@@ -108,8 +108,8 @@ private theorem isPL_real {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
 section MeasurableSpace
 
 variable {X Y : Type*}
-variable [AddCommGroup X] [Module ℝ X] [MeasurableSpace X] [AddCommGroup Y] [Module ℝ Y]
-variable [MeasurableSpace Y]
+  [AddCommGroup X] [Module ℝ X] [MeasurableSpace X] [AddCommGroup Y] [Module ℝ Y]
+  [MeasurableSpace Y]
 
 private theorem IsPL.comp {μ : Measure X} {ν : Measure Y} {t : ℝ}
     (hX : IsPL X μ t) {e : X → Y} (hmp : MeasurePreserving e μ ν)
@@ -134,7 +134,7 @@ private theorem IsPL.symm {μ : Measure X} {ν : Measure Y} {t : ℝ}
   rw [hlin, e.apply_symm_apply, e.apply_symm_apply, e.apply_symm_apply]
 
 private theorem IsPL.prod {μ : Measure X} {ν : Measure Y}
-    [SFinite μ] [SFinite ν] {t : ℝ}
+    [SFinite ν] {t : ℝ}
     (hX : IsPL X μ t) (hY : IsPL Y ν t) : IsPL (X × Y) (μ.prod ν) t := by
   intro f g h hf hg hh hfgh
   have hslice : ∀ (u : X × Y → ℝ≥0∞), Measurable u → ∀ x : X, Measurable fun y => u (x, y) :=

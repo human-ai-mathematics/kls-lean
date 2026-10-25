@@ -92,7 +92,7 @@ variable (m : Measure E) [m.IsAddHaarMeasure]
 section NormedSpace
 
 variable {G : Type*}
-variable [NormedAddCommGroup G] [NormedSpace ℝ G]
+  [NormedAddCommGroup G] [NormedSpace ℝ G]
 
 omit [CompleteSpace E] [m.IsAddHaarMeasure] in
 /-- Functions of temperate growth are integrable for every exponential tilt of a law with all
@@ -111,10 +111,12 @@ theorem integrable_expTilt_of_hasTemperateGrowth {V : E → ℝ}
 section NormedSpace
 
 variable {G H : Type*}
-variable [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G] [NormedAddCommGroup H]
-variable [NormedSpace ℝ H] [CompleteSpace H]
+  [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G] [NormedAddCommGroup H]
+  [NormedSpace ℝ H] [CompleteSpace H]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+section LinearTransport
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E]
 /-- Tilt averages commute with continuous linear maps (for integrable functions). -/
 theorem clm_apply_tiltAverage (μ : Measure E)
     {g : E → G} (hg : ∀ z, Integrable g (expTilt μ z)) (L : G →L[ℝ] H) :
@@ -123,7 +125,6 @@ theorem clm_apply_tiltAverage (μ : Measure E)
     unfold tiltAverage
     exact (L.integral_comp_comm (hg z)).symm
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Taylor tensors commute with continuous linear maps. -/
 theorem clm_comp_taylorTensor (μ : Measure E)
     {g : E → G} (hg : ∀ z, Integrable g (expTilt μ z)) (hF : ContDiff ℝ ∞ (tiltAverage μ g))
@@ -137,6 +138,8 @@ theorem clm_comp_taylorTensor (μ : Measure E)
   rw [heq] at hd
   ext v
   simp [taylorTensor, hd]
+
+end LinearTransport
 
 end NormedSpace
 
@@ -338,7 +341,7 @@ def centeredFDeriv (μ : Measure E) (f : E → G) (x : E) : E →L[ℝ] G :=
 section NormedSpace
 
 variable {H : Type*}
-variable [NormedAddCommGroup H] [NormedSpace ℝ H]
+  [NormedAddCommGroup H] [NormedSpace ℝ H]
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem cor37_iteratedFDeriv_sub_const (F : E → H) (c : H) {d : ℕ} (hd : 1 ≤ d) :

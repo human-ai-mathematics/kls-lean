@@ -22,7 +22,9 @@ open FunctionalInequalities.KLS.MetricBV
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section TruncatedTests
+
+omit [MeasurableSpace X] [BorelSpace X]
 theorem truncatedSlope (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥0, LipschitzWith K f)
     (x : X) :
     FunctionalInequalities.Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
@@ -30,12 +32,13 @@ theorem truncatedSlope (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥
         (Metric.ball x₀ R)ᶜ.indicator 1 x := by
   exact apply_truncate_le x₀ R hf x
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem truncatedDistance (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥0, LipschitzWith K f)
     (B : Set X) (x : X) :
     ‖Test.truncate x₀ R f hf x - B.indicator (1 : X → ℝ) x‖ₑ ≤
       ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
   exact enorm_truncate_sub_le x₀ R hf B x
+
+end TruncatedTests
 
 theorem explicitConvergence (ν : Measure X) [IsFiniteMeasure ν] (x₀ : X) {B : Set X}
     {f : ℕ → X → ℝ} (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))

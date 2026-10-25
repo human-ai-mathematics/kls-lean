@@ -33,7 +33,7 @@ theorem initial_compatible (d : ℕ) (a : Fin d → E) (h : E → ℝ) :
   simp
 
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [m.IsAddHaarMeasure]
+  (m : Measure E) [m.IsAddHaarMeasure]
 
 /-- The actual wave generator is skew for the potential weight. -/
 theorem potential_skew (d : ℕ) (a : Fin d → E) {U : E → ℝ} (hU : ContDiff ℝ ∞ U)

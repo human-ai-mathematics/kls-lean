@@ -119,25 +119,27 @@ private def projectionCoordinates (x : E) : (Probability.affineSupport μ).direc
   (Probability.affineSupport μ).direction.orthogonalProjectionOnto
     (x - Probability.supportPoint μ)
 
-omit [CompleteSpace E] [BorelSpace E] in
+section ProjectionCoordinates
+
+omit [CompleteSpace E] [BorelSpace E]
 private theorem projectionCoordinates_reconstruct (v : (Probability.affineSupport μ).direction) :
     projectionCoordinates μ (Probability.reconstruct μ v) = v := by
   change (Probability.affineSupport μ).direction.orthogonalProjectionOnto
     ((v : E) + Probability.supportPoint μ - Probability.supportPoint μ) = v
   simp
 
-omit [CompleteSpace E] [BorelSpace E] in
 private theorem contDiff_projectionCoordinates : ContDiff ℝ ∞ (projectionCoordinates μ) :=
   (Probability.affineSupport μ).direction.orthogonalProjectionOnto.contDiff.comp
     (contDiff_id.sub contDiff_const)
 
-omit [CompleteSpace E] [BorelSpace E] in
 private theorem lipschitz_projectionCoordinates : LipschitzWith 1 (projectionCoordinates μ) := by
   rw [lipschitzWith_iff_dist_le_mul]
   intro x y
   simpa only [projectionCoordinates, dist_eq_norm, ← map_sub, sub_sub_sub_cancel_right,
     NNReal.coe_one, one_mul] using
     (Probability.affineSupport μ).direction.norm_orthogonalProjectionOnto_apply_le (x - y)
+
+end ProjectionCoordinates
 
 omit [CompleteSpace E] in
 private theorem measurePreserving_projectionCoordinates :

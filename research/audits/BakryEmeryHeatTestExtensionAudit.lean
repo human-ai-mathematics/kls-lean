@@ -16,7 +16,7 @@ open scoped ContDiff
 namespace BakryEmeryHeatTestExtensionAudit
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : LogConcave ν)
+  {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : LogConcave ν)
   (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
 /-- **Arbitrary data.** The frontend for arbitrary `g`, `r > 0`, `s ≥ 0` and `φ ≥ 0`. -/

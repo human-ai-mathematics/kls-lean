@@ -113,7 +113,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- A positive square root is at least as close to `1` as its square: `‖S - 1‖ ≤ ‖S² - 1‖`. -/
 theorem norm_sub_one_le_of_isPositive_mul_self
-    [CompleteSpace E]
     {S Q : E →L[ℝ] E} (hS : S.IsPositive)
     (hQ : S * S = Q) : ‖S - 1‖ ≤ ‖Q - 1‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
@@ -144,7 +143,6 @@ theorem norm_sub_one_le_of_isPositive_mul_self
 
 /-- An operator represented by a bilinear form is bounded by the form's norm. -/
 theorem opNorm_le_of_inner_eq
-    [CompleteSpace E]
     {A : E →L[ℝ] E}
     {κ : ContinuousMultilinearMap ℝ (fun _ : Fin 2 => E) ℝ}
     (h : ∀ u v : E, ⟪A u, v⟫ = κ ![u, v]) : ‖A‖ ≤ ‖κ‖ := by
@@ -162,9 +160,8 @@ theorem opNorm_le_of_inner_eq
   · rw [← h0]; positivity
   · exact le_of_mul_le_mul_right h1 h0
 
-/-- An operator with `‖A - 1‖ < 1` is strictly positive, hence a unit, when self-adjoint. -/
+/-- An operator with `‖A - 1‖ < 1` has a strictly positive quadratic form on nonzero vectors. -/
 theorem inner_self_pos_of_norm_sub_one_lt
-    [CompleteSpace E]
     {A : E →L[ℝ] E} (hA : ‖A - 1‖ < 1) {v : E} (hv : v ≠ 0) :
     0 < ⟪A v, v⟫ := by
   have hv' : 0 < ‖v‖ := norm_pos_iff.mpr hv
@@ -202,12 +199,8 @@ section MeasureHelpers
 
 variable {E : Type*} [NormedAddCommGroup E]
 
-section InnerProduct
-
-variable [InnerProductSpace ℝ E]
-
 /-- A ball truncation has exponential moments of every order. -/
-theorem integrable_exp_cond_closedBall [CompleteSpace E] [FiniteDimensional ℝ E]
+theorem integrable_exp_cond_closedBall
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     (ν : Measure E) [IsFiniteMeasure ν] (R : ℕ)
     (hR : ν (Metric.closedBall (0 : E) R) ≠ 0) (t : ℝ) :
@@ -222,6 +215,10 @@ theorem integrable_exp_cond_closedBall [CompleteSpace E] [FiniteDimensional ℝ 
       t * ‖x‖ ≤ |t| * ‖x‖ := mul_le_mul_of_nonneg_right (le_abs_self t) (norm_nonneg x)
       _ ≤ |t| * R := mul_le_mul_of_nonneg_left hx' (abs_nonneg t)
   exact hres.smul_measure (ENNReal.inv_ne_top.2 hR)
+
+section InnerProduct
+
+variable [InnerProductSpace ℝ E]
 
 /-- A ball truncation is compactly supported. -/
 theorem isCompact_support_cond_closedBall [CompleteSpace E] [FiniteDimensional ℝ E]

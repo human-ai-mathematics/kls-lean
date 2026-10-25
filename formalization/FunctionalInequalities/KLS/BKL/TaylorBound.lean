@@ -127,7 +127,7 @@ open scoped ContDiff
 section NormedSpace
 
 variable {E F : Type*}
-variable [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
+  [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
 
 private theorem compact_c2_hessian_bounded
     {g : E → F} (hg : ContDiff ℝ 2 g) (hc : HasCompactSupport g) :
@@ -276,7 +276,7 @@ open FunctionalInequalities.Analysis.Tensor
 section MeasurableSpace
 
 variable {A : Type*}
-variable [MeasurableSpace A]
+  [MeasurableSpace A]
 
 private theorem integral_sq_eq_norm_sq
     (μ : Measure A) {g : A → ℝ} (hg : MemLp g 2 μ) :

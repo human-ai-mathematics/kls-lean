@@ -21,7 +21,7 @@ namespace FunctionalInequalities.Analysis
 section FiniteIndex
 
 variable {ι : Type*}
-variable [Fintype ι] [DecidableEq ι]
+  [Fintype ι] [DecidableEq ι]
 
 private lemma matrix_sqrt_eq_real_cfc_of_nonneg
     (A : Matrix ι ι ℝ) (hA : 0 ≤ A) :

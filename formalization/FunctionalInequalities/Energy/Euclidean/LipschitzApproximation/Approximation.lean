@@ -61,7 +61,7 @@ section Main
 
 variable [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E]
 
-variable (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m]
+  (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m]
 
 /-- Step 1 (cutoff): approximate in the weighted graph norm by globally Lipschitz tests
 with compact support. Suggested witnesses are smooth cutoffs times g; their Lipschitz constants

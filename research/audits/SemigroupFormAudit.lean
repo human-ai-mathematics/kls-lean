@@ -76,7 +76,7 @@ theorem route_S4 :
 section InnerProduct
 
 variable {H₀ H₁ : Type*}
-variable [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
+  [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
 
 /-! ### Boundary cases -/
 

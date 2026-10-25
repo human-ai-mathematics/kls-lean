@@ -43,7 +43,7 @@ theorem mean_compLp_innerSL [CompleteSpace G] (μ : ProbabilityMeasure α) (c : 
 section InnerProduct
 
 variable {F : Type*}
-variable [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F]
 
 private theorem norm_sq_eq_integral_norm_sq {μ : Measure α} (f : Lp F 2 μ) : ‖f‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂μ := by
   rw [← real_inner_self_eq_norm_sq, MeasureTheory.L2.inner_def]
@@ -135,7 +135,7 @@ private theorem abs_sqrt_sum_sq_sub_le_sum_abs {n : ℕ} (a b : Fin n → ℝ) :
 section MeasurableSpace
 
 variable {X : Type*}
-variable [MeasurableSpace X]
+  [MeasurableSpace X]
 
 /-- **Euclidean density in `L^p`.** If every coordinate is in `L^p`, so is `√(Σ aᵢ²)`. -/
 theorem memLp_sqrt_sum_sq {μ : Measure X}

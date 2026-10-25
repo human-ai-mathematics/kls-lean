@@ -47,7 +47,9 @@ theorem translateLaw (hμ : LogConcave μ) (b : E) :
   rw [hf]
   exact (Probability.measurePreserving_translate_symm μ b).map_eq
 
-omit [CompleteSpace E] in
+section TranslatedMoments
+
+omit [CompleteSpace E]
 /-- A log-concave law has a finite ambient second moment: the intrinsic law has one and
 reconstruction is an affine isometry. -/
 theorem memLp_id_two (hμ : LogConcave μ) : MemLp id 2 (μ : Measure E) := by
@@ -70,10 +72,11 @@ theorem memLp_id_two (hμ : LogConcave μ) : MemLp id 2 (μ : Measure E) := by
       (measurable_intrinsicMap μ).aemeasurable).mp h1
   exact h2.ae_eq (reconstruct_intrinsicMap_ae μ)
 
-omit [CompleteSpace E] in
 /-- The identity is integrable against a log-concave law, so the barycenter exists. -/
 theorem integrable_id (hμ : LogConcave μ) : Integrable id (μ : Measure E) :=
   hμ.memLp_id_two.integrable (by norm_num)
+
+end TranslatedMoments
 
 /-- Translating a log-concave law by the negative barycenter gives a centered law. -/
 theorem integral_id_translateLaw_neg_integral (hμ : LogConcave μ) :

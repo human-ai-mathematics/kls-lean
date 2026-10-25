@@ -41,7 +41,7 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
 
-variable (ν : ProbabilityMeasure V) (B : V →L[ℝ] V)
+  (ν : ProbabilityMeasure V) (B : V →L[ℝ] V)
 
 omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 omit [CompleteSpace V] in
@@ -62,7 +62,9 @@ theorem hasCompactSupport_apply {g : V → ℝ} (hs : HasCompactSupport g) :
     exact (hs.fderiv ℝ).comp_left (map_zero _)
   exact h1.comp_left (map_zero B)
 
-omit [FiniteDimensional ℝ V] in
+section CompactSmoothTests
+
+omit [FiniteDimensional ℝ V]
 /-- Smooth compactly supported functions are weighted gradient tests for every law. -/
 theorem IsTest.of_contDiff_hasCompactSupport {g : V → ℝ} (hg : ContDiff ℝ ∞ g)
     (hs : HasCompactSupport g) : IsTest ν B g := by
@@ -74,11 +76,12 @@ theorem IsTest.of_contDiff_hasCompactSupport {g : V → ℝ} (hg : ContDiff ℝ 
     obtain ⟨C, hC⟩ := hcont.bounded_above_of_compact_support (hasCompactSupport_apply B hs)
     exact MemLp.of_bound hcont.aestronglyMeasurable C (ae_of_all _ hC)
 
-omit [FiniteDimensional ℝ V] in
 /-- Smooth compactly supported functions are square integrable for every probability law. -/
 theorem memLp_of_contDiff_hasCompactSupport {g : V → ℝ} (hg : ContDiff ℝ ∞ g)
     (hs : HasCompactSupport g) : MemLp g 2 (ν : Measure V) :=
   (IsTest.of_contDiff_hasCompactSupport ν 0 hg hs).memLp
+
+end CompactSmoothTests
 
 /-- The smooth core: classes of smooth compactly supported functions in `L²(ν)`. -/
 def smoothCore : Submodule ℝ (Lp ℝ 2 (ν : Measure V)) where

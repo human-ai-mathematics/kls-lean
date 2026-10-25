@@ -20,10 +20,13 @@ namespace FunctionalInequalities.Analysis.BakryEmery
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
+section WeightedIntegrals
+
+variable {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+
 omit [FiniteDimensional ℝ E] in
 /-- Inside the exponential radius the weighted integrand `e^{⟪z,x⟫} g(x)` is integrable. -/
-theorem integrable_exp_inner_smul_of_lt {F : Type*} [NormedAddCommGroup F]
-    [NormedSpace ℝ F] (μ : Measure E) {g : E → F}
+theorem integrable_exp_inner_smul_of_lt (μ : Measure E) {g : E → F}
     (hg : AEStronglyMeasurable g μ) {r : ℝ}
     (hgi : ∀ t < r, Integrable (fun x => Real.exp (t * ‖x‖) * ‖g x‖) μ)
     {z : E} (hz : ‖z‖ < r) : Integrable (fun x => Real.exp ⟪z, x⟫ • g x) μ := by
@@ -36,8 +39,8 @@ theorem integrable_exp_inner_smul_of_lt {F : Type*} [NormedAddCommGroup F]
 
 /-- **All-order derivatives of `z ↦ ∫ e^{⟪z,x⟫} g(x) dμ` inside the exponential radius**: for `‖z‖ < r`,
 `D^d(…)(z)(h) = ∫ e^{⟪z,x⟫} ∏_j ⟪x, h_j⟫ g(x) dμ`, given `∫ e^{t‖x‖}‖g‖ < ∞` for all `t < r`. -/
-theorem iteratedFDeriv_weightedExp_integral_of_lt {F : Type*} [NormedAddCommGroup F]
-    [NormedSpace ℝ F] [CompleteSpace F] (μ : Measure E) {g : E → F}
+theorem iteratedFDeriv_weightedExp_integral_of_lt [CompleteSpace F]
+    (μ : Measure E) {g : E → F}
     (hg : AEStronglyMeasurable g μ) {r : ℝ}
     (hgi : ∀ t < r, Integrable (fun x => Real.exp (t * ‖x‖) * ‖g x‖) μ)
     (d : ℕ) (z : E) (hz : ‖z‖ < r) (h : Fin d → E) :
@@ -104,9 +107,11 @@ theorem iteratedFDeriv_weightedExp_integral_of_lt {F : Type*} [NormedAddCommGrou
         rw [Fin.prod_univ_castSucc]
         simp only [a, Fin.init_def, mul_assoc]
 
+end WeightedIntegrals
+
 /-- The `d`-th derivative of the Laplace transform at `0` is the degree-`d` moment tensor
 `h ↦ ∫ ∏_j ⟪x, h_j⟫ dμ`, given one exponential moment `∫ e^{r‖x‖} dμ < ∞`. -/
-theorem iteratedFDeriv_laplace_zero (μ : Measure E) [IsProbabilityMeasure μ]
+theorem iteratedFDeriv_laplace_zero (μ : Measure E)
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     (d : ℕ) (h : Fin d → E) :
     iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂μ) 0 h =

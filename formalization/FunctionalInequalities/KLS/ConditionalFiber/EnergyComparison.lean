@@ -125,7 +125,9 @@ private def intrinsicIsometryEquiv (ν : ProbabilityMeasure E)
     ⟨(Probability.reconstruct ν).injective, surjective_intrinsicReconstruct ν h⟩
   isometry_toFun := (Probability.reconstruct ν).isometry
 
-omit [CompleteSpace E] in
+section IntrinsicFiberConstants
+
+omit [CompleteSpace E]
 /-- For full affine support, coordinate and intrinsic local-slope bounds coincide. -/
 private theorem holds_iff_intrinsicMeasure (ν : ProbabilityMeasure E)
     (h : Probability.affineSupport ν = ⊤) (C : NNReal) :
@@ -141,7 +143,6 @@ private theorem holds_iff_intrinsicMeasure (ν : ProbabilityMeasure E)
     exact holds_of_isometryEquiv e.symm
       (MeasurePreserving.symm e.toHomeomorph.toMeasurableEquiv hmp) hC
 
-omit [CompleteSpace E] in
 /-- For full affine support, the literature constant is the coordinate infimum. -/
 private theorem intrinsic_constant_eq_iInf (ν : ProbabilityMeasure E)
     (h : Probability.affineSupport ν = ⊤) :
@@ -153,6 +154,8 @@ private theorem intrinsic_constant_eq_iInf (ν : ProbabilityMeasure E)
       iInf_le_of_le ⟨C.1, (holds_iff_intrinsicMeasure ν h C.1).1 C.2⟩ le_rfl
   · exact le_iInf fun C ↦
       iInf_le_of_le ⟨C.1, (holds_iff_intrinsicMeasure ν h C.1).2 C.2⟩ le_rfl
+
+end IntrinsicFiberConstants
 
 omit [InnerProductSpace ℝ E] [CompleteSpace E] [BorelSpace E] [SecondCountableTopology E]
   [FiniteDimensional ℝ E] in
@@ -277,7 +280,9 @@ end LineSlice
 
 section Disintegration
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+section ReconstructedFibers
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
 /-- A measurable almost-sure property of `μ` holds along almost every conditional fiber. -/
 private theorem ae_ae_reconstruct (μ : ProbabilityMeasure E) (ρ : ProbabilityMeasure (Direction E))
     {P : E → Prop} (hP : MeasurableSet {x | P x}) (hμ : ∀ᵐ x ∂(μ : Measure E), P x) :
@@ -297,7 +302,6 @@ private theorem ae_ae_reconstruct (μ : ProbabilityMeasure E) (ρ : ProbabilityM
   rw [← compProd_baseLaw_kernel] at hjoint
   exact Measure.ae_ae_of_ae_compProd hjoint
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- A square-integrable Borel test is square integrable along almost every conditional fiber. -/
 private theorem ae_memLp_comp_reconstruct (μ : ProbabilityMeasure E)
     (ρ : ProbabilityMeasure (Direction E)) {f : E → ℝ} (hfm : Measurable f)
@@ -322,6 +326,8 @@ private theorem ae_memLp_comp_reconstruct (μ : ProbabilityMeasure E)
   refine ⟨(hfm.comp (measurable_reconstruct_left b)).aestronglyMeasurable, ?_⟩
   rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top]
   simpa using hb
+
+end ReconstructedFibers
 
 end Disintegration
 

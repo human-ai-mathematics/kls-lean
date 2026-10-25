@@ -27,7 +27,7 @@ namespace FunctionalInequalities.Analysis
 section NormedSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup E] [NormedSpace ℝ E]
 
 
 private lemma smul_mem_of_mem_closure

@@ -29,7 +29,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma resolvent_subgradient_monotone {f : E → ℝ} {u v p q : E}
     (hp : ∀ w, f u + ⟪p, w - u⟫ ≤ f w)
@@ -280,7 +280,7 @@ private lemma secondDifference_tendsto {f : ℝ → ℝ} (hf : ContDiff ℝ 2 f)
 section StructuredSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E]
+  [NormedAddCommGroup E]
 
 section NormedSpace
 

@@ -110,7 +110,9 @@ section SardBoundary
 
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
 
-omit [FiniteDimensional ℝ V] in
+section ScalarSardObstruction
+
+omit [FiniteDimensional ℝ V]
 /-- Against a real-valued target, a linear functional fails to be surjective exactly when it
 vanishes; this is what lets the equidimensional statement be compared with `Analysis.sard`. -/
 theorem not_surjective_iff_eq_zero (L : V →L[ℝ] ℝ) :
@@ -127,11 +129,12 @@ theorem not_surjective_iff_eq_zero (L : V →L[ℝ] ℝ) :
     obtain ⟨v, hv⟩ := h 1
     simp at hv
 
-omit [FiniteDimensional ℝ V] in
 /-- **The overlap with the sharp Sard hole is exactly dimension one.**  `R10` applies to a
 real-valued map only when `finrank ℝ V = finrank ℝ ℝ = 1`. -/
 theorem r10_reaches_only_dimension_one (h : finrank ℝ V = finrank ℝ ℝ) : finrank ℝ V = 1 := by
   simpa using h
+
+end ScalarSardObstruction
 
 /-- **And in dimension one it recovers what is already proved.**  `Analysis.sard_of_finrank_le_one`
 proves this case unconditionally, by the same Mathlib lemma; the sharp `Analysis.sard` for

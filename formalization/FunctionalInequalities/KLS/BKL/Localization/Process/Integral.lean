@@ -126,7 +126,6 @@ omit [IsProbabilityMeasure P] in
 /-- Almost-sure statements valid for all `s ≥ 0` transfer to the product measure
 `P ⊗ Leb|_{(0,T]}`. -/
 theorem ae_prod_restrict_Ioc_of_ae
-    [IsProbabilityMeasure P]
     {Q : Ω → ℝ → Prop}
     (hQ : ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → Q w s) (T : ℝ) :
     ∀ᵐ z ∂(P.prod (volume.restrict (Set.Ioc (0 : ℝ) T))), Q z.1 z.2 := by

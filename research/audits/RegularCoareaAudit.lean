@@ -23,7 +23,7 @@ theorem target :
 section FiniteDimensional
 
 variable {V : Type*}
-variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+  [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
 
 section MeasurableSpace
 

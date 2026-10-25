@@ -87,7 +87,9 @@ variable [MeasurableSpace E] [BorelSpace E] [sct : SecondCountableTopology E]
   [FiniteDimensional ℝ E] (ν : ProbabilityMeasure E) (m : Measure E)
   [Measure.IsAddHaarMeasure m]
 
-omit sct in
+section GradientIdentification
+
+omit sct
 /-- Step 2: Rademacher and absolute continuity identify the two pointwise energies almost
 everywhere for locally Lipschitz tests, with no integrability or density lower bound premise. -/
 theorem apply_ae_eq_norm_gradient (hν : (ν : Measure E) ≪ m)
@@ -99,7 +101,6 @@ theorem apply_ae_eq_norm_gradient (hν : (ν : Measure E) ≪ m)
     with x hx
   exact apply_eq_norm_gradient f x hx
 
-omit sct in
 /-- Step 3: equality of the extended local-slope and gradient energies, also when infinite.
 The lintegral keeps nonintegrable functions from acquiring a spurious zero energy. -/
 theorem energy_eq_lintegral_gradient (hν : (ν : Measure E) ≪ m)
@@ -109,6 +110,8 @@ theorem energy_eq_lintegral_gradient (hν : (ν : Measure E) ≪ m)
   apply lintegral_congr_ae
   filter_upwards [apply_ae_eq_norm_gradient ν m hν f hf] with x hx
   rw [hx]
+
+end GradientIdentification
 
 /-- Step 4: the exact existing literature test domain, expressed by L2 gradient membership.
 This is a theorem about the existing definition, not an additional admissibility assumption. -/

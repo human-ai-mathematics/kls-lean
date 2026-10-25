@@ -238,8 +238,8 @@ theorem exists_bound_of_log_lower (A : ℝ) (n : ℕ) (b : ℝ) :
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-variable [BorelSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+  [BorelSpace E]
 /-- Actual normalized-sequence integral control from a finite eventual
 functional lower bound, as in CEK (62). The finite prefix is handled by the
 proved bounded-range theorem; no desired sequence bound is supplied. -/

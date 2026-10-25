@@ -13,7 +13,7 @@ open scoped Topology NNReal ENNReal
 namespace FunctionalInequalities.KLS.MetricBV
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X]
-variable [BorelSpace X]
+  [BorelSpace X]
 section LipschitzBridge
 
 /-! ### Globally Lipschitz approximating sequences
@@ -65,7 +65,9 @@ def Test.truncate (x₀ : X) (R : ℝ) (f : X → ℝ) (hf : ∃ K : ℝ≥0, Li
     rw [Metric.mem_ball, not_lt] at hnot
     exact hx (by simp [cutoff_eq_zero hnot])
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section TruncationBounds
+
+omit [MeasurableSpace X] [BorelSpace X]
 /-- The truncated test's slope exceeds the original slope by at most the indicator of the
 complement of the inner ball. -/
 theorem apply_truncate_le (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥0, LipschitzWith K f)
@@ -95,7 +97,6 @@ theorem apply_truncate_le (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ
         rw [Real.dist_eq, NNReal.coe_one, one_mul]; exact abs_cutoff_sub_le x₀ R a b
     simpa using Energy.LocalSlope.apply_le_of_lipschitzWith hlip x
 
-omit [MeasurableSpace X] [BorelSpace X] in
 /-- The truncated test's pointwise distance to an indicator exceeds that of the original by at
 most the indicator of the complement of the inner ball. -/
 theorem enorm_truncate_sub_le (x₀ : X) (R : ℝ) {f : X → ℝ}
@@ -129,6 +130,8 @@ theorem enorm_truncate_sub_le (x₀ : X) (R : ℝ) {f : X → ℝ}
     exact zero_le
   · rw [Set.indicator_of_mem (Set.mem_compl hx), Pi.one_apply]
     exact ENNReal.ofReal_le_one.mpr (by linarith)
+
+end TruncationBounds
 
 /-- The cost of the truncated test is at most the slope integral of the original plus the mass
 outside the inner ball. -/
@@ -259,7 +262,9 @@ private theorem ofReal_clampUnit_le_indicator_error (f : X → ℝ) (B : Set X) 
     simpa only [clampUnit_of_mem (by norm_num : (0 : ℝ) ≤ 0) (by norm_num : (0 : ℝ) ≤ 1),
       sub_zero, abs_of_nonneg (clampUnit_nonneg _)] using abs_clampUnit_sub_le (f x) 0
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section TruncationTails
+
+omit [MeasurableSpace X] [BorelSpace X]
 private theorem apply_truncate_le_indicator_error (x₀ : X) (R : ℝ) {f : X → ℝ}
     (hf : ∃ K : ℝ≥0, LipschitzWith K f) (B : Set X) (x : X) :
     Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
@@ -272,7 +277,6 @@ private theorem apply_truncate_le_indicator_error (x₀ : X) (R : ℝ) {f : X �
   · rw [Set.indicator_of_mem (Set.mem_compl hx)]
     by_cases hb : x ∈ B <;> simpa [hb, hx] using ofReal_clampUnit_le_indicator_error f B x
 
-omit [MeasurableSpace X] [BorelSpace X] in
 /-- The cutoff error is controlled by the original indicator error and the target outside the
 inner ball, rather than by all the mass outside that ball. -/
 theorem enorm_truncate_sub_le_target_tail (x₀ : X) (R : ℝ) {f : X → ℝ}
@@ -305,6 +309,8 @@ theorem enorm_truncate_sub_le_target_tail (x₀ : X) (R : ℝ) {f : X → ℝ}
     exact (mul_le_of_le_one_left hc0 hu1).trans (by
       simpa only [clampUnit_of_mem (by norm_num : (0 : ℝ) ≤ 0) (by norm_num : (0 : ℝ) ≤ 1),
         sub_zero, abs_of_nonneg hc0] using abs_clampUnit_sub_le (f x) 0)
+
+end TruncationTails
 
 /-- The cutoff adds at most the original indicator L1 error and the target mass outside
 the inner ball to the slope integral. No finite-total-mass hypothesis is needed. -/

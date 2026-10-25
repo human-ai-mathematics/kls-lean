@@ -74,7 +74,9 @@ theorem hasCompactSupport_cutoff {R : ℝ} (hR : 0 < R) : HasCompactSupport (cut
     rw [← hs]
     exact hne
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section CutoffBounds
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 theorem cutoff_eq_one {R : ℝ} (hR : 0 < R) {x : E} (hx : ‖x‖ ≤ R) : cutoff R x = 1 := by
     unfold cutoff
     apply (unitBump : ContDiffBump (0 : E)).one_of_mem_closedBall
@@ -92,7 +94,6 @@ theorem cutoff_eq_one {R : ℝ} (hR : 0 < R) {x : E} (hx : ‖x‖ ≤ R) : cuto
     change dist (R⁻¹ • x) 0 ≤ 1
     simpa only [dist_zero_right] using hnorm
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 theorem abs_cutoff_le_one (R : ℝ) (x : E) : |cutoff R x| ≤ 1 := by
     change |(unitBump : ContDiffBump (0 : E)) (R⁻¹ • x)| ≤ 1
     have hnonneg :
@@ -102,6 +103,8 @@ theorem abs_cutoff_le_one (R : ℝ) (x : E) : |cutoff R x| ≤ 1 := by
         (unitBump : ContDiffBump (0 : E)) (R⁻¹ • x) ≤ 1 :=
       ContDiffBump.le_one (unitBump : ContDiffBump (0 : E))
     exact abs_le.2 ⟨by linarith, hle⟩
+
+end CutoffBounds
 
 omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] in
 /-- Uniform derivative bounds: for each order `n`, `‖∇ⁿχ_R‖ ≤ C` for every `R ≥ 1`. -/
@@ -309,7 +312,9 @@ theorem integrable_exp_mul_norm_expTilt {V : E → ℝ}
 
 /-! ### The integrated generator identity on temperate tests -/
 
-omit [MeasurableSpace E] [BorelSpace E] in
+section GeneratorGrowth
+
+omit [MeasurableSpace E] [BorelSpace E]
 private theorem growth_abs_weightedLaplacian_le (V g : E → ℝ) (x : E) :
     |weightedLaplacian V g x| ≤
       (Module.finrank ℝ E : ℝ) * ‖iteratedFDeriv ℝ 2 g x‖ +
@@ -325,7 +330,6 @@ private theorem growth_abs_weightedLaplacian_le (V g : E → ℝ) (x : E) :
       · simpa only [norm_gradient_eq_norm_iteratedFDeriv_one] using
           abs_real_inner_le_norm (gradient V x) (gradient g x)
 
-omit [MeasurableSpace E] [BorelSpace E] in
 private theorem growth_weightedLaplacian_bound {V g : E → ℝ}
     {CV C : ℝ} {kV k : ℕ} (hCV : 0 ≤ CV) (hC : 0 ≤ C)
     (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
@@ -351,6 +355,8 @@ private theorem growth_weightedLaplacian_bound {V g : E → ℝ}
         le_mul_of_one_le_right (by positivity) hp
       exact add_le_add_left hm _
     _ = _ := by rw [pow_add]; ring
+
+end GeneratorGrowth
 
 /-- `∫ ℒf dμ = 0` for `μ = m.tilted (-V)` with `V ∈ C¹`, `∇V` polynomially bounded and all
 exponential moments, and `f ∈ C²` with `f`, `∇f`, `∇²f` polynomially bounded. -/

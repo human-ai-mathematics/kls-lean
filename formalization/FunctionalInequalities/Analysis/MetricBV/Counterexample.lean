@@ -12,7 +12,7 @@ open scoped Topology NNReal ENNReal
 namespace FunctionalInequalities.KLS.MetricBV
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X]
-variable [BorelSpace X]
+  [BorelSpace X]
 /-- Complement symmetry fails for Lebesgue measure on the real line: the empty set has perimeter
 zero while the whole line has infinite perimeter. -/
 theorem perimeter_compl_ne_real_volume :

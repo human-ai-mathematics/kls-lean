@@ -96,7 +96,9 @@ theorem map_affineIsometry [CompleteSpace F]
 
 variable [ProperSpace E]
 
-omit [BorelSpace E] in
+section SupportConvexity
+
+omit [BorelSpace E]
 /-- Equal-radius closed-ball masses inherit the log-concavity inequality. This is the
 pointwise inequality needed for ball-average regularizations of the measure. -/
 theorem closedBall_mul_le {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
@@ -122,7 +124,6 @@ theorem closedBall_mul_le {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
         (mul_le_mul_of_nonneg_left hv (sub_nonneg.mpr ht1.le))
     _ = r := by ring
 
-omit [BorelSpace E] in
 /-- Compact-set log-concavity forces the topological support to be convex. This uses positive
 neighborhood masses, without presupposing an ambient density. -/
 theorem convex_support {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
@@ -146,7 +147,6 @@ theorem convex_support {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
       (μ : Measure E) (Metric.closedBall y r) ^ (1 - a) := by positivity
   simpa only [hbeq] using hpos.trans_le (hμ.closedBall_mul_le x y r a ha' ha1)
 
-omit [BorelSpace E] in
 /-- Superlevel sets of equal-radius closed-ball masses are convex. -/
 theorem convex_closedBall_superlevel {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) (r : ℝ) (A : ENNReal) :
@@ -172,13 +172,17 @@ theorem convex_closedBall_superlevel {μ : ProbabilityMeasure E}
       · exact hy
     _ ≤ _ := by simpa only [hbeq] using hμ.closedBall_mul_le x y r a ha' ha1
 
+end SupportConvexity
+
 end Transport
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
   [FiniteDimensional ℝ E]
 
-omit [CompleteSpace E] in
+section IntrinsicSupport
+
+omit [CompleteSpace E]
 /-- Log-concavity is retained on the direction of the affine support, even for singular
 ambient laws and a zero-dimensional carrier. -/
 theorem intrinsicMeasure {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
@@ -186,7 +190,6 @@ theorem intrinsicMeasure {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
   hμ.of_affineIsometry_map (Probability.intrinsicMeasure μ) (Probability.reconstruct μ)
     (Probability.measurePreserving_reconstruct μ).map_eq
 
-omit [CompleteSpace E] in
 /-- The intrinsic support has nonempty interior. This includes the singleton topology in
 dimension zero and does not assert that the boundary has zero probability mass. -/
 theorem interior_intrinsic_support_nonempty {μ : ProbabilityMeasure E}
@@ -196,7 +199,6 @@ theorem interior_intrinsic_support_nonempty {μ : ProbabilityMeasure E}
   apply hμ.intrinsicMeasure.convex_support.interior_nonempty_iff_affineSpan_eq_top.mpr
   exact Probability.affineSupport_intrinsicMeasure μ
 
-omit [CompleteSpace E] in
 /-- The intrinsic support boundary is Haar-null. Transferring this null set to the probability
 law still requires the separate absolute-continuity theorem. -/
 theorem haar_frontier_intrinsic_support {μ : ProbabilityMeasure E}
@@ -204,6 +206,8 @@ theorem haar_frontier_intrinsic_support {μ : ProbabilityMeasure E}
     [Measure.IsAddHaarMeasure m] :
     m (frontier (Probability.intrinsicMeasure μ : Measure _).support) = 0 :=
   hμ.intrinsicMeasure.convex_support.addHaar_frontier m
+
+end IntrinsicSupport
 
 section Conditioning
 

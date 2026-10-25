@@ -306,7 +306,9 @@ theorem graphProj_graphMap (ι : H →ₗᵢ[ℝ] V) {e : V} (hperp : ∀ v : H,
   rw [graphMap, map_add, graphProj_ι, ContinuousLinearMap.map_smul,
     graphProj_eq_zero ι hperp, smul_zero, add_zero]
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V] in
+section GraphDistances
+
+omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V]
 /-- The graph map separates points at least as much as the identity. -/
 theorem norm_sub_graphMap_sq (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1)
     (hperp : ∀ v : H, ⟪ι v, e⟫ = (0 : ℝ)) (g : H → ℝ) (y y' : H) :
@@ -321,13 +323,14 @@ theorem norm_sub_graphMap_sq (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1
     ι.inner_map_map, hie, hei, hee]
   ring
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V] in
 theorem norm_sub_le_norm_sub_graphMap (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1)
     (hperp : ∀ v : H, ⟪ι v, e⟫ = (0 : ℝ)) (g : H → ℝ) (y y' : H) :
     ‖y - y'‖ ≤ ‖graphMap ι e g y - graphMap ι e g y'‖ := by
   have h := norm_sub_graphMap_sq ι he hperp g y y'
   nlinarith [norm_nonneg (graphMap ι e g y - graphMap ι e g y'), norm_nonneg (y - y'),
     sq_nonneg (g y - g y')]
+
+end GraphDistances
 
 theorem graphMap_injective (ι : H →ₗᵢ[ℝ] V) {e : V} (hperp : ∀ v : H, ⟪ι v, e⟫ = (0 : ℝ))
     (g : H → ℝ) : Function.Injective (graphMap ι e g) := by

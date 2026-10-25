@@ -115,20 +115,20 @@ theorem divergence_eq_traceLM (F : V → V) (x : V) : divergence F x = traceLM (
 theorem continuous_divergence {F : V → V} (hF : ContDiff ℝ 1 F) : Continuous (divergence F) :=
   continuous_traceLM.comp (hF.continuous_fderiv one_ne_zero)
 
-omit [FiniteDimensional ℝ V] in
+section CompactDivergence
+
+omit [FiniteDimensional ℝ V]
 /-- A field vanishing on a neighbourhood of `x` has vanishing divergence at `x`. -/
 theorem divergence_eq_zero_of_notMem_tsupport {F : V → V} {x : V} (hx : x ∉ tsupport F) :
     divergence F x = 0 := by
   rw [divergence, fderiv_eq_zero_of_notMem_tsupport hx]
   simp
 
-omit [FiniteDimensional ℝ V] in
 /-- The divergence of a compactly supported field is compactly supported. -/
 theorem hasCompactSupport_divergence {F : V → V} (hF : HasCompactSupport F) :
     HasCompactSupport (divergence F) :=
   HasCompactSupport.intro hF fun _ hx => divergence_eq_zero_of_notMem_tsupport hx
 
-omit [FiniteDimensional ℝ V] in
 /-- The divergence is additive over a finite family of fields differentiable at the point. -/
 theorem divergence_finset_sum {γ : Type*} (s : Finset γ) {G : γ → V → V} {x : V}
     (hG : ∀ i ∈ s, DifferentiableAt ℝ (G i) x) :
@@ -140,6 +140,8 @@ theorem divergence_finset_sum {γ : Type*} (s : Finset γ) {G : γ → V → V} 
     exact HasFDerivAt.sum fun i hi => (hG i hi).hasFDerivAt
   rw [divergence_eq_traceLM, hd.fderiv, map_sum]
   rfl
+
+end CompactDivergence
 
 end Trace
 

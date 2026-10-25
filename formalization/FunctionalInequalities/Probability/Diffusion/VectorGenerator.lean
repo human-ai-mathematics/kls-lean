@@ -31,7 +31,7 @@ theorem diffusionGenerator_eq_vectorGenerator (b : V → V) (σ : V → Fin d �
 section NormedSpace
 
 variable {W W' : Type*}
-variable [NormedAddCommGroup W] [NormedSpace ℝ W] [NormedAddCommGroup W'] [NormedSpace ℝ W']
+  [NormedAddCommGroup W] [NormedSpace ℝ W] [NormedAddCommGroup W'] [NormedSpace ℝ W']
 
 /-- The derivative of a continuous linear map applied to a differentiable function. -/
 theorem fderiv_clm_comp_apply_vec (ℓ : W →L[ℝ] W') {G : V → W} {x : V}
@@ -101,7 +101,7 @@ end NormedSpace
 section NormedSpace
 
 variable {W₁ W₂ : Type*}
-variable [NormedAddCommGroup W₁] [NormedSpace ℝ W₁] [NormedAddCommGroup W₂] [NormedSpace ℝ W₂]
+  [NormedAddCommGroup W₁] [NormedSpace ℝ W₁] [NormedAddCommGroup W₂] [NormedSpace ℝ W₂]
 
 /-- The vector generator of a pair is the pair of vector generators. -/
 theorem vectorGenerator_prodMk (b : V → V) (σ : V → Fin d → V)
@@ -135,8 +135,8 @@ theorem fderiv_prodMk_apply_vec {G₁ : V → W₁} {G₂ : V → W₂} {x : V}
 
 end NormedSpace
 
-/-- The derivative of a finite family, applied to a vector. -/
-theorem fderiv_pi_apply_vec {ι : Type*} [Fintype ι] {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
+/-- The derivative of a componentwise differentiable family, applied to a vector. -/
+theorem fderiv_pi_apply_vec {ι : Type*} {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
     {G : V → ι → W} {x : V} (hG : ∀ i, DifferentiableAt ℝ (fun y => G y i) x) (v : V) :
     fderiv ℝ G x v = fun i => fderiv ℝ (fun y => G y i) x v := by
   rw [fderiv_pi hG]

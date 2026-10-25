@@ -18,7 +18,7 @@ open MeasureTheory Set
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
@@ -323,7 +323,9 @@ theorem State.Supported.coordinateGenerator [DecidableEq ι] {Y : State E ι} {R
       rfl
     · simp [WaveSplitting.coordinateGenerator, hi]
 
-omit [NormedSpace ℝ E] in
+section SupportedDifferences
+
+omit [NormedSpace ℝ E]
 theorem State.Supported.addState {X Y : State E ι} {R : ℝ} (hX : X.Supported R)
     (hY : Y.Supported R) : (WaveSplitting.addState X Y).Supported R := fun x hx => by
   obtain ⟨h₁, h₂, h₃⟩ := hX x hx
@@ -331,13 +333,14 @@ theorem State.Supported.addState {X Y : State E ι} {R : ℝ} (hX : X.Supported 
   exact ⟨by simp [WaveSplitting.addState, h₁, h₄], by simp [WaveSplitting.addState, h₂, h₅],
     fun j => by simp [WaveSplitting.addState, h₃ j, h₆ j]⟩
 
-omit [NormedSpace ℝ E] in
 theorem State.Supported.subState {X Y : State E ι} {R : ℝ} (hX : X.Supported R)
     (hY : Y.Supported R) : (WaveSplitting.subState X Y).Supported R := fun x hx => by
   obtain ⟨h₁, h₂, h₃⟩ := hX x hx
   obtain ⟨h₄, h₅, h₆⟩ := hY x hx
   exact ⟨by simp [WaveSplitting.subState, h₁, h₄], by simp [WaveSplitting.subState, h₂, h₅],
     fun j => by simp [WaveSplitting.subState, h₃ j, h₆ j]⟩
+
+end SupportedDifferences
 
 section FiniteIndex
 
@@ -427,15 +430,18 @@ private theorem integral_stateJet (a : ι → E) (k : ℕ) {Y : State E ι}
     integral_finsetSum Finset.univ (fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))]
   exact (derivativeEnergy_eq_scalarEnergy m a k hY hc).symm
 
-omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
+section DerivativeEnergy
+
+omit [BorelSpace E] [IsFiniteMeasureOnCompacts m]
 theorem derivativeEnergy_zeroState (a : ι → E) (k : ℕ) :
     derivativeEnergy m a k (zeroState : State E ι) = 0 := by
   simp [derivativeEnergy, energy, differentiate, derivative, zeroState, squareIntegral]
 
-omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
 theorem derivativeEnergy_nonneg (a : ι → E) (k : ℕ) (Y : State E ι) :
     0 ≤ derivativeEnergy m a k Y :=
   Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => energy_nonneg m _
+
+end DerivativeEnergy
 
 end FiniteIndex
 

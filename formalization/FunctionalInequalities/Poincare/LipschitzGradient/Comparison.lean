@@ -45,7 +45,7 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
 
-variable (ν : ProbabilityMeasure V) (m : Measure V) [m.IsAddHaarMeasure]
+  (ν : ProbabilityMeasure V) (m : Measure V) [m.IsAddHaarMeasure]
 
 namespace Energy.LipschitzGradient
 

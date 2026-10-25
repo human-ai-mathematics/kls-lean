@@ -22,7 +22,10 @@ def Holds (ν : ProbabilityMeasure E) (C : NNReal) : Prop :=
   ∀ f : E → ℝ, Energy.LocalSlope.Admissible ν f →
     evariance f (ν : Measure E) ≤ (C : ENNReal) * Energy.LocalSlope.energy ν f
 
-/-- The literature optimum of the intrinsic law. Empty sets of finite constants give infinity. -/
+/-- The infimum of finite nonnegative Poincaré bounds for `Probability.intrinsicMeasure μ`.
+Intrinsic coordinates remove redundant affine directions using an affine isometry; they do not
+normalize the covariance. An empty set of finite bounds gives `⊤`. A zero-dimensional intrinsic
+coordinate space has value zero, as proved below. -/
 def Intrinsic.constant (μ : ProbabilityMeasure E) : ENNReal :=
   ⨅ C : {C : NNReal // Poincare.LocalSlope.Holds (Probability.intrinsicMeasure μ) C},
     (C.1 : ENNReal)
@@ -37,7 +40,9 @@ theorem holds_zero_of_subsingleton [Subsingleton E] (ν : ProbabilityMeasure E) 
   rw [hf]
   simp [evariance]
 
-omit [CompleteSpace E] in
+section DegenerateConstants
+
+omit [CompleteSpace E]
 /-- The literature optimum includes the zero-dimensional case with value zero. -/
 theorem Intrinsic.constant_eq_zero_of_subsingleton [Subsingleton E] (μ : ProbabilityMeasure E) :
     Poincare.LocalSlope.Intrinsic.constant μ = 0 := by
@@ -45,7 +50,6 @@ theorem Intrinsic.constant_eq_zero_of_subsingleton [Subsingleton E] (μ : Probab
   exact iInf_le_of_le ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
     (by simp)
 
-omit [CompleteSpace E] in
 /-- A zero-dimensional direction space gives literature optimum zero: every intrinsic test is
 constant there. -/
 theorem Intrinsic.constant_eq_zero_of_direction_subsingleton (μ : ProbabilityMeasure E)
@@ -55,7 +59,6 @@ theorem Intrinsic.constant_eq_zero_of_direction_subsingleton (μ : ProbabilityMe
   exact iInf_le_of_le ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
     (by simp)
 
-omit [CompleteSpace E] in
 /-- The zero-dimensional case stated through the direction submodule. -/
 theorem Intrinsic.constant_eq_zero_of_direction_eq_bot (μ : ProbabilityMeasure E)
     (h : (Probability.affineSupport μ).direction = ⊥) :
@@ -63,5 +66,7 @@ theorem Intrinsic.constant_eq_zero_of_direction_eq_bot (μ : ProbabilityMeasure 
   have : Subsingleton (Probability.affineSupport μ).direction :=
     Submodule.subsingleton_iff_eq_bot.mpr h
   exact Intrinsic.constant_eq_zero_of_direction_subsingleton μ
+
+end DegenerateConstants
 
 end FunctionalInequalities.Poincare.LocalSlope

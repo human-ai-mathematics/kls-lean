@@ -212,12 +212,13 @@ theorem trace_transpose_mul_right_involution (A Q : Matrix ι ι ℝ)
     _ = Matrix.trace (A.transpose*A) := by
       rw [Matrix.mul_assoc, hQQ,Matrix.mul_one]
 
-omit [DecidableEq ι] in
+section TraceConjugation
+
+omit [DecidableEq ι]
 theorem trace_symmetric_conjugation (S H : Matrix ι ι ℝ) :
     Matrix.trace (S*H*S) = Matrix.trace ((S*S)*H) := by
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_cycle S H S
 
-omit [DecidableEq ι] in
 theorem trace_transpose_conjugation_sq (S H : Matrix ι ι ℝ)
     (hS : S.IsSymm) (hH : H.IsSymm) :
     Matrix.trace ((S*H*S).transpose*(S*H*S)) = Matrix.trace ((S*S)*H*(S*S)*H) := by
@@ -227,6 +228,8 @@ theorem trace_transpose_conjugation_sq (S H : Matrix ι ι ℝ)
     simp only [Matrix.transpose_mul,hSt,hHt,Matrix.mul_assoc]
   rw [ht]
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm (S*H*S*S*H) S
+
+end TraceConjugation
 
 end FunctionalInequalities.Analysis
 

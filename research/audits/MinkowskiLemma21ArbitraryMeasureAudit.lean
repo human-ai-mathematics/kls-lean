@@ -26,20 +26,23 @@ theorem unfoldedEquality (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (h�
         liminf (fun n => minkowskiContent ν (A.1 n)) atTop :=
   relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent_of_measure_lt_top ν hB hνB
 
-omit [BorelSpace X] in
+section MinkowskiSemicontinuity
+
+omit [BorelSpace X]
 /-- Semicontinuity needs neither measurability nor finite mass of the limit set. -/
 theorem semicontinuity (ν : Measure X) (B : Set X) (A : MinkowskiApproximatingSequence ν B) :
     relaxedUpperMinkowskiContent ν B ≤
       liminf (fun n => relaxedUpperMinkowskiContent ν (A.1 n)) atTop :=
   relaxedUpperMinkowskiContent_le_liminf_of_tendsto ν A.2.1 A.2.2
 
-omit [BorelSpace X] in
 theorem nearMinimum (ν : Measure X) (B : Set X) {a ε : ENNReal}
     (ha : relaxedUpperMinkowskiContent ν B < a) (hε : 0 < ε) :
     ∃ C : Set X, MeasurableSet C ∧
       (∫⁻ x, ‖C.indicator (1 : X → ℝ) x - B.indicator 1 x‖ₑ ∂ν) < ε ∧
       upperMinkowskiContent ν C < a :=
   exists_upperApproximation_lt ν B ha hε
+
+end MinkowskiSemicontinuity
 
 /-- Infinite-mass Lebesgue measure on the line. -/
 theorem lebesgueInterval : (volume : Measure ℝ) univ = ⊤ ∧

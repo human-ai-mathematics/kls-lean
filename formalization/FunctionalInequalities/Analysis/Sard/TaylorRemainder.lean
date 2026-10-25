@@ -22,7 +22,7 @@ variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 section StructuredSpace
 
 variable {F : Type*}
-variable [NormedAddCommGroup F]
+  [NormedAddCommGroup F]
 
 omit [NormedSpace ℝ V] in
 /-- Order zero: uniform continuity on a compact set, with the nearby point outside it. -/

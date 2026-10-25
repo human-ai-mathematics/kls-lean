@@ -442,7 +442,9 @@ section Recovery
 
 variable (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
 
-omit [IsFiniteMeasure ν] in
+section MinkowskiRadii
+
+omit [IsFiniteMeasure ν]
 /-- The mass increment at a positive radius is the lower-content quotient times the radius. -/
 theorem measure_thickening_sub_eq_div_mul {r : ℝ} (hr : 0 < r) :
     (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B =
@@ -450,7 +452,6 @@ theorem measure_thickening_sub_eq_div_mul {r : ℝ} (hr : 0 < r) :
         ENNReal.ofReal r :=
   (ENNReal.div_mul_cancel (ENNReal.ofReal_pos.2 hr).ne' ENNReal.ofReal_ne_top).symm
 
-omit [IsFiniteMeasure ν] in
 /-- Radii realizing the lower-content liminf: `r n ∈ (0, 1/(n+1))` with quotient at most
 `minkowskiContent ν B + n⁻¹`, so `r n → 0⁺` and the quotients tend to the lower content. -/
 theorem exists_radii_tendsto_minkowskiContent (hfin : minkowskiContent ν B ≠ ⊤) :
@@ -485,6 +486,8 @@ theorem exists_radii_tendsto_minkowskiContent (hfin : minkowskiContent ν B ≠ 
       simpa using tendsto_const_nhds.add ENNReal.tendsto_inv_nat_nhds_zero
     rw [← hlim.limsup_eq]
     exact limsup_le_limsup (Eventually.of_forall fun n => (hr n).2.le)
+
+end MinkowskiRadii
 
 variable [OpensMeasurableSpace V]
 

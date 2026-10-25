@@ -27,7 +27,7 @@ section
 open MeasureTheory
 open scoped ENNReal
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-variable [MeasurableSpace E] [BorelSpace E]
+  [MeasurableSpace E] [BorelSpace E]
 /-- The actual translated conjugate mass for a right-translation-invariant
 background measure, retaining both zero and infinite values. -/
 theorem mass_legendre_affineSubtract (dx : Measure E) [Measure.IsAddRightInvariant dx]
@@ -64,7 +64,9 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 section StructuredSpace
 
 variable [IsFiniteMeasure μ]
-omit [BorelSpace E] in
+section AffineMoments
+
+omit [BorelSpace E]
 /-- The actual affine perturbation is admissible under the input first moment.
 Neither output integrability nor a supporting affine plane is assumed. -/
 theorem affineSubtract_potentialIntegrable
@@ -89,7 +91,6 @@ theorem affineSubtract_potentialIntegrable
     rw [← EReal.coe_toReal hx (hf.1 x), ← EReal.coe_sub]
     exact EReal.coe_ne_top _
   · exact (hf.2.2.sub (hlin.add (integrable_const b))).congr (Filter.EventuallyEq.symm heq)
-omit [BorelSpace E] in
 /-- The actual integral formula retains total mass for a general finite measure.
 This is not asserted to be invariant under a constant shift at arbitrary mass. -/
 theorem integral_affineSubtract
@@ -110,6 +111,8 @@ theorem integral_affineSubtract
   rw [integral_congr_ae heq, hsub, hadd, integral_const]
   simp only [smul_eq_mul, measureReal_def]
   ring
+
+end AffineMoments
 
 end StructuredSpace
 omit [BorelSpace E] in
@@ -156,7 +159,7 @@ section
 
 open MeasureTheory
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-variable [MeasurableSpace E] [BorelSpace E] {μ : Measure E}
+  [MeasurableSpace E] [BorelSpace E] {μ : Measure E}
 /-- The actual source affine normalization preserves admissibility and the
 variational value under the source probability, first-moment and centering data. -/
 theorem exists_origin_zero_affine_of_probability [FiniteDimensional ℝ E] [IsProbabilityMeasure μ]

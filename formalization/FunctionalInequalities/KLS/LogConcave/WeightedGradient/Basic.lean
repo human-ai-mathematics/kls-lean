@@ -47,13 +47,14 @@ section FullDimensional
 
 variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
 
-omit [CompleteSpace V] in
+section IntrinsicDensityBounds
+
+omit [CompleteSpace V]
 /-- A full-dimensional log-concave law is absolutely continuous with respect to Haar measure. -/
 theorem absolutelyContinuous_haar (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) : (ν : Measure V) ≪ m :=
   hν.absolutelyContinuous_of_interior_support_nonempty m hi
 
-omit [CompleteSpace V] in
 /-- The frontier of the convex support of a full-dimensional log-concave law is null. -/
 theorem frontier_support_eq_zero (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) :
@@ -61,7 +62,6 @@ theorem frontier_support_eq_zero (hν : LogConcave ν)
   hν.absolutelyContinuous_haar Measure.addHaar hi
     (hν.convex_support.addHaar_frontier Measure.addHaar)
 
-omit [CompleteSpace V] in
 /-- On compact subsets of the support interior the Borell density is bounded below by a positive
 constant, so Haar measure is locally dominated by the law. -/
 theorem locallyDominates (hν : LogConcave ν)
@@ -86,6 +86,8 @@ theorem locallyDominates (hν : LogConcave ν)
   calc m (s ∩ K) = ((a' : ℝ≥0∞))⁻¹ * ((a' : ℝ≥0∞) * m (s ∩ K)) := by
         rw [← mul_assoc, ENNReal.inv_mul_cancel ha'0' ha'top, one_mul]
     _ ≤ ((a' : ℝ≥0∞))⁻¹ * (ν : Measure V) (s ∩ K) := by gcongr
+
+end IntrinsicDensityBounds
 
 variable (B : V →L[ℝ] V)
 

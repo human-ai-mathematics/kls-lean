@@ -47,7 +47,9 @@ omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ K] [FiniteDimensional ℝ 
 @[simp] theorem graphMapLinear_apply (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V) (A : H →L[ℝ] K) (y : H) :
     graphMapLinear ι κ A y = ι y + κ (A y) := rfl
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
+section GraphJacobian
+
+omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V]
 /-- The Gram operator of a graph map is `1 + Aᵀ A` on the parameter space: the two isometries
 contribute the identity and the cross terms vanish because their ranges are orthogonal. -/
 theorem adjoint_comp_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
@@ -65,7 +67,6 @@ theorem adjoint_comp_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[
     ι.inner_map_map, κ.inner_map_map, LinearMap.comp_apply, LinearMap.adjoint_inner_left]
   ring
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
 /-- **The graph volume factor, squared.**  No square root and no positivity argument is needed for
 this form. -/
 theorem normDet_graphMapLinear_sq (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
@@ -76,7 +77,6 @@ theorem normDet_graphMapLinear_sq (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[�
   rw [adjoint_comp_graphMapLinear ι κ hperp A] at h
   exact_mod_cast h
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
 /-- **The graph volume factor in arbitrary codimension**: `√det (1 + Aᵀ A)`, a determinant on the
 parameter space `H`, independent of the ambient embedding. -/
 theorem normDet_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
@@ -86,6 +86,8 @@ theorem normDet_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] 
           (LinearMap.id + LinearMap.adjoint (A : H →ₗ[ℝ] K) ∘ₗ (A : H →ₗ[ℝ] K))) := by
   rw [← normDet_graphMapLinear_sq ι κ hperp A,
     Real.sqrt_sq (LinearMap.normDet_nonneg _)]
+
+end GraphJacobian
 
 /-! ### The codimension-one case agrees with the existing area formula -/
 

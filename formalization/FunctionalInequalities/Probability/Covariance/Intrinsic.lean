@@ -37,9 +37,9 @@ open MeasureTheory ProbabilityTheory
 open scoped InnerProductSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-variable [MeasurableSpace E] [BorelSpace E]
-variable [SecondCountableTopology E] [FiniteDimensional ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E]
+  [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 namespace FunctionalInequalities.Probability
 

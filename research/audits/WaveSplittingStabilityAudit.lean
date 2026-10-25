@@ -9,7 +9,7 @@ open scoped ContDiff
 namespace WaveSplittingStabilityAudit
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
 
 /-- Fifth-order stability at fixed horizon for arbitrary compact smooth initial data. -/
 theorem fifth_order_horizon (d : ℕ) (a : Fin d → E) (b : Fin d → E → ℝ)

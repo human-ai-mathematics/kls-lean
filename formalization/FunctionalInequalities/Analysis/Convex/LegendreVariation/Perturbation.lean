@@ -20,7 +20,7 @@ section BoundedPerturbation
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private theorem legendre_bounded_perturbation_terms
     (φ : E → EReal) (hφ : ProperPotential φ) (b : E → ℝ)

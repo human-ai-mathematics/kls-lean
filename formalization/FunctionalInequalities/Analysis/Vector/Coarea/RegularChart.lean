@@ -121,22 +121,24 @@ theorem coe_flattenVectorEquiv {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗᵢ[ℝ] 
 
 /-! ### The chart -/
 
-omit [FiniteDimensional ℝ W] in
+section FlatteningChart
+
+omit [FiniteDimensional ℝ W]
 /-- The chart that flattens every nearby level of `u`: the parameter component is the tangential
 retraction, the normal component is the value of `u`. -/
 def flattenVectorChart (ι : H →ₗᵢ[ℝ] V) (u : V → W) : V → H × W :=
   fun x => (graphProj ι x, u x)
 
-omit [FiniteDimensional ℝ W] in
 theorem contDiffOn_flattenVectorChart (ι : H →ₗᵢ[ℝ] V) {u : V → W} {O : Set V}
     (hu : ContDiffOn ℝ 1 u O) : ContDiffOn ℝ 1 (flattenVectorChart ι u) O :=
   (graphProj ι).contDiff.contDiffOn.prodMk hu
 
-omit [FiniteDimensional ℝ W] in
 theorem hasFDerivAt_flattenVectorChart (ι : H →ₗᵢ[ℝ] V) {u : V → W} {x : V}
     (hu : DifferentiableAt ℝ u x) :
     HasFDerivAt (flattenVectorChart ι u) ((graphProj ι).prod (fderiv ℝ u x)) x :=
   (graphProj ι).hasFDerivAt.prodMk hu.hasFDerivAt
+
+end FlatteningChart
 
 /-- **A chart flattening every nearby level, with a `C¹` inverse on its whole target.**  The
 codimension-`m` analogue of `exists_regularChart`; no regularity outside `O` is used or asserted. -/
@@ -159,17 +161,20 @@ theorem exists_vectorRegularChart {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗᵢ[�
 
 /-! ### The inverse chart is a family of graphs -/
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ W] in
+section LevelHeight
+
+omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ W]
 /-- The height of the inverse chart: its normal coordinate, as a function of the parameter and the
 level jointly. -/
 def vectorLevelHeight (κ : K →ₗᵢ[ℝ] V) (D : OpenPartialHomeomorph V (H × W)) (p : H × W) : K :=
   graphProj κ (D.symm p)
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ W] in
 theorem contDiffOn_vectorLevelHeight (κ : K →ₗᵢ[ℝ] V) {D : OpenPartialHomeomorph V (H × W)}
     (hD : ContDiffOn ℝ 1 D.symm D.target) :
     ContDiffOn ℝ 1 (vectorLevelHeight κ D) D.target :=
   (graphProj κ).contDiff.comp_contDiffOn hD
+
+end LevelHeight
 
 omit [InnerProductSpace ℝ W] [FiniteDimensional ℝ W] in
 /-- **The inverse chart is precisely a graph at each level, and that graph attains the level.**

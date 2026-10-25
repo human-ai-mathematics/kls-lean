@@ -61,7 +61,7 @@ abbrev E0 := EuclideanSpace ℝ (Fin 0)
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 theorem hessian_zero_fun (x v : E) :
     bilinearIteratedFDerivTwo ℝ (fun _ : E => (0 : ℝ)) x v v = 0 := by

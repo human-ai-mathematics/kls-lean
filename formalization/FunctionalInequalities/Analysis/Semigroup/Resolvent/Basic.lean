@@ -72,19 +72,22 @@ def graphL2 (T : H₀ →ₗ.[ℝ] H₁) : Submodule ℝ (WithLp 2 (H₀ × H₁
     ((WithLp.prodContinuousLinearEquiv 2 ℝ H₀ H₁) :
       WithLp 2 (H₀ × H₁) →L[ℝ] (H₀ × H₁)).toLinearMap
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
+section ResolventGraph
+
+omit [CompleteSpace H₀] [CompleteSpace H₁]
 /-- Points of the transported graph, in the form the resolvent equation produces them. -/
 theorem toLp_mem_graphL2 (T : H₀ →ₗ.[ℝ] H₁) (u : T.domain) :
     (WithLp.prodContinuousLinearEquiv 2 ℝ H₀ H₁).symm ((u : H₀), T u) ∈ graphL2 T := by
   simp only [graphL2, Submodule.mem_comap]
   simp [T.mem_graph u]
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
 /-- The transported graph of a closed operator is closed: it is the preimage of the graph under
 the continuous transport. -/
 theorem isClosed_graphL2 (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) :
     IsClosed ((graphL2 T : Submodule ℝ (WithLp 2 (H₀ × H₁))) : Set (WithLp 2 (H₀ × H₁))) := by
   exact hT.preimage (WithLp.prodContinuousLinearEquiv 2 ℝ H₀ H₁).continuous
+
+end ResolventGraph
 
 /-- resolvent solvability's ambient space: the transported graph of a closed operator is a Hilbert space.
 
@@ -118,7 +121,9 @@ omit [CompleteSpace H₀] [CompleteSpace H₁] in
 def scaledGraphL2 (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) : Submodule ℝ (WithLp 2 (H₀ × H₁)) :=
   T.graph.comap (rescale s).toLinearMap
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
+section ScaledResolventGraph
+
+omit [CompleteSpace H₀] [CompleteSpace H₁]
 theorem toLp_mem_scaledGraphL2 (T : H₀ →ₗ.[ℝ] H₁) {s : ℝ} (hs : 0 < s) (u : T.domain) :
     (WithLp.toLp 2 ((u : H₀), Real.sqrt s • T u)) ∈ scaledGraphL2 T s := by
   have hne : Real.sqrt s ≠ 0 := ne_of_gt (Real.sqrt_pos.mpr hs)
@@ -126,7 +131,6 @@ theorem toLp_mem_scaledGraphL2 (T : H₀ →ₗ.[ℝ] H₁) {s : ℝ} (hs : 0 < 
     inv_smul_smul₀ hne]
   exact T.mem_graph u
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
 theorem exists_of_mem_scaledGraphL2 {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s)
     {z : WithLp 2 (H₀ × H₁)} (hz : z ∈ scaledGraphL2 T s) :
     ∃ u : T.domain, (WithLp.ofLp z).1 = (u : H₀) ∧ (WithLp.ofLp z).2 = Real.sqrt s • T u := by
@@ -136,11 +140,12 @@ theorem exists_of_mem_scaledGraphL2 {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs :
   dsimp only at hu1 hu2
   exact ⟨u, hu1.symm, by rw [hu2]; exact (smul_inv_smul₀ hne _).symm⟩
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
 /-- The rescaled graph of a closed operator is closed. -/
 theorem isClosed_scaledGraphL2 (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) (hT : T.IsClosed) :
     IsClosed ((scaledGraphL2 T s : Submodule ℝ (WithLp 2 (H₀ × H₁))) : Set (WithLp 2 (H₀ × H₁))) :=
   hT.preimage (rescale s).continuous
+
+end ScaledResolventGraph
 
 /-- The rescaled graph of a closed operator is a Hilbert space. -/
 theorem completeSpace_scaledGraphL2 (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) (hT : T.IsClosed) :

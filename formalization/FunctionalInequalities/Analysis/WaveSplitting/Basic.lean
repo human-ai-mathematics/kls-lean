@@ -14,7 +14,7 @@ noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+  {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- Classical displacement, velocity and vector-field coordinates. -/
 structure State (E ι : Type*) where
@@ -162,14 +162,15 @@ omit [Fintype ι] in
   | nil => rfl
   | cons j js ih => simp [WaveSplitting.sweep, ih]
 
-omit [Fintype ι] in
+section SweepRegularity
+
+omit [Fintype ι]
 theorem State.Smooth.sweep {Y : State E ι} (hY : Y.Smooth)
     (a : ι → E) (t : ℝ) (js : List ι) : (sweep a t js Y).Smooth := by
   induction js generalizing Y with
   | nil => exact hY
   | cons j js ih => exact ih (hY.transport (a j) j t)
 
-omit [Fintype ι] in
 theorem State.Supported.sweep {Y : State E ι} {R : ℝ} (hY : Y.Supported R)
     (a : ι → E) (t : ℝ) (js : List ι) :
     (sweep a t js Y).Supported (R + |t| * travel a js) := by
@@ -178,6 +179,8 @@ theorem State.Supported.sweep {Y : State E ι} {R : ℝ} (hY : Y.Supported R)
   | cons j js ih =>
     have h := ih (hY.transport (a j) j t)
     convert h using 1 <;> simp [WaveSplitting.sweep, travel]; ring
+
+end SweepRegularity
 
 /-- A coordinate sweep followed by the zero-order flow. -/
 def step (a : ι → E) (b : ι → E → ℝ) (js : List ι) (t : ℝ) (Y : State E ι) :
@@ -272,7 +275,9 @@ theorem JointSmooth.reaction {Y : ℝ → State E ι} (hY : JointSmooth Y)
     ((hcos.sub contDiff_const).mul hc),
     ((hs.neg.mul hY.1).add (hcos.mul hY.2.1)).sub (hs.mul hc), hY.2.2⟩
 
-omit [Fintype ι] in
+section JointTransport
+
+omit [Fintype ι]
 theorem JointSmooth.transport {Y : ℝ → State E ι} (hY : JointSmooth Y)
     (a : E) (j : ι) : JointSmooth (fun t => transport a j t (Y t)) := by
   have hp : ContDiff ℝ ∞ (fun z : ℝ × E => (z.1, z.2 + z.1 • a)) :=
@@ -288,12 +293,13 @@ theorem JointSmooth.transport {Y : ℝ → State E ι} (hY : JointSmooth Y)
           ((hY.2.1.comp hm).sub ((hY.2.2 j).comp hm))).div_const 2
     · simpa only [WaveSplitting.transport, hi, ↓reduceIte] using hY.2.2 i
 
-omit [Fintype ι] in
 theorem JointSmooth.sweep {Y : ℝ → State E ι} (hY : JointSmooth Y)
     (a : ι → E) (js : List ι) : JointSmooth (fun t => sweep a t js (Y t)) := by
   induction js generalizing Y with
   | nil => exact hY
   | cons j js ih => exact ih (hY.transport (a j) j)
+
+end JointTransport
 
 /-- Each entire closed cell extends to a jointly smooth function of time and space. -/
 theorem State.Smooth.joint_cell {Y : State E ι} (hY : Y.Smooth)
@@ -326,7 +332,9 @@ theorem initial_cells [FiniteDimensional ℝ E]
   exact (hR.cell a b js hδ hθ.1 hθ.2 hk) x
     (by simpa [Metric.mem_closedBall, dist_zero_right, not_le] using hx)
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] [DecidableEq ι] in
+section ReactionDerivatives
+
+omit [NormedAddCommGroup E] [NormedSpace ℝ E] [DecidableEq ι]
 /-- The displacement derivative is exactly the velocity of the zero-order flow. -/
 theorem reaction_hasDerivAt_u (b : ι → E → ℝ) (Y : State E ι) (x : E) (t : ℝ) :
     HasDerivAt (fun s => (reaction b s Y).u x) (reaction b t Y |>.v x) t := by
@@ -337,7 +345,6 @@ theorem reaction_hasDerivAt_u (b : ι → E → ℝ) (Y : State E ι) (x : E) (t
   dsimp only [reaction]
   ring
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] [DecidableEq ι] in
 /-- The velocity derivative includes the original coefficient pairing with its correct sign. -/
 theorem reaction_hasDerivAt_v (b : ι → E → ℝ) (Y : State E ι) (x : E) (t : ℝ) :
     HasDerivAt (fun s => (reaction b s Y).v x)
@@ -349,9 +356,13 @@ theorem reaction_hasDerivAt_v (b : ι → E → ℝ) (Y : State E ι) (x : E) (t
   dsimp only [reaction]
   ring
 
+end ReactionDerivatives
 
 
-omit [Fintype ι] in
+
+section TransportIdentities
+
+omit [Fintype ι]
 /-- Pointwise characteristic energy identity, before Haar integration. -/
 theorem transport_energy (a : E) (j : ι) (t : ℝ) (Y : State E ι) (x : E) :
     (transport a j t Y).v x ^ 2 + (transport a j t Y).p j x ^ 2 =
@@ -360,7 +371,6 @@ theorem transport_energy (a : E) (j : ι) (t : ℝ) (Y : State E ι) (x : E) :
   simp only [transport, ↓reduceIte]
   ring
 
-omit [Fintype ι] in
 /-- The infinitesimal velocity equation of the coordinate flow at time zero. -/
 theorem transport_hasDerivAt_v_zero (a : E) (j : ι) (Y : State E ι) (x : E)
     (hv : DifferentiableAt ℝ Y.v x) (hp : DifferentiableAt ℝ (Y.p j) x) :
@@ -381,7 +391,6 @@ theorem transport_hasDerivAt_v_zero (a : E) (j : ι) (Y : State E ι) (x : E)
   simp only [map_neg]
   ring
 
-omit [Fintype ι] in
 /-- The infinitesimal field equation of the coordinate flow at time zero. -/
 theorem transport_hasDerivAt_p_zero (a : E) (j : ι) (Y : State E ι) (x : E)
     (hv : DifferentiableAt ℝ Y.v x) (hp : DifferentiableAt ℝ (Y.p j) x) :
@@ -402,5 +411,7 @@ theorem transport_hasDerivAt_p_zero (a : E) (j : ι) (Y : State E ι) (x : E)
   apply HasDerivAt.congr_deriv (((hvp.add hpp).sub (hvm.sub hpm)).div_const 2)
   simp only [map_neg]
   ring
+
+end TransportIdentities
 
 end FunctionalInequalities.Analysis.WaveSplitting

@@ -21,24 +21,25 @@ open FunctionalInequalities.KLS.Isoperimetry
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
 
-omit [BorelSpace X] in
+section ArbitraryMassContent
+
+omit [BorelSpace X]
 theorem lower_le_upper (ν : Measure X) (B : Set X) :
     minkowskiContent ν B ≤ upperMinkowskiContent ν B := liminf_le_limsup
 
-omit [BorelSpace X] in
 theorem upper_empty (ν : Measure X) : upperMinkowskiContent ν (∅ : Set X) = 0 := by
   unfold upperMinkowskiContent
   simp [Metric.thickening_empty]
 
-omit [BorelSpace X] in
 theorem lower_empty (ν : Measure X) : minkowskiContent ν (∅ : Set X) = 0 :=
   le_antisymm ((lower_le_upper ν ∅).trans_eq (upper_empty ν)) bot_le
 
-omit [BorelSpace X] in
 theorem relaxed_le_relaxedUpper (ν : Measure X) (B : Set X) :
     relaxedMinkowskiContent ν B ≤ relaxedUpperMinkowskiContent ν B :=
   le_iInf fun A => (iInf_le _ A).trans
     (liminf_le_liminf (Eventually.of_forall fun n => lower_le_upper ν (A.1 n)))
+
+end ArbitraryMassContent
 
 /-- Empty target, infinite-mass Lebesgue measure: both relaxed contents and perimeter vanish
 (the relaxed identity at the empty target is recovered at the published scope). -/

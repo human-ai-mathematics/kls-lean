@@ -14,7 +14,7 @@ open MeasureTheory Set
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
@@ -284,7 +284,9 @@ theorem sqrt_derivativeEnergy_defect_cell_le {d : ℕ} (a : Fin d → E) {b : Fi
     (step a b _ θ (nodes a b _ δ Y n)))) ≤ _
   nlinarith
 
-omit [IsFiniteMeasureOnCompacts m] in
+section CellBounds
+
+omit [IsFiniteMeasureOnCompacts m]
 /-- **Mesh-uniform compatibility defect on the actual cells.** For a smooth coefficient without
 global bounds and smooth supported initial data, one constant works for all meshes of a fixed
 horizon: `sqrt E_order(d(cell_k(θ))) <= sqrt E_order(d(Y)) + C δ`, where `d = p - D u`. -/
@@ -317,7 +319,6 @@ theorem exists_defect_cell_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d → E
       nlinarith [mul_le_mul_of_nonneg_right hkt (mul_nonneg hr hδ)]
     _ = _ := by ring
 
-omit [IsFiniteMeasureOnCompacts m] in
 /-- **Weighted form energy of the displacement on the actual cells.** With a `C^1` weight
 satisfying `D_(a_j) w = -b_j w`, the weighted coordinate form energy of `u`, namely
 `∫ w (u^2 + Σ_j (D_(a_j) u)^2)`, obeys on every actual cell of a fixed horizon
@@ -397,6 +398,8 @@ theorem exists_formEnergy_cell_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
   have hE₀ := Real.sqrt_nonneg (derivativeEnergy m a 0 (compatibilityDefect a Y))
   have h₄' := mul_le_mul_of_nonneg_left h₄ hsM
   nlinarith [mul_nonneg hsM hE₀, mul_nonneg (mul_nonneg hsM hCD) hδ, mul_nonneg hCW hδ]
+
+end CellBounds
 
 end Integration
 end FunctionalInequalities.Analysis.WaveSplitting

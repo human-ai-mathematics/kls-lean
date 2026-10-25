@@ -99,13 +99,14 @@ section Stratification
 variable {V W : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
   [NormedAddCommGroup W] [NormedSpace ℝ W] [FiniteDimensional ℝ W]
 
-omit [FiniteDimensional ℝ W] in
+section RankStrata
+
+omit [FiniteDimensional ℝ W]
 /-- In finite dimensions the rank of a linear map is the `finrank` of its range, as a cardinal. -/
 theorem rank_toLinearMap_eq (f : V →L[ℝ] W) :
     (f : V →ₗ[ℝ] W).rank = (finrank ℝ (LinearMap.range (f : V →ₗ[ℝ] W)) : Cardinal) :=
   (finrank_eq_rank ℝ (LinearMap.range (f : V →ₗ[ℝ] W))).symm
 
-omit [FiniteDimensional ℝ W] in
 /-- A rank stratum of continuous linear maps is the difference of two open sets: the rank is an
 integer, so `rank f = r` is `r ≤ rank f` together with the failure of `r + 1 ≤ rank f`. -/
 theorem setOf_rank_eq (r : ℕ) :
@@ -115,6 +116,8 @@ theorem setOf_rank_eq (r : ℕ) :
   ext f
   simp only [Set.mem_ofPred_eq, Set.mem_sdiff, rank_toLinearMap_eq, Nat.cast_le, Nat.cast_inj]
   omega
+
+end RankStrata
 
 /-- A continuous linear map into a finite-dimensional target is surjective exactly when its rank is
 the dimension of the target. -/

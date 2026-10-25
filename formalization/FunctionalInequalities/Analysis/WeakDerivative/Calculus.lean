@@ -514,7 +514,7 @@ namespace FunctionalInequalities.Analysis
 section StructuredSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E]
+  [NormedAddCommGroup E]
 
 section NormedSpace
 

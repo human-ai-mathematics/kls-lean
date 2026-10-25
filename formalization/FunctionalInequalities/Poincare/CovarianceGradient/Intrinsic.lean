@@ -47,14 +47,15 @@ relaxation of the intrinsic law. -/
 def Holds (μ : ProbabilityMeasure E) (C : NNReal) : Prop :=
   L2Energy.Holds (Probability.intrinsicMeasure μ) (Energy.CovarianceGradient.Intrinsic.energy μ) C
 
-omit [CompleteSpace E] in
+section IntrinsicConstants
+
+omit [CompleteSpace E]
 /-- A finite constant is valid for the affine covariance relaxation exactly when it bounds the
 optimal extended constant. -/
 theorem holds_iff_constant_le (μ : ProbabilityMeasure E) (C : NNReal) :
     Holds μ C ↔ constant μ ≤ (C : ENNReal) :=
   L2Energy.holds_iff_constant_le (Probability.intrinsicMeasure μ) (Energy.CovarianceGradient.Intrinsic.energy μ) C
 
-omit [CompleteSpace E] in
 /-- Unfolding the affine constant exposes the generic `L²` optimizer of the intrinsic law at the
 sequential relaxation of the covariance pre-energy. -/
 theorem constant_eq (μ : ProbabilityMeasure E) :
@@ -62,19 +63,19 @@ theorem constant_eq (μ : ProbabilityMeasure E) :
       ((Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).sequentialRelaxation) :=
   rfl
 
-omit [CompleteSpace E] in
 /-- A zero-dimensional direction space gives affine constant zero: every intrinsic `L²` class
 is constant there. -/
 theorem constant_eq_zero_of_subsingleton (μ : ProbabilityMeasure E)
     [Subsingleton (Probability.affineSupport μ).direction] : constant μ = 0 :=
   L2Energy.constant_eq_zero_of_subsingleton _ _
 
-omit [CompleteSpace E] in
 /-- The zero-dimensional case stated through the direction submodule. -/
 theorem constant_eq_zero_of_direction_eq_bot (μ : ProbabilityMeasure E)
     (h : (Probability.affineSupport μ).direction = ⊥) : constant μ = 0 := by
   have : Subsingleton (Probability.affineSupport μ).direction :=
     Submodule.subsingleton_iff_eq_bot.mpr h
   exact constant_eq_zero_of_subsingleton μ
+
+end IntrinsicConstants
 
 end FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic

@@ -137,7 +137,9 @@ theorem poincare_temperate_gaussian {ρ : ℝ} (hρ : 0 < ρ) {f : V → ℝ} (h
     (regularPotential_gaussian (V := V) hρ).interior_support_law
     (regularPotential_gaussian (V := V) hρ).integrable_exp_mul_norm hC hf
 
-omit [SecondCountableTopology V] in
+section GaussianExamples
+
+omit [SecondCountableTopology V]
 /-- The first energy drop of Lemma 3.9 on the regular Gaussian law for the eigenfunction `⟪c, ·⟫`
 (`ℒ⟪c, ·⟫ = -ρ ⟪c, ·⟫`; mean zero and covariance `≤ ρ⁻¹` derived from (15) and the Poincaré
 inequality on `𝒜`): `‖c‖² ≤ ρ ∫ ⟪c, x⟫²` (the Gaussian attains equality; only the inequality is
@@ -217,7 +219,6 @@ theorem eigen_linear_gaussian {ρ : ℝ} (hρ : 0 < ρ) (c : V) :
     hR.temperate hR.integrable_exp_mul_norm (hlin c) (heig c) (hmean c) (inv_pos.mpr hρ).le hcov
   exact this
 
-omit [SecondCountableTopology V] in
 /-- Lemma 3.4 for the Gaussian law and the pair `g = ⟪c, ·⟫`, `h = 0`. -/
 theorem lemma_3_4_trivial_pair {ρ : ℝ} (hρ : 0 < ρ) (c : V) (α : ℝ) :
     ∫ x, ‖weightedLaplacianVec (potential ρ)
@@ -246,6 +247,8 @@ theorem lemma_3_4_trivial_pair {ρ : ℝ} (hρ : 0 < ρ) (c : V) (α : ℝ) :
     simp only [gradCoord, integral_const, probReal_univ, one_smul, sub_self]
     simp
     rfl
+
+end GaussianExamples
 
 /-- Corollary 3.5 on an explicit real sequence satisfying (45). -/
 example : Summable (fun i : ℕ => (1 / 2 : ℝ) ^ i) ∧

@@ -456,7 +456,9 @@ section Mollification
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
+section MollifiedSlopes
+
+omit [CompleteSpace V] [SecondCountableTopology V]
 /-- The mollification at radius `R` inherits, on the ball of radius `δ`, every Lipschitz constant
 of `g` on the ball of radius `δ + 2 * R`: the kernel of radius `2 * R` sees nothing further. -/
 theorem lipschitzOnWith_mollify_ball (m : Measure V) [m.IsAddHaarMeasure]
@@ -492,7 +494,6 @@ theorem lipschitzOnWith_mollify_ball (m : Measure V) [m.IsAddHaarMeasure]
             _ = (c : ℝ) * dist y z := by rw [dist_sub_right]
     _ = (c : ℝ) * dist y z := by rw [integral_const_mul, integral_kernel m hR, mul_one]
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- The mollification's derivative at `x` respects every Lipschitz constant of `g` on a slightly
 larger ball. -/
 theorem norm_fderiv_mollify_le_of_lipschitzOnWith (m : Measure V) [m.IsAddHaarMeasure]
@@ -502,6 +503,8 @@ theorem norm_fderiv_mollify_le_of_lipschitzOnWith (m : Measure V) [m.IsAddHaarMe
   ((hasFDerivAt_mollify m hR hg x).differentiableAt.hasFDerivAt).le_of_lipschitzOn
     (Metric.isOpen_ball.mem_nhds (Metric.mem_ball_self hδ))
     (lipschitzOnWith_mollify_ball m hR hg x h)
+
+end MollifiedSlopes
 
 omit [SecondCountableTopology V] in
 /-- Pointwise reverse convergence: the gradient norms of the mollifications do not exceed the

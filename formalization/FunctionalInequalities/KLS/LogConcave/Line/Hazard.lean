@@ -186,18 +186,21 @@ variable (hμ : LogConcave μ) (hi : (interior (μ : Measure ℝ).support).Nonem
   {m : ℝ} (hm : cdf μ m = 1 / 2)
 include hμ hi hm
 
-omit hμ hi in
+section MedianCdf
+
+omit hμ hi
 /-- The distribution function of a point in the interior of the support to the right of the
 median is at least one half. -/
 theorem half_le_cdf_of_le {x : ℝ} (hmx : m ≤ x) : 1 / 2 ≤ cdf μ x := by
   have := Probability.Line.cdf_mono μ hmx
   rwa [hm] at this
 
-omit hμ hi in
 /-- The distribution function to the left of the median is at most one half. -/
 theorem cdf_le_half_of_le {x : ℝ} (hxm : x ≤ m) : cdf μ x ≤ 1 / 2 := by
   have := Probability.Line.cdf_mono μ hxm
   rwa [hm] at this
+
+end MedianCdf
 
 /-- A median lies in the interior of the support. -/
 theorem median_mem : m ∈ interior (μ : Measure ℝ).support :=

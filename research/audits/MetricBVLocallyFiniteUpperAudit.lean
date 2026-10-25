@@ -42,16 +42,19 @@ theorem actualRadii (ν : Measure X) {B : Set X} (hB : MeasurableSet B)
         minkowskiContent ν B :=
   exists_upperRecovery_of_measure_lt_top ν hB hνB hc
 
-omit [BorelSpace X] in
+section RestrictedMass
+
+omit [BorelSpace X]
 theorem finiteNeighborhood (ν : Measure X) {B : Set X} (hνB : ν B < ⊤)
     (hc : minkowskiContent ν B < ⊤) : ∃ r : ℝ, 0 < r ∧ ν (thickening r B) < ⊤ :=
   exists_measure_thickening_lt_top ν hνB hc
 
-omit [BorelSpace X] in
 theorem actualRestrictedQuotient (ν : Measure X) {B U : Set X} (hU : MeasurableSet U)
     {r : ℝ} (hr : 0 < r) (hsub : thickening r B ⊆ U) :
     upperMinkowskiContent (ν.restrict U) B = upperMinkowskiContent ν B :=
   upperMinkowskiContent_restrict_of_thickening_subset ν hU hr hsub
+
+end RestrictedMass
 
 theorem arbitraryClassLower (ν : Measure X) {B : Set X} (hB : MeasurableSet B)
     (hνB : ν B < ⊤) (A : MinkowskiApproximatingSequence ν B) :

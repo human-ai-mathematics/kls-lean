@@ -50,7 +50,9 @@ variable {E F : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-omit [CompleteSpace E] [CompleteSpace F] in
+section ProductSections
+
+omit [CompleteSpace E] [CompleteSpace F]
 /-- Every left section is `C∞`. Source: local helper from Mathlib's `ContDiff.comp`,
 `WithLp.prodContinuousLinearEquiv`, and `contDiff_prodMk_left`; no section L² claim is made. -/
 theorem contDiff_section_left {f : WithLp 2 (E × F) → ℝ}
@@ -59,7 +61,6 @@ theorem contDiff_section_left {f : WithLp 2 (E × F) → ℝ}
   hf.comp
     ((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.contDiff.comp (contDiff_prodMk_left y))
 
-omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every right section is `C∞`. Source: local helper from Mathlib's `ContDiff.comp`,
 `WithLp.prodContinuousLinearEquiv`, and `contDiff_prodMk_right`; no section L² claim is made. -/
 theorem contDiff_section_right {f : WithLp 2 (E × F) → ℝ}
@@ -67,6 +68,8 @@ theorem contDiff_section_right {f : WithLp 2 (E × F) → ℝ}
     ContDiff ℝ ∞ (fun y ↦ f (WithLp.toLp 2 (x, y))) :=
   hf.comp
     ((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.contDiff.comp (contDiff_prodMk_right x))
+
+end ProductSections
 
 /-- Source: local chain-rule helper using Mathlib's `HasFDerivAt.comp`, `toDual_gradient`,
 and `WithLp.prod_inner_apply` to identify the left partial gradient. -/

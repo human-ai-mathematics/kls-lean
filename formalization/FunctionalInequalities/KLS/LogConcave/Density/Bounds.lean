@@ -42,7 +42,9 @@ theorem absolutelyContinuous {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDe
   rw [← h.withDensity_eq]
   exact withDensity_absolutelyContinuous m _
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
+section DensityBounds
+
+omit [CompleteSpace V] [SecondCountableTopology V]
 /-- A Borell density of a probability law is bounded below by a positive constant on some ball.
 The recovery construction needs the ball itself, not only the resulting global bound. -/
 theorem exists_ball_le {ν : ProbabilityMeasure V} {m : Measure V} [m.IsAddHaarMeasure]
@@ -58,7 +60,6 @@ theorem exists_ball_le {ν : ProbabilityMeasure V} {m : Measure V} [m.IsAddHaarM
   obtain ⟨r, hr, hsub⟩ := Metric.mem_nhds_iff.mp hmem
   exact ⟨a, r, ρ a / 2, hr, by linarith, fun z hz ↦ (hsub hz).le⟩
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- A Borell density of a probability law is bounded: `M = sup ρ < ∞`.  On a ball where
 `ρ ≥ b₀ > 0`, log-concavity gives `ρ ≥ √(b₀ ρ(x))` on a half-size ball, whose mass is at most
 one. -/
@@ -124,6 +125,8 @@ theorem exists_le {ν : ProbabilityMeasure V} {m : Measure V} [m.IsAddHaarMeasur
     _ ≤ (1 / K ^ 2) * K ^ 2 := by
         exact mul_le_mul_of_nonneg_right hmul hK2.le
     _ = 1 := by field_simp
+
+end DensityBounds
 
 omit [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The log-concave comparison of the Blueprint: if `y = s x + (1 - s) b` with `0 < s < 1`,

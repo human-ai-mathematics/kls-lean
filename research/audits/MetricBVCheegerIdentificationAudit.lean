@@ -45,8 +45,8 @@ theorem threeConstants (ν : ProbabilityMeasure V) :
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
-variable [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
+  [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 theorem frontendSymmetric (μ : ProbabilityMeasure E) :
     symmetricConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) = Isoperimetry.constant μ := by

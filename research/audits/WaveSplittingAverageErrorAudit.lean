@@ -10,7 +10,7 @@ open scoped ContDiff
 namespace WaveSplittingAverageErrorAudit
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
   [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [m.IsAddHaarMeasure]
+  (m : Measure E) [m.IsAddHaarMeasure]
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem potential_weight (d : ℕ) (a : Fin d → E) {U : E → ℝ} (hU : ContDiff ℝ ∞ U) :

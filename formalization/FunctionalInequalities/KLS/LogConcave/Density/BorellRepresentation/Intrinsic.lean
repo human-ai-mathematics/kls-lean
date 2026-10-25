@@ -63,7 +63,9 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteS
 
 namespace KLS.LogConcave
 
-omit [CompleteSpace F] in
+section IntrinsicDensity
+
+omit [CompleteSpace F]
 /-- The support of the intrinsic law is already its own closed convex hull. Hence the interior
 of the closed convex hull of the support, as written in the Blueprint, is `interior ν.support`. -/
 theorem closure_convexHull_intrinsic_support {μ : ProbabilityMeasure F}
@@ -73,7 +75,6 @@ theorem closure_convexHull_intrinsic_support {μ : ProbabilityMeasure F}
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction).support := by
   rw [hμ.intrinsicMeasure.convex_support.convexHull_eq, Measure.isClosed_support.closure_eq]
 
-omit [CompleteSpace F] in
 /-- The intrinsic law gives zero mass to the complement of the interior of its support. This is
 the `ν(V ∖ Ω) = 0` clause; it follows from the proved null-frontier result. -/
 theorem intrinsic_interior_support_compl {μ : ProbabilityMeasure F}
@@ -91,7 +92,6 @@ theorem intrinsic_interior_support_compl {μ : ProbabilityMeasure F}
   exact measure_mono_null hsub
     (measure_union_null Measure.measure_compl_support hμ.intrinsic_frontier_support_eq_zero)
 
-omit [CompleteSpace F] in
 /-- Existence of a Borell density representative of the intrinsic law relative to any additive
 Haar measure on the direction of the affine support. Absolute continuity is already proved; the
 obligation is to choose an upper semicontinuous log-concave finite-valued version of the
@@ -104,7 +104,6 @@ theorem exists_isBorellDensity {μ : ProbabilityMeasure F} (hμ : LogConcave μ)
   hμ.intrinsicMeasure.exists_isBorellDensity_of_interior_support_nonempty m
     hμ.interior_intrinsic_support_nonempty (hμ.intrinsic_absolutelyContinuous m)
 
-omit [CompleteSpace F] in
 /-- The intrinsic law of a log-concave probability has an exponential moment: some positive
 rate `t` makes `exp (t ‖v‖)` integrable. This is the tail estimate behind the moment
 conclusion and is stated separately because it is the form proved in the literature. -/
@@ -114,7 +113,6 @@ theorem intrinsic_integrable_exp_norm {μ : ProbabilityMeasure F}
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) :=
   ((borel_iff _).1 hμ.intrinsicMeasure).exists_integrable_exp_norm
 
-omit [CompleteSpace F] in
 /-- The intrinsic law of a log-concave probability has finite moments of every order.
 It follows from the exponential moment and Mathlib's `IntegrableExpMul`. -/
 theorem intrinsic_integrable_norm_pow {μ : ProbabilityMeasure F}
@@ -123,6 +121,8 @@ theorem intrinsic_integrable_norm_pow {μ : ProbabilityMeasure F}
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) := by
   obtain ⟨t, ht, hint⟩ := hμ.intrinsic_integrable_exp_norm
   exact Probability.integrable_norm_pow_of_integrable_exp_norm ht hint p
+
+end IntrinsicDensity
 
 end KLS.LogConcave
 

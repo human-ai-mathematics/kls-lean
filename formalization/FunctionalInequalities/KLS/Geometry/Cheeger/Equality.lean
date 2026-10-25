@@ -139,7 +139,9 @@ theorem exists_smooth_approximation_lipschitz (ν : ProbabilityMeasure V) (m : M
 
 /-! ### The defining infimum in multiplied form -/
 
-omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section CoareaPerimeters
+
+omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- The defining infimum of `h_S` in multiplied form: `h_S · m(ν U) ≤ P_ρ(U)` for every smooth
 domain `U`, including the degenerate masses `0` and `1`.  There the balance vanishes and the bound
 is the `ENNReal` identity `⊤ * 0 = 0`, so no finiteness of `h_S` is needed and the infimum, which
@@ -166,7 +168,6 @@ theorem smoothConstant_mul_min_le (ρ : V → ℝ) (Ω : Set V) (ν : Probabilit
     rw [iInf_pos hUpos, iInf_pos hUlt]
   exact (ENNReal.le_div_iff_mul_le (Or.inl h0) (Or.inl hmtop)).mp hiInf
 
-omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The relative perimeter of a superlevel domain is bounded by the level integral of the weight:
 the frontier of `{x | t < u x}` lies in `{x | u x = t}` for a continuous `u`, and the relative
 perimeter only integrates over a subset of that frontier. -/
@@ -178,6 +179,8 @@ theorem relativePerimeter_le_lintegral_levelSet (ρ : V → ℝ) (Ω : Set V) {u
   refine lintegral_mono' (Measure.restrict_mono ?_ le_rfl) le_rfl
   rw [hU]
   exact Set.inter_subset_left.trans (SmoothDomain.frontier_superlevel_subset hu t)
+
+end CoareaPerimeters
 
 omit [SecondCountableTopology V] in
 /-- The weighted coarea formula for the Borell density: with `ν = volume.withDensity (ofReal ∘ ρ)`

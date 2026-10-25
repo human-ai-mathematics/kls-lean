@@ -21,7 +21,9 @@ variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [MeasurableSpace
 
 namespace KLS.BorelLogConcave
 
-omit [FiniteDimensional ℝ V] in
+section ExponentialMoments
+
+omit [FiniteDimensional ℝ V]
 /-- Borell's tail lemma in the form needed here: once a ball of radius `R` carries mass at
 least `3/4`, the mass outside radius `k R` decays geometrically in `k`. The bound is stated
 for every `k`, the cases `k = 0, 1` being trivial. -/
@@ -105,7 +107,6 @@ theorem measure_norm_ge_le {ν : ProbabilityMeasure V} (hν : BorelLogConcave ν
   rw [hexp]
   exact Real.rpow_le_rpow_of_exponent_le (by norm_num) (by linarith)
 
-omit [FiniteDimensional ℝ V] in
 /-- A Borel log-concave probability law on a finite-dimensional space has an exponential
 moment. The radius is chosen from the exhaustion by balls, the tail from Borell's lemma, and
 the integral is dominated by a geometric series. -/
@@ -192,6 +193,8 @@ theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V}
   · rw [hasFiniteIntegral_iff_ofReal (Eventually.of_forall fun v ↦ (Real.exp_pos _).le)]
     exact hbound
 
+end ExponentialMoments
+
 end KLS.BorelLogConcave
 
 namespace Probability
@@ -244,7 +247,9 @@ end Probability
 
 namespace KLS.BorelLogConcave
 
-omit [FiniteDimensional ℝ V] in
+section QuantitativeMoments
+
+omit [FiniteDimensional ℝ V]
 /-- **Quantitative Borell exponential moment**: if a ball of radius `R` carries mass `≥ 3/4`, then
 `∫ e^{q‖v‖} dν ≤ 3^{3/4}/(1 − 3^{−1/4})` with the explicit rate `q = log 3/(4R)`; constants do not
 depend on the law (BKL Section 2, p. 5, uniform moments of the regular approximation). -/
@@ -336,7 +341,6 @@ theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V}
     ring
   exact ⟨hint, by simpa only [ht₀_def, htsum] using hreal⟩
 
-omit [FiniteDimensional ℝ V] in
 /-- Explicit moment bound of every order `p` from the exponential bound: `∫‖v‖^p ≤ p!/q^p · C₀`. -/
 theorem integral_norm_pow_le_of_ball {ν : ProbabilityMeasure V}
     (hν : KLS.BorelLogConcave ν) {R : ℝ} (hR : 0 < R)
@@ -369,7 +373,6 @@ theorem integral_norm_pow_le_of_ball {ν : ProbabilityMeasure V}
       integral_const_mul _ _
     _ ≤ _ := mul_le_mul_of_nonneg_left hbound hc
 
-omit [FiniteDimensional ℝ V] in
 /-- All-order moment bounds from log-concavity and a second-moment radius `∫‖v‖² ≤ R²/4`. -/
 theorem integral_norm_pow_le_of_second_moment {ν : ProbabilityMeasure V}
     (hν : KLS.BorelLogConcave ν) {R : ℝ} (hR : 0 < R)
@@ -381,7 +384,6 @@ theorem integral_norm_pow_le_of_second_moment {ν : ProbabilityMeasure V}
           ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) := by
   exact integral_norm_pow_le_of_ball hν hR (Probability.measure_ball_ge_of_integral_norm_sq_le hR hint hsecond) p
 
-omit [FiniteDimensional ℝ V] in
 /-- All-order moment bounds from log-concavity and a second-moment bound `∫‖v‖² ≤ M`, with the
 common radius `R = 2√(M+1)` and rate `log 3/(8√(M+1))`; uniform over all such laws. -/
 theorem integral_norm_pow_le_of_second_bound {ν : ProbabilityMeasure V}
@@ -405,6 +407,8 @@ theorem integral_norm_pow_le_of_second_bound {ν : ProbabilityMeasure V}
     nlinarith
   exact integral_norm_pow_le_of_second_moment hν hR hint hs p
 
+end QuantitativeMoments
+
 end KLS.BorelLogConcave
 
 end Moments
@@ -412,8 +416,8 @@ end Moments
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-variable [BorelSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+  [BorelSpace E]
 
 
 

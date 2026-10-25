@@ -125,7 +125,7 @@ section IsometryTransport
 
 variable [MeasurableSpace E] [BorelSpace E] [MeasurableSpace F] [BorelSpace F]
 
-variable (e : E ≃ₗᵢ[ℝ] F) (μ : Measure E) [IsProbabilityMeasure μ]
+  (e : E ≃ₗᵢ[ℝ] F) (μ : Measure E) [IsProbabilityMeasure μ]
 
 omit [CompleteSpace E] [CompleteSpace F] [IsProbabilityMeasure μ] in
 private theorem measurePreserving_isometryEquiv :

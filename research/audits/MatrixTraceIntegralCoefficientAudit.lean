@@ -21,7 +21,7 @@ namespace MatrixTraceIntegralCoefficientAudit
 section FiniteIndex
 
 variable {ι : Type*}
-variable [Fintype ι] [DecidableEq ι]
+  [Fintype ι] [DecidableEq ι]
 
 /-- `tr(A (c • 1) A (c • 1)) = c² tr(A²)`. -/
 theorem scalar_field_trace (c : ℝ) (A : Matrix ι ι ℝ) :

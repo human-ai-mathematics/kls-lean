@@ -21,7 +21,7 @@ namespace BKLMappedCovarianceClients
 section FiniteIndex
 
 variable {n : Type*}
-variable [Fintype n] [DecidableEq n]
+  [Fintype n] [DecidableEq n]
 
 /-- The API through its named arguments, for every isotropic law and every real symmetric matrix. -/
 theorem general (μ : ProbabilityMeasure (EuclideanSpace ℝ n))

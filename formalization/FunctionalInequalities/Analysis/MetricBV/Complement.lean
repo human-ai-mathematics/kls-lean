@@ -12,7 +12,7 @@ open scoped Topology NNReal ENNReal
 namespace FunctionalInequalities.KLS.MetricBV
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X]
-variable [BorelSpace X]
+  [BorelSpace X]
 section Complement
 
 /-! ### Complement symmetry for finite measures
@@ -44,22 +44,24 @@ theorem abs_clampUnit_sub_le (s t : ℝ) : |clampUnit s - clampUnit t| ≤ |s - 
 /-- The radial cutoff equal to `1` on `closedBall x₀ R` and `0` outside `ball x₀ (R + 1)`. -/
 def cutoff (x₀ : X) (R : ℝ) (x : X) : ℝ := clampUnit (R + 1 - dist x x₀)
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section CutoffValues
+
+omit [MeasurableSpace X] [BorelSpace X]
 theorem abs_cutoff_sub_le (x₀ : X) (R : ℝ) (x y : X) :
     |cutoff x₀ R x - cutoff x₀ R y| ≤ dist x y := by
   refine (abs_clampUnit_sub_le _ _).trans ?_
   rw [show R + 1 - dist x x₀ - (R + 1 - dist y x₀) = dist y x₀ - dist x x₀ by ring, abs_sub_comm]
   exact abs_dist_sub_le x y x₀
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem cutoff_eq_one {x₀ x : X} {R : ℝ} (h : dist x x₀ ≤ R) : cutoff x₀ R x = 1 := by
   unfold cutoff clampUnit
   rw [min_eq_right (by linarith), max_eq_left zero_le_one]
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem cutoff_eq_zero {x₀ x : X} {R : ℝ} (h : R + 1 ≤ dist x x₀) : cutoff x₀ R x = 0 := by
   unfold cutoff clampUnit
   rw [min_eq_left (by linarith), max_eq_right (by linarith)]
+
+end CutoffValues
 
 omit [MetricSpace X] [MeasurableSpace X] [BorelSpace X] in
 /-- The secant estimate behind the reflected test. -/
@@ -75,11 +77,14 @@ theorem abs_mul_one_sub_sub_le {u v c c' : ℝ} (hu0 : 0 ≤ u) (hu1 : u ≤ 1) 
     mul_le_of_le_one_right (abs_nonneg _) (by linarith)
   linarith
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section CutoffBounds
+
+omit [MeasurableSpace X] [BorelSpace X]
 theorem cutoff_nonneg (x₀ : X) (R : ℝ) (x : X) : 0 ≤ cutoff x₀ R x := clampUnit_nonneg _
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem cutoff_le_one (x₀ : X) (R : ℝ) (x : X) : cutoff x₀ R x ≤ 1 := clampUnit_le_one _
+
+end CutoffBounds
 
 /-- The reflected test `χ_R · (1 - clamp f)`: a bounded-support approximation of `1 - f`. -/
 def Test.reflect (x₀ : X) (R : ℝ) (f : Test X) : Test X where
@@ -111,7 +116,9 @@ def Test.reflect (x₀ : X) (R : ℝ) (f : Test X) : Test X where
     rw [Metric.mem_ball, not_lt] at hnot
     exact hx (by simp [cutoff_eq_zero hnot])
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section ReflectionBounds
+
+omit [MeasurableSpace X] [BorelSpace X]
 /-- The local slope of the reflected test exceeds that of the original by at most the
 indicator of the complement of the inner ball. -/
 theorem apply_reflect_le (x₀ : X) (R : ℝ) (f : Test X) (x : X) :
@@ -140,7 +147,6 @@ theorem apply_reflect_le (x₀ : X) (R : ℝ) (f : Test X) (x : X) :
         rw [Real.dist_eq, NNReal.coe_one, one_mul]; exact abs_cutoff_sub_le x₀ R a b
     simpa using Energy.LocalSlope.apply_le_of_lipschitzWith hlip x
 
-omit [MeasurableSpace X] [BorelSpace X] in
 /-- The reflected test is `L¹`-close to the complementary indicator, up to the indicator of the
 complement of the inner ball. -/
 theorem enorm_reflect_sub_le (x₀ : X) (R : ℝ) (f : Test X) (B : Set X) (x : X) :
@@ -178,6 +184,8 @@ theorem enorm_reflect_sub_le (x₀ : X) (R : ℝ) (f : Test X) (B : Set X) (x : 
     exact zero_le
   · rw [Set.indicator_of_mem (Set.mem_compl hx), Pi.one_apply]
     exact ENNReal.ofReal_le_one.mpr (by linarith)
+
+end ReflectionBounds
 
 /-- The cost of the reflected test is at most that of the original plus the mass outside the
 inner ball. -/

@@ -19,7 +19,9 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
   [SecondCountableTopology V]
 
-omit [SecondCountableTopology V] in
+section GaussianConstants
+
+omit [SecondCountableTopology V]
 /-- Every finite-dimensional standard Gaussian satisfies the smooth-test
 Poincaré inequality with constant one, including dimension zero. -/
 theorem holds_stdGaussian : Holds (stdGaussian V) 1 := by
@@ -39,11 +41,12 @@ theorem holds_stdGaussian : Holds (stdGaussian V) 1 := by
   rw [stdGaussian_map e] at hmap
   exact hmap
 
-omit [SecondCountableTopology V] in
 /-- A scalar image of the standard Gaussian has constant at most the
 squared scale, including zero scale and dimension zero. -/
 theorem holds_stdGaussian_map_smul (r : ℝ) :
     Holds ((stdGaussian V).map (fun x : V => r • x)) (r ^ 2) := by
   simpa only [mul_one] using (holds_stdGaussian (V := V)).map_smul r
+
+end GaussianConstants
 
 end FunctionalInequalities.Poincare.SmoothTest

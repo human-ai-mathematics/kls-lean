@@ -25,7 +25,9 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDim
 
 
 
-omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] in
+section TiltedDensityIntegrability
+
+omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V]
 /-- A tilted law of total mass one has an integrable density: `e^{-W} ∈ L¹(m)`. -/
 theorem integrable_exp_neg_of_eq_tilted {m : Measure V} {W : V → ℝ}
     (hνW : (ν : Measure V) = m.tilted (-W)) :
@@ -44,7 +46,6 @@ theorem integrable_exp_neg_of_eq_tilted {m : Measure V} {W : V → ℝ}
   rw [hνzero] at huniv
   norm_num at huniv
 
-omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] in
 /-- A tilted law of total mass one has a positive normalizing constant `∫ e^{-W} dm`. -/
 theorem integral_exp_neg_pos_of_eq_tilted {m : Measure V} {W : V → ℝ}
     (hνW : (ν : Measure V) = m.tilted (-W)) :
@@ -70,6 +71,8 @@ theorem integral_exp_neg_pos_of_eq_tilted {m : Measure V} {W : V → ℝ}
     simp [Function.support]
   rw [integral_pos_iff_support_of_nonneg (fun x => (Real.exp_pos _).le) hint, hsupp]
   exact hmuniv
+
+end TiltedDensityIntegrability
 
 omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 /-- For convex `W` and `Z > 0`, the normalized weight `e^{-W} / Z` is log-concave:

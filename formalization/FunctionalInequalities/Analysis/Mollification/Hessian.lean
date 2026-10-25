@@ -19,14 +19,15 @@ namespace FunctionalInequalities.Analysis
 section StructuredSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E]
+  [NormedAddCommGroup E]
 
 section NormedSpace
 
 variable [NormedSpace ℝ E]
 
+omit [NormedSpace ℝ E] in
 private lemma integrable_mul_of_compact_support
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [MeasurableSpace E]
     {μ : Measure E} [IsFiniteMeasureOnCompacts μ] [OpensMeasurableSpace E]
     {f g : E → ℝ} (hf : Continuous f) (hg : Continuous g)
     (hcf : HasCompactSupport f) :
@@ -42,8 +43,8 @@ private lemma integrable_mul_of_compact_support
   exact hx hzero
 
 private lemma integrable_smul_of_compact_support
-    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {E F : Type*} [NormedAddCommGroup E]
+    [MeasurableSpace E]
     {μ : Measure E} [IsFiniteMeasureOnCompacts μ] [OpensMeasurableSpace E]
     [NormedAddCommGroup F] [NormedSpace ℝ F]
     {f : E → ℝ} {g : E → F} (hf : Continuous f) (hg : Continuous g)

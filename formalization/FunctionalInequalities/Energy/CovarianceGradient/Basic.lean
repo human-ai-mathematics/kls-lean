@@ -283,17 +283,20 @@ theorem preEnergy_eq_intrinsicMeasure (μ : ProbabilityMeasure E) :
     preEnergy μ = Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ) :=
   rfl
 
-omit [CompleteSpace E] in
+section IntrinsicEnergy
+
+omit [CompleteSpace E]
 /-- The affine relaxation is the covariance relaxation of the intrinsic law. -/
 theorem energy_eq_relaxation_intrinsicMeasure (μ : ProbabilityMeasure E) :
     energy μ = Energy.CovarianceGradient.relaxation (Probability.intrinsicMeasure μ) :=
   rfl
 
-omit [CompleteSpace E] in
 /-- Unfolding the affine relaxation exposes the generic sequential relaxation. -/
 theorem energy_apply (μ : ProbabilityMeasure E)
     (f : Lp ℝ 2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :
     energy μ f = (Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).sequentialRelaxation f :=
   rfl
+
+end IntrinsicEnergy
 
 end FunctionalInequalities.Energy.CovarianceGradient.Intrinsic

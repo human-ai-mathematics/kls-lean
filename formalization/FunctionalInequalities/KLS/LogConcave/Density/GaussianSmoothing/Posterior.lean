@@ -66,7 +66,9 @@ private theorem gaussian_weight_logConcave {s Z : ℝ} (hs : 0 ≤ s) (hZ : 0 < 
     _ = _ / Z := by rw [hden]
     _ ≤ _ := div_le_div_of_nonneg_right hker hZ.le
 
-omit [CompleteSpace E] in
+section PosteriorDensity
+
+omit [CompleteSpace E]
 /-- The posterior has the Borell density `ρ(y) e^{-s‖x-y‖²}/Z_x` with respect to Lebesgue measure. -/
 theorem posteriorLaw_isBorellDensity {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
@@ -101,12 +103,13 @@ theorem posteriorLaw_isBorellDensity {μ : Measure E} [IsProbabilityMeasure μ]
     rw [heq, withDensity_mul _ hρ.measurable.ennreal_ofReal hg.measurable.ennreal_ofReal,
       hρ.withDensity_eq]
 
-omit [CompleteSpace E] in
 /-- The Gaussian posterior of a law with a Borell density is log-concave. -/
 theorem posteriorLaw_logConcave {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
     KLS.LogConcave (posteriorLaw μ hs x) :=
   (posteriorLaw_isBorellDensity hρ hs x).compactLogConcave
+
+end PosteriorDensity
 
 
 /-- The centered posterior `(y ↦ y − ∫ y dP_x)_* P_x`. -/
@@ -128,14 +131,15 @@ theorem coe_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s :
     y - ∫ z, z ∂(μ.tilted (fun z => -s * ‖x - z‖ ^ 2))
   abel
 
-omit [CompleteSpace E] in
+section CenteredPosteriorDensity
+
+omit [CompleteSpace E]
 /-- The centered posterior is log-concave. -/
 theorem centeredPosteriorLaw_logConcave {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
     KLS.LogConcave (centeredPosteriorLaw μ hs x) :=
   (posteriorLaw_logConcave hρ hs x).translateLaw _
 
-omit [CompleteSpace E] in
 theorem memLp_two_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s)
     (x : E) : MemLp id 2 (centeredPosteriorLaw μ hs x : Measure E) := by
   let P : ProbabilityMeasure E := posteriorLaw μ hs x
@@ -146,6 +150,8 @@ theorem memLp_two_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure
   apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable
     (measurable_const_add c).aemeasurable).2
   exact hc.add hp
+
+end CenteredPosteriorDensity
 
 /-- The centered posterior has mean zero (the barycenter is integrable). -/
 theorem integral_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s)

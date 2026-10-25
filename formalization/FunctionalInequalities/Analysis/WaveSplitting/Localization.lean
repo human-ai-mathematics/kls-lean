@@ -6,7 +6,7 @@ noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*} [Fintype ι]
+  {ι : Type*} [Fintype ι]
 
 /-- Compact smooth coefficients have bounded scalar derivatives at each finite order. -/
 theorem exists_wordDerivative_bound (a : ι → E) (k : ℕ) {b : ι → E → ℝ}
@@ -117,7 +117,7 @@ theorem cell_eq_of_supported [DecidableEq ι] {Y : State E ι} {R T δ θ : ℝ}
 section Integration
 open MeasureTheory
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
 
 /-- Original smooth coefficients have a fixed-horizon, mesh-uniform energy bound at every
 finite order. No global coefficient or derivative bound is assumed. -/

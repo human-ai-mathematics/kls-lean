@@ -44,7 +44,9 @@ omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 theorem contDiff_normalCoordinate : ContDiff ℝ ∞ (normalCoordinate μ n) :=
   contDiff_const.inner ℝ (contDiff_id.sub contDiff_const)
 
-omit [BorelSpace E] [FiniteDimensional ℝ E] in
+section NormalCoordinates
+
+omit [BorelSpace E] [FiniteDimensional ℝ E]
 /-- The coordinate has Fréchet derivative the dual of `n`. -/
 theorem hasFDerivAt_normalCoordinate (x : E) :
     HasFDerivAt (normalCoordinate μ n) (toDual ℝ E n) x := by
@@ -52,11 +54,12 @@ theorem hasFDerivAt_normalCoordinate (x : E) :
       (ContinuousLinearMap.id ℝ E) x := (hasFDerivAt_id x).sub_const _
   exact ((toDual ℝ E n).hasFDerivAt.comp x h1).congr_fderiv (ContinuousLinearMap.comp_id _)
 
-omit [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- The gradient of the coordinate is the constant vector `n`. -/
 theorem gradient_normalCoordinate (x : E) : gradient (normalCoordinate μ n) x = n := by
   apply (toDual ℝ E).injective
   rw [toDual_gradient, (hasFDerivAt_normalCoordinate μ n x).fderiv]
+
+end NormalCoordinates
 
 omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- The coordinate vanishes `μ`-almost everywhere when `n` is orthogonal to the direction of the
@@ -89,20 +92,23 @@ def Test.normalCoordinate (hn : n ∈ (Probability.affineSupport μ).direction�
     simp only [gradient_normalCoordinate]
     exact integrable_const _
 
-omit [BorelSpace E] [FiniteDimensional ℝ E] in
+section NormalCoordinateTests
+
+omit [BorelSpace E] [FiniteDimensional ℝ E]
 /-- The `L²` class of the coordinate is zero. -/
 theorem Test.toL2_normalCoordinate (hn : n ∈ (Probability.affineSupport μ).directionᗮ) :
     (Test.normalCoordinate μ n hn).toL2 = 0 := by
   rw [Lp.eq_zero_iff_ae_eq_zero]
   exact (Test.normalCoordinate μ n hn).toL2_coeFn.trans (normalCoordinate_ae_eq_zero μ n hn)
 
-omit [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- The smooth-gradient energy of the coordinate is `‖n‖²`. -/
 theorem Test.energy_normalCoordinate (hn : n ∈ (Probability.affineSupport μ).directionᗮ) :
     ((Test.normalCoordinate μ n hn).energy : ℝ) = ‖n‖ ^ 2 := by
   rw [Test.coe_energy]
   simp only [Test.normalCoordinate, gradient_normalCoordinate]
   simp
+
+end NormalCoordinateTests
 
 omit [CompleteSpace E] [BorelSpace E] [SecondCountableTopology E] in
 /-- A proper direction space has a unit normal vector. -/

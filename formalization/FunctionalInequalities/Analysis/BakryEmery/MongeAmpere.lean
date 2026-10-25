@@ -214,7 +214,9 @@ end Jacobi
 
 section Positivity
 
-omit [FiniteDimensional ℝ E] in
+section HessianPositivity
+
+omit [FiniteDimensional ℝ E]
 /-- A nonnegative Hessian form gives a positive semidefinite Hessian matrix (pointwise `C²`). -/
 theorem hessianMatrixIn_posSemidef {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
     {φ : E → ℝ} {x : E} (hφ : ContDiffAt ℝ 2 φ x)
@@ -240,7 +242,6 @@ theorem hessianMatrixIn_posSemidef {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E
     rw [heq]
     exact hH _
 
-omit [FiniteDimensional ℝ E] in
 /-- The inverse Hessian matrix of a positive definite Hessian is positive semidefinite. -/
 theorem inv_hessianMatrixIn_posSemidef {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
     {φ : E → ℝ} {x : E} (hφ : ContDiff ℝ 2 φ)
@@ -252,6 +253,8 @@ theorem inv_hessianMatrixIn_posSemidef {m : ℕ} (b : OrthonormalBasis (Fin m) �
   by_cases hv : v = 0
   · simp [hv]
   · exact (hPD v hv).le
+
+end HessianPositivity
 
 end Positivity
 

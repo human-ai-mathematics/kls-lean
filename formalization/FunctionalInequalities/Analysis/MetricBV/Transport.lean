@@ -14,7 +14,7 @@ open scoped Topology NNReal ENNReal
 namespace FunctionalInequalities.KLS.MetricBV
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X]
-variable [BorelSpace X]
+  [BorelSpace X]
 section SubsetRestriction
 
 /-! ### Restriction to a measurable subset

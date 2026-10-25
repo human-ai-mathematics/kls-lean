@@ -590,7 +590,7 @@ variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ
   [FiniteDimensional ℝ H] [MeasurableSpace H] [BorelSpace H]
   [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V]
-variable {ι : H →ₗᵢ[ℝ] V} {e : V}
+  {ι : H →ₗᵢ[ℝ] V} {e : V}
 
 /-- **Divergence formula on a smooth subgraph.** -/
 theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g : H → ℝ}

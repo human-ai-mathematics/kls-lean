@@ -756,15 +756,18 @@ private lemma inv_mem_fixingOutside {s : Finset Ω} {σ : Equiv.Perm Ω}
   have h := congrArg (fun y => σ⁻¹ y) (hσ x hx)
   simpa using h.symm
 
-omit [Fintype Ω] in
+section PermutationImages
+
+omit [Fintype Ω]
 private lemma image_mul_perm (S : Finset Ω) (σ τ : Equiv.Perm Ω) :
     S.image (σ * τ) = (S.image τ).image σ := by
   simp [Finset.image_image, Equiv.Perm.coe_mul]
 
-omit [Fintype Ω] in
 private lemma image_inv_image_perm (S : Finset Ω) (σ : Equiv.Perm Ω) :
     (S.image σ).image (σ⁻¹ : Equiv.Perm Ω) = S := by
   simp [Finset.image_image]
+
+end PermutationImages
 
 /-- All fibers of `σ ↦ A.image σ` on `fixingOutside Q` over the `|A|`-subsets of `Q` have the same
 size. -/
@@ -904,7 +907,9 @@ theorem sum_fixingOutside_eq_smul_sum (ρ : Equiv.Perm Ω →* (V ≃ₗᵢ[ℝ]
             ∑ F ∈ Q.powersetCard A.card, T F := by
         rw [hM]
 
-omit [Fintype Ω] in
+section PermutationSubsets
+
+omit [Fintype Ω]
 /-- Equivariance of subset sums: if `ρ g (T F) = T (F.image g)` for every `F`, then the sum of
 `T` over the `k`-subsets of `g(Q)` is `ρ g` applied to the sum over the `k`-subsets of `Q`. -/
 theorem sum_powersetCard_image_eq (ρ : Equiv.Perm Ω →* (V ≃ₗᵢ[ℝ] V)) (g : Equiv.Perm Ω)
@@ -927,7 +932,6 @@ theorem sum_powersetCard_image_eq (ρ : Equiv.Perm Ω →* (V ≃ₗᵢ[ℝ] V))
       _ = ρ g (∑ F ∈ Q.powersetCard k, T F) := by
             rw [map_sum]
 
-omit [Fintype Ω] in
 private lemma image_image_perm (A : Finset Ω) (g τ : Equiv.Perm Ω) :
     (A.image τ).image g = A.image (g * τ) := by
   ext x
@@ -940,6 +944,8 @@ private lemma image_image_perm (A : Finset Ω) (g τ : Equiv.Perm Ω) :
     rcases Finset.mem_image.mp hx with ⟨z, hz, rfl⟩
     exact Finset.mem_image.mpr
       ⟨τ z, Finset.mem_image.mpr ⟨z, hz, rfl⟩, by simp [Equiv.Perm.mul_apply]⟩
+
+end PermutationSubsets
 
 /-- **BKL Lemma 2.2** (orthogonal-representation form, with the stronger binomial factor `C(2d, d)`). -/
 theorem norm_le_choose_mul_norm_blockAverage (ρ : Equiv.Perm Ω →* (V ≃ₗᵢ[ℝ] V))

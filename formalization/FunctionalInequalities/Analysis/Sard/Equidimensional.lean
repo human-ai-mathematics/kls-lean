@@ -59,7 +59,9 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteD
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
   [MeasurableSpace W] [BorelSpace W]
 
-omit [MeasurableSpace V] [BorelSpace V] in
+section CriticalValues
+
+omit [MeasurableSpace V] [BorelSpace V]
 /-- **The critical values of an equidimensional `C¹` map form a null set.**  Mathlib's
 self-map statement, conjugated by the linear isometry of `isometryEquivOfFinrankEq`: the image is
 computed in `W` directly, by precomposing `u` with the inverse isometry rather than postcomposing
@@ -96,7 +98,6 @@ theorem measure_image_critical_eq_zero {u : V → W} (hu : ContDiff ℝ 1 u)
   exact MeasureTheory.addHaar_image_eq_zero_of_det_fderivWithin_eq_zero
     (μ := (volume : Measure W)) hderiv hdet
 
-omit [MeasurableSpace V] [BorelSpace V] in
 /-- **In equal dimensions, almost every level avoids the critical set entirely.**  The
 fibre dimension is `k = 0`, so the `ℋ^0`-null conclusion of rank-deficient coarea degenerates to emptiness of the
 slice.  See the module docstring: this is the `n = m` case only, and is not a general Sard
@@ -113,6 +114,8 @@ theorem ae_critical_inter_levelSet_eq_empty {u : V → W} (hu : ContDiff ℝ 1 u
   refine Set.eq_empty_iff_forall_notMem.2 ?_
   rintro x ⟨hx, rfl⟩
   exact ht ⟨x, hx, rfl⟩
+
+end CriticalValues
 
 end Equidimensional
 

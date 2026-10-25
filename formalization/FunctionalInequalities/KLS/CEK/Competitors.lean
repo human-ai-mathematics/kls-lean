@@ -89,7 +89,7 @@ section
 open MeasureTheory Set Filter
 open scoped ENNReal Topology
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 /-- Actual finite baseline and a fixed finite all-competitor upper bound.
 This establishes the variational range bounds, not an optimizer. -/
 theorem exists_finite_baseline_and_upper (dx μ : Measure E) [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]

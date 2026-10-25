@@ -64,7 +64,9 @@ theorem inner_gradient_eq_sum_fderiv_mul_fderiv (f g : E → ℝ) (x : E) :
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [inner_gradient_left, real_inner_comm, inner_gradient_left]
 
-omit [CompleteSpace E] in
+section LaplacianRegularity
+
+omit [CompleteSpace E]
 /-- The Laplacian of a `C²` function is continuous. -/
 theorem continuous_laplacian {f : E → ℝ} (hf : ContDiff ℝ 2 f) :
     Continuous (Laplacian.laplacian f) := by
@@ -77,7 +79,6 @@ theorem continuous_laplacian {f : E → ℝ} (hf : ContDiff ℝ 2 f) :
   exact continuous_finsetSum _ fun i _ =>
     (h2.clm_apply continuous_const).clm_apply continuous_const
 
-omit [CompleteSpace E] in
 /-- The Laplacian of a compactly supported function has compact support. -/
 theorem hasCompactSupport_laplacian {f : E → ℝ} (hfc : HasCompactSupport f) :
     HasCompactSupport (Laplacian.laplacian f) := by
@@ -87,17 +88,22 @@ theorem hasCompactSupport_laplacian {f : E → ℝ} (hfc : HasCompactSupport f) 
   rw [this]
   exact ((hfc.fderiv (𝕜 := ℝ)).fderiv (𝕜 := ℝ)).comp_left (by simp)
 
-omit [FiniteDimensional ℝ E] in
+end LaplacianRegularity
+
+section GradientRegularity
+
+omit [FiniteDimensional ℝ E]
 /-- The gradient of a `C¹` function is continuous. -/
 theorem continuous_gradient {f : E → ℝ} (hf : ContDiff ℝ 1 f) : Continuous (gradient f) :=
   (toDual ℝ E).symm.continuous.comp (hf.continuous_fderiv one_ne_zero)
 
-omit [FiniteDimensional ℝ E] in
 /-- The gradient of a compactly supported function has compact support. -/
 theorem hasCompactSupport_gradient {f : E → ℝ} (hfc : HasCompactSupport f) :
     HasCompactSupport (gradient f) := by
   change HasCompactSupport ((toDual ℝ E).symm ∘ fderiv ℝ f)
   exact (hfc.fderiv (𝕜 := ℝ)).comp_left (map_zero _)
+
+end GradientRegularity
 
 end Pointwise
 
@@ -526,7 +532,9 @@ theorem bilinearIteratedFDerivTwo_gradient_gradient (U f : E → ℝ) (x : E) :
   rw [gradient_eq_sum_fderiv_smul]
   exact bilinear_sum_smul_sum_smul _ _ _
 
-omit [CompleteSpace E] in
+section LaplacianCoordinates
+
+omit [CompleteSpace E]
 /-- The Laplacian as the trace of the iterated directional derivatives, at a point where the
 derivative is differentiable. -/
 theorem laplacian_eq_sum_fderiv_apply_fderiv_apply {g : E → ℝ} {x : E}
@@ -537,7 +545,6 @@ theorem laplacian_eq_sum_fderiv_apply_fderiv_apply {g : E → ℝ} {x : E}
   rw [laplacian_eq_sum_fderiv_fderiv]
   exact Finset.sum_congr rfl fun i _ => (fderiv_fderiv_apply hg _ _).symm
 
-omit [CompleteSpace E] in
 /-- The Laplacian of a `C²` function as a function: the trace of the iterated directional
 derivatives in the standard orthonormal basis. -/
 theorem laplacian_eq_fun_sum {g : E → ℝ} (hg : ContDiff ℝ 2 g) :
@@ -547,7 +554,6 @@ theorem laplacian_eq_fun_sum {g : E → ℝ} (hg : ContDiff ℝ 2 g) :
   funext fun x => laplacian_eq_sum_fderiv_apply_fderiv_apply
     ((hg.fderiv_right (m := 1) (by norm_num)).differentiable one_ne_zero x)
 
-omit [CompleteSpace E] in
 /-- The Laplacian of a `C^n` function is `C^m` when `m + 2 ≤ n`. -/
 theorem contDiff_laplacian {g : E → ℝ} {n m : WithTop ℕ∞} (hg : ContDiff ℝ n g) (hmn : m + 2 ≤ n) :
     ContDiff ℝ m (Laplacian.laplacian g) := by
@@ -557,6 +563,8 @@ theorem contDiff_laplacian {g : E → ℝ} {n m : WithTop ℕ∞} (hg : ContDiff
   refine contDiff_fderiv_apply (contDiff_fderiv_apply hg ?_ _) le_rfl _
   calc m + 1 + 1 = m + 2 := by rw [add_assoc]; norm_num
     _ ≤ n := hmn
+
+end LaplacianCoordinates
 
 /-- **Chain rule for the Laplacian.** If `h` has derivative `h' (G y)` at every value `G y`, and
 `h'` has derivative `h'' (G x)` at `G x`, then `Δ(h ∘ G)(x) = h'(G x) ΔG(x) + h''(G x) ‖∇G(x)‖²`
@@ -629,7 +637,9 @@ noncomputable def nondivergenceOperator
       (stdOrthonormalBasis ℝ E j)) -
     ∑ i, b x i * fderiv ℝ f x (stdOrthonormalBasis ℝ E i)
 
-omit [FiniteDimensional ℝ E] [CompleteSpace E] in
+section ProductFactors
+
+omit [FiniteDimensional ℝ E] [CompleteSpace E]
 private lemma nondivergenceOperator_mul_factor_double
     (A : E → Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → ℝ)
     (x : E) (c : ℝ)
@@ -651,7 +661,6 @@ private lemma nondivergenceOperator_mul_factor_double
     _ = c * ∑ i, ∑ j, A x i j * H i j := by
       rw [Finset.mul_sum]
 
-omit [FiniteDimensional ℝ E] [CompleteSpace E] in
 private lemma nondivergenceOperator_mul_factor_single
     (b : E → Fin (Module.finrank ℝ E) → ℝ) (x : E) (c : ℝ)
     (H : Fin (Module.finrank ℝ E) → ℝ) :
@@ -666,7 +675,11 @@ private lemma nondivergenceOperator_mul_factor_single
     _ = c * ∑ i, b x i * H i := by
       rw [Finset.mul_sum]
 
-omit [CompleteSpace E] in
+end ProductFactors
+
+section ProductExpansion
+
+omit [CompleteSpace E]
 private lemma nondivergenceOperator_mul_mixed_sum
     (A : E → Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → ℝ)
     (hA : ∀ x i j, A x i j = A x j i) (x : E)
@@ -705,7 +718,6 @@ private lemma nondivergenceOperator_mul_mixed_sum
           fderiv ℝ g x (stdOrthonormalBasis ℝ E j)) := by
       rw [Finset.sum_comm]
 
-omit [CompleteSpace E] in
 /-- **Letwin (2.3), the product rule for `L_{A,b}`** with symmetric `A(x)`:
 `L(fg) = f Lg + g Lf + 2 ∑_{ij} A_{ij} ∂_i f ∂_j g`. -/
 theorem nondivergenceOperator_mul
@@ -787,6 +799,8 @@ theorem nondivergenceOperator_mul
     simp only [Finset.sum_add_distrib, mul_add]
     rw [hfg, hgf, hbf, hbg, hcanon, hmix]
     ring
+
+end ProductExpansion
 
 end StdBasis
 

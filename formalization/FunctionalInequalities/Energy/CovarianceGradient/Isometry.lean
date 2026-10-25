@@ -36,7 +36,7 @@ open Energy.Euclidean
 universe u v
 
 variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁] [CompleteSpace V₁]
-variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] [CompleteSpace V₂]
+  {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] [CompleteSpace V₂]
 
 section Gradient
 
@@ -69,7 +69,7 @@ section Tests
 
 variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
 
-variable {ν₁ : ProbabilityMeasure V₁} {ν₂ : ProbabilityMeasure V₂} {L : V₁ ≃ₗᵢ[ℝ] V₂}
+  {ν₁ : ProbabilityMeasure V₁} {ν₂ : ProbabilityMeasure V₂} {L : V₁ ≃ₗᵢ[ℝ] V₂}
 
 namespace CovarianceGradient.Test
 
@@ -99,7 +99,9 @@ def compLinearIsometryEquiv
     rw [← hmp.map_eq] at this
     exact (integrable_map_measure (hmp.map_eq ▸ g.integrable.1) hmp.aemeasurable).mp this
 
-omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂] in
+section IsometricTests
+
+omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
 /-- The composed test has the same covariance energy. -/
 theorem energy_compLinearIsometryEquiv
     (hmp : MeasurePreserving L (ν₁ : Measure V₁) (ν₂ : Measure V₂))
@@ -117,7 +119,6 @@ theorem energy_compLinearIsometryEquiv
   rw [hdens, ← hmp.map_eq, integral_map hmp.aemeasurable (hmp.map_eq ▸ g.integrable.1)]
   rfl
 
-omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂] in
 /-- The composed test realizes the pullback of the original class. -/
 theorem toL2_compLinearIsometryEquiv
     (hmp : MeasurePreserving L (ν₁ : Measure V₁) (ν₂ : Measure V₂))
@@ -130,6 +131,8 @@ theorem toL2_compLinearIsometryEquiv
   refine Filter.EventuallyEq.trans ?_ (Lp.coeFn_compMeasurePreserving g.toL2 hmp).symm
   exact hmp.quasiMeasurePreserving.ae_eq_comp g.toL2_coeFn.symm
 
+end IsometricTests
+
 end CovarianceGradient.Test
 
 end Tests
@@ -138,7 +141,7 @@ section Relaxation
 
 variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
 
-variable (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
+  (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
 
 namespace CovarianceGradient
 

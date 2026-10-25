@@ -32,7 +32,9 @@ theorem measurableSet_goodSet {u : V → ℝ} (hu : Continuous u) (ε δ : ℝ) 
     (((hu.measurable.comp (measurable_id.add_const (denseSeq V i))).sub hu.measurable).sub
       (measurable_fderiv_apply_const ℝ u (denseSeq V i))).norm measurable_const
 
-omit [MeasurableSpace V] [BorelSpace V] in
+section GoodSets
+
+omit [MeasurableSpace V] [BorelSpace V]
 theorem goodSet_iff {u : V → ℝ} (hu : Continuous u) {ε δ : ℝ} {x : V} :
     x ∈ goodSet u ε δ ↔ ∀ h : V, ‖h‖ < δ →
       ‖u (x + h) - u x - fderiv ℝ u x h‖ ≤ ε * ‖h‖ := by
@@ -46,7 +48,6 @@ theorem goodSet_iff {u : V → ℝ} (hu : Continuous u) {ε δ : ℝ} {x : V} :
   intro h
   exact (denseRange_denseSeq V).induction_on h hc hx
 
-omit [MeasurableSpace V] [BorelSpace V] in
 theorem exists_goodSet {u : V → ℝ} {x : V} (hx : DifferentiableAt ℝ u x)
     {ε : ℝ} (hε : 0 < ε) : ∃ m : ℕ, x ∈ goodSet u ε ((m : ℝ) + 1)⁻¹ := by
   obtain ⟨δ, hδ, hd⟩ := Metric.mem_nhds_iff.1 (hx.hasFDerivAt.isLittleO.def hε)
@@ -56,10 +57,11 @@ theorem exists_goodSet {u : V → ℝ} {x : V} (hx : DifferentiableAt ℝ u x)
     simpa only [mem_ball, dist_eq_norm, add_sub_cancel_left] using hi.trans (by simpa using hm)
   simpa only [mem_ofPred_eq, add_sub_cancel_left] using hd hq
 
-omit [MeasurableSpace V] [BorelSpace V] in
 theorem goodSet_mono {u : V → ℝ} {ε δ δ' : ℝ} (h : δ' ≤ δ) :
     goodSet u ε δ ⊆ goodSet u ε δ' :=
   fun _ hx i hi => hx i (hi.trans_le h)
+
+end GoodSets
 
 omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 /-- Uniform ambient remainders and a Lipschitz bound force continuity of the derivative

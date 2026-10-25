@@ -83,7 +83,9 @@ theorem norm_mul_fderiv_comp_sub_smul_le {φ : V → ℝ} {M : ℝ}
 variable [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
   (m : Measure V) [m.IsAddHaarMeasure]
 
-omit [m.IsAddHaarMeasure] in
+section ZeroGradientTranslations
+
+omit [m.IsAddHaarMeasure]
 /-- Differentiation under the integral sign for a translated test: for locally integrable `h`,
 `d/dt ∫ h(x) φ(x - t v) dm = -∫ h(x) Dφ(x - t v) v dm`. -/
 theorem hasDerivAt_integral_mul_translate {h : V → ℝ} (hh : LocallyIntegrable h m) {φ : V → ℝ}
@@ -160,7 +162,6 @@ theorem hasDerivAt_integral_mul_translate {h : V → ℝ} (hh : LocallyIntegrabl
   simp only [mul_neg, integral_neg] at h2
   exact h2
 
-omit [m.IsAddHaarMeasure] in
 /-- Zero weak gradient makes `∫ h(x) (φ(x) - φ(x - v)) dm` vanish. -/
 theorem integral_mul_sub_translate_eq_zero {h : V → ℝ} (hh : LocallyIntegrable h m)
     (h0 : ∀ φ : V → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ → ∀ w : V,
@@ -246,6 +247,8 @@ theorem integral_mul_sub_translate_eq_zero {h : V → ℝ} (hh : LocallyIntegrab
     _ = (∫ x, h x * φ x ∂m) - ∫ x, h x * φ (x - v) ∂m :=
       integral_sub hi0 hi1
     _ = 0 := sub_eq_zero.mpr hF01
+
+end ZeroGradientTranslations
 
 omit [SecondCountableTopology V] in
 /-- Translates of a locally integrable function are locally integrable for Haar measure. -/

@@ -236,20 +236,23 @@ theorem measurable_energyAt (κ : Kernel (Direction E × E) ℝ) [IsMarkovKernel
   unfold energyAt
   exact Measurable.ite hgood (hvar.div hvar_id) measurable_const
 
-omit [BorelSpace E] [SecondCountableTopology E] in
+section FiberCongruence
+
+omit [BorelSpace E] [SecondCountableTopology E]
 /-- The fiber energy depends on the kernel only through its value at the base point. -/
 theorem energyAt_congr_kernel {κ κ' : Kernel (Direction E × E) ℝ} {b : Direction E × E}
     (h : κ b = κ' b) (f : E → ℝ) : energyAt κ b f = energyAt κ' b f := by
   unfold energyAt Nondegenerate
   rw [h]
 
-omit [BorelSpace E] [SecondCountableTopology E] in
 /-- The fiber energy depends on the test only through its class along the fiber. -/
 theorem energyAt_congr_ae {κ : Kernel (Direction E × E) ℝ} {b : Direction E × E}
     {f g : E → ℝ}
     (h : (fun t ↦ f (reconstruct b t)) =ᵐ[κ b] (fun t ↦ g (reconstruct b t))) :
     energyAt κ b f = energyAt κ b g := by
   simp only [energyAt, evariance_congr h]
+
+end FiberCongruence
 
 /-- Every Markov version of the same joint disintegration gives the same energy. -/
 theorem energyWithKernel_eq_energy (μ : ProbabilityMeasure E) (ρ : ProbabilityMeasure (Direction E))

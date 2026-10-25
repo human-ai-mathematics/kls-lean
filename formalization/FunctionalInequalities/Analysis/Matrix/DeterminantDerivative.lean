@@ -105,7 +105,7 @@ namespace FunctionalInequalities.Analysis
 section FiniteIndex
 
 variable {ι : Type*}
-variable [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
+  [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
 
 /-- Derivative of the finite determinant polynomial along a scalar affine path.
 No outer matrix chain rule, invertibility, or nonempty-index assumption. -/

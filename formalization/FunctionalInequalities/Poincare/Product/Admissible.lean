@@ -64,7 +64,9 @@ private theorem Admissible.continuous_gradient (hf : Admissible (prodMeasure μ 
   rw [heq]
   exact (InnerProductSpace.toDual ℝ (WithLp 2 (E × F))).symm.continuous.comp hfd
 
-omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+section ProductGradientIntegrability
+
+omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
 /-- Source: local finite-energy helper using Mathlib's `Integrable.mono'` and
 `WithLp.prod_norm_sq_eq_of_L2` to dominate the left component by the full squared gradient. -/
 theorem Admissible.integrable_gradient_fst (hf : Admissible (prodMeasure μ ν) f) :
@@ -82,7 +84,6 @@ theorem Admissible.integrable_gradient_fst (hf : Admissible (prodMeasure μ ν) 
   have hsq := sq_nonneg ‖(gradient f (WithLp.toLp 2 p)).snd‖
   linarith
 
-omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
 /-- Source: local finite-energy helper using Mathlib's `Integrable.mono'` and
 `WithLp.prod_norm_sq_eq_of_L2` to dominate the right component by the full squared gradient. -/
 theorem Admissible.integrable_gradient_snd (hf : Admissible (prodMeasure μ ν) f) :
@@ -99,6 +100,8 @@ theorem Admissible.integrable_gradient_snd (hf : Admissible (prodMeasure μ ν) 
   have hsum := WithLp.prod_norm_sq_eq_of_L2 (gradient f (WithLp.toLp 2 p))
   have hsq := sq_nonneg ‖(gradient f (WithLp.toLp 2 p)).fst‖
   linarith
+
+end ProductGradientIntegrability
 
 /-- Source: local a.e. consequence of `ProductVariance.memLp_left_ae`,
 `Integrable.prod_left_ae`, and the left-section calculus helpers. Only an a.e. claim is made;

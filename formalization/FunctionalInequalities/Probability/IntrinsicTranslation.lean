@@ -15,7 +15,7 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 
-variable (μ : ProbabilityMeasure E) (b : E)
+  (μ : ProbabilityMeasure E) (b : E)
 
 omit [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- On the affine support, the intrinsic coordinate of a point is its displacement from the chosen
@@ -120,7 +120,9 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
 
-omit [FiniteDimensional ℝ V] in
+section TranslationMeans
+
+omit [FiniteDimensional ℝ V]
 /-- The barycenter of a translated law is the translated barycenter. -/
 theorem integral_id_translateLaw (ν : ProbabilityMeasure V) (hint : Integrable id (ν : Measure V))
     (c : V) : ∫ x, x ∂(translateLaw ν c : Measure V) = c + ∫ x, x ∂(ν : Measure V) := by
@@ -129,12 +131,13 @@ theorem integral_id_translateLaw (ν : ProbabilityMeasure V) (hint : Integrable 
   have hint' : Integrable (fun x : V ↦ x) (ν : Measure V) := hint
   rw [integral_add (integrable_const c) hint', integral_const, probReal_univ, one_smul]
 
-omit [FiniteDimensional ℝ V] in
 /-- Translating by the negative barycenter centers the law. -/
 theorem integral_id_translateLaw_neg_integral (ν : ProbabilityMeasure V)
     (hint : Integrable id (ν : Measure V)) :
     ∫ x, x ∂(translateLaw ν (-∫ x, x ∂(ν : Measure V)) : Measure V) = 0 := by
   rw [integral_id_translateLaw ν hint]
   simp
+
+end TranslationMeans
 
 end FunctionalInequalities.Probability

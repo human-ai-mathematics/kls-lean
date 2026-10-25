@@ -29,23 +29,27 @@ private theorem sumMap_contDiff : ContDiff ℝ ∞ (sumMap (V := V)) := by
   exact (contDiff_fst.add contDiff_snd).comp
     (WithLp.prodContinuousLinearEquiv 2 ℝ V V).contDiff
 
-omit [CompleteSpace V] in
+section SumLaws
+
+omit [CompleteSpace V]
 private theorem sumMap_measurable : Measurable (sumMap (V := V)) :=
   sumMap_contDiff.continuous.measurable
 
-omit [CompleteSpace V] in
 private theorem map_prodMeasure_sumMap (μ ν : Measure V) :
     (prodMeasure μ ν).map (sumMap (V := V)) = μ.conv ν := by
   rw [prodMeasure, Measure.map_map sumMap_measurable
     (WithLp.measurable_toLp 2 (V × V))]
   rfl
 
-omit [CompleteSpace V] in
 private theorem sumMap_measurePreserving (μ ν : Measure V) :
     MeasurePreserving (sumMap (V := V)) (prodMeasure μ ν) (μ.conv ν) :=
   ⟨sumMap_measurable, map_prodMeasure_sumMap μ ν⟩
 
-omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] in
+end SumLaws
+
+section LiftedGradients
+
+omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
 private theorem gradient_lift_fst (f : V → ℝ) (hf : Differentiable ℝ f)
     (x y : V) :
     (gradient (fun p : WithLp 2 (V × V) => f (sumMap p))
@@ -56,7 +60,6 @@ private theorem gradient_lift_fst (f : V → ℝ) (hf : Differentiable ℝ f)
   change gradient (fun z : V => f (z + y)) x = gradient f (x + y)
   simpa only [add_comm] using Energy.Euclidean.gradient_comp_const_add f y x
 
-omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] in
 private theorem gradient_lift_snd (f : V → ℝ) (hf : Differentiable ℝ f)
     (x y : V) :
     (gradient (fun p : WithLp 2 (V × V) => f (sumMap p))
@@ -67,7 +70,6 @@ private theorem gradient_lift_snd (f : V → ℝ) (hf : Differentiable ℝ f)
   change gradient (fun z : V => f (x + z)) y = gradient f (x + y)
   exact Energy.Euclidean.gradient_comp_const_add f x y
 
-omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] in
 private theorem gradient_lift_norm_sq (f : V → ℝ) (hf : Differentiable ℝ f)
     (p : WithLp 2 (V × V)) :
     ‖gradient (fun q : WithLp 2 (V × V) => f (sumMap q)) p‖ ^ 2 =
@@ -77,6 +79,8 @@ private theorem gradient_lift_norm_sq (f : V → ℝ) (hf : Differentiable ℝ f
     gradient_lift_fst f hf, gradient_lift_snd f hf]
   simp only [sumMap, WithLp.toLp_fst, WithLp.toLp_snd]
   ring
+
+end LiftedGradients
 
 private theorem admissible_lift {μ ν : Measure V} [IsProbabilityMeasure μ]
     [IsProbabilityMeasure ν] {f : V → ℝ} (hf : Admissible (μ.conv ν) f) :

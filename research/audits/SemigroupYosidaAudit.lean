@@ -56,7 +56,7 @@ theorem route_S5_of_nonneg :
 section InnerProduct
 
 variable {H₀ : Type*}
-variable [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
+  [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
 
 /-! ### Boundary cases -/
 

@@ -42,7 +42,7 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 
-variable (μ : ProbabilityMeasure E) (b : E)
+  (μ : ProbabilityMeasure E) (b : E)
 
 omit [CompleteSpace E] in
 /-- The affine covariance Poincaré constant is invariant under ambient translations of the law. -/

@@ -250,7 +250,7 @@ section Directional
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **Weighted directional integration by parts** (Letwin arXiv:2607.24164v1, Lemma A.3, pp. 16–17):
 for smooth `φ, f, g` with `∫ e^{-φ} dm = 1` and the four integrands `(∂_v f) g`, `f ∂_v g`, `f g ∂_v φ`,

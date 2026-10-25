@@ -578,7 +578,9 @@ theorem gradCoord_gradCoord_symm {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E)
 
 end CoordinateSymmetry
 
-omit [CompleteSpace E] [m.IsAddHaarMeasure] in
+section GradientEnergyIdentities
+
+omit [CompleteSpace E] [m.IsAddHaarMeasure]
 /-- **BKL (35)**: under the normalization (33), the energy drop `v_i - v_{i+1}` is `‖∫ ∇h_i‖²`. -/
 theorem integral_norm_sq_gradCoord_sub_eq_of_normalized {V : E → ℝ}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
@@ -594,7 +596,6 @@ theorem integral_norm_sq_gradCoord_sub_eq_of_normalized {V : E → ℝ}
   rw [h33, integral_norm_sq_sub_integral (m.tilted (-V)) hi hi2]
   ring
 
-omit [CompleteSpace E] [m.IsAddHaarMeasure] in
 /-- **BKL (36)** along a sequence of iterates normalized by (33): `v_0 = v_N + Σ_{k<N} ‖∫ ∇h_k‖²`. -/
 theorem integral_norm_sq_gradCoord_eq_add_sum {V : E → ℝ}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
@@ -617,6 +618,8 @@ theorem integral_norm_sq_gradCoord_eq_add_sum {V : E → ℝ}
     rw [← h33 N] at h
     rw [ih, Finset.sum_range_succ]
     linarith
+
+end GradientEnergyIdentities
 
 /-- **BKL Lemma 3.2** for a supplied pair satisfying (30) (the normalization (33) is not needed): if
 `λ > 0` and `λ ≤ α²` whenever `α ≠ 0`, then `∇₀h` lies within squared `L²` distance `χ / λ`, `χ = ‖∇²g - α ∇h‖²`, of a tensor field
@@ -758,17 +761,20 @@ omit [NormedAddCommGroup G] [InnerProductSpace ℝ G] in
 theorem swapFirstTwo_apply {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G)))
     (i j : Fin n) : swapFirstTwo A i j = A j i := rfl
 
-omit [InnerProductSpace ℝ G] in
+section TensorPermutation
+
+omit [InnerProductSpace ℝ G]
 theorem swapFirstTwo_sub {n : ℕ} (A B : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) :
     swapFirstTwo (A - B) = swapFirstTwo A - swapFirstTwo B := rfl
 
-omit [InnerProductSpace ℝ G] in
 theorem norm_swapFirstTwo {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) :
     ‖swapFirstTwo A‖ = ‖A‖ := by
   have hsq : ‖swapFirstTwo A‖ ^ 2 = ‖A‖ ^ 2 := by
     simp only [PiLp.norm_sq_eq_of_L2, swapFirstTwo_apply]
     rw [Finset.sum_comm]
   nlinarith [norm_nonneg (swapFirstTwo A), norm_nonneg A]
+
+end TensorPermutation
 
 /-- The symmetrization `S₂ A = (A + τ₁ A) / 2` of the first two indices. -/
 def symmetrizeFirstTwo {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) :

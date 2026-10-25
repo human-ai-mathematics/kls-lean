@@ -21,7 +21,7 @@ namespace FunctionalInequalities.Probability
 section MeasurableSpace
 
 variable {E : Type*}
-variable [MeasurableSpace E]
+  [MeasurableSpace E]
 
 /-- `∫⁻ Π_i g_i(x_i) d(⊗_i μ) = Π_i ∫⁻ g_i dμ` over `Fin N`. -/
 theorem lintegral_pi_prod_fin
@@ -238,7 +238,7 @@ end MeasurableSpace
 section MeasurableSpace
 
 variable {A B : Type*}
-variable [MeasurableSpace A] [MeasurableSpace B]
+  [MeasurableSpace A] [MeasurableSpace B]
 
 /-- **Independent sums.** Under `μ ⊗ ν`, centered `X ∈ L²(μ)` and `Y ∈ L²(ν)` give a centered
 sum `X + Y` with second moment `∫ X² dμ + ∫ Y² dν`. -/

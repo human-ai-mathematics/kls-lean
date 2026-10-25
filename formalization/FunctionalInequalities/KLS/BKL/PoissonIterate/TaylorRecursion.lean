@@ -308,7 +308,9 @@ private theorem permField_symField {k q : ℕ} (u : Field ν k) {π : Equiv.Perm
   simp only [← permField_mul]
   exact sum_fixingOutside_mul_left hπ (fun σ => permField σ u)
 
-omit [BorelSpace V] in
+section TaylorFieldBounds
+
+omit [BorelSpace V]
 /-- `taylorField d u` is symmetric in the `q` positions after the Taylor indices when `u` is
 symmetric in its first `q` positions. -/
 private theorem slotRep_taylorField_right {d k q : ℕ} (u : Field ν k)
@@ -335,7 +337,6 @@ private theorem slotRep_taylorField_right {d k q : ℕ} (u : Field ν k)
   rw [permField_apply] at h
   rw [show (fun i => J (Fin.natAdd d (π i))) = (fun i => J (Fin.natAdd d i)) ∘ π from rfl, h]
 
-omit [BorelSpace V] in
 /-- **The Taylor bound (29) componentwise**: if `|T_d g| ≤ R^d ‖g‖₂` for every `g ∈ L²(ν)`, then
 `|T_d u|² ≤ R^{2d} ‖u‖²` for every tensor field `u`. -/
 private theorem norm_taylorField_sq_le_of_bound {R : ℝ} {d : ℕ}
@@ -354,6 +355,8 @@ private theorem norm_taylorField_sq_le_of_bound {R : ℝ} {d : ℕ}
     simp [taylorField, coordTensor_apply, Fin.append_left, Fin.append_right]
   rw [hI, pow_mul', ← mul_pow]
   exact pow_le_pow_left₀ (norm_nonneg _) (h29 (u I)) 2
+
+end TaylorFieldBounds
 
 end Taylor
 

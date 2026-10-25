@@ -51,7 +51,7 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDim
 section Contraction
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable (φ : ContDiffBump (0 : V))
+  (φ : ContDiffBump (0 : V))
 
 /-- Pointwise Cauchy–Schwarz for the mollifier: `‖(ρ ⋆ f) x‖² ≤ ∫ ρ(t) ‖f (x - t)‖² dt`. -/
 theorem enorm_convolution_sq_le {f : V → E} (hf : AEStronglyMeasurable f m) (x : V) :
@@ -159,7 +159,9 @@ section Convergence
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
 
-omit [CompleteSpace E] in
+section ConvolutionSupport
+
+omit [CompleteSpace E]
 /-- The support of a mollification with `rOut ≤ ε` lies in the closed `ε`-thickening of the
 support of the function. -/
 theorem support_convolution_subset_cthickening_of_rOut_le (φ : ContDiffBump (0 : V)) {ε : ℝ}
@@ -174,7 +176,6 @@ theorem support_convolution_subset_cthickening_of_rOut_le (φ : ContDiffBump (0 
   rw [mem_ball, dist_zero_right] at ha
   exact ha.le.trans hφ
 
-omit [CompleteSpace E] in
 /-- The support of a mollification with `rOut ≤ 1` lies in the closed `1`-thickening of the
 support of the function. -/
 theorem support_convolution_subset_cthickening (φ : ContDiffBump (0 : V)) (hφ : φ.rOut ≤ 1)
@@ -182,6 +183,8 @@ theorem support_convolution_subset_cthickening (φ : ContDiffBump (0 : V)) (hφ 
     Function.support (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) ⊆
       cthickening 1 (tsupport f) :=
   support_convolution_subset_cthickening_of_rOut_le φ hφ f
+
+end ConvolutionSupport
 
 /-- **Mollifications of a continuous compactly supported function converge in `L²`** as the
 radius of the bump tends to zero. -/
@@ -277,7 +280,7 @@ end Convergence
 section Adjoint
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-variable (φ : ContDiffBump (0 : V))
+  (φ : ContDiffBump (0 : V))
 
 /-- **The mollifier is symmetric for the `L²` pairing**: for an integrable `a` and a continuous
 compactly supported `b`, `∫ ⟪ρ ⋆ a, b⟫ = ∫ ⟪a, ρ ⋆ b⟫`. The bump is even, so no reflection of the
@@ -448,8 +451,8 @@ open scoped Convolution
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-variable [BorelSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+  [BorelSpace E]
 
 /-! Derivative of a normalized-bump convolution with a Lipschitz function. -/
 

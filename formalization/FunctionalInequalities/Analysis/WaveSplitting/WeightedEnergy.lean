@@ -18,7 +18,7 @@ open MeasureTheory Set
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
@@ -234,15 +234,18 @@ section FiniteIndex
 
 variable [Fintype ι]
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
+section WeightedPositivity
+
+omit [NormedAddCommGroup E] [NormedSpace ℝ E] [BorelSpace E] [IsFiniteMeasureOnCompacts m]
 theorem weightedEnergy_nonneg {w : E → ℝ} (hw0 : ∀ x, 0 ≤ w x) (Y : State E ι) :
     0 ≤ weightedEnergy m w Y :=
   integral_nonneg fun x => mul_nonneg (hw0 x) (by positivity)
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
 private theorem weightedPairing_self (w : E → ℝ) (X : State E ι) :
     weightedPairing m w X X = weightedEnergy m w X := by
   simp only [weightedPairing, weightedEnergy, pow_two]
+
+end WeightedPositivity
 
 end FiniteIndex
 
@@ -405,7 +408,9 @@ end FiniteIndex
 section Haar
 variable [m.IsAddHaarMeasure]
 
-omit [IsFiniteMeasureOnCompacts m] in
+section WeightedGenerator
+
+omit [IsFiniteMeasureOnCompacts m]
 private theorem integral_fderiv_eq_zero {g : E → ℝ} (hg : ContDiff ℝ 1 g) {R : ℝ}
     (hR : ∀ x, R < ‖x‖ → g x = 0) (v : E) : ∫ x, fderiv ℝ g x v ∂m = 0 := by
   have hgc : HasCompactSupport g := HasCompactSupport.intro (isCompact_closedBall 0 R)
@@ -422,7 +427,6 @@ private theorem integral_fderiv_eq_zero {g : E → ℝ} (hg : ContDiff ℝ 1 g) 
     (fun x _ => (hg.differentiable one_ne_zero) x)
   simpa using h
 
-omit [IsFiniteMeasureOnCompacts m] in
 /-- **Weighted skew identity.** If `D_(a_j) w = -b_j w`, the actual wave generator is skew
 in the weighted pairing on supported smooth states. No identification `p = grad u` is used. -/
 theorem weightedPairing_waveGenerator [Fintype ι] (a : ι → E) (b : ι → E → ℝ)
@@ -472,6 +476,8 @@ theorem weightedPairing_waveGenerator [Fintype ι] (a : ι → E) (b : ι → E 
   unfold weightedPairing
   rw [hpt, integral_finsetSum _ fun j _ => hi j]
   exact Finset.sum_eq_zero fun j _ => integral_fderiv_eq_zero m (hH j) (hHR j) (a j)
+
+end WeightedGenerator
 
 end Haar
 
@@ -576,7 +582,9 @@ section StructuredSpace
 
 variable [m.IsAddHaarMeasure]
 
-omit [IsFiniteMeasureOnCompacts m] in
+section WeightedStepBounds
+
+omit [IsFiniteMeasureOnCompacts m]
 /-- **Forced weighted energy on one actual step.** If every residual on `[0,θ]` has weighted
 energy at most `η^2`, the weighted norm of the actual step grows by at most `θ η`. The
 initial norm enters with coefficient one. -/
@@ -622,7 +630,6 @@ theorem sqrt_weightedEnergy_step_le {d : ℕ} (a : Fin d → E)
   nlinarith [le_abs_self (weightedPairing m w (step a b js s Y) (residual a b js Y s)),
     mul_le_mul_of_nonneg_left hsq hn]
 
-omit [IsFiniteMeasureOnCompacts m] in
 /-- Forced weighted energy at the actual grid nodes. -/
 theorem sqrt_weightedEnergy_nodes_le {d : ℕ} (a : Fin d → E)
     {b : Fin d → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) {w : E → ℝ} (hw : ContDiff ℝ 1 w)
@@ -643,7 +650,6 @@ theorem sqrt_weightedEnergy_nodes_le {d : ℕ} (a : Fin d → E)
     push_cast
     nlinarith
 
-omit [IsFiniteMeasureOnCompacts m] in
 /-- Forced weighted energy inside every actual cell. -/
 theorem sqrt_weightedEnergy_cell_le {d : ℕ} (a : Fin d → E)
     {b : Fin d → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) {w : E → ℝ} (hw : ContDiff ℝ 1 w)
@@ -661,6 +667,8 @@ theorem sqrt_weightedEnergy_cell_le {d : ℕ} (a : Fin d → E)
     (hR.nodes a b _ δ k) hθ hη fun s hs => he k le_rfl s ⟨hs.1, hs.2.trans hθδ⟩
   change √(weightedEnergy m w (step a b _ θ (nodes a b _ δ Y k))) ≤ _
   nlinarith
+
+end WeightedStepBounds
 
 end StructuredSpace
 

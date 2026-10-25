@@ -14,7 +14,7 @@ open scoped ContDiff RealInnerProductSpace LinearPMap
 namespace HeatCompositionDomainAudit
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
+  {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
 theorem recognition

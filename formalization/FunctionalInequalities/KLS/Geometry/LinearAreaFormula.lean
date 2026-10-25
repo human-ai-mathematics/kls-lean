@@ -42,7 +42,9 @@ theorem hausdorffNormalized_image_linearMap (L : H →ₗ[ℝ] V) (s : Set H) :
     smul_eq_mul, smul_eq_mul, LinearMap.hausdorffMeasure_image]
   ring
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
+section IsometricJacobians
+
+omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V]
 /-- The adjoint of a linear isometric embedding is a left inverse. -/
 theorem adjoint_apply_linearIsometry (ι : H →ₗᵢ[ℝ] V) (x : H) :
     LinearMap.adjoint (ι : H →ₗ[ℝ] V) (ι x) = x := by
@@ -50,7 +52,6 @@ theorem adjoint_apply_linearIsometry (ι : H →ₗᵢ[ℝ] V) (x : H) :
   rw [LinearMap.adjoint_inner_left]
   exact ι.inner_map_map x y
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
 /-- A linear isometric embedding has unit norm determinant: it changes no `k`-volume. -/
 theorem normDet_linearIsometry (ι : H →ₗᵢ[ℝ] V) : LinearMap.normDet (ι : H →ₗ[ℝ] V) = 1 := by
   have hcomp : LinearMap.adjoint (ι : H →ₗ[ℝ] V) ∘ₗ (ι : H →ₗ[ℝ] V) = LinearMap.id := by
@@ -62,6 +63,8 @@ theorem normDet_linearIsometry (ι : H →ₗᵢ[ℝ] V) : LinearMap.normDet (ι
     exact_mod_cast h
   have hnn := LinearMap.normDet_nonneg (ι : H →ₗ[ℝ] V)
   nlinarith
+
+end IsometricJacobians
 
 /-- An isometrically embedded set keeps its normalized `k`-dimensional measure. -/
 theorem hausdorffNormalized_image_linearIsometry (ι : H →ₗᵢ[ℝ] V) (s : Set H) :

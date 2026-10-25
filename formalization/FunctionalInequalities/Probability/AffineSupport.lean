@@ -42,7 +42,9 @@ theorem support_subset_affineSupport (μ : ProbabilityMeasure E) :
     (μ : Measure E).support ⊆ affineSupport μ :=
   subset_affineSpan ℝ _
 
-/-- The affine support is the smallest closed affine subspace of full measure. -/
+/-- The affine support lies in every closed affine subspace that contains almost every point.
+Closedness and full measure of the affine support itself are established separately under the
+hypotheses of `isClosed_affineSupport` and `measure_compl_affineSupport`. -/
 theorem affineSupport_le_of_ae_mem (μ : ProbabilityMeasure E) (A : AffineSubspace ℝ E)
     (hA : IsClosed (A : Set E)) (hμ : ∀ᵐ x ∂(μ : Measure E), x ∈ A) :
     affineSupport μ ≤ A := by
@@ -144,7 +146,9 @@ theorem coe_retraction_ae (μ : ProbabilityMeasure E) :
   filter_upwards [ae_mem_affineSupport μ] with x hx
   exact coe_retraction_of_mem μ hx
 
-/-- Intrinsic vector coordinates of an ambient point. -/
+/-- Vector coordinates in the direction of the affine support, with `origin μ` as the origin.
+On the affine support these are affine isometric coordinates. Outside it the retraction uses the
+chosen origin. The chosen support point need not be the mean. -/
 def intrinsicMap (μ : ProbabilityMeasure E) (x : E) : (affineSupport μ).direction :=
   (coordinateEquiv μ).symm (retraction μ x)
 
@@ -153,7 +157,9 @@ omit [CompleteSpace E] in
 theorem measurable_intrinsicMap (μ : ProbabilityMeasure E) : Measurable (intrinsicMap μ) :=
   (coordinateEquiv μ).symm.continuous.measurable.comp (measurable_retraction μ)
 
-/-- The original probability law expressed on the direction vector space of its affine support. -/
+/-- The original probability law in affine isometric coordinates on its affine-support direction.
+The origin is the chosen support point `origin μ`; this construction does not center the mean or
+normalize the covariance. -/
 def intrinsicMeasure (μ : ProbabilityMeasure E) :
     ProbabilityMeasure (affineSupport μ).direction :=
   μ.map (measurable_intrinsicMap μ).aemeasurable
@@ -194,13 +200,14 @@ theorem reconstruct_intrinsicMap_ae (μ : ProbabilityMeasure E) :
   filter_upwards [ae_mem_affineSupport μ] with x hx
   simp [reconstruct, intrinsicMap, coordinateEquiv, retraction, hx]
 
-omit [CompleteSpace E] in
+section IntrinsicMeasurePreserving
+
+omit [CompleteSpace E]
 /-- Taking intrinsic coordinates preserves the probability law by construction. -/
 theorem measurePreserving_intrinsicMap (μ : ProbabilityMeasure E) :
     MeasurePreserving (intrinsicMap μ) (μ : Measure E) (intrinsicMeasure μ : Measure _) :=
   ⟨measurable_intrinsicMap μ, rfl⟩
 
-omit [CompleteSpace E] in
 /-- Reconstructing the intrinsic law gives back the original ambient probability law exactly. -/
 theorem measurePreserving_reconstruct (μ : ProbabilityMeasure E) :
     MeasurePreserving (reconstruct μ) (intrinsicMeasure μ : Measure _) (μ : Measure E) := by
@@ -212,7 +219,6 @@ theorem measurePreserving_reconstruct (μ : ProbabilityMeasure E) :
     simpa only [Function.comp_apply, id_eq] using hx
   rw [Measure.map_congr hcomp, Measure.map_id]
 
-omit [CompleteSpace E] in
 /-- Intrinsic coordinates remove every redundant affine direction. This statement is purely
 geometric and does not require log-concavity or absolute continuity. -/
 theorem affineSupport_intrinsicMeasure (μ : ProbabilityMeasure E) :
@@ -231,6 +237,8 @@ theorem affineSupport_intrinsicMeasure (μ : ProbabilityMeasure E) :
   have hv : reconstruct μ v ∈ affineSupport μ := (coordinateEquiv μ v).property
   obtain ⟨w, hw, heq⟩ := hle hv
   exact (reconstruct μ).injective heq ▸ hw
+
+end IntrinsicMeasurePreserving
 
 end Coordinates
 

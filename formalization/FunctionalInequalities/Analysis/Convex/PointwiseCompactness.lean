@@ -23,7 +23,7 @@ namespace FunctionalInequalities.Analysis
 section NormedSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup E] [NormedSpace ℝ E]
 
 private theorem convexOn_pointwise_sup
     {K : Set E} (f : ℕ → E → ℝ) (hf : ∀ n, ConvexOn ℝ K (f n))

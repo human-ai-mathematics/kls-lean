@@ -49,8 +49,8 @@ def intrinsicClosedSupportLaw {E : Type*} [NormedAddCommGroup E]
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
-variable [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
+  [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 /-- Complement symmetry of the metric BV perimeter on the closed intrinsic support. -/
 theorem perimeter_compl_intrinsicClosedSupportLaw
@@ -99,7 +99,9 @@ end FiniteDimensional
 
 section HalfSymmetric
 
-omit [MetricSpace X] [BorelSpace X] in
+section HalfMassBounds
+
+omit [MetricSpace X] [BorelSpace X]
 /-- A mass at most one half is at most the complementary mass. -/
 theorem le_one_sub_of_le_half {m : ENNReal} (h : m ≤ 1 / 2) : m ≤ 1 - m := by
   have hm : 1 / 2 ≤ 1 - m := by
@@ -107,7 +109,6 @@ theorem le_one_sub_of_le_half {m : ENNReal} (h : m ≤ 1 / 2) : m ≤ 1 - m := b
       _ ≤ 1 - m := tsub_le_tsub_left h 1
   exact h.trans hm
 
-omit [MetricSpace X] [BorelSpace X] in
 /-- A mass strictly above one half has complementary mass strictly below one half. -/
 theorem one_sub_lt_half_of_half_lt {m : ENNReal} (h : 1 / 2 < m) (h1 : m ≤ 1) :
     1 - m < 1 / 2 := by
@@ -115,6 +116,8 @@ theorem one_sub_lt_half_of_half_lt {m : ENNReal} (h : 1 / 2 < m) (h1 : m ≤ 1) 
   rw [ENNReal.sub_lt_iff_lt_right hm h1]
   calc (1 : ENNReal) = 1 / 2 + 1 / 2 := (ENNReal.add_halves 1).symm
     _ < 1 / 2 + m := ENNReal.add_lt_add_left (by simp) h
+
+end HalfMassBounds
 
 /-- The half-mass and symmetric BV Cheeger constants coincide for every probability measure
 on a metric space. A symmetric test set of mass above one half is replaced by its complement,

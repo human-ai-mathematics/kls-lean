@@ -98,7 +98,7 @@ namespace FunctionalInequalities.Analysis
 section MeasurableSpace
 
 variable {X : Type*}
-variable [MeasurableSpace X]
+  [MeasurableSpace X]
 
 private lemma l2_pairing_toLp
     {μ : Measure X} (A : Lp ℝ 2 μ) {b : X → ℝ} (hb : MemLp b 2 μ) :
@@ -122,8 +122,8 @@ end MeasurableSpace
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-variable [BorelSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+  [BorelSpace E]
 
 private lemma translated_memLp {f : E → ℝ}
     (hf : MemLp f 2 (volume : Measure E)) (w : E) :

@@ -53,7 +53,7 @@ end Euclidean
 
 variable [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-variable {ν₁ ν₂ : ProbabilityMeasure V} {c : V}
+  {ν₁ ν₂ : ProbabilityMeasure V} {c : V}
 
 namespace CovarianceGradient.Test
 
@@ -81,7 +81,9 @@ def translate
     rw [← hmp.map_eq] at this
     exact (integrable_map_measure (hmp.map_eq ▸ g.integrable.1) hmp.aemeasurable).mp this
 
-omit [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section TranslatedTests
+
+omit [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- The translated test has the same covariance energy. -/
 theorem energy_translate
     (hmp : MeasurePreserving (fun x ↦ c + x) (ν₁ : Measure V) (ν₂ : Measure V))
@@ -98,7 +100,6 @@ theorem energy_translate
   rw [hdens, ← hmp.map_eq, integral_map hmp.aemeasurable (hmp.map_eq ▸ g.integrable.1)]
   rfl
 
-omit [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The translated test realizes the pullback of the original class. -/
 theorem toL2_translate
     (hmp : MeasurePreserving (fun x ↦ c + x) (ν₁ : Measure V) (ν₂ : Measure V))
@@ -110,6 +111,8 @@ theorem toL2_translate
   refine Filter.EventuallyEq.trans ?_ (Lp.coeFn_compMeasurePreserving g.toL2 hmp).symm
   exact hmp.quasiMeasurePreserving.ae_eq_comp g.toL2_coeFn.symm
 
+end TranslatedTests
+
 end CovarianceGradient.Test
 
 end Tests
@@ -118,7 +121,7 @@ section Relaxation
 
 variable [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-variable (ν : ProbabilityMeasure V) (c : V)
+  (ν : ProbabilityMeasure V) (c : V)
 
 namespace CovarianceGradient
 

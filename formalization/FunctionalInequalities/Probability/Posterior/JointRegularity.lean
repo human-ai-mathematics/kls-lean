@@ -52,20 +52,23 @@ private def parameterScore (x : E) : (E × (E →L[ℝ] E)) →L[ℝ] ℝ :=
     (1 / 2 : ℝ) • ((innerSL ℝ x).comp
       ((ContinuousLinearMap.apply ℝ E x).comp (ContinuousLinearMap.snd ℝ E (E →L[ℝ] E))))
 
-omit [FiniteDimensional ℝ E] in
+section ParameterScores
+
+omit [FiniteDimensional ℝ E]
 private theorem parameterScore_apply (x : E) (p : E × (E →L[ℝ] E)) :
     parameterScore E x p = quadraticExponent p.1 p.2 x := by
   change ⟪x, p.1⟫ - (1 / 2 : ℝ) * ⟪x, p.2 x⟫ = quadraticExponent p.1 p.2 x
   simp only [quadraticExponent]
   rw [real_inner_comm x p.1, real_inner_comm x (p.2 x)]
 
-omit [FiniteDimensional ℝ E] in
 private theorem continuous_parameterScore : Continuous (parameterScore E) := by
   have hi : Continuous (fun x : E => innerSL ℝ x) := (InnerProductSpace.toDualMap ℝ E).continuous
   have he : Continuous (fun x : E =>
       (ContinuousLinearMap.apply ℝ E x).comp (ContinuousLinearMap.snd ℝ E (E →L[ℝ] E))) :=
     (ContinuousLinearMap.apply ℝ E).continuous.clm_comp_const _
   exact (hi.clm_comp_const _).sub ((hi.clm_comp he).const_smul (1 / 2 : ℝ))
+
+end ParameterScores
 
 /-- Riesz representative of the score in the chart coordinates. -/
 private def parameterFeature (x : E) :

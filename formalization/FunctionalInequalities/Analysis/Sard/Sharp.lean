@@ -84,7 +84,7 @@ theorem sard_pi : ∀ (n : ℕ) (u : (Fin n → ℝ) → ℝ), ContDiff ℝ n u 
 section FiniteDimensional
 
 variable {V : Type*}
-variable [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+  [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 
 /-- **Sard's theorem at the sharp regularity.**  The set of critical values of a
 `C^(finrank ℝ V)` real-valued function on a finite-dimensional real normed space is

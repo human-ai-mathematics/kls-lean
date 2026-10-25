@@ -70,7 +70,9 @@ theorem inner_weightedLaplacianVec_eq_sum (V : E → ℝ) {f : E → F} (hf : Co
     intro α hα
     rw [inner_weightedLaplacianVec_inner V hf (stdOrthonormalBasis ℝ F α) x]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F] in
+section GradientComponents
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F]
 private lemma inner_gradient_component
     {f : E → F} {x : E} (hf : DifferentiableAt ℝ f x) (c : F) (v : E) :
     ⟪gradient (fun y => ⟪c, f y⟫) x, v⟫ =
@@ -80,7 +82,6 @@ private lemma inner_gradient_component
   simpa [Function.comp_def, innerSL_apply_apply, ContinuousLinearMap.comp_apply,
     InnerProductSpace.toDual_symm_apply, real_inner_comm] using h
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F] in
 private lemma inner_component_gradient
     {f : E → F} {x : E} (hf : DifferentiableAt ℝ f x) (c : F) (v : E) :
     ⟪c, fderiv ℝ f x v⟫ =
@@ -91,6 +92,8 @@ private lemma inner_component_gradient
       (inner_gradient_component hf c v).symm
     _ = ⟪v, gradient (fun y => ⟪c, f y⟫) x⟫ :=
       real_inner_comm _ _
+
+end GradientComponents
 
 omit [MeasurableSpace E] [BorelSpace E] in
 /-- `∑_i ⟪Du(e_i), Dv(e_i)⟫ = ∑_α ⟪∇u_α, ∇v_α⟫`. -/

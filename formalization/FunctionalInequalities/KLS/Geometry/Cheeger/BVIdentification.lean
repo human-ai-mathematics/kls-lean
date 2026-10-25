@@ -120,7 +120,7 @@ section ClosedSupport
 section MeasurableSpace
 
 variable {X : Type*}
-variable [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+  [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
 
 /-- An admissible set bounds the symmetric BV constant by its quotient. -/
 theorem symmetricConstant_le_div

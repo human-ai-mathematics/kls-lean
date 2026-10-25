@@ -87,7 +87,7 @@ theorem client_L12 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace �
 section InnerProduct
 
 variable {V : Type*}
-variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+  [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
 
 section FiniteDimensional
 

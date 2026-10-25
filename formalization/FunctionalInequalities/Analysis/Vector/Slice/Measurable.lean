@@ -43,7 +43,9 @@ section Slice
 variable {X : Type*} [EMetricSpace X] [MeasurableSpace X] [BorelSpace X]
   {W : Type*} [MetricSpace W]
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section VectorSliceSemicontinuity
+
+omit [MeasurableSpace X] [BorelSpace X]
 /-- An open set containing one level slice of a compact set contains all nearby level slices: the
 compact remainder outside it keeps the map at a positive distance from the level.  The real-valued
 case uses `|u x - t|`; here it is `dist (u x) t`, and nothing else changes. -/
@@ -67,7 +69,6 @@ theorem isOpen_setOf_slice_subset_vector {S U : Set X} {u : X → W} (hS : IsCom
     rw [hx.2] at hle
     exact absurd (Metric.mem_ball.1 hs) (not_lt.2 hle)
 
-omit [MeasurableSpace X] [BorelSpace X] in
 /-- At a fixed scale, the open-cover cost of the level slices of a compact set is upper
 semicontinuous in the level, for a metric target.  Restricting to open covers is what makes this
 true: the same cover serves all nearby slices. -/
@@ -81,6 +82,8 @@ theorem upperSemicontinuous_openCoverCost_slice_vector (d : ℝ) (r : ℝ≥0∞
   refine Filter.mem_of_superset
     ((isOpen_setOf_slice_subset_vector hS (isOpen_iUnion hopen) hu).mem_nhds hcov) fun s hs => ?_
   exact (openCoverCost_le hopen hs hdiam).trans_lt hcost
+
+end VectorSliceSemicontinuity
 
 /-- **Compact slices are measurable in codimension `m`.**  For `S` compact and `u` continuous with
 values in a metric space, the `d`-dimensional Hausdorff measure of the level slices of `S` is a
