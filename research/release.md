@@ -5,6 +5,31 @@ does not change mathematical coverage or authorize changing repository visibilit
 The [paper register](progress/LITERATURE.md) owns source correspondence and certificate scope;
 the [verification guide](verification.md) owns receipt and trust boundaries.
 
+## Public access and the v1.0 release
+
+For [Issue #10](https://github.com/human-ai-mathematics/kls-lean/issues/10), the maintainer
+chose on **2026-10-26** to make the repository public after approving the README,
+before final freeze verification. Finish and review the intended public documentation
+and source diff first. Record README approval before changing visibility; making the
+source public does not establish a verified v1.0 release.
+
+When visibility changes, update the private-access notes in the
+[root README](../README.md#build-and-verify) and the
+[separate-project examples guide](../examples/README.md#connect-a-separate-lake-project).
+Check that the documented public clone and dependency URLs work without repository credentials.
+
+Then select the release commit, complete the local checks below, and push
+`milestone/v1.0` to trigger Lean certification. Both that CI run and the Linux sandboxed
+Comparator runs for `kls` and `openai` must pass for the **same final commit** before
+publishing the GitHub release with its receipts. Follow with the Zenodo archive/DOI
+and Palomar registration. The reported Comparator passes at `2639e79` and any CI run
+for an earlier revision do not cover a later release commit.
+
+Prepare the Formal Conjectures proposal before the Mathlib contribution, as agreed
+in the issue. The external proof annotation needs an accessible, immutable proof
+link and a checked statement correspondence; neither proposal preparation nor public
+source access implies that a contribution has been submitted or accepted.
+
 ## Finish the source snapshot
 
 Review the intended diff, preserve unrelated local changes and staging, and finish public
@@ -24,7 +49,7 @@ so that a fresh clone needs no local archive. Keep the root README short and fol
 From the root, populate and check the pinned third-party cache, then freeze the files:
 
 ```bash
-python3 research/cache_mathlib.py
+python3 research/cache_mathlib.py --project all
 python3 research/verify.py
 ```
 
@@ -33,6 +58,11 @@ Inspect the recorded snapshot and all errors. The full verifier includes all cur
 modules, strict audit clients, declaration axiom checks, statement/metadata checks and local
 kernel replay. It trusts pinned third-party compiled imports. A later source or documentation
 edit requires a new matching full receipt before release.
+
+The OpenAI bridge is a separate Lake package. Follow its
+[build and audit instructions](../integrations/openai/README.md) as well as the
+[Comparator guide](audits/KLS/Comparator/README.md). The cache command above prepares
+both packages; the root verifier does not replace the bridge's separate checks.
 
 After the intended changes have an approved commit, verify a separate Git consumer:
 
@@ -55,7 +85,9 @@ Remote certification checks the Lean build, strict audit clients, every local de
 against only `propext`, `Classical.choice` and `Quot.sound`, and the vendor and classical KLS
 gates. See [receipt scope](verification.md#receipts-and-trust-scope) for full local kernel replay
 evidence and the remaining local gates.
-Only then update publication claims for that revision and change visibility when authorized.
+Only then claim remote certification for that revision. Public access may already have
+been enabled under the README-first decision above; the verified release still waits
+for both final-commit sandboxed Comparator passes and the remaining local checks.
 Do not describe an older, cancelled, timed-out or incomplete run as current acceptance.
 
 ## Diagnose a long or failed run
@@ -73,7 +105,8 @@ cache: fetching only dotted imports can otherwise turn a build into hours of sou
 For a read-only local diagnosis, run `python3 research/cache_mathlib.py --check`.
 Cache completeness checks file presence; they are not a replay of third-party proofs.
 
-The hosted runner reserves disk before setup and bounds the job to 180 minutes. A disk error,
+The hosted runner reserves disk before setup and bounds the job to the timeout in the
+[Lean certification workflow](../.github/workflows/lean.yml). A disk error,
 missing cache, compiler error and manual cancellation are different outcomes. Preserve their
 logs and annotations, fix the identified cause, and retry at a meaningful milestone. Keep the
 strict build and axiom audits enabled; raising a timeout alone does not repair a cache or disk problem.

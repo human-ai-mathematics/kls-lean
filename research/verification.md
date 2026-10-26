@@ -138,6 +138,15 @@ isolated source reconstruction. Kernel replay alone accepts `sorryAx`; the separ
 gates reject it in their stated proof scopes. No-sorry claims require the actual declaration
 and import-boundary audits, not just a successful build.
 
+## Recorded remote certification
+
+Checked on 2026-10-26: [Lean certification run 40228537569](https://github.com/human-ai-mathematics/kls-lean/actions/runs/40228537569)
+succeeded for `ae11b0c4dc561936a5583454b5ad589ea9040559`. Its scope is the remote
+Lean-only check described above, including the standard-axiom gates and excluding
+local-module replay and metadata/Python checks. It does not certify later commits
+or working-tree changes, and does not replace the separate bridge and Comparator checks.
+The [release procedure](release.md) requires evidence for the final release revision.
+
 ## Statement baseline
 
 [statement_snapshot.py](statement_snapshot.py) checks elaborated types and local definition
