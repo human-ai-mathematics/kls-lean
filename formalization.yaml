@@ -38,8 +38,11 @@ sources:
       log-concave probability law and every self-adjoint quadratic form,
       including singular and indefinite forms, without compact support.
       The noncompact passage uses centered, covariance-whitened ball truncations
-      and mixed-moment convergence. Theorem 1.1, the full smooth approximation
-      of Lemma A.1 and the full smooth moment-map theory remain separate targets.
+      and mixed-moment convergence. Lemma A.1's regular approximation is also
+      formalized, preserving isotropy and mixed moments of degree at most four.
+      Theorem 1.1's conclusion follows from the stronger BKL bound; its original
+      proof route and the full smooth moment-map theory of Lemma 2.2 for the
+      literal merely convex source class remain incomplete locally.
       Source-author involvement is not established in the current provenance
       records; no source-author endorsement is asserted.
   - title: Analysis and Geometry of Markov Diffusion Operators
@@ -149,8 +152,12 @@ review:
   notes: >-
     The maintainer reports personally reviewing the key mathematical statements.
     The original important definitions and APIs have also received that review.
-    The OpenAI statement/bridge and external upstream interfaces have not yet
-    received the maintainer's personal review. The current itemized scope,
+    On 2026-10-26 the maintainer additionally reported personally reviewing the
+    OpenAI statement and bridge conversion proof, and part of the Letwin work.
+    The Letwin declarations reviewed were not itemized; approval of the entire
+    noncompact extension or proof dependency chain is not inferred. External
+    upstream stochastic-analysis interfaces have not received that personal review.
+    The current itemized scope,
     including Nicolas's reported inspection, is recorded in
     research/progress/public-interface-review.md.
     Separate review passes using Claude and GPT were used during development,

@@ -66,8 +66,10 @@ review:
   status: self-assessed
   notes: >-
     The maintainer reports reviewing the substantive KLS project's original
-    important definitions and APIs, but has not yet personally reviewed this
-    OpenAI statement or its bridge. Nicolas reports checking the bridge,
+    important definitions and APIs. On 2026-10-26 the maintainer additionally
+    reported personally reviewing the OpenAI statement and bridge conversion
+    proof. This report does not extend to upstream stochastic-analysis interfaces
+    or every dependency proof term. Nicolas reports checking the bridge,
     including the upstream model hash, and the metadata in Issue 10 comment
     https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6288377384.
     This is not a full public-API or independent peer-review signoff, and no

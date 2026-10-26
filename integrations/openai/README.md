@@ -79,6 +79,8 @@ helped organize literature and proof approaches. The root
 [formalization metadata](../../formalization.yaml) records substantial AI involvement,
 the maintainer's review of key statements and the separate Claude/GPT review passes.
 The [current review checklist](../../research/progress/public-interface-review.md) records
-that the maintainer has not yet personally reviewed the OpenAI model or bridge.
+the maintainer's 2026-10-26 report of personally reviewing the OpenAI statement and
+bridge conversion proof. Upstream stochastic-analysis interfaces remain outside
+that reported personal review.
 The bridge imports the substantive proof; its unchanged OpenAI model retains its
 original authorship and license.
