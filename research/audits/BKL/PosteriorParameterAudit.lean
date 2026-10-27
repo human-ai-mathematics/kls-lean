@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.Gaussian.Moments
 import FunctionalInequalities.KLS.BKL.Posterior.Response
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Probability.Posterior.Generator
@@ -9,6 +10,8 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 import FunctionalInequalities.KLS.BKL.Posterior.Noise
 import FunctionalInequalities.KLS.BKL.Posterior.Regularity
 import FunctionalInequalities.KLS.BKL.Posterior.Standardization
+
+open FunctionalInequalities.Probability.Gaussian
 /-!
 # Audit: parameter response, generator and log-concavity of the BKL posterior (67)–(68)
 
@@ -42,10 +45,10 @@ open scoped RealInnerProductSpace ContDiff
 namespace ActualPosteriorParameterClients
 
 private def μG : ProbabilityMeasure ℝ :=
-  ⟨gaussianLaw (1 / 2), gaussianLaw_probability (by norm_num)⟩
+  ⟨FunctionalInequalities.Probability.Gaussian.law (1 / 2), FunctionalInequalities.Probability.Gaussian.law_probability (by norm_num)⟩
 
 private theorem prior_variance_one : variance id (μG : Measure ℝ) = 1 := by
-  have h := gaussianLaw_variance (E := ℝ) (by norm_num : (0 : ℝ) < 1 / 2) (1 : ℝ)
+  have h := FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ) (by norm_num : (0 : ℝ) < 1 / 2) (1 : ℝ)
   norm_num [μG, Real.inner_apply] at h ⊢
   exact h
 
@@ -53,14 +56,14 @@ theorem actual_gaussian_source : KLS.LogConcave μG ∧ KLS.Isotropic μG := by
   have hG := KLS.regularPotential_half_norm_sq (E := ℝ)
   have hLaw : μG = hG.law := by
     apply ProbabilityMeasure.toMeasure_injective
-    change gaussianLaw (V := ℝ) (1 / 2) = (volume : Measure ℝ).tilted (-fun x => ‖x‖ ^ 2 / 2)
-    rw [gaussianLaw_eq_tilted (by norm_num)]
+    change FunctionalInequalities.Probability.Gaussian.law (V := ℝ) (1 / 2) = (volume : Measure ℝ).tilted (-fun x => ‖x‖ ^ 2 / 2)
+    rw [FunctionalInequalities.Probability.Gaussian.law_eq_tilted (by norm_num)]
     congr 1
     funext x
     simp only [Pi.neg_apply]
     ring
   refine ⟨by rw [hLaw]; exact hG.logConcave_law, ?_⟩
-  refine ⟨gaussianLaw_memLp_two (by norm_num), gaussianLaw_mean_zero (by norm_num), ?_⟩
+  refine ⟨FunctionalInequalities.Probability.Gaussian.memLp_two (by norm_num), FunctionalInequalities.Probability.Gaussian.mean_zero (by norm_num), ?_⟩
   apply ContinuousLinearMap.ext
   intro u
   apply ext_inner_right ℝ
@@ -69,15 +72,15 @@ theorem actual_gaussian_source : KLS.LogConcave μG ∧ KLS.Isotropic μG := by
     ContinuousLinearMap.id_apply, Real.inner_apply, mul_one]
 
 private theorem posterior_gaussian :
-    (μG : Measure ℝ).tilted (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ)) = gaussianLaw 1 := by
+    (μG : Measure ℝ).tilted (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ)) = FunctionalInequalities.Probability.Gaussian.law 1 := by
   have he : Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ) = fun x => -(1 / 2 : ℝ) * ‖x‖ ^ 2 := by
     funext x
     simp only [Probability.Posterior.quadraticExponent, inner_zero_left, ContinuousLinearMap.id_apply, real_inner_self_eq_norm_sq]
     ring
-  change (gaussianLaw (V := ℝ) (1 / 2)).tilted _ = _
-  rw [he, gaussianLaw_eq_tilted (by norm_num),
+  change (FunctionalInequalities.Probability.Gaussian.law (V := ℝ) (1 / 2)).tilted _ = _
+  rw [he, FunctionalInequalities.Probability.Gaussian.law_eq_tilted (by norm_num),
     tilted_tilted (integrable_kernel (by norm_num : (0 : ℝ) < 1 / 2)),
-    gaussianLaw_eq_tilted (by norm_num : (0 : ℝ) < 1)]
+    FunctionalInequalities.Probability.Gaussian.law_eq_tilted (by norm_num : (0 : ℝ) < 1)]
   congr 1
   funext x
   simp only [Pi.add_apply]
@@ -100,9 +103,9 @@ theorem gaussian_coercive_response_half :
   have hcov : covariance id (Probability.Posterior.quadraticExponent (1 : ℝ) (0 : ℝ →L[ℝ] ℝ))
       ((μG : Measure ℝ).tilted (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ))) = 1 / 2 := by
     rw [hg, posterior_gaussian]
-    change covariance (fun x : ℝ => x) (fun x : ℝ => x) (gaussianLaw 1) = 1 / 2
+    change covariance (fun x : ℝ => x) (fun x : ℝ => x) (FunctionalInequalities.Probability.Gaussian.law 1) = 1 / 2
     rw [covariance_self aemeasurable_id']
-    have hv := gaussianLaw_variance (E := ℝ) (by norm_num : (0 : ℝ) < 1) (1 : ℝ)
+    have hv := FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ) (by norm_num : (0 : ℝ) < 1) (1 : ℝ)
     norm_num [Real.inner_apply] at hv ⊢
     exact hv
   simpa only [smul_zero, add_zero, smul_eq_mul, mul_one, zero_add, hcov, id_eq] using hd

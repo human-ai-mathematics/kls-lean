@@ -1,3 +1,5 @@
+import FunctionalInequalities.Analysis.MeasurableCover
+import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Analysis.Hausdorff.Volume
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Calculus.Gradient.Basic
@@ -444,13 +446,6 @@ variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ
   [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V]
 
-omit [MeasurableSpace H] [BorelSpace H] in
-theorem continuous_gradient {g : H → ℝ} (hg : ContDiff ℝ 1 g) : Continuous (gradient g) := by
-  have h1 : Continuous (fderiv ℝ g) := hg.continuous_fderiv one_ne_zero
-  have h2 : (gradient g) = fun x => (InnerProductSpace.toDual ℝ H).symm (fderiv ℝ g x) := by
-    funext x; rw [gradient]
-  rw [h2]
-  exact (InnerProductSpace.toDual ℝ H).symm.continuous.comp h1
 
 omit [InnerProductSpace ℝ H] [FiniteDimensional ℝ H] [MeasurableSpace H] [BorelSpace H] in
 theorem continuous_graphJacobian : Continuous (graphJacobian : H → ℝ) := by
@@ -468,7 +463,7 @@ theorem exists_approximating_partition (ι : H →ₗᵢ[ℝ] V) {e : V} (he : �
       (∀ n, ApproximatesLinearOn (graphMap ι e g) (graphLinear ι e (a n)) (t n) ε) ∧
       (∀ n, ∀ z ∈ t n, ‖gradient g z - a n‖ ≤ (ε : ℝ)) := by
   classical
-  have hgc : Continuous (gradient g) := continuous_gradient hg
+  have hgc : Continuous (gradient g) := BakryEmery.continuous_gradient hg
   have hrad : ∀ y₀ : H, ∃ r : ℝ, 0 < r ∧
       ∀ z ∈ Metric.ball y₀ r, ‖gradient g z - gradient g y₀‖ ≤ (ε : ℝ) := by
     intro y₀
@@ -479,26 +474,18 @@ theorem exists_approximating_partition (ι : H →ₗᵢ[ℝ] V) {e : V} (he : �
     rw [dist_eq_norm] at this
     exact this.le
   choose r hrpos hrball using hrad
-  have hfnhds : ∀ x : H, Metric.ball x (r x) ∈ 𝓝 x := fun x => Metric.ball_mem_nhds x (hrpos x)
-  obtain ⟨c, hc, hcu⟩ := TopologicalSpace.countable_cover_nhds hfnhds
-  have hcne : c.Nonempty := by
-    have hmem : (0 : H) ∈ (Set.univ : Set H) := Set.mem_univ _
-    rw [← hcu] at hmem
-    obtain ⟨x, hx, -⟩ := Set.mem_iUnion₂.mp hmem
-    exact ⟨x, hx⟩
-  obtain ⟨w, hw⟩ := hc.exists_eq_range hcne
-  set B : ℕ → Set H := fun n => Metric.ball (w n) (r (w n)) with hB
-  have hBu : (⋃ n, B n) = Set.univ := by
-    rw [← hcu, hw, Set.biUnion_range]
-  refine ⟨fun n => disjointed B n, fun n => gradient g (w n), ?_, ?_, ?_, ?_, ?_⟩
-  · exact fun n => MeasurableSet.disjointed (fun i => Metric.isOpen_ball.measurableSet) n
-  · exact disjoint_disjointed B
-  · rw [iUnion_disjointed, hBu]
+  obtain ⟨σ, T, hTm, hTd, hTu, hTsub⟩ :=
+    exists_measurable_partition_subordinate MeasurableSet.univ (subset_refl _)
+      ⟨(0 : H), Set.mem_univ _⟩
+      (fun z : (Set.univ : Set H) => Metric.ball (z : H) (r z))
+      (fun _ => Metric.isOpen_ball)
+      (fun z => Metric.mem_ball_self (hrpos z)) (fun _ => Set.subset_univ _)
+  let w : ℕ → H := fun n => σ n
+  refine ⟨T, fun n => gradient g (w n), hTm, hTd, hTu, ?_, ?_⟩
   · intro n
-    exact approximatesLinearOn_graphMap ι he hg (hrball (w n)) (disjointed_subset B n)
+    exact approximatesLinearOn_graphMap ι he hg (hrball (w n)) (hTsub n)
   · intro n z hz
-    exact hrball (w n) z (disjointed_subset B n hz)
-
+    exact hrball (w n) z (hTsub n hz)
 omit [InnerProductSpace ℝ H] [FiniteDimensional ℝ H] [MeasurableSpace H] [BorelSpace H]
   [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- Comparison of Hausdorff measures of two images from a pointwise Lipschitz comparison. -/
@@ -675,7 +662,7 @@ variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ
 theorem measurable_graphJacobian_gradient {g : H → ℝ} (hg : ContDiff ℝ 1 g) :
     Measurable fun y : H => ENNReal.ofReal (graphJacobian (gradient g y)) :=
   (ENNReal.measurable_ofReal.comp
-    (continuous_graphJacobian.comp (continuous_gradient hg)).measurable)
+    (continuous_graphJacobian.comp (BakryEmery.continuous_gradient hg)).measurable)
 
 /-- Two-sided estimate at scale `ε`. -/
 theorem graphMap_estimates (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1)
@@ -770,15 +757,8 @@ theorem graphMap_estimates (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1)
         _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (ENNReal.ofReal (graphJacobian (a n)) * μ (u n)) := by
             rw [mul_assoc]
         _ ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) := by gcongr
-    calc ∑' n, μH[k] (Ψ '' (u n))
-        ≤ ∑' n, ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) :=
-          ENNReal.tsum_le_tsum hterm
-      _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * ∑' n, (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) :=
-          ENNReal.tsum_mul_left
-      _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * ((∑' n, ∫⁻ y in u n, J y ∂μ) + ∑' n, ε * μ (u n)) := by
-          rw [ENNReal.tsum_add]
-      _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in s, J y ∂μ + ε * μ s) := by
-          rw [← hsplitint, ENNReal.tsum_mul_left, ← hsplitmeas]
+    simpa only [ENNReal.tsum_mul_left, ENNReal.tsum_add, ← hsplitint, ← hsplitmeas]
+      using ENNReal.tsum_le_tsum hterm
   · rw [hsplitint]
     have hterm : ∀ n, ∫⁻ y in u n, J y ∂μ
         ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * μH[k] (Ψ '' (u n)) + ε * μ (u n) := by
@@ -874,19 +854,11 @@ theorem hausdorffMeasure_image_graphMap (ι : H →ₗᵢ[ℝ] V) {e : V} (he : 
     have : (i : ℝ) ≤ (j : ℝ) := Nat.cast_le.mpr hij
     linarith
   have hsmunion : (⋃ m, sm m) = s := by
-    refine Set.Subset.antisymm (Set.iUnion_subset fun m => Set.inter_subset_left) fun y hy => ?_
-    obtain ⟨m, hm⟩ := exists_nat_gt ‖y‖
-    refine Set.mem_iUnion.mpr ⟨m, hy, ?_⟩
-    simp only [Metric.mem_ball, dist_zero_right]
-    linarith
+    simp only [sm, ← Set.inter_iUnion, Metric.iUnion_ball_nat_succ, Set.inter_univ]
   have hsmfin : ∀ m, μ (sm m) ≠ ⊤ := by
     intro m
-    have hball : μ (Metric.ball (0 : H) (m + 1)) ≠ ⊤ := by
-      have hsubset : Metric.ball (0 : H) (m + 1) ⊆ Metric.closedBall (0 : H) (m + 1) :=
-        Metric.ball_subset_closedBall
-      have hcpt := (isCompact_closedBall (0 : H) ((m : ℝ) + 1)).measure_lt_top (μ := μ)
-      exact ne_top_of_le_ne_top hcpt.ne (measure_mono hsubset)
-    exact ne_top_of_le_ne_top hball (measure_mono Set.inter_subset_right)
+    exact ((Metric.isBounded_ball (x := (0 : H)) (r := (m : ℝ) + 1)).subset
+      Set.inter_subset_right).measure_lt_top.ne
   -- both sides are limits of the truncated versions
   have hLim : Tendsto (fun m => μH[(n : ℝ)] (graphMap ι e g '' sm m)) atTop
       (𝓝 (μH[(n : ℝ)] (graphMap ι e g '' s))) := by
@@ -895,36 +867,10 @@ theorem hausdorffMeasure_image_graphMap (ι : H →ₗᵢ[ℝ] V) {e : V} (he : 
     rw [← himg]
     exact tendsto_measure_iUnion_atTop (fun i j hij => Set.image_mono (hsmmono hij))
   have hRlim : Tendsto (fun m => ∫⁻ y in sm m, J y ∂μ) atTop (𝓝 (∫⁻ y in s, J y ∂μ)) := by
-    have hind : ∀ m, ∫⁻ y in sm m, J y ∂μ = ∫⁻ y, (sm m).indicator J y ∂μ :=
-      fun m => (lintegral_indicator (hsmmeas m) J).symm
-    have hmonoind : Monotone fun m => (sm m).indicator J := by
-      intro i j hij y
-      show (sm i).indicator J y ≤ (sm j).indicator J y
-      by_cases hy : y ∈ sm i
-      · rw [Set.indicator_of_mem hy, Set.indicator_of_mem (hsmmono hij hy)]
-      · rw [Set.indicator_of_notMem hy]; exact zero_le
-    have hsup : ∀ y, (⨆ m, (sm m).indicator J y) = s.indicator J y := by
-      intro y
-      by_cases hy : y ∈ s
-      · rw [Set.indicator_of_mem hy]
-        have hyU : y ∈ ⋃ k, sm k := by rw [hsmunion]; exact hy
-        obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hyU
-        refine le_antisymm (iSup_le fun i => ?_) (le_iSup_of_le m ?_)
-        · by_cases hyi : y ∈ sm i
-          · rw [Set.indicator_of_mem hyi]
-          · rw [Set.indicator_of_notMem hyi]; exact zero_le
-        · rw [Set.indicator_of_mem hm]
-      · rw [Set.indicator_of_notMem hy]
-        refine le_antisymm (iSup_le fun i => ?_) zero_le
-        rw [Set.indicator_of_notMem (fun h => hy (Set.inter_subset_left h))]
-    have hkey : ∫⁻ y in s, J y ∂μ = ⨆ m, ∫⁻ y in sm m, J y ∂μ := by
-      simp_rw [hind]
-      rw [← lintegral_indicator hs]
-      rw [← lintegral_iSup (fun m => hJmeas.indicator (hsmmeas m)) hmonoind]
-      exact lintegral_congr fun y => (hsup y).symm
-    rw [hkey]
-    refine tendsto_atTop_iSup fun i j hij => ?_
-    exact lintegral_mono_set (hsmmono hij)
+    have hd : Directed (· ⊆ ·) sm := fun i j =>
+      ⟨max i j, hsmmono (le_max_left _ _), hsmmono (le_max_right _ _)⟩
+    rw [← hsmunion, setLIntegral_iUnion_of_directed J hd]
+    exact tendsto_atTop_iSup fun i j hij => lintegral_mono_set (hsmmono hij)
   refine tendsto_nhds_unique hLim ?_
   have heq : ∀ m, μH[(n : ℝ)] (graphMap ι e g '' sm m) = ∫⁻ y in sm m, J y ∂μ :=
     fun m => hausdorffMeasure_image_graphMap_of_finite ι he hperp hg (hsmmeas m) (hsmfin m)

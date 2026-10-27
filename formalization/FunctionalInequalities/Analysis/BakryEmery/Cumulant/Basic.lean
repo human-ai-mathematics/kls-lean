@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Local
 import Mathlib.Probability.Moments.Variance
@@ -565,14 +566,17 @@ private lemma third_memLp_inner_mul (v w : E) :
 
 end ThirdMomentIdentities
 
-include hexp in
-/-- **BKL Lemma 4.2, conditional on the Letwin bound**: for a centered isotropic probability law
-with all exponential moments satisfying `LetwinQuadraticBound`, `R^μ_3 ≤ 8 Id`, that is
-`∑_{j,k} κ_3(u, e_j, e_k)² ≤ 8 |u|²` for every `u`. -/
-theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
-    (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫) (hL : LetwinQuadraticBound μ) (u : E) :
-    ∑ j, ∑ k, cumulant μ 3 ![u, stdOrthonormalBasis ℝ E j, stdOrthonormalBasis ℝ E k] ^ 2 ≤
-      8 * ‖u‖ ^ 2 := by
+omit [BorelSpace E] in
+/-- The Letwin quadratic estimate contracts the centered isotropic third moments.
+Only linear and quadratic L2 membership is used, independently of its producer. -/
+theorem sum_sq_thirdMoment_le_of_letwin
+    (hlin : ∀ v : E, MemLp (fun x => ⟪v, x⟫) 2 μ)
+    (hquad : ∀ v w : E, MemLp (fun x => ⟪v, x⟫ * ⟪w, x⟫) 2 μ)
+    (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
+    (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫)
+    (hL : LetwinQuadraticBound μ) (u : E) :
+    ∑ j, ∑ k, (∫ x, ⟪u, x⟫ * ⟪stdOrthonormalBasis ℝ E j, x⟫ *
+      ⟪stdOrthonormalBasis ℝ E k, x⟫ ∂μ) ^ 2 ≤ 8 * ‖u‖ ^ 2 := by
   classical
   let b := stdOrthonormalBasis ℝ E
   let C := fun j k => ∫ x, ⟪u, x⟫ * ⟪b j, x⟫ * ⟪b k, x⟫ ∂μ
@@ -606,7 +610,7 @@ theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ �
     simp [b.inner_eq_ite]
   have hvar : ∫ x, q x ^ 2 ∂μ ≤ 8 * S := by
     simpa only [q, Q, hMij, hC, S, b] using hL M hM
-  have hf : MemLp f 2 μ := third_memLp_inner μ hexp u
+  have hf : MemLp f 2 μ := hlin u
   have hQ : MemLp Q 2 μ := by
     have heq : Q = fun x => ∑ j, ∑ k, C j k * (⟪b k, x⟫ * ⟪b j, x⟫) := by
       funext x
@@ -614,11 +618,11 @@ theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ �
     rw [heq]
     exact memLp_finsetSum _ fun j _ =>
       memLp_finsetSum _ fun k _ =>
-        (third_memLp_inner_mul μ hexp (b k) (b j)).const_mul (C j k)
+        (hquad (b k) (b j)).const_mul (C j k)
   have hq : MemLp q 2 μ := hQ.sub (memLp_const _)
   have hcross : ∫ x, f x * q x ∂μ = S := by
     have hprod : ∀ j k, Integrable (fun x => ⟪u, x⟫ * (⟪b k, x⟫ * ⟪b j, x⟫)) μ :=
-      fun j k => hf.integrable_mul (third_memLp_inner_mul μ hexp (b k) (b j))
+      fun j k => hf.integrable_mul (hquad (b k) (b j))
     have hprodC : ∀ j k, Integrable (fun x => C j k * (⟪u, x⟫ * (⟪b k, x⟫ * ⟪b j, x⟫))) μ :=
       fun j k => (hprod j k).const_mul _
     have hsum : Integrable (fun x => f x * Q x) μ := hf.integrable_mul hQ
@@ -664,6 +668,17 @@ theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ �
     have he : ∫ x, f x ^ 2 ∂μ = ‖u‖ ^ 2 := by
       simpa only [f, pow_two, real_inner_self_eq_norm_sq] using hiso u u
     rwa [he] at hn
+  change S ≤ 8 * ‖u‖ ^ 2
+  linarith
+
+include hexp in
+/-- **BKL Lemma 4.2, conditional on the Letwin bound**: for a centered isotropic probability law
+with all exponential moments satisfying `LetwinQuadraticBound`, `R^μ_3 ≤ 8 Id`, that is
+`∑_{j,k} κ_3(u, e_j, e_k)² ≤ 8 |u|²` for every `u`. -/
+theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
+    (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫) (hL : LetwinQuadraticBound μ) (u : E) :
+    ∑ j, ∑ k, cumulant μ 3 ![u, stdOrthonormalBasis ℝ E j, stdOrthonormalBasis ℝ E k] ^ 2 ≤
+      8 * ‖u‖ ^ 2 := by
   have hκ (v w : E) :
       cumulant μ 3 ![u, v, w] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
     have ht := taylorTensor_two_inner_eq_of_centered μ hexp hc u v w
@@ -671,9 +686,8 @@ theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ �
     norm_num at ht
     linarith
   simp_rw [hκ]
-  change S ≤ 8 * ‖u‖ ^ 2
-  linarith
-
+  exact sum_sq_thirdMoment_le_of_letwin μ (third_memLp_inner μ hexp)
+    (third_memLp_inner_mul μ hexp) hc hiso hL u
 end ThirdCumulant
 
 
@@ -760,6 +774,8 @@ theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E) [IsP
         simp [div_eq_mul_inv, inv_pow]
         ring
 
+-- Retain the positive-radius parameter of the established public contract.
+set_option linter.unusedVariables false in
 open scoped ContDiff in
 /-- **Local smoothness of `Λ_μ`** (BKL p. 29, "finite and smooth in a neighborhood of the origin"):
 one positive norm-exponential moment `∫ e^{r‖x‖} dμ < ∞` makes `Λ_μ` `C^∞` on the open ball of
@@ -770,17 +786,8 @@ theorem contDiffOn_logLaplace_ball (μ : Measure E) [IsFiniteMeasure μ] [NeZero
   have hgi : ∀ t < r,
       Integrable (fun x : E => Real.exp (t * ‖x‖) * ‖(1 : ℝ)‖) μ := by
     intro t ht
-    refine hexp.mono' ?_ ?_
-    · fun_prop
-    · filter_upwards [] with x
-      simp only [norm_one, mul_one, Real.norm_of_nonneg (Real.exp_pos _).le]
-      by_cases ht0 : 0 ≤ t
-      · exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right ht.le (norm_nonneg x))
-      · calc
-          Real.exp (t * ‖x‖) ≤ 1 := Real.exp_le_one_iff.mpr
-            (mul_nonpos_of_nonpos_of_nonneg (le_of_not_ge ht0) (norm_nonneg x))
-          _ ≤ Real.exp (r * ‖x‖) := Real.one_le_exp_iff.mpr
-            (mul_nonneg hr.le (norm_nonneg x))
+    simpa only [norm_one, mul_one] using
+      Probability.integrable_exp_mul_norm_of_le hexp ht.le
   have hZ : ContDiffOn ℝ ∞ (fun z : E => ∫ x, Real.exp ⟪z, x⟫ ∂μ)
       (Metric.ball 0 r) := by
     simpa only [smul_eq_mul, mul_one] using

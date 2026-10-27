@@ -1,3 +1,4 @@
+import FunctionalInequalities.KLS.BKL.Localization.Coefficients
 import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Regularity
@@ -30,6 +31,107 @@ section Process
 variable {μ hc} {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} [IsProbabilityMeasure P]
   {W : MultidimBrownianMotion P n} {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
   {hW : ∀ k, IsBrownianFiltration (W.W k) ℱ} {γ : Param n → ℝ} {p : ℝ → Ω → Param n}
+
+/-- Separate the tensor Cauchy--Schwarz step from stochastic integration. -/
+private theorem cutoff_tensor_energy_lower_bound {ι : Type*} [Fintype ι]
+    (r : ℕ) (γ : ℝ) (E b : ℕ → ℝ) (Tt Lt : ι → ℝ) (g : ℝ)
+    (hb : ∀ j, 0 ≤ b j) (hTsq : ∑ K, Tt K ^ 2 = E r)
+    (h51 : (1 / 2 : ℝ) * E (r + 1) - 17 * ((r : ℝ) + 1) ^ 2 * E r -
+      2 * ∑ K, Tt K * Lt K ≤ g)
+    (hL : Real.sqrt (∑ K, Lt K ^ 2) ≤
+      ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
+        Real.sqrt (b (r + 1 - a + 1) * E a)) :
+      (1 / 2 : ℝ) * (γ ^ 2 * E (r + 1)) - 17 * ((r : ℝ) + 1) ^ 2 * (γ ^ 2 * E r) -
+        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
+          Real.sqrt (b (r + 1 - a + 1)) *
+          ((γ * Real.sqrt (E r)) * (γ * Real.sqrt (E a))) ≤
+      γ ^ 2 * g := by
+  have hγ2 : 0 ≤ γ ^ 2 := sq_nonneg _
+  have hCS : ∑ K : ι, Tt K * Lt K ≤
+      Real.sqrt (∑ K : ι, Tt K ^ 2) *
+        Real.sqrt (∑ K : ι, Lt K ^ 2) :=
+    Real.sum_mul_le_sqrt_mul_sqrt Finset.univ _ _
+  rw [hTsq] at hCS
+  have hL2 := hL
+  have hsq : ∀ a, Real.sqrt (b (r + 1 - a + 1) * E a) =
+      Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a) :=
+    fun a => Real.sqrt_mul (hb _) _
+  simp only [hsq] at hL2
+  have hS : ∑ K : ι, Tt K * Lt K ≤
+      Real.sqrt (E r) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
+        (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a)) :=
+    hCS.trans (mul_le_mul_of_nonneg_left hL2 (Real.sqrt_nonneg _))
+  have key := h51
+  have hsum : ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
+      Real.sqrt (b (r + 1 - a + 1)) *
+      ((γ * Real.sqrt (E r)) * (γ * Real.sqrt (E a))) =
+      γ ^ 2 * (Real.sqrt (E r) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+        ((r + 1 - 1).choose (a - 1) : ℝ) *
+        (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a))) := by
+    rw [Finset.mul_sum, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro a _
+    ring
+  rw [hsum]
+  have hfac : (1 / 2 : ℝ) * (γ ^ 2 * E (r + 1)) -
+      17 * ((r : ℝ) + 1) ^ 2 * (γ ^ 2 * E r) -
+      2 * (γ ^ 2 * (Real.sqrt (E r) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+        ((r + 1 - 1).choose (a - 1) : ℝ) *
+        (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a)))) =
+      γ ^ 2 * ((1 / 2 : ℝ) * E (r + 1) - 17 * ((r : ℝ) + 1) ^ 2 * E r -
+        2 * (Real.sqrt (E r) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+          ((r + 1 - 1).choose (a - 1) : ℝ) *
+          (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a)))) := by
+    ring
+  rw [hfac]
+  refine mul_le_mul_of_nonneg_left ?_ hγ2
+  linarith [hS, key]
+
+omit [IsProbabilityMeasure P] in
+/-- Weighted energy, square-root energy and cross terms inherit pathwise bounds. -/
+private theorem cutoff_weighted_path_bounds {E : ℕ → Param n → ℝ}
+    (hγ01 : ∀ q, 0 ≤ γ q ∧ γ q ≤ 1) (hEnn : ∀ d q, 0 ≤ E d q)
+    (hEbd : ∀ d, ∃ C : ℝ, 0 ≤ C ∧ ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → E d (p s w) ≤ C) :
+    (∀ d, ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → |γ (p s w) ^ 2 * E d (p s w)| ≤ C) ∧
+    (∀ d, ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → |γ (p s w) * Real.sqrt (E d (p s w))| ≤ C) ∧
+    (∀ d d', ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
+      |(γ (p s w) * Real.sqrt (E d (p s w))) * (γ (p s w) * Real.sqrt (E d' (p s w)))| ≤ C) := by
+  have hγabs : ∀ q, |γ q| ≤ 1 := fun q =>
+    abs_le.mpr ⟨by linarith [(hγ01 q).1], (hγ01 q).2⟩
+  have hGbd : ∀ d, ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
+      |γ (p s w) ^ 2 * E d (p s w)| ≤ C := by
+    intro d
+    obtain ⟨C, _hC0, hC⟩ := hEbd d
+    refine ⟨C, ?_⟩
+    filter_upwards [hC] with w hw
+    intro s hs
+    rw [abs_of_nonneg (mul_nonneg (sq_nonneg _) (hEnn d _))]
+    have hg := hγ01 (p s w)
+    calc γ (p s w) ^ 2 * E d (p s w) ≤ 1 * C :=
+          mul_le_mul (pow_le_one₀ hg.1 hg.2) (hw s hs) (hEnn d _) zero_le_one
+      _ = C := one_mul _
+  have hfbd : ∀ d, ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
+      |γ (p s w) * Real.sqrt (E d (p s w))| ≤ C := by
+    intro d
+    obtain ⟨C, _hC0, hC⟩ := hEbd d
+    refine ⟨Real.sqrt C, ?_⟩
+    filter_upwards [hC] with w hw
+    intro s hs
+    rw [abs_mul, abs_of_nonneg (Real.sqrt_nonneg _)]
+    calc |γ (p s w)| * Real.sqrt (E d (p s w)) ≤ 1 * Real.sqrt C :=
+          mul_le_mul (hγabs _) (Real.sqrt_le_sqrt (hw s hs)) (Real.sqrt_nonneg _) zero_le_one
+      _ = Real.sqrt C := one_mul _
+  have hffbd : ∀ d d', ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
+      |(γ (p s w) * Real.sqrt (E d (p s w))) * (γ (p s w) * Real.sqrt (E d' (p s w)))| ≤ C := by
+    intro d d'
+    obtain ⟨C, hC⟩ := hfbd d
+    obtain ⟨C', hC'⟩ := hfbd d'
+    refine ⟨C * C', ?_⟩
+    filter_upwards [hC, hC'] with w hw hw'
+    intro s hs
+    rw [abs_mul]
+    exact mul_le_mul (hw s hs) (hw' s hs) (abs_nonneg _) ((abs_nonneg _).trans (hw s hs))
+  exact ⟨hGbd, hfbd, hffbd⟩
 
 set_option maxHeartbeats 1000000 in
 theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
@@ -136,54 +238,15 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
           ((γ q * Real.sqrt (E r q)) * (γ q * Real.sqrt (E a q))) ≤
       γ q ^ 2 * generator μ hc (E r) q := by
     intro q h1 h2
-    have hγ2 : 0 ≤ γ q ^ 2 := sq_nonneg _
-    have hCS : ∑ K : Fin r → Fin n, Tt q K * Lt q K ≤
-        Real.sqrt (∑ K : Fin r → Fin n, Tt q K ^ 2) *
-          Real.sqrt (∑ K : Fin r → Fin n, Lt q K ^ 2) :=
-      Real.sum_mul_le_sqrt_mul_sqrt Finset.univ _ _
-    rw [hTsq q] at hCS
-    have hL2 := hL' q h1 h2
-    have hsq : ∀ a, Real.sqrt (b (r + 1 - a + 1) * E a q) =
-        Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a q) :=
-      fun a => Real.sqrt_mul (hb _) _
-    simp only [hsq] at hL2
-    have hS : ∑ K : Fin r → Fin n, Tt q K * Lt q K ≤
-        Real.sqrt (E r q) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a q)) :=
-      hCS.trans (mul_le_mul_of_nonneg_left hL2 (Real.sqrt_nonneg _))
-    have key := h51' q h1 h2
-    have hsum : ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-        Real.sqrt (b (r + 1 - a + 1)) *
-        ((γ q * Real.sqrt (E r q)) * (γ q * Real.sqrt (E a q))) =
-        γ q ^ 2 * (Real.sqrt (E r q) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
-          ((r + 1 - 1).choose (a - 1) : ℝ) *
-          (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a q))) := by
-      rw [Finset.mul_sum, Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro a _
-      ring
-    rw [hsum]
-    have hfac : (1 / 2 : ℝ) * (γ q ^ 2 * E (r + 1) q) -
-        17 * ((r : ℝ) + 1) ^ 2 * (γ q ^ 2 * E r q) -
-        2 * (γ q ^ 2 * (Real.sqrt (E r q) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
-          ((r + 1 - 1).choose (a - 1) : ℝ) *
-          (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a q)))) =
-        γ q ^ 2 * ((1 / 2 : ℝ) * E (r + 1) q - 17 * ((r : ℝ) + 1) ^ 2 * E r q -
-          2 * (Real.sqrt (E r q) * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
-            ((r + 1 - 1).choose (a - 1) : ℝ) *
-            (Real.sqrt (b (r + 1 - a + 1)) * Real.sqrt (E a q)))) := by
-      ring
-    rw [hfac]
-    refine mul_le_mul_of_nonneg_left ?_ hγ2
-    linarith [hS, key]
+    exact cutoff_tensor_energy_lower_bound r (γ q) (fun d => E d q) b
+      (Tt q) (Lt q) (generator μ hc (E r) q) hb (hTsq q)
+      (h51' q h1 h2) (hL' q h1 h2)
   -- Bounds along the path.
   have hQ := IsEldanCutoff.ae_Q_posSemidef hiso hγ h
   have hγc : Continuous γ := by
     obtain ⟨K, hK⟩ := hγ.lipschitz
     exact hK.continuous
   have hγ01 : ∀ q, 0 ≤ γ q ∧ γ q ≤ 1 := fun q => hγ.mem_Icc q
-  have hγabs : ∀ q, |γ q| ≤ 1 := fun q =>
-    abs_le.mpr ⟨by linarith [(hγ01 q).1], (hγ01 q).2⟩
   have hEbd : ∀ d, ∃ C : ℝ, 0 ≤ C ∧ ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → E d (p s w) ≤ C := by
     intro d
     obtain ⟨C, hC0, hC⟩ := exists_cumulantEnergy_le μ hc hiso hLC hρ hsupp d
@@ -194,39 +257,7 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
     exact hC (p s w) (hw s hs).1 (hw s hs).2 u
   have hGcont : ∀ d, Continuous (fun q => γ q ^ 2 * E d q) :=
     fun d => (hγc.pow 2).mul (hEcont d)
-  have hGbd : ∀ d, ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
-      |γ (p s w) ^ 2 * E d (p s w)| ≤ C := by
-    intro d
-    obtain ⟨C, _hC0, hC⟩ := hEbd d
-    refine ⟨C, ?_⟩
-    filter_upwards [hC] with w hw
-    intro s hs
-    rw [abs_of_nonneg (mul_nonneg (sq_nonneg _) (hEnn d _))]
-    have hg := hγ01 (p s w)
-    calc γ (p s w) ^ 2 * E d (p s w) ≤ 1 * C :=
-          mul_le_mul (pow_le_one₀ hg.1 hg.2) (hw s hs) (hEnn d _) zero_le_one
-      _ = C := one_mul _
-  have hfbd : ∀ d, ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
-      |γ (p s w) * Real.sqrt (E d (p s w))| ≤ C := by
-    intro d
-    obtain ⟨C, _hC0, hC⟩ := hEbd d
-    refine ⟨Real.sqrt C, ?_⟩
-    filter_upwards [hC] with w hw
-    intro s hs
-    rw [abs_mul, abs_of_nonneg (Real.sqrt_nonneg _)]
-    calc |γ (p s w)| * Real.sqrt (E d (p s w)) ≤ 1 * Real.sqrt C :=
-          mul_le_mul (hγabs _) (Real.sqrt_le_sqrt (hw s hs)) (Real.sqrt_nonneg _) zero_le_one
-      _ = Real.sqrt C := one_mul _
-  have hffbd : ∀ d d', ∃ C : ℝ, ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
-      |(γ (p s w) * Real.sqrt (E d (p s w))) * (γ (p s w) * Real.sqrt (E d' (p s w)))| ≤ C := by
-    intro d d'
-    obtain ⟨C, hC⟩ := hfbd d
-    obtain ⟨C', hC'⟩ := hfbd d'
-    refine ⟨C * C', ?_⟩
-    filter_upwards [hC, hC'] with w hw hw'
-    intro s hs
-    rw [abs_mul]
-    exact mul_le_mul (hw s hs) (hw' s hs) (abs_nonneg _) ((abs_nonneg _).trans (hw s hs))
+  obtain ⟨hGbd, hfbd, hffbd⟩ := cutoff_weighted_path_bounds hγ01 hEnn hEbd
   -- The generator term is bounded (compact support of the cutoff).
   have hF3 : ContDiff ℝ 3 (E r) := (hEsmooth r).of_le (WithTop.coe_le_coe.mpr le_top)
   have hgen_cont : Continuous (generator μ hc (E r)) :=

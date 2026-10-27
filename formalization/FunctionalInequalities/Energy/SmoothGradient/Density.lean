@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Energy.SmoothGradient.Basic
 import Mathlib.Analysis.Calculus.FDeriv.Const
 import Mathlib.Analysis.Normed.Lp.SmoothApprox
@@ -22,18 +23,13 @@ open scoped ContDiff
 
 namespace FunctionalInequalities.Energy.SmoothGradient
 
+open FunctionalInequalities.Analysis.BakryEmery (continuous_gradient_of_contDiff)
+
 universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
   [FiniteDimensional ℝ E]
-
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [FiniteDimensional ℝ E] in
-private theorem continuous_gradient_of_contDiff {f : E → ℝ} (hf : ContDiff ℝ ∞ f) :
-    Continuous (gradient f) := by
-  change Continuous (fun x ↦ (toDual ℝ E).symm (fderiv ℝ f x))
-  exact (toDual ℝ E).symm.continuous.comp (hf.continuous_fderiv (by simp))
 
 omit [SecondCountableTopology E] [FiniteDimensional ℝ E] in
 private theorem gradientSq_integrable_of_hasCompactSupport {μ : Measure E}
@@ -49,7 +45,7 @@ private theorem gradientSq_integrable_of_hasCompactSupport {μ : Measure E}
       HasCompactSupport ((fun z : E ↦ ‖z‖ ^ 2) ∘ gradient f) :=
     hgradient_compact.comp_left (g := fun z : E ↦ ‖z‖ ^ 2) (by simp)
   change HasCompactSupport (fun x ↦ ‖gradient f x‖ ^ 2) at hsq_compact
-  exact ((continuous_gradient_of_contDiff hf_smooth).norm.pow 2)
+  exact ((continuous_gradient_of_contDiff hf_smooth (by simp)).norm.pow 2)
     |>.integrable_of_hasCompactSupport hsq_compact
 
 /-- The concrete smooth-gradient tests have dense realization in real `L²(μ)`. -/

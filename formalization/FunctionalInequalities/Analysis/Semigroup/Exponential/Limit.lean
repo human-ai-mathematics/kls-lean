@@ -2,61 +2,13 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
 import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
-# Strong limits of exponentials of commuting nonnegative bounded operators
+# Strong limits of commuting nonnegative operator exponentials
 
-`Y6` and `Y7` of the Yosida-limit route
-(statements in `research/audits/YosidaLimitRouteStatements.lean`), proved here and restated verbatim as
-`route_Y6` and `route_Y7`.
-
-* `Y6` (`norm_exp_neg_smul_sub_le`) is the analytic core: for bounded **commuting** nonnegative
-  operators `A, B` on a real Hilbert space and `t ≥ 0`,
-  `‖exp (-t • A) f - exp (-t • B) f‖ ≤ t ‖A f - B f‖`, pointwise in `f`.
-* `Y7` (`exists_limit_exp_neg_smul`) is the **corrected** abstract the adjoint-product identification: a family `L s hs` of
-  nonnegative commuting bounded operators whose values are Cauchy as `s ↓ 0` on a dense set has
-  `exp (-t • L s hs) f` convergent as `s ↓ 0` for every `f` and every `t ≥ 0`. The Cauchy
-  hypothesis on a dense set is what the adjoint-product identification of
-  `research/audits/SemigroupGenerationRouteStatements.lean` was missing; `Y0` of the route file
-  records the counterexample to the uncorrected statement.
-
-## Proof of `Y6`: differentiate the interpolation path
-
-With `φ τ = exp (τ • (-A)) (exp ((τ - t) • B) f)` the product rule
-(`HasDerivAt.clm_apply`, `hasDerivAt_exp_smul_const`) gives
-`φ' τ = exp (τ • (-A)) ((-A) (exp ((τ - t) • B) f)) + exp (τ • (-A)) (exp ((τ - t) • B) (B f))`,
-and `Commute.exp_right` moves `A` past `exp ((τ - t) • B)`, so
-`φ' τ = exp (τ • (-A)) (exp ((τ - t) • B) (B f - A f))`. On `[0, t]` both exponentials are
-contractions by resolvent contraction (`norm_exp_neg_smul_apply_le`), so `‖φ' τ‖ ≤ ‖A f - B f‖`, and the mean value
-inequality `norm_image_sub_le_of_norm_deriv_le_segment'` applied to `φ t - φ 0` is the claim. No
-operator norm is ever estimated: everything is pointwise in `f`, which avoids the
-`ContinuousLinearMap` norm instance diamond.
-
-## Proof of `Y7`: Cauchy on a dense set, then everywhere
-
-`exists_limit_of_cauchy_along_pos` is the completeness step, stated for an arbitrary family
-`u : ∀ s : ℝ, 0 < s → H₀` in a complete normed group: an `ε`–`δ` Cauchy family as `s ↓ 0`
-converges. It is proved by extracting the sequence `u (1 / (n + 1))`, which is `CauchySeq`, and
-comparing an arbitrary small `s` with a far enough member of that sequence. `Y6` makes the family
-`s ↦ exp (-t • L s hs) v` Cauchy for `v` in the dense set, and the contraction bound resolvent contraction upgrades
-this to every `f` by an `ε/3` argument through a nearby `v ∈ D`.
-
-## Route hypotheses used, and the general form of the lemmas
-
-Every hypothesis of `Y6` is used: nonnegativity of `A` and of `B` each supply one of the two
-contraction estimates on `‖φ' τ‖`, commutation supplies the cancellation in `φ'`, and `0 ≤ t` is
-needed both for the contraction estimates and for `[0, t]` to be the correct interval. `Y7` uses
-all four of its hypotheses through `Y6` and resolvent contraction. The module lemmas differ from the route
-propositions only in binder shape (explicit `ε`, `s`, `r` instead of the route's implicit ones)
-and in that `exists_limit_of_cauchy_along_pos` is stated for a bare complete normed group; the
-verbatim route statements are `route_Y6` and `route_Y7`.
-
-## Deliberately out of scope
-
-`Y8` (the adjoint-product identification for the actual Yosida approximation `L_s = s⁻¹ (1 - J_s)`) is **not** proved here: this
-module mentions no unbounded operator `T`, no resolvent and no adjoint. the exponential approximation (the semigroup and
-strong-continuity laws of the limit) and the semigroup limit (the generator is `T†T`) are not stated. Nothing
-here is the Markov property, Bakry–Émery calculus, a heat kernel estimate or any step of Buser's
-inequality; `thm:logconcave-cheeger-poincare-comparison` gains no progress marker from this
-module.
+Commuting bounded nonnegative operators on a complete real Hilbert space satisfy
+`‖exp (-t • A) f - exp (-t • B) f‖ ≤ t * ‖A f - B f‖` for `t ≥ 0`.
+For a pairwise commuting family, a Cauchy condition on a dense set yields a strong
+positive-parameter limit of the exponentials. The dense-set argument uses contraction.
+The auxiliary Cauchy-limit construction needs only a complete normed group.
 -/
 
 noncomputable section
@@ -260,44 +212,5 @@ theorem exists_limit_exp_neg_smul (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H�
   exact exists_limit_of_cauchy_along_pos (fun s hs => NormedSpace.exp (-t • L s hs) f) general
 
 end Limit
-
-/-! ### The route propositions, verbatim -/
-
-/-- **`Y6` of the Yosida-limit route**, stated verbatim as in
-`research/audits/YosidaLimitRouteStatements.lean` and discharged from `norm_exp_neg_smul_sub_le`.
-No hypothesis is discarded. -/
-theorem route_Y6 :
-    ∀ {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    (A B : H₀ →L[ℝ] H₀), (∀ f, 0 ≤ ⟪A f, f⟫) → (∀ f, 0 ≤ ⟪B f, f⟫) → A.comp B = B.comp A →
-      ∀ t : ℝ, 0 ≤ t → ∀ f : H₀,
-        ‖NormedSpace.exp (-t • A) f - NormedSpace.exp (-t • B) f‖ ≤ t * ‖A f - B f‖ := by
-  intro H₀ _ _ _ A B hA hB hAB t ht f
-  exact norm_exp_neg_smul_sub_le A B hA hB hAB ht f
-
-/-- **`Y7` of the Yosida-limit route**, stated verbatim as in
-`research/audits/YosidaLimitRouteStatements.lean` and discharged from
-`exists_limit_exp_neg_smul`. The route's implicit `{ε}` and `{s r}` binders are converted to the
-explicit ones of the module lemma; no hypothesis is discarded. -/
-theorem route_Y7 :
-    ∀ {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H₀),
-      (∀ (s : ℝ) (hs : 0 < s) (f : H₀), 0 ≤ ⟪L s hs f, f⟫) →
-      (∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), (L s hs).comp (L r hr) = (L r hr).comp (L s hs)) →
-      ∀ D : Set H₀, Dense D →
-        (∀ f ∈ D, ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-          ∀ {s r : ℝ} (hs : 0 < s) (hr : 0 < r), s < δ → r < δ → ‖L s hs f - L r hr f‖ < ε) →
-        ∀ (f : H₀) (t : ℝ), 0 ≤ t → ∃ g : H₀, ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-          ∀ {s : ℝ} (hs : 0 < s), s < δ → ‖NormedSpace.exp (-t • L s hs) f - g‖ < ε := by
-  intro H₀ _ _ _ L hL hcomm D hD hC f t ht
-  have hC' : ∀ v ∈ D, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ → ‖L s hs v - L r hr v‖ < ε := by
-    intro v hv ε hε
-    obtain ⟨δ, hδ, hδ'⟩ := hC v hv hε
-    exact ⟨δ, hδ, fun s r hs hr h1 h2 => hδ' hs hr h1 h2⟩
-  obtain ⟨g, hg⟩ := exists_limit_exp_neg_smul L hL hcomm D hD hC' f ht
-  refine ⟨g, ?_⟩
-  intro ε hε
-  obtain ⟨δ, hδ, hδ'⟩ := hg ε hε
-  exact ⟨δ, hδ, fun {s} hs hsδ => hδ' s hs hsδ⟩
 
 end FunctionalInequalities.Analysis.Semigroup

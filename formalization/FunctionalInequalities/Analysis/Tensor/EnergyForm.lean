@@ -1,3 +1,10 @@
+import Mathlib.Analysis.Calculus.Deriv.Add
+import Mathlib.Analysis.InnerProductSpace.Calculus
+import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Calculus.FDeriv.Mul
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import FunctionalInequalities.Analysis.Tensor.SlotAction
 
 /-!
@@ -80,7 +87,7 @@ theorem contDiffAt_energyForm (A : EuclideanSpace ℝ (Fin n) →L[ℝ] Euclidea
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
-section S3Bf2EnergyFormFirstOrder
+section EnergyFormFirstDerivative
 
 open Matrix
 open scoped RealInnerProductSpace
@@ -402,9 +409,9 @@ theorem fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
-end S3Bf2EnergyFormFirstOrder
+end EnergyFormFirstDerivative
 
-section S3Bf3B1SecondOrderHelpers
+section EnergyFormSecondDerivativeCalculus
 
 open Matrix
 open scoped RealInnerProductSpace
@@ -645,9 +652,9 @@ theorem fderiv_fderiv_apply_eq_deriv_deriv_line {W : Type*} [NormedAddCommGroup 
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
-end S3Bf3B1SecondOrderHelpers
+end EnergyFormSecondDerivativeCalculus
 
-section S3Bf3B2SecondOrderCore
+section EnergyFormSecondDerivative
 
 open Matrix
 open scoped RealInnerProductSpace
@@ -1147,4 +1154,4 @@ theorem fderiv_fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
-end S3Bf3B2SecondOrderCore
+end EnergyFormSecondDerivative

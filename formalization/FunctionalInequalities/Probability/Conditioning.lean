@@ -357,7 +357,7 @@ end AffineMoments
 
 end FunctionalInequalities.Probability
 
-section LT10ABallConditioningMoments
+section BallConditioningMoments
 
 open MeasureTheory Set Metric Filter
 open scoped Topology
@@ -481,4 +481,4 @@ theorem tendsto_integral_cond_closedBall {E : Type*} [NormedAddCommGroup E] [Inn
 
 end FunctionalInequalities.KLS
 
-end LT10ABallConditioningMoments
+end BallConditioningMoments

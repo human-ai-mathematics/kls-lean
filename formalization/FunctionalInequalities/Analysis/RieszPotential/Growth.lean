@@ -83,7 +83,7 @@ private theorem lintegral_le_of_mass_and_rpow_tail
 section MeasurableSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+  [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
 
 /-- Radial potential bound from ball growth and a total-mass bound. -/
 private theorem lintegral_norm_sub_rpow_neg_le_of_ball_growth

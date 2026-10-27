@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.LocalInverse
 import FunctionalInequalities.Analysis.HessianRegularity
-import FunctionalInequalities.Analysis.Convex.Subgradient
+import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
 import Mathlib.LinearAlgebra.Determinant
 
 /-!

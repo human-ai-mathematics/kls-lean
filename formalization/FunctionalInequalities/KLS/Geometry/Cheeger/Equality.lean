@@ -8,13 +8,9 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximat
 /-!
 # The two Cheeger infima agree
 
-Hole-free module for Blueprint `lem:relative-perimeter-cheeger-infimum` (Appendix A), together
-with the `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` clauses of
-`thm:klartag-density-frontend-identification`.  It is a **drop-in replacement** of the
-work-in-progress module `KLS/WIP/CheegerInfimum.lean`: it carries the same seven public
-declarations with byte-identical `pp.all` signatures, the same two private helpers, and it proves
-the two obligations that were left open there,
-`smoothConstant_mul_lintegral_min_superlevel_le` and `smoothConstant_le_minkowskiConstant`.
+The smooth relative-perimeter and outer Minkowski Cheeger infima agree for a probability
+law with a Borell density. Smooth approximation, weighted coarea and the distance-cutoff
+error estimate give the comparison, including infinite constants and dimension zero.
 
 ## The two infima
 
@@ -33,7 +29,7 @@ For a probability law `ν` on a finite-dimensional real inner-product space `V`,
 Both infima are `⊤` when no admissible set exists, in particular in dimension zero, where the
 equality reads `⊤ = ⊤`.
 
-## The two new proofs
+## The two comparisons
 
 `smoothConstant_mul_lintegral_min_superlevel_le` (the smooth coarea bound
 `h_S · ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν`).  For almost every level `t` the strict superlevel set
@@ -245,34 +241,6 @@ theorem smoothConstant_mul_lintegral_min_superlevel_le {ν : ProbabilityMeasure 
 
 /-! ### The distance cutoff and the balance -/
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- The `L¹(ν)` distance of a distance cutoff to the indicator: `w_r = 1` on `B`, `0 ≤ w_r ≤ 1`,
-and `w_r = 0` off the open `r`-thickening, so `‖w_r - 𝟙_B‖₁ ≤ ν(B^r) - ν B`.  Nonemptiness of `B`
-is needed, since `Metric.infDist x ∅ = 0` makes `distanceCutoff ∅ r` the constant `1`. -/
-theorem lintegral_enorm_distanceCutoff_sub_indicator_le (ν : ProbabilityMeasure V) {B : Set V}
-    (hB : B.Nonempty) (hBm : MeasurableSet B) {r : ℝ} (hr : 0 < r) :
-    ∫⁻ x, ‖distanceCutoff B r x - B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
-      (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B := by
-  have hsub : B ⊆ Metric.thickening r B := Metric.self_subset_thickening hr B
-  have hdiff : (ν : Measure V) (Metric.thickening r B \ B) =
-      (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B :=
-    measure_sdiff hsub hBm.nullMeasurableSet (measure_ne_top _ _)
-  rw [← hdiff, ← lintegral_indicator_one (Metric.isOpen_thickening.measurableSet.diff hBm)]
-  refine lintegral_mono fun x ↦ ?_
-  by_cases hxB : x ∈ B
-  · rw [distanceCutoff_eq_one_of_mem_closure hB hr (subset_closure hxB),
-      Set.indicator_of_mem hxB]
-    simp
-  · by_cases hxt : x ∈ Metric.thickening r B
-    · rw [Set.indicator_of_notMem hxB, Set.indicator_of_mem (Set.mem_sdiff_of_mem hxt hxB)]
-      obtain ⟨h0, h1⟩ := distanceCutoff_mem_Icc B hr x
-      rw [sub_zero, Real.enorm_eq_ofReal_abs, abs_of_nonneg h0]
-      simpa using ENNReal.ofReal_le_one.2 h1
-    · rw [distanceCutoff_eq_zero_of_notMem_thickening hB hr hxt,
-        Set.indicator_of_notMem hxB]
-      simp
-
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [FiniteDimensional ℝ V] in
 /-- The balance is `1`-Lipschitz in the set, in integrated form:
 `m(ν B) ≤ ∫₀¹ m(ν{u > t}) dt + ‖u - 𝟙_B‖₁` for a measurable `[0,1]`-valued `u`.  The layer-cake
@@ -304,15 +272,23 @@ theorem min_measure_le_lintegral_min_superlevel_add (ν : ProbabilityMeasure V) 
 
 /-! ### The two infima agree -/
 
-/-- `h_S ≤ h_M`: distance cutoffs of a Borel set of finite content, smooth replacements, and the
-weighted coarea bound. -/
-theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V → ℝ}
-    (hρ : IsBorellDensity (ν : Measure V) volume ρ) :
-    smoothConstant ρ (interior (ν : Measure V).support) ν ≤ minkowskiConstant ν := by
+section SmoothTestMinkowski
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+
+/-- A uniform coarea inequality on smooth Lipschitz tests bounds the actual
+Minkowski Cheeger infimum, with no attainment or finite-content assumption. -/
+theorem le_minkowskiConstant_of_smooth_test {ν : ProbabilityMeasure V} (H : ℝ≥0∞)
+    (hac : (ν : Measure V) ≪ volume)
+    (hTest : ∀ {u : V → ℝ}, ContDiff ℝ ∞ u →
+      ∀ {K : ℝ≥0}, LipschitzWith K u →
+      (∀ x, u x ∈ Set.Icc (0 : ℝ) 1) →
+      H * (∫⁻ t in Set.Ioo (0 : ℝ) 1,
+        min ((ν : Measure V) {x | t < u x})
+          (1 - (ν : Measure V) {x | t < u x})) ≤
+        ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V)) :
+    H ≤ minkowskiConstant ν := by
   classical
-  have hac : (ν : Measure V) ≪ volume := by
-    rw [← hρ.withDensity_eq]
-    exact withDensity_absolutelyContinuous _ _
   simp only [minkowskiConstant]
   refine le_iInf fun B ↦ le_iInf fun hBm ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
   have hm0 : min ((ν : Measure V) B) (1 - (ν : Measure V) B) ≠ 0 :=
@@ -331,7 +307,7 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
     fun r ↦ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B with hedef
   -- The single-radius estimate, with the error subtracted from the balance.
   have hmain : ∀ r : ℝ, 0 < r →
-      smoothConstant ρ (interior (ν : Measure V).support) ν *
+      H *
           (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r) ≤
         e r / ENNReal.ofReal r := by
     intro r hr
@@ -348,7 +324,7 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
     set δ : ℕ → ℝ≥0∞ := fun j ↦ ∫⁻ x, ‖g j x - w x‖ₑ ∂(ν : Measure V) with hδdef
     have hwmeas : Measurable w := hwL.continuous.measurable
     -- for each mollification index, the error-corrected balance is controlled
-    have hstep : ∀ j, smoothConstant ρ (interior (ν : Measure V).support) ν *
+    have hstep : ∀ j, H *
         (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - (δ j + e r)) ≤
           ∫⁻ x, ‖gradient (g j) x‖ₑ ∂(ν : Measure V) := by
       intro j
@@ -371,21 +347,21 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
           (∫⁻ t in Set.Ioo (0 : ℝ) 1,
             min ((ν : Measure V) {x | t < g j x}) (1 - (ν : Measure V) {x | t < g j x})) +
               (δ j + e r) := hbal.trans (add_le_add le_rfl htri)
-      calc smoothConstant ρ (interior (ν : Measure V).support) ν *
+      calc H *
             (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - (δ j + e r))
-          ≤ smoothConstant ρ (interior (ν : Measure V).support) ν *
+          ≤ H *
               ∫⁻ t in Set.Ioo (0 : ℝ) 1,
                 min ((ν : Measure V) {x | t < g j x})
                   (1 - (ν : Measure V) {x | t < g j x}) :=
             mul_le_mul' le_rfl (tsub_le_iff_right.mpr hbal')
         _ ≤ ∫⁻ x, ‖gradient (g j) x‖ₑ ∂(ν : Measure V) :=
-            smoothConstant_mul_lintegral_min_superlevel_le hρ (hgreg j).1 hK' (hgreg j).2.2
+            hTest (hgreg j).1 hK' (hgreg j).2.2
     -- pass to the limit in the mollification index
     have hδe : Tendsto (fun j ↦ δ j + e r) atTop (𝓝 (e r)) := by
       simpa using hgL1.add (tendsto_const_nhds (x := e r))
-    have hleft : Tendsto (fun j ↦ smoothConstant ρ (interior (ν : Measure V).support) ν *
+    have hleft : Tendsto (fun j ↦ H *
         (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - (δ j + e r))) atTop
-        (𝓝 (smoothConstant ρ (interior (ν : Measure V).support) ν *
+        (𝓝 (H *
           (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r))) :=
       ENNReal.Tendsto.const_mul
         (ENNReal.Tendsto.sub tendsto_const_nhds hδe (Or.inl hmtop)) (Or.inl hne)
@@ -402,9 +378,9 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
     have h2 := ENNReal.Tendsto.sub h1 (tendsto_const_nhds (x := (ν : Measure V) B))
       (Or.inl (measure_ne_top _ _))
     rwa [tsub_self] at h2
-  have hLtend : Tendsto (fun r : ℝ ↦ smoothConstant ρ (interior (ν : Measure V).support) ν *
+  have hLtend : Tendsto (fun r : ℝ ↦ H *
       (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r)) (𝓝[>] 0)
-      (𝓝 (smoothConstant ρ (interior (ν : Measure V).support) ν *
+      (𝓝 (H *
         min ((ν : Measure V) B) (1 - (ν : Measure V) B))) := by
     have h2 : Tendsto (fun r : ℝ ↦ min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r)
         (𝓝[>] 0) (𝓝 (min ((ν : Measure V) B) (1 - (ν : Measure V) B))) := by
@@ -413,9 +389,9 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
         (Or.inl hmtop)
       rwa [tsub_zero] at h3
     exact ENNReal.Tendsto.const_mul h2 (Or.inl hm0)
-  calc smoothConstant ρ (interior (ν : Measure V).support) ν *
+  calc H *
         min ((ν : Measure V) B) (1 - (ν : Measure V) B)
-      = liminf (fun r : ℝ ↦ smoothConstant ρ (interior (ν : Measure V).support) ν *
+      = liminf (fun r : ℝ ↦ H *
           (min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r)) (𝓝[>] 0) :=
         hLtend.liminf_eq.symm
     _ ≤ liminf (fun r : ℝ ↦ e r / ENNReal.ofReal r) (𝓝[>] 0) := by
@@ -423,6 +399,20 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
         filter_upwards [self_mem_nhdsWithin] with r hr using hmain r hr
     _ = minkowskiContent (ν : Measure V) B := rfl
 
+
+
+end SmoothTestMinkowski
+
+/-- `h_S ≤ h_M`: distance cutoffs of a Borel set of finite content, smooth replacements, and the
+weighted coarea bound. -/
+theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V → ℝ}
+    (hρ : IsBorellDensity (ν : Measure V) volume ρ) :
+    smoothConstant ρ (interior (ν : Measure V).support) ν ≤ minkowskiConstant ν := by
+  have hac : (ν : Measure V) ≪ volume := by
+    rw [← hρ.withDensity_eq]
+    exact withDensity_absolutelyContinuous _ _
+  exact le_minkowskiConstant_of_smooth_test _ hac
+    (fun {u} hu {K} hK hu01 => smoothConstant_mul_lintegral_min_superlevel_le hρ hu hK hu01)
 /-- Blueprint `lem:relative-perimeter-cheeger-infimum`: for a probability law with a Borell density
 relative to Lebesgue measure, the Minkowski Cheeger infimum over Borel sets equals the
 relative-perimeter Cheeger infimum over smooth domains. -/

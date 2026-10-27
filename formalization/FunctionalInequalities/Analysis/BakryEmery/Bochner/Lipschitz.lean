@@ -1,7 +1,8 @@
+import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
 import FunctionalInequalities.Analysis.Mollification.Hessian
 import FunctionalInequalities.Analysis.BakryEmery.Curvature
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
 
 /-!
 # Bochner's identity at `C^{1,1}`

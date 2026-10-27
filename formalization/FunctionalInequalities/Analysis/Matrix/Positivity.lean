@@ -1,3 +1,5 @@
+import Mathlib.LinearAlgebra.Basis.SMul
+import Mathlib.LinearAlgebra.Matrix.Basis
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Kronecker
@@ -755,5 +757,220 @@ theorem exists_invertible_congruence_of_posDef
       _ = X*X := by rw [hYL,hYR]; simp only [mul_one]
       _ = A := hXX
 end PositiveCongruence
+
+end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+
+open Set Filter
+open scoped Topology
+
+/-- A real symmetric matrix is PSD when every positive scalar identity shift
+is PSD. The empty index type is included. -/
+theorem posSemidef_of_positive_shifts {n : ℕ}
+    {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian)
+    (hu : ∀ t : ℝ, 0 < t → (B + t • 1).PosSemidef) : B.PosSemidef := by
+  have hc : Continuous (fun t : ℝ => B + t • 1) :=
+    continuous_const.add (continuous_id.smul continuous_const)
+  refine Matrix.posSemidef_iff_dotProduct_mulVec.mpr ⟨hB, ?_⟩
+  intro v
+  have hv : Continuous (fun t : ℝ => star v ⬝ᵥ (B + t • 1).mulVec v) :=
+    continuous_const.dotProduct (hc.matrix_mulVec continuous_const)
+  have hh : ∀ᶠ t : ℝ in 𝓝[>] 0, 0 ≤ star v ⬝ᵥ (B + t • 1).mulVec v := by
+    filter_upwards [self_mem_nhdsWithin] with t ht
+    exact (hu t ht).dotProduct_mulVec_nonneg v
+  simpa using ge_of_tendsto
+    (hv.continuousAt.tendsto.mono_left
+      (nhdsWithin_le_nhds (a := (0 : ℝ)) (s := Ioi 0))) hh
+
+section AxisFrames
+open Matrix Module
+open scoped RealInnerProductSpace
+
+/-- Positive definiteness generates an orthogonal coordinate basis while fixing a chosen axis. -/
+theorem exists_orthogonal_basis_fixing_axis {n : ℕ}
+    (H : Matrix (Fin n) (Fin n) ℝ) (hH : H.PosDef) (k : Fin n) :
+    ∃ b : Basis (Fin n) ℝ (Fin n → ℝ),
+      b k=Pi.single k 1 ∧
+      ∀ i j, i≠j → (H *ᵥ b j) ⬝ᵥ b i=0 := by
+  classical
+  let ng := H.toNormedAddCommGroup hH
+  let _ : SeminormedAddCommGroup (Fin n → ℝ) := ng.toSeminormedAddCommGroup
+  let _ : NormedAddCommGroup (Fin n → ℝ) := ng
+  let _ : InnerProductSpace ℝ (Fin n → ℝ) := H.toInnerProductSpace hH.posSemidef
+  let v : Fin n → ℝ := Pi.single k 1
+  let a := Real.sqrt (H k k)
+  have ha : 0<a := Real.sqrt_pos.mpr hH.diag_pos
+  have hasq : a^2=H k k := Real.sq_sqrt hH.diag_pos.le
+  let w := a⁻¹ • v
+  have hw : inner ℝ w w=1 := by
+    change (H *ᵥ w) ⬝ᵥ star w=1
+    simp only [w,v,star_trivial,smul_dotProduct,dotProduct_smul,mulVec_smul]
+    simp only [mulVec_single,mul_one,dotProduct_single]
+    simp only [Pi.smul_apply,op_smul_eq_smul,smul_eq_mul,Matrix.col]
+    field_simp [ha.ne']
+    exact hasq.symm
+  have ho : Orthonormal ℝ (({k} : Set (Fin n)).domRestrict (fun _ => w)) := by
+    rw [orthonormal_iff_ite]
+    intro i j
+    have hij : i=j := Subtype.ext ((Set.mem_singleton_iff.mp i.property).trans
+      (Set.mem_singleton_iff.mp j.property).symm)
+    simpa only [Set.domRestrict_apply,if_pos hij] using hw
+  obtain ⟨B,hB⟩ := ho.exists_orthonormalBasis_extension_of_card_eq
+    (by simp : Module.finrank ℝ (Fin n → ℝ)=Fintype.card (Fin n))
+  let s : Fin n → ℝˣ := fun i => Units.mk0 (if i=k then a else 1)
+    (by split_ifs; exact ha.ne'; exact one_ne_zero)
+  let b := B.toBasis.unitsSMul s
+  refine ⟨b,?_,?_⟩
+  · dsimp [b]
+    rw [Basis.unitsSMul_apply]
+    change (s k : ℝ) • B k=v
+    rw [hB k (by simp)]
+    simp only [s,Units.val_mk0]
+    change a • (a⁻¹ • v)=v
+    rw [smul_smul,mul_inv_cancel₀ ha.ne',one_smul]
+  · intro i j hij
+    have hb : inner ℝ (b i) (b j)=0 := by
+      dsimp only [b]
+      rw [Basis.unitsSMul_apply,Basis.unitsSMul_apply]
+      simp only [Units.smul_def,inner_smul_left,inner_smul_right]
+      change (s j : ℝ) * ((starRingEnd ℝ) (s i : ℝ) * inner ℝ (B i) (B j))=0
+      rw [B.orthonormal.inner_eq_zero hij]
+      simp
+    change (H *ᵥ b j) ⬝ᵥ star (b i)=0 at hb
+    simpa using hb
+
+/-- The generated basis gives an invertible diagonalizing matrix fixing the chosen axis. -/
+theorem exists_diagonal_frame_fixing_axis {n : ℕ}
+    (H : Matrix (Fin n) (Fin n) ℝ) (hH : H.PosDef) (k : Fin n) :
+    ∃ (A : Matrix (Fin n) (Fin n) ℝ) (d : Fin n → ℝ),
+      IsUnit A ∧ (A *ᵥ Pi.single k 1)=Pi.single k 1 ∧
+      (∀ i,0<d i) ∧ Aᵀ*H*A=Matrix.diagonal d := by
+  classical
+  obtain ⟨b,hbk,horth⟩ := exists_orthogonal_basis_fixing_axis H hH k
+  let e := Pi.basisFun ℝ (Fin n)
+  let A := e.toMatrix b
+  have hA (i j) : A i j=b j i := rfl
+  have hu : IsUnit A := by
+    let _ : Invertible A := e.invertibleToMatrix b
+    exact isUnit_of_invertible A
+  have hentry (i j) : (Aᵀ*H*A) i j=(H *ᵥ b j) ⬝ᵥ b i := by
+    rw [Matrix.mul_assoc]
+    change (∑ l, A l i * (∑ m,H l m*A m j)) =
+      ∑ l,(∑ m,H l m*b j m)*b i l
+    simp_rw [hA]
+    apply Finset.sum_congr rfl
+    intro l _
+    exact mul_comm _ _
+  refine ⟨A,fun i => (H *ᵥ b i) ⬝ᵥ b i,hu,?_,?_,?_⟩
+  · ext i
+    rw [Matrix.mulVec_single_one]
+    change A i k=(Pi.single k (1 : ℝ) : Fin n → ℝ) i
+    rw [hA,hbk]
+  · intro i
+    have hi := hH.dotProduct_mulVec_pos (b.ne_zero i)
+    simpa only [star_trivial,dotProduct_comm] using hi
+  · ext i j
+    rw [hentry]
+    by_cases hij : i=j
+    · subst j; simp
+    · rw [horth i j hij]
+      simp [Matrix.diagonal,hij]
+
+end AxisFrames
+
+/-! ## Symmetric parts of real quadratic coefficients
+
+CNS1984 (5.1) controls quadratic forms rather than the raw skew part. The
+symmetric part is PSD, preserves Hermitian trace pairings and has the stated
+ELEMENTWISE norm ceiling. Empty finite indices are included.
+-/
+section SymmetricCoefficients
+open scoped Matrix.Norms.Elementwise
+
+/-- Reindexing a double sum against the transpose; shared by the quadratic-form and trace identities. -/
+private lemma sum_transpose_mul {ι : Type*} [Fintype ι] (A : Matrix ι ι ℝ) (g : ι → ι → ℝ) :
+    ∑ i, ∑ j, A.transpose i j * g i j = ∑ i, ∑ j, A i j * g j i := by
+  rw [Finset.sum_comm]
+  simp only [Matrix.transpose_apply]
+
+/-- The coordinate quadratic form is `v ⬝ᵥ B v`; shared by positivity and the norm ceiling. -/
+private lemma quadratic_eq_dotProduct {ι : Type*} [Fintype ι] (B : Matrix ι ι ℝ) (v : ι → ℝ) :
+    ∑ i, ∑ j, B i j * v i * v j = dotProduct v (B.mulVec v) := by
+  simp only [dotProduct, Matrix.mulVec, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
+
+theorem posSemidef_symmetricPart_of_quadratic_nonneg {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (A : Matrix ι ι ℝ) (hA : ∀ v : ι → ℝ, 0 ≤ ∑ i, ∑ j, A i j * v i * v j) :
+    ((1 / 2 : ℝ) • (A + A.transpose)).PosSemidef ∧
+      (∀ v : ι → ℝ,
+        (∑ i, ∑ j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j) =
+          ∑ i, ∑ j, A i j * v i * v j) ∧
+      (∀ (H : Matrix ι ι ℝ), H.IsHermitian →
+        Matrix.trace (((1 / 2 : ℝ) • (A + A.transpose)) * H) = Matrix.trace (A * H)) := by
+  have hquad : ∀ v : ι → ℝ,
+      (∑ i, ∑ j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j) = ∑ i, ∑ j, A i j * v i * v j := by
+    intro v
+    have h : ∑ i, ∑ j, A.transpose i j * (v i * v j) = ∑ i, ∑ j, A i j * (v j * v i) :=
+      sum_transpose_mul A fun i j => v i * v j
+    have e : ∀ i j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j =
+        (1 / 2) * (A i j * v i * v j) + (1 / 2) * (A.transpose i j * (v i * v j)) := by
+      intro i j
+      simp only [Matrix.smul_apply, Matrix.add_apply, smul_eq_mul]
+      ring
+    have e2 : ∑ i, ∑ j, A i j * (v j * v i) = ∑ i, ∑ j, A i j * v i * v j :=
+      Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
+    simp only [e, Finset.sum_add_distrib, ← Finset.mul_sum]
+    rw [h, e2]
+    ring
+  refine ⟨Matrix.PosSemidef.of_dotProduct_mulVec_nonneg ?_ fun v => ?_, hquad, fun H hH => ?_⟩
+  · ext i j
+    simp [Matrix.conjTranspose_apply]
+    ring
+  · have hv : star v = v := star_trivial v
+    rw [hv, ← quadratic_eq_dotProduct, hquad]
+    exact hA v
+  · have hHs : ∀ i j, H j i = H i j := fun i j => by simpa using hH.apply i j
+    have htr : ∀ B : Matrix ι ι ℝ, Matrix.trace (B * H) = ∑ i, ∑ j, B i j * H j i := fun B => by
+      simp [Matrix.trace, Matrix.mul_apply]
+    have h : ∑ i, ∑ j, A.transpose i j * H j i = ∑ i, ∑ j, A i j * H i j :=
+      sum_transpose_mul A fun i j => H j i
+    have e : ∀ i j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * H j i =
+        (1 / 2) * (A i j * H j i) + (1 / 2) * (A.transpose i j * H j i) := by
+      intro i j
+      simp only [Matrix.smul_apply, Matrix.add_apply, smul_eq_mul]
+      ring
+    have e2 : ∑ i, ∑ j, A i j * H i j = ∑ i, ∑ j, A i j * H j i :=
+      Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by rw [hHs]
+    rw [htr, htr]
+    simp only [e, Finset.sum_add_distrib, ← Finset.mul_sum]
+    rw [h, e2]
+    ring
+
+theorem norm_symmetricPart_le_of_quadratic_le {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (A : Matrix ι ι ℝ) {M : ℝ} (hM : 0 ≤ M)
+    (hA : ∀ v : ι → ℝ, 0 ≤ ∑ i, ∑ j, A i j * v i * v j)
+    (hcap : ∀ v : ι → ℝ, (∑ i, ∑ j, A i j * v i * v j) ≤ M * ∑ i, (v i) ^ 2) :
+    ‖((1 / 2 : ℝ) • (A + A.transpose))‖ ≤ M := by
+  obtain ⟨hS, hquad, -⟩ := posSemidef_symmetricPart_of_quadratic_nonneg A hA
+  set S : Matrix ι ι ℝ := (1 / 2 : ℝ) • (A + A.transpose) with hSdef
+  have hent : ∀ a b : ι, dotProduct (Pi.single a 1) (S.mulVec (Pi.single b 1)) = S a b := fun a b => by
+    simp [Matrix.mulVec, dotProduct, Pi.single_apply]
+  -- diagonal ceiling from the quadratic ceiling at `eᵢ`
+  have hdiag : ∀ i : ι, S i i ≤ M := fun i => by
+    rw [← hent, ← quadratic_eq_dotProduct, hquad]
+    calc _ ≤ M * ∑ k, (Pi.single i (1 : ℝ) k) ^ 2 := hcap _
+      _ = M := by simp [Pi.single_apply]
+  rw [Matrix.norm_le_iff hM]
+  intro i j
+  -- canonical PSD Young inequality at `ε = 1` on `eᵢ` and `±eⱼ`
+  have hp := posSemidef_quadratic_young S hS (Pi.single i 1) (Pi.single j 1) one_pos
+  have hm := posSemidef_quadratic_young S hS (Pi.single i 1) (-Pi.single j 1) one_pos
+  simp only [Matrix.mulVec_neg, dotProduct_neg, neg_dotProduct, neg_neg] at hm
+  rw [hent, hent, hent, inv_one, one_mul, one_mul] at hp hm
+  rw [Real.norm_eq_abs, abs_le]
+  constructor <;> linarith [hdiag i, hdiag j]
+
+end SymmetricCoefficients
 
 end FunctionalInequalities.Analysis

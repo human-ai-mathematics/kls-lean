@@ -82,8 +82,13 @@ end SemigroupYosidaAudit
 #print axioms FunctionalInequalities.Analysis.Semigroup.hasDerivAt_exp_smul_apply
 #print axioms FunctionalInequalities.Analysis.Semigroup.antitone_normSq_exp_smul_neg
 #print axioms FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_apply_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.route_S5
 #print axioms SemigroupYosidaAudit.route_S5
 #print axioms SemigroupYosidaAudit.route_S5_of_nonneg
 #print axioms SemigroupYosidaAudit.boundary_t_zero
 #print axioms SemigroupYosidaAudit.boundary_L_zero
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  if env.contains `FunctionalInequalities.Analysis.Semigroup.route_S5 then
+    throwError "The route-only production wrapper must not survive"

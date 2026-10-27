@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.BrascampLieb
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakLaplacian
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Lipschitz
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.Matrix.Positivity
 

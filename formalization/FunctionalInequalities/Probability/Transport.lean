@@ -13,6 +13,7 @@ identities are statements about that probability law. L² pullbacks are in `L2.T
 noncomputable section
 
 open MeasureTheory Filter Topology InnerProductSpace
+open scoped ENNReal
 
 namespace FunctionalInequalities
 
@@ -24,6 +25,25 @@ section MeasurableSpace
 
 variable {A B : Type*}
   [MeasurableSpace A] [MeasurableSpace B]
+
+/-- An indicator-density image law constrains the map almost everywhere for the base measure. -/
+theorem Probability.ae_mem_of_map_tilted_eq_withDensity_indicator
+    (μ : Measure A) (ν : Measure B) {φ : A → ℝ}
+    (hint : Integrable (fun x => Real.exp (φ x)) μ)
+    {f : A → B} (hf : AEMeasurable f (μ.tilted φ)) {S : Set B} (hS : MeasurableSet S)
+    {w : B → ℝ≥0∞} (hw : Measurable w)
+    (hmap : (μ.tilted φ).map f = ν.withDensity (S.indicator w)) :
+    ∀ᵐ x ∂μ, f x ∈ S := by
+  have hs : ∀ᵐ y ∂ν.withDensity (S.indicator w), y ∈ S := by
+    apply (ae_withDensity_iff (hw.indicator hS)).2
+    exact Filter.Eventually.of_forall fun y hy => by
+      by_contra h
+      exact hy (Set.indicator_of_notMem h _)
+  have ht : ∀ᵐ x ∂μ.tilted φ, f x ∈ S := by
+    apply ae_of_ae_map hf
+    rw [hmap]
+    exact hs
+  exact (absolutelyContinuous_tilted hint).ae_le ht
 
 /-- Pushing a density through a measurable equivalence: the new density is the old one composed with
 the inverse. -/
@@ -152,6 +172,19 @@ theorem Probability.measurePreserving_translate_symm :
   rw [this, Measure.map_id]
 
 end TranslationLaws
+
+section TranslationMoments
+
+variable {V₁ : Type*} [NormedAddCommGroup V₁] [MeasurableSpace V₁] [BorelSpace V₁]
+
+/-- Translation keeps a finite second moment. -/
+theorem Probability.memLp_id_two_translateLaw
+    (ν : ProbabilityMeasure V₁) (c : V₁) (h : MemLp id 2 (ν : Measure V₁)) :
+    MemLp id 2 (translateLaw ν c : Measure V₁) := by
+  rw [coe_translateLaw]
+  exact (measurableEmbedding_addLeft c).memLp_map_measure_iff.mpr ((memLp_const c).add h)
+
+end TranslationMoments
 
 variable [CompleteSpace V]
 

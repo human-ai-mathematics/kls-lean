@@ -1,4 +1,7 @@
-import Mathlib
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.Matrix.SchurComplement
+import Mathlib.Order.CompletePartialOrder
 
 /-!
 # Affine normalisation of convex bodies
@@ -122,7 +125,7 @@ theorem exists_max_simplexEdgeMatrix_det {n : ℕ} {K : Set (EuclideanSpace ℝ 
 
 end FunctionalInequalities.Analysis
 
-section LT11D2MaxSimplexBox
+section MaxSimplexBox
 
 open Set Matrix
 
@@ -297,9 +300,9 @@ theorem abs_simplexCoord_le_one_of_max {n : ℕ} {K : Set (EuclideanSpace ℝ (F
 
 end FunctionalInequalities.Analysis
 
-end LT11D2MaxSimplexBox
+end MaxSimplexBox
 
-section LT11D3SimplexBall
+section SimplexBall
 
 open Set Metric
 
@@ -502,9 +505,9 @@ theorem closedBall_subset_stdSimplex_and_box_subset_closedBall {n : ℕ} (hn : 0
 
 end FunctionalInequalities.Analysis
 
-end LT11D3SimplexBall
+end SimplexBall
 
-section LT11D4AffineNormalizationAssembly
+section AffineNormalizationAssembly
 
 open Set Metric
 
@@ -737,4 +740,4 @@ theorem exists_affine_normalization {E : Type*} [NormedAddCommGroup E] [InnerPro
 
 end FunctionalInequalities.Analysis
 
-end LT11D4AffineNormalizationAssembly
+end AffineNormalizationAssembly

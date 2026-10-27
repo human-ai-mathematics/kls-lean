@@ -1674,7 +1674,7 @@
       "diagram": {
         "id": "WPRODG",
         "label": "Weak product<br/>Global L2 factors",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1684,7 +1684,7 @@
       "diagram": {
         "id": "WPRODL",
         "label": "Weak product<br/>Bounded, local L2 derivative",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1694,7 +1694,7 @@
       "diagram": {
         "id": "WLIN",
         "label": "Weak linearity<br/>Finite real combinations",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1704,7 +1704,7 @@
       "diagram": {
         "id": "WFPROD",
         "label": "Weak product<br/>Finite bounded factors",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1784,7 +1784,7 @@
       "diagram": {
         "id": "WEXPNEG",
         "label": "Weak negative exponential<br/>Lipschitz exponent",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1794,7 +1794,7 @@
       "diagram": {
         "id": "WPRODLB",
         "label": "Weak product<br/>Compact-locally bounded factors",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1854,7 +1854,7 @@
       "diagram": {
         "id": "WCURL",
         "label": "Rough compact curl testing<br/>∫ p b = ∫ q a",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1904,7 +1904,7 @@
       "diagram": {
         "id": "WBTEST",
         "label": "Bounded weak-test extension<br/>of divergence identities",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -1924,7 +1924,7 @@
       "diagram": {
         "id": "WGRADCOMP",
         "label": "Weak derivative of<br/>∂ₐW(∇u)",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
         "shape": "box"
       }
     },
@@ -1934,7 +1934,7 @@
       "diagram": {
         "id": "WMARHS",
         "label": "Weak derivative of the<br/>first Monge–Ampère right side",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
         "shape": "box"
       }
     },
@@ -1944,7 +1944,7 @@
       "diagram": {
         "id": "WFLUXLOC",
         "label": "Hessian flux L2 and<br/>trace forcing locally L1",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
         "shape": "box"
       }
     },
@@ -1954,7 +1954,7 @@
       "diagram": {
         "id": "WFLUX",
         "label": "Unweighted weak<br/>Hessian flux identity",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
         "shape": "box"
       }
     },
@@ -1964,7 +1964,7 @@
       "diagram": {
         "id": "WEVOL",
         "label": "Weighted weak Hessian evolution<br/>Letwin (2.6)",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
         "shape": "box"
       }
     },
@@ -1974,7 +1974,7 @@
       "diagram": {
         "id": "WEVOLB",
         "label": "Weak Hessian evolution<br/>bounded H¹ tests",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
         "shape": "box"
       }
     },
@@ -2034,7 +2034,7 @@
       "diagram": {
         "id": "WCFLUX",
         "label": "Compact flux IBP<br/>bounded weak test",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -2174,7 +2174,7 @@
       "diagram": {
         "id": "S1",
         "label": "Integrable weak derivative<br/>has zero integral",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },
@@ -2274,7 +2274,7 @@
       "diagram": {
         "id": "ROUGHTEST",
         "label": "Weak H1 tools<br/>chain rule, log/power, rough tests",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
         "shape": "box"
       }
     },

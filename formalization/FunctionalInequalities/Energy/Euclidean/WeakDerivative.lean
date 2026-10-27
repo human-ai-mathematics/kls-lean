@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 import Mathlib.Analysis.Calculus.ParametricIntegral
 import Mathlib.MeasureTheory.Group.Integral
@@ -35,6 +36,8 @@ open scoped ContDiff
 
 namespace FunctionalInequalities.Energy.Euclidean
 
+open FunctionalInequalities.Analysis.BakryEmery (continuous_gradient_of_contDiff)
+
 open LipschitzApproximation
 
 universe u
@@ -46,12 +49,6 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
 theorem inner_gradient_eq_fderiv_apply (f : V → ℝ) (x w : V) :
     inner ℝ (gradient f x) w = fderiv ℝ f x w := by
   rw [← toDual_apply_apply, toDual_gradient]
-
-/-- The gradient of a `C¹` function is continuous. -/
-theorem continuous_gradient_of_contDiff {f : V → ℝ} {n : WithTop ℕ∞} (hf : ContDiff ℝ n f)
-    (hn : n ≠ 0) : Continuous (gradient f) := by
-  change Continuous (fun x ↦ (toDual ℝ V).symm (fderiv ℝ f x))
-  exact (toDual ℝ V).symm.continuous.comp (hf.continuous_fderiv hn)
 
 omit [CompleteSpace V] in
 /-- The derivative of a compactly supported `C¹` function is globally bounded. -/

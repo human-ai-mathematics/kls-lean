@@ -1,5 +1,7 @@
 import FunctionalInequalities.Analysis.Operator.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 import FunctionalInequalities.Analysis.Matrix.Positivity
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic

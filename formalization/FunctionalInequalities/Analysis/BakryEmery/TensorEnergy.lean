@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 
 /-!
@@ -223,7 +224,7 @@ private theorem energyPyth_integrable {H : Type*} [NormedAddCommGroup H]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {f : E → H} (hf : f.HasTemperateGrowth) : Integrable f μ := by
   obtain ⟨k, C, hb⟩ := hf.2 0
-  exact integrable_of_norm_le_pow μ hexp hf.1.continuous.aestronglyMeasurable
+  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hf.1.continuous.aestronglyMeasurable
     (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 /-- (39): `‖∇²g‖² = α² ‖∇h‖² + χ` with `χ = ‖∇²g - α ∇h‖²`. -/
@@ -503,6 +504,8 @@ end Chain
 
 section Symmetry
 
+universe v
+
 omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
   [BorelSpace E] in
 /-- Centering in `L²(μ; H)`: `∫ ‖F - ∫ F‖² = ∫ ‖F‖² - ‖∫ F‖²` for a probability measure. -/
@@ -534,8 +537,8 @@ private theorem integrable_and_integrable_norm_sq_of_hasTemperateGrowth {H : Typ
   obtain ⟨k, C, hb⟩ := hf.2 0
   have hb' : ∀ x, ‖f x‖ ≤ C * (1 + ‖x‖) ^ k := fun x => by
     simpa only [norm_iteratedFDeriv_zero] using hb x
-  refine ⟨integrable_of_norm_le_pow μ hexp hf.1.continuous.aestronglyMeasurable hb', ?_⟩
-  refine integrable_of_norm_le_pow μ hexp
+  refine ⟨FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hf.1.continuous.aestronglyMeasurable hb', ?_⟩
+  refine FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp
     (hf.1.continuous.aestronglyMeasurable.norm.pow 2) (C := C ^ 2) (k := 2 * k) (fun x => ?_)
   have h0 : 0 ≤ ‖f x‖ := norm_nonneg _
   have hsq : ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := pow_le_pow_left₀ h0 (hb' x) 2
@@ -873,7 +876,7 @@ theorem norm_sq_integral_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth
     inferInstance
   have hintD : Integrable (fun x => fderiv ℝ h x) (m.tilted (-V)) := by
     obtain ⟨k, C, hb⟩ := hh.2 1
-    refine integrable_of_norm_le_pow (m.tilted (-V)) hexp
+    refine FunctionalInequalities.Probability.integrable_of_norm_le_pow (m.tilted (-V)) hexp
       (hh.1.continuous_fderiv (by simp)).aestronglyMeasurable (C := C) (k := k) (fun x => ?_)
     rw [← norm_iteratedFDeriv_one]
     exact hb x
@@ -888,23 +891,6 @@ theorem norm_sq_integral_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth
   rw [h1, integral_fderiv_apply_eq_smul_taylorTensor_one m hV hexp hh h30, norm_smul, mul_pow,
     Real.norm_eq_abs, sq_abs]
 
-
-omit [CompleteSpace E] in
-private theorem memLp_two_of_hasTemperateGrowth_aux {H : Type*} [NormedAddCommGroup H]
-    [NormedSpace ℝ H] (μ : Measure E)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → H}
-    (hf : f.HasTemperateGrowth) : MemLp f 2 μ := by
-  obtain ⟨k, C, hb⟩ := hf.2 0
-  have hb' : ∀ x, ‖f x‖ ≤ C * (1 + ‖x‖) ^ k := fun x => by
-    simpa only [norm_iteratedFDeriv_zero] using hb x
-  refine (memLp_two_iff_integrable_sq_norm hf.1.continuous.aestronglyMeasurable).2 ?_
-  refine integrable_of_norm_le_pow μ hexp (hf.1.continuous.aestronglyMeasurable.norm.pow 2)
-    (C := C ^ 2) (k := 2 * k) (fun x => ?_)
-  have h0 : 0 ≤ ‖f x‖ := norm_nonneg _
-  have hsq : ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := pow_le_pow_left₀ h0 (hb' x) 2
-  rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]
-  calc ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := hsq
-    _ = C ^ 2 * (1 + ‖x‖) ^ (2 * k) := by ring
 
 /-- **The first energy drop of BKL Lemma 3.9** for a supplied eigenfunction: if `ℒf = -λ f`, `∫ f = 0`
 and the covariance of `μ` is at most `K` (`∫ ⟪e, x - b⟫² ≤ K ‖e‖²` with `b` the barycenter), then
@@ -935,18 +921,18 @@ theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTempera
     simp only [gradient, hd, LinearIsometryEquiv.symm_apply_apply]
   simp only [heig, hgl] at hibp
   have hgi : Integrable (gradient f) μ :=
-    (memLp_two_of_hasTemperateGrowth_aux μ hexp (hasTemperateGrowth_gradient hf)).integrable
+    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp (hasTemperateGrowth_gradient hf)).integrable
       (by norm_num)
-  have hf2 := memLp_two_of_hasTemperateGrowth_aux μ hexp hf
+  have hf2 := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp hf
   have hg : (fun x : E => ⟪w, x - b⟫).HasTemperateGrowth := by
     have : (fun x : E => ⟪w, x - b⟫) = fun x => ⟪w, x⟫ - ⟪w, b⟫ := by
       funext x; rw [inner_sub_right]
     rw [this]
     exact hlin.sub (Function.HasTemperateGrowth.const _)
-  have hg2 := memLp_two_of_hasTemperateGrowth_aux μ hexp hg
+  have hg2 := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp hg
   have hfi : Integrable f μ := hf2.integrable (by norm_num)
   have hfl : Integrable (fun x => f x * ⟪w, x⟫) μ :=
-    (memLp_two_of_hasTemperateGrowth_aux μ hexp (hf.mul hlin)).integrable (by norm_num)
+    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp (hf.mul hlin)).integrable (by norm_num)
   have h1 : ‖w‖ ^ 2 = lam * ∫ x, f x * ⟪w, x - b⟫ ∂μ := by
     have hww : ‖w‖ ^ 2 = ∫ x, ⟪gradient f x, w⟫ ∂μ := by
       rw [← real_inner_self_eq_norm_sq]

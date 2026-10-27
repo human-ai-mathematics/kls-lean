@@ -64,7 +64,16 @@ theorem route_Y7 :
         ∀ (f : H₀) (t : ℝ), 0 ≤ t → ∃ g : H₀, ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
           ∀ {s : ℝ} (hs : 0 < s), s < δ → ‖NormedSpace.exp (-t • L s hs) f - g‖ < ε := by
   intro H₀ _ _ _ L hL hcomm D hD hC f t ht
-  exact Analysis.Semigroup.route_Y7 L hL hcomm D hD hC f t ht
+  have hC' : ∀ v ∈ D, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
+      ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ →
+        ‖L s hs v - L r hr v‖ < ε := by
+    intro v hv ε hε
+    obtain ⟨δ, hδ, hδ'⟩ := hC v hv hε
+    exact ⟨δ, hδ, fun s r hs hr hsδ hrδ => hδ' hs hr hsδ hrδ⟩
+  obtain ⟨g, hg⟩ := Analysis.Semigroup.exists_limit_exp_neg_smul L hL hcomm D hD hC' f ht
+  exact ⟨g, fun hε => by
+    obtain ⟨δ, hδ, hδ'⟩ := hg _ hε
+    exact ⟨δ, hδ, fun hs hsδ => hδ' _ hs hsδ⟩⟩
 
 section InnerProduct
 
@@ -104,8 +113,6 @@ open FunctionalInequalities.Analysis.Semigroup
 #print axioms norm_exp_neg_smul_sub_le
 #print axioms exists_limit_of_cauchy_along_pos
 #print axioms exists_limit_exp_neg_smul
-#print axioms FunctionalInequalities.Analysis.Semigroup.route_Y6
-#print axioms FunctionalInequalities.Analysis.Semigroup.route_Y7
 
 -- Theorems of this client.
 #print axioms SemigroupLimitAudit.route_Y6
@@ -114,3 +121,11 @@ open FunctionalInequalities.Analysis.Semigroup
 #print axioms SemigroupLimitAudit.boundary_Y6_eq
 
 end AxiomReports
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  if env.contains `FunctionalInequalities.Analysis.Semigroup.route_Y6 then
+    throwError "The route-only production wrapper must not survive"
+  if env.contains `FunctionalInequalities.Analysis.Semigroup.route_Y7 then
+    throwError "The route-only production wrapper must not survive"

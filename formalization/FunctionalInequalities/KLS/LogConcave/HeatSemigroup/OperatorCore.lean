@@ -140,14 +140,6 @@ private theorem gradient_cutoff_eq_zero {r : ℝ} (hr : 0 < r) {y : V} (hy : ‖
     exact cutoff_eq_one hr hz.le
   rw [gradient, hev.fderiv_eq, fderiv_const_apply, map_zero]
 
-/-- The gradient vanishes outside the closed support. -/
-private theorem gradient_eq_zero_of_notMem_tsupport {f : V → ℝ} {y : V} (hy : y ∉ tsupport f) :
-    gradient f y = 0 := by
-  have h : fderiv ℝ f y = 0 := by
-    by_contra h
-    exact hy (support_fderiv_subset (𝕜 := ℝ) h)
-  rw [gradient, h, map_zero]
-
 /-- A single bound for the gradients of the whole scaled family. -/
 private theorem exists_norm_gradient_cutoff_le :
     ∃ M : ℝ, 0 < M ∧ ∀ r : ℝ, 0 < r → ∀ y : V, ‖gradient (cutoff (V := V) r) y‖ ≤ M / r := by
@@ -184,6 +176,103 @@ section Criterion
 
 variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
+
+/-- Multiplication by a smooth cutoff preserves a graph-core approximation when it fixes
+both graph components and its gradient annihilates the scalar component. -/
+private theorem exists_seq_localized_tendsto_graph
+    (z : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
+    {ξ : V → ℝ} (hξs : ContDiff ℝ ∞ ξ) (hξc : HasCompactSupport ξ)
+    (hξm : AEStronglyMeasurable ξ (ν : Measure V))
+    (hξb : ∀ᵐ y ∂(ν : Measure V), |ξ y| ≤ 1)
+    (hgξm : AEStronglyMeasurable (gradient ξ) (ν : Measure V))
+    {Nξ : ℝ} (hgξb : ∀ᵐ y ∂(ν : Measure V), ‖gradient ξ y‖ ≤ Nξ)
+    (hξz : L2.bddSmulL (H := ℝ) hξm hξb (z : Lp ℝ 2 (ν : Measure V)) = z)
+    (hξTz : L2.bddSmulL (H := V) hξm hξb
+      ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) z) =
+      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) z)
+    (hgξ0 : L2.bddSmulRightL (H := V) hgξm hgξb (z : Lp ℝ 2 (ν : Measure V)) = 0) :
+    ∃ (g : ℕ → V → ℝ) (hg : ∀ n, ContDiff ℝ ∞ (g n))
+        (_hgc : ∀ n, HasCompactSupport (g n)),
+      Tendsto (fun n => (memLp_of_contDiff_hasCompactSupport ν
+        (hξs.mul (hg n)) (hξc.mul_right)).toLp (fun y => ξ y * g n y)) atTop
+        (𝓝 (z : Lp ℝ 2 (ν : Measure V))) ∧
+      Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport
+        (hξs.mul (hg n)) (hξc.mul_right)).toLp (gradient fun y => ξ y * g n y)) atTop
+        (𝓝 ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) z)) := by
+  obtain ⟨g, hg, hgc, hcv1, hcv2⟩ := hν.exists_seq_smooth_tendsto_graph m
+    (ContinuousLinearMap.id ℝ V) hi z
+  have hfs : ∀ n, ContDiff ℝ ∞ fun y => ξ y * g n y :=
+    fun n => hξs.mul (hg n)
+  have hfc : ∀ n, HasCompactSupport fun y => ξ y * g n y :=
+    fun n => hξc.mul_right
+  -- the gradient class of a smooth compactly supported function, in the two shapes used
+  have hbridge : ∀ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc' : HasCompactSupport f),
+      (IsTest.of_contDiff_hasCompactSupport ν (ContinuousLinearMap.id ℝ V) hf
+          hfc').memLp_apply.toLp (apply (ContinuousLinearMap.id ℝ V) f)
+        = (memLp_gradient_of_contDiff_hasCompactSupport hf hfc').toLp (gradient f) := by
+    intro f hf hfc'
+    refine Lp.ext ?_
+    filter_upwards [(IsTest.of_contDiff_hasCompactSupport ν (ContinuousLinearMap.id ℝ V) hf
+        hfc').memLp_apply.coeFn_toLp,
+      (memLp_gradient_of_contDiff_hasCompactSupport hf hfc').coeFn_toLp] with y e1 e2
+    rw [e1, e2, apply_id]
+  -- `[ξ gₙ] → z` in `L²`
+  have hfL : ∀ n, (memLp_of_contDiff_hasCompactSupport ν (hfs n) (hfc n)).toLp _
+      = L2.bddSmulL (H := ℝ) hξm hξb
+        ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)) := by
+    intro n
+    refine Lp.ext ?_
+    filter_upwards [(memLp_of_contDiff_hasCompactSupport ν (hfs n) (hfc n)).coeFn_toLp,
+      L2.coeFn_bddSmulL (H := ℝ) hξm hξb
+        ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)),
+      (memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).coeFn_toLp] with y e1 e2 e3
+    rw [e1, e2, e3, smul_eq_mul]
+  have hcvf : Tendsto (fun n => (memLp_of_contDiff_hasCompactSupport ν (hfs n) (hfc n)).toLp
+      (fun y => ξ y * g n y)) atTop
+      (𝓝 (((z) : (Lp ℝ 2 (ν : Measure V))))) := by
+    have h := ((L2.bddSmulL (H := ℝ) hξm hξb).continuous.tendsto
+      (((z) :
+        (Lp ℝ 2 (ν : Measure V))))).comp hcv1
+    rw [hξz] at h
+    exact h.congr fun n => (hfL n).symm
+  -- `[∇(ξ gₙ)] → T̄ z` in `L²`
+  have hgradf : ∀ n, (memLp_gradient_of_contDiff_hasCompactSupport (hfs n) (hfc n)).toLp
+        (gradient fun y => ξ y * g n y)
+      = L2.bddSmulL (H := V) hξm hξb
+          ((memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).toLp (gradient (g n)))
+        + L2.bddSmulRightL (H := V) hgξm hgξb
+          ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)) := by
+    intro n
+    refine Lp.ext ?_
+    filter_upwards [(memLp_gradient_of_contDiff_hasCompactSupport (hfs n) (hfc n)).coeFn_toLp,
+      Lp.coeFn_add (L2.bddSmulL (H := V) hξm hξb
+          ((memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).toLp (gradient (g n))))
+        (L2.bddSmulRightL (H := V) hgξm hgξb
+          ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n))),
+      L2.coeFn_bddSmulL (H := V) hξm hξb
+        ((memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).toLp (gradient (g n))),
+      L2.coeFn_bddSmulRightL (H := V) hgξm hgξb
+        ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)),
+      (memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).coeFn_toLp,
+      (memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).coeFn_toLp] with
+      y e1 e2 e3 e4 e5 e6
+    rw [e1, e2, Pi.add_apply, e3, e4, e5, e6,
+      gradient_mul (hξs.differentiable (by simp)).differentiableAt
+        ((hg n).differentiable (by simp)).differentiableAt]
+  have hcvg : Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (hfs n)
+      (hfc n)).toLp (gradient fun y => ξ y * g n y)) atTop
+      (𝓝 ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) z)) := by
+    have hcv2' : Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (hg n)
+        (hgc n)).toLp (gradient (g n))) atTop (𝓝
+          ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) z)) :=
+      hcv2.congr fun n => hbridge _ (hg n) (hgc n)
+    have h := (((L2.bddSmulL (H := V) hξm hξb).continuous.tendsto
+        ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) z)).comp hcv2').add
+      (((L2.bddSmulRightL (H := V) hgξm hgξb).continuous.tendsto
+        (((z) : (Lp ℝ 2 (ν : Measure V))))).comp hcv1)
+    rw [hξTz, hgξ0, add_zero] at h
+    exact h.congr fun n => (hgradf n).symm
+  exact ⟨g, hg, hgc, hcvf, hcvg⟩
 
 /-- The scaled-cutoff estimate behind the criterion: a class annihilating `(A + 1) C_c^∞(V)`
 whose localizations all lie in `D(T̄)` has `‖χ_r u‖ ≤ (M / r) ‖u‖` for the cutoff family. -/
@@ -353,35 +442,6 @@ private theorem norm_toLp_mul_cutoff_le
         (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)⟫
       = -⟪(((⟨_, hzmem⟩ : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)) :
         (Lp ℝ 2 (ν : Measure V))), u⟫ := by
-    obtain ⟨g, hg, hgc, hcv1, hcv2⟩ := hν.exists_seq_smooth_tendsto_graph m
-      (ContinuousLinearMap.id ℝ V) hi (⟨_, hzmem⟩ :
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
-    have hfs : ∀ n, ContDiff ℝ ∞ fun y => cutoff (V := V) (2 * r) y * g n y :=
-      fun n => hξs.mul (hg n)
-    have hfc : ∀ n, HasCompactSupport fun y => cutoff (V := V) (2 * r) y * g n y :=
-      fun n => hξc.mul_right
-    -- the gradient class of a smooth compactly supported function, in the two shapes used
-    have hbridge : ∀ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc' : HasCompactSupport f),
-        (IsTest.of_contDiff_hasCompactSupport ν (ContinuousLinearMap.id ℝ V) hf
-            hfc').memLp_apply.toLp (apply (ContinuousLinearMap.id ℝ V) f)
-          = (memLp_gradient_of_contDiff_hasCompactSupport hf hfc').toLp (gradient f) := by
-      intro f hf hfc'
-      refine Lp.ext ?_
-      filter_upwards [(IsTest.of_contDiff_hasCompactSupport ν (ContinuousLinearMap.id ℝ V) hf
-          hfc').memLp_apply.coeFn_toLp,
-        (memLp_gradient_of_contDiff_hasCompactSupport hf hfc').coeFn_toLp] with y e1 e2
-      rw [e1, e2, apply_id]
-    -- `[ξ gₙ] → z` in `L²`
-    have hfL : ∀ n, (memLp_of_contDiff_hasCompactSupport ν (hfs n) (hfc n)).toLp _
-        = L2.bddSmulL (H := ℝ) hξm hξb
-          ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)) := by
-      intro n
-      refine Lp.ext ?_
-      filter_upwards [(memLp_of_contDiff_hasCompactSupport ν (hfs n) (hfc n)).coeFn_toLp,
-        L2.coeFn_bddSmulL (H := ℝ) hξm hξb
-          ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)),
-        (memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).coeFn_toLp] with y e1 e2 e3
-      rw [e1, e2, e3, smul_eq_mul]
     have hξz : L2.bddSmulL (H := ℝ) hξm hξb ((((⟨_, hzmem⟩ :
       (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)) : (Lp ℝ 2
         (ν : Measure V))))
@@ -395,39 +455,6 @@ private theorem norm_toLp_mul_cutoff_le
       by_cases hy : y ∈ tsupport (cutoff (V := V) r)
       · rw [hξone y hy]; ring
       · rw [image_eq_zero_of_notMem_tsupport hy]; ring
-    have hcvf : Tendsto (fun n => (memLp_of_contDiff_hasCompactSupport ν (hfs n) (hfc n)).toLp
-        (fun y => cutoff (V := V) (2 * r) y * g n y)) atTop
-        (𝓝 ((((⟨_, hzmem⟩ : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V)
-          hi).domain)) : (Lp ℝ 2 (ν : Measure V))))) := by
-      have h := ((L2.bddSmulL (H := ℝ) hξm hξb).continuous.tendsto
-        ((((⟨_, hzmem⟩ : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)) :
-          (Lp ℝ 2 (ν : Measure V))))).comp hcv1
-      rw [hξz] at h
-      exact h.congr fun n => (hfL n).symm
-    -- `[∇(ξ gₙ)] → T̄ z` in `L²`
-    have hgradf : ∀ n, (memLp_gradient_of_contDiff_hasCompactSupport (hfs n) (hfc n)).toLp
-          (gradient fun y => cutoff (V := V) (2 * r) y * g n y)
-        = L2.bddSmulL (H := V) hξm hξb
-            ((memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).toLp (gradient (g n)))
-          + L2.bddSmulRightL (H := V) hgξm hgξb
-            ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)) := by
-      intro n
-      refine Lp.ext ?_
-      filter_upwards [(memLp_gradient_of_contDiff_hasCompactSupport (hfs n) (hfc n)).coeFn_toLp,
-        Lp.coeFn_add (L2.bddSmulL (H := V) hξm hξb
-            ((memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).toLp (gradient (g n))))
-          (L2.bddSmulRightL (H := V) hgξm hgξb
-            ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n))),
-        L2.coeFn_bddSmulL (H := V) hξm hξb
-          ((memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).toLp (gradient (g n))),
-        L2.coeFn_bddSmulRightL (H := V) hgξm hgξb
-          ((memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).toLp (g n)),
-        (memLp_gradient_of_contDiff_hasCompactSupport (hg n) (hgc n)).coeFn_toLp,
-        (memLp_of_contDiff_hasCompactSupport ν (hg n) (hgc n)).coeFn_toLp] with
-        y e1 e2 e3 e4 e5 e6
-      rw [e1, e2, Pi.add_apply, e3, e4, e5, e6,
-        gradient_mul (hξs.differentiable (by simp)).differentiableAt
-          ((hg n).differentiable (by simp)).differentiableAt]
     have hξTz : L2.bddSmulL (H := V) hξm hξb
       ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (⟨_, hzmem⟩ :
         (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain))
@@ -441,7 +468,7 @@ private theorem norm_toLp_mul_cutoff_le
       by_cases hy : y ∈ tsupport (cutoff (V := V) r)
       · rw [hξone y hy, one_smul]
       · rw [image_eq_zero_of_notMem_tsupport hy, apply_id,
-          gradient_eq_zero_of_notMem_tsupport hy]
+          Analysis.BakryEmery.gradient_eq_zero_of_notMem_tsupport hy]
         simp
     have hgξ0 : L2.bddSmulRightL (H := V) hgξm hgξb ((((⟨_, hzmem⟩ :
       (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)) : (Lp ℝ 2
@@ -455,23 +482,13 @@ private theorem norm_toLp_mul_cutoff_le
       by_cases hy : y ∈ tsupport (cutoff (V := V) r)
       · rw [hgξzero y hy, smul_zero]
       · rw [image_eq_zero_of_notMem_tsupport hy]; simp
-    have hcvg : Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (hfs n)
-        (hfc n)).toLp (gradient fun y => cutoff (V := V) (2 * r) y * g n y)) atTop
-        (𝓝 ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (⟨_, hzmem⟩ :
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain))) := by
-      have hcv2' : Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (hg n)
-          (hgc n)).toLp (gradient (g n))) atTop (𝓝
-            ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (⟨_, hzmem⟩ :
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain))) :=
-        hcv2.congr fun n => hbridge _ (hg n) (hgc n)
-      have h := (((L2.bddSmulL (H := V) hξm hξb).continuous.tendsto
-          ((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (⟨_, hzmem⟩ :
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain))).comp hcv2').add
-        (((L2.bddSmulRightL (H := V) hgξm hgξb).continuous.tendsto
-          ((((⟨_, hzmem⟩ : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V)
-            hi).domain)) : (Lp ℝ 2 (ν : Measure V))))).comp hcv1)
-      rw [hξTz, hgξ0, add_zero] at h
-      exact h.congr fun n => (hgradf n).symm
+    obtain ⟨g, hg, hgc, hcvf, hcvg⟩ := exists_seq_localized_tendsto_graph m hν hi
+      (⟨_, hzmem⟩ : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
+      hξs hξc hξm hξb hgξm hgξb hξz hξTz hgξ0
+    have hfs : ∀ n, ContDiff ℝ ∞ fun y => cutoff (V := V) (2 * r) y * g n y :=
+      fun n => hξs.mul (hg n)
+    have hfc : ∀ n, HasCompactSupport fun y => cutoff (V := V) (2 * r) y * g n y :=
+      fun n => hξc.mul_right
     -- the generator image of the localized test function, and where it lives
     have hAae : ∀ n, (((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
       ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfs n)

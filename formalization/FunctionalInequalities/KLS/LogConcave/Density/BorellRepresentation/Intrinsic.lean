@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
 
 /-!
@@ -120,7 +121,7 @@ theorem intrinsic_integrable_norm_pow {μ : ProbabilityMeasure F}
     Integrable (fun v ↦ ‖v‖ ^ p)
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) := by
   obtain ⟨t, ht, hint⟩ := hμ.intrinsic_integrable_exp_norm
-  exact Probability.integrable_norm_pow_of_integrable_exp_norm ht hint p
+  exact Probability.integrable_norm_pow_of_exp _ ht hint p
 
 end IntrinsicDensity
 

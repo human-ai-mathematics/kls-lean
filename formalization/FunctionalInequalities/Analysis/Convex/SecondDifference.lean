@@ -1,5 +1,17 @@
-import Mathlib
-import FunctionalInequalities.Analysis.Convex.Subgradient
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Algebra.Ring.IsFormallyReal
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.Calculus.FDeriv.Add
+import Mathlib.Analysis.Calculus.Gradient.Basic
+import Mathlib.Analysis.Convex.Deriv
+import Mathlib.Analysis.Convex.Mul
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.LinearAlgebra.AffineSpace.Slope
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
 
 /-!
 # Second differences and Lipschitz gradients
@@ -19,29 +31,6 @@ section InnerProduct
 
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-
-private lemma gradient_le_increment
-    {u : E → ℝ} (hc : ConvexOn ℝ Set.univ u)
-    (z v : E) (hz : DifferentiableAt ℝ u z) :
-    ⟪gradient u z, v⟫ ≤ u (z + v) - u z := by
-  have hd :
-      HasFDerivAt u ((InnerProductSpace.toDual ℝ E) (gradient u z))
-        ((AffineMap.lineMap (k := ℝ) z (z + v)) (0 : ℝ)) := by
-    simpa only [AffineMap.lineMap_apply_zero] using hz.hasGradientAt.hasFDerivAt
-  have hl :
-      HasDerivAt (u ∘ ⇑(AffineMap.lineMap (k := ℝ) z (z + v)))
-        ⟪gradient u z, v⟫ (0 : ℝ) := by
-    simpa only [add_sub_cancel_left, InnerProductSpace.toDual_apply_apply] using
-      hd.comp_hasDerivAt 0
-        (AffineMap.hasDerivAt_lineMap (a := z) (b := z + v) (x := (0 : ℝ)))
-  have hcl :
-      ConvexOn ℝ Set.univ (u ∘ ⇑(AffineMap.lineMap (k := ℝ) z (z + v))) := by
-    simpa only [Set.preimage_univ] using
-      ConvexOn.comp_affineMap (AffineMap.lineMap (k := ℝ) z (z + v)) hc
-  simpa only [slope_def_field, Function.comp_apply,
-    AffineMap.lineMap_apply_one, AffineMap.lineMap_apply_zero, sub_zero, div_one] using
-    hcl.le_slope_of_hasDerivAt (Set.mem_univ 0) (Set.mem_univ 1)
-      (zero_lt_one : (0 : ℝ) < 1) hl
 
 /-- **Quadratic upper bound from a second-difference bound** (weak Letwin route, C^{1,1} estimate): a differentiable convex `u` with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` satisfies
 `u y ≤ u x + ⟪∇u x, y − x⟫ + C ‖y − x‖²`. -/
@@ -67,7 +56,7 @@ end FunctionalInequalities.Analysis
 
 namespace FunctionalInequalities.Analysis
 
-section LT4BCocoerciveGradient
+section CocoerciveGradient
 
 open scoped RealInnerProductSpace
 
@@ -200,13 +189,13 @@ theorem norm_gradient_sub_le_of_quadratic_upper_bound {E : Type*}
           ring
     exact le_of_mul_le_mul_left hsq ha_pos
 
-end LT4BCocoerciveGradient
+end CocoerciveGradient
 
 end FunctionalInequalities.Analysis
 
 namespace FunctionalInequalities.Analysis
 
-section W0T4SecondDifferenceLipschitz
+section SecondDifferenceLipschitz
 
 
 
@@ -479,11 +468,11 @@ theorem lipschitzWith_gradient_of_second_difference_le {E : Type*} [NormedAddCom
     rw [dist_eq_norm, dist_eq_norm, Real.coe_toNNReal (4 * C) h4C]
     exact hnorm x y
 
-end W0T4SecondDifferenceLipschitz
+end SecondDifferenceLipschitz
 
 end FunctionalInequalities.Analysis
 
-section LT17CPenalizedMaximumBound
+section PenalizedMaximumBound
 
 open Set
 open scoped RealInnerProductSpace
@@ -684,8 +673,7 @@ private lemma sd_penalized_estimate {u V : E → ℝ}
   rw [he'] at ht
   exact ht
 
-/-- **Second-difference bound from penalised maxima** (weak Letwin route; KLS500
-`weak_moment_symmetricSecondDifference_le_of_uniformlyConvex_target`, algebraic part): let `u` be convex and
+/-- **Second-difference bound from penalised maxima** (weak Letwin route, algebraic part): let `u` be convex and
 differentiable, bounded below, and `V` differentiable with `V − (κ/2)‖·‖²` convex. Suppose that for every
 `η > 0` the penalised second difference `Δ²ₕu − η u` has a maximiser `x₀` at which the log-density
 `F := V ∘ ∇u − u` satisfies the comparison `F(x₀ + h) + F(x₀ − h) − 2 F(x₀) ≤ η n`. Then
@@ -737,16 +725,16 @@ end InnerProduct
 
 end FunctionalInequalities.Analysis
 
-end LT17CPenalizedMaximumBound
+end PenalizedMaximumBound
 
 section CenteredDifference
 
-open MeasureTheory Set Filter
+open Set Filter
 open scoped Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private lemma increment_fderiv {n : ℕ}
+theorem fderiv_centeredDifference {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : Differentiable ℝ u)
     (h : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (fun y => u (y + h) + u (y - h) - 2 * u y) =
@@ -766,14 +754,14 @@ private lemma increment_fderiv {n : ℕ}
       (fun q => fderiv ℝ u (y + h) + q - (fderiv ℝ u y + fderiv ℝ u y))
       (fderiv_comp_add_right (𝕜 := ℝ) (f := u) (x := y) (-h))
 
-private lemma increment_gradient {n : ℕ}
+theorem gradient_centeredDifference {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : Differentiable ℝ u)
     (h x : EuclideanSpace ℝ (Fin n)) :
     gradient (fun y => u (y + h) + u (y - h) - 2 * u y) x =
       gradient u (x + h) + gradient u (x - h) - 2 • gradient u x := by
   change (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).symm
     (fderiv ℝ (fun y => u (y + h) + u (y - h) - 2 * u y) x) = _
-  rw [increment_fderiv hu h]
+  rw [fderiv_centeredDifference hu h]
   simp only [map_sub, map_add, gradient, two_smul]
 
 /-- Consumer adapter for the centered second difference used in the weak
@@ -827,7 +815,7 @@ theorem centeredDifference_contDiff_lipschitz_gradient {n : ℕ}
         (2 : ℕ) • gradient u x) =
       gradient (fun x => u (x + h) + u (x - h) - 2 * u x) := by
     funext x
-    exact (increment_gradient hdu h x).symm
+    exact (gradient_centeredDifference hdu h x).symm
   have hconst : G + G + 2 * G = 4 * G := by
     ring
   rw [hconst, hfun] at hgrad

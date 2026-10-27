@@ -79,7 +79,7 @@ private theorem integrable_coord_of_logConcave {n : ℕ} (ν : ProbabilityMeasur
     Integrable (fun x : EuclideanSpace ℝ (Fin n) => ∏ i, x (c i))
       (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
   obtain ⟨r, hr, hexp⟩ := ((KLS.LogConcave.borel_iff ν).1 hLC).exists_integrable_exp_norm
-  have h := integrable_prod_inner_cond (ν : Measure (EuclideanSpace ℝ (Fin n))) hr hexp d
+  have h := FunctionalInequalities.Probability.integrable_prod_inner_of_exp (ν : Measure (EuclideanSpace ℝ (Fin n))) hr hexp d
     (fun i => EuclideanSpace.single (c i) (1 : ℝ))
   refine h.congr (ae_of_all _ fun x => ?_)
   simp [EuclideanSpace.inner_single_right]

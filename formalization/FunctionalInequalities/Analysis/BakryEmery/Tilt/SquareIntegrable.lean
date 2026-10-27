@@ -691,50 +691,6 @@ theorem contDiff_tiltAverage_Lp (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ
   exact ContDiff.sum fun i _ =>
     (contDiff_tiltAverage_of_memLp μ hexp (Lp.memLp _)).smul contDiff_const
 
-omit [FiniteDimensional ℝ E] [BorelSpace E] in
-/-- Lemma 3.6 from the tilt identity: if `F_g(w) = ⟪w, F_G(w)⟫` for every `w` with `F_G` smooth,
-then `T_{d+1} g = S_{d+1} T_d G`. This is the tensor part of the proof of
-`taylorTensor_neg_weightedLaplacian`, isolated from the smooth compactly supported setting. -/
-theorem taylorTensor_succ_of_eq_inner (μ : Measure E) {g : E → ℝ} {G : E → E}
-    (hG : ContDiff ℝ ∞ (tiltAverage μ G))
-    (hEq : tiltAverage μ g = fun w => ⟪w, tiltAverage μ G w⟫) (d : ℕ) :
-    taylorTensor μ g (d + 1) = symmetrizeML (appendInner (taylorTensor μ G d)) := by
-  set Φ := tiltAverage μ G with hΦ
-  ext h
-  simp only [taylorTensor, symmetrizeML, appendInner,
-    smul_apply,
-    sum_apply,
-    ContinuousMultilinearMap.domDomCongr_apply,
-    ContinuousMultilinearMap.uncurryRight_apply,
-    ContinuousLinearMap.compContinuousMultilinearMap_coe]
-  rw [hEq, ← hΦ]
-  rw [iteratedFDeriv_inner_self_apply hG d 0 h]
-  simp only [inner_zero_left, zero_add, Function.comp_apply]
-  change
-    ((d + 1).factorial : ℝ)⁻¹ •
-        ∑ k : Fin (d + 1), ⟪h k, (iteratedFDeriv ℝ d Φ 0) (k.removeNth h)⟫ =
-      ((d + 1).factorial : ℝ)⁻¹ •
-        ∑ σ : Equiv.Perm (Fin (d + 1)),
-          ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)),
-            h (σ (Fin.last d))⟫
-  have hs : (∑ σ : Equiv.Perm (Fin (d + 1)),
-        ⟪(iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫) =
-      (d.factorial : ℝ) *
-        ∑ k : Fin (d + 1), ⟪(iteratedFDeriv ℝ d Φ 0) (k.removeNth h), h k⟫ := by
-    apply sum_perm_inner_init_last
-    intro τ v
-    exact iteratedFDeriv_comp_perm_of_contDiff hG d 0 v τ
-  have hsum : (∑ σ : Equiv.Perm (Fin (d + 1)),
-        ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)),
-          h (σ (Fin.last d))⟫) =
-      ∑ k : Fin (d + 1), ⟪(iteratedFDeriv ℝ d Φ 0) (k.removeNth h), h k⟫ := by
-    simp_rw [smul_apply, real_inner_smul_left]
-    rw [← Finset.mul_sum, hs]
-    field_simp [Nat.factorial_ne_zero]
-  rw [hsum]
-  congr 1
-  exact Finset.sum_congr rfl fun k _ => real_inner_comm _ _
-
 end Lp
 
 end FunctionalInequalities.Analysis.BakryEmery

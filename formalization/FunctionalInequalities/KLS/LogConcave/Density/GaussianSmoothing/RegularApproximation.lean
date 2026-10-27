@@ -25,6 +25,8 @@ noncomputable section
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
+open FunctionalInequalities.Probability.Gaussian
+
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 

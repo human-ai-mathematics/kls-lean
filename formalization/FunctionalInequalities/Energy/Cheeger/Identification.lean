@@ -5,10 +5,9 @@ import FunctionalInequalities.Energy.Euclidean.Slope.Density
 /-!
 # The Cheeger identification for every Borel probability law
 
-Hole-free module for Blueprint `thm:smooth-gradient-relaxation-two-cheeger`, the unconditional
-identity `𝓔^can_μ = 2 Ch_μ`.  It replaces the former work-in-progress module
-`Energy/WIP/Cheeger.lean`; its five declarations are moved here with byte-identical `pp.all`
-signatures (`build/audit/energy-slope-proofs/ppall-before.txt` and `ppall-after.txt`).
+The unconditional identity `𝓔^can_μ = 2 Ch_μ` identifies the smooth-gradient relaxation
+with twice the Cheeger energy for every Borel probability law on a finite-dimensional real
+inner-product space, including singular laws and zero-dimensional affine supports.
 
 * `SmoothGradient.relaxation_eq_localSlope`: the smooth-gradient relaxation is the relaxed squared
   local slope, for every Borel probability law on a finite-dimensional inner-product space — the
@@ -18,8 +17,7 @@ signatures (`build/audit/energy-slope-proofs/ppall-before.txt` and `ppall-after.
 * `LocalSlope.relaxation_eq_asymptoticLipschitz`, `Cheeger.energy_eq_ofAsymptoticLipschitz`: the two
   Cheeger conventions agree, by collapsing the unconditional sandwich of
   `Energy/Euclidean/Slope/Comparison.lean`; this is a consequence of the identification, not a
-  second obligation, and the citation of Ambrosio–Gigli–Savaré recorded for it in the former WIP
-  module is no longer load-bearing.
+  independent density assumption. The proof uses the local-slope comparison directly.
 * `SmoothGradient.relaxation_eq_two_mul_cheeger`, `SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger`:
   the coordinate and the affine-support forms of `𝓔^can = 2 Ch`, the latter being the Blueprint
   statement, with the value `⊤` allowed on both sides and a one-point affine support giving

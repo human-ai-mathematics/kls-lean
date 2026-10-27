@@ -36,7 +36,7 @@ def cumulantEnergy (ν : Measure (EuclideanSpace ℝ (Fin n))) (r : ℕ) (u : Eu
 
 end FunctionalInequalities.KLS.BKL
 
-section S4Section6Pointwise
+section PointwiseCumulantEnergy
 
 open MeasureTheory
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
@@ -560,4 +560,4 @@ theorem sqrt_lowerDrift_energy_le (ν : ProbabilityMeasure (EuclideanSpace ℝ (
 
 end FunctionalInequalities.KLS.BKL
 
-end S4Section6Pointwise
+end PointwiseCumulantEnergy

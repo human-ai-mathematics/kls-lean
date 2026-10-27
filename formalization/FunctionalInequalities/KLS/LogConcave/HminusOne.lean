@@ -177,7 +177,7 @@ end FunctionalInequalities.KLS.LogConcave
 
 namespace FunctionalInequalities.Analysis.BakryEmery
 
-section LT9CBochnerHessianBound
+section BochnerHessianBound
 
 open InnerProductSpace
 
@@ -433,11 +433,11 @@ theorem sum_integral_norm_fderiv_partial_sq_le_integral_weightedLaplacian_sq [m.
 
 end HaarReference
 
-end LT9CBochnerHessianBound
+end BochnerHessianBound
 
 end FunctionalInequalities.Analysis.BakryEmery
 
-section LT9DHminus1VarianceAssembly
+section Hminus1VarianceAssembly
 
 /-! The `H⁻¹` variance bound for a convex `C²` potential (Letwin Proposition 2.8). -/
 
@@ -632,4 +632,4 @@ theorem variance_le_sum_of_partial_dual_bounds {n : ℕ}
 
 end FunctionalInequalities.KLS.LogConcave
 
-end LT9DHminus1VarianceAssembly
+end Hminus1VarianceAssembly

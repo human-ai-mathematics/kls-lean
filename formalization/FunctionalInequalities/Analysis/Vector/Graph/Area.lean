@@ -196,15 +196,8 @@ theorem vectorGraphMap_estimates (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ
               * (ENNReal.ofReal (LinearMap.normDet ((graphMapLinear ι κ (A n) : H →ₗ[ℝ] V)))
                 * μ (u n)) := by rw [mul_assoc]
         _ ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) := by gcongr
-    calc ∑' n, μH[k] (Ψ '' (u n))
-        ≤ ∑' n, ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) :=
-          ENNReal.tsum_le_tsum hterm
-      _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * ∑' n, (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) :=
-          ENNReal.tsum_mul_left
-      _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * ((∑' n, ∫⁻ y in u n, J y ∂μ) + ∑' n, ε * μ (u n)) := by
-          rw [ENNReal.tsum_add]
-      _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in s, J y ∂μ + ε * μ s) := by
-          rw [← hsplitint, ENNReal.tsum_mul_left, ← hsplitmeas]
+    simpa only [ENNReal.tsum_mul_left, ENNReal.tsum_add, ← hsplitint, ← hsplitmeas]
+      using ENNReal.tsum_le_tsum hterm
   · rw [hsplitint]
     have hterm : ∀ n, ∫⁻ y in u n, J y ∂μ
         ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * μH[k] (Ψ '' (u n)) + ε * μ (u n) := by
@@ -302,19 +295,11 @@ theorem hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K 
     have : (i : ℝ) ≤ (j : ℝ) := Nat.cast_le.mpr hij
     linarith
   have hsmunion : (⋃ m, sm m) = s := by
-    refine Set.Subset.antisymm (Set.iUnion_subset fun m => Set.inter_subset_left) fun y hy => ?_
-    obtain ⟨m, hm⟩ := exists_nat_gt ‖y‖
-    refine Set.mem_iUnion.mpr ⟨m, hy, ?_⟩
-    simp only [Metric.mem_ball, dist_zero_right]
-    linarith
+    simp only [sm, ← Set.inter_iUnion, Metric.iUnion_ball_nat_succ, Set.inter_univ]
   have hsmfin : ∀ m, μ (sm m) ≠ ⊤ := by
     intro m
-    have hball : μ (Metric.ball (0 : H) (m + 1)) ≠ ⊤ := by
-      have hsubset : Metric.ball (0 : H) (m + 1) ⊆ Metric.closedBall (0 : H) (m + 1) :=
-        Metric.ball_subset_closedBall
-      have hcpt := (isCompact_closedBall (0 : H) ((m : ℝ) + 1)).measure_lt_top (μ := μ)
-      exact ne_top_of_le_ne_top hcpt.ne (measure_mono hsubset)
-    exact ne_top_of_le_ne_top hball (measure_mono Set.inter_subset_right)
+    exact ((Metric.isBounded_ball (x := (0 : H)) (r := (m : ℝ) + 1)).subset
+      Set.inter_subset_right).measure_lt_top.ne
   have hLim : Tendsto (fun m => μH[(n : ℝ)] (vectorGraphMap ι κ γ '' sm m)) atTop
       (𝓝 (μH[(n : ℝ)] (vectorGraphMap ι κ γ '' s))) := by
     have himg : (⋃ m, vectorGraphMap ι κ γ '' sm m) = vectorGraphMap ι κ γ '' s := by
@@ -322,36 +307,10 @@ theorem hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K 
     rw [← himg]
     exact tendsto_measure_iUnion_atTop (fun i j hij => Set.image_mono (hsmmono hij))
   have hRlim : Tendsto (fun m => ∫⁻ y in sm m, J y ∂μ) atTop (𝓝 (∫⁻ y in s, J y ∂μ)) := by
-    have hind : ∀ m, ∫⁻ y in sm m, J y ∂μ = ∫⁻ y, (sm m).indicator J y ∂μ :=
-      fun m => (lintegral_indicator (hsmmeas m) J).symm
-    have hmonoind : Monotone fun m => (sm m).indicator J := by
-      intro i j hij y
-      show (sm i).indicator J y ≤ (sm j).indicator J y
-      by_cases hy : y ∈ sm i
-      · rw [Set.indicator_of_mem hy, Set.indicator_of_mem (hsmmono hij hy)]
-      · rw [Set.indicator_of_notMem hy]; exact zero_le
-    have hsup : ∀ y, (⨆ m, (sm m).indicator J y) = s.indicator J y := by
-      intro y
-      by_cases hy : y ∈ s
-      · rw [Set.indicator_of_mem hy]
-        have hyU : y ∈ ⋃ k, sm k := by rw [hsmunion]; exact hy
-        obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hyU
-        refine le_antisymm (iSup_le fun i => ?_) (le_iSup_of_le m ?_)
-        · by_cases hyi : y ∈ sm i
-          · rw [Set.indicator_of_mem hyi]
-          · rw [Set.indicator_of_notMem hyi]; exact zero_le
-        · rw [Set.indicator_of_mem hm]
-      · rw [Set.indicator_of_notMem hy]
-        refine le_antisymm (iSup_le fun i => ?_) zero_le
-        rw [Set.indicator_of_notMem (fun h => hy (Set.inter_subset_left h))]
-    have hkey : ∫⁻ y in s, J y ∂μ = ⨆ m, ∫⁻ y in sm m, J y ∂μ := by
-      simp_rw [hind]
-      rw [← lintegral_indicator hs]
-      rw [← lintegral_iSup (fun m => hJmeas.indicator (hsmmeas m)) hmonoind]
-      exact lintegral_congr fun y => (hsup y).symm
-    rw [hkey]
-    refine tendsto_atTop_iSup fun i j hij => ?_
-    exact lintegral_mono_set (hsmmono hij)
+    have hd : Directed (· ⊆ ·) sm := fun i j =>
+      ⟨max i j, hsmmono (le_max_left _ _), hsmmono (le_max_right _ _)⟩
+    rw [← hsmunion, setLIntegral_iUnion_of_directed J hd]
+    exact tendsto_atTop_iSup fun i j hij => lintegral_mono_set (hsmmono hij)
   refine tendsto_nhds_unique hLim ?_
   have heq : ∀ m, μH[(n : ℝ)] (vectorGraphMap ι κ γ '' sm m) = ∫⁻ y in sm m, J y ∂μ :=
     fun m => hausdorffMeasure_image_vectorGraphMap_of_finite ι κ hperp hγ (hsmmeas m) (hsmfin m)

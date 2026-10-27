@@ -104,21 +104,18 @@ private theorem integrable_smul_fderiv_newtonianKernel (hn : 2 ≤ n) (hΩb : Bo
   have hL := opNorm_le_sum_abs_basisFun (fderiv ℝ (newtonianKernel n) (x - y))
   exact mul_le_mul (hy.trans (le_max_left _ _)) hL (norm_nonneg _) (le_max_right _ _)
 
-/-- The smooth truncated potentials are differentiable everywhere, with the derivative under the integral, and the
-derivative field is continuous. Uses only the finite measure of `Ω` and the essential bound of `f`. -/
-private theorem approx_hasFDerivAt_continuous (hn : 2 ≤ n) (hΩm : MeasurableSet Ω) (hΩb : Bornology.IsBounded Ω)
-    (hf : AEMeasurable f (volume.restrict Ω)) (hM : ∀ᵐ y ∂(volume.restrict Ω), |f y| ≤ M)
-    {eps : ℝ} (heps : 0 < eps) :
-    (∀ x, HasFDerivAt (fun x => ∫ y in Ω, truncatedNewtonianKernel n eps (x - y) * f y)
-      (∫ y in Ω, f y • fderiv ℝ (truncatedNewtonianKernel n eps) (x - y)) x) ∧
-    Continuous (fun x => ∫ y in Ω, f y • fderiv ℝ (truncatedNewtonianKernel n eps) (x - y)) := by
+/-- Differentiation under a bounded-domain integral for a C1 translated kernel. -/
+theorem hasFDerivAt_setIntegral_comp_sub_mul {T : EuclideanSpace ℝ (Fin n) → ℝ} (hT : ContDiff ℝ 1 T)
+    (hΩm : MeasurableSet Ω) (hΩb : Bornology.IsBounded Ω)
+    (hf : AEMeasurable f (volume.restrict Ω)) (hM : ∀ᵐ y ∂(volume.restrict Ω), |f y| ≤ M) :
+    (∀ x, HasFDerivAt (fun x => ∫ y in Ω, T (x - y) * f y) (∫ y in Ω, f y • fderiv ℝ T (x - y)) x) ∧
+    (∀ x, Integrable (fun y => f y • fderiv ℝ T (x - y)) (volume.restrict Ω)) ∧
+    Continuous (fun x => ∫ y in Ω, f y • fderiv ℝ T (x - y)) := by
   have : IsFiniteMeasure (volume.restrict Ω) :=
     ⟨by rw [Measure.restrict_apply_univ]; exact hΩb.measure_lt_top⟩
-  set T := truncatedNewtonianKernel n eps
-  have hT : ContDiff ℝ ∞ T := contDiff_truncatedNewtonianKernel hn heps
   have hTc : Continuous T := hT.continuous
-  have hT1 : Continuous (fderiv ℝ T) := hT.continuous_fderiv (by simp)
-  have hTd : Differentiable ℝ T := hT.differentiable (by simp)
+  have hT1 : Continuous (fderiv ℝ T) := hT.continuous_fderiv one_ne_zero
+  have hTd : Differentiable ℝ T := hT.differentiable one_ne_zero
   set M' := max M 0
   have hM' : ∀ᵐ y ∂(volume.restrict Ω), |f y| ≤ M' := hM.mono fun _ h => h.trans (le_max_left _ _)
   have hfi : Integrable f (volume.restrict Ω) :=
@@ -152,9 +149,8 @@ private theorem approx_hasFDerivAt_continuous (hn : 2 ≤ n) (hΩm : MeasurableS
     intro x hx
     rw [norm_smul, Real.norm_eq_abs]
     exact mul_le_mul hfy (h2 _ (hmem x0 x y hx hy)) (norm_nonneg _) (le_max_right _ _)
-  constructor
-  · intro x0
-    obtain ⟨K1, K2, h1, h2⟩ := hbounds x0
+  refine ⟨fun x0 => ?_, fun x0 => ?_, ?_⟩
+  · obtain ⟨K1, K2, h1, h2⟩ := hbounds x0
     have hint : Integrable (fun y => T (x0 - y) * f y) (volume.restrict Ω) := by
       refine hfi.bdd_mul (c := K1) (hTc.comp (continuous_const.sub continuous_id)).aestronglyMeasurable ?_
       filter_upwards [ae_restrict_mem hΩm] with y hy
@@ -169,6 +165,10 @@ private theorem approx_hasFDerivAt_continuous (hn : 2 ≤ n) (hΩm : MeasurableS
       rw [ContinuousLinearMap.comp_id] at h
       exact h
     exact hc.mul_const (f y)
+  · obtain ⟨_, K2, -, h2⟩ := hbounds x0
+    refine (integrable_const (M' * K2)).mono' (hmeasF' x0) ?_
+    filter_upwards [hboundF' x0 K2 h2] with y hy
+    exact hy x0 (mem_ball_self one_pos)
   · refine continuous_iff_continuousAt.mpr fun x0 => ?_
     obtain ⟨_, K2, -, h2⟩ := hbounds x0
     refine continuousAt_of_dominated (bound := fun _ => M' * K2) (Eventually.of_forall hmeasF') ?_
@@ -178,6 +178,19 @@ private theorem approx_hasFDerivAt_continuous (hn : 2 ≤ n) (hΩm : MeasurableS
       exact hy x hx
     · exact ((hT1.comp (continuous_id.sub (continuous_const (y := y)))).const_smul (f y)).continuousAt
 
+
+/-- The smooth truncated potentials are differentiable everywhere, with the derivative under the integral, and the
+derivative field is continuous. Uses only the finite measure of `Ω` and the essential bound of `f`. -/
+private theorem approx_hasFDerivAt_continuous (hn : 2 ≤ n) (hΩm : MeasurableSet Ω) (hΩb : Bornology.IsBounded Ω)
+    (hf : AEMeasurable f (volume.restrict Ω)) (hM : ∀ᵐ y ∂(volume.restrict Ω), |f y| ≤ M)
+    {eps : ℝ} (heps : 0 < eps) :
+    (∀ x, HasFDerivAt (fun x => ∫ y in Ω, truncatedNewtonianKernel n eps (x - y) * f y)
+      (∫ y in Ω, f y • fderiv ℝ (truncatedNewtonianKernel n eps) (x - y)) x) ∧
+    Continuous (fun x => ∫ y in Ω, f y • fderiv ℝ (truncatedNewtonianKernel n eps) (x - y)) := by
+  obtain ⟨hd, -, hc⟩ := hasFDerivAt_setIntegral_comp_sub_mul
+    ((contDiff_truncatedNewtonianKernel hn heps).of_le (WithTop.coe_le_coe.mpr le_top))
+    hΩm hΩb hf hM
+  exact ⟨hd, hc⟩
 /-- Scalar approximation error at every point: `|w_ε(x) − w(x)| ≤ max M 0 · newtonianScalarErrorBound n ε`. -/
 private theorem approx_potential_error (hn : 2 ≤ n) (hΩb : Bornology.IsBounded Ω)
     (hf : AEMeasurable f (volume.restrict Ω)) (hM : ∀ᵐ y ∂(volume.restrict Ω), |f y| ≤ M)

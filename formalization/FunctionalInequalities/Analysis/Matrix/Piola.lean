@@ -1,5 +1,6 @@
+import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 import FunctionalInequalities.Analysis.Mollification.Hessian
 import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
@@ -271,7 +272,7 @@ theorem sum_fderiv_adjugate_hessianMatrix_eq_zero {n : ℕ} {u : EuclideanSpace 
 
 end FunctionalInequalities.Analysis
 
-section LT6BWeakPiola
+section WeakPiola
 
 open MeasureTheory Matrix Filter
 open scoped Topology
@@ -281,54 +282,14 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 
-private def weakPiolaMatrix {n : ℕ}
-    (L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
-    Matrix (Fin n) (Fin n) ℝ :=
-  fun r s =>
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n)))
-      (L (EuclideanSpace.basisFun (Fin n) ℝ r))
-      (EuclideanSpace.basisFun (Fin n) ℝ s)
-
-private lemma weakPiola_hessian {n : ℕ}
-    (u : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
-    hessianMatrix u x = weakPiolaMatrix (fderiv ℝ (gradient u) x) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
-  have he : fderiv ℝ u = T ∘ gradient u :=
-    funext fun y => (T.apply_symm_apply (fderiv ℝ u y)).symm
-  have hd :
-      fderiv ℝ (fderiv ℝ u) x =
-        T.toContinuousLinearMap.comp (fderiv ℝ (gradient u) x) :=
-    (congrArg (fun f => fderiv ℝ f x) he).trans T.comp_fderiv
-  ext r s
-  change
-    fderiv ℝ (fderiv ℝ u) x (EuclideanSpace.basisFun (Fin n) ℝ r)
-        (EuclideanSpace.basisFun (Fin n) ℝ s) =
-      T (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ r))
-        (EuclideanSpace.basisFun (Fin n) ℝ s)
-  rw [hd]
-  rfl
-
-private lemma weakPiola_continuous_cofactor {n : ℕ} (i j : Fin n) :
+private lemma continuous_adjugate_gradientDerivativeMatrix {n : ℕ} (i j : Fin n) :
     Continuous
       (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) =>
-        (weakPiolaMatrix L).adjugate i j) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
-  apply (continuous_apply j).comp
-  apply (continuous_apply i).comp
-  apply Continuous.matrix_adjugate
-  apply continuous_pi
-  intro r
-  apply continuous_pi
-  intro s
-  exact
-    (T.continuous.comp (continuous_id.clm_apply continuous_const)).clm_apply
-      continuous_const
+        (gradientDerivativeMatrix L).adjugate i j) := by
+  exact (continuous_apply j).comp
+    ((continuous_apply i).comp continuous_gradientDerivativeMatrix.matrix_adjugate)
 
-private lemma weakPiola_contDiff_cofactor {n : ℕ}
+private lemma contDiff_adjugate_hessianMatrix {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 3 u)
     (i j : Fin n) :
     ContDiff ℝ 1 (fun x => (hessianMatrix u x).adjugate i j) := by
@@ -379,7 +340,7 @@ private lemma weakPiola_smooth {n : ℕ}
       fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j) = 0 := by
   classical
   let e := EuclideanSpace.basisFun (Fin n) ℝ
-  have hA := weakPiola_contDiff_cofactor hu i
+  have hA := contDiff_adjugate_hessianMatrix hu i
   have hInt : ∀ j : Fin n,
       Integrable (fun x =>
         fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x)
@@ -435,7 +396,7 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero {n : ℕ}
       (WithTop.coe_le_coe.mpr (show (3 : ℕ∞) ≤ ⊤ from le_top))
   have hA : ∀ k j, ContDiff ℝ 1
       (fun x => (hessianMatrix (Uk k) x).adjugate i j) :=
-    fun k j => weakPiola_contDiff_cofactor (hUk₃ k) i j
+    fun k j => contDiff_adjugate_hessianMatrix (hUk₃ k) i j
   have hψD : ∀ j : Fin n, Continuous (fun x => fderiv ℝ ψ x (e j)) :=
     fun _ => (hψ.continuous_fderiv one_ne_zero).clm_apply continuous_const
   have hlim : ∀ j : Fin n,
@@ -446,14 +407,14 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero {n : ℕ}
         (𝓝 (∫ x, (hessianMatrix u x).adjugate i j *
           fderiv ℝ ψ x (e j))) := by
     intro j
-    have hco := weakPiola_continuous_cofactor i j
+    have hco := continuous_adjugate_gradientDerivativeMatrix i j
     obtain ⟨C, hC⟩ :=
       (isCompact_closedBall
         (0 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
         (G : ℝ)).exists_bound_of_continuousOn hco.continuousOn
     have hbound : ∀ k x, ‖(hessianMatrix (Uk k) x).adjugate i j‖ ≤ C := by
       intro k x
-      rw [weakPiola_hessian]
+      rw [hessianMatrix_eq_gradientDerivativeMatrix]
       apply hC
       change dist (fderiv ℝ (gradient (Uk k)) x) 0 ≤ (G : ℝ)
       rw [dist_zero_right]
@@ -472,7 +433,7 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero {n : ℕ}
     · filter_upwards [hconv] with x hx
       have ht :=
         (hco.continuousAt.tendsto.comp hx).mul_const (fderiv ℝ ψ x (e j))
-      simpa only [weakPiola_hessian, Function.comp_def] using ht
+      simpa only [hessianMatrix_eq_gradientDerivativeMatrix, Function.comp_def] using ht
   have hsum :=
     tendsto_finsetSum Finset.univ (fun j _ => hlim j)
   have hzero : ∀ k,
@@ -488,9 +449,9 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero {n : ℕ}
 
 end FunctionalInequalities.Analysis
 
-end LT6BWeakPiola
+end WeakPiola
 
-section LN10AInverseHessianDivergence
+section InverseHessianDivergence
 
 open MeasureTheory Set Filter
 open scoped Topology
@@ -509,28 +470,6 @@ section NormedSpace
 
 variable [NormedSpace ℝ E]
 
-private lemma n10_measurable_deriv
-    [MeasurableSpace E] [BorelSpace E]
-    (f : E → ℝ) (v : E) :
-    Measurable (fun x => fderiv ℝ f x v) :=
-  (ContinuousLinearMap.apply ℝ ℝ v).measurable.comp (measurable_fderiv ℝ f)
-
-private lemma n10_deriv_bound
-    {f : E → ℝ} {L : NNReal} (hf : LipschitzWith L f) (v x : E) :
-    ‖fderiv ℝ f x v‖ ≤ (L : ℝ) * ‖v‖ :=
-  (fderiv ℝ f x).le_opNorm v |>.trans
-    (mul_le_mul_of_nonneg_right
-      (norm_fderiv_le_of_lipschitz ℝ hf) (norm_nonneg v))
-
-private lemma n10_deriv_zero
-    {f : E → ℝ} {x : E} (hx : x ∉ tsupport f) (v : E) :
-    fderiv ℝ f x v = 0 := by
-  have hz : fderiv ℝ f x = 0 :=
-    image_eq_zero_of_notMem_tsupport
-      (fun h => hx ((tsupport_fderiv_subset ℝ) h))
-  rw [hz]
-  rfl
-
 end NormedSpace
 
 section FiniteDimensional
@@ -541,7 +480,7 @@ section MeasurableSpace
 
 variable [MeasurableSpace E] [BorelSpace E]
 
-private lemma n10_integrable_bounded_compact
+private lemma integrable_of_measurable_bounded_compact
     {f : E → ℝ} (hm : Measurable f) (hc : HasCompactSupport f)
     {C : ℝ} (hb : ∀ x, ‖f x‖ ≤ C) :
     Integrable f (volume : Measure E) := by
@@ -551,53 +490,38 @@ private lemma n10_integrable_bounded_compact
   exact (hl.integrableOn_isCompact hc.isCompact).integrable_of_forall_notMem_eq_zero
     (fun _ hx => image_eq_zero_of_notMem_tsupport hx)
 
-private lemma n10_integrable_deriv
+private lemma integrable_fderiv_apply_of_lipschitz
     {f : E → ℝ} {L : NNReal} (hf : LipschitzWith L f)
     (hc : HasCompactSupport f) (v : E) :
     Integrable (fun x => fderiv ℝ f x v) (volume : Measure E) :=
-  n10_integrable_bounded_compact (n10_measurable_deriv f v)
-    (hc.fderiv_apply ℝ v) (n10_deriv_bound hf v)
+  integrable_of_measurable_bounded_compact (measurable_fderiv_apply_const ℝ f v)
+    (hc.fderiv_apply ℝ v) (norm_fderiv_apply_le_of_lipschitz hf v)
 
-private lemma n10_integrable_weighted_deriv
+private lemma integrable_weight_mul_fderiv_apply
     {f w : E → ℝ} {L : NNReal} (hf : LipschitzWith L f)
     (hc : HasCompactSupport f) (hw : Continuous w) (v : E) :
     Integrable (fun x => w x * fderiv ℝ f x v) (volume : Measure E) := by
   have hd : LocallyIntegrable (fun x => fderiv ℝ f x v) (volume : Measure E) :=
-    (memLp_top_of_bound (n10_measurable_deriv f v).aestronglyMeasurable
+    (memLp_top_of_bound (measurable_fderiv_apply_const ℝ f v).aestronglyMeasurable
       ((L : ℝ) * ‖v‖)
-      (Eventually.of_forall (n10_deriv_bound hf v))).locallyIntegrable le_top
+      (Eventually.of_forall (norm_fderiv_apply_le_of_lipschitz hf v))).locallyIntegrable le_top
   have hl := LocallyIntegrable.continuous_mul hw hd
   apply (hl.integrableOn_isCompact hc.isCompact).integrable_of_forall_notMem_eq_zero
   intro x hx
-  rw [n10_deriv_zero hx v, mul_zero]
+  simp only [fderiv_of_notMem_tsupport ℝ hx, _root_.zero_apply, mul_zero]
 
 end MeasurableSpace
-
-private lemma n10_cutoff
-    {K : Set E} (hK : IsCompact K) :
-    ∃ χ : E → ℝ, ContDiff ℝ 1 χ ∧ HasCompactSupport χ ∧
-      ∀ x ∈ K, χ =ᶠ[𝓝 x] (fun _ => 1) := by
-  obtain ⟨r, hr⟩ := hK.isBounded.subset_closedBall (0 : E)
-  let φ : ContDiffBump (0 : E) :=
-    ⟨max r 0 + 1, max r 0 + 2, by positivity, by linarith⟩
-  refine ⟨φ, φ.contDiff, φ.hasCompactSupport, ?_⟩
-  intro x hx
-  apply φ.eventuallyEq_one_of_mem_ball
-  have h := hr hx
-  change dist x 0 ≤ r at h
-  change dist x 0 < max r 0 + 1
-  linarith [le_max_left r 0]
 
 end FiniteDimensional
 
 /-- Localization lets Lipschitz integration by parts act on a smooth coefficient. -/
-private lemma n10_integration_by_parts {n : ℕ}
+private lemma integral_smooth_mul_fderiv_lipschitz {n : ℕ}
     {f ψ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hf : ContDiff ℝ 1 f) {L : NNReal} (hψ : LipschitzWith L ψ)
     (hψc : HasCompactSupport ψ) (v : EuclideanSpace ℝ (Fin n)) :
     (∫ x, f x * fderiv ℝ ψ x v) =
       - ∫ x, fderiv ℝ f x v * ψ x := by
-  obtain ⟨χ, hχ, hχc, hχeq⟩ := n10_cutoff hψc.isCompact
+  obtain ⟨χ, hχ, hχc, hχeq⟩ := exists_compact_contDiff_eq_one_near hψc.isCompact
   let g := fun x => χ x * f x
   have hgd : ContDiff ℝ 1 g := hχ.mul hf
   have hgc : HasCompactSupport g := hχc.mul_right
@@ -632,67 +556,20 @@ private lemma n10_integration_by_parts {n : ℕ}
         by_cases hx : x ∈ tsupport ψ
         · rw [(heq x hx).eq_of_nhds]
           ring
-        · rw [n10_deriv_zero hx v]
+        · rw [fderiv_of_notMem_tsupport ℝ hx]
           simp
       _ = _ := integral_neg _
   rw [hl, hr] at hb
   linarith
 
-private def n10_matrix {n : ℕ}
-    (L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
-    Matrix (Fin n) (Fin n) ℝ :=
-  fun r s =>
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n)))
-      (L (EuclideanSpace.basisFun (Fin n) ℝ r))
-      (EuclideanSpace.basisFun (Fin n) ℝ s)
-
-private lemma n10_hessian {n : ℕ}
-    (u : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
-    hessianMatrix u x = n10_matrix (fderiv ℝ (gradient u) x) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
-  have he : fderiv ℝ u = T ∘ gradient u :=
-    funext fun y => (T.apply_symm_apply (fderiv ℝ u y)).symm
-  have hd :
-      fderiv ℝ (fderiv ℝ u) x =
-        T.toContinuousLinearMap.comp (fderiv ℝ (gradient u) x) :=
-    (congrArg (fun f => fderiv ℝ f x) he).trans T.comp_fderiv
-  ext r s
-  change
-    fderiv ℝ (fderiv ℝ u) x (EuclideanSpace.basisFun (Fin n) ℝ r)
-        (EuclideanSpace.basisFun (Fin n) ℝ s) =
-      T (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ r))
-        (EuclideanSpace.basisFun (Fin n) ℝ s)
-  rw [hd]
-  rfl
-
-private lemma n10_continuous_cofactor {n : ℕ} (i j : Fin n) :
-    Continuous
-      (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) =>
-        (n10_matrix L).adjugate i j) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
-  apply (continuous_apply j).comp
-  apply (continuous_apply i).comp
-  apply Continuous.matrix_adjugate
-  apply continuous_pi
-  intro r
-  apply continuous_pi
-  intro s
-  exact
-    (T.continuous.comp (continuous_id.clm_apply continuous_const)).clm_apply
-      continuous_const
-
-private lemma n10_measurable_cofactor {n : ℕ}
+private lemma measurable_adjugate_hessianMatrix {n : ℕ}
     (u : EuclideanSpace ℝ (Fin n) → ℝ) (i j : Fin n) :
     Measurable (fun x => (hessianMatrix u x).adjugate i j) := by
-  simpa only [n10_hessian, Function.comp_def] using
-    (n10_continuous_cofactor i j).measurable.comp
+  simpa only [hessianMatrix_eq_gradientDerivativeMatrix, Function.comp_def] using
+    (continuous_adjugate_gradientDerivativeMatrix i j).measurable.comp
       (measurable_fderiv ℝ (gradient u))
 
-private lemma n10_cofactor_bound {n : ℕ}
+private lemma norm_adjugate_hessianMatrix_le {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
     (hG : LipschitzWith G (gradient u)) (i j : Fin n) :
     ∃ C : ℝ, ∀ x, ‖(hessianMatrix u x).adjugate i j‖ ≤ C := by
@@ -700,37 +577,15 @@ private lemma n10_cofactor_bound {n : ℕ}
     (isCompact_closedBall
       (0 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
       (G : ℝ)).exists_bound_of_continuousOn
-        (n10_continuous_cofactor i j).continuousOn
+        (continuous_adjugate_gradientDerivativeMatrix i j).continuousOn
   refine ⟨C, fun x => ?_⟩
-  rw [n10_hessian]
+  rw [hessianMatrix_eq_gradientDerivativeMatrix]
   apply hC
   change dist (fderiv ℝ (gradient u) x) 0 ≤ (G : ℝ)
   rw [dist_zero_right]
   exact norm_fderiv_le_of_lipschitz ℝ hG
 
-private lemma n10_contDiff_cofactor {n : ℕ}
-    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 3 u)
-    (i j : Fin n) :
-    ContDiff ℝ 1 (fun x => (hessianMatrix u x).adjugate i j) := by
-  classical
-  have h₂ : ContDiff ℝ 2 (fderiv ℝ u) := hu.fderiv_right (by norm_num)
-  have h₁ : ContDiff ℝ 1 (fderiv ℝ (fderiv ℝ u)) :=
-    h₂.fderiv_right (by norm_num)
-  have hentry : ∀ r s, ContDiff ℝ 1 (fun x => hessianMatrix u x r s) := by
-    intro r s
-    exact (h₁.clm_apply contDiff_const).clm_apply contDiff_const
-  simp only [Matrix.adjugate_apply, Matrix.det_apply]
-  apply ContDiff.sum
-  intro σ _
-  apply ContDiff.const_smul
-  apply contDiff_prod
-  intro r _
-  simp only [Matrix.updateRow_apply]
-  split_ifs
-  · exact contDiff_const
-  · exact hentry _ _
-
-private lemma n10_smooth_piola {n : ℕ}
+private lemma integral_smooth_adjugate_hessianMatrix_mul_fderiv {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 3 u)
     {ψ : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal}
     (hψ : LipschitzWith L ψ) (hψc : HasCompactSupport ψ) (i : Fin n) :
@@ -738,7 +593,7 @@ private lemma n10_smooth_piola {n : ℕ}
       fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j) = 0 := by
   classical
   let e := EuclideanSpace.basisFun (Fin n) ℝ
-  have hA := n10_contDiff_cofactor hu i
+  have hA := contDiff_adjugate_hessianMatrix hu i
   have hInt : ∀ j : Fin n,
       Integrable (fun x =>
         fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x)
@@ -753,7 +608,7 @@ private lemma n10_smooth_piola {n : ℕ}
           fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x) := by
       apply Finset.sum_congr rfl
       intro j _
-      exact n10_integration_by_parts (hA j) hψ hψc (e j)
+      exact integral_smooth_mul_fderiv_lipschitz (hA j) hψ hψc (e j)
     _ = -(∑ j, ∫ x,
         fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x) :=
       Finset.sum_neg_distrib _
@@ -773,7 +628,7 @@ private lemma n10_smooth_piola {n : ℕ}
       simp only [hz, integral_zero, neg_zero]
 
 /-- Dominated convergence for smooth potentials with a fixed Lipschitz test. -/
-private lemma n10_integral_convergence {n : ℕ}
+private lemma tendsto_integral_adjugate_hessianMatrix {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ}
     {Uk : ℕ → EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
     (hLip : ∀ k, LipschitzWith G (gradient (Uk k)))
@@ -793,10 +648,10 @@ private lemma n10_integral_convergence {n : ℕ}
     (isCompact_closedBall
       (0 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
       (G : ℝ)).exists_bound_of_continuousOn
-        (n10_continuous_cofactor i j).continuousOn
+        (continuous_adjugate_gradientDerivativeMatrix i j).continuousOn
   have hb : ∀ k x, ‖(hessianMatrix (Uk k) x).adjugate i j‖ ≤ C := by
     intro k x
-    rw [n10_hessian]
+    rw [hessianMatrix_eq_gradientDerivativeMatrix]
     apply hC
     change dist (fderiv ℝ (gradient (Uk k)) x) 0 ≤ (G : ℝ)
     rw [dist_zero_right]
@@ -804,17 +659,17 @@ private lemma n10_integral_convergence {n : ℕ}
   apply tendsto_integral_filter_of_dominated_convergence
     (fun x => C * ‖fderiv ℝ ψ x v‖)
   · exact Eventually.of_forall fun k =>
-      ((n10_measurable_cofactor (Uk k) i j).mul
-        (n10_measurable_deriv ψ v)).aestronglyMeasurable
+      ((measurable_adjugate_hessianMatrix (Uk k) i j).mul
+        (measurable_fderiv_apply_const ℝ ψ v)).aestronglyMeasurable
   · exact Eventually.of_forall fun k => Eventually.of_forall fun x => by
       rw [norm_mul]
       exact mul_le_mul_of_nonneg_right (hb k x) (norm_nonneg _)
-  · exact (n10_integrable_deriv hψ hψc v).norm.const_mul C
+  · exact (integrable_fderiv_apply_of_lipschitz hψ hψc v).norm.const_mul C
   · filter_upwards [hconv] with x hx
     have ht :=
-      ((n10_continuous_cofactor i j).continuousAt.tendsto.comp hx).mul_const
+      ((continuous_adjugate_gradientDerivativeMatrix i j).continuousAt.tendsto.comp hx).mul_const
         (fderiv ℝ ψ x v)
-    simpa only [n10_hessian, Function.comp_def] using ht
+    simpa only [hessianMatrix_eq_gradientDerivativeMatrix, Function.comp_def] using ht
 
 /-- **Weak Piola identity with Lipschitz tests** (weak Letwin route): for `u ∈ C¹` with Lipschitz
 gradient and a Lipschitz `ψ` with compact support (`fderiv ℝ ψ` its a.e. derivative),
@@ -832,11 +687,11 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero_of_lipschitz {n :
     fun k => (hUk k).of_le
       (WithTop.coe_le_coe.mpr (show (3 : ℕ∞) ≤ ⊤ from le_top))
   have hsum := tendsto_finsetSum Finset.univ
-    (fun j _ => n10_integral_convergence hLip hconv hψ hψc i j)
+    (fun j _ => tendsto_integral_adjugate_hessianMatrix hLip hconv hψ hψc i j)
   have hzero : ∀ k,
       (∑ j, ∫ x, (hessianMatrix (Uk k) x).adjugate i j *
         fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j)) = 0 :=
-    fun k => n10_smooth_piola (hUk₃ k) hψ hψc i
+    fun k => integral_smooth_adjugate_hessianMatrix_mul_fderiv (hUk₃ k) hψ hψc i
   have hsumzero : Tendsto
       (fun k => ∑ j, ∫ x, (hessianMatrix (Uk k) x).adjugate i j *
         fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j))
@@ -845,7 +700,7 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero_of_lipschitz {n :
     exact tendsto_const_nhds
   exact tendsto_nhds_unique hsum hsumzero
 
-private lemma n10_lipschitz_product
+private lemma lipschitzWith_compact_smooth_mul_lipschitz
     {f g : E → ℝ} {Lf Lg : NNReal}
     (hf : LipschitzWith Lf f) (hg : LipschitzWith Lg g)
     (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
@@ -880,20 +735,20 @@ private lemma n10_lipschitz_product
 
 end StructuredSpace
 
-private lemma n10_exp_test_lipschitz {n : ℕ}
+private lemma lipschitzWith_exp_neg_mul_test {n : ℕ}
     {F ψ : EuclideanSpace ℝ (Fin n) → ℝ} {LF Lψ : NNReal}
     (hF : LipschitzWith LF F) (hψ : LipschitzWith Lψ ψ)
     (hψc : HasCompactSupport ψ) :
     ∃ L : NNReal, LipschitzWith L (fun x => Real.exp (-F x) * ψ x) := by
   obtain ⟨χ, hχ, hχc, hχeq⟩ :=
-    n10_cutoff (hψc.isCompact.image hF.continuous)
+    exists_compact_contDiff_eq_one_near (hψc.isCompact.image hF.continuous)
   let q : ℝ → ℝ := fun t => χ t * Real.exp (-t)
   have hq : ContDiff ℝ 1 q := hχ.mul contDiff_id.neg.exp
   have hqc : HasCompactSupport q := hχc.mul_right
   obtain ⟨Lq, hLq⟩ :=
     ContDiff.lipschitzWith_of_hasCompactSupport hqc hq one_ne_zero
   obtain ⟨C, hC⟩ := hqc.exists_bound_of_continuous hq.continuous
-  obtain ⟨L, hL⟩ := n10_lipschitz_product (hLq.comp hF) hψ
+  obtain ⟨L, hL⟩ := lipschitzWith_compact_smooth_mul_lipschitz (hLq.comp hF) hψ
     ⟨C, fun x => hC (F x)⟩
     (hψc.exists_bound_of_continuous hψ.continuous)
   have he :
@@ -930,7 +785,7 @@ theorem sum_integral_inv_hessianMatrix_mul_fderiv_eq {n : ℕ}
     Real.continuous_exp.comp hF.continuous.neg
   have htc : HasCompactSupport (fun x => Real.exp (-F x) * ψ x) :=
     hψc.mul_left
-  obtain ⟨Lt, ht⟩ := n10_exp_test_lipschitz hF hψ hψc
+  obtain ⟨Lt, ht⟩ := lipschitzWith_exp_neg_mul_test hF hψ hψc
   have hzero :=
     sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero_of_lipschitz
       hu hG ht htc i
@@ -963,9 +818,9 @@ theorem sum_integral_inv_hessianMatrix_mul_fderiv_eq {n : ℕ}
       Integrable (fun x => (hessianMatrix u x)⁻¹ i j * fderiv ℝ ψ x (e j))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     intro j
-    obtain ⟨C, hC⟩ := n10_cofactor_bound hG i j
-    have hi := (n10_integrable_weighted_deriv hψ hψc hw (e j)).bdd_mul
-      (n10_measurable_cofactor u i j).aestronglyMeasurable
+    obtain ⟨C, hC⟩ := norm_adjugate_hessianMatrix_le hG i j
+    have hi := (integrable_weight_mul_fderiv_apply hψ hψc hw (e j)).bdd_mul
+      (measurable_adjugate_hessianMatrix u i j).aestronglyMeasurable
       (Eventually.of_forall hC)
     apply hi.congr
     filter_upwards [hinv] with x hx
@@ -979,13 +834,13 @@ theorem sum_integral_inv_hessianMatrix_mul_fderiv_eq {n : ℕ}
         (hessianMatrix u x)⁻¹ i j * fderiv ℝ F x (e j) * ψ x)
         (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     intro j
-    obtain ⟨C, hC⟩ := n10_cofactor_bound hG i j
+    obtain ⟨C, hC⟩ := norm_adjugate_hessianMatrix_le hG i j
     have hi :=
       (hw.mul hψ.continuous).integrable_of_hasCompactSupport
         (μ := (volume : Measure (EuclideanSpace ℝ (Fin n)))) htc
-    have hi' := hi.bdd_mul (n10_measurable_deriv F (e j)).aestronglyMeasurable
-      (Eventually.of_forall (n10_deriv_bound hF (e j)))
-    have hi'' := hi'.bdd_mul (n10_measurable_cofactor u i j).aestronglyMeasurable
+    have hi' := hi.bdd_mul (measurable_fderiv_apply_const ℝ F (e j)).aestronglyMeasurable
+      (Eventually.of_forall (norm_fderiv_apply_le_of_lipschitz hF (e j)))
+    have hi'' := hi'.bdd_mul (measurable_adjugate_hessianMatrix u i j).aestronglyMeasurable
       (Eventually.of_forall hC)
     apply hi''.congr
     filter_upwards [hinv] with x hx
@@ -1028,8 +883,8 @@ theorem integrable_inv_hessianMatrix_mul_of_bounded_compact {n : ℕ}
   classical
   have hw : Continuous (fun x => Real.exp (-F x)) :=
     Real.continuous_exp.comp hF.neg
-  -- The bounded-compact argument of `n10_integrable_bounded_compact`,
-  -- with continuous multiplication as in `n10_integrable_weighted_deriv`.
+  -- The bounded-compact argument of `integrable_of_measurable_bounded_compact`,
+  -- with continuous multiplication as in `integrable_weight_mul_fderiv_apply`.
   have hl : LocallyIntegrable f
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     (memLp_top_of_bound hf.aestronglyMeasurable C
@@ -1040,9 +895,9 @@ theorem integrable_inv_hessianMatrix_mul_of_bounded_compact {n : ℕ}
     apply (hwl.integrableOn_isCompact hfc.isCompact).integrable_of_forall_notMem_eq_zero
     intro x hx
     rw [image_eq_zero_of_notMem_tsupport hx, mul_zero]
-  obtain ⟨B, hB⟩ := n10_cofactor_bound hG i j
+  obtain ⟨B, hB⟩ := norm_adjugate_hessianMatrix_le hG i j
   have hi := hwi.bdd_mul
-    (n10_measurable_cofactor u i j).aestronglyMeasurable
+    (measurable_adjugate_hessianMatrix u i j).aestronglyMeasurable
     (Filter.Eventually.of_forall hB)
   -- The AE inverse representation and congruence argument of
   -- `sum_integral_inv_hessianMatrix_mul_fderiv_eq` above.
@@ -1062,7 +917,7 @@ theorem integrable_inv_hessianMatrix_mul_of_bounded_compact {n : ℕ}
 
 end FunctionalInequalities.Analysis
 
-end LN10AInverseHessianDivergence
+end InverseHessianDivergence
 
 
 section WeakHessianAdjugateConsumers
@@ -1076,8 +931,8 @@ theorem memLp_hessian_adjugate_top {n : ℕ}
     (hG : LipschitzWith G (gradient u)) (i j : Fin n) :
     MemLp (fun x => (hessianMatrix u x).adjugate i j) (⊤ : ENNReal)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-  obtain ⟨C, hC⟩ := n10_cofactor_bound hG i j
-  exact memLp_top_of_bound (n10_measurable_cofactor u i j).aestronglyMeasurable C
+  obtain ⟨C, hC⟩ := norm_adjugate_hessianMatrix_le hG i j
+  exact memLp_top_of_bound (measurable_adjugate_hessianMatrix u i j).aestronglyMeasurable C
     (Filter.Eventually.of_forall hC)
 
 /-- Existing cofactor proof core, for the same supplied actual tensor. -/

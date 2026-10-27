@@ -1,4 +1,7 @@
+import FunctionalInequalities.Probability.Gaussian.Moments
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.RegularApproximation
+
+open FunctionalInequalities.Probability.Gaussian
 
 /-!
 # Audit: the joint regular approximation (BKL Section 2)
@@ -17,7 +20,7 @@ open FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 namespace RegularApproximationAudit
 
 private noncomputable def μG : ProbabilityMeasure ℝ :=
-  ⟨gaussianLaw (1 / 2), gaussianLaw_probability (by norm_num)⟩
+  ⟨FunctionalInequalities.Probability.Gaussian.law (1 / 2), FunctionalInequalities.Probability.Gaussian.law_probability (by norm_num)⟩
 
 private theorem gaussian_density :
     KLS.IsBorellDensity (μG : Measure ℝ) volume (normalizedKernel (1 / 2)) := by
@@ -29,13 +32,13 @@ private theorem gaussian_density :
   · intro x y t ht0 ht1
     exact normalizedKernel_logConcave hs x y ht0 ht1
 
-private theorem gaussian_L2 : MemLp id 2 (μG : Measure ℝ) := gaussianLaw_memLp_two (by norm_num)
+private theorem gaussian_L2 : MemLp id 2 (μG : Measure ℝ) := FunctionalInequalities.Probability.Gaussian.memLp_two (by norm_num)
 
 /-- The actual positive-dimensional source has nonzero variance, fixed independently of the
 selected diagonal. This rules out a vacuous zero-law interpretation of the main client. -/
 theorem actual_gaussian_variance_one :
     ProbabilityTheory.variance (fun y : ℝ => ⟪(1 : ℝ), y⟫) (μG : Measure ℝ) = 1 := by
-  have h := gaussianLaw_variance (E := ℝ) (by norm_num : (0 : ℝ) < 1 / 2) (1 : ℝ)
+  have h := FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ) (by norm_num : (0 : ℝ) < 1 / 2) (1 : ℝ)
   norm_num [μG] at h ⊢
   exact h
 

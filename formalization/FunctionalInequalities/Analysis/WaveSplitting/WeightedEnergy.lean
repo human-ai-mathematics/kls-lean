@@ -20,16 +20,6 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 /-! ## Elementary square-root inequalities -/
 
 private theorem sq_sqrt_add {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) :
@@ -179,7 +169,7 @@ private theorem continuous_pairing [Fintype ι] {w : E → ℝ} (hw : Continuous
 private theorem differentiate_addState {n : ℕ} (v : Fin n → E) {X Z : State E ι}
     (hX : X.Smooth) (hZ : Z.Smooth) :
     differentiate v (addState X Z) = addState (differentiate v X) (differentiate v Z) := by
-  apply state_ext
+  apply State.ext
   · exact derivative_add v hX.1 hZ.1
   · exact derivative_add v hX.2.1 hZ.2.1
   · funext j
@@ -206,16 +196,6 @@ private theorem State.Smooth.continuousState_differentiate {Y : State E ι} (hY 
     {n : ℕ} (v : Fin n → E) : ContinuousState (differentiate v Y) :=
   ⟨continuous_derivative v hY.1, continuous_derivative v hY.2.1,
     fun j => continuous_derivative v (hY.2.2 j)⟩
-
-private theorem timeDerivative_step_eq [Fintype ι] [DecidableEq ι] (a : ι → E)
-    (b : ι → E → ℝ) (js : List ι) (Y : State E ι) (θ : ℝ) :
-    timeDerivative (fun s => step a b js s Y) θ =
-      addState (splitGenerator a b js (step a b js θ Y)) (residual a b js Y θ) := by
-  rw [residual_eq_subState]
-  apply state_ext
-  · funext x; simp only [addState, subState]; ring
-  · funext x; simp only [addState, subState]; ring
-  · funext j x; simp only [addState, subState]; ring
 
 /-! ## Weighted energy and pairing -/
 

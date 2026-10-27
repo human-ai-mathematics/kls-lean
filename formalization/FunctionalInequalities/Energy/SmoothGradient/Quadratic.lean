@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Energy.SmoothGradient.Basic
 import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
 import Mathlib.Analysis.Calculus.ContDiff.Operations
@@ -20,6 +21,8 @@ open InnerProductSpace MeasureTheory
 open scoped ContDiff
 
 namespace FunctionalInequalities.Energy.SmoothGradient
+
+open FunctionalInequalities.Analysis.BakryEmery (continuous_gradient_of_contDiff)
 
 universe u
 
@@ -59,18 +62,12 @@ theorem gradient_smul (c : ℝ) (f : Test mu) (x : E) :
   simpa only [toDual_gradient, map_smul] using
     fderiv_const_smul ((f.contDiff.differentiable (by simp)) x) c
 
-omit [MeasurableSpace E] in
-private theorem continuous_gradient_of_contDiff {f : E → ℝ} (hf : ContDiff ℝ ∞ f) :
-    Continuous (gradient f) := by
-  change Continuous (fun x ↦ (toDual ℝ E).symm (fderiv ℝ f x))
-  exact (toDual ℝ E).symm.continuous.comp (hf.continuous_fderiv (by simp))
-
 private theorem gradientSq_add_integrable [BorelSpace E]
     (f g : Test mu) :
     Integrable (fun x ↦ ‖gradient (f.toFun + g.toFun) x‖ ^ 2) (mu : Measure E) := by
   refine ((f.gradient_sq_integrable.add g.gradient_sq_integrable).const_mul 2).mono' ?_ ?_
   · exact
-      ((continuous_gradient_of_contDiff (f.contDiff.add g.contDiff)).norm.pow 2)
+      ((continuous_gradient_of_contDiff (f.contDiff.add g.contDiff) (by simp)).norm.pow 2)
         |>.aestronglyMeasurable
   · filter_upwards with x
     rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _), gradient_add]
@@ -87,7 +84,7 @@ private theorem gradientSq_sub_integrable [BorelSpace E]
     Integrable (fun x ↦ ‖gradient (f.toFun - g.toFun) x‖ ^ 2) (mu : Measure E) := by
   refine ((f.gradient_sq_integrable.add g.gradient_sq_integrable).const_mul 2).mono' ?_ ?_
   · exact
-      ((continuous_gradient_of_contDiff (f.contDiff.sub g.contDiff)).norm.pow 2)
+      ((continuous_gradient_of_contDiff (f.contDiff.sub g.contDiff) (by simp)).norm.pow 2)
         |>.aestronglyMeasurable
   · filter_upwards with x
     rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _), gradient_sub]

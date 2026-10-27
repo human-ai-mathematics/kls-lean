@@ -118,21 +118,10 @@ def Test.reflect (x₀ : X) (R : ℝ) (f : Test X) : Test X where
 
 section ReflectionBounds
 
-omit [MeasurableSpace X] [BorelSpace X]
-/-- The local slope of the reflected test exceeds that of the original by at most the
-indicator of the complement of the inner ball. -/
-theorem apply_reflect_le (x₀ : X) (R : ℝ) (f : Test X) (x : X) :
-    Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
-      Energy.LocalSlope.apply f x + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
-  have hsec : Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
-      Energy.LocalSlope.apply f x + Energy.LocalSlope.apply (cutoff x₀ R) x := by
-    refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
-    change |cutoff x₀ R y * (1 - clampUnit (f y)) - cutoff x₀ R x * (1 - clampUnit (f x))| ≤
-      dist (f y) (f x) + dist (cutoff x₀ R y) (cutoff x₀ R x)
-    rw [Real.dist_eq, Real.dist_eq]
-    exact (abs_mul_one_sub_sub_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y)
-      (clampUnit_nonneg _) (clampUnit_le_one _)).trans (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
-  refine hsec.trans (add_le_add le_rfl ?_)
+omit [MeasurableSpace X] [BorelSpace X] in
+/-- The radial cutoff has zero slope inside the inner ball and slope at most one outside. -/
+theorem apply_cutoff_le (x₀ : X) (R : ℝ) (x : X) :
+    Energy.LocalSlope.apply (cutoff x₀ R) x ≤ (Metric.ball x₀ R)ᶜ.indicator 1 x := by
   by_cases hx : x ∈ Metric.ball x₀ R
   · have hr : 0 < R - dist x x₀ := by rw [Metric.mem_ball] at hx; linarith
     rw [Energy.LocalSlope.apply_eq_zero_of_eqOn_ball hr fun y hy => ?_]
@@ -147,6 +136,22 @@ theorem apply_reflect_le (x₀ : X) (R : ℝ) (f : Test X) (x : X) :
         rw [Real.dist_eq, NNReal.coe_one, one_mul]; exact abs_cutoff_sub_le x₀ R a b
     simpa using Energy.LocalSlope.apply_le_of_lipschitzWith hlip x
 
+
+omit [MeasurableSpace X] [BorelSpace X]
+/-- The local slope of the reflected test exceeds that of the original by at most the
+indicator of the complement of the inner ball. -/
+theorem apply_reflect_le (x₀ : X) (R : ℝ) (f : Test X) (x : X) :
+    Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
+      Energy.LocalSlope.apply f x + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
+  have hsec : Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
+      Energy.LocalSlope.apply f x + Energy.LocalSlope.apply (cutoff x₀ R) x := by
+    refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
+    change |cutoff x₀ R y * (1 - clampUnit (f y)) - cutoff x₀ R x * (1 - clampUnit (f x))| ≤
+      dist (f y) (f x) + dist (cutoff x₀ R y) (cutoff x₀ R x)
+    rw [Real.dist_eq, Real.dist_eq]
+    exact (abs_mul_one_sub_sub_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y)
+      (clampUnit_nonneg _) (clampUnit_le_one _)).trans (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
+  exact hsec.trans (add_le_add le_rfl (apply_cutoff_le x₀ R x))
 /-- The reflected test is `L¹`-close to the complementary indicator, up to the indicator of the
 complement of the inner ball. -/
 theorem enorm_reflect_sub_le (x₀ : X) (R : ℝ) (f : Test X) (B : Set X) (x : X) :

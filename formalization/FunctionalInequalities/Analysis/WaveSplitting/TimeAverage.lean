@@ -22,16 +22,6 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 /-! ## Parametric interval integrals of jointly smooth functions -/
 
 section Parametric
@@ -239,16 +229,6 @@ def timeAverage [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E → �
     (δ : ℝ) (Y : State E ι) (N : ℕ) (x : E) : ℝ :=
   ∑ k ∈ Finset.range N,
     ∫ θ in (0 : ℝ)..δ, (1 - (k * δ + θ) / (N * δ)) * (cell a b js δ Y k θ).u x
-
-private theorem timeDerivative_step_eq [Fintype ι] [DecidableEq ι] (a : ι → E)
-    (b : ι → E → ℝ) (js : List ι) (Y : State E ι) (θ : ℝ) :
-    timeDerivative (fun s => step a b js s Y) θ =
-      addState (splitGenerator a b js (step a b js θ Y)) (residual a b js Y θ) := by
-  rw [residual_eq_subState]
-  apply state_ext
-  · funext x; simp only [addState, subState]; ring
-  · funext x; simp only [addState, subState]; ring
-  · funext j x; simp only [addState, subState]; ring
 
 section Parametric
 variable [FiniteDimensional ℝ E]

@@ -1,4 +1,5 @@
 import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Transport
 import FunctionalInequalities.Probability.LogConcave
 import Mathlib.Analysis.Convex.Measure
 import Mathlib.Topology.Maps.Proper.Basic
@@ -61,6 +62,38 @@ theorem of_affineIsometry_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
   have h := hμ (f '' K) (f '' L) (hK.image f.continuous) (hL.image f.continuous) t ht ht1
   rwa [hm K hK, hm L hL, ← hcomb, hm _ hc] at h
 
+/-- A probability law carried by a continuous linear equivalence inherits compact-set
+log-concavity from its image law. -/
+theorem of_continuousLinearEquiv_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
+    (ν : ProbabilityMeasure F) (T : F ≃L[ℝ] E)
+    (hmap : Measure.map T (ν : Measure F) = (μ : Measure E)) : LogConcave ν := by
+  intro K L hK hL t ht ht1
+  have hm (S : Set F) (hS : IsCompact S) : (μ : Measure E) (T '' S) = (ν : Measure F) S := by
+    rw [← hmap, Measure.map_apply T.continuous.measurable (hS.image T.continuous).measurableSet,
+      Set.preimage_image_eq _ T.injective]
+  have hcomb : T '' {z | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
+      {z | ∃ x ∈ T '' K, ∃ y ∈ T '' L, z = t • x + (1 - t) • y} := by
+    have hf (x y : F) : T (t • x + (1 - t) • y) = t • T x + (1 - t) • T y := by
+      rw [map_add, map_smul, map_smul]
+    ext z
+    constructor
+    · rintro ⟨_, ⟨x, hx, y, hy, rfl⟩, rfl⟩
+      exact ⟨T x, ⟨x, hx, rfl⟩, T y, ⟨y, hy, rfl⟩, hf x y⟩
+    · rintro ⟨_, ⟨x, hx, rfl⟩, _, ⟨y, hy, rfl⟩, rfl⟩
+      exact ⟨t • x + (1 - t) • y, ⟨x, hx, y, hy, rfl⟩, hf x y⟩
+  have hc : IsCompact {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} := by
+    have he : {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
+        (fun p : F × F => t • p.1 + (1 - t) • p.2) '' (K ×ˢ L) := by
+      ext z
+      simp only [Set.mem_ofPred_eq, Set.mem_image, Set.mem_prod]
+      constructor
+      · rintro ⟨x, hx, y, hy, rfl⟩; exact ⟨(x, y), ⟨hx, hy⟩, rfl⟩
+      · rintro ⟨⟨x, y⟩, ⟨hx, hy⟩, rfl⟩; exact ⟨x, hx, y, hy, rfl⟩
+    rw [he]
+    exact (hK.prod hL).image (by fun_prop)
+  have h := hμ (T '' K) (T '' L) (hK.image T.continuous) (hL.image T.continuous) t ht ht1
+  rwa [hm K hK, hm L hL, ← hcomb, hm _ hc] at h
+
 /-- Pushforward along an affine isometric embedding of a complete space preserves compact-set log-concavity
 (the converse direction of `of_affineIsometry_map`; lower-dimensional images allowed, no density assumed). -/
 theorem map_affineIsometry [CompleteSpace F]
@@ -93,6 +126,8 @@ theorem map_affineIsometry [CompleteSpace F]
   apply h.trans (measure_mono ?_)
   rintro z ⟨x, hx, y, hy, rfl⟩
   exact ⟨f x, hx, f y, hy, hf x y⟩
+
+
 
 variable [ProperSpace E]
 
@@ -175,6 +210,33 @@ theorem convex_closedBall_superlevel {μ : ProbabilityMeasure E}
 end SupportConvexity
 
 end Transport
+
+
+section LinearEquivalence
+
+variable {V₁ V₂ : Type*} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
+  [MeasurableSpace V₁] [BorelSpace V₁]
+  [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] [MeasurableSpace V₂] [BorelSpace V₂]
+
+/-- The image of a log-concave law under a continuous linear equivalence is log-concave. -/
+theorem mapContinuousLinearEquiv {ν : ProbabilityMeasure V₁} (hν : LogConcave ν) (T : V₁ ≃L[ℝ] V₂) :
+    LogConcave (Probability.mapContinuousLinearEquiv ν T) :=
+  hν.of_continuousLinearEquiv_map _ T.symm (Probability.measurePreserving_mapContinuousLinearEquiv_symm ν T).map_eq
+
+end LinearEquivalence
+
+section FullAffineSupport
+
+variable {V₁ : Type*} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
+  [MeasurableSpace V₁] [FiniteDimensional ℝ V₁]
+
+/-- A log-concave law with full affine support has support with nonempty interior. -/
+theorem interior_support_nonempty_of_affineSupport_eq_top {ν : ProbabilityMeasure V₁}
+    (hν : LogConcave ν) (h : Probability.affineSupport ν = ⊤) :
+    (interior (ν : Measure V₁).support).Nonempty :=
+  hν.convex_support.interior_nonempty_iff_affineSpan_eq_top.mpr h
+
+end FullAffineSupport
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]

@@ -3,7 +3,7 @@ import Mathlib.Analysis.Normed.Module.Multilinear.Curry
 import Mathlib.Data.Fintype.Perm
 
 /-!
-# Symmetrization of real multilinear maps
+# Rank-one bounds and symmetrization of real multilinear maps
 
 The symmetrization `S_q` of a real `q`-linear map on a real inner product space (the average over
 all permutations of its arguments, Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2) and the
@@ -20,6 +20,18 @@ open scoped RealInnerProductSpace
 namespace FunctionalInequalities.Analysis.Tensor
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+/-- The rank-one moment product is bounded by the product of the argument norms. -/
+theorem norm_prod_inner_le (d : ℕ) (h : Fin d → E) (x : E) :
+    ‖∏ j, ⟪x, h j⟫‖ ≤ ‖x‖ ^ d * ∏ j, ‖h j‖ := by
+  rw [norm_prod]
+  calc
+    ∏ j, ‖⟪x, h j⟫‖ ≤ ∏ j, ‖x‖ * ‖h j‖ := by
+      apply Finset.prod_le_prod
+      · intro j _; exact norm_nonneg _
+      · intro j _; exact norm_inner_le_norm _ _
+    _ = ‖x‖ ^ d * ∏ j, ‖h j‖ := by rw [Finset.prod_mul_distrib]; simp
+
 
 /-- The symmetrization `S_q` of a `q`-linear map with values in a real normed space: the average of
 `Φ (h ∘ σ)` over all permutations `σ` of the `q` arguments (BKL Section 2; for a tensor-valued map

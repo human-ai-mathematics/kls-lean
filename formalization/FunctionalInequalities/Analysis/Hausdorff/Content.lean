@@ -112,7 +112,7 @@ theorem coverCost_le_hausdorffMeasure {d : ℝ} {r : ℝ≥0∞} (hr : 0 < r) (A
   exact le_iSup₂ (f := fun r (_ : 0 < r) => coverCost d r A) r hr
 
 /-- Near-optimal covers at every positive scale.  The `coverCost` form of the extraction used by
-`Analysis/Hausdorff/Slicing.lean`; both read off `Measure.hausdorffMeasure_apply`. -/
+scalar and vector Hausdorff slicing; it reads off `Measure.hausdorffMeasure_apply`. -/
 theorem exists_cover_familyCost_lt {d : ℝ} {r c : ℝ≥0∞} {A : Set X} (hr : 0 < r)
     (hc : μH[d] A < c) :
     ∃ T : ℕ → Set X, A ⊆ ⋃ i, T i ∧ (∀ i, Metric.ediam (T i) ≤ r) ∧ familyCost d T < c := by

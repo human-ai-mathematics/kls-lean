@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
 import FunctionalInequalities.Analysis.Harmonic.LocalCaps
 import Mathlib.Analysis.Calculus.MeanValue
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
@@ -25,13 +26,9 @@ open Set Metric
 open scoped ContDiff Topology
 namespace FunctionalInequalities.Analysis
 
+open scoped FunctionalInequalities.Analysis.DerivativeNorms
+
 -- These are exactly the standard CLM instances at the concrete Hessian type.
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
 
 /-- Uniform Hessian point and Lipschitz bounds on `B₁` for harmonic functions on `B₂`.
 The dimension constants are chosen before the source and its value bound. -/

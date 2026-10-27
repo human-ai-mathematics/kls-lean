@@ -23,7 +23,7 @@ namespace GaussianPosteriorAudit
 private noncomputable def W (y : ℝ) : ℝ := (1 / 2 : ℝ) * ‖y‖ ^ 2
 
 private theorem W_integrable : Integrable (fun y : ℝ => Real.exp (-W y)) volume := by
-  have h := integrable_kernel (V := ℝ) (by norm_num : (0 : ℝ) < 1 / 2)
+  have h := FunctionalInequalities.Probability.Gaussian.integrable_kernel (V := ℝ) (by norm_num : (0 : ℝ) < 1 / 2)
   change Integrable (fun y : ℝ => Real.exp (-(1 / 2 : ℝ) * ‖y‖ ^ 2)) volume at h
   convert h using 1
   funext y

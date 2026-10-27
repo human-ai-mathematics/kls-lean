@@ -154,6 +154,31 @@ theorem integrable_weightedLaplacian_expTilt {V W f : E → ℝ} (hV : ContDiff 
 
 end TiltIntegrability
 
+omit [BorelSpace E] in
+/-- The shifted generator identity yields the tilt pairing once its integrability
+and zero integral have been established. -/
+theorem integral_neg_weightedLaplacian_eq_inner {μ : Measure E} {V f : E → ℝ}
+    (hV : ContDiff ℝ 1 V) (z : E) (hgrad : Integrable (gradient f) μ)
+    (hL : Integrable (fun x => weightedLaplacian V f x) μ)
+    (hzero : (∫ x, weightedLaplacian (fun y => V y - ⟪z, y⟫) f x ∂μ) = 0) :
+    (∫ x, -weightedLaplacian V f x ∂μ) = ⟪z, ∫ x, gradient f x ∂μ⟫ := by
+  have hinner : Integrable (fun x => ⟪z, gradient f x⟫) μ :=
+    (innerSL ℝ z).integrable_comp hgrad
+  have hsum : (∫ x, weightedLaplacian V f x ∂μ) +
+      (∫ x, ⟪z, gradient f x⟫ ∂μ) = 0 := by
+    rw [← integral_add hL hinner]
+    calc
+      (∫ x, weightedLaplacian V f x + ⟪z, gradient f x⟫ ∂μ) =
+          ∫ x, weightedLaplacian (fun y => V y - ⟪z, y⟫) f x ∂μ := by
+        apply integral_congr_ae
+        exact Filter.Eventually.of_forall fun x =>
+          (weightedLaplacian_sub_inner z x (hV.differentiable (by norm_num) x)).symm
+      _ = 0 := hzero
+  calc
+    (∫ x, -weightedLaplacian V f x ∂μ) = -(∫ x, weightedLaplacian V f x ∂μ) := integral_neg _
+    _ = ∫ x, ⟪z, gradient f x⟫ ∂μ := by linarith
+    _ = ⟪z, ∫ x, gradient f x ∂μ⟫ := integral_inner hgrad z
+
 /-- **BKL (48)** for compactly supported `C²` functions: with `μ = m.tilted (-V)`, `V ∈ C¹`,
 `F_{-ℒu}(z) = ⟪z, F_{∇u}(z)⟫` for every `z ∈ E`, where `ℒu = Δu - ⟪∇V, ∇u⟫`. -/
 theorem tiltAverage_neg_weightedLaplacian {V f : E → ℝ} (hV : ContDiff ℝ 1 V)
@@ -190,49 +215,7 @@ theorem tiltAverage_neg_weightedLaplacian {V f : E → ℝ} (hV : ContDiff ℝ 1
               ∫ x, weightedLaplacian W f x ∂(m.tilted (-W)) := by
                 rw [hz]
           _ = 0 := integral_weightedLaplacian_eq_zero m hW hf hfc
-      have hpoint (x : E) :
-          weightedLaplacian W f x =
-            weightedLaplacian V f x + ⟪z, gradient f x⟫ := by
-        change weightedLaplacian
-            (fun y => V y - ⟪z, y⟫) f x =
-          weightedLaplacian V f x + ⟪z, gradient f x⟫
-        exact weightedLaplacian_sub_inner z x
-          (hV.differentiable (by norm_num) x)
-      have hadd :
-          (∫ x, (weightedLaplacian V f x + ⟪z, gradient f x⟫)
-            ∂(expTilt (m.tilted (-V)) z)) = 0 := by
-        have heq :
-            (∫ x, (weightedLaplacian V f x + ⟪z, gradient f x⟫)
-              ∂(expTilt (m.tilted (-V)) z)) =
-              ∫ x, weightedLaplacian W f x
-                ∂(expTilt (m.tilted (-V)) z) := by
-          apply integral_congr_ae
-          exact Filter.Eventually.of_forall (fun x => (hpoint x).symm)
-        exact heq.trans hzero
-      have hsum :
-          (∫ x, weightedLaplacian V f x
-              ∂(expTilt (m.tilted (-V)) z)) +
-            ∫ x, ⟪z, gradient f x⟫
-              ∂(expTilt (m.tilted (-V)) z) = 0 := by
-        rw [← integral_add hL hinner]
-        exact hadd
-      have hneg :
-          -(∫ x, weightedLaplacian V f x
-              ∂(expTilt (m.tilted (-V)) z)) =
-            ∫ x, ⟪z, gradient f x⟫
-              ∂(expTilt (m.tilted (-V)) z) := by
-        linarith
-      calc
-        (∫ x, -weightedLaplacian V f x
-            ∂(expTilt (m.tilted (-V)) z)) =
-            -(∫ x, weightedLaplacian V f x
-              ∂(expTilt (m.tilted (-V)) z)) := by
-                rw [integral_neg]
-        _ = ∫ x, ⟪z, gradient f x⟫
-              ∂(expTilt (m.tilted (-V)) z) := hneg
-        _ = ⟪z, ∫ x, gradient f x
-              ∂(expTilt (m.tilted (-V)) z)⟫ :=
-          integral_inner hgrad z
+      exact integral_neg_weightedLaplacian_eq_inner hV z hgrad hL hzero
     · have hzero : m.tilted (-V) = 0 :=
         tilted_of_not_integrable h
       have hz : expTilt (m.tilted (-V)) z = 0 := by
@@ -508,6 +491,51 @@ theorem contDiff_tiltAverage (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
 
 end SmoothTiltIntegrals
 
+omit [FiniteDimensional ℝ E] [BorelSpace E] in
+/-- Lemma 3.6 from the tilt identity: if `F_g(w) = ⟪w, F_G(w)⟫` for every `w` with `F_G` smooth,
+then `T_{d+1} g = S_{d+1} T_d G`. This is the tensor part of the proof of
+`taylorTensor_neg_weightedLaplacian`, isolated from the smooth compactly supported setting. -/
+theorem taylorTensor_succ_of_eq_inner (μ : Measure E) {g : E → ℝ} {G : E → E}
+    (hG : ContDiff ℝ ∞ (tiltAverage μ G))
+    (hEq : tiltAverage μ g = fun w => ⟪w, tiltAverage μ G w⟫) (d : ℕ) :
+    taylorTensor μ g (d + 1) = symmetrizeML (appendInner (taylorTensor μ G d)) := by
+  set Φ := tiltAverage μ G with hΦ
+  ext h
+  simp only [taylorTensor, symmetrizeML, appendInner,
+    smul_apply,
+    sum_apply,
+    ContinuousMultilinearMap.domDomCongr_apply,
+    ContinuousMultilinearMap.uncurryRight_apply,
+    ContinuousLinearMap.compContinuousMultilinearMap_coe]
+  rw [hEq, ← hΦ]
+  rw [iteratedFDeriv_inner_self_apply hG d 0 h]
+  simp only [inner_zero_left, zero_add, Function.comp_apply]
+  change
+    ((d + 1).factorial : ℝ)⁻¹ •
+        ∑ k : Fin (d + 1), ⟪h k, (iteratedFDeriv ℝ d Φ 0) (k.removeNth h)⟫ =
+      ((d + 1).factorial : ℝ)⁻¹ •
+        ∑ σ : Equiv.Perm (Fin (d + 1)),
+          ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)),
+            h (σ (Fin.last d))⟫
+  have hs : (∑ σ : Equiv.Perm (Fin (d + 1)),
+        ⟪(iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫) =
+      (d.factorial : ℝ) *
+        ∑ k : Fin (d + 1), ⟪(iteratedFDeriv ℝ d Φ 0) (k.removeNth h), h k⟫ := by
+    apply sum_perm_inner_init_last
+    intro τ v
+    exact iteratedFDeriv_comp_perm_of_contDiff hG d 0 v τ
+  have hsum : (∑ σ : Equiv.Perm (Fin (d + 1)),
+        ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)),
+          h (σ (Fin.last d))⟫) =
+      ∑ k : Fin (d + 1), ⟪(iteratedFDeriv ℝ d Φ 0) (k.removeNth h), h k⟫ := by
+    simp_rw [smul_apply, real_inner_smul_left]
+    rw [← Finset.mul_sum, hs]
+    field_simp [Nat.factorial_ne_zero]
+  rw [hsum]
+  congr 1
+  exact Finset.sum_congr rfl fun k _ => real_inner_comm _ _
+
+
 /-- **BKL Lemma 3.6** for compactly supported `C²` functions, for `μ = m.tilted (-V)` with
 `V ∈ C¹` and all exponential moments: `T_{d+1}(-ℒu) = S_{d+1} T_d(∇u)` for every `d`, where the
 original index of `T_d(∇u)` is placed after its `d` Taylor indices. For `d = 0` this is (49),
@@ -555,66 +583,7 @@ theorem taylorTensor_neg_weightedLaplacian {V f : E → ℝ} (hV : ContDiff ℝ 
       funext w
       dsimp [G, μ]
       exact tiltAverage_neg_weightedLaplacian m hV hf hfc w
-    ext h
-    simp only [taylorTensor, symmetrizeML, appendInner,
-      smul_apply,
-      sum_apply,
-      ContinuousMultilinearMap.domDomCongr_apply,
-      ContinuousMultilinearMap.uncurryRight_apply,
-      ContinuousLinearMap.compContinuousMultilinearMap_coe]
-    rw [hEq]
-    rw [iteratedFDeriv_inner_self_apply hG d 0 h]
-    simp only [inner_zero_left, zero_add, Function.comp_apply]
-    change
-      ((d + 1).factorial : ℝ)⁻¹ •
-          ∑ k : Fin (d + 1),
-            ⟪h k, (iteratedFDeriv ℝ d G 0) (k.removeNth h)⟫ =
-        ((d + 1).factorial : ℝ)⁻¹ •
-          ∑ σ : Equiv.Perm (Fin (d + 1)),
-            ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d G 0)
-                (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫
-    have hs :
-        (∑ σ : Equiv.Perm (Fin (d + 1)),
-            ⟪(iteratedFDeriv ℝ d G 0) (Fin.init (h ∘ σ)),
-              h (σ (Fin.last d))⟫) =
-          (d.factorial : ℝ) *
-            ∑ k : Fin (d + 1),
-              ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫ := by
-      apply sum_perm_inner_init_last
-      intro τ v
-      exact iteratedFDeriv_comp_perm_of_contDiff hG d 0 v τ
-    have hsum :
-        (∑ σ : Equiv.Perm (Fin (d + 1)),
-            ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d G 0)
-                (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫) =
-          ∑ k : Fin (d + 1),
-            ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫ := by
-      calc
-        (∑ σ : Equiv.Perm (Fin (d + 1)),
-            ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d G 0)
-                (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫)
-            =
-          (d.factorial : ℝ)⁻¹ *
-            ∑ σ : Equiv.Perm (Fin (d + 1)),
-              ⟪(iteratedFDeriv ℝ d G 0) (Fin.init (h ∘ σ)),
-                h (σ (Fin.last d))⟫ := by
-              simp_rw [smul_apply, real_inner_smul_left]
-              rw [Finset.mul_sum]
-        _ =
-          (d.factorial : ℝ)⁻¹ *
-            ((d.factorial : ℝ) *
-              ∑ k : Fin (d + 1),
-                ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫) := by
-              rw [hs]
-        _ = ∑ k : Fin (d + 1),
-            ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫ := by
-              field_simp [Nat.factorial_ne_zero]
-    rw [hsum]
-    congr 1
-    apply Finset.sum_congr rfl
-    intro k hk
-    exact real_inner_comm _ _
-
+    exact taylorTensor_succ_of_eq_inner μ hG hEq d
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 private lemma expTilt_tilted_zero (V : E → ℝ) :
     expTilt (m.tilted (-V)) 0 = m.tilted (-V) := by

@@ -186,7 +186,7 @@ end InnerProduct
 
 end FunctionalInequalities.KLS
 
-section LT10BWhiteningMoments
+section WhiteningMoments
 
 open MeasureTheory Set Metric Filter
 open scoped Topology RealInnerProductSpace MatrixOrder Matrix.Norms.L2Operator
@@ -527,4 +527,4 @@ end FiniteDimensional
 
 end FunctionalInequalities.KLS
 
-end LT10BWhiteningMoments
+end WhiteningMoments

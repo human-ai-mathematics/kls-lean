@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 noncomputable section
 open MeasureTheory Set Filter

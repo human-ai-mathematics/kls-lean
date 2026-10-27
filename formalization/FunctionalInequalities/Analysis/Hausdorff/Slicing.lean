@@ -1,3 +1,5 @@
+import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+import FunctionalInequalities.Analysis.Hausdorff.Content
 import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Integral.Lebesgue.Add
@@ -17,7 +19,7 @@ The proof is a covering argument, not an application of Rademacher's theorem: di
 almost everywhere says nothing about individual level sets.  For each scale `k` the infimum formula
 `Measure.hausdorffMeasure_apply` supplies a countable cover `T k` of `S` with diameters at most
 `(k + 1)⁻¹` and total `(d + 1)`-dimensional cover cost at most `μH[d + 1] S + (k + 1)⁻¹`
-(`exists_cover_cost_lt`).  Each cover piece meeting `S` has its `u`-image inside an explicit closed
+(`exists_cover_familyCost_lt`).  Each cover piece meeting `S` has its `u`-image inside an explicit closed
 interval of length `2 K (diameter of the piece)`, because `u` is Lipschitz on `S`; only points of
 `S` are ever compared (`exists_levelSlab`).  Summing the pieces whose interval contains `t` gives
 the majorant at scale `k`, measurable by construction, with Lebesgue integral at most
@@ -54,46 +56,16 @@ theorem exists_measurable_majorant_of_eqOn {Y : Type*} [MeasurableSpace Y] {μ :
     {u : Y → ℝ} {S : Set Y} (h : ∀ x ∈ S, ∀ y ∈ S, u x = u y) :
     ∃ F : ℝ → ℝ≥0∞, Measurable F ∧ (∀ t, μ (S ∩ {x | u x = t}) ≤ F t) ∧
       (∫⁻ t, F t ∂(volume : Measure ℝ)) = 0 := by
-  rcases S.eq_empty_or_nonempty with hS | ⟨x₀, hx₀⟩
-  · exact ⟨0, measurable_const, fun t => by simp [hS], by simp⟩
-  refine ⟨({u x₀} : Set ℝ).indicator fun _ => ∞,
-    measurable_const.indicator (measurableSet_singleton _), fun t => ?_, ?_⟩
-  · by_cases ht : t = u x₀
-    · simp [ht]
-    · have : S ∩ {x | u x = t} = ∅ := by
-        refine Set.eq_empty_of_forall_notMem fun x hx => ht ?_
-        rw [← hx.2, h x hx.1 x₀ hx₀]
-      simp [this, ht]
-  · rw [lintegral_indicator_const (measurableSet_singleton _), Real.volume_singleton, mul_zero]
-
+  exact exists_measurable_majorant_of_eqOn_vector h
 variable {X : Type*} [EMetricSpace X] [MeasurableSpace X] [BorelSpace X]
 
-/-- Near-optimal countable covers of arbitrarily small diameter: every scale admits a cover whose
-total `d`-dimensional cover cost is below any bound strictly above `μH[d] S`.  Read off the
-infimum formula for `μH[d]`, whose scalewise infima are all at most `μH[d] S`; the `Nonempty` guard
-is Mathlib's, and it keeps the cost of an empty piece at `0` even for `d = 0`. -/
-theorem exists_cover_cost_lt {d : ℝ} {S : Set X} {r c : ℝ≥0∞} (hr : 0 < r)
-    (hc : μH[d] S < c) :
-    ∃ T : ℕ → Set X, S ⊆ ⋃ i, T i ∧ (∀ i, Metric.ediam (T i) ≤ r) ∧
-      ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d < c := by
-  have hle : (⨅ (T : ℕ → Set X) (_ : S ⊆ ⋃ i, T i) (_ : ∀ i, Metric.ediam (T i) ≤ r),
-      ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d) ≤ μH[d] S := by
-    rw [Measure.hausdorffMeasure_apply]
-    exact le_iSup₂ (f := fun r (_ : 0 < r) =>
-      ⨅ (T : ℕ → Set X) (_ : S ⊆ ⋃ i, T i) (_ : ∀ i, Metric.ediam (T i) ≤ r),
-        ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d) r hr
-  obtain ⟨T, hT⟩ := iInf_lt_iff.1 (hle.trans_lt hc)
-  obtain ⟨hcov, hT⟩ := iInf_lt_iff.1 hT
-  obtain ⟨hdiam, hcost⟩ := iInf_lt_iff.1 hT
-  exact ⟨T, hcov, hdiam, hcost⟩
-
 /-- A `μH[d]`-null set admits countable covers of arbitrarily small diameter whose total
-`d`-dimensional cover cost is arbitrarily small.  The null case of `exists_cover_cost_lt`. -/
+`d`-dimensional cover cost is arbitrarily small.  The null case of `exists_cover_familyCost_lt`. -/
 theorem exists_cover_of_hausdorffMeasure_eq_zero {d : ℝ} {N : Set X} (hN : μH[d] N = 0)
     {r c : ℝ≥0∞} (hr : 0 < r) (hc : 0 < c) :
     ∃ T : ℕ → Set X, N ⊆ ⋃ i, T i ∧ (∀ i, Metric.ediam (T i) ≤ r) ∧
       ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d < c :=
-  exists_cover_cost_lt hr (hN.trans_lt hc)
+  exists_cover_familyCost_lt hr (hN.trans_lt hc)
 
 omit [MeasurableSpace X] [BorelSpace X] in
 /-- Level slabs of a cover.  For a function Lipschitz on `N` and a cover family `T` of finite
@@ -108,44 +80,11 @@ theorem exists_levelSlab {u : X → ℝ} {K : ℝ≥0} {N : Set X} (hu : Lipschi
     ∃ J : ℕ → Set ℝ, (∀ i, MeasurableSet (J i)) ∧
       (∀ i, volume (J i) ≤ 2 * (K : ℝ≥0∞) * Metric.ediam (T i)) ∧
       (∀ i, ∀ x ∈ T i ∩ N, u x ∈ J i) := by
-  classical
-  have hcast : ∀ i, (K : ℝ≥0∞) * Metric.ediam (T i)
-      = ENNReal.ofReal ((K : ℝ) * (Metric.ediam (T i)).toReal) := fun i => by
-    rw [ENNReal.ofReal_mul K.coe_nonneg, ENNReal.ofReal_coe_nnreal,
-      ENNReal.ofReal_toReal (hT i)]
-  refine ⟨fun i => if h : (T i ∩ N).Nonempty then
-      Metric.closedBall (u h.some) ((K : ℝ) * (Metric.ediam (T i)).toReal) else ∅, ?_, ?_, ?_⟩
-  · intro i
-    dsimp only
-    split
-    · exact measurableSet_closedBall
-    · exact MeasurableSet.empty
-  · intro i
-    dsimp only
-    by_cases h : (T i ∩ N).Nonempty
-    · have hval : volume (Metric.closedBall (u h.some)
-          ((K : ℝ) * (Metric.ediam (T i)).toReal))
-          = 2 * (K : ℝ≥0∞) * Metric.ediam (T i) := by
-        rw [Real.volume_closedBall, ENNReal.ofReal_mul (by norm_num : (0 : ℝ) ≤ 2),
-          ← hcast i, ← mul_assoc]
-        norm_num
-      rw [dif_pos h, hval]
-    · rw [dif_neg h]
-      simp
-  · intro i x hx
-    have h : (T i ∩ N).Nonempty := ⟨x, hx⟩
-    have hp := h.some_mem
-    have hedist : edist (u x) (u h.some) ≤ (K : ℝ≥0∞) * Metric.ediam (T i) :=
-      (hu hx.2 hp.2).trans (by gcongr; exact Metric.edist_le_ediam_of_mem hx.1 hp.1)
-    have hfin : (K : ℝ≥0∞) * Metric.ediam (T i) ≠ ∞ := by
-      simp [ENNReal.mul_eq_top, hT i]
-    dsimp only
-    rw [dif_pos h, Metric.mem_closedBall, dist_edist]
-    calc (edist (u x) (u h.some)).toReal
-        ≤ ((K : ℝ≥0∞) * Metric.ediam (T i)).toReal := ENNReal.toReal_mono hfin hedist
-      _ = (K : ℝ) * (Metric.ediam (T i)).toReal := by
-          rw [ENNReal.toReal_mul, ENNReal.coe_toReal]
-
+  obtain ⟨J, hJm, hJvol, hJmem, _⟩ := exists_levelBall hu T hT
+  have hball : (volume : Measure ℝ) (Metric.closedBall (0 : ℝ) 1) = 2 := by
+    norm_num [Real.volume_closedBall]
+  exact ⟨J, hJm, fun i => by
+    simpa only [Module.finrank_self, pow_one, hball, mul_assoc] using hJvol i, hJmem⟩
 /-- **Eilenberg slicing bound, measurable-majorant form.**  For `u` Lipschitz on `S`, the slice
 function `t ↦ μH[d] (S ∩ {u = t})` is dominated by a measurable `F` with
 `∫⁻ F ≤ 2 K μH[d + 1] S`.
@@ -159,118 +98,10 @@ theorem exists_measurable_majorant {u : X → ℝ} {K : ℝ≥0} {S : Set X} {d 
     ∃ F : ℝ → ℝ≥0∞, Measurable F ∧
       (∀ t, μH[d] (S ∩ {x | u x = t}) ≤ F t) ∧
       (∫⁻ t, F t ∂(volume : Measure ℝ)) ≤ 2 * (K : ℝ≥0∞) * μH[d + 1] S := by
-  classical
-  -- `K = 0`: `u` is constant on `S`, and the one-point majorant has integral zero.
-  rcases eq_or_ne K 0 with hK | hK
-  · obtain ⟨F, hFmeas, hFdom, hFint⟩ :=
-      exists_measurable_majorant_of_eqOn (μ := (μH[d] : Measure X)) (u := u) (S := S)
-        fun x hx y hy => by
-          have := hu hx hy
-          simp [hK] at this
-          exact this
-    exact ⟨F, hFmeas, hFdom, by rw [hFint]; simp⟩
-  -- Infinite cover cost with `K ≠ 0`: the bound is `∞`.
-  rcases eq_or_ne (μH[d + 1] S) ∞ with htop | htop
-  · refine ⟨fun _ => ∞, measurable_const, fun _ => le_top, ?_⟩
-    rw [htop, ENNReal.mul_top (by simp [hK])]
-    exact le_top
-  -- Scales and cover costs.
-  have hεpos : ∀ k : ℕ, (0 : ℝ≥0∞) < ((k : ℝ≥0∞) + 1)⁻¹ := fun k =>
-    ENNReal.inv_pos.2 (by simp)
-  have hεtop : ∀ k : ℕ, ((k : ℝ≥0∞) + 1)⁻¹ ≠ ∞ := fun k =>
-    ENNReal.inv_ne_top.2 (by positivity)
-  have hεtendsto : Tendsto (fun k : ℕ => ((k : ℝ≥0∞) + 1)⁻¹) atTop (𝓝 0) := by
-    have h : (fun k : ℕ => ((k : ℝ≥0∞) + 1)⁻¹) = fun k : ℕ => ((k + 1 : ℕ) : ℝ≥0∞)⁻¹ := by
-      funext k; norm_cast
-    rw [h]
-    exact ENNReal.tendsto_inv_nat_nhds_zero.comp (tendsto_add_atTop_nat 1)
-  -- Covers of `S` at every scale, of nearly optimal cost, and their level slabs.
-  choose T hcov hdiam hcost using fun k : ℕ =>
-    exists_cover_cost_lt (S := S) (d := d + 1) (hεpos k)
-      (ENNReal.lt_add_right htop (hεpos k).ne')
-  have hδtop : ∀ k i, Metric.ediam (T k i) ≠ ∞ := fun k i =>
-    ne_top_of_le_ne_top (hεtop k) (hdiam k i)
-  choose J hJmeas hJvol hJmem using fun k : ℕ => exists_levelSlab hu (T k) (hδtop k)
-  -- The measurable majorants at each scale.
-  set F : ℕ → ℝ → ℝ≥0∞ := fun k t =>
-    ∑' i, (J k i).indicator (fun _ => Metric.ediam (T k i) ^ d) t with hF
-  have hFmeas : ∀ k, Measurable (F k) := by
-    intro k
-    simp only [hF, ENNReal.tsum_eq_iSup_sum]
-    exact Measurable.iSup fun s => Finset.measurable_sum s fun i _ =>
-      measurable_const.indicator (hJmeas k i)
-  -- Pointwise Hausdorff bound at every level, from the cover-limit estimate.
-  have hpointwise : ∀ t : ℝ, μH[d] (S ∩ {x | u x = t}) ≤ liminf (fun k => F k t) atTop := by
-    intro t
-    have hbound := Measure.hausdorffMeasure_le_liminf_tsum (X := X)
-      (ι := fun k : ℕ => {i : ℕ // t ∈ J k i}) d (S ∩ {x | u x = t})
-      (fun k : ℕ => ((k : ℝ≥0∞) + 1)⁻¹) hεtendsto (fun k i => T k i.1)
-      (Eventually.of_forall fun k i => hdiam k i.1)
-      (Eventually.of_forall fun k x hx => by
-        obtain ⟨i, hi⟩ := Set.mem_iUnion.1 (hcov k hx.1)
-        exact Set.mem_iUnion.2 ⟨⟨i, hx.2 ▸ hJmem k i x ⟨hi, hx.1⟩⟩, hi⟩)
-    refine hbound.trans (liminf_le_liminf (Eventually.of_forall fun k => ?_))
-    have h1 : ∑' i : {i : ℕ // t ∈ J k i}, Metric.ediam (T k i.1) ^ d
-        = ∑' i : ℕ, Set.indicator {i : ℕ | t ∈ J k i}
-            (fun i => Metric.ediam (T k i) ^ d) i :=
-      tsum_subtype {i : ℕ | t ∈ J k i} fun i => Metric.ediam (T k i) ^ d
-    refine le_of_eq (h1.trans ?_)
-    simp only [hF]
-    exact tsum_congr fun i => by
-      by_cases h : t ∈ J k i <;> simp [h]
-  -- The majorants have nearly optimal integrals.
-  have hintegral : ∀ k : ℕ, ∫⁻ t, F k t ∂(volume : Measure ℝ)
-      ≤ 2 * (K : ℝ≥0∞) * (μH[d + 1] S + ((k : ℝ≥0∞) + 1)⁻¹) := by
-    intro k
-    simp only [hF]
-    rw [lintegral_tsum fun i => (measurable_const.indicator (hJmeas k i)).aemeasurable]
-    have hterm : ∀ i, ∫⁻ t, (J k i).indicator (fun _ => Metric.ediam (T k i) ^ d) t
-          ∂(volume : Measure ℝ)
-        ≤ 2 * (K : ℝ≥0∞) * ⨆ _ : (T k i).Nonempty, Metric.ediam (T k i) ^ (d + 1) := by
-      intro i
-      rw [lintegral_indicator_const (hJmeas k i)]
-      by_cases hne : (T k i).Nonempty
-      · have hpow : Metric.ediam (T k i) ^ d * (2 * (K : ℝ≥0∞) * Metric.ediam (T k i))
-            = 2 * (K : ℝ≥0∞) * Metric.ediam (T k i) ^ (d + 1) := by
-          rcases eq_or_ne (Metric.ediam (T k i)) 0 with h0 | h0
-          · rcases eq_or_lt_of_le hd with hd0 | hd0
-            · simp [h0, ← hd0]
-            · rw [h0, ENNReal.zero_rpow_of_pos hd0, ENNReal.zero_rpow_of_pos (by linarith)]
-              simp
-          · rw [ENNReal.rpow_add _ _ h0 (hδtop k i), ENNReal.rpow_one]; ring
-        calc Metric.ediam (T k i) ^ d * volume (J k i)
-            ≤ Metric.ediam (T k i) ^ d * (2 * (K : ℝ≥0∞) * Metric.ediam (T k i)) := by
-              gcongr; exact hJvol k i
-          _ = 2 * (K : ℝ≥0∞) * Metric.ediam (T k i) ^ (d + 1) := hpow
-          _ ≤ _ := by
-              gcongr
-              exact le_iSup (fun _ : (T k i).Nonempty => Metric.ediam (T k i) ^ (d + 1)) hne
-      · have hvol : volume (J k i) = 0 := by
-          refine nonpos_iff_eq_zero.1 ?_
-          have hle := hJvol k i
-          rw [Set.not_nonempty_iff_eq_empty.1 hne, Metric.ediam_empty, mul_zero] at hle
-          exact hle
-        simp [hvol]
-    calc ∑' i, ∫⁻ t, (J k i).indicator (fun _ => Metric.ediam (T k i) ^ d) t
-            ∂(volume : Measure ℝ)
-        ≤ ∑' i, 2 * (K : ℝ≥0∞) * ⨆ _ : (T k i).Nonempty, Metric.ediam (T k i) ^ (d + 1) :=
-          ENNReal.tsum_le_tsum hterm
-      _ = 2 * (K : ℝ≥0∞) * ∑' i, ⨆ _ : (T k i).Nonempty, Metric.ediam (T k i) ^ (d + 1) :=
-          ENNReal.tsum_mul_left
-      _ ≤ 2 * (K : ℝ≥0∞) * (μH[d + 1] S + ((k : ℝ≥0∞) + 1)⁻¹) := by
-          gcongr; exact (hcost k).le
-  -- Fatou's lemma on the measurable majorants.
-  refine ⟨fun t => liminf (fun k => F k t) atTop, Measurable.liminf hFmeas, hpointwise, ?_⟩
-  refine (lintegral_liminf_le' fun k => (hFmeas k).aemeasurable).trans ?_
-  have htend : Tendsto (fun k : ℕ => 2 * (K : ℝ≥0∞) * (μH[d + 1] S + ((k : ℝ≥0∞) + 1)⁻¹))
-      atTop (𝓝 (2 * (K : ℝ≥0∞) * μH[d + 1] S)) := by
-    refine ENNReal.Tendsto.const_mul ?_ (Or.inr (by simp [ENNReal.mul_eq_top]))
-    simpa using tendsto_const_nhds.add hεtendsto
-  calc liminf (fun k => ∫⁻ t, F k t ∂(volume : Measure ℝ)) atTop
-      ≤ liminf (fun k : ℕ => 2 * (K : ℝ≥0∞) * (μH[d + 1] S + ((k : ℝ≥0∞) + 1)⁻¹)) atTop :=
-        liminf_le_liminf (Eventually.of_forall hintegral)
-    _ = 2 * (K : ℝ≥0∞) * μH[d + 1] S := htend.liminf_eq
-
+  have hball : (volume : Measure ℝ) (Metric.closedBall (0 : ℝ) 1) = 2 := by
+    norm_num [Real.volume_closedBall]
+  simpa only [Module.finrank_self, Nat.cast_one, pow_one, hball] using
+    exists_measurable_majorant_vector hd hu
 /-- **Null slicing.**  If `N` carries no `(d + 1)`-dimensional Hausdorff measure and `u` is
 Lipschitz on `N`, then `μH[d] (N ∩ {u = t}) = 0` for almost every level `t`.
 

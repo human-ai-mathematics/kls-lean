@@ -1,3 +1,6 @@
+import FunctionalInequalities.Analysis.RingInverseDerivative
+import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.Analysis.Calculus.FDeriv.Bilinear
 import Mathlib.Analysis.Calculus.FDeriv.Analytic
 import Mathlib.Topology.Algebra.Group.Matrix
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
@@ -201,3 +204,164 @@ end LogDetContDiff
 end FunctionalInequalities.Analysis
 
 end LogDetSmoothness
+
+/-! ## Local inverse-field and second log-determinant variations
+
+The first and mixed second differential identities for a locally constant
+determinant are the coordinate-invariant form of Savin, The obstacle problem
+for Monge Ampere equation, DOI10.1007/s00526-004-0275-8, Proposition4.1 proof
+(10)-(11), p13. They support the reference-regularity step in Letwin
+arXiv2607.24164v1 Lemma2.2 via BB1207.6128v1 Theorem2.24(ii), without asserting
+a Pogorelov bound or producing classical regularity for an unknown solution.
+-/
+noncomputable section
+namespace FunctionalInequalities.Analysis
+open Filter
+open scoped Matrix.Norms.Elementwise Topology
+
+private def endEquiv (ι : Type*) [Fintype ι] [DecidableEq ι] :
+    Matrix ι ι ℝ ≃ₐ[ℝ] ((ι → ℝ) →L[ℝ] (ι → ℝ)) :=
+  AlgEquiv.ofLinearEquiv
+    ((Matrix.toLinAlgEquiv' : Matrix ι ι ℝ ≃ₐ[ℝ] _).toLinearEquiv.trans
+      LinearMap.toContinuousLinearMap)
+    (by ext v i; simp)
+    (by intro A B; ext v i; simp [Matrix.toLinAlgEquiv'_apply, Matrix.mulVec_mulVec])
+
+private lemma end_inverse {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (A : Matrix ι ι ℝ) (hA : IsUnit A.det) :
+    Ring.inverse (endEquiv ι A)=endEquiv ι A⁻¹ := by
+  apply left_inv_eq_right_inv
+  · exact Ring.inverse_mul_cancel _ (((Matrix.isUnit_iff_isUnit_det A).mpr hA).map
+      (endEquiv ι).toRingHom)
+  · rw [←map_mul,Matrix.mul_nonsing_inv A hA,map_one]
+
+private lemma inverse_comp_derivative
+    {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {M : G → Matrix ι ι ℝ} {x : G}
+    (hM : DifferentiableAt ℝ M x) (hdet : (M x).det ≠ 0) :
+    ∃ L : G →L[ℝ] Matrix ι ι ℝ, HasFDerivAt (fun y => (M y)⁻¹) L x ∧
+      ∀ v, L v = -((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹) := by
+  let e := endEquiv ι
+  let ec := e.toLinearEquiv.toContinuousLinearEquiv
+  have hu : IsUnit (e (M x)) :=
+    ((Matrix.isUnit_iff_isUnit_det (M x)).mpr (isUnit_iff_ne_zero.mpr hdet)).map e.toRingHom
+  have hE := ec.hasFDerivAt.comp x hM.hasFDerivAt
+  have hI := hasFDerivAt_ringInverse_comp hE hu
+  have hD := ec.symm.hasFDerivAt.comp x hI
+  have hev : (fun y => ec.symm (Ring.inverse (ec (M y)))) =ᶠ[𝓝 x]
+      (fun y => (M y)⁻¹) := by
+    have hopen : IsOpen {A : Matrix ι ι ℝ | IsUnit A.det} :=
+      Units.isOpen.preimage (by fun_prop)
+    filter_upwards [hM.continuousAt.preimage_mem_nhds
+      (hopen.mem_nhds (isUnit_iff_ne_zero.mpr hdet))] with y hy
+    apply e.injective
+    change e (e.symm (Ring.inverse (e (M y))))=e (M y)⁻¹
+    rw [e.apply_symm_apply,end_inverse (M y) hy]
+  have hd := hD.congr_of_eventuallyEq hev.symm
+  refine ⟨_,hd,?_⟩
+  intro v
+  change e.symm (-(Ring.inverse (e (M x)) * e (fderiv ℝ M x v) * Ring.inverse (e (M x))))=_
+  rw [end_inverse (M x) (isUnit_iff_ne_zero.mpr hdet)]
+  apply e.injective
+  simp only [map_neg,map_mul,AlgEquiv.apply_symm_apply]
+  rfl
+
+/-- Actual inverse-field derivative under the original elementwise matrix API.
+The existing generic RingInverseDerivative is reused through the genuine
+finite-dimensional matrix/endomorphism equivalence, without a norm change
+in the statement, nonempty index, adjugate expansion or second inverse proof. -/
+theorem fderiv_inverse_comp_apply
+    {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {M : G → Matrix ι ι ℝ} {x : G}
+    (hM : DifferentiableAt ℝ M x) (hdet : (M x).det ≠ 0) (v : G) :
+    fderiv ℝ (fun y => (M y)⁻¹) x v =
+      -((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹) := by
+  obtain ⟨L,hd,he⟩ := inverse_comp_derivative hM hdet
+  have hv := congrArg (fun D : G →L[ℝ] Matrix ι ι ℝ => D v) hd.fderiv
+  exact hv.trans (he v)
+
+private lemma fderiv_trace_mul_apply
+    {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {A B : G → Matrix ι ι ℝ} {x : G}
+    (hA : DifferentiableAt ℝ A x) (hB : DifferentiableAt ℝ B x) (v : G) :
+    fderiv ℝ (fun y => (A y * B y).trace) x v =
+      (fderiv ℝ A x v * B x + A x * fderiv ℝ B x v).trace := by
+  let T : Matrix ι ι ℝ →ₗ[ℝ] Matrix ι ι ℝ →ₗ[ℝ] ℝ :=
+    { toFun := fun a =>
+        { toFun := fun b => (a*b).trace
+          map_add' := by intros; simp [Matrix.mul_add,Matrix.trace_add]
+          map_smul' := by intros; simp [Matrix.trace_smul] }
+      map_add' := by intros; ext; simp [Matrix.add_mul,Matrix.trace_add]
+      map_smul' := by intros; ext; simp [Matrix.trace_smul] }
+  let Tc := (LinearMap.toContinuousLinearMap.toLinearMap.comp T).toContinuousLinearMap
+  have hd := Tc.hasFDerivAt_of_bilinear hA.hasFDerivAt hB.hasFDerivAt
+  have hv := congrArg (fun L : G →L[ℝ] ℝ => L v) hd.fderiv
+  change fderiv ℝ (fun y => (A y*B y).trace) x v =
+    (A x*fderiv ℝ B x v).trace + (fderiv ℝ A x v*B x).trace at hv
+  rw [Matrix.trace_add]
+  linarith
+
+/-- Actual mixed second variation of logdet along a C2 matrix field. Local
+nonzero determinant suffices; no positive-definite, finite-dimensional source
+space, complete source, nonempty index or linearized-equation premise. -/
+theorem fderiv_logDet_comp_second_apply
+    {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {M : G → Matrix ι ι ℝ} {x : G}
+    (hM : ContDiffAt ℝ 2 M x) (hdet : (M x).det ≠ 0) (v w : G) :
+    fderiv ℝ (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) x v =
+      ((M x)⁻¹ * fderiv ℝ (fun y => fderiv ℝ M y w) x v).trace -
+      ((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹ * fderiv ℝ M x w).trace := by
+  have hM0 : DifferentiableAt ℝ M x := hM.differentiableAt (by norm_num)
+  have hDM : DifferentiableAt ℝ (fun y => fderiv ℝ M y w) x :=
+    ((hM.fderiv_right (m := 1) (by norm_num)).differentiableAt (by norm_num)).clm_apply
+      (differentiableAt_const w)
+  obtain ⟨L,hInv,hInvApply⟩ := inverse_comp_derivative hM0 hdet
+  have hnear : (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) =ᶠ[𝓝 x]
+      (fun y => ((M y)⁻¹ * fderiv ℝ M y w).trace) := by
+    have hn := hM.eventually (by norm_num)
+    have hnz : ∀ᶠ y in 𝓝 x, (M y).det ≠ 0 :=
+      (((differentiableAt_det (M x)).continuousAt.comp hM0.continuousAt).eventually_ne hdet)
+    filter_upwards [hn,hnz] with y hy hyz
+    exact fderiv_logDet_comp_apply (hy.differentiableAt (by norm_num)) hyz w
+  rw [hnear.fderiv_eq,fderiv_trace_mul_apply hInv.differentiableAt hDM v,
+    hInv.fderiv,hInvApply v,Matrix.neg_mul,Matrix.trace_add,Matrix.trace_neg]
+  ring
+
+/-- Savin Proposition4.1 proof (10)-(11): actual local constant determinant
+generates BOTH differential identities. No linearized equation is assumed. -/
+theorem trace_identities_of_eventually_det_const
+    {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {M : G → Matrix ι ι ℝ} {x : G} {c : ℝ}
+    (hM : ContDiffAt ℝ 2 M x) (hc : c ≠ 0)
+    (heq : ∀ᶠ y in 𝓝 x, (M y).det=c) :
+    (∀ v : G, ((M x)⁻¹ * fderiv ℝ M x v).trace=0) ∧
+    ∀ v w : G, ((M x)⁻¹ * fderiv ℝ (fun y => fderiv ℝ M y w) x v).trace =
+      ((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹ * fderiv ℝ M x w).trace := by
+  have hd : (M x).det ≠ 0 := by rw [mem_of_mem_nhds heq]; exact hc
+  have hg : (fun y => Real.log (M y).det) =ᶠ[𝓝 x] (fun _ => Real.log c) := by
+    filter_upwards [heq] with y hy
+    rw [hy]
+  constructor
+  · intro v
+    rw [←fderiv_logDet_comp_apply (hM.differentiableAt (by norm_num)) hd v,hg.fderiv_eq]
+    simp
+  · intro v w
+    have hz : (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) =ᶠ[𝓝 x]
+        (fun _ => (0 : ℝ)) := by
+      filter_upwards [hg.eventually_nhds] with y hy
+      have hyy : (fun z => Real.log (M z).det) =ᶠ[𝓝 y] (fun _ => Real.log c) := hy
+      rw [hyy.fderiv_eq]
+      simp
+    have hs := fderiv_logDet_comp_second_apply hM hd v w
+    rw [hz.fderiv_eq] at hs
+    have hz0 : fderiv ℝ (fun _ : G => (0 : ℝ)) x v=0 := by simp
+    rw [hz0] at hs
+    exact sub_eq_zero.mp hs.symm
+
+
+end FunctionalInequalities.Analysis

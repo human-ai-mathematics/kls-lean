@@ -25,14 +25,6 @@ section Isodiametric
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V]
 
-omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V]
-  [BorelSpace V] in
-/-- A positive real power commutes with suprema in `ℝ≥0∞` (copy of the private helper of
-`FunctionalInequalities.Probability.Line.BrunnMinkowski`, which is not exported). -/
-private theorem rpow_iSup {ι : Sort*} (u : ι → ENNReal) {t : ℝ} (ht : 0 < t) :
-    (⨆ i, u i) ^ t = ⨆ i, u i ^ t :=
-  (ENNReal.orderIsoRpow t ht).map_iSup u
-
 /-- The `ℝ≥0∞`-valued Prékopa–Leindler property at exponent `t`. -/
 private def IsPL (X : Type*) [AddCommGroup X] [Module ℝ X] [MeasurableSpace X]
     (μ : Measure X) (t : ℝ) : Prop :=
@@ -98,7 +90,9 @@ private theorem isPL_real {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
     rw [← lintegral_iSup (fun N => hu.min measurable_const)
       (fun a b hab x => min_le_min le_rfl (by exact_mod_cast hab))]
     exact lintegral_congr fun x => iSup_min_natCast (u x)
-  rw [← hsup f hf, ← hsup g hg, rpow_iSup _ ht0, rpow_iSup _ ht1', ENNReal.iSup_mul]
+  rw [← hsup f hf, ← hsup g hg]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul]
   refine iSup_le fun N => ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun M => ?_
@@ -296,7 +290,9 @@ theorem volume_rpow_mul_le_volume_combination {S T : Set V} (hS : MeasurableSet 
     ⟨⟨{s₀}, by simpa using hs₀, isCompact_singleton, ⟨s₀, rfl⟩⟩⟩
   have hnT : Nonempty {L : Set V // L ⊆ T ∧ IsCompact L ∧ L.Nonempty} :=
     ⟨⟨{t₀}, by simpa using ht₀, isCompact_singleton, ⟨t₀, rfl⟩⟩⟩
-  rw [hsup S hS ⟨s₀, hs₀⟩, hsup T hT ⟨t₀, ht₀⟩, rpow_iSup _ ht0, rpow_iSup _ ht1',
+  rw [hsup S hS ⟨s₀, hs₀⟩, hsup T hT ⟨t₀, ht₀⟩]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _,
     ENNReal.iSup_mul]
   refine iSup_le fun K ↦ ?_
   rw [ENNReal.mul_iSup]

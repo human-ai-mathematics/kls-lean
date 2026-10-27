@@ -274,3 +274,26 @@ theorem exists_smooth_concentric_cutoff_norm_fderiv_le
 end FunctionalInequalities.Analysis
 
 end ConcentricCutoff
+
+namespace FunctionalInequalities.Analysis
+open Set Filter Topology
+open scoped ContDiff
+/-- A compact set admits a compact C1 cutoff equal to one near each of its points. -/
+theorem exists_compact_contDiff_eq_one_near {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    {K : Set E} (hK : IsCompact K) :
+    ∃ χ : E → ℝ, ContDiff ℝ 1 χ ∧ HasCompactSupport χ ∧
+      ∀ x ∈ K, χ =ᶠ[𝓝 x] (fun _ => 1) := by
+  obtain ⟨r, hr⟩ := hK.isBounded.subset_closedBall (0 : E)
+  let φ : ContDiffBump (0 : E) :=
+    ⟨max r 0 + 1, max r 0 + 2, by positivity, by linarith⟩
+  refine ⟨φ, φ.contDiff, φ.hasCompactSupport, ?_⟩
+  intro x hx
+  apply φ.eventuallyEq_one_of_mem_ball
+  have h := hr hx
+  change dist x 0 ≤ r at h
+  change dist x 0 < max r 0 + 1
+  linarith [le_max_left r 0]
+
+
+end FunctionalInequalities.Analysis

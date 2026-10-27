@@ -1,6 +1,7 @@
 import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.LogConcave.Translation
+import FunctionalInequalities.KLS.LogConcave.Transport
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 import FunctionalInequalities.KLS.Statement
@@ -48,91 +49,12 @@ namespace FunctionalInequalities
 
 open Energy Energy.Euclidean Probability
 
-section Transport
-
-variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-  [MeasurableSpace E] [BorelSpace E]
-  [NormedAddCommGroup F] [NormedSpace ℝ F] [MeasurableSpace F] [BorelSpace F]
-
-namespace KLS.LogConcave
-
-/-- A probability law carried by a continuous linear equivalence inherits compact-set
-log-concavity from its image law. -/
-theorem of_continuousLinearEquiv_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
-    (ν : ProbabilityMeasure F) (T : F ≃L[ℝ] E)
-    (hmap : Measure.map T (ν : Measure F) = (μ : Measure E)) : LogConcave ν := by
-  intro K L hK hL t ht ht1
-  have hm (S : Set F) (hS : IsCompact S) : (μ : Measure E) (T '' S) = (ν : Measure F) S := by
-    rw [← hmap, Measure.map_apply T.continuous.measurable (hS.image T.continuous).measurableSet,
-      Set.preimage_image_eq _ T.injective]
-  have hcomb : T '' {z | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
-      {z | ∃ x ∈ T '' K, ∃ y ∈ T '' L, z = t • x + (1 - t) • y} := by
-    have hf (x y : F) : T (t • x + (1 - t) • y) = t • T x + (1 - t) • T y := by
-      rw [map_add, map_smul, map_smul]
-    ext z
-    constructor
-    · rintro ⟨_, ⟨x, hx, y, hy, rfl⟩, rfl⟩
-      exact ⟨T x, ⟨x, hx, rfl⟩, T y, ⟨y, hy, rfl⟩, hf x y⟩
-    · rintro ⟨_, ⟨x, hx, rfl⟩, _, ⟨y, hy, rfl⟩, rfl⟩
-      exact ⟨t • x + (1 - t) • y, ⟨x, hx, y, hy, rfl⟩, hf x y⟩
-  have hc : IsCompact {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} := by
-    have he : {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
-        (fun p : F × F => t • p.1 + (1 - t) • p.2) '' (K ×ˢ L) := by
-      ext z
-      simp only [Set.mem_ofPred_eq, Set.mem_image, Set.mem_prod]
-      constructor
-      · rintro ⟨x, hx, y, hy, rfl⟩; exact ⟨(x, y), ⟨hx, hy⟩, rfl⟩
-      · rintro ⟨⟨x, y⟩, ⟨hx, hy⟩, rfl⟩; exact ⟨x, hx, y, hy, rfl⟩
-    rw [he]
-    exact (hK.prod hL).image (by fun_prop)
-  have h := hμ (T '' K) (T '' L) (hK.image T.continuous) (hL.image T.continuous) t ht ht1
-  rwa [hm K hK, hm L hL, ← hcomb, hm _ hc] at h
-
-end KLS.LogConcave
-
-end Transport
-
 section Euclidean
 
 variable {V₁ V₂ : Type*} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁] [CompleteSpace V₁]
   [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁]
   [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] [CompleteSpace V₂]
   [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
-
-
-namespace KLS.LogConcave
-
-omit [CompleteSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [CompleteSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂] in
-/-- The image of a log-concave law under a continuous linear equivalence is log-concave. -/
-theorem mapContinuousLinearEquiv {ν : ProbabilityMeasure V₁} (hν : LogConcave ν) (T : V₁ ≃L[ℝ] V₂) :
-    LogConcave (Probability.mapContinuousLinearEquiv ν T) :=
-  hν.of_continuousLinearEquiv_map _ T.symm (Probability.measurePreserving_mapContinuousLinearEquiv_symm ν T).map_eq
-
-end KLS.LogConcave
-
-namespace Probability
-
-omit [CompleteSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] in
-omit [InnerProductSpace ℝ V₁] in
-/-- Translation keeps a finite second moment. -/
-theorem memLp_id_two_translateLaw
-    (ν : ProbabilityMeasure V₁) (c : V₁) (h : MemLp id 2 (ν : Measure V₁)) :
-    MemLp id 2 (translateLaw ν c : Measure V₁) := by
-  rw [coe_translateLaw]
-  exact (measurableEmbedding_addLeft c).memLp_map_measure_iff.mpr ((memLp_const c).add h)
-
-end Probability
-
-namespace KLS.LogConcave
-
-omit [CompleteSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] in
-/-- A log-concave law with full affine support has support with nonempty interior. -/
-theorem interior_support_nonempty_of_affineSupport_eq_top {ν : ProbabilityMeasure V₁}
-    (hν : LogConcave ν) (h : affineSupport ν = ⊤) :
-    (interior (ν : Measure V₁).support).Nonempty :=
-  hν.convex_support.interior_nonempty_iff_affineSpan_eq_top.mpr h
-
-end KLS.LogConcave
 
 namespace KLS.LogConcave
 
@@ -188,7 +110,6 @@ end KLS
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
-
 
 namespace KLS.LogConcave
 

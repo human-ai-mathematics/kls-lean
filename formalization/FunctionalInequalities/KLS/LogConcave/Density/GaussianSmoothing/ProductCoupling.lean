@@ -9,16 +9,16 @@ import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.L2.Pairing
 import FunctionalInequalities.Probability.Stein.Kernel
 import FunctionalInequalities.Probability.Stein.SourceDualBound
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Probability.Stein.HessianKernel
 
 /-!
 # The Gaussian product coupling of a latent source
 
-For a `C¹` globally Lipschitz `u` with Lipschitz gradient and `∫ e^{-u} = 1`, the latent law `ρ = e^{-u} dx`, the Gaussian `gaussianLaw s`
+For a `C¹` globally Lipschitz `u` with Lipschitz gradient and `∫ e^{-u} = 1`, the latent law `ρ = e^{-u} dx`, the Gaussian `Probability.Gaussian.law s`
 and a continuous linear `S`:
-- integrability of the source and noise pairings on `ρ ⊗ gaussianLaw s` for bounded Lipschitz `C¹` tests;
+- integrability of the source and noise pairings on `ρ ⊗ Probability.Gaussian.law s` for bounded Lipschitz `C¹` tests;
 - the product source Stein identity (source Stein on the first factor, the translated Gaussian identity on the second, Fubini);
 - the compact dual Cauchy–Schwarz bound for the smoothed linear image, with the latent field `S (∇²u) S† v + (2s)⁻¹ v`.
 
@@ -33,6 +33,8 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
+open FunctionalInequalities.Probability.Gaussian
+
 set_option maxHeartbeats 800000 in
 theorem gaussian_product_source_stein_pairings_integrable {n : ℕ}
     {u h : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lh : NNReal}
@@ -44,7 +46,7 @@ theorem gaussian_product_source_stein_pairings_integrable {n : ℕ}
     (S : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
     (v : EuclideanSpace ℝ (Fin n)) {s : ℝ} (hs : 0 < s) :
     let P := ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).prod
-      (gaussianLaw (V := EuclideanSpace ℝ (Fin n)) s)
+      (Probability.Gaussian.law (V := EuclideanSpace ℝ (Fin n)) s)
     let Z := fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) => S (gradient u p.1) + p.2
     let F := fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) =>
       S (action (hessianMatrix u p.1) (S.adjoint v))
@@ -55,14 +57,14 @@ theorem gaussian_product_source_stein_pairings_integrable {n : ℕ}
     Integrable (fun p => fderiv ℝ h (Z p) v) P := by
   let E := EuclideanSpace ℝ (Fin n)
   let rho : Measure E := volume.tilted (-u)
-  let nu : Measure E := gaussianLaw s
+  let nu : Measure E := Probability.Gaussian.law s
   let P := rho.prod nu
   let Z : E × E → E := fun p => S (gradient u p.1) + p.2
   let F : E × E → E := fun p => S (action (hessianMatrix u p.1) (S.adjoint v))
   have hexp : Integrable (fun y : E => Real.exp (-u y)) volume :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
   let : IsProbabilityMeasure rho := isProbabilityMeasure_tilted hexp
-  let : IsProbabilityMeasure nu := gaussianLaw_probability hs
+  let : IsProbabilityMeasure nu := Probability.Gaussian.law_probability hs
   have hgnorm (f : E → ℝ) {K : NNReal} (hf : LipschitzWith K f) (x : E) :
       ‖gradient f x‖ ≤ (K : ℝ) := by
     calc
@@ -74,7 +76,7 @@ theorem gaussian_product_source_stein_pairings_integrable {n : ℕ}
   have hSU : MemLp (fun p : E × E => S (gradient u p.1)) 2 P :=
     (hu2.continuousLinearMap_comp S).comp_fst nu
   have hnoise : MemLp (fun p : E × E => p.2) 2 P :=
-    (gaussianLaw_memLp_two hs).comp_snd rho
+    (Probability.Gaussian.memLp_two hs).comp_snd rho
   have hZ2 : MemLp Z 2 P := hSU.add hnoise
   have hZmeas : Measurable Z :=
     (S.continuous.measurable.comp ((continuous_gradient hu).measurable.comp measurable_fst)).add measurable_snd
@@ -132,7 +134,7 @@ theorem gaussian_product_source_stein_identity {n : ℕ}
     (S : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
     (v : EuclideanSpace ℝ (Fin n)) {s : ℝ} (hs : 0 < s) :
     let P := ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).prod
-      (FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw (V := EuclideanSpace ℝ (Fin n)) s)
+      (Probability.Gaussian.law (V := EuclideanSpace ℝ (Fin n)) s)
     Integrable (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) =>
       ⟪S (gradient u p.1) + p.2, v⟫ * h (S (gradient u p.1) + p.2)) P ∧
     Integrable (fun p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n) =>
@@ -147,7 +149,7 @@ theorem gaussian_product_source_stein_identity {n : ℕ}
             (2 * s)⁻¹ * fderiv ℝ h (S (gradient u p.1) + p.2) v ∂P := by
   let E := EuclideanSpace ℝ (Fin n)
   let rho : Measure E := volume.tilted (-u)
-  let nu : Measure E := gaussianLaw s
+  let nu : Measure E := Probability.Gaussian.law s
   let P := rho.prod nu
   let SL : E × E → ℝ := fun p => ⟪S (gradient u p.1),v⟫ * h (S (gradient u p.1)+p.2)
   let NL : E × E → ℝ := fun p => ⟪p.2,v⟫ * h (S (gradient u p.1)+p.2)
@@ -157,7 +159,7 @@ theorem gaussian_product_source_stein_identity {n : ℕ}
   have hexp : Integrable (fun y : E => Real.exp (-u y)) volume :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
   let : IsProbabilityMeasure rho := isProbabilityMeasure_tilted hexp
-  let : IsProbabilityMeasure nu := gaussianLaw_probability hs
+  let : IsProbabilityMeasure nu := Probability.Gaussian.law_probability hs
   obtain ⟨_hZ,_hF,_hGH,hSL,hNL,hSR,hNR⟩ :=
     gaussian_product_source_stein_pairings_integrable hu hL hG hnorm hh hhLip C hbound S v hs
   have hsrc : (∫ p, SL p ∂P) = ∫ p, SR p ∂P := by
@@ -172,7 +174,7 @@ theorem gaussian_product_source_stein_identity {n : ℕ}
       _ = ∫ y, (2*s)⁻¹ * ∫ z, NR (y,z) ∂nu ∂rho := by
         apply integral_congr_ae
         filter_upwards [] with y
-        exact (gaussianLaw_translated_directional_identity_of_bounded_lipschitz_test
+        exact (Probability.Gaussian.translated_directional_identity_of_bounded_lipschitz_test
           hh hhLip C hbound (S (gradient u y)) v hs).2.2
       _ = (2*s)⁻¹ * ∫ y, ∫ z, NR (y,z) ∂nu ∂rho := integral_const_mul _ _
       _ = _ := by rw [← integral_prod NR hNR]
@@ -219,21 +221,21 @@ theorem gaussian_product_compact_dual_bound {n : ℕ}
     (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = smoothedLaw ((μ : Measure _).map S) s)
     (h : EuclideanSpace ℝ (Fin n) → ℝ) (hh : ContDiff ℝ ∞ h) (hhc : HasCompactSupport h) :
     let P := ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).prod
-      (gaussianLaw (V := EuclideanSpace ℝ (Fin n)) s)
+      (Probability.Gaussian.law (V := EuclideanSpace ℝ (Fin n)) s)
     (∫ x, ⟪x,v⟫ * h x ∂(ν : Measure _)) ^ 2 ≤
       (∫ p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n),
         ‖S (action (hessianMatrix u p.1) (S.adjoint v)) + (2*s)⁻¹ • v‖ ^ 2 ∂P) *
       ∫ x, ‖fderiv ℝ h x‖ ^ 2 ∂(ν : Measure _) := by
   let E := EuclideanSpace ℝ (Fin n)
   let ρ : Measure E := volume.tilted (-u)
-  let γ : Measure E := gaussianLaw s
+  let γ : Measure E := Probability.Gaussian.law s
   let P := ρ.prod γ
   let Z : E × E → E := fun p => S (gradient u p.1) + p.2
   let F : E × E → E := fun p => S (action (hessianMatrix u p.1) (S.adjoint v)) + (2*s)⁻¹ • v
   have hexp : Integrable (fun y : E => Real.exp (-u y)) volume :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
   let : IsProbabilityMeasure ρ := isProbabilityMeasure_tilted hexp
-  let : IsProbabilityMeasure γ := gaussianLaw_probability hs
+  let : IsProbabilityMeasure γ := Probability.Gaussian.law_probability hs
   have hh1 : ContDiff ℝ 1 h := hh.of_le (WithTop.coe_le_coe.mpr le_top)
   obtain ⟨Lh,hhLip⟩ := Energy.WeightedGradient.lipschitzWith_of_contDiff_hasCompactSupport hh hhc
   obtain ⟨C,hC⟩ := hh.continuous.bounded_above_of_compact_support hhc

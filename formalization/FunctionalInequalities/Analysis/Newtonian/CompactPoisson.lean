@@ -26,7 +26,7 @@ set, as in the definition on pp. 51–53):
 (`newtonianPotential_schauder`), is chosen before `c, R, u, f`. `compactPoisson_GT4_5` states the theorem
 in the source class. Norms are the actual operator norms of `fderiv ℝ u` and `fderiv ℝ (fderiv ℝ u)`.
 The general (not compactly supported) case and the harmonic half of Theorem 4.6 are not treated here.
-The support lemma `fderiv_eq_zero_of_notMem_tsupport` is the general one of `Analysis/Divergence.lean`.
+The support lemma `fderiv_of_notMem_tsupport` comes from Mathlib calculus.
 -/
 
 noncomputable section
@@ -118,7 +118,7 @@ theorem compactPoisson_first_estimate (hn : 2 ≤ n) {c : EuclideanSpace ℝ (Fi
     intro x
     by_cases hx : x ∈ closedBall c R
     · rw [hueq]; exact norm_fderiv_newtonianPotential_ball_le hn hR hfc.aemeasurable hM hx
-    · rw [fderiv_eq_zero_of_notMem_tsupport fun h => hx (ball_subset_closedBall (hs h)), norm_zero]; positivity
+    · rw [fderiv_of_notMem_tsupport ℝ fun h => hx (ball_subset_closedBall (hs h)), norm_zero]; positivity
   have hdiff : Differentiable ℝ u := hu.differentiable (by norm_num)
   have hux : ∀ x, |u x| ≤ 2 * R * (n * (2 * R) * M) := by
     intro x

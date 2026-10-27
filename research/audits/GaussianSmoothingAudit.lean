@@ -1,5 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 
+open FunctionalInequalities.Probability.Gaussian
+
 /-! Independent full-signature clients for the proved Gaussian convolution properties.
 The clients do not assert smoothness or convergence. -/
 
@@ -32,8 +34,8 @@ theorem pointwise_logConcave {ν : Measure V} [IsProbabilityMeasure ν] {ρ : V 
 
 theorem normalized_kernel_mass {s : ℝ} (hs : 0 < s) :
     ∫ x : V,
-      FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel s x = 1 :=
-  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_normalizedKernel hs
+      FunctionalInequalities.Probability.Gaussian.normalizedKernel s x = 1 :=
+  FunctionalInequalities.Probability.Gaussian.integral_normalizedKernel hs
 
 theorem normalized_law {ν : Measure V} [IsProbabilityMeasure ν] {ρ : V → ℝ}
     (hρ : FunctionalInequalities.KLS.IsBorellDensity ν volume ρ)

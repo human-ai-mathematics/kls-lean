@@ -24,8 +24,8 @@ noncomputable section
 namespace FunctionalInequalities.Analysis
 
 variable {E F : Type*}
-variable [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable [NormedAddCommGroup F] [NormedSpace ℝ F]
+  [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
 
 /-- The second Fréchet derivative of `f ∘ T` under a continuous linear equivalence `T`. -/
 theorem hessian_comp_equiv (T : E ≃L[ℝ] F) (f : F → ℝ)

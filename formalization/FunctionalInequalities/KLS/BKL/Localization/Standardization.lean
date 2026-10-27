@@ -18,18 +18,20 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS
 
-/-- **Standardized posterior cumulant bound** (BKL arXiv:2610.05474v1, (77)): for a compactly supported
-isotropic log-concave prior and a posterior with symmetric positive semidefinite `Q`, a cumulant bound
-`CumulantBoundCompact d b` (`d ≥ 1`) applied to the standardized posterior
-`ν = (A^{-1/2}(· − a))_* μ_{c,Q}` gives, with `σ = A^{-1/2}`,
-`Σ_J κ_{d+1}(μ_{c,Q})(v, σ e_{J_1}, …, σ e_{J_d})² ≤ b ⟪A v, v⟫`, i.e. `‖κ_{d+1}(t)(v)‖²_t ≤ b ⟨A_t v, v⟩`. -/
-theorem compactPosterior_cumulant_bound {n : ℕ}
+/-- The standardized-posterior transfer only needs the cumulant bound in its own dimension. -/
+theorem compactPosterior_cumulant_bound_of_fixed_dimension {n : ℕ}
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
     (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
     (c : EuclideanSpace ℝ (Fin n)) (Q : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
     (hSym : IsSelfAdjoint Q) (hQ : ∀ x, 0 ≤ ⟪Q x, x⟫)
-    {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : LogConcave.Suspension.CumulantBoundCompact d b)
+    {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : ∀ ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
+      KLS.LogConcave ν → KLS.Isotropic ν →
+      IsCompact (ν : Measure (EuclideanSpace ℝ (Fin n))).support →
+      ∀ u : EuclideanSpace ℝ (Fin n),
+        ∑ J : Fin d → Fin n,
+          cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
+            (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) ^ 2 ≤ b * ‖u‖ ^ 2)
     (v : EuclideanSpace ℝ (Fin n)) :
     ∑ J : Fin d → Fin n,
         cumulant (compactPosterior μ hc c Q : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
@@ -171,7 +173,7 @@ theorem compactPosterior_cumulant_bound {n : ℕ}
       _ = ⟪A (σ u), σ u⟫ := by rw [hself]
       _ = ⟪A v, v⟫ := by rw [← hv]
   have hbound :=
-    h n ν hνiso hνLC hνcompact (W.symm v)
+    h ν hνLC hνiso hνcompact (W.symm v)
   calc
     ∑ J : Fin d → Fin n,
         cumulant (π : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
@@ -187,4 +189,26 @@ theorem compactPosterior_cumulant_bound {n : ℕ}
           (compactPosterior μ hc c Q : Measure (EuclideanSpace ℝ (Fin n))) v, v⟫ := by
       rfl
 
+
+/-- **Standardized posterior cumulant bound** (BKL arXiv:2610.05474v1, (77)): for a compactly supported
+isotropic log-concave prior and a posterior with symmetric positive semidefinite `Q`, a cumulant bound
+`CumulantBoundCompact d b` (`d ≥ 1`) applied to the standardized posterior
+`ν = (A^{-1/2}(· − a))_* μ_{c,Q}` gives, with `σ = A^{-1/2}`,
+`Σ_J κ_{d+1}(μ_{c,Q})(v, σ e_{J_1}, …, σ e_{J_d})² ≤ b ⟪A v, v⟫`, i.e. `‖κ_{d+1}(t)(v)‖²_t ≤ b ⟨A_t v, v⟩`. -/
+theorem compactPosterior_cumulant_bound {n : ℕ}
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
+    (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
+    (c : EuclideanSpace ℝ (Fin n)) (Q : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (hSym : IsSelfAdjoint Q) (hQ : ∀ x, 0 ≤ ⟪Q x, x⟫)
+    {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : LogConcave.Suspension.CumulantBoundCompact d b)
+    (v : EuclideanSpace ℝ (Fin n)) :
+    ∑ J : Fin d → Fin n,
+        cumulant (compactPosterior μ hc c Q : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
+          (Fin.cons v fun k => inverseSqrt (Covariance.operator
+            (compactPosterior μ hc c Q : Measure (EuclideanSpace ℝ (Fin n))))
+              (EuclideanSpace.basisFun (Fin n) ℝ (J k))) ^ 2 ≤
+      b * ⟪Covariance.operator (compactPosterior μ hc c Q : Measure (EuclideanSpace ℝ (Fin n))) v, v⟫ := by
+  exact compactPosterior_cumulant_bound_of_fixed_dimension μ hc hiso hLC c Q hSym hQ hd
+    (fun ν hνLC hνiso hνcompact u => h n ν hνiso hνLC hνcompact u) v
 end FunctionalInequalities.KLS

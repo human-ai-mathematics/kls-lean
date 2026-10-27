@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.RieszPotential.Representation
 import FunctionalInequalities.Analysis.RieszPotential.Critical
 import FunctionalInequalities.Analysis.WeakDerivative.Approximation
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.Products
 import FunctionalInequalities.L2.Components
 import Mathlib.Analysis.InnerProductSpace.Dual
 import Mathlib.MeasureTheory.Function.ConvergenceInMeasure

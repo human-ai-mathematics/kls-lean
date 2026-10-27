@@ -1,18 +1,20 @@
-import FunctionalInequalities.Analysis.Convex.Alexandrov
+import FunctionalInequalities.Analysis.Convex.CompactTilt
+import FunctionalInequalities.Analysis.Convex.Extension
+import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
 import FunctionalInequalities.Analysis.Convex.Normalization
-import FunctionalInequalities.Analysis.Convex.Subgradient
+import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
 import Mathlib.Analysis.LocallyConvex.Separation
 import Mathlib.Analysis.Convex.Extrema
 import Mathlib.Analysis.Convex.Continuous
 import FunctionalInequalities.Analysis.Convex.Coercivity
 
-/-!
-# Caffarelli's strict convexity argument: geometric steps
+/-! # Contact in convex Monge--Ampere analysis
 
-Steps of Caffarelli's exposed-point argument for Alexandrov solutions with two-sided Monge–Ampère bounds
-(weak Letwin route), built on `Analysis/Convex/Alexandrov.lean` and `Analysis/Convex/Normalization.lean`.
-
-* `infDist_frontier_image_le_of_width`.
+Caffarelli contact geometry supporting Letwin arXiv:2607.24164v1
+Lemma 2.2 through BB arXiv:1207.6128v1 Theorem 2.24(ii).
+The declarations retain their given-source hypotheses; domain contact
+rigidity and moment-source regularity have separate consumers.
 -/
 
 noncomputable section
@@ -138,7 +140,7 @@ theorem infDist_frontier_image_le_of_width {E : Type*} [NormedAddCommGroup E]
 
 end FunctionalInequalities.Analysis
 
-section LT11E3SectionsShrink
+section SectionsShrink
 
 open Set Metric Filter
 open scoped RealInnerProductSpace Topology
@@ -347,9 +349,9 @@ end InnerProduct
 
 end FunctionalInequalities.Analysis
 
-end LT11E3SectionsShrink
+end SectionsShrink
 
-section LT11E7LocalizedContactLemma
+section LocalizedContactLemma
 
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
@@ -411,20 +413,6 @@ private lemma contact_volume_sub_affine
   rw [contact_subgradientImage_sub_affine, Set.image_add_right,
     measure_preimage_add_right]
 
-private lemma contact_affine_volume (e : E ≃ᵃ[ℝ] E) (G : Set E) :
-    (volume : Measure E) (e '' G) =
-      ENNReal.ofReal |LinearMap.det (e.linear : E →ₗ[ℝ] E)| * volume G := by
-  have he (x : E) : e x = e.linear x + e 0 := by
-    simpa only [vadd_eq_add, add_zero] using e.map_vadd (0 : E) x
-  have himage :
-      e '' G = (fun x => x + e 0) '' ((e.linear : E →ₗ[ℝ] E) '' G) := by
-    rw [Set.image_image]
-    congr 1
-    funext x
-    exact he x
-  rw [himage, Set.image_add_right, measure_preimage_add_right,
-    Measure.addHaar_image_linearMap]
-
 end MeasurableSpace
 
 private lemma contact_det_pos
@@ -472,7 +460,7 @@ private lemma contact_transport_real_bounds
   have hvol :
       ((volume : Measure E) (e '' G)).toReal =
         D * (volume G).toReal := by
-    have h := congrArg ENNReal.toReal (contact_affine_volume e G)
+    have h := congrArg ENNReal.toReal (volume_image_affineEquiv e G)
     simpa only [ENNReal.toReal_mul,
       ENNReal.toReal_ofReal (abs_nonneg _)] using h
   have hgrad :
@@ -1068,9 +1056,9 @@ end InnerProduct
 
 end FunctionalInequalities.Analysis
 
-end LT11E7LocalizedContactLemma
+end LocalizedContactLemma
 
-section LT11F1StrictConvexityElementary
+section StrictConvexityElementary
 
 open Set
 open scoped RealInnerProductSpace
@@ -1100,17 +1088,15 @@ private theorem strict_supporting_inequality {u : E → ℝ} (hstrict : StrictCo
   simp only [inner_sub_right, inner_add_right, real_inner_smul_right] at hs heq
   linarith
 
-section FiniteDimensional
-
-variable [FiniteDimensional ℝ E]
-
-/-- **Singleton contact sets give strict convexity** (weak Letwin route): if every
-supporting affine function of the convex `u` touches its graph at exactly one point, `u` is strictly
-convex. -/
-theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    (hcontact : ∀ x p : E, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) →
-      ∀ y, u y = u x + ⟪p, y - x⟫ → y = x) :
-    StrictConvexOn ℝ univ u := by
+/-- The common weighted-gap proof from actual supports and contact uniqueness.
+Both public callers generate their support family from their source data. -/
+private theorem strictConvexOn_of_supports_contact
+    {u : E → ℝ} {Ω : Set E} (hconv : ConvexOn ℝ Ω u)
+    (hsupports : ∀ x ∈ Ω, ∃ p : E, ∀ y ∈ Ω, u x + ⟪p,y-x⟫ ≤ u y)
+    (hcontact : ∀ x ∈ Ω, ∀ p : E,
+      (∀ y ∈ Ω, u x + ⟪p,y-x⟫ ≤ u y) →
+      ∀ y ∈ Ω, u y = u x + ⟪p,y-x⟫ → y = x) :
+    StrictConvexOn ℝ Ω u := by
   refine ⟨hconv.1, ?_⟩
   intro x hx y hy hxy a b ha hb hab
   have hle := hconv.2 hx hy ha.le hb.le hab
@@ -1119,7 +1105,8 @@ theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ 
   let z := a • x + b • y
   have heq : u z = a * u x + b * u y :=
     le_antisymm hle (le_of_not_gt hn)
-  obtain ⟨p, hp, _⟩ := exists_subgradient_slope_le_inner_add hconv z (0 : E)
+  have hz : z ∈ Ω := hconv.1 hx hy ha.le hb.le hab
+  obtain ⟨p, hp⟩ := hsupports z hz
   have hzinner : ⟪p, z⟫ = a * ⟪p, x⟫ + b * ⟪p, y⟫ := by
     simp only [z, inner_add_right, real_inner_smul_right]
   have hlinear : a * ⟪p, x - z⟫ + b * ⟪p, y - z⟫ = 0 := by
@@ -1132,10 +1119,10 @@ theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ 
   let B := u y - u z - ⟪p, y - z⟫
   have hA : 0 ≤ A := by
     dsimp [A]
-    linarith [hp x]
+    linarith [hp x hx]
   have hB : 0 ≤ B := by
     dsimp [B]
-    linarith [hp y]
+    linarith [hp y hy]
   have hsum : a * A + b * B = 0 := by
     dsimp [A, B]
     calc
@@ -1152,9 +1139,43 @@ theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ 
   have hBz : B = 0 := by
     have h : b * B = 0 := by linarith
     exact (mul_eq_zero.mp h).resolve_left (ne_of_gt hb)
-  have hxz : x = z := hcontact z p hp x (by dsimp [A] at hAz; linarith)
-  have hyz : y = z := hcontact z p hp y (by dsimp [B] at hBz; linarith)
+  have hxz : x = z := hcontact z hz p hp x hx (by dsimp [A] at hAz; linarith)
+  have hyz : y = z := hcontact z hz p hp y hy (by dsimp [B] at hBz; linarith)
   exact hxy (hxz.trans hyz.symm)
+
+
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+/-- **Singleton contact sets give strict convexity** (weak Letwin route): if every
+supporting affine function of the convex `u` touches its graph at exactly one point, `u` is strictly
+convex. -/
+theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
+    (hcontact : ∀ x p : E, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) →
+      ∀ y, u y = u x + ⟪p, y - x⟫ → y = x) :
+    StrictConvexOn ℝ univ u := by
+  apply strictConvexOn_of_supports_contact hconv
+  · intro x _hx
+    obtain ⟨p,hp,_hR⟩ := exists_subgradient_slope_le_inner_add hconv x (0 : E)
+    exact ⟨p,fun y _hy => hp y⟩
+  · intro x _hx p hp y _hy hxy
+    exact hcontact x p (fun z => hp z (mem_univ _)) y hxy
+
+
+/-- Actual local C0 supports generated on each singleton; no global source
+extension, differentiability or supplied support family. -/
+theorem strictConvexOn_of_domain_contact_eq
+    {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hconv : ConvexOn ℝ Ω u)
+    (hC : ContinuousOn u Ω)
+    (hcontact : ∀ x ∈ Ω, ∀ p : E,
+      (∀ y ∈ Ω, u x + ⟪p,y-x⟫ ≤ u y) →
+      ∀ y ∈ Ω, u y = u x + ⟪p,y-x⟫ → y = x) : StrictConvexOn ℝ Ω u := by
+  apply strictConvexOn_of_supports_contact hconv ?_ hcontact
+  intro x hx
+  obtain ⟨R,_hR,hs,_hcap⟩ := exists_uniform_subgradient_bound_on_compact
+    hΩ hconv hC (isCompact_singleton (x := x)) (singleton_subset_iff.mpr hx)
+  exact hs x (mem_singleton x)
 
 /-- **Slopes of a strictly convex function lie in the interior of a convex slope range** (weak Letwin
 route): if all subgradients of the strictly convex `u` lie in a convex `K` with nonempty
@@ -1199,8 +1220,7 @@ theorem subgradient_mem_interior_of_strictConvexOn {u : E → ℝ}
   rw [hqv] at hback
   linarith
 
-/-- **A strictly exposed contact point below a level** (weak Letwin route; KLS500
-`exists_strict_exposed_contact_in_sublevel`): if `{u ≤ R}` is compact and `u x < R`, the contact set of a
+/-- **A strictly exposed contact point below a level** (weak Letwin route): if `{u ≤ R}` is compact and `u x < R`, the contact set of a
 supporting affine function at `x` has a point `z` with `u z < R` that is strictly exposed in the direction
 `θ` among the contact points with `u ≤ R`. -/
 theorem exists_exposed_contact_of_lt {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x p : E}
@@ -1265,1055 +1285,5 @@ end InnerProduct
 
 end FunctionalInequalities.Analysis
 
-end LT11F1StrictConvexityElementary
+end StrictConvexityElementary
 
-section LT11F2TruncatedConjugate
-
-open Set Metric
-open scoped RealInnerProductSpace
-
-/-! The truncated conjugate used to localize the contact-set argument. -/
-
-namespace FunctionalInequalities.Analysis
-
-/-- The **ball-truncated conjugate** `p ↦ sup_{‖x‖ ≤ M} (⟪p, x⟫ − u x)` (weak Letwin route;
-KLS500 `truncatedLegendrePotential`): a globally finite convex function that agrees with the Legendre
-transform of `u` wherever the supremum is attained inside the ball. -/
-def truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (u : E → ℝ)
-    (M : ℝ) (p : E) : ℝ :=
-  sSup ((fun x => ⟪p, x⟫ - u x) '' closedBall (0 : E) M)
-
-section FiniteDimensional
-
-variable {E : Type*}
-  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-
-/-- The supremum is attained and dominates every value on the ball. -/
-theorem exists_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) (p : E) :
-    (∃ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x) ∧
-      ∀ x ∈ closedBall (0 : E) M, ⟪p, x⟫ - u x ≤ truncatedConjugate u M p := by
-  have hc :
-      IsCompact ((fun x => ⟪p, x⟫ - u x) '' closedBall (0 : E) M) :=
-    (isCompact_closedBall (0 : E) M).image
-      ((continuous_const.inner continuous_id).sub hu)
-  have hn :
-      ((fun x => ⟪p, x⟫ - u x) '' closedBall (0 : E) M).Nonempty :=
-    ⟨⟪p, 0⟫ - u 0, ⟨0, mem_closedBall_self hM, rfl⟩⟩
-  constructor
-  · obtain ⟨x, hx, heq⟩ := hc.sSup_mem hn
-    exact ⟨x, hx, heq.symm⟩
-  · intro x hx
-    exact le_csSup hc.bddAbove ⟨x, hx, rfl⟩
-
-/-- The truncated conjugate is convex. -/
-theorem convexOn_truncatedConjugate {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) :
-    ConvexOn ℝ univ (truncatedConjugate u M) := by
-  refine ⟨convex_univ, ?_⟩
-  intro p hp q hq a b ha hb hab
-  obtain ⟨x, hx, heq⟩ :=
-    (exists_truncatedConjugate_eq hu hM (a • p + b • q)).1
-  have hpx := (exists_truncatedConjugate_eq hu hM p).2 x hx
-  have hqx := (exists_truncatedConjugate_eq hu hM q).2 x hx
-  change truncatedConjugate u M (a • p + b • q) ≤
-    a * truncatedConjugate u M p + b * truncatedConjugate u M q
-  rw [heq]
-  calc
-    ⟪a • p + b • q, x⟫ - u x =
-        a * (⟪p, x⟫ - u x) + b * (⟪q, x⟫ - u x) := by
-      rw [inner_add_left, real_inner_smul_left, real_inner_smul_left]
-      nlinarith [congrArg (fun t : ℝ => t * u x) hab]
-    _ ≤ a * truncatedConjugate u M p + b * truncatedConjugate u M q :=
-      add_le_add (mul_le_mul_of_nonneg_left hpx ha)
-        (mul_le_mul_of_nonneg_left hqx hb)
-
-/-- **Zeros of the centred truncated conjugate are the subgradients**: for convex `u` and
-`‖xc‖ < M`, `f p := truncatedConjugate u M p − ⟪p, xc⟫ + u xc` is nonnegative, vanishes exactly at the
-subgradients of `u` at `xc`, and has compact sublevel sets. -/
-theorem truncatedConjugate_centered_spec {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {M : ℝ} {xc : E}
-    (hxc : ‖xc‖ < M) :
-    (∀ p, 0 ≤ truncatedConjugate u M p - ⟪p, xc⟫ + u xc) ∧
-    (∀ p, truncatedConjugate u M p - ⟪p, xc⟫ + u xc = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y) ∧
-    ∀ R : ℝ, IsCompact {p | truncatedConjugate u M p - ⟪p, xc⟫ + u xc ≤ R} := by
-  have hu : Continuous u :=
-    continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hconv)
-  have hM : 0 ≤ M := (norm_nonneg xc).trans hxc.le
-  have hxc_mem : xc ∈ closedBall (0 : E) M :=
-    mem_closedBall_zero_iff.mpr hxc.le
-  have hnonneg (p : E) :
-      0 ≤ truncatedConjugate u M p - ⟪p, xc⟫ + u xc := by
-    have h := (exists_truncatedConjugate_eq hu hM p).2 xc hxc_mem
-    linarith
-  refine ⟨hnonneg, ?_, ?_⟩
-  · intro p
-    constructor
-    · intro hp
-      have htilt : ConvexOn ℝ univ (fun x => u x - ⟪p, x⟫) := by
-        refine ⟨convex_univ, ?_⟩
-        intro x hx y hy a b ha hb hab
-        have hc := hconv.2 hx hy ha hb hab
-        change u (a • x + b • y) - ⟪p, a • x + b • y⟫ ≤
-          a * (u x - ⟪p, x⟫) + b * (u y - ⟪p, y⟫)
-        rw [inner_add_right, real_inner_smul_right, real_inner_smul_right]
-        change u (a • x + b • y) ≤ a * u x + b * u y at hc
-        linarith
-      have hmin :
-          IsMinOn (fun x => u x - ⟪p, x⟫) (closedBall (0 : E) M) xc := by
-        intro x hx
-        have h := (exists_truncatedConjugate_eq hu hM p).2 x hx
-        change u xc - ⟪p, xc⟫ ≤ u x - ⟪p, x⟫
-        linarith
-      have hnbhd : closedBall (0 : E) M ∈ nhds xc :=
-        Filter.mem_of_superset
-          (isOpen_ball.mem_nhds (mem_ball_zero_iff.mpr hxc))
-          ball_subset_closedBall
-      have hglobal :=
-        IsMinOn.of_isLocalMin_of_convex_univ (hmin.isLocalMin hnbhd) htilt
-      intro y
-      have hy := hglobal y
-      rw [inner_sub_right]
-      linarith
-    · intro hp
-      obtain ⟨x, hx, heq⟩ := (exists_truncatedConjugate_eq hu hM p).1
-      have hs := hp x
-      rw [inner_sub_right] at hs
-      have hn := hnonneg p
-      rw [heq] at hn ⊢
-      linarith
-  · intro R
-    have htc : Continuous (truncatedConjugate u M) :=
-      continuousOn_univ.mp
-        (ConvexOn.continuousOn isOpen_univ (convexOn_truncatedConjugate hu hM))
-    have hf : Continuous (fun p => truncatedConjugate u M p - ⟪p, xc⟫ + u xc) :=
-      (htc.sub (continuous_id.inner continuous_const)).add continuous_const
-    obtain ⟨C, hC⟩ :=
-      (isCompact_closedBall (0 : E) M).exists_bound_of_continuousOn hu.continuousOn
-    have hd : 0 < M - ‖xc‖ := sub_pos.mpr hxc
-    apply Metric.isCompact_of_isClosed_isBounded (isClosed_le hf continuous_const)
-    apply (Metric.isBounded_iff_subset_closedBall (0 : E)).2
-    refine ⟨max 0 ((R + C - u xc) / (M - ‖xc‖)), ?_⟩
-    intro p hp
-    change truncatedConjugate u M p - ⟪p, xc⟫ + u xc ≤ R at hp
-    apply mem_closedBall_zero_iff.mpr
-    by_cases hp0 : p = 0
-    · subst p
-      rw [norm_zero]
-      exact le_max_left _ _
-    · have hn : ‖p‖ ≠ 0 := norm_ne_zero_iff.mpr hp0
-      let x : E := xc + ((M - ‖xc‖) / ‖p‖) • p
-      have hnorm : ‖((M - ‖xc‖) / ‖p‖) • p‖ = M - ‖xc‖ := by
-        rw [norm_smul, Real.norm_eq_abs,
-          abs_of_nonneg (div_nonneg hd.le (norm_nonneg p)), div_mul_cancel₀ _ hn]
-      have hx : x ∈ closedBall (0 : E) M := by
-        apply mem_closedBall_zero_iff.mpr
-        calc
-          ‖x‖ ≤ ‖xc‖ + ‖((M - ‖xc‖) / ‖p‖) • p‖ := norm_add_le _ _
-          _ = M := by rw [hnorm]; ring
-      have hinner : ⟪p, x⟫ = ⟪p, xc⟫ + (M - ‖xc‖) * ‖p‖ := by
-        dsimp only [x]
-        rw [inner_add_right, real_inner_smul_right, real_inner_self_eq_norm_sq]
-        congr 1
-        field_simp
-      have hux : u x ≤ C := by
-        have hc := hC x hx
-        rw [Real.norm_eq_abs] at hc
-        exact (le_abs_self (u x)).trans hc
-      have hdom := (exists_truncatedConjugate_eq hu hM p).2 x hx
-      rw [hinner] at hdom
-      calc
-        ‖p‖ ≤ (R + C - u xc) / (M - ‖xc‖) := by
-          apply (le_div_iff₀ hd).2
-          nlinarith
-        _ ≤ max 0 ((R + C - u xc) / (M - ‖xc‖)) := le_max_right _ _
-
-end FiniteDimensional
-
-end FunctionalInequalities.Analysis
-
-end LT11F2TruncatedConjugate
-
-section LT11F3TruncatedConjugateSubgradients
-
-open Set Metric
-open scoped RealInnerProductSpace Topology
-
-/-! Subgradients and subgradient images of the truncated conjugate. -/
-
-namespace FunctionalInequalities.Analysis
-
-section InnerProduct
-
-variable {E : Type*}
-  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-
-private lemma n7_isClosed_bad_maximizers [FiniteDimensional ℝ E] {u : E → ℝ}
-    (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) {C : Set E} (hC : IsClosed C) :
-    IsClosed {p : E | ∃ x ∈ closedBall (0 : E) M,
-      x ∈ C ∧ truncatedConjugate u M p = ⟪p, x⟫ - u x} := by
-  let B := closedBall (0 : E) M
-  let : CompactSpace B := isCompact_iff_compactSpace.mp (isCompact_closedBall 0 M)
-  have hT : Continuous (truncatedConjugate u M) :=
-    continuousOn_univ.mp ((convexOn_truncatedConjugate hu hM).continuousOn isOpen_univ)
-  let D : Set (B × E) :=
-    {q | (q.1 : E) ∈ C ∧ truncatedConjugate u M q.2 = ⟪q.2, (q.1 : E)⟫ - u q.1}
-  have hD : IsClosed D :=
-    (hC.preimage (continuous_subtype_val.comp continuous_fst)).inter
-      (isClosed_eq (hT.comp continuous_snd)
-        ((continuous_snd.inner (continuous_subtype_val.comp continuous_fst)).sub
-          (hu.comp (continuous_subtype_val.comp continuous_fst))))
-  have he : Prod.snd '' D =
-      {p : E | ∃ x ∈ closedBall (0 : E) M,
-        x ∈ C ∧ truncatedConjugate u M p = ⟪p, x⟫ - u x} := by
-    ext p
-    constructor
-    · rintro ⟨⟨x, q⟩, hx, rfl⟩
-      exact ⟨x, x.property, hx⟩
-    · rintro ⟨x, hx, hc, he⟩
-      exact ⟨(⟨x, hx⟩, p), ⟨hc, he⟩, rfl⟩
-  rw [← he]
-  exact isClosedMap_snd_of_compactSpace D hD
-
-private lemma n7_support_min {u : E → ℝ} {x p : E}
-    (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) :
-    IsMinOn (fun y => u y - ⟪p, y⟫) univ x := by
-  intro y _
-  have h := hp y
-  rw [inner_sub_right] at h
-  dsimp
-  linarith
-
-private lemma n7_support_unique {u : E → ℝ}
-    (hstrict : StrictConvexOn ℝ univ u) {x z p : E}
-    (hx : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
-    (hz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y) : x = z := by
-  exact (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
-    (n7_support_min hx) (n7_support_min hz) (mem_univ x) (mem_univ z)
-
-private lemma n7_conjugate_eq_of_support {u : E → ℝ} {M : ℝ} {x p : E}
-    (hx : x ∈ closedBall (0 : E) M)
-    (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) :
-    truncatedConjugate u M p = ⟪p, x⟫ - u x := by
-  have hb : ∀ y, ⟪p, y⟫ - u y ≤ ⟪p, x⟫ - u x := by
-    intro y
-    have h := hp y
-    rw [inner_sub_right] at h
-    linarith
-  apply le_antisymm
-  · exact csSup_le ⟨_, ⟨x, hx, rfl⟩⟩ (by
-      rintro _ ⟨y, _, rfl⟩
-      exact hb y)
-  · exact le_csSup ⟨_, by
-      rintro _ ⟨y, _, rfl⟩
-      exact hb y⟩ ⟨x, hx, rfl⟩
-
-section FiniteDimensional
-
-variable [FiniteDimensional ℝ E]
-
-private lemma n7_support_of_interior_max {u : E → ℝ}
-    (hu : Continuous u) (hconv : ConvexOn ℝ univ u) {M : ℝ} (hM : 0 ≤ M)
-    {x p : E} (hx : ‖x‖ < M)
-    (heq : truncatedConjugate u M p = ⟪p, x⟫ - u x) :
-    ∀ y, u x + ⟪p, y - x⟫ ≤ u y := by
-  let f : E → ℝ := fun z => u z - ⟪p, z⟫
-  have hf : ConvexOn ℝ univ f :=
-    hconv.sub ((innerₗ E p).concaveOn convex_univ)
-  have hmin : ∀ z ∈ ball (0 : E) M, f x ≤ f z := by
-    intro z hz
-    have h := (exists_truncatedConjugate_eq hu hM p).2 z
-      (closedBall_subset_closedBall (le_refl M)
-        (ball_subset_closedBall hz))
-    rw [heq] at h
-    dsimp [f]
-    linarith
-  intro y
-  have hpre : (AffineMap.lineMap x y) ⁻¹' ball (0 : E) M ∈ 𝓝 (0 : ℝ) :=
-    (AffineMap.lineMap_continuous (p := x) (q := y)).continuousAt.preimage_mem_nhds
-      (isOpen_ball.mem_nhds (by
-        rw [AffineMap.lineMap_apply_zero]
-        exact mem_ball_zero_iff.mpr hx))
-  obtain ⟨ε, hε, hεsub⟩ := Metric.mem_nhds_iff.mp hpre
-  let t : ℝ := min (ε / 2) (1 / 2)
-  have ht : 0 < t := lt_min (by linarith) (by norm_num)
-  have htε : t < ε := (min_le_left _ _).trans_lt (by linarith)
-  have ht1 : t < 1 := (min_le_right _ _).trans_lt (by norm_num)
-  have hz : AffineMap.lineMap x y t ∈ ball (0 : E) M := by
-    apply hεsub
-    rw [Metric.mem_ball, Real.dist_eq]
-    simpa only [sub_zero, abs_of_pos ht] using htε
-  have hxz := hmin _ hz
-  have hzy := hf.le_right_of_left_le (mem_univ x) (mem_univ y)
-    (lineMap_mem_openSegment ℝ x y ⟨ht, ht1⟩) hxz
-  have hxy : f x ≤ f y := hxz.trans hzy
-  dsimp [f] at hxy
-  rw [inner_sub_right]
-  linarith
-
-/-- The set of slopes whose ball maximisers all lie in the open ball is open (weak Letwin route). -/
-theorem isOpen_setOf_truncatedConjugate_maximizer_lt {u : E → ℝ} (hu : Continuous u) {M : ℝ}
-    (hM : 0 ≤ M) :
-    IsOpen {p : E | ∀ x ∈ closedBall (0 : E) M,
-      truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M} := by
-  classical
-  have hc : IsClosed {x : E | M ≤ ‖x‖} :=
-    isClosed_le continuous_const continuous_norm
-  have he :
-      {p : E | ∀ x ∈ closedBall (0 : E) M,
-        truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M} =
-      {p : E | ∃ x ∈ closedBall (0 : E) M,
-        x ∈ {x : E | M ≤ ‖x‖} ∧
-          truncatedConjugate u M p = ⟪p, x⟫ - u x}ᶜ := by
-    ext p
-    constructor
-    · intro hp
-      rintro ⟨x, hx, hn, heq⟩
-      exact (not_lt_of_ge hn) (hp x hx heq)
-    · intro hp x hx heq
-      by_contra hn
-      exact hp ⟨x, hx, le_of_not_gt hn, heq⟩
-  rw [he]
-  exact (n7_isClosed_bad_maximizers hu hM hc).isOpen_compl
-
-end FiniteDimensional
-
-/-- For strictly convex `u`, a subgradient `p` at a point `x` of the open ball has `x` as its only ball
-maximiser. -/
-theorem eq_of_truncatedConjugate_eq_of_subgradient [FiniteDimensional ℝ E] {u : E → ℝ}
-    (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} {x p : E} (hx : ‖x‖ < M)
-    (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) {x' : E} (hx' : x' ∈ closedBall (0 : E) M)
-    (heq : truncatedConjugate u M p = ⟪p, x'⟫ - u x') : x' = x := by
-  have hxeq := n7_conjugate_eq_of_support (mem_closedBall_zero_iff.mpr hx.le) hp
-  have hp' : ∀ y, u x' + ⟪p, y - x'⟫ ≤ u y := by
-    intro y
-    have h := hp y
-    rw [inner_sub_right] at h ⊢
-    linarith [heq, hxeq]
-  exact (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
-    (n7_support_min hp') (n7_support_min hp)
-    ((subset_univ (closedBall (0 : E) M)) hx') (mem_univ x)
-
-section FiniteDimensional
-
-variable [FiniteDimensional ℝ E]
-
-private lemma n7_subgradient_eq_maximizer {u : E → ℝ}
-    (hu : Continuous u) (hstrict : StrictConvexOn ℝ univ u)
-    {M : ℝ} (hM : 0 ≤ M) {p x g : E} (hx : ‖x‖ < M)
-    (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
-    (heq : truncatedConjugate u M p = ⟪p, x⟫ - u x)
-    (hg : ∀ q, truncatedConjugate u M p + ⟪g, q - p⟫ ≤ truncatedConjugate u M q) :
-    g = x := by
-  classical
-  by_contra hne
-  let v := g - x
-  have hv : 0 < ⟪v, v⟫ := real_inner_self_pos.mpr (sub_ne_zero.mpr hne)
-  have hgap : ⟪v, x⟫ < ⟪v, g⟫ := by
-    have hh : ⟪v, v⟫ = ⟪v, g⟫ - ⟪v, x⟫ := by
-      dsimp [v]
-      rw [inner_sub_right]
-    linarith
-  let c : ℝ := (⟪v, x⟫ + ⟪v, g⟫) / 2
-  have hxc : ⟪v, x⟫ < c := by dsimp [c]; linarith
-  have hcg : c < ⟪v, g⟫ := by dsimp [c]; linarith
-  let C : Set E := {z | c ≤ ⟪v, z⟫}
-  let A : Set E := {q | ∃ z ∈ closedBall (0 : E) M,
-    z ∈ C ∧ truncatedConjugate u M q = ⟪q, z⟫ - u z}
-  have hA : IsClosed A :=
-    n7_isClosed_bad_maximizers hu hM
-      (isClosed_le continuous_const (continuous_const.inner continuous_id))
-  have hpA : p ∈ Aᶜ := by
-    rintro ⟨z, hz, hc, hzmax⟩
-    have hzx := eq_of_truncatedConjugate_eq_of_subgradient hstrict hx hp hz hzmax
-    subst z
-    exact (not_le_of_gt hxc) hc
-  have hpath : Continuous (fun t : ℝ => p + t • v) :=
-    continuous_const.add (continuous_id.smul continuous_const)
-  have hpre : (fun t : ℝ => p + t • v) ⁻¹' Aᶜ ∈ 𝓝 (0 : ℝ) :=
-    hpath.continuousAt.preimage_mem_nhds
-      (hA.isOpen_compl.mem_nhds (by simpa only [zero_smul, add_zero] using hpA))
-  obtain ⟨ε, hε, hεsub⟩ := Metric.mem_nhds_iff.mp hpre
-  let t : ℝ := ε / 2
-  have ht : 0 < t := by dsimp [t]; linarith
-  have htε : t < ε := by dsimp [t]; linarith
-  have hqA : p + t • v ∈ Aᶜ := by
-    apply hεsub
-    rw [Metric.mem_ball, Real.dist_eq]
-    simpa only [sub_zero, abs_of_pos ht] using htε
-  obtain ⟨z, hz, hzmax⟩ := (exists_truncatedConjugate_eq hu hM (p + t • v)).1
-  have hzc : ⟪v, z⟫ < c := by
-    by_contra hn
-    exact hqA ⟨z, hz, le_of_not_gt hn, hzmax⟩
-  have hbase := (exists_truncatedConjugate_eq hu hM p).2 z hz
-  have hsub := hg (p + t • v)
-  rw [hzmax, add_sub_cancel_left, inner_smul_right] at hsub
-  rw [inner_add_left, real_inner_smul_left] at hsub
-  have hgv : ⟪g, v⟫ = ⟪v, g⟫ := real_inner_comm v g
-  have hle : t * ⟪v, g⟫ ≤ t * ⟪v, z⟫ := by
-    rw [heq] at hbase hsub
-    rw [hgv] at hsub
-    linarith
-  have hgz : ⟪v, g⟫ ≤ ⟪v, z⟫ := (mul_le_mul_iff_right₀ ht).mp hle
-  linarith
-
-/-- **Danskin identification of subgradient images** (weak Letwin route; KLS500
-`convexSubgradientImage_truncatedLegendrePotential_eq_relative`): for strictly convex continuous `u`, on a set
-`S` of slopes whose ball maximisers lie in the open ball, the subgradient image of the truncated conjugate is the
-inverse subgradient image `{x | ∃ p ∈ S, p ∈ ∂u(x)}`. -/
-theorem subgradientImage_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u)
-    (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} (hM : 0 ≤ M) {S : Set E}
-    (hS : ∀ p ∈ S, ∀ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M) :
-    subgradientImage (truncatedConjugate u M) S = {x | ∃ p ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
-  ext g
-  constructor
-  · rintro ⟨p, hpS, hg⟩
-    obtain ⟨x, hxB, heq⟩ := (exists_truncatedConjugate_eq hu hM p).1
-    have hx := hS p hpS x hxB heq
-    have hp := n7_support_of_interior_max hu hstrict.convexOn hM hx heq
-    have hgx := n7_subgradient_eq_maximizer hu hstrict hM hx hp heq hg
-    subst g
-    exact ⟨p, hpS, hp⟩
-  · rintro ⟨p, hpS, hp⟩
-    obtain ⟨x, hxB, heq⟩ := (exists_truncatedConjugate_eq hu hM p).1
-    have hx := hS p hpS x hxB heq
-    have hpx := n7_support_of_interior_max hu hstrict.convexOn hM hx heq
-    have hxg : x = g := n7_support_unique hstrict hpx hp
-    subst g
-    refine ⟨p, hpS, ?_⟩
-    intro q
-    have hq := (exists_truncatedConjugate_eq hu hM q).2 x hxB
-    rw [heq, inner_sub_right]
-    have hcomm : ⟪x, q⟫ = ⟪q, x⟫ := real_inner_comm q x
-    have hcomm' : ⟪x, p⟫ = ⟪p, x⟫ := real_inner_comm p x
-    rw [hcomm, hcomm']
-    linarith
-
-end FiniteDimensional
-
-end InnerProduct
-
-end FunctionalInequalities.Analysis
-
-end LT11F3TruncatedConjugateSubgradients
-
-section LT11F5SublevelContactLemma
-
-open MeasureTheory Set Metric Filter
-open scoped RealInnerProductSpace ENNReal Topology
-
-/-! The contact lemma on sublevel sets. -/
-
-namespace FunctionalInequalities.Analysis
-
-section InnerProduct
-
-variable {E : Type*}
-  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-
-private lemma supporting_affine_convex (c : ℝ) (p x : E) :
-    ConvexOn ℝ univ (fun w => c + ⟪p, w - x⟫) := by
-  refine (((innerSL ℝ p).toLinearMap.convexOn
-    (convex_univ : Convex ℝ (univ : Set E))).add_const (c - ⟪p, x⟫)).congr ?_
-  intro w _
-  change ⟪p, w⟫ + (c - ⟪p, x⟫) = c + ⟪p, w - x⟫
-  rw [inner_sub_right]
-  ring
-
-private lemma subgradient_of_local_agreement {u v : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    {U : Set E} (hU : IsOpen U) {x q : E} (hx : x ∈ U)
-    (heq : ∀ ⦃w⦄, w ∈ U → v w = u w)
-    (hq : ∀ w, v x + ⟪q, w - x⟫ ≤ v w) :
-    ∀ w, u x + ⟪q, w - x⟫ ≤ u w := by
-  have hloc : IsLocalMin (fun w => u w - ⟪q, w⟫) x := by
-    filter_upwards [hU.eventually_mem hx] with w hw
-    change u x - ⟪q, x⟫ ≤ u w - ⟪q, w⟫
-    have hh := hq w
-    rw [heq hx, heq hw, inner_sub_right] at hh
-    linarith
-  have hg := IsMinOn.of_isLocalMin_of_convex_univ hloc
-    (hconv.sub ((innerSL ℝ q).toLinearMap.concaveOn convex_univ))
-  intro w
-  have hh := hg w
-  change u x - ⟪q, x⟫ ≤ u w - ⟪q, w⟫ at hh
-  rw [inner_sub_right]
-  linarith
-
-private lemma subgradientImage_of_local_agreement {u v : E → ℝ}
-    (hconv : ConvexOn ℝ univ u) (huv : ∀ x, u x ≤ v x)
-    {U : Set E} (hU : IsOpen U) (heq : ∀ ⦃x⦄, x ∈ U → v x = u x)
-    {G : Set E} (hGU : G ⊆ U) :
-    subgradientImage v G = subgradientImage u G := by
-  ext q
-  constructor
-  · rintro ⟨x, hx, hq⟩
-    exact ⟨x, hx, subgradient_of_local_agreement hconv hU (hGU hx) heq hq⟩
-  · rintro ⟨x, hx, hq⟩
-    refine ⟨x, hx, ?_⟩
-    intro w
-    rw [heq (hGU hx)]
-    exact (hq w).trans (huv w)
-
-section FiniteDimensional
-
-variable [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
-
-private lemma eq_of_two_contacts_below {u : E → ℝ}
-    (hconv : ConvexOn ℝ univ u) {x₀ p : E}
-    (hp : ∀ x, u x₀ + ⟪p, x - x₀⟫ ≤ u x) {R : ℝ}
-    (hK : IsCompact {x | u x ≤ R})
-    (hB : ∀ Q : Set E, IsCompact Q → Q ⊆ {x | u x < R} →
-      ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E, IsOpen G → closure G ⊆ Q →
-        ENNReal.ofReal a * (volume : Measure E) G ≤
-          (volume : Measure E) (subgradientImage u G) ∧
-        (volume : Measure E) (subgradientImage u G) ≤
-          ENNReal.ofReal b * (volume : Measure E) G)
-    (hxR : u x₀ < R) {y : E} (hyR : u y < R)
-    (hy : u y = u x₀ + ⟪p, y - x₀⟫) : y = x₀ := by
-  classical
-  by_contra hne
-  have hu : Continuous u := continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
-  obtain ⟨r, hr, hrR⟩ := exists_between (max_lt hxR hyR)
-  have hx_r : u x₀ < r := (le_max_left _ _).trans_lt hr
-  have hy_r : u y < r := (le_max_right _ _).trans_lt hr
-  have hKr : IsCompact {x | u x ≤ r} :=
-    hK.of_isClosed_subset (isClosed_le hu continuous_const)
-      (fun _ hx => hx.trans hrR.le)
-  obtain ⟨z, θ₀, hz, hzr, hexp₀⟩ :=
-    exists_exposed_contact_of_lt hconv hp hx_r hKr
-  have hθ₀ : θ₀ ≠ 0 := by
-    intro hzero
-    by_cases hxz : x₀ = z
-    · have hyz : y ≠ z := by
-        intro hyz
-        exact hne (hyz.trans hxz.symm)
-      have hh := hexp₀ y hy hy_r.le hyz
-      simp [hzero] at hh
-    · have hxcontact : u x₀ = u x₀ + ⟪p, x₀ - x₀⟫ := by simp
-      have hh := hexp₀ x₀ hxcontact hx_r.le hxz
-      simp [hzero] at hh
-  have hn : 0 < ‖θ₀‖ := norm_pos_iff.mpr hθ₀
-  let θ : E := ‖θ₀‖⁻¹ • θ₀
-  have hθ : ‖θ‖ = 1 := by
-    dsimp only [θ]
-    rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hn),
-      inv_mul_cancel₀ (ne_of_gt hn)]
-  let ℓ : E → ℝ := fun x => u x₀ + ⟪p, x - x₀⟫
-  have hℓ : ConvexOn ℝ univ ℓ := supporting_affine_convex (u x₀) p x₀
-  have hℓcont : Continuous ℓ := by
-    exact continuous_const.add (continuous_const.inner (continuous_id.sub continuous_const))
-  have hℓ0 : ℓ x₀ = u x₀ := by simp [ℓ]
-  have hℓu (x : E) : ℓ x ≤ u x := hp x
-  let v : E → ℝ := fun x => max (u x) (ℓ x + 2 * (ℓ x - r))
-  have hvconv : ConvexOn ℝ univ v := by
-    exact hconv.sup
-      (hℓ.add (ConvexOn.smul (by norm_num : (0 : ℝ) ≤ 2)
-        (hℓ.sub (concaveOn_const r convex_univ))))
-  have hvcont : Continuous v :=
-    continuousOn_univ.mp (hvconv.continuousOn isOpen_univ)
-  have huv (x : E) : u x ≤ v x := le_max_left _ _
-  have hv0 : v x₀ = u x₀ := by
-    change max (u x₀) (ℓ x₀ + 2 * (ℓ x₀ - r)) = u x₀
-    rw [hℓ0]
-    apply max_eq_left
-    linarith
-  have hvp : ∀ x, v x₀ + ⟪p, x - x₀⟫ ≤ v x := by
-    intro x
-    rw [hv0]
-    exact (hp x).trans (huv x)
-  have hcontact (x : E) :
-      v x = v x₀ + ⟪p, x - x₀⟫ ↔ u x = ℓ x ∧ ℓ x ≤ r := by
-    rw [hv0]
-    change max (u x) (ℓ x + 2 * (ℓ x - r)) = ℓ x ↔
-      u x = ℓ x ∧ ℓ x ≤ r
-    constructor
-    · intro hx
-      have hfirst : u x ≤ ℓ x :=
-        (le_max_left (u x) (ℓ x + 2 * (ℓ x - r))).trans_eq hx
-      have hsecond : ℓ x + 2 * (ℓ x - r) ≤ ℓ x :=
-        (le_max_right (u x) (ℓ x + 2 * (ℓ x - r))).trans_eq hx
-      exact ⟨le_antisymm hfirst (hℓu x), by linarith⟩
-    · rintro ⟨hx, hxr⟩
-      rw [hx]
-      apply max_eq_left
-      linarith
-  let C : Set E := {x | v x = v x₀ + ⟪p, x - x₀⟫}
-  have hC : IsCompact C := by
-    apply hKr.of_isClosed_subset
-    · exact isClosed_eq hvcont
-        (continuous_const.add (continuous_const.inner (continuous_id.sub continuous_const)))
-    · intro x hx
-      obtain ⟨hxu, hxr⟩ := (hcontact x).mp hx
-      exact hxu.trans_le hxr
-  have hzC : z ∈ C := (hcontact z).mpr ⟨hz, hz.symm.trans_le hzr.le⟩
-  have hxC : x₀ ∈ C := by
-    apply (hcontact x₀).mpr
-    exact ⟨hℓ0.symm, hℓ0.trans_le hx_r.le⟩
-  have hyC : y ∈ C := (hcontact y).mpr ⟨hy, hy.symm.trans_le hy_r.le⟩
-  have hexp : ∀ x ∈ C, x ≠ z → ⟪x - z, θ⟫ < 0 := by
-    intro x hx hxz
-    obtain ⟨hxu, hxr⟩ := (hcontact x).mp hx
-    have hh := hexp₀ x hxu (hxu.trans_le hxr) hxz
-    change ⟪x - z, ‖θ₀‖⁻¹ • θ₀⟫ < 0
-    rw [inner_smul_right]
-    exact mul_neg_of_pos_of_neg (inv_pos.mpr hn) hh
-  let U : Set E := {x | ℓ x < r} ∩ {x | u x < R}
-  have hU : IsOpen U :=
-    (isOpen_lt hℓcont continuous_const).inter (isOpen_lt hu continuous_const)
-  have hzU : z ∈ U := by
-    exact ⟨hz.symm.trans_lt hzr, hzr.trans hrR⟩
-  have hvU : ∀ ⦃x⦄, x ∈ U → v x = u x := by
-    intro x hx
-    change max (u x) (ℓ x + 2 * (ℓ x - r)) = u x
-    apply max_eq_left
-    have hlt : ℓ x < r := hx.1
-    have hle := hℓu x
-    linarith
-  have hwidth : ∃ h : ℝ, 0 < h ∧ C ∩ {x | -h ≤ ⟪x - z, θ⟫} ⊆ U := by
-    let D : Set E := C ∩ Uᶜ
-    have hD : IsCompact D := hC.inter_right hU.isClosed_compl
-    have hf : Continuous (fun x : E => ⟪x - z, θ⟫) :=
-      (continuous_id.sub continuous_const).inner continuous_const
-    by_cases hDne : D.Nonempty
-    · obtain ⟨d, hd, hmax⟩ := hD.exists_isMaxOn hDne hf.continuousOn
-      have hdz : d ≠ z := by
-        intro hdZ
-        exact hd.2 (hdZ.symm ▸ hzU)
-      have hdneg := hexp d hd.1 hdz
-      refine ⟨-⟪d - z, θ⟫ / 2, by linarith, ?_⟩
-      intro x hx
-      by_contra hxU
-      have hxd : x ∈ D := ⟨hx.1, hxU⟩
-      have hh : ⟪x - z, θ⟫ ≤ ⟪d - z, θ⟫ := hmax hxd
-      have hcap := hx.2
-      change -(-⟪d - z, θ⟫ / 2) ≤ ⟪x - z, θ⟫ at hcap
-      linarith
-    · refine ⟨1, zero_lt_one, ?_⟩
-      intro x hx
-      by_contra hxU
-      exact hDne ⟨x, hx.1, hxU⟩
-  obtain ⟨h, hh, hCU⟩ := hwidth
-  have hvB : ∀ Q : Set E, IsCompact Q → Q ⊆ U →
-      ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E, IsOpen G → closure G ⊆ Q →
-        ENNReal.ofReal a * (volume : Measure E) G ≤
-          (volume : Measure E) (subgradientImage v G) ∧
-        (volume : Measure E) (subgradientImage v G) ≤
-          ENNReal.ofReal b * (volume : Measure E) G := by
-    intro Q hQ hQU
-    obtain ⟨a, b, ha, hab⟩ := hB Q hQ (fun x hx => (hQU hx).2)
-    refine ⟨a, b, ha, ?_⟩
-    intro G hG hGQ
-    have hGU : G ⊆ U := fun _ hx => hQU (hGQ (subset_closure hx))
-    rw [subgradientImage_of_local_agreement hconv huv hU hvU hGU]
-    exact hab G hG hGQ
-  have hsingle : C = {z} :=
-    contactSet_eq_singleton_of_exposed_of_local_bounds hvconv hvp hC hzC
-      hθ hexp hh hU hCU hvB
-  have hxz : x₀ = z := mem_singleton_iff.mp (hsingle ▸ hxC)
-  have hyz : y = z := mem_singleton_iff.mp (hsingle ▸ hyC)
-  exact hne (hyz.trans hxz.symm)
-
-/-- **Caffarelli's contact-set lemma below a level** (weak Letwin route; KLS500
-`supportContactSet_subsingleton_of_local_subgradient_bounds`): if `{u ≤ R}` is compact and the convex `u` has
-two-sided Alexandrov bounds on compact subsets of `{u < R}`, then a supporting affine function at `x₀`
-(`u x₀ < R`) touches the graph of `u` at no other point of `{u < R}`. No compactness of the full contact set
-is assumed. -/
-theorem eq_of_contact_of_sublevel_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
-    (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y) {R : ℝ} (hK : IsCompact {y | u y ≤ R})
-    (hB : ∀ Q : Set E, IsCompact Q → Q ⊆ {y | u y < R} → ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E,
-      IsOpen G → closure G ⊆ Q →
-      ENNReal.ofReal a * (volume : Measure E) G ≤ (volume : Measure E) (subgradientImage u G) ∧
-      (volume : Measure E) (subgradientImage u G) ≤ ENNReal.ofReal b * (volume : Measure E) G)
-    {y : E} (hyR : u y < R) (hy : u y = u x₀ + ⟪p, y - x₀⟫) : y = x₀ := by
-  classical
-  by_contra hne
-  have hpy : ∀ w, u y + ⟪p, w - y⟫ ≤ u w := by
-    intro w
-    have hh := hp w
-    have hy' := hy
-    simp only [inner_sub_right] at hh hy' ⊢
-    linarith
-  have hxcontact : u x₀ = u y + ⟪p, x₀ - y⟫ := by
-    have hy' := hy
-    simp only [inner_sub_right] at hy' ⊢
-    linarith
-  have hu : Continuous u := continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
-  let f : ℝ → E := AffineMap.lineMap y x₀
-  have hf : Continuous f := AffineMap.lineMap_continuous
-  have hf0 : f 0 = y := AffineMap.lineMap_apply_zero y x₀
-  have htend : Tendsto (fun t => u (f t)) (𝓝 0) (𝓝 (u y)) := by
-    have hh : Tendsto (fun t => u (f t)) (𝓝 0) (𝓝 (u (f 0))) :=
-      (hu.comp hf).tendsto 0
-    rw [hf0] at hh
-    exact hh
-  have hnear : ∀ᶠ t in 𝓝 (0 : ℝ), u (f t) < R :=
-    htend.eventually (eventually_lt_nhds hyR)
-  obtain ⟨t, ht, htR, ht1⟩ :=
-    (hnear.and (eventually_lt_nhds (show (0 : ℝ) < 1 from zero_lt_one))).exists_gt
-  have htcontact : u (f t) = u y + ⟪p, f t - y⟫ := by
-    have hh := hconv.2 (mem_univ y) (mem_univ x₀)
-      (sub_nonneg.mpr ht1.le) ht.le (by ring : 1 - t + t = 1)
-    have hl := hpy (f t)
-    have hx' := hxcontact
-    have hft : f t = (1 - t) • y + t • x₀ :=
-      AffineMap.lineMap_apply_module y x₀ t
-    rw [hft] at hl ⊢
-    simp only [smul_eq_mul] at hh
-    simp only [inner_sub_right, inner_add_right, inner_smul_right] at hl hx' ⊢
-    nlinarith
-  have he : f t = y :=
-    eq_of_two_contacts_below hconv hpy hK hB hyR htR htcontact
-  have htzero : t = 0 :=
-    (AffineMap.lineMap_injective ℝ hne) (he.trans hf0.symm)
-  exact (ne_of_gt ht) htzero
-
-end FiniteDimensional
-
-end InnerProduct
-
-end FunctionalInequalities.Analysis
-
-end LT11F5SublevelContactLemma
-
-section LT11F6MomentStrictConvexity
-
-open MeasureTheory Set Metric
-open scoped RealInnerProductSpace ENNReal
-
-/-! **Caffarelli's strict convexity** for moment-map potentials: a convex potential whose gradient pushes a measure with bounded density forward to one with density bounded above and below on a convex body is strictly convex. -/
-
-namespace FunctionalInequalities.Analysis
-
-/-- **The moment potential is strictly convex** (weak Letwin route; KLS500
-`moment_strictConvexOn`): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes `e^{-u} dx` forward
-to `1_K e^{-V} dx` (`K` compact convex nonempty, `V` continuous) is strictly convex. -/
-theorem strictConvexOn_of_map_gradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
-    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
-    {K : Set E} (hK : IsCompact K) (hKc : Convex ℝ K) (hKne : K.Nonempty)
-    {V : E → ℝ} (hV : Continuous V)
-    (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) =
-      (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p)))) :
-    StrictConvexOn ℝ univ u := by
-  classical
-  let ρ : E → ℝ≥0∞ := fun x => ENNReal.ofReal (Real.exp (-u x))
-  let f : E → ℝ≥0∞ := K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))
-  have hρ : Measurable ρ := hu.continuous.measurable.neg.exp.ennreal_ofReal
-  have hf : Measurable f :=
-    hV.measurable.neg.exp.ennreal_ofReal.indicator hK.measurableSet
-  have hgrad : Measurable (gradient u) :=
-    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
-      (measurable_fderiv ℝ u)
-  have htilt : (volume : Measure E).tilted (-u) = volume.withDensity ρ := by
-    change (volume : Measure E).withDensity
-      (fun x => ENNReal.ofReal
-        (Real.exp (-u x) / ∫ y, Real.exp (-u y) ∂(volume : Measure E))) =
-      volume.withDensity ρ
-    simp only [hnorm, div_one, ρ]
-  have hmap' :
-      ((volume : Measure E).withDensity ρ).map (gradient u) =
-        volume.withDensity f := by
-    rw [← htilt]
-    exact hmap
-  have hμK : ∀ᵐ p ∂(volume : Measure E).withDensity f, p ∈ K := by
-    apply (ae_withDensity_iff hf).2
-    exact Filter.Eventually.of_forall fun p hp => by
-      by_contra h
-      exact hp (Set.indicator_of_notMem h _)
-  have hνK :
-      ∀ᵐ x ∂(volume : Measure E).withDensity ρ, gradient u x ∈ K := by
-    apply ae_of_ae_map hgrad.aemeasurable
-    rw [hmap']
-    exact hμK
-  have hae : ∀ᵐ x ∂(volume : Measure E), gradient u x ∈ K := by
-    have h := (ae_withDensity_iff hρ).1 hνK
-    filter_upwards [h] with x hx
-    exact hx (ne_of_gt (ENNReal.ofReal_pos.mpr (Real.exp_pos (-u x))))
-  have hint : Integrable (fun x => Real.exp (-u x)) (volume : Measure E) :=
-    Integrable.of_integral_ne_zero (by rw [hnorm]; exact one_ne_zero)
-  have hsub : ∀ R : ℝ, IsCompact {x | u x ≤ R} :=
-    (exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg
-      volume hconv hint).2
-  obtain ⟨D, hD⟩ := hK.exists_bound_of_continuousOn hV.continuousOn
-  obtain ⟨q, hq⟩ := hKne
-  have hDnonneg : 0 ≤ D := (norm_nonneg (V q)).trans (hD q hq)
-  apply strictConvexOn_of_contact_eq hconv
-  intro x p hp y hy
-  let R : ℝ := max (u x) (u y) + 1
-  have hyR : u y < R := by
-    dsimp only [R]
-    linarith [le_max_right (u x) (u y)]
-  refine eq_of_contact_of_sublevel_bounds hconv hp (hsub R) ?_ hyR hy
-  intro Q hQ _
-  obtain ⟨C, hC⟩ := hQ.exists_bound_of_continuousOn hu.continuous.continuousOn
-  refine ⟨Real.exp (-C - D), Real.exp (C + D), Real.exp_pos _, ?_⟩
-  intro G hG hGQ
-  have hbounds :
-      ∀ᵐ z ∂(volume : Measure E).restrict G,
-        ENNReal.ofReal (Real.exp (-C - D)) ≤
-            ENNReal.ofReal (Real.exp (-u z + V (gradient u z))) ∧
-          ENNReal.ofReal (Real.exp (-u z + V (gradient u z))) ≤
-            ENNReal.ofReal (Real.exp (C + D)) := by
-    filter_upwards [ae_restrict_of_ae hae, ae_restrict_mem hG.measurableSet]
-      with z hzK hzG
-    have hzQ : z ∈ Q := hGQ (subset_closure hzG)
-    have huz : -C ≤ u z ∧ u z ≤ C := by
-      apply abs_le.mp
-      simpa only [Real.norm_eq_abs] using hC z hzQ
-    have hvz : -D ≤ V (gradient u z) ∧ V (gradient u z) ≤ D := by
-      apply abs_le.mp
-      simpa only [Real.norm_eq_abs] using hD (gradient u z) hzK
-    constructor
-    · apply ENNReal.ofReal_le_ofReal
-      apply Real.exp_le_exp.mpr
-      linarith [huz.2, hvz.1]
-    · apply ENNReal.ofReal_le_ofReal
-      apply Real.exp_le_exp.mpr
-      linarith [huz.1, hvz.2, hDnonneg]
-  rw [volume_subgradientImage_eq_lintegral_of_isOpen
-    hu hconv hnorm hK.isClosed hKc hV.measurable hmap hG]
-  constructor
-  · calc
-      ENNReal.ofReal (Real.exp (-C - D)) * (volume : Measure E) G =
-          ∫⁻ z in G, ENNReal.ofReal (Real.exp (-C - D)) ∂(volume : Measure E) :=
-        (setLIntegral_const G _).symm
-      _ ≤ ∫⁻ z in G, ENNReal.ofReal (Real.exp (-u z + V (gradient u z)))
-          ∂(volume : Measure E) :=
-        lintegral_mono_ae (hbounds.mono fun _ hz => hz.1)
-  · calc
-      (∫⁻ z in G, ENNReal.ofReal (Real.exp (-u z + V (gradient u z)))
-          ∂(volume : Measure E)) ≤
-          ∫⁻ z in G, ENNReal.ofReal (Real.exp (C + D)) ∂(volume : Measure E) :=
-        lintegral_mono_ae (hbounds.mono fun _ hz => hz.2)
-      _ = ENNReal.ofReal (Real.exp (C + D)) * (volume : Measure E) G :=
-        setLIntegral_const G _
-
-end FunctionalInequalities.Analysis
-
-end LT11F6MomentStrictConvexity
-
-section LT11F7MomentC1
-
-open MeasureTheory Set Metric
-open scoped RealInnerProductSpace ENNReal
-
-/-! **The moment-map potential is C¹**: strict convexity of the conjugate gives differentiability of the potential. -/
-
-namespace FunctionalInequalities.Analysis
-
-private lemma t11f7_small_sublevel {X : Type*} [TopologicalSpace X]
-    {f : X → ℝ} (hf : Continuous f) (hnonneg : ∀ x, 0 ≤ f x)
-    (hcompact : IsCompact {x | f x ≤ 1})
-    {A : Set X} (hA : IsOpen A) (hzero : ∀ x, f x = 0 → x ∈ A) :
-    ∃ R : ℝ, 0 < R ∧ {x | f x ≤ R} ⊆ A := by
-  classical
-  by_cases hne : ({x | f x ≤ 1} \ A).Nonempty
-  · obtain ⟨z, hz, hmin⟩ :=
-      (hcompact.diff hA).exists_isMinOn hne hf.continuousOn
-    have hzpos : 0 < f z := by
-      have hznot : f z ≠ 0 := fun h => hz.2 (hzero z h)
-      exact lt_of_le_of_ne (hnonneg z) (Ne.symm hznot)
-    refine ⟨min 1 (f z / 2), lt_min zero_lt_one (by linarith), ?_⟩
-    intro x hx
-    change f x ≤ min 1 (f z / 2) at hx
-    by_contra hxA
-    have hxB : x ∈ {x | f x ≤ 1} \ A :=
-      ⟨hx.trans (min_le_left _ _), hxA⟩
-    have hzx : f z ≤ f x := hmin hxB
-    have hhalf : f x ≤ f z / 2 := hx.trans (min_le_right _ _)
-    linarith
-  · refine ⟨1, zero_lt_one, ?_⟩
-    intro x hx
-    by_contra hxA
-    exact hne ⟨x, hx, hxA⟩
-
-section InnerProduct
-
-variable {E : Type*}
-  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-
-private lemma t11f7_support_unique {u : E → ℝ}
-    (hstrict : StrictConvexOn ℝ univ u) {x z p : E}
-    (hx : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
-    (hz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y) :
-    x = z := by
-  apply (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
-    ?_ ?_ (mem_univ x) (mem_univ z)
-  · intro y _
-    change u x - ⟪p, x⟫ ≤ u y - ⟪p, y⟫
-    have h := hx y
-    rw [inner_sub_right] at h
-    linarith
-  · intro y _
-    change u z - ⟪p, z⟫ ≤ u y - ⟪p, y⟫
-    have h := hz y
-    rw [inner_sub_right] at h
-    linarith
-
-set_option maxHeartbeats 800000 in
-/-- **The moment potential is `C¹`** (weak Letwin route; KLS500
-`moment_contDiff_one_closedTarget`): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes
-`e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous) has exactly
-one subgradient at every point, hence is continuously differentiable. -/
-theorem contDiff_one_of_map_gradient
-    [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
-    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
-    {K : Set E} (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty)
-    {V : E → ℝ} (hV : Continuous V)
-    (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) =
-      (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p)))) :
-    ContDiff ℝ 1 u := by
-  classical
-  have hstrict : StrictConvexOn ℝ univ u :=
-    strictConvexOn_of_map_gradient hu hconv hnorm hK hKc
-      (hKint.mono interior_subset) hV hmap
-  let ρ : E → ℝ≥0∞ :=
-    K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))
-  let w : E → ℝ≥0∞ := fun x => ENNReal.ofReal (Real.exp (-u x))
-  have hρ : Measurable ρ :=
-    hV.measurable.neg.exp.ennreal_ofReal.indicator hK.measurableSet
-  have hw : Measurable w :=
-    hu.continuous.measurable.neg.exp.ennreal_ofReal
-  have hgrad : Measurable (gradient u) :=
-    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
-      (measurable_fderiv ℝ u)
-  have htilt : (volume : Measure E).tilted (-u) = volume.withDensity w := by
-    change (volume : Measure E).withDensity
-      (fun x => ENNReal.ofReal
-        (Real.exp (-u x) / ∫ y, Real.exp (-u y) ∂(volume : Measure E))) =
-      volume.withDensity w
-    simp only [hnorm, div_one, w]
-  have hmap' :
-      ((volume : Measure E).withDensity w).map (gradient u) =
-        volume.withDensity ρ := by
-    rw [← htilt]
-    exact hmap
-  have hμK : ∀ᵐ p ∂(volume : Measure E).withDensity ρ, p ∈ K := by
-    apply (ae_withDensity_iff hρ).2
-    exact Filter.Eventually.of_forall fun p hp => by
-      by_contra h
-      exact hp (Set.indicator_of_notMem h _)
-  have hνK :
-      ∀ᵐ x ∂(volume : Measure E).withDensity w, gradient u x ∈ K := by
-    apply ae_of_ae_map hgrad.aemeasurable
-    rw [hmap']
-    exact hμK
-  have hae : ∀ᵐ x ∂(volume : Measure E), gradient u x ∈ K := by
-    have h := (ae_withDensity_iff hw).1 hνK
-    filter_upwards [h] with x hx
-    exact hx (ne_of_gt (ENNReal.ofReal_pos.mpr (Real.exp_pos (-u x))))
-  have hsubK : ∀ x p, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) → p ∈ K := by
-    intro x p hp
-    exact subgradient_mem_of_ae_gradient_mem hu hconv hK.isClosed hKc hae hp
-  have hsubint : ∀ x p, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) →
-      p ∈ interior K := by
-    intro x p hp
-    exact subgradient_mem_interior_of_strictConvexOn hstrict hKc hKint hsubK hp
-  obtain ⟨D, hD⟩ := hK.exists_bound_of_continuousOn hV.continuousOn
-  have hρK : ∀ p ∈ K,
-      ENNReal.ofReal (Real.exp (-D)) ≤ ρ p ∧
-        ρ p ≤ ENNReal.ofReal (Real.exp D) := by
-    intro p hp
-    have hbound : -D ≤ V p ∧ V p ≤ D :=
-      abs_le.mp (by simpa only [Real.norm_eq_abs] using hD p hp)
-    dsimp only [ρ]
-    rw [Set.indicator_of_mem hp]
-    constructor
-    · exact ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr (by linarith [hbound.2]))
-    · exact ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr (by linarith [hbound.1]))
-  apply contDiff_one_of_convexOn_of_unique_subgradient hconv
-  intro xc
-  obtain ⟨p₀, hp₀, _⟩ := exists_subgradient_slope_le_inner_add hconv xc (0 : E)
-  let M : ℝ := ‖xc‖ + 1
-  have hxc : ‖xc‖ < M := by dsimp only [M]; linarith
-  have hM : 0 ≤ M := (norm_nonneg xc).trans hxc.le
-  let f : E → ℝ := fun p => truncatedConjugate u M p - ⟪p, xc⟫ + u xc
-  have hspec := truncatedConjugate_centered_spec hconv hxc
-  have hfnonneg : ∀ p, 0 ≤ f p := hspec.1
-  have hfzero : ∀ p, f p = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y :=
-    hspec.2.1
-  have hfcompact : ∀ R : ℝ, IsCompact {p | f p ≤ R} := hspec.2.2
-  have hfeq :
-      f = fun p => truncatedConjugate u M p - (⟪xc, p⟫ + (-u xc)) := by
-    funext p
-    dsimp only [f]
-    rw [real_inner_comm p xc]
-    ring
-  have hfconv : ConvexOn ℝ univ f := by
-    rw [hfeq]
-    exact (convexOn_truncatedConjugate hu.continuous hM).sub
-      (((innerₗ E xc).concaveOn convex_univ).add_const (-u xc))
-  have hfcont : Continuous f :=
-    continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hfconv)
-  let A : Set E := interior K ∩
-    {p | ∀ x ∈ closedBall (0 : E) M,
-      truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M}
-  have hAopen : IsOpen A :=
-    isOpen_interior.inter
-      (isOpen_setOf_truncatedConjugate_maximizer_lt hu.continuous hM)
-  have hzeroA : ∀ p, f p = 0 → p ∈ A := by
-    intro p hp
-    have hpsub := (hfzero p).mp hp
-    refine ⟨hsubint xc p hpsub, ?_⟩
-    intro x hx heq
-    have hxxc :=
-      eq_of_truncatedConjugate_eq_of_subgradient hstrict hxc hpsub hx heq
-    rw [hxxc]
-    exact hxc
-  obtain ⟨R, hR, hRA⟩ :=
-    t11f7_small_sublevel hfcont hfnonneg (hfcompact 1) hAopen hzeroA
-  obtain ⟨a, b, ha, hab⟩ :=
-    exists_inverse_subgradient_volume_bounds hu hconv hnorm hmap hρ rfl
-      hK.isClosed hKc (Real.exp_pos (-D)) hρK M
-  have hB :
-      ∀ Q : Set E, IsCompact Q → Q ⊆ {p | f p < R} →
-        ∃ a b, 0 < a ∧
-          ∀ G : Set E, IsOpen G → closure G ⊆ Q →
-            ENNReal.ofReal a * volume G ≤ volume (subgradientImage f G) ∧
-              volume (subgradientImage f G) ≤ ENNReal.ofReal b * volume G := by
-    intro Q _ hQR
-    refine ⟨a, b, ha, ?_⟩
-    intro G hG hGQ
-    have hGA : G ⊆ A := by
-      intro p hp
-      have hpR : f p < R := hQR (hGQ (subset_closure hp))
-      exact hRA (show f p ≤ R from hpR.le)
-    have hGK : G ⊆ K := fun p hp => interior_subset (hGA hp).1
-    have hmax :
-        ∀ p ∈ G, ∀ x ∈ closedBall (0 : E) M,
-          truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M := by
-      intro p hp
-      exact (hGA hp).2
-    have hinv :
-        {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ⊆
-          closedBall (0 : E) M := by
-      rintro x ⟨p, hpG, hpx⟩
-      obtain ⟨z, hz, heq⟩ := (exists_truncatedConjugate_eq hu.continuous hM p).1
-      have hzlt : ‖z‖ < M := hmax p hpG z hz heq
-      have hpz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y := by
-        apply ((truncatedConjugate_centered_spec hconv hzlt).2.1 p).mp
-        linarith [heq]
-      have hxz : x = z := t11f7_support_unique hstrict hpx hpz
-      exact hxz.symm ▸ hz
-    have hvol :
-        volume (subgradientImage f G) =
-          volume {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
-      rw [hfeq, volume_subgradientImage_sub_inner_add_const]
-      rw [subgradientImage_truncatedConjugate_eq hu.continuous hstrict hM hmax]
-    rw [hvol]
-    exact hab G hG hGK hinv
-  have hp₀zero : f p₀ = 0 := (hfzero p₀).mpr hp₀
-  have hp₀f : ∀ q, f p₀ + ⟪(0 : E), q - p₀⟫ ≤ f q := by
-    intro q
-    simpa only [hp₀zero, inner_zero_left, add_zero] using hfnonneg q
-  refine ⟨p₀, hp₀, ?_⟩
-  intro p hp
-  have hpzero : f p = 0 := (hfzero p).mpr hp
-  apply eq_of_contact_of_sublevel_bounds hfconv hp₀f (hfcompact R) hB
-  · simpa only [hpzero] using hR
-  · simp only [hpzero, hp₀zero, inner_zero_left, add_zero]
-
-end InnerProduct
-
-end FunctionalInequalities.Analysis
-
-end LT11F7MomentC1

@@ -9,7 +9,7 @@ import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
 import FunctionalInequalities.Probability.AffineSupport
 import FunctionalInequalities.Probability.Moments
 import FunctionalInequalities.Probability.Stein.Kernel
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Probability.Transport
 
 /-!
@@ -31,6 +31,8 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
+open FunctionalInequalities.Probability.Gaussian
+
 set_option maxHeartbeats 1000000 in
 theorem gaussian_smoothed_quadratic_variance_le_latent_energy {n : ℕ}
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
@@ -46,14 +48,14 @@ theorem gaussian_smoothed_quadratic_variance_le_latent_energy {n : ℕ}
     (Q : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
     (hQ : IsSelfAdjoint Q) {s : ℝ} (hs : 0 < s) :
     let P := ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).prod
-      (gaussianLaw (V := EuclideanSpace ℝ (Fin n)) s)
+      (Probability.Gaussian.law (V := EuclideanSpace ℝ (Fin n)) s)
     variance (fun x => ⟪Q x,x⟫) (smoothedLaw ((μ : Measure _).map S) s) ≤
       4 * ∑ i : Fin n, ∫ p : EuclideanSpace ℝ (Fin n) × EuclideanSpace ℝ (Fin n),
         ‖S (action (hessianMatrix u p.1) (S.toContinuousLinearMap.adjoint
           (Q (EuclideanSpace.single i 1)))) + (2*s)⁻¹ • Q (EuclideanSpace.single i 1)‖ ^ 2 ∂P := by
   let E := EuclideanSpace ℝ (Fin n)
   let ρ : Measure E := volume.tilted (-u)
-  let P := ρ.prod (gaussianLaw (V := E) s)
+  let P := ρ.prod (Probability.Gaussian.law (V := E) s)
   let ν := smoothedProbabilityLaw (Probability.mapContinuousLinearEquiv μ S) s hs
   let f : E → ℝ := fun x => ⟪Q x,x⟫
   let J : Fin n → ℝ := fun i => ∫ p : E × E,
@@ -75,7 +77,7 @@ theorem gaussian_smoothed_quadratic_variance_le_latent_energy {n : ℕ}
   let : IsProbabilityMeasure ((μ : Measure E).map S.toContinuousLinearMap) :=
     (μ : Measure E).isProbabilityMeasure_map S.toContinuousLinearMap.continuous.measurable.aemeasurable
   have hν4 : MemLp id 4 (ν : Measure E) :=
-    smoothedLaw_memLp_four _ (map_linear_memLp_four _ S.toContinuousLinearMap hμ4) hs
+    smoothedLaw_memLp_four _ (Probability.memLp_four_map_linear _ S.toContinuousLinearMap hμ4) hs
   have hν2 : MemLp id 2 (ν : Measure E) := hν4.mono_exponent (by norm_num)
   obtain ⟨W,hW,hWc,hνW,hνLC⟩ := exists_convex_smooth_potential_smoothed_linearEquiv μ hLC hfull S hs
   have hf : ContDiff ℝ 1 f := Q.contDiff.inner ℝ contDiff_id
@@ -130,9 +132,9 @@ theorem variance_quadratic_le_smoothedLaw {E : Type*}
     (A : E →L[ℝ] E) {s : ℝ} (hs : 0 < s) :
     variance (fun x : E => ⟪A x,x⟫) (mu : Measure E) ≤
       variance (fun x : E => ⟪A x,x⟫) (smoothedLaw (mu : Measure E) s) := by
-  let noise : ProbabilityMeasure E := ⟨gaussianLaw s,gaussianLaw_probability hs⟩
+  let noise : ProbabilityMeasure E := ⟨Probability.Gaussian.law s,Probability.Gaussian.law_probability hs⟩
   exact Probability.quadratic_variance_le_centered_noise_convolution mu noise h4
-    (gaussianLaw_memLp_four hs) (gaussianLaw_mean_zero hs) A
+    (Probability.Gaussian.memLp_four hs) (Probability.Gaussian.mean_zero hs) A
 
 end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 

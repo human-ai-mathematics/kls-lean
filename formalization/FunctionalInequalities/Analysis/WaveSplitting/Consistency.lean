@@ -11,16 +11,6 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 private theorem diagonal_hasDerivAt {F : ℝ × ℝ → ℝ} (hF : ContDiff ℝ ∞ F)
     {d₁ d₂ : ℝ} (h₁ : HasDerivAt (fun t => F (t,0)) d₁ 0)
     (h₂ : HasDerivAt (fun t => F (0,t)) d₂ 0) :
@@ -206,7 +196,7 @@ def waveGenerator [Fintype ι] (a : ι → E) (b : ι → E → ℝ) (Y : State 
 /-- A complete coordinate sweep has precisely the wave generator, with no missing components. -/
 theorem splitGenerator_finRange {d : ℕ} (a : Fin d → E) (b : Fin d → E → ℝ)
     (Y : State E (Fin d)) : splitGenerator a b (List.finRange d) Y = waveGenerator a b Y := by
-  apply state_ext
+  apply State.ext
   · funext x
     simp [splitGenerator, addState, reactionGenerator, waveGenerator]
   · funext x
@@ -225,7 +215,7 @@ def timeDerivative (Y : ℝ → State E ι) (t : ℝ) : State E ι :=
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem HasTimeDerivative.timeDerivative_eq {Y : ℝ → State E ι} {D : State E ι} {t : ℝ}
     (h : HasTimeDerivative Y D t) : timeDerivative Y t = D := by
-  apply state_ext
+  apply State.ext
   · funext x; exact (h.1 x).deriv
   · funext x; exact (h.2.1 x).deriv
   · funext j x; exact (h.2.2 j x).deriv

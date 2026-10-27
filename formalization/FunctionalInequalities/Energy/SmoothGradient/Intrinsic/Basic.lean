@@ -138,6 +138,8 @@ namespace FunctionalInequalities.Energy.SmoothGradient.Intrinsic
 
 open Euclidean
 
+universe u
+
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
   [FiniteDimensional ℝ E]

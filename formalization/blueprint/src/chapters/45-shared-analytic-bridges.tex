@@ -1580,9 +1580,9 @@ addressed.
 
 \begin{lemma}[Moments and weak convergence of the Gaussian smoothing]
   \label{lem:bkl-gaussian-moments}
-  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_laplace,
-        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_mean_zero,
-        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_inner_sq,
+  \lean{FunctionalInequalities.Probability.Gaussian.laplace,
+        FunctionalInequalities.Probability.Gaussian.mean_zero,
+        FunctionalInequalities.Probability.Gaussian.integral_inner_sq,
         FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_mean,
         FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator,
         FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_norm_sq,
@@ -4708,7 +4708,7 @@ form taken by the variance estimate for isotropic $\mu$), then
 
 \begin{lemma}[Gaussian directional identity for $C^1$ tests]
   \label{lem:gaussian-directional-identity}
-  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_directional_identity_of_bounded_lipschitz_test}
+  \lean{FunctionalInequalities.Probability.Gaussian.directional_identity_of_bounded_lipschitz_test}
   \leanok
   \uses{lem:integrable-weak-divergence}
   Under \texttt{gaussianLaw s} with $s>0$, in every dimension, for every $C^1$, bounded and globally Lipschitz $f$ and every direction $v$,
@@ -5674,9 +5674,9 @@ form taken by the variance estimate for isotropic $\mu$), then
 
 \begin{lemma}[Fourth moments of Gaussian, smoothed and linear-image laws]
   \label{lem:gaussian-fourth-moments}
-  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_memLp_four,
+  \lean{FunctionalInequalities.Probability.Gaussian.memLp_four,
         FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_memLp_four,
-        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.map_linear_memLp_four}
+        FunctionalInequalities.Probability.memLp_four_map_linear}
   \leanok
   On a finite-dimensional real inner product space: \texttt{gaussianLaw s} ($s>0$) has a fourth moment; if a probability
   measure $\mu$ has a fourth moment, so do its Gaussian smoothing and its image under any continuous linear map.
@@ -5688,7 +5688,7 @@ form taken by the variance estimate for isotropic $\mu$), then
 
 \begin{lemma}[Translated Gaussian directional identity]
   \label{lem:gaussian-translated-directional-identity}
-  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_translated_directional_identity_of_bounded_lipschitz_test}
+  \lean{FunctionalInequalities.Probability.Gaussian.translated_directional_identity_of_bounded_lipschitz_test}
   \leanok
   \uses{lem:gaussian-directional-identity}
   For $s>0$, a bounded globally Lipschitz $h\in C^1$ and $a,v\in\mathbb R^n$, under $z\sim$ \texttt{gaussianLaw s}:

@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Sard.Smooth
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Analysis.Calculus.MeanValue
 
 /-! # Parametrized disks, flatness along a disk, and the mean value step -/

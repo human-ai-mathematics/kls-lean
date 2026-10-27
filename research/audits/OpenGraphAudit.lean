@@ -126,7 +126,7 @@ theorem preserved_setLIntegral_image_graphChartMap :
 
 /-! ### Axiom audit -/
 
-#print axioms FunctionalInequalities.Analysis.exists_contDiff_one_eqOn_ball
+#print axioms FunctionalInequalities.Analysis.exists_contDiff_eqOn_ball
 #print axioms FunctionalInequalities.Analysis.setLIntegral_image_graphMap
 #print axioms FunctionalInequalities.Analysis.setLIntegral_image_graphMap_of_contDiffOn
 #print axioms OpenGraphAudit.target

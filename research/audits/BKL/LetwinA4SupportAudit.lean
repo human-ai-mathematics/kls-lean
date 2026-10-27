@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Convex.Coercivity
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.Analysis.Convex.Mul
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace

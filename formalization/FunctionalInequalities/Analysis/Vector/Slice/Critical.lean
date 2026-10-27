@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.Lipschitz.ZeroDerivative
 import FunctionalInequalities.Analysis.Vector.Slice.Measurable
 import FunctionalInequalities.Analysis.Vector.Coarea.Regular
 import Mathlib.MeasureTheory.Function.Jacobian
@@ -62,24 +63,7 @@ theorem exists_lipschitzOnWith_zeroDeriv_cover {u : V → W} (hu : ContDiff ℝ 
     (hε : ε ≠ 0) :
     ∃ T : ℕ → Set V, Pairwise (Function.onFun Disjoint T) ∧ (∀ n, MeasurableSet (T n)) ∧
       {x : V | fderiv ℝ u x = 0} ⊆ ⋃ n, T n ∧
-      ∀ n, LipschitzOnWith ε u ({x : V | fderiv ℝ u x = 0} ∩ T n) := by
-  rcases Set.eq_empty_or_nonempty {x : V | fderiv ℝ u x = 0} with hC | hC
-  · refine ⟨fun _ => ∅, fun i j _ => by simp, fun _ => MeasurableSet.empty, by simp [hC], ?_⟩
-    intro n
-    simp only [Set.inter_empty]
-    exact LipschitzOnWith.of_dist_le_mul fun x hx => absurd hx (Set.notMem_empty x)
-  obtain ⟨T, A, hdisj, hmeas, hcov, happrox, hA⟩ :=
-    exists_partition_approximatesLinearOn_of_hasFDerivWithinAt u {x : V | fderiv ℝ u x = 0}
-      (fderiv ℝ u) (fun x _ => ((hu.differentiable one_ne_zero) x).hasFDerivAt.hasFDerivWithinAt)
-      (fun _ => ε) (fun _ => hε)
-  refine ⟨T, hdisj, hmeas, hcov, fun n => ?_⟩
-  obtain ⟨y, hy, hAy⟩ := hA hC n
-  have hA0 : A n = 0 := by rw [hAy]; exact hy
-  refine LipschitzOnWith.of_dist_le_mul fun x hx y' hy' => ?_
-  have h := happrox n x hx y' hy'
-  rw [hA0] at h
-  simpa [dist_eq_norm] using h
-
+      ∀ n, LipschitzOnWith ε u ({x : V | fderiv ℝ u x = 0} ∩ T n) := exists_lipschitzOnWith_cover_of_fderiv_eq_zero hu hε
 /-- The vanishing-derivative slices inside a fixed ball are null at almost every level. -/
 theorem ae_hausdorffMeasure_zeroDeriv_ball_eq_zero {u : V → W} (hu : ContDiff ℝ 1 u) {k : ℕ}
     (hk : k + finrank ℝ W = finrank ℝ V) (hm : 0 < finrank ℝ W) (R : ℕ) :
@@ -216,60 +200,14 @@ theorem coarea_of_contDiff_of_critical_eq_zeroDeriv {S : Set V} {u : V → W} {g
     (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
       = ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k)
           ∂(volume : Measure W)) := by
-  set ν : Measure V := KLS.hausdorffNormalized V k with hν
-  set R : Set V := {x : V | coareaJacobian (fderiv ℝ u x) ≠ 0} with hR
-  have hRopen : IsOpen R := isOpen_coareaJacobian_ne_zero hu
-  have hRmeas : MeasurableSet R := hRopen.measurableSet
-  have hkdim : k = finrank ℝ V - finrank ℝ W := by omega
-  -- measurability, with no regularity hypothesis
-  have hmeas : AEMeasurable (fun t : W => ∫⁻ y in S ∩ {x | u x = t}, g y ∂ν)
-      (volume : Measure W) :=
-    aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector hk isOpen_univ hu.contDiffOn hS
-      (Set.subset_univ S) hg
-  refine ⟨hmeas, ?_⟩
-  -- the regular part
-  obtain ⟨-, heqR⟩ := coarea_of_contDiffOn_of_coareaJacobian_ne_zero (O := R) (S := S ∩ R)
-    hRopen hu.contDiffOn (fun _ hx => hx) (hS.inter hRmeas) Set.inter_subset_right hg
-  rw [← hkdim] at heqR
-  -- the ambient integral sees only the regular part
-  have hleft : (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V))
-      = ∫⁻ x in S ∩ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V) := by
-    rw [← lintegral_inter_add_sdiff _ _ hRmeas]
-    have hzero : (∫⁻ x in S \ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V)) = 0 := by
-      refine setLIntegral_eq_zero (hS.diff hRmeas) fun x hx => ?_
-      have h0 : coareaJacobian (fderiv ℝ u x) = 0 := by
-        by_contra hne
-        exact hx.2 hne
-      simp [h0]
-    rw [hzero, add_zero]
-  -- the fibre integral sees only the regular part, at almost every level
-  have hright : ∀ᵐ t ∂(volume : Measure W),
-      (∫⁻ y in S ∩ {x | u x = t}, g y ∂ν) = ∫⁻ y in (S ∩ R) ∩ {x | u x = t}, g y ∂ν := by
-    filter_upwards [ae_hausdorffNormalized_zeroDeriv_inter_levelSet_eq_zero hu hk hm] with t ht
-    refine setLIntegral_congr ?_
-    have hsub : (S ∩ {x | u x = t}) \ ((S ∩ R) ∩ {x | u x = t})
-        ⊆ {x : V | fderiv ℝ u x = 0} ∩ {x | u x = t} := by
-      rintro x ⟨⟨hxS, hxt⟩, hxn⟩
-      refine ⟨?_, hxt⟩
-      rcases hcrit x with hreg | hzero
-      · exact absurd ⟨⟨hxS, hreg⟩, hxt⟩ hxn
-      · exact hzero
-    have hempty : ((S ∩ R) ∩ {x | u x = t}) \ (S ∩ {x | u x = t}) = ∅ := by
-      ext x
-      simp only [Set.mem_sdiff, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_empty_iff_false,
-        iff_false, not_and]
-      tauto
-    exact MeasureTheory.ae_eq_set.2 ⟨measure_mono_null hsub ht, by rw [hempty]; simp⟩
-  calc (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V))
-      = ∫⁻ x in S ∩ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-          ∂(volume : Measure V) := hleft
-    _ = ∫⁻ t, ∫⁻ y in (S ∩ R) ∩ {x | u x = t}, g y ∂ν ∂(volume : Measure W) := heqR
-    _ = ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂ν ∂(volume : Measure W) :=
-        lintegral_congr_ae (hright.mono fun t ht => ht.symm)
-
+  apply coarea_of_contDiff_of_ae_null_critical hk hu hS hg
+  filter_upwards [ae_hausdorffNormalized_zeroDeriv_inter_levelSet_eq_zero hu hk hm] with t ht
+  refine measure_mono_null ?_ ht
+  rintro x ⟨hx, hxt⟩
+  refine ⟨?_, hxt⟩
+  rcases hcrit x with hreg | hzero
+  · exact absurd hx hreg
+  · exact hzero
 end Critical
 
 end FunctionalInequalities.Analysis

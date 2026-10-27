@@ -1,3 +1,4 @@
+import FunctionalInequalities.L2.Pairing
 import FunctionalInequalities.Analysis.TestFunctionOrder
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate
 
@@ -44,15 +45,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
-omit [CompleteSpace V] in
-private theorem integrable_Lp_mul_compact (ψ : Lp ℝ 2 (ν : Measure V)) {q : V → ℝ}
-    (hq : Continuous q) (hqc : HasCompactSupport q) :
-    Integrable (fun x => ψ x * q x) (ν : Measure V) := by
-  have hqL : MemLp q 2 (ν : Measure V) := hq.memLp_of_hasCompactSupport hqc
-  refine (L2.integrable_inner (𝕜 := ℝ) ψ (hqL.toLp q)).congr ?_
-  filter_upwards [hqL.coeFn_toLp] with x hx
-  simp only [hx, Real.inner_apply, mul_comm]
-
 /-- The carré identity on smooth compactly supported data. -/
 private theorem integral_carre_smooth (hνU : (ν : Measure V) = m.tilted (-U))
     (hU : ContDiff ℝ ∞ U)
@@ -76,9 +68,9 @@ private theorem integral_carre_smooth (hνU : (ν : Measure V) = m.tilted (-U))
     ring
   have i₁ : Integrable (fun x => (ψ : Lp ℝ 2 (ν : Measure V)) x *
       (q x * weightedLaplacian U q x)) (ν : Measure V) :=
-    integrable_Lp_mul_compact (ν := ν) (ψ : Lp ℝ 2 (ν : Measure V))
+    FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V))
       (hq.continuous.mul hL.continuous) (hqc.mul_right)
-  have i₂ := integrable_Lp_mul_compact (ν := ν) (ψ : Lp ℝ 2 (ν : Measure V))
+  have i₂ := FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V))
     (continuous_gamma (hq.of_le (by decide)) (hq.of_le (by decide)))
     (hasCompactSupport_gamma_left q hqc)
   rw [hsym, hmul]

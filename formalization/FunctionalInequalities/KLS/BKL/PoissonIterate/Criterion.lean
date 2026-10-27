@@ -333,35 +333,6 @@ theorem le_of_iterate_bounds {C c R : ℝ} {v p χ L α : ℕ → ℝ} {t : ℕ 
 
 end Scalar
 
-/-! ### The Taylor bound (29) for tensor fields -/
-
-section Taylor
-
-variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-  [MeasurableSpace V] {ν : ProbabilityMeasure V}
-
-/-- **The Taylor bound (29) componentwise** (BKL p. 16, proof of Lemma 3.8, and p. 17): if
-`|T_d g| ≤ R^d ‖g‖₂` for every `g ∈ L²(ν)` in the Hilbert–Schmidt norm of the standard basis,
-then `|T_d u|² ≤ R^{2d} ‖u‖²` for every tensor field `u`, by summing over its components. -/
-theorem norm_taylorField_sq_le {R : ℝ} {d : ℕ}
-    (h29 : ∀ g : Lp ℝ 2 (ν : Measure V),
-      ‖coordTensor (stdOrthonormalBasis ℝ V) (taylorTensor (ν : Measure V) (⇑g) d)‖ ≤
-        R ^ d * ‖g‖) {k : ℕ} (u : Field ν k) :
-    ‖taylorField d u‖ ^ 2 ≤ R ^ (2 * d) * normSq u := by
-  rw [EuclideanSpace.norm_sq_eq, ← (Fin.appendEquiv d k).sum_comp, Fintype.sum_prod_type,
-    Finset.sum_comm, normSq, Finset.mul_sum]
-  refine Finset.sum_le_sum fun I _ => ?_
-  have hI : ∑ J : Fin d → Fin (Module.finrank ℝ V),
-      ‖taylorField d u (Fin.appendEquiv d k (J, I))‖ ^ 2 =
-        ‖coordTensor (stdOrthonormalBasis ℝ V) (taylorTensor (ν : Measure V) (⇑(u I)) d)‖ ^ 2 := by
-    rw [EuclideanSpace.norm_sq_eq]
-    refine Finset.sum_congr rfl fun J _ => ?_
-    simp [taylorField, coordTensor_apply, Fin.append_left, Fin.append_right]
-  rw [hI, pow_mul', ← mul_pow]
-  exact pow_le_pow_left₀ (norm_nonneg _) (h29 (u I)) 2
-
-end Taylor
-
 /-! ### The criterion in the heat model -/
 
 /-- The universal constant of BKL Theorem 3.1 obtained in the operator route: `K = 100 c²` with

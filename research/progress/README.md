@@ -988,10 +988,10 @@ flowchart LR
     click SRCDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean" "Moment potential — Second differences ≤ 4/κ" _blank
     click EXPLIP href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean" "Lipschitz exponent — −u + V(∇u)" _blank
     click REGTENSOR href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean" "Regular source law — Weak third-derivative tensor" _blank
-    click WPRODG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak product — Global L2 factors" _blank
-    click WPRODL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak product — Bounded, local L2 derivative" _blank
-    click WLIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak linearity — Finite real combinations" _blank
-    click WFPROD href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak product — Finite bounded factors" _blank
+    click WPRODG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak product — Global L2 factors" _blank
+    click WPRODL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak product — Bounded, local L2 derivative" _blank
+    click WLIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak linearity — Finite real combinations" _blank
+    click WFPROD href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak product — Finite bounded factors" _blank
     click WDET href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak determinant — Permutation polynomial" _blank
     click WTRACE href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak trace quadratic — tr(BABA), arbitrary B" _blank
     click WJAC href "../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean" "Weak determinant density — = outer Jacobi differential" _blank
@@ -999,32 +999,32 @@ flowchart LR
     click WAECONGR href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean" "Weak derivative — a.e. transport" _blank
     click AEEXP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "A.e. exponent derivative — −u + V(∇u)" _blank
     click WMA1 href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean" "Regular source law — First weak Monge–Ampère (2.4)" _blank
-    click WEXPNEG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak negative exponential — Lipschitz exponent" _blank
-    click WPRODLB href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak product — Compact-locally bounded factors" _blank
+    click WEXPNEG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak negative exponential — Lipschitz exponent" _blank
+    click WPRODLB href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak product — Compact-locally bounded factors" _blank
     click WMATINV href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak matrix inverse — DR = −R DA R a.e." _blank
     click WADJ href "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean" "Hessian adjugate — Bound and weak derivative" _blank
     click WINVH href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Intrinsic weak inverse Hessian — Letwin (2.5)" _blank
     click WINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — Weak inverse Hessian (2.5)" _blank
     click WSMOOTH href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean" "Common-support smooth — approximation of weak derivatives" _blank
-    click WCURL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Rough compact curl testing — ∫ p b = ∫ q a" _blank
+    click WCURL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Rough compact curl testing — ∫ p b = ∫ q a" _blank
     click WEAKGENC1 href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Weak generator identity — C¹ multipliers" _blank
     click MEANC11 href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean" "Mean Hessian identity — C¹,¹ potential" _blank
     click WMEANH href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — Mean Hessian = Id" _blank
     click WBAPPROX href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean" "Bounded all-coordinate approximation — common support, a.e. limit" _blank
-    click WBTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Bounded weak-test extension — of divergence identities" _blank
+    click WBTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Bounded weak-test extension — of divergence identities" _blank
     click WINVROW href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Weak Piola row divergence — of the inverse Hessian" _blank
-    click WGRADCOMP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean" "Weak derivative of — ∂ₐW(∇u)" _blank
-    click WMARHS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean" "Weak derivative of the — first Monge–Ampère right side" _blank
-    click WFLUXLOC href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean" "Hessian flux L2 and — trace forcing locally L1" _blank
-    click WFLUX href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean" "Unweighted weak — Hessian flux identity" _blank
-    click WEVOL href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean" "Weighted weak Hessian evolution — Letwin (2.6)" _blank
-    click WEVOLB href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean" "Weak Hessian evolution — bounded H¹ tests" _blank
+    click WGRADCOMP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weak derivative of — ∂ₐW(∇u)" _blank
+    click WMARHS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weak derivative of the — first Monge–Ampère right side" _blank
+    click WFLUXLOC href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Hessian flux L2 and — trace forcing locally L1" _blank
+    click WFLUX href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Unweighted weak — Hessian flux identity" _blank
+    click WEVOL href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weighted weak Hessian evolution — Letwin (2.6)" _blank
+    click WEVOLB href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weak Hessian evolution — bounded H¹ tests" _blank
     click WEVOLSRC href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — weak Hessian evolution (2.6)" _blank
     click WHTEST href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — bounded ψ·H tests" _blank
     click WCUTR href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean" "Weak inverse-Hessian cutoffs — real R ≥ 1, defect ≤ C/R" _blank
     click WCUTN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean" "Weak inverse-Hessian cutoffs — natural index, defect ≤ C/(m+1)" _blank
     click WCUTSRC href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean" "Regular source law — weak height cutoffs" _blank
-    click WCFLUX href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Compact flux IBP — bounded weak test" _blank
+    click WCFLUX href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Compact flux IBP — bounded weak test" _blank
     click WBTRQ href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Bounded weak trace — quadratic data" _blank
     click WROUGH href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean" "Rough eta against — C1 cutoff generator" _blank
     click WTRCON href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean" "Weak trace contraction — (2.8)/(2.10)" _blank
@@ -1038,7 +1038,7 @@ flowchart LR
     click MVAR href "../../formalization/FunctionalInequalities/Probability/Moments.lean" "Random matrix — variance trace" _blank
     click WT25 href "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean" "Weak Hessian trace bound — (Theorem 2.5, PSD B)" _blank
     click SYMAE href "../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean" "AE PSD symmetric — trace extension" _blank
-    click S1 href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Integrable weak derivative — has zero integral" _blank
+    click S1 href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Integrable weak derivative — has zero integral" _blank
     click WIBP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean" "Tilted IBP — bounded Lipschitz tests" _blank
     click C1CHAIN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean" "C1 gradient — chain coordinate" _blank
     click SRCSTEIN href "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean" "Weak source — Stein identity" _blank
@@ -1048,7 +1048,7 @@ flowchart LR
     click REGINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean" "Regular source law — gradient inverse, local ellipticity" _blank
     click TGTSTEIN href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean" "Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n)" _blank
     click DIRSUB href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — directional weak subsolution, local coefficient bounds" _blank
-    click ROUGHTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak H1 tools — chain rule, log/power, rough tests" _blank
+    click ROUGHTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak H1 tools — chain rule, log/power, rough tests" _blank
     click H1ENERGY href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "H1 energy tools — Caccioppoli, weak Sobolev" _blank
     click MOSERIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "Moser inputs — log/power energy, cutoffs, Lp limit" _blank
     click MORREYPOT href "../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean" "Morrey and potential inputs — all-ball Morrey, critical potential exp" _blank
@@ -1253,10 +1253,10 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Moment potential — Second differences ≤ 4/κ | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean) |
 | Lipschitz exponent — −u + V(∇u) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean) |
 | Regular source law — Weak third-derivative tensor | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean) |
-| Weak product — Global L2 factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak product — Bounded, local L2 derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak linearity — Finite real combinations | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak product — Finite bounded factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Weak product — Global L2 factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak product — Bounded, local L2 derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak linearity — Finite real combinations | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak product — Finite bounded factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak determinant — Permutation polynomial | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Weak trace quadratic — tr(BABA), arbitrary B | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Weak determinant density — = outer Jacobi differential | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean) |
@@ -1264,32 +1264,32 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Weak derivative — a.e. transport | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean) |
 | A.e. exponent derivative — −u + V(∇u) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
 | Regular source law — First weak Monge–Ampère (2.4) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean) |
-| Weak negative exponential — Lipschitz exponent | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak product — Compact-locally bounded factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Weak negative exponential — Lipschitz exponent | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak product — Compact-locally bounded factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak matrix inverse — DR = −R DA R a.e. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Hessian adjugate — Bound and weak derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean) |
 | Intrinsic weak inverse Hessian — Letwin (2.5) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
 | Regular source law — Weak inverse Hessian (2.5) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Common-support smooth — approximation of weak derivatives | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean) |
-| Rough compact curl testing — ∫ p b = ∫ q a | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Rough compact curl testing — ∫ p b = ∫ q a | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak generator identity — C¹ multipliers | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
 | Mean Hessian identity — C¹,¹ potential | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean) |
 | Regular source law — Mean Hessian = Id | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Bounded all-coordinate approximation — common support, a.e. limit | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean) |
-| Bounded weak-test extension — of divergence identities | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Bounded weak-test extension — of divergence identities | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak Piola row divergence — of the inverse Hessian | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
-| Weak derivative of — ∂ₐW(∇u) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Weak derivative of the — first Monge–Ampère right side | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Hessian flux L2 and — trace forcing locally L1 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Unweighted weak — Hessian flux identity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Weighted weak Hessian evolution — Letwin (2.6) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Weak Hessian evolution — bounded H¹ tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
+| Weak derivative of — ∂ₐW(∇u) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Weak derivative of the — first Monge–Ampère right side | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Hessian flux L2 and — trace forcing locally L1 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Unweighted weak — Hessian flux identity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Weighted weak Hessian evolution — Letwin (2.6) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Weak Hessian evolution — bounded H¹ tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
 | Regular source law — weak Hessian evolution (2.6) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Regular source law — bounded ψ·H tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Weak inverse-Hessian cutoffs — real R ≥ 1, defect ≤ C/R | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean) |
 | Weak inverse-Hessian cutoffs — natural index, defect ≤ C/(m+1) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean) |
 | Regular source law — weak height cutoffs | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean) |
-| Compact flux IBP — bounded weak test | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Compact flux IBP — bounded weak test | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Bounded weak trace — quadratic data | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Rough eta against — C1 cutoff generator | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean) |
 | Weak trace contraction — (2.8)/(2.10) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean) |
@@ -1303,7 +1303,7 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Random matrix — variance trace | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Moments.lean) |
 | Weak Hessian trace bound — (Theorem 2.5, PSD B) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean) |
 | AE PSD symmetric — trace extension | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) |
-| Integrable weak derivative — has zero integral | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Integrable weak derivative — has zero integral | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Tilted IBP — bounded Lipschitz tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean) |
 | C1 gradient — chain coordinate | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean) |
 | Weak source — Stein identity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean) |
@@ -1313,7 +1313,7 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Regular source law — gradient inverse, local ellipticity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean) |
 | Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean) |
 | Regular source law — directional weak subsolution, local coefficient bounds | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
-| Weak H1 tools — chain rule, log/power, rough tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Weak H1 tools — chain rule, log/power, rough tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | H1 energy tools — Caccioppoli, weak Sobolev | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
 | Moser inputs — log/power energy, cutoffs, Lp limit | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
 | Morrey and potential inputs — all-ball Morrey, critical potential exp | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean) |
@@ -1483,10 +1483,10 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Moment potential — Second differences ≤ 4/κ | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean) |
 | Lipschitz exponent — −u + V(∇u) | [Source](../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean) |
 | Regular source law — Weak third-derivative tensor | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean) |
-| Weak product — Global L2 factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak product — Bounded, local L2 derivative | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak linearity — Finite real combinations | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak product — Finite bounded factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Weak product — Global L2 factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak product — Bounded, local L2 derivative | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak linearity — Finite real combinations | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak product — Finite bounded factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak determinant — Permutation polynomial | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Weak trace quadratic — tr(BABA), arbitrary B | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Weak determinant density — = outer Jacobi differential | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean) |
@@ -1494,32 +1494,32 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Weak derivative — a.e. transport | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean) |
 | A.e. exponent derivative — −u + V(∇u) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
 | Regular source law — First weak Monge–Ampère (2.4) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean) |
-| Weak negative exponential — Lipschitz exponent | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
-| Weak product — Compact-locally bounded factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Weak negative exponential — Lipschitz exponent | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
+| Weak product — Compact-locally bounded factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak matrix inverse — DR = −R DA R a.e. | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Hessian adjugate — Bound and weak derivative | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean) |
 | Intrinsic weak inverse Hessian — Letwin (2.5) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
 | Regular source law — Weak inverse Hessian (2.5) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Common-support smooth — approximation of weak derivatives | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean) |
-| Rough compact curl testing — ∫ p b = ∫ q a | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Rough compact curl testing — ∫ p b = ∫ q a | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak generator identity — C¹ multipliers | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
 | Mean Hessian identity — C¹,¹ potential | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean) |
 | Regular source law — Mean Hessian = Id | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Bounded all-coordinate approximation — common support, a.e. limit | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean) |
-| Bounded weak-test extension — of divergence identities | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Bounded weak-test extension — of divergence identities | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Weak Piola row divergence — of the inverse Hessian | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean) |
-| Weak derivative of — ∂ₐW(∇u) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Weak derivative of the — first Monge–Ampère right side | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Hessian flux L2 and — trace forcing locally L1 | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Unweighted weak — Hessian flux identity | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Weighted weak Hessian evolution — Letwin (2.6) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
-| Weak Hessian evolution — bounded H¹ tests | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean) |
+| Weak derivative of — ∂ₐW(∇u) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Weak derivative of the — first Monge–Ampère right side | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Hessian flux L2 and — trace forcing locally L1 | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Unweighted weak — Hessian flux identity | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Weighted weak Hessian evolution — Letwin (2.6) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
+| Weak Hessian evolution — bounded H¹ tests | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean) |
 | Regular source law — weak Hessian evolution (2.6) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Regular source law — bounded ψ·H tests | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
 | Weak inverse-Hessian cutoffs — real R ≥ 1, defect ≤ C/R | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean) |
 | Weak inverse-Hessian cutoffs — natural index, defect ≤ C/(m+1) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean) |
 | Regular source law — weak height cutoffs | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean) |
-| Compact flux IBP — bounded weak test | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Compact flux IBP — bounded weak test | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Bounded weak trace — quadratic data | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
 | Rough eta against — C1 cutoff generator | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean) |
 | Weak trace contraction — (2.8)/(2.10) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean) |
@@ -1533,7 +1533,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Random matrix — variance trace | [Source](../../formalization/FunctionalInequalities/Probability/Moments.lean) |
 | Weak Hessian trace bound — (Theorem 2.5, PSD B) | [Source](../../formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean) |
 | AE PSD symmetric — trace extension | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) |
-| Integrable weak derivative — has zero integral | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Integrable weak derivative — has zero integral | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | Tilted IBP — bounded Lipschitz tests | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean) |
 | C1 gradient — chain coordinate | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean) |
 | Weak source — Stein identity | [Source](../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean) |
@@ -1543,7 +1543,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Regular source law — gradient inverse, local ellipticity | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean) |
 | Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean) |
 | Regular source law — directional weak subsolution, local coefficient bounds | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
-| Weak H1 tools — chain rule, log/power, rough tests | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| Weak H1 tools — chain rule, log/power, rough tests | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean) |
 | H1 energy tools — Caccioppoli, weak Sobolev | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
 | Moser inputs — log/power energy, cutoffs, Lp limit | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
 | Morrey and potential inputs — all-ball Morrey, critical potential exp | [Source](../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean) |

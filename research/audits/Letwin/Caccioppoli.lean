@@ -8,7 +8,7 @@ import FunctionalInequalities.Analysis.RieszPotential.Critical
 import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
 import FunctionalInequalities.Analysis.WeakDerivative.Representation
 import FunctionalInequalities.Analysis.WeakDerivative.Moser
-import FunctionalInequalities.Probability.ExponentialMoments
+import FunctionalInequalities.Probability.ExponentialMoments.Growth
 import FunctionalInequalities.Analysis.WeakDerivative.Harnack
 
 /-!
@@ -827,7 +827,7 @@ private theorem block_two_extend {w : EuclideanSpace ℝ (Fin 2) → ℝ} {a : F
 section UnifiedWitness
 
 variable {n : ℕ} (hn : 0 < n)
-variable {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ}
+  {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ}
   (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
   (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
   (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))

@@ -34,7 +34,7 @@ private lemma memLp_four_of_exp {E : Type*} [NormedAddCommGroup E] [InnerProduct
     (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) : MemLp id 4 μ := by
   apply (integrable_norm_rpow_iff (p := 4) continuous_id.aestronglyMeasurable
     (by norm_num) (by norm_num)).mp
-  simpa using integrable_norm_pow_of_exp_cond μ hr hexp 4
+  simpa using FunctionalInequalities.Probability.integrable_norm_pow_of_exp μ hr hexp 4
 
 /-- Letwin arXiv:2607.24164v1, Theorem 1.2: the constant-eight quadratic-form variance bound
 for arbitrary isotropic log-concave probability laws, with no compact-support assumption. -/

@@ -8,61 +8,101 @@ import FunctionalInequalities.Analysis.HolderRepresentative
 import FunctionalInequalities.Analysis.HessianRegularity
 
 /-!
-# Regular moment potentials with Hölder Hessian
+# Hölder Hessian regularity at a given moment potential
 
-At the regular moment potential `u` of `exists_regular_moment_directional_hessian_subsolution` (smooth `κ`-uniformly convex `W`,
-compact convex `K` with nonempty interior, normalized isotropic `1_K e^{−W}` law; Letwin, arXiv:2607.24164v1, Lemma 2.2 support):
-the essential weak Harnack law for the directional Hessian deficits, their essential oscillation decay in a fixed frame,
-power decay, Hölder representatives of every Hessian entry, one continuous representative, `C²`, and the everywhere
-log-determinant equation. The method is the rough-divergence form of Gilbarg–Trudinger (2001), Lemmas 17.13/17.14 and 8.23.
-All steps use the same `u`. The public result is `exists_regular_moment_potential_holder_hessian`. Not full Schauder/`C^∞` regularity
-and not the merely convex Lemma 2.2.
+Letwin arXiv:2607.24164v1, Lemma 2.2, strong regular class. The given-potential theorem
+`holder_hessian_of_weak_evolution_fields` carries the rough-divergence Harnack, fixed-frame
+oscillation decay and Hölder-representative argument through at a supplied normalized C¹
+moment potential. Weak Hessian and inverse-Hessian derivatives are inputs; C², local Hölder
+Hessian bounds and the everywhere positive Monge–Ampère equation are conclusions.
+
+The source-law producer retains its prior type and all fields. Both uses share this given-data
+proof, allowing estimates already proved at one potential to survive the regularity upgrade.
+The method follows Gilbarg–Trudinger (2001), Lemmas 17.13/17.14 and 8.23. The merely convex
+source class and smoothness require their separate tools.
 -/
 
 /-! ## The same regular moment potential -/
 
-noncomputable section RegularMomentHolderHessian
+noncomputable section RegularMomentHolderHessianData
 
 open MeasureTheory Set Metric Matrix
 open scoped ContDiff ENNReal NNReal
 
 namespace FunctionalInequalities.Analysis
 
-open FunctionalInequalities FunctionalInequalities.Probability.Stein
+open FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
 
-section SameWitness
-variable {n : ℕ} (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ}
-  (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+section GivenData
+variable {n : ℕ} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ}
+
+/-- The eleven fields of the weak Hessian evolution witness that the Hölder-Hessian chain consumes (the source
+hypotheses `0 < n`, `0 < κ`, smooth `κ`-uniformly convex `W` are passed separately): exactly the fields
+`hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv` destructured by the canonical chain from
+`exists_regular_moment_directional_hessian_subsolution`; the compact-local coefficient bounds are re-derived. -/
+private def EvolutionData (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (W : EuclideanSpace ℝ (Fin n) → ℝ) (κ : ℝ)
+    (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
+    (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ) : Prop :=
+  ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+  (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+  ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+    (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+  ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+  LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
+  (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+    (hessianMatrix u x).PosDef ∧
+    Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+    ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
+  (∀ k i j,
+    HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
+        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+        MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+  (∀ k : Fin n,
+    HasWeakDerivAlong (fun x => (hessianMatrix u x).det)
+      (fun x => (hessianMatrix u x).det *
+        ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace)
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+    (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      MemLp (fun x => (hessianMatrix u x).det *
+        ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace)
+        2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+    HasWeakDerivAlong (fun x => Real.log (hessianMatrix u x).det)
+      (fun x => ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace)
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+    (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace =
+        fderiv ℝ (fun y => -u y + W (gradient u y)) x
+          (EuclideanSpace.basisFun (Fin n) ℝ k)) ∧
+    (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace =
+        -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ k) +
+          ∑ a : Fin n, hessianMatrix u x k a *
+            fderiv ℝ W (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ a))) ∧
+  (∀ k i j : Fin n,
+    HasWeakDerivAlong (fun x => (hessianMatrix u x)⁻¹ i j)
+      (fun x => -(((hessianMatrix u x)⁻¹ *
+        (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j))
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+    (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      MemLp (fun x => -(((hessianMatrix u x)⁻¹ *
+        (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j)) 2
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+    ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+
+variable (hn : 0 < n) (hκ : 0 < κ) (hW : ContDiff ℝ ∞ W)
   (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
   (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-  (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-    (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-      (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-  (hiso : KLS.Isotropic μ)
-include hn hκ hK hKc hKint hW hstrong hμ hiso
+  {u : EuclideanSpace ℝ (Fin n) → ℝ} {L LF : NNReal} {T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ}
+include hn hκ hW hstrong
 
 /-- One regular moment potential `u` with all its regular-class data, and the essential weak Harnack law of
 Gilbarg–Trudinger (2001), Theorem 8.18 (bounded symmetric case), for every directional Hessian deficit at that `u`. For
 every compact `S` the coefficients `α, β, B` and constants `C(p)` are chosen before every center, radius, direction and cap.
 This is the given-data application of `bounded_weak_harnack_of_given_data` to the CEK weak Hessian producer. -/
-private theorem given_data_harnack_regular_moment_potential :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem given_data_harnack_regular_moment_potential_of_data (h : EvolutionData μ W κ u L LF T) :
       ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
         ∃ α β B : ℝ, 0 < α ∧ 0 < β ∧ 0 ≤ B ∧
         (∀ x ∈ S, Real.exp (-u x) ≤ B) ∧
@@ -83,9 +123,15 @@ private theorem given_data_harnack_regular_moment_potential :
               (essInf (fun x => ENNReal.ofReal (w x))
                 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball x0 R)) +
               ENNReal.ofReal (M*B*R^2/α)) := by
-  obtain ⟨u, L, LF, T, hold, -, hcoef⟩ :=
-    exists_regular_moment_directional_hessian_subsolution hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, -, hd, hT, -, hfirst, hInv, -⟩ := hold
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
+  have hcoef : ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      ∃ c₀ c₁ : ℝ, 0 < c₀ ∧ 0 < c₁ ∧
+        ∀ᵐ x ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S),
+          (Real.exp (-u x) • (hessianMatrix u x)⁻¹ - c₀ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef ∧
+          (c₁ • (1 : Matrix (Fin n) (Fin n) ℝ) - Real.exp (-u x) • (hessianMatrix u x)⁻¹).PosSemidef :=
+    fun S hS => exists_compact_inverse_hessian_coefficient_bounds hn hC1.continuous
+      (hC1.continuous.neg.add (hW.continuous.comp (BakryEmery.continuous_gradient hC1)))
+      (div_pos (by norm_num : (0 : ℝ) < 16) hκ) hd hS
   have hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
       (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
     filter_upwards [hd] with x hx
@@ -93,12 +139,9 @@ private theorem given_data_harnack_regular_moment_potential :
   have hVc : ConvexOn ℝ univ W := by
     have hn' : ConvexOn ℝ univ (fun y : EuclideanSpace ℝ (Fin n) => ‖y‖ ^ 2) :=
       convexOn_univ_norm.pow (fun _ _ => norm_nonneg _) 2
-    have hq := hn'.smul (show 0 ≤ κ / 2 by positivity)
-    have he : (fun y => W y - κ / 2 * ‖y‖ ^ 2) + (fun y => (κ / 2) • ‖y‖ ^ 2) = W := by
-      funext y
-      simp only [Pi.add_apply, smul_eq_mul, sub_add_cancel]
-    rw [← he]
-    exact hstrong.add hq
+    have hq := hn'.smul
+      (show 0 ≤ κ / 2 by positivity)
+    convert hstrong.add hq using 1 <;> ext y <;> simp [smul_eq_mul]
   have hρc : Continuous fun x => Real.exp (-u x) := Real.continuous_exp.comp hC1.continuous.neg
   have hAm (i j : Fin n) : AEStronglyMeasurable (fun x => (Real.exp (-u x) • (hessianMatrix u x)⁻¹) i j)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
@@ -111,7 +154,7 @@ private theorem given_data_harnack_regular_moment_potential :
       exact ((hInv i i j).2.2 S hS).integrable (by simp)
     change AEStronglyMeasurable (fun x => Real.exp (-u x) * (hessianMatrix u x)⁻¹ i j) volume
     exact hρc.aestronglyMeasurable.mul hLoc.aestronglyMeasurable
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,fun S hSc => ?_⟩
+  intro S hSc
   -- one choice of `α, β` and of the density bound `B` on `B_4R`
   obtain ⟨c0, c1, hc0, hc1, hcb⟩ := hcoef S hSc
   obtain ⟨Cρ, hCρ⟩ := hSc.exists_bound_of_continuousOn hρc.continuousOn
@@ -230,24 +273,7 @@ private theorem given_data_harnack_regular_moment_potential :
 
 /-- At the same regular moment potential: for every compact `S`, a fixed frame (coordinates and normalized pairs) and
 `0 < θ < 1`, `C > 0` with the essential oscillation decay of its Hessian directions on balls `B̄(x0,4R) ⊆ S`. -/
-private theorem regular_moment_hessian_essential_oscillation :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem regular_moment_hessian_essential_oscillation_of_data (h : EvolutionData μ W κ u L LF T) :
       ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
         ∃ α β B : ℝ, 0 < α ∧ 0 < β ∧ 0 ≤ B ∧
         (∀ x ∈ S, Real.exp (-u x) ≤ B) ∧
@@ -266,9 +292,9 @@ private theorem regular_moment_hessian_essential_oscillation :
               essInf (q k) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball x0 R)))) ≤
             θ*(∑ k, (essSup (q k) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball x0 (4*R)))-
               essInf (q k) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball x0 (4*R)))))+C*(R+R^2) := by
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hS⟩ :=
-    given_data_harnack_regular_moment_potential hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,fun S hSc => ?_⟩
+  have hS := given_data_harnack_regular_moment_potential_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
+  intro S hSc
   obtain ⟨α,β,B,hα,hβ,hB,hρB,hA,Ch,hCh,hH⟩ := hS S hSc
   let hi : ℝ := α+β+1
   have hαhi : α < hi := by dsimp only [hi]; linarith
@@ -312,24 +338,7 @@ private theorem regular_moment_hessian_essential_oscillation :
 
 /-- At the same regular moment potential: for every `s > 0`, a fixed frame and `η, Q`, chosen before every center in
 `B̄(0,s)` and every radius in `(0,1]`, bounding the summed essential widths of the Hessian directions by `Q r^η`. -/
-private theorem regular_moment_hessian_power_oscillation :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem regular_moment_hessian_power_oscillation_of_data (h : EvolutionData μ W κ u L LF T) :
       ∀ s : ℝ, 0 < s →
         ∃ (N : ℕ) (γ : Fin N → Fin n → ℝ) (η Q : ℝ),
           (∀ k, ∑ i : Fin n, (γ k i)^2 = 1) ∧
@@ -341,9 +350,9 @@ private theorem regular_moment_hessian_power_oscillation :
           ∀ x0 ∈ closedBall (0 : EuclideanSpace ℝ (Fin n)) s, ∀ r ∈ Ioc (0:ℝ) 1,
             (∑ k, (essSup (q k) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball x0 r))-
               essInf (q k) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball x0 r)))) ≤ Q*r^η := by
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hS⟩ :=
-    regular_moment_hessian_essential_oscillation hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,fun s _hs => ?_⟩
+  have hS := regular_moment_hessian_essential_oscillation_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
+  intro s _hs
   obtain ⟨_α,_β,_B,_hα,_hβ,_hB,_hρB,_hA,N,γ,θ,C,hγ,hcoord,hpair,hθ,hθ1,hC,hOsc⟩ :=
     hS (closedBall (0 : EuclideanSpace ℝ (Fin n)) (s+4)) (isCompact_closedBall _ _)
   let q := fun k x => ∑ i : Fin n, ∑ j : Fin n, γ k i*γ k j*hessianMatrix u x i j
@@ -377,24 +386,7 @@ private theorem regular_moment_hessian_power_oscillation :
 
 /-- At the same regular moment potential: on every ball `B(0,s)`, continuous Hölder representatives (common `η, C`) of every
 frame quadratic form of the Hessian. -/
-private theorem regular_moment_hessian_directional_holder :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem regular_moment_hessian_directional_holder_of_data (h : EvolutionData μ W κ u L LF T) :
       ∀ s : ℝ, 0 < s →
         ∃ (N : ℕ) (γ : Fin N → Fin n → ℝ) (η C : ℝ≥0),
           (∀ k, ∑ i : Fin n, (γ k i)^2 = 1) ∧
@@ -407,9 +399,9 @@ private theorem regular_moment_hessian_directional_holder :
             ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball 0 s),
               ∀ hx : x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) s,
                 g ⟨x,hx⟩ = ∑ i : Fin n, ∑ j : Fin n, γ k i*γ k j*hessianMatrix u x i j := by
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hS⟩ :=
-    regular_moment_hessian_power_oscillation hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,fun s hs => ?_⟩
+  have hS := regular_moment_hessian_power_oscillation_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
+  intro s hs
   obtain ⟨N,γ,η,Q,hγ,hcoord,hpair,hη,hη1,hQ,hPow⟩ := hS s hs
   let q := fun k x => ∑ i : Fin n, ∑ j : Fin n, γ k i*γ k j*hessianMatrix u x i j
   let ηn : ℝ≥0 := ⟨η,hη.le⟩
@@ -446,24 +438,7 @@ private theorem regular_moment_hessian_directional_holder :
 
 /-- At the same regular moment potential: on every ball `B(0,s)`, continuous Hölder representatives (common `η, C`) of every
 Hessian entry. -/
-private theorem regular_moment_hessian_entry_holder :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem regular_moment_hessian_entry_holder_of_data (h : EvolutionData μ W κ u L LF T) :
       ∀ s : ℝ, 0 < s →
         ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
           ∀ i j : Fin n, ∃ g : (ball (0 : EuclideanSpace ℝ (Fin n)) s) → ℝ,
@@ -471,9 +446,9 @@ private theorem regular_moment_hessian_entry_holder :
             ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball 0 s),
               ∀ hx : x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) s,
                 g ⟨x,hx⟩ = hessianMatrix u x i j := by
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hS⟩ :=
-    regular_moment_hessian_directional_holder hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,fun s hs => ?_⟩
+  have hS := regular_moment_hessian_directional_holder_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
+  intro s hs
   obtain ⟨N,γ,η,C,_hγ,hcoord,hpair,hη,hη1,hC,hRep⟩ := hS s hs
   have hSym : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (ball 0 s),
       (hessianMatrix u x).IsSymm := ae_restrict_of_ae (hd.mono fun _ hx =>
@@ -487,32 +462,15 @@ private theorem regular_moment_hessian_entry_holder :
 
 /-- At the same regular moment potential: one continuous matrix field equal to the Hessian almost everywhere and locally
 Hölder in every entry. -/
-private theorem regular_moment_continuous_hessian_representative :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem regular_moment_continuous_hessian_representative_of_data (h : EvolutionData μ W κ u L LF T) :
       ∃ B : EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ,
         Continuous B ∧ B =ᵐ[(volume : Measure (EuclideanSpace ℝ (Fin n)))] hessianMatrix u ∧
         ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
           ∀ i j : Fin n, HolderWith C η
             (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => B x.val i j) := by
   classical
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hS⟩ :=
-    regular_moment_hessian_entry_holder hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  have hS := regular_moment_hessian_entry_holder_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
   have hNat (m : ℕ) := hS ((m:ℝ)+1) (by positivity)
   choose ηm Cm hηm hηm1 hCm hLoc using hNat
   choose g hgHolder hgCont hgAE using hLoc
@@ -526,7 +484,7 @@ private theorem regular_moment_continuous_hessian_representative :
     filter_upwards [ae_all_iff.mpr (fun i => ae_all_iff.mpr (fun j => hbAE i j))] with x hx
     ext i j
     exact hx i j
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,B,hBcont,hBAE,fun s _hs => ?_⟩
+  refine ⟨B,hBcont,hBAE,fun s _hs => ?_⟩
   obtain ⟨m,hm⟩ := exists_nat_gt s
   have hms : s < (m:ℝ)+1 := by linarith
   refine ⟨ηm m,Cm m,hηm m,hηm1 m,hCm m,fun i j => ?_⟩
@@ -541,33 +499,117 @@ private theorem regular_moment_continuous_hessian_representative :
   exact (hgHolder m i j).dist_le ⟨x.val,hxm⟩ ⟨y.val,hym⟩
 
 /-- At the same regular moment potential: `u` is `C²` and its classical Hessian entries are locally Hölder. -/
-private theorem regular_moment_contDiff_two_holder_hessian :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+private theorem regular_moment_contDiff_two_holder_hessian_of_data (h : EvolutionData μ W κ u L LF T) :
       ContDiff ℝ 2 u ∧
       ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
         ∀ i j : Fin n, HolderWith C η
           (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j) := by
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,B,hBcont,hBAE,hLocal⟩ :=
-    regular_moment_continuous_hessian_representative hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  obtain ⟨B,hBcont,hBAE,hLocal⟩ := regular_moment_continuous_hessian_representative_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
   obtain ⟨hC2,hHess⟩ := contDiff_two_of_continuous_ae_hessian hC1 hG B hBcont hBAE
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hC2,?_⟩
+  refine ⟨hC2,?_⟩
   simpa only [hHess] using hLocal
+
+/-- Regular moment potential with Hölder Hessian (support for Letwin, arXiv:2607.24164v1, Lemma 2.2, strong class). Setting:
+`n > 0`, smooth `κ`-uniformly convex `W` (`κ > 0`), compact convex `K` with nonempty interior, and the normalized isotropic
+law `1_K e^{−W}`. ONE convex potential `u` keeps its original data: Lipschitz bound, `∫ e^{−u} = 1`, `(∇u)_* e^{−u} = μ`,
+`C¹` with `16/κ`-Lipschitz gradient, Lipschitz right side, the a.e. positive definite Hessian with `log det = −u + W∘∇u` and
+cap `16/κ`, and the weak third derivative `T`. The same `u` is moreover `C²`, its Hessian is continuous, the Hessian is
+positive definite with the log-determinant equation and cap at EVERY point, and on every ball `B(0,s)` all Hessian entries
+are Hölder with one exponent and constant chosen before the entries. The proof is the rough-divergence form of
+Gilbarg–Trudinger (2001), Lemmas 17.13/17.14 and 8.23. It is not full Schauder/`C^∞` regularity nor the merely convex Lemma
+2.2. -/
+private theorem holder_hessian_of_evolution_data (h : EvolutionData μ W κ u L LF T) :
+      ContDiff ℝ 2 u ∧ Continuous (hessianMatrix u) ∧
+      (∀ x, (hessianMatrix u x).PosDef ∧
+        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+        ((16/κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
+      ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
+        ∀ i j : Fin n, HolderWith C η
+          (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j) := by
+  obtain ⟨B,hBcont,hBAE,hLocal⟩ := regular_moment_continuous_hessian_representative_of_data hn hκ hW hstrong μ h
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩ := h
+  obtain ⟨hC2,hHess⟩ := contDiff_two_of_continuous_ae_hessian hC1 hG B hBcont hBAE
+  have hHcont : Continuous (hessianMatrix u) := by rw [hHess]; exact hBcont
+  have hEvery := everywhere_posDef_logdet_of_continuous_hessian_ae hn
+    (by positivity : 0 < 16/κ) hHcont hF.continuous hd
+  refine ⟨hC2,hHcont,hEvery,?_⟩
+  simpa only [hHess] using hLocal
+
+/-- At a GIVEN normalized regular moment potential, the weak Hessian evolution fields imply C²
+regularity, an everywhere positive definite Hessian satisfying the Monge–Ampère equation and cap,
+and locally Hölder Hessian entries. The potential is not replaced and no higher regularity is assumed. -/
+theorem holder_hessian_of_weak_evolution_fields (h :
+  ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+  (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+  ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+    (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+  ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+  LipschitzWith LF (fun x => -u x + W (gradient u x)) ∧
+  (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+    (hessianMatrix u x).PosDef ∧
+    Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+    ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
+  (∀ k i j,
+    HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
+        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+        MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+  (∀ k : Fin n,
+    HasWeakDerivAlong (fun x => (hessianMatrix u x).det)
+      (fun x => (hessianMatrix u x).det *
+        ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace)
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+    (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      MemLp (fun x => (hessianMatrix u x).det *
+        ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace)
+        2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+    HasWeakDerivAlong (fun x => Real.log (hessianMatrix u x).det)
+      (fun x => ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace)
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+    (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace =
+        fderiv ℝ (fun y => -u y + W (gradient u y)) x
+          (EuclideanSpace.basisFun (Fin n) ℝ k)) ∧
+    (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      ((hessianMatrix u x)⁻¹ * (Matrix.of fun i j => T x k i j)).trace =
+        -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ k) +
+          ∑ a : Fin n, hessianMatrix u x k a *
+            fderiv ℝ W (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ a))) ∧
+  (∀ k i j : Fin n,
+    HasWeakDerivAlong (fun x => (hessianMatrix u x)⁻¹ i j)
+      (fun x => -(((hessianMatrix u x)⁻¹ *
+        (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j))
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+    (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      MemLp (fun x => -(((hessianMatrix u x)⁻¹ *
+        (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j)) 2
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+    ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+      MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))) :
+      ContDiff ℝ 2 u ∧ Continuous (hessianMatrix u) ∧
+      (∀ x, (hessianMatrix u x).PosDef ∧
+        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+        ((16/κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
+      ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
+        ∀ i j : Fin n, HolderWith C η
+          (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j) := by
+  exact holder_hessian_of_evolution_data hn hκ hW hstrong μ h
+
+
+end GivenData
+
+section SameWitness
+variable {n : ℕ} (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ}
+  (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+  (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+  (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+  (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+    (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+      (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+  (hiso : KLS.Isotropic μ)
+include hn hκ hK hKc hKint hW hstrong hμ hiso
 
 /-- Regular moment potential with Hölder Hessian (support for Letwin, arXiv:2607.24164v1, Lemma 2.2, strong class). Setting:
 `n > 0`, smooth `κ`-uniformly convex `W` (`κ > 0`), compact convex `K` with nonempty interior, and the normalized isotropic
@@ -603,17 +645,17 @@ theorem exists_regular_moment_potential_holder_hessian :
       ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
         ∀ i j : Fin n, HolderWith C η
           (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j) := by
-  obtain ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,B,hBcont,hBAE,hLocal⟩ :=
-    regular_moment_continuous_hessian_representative hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  obtain ⟨hC2,hHess⟩ := contDiff_two_of_continuous_ae_hessian hC1 hG B hBcont hBAE
-  have hHcont : Continuous (hessianMatrix u) := by rw [hHess]; exact hBcont
-  have hEvery := everywhere_posDef_logdet_of_continuous_hessian_ae hn
-    (by positivity : 0 < 16/κ) hHcont hF.continuous hd
-  refine ⟨u,L,LF,T,hconv,hl,hnorm,hmap,hC1,hG,hF,hd,hT,hC2,hHcont,hEvery,?_⟩
-  simpa only [hHess] using hLocal
+  obtain ⟨u, L, LF, T, hbase⟩ := exists_regular_moment_weak_hessian_evolution
+    hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  obtain ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, _hw, hd, hT, _he,
+    hfirst, hInv, _tail⟩ := hbase
+  obtain ⟨hC2, hHcont, hEvery, hLocal⟩ := holder_hessian_of_weak_evolution_fields
+    hn hκ hW hstrong μ ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hfirst, hInv⟩
+  exact ⟨u, L, LF, T, hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT,
+    hC2, hHcont, hEvery, hLocal⟩
 
 end SameWitness
 
 end FunctionalInequalities.Analysis
 
-end RegularMomentHolderHessian
+end RegularMomentHolderHessianData

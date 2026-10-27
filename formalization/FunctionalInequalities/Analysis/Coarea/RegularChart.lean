@@ -105,24 +105,10 @@ theorem gradient_eq_smul_of_level_graph (hsp : IsGraphSplitting ι e) {φ : V �
     (hasFDerivAt_const t y).congr_of_eventuallyEq hlevel
   have hkey : (fderiv ℝ φ (Ψ y)).comp (graphLinear ι e (gradient g y)) = 0 :=
     hcomp.unique hzeroderiv
-  have hinner : ∀ v : H, (⟪a, ι v⟫ : ℝ) = ⟪(β • (-(gradient g y)) : H), v⟫ := by
-    intro v
-    have h := congrArg (fun L : H →L[ℝ] ℝ => L v) hkey
-    simp only [ContinuousLinearMap.coe_comp, Function.comp_apply, graphLinear_apply,
-      zero_apply] at h
-    rw [← fderiv_eq_innerSL_gradient φ (Ψ y)] at h
-    simp only [innerSL_apply_apply, inner_add_right, real_inner_smul_right] at h
-    rw [← ha] at h
-    rw [inner_smul_left, inner_neg_left, hβ]
-    simp only [starRingEnd_apply, star_trivial]
-    linear_combination h
-  have hproj : graphProj ι a = β • (-(gradient g y)) := graphProj_eq_of_inner_ι ι hinner
-  have hrec := hsp.eq_ι_add_smul a
-  rw [hproj] at hrec
-  have hea : (⟪e, a⟫ : ℝ) = β := by rw [hβ, real_inner_comm]
-  rw [hea] at hrec
-  rw [← hrec, map_smul, smul_add]
-
+  have hnormal : (innerSL ℝ (gradient φ (Ψ y))).comp (graphLinear ι e (gradient g y)) = 0 := by
+    rw [fderiv_eq_innerSL_gradient φ (Ψ y)]
+    exact hkey
+  exact hsp.eq_normal_of_comp_graphLinear_eq_zero hnormal
 /-- Pointwise matching of the one-dimensional inverse Jacobian and the graph area factor.
 No division or finite-weight assumption occurs. -/
 theorem abs_deriv_mul_norm_gradient (hsp : IsGraphSplitting ι e)

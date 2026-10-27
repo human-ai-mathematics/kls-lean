@@ -1,3 +1,5 @@
+import FunctionalInequalities.Analysis.Operator.Positive
+import FunctionalInequalities.Analysis.Operator.Coordinates
 import FunctionalInequalities.KLS.BKL.LocalThirdCumulant
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Truncation
 import FunctionalInequalities.KLS.LogConcave.Transport
@@ -70,20 +72,8 @@ theorem cumulantBoundCompact_two_of_letwinCompact (h : LetwinCompactBound) :
     have heq : (∑ J : Fin 2 → Fin (n + 1), cumulant (μ : Measure _) 3
         (Fin.cons u fun k => b (J k)) ^ 2) =
         ∑ j, ∑ k, cumulant (μ : Measure _) 3 ![u, b j, b k] ^ 2 := by
-      have hreindex := (finTwoArrowEquiv (Fin (n + 1))).symm.sum_comp
-        (fun J => cumulant (μ : Measure _) 3 (Fin.cons u fun k => b (J k)) ^ 2)
-      calc
-        _ = ∑ q : Fin (n + 1) × Fin (n + 1), cumulant (μ : Measure _) 3
-            (Fin.cons u fun k => b (((finTwoArrowEquiv (Fin (n + 1))).symm q) k)) ^ 2 :=
-          hreindex.symm
-        _ = ∑ q : Fin (n + 1) × Fin (n + 1), cumulant (μ : Measure _) 3
-            ![u, b q.1, b q.2] ^ 2 := by
-          apply Finset.sum_congr rfl
-          intro q _hq
-          congr 2
-          ext i
-          fin_cases i <;> rfl
-        _ = _ := Fintype.sum_prod_type _
+      exact Analysis.Tensor.sum_finTwo_arrow_cons b u
+        (fun v => cumulant (μ : Measure _) 3 v ^ 2)
     change (∑ J : Fin 2 → Fin (n + 1), cumulant (μ : Measure _) 3
       (Fin.cons u fun k => b (J k)) ^ 2) ≤ _
     rw [heq]
@@ -97,7 +87,7 @@ end FunctionalInequalities.KLS.LogConcave.Suspension
 
 namespace FunctionalInequalities.KLS.LogConcave.Suspension
 
-section S8CCompactToGeneral
+section CompactToGeneral
 
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
@@ -110,88 +100,6 @@ open Filter Topology ProbabilityTheory FunctionalInequalities.Analysis
 section OperatorHelpers
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-
-/-- A positive square root is at least as close to `1` as its square: `‖S - 1‖ ≤ ‖S² - 1‖`. -/
-theorem norm_sub_one_le_of_isPositive_mul_self
-    {S Q : E →L[ℝ] E} (hS : S.IsPositive)
-    (hQ : S * S = Q) : ‖S - 1‖ ≤ ‖Q - 1‖ := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-  set y := (S - 1) x with hy
-  have hkey : ‖y‖ ≤ ‖(S + 1) y‖ := by
-    have h1 : ‖y‖ * ‖y‖ ≤ ‖(S + 1) y‖ * ‖y‖ := by
-      calc
-        ‖y‖ * ‖y‖ = ⟪y, y⟫ := (real_inner_self_eq_norm_mul_norm y).symm
-        _ ≤ ⟪S y, y⟫ + ⟪y, y⟫ := by
-          have := hS.inner_nonneg_left y
-          linarith
-        _ = ⟪(S + 1) y, y⟫ := by
-          rw [add_apply, one_apply_eq_self, inner_add_left]
-        _ ≤ ‖(S + 1) y‖ * ‖y‖ := real_inner_le_norm _ _
-    rcases (norm_nonneg y).eq_or_lt with h0 | h0
-    · rw [← h0]; exact norm_nonneg _
-    · exact le_of_mul_le_mul_right h1 h0
-  have h2 : (S + 1) y = (Q - 1) x := by
-    rw [hy, ← hQ]
-    simp only [add_apply, sub_apply,
-      one_apply_eq_self, mul_apply_eq_comp, map_sub]
-    abel
-  calc
-    ‖(S - 1) x‖ = ‖y‖ := rfl
-    _ ≤ ‖(S + 1) y‖ := hkey
-    _ = ‖(Q - 1) x‖ := by rw [h2]
-    _ ≤ ‖Q - 1‖ * ‖x‖ := ContinuousLinearMap.le_opNorm _ _
-
-/-- An operator represented by a bilinear form is bounded by the form's norm. -/
-theorem opNorm_le_of_inner_eq
-    {A : E →L[ℝ] E}
-    {κ : ContinuousMultilinearMap ℝ (fun _ : Fin 2 => E) ℝ}
-    (h : ∀ u v : E, ⟪A u, v⟫ = κ ![u, v]) : ‖A‖ ≤ ‖κ‖ := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun u => ?_
-  have h1 : ‖A u‖ * ‖A u‖ ≤ (‖κ‖ * ‖u‖) * ‖A u‖ := by
-    calc
-      ‖A u‖ * ‖A u‖ = ⟪A u, A u⟫ := (real_inner_self_eq_norm_mul_norm _).symm
-      _ = κ ![u, A u] := h u (A u)
-      _ ≤ ‖κ ![u, A u]‖ := le_abs_self _
-      _ ≤ ‖κ‖ * ∏ i, ‖(![u, A u] : Fin 2 → E) i‖ := κ.le_opNorm _
-      _ = (‖κ‖ * ‖u‖) * ‖A u‖ := by
-        rw [Fin.prod_univ_two]
-        simp [mul_assoc]
-  rcases (norm_nonneg (A u)).eq_or_lt with h0 | h0
-  · rw [← h0]; positivity
-  · exact le_of_mul_le_mul_right h1 h0
-
-/-- An operator with `‖A - 1‖ < 1` has a strictly positive quadratic form on nonzero vectors. -/
-theorem inner_self_pos_of_norm_sub_one_lt
-    {A : E →L[ℝ] E} (hA : ‖A - 1‖ < 1) {v : E} (hv : v ≠ 0) :
-    0 < ⟪A v, v⟫ := by
-  have hv' : 0 < ‖v‖ := norm_pos_iff.mpr hv
-  have h1 : ⟪A v, v⟫ = ‖v‖ * ‖v‖ + ⟪(A - 1) v, v⟫ := by
-    rw [sub_apply, one_apply_eq_self, inner_sub_left,
-      real_inner_self_eq_norm_mul_norm]
-    ring
-  have h2 : ⟪(A - 1) v, v⟫ ≥ -(‖A - 1‖ * ‖v‖ * ‖v‖) := by
-    have := real_inner_le_norm ((A - 1) v) (-v)
-    rw [inner_neg_right, norm_neg] at this
-    have h3 := ContinuousLinearMap.le_opNorm (A - 1) v
-    nlinarith [norm_nonneg ((A - 1) v)]
-  rw [h1]
-  nlinarith [mul_pos hv' hv', norm_nonneg (A - 1)]
-
-/-- Inverse square roots of operators converging to `1` converge to `1`. -/
-theorem tendsto_inverseSqrt_one
-    [CompleteSpace E]
-    [FiniteDimensional ℝ E] {Sg : ℕ → E →L[ℝ] E}
-    (hSg : Tendsto Sg atTop (𝓝 1))
-    (hpos : ∀ᶠ R in atTop, (Sg R).IsPositive) (hunit : ∀ᶠ R in atTop, IsUnit (Sg R)) :
-    Tendsto (fun R => inverseSqrt (Sg R)) atTop (𝓝 1) := by
-  have hinv : Tendsto (fun R => Ring.inverse (Sg R)) atTop (𝓝 1) := by
-    have := (NormedRing.inverse_continuousAt (1 : (E →L[ℝ] E)ˣ)).tendsto.comp hSg
-    simpa [Function.comp_def] using this
-  rw [tendsto_iff_norm_sub_tendsto_zero] at hinv ⊢
-  refine squeeze_zero' (Eventually.of_forall fun R => norm_nonneg _) ?_ hinv
-  filter_upwards [hpos, hunit] with R hp hu
-  exact norm_sub_one_le_of_isPositive_mul_self (inverseSqrt_spec _ hp hu).1
-    (inverseSqrt_spec _ hp hu).2.2.1
 
 end OperatorHelpers
 
@@ -320,7 +228,7 @@ theorem cumulantBound_of_compact {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : Cumulan
   let Sg : ℕ → E →L[ℝ] E := fun R => Covariance.operator (νR R)
   let T : ℕ → E →L[ℝ] E := fun R => inverseSqrt (Sg R)
   have hmass : ∀ᶠ R : ℕ in atTop, (ν : Measure E) (Metric.closedBall (0 : E) R) ≠ 0 :=
-    eventually_measure_closedBall_ne_zero_cond (ν : Measure E)
+    eventually_measure_closedBall_ne_zero (ν : Measure E)
   have hcum2 := tendsto_cumulant_cond_closedBall (ν : Measure E) hr hexp 2
   have hcumd := tendsto_cumulant_cond_closedBall (ν : Measure E) hr hexp (d + 1)
   have hSg : Tendsto Sg atTop (𝓝 1) := by
@@ -331,7 +239,7 @@ theorem cumulantBound_of_compact {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : Cumulan
     have : IsProbabilityMeasure (νR R) := cond_isProbabilityMeasure hR
     have hexpR : Integrable (fun x => Real.exp (r * ‖x‖)) (νR R) :=
       (hexp.restrict (s := Metric.closedBall (0 : E) R)).smul_measure (ENNReal.inv_ne_top.2 hR)
-    refine opNorm_le_of_inner_eq fun v w => ?_
+    refine FunctionalInequalities.Analysis.opNorm_le_of_inner_eq fun v w => ?_
     simp only [sub_apply]
     rw [cumulant_two_eq_covariance_of_integrable_exp
         ((ν : Measure E)[|Metric.closedBall (0 : E) R]) hr hexpR v w,
@@ -345,8 +253,8 @@ theorem cumulantBound_of_compact {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : Cumulan
   have hlt : ∀ᶠ R in atTop, ‖Sg R - 1‖ < 1 :=
     (tendsto_iff_norm_sub_tendsto_zero.1 hSg).eventually (gt_mem_nhds one_pos)
   have hunit : ∀ᶠ R in atTop, IsUnit (Sg R) := hlt.mono fun R hR =>
-    isUnit_of_inner_self_pos _ fun v hv => inner_self_pos_of_norm_sub_one_lt hR hv
-  have hT : Tendsto T atTop (𝓝 1) := tendsto_inverseSqrt_one hSg (Eventually.of_forall hpos) hunit
+    isUnit_of_inner_self_pos _ fun v hv => FunctionalInequalities.Analysis.inner_self_pos_of_norm_sub_one_lt hR hv
+  have hT : Tendsto T atTop (𝓝 1) := FunctionalInequalities.Analysis.tendsto_inverseSqrt_one hSg (Eventually.of_forall hpos) hunit
   have hbound : ∀ᶠ R in atTop, ∑ J : Fin d → Fin m, cumulant (νR R) (d + 1)
       (Fin.cons (T R u) fun k => T R (EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2 ≤ b * ‖u‖ ^ 2 := by
     filter_upwards [hmass, hunit] with R hR hu
@@ -392,7 +300,7 @@ theorem cumulantBound_of_compact {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : Cumulan
     · simpa only [Fin.cons_succ] using hTv (EuclideanSpace.basisFun (Fin m) ℝ (J k))
   exact le_of_tendsto hlim hbound
 
-end S8CCompactToGeneral
+end CompactToGeneral
 
 end FunctionalInequalities.KLS.LogConcave.Suspension
 
@@ -427,7 +335,7 @@ theorem exists_compact_moment_approximation {n : ℕ} {ν : ProbabilityMeasure (
       Probability.tendsto_integral_cond_closedBall (ν : Measure E)
         (hiso.memLp_two.integrable (by norm_num))
   have hmass : ∀ᶠ R : ℕ in atTop, (ν : Measure E) (Metric.closedBall (0 : E) R) ≠ 0 :=
-    eventually_measure_closedBall_ne_zero_cond (ν : Measure E)
+    eventually_measure_closedBall_ne_zero (ν : Measure E)
   have hcum2 := tendsto_cumulant_cond_closedBall (ν : Measure E) hr hexp 2
   have hSg : Tendsto Sg atTop (𝓝 1) := by
     rw [tendsto_iff_norm_sub_tendsto_zero]
@@ -437,7 +345,7 @@ theorem exists_compact_moment_approximation {n : ℕ} {ν : ProbabilityMeasure (
     have : IsProbabilityMeasure (νR R) := cond_isProbabilityMeasure hR
     have hexpR : Integrable (fun x => Real.exp (r * ‖x‖)) (νR R) :=
       (hexp.restrict (s := Metric.closedBall (0 : E) R)).smul_measure (ENNReal.inv_ne_top.2 hR)
-    refine opNorm_le_of_inner_eq fun v w => ?_
+    refine FunctionalInequalities.Analysis.opNorm_le_of_inner_eq fun v w => ?_
     simp only [sub_apply]
     rw [cumulant_two_eq_covariance_of_integrable_exp
         ((ν : Measure E)[|Metric.closedBall (0 : E) R]) hr hexpR v w,
@@ -451,8 +359,8 @@ theorem exists_compact_moment_approximation {n : ℕ} {ν : ProbabilityMeasure (
   have hlt : ∀ᶠ R in atTop, ‖Sg R - 1‖ < 1 :=
     (tendsto_iff_norm_sub_tendsto_zero.1 hSg).eventually (gt_mem_nhds one_pos)
   have hunit : ∀ᶠ R in atTop, IsUnit (Sg R) := hlt.mono fun R hR =>
-    isUnit_of_inner_self_pos _ fun v hv => inner_self_pos_of_norm_sub_one_lt hR hv
-  have hT : Tendsto T atTop (𝓝 1) := tendsto_inverseSqrt_one hSg (Eventually.of_forall hpos) hunit
+    isUnit_of_inner_self_pos _ fun v hv => FunctionalInequalities.Analysis.inner_self_pos_of_norm_sub_one_lt hR hv
+  have hT : Tendsto T atTop (𝓝 1) := FunctionalInequalities.Analysis.tendsto_inverseSqrt_one hSg (Eventually.of_forall hpos) hunit
   obtain ⟨N, hN⟩ := eventually_atTop.1 (hmass.and hunit)
   have happrox (k : ℕ) : ∃ η : ProbabilityMeasure E,
       KLS.LogConcave η ∧ KLS.Isotropic η ∧ IsCompact (η : Measure E).support ∧
@@ -472,7 +380,7 @@ theorem exists_compact_moment_approximation {n : ℕ} {ν : ProbabilityMeasure (
   refine ⟨η, fun k => ⟨hηLC k, hηiso k, hηcompact k⟩, ?_⟩
   intro d _hd v
   have h := Probability.tendsto_integral_prod_inner_affine_cond_closedBall
-    (ν : Measure E) d (integrable_norm_pow_of_exp_cond _ hr hexp d) T a hT ha v
+    (ν : Measure E) d (FunctionalInequalities.Probability.integrable_norm_pow_of_exp _ hr hexp d) T a hT ha v
   have htail : Tendsto (fun k : ℕ => k + N) atTop atTop :=
     tendsto_add_atTop_nat N
   apply (h.comp htail).congr'

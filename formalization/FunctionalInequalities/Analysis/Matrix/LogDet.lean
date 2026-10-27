@@ -556,3 +556,25 @@ theorem directional_deficit_le_sum_of_logdet {n N : ℕ}
 end FunctionalInequalities.Analysis
 
 end FrameDeficit
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Three-point log-det concavity** (weak Letwin route): for positive definite `A, B₊, B₋ ≤ K·Id`,
+`(‖B₊ − A‖²_F + ‖B₋ − A‖²_F)/(2K²) ≤ tr(A⁻¹(B₊ + B₋ − 2A)) − log det B₊ − log det B₋ + 2 log det A`. -/
+theorem frobenius_add_frobenius_le_trace_sub_log_det {n : ℕ}
+    {A Bp Bm : Matrix (Fin n) (Fin n) ℝ} {K : ℝ} (hA : A.PosDef) (hBp : Bp.PosDef) (hBm : Bm.PosDef)
+    (hAK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - A).PosSemidef)
+    (hBpK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Bp).PosSemidef)
+    (hBmK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Bm).PosSemidef) :
+    ((∑ i, ∑ j, (Bp - A) i j ^ 2) + ∑ i, ∑ j, (Bm - A) i j ^ 2) / (2 * K ^ 2) ≤
+      (A⁻¹ * (Bp + Bm - 2 • A)).trace - Real.log Bp.det - Real.log Bm.det + 2 * Real.log A.det := by
+  have hp := log_det_add_frobenius_sq_le hA hBp hAK hBpK
+  have hm := log_det_add_frobenius_sq_le hA hBm hAK hBmK
+  have he : Bp + Bm - 2 • A = (Bp - A) + (Bm - A) := by
+    rw [two_smul]
+    abel
+  rw [he, Matrix.mul_add, Matrix.trace_add, add_div]
+  linarith
+
+
+end FunctionalInequalities.Analysis

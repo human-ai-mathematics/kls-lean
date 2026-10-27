@@ -602,7 +602,7 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
   have hgd : Differentiable ℝ g := hg.differentiable one_ne_zero
   have hFd : Differentiable ℝ F := hF.differentiable one_ne_zero
   have hfdcont : Continuous (fderiv ℝ F) := hF.continuous_fderiv one_ne_zero
-  have hgradcont : Continuous (gradient g) := continuous_gradient hg
+  have hgradcont : Continuous (gradient g) := BakryEmery.continuous_gradient hg
   have hcoordcont : Continuous fun x : V => graphCoord ι x₀ x :=
     (graphProj ι).continuous.comp (continuous_id.sub continuous_const)
   set Ξ : (H × ℝ) ≃ₜ V := graphChartHomeomorph hsp x₀ hgc with hΞ
@@ -631,7 +631,7 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
     refine HasCompactSupport.intro hFc.isCompact fun x hx => ?_
     show tangentDiv ι (fderiv ℝ F x)
         + (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ) = 0
-    simp [fderiv_eq_zero_of_notMem_tsupport hx]
+    simp [fderiv_of_notMem_tsupport ℝ hx]
   have hQcs : HasCompactSupport Qamb := by
     refine HasCompactSupport.intro hFc.isCompact fun x hx => ?_
     show (⟪e - ι (gradient g (graphCoord ι x₀ x)), F x⟫ : ℝ) = 0
@@ -642,7 +642,7 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
   have hBcs : HasCompactSupport Bamb := by
     refine HasCompactSupport.intro hFc.isCompact fun x hx => ?_
     show (⟪e - ι (gradient g (graphCoord ι x₀ x)), fderiv ℝ F x e⟫ : ℝ) = 0
-    rw [fderiv_eq_zero_of_notMem_tsupport hx]
+    rw [fderiv_of_notMem_tsupport ℝ hx]
     simp
   -- the pointwise splitting of the divergence
   have hsplit : ∀ x : V, divergence F x = Aamb x + Bamb x := by

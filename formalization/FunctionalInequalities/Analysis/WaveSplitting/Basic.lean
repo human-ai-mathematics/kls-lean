@@ -22,6 +22,18 @@ structure State (E ι : Type*) where
   v : E → ℝ
   p : ι → E → ℝ
 
+omit [NormedAddCommGroup E] [NormedSpace ℝ E] [Fintype ι] [DecidableEq ι] in
+/-- Classical states are equal when their displacement, velocity and coordinates agree. -/
+@[ext] theorem State.ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
+    (hp : X.p = Y.p) : X = Y := by
+  cases X
+  cases Y
+  cases hu
+  cases hv
+  cases hp
+  rfl
+
+
 /-- Spatial smoothness of all components. -/
 def State.Smooth (Y : State E ι) : Prop :=
   ContDiff ℝ ∞ Y.u ∧ ContDiff ℝ ∞ Y.v ∧ ∀ j, ContDiff ℝ ∞ (Y.p j)
@@ -36,6 +48,13 @@ def initial (h : E → ℝ) : State E ι := ⟨0, h, fun _ => 0⟩
 /-- The coordinate pairing `b · p`. -/
 def coupling (b : ι → E → ℝ) (Y : State E ι) (x : E) : ℝ :=
   ∑ j, b j x * Y.p j x
+
+omit [DecidableEq ι] in
+/-- Smooth coefficients paired with a smooth state give a smooth scalar field. -/
+theorem State.Smooth.coupling {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
+    {Y : State E ι} (hY : Y.Smooth) : ContDiff ℝ ∞ (coupling b Y) :=
+  ContDiff.sum fun j _ => (hb j).mul (hY.2.2 j)
+
 
 /-- The exact zero-order flow, fixing the vector field. -/
 def reaction (b : ι → E → ℝ) (t : ℝ) (Y : State E ι) : State E ι where
@@ -88,8 +107,8 @@ omit [DecidableEq ι] in
 theorem State.Smooth.reaction {Y : State E ι} (hY : Y.Smooth)
     {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) (t : ℝ) :
     (reaction b t Y).Smooth := by
-  have hc : ContDiff ℝ ∞ (coupling b Y) :=
-    ContDiff.sum fun j _ => (hb j).mul (hY.2.2 j)
+  have hc : ContDiff ℝ ∞ (WaveSplitting.coupling b Y) :=
+    State.Smooth.coupling hb hY
   exact ⟨((contDiff_const.mul hY.1).add (contDiff_const.mul hY.2.1)).add
     (contDiff_const.mul hc),
     ((contDiff_const.mul hY.1).add (contDiff_const.mul hY.2.1)).sub

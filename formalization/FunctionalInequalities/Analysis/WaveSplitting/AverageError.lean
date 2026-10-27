@@ -17,16 +17,6 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 /-- A scalar function viewed as the displacement of a classical state. -/
 def scalarState (f : E → ℝ) : State E ι := ⟨f, 0, fun _ => 0⟩
 
@@ -60,7 +50,7 @@ private theorem formState_scalarState_add (a : ι → E) {f g : E → ℝ} (hf :
     (hg : ContDiff ℝ ∞ g) :
     formState a (scalarState (fun x => f x + g x)) =
       addState (formState a (scalarState f)) (formState a (scalarState g)) := by
-  apply state_ext
+  apply State.ext
   · rfl
   · funext x; simp [addState, formState]
   · funext j x
@@ -141,7 +131,7 @@ theorem sqrt_scalarEnergy_add_le [Fintype ι] (a : ι → E) (k : ℕ) {f g : E 
     (scalarState_smooth (ι := ι) hg) (scalarState_supported hfR) (scalarState_supported hgR)
   have e : addState (scalarState f : State E ι) (scalarState g) =
       scalarState (fun x => f x + g x) := by
-    apply state_ext
+    apply State.ext
     · rfl
     · funext x; simp [addState, scalarState]
     · funext j x; simp [addState, scalarState]
@@ -188,7 +178,7 @@ theorem scalarEnergy_intervalIntegral_le [Fintype ι] (a : ι → E) (k : ℕ) {
       (continuous_id.prodMk (continuous_const : Continuous fun _ : ℝ => x))
     exact h
   have h0 : G 0 = zeroState := by
-    apply state_ext
+    apply State.ext
     · funext x; simp [G, scalarState, zeroState]
     · rfl
     · rfl
@@ -198,7 +188,7 @@ theorem scalarEnergy_intervalIntegral_le [Fintype ι] (a : ι → E) (k : ℕ) {
     refine (setIntegral_congr_fun measurableSet_Ioc fun θ hθ => ?_).trans (integral_zero _ _)
     exact hR θ ⟨hθ.1.le, hθ.2.trans hs.2⟩ y hy
   have hderiv (s : ℝ) : timeDerivative G s = scalarState (fun y => g (s, y)) := by
-    apply state_ext
+    apply State.ext
     · funext x
       exact (hcont x).deriv_integral _ 0 s
     · funext x; simp [timeDerivative, G, scalarState]
@@ -307,7 +297,7 @@ private theorem weightedDivergence_vanishing [Fintype ι] (a : ι → E) (b : ι
 
 theorem compatibilityDefect_initial (a : ι → E) (h : E → ℝ) :
     compatibilityDefect a (initial h : State E ι) = zeroState := by
-  apply state_ext
+  apply State.ext
   · rfl
   · rfl
   · funext j x

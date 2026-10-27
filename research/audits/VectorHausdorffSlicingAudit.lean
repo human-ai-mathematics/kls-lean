@@ -128,7 +128,7 @@ end VectorHausdorffSlicingAudit
 /-! ### Axiom audit: every report is standard-only -/
 
 #print axioms FunctionalInequalities.Analysis.exists_measurable_majorant_of_eqOn_vector
-#print axioms FunctionalInequalities.Analysis.exists_cover_cost_lt_vector
+#print axioms FunctionalInequalities.Analysis.exists_cover_familyCost_lt
 #print axioms FunctionalInequalities.Analysis.exists_levelBall
 #print axioms FunctionalInequalities.Analysis.exists_measurable_majorant_vector
 #print axioms FunctionalInequalities.Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero_vector

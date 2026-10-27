@@ -12,7 +12,7 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
 -/
 
 noncomputable section
-section S7CClaimToBound
+section CutoffEnergyToCumulantBound
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal RealInnerProductSpace
@@ -198,4 +198,4 @@ theorem envelope_succ_eq (K : ℝ) (d : ℕ) : envelope K (d + 1) = (d.factorial
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-end S7CClaimToBound
+end CutoffEnergyToCumulantBound

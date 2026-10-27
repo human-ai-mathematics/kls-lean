@@ -151,7 +151,7 @@ theorem setIntegral_image_graphChartMap (ι : H →ₗᵢ[ℝ] V) {e : V} (he : 
     rw [h]
     exact continuous_const.add (ι.continuous.add ((hg.continuous).smul continuous_const))
   have hJnn : Measurable fun y : H => (graphJacobian (gradient g y)).toNNReal :=
-    (continuous_graphJacobian.comp (continuous_gradient hg)).measurable.real_toNNReal
+    (continuous_graphJacobian.comp (BakryEmery.continuous_gradient hg)).measurable.real_toNNReal
   have hmap := map_graphChartMap_withDensity ι he hperp x₀ hg hs
   rw [← hmap] at hf ⊢
   rw [integral_map hcont.measurable.aemeasurable hf, restrict_withDensity hs,

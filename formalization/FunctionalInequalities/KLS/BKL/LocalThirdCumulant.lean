@@ -68,20 +68,8 @@ theorem LogConcave.Suspension.cumulantBound_two_of_letwin
     have heq : (∑ J : Fin 2 → Fin (n + 1), cumulant (μ : Measure _) 3
         (Fin.cons u fun k => b (J k)) ^ 2) =
         ∑ j, ∑ k, cumulant (μ : Measure _) 3 ![u, b j, b k] ^ 2 := by
-      have hreindex := (finTwoArrowEquiv (Fin (n + 1))).symm.sum_comp
-        (fun J => cumulant (μ : Measure _) 3 (Fin.cons u fun k => b (J k)) ^ 2)
-      calc
-        _ = ∑ q : Fin (n + 1) × Fin (n + 1), cumulant (μ : Measure _) 3
-            (Fin.cons u fun k => b (((finTwoArrowEquiv (Fin (n + 1))).symm q) k)) ^ 2 :=
-          hreindex.symm
-        _ = ∑ q : Fin (n + 1) × Fin (n + 1), cumulant (μ : Measure _) 3
-            ![u, b q.1, b q.2] ^ 2 := by
-          apply Finset.sum_congr rfl
-          intro q _hq
-          congr 2
-          ext i
-          fin_cases i <;> rfl
-        _ = _ := Fintype.sum_prod_type _
+      exact Analysis.Tensor.sum_finTwo_arrow_cons b u
+        (fun v => cumulant (μ : Measure _) 3 v ^ 2)
     change (∑ J : Fin 2 → Fin (n + 1), cumulant (μ : Measure _) 3
       (Fin.cons u fun k => b (J k)) ^ 2) ≤ _
     rw [heq]

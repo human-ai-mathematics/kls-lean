@@ -339,7 +339,7 @@ private theorem slotRep_taylorField_right {d k q : ℕ} (u : Field ν k)
 
 /-- **The Taylor bound (29) componentwise**: if `|T_d g| ≤ R^d ‖g‖₂` for every `g ∈ L²(ν)`, then
 `|T_d u|² ≤ R^{2d} ‖u‖²` for every tensor field `u`. -/
-private theorem norm_taylorField_sq_le_of_bound {R : ℝ} {d : ℕ}
+theorem norm_taylorField_sq_le {R : ℝ} {d : ℕ}
     (h29 : ∀ g : Lp ℝ 2 (ν : Measure V),
       ‖coordTensor (stdOrthonormalBasis ℝ V) (taylorTensor (ν : Measure V) (⇑g) d)‖ ≤
         R ^ d * ‖g‖) {k : ℕ} (u : Field ν k) :
@@ -527,7 +527,7 @@ theorem norm_taylorField_grad0_iter_sq_le (hCpos : 0 < C) {R : ℝ}
   have hdiff : ‖A - B‖ ^ 2 ≤
       R ^ (2 * d) * (4 * ((2 * d : ℕ) : ℝ) ^ 4 * M ^ (2 * d) * C * D) := by
     rw [hAB]
-    exact (norm_taylorField_sq_le_of_bound (fun g => h29 g d hd) _).trans
+    exact (norm_taylorField_sq_le (fun g => h29 g d hd) _).trans
       (mul_le_mul_of_nonneg_left hS1 hR0)
   -- (59)
   have htri : ‖A‖ ≤ (1 + 4 ^ d) * ‖A - B‖ + 4 ^ d * ‖SA‖ := by

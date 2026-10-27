@@ -20,16 +20,6 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 /-! ## Ordered spatial derivatives of time slices -/
 
 /-- Every ordered spatial derivative of a jointly smooth function is jointly smooth. -/
@@ -419,17 +409,7 @@ private theorem integrable_stateJet (a : ι → E) (k : ℕ) {Y : State E ι}
 private theorem integral_stateJet (a : ι → E) (k : ℕ) {Y : State E ι}
     (hY : Y.Smooth) (hc : Y.CompactSupport) :
     ∫ x, stateJet a k Y x ∂m = derivativeEnergy m a k Y := by
-  have huv : Integrable (fun x => jetSquare a k Y.u x + jetSquare a k Y.v x) m :=
-    (integrable_jetSquare m a k hY.1 hc.1).add (integrable_jetSquare m a k hY.2.1 hc.2.1)
-  have hp : Integrable (fun x => ∑ j, jetSquare a k (Y.p j) x) m :=
-    integrable_finsetSum Finset.univ fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j)
-  unfold stateJet
-  rw [integral_add huv hp,
-    integral_add (integrable_jetSquare m a k hY.1 hc.1)
-      (integrable_jetSquare m a k hY.2.1 hc.2.1),
-    integral_finsetSum Finset.univ (fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))]
-  exact (derivativeEnergy_eq_scalarEnergy m a k hY hc).symm
-
+  exact integral_jetSquare_eq_derivativeEnergy m a k hY hc
 section DerivativeEnergy
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m]
@@ -667,7 +647,7 @@ theorem derivativeEnergy_sweepResidual_le (a : ι → E) (k : ℕ) (js : List ι
             (coordinateGenerator (a j) j (sweep a t js (transport (a j) j t Y))))
           (subState (sweepDerivative a t js (transport (a j) j t Y))
             (sweepGenerator a js (sweep a t js (transport (a j) j t Y)))) := by
-      apply state_ext
+      apply State.ext
       · funext x
         simp only [sweepDerivative, sweepGenerator, sweep, subState, addState]
         ring
@@ -842,7 +822,7 @@ theorem derivativeEnergy_residual_le [m.IsAddRightInvariant] [Fintype ι] [Decid
         (subState (reaction b t (sweepGenerator a js (sweep a t js Y)))
           (sweepGenerator a js (reaction b t (sweep a t js Y)))) := by
     rw [residual_eq a b js hY t, reaction_subState]
-    apply state_ext
+    apply State.ext
     · funext x; simp only [addState, subState, step]; ring
     · funext x; simp only [addState, subState, step]; ring
     · funext i x; simp only [addState, subState, step]; ring

@@ -1,9 +1,11 @@
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Composition
 import FunctionalInequalities.Analysis.Matrix.WeakDerivative
 import FunctionalInequalities.Analysis.Matrix.Piola
 import FunctionalInequalities.Analysis.Cutoff.LipschitzBall
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
+import FunctionalInequalities.Analysis.WeakDerivative.Products
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.LinearAlgebra.Matrix.Hermitian
@@ -31,7 +33,7 @@ for use by the actual-source weak Monge–Ampère identification bridge. No `C²
 are not proved here.
 The inverse-calculus assembly additionally proves weak (2.5) from a Lipschitz log-det representative, a Lipschitz gradient and a given weak local-L2 Hessian tensor. No C2 regularity or desired inverse formula is assumed. The fixed-object weak Piola row divergence
 `ae_inverse_hessian_row_divergence_of_weak_derivative` is also proved here; the second evolution (2.6) and
-bounded testing are in `IntegrationByParts/WeakHessianEvolution.lean`, and the main bound remains open.
+bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`, and the main bound remains open.
 -/
 
 noncomputable section
@@ -84,40 +86,6 @@ open FunctionalInequalities.Probability.Stein
 open scoped RealInnerProductSpace ContDiff
 
 namespace FunctionalInequalities.Analysis
-
-private lemma differentiableAt_fderiv_of_differentiableAt_gradient
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    {u : E → ℝ} {x : E} (hx : DifferentiableAt ℝ (gradient u) x) :
-    DifferentiableAt ℝ (fderiv ℝ u) x := by
-  have heq :
-      fderiv ℝ u = (InnerProductSpace.toDual ℝ E) ∘ gradient u := by
-    funext y
-    simp [gradient]
-  rw [heq]
-  exact
-    (InnerProductSpace.toDual ℝ E).toContinuousLinearEquiv.differentiableAt.comp x hx
-
-private lemma hessian_coord_of_gradient_diff
-    {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ} {x : EuclideanSpace ℝ (Fin n)}
-    {i j : Fin n} (hx : DifferentiableAt ℝ (gradient u) x) :
-    fderiv ℝ (fun y => fderiv ℝ u y (EuclideanSpace.basisFun (Fin n) ℝ j)) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) =
-      hessianMatrix u x i j := by
-  have hfd : DifferentiableAt ℝ (fderiv ℝ u) x :=
-    differentiableAt_fderiv_of_differentiableAt_gradient hx
-  have hc :
-      DifferentiableAt ℝ
-        (fun _ : EuclideanSpace ℝ (Fin n) =>
-          EuclideanSpace.basisFun (Fin n) ℝ j) x :=
-    (differentiable_const (EuclideanSpace.basisFun (Fin n) ℝ j) :
-      Differentiable ℝ
-        (fun _ : EuclideanSpace ℝ (Fin n) =>
-          EuclideanSpace.basisFun (Fin n) ℝ j)).differentiableAt
-  have h := fderiv_clm_apply hfd hc
-  have h' := congrArg
-    (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ =>
-      L (EuclideanSpace.basisFun (Fin n) ℝ i)) h
-  simpa [hessianMatrix, bilinearIteratedFDerivTwo] using h'
 
 /-- Almost-everywhere derivative of the actual weighted gradient test for Letwin (2.2).
 Only C1 u and eta and a Lipschitz gradient of w are needed. -/
@@ -176,128 +144,6 @@ end FunctionalInequalities.Analysis
 
 end WeightedGradientTestDerivative
 
-section MongeAmpereExponentDerivative
-
-open MeasureTheory
-open FunctionalInequalities.Probability.Stein
-open scoped RealInnerProductSpace ContDiff
-
-namespace FunctionalInequalities.Analysis
-
-private lemma gradient_fderiv_coordinate {n : ℕ}
-    {u : EuclideanSpace ℝ (Fin n) → ℝ}
-    {x : EuclideanSpace ℝ (Fin n)}
-    (hu : ContDiff ℝ 1 u) (hx : DifferentiableAt ℝ (gradient u) x)
-    (j k : Fin n) :
-    fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j) k =
-      hessianMatrix u x j k := by
-  have hm :
-      LinearMap.toMatrix
-          (EuclideanSpace.basisFun (Fin n) ℝ).toBasis
-          (EuclideanSpace.basisFun (Fin n) ℝ).toBasis
-          (fderiv ℝ (gradient u) x).toLinearMap =
-        hessianMatrix u x := by
-    rw [← hessianMatrix_toEuclideanLin_of_differentiableAt_gradient hu hx,
-      Matrix.toEuclideanLin_eq_toLin_orthonormal,
-      LinearMap.toMatrix_toLin]
-  have hentry :
-      fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j) k =
-        hessianMatrix u x k j := by
-    have he := congrArg (fun M : Matrix (Fin n) (Fin n) ℝ => M k j) hm
-    simp only [LinearMap.toMatrix_apply,
-      OrthonormalBasis.coe_toBasis_repr_apply,
-      EuclideanSpace.basisFun_repr, OrthonormalBasis.coe_toBasis] at he
-    exact he
-  calc
-    fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j) k =
-        hessianMatrix u x k j := hentry
-    _ = hessianMatrix u x j k := by
-      simpa only [star_trivial] using
-        (hessianMatrix_isHermitian_of_differentiableAt_gradient hu hx).apply j k
-
-/-- AE coordinate chain derivative of the Monge-Ampere right-hand exponent
-for Letwin (2.2), with C1 u and Lipschitz gradient, without a C2 premise. -/
-theorem ae_fderiv_mongeAmpere_exponent {n : ℕ}
-    {u V : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u))
-    (hV : ContDiff ℝ 1 V) :
-    ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))), ∀ j : Fin n,
-      fderiv ℝ (fun y => -u y + V (gradient u y)) x
-          (EuclideanSpace.basisFun (Fin n) ℝ j) =
-        -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ j) +
-          ∑ k, hessianMatrix u x j k *
-            fderiv ℝ V (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
-  filter_upwards [hG.ae_differentiableAt (μ := volume)] with x hx
-  intro j
-  have hux : DifferentiableAt ℝ u x := hu.differentiable one_ne_zero x
-  have hVx : DifferentiableAt ℝ V (gradient u x) :=
-    hV.differentiable one_ne_zero (gradient u x)
-  have hexp :
-      HasFDerivAt (fun y => -u y + V (gradient u y))
-        (-fderiv ℝ u x +
-          (fderiv ℝ V (gradient u x)).comp (fderiv ℝ (gradient u) x)) x :=
-    hux.hasFDerivAt.neg.add (hVx.hasFDerivAt.comp x hx.hasFDerivAt)
-  have heval :
-      fderiv ℝ (fun y => -u y + V (gradient u y)) x
-          (EuclideanSpace.basisFun (Fin n) ℝ j) =
-        -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ j) +
-          fderiv ℝ V (gradient u x)
-            (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j)) := by
-    exact congrArg
-      (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ =>
-        L (EuclideanSpace.basisFun (Fin n) ℝ j))
-      hexp.fderiv
-  have hchain :
-      fderiv ℝ V (gradient u x)
-          (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j)) =
-        ∑ k, hessianMatrix u x j k *
-          fderiv ℝ V (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
-    calc
-      fderiv ℝ V (gradient u x)
-          (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j)) =
-          ⟪gradient V (gradient u x),
-            fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ :=
-        inner_gradient_left.symm
-      _ = ∑ k, ⟪gradient V (gradient u x) k,
-          fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j) k⟫ :=
-        PiLp.inner_apply _ _
-      _ = ∑ k, hessianMatrix u x j k *
-          fderiv ℝ V (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
-        apply Finset.sum_congr rfl
-        intro k _
-        have hVk :
-            fderiv ℝ V (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ k) =
-              gradient V (gradient u x) k := by
-          calc
-            fderiv ℝ V (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ k) =
-                ⟪gradient V (gradient u x),
-                  EuclideanSpace.basisFun (Fin n) ℝ k⟫ :=
-              inner_gradient_left.symm
-            _ = gradient V (gradient u x) k :=
-              EuclideanSpace.inner_basisFun_real
-                (Fin n) (gradient V (gradient u x)) k
-        calc
-          ⟪gradient V (gradient u x) k,
-              fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j) k⟫ =
-              gradient V (gradient u x) k *
-                fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ j) k :=
-            Real.inner_apply _ _
-          _ = gradient V (gradient u x) k * hessianMatrix u x j k :=
-            congrArg (fun t : ℝ => gradient V (gradient u x) k * t)
-              (gradient_fderiv_coordinate hu hx j k)
-          _ = hessianMatrix u x j k * gradient V (gradient u x) k :=
-            mul_comm _ _
-          _ = hessianMatrix u x j k *
-              fderiv ℝ V (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ k) :=
-            congrArg (fun t : ℝ => hessianMatrix u x j k * t) hVk.symm
-  exact heval.trans
-    (congrArg
-      (fun t : ℝ => -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ j) + t)
-      hchain)
-
-end FunctionalInequalities.Analysis
-
-end MongeAmpereExponentDerivative
 
 section InverseMatrixCancellation
 

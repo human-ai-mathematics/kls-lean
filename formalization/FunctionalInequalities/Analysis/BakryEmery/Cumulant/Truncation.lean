@@ -24,37 +24,6 @@ section CondHelpers
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
-/-- Norm moments of every order from one positive exponential moment. -/
-theorem integrable_norm_pow_of_exp_cond (μ : Measure E) [IsFiniteMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (d : ℕ) :
-    Integrable (fun x : E => ‖x‖ ^ d) μ := by
-  have hneg : Integrable (fun x : E => Real.exp (-r * ‖x‖)) μ := by
-    refine (integrable_const (1 : ℝ)).mono' (by fun_prop) ?_
-    filter_upwards [] with x
-    rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-    exact Real.exp_le_one_iff.2 (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.2 hr.le) (norm_nonneg x))
-  simpa only [abs_norm] using
-    ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul hr.ne' hexp hneg d
-
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-theorem norm_prod_inner_le_cond (d : ℕ) (h : Fin d → E) (x : E) :
-    ‖∏ j, ⟪x, h j⟫‖ ≤ ‖x‖ ^ d * ∏ j, ‖h j‖ := by
-  rw [norm_prod]
-  calc
-    ∏ j, ‖⟪x, h j⟫‖ ≤ ∏ j, ‖x‖ * ‖h j‖ := by
-      apply Finset.prod_le_prod
-      · intro j _; exact norm_nonneg _
-      · intro j _; exact norm_inner_le_norm _ _
-    _ = ‖x‖ ^ d * ∏ j, ‖h j‖ := by rw [Finset.prod_mul_distrib]; simp
-
-omit [FiniteDimensional ℝ E] in
-theorem integrable_prod_inner_cond (μ : Measure E) [IsFiniteMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (d : ℕ)
-    (h : Fin d → E) : Integrable (fun x : E => ∏ j, ⟪x, h j⟫) μ :=
-  ((integrable_norm_pow_of_exp_cond μ hr hexp d).mul_const (∏ j, ‖h j‖)).mono' (by fun_prop)
-    (ae_of_all _ fun x => norm_prod_inner_le_cond d h x)
-
 /-- Operator-norm distance between the moment tensors of `ν[|s]` and `ν`. -/
 theorem norm_iteratedFDeriv_laplace_cond_sub_le (ν : Measure E) [IsProbabilityMeasure ν]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) ν) (d : ℕ)
@@ -65,20 +34,20 @@ theorem norm_iteratedFDeriv_laplace_cond_sub_le (ν : Measure E) [IsProbabilityM
   have : IsProbabilityMeasure (ν[|s]) := cond_isProbabilityMeasure hs0
   have hexp' : Integrable (fun x => Real.exp (r * ‖x‖)) (ν[|s]) :=
     (hexp.restrict (s := s)).smul_measure (ENNReal.inv_ne_top.2 hs0)
-  have hpow := integrable_norm_pow_of_exp_cond ν hr hexp d
+  have hpow := FunctionalInequalities.Probability.integrable_norm_pow_of_exp ν hr hexp d
   have hM : 0 ≤ ∫ x, ‖x‖ ^ d ∂ν := integral_nonneg fun x => by positivity
   have he : 0 ≤ ∫ x in sᶜ, ‖x‖ ^ d ∂ν := integral_nonneg fun x => by positivity
   refine ContinuousMultilinearMap.opNorm_le_bound (by positivity) fun h => ?_
   rw [sub_apply, iteratedFDeriv_laplace_zero (ν[|s]) hr hexp' d h,
     iteratedFDeriv_laplace_zero ν hr hexp d h]
-  have hint := integrable_prod_inner_cond ν hr hexp d h
+  have hint := FunctionalInequalities.Probability.integrable_prod_inner_of_exp ν hr hexp d h
   have hP : 0 ≤ ∏ j, ‖h j‖ := Finset.prod_nonneg fun j _ => norm_nonneg _
   have hcond : ∫ x, ∏ j, ⟪x, h j⟫ ∂(ν[|s]) =
       ((ν s)⁻¹).toReal * ∫ x in s, ∏ j, ⟪x, h j⟫ ∂ν := by
     simp only [ProbabilityTheory.cond, integral_smul_measure, smul_eq_mul]
   have hsplit := integral_add_compl hs hint
   have hbound : ∀ᵐ x ∂ν, ‖∏ j, ⟪x, h j⟫‖ ≤ ‖x‖ ^ d * ∏ j, ‖h j‖ :=
-    ae_of_all _ fun x => norm_prod_inner_le_cond d h x
+    ae_of_all _ fun x => FunctionalInequalities.Analysis.Tensor.norm_prod_inner_le d h x
   have hA : ‖∫ x in s, ∏ j, ⟪x, h j⟫ ∂ν‖ ≤ (∫ x, ‖x‖ ^ d ∂ν) * ∏ j, ‖h j‖ := by
     calc
       ‖∫ x in s, ∏ j, ⟪x, h j⟫ ∂ν‖ ≤ ∫ x in s, ‖x‖ ^ d * ∏ j, ‖h j‖ ∂ν :=
@@ -104,7 +73,7 @@ theorem norm_iteratedFDeriv_laplace_cond_sub_le (ν : Measure E) [IsProbabilityM
     _ = (|c - 1| * ∫ x, ‖x‖ ^ d ∂ν + ∫ x in sᶜ, ‖x‖ ^ d ∂ν) * ∏ j, ‖h j‖ := by ring
 
 omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [BorelSpace E] in
-theorem eventually_measure_closedBall_ne_zero_cond (ν : Measure E) [IsProbabilityMeasure ν] :
+theorem eventually_measure_closedBall_ne_zero (ν : Measure E) [IsProbabilityMeasure ν] :
     ∀ᶠ R : ℕ in atTop, ν (Metric.closedBall (0 : E) R) ≠ 0 := by
   have hmono : Monotone fun R : ℕ => Metric.closedBall (0 : E) (R : ℝ) := fun m n hmn =>
     Metric.closedBall_subset_closedBall (by exact_mod_cast hmn)
@@ -120,7 +89,7 @@ theorem tendsto_iteratedFDeriv_laplace_cond_closedBall (ν : Measure E) [IsProba
     Tendsto (fun R : ℕ => iteratedFDeriv ℝ d
         (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂(ν[|Metric.closedBall (0 : E) R])) 0) atTop
       (𝓝 (iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂ν) 0)) := by
-  have hpow := integrable_norm_pow_of_exp_cond ν hr hexp d
+  have hpow := FunctionalInequalities.Probability.integrable_norm_pow_of_exp ν hr hexp d
   have hmono : Monotone fun R : ℕ => Metric.closedBall (0 : E) (R : ℝ) := fun m n hmn =>
     Metric.closedBall_subset_closedBall (by exact_mod_cast hmn)
   have hmeas : ∀ R : ℕ, MeasurableSet (Metric.closedBall (0 : E) (R : ℝ)) := fun R =>
@@ -143,7 +112,7 @@ theorem tendsto_iteratedFDeriv_laplace_cond_closedBall (ν : Measure E) [IsProba
       |((ν (Metric.closedBall (0 : E) R))⁻¹).toReal - 1| * ∫ x, ‖x‖ ^ d ∂ν +
         ((∫ x, ‖x‖ ^ d ∂ν) - ∫ x in Metric.closedBall (0 : E) R, ‖x‖ ^ d ∂ν))
     (Eventually.of_forall fun R => norm_nonneg _) ?_ ?_
-  · filter_upwards [eventually_measure_closedBall_ne_zero_cond ν] with R hR
+  · filter_upwards [eventually_measure_closedBall_ne_zero ν] with R hR
     have h1 := norm_iteratedFDeriv_laplace_cond_sub_le ν hr hexp d (hmeas R) hR
     have h2 := integral_add_compl (hmeas R) hpow
     calc
@@ -156,24 +125,15 @@ theorem tendsto_iteratedFDeriv_laplace_cond_closedBall (ν : Measure E) [IsProba
 
 /-- The cumulant tensor as the Faà di Bruno composition of the Taylor jets of `log` at `1` and of
 the Laplace transform at `0`. -/
-theorem cumulant_eq_taylorComp_cond (μ : Measure E) [IsProbabilityMeasure μ] {r : ℝ} (hr : 0 < r)
+theorem cumulant_eq_taylorComp (μ : Measure E) [IsProbabilityMeasure μ] {r : ℝ} (hr : 0 < r)
     (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (k : ℕ) :
     cumulant μ k = (ftaylorSeriesWithin ℝ Real.log {0}ᶜ 1).taylorComp
       (ftaylorSeriesWithin ℝ (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂μ) (Metric.ball 0 r) 0) k := by
   have hgi : ∀ t < r,
       Integrable (fun x : E => Real.exp (t * ‖x‖) * ‖(1 : ℝ)‖) μ := by
     intro t ht
-    refine hexp.mono' ?_ ?_
-    · fun_prop
-    · filter_upwards [] with x
-      simp only [norm_one, mul_one, Real.norm_of_nonneg (Real.exp_pos _).le]
-      by_cases ht0 : 0 ≤ t
-      · exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right ht.le (norm_nonneg x))
-      · calc
-          Real.exp (t * ‖x‖) ≤ 1 := Real.exp_le_one_iff.mpr
-            (mul_nonpos_of_nonpos_of_nonneg (le_of_not_ge ht0) (norm_nonneg x))
-          _ ≤ Real.exp (r * ‖x‖) := Real.one_le_exp_iff.mpr
-            (mul_nonneg hr.le (norm_nonneg x))
+    simpa only [norm_one, mul_one] using
+      Probability.integrable_exp_mul_norm_of_le hexp ht.le
   have hZ : ContDiffOn ℝ ∞ (fun z : E => ∫ x, Real.exp ⟪z, x⟫ ∂μ)
       (Metric.ball 0 r) := by
     simpa only [smul_eq_mul, mul_one] using
@@ -227,18 +187,18 @@ theorem tendsto_cumulant_cond_closedBall {E : Type*} [NormedAddCommGroup E] [Inn
     ftaylorSeriesWithin ℝ (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂ν) (Metric.ball 0 r) 0 with hp'
   have hcum : ∀ᶠ R : ℕ in atTop,
       cumulant (ν[|Metric.closedBall (0 : E) R]) k = q.taylorComp (p R) k := by
-    filter_upwards [eventually_measure_closedBall_ne_zero_cond ν] with R hR
+    filter_upwards [eventually_measure_closedBall_ne_zero ν] with R hR
     have : IsProbabilityMeasure (ν[|Metric.closedBall (0 : E) R]) := cond_isProbabilityMeasure hR
     have hexp' : Integrable (fun x => Real.exp (r * ‖x‖)) (ν[|Metric.closedBall (0 : E) R]) :=
       (hexp.restrict (s := Metric.closedBall (0 : E) R)).smul_measure (ENNReal.inv_ne_top.2 hR)
-    exact cumulant_eq_taylorComp_cond (ν[|Metric.closedBall (0 : E) R]) hr hexp' k
+    exact cumulant_eq_taylorComp (ν[|Metric.closedBall (0 : E) R]) hr hexp' k
   have hlim : ∀ j : ℕ, Tendsto (fun R => p R j) atTop (𝓝 (p' j)) := by
     intro j
     have := tendsto_iteratedFDeriv_laplace_cond_closedBall ν hr hexp j
     simp only [hp, hp', ftaylorSeriesWithin]
     simp only [iteratedFDerivWithin_of_isOpen j Metric.isOpen_ball h0]
     exact this
-  rw [cumulant_eq_taylorComp_cond ν hr hexp k]
+  rw [cumulant_eq_taylorComp ν hr hexp k]
   have hlittle := FormalMultilinearSeries.taylorComp_sub_taylorComp_isLittleO (l := atTop)
     (p₁ := fun _ : ℕ => q) (p₂ := fun _ : ℕ => q) (q₁ := p) (q₂ := fun _ : ℕ => p')
     (f := fun _ : ℕ => (1 : ℝ)) (n := k)

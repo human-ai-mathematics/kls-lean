@@ -13,7 +13,7 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 -/
 
 noncomputable section
-section S7B2BoundaryMeanValue
+section BoundaryMeanValue
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal RealInnerProductSpace
@@ -367,4 +367,4 @@ theorem IsEldanCutoff.exists_weighted_energy_le (hiso : KLS.Isotropic μ) {γ : 
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-end S7B2BoundaryMeanValue
+end BoundaryMeanValue

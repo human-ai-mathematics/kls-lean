@@ -1,4 +1,6 @@
-import Mathlib
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!

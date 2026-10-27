@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.MeasurableCover
 import FunctionalInequalities.Analysis.Vector.Coarea.Local
 
 /-! # Weighted slice measurability in codimension `m`, and the regular coarea formula
@@ -6,21 +7,16 @@ The assembly of the local coarea equality into a statement about a whole regular
 more ingredient: the level function `t ↦ ∫⁻ over S ∩ {u = t}` must be measurable, since the
 patching exchanges a countable sum with the outer integral and `lintegral_tsum` needs measurability.
 
-**The route taken here is not the scalar one.**  In codimension one the repository proves slice
-measurability for an arbitrary Borel `S` inside an open `C¹` domain **with no regular-point
-hypothesis**, through the Eilenberg slicing inequality of `Analysis/Hausdorff/SurfaceSlicing.lean`.  The
-codimension-`m` Eilenberg inequality is **not** available here, so this module proves the statement
-only where the differential is surjective, and proves it **directly from the chart**: on a chart the
-slice integral is a Tonelli section of one measurable function on the parameter–level product, so
-its measurability is immediate and no slicing inequality is used.
+Local chart slice integrals are Tonelli sections on the parameter–level product.
+`Vector/Coarea/Local.lean` owns their measurability and the local equality; the subordinate
+measurable partition assembles them on regular open sets here. This argument uses no
+Eilenberg inequality. The general codimension Eilenberg majorant is separately available in
+`Vector/Slice/Hausdorff.lean`.
 
-That is enough for the regular case, and `coarea_of_contDiffOn_of_coareaJacobian_ne_zero` assembles
-it: the **codimension-`m` regular coarea formula**, the analogue of the scalar regular-domain coarea
-`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`, with weighted slice measurability included.
-
-**What is still open**: slice measurability **without** the regularity hypothesis, which in
-codimension one is what lets the critical part be treated at all; the critical set, sharp
-finite-regularity Sard, and everything beyond the regular case.
+`coarea_of_contDiffOn_of_coareaJacobian_ne_zero` includes measurable weighted slices on the
+regular open set. `coarea_of_contDiff_of_ae_null_critical` extends it when actual almost-everywhere
+null critical fibres are supplied. Their rank-deficient and zero-derivative producers remain
+separate in `Vector/RankDeficient/Coarea.lean` and `Vector/Slice/Critical.lean`.
 -/
 
 noncomputable section
@@ -39,93 +35,6 @@ variable {H K V W : Type*}
   [MeasurableSpace V] [BorelSpace V]
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
   [MeasurableSpace W] [BorelSpace W]
-
-omit [MeasurableSpace K] [BorelSpace K] in
-/-- **Weighted slices of a chart piece are measurable in the level.**  On a level-graph family the
-slice integral is the Tonelli section of a single measurable function on the parameter–level
-product, so its measurability in the level needs no slicing inequality. -/
-theorem measurable_setLIntegral_inter_levelSet_levelGraphFamily {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗᵢ[ℝ] V}
-    (hsp : IsVectorGraphSplitting ι κ) {u : V → W} {Ω : Set (H × W)} {ψ : H × W → K}
-    (hψ : ContDiff ℝ 1 ψ) (hlevel : ∀ p ∈ Ω, u (ι p.1 + κ (ψ p)) = p.2)
-    {A : Set (H × W)} (hA : MeasurableSet A) (hAΩ : A ⊆ Ω)
-    {g : V → ℝ≥0∞} (hg : Measurable g) :
-    Measurable (fun t : W =>
-      ∫⁻ x in ((fun p : H × W => ι p.1 + κ (ψ p)) '' A) ∩ {x : V | u x = t}, g x
-        ∂(KLS.hausdorffNormalized V (finrank ℝ H))) := by
-  have hcont : Continuous (fun p : H × W => ι p.1 + κ (ψ p)) :=
-    (ι.continuous.comp continuous_fst).add (κ.continuous.comp hψ.continuous)
-  set F : H × W → ℝ≥0∞ := fun p => ENNReal.ofReal (LinearMap.normDet
-      ((graphMapLinear ι κ (fderiv ℝ (fun y => ψ (y, p.2)) p.1) : H →ₗ[ℝ] V)))
-      * g (ι p.1 + κ (ψ p)) with hF
-  have hFmeas : Measurable F :=
-    (continuous_normDet_graphMapLinear_fderiv_fst ι κ hψ).measurable.ennreal_ofReal.mul
-      (hg.comp hcont.measurable)
-  have hkey : ∀ t : W,
-      (∫⁻ x in ((fun p : H × W => ι p.1 + κ (ψ p)) '' A) ∩ {x : V | u x = t}, g x
-          ∂(KLS.hausdorffNormalized V (finrank ℝ H)))
-        = ∫⁻ y, (A.indicator F) (y, t) ∂(volume : Measure H) := by
-    intro t
-    have hAt : MeasurableSet {y : H | (y, t) ∈ A} :=
-      hA.preimage (measurable_id.prodMk measurable_const)
-    have hγ : ContDiff ℝ 1 (fun y => ψ (y, t)) := hψ.comp (contDiff_id.prodMk contDiff_const)
-    have hslice := slice_eq_image_vectorGraphMap (ι := ι) (κ := κ) (u := u) (Ω := A) (ψ := ψ)
-      (N := (fun p : H × W => ι p.1 + κ (ψ p)) '' A) rfl (fun p hp => hlevel p (hAΩ hp)) t
-    rw [hslice, setLIntegral_image_vectorGraphMap ι κ hsp.perp hγ hAt hg,
-      ← lintegral_indicator hAt]
-    refine lintegral_congr fun y => ?_
-    by_cases hy : (y, t) ∈ A
-    · rw [Set.indicator_of_mem hy, Set.indicator_of_mem (show y ∈ {y : H | (y, t) ∈ A} from hy)]
-      rfl
-    · rw [Set.indicator_of_notMem hy,
-        Set.indicator_of_notMem (show y ∉ {y : H | (y, t) ∈ A} from hy)]
-  simp_rw [hkey]
-  exact (hFmeas.indicator hA).lintegral_prod_left'
-
-/-- **Local regular coarea with slice measurability.**  The neighbourhood of
-`exists_vector_coarea_neighborhood`, carrying in addition the measurability of the level function,
-which the patching needs.  Both conclusions hold for every Borel subset and every measurable
-weight. -/
-theorem exists_vector_coarea_neighborhood_measurable {u : V → W} {O : Set V} (hO : IsOpen O)
-    (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O)
-    (hreg : coareaJacobian (fderiv ℝ u x₀) ≠ 0) :
-    ∃ N : Set V, IsOpen N ∧ x₀ ∈ N ∧ N ⊆ O ∧
-      ∀ S : Set V, MeasurableSet S → S ⊆ N → ∀ g : V → ℝ≥0∞, Measurable g →
-        Measurable (fun t : W => ∫⁻ x in S ∩ {x : V | u x = t}, g x
-            ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))) ∧
-        (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
-          = ∫⁻ t, ∫⁻ x in S ∩ {x : V | u x = t}, g x
-              ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))
-              ∂(volume : Measure W)) := by
-  obtain ⟨P, Ω, ψ, N, hsp, hdim, hΩ, hψ, hN, hxN, hNO, hlevel, himg, hinj⟩ :=
-    exists_levelGraphFamily_of_coareaJacobian_ne_zero hO hu hx₀ hreg
-  set Ψ : P × W → V := fun p => P.subtypeₗᵢ p.1 + (Pᗮ).subtypeₗᵢ (ψ p) with hΨ
-  have hcont : Continuous Ψ :=
-    ((P.subtypeₗᵢ).continuous.comp continuous_fst).add
-      (((Pᗮ).subtypeₗᵢ).continuous.comp hψ.continuous)
-  have hmem : ∀ p ∈ Ω, Ψ p ∈ O := fun p hp => hNO (himg ▸ ⟨p, hp, rfl⟩)
-  have hPdim : finrank ℝ P = finrank ℝ V - finrank ℝ W := by
-    have h1 := Submodule.finrank_add_finrank_orthogonal (𝕜 := ℝ) (E := V) P
-    omega
-  refine ⟨N, hN, hxN, hNO, fun S hS hSN g hg => ?_⟩
-  set A : Set (P × W) := Ω ∩ Ψ ⁻¹' S with hA
-  have hAmeas : MeasurableSet A := hΩ.measurableSet.inter (hS.preimage hcont.measurable)
-  have hAΩ : A ⊆ Ω := Set.inter_subset_left
-  have hAimg : Ψ '' A = S := by
-    apply Set.Subset.antisymm
-    · rintro x ⟨p, hp, rfl⟩
-      exact hp.2
-    · intro x hx
-      obtain ⟨p, hp, hpx⟩ : x ∈ Ψ '' Ω := by rw [himg]; exact hSN hx
-      exact ⟨p, ⟨hp, by show Ψ p ∈ S; rw [hpx]; exact hx⟩, hpx⟩
-  constructor
-  · have h := measurable_setLIntegral_inter_levelSet_levelGraphFamily hsp hψ hlevel
-      hAmeas hAΩ hg
-    rw [hAimg, hPdim] at h
-    exact h
-  · have h := setLIntegral_coarea_levelGraphFamily hsp hdim hO hu hΩ hψ hlevel hmem hinj
-      hAmeas hAΩ hg
-    rw [hAimg, hPdim] at h
-    exact h
 
 /-- **The codimension-`m` regular coarea formula.**  On an open set where the differential of `u` is
 everywhere surjective, for every Borel `S ⊆ O` and every measurable `ℝ≥0∞` weight, the level
@@ -154,26 +63,9 @@ theorem coarea_of_contDiffOn_of_coareaJacobian_ne_zero {O S : Set V} {u : V → 
     simp
   choose N hN hxN hNO hformula using fun z : O =>
     exists_vector_coarea_neighborhood_measurable hO hu z.2 (hreg z z.2)
-  obtain ⟨T, hTc, hTu⟩ := TopologicalSpace.isOpen_iUnion_countable N hN
-  have hOcov : ⋃ z : O, N z = O :=
-    Set.Subset.antisymm (Set.iUnion_subset hNO) fun y hy =>
-      Set.mem_iUnion.2 ⟨⟨y, hy⟩, hxN ⟨y, hy⟩⟩
-  have hTne : T.Nonempty := by
-    have : z₀ ∈ ⋃ z ∈ T, N z := by rw [hTu, hOcov]; exact hSO hz₀
-    obtain ⟨z, hzT, -⟩ := Set.mem_iUnion₂.1 this
-    exact ⟨z, hzT⟩
-  obtain ⟨σ, hσ⟩ := hTc.exists_eq_range hTne
-  have hcov : O ⊆ ⋃ n, N (σ n) := by rw [← hOcov, ← hTu, hσ, Set.biUnion_range]
-  set Q : ℕ → Set V := disjointed fun n => S ∩ N (σ n) with hQ
-  have hQm : ∀ n, MeasurableSet (Q n) :=
-    MeasurableSet.disjointed fun n => hS.inter (hN (σ n)).measurableSet
-  have hQd : Pairwise (Function.onFun Disjoint Q) := disjoint_disjointed _
-  have hQn : ∀ n, Q n ⊆ N (σ n) := fun n =>
-    (disjointed_subset _ n).trans Set.inter_subset_right
+  obtain ⟨σ, Q, hQm, hQd, hQu, hQn⟩ :=
+    exists_measurable_partition_subordinate hS hSO ⟨z₀, hz₀⟩ N hN hxN hNO
   have hQO : ∀ n, Q n ⊆ O := fun n => (hQn n).trans (hNO (σ n))
-  have hQu : ⋃ n, Q n = S := by
-    rw [hQ, iUnion_disjointed, ← Set.inter_iUnion]
-    exact Set.inter_eq_self_of_subset_left (hSO.trans hcov)
   have hslicem : ∀ n t, MeasurableSet (Q n ∩ {x : V | u x = t}) := by
     have hw : Measurable (O.piecewise u (fun _ => (0 : W))) :=
       hu.continuousOn.measurable_piecewise continuous_const.continuousOn hO.measurableSet
@@ -207,5 +99,55 @@ theorem coarea_of_contDiffOn_of_coareaJacobian_ne_zero {O S : Set V} {u : V → 
         (lintegral_tsum fun n => (hmeas n).aemeasurable).symm
       _ = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := by
         simp_rw [hsum]
+
+/-- Regular coarea extends over AE-null critical fibres. The nullity is an
+explicit input, independently of the theorem used to establish it. -/
+theorem coarea_of_contDiff_of_ae_null_critical {S : Set V} {u : V → W} {g : V → ℝ≥0∞}
+    {k : ℕ} (hk : k + finrank ℝ W = finrank ℝ V) (hu : ContDiff ℝ 1 u)
+    (hS : MeasurableSet S) (hg : Measurable g)
+    (hnull : ∀ᵐ t ∂(volume : Measure W),
+      (KLS.hausdorffNormalized V k) ({x | coareaJacobian (fderiv ℝ u x) = 0} ∩
+        {x : V | u x = t}) = 0) :
+    AEMeasurable (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y
+      ∂(KLS.hausdorffNormalized V k)) (volume : Measure W) ∧
+    (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)) =
+      ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k)
+        ∂(volume : Measure W) := by
+  let ν : Measure V := KLS.hausdorffNormalized V k
+  let R : Set V := {x : V | coareaJacobian (fderiv ℝ u x) ≠ 0}
+  have hRopen : IsOpen R :=
+    isOpen_ne_fun (continuous_coareaJacobian.comp (hu.continuous_fderiv one_ne_zero))
+      continuous_const
+  have hkdim : k = finrank ℝ V - finrank ℝ W := by omega
+  obtain ⟨hm, heq⟩ := coarea_of_contDiffOn_of_coareaJacobian_ne_zero (O := R) (S := S ∩ R)
+    hRopen hu.contDiffOn (fun _ hx => hx) (hS.inter hRopen.measurableSet) Set.inter_subset_right hg
+  rw [← hkdim] at hm heq
+  have hfibre : ∀ᵐ t ∂(volume : Measure W),
+      (∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν) =
+        ∫⁻ y in (S ∩ R) ∩ {x : V | u x = t}, g y ∂ν := by
+    filter_upwards [hnull] with t ht
+    apply setLIntegral_congr
+    apply MeasureTheory.ae_eq_set.2
+    constructor
+    · refine measure_mono_null ?_ ht
+      intro x hx
+      simp only [Set.mem_sdiff, Set.mem_inter_iff, Set.mem_ofPred_eq] at hx ⊢
+      exact ⟨by by_contra h; exact hx.2 ⟨⟨hx.1.1, h⟩, hx.1.2⟩, hx.1.2⟩
+    · have hempty : ((S ∩ R) ∩ {x : V | u x = t}) \ (S ∩ {x : V | u x = t}) = ∅ := by
+        ext x; simp only [Set.mem_sdiff, Set.mem_inter_iff, Set.mem_empty_iff_false]; tauto
+      rw [hempty]; simp
+  refine ⟨hm.aemeasurable.congr (Filter.EventuallyEq.symm hfibre), ?_⟩
+  have hambient : (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
+      ∂(volume : Measure V)) =
+      ∫⁻ x in S ∩ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
+        ∂(volume : Measure V) := by
+    rw [← lintegral_inter_add_sdiff _ _ hRopen.measurableSet]
+    have hz : (∫⁻ x in S \ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
+        ∂(volume : Measure V)) = 0 := by
+      refine setLIntegral_eq_zero (hS.diff hRopen.measurableSet) fun x hx => ?_
+      have h0 : coareaJacobian (fderiv ℝ u x) = 0 := by simpa [R] using hx.2
+      simp [h0]
+    rw [hz, add_zero]
+  exact hambient.trans (heq.trans (lintegral_congr_ae (Filter.EventuallyEq.symm hfibre)))
 
 end FunctionalInequalities.Analysis

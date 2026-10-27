@@ -246,18 +246,22 @@ theorem variance_smul (μ : ProbabilityMeasure α) (c : ℝ) (f : Lp ℝ 2 (μ :
   rw [variance, center_smul, nnnorm_smul, mul_pow]
   rfl
 
+/-- Every L2 element on a subsingleton probability space is a constant element. -/
+theorem exists_eq_const_of_subsingleton [Subsingleton α] (μ : ProbabilityMeasure α)
+    (f : Lp ℝ 2 (μ : Measure α)) : ∃ c : ℝ, f = const μ c := by
+  obtain ⟨x₀⟩ := nonempty_of_isProbabilityMeasure (μ : Measure α)
+  refine ⟨f x₀, ?_⟩
+  apply Lp.ext
+  filter_upwards [const_coeFn μ (f x₀)] with x hx
+  rw [hx]
+  exact congrArg f (Subsingleton.elim x x₀)
+
 /-- On a subsingleton carrier every `L²` element is a constant element, hence has zero variance.
 The probability law forces the carrier to be nonempty. -/
 theorem variance_eq_zero_of_subsingleton [Subsingleton α] (μ : ProbabilityMeasure α)
     (f : Lp ℝ 2 (μ : Measure α)) : variance μ f = 0 := by
-  obtain ⟨x₀⟩ := nonempty_of_isProbabilityMeasure (μ : Measure α)
-  have hf : f = const μ (f x₀) := by
-    apply Lp.ext
-    filter_upwards [const_coeFn μ (f x₀)] with x hx
-    rw [hx]
-    exact congrArg f (Subsingleton.elim x x₀)
-  rw [hf, variance_const]
-
+  obtain ⟨c, rfl⟩ := exists_eq_const_of_subsingleton μ f
+  exact variance_const μ c
 /-- The intrinsic `L²` variance agrees, after coercion, with Mathlib's variance of the
 representative supplied by the `Lp` element. -/
 theorem coe_variance_eq_pointwise (μ : ProbabilityMeasure α)

@@ -12,7 +12,7 @@ noncomputable section
 open MeasureTheory
 open scoped ContDiff
 
-section LN11C2WeakDerivativeGluing
+section WeakDerivativeGluing
 
 open MeasureTheory Set Filter Metric
 open scoped Topology
@@ -140,7 +140,7 @@ theorem exists_hasWeakDerivAlong_of_forall_cutoff {E : Type*} [NormedAddCommGrou
 
 end FunctionalInequalities.Analysis
 
-end LN11C2WeakDerivativeGluing
+end WeakDerivativeGluing
 section CompactWeakDerivativeTesting
 noncomputable section
 open MeasureTheory Filter Set Metric InnerProductSpace

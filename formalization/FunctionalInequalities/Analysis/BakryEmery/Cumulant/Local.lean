@@ -243,104 +243,12 @@ theorem sum_sq_cumulant_three_le_of_letwin_of_integrable_exp (μ : Measure E) [I
     (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫) (hL : LetwinQuadraticBound μ) (u : E) :
     ∑ j, ∑ k, cumulant μ 3 ![u, stdOrthonormalBasis ℝ E j, stdOrthonormalBasis ℝ E k] ^ 2 ≤
       8 * ‖u‖ ^ 2 := by
-  classical
-  let b := stdOrthonormalBasis ℝ E
-  let C := fun j k => ∫ x, ⟪u, x⟫ * ⟪b j, x⟫ * ⟪b k, x⟫ ∂μ
-  let S : ℝ := ∑ j, ∑ k, C j k ^ 2
-  let M : E →L[ℝ] E := ∑ j, ∑ k, C j k • (innerSL ℝ (b k)).smulRight (b j)
-  let Q : E → ℝ := fun x => ⟪M x, x⟫
-  let f : E → ℝ := fun x => ⟪u, x⟫
-  let q : E → ℝ := fun x => Q x - ∫ y, Q y ∂μ
-  have hC : ∀ j k, C j k = C k j := by
-    intro j k
-    apply integral_congr_ae
-    filter_upwards [] with x
-    ring
-  have hMxy (x y : E) :
-      ⟪M x, y⟫ = ∑ j, ∑ k, C j k * ⟪b k, x⟫ * ⟪b j, y⟫ := by
-    simp [M, sum_inner, real_inner_smul_left, mul_assoc]
-  have hM : IsSelfAdjoint M := by
-    apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2
-    intro x y
-    change ⟪M x, y⟫ = ⟪x, M y⟫
-    conv_rhs => rw [real_inner_comm]
-    rw [hMxy, hMxy, Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro j _
-    apply Finset.sum_congr rfl
-    intro k _
-    rw [hC k j]
-    ring
-  have hMij (i j) : ⟪M (b i), b j⟫ = C j i := by
-    rw [hMxy]
-    simp [b.inner_eq_ite]
-  have hvar : ∫ x, q x ^ 2 ∂μ ≤ 8 * S := by
-    simpa only [q, Q, hMij, hC, S, b] using hL M hM
-  have hf : MemLp f 2 μ := memLp_inner_of_local μ hr hexp u
-  have hQ : MemLp Q 2 μ := by
-    have heq : Q = fun x => ∑ j, ∑ k, C j k * (⟪b k, x⟫ * ⟪b j, x⟫) := by
-      funext x
-      simp only [Q, hMxy, mul_assoc]
-    rw [heq]
-    exact memLp_finsetSum _ fun j _ =>
-      memLp_finsetSum _ fun k _ =>
-        (memLp_inner_mul_of_local μ hr hexp (b k) (b j)).const_mul (C j k)
-  have hq : MemLp q 2 μ := hQ.sub (memLp_const _)
-  have hcross : ∫ x, f x * q x ∂μ = S := by
-    have hprod : ∀ j k, Integrable (fun x => ⟪u, x⟫ * (⟪b k, x⟫ * ⟪b j, x⟫)) μ :=
-      fun j k => hf.integrable_mul (memLp_inner_mul_of_local μ hr hexp (b k) (b j))
-    have hprodC : ∀ j k, Integrable (fun x => C j k * (⟪u, x⟫ * (⟪b k, x⟫ * ⟪b j, x⟫))) μ :=
-      fun j k => (hprod j k).const_mul _
-    have hsum : Integrable (fun x => f x * Q x) μ := hf.integrable_mul hQ
-    simp only [q, mul_sub]
-    rw [integral_sub hsum ((hf.integrable (by norm_num)).mul_const (∫ y, Q y ∂μ)),
-      integral_mul_const]
-    simp only [f, hc, zero_mul, sub_zero]
-    simp_rw [Q, hMxy, Finset.mul_sum]
-    rw [integral_finsetSum]
-    · apply Finset.sum_congr rfl
-      intro j _
-      rw [integral_finsetSum]
-      · apply Finset.sum_congr rfl
-        intro k _
-        have heq : (fun x => ⟪u, x⟫ * (C j k * ⟪b k, x⟫ * ⟪b j, x⟫)) =
-            fun x => C j k * (⟪u, x⟫ * ⟪b j, x⟫ * ⟪b k, x⟫) := by
-          funext x; ring
-        rw [heq, integral_const_mul]
-        exact (pow_two (C j k)).symm
-      · intro k _
-        simpa only [mul_assoc, mul_comm, mul_left_comm] using hprodC j k
-    · intro j _
-      apply integrable_finsetSum
-      intro k _
-      simpa only [mul_assoc, mul_comm, mul_left_comm] using hprodC j k
-  have hf2 : Integrable (fun x => f x ^ 2) μ :=
-    (memLp_two_iff_integrable_sq hf.aestronglyMeasurable).1 hf
-  have hq2 : Integrable (fun x => q x ^ 2) μ :=
-    (memLp_two_iff_integrable_sq hq.aestronglyMeasurable).1 hq
-  have hsq : 0 ≤ (∫ x, q x ^ 2 ∂μ) - 16 * S + 64 * ‖u‖ ^ 2 := by
-    have hn := integral_nonneg (μ := μ) (f := fun x => (q x - 8 * f x) ^ 2)
-      (fun x => sq_nonneg _)
-    have heq : (fun x => (q x - 8 * f x) ^ 2) =
-        fun x => q x ^ 2 - 16 * (f x * q x) + 64 * f x ^ 2 := by
-      funext x; ring
-    rw [heq, integral_add (f := fun x => q x ^ 2 - 16 * (f x * q x))
-      (g := fun x => 64 * f x ^ 2)
-      (hq2.sub ((hf.integrable_mul hq).const_mul 16))
-      (hf2.const_mul 64),
-      integral_sub (f := fun x => q x ^ 2) (g := fun x => 16 * (f x * q x))
-      hq2 ((hf.integrable_mul hq).const_mul 16),
-      integral_const_mul, integral_const_mul, hcross] at hn
-    have he : ∫ x, f x ^ 2 ∂μ = ‖u‖ ^ 2 := by
-      simpa only [f, pow_two, real_inner_self_eq_norm_sq] using hiso u u
-    rwa [he] at hn
   have hκ (v w : E) :
       cumulant μ 3 ![u, v, w] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ :=
     cumulant_three_eq_integral_of_integrable_exp μ hr hexp hc u v w
   simp_rw [hκ]
-  change S ≤ 8 * ‖u‖ ^ 2
-  linarith
-
+  exact sum_sq_thirdMoment_le_of_letwin μ (memLp_inner_of_local μ hr hexp)
+    (memLp_inner_mul_of_local μ hr hexp) hc hiso hL u
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem sum_pair_eq_sum_tensor {m : ℕ}
     (b : OrthonormalBasis (Fin m) ℝ E)

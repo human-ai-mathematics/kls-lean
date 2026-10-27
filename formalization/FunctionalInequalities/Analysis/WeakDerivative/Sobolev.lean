@@ -1,3 +1,4 @@
+import Mathlib.Analysis.FunctionalSpaces.SobolevInequality
 import FunctionalInequalities.Analysis.WeakDerivative.Approximation
 import FunctionalInequalities.L2.Components
 import FunctionalInequalities.Analysis.LpExponent

@@ -1,3 +1,5 @@
+import FunctionalInequalities.Probability.Moments
+import FunctionalInequalities.Probability.Gaussian.Moments
 import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
 import FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein
 import FunctionalInequalities.KLS.IsotropicSupport
@@ -8,7 +10,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 import FunctionalInequalities.Analysis.Matrix.Sign
 import FunctionalInequalities.Analysis.Operator.Coordinates
 import FunctionalInequalities.Probability.Stein.Kernel
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import FunctionalInequalities.Probability.LogConcave
@@ -101,7 +103,7 @@ theorem regularClass_matrix_variance_le_eight :
   have hS : S.IsSymm := Matrix.isHermitian_iff_isSymm.mp hSp.isHermitian
   let QL : E →L[ℝ] E := (Matrix.toEuclideanLin Q).toContinuousLinearMap
   let μe := Probability.mapContinuousLinearEquiv μ e
-  have hμe4 : MemLp id 4 (μe : Measure E) := map_linear_memLp_four (μ : Measure E) e.toContinuousLinearMap hμ4
+  have hμe4 : MemLp id 4 (μe : Measure E) := Probability.memLp_four_map_linear (μ : Measure E) e.toContinuousLinearMap hμ4
   have hvarmap : variance (fun x : E => ⟪QL x,x⟫) (μe : Measure E) =
       variance (fun x : E => ∑ i, ∑ j, M i j*x i*x j) (μ : Measure E) := by
     change variance (fun x => ⟪action Q x,x⟫) ((μ : Measure E).map e.toContinuousLinearMap) = _
@@ -111,8 +113,8 @@ theorem regularClass_matrix_variance_le_eight :
     (variance (fun x : E => ∑ i, ∑ j, M i j*x i*x j) (μ : Measure E))
     (8*Matrix.trace (M*M)) (8*Matrix.trace B) (4*(n : ℝ))
   intro s hs
-  let γ : Measure E := gaussianLaw s
-  let : IsProbabilityMeasure γ := gaussianLaw_probability hs
+  let γ : Measure E := Probability.Gaussian.law s
+  let : IsProbabilityMeasure γ := Probability.Gaussian.law_probability hs
   let P := ρ.prod γ
   have hHsym : ∀ᵐ y ∂ρ, (hessianMatrix u y).IsSymm := by
     filter_upwards [(tilted_absolutelyContinuous (volume : Measure E) (-u)).ae_le hdata] with y hy

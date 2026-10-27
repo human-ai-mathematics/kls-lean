@@ -1,3 +1,5 @@
+import FunctionalInequalities.Analysis.Sard.Basic
+import FunctionalInequalities.Analysis.Sard.QuadraticCover
 import FunctionalInequalities.Analysis.Sard.MorseVanishing
 
 /-! # Sard's theorem at the sharp finite regularity `C^n`
@@ -95,41 +97,11 @@ theorem sard
   have hdim : Module.finrank ℝ (Fin (Module.finrank ℝ V) → ℝ) = Module.finrank ℝ V := by
     simp
   set e : (Fin (Module.finrank ℝ V) → ℝ) ≃L[ℝ] V := ContinuousLinearEquiv.ofFinrankEq hdim with he
-  have hdu : Differentiable ℝ u := by
-    rcases Nat.eq_zero_or_pos (Module.finrank ℝ V) with hzero | hpos
-    · have : Subsingleton V := Module.finrank_zero_iff.mp hzero
-      intro x
-      have : (fun _ : V => u 0) = u := by
-        funext y; rw [Subsingleton.elim y 0]
-      rw [← this]
-      exact differentiableAt_const _
-    · exact hu.differentiable (by exact_mod_cast Nat.one_le_iff_ne_zero.mp hpos)
-  have hchain : ∀ y, fderiv ℝ (u ∘ e) y =
-      (fderiv ℝ u (e y)).comp (e : (Fin (Module.finrank ℝ V) → ℝ) →L[ℝ] V) :=
-    fun y => ((hdu (e y)).hasFDerivAt.comp y e.hasFDerivAt).fderiv
-  have himg : u '' {x | fderiv ℝ u x = 0} = (u ∘ e) '' {y | fderiv ℝ (u ∘ e) y = 0} := by
-    ext z
-    constructor
-    · rintro ⟨x, hx, rfl⟩
-      refine ⟨e.symm x, ?_, by simp⟩
-      show fderiv ℝ (u ∘ e) (e.symm x) = 0
-      rw [hchain, ContinuousLinearEquiv.apply_symm_apply]
-      rw [show fderiv ℝ u x = 0 from hx]
-      exact ContinuousLinearMap.zero_comp _
-    · rintro ⟨y, hy, rfl⟩
-      refine ⟨e y, ?_, rfl⟩
-      show fderiv ℝ u (e y) = 0
-      refine ContinuousLinearMap.ext fun v => ?_
-      have hzero : fderiv ℝ (u ∘ e) y = 0 := hy
-      rw [hchain] at hzero
-      have := congrArg (fun L : (Fin (Module.finrank ℝ V) → ℝ) →L[ℝ] ℝ => L (e.symm v)) hzero
-      simpa using this
-  rw [himg]
+  rw [image_critical_comp_continuousLinearEquiv e u]
   exact sard_pi _ _ (hu.comp e.contDiff)
 
 /-- Almost every level is a regular value of a `C^n` function on an `n`-dimensional space.
-Migrated unchanged from the former `KLS/WIP/AnalyticPrerequisites.lean`; it now depends on the
-proved `sard` instead of a hole. -/
+-/
 theorem ae_forall_fderiv_ne_zero {u : V → ℝ} (hu : ContDiff ℝ (Module.finrank ℝ V) u) :
     ∀ᵐ t ∂(volume : Measure ℝ), ∀ x, u x = t → fderiv ℝ u x ≠ 0 := by
   rw [ae_iff]

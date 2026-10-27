@@ -1,3 +1,4 @@
+import Mathlib.Analysis.Calculus.FDeriv.Equiv
 import Mathlib.MeasureTheory.Function.Jacobian
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.Normed.Module.FiniteDimension
@@ -13,6 +14,30 @@ noncomputable section
 open MeasureTheory
 
 namespace FunctionalInequalities.Analysis
+
+/-- Precomposition by a continuous linear equivalence preserves the critical-value image.
+No differentiability or finite-dimensional hypothesis is needed. -/
+theorem image_critical_comp_continuousLinearEquiv {E F : Type*}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    (e : E ≃L[ℝ] F) (u : F → ℝ) :
+    u '' {x | fderiv ℝ u x = 0} = (u ∘ e) '' {y | fderiv ℝ (u ∘ e) y = 0} := by
+  ext z
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    refine ⟨e.symm x, ?_, by simp⟩
+    show fderiv ℝ (u ∘ e) (e.symm x) = 0
+    rw [e.comp_right_fderiv, e.apply_symm_apply, hx, ContinuousLinearMap.zero_comp]
+  · rintro ⟨y, hy, rfl⟩
+    refine ⟨e y, ?_, rfl⟩
+    apply ContinuousLinearMap.ext
+    intro v
+    have hzero : fderiv ℝ (u ∘ e) y = 0 := hy
+    rw [e.comp_right_fderiv] at hzero
+    have := congrArg (fun L : E →L[ℝ] ℝ => L (e.symm v)) hzero
+    simpa using this
+
+
 
 universe v
 

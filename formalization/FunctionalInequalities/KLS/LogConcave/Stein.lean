@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import FunctionalInequalities.Probability.Stein.DualBound
 import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 import FunctionalInequalities.KLS.LogConcave.Isotropic
@@ -27,7 +28,7 @@ theorem absolutelyContinuous_and_memLp_two_of_affineSupport_eq_top {n : ℕ} (μ
     (hLC.interior_support_nonempty_of_affineSupport_eq_top hfull), ?_⟩
   obtain ⟨r, hr, hexp, _⟩ := hLC.exists_integrable_exp_norm_contDiffOn_logLaplace
   apply (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).mpr
-  exact Probability.integrable_norm_pow_of_integrable_exp_norm hr hexp 2
+  exact Probability.integrable_norm_pow_of_exp _ hr hexp 2
 
 /-- **Letwin A.7** for a full-dimensional log-concave law: the Stein identity and its Cauchy–Schwarz
 bound hold for every locally Lipschitz `f` with `f, ∇f ∈ L²(μ)`. -/

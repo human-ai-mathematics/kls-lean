@@ -16,7 +16,7 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 -/
 
 noncomputable section
-section S5E1BLyapunovBound
+section LyapunovBound
 
 open MeasureTheory
 open scoped RealInnerProductSpace ContDiff
@@ -623,4 +623,4 @@ theorem exists_generator_lyapunov_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogCon
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-end S5E1BLyapunovBound
+end LyapunovBound

@@ -6,7 +6,7 @@ import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 -/
 
 noncomputable section
-section S7DTheorem41Compact
+section CompactTheoremAssembly
 
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
@@ -76,4 +76,4 @@ theorem theorem41Compact_of_letwinCompact (hL : LogConcave.Suspension.LetwinComp
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-end S7DTheorem41Compact
+end CompactTheoremAssembly

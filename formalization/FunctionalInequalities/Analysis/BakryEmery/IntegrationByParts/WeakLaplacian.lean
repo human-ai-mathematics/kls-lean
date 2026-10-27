@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.Testing
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 
 /-!

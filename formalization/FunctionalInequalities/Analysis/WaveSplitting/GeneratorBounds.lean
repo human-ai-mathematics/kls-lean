@@ -69,31 +69,20 @@ theorem State.CompactSupport.coordinateGenerator {Y : State E ι}
 
 end FiniteIndex
 
-private theorem smooth_coupling {b : ι → E → ℝ} [Fintype ι]
-    (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) :
-    ContDiff ℝ ∞ (coupling b Y) := ContDiff.sum fun j _ => (hb j).mul (hY.2.2 j)
-
 section FiniteIndex
 
 variable [Fintype ι]
-
-omit [NormedSpace ℝ E] in
-private theorem compact_coupling (b : ι → E → ℝ) {Y : State E ι}
-    (hc : Y.CompactSupport) : HasCompactSupport (coupling b Y) := by
-  have he : coupling b Y = ∑ j, fun x => b j x * Y.p j x := by funext x; simp [coupling]
-  rw [he]
-  exact HasCompactSupport.finset_sum fun j _ => (hc.2.2 j).mul_left
 
 /-- The reaction generator preserves smooth compact classical states. -/
 theorem State.Smooth.reactionGenerator {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) :
     (reactionGenerator b Y).Smooth :=
-  ⟨hY.2.1, hY.1.neg.sub (smooth_coupling hb hY), fun _ => contDiff_const⟩
+  ⟨hY.2.1, hY.1.neg.sub (State.Smooth.coupling hb hY), fun _ => contDiff_const⟩
 
 omit [NormedSpace ℝ E] in
 theorem State.CompactSupport.reactionGenerator (b : ι → E → ℝ)
     {Y : State E ι} (hc : Y.CompactSupport) : (reactionGenerator b Y).CompactSupport :=
-  ⟨hc.2.1, hc.1.neg.sub (compact_coupling b hc), fun _ => HasCompactSupport.zero⟩
+  ⟨hc.2.1, hc.1.neg.sub (hasCompactSupport_coupling b Y hc.2.2), fun _ => HasCompactSupport.zero⟩
 
 end FiniteIndex
 
@@ -244,7 +233,7 @@ theorem scalarEnergy_coupling_le (a : ι → E) (k : ℕ)
       couplingConstant (ι := ι) k B * ∑ j, scalarEnergy m a k (Y.p j) := by
   have hp : Integrable (fun x => ∑ j, jetSquare a k (Y.p j) x) m :=
     integrable_finsetSum Finset.univ fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j)
-  have h := integral_mono (integrable_jetSquare m a k (smooth_coupling hb hY) (compact_coupling b hc))
+  have h := integral_mono (integrable_jetSquare m a k (State.Smooth.coupling hb hY) (hasCompactSupport_coupling b Y hc.2.2))
     (hp.const_mul (couplingConstant (ι := ι) k B)) (jetSquare_coupling_le a k hb hY hB hbB)
   simpa only [scalarEnergy, integral_const_mul, integral_finsetSum Finset.univ
     (fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))] using h
@@ -256,7 +245,7 @@ theorem derivativeEnergy_reactionGenerator_le (a : ι → E) (k : ℕ)
     (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
     derivativeEnergy m a k (reactionGenerator b Y) ≤
       (2 + 2 * couplingConstant (ι := ι) k B) * derivativeEnergy m a k Y := by
-  have hs := scalarEnergy_sub_le m a k hY.1.neg (smooth_coupling hb hY) hc.1.neg (compact_coupling b hc)
+  have hs := scalarEnergy_sub_le m a k hY.1.neg (State.Smooth.coupling hb hY) hc.1.neg (hasCompactSupport_coupling b Y hc.2.2)
   rw [scalarEnergy_neg m a k hY.1 hc.1] at hs
   have hcouple := scalarEnergy_coupling_le m a k hb hY hc hB hbB
   rw [derivativeEnergy_eq_scalarEnergy m a k (hY.reactionGenerator hb) (hc.reactionGenerator b),

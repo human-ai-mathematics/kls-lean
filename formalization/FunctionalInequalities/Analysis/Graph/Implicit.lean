@@ -152,6 +152,27 @@ theorem graphProj_eq_of_inner_ι (ι : H →ₗᵢ[ℝ] V) {a : V} {b : H}
   rw [graphProj, ContinuousLinearMap.adjoint_inner_left]
   exact hab w
 
+/-- A functional annihilating the graph tangent has its representing vector in the normal line. -/
+theorem IsGraphSplitting.eq_normal_of_comp_graphLinear_eq_zero
+    {ι : H →ₗᵢ[ℝ] V} {e a : V} {b : H} (hsp : IsGraphSplitting ι e)
+    (hkey : (innerSL ℝ a).comp (graphLinear ι e b) = 0) :
+    a = (⟪a, e⟫ : ℝ) • (ι (-b) + e) := by
+  have hinner : ∀ v : H, (⟪a, ι v⟫ : ℝ) = ⟪(⟪a, e⟫ • (-b) : H), v⟫ := by
+    intro v
+    have h := congrArg (fun L : H →L[ℝ] ℝ => L v) hkey
+    simp only [ContinuousLinearMap.coe_comp, Function.comp_apply, graphLinear_apply,
+      zero_apply, innerSL_apply_apply, inner_add_right,
+      real_inner_smul_right] at h
+    rw [inner_smul_left, inner_neg_left]
+    simp only [starRingEnd_apply, star_trivial]
+    linear_combination h
+  have hproj := graphProj_eq_of_inner_ι ι hinner
+  have hrec := hsp.eq_ι_add_smul a
+  rw [hproj, real_inner_comm a e] at hrec
+  calc
+    a = ι (⟪a, e⟫ • (-b)) + ⟪a, e⟫ • e := hrec.symm
+    _ = ⟪a, e⟫ • (ι (-b) + e) := by rw [map_smul, smul_add]
+
 end Splitting
 
 section OrthogonalSplitting
@@ -487,24 +508,10 @@ theorem gradient_eq_smul_of_graph (hsp : IsGraphSplitting ι e) {φ : V → ℝ}
     (hasFDerivAt_const (0 : ℝ) y).congr_of_eventuallyEq hzero'
   have hkey : (fderiv ℝ φ (Ψ y)).comp (graphLinear ι e (gradient g y)) = 0 :=
     hcomp.unique hzeroderiv
-  have hinner : ∀ v : H, (⟪a, ι v⟫ : ℝ) = ⟪(β • (-(gradient g y)) : H), v⟫ := by
-    intro v
-    have h := congrArg (fun L : H →L[ℝ] ℝ => L v) hkey
-    simp only [ContinuousLinearMap.coe_comp, Function.comp_apply, graphLinear_apply,
-      zero_apply] at h
-    rw [← fderiv_eq_innerSL_gradient φ (Ψ y)] at h
-    simp only [innerSL_apply_apply, inner_add_right, real_inner_smul_right] at h
-    rw [← ha] at h
-    rw [inner_smul_left, inner_neg_left, hβ]
-    simp only [starRingEnd_apply, star_trivial]
-    linear_combination h
-  have hproj : graphProj ι a = β • (-(gradient g y)) := graphProj_eq_of_inner_ι ι hinner
-  have hrec := hsp.eq_ι_add_smul a
-  rw [hproj] at hrec
-  have hea : (⟪e, a⟫ : ℝ) = β := by rw [hβ, real_inner_comm]
-  rw [hea] at hrec
-  rw [← hrec, map_smul, smul_add]
-
+  have hnormal : (innerSL ℝ (gradient φ (Ψ y))).comp (graphLinear ι e (gradient g y)) = 0 := by
+    rw [fderiv_eq_innerSL_gradient φ (Ψ y)]
+    exact hkey
+  exact hsp.eq_normal_of_comp_graphLinear_eq_zero hnormal
 /-- Normalizing the gradient: the unit normal in graph coordinates. -/
 theorem norm_inv_smul_eq_graphJacobian_inv_smul (hsp : IsGraphSplitting ι e) {a : V} {b : H}
     {β : ℝ} (hβ : 0 < β) (ha : a = β • (ι (-b) + e)) :

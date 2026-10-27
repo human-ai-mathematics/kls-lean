@@ -11,7 +11,7 @@ import FunctionalInequalities.Probability.Transport
 # Gaussian smoothing of linear images
 
 Two identifications for the Gaussian-smoothed image `smoothedLaw (μ.map S) s`:
-- `gaussian_product_latent_map`: if `ρ.map g = μ`, the product `ρ ⊗ gaussianLaw s` pushed by `(y, z) ↦ S (g y) + z` is
+- `gaussian_product_latent_map`: if `ρ.map g = μ`, the product `ρ ⊗ Probability.Gaussian.law s` pushed by `(y, z) ↦ S (g y) + z` is
   `smoothedLaw (μ.map S) s`;
 - `exists_convex_smooth_potential_smoothed_linearEquiv`: for a log-concave `μ` with full affine support and an invertible continuous
   linear `S`, the smoothed image is `e^{-W} dx` with `W` smooth and convex, and the smoothed probability law is log-concave.
@@ -25,16 +25,18 @@ open scoped ENNReal ContDiff
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
+open FunctionalInequalities.Probability.Gaussian
+
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 theorem gaussian_product_latent_map (ρ μ : Measure E) [IsProbabilityMeasure ρ]
     (g : E → E) (hg : Measurable g) (hmap : ρ.map g = μ)
     (S : E →L[ℝ] E) {s : ℝ} (hs : 0 < s) :
-    (ρ.prod (gaussianLaw (V := E) s)).map (fun p => S (g p.1) + p.2) =
+    (ρ.prod (Probability.Gaussian.law (V := E) s)).map (fun p => S (g p.1) + p.2) =
       smoothedLaw (μ.map S) s := by
-  let γ : Measure E := gaussianLaw s
-  let _ : IsProbabilityMeasure γ := gaussianLaw_probability hs
+  let γ : Measure E := Probability.Gaussian.law s
+  let _ : IsProbabilityMeasure γ := Probability.Gaussian.law_probability hs
   have hp : (ρ.map (fun x => S (g x))).prod γ =
       (ρ.prod γ).map (Prod.map (fun x => S (g x)) id) := by
     simpa only [Measure.map_id, Function.comp_def] using Measure.map_prod_map ρ γ

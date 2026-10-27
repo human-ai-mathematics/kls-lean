@@ -1,3 +1,4 @@
+import FunctionalInequalities.L2.Pairing
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass
 import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
 import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
@@ -26,15 +27,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
-omit [CompleteSpace V] in
-private theorem integrable_Lp_mul_compact (ψ : Lp ℝ 2 (ν : Measure V)) {q : V → ℝ}
-    (hq : Continuous q) (hqc : HasCompactSupport q) :
-    Integrable (fun x ↦ ψ x * q x) (ν : Measure V) := by
-  have hqL : MemLp q 2 (ν : Measure V) := hq.memLp_of_hasCompactSupport hqc
-  refine (L2.integrable_inner (𝕜 := ℝ) ψ (hqL.toLp q)).congr ?_
-  filter_upwards [hqL.coeFn_toLp] with x hx
-  simp only [hx, Real.inner_apply, mul_comm]
-
 private theorem integral_chain_smooth (hνU : (ν : Measure V) = m.tilted (-U))
     (hU : ContDiff ℝ 1 U) {Φ : ℝ → ℝ} (hΦ : ContDiff ℝ ∞ Φ) (hΦ0 : Φ 0 = 0)
     (ψ : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
@@ -55,11 +47,11 @@ private theorem integral_chain_smooth (hνU : (ν : Measure V) = m.tilted (-U))
     exact weightedLaplacian_comp U (hq.of_le (by decide))
       (fun y ↦ (hΦ.differentiable (by simp) (q y)).hasDerivAt)
       (hΦ₁.differentiable (by simp) (q x)).hasDerivAt
-  have i₁ := integrable_Lp_mul_compact (ν := ν) (ψ : Lp ℝ 2 (ν : Measure V))
+  have i₁ := FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V))
     ((hΦ₁.continuous.comp hq.continuous).mul
       (continuous_weightedLaplacian hU (hq.of_le (by decide))))
     ((hasCompactSupport_weightedLaplacian U hqc).mul_left)
-  have i₂ := integrable_Lp_mul_compact (ν := ν) (ψ : Lp ℝ 2 (ν : Measure V))
+  have i₂ := FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V))
     ((hΦ₂.continuous.comp hq.continuous).mul
       (continuous_gamma (hq.of_le (by decide)) (hq.of_le (by decide))))
     ((hasCompactSupport_gamma_left q hqc).mul_left)

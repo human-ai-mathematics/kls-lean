@@ -20,6 +20,38 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis.Tensor
 
+/-- Sum a function of two chosen coordinates as an iterated sum over those coordinates. -/
+theorem sum_finTwo_arrow {ι E : Type*} [Fintype ι] (b : ι → E)
+    (f : (Fin 2 → E) → ℝ) :
+    ∑ J : Fin 2 → ι, f (fun k => b (J k)) = ∑ i, ∑ j, f ![b i, b j] := by
+  calc
+    ∑ J : Fin 2 → ι, f (fun k => b (J k)) =
+        ∑ q : ι × ι, f (fun k => b ((finTwoArrowEquiv ι).symm q k)) :=
+      ((finTwoArrowEquiv ι).symm.sum_comp (fun J => f (fun k => b (J k)))).symm
+    _ = ∑ q : ι × ι, f ![b q.1, b q.2] := by
+      apply Finset.sum_congr rfl
+      intro q _
+      have hvec : (fun k => b ((finTwoArrowEquiv ι).symm q k)) = ![b q.1, b q.2] := by
+        funext i
+        fin_cases i <;> rfl
+      rw [hvec]
+    _ = ∑ i, ∑ j, f ![b i, b j] := Fintype.sum_prod_type _
+
+/-- Sum over two coordinates after adjoining a fixed first coordinate. -/
+theorem sum_finTwo_arrow_cons {ι E : Type*} [Fintype ι] (b : ι → E) (u : E)
+    (f : (Fin 3 → E) → ℝ) :
+    ∑ J : Fin 2 → ι, f (Fin.cons u fun k => b (J k)) =
+      ∑ i, ∑ j, f ![u, b i, b j] := by
+  rw [sum_finTwo_arrow b (fun v => f (Fin.cons u v))]
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro j _
+  have hvec : Fin.cons u ![b i, b j] = ![u, b i, b j] := by
+    funext k
+    fin_cases k <;> rfl
+  rw [hvec]
+
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- The coefficient array `(Φ (b i₁, …, b i_k))_i` of a real `k`-linear map in an orthonormal

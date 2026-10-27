@@ -71,7 +71,7 @@ theorem setLIntegral_coarea_graph_family (ι : H →ₗᵢ[ℝ] V) {e : V}
     funext p
     exact (hE p).symm
   have hgrad : Continuous (gradient u) :=
-    (InnerProductSpace.toDual ℝ V).symm.continuous.comp (hu.continuous_fderiv (by simp))
+    BakryEmery.continuous_gradient_of_contDiff hu (by simp)
   let f : V → ℝ≥0∞ := fun x => ‖gradient u x‖ₑ * g x
   have hf : Measurable f := hgrad.enorm.measurable.mul hg
   let J : H × ℝ → ℝ≥0∞ := fun p =>
@@ -136,7 +136,7 @@ theorem exists_coarea_neighborhood (ι : H →ₗᵢ[ℝ] V) {e : V}
     change ι p₀.1 + p₀.2 • e ∈ D.target
     rw [← hE, show E p₀ = D x₀ from E.apply_symm_apply (D x₀)]
     exact D.map_source hxD
-  obtain ⟨r, ψ, hr, hrΩ, hψ, hψeq⟩ := Analysis.exists_contDiff_one_eqOn_ball
+  obtain ⟨r, ψ, hr, hrΩ, hψ, hψeq⟩ := Analysis.exists_contDiff_eqOn_ball
     (isOpen_levelChartDomain ι e D) (contDiffOn_levelChartHeight ι e D hIC) hp₀
   let Ω := Metric.ball p₀ r
   have hΩ : IsOpen Ω := Metric.isOpen_ball
@@ -194,7 +194,7 @@ theorem exists_regular_coarea_neighborhood {O : Set V} {u : V → ℝ}
         (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
           ∫⁻ t, ∫⁻ x in S ∩ {x | u x = t}, g x ∂(surfaceMeasure V) := by
   classical
-  obtain ⟨r, w, hr, hrO, hw, heq⟩ := Analysis.exists_contDiff_one_eqOn_ball hO hu hx₀
+  obtain ⟨r, w, hr, hrO, hw, heq⟩ := Analysis.exists_contDiff_eqOn_ball hO hu hx₀
   have hevent : ∀ x ∈ Metric.ball x₀ r, w =ᶠ[𝓝 x] u := fun x hx =>
     Filter.eventuallyEq_of_mem (Metric.isOpen_ball.mem_nhds hx) heq
   have hgradne : gradient w x₀ ≠ 0 := by

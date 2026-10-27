@@ -102,7 +102,7 @@ theorem integrable_expTilt_of_hasTemperateGrowth {V : E → ℝ}
     {g : E → G} (hg : g.HasTemperateGrowth) (z : E) :
     Integrable g (expTilt (m.tilted (-V)) z) := by
     rcases hg.2 0 with ⟨k, C, hC⟩
-    refine integrable_of_norm_le_pow (k := k) (C := C)
+    refine FunctionalInequalities.Probability.integrable_of_norm_le_pow (k := k) (C := C)
       (expTilt (m.tilted (-V)) z) ?_ ?_ ?_
     · exact integrable_exp_mul_norm_expTilt m hexp z
     · exact hg.1.continuous.aestronglyMeasurable
@@ -151,7 +151,7 @@ private theorem tensorTilt_integrable_laplacian {V : E → ℝ}
   classical
   obtain ⟨k, C, hb⟩ := hf.2 2
   have h₂ : Integrable (iteratedFDeriv ℝ 2 f) (expTilt (m.tilted (-V)) z) :=
-    integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
+    FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
       (hf.1.continuous_iteratedFDeriv (WithTop.coe_le_coe.mpr le_top)).aestronglyMeasurable hb
   have heq : Laplacian.laplacian f = fun x =>
       ∑ i, iteratedFDeriv ℝ 2 f x
@@ -170,7 +170,7 @@ private theorem tensorTilt_integrable_drift {V : E → ℝ} (hV : ContDiff ℝ 1
     {f : E → F} (hf : f.HasTemperateGrowth) (z : E) :
     Integrable (fun x => fderiv ℝ f x (gradient V x)) (expTilt (m.tilted (-V)) z) := by
   obtain ⟨k, C, hC, hb⟩ := hf.norm_iteratedFDeriv_le_uniform 1
-  apply integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
+  apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
     ((hf.1.continuous_fderiv (by simp)).clm_apply
       (continuous_gradient hV)).aestronglyMeasurable (C := C * CV) (k := k + kV)
   intro x

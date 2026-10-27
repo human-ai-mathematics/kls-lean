@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.RieszPotential.Growth
-import FunctionalInequalities.Probability.ExponentialMoments
+import FunctionalInequalities.Probability.ExponentialMoments.Growth
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.Measure.WithDensity
 import Mathlib.Analysis.InnerProductSpace.PiL2

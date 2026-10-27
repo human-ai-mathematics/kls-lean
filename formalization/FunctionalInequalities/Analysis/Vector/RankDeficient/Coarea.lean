@@ -144,57 +144,7 @@ theorem coarea_of_contDiff {S : Set V} {u : V → W} {g : V → ℝ≥0∞} {k :
     (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
       = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k)
           ∂(volume : Measure W)) := by
-  set ν : Measure V := KLS.hausdorffNormalized V k with hν
-  set R : Set V := {x : V | coareaJacobian (fderiv ℝ u x) ≠ 0} with hR
-  have hRopen : IsOpen R := isOpen_coareaJacobian_ne_zero hu
-  have hRmeas : MeasurableSet R := hRopen.measurableSet
-  have hkdim : k = finrank ℝ V - finrank ℝ W := by omega
-  have hmeas : AEMeasurable (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν)
-      (volume : Measure W) :=
-    aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector hk isOpen_univ hu.contDiffOn hS
-      (Set.subset_univ S) hg
-  refine ⟨hmeas, ?_⟩
-  obtain ⟨-, heqR⟩ := coarea_of_contDiffOn_of_coareaJacobian_ne_zero (O := R) (S := S ∩ R)
-    hRopen hu.contDiffOn (fun _ hx => hx) (hS.inter hRmeas) Set.inter_subset_right hg
-  rw [← hkdim] at heqR
-  have hleft : (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V))
-      = ∫⁻ x in S ∩ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V) := by
-    rw [← lintegral_inter_add_sdiff _ _ hRmeas]
-    have hzero : (∫⁻ x in S \ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V)) = 0 := by
-      refine setLIntegral_eq_zero (hS.diff hRmeas) fun x hx => ?_
-      have h0 : coareaJacobian (fderiv ℝ u x) = 0 := by
-        by_contra hne
-        exact hx.2 hne
-      simp [h0]
-    rw [hzero, add_zero]
-  have hright : ∀ᵐ t ∂(volume : Measure W),
-      (∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν)
-        = ∫⁻ y in (S ∩ R) ∩ {x : V | u x = t}, g y ∂ν := by
-    filter_upwards [ae_hausdorffNormalized_critical_inter_levelSet_eq_zero hu hk] with t ht
-    refine setLIntegral_congr ?_
-    have hsub : (S ∩ {x : V | u x = t}) \ ((S ∩ R) ∩ {x : V | u x = t})
-        ⊆ {x : V | ¬ Function.Surjective (fderiv ℝ u x)} ∩ {x : V | u x = t} := by
-      rintro x ⟨⟨hxS, hxt⟩, hxn⟩
-      refine ⟨?_, hxt⟩
-      have hxR : x ∉ R := fun hxR => hxn ⟨⟨hxS, hxR⟩, hxt⟩
-      have h0 : coareaJacobian (fderiv ℝ u x) = 0 := by
-        by_contra hne
-        exact hxR hne
-      exact (coareaJacobian_eq_zero_iff _).1 h0
-    have hempty : ((S ∩ R) ∩ {x : V | u x = t}) \ (S ∩ {x : V | u x = t}) = ∅ := by
-      ext x
-      simp only [Set.mem_sdiff, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_empty_iff_false,
-        iff_false, not_and]
-      tauto
-    exact MeasureTheory.ae_eq_set.2 ⟨measure_mono_null hsub ht, by rw [hempty]; simp⟩
-  calc (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V))
-      = ∫⁻ x in S ∩ R, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-          ∂(volume : Measure V) := hleft
-    _ = ∫⁻ t, ∫⁻ y in (S ∩ R) ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := heqR
-    _ = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) :=
-        lintegral_congr_ae (hright.mono fun t ht => ht.symm)
-
+  apply coarea_of_contDiff_of_ae_null_critical hk hu hS hg
+  simpa only [coareaJacobian_eq_zero_iff, ContinuousLinearMap.coe_coe] using
+    ae_hausdorffNormalized_critical_inter_levelSet_eq_zero hu hk
 end FunctionalInequalities.Analysis

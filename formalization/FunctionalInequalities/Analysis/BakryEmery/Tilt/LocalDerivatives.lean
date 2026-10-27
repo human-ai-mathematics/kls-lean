@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Local
 import Mathlib.Probability.Moments.IntegrableExpMul
 
@@ -127,45 +128,22 @@ theorem iteratedFDeriv_laplace_zero (μ : Measure E)
       (by simpa using hr) h
 
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem moment_product_norm_le (d : ℕ) (h : Fin d → E) (x : E) :
-    ‖∏ j, ⟪x, h j⟫‖ ≤ ‖x‖ ^ d * ∏ j, ‖h j‖ := by
-  rw [norm_prod]
-  calc
-    ∏ j, ‖⟪x, h j⟫‖ ≤ ∏ j, ‖x‖ * ‖h j‖ := by
-      apply Finset.prod_le_prod
-      · intro j _; exact norm_nonneg _
-      · intro j _; exact norm_inner_le_norm _ _
-    _ = ‖x‖ ^ d * ∏ j, ‖h j‖ := by rw [Finset.prod_mul_distrib]; simp
-
-omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
-private theorem norm_moment_integrable (μ : Measure E) [IsProbabilityMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (d : ℕ) :
-    Integrable (fun x : E => ‖x‖ ^ d) μ := by
-  have hneg : Integrable (fun x : E => Real.exp (-r * ‖x‖)) μ := by
-    refine (integrable_const (1 : ℝ)).mono' (by fun_prop) ?_
-    filter_upwards [] with x
-    rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-    exact Real.exp_le_one_iff.2 (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.2 hr.le) (norm_nonneg x))
-  simpa only [abs_norm] using
-    ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul hr.ne' hexp hneg d
-
 /-- `‖D^d L_μ(0)‖ ≤ ∫ ‖x‖^d dμ` (operator norm; `d = 0` gives `1`). -/
 theorem norm_iteratedFDeriv_laplace_zero_le (μ : Measure E) [IsProbabilityMeasure μ]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (d : ℕ) :
     ‖iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂μ) 0‖ ≤ ∫ x, ‖x‖ ^ d ∂μ := by
   have hm : Integrable (fun x : E => ‖x‖ ^ d) μ :=
-    norm_moment_integrable μ hr hexp d
+    FunctionalInequalities.Probability.integrable_norm_pow_of_exp μ hr hexp d
   apply ContinuousMultilinearMap.opNorm_le_bound (integral_nonneg fun x => pow_nonneg (norm_nonneg x) d)
   intro h
   rw [iteratedFDeriv_laplace_zero μ hr hexp d h]
   have hpi : Integrable (fun x : E => ∏ j, ⟪x, h j⟫) μ :=
     (hm.mul_const (∏ j, ‖h j‖)).mono' (by fun_prop)
-      (ae_of_all _ fun x => moment_product_norm_le d h x)
+      (ae_of_all _ fun x => FunctionalInequalities.Analysis.Tensor.norm_prod_inner_le d h x)
   calc
     ‖∫ x, ∏ j, ⟪x, h j⟫ ∂μ‖ ≤ ∫ x, ‖∏ j, ⟪x, h j⟫‖ ∂μ := norm_integral_le_integral_norm _
     _ ≤ ∫ x, ‖x‖ ^ d * ∏ j, ‖h j‖ ∂μ :=
-      integral_mono hpi.norm (hm.mul_const _) (fun x => moment_product_norm_le d h x)
+      integral_mono hpi.norm (hm.mul_const _) (fun x => FunctionalInequalities.Analysis.Tensor.norm_prod_inner_le d h x)
     _ = (∫ x, ‖x‖ ^ d ∂μ) * ∏ j, ‖h j‖ := integral_mul_const _ _
 
 /-- **The first Taylor tensor is the centered first moment**: for `f ∈ L²(μ)`,

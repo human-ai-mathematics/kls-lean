@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import Mathlib.Probability.Moments.IntegrableExpMul
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
@@ -200,24 +201,6 @@ end KLS.BorelLogConcave
 namespace Probability
 
 omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
-/-- An exponential moment gives finite moments of every order. -/
-theorem integrable_norm_pow_of_integrable_exp_norm {ν : Measure V} [IsProbabilityMeasure ν]
-    {t : ℝ} (ht : 0 < t) (hint : Integrable (fun v ↦ Real.exp (t * ‖v‖)) ν) (p : ℕ) :
-    Integrable (fun v ↦ ‖v‖ ^ p) ν := by
-  have hneg : Integrable (fun v ↦ Real.exp (-t * ‖v‖)) ν := by
-    refine (integrable_const (1 : ℝ)).mono' ?_ (Eventually.of_forall fun v ↦ ?_)
-    · exact (Real.continuous_exp.comp (continuous_const.mul continuous_norm)).measurable
-        |>.aestronglyMeasurable
-    · rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
-      exact Real.exp_le_one_iff.mpr (by nlinarith [norm_nonneg v])
-  have := ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul ht.ne' hint hneg p
-  simpa [abs_norm] using this
-
-end Probability
-
-namespace Probability
-
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- Markov: `∫‖v‖² ≤ R²/4` gives mass at least `3/4` to the open ball of radius `R`. -/
 theorem measure_ball_ge_of_integral_norm_sq_le {ν : ProbabilityMeasure V} {R : ℝ} (hR : 0 < R)
     (hint : Integrable (fun v : V => ‖v‖ ^ 2) (ν : Measure V))
@@ -353,7 +336,7 @@ theorem integral_norm_pow_le_of_ball {ν : ProbabilityMeasure V}
   have ht : 0 < t := div_pos (Real.log_pos (by norm_num)) (mul_pos (by norm_num) hR)
   obtain ⟨hint, hbound⟩ := integral_exp_norm_le_of_ball hν hR hball
   have hpint : Integrable (fun v : V => ‖v‖ ^ p) (ν : Measure V) :=
-    Probability.integrable_norm_pow_of_integrable_exp_norm ht hint p
+    Probability.integrable_norm_pow_of_exp _ ht hint p
   have hfac : 0 < (p.factorial : ℝ) := by exact_mod_cast Nat.factorial_pos p
   have htPow : 0 < t ^ p := pow_pos ht p
   have hpt (v : V) : ‖v‖ ^ p ≤ ((p.factorial : ℝ) / t ^ p) * Real.exp (t * ‖v‖) := by
@@ -436,7 +419,7 @@ exponential moment. -/
 theorem KLS.LogConcave.integrable_norm_pow {ν : ProbabilityMeasure E}
     (hν : KLS.LogConcave ν) (d : ℕ) : Integrable (fun x : E => ‖x‖ ^ d) (ν : Measure E) := by
   obtain ⟨r, hr, hi⟩ := ((KLS.LogConcave.borel_iff ν).1 hν).exists_integrable_exp_norm
-  exact Probability.integrable_norm_pow_of_integrable_exp_norm hr hi d
+  exact Probability.integrable_norm_pow_of_exp _ hr hi d
 
 end FiniteDimensional
 

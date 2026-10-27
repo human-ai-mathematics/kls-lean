@@ -12,10 +12,6 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 def couplingConstant (k : ℕ) (B : ℝ) : ℝ :=
   Fintype.card ι * (jetCount (ι := ι) k : ℝ) * 4 ^ k * B
 
-private theorem smooth_coupling {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
-    {Y : State E ι} (hY : Y.Smooth) : ContDiff ℝ ∞ (coupling b Y) :=
-  ContDiff.sum fun j _ => (hb j).mul (hY.2.2 j)
-
 /-- The scalar coefficient pairing satisfies the actual finite-jet product bound. -/
 theorem jetSquare_coupling_le (a : ι → E) (k : ℕ) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth)
@@ -37,7 +33,7 @@ private theorem derivative_reaction_pair {n : ℕ} (v : Fin n → E) {b : ι →
     derivative v (reaction b t Y).u x ^ 2 + derivative v (reaction b t Y).v x ^ 2 ≤
       (1 + t) * (derivative v Y.u x ^ 2 + derivative v Y.v x ^ 2) +
       4 * t * derivative v (coupling b Y) x ^ 2 := by
-  have hc := smooth_coupling hb hY
+  have hc := State.Smooth.coupling hb hY
   let Z : State E Unit := ⟨derivative v Y.u, derivative v Y.v,
     fun _ => derivative v (coupling b Y)⟩
   have h := reaction_pair_bound (fun (_ : Unit) (_ : E) => (1 : ℝ)) Z x ht ht1
@@ -102,7 +98,8 @@ theorem derivativeEnergy_eq_scalarEnergy (a : ι → E) (k : ℕ) {Y : State E �
   intro j hj
   rw [Finset.sum_comm]
 
-private theorem integral_stateJet (a : ι → E) (k : ℕ) {Y : State E ι}
+/-- The integral of the scalar component jets is the actual derivative energy. -/
+theorem integral_jetSquare_eq_derivativeEnergy (a : ι → E) (k : ℕ) {Y : State E ι}
     (hY : Y.Smooth) (hc : Y.CompactSupport) :
     (∫ x, jetSquare a k Y.u x + jetSquare a k Y.v x + ∑ j, jetSquare a k (Y.p j) x ∂m) =
       derivativeEnergy m a k Y := by
@@ -132,8 +129,8 @@ theorem derivativeEnergy_reaction_le (a : ι → E) (k : ℕ) {b : ι → E → 
       (integrable_finsetSum Finset.univ fun j _ => integrable_jetSquare m a k (hs.2.2 j) (hc.2.2 j))
   have h := integral_mono (hint (hY.reaction hb t) (hc.reaction b t))
     ((hint hY hc).const_mul _) (jetSquare_reaction_le a k hb hY hB hbB ht ht1)
-  simpa only [integral_const_mul, integral_stateJet m a k hY hc,
-    integral_stateJet m a k (hY.reaction hb t) (hc.reaction b t)] using h
+  simpa only [integral_const_mul, integral_jetSquare_eq_derivativeEnergy m a k hY hc,
+    integral_jetSquare_eq_derivativeEnergy m a k (hY.reaction hb t) (hc.reaction b t)] using h
 
 section InvariantMeasure
 

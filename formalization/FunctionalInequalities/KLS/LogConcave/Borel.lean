@@ -90,10 +90,6 @@ theorem combination_mono {A₀ A₁ B₀ B₁ : Set E} (h₀ : A₀ ⊆ B₀) (h
 
 end CompactCombinations
 
-private theorem rpow_iSup {ι : Sort*} (f : ι → ENNReal) {t : ℝ} (ht : 0 < t) :
-    (⨆ i, f i) ^ t = ⨆ i, f i ^ t :=
-  (ENNReal.orderIsoRpow t ht).map_iSup f
-
 /-- Compact-set log-concavity is equivalent to the Borel/inner-measure formulation.
 Compact sets are Borel and the inner measure is dominated by the measure, so the Borel
 formulation specializes. Conversely, compact inner regularity writes each Borel mass as a
@@ -118,7 +114,8 @@ theorem LogConcave.borel_iff [FiniteDimensional ℝ E] (μ : ProbabilityMeasure 
           rw [hB₀.measure_eq_iSup_isCompact, hB₁.measure_eq_iSup_isCompact]
       _ = ⨆ (K₀ : Set E) (_ : K₀ ⊆ B₀) (_ : IsCompact K₀) (K₁ : Set E) (_ : K₁ ⊆ B₁)
             (_ : IsCompact K₁), (μ : Measure E) K₀ ^ t * (μ : Measure E) K₁ ^ (1 - t) := by
-          simp_rw [rpow_iSup _ ht0, rpow_iSup _ ht1', ENNReal.iSup_mul, ENNReal.mul_iSup]
+          simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+          simp_rw (config := { congrConsts := false }) [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul, ENNReal.mul_iSup]
       _ ≤ _ := by
           refine iSup₂_le fun K₀ h₀ ↦ iSup_le fun hK₀ ↦ iSup₂_le fun K₁ h₁ ↦ iSup_le fun hK₁ ↦ ?_
           exact key K₀ K₁ h₀ hK₀ h₁ hK₁

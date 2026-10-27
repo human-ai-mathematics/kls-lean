@@ -1,5 +1,13 @@
 import FunctionalInequalities.Analysis.Mollification.Basic
-import Mathlib
+import Mathlib.Analysis.Calculus.ContDiff.Defs
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import Mathlib.Analysis.Calculus.FDeriv.Mul
+import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+import Mathlib.Analysis.Calculus.Rademacher
+import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
+import Mathlib.MeasureTheory.Function.LocallyIntegrable
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.OfBasis
 
 /-!
 # Weak directional derivatives and classical identification

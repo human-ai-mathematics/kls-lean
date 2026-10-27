@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Temperate
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
@@ -35,22 +36,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   (hνU : (ν : Measure V) = m.tilted (-U)) (hU : U.HasTemperateGrowth)
   (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V))
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
-private theorem memLp_two_of_hasTemperateGrowth' {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
-    (μ : Measure V) (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : V → F}
-    (hf : f.HasTemperateGrowth) : MemLp f 2 μ := by
-  obtain ⟨k, C, hb⟩ := hf.2 0
-  have hb' : ∀ x, ‖f x‖ ≤ C * (1 + ‖x‖) ^ k := fun x => by
-    simpa only [norm_iteratedFDeriv_zero] using hb x
-  refine (memLp_two_iff_integrable_sq_norm hf.1.continuous.aestronglyMeasurable).2 ?_
-  refine integrable_of_norm_le_pow μ hexp (hf.1.continuous.aestronglyMeasurable.norm.pow 2)
-    (C := C ^ 2) (k := 2 * k) (fun x => ?_)
-  have h0 : 0 ≤ ‖f x‖ := norm_nonneg _
-  have hsq : ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := pow_le_pow_left₀ h0 (hb' x) 2
-  rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]
-  calc ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := hsq
-    _ = C ^ 2 * (1 + ‖x‖) ^ (2 * k) := by ring
-
 open scoped ContDiff
 open Filter Topology Energy Energy.WeightedGradient
 
@@ -68,7 +53,7 @@ private theorem q_memLp_of_polynomial_bound {g : V → F}
     (hb : ∀ x, ‖g x‖ ≤ C * (1 + ‖x‖) ^ k) :
     MemLp g 2 (ν : Measure V) := by
   apply (memLp_two_iff_integrable_sq_norm hg).mpr
-  apply integrable_of_norm_le_pow (ν : Measure V) hexp (hg.norm.pow 2)
+  apply FunctionalInequalities.Probability.integrable_of_norm_le_pow (ν : Measure V) hexp (hg.norm.pow 2)
     (C := C ^ 2) (k := k * 2)
   intro x
   change ‖‖g x‖ ^ 2‖ ≤ _
@@ -186,7 +171,7 @@ theorem exists_toLp_mem_closedWeightedOperator_domain_of_hasTemperateGrowth {f :
     (hgb x).trans (mul_le_mul_of_nonneg_right hCA (by positivity))
   let D : V → ℝ := fun x => (2 * A) ^ 2 * (1 + ‖x‖) ^ (k * 2)
   have hD : Integrable D (ν : Measure V) := by
-    apply integrable_of_norm_le_pow _ hexp (by fun_prop)
+    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop)
       (C := (2 * A) ^ 2) (k := k * 2)
     intro x
     exact Real.norm_of_nonneg (by dsimp [D]; positivity) |>.le
@@ -235,7 +220,7 @@ theorem exists_toLp_mem_adjointComp_domain_of_hasTemperateGrowth {f : V → ℝ}
     exists_toLp_mem_closedWeightedOperator_domain_of_hasTemperateGrowth m hν hi hexp hf
   have hU1 : ContDiff ℝ 1 U := hU.1.of_le (by simp)
   have hL2 : MemLp (fun x => -weightedLaplacian U f x) 2 (ν : Measure V) :=
-    memLp_two_of_hasTemperateGrowth' (ν : Measure V) hexp (hasTemperateGrowth_weightedLaplacian hU hf).neg
+    FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth (ν : Measure V) hexp (hasTemperateGrowth_weightedLaplacian hU hf).neg
   have hweak : ∀ x : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain,
       ⟪hL2.toLp (fun y => -weightedLaplacian U f y), (x : Lp ℝ 2 (ν : Measure V))⟫ =
         ⟪hg2.toLp (gradient f), hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi x⟫ := by
@@ -378,7 +363,7 @@ private theorem integrable_norm_sq_weightedLaplacianVec (μ : Measure V)
   simp_rw [hpt]
   refine integrable_finsetSum _ fun k _ => ?_
   have hk := hasTemperateGrowth_weightedLaplacian hU (hasTemperateGrowth_inner_left_comp hh (b k))
-  have hm := memLp_two_of_hasTemperateGrowth' μ hexp hk
+  have hm := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp hk
   simpa only [Real.norm_eq_abs, sq_abs] using (memLp_two_iff_integrable_sq_norm hm.1).1 hm
 
 include m hν hi hexp hC in
@@ -416,7 +401,7 @@ theorem integral_norm_sq_sub_integral_le_of_hasTemperateGrowth {h : V → F} (hh
   have hfk : ∀ k, (fun x => ⟪b k, h x⟫).HasTemperateGrowth := fun k =>
     hasTemperateGrowth_inner_left_comp hh (b k)
   have hhi : Integrable h (ν : Measure V) :=
-    (memLp_two_of_hasTemperateGrowth' (ν : Measure V) hexp hh).integrable (by norm_num)
+    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth (ν : Measure V) hexp hh).integrable (by norm_num)
   have hmean : ∀ k, ∫ y, ⟪b k, h y⟫ ∂(ν : Measure V) = ⟪b k, c⟫ := fun k => integral_inner hhi (b k)
   have hA : ∀ x, ‖h x - c‖ ^ 2 =
       ∑ k, (⟪b k, h x⟫ - ∫ y, ⟪b k, h y⟫ ∂(ν : Measure V)) ^ 2 := by
@@ -450,13 +435,13 @@ theorem integral_norm_sq_sub_integral_le_of_hasTemperateGrowth {h : V → F} (hh
   have hI1 : ∀ k, Integrable (fun x => (⟪b k, h x⟫ - ∫ y, ⟪b k, h y⟫ ∂(ν : Measure V)) ^ 2)
       (ν : Measure V) := by
     intro k
-    have hm := memLp_two_of_hasTemperateGrowth' (ν : Measure V) hexp
+    have hm := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth (ν : Measure V) hexp
       ((hfk k).sub (Function.HasTemperateGrowth.const (∫ y, ⟪b k, h y⟫ ∂(ν : Measure V))))
     simpa only [Real.norm_eq_abs, sq_abs, Pi.sub_apply] using
       (memLp_two_iff_integrable_sq_norm hm.1).1 hm
   have hI2 : ∀ k, Integrable (fun x => ‖gradient (fun y => ⟪b k, h y⟫) x‖ ^ 2) (ν : Measure V) := by
     intro k
-    have hm := memLp_two_of_hasTemperateGrowth' (ν : Measure V) hexp (hasTemperateGrowth_gradient (hfk k))
+    have hm := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth (ν : Measure V) hexp (hasTemperateGrowth_gradient (hfk k))
     exact (memLp_two_iff_integrable_sq_norm hm.1).1 hm
   simp_rw [hA, hB]
   rw [integral_finsetSum _ fun k _ => hI1 k, integral_finsetSum _ fun k _ => hI2 k, Finset.mul_sum]
@@ -490,7 +475,7 @@ theorem integral_norm_sq_gradCoord_le_of_hasTemperateGrowth {h : V → F} (hh : 
   have hY := integral_norm_sq_sub_integral_le_of_hasTemperateGrowth m hν hi hexp hC hh
   rw [← hc] at hY
   have hLi := integrable_norm_sq_weightedLaplacianVec (ν : Measure V) hexp hU hh
-  have hmc := memLp_two_of_hasTemperateGrowth' (ν : Measure V) hexp hhc
+  have hmc := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth (ν : Measure V) hexp hhc
   have hYi := (memLp_two_iff_integrable_sq_norm hmc.1).1 hmc
   set X := ∫ x, ‖gradCoord h x‖ ^ 2 ∂(ν : Measure V)
   set L := ∫ x, ‖weightedLaplacianVec U h x‖ ^ 2 ∂(ν : Measure V)
@@ -605,7 +590,7 @@ theorem exists_symm_integral_norm_sq_sub_le_mul {g : V → G}
           (C : ℝ) * ∫ x, ‖gradCoord (gradCoord g) x - α • gradCoord h x‖ ^ 2 ∂(ν : Measure V) := by
   by_cases hX : ∫ x, ‖gradCoord h x‖ ^ 2 ∂(ν : Measure V) = 0
   · have hgh := hasTemperateGrowth_gradCoord hh
-    have hm := memLp_two_of_hasTemperateGrowth' (ν : Measure V) hexp hgh
+    have hm := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth (ν : Measure V) hexp hgh
     have hi2 := (memLp_two_iff_integrable_sq_norm hm.1).1 hm
     have hae : (fun x => ‖gradCoord h x‖ ^ 2) =ᵐ[(ν : Measure V)] 0 :=
       (integral_eq_zero_iff_of_nonneg (fun x => by positivity) hi2).1 hX

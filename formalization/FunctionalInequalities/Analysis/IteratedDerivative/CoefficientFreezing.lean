@@ -36,7 +36,7 @@ noncomputable section
 open Set Metric
 namespace FunctionalInequalities.Analysis
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*} [Fintype ι]
+  {ι : Type*} [Fintype ι]
 
 /-- The actual principal part in a fixed finite family of directions. -/
 def principalPart (a : ι → E → ℝ) (v w : ι → E)

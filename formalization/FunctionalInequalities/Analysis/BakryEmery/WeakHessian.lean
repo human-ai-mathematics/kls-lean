@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+import FunctionalInequalities.Analysis.WeakDerivative.Products
 
 /-!
 # Generic weak Hessian coordinates and pointwise identification
@@ -61,7 +61,8 @@ private lemma HasWeakDerivAlong.congr_right {f g g' : E → ℝ} {v : E}
 
 end FiniteDimensional
 
-private lemma differentiableAt_fderiv_of_differentiableAt_gradient [CompleteSpace E]
+/-- Differentiability of the gradient gives differentiability of the total Fréchet derivative. -/
+theorem differentiableAt_fderiv_of_differentiableAt_gradient [CompleteSpace E]
     {u : E → ℝ} {x : E} (hx : DifferentiableAt ℝ (gradient u) x) :
     DifferentiableAt ℝ (fderiv ℝ u) x := by
   have heq :
@@ -72,7 +73,8 @@ private lemma differentiableAt_fderiv_of_differentiableAt_gradient [CompleteSpac
   exact
     (InnerProductSpace.toDual ℝ E).toContinuousLinearEquiv.differentiableAt.comp x hx
 
-private lemma hessian_coord_of_gradient_diff
+/-- At a differentiability point of the gradient, the differentiated coordinate derivative is the total Hessian entry. -/
+theorem hessian_coord_of_gradient_diff
     {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ} {x : EuclideanSpace ℝ (Fin n)}
     {i j : Fin n} (hx : DifferentiableAt ℝ (gradient u) x) :
     fderiv ℝ (fun y => fderiv ℝ u y (EuclideanSpace.basisFun (Fin n) ℝ j)) x
@@ -349,53 +351,16 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Probability.Stein
 
-private def n10_matrix {n : ℕ}
-    (L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
-    Matrix (Fin n) (Fin n) ℝ :=
-  fun r s =>
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n)))
-      (L (EuclideanSpace.basisFun (Fin n) ℝ r))
-      (EuclideanSpace.basisFun (Fin n) ℝ s)
-
-private lemma n10_hessian {n : ℕ}
-    (u : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
-    hessianMatrix u x = n10_matrix (fderiv ℝ (gradient u) x) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
-  have he : fderiv ℝ u = T ∘ gradient u :=
-    funext fun y => (T.apply_symm_apply (fderiv ℝ u y)).symm
-  have hd :
-      fderiv ℝ (fderiv ℝ u) x =
-        T.toContinuousLinearMap.comp (fderiv ℝ (gradient u) x) :=
-    (congrArg (fun f => fderiv ℝ f x) he).trans T.comp_fderiv
-  ext r s
-  change
-    fderiv ℝ (fderiv ℝ u) x (EuclideanSpace.basisFun (Fin n) ℝ r)
-        (EuclideanSpace.basisFun (Fin n) ℝ s) =
-      T (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ r))
-        (EuclideanSpace.basisFun (Fin n) ℝ s)
-  rw [hd]
-  rfl
-
-private lemma n11b_continuous_hessian_entry {n : ℕ} (i j : Fin n) :
-    Continuous
-      (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) =>
-        n10_matrix L i j) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
-  exact
-    (T.continuous.comp (continuous_id.clm_apply continuous_const)).clm_apply
-      continuous_const
-
 /-- Measurability of the total coordinate Hessian, without smoothness premises. -/
 theorem measurable_hessianMatrix_entry {n : ℕ}
     (u : EuclideanSpace ℝ (Fin n) → ℝ) (i j : Fin n) :
     Measurable (fun x => hessianMatrix u x i j) := by
-  simpa only [n10_hessian, Function.comp_def] using
-    (n11b_continuous_hessian_entry i j).measurable.comp
-      (measurable_fderiv ℝ (gradient u))
+  have hentry : Continuous
+      (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) =>
+        gradientDerivativeMatrix L i j) :=
+    (continuous_apply j).comp ((continuous_apply i).comp continuous_gradientDerivativeMatrix)
+  simpa only [hessianMatrix_eq_gradientDerivativeMatrix, Function.comp_def] using
+    hentry.measurable.comp (measurable_fderiv ℝ (gradient u))
 
 /-- The total coordinate Hessian is bounded by the gradient Lipschitz constant;
 this does not assert C2 regularity or classical differentiability everywhere. -/
@@ -407,7 +372,7 @@ theorem norm_hessianMatrix_entry_le_of_lipschitz_gradient {n : ℕ}
   let L := fderiv ℝ (gradient u) x
   let e := EuclideanSpace.basisFun (Fin n) ℝ
   let T := InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))
-  rw [n10_hessian]
+  rw [hessianMatrix_eq_gradientDerivativeMatrix]
   change ‖T (L (e i)) (e j)‖ ≤ (G : ℝ)
   calc
     ‖T (L (e i)) (e j)‖ ≤ ‖T (L (e i))‖ * ‖e j‖ :=
@@ -429,6 +394,23 @@ open MeasureTheory Set
 open scoped Topology ContDiff
 namespace FunctionalInequalities.Probability.Stein
 
+/-- Lipschitz-gradient total Hessian entries are essentially bounded on
+compact sets, without a differentiability or equation premise. -/
+theorem memLp_top_hessianMatrix_entry_of_isCompact {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
+    (hGradLip : LipschitzWith G (gradient u)) (i j : Fin n)
+    (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
+    MemLp (fun x => hessianMatrix u x i j) (⊤ : ENNReal)
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+  let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
+    isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
+  exact MemLp.of_bound
+    (measurable_hessianMatrix_entry u i j).aestronglyMeasurable (G : ℝ)
+    (Filter.Eventually.of_forall fun x => norm_hessianMatrix_entry_le_of_lipschitz_gradient hGradLip x i j)
+
+
+
+
 /-- The total coordinate Hessian entry is L2 on every compact set, from the
 actual Lipschitz-gradient bound. No differentiability or PDE premise is added. -/
 theorem memLp_hessianMatrix_entry_of_isCompact {n : ℕ}
@@ -440,12 +422,7 @@ theorem memLp_hessianMatrix_entry_of_isCompact {n : ℕ}
   let : IsFiniteMeasure
       ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
     isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
-  exact MemLp.of_bound
-    (measurable_hessianMatrix_entry u i j).aestronglyMeasurable
-    (G : ℝ)
-    (Filter.Eventually.of_forall fun x =>
-      norm_hessianMatrix_entry_le_of_lipschitz_gradient hG x i j)
-
+  exact (memLp_top_hessianMatrix_entry_of_isCompact hG i j S hS).mono_exponent le_top
 /-- Multiplying a total Hessian entry by a continuous compact cutoff produces
 an actual global L2 function for the existing difference-quotient criterion. -/
 theorem memLp_cutoff_mul_hessianMatrix_entry {n : ℕ}

@@ -25,6 +25,19 @@ noncomputable def diffusionGenerator {V : Type*} [NormedAddCommGroup V] [NormedS
     {d : ℕ} (b : V → V) (σ : V → Fin d → V) (F : V → ℝ) (x : V) : ℝ :=
   fderiv ℝ F x (b x) + (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ F) x (σ x k) (σ x k)
 
+/-- A diffusion generator with continuous drift and noise maps `C²` functions to continuous functions. -/
+theorem continuous_diffusionGenerator {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
+    {d : ℕ} {b : V → V} {σ : V → Fin d → V} {F : V → ℝ}
+    (hb : Continuous b) (hσ : ∀ k, Continuous (fun x => σ x k))
+    (hF : ContDiff ℝ 2 F) : Continuous (diffusionGenerator b σ F) := by
+  have hfirst : Continuous (fun x => fderiv ℝ F x (b x)) :=
+    (hF.continuous_fderiv (by norm_num)).clm_apply hb
+  have hsecond (k : Fin d) :
+      Continuous (fun x => fderiv ℝ (fderiv ℝ F) x (σ x k) (σ x k)) := by
+    have hfd : ContDiff ℝ 1 (fderiv ℝ F) := hF.fderiv_right (by norm_num)
+    exact ((hfd.continuous_fderiv one_ne_zero).clm_apply (hσ k)).clm_apply (hσ k)
+  exact hfirst.add (continuous_const.mul (continuous_finsetSum _ (fun k _ => hsecond k)))
+
 section Adapter
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 
@@ -77,7 +90,7 @@ end FunctionalInequalities.Probability.Diffusion
 
 namespace FunctionalInequalities.Probability.Diffusion
 
-section S3B1GeneratorChainRule
+section GeneratorChainRule
 
 
 
@@ -160,13 +173,13 @@ theorem diffusionGenerator_comp {V W : Type*} [NormedAddCommGroup V] [NormedSpac
       simp only [smul_eq_mul]
       ring
 
-end S3B1GeneratorChainRule
+end GeneratorChainRule
 
 end FunctionalInequalities.Probability.Diffusion
 
 namespace FunctionalInequalities.Probability.Diffusion
 
-section S3B1LLocalChainRule
+section LocalGeneratorChainRule
 
 
 
@@ -299,7 +312,7 @@ theorem diffusionGenerator_comp_of_contDiffAt {d : ℕ} (b : V → V) (σ : V �
 
 end NormedSpace
 
-end S3B1LLocalChainRule
+end LocalGeneratorChainRule
 
 end FunctionalInequalities.Probability.Diffusion
 

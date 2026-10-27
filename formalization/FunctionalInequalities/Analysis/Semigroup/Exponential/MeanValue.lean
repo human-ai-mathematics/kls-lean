@@ -3,54 +3,12 @@ import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.SpecialFunctions.Exponential
 
 /-!
-# A mean value bound for `exp (-t • A) f - f + t • A f`
+# Mean-value estimates for operator exponentials
 
-The estimate is `norm_exp_neg_smul_sub_add_smul_le`.
-
-For a bounded operator `A` on a complete normed space, a vector `f`, `0 ≤ t` and a real `C`: if
-`‖exp (-τ • A) (A f) - A f‖ ≤ C` for every `τ ∈ [0, t]`, then
-
-`‖exp (-t • A) f - f + t • A f‖ ≤ C * t`.
-
-This is the quantitative statement that `exp (-t • A) f = f - t • A f + O(t)` with a constant
-controlled by the motion of `A f` along the orbit; the route uses it with `A = L_s` the Yosida
-approximation to identify the generator of the limit semigroup.
-
-## Proof
-
-The path `φ τ = exp (-τ • A) f - f + τ • A f` has `φ 0 = 0` and, by
-`hasDerivAt_exp_smul_const` evaluated at the fixed vector `f` (`HasDerivAt.clm_apply` against
-`hasDerivAt_const`) plus the derivative `A f` of `τ ↦ τ • A f`,
-
-`φ' τ = -(exp (-τ • A) (A f)) + A f`,
-
-recorded as `hasDerivAt_exp_neg_smul_path`. Its norm is `‖exp (-τ • A) (A f) - A f‖ ≤ C` on
-`[0, t]`, so the mean value inequality
-`norm_image_sub_le_of_norm_deriv_le_segment'` on `[0, t]`, evaluated at `t`, gives
-`‖φ t - φ 0‖ ≤ C * (t - 0)`. Everything is pointwise in `f`: no operator norm of `A` or of an
-exponential is ever estimated, which avoids the `ContinuousLinearMap` norm instance diamond.
-Nonnegativity of `A` is not assumed and not needed, nor is `0 ≤ C`: for `t = 0` both sides
-are `0`.
-
-## Scope
-
-The route states the exponential mean-value bound on a real Hilbert space, `[InnerProductSpace ℝ H₀] [CompleteSpace H₀]`. The
-inner product plays no role — no symmetry, no nonnegativity, no Cauchy–Schwarz — so the module
-lemmas are proved for an arbitrary `[NormedSpace ℝ H₀] [CompleteSpace H₀]`, and `route_G2`
-accepts the `InnerProductSpace` instance and discards it. Completeness **is** used: it supplies
-`CompleteSpace (H₀ →L[ℝ] H₀)`, the hypothesis under which `NormedSpace.exp` is differentiable.
-The hypothesis `0 ≤ t` **is** used, so that `[0, t]` is the correct interval and `t` its right
-endpoint. This follows the precedent of the shifted weak form, resolvent solvability, resolvent contraction and the form identity, which likewise prove the
-general statement and keep a verbatim wrapper.
-
-## Deliberately out of scope
-
-the generator right derivative (uniformity on `[0, t]` of the the adjoint-product identification convergence) and `G3`/the semigroup limit (the generator of the limit
-semigroup is `-T†T`) are **not** proved here; neither are `P1`–`P8` (the exponential approximation). This module mentions
-no unbounded operator `T`, no adjoint, no resolvent and no Yosida approximation: it is a
-statement about a single bounded operator. Nothing here is the Markov property, Bakry–Émery
-calculus, a small-time heat estimate, localization or any step of Buser's inequality;
-`thm:logconcave-cheeger-poincare-comparison` gains no progress marker from this module.
+For a bounded operator on a complete real normed space, the error
+`exp (-t • A) f - f + t • A f` is bounded by `C * t` when
+`‖exp (-τ • A) (A f) - A f‖ ≤ C` throughout `0 ≤ τ ≤ t`.
+The exponential path derivative and the mean-value estimate require no inner product.
 -/
 
 noncomputable section
@@ -115,19 +73,5 @@ theorem norm_exp_neg_smul_sub_add_smul_le (A : H₀ →L[ℝ] H₀) (f : H₀) {
   exact hmvt
 
 end MeanValue
-
-/-- **the exponential mean-value bound of the generated-semigroup route**, stated verbatim as in
-`research/audits/GeneratedSemigroupRouteStatements.lean` and discharged from
-`norm_exp_neg_smul_sub_add_smul_le`.
-
-The route's `InnerProductSpace ℝ H₀` instance is accepted here and **not used**; the general
-statement, for any complete normed space over `ℝ`, is `norm_exp_neg_smul_sub_add_smul_le`. -/
-theorem route_G2 :
-    ∀ {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    (A : H₀ →L[ℝ] H₀) (f : H₀) {t : ℝ}, 0 ≤ t → ∀ {C : ℝ},
-      (∀ τ ∈ Set.Icc 0 t, ‖NormedSpace.exp (-τ • A) (A f) - A f‖ ≤ C) →
-        ‖NormedSpace.exp (-t • A) f - f + t • A f‖ ≤ C * t := by
-  intro H₀ _ _ _ A f t ht C hC
-  exact norm_exp_neg_smul_sub_add_smul_le A f ht hC
 
 end FunctionalInequalities.Analysis.Semigroup

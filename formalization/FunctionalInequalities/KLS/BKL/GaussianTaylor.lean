@@ -1,6 +1,6 @@
+import FunctionalInequalities.Probability.Gaussian.Moments
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 import Mathlib.Analysis.Complex.ExponentialBounds
-import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 
 /-!
@@ -119,134 +119,47 @@ end GaussianPotential
 section GaussianLaplace
 
 omit [CompleteSpace E]
-/-- The Gaussian integral `∫ e^{-‖x‖²/2 + ⟪z, x⟫} dx` as a complex number. -/
-private theorem ofReal_integral_exp_gaussian (z : E) :
-    ((∫ x, Real.exp (-(‖x‖ ^ 2 / 2) + ⟪z, x⟫) : ℝ) : ℂ) =
-      (Real.pi / (1 / 2 : ℂ)) ^ (Module.finrank ℝ E / 2 : ℂ) *
-        Complex.exp (‖z‖ ^ 2 / 2) := by
-  have hb : 0 < ((1 / 2 : ℂ)).re := by norm_num
-  have h := GaussianFourier.integral_cexp_neg_mul_sq_norm_add (V := E) hb 1 z
-  calc ((∫ x, Real.exp (-(‖x‖ ^ 2 / 2) + ⟪z, x⟫) : ℝ) : ℂ)
-      = ∫ x, ((Real.exp (-(‖x‖ ^ 2 / 2) + ⟪z, x⟫) : ℝ) : ℂ) := integral_complex_ofReal.symm
-    _ = ∫ v : E, Complex.exp (-(1 / 2) * ‖v‖ ^ 2 + 1 * ⟪z, v⟫) := by
-      refine integral_congr_ae (Eventually.of_forall fun x => ?_)
-      simp only [Complex.ofReal_exp]
-      push_cast
-      ring_nf
-    _ = _ := by
-      rw [h]
-      ring_nf
+/-- The shared Gaussian normalization at `s = 1/2` is the standard tilted law. -/
+private theorem gaussianLaw_half_eq_tilted :
+    Probability.Gaussian.law (V := E) (1 / 2) =
+      (volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2) := by
+  rw [Probability.Gaussian.law_eq_tilted (by norm_num : (0 : ℝ) < 1 / 2)]
+  congr 1
+  funext x
+  simp only [Pi.neg_apply]
+  ring
 
 /-- **Moment generating function of the standard Gaussian**:
 `∫ e^{⟪z, x⟫} dγ = e^{‖z‖²/2}` for `γ = volume.tilted (-‖·‖²/2)`. -/
 theorem integral_exp_inner_tilted_half_norm_sq (z : E) :
     ∫ x, Real.exp ⟪z, x⟫ ∂((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) =
       Real.exp (‖z‖ ^ 2 / 2) := by
-  rw [integral_tilted]
-  simp only [Pi.neg_apply, smul_eq_mul]
-  have hnum : (∫ x : E, Real.exp (-(‖x‖ ^ 2 / 2)) / (∫ y : E, Real.exp (-(‖y‖ ^ 2 / 2))) *
-      Real.exp ⟪z, x⟫) =
-      (∫ x : E, Real.exp (-(‖x‖ ^ 2 / 2) + ⟪z, x⟫)) / (∫ y : E, Real.exp (-(‖y‖ ^ 2 / 2))) := by
-    rw [← integral_div]
-    congr 1
-    funext x
-    rw [Real.exp_add]
-    ring
-  rw [hnum]
-  have h0 := ofReal_integral_exp_gaussian (E := E) 0
-  simp only [inner_zero_left, add_zero, norm_zero] at h0
-  have hz := ofReal_integral_exp_gaussian (E := E) z
-  apply Complex.ofReal_injective
-  rw [Complex.ofReal_div, hz, h0, Complex.ofReal_exp]
-  have hne : (Real.pi / (1 / 2 : ℂ)) ^ (Module.finrank ℝ E / 2 : ℂ) ≠ 0 := by
-    rw [Ne, Complex.cpow_eq_zero_iff]
-    intro h
-    have : (Real.pi : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr Real.pi_ne_zero
-    exact this (by simpa using h.1)
-  push_cast
-  field_simp
-  simp
-
+  have hs : (0 : ℝ) < 1 / 2 := by norm_num
+  have h := Probability.Gaussian.laplace (E := E) hs z
+  rw [gaussianLaw_half_eq_tilted] at h
+  simpa only [show (4 : ℝ) * (1 / 2) = 2 by norm_num,
+    show (2 : ℝ) * (1 / 2) = 1 by norm_num, div_one] using h
 end GaussianLaplace
-
-section GaussianDerivatives
-
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-private theorem hasFDerivAt_exp_half_norm_sq (y : E) :
-    HasFDerivAt (fun z : E => Real.exp (‖z‖ ^ 2 / 2))
-      (Real.exp (‖y‖ ^ 2 / 2) • innerSL ℝ y) y :=
-  (hasFDerivAt_half_norm_sq y).exp
-
-private theorem contDiff_exp_half_norm_sq :
-    ContDiff ℝ ∞ (fun z : E => Real.exp (‖z‖ ^ 2 / 2)) :=
-  ContDiff.exp ((contDiff_norm_sq ℝ).div_const 2)
-
-end GaussianDerivatives
-
-omit [CompleteSpace E] in
-/-- The moment generating function in the form of the Laplace integrals of
-`Analysis/BakryEmery/Tilt/SquareIntegrable.lean`. -/
-private theorem laplace_one_eq :
-    (fun z => ∫ x, Real.exp ⟪z, x⟫ • (1 : ℝ)
-        ∂((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2))) =
-      fun z : E => Real.exp (‖z‖ ^ 2 / 2) := by
-  funext z
-  simp only [smul_eq_mul, mul_one]
-  exact integral_exp_inner_tilted_half_norm_sq z
-
-/-- Every direction moment `∫ ∏ ⟪x, h_j⟫ dγ` is the `d`-th derivative of `e^{‖z‖²/2}` at `0`. -/
-private theorem integral_prod_inner_eq (d : ℕ) (h : Fin d → E) :
-    ∫ x, ∏ j, ⟪x, h j⟫ ∂((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) =
-      iteratedFDeriv ℝ d (fun z : E => Real.exp (‖z‖ ^ 2 / 2)) 0 h := by
-  have hV := regularPotential_half_norm_sq (E := E)
-  have H := iteratedFDeriv_integral_exp_inner_smul
-    ((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) (g := fun _ => (1 : ℝ))
-    aestronglyMeasurable_const (fun r => by simpa using hV.integrable_exp_mul_norm r) d 0 h
-  rw [laplace_one_eq] at H
-  rw [H]
-  simp
 
 /-- **The standard Gaussian is centered**: `∫ x dγ = 0`. -/
 theorem integral_id_tilted_half_norm_sq :
     ∫ x, x ∂((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) = 0 := by
-  have hV := regularPotential_half_norm_sq (E := E)
-  have hint : Integrable (fun x : E => x)
-      ((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) := by
-    refine (hV.integrable_exp_mul_norm 1).mono' continuous_id.aestronglyMeasurable
-      (Eventually.of_forall fun x => ?_)
-    rw [one_mul]
-    linarith [Real.add_one_le_exp ‖x‖]
-  apply ext_inner_left ℝ
-  intro h
-  rw [← integral_inner hint, inner_zero_right]
-  have H := integral_prod_inner_eq (E := E) 1 (fun _ => h)
-  simp only [Finset.prod_const, Finset.card_univ, Fintype.card_fin, pow_one] at H
-  simp_rw [real_inner_comm _ h]
-  rw [H, iteratedFDeriv_one_apply, (hasFDerivAt_exp_half_norm_sq (0 : E)).fderiv]
-  simp
+  have hs : (0 : ℝ) < 1 / 2 := by norm_num
+  have h := Probability.Gaussian.mean_zero (E := E) hs
+  rw [gaussianLaw_half_eq_tilted] at h
+  simpa only [show (4 : ℝ) * (1 / 2) = 2 by norm_num,
+    show (2 : ℝ) * (1 / 2) = 1 by norm_num, div_one] using h
 
+-- Retain the existing CompleteSpace binder in this public interface.
+set_option linter.unusedSectionVars false in
 /-- **The standard Gaussian has identity covariance**: `∫ ⟪v, x⟫² dγ = ‖v‖²`. -/
 theorem integral_inner_sq_tilted_half_norm_sq (v : E) :
     ∫ x, ⟪v, x⟫ ^ 2 ∂((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) = ‖v‖ ^ 2 := by
-  have H := integral_prod_inner_eq (E := E) 2 ![v, v]
-  simp only [Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one] at H
-  have hsq : (fun x : E => ⟪v, x⟫ ^ 2) = fun x => ⟪x, v⟫ * ⟪x, v⟫ := by
-    funext x
-    rw [real_inner_comm, sq]
-  rw [hsq, H, ← bilinearIteratedFDerivTwo_eq_iteratedFDeriv,
-    bilinearIteratedFDerivTwo_eq_fderiv_apply
-      (contDiff_exp_half_norm_sq.of_le (WithTop.coe_le_coe.mpr le_top))]
-  have hfun : (fun y : E => fderiv ℝ (fun z : E => Real.exp (‖z‖ ^ 2 / 2)) y v) =
-      fun y => Real.exp (‖y‖ ^ 2 / 2) * ⟪v, y⟫ := by
-    funext y
-    rw [(hasFDerivAt_exp_half_norm_sq y).fderiv]
-    simp [real_inner_comm]
-  have hd : HasFDerivAt (fun y : E => Real.exp (‖y‖ ^ 2 / 2) * ⟪v, y⟫)
-      (Real.exp (‖(0 : E)‖ ^ 2 / 2) • innerSL ℝ v +
-        ⟪v, (0 : E)⟫ • (Real.exp (‖(0 : E)‖ ^ 2 / 2) • innerSL ℝ (0 : E))) 0 :=
-    (hasFDerivAt_exp_half_norm_sq (0 : E)).mul ((innerSL ℝ v).hasFDerivAt)
-  rw [hfun, hd.fderiv]
-  simp
+  have hs : (0 : ℝ) < 1 / 2 := by norm_num
+  have h := Probability.Gaussian.integral_inner_sq (E := E) hs v
+  rw [gaussianLaw_half_eq_tilted] at h
+  simpa only [show (4 : ℝ) * (1 / 2) = 2 by norm_num,
+    show (2 : ℝ) * (1 / 2) = 1 by norm_num, div_one] using h
 
 omit [CompleteSpace E] in
 private theorem integrable_exp_inner_tilted_half_norm_sq (w : E) :

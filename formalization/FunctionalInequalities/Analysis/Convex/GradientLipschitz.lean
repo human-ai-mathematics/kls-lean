@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Convex.Viscosity
-import FunctionalInequalities.Analysis.Convex.Alexandrov
+import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+import FunctionalInequalities.Analysis.Convex.Viscosity.Mollification
+import FunctionalInequalities.Analysis.Convex.MaximumComparison
+import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
 import FunctionalInequalities.Analysis.Convex.Coercivity
 import FunctionalInequalities.Analysis.Convex.SecondDifference
 
@@ -173,8 +175,7 @@ theorem secondDifference_le_of_map_gradient {n : ℕ} {u V : EuclideanSpace ℝ 
         hκ hstrong hC hm n h hmax x
   exact hsd
 
-/-- **`C^{1,1}` regularity of the moment potential** (weak Letwin route; KLS500
-`weak_moment_mollify_hessian_upper`/`moment gradient Lipschitz`): if the `C¹` convex Lipschitz `u` with
+/-- **`C^{1,1}` regularity of the moment potential** (weak Letwin route): if the `C¹` convex Lipschitz `u` with
 `∫ e^{-u} = 1` pushes `e^{-u} dx` forward by `∇u` to `1_K e^{-V} dx` with `K` compact convex and `V ∈ C¹` such
 that `V − (κ/2)‖·‖²` is convex, then `∇u` is `16/κ`-Lipschitz. -/
 theorem lipschitzWith_gradient_of_map_gradient {n : ℕ} {u V : EuclideanSpace ℝ (Fin n) → ℝ}

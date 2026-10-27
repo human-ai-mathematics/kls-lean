@@ -1,7 +1,9 @@
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.ConvexHessian
 import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
+import FunctionalInequalities.Analysis.WeakDerivative.Products
+import FunctionalInequalities.Analysis.WeakDerivative.Testing
 
 /-!
 # Mean of the Hessian at `C^{1,1}`

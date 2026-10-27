@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.WeakDerivative.Testing
 import FunctionalInequalities.Analysis.Cutoff.Profile
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
@@ -189,40 +190,6 @@ private theorem integrable_profile_energy_and_integral_le {n : ℕ}
       integral_mono hi (hexp.const_mul (D * B)) hpoint
     _ = D * B := by rw [integral_const_mul, hnorm, mul_one]
 
-private theorem hasCompactSupport_comp_of_isCompact_sublevel {E : Type*} [TopologicalSpace E] {φ : E → ℝ} {g : ℝ → ℝ} {T : ℝ}
-    (hφ : Continuous φ) (hsub : IsCompact {y | φ y ≤ T}) (hg : ∀ s, T ≤ s → g s = 0) :
-    HasCompactSupport (fun x => g (φ x)) := by
-    refine HasCompactSupport.intro' hsub (isClosed_le hφ continuous_const) ?_
-    intro x hx
-    have hx' : ¬ φ x ≤ T := hx
-    exact hg (φ x) (le_of_lt (lt_of_not_ge hx'))
-
-private theorem shifted_inv_mul_intervalIntegral_div_three_cutoff {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w)
-    (hw0 : ∀ t, 0 ≤ w t) (hws : ∀ t, t ≤ 0 ∨ 3 ≤ t → w t = 0) {R : ℝ} (hR : 0 < R) (c : ℝ) :
-    ContDiff ℝ ∞ (fun s => R⁻¹ * ∫ t in (s - c) / R..3, w t) ∧
-      (∀ s, deriv (fun s => R⁻¹ * ∫ t in (s - c) / R..3, w t) s = -((R ^ 2)⁻¹ * w ((s - c) / R))) ∧
-      (∀ s, |R⁻¹ * ∫ t in (s - c) / R..3, w t| ≤ R⁻¹ * ∫ t in (0 : ℝ)..3, w t) ∧
-      (∀ s, c + 3 * R ≤ s → R⁻¹ * ∫ t in (s - c) / R..3, w t = 0) := by
-    obtain ⟨hq, hqd, hq0, hqBound, hqZero⟩ :=
-      inv_mul_intervalIntegral_div_three_cutoff hw hw0 hws hR
-    let q : ℝ → ℝ := fun t => R⁻¹ * ∫ u in t / R..3, w u
-    refine ⟨?_, ?_, ?_, ?_⟩
-    · exact hq.comp (contDiff_id.sub contDiff_const)
-    · intro s
-      have hshift :
-          deriv (fun t => q (t - c)) s = deriv q (s - c) := by
-        simpa only [div_one, inv_one, one_mul] using
-          (deriv_comp_sub_div_and_deriv_deriv q c 1 s).1
-      calc
-        deriv (fun t => R⁻¹ * ∫ u in (t - c) / R..3, w u) s =
-            deriv q (s - c) := hshift
-        _ = -((R ^ 2)⁻¹ * w ((s - c) / R)) := hqd (s - c)
-    · intro s
-      rw [abs_of_nonneg (hq0 (s - c))]
-      exact hqBound (s - c)
-    · intro s hs
-      exact hqZero (s - c) (by linarith)
-
 private theorem integrable_majorant_inverse_energy_and_integral_le {n : ℕ}
     {u V : EuclideanSpace ℝ (Fin n) → ℝ} {G LF : NNReal}
     (hu : ContDiff ℝ 1 u) (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
@@ -335,40 +302,6 @@ private theorem scaled_C1_height_cutoff_family {n : ℕ}
       (fun R hR => show (0 : ℝ) < R from lt_of_lt_of_le zero_lt_one hR)
   · intro x
     exact (monotoneOn_and_tendsto_smoothTransition_two_sub_div (u x - c)).2
-
-private lemma differentiableAt_fderiv_of_differentiableAt_gradient
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    {u : E → ℝ} {x : E} (hx : DifferentiableAt ℝ (gradient u) x) :
-    DifferentiableAt ℝ (fderiv ℝ u) x := by
-  have heq :
-      fderiv ℝ u = (InnerProductSpace.toDual ℝ E) ∘ gradient u := by
-    funext y
-    simp [gradient]
-  rw [heq]
-  exact
-    (InnerProductSpace.toDual ℝ E).toContinuousLinearEquiv.differentiableAt.comp x hx
-
-private lemma hessian_coord_of_gradient_diff
-    {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ} {x : EuclideanSpace ℝ (Fin n)}
-    {i j : Fin n} (hx : DifferentiableAt ℝ (gradient u) x) :
-    fderiv ℝ (fun y => fderiv ℝ u y (EuclideanSpace.basisFun (Fin n) ℝ j)) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) =
-      hessianMatrix u x i j := by
-  have hfd : DifferentiableAt ℝ (fderiv ℝ u) x :=
-    differentiableAt_fderiv_of_differentiableAt_gradient hx
-  have hc :
-      DifferentiableAt ℝ
-        (fun _ : EuclideanSpace ℝ (Fin n) =>
-          EuclideanSpace.basisFun (Fin n) ℝ j) x :=
-    (differentiable_const (EuclideanSpace.basisFun (Fin n) ℝ j) :
-      Differentiable ℝ
-        (fun _ : EuclideanSpace ℝ (Fin n) =>
-          EuclideanSpace.basisFun (Fin n) ℝ j)).differentiableAt
-  have h := fderiv_clm_apply hfd hc
-  have h' := congrArg
-    (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ =>
-      L (EuclideanSpace.basisFun (Fin n) ℝ i)) h
-  simpa [hessianMatrix, bilinearIteratedFDerivTwo] using h'
 
 private theorem ae_hessianMatrix_comp_profile {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} {ζ : ℝ → ℝ} {G : NNReal}

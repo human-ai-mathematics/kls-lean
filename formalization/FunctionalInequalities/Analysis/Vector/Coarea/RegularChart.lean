@@ -28,7 +28,7 @@ the fibre Jacobian identity of `CoareaGraphJacobian.lean` and the area formula `
 
 **No coarea formula is proved here**, and no integration is performed.  There is no regularity
 hypothesis outside `O`: the chart is built from the local `C¹` representative
-`exists_contDiff_one_eqOn_ball`, exactly as in the scalar file.
+`exists_contDiff_eqOn_ball`, exactly as in the scalar file.
 -/
 
 noncomputable section
@@ -213,7 +213,7 @@ theorem exists_levelGraphFamily {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗᵢ[ℝ]
   set p₀ : H × W := D x₀ with hp₀def
   have hp₀ : p₀ ∈ D.target := D.map_source hxD
   obtain ⟨r, ψ, hr, hrT, hψ, hψeq⟩ :=
-    exists_contDiff_one_eqOn_ball D.open_target (contDiffOn_vectorLevelHeight κ hIC) hp₀
+    exists_contDiff_eqOn_ball D.open_target (contDiffOn_vectorLevelHeight κ hIC) hp₀
   set Ω : Set (H × W) := Metric.ball p₀ r with hΩdef
   have hΩopen : IsOpen Ω := Metric.isOpen_ball
   have hinv : ∀ p ∈ Ω, ι p.1 + κ (ψ p) = D.symm p := by

@@ -42,16 +42,6 @@ derivative; zero where `F` is not differentiable. -/
 def divergence (F : V → V) (x : V) : ℝ :=
   LinearMap.trace ℝ V (fderiv ℝ F x).toLinearMap
 
-/-- A function vanishing outside its support has vanishing derivative there.  Moved down from
-`Analysis/Graph/Divergence.lean`, which still uses it, so that the support lemmas of the
-divergence can live next to the definition. -/
-theorem fderiv_eq_zero_of_notMem_tsupport {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    {F : V → E} {x : V} (hx : x ∉ tsupport F) : fderiv ℝ F x = 0 := by
-  have heq : F =ᶠ[nhds x] fun _ => (0 : E) := by
-    filter_upwards [(isOpen_compl_iff.mpr (isClosed_tsupport F)).mem_nhds hx] with y hy
-    exact image_eq_zero_of_notMem_tsupport hy
-  rw [heq.fderiv_eq]
-  simp
 
 end Divergence
 
@@ -121,7 +111,7 @@ omit [FiniteDimensional ℝ V]
 /-- A field vanishing on a neighbourhood of `x` has vanishing divergence at `x`. -/
 theorem divergence_eq_zero_of_notMem_tsupport {F : V → V} {x : V} (hx : x ∉ tsupport F) :
     divergence F x = 0 := by
-  rw [divergence, fderiv_eq_zero_of_notMem_tsupport hx]
+  rw [divergence, fderiv_of_notMem_tsupport ℝ hx]
   simp
 
 /-- The divergence of a compactly supported field is compactly supported. -/

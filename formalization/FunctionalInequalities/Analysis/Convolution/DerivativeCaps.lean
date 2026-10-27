@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
 import FunctionalInequalities.Analysis.Convolution.UniformBound
 import Mathlib.Analysis.Calculus.ContDiff.Convolution
 import Mathlib.Analysis.Calculus.ContDiff.Comp
@@ -28,35 +29,7 @@ open MeasureTheory
 open scoped Convolution
 namespace FunctionalInequalities.Analysis
 
--- These are exactly the standard CLM instances at the concrete Hessian type.
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedAddCommGroup
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedAddCommGroup
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedSpace ℝ
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
+open scoped FunctionalInequalities.Analysis.DerivativeNorms
 
 /-- A compact C⁴ kernel produces uniform D1/D2/D3 bounds. The source enters only
 through local integrability and its value bound, never through its derivatives. -/

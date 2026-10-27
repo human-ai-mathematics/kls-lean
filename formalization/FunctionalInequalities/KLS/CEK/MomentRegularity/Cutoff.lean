@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff
 import FunctionalInequalities.Analysis.WeakDerivative.Basic

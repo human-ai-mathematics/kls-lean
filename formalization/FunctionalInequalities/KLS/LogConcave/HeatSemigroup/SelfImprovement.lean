@@ -1,3 +1,4 @@
+import FunctionalInequalities.L2.Pairing
 import FunctionalInequalities.L2.PositiveMap
 import FunctionalInequalities.Analysis.TestFunctionOrder
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate
@@ -42,15 +43,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
-omit [CompleteSpace V] in
-private theorem integrable_Lp_mul_compact' (ψ : Lp ℝ 2 (ν : Measure V)) {q : V → ℝ}
-    (hq : Continuous q) (hqc : HasCompactSupport q) :
-    Integrable (fun x => ψ x * q x) (ν : Measure V) := by
-  have hqL : MemLp q 2 (ν : Measure V) := hq.memLp_of_hasCompactSupport hqc
-  refine (L2.integrable_inner (𝕜 := ℝ) ψ (hqL.toLp q)).congr ?_
-  filter_upwards [hqL.coeFn_toLp] with x hx
-  simp only [hx, Real.inner_apply, mul_comm]
-
 omit [SecondCountableTopology V] [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V] in
 private theorem contDiff_sqrt_gamma {q : V → ℝ} (hq : ContDiff ℝ ∞ q) {ε : ℝ} (hε : 0 < ε) :
     ContDiff ℝ ∞ (fun y => √(ε + gamma q q y) - √ε) := by
@@ -92,8 +84,8 @@ theorem integral_regularizedNorm_smooth_nonneg (hνU : (ν : Measure V) = m.tilt
   have hRc : HasCompactSupport (fun y => gamma q (weightedLaplacian U q) y / √(ε + gamma q q y)) :=
     (hasCompactSupport_gamma_left (weightedLaplacian U q) hqc).mul_right
       (f' := fun y => (√(ε + gamma q q y))⁻¹)
-  have i₁ := integrable_Lp_mul_compact' (ν := ν) (ψ : Lp ℝ 2 (ν : Measure V)) hLH hLHc
-  have i₂ := integrable_Lp_mul_compact' (ν := ν) (ψ : Lp ℝ 2 (ν : Measure V)) hR hRc
+  have i₁ := FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V)) hLH hLHc
+  have i₂ := FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V)) hR hRc
   have hneg : ∀ y, gamma q (fun y => -weightedLaplacian U q y) y = -gamma q (weightedLaplacian U q) y :=
     fun y => by rw [gamma_apply, gamma_apply, gradient_neg, inner_neg_right]
   rw [hsym, neg_neg]
@@ -229,42 +221,14 @@ theorem integral_mul_regularizedNorm_le_of_pos
     simp only [hΨ'def, dif_pos hr]
     have hr0 : 0 < r := ha.trans_le hr.1
     have htr : 0 < t - r := sub_pos.mpr hr.2
-    have hP := Generated.hasDerivWithinAt_apply_Iic T hT hd Φ htr
-    have hlin : HasDerivWithinAt (fun r : ℝ => t - r) (-1) (Ici r) r :=
-      ((hasDerivAt_id r).const_sub t).hasDerivWithinAt
-    have hmaps : MapsTo (fun r : ℝ => t - r) (Ici r) (Iic (t - r)) := fun s hs => by
-      simp only [mem_Iic]; linarith [mem_Ici.mp hs]
-    have hq' := hP.scomp r hlin hmaps
-    simp only [neg_smul, one_smul, neg_neg] at hq'
-    have hq : HasDerivWithinAt q _ (Ici r) r := hq'
+    have hq : HasDerivWithinAt q _ (Ici r) r :=
+      Generated.hasDerivWithinAt_apply_sub_Ici T hT hd Φ htr
     have huder := Generated.hasDerivWithinAt_map_apply_Ici T hT hd g hu hr0
     have hslope : ∀ᶠ s in 𝓝[Ici r \ {r}] r, ∀ᵐ x ∂(ν : Measure V), |slope q r s x| ≤ D := by
       rw [Ici_sdiff_left]
       filter_upwards [Ioo_mem_nhdsGT hr.2] with s hs
-      have hsr : 0 < s - r := sub_pos.mpr hs.1
-      have hts : 0 ≤ t - s := sub_nonneg.mpr hs.2.le
-      have hsplit : Generated.apply T hT hd (t - r) (Φ : Lp ℝ 2 (ν : Measure V)) =
-          Generated.apply T hT hd (t - s)
-            (Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V))) := by
-        rw [← Generated.add_time T hT hd hts hsr.le]; congr 1; ring
-      have hkey : slope q r s = operator m (ContinuousLinearMap.id ℝ V) hν hi hts
-          ((s - r)⁻¹ • ((Φ : Lp ℝ 2 (ν : Measure V)) -
-            Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V)))) := by
-        rw [slope_def_module, HeatSemigroup.apply, Generated.map_smul T hT hd hts,
-          Generated.map_sub T hT hd hts, ← hsplit]
-      have hdiff := ae_abs_operator_sub_le m (ContinuousLinearMap.id ℝ V) hν hi Φ hD hAΦ hsr.le
-      have hk : ∀ᵐ x ∂(ν : Measure V), |((s - r)⁻¹ • ((Φ : Lp ℝ 2 (ν : Measure V)) -
-          Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V))) :
-            Lp ℝ 2 (ν : Measure V)) x| ≤ D := by
-        filter_upwards [hdiff, Lp.coeFn_smul (s - r)⁻¹ ((Φ : Lp ℝ 2 (ν : Measure V)) -
-          Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V))),
-          Lp.coeFn_sub (Φ : Lp ℝ 2 (ν : Measure V))
-            (Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V)))] with x h1 h2 h3
-        rw [h2, Pi.smul_apply, h3, Pi.sub_apply, smul_eq_mul, abs_mul, abs_inv,
-          abs_of_pos hsr, abs_sub_comm, inv_mul_le_iff₀ hsr]
-        exact h1
-      rw [hkey]
-      exact ae_abs_operator_le m _ hν hi hts _ hD hk
+      exact ae_abs_slope_operator_backwards_le m (ContinuousLinearMap.id ℝ V)
+        hν hi Φ hD hAΦ hs.1 hs.2.le
     have hq'b : ∀ᵐ x ∂(ν : Measure V), |(adjointComp T ⟨_, preserves_domain m
         (ContinuousLinearMap.id ℝ V) hν hi Φ htr.le⟩ : Lp ℝ 2 (ν : Measure V)) x| ≤ D :=
       (hb (t - r) htr.le).2
@@ -304,12 +268,8 @@ theorem integral_mul_regularizedNorm_le_of_pos
     exact key _ _ hmain
   have hcont : ContinuousOn Ψ (Icc a t) := by
     intro r hr
-    have hqc : ContinuousWithinAt q (Icc a t) r := by
-      have h1 : ContinuousOn (fun τ => Generated.apply T hT hd τ (Φ : Lp ℝ 2 (ν : Measure V)))
-          (Ici 0) := Generated.continuousOn T hT hd _
-      have h2 : ContinuousOn (fun r : ℝ => t - r) (Icc a t) :=
-        (continuous_const.sub continuous_id).continuousOn
-      exact (h1.comp h2 (fun s hs => by simp only [mem_Ici]; linarith [hs.2])) r hr
+    have hqc : ContinuousWithinAt q (Icc a t) r :=
+      Generated.continuousOn_apply_sub T hT hd (Φ : Lp ℝ 2 (ν : Measure V)) r hr
     have huc : ContinuousWithinAt u (Icc a t) r :=
       ((Generated.continuousOn_map_apply T hT hd g hu).mono
         (fun s hs => (show (0 : ℝ) < s from ha.trans_le hs.1))) r hr
@@ -380,17 +340,9 @@ theorem integral_mul_regularizedNorm_le
   have hul : Tendsto u (𝓝[>] 0) (𝓝 (T f)) :=
     (Generated.tendsto_map_apply_zero T hT hd f hu).mono_left
       (nhdsWithin_mono _ Ioi_subset_Ici_self)
-  have hsub : Tendsto (fun a : ℝ => t - a) (𝓝[>] 0) (𝓝[Ici 0] t) := by
-    refine tendsto_nhdsWithin_iff.mpr ⟨?_, ?_⟩
-    · have h : Tendsto (fun a : ℝ => t - a) (𝓝 0) (𝓝 (t - 0)) :=
-        ((continuous_const.sub continuous_id).tendsto (0 : ℝ))
-      rw [sub_zero] at h
-      exact h.mono_left nhdsWithin_le_nhds
-    · filter_upwards [Ioo_mem_nhdsGT hpos] with a ha
-      simp only [mem_Ici]; linarith [ha.2]
   have hql : Tendsto q (𝓝[>] 0) (𝓝 (Generated.apply T hT hd t
       ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ))) :=
-    ((Generated.continuousOn T hT hd _) t (mem_Ici.mpr ht)).tendsto.comp hsub
+    Generated.tendsto_apply_sub_zero T hT hd _ hpos
   have hqb : ∀ᶠ a in 𝓝[>] 0, ∀ᵐ x ∂(ν : Measure V), |q a x| ≤ C := by
     filter_upwards [Ioo_mem_nhdsGT hpos] with a ha
     exact (hb (t - a) (sub_nonneg.mpr ha.2.le)).1

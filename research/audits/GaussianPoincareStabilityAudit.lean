@@ -1,5 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Poincare
 
+open FunctionalInequalities.Probability.Gaussian
+
 /-! Independent full-signature clients for actual Gaussian-convolution Poincaré stability. -/
 
 set_option autoImplicit false
@@ -13,9 +15,9 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 theorem actualGaussianFactor {s : ℝ} (hs : 0 < s) :
     FunctionalInequalities.Poincare.SmoothTest.Holds
-      (FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw (V := V) s)
+      (FunctionalInequalities.Probability.Gaussian.law (V := V) s)
       (1 / (2 * s)) := by
-  exact FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_smoothTest_holds hs
+  exact FunctionalInequalities.Poincare.SmoothTest.holds_gaussianLaw hs
 
 theorem actualConvolutionConstant (ν : Measure V) [IsProbabilityMeasure ν]
     {s : ℝ} (hs : 0 < s) :

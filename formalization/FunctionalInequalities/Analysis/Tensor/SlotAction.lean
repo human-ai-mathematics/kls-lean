@@ -1,4 +1,21 @@
-import Mathlib
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Group.Finset.Defs
+import Mathlib.Algebra.BigOperators.Group.Finset.Sigma
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.Chebyshev
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Data.Fintype.Basic
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Fintype.Pi
+import Mathlib.Data.Matrix.Mul
+import Mathlib.Data.Real.Basic
+import Mathlib.LinearAlgebra.Matrix.Defs
+import Mathlib.LinearAlgebra.Matrix.Hermitian
+import Mathlib.LinearAlgebra.Matrix.Symmetric
+import Mathlib.Tactic.Linarith.Frontend
+import Mathlib.Tactic.Ring.RingNF
 
 /-!
 # Matrices acting on one slot of a coordinate tensor
@@ -250,7 +267,7 @@ theorem drift_expression_ge {m : ℕ} (hm : r + 1 = m) (H : Fin n → Matrix (Fi
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
-section S3Bf3ASlotActionAlgebra
+section SlotActionAlgebra
 
 open Matrix
 
@@ -460,4 +477,4 @@ theorem inner_actSum_actSum (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (T 
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
-end S3Bf3ASlotActionAlgebra
+end SlotActionAlgebra

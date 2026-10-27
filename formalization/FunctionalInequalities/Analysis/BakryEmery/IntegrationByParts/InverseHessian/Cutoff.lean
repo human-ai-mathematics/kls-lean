@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.Cutoff.Profile
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
 import FunctionalInequalities.Analysis.Convex.Coercivity
 
@@ -33,43 +34,9 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private theorem hasCompactSupport_comp_of_isCompact_sublevel {E : Type*} [TopologicalSpace E] {φ : E → ℝ} {g : ℝ → ℝ} {T : ℝ}
-    (hφ : Continuous φ) (hsub : IsCompact {y | φ y ≤ T}) (hg : ∀ s, T ≤ s → g s = 0) :
-    HasCompactSupport (fun x => g (φ x)) := by
-    refine HasCompactSupport.intro' hsub (isClosed_le hφ continuous_const) ?_
-    intro x hx
-    have hx' : ¬ φ x ≤ T := hx
-    exact hg (φ x) (le_of_lt (lt_of_not_ge hx'))
-
 end FunctionalInequalities.Analysis
 
 namespace FunctionalInequalities.Analysis
-
-private theorem shifted_inv_mul_intervalIntegral_div_three_cutoff {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w)
-    (hw0 : ∀ t, 0 ≤ w t) (hws : ∀ t, t ≤ 0 ∨ 3 ≤ t → w t = 0) {R : ℝ} (hR : 0 < R) (c : ℝ) :
-    ContDiff ℝ ∞ (fun s => R⁻¹ * ∫ t in (s - c) / R..3, w t) ∧
-      (∀ s, deriv (fun s => R⁻¹ * ∫ t in (s - c) / R..3, w t) s = -((R ^ 2)⁻¹ * w ((s - c) / R))) ∧
-      (∀ s, |R⁻¹ * ∫ t in (s - c) / R..3, w t| ≤ R⁻¹ * ∫ t in (0 : ℝ)..3, w t) ∧
-      (∀ s, c + 3 * R ≤ s → R⁻¹ * ∫ t in (s - c) / R..3, w t = 0) := by
-    obtain ⟨hq, hqd, hq0, hqBound, hqZero⟩ :=
-      inv_mul_intervalIntegral_div_three_cutoff hw hw0 hws hR
-    let q : ℝ → ℝ := fun t => R⁻¹ * ∫ u in t / R..3, w u
-    refine ⟨?_, ?_, ?_, ?_⟩
-    · exact hq.comp (contDiff_id.sub contDiff_const)
-    · intro s
-      have hshift :
-          deriv (fun t => q (t - c)) s = deriv q (s - c) := by
-        simpa only [div_one, inv_one, one_mul] using
-          (deriv_comp_sub_div_and_deriv_deriv q c 1 s).1
-      calc
-        deriv (fun t => R⁻¹ * ∫ u in (t - c) / R..3, w u) s =
-            deriv q (s - c) := hshift
-        _ = -((R ^ 2)⁻¹ * w ((s - c) / R)) := hqd (s - c)
-    · intro s
-      rw [abs_of_nonneg (hq0 (s - c))]
-      exact hqBound (s - c)
-    · intro s hs
-      exact hqZero (s - c) (by linarith)
 
 end FunctionalInequalities.Analysis
 

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Cutoff.Translation
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.Convex.HessianIncrement
 import FunctionalInequalities.Analysis.Convex.HessianRegularity

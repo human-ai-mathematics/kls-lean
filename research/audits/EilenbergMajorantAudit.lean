@@ -176,7 +176,7 @@ theorem eilenbergConstant_euclidean_zero :
 /-! ### Axiom audit -/
 
 #print axioms FunctionalInequalities.Analysis.exists_measurable_majorant_of_eqOn
-#print axioms FunctionalInequalities.Analysis.exists_cover_cost_lt
+#print axioms FunctionalInequalities.Analysis.exists_cover_familyCost_lt
 #print axioms FunctionalInequalities.Analysis.exists_cover_of_hausdorffMeasure_eq_zero
 #print axioms FunctionalInequalities.Analysis.exists_levelSlab
 #print axioms FunctionalInequalities.Analysis.exists_measurable_majorant

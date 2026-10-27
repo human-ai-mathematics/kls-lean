@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.Products
 import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!

@@ -1,0 +1,1387 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Delivery of the previously completed KLS/BKL proof chain and existing library organization. Later literal-source Letwin, unit Dirichlet, Pogorelov and CNS/elliptic developments are excluded. Mathematical classifications and certificate states retain the committed baseline.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Theorems 4.1 and 1.1",
+    "Letwin arXiv:2607.24164v1 compact constant-8 input to the BKL chain"
+  ],
+  "selection_rule": "Previously committed module identities, mapped owners of previously committed declarations, the actual KLS.Target import closure and necessary generic dependencies. No future-only unit Dirichlet, Pogorelov or CNS barrier module is included.",
+  "production_modules": 750,
+  "module_path_map": [
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Transport.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Sublevel.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Taylor.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/MaximumComparison.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Mollification.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Pointwise.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean",
+        "formalization/FunctionalInequalities/Analysis/Matrix/LogDet.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
+      ]
+    }
+  ],
+  "public_declaration_locations": [
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.abs_hessianInverseOperator_comp_sub_div_le",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_inner_hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.bounded_hessianInverseOperator_self",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.contDiffAt_inverseHessianEntry",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.continuous_hessianInverseOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_fderiv_comp_gradient_apply",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_ringInverse_hessianOperator_apply",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_comp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_mul",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_self",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator_isSelfAdjoint",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator_isUnit_of_posDef",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inner_ringInverse_hessianOperator_pos",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.operatorEntry_hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_fderiv_comp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_hessian",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.compact_mul_data",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_data",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.compact_bounded_test_domination",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_one_of_map_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contactSet_eq_singleton_of_exposed_of_local_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contactSet_eq_singleton_of_local_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.convexOn_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.convexOn_truncatedConjugate",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_contact_of_sublevel_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Sublevel.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_truncatedConjugate_eq_of_subgradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_bounded_weak_log_extension",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_compact_sections_subset_and_shrink",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/LocalExtension.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_exposed_contact_of_lt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_farthest_point_exposed",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_inverse_subgradient_volume_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_local_subgradientImage_volume_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Transport.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_alexandrov_maximum_principle",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_volume_convexHull_closedBall_union_singleton_ge",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_truncatedConjugate_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_unit_inner_le_infDist_frontier",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_compact_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_max_shift_of_ae_nonneg_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_shift_of_ae_nonneg_compact_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_rpow_shift_of_ae_nonneg_compact_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.infDist_frontier_image_le_of_width",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.infDist_frontier_le_of_forall_inner_le",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_eq_zero_of_integrable_weak_derivative",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.isOpen_setOf_truncatedConjugate_maximizer_lt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.le_neg_of_lower_alexandrov_bound",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.lintegral_subgradientImage_eq_of_map_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Transport.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_data",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.locallyIntegrable_mul_of_compact_L2",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.locallyIntegrable_of_compact_local_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.memLp_mul_of_hasCompactSupport",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.memLp_top_restrict_of_continuous",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.mem_subgradientImage_of_affine_le_of_nonneg_frontier",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.strictConvexOn_of_contact_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.strictConvexOn_of_map_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_comp_affineEquiv_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_sub_inner_add_const",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_truncatedConjugate_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_mem_interior_of_strictConvexOn",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.truncatedConjugate",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.truncatedConjugate_centered_spec",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_comp_affineEquiv_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_eq_lintegral_of_isOpen",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_sub_inner_add_const",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.norm_taylorField_sq_le",
+      "old": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Criterion.lean",
+      "new": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.chain_coordinate",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessianMatrix",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessian_entry_continuous",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessian_eq_inner_fderiv_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integrable_exp_abs_of_moment_growth",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_moment_growth",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_scaled_high_moment_growth",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integral_rpow_mul_integral_rpow_neg_le_of_log_exp",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_penalized_maximum_with_comparison",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/MaximumComparison.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hessianMatrix_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.frobenius_add_frobenius_le_trace_sub_log_det",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Matrix/LogDet.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_hessian_increment_le_generator",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+      "new": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.mapContinuousLinearEquiv",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+      "new": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.interior_support_nonempty_of_affineSupport_eq_top",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+      "new": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.memLp_id_two_translateLaw",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+      "new": "formalization/FunctionalInequalities/Probability/Transport.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_posDef_det_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_quadraticAt_expansion",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_fderiv_mongeAmpere_exponent",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_unique_subgradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.det_hessianMatrix_le_of_lower_touch",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.differentiable_of_convexOn_of_unique_subgradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Taylor.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_lipschitzWith_weak_fderiv_comp_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_taylor_two_hessianMatrix_bound",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.gradient_le_increment",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_mongeAmpere_first_rhs",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.injective_gradient_of_strictConvexOn",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le_of_bounded_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram_of_bounded_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_weak_hessian_flux_eq_trace_derivative",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.le_det_hessianMatrix_of_upper_touch",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.localLp_hessian_flux_trace_forcing",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posDef_and_convolution_le_log_det_hessianMatrix",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Mollification.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posDef_and_det_eq_of_quadratic_expansion",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Pointwise.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posSemidef_hessianMatrix_of_upper_touch",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.rough_square_test_of_weak_data",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_subset_of_le",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_mem_of_ae_gradient_mem",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_setOf_subgradient_eq_zero_of_affine_on_line",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradient_two_points_eq_zero",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean"
+    }
+  ],
+  "public_name_migrations": [
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.integrable_norm_pow_of_exp_cond",
+      "new": "FunctionalInequalities.Probability.integrable_norm_pow_of_exp"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.integrable_of_norm_le_pow",
+      "new": "FunctionalInequalities.Probability.integrable_of_norm_le_pow"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.integrable_prod_inner_cond",
+      "new": "FunctionalInequalities.Probability.integrable_prod_inner_of_exp"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.norm_prod_inner_le_cond",
+      "new": "FunctionalInequalities.Analysis.Tensor.norm_prod_inner_le"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.MorseSard.exists_contDiff_eventuallyEq_nat",
+      "new": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.Semigroup.route_G2",
+      "new": "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_sub_add_smul_le"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.Semigroup.route_S5",
+      "new": "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_apply_le"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.Semigroup.route_Y6",
+      "new": "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_sub_le"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.Semigroup.route_Y7",
+      "new": "FunctionalInequalities.Analysis.Semigroup.exists_limit_exp_neg_smul"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.continuous_gradient",
+      "new": "FunctionalInequalities.Analysis.BakryEmery.continuous_gradient"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.exists_contDiff_one_eqOn_ball",
+      "new": "FunctionalInequalities.Analysis.exists_contDiff_eqOn_ball"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.exists_cover_cost_lt",
+      "new": "FunctionalInequalities.Analysis.exists_cover_familyCost_lt"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.exists_cover_cost_lt_vector",
+      "new": "FunctionalInequalities.Analysis.exists_cover_familyCost_lt"
+    },
+    {
+      "old": "FunctionalInequalities.Energy.Euclidean.continuous_gradient_of_contDiff",
+      "new": "FunctionalInequalities.Analysis.BakryEmery.continuous_gradient_of_contDiff"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.charFun_gaussianLaw",
+      "new": "FunctionalInequalities.Probability.Gaussian.charFun_law"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_le_one",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_le_one"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_logConcave"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_measurable"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_pos"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw",
+      "new": "FunctionalInequalities.Probability.Gaussian.law"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw.congr_simp",
+      "new": "FunctionalInequalities.Probability.Gaussian.law.congr_simp"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_directional_identity_of_bounded_lipschitz_test",
+      "new": "FunctionalInequalities.Probability.Gaussian.directional_identity_of_bounded_lipschitz_test"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_eq_scaled_stdGaussian",
+      "new": "FunctionalInequalities.Probability.Gaussian.law_eq_scaled_stdGaussian"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_eq_tilted",
+      "new": "FunctionalInequalities.Probability.Gaussian.law_eq_tilted"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_exp_norm_integrable",
+      "new": "FunctionalInequalities.Probability.Gaussian.exp_norm_integrable"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_inner_sq",
+      "new": "FunctionalInequalities.Probability.Gaussian.integral_inner_sq"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_laplace",
+      "new": "FunctionalInequalities.Probability.Gaussian.laplace"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_mean_zero",
+      "new": "FunctionalInequalities.Probability.Gaussian.mean_zero"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_memLp_four",
+      "new": "FunctionalInequalities.Probability.Gaussian.memLp_four"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_memLp_two",
+      "new": "FunctionalInequalities.Probability.Gaussian.memLp_two"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_probability",
+      "new": "FunctionalInequalities.Probability.Gaussian.law_probability"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_smoothTest_holds",
+      "new": "FunctionalInequalities.Poincare.SmoothTest.holds_gaussianLaw"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_translated_directional_identity_of_bounded_lipschitz_test",
+      "new": "FunctionalInequalities.Probability.Gaussian.translated_directional_identity_of_bounded_lipschitz_test"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_variance",
+      "new": "FunctionalInequalities.Probability.Gaussian.variance_inner"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integrable_kernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integrable_kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integrable_normalizedKernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integrable_normalizedKernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_kernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integral_kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_normalizedKernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integral_normalizedKernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel_logConcave"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel_measurable"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel_pos"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.map_linear_memLp_four",
+      "new": "FunctionalInequalities.Probability.memLp_four_map_linear"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.mass",
+      "new": "FunctionalInequalities.Probability.Gaussian.mass"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.mass_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.mass_pos"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedEkernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedEkernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedEkernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedEkernel_logConcave"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedEkernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedEkernel_measurable"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_le_inv_mass",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_le_inv_mass"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_logConcave"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_measurable"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_pos"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.inner_self_pos_of_norm_sub_one_lt",
+      "new": "FunctionalInequalities.Analysis.inner_self_pos_of_norm_sub_one_lt"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_sub_one_le_of_isPositive_mul_self",
+      "new": "FunctionalInequalities.Analysis.norm_sub_one_le_of_isPositive_mul_self"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.opNorm_le_of_inner_eq",
+      "new": "FunctionalInequalities.Analysis.opNorm_le_of_inner_eq"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.tendsto_inverseSqrt_one",
+      "new": "FunctionalInequalities.Analysis.tendsto_inverseSqrt_one"
+    },
+    {
+      "old": "FunctionalInequalities.Probability.integrable_norm_pow_of_integrable_exp_norm",
+      "new": "FunctionalInequalities.Probability.integrable_norm_pow_of_exp"
+    }
+  ],
+  "validation_inputs": [
+    "research/audits/AffineDerivativeScaleAudit.lean",
+    "research/audits/AreaFormulaRouteStatements.lean",
+    "research/audits/BKL/AffineRegularAudit.lean",
+    "research/audits/BKL/ApproximateEigenfunctionAudit.lean",
+    "research/audits/BKL/BasisChangeAudit.lean",
+    "research/audits/BKL/ConditioningAudit.lean",
+    "research/audits/BKL/ConvexHessianAudit.lean",
+    "research/audits/BKL/ConvexSupportAudit.lean",
+    "research/audits/BKL/CovarianceSupportAudit.lean",
+    "research/audits/BKL/CumulantBoundAudit.lean",
+    "research/audits/BKL/CumulantEnvelopeAudit.lean",
+    "research/audits/BKL/CutoffEnergyAudit.lean",
+    "research/audits/BKL/DyadicSummationAudit.lean",
+    "research/audits/BKL/FoundationsAudit.lean",
+    "research/audits/BKL/GaussianGrowthAudit.lean",
+    "research/audits/BKL/GaussianHessianAudit.lean",
+    "research/audits/BKL/GaussianMomentsAudit.lean",
+    "research/audits/BKL/GaussianPosteriorAudit.lean",
+    "research/audits/BKL/GaussianSteinAudit.lean",
+    "research/audits/BKL/GaussianTaylorAudit.lean",
+    "research/audits/BKL/GeneratorTiltAudit.lean",
+    "research/audits/BKL/GroupedCumulantAudit.lean",
+    "research/audits/BKL/GroupingSupportAudit.lean",
+    "research/audits/BKL/HessianIncrementAudit.lean",
+    "research/audits/BKL/HessianSteinAudit.lean",
+    "research/audits/BKL/IsotropicReductionAudit.lean",
+    "research/audits/BKL/IterateDefectAudit.lean",
+    "research/audits/BKL/IterateDomainAudit.lean",
+    "research/audits/BKL/IterateRouteStatements.lean",
+    "research/audits/BKL/IterateSymmetryAudit.lean",
+    "research/audits/BKL/IterateTaylorAudit.lean",
+    "research/audits/BKL/IterateTaylorRecursionAudit.lean",
+    "research/audits/BKL/IteratedLeibnizAudit.lean",
+    "research/audits/BKL/KlsAudit.lean",
+    "research/audits/BKL/LetwinA4SupportAudit.lean",
+    "research/audits/BKL/LetwinBoundedPrimalAudit.lean",
+    "research/audits/BKL/LetwinCenteredRangeAudit.lean",
+    "research/audits/BKL/LetwinCompactApproximationAudit.lean",
+    "research/audits/BKL/LetwinCompactBoundAudit.lean",
+    "research/audits/BKL/LetwinCutoffAudit.lean",
+    "research/audits/BKL/LetwinCutoffPrimitiveAudit.lean",
+    "research/audits/BKL/LetwinCutoffProfileAudit.lean",
+    "research/audits/BKL/LetwinEnergyDefectAudit.lean",
+    "research/audits/BKL/LetwinFiniteEnergyAudit.lean",
+    "research/audits/BKL/LetwinHessianTraceAudit.lean",
+    "research/audits/BKL/LetwinInverseHessianAudit.lean",
+    "research/audits/BKL/LetwinLegendreVariationAudit.lean",
+    "research/audits/BKL/LetwinMongeAmpereTraceAudit.lean",
+    "research/audits/BKL/LetwinOperatorContinuityAudit.lean",
+    "research/audits/BKL/LetwinRealExhaustionAudit.lean",
+    "research/audits/BKL/LetwinRescalingPositivityAudit.lean",
+    "research/audits/BKL/LetwinScalarBrascampLiebAudit.lean",
+    "research/audits/BKL/LetwinSteinAudit.lean",
+    "research/audits/BKL/LetwinSupportAudit.lean",
+    "research/audits/BKL/LetwinSymmetricIntegralAudit.lean",
+    "research/audits/BKL/LetwinSymmetricJordanAudit.lean",
+    "research/audits/BKL/LetwinUniformIntervalAudit.lean",
+    "research/audits/BKL/LetwinWeightedEnergyAudit.lean",
+    "research/audits/BKL/LocalThirdCumulantAudit.lean",
+    "research/audits/BKL/MappedCovarianceAudit.lean",
+    "research/audits/BKL/MollificationConvexRangeAudit.lean",
+    "research/audits/BKL/MomentTailAudit.lean",
+    "research/audits/BKL/NoiseEntryAudit.lean",
+    "research/audits/BKL/NondivergenceAudit.lean",
+    "research/audits/BKL/OperatorRouteStatements.lean",
+    "research/audits/BKL/PermutationAudit.lean",
+    "research/audits/BKL/PosteriorParameterAudit.lean",
+    "research/audits/BKL/PrincipalInverseSqrtAudit.lean",
+    "research/audits/BKL/Proposition71RouteStatements.lean",
+    "research/audits/BKL/Proposition71SupportAudit.lean",
+    "research/audits/BKL/QuadraticCovarianceAudit.lean",
+    "research/audits/BKL/RawCumulantExpansionAudit.lean",
+    "research/audits/BKL/ReductionAudit.lean",
+    "research/audits/BKL/RegularApproximationAudit.lean",
+    "research/audits/BKL/RegularIsometryAudit.lean",
+    "research/audits/BKL/RegularIsotropicAudit.lean",
+    "research/audits/BKL/RegularLawAudit.lean",
+    "research/audits/BKL/RegularMomentPotentialAudit.lean",
+    "research/audits/BKL/RegularMomentWeakTensorAudit.lean",
+    "research/audits/BKL/RegularPoincareAudit.lean",
+    "research/audits/BKL/SelectedPartitionAudit.lean",
+    "research/audits/BKL/SingletonAllocationAudit.lean",
+    "research/audits/BKL/SixthContractionMapAudit.lean",
+    "research/audits/BKL/SixthMomentAudit.lean",
+    "research/audits/BKL/SuspensionAudit.lean",
+    "research/audits/BKL/TaylorCriterionAudit.lean",
+    "research/audits/BKL/ThirdCumulantWitnessAudit.lean",
+    "research/audits/BKL/ThirdMomentContractionAudit.lean",
+    "research/audits/BKL/TraceEnergyAudit.lean",
+    "research/audits/BKL/WeakDeterminantJacobiAudit.lean",
+    "research/audits/BKL/WeakHessianAudit.lean",
+    "research/audits/BKL/WeakHessianEvolutionAudit.lean",
+    "research/audits/BKL/WeakHessianIdentificationAudit.lean",
+    "research/audits/BKL/WeakHessianInverseAudit.lean",
+    "research/audits/BKL/WeakHessianPolynomialAudit.lean",
+    "research/audits/BKL/WeakHessianProductAudit.lean",
+    "research/audits/BKL/WeakHessianRegularityAudit.lean",
+    "research/audits/BKL/WeakHessianSymmetryAudit.lean",
+    "research/audits/BKL/WeakHessianTraceAudit.lean",
+    "research/audits/BKL/WeakInverseHessianAudit.lean",
+    "research/audits/BKL/WeakInverseHessianCutoffAudit.lean",
+    "research/audits/BKL/WeakLimitAudit.lean",
+    "research/audits/BKL/WeakMongeAmpereFirstAudit.lean",
+    "research/audits/BakryEmeryBochnerAudit.lean",
+    "research/audits/BakryEmeryErgodicityAudit.lean",
+    "research/audits/BakryEmeryGeneratorAudit.lean",
+    "research/audits/BakryEmeryGeneratorGammaTwoAudit.lean",
+    "research/audits/BakryEmeryGradientEstimateAudit.lean",
+    "research/audits/BakryEmeryHeatApproximationAudit.lean",
+    "research/audits/BakryEmeryHeatTestClassAudit.lean",
+    "research/audits/BakryEmeryHeatTestExtensionAudit.lean",
+    "research/audits/BakryEmeryInteriorRegularityAudit.lean",
+    "research/audits/BakryEmeryOperatorCoreAudit.lean",
+    "research/audits/BakryEmeryReverseSelfImprovementAudit.lean",
+    "research/audits/BakryEmeryRouteStatements.lean",
+    "research/audits/BakryEmeryWeakGammaAudit.lean",
+    "research/audits/BorelSliceAudit.lean",
+    "research/audits/BorellDensityContinuityAudit.lean",
+    "research/audits/BorellDensityLogConcavityAudit.lean",
+    "research/audits/BuserLineAudit.lean",
+    "research/audits/BuserRouteStatements.lean",
+    "research/audits/CEK/ConjugateMassAudit.lean",
+    "research/audits/CEK/DifferenceQuotientAudit.lean",
+    "research/audits/CEK/EllipticityAudit.lean",
+    "research/audits/CEK/FunctionalLimitAudit.lean",
+    "research/audits/CEK/LegendreAudit.lean",
+    "research/audits/CEK/Lemma17Audit.lean",
+    "research/audits/CEK/PointControlAudit.lean",
+    "research/audits/CEK/Proposition12Audit.lean",
+    "research/audits/CheegerEqualityAudit.lean",
+    "research/audits/CheegerInequalityAudit.lean",
+    "research/audits/CheegerInequalityRouteStatements.lean",
+    "research/audits/CheegerInfimumRouteStatements.lean",
+    "research/audits/CoareaGraphJacobianAudit.lean",
+    "research/audits/CoareaJacobianAudit.lean",
+    "research/audits/CoefficientFreezingAudit.lean",
+    "research/audits/CompactSliceAudit.lean",
+    "research/audits/ConvolutionLogConcavityAudit.lean",
+    "research/audits/CriticalSliceAudit.lean",
+    "research/audits/EilenbergMajorantAudit.lean",
+    "research/audits/EnergySlopeComparisonAudit.lean",
+    "research/audits/EnergySlopeDensityAudit.lean",
+    "research/audits/EnergySlopeRecoveryAudit.lean",
+    "research/audits/EnergySlopeRouteStatements.lean",
+    "research/audits/EquidimensionalSardAudit.lean",
+    "research/audits/ExpMeanValueAudit.lean",
+    "research/audits/ExponentObstructionAudit.lean",
+    "research/audits/FirstOrderJetAudit.lean",
+    "research/audits/GaussianApproximationAudit.lean",
+    "research/audits/GaussianBuserPassageAudit.lean",
+    "research/audits/GaussianFirstRegularityAudit.lean",
+    "research/audits/GaussianInfiniteRegularityAudit.lean",
+    "research/audits/GaussianPoincareStabilityAudit.lean",
+    "research/audits/GaussianProfileAudit.lean",
+    "research/audits/GaussianRegularizationAudit.lean",
+    "research/audits/GaussianSecondRegularityAudit.lean",
+    "research/audits/GaussianSmoothingAudit.lean",
+    "research/audits/GeneratedSemigroupRouteStatements.lean",
+    "research/audits/GeneratorAudit.lean",
+    "research/audits/GraphJacobianAudit.lean",
+    "research/audits/HeatAlmostEverywhereAudit.lean",
+    "research/audits/HeatBuserBridgeAudit.lean",
+    "research/audits/HeatChainRuleAudit.lean",
+    "research/audits/HeatCompositionDerivativeAudit.lean",
+    "research/audits/HeatCompositionDomainAudit.lean",
+    "research/audits/HeatIntegratedProfileAudit.lean",
+    "research/audits/HeatPiCoefficientAudit.lean",
+    "research/audits/HeatProfileLimitAudit.lean",
+    "research/audits/HeatSemigroupAudit.lean",
+    "research/audits/HeatSemigroupMarkovAudit.lean",
+    "research/audits/HeatSmallTimeAudit.lean",
+    "research/audits/HeatSpectralDecayAudit.lean",
+    "research/audits/HeatStrongInterpolationAudit.lean",
+    "research/audits/HeatWeightedCauchyAudit.lean",
+    "research/audits/HessianInterpolationAudit.lean",
+    "research/audits/IsoperimetryCoareaAudit.lean",
+    "research/audits/KlartagLiteraturePoincareAudit.lean",
+    "research/audits/KlartagLiteraturePoincareRouteStatements.lean",
+    "research/audits/Letwin/BootstrapThree.lean",
+    "research/audits/Letwin/Caccioppoli.lean",
+    "research/audits/Letwin/DirectionalSubsolution.lean",
+    "research/audits/Letwin/GradientInverse.lean",
+    "research/audits/Letwin/HessianHolder.lean",
+    "research/audits/Letwin/QuadraticBound.lean",
+    "research/audits/Letwin/RegularApproximation.lean",
+    "research/audits/Letwin/RoughTesting.lean",
+    "research/audits/Letwin/WeakHessianKernel.lean",
+    "research/audits/LevelSetMeasurableAudit.lean",
+    "research/audits/LinearAreaFormulaAudit.lean",
+    "research/audits/LipschitzCoareaAudit.lean",
+    "research/audits/LipschitzCoareaMigrationAudit.lean",
+    "research/audits/LipschitzVectorCoareaAudit.lean",
+    "research/audits/LipschitzVectorCoareaRouteStatements.lean",
+    "research/audits/LocallyLipschitzCoareaAudit.lean",
+    "research/audits/LocallyLipschitzVectorCoareaAudit.lean",
+    "research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean",
+    "research/audits/MarkovRouteStatements.lean",
+    "research/audits/MatrixTraceIntegralCoefficientAudit.lean",
+    "research/audits/MetricBVCheegerAudit.lean",
+    "research/audits/MetricBVCheegerIdentificationAudit.lean",
+    "research/audits/MetricBVCoareaRadiusAudit.lean",
+    "research/audits/MetricBVComplementAudit.lean",
+    "research/audits/MetricBVConvexSupportAudit.lean",
+    "research/audits/MetricBVDefinitionClassAudit.lean",
+    "research/audits/MetricBVFiniteNeighborhoodAudit.lean",
+    "research/audits/MetricBVFiniteRecoveryAudit.lean",
+    "research/audits/MetricBVFiniteScalingAudit.lean",
+    "research/audits/MetricBVFiniteTargetAudit.lean",
+    "research/audits/MetricBVHypothesisBoundaryAudit.lean",
+    "research/audits/MetricBVInterfaceAudit.lean",
+    "research/audits/MetricBVIntrinsicIdentificationAudit.lean",
+    "research/audits/MetricBVLipschitzAudit.lean",
+    "research/audits/MetricBVLocalL1Audit.lean",
+    "research/audits/MetricBVLocalL1RelaxationAudit.lean",
+    "research/audits/MetricBVLocalLipschitzAudit.lean",
+    "research/audits/MetricBVLocalLipschitzTargetTailAudit.lean",
+    "research/audits/MetricBVLocallyFiniteLowerAudit.lean",
+    "research/audits/MetricBVLocallyFiniteUpperAudit.lean",
+    "research/audits/MetricBVLowerSemicontinuityAudit.lean",
+    "research/audits/MetricBVMinkowskiAudit.lean",
+    "research/audits/MetricBVMinkowskiCoareaAudit.lean",
+    "research/audits/MetricBVMinkowskiRecoveryAudit.lean",
+    "research/audits/MetricBVNonproperTargetAudit.lean",
+    "research/audits/MetricBVRatioRecoveryAudit.lean",
+    "research/audits/MetricBVRecoveryAudit.lean",
+    "research/audits/MetricBVRecoverySequenceAudit.lean",
+    "research/audits/MetricBVRelaxedMinkowskiAudit.lean",
+    "research/audits/MetricBVSuperlevelSelectionAudit.lean",
+    "research/audits/MetricBVSupportCostAudit.lean",
+    "research/audits/MetricBVSupportRestrictionAudit.lean",
+    "research/audits/MetricBVSupportRetractionAudit.lean",
+    "research/audits/MetricBVTestClassAudit.lean",
+    "research/audits/MinkowskiInfiniteMassGenericAudit.lean",
+    "research/audits/MinkowskiLemma21ArbitraryMeasureAudit.lean",
+    "research/audits/MinkowskiMetricChainAudit.lean",
+    "research/audits/MinkowskiRelaxedUpperAudit.lean",
+    "research/audits/MinkowskiUpperBVRecoveryAudit.lean",
+    "research/audits/MinkowskiUpperIntegratedAudit.lean",
+    "research/audits/MinkowskiUpperRecoveryAudit.lean",
+    "research/audits/MinkowskiUpperThickeningAudit.lean",
+    "research/audits/Newtonian/CompactPoissonAudit.lean",
+    "research/audits/Newtonian/ConstantCoefficientAudit.lean",
+    "research/audits/Newtonian/HarmonicKernelAudit.lean",
+    "research/audits/Newtonian/InteriorSchauderAudit.lean",
+    "research/audits/Newtonian/RepresentationAudit.lean",
+    "research/audits/Newtonian/VariableCoefficientAudit.lean",
+    "research/audits/NormDetContinuityAudit.lean",
+    "research/audits/NullSlicingAudit.lean",
+    "research/audits/OpenGraphAudit.lean",
+    "research/audits/PlanarSardAudit.lean",
+    "research/audits/RankDeficientCoareaAudit.lean",
+    "research/audits/RankDeficientRouteStatements.lean",
+    "research/audits/RankStratificationAudit.lean",
+    "research/audits/RegularCoareaAudit.lean",
+    "research/audits/RegularFibreFiniteAudit.lean",
+    "research/audits/ResolventLimitAudit.lean",
+    "research/audits/RightInverseBoundAudit.lean",
+    "research/audits/SchauderToolsAudit.lean",
+    "research/audits/SemigroupDomainStabilityAudit.lean",
+    "research/audits/SemigroupFormAudit.lean",
+    "research/audits/SemigroupFormDomainStabilityAudit.lean",
+    "research/audits/SemigroupGenerationRouteStatements.lean",
+    "research/audits/SemigroupLawsAudit.lean",
+    "research/audits/SemigroupLimitAudit.lean",
+    "research/audits/SemigroupSmoothingAudit.lean",
+    "research/audits/SemigroupYosidaAudit.lean",
+    "research/audits/SharpSardAudit.lean",
+    "research/audits/SharpSardRouteStatements.lean",
+    "research/audits/SmoothCoareaAudit.lean",
+    "research/audits/SourceLayout/BackwardSemigroup.lean",
+    "research/audits/SourceLayout/CompactPairing.lean",
+    "research/audits/SourceLayout/ConsolidatedOwners.lean",
+    "research/audits/SourceLayout/CoverSelection.lean",
+    "research/audits/SourceLayout/Derivative.lean",
+    "research/audits/SourceLayout/DiffusionRegularity.lean",
+    "research/audits/SourceLayout/ExponentialMoments.lean",
+    "research/audits/SourceLayout/GaussianCharacteristic.lean",
+    "research/audits/SourceLayout/GaussianFoundations.lean",
+    "research/audits/SourceLayout/GaussianPoincare.lean",
+    "research/audits/SourceLayout/GraphGradient.lean",
+    "research/audits/SourceLayout/HessianComposition.lean",
+    "research/audits/SourceLayout/HessianCoordinates.lean",
+    "research/audits/SourceLayout/HessianDiffusion.lean",
+    "research/audits/SourceLayout/HessianObjects.lean",
+    "research/audits/SourceLayout/LinearImageMoments.lean",
+    "research/audits/SourceLayout/LocalExtension.lean",
+    "research/audits/SourceLayout/MeasurablePartition.lean",
+    "research/audits/SourceLayout/MigrationAbsence.lean",
+    "research/audits/SourceLayout/MomentReuse.lean",
+    "research/audits/SourceLayout/NormExponentialRadius.lean",
+    "research/audits/SourceLayout/OperatorNorm.lean",
+    "research/audits/SourceLayout/OperatorPerturbation.lean",
+    "research/audits/SourceLayout/PiCoordinates.lean",
+    "research/audits/SourceLayout/PointwiseTruncation.lean",
+    "research/audits/SourceLayout/PositiveContinuousWeight.lean",
+    "research/audits/SourceLayout/Quadratic.lean",
+    "research/audits/SourceLayout/SardChart.lean",
+    "research/audits/SourceLayout/SardCoordinateChange.lean",
+    "research/audits/SourceLayout/SardDisk.lean",
+    "research/audits/SourceLayout/SardSharp.lean",
+    "research/audits/SourceLayout/StateExtensionality.lean",
+    "research/audits/SourceLayout/SubgradientFoundations.lean",
+    "research/audits/SourceLayout/TaylorField.lean",
+    "research/audits/SourceLayout/TouchingLayer.lean",
+    "research/audits/SourceLayout/Transport.lean",
+    "research/audits/SourceLayout/TruncationNames.lean",
+    "research/audits/SourceLayout/WaveFoundations.lean",
+    "research/audits/SourceLayout/WeakProducts.lean",
+    "research/audits/StochasticCalculus/Regularization.lean",
+    "research/audits/StratumSlicingAudit.lean",
+    "research/audits/StratumSlicingRouteStatements.lean",
+    "research/audits/TangentialLipschitzAudit.lean",
+    "research/audits/TargetSplitFubiniAudit.lean",
+    "research/audits/VectorCriticalSliceAudit.lean",
+    "research/audits/VectorFiberIntegralAudit.lean",
+    "research/audits/VectorGraphAreaAudit.lean",
+    "research/audits/VectorGraphAudit.lean",
+    "research/audits/VectorGraphSandwichAudit.lean",
+    "research/audits/VectorHausdorffSlicingAudit.lean",
+    "research/audits/VectorLocalCoareaAudit.lean",
+    "research/audits/VectorRegularChartAudit.lean",
+    "research/audits/VectorRegularCoareaAudit.lean",
+    "research/audits/VectorSliceMeasurableAudit.lean",
+    "research/audits/VonNeumannAudit.lean",
+    "research/audits/VonNeumannRouteStatements.lean",
+    "research/audits/WaveSplittingAudit.lean",
+    "research/audits/WaveSplittingAverageErrorAudit.lean",
+    "research/audits/WaveSplittingConsistencyAudit.lean",
+    "research/audits/WaveSplittingEnergyAudit.lean",
+    "research/audits/WaveSplittingFormRangeAudit.lean",
+    "research/audits/WaveSplittingGeneratorBoundsAudit.lean",
+    "research/audits/WaveSplittingLocalizationAudit.lean",
+    "research/audits/WaveSplittingResidualAudit.lean",
+    "research/audits/WaveSplittingStabilityAudit.lean",
+    "research/audits/WaveSplittingTimeAverageAudit.lean",
+    "research/audits/WaveSplittingWeightedEnergyAudit.lean",
+    "research/audits/WeightedCoareaInfrastructure.lean",
+    "research/audits/WeightedCoareaRouteStatements.lean",
+    "research/audits/WhitneyConstructionAudit.lean",
+    "research/audits/WhitneyExtensionAudit.lean",
+    "research/audits/YosidaFamilyAudit.lean",
+    "research/audits/YosidaLimitAudit.lean",
+    "research/audits/YosidaLimitRouteStatements.lean",
+    "research/audits/KLS/CompletedChainScopeAudit.lean"
+  ],
+  "nonclaims": [
+    "No new proof of full merely convex Letwin Lemma 2.2",
+    "No classical Dirichlet solvability, general W2p or CNS boundary modulus producer",
+    "No remote certification or certificate renewal"
+  ],
+  "verification_scope": "Independent source build, strict audit clients, transitive standard-axiom audits and local/vendor native kernel replay for this isolated candidate. Pinned compiled Mathlib dependencies remain trusted.",
+  "retained_public_interfaces_from_verified_working_tree": 6464,
+  "public_type_kind_universe_safety_comparison": "Exact for every shared public declaration against the previously verified full working tree. No type or instance normalization.",
+  "compiler_generated_additions": [
+    {
+      "name": "ContinuousLinearMap.compLpL.congr_simp",
+      "module": "FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable",
+      "type": "∀ {α : Type u_1} {E : Type u_4} {F : Type u_5} {m : MeasurableSpace.{u_1} α} (p : ENNReal)\n  (μ : MeasureTheory.Measure.{u_1} α) [inst : NormedAddCommGroup.{u_4} E] [inst_1 : NormedAddCommGroup.{u_5} F]\n  {𝕜 : Type u_6} {𝕜' : Type u_7} [inst_2 : NontriviallyNormedField.{u_6} 𝕜] [inst_3 : NontriviallyNormedField.{u_7} 𝕜']\n  [inst_4 : NormedSpace.{u_6, u_4} 𝕜 E] [inst_5 : NormedSpace.{u_7, u_5} 𝕜' F] {σ : RingHom.{u_6, u_7} 𝕜 𝕜'}\n  [inst_6 : RingHomIsometric.{u_6, u_7} σ] [inst_7 : Fact (LE.le.{0} 1 p)]\n  (L L_1 : ContinuousLinearMap.{u_6, u_7, u_4, u_5} σ E F),\n  Eq.{max (u_4 + 1) (u_5 + 1)} L L_1 →\n    Eq.{max ((max u_1 u_4) + 1) ((max u_1 u_5) + 1)} (ContinuousLinearMap.compLpL.{u_1, u_4, u_5, u_6, u_7} p μ L)\n      (ContinuousLinearMap.compLpL.{u_1, u_4, u_5, u_6, u_7} p μ L_1)",
+      "reason": "Lean-generated congruence property materialized at a different first consumer in the reduced aggregate; no new source declaration."
+    }
+  ],
+  "raw_retained_interface_and_definition_closure": {
+    "shared_public_interfaces": 6464,
+    "retained_closure": 7196,
+    "private_closure": 732,
+    "normalization": "None; exact expression fingerprints/universes and non-proof values for every shared public contract and retained local definition dependency."
+  },
+  "compiler_owner_provenance_changes": [
+    {
+      "name": "ContDiffBump.mk.congr_simp",
+      "old": "FunctionalInequalities.Analysis.LocalExtension",
+      "new": "FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.weightedLaplacian.congr_simp",
+      "old": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic",
+      "new": "FunctionalInequalities.Analysis.BakryEmery.Gamma"
+    },
+    {
+      "name": "FunctionalInequalities.Covariance.operator.congr_simp",
+      "old": "FunctionalInequalities.Probability.Transport",
+      "new": "FunctionalInequalities.Probability.Covariance.Intrinsic"
+    },
+    {
+      "name": "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant.congr_simp",
+      "old": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Correlation",
+      "new": "FunctionalInequalities.KLS.LogConcave.ConditionalFiber"
+    }
+  ]
+}

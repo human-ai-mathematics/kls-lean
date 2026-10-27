@@ -62,3 +62,16 @@ theorem gradient_eq_of_hasFDerivAt {f : E → ℝ} {L : E →L[ℝ] ℝ} {x : E}
 end Gradient
 
 end FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+
+namespace FunctionalInequalities.Analysis
+/-- A Lipschitz bound controls the total directional Frechet derivative. -/
+theorem norm_fderiv_apply_le_of_lipschitz {E : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E]
+    {f : E → ℝ} {L : NNReal} (hf : LipschitzWith L f) (v x : E) :
+    ‖fderiv ℝ f x v‖ ≤ (L : ℝ) * ‖v‖ :=
+  (fderiv ℝ f x).le_opNorm v |>.trans
+    (mul_le_mul_of_nonneg_right
+      (norm_fderiv_le_of_lipschitz ℝ hf) (norm_nonneg v))
+
+
+end FunctionalInequalities.Analysis

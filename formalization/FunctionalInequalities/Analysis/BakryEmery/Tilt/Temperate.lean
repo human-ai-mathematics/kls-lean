@@ -1,3 +1,4 @@
+import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Gamma
 import Mathlib.Analysis.Distribution.TemperateGrowth
@@ -224,47 +225,6 @@ theorem hasTemperateGrowth_fderiv {G : Type*} [NormedAddCommGroup G] [NormedSpac
 
 /-! ### Integrability under exponential moments -/
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
-/-- Under all exponential moments, polynomially bounded measurable functions are integrable. -/
-theorem integrable_of_norm_le_pow {F : Type*} [NormedAddCommGroup F] (μ : Measure E)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {g : E → F}
-    (hg : AEStronglyMeasurable g μ) {C : ℝ} {k : ℕ} (hgb : ∀ x, ‖g x‖ ≤ C * (1 + ‖x‖) ^ k) :
-    Integrable g μ := by
-    have hpow : ∀ t : ℝ, 0 ≤ t → ∀ n : ℕ,
-        (1 + t) ^ n ≤ Real.exp ((n : ℝ) * t) := by
-      intro t ht n
-      induction n with
-      | zero =>
-          simp
-      | succ n ih =>
-          calc
-            (1 + t) ^ n.succ = (1 + t) ^ n * (1 + t) := by
-              rw [pow_succ]
-            _ ≤ Real.exp ((n : ℝ) * t) * Real.exp t := by
-              exact
-                mul_le_mul ih (by simpa [add_comm] using Real.add_one_le_exp t)
-                  (by linarith) (by positivity)
-            _ = Real.exp ((n.succ : ℕ) * t) := by
-              rw [← Real.exp_add]
-              congr 1
-              push_cast
-              ring
-    have hdom : ∀ x : E, ‖g x‖ ≤ max C 0 * Real.exp ((k : ℝ) * ‖x‖) := by
-      intro x
-      have hp : (1 + ‖x‖) ^ k ≤ Real.exp ((k : ℝ) * ‖x‖) :=
-        hpow ‖x‖ (norm_nonneg x) k
-      calc
-        ‖g x‖ ≤ C * (1 + ‖x‖) ^ k := hgb x
-        _ ≤ max C 0 * (1 + ‖x‖) ^ k := by
-          exact
-            mul_le_mul_of_nonneg_right (le_max_left C 0)
-              (pow_nonneg (by positivity) k)
-        _ ≤ max C 0 * Real.exp ((k : ℝ) * ‖x‖) := by
-          exact mul_le_mul_of_nonneg_left hp (le_max_right C 0)
-    refine ((hexp (k : ℝ)).const_mul (max C 0)).mono' hg
-      (ae_of_all _ (fun x => ?_))
-    simpa [smul_eq_mul] using hdom x
-
 variable (m : Measure E) [m.IsAddHaarMeasure]
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] in
@@ -453,7 +413,7 @@ theorem integral_weightedLaplacian_eq_zero_of_growth {V f : E → ℝ} (hV : Con
       _ = H * (1 + ‖x‖) ^ (k + kV) := by dsimp [H]; rw [pow_add]; ring
   have hbi : Integrable (fun x : E => H * (1 + ‖x‖) ^ (k + kV))
       (m.tilted (-V)) := by
-    apply integrable_of_norm_le_pow _ hexp (by fun_prop) (C := H) (k := k + kV)
+    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C := H) (k := k + kV)
     intro x
     rw [Real.norm_of_nonneg (by positivity)]
   have hmeas (n : ℕ) : AEStronglyMeasurable (F n) (m.tilted (-V)) :=
@@ -491,13 +451,6 @@ private theorem growth_test_bounds {f : E → ℝ} (hf : f.HasTemperateGrowth) :
   refine ⟨k, C, hC, fun x => ⟨?_, hb 1 (by omega) x, hb 2 le_rfl x⟩⟩
   simpa only [norm_iteratedFDeriv_zero, Real.norm_eq_abs] using hb 0 (by omega) x
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem growth_continuous_gradient {f : E → ℝ} (hf : ContDiff ℝ 2 f) :
-    Continuous (gradient f) := by
-  change Continuous (fun x => (InnerProductSpace.toDual ℝ E).symm (fderiv ℝ f x))
-  exact (InnerProductSpace.toDual ℝ E).symm.continuous.comp
-    (hf.continuous_fderiv (by norm_num))
-
 /-- **BKL (48)** for `u ∈ 𝒜`: `F_{-ℒu}(z) = ⟪z, F_{∇u}(z)⟫` for every `z`. -/
 theorem tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ}
     (hV : ContDiff ℝ 1 V) {CV : ℝ} {kV : ℕ} (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
@@ -523,8 +476,8 @@ theorem tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ
       simpa only [W] using expTilt_tilted m h z
     have hgrad :
         Integrable (gradient f) (expTilt (m.tilted (-V)) z) :=
-      integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
-        (growth_continuous_gradient hf2).aestronglyMeasurable (fun x => by
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
+        (continuous_gradient_of_contDiff hf2 (by norm_num)).aestronglyMeasurable (fun x => by
           rw [norm_gradient_eq_norm_iteratedFDeriv_one]
           exact (hfg x).2.1)
     have hinner :
@@ -534,7 +487,7 @@ theorem tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ
     have hL :
         Integrable (fun x => weightedLaplacian V f x)
           (expTilt (m.tilted (-V)) z) :=
-      integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
         (continuous_weightedLaplacian hV hf2).aestronglyMeasurable (fun x => by
           rw [Real.norm_eq_abs]
           exact growth_weightedLaplacian_bound hCV hC hVg (fun y => (hfg y).2) x)
@@ -564,49 +517,7 @@ theorem tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ
             exact integrable_exp_mul_norm_expTilt m hexp z r
           · exact hf2
           · exact hfg
-    have hpoint (x : E) :
-        weightedLaplacian W f x =
-          weightedLaplacian V f x + ⟪z, gradient f x⟫ := by
-      change weightedLaplacian
-          (fun y => V y - ⟪z, y⟫) f x =
-        weightedLaplacian V f x + ⟪z, gradient f x⟫
-      exact weightedLaplacian_sub_inner z x
-        (hV.differentiable (by norm_num) x)
-    have hadd :
-        (∫ x, (weightedLaplacian V f x + ⟪z, gradient f x⟫)
-          ∂(expTilt (m.tilted (-V)) z)) = 0 := by
-      have heq :
-          (∫ x, (weightedLaplacian V f x + ⟪z, gradient f x⟫)
-            ∂(expTilt (m.tilted (-V)) z)) =
-            ∫ x, weightedLaplacian W f x
-              ∂(expTilt (m.tilted (-V)) z) := by
-        apply integral_congr_ae
-        exact Filter.Eventually.of_forall (fun x => (hpoint x).symm)
-      exact heq.trans hzero
-    have hsum :
-        (∫ x, weightedLaplacian V f x
-            ∂(expTilt (m.tilted (-V)) z)) +
-          ∫ x, ⟪z, gradient f x⟫
-            ∂(expTilt (m.tilted (-V)) z) = 0 := by
-      rw [← integral_add hL hinner]
-      exact hadd
-    have hneg :
-        -(∫ x, weightedLaplacian V f x
-            ∂(expTilt (m.tilted (-V)) z)) =
-          ∫ x, ⟪z, gradient f x⟫
-            ∂(expTilt (m.tilted (-V)) z) := by
-      linarith
-    calc
-      (∫ x, -weightedLaplacian V f x
-          ∂(expTilt (m.tilted (-V)) z)) =
-          -(∫ x, weightedLaplacian V f x
-            ∂(expTilt (m.tilted (-V)) z)) := by
-              rw [integral_neg]
-      _ = ∫ x, ⟪z, gradient f x⟫
-            ∂(expTilt (m.tilted (-V)) z) := hneg
-      _ = ⟪z, ∫ x, gradient f x
-            ∂(expTilt (m.tilted (-V)) z)⟫ :=
-        integral_inner hgrad z
+    exact integral_neg_weightedLaplacian_eq_inner hV z hgrad hL hzero
   · have hzero : m.tilted (-V) = 0 :=
       tilted_of_not_integrable h
     have hz : expTilt (m.tilted (-V)) z = 0 := by
@@ -698,7 +609,7 @@ theorem taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → �
     · let := isProbabilityMeasure_tilted hi
       obtain ⟨k, C, hC, hfg⟩ := growth_test_bounds hf
       apply contDiff_tiltAverage_of_norm_le_pow μ hexp
-        (growth_continuous_gradient hf2).aestronglyMeasurable (M := C) (k := k)
+        (continuous_gradient_of_contDiff hf2 (by norm_num)).aestronglyMeasurable (M := C) (k := k)
       intro x
       rw [norm_gradient_eq_norm_iteratedFDeriv_one]
       exact (hfg x).2.1
@@ -714,66 +625,7 @@ theorem taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → �
     funext w
     dsimp [G, μ]
     exact tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth m hV hVg hexp hf w
-  ext h
-  simp only [taylorTensor, symmetrizeML, appendInner,
-    smul_apply,
-    sum_apply,
-    ContinuousMultilinearMap.domDomCongr_apply,
-    ContinuousMultilinearMap.uncurryRight_apply,
-    ContinuousLinearMap.compContinuousMultilinearMap_coe]
-  rw [hEq]
-  rw [iteratedFDeriv_inner_self_apply hG d 0 h]
-  simp only [inner_zero_left, zero_add, Function.comp_apply]
-  change
-    ((d + 1).factorial : ℝ)⁻¹ •
-        ∑ k : Fin (d + 1),
-          ⟪h k, (iteratedFDeriv ℝ d G 0) (k.removeNth h)⟫ =
-      ((d + 1).factorial : ℝ)⁻¹ •
-        ∑ σ : Equiv.Perm (Fin (d + 1)),
-          ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d G 0)
-              (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫
-  have hs :
-      (∑ σ : Equiv.Perm (Fin (d + 1)),
-          ⟪(iteratedFDeriv ℝ d G 0) (Fin.init (h ∘ σ)),
-            h (σ (Fin.last d))⟫) =
-        (d.factorial : ℝ) *
-          ∑ k : Fin (d + 1),
-            ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫ := by
-    apply sum_perm_inner_init_last
-    intro τ v
-    exact iteratedFDeriv_comp_perm_of_contDiff hG d 0 v τ
-  have hsum :
-      (∑ σ : Equiv.Perm (Fin (d + 1)),
-          ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d G 0)
-              (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫) =
-        ∑ k : Fin (d + 1),
-          ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫ := by
-    calc
-      (∑ σ : Equiv.Perm (Fin (d + 1)),
-          ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d G 0)
-              (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫)
-          =
-        (d.factorial : ℝ)⁻¹ *
-          ∑ σ : Equiv.Perm (Fin (d + 1)),
-            ⟪(iteratedFDeriv ℝ d G 0) (Fin.init (h ∘ σ)),
-              h (σ (Fin.last d))⟫ := by
-            simp_rw [smul_apply, real_inner_smul_left]
-            rw [Finset.mul_sum]
-      _ =
-        (d.factorial : ℝ)⁻¹ *
-          ((d.factorial : ℝ) *
-            ∑ k : Fin (d + 1),
-              ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫) := by
-            rw [hs]
-      _ = ∑ k : Fin (d + 1),
-          ⟪(iteratedFDeriv ℝ d G 0) (k.removeNth h), h k⟫ := by
-            field_simp [Nat.factorial_ne_zero]
-  rw [hsum]
-  congr 1
-  apply Finset.sum_congr rfl
-  intro k hk
-  exact real_inner_comm _ _
-
+  exact taylorTensor_succ_of_eq_inner μ hG hEq d
 /-- **BKL Lemma 3.6, (49)**, for scalar `u ∈ 𝒜`: `T_1(-ℒu)(h) = ⟪∫ ∇u dμ, h⟫`. -/
 theorem taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ}
     (hV : ContDiff ℝ 1 V) {CV : ℝ} {kV : ℕ} (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)

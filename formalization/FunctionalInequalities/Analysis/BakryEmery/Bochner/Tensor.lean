@@ -274,7 +274,7 @@ private theorem tensorIBP_integrable (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {g : E → ℝ} (hg : g.HasTemperateGrowth) : Integrable g μ := by
   obtain ⟨k, C, hb⟩ := hg.2 0
-  exact integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
+  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
     (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 omit [m.IsAddHaarMeasure] in
@@ -296,7 +296,7 @@ private theorem tensorIBP_integrable_product {V : E → ℝ} (hV : ContDiff ℝ 
     simpa only [norm_iteratedFDeriv_zero] using hbr 0 le_rfl x
   have hDi : Integrable (fun x => ⟪gradient V x, gradient q x⟫ * r x)
       (m.tilted (-V)) := by
-    apply integrable_of_norm_le_pow _ hexp
+    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp
       (((continuous_gradient hV).inner
         (continuous_gradient (hq.1.of_le (WithTop.coe_le_coe.mpr le_top)))).mul
         hr.1.continuous).aestronglyMeasurable (C := CV * Cq * Cr) (k := kV + kq + kr)
@@ -372,7 +372,7 @@ private theorem tensorEq_integrable (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {g : E → ℝ} (hg : g.HasTemperateGrowth) : Integrable g μ := by
   obtain ⟨k, C, hb⟩ := hg.2 0
-  exact integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
+  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
     (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in

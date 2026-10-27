@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.MeasurableCover
 import FunctionalInequalities.Analysis.Hausdorff.Content
 import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
 import FunctionalInequalities.Analysis.Hausdorff.Volume
@@ -240,30 +241,11 @@ theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector {O S : Set
   rcases S.eq_empty_or_nonempty with hSe | ⟨z₀, hz₀⟩
   · simp [hSe]
   choose ρ w hρ hballO hwC hwEq using fun z : O =>
-    Analysis.exists_contDiff_one_eqOn_ball hO hu z.2
-  obtain ⟨T, hTc, hTu⟩ := TopologicalSpace.isOpen_iUnion_countable
-    (fun z : O => Metric.ball (z : V) (ρ z)) (fun _ => Metric.isOpen_ball)
-  have hOcov : ⋃ z : O, Metric.ball (z : V) (ρ z) = O :=
-    Set.Subset.antisymm (Set.iUnion_subset fun z => hballO z) fun y hy =>
-      Set.mem_iUnion.2 ⟨⟨y, hy⟩, Metric.mem_ball_self (hρ ⟨y, hy⟩)⟩
-  have hTne : T.Nonempty := by
-    have : z₀ ∈ ⋃ z ∈ T, Metric.ball (z : V) (ρ z) := by
-      rw [hTu, hOcov]; exact hSO hz₀
-    obtain ⟨z, hzT, -⟩ := Set.mem_iUnion₂.1 this
-    exact ⟨z, hzT⟩
-  obtain ⟨σ, hσ⟩ := hTc.exists_eq_range hTne
-  let B : ℕ → Set V := fun n => Metric.ball ((σ n : O) : V) (ρ (σ n))
-  have hBcov : O ⊆ ⋃ n, B n := by
-    rw [← hOcov, ← hTu, hσ, Set.biUnion_range]
-  set P : ℕ → Set V := disjointed fun n => S ∩ B n with hP
-  have hPmeas : ∀ n, MeasurableSet (P n) :=
-    MeasurableSet.disjointed fun n => hS.inter Metric.isOpen_ball.measurableSet
-  have hPdisj : Pairwise (Function.onFun Disjoint P) := disjoint_disjointed _
-  have hPsub : ∀ n, P n ⊆ B n := fun n =>
-    (disjointed_subset _ n).trans Set.inter_subset_right
-  have hPunion : ⋃ n, P n = S := by
-    rw [hP, iUnion_disjointed, ← Set.inter_iUnion]
-    exact Set.inter_eq_self_of_subset_left (hSO.trans hBcov)
+    Analysis.exists_contDiff_eqOn_ball hO hu z.2
+  obtain ⟨σ, P, hPmeas, hPdisj, hPunion, hPsub⟩ :=
+    Analysis.exists_measurable_partition_subordinate hS hSO ⟨z₀, hz₀⟩
+      (fun z : O => Metric.ball (z : V) (ρ z)) (fun _ => Metric.isOpen_ball)
+      (fun z => Metric.mem_ball_self (hρ z)) hballO
   have hslice : ∀ n t, P n ∩ {x | u x = t} = P n ∩ {x | w (σ n) x = t} := by
     intro n t
     ext x

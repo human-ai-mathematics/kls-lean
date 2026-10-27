@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Matrix.AveragedInverse
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 
 /-!
 # Finite differences of a `C²` function and their log-determinant equations

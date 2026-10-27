@@ -408,7 +408,7 @@ theorem generator_cumulantEnergy_eq (hiso : KLS.Isotropic μ) {r : ℕ} (hr : 2 
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-section S3BLemma51Assembly
+section GeneratorEnergyEstimate
 
 open MeasureTheory
 open scoped RealInnerProductSpace
@@ -633,4 +633,4 @@ theorem generator_cumulantEnergy_ge (hiso : KLS.Isotropic μ) (hLC : KLS.LogConc
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-end S3BLemma51Assembly
+end GeneratorEnergyEstimate

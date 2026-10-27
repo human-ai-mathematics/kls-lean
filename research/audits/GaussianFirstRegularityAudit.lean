@@ -1,5 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 
+open FunctionalInequalities.Probability.Gaussian
+
 /-! Independent full-signature client for first regularity of the actual Gaussian convolution. -/
 
 set_option autoImplicit false
@@ -18,7 +20,7 @@ theorem density_derivative {ν : Measure V} [IsProbabilityMeasure ν]
     HasFDerivAt
       (FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedDensity ρ s)
       (∫ y, (-2 * s *
-        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel s (x-y)) •
+        FunctionalInequalities.Probability.Gaussian.normalizedKernel s (x-y)) •
           innerSL ℝ (x-y) ∂ν) x :=
   FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedDensity_hasFDerivAt
     hρ hs x

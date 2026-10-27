@@ -1,7 +1,7 @@
 import FunctionalInequalities.Probability.Support
 import FunctionalInequalities.Analysis.Convex.GradientImage
 import FunctionalInequalities.Analysis.Convex.GradientInverse
-import FunctionalInequalities.Analysis.Convex.Caffarelli
+import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
 import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
@@ -90,7 +90,7 @@ theorem range_gradient_eq_interior_of_map_gradient
   have hexp : Integrable (fun x => Real.exp (-u x)) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
   exact range_gradient_eq_interior_of_tilted_map hstrict
-    (hC1.differentiable (by norm_num)) (Analysis.continuous_gradient hC1) volume hexp
+    (hC1.differentiable (by norm_num)) (Analysis.BakryEmery.continuous_gradient hC1) volume hexp
     hKc hK.isClosed hKi hW hmap
 
 end TransportRange

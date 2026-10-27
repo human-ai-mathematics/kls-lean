@@ -34,7 +34,7 @@ namespace FunctionalInequalities.KLS.LogConcave.Suspension
 its density and cumulants, the chosen-copy derivative formula (112), and the finite-coordinate
 comparison supply the Taylor estimate below. -/
 
-private theorem r7_source_energy_limit {T b : ℝ} {d : ℕ} (hb : 0 < b) (hd : 2 ≤ d)
+private theorem source_energy_bound_of_sigma_bounds {T b : ℝ} {d : ℕ} (hb : 0 < b) (hd : 2 ≤ d)
     (hβbound : ∀ β : ℝ, 0 < β → T ≤ (sigma β) ^ 2 * b / (d.factorial : ℝ) ^ 2) :
     T ≤ b / (d.factorial : ℝ) ^ 2 := by
   have hfac_nat : 2 ≤ d.factorial := by simpa using Nat.factorial_le hd
@@ -59,7 +59,7 @@ private theorem r7_source_energy_limit {T b : ℝ} {d : ℕ} (hb : 0 < b) (hd : 
   linarith
 
 set_option maxHeartbeats 800000 in
-private theorem r7_beta_energy_bound {d : ℕ} (hd : 1 ≤ d) {b : ℝ}
+private theorem taylor_energy_le_sigma_sq_mul_cumulant_bound {d : ℕ} (hd : 1 ≤ d) {b : ℝ}
     (hcb : CumulantBound d b) {n : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} {M : ℝ} (hf : ContDiff ℝ 2 f)
@@ -116,9 +116,9 @@ theorem norm_coordTensor_taylorTensor_sq_le_of_cumulantBound {d : ℕ} (hd : 2 �
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) :
     ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
       b / (d.factorial : ℝ) ^ 2 := by
-  apply r7_source_energy_limit hb hd
+  apply source_energy_bound_of_sigma_bounds hb hd
   intro β hβ
-  exact r7_beta_energy_bound (by omega) hcb V hV hiso hf hfM hf2 hf0 hf1 hfx hβ
+  exact taylor_energy_le_sigma_sq_mul_cumulant_bound (by omega) hcb V hV hiso hf hfM hf2 hf0 hf1 hfx hβ
 
 /-! ### The density step (BKL p. 30) -/
 

@@ -143,6 +143,51 @@ theorem ae_abs_operator_sub_le (ψ : (adjointComp (hν.closedWeightedOperator m 
   exact _root_.abs_le.mpr ⟨by simp only [Pi.zero_apply] at h2; linarith,
     by simp only [Pi.zero_apply] at h1; linarith⟩
 
+/-- A bounded generator gives a uniform pointwise slope bound for the backward orbit. -/
+theorem ae_abs_slope_operator_backwards_le
+    (ψ : (adjointComp (hν.closedWeightedOperator m B hi)).domain)
+    {D r s t : ℝ} (hD : 0 ≤ D)
+    (hAψ : ∀ᵐ x ∂(ν : Measure V),
+      |(adjointComp (hν.closedWeightedOperator m B hi) ψ : Lp ℝ 2 (ν : Measure V)) x| ≤ D)
+    (hrs : r < s) (hst : s ≤ t) :
+    ∀ᵐ x ∂(ν : Measure V),
+      |slope (fun a => Generated.apply (hν.closedWeightedOperator m B hi)
+        (hν.closedWeightedOperator_isClosed m B hi)
+        (hν.dense_domain_closedWeightedOperator m B hi) (t - a)
+        (ψ : Lp ℝ 2 (ν : Measure V))) r s x| ≤ D := by
+  revert ψ
+  set T := hν.closedWeightedOperator m B hi
+  set hT := hν.closedWeightedOperator_isClosed m B hi
+  set hd := hν.dense_domain_closedWeightedOperator m B hi
+  intro ψ hAψ
+  set q : ℝ → Lp ℝ 2 (ν : Measure V) :=
+    fun a => Generated.apply T hT hd (t - a) (ψ : Lp ℝ 2 (ν : Measure V))
+  have hsr : 0 < s - r := sub_pos.mpr hrs
+  have hts : 0 ≤ t - s := sub_nonneg.mpr hst
+  have hsplit : Generated.apply T hT hd (t - r) (ψ : Lp ℝ 2 (ν : Measure V)) =
+      Generated.apply T hT hd (t - s)
+        (Generated.apply T hT hd (s - r) (ψ : Lp ℝ 2 (ν : Measure V))) := by
+    rw [← Generated.add_time T hT hd hts hsr.le]; congr 1; ring
+  have hkey : slope q r s = operator m B hν hi hts
+      ((s - r)⁻¹ • ((ψ : Lp ℝ 2 (ν : Measure V)) -
+        Generated.apply T hT hd (s - r) (ψ : Lp ℝ 2 (ν : Measure V)))) := by
+    rw [slope_def_module, HeatSemigroup.apply, Generated.map_smul T hT hd hts,
+      Generated.map_sub T hT hd hts, ← hsplit]
+  have hdiff := ae_abs_operator_sub_le m B hν hi ψ hD hAψ hsr.le
+  have hk : ∀ᵐ x ∂(ν : Measure V), |((s - r)⁻¹ • ((ψ : Lp ℝ 2 (ν : Measure V)) -
+      Generated.apply T hT hd (s - r) (ψ : Lp ℝ 2 (ν : Measure V))) :
+        Lp ℝ 2 (ν : Measure V)) x| ≤ D := by
+    filter_upwards [hdiff, Lp.coeFn_smul (s - r)⁻¹ ((ψ : Lp ℝ 2 (ν : Measure V)) -
+      Generated.apply T hT hd (s - r) (ψ : Lp ℝ 2 (ν : Measure V))),
+      Lp.coeFn_sub (ψ : Lp ℝ 2 (ν : Measure V))
+        (Generated.apply T hT hd (s - r) (ψ : Lp ℝ 2 (ν : Measure V)))] with x h1 h2 h3
+    rw [h2, Pi.smul_apply, h3, Pi.sub_apply, smul_eq_mul, abs_mul, abs_inv,
+      abs_of_pos hsr, abs_sub_comm]
+    rw [inv_mul_le_iff₀ hsr]
+    exact h1
+  rw [hkey]
+  exact ae_abs_operator_le m _ hν hi hts _ hD hk
+
 end Difference
 
 section Interpolation
@@ -216,43 +261,14 @@ theorem integral_mul_weakGamma_le_of_pos
     intro r hr
     have hr0 : 0 < r := ha.trans_le hr.1
     have htr : 0 < t - r := sub_pos.mpr hr.2
-    have hP := Generated.hasDerivWithinAt_apply_Iic T hT hd Φ htr
-    have hlin : HasDerivWithinAt (fun r : ℝ => t - r) (-1) (Ici r) r :=
-      ((hasDerivAt_id r).const_sub t).hasDerivWithinAt
-    have hmaps : MapsTo (fun r : ℝ => t - r) (Ici r) (Iic (t - r)) := fun s hs => by
-      simp only [mem_Iic]; linarith [mem_Ici.mp hs]
-    have hq' := hP.scomp r hlin hmaps
-    simp only [neg_smul, one_smul, neg_neg] at hq'
-    have hq : HasDerivWithinAt q _ (Ici r) r := hq'
+    have hq : HasDerivWithinAt q _ (Ici r) r :=
+      Generated.hasDerivWithinAt_apply_sub_Ici T hT hd Φ htr
     have huder := Generated.hasDerivWithinAt_map_apply_Ici T hT hd g hu hr0
     have hslope : ∀ᶠ s in 𝓝[Ici r \ {r}] r, ∀ᵐ x ∂(ν : Measure V), |slope q r s x| ≤ D := by
       rw [Ici_sdiff_left]
       filter_upwards [Ioo_mem_nhdsGT hr.2] with s hs
-      have hsr : 0 < s - r := sub_pos.mpr hs.1
-      have hts : 0 ≤ t - s := sub_nonneg.mpr hs.2.le
-      have hsplit : Generated.apply T hT hd (t - r) (Φ : Lp ℝ 2 (ν : Measure V)) =
-          Generated.apply T hT hd (t - s)
-            (Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V))) := by
-        rw [← Generated.add_time T hT hd hts hsr.le]; congr 1; ring
-      have hkey : slope q r s = operator m (ContinuousLinearMap.id ℝ V) hν hi hts
-          ((s - r)⁻¹ • ((Φ : Lp ℝ 2 (ν : Measure V)) -
-            Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V)))) := by
-        rw [slope_def_module, HeatSemigroup.apply, Generated.map_smul T hT hd hts,
-          Generated.map_sub T hT hd hts, ← hsplit]
-      have hdiff := ae_abs_operator_sub_le m (ContinuousLinearMap.id ℝ V) hν hi Φ hD hAΦ hsr.le
-      have hk : ∀ᵐ x ∂(ν : Measure V), |((s - r)⁻¹ • ((Φ : Lp ℝ 2 (ν : Measure V)) -
-          Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V))) :
-            Lp ℝ 2 (ν : Measure V)) x| ≤ D := by
-        filter_upwards [hdiff, Lp.coeFn_smul (s - r)⁻¹ ((Φ : Lp ℝ 2 (ν : Measure V)) -
-          Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V))),
-          Lp.coeFn_sub (Φ : Lp ℝ 2 (ν : Measure V))
-            (Generated.apply T hT hd (s - r) (Φ : Lp ℝ 2 (ν : Measure V)))] with x h1 h2 h3
-        rw [h2, Pi.smul_apply, h3, Pi.sub_apply, smul_eq_mul, abs_mul, abs_inv,
-          abs_of_pos hsr, abs_sub_comm]
-        rw [inv_mul_le_iff₀ hsr]
-        exact h1
-      rw [hkey]
-      exact ae_abs_operator_le m _ hν hi hts _ hD hk
+      exact ae_abs_slope_operator_backwards_le m (ContinuousLinearMap.id ℝ V)
+        hν hi Φ hD hAΦ hs.1 hs.2.le
     have hq'b : ∀ᵐ x ∂(ν : Measure V), |(adjointComp T ⟨_, preserves_domain m
         (ContinuousLinearMap.id ℝ V) hν hi Φ htr.le⟩ : Lp ℝ 2 (ν : Measure V)) x| ≤ D :=
       (hb (t - r) htr.le).2
@@ -298,12 +314,8 @@ theorem integral_mul_weakGamma_le_of_pos
   -- continuity of `Ψ` on `[a, t]`
   have hcont : ContinuousOn Ψ (Icc a t) := by
     intro r hr
-    have hqc : ContinuousWithinAt q (Icc a t) r := by
-      have h1 : ContinuousOn (fun τ => Generated.apply T hT hd τ (Φ : Lp ℝ 2 (ν : Measure V)))
-          (Ici 0) := Generated.continuousOn T hT hd _
-      have h2 : ContinuousOn (fun r : ℝ => t - r) (Icc a t) :=
-        (continuous_const.sub continuous_id).continuousOn
-      exact (h1.comp h2 (fun s hs => by simp only [mem_Ici]; linarith [hs.2])) r hr
+    have hqc : ContinuousWithinAt q (Icc a t) r :=
+      Generated.continuousOn_apply_sub T hT hd (Φ : Lp ℝ 2 (ν : Measure V)) r hr
     have huc : ContinuousWithinAt u (Icc a t) r :=
       ((Generated.continuousOn_map_apply T hT hd g hu).mono
         (fun s hs => (show (0 : ℝ) < s from ha.trans_le hs.1))) r hr
@@ -395,17 +407,9 @@ theorem integral_mul_weakGamma_le
   have hul : Tendsto u (𝓝[>] 0) (𝓝 (T f)) :=
     (Generated.tendsto_map_apply_zero T hT hd f hu).mono_left
       (nhdsWithin_mono _ Ioi_subset_Ici_self)
-  have hsub : Tendsto (fun a : ℝ => t - a) (𝓝[>] 0) (𝓝[Ici 0] t) := by
-    refine tendsto_nhdsWithin_iff.mpr ⟨?_, ?_⟩
-    · have h : Tendsto (fun a : ℝ => t - a) (𝓝 0) (𝓝 (t - 0)) :=
-        ((continuous_const.sub continuous_id).tendsto (0 : ℝ))
-      rw [sub_zero] at h
-      exact h.mono_left nhdsWithin_le_nhds
-    · filter_upwards [Ioo_mem_nhdsGT hpos] with a ha
-      simp only [mem_Ici]; linarith [ha.2]
   have hql : Tendsto q (𝓝[>] 0) (𝓝 (Generated.apply T hT hd t
       ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ))) :=
-    ((Generated.continuousOn T hT hd _) t (mem_Ici.mpr ht)).tendsto.comp hsub
+    Generated.tendsto_apply_sub_zero T hT hd _ hpos
   have hqb : ∀ᶠ a in 𝓝[>] 0, ∀ᵐ x ∂(ν : Measure V), |q a x| ≤ C := by
     filter_upwards [Ioo_mem_nhdsGT hpos] with a ha
     exact (hb (t - a) (sub_nonneg.mpr ha.2.le)).1

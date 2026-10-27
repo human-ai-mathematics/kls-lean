@@ -107,6 +107,15 @@ theorem cutoffDrift_eq (γ : Param n → ℝ) :
   funext p
   simp only [cutoffDrift, smul_smul, pow_two]
 
+/-- The generator of a `C³` function is continuous (continuous coefficients). -/
+theorem continuous_generator_of_contDiff_three (hiso : KLS.Isotropic μ) {F : Param n → ℝ}
+    (hF : ContDiff ℝ 3 F) : Continuous (generator μ hc F) := by
+  exact continuous_diffusionGenerator
+    (locallyLipschitz_drift μ hc hiso).continuous
+    (fun k => (locallyLipschitz_noise μ hc hiso k).continuous)
+    (hF.of_le (by norm_num))
+
+
 /-- The cutoff drift is globally Lipschitz and bounded. -/
 theorem cutoffDrift_lipschitz_bounded (hiso : KLS.Isotropic μ) {γ : Param n → ℝ}
     (hγ : IsCutoff γ) :

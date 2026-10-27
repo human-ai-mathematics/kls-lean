@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.LocalExtension
 import FunctionalInequalities.Analysis.Graph.Integral
 import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 
@@ -10,7 +11,7 @@ an open set `O`, for measurable parameter sets `S ⊆ O`.
 
 A `ContDiffOn` function on an open set does **not** extend to a globally `C¹` function — `1 / x`
 on `(0, ∞)` is the standard counterexample — so the localization is genuinely countable and cannot
-be done by one global extension.  What is true, and is what `exists_contDiff_one_eqOn_ball` proves,
+be done by one global extension.  What is true, and is what `exists_contDiff_eqOn_ball` proves,
 is that every point of `O` has a ball on which some globally `C¹` function agrees with the given
 one: multiply by a `ContDiffBump` supported inside `O`.  This is the interior localization the route
 prescribes; it is **not** the Whitney extension from a closed set, which is the separate unproved
@@ -23,10 +24,8 @@ sides of the identity are countably additive over those pieces, and on each piec
 theorem applies to the local extension; the gradients agree because the functions agree on an
 **open** ball around each point (`Filter.EventuallyEq.gradient_eq`).
 
-`Analysis/Sard/Smooth.lean` already contains the `C^∞` analogue `exists_contDiff_eventuallyEq`, with
-an eventual equality rather than an explicit ball.  It is deliberately left untouched: generalizing
-its order or strengthening its conclusion would change a published signature, so the `C¹` variant
-needed here is proved separately.
+`Analysis/LocalExtension.lean` supplies the shared finite-order and smooth bump
+extension; this module uses its explicit agreement ball.
 
 No integrability, boundedness or finiteness hypothesis is used; the weight may be unbounded or
 identically `∞`, `S` need not be bounded or of finite measure, and `O = ∅` or `S = ∅` are covered.
@@ -41,46 +40,11 @@ namespace FunctionalInequalities.Analysis
 
 section Extension
 
-/-- A function that is `C¹` on an open set agrees with a globally `C¹` function on a ball around
-any of its points.  Multiplication by a bump supported in the open set; differentiability is a
-local property.  The `C^∞` analogue is `Analysis.exists_contDiff_eventuallyEq`. -/
-theorem exists_contDiff_one_eqOn_ball {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
-    {f : E → F} {O : Set E} {z : E} (hO : IsOpen O) (hf : ContDiffOn ℝ 1 f O) (hz : z ∈ O) :
-    ∃ (ρ : ℝ) (w : E → F), 0 < ρ ∧ Metric.ball z ρ ⊆ O ∧ ContDiff ℝ 1 w ∧
-      Set.EqOn w f (Metric.ball z ρ) := by
-  classical
-  obtain ⟨r, hr, hrO⟩ := Metric.isOpen_iff.mp hO z hz
-  set χ : ContDiffBump z := ⟨r / 3, r / 2, by positivity, by linarith⟩ with hχ
-  have hχsmall : Metric.ball z (r / 3) ⊆ O := fun y hy =>
-    hrO (Metric.ball_subset_ball (by linarith) hy)
-  have htsupp : tsupport (χ : E → ℝ) ⊆ O := by
-    rw [χ.tsupport_eq]
-    exact fun y hy => hrO (by
-      simp only [Metric.mem_closedBall] at hy
-      simpa [Metric.mem_ball] using hy.trans_lt (by simp [hχ]; linarith))
-  refine ⟨r / 3, fun y => if y ∈ O then (χ y) • f y else 0, by positivity, hχsmall, ?_, ?_⟩
-  · rw [contDiff_iff_contDiffAt]
-    intro y
-    by_cases hy : y ∈ O
-    · refine ContDiffAt.congr_of_eventuallyEq
-        ((χ.contDiff (n := 1)).contDiffAt.smul (hf.contDiffAt (hO.mem_nhds hy))) ?_
-      filter_upwards [hO.mem_nhds hy] with y' hy'
-      simp [hy']
-    · have hyt : y ∈ (tsupport (χ : E → ℝ))ᶜ := fun hc => hy (htsupp hc)
-      refine ContDiffAt.congr_of_eventuallyEq (contDiffAt_const (c := (0 : F))) ?_
-      filter_upwards [(isClosed_tsupport (χ : E → ℝ)).isOpen_compl.mem_nhds hyt] with y' hy'
-      have hzero : χ y' = 0 := image_eq_zero_of_notMem_tsupport hy'
-      by_cases hy'O : y' ∈ O <;> simp [hy'O, hzero]
-  · intro y hy
-    have hyO : y ∈ O := hχsmall hy
-    have hone : χ y = 1 := χ.one_of_mem_closedBall (by
-      simpa [Metric.mem_closedBall, hχ] using (Metric.mem_ball.mp hy).le)
-    simp [hyO, hone]
-
 end Extension
 
 section OpenGraph
+
+universe u v
 
 variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
   [FiniteDimensional ℝ H] [MeasurableSpace H] [BorelSpace H]
@@ -114,7 +78,7 @@ theorem setLIntegral_image_graphMap_of_contDiffOn (ι : H →ₗᵢ[ℝ] V) {e :
   rcases S.eq_empty_or_nonempty with hSe | ⟨z₀, hz₀⟩
   · simp [hSe]
   -- every point of `O` carries a ball with a global `C¹` representative
-  choose ρ w hρ hballO hwC hwEq using fun z : O => exists_contDiff_one_eqOn_ball hO hv z.2
+  choose ρ w hρ hballO hwC hwEq using fun z : O => exists_contDiff_eqOn_ball hO hv z.2
   obtain ⟨T, hTc, hTu⟩ := TopologicalSpace.isOpen_iUnion_countable
     (fun z : O => Metric.ball (z : H) (ρ z)) (fun _ => Metric.isOpen_ball)
   have hOcov : ⋃ z : O, Metric.ball ((z : H)) (ρ z) = O :=

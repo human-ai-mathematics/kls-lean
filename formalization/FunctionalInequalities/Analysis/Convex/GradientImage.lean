@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Convex.Coercivity
-import FunctionalInequalities.Analysis.Convex.Subgradient
+import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
 import Mathlib.Analysis.Convex.Deriv
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.Calculus.LocalExtr.Basic

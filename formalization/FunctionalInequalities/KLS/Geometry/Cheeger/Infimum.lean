@@ -13,13 +13,12 @@ Hole-free application layer over the proved recovery sequence
   `smoothConstant_eq_top_of_subsingleton`);
 * the layer-cake identity `lintegral_measure_symmDiff_superlevel`, the balance estimate
   `min_measure_le_add_measure_symmDiff` and the convergence `tendsto_lintegral_min_superlevel`,
-  all migrated unchanged from `KLS/WIP/CheegerInfimum.lean`;
+  used in the comparison of the two infima;
 * the proved one-sided comparison `minkowskiConstant_le_smoothConstant`.
 
-Only one direction is proved here.  `smoothConstant_le_minkowskiConstant` still needs Sard, the
-weighted coarea formula and the distance-cutoff gradient estimate, so it and the equality
-`minkowskiConstant_eq_smoothConstant` stay in `KLS/WIP/CheegerInfimum.lean`; nothing in this module
-claims that the two Cheeger infima agree.
+This module proves the direction `minkowskiConstant_le_smoothConstant`.
+`KLS/Geometry/Cheeger/Equality.lean` supplies the reverse comparison and equality using Sard,
+weighted coarea and the distance-cutoff estimates.
 
 No mathematical scope was added: an arbitrary finite-dimensional real inner-product space, zero
 dimension included; an arbitrary Borell density relative to Lebesgue `volume`; no bounded support,

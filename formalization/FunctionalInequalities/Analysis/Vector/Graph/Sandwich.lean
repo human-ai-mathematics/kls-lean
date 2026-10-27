@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.MeasurableCover
 import FunctionalInequalities.Analysis.Vector.Graph.Basic
 
 /-! # Two-sided estimates for vector-valued graphs
@@ -206,26 +207,18 @@ theorem exists_approximating_partition_vectorGraph (ι : H →ₗᵢ[ℝ] V) (κ
     rw [dist_eq_norm] at this
     exact this.le
   choose r hrpos hrball using hrad
-  have hfnhds : ∀ x : H, Metric.ball x (r x) ∈ 𝓝 x := fun x => Metric.ball_mem_nhds x (hrpos x)
-  obtain ⟨c, hc, hcu⟩ := TopologicalSpace.countable_cover_nhds hfnhds
-  have hcne : c.Nonempty := by
-    have hmem : (0 : H) ∈ (Set.univ : Set H) := Set.mem_univ _
-    rw [← hcu] at hmem
-    obtain ⟨x, hx, -⟩ := Set.mem_iUnion₂.mp hmem
-    exact ⟨x, hx⟩
-  obtain ⟨w, hw⟩ := hc.exists_eq_range hcne
-  set B : ℕ → Set H := fun n => Metric.ball (w n) (r (w n)) with hB
-  have hBu : (⋃ n, B n) = Set.univ := by
-    rw [← hcu, hw, Set.biUnion_range]
-  refine ⟨fun n => disjointed B n, fun n => fderiv ℝ γ (w n), ?_, ?_, ?_, ?_, ?_⟩
-  · exact fun n => MeasurableSet.disjointed (fun i => Metric.isOpen_ball.measurableSet) n
-  · exact disjoint_disjointed B
-  · rw [iUnion_disjointed, hBu]
+  obtain ⟨σ, T, hTm, hTd, hTu, hTsub⟩ :=
+    exists_measurable_partition_subordinate MeasurableSet.univ (subset_refl _)
+      ⟨(0 : H), Set.mem_univ _⟩
+      (fun z : (Set.univ : Set H) => Metric.ball (z : H) (r z))
+      (fun _ => Metric.isOpen_ball)
+      (fun z => Metric.mem_ball_self (hrpos z)) (fun _ => Set.subset_univ _)
+  let w : ℕ → H := fun n => σ n
+  refine ⟨T, fun n => fderiv ℝ γ (w n), hTm, hTd, hTu, ?_, ?_⟩
   · intro n
-    exact approximatesLinearOn_vectorGraphMap ι κ hγ (hrball (w n)) (disjointed_subset B n)
+    exact approximatesLinearOn_vectorGraphMap ι κ hγ (hrball (w n)) (hTsub n)
   · intro n z hz
-    exact hrball (w n) z (disjointed_subset B n hz)
-
+    exact hrball (w n) z (hTsub n hz)
 end Sandwich
 
 end FunctionalInequalities.Analysis

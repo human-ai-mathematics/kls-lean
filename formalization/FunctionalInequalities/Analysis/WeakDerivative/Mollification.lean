@@ -1,3 +1,4 @@
+import Mathlib.Analysis.Normed.Module.WeakDual
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
@@ -11,7 +12,7 @@ noncomputable section
 open MeasureTheory
 open scoped ContDiff
 
-section LW3B1WeakDerivativeMollification
+section WeakDerivativeMollification
 
 open MeasureTheory Set Filter
 open scoped Topology Convolution
@@ -84,9 +85,9 @@ theorem fderiv_convolution_eq_of_hasWeakDerivAlong {E : Type*} [NormedAddCommGro
 
 end FunctionalInequalities.Analysis
 
-end LW3B1WeakDerivativeMollification
+end WeakDerivativeMollification
 
-section LN11C1WeakDerivativeOfDifferenceBound
+section WeakDerivativeOfDifferenceBound
 
 open MeasureTheory Set Filter
 open scoped Topology
@@ -272,4 +273,4 @@ end FiniteDimensional
 
 end FunctionalInequalities.Analysis
 
-end LN11C1WeakDerivativeOfDifferenceBound
+end WeakDerivativeOfDifferenceBound

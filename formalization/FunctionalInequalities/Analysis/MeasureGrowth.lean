@@ -27,7 +27,7 @@ namespace FunctionalInequalities.Analysis
 section MeasurableSpace
 
 variable {E : Type*}
-variable [PseudoMetricSpace E] [MeasurableSpace E]
+  [PseudoMetricSpace E] [MeasurableSpace E]
 
 /-- **Mass from support and growth.** If `ν` is a.e. supported in `closedBall x D`, `D > 0`, and
 `ν(B(x,r)) ≤ K r^d` for every `r > 0`, then `ν(univ) ≤ K D^d`. -/

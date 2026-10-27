@@ -95,17 +95,6 @@ private theorem laplacian_eq_zero_of_notMem_tsupport {f : V → ℝ} {y : V} (hy
   rw [laplacian_eq_sum_fderiv_fderiv, h2]
   simp
 
-variable [CompleteSpace V]
-
-omit [FiniteDimensional ℝ V] in
-/-- The gradient vanishes outside the closed support. -/
-private theorem gradient_eq_zero_of_notMem_tsupport {f : V → ℝ} {y : V} (hy : y ∉ tsupport f) :
-    gradient f y = 0 := by
-  have h : fderiv ℝ f y = 0 := by
-    by_contra h
-    exact hy (support_fderiv_subset (𝕜 := ℝ) h)
-  rw [gradient, h, map_zero]
-
 end Pointwise
 
 section Haar
@@ -317,8 +306,8 @@ private theorem integral_laplacian_mul_convolution_eq {W : V → ℝ} {F : V →
     beta_reduce
     by_cases hx : x ∈ tsupport f
     · rw [hgrad, hη1 x hx, one_mul, real_inner_comm]
-    · rw [gradient_eq_zero_of_notMem_tsupport hx, inner_zero_left, ← hgrad,
-        gradient_eq_zero_of_notMem_tsupport hx, inner_zero_right]
+    · rw [Analysis.BakryEmery.gradient_eq_zero_of_notMem_tsupport hx, inner_zero_left, ← hgrad,
+        Analysis.BakryEmery.gradient_eq_zero_of_notMem_tsupport hx, inner_zero_right]
   -- (iii) the zeroth-order term
   have e3 : ∫ x, f x * W x ∂m =
       ∫ x, g x * (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] fun y => η y * W y) x ∂m := by
@@ -537,6 +526,112 @@ private theorem isTest_of_contDiff_one {g : V → ℝ} (hg : ContDiff ℝ 1 g)
   · rw [apply_id]
     exact (continuous_gradient hg).memLp_of_hasCompactSupport (hasCompactSupport_gradient hgc)
 
+omit [SecondCountableTopology V] in
+/-- The mollified weak equation gives a Caccioppoli estimate for differences. -/
+private theorem mollified_difference_caccioppoli {χ : V → ℝ}
+    (hχ : ContDiff ℝ ∞ χ) (hχc : HasCompactSupport χ)
+    (v : ℕ → V → ℝ) (H : ℕ → V → V)
+    (hvs : ∀ n, ContDiff ℝ ∞ (v n)) (hHc : ∀ n, Continuous (H n))
+    (hmoll : ∀ n (g : V → ℝ), ContDiff ℝ ∞ g → HasCompactSupport g →
+      tsupport g ⊆ tsupport χ →
+      ∫ x, Laplacian.laplacian g x * v n x ∂m =
+        ∫ x, ⟪gradient g x, H n x⟫ ∂m + ∫ x, g x * v n x ∂m) :
+ ∀ n k, eLpNorm (fun x => χ x • gradient (v n - v k) x) 2 m ≤
+      3 * eLpNorm (fun x => (v n - v k) x • gradient χ x) 2 m +
+        2 * eLpNorm (fun x => χ x • (H n - H k) x) 2 m := by
+  have hχ1 : ContDiff ℝ 1 χ := hχ.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hdiff : ∀ n k (g : V → ℝ), ContDiff ℝ ∞ g → HasCompactSupport g →
+      tsupport g ⊆ tsupport χ →
+      ∫ x, Laplacian.laplacian g x * (v n - v k) x ∂m =
+        ∫ x, ⟪gradient g x, (H n - H k) x⟫ ∂m + ∫ x, g x * (v n - v k) x ∂m := by
+    intro n k g hg hgc hgs
+    have hg1 : ContDiff ℝ 1 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
+    have hg2 : ContDiff ℝ 2 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
+    have i1 : ∀ j, Integrable (fun x => Laplacian.laplacian g x * v j x) m := fun j =>
+      ((continuous_laplacian hg2).mul (hvs j).continuous).integrable_of_hasCompactSupport
+        (hasCompactSupport_laplacian hgc).mul_right
+    have i2 : ∀ j, Integrable (fun x => ⟪gradient g x, H j x⟫) m := fun j =>
+      ((continuous_gradient hg1).inner (hHc j)).integrable_of_hasCompactSupport
+        (hasCompactSupport_inner_left (hasCompactSupport_gradient hgc))
+    have i3 : ∀ j, Integrable (fun x => g x * v j x) m := fun j =>
+      (hg1.continuous.mul (hvs j).continuous).integrable_of_hasCompactSupport hgc.mul_right
+    have h1 := hmoll n g hg hgc hgs
+    have h2 := hmoll k g hg hgc hgs
+    simp only [Pi.sub_apply, mul_sub, inner_sub_right]
+    rw [integral_sub (i1 n) (i1 k), integral_sub (i2 n) (i2 k), integral_sub (i3 n) (i3 k)]
+    linarith
+  -- the Caccioppoli estimate for differences, in `eLpNorm` form
+  have hcacc : ∀ n k, eLpNorm (fun x => χ x • gradient (v n - v k) x) 2 m ≤
+      3 * eLpNorm (fun x => (v n - v k) x • gradient χ x) 2 m +
+        2 * eLpNorm (fun x => χ x • (H n - H k) x) 2 m := by
+    intro n k
+    have hv' : ContDiff ℝ ∞ (v n - v k) := (hvs n).sub (hvs k)
+    have hA : MemLp (fun x => χ x • gradient (v n - v k) x) 2 m :=
+      (hχ.continuous.smul (continuous_gradient
+        (hv'.of_le (WithTop.coe_le_coe.mpr le_top)))).memLp_of_hasCompactSupport hχc.smul_right
+    have hB : MemLp (fun x => (v n - v k) x • gradient χ x) 2 m :=
+      (hv'.continuous.smul (continuous_gradient hχ1)).memLp_of_hasCompactSupport
+        (hasCompactSupport_gradient hχc).smul_left
+    have hC : MemLp (fun x => χ x • (H n - H k) x) 2 m :=
+      (hχ.continuous.smul ((hHc n).sub (hHc k))).memLp_of_hasCompactSupport hχc.smul_right
+    have h := norm_toLp_smul_gradient_le m hχ hχc hv' (hdiff n k) hA hB hC
+    rw [Lp.norm_toLp, Lp.norm_toLp, Lp.norm_toLp] at h
+    have hA' := hA.eLpNorm_lt_top.ne
+    have hB' := hB.eLpNorm_lt_top.ne
+    have hC' := hC.eLpNorm_lt_top.ne
+    rw [← ENNReal.ofReal_toReal hA', ← ENNReal.ofReal_toReal hB', ← ENNReal.ofReal_toReal hC']
+    calc ENNReal.ofReal (eLpNorm (fun x => χ x • gradient (v n - v k) x) 2 m).toReal
+        ≤ ENNReal.ofReal (3 * (eLpNorm (fun x => (v n - v k) x • gradient χ x) 2 m).toReal +
+            2 * (eLpNorm (fun x => χ x • (H n - H k) x) 2 m).toReal) :=
+          ENNReal.ofReal_le_ofReal h
+      _ = _ := by
+          rw [ENNReal.ofReal_add (by positivity) (by positivity), ENNReal.ofReal_mul (by norm_num),
+            ENNReal.ofReal_mul (by norm_num), ENNReal.ofReal_ofNat, ENNReal.ofReal_ofNat]
+  exact hcacc
+
+omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] [m.IsAddHaarMeasure] in
+/-- A bounded compactly supported error multiplier transfers Haar L2 convergence to the tilted law. -/
+private theorem localized_toLp_tendsto
+    (hνU : (ν : Measure V) = m.tilted (-U))
+    {χ : V → ℝ} (hχ : ContDiff ℝ ∞ χ) (hχc : HasCompactSupport χ)
+    (u : Lp ℝ 2 (ν : Measure V)) {g v : ℕ → V → ℝ} {w A : V → ℝ}
+    (hgL : ∀ n, MemLp (g n) 2 (ν : Measure V))
+    (hgu : ∀ n x, g n x - χ x * u x = A x * (v n - w) x)
+    (hA_zero : ∀ x ∉ tsupport χ, A x = 0)
+    {M Cρ : ℝ} (hM0 : 0 ≤ M) (hM : ∀ x, ‖A x‖ ≤ M)
+    (hρle : ∀ x ∈ tsupport χ, tiltedDensity m U x ≤ Cρ)
+    (hvconv : Tendsto (fun n => eLpNorm (v n - w) 2 m) atTop (𝓝 0)) :
+    Tendsto (fun n => (hgL n).toLp (g n)) atTop
+      (𝓝 ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _)) := by
+  rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm']
+  have heq : ∀ n, eLpNorm (((hgL n).toLp (g n) : Lp ℝ 2 (ν : Measure V)) -
+      ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _ :
+        Lp ℝ 2 (ν : Measure V)) : V → ℝ) 2 (ν : Measure V) =
+      eLpNorm (fun x => g n x - χ x * u x) 2 (ν : Measure V) := by
+    intro n
+    refine eLpNorm_congr_ae ?_
+    filter_upwards [(hgL n).coeFn_toLp,
+      (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).coeFn_toLp] with x e1 e2
+    rw [Pi.sub_apply, e1, e2]
+  simp only [heq]
+  have hle : ∀ n, eLpNorm (fun x => g n x - χ x * u x) 2 (ν : Measure V) ≤
+      (ENNReal.ofReal Cρ ^ (1 / 2 : ℝ)) * (ENNReal.ofReal M * eLpNorm (v n - w) 2 m) := by
+    intro n
+    have hzero : ∀ x ∉ tsupport χ, g n x - χ x * u x = 0 := fun x hx => by
+      rw [hgu, hA_zero x hx, zero_mul]
+    refine (eLpNorm_tilted_le m hνU fun x hx => hρle x ?_).trans ?_
+    · by_contra hx'
+      exact hx (hzero x hx')
+    · gcongr
+      refine eLpNorm_le_of_norm_le m hM0 fun x => ?_
+      rw [hgu, norm_mul]
+      exact mul_le_mul_of_nonneg_right (hM x) (norm_nonneg _)
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_
+    (fun n => bot_le) hle
+  have h := ENNReal.Tendsto.const_mul (a := (ENNReal.ofReal Cρ ^ (1 / 2 : ℝ))) (ENNReal.Tendsto.const_mul
+    (a := ENNReal.ofReal M) hvconv (Or.inr ENNReal.ofReal_ne_top)) (Or.inr (ENNReal.rpow_ne_top_of_nonneg (by norm_num) ENNReal.ofReal_ne_top))
+  rwa [mul_zero, mul_zero] at h
+
 /-- **Interior regularity of deficiency elements.** For `ν = m.tilted (-U)` with a `C¹` potential
 and unit weight, let `u ∈ L²(ν)` be orthogonal to `(A + 1) C_c^∞(V)`, that is,
 `⟪A [f], u⟫ + ⟪[f], u⟫ = 0` for every smooth compactly supported `f`. Then every localization
@@ -667,53 +762,7 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
         ∫ x, ⟪gradient g x, H n x⟫ ∂m + ∫ x, g x * v n x ∂m := fun n g hg hgc hgs =>
     integral_laplacian_mul_convolution_eq m hW η le_rfl hwI hGI (mollifier (V := V) n)
       (mollifier_rOut_le_one n) hg hgc (hgs.trans hR)
-  have hdiff : ∀ n k (g : V → ℝ), ContDiff ℝ ∞ g → HasCompactSupport g →
-      tsupport g ⊆ tsupport χ →
-      ∫ x, Laplacian.laplacian g x * (v n - v k) x ∂m =
-        ∫ x, ⟪gradient g x, (H n - H k) x⟫ ∂m + ∫ x, g x * (v n - v k) x ∂m := by
-    intro n k g hg hgc hgs
-    have hg1 : ContDiff ℝ 1 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
-    have hg2 : ContDiff ℝ 2 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
-    have i1 : ∀ j, Integrable (fun x => Laplacian.laplacian g x * v j x) m := fun j =>
-      ((continuous_laplacian hg2).mul (hvs j).continuous).integrable_of_hasCompactSupport
-        (hasCompactSupport_laplacian hgc).mul_right
-    have i2 : ∀ j, Integrable (fun x => ⟪gradient g x, H j x⟫) m := fun j =>
-      ((continuous_gradient hg1).inner (hHc j)).integrable_of_hasCompactSupport
-        (hasCompactSupport_inner_left (hasCompactSupport_gradient hgc))
-    have i3 : ∀ j, Integrable (fun x => g x * v j x) m := fun j =>
-      (hg1.continuous.mul (hvs j).continuous).integrable_of_hasCompactSupport hgc.mul_right
-    have h1 := hmoll n g hg hgc hgs
-    have h2 := hmoll k g hg hgc hgs
-    simp only [Pi.sub_apply, mul_sub, inner_sub_right]
-    rw [integral_sub (i1 n) (i1 k), integral_sub (i2 n) (i2 k), integral_sub (i3 n) (i3 k)]
-    linarith
-  -- the Caccioppoli estimate for differences, in `eLpNorm` form
-  have hcacc : ∀ n k, eLpNorm (fun x => χ x • gradient (v n - v k) x) 2 m ≤
-      3 * eLpNorm (fun x => (v n - v k) x • gradient χ x) 2 m +
-        2 * eLpNorm (fun x => χ x • (H n - H k) x) 2 m := by
-    intro n k
-    have hv' : ContDiff ℝ ∞ (v n - v k) := (hvs n).sub (hvs k)
-    have hA : MemLp (fun x => χ x • gradient (v n - v k) x) 2 m :=
-      (hχ.continuous.smul (continuous_gradient
-        (hv'.of_le (WithTop.coe_le_coe.mpr le_top)))).memLp_of_hasCompactSupport hχc.smul_right
-    have hB : MemLp (fun x => (v n - v k) x • gradient χ x) 2 m :=
-      (hv'.continuous.smul (continuous_gradient hχ1)).memLp_of_hasCompactSupport
-        (hasCompactSupport_gradient hχc).smul_left
-    have hC : MemLp (fun x => χ x • (H n - H k) x) 2 m :=
-      (hχ.continuous.smul ((hHc n).sub (hHc k))).memLp_of_hasCompactSupport hχc.smul_right
-    have h := norm_toLp_smul_gradient_le m hχ hχc hv' (hdiff n k) hA hB hC
-    rw [Lp.norm_toLp, Lp.norm_toLp, Lp.norm_toLp] at h
-    have hA' := hA.eLpNorm_lt_top.ne
-    have hB' := hB.eLpNorm_lt_top.ne
-    have hC' := hC.eLpNorm_lt_top.ne
-    rw [← ENNReal.ofReal_toReal hA', ← ENNReal.ofReal_toReal hB', ← ENNReal.ofReal_toReal hC']
-    calc ENNReal.ofReal (eLpNorm (fun x => χ x • gradient (v n - v k) x) 2 m).toReal
-        ≤ ENNReal.ofReal (3 * (eLpNorm (fun x => (v n - v k) x • gradient χ x) 2 m).toReal +
-            2 * (eLpNorm (fun x => χ x • (H n - H k) x) 2 m).toReal) :=
-          ENNReal.ofReal_le_ofReal h
-      _ = _ := by
-          rw [ENNReal.ofReal_add (by positivity) (by positivity), ENNReal.ofReal_mul (by norm_num),
-            ENNReal.ofReal_mul (by norm_num), ENNReal.ofReal_ofNat, ENNReal.ofReal_ofNat]
+  have hcacc := mollified_difference_caccioppoli m hχ hχc v H hvs hHc hmoll
   -- the bounds on the cutoff and the density on the support of `χ`
   obtain ⟨M₁, hM₁⟩ := (continuous_gradient hχ1).bounded_above_of_compact_support
     (hasCompactSupport_gradient hχc)
@@ -735,7 +784,7 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
     (le_abs_self _).trans (hC₃ x (hR hx))
   have hρinvle : ∀ x ∈ tsupport χ, ‖ρinv x‖ ≤ C₄ := fun x hx => hC₄ x (hR hx)
   have hgradχ : ∀ x ∉ tsupport χ, gradient χ x = 0 := fun x hx =>
-    gradient_eq_zero_of_notMem_tsupport hx
+    Analysis.BakryEmery.gradient_eq_zero_of_notMem_tsupport hx
   -- the tests `gₙ = χ vₙ / ρ`
   set gfun : ℕ → V → ℝ := fun n x => χ x * v n x * ρinv x with hgfun_def
   have hgc1 : ∀ n, ContDiff ℝ 1 (gfun n) := fun n => (hχ1.mul (hv1 n)).mul hρinvc
@@ -929,34 +978,9 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
     · simp [hgfun_def, image_eq_zero_of_notMem_tsupport hx]
   have hxa : Tendsto (fun n => (htest n).memLp.toLp (gfun n)) atTop
       (𝓝 ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _)) := by
-    rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm']
-    have heq : ∀ n, eLpNorm (((htest n).memLp.toLp (gfun n) : Lp ℝ 2 (ν : Measure V)) -
-        ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _ :
-          Lp ℝ 2 (ν : Measure V)) : V → ℝ) 2 (ν : Measure V) =
-        eLpNorm (fun x => gfun n x - χ x * u x) 2 (ν : Measure V) := by
-      intro n
-      refine eLpNorm_congr_ae ?_
-      filter_upwards [(htest n).memLp.coeFn_toLp,
-        (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).coeFn_toLp] with x e1 e2
-      rw [Pi.sub_apply, e1, e2]
-    simp only [heq]
-    have hle : ∀ n, eLpNorm (fun x => gfun n x - χ x * u x) 2 (ν : Measure V) ≤
-        K₀ * (ENNReal.ofReal M₅ * eLpNorm (v n - w) 2 m) := by
-      intro n
-      have hzero : ∀ x ∉ tsupport χ, gfun n x - χ x * u x = 0 := fun x hx => by
-        rw [hgu, image_eq_zero_of_notMem_tsupport hx, zero_mul, zero_mul]
-      refine (eLpNorm_tilted_le m hνU fun x hx => hρle x ?_).trans ?_
-      · by_contra hx'
-        exact hx (hzero x hx')
-      · gcongr
-        refine eLpNorm_le_of_norm_le m hM₅0 fun x => ?_
-        rw [hgu, norm_mul]
-        exact mul_le_mul_of_nonneg_right (hM₅ x) (norm_nonneg _)
-    refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_
-      (fun n => bot_le) hle
-    have h := ENNReal.Tendsto.const_mul (a := K₀) (ENNReal.Tendsto.const_mul
-      (a := ENNReal.ofReal M₅) hvconv (Or.inr ENNReal.ofReal_ne_top)) (Or.inr hK₀)
-    rwa [mul_zero, mul_zero] at h
+    exact localized_toLp_tendsto m hνU hχ hχc u (fun n => (htest n).memLp) hgu
+      (fun x hx => by rw [image_eq_zero_of_notMem_tsupport hx, zero_mul])
+      hM₅0 hM₅ hρle hvconv
   obtain ⟨hmem', -⟩ := exists_mem_domain_apply_eq_of_tendsto
     (hν.closedWeightedOperator_isClosed m (ContinuousLinearMap.id ℝ V) hi) hmem hxa hb
   exact hmem'

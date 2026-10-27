@@ -240,12 +240,12 @@ theorem integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth {V f g : E �
       _ = _ := by rw [pow_add]; ring
   have hFi : Integrable (fun x : E => (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg))
       (m.tilted (-V)) := by
-    apply integrable_of_norm_le_pow _ hexp (by fun_prop) (C := A * Cg) (k := kf + kV + kg)
+    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C := A * Cg) (k := kf + kV + kg)
     intro x
     rw [Real.norm_of_nonneg (by positivity)]
   have hGi : Integrable (fun x : E => (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg))
       (m.tilted (-V)) := by
-    apply integrable_of_norm_le_pow _ hexp (by fun_prop)
+    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop)
       (C := Cf * (Cg + Cg * K)) (k := kf + kg)
     intro x
     rw [Real.norm_of_nonneg (by positivity)]

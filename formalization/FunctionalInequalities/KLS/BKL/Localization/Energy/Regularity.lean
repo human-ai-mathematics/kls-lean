@@ -4,10 +4,9 @@ import FunctionalInequalities.Analysis.Tensor.EnergyForm
 import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.KLS.BKL.Posterior.Regularity
-import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
-# Regularity of posterior cumulant energies and their generators
+# Regularity of posterior cumulant energies
 -/
 
 noncomputable section
@@ -15,7 +14,7 @@ noncomputable section
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal RealInnerProductSpace ContDiff
 open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysis
-  FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
+  FunctionalInequalities.Analysis.BakryEmery
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 
@@ -86,42 +85,5 @@ theorem contDiff_cumulantEnergy_posterior (hiso : KLS.Isotropic μ) (d : ℕ)
     intro s hs
     exact ContDiff.inner ℝ contDiff_const
       (hAi.clm_apply contDiff_const)
-
-/-- The generator of a `C³` function is continuous (continuous coefficients). -/
-theorem continuous_generator_of_contDiff_three (hiso : KLS.Isotropic μ) {F : Param n → ℝ}
-    (hF : ContDiff ℝ 3 F) : Continuous (generator μ hc F) := by
-  have hdrift : Continuous (drift μ hc) :=
-    (locallyLipschitz_drift μ hc hiso).continuous
-  have hfirst : Continuous (fun q => fderiv ℝ F q (drift μ hc q)) := by
-    have h :=
-      hF.continuous_fderiv_apply (by norm_num :
-        (3 : WithTop ℕ∞) ≠ 0)
-    exact h.comp (continuous_id.prodMk hdrift)
-  have hsecond (k : Fin n) :
-      Continuous
-        (fun q => fderiv ℝ (fderiv ℝ F) q
-          (noise μ hc q k) (noise μ hc q k)) := by
-    have hnoise : Continuous (fun q => noise μ hc q k) :=
-      (locallyLipschitz_noise μ hc hiso k).continuous
-    have h :=
-      (hF.fderiv_right
-        (m := (1 : WithTop ℕ∞))
-        (by norm_num :
-          (1 : WithTop ℕ∞) + 1 ≤ (3 : WithTop ℕ∞))).continuous_fderiv_apply
-        (by norm_num :
-          (1 : WithTop ℕ∞) ≠ 0)
-    have h' : Continuous
-        (fun q => fderiv ℝ (fderiv ℝ F) q (noise μ hc q k)) :=
-      h.comp (continuous_id.prodMk hnoise)
-    exact h'.clm_apply hnoise
-  have hsum :
-      Continuous
-        (fun q => ∑ k, fderiv ℝ (fderiv ℝ F) q
-          (noise μ hc q k) (noise μ hc q k)) := by
-    exact continuous_finsetSum Finset.univ (by
-      intro k hk
-      exact hsecond k)
-  unfold generator diffusionGenerator
-  exact hfirst.add (continuous_const.mul hsum)
 
 end FunctionalInequalities.KLS.BKL.Localization

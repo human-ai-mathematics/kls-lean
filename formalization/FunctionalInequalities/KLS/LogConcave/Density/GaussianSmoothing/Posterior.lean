@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.UpperSemicontinuity
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Hessian
 import FunctionalInequalities.KLS.LogConcave.Translation
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
@@ -20,6 +21,8 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
+open FunctionalInequalities.Probability.Gaussian
+
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
@@ -28,21 +31,6 @@ noncomputable def posteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : �
     ProbabilityMeasure E :=
   ⟨μ.tilted (fun y => -s * ‖x - y‖ ^ 2),
     isProbabilityMeasure_posterior μ hs x⟩
-
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-  [BorelSpace E] in
-private theorem upperSemicontinuous_mul_positive {f g : E → ℝ}
-    (hf : UpperSemicontinuous f) (hg : Continuous g) (hgpos : ∀ y, 0 < g y) :
-    UpperSemicontinuous (fun y => f y * g y) := by
-  intro y c hc
-  obtain ⟨a, ha, hac⟩ := exists_between hc
-  have hfu : f y < a / g y := (lt_div_iff₀ (hgpos y)).2 ha
-  have htc : a / g y * g y < c := by
-    simpa only [div_mul_cancel₀ a (hgpos y).ne'] using hac
-  have hgc : ∀ᶠ z in 𝓝 y, a / g y * g z < c :=
-    (hg.const_mul (a / g y)).continuousAt.eventually (isOpen_Iio.mem_nhds htc)
-  filter_upwards [hf y _ hfu, hgc] with z hz hgz
-  exact (mul_le_mul_of_nonneg_right hz.le (hgpos z).le).trans_lt hgz
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem gaussian_weight_logConcave {s Z : ℝ} (hs : 0 ≤ s) (hZ : 0 < Z)
@@ -81,7 +69,7 @@ theorem posteriorLaw_isBorellDensity {μ : Measure E} [IsProbabilityMeasure μ]
   have hg : Continuous g := by dsimp [g]; fun_prop
   have hgpos : ∀ y, 0 < g y := fun y => div_pos (Real.exp_pos _) hZ
   refine ⟨hρ.measurable.mul hg.measurable, fun y => mul_nonneg (hρ.nonneg y) (hgpos y).le,
-    upperSemicontinuous_mul_positive hρ.upperSemicontinuous hg hgpos, ?_, ?_⟩
+    FunctionalInequalities.Analysis.upperSemicontinuous_mul_of_continuous_pos hρ.upperSemicontinuous hg hgpos, ?_, ?_⟩
   · intro a b t ht0 ht1
     have hgLC := gaussian_weight_logConcave hs.le hZ x a b ht0 ht1
     have hρLC := hρ.logConcave a b t ht0 ht1

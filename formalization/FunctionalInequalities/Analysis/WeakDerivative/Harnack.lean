@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.WeakDerivative.Caccioppoli
 import FunctionalInequalities.Analysis.WeakDerivative.Moser
 import FunctionalInequalities.Analysis.WeakDerivative.Representation
 import FunctionalInequalities.Analysis.MorreyGrowth
-import FunctionalInequalities.Probability.ExponentialMoments
+import FunctionalInequalities.Probability.ExponentialMoments.Growth
 import FunctionalInequalities.Analysis.LpExponent
 
 /-!

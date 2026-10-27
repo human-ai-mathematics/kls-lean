@@ -1,6 +1,6 @@
 import FunctionalInequalities.Probability.Stein.Kernel
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import Mathlib.MeasureTheory.Constructions.Polish.Basic
 import Mathlib.MeasureTheory.SpecificCodomains.WithLp

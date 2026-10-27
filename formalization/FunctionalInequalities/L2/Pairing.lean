@@ -1,3 +1,4 @@
+import Mathlib.MeasureTheory.Function.LpSpace.Indicator
 import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
@@ -67,5 +68,32 @@ theorem integrable_inner_of_memLp {a f : A → E}
   apply (MeasureTheory.L2.integrable_inner (𝕜 := ℝ) (ha.toLp a) (hf.toLp f)).congr
   filter_upwards [ha.coeFn_toLp, hf.coeFn_toLp] with x hax hfx
   rw [hax, hfx]
+
+omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] in
+/-- Scalar L2 pairing convergence, expressed using ordinary multiplication. -/
+theorem tendsto_integral_mul_of_eLpNorm_sub
+    {X : Type*} [MeasurableSpace X] {μ : Measure X}
+    {a b : X → ℝ} {u : ℕ → X → ℝ}
+    (ha : MemLp a 2 μ) (hb : MemLp b 2 μ)
+    (hu : ∀ m, MemLp (u m) 2 μ)
+    (hconv : Tendsto (fun m => eLpNorm (u m - b) 2 μ) atTop (𝓝 0)) :
+    Tendsto (fun m => ∫ x, a x * u m x ∂μ) atTop
+      (𝓝 (∫ x, a x * b x ∂μ)) := by
+  simpa only [RCLike.inner_apply, starRingEnd_apply, star_trivial, mul_comm] using
+    tendsto_integral_inner_of_eLpNorm_sub ha hb hu hconv
+
+
+omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] in
+/-- A square-integrable scalar field pairs integrably with a continuous compact
+multiplier. Only finiteness of the measure on compact sets is needed. -/
+theorem integrable_mul_continuous_of_hasCompactSupport
+    {X : Type*} [TopologicalSpace X] [MeasurableSpace X] [OpensMeasurableSpace X]
+    {μ : Measure X} [IsFiniteMeasureOnCompacts μ]
+    (ψ : Lp ℝ 2 μ) {q : X → ℝ} (hq : Continuous q) (hqc : HasCompactSupport q) :
+    Integrable (fun x => ψ x * q x) μ := by
+  have hqL : MemLp q 2 μ := hq.memLp_of_hasCompactSupport hqc
+  refine (MeasureTheory.L2.integrable_inner (𝕜 := ℝ) ψ (hqL.toLp q)).congr ?_
+  filter_upwards [hqL.coeFn_toLp] with x hx
+  simp only [hx, Real.inner_apply, mul_comm]
 
 end FunctionalInequalities.L2

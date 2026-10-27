@@ -1,3 +1,4 @@
+import Mathlib.MeasureTheory.Function.LpSpace.Basic
 import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 import Mathlib.MeasureTheory.Function.StronglyMeasurable.Basic
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
@@ -10,8 +11,9 @@ import Mathlib.MeasureTheory.Measure.Real
 import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!
-# Finite second moments of Borel laws and a third-moment contraction
+# Finite moments and linear images of Borel laws
 
+Continuous linear images preserve finite fourth moments.
 `memLp_id_two_iff_lintegral_enorm_rpow_lt_top` characterises finite second moments. The section
 `ThirdMomentContraction` proves `Σ_{ijk} (∫ x_i x_j x_k dν)² ≤ ∫ ‖x‖⁶ dν` for a probability law on `ℝⁿ` with
 integrable sixth moment (no centering or log-concavity), a deterministic support of the proposed
@@ -28,6 +30,18 @@ of that degree (`tendsto_integral_prod_inner_of_coord`).
 open MeasureTheory
 
 namespace FunctionalInequalities.Probability
+
+section LinearImages
+
+/-- A continuous linear image preserves a finite fourth moment. -/
+theorem memLp_four_map_linear {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    (μ : Measure E) (S : E →L[ℝ] E)
+    (hμ4 : MemLp id 4 μ) : MemLp id 4 (μ.map S) := by
+  apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable S.continuous.measurable.aemeasurable).2
+  exact S.comp_memLp' hμ4
+
+end LinearImages
 
 variable {E : Type*} [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
   [SecondCountableTopology E]

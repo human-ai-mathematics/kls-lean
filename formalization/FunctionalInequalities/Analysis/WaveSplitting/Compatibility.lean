@@ -16,16 +16,6 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 /-- The gradient-compatibility defect `p_j - D_(a_j) u`, stored in the coordinate components;
 the displacement and velocity components are zero. -/
 def compatibilityDefect (a : ι → E) (Y : State E ι) : State E ι :=
@@ -38,7 +28,7 @@ def formState (a : ι → E) (Y : State E ι) : State E ι :=
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 @[simp] theorem subState_zeroState (Y : State E ι) : subState Y zeroState = Y := by
-  apply state_ext <;> funext <;> simp [subState, zeroState]
+  apply State.ext <;> funext <;> simp [subState, zeroState]
 
 private theorem fderiv_eq_zero_of_supported {f : E → ℝ} {R : ℝ}
     (hf : ∀ y, R < ‖y‖ → f y = 0) {x : E} (hx : R < ‖x‖) : fderiv ℝ f x = 0 := by
@@ -82,7 +72,7 @@ private theorem compatibilityDefect_addState (a : ι → E) {X Z : State E ι}
     (hX : X.Smooth) (hZ : Z.Smooth) :
     compatibilityDefect a (addState X Z) =
       addState (compatibilityDefect a X) (compatibilityDefect a Z) := by
-  apply state_ext
+  apply State.ext
   · funext x; simp [compatibilityDefect, addState]
   · funext x; simp [compatibilityDefect, addState]
   · funext j x
@@ -97,7 +87,7 @@ private theorem addState_zeroState (Y : State E ι) : addState zeroState Y = Y :
 /-- The wave generator itself is compatible: its defect vanishes identically. -/
 theorem compatibilityDefect_waveGenerator [Fintype ι] (a : ι → E) (b : ι → E → ℝ)
     (Y : State E ι) : compatibilityDefect a (waveGenerator a b Y) = zeroState := by
-  apply state_ext
+  apply State.ext
   · rfl
   · rfl
   · funext j x
@@ -119,7 +109,7 @@ theorem compatibilityDefect_timeDerivative_step {d : ℕ} (a : Fin d → E) {b :
       addState (waveGenerator a b (step a b (List.finRange d) s Y))
         (residual a b (List.finRange d) Y s) := by
     rw [← splitGenerator_finRange, residual_eq_subState]
-    apply state_ext
+    apply State.ext
     · funext x; simp only [addState, subState]; ring
     · funext x; simp only [addState, subState]; ring
     · funext j x; simp only [addState, subState]; ring
@@ -224,7 +214,7 @@ theorem sqrt_derivativeEnergy_defect_step_le {d : ℕ} (a : Fin d → E) {b : Fi
         (mul_le_mul_of_nonneg_left (hM s hs) (defectConstant_nonneg k)))
   have hid : compatibilityDefect a (step a b js θ Y) = addState (compatibilityDefect a Y)
       (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y)) := by
-    apply state_ext
+    apply State.ext
     · funext x; simp [compatibilityDefect, addState, subState]
     · funext x; simp [compatibilityDefect, addState, subState]
     · funext j x; simp only [compatibilityDefect, addState, subState]; ring
@@ -362,7 +352,7 @@ theorem exists_formEnergy_cell_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
   have hX₀ : X₀.Smooth := ⟨hX.1, contDiff_const, hX.2.2⟩
   have hX₀R : X₀.Supported T := fun x hx => ⟨(hXR x hx).1, rfl, (hXR x hx).2.2⟩
   have hid : formState a X = subState X₀ (compatibilityDefect a X) := by
-    apply state_ext
+    apply State.ext
     · funext x; simp [formState, subState, compatibilityDefect, X₀]
     · funext x; simp [formState, subState, compatibilityDefect, X₀]
     · funext j x; simp only [formState, subState, compatibilityDefect, X₀]; ring

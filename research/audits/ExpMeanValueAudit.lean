@@ -16,7 +16,7 @@ if `‖exp (-τ • A) (A f) - A f‖ ≤ C` on `[0, t]`, then
 **One route hypothesis is discarded**: the `InnerProductSpace ℝ H₀` instance. The proof uses no
 inner product — no symmetry, no nonnegativity of `A`, no Cauchy–Schwarz — so the module proves
 `norm_exp_neg_smul_sub_add_smul_le` for an arbitrary `[NormedSpace ℝ H₀] [CompleteSpace H₀]` and
-`route_G2` accepts and drops the stronger instance, as `S2`, `S3`, `S5` and `V1` do. The
+The audit contract accepts and drops the stronger instance, as `S2`, `S3`, `S5` and `V1` do. The
 hypotheses `0 ≤ t` and completeness are both used: completeness makes `H₀ →L[ℝ] H₀` complete, so
 that `NormedSpace.exp` is differentiable, and `0 ≤ t` makes `[0, t]` the interval of the mean
 value inequality with `t` as its right endpoint. `C` is **not** assumed nonnegative.
@@ -77,10 +77,15 @@ open FunctionalInequalities.Analysis.Semigroup
 -- Public declarations of `Analysis/Semigroup/Exponential/MeanValue.lean`.
 #print axioms hasDerivAt_exp_neg_smul_path
 #print axioms norm_exp_neg_smul_sub_add_smul_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.route_G2
 
 -- Theorems of this client.
 #print axioms ExpMeanValueAudit.route_G2
 #print axioms ExpMeanValueAudit.boundary_G2_t_zero
 
 end AxiomReports
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  if env.contains `FunctionalInequalities.Analysis.Semigroup.route_G2 then
+    throwError "The route-only production wrapper must not survive"

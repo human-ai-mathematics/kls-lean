@@ -4401,7 +4401,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.mapContinuousLinearEquiv",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean"
               }
             ],
             "note": "Quoted. Lean proves only the invertible linear case in measure form: the image of a compact-set (Borell) log-concave law under a continuous linear equivalence of finite-dimensional inner-product spaces is log-concave. Convolution and marginals (non-invertible maps) are not stated; the Prekopa-Leindler inequality itself is in Probability/BrunnMinkowski.lean but does not state this lemma."
@@ -6391,8 +6391,8 @@
                 "source": "formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_smoothTest_holds",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean"
+                "name": "FunctionalInequalities.Poincare.SmoothTest.holds_gaussianLaw",
+                "source": "formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean"
               }
             ],
             "note": "The mapped declarations give the Gaussian instances r·G with constant r² and density proportional to exp(−s|x|²) with constant 1/(2s). The library also proves literatureConstant_le_inv_of_eq_tilted (KLS/LogConcave/HeatSemigroup/Curvature.lean; thm:bakry-emery-poincare): C_P ≤ 1/t for ν = volume.tilted (−W), W ∈ C² and Hess W ≥ t Id, t > 0, for the intrinsic literature constant in every finite-dimensional real inner-product space. The arbitrary nonsmooth log-concave-factor formulation of this item is not mapped; its recorded Gaussian fragment remains partial."
@@ -8634,7 +8634,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.contDiff_one_of_map_gradient",
-                "source": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.lipschitzWith_gradient_of_map_gradient",
@@ -8666,7 +8666,7 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.injective_gradient_of_strictConvexOn",
-                "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.ae_posSemidef_hessianMatrix_sub_of_log_det",
@@ -8698,7 +8698,7 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.exists_regular_moment_directional_hessian_subsolution",
@@ -8718,15 +8718,15 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_compact_bounded",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_shift_of_ae_nonneg_compact_bounded",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_rpow_shift_of_ae_nonneg_compact_bounded",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.directional_cutoff_data",
@@ -8734,11 +8734,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le_of_bounded_weak_test",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.rough_square_test_of_weak_data",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.posSemidef_quadratic_young",
@@ -8758,11 +8758,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_data",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_test",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.rpow_cutoff_quadratic_young",
@@ -8786,11 +8786,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_bounded",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_max_shift_of_ae_nonneg_bounded",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.bounded_weak_supersolution_log_caccioppoli",
@@ -8818,15 +8818,15 @@
               },
               {
                 "name": "FunctionalInequalities.Probability.integrable_exp_abs_of_moment_growth",
-                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
               },
               {
                 "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_moment_growth",
-                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
               },
               {
                 "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_scaled_high_moment_growth",
-                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.measure_univ_le_of_ae_closedBall_ball_growth",
@@ -8862,15 +8862,15 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_data",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_test",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.exists_bounded_weak_log_extension",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.local_weak_supersolution_caccioppoli",
@@ -8930,7 +8930,7 @@
               },
               {
                 "name": "FunctionalInequalities.Probability.integral_rpow_mul_integral_rpow_neg_le_of_log_exp",
-                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.exists_centered_buffered_morrey_bound_of_cutoff_energy",
@@ -9404,7 +9404,7 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_mul",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean"
               }
             ],
             "note": "The Leibniz rule is formalized for an arbitrary real coefficient field A, symmetric at each point without a positivity premise, arbitrary drift b and C² functions in the standard orthonormal basis. hessianInverseOperator_mul also specializes it to A = (Hess φ)⁻¹ and b = ∇V ∘ ∇φ for a given potential. Actual-source weak Monge–Ampere and trace estimates are available under L24 and T25. The smooth moment map of Lemma 2.2 for the full source class is not constructed; this generic product rule does not assert that missing regularity or the full smooth Theorem 2.5."
@@ -9441,11 +9441,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_ringInverse_hessianOperator_apply",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_of_mongeAmpere",
@@ -9457,7 +9457,7 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.ae_fderiv_mongeAmpere_exponent",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.ae_weak_matrix_inverse_derivative",
@@ -9477,11 +9477,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_mongeAmpere_first_rhs",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.ae_inverse_hessian_row_divergence_of_weak_derivative",
@@ -9489,11 +9489,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_weak_hessian_flux_eq_trace_derivative",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_hessian_evolution",
@@ -9699,19 +9699,19 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_det_of_locally_memLp_two",
@@ -9735,11 +9735,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.memLp_hessian_adjugate_top",
@@ -9759,11 +9759,11 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test",
-                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram_of_bounded_weak_test",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_hessian_testing",

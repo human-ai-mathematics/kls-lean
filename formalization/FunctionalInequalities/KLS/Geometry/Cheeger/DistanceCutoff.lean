@@ -118,6 +118,35 @@ theorem distanceCutoff_eq_zero_of_notMem_thickening {B : Set V} (hB : B.Nonempty
 
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V]
   [FiniteDimensional ℝ V] in
+/-- The `L¹(ν)` distance of a distance cutoff to the indicator: `w_r = 1` on `B`, `0 ≤ w_r ≤ 1`,
+and `w_r = 0` off the open `r`-thickening, so `‖w_r - 𝟙_B‖₁ ≤ ν(B^r) - ν B`.  Nonemptiness of `B`
+is needed, since `Metric.infDist x ∅ = 0` makes `distanceCutoff ∅ r` the constant `1`. -/
+theorem lintegral_enorm_distanceCutoff_sub_indicator_le (ν : ProbabilityMeasure V) {B : Set V}
+    (hB : B.Nonempty) (hBm : MeasurableSet B) {r : ℝ} (hr : 0 < r) :
+    ∫⁻ x, ‖distanceCutoff B r x - B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
+      (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B := by
+  have hsub : B ⊆ Metric.thickening r B := Metric.self_subset_thickening hr B
+  have hdiff : (ν : Measure V) (Metric.thickening r B \ B) =
+      (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B :=
+    measure_sdiff hsub hBm.nullMeasurableSet (measure_ne_top _ _)
+  rw [← hdiff, ← lintegral_indicator_one (Metric.isOpen_thickening.measurableSet.diff hBm)]
+  refine lintegral_mono fun x ↦ ?_
+  by_cases hxB : x ∈ B
+  · rw [distanceCutoff_eq_one_of_mem_closure hB hr (subset_closure hxB),
+      Set.indicator_of_mem hxB]
+    simp
+  · by_cases hxt : x ∈ Metric.thickening r B
+    · rw [Set.indicator_of_notMem hxB, Set.indicator_of_mem (Set.mem_sdiff_of_mem hxt hxB)]
+      obtain ⟨h0, h1⟩ := distanceCutoff_mem_Icc B hr x
+      rw [sub_zero, Real.enorm_eq_ofReal_abs, abs_of_nonneg h0]
+      simpa using ENNReal.ofReal_le_one.2 h1
+    · rw [distanceCutoff_eq_zero_of_notMem_thickening hB hr hxt,
+        Set.indicator_of_notMem hxB]
+      simp
+
+
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V]
+  [FiniteDimensional ℝ V] in
 /-- When `B` is measurable and its closure carries no extra mass, the cutoffs converge to the
 indicator in `L¹(ν)` as `r ↓ 0`.  Measurability is needed to identify the mass of the annulus
 `B^r \ B` with `ν(B^r) − ν(B)`. -/
@@ -131,24 +160,7 @@ theorem tendsto_distanceCutoff_indicator (ν : ProbabilityMeasure V) {B : Set V}
       ∫⁻ x, ‖distanceCutoff B r x - B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
         (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B := by
     intro r hr
-    have hsub : B ⊆ Metric.thickening r B := Metric.self_subset_thickening hr B
-    have hdiff : (ν : Measure V) (Metric.thickening r B \ B) =
-        (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B :=
-      measure_sdiff hsub hBm.nullMeasurableSet (measure_ne_top _ _)
-    rw [← hdiff, ← lintegral_indicator_one (Metric.isOpen_thickening.measurableSet.diff hBm)]
-    refine lintegral_mono fun x ↦ ?_
-    by_cases hxB : x ∈ B
-    · rw [distanceCutoff_eq_one_of_mem_closure hB hr (subset_closure hxB),
-        Set.indicator_of_mem hxB]
-      simp
-    · by_cases hxt : x ∈ Metric.thickening r B
-      · rw [Set.indicator_of_notMem hxB, Set.indicator_of_mem (Set.mem_sdiff_of_mem hxt hxB)]
-        obtain ⟨h0, h1⟩ := distanceCutoff_mem_Icc B hr x
-        rw [sub_zero, Real.enorm_eq_ofReal_abs, abs_of_nonneg h0]
-        simpa using ENNReal.ofReal_le_one.2 h1
-      · rw [distanceCutoff_eq_zero_of_notMem_thickening hB hr hxt,
-          Set.indicator_of_notMem hxB]
-        simp
+    exact lintegral_enorm_distanceCutoff_sub_indicator_le ν hB hBm hr
   -- the annulus mass tends to zero
   have hthin : Tendsto
       (fun r : ℝ ↦ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) (𝓝[>] 0) (𝓝 0) := by

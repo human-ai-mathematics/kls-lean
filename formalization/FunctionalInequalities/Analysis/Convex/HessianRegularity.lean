@@ -12,8 +12,7 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 
-/-- **The Hessian of the `C^{1,1}` Monge–Ampère solution is in `H¹_loc`** (weak Letwin route; KLS500
-`weak_moment_exists_third_tensor`): every entry of `∇²u` has a weak derivative along every coordinate direction, locally in
+/-- **The Hessian of the `C^{1,1}` Monge–Ampère solution is in `H¹_loc`** (weak Letwin route): every entry of `∇²u` has a weak derivative along every coordinate direction, locally in
 `L²`. -/
 theorem exists_weak_third_derivative {n : ℕ} {u V : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) (hconv : ConvexOn ℝ univ u) {G : NNReal}

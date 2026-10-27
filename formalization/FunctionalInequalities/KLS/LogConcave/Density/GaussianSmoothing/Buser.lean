@@ -18,6 +18,8 @@ noncomputable section
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal ContDiff
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+open FunctionalInequalities.Probability.Gaussian
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 

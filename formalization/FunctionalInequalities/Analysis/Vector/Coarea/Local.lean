@@ -111,23 +111,63 @@ theorem setLIntegral_coarea_levelGraphFamily {ι : H →ₗᵢ[ℝ] V} {κ : K �
   rw [hslice, setLIntegral_image_vectorGraphMap ι κ hsp.perp hγ hAt hg]
   rfl
 
-/-- **Local regular coarea in codimension `m`.**  Every point where the differential is surjective
-has an open neighbourhood on **every** Borel subset of which the coarea equality holds, for
-**every** measurable `ℝ≥0∞` weight; the neighbourhood is independent of the weight.  The surface
-measure is the normalized Hausdorff measure of the codimension, `finrank V - finrank W`.
+omit [MeasurableSpace K] [BorelSpace K] in
+/-- **Weighted slices of a chart piece are measurable in the level.**  On a level-graph family the
+slice integral is the Tonelli section of a single measurable function on the parameter–level
+product, so its measurability in the level needs no slicing inequality. -/
+theorem measurable_setLIntegral_inter_levelSet_levelGraphFamily {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗᵢ[ℝ] V}
+    (hsp : IsVectorGraphSplitting ι κ) {u : V → W} {Ω : Set (H × W)} {ψ : H × W → K}
+    (hψ : ContDiff ℝ 1 ψ) (hlevel : ∀ p ∈ Ω, u (ι p.1 + κ (ψ p)) = p.2)
+    {A : Set (H × W)} (hA : MeasurableSet A) (hAΩ : A ⊆ Ω)
+    {g : V → ℝ≥0∞} (hg : Measurable g) :
+    Measurable (fun t : W =>
+      ∫⁻ x in ((fun p : H × W => ι p.1 + κ (ψ p)) '' A) ∩ {x : V | u x = t}, g x
+        ∂(KLS.hausdorffNormalized V (finrank ℝ H))) := by
+  have hcont : Continuous (fun p : H × W => ι p.1 + κ (ψ p)) :=
+    (ι.continuous.comp continuous_fst).add (κ.continuous.comp hψ.continuous)
+  set F : H × W → ℝ≥0∞ := fun p => ENNReal.ofReal (LinearMap.normDet
+      ((graphMapLinear ι κ (fderiv ℝ (fun y => ψ (y, p.2)) p.1) : H →ₗ[ℝ] V)))
+      * g (ι p.1 + κ (ψ p)) with hF
+  have hFmeas : Measurable F :=
+    (continuous_normDet_graphMapLinear_fderiv_fst ι κ hψ).measurable.ennreal_ofReal.mul
+      (hg.comp hcont.measurable)
+  have hkey : ∀ t : W,
+      (∫⁻ x in ((fun p : H × W => ι p.1 + κ (ψ p)) '' A) ∩ {x : V | u x = t}, g x
+          ∂(KLS.hausdorffNormalized V (finrank ℝ H)))
+        = ∫⁻ y, (A.indicator F) (y, t) ∂(volume : Measure H) := by
+    intro t
+    have hAt : MeasurableSet {y : H | (y, t) ∈ A} :=
+      hA.preimage (measurable_id.prodMk measurable_const)
+    have hγ : ContDiff ℝ 1 (fun y => ψ (y, t)) := hψ.comp (contDiff_id.prodMk contDiff_const)
+    have hslice := slice_eq_image_vectorGraphMap (ι := ι) (κ := κ) (u := u) (Ω := A) (ψ := ψ)
+      (N := (fun p : H × W => ι p.1 + κ (ψ p)) '' A) rfl (fun p hp => hlevel p (hAΩ hp)) t
+    rw [hslice, setLIntegral_image_vectorGraphMap ι κ hsp.perp hγ hAt hg,
+      ← lintegral_indicator hAt]
+    refine lintegral_congr fun y => ?_
+    by_cases hy : (y, t) ∈ A
+    · rw [Set.indicator_of_mem hy, Set.indicator_of_mem (show y ∈ {y : H | (y, t) ∈ A} from hy)]
+      rfl
+    · rw [Set.indicator_of_notMem hy,
+        Set.indicator_of_notMem (show y ∉ {y : H | (y, t) ∈ A} from hy)]
+  simp_rw [hkey]
+  exact (hFmeas.indicator hA).lintegral_prod_left'
 
-This is the codimension-`m` analogue of `KLS.exists_regular_coarea_neighborhood`.  **It is not the
-regular coarea formula**: the countable cover with disjoint patching, and the codimension-`m`
-weighted slice measurability the a.e. form of the outer integral needs, are not proved. -/
-theorem exists_vector_coarea_neighborhood {u : V → W} {O : Set V} (hO : IsOpen O)
+
+/-- **Local regular coarea with slice measurability.**  The neighbourhood of
+`exists_vector_coarea_neighborhood`, carrying in addition the measurability of the level function,
+which the patching needs.  Both conclusions hold for every Borel subset and every measurable
+weight. -/
+theorem exists_vector_coarea_neighborhood_measurable {u : V → W} {O : Set V} (hO : IsOpen O)
     (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O)
     (hreg : coareaJacobian (fderiv ℝ u x₀) ≠ 0) :
     ∃ N : Set V, IsOpen N ∧ x₀ ∈ N ∧ N ⊆ O ∧
       ∀ S : Set V, MeasurableSet S → S ⊆ N → ∀ g : V → ℝ≥0∞, Measurable g →
-        ∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
+        Measurable (fun t : W => ∫⁻ x in S ∩ {x : V | u x = t}, g x
+            ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))) ∧
+        (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
           = ∫⁻ t, ∫⁻ x in S ∩ {x : V | u x = t}, g x
               ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))
-              ∂(volume : Measure W) := by
+              ∂(volume : Measure W)) := by
   obtain ⟨P, Ω, ψ, N, hsp, hdim, hΩ, hψ, hN, hxN, hNO, hlevel, himg, hinj⟩ :=
     exists_levelGraphFamily_of_coareaJacobian_ne_zero hO hu hx₀ hreg
   set Ψ : P × W → V := fun p => P.subtypeₗᵢ p.1 + (Pᗮ).subtypeₗᵢ (ψ p) with hΨ
@@ -149,10 +189,34 @@ theorem exists_vector_coarea_neighborhood {u : V → W} {O : Set V} (hO : IsOpen
     · intro x hx
       obtain ⟨p, hp, hpx⟩ : x ∈ Ψ '' Ω := by rw [himg]; exact hSN hx
       exact ⟨p, ⟨hp, by show Ψ p ∈ S; rw [hpx]; exact hx⟩, hpx⟩
-  have h := setLIntegral_coarea_levelGraphFamily hsp hdim hO hu hΩ hψ hlevel hmem hinj
-    hAmeas hAΩ hg
-  rw [hAimg] at h
-  rw [hPdim] at h
-  exact h
+  constructor
+  · have h := measurable_setLIntegral_inter_levelSet_levelGraphFamily hsp hψ hlevel
+      hAmeas hAΩ hg
+    rw [hAimg, hPdim] at h
+    exact h
+  · have h := setLIntegral_coarea_levelGraphFamily hsp hdim hO hu hΩ hψ hlevel hmem hinj
+      hAmeas hAΩ hg
+    rw [hAimg, hPdim] at h
+    exact h
 
+
+/-- **Local regular coarea in codimension `m`.**  Every point where the differential is surjective
+has an open neighbourhood on **every** Borel subset of which the coarea equality holds, for
+**every** measurable `ℝ≥0∞` weight; the neighbourhood is independent of the weight.  The surface
+measure is the normalized Hausdorff measure of the codimension, `finrank V - finrank W`.
+
+This is the codimension-`m` analogue of `KLS.exists_regular_coarea_neighborhood`.  The stronger local theorem above also supplies weighted slice measurability.
+The countable disjoint patching into the regular-domain coarea theorem is in
+`Analysis/Vector/Coarea/Regular.lean`. -/
+theorem exists_vector_coarea_neighborhood {u : V → W} {O : Set V} (hO : IsOpen O)
+    (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O)
+    (hreg : coareaJacobian (fderiv ℝ u x₀) ≠ 0) :
+    ∃ N : Set V, IsOpen N ∧ x₀ ∈ N ∧ N ⊆ O ∧
+      ∀ S : Set V, MeasurableSet S → S ⊆ N → ∀ g : V → ℝ≥0∞, Measurable g →
+        ∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
+          = ∫⁻ t, ∫⁻ x in S ∩ {x : V | u x = t}, g x
+              ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))
+              ∂(volume : Measure W) := by
+  obtain ⟨N, hN, hxN, hNO, h⟩ := exists_vector_coarea_neighborhood_measurable hO hu hx₀ hreg
+  exact ⟨N, hN, hxN, hNO, fun S hS hSN g hg => (h S hS hSN g hg).2⟩
 end FunctionalInequalities.Analysis

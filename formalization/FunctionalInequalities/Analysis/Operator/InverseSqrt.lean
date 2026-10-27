@@ -250,3 +250,26 @@ theorem locallyLipschitz_inverseSqrt_of_contDiff_ringInverse {P : Type*} [Normed
 end LocalLipschitz
 
 end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+open Filter Topology
+open scoped RealInnerProductSpace
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+/-- Inverse square roots of operators converging to `1` converge to `1`. -/
+theorem tendsto_inverseSqrt_one
+    [CompleteSpace E] [FiniteDimensional ℝ E] {Sg : ℕ → E →L[ℝ] E}
+    (hSg : Tendsto Sg atTop (𝓝 1))
+    (hpos : ∀ᶠ R in atTop, (Sg R).IsPositive) (hunit : ∀ᶠ R in atTop, IsUnit (Sg R)) :
+    Tendsto (fun R => inverseSqrt (Sg R)) atTop (𝓝 1) := by
+  have hinv : Tendsto (fun R => Ring.inverse (Sg R)) atTop (𝓝 1) := by
+    have := (NormedRing.inverse_continuousAt (1 : (E →L[ℝ] E)ˣ)).tendsto.comp hSg
+    simpa [Function.comp_def] using this
+  rw [tendsto_iff_norm_sub_tendsto_zero] at hinv ⊢
+  refine squeeze_zero' (Eventually.of_forall fun R => norm_nonneg _) ?_ hinv
+  filter_upwards [hpos, hunit] with R hp hu
+  exact FunctionalInequalities.Analysis.norm_sub_one_le_of_isPositive_mul_self (inverseSqrt_spec _ hp hu).1
+    (inverseSqrt_spec _ hp hu).2.2.1
+
+
+end FunctionalInequalities.Analysis

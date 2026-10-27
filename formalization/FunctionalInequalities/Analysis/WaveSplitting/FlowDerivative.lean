@@ -15,29 +15,32 @@ namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
-    (hp : X.p = Y.p) : X = Y := by
-  cases X
-  cases Y
-  cases hu
-  cases hv
-  cases hp
-  rfl
-
 /-- Pointwise difference of classical states. -/
 def subState (X Y : State E ι) : State E ι :=
   ⟨fun x => X.u x - Y.u x, fun x => X.v x - Y.v x, fun j x => X.p j x - Y.p j x⟩
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 @[simp] theorem subState_self (Y : State E ι) : subState Y Y = zeroState := by
-  apply state_ext <;> funext <;> simp [subState, zeroState]
+  apply State.ext <;> funext <;> simp [subState, zeroState]
 
 /-- The actual residual is the difference of its two defining states. -/
 theorem residual_eq_subState [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E → ℝ)
     (js : List ι) (Y : State E ι) (t : ℝ) :
     residual a b js Y t = subState (timeDerivative (fun s => step a b js s Y) t)
       (splitGenerator a b js (step a b js t Y)) := rfl
+
+
+/-- The step derivative is its split generator plus the actual residual. -/
+theorem timeDerivative_step_eq [Fintype ι] [DecidableEq ι] (a : ι → E)
+    (b : ι → E → ℝ) (js : List ι) (Y : State E ι) (θ : ℝ) :
+    timeDerivative (fun s => step a b js s Y) θ =
+      addState (splitGenerator a b js (step a b js θ Y)) (residual a b js Y θ) := by
+  rw [residual_eq_subState]
+  apply State.ext
+  · funext x; simp only [addState, subState]; ring
+  · funext x; simp only [addState, subState]; ring
+  · funext j x; simp only [addState, subState]; ring
+
 
 section FiniteIndex
 
@@ -47,7 +50,7 @@ variable [DecidableEq ι]
 
 theorem transport_addState (a : E) (j : ι) (t : ℝ) (X Y : State E ι) :
     transport a j t (addState X Y) = addState (transport a j t X) (transport a j t Y) := by
-  apply state_ext
+  apply State.ext
   · rfl
   · funext x; simp only [transport, addState]; ring
   · funext i x
@@ -57,7 +60,7 @@ theorem transport_addState (a : E) (j : ι) (t : ℝ) (X Y : State E ι) :
 
 theorem transport_zeroState (a : E) (j : ι) (t : ℝ) :
     transport a j t (zeroState : State E ι) = zeroState := by
-  apply state_ext
+  apply State.ext
   · rfl
   · funext x; simp [transport, zeroState]
   · funext i x
@@ -90,14 +93,14 @@ private theorem coupling_subState (b : ι → E → ℝ) (X Y : State E ι) (x :
 
 theorem reaction_subState (b : ι → E → ℝ) (t : ℝ) (X Y : State E ι) :
     reaction b t (subState X Y) = subState (reaction b t X) (reaction b t Y) := by
-  apply state_ext
+  apply State.ext
   · funext x; simp only [reaction, coupling_subState]; simp only [subState]; ring
   · funext x; simp only [reaction, coupling_subState]; simp only [subState]; ring
   · rfl
 
 theorem reaction_zeroState (b : ι → E → ℝ) (t : ℝ) :
     reaction b t (zeroState : State E ι) = zeroState := by
-  apply state_ext <;> funext <;> simp [reaction, zeroState, coupling]
+  apply State.ext <;> funext <;> simp [reaction, zeroState, coupling]
 
 end SubStateIdentities
 
@@ -110,7 +113,7 @@ theorem transport_transport [DecidableEq ι] (a : E) (j : ι) (s t : ℝ) (Y : S
     transport a j s (transport a j t Y) = transport a j (t + s) Y := by
   have e₁ (x : E) : x + s • a + t • a = x + (t + s) • a := by rw [add_smul]; abel
   have e₂ (x : E) : x - s • a - t • a = x - (t + s) • a := by rw [add_smul]; abel
-  apply state_ext
+  apply State.ext
   · rfl
   · funext x; simp only [transport, ↓reduceIte]; rw [e₁, e₂]; ring
   · funext i x
@@ -122,7 +125,7 @@ omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 /-- The zero-order flow is a one-parameter group; its coefficient pairing is unchanged. -/
 theorem reaction_reaction [Fintype ι] (b : ι → E → ℝ) (s t : ℝ) (Y : State E ι) :
     reaction b s (reaction b t Y) = reaction b (t + s) Y := by
-  apply state_ext
+  apply State.ext
   · funext x; simp only [reaction, coupling, Real.cos_add, Real.sin_add]; ring
   · funext x; simp only [reaction, coupling, Real.cos_add, Real.sin_add]; ring
   · rfl
@@ -289,7 +292,7 @@ theorem residual_eq (a : ι → E) (b : ι → E → ℝ)
     residual a b js Y t = subState (reaction b t (sweepDerivative a t js Y))
       (sweepGenerator a js (step a b js t Y)) := by
   rw [residual_eq_subState, (step_hasTimeDerivative a b js hY t).timeDerivative_eq]
-  apply state_ext
+  apply State.ext
   · funext x; simp only [subState, addState, splitGenerator]; ring
   · funext x; simp only [subState, addState, splitGenerator]; ring
   · funext j x; simp only [subState, addState, splitGenerator]; ring

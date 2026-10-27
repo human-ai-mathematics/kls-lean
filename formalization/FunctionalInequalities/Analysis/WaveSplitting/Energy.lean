@@ -142,7 +142,8 @@ variable [Fintype ι]
 section CompactCoupling
 
 omit [NormedSpace ℝ E]
-private theorem compact_coupling (b : ι → E → ℝ) (Y : State E ι)
+/-- Compact support of the field components suffices for the coefficient pairing. -/
+theorem hasCompactSupport_coupling (b : ι → E → ℝ) (Y : State E ι)
     (hp : ∀ j, HasCompactSupport (Y.p j)) : HasCompactSupport (coupling b Y) := by
   have heq : coupling b Y = ∑ j, fun x => b j x * Y.p j x := by
     funext x
@@ -155,7 +156,7 @@ theorem State.CompactSupport.reaction {Y : State E ι}
     (hY : Y.CompactSupport) (b : ι → E → ℝ) (t : ℝ) :
     (reaction b t Y).CompactSupport := by
   have hc : HasCompactSupport (coupling b Y) :=
-    compact_coupling b Y hY.2.2
+    hasCompactSupport_coupling b Y hY.2.2
   have mulrule {f : E → ℝ} (hf : HasCompactSupport f) (c : ℝ) :
       HasCompactSupport (fun x => c * f x) :=
     hf.comp_left (g := fun z : ℝ => c * z) (by simp)
@@ -380,7 +381,7 @@ theorem energy_reaction_pair {b : ι → E → ℝ}
   have hbc : Continuous (coupling b Y) :=
     continuous_finsetSum _ fun j _ => (hb j).continuous.mul (hY.2.2 j).continuous
   have hbcc : HasCompactSupport (coupling b Y) :=
-    compact_coupling b Y hc.2.2
+    hasCompactSupport_coupling b Y hc.2.2
   have hu := integrable_sq m hY.1.continuous hc.1
   have hv := integrable_sq m hY.2.1.continuous hc.2.1
   have hcouple := integrable_sq m hbc hbcc
@@ -406,7 +407,7 @@ theorem squareIntegral_coupling_le {b : ι → E → ℝ}
   have hbc : Continuous (coupling b Y) :=
     continuous_finsetSum _ fun j _ => (hb j).continuous.mul (hY.2.2 j).continuous
   have hbcc : HasCompactSupport (coupling b Y) :=
-    compact_coupling b Y hc.2.2
+    hasCompactSupport_coupling b Y hc.2.2
   have hp (j : ι) := integrable_sq m (hY.2.2 j).continuous (hc.2.2 j)
   have hsum : Integrable (fun x => ∑ j, Y.p j x ^ 2) m := integrable_finsetSum _ fun j _ => hp j
   have hint := integral_mono (integrable_sq m hbc hbcc) (hsum.const_mul B) (fun x =>

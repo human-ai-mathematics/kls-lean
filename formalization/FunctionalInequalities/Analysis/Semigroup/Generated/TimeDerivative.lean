@@ -114,6 +114,42 @@ theorem hasDerivWithinAt_apply_Iic (f : (adjointComp T).domain) {t : ℝ} (ht : 
   rw [hsplit]
   exact (norm_add_le _ _).trans_lt (by linarith)
 
+/-- The backward orbit has right derivative `A P_(t-r) f` when `r < t`. -/
+theorem hasDerivWithinAt_apply_sub_Ici (f : (adjointComp T).domain) {r t : ℝ}
+    (htr : 0 < t - r) :
+    HasDerivWithinAt (fun a => apply T hT hd (t - a) f)
+      (adjointComp T ⟨apply T hT hd (t - r) f,
+        preserves_domain T hT hd f htr.le⟩) (Ici r) r := by
+  have hP := hasDerivWithinAt_apply_Iic T hT hd f htr
+  have hlin : HasDerivWithinAt (fun a : ℝ => t - a) (-1) (Ici r) r :=
+    ((hasDerivAt_id r).const_sub t).hasDerivWithinAt
+  have hmaps : MapsTo (fun a : ℝ => t - a) (Ici r) (Iic (t - r)) := fun a ha => by
+    simp only [mem_Iic]; linarith [mem_Ici.mp ha]
+  have hq := hP.scomp r hlin hmaps
+  simp only [neg_smul, one_smul, neg_neg] at hq
+  exact hq
+
+/-- The backward orbit is continuous on every interval ending at `t`. -/
+theorem continuousOn_apply_sub (f : H₀) {a t : ℝ} :
+    ContinuousOn (fun r => apply T hT hd (t - r) f) (Icc a t) := by
+  exact (continuousOn T hT hd f).comp
+    (continuous_const.sub continuous_id).continuousOn
+    (fun r hr => by simp only [mem_Ici]; linarith [hr.2])
+
+/-- Sending the backward time increment to zero recovers the positive-time orbit. -/
+theorem tendsto_apply_sub_zero (f : H₀) {t : ℝ} (ht : 0 < t) :
+    Tendsto (fun a : ℝ => apply T hT hd (t - a) f) (𝓝[>] 0)
+      (𝓝 (apply T hT hd t f)) := by
+  have hsub : Tendsto (fun a : ℝ => t - a) (𝓝[>] 0) (𝓝[Ici 0] t) := by
+    refine tendsto_nhdsWithin_iff.mpr ⟨?_, ?_⟩
+    · have h : Tendsto (fun a : ℝ => t - a) (𝓝 0) (𝓝 (t - 0)) :=
+        ((continuous_const.sub continuous_id).tendsto (0 : ℝ))
+      rw [sub_zero] at h
+      exact h.mono_left nhdsWithin_le_nhds
+    · filter_upwards [Ioo_mem_nhdsGT ht] with a ha
+      simp only [mem_Ici]; linarith [ha.2]
+  exact ((continuousOn T hT hd f) t (mem_Ici.mpr ht.le)).tendsto.comp hsub
+
 /-- **Two-sided derivative of the orbit** at positive times. -/
 theorem hasDerivAt_apply (f : (adjointComp T).domain) {t : ℝ} (ht : 0 < t) :
     HasDerivAt (fun s => apply T hT hd s f)

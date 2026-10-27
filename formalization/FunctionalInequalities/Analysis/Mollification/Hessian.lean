@@ -1,5 +1,13 @@
 import FunctionalInequalities.Analysis.Mollification.Basic
-import Mathlib
+import Mathlib.Analysis.Calculus.BumpFunction.Basic
+import Mathlib.Analysis.Calculus.ContDiff.Convolution
+import Mathlib.Analysis.Calculus.FDeriv.Measurable
+import Mathlib.Analysis.Calculus.Gradient.Basic
+import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+import Mathlib.Analysis.Normed.Module.Basic
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # Mollifying functions with Lipschitz gradient

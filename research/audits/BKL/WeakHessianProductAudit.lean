@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.Products
 import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 noncomputable section

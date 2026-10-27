@@ -314,10 +314,6 @@ private theorem prekopaLeindler_bddAbove {f g h : ℝ → ℝ} (hf : Measurable 
         mul_le_mul_left hchain _
     _ = ∫⁻ z, ENNReal.ofReal (h z) := hcancel _
 
-private theorem rpow_iSup {ι : Sort*} (u : ι → ENNReal) {t : ℝ} (ht : 0 < t) :
-    (⨆ i, u i) ^ t = ⨆ i, u i ^ t :=
-  (ENNReal.orderIsoRpow t ht).map_iSup u
-
 /-- **Prekopa-Leindler inequality** on the line: if `f x ^ t * g y ^ (1 - t)` is dominated by `h`
 at the corresponding convex combination of `x` and `y`, then the same holds for the integrals. -/
 theorem prekopaLeindler {f g h : ℝ → ℝ} (hf : Measurable f) (hg : Measurable g)
@@ -372,7 +368,9 @@ theorem prekopaLeindler {f g h : ℝ → ℝ} (hf : Measurable f) (hg : Measurab
   have hmono : ∀ u : ℝ → ℝ, Monotone fun n : ℕ ↦ ∫⁻ x, ENNReal.ofReal (min (u x) ((n : ℝ) + 1)) :=
     fun u a b hab ↦ lintegral_mono fun x ↦ ENNReal.ofReal_le_ofReal
       (min_le_min le_rfl (hcast a b hab))
-  rw [← hsup f hf, ← hsup g hg, rpow_iSup _ ht0, rpow_iSup _ ht1', ENNReal.iSup_mul]
+  rw [← hsup f hf, ← hsup g hg]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul]
   refine iSup_le fun n ↦ ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun m ↦ ?_

@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
 import FunctionalInequalities.Analysis.IteratedDerivative.VariableCoefficientSchauder
 import FunctionalInequalities.Analysis.IteratedDerivative.QuotientLimit
 import FunctionalInequalities.Analysis.BakryEmery.DifferenceQuotient
@@ -41,6 +42,8 @@ noncomputable section
 
 namespace FunctionalInequalities.Analysis
 
+open scoped FunctionalInequalities.Analysis.DerivativeNorms
+
 open Set Metric Filter Topology
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped NNReal ContDiff BigOperators
@@ -48,23 +51,6 @@ open scoped NNReal ContDiff BigOperators
 variable {n : ℕ}
 local notation "E" => EuclideanSpace ℝ (Fin n)
 
--- The standard operator-norm instances at the concrete third-derivative type; instance search
--- does not find them through the nested continuous-linear-map structure in this import closure
--- (same device as `Analysis/Harmonic/LocalCaps.lean`).
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
 
 /-- The Hessian of a scalar-step finite difference of a `C²` function is the finite difference
 of the Hessians (operator form of `hessianMatrix_differenceQuotient`). -/

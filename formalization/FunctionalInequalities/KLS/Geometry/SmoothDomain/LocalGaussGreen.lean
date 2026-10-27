@@ -79,7 +79,7 @@ theorem eq_zero_of_notMem_cylinder (C : U.BoundaryChart x₀) {F : V → V}
     F x = 0 ∧ Analysis.divergence F x = 0 := by
   have hx' : x ∉ tsupport F := fun h => hx (hsupp h)
   refine ⟨image_eq_zero_of_notMem_tsupport hx', ?_⟩
-  rw [Analysis.divergence, Analysis.fderiv_eq_zero_of_notMem_tsupport hx']
+  rw [Analysis.divergence, fderiv_of_notMem_tsupport ℝ hx']
   simp
 
 /-- A parameter outside the chart's parameter set maps out of the cylinder. -/

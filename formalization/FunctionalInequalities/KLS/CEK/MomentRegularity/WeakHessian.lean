@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessianEvolution
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Directional
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Flux
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Testing
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Weighted
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.Graph.Area
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.Products
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.Probability.Stein.HessianKernel
 import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
@@ -203,7 +206,7 @@ theorem exists_regular_moment_weak_inverse_mean_hessian :
   let ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)) :=
     ⟨(volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u),
       isProbabilityMeasure_tilted hexp⟩
-  have hgm : Measurable (gradient u) := (continuous_gradient hC1).measurable
+  have hgm : Measurable (gradient u) := (BakryEmery.continuous_gradient hC1).measurable
   have hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient u) =
       (μ : Measure (EuclideanSpace ℝ (Fin n))) := hm
   have hmapProb : ν.map hgm.aemeasurable = μ := by
@@ -273,20 +276,6 @@ open scoped ContDiff Topology
 namespace FunctionalInequalities.Analysis
 
 /-! Regular-class weak Hessian evolution and bounded Hessian testing at one actual witness. -/
-
-/-- Compact-local essential boundedness of the total Hessian entry, reusing its
-canonical measurability and Lipschitz-gradient pointwise bound. -/
-private theorem memLp_top_hessianMatrix_entry_of_isCompact {n : ℕ}
-    {u : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
-    (hGradLip : LipschitzWith G (gradient u)) (i j : Fin n)
-    (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
-    MemLp (fun x => hessianMatrix u x i j) (⊤ : ENNReal)
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
-  let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
-    isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
-  exact MemLp.of_bound
-    (measurable_hessianMatrix_entry u i j).aestronglyMeasurable (G : ℝ)
-    (Filter.Eventually.of_forall fun x => norm_hessianMatrix_entry_le_of_lipschitz_gradient hGradLip x i j)
 
 /-- Actual compact Hessian multipliers have the bounded H1 data; no global T2 is used. -/
 private theorem bounded_compact_hessian_test_data {n : ℕ}
@@ -819,12 +808,9 @@ theorem exists_regular_moment_directional_hessian_subsolution :
     have hVc : ConvexOn ℝ univ W := by
       have hn' : ConvexOn ℝ univ (fun y : EuclideanSpace ℝ (Fin n) => ‖y‖ ^ 2) :=
         convexOn_univ_norm.pow (fun _ _ => norm_nonneg _) 2
-      have hq := hn'.smul (show 0 ≤ κ / 2 by positivity)
-      have he : (fun y => W y - κ / 2 * ‖y‖ ^ 2) + (fun y => (κ / 2) • ‖y‖ ^ 2) = W := by
-        funext y
-        simp only [Pi.add_apply, smul_eq_mul, sub_add_cancel]
-      rw [← he]
-      exact hstrong.add hq
+      have hq := hn'.smul
+        (show 0 ≤ κ / 2 by positivity)
+      convert hstrong.add hq using 1 <;> ext y <;> simp [smul_eq_mul]
     intro v ψ hψ hψc hψn
     exact integral_directional_hessian_flux_le hC1 hl hG (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT
       hInv (fun i => (hfirst i).2.2.2.2) hVc (hd.mono fun x hx => hx.1) v ψ hψ hψc hψn

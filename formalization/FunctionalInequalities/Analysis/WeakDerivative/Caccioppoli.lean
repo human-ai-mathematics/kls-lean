@@ -1,4 +1,5 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
+import FunctionalInequalities.Analysis.WeakDerivative.PowerTests
 import FunctionalInequalities.Analysis.Matrix.Positivity
 
 /-!
@@ -11,7 +12,7 @@ in `tsupport χ`, the energy of the negative power `s^(-p-1)` (`s = δ + max w 0
 `∫ χ² s^(-p-1) |a|² ≤ (4β/(p²α)) ∫ s^(1-p) |∇χ|² + (2F/(pα)) ∫ χ² s^(-p)`, with all three integrals integrable
 (`local_weak_supersolution_caccioppoli`).
 
-The proof tests with the square cutoff test `χ² s^(-p)` of `WeakDerivative/Calculus.lean` and absorbs the cross term with
+The proof tests with the square cutoff test `χ² s^(-p)` of `WeakDerivative/PowerTests.lean` and absorbs the cross term with
 `rpow_cutoff_quadratic_young`. This is a supporting `H¹` energy estimate for Gilbarg–Trudinger (2001) (8.48)–(8.49) and
 Letwin arXiv:2607.24164v1 Lemma 2.2. It is not Moser iteration, John–Nirenberg or a Harnack inequality.
 

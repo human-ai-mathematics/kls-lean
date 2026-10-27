@@ -220,7 +220,7 @@ end Process
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-section S5D2BEldanQPsd
+section EldanParameterPositiveSemidefinite
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal RealInnerProductSpace
@@ -475,4 +475,4 @@ end Process
 
 end FunctionalInequalities.KLS.BKL.Localization
 
-end S5D2BEldanQPsd
+end EldanParameterPositiveSemidefinite

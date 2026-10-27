@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
 import FunctionalInequalities.Analysis.Harmonic.LocalReproduction
 import FunctionalInequalities.Analysis.Convolution.DerivativeCaps
 
@@ -24,35 +25,7 @@ open Set Metric MeasureTheory Filter
 open scoped ContDiff Topology Convolution
 namespace FunctionalInequalities.Analysis
 
--- These are exactly the standard CLM instances at the concrete Hessian type.
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedAddCommGroup
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedAddCommGroup
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedSpace ℝ
-    (ℝ →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
+open scoped FunctionalInequalities.Analysis.DerivativeNorms
 
 /-- The outer cutoff does not increase a value bound on `B₂`.
 Both the range `[0, 1]` of the cutoff and its support inside `B₂` are used. -/

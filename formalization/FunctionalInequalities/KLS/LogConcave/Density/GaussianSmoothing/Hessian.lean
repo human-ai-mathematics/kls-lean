@@ -27,6 +27,8 @@ open scoped RealInnerProductSpace Topology ContDiff
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
+open FunctionalInequalities.Probability.Gaussian
+
 universe u_2
 
 variable {E : Type u_2} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

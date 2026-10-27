@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
 import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
 import FunctionalInequalities.Analysis.BakryEmery.EllipticGradientForcing
 import FunctionalInequalities.Analysis.IteratedDerivative.HolderBootstrapStep
@@ -33,26 +34,12 @@ noncomputable section
 
 namespace FunctionalInequalities.Analysis
 
+open scoped FunctionalInequalities.Analysis.DerivativeNorms
+
 open Set Metric Filter Topology MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Stein
 open scoped NNReal ContDiff BigOperators ENNReal
 
--- The standard operator-norm instances at the concrete second- and third-derivative types (same
--- device as `HolderBootstrapStep` and `Analysis/Harmonic/LocalCaps.lean`).
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
-local instance {n : ℕ} : NormedAddCommGroup
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-local instance {n : ℕ} : NormedSpace ℝ
-    (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ) :=
-  ContinuousLinearMap.toNormedSpace
 
 variable {n : ℕ}
 local notation "E" => EuclideanSpace ℝ (Fin n)
@@ -255,6 +242,74 @@ theorem contDiffOn_three_balls_of_regular_fields (hn : 2 ≤ n) {u W : E → ℝ
     (by positivity) (fun x hx y hy => hHu x (hsub3 hx) y (hsub3 hy)) (L : ℝ) 0 0 hUQE
   exact hres
 
+/-- At a given regular moment potential, locally Hölder Hessian fields yield C³ regularity
+and uniform local Hölder third-derivative bounds. The potential is retained throughout. -/
+theorem contDiff_three_of_regular_fields (hn : 2 ≤ n) {u W : E → ℝ}
+    (hC2 : ContDiff ℝ 2 u) (hW : ContDiff ℝ 2 W)
+    {L G : NNReal} (hl : LipschitzWith L u) (hG : LipschitzWith G (gradient u))
+    (hEvery : ∀ x, (hessianMatrix u x).PosDef ∧
+      Real.log (hessianMatrix u x).det = -u x + W (gradient u x))
+    (hLocal : ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
+      ∀ i j : Fin n, HolderWith C η (fun x : ball (0 : E) s => hessianMatrix u x.val i j)) :
+    ContDiff ℝ 3 u ∧
+      ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
+        (∀ x ∈ ball (0 : E) s, ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x‖ ≤ C) ∧
+        ∀ x ∈ ball (0 : E) s, ∀ y ∈ ball (0 : E) s,
+          ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x - fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y‖ ≤
+            C * ‖x - y‖ ^ (η : ℝ) := by
+  have hkey := fun (s : ℝ) (hs : 0 < s) =>
+    contDiffOn_three_balls_of_regular_fields hn hC2 hW hl hG hEvery hLocal s hs
+  -- global `C³`
+  have h3 : ContDiff ℝ 3 u := by
+    rw [contDiff_iff_contDiffAt]
+    intro x₀
+    obtain ⟨_, _, _, _, _, h⟩ := hkey (‖x₀‖ + 1) (by positivity)
+    have hx₀ : x₀ ∈ ball (0 : E) (‖x₀‖ + 1) := mem_ball_zero_iff.mpr (by linarith)
+    exact (h x₀ hx₀).1.contDiffAt (isOpen_ball.mem_nhds (mem_ball_self (by norm_num)))
+  -- local Hölder third derivative
+  have hholder : ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
+      (∀ x ∈ ball (0 : E) s, ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x‖ ≤ C) ∧
+      ∀ x ∈ ball (0 : E) s, ∀ y ∈ ball (0 : E) s,
+        ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x - fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y‖ ≤
+          C * ‖x - y‖ ^ (η : ℝ) := by
+    intro s hs
+    obtain ⟨η, Kc, hη0, hη1, hKc, h⟩ := hkey s hs
+    have hηr : (0 : ℝ) < η := hη0
+    have hη1r : (η : ℝ) ≤ 1 := by exact_mod_cast hη1.le
+    refine ⟨η, Real.toNNReal (4 * Kc + 1), hη0, hη1, Real.toNNReal_pos.mpr (by positivity),
+      ?_, ?_⟩
+    · intro x hx
+      rw [Real.coe_toNNReal _ (by positivity)]
+      have := (h x hx).2.1 x (mem_ball_self (by norm_num))
+      linarith
+    · intro x hx y hy
+      rw [Real.coe_toNNReal _ (by positivity)]
+      have hpow : 0 ≤ ‖x - y‖ ^ (η : ℝ) := by positivity
+      by_cases hxy : ‖x - y‖ < 1 / 2
+      · have hy' : y ∈ ball x (1 / 2) := by
+          rw [mem_ball, dist_eq_norm, norm_sub_rev]; exact hxy
+        have := (h x hx).2.2 x (mem_ball_self (by norm_num)) y hy'
+        refine this.trans (mul_le_mul_of_nonneg_right ?_ hpow)
+        linarith
+      · have hxy : 1 / 2 ≤ ‖x - y‖ := not_lt.mp hxy
+        have hbx := (h x hx).2.1 x (mem_ball_self (by norm_num))
+        have hby := (h y hy).2.1 y (mem_ball_self (by norm_num))
+        have hsub := norm_sub_le (fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x)
+          (fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y)
+        -- `1 ≤ 2 ‖x - y‖^η` since `‖x - y‖ ≥ 1/2` and `η ≤ 1`
+        have h1 : (1 / 2 : ℝ) ^ (η : ℝ) ≤ ‖x - y‖ ^ (η : ℝ) :=
+          Real.rpow_le_rpow (by norm_num) hxy hηr.le
+        have h2 : (1 / 2 : ℝ) ^ (1 : ℝ) ≤ (1 / 2 : ℝ) ^ (η : ℝ) :=
+          Real.rpow_le_rpow_of_exponent_ge (by norm_num) (by norm_num) hη1r
+        rw [Real.rpow_one] at h2
+        have h3' : 1 ≤ 2 * ‖x - y‖ ^ (η : ℝ) := by linarith
+        calc ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x - fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y‖
+            ≤ 2 * Kc := by linarith
+          _ = (2 * Kc) * 1 := (mul_one _).symm
+          _ ≤ (2 * Kc) * (2 * ‖x - y‖ ^ (η : ℝ)) := by gcongr
+          _ ≤ (4 * Kc + 1) * ‖x - y‖ ^ (η : ℝ) := by nlinarith
+  exact ⟨h3, hholder⟩
+
 section SameWitness
 variable (hn : 2 ≤ n) {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
   {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty)
@@ -318,60 +373,9 @@ theorem exists_regular_moment_potential_contDiff_three :
   obtain ⟨u, L, LF, T, hconv, hl, hnorm, hmap, hC1, hG, hF, hd, hT, hC2, hHcont, hEvery, hLocal,
       he, hΨ⟩ :=
     exists_regular_moment_potential_holder_hessian_inverse hn0 hκ hK hKc hKint hW hstrong μ hμ hiso
-  have hkey := fun (s : ℝ) (hs : 0 < s) =>
-    contDiffOn_three_balls_of_regular_fields hn hC2 (hW.of_le (by
-      change (↑(2 : ℕ∞) : WithTop ℕ∞) ≤ ↑(⊤ : ℕ∞)
-      exact WithTop.coe_le_coe.mpr le_top)) hl hG
-      (fun x => ⟨(hEvery x).1, (hEvery x).2.1⟩) hLocal s hs
-  -- global `C³`
-  have h3 : ContDiff ℝ 3 u := by
-    rw [contDiff_iff_contDiffAt]
-    intro x₀
-    obtain ⟨_, _, _, _, _, h⟩ := hkey (‖x₀‖ + 1) (by positivity)
-    have hx₀ : x₀ ∈ ball (0 : E) (‖x₀‖ + 1) := mem_ball_zero_iff.mpr (by linarith)
-    exact (h x₀ hx₀).1.contDiffAt (isOpen_ball.mem_nhds (mem_ball_self (by norm_num)))
-  -- local Hölder third derivative
-  have hholder : ∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
-      (∀ x ∈ ball (0 : E) s, ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x‖ ≤ C) ∧
-      ∀ x ∈ ball (0 : E) s, ∀ y ∈ ball (0 : E) s,
-        ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x - fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y‖ ≤
-          C * ‖x - y‖ ^ (η : ℝ) := by
-    intro s hs
-    obtain ⟨η, Kc, hη0, hη1, hKc, h⟩ := hkey s hs
-    have hηr : (0 : ℝ) < η := hη0
-    have hη1r : (η : ℝ) ≤ 1 := by exact_mod_cast hη1.le
-    refine ⟨η, Real.toNNReal (4 * Kc + 1), hη0, hη1, Real.toNNReal_pos.mpr (by positivity),
-      ?_, ?_⟩
-    · intro x hx
-      rw [Real.coe_toNNReal _ (by positivity)]
-      have := (h x hx).2.1 x (mem_ball_self (by norm_num))
-      linarith
-    · intro x hx y hy
-      rw [Real.coe_toNNReal _ (by positivity)]
-      have hpow : 0 ≤ ‖x - y‖ ^ (η : ℝ) := by positivity
-      by_cases hxy : ‖x - y‖ < 1 / 2
-      · have hy' : y ∈ ball x (1 / 2) := by
-          rw [mem_ball, dist_eq_norm, norm_sub_rev]; exact hxy
-        have := (h x hx).2.2 x (mem_ball_self (by norm_num)) y hy'
-        refine this.trans (mul_le_mul_of_nonneg_right ?_ hpow)
-        linarith
-      · have hxy : 1 / 2 ≤ ‖x - y‖ := not_lt.mp hxy
-        have hbx := (h x hx).2.1 x (mem_ball_self (by norm_num))
-        have hby := (h y hy).2.1 y (mem_ball_self (by norm_num))
-        have hsub := norm_sub_le (fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x)
-          (fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y)
-        -- `1 ≤ 2 ‖x - y‖^η` since `‖x - y‖ ≥ 1/2` and `η ≤ 1`
-        have h1 : (1 / 2 : ℝ) ^ (η : ℝ) ≤ ‖x - y‖ ^ (η : ℝ) :=
-          Real.rpow_le_rpow (by norm_num) hxy hηr.le
-        have h2 : (1 / 2 : ℝ) ^ (1 : ℝ) ≤ (1 / 2 : ℝ) ^ (η : ℝ) :=
-          Real.rpow_le_rpow_of_exponent_ge (by norm_num) (by norm_num) hη1r
-        rw [Real.rpow_one] at h2
-        have h3' : 1 ≤ 2 * ‖x - y‖ ^ (η : ℝ) := by linarith
-        calc ‖fderiv ℝ (fderiv ℝ (fderiv ℝ u)) x - fderiv ℝ (fderiv ℝ (fderiv ℝ u)) y‖
-            ≤ 2 * Kc := by linarith
-          _ = (2 * Kc) * 1 := (mul_one _).symm
-          _ ≤ (2 * Kc) * (2 * ‖x - y‖ ^ (η : ℝ)) := by gcongr
-          _ ≤ (4 * Kc + 1) * ‖x - y‖ ^ (η : ℝ) := by nlinarith
+  obtain ⟨h3, hholder⟩ := contDiff_three_of_regular_fields hn hC2
+    (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hl hG
+    (fun x => ⟨(hEvery x).1, (hEvery x).2.1⟩) hLocal
   -- the `C²` gradient inverse
   have hΨ2 := Probability.MomentMeasure.exists_regular_inverse_of_map_gradient hn0 (k := 2)
     (by norm_num) hl hconv hnorm (by convert h3 using 1; norm_num) (fun x => (hEvery x).1)

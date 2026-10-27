@@ -1,3 +1,7 @@
+import FunctionalInequalities.Analysis.Sard.Basic
+import FunctionalInequalities.Analysis.PiCoordinates
+import FunctionalInequalities.Analysis.Sard.CoordinateChange
+import FunctionalInequalities.Analysis.LocalExtension
 import FunctionalInequalities.Analysis.Sard.QuadraticCover
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
 import Mathlib.Analysis.Calculus.ContDiff.Operations
@@ -20,10 +24,9 @@ on `Fin n → ℝ`.
   built, and `Analysis/Graph/Implicit.lean` does not apply here since it needs `C^∞` data with an
   inner-product graph splitting.
 
-These are ingredients only. Sard's theorem itself is **not** proved here: the dimension descent
-that consumes them, and the open-domain form of the flat layer it needs, are still missing. The
-sharp `C^n` `Analysis.sard` is proved by a different route — Morse's decomposition, not this
-descent — in `Analysis/Sard/Sharp.lean`.
+The dimension descent below combines these ingredients to prove `sard_smooth_pi` and
+`sard_smooth`, without assuming the critical set measurable. The sharp `C^n` statement
+`Analysis.sard` is proved separately by Morse's decomposition in `Analysis/Sard/Sharp.lean`.
 -/
 
 noncomputable section
@@ -33,124 +36,9 @@ open scoped ContDiff Topology
 
 namespace FunctionalInequalities.Analysis
 
-section Extension
-
-/-- A function smooth on an open set agrees near any of its points with a globally smooth
-function. Multiplication by a bump supported in the open set; smoothness is local. -/
-theorem exists_contDiff_eventuallyEq {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
-    {f : E → F} {O : Set E} {z : E} (hO : IsOpen O) (hf : ContDiffOn ℝ ∞ f O) (hz : z ∈ O) :
-    ∃ g : E → F, ContDiff ℝ ∞ g ∧ g =ᶠ[𝓝 z] f := by
-  classical
-  obtain ⟨r, hr, hrO⟩ := Metric.isOpen_iff.mp hO z hz
-  set χ : ContDiffBump z := ⟨r / 3, r / 2, by positivity, by linarith⟩ with hχ
-  have htsupp : tsupport (χ : E → ℝ) ⊆ O := by
-    rw [χ.tsupport_eq]
-    exact fun y hy => hrO (by
-      simp only [mem_closedBall] at hy
-      simpa [mem_ball] using hy.trans_lt (by simp [hχ]; linarith))
-  refine ⟨fun y => if y ∈ O then (χ y) • f y else 0, ?_, ?_⟩
-  · rw [contDiff_iff_contDiffAt]
-    intro y
-    by_cases hy : y ∈ O
-    · refine ContDiffAt.congr_of_eventuallyEq
-        (χ.contDiff.contDiffAt.smul (hf.contDiffAt (hO.mem_nhds hy))) ?_
-      filter_upwards [hO.mem_nhds hy] with y' hy'
-      simp [hy']
-    · have hyt : y ∈ (tsupport (χ : E → ℝ))ᶜ := fun hc => hy (htsupp hc)
-      refine ContDiffAt.congr_of_eventuallyEq (contDiffAt_const (c := (0 : F))) ?_
-      filter_upwards [(isClosed_tsupport (χ : E → ℝ)).isOpen_compl.mem_nhds hyt] with y' hy'
-      have hzero : χ y' = 0 := image_eq_zero_of_notMem_tsupport hy'
-      by_cases hy'O : y' ∈ O <;> simp [hy'O, hzero]
-  · filter_upwards [Metric.ball_mem_nhds z (by positivity : (0:ℝ) < r / 3)] with y hy
-    have hyO : y ∈ O := hrO (by simpa [mem_ball] using (mem_ball.mp hy).trans (by linarith))
-    have hone : χ y = 1 := χ.one_of_mem_closedBall (by
-      simpa [mem_closedBall, hχ] using (mem_ball.mp hy).le)
-    simp [hyO, hone]
-
-end Extension
-
 section LocalGraph
 
 variable {n : ℕ}
-
-/-- A nonzero functional on a finite product of lines is nonzero on a basis vector. -/
-private lemma exists_apply_single_ne_zero {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {α : (ι → ℝ) →L[ℝ] ℝ} (hα : α ≠ 0) : ∃ i : ι, α (Pi.single i (1 : ℝ)) ≠ 0 := by
-  by_contra h
-  push Not at h
-  refine hα (ContinuousLinearMap.ext fun v => ?_)
-  have hv : v = ∑ i : ι, v i • Pi.single i (1 : ℝ) := by
-    funext k
-    simp [Finset.sum_apply, Pi.single_apply]
-  rw [hv]
-  simp [map_sum, h]
-
-/-- Replacing the `i`-th coordinate by `w` keeps smoothness. -/
-private lemma contDiff_straighten (i : Fin (n + 1)) {w : (Fin (n + 1) → ℝ) → ℝ}
-    (hw : ContDiff ℝ ∞ w) : ContDiff ℝ ∞ (fun x => Function.update x i (w x)) := by
-  rw [contDiff_pi]
-  intro k
-  by_cases hk : k = i
-  · subst hk
-    simpa using hw
-  · simpa [Function.update_apply, hk] using contDiff_apply ℝ ℝ k
-
-/-- The differential of that chart. -/
-private lemma hasFDerivAt_straighten (i : Fin (n + 1)) {w : (Fin (n + 1) → ℝ) → ℝ}
-    (hw : Differentiable ℝ w) (x : Fin (n + 1) → ℝ) :
-    HasFDerivAt (fun x => Function.update x i (w x))
-      (ContinuousLinearMap.pi fun k => if k = i then fderiv ℝ w x
-        else ContinuousLinearMap.proj k) x := by
-  refine hasFDerivAt_pi''  fun k => ?_
-  rw [ContinuousLinearMap.proj_pi]
-  by_cases hk : k = i
-  · subst hk
-    simpa using (hw x).hasFDerivAt
-  · simpa [Function.update_apply, hk] using hasFDerivAt_apply (𝕜 := ℝ) k x
-
-/-- That differential is injective as soon as `w` really depends on the `i`-th coordinate. -/
-private lemma injective_straightenDeriv (i : Fin (n + 1)) {α : (Fin (n + 1) → ℝ) →L[ℝ] ℝ}
-    (hα : α (Pi.single i (1 : ℝ)) ≠ 0) :
-    Function.Injective (ContinuousLinearMap.pi fun k : Fin (n + 1) =>
-      if k = i then α else ContinuousLinearMap.proj k) := by
-  intro v₁ v₂ hv
-  rw [← sub_eq_zero]
-  set v : Fin (n + 1) → ℝ := v₁ - v₂ with hvdef
-  have h0 : (ContinuousLinearMap.pi fun k : Fin (n + 1) =>
-      if k = i then α else ContinuousLinearMap.proj k) v = 0 := by
-    rw [hvdef, map_sub, hv, sub_self]
-  have hoff : ∀ k, k ≠ i → v k = 0 := by
-    intro k hk
-    have := congrFun h0 k
-    simpa [ContinuousLinearMap.pi_apply, hk] using this
-  have hsingle : v = v i • Pi.single i (1 : ℝ) := by
-    funext k
-    by_cases hk : k = i
-    · subst hk; simp
-    · simp [hoff k hk, hk]
-  have hαv : α v = 0 := by
-    have := congrFun h0 i
-    simpa [ContinuousLinearMap.pi_apply] using this
-  rw [hsingle, map_smul, smul_eq_mul] at hαv
-  have hvi : v i = 0 := by
-    rcases mul_eq_zero.mp hαv with h | h
-    · exact h
-    · exact absurd h hα
-  rw [hsingle, hvi, zero_smul]
-
-/-- The straightening differential is a linear equivalence wherever `w` really depends on the
-`i`-th coordinate. -/
-private lemma exists_straightenEquiv (i : Fin (n + 1)) {α : (Fin (n + 1) → ℝ) →L[ℝ] ℝ}
-    (hα : α (Pi.single i (1 : ℝ)) ≠ 0) :
-    ∃ Le : (Fin (n + 1) → ℝ) ≃L[ℝ] (Fin (n + 1) → ℝ),
-      (Le : (Fin (n + 1) → ℝ) →L[ℝ] (Fin (n + 1) → ℝ)) =
-        ContinuousLinearMap.pi fun k : Fin (n + 1) =>
-          if k = i then α else ContinuousLinearMap.proj k := by
-  refine ⟨(LinearEquiv.ofInjectiveEndo _ (injective_straightenDeriv i hα)).toContinuousLinearEquiv,
-    ?_⟩
-  ext v k
-  rfl
 
 /-- Local `C^∞` graph of a regular zero set. Near `x₀` every zero of `w` is `γ (p x)`, where the
 parameter map `p` is a fixed continuous projection onto the remaining coordinates and `γ` is
@@ -163,30 +51,30 @@ theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 
       Continuous p ∧ IsOpen O ∧ p x₀ ∈ O ∧ ContDiffOn ℝ ∞ γ O ∧ γ (p x₀) = x₀ ∧
         ∀ᶠ x in 𝓝 x₀, w x = 0 → p x ∈ O ∧ γ (p x) = x := by
   classical
-  obtain ⟨i, hi⟩ := exists_apply_single_ne_zero hd
+  obtain ⟨i, hi⟩ := PiCoordinates.exists_apply_single_ne_zero hd
   have hne : (∞ : WithTop ℕ∞) ≠ 0 := by simp
   have hdiff : Differentiable ℝ w := hw.differentiable (by simp)
   have hWopen : IsOpen {x : Fin (n + 1) → ℝ | fderiv ℝ w x (Pi.single i (1 : ℝ)) ≠ 0} :=
     isOpen_ne.preimage ((hw.continuous_fderiv (by simp)).clm_apply continuous_const)
-  obtain ⟨Le, hLecoe⟩ := exists_straightenEquiv i hi
+  obtain ⟨Le, hLecoe⟩ := Sard.CoordinateChange.exists_updateEquiv i hi
   have hΦd : HasFDerivAt (fun x => Function.update x i (w x))
       (Le : (Fin (n + 1) → ℝ) →L[ℝ] (Fin (n + 1) → ℝ)) x₀ := by
     rw [hLecoe]
-    exact hasFDerivAt_straighten i hdiff x₀
+    exact Sard.CoordinateChange.hasFDerivAt_update i hdiff x₀
   have hΦc : ContDiffAt ℝ ∞ (fun x => Function.update x i (w x)) x₀ :=
-    (contDiff_straighten i hw).contDiffAt
+    (Sard.CoordinateChange.contDiff_update i hw).contDiffAt
   set H := hΦc.toOpenPartialHomeomorph (fun x => Function.update x i (w x)) hΦd hne with hH
   have hHcoe : ⇑H = fun x => Function.update x i (w x) := rfl
   have hx₀src : x₀ ∈ H.source := hΦc.mem_toOpenPartialHomeomorph_source hΦd hne
   have hsymm : ∀ y ∈ H.target, fderiv ℝ w (H.symm y) (Pi.single i (1 : ℝ)) ≠ 0 →
       ContDiffAt ℝ ∞ H.symm y := by
     intro y hy hWy
-    obtain ⟨Le', hLe'⟩ := exists_straightenEquiv i hWy
+    obtain ⟨Le', hLe'⟩ := Sard.CoordinateChange.exists_updateEquiv i hWy
     refine H.contDiffAt_symm (f₀' := Le') hy ?_ ?_
     · rw [hHcoe, hLe']
-      exact hasFDerivAt_straighten i hdiff (H.symm y)
+      exact Sard.CoordinateChange.hasFDerivAt_update i hdiff (H.symm y)
     · rw [hHcoe]
-      exact (contDiff_straighten i hw).contDiffAt
+      exact (Sard.CoordinateChange.contDiff_update i hw).contDiffAt
   have hembc : ContDiff ℝ ∞ (fun y : Fin n → ℝ => Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y) := by
     rw [contDiff_pi]
     intro k
@@ -197,11 +85,8 @@ theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 
   have hkey : ∀ x : Fin (n + 1) → ℝ, w x = 0 →
       Function.update x i (w x) = Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) (Fin.removeNth i x) := by
     intro x hx
-    funext k
-    rcases eq_or_ne k i with rfl | hk
-    · simp [hx]
-    · obtain ⟨j, rfl⟩ := Fin.exists_succAbove_eq hk
-      simp [Fin.succAbove_ne i j, Fin.removeNth]
+    simp only [Fin.insertNth_removeNth, hx]
+
   set T : Set (Fin (n + 1) → ℝ) :=
     H.target ∩ H.symm ⁻¹' {x : Fin (n + 1) → ℝ | fderiv ℝ w x (Pi.single i (1 : ℝ)) ≠ 0} with hT
   have hTopen : IsOpen T :=
@@ -369,7 +254,7 @@ private lemma exists_nhds_layer_image_null {m j : ℕ} {u : (Fin (m + 1) → ℝ
   · exact congrArg u hγ'px
 
 /-- **Sard's theorem for `C^∞` real-valued functions on `Fin n → ℝ`.** The critical set is not
-assumed measurable. This is the smooth category: the sharp `C^n` statement is not proved. -/
+assumed measurable. The sharp `C^n` theorem is proved separately in `Analysis/Sard/Sharp.lean`. -/
 theorem sard_smooth_pi : ∀ (n : ℕ) (u : (Fin n → ℝ) → ℝ), ContDiff ℝ ∞ u →
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 := by
   intro n
@@ -420,38 +305,18 @@ variable {V : Type*}
 
 /-- **Sard's theorem for `C^∞` real-valued functions** on an arbitrary finite-dimensional real
 normed space. The critical set is not assumed measurable. This is the smooth category: the sharp
-`C^(finrank)` statement `Analysis.sard` is a different, still unproved, obligation. -/
+`C^(finrank)` statement `Analysis.sard` is proved separately in `Analysis/Sard/Sharp.lean`. -/
 theorem sard_smooth {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 := by
   have hdim : Module.finrank ℝ (Fin (Module.finrank ℝ V) → ℝ) = Module.finrank ℝ V := by
     simp
   set e : (Fin (Module.finrank ℝ V) → ℝ) ≃L[ℝ] V := ContinuousLinearEquiv.ofFinrankEq hdim with he
-  have hdu : Differentiable ℝ u := hu.differentiable (by simp)
-  have hchain : ∀ y, fderiv ℝ (u ∘ e) y =
-      (fderiv ℝ u (e y)).comp (e : (Fin (Module.finrank ℝ V) → ℝ) →L[ℝ] V) :=
-    fun y => ((hdu (e y)).hasFDerivAt.comp y e.hasFDerivAt).fderiv
-  have himg : u '' {x | fderiv ℝ u x = 0} = (u ∘ e) '' {y | fderiv ℝ (u ∘ e) y = 0} := by
-    ext z
-    constructor
-    · rintro ⟨x, hx, rfl⟩
-      refine ⟨e.symm x, ?_, by simp⟩
-      show fderiv ℝ (u ∘ e) (e.symm x) = 0
-      rw [hchain, ContinuousLinearEquiv.apply_symm_apply]
-      rw [show fderiv ℝ u x = 0 from hx]
-      exact ContinuousLinearMap.zero_comp _
-    · rintro ⟨y, hy, rfl⟩
-      refine ⟨e y, ?_, rfl⟩
-      show fderiv ℝ u (e y) = 0
-      refine ContinuousLinearMap.ext fun v => ?_
-      have hzero : fderiv ℝ (u ∘ e) y = 0 := hy
-      rw [hchain] at hzero
-      have := congrArg (fun L : (Fin (Module.finrank ℝ V) → ℝ) →L[ℝ] ℝ => L (e.symm v)) hzero
-      simpa using this
-  rw [himg]
+  rw [image_critical_comp_continuousLinearEquiv e u]
   exact sard_smooth_pi _ _ (hu.comp e.contDiff)
 
 /-- Almost every value of a `C^∞` real-valued function on a finite-dimensional real normed space
-is a regular value. `C^∞` variant of the still unproved `Analysis.ae_forall_fderiv_ne_zero`. -/
+is a regular value. The sharp finite-regularity theorem `Analysis.ae_forall_fderiv_ne_zero`
+is proved separately in `Analysis/Sard/Sharp.lean`. -/
 theorem ae_forall_fderiv_ne_zero_of_contDiff_top {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
     ∀ᵐ t ∂(volume : Measure ℝ), ∀ x, u x = t → fderiv ℝ u x ≠ 0 := by
   rw [ae_iff]

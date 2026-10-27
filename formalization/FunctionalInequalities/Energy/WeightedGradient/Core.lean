@@ -33,6 +33,8 @@ open scoped ContDiff
 
 namespace FunctionalInequalities.Energy.WeightedGradient
 
+open FunctionalInequalities.Analysis.BakryEmery (continuous_gradient_of_contDiff)
+
 open Energy.Euclidean
 
 universe u

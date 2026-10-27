@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient
+import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
 import FunctionalInequalities.Analysis.Convex.Proximal
 import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 import Mathlib.Analysis.Calculus.Taylor
@@ -249,7 +251,7 @@ end InnerProduct
 
 end FunctionalInequalities.Analysis
 
-section LT12D7FatouSecondDifference
+section FatouSecondDifference
 
 open MeasureTheory Set Filter
 open scoped Topology
@@ -582,9 +584,9 @@ end StructuredSpace
 
 end FunctionalInequalities.Analysis
 
-end LT12D7FatouSecondDifference
+end FatouSecondDifference
 
-section LT12D6AlexandrovTheorem
+section AlexandrovTheorem
 
 open MeasureTheory Set Filter
 open scoped RealInnerProductSpace Topology
@@ -593,18 +595,24 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Alexandrov's theorem** (A. D. Alexandrov 1939; Evans–Gariepy, *Measure theory and fine properties of
-functions*, Thm 6.9; weak Letwin route): a convex function on a finite-dimensional real inner
-product space has, at almost every point, a unique subgradient `p` and a second-order expansion
-`f y = f x + ⟪p, y − x⟫ + ½ ⟪B (y − x), y − x⟫ + o(‖y − x‖²)` with a symmetric `B`. -/
-theorem ae_exists_secondOrder_expansion {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+set_option maxHeartbeats 800000 in
+/-- **Alexandrov expansion with retained subgradient expansion**.
+
+This is the shared producer for the value expansion and the first-order expansion of all
+subgradients, with the same symmetric operator `B`. -/
+theorem ae_exists_subgradient_secondOrder_expansion
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {f : E → ℝ}
     (hconv : ConvexOn ℝ univ f) :
     ∀ᵐ x ∂(volume : Measure E), ∃ p : E, ∃ B : E →L[ℝ] E,
       (∀ v w, ⟪B v, w⟫ = ⟪v, B w⟫) ∧
       (∀ q : E, (∀ y, f x + ⟪q, y - x⟫ ≤ f y) → q = p) ∧
+      (∀ ε > 0, ∀ᶠ y in 𝓝 x, ∀ q : E,
+        (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
+          ‖q - p - B (y - x)‖ ≤ ε * ‖y - x‖) ∧
       ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-        |f y - f x - ⟪p, y - x⟫ - (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+        |f y - f x - ⟪p, y - x⟫ -
+            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
   classical
   let P : E → E := proximalPoint f
   have hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y :=
@@ -657,8 +665,11 @@ theorem ae_exists_secondOrder_expansion {E : Type*} [NormedAddCommGroup E] [Inne
     exact hDiff.hasFDerivAt
   have hInvSymm : ∀ v w, ⟪T.symm v, w⟫ = ⟪v, T.symm w⟫ := by
     intro v w
-    have h := (inner_hasFDerivAt_resolvent_symm hP hT (T.symm v) (T.symm w)).1
-    change ⟪T (T.symm v), T.symm w⟫ = ⟪T.symm v, T (T.symm w)⟫ at h
+    have h :=
+      (inner_hasFDerivAt_resolvent_symm hP hT
+        (T.symm v) (T.symm w)).1
+    change ⟪T (T.symm v), T.symm w⟫ =
+      ⟪T.symm v, T (T.symm w)⟫ at h
     simp only [ContinuousLinearEquiv.apply_symm_apply] at h
     exact h.symm
   let B : E →L[ℝ] E :=
@@ -667,16 +678,137 @@ theorem ae_exists_secondOrder_expansion {E : Type*} [NormedAddCommGroup E] [Inne
     intro v w
     change ⟪T.symm v - v, w⟫ = ⟪v, T.symm w - w⟫
     rw [inner_sub_left, inner_sub_right, hInvSymm v w]
-  have hExpansion := subgradient_expansion_of_hasFDerivAt_resolvent hP hT
+  have hExpansion :=
+    subgradient_expansion_of_hasFDerivAt_resolvent hP hT
   rw [hPz] at hExpansion
-  refine ⟨z - x, B, hBsymm, hExpansion.1, ?_⟩
-  apply eventually_abs_sub_quadratic_le_of_subgradient_expansion hconv
-  intro ε hε
-  filter_upwards [hExpansion.2 ε hε] with y hy
-  intro q hq
-  change ‖q - (z - x) - (T.symm (y - x) - (y - x))‖ ≤ ε * ‖y - x‖
-  exact hy q hq
+  have hTaylor :
+      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+        |f y - f x - ⟪z - x, y - x⟫ -
+            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+    apply eventually_abs_sub_quadratic_le_of_subgradient_expansion hconv
+    intro ε hε
+    filter_upwards [hExpansion.2 ε hε] with y hy
+    intro q hq
+    change
+      ‖q - (z - x) - (T.symm (y - x) - (y - x))‖ ≤
+        ε * ‖y - x‖
+    exact hy q hq
+  exact ⟨z - x, B, hBsymm, hExpansion.1, hExpansion.2, hTaylor⟩
+
+/-- **Alexandrov's theorem** (A. D. Alexandrov 1939; Evans–Gariepy, *Measure theory and fine properties of
+functions*, Thm 6.9; weak Letwin route): a convex function on a finite-dimensional real inner
+product space has, at almost every point, a unique subgradient `p` and a second-order expansion
+`f y = f x + ⟪p, y − x⟫ + ½ ⟪B (y − x), y − x⟫ + o(‖y − x‖²)` with a symmetric `B`. -/
+theorem ae_exists_secondOrder_expansion
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {f : E → ℝ}
+    (hconv : ConvexOn ℝ univ f) :
+    ∀ᵐ x ∂(volume : Measure E), ∃ p : E, ∃ B : E →L[ℝ] E,
+      (∀ v w, ⟪B v, w⟫ = ⟪v, B w⟫) ∧
+      (∀ q : E, (∀ y, f x + ⟪q, y - x⟫ ≤ f y) → q = p) ∧
+      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+        |f y - f x - ⟪p, y - x⟫ -
+            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+  filter_upwards [ae_exists_subgradient_secondOrder_expansion hconv] with x hx
+  rcases hx with ⟨p, B, hBsymm, huniq, _hfirst, hTaylor⟩
+  exact ⟨p, B, hBsymm, huniq, hTaylor⟩
+
+/-- **Almost-everywhere differentiability of the gradient with the Alexandrov expansion**.
+
+For a globally finite convex function differentiable only on an open domain, the derivative
+of `gradient u` and the quadratic Taylor expansion use the SAME symmetric operator a.e. there.
+No global differentiability, smooth extension, C11 or W2p is an input. -/
+theorem ae_exists_gradient_secondOrder_expansion_on_open
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {u : E → ℝ} (hconv : ConvexOn ℝ Set.univ u) {Omega : Set E}
+    (hOmega : IsOpen Omega) (hdiff : DifferentiableOn ℝ u Omega) :
+    ∀ᵐ x ∂(volume : Measure E).restrict Omega, ∃ B : E →L[ℝ] E,
+      (∀ v w, ⟪B v, w⟫ = ⟪v, B w⟫) ∧
+      HasFDerivAt (gradient u) B x ∧
+      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+        |u y - u x - ⟪gradient u x, y - x⟫ -
+            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+  have hgradsub (y : E) (hy : y ∈ Omega) :
+      ∀ w, u y + ⟪gradient u y, w - y⟫ ≤ u w := by
+    intro w
+    have hdy : DifferentiableAt ℝ u y :=
+      (hdiff y hy).differentiableAt (hOmega.mem_nhds hy)
+    have h :=
+      gradient_le_increment hconv y (w - y) hdy
+    have harg : y + (w - y) = w := by
+      abel
+    rw [harg] at h
+    linarith
+
+  have hsub :=
+    ae_exists_subgradient_secondOrder_expansion (E := E) hconv
+  have hsub' :=
+    ae_restrict_of_ae (s := Omega) hsub
+  have hmem :
+      ∀ᵐ x ∂(volume : Measure E).restrict Omega, x ∈ Omega :=
+    ae_restrict_mem hOmega.measurableSet
+
+  filter_upwards [hsub', hmem] with x hx hxOmega
+  rcases hx with ⟨p, B, hBsymm, huniq, hfirst, hTaylor⟩
+
+  have hpx : p = gradient u x :=
+    (huniq (gradient u x) (hgradsub x hxOmega)).symm
+
+  have hfirstGrad (ε : ℝ) (hε : 0 < ε) :
+      ∀ᶠ y in 𝓝 x,
+        ‖gradient u y - gradient u x - B (y - x)‖ ≤
+          ε * ‖y - x‖ := by
+    filter_upwards [hfirst ε hε, hOmega.mem_nhds hxOmega] with y hy hyOmega
+    have hy' := hy (gradient u y) (hgradsub y hyOmega)
+    simpa only [hpx] using hy'
+
+  have hlittle :
+      (fun h : E =>
+        gradient u (x + h) - gradient u x - B h) =o[𝓝 (0 : E)]
+          (fun h : E => h) := by
+    rw [Asymptotics.isLittleO_iff]
+    intro ε hε
+    have ht :
+        Tendsto (fun h : E => x + h) (𝓝 (0 : E)) (𝓝 x) := by
+      simpa only [id_eq, add_zero] using
+        (tendsto_const_nhds.add
+          (tendsto_id :
+            Tendsto id (𝓝 (0 : E)) (𝓝 (0 : E))))
+    have hev := ht.eventually (hfirstGrad ε hε)
+    filter_upwards [hev] with h hh
+    simpa only [add_sub_cancel_left] using hh
+
+  have hgrad :
+      HasFDerivAt (gradient u) B x := by
+    rw [hasFDerivAt_iff_isLittleO_nhds_zero]
+    simpa only using hlittle
+
+  have hTaylor' :
+      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+        |u y - u x - ⟪gradient u x, y - x⟫ -
+            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+    simpa only [hpx] using hTaylor
+
+  exact ⟨B, hBsymm, hgrad, hTaylor'⟩
+
+
+/-- The global differentiable theorem is the actual univ specialization of the
+local gradient/second-order producer, retaining the same symmetric operator. -/
+theorem ae_exists_gradient_secondOrder_expansion
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {u : E → ℝ}
+    (hconv : ConvexOn ℝ univ u) (hdiff : Differentiable ℝ u) :
+    ∀ᵐ x ∂(volume : Measure E), ∃ B : E →L[ℝ] E,
+      (∀ v w, ⟪B v, w⟫ = ⟪v, B w⟫) ∧
+      HasFDerivAt (gradient u) B x ∧
+      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+        |u y - u x - ⟪gradient u x, y - x⟫ -
+            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+  simpa only [Measure.restrict_univ] using
+    ae_exists_gradient_secondOrder_expansion_on_open hconv isOpen_univ hdiff.differentiableOn
+
 
 end FunctionalInequalities.Analysis
 
-end LT12D6AlexandrovTheorem
+end AlexandrovTheorem

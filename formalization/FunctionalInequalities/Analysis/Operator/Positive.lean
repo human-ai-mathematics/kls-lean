@@ -1,3 +1,4 @@
+import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.Banach
 
@@ -85,5 +86,68 @@ theorem eq_ringInverse_of_comp_eq_id (A B : E →L[ℝ] E) (hu : IsUnit A)
     _ = Ring.inverse A := by rw [hAB, mul_one]
 
 end General
+
+end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+open Filter Topology
+open scoped RealInnerProductSpace
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+/-- A positive square root is at least as close to `1` as its square: `‖S - 1‖ ≤ ‖S² - 1‖`. -/
+theorem norm_sub_one_le_of_isPositive_mul_self
+    {S Q : E →L[ℝ] E} (hS : S.IsPositive)
+    (hQ : S * S = Q) : ‖S - 1‖ ≤ ‖Q - 1‖ := by
+  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
+  set y := (S - 1) x with hy
+  have hkey : ‖y‖ ≤ ‖(S + 1) y‖ := by
+    have h1 : ‖y‖ * ‖y‖ ≤ ‖(S + 1) y‖ * ‖y‖ := by
+      calc
+        ‖y‖ * ‖y‖ = ⟪y, y⟫ := (real_inner_self_eq_norm_mul_norm y).symm
+        _ ≤ ⟪S y, y⟫ + ⟪y, y⟫ := by
+          have := hS.inner_nonneg_left y
+          linarith
+        _ = ⟪(S + 1) y, y⟫ := by
+          rw [add_apply, one_apply_eq_self, inner_add_left]
+        _ ≤ ‖(S + 1) y‖ * ‖y‖ := real_inner_le_norm _ _
+    rcases (norm_nonneg y).eq_or_lt with h0 | h0
+    · rw [← h0]; exact norm_nonneg _
+    · exact le_of_mul_le_mul_right h1 h0
+  have h2 : (S + 1) y = (Q - 1) x := by
+    rw [hy, ← hQ]
+    simp only [add_apply, sub_apply,
+      one_apply_eq_self, mul_apply_eq_comp, map_sub]
+    abel
+  calc
+    ‖(S - 1) x‖ = ‖y‖ := rfl
+    _ ≤ ‖(S + 1) y‖ := hkey
+    _ = ‖(Q - 1) x‖ := by rw [h2]
+    _ ≤ ‖Q - 1‖ * ‖x‖ := ContinuousLinearMap.le_opNorm _ _
+
+
+end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+open Filter Topology
+open scoped RealInnerProductSpace
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+/-- An operator with `‖A - 1‖ < 1` has a strictly positive quadratic form on nonzero vectors. -/
+theorem inner_self_pos_of_norm_sub_one_lt
+    {A : E →L[ℝ] E} (hA : ‖A - 1‖ < 1) {v : E} (hv : v ≠ 0) :
+    0 < ⟪A v, v⟫ := by
+  have hv' : 0 < ‖v‖ := norm_pos_iff.mpr hv
+  have h1 : ⟪A v, v⟫ = ‖v‖ * ‖v‖ + ⟪(A - 1) v, v⟫ := by
+    rw [sub_apply, one_apply_eq_self, inner_sub_left,
+      real_inner_self_eq_norm_mul_norm]
+    ring
+  have h2 : ⟪(A - 1) v, v⟫ ≥ -(‖A - 1‖ * ‖v‖ * ‖v‖) := by
+    have := real_inner_le_norm ((A - 1) v) (-v)
+    rw [inner_neg_right, norm_neg] at this
+    have h3 := ContinuousLinearMap.le_opNorm (A - 1) v
+    nlinarith [norm_nonneg ((A - 1) v)]
+  rw [h1]
+  nlinarith [mul_pos hv' hv', norm_nonneg (A - 1)]
+
 
 end FunctionalInequalities.Analysis

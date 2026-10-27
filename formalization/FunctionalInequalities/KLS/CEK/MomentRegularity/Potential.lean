@@ -1,17 +1,27 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
-import FunctionalInequalities.Analysis.Convex.Alexandrov
-import FunctionalInequalities.Analysis.Convex.Caffarelli
+import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
+import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
 import FunctionalInequalities.Analysis.Convex.GradientLipschitz
 import FunctionalInequalities.Analysis.Convex.HessianRegularity
-import FunctionalInequalities.Analysis.Convex.Subgradient
-import FunctionalInequalities.Analysis.Convex.Viscosity
+import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
+import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
+import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
+import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
+import FunctionalInequalities.Probability.MomentMeasure.Gradient
+import Mathlib.Topology.TietzeExtension
 import FunctionalInequalities.KLS.CEK.MomentMap
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.Probability.Stein.HessianKernel
 
 /-!
-# Actual regular-class C1 moment potentials
+# Moment potentials for continuous convex-body targets and the strong regular class
+
+The continuous-target producers require only continuity of W on the compact body (or the closure
+of a bounded open convex body). They yield C¹, strict convexity, a gradient homeomorphism and
+the Alexandrov/viscosity equation without uniform convexity. Higher regularity remains separate.
 
 The regular-class moment witness (`exists_regular_moment_potential`) and two extensions at the same `u` and `L`: a
 measurable everywhere left inverse of the injective gradient (`exists_regular_moment_potential_with_inverse`, via the
@@ -26,6 +36,145 @@ open scoped RealInnerProductSpace ContDiff Topology
 open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
+
+section ContinuousTarget
+variable {n : ℕ}
+local notation "E" => EuclideanSpace ℝ (Fin n)
+
+/-- Moment-map support for the literal convex-source Lemma 2.2: no uniform convexity or
+higher regularity premise. The conclusion is C¹, a gradient homeomorphism and the actual
+Alexandrov/viscosity equation; C^{1,alpha}, W^{2,p} and C-infinity remain separate. -/
+theorem exists_moment_potential_of_continuousOn (hn : 0 < n)
+    {K : Set E} (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty)
+    {W : E → ℝ} (hW : ContinuousOn W K) (μ : ProbabilityMeasure E)
+    (hμ : (μ : Measure E) = (volume : Measure E).withDensity
+      (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) :
+    ∃ (u : E → ℝ) (L : NNReal), StrictConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+      (∫ x, Real.exp (-u x) ∂(volume : Measure E)) = 1 ∧
+      ((volume : Measure E).tilted (-u)).map (gradient u) = (μ : Measure E) ∧
+      ContDiff ℝ 1 u ∧
+      (∃ e : E ≃ₜ interior K, ∀ x, (e x : E) = gradient u x) ∧
+      Continuous (fun x => Real.exp (-u x + W (gradient u x))) ∧
+      (∀ G : Set E, IsOpen G → volume (subgradientImage u G) =
+        ∫⁻ x in G, ENNReal.ofReal (Real.exp (-u x + W (gradient u x)))) ∧
+      (∀ᵐ x ∂(volume : Measure E), ∃ B : Matrix (Fin n) (Fin n) ℝ,
+        B.IsHermitian ∧ B.PosDef ∧ B.det = Real.exp (-u x + W (gradient u x)) ∧
+        ∃ g : E, ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+          |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2) ∧
+      (∀ (x : E) (ψ : E → ℝ), ContDiffAt ℝ 2 ψ x → u x = ψ x →
+        (∀ᶠ y in 𝓝 x, u y ≤ ψ y) →
+        Real.exp (-u x + W (gradient u x)) ≤ (hessianMatrix ψ x).det) ∧
+      ∀ (x : E) (ψ : E → ℝ), ContDiffAt ℝ 2 ψ x → (hessianMatrix ψ x).PosSemidef →
+        u x = ψ x → (∀ᶠ y in 𝓝 x, ψ y ≤ u y) →
+        (hessianMatrix ψ x).det ≤ Real.exp (-u x + W (gradient u x)) := by
+  classical
+  have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+  let w : C(K, ℝ) := ⟨fun y => W y, continuousOn_iff_continuous_domRestrict.mp hW⟩
+  obtain ⟨F, hF⟩ := ContinuousMap.exists_restrict_eq hK.isClosed w
+  have hEq : ∀ y ∈ K, F y = W y := by
+    intro y hy
+    exact congrArg (fun g : C(K, ℝ) => g ⟨y, hy⟩) hF
+  have hDensity : (K.indicator fun y => ENNReal.ofReal (Real.exp (-W y))) =
+      K.indicator fun y => ENNReal.ofReal (Real.exp (-F y)) := by
+    funext y
+    by_cases hy : y ∈ K
+    · simp only [indicator_of_mem hy, hEq y hy]
+    · simp only [indicator_of_notMem hy]
+  have hμF : (μ : Measure E) = (volume : Measure E).withDensity
+      (K.indicator fun y => ENNReal.ofReal (Real.exp (-F y))) := by
+    rw [hμ, hDensity]
+  obtain ⟨R, hR, hRK⟩ := hK.isBounded.exists_pos_norm_le
+  let L : NNReal := ⟨R, hR.le⟩
+  have hL : ∀ᵐ y ∂(μ : Measure E), ‖y‖ ≤ (L : ℝ) := by
+    rw [hμF]
+    refine (ae_withDensity_iff (F.continuous.measurable.neg.exp.ennreal_ofReal.indicator
+      hK.measurableSet)).2 ?_
+    filter_upwards [] with y hy
+    by_cases hyK : y ∈ K
+    · exact hRK y hyK
+    · rw [indicator_of_notMem hyK] at hy
+      exact (hy rfl).elim
+  obtain ⟨u, hc, hl, hnorm, hm⟩ := KLS.CEK.exists_momentMap_of_isotropic_of_ae_norm_le μ hiso L hL
+  have hmF := hm.trans hμF
+  have hstrict := strictConvexOn_of_map_gradient hl hc hnorm hK hKc
+    (hKint.mono interior_subset) F.continuous hmF
+  have hC1 := contDiff_one_of_map_gradient hl hc hnorm hK hKc hKint F.continuous hmF
+  obtain ⟨e, he⟩ := Probability.MomentMeasure.exists_gradient_homeomorph_interior_of_map_gradient
+    hn hl hc hnorm hC1 hK hKc hKint F.continuous hmF
+  have hgradK (x : E) : gradient u x ∈ K := by
+    rw [← he x]
+    exact interior_subset (e x).property
+  have hFg (x : E) : F (gradient u x) = W (gradient u x) := hEq _ (hgradK x)
+  have hf : Continuous (fun x => Real.exp (-u x + W (gradient u x))) := by
+    have h := Real.continuous_exp.comp
+      (hC1.continuous.neg.add (F.continuous.comp (BakryEmery.continuous_gradient hC1)))
+    change Continuous (fun x => Real.exp (-u x + F (gradient u x))) at h
+    simpa only [hFg] using h
+  have hMA (G : Set E) (hG : IsOpen G) : volume (subgradientImage u G) =
+      ∫⁻ x in G, ENNReal.ofReal (Real.exp (-u x + W (gradient u x))) := by
+    simpa only [hFg] using volume_subgradientImage_eq_lintegral_of_isOpen hl hc hnorm
+      hK.isClosed hKc F.continuous.measurable hmF hG
+  refine ⟨u, L, hstrict, hl, hnorm, hm, hC1, ⟨e, he⟩, hf, hMA,
+    ae_exists_posDef_det_eq hc hf (fun x => Real.exp_pos _) hMA, ?_, ?_⟩
+  · intro x ψ hψ hcontact htouch
+    exact le_det_hessianMatrix_of_upper_touch hc isOpen_univ
+      (fun G hG _ => hMA G hG) (mem_univ x) hf.continuousAt hψ hcontact htouch
+  · intro x ψ hψ hH hcontact htouch
+    exact det_hessianMatrix_le_of_lower_touch hc isOpen_univ
+      (fun G hG _ => hMA G hG) (mem_univ x) hf.continuousAt (Real.exp_pos _).le
+      hψ hH hcontact htouch
+/-- The literal bounded open convex-body inputs of Letwin Lemma 2.2 yield a normalized finite C¹
+moment potential, a gradient homeomorphism onto K and the Alexandrov/viscosity equation.
+Continuity on closure K suffices here; smoothness and convexity of W are not needed for this step. -/
+theorem exists_moment_potential_of_bounded_open_convex (hn : 0 < n)
+    {K : Set E} (hKb : Bornology.IsBounded K) (hKo : IsOpen K) (hKc : Convex ℝ K)
+    (hKne : K.Nonempty) {W : E → ℝ} (hW : ContinuousOn W (closure K))
+    (μ : ProbabilityMeasure E)
+    (hμ : (μ : Measure E) = (volume : Measure E).withDensity
+      (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) :
+    ∃ (u : E → ℝ) (L : NNReal), StrictConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+      (∫ x, Real.exp (-u x) ∂(volume : Measure E)) = 1 ∧
+      ((volume : Measure E).tilted (-u)).map (gradient u) = (μ : Measure E) ∧
+      ContDiff ℝ 1 u ∧
+      (∃ e : E ≃ₜ K, ∀ x, (e x : E) = gradient u x) ∧
+      Continuous (fun x => Real.exp (-u x + W (gradient u x))) ∧
+      (∀ G : Set E, IsOpen G → volume (subgradientImage u G) =
+        ∫⁻ x in G, ENNReal.ofReal (Real.exp (-u x + W (gradient u x)))) ∧
+      (∀ᵐ x ∂(volume : Measure E), ∃ B : Matrix (Fin n) (Fin n) ℝ,
+        B.IsHermitian ∧ B.PosDef ∧ B.det = Real.exp (-u x + W (gradient u x)) ∧
+        ∃ g : E, ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+          |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2) ∧
+      (∀ (x : E) (ψ : E → ℝ), ContDiffAt ℝ 2 ψ x → u x = ψ x →
+        (∀ᶠ y in 𝓝 x, u y ≤ ψ y) →
+        Real.exp (-u x + W (gradient u x)) ≤ (hessianMatrix ψ x).det) ∧
+      ∀ (x : E) (ψ : E → ℝ), ContDiffAt ℝ 2 ψ x → (hessianMatrix ψ x).PosSemidef →
+        u x = ψ x → (∀ᶠ y in 𝓝 x, ψ y ≤ u y) →
+        (hessianMatrix ψ x).det ≤ Real.exp (-u x + W (gradient u x)) := by
+  have hInt : interior (closure K) = K := by
+    rw [hKc.interior_closure_eq_interior_of_nonempty_interior, hKo.interior_eq]
+    simpa only [hKo.interior_eq] using hKne
+  have hμcl : (μ : Measure E) = (volume : Measure E).withDensity
+      ((closure K).indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
+    rw [hμ]
+    apply withDensity_congr_ae
+    have hnull : ∀ᵐ x ∂(volume : Measure E), x ∉ frontier K :=
+      measure_eq_zero_iff_ae_notMem.mp (hKc.addHaar_frontier volume)
+    filter_upwards [hnull] with x hx
+    by_cases hxK : x ∈ K
+    · rw [indicator_of_mem hxK, indicator_of_mem (subset_closure hxK)]
+    · have hxcl : x ∉ closure K := by
+        intro hc
+        exact hx ⟨hc, by simpa only [hKo.interior_eq] using hxK⟩
+      rw [indicator_of_notMem hxK, indicator_of_notMem hxcl]
+  obtain ⟨u, L, hstrict, hl, hnorm, hm, hC1, ⟨e, he⟩, hf, hMA, hae, hUpper, hLower⟩ :=
+    exists_moment_potential_of_continuousOn hn hKb.isCompact_closure hKc.closure
+      (by simpa only [hInt] using hKne) hW μ hμcl hiso
+  exact ⟨u, L, hstrict, hl, hnorm, hm, hC1, ⟨e.trans (Homeomorph.setCongr hInt), he⟩,
+    hf, hMA, hae, hUpper, hLower⟩
+
+end ContinuousTarget
 
 /-- A regular-class isotropic law has a convex Lipschitz C1 moment potential with
 16/kappa-Lipschitz gradient and the a.e. Hessian/log-det package. -/
@@ -51,31 +200,12 @@ theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (Euclide
   let E := EuclideanSpace ℝ (Fin n)
   have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
   have : Nontrivial E := inferInstance
-  obtain ⟨R, hR, hRK⟩ := hK.isBounded.exists_pos_norm_le
-  let L : NNReal := ⟨R, hR.le⟩
-  have hL : ∀ᵐ y ∂(μ : Measure E), ‖y‖ ≤ (L : ℝ) := by
-    rw [hμ]
-    refine (ae_withDensity_iff ?_).2 ?_
-    · exact Measurable.indicator
-        (Measurable.ennreal_ofReal
-          (Real.continuous_exp.measurable.comp
-            (Measurable.neg hW.continuous.measurable)))
-        hK.measurableSet
-    · filter_upwards [] with y hy
-      by_cases hyK : y ∈ K
-      · exact hRK y hyK
-      · rw [Set.indicator_of_notMem hyK] at hy
-        exact (hy rfl).elim
-  obtain ⟨u, huconv, huLip, hunorm, humap⟩ :=
-    KLS.CEK.exists_momentMap_of_isotropic_of_ae_norm_le μ hiso L hL
-  have hmap :
-      ((volume : Measure E).tilted (-u)).map (gradient u) =
-        (volume : Measure E).withDensity
-          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) :=
-    humap.trans hμ
-  have huC1 : ContDiff ℝ 1 u :=
-    contDiff_one_of_map_gradient huLip huconv hunorm hK hKc hKint
-      hW.continuous hmap
+  obtain ⟨u, L, hstrict, huLip, hunorm, humap, huC1, _he, _hf, _hMA, _hae, _hUpper, _hLower⟩ :=
+    exists_moment_potential_of_continuousOn hn hK hKc hKint hW.continuous.continuousOn μ hμ hiso
+  have huconv := hstrict.convexOn
+  have hmap : ((volume : Measure E).tilted (-u)).map (gradient u) =
+      (volume : Measure E).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := humap.trans hμ
   have hgradLip : LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) :=
     lipschitzWith_gradient_of_map_gradient huLip huconv hunorm hK hKc
       (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hκ hstrong hmap huC1

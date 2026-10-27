@@ -210,14 +210,8 @@ omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountable
 theorem relaxation_eq_zero_of_subsingleton [Subsingleton V] (ν : ProbabilityMeasure V)
     (f : Lp ℝ 2 (ν : Measure V)) :
     relaxation ν f = 0 := by
-  obtain ⟨x₀⟩ := nonempty_of_isProbabilityMeasure (ν : Measure V)
-  set c := f x₀ with hc
+  obtain ⟨c, hf⟩ := L2.exists_eq_const_of_subsingleton ν f
   have hconst : MemLp (fun _ : V ↦ c) 2 (ν : Measure V) := memLp_const c
-  have hf : f = hconst.toLp (fun _ ↦ c) := by
-    apply Lp.ext
-    filter_upwards [hconst.coeFn_toLp] with x hx
-    rw [hx, hc]
-    exact congrArg f (Subsingleton.elim x x₀)
   have henergy : energy ν (fun _ : V ↦ c) = 0 := by
     unfold energy
     simp

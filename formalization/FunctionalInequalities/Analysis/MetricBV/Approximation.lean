@@ -34,6 +34,9 @@ theorem abs_mul_sub_mul_le {u v c c' : ℝ} (hu0 : 0 ≤ u) (hu1 : u ≤ 1) (hc0
   have h2 : |u - v| * c' ≤ |u - v| := mul_le_of_le_one_right (abs_nonneg _) hc1
   linarith
 
+/-- The truncation `χ_R · clamp f` of an arbitrary real function. -/
+def truncateFun (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) : ℝ := cutoff x₀ R x * clampUnit (f x)
+
 /-- The truncated test `χ_R · clamp f` of a globally Lipschitz function. -/
 def Test.truncate (x₀ : X) (R : ℝ) (f : X → ℝ) (hf : ∃ K : ℝ≥0, LipschitzWith K f) :
     Test X where
@@ -65,16 +68,41 @@ def Test.truncate (x₀ : X) (R : ℝ) (f : X → ℝ) (hf : ∃ K : ℝ≥0, Li
     rw [Metric.mem_ball, not_lt] at hnot
     exact hx (by simp [cutoff_eq_zero hnot])
 
+omit [MeasurableSpace X] [BorelSpace X] in
+/-- The globally Lipschitz truncated test is the truncation of its function. -/
+theorem Test.truncate_toFun (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥0, LipschitzWith K f) :
+    (Test.truncate x₀ R f hf : X → ℝ) = truncateFun x₀ R f := rfl
+
 section TruncationBounds
 
 omit [MeasurableSpace X] [BorelSpace X]
-/-- The truncated test's slope exceeds the original slope by at most the indicator of the
+/-- Outside the closed ball of radius `R + 1` the truncation vanishes. -/
+theorem truncateFun_eq_zero (x₀ : X) (R : ℝ) (f : X → ℝ) {x : X} (hx : R + 1 ≤ dist x x₀) :
+    truncateFun x₀ R f x = 0 := by
+  simp [truncateFun, cutoff_eq_zero hx]
+
+theorem truncateFun_nonneg (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) : 0 ≤ truncateFun x₀ R f x :=
+  mul_nonneg (cutoff_nonneg x₀ R x) (clampUnit_nonneg _)
+
+theorem truncateFun_le_one (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) : truncateFun x₀ R f x ≤ 1 :=
+  mul_le_one₀ (cutoff_le_one x₀ R x) (clampUnit_nonneg _) (clampUnit_le_one _)
+
+/-- The cutoff at `x` is at most the distance from `x` to any point outside the ball of radius
+`R + 1`. -/
+theorem cutoff_le_dist_of_le {x₀ x y : X} {R : ℝ} (hy : R + 1 ≤ dist y x₀) :
+    cutoff x₀ R x ≤ dist x y := by
+  unfold cutoff clampUnit
+  have h := dist_triangle y x x₀
+  rw [dist_comm x y]
+  refine max_le ((min_le_left _ _).trans ?_) dist_nonneg
+  linarith
+
+/-- The truncation's slope exceeds the original slope by at most the indicator of the
 complement of the inner ball. -/
-theorem apply_truncate_le (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥0, LipschitzWith K f)
-    (x : X) :
-    Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
+theorem apply_truncateFun_le (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) :
+    Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
       Energy.LocalSlope.apply f x + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
-  have hsec : Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
+  have hsec : Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
       Energy.LocalSlope.apply f x + Energy.LocalSlope.apply (cutoff x₀ R) x := by
     refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
     change |cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x)| ≤
@@ -82,26 +110,11 @@ theorem apply_truncate_le (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ
     rw [Real.dist_eq, Real.dist_eq]
     exact (abs_mul_sub_mul_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y)
       (clampUnit_nonneg _) (clampUnit_le_one _)).trans (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
-  refine hsec.trans (add_le_add le_rfl ?_)
-  by_cases hx : x ∈ Metric.ball x₀ R
-  · have hr : 0 < R - dist x x₀ := by rw [Metric.mem_ball] at hx; linarith
-    rw [Energy.LocalSlope.apply_eq_zero_of_eqOn_ball hr fun y hy => ?_]
-    · exact zero_le
-    · have hy' : dist y x₀ ≤ R := by
-        have := dist_triangle y x x₀
-        linarith
-      rw [cutoff_eq_one hy', cutoff_eq_one (le_of_lt (Metric.mem_ball.mp hx))]
-  · rw [Set.indicator_of_mem (Set.mem_compl hx), Pi.one_apply]
-    have hlip : LipschitzWith 1 (cutoff x₀ R) :=
-      LipschitzWith.of_dist_le_mul fun a b => by
-        rw [Real.dist_eq, NNReal.coe_one, one_mul]; exact abs_cutoff_sub_le x₀ R a b
-    simpa using Energy.LocalSlope.apply_le_of_lipschitzWith hlip x
-
-/-- The truncated test's pointwise distance to an indicator exceeds that of the original by at
-most the indicator of the complement of the inner ball. -/
-theorem enorm_truncate_sub_le (x₀ : X) (R : ℝ) {f : X → ℝ}
-    (hf : ∃ K : ℝ≥0, LipschitzWith K f) (B : Set X) (x : X) :
-    ‖Test.truncate x₀ R f hf x - B.indicator (1 : X → ℝ) x‖ₑ ≤
+  exact hsec.trans (add_le_add le_rfl (apply_cutoff_le x₀ R x))
+/-- The truncation's pointwise distance to an indicator exceeds that of the original by at most
+the indicator of the complement of the inner ball. -/
+theorem enorm_truncateFun_sub_le (x₀ : X) (R : ℝ) (f : X → ℝ) (B : Set X) (x : X) :
+    ‖truncateFun x₀ R f x - B.indicator (1 : X → ℝ) x‖ₑ ≤
       ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
   set i := B.indicator (1 : X → ℝ) x
   have hi01 : 0 ≤ i ∧ i ≤ 1 := by
@@ -130,6 +143,22 @@ theorem enorm_truncate_sub_le (x₀ : X) (R : ℝ) {f : X → ℝ}
     exact zero_le
   · rw [Set.indicator_of_mem (Set.mem_compl hx), Pi.one_apply]
     exact ENNReal.ofReal_le_one.mpr (by linarith)
+
+/-- The truncated test's slope exceeds the original slope by at most the indicator of the
+complement of the inner ball. -/
+theorem apply_truncate_le (x₀ : X) (R : ℝ) {f : X → ℝ} (hf : ∃ K : ℝ≥0, LipschitzWith K f)
+    (x : X) :
+    Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
+      Energy.LocalSlope.apply f x + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
+  exact apply_truncateFun_le x₀ R f x
+
+/-- The truncated test's pointwise distance to an indicator exceeds that of the original by at
+most the indicator of the complement of the inner ball. -/
+theorem enorm_truncate_sub_le (x₀ : X) (R : ℝ) {f : X → ℝ}
+    (hf : ∃ K : ℝ≥0, LipschitzWith K f) (B : Set X) (x : X) :
+    ‖Test.truncate x₀ R f hf x - B.indicator (1 : X → ℝ) x‖ₑ ≤
+      ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
+  exact enorm_truncateFun_sub_le x₀ R f B x
 
 end TruncationBounds
 

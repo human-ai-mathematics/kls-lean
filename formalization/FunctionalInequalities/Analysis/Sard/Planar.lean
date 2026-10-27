@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.PiCoordinates
 import FunctionalInequalities.Analysis.Sard.QuadraticCover
 import Mathlib.Topology.Bases
 
@@ -37,20 +38,12 @@ private lemma norm_le_abs_add_abs (i : Fin 2) (v : Fin 2 → ℝ) :
   intro k
   fin_cases i <;> fin_cases k <;> simp only [Real.norm_eq_abs] <;> simp
 
-private lemma exists_apply_single_ne_zero {α : (Fin 2 → ℝ) →L[ℝ] ℝ} (hα : α ≠ 0) :
-    ∃ i : Fin 2, α (Pi.single i (1 : ℝ)) ≠ 0 := by
-  by_contra h
-  push Not at h
-  refine hα (ContinuousLinearMap.ext fun v => ?_)
-  rw [apply_decomp_fin_two α 0 v, h 0, h (1 - 0)]
-  simp
-
 /-- A nonzero functional on the plane makes the region where it is small a Lipschitz graph
 over one of the two coordinates. Elementary linear algebra; no implicit function theorem. -/
 private lemma exists_graph_direction {α : (Fin 2 → ℝ) →L[ℝ] ℝ} (hα : α ≠ 0) :
     ∃ (j : Fin 2) (ε L : ℝ), 0 < ε ∧ 0 < L ∧
       ∀ v : Fin 2 → ℝ, |α v| ≤ ε * ‖v‖ → ‖v‖ ≤ L * |v j| := by
-  obtain ⟨i, hi⟩ := exists_apply_single_ne_zero hα
+  obtain ⟨i, hi⟩ := PiCoordinates.exists_apply_single_ne_zero hα
   set A : ℝ := α (Pi.single i (1 : ℝ)) with hAdef
   set B : ℝ := α (Pi.single (1 - i) (1 : ℝ)) with hBdef
   have ha : 0 < |A| := abs_pos.mpr hi

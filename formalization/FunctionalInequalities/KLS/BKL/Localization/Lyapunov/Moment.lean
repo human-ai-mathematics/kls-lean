@@ -1,3 +1,4 @@
+import FunctionalInequalities.KLS.BKL.Localization.Coefficients
 import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
@@ -28,45 +29,6 @@ variable {n : ℕ} {μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
   {W : MultidimBrownianMotion P n} {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
   {hW : ∀ k, IsBrownianFiltration (W.W k) ℱ} {γ : Param n → ℝ} {p : ℝ → Ω → Param n}
 
-private theorem continuous_generator_of_contDiff
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
-    (hiso : KLS.Isotropic μ) {F : Param n → ℝ} (hF : ContDiff ℝ 3 F) :
-    Continuous (generator μ hc F) := by
-  have hdrift : Continuous (drift μ hc) :=
-    (locallyLipschitz_drift μ hc hiso).continuous
-  have hfirst : Continuous (fun q => fderiv ℝ F q (drift μ hc q)) := by
-    have h :=
-      hF.continuous_fderiv_apply (by norm_num :
-        (3 : WithTop ℕ∞) ≠ 0)
-    exact h.comp (continuous_id.prodMk hdrift)
-  have hsecond (k : Fin n) :
-      Continuous
-        (fun q => fderiv ℝ (fderiv ℝ F) q
-          (noise μ hc q k) (noise μ hc q k)) := by
-    have hnoise : Continuous (fun q => noise μ hc q k) :=
-      (locallyLipschitz_noise μ hc hiso k).continuous
-    have h :=
-      (hF.fderiv_right
-        (m := (1 : WithTop ℕ∞))
-        (by norm_num :
-          (1 : WithTop ℕ∞) + 1 ≤ (3 : WithTop ℕ∞))).continuous_fderiv_apply
-        (by norm_num :
-          (1 : WithTop ℕ∞) ≠ 0)
-    have h' : Continuous
-        (fun q => fderiv ℝ (fderiv ℝ F) q (noise μ hc q k)) :=
-      h.comp (continuous_id.prodMk hnoise)
-    exact h'.clm_apply hnoise
-  have hsum :
-      Continuous
-        (fun q => ∑ k, fderiv ℝ (fderiv ℝ F) q
-          (noise μ hc q k) (noise μ hc q k)) := by
-    exact continuous_finsetSum Finset.univ (by
-      intro k hk
-      exact hsecond k)
-  unfold generator diffusionGenerator
-  exact hfirst.add (continuous_const.mul hsum)
-
 theorem IsEldanCutoff.integral_lyapunov_le (hiso : KLS.Isotropic μ) (hγ : IsCutoff γ)
     (hℱ0 : ∀ t : ℝ, t ≤ 0 → ℱ 0 ≤ ℱ t)
     (hnull : ∀ s : Set Ω, MeasurableSet s → P s = 0 → MeasurableSet[ℱ 0] s)
@@ -87,7 +49,7 @@ theorem IsEldanCutoff.integral_lyapunov_le (hiso : KLS.Isotropic μ) (hγ : IsCu
   have hγc : Continuous γ :=
     hγ.lipschitz.choose_spec.continuous
   have hgen : Continuous (generator μ hc F) :=
-    continuous_generator_of_contDiff μ hc hiso hF3
+    continuous_generator_of_contDiff_three μ hc hiso hF3
   have hgc : Continuous g :=
     (hγc.pow 2).mul hgen
   have hgcs : HasCompactSupport g := by

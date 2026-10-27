@@ -121,7 +121,7 @@ end Equidimensional
 
 end FunctionalInequalities.Analysis
 
-section LT12D1LipschitzNullImage
+section LipschitzNullImage
 
 open MeasureTheory Set
 
@@ -151,4 +151,4 @@ theorem volume_image_eq_zero_of_lipschitzOnWith {E : Type*} [NormedAddCommGroup 
 
 end FunctionalInequalities.Analysis
 
-end LT12D1LipschitzNullImage
+end LipschitzNullImage

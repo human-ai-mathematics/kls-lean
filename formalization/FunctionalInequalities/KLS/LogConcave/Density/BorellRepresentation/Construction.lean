@@ -76,11 +76,6 @@ theorem measurable_lowerDensity [SFinite ν] : Measurable (lowerDensity ν m) :=
 
 end LocalDensityMeasurability
 
-/-- Positive real powers commute with suprema in `ENNReal`. -/
-private theorem rpow_iSup {I : Sort*} (f : I → ENNReal) {t : ℝ} (ht : 0 < t) :
-    (⨆ i, f i) ^ t = ⨆ i, f i ^ t :=
-  (ENNReal.orderIsoRpow t ht).map_iSup f
-
 omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V] in
 /-- A uniform eventual small-ball bound bounds the lower density everywhere. -/
 theorem lowerDensity_le (C : ENNReal)
@@ -145,7 +140,8 @@ theorem lowerDensity_logConcave {ν : ProbabilityMeasure V} (hlc : LogConcave ν
   have ht1' : 0 < 1 - t := sub_pos.mpr ht1
   unfold lowerDensity
   simp only [liminf_eq_iSup_iInf_of_nat]
-  rw [rpow_iSup _ ht, rpow_iSup _ ht1', ENNReal.iSup_mul]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul]
   refine iSup_le fun i ↦ ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun j ↦ ?_
@@ -209,8 +205,9 @@ theorem envelope_logConcave
         mul_le_mul' (ENNReal.rpow_le_rpow (iInf_le _ n) ht.le)
           (ENNReal.rpow_le_rpow (iInf_le _ n) ht1'.le)
     _ ≤ ⨆ z ∈ Metric.ball (t • x + (1 - t) • y) (radius n), lowerDensity ν m z := by
-        rw [rpow_iSup _ ht, rpow_iSup _ ht1']
-        simp only [rpow_iSup _ ht, rpow_iSup _ ht1', ENNReal.iSup_mul, ENNReal.mul_iSup]
+        simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+        rw [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _]
+        simp (config := { congrConsts := false }) only [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul, ENNReal.mul_iSup]
         refine iSup₂_le fun y' hy' ↦ iSup₂_le fun x' hx' ↦ ?_
         refine le_iSup₂_of_le (t • x' + (1 - t) • y') ?_ (hψ x' y' t ht ht1)
         rw [Metric.mem_ball, dist_eq_norm] at hx' hy' ⊢

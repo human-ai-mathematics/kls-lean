@@ -79,7 +79,7 @@ theorem finite_polynomial_sum {n m : ℕ}
         (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
     obtain ⟨r, hr, hexp⟩ := ((KLS.LogConcave.borel_iff ν).1 hν).exists_integrable_exp_norm
     simpa only [real_inner_comm] using
-      integrable_prod_inner_cond (ν : Measure (EuclideanSpace ℝ (Fin n))) hr hexp (d i) (v i)
+      FunctionalInequalities.Probability.integrable_prod_inner_of_exp (ν : Measure (EuclideanSpace ℝ (Fin n))) hr hexp (d i) (v i)
   have integral_eq (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
       (hν : KLS.LogConcave ν) :
       (∫ x, ∑ i, a i * ∏ j, ⟪v i j, x⟫

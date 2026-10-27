@@ -1,5 +1,8 @@
+import FunctionalInequalities.Probability.Gaussian.Moments
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+
+open FunctionalInequalities.Probability.Gaussian
 
 /-!
 # Audit: moments and weak convergence of the Gaussian smoothing (BKL Section 2)
@@ -72,9 +75,9 @@ theorem zero_dim_second {s : ℝ} (hs : 0 < s) :
 
 end GaussianMomentsAudit
 
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_laplace
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_mean_zero
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_inner_sq
+#print axioms FunctionalInequalities.Probability.Gaussian.laplace
+#print axioms FunctionalInequalities.Probability.Gaussian.mean_zero
+#print axioms FunctionalInequalities.Probability.Gaussian.integral_inner_sq
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_mean
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_norm_sq

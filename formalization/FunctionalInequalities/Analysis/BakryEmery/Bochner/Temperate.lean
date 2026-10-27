@@ -128,7 +128,7 @@ private theorem bochner_temperate_integrable {F : Type*} [NormedAddCommGroup F]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {g : E → F} (hg : g.HasTemperateGrowth) : Integrable g μ := by
   obtain ⟨k, C, hb⟩ := hg.2 0
-  exact integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
+  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
     (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 private theorem bochner_temperate_generator_zero (m : Measure E) [m.IsAddHaarMeasure]
@@ -184,7 +184,7 @@ private theorem bochner_sq_temperate_integrable (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {g : E → ℝ} (hg : g.HasTemperateGrowth) : Integrable g μ := by
   obtain ⟨k, C, hb⟩ := hg.2 0
-  exact integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
+  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
     (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 /-- **BKL (16)**, the integrated Bochner formula on `𝒜`:
@@ -222,7 +222,7 @@ private theorem bochner_le_temperate_integrable (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {g : E → ℝ} (hg : g.HasTemperateGrowth) : Integrable g μ := by
   obtain ⟨k, C, hb⟩ := hg.2 0
-  exact integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
+  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
     (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 /-- The curvature form of (16) used in BKL Lemma 3.4: if `∇²V ≥ ρ`, then

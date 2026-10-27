@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.UpperSemicontinuity
 import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
 import FunctionalInequalities.KLS.LogConcave.Transport
@@ -16,21 +17,6 @@ noncomputable section
 open MeasureTheory Set Filter Topology FunctionalInequalities
 
 namespace FunctionalInequalities.KLS.LogConcave
-
-/- Upper semicontinuity of a product with a continuous positive factor (argument from the accepted
-Gaussian-posterior bundle, credited). -/
-private theorem upperSemicontinuous_mul_positive {E : Type*} [TopologicalSpace E] {f g : E → ℝ}
-    (hf : UpperSemicontinuous f) (hg : Continuous g) (hgpos : ∀ y, 0 < g y) :
-    UpperSemicontinuous (fun y => f y * g y) := by
-  intro y c hc
-  obtain ⟨a, ha, hac⟩ := exists_between hc
-  have hfu : f y < a / g y := (lt_div_iff₀ (hgpos y)).2 ha
-  have htc : a / g y * g y < c := by
-    simpa only [div_mul_cancel₀ a (hgpos y).ne'] using hac
-  have hgc : ∀ᶠ z in 𝓝 y, a / g y * g z < c :=
-    (hg.const_mul (a / g y)).continuousAt.eventually (isOpen_Iio.mem_nhds htc)
-  filter_upwards [hf y _ hfu, hgc] with z hz hgz
-  exact (mul_le_mul_of_nonneg_right hz.le (hgpos z).le).trans_lt hgz
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -53,7 +39,7 @@ theorem isBorellDensity_of_concave_tilt (μ ν : ProbabilityMeasure E)
   have hg : Continuous g := (Real.continuous_exp.comp hφ).div_const _
   have hgp : ∀ y, 0 < g y := fun y => div_pos (Real.exp_pos _) hZ
   refine ⟨hρ.measurable.mul hg.measurable, fun x => mul_nonneg (hρ.nonneg x) (hgp x).le,
-    upperSemicontinuous_mul_positive hρ.upperSemicontinuous hg hgp, ?_, ?_⟩
+    FunctionalInequalities.Analysis.upperSemicontinuous_mul_of_continuous_pos hρ.upperSemicontinuous hg hgp, ?_, ?_⟩
   · intro a b t ht0 ht1
     have hgLC : g a ^ t * g b ^ (1 - t) ≤ g (t • a + (1 - t) • b) := by
       simpa only [g, Pi.neg_apply, neg_neg] using

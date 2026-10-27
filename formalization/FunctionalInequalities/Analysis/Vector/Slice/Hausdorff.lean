@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.Hausdorff.Content
 import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
@@ -71,24 +72,6 @@ theorem exists_measurable_majorant_of_eqOn_vector [Nontrivial W] {Y : Type*} [Me
   · rw [lintegral_indicator_const (measurableSet_singleton _), measure_singleton, mul_zero]
 
 variable {X : Type*} [EMetricSpace X] [MeasurableSpace X] [BorelSpace X]
-
-/-- Near-optimal countable covers of arbitrarily small diameter, read off the infimum formula for
-`μH[d]`.  Identical to the real-valued layer; repeated here so this module depends only on
-Mathlib. -/
-theorem exists_cover_cost_lt_vector {d : ℝ} {S : Set X} {r c : ℝ≥0∞} (hr : 0 < r)
-    (hc : μH[d] S < c) :
-    ∃ T : ℕ → Set X, S ⊆ ⋃ i, T i ∧ (∀ i, Metric.ediam (T i) ≤ r) ∧
-      ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d < c := by
-  have hle : (⨅ (T : ℕ → Set X) (_ : S ⊆ ⋃ i, T i) (_ : ∀ i, Metric.ediam (T i) ≤ r),
-      ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d) ≤ μH[d] S := by
-    rw [Measure.hausdorffMeasure_apply]
-    exact le_iSup₂ (f := fun r (_ : 0 < r) =>
-      ⨅ (T : ℕ → Set X) (_ : S ⊆ ⋃ i, T i) (_ : ∀ i, Metric.ediam (T i) ≤ r),
-        ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d) r hr
-  obtain ⟨T, hT⟩ := iInf_lt_iff.1 (hle.trans_lt hc)
-  obtain ⟨hcov, hT⟩ := iInf_lt_iff.1 hT
-  obtain ⟨hdiam, hcost⟩ := iInf_lt_iff.1 hT
-  exact ⟨T, hcov, hdiam, hcost⟩
 
 omit [MeasurableSpace X] [BorelSpace X] in
 /-- **Level balls of a cover.**  For a function Lipschitz on `N` with values in `W` and a cover
@@ -197,7 +180,7 @@ theorem exists_measurable_majorant_vector {u : X → W} {K : ℝ≥0} {S : Set X
     rw [h]
     exact ENNReal.tendsto_inv_nat_nhds_zero.comp (tendsto_add_atTop_nat 1)
   choose T hcov hdiam hcost using fun k : ℕ =>
-    exists_cover_cost_lt_vector (S := S) (d := d + (m : ℝ)) (hεpos k)
+    exists_cover_familyCost_lt (A := S) (d := d + (m : ℝ)) (hεpos k)
       (ENNReal.lt_add_right htop (hεpos k).ne')
   have hδtop : ∀ k i, Metric.ediam (T k i) ≠ ∞ := fun k i =>
     ne_top_of_le_ne_top (hεtop k) (hdiam k i)
