@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoVersionExists
 import LevyStochCalc.Brownian.VectorItoProcessVersion
 
@@ -80,7 +83,7 @@ theorem exists_isVectorItoVersion
       exact (((hbp p).stronglyMeasurable_setIntegral measurableSet_Icc
         Set.Icc_subset_Iic_self volume).mono le_rfl).measurable
     refine Measurable.stronglyMeasurable ?_
-    letI : MeasurableSpace Ω := ℱ t
+    let : MeasurableSpace Ω := ℱ t
     exact measurable_pi_lambda _ hcoordm
   · intro t ht
     have hall : ∀ᵐ ω ∂P, ∀ (p : Fin n) (k : Fin d),

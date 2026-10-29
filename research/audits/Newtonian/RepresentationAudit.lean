@@ -1,10 +1,10 @@
-import FunctionalInequalities.Analysis.Newtonian.Representation
+import FunctionalInequalities.Analysis.Newtonian.Potential.Representation
 
 /-!
 # Audit: the compact C² Newtonian representation (4.15)
 
 Real clients of `compact_C2_newtonian_representation`
-(`FunctionalInequalities/Analysis/Newtonian/Representation.lean`; Gilbarg–Trudinger, *Elliptic Partial
+(`FunctionalInequalities/Analysis/Newtonian/Potential/Representation.lean`; Gilbarg–Trudinger, *Elliptic Partial
 Differential Equations of Second Order*, Classics 2001, (4.15)), with the source-normalized kernel:
 
 * `planar_bump_representation` (`n = 2`): for the smooth bump `β` with `β = 1` on `B̄_1(0)`,

@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.CEK.VariationalMaximum
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.Probability.Covariance.Positivity
 import FunctionalInequalities.Probability.MomentMeasure.Integrability
-import FunctionalInequalities.Analysis.Convex.BoundedConjugate
+import FunctionalInequalities.Analysis.Convex.Legendre.BoundedDomain
 
 /-!
 # A normalized Lipschitz primal for a bounded isotropic source law

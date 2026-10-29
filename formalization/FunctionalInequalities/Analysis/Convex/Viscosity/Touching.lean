@@ -144,7 +144,7 @@ private lemma directional_second_deriv_nonneg
   linarith
 
 /-- **A `C²` function touching a convex function from above has positive semidefinite Hessian at the
-contact point** (weak Letwin route, viscosity tests). -/
+contact point** (viscosity tests). -/
 theorem posSemidef_hessianMatrix_of_upper_touch {n : ℕ} {u ψ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ u) {x₀ : EuclideanSpace ℝ (Fin n)} (hψ : ContDiffAt ℝ 2 ψ x₀)
     (hcontact : u x₀ = ψ x₀) (htouch : ∀ᶠ x in 𝓝 x₀, u x ≤ ψ x) :
@@ -381,7 +381,7 @@ private lemma local_taylor_two
   rw [hgexpr] at hbound
   simpa only [Real.norm_eq_abs] using hbound
 
-/-- **Second-order Taylor bound with the coordinate Hessian** (weak Letwin route, viscosity tests):
+/-- **Second-order Taylor bound with the coordinate Hessian** (viscosity tests):
 for `ψ` twice differentiable at `x₀` (`ContDiffAt ℝ 2`), every `ε > 0` admits `r > 0` with
 `|ψ x − ψ x₀ − Dψ(x₀)(x − x₀) − ½ ⟪x − x₀, ∇²ψ(x₀)(x − x₀)⟫| ≤ ε ‖x − x₀‖²` on `ball x₀ r`. -/
 theorem exists_taylor_two_hessianMatrix_bound {n : ℕ} {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -574,7 +574,8 @@ private lemma touching_cancel_volume {n : ℕ}
       (by simpa only [mul_comm] using h)
 
 set_option maxHeartbeats 800000 in
-/-- **Upper touching test for an Alexandrov solution** (weak Letwin route, viscosity inequality): if the subgradient images of the convex `u` on open subsets of `Ω` carry the density `f`
+/-- **Upper touching test for an Alexandrov solution** (viscosity inequality): if the subgradient
+images of the convex `u` on open subsets of `Ω` carry the density `f`
 (`vol (∂u(G)) = ∫_G f`), `f` is continuous at `x₀ ∈ Ω`, and a `C²` function `ψ` touches `u` from above
 at `x₀` (`u ≤ ψ` near `x₀`, `u x₀ = ψ x₀`), then `f x₀ ≤ det ∇²ψ(x₀)` (standard coordinates of
 `EuclideanSpace ℝ (Fin n)`, `hessianMatrix ψ x₀ i j = D²ψ(x₀)(eᵢ, eⱼ)`). -/
@@ -679,7 +680,7 @@ theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace �
   exact (not_le_of_gt hMdet) hcoef
 
 set_option maxHeartbeats 800000 in
-/-- **Lower touching test for an Alexandrov solution** (weak Letwin route): with the
+/-- **Lower touching test for an Alexandrov solution**: with the
 same Alexandrov hypothesis, if `ψ ∈ C²` touches `u` from below at `x₀` (`ψ ≤ u` near `x₀`,
 `u x₀ = ψ x₀`) and `∇²ψ(x₀)` is positive semidefinite, then `det ∇²ψ(x₀) ≤ f x₀`. -/
 theorem det_hessianMatrix_le_of_lower_touch {n : ℕ} {u f ψ : EuclideanSpace ℝ (Fin n) → ℝ}

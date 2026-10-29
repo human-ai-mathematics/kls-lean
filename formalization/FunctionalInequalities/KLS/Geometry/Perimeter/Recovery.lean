@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.Relative
 /-! # Smooth recovery sequences for the relative perimeter
 
 The outward dilation of `Geometry/RelativePerimeter` is combined with a vanishing mollification
-radius.  No coarea, Sard or Cheeger dependency; the module imports no work-in-progress layer. -/
+radius.  No coarea, Sard or Cheeger dependency. -/
 
 noncomputable section
 

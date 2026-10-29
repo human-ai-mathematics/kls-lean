@@ -1,0 +1,258 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Shared finite norm moments, Hausdorff cover selection and Pi-coordinate detection; Gaussian object/Poincare identification and linear-image moment ownership. No coverage or certificate changes.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Section 2 and Theorems 3.1, 4.1 and 1.1",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 via BB arXiv:1207.6128v1 Theorem 2.24(ii)"
+  ],
+  "module_path_map": [
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slicing.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Hausdorff/Content.lean",
+        "formalization/FunctionalInequalities/Analysis/Hausdorff/Slicing.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/PiCoordinates.lean",
+        "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Planar.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/PiCoordinates.lean",
+        "formalization/FunctionalInequalities/Analysis/Sard/Planar.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/PiCoordinates.lean",
+        "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Hausdorff/Content.lean",
+        "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+        "formalization/FunctionalInequalities/Probability/Moments.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+        "formalization/FunctionalInequalities/Probability/Moments.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+        "formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean",
+        "formalization/FunctionalInequalities/Probability/Gaussian/CharacteristicFunction.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+        "formalization/FunctionalInequalities/Probability/Moments.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Stein.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Stein.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean"
+      ]
+    }
+  ],
+  "physical_declaration_moves": [
+    {
+      "name_before": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.charFun_gaussianLaw",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/Gaussian/CharacteristicFunction.lean",
+      "namespace_rename_separate": true
+    },
+    {
+      "name_before": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_eq_scaled_stdGaussian",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/Gaussian/CharacteristicFunction.lean",
+      "namespace_rename_separate": true
+    },
+    {
+      "name_before": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_smoothTest_holds",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "new_source": "formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean",
+      "namespace_rename_separate": true
+    },
+    {
+      "name_before": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.map_linear_memLp_four",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/Moments.lean",
+      "namespace_rename_separate": true
+    }
+  ],
+  "exact_public_api_renames": [
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.charFun_gaussianLaw",
+      "new": "FunctionalInequalities.Probability.Gaussian.charFun_law",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/Gaussian/CharacteristicFunction.lean",
+      "class": "exact interface rename, separate from physical owner move"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_eq_scaled_stdGaussian",
+      "new": "FunctionalInequalities.Probability.Gaussian.law_eq_scaled_stdGaussian",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/Gaussian/CharacteristicFunction.lean",
+      "class": "exact interface rename, separate from physical owner move"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_smoothTest_holds",
+      "new": "FunctionalInequalities.Poincare.SmoothTest.holds_gaussianLaw",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "new_source": "formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean",
+      "class": "exact interface rename, separate from physical owner move"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.map_linear_memLp_four",
+      "new": "FunctionalInequalities.Probability.memLp_four_map_linear",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/Moments.lean",
+      "class": "exact interface rename, separate from physical owner move"
+    }
+  ],
+  "contract_mergers": [
+    {
+      "old": "FunctionalInequalities.Probability.integrable_norm_pow_of_integrable_exp_norm",
+      "new": "FunctionalInequalities.Probability.integrable_norm_pow_of_exp",
+      "class": "specialization merger; implicit probability measure -> explicit finite measure; old probability contract separately compiled",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "new_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean",
+      "consumers": [
+        {
+          "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+          "calls": 2
+        },
+        {
+          "path": "formalization/FunctionalInequalities/KLS/LogConcave/Stein.lean",
+          "calls": 1
+        },
+        {
+          "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.exists_cover_cost_lt",
+      "new": "FunctionalInequalities.Analysis.exists_cover_familyCost_lt",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slicing.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Content.lean",
+      "class": "equivalent-contract merger; S -> A binder label, familyCost unfolds to original Nonempty-guarded sum, vector universe alpha-renaming"
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.exists_cover_cost_lt_vector",
+      "new": "FunctionalInequalities.Analysis.exists_cover_familyCost_lt",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Content.lean",
+      "class": "equivalent-contract merger; S -> A binder label, familyCost unfolds to original Nonempty-guarded sum, vector universe alpha-renaming"
+    }
+  ],
+  "private_coordinate_helper_mergers": [
+    {
+      "old_private_helper": "exists_apply_single_ne_zero",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "new": "FunctionalInequalities.Analysis.PiCoordinates.exists_apply_single_ne_zero",
+      "class": "private generic/helper-specialization merger; chart regularity remains separate"
+    },
+    {
+      "old_private_helper": "exists_single_ne_zero",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "new": "FunctionalInequalities.Analysis.PiCoordinates.exists_apply_single_ne_zero",
+      "class": "private generic/helper-specialization merger; chart regularity remains separate"
+    },
+    {
+      "old_private_helper": "exists_apply_single_ne_zero",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Planar.lean",
+      "new": "FunctionalInequalities.Analysis.PiCoordinates.exists_apply_single_ne_zero",
+      "class": "private generic/helper-specialization merger; chart regularity remains separate"
+    }
+  ],
+  "new_property": {
+    "name": "FunctionalInequalities.Analysis.PiCoordinates.exists_apply_single_ne_zero",
+    "source": "formalization/FunctionalInequalities/Analysis/PiCoordinates.lean",
+    "scope": "Finite ordinary real products, no nonempty-index, Euclidean-norm, smoothness or measure premise."
+  },
+  "interface_comparison": {
+    "before_public": 6731,
+    "after_public": 6729,
+    "retained_interfaces": 6728,
+    "definition_closure_vertices": 7465,
+    "private_closure_vertices": 737,
+    "normalization": "None for retained elaborated expressions: raw type/value hashes and level parameters match. Printed binders additionally ignore line-wrapping whitespace. The three merger contracts have separate strict source-law clients; they are not claimed as pure renames. Theorem proof bodies are excluded, with full axioms/native replay separate."
+  },
+  "module_count": 799,
+  "validation_inputs": [
+    "research/audits/SourceLayout/MomentReuse.lean",
+    "research/audits/SourceLayout/CoverSelection.lean",
+    "research/audits/SourceLayout/PiCoordinates.lean",
+    "research/audits/SourceLayout/GaussianCharacteristic.lean",
+    "research/audits/SourceLayout/GaussianPoincare.lean",
+    "research/audits/SourceLayout/LinearImageMoments.lean"
+  ],
+  "trust_scope": "Full local verifier checks all strict clients, standard-axiom declarations/vendors and exact-source local/vendor native replay. Pinned compiled Mathlib imports remain trusted. No remote verification or certificate renewal is asserted.",
+  "validation_fixture_move": {
+    "new_source": "examples/EllipticDrift.lean",
+    "namespaces_unchanged": true,
+    "coefficient_declaration_block_sha256": "e88bb5f9ee621b56e6f45b37b54f9243bb6c027b8cb4da8ce3927d698840e39d",
+    "point_declaration_block_sha256": "552563863e269c6a41204cf8e8a16b14f209b77ba025a9a79be94fa681a4a0d3",
+    "changed_audit_files": [
+      "research/audits/Elliptic/CoefficientScope.lean",
+      "research/audits/Elliptic/EllipticBarrier.lean",
+      "research/audits/Elliptic/LogRadialAmbient.lean",
+      "research/audits/Elliptic/LogRadialDrift.lean",
+      "research/audits/Elliptic/LogRadialPlane.lean",
+      "research/audits/Elliptic/LogRadialPoint.lean",
+      "research/audits/Elliptic/LogRadialZeroth.lean",
+      "research/audits/Elliptic/Nonsymmetric.lean"
+    ],
+    "lake_root_added": "examples.EllipticDrift",
+    "checker_changes": false,
+    "all_moved_declarations_verbatim": true,
+    "interfaces": {
+      "status": "passed",
+      "declarations": 7,
+      "raw_types_universes_definition_values_and_printed_binders_exact": true,
+      "declaration_blocks_moved_verbatim": true
+    },
+    "strict_elliptic_clients": 20
+  }
+}

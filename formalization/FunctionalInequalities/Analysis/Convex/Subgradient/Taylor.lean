@@ -99,8 +99,8 @@ private lemma inner_slope_error
   simpa only [pow_two, mul_assoc] using hb
 
 set_option maxHeartbeats 800000 in
-/-- **First-order expansion of the subdifferential gives a second-order Taylor expansion** (weak Letwin
-route, Alexandrov's theorem): if every subgradient `q` of the convex `f` at points `y` near `x`
+/-- **First-order expansion of the subdifferential gives a second-order Taylor expansion**
+(Alexandrov's theorem): if every subgradient `q` of the convex `f` at points `y` near `x`
 satisfies `‖q − p − B (y − x)‖ ≤ ε ‖y − x‖`, then
 `|f y − f x − ⟪p, y − x⟫ − ½ ⟪B (y − x), y − x⟫| ≤ ε' ‖y − x‖²` near `x`. -/
 theorem eventually_abs_sub_quadratic_le_of_subgradient_expansion [FiniteDimensional ℝ E] {f : E → ℝ}

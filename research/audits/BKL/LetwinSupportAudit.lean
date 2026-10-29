@@ -12,7 +12,6 @@ identities only: neither Letwin Theorem 1.2 nor BKL Theorem 4.1 is asserted.
   identity (2.12); `signed_nonzero_client`, `positive_nonzero_client`: nonzero `Fin 2` instances.
 * `directional_test_against_one`: Lemma A.3 with `g = 1`, the directional Stein pairing
   `∫ ∂_v f dν = ∫ f ∂_v φ dν`.
-Consumers are Codex client proofs (`build/reviews/2026-10-07-bkl-continuous/queue/letwin-prerequisite/`).
 -/
 
 noncomputable section

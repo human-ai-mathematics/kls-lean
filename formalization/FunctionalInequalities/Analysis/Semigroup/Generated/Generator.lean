@@ -49,11 +49,12 @@ every `0 < s < δ` **and every `τ ∈ [0, t]` simultaneously**
 
 `‖exp (-τ • L_s) b - P_τ b‖ ≤ ε`.
 
-The point is the uniformity in `τ`: the the adjoint-product identification convergence `Generated.yosida_limit` is a pointwise
+The point is the uniformity in `τ`: the adjoint-product identification convergence `Generated.yosida_limit` is a pointwise
 statement at a fixed time, whereas the bound here has a single `δ` for the whole interval.
 
-Proof: `Y6` bounds `‖exp (-τ • L_s) b - exp (-τ • L_r) b‖` by `τ ‖L_s b - L_r b‖ ≤ t ‖L_s b - L_r b‖`,
-and `Y5` makes `‖L_s b - T†T b‖ < ε / (2 (t + 1))` for `s < δ`; letting `r ↓ 0` at the fixed `τ`
+Proof: `norm_exp_neg_smul_sub_le` bounds `‖exp (-τ • L_s) b - exp (-τ • L_r) b‖` by
+`τ ‖L_s b - L_r b‖ ≤ t ‖L_s b - L_r b‖`, and `exists_delta_norm_yosida_sub_adjointComp_lt` makes
+`‖L_s b - T†T b‖ < ε / (2 (t + 1))` for `s < δ`; letting `r ↓ 0` at the fixed `τ`
 through `Generated.yosida_limit` and squeezing removes the auxiliary parameter. -/
 theorem yosida_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (b : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t) {ε : ℝ}
@@ -109,7 +110,7 @@ all `0 < s < δ` and **all** `τ ∈ [0, t]`
 
 `‖exp (-τ • L_s) g - P_τ g‖ < ε`,
 
-i.e. the the adjoint-product identification convergence of `Generated.yosida_limit` is uniform on compact time intervals.
+i.e. the adjoint-product identification convergence of `Generated.yosida_limit` is uniform on compact time intervals.
 
 Proof: approximate `g` within `ε/3` by `b ∈ D(T†T)` (`dense_adjointComp_domain`), apply
 `Generated.yosida_error_le` to `b` with `ε/3`, and absorb the two
@@ -150,8 +151,9 @@ theorem yosida_converges (T : H₀ →ₗ.[ℝ] H₁)
 i.e. `P_t f = f - t • T†T f + o(t)` as `t ↓ 0`, with an explicit modulus.
 
 Proof: the exponential mean-value bound applied to `A = L_s` needs `‖exp (-τ • L_s) (L_s f) - L_s f‖` bounded on all of
-`[0, t]`, which is exactly what the generator right derivative (uniformity in `τ`), `Y5` and `P7` supply; then `s ↓ 0` at
-the fixed `t` through `Generated.yosida_limit`, squeezed by `le_of_forall_pos_add_le`. -/
+`[0, t]`, which is exactly what the generator right derivative (uniformity in `τ`),
+`exists_delta_norm_yosida_sub_adjointComp_lt` and `Generated.continuous_at_zero` supply; then
+`s ↓ 0` at the fixed `t` through `Generated.yosida_limit`, squeezed by `le_of_forall_pos_add_le`. -/
 theorem generator_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : (adjointComp T).domain) {ε : ℝ} (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 < t → t < δ →
@@ -228,8 +230,8 @@ theorem generator_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     rwa [norm_sub_rev] at hlim
   linarith
 
-/-- **`G3` = the semigroup limit: the generator of `P_t` is `-T†T` on `D(T†T)`.** For `f ∈ D(T†T)` and `ε > 0`
-there is `δ > 0` with
+/-- **The semigroup limit: the generator of `P_t` is `-T†T` on `D(T†T)`.** For `f ∈ D(T†T)` and
+`ε > 0` there is `δ > 0` with
 
 `‖t⁻¹ • (P_t f - f) + T†T f‖ < ε` for every `0 < t < δ`,
 

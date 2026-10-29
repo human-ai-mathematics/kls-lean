@@ -10,9 +10,8 @@ spaces, this module packages `T†T` as a `LinearPMap` on `H₀` with domain
 of the outer one, so `T` is first restricted to that domain with `LinearPMap.domRestrict`.
 
 This is the object of von Neumann's theorem (`T` closed and densely defined ⟹ `T†T` self-adjoint
-with dense domain), which is **not** proved here; its obligations are the `V`-series of
-`research/audits/VonNeumannRouteStatements.lean`. Everything here is definitional or `rfl`-level
-glue. No measure, no log-concavity and no KLS content.
+with dense domain), which is **not** proved here; see `Analysis/Semigroup/VonNeumann.lean`.
+Everything here is definitional or `rfl`-level glue. No measure, no log-concavity and no KLS content.
 -/
 
 noncomputable section

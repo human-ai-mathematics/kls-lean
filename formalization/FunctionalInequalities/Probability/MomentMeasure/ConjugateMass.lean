@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Convex.AffineMaximum
+import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
 import FunctionalInequalities.Probability.MomentMeasure.Basic
 import Mathlib.MeasureTheory.Constructions.HaarToSphere
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
@@ -16,7 +16,7 @@ on a finite-dimensional space, dimension zero included, `∫ exp(-ψ*) dx` is fi
 `limsup_j ∫ exp(-(φ j)*) dx` (Cordero-Erausquin–Klartag, *Moment measures*, arXiv:1304.0630v1, Lemma 17, (56b)).
 No convergence of the conjugates, finiteness of initial dual masses or integrability is assumed: the pointwise step is
 `limsup_density_legendre_le`, and the common integrable dominator `exists_integrable_exponential_domination` is built from
-finitely many vertices (`Analysis/Convex/AffineMaximum.lean`) and `integrable_exp_sub_norm`, the Haar integrability of
+finitely many vertices (`Analysis/Convex/Legendre/AffineMaximum.lean`) and `integrable_exp_sub_norm`, the Haar integrability of
 `exp(M - c‖y‖)` for `c > 0`.
 
 Real normalization (`real_legendre_normalization`): if the conjugate `φ*` has a real representative `ψ` and conjugate mass
@@ -197,7 +197,7 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `FunctionalLimit.lean`.
+-- A logarithmic lower bound from limits of integrals.
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

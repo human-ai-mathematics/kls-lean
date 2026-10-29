@@ -708,21 +708,21 @@ open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryE
 open FunctionalInequalities.KLS.LogConcave.Suspension
 open scoped RealInnerProductSpace ContDiff Topology
 
+open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
+open FunctionalInequalities.KLS.LogConcave.Suspension
 /-- BKL (112), derived from actual local (111), local smoothness of the actual joint log-Laplace,
 and the finite-copy derivative selection rule. The same-copy tensor retains all repeated slots. -/
-private theorem source_mixed_cumulant_entries {n N : ℕ} (hN : 0 < N)
-    (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ} (hV : KLS.RegularPotential V a b')
-    {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ} (hβ : 0 < β)
-    (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
-    (h110 : β / Real.sqrt N * M ≤ a)
-    {d : ℕ} (hd : 1 ≤ d) (I : Fin d → Fin N) (J : Fin d → Fin n) :
+theorem cumulant_jointLaw_none_entries {n N : ℕ} (hN : 0 < N) (V : EuclideanSpace ℝ (Fin n) → ℝ)
+    {a b' : ℝ} (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ}
+    (hβ : 0 < β) (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
+    (h110 : β / Real.sqrt N * M ≤ a) {d : ℕ} (hd : 1 ≤ d) (I : Fin d → Fin N) (J : Fin d → Fin n) :
     cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
-      (Fin.cons (EuclideanSpace.single none 1)
-        (fun k => EuclideanSpace.single (some (I k, J k)) 1)) =
+        (Fin.cons (EuclideanSpace.single none 1) fun k =>
+          EuclideanSpace.single (some (I k, J k)) 1) =
       if ∀ k k', I k = I k' then
         (d.factorial : ℝ) / (sigma β * Real.sqrt N) *
-          taylorTensor (hV.law : Measure _) f d
-            (fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) else 0 := by
+          taylorTensor (hV.law : Measure _) f d fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)
+      else 0 := by
   classical
   let μ : Measure (EuclideanSpace ℝ (Fin n)) := hV.law
   let ν : Measure (JointSpace N n) := jointLaw μ f β (sigma β) N
@@ -788,20 +788,5 @@ private theorem source_mixed_cumulant_entries {n N : ℕ} (hN : 0 < N)
     field_simp [hfac]
     rfl
   · rfl
-
-open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
-open FunctionalInequalities.KLS.LogConcave.Suspension
-theorem cumulant_jointLaw_none_entries {n N : ℕ} (hN : 0 < N) (V : EuclideanSpace ℝ (Fin n) → ℝ)
-    {a b' : ℝ} (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ}
-    (hβ : 0 < β) (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
-    (h110 : β / Real.sqrt N * M ≤ a) {d : ℕ} (hd : 1 ≤ d) (I : Fin d → Fin N) (J : Fin d → Fin n) :
-    cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
-        (Fin.cons (EuclideanSpace.single none 1) fun k =>
-          EuclideanSpace.single (some (I k, J k)) 1) =
-      if ∀ k k', I k = I k' then
-        (d.factorial : ℝ) / (sigma β * Real.sqrt N) *
-          taylorTensor (hV.law : Measure _) f d fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)
-      else 0 := by
-  exact source_mixed_cumulant_entries hN V hV hβ hf hfM h110 hd I J
 
 end FunctionalInequalities.KLS.LogConcave.Suspension

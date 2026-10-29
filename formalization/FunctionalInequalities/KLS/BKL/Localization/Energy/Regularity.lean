@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Conjugation
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
 import FunctionalInequalities.Analysis.Tensor.EnergyForm
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.KLS.BKL.Posterior.Regularity
 

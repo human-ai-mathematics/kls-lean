@@ -4,7 +4,7 @@ import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 
 /-! # Weighted graph area over an open parameter domain
 
-Property open-domain graph area of the weighted coarea route: the weighted change of variables
+The weighted change of variables
 `setLIntegral_image_graphChartMap` of `Analysis/Graph/Integral.lean` requires the graph function to
 be `C¹` on the **whole** parameter space.  Here it is localized to a function that is `C¹` only on
 an open set `O`, for measurable parameter sets `S ⊆ O`.
@@ -13,9 +13,9 @@ A `ContDiffOn` function on an open set does **not** extend to a globally `C¹` f
 on `(0, ∞)` is the standard counterexample — so the localization is genuinely countable and cannot
 be done by one global extension.  What is true, and is what `exists_contDiff_eqOn_ball` proves,
 is that every point of `O` has a ball on which some globally `C¹` function agrees with the given
-one: multiply by a `ContDiffBump` supported inside `O`.  This is the interior localization the route
-prescribes; it is **not** the Whitney extension from a closed set, which is the separate unproved
-obligation compact Whitney extension.
+one: multiply by a `ContDiffBump` supported inside `O`.  This is an interior localization;
+it is **not** the Whitney extension from a closed set, which is the separate unproved
+compact Whitney extension problem.
 
 Second countability then extracts a countable subfamily of such balls covering `O`, `disjointed`
 turns it into countably many pairwise disjoint measurable pieces of `S`, and the graph map is
@@ -63,7 +63,7 @@ theorem setLIntegral_image_graphMap (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e
     funext y; rw [graphChartMap, zero_add]
   simpa [h] using setLIntegral_image_graphChartMap ι he hperp 0 hg hs hf
 
-/-- **Weighted graph area over an open parameter domain** (obligation open-domain graph area).  The graph function is
+/-- **Weighted graph area over an open parameter domain.**  The graph function is
 `C¹` only on the open set `O`, and the parameter set is any measurable `S ⊆ O`.
 
 No integrability of the weight, no boundedness or finite measure of `S`, and no global regularity

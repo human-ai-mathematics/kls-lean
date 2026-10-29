@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import Mathlib.Probability.Process.Adapted
 import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.MeasureTheory.Integral.Bochner.Set
@@ -43,7 +46,7 @@ variable {ℱ : Filtration ℝ mΩ} {H : Ω → ℝ → E}
 /-- A progressively measurable process is adapted. -/
 theorem stronglyMeasurable_eval (h : ProgressivelyMeasurable ℱ H) (t : ℝ) :
     StronglyMeasurable[ℱ t] fun ω => H ω t := by
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have := (h t).comp_measurable (measurable_prodMk_right (y := t))
   simpa [Function.comp_def] using this
 
@@ -69,7 +72,7 @@ measurable. -/
 theorem minTime (h : ProgressivelyMeasurable ℱ H) (T : ℝ) :
     ProgressivelyMeasurable ℱ fun ω s => H ω (min s T) := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hmono : ℱ (min t T) ≤ ℱ t := ℱ.mono (min_le_left t T)
   have hG : StronglyMeasurable fun q : Ω × ℝ => (Set.Iic (min t T)).indicator (H q.1) q.2 :=
     (h (min t T)).mono (sup_le_sup (MeasurableSpace.comap_mono hmono) le_rfl)
@@ -94,7 +97,7 @@ theorem minTime (h : ProgressivelyMeasurable ℱ H) (T : ℝ) :
 theorem isStronglyProgressive (h : ProgressivelyMeasurable ℱ H) :
     IsStronglyProgressive ℱ fun s ω => H ω s := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have he : Measurable fun q : Set.Iic t × Ω => (q.2, (q.1 : ℝ)) :=
     measurable_snd.prodMk (measurable_subtype_coe.comp measurable_fst)
   have := (h t).comp_measurable he
@@ -110,7 +113,7 @@ theorem isStronglyProgressive (h : ProgressivelyMeasurable ℱ H) :
 theorem of_isStronglyProgressive (h : IsStronglyProgressive ℱ fun s ω => H ω s) :
     ProgressivelyMeasurable ℱ H := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   let e : Ω × ℝ → Set.Iic t × Ω := fun p => (⟨min p.2 t, Set.mem_Iic.mpr (min_le_right _ _)⟩, p.1)
   have he : Measurable e :=
     ((measurable_snd.min measurable_const).subtype_mk).prodMk measurable_fst
@@ -209,7 +212,7 @@ is `ℱ t`-measurable. -/
 theorem ProgressivelyMeasurable.stronglyMeasurable_setIntegral (h : ProgressivelyMeasurable ℱ H)
     {t : ℝ} {S : Set ℝ} (hS : MeasurableSet S) (hSt : S ⊆ Set.Iic t) (μ : Measure ℝ)
     [SFinite μ] : StronglyMeasurable[ℱ t] fun ω => ∫ s in S, H ω s ∂μ := by
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have h1 : StronglyMeasurable fun ω => ∫ s in S, (Set.Iic t).indicator (H ω) s ∂μ :=
     (h t).integral_prod_right' (ν := μ.restrict S)
   have : (fun ω => ∫ s in S, H ω s ∂μ)
@@ -257,7 +260,7 @@ theorem indicator_mark (h : MarkedProgressivelyMeasurable ℱ φ) {S : Set E}
     (hS : MeasurableSet S) :
     MarkedProgressivelyMeasurable ℱ fun ω s e => S.indicator (fun _ => φ ω s e) e := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have : (fun p : Ω × ℝ × E =>
         (Set.Iic t).indicator (fun s => S.indicator (fun _ => φ p.1 s p.2.2) p.2.2) p.2.1)
       = {p : Ω × ℝ × E | p.2.2 ∈ S}.indicator
@@ -274,7 +277,7 @@ theorem indicator_time (h : MarkedProgressivelyMeasurable ℱ φ) {S : Set ℝ}
     (hS : MeasurableSet S) :
     MarkedProgressivelyMeasurable ℱ fun ω s e => S.indicator (fun _ => φ ω s e) s := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hrw : (fun p : Ω × ℝ × E =>
         (Set.Iic t).indicator (fun s => S.indicator (fun _ => φ p.1 s p.2.2) s) p.2.1)
       = {p : Ω × ℝ × E | p.2.1 ∈ S}.indicator
@@ -300,7 +303,7 @@ theorem MarkedProgressivelyMeasurable.stronglyMeasurable_setIntegral_prod
     (hSt : S ⊆ Set.Iic t) (μ : Measure ℝ) [SFinite μ] :
     @StronglyMeasurable (Ω × E) F _ (@Prod.instMeasurableSpace Ω E (ℱ t) inferInstance)
       fun q : Ω × E => ∫ s in S, φ q.1 s q.2 ∂μ := by
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hr : Measurable fun r : (Ω × E) × ℝ => (r.1.1, r.2, r.1.2) :=
     (measurable_fst.comp measurable_fst).prodMk
       (measurable_snd.prodMk (measurable_snd.comp measurable_fst))
@@ -321,7 +324,7 @@ theorem MarkedProgressivelyMeasurable.stronglyMeasurable_setIntegral_integral
     (h : MarkedProgressivelyMeasurable ℱ φ) {t : ℝ} {S : Set ℝ} (hS : MeasurableSet S)
     (hSt : S ⊆ Set.Iic t) (μ : Measure ℝ) [SFinite μ] (ν : Measure E) [SFinite ν] :
     StronglyMeasurable[ℱ t] fun ω => ∫ s in S, ∫ e, φ ω s e ∂ν ∂μ := by
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have h1 : StronglyMeasurable fun r : (Ω × ℝ) × E =>
       (Set.Iic t).indicator (fun s => φ r.1.1 s r.2) r.1.2 :=
     (h t).comp_measurable MeasurableEquiv.prodAssoc.measurable
@@ -350,7 +353,7 @@ theorem ProgressivelyMeasurable.limsup {H : ℕ → Ω → ℝ → ℝ}
     (h : ∀ k, ProgressivelyMeasurable ℱ (H k)) :
     ProgressivelyMeasurable ℱ fun ω s => Filter.limsup (fun k => H k ω s) Filter.atTop := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hind : (fun p : Ω × ℝ =>
         (Set.Iic t).indicator (fun s => Filter.limsup (fun k => H k p.1 s) Filter.atTop) p.2)
       = fun p : Ω × ℝ =>

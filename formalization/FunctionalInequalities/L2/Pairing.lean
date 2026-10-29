@@ -15,6 +15,15 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.L2
 
+/-- The squared norm of a real-inner-product-valued `L²` class is the integral of its
+pointwise squared norm. The measure is arbitrary; the target need not be complete. -/
+theorem norm_sq_eq_integral_norm_sq {α : Type*} [MeasurableSpace α]
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    {μ : Measure α} (f : Lp F 2 μ) :
+    ‖f‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂μ := by
+  rw [← real_inner_self_eq_norm_sq, MeasureTheory.L2.inner_def]
+  simp only [real_inner_self_eq_norm_sq]
+
 variable {A E : Type*} [MeasurableSpace A] [NormedAddCommGroup E]
   [InnerProductSpace ℝ E] {μ : Measure A}
 

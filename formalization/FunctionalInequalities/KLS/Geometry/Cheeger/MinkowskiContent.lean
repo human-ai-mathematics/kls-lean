@@ -26,8 +26,8 @@ no absolute continuity, no positive dimension and no boundedness of `u` are assu
 
 Read `minkowskiContent`, then the local supremum `ballSup` with its Lipschitz property and
 the near-neighbour witness `thickening_superlevel_subset`, then the coarea inequality.
-Nothing here depends on the weighted coarea formula, Sard, the relative perimeter or any
-work-in-progress layer: the module imports no local module at all, only Mathlib.
+Nothing here depends on the weighted coarea formula, Sard or the relative perimeter:
+the module imports no local module at all, only Mathlib.
 -/
 
 noncomputable section
@@ -134,29 +134,12 @@ def minkowskiContent (ν : Measure V) (B : Set V) : ℝ≥0∞ :=
   liminf (fun r : ℝ ↦
     ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r) (𝓝[>] 0)
 
-/-- `liminf` commutes with multiplication by a finite constant on `ℝ≥0∞` (a local tool used for
-the scaling of contents). -/
-theorem liminf_coe_mul {ι : Type*} {l : Filter ι} [l.NeBot] (c : ℝ≥0) (u : ι → ℝ≥0∞) :
-    liminf (fun i => (c : ℝ≥0∞) * u i) l = c * liminf u l := by
-  have hmono : Monotone fun x : ℝ≥0∞ => (c : ℝ≥0∞) * x := fun _ _ h => mul_le_mul' le_rfl h
-  have h := hmono.map_liminf_of_continuousAt (F := l) u
-    (ENNReal.continuous_const_mul ENNReal.coe_ne_top).continuousAt
-  simpa [Function.comp_def] using h.symm
-
-/-- `limsup` commutes with multiplication by a finite constant on `ℝ≥0∞` (a local tool). -/
-theorem limsup_coe_mul {ι : Type*} {l : Filter ι} [l.NeBot] (c : ℝ≥0) (u : ι → ℝ≥0∞) :
-    limsup (fun i => (c : ℝ≥0∞) * u i) l = c * limsup u l := by
-  have hmono : Monotone fun x : ℝ≥0∞ => (c : ℝ≥0∞) * x := fun _ _ h => mul_le_mul' le_rfl h
-  have h := hmono.map_limsup_of_continuousAt (F := l) u
-    (ENNReal.continuous_const_mul ENNReal.coe_ne_top).continuousAt
-  simpa [Function.comp_def] using h.symm
-
 /-- **Content scaling**: `minkowskiContent (c • ν) B = c * minkowskiContent ν B` for every
 `c : ℝ≥0` (finite scalar; the increment is scaled before the truncated subtraction). -/
 theorem minkowskiContent_smul (c : ℝ≥0) (ν : Measure V) (B : Set V) :
     minkowskiContent (c • ν) B = c * minkowskiContent ν B := by
   unfold minkowskiContent
-  rw [← liminf_coe_mul]
+  rw [← ENNReal.liminf_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top]
   refine liminf_congr (Eventually.of_forall fun r => ?_)
   simp only [Measure.smul_apply, ENNReal.smul_def, smul_eq_mul]
   rw [← ENNReal.mul_sub (fun _ _ => ENNReal.coe_ne_top), mul_div_assoc]

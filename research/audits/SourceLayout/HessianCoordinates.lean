@@ -1,6 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 
-/-! Total Hessian identification and weak coordinate calculus through their shared owner. -/
+/-! Total Hessian identification and weak coordinate calculus through their shared module. -/
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

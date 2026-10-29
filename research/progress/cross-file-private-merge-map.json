@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Three cross-file private duplicate groups: convex gradient support, translated L2 moments and the L2 norm/integral identity. Four private names removed; existing public contracts, hypotheses, constants, normalizations, dimensions and certificate entries retained.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Section 2 regular-law isotropic reduction and Lemma 2.1 heat-model L2 energy bridge",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 gradient-image support infrastructure"
+  ],
+  "placement_plan": {
+    "owner": "Existing Convex/Subgradient/Basic and Probability/Transport producers; extend existing L2/Pairing with the class-valued norm/integral identity.",
+    "scope": "Retain exact original contracts, in particular normed-group translation and arbitrary measurable-source/noncomplete real-inner-product-target L2 energy.",
+    "destination": "FunctionalInequalities.Analysis.gradient_le_increment; FunctionalInequalities.Probability.memLp_id_two_translateLaw; FunctionalInequalities.L2.norm_sq_eq_integral_norm_sq.",
+    "imports": "Applications import their lower mathematical owners; Components already imports Pairing. No reverse KLS, Energy or GradientImage dependency.",
+    "decision": "Extend existing Pairing; reuse the other two existing producers. No new production module.",
+    "api_impact": "One added public L2 theorem; four private names removed with no aliases. All pre-existing public names/types/definition values and certificates retained.",
+    "validation": "Strict changed modules and original-contract clients; removed-private absence; compiler-derived retained public types and definition closures; full local verifier including standard-axiom audits and kernel replay."
+  },
+  "new_public_declarations": [
+    {
+      "name": "FunctionalInequalities.L2.norm_sq_eq_integral_norm_sq",
+      "source": "formalization/FunctionalInequalities/L2/Pairing.lean"
+    }
+  ],
+  "removed_public_declarations": [],
+  "private_mergers": [
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.GradientImage.0.FunctionalInequalities.Analysis.gradient_increment",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convex/GradientImage.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.gradient_le_increment",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "class": "exact contract modulo bound-variable and universe-parameter names",
+      "legacy_scope": "Complete real inner-product source; convexity on univ and differentiability at the same point.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.LogConcave.Regular.Isotropic.0.FunctionalInequalities.KLS.RegularPotential.memLp_two_translate",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular/Isotropic.lean",
+      "replacement_name": "FunctionalInequalities.Probability.memLp_id_two_translateLaw",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/Transport.lean",
+      "class": "exact contract modulo bound-variable and universe-parameter names",
+      "legacy_scope": "Normed additive group with Borel measurable structure; probability law and finite second moment; no inner-product, dimension or completeness hypothesis.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate.0.FunctionalInequalities.KLS.LogConcave.norm_sq_Lp_eq_integral",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean",
+      "replacement_name": "FunctionalInequalities.L2.norm_sq_eq_integral_norm_sq",
+      "replacement_source": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "class": "exact contract modulo bound-variable and universe-parameter names",
+      "legacy_scope": "Arbitrary measurable source and measure; real inner-product target, without completeness, finite dimension or separability.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.L2.Components.0.FunctionalInequalities.L2.norm_sq_eq_integral_norm_sq",
+      "old_source": "formalization/FunctionalInequalities/L2/Components.lean",
+      "replacement_name": "FunctionalInequalities.L2.norm_sq_eq_integral_norm_sq",
+      "replacement_source": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "class": "exact contract modulo bound-variable and universe-parameter names",
+      "legacy_scope": "Arbitrary measurable source and measure; real inner-product target, without completeness, finite dimension or separability.",
+      "compatibility_alias": false
+    }
+  ],
+  "owner_moves": [],
+  "maintained_clients": [
+    "research/audits/SourceLayout/CrossFileContracts.lean",
+    "research/audits/SourceLayout/CrossFilePrivateMergers.lean"
+  ],
+  "review": {
+    "meaning_and_scope": "pass: same convexity/differentiability, translated second-moment and L2 energy contracts; no mathematical assumption/constant or certificate change.",
+    "reuse_and_generality": "pass: pinned Mathlib L2.inner_def is the shared identity proof; existing gradient and translation owners already supply exact contracts. Pairing owns class-valued norm energy beside existing MemLp energy.",
+    "public_api_and_placement": "pass: extend existing L2 owner with one real reusable identity; no new production modules or reverse dependency.",
+    "documentation_and_credit": "pass: source mathematical purpose and BKL/Letwin attributions retained; current map and clients maintained in tracked directories.",
+    "consumer_and_compatibility": "pass: strict affected modules, full build and independent original-contract/named-argument/import/absence clients passed. Four old private contracts match compiled replacements modulo bound-variable and universe names.",
+    "evidence_and_preservation": "Baseline source bytes and semantic Git staging saved before editing. Compare raw interfaces before refreshing affected evidence. Mathematical progress unchanged; no commit, push or remote CI."
+  },
+  "evidence_reassessment": [
+    {
+      "node": "thm:logconcave-cheeger-poincare-comparison",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:letwin-weak-third-derivative",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-product-global-l2",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-product-local-bounded",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-finite-linear-combination",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-finite-product",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-determinant",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-trace-quadratic",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-derivative-ae-congr",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-first-ma",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-exp-neg-lipschitz",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-product-locally-bounded",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-matrix-inverse-derivative",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-inverse-hessian-of-logdet",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-inverse",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-smooth-approximation",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-curl-rough-test",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-bounded-all-coordinate-approximation",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-bounded-test-extension",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:weak-compact-flux-bounded-test",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    },
+    {
+      "node": "lem:integrable-weak-divergence",
+      "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "old_sha256": "24f63c126a634bb3306119002dbfff86cd9469528b843596b7fc4e9a9065369c",
+      "new_sha256": "8abe0e6917942cd648cb56b529daad6566b62db4f4cb12f48c2f00d15ffd7d02",
+      "assessment": "pass: old digest matches saved source baseline; all retained raw public interfaces and definition closures remain identical, private contracts match their replacements, strict consumers and legacy/narrow clients passed. Proof/certificate status unchanged."
+    }
+  ],
+  "validation_scope": "Full local verification required; generated receipts live in ignored build/verification and operational baselines in ignored build/history. Passing old receipts do not certify this snapshot.",
+  "interface_comparison": {
+    "retained_public": 6835,
+    "added_public": [
+      "FunctionalInequalities.L2.norm_sq_eq_integral_norm_sq"
+    ],
+    "removed_public": [],
+    "changed_retained_public": [],
+    "owner_changes": [],
+    "closure_vertices": 7574,
+    "changed_definition_closure": []
+  }
+}

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Convex.Affine
+import FunctionalInequalities.Analysis.Convex.Legendre.Affine
 import FunctionalInequalities.Probability.MomentMeasure.Integrability
 import FunctionalInequalities.Probability.MomentMeasure.Basic
 import Mathlib.MeasureTheory.Group.LIntegral
@@ -22,7 +22,7 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `AffineConjugation.lean`.
+-- Mass of the Legendre transform under affine subtraction.
 
 open MeasureTheory
 open scoped ENNReal
@@ -54,7 +54,7 @@ theorem mass_legendre_affineSubtract_volume {n : ℕ}
 end
 
 section
--- Accepted source `AffineProbability.lean`.
+-- Integrability and integrals under affine subtraction.
 
 open MeasureTheory
 open scoped ENNReal
@@ -155,7 +155,7 @@ theorem variationalFunctional_affineSubtract_volume {n : ℕ}
 end
 
 section
--- Accepted source `OriginNormalization.lean`.
+-- Normalizing a potential to vanish at the origin under a probability law.
 
 open MeasureTheory
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

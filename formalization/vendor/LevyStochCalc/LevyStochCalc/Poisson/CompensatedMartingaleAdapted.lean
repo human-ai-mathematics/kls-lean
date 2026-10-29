@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Poisson.CompensatedSimple
 import LevyStochCalc.Poisson.CompensatedIsometry
 import LevyStochCalc.Poisson.CompensatedIsometryL2
@@ -231,7 +234,7 @@ lemma compensated_condExp_Ioc_eq_zero
       exact compensated_condExp_future_eq_zero N ℱ hℱ hs (hsa_eq ▸ hab_lt) hA hA_fin
     · have h_base := compensated_condExp_future_eq_zero N ℱ hℱ (le_trans hs hsa) hab_lt hA hA_fin
       have hm₂a := ℱ.le' a
-      haveI : SigmaFinite (P.trim hm₂a) := inferInstance
+      have : SigmaFinite (P.trim hm₂a) := inferInstance
       have h_tower := MeasureTheory.condExp_condExp_of_le (μ := P)
         (f := fun ω => N.compensated (Set.Ioc a b ×ˢ A) ω)
         (ℱ.mono hsa) hm₂a
@@ -404,7 +407,7 @@ lemma simpleIntegral_term_condExp_compensated
       filter_upwards [hpull, ht_zero] with ω hp hz
       rw [hp]; simp only [Pi.mul_apply]; rw [hz]; ring
     have hm₂pc := ℱ.le' (φ.partition i.castSucc)
-    haveI : SigmaFinite (P.trim hm₂pc) := inferInstance
+    have : SigmaFinite (P.trim hm₂pc) := inferInstance
     have htower := MeasureTheory.condExp_condExp_of_le (μ := P) (f := ft)
       (ℱ.mono hpc_s.le) hm₂pc
     refine htower.symm.trans ((MeasureTheory.condExp_congr_ae hpc_eq_zero).trans ?_)

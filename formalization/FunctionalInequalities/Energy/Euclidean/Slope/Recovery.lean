@@ -4,7 +4,6 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 /-!
 # Smooth recovery of a globally Lipschitz test, and the reduction tools
 
-Source: part `B` of the energy-slope route (`research/audits/EnergySlopeRouteStatements.lean`).
 Read `SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith` (smooth recovery) for the main
 contract, then the four reduction tools `locallyLipschitz_mul` (the local Lipschitz product rule),
 `exists_lipschitzWith_of_eq_zero_outside_ball` (the bounded-support Lipschitz bound), `AsymptoticLipschitz.apply_mul_le` (the asymptotic-Lipschitz product bound)
@@ -22,7 +21,8 @@ enough radius.  The uniform bound `K²` makes reverse Fatou (`MeasureTheory.lims
 applicable, so the mollifications form an approximating sequence of smooth tests whose limiting
 energy is at most the asymptotic-Lipschitz energy of `g`.
 
-the local Lipschitz product rule–the local-slope product bound are the reduction tools that turn a general test into a globally Lipschitz one:
+The local Lipschitz product rule and the local-slope product bound are the reduction tools that
+turn a general test into a globally Lipschitz one:
 a locally Lipschitz function times a bounded globally Lipschitz one is locally Lipschitz; a
 locally Lipschitz function vanishing outside a ball is globally Lipschitz; and the one-moving-
 point Leibniz bounds for the asymptotic Lipschitz constant and for the local slope.
@@ -30,7 +30,7 @@ point Leibniz bounds for the asymptotic Lipschitz constant and for the local slo
 ## What is not proved here
 
 No density statement: the mollification radius is uniform in `x`, which is genuinely insufficient
-for a general locally Lipschitz test (the diagnostic `D1` of the route file).  The density
+for a general locally Lipschitz test.  The density
 argument is `Energy/Euclidean/Slope/Density.lean`.
 -/
 

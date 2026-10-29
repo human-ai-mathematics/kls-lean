@@ -5,7 +5,7 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Flux
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Testing
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Weighted
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import FunctionalInequalities.Analysis.Graph.Area
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import FunctionalInequalities.Analysis.WeakDerivative.Products
@@ -50,7 +50,8 @@ open scoped Matrix.Norms.Elementwise
 namespace FunctionalInequalities.Analysis
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-/-- Actual regular-source weak inverse formula (Letwin (2.5)), retaining all R0/EX fields. -/
+/-- Weak inverse formula (Letwin (2.5)) for the regular moment potential, retaining all of its
+regularity and existence conclusions. -/
 theorem exists_regular_moment_weak_inverse :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
@@ -114,7 +115,6 @@ theorem exists_regular_moment_weak_inverse :
 end FunctionalInequalities.Analysis
 end RegularMomentWeakInverse
 
-
 section RegularMomentWeakInverseMean
 noncomputable section
 open MeasureTheory Set
@@ -122,19 +122,10 @@ open FunctionalInequalities.Probability.Stein
 open scoped ContDiff RealInnerProductSpace Topology
 namespace FunctionalInequalities.Analysis
 
-/-! The same actual regular-law witnesses retain all weak inverse and first
+/-! The same regular-law witnesses retain all weak inverse and first
 Monge-Ampere fields and additionally have integrable Hessian entries with mean Id.
-The analytic C1,1 mean-Hessian identity is already canonical. This consumer does
-not establish Letwin2.5 or compact8, nor any C2 regularity upgrade. -/
-
-private lemma mean_hessian_basis_entry {n : ℕ}
-    (A : Matrix (Fin n) (Fin n) ℝ) (i j : Fin n) :
-    ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-      Matrix.toEuclideanLin A (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ = A i j := by
-  rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply,
-    EuclideanSpace.inner_single_left, Matrix.toLpLin_apply 2 2]
-  simp [Matrix.mulVec, dotProduct]
-
+This does not establish Letwin's Theorem 2.5 or the compact bound with constant 8,
+nor any C2 regularity upgrade. -/
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
 theorem exists_regular_moment_weak_inverse_mean_hessian :
@@ -246,7 +237,7 @@ theorem exists_regular_moment_weak_inverse_mean_hessian :
     calc
       hessianMatrix u x i j =
           ⟪e i, Matrix.toEuclideanLin (hessianMatrix u x) (e j)⟫ :=
-        (mean_hessian_basis_entry (hessianMatrix u x) i j).symm
+        (inner_basisFun_toEuclideanLin (hessianMatrix u x) i j).symm
       _ = ⟪e i, fderiv ℝ (gradient u) x (e j)⟫ := by rw [hmat]; rfl
       _ = ⟪fderiv ℝ (gradient u) x (e j), e i⟫ := real_inner_comm _ _
   calc
@@ -267,7 +258,6 @@ theorem exists_regular_moment_weak_inverse_mean_hessian :
 end FunctionalInequalities.Analysis
 end
 end RegularMomentWeakInverseMean
-
 
 section RegularMomentWeakHessianEvolution
 open MeasureTheory Set Filter
@@ -322,7 +312,6 @@ private theorem bounded_compact_hessian_test_data {n : ℕ}
     have hdata := HasWeakDerivAlong.compact_mul_data (hT k i j).1 (hT k i j).2
       (fun S hS => memLp_top_hessianMatrix_entry_of_isCompact hG i j S hS) hψ hψc
     exact ⟨hdata.1, hdata.2.2.1, hdata.2.2.2⟩
-
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The regular-class moment potential with its weak weighted Hessian evolution: the same `u, L, LF, T`
@@ -650,7 +639,6 @@ theorem exists_regular_moment_bounded_weak_hessian_testing :
     (fun b => (hfirst b).2.2.2.2) hη hbound hηc
     (fun b => (hweak b).1) (fun b => (hweak b).2.1) (fun b => (hweak b).2.2) i j
 
-
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The regular-class weak Hessian evolution witness with its directional weak subsolution and local coefficient bounds:
 the same `u, L, LF, T` as `exists_regular_moment_weak_hessian_evolution` with every one of its fields, plus, for every
@@ -805,12 +793,8 @@ theorem exists_regular_moment_directional_hessian_subsolution :
         (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
       filter_upwards [hd] with x hx
       rw [← hx.2.1, Real.exp_log hx.1.det_pos]
-    have hVc : ConvexOn ℝ univ W := by
-      have hn' : ConvexOn ℝ univ (fun y : EuclideanSpace ℝ (Fin n) => ‖y‖ ^ 2) :=
-        convexOn_univ_norm.pow (fun _ _ => norm_nonneg _) 2
-      have hq := hn'.smul
-        (show 0 ≤ κ / 2 by positivity)
-      convert hstrong.add hq using 1 <;> ext y <;> simp [smul_eq_mul]
+    have hVc : ConvexOn ℝ univ W :=
+      UniformConvexOn.convexOn (strongConvexOn_iff_convex.mpr hstrong) fun r => by positivity
     intro v ψ hψ hψc hψn
     exact integral_directional_hessian_flux_le hC1 hl hG (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT
       hInv (fun i => (hfirst i).2.2.2.2) hVc (hd.mono fun x hx => hx.1) v ψ hψ hψc hψn

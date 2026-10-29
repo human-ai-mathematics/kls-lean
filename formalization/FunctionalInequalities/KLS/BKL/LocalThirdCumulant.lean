@@ -11,11 +11,12 @@ isotropic log-concave law, Borell gives some positive exponential radius (not ev
 with the Letwin quadratic-form bound
 (Letwin Theorem 1.2, an explicit hypothesis) the third cumulants satisfy `∑_{jk} κ₃(u,e_j,e_k)² ≤ 8‖u‖²`.
 If this holds for all isotropic log-concave laws in positive dimension, `CumulantBound 2 8` follows.
-The older statement in `Analysis/BakryEmery/Cumulant/Basic.lean` assumes all exponential moments, which
+The statement in `Analysis/BakryEmery/Cumulant/Basic.lean` assumes all exponential moments, which
 general log-concave laws (e.g. Laplace) do not have; this module is the source-faithful version.
 The noncompact input is proved separately by `KLS.LogConcave.letwinQuadraticBound` in
 `KLS/Letwin/QuadraticBound.lean`; the interfaces here remain conditional to avoid that import.
-The accepted Theorem 4.1 uses compact Letwin and cutoff induction; no uncut Eldan process is constructed.
+The proof of Theorem 4.1 uses compact Letwin and cutoff induction; no uncut Eldan process
+is constructed.
 -/
 
 open MeasureTheory

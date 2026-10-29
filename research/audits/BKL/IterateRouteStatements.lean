@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
 import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 
 /-!

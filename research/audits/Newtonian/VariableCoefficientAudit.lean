@@ -1,10 +1,10 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.VariableCoefficientSchauder
+import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.VariableCoefficient
 
 /-!
 # Audit: GT Theorem 6.2 (interior a priori form) for `(1 + x₀²/8) Δ + 1` on a planar quadratic
 
 Real client of `variable_coefficient_interior_hessian_holder`
-(`FunctionalInequalities/Analysis/IteratedDerivative/VariableCoefficientSchauder.lean`;
+(`FunctionalInequalities/Analysis/IteratedDerivative/Schauder/VariableCoefficient.lean`;
 Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001,
 Theorem 6.2, pp. 90–92) with `n = 2`, the variable principal coefficients
 `a(x) = (1 + x₀²/8) · Id` (ellipticity constants `λ = 1`, `Λ = 2`, Hölder constant `K = 1` with

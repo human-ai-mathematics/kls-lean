@@ -14,6 +14,7 @@ Hole-free application layer over the proved recovery sequence
 * the layer-cake identity `lintegral_measure_symmDiff_superlevel`, the balance estimate
   `min_measure_le_add_measure_symmDiff` and the convergence `tendsto_lintegral_min_superlevel`,
   used in the comparison of the two infima;
+* the monotonicity `smoothConstant_mono` in the charged region `Ω`;
 * the proved one-sided comparison `minkowskiConstant_le_smoothConstant`.
 
 This module proves the direction `minkowskiConstant_le_smoothConstant`.
@@ -64,6 +65,17 @@ theorem smoothConstant_eq_top_of_subsingleton [Subsingleton V] (ρ : V → ℝ) 
   · have hUu : U.carrier = Set.univ := Set.eq_univ_of_forall fun y ↦ by rwa [Subsingleton.elim y x]
     rw [hUu, measure_univ, iInf_pos (by norm_num : (0 : ℝ≥0∞) < 1)]
     exact iInf_neg (lt_irrefl 1)
+
+omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+/-- `h_S` is monotone in the region `Ω` where the boundary is charged: enlarging `Ω` enlarges
+every relative perimeter `∫_{∂U ∩ Ω} ρ dℋ^{n-1}`. In particular `Ω = Set.univ`, the ambient
+smooth-boundary convention, gives the largest value. -/
+theorem smoothConstant_mono (ρ : V → ℝ) {Ω Ω' : Set V} (h : Ω ⊆ Ω') (ν : ProbabilityMeasure V) :
+    smoothConstant ρ Ω ν ≤ smoothConstant ρ Ω' ν := by
+  unfold smoothConstant
+  refine iInf_mono fun U ↦ iInf_mono fun _ ↦ iInf_mono fun _ ↦ ?_
+  gcongr
+  exact lintegral_mono' (Measure.restrict_mono (Set.inter_subset_inter_right _ h) le_rfl) le_rfl
 
 /-! ### Layer-cake identities for `[0,1]`-valued functions -/
 

@@ -1,7 +1,8 @@
 import FunctionalInequalities.Probability.Transport
 import FunctionalInequalities.KLS.LogConcave.Transport
 
-/-! Narrow-import clients for the transport owners. No isotropic or Poincaré assembly is imported. -/
+/-! Narrow-import clients for the transport modules. No isotropic or Poincaré assembly is
+imported. -/
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

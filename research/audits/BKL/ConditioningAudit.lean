@@ -6,11 +6,11 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 import Mathlib.Probability.Moments.Variance
 
-/-! Independent audit clients for CB5 half mass and CB1/CB4 ball conditioning (Probability/Moments.lean section MomentTails, Probability/Conditioning.lean). Merged verbatim from the reviewer receipt `CB5-CB4-Independent-20261008 (raw d81354de…)` (modules
-Models, ConditionModels, ConditionClients, BoundaryClients, ZeroClients), re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration
-tooling stays in the receipt. -/
+/-! Audit clients for the half mass and the ball conditioning (`Probability/Moments.lean` section
+MomentTails, `Probability/Conditioning.lean`), in the sections Models, ConditionModels,
+ConditionClients, BoundaryClients and ZeroClients. -/
 
--- ===== reviewer module Models (CB5-CB4-Independent-20261008 (raw d81354de…)) =====
+-- ===== Models =====
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory
@@ -85,7 +85,7 @@ lemma rank_zero_ball (R : ℝ) (hR : 0 < R) : Metric.ball (0 : E0) R = Set.univ 
   simpa [hx, mem_ball_zero_iff] using hR
 end CBTailModels
 
--- ===== reviewer module ConditionModels (CB5-CB4-Independent-20261008 (raw d81354de…)) =====
+-- ===== ConditionModels =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory Set CBTailModels
@@ -167,7 +167,7 @@ lemma signed_threshold_false :
   norm_num
 end CBConditionModels
 
--- ===== reviewer module ConditionClients (CB5-CB4-Independent-20261008 (raw d81354de…)) =====
+-- ===== ConditionClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set CBTailModels CBConditionModels
@@ -263,7 +263,7 @@ lemma atom_zero_exact_error_zero :
   simp
 end CBConditionClients
 
--- ===== reviewer module BoundaryClients (CB5-CB4-Independent-20261008 (raw d81354de…)) =====
+-- ===== BoundaryClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set CBTailModels
@@ -295,7 +295,7 @@ lemma boundary_cond_not_probability :
   exact zero_ne_one hu
 end CBConditionBoundary
 
--- ===== reviewer module ZeroClients (CB5-CB4-Independent-20261008 (raw d81354de…)) =====
+-- ===== ZeroClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set CBTailModels

@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
 
 /-!
-# Audit: BKL Lemma 3.3 for the iterates (route `S1`)
+# Audit: BKL Lemma 3.3 for the iterates
 
 The proposition `S1` of `research/audits/BKL/IterateRouteStatements.lean` (operator route to
 Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
@@ -33,7 +33,7 @@ variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSp
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-/-- `S1`, verbatim: BKL Lemma 3.3 for every `q`. -/
+/-- `S1` of `IterateRouteStatements.lean`, verbatim: BKL Lemma 3.3 for every `q`. -/
 theorem s1 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →

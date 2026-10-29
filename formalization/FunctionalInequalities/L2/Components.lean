@@ -45,10 +45,6 @@ section InnerProduct
 variable {F : Type*}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F]
 
-private theorem norm_sq_eq_integral_norm_sq {μ : Measure α} (f : Lp F 2 μ) : ‖f‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂μ := by
-  rw [← real_inner_self_eq_norm_sq, MeasureTheory.L2.inner_def]
-  simp only [real_inner_self_eq_norm_sq]
-
 private theorem integrable_norm_sq
     {μ : Measure α} (f : Lp F 2 μ) : Integrable (fun x => ‖f x‖ ^ 2) μ := by
   simpa only [real_inner_self_eq_norm_sq] using MeasureTheory.L2.integrable_inner (𝕜 := ℝ) f f

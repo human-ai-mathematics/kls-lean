@@ -4,8 +4,6 @@ import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
 /-!
 # Mollification and weak derivatives from difference bounds
-
-Existing names, statements and proof payloads are preserved.
 -/
 
 noncomputable section
@@ -21,7 +19,7 @@ open scoped Topology Convolution
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Mollification commutes with weak derivatives** (weak Letwin route, generic): if `g` is the weak derivative
+/-- **Mollification commutes with weak derivatives**: if `g` is the weak derivative
 of `f` along `v`, then `φ.normed ⋆ f` is smooth with `∂ᵥ(φ.normed ⋆ f) = φ.normed ⋆ g`. -/
 theorem fderiv_convolution_eq_of_hasWeakDerivAlong {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -184,8 +182,8 @@ private lemma quotient_pairing_tendsto {f : E → ℝ}
   simp only [zero_add, smul_eq_mul] at ht
   exact ht.congr' (.of_forall fun t => (heq t).symm)
 
-/-- **Difference-quotient criterion for a weak derivative in `L²`** (Nirenberg; Evans PDE §5.8.2 Thm 3(ii); weak Letwin
-route): if `f ∈ L²` and `∫ (f(x + t v) − f(x))² ≤ C t²` for all small `t ≠ 0`, then `f` has a weak
+/-- **Difference-quotient criterion for a weak derivative in `L²`** (Nirenberg; Evans PDE §5.8.2 Thm
+3(ii)): if `f ∈ L²` and `∫ (f(x + t v) − f(x))² ≤ C t²` for all small `t ≠ 0`, then `f` has a weak
 derivative along `v` that lies in `L²`. -/
 theorem exists_hasWeakDerivAlong_of_sq_difference_le
     {f : E → ℝ} (hf : MemLp f 2 (volume : Measure E)) (v : E) {C : ℝ}

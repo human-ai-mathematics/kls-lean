@@ -228,8 +228,8 @@ theorem setLIntegral_image_levelGraphMap {ι : H →ₗᵢ[ℝ] V} {κ : K →�
 /-- **The ambient side of the local coarea equality.**  On a Borel piece of a level-graph family the
 integral of the ambient coarea density against an arbitrary weight becomes an integral over the
 parameter–level domain of the **graph area density**, which is what the normalized area formula
-`B2` consumes.  The substitution is the codimension-`m` vertical one; the change of density is the
-fibre Jacobian identity, applied pointwise.
+`hausdorffNormalized_image_vectorGraphMap` consumes.  The substitution is the codimension-`m`
+vertical one; the change of density is the fibre Jacobian identity, applied pointwise.
 
 **This is not a coarea formula**: the remaining steps are Tonelli in the level variable, the
 *weighted* codimension-`m` area formula on each fibre, and the patching. -/

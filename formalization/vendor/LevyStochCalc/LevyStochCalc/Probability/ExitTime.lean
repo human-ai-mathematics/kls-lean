@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import Mathlib.Probability.Process.Stopping
 import Mathlib.Data.Rat.Denumerable
 import Mathlib.Topology.Order.Compact
@@ -46,7 +49,7 @@ theorem isClosed_exitSet {X : Ω → ℝ → E} {ω : Ω} (hX : Continuous (X ω
     IsClosed (exitSet X k ω) := by
   have h : exitSet X k ω = Set.Ici (0 : ℝ) ∩ (fun r => ‖X ω r‖) ⁻¹' Set.Ici k := by
     ext r
-    simp only [exitSet, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_Ici, Set.mem_preimage]
+    simp only [exitSet, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_Ici, Set.mem_preimage]
   rw [h]
   exact isClosed_Ici.inter (isClosed_Ici.preimage hX.norm)
 
@@ -143,7 +146,7 @@ theorem exitTime_le_iff_forall {X : Ω → ℝ → E} {ω : Ω} (hX : Continuous
 theorem measurable_norm_of_adapted [MeasurableSpace E] [OpensMeasurableSpace E]
     {ℱ : Filtration ℝ mΩ} {X : Ω → ℝ → E} (hadapt : Adapted ℱ fun r ω => X ω r) (r : ℝ) :
     Measurable[ℱ r] fun ω => ‖X ω r‖ := by
-  letI : MeasurableSpace Ω := ℱ r
+  let : MeasurableSpace Ω := ℱ r
   exact Measurable.norm (hadapt r)
 
 theorem measurableSet_exitTime_le {ℱ : Filtration ℝ mΩ} [MeasurableSpace E]
@@ -153,7 +156,7 @@ theorem measurableSet_exitTime_le {ℱ : Filtration ℝ mΩ} [MeasurableSpace E]
   rcases lt_or_ge t 0 with ht | ht
   · have hempty : {ω | exitTime X k ω ≤ (t : WithTop ℝ)} = (∅ : Set Ω) := by
       ext ω
-      simp only [Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false]
+      simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
       intro hle
       obtain ⟨s, hs, -⟩ := (exitTime_le_iff (hcont ω) k t).1 hle
       exact absurd (hs.1.trans hs.2) (not_le.2 ht)
@@ -162,13 +165,13 @@ theorem measurableSet_exitTime_le {ℱ : Filtration ℝ mΩ} [MeasurableSpace E]
   · have hset : {ω | exitTime X k ω ≤ (t : WithTop ℝ)}
         = ⋂ n : ℕ, ⋃ m : ℕ, {ω | k - ((n : ℝ) + 1)⁻¹ < ‖X ω (gridPt t m)‖} := by
       ext ω
-      simp only [Set.mem_setOf_eq, Set.mem_iInter, Set.mem_iUnion]
+      simp only [Set.mem_ofPred_eq, Set.mem_iInter, Set.mem_iUnion]
       exact exitTime_le_iff_forall (hcont ω) k ht
     rw [hset]
     have hmeas : ∀ m : ℕ, Measurable[ℱ t] fun ω => ‖X ω (gridPt t m)‖ := fun m =>
       (measurable_norm_of_adapted hadapt (gridPt t m)).mono
         (ℱ.mono (gridPt_mem_Icc ht m).2) le_rfl
-    letI : MeasurableSpace Ω := ℱ t
+    let : MeasurableSpace Ω := ℱ t
     exact MeasurableSet.iInter fun n => MeasurableSet.iUnion fun m =>
       measurableSet_lt measurable_const (hmeas m)
 

@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Ito.PicardIntegrand
 import LevyStochCalc.Probability.ProgressiveCadlag
 import LevyStochCalc.Ito.PicardSpace
@@ -180,7 +183,7 @@ omit [MeasurableSpace E] [MeasureTheory.IsProbabilityMeasure P] in
 theorem integrableOn_of_lintegral_sq_lt_top {f : ℝ → ℝ} (hf : Measurable f) {b : ℝ}
     (hfin : ∫⁻ s in Set.Icc (0 : ℝ) b, (‖f s‖₊ : ℝ≥0∞) ^ 2 ∂volume < ⊤) :
     MeasureTheory.IntegrableOn f (Set.Icc (0 : ℝ) b) volume := by
-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
+  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
         exact ENNReal.ofReal_lt_top⟩
   exact (memLp_two_of_lintegral_sq_lt_top hf hfin).integrable (by norm_num)
@@ -193,7 +196,7 @@ theorem lintegral_sq_setIntegral_le {f : Ω → ℝ → ℝ}
     ∫⁻ ω, (‖∫ s in Set.Icc (0 : ℝ) t, f ω s‖₊ : ℝ≥0∞) ^ 2 ∂P
       ≤ ENNReal.ofReal t
         * ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) t, (‖f ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
         exact ENNReal.ofReal_lt_top⟩
   have hinner_meas : Measurable fun ω : Ω =>
@@ -294,7 +297,7 @@ omit [MeasurableSpace E] [MeasureTheory.IsProbabilityMeasure P] in
 theorem measurable_setIntegral_slice {f : Ω → ℝ → ℝ}
     (hf : Measurable (Function.uncurry f)) (t : ℝ) :
     Measurable fun ω => ∫ s in Set.Icc (0 : ℝ) t, f ω s := by
-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
         exact ENNReal.ofReal_lt_top⟩
   exact (hf.stronglyMeasurable.integral_prod_right'

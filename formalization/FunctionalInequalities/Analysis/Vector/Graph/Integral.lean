@@ -2,9 +2,10 @@ import FunctionalInequalities.Analysis.Vector.Graph.Area
 
 /-! # The weighted codimension-`m` graph area formula
 
-Property `B2` of the area formula route computes the normalized `k`-dimensional measure of a `C¹`
-graph.  That is an identity of **measures of sets**; the coarea formula integrates an arbitrary
-weight over a fibre, so it needs the same identity as a **change of variables**.
+The normalized area formula `hausdorffNormalized_image_vectorGraphMap` computes the normalized
+`k`-dimensional measure of a `C¹` graph.  That is an identity of **measures of sets**; the coarea
+formula integrates an arbitrary weight over a fibre, so it needs the same identity as a **change
+of variables**.
 
 `map_vectorGraphMap_withDensity` upgrades it in the standard way: the graph parametrization pushes
 the Jacobian-weighted Lebesgue measure on the parameter space forward to the normalized surface
@@ -71,7 +72,7 @@ theorem map_vectorGraphMap_withDensity (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗ�
 
 /-- **The weighted codimension-`m` graph area formula.**  The surface integral of an arbitrary
 measurable `ℝ≥0∞` weight over a piece of a `C¹` graph is the Lebesgue integral of the weight against
-the graph area density.  `B2` is the case `f = 1`.
+the graph area density.  `hausdorffNormalized_image_vectorGraphMap` is the case `f = 1`.
 
 No integrability, boundedness or finiteness is assumed; the parameter set need only be
 measurable. -/

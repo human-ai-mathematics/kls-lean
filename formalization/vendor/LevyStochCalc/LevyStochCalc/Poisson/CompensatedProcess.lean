@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Poisson.CompensatedApprox
 
 /-!
@@ -161,7 +164,7 @@ lemma stageIntegral_tendsto_process (t : ℝ) :
     Tendsto (fun n => eLpNorm (fun ω => stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n
       t ω
       - process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t ω) 2 P) atTop (𝓝 0) := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   have h1 := stageLp_tendsto N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t
   have hmem : MemLp (↑↑(processLp N ℱ φ h_meas h_progMeas h_sq_int_global t) : Ω → ℝ) 2 P :=
     Lp.memLp _

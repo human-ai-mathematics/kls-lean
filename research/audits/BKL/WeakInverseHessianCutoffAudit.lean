@@ -2,9 +2,10 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff
 /-!
 # Weak inverse-Hessian cutoff audit
 
-Clients of the C1 height-cutoff package (Letwin arXiv:2607.24164v1, Lemma A.4 cutoffs in C1 form): retention of the
-whole bounded-testing source contract by the cutoff producer, and the substantive χ_R · H_lk weak test at one
-witness. The generic family carries no dimension hypothesis (n = 0 included). Not A.5, (2.14), Theorem 2.5 or KLS.
+Clients of the `C¹` height-cutoff package (Letwin arXiv:2607.24164v1, Lemma A.4 cutoffs in `C¹`
+form): retention of the whole bounded-testing source statement by the cutoff producer, and the
+substantive χ_R · H_lk weak test at one witness. The generic family carries no dimension hypothesis
+(n = 0 included). Not A.5, (2.14), Theorem 2.5 or KLS.
 -/
 noncomputable section
 open MeasureTheory Filter Set Metric Matrix
@@ -13,7 +14,8 @@ open scoped ContDiff Topology RealInnerProductSpace
 open FunctionalInequalities FunctionalInequalities.Analysis
 namespace WeakInverseHessianCutoffAudit
 
-/-- Original whole bounded-testing source contract retained by the cutoff producer at one witness. -/
+/-- Original whole bounded-testing source statement retained by the cutoff producer at one
+witness. -/
 theorem weak_cutoffs_retain_bounded_testing_source_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)

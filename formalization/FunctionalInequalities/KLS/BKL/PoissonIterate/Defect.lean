@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 
 /-!
@@ -29,7 +29,7 @@ Each is first proved for one step from an arbitrary field `h` with components in
 (`normSq_gradField_gradField_step`, `normSq_genField_step_add_defect_le`,
 `exists_symm_normSq_grad0_step_sub_le`). Along the way: weak first derivatives of `D(A)` lie in
 `D(T̄)` (`partialDeriv_mem_domain`) and the weak Hessian is symmetric (`partialDeriv_comm`,
-`gradField_gradField_comp_swap`), both from `HeatSemigroup/Hessian.lean`; `α ≥ 0`
+`gradField_gradField_comp_swap`), both from `HeatSemigroup/Generator/Hessian.lean`; `α ≥ 0`
 (`scale_nonneg`); `⟪u - ∫u, u⟫ = ‖u - ∫u‖²` and `‖u - ∫u‖ ≤ ‖u‖`.
 
 ## The argument
@@ -120,12 +120,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- A potential of temperate growth is `C²`. -/
-private theorem contDiff_two (hUt : U.HasTemperateGrowth) : ContDiff ℝ 2 U :=
-  hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
-
 /-- A weak partial derivative on `D(T̄)` in terms of `T̄`. -/
 private theorem partialDeriv_eq {u : Lp ℝ 2 (ν : Measure V)} (hu : u ∈ (T̄).domain)
     (j : Fin (Module.finrank ℝ V)) :
@@ -185,7 +179,7 @@ include hνU hUt hexp hC in
 theorem normSq_gradField_gradField_step {k : ℕ} (h : Field ν k)
     (hh : ∀ I, h I ∈ (adjointComp T̄).domain) :
     normSq (gradField T̄ (gradField T̄ h)) = normSq (genField T̄ (step T̄ h)) + defect T̄ h := by
-  have hU := contDiff_two hUt
+  have hU : ContDiff ℝ 2 U := hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
   set α := scale T̄ h
   have hu : ∀ J, gradField T̄ h J ∈ (T̄).domain := fun J =>
     partialDeriv_mem_domain m hν hi hνU hUt hexp (hh _) _
@@ -286,7 +280,7 @@ theorem exists_symm_normSq_grad0_step_sub_le (hCpos : 0 < C) {k : ℕ} (h : Fiel
     (hh : ∀ I, h I ∈ (adjointComp T̄).domain) :
     ∃ S : Field ν (k + 2), (∀ J, S (J ∘ Equiv.swap 0 1) = S J) ∧
       normSq (grad0 T̄ (step T̄ h) - S) ≤ (C : ℝ) * defect T̄ h := by
-  have hU := contDiff_two hUt
+  have hU : ContDiff ℝ 2 U := hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
   refine ⟨fun J => (scale T̄ h)⁻¹ • L2.center ν (gradField T̄ (gradField T̄ h) J),
     fun J => ?_, (normSq_grad0_step_sub_le m hν hi h).trans ?_⟩
   · simp only [gradField_gradField_comp_swap m hν hi hνU hUt hexp h hh J]
@@ -317,7 +311,7 @@ theorem normSq_gradField_gradField_iter {f : Lp ℝ 2 (ν : Measure V)}
     normSq (gradField T̄ (gradField T̄ (iter T̄ f k))) =
       normSq (genField T̄ (iter T̄ f (k + 1))) + defect T̄ (iter T̄ f k) :=
   normSq_gradField_gradField_step m hν hi hνU hUt hexp hC _
-    (iter_mem_adjointComp_domain m hν hi hνU (contDiff_two hUt) hC hf k)
+    (iter_mem_adjointComp_domain m hν hi hνU (hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)) hC hf k)
 
 include hνU hUt hexp hC in
 /-- **BKL Lemma 3.4.** For `f ∈ D(A)` and `∇²U ≥ a`:
@@ -328,7 +322,7 @@ theorem normSq_genField_iter_succ_add_defect_le {a : ℝ}
     normSq (genField T̄ (iter T̄ f (k + 1))) + defect T̄ (iter T̄ f k) +
         a * energy T̄ (iter T̄ f k) ≤ normSq (genField T̄ (iter T̄ f k)) :=
   normSq_genField_step_add_defect_le m hν hi hνU hUt hexp hC ha _
-    (iter_mem_adjointComp_domain m hν hi hνU (contDiff_two hUt) hC hf k)
+    (iter_mem_adjointComp_domain m hν hi hνU (hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)) hC hf k)
 
 include hνU hUt hexp hC in
 /-- **BKL Corollary 3.5.** For `f ∈ D(A)` and `∇²U ≥ a > 0`, the energies `‖∇h_{k+1}‖²` are
@@ -366,7 +360,7 @@ theorem exists_symm_normSq_grad0_iter_succ_sub_le (hCpos : 0 < C)
     ∃ S : Field ν (k + 2), (∀ J, S (J ∘ Equiv.swap 0 1) = S J) ∧
       normSq (grad0 T̄ (iter T̄ f (k + 1)) - S) ≤ (C : ℝ) * defect T̄ (iter T̄ f k) :=
   exists_symm_normSq_grad0_step_sub_le m hν hi hνU hUt hexp hC hCpos _
-    (iter_mem_adjointComp_domain m hν hi hνU (contDiff_two hUt) hC hf k)
+    (iter_mem_adjointComp_domain m hν hi hνU (hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)) hC hf k)
 
 end HeatModel
 

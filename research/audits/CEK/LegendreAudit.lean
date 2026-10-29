@@ -1,12 +1,11 @@
-import FunctionalInequalities.Analysis.Convex.AffineMaximum
+import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
 import FunctionalInequalities.Probability.MomentMeasure.Basic
 
 /-! Audit clients for the extended-real Legendre transform and finite affine maxima
-(`Analysis/Convex/Legendre.lean`, `Analysis/Convex/AffineMaximum.lean`; Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
-(61) and the proof of Proposition 12). Client blocks are verbatim from the root-compiled lane A clients
-(`lane-a/Clients.lean` c3964edf…, `lane-a/round2-convexification/ConvexificationClients.lean` a733721b…), re-pointed from
-the scratch namespace `KLSConstruction.MomentMap` to the owning namespaces: a nonconstant affine primal negative on half
-the line, the infinite-value density boundary, a nonconvex discontinuous two-point primal and the empty effective domain. -/
+(`Analysis/Convex/Legendre/Basic.lean`, `Analysis/Convex/Legendre/AffineMaximum.lean`; Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
+(61) and the proof of Proposition 12), stated in the owning namespaces: a nonconstant affine primal
+negative on half the line, the infinite-value density boundary, a nonconvex discontinuous
+two-point primal and the empty effective domain. -/
 
 noncomputable section
 

@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Probability.Progressive
 import Mathlib.MeasureTheory.Function.Floor
 import Mathlib.MeasureTheory.Integral.Prod
@@ -94,7 +97,7 @@ theorem progressivelyMeasurable_of_rightContinuous
     ProgressivelyMeasurable ℱ (fun ω s => X s ω) := by
   refine ProgressivelyMeasurable.of_isStronglyProgressive ?_
   intro i
-  letI : MeasurableSpace Ω := ℱ i
+  let : MeasurableSpace Ω := ℱ i
   -- the staircase, as a function of a dyadic index and the sample point
   have hslice : ∀ (n : ℕ) (k : ℤ),
       Measurable fun ω : Ω => X (min ((k : ℝ) / 2 ^ n) i) ω := by
@@ -197,8 +200,8 @@ theorem ProgressivelyMeasurable.measurable_setIntegral_Icc
     {ℱ : MeasureTheory.Filtration ℝ ‹MeasurableSpace Ω›} {H : Ω → ℝ → ℝ}
     (h : ProgressivelyMeasurable ℱ H) (t : ℝ) :
     Measurable[ℱ t] fun ω => ∫ s in Set.Icc (0 : ℝ) t, H ω s ∂volume := by
-  letI : MeasurableSpace Ω := ℱ t
-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+  let : MeasurableSpace Ω := ℱ t
+  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
         exact ENNReal.ofReal_lt_top⟩
   have hind : Measurable fun ω : Ω =>

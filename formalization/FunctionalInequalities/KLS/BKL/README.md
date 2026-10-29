@@ -9,8 +9,8 @@ arXiv:2610.05474v1. Exact theorem scope and certificates belong to the
 
 | Entry | Responsibility |
 | --- | --- |
-| [CumulantInduction.lean](CumulantInduction.lean) | Source Theorem 4.1 interfaces and the shared cutoff/cumulant producers, retaining the explicit compact Letwin hypothesis |
-| [CumulantBound.lean](CumulantBound.lean) | Closed (95) cutoff and Theorem 4.1 producers from the proved compact Letwin input, consumed by the certificates and `Poincare` |
+| [Cumulant/Induction.lean](Cumulant/Induction.lean) | Source Theorem 4.1 interfaces and the shared cutoff/cumulant producers, retaining the explicit compact Letwin hypothesis |
+| [Cumulant/Bound.lean](Cumulant/Bound.lean) | Closed (95) cutoff and Theorem 4.1 producers from the proved compact Letwin input, consumed by the certificates and `Poincare` |
 | [Poincare.lean](Poincare.lean) | Closed Theorem 1.1 and KLS producers, from `CumulantBound` and the reduction |
 | [Reduction.lean](Reduction.lean) | Regular-law reduction from universal cumulant bounds to Poincaré |
 | [TaylorBound.lean](TaylorBound.lean) · [Suspension/](Suspension/) | Source Proposition 7.1 and suspension construction |
@@ -20,7 +20,7 @@ arXiv:2610.05474v1. Exact theorem scope and certificates belong to the
 
 | Family | Responsibility and reading order |
 | --- | --- |
-| [CumulantEnergy/](CumulantEnergy/) | `Basic` defines the energies; `Conjugation` identifies coordinate forms; `Bound` gives isotropic estimates |
+| [Cumulant/Energy/](Cumulant/Energy/) | `Basic` defines the energies; `Conjugation` identifies coordinate forms; `Bound` gives isotropic estimates |
 | [Posterior/](Posterior/) | `Covariance` supplies algebra and radius bounds; `Regularity`, `Standardization`, `Noise`, `Moments` and `Response` contain their separate clients |
 | [Localization/Process/](Localization/Process/) | `Basic` constructs the cutoff process; `Integral` supplies bounded-functional and time/product integration |
 | [Localization/Energy/](Localization/Energy/) | Compact-posterior `Bound` and `Regularity`, pointwise `Generator` estimates and process `Integral` estimate |

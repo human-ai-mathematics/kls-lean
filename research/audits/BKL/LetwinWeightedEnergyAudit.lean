@@ -4,16 +4,19 @@ import FunctionalInequalities.Analysis.Cutoff.Profile
 /-!
 # Audit: Letwin Lemma A.4 weighted energy bound
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients of `integrable_and_neg_integral_deriv_comp_mul_le`,
-with the source hypotheses of Lemma A.4 and no assumed energy:
-- `exists_energy_bound`: from the source data (gradient image in a bounded `K`, `V` smooth on an open `U ⊇ closure K`,
-  Monge–Ampère, positive definite Hessian, normalization) a constant `D ≥ 0` is DERIVED (bounded self-generator) such that
-  every smooth `h` with `h ∘ φ` compactly supported and `|h| ≤ M` gives integrability and `−∫ h′(φ) Γφ dν ≤ D M`;
-- `energy_term_nonneg_le`: for `h′ ≤ 0` (the sign of the tail primitive) the energy term lies in `[0, D M]`;
-- `primitive_energy_le`: for the actual Q3 tail primitive `q_R` of a smooth nonnegative `w` vanishing off `(0, 3)`, the
-  source energy term `R⁻² w(φ/R) Γφ` is integrable with `∫ R⁻² w(φ/R) Γφ dν ≤ D R⁻¹ ∫_0^3 w`, given that `q_R ∘ φ` is
-  compactly supported.
-These are not the Lemma A.4 producer or a source-law client. Client bodies: Claude.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients of
+`integrable_and_neg_integral_deriv_comp_mul_le`, with the source hypotheses of Lemma A.4 and no
+assumed energy:
+- `exists_energy_bound`: from the source data (gradient image in a bounded `K`, `V` smooth on an
+  open `U ⊇ closure K`, Monge–Ampère, positive definite Hessian, normalization) a constant `D ≥ 0`
+  is DERIVED (bounded self-generator) such that every smooth `h` with `h ∘ φ` compactly supported
+  and `|h| ≤ M` gives integrability and `−∫ h′(φ) Γφ dν ≤ D M`;
+- `energy_term_nonneg_le`: for `h′ ≤ 0` (the sign of the tail primitive) the energy term lies in
+  `[0, D M]`;
+- `primitive_energy_le`: for the actual tail primitive `q_R` of a smooth nonnegative `w` vanishing
+  off `(0, 3)`, the source energy term `R⁻² w(φ/R) Γφ` is integrable with
+  `∫ R⁻² w(φ/R) Γφ dν ≤ D R⁻¹ ∫_0^3 w`, given that `q_R ∘ φ` is compactly supported.
+These are not the Lemma A.4 producer or a source-law client.
 -/
 
 open MeasureTheory
@@ -60,7 +63,7 @@ theorem energy_term_nonneg_le (m : Measure E) [m.IsAddHaarMeasure] {φ V : E →
     (sum_inverseHessianEntry_mul_mul_nonneg _ (hφ.of_le (WithTop.coe_le_coe.mpr le_top)) x (hPD x) _)), ?_⟩
   exact (integrable_and_neg_integral_deriv_comp_mul_le m hφ hh hc hU hV hRange hMA hPD hnorm hD hM).2
 
-/-- The source energy term for the actual Q3 tail primitive. -/
+/-- The source energy term for the actual tail primitive `q_R`. -/
 theorem primitive_energy_le (m : Measure E) [m.IsAddHaarMeasure] {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
     {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U) (hRange : Set.range (gradient φ) ⊆ U)
     (hMA : ∀ y, logDetHessian φ (stdOrthonormalBasis ℝ E) y = -φ y + V (gradient φ y))

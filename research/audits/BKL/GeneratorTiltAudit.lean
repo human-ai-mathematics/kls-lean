@@ -1,7 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
 
 /-!
-# Audit: the tilt identity (48) and Lemma 3.6 on the generator domain (BKL route, O4–O5)
+# Audit: the tilt identity (48) and Lemma 3.6 on the generator domain (BKL)
 
 The obligations `O4` and `O5` of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
 to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1) are restated **verbatim** and proved from
@@ -13,7 +13,8 @@ unit-weight gradient, `A = T̄†T̄` and `F ∈ D(A)`, with the representatives
 * `o5`: Lemma 3.6, `T_{d+1}(A F) = S_{d+1} T_d(T̄ F)` for every `d`
   (`KLS.LogConcave.taylorTensor_adjointComp_eq`).
 
-Not audited here: the weak Hessian `O3`, the iterates and Theorem 3.1 itself.
+Not audited here: the weak Hessian (`O3` of `OperatorRouteStatements.lean`), the iterates and
+Theorem 3.1 itself.
 -/
 
 noncomputable section
@@ -25,7 +26,7 @@ open scoped ENNReal NNReal RealInnerProductSpace InnerProductSpace ContDiff
 
 namespace BKLGeneratorTiltAudit
 
-/-- `O4`, verbatim. -/
+/-- `O4` of `OperatorRouteStatements.lean`, verbatim. -/
 theorem o4 : (∀ {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
     {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : KLS.LogConcave ν)
@@ -42,7 +43,7 @@ theorem o4 : (∀ {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [C
   intro V _ _ _ _ _ _ _ ν m _ hν hi U hνU hU hexp F z
   exact KLS.LogConcave.tiltAverage_adjointComp_eq m hν hi hνU hU hexp F z
 
-/-- `O5`, verbatim. -/
+/-- `O5` of `OperatorRouteStatements.lean`, verbatim. -/
 theorem o5 : (∀ {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
     {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : KLS.LogConcave ν)

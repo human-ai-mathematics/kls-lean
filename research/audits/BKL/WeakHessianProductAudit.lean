@@ -91,7 +91,7 @@ end WeakHessianProductAudit.Global
 namespace WeakHessianProductAudit.Local
 
 /-- Produce uncut bounded-Hessian weak products and local L2 densities from
-actual normalized R0 source-law inputs, not assumed global-L2 raw fields. -/
+actual normalized regular source-law inputs, not assumed global-L2 raw fields. -/
 theorem produced_normalized_hessian_product {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)

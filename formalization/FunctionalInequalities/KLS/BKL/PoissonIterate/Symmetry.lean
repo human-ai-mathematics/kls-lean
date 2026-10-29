@@ -235,12 +235,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- A potential of temperate growth is `C²`. -/
-private theorem contDiff_two (hUt : U.HasTemperateGrowth) : ContDiff ℝ 2 U :=
-  hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
-
 omit [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- If `σ` fixes `S`, then `‖u - σ u‖² ≤ 4 ‖u - S‖²`. -/
 private theorem normSq_sub_permField_le_of_fixed {k : ℕ} (σ : Equiv.Perm (Fin k))
@@ -280,7 +274,7 @@ private theorem normSq_grad0_iter_sub_permField_le_aux (hCpos : 0 < C)
       normSq (grad0 T̄ (iter T̄ f k) -
           permField (Equiv.swap ℓ (finRotate (k + 1) ℓ)) (grad0 T̄ (iter T̄ f k))) ≤
         max 1 β ^ n * (4 * (C : ℝ) * defect T̄ (iter T̄ f (k - n - 1))) := by
-  have hU := contDiff_two hUt
+  have hU : ContDiff ℝ 2 U := hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
   have hC0 : (0 : ℝ) < C := NNReal.coe_pos.mpr hCpos
   induction n with
   | zero =>

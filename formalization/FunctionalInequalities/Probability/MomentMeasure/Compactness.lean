@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.ConvexSupport
+import FunctionalInequalities.Probability.Support.Convex
 import FunctionalInequalities.Analysis.Convex.PointwiseCompactness
 import FunctionalInequalities.Analysis.Convex.RadialExtension
 import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
@@ -18,7 +18,7 @@ integrals. Dimension zero is included.
 * (56a), `Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph`: a subsequence and a nonnegative convex limit,
   finite and attained pointwise on the interior of the support hull, radially closed, `⊤` off its closure and Borel,
   whose integral is at most the liminf of the integrals. Pointwise bounds come from Lemma 16
-  (`Probability/ConvexSupport.lean`), the subsequence from `Analysis/Convex/PointwiseCompactness.lean`, the limit from
+  (`Probability/Support/Convex.lean`), the subsequence from `Analysis/Convex/PointwiseCompactness.lean`, the limit from
   `Analysis/Convex/RadialExtension.lean`; Fatou is applied to the scaled potentials and then along the radial limit.
 * Full (56), `MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph`: the same subsequence and limit also satisfy
   (56b) for every additive Haar `dx`, `limsup ∫ exp(-(φ (s j))*) dx ≤ ∫ exp(-ψ*) dx`, with `ψ` integrable against `μ` and

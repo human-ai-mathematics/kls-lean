@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SmoothDomain.GaussGreen
+import FunctionalInequalities.Analysis.SmoothDomain.GaussGreen
 import FunctionalInequalities.KLS.Geometry.Perimeter.Mollification
 
 /-! # Boundary formula and norm bound for mollified indicators

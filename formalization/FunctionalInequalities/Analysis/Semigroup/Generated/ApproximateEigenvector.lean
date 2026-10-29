@@ -18,7 +18,7 @@ so `z ∈ D(A)` with `A z = λ (2 y - z)`, and testing the weak equation against
 at `y / 2 - z = w - y / 2` gives `q(y, w) - q(w, w) ≤ q(y, y) / 4 ≤ λ η / 4`.
 
 This replaces a first eigenvector of `A` on `(ker T)ᗮ` in Bizeul–Klartag–Lehec
-(arXiv:2610.05474v1), Section 3, in the operator route (`research/audits/BKL/OperatorRouteStatements.lean`). No
+(arXiv:2610.05474v1), Section 3. No
 compactness and no spectral theorem are used, and no exact eigenvector is claimed to exist.
 -/
 
@@ -50,7 +50,7 @@ private theorem mul_norm_sub_sq_le (T : H₀ →ₗ.[ℝ] H₁) {lam : ℝ} (y z
 `λ ‖y‖² ≤ ‖T y‖²` on `D(T) ∩ (ker T)ᗮ`, a unit `y` there with `‖T y‖² ≤ λ (1 + η)` lies within
 `√(η / 8)` of some `z ∈ D(T†T) ∩ (ker T)ᗮ` with `‖T†T z - λ z‖ ≤ λ √(η / 2)`.
 
-The route statement also assumes `0 ≤ η`; it is not needed, since the gap inequality at `y`
+The hypothesis `0 ≤ η` is not needed, since the gap inequality at `y`
 already forces `λ ≤ ‖T y‖² ≤ λ (1 + η)`. -/
 theorem exists_approx_eigenvector_of_gap (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {lam η : ℝ} (hlam : 0 < lam)

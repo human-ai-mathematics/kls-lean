@@ -6,15 +6,16 @@ import Mathlib.Tactic.FinCases
 /-!
 # Audit: trace energies of a symmetric matrix field under a probability law
 
-Source: Letwin, arXiv:2607.24164v1, Theorem 2.5 (support only: the extension from positive semidefinite to all symmetric
-`B`). An actual finite probability law and a nonconstant positive semidefinite matrix field, with every premise derived:
-`ν = ½ δ_false + ½ δ_true` on `Bool` (total mass `1`, nonzero), `H(false) = [[1, 1], [1, 1]]`,
-`H(true) = [[1, −1], [−1, 1]]` (rank one, positive semidefinite, coordinate-measurable); the positive semidefinite bound
-`∫ tr(A H A H) dν = (a + c)² + 4b² ≤ 2 tr(A²)` is proved for every positive semidefinite `A`; the production theorem
-`symmetric_trace_integral_extension` is then invoked for every symmetric `C`; and the indefinite `B = diag(1, −2)` (neither
-`B` nor `−B` positive semidefinite, commuting with neither atom) has averaged trace energy `1`. A generic matrix-field client,
-not a moment-map or source-law client. Client body: strong-API candidate (`api-symmetric-client-patch-v9`, 1376c19e…),
-verbatim.
+Source: Letwin, arXiv:2607.24164v1, Theorem 2.5 (support only: the extension from positive
+semidefinite to all symmetric `B`). An actual finite probability law and a nonconstant positive
+semidefinite matrix field, with every premise derived: `ν = ½ δ_false + ½ δ_true` on `Bool` (total
+mass `1`, nonzero), `H(false) = [[1, 1], [1, 1]]`, `H(true) = [[1, −1], [−1, 1]]` (rank one,
+positive semidefinite, coordinate-measurable); the positive semidefinite bound
+`∫ tr(A H A H) dν = (a + c)² + 4b² ≤ 2 tr(A²)` is proved for every positive semidefinite `A`; the
+library theorem `symmetric_trace_integral_extension` is then invoked for every symmetric `C`; and
+the indefinite `B = diag(1, −2)` (neither `B` nor `−B` positive semidefinite, commuting with
+neither atom) has averaged trace energy `1`. A generic matrix-field client, not a moment-map or
+source-law client.
 -/
 
 open Matrix MeasureTheory

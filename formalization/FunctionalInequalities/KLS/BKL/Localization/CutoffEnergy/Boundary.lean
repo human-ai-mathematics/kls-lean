@@ -1,9 +1,9 @@
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
 import FunctionalInequalities.KLS.BKL.Localization.Standardization
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.CompactReduction
-import FunctionalInequalities.KLS.BKL.CumulantEnvelope
+import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
 import FunctionalInequalities.Probability.Diffusion.Generator
@@ -46,25 +46,6 @@ private theorem measurable_path
   have hm := Φ.symm.continuous.measurable.comp (hv.measurable t)
   change Measurable (fun w => Φ.symm (Φ (p t w))) at hm
   simpa only [Φ.symm_apply_apply] using hm
-
-private theorem measurable_path_uncurry
-    {γ : Param n → ℝ}
-    (h : IsEldanCutoff μ hc W ℱ hW γ p) :
-    Measurable (fun z : Ω × ℝ => p z.2 z.1) := by
-  let Φ : Param n ≃L[ℝ] (Fin (Module.finrank ℝ (Param n)) → ℝ) :=
-    stateEquiv (Param n)
-  change IsDiffusion W ℱ hW
-    (transportDrift Φ (cutoffDrift μ hc γ))
-    (transportNoise Φ (cutoffNoise μ hc γ)) (Φ 0)
-    (fun s ω => Φ (p s ω)) at h
-  obtain ⟨_, _, _, hv⟩ := h
-  have hm :
-      Measurable (fun z : Ω × ℝ => Φ (p z.2 z.1)) := by
-    change Measurable (Function.uncurry (fun w s => Φ (p s w)))
-    exact hv.measurable_uncurry
-  have hm' := Φ.symm.continuous.measurable.comp hm
-  change Measurable (fun z : Ω × ℝ => Φ.symm (Φ (p z.2 z.1))) at hm'
-  simpa only [Φ.symm_apply_apply] using hm'
 
 private theorem cumulantEnergy_nonneg
     (ν : Measure (EuclideanSpace ℝ (Fin n))) (d : ℕ)
@@ -268,7 +249,7 @@ theorem IsEldanCutoff.exists_weighted_energy_le (hiso : KLS.Isotropic μ) {γ : 
   have hjoint :
       Measurable (fun z : Ω × ℝ => F z.2 z.1) := by
     change Measurable (fun z : Ω × ℝ => γ (p z.2 z.1) ^ 2 * E (p z.2 z.1))
-    exact hFcont.measurable.comp (measurable_path_uncurry h)
+    exact hFcont.measurable.comp h.measurable_uncurry_path
   have hprod :
       Integrable (fun z : Ω × ℝ => F z.2 z.1)
         (P.prod (volume.restrict (Set.Ioc T₀ (2 * T₀)))) := by

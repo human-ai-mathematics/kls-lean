@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.BKL.CumulantBound
+import FunctionalInequalities.KLS.BKL.Cumulant.Bound
 /-!
 # Lean source-form certificate: `thm:bkl-cumulant-bound` (BKL Theorem 4.1)
 

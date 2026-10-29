@@ -115,7 +115,7 @@ for every `c : ℝ≥0`. -/
 theorem upperMinkowskiContent_smul (c : ℝ≥0) (ν : Measure V) (B : Set V) :
     upperMinkowskiContent (c • ν) B = c * upperMinkowskiContent ν B := by
   unfold upperMinkowskiContent
-  rw [← limsup_coe_mul]
+  rw [← ENNReal.limsup_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top]
   refine limsup_congr (Eventually.of_forall fun r => ?_)
   simp only [Measure.smul_apply, ENNReal.smul_def, smul_eq_mul]
   rw [← ENNReal.mul_sub (fun _ _ => ENNReal.coe_ne_top), mul_div_assoc]
@@ -261,7 +261,7 @@ theorem ae_restrict_Ioi_upperMinkowskiContent_thickening_le_deriv (ν : Measure 
 /-! ### Integrated upper content of thickenings
 
 The upper content of `thickening s B` integrated over the radii `s ∈ (0, r)` is at most the mass
-increment `ν (thickening r B) - ν B`.  The route is inequality only: the phase-22 a.e. bound by
+increment `ν (thickening r B) - ν B`.  The argument is inequality only: the a.e. bound by
 `ENNReal.ofReal (deriv F s)`, then the Radon–Nikodym form of the monotone differentiation theorem
 (`Monotone.ae_hasDerivAt`), which identifies the derivative a.e. with the density of the
 Lebesgue–Stieltjes measure `μ_F` of the right-continuous modification `rightLim F` of the radius

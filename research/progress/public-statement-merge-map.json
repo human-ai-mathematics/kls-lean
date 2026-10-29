@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Six public duplicate-statement groups and the C2 weak-generator corollary. Mathematical hypotheses, constants, normalization, dimensions, public target/certificate entries and proof status are preserved. No compatibility aliases.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Theorems 4.1 and 1.1 and their deterministic tensor/semigroup supports",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 and equation (2.2), via GT2001 Theorem 6.2 and Lemma 17.16"
+  ],
+  "placement_plan": {
+    "decision": "Extend existing EuclideanCoordinates and Holder/Cutoff; reuse existing Tensor and earlier Generated/Generator; use pinned Mathlib for gradient pairing. No new production module.",
+    "dependencies": "Euclidean and Holder tools import no Newtonian or KLS modules. The real-distance-to-Holder conversion moves from KernelBounds to Holder/Cutoff without changing its name or contract.",
+    "api_impact": "Seven redundant public names removed across six groups; three retained declarations change defining module; C1/C2 names and contracts retained.",
+    "validation": "Strict affected consumers and narrow imports; exact raw retained types and non-theorem definition closures, alpha-equivalent merger contracts, old-name absence, full local research/verify.py. No remote CI."
+  },
+  "declaration_mergers": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.le_rpow_mul_rpow_of_le",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.le_rpow_one_sub_mul_rpow",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/Holder/Cutoff.lean",
+      "class": "same-statement-modulo-bound-variable-names",
+      "parameter_map": {
+        "D": "d",
+        "htD": "htd"
+      },
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.clm_eq_sum_basisFun_smul_proj",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.eq_sum_apply_basisFun_smul_proj",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/EuclideanCoordinates.lean",
+      "class": "same-statement-modulo-bound-variable-names",
+      "parameter_map": {},
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "FunctionalInequalities.KLS.BKL.sum_sq_contract_le_rows",
+      "old_source": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnergy/Basic.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.Tensor.sum_sq_contract_le",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/Tensor/Coordinate.lean",
+      "class": "same-statement-modulo-bound-variable-names",
+      "parameter_map": {
+        "β": "b"
+      },
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.Semigroup.Generated.right_derivative_zero",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/TimeDerivative.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "class": "same-statement-modulo-bound-variable-names",
+      "parameter_map": {},
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.opNorm_le_sum_sum_abs_basisFun",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.norm_le_sum_abs_apply_basisFun_apply",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/EuclideanCoordinates.lean",
+      "class": "same-statement-modulo-bound-variable-names",
+      "parameter_map": {},
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.gradient_pairing_eq_fderiv",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/InverseHessianEnergy.lean",
+      "replacement_name": "inner_gradient_left",
+      "replacement_source": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Gradient/Basic.lean",
+      "class": "pinned-Mathlib-specialization",
+      "parameter_map": {},
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.inner_gradient_eq_fderiv_apply",
+      "old_source": "formalization/FunctionalInequalities/Energy/Euclidean/WeakDerivative.lean",
+      "replacement_name": "inner_gradient_left",
+      "replacement_source": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Gradient/Basic.lean",
+      "class": "pinned-Mathlib-specialization",
+      "parameter_map": {},
+      "compatibility_alias": false
+    }
+  ],
+  "declaration_owner_migrations": [
+    {
+      "name": "FunctionalInequalities.Analysis.eq_sum_apply_basisFun_smul_proj",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Newtonian/PotentialC2.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/EuclideanCoordinates.lean",
+      "class": "owner-only; exact public type retained"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.norm_le_sum_abs_apply_basisFun_apply",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/EuclideanCoordinates.lean",
+      "class": "owner-only; exact public type retained"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.holderOnWith_of_dist_le",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Newtonian/KernelBounds.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Holder/Cutoff.lean",
+      "class": "owner-only; exact public type after the two explicitly recorded anonymous-instance owner-hygiene rebindings"
+    }
+  ],
+  "proof_refactor": {
+    "producer": "FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy_of_contDiff_one",
+    "corollary": "FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy",
+    "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+    "change": "Move the C1 proof before the C2 contract and apply it using the C2-to-C1 .of_le implication; preserve both exact public types and the separate primed identity."
+  },
+  "audit_clients": [
+    "research/audits/SourceLayout/StatementCoordinates.lean",
+    "research/audits/SourceLayout/HolderInterpolation.lean",
+    "research/audits/SourceLayout/StatementMergers.lean"
+  ],
+  "compiler_hygiene_migrations": [
+    {
+      "declaration": "FunctionalInequalities.Analysis.holderOnWith_of_dist_le",
+      "kind": "anonymous instImplicit binder owner hygiene only; argument order, binder information and all types unchanged",
+      "bindings": [
+        {
+          "old": "inst._@.FunctionalInequalities.Analysis.Newtonian.KernelBounds.825411841._hygCtx._hyg.4",
+          "new": "inst._@.FunctionalInequalities.Analysis.Holder.Cutoff.825411841._hygCtx._hyg.4"
+        },
+        {
+          "old": "inst._@.FunctionalInequalities.Analysis.Newtonian.KernelBounds.825411841._hygCtx._hyg.7",
+          "new": "inst._@.FunctionalInequalities.Analysis.Holder.Cutoff.825411841._hygCtx._hyg.7"
+        }
+      ]
+    }
+  ],
+  "source_evidence_reassessment": {
+    "scope": "Only the fifteen existing infrastructure evidence entries for five files changed by this migration. Every previous hash matched the saved working-tree baseline before replacement. Task statuses, assumptions, priorities and certificate/proof status are unchanged. Retained interfaces and definition closures were compared before updating these hashes.",
+    "entries": [
+      {
+        "node": "thm:logconcave-cheeger-poincare-comparison",
+        "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "old_sha256": "1c379d25d6a97c5613cb79f1c411119a03c53e9ae8e2c3d2b5bb689c6f6bdb59",
+        "new_sha256": "70974c8ebe61238d8dd9d472016c35f9a35f2d0de3b65f8887b38a98fc965591"
+      },
+      {
+        "node": "thm:logconcave-cheeger-poincare-comparison",
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/TimeDerivative.lean",
+        "old_sha256": "a30be4fba5693c1b4b704519ee881d15f6d63c0485394cdb36d8c446f611f9b3",
+        "new_sha256": "8427564260d64d183b7821f6099b2ba15b3aade17080d97c840c7b8d61807505"
+      },
+      {
+        "node": "thm:logconcave-cheeger-poincare-comparison",
+        "path": "research/audits/BakryEmeryGradientEstimateAudit.lean",
+        "old_sha256": "9ca72f9e6c31893ce29478107191e90a218fce44bb113f1b49a23e5a75562568",
+        "new_sha256": "56c146e58355de78fd67236f98867d0177ffc8eadbd2dbf5d09e6bb1215f3f21"
+      },
+      {
+        "node": "thm:klartag-density-frontend-identification",
+        "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "old_sha256": "1c379d25d6a97c5613cb79f1c411119a03c53e9ae8e2c3d2b5bb689c6f6bdb59",
+        "new_sha256": "70974c8ebe61238d8dd9d472016c35f9a35f2d0de3b65f8887b38a98fc965591"
+      },
+      {
+        "node": "lem:covariance-core-closure",
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/WeakDerivative.lean",
+        "old_sha256": "b67c1c06c9faa9e9e1ebb70d0f3266ba60131c405c1b50058d5a5402720f0c4e",
+        "new_sha256": "c631cae5737d0dc69021484278f7712c4b79134680d0ddce30a61257f3568f39"
+      },
+      {
+        "node": "lem:relative-perimeter-smoothing",
+        "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "old_sha256": "1c379d25d6a97c5613cb79f1c411119a03c53e9ae8e2c3d2b5bb689c6f6bdb59",
+        "new_sha256": "70974c8ebe61238d8dd9d472016c35f9a35f2d0de3b65f8887b38a98fc965591"
+      },
+      {
+        "node": "lem:letwin-weak-generator-symmetry",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:letwin-weak-generator-integrability",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:letwin-hessian-increment-energy",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:ae-mongeampere-exponent",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:letwin-regular-moment-weak-first-ma",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:weak-inverse-hessian-of-logdet",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:letwin-regular-moment-weak-inverse",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:letwin-weak-generator-c1",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      },
+      {
+        "node": "lem:weak-inverse-hessian-row-divergence",
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "f46d681fecea7080647dab76c54453a9d643d0ca4c01ffa41a3e4b328e36ea6a",
+        "new_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212"
+      }
+    ]
+  }
+}

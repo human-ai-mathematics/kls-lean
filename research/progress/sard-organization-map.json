@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Shared coordinate replacement in finite and smooth Sard charts; direct disk and sharp-cover prerequisites; current source comments. No mathematical coverage or certificate changes.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Section 2 and Theorems 3.1, 4.1 and 1.1",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 via BB arXiv:1207.6128v1 Theorem 2.24(ii)"
+  ],
+  "module_path_migrations": [],
+  "existing_public_name_migrations": [],
+  "new_owner": {
+    "source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+    "namespace": "FunctionalInequalities.Analysis.Sard.CoordinateChange",
+    "scope": "Ordinary finite real products; general regularity order; differentiable coordinate replacement and its continuous-linear equivalence under the original nonzero coordinate premise.",
+    "public_properties": [
+      "FunctionalInequalities.Analysis.Sard.CoordinateChange.contDiff_update",
+      "FunctionalInequalities.Analysis.Sard.CoordinateChange.exists_updateEquiv",
+      "FunctionalInequalities.Analysis.Sard.CoordinateChange.hasFDerivAt_update"
+    ],
+    "private_support": "injective_updateDeriv"
+  },
+  "private_support_mergers": [
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "old_private_name": "contDiff_update",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "contDiff_update",
+      "shared_private": false,
+      "scope_change": "finite/smooth support merged at general regularity"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "old_private_name": "hasFDerivAt_update",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "hasFDerivAt_update",
+      "shared_private": false,
+      "scope_change": "same coordinate-replacement contract"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "old_private_name": "injective_updateDeriv",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "injective_updateDeriv",
+      "shared_private": true,
+      "scope_change": "same coordinate-replacement contract"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "old_private_name": "exists_updateEquiv",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "exists_updateEquiv",
+      "shared_private": false,
+      "scope_change": "same coordinate-replacement contract"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "old_private_name": "contDiff_straighten",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "contDiff_update",
+      "shared_private": false,
+      "scope_change": "finite/smooth support merged at general regularity"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "old_private_name": "hasFDerivAt_straighten",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "hasFDerivAt_update",
+      "shared_private": false,
+      "scope_change": "same coordinate-replacement contract"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "old_private_name": "injective_straightenDeriv",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "injective_updateDeriv",
+      "shared_private": true,
+      "scope_change": "same coordinate-replacement contract"
+    },
+    {
+      "old_source": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "old_private_name": "exists_straightenEquiv",
+      "shared_source": "formalization/FunctionalInequalities/Analysis/Sard/CoordinateChange.lean",
+      "shared_name": "exists_updateEquiv",
+      "shared_private": false,
+      "scope_change": "same coordinate-replacement contract"
+    }
+  ],
+  "existing_mathlib_reuse": {
+    "name": "Fin.insertNth_removeNth",
+    "pinned_source": "Mathlib/Data/Fin/Tuple/Basic.lean",
+    "consumers": [
+      "Sard/Chart",
+      "Sard/Smooth"
+    ],
+    "scope": "Both zero-hyperplane identity proof bodies use the existing update/insert/remove identity directly."
+  },
+  "direct_dependency_changes": [
+    {
+      "consumer": "Sard/Chart",
+      "shared_prerequisite": "Sard/CoordinateChange"
+    },
+    {
+      "consumer": "Sard/Smooth",
+      "shared_prerequisite": "Sard/CoordinateChange"
+    },
+    {
+      "consumer": "Sard/Disk",
+      "removed": "Sard/Smooth",
+      "direct_mathlib": [
+        "Mathlib.Analysis.InnerProductSpace.Basic",
+        "Mathlib.Analysis.Calculus.ContDiff.Operations",
+        "Mathlib.Analysis.Normed.Module.FiniteDimension",
+        "Mathlib.Analysis.Calculus.MeanValue"
+      ],
+      "definition_preservation": "The direct inner-product import retains the original real normed-space instance; raw IsDisk and FlatAlong values are unchanged."
+    },
+    {
+      "consumer": "Sard/Sharp",
+      "direct_prerequisite": "Sard/QuadraticCover",
+      "reason": "The actual oscillation-cover theorem no longer arrives indirectly through Disk and Smooth."
+    }
+  ],
+  "existing_interface_comparison": {
+    "before_public": 6729,
+    "after_public": 6732,
+    "retained_interfaces": 6729,
+    "retained_definition_closure_vertices": 7466,
+    "retained_private_closure_vertices": 737,
+    "normalization": "None. Existing public names, owners, raw types/universes/non-proof definition values, rendered binders, kinds/safety/partiality and their complete retained local definition closure compared exactly. Theorem proof bodies are excluded; strict standard-axiom and native kernel checks are separate gates. Eight old private theorem supports are merged into three shared public properties and one private injectivity proof, without compatibility aliases."
+  },
+  "validation_inputs": [
+    "research/audits/SourceLayout/SardCoordinateChange.lean",
+    "research/audits/SourceLayout/SardDisk.lean",
+    "research/audits/SourceLayout/SardSharp.lean",
+    "research/audits/SourceLayout/SardChart.lean",
+    "research/audits/SourceLayout/PiCoordinates.lean"
+  ],
+  "trust_scope": "Current source compilation, raw interface/definition comparison, strict narrow clients, standard-axiom audit and full local/vendor kernel replay. Pinned compiled Mathlib imports remain trusted. No remote verification or certificate renewal."
+}

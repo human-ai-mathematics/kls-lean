@@ -1,0 +1,786 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Operator-norm setup, parameterized Gaussian foundations, shared wave tools and positive-weight upper semicontinuity. No mathematical coverage or certificate changes.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Section 2 and Theorems 3.1, 4.1, 1.1",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 via BB arXiv:1207.6128v1 Theorem 2.24(ii)"
+  ],
+  "module_path_map": [
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/LinearizedEquation.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/LinearizedEquation.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalHolder.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Harmonic/LocalHolder.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapInduction.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapInduction.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LinearEquation.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LinearEquation.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/GeneratorBounds.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Energy.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/GeneratorBounds.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Residual.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/FlowDerivative.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Residual.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Stability.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Stability.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Energy.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Stability.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/TimeAverage.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/FlowDerivative.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Stability.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/TimeAverage.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/WeightedEnergy.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/FlowDerivative.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Stability.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/WeightedEnergy.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
+        "formalization/FunctionalInequalities/Probability/Gaussian/Kernel.lean",
+        "formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+        "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Smooth.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+        "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Smooth.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+        "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/ConcaveTilt.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/UpperSemicontinuity.lean",
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/ConcaveTilt.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
+        "formalization/FunctionalInequalities/Probability/Gaussian/Kernel.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+        "formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/UpperSemicontinuity.lean",
+        "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+      ]
+    }
+  ],
+  "public_api_renames": [
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_le_one",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_le_one",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_logConcave",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_measurable",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.ekernel_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.ekernel_pos",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw",
+      "new": "FunctionalInequalities.Probability.Gaussian.law",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_probability",
+      "new": "FunctionalInequalities.Probability.Gaussian.law_probability",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integrable_kernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integrable_kernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integrable_normalizedKernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integrable_normalizedKernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_kernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integral_kernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_normalizedKernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.integral_normalizedKernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel_logConcave",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel_measurable",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.kernel_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.kernel_pos",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.mass",
+      "new": "FunctionalInequalities.Probability.Gaussian.mass",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.mass_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.mass_pos",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedEkernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedEkernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedEkernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedEkernel_logConcave",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedEkernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedEkernel_measurable",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_le_inv_mass",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_le_inv_mass",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_logConcave",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_logConcave",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_measurable",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_measurable",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedKernel_pos",
+      "new": "FunctionalInequalities.Probability.Gaussian.normalizedKernel_pos",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_directional_identity_of_bounded_lipschitz_test",
+      "new": "FunctionalInequalities.Probability.Gaussian.directional_identity_of_bounded_lipschitz_test",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_eq_tilted",
+      "new": "FunctionalInequalities.Probability.Gaussian.law_eq_tilted",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_exp_norm_integrable",
+      "new": "FunctionalInequalities.Probability.Gaussian.exp_norm_integrable",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_inner_sq",
+      "new": "FunctionalInequalities.Probability.Gaussian.integral_inner_sq",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_laplace",
+      "new": "FunctionalInequalities.Probability.Gaussian.laplace",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_mean_zero",
+      "new": "FunctionalInequalities.Probability.Gaussian.mean_zero",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_memLp_four",
+      "new": "FunctionalInequalities.Probability.Gaussian.memLp_four",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_memLp_two",
+      "new": "FunctionalInequalities.Probability.Gaussian.memLp_two",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_translated_directional_identity_of_bounded_lipschitz_test",
+      "new": "FunctionalInequalities.Probability.Gaussian.translated_directional_identity_of_bounded_lipschitz_test",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_variance",
+      "new": "FunctionalInequalities.Probability.Gaussian.variance_inner",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Moments"
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw.congr_simp",
+      "new": "FunctionalInequalities.Probability.Gaussian.law.congr_simp",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic",
+      "new_module": "FunctionalInequalities.Probability.Gaussian.Kernel"
+    }
+  ],
+  "private_operator_norm_migrations": [
+    {
+      "old": "FunctionalInequalities.Analysis.smoothSteinNormed1",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.smoothSteinNormed2",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.smoothNormed1",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Smooth.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.smoothNormed2",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Smooth.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.smoothNormed3",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Smooth.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.smoothNormed4",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Smooth.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_11",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_11",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_12",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_12",
+      "old_source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_8",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalHolder.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_8",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalHolder.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_4",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_4",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_5",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeLinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_6",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_7",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeTrilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_5",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeLinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_6",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_7",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeTrilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.linearizedEquationNormed1",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/LinearizedEquation.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.linearizedEquationNormed2",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/LinearizedEquation.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_9",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_9",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_10",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_10",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.localHolderNormed1",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.localHolderNormed2",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.localHolderNormed3",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.localHolderNormed4",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LocalHolder.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.holderBootstrapInductionNormed1",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapInduction.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.holderBootstrapInductionNormed2",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapInduction.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.holderBootstrapInductionNormed3",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapInduction.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.holderBootstrapInductionNormed4",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapInduction.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.linearEquationNormed1",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LinearEquation.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.linearEquationNormed2",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LinearEquation.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.linearEquationNormed3",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LinearEquation.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.linearEquationNormed4",
+      "old_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/LinearEquation.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_1",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeLinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_2",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedAddCommGroupContinuousLinearMapRealIdEuclideanSpaceFin_functionalInequalities_3",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeTrilinearGroup",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_1",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeLinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_2",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.instNormedSpaceRealContinuousLinearMapIdEuclideanSpaceFin_functionalInequalities_3",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean",
+      "new": "_private.FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm.0.FunctionalInequalities.Analysis.DerivativeNorms.timeTrilinearSpace",
+      "new_source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/OperatorNorm.lean",
+      "public_after": false
+    }
+  ],
+  "shared_proofs": [
+    {
+      "old_sources": [
+        "Analysis/WaveSplitting/GeneratorBounds",
+        "Analysis/WaveSplitting/Stability"
+      ],
+      "new_owner": "Analysis/WaveSplitting/Basic",
+      "name": "State.Smooth.coupling",
+      "scope": "Smooth coefficient functions and a smooth state; finite index, no DecidableEq."
+    },
+    {
+      "old_sources": [
+        "Analysis/WaveSplitting/Energy",
+        "Analysis/WaveSplitting/GeneratorBounds"
+      ],
+      "new_owner": "Analysis/WaveSplitting/Energy",
+      "name": "hasCompactSupport_coupling",
+      "scope": "Only compact support of field components; no normed-space assumption."
+    },
+    {
+      "old_sources": [
+        "Analysis/WaveSplitting/Stability",
+        "Analysis/WaveSplitting/Residual"
+      ],
+      "new_owner": "Analysis/WaveSplitting/Stability",
+      "name": "integral_jetSquare_eq_derivativeEnergy",
+      "scope": "Original finite-component scalar jet-energy integral; the private stateJet specialization has one shared proof."
+    },
+    {
+      "old_sources": [
+        "Analysis/WaveSplitting/TimeAverage",
+        "Analysis/WaveSplitting/WeightedEnergy"
+      ],
+      "new_owner": "Analysis/WaveSplitting/FlowDerivative",
+      "name": "timeDerivative_step_eq",
+      "scope": "Exact residual identity before quantitative/time-average estimates."
+    },
+    {
+      "old_sources": [
+        "KLS/LogConcave/Density/ConcaveTilt",
+        "KLS/LogConcave/Density/GaussianSmoothing/Posterior"
+      ],
+      "new_owner": "Analysis/UpperSemicontinuity",
+      "name": "upperSemicontinuous_mul_of_continuous_pos",
+      "scope": "Arbitrary topological source; USC real f and strictly positive continuous real g."
+    }
+  ],
+  "private_gaussian_helpers": [
+    {
+      "name": "ofReal_integral_exp_gaussian",
+      "old_module": "KLS/LogConcave/Density/GaussianSmoothing/Moments",
+      "new_module": "Probability/Gaussian/Moments",
+      "namespace_from": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing",
+      "namespace_to": "FunctionalInequalities.Probability.Gaussian"
+    },
+    {
+      "name": "hasFDerivAt_exp_norm_sq_div",
+      "old_module": "KLS/LogConcave/Density/GaussianSmoothing/Moments",
+      "new_module": "Probability/Gaussian/Moments",
+      "namespace_from": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing",
+      "namespace_to": "FunctionalInequalities.Probability.Gaussian"
+    }
+  ],
+  "interface_comparison": {
+    "before_public": 6718,
+    "after_public": 6677,
+    "original_mathematical_interfaces": 6672,
+    "raw_fingerprint_changes": 63,
+    "retained_definition_closure_vertices": 7409,
+    "private_closure_vertices": 737,
+    "printed_binder_kind_safety_comparison": "passed",
+    "normalization": "Delta-expand only the 46 removed/8 private replacement operator-norm aliases. Generated local proof constants are represented by their exact normalized proposition type (proof irrelevance). Map 35 public Gaussian names and private owning-module prefixes. No mathematical premise, universe, norm, non-proof definition or data witness is dropped; rfl clients separately check all old/new norm providers. Theorem proof bodies are excluded; axioms and native replay are separate gates."
+  },
+  "validation_inputs": [
+    "research/audits/SourceLayout/OperatorNorm.lean",
+    "research/audits/SourceLayout/GaussianFoundations.lean",
+    "research/audits/SourceLayout/WaveFoundations.lean",
+    "research/audits/SourceLayout/PositiveContinuousWeight.lean"
+  ],
+  "trust_scope": "Full local verifier includes strict clients, declaration/vendor standard-axiom audits and exact-source local/vendor native kernel replay. Pinned compiled Mathlib remains trusted. No remote verification or ledger-certificate renewal is asserted."
+}

@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Six temperate-integrability private statements unified; three same-file private/private groups merged and two same-file private/public wrappers eliminated. Existing public contracts, mathematical assumptions, constants, normalizations, dimensional scope and certificate status are retained.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Lemmas 3.3-3.9, equations (15)-(16) and (39), and Proposition 7.1 supporting equation (112)",
+    "Letwin arXiv:2607.24164v1 Theorem 1.2 and Lemma 2.2 supporting analysis interfaces"
+  ],
+  "placement_plan": {
+    "owner": "Existing Probability/ExponentialMoments/Temperate for the shared generic integrability producer; existing owners for same-file proof reuse. No new production module.",
+    "scope": "The L1 producer retains arbitrary measures and all real norm exponential moments, general real normed source/target, and no target completeness or probability normalization. Mathlib SecondCountableTopologyEither E F preserves scalar sources with no second-countability or finite-dimension premise and the original finite-dimensional-source vector contracts.",
+    "dependency_direction": "BakryEmery consumers import the lower Probability producer directly; no reverse Analysis application dependency. Same-file mergers add no cross-family import.",
+    "api_impact": "One new public integrability theorem. Eleven private full names removed; no existing public name removed, renamed or made private. Two existing public wrappers retain their full types and directly own their proofs.",
+    "validation": "Strict affected consumers; original scalar and vector contracts and narrow-import clients; all retained raw public types and non-proof definition closures; private absence; full local verifier including axiom audits and local-module kernel replay."
+  },
+  "new_public_declarations": [
+    {
+      "name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean"
+    }
+  ],
+  "removed_public_declarations": [],
+  "private_mergers": [
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate.0.FunctionalInequalities.Analysis.BakryEmery.bochner_temperate_integrable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Temperate.lean",
+      "replacement_name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "class": "same scalar or vector legacy contract from the generic normed-space producer",
+      "legacy_scope": "finite-dimensional inner-product source; arbitrary real normed target, without completeness",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate.0.FunctionalInequalities.Analysis.BakryEmery.bochner_sq_temperate_integrable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Temperate.lean",
+      "replacement_name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "class": "same scalar or vector legacy contract from the generic normed-space producer",
+      "legacy_scope": "scalar codomain permits a non-second-countable source",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate.0.FunctionalInequalities.Analysis.BakryEmery.bochner_le_temperate_integrable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Temperate.lean",
+      "replacement_name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "class": "same scalar or vector legacy contract from the generic normed-space producer",
+      "legacy_scope": "scalar codomain permits a non-second-countable source",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor.0.FunctionalInequalities.Analysis.BakryEmery.tensorIBP_integrable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean",
+      "replacement_name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "class": "same scalar or vector legacy contract from the generic normed-space producer",
+      "legacy_scope": "scalar codomain permits a non-second-countable source",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor.0.FunctionalInequalities.Analysis.BakryEmery.tensorEq_integrable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean",
+      "replacement_name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "class": "same scalar or vector legacy contract from the generic normed-space producer",
+      "legacy_scope": "scalar codomain permits a non-second-countable source",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.TensorEnergy.0.FunctionalInequalities.Analysis.BakryEmery.energyPyth_integrable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean",
+      "replacement_name": "FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth",
+      "replacement_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "class": "same scalar or vector legacy contract from the generic normed-space producer",
+      "legacy_scope": "finite-dimensional inner-product source; arbitrary real normed target, without completeness",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor.0.FunctionalInequalities.Analysis.BakryEmery.tensorCurv_gradient_inner",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean",
+      "replacement_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor.0.FunctionalInequalities.Analysis.BakryEmery.inner_gradient_component",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean",
+      "class": "same-file-private-duplicate",
+      "contract_relation": "identical type modulo bound-variable and universe-parameter names",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation.0.FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.source_density_integrable",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Approximation.lean",
+      "replacement_name": "_private.FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation.0.FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.source_integrable",
+      "replacement_source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Approximation.lean",
+      "class": "same-file-private-duplicate",
+      "contract_relation": "identical type modulo bound-variable and universe-parameter names",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Tensor.EnergyForm.0.FunctionalInequalities.Analysis.CoordinateTensor.inverse_line_at_zero",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+      "replacement_name": "_private.FunctionalInequalities.Analysis.Tensor.EnergyForm.0.FunctionalInequalities.Analysis.CoordinateTensor.inverse_line",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+      "class": "same-file-private-duplicate",
+      "contract_relation": "identical type modulo bound-variable and universe-parameter names",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Energy.Cheeger.Basic.0.FunctionalInequalities.Energy.SmoothGradient.Test.localSlope_energy_eq_coe_energy",
+      "old_source": "formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
+      "replacement_name": "FunctionalInequalities.Energy.SmoothGradient.Test.localSlope_energy",
+      "replacement_source": "formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
+      "class": "same-file-private-to-public-proof-inline",
+      "contract_relation": "identical type modulo bound-variable and universe-parameter names",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.Suspension.Derivatives.0.FunctionalInequalities.KLS.LogConcave.Suspension.source_mixed_cumulant_entries",
+      "old_source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Derivatives.lean",
+      "replacement_name": "FunctionalInequalities.KLS.LogConcave.Suspension.cumulant_jointLaw_none_entries",
+      "replacement_source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Derivatives.lean",
+      "class": "same-file-private-to-public-proof-inline",
+      "contract_relation": "identical type modulo bound-variable and universe-parameter names",
+      "compatibility_alias": false
+    }
+  ],
+  "audit_clients": [
+    "research/audits/SourceLayout/TemperateIntegrability.lean",
+    "research/audits/SourceLayout/PrivateMergers.lean"
+  ],
+  "source_evidence_reassessment": {
+    "scope": "Only existing evidence entries for this cleanup. Every old hash matched the saved working-tree baseline; all retained public types and definition closures and all eleven merger contracts passed comparison before refresh. Task statuses, assumptions, priorities and proof/certificate status are unchanged.",
+    "entries": [
+      {
+        "node": "thm:logconcave-cheeger-poincare-comparison",
+        "path": "formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
+        "old_sha256": "89215984b6678fd3465a0ce6d8537b9c7d21dcd6ba49a71249e9fb68e558b44a",
+        "new_sha256": "b5a1a0ad5ce82a5d24c0523b846b031a95be0d5f3b8309f477f7f06eb0723dab"
+      },
+      {
+        "node": "thm:smooth-gradient-relaxation-two-cheeger",
+        "path": "formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
+        "old_sha256": "89215984b6678fd3465a0ce6d8537b9c7d21dcd6ba49a71249e9fb68e558b44a",
+        "new_sha256": "b5a1a0ad5ce82a5d24c0523b846b031a95be0d5f3b8309f477f7f06eb0723dab"
+      }
+    ]
+  }
+}

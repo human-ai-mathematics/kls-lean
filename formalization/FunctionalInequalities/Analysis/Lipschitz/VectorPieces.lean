@@ -30,7 +30,7 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteD
   [MeasurableSpace V] [BorelSpace V]
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
 
-/-- **`V1`: exact `C¹` representatives of a Lipschitz map into `W`, on countably many disjoint
+/-- **Exact `C¹` representatives of a Lipschitz map into `W`, on countably many disjoint
 measurable pieces covering almost every point, with the original ambient differential on each
 piece.**  Word for word `Analysis.exists_contDiff_pieces` with target `W` in place of `ℝ`. -/
 theorem exists_contDiff_pieces_vector {u : V → W} {K : ℝ≥0} (hu : LipschitzWith K u) :

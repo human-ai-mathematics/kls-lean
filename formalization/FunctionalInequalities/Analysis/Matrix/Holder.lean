@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.HolderRepresentative
+import FunctionalInequalities.Analysis.Holder.Representative
 import FunctionalInequalities.Analysis.Matrix.RankOneFrame
 
 /-!

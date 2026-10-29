@@ -2,11 +2,12 @@ import FunctionalInequalities.Probability.ExponentialMoments.Norm
 import Mathlib.Analysis.Distribution.TemperateGrowth
 import Mathlib.MeasureTheory.Function.L2Space
 
-/-! # Temperate functions in L2 under exponential moments
+/-! # Temperate functions in L1 and L2 under exponential moments
 
-The source is a second-countable real normed space with its Borel structure;
-the target is an arbitrary real normed space. No Hilbert, finite-dimensional
-or probability normalization hypothesis is needed.
+The source has its Borel structure and the target is an arbitrary real normed
+space. For L1, either space is second countable; real targets need no such source
+hypothesis. The L2 result retains its second-countable source. No Hilbert,
+finite-dimensional or probability normalization hypothesis is needed.
 -/
 
 noncomputable section
@@ -14,9 +15,20 @@ open MeasureTheory Filter
 open scoped ENNReal Topology
 namespace FunctionalInequalities.Probability
 
-section TemperateL2
+section TemperateIntegrability
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [SecondCountableTopology E]
   [MeasurableSpace E] [BorelSpace E]
+
+omit [SecondCountableTopology E] in
+/-- Temperate functions are integrable under all norm exponential moments.
+The target is any real normed space; no completeness or probability normalization is assumed. -/
+theorem integrable_of_hasTemperateGrowth {F : Type*} [NormedAddCommGroup F]
+    [NormedSpace ℝ F] [SecondCountableTopologyEither E F] (μ : Measure E)
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {g : E → F}
+    (hg : g.HasTemperateGrowth) : Integrable g μ := by
+  obtain ⟨k, C, hb⟩ := hg.2 0
+  exact integrable_of_norm_le_pow μ hexp hg.1.continuous.aestronglyMeasurable
+    (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
 
 /-- Temperate functions belong to L2 under all norm exponential moments. -/
 theorem memLp_two_of_hasTemperateGrowth {H : Type*} [NormedAddCommGroup H]
@@ -36,6 +48,6 @@ theorem memLp_two_of_hasTemperateGrowth {H : Type*} [NormedAddCommGroup H]
     _ = C ^ 2 * (1 + ‖x‖) ^ (2 * k) := by ring
 
 
-end TemperateL2
+end TemperateIntegrability
 
 end FunctionalInequalities.Probability

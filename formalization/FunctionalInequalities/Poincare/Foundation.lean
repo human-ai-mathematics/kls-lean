@@ -42,7 +42,7 @@ import FunctionalInequalities.Poincare.L2.Comparison
 import FunctionalInequalities.Poincare.L2.Energy
 import FunctionalInequalities.Poincare.SmoothTest.Optimal
 import FunctionalInequalities.Poincare.Relaxation
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import FunctionalInequalities.Probability.Basic
 import FunctionalInequalities.Probability.Covariance.Factorization
 import FunctionalInequalities.Probability.Covariance.Whitening
@@ -81,7 +81,7 @@ This is the aggregate entry point for the new layered API:
   Lipschitz functions, and closability, dense domain and smooth core of the weighted gradient
   under absolute continuity, null support frontier and local domination of Haar measure.
 
-The accepted smooth-test theorems remain available from `Poincare.SmoothTest.Basic` and its existing
+The smooth-test theorems remain available from `Poincare.SmoothTest.Basic` and its existing
 downstream modules. Both concrete test layers use ordinary `C∞` regularity (`ContDiff ℝ ∞` in
 Mathlib v4.33); this aggregate still does not identify their optimal constants with a Cheeger or
 spectral-gap formulation.

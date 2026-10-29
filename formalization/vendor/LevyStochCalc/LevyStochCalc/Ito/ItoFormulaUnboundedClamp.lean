@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Ito.VectorItoProcessDiff
 import LevyStochCalc.Brownian.ItoCutoff
 
@@ -402,7 +405,7 @@ theorem exists_seq_ae_tendsto_of_tendsto_lintegral {α : Type*} [MeasurableSpace
     ∃ ms : ℕ → ℕ, (∀ i : ℕ, i ≤ ms i) ∧
       ∀ᵐ a ∂μ, ∀ c : ι, Filter.Tendsto (fun i : ℕ => u (ms i) c a) Filter.atTop (𝓝 (v c a)) := by
   classical
-  haveI := Fintype.ofFinite ι
+  have := Fintype.ofFinite ι
   have hsumTendsto : Filter.Tendsto
       (fun i : ℕ => ∑ c : ι, ∫⁻ a, (‖u i c a - v c a‖₊ : ℝ≥0∞) ^ 2 ∂μ)
       Filter.atTop (𝓝 0) := by

@@ -4,6 +4,13 @@ import FunctionalInequalities.L2.Pairing
 
 /-! # Weak products and compact local L2 data
 
+Weak product rules: for globally `L²` factors (`HasWeakDerivAlong.mul_of_memLp_two`), bounded
+factors with compact-local `L²` derivatives (`HasWeakDerivAlong.mul_of_locally_memLp_two`) and
+locally essentially bounded factors (`HasWeakDerivAlong.mul_of_locally_bounded`); finite linear
+combinations and Leibniz products; and multiplication by a compactly supported `C¹` cutoff
+(`HasWeakDerivAlong.compact_mul_data`). It also provides the compact-local `L²` and local
+integrability helpers shared with the other weak-calculus modules.
+
 Supporting weak calculus for Letwin arXiv:2607.24164v1 and the
 local elliptic estimates of Gilbarg--Trudinger (2001). Each declaration
 retains its own support, integrability and dimensional hypotheses.

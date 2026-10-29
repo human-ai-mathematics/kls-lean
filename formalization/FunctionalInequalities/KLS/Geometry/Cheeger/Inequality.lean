@@ -45,8 +45,8 @@ Read the module in this order.
   resulting bound on the smooth-test constant and its degenerate case.
 
 The Buser half `Ψ_KLS(μ)² ≤ π C_P(μ)` is not part of this module; it is
-`LogConcave.inverseScale_sq_le_pi_literature` in `KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`.  Nothing here depends on the weighted coarea formula, on Sard's theorem, on the relative
-perimeter or on any work-in-progress layer.
+`LogConcave.inverseScale_sq_le_pi_literature` in `KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`.  Nothing here depends on the weighted
+coarea formula, on Sard's theorem or on the relative perimeter.
 -/
 
 noncomputable section

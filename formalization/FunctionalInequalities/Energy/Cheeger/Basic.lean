@@ -149,9 +149,10 @@ private theorem apply_toFun_eq_norm_gradient (f : Test ν) (x : V) :
     LocalSlope.apply f.toFun x = ENNReal.ofReal ‖gradient f.toFun x‖ :=
   LocalSlope.apply_eq_norm_gradient f.toFun x (f.contDiff.differentiable (by simp) x)
 
-/-- The squared local-slope energy of a smooth test equals its smooth-gradient energy. -/
-private theorem localSlope_energy_eq_coe_energy (f : Test ν) :
-    LocalSlope.energy ν f.toFun = (f.energy : ℝ≥0∞) := by
+/-- The squared local-slope energy of a smooth test is its smooth-gradient energy.  No
+absolute-continuity hypothesis: the slope equals the gradient norm at every point. -/
+theorem localSlope_energy (f : Test ν) :
+    LocalSlope.energy ν f = (f.energy : ℝ≥0∞) := by
   have step1 : LocalSlope.energy ν f.toFun =
       ∫⁻ x, ENNReal.ofReal (‖gradient f.toFun x‖ ^ 2) ∂(ν : Measure V) := by
     unfold LocalSlope.energy
@@ -164,13 +165,7 @@ private theorem localSlope_energy_eq_coe_energy (f : Test ν) :
 local slope is the gradient norm at every point, with square-integrable gradient. -/
 theorem localSlope_admissible (f : Test ν) : LocalSlope.Admissible ν f :=
   ⟨(f.contDiff.of_le (by exact_mod_cast le_top)).locallyLipschitz, f.memLp_two, by
-    rw [localSlope_energy_eq_coe_energy f]; exact ENNReal.coe_ne_top⟩
-
-/-- The squared local-slope energy of a smooth test is its smooth-gradient energy.  No
-absolute-continuity hypothesis: the slope equals the gradient norm at every point. -/
-theorem localSlope_energy (f : Test ν) :
-    LocalSlope.energy ν f = (f.energy : ℝ≥0∞) :=
-  localSlope_energy_eq_coe_energy f
+    rw [localSlope_energy f]; exact ENNReal.coe_ne_top⟩
 
 end CheegerEnergy
 

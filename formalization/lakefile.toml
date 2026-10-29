@@ -54,6 +54,8 @@ roots = [
   "solutions.ThmBklTaylorCriterion",
   "solutions.PropBklSuspension",
   "solutions.ThmLetwinCompactQuadraticBound",
+  "solutions.ThmLetwinQuadraticBound",
+  "solutions.ThmLetwinIsoperimetricBound",
   "solutions.LemBklCutoffEnergy",
   "solutions.ThmBklCumulantBound",
   "solutions.ThmBklPoincare",
@@ -68,6 +70,7 @@ roots = [
   "examples.PoincareFoundation",
   "examples.ApiOrganization",
   "examples.MatrixIntegral",
+  "examples.EllipticDrift",
   "examples.GeneratedSemigroup",
   "examples.FiniteProductCovariance",
 ]

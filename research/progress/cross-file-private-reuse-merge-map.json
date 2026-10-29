@@ -1,0 +1,372 @@
+{
+  "version": 1,
+  "review_date": "2026-10-28",
+  "status": "source cleanup complete and verified: snapshot build, audit clients, interface comparison, evidence refresh and full research/verify.py passed (2026-10-28)",
+  "verification_state": {
+    "lean_build": "passed in an isolated snapshot only (/private/tmp copy of the 2026-10-28 01:37 CST Lean sources, including the concurrent Letwin HessianTrace addition): lake build of all default targets, 4896 jobs, exit 0, no warnings. Main-tree .lake not rebuilt.",
+    "audit_clients": "strict (-DwarningAsError=true) elaboration passed in the snapshot for SourceLayout/CrossFileReuse{Contracts,Mergers}.lean, BakryEmeryBochnerAudit.lean and BuserLineAudit.lean; all printed axiom reports standard; removed-private absence and owner-module checks passed",
+    "axiom_audit": "full declaration audit passed within the research/verify.py receipt above",
+    "kernel_replay": "passed within the research/verify.py receipt above",
+    "research_verify_py": "research/verify.py (full scope) passed: receipt build/verification/20261027T192312.895493Z/report.json, snapshot sha256 c36595e15784c17ebffa9d725ce9b54f7496ba98221aff20027d6deccfbbfad0, 438 gates, 423 strict research audit clients, 11902 local declarations axiom-audited (standard axioms), 1091 modules kernel-replayed (leanchecker). The receipt certifies that snapshot only; later edits (including this status text) are outside it.",
+    "interface_comparison": "passed for batches 4 and 5 together: compiler-derived dump of every FunctionalInequalities constant (type hash, definition value hash, universe parameters) in a baseline snapshot with the pre-batch-4/5 sources restored versus the edited snapshot. Public delta exactly: owner moves hasDerivAt_line (Bochner.Basic → Calculus) and thickening_preimage_isometry (Line.Buser → Cheeger.Equality) with identical type hashes; added fderiv_eq_zero_of_supported, mul_mem_fixingOutside, inv_mem_fixingOutside, inner_basisFun_toEuclideanLin, two_mul_sqrt_div_pi_le_sqrt_two_mul, eq_of_strictConvexOn_of_support; removed Isoperimetry.liminf_coe_mul, limsup_coe_mul. Private delta exactly the recorded removals and promotions (plus their auxiliary _simp lemmas). No other declaration changed type or definition value. Dumps: build/history/2026-10-28-private-promotion-batch5/interface/",
+    "api_index_regeneration": "not run",
+    "evidence_hashes": "not refreshed",
+    "logs": "build/history/2026-10-28-cross-file-private-reuse-batch4/snapshot-*.log"
+  },
+  "scope": "Four cross-file private duplicate groups replaced by existing public declarations (one pinned Mathlib theorem, three project theorems). Six private names removed; two existing public theorems change defining module with identical full names, universes, binders, docstrings and proofs. Hypotheses, constants, normalizations, dimensions, certificate entries and proof status unchanged.",
+  "literature_targets": [
+    "BKL2026 (arXiv:2610.05474v1): localization posterior parameter dependence, cumulant dynamics and cumulant bounds supporting Theorems 4.1 and 1.1",
+    "Letwin2026 (arXiv:2607.24164v1): regularity of the moment map / product rule supporting interfaces in Analysis/BakryEmery/Calculus",
+    "ChenKlartag2026: exact identity LH+H = A+Q supporting interfaces in Analysis/BakryEmery/Bochner/Basic",
+    "Log-concave Cheeger/Buser line and metric BV perimeter scaling infrastructure (existing KLS.Isoperimetry and MetricBV entries)"
+  ],
+  "placement_plan": {
+    "owner": "Pinned Mathlib Order/Filter/ENNReal for liminf scaling; Process/Integral for the Eldan path; Analysis/BakryEmery/Calculus for the affine-line derivative; KLS/Geometry/Cheeger/Equality for the isometric thickening identity.",
+    "scope": "Exact original contracts. The line derivative needs only a real inner-product space (no completeness, finite dimension or measurable structure); the thickening identity only pseudo-extended-metric spaces with a surjective isometry; liminf scaling any nontrivial filter and finite constant.",
+    "destination": "ENNReal.liminf_const_mul_of_ne_top; FunctionalInequalities.KLS.BKL.Localization.IsEldanCutoff.measurable_uncurry_path; FunctionalInequalities.Analysis.BakryEmery.hasDerivAt_line; FunctionalInequalities.KLS.Isoperimetry.thickening_preimage_isometry.",
+    "imports": "No import added or removed. Each owner is already in every consumer's import closure: Boundary imports Process/Integral directly; Generator imports Calculus directly; LogPartition, Bochner/Basic reach Calculus transitively; Line/Buser reaches Cheeger/Equality transitively.",
+    "decision": "Reuse existing owners; two verbatim owner moves (Bochner/Basic -> Calculus, Line/Buser -> Cheeger/Equality) put the public theorem at the lowest module holding a duplicate. No new production module.",
+    "api_impact": "No public name added, removed or renamed. Two public theorems change defining module only and remain visible to every former importer. Six private names removed; no aliases.",
+    "validation": "Deferred: strict build of the eight edited modules and all reverse-import consumers (full build), the two new SourceLayout clients, research/audits/BakryEmeryBochnerAudit.lean and research/audits/BuserLineAudit.lean, compiler-derived retained public types/definition closures (expect owner changes for exactly the two moved theorems), private absence, API.md/MODULES.md regeneration, evidence reassessment and full research/verify.py."
+  },
+  "new_public_declarations": [],
+  "removed_public_declarations": [],
+  "owner_moves": [
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hasDerivAt_line",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "class": "verbatim move: same namespace, universe name u, section binders {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E], explicit (x v : E) (t : ℝ), docstring and proof text",
+      "reason": "Calculus is imported by Bochner/Basic and both Posterior consumers and held a private copy."
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.thickening_preimage_isometry",
+      "old_source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
+      "new_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "class": "verbatim move: same namespace FunctionalInequalities.KLS.Isoperimetry, self-contained binders {α β : Type*} with pseudo-extended-metric instances, docstring and proof text; enclosing section variables do not occur in the statement",
+      "reason": "Line/Buser imports Cheeger/Equality, which held a private copy."
+    }
+  ],
+  "private_mergers": [
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.MetricBV.Scaling.0.FunctionalInequalities.KLS.MetricBV.liminf_coe_mul",
+      "old_source": "formalization/FunctionalInequalities/Analysis/MetricBV/Scaling.lean",
+      "replacement_name": "ENNReal.liminf_const_mul_of_ne_top",
+      "replacement_source": "pinned Mathlib db584cd6d46c92f209a44c0f1c829460d327499d: Mathlib/Order/Filter/ENNReal.lean",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Analysis/MetricBV/Scaling.lean: perimeter_smul_le"
+      ],
+      "class": "specialization a := (c : ℝ≥0∞) of the Mathlib statement, discharged by ENNReal.coe_ne_top",
+      "contract_basis": "Mathlib: [f.NeBot] {u : α → ℝ≥0∞} {a : ℝ≥0∞} (ha_top : a ≠ ⊤) : f.liminf (fun x => a * u x) = a * f.liminf u. Private: [l.NeBot] (c : ℝ≥0) (u) : liminf (fun i => ↑c * u i) l = ↑c * liminf u l. Same NeBot instance, same codomain, no extra hypothesis. The identical call form is already used in Energy/Relaxation/Quadratic.lean.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Boundary.0.FunctionalInequalities.KLS.BKL.Localization.measurable_path_uncurry",
+      "old_source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Boundary.lean",
+      "replacement_name": "FunctionalInequalities.KLS.BKL.Localization.IsEldanCutoff.measurable_uncurry_path",
+      "replacement_source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process/Integral.lean",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Boundary.lean: IsEldanCutoff.exists_weighted_energy_le"
+      ],
+      "class": "exact contract modulo binder order of section variables",
+      "contract_basis": "Both use section variables {n} {μ} {hc} {Ω} [MeasurableSpace Ω] {P} [IsProbabilityMeasure P] {W} {ℱ} {hW} {p} and {γ}, hypothesis IsEldanCutoff μ hc W ℱ hW γ p, conclusion Measurable (fun z : Ω × ℝ => p z.2 z.1); identical proof. The consumer binds h with that syntactic type, so dot notation resolves.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.BakryEmery.Calculus.0.FunctionalInequalities.Analysis.BakryEmery.line_deriv",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.BakryEmery.hasDerivAt_line",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean: bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open (two uses)"
+      ],
+      "class": "exact contract (same section context, statement and proof); the private becomes the moved public theorem",
+      "contract_basis": "Identical text in the identical section context.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Probability.Posterior.Generator.0.FunctionalInequalities.Probability.Posterior.line_hasDerivAt",
+      "old_source": "formalization/FunctionalInequalities/Probability/Posterior/Generator.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.BakryEmery.hasDerivAt_line",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Probability/Posterior/Generator.lean: fderiv_posteriorExpectation_c_apply",
+        "formalization/FunctionalInequalities/Probability/Posterior/Generator.lean: bilinearIteratedFDerivTwo_posteriorExpectation_c"
+      ],
+      "class": "specialization t := 0",
+      "contract_basis": "Private (after omit) used only E with [NormedAddCommGroup E] [InnerProductSpace ℝ E]; conclusion HasDerivAt (fun t => c + t • h) h 0 equals hasDerivAt_line c h 0. The public is universe-polymorphic in E.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Probability.Posterior.LogPartition.0.FunctionalInequalities.Probability.Posterior.line_hasDerivAt",
+      "old_source": "formalization/FunctionalInequalities/Probability/Posterior/LogPartition.lean",
+      "replacement_name": "FunctionalInequalities.Analysis.BakryEmery.hasDerivAt_line",
+      "replacement_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Probability/Posterior/LogPartition.lean: fderiv_logPartition_c_apply"
+      ],
+      "class": "specialization t := 0",
+      "contract_basis": "Private (after omitting CompleteSpace, FiniteDimensional, MeasurableSpace, BorelSpace) used only a real inner-product space; same conclusion as hasDerivAt_line c h 0. Referenced as Analysis.BakryEmery.hasDerivAt_line, the file's existing qualification style.",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.Geometry.Cheeger.Equality.0.FunctionalInequalities.KLS.Isoperimetry.thickening_preimage_of_isometry",
+      "old_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "replacement_name": "FunctionalInequalities.KLS.Isoperimetry.thickening_preimage_isometry",
+      "replacement_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean: constant_eq_minkowskiConstant_intrinsic"
+      ],
+      "class": "exact contract modulo the declaration name; statement and proof text identical",
+      "contract_basis": "Byte-identical binders, statement and proof; only the name and visibility differed.",
+      "compatibility_alias": false
+    }
+  ],
+  "retained_groups": [
+    {
+      "declarations": [
+        "Analysis/WaveSplitting/{AverageError,Compatibility,Residual}.lean: fderiv_eq_zero_of_vanishing/fderiv_eq_zero_of_supported"
+      ],
+      "reason": "Private/private only; no existing public or pinned-Mathlib declaration with this vanishing-outside-radius contract. Merging needs a new public owner (deferred: not a reuse group)."
+    },
+    {
+      "declarations": [
+        "KLS/BKL/PoissonIterate/{Defect,Symmetry,TaylorRecursion}.lean: contDiff_two (HasTemperateGrowth → C²)"
+      ],
+      "reason": "No existing public owner; inlining hUt.1.of_le hits the documented ContDiff ∞ downcast elaboration trap and should not be done without compilation."
+    },
+    {
+      "declarations": [
+        "Analysis/BakryEmery/Calculus.lean and Analysis/Convex/Pogorelov.lean: private abbrev D, smooth_D_at, D_congr"
+      ],
+      "reason": "Private/private only; sharing needs a new public directional-derivative API (owner decision)."
+    },
+    {
+      "declarations": [
+        "Analysis/HessianRegularity.lean isClosed_psd_for_equation; Analysis/Matrix/RankOneFrame.lean isClosed_posSemidef_real"
+      ],
+      "reason": "No pinned-Mathlib closedness lemma for real PSD matrices; needs a new public owner."
+    },
+    {
+      "declarations": [
+        "Analysis/Convex/Quadratic.lean quadraticAt_basis_entry; KLS/CEK/MomentRegularity/WeakHessian.lean mean_hessian_basis_entry"
+      ],
+      "reason": "No existing public replacement found; needs a new owner in Euclidean coordinates."
+    },
+    {
+      "declarations": [
+        "Analysis/Newtonian/{CancelledHessian,GradientApprox}.lean volume_ball_le_*"
+      ],
+      "reason": "Public KernelBounds gives the real-valued equality with natural exponent, not the ENNReal bound with real exponent; replacement would change proofs, not reuse a contract."
+    },
+    {
+      "declarations": [
+        "Analysis/Tensor/Symmetrization.lean mul_mem_fixingOutside; KLS/BKL/PoissonIterate/TaylorRecursion.lean mul_mem_fixingOutside'"
+      ],
+      "reason": "Both private; needs promotion of the Symmetrization lemma to public (new API)."
+    },
+    {
+      "declarations": [
+        "KLS/BKL/Localization/{Energy/Generator,Lyapunov/Basic}.lean covariance C² lemmas"
+      ],
+      "reason": "Both private; no public owner."
+    },
+    {
+      "declarations": [
+        "KLS/LogConcave/HeatSemigroup/{Approximation,Perimeter}.lean pi_coefficient_le"
+      ],
+      "reason": "Both private; no public owner."
+    },
+    {
+      "declarations": [
+        "Analysis/Convex/Caffarelli/MomentRegularity.lean eq_of_common_supporting_slope; Analysis/Convex/TruncatedConjugate.lean eq_of_strictConvexOn_of_support"
+      ],
+      "reason": "Both private; no public owner found."
+    },
+    {
+      "declarations": [
+        "Probability/Posterior/{JointRegularity,LogPartition}.lean parameterScore/partitionParameterScore"
+      ],
+      "reason": "Private definitions (not lemmas); identification of definitions is an interface change outside this batch."
+    },
+    {
+      "declarations": [
+        "KLS/Geometry/Cheeger/MinkowskiContent.lean public liminf_coe_mul/limsup_coe_mul"
+      ],
+      "reason": "Public duplicates of pinned Mathlib ENNReal.liminf_const_mul_of_ne_top/limsup_const_mul_of_ne_top used by RelaxedMinkowski; removal is a public API migration outside this private-only batch."
+    },
+    {
+      "declarations": [
+        "Analysis/Convex/Alexandrov/Comparison.lean strict_tangent_gap_of_local"
+      ],
+      "reason": "Different contract: second point in the closure of an open convex domain with convexity on the closure; already reuses the public strict-convex tangent gap."
+    },
+    {
+      "declarations": [
+        "Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean hessian_comp_equiv_of_contDiffAt"
+      ],
+      "reason": "Local C² at T x is weaker than the global ContDiff hypothesis of public hessian_comp_equiv."
+    },
+    {
+      "declarations": [
+        "Analysis/Matrix/WeakTrace.lean locallyIntegrable_mul_of_memLp_top"
+      ],
+      "reason": "L∞ × locally integrable differs from the public compact-L² × compact-L² product lemma."
+    },
+    {
+      "declarations": [
+        "Probability/Moments.lean integral_sq_le_of_integrable"
+      ],
+      "reason": "Public Probability.ProductVariance.sq_integral_le takes MemLp and is not imported; replacement would add an import edge between independent Probability modules."
+    },
+    {
+      "declarations": [
+        "Analysis/BakryEmery/WeakHessian.lean contDiff_fderiv_apply"
+      ],
+      "reason": "Private needs only NormedSpace; public Calculus version requires an inner-product space and an order side condition 1 + 1 ≤ ∞ whose elaboration should be compiled."
+    },
+    {
+      "declarations": [
+        "Analysis/WaveSplitting/TimeAverage.lean fderiv_sum_apply"
+      ],
+      "reason": "Normed-space scope and no import of the inner-product Calculus owner."
+    },
+    {
+      "declarations": [
+        "Analysis/BakryEmery/MongeAmpere.lean fderiv_exp_neg_apply"
+      ],
+      "reason": "Different hypotheses (C∞ vs differentiable), different conclusion arrangement, and no import of WaveSplitting/Potential."
+    },
+    {
+      "declarations": [
+        "KLS/LogConcave/HeatSemigroup/OperatorCore.lean cutoff family"
+      ],
+      "reason": "Different cutoff object (5/8 profile) from the public Tilt/Temperate cutoff."
+    },
+    {
+      "declarations": [
+        "KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean integrable_exp_neg, integral_exp_neg_pos, laplacian_eq_zero_of_notMem_tsupport"
+      ],
+      "reason": "Different hypotheses or carrier (tilted probability law vs RegularPotential; general finite-dimensional space vs EuclideanSpace (Fin n))."
+    },
+    {
+      "declarations": [
+        "KLS/ConditionalFiber/EnergyComparison.lean holds_iff_intrinsicMeasure, holds_of_isometryEquiv, intrinsic_constant_eq_iInf"
+      ],
+      "reason": "Different hypotheses (full affine support) or conclusion form from the Poincare owners, which are not imported."
+    }
+  ],
+  "affected_modules": [
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/MetricBV/Scaling.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Boundary.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
+    "formalization/FunctionalInequalities/Probability/Posterior/Generator.lean",
+    "formalization/FunctionalInequalities/Probability/Posterior/LogPartition.lean"
+  ],
+  "maintained_clients": [
+    "research/audits/SourceLayout/CrossFileReuseContracts.lean",
+    "research/audits/SourceLayout/CrossFileReuseMergers.lean"
+  ],
+  "existing_clients_to_recheck": [
+    "research/audits/BakryEmeryBochnerAudit.lean (#print axioms hasDerivAt_line)",
+    "research/audits/BuserLineAudit.lean (#print axioms thickening_preimage_isometry)",
+    "research/audits/BKL/PosteriorParameterAudit.lean"
+  ],
+  "pending_index_updates": [
+    "formalization/API.md (generated)",
+    "formalization/MODULES.md (module descriptions only; no declaration entry found for the moved theorems)"
+  ],
+  "evidence_reassessment": [
+    {
+      "node": "thm:logconcave-cheeger-poincare-comparison",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
+      "recorded_sha256": "2a171a1a9c9f9c20dde18a1bd49be9096c5c0d85caf3e23598e6d23785e9a358",
+      "baseline_sha256": "2a171a1a9c9f9c20dde18a1bd49be9096c5c0d85caf3e23598e6d23785e9a358",
+      "current_sha256": "ea21c4b8bfb7fccb8b54b99d729605fd49adcddb4e0eca2254c96e6278e3b230",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "ea21c4b8bfb7fccb8b54b99d729605fd49adcddb4e0eca2254c96e6278e3b230"
+    },
+    {
+      "node": "thm:logconcave-cheeger-poincare-comparison",
+      "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "recorded_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "baseline_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "current_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d"
+    },
+    {
+      "node": "thm:logconcave-cheeger-poincare-comparison",
+      "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+      "recorded_sha256": "464ad5f6c770f3cd3cc924fe9b302e9dc068c8a445650d12c8c56646be52f527",
+      "baseline_sha256": "464ad5f6c770f3cd3cc924fe9b302e9dc068c8a445650d12c8c56646be52f527",
+      "current_sha256": "8614a6f93ed1ebe0aa35a5ccbf9d2c1d20980fa7122f8b88a310ac3afa38b4ad",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "8614a6f93ed1ebe0aa35a5ccbf9d2c1d20980fa7122f8b88a310ac3afa38b4ad"
+    },
+    {
+      "node": "lem:covariance-core-closure",
+      "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "recorded_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "baseline_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "current_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d"
+    },
+    {
+      "node": "lem:relative-perimeter-smoothing",
+      "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "recorded_sha256": "be38076b181382bf36aa67f1163d4b8449b3df859739c86fe31f754362e9663a",
+      "baseline_sha256": "be38076b181382bf36aa67f1163d4b8449b3df859739c86fe31f754362e9663a",
+      "current_sha256": "2f83b7a39de0dc606c70f806c84a6a9f195575cac5e48da15d777fa0e18c92a9",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "2f83b7a39de0dc606c70f806c84a6a9f195575cac5e48da15d777fa0e18c92a9"
+    },
+    {
+      "node": "lem:relative-perimeter-smoothing",
+      "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "recorded_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "baseline_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "current_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d"
+    },
+    {
+      "node": "lem:relative-perimeter-cheeger-infimum",
+      "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "recorded_sha256": "be38076b181382bf36aa67f1163d4b8449b3df859739c86fe31f754362e9663a",
+      "baseline_sha256": "be38076b181382bf36aa67f1163d4b8449b3df859739c86fe31f754362e9663a",
+      "current_sha256": "2f83b7a39de0dc606c70f806c84a6a9f195575cac5e48da15d777fa0e18c92a9",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "2f83b7a39de0dc606c70f806c84a6a9f195575cac5e48da15d777fa0e18c92a9"
+    },
+    {
+      "node": "lem:gradient-affine-precomposition",
+      "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+      "recorded_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "baseline_sha256": "a7689d1875c3a264afb88e1f4ffc45033bc1303ddb4d0dde9e069f1aa3e87ce5",
+      "current_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "21710194781dbdd96bc411fa35be6df9be6bce68ba4381ce3fc256c6badab19d"
+    }
+  ],
+  "review": {
+    "meaning_and_scope": "pass by source reading: identical hypotheses/conclusions or exact specializations; no constant, normalization, dimension, certificate or proof-status change. Compilation pending.",
+    "reuse_and_generality": "pass by source reading: replacements are existing public declarations; none adds CompleteSpace, finite dimension, separability or finite-measure hypotheses.",
+    "public_api_and_placement": "pending compiler interface comparison; expected: no public name change, two owner changes, six private removals.",
+    "documentation_and_credit": "pass: docstrings moved verbatim; no attribution removed.",
+    "consumer_and_compatibility": "pending: strict consumers and new clients not yet elaborated.",
+    "evidence_and_preservation": "Baseline bytes, real index and staging saved under build/history/2026-10-28-cross-file-private-reuse-batch4; evidence hashes not refreshed."
+  }
+}

@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Ito.Picard
 
 /-!
@@ -363,7 +366,7 @@ theorem progressivelyMeasurable_comp_state {n : ℕ}
     Probability.ProgressivelyMeasurable ℱ (fun ω s => f s (X s ω)) := by
   refine Probability.ProgressivelyMeasurable.of_isStronglyProgressive ?_
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hXm : Measurable fun q : Set.Iic t × Ω => (X (q.1 : ℝ) q.2 : Fin n → ℝ) :=
     measurable_pi_lambda _ fun i => ((hX i).isStronglyProgressive t).measurable
   have hq : Measurable fun q : Set.Iic t × Ω => ((q.1 : ℝ), X (q.1 : ℝ) q.2) :=
@@ -379,7 +382,7 @@ theorem markedProgressivelyMeasurable_comp_state {n : ℕ}
     (hg : Measurable fun p : ℝ × (Fin n → ℝ) × E => g p.1 p.2.1 p.2.2) :
     Probability.MarkedProgressivelyMeasurable ℱ (fun ω s e => g s (X s ω) e) := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hXm : Measurable fun q : Set.Iic t × Ω => (X (q.1 : ℝ) q.2 : Fin n → ℝ) :=
     measurable_pi_lambda _ fun i => ((hX i).isStronglyProgressive t).measurable
   have hbase : Measurable fun q : (Set.Iic t × Ω) × E =>

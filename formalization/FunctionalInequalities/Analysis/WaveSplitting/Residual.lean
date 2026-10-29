@@ -232,7 +232,9 @@ private theorem eventually_zero_of_supported {f : E → ℝ} {R : ℝ}
   Filter.eventually_of_mem ((isOpen_lt continuous_const continuous_norm).mem_nhds hx)
     fun y hy => hf y hy
 
-private theorem fderiv_eq_zero_of_supported {f : E → ℝ} {R : ℝ}
+/-- A real function vanishing outside the closed ball of radius `R` has zero derivative
+there. -/
+theorem fderiv_eq_zero_of_supported {f : E → ℝ} {R : ℝ}
     (hf : ∀ y, R < ‖y‖ → f y = 0) {x : E} (hx : R < ‖x‖) : fderiv ℝ f x = 0 := by
   rw [(eventually_zero_of_supported hf hx).fderiv_eq]
   simp

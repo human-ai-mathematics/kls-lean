@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Matrix.LogDetSegment
+import FunctionalInequalities.Analysis.Matrix.LogDet.Segment
 import FunctionalInequalities.Analysis.Matrix.InverseHolder
 
 /-!

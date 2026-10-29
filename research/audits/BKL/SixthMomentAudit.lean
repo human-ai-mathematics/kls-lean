@@ -5,11 +5,11 @@ import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 import FunctionalInequalities.KLS.BKL.Posterior.Moments
-/-! Independent audit clients for SM1 canonical sixth moment of the compact posterior (KLS/BKL/PosteriorDomain.lean section SixthMoment). Merged verbatim from the reviewer receipt `SM1-Independent-20261008 (raw 989e6c8a…)` (modules
-UniformWitness, LawClients, ZeroClients, ConsumerApplications), re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration
-tooling stays in the receipt. -/
+/-! Audit clients for the canonical sixth moment of the compact posterior
+(`KLS/BKL/PosteriorDomain.lean` section SixthMoment), in the sections UniformWitness, LawClients,
+ZeroClients and ConsumerApplications. -/
 
--- ===== reviewer module UniformWitness (SM1-Independent-20261008 (raw 989e6c8a…)) =====
+-- ===== UniformWitness =====
 /-!
 # Audit: a law satisfying every premise of the conditional BKL Lemma 4.2
 
@@ -346,7 +346,7 @@ end BKLSkewWitness
 #print axioms FunctionalInequalities.Analysis.BakryEmery.taylorTensor_two_inner_eq_of_centered
 #print axioms FunctionalInequalities.Analysis.BakryEmery.fderiv_logLaplace_zero_apply
 
--- ===== reviewer module LawClients (SM1-Independent-20261008 (raw 989e6c8a…)) =====
+-- ===== LawClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
@@ -452,7 +452,7 @@ lemma actual_signed (c : E1) (q : ℝ) (hq : 0 ≤ q) :
 
 end SM1LawClients
 
--- ===== reviewer module ZeroClients (SM1-Independent-20261008 (raw 989e6c8a…)) =====
+-- ===== ZeroClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
@@ -515,7 +515,7 @@ lemma actual_integral_zero (c : E0) (Q : E0 →L[ℝ] E0) :
   simp [hzero]
 end SM1ZeroClients
 
--- ===== reviewer module ConsumerApplications (SM1-Independent-20261008 (raw 989e6c8a…)) =====
+-- ===== ConsumerApplications =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Probability.Posterior

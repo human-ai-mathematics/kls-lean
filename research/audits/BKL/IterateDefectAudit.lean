@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
 
 /-!
-# Audit: (47), Lemma 3.4, Corollary 3.5 and Lemma 3.2 for the BKL iterates (route `I4`–`I6`, `I8`)
+# Audit: (47), Lemma 3.4, Corollary 3.5 and Lemma 3.2 for the BKL iterates
 
 The propositions `I4`, `I5`, `I6` and `I8` of `research/audits/BKL/IterateRouteStatements.lean`
 (operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
@@ -38,7 +38,7 @@ variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSp
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-/-- `I4`, verbatim: the Pythagorean identity (47). -/
+/-- `I4` of `IterateRouteStatements.lean`, verbatim: the Pythagorean identity (47). -/
 theorem i4 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →
@@ -49,7 +49,7 @@ theorem i4 :
   intro hνU hUt hexp C _ hC f hf _ k
   exact normSq_gradField_gradField_iter m hν hi hνU hUt hexp hC hf k
 
-/-- `I5`, verbatim: BKL Lemma 3.4. -/
+/-- `I5` of `IterateRouteStatements.lean`, verbatim: BKL Lemma 3.4. -/
 theorem i5 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →
@@ -61,7 +61,7 @@ theorem i5 :
   intro hνU hUt hexp a ha C _ hC f hf _ k
   exact normSq_genField_iter_succ_add_defect_le m hν hi hνU hUt hexp hC ha hf k
 
-/-- `I6`, verbatim: BKL Corollary 3.5 and the summed defects. -/
+/-- `I6` of `IterateRouteStatements.lean`, verbatim: BKL Corollary 3.5 and the summed defects. -/
 theorem i6 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →
@@ -74,7 +74,7 @@ theorem i6 :
   exact ⟨tendsto_energy_iter_zero m hν hi hνU hUt hexp hC ha₀ ha hf,
     fun N => sum_defect_iter_le m hν hi hνU hUt hexp hC ha₀.le ha hf N⟩
 
-/-- `I8`, verbatim: BKL Lemma 3.2 with `λ = 1/C`. -/
+/-- `I8` of `IterateRouteStatements.lean`, verbatim: BKL Lemma 3.2 with `λ = 1/C`. -/
 theorem i8 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →

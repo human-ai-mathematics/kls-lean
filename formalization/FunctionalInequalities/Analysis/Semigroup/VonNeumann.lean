@@ -31,8 +31,8 @@ Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, res
 `Resolvent.lean` (resolvent contraction drops self-adjointness), hypotheses that turn out to be unnecessary are
 **not** assumed:
 
-* the form identity is proved without `T.IsClosed` (the route statement does not carry it either) and
-  without `CompleteSpace H₁`: `inner_adjointComp` and the verbatim wrapper
+* the form identity is proved without `T.IsClosed` and
+  without `CompleteSpace H₁`: `inner_adjointComp` and the wrapper
   `inner_adjointComp_apply` live in the section before `CompleteSpace H₁` is introduced.  Only
   density of `D(T)` is used, and it is genuinely needed because Mathlib's `LinearPMap.adjoint`
   carries a junk value on a non-dense domain.
@@ -41,18 +41,19 @@ Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, res
   and only the identification of the value `T† (T (J_s f)) = s⁻¹ (f - J_s f)`
   (`adjointComp_resolventDomain`) uses `adjoint_apply_eq`, hence density.
 
-## Deviation from the route sketch
+## Order of the arguments
 
-The route sketches density of D(T†T) as "immediate from self-adjointness of T†T and `IsSelfAdjoint.dense_domain`".  That order is
-not available: `LinearPMap.IsFormalAdjoint.le_adjoint`, which turns symmetry of `T†T` into
+Deriving density of D(T†T) from self-adjointness of T†T via
+`IsSelfAdjoint.dense_domain` would be circular here: `LinearPMap.IsFormalAdjoint.le_adjoint`, which turns symmetry of `T†T` into
 `T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So density of D(T†T) is proved first, by the direct
-argument the route also records (if `g ⊥ D(T†T)` then `g = u + T†T u` with `u = J_1 g`, and
+argument (if `g ⊥ D(T†T)` then `g = u + T†T u` with `u = J_1 g`, and
 `0 = ⟪u, g⟫ = ‖u‖² + ‖T u‖²`), and self-adjointness of T†T is then derived from it.
 
 ## Deliberately out of scope
 
-Nothing here proves the adjoint-product identification–the semigroup limit of the semigroup-generation route (Yosida exponentials, their
-strong convergence, the semigroup), nothing proves Part B (the quantitative resolvent bound–resolvent commutation, the resolvent limits), and
+Nothing here proves the adjoint-product identification or the semigroup limit (Yosida exponentials,
+their strong convergence, the semigroup), nothing proves the quantitative resolvent bound,
+resolvent commutation or the resolvent limits, and
 nothing here concerns Buser's inequality, the Markov property, Bakry–Émery calculus or any KLS
 quantity.  This module is general real Hilbert space material: no measure, no log-concavity.
 -/
@@ -80,7 +81,7 @@ theorem inner_adjointComp {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : S
   rw [adjointComp_apply]
   exact LinearPMap.adjoint_isFormalAdjoint hd _ ⟨y, hy⟩
 
-/-- the form identity, in the verbatim shape of the route statement: the pairing version of
+/-- The form identity, in pairing form: the version of
 `inner_adjointComp` with `y` presented as an element of `T.domain`. -/
 theorem inner_adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (hd : Dense (T.domain : Set H₀))
     (x : (adjointComp T).domain) (y : T.domain) :
@@ -272,7 +273,7 @@ theorem adjointComp_resolventDomain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClose
 /-- the resolvent domain identity: the resolvent inverts `1 + s T†T`.
 
 For `s > 0` and every datum `f`, the weak solution `J_s f` lies in `D(T†T)` and satisfies
-`J_s f + s • T†T (J_s f) = f`.  This is the verbatim route statement, assembled from
+`J_s f + s • T†T (J_s f) = f`.  It is assembled from
 `mem_adjointComp_domain_resolventDomain` and `adjointComp_resolventDomain`. -/
 theorem resolvent_add_smul_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {s : ℝ} (hs : 0 < s) (f : H₀) :
@@ -300,7 +301,7 @@ theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
 
 /-- density of D(T†T): `D(T†T)` is dense.
 
-Proved directly, not from self-adjointness of T†T (see the module docstring for why the route's order is not
+Proved directly, not from self-adjointness of T†T (see the module docstring for why the other order is not
 available).  If `g` is orthogonal to `D(T†T)`, write `g = x + T†T x` with `x ∈ D(T†T)` by
 surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by the form identity, so `x = 0` and `g = 0`.
 A submodule of a complete inner product space with trivial orthogonal complement is dense. -/

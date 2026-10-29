@@ -3,6 +3,9 @@ Copyright (c) 2023 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne, Peter Pfaffelhuber
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 module
 
 public import Mathlib.MeasureTheory.Constructions.ClosedCompactCylinders
@@ -140,7 +143,7 @@ lemma mem_piCylinderSet (hs : ∀ n, s n ∈ closedCompactCylinders α) (x : Π 
     x ∈ piCylinderSet hs ↔
     ∀ i, x i ∈ (fun a : Π j : Js (hs (indexProj hs i)), α j ↦ a ⟨i, mem_indexProj hs i⟩) ''
       (As (hs (indexProj hs i))) := by
-  simp only [piCylinderSet, mem_image, Subtype.forall, mem_setOf_eq]
+  simp only [piCylinderSet, mem_image, Subtype.forall, mem_ofPred_eq]
 
 theorem isCompact_piCylinderSet (hs : ∀ n, s n ∈ closedCompactCylinders α) :
     IsCompact (piCylinderSet hs) :=
@@ -171,7 +174,7 @@ theorem nonempty_piCylinderSet (hs : ∀ n, s n ∈ closedCompactCylinders α)
   have hb_mem i : b i ∈ As (hs (indexProj hs i)) := (hs_nonempty' (indexProj hs i)).choose_spec
   let a : Π i : allProj hs, α i := fun i ↦ b i ⟨i, mem_indexProj hs i⟩
   refine ⟨a, ?_⟩
-  simp only [piCylinderSet, mem_image, SetCoe.forall, mem_setOf_eq]
+  simp only [piCylinderSet, mem_image, SetCoe.forall, mem_ofPred_eq]
   exact fun j hj ↦ ⟨b ⟨j, hj⟩, hb_mem _, rfl⟩
 
 end piCylinderSet

@@ -129,7 +129,7 @@ private lemma fderiv_det_updateRow
         rw [hr]
         rfl
 
-/-- **Piola identity for the adjugate of a smooth Hessian** (weak Letwin route, smooth
+/-- **Piola identity for the adjugate of a smooth Hessian** (smooth
 case): for a `C³` function `u` on `ℝⁿ`, the rows of the adjugate (cofactor) matrix of the Hessian
 `H = ∇²u` are divergence-free: `∑ⱼ ∂ⱼ (adj H)ᵢⱼ = 0`. Here `hessianMatrix u y i j = D²u(y)(eᵢ, eⱼ)`
 in the standard basis `eⱼ = EuclideanSpace.basisFun (Fin n) ℝ j`. -/
@@ -375,7 +375,7 @@ private lemma weakPiola_smooth {n : ℕ}
         rw [sum_fderiv_adjugate_hessianMatrix_eq_zero hu x i, zero_mul]
       simp only [hz, integral_zero, neg_zero]
 
-/-- **Weak Piola identity for a `C¹` function with Lipschitz gradient** (weak Letwin route):
+/-- **Weak Piola identity for a `C¹` function with Lipschitz gradient**:
 the rows of the adjugate of the a.e. Hessian `H = D(∇u)` are weakly divergence-free,
 `∑ⱼ ∫ (adj H)ᵢⱼ ∂ⱼψ = 0` for every `C¹` test `ψ` with compact support. Here
 `hessianMatrix u x i j = D²u(x)(eᵢ, eⱼ)` is the true Hessian at every point where `∇u` is
@@ -457,7 +457,8 @@ open MeasureTheory Set Filter
 open scoped Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! The weak Piola identity for Lipschitz gradients and the divergence form of the inverse Hessian (weak Letwin route). -/
+/-! The weak Piola identity for Lipschitz gradients and the divergence form of the inverse Hessian.
+-/
 
 namespace FunctionalInequalities.Analysis
 
@@ -671,7 +672,7 @@ private lemma tendsto_integral_adjugate_hessianMatrix {n : ℕ}
         (fderiv ℝ ψ x v)
     simpa only [hessianMatrix_eq_gradientDerivativeMatrix, Function.comp_def] using ht
 
-/-- **Weak Piola identity with Lipschitz tests** (weak Letwin route): for `u ∈ C¹` with Lipschitz
+/-- **Weak Piola identity with Lipschitz tests**: for `u ∈ C¹` with Lipschitz
 gradient and a Lipschitz `ψ` with compact support (`fderiv ℝ ψ` its a.e. derivative),
 `∑ⱼ ∫ (adj ∇²u)ᵢⱼ ∂ⱼψ = 0`. -/
 theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero_of_lipschitz {n : ℕ}
@@ -765,7 +766,7 @@ private lemma lipschitzWith_exp_neg_mul_test {n : ℕ}
   rw [he] at hL
   exact hL
 
-/-- **Divergence of the inverse Hessian** (weak Letwin route): if moreover `det ∇²u = e^F` a.e. for a
+/-- **Divergence of the inverse Hessian**: if moreover `det ∇²u = e^F` a.e. for a
 Lipschitz `F`, then for Lipschitz `ψ` with compact support
 `∑ⱼ ∫ (∇²u)⁻¹ᵢⱼ ∂ⱼψ = ∑ⱼ ∫ (∇²u)⁻¹ᵢⱼ ∂ⱼF ψ`, i.e. `div (∇²u)⁻¹ = −(∇²u)⁻¹ ∇F` weakly. -/
 theorem sum_integral_inv_hessianMatrix_mul_fderiv_eq {n : ℕ}

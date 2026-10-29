@@ -1,12 +1,12 @@
 import FunctionalInequalities.KLS.BKL.Localization.CumulantGenerator
 import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Conjugation
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
 import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
 import FunctionalInequalities.Probability.Diffusion.VectorGenerator
 import FunctionalInequalities.Analysis.Tensor.EnergyForm
 import FunctionalInequalities.KLS.BKL.Localization.Standardization
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Probability.Diffusion.Generator
 /-!

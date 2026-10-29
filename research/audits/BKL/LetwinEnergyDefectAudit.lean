@@ -8,11 +8,11 @@ Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients, every pre
 - `square_extraction`: the coefficient extraction for `h(s) = s²` in an arbitrary orthonormal basis,
   `Σ_ij A_ij ∂_iφ ∂_j(φ²) = 2φ Σ_ij A_ij ∂_iφ ∂_jφ`;
 - `profile_defect_le`: the pointwise defect domination for the actual profile `η = smoothTransition (2 − ·)` with the
-  adopted common bound `B` of `η′`, `η″` and the nonnegativity of the inverse-Hessian quadratic form, i.e. the source
+  fixed common bound `B` of `η′`, `η″` and the nonnegativity of the inverse-Hessian quadratic form, i.e. the source
   form `|Lχ| ≤ |R⁻¹| B |Lφ| + R⁻² B Γφ` with `Γφ ≥ 0` for every real `c`, `R`;
 - `energy_nonneg_of_deriv_nonpos`: the energy identity with the quadratic-form sign: for `h′ ≤ 0` (the sign of the tail
   primitive `q_R′ = −R⁻² w`), `∫ (Lφ) h(φ) dν ≥ 0`.
-These are not the Lemma A.4 producer, its compact-support assembly or a source-law client. Client bodies: Claude.
+These are not the Lemma A.4 producer, its compact-support assembly or a source-law client.
 -/
 
 open MeasureTheory

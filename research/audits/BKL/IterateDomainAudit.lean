@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
 
 /-!
-# Audit: the BKL iterates in `D(A)`, (30), (33), (46), (35)–(36) and (32) (route `I1`–`I3`, `I7`)
+# Audit: the BKL iterates in `D(A)`, (30), (33), (46), (35)–(36) and (32)
 
 The propositions `I1`, `I2`, `I3` and `I7` of `research/audits/BKL/IterateRouteStatements.lean`
 (operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
@@ -38,7 +38,8 @@ variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSp
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-/-- `I1`, verbatim: every component of every iterate lies in `D(A)` and is centered. -/
+/-- `I1` of `IterateRouteStatements.lean`, verbatim: every component of every iterate lies in
+`D(A)` and is centered. -/
 theorem i1 :
     ((ν : Measure V) = m.tilted (-U) → ContDiff ℝ 2 U →
     ∀ {C : NNReal}, Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal) →
@@ -47,7 +48,7 @@ theorem i1 :
   intro hνU hU C hC f hf hfm k I
   exact KLS.LogConcave.PoissonIterate.iter_mem_domain_and_mean_eq_zero m hν hi hνU hU hC hf hfm k I
 
-/-- `I2`, verbatim: the Poisson relation (30). -/
+/-- `I2` of `IterateRouteStatements.lean`, verbatim: the Poisson relation (30). -/
 theorem i2 :
     ((ν : Measure V) = m.tilted (-U) → ContDiff ℝ 2 U →
     ∀ {C : NNReal}, Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal) →
@@ -56,7 +57,8 @@ theorem i2 :
   intro hνU hU C hC f _ _ k
   exact KLS.LogConcave.PoissonIterate.genField_iter_succ m hν hi hνU hU hC f k
 
-/-- `I3`, verbatim: the normalization (33), (46), the energy drop (35) and (32). -/
+/-- `I3` of `IterateRouteStatements.lean`, verbatim: the normalization (33), (46), the energy
+drop (35) and (32). -/
 theorem i3 :
     ((ν : Measure V) = m.tilted (-U) → ContDiff ℝ 2 U →
     ∀ {C : NNReal}, 0 < C → Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal) →
@@ -72,7 +74,7 @@ theorem i3 :
     KLS.LogConcave.PoissonIterate.energy_sub_energy_iter_succ m hν hi hνU hU hC f k,
     KLS.LogConcave.PoissonIterate.inv_le_scale_sq m hν hi hνU hU hC hCpos f k⟩
 
-/-- `I7`, verbatim: the telescoped identity (36). -/
+/-- `I7` of `IterateRouteStatements.lean`, verbatim: the telescoped identity (36). -/
 theorem i7 :
     ((ν : Measure V) = m.tilted (-U) → ContDiff ℝ 2 U →
     ∀ {C : NNReal}, 0 < C → Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal) →

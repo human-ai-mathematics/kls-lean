@@ -4,11 +4,11 @@ import Mathlib.Probability.ConditionalProbability
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import FunctionalInequalities.KLS.Isotropic
 
-/-! Independent audit clients for D74s singleton allocation of (74) (Analysis/BakryEmery/Cumulant/Local.lean section SingletonAllocation). Merged verbatim from the reviewer receipt `D74s-Independent-20261008 (raw 734d1073…)` (modules
-UniformWitness, UniformClients, SkewClients, ZeroClients), re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration
-tooling stays in the receipt. -/
+/-! Audit clients for the singleton allocation of (74) (`Analysis/BakryEmery/Cumulant/Local.lean`
+section SingletonAllocation), in the sections UniformWitness, UniformClients, SkewClients and
+ZeroClients. -/
 
--- ===== reviewer module UniformWitness (D74s-Independent-20261008 (raw 734d1073…)) =====
+-- ===== UniformWitness =====
 /-!
 # Audit: a law satisfying every premise of the conditional BKL Lemma 4.2
 
@@ -345,7 +345,7 @@ end BKLSkewWitness
 #print axioms FunctionalInequalities.Analysis.BakryEmery.taylorTensor_two_inner_eq_of_centered
 #print axioms FunctionalInequalities.Analysis.BakryEmery.fderiv_logLaplace_zero_apply
 
--- ===== reviewer module UniformClients (D74s-Independent-20261008 (raw 734d1073…)) =====
+-- ===== UniformClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory Set intervalIntegral
@@ -432,7 +432,7 @@ lemma actual_higher_signed :
   actual_all_lists [1,-2,3] (-4)
 end D74sUniformClients
 
--- ===== reviewer module SkewClients (D74s-Independent-20261008 (raw 734d1073…)) =====
+-- ===== SkewClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
@@ -475,7 +475,7 @@ lemma actual_all_lists (hs : List ℝ) (w : ℝ) :
   inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs w
 end D74sSkewClients
 
--- ===== reviewer module ZeroClients (D74s-Independent-20261008 (raw 734d1073…)) =====
+-- ===== ZeroClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set

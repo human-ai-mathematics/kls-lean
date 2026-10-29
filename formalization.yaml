@@ -30,7 +30,7 @@ sources:
     authors: [Letwin]
     id: https://arxiv.org/abs/2607.24164v1
     type: article
-    location: Theorem 1.2; supporting statements mapped in the literature register
+    location: Theorems 1.1 and 1.2; supporting statements mapped in the literature register
     relationship: adapts
     author_endorsement: other
     note: >-
@@ -40,9 +40,12 @@ sources:
       The noncompact passage uses centered, covariance-whitened ball truncations
       and mixed-moment convergence. Lemma A.1's regular approximation is also
       formalized, preserving isotropy and mixed moments of degree at most four.
-      Theorem 1.1's conclusion follows from the stronger BKL bound; its original
-      proof route and the full smooth moment-map theory of Lemma 2.2 for the
-      literal merely convex source class remain incomplete locally.
+      Theorem 1.1's conclusion is paper-target certified through the stronger BKL
+      bound; its original third-moment/traced Klartag route remains unformalized.
+      Theorem 1.2 has a separate source-form certificate. Lemma 2.2 and Theorem 2.5
+      hold for every moment potential of the literal bounded convex source class.
+      Proposition 2.8 is partial for full-dimensional laws. Paper coverage refers
+      to the selected main-theorem conclusion, not every statement or original proof.
       Source-author involvement is not established in the current provenance
       records; no source-author endorsement is asserted.
   - title: Analysis and Geometry of Markov Diffusion Operators
@@ -86,6 +89,11 @@ status:
   sorry_in_definitions: 0
   axioms: [propext, Classical.choice, Quot.sound]
   main_results:
+    - declaration: FunctionalInequalities.KLS.LogConcave.exists_logQuarter_isoperimetricBound
+      file: formalization/FunctionalInequalities/KLS/Letwin/IsoperimetricBound.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies: []
     - declaration: FunctionalInequalities.KLS.kls
       file: formalization/FunctionalInequalities/KLS/Target.lean
       sorry_count: 0

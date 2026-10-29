@@ -77,7 +77,7 @@ of acceptance for a later release revision:
 [[require]]
 name = "functional-inequalities"
 git = "https://github.com/human-ai-mathematics/kls-lean.git"
-rev = "5d41bd7dd379d0c0858f1b8416f61c82e0fe26eb"
+rev = "0233f0b837131da5bb20420c4152d13260b8260a"
 subDir = "formalization"
 ```
 

@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Vector.Graph.Basic
 
 /-! # Two-sided estimates for vector-valued graphs
 
-Property vector-valued graph area, fourth phase: the sandwich estimates.  A graph map that is `ε`-close to its linear
+The sandwich estimates.  A graph map that is `ε`-close to its linear
 model has `k`-dimensional image measure within a factor `(1 + ε)^k` of the linear one, on both
 sides.
 

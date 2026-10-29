@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.BKL.LetwinApproximation
-import FunctionalInequalities.KLS.BKL.CumulantInduction
+import FunctionalInequalities.KLS.BKL.Cumulant.Induction
 import FunctionalInequalities.KLS.BKL.Poincare
 noncomputable section
 open MeasureTheory Set Metric Filter

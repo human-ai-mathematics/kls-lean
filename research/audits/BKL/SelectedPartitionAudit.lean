@@ -1,17 +1,15 @@
 import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
 
-/-! Independent audit clients for `selected_mask_partition` (Analysis/IteratedDerivative/Bilinear.lean):
-the actual zero-slot model has no singleton selection, a one-slot selection of four identical vectors is an
-actual singleton indicator, and an indexed singleton indicator selects one vector despite the repeated data.
-Statements and bodies verbatim from the independently accepted clients
-(`independent-selected-partition-clients/src/SelectedPartitionClients.lean`, sha 79f9ea91…),
-re-pointed from the packet copy of the producer to the production owner; the producer is not duplicated here.
-No cumulant, stochastic or energy statement is involved. -/
+/-! Audit clients for `selected_mask_partition` (`Analysis/IteratedDerivative/Bilinear.lean`):
+the actual zero-slot model has no singleton selection, a one-slot selection of four identical
+vectors is an actual singleton indicator, and an indexed singleton indicator selects one vector
+despite the repeated data. The producer is not duplicated here. No cumulant, stochastic or energy
+statement is involved. -/
 
 namespace Stage1SelectedClients
 open FunctionalInequalities.Analysis
 
-/-- A singleton cannot occur in the actual zero-slot model, by the accepted length conservation. -/
+/-- A singleton cannot occur in the actual zero-slot model, by length conservation. -/
 theorem zero_slots_no_singleton :
     ¬ ∃ q : Fin 0 → Bool, (selected (fun i : Fin 0 => (Fin.elim0 i : ℝ)) q).length = 1 := by
   rintro ⟨q, hq⟩

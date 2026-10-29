@@ -21,10 +21,10 @@ The two measure-theoretic ingredients are proved here as well:
 `ae_measure_superlevel_lt_eq_le`, which says that the strict and the closed superlevel sets carry
 the same mass for Lebesgue-almost every level because only countably many level sets are charged,
 and `measurable_min_measure_superlevel`, the measurability of the superlevel balance, which follows
-from antitonicity of the superlevel mass and is shared with `KLS/WIP/CheegerInfimum.lean`.
+from antitonicity of the superlevel mass.
 
-Nothing here depends on the weighted coarea formula, Sard, the smooth recovery sequence, the
-relative perimeter or any work-in-progress layer: the only local import is the likewise hole-free
+Nothing here depends on the weighted coarea formula, Sard, the smooth recovery sequence or the
+relative perimeter: the only local import is the likewise hole-free
 `MinkowskiContent`, whose own import closure is Mathlib.
 -/
 

@@ -29,7 +29,7 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-/-- An isotropic law has full affine support (owner: `KLS/IsotropicSupport.lean`). -/
+/-- An isotropic law has full affine support (proved in `KLS/IsotropicSupport.lean`). -/
 theorem affineSupport_eq_top_of_isotropic {μ : ProbabilityMeasure E} (hiso : KLS.Isotropic μ) :
     Probability.affineSupport μ = ⊤ :=
   hiso.affineSupport_eq_top

@@ -1,6 +1,7 @@
 import FunctionalInequalities.Analysis.Convex.Quadratic
 
-/-! A classical all-order client of the quadratic owner, without the viscosity or Dirichlet chain. -/
+/-! A classical all-order client of the quadratic module, without the viscosity or Dirichlet
+chain. -/
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

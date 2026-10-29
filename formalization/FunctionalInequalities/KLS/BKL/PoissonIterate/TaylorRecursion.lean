@@ -16,7 +16,7 @@ indices first.
 * `norm_symmetrize_taylorField_grad0_iter_sq_le`: **(56)–(57)**, iterating Corollary 3.7: if
   `α_{j+2}² ≤ β/C` for `j < k` and `e ≤ k`, `d ≥ 1`, then
   `|S_{d+e} T_d(∇₀h_{k+1})|² ≤ (β/C)^e |T_{d+e}(∇₀h_{k+1-e})|²`;
-* `norm_taylorField_grad0_iter_sq_le`: **BKL Lemma 3.8** in the route form: under the Taylor
+* `norm_taylorField_grad0_iter_sq_le`: **BKL Lemma 3.8** in the form used here: under the Taylor
   bound (29) `|T_d g| ≤ R^d ‖g‖` for `d ≥ 1`, for `d ≥ 1`, `2d ≤ k + 1` and
   `0 < α_{j+2}² ≤ β/C` for `j < k`,
   `|T_d(∇₀h_{k+1})|² ≤ (c/C)^d |T_{2d}(∇₀h_{k+1-d})|² + c^d R^{2d} C Σ_{k+1-2d ≤ j < k} χ_{j+1}`
@@ -42,7 +42,7 @@ Lemma 2.2 gives `|T̃| ≤ 4^d |S_{2d} T̃| ≤ 4^d (|S_{2d} T| + |T - T̃|)`. B
 
 ## What this is not
 
-The constant `c` is the explicit one of the route statement, not the source's unspecified
+The constant `c` is explicit, not the source's unspecified
 universal constant; the bound (29) is used only for `d` itself, and `R ≥ 1` and the centering of
 `f` are not needed. Lemma 3.9's bound by `R` and Theorem 3.1 are not proved here.
 -/
@@ -66,31 +66,18 @@ private theorem one_mem_fixingOutside' (s : Finset Ω) :
     (1 : Equiv.Perm Ω) ∈ fixingOutside s := by
   simp [fixingOutside]
 
-private theorem mul_mem_fixingOutside' {s : Finset Ω} {σ τ : Equiv.Perm Ω}
-    (hσ : σ ∈ fixingOutside s) (hτ : τ ∈ fixingOutside s) : σ * τ ∈ fixingOutside s := by
-  simp only [fixingOutside, mem_filter, mem_univ, true_and] at hσ hτ ⊢
-  intro x hx
-  simp [Equiv.Perm.coe_mul, hσ x hx, hτ x hx]
-
-private theorem inv_mem_fixingOutside' {s : Finset Ω} {σ : Equiv.Perm Ω}
-    (hσ : σ ∈ fixingOutside s) : σ⁻¹ ∈ fixingOutside s := by
-  simp only [fixingOutside, mem_filter, mem_univ, true_and] at hσ ⊢
-  intro x hx
-  have h := congrArg (fun y => σ⁻¹ y) (hσ x hx)
-  simpa using h.symm
-
 private theorem sum_fixingOutside_mul_right {M : Type*} [AddCommMonoid M] {s : Finset Ω}
     {τ : Equiv.Perm Ω} (hτ : τ ∈ fixingOutside s) (g : Equiv.Perm Ω → M) :
     ∑ σ ∈ fixingOutside s, g (σ * τ) = ∑ σ ∈ fixingOutside s, g σ :=
-  sum_nbij' (· * τ) (· * τ⁻¹) (fun _ hσ => mul_mem_fixingOutside' hσ hτ)
-    (fun _ hσ => mul_mem_fixingOutside' hσ (inv_mem_fixingOutside' hτ))
+  sum_nbij' (· * τ) (· * τ⁻¹) (fun _ hσ => mul_mem_fixingOutside hσ hτ)
+    (fun _ hσ => mul_mem_fixingOutside hσ (inv_mem_fixingOutside hτ))
     (fun _ _ => by simp) (fun _ _ => by simp) (fun _ _ => rfl)
 
 private theorem sum_fixingOutside_mul_left {M : Type*} [AddCommMonoid M] {s : Finset Ω}
     {τ : Equiv.Perm Ω} (hτ : τ ∈ fixingOutside s) (g : Equiv.Perm Ω → M) :
     ∑ σ ∈ fixingOutside s, g (τ * σ) = ∑ σ ∈ fixingOutside s, g σ :=
-  sum_nbij' (τ * ·) (τ⁻¹ * ·) (fun _ hσ => mul_mem_fixingOutside' hτ hσ)
-    (fun _ hσ => mul_mem_fixingOutside' (inv_mem_fixingOutside' hτ) hσ)
+  sum_nbij' (τ * ·) (τ⁻¹ * ·) (fun _ hσ => mul_mem_fixingOutside hτ hσ)
+    (fun _ hσ => mul_mem_fixingOutside (inv_mem_fixingOutside hτ) hσ)
     (fun _ _ => by simp) (fun _ _ => by simp) (fun _ _ => rfl)
 
 private theorem card_fixingOutside_pos (s : Finset Ω) : (0 : ℝ) < (fixingOutside s).card := by
@@ -427,11 +414,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-private theorem contDiff_two' (hUt : U.HasTemperateGrowth) : ContDiff ℝ 2 U :=
-  hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
-
 include hνU hUt hexp hC in
 /-- **BKL (56)–(57)**: iterating Corollary 3.7. If `α_{j+2}² ≤ β/C` for `j < k`, `e ≤ k` and
 `d ≥ 1`, then `|S_{d+e} T_d(∇₀h_{k+1})|² ≤ (β/C)^e |T_{d+e}(∇₀h_{k+1-e})|²`. -/
@@ -455,7 +437,7 @@ theorem norm_symmetrize_taylorField_grad0_iter_sq_le (f : Lp ℝ 2 (ν : Measure
         scale T̄ (iter T̄ f k) • taylorField (d + 1) (grad0 T̄ (iter T̄ f k)) := by
       ext J
       simp only [recast, PiLp.toLp_apply, PiLp.smul_apply, smul_eq_mul]
-      exact symmetrize_taylorField_grad0_iter_succ m hν hi hνU (contDiff_two' hUt) hexp hC f k
+      exact symmetrize_taylorField_grad0_iter_succ m hν hi hνU (hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)) hexp hC f k
         hd J
     have hnorm : ‖symmetrize (Module.finrank ℝ V) (d + (k + 1 + 1)) (d + 1 + e)
         (taylorField d (grad0 T̄ (iter T̄ f (k + 1))))‖ =
@@ -475,7 +457,7 @@ theorem norm_symmetrize_taylorField_grad0_iter_sq_le (f : Lp ℝ 2 (ν : Measure
       _ = _ := by ring
 
 include hνU hUt hexp hC in
-/-- **BKL Lemma 3.8** in the route form, with the explicit constant `c = 2^20 max(1, β)²`. Under
+/-- **BKL Lemma 3.8** in the form used here, with the explicit constant `c = 2^20 max(1, β)²`. Under
 the Taylor bound (29), `|T_d g| ≤ R^d ‖g‖₂` for `g ∈ L²(ν)` and `d ≥ 1` (Hilbert–Schmidt norm in
 the standard basis), for `f ∈ D(A)`, `d ≥ 1`, `2d ≤ k + 1` and `0 < α_{j+2}² ≤ β/C` for `j < k`:
 `|T_d(∇₀h_{k+1})|² ≤ (c/C)^d |T_{2d}(∇₀h_{k+1-d})|² + c^d R^{2d} C Σ_{k+1-2d ≤ j < k} χ_{j+1}`. -/

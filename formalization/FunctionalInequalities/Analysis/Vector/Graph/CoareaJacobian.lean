@@ -5,7 +5,7 @@ import Mathlib.LinearAlgebra.Matrix.SchurComplement
 
 The regular case of the codimension-`m` coarea formula compares two densities: the ambient one,
 `coareaJacobian (fderiv ℝ u x)`, which the scalar theory records as `‖gradient u x‖`, and the
-graph area density `normDet (graphMapLinear ι κ (Dγ y))` produced by obligation `B2`
+graph area density `normDet (graphMapLinear ι κ (Dγ y))` produced by the normalized area formula
 (`hausdorffNormalized_image_vectorGraphMap`).  This module proves that the two match, exactly as
 `abs_deriv_mul_norm_gradient` does in codimension one.
 

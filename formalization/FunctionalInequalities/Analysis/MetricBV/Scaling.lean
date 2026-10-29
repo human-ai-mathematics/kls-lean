@@ -25,14 +25,6 @@ A finite nonzero measure is `c • ν` with `c : ℝ≥0` nonzero and `ν` a pro
 
 section Scaling
 
-/-- `liminf` commutes with multiplication by a finite constant on `ℝ≥0∞` (a local tool). -/
-private theorem liminf_coe_mul {ι : Type*} {l : Filter ι} [l.NeBot] (c : ℝ≥0) (u : ι → ℝ≥0∞) :
-    liminf (fun i => (c : ℝ≥0∞) * u i) l = c * liminf u l := by
-  have hmono : Monotone fun x : ℝ≥0∞ => (c : ℝ≥0∞) * x := fun _ _ h => mul_le_mul' le_rfl h
-  have h := hmono.map_liminf_of_continuousAt (F := l) u
-    (ENNReal.continuous_const_mul ENNReal.coe_ne_top).continuousAt
-  simpa [Function.comp_def] using h.symm
-
 theorem cost_smul (c : ℝ≥0) (ν : Measure X) (f : Test X) : cost (c • ν) f = c * cost ν f := by
   simp only [cost, lintegral_smul_measure, ENNReal.smul_def, smul_eq_mul]
 
@@ -72,7 +64,7 @@ theorem perimeter_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure X) (B : Set
     (fun h => absurd (ENNReal.coe_eq_zero.1 h) hc)]
   refine le_iInf fun f => (iInf_le _ (f.smul c)).trans (le_of_eq ?_)
   simp only [ApproximatingSequence.smul, cost_smul]
-  exact liminf_coe_mul c _
+  exact ENNReal.liminf_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top
 
 /-- **Perimeter scaling**: `perimeter (c • ν) B = c * perimeter ν B` for every nonzero `c : ℝ≥0`
 and every set `B` (also when the class is empty and both sides are `⊤`). -/

@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHess
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.Analysis.SpecificLimits.Basic
 
-/-! Core client, re-pointed to the canonical module/name (`Analysis/Cutoff/Conservativity.lean`): the actual uniform
+/-! Core client of `Analysis/Cutoff/Conservativity.lean`: the actual uniform
 two-atom probability law on `Bool` (atoms `true`, `false`, mass `1/2` each), signed bounded `f` (values `2`, `-1`),
 `g` (values `-1`, `1`), `c = 1`, cutoffs `χ_n` (values `1`, `1 - 1/(n+2)`), defects (values `-1/(2(n+2))`, `0`).
 Every premise of `integrable_and_integral_eq_zero_of_cutoff_defect` is proved here from the actual values: `g + c f`

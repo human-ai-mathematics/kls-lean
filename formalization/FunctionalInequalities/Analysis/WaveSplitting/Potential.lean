@@ -19,7 +19,7 @@ Specialization of the coordinate objects of this family to a potential `U`: the 
   `m`-integrable, `Z = ∫ exp (-U) dm > 0` and `FE_w(f) = Z ∫ (f² + ‖∇f‖²) dμ`.
 
 Everything here is classical and pointwise or integral; the closed gradient, its adjoint and
-the class-level statements are in `KLS/LogConcave/HeatSemigroup/FormRange.lean`.
+the class-level statements are in `KLS/LogConcave/HeatSemigroup/Generator/FormRange.lean`.
 -/
 
 noncomputable section
@@ -56,7 +56,7 @@ variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] (m : Measu
 
 /-- **Classical form-range approximation for a potential.** For a smooth potential `U`, any
 directions `a`, the coefficient `b_j = D_(a_j) U` and the weight `w = exp (-U)`: every
-compactly supported smooth `h` and every `ε > 0` admit an actual cellwise time average
+compactly supported smooth `h` and every `ε > 0` give an actual cellwise time average
 `q ∈ C_c^∞` with `sqrt FE_w(J_cl q - h) < ε`. The horizon is chosen first, then the mesh. -/
 theorem exists_timeAverage_error_lt {d : ℕ} (a : Fin d → E) {U h : E → ℝ}
     (hU : ContDiff ℝ ∞ U) (hh : ContDiff ℝ ∞ h) (hc : HasCompactSupport h) {ε : ℝ}

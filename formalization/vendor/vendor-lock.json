@@ -166,11 +166,11 @@
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Topology.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Topology",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "5171ccdf94ae4cf882837f70e9010643d0565bda",
           "upstream_path": "BrownianMotion/Auxiliary/Topology.lean",
           "upstream_sha256": "ce23e4180f97416196f30f05f52756ecc46c99737ec9bb674c9ed3f16014e2b6",
-          "vendored_sha256": "ce23e4180f97416196f30f05f52756ecc46c99737ec9bb674c9ed3f16014e2b6"
+          "vendored_sha256": "93e2f0b5a7c9904702192919c22db72dc48b0ee3e8c4a59a14f599a66f959136"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Upcrossing",
@@ -302,11 +302,11 @@
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/Predictable.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Predictable",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "82a16cb96ca0a08999a146a9dcc75245308cd2f4",
           "upstream_path": "BrownianMotion/StochasticIntegral/Predictable.lean",
           "upstream_sha256": "f7343bf59842b18db0ffe03631e59c25c7ecac79dc3bd87e0c4147508b36b06c",
-          "vendored_sha256": "f7343bf59842b18db0ffe03631e59c25c7ecac79dc3bd87e0c4147508b36b06c"
+          "vendored_sha256": "b07322d262e09e52a7161861d0a59c97e57dedb226d2e599de7b88b59b09c4d1"
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/Basic.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.Basic",
@@ -364,11 +364,11 @@
       "files": {
         "KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean": {
           "module": "KolmogorovExtension4.KolmogorovExtension4.CompactSystem",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "78f3cb73f146c6290207652affaa64298cc6ef8b",
           "upstream_path": "KolmogorovExtension4/CompactSystem.lean",
           "upstream_sha256": "b5c9e085528a7dac8d822449a5b62050eb8e819e59a17e256ca1995ee534f7d1",
-          "vendored_sha256": "b5c9e085528a7dac8d822449a5b62050eb8e819e59a17e256ca1995ee534f7d1"
+          "vendored_sha256": "c30a0febf2d7711a06484056c705d2896261553943d87eadd21d499a4cca55d8"
         },
         "KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean": {
           "module": "KolmogorovExtension4.KolmogorovExtension4.KolmogorovExtension",
@@ -455,11 +455,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ContinuityKolmogorovBounds.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ContinuityKolmogorovBounds",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "0b2dc59a628a58743125c4fbcef0971f14952b1e",
           "upstream_path": "LevyStochCalc/Brownian/ContinuityKolmogorovBounds.lean",
           "upstream_sha256": "0eb375571e541b16f366f8c32b82a21349fba6f84b8b27c5bc3c38ba1e2542a8",
-          "vendored_sha256": "0eb375571e541b16f366f8c32b82a21349fba6f84b8b27c5bc3c38ba1e2542a8"
+          "vendored_sha256": "fab518fc01d4e8db949c8d133f70773188cd5c3874d30687e33216f5c7cf84c9"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/CoordDerivative.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.CoordDerivative",
@@ -487,11 +487,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityLimit.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.CrossOrthogonalityLimit",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "7b6b1b3d661a034408a2728f08d08fbd046bae6b",
           "upstream_path": "LevyStochCalc/Brownian/CrossOrthogonalityLimit.lean",
           "upstream_sha256": "cafe276ef4f49b3465ec68b74b06466780f6eee9daa9da8f57ef3fdef9595515",
-          "vendored_sha256": "cafe276ef4f49b3465ec68b74b06466780f6eee9daa9da8f57ef3fdef9595515"
+          "vendored_sha256": "fdbec09d02c2e7bdf7d8b2ef2a6215d0fe3013f737afb7b2775ae7a49ecb0630"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.CrossVariation",
@@ -567,11 +567,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoAlgebraSimpleIntegrand",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "3fbefade05389074bbbc94f693ef65407383a230",
           "upstream_path": "LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean",
           "upstream_sha256": "91fc9c5efacd1e5d091f4b7032537e5d0a1210f857c90a0c7640a769059d67f8",
-          "vendored_sha256": "91fc9c5efacd1e5d091f4b7032537e5d0a1210f857c90a0c7640a769059d67f8"
+          "vendored_sha256": "f3d2a84c1758de95e403033f9fb9bb7bcc51ccb290610b24fc48924b9ae9b236"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoCutoff.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoCutoff",
@@ -591,27 +591,27 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityDyadicAverages.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityDyadicAverages",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "718b88e16048e8b2526887f29d750d02a1853ed5",
           "upstream_path": "LevyStochCalc/Brownian/ItoDensityDyadicAverages.lean",
           "upstream_sha256": "f8263ad7dcd87eb738d8ce35a81b0c9b107282ba962a641b5a04a2e0fb56d258",
-          "vendored_sha256": "f8263ad7dcd87eb738d8ce35a81b0c9b107282ba962a641b5a04a2e0fb56d258"
+          "vendored_sha256": "57793c8bf5c81d3aa0c9581e0a47fb90353728827813307b7d6324ab1aadc544"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPointwise.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityPointwise",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "d5fe5b333ac1618f4ab01b790e394b75f4f9ccb4",
           "upstream_path": "LevyStochCalc/Brownian/ItoDensityPointwise.lean",
           "upstream_sha256": "39afe36c7579495f0f9ab45a54d6b3e1420f2ba0b9f89bbc8eec41a1201b30a3",
-          "vendored_sha256": "39afe36c7579495f0f9ab45a54d6b3e1420f2ba0b9f89bbc8eec41a1201b30a3"
+          "vendored_sha256": "048a7230aaa8341513e2d3cef93980cbbb649440abb7dc255bc96e61d36c4a94"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPredictableL2.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityPredictableL2",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "228337c0672cb4748418b29367e10d3e77ba2f6f",
           "upstream_path": "LevyStochCalc/Brownian/ItoDensityPredictableL2.lean",
           "upstream_sha256": "84978467e589d9d703a6898d22c7aaecef86d563d33d0381acefa1d6141dda78",
-          "vendored_sha256": "84978467e589d9d703a6898d22c7aaecef86d563d33d0381acefa1d6141dda78"
+          "vendored_sha256": "c04de0e027b88f908d87e70645787b8182904207177b649a245256180f651778"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityShiftedAverages",
@@ -735,11 +735,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoIntegrandComplete.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoIntegrandComplete",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "b3085d422a57c8a677824aa1d1025cabb0b5b17c",
           "upstream_path": "LevyStochCalc/Brownian/ItoIntegrandComplete.lean",
           "upstream_sha256": "bf44dce74a44ff008628e0ec224cbe35b8feab3a308cddee81d29027015df17c",
-          "vendored_sha256": "bf44dce74a44ff008628e0ec224cbe35b8feab3a308cddee81d29027015df17c"
+          "vendored_sha256": "9ca5741add8124396f99151b4708d6d5a77c7384b019b92d35ecda1fa6a6c6e8"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoL2Completion.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2Completion",
@@ -751,11 +751,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionApi.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionApi",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "96318fefb842ebaafd3967853fd72430468aa0e7",
           "upstream_path": "LevyStochCalc/Brownian/ItoL2CompletionApi.lean",
           "upstream_sha256": "1fc196bbf0b1c884f3587c84a3506b7a70bcd52f93e9466247ee46ec1c1b15b2",
-          "vendored_sha256": "1fc196bbf0b1c884f3587c84a3506b7a70bcd52f93e9466247ee46ec1c1b15b2"
+          "vendored_sha256": "e99b88881365d281d4fff8963e0bbe62182e575d2c641a0311b5a35804f5b6b6"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionCompensator.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionCompensator",
@@ -799,19 +799,19 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionMaster",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "f3162153b49f56228a0f557129d7315849a89531",
           "upstream_path": "LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
           "upstream_sha256": "07a794ffa55cd9e660d9afb223a6176b1ece47a6caf81ff7fdb61af539e74f73",
-          "vendored_sha256": "07a794ffa55cd9e660d9afb223a6176b1ece47a6caf81ff7fdb61af539e74f73"
+          "vendored_sha256": "a8d3a1e1605256f6b5c82cf1d6763348bd145130759cce55197689c98dbbe236"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionQuadVar.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionQuadVar",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "ea627c8846c2504b4bc048f79ea610cbed3fa6f9",
           "upstream_path": "LevyStochCalc/Brownian/ItoL2CompletionQuadVar.lean",
           "upstream_sha256": "e839c833095a0e0cf468e643c46dd439f10697750705abecc192f8586a8c9147",
-          "vendored_sha256": "e839c833095a0e0cf468e643c46dd439f10697750705abecc192f8586a8c9147"
+          "vendored_sha256": "7743e6b4a6022cb8028128a94b7746cc0f22bc129145149d1947df9eb8161730"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoLinear.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoLinear",
@@ -823,11 +823,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoLocality",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "16c1b86ffb73ad808b3448c3d52219c1a2fbb765",
           "upstream_path": "LevyStochCalc/Brownian/ItoLocality.lean",
           "upstream_sha256": "9711f8a3ded3fc4e942542d3f6e68321e4998f267ed1fc68491a26f24c29d7dd",
-          "vendored_sha256": "9711f8a3ded3fc4e942542d3f6e68321e4998f267ed1fc68491a26f24c29d7dd"
+          "vendored_sha256": "8c91e794937213b6a36f2adef6b25fe176e67331a97e41e282fa4d6de577e8ec"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoMartingale.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoMartingale",
@@ -847,11 +847,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoOptionalStopping",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "ba37808c520355c55f3a0e8e82c8e746926d1d96",
           "upstream_path": "LevyStochCalc/Brownian/ItoOptionalStopping.lean",
           "upstream_sha256": "44fd13f1e38dbcf26fa55b80580debb41a25a464907e0e0f5c3b5878fa7b17bd",
-          "vendored_sha256": "44fd13f1e38dbcf26fa55b80580debb41a25a464907e0e0f5c3b5878fa7b17bd"
+          "vendored_sha256": "052a48b34345ae92a11c804ec61bf010062fe74bed66018e87e79856876847bb"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoProcess.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoProcess",
@@ -903,11 +903,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoRange.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoRange",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "8346982d1e290d095e87f5cb4356a7b3d8bc66c1",
           "upstream_path": "LevyStochCalc/Brownian/ItoRange.lean",
           "upstream_sha256": "93489fe1d2f08787e76b301d813125b246ba6fb182221b229ac52c4fa02dd10a",
-          "vendored_sha256": "93489fe1d2f08787e76b301d813125b246ba6fb182221b229ac52c4fa02dd10a"
+          "vendored_sha256": "704fb837404feee0648722a26fa0d6ad15ec0d65ee1a32473095fa7186cada04"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoRiemannIntegrand.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoRiemannIntegrand",
@@ -967,11 +967,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoVersionExists",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "82195cf9bb6ce29e689234e61788c56fc311fd1c",
           "upstream_path": "LevyStochCalc/Brownian/ItoVersionExists.lean",
           "upstream_sha256": "a153d5e04b9254a495a65957c66df6d6ec5be296e007d3bae141636dde16d09d",
-          "vendored_sha256": "a153d5e04b9254a495a65957c66df6d6ec5be296e007d3bae141636dde16d09d"
+          "vendored_sha256": "cbdbfc3adc80cf9462cc08f4949d4822032c1ec2d3f9803c6d7517a392f817fc"
         },
         "LevyStochCalc/LevyStochCalc/Brownian/ItoZero.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.ItoZero",
@@ -1207,11 +1207,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Brownian/VectorItoVersionExists.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoVersionExists",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "d6abf564812d401bab97f7babb5cc12ca7b249aa",
           "upstream_path": "LevyStochCalc/Brownian/VectorItoVersionExists.lean",
           "upstream_sha256": "b1cc9c947b50c040e5cc1995d9b35194f136087f1102d40f820963ff86febdc1",
-          "vendored_sha256": "b1cc9c947b50c040e5cc1995d9b35194f136087f1102d40f820963ff86febdc1"
+          "vendored_sha256": "32dc0e4c3ff0bba7143b7db9fd1f8bf9a45acd7bef3d2d67c9a4df5adca1576b"
         },
         "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnbounded.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnbounded",
@@ -1223,11 +1223,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedClamp.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnboundedClamp",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "cccfd3d45dbaf22ce7ca11d820196d694943c488",
           "upstream_path": "LevyStochCalc/Ito/ItoFormulaUnboundedClamp.lean",
           "upstream_sha256": "d63431a67251554db32c067533a69dfedf4ac732c0345ff8f92e5f8082bddcab",
-          "vendored_sha256": "d63431a67251554db32c067533a69dfedf4ac732c0345ff8f92e5f8082bddcab"
+          "vendored_sha256": "f8f373e07bb5de48ee0fa90654ac0e8c800122b55d7d5468826b4035f5ff2c01"
         },
         "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedIntegrands.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnboundedIntegrands",
@@ -1303,11 +1303,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardGlobal.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardGlobal",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "c04a91317b395dc402042f15e120c3a2505d40d5",
           "upstream_path": "LevyStochCalc/Ito/PicardGlobal.lean",
           "upstream_sha256": "324b256bace280785807508449b9094fb523012a4218bbe8fd3358b66059707b",
-          "vendored_sha256": "324b256bace280785807508449b9094fb523012a4218bbe8fd3358b66059707b"
+          "vendored_sha256": "bb1ce7217d42645510da24cbe725689ff5ec2b6cc1cb8788a9d6c01034afac3b"
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrand.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardIntegrand",
@@ -1319,11 +1319,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandBounds.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardIntegrandBounds",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "f19364883759a64e938bec72d8e12de0cc3e0839",
           "upstream_path": "LevyStochCalc/Ito/PicardIntegrandBounds.lean",
           "upstream_sha256": "9d64ac0f75e22b0d5b8fa1c80cebef702c7a48080b8d5cfbdd10768e9ad45241",
-          "vendored_sha256": "9d64ac0f75e22b0d5b8fa1c80cebef702c7a48080b8d5cfbdd10768e9ad45241"
+          "vendored_sha256": "63d63160e819d6a6bb060b36e0b023b58b3da689da81ff759de179313aa2e958"
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandFrozen.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardIntegrandFrozen",
@@ -1359,19 +1359,19 @@
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardOutputModification.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputModification",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "554d87006f2ebea1f2b5bc0c8e84c1d36fc087ab",
           "upstream_path": "LevyStochCalc/Ito/PicardOutputModification.lean",
           "upstream_sha256": "038e03d378acb7c05417b4bd2a351753af3ee3566130d2169446fe4e02983b1a",
-          "vendored_sha256": "038e03d378acb7c05417b4bd2a351753af3ee3566130d2169446fe4e02983b1a"
+          "vendored_sha256": "dd5544f30559008e9e9e92757a335cf520f9ae14a29535b8a15d6c7b6bb8be91"
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardOutputMoments.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputMoments",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "783b6690fa082b2821049cec7632702ff7a44fee",
           "upstream_path": "LevyStochCalc/Ito/PicardOutputMoments.lean",
           "upstream_sha256": "31cd5cc9f3897222c4c8cc03a543f5810e849bff2439585b8aa8e4254d6f840e",
-          "vendored_sha256": "31cd5cc9f3897222c4c8cc03a543f5810e849bff2439585b8aa8e4254d6f840e"
+          "vendored_sha256": "514698c545e46e77e9f18d22163eacbc9400648709d57199a93194031286feeb"
         },
         "LevyStochCalc/LevyStochCalc/Ito/PicardOutputStepDiff.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputStepDiff",
@@ -1471,19 +1471,19 @@
         },
         "LevyStochCalc/LevyStochCalc/Ito/VectorItoProcessDiff.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoProcessDiff",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "19112c9ab8bbc56a9bc7eebdadd3a7fc8403b269",
           "upstream_path": "LevyStochCalc/Ito/VectorItoProcessDiff.lean",
           "upstream_sha256": "52731e7dca5b00d10aa9ffca0684b21bf93873b4bbc074637374bee54064e8bc",
-          "vendored_sha256": "52731e7dca5b00d10aa9ffca0684b21bf93873b4bbc074637374bee54064e8bc"
+          "vendored_sha256": "6411da192cc47ae487afb84ff7c0ceb85bc6883457a856a2f5b0d3003a92ba69"
         },
         "LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoVersionLimit",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "018e122c11fe9958e28cdcc38d36d1040ae52ef8",
           "upstream_path": "LevyStochCalc/Ito/VectorItoVersionLimit.lean",
           "upstream_sha256": "bb3b8b75de4fef1be8504b1026b8a9f4696d4e745bad44b86cc9522ab80f5969",
-          "vendored_sha256": "bb3b8b75de4fef1be8504b1026b8a9f4696d4e745bad44b86cc9522ab80f5969"
+          "vendored_sha256": "91ba3bf668096815d4adfbc8e5b50b4539e6dd98733bac7a5f844cd99dddb0cb"
         },
         "LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionSup.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoVersionSup",
@@ -1567,27 +1567,27 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityLimit.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityLimit",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "8b86c6dee0c3e19d5bd46caef3f80a829ce330d5",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedDensityLimit.lean",
           "upstream_sha256": "26317f2a06013495e12f88143d078b48ce00542abb6aea280dda48413d358176",
-          "vendored_sha256": "26317f2a06013495e12f88143d078b48ce00542abb6aea280dda48413d358176"
+          "vendored_sha256": "9d7e897c4666877635c39ae2f3b10e562b82d951c2ee08f9f5716315fa7ac1f3"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityMarkApprox",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "e18755246cb0528714e7901c2325554aa58209bb",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
           "upstream_sha256": "5dee56c8154d1dd5ab5e7ef031cad8996daa2a725fceaeef1ea7e1fcdd27a2c6",
-          "vendored_sha256": "5dee56c8154d1dd5ab5e7ef031cad8996daa2a725fceaeef1ea7e1fcdd27a2c6"
+          "vendored_sha256": "44de96ca34ee9491f530683ecba3851619b0fb1188ae5abdc17c15a3e1b0b82f"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkSum.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityMarkSum",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "f1bee89f9c8a05c2db89d75670284cf8df3d377d",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedDensityMarkSum.lean",
           "upstream_sha256": "b75740efafa3d13d244ddae69aeccb0c8462262e84430e51deed8ca078794617",
-          "vendored_sha256": "b75740efafa3d13d244ddae69aeccb0c8462262e84430e51deed8ca078794617"
+          "vendored_sha256": "a2dee9151fe06fdc714d8f1cacba628cf02aaeb722e837094881bb5d6b5ddb81"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRectSimple.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityRectSimple",
@@ -1639,11 +1639,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIntegrandComplete.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedIntegrandComplete",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "b7abcb4a2ccfc0cc4268da394dd47bc2627a5aaf",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedIntegrandComplete.lean",
           "upstream_sha256": "92baea79fd4b757b40c79f2be8e76b6b753a13e735a8f3bcff91b51a2411aba6",
-          "vendored_sha256": "92baea79fd4b757b40c79f2be8e76b6b753a13e735a8f3bcff91b51a2411aba6"
+          "vendored_sha256": "71e3a692687da8a108c448c5687e482ba4abdfd4aaee2ed4ea85ec8bdb8bd460"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIsometry.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedIsometry",
@@ -1687,11 +1687,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleAdapted.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedMartingaleAdapted",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "ae4fde28f968b0efdd43ab037e62c96ce61ad1ac",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedMartingaleAdapted.lean",
           "upstream_sha256": "e7e380e712b86ebfec558b5d6cc3e486d468641b1d619ca3c376f05b6b6e6ad6",
-          "vendored_sha256": "e7e380e712b86ebfec558b5d6cc3e486d468641b1d619ca3c376f05b6b6e6ad6"
+          "vendored_sha256": "ae20063a46c620aa39d1321a39514370f7eb89805eecd75f9884d97f8baff0bd"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleIncrement.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedMartingaleIncrement",
@@ -1711,11 +1711,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcess.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedProcess",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "d6d5721d1f9252b025413fc962453d045ca9324f",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedProcess.lean",
           "upstream_sha256": "7e062940476dfff0747c8d7e5d3f5cfe1985f0913fcdf9b7580b95ba3a638b5f",
-          "vendored_sha256": "7e062940476dfff0747c8d7e5d3f5cfe1985f0913fcdf9b7580b95ba3a638b5f"
+          "vendored_sha256": "05bb78a85aa1baabb2f7020cc1cb7ed5ff148fb6aa3300991a30efd4592fecee"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcessQuadVar.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedProcessQuadVar",
@@ -1727,11 +1727,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedPullOut.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedPullOut",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "95798fceda8527bed63b1537c41a734ea44d52b1",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedPullOut.lean",
           "upstream_sha256": "d3056b70da5c7815c6b307734a95be666957142baadc3bcfa8405da8d3d9e6d8",
-          "vendored_sha256": "d3056b70da5c7815c6b307734a95be666957142baadc3bcfa8405da8d3d9e6d8"
+          "vendored_sha256": "e45eae1763a0c8183964ee84569ca9b2d01bb41e68a834612d79d07a4fcd6b07"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedQuadVar.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedQuadVar",
@@ -1743,11 +1743,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedRange.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedRange",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "e224482e9bee775ddbefc3ec2812f3e324833313",
           "upstream_path": "LevyStochCalc/Poisson/CompensatedRange.lean",
           "upstream_sha256": "89ef64ddb3c7a01aa1f67d7c5b07429f4715b269ce89b8bc78fc0a217d5e29fc",
-          "vendored_sha256": "89ef64ddb3c7a01aa1f67d7c5b07429f4715b269ce89b8bc78fc0a217d5e29fc"
+          "vendored_sha256": "be71a82bef7beaee643cdc28b6d5e1387e863db12b7da83e270dc69388d1264b"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/CompensatedSimple.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedSimple",
@@ -1839,35 +1839,35 @@
         },
         "LevyStochCalc/LevyStochCalc/Poisson/PoissonSuperposition.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.PoissonSuperposition",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "3994b384c5c776c6d0bae216939db652de08f7f3",
           "upstream_path": "LevyStochCalc/Poisson/PoissonSuperposition.lean",
           "upstream_sha256": "5dfc07cc3976348d3ce2e723ad5c944856880e596480fcbb8bca1eeb1b2bd231",
-          "vendored_sha256": "5dfc07cc3976348d3ce2e723ad5c944856880e596480fcbb8bca1eeb1b2bd231"
+          "vendored_sha256": "0608e02b410eb881d04fa20c1694b461d6fc9af0274eac759a42d8435aa984f6"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/RandomMeasure.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.RandomMeasure",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "e0b0688fe0cb19941d8104a71f5af0dd7e0cf0df",
           "upstream_path": "LevyStochCalc/Poisson/RandomMeasure.lean",
           "upstream_sha256": "57e71ec610ac91e6a7724ecea397601036801f45b33f0a3f431b5423ccf828f0",
-          "vendored_sha256": "57e71ec610ac91e6a7724ecea397601036801f45b33f0a3f431b5423ccf828f0"
+          "vendored_sha256": "7adcb0215c0eab5a19c99f4efc5d2b3c142d0df885ba30f1f2914273e29b7183"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/RegionIndependence.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.RegionIndependence",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "ee5e0cf0f726b47ff0ed3505f6a0035c26439178",
           "upstream_path": "LevyStochCalc/Poisson/RegionIndependence.lean",
           "upstream_sha256": "45902e749ed404e1746a114536ff2b9b13e3f79ddc75e667997bc2dafeee4d6d",
-          "vendored_sha256": "45902e749ed404e1746a114536ff2b9b13e3f79ddc75e667997bc2dafeee4d6d"
+          "vendored_sha256": "845a4f2df40622dd00bc76126170e2b49b69dd205fecb30c40fc63c7a6b0848d"
         },
         "LevyStochCalc/LevyStochCalc/Poisson/RegionPartition.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Poisson.RegionPartition",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "3bbf3ca020fc971b5ee2dcd598e01df42af1eb94",
           "upstream_path": "LevyStochCalc/Poisson/RegionPartition.lean",
           "upstream_sha256": "4f73f337131c51bfb9168504ea730704bffcd19695284a654b429c910eff497a",
-          "vendored_sha256": "4f73f337131c51bfb9168504ea730704bffcd19695284a654b429c910eff497a"
+          "vendored_sha256": "7c53298f5a4d12a9e6d85d26769b53215c4f33ccecbb9c49fcff4c94538c0c82"
         },
         "LevyStochCalc/LevyStochCalc/Probability/AbsMoment.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.AbsMoment",
@@ -1903,11 +1903,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.ExitTime",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "0c874862623ea4f3d16d26ad368a14555867d19b",
           "upstream_path": "LevyStochCalc/Probability/ExitTime.lean",
           "upstream_sha256": "41f61bc0b361c66e1f1303dfa51952be439dceeec6d77ee055f096f90f052e35",
-          "vendored_sha256": "41f61bc0b361c66e1f1303dfa51952be439dceeec6d77ee055f096f90f052e35"
+          "vendored_sha256": "53b3e04050fff9bf51fecc35104fe2b588911f274ebbed55b27fea10fa741c29"
         },
         "LevyStochCalc/LevyStochCalc/Probability/IndepGrouping.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.IndepGrouping",
@@ -1927,43 +1927,43 @@
         },
         "LevyStochCalc/LevyStochCalc/Probability/IndepLimit.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.IndepLimit",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "6b05e5909c6874057b9aab166a5a7a0b7fbce553",
           "upstream_path": "LevyStochCalc/Probability/IndepLimit.lean",
           "upstream_sha256": "4411dc3315cc5bb351a7cc86e61c3eeda62a6eb6dc2301280f286560b4e9214a",
-          "vendored_sha256": "4411dc3315cc5bb351a7cc86e61c3eeda62a6eb6dc2301280f286560b4e9214a"
+          "vendored_sha256": "bc3f8797e719cbd1ef1d50a1be5d309ae839ef2a93a48fe3ca396388a2c4eddd"
         },
         "LevyStochCalc/LevyStochCalc/Probability/MartingaleDifference.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.MartingaleDifference",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "93266a84954b7c4477278ddf1dd6cc30eb352b85",
           "upstream_path": "LevyStochCalc/Probability/MartingaleDifference.lean",
           "upstream_sha256": "ea85d805ceadc25fa76e1cc91abf9a36515a82128c492e9aa51437f21c42620f",
-          "vendored_sha256": "ea85d805ceadc25fa76e1cc91abf9a36515a82128c492e9aa51437f21c42620f"
+          "vendored_sha256": "3349deaf8d94028f6979f829610abae17f0e3b93a51475cf2108bed6d6c8d971"
         },
         "LevyStochCalc/LevyStochCalc/Probability/Progressive.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.Progressive",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "e5994ed039d3cce45fa37be5e34edf5126abade0",
           "upstream_path": "LevyStochCalc/Probability/Progressive.lean",
           "upstream_sha256": "8e3365fbaffe4bdcc0d206ac1352fa7a8a86ac5fc94742d76fe50e7d47ed678d",
-          "vendored_sha256": "8e3365fbaffe4bdcc0d206ac1352fa7a8a86ac5fc94742d76fe50e7d47ed678d"
+          "vendored_sha256": "423683255ca8cbb601a3903f10c33d2761c69d1ca382898185e8f5cfdca7f07f"
         },
         "LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.ProgressiveCadlag",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "3aac2f9bbbdd3fc69befc3eafd4bc7bf734d219c",
           "upstream_path": "LevyStochCalc/Probability/ProgressiveCadlag.lean",
           "upstream_sha256": "e51c78195c77c2f8c20afa1b2a0b70758188de3ed5bd49a9276c21810d9e7080",
-          "vendored_sha256": "e51c78195c77c2f8c20afa1b2a0b70758188de3ed5bd49a9276c21810d9e7080"
+          "vendored_sha256": "a6ccf0d557352a04a7a14d1adbb2e3bab23bd66ec5ef6fdaa272c26ea7fdcc4f"
         },
         "LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.StoppedProgressive",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "6ab0b1074bdbceb9b78098990ecf7b3054073415",
           "upstream_path": "LevyStochCalc/Probability/StoppedProgressive.lean",
           "upstream_sha256": "6673d64ea5a196ff920e1d18d840a7979e5f8f871884b515616e82acff10fcbc",
-          "vendored_sha256": "6673d64ea5a196ff920e1d18d840a7979e5f8f871884b515616e82acff10fcbc"
+          "vendored_sha256": "d92f8b45151450bbebe16014290cb5e09bc8b025e8bc6bd0c0386ff1f50e0c1b"
         },
         "LevyStochCalc/LevyStochCalc/Probability/Transport.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Probability.Transport",
@@ -2025,21 +2025,64 @@
   "patch": {
     "files": [
       "BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean",
+      "BrownianMotion/BrownianMotion/Auxiliary/Topology.lean",
+      "BrownianMotion/BrownianMotion/StochasticIntegral/Predictable.lean",
       "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+      "KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean",
       "KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ContinuityKolmogorovBounds.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityLimit.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityDyadicAverages.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPointwise.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPredictableL2.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoIntegrandComplete.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionApi.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionIncrement.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionQuadVar.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoRange.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean",
+      "LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/MartingaleCondExp.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean",
-      "LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean"
+      "LevyStochCalc/LevyStochCalc/Brownian/VectorItoVersionExists.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedClamp.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/PicardGlobal.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandBounds.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/PicardOutputModification.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/PicardOutputMoments.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/VectorItoProcessDiff.lean",
+      "LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+      "LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityLimit.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkSum.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIntegrandComplete.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleAdapted.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcess.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedPullOut.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/CompensatedRange.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/PoissonSuperposition.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/RandomMeasure.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/RegionIndependence.lean",
+      "LevyStochCalc/LevyStochCalc/Poisson/RegionPartition.lean",
+      "LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean",
+      "LevyStochCalc/LevyStochCalc/Probability/IndepLimit.lean",
+      "LevyStochCalc/LevyStochCalc/Probability/MartingaleDifference.lean",
+      "LevyStochCalc/LevyStochCalc/Probability/Progressive.lean",
+      "LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean",
+      "LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean"
     ],
     "path": "port.patch",
-    "sha256": "27a78c6a87e109f62351cf0178934df0dd4f7e091122f75b6d67917e8cd21e27"
+    "sha256": "8f496c62c262f9b054f3f59c6ef4c45c413d2f895e94b2fafad58037b4b32380"
   },
   "port": {
     "lean": "v4.33.0",

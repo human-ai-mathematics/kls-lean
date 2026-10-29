@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoL2Completion
 
 /-!
@@ -92,7 +95,7 @@ theorem progressivelyMeasurable_sum_indicator_Ioc
       rw [Set.indicator_of_notMem]
       rintro ⟨-, -, hmem⟩
       exact hp (Set.mem_Iic.mp hmem)
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   rw [key]
   refine Finset.stronglyMeasurable_fun_sum _ fun i _ => ?_
   by_cases hi : a i < t

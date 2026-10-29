@@ -1,0 +1,1521 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Consolidated review of naming, ownership, dependency direction and repeated proof logic across every production module. All forty original exact-fragment candidates were reviewed in one repair batch; remaining local frontend repetitions have individual scope reasons. No mathematical coverage, published hypotheses, constants, normalization, dimensions or certificate status changes.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Lemmas 3.6 and 4.2, Section 2 and Theorems 3.1, 4.1 and 1.1",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 via BB arXiv:1207.6128v1 Theorem 2.24(ii)"
+  ],
+  "module_path_migrations": [],
+  "existing_public_name_migrations": [],
+  "declaration_owner_migrations": [
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_succ_of_eq_inner",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasFDerivAt_setIntegral_comp_sub_mul",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientApprox.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.lintegral_minkowskiContent_superlevel_le_liminf_of_majorant",
+      "old_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/LocalSlopeCoarea.lean",
+      "new_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.lintegral_minkowskiContent_superlevel_le_limsup_of_majorant",
+      "old_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/LocalSlopeCoarea.lean",
+      "new_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.le_minkowskiConstant_of_smooth_test",
+      "old_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
+      "new_source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.measurable_setLIntegral_inter_levelSet_levelGraphFamily",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_vector_coarea_neighborhood_measurable",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+      "class": "owner-only"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_distanceCutoff_sub_indicator_le",
+      "old_module": "FunctionalInequalities.KLS.Geometry.Cheeger.Equality",
+      "new_module": "FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff",
+      "migration": "owner-only"
+    }
+  ],
+  "compiler_generated_owner_provenance": [
+    {
+      "name": "FunctionalInequalities.Covariance.operator.congr_simp",
+      "old_module": "FunctionalInequalities.Energy.CovarianceGradient.Basic",
+      "new_module": "FunctionalInequalities.Probability.Transport",
+      "class": "compiler-generated-owner-only",
+      "reason": "Lean generates this identical congruence theorem at its first simp consumer. Changed dependency order changes its recorded first-consumer module; raw type, levels and non-proof value are preserved."
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.smoothConstant.congr_simp",
+      "old_module": "FunctionalInequalities.KLS.Geometry.Cheeger.Equality",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.SmoothBuser",
+      "class": "compiler-generated-owner-only",
+      "reason": "Shared equality proof removes the former first simp request. The identical generated congruence theorem is recorded at the next consumer; raw type, levels and non-proof value are preserved."
+    }
+  ],
+  "new_property_modules": [
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/MeasurableCover.lean",
+      "role": "Countable measurable partitions subordinate to open covers; no measure or finite-mass premise"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Lipschitz/ZeroDerivative.lean",
+      "role": "Small Lipschitz pieces of a zero-derivative set; distinct from rank-deficient fibre nullity"
+    }
+  ],
+  "new_shared_properties": [
+    "FunctionalInequalities.Analysis.BakryEmery.integral_neg_weightedLaplacian_eq_inner",
+    "FunctionalInequalities.Analysis.BakryEmery.sum_sq_thirdMoment_le_of_letwin",
+    "FunctionalInequalities.Analysis.IsGraphSplitting.eq_normal_of_comp_graphLinear_eq_zero",
+    "FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn_apply_sub",
+    "FunctionalInequalities.Analysis.Semigroup.Generated.hasDerivWithinAt_apply_sub_Ici",
+    "FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_apply_sub_zero",
+    "FunctionalInequalities.Analysis.Tensor.sum_finTwo_arrow",
+    "FunctionalInequalities.Analysis.Tensor.sum_finTwo_arrow_cons",
+    "FunctionalInequalities.Analysis.coarea_of_contDiff_of_ae_null_critical",
+    "FunctionalInequalities.Analysis.exists_lipschitzOnWith_cover_of_fderiv_eq_zero",
+    "FunctionalInequalities.Analysis.exists_measurable_partition_subordinate",
+    "FunctionalInequalities.Analysis.image_critical_comp_continuousLinearEquiv",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ae_abs_slope_operator_backwards_le",
+    "FunctionalInequalities.KLS.MetricBV.apply_cutoff_le",
+    "FunctionalInequalities.KLS.compactPosterior_cumulant_bound_of_fixed_dimension",
+    "FunctionalInequalities.L2.exists_eq_const_of_subsingleton",
+    "FunctionalInequalities.Probability.ae_mem_of_map_tilted_eq_withDensity_indicator",
+    "FunctionalInequalities.Probability.integrable_exp_mul_norm_of_le"
+  ],
+  "repair_groups": [
+    {
+      "id": "sard-transport",
+      "candidate_indices": [
+        14
+      ],
+      "owner": "Sard/Basic",
+      "decision": "Extend with critical-image transport via Mathlib comp_right_fderiv; both lifts call it. Existing public contracts unchanged; no new module.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "tilt-integral",
+      "candidate_indices": [
+        1,
+        38
+      ],
+      "owner": "BakryEmery/Tilt/Basic",
+      "decision": "Extend with explicit integral-algebra property. Retain separate compact/growth producers and the zero-density branches.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "tilt-tensor",
+      "candidate_indices": [
+        0
+      ],
+      "owner": "BakryEmery/Tilt/Basic",
+      "decision": "Move existing taylorTensor_succ_of_eq_inner from SquareIntegrable, keeping exact full API. Both wrappers call it. Record owner migration separately.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "cumulant-contraction",
+      "candidate_indices": [
+        2,
+        7
+      ],
+      "owner": "BakryEmery/Cumulant/Basic",
+      "decision": "Extend with primitive L2/third-moment contraction; all-radius and local-radius wrappers keep their hypotheses and cumulant identities.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "kernel-differentiation",
+      "candidate_indices": [
+        8,
+        32
+      ],
+      "owner": "Newtonian/Potential",
+      "decision": "Move existing generic differentiable-integral property from GradientApprox below both consumers, exact namespace/type; specialize private truncated-kernel proof.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "graph-monotone-limits",
+      "candidate_indices": [
+        4,
+        13
+      ],
+      "owner": "Existing scalar and vector Graph/Area",
+      "decision": "Replace indicator/iSup proof with Mathlib setLIntegral_iUnion_of_directed. Retain distinct Jacobian and codimension interfaces.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "section-affine-reuse",
+      "candidate_indices": [
+        39
+      ],
+      "owner": "Convex/Section/Affine and Growth",
+      "decision": "Growth calls existing section_eq_sublevel and convexOn_sub_inner_add_const; preserve its public contract and all Engulfing bytes.",
+      "validation": "Targeted build and strict meaningful client; all existing raw interfaces/definitions compared before one final full verifier."
+    },
+    {
+      "id": "minkowski-majorant",
+      "candidate_indices": [
+        20,
+        36
+      ],
+      "owner": "Cheeger/MinkowskiContent",
+      "decision": "Move existing generic liminf/limsup majorant tools below the C1 and local-slope consumers. Replace C1 duplicated layer cake/Fatou with the existing generic theorem; exact owner migrations.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "cheeger-smooth-test",
+      "candidate_indices": [
+        11,
+        24,
+        29,
+        30
+      ],
+      "owner": "Cheeger/Equality",
+      "decision": "Move existing abstract smooth-test-to-Minkowski theorem from Stability into Equality; concrete density corollary invokes it. Preserve all full types and namespaces.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "posterior-transfer",
+      "candidate_indices": [
+        10,
+        28,
+        34
+      ],
+      "owner": "BKL/Localization/Standardization",
+      "decision": "Factor fixed-dimensional compact posterior cumulant transfer. Existing all-dimension theorem and fixed-dimension energy consumer call the shared proof. No conclusion-bearing structure.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "finite-two-index",
+      "candidate_indices": [
+        17
+      ],
+      "owner": "Tensor/Coefficients",
+      "decision": "Share finite-two-function reindexing using the existing finTwoArrowEquiv; keep compact/all-law induction wrappers and zero-dimensional branches.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "metric-cutoff",
+      "candidate_indices": [
+        27
+      ],
+      "owner": "MetricBV/Complement",
+      "decision": "Expose the shared cutoff slope bound in its existing owner; reflected and truncated tests use it. All cutoff/test definitions unchanged.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "subsingleton-L2",
+      "candidate_indices": [
+        33
+      ],
+      "owner": "L2/MeanVariance",
+      "decision": "Share the actual constant-representation lemma for a subsingleton L2 carrier; use in variance and the two distinct energy relaxations.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "gradient-law-support",
+      "candidate_indices": [
+        9
+      ],
+      "owner": "Existing Alexandrov/Caffarelli owners",
+      "decision": "Reuse Mathlib absolutelyContinuous_tilted and ae_of_ae_map directly instead of rederiving positive-density AE transfer; preserve source transport/convex hypotheses.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "cek-convexity",
+      "candidate_indices": [
+        35
+      ],
+      "owner": "Existing CEK consumers",
+      "decision": "Use Mathlib convex addition and squared-norm convexity directly for the repeated 13-line elementary convexity step; leave all EvolutionData/source-law claims unchanged.",
+      "validation": "Targeted build, actual clients, exact existing interfaces/definition closure and final full verifier."
+    },
+    {
+      "id": "measurable-open-partition",
+      "candidate_indices": [
+        5
+      ],
+      "owner": "Analysis/MeasurableCover",
+      "decision": "Create a narrowly scoped measurable partition owner; preserve the existing measure-free MetricCover owner. Scalar/vector local-extension slicing and regular coarea use one subordinate open-cover construction.",
+      "validation": "Targeted build, narrow real clients, full raw retained interface/definition closure comparison, then one final full verification."
+    },
+    {
+      "id": "zero-derivative-cover",
+      "candidate_indices": [
+        25
+      ],
+      "owner": "Analysis/Lipschitz/ZeroDerivative",
+      "decision": "Create a property module in the existing Lipschitz family for the generic scalar/vector vanishing-derivative cover. Both existing contracts stay exact; rank deficiency remains distinct.",
+      "validation": "Targeted build, narrow real clients, full raw retained interface/definition closure comparison, then one final full verification."
+    },
+    {
+      "id": "local-vector-coarea",
+      "candidate_indices": [
+        15
+      ],
+      "owner": "Analysis/Vector/Coarea/Local",
+      "decision": "Move the actual chart slice measurability and stronger measurable neighborhood theorem below both consumers. The old local-equality theorem specializes it; Regular owns only global patching.",
+      "validation": "Targeted build, narrow real clients, full raw retained interface/definition closure comparison, then one final full verification."
+    },
+    {
+      "id": "critical-coarea-assembly",
+      "candidate_indices": [
+        16
+      ],
+      "owner": "Analysis/Vector/Coarea/Regular",
+      "decision": "Extend with the shared assembly given actual AE-null critical fibres. General rank-deficient and zero-derivative producers retain distinct proofs and hypotheses.",
+      "validation": "Targeted build, narrow real clients, full raw retained interface/definition closure comparison, then one final full verification."
+    },
+    {
+      "id": "graph-normal-algebra",
+      "candidate_indices": [
+        18
+      ],
+      "owner": "Analysis/Graph/Implicit",
+      "decision": "Extend IsGraphSplitting with the pure normal-vector algebra for a functional annihilating the graph tangent. Local and translated/global graph derivative proofs call it.",
+      "validation": "Targeted build, narrow real clients, full raw retained interface/definition closure comparison, then one final full verification."
+    },
+    {
+      "id": "scalar-slicing-specialization",
+      "candidate_indices": [
+        23,
+        26
+      ],
+      "owner": "Analysis/Hausdorff/Slicing",
+      "decision": "Specialize the existing generic vector Eilenberg majorant and level-ball tools to W=Real, proving the exact unit-ball-volume factor 2. Preserve all scalar names/scopes; vector never imports scalar.",
+      "validation": "Targeted real consumers and exact existing compiler contracts/definition closure before one final full verifier."
+    },
+    {
+      "id": "graph-open-partition",
+      "candidate_indices": [
+        19
+      ],
+      "owner": "Analysis/MeasurableCover",
+      "decision": "Scalar/vector graph approximation partitions use the shared subordinate measurable open-cover producer, retaining their distinct derivative/Jacobian conclusions.",
+      "validation": "Targeted real consumers and exact existing compiler contracts/definition closure before one final full verifier."
+    },
+    {
+      "id": "distance-cutoff-bound",
+      "candidate_indices": [
+        22
+      ],
+      "owner": "Cheeger/DistanceCutoff",
+      "decision": "Move the existing pointwise integrated cutoff error theorem below its limit consumer; Equality imports it. Preserve its full old contract.",
+      "validation": "Targeted real consumers and exact existing compiler contracts/definition closure before one final full verifier."
+    },
+    {
+      "id": "heat-orbit",
+      "candidate_indices": [
+        3,
+        6,
+        12,
+        37
+      ],
+      "owner": "Semigroup/Generated/TimeDerivative and HeatSemigroup/GradientEstimate",
+      "decision": "Share actual backward-orbit derivative/continuity/zero-time convergence and the AE slope bound, while preserving the distinct WeakGamma and regularizedNorm differentiation frontends.",
+      "validation": "Targeted real consumers and exact existing compiler contracts/definition closure before one final full verifier."
+    },
+    {
+      "id": "exp-radius-monotonicity",
+      "candidate_indices": [
+        21
+      ],
+      "owner": "Probability/ExponentialMoments/Norm",
+      "decision": "Share monotonicity of norm-exponential integrability. Cumulant local smoothness and truncation keep their own Taylor/positivity arguments.",
+      "validation": "Targeted real consumers and exact existing compiler contracts/definition closure before one final full verifier."
+    },
+    {
+      "id": "current-comments",
+      "candidate_indices": [],
+      "owner": "Existing mathematical source owners",
+      "decision": "Archive obsolete WIP/migration metadata verbatim with hashes; correct only stale route-completion prose against current declarations. Preserve mathematical credit and genuine scope limitations.",
+      "validation": "Targeted real consumers and exact existing compiler contracts/definition closure before one final full verifier."
+    },
+    {
+      "id": "tilted-pushforward-support",
+      "candidate_indices": [
+        9
+      ],
+      "owner": "Probability/Transport",
+      "scope": "Arbitrary measurable spaces, integrable exponential tilt and an indicator-density image law",
+      "decision": "Share actual AE support transfer under a tilted pushforward; convex contact geometry remains in its two consumers. Remove only unused local density aliases in the moment regularity proof.",
+      "api_impact": "One new property; existing public contracts and definitions retained",
+      "validation": "Narrow real client, raw retained interfaces and closure, final full verifier"
+    },
+    {
+      "id": "graph-sum-algebra",
+      "candidate_indices": [
+        31
+      ],
+      "owner": "Existing scalar/vector graph estimate consumers",
+      "decision": "Apply Mathlib ENNReal.tsum_mul_left and tsum_add directly to the existing pointwise bounds; preserve the different geometric/Jacobian producers. No new framework or contract.",
+      "validation": "Full build, exact existing interface and closure comparison, final verifier"
+    }
+  ],
+  "original_fragment_review": {
+    "scope": "Exact comment-free contiguous proof fragments with at least twelve nonblank lines across distinct production files; candidate review only, not semantic-duplication completeness.",
+    "candidate_count": 40,
+    "candidates": [
+      {
+        "nonblank_lines": 59,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean",
+          "declaration": "taylorTensor_neg_weightedLaplacian",
+          "declaration_line": 515,
+          "first_line": 558,
+          "last_line": 616
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean",
+          "declaration": "taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth",
+          "declaration_line": 640,
+          "first_line": 670,
+          "last_line": 728
+        },
+        "body_sha256": "c969ca87516748d26415089b2471a48104cda2a2b4c62bc89ea0c7cdcabcfd83",
+        "first_line": "ext h",
+        "candidate_id": 0,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "tilt-tensor"
+        ]
+      },
+      {
+        "nonblank_lines": 51,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean",
+          "declaration": "tiltAverage_neg_weightedLaplacian",
+          "declaration_line": 159,
+          "first_line": 193,
+          "last_line": 243
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean",
+          "declaration": "tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth",
+          "declaration_line": 455,
+          "first_line": 520,
+          "last_line": 570
+        },
+        "body_sha256": "25c08bad13aa5fa50a607bdb2a25120bf467ebcda8cf056cfe5b418598c05bfc",
+        "first_line": "have hpoint (x : E) :",
+        "candidate_id": 1,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "tilt-integral"
+        ]
+      },
+      {
+        "nonblank_lines": 46,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
+          "declaration": "sum_sq_cumulant_three_le_of_letwin",
+          "declaration_line": 572,
+          "first_line": 622,
+          "last_line": 667
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean",
+          "declaration": "sum_sq_cumulant_three_le_of_letwin_of_integrable_exp",
+          "declaration_line": 241,
+          "first_line": 292,
+          "last_line": 337
+        },
+        "body_sha256": "28df0b575713f2fdb8eba50f393169da988e0cda3d804a98228aefd6e82cd36b",
+        "first_line": "have hprodC : ∀ j k, Integrable (fun x => C j k * (⟪u, x⟫ * (⟪b k, x⟫ * ⟪b j, x⟫))) μ :=",
+        "candidate_id": 2,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cumulant-contraction"
+        ]
+      },
+      {
+        "nonblank_lines": 40,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le",
+          "declaration_line": 356,
+          "first_line": 372,
+          "last_line": 411
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le",
+          "declaration_line": 335,
+          "first_line": 349,
+          "last_line": 388
+        },
+        "body_sha256": "cd2a173067c4bb62139dc69ae152023ebd6cf94b5b982ac2c2b357a01beb6f03",
+        "first_line": "revert f",
+        "candidate_id": 3,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "heat-orbit"
+        ]
+      },
+      {
+        "nonblank_lines": 35,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "hausdorffMeasure_image_graphMap",
+          "declaration_line": 853,
+          "first_line": 888,
+          "last_line": 922
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Area.lean",
+          "declaration": "hausdorffMeasure_image_vectorGraphMap",
+          "declaration_line": 284,
+          "first_line": 321,
+          "last_line": 355
+        },
+        "body_sha256": "0d7a095aafc50cc72da1fa867203c12b0eb1effab1dc44f1acbb267b80dff8e6",
+        "first_line": "rw [← Set.image_iUnion, hsmunion]",
+        "candidate_id": 4,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "graph-monotone-limits"
+        ]
+      },
+      {
+        "nonblank_lines": 34,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/OpenMeasurable.lean",
+          "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn",
+          "declaration_line": 23,
+          "first_line": 29,
+          "last_line": 62
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Measurable.lean",
+          "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector",
+          "declaration_line": 234,
+          "first_line": 239,
+          "last_line": 272
+        },
+        "body_sha256": "e794091d66d9d5524ae3e6f83333f2925376abb28dfa0ebfb2e0a3bdf3055d40",
+        "first_line": "classical",
+        "candidate_id": 5,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "measurable-open-partition"
+        ]
+      },
+      {
+        "nonblank_lines": 34,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 158,
+          "first_line": 217,
+          "last_line": 250
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 169,
+          "first_line": 222,
+          "last_line": 255
+        },
+        "body_sha256": "b75e93113e619c998cae1d5c26af0d116b0e8be52311e99ce4e055811760e7ac",
+        "first_line": "have hr0 : 0 < r := ha.trans_le hr.1",
+        "candidate_id": 6,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "heat-orbit"
+        ]
+      },
+      {
+        "nonblank_lines": 33,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
+          "declaration": "sum_sq_cumulant_three_le_of_letwin",
+          "declaration_line": 572,
+          "first_line": 576,
+          "last_line": 608
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean",
+          "declaration": "sum_sq_cumulant_three_le_of_letwin_of_integrable_exp",
+          "declaration_line": 241,
+          "first_line": 246,
+          "last_line": 278
+        },
+        "body_sha256": "d965d40df6b04f5457a61696736db5689b588aa3f9e809074a8be420f7205c96",
+        "first_line": "classical",
+        "candidate_id": 7,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cumulant-contraction"
+        ]
+      },
+      {
+        "nonblank_lines": 33,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientApprox.lean",
+          "declaration": "hasFDerivAt_setIntegral_comp_sub_mul",
+          "declaration_line": 59,
+          "first_line": 70,
+          "last_line": 102
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential.lean",
+          "declaration": "approx_hasFDerivAt_continuous",
+          "declaration_line": 109,
+          "first_line": 122,
+          "last_line": 154
+        },
+        "body_sha256": "ba51a33edc65e4573b3e5c790d683d20917e5c9c636b38a690270215b9da5717",
+        "first_line": "set M' := max M 0",
+        "candidate_id": 8,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "kernel-differentiation"
+        ]
+      },
+      {
+        "nonblank_lines": 28,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+          "declaration": "volume_subgradientImage_eq_lintegral_of_isOpen",
+          "declaration_line": 744,
+          "first_line": 764,
+          "last_line": 791
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean",
+          "declaration": "strictConvexOn_of_map_gradient",
+          "declaration_line": 25,
+          "first_line": 40,
+          "last_line": 67
+        },
+        "body_sha256": "66ed6d3fe9c52b52bf4a4c3394254112b3c1b462ece143d3d64c9a502fdae6c2",
+        "first_line": "have hgrad : Measurable (gradient u) :=",
+        "candidate_id": 9,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "gradient-law-support",
+          "tilted-pushforward-support"
+        ]
+      },
+      {
+        "nonblank_lines": 28,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Bound.lean",
+          "declaration": "posterior_energy_transfer",
+          "declaration_line": 24,
+          "first_line": 75,
+          "last_line": 102
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Standardization.lean",
+          "declaration": "compactPosterior_cumulant_bound",
+          "declaration_line": 26,
+          "first_line": 76,
+          "last_line": 103
+        },
+        "body_sha256": "a544accc168755a0c838b3473f2c537d931c7e07d1b1ec045bc72c94204eb3a8",
+        "first_line": "Measure.map (fun x => W (x - a)) (π : Measure (EuclideanSpace ℝ (Fin n)))",
+        "candidate_id": 10,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "posterior-transfer"
+        ]
+      },
+      {
+        "nonblank_lines": 22,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "declaration": "smoothConstant_le_minkowskiConstant",
+          "declaration_line": 309,
+          "first_line": 352,
+          "last_line": 373
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
+          "declaration": "le_minkowskiConstant_of_smooth_test",
+          "declaration_line": 23,
+          "first_line": 70,
+          "last_line": 91
+        },
+        "body_sha256": "2a554e00b4f09b43237afe5e6c20d680538158aaeac831c02df59730496ee621",
+        "first_line": "(min ((ν : Measure V) B) (1 - (ν : Measure V) B) - (δ j + e r)) ≤",
+        "candidate_id": 11,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cheeger-smooth-test"
+        ]
+      },
+      {
+        "nonblank_lines": 22,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 158,
+          "first_line": 178,
+          "last_line": 199
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 169,
+          "first_line": 183,
+          "last_line": 204
+        },
+        "body_sha256": "e851ecfbe83658151b8e105ffd117f02263f32229e812225becc823f19bdfb7e",
+        "first_line": "set T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi with hTdef",
+        "candidate_id": 12,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "heat-orbit"
+        ]
+      },
+      {
+        "nonblank_lines": 21,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "hausdorffMeasure_image_graphMap",
+          "declaration_line": 853,
+          "first_line": 863,
+          "last_line": 883
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Area.lean",
+          "declaration": "hausdorffMeasure_image_vectorGraphMap",
+          "declaration_line": 284,
+          "first_line": 297,
+          "last_line": 317
+        },
+        "body_sha256": "ef35c84af60a39d52a6434fd99b76ef18cbb85ab82abe3abb14823f644433a0f",
+        "first_line": "set sm : ℕ → Set H := fun m => s ∩ Metric.ball (0 : H) (m + 1) with hsm",
+        "candidate_id": 13,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "graph-monotone-limits"
+        ]
+      },
+      {
+        "nonblank_lines": 21,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
+          "declaration": "sard",
+          "declaration_line": 93,
+          "first_line": 108,
+          "last_line": 128
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+          "declaration": "sard_smooth",
+          "declaration_line": 308,
+          "first_line": 314,
+          "last_line": 334
+        },
+        "body_sha256": "5bcb6c8972828dee32c03b131f1a2860480a9fef87f608fa57dcbc6ed0bc88fe",
+        "first_line": "have hchain : ∀ y, fderiv ℝ (u ∘ e) y =",
+        "candidate_id": 14,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "sard-transport"
+        ]
+      },
+      {
+        "nonblank_lines": 21,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+          "declaration": "exists_vector_coarea_neighborhood",
+          "declaration_line": 122,
+          "first_line": 131,
+          "last_line": 151
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
+          "declaration": "exists_vector_coarea_neighborhood_measurable",
+          "declaration_line": 88,
+          "first_line": 99,
+          "last_line": 119
+        },
+        "body_sha256": "dbde8fcd01d67ffad80cbdafded4178322fbaebbc535e459d0964d37fc2a5634",
+        "first_line": "obtain ⟨P, Ω, ψ, N, hsp, hdim, hΩ, hψ, hN, hxN, hNO, hlevel, himg, hinj⟩ :=",
+        "candidate_id": 15,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "local-vector-coarea"
+        ]
+      },
+      {
+        "nonblank_lines": 21,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/Coarea.lean",
+          "declaration": "coarea_of_contDiff",
+          "declaration_line": 139,
+          "first_line": 153,
+          "last_line": 173
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
+          "declaration": "coarea_of_contDiff_of_critical_eq_zeroDeriv",
+          "declaration_line": 210,
+          "first_line": 226,
+          "last_line": 249
+        },
+        "body_sha256": "bc8d2a91f6215f4ba552c59316efac8b146087558fa47120586c2daac89b30f0",
+        "first_line": "(volume : Measure W) :=",
+        "candidate_id": 16,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "critical-coarea-assembly"
+        ]
+      },
+      {
+        "nonblank_lines": 20,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/CompactReduction.lean",
+          "declaration": "cumulantBoundCompact_two_of_letwinCompact",
+          "declaration_line": 55,
+          "first_line": 72,
+          "last_line": 91
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean",
+          "declaration": "LogConcave.Suspension.cumulantBound_two_of_letwin",
+          "declaration_line": 48,
+          "first_line": 68,
+          "last_line": 87
+        },
+        "body_sha256": "77cc0b87b6080285cdc99f7407857cf63a2705152dfdc9420898455d69a7b407",
+        "first_line": "have heq : (∑ J : Fin 2 → Fin (n + 1), cumulant (μ : Measure _) 3",
+        "candidate_id": 17,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "finite-two-index"
+        ]
+      },
+      {
+        "nonblank_lines": 19,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Coarea/RegularChart.lean",
+          "declaration": "gradient_eq_smul_of_level_graph",
+          "declaration_line": 90,
+          "first_line": 106,
+          "last_line": 124
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Implicit.lean",
+          "declaration": "gradient_eq_smul_of_graph",
+          "declaration_line": 471,
+          "first_line": 488,
+          "last_line": 506
+        },
+        "body_sha256": "b73b7becdeeda3d24b2dda3c442192f609704ffd07fd86da9ca0fbc40531f134",
+        "first_line": "have hkey : (fderiv ℝ φ (Ψ y)).comp (graphLinear ι e (gradient g y)) = 0 :=",
+        "candidate_id": 18,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "graph-normal-algebra"
+        ]
+      },
+      {
+        "nonblank_lines": 19,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "exists_approximating_partition",
+          "declaration_line": 457,
+          "first_line": 468,
+          "last_line": 486
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+          "declaration": "exists_approximating_partition_vectorGraph",
+          "declaration_line": 190,
+          "first_line": 201,
+          "last_line": 219
+        },
+        "body_sha256": "808cd2bc70ac7e678ebcea66528b0ac91e6494cf4e5e0700bda383d8e81544a1",
+        "first_line": "intro y₀",
+        "candidate_id": 19,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "graph-open-partition"
+        ]
+      },
+      {
+        "nonblank_lines": 19,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/LocalSlopeCoarea.lean",
+          "declaration": "lintegral_minkowskiContent_superlevel_le_liminf_of_majorant",
+          "declaration_line": 93,
+          "first_line": 110,
+          "last_line": 129
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+          "declaration": "lintegral_minkowskiContent_superlevel_le",
+          "declaration_line": 392,
+          "first_line": 415,
+          "last_line": 434
+        },
+        "body_sha256": "ba9e7e52b3d0a3e2fe135e0a5e7ef4dcfd95ef03ef5219e6acbf2b6ecce1c994",
+        "first_line": "set G : ℕ → ℝ → ℝ≥0∞ := fun n t => (ν : Measure V) (S n t) / ENNReal.ofReal (r n) with hGdef",
+        "candidate_id": 20,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "minkowski-majorant"
+        ]
+      },
+      {
+        "nonblank_lines": 18,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
+          "declaration": "contDiffOn_logLaplace_ball",
+          "declaration_line": 767,
+          "first_line": 770,
+          "last_line": 787
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean",
+          "declaration": "cumulant_eq_taylorComp",
+          "declaration_line": 128,
+          "first_line": 132,
+          "last_line": 149
+        },
+        "body_sha256": "3fb9c905ea07c5845e49a4391eb8541a59871713848e0ec8dc31dab8bbf78f81",
+        "first_line": "have hgi : ∀ t < r,",
+        "candidate_id": 21,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "exp-radius-monotonicity"
+        ]
+      },
+      {
+        "nonblank_lines": 18,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
+          "declaration": "tendsto_distanceCutoff_indicator",
+          "declaration_line": 124,
+          "first_line": 134,
+          "last_line": 151
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "declaration": "lintegral_enorm_distanceCutoff_sub_indicator_le",
+          "declaration_line": 253,
+          "first_line": 257,
+          "last_line": 274
+        },
+        "body_sha256": "0ff3ea68c832e89dc0e36528548a85eaa42649b96729f4d8d7058d947a799b53",
+        "first_line": "have hsub : B ⊆ Metric.thickening r B := Metric.self_subset_thickening hr B",
+        "candidate_id": 22,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "distance-cutoff-bound"
+        ]
+      },
+      {
+        "nonblank_lines": 17,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slicing.lean",
+          "declaration": "exists_measurable_majorant",
+          "declaration_line": 139,
+          "first_line": 186,
+          "last_line": 202
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+          "declaration": "exists_measurable_majorant_vector",
+          "declaration_line": 138,
+          "first_line": 198,
+          "last_line": 214
+        },
+        "body_sha256": "d463b0feed2fddd6ae06296a2a76df1c3d832490dbc46acc2aaf008633204acb",
+        "first_line": "intro t",
+        "candidate_id": 23,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "scalar-slicing-specialization"
+        ]
+      },
+      {
+        "nonblank_lines": 16,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "declaration": "smoothConstant_le_minkowskiConstant",
+          "declaration_line": 309,
+          "first_line": 316,
+          "last_line": 333
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
+          "declaration": "le_minkowskiConstant_of_smooth_test",
+          "declaration_line": 23,
+          "first_line": 34,
+          "last_line": 51
+        },
+        "body_sha256": "b8f83e8c3e8c3552ca7805621c83c622d05127f833e2b57924cb3a0e1ffb52e4",
+        "first_line": "simp only [minkowskiConstant]",
+        "candidate_id": 24,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cheeger-smooth-test"
+        ]
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/Critical.lean",
+          "declaration": "exists_lipschitzOnWith_critical_cover",
+          "declaration_line": 54,
+          "first_line": 59,
+          "last_line": 73
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
+          "declaration": "exists_lipschitzOnWith_zeroDeriv_cover",
+          "declaration_line": 61,
+          "first_line": 66,
+          "last_line": 80
+        },
+        "body_sha256": "a282526a90cba74c6f5cdfd560d49035de9fc46c78fe12ced8cb921a0d4a667d",
+        "first_line": "rcases Set.eq_empty_or_nonempty {x : V | fderiv ℝ u x = 0} with hC | hC",
+        "candidate_id": 25,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "zero-derivative-cover"
+        ]
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slicing.lean",
+          "declaration": "exists_levelSlab",
+          "declaration_line": 88,
+          "first_line": 115,
+          "last_line": 129
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+          "declaration": "exists_levelBall",
+          "declaration_line": 84,
+          "first_line": 110,
+          "last_line": 124
+        },
+        "body_sha256": "9394955210216a17f7310b615b58c9332f871db8229daac5fe14d8f75464fd80",
+        "first_line": "· rw [dif_neg h]",
+        "candidate_id": 26,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "scalar-slicing-specialization"
+        ]
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/MetricBV/Approximation.lean",
+          "declaration": "apply_truncateFun_le",
+          "declaration_line": 102,
+          "first_line": 112,
+          "last_line": 126
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/MetricBV/Complement.lean",
+          "declaration": "apply_reflect_le",
+          "declaration_line": 124,
+          "first_line": 134,
+          "last_line": 148
+        },
+        "body_sha256": "6e11791a3c5e9af45148afc346f28ae8ec6b0dc9022db48440a48bbe1b93000f",
+        "first_line": "(clampUnit_nonneg _) (clampUnit_le_one _)).trans (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)",
+        "candidate_id": 27,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "metric-cutoff"
+        ]
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Bound.lean",
+          "declaration": "posterior_energy_transfer",
+          "declaration_line": 24,
+          "first_line": 123,
+          "last_line": 137
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Standardization.lean",
+          "declaration": "compactPosterior_cumulant_bound",
+          "declaration_line": 26,
+          "first_line": 130,
+          "last_line": 144
+        },
+        "body_sha256": "0fe8fe871f44eadf30ee4b23798b07226fd3630b4cd3cef8709a80207f0ea3c5",
+        "first_line": "rw [hνcoe, cumulant_map_affine W a (π : Measure (EuclideanSpace ℝ (Fin n))) hexp hk]",
+        "candidate_id": 28,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "posterior-transfer"
+        ]
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "declaration": "smoothConstant_le_minkowskiConstant",
+          "declaration_line": 309,
+          "first_line": 335,
+          "last_line": 349
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
+          "declaration": "le_minkowskiConstant_of_smooth_test",
+          "declaration_line": 23,
+          "first_line": 53,
+          "last_line": 67
+        },
+        "body_sha256": "a68ad57614fd34f962feb4ceaaed8be50279bb328edd77aa0e69dbd4d52d007d",
+        "first_line": "(min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r) ≤",
+        "candidate_id": 29,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cheeger-smooth-test"
+        ]
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "declaration": "smoothConstant_le_minkowskiConstant",
+          "declaration_line": 309,
+          "first_line": 389,
+          "last_line": 404
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
+          "declaration": "le_minkowskiConstant_of_smooth_test",
+          "declaration_line": 23,
+          "first_line": 107,
+          "last_line": 122
+        },
+        "body_sha256": "c2afb6f5e3a20026e6e359bcabef2730384abcc990f043d88d749efc3f0b3b80",
+        "first_line": "(min ((ν : Measure V) B) (1 - (ν : Measure V) B) - e r))) :=",
+        "candidate_id": 30,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cheeger-smooth-test"
+        ]
+      },
+      {
+        "nonblank_lines": 14,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "graphMap_estimates",
+          "declaration_line": 675,
+          "first_line": 766,
+          "last_line": 779
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Area.lean",
+          "declaration": "vectorGraphMap_estimates",
+          "declaration_line": 97,
+          "first_line": 198,
+          "last_line": 211
+        },
+        "body_sha256": "f7b71016f42a0abc1f501614958889297c978d2785e546756d1b04ecbc0c4875",
+        "first_line": "_ ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ k * (∫⁻ y in u n, J y ∂μ + ε * μ (u n)) := by gcongr",
+        "candidate_id": 31,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "graph-sum-algebra"
+        ]
+      },
+      {
+        "nonblank_lines": 14,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientApprox.lean",
+          "declaration": "hasFDerivAt_setIntegral_comp_sub_mul",
+          "declaration_line": 59,
+          "first_line": 105,
+          "last_line": 118
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential.lean",
+          "declaration": "approx_hasFDerivAt_continuous",
+          "declaration_line": 109,
+          "first_line": 158,
+          "last_line": 171
+        },
+        "body_sha256": "a6ddce8a6794a0e72cf777c6ab68cf369a248583261f4e0a0e6e9c9d8d571c86",
+        "first_line": "have hint : Integrable (fun y => T (x0 - y) * f y) (volume.restrict Ω) := by",
+        "candidate_id": 32,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "kernel-differentiation"
+        ]
+      },
+      {
+        "nonblank_lines": 14,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Comparison.lean",
+          "declaration": "relaxation_eq_zero_of_subsingleton",
+          "declaration_line": 114,
+          "first_line": 117,
+          "last_line": 130
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Energy/LocalSlope/Relaxation.lean",
+          "declaration": "relaxation_eq_zero_of_subsingleton",
+          "declaration_line": 210,
+          "first_line": 213,
+          "last_line": 226
+        },
+        "body_sha256": "44284239ec13934c30f582bd9f30f3d1a15d369bd9abc39037a98b1fb64e0dbe",
+        "first_line": "obtain ⟨x₀⟩ := nonempty_of_isProbabilityMeasure (ν : Measure V)",
+        "candidate_id": 33,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "subsingleton-L2"
+        ]
+      },
+      {
+        "nonblank_lines": 13,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Bound.lean",
+          "declaration": "posterior_energy_transfer",
+          "declaration_line": 24,
+          "first_line": 61,
+          "last_line": 73
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Standardization.lean",
+          "declaration": "compactPosterior_cumulant_bound",
+          "declaration_line": 26,
+          "first_line": 61,
+          "last_line": 73
+        },
+        "body_sha256": "73c561ad83bacb89efa2000d2019ddb7202c612444f9707f26f1a730b8dbc590",
+        "first_line": "change ContinuousLinearMap.adjoint (inverseSqrt A) = inverseSqrt A",
+        "candidate_id": 34,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "posterior-transfer"
+        ]
+      },
+      {
+        "nonblank_lines": 13,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean",
+          "declaration": "given_data_harnack_regular_moment_potential_of_data",
+          "declaration_line": 105,
+          "first_line": 135,
+          "last_line": 147
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+          "declaration": "exists_regular_moment_directional_hessian_subsolution",
+          "declaration_line": 660,
+          "first_line": 804,
+          "last_line": 816
+        },
+        "body_sha256": "a71ce8b884edad1e7f5e6a8f5434ef4a8fe7fb61840ad72cf42fc7966f0c5708",
+        "first_line": "have hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),",
+        "candidate_id": 35,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "cek-convexity"
+        ]
+      },
+      {
+        "nonblank_lines": 13,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/LocalSlopeCoarea.lean",
+          "declaration": "lintegral_minkowskiContent_superlevel_le_liminf_of_majorant",
+          "declaration_line": 93,
+          "first_line": 140,
+          "last_line": 152
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+          "declaration": "lintegral_minkowskiContent_superlevel_le",
+          "declaration_line": 392,
+          "first_line": 446,
+          "last_line": 458
+        },
+        "body_sha256": "eae87dbf61ef62ecb447f1a37aa8c8dd5e85c3e60be7d4cb1cce4fe22a6ff564",
+        "first_line": "intro x",
+        "candidate_id": 36,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "minkowski-majorant"
+        ]
+      },
+      {
+        "nonblank_lines": 13,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 158,
+          "first_line": 299,
+          "last_line": 311
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 169,
+          "first_line": 297,
+          "last_line": 309
+        },
+        "body_sha256": "d3da43ee1325a26d25820aa65ccc29f91f17d7d4ee2d1c304b658a090bc14048",
+        "first_line": "have hcont : ContinuousOn Ψ (Icc a t) := by",
+        "candidate_id": 37,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "heat-orbit"
+        ]
+      },
+      {
+        "nonblank_lines": 12,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean",
+          "declaration": "tiltAverage_neg_weightedLaplacian",
+          "declaration_line": 159,
+          "first_line": 163,
+          "last_line": 174
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean",
+          "declaration": "tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth",
+          "declaration_line": 455,
+          "first_line": 467,
+          "last_line": 478
+        },
+        "body_sha256": "b6459a09260f115ba645efd56b9a2943415c8e413cf106a9e2efbc77df2ee988",
+        "first_line": "unfold tiltAverage",
+        "candidate_id": 38,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "tilt-integral"
+        ]
+      },
+      {
+        "nonblank_lines": 12,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+          "declaration": "section_eq_sublevel",
+          "declaration_line": 18,
+          "first_line": 21,
+          "last_line": 32
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+          "declaration": "exists_section_volume_upper_bound",
+          "declaration_line": 340,
+          "first_line": 359,
+          "last_line": 370
+        },
+        "body_sha256": "2f75d717911973757b9f23295d2dd3f63198562ce62a5e6b2d992faa892f8af6",
+        "first_line": "ext y",
+        "candidate_id": 39,
+        "disposition": "shared_property_or_existing_theorem",
+        "repair_groups": [
+          "section-affine-reuse"
+        ]
+      }
+    ]
+  },
+  "remaining_fragment_review": {
+    "scope": "Exact comment-free contiguous proof fragments with at least twelve nonblank lines across distinct production files; candidate review only, not semantic-duplication completeness.",
+    "candidate_count": 7,
+    "candidates": [
+      {
+        "nonblank_lines": 32,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le",
+          "declaration_line": 366,
+          "first_line": 382,
+          "last_line": 413
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le",
+          "declaration_line": 303,
+          "first_line": 317,
+          "last_line": 348
+        },
+        "body_sha256": "629d9c8eea0f7749ec7f9a8ac5e134926b1790b5b8cddcee9df5bcbf2a075646",
+        "first_line": "revert f",
+        "disposition": "retain_frontend_scope",
+        "reason": "The 32-line match is local operator/test setup and the time-zero branch for two different integrands. Shared backward derivatives, continuity, convergence and the actual AE slope estimate are separate canonical properties; abstracting the integrands would introduce an unnecessary theorem-carrying interface."
+      },
+      {
+        "nonblank_lines": 22,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 201,
+          "first_line": 221,
+          "last_line": 242
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 169,
+          "first_line": 183,
+          "last_line": 204
+        },
+        "body_sha256": "e851ecfbe83658151b8e105ffd117f02263f32229e812225becc823f19bdfb7e",
+        "first_line": "set T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi with hTdef",
+        "disposition": "retain_frontend_scope",
+        "reason": "The 22-line match sets up the common operator, compact test and its bounds before the distinct WeakGamma and regularized-norm derivative rules. The substantive orbit estimate is shared; the frontends have different derivative conclusions."
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "exists_approximating_partition",
+          "declaration_line": 458,
+          "first_line": 469,
+          "last_line": 483
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+          "declaration": "exists_approximating_partition_vectorGraph",
+          "declaration_line": 191,
+          "first_line": 202,
+          "last_line": 216
+        },
+        "body_sha256": "3d1a1710f56a6c971da57b32729b2216bedbed8b246032405e640d169a2ffc80",
+        "first_line": "intro y₀",
+        "disposition": "retain_frontend_scope",
+        "reason": "The scalar gradient and vector derivative use Metric.continuousAt_iff to select radii. Their graph tangent maps and Jacobians differ. Countable measurable partition construction is shared by MeasurableCover."
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/OpenMeasurable.lean",
+          "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn",
+          "declaration_line": 24,
+          "first_line": 30,
+          "last_line": 44
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Measurable.lean",
+          "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector",
+          "declaration_line": 235,
+          "first_line": 240,
+          "last_line": 254
+        },
+        "body_sha256": "ac27aa5851990a79ada2535d129f0501162691ad6c02d57956e02a522ffc1cb9",
+        "first_line": "classical",
+        "disposition": "retain_frontend_scope",
+        "reason": "The local representatives and slice-set identities have distinct surface-measure and dimension-indexed normalized-vector contracts. The scalar theorem includes ambient dimension zero without the vector dimension equation. Their open-cover partition is shared, while weighted slice producers retain these scopes."
+      },
+      {
+        "nonblank_lines": 14,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 201,
+          "first_line": 260,
+          "last_line": 273
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 169,
+          "first_line": 222,
+          "last_line": 235
+        },
+        "body_sha256": "9ebd08953587bcab88fa4d5516b8b580c940fe7eb03c7d7a4ed51f03e40d00b2",
+        "first_line": "have hr0 : 0 < r := ha.trans_le hr.1",
+        "disposition": "retain_frontend_scope",
+        "reason": "The matched local block invokes the shared orbit derivative and AE slope properties and prepares bounds for distinct product/chain rules. The mathematical derivative frontends stay separate."
+      },
+      {
+        "nonblank_lines": 13,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "hausdorffMeasure_image_graphMap",
+          "declaration_line": 839,
+          "first_line": 849,
+          "last_line": 861
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Area.lean",
+          "declaration": "hausdorffMeasure_image_vectorGraphMap",
+          "declaration_line": 277,
+          "first_line": 290,
+          "last_line": 302
+        },
+        "body_sha256": "95786d10d90eb7491bac833d8ea49ac4f25d76bd96f0db3cf34674ca5efe4334",
+        "first_line": "set sm : ℕ → Set H := fun m => s ∩ Metric.ball (0 : H) (m + 1) with hsm",
+        "disposition": "retain_frontend_scope",
+        "reason": "The matched radius exhaustion and continuity-of-measure statements concern two different graph images/Jacobians. Both now use Mathlib bounded-set finiteness, the ball-union identity and monotone set-integral convergence directly."
+      },
+      {
+        "nonblank_lines": 12,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean",
+          "declaration": "tiltAverage_neg_weightedLaplacian",
+          "declaration_line": 184,
+          "first_line": 188,
+          "last_line": 199
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean",
+          "declaration": "tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth",
+          "declaration_line": 455,
+          "first_line": 467,
+          "last_line": 478
+        },
+        "body_sha256": "b6459a09260f115ba645efd56b9a2943415c8e413cf106a9e2efbc77df2ee988",
+        "first_line": "unfold tiltAverage",
+        "disposition": "retain_frontend_scope",
+        "reason": "The remaining block names the shifted potential and transports the tilt. Compact support and temperate-growth integrability/zero-integral producers remain distinct. The shared final weighted-generator integral algebra and Taylor tensor contraction have canonical owners."
+      }
+    ]
+  },
+  "near_fragment_review": {
+    "method": "Repeat the cross-file scan at twenty nonblank lines after normalizing local proof-hypothesis names; only the two already reviewed heat frontend setup blocks remain. This is a bounded detection method, not a completeness claim for semantic duplication."
+  },
+  "existing_interface_comparison": {
+    "before_public": 6732,
+    "after_public": 6750,
+    "retained_interfaces": 6732,
+    "retained_definition_closure_vertices": 7469,
+    "retained_private_closure_vertices": 737,
+    "normalization": "None. Existing raw types, universe parameters, non-proof definition values, rendered binders, kinds, safety and partiality are exact. Eight explicit source-declaration owner moves and two lazy compiler-generated congruence-owner changes preserve full names. The complete retained local definition closure is compared without proof-witness or instance normalization. Theorem proof bodies are excluded; axioms and kernel replay are separate checks."
+  },
+  "validation_inputs": [
+    "research/audits/SourceLayout/MeasurablePartition.lean",
+    "research/audits/SourceLayout/NormExponentialRadius.lean",
+    "research/audits/SourceLayout/BackwardSemigroup.lean",
+    "research/audits/SourceLayout/ConsolidatedOwners.lean"
+  ],
+  "review_checks": {
+    "meaning_and_scope": "Existing elaborated public types, universes, binders and non-proof definition closures are compared exactly; no public name or mathematical contract is removed.",
+    "reuse_and_generality": "All forty exact proof-fragment candidates have concrete shared-property or pinned-Mathlib replacements. Zero derivative, rank deficiency, finite-radius exponential integrability, compact/temperate producers and scalar/vector degeneracies retain their distinct hypotheses.",
+    "placement": "Eight declaration owner moves keep exact full names; foundations never import per-paper modules. The measure-free MetricCover and generic Hilbert semigroup layers retain their dependency boundaries.",
+    "documentation": "Obsolete WIP/migration comments are preserved verbatim with hashes in the local operational archive. Source comments describe current mathematical owners and preserve paper credit.",
+    "consumer": "Four maintained narrow-import clients cover unbounded measurable partitions, negative exponential radii without finite mass, subsingleton L2, empty finite coordinates and measure-free backward Hilbert orbits.",
+    "preservation": "Real index/HEAD, entire Engulfing, existing audits, all checkers, prior maps and unrelated CNS/elliptic work retain their saved dirty-baseline bytes."
+  },
+  "trust_scope": "Strict independent clients, current library build, raw interfaces and non-proof definition closure, transitive standard-axiom audit and full local/vendor native kernel replay are separate checks. Pinned compiled Mathlib imports remain trusted. No remote verification, certificate renewal or publication."
+}

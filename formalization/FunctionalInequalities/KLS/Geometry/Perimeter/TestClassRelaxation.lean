@@ -188,7 +188,7 @@ section CompactLocal
 
 The class below asks only for bare convergence of the indicator error on every compact set; no
 local integrability of the approximants is imposed. Global `L¹` sequences belong to it, and on a
-proper space with a finite measure its infimum is again the perimeter (phase-20 bridge). -/
+proper space with a finite measure its infimum is again the perimeter. -/
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X]
 
@@ -238,7 +238,7 @@ theorem compactLocallyLipschitzRelaxation_le_perimeter (ν : Measure X) (B : Set
     (locallyLipschitzRelaxation_le_perimeter ν B)
 
 /-- On a proper space with a finite measure the perimeter is at most the compact-local
-relaxation (phase-20 bridge). -/
+relaxation. -/
 theorem perimeter_le_compactLocallyLipschitzRelaxation [ProperSpace X] (ν : Measure X)
     [IsFiniteMeasure ν] (B : Set X) :
     perimeter ν B ≤ compactLocallyLipschitzRelaxation ν B :=

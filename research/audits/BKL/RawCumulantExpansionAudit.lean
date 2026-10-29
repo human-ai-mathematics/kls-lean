@@ -4,10 +4,12 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import FunctionalInequalities.KLS.Isotropic
 
-/-! Independent audit clients for the raw (74) expansion and its supports (Analysis/IteratedDerivative/{Bilinear,InnerProduct}.lean, Analysis/BakryEmery/Cumulant/Leibniz.lean). Merged verbatim from the reviewer receipt `D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)` (modules
-UniformLaw, SkewLaw, MaskClients, InnerClients, GradientClients, RawModels, PlaneModels), re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration tooling stays in the receipt. -/
+/-! Audit clients for the raw (74) expansion and its supports
+(`Analysis/IteratedDerivative/{Bilinear,InnerProduct}.lean`,
+`Analysis/BakryEmery/Cumulant/Leibniz.lean`), in the sections UniformLaw, SkewLaw, MaskClients,
+InnerClients, GradientClients, RawModels and PlaneModels. -/
 
--- ===== reviewer module UniformLaw (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== UniformLaw =====
 section UniformLaw
 set_option autoImplicit false
 noncomputable section
@@ -54,7 +56,7 @@ end D74rUniformLaw
 end
 end UniformLaw
 
--- ===== reviewer module SkewLaw (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== SkewLaw =====
 section SkewLaw
 set_option autoImplicit false
 noncomputable section
@@ -109,7 +111,7 @@ end D74rSkewLaw
 end
 end SkewLaw
 
--- ===== reviewer module MaskClients (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== MaskClients =====
 section MaskClients
 set_option autoImplicit false
 namespace D74RawMasks
@@ -149,7 +151,7 @@ end D74RawMasks
 
 end MaskClients
 
--- ===== reviewer module InnerClients (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== InnerClients =====
 section InnerClients
 set_option autoImplicit false
 noncomputable section
@@ -263,7 +265,7 @@ end D74rInnerClients
 end
 end InnerClients
 
--- ===== reviewer module GradientClients (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== GradientClients =====
 section GradientClients
 set_option autoImplicit false
 noncomputable section
@@ -478,7 +480,7 @@ end D74rGradientClients
 end
 end GradientClients
 
--- ===== reviewer module RawModels (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== RawModels =====
 section RawModels
 set_option autoImplicit false
 noncomputable section
@@ -644,7 +646,7 @@ end D74RawModels
 end
 end RawModels
 
--- ===== reviewer module PlaneModels (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== PlaneModels =====
 section PlaneModels
 set_option autoImplicit false
 noncomputable section

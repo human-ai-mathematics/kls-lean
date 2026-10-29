@@ -83,7 +83,7 @@ theorem map_restrict_convex_ray_le
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) ≤
       ENNReal.ofReal (t ^ (-(n : ℝ))) •
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (Ω ∩ closedBall x (t * D))) := by
-  -- The two initial frozen premises are retained although the transport proof does not need them.
+  -- The premises `hSm` and `hD` are not needed by the transport proof.
   have _hSm := hSm
   have _hD := hD
   let H : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) := fun y => x + t • (y - x)

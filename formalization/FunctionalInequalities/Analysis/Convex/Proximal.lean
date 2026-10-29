@@ -133,8 +133,8 @@ private theorem subgradient_of_proximal_minimizer
   linarith
 
 /-- The **proximal point** (resolvent of the subdifferential) of `f` at `z`: a point `x` such that
-`z − x` is a subgradient of `f` at `x`, i.e. the minimiser of `x ↦ f x + ½‖x − z‖²` (weak Letwin route,
-Alexandrov's theorem). For convex `f` on a finite-dimensional space it exists and is unique. -/
+`z − x` is a subgradient of `f` at `x`, i.e. the minimiser of `x ↦ f x + ½‖x − z‖²` (Alexandrov's
+theorem). For convex `f` on a finite-dimensional space it exists and is unique. -/
 def proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (f : E → ℝ) (z : E) : E :=
   Classical.epsilon fun x => ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y
 
@@ -240,7 +240,8 @@ private lemma proximal_quadratic_bounds {f : E → ℝ} {P : E → E}
     · linarith only [hpw, hsq']
     · linarith only [hpz, hsq]
 
-/-- **The resolvent of a convex function is a gradient** (weak Letwin route, Alexandrov's theorem): if `P z` is a point at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
+/-- **The resolvent of a convex function is a gradient** (Alexandrov's theorem): if `P z` is a point
+at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
 `w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at every `z`. -/
 theorem hasFDerivAt_half_sq_sub_moreau
     {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :

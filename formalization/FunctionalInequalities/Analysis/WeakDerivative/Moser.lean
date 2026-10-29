@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.WeakDerivative.Sobolev
 import FunctionalInequalities.Analysis.Cutoff.SmoothBall
-import FunctionalInequalities.Analysis.MoserIteration
+import FunctionalInequalities.Analysis.Iteration.LpNorm
 import FunctionalInequalities.Analysis.LpExponent
 
 /-!

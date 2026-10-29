@@ -19,6 +19,9 @@ differentiates on its right-hand side to `−Dφ + DV(∇φ)[∇²φ ·]`; Jacob
 left-hand side, hence the first derivative (2.4) of the equation; differentiating once more gives (2.6)
 with the inverse-Hessian operator, whose two right-hand-side matrices (`∇²φ ∇²V(∇φ) ∇²φ` for convex `V`,
 and the inverse-Hessian-weighted third-derivative Gram matrix) are positive semidefinite. Section
+`LocalMaximum`: the pointwise maximum principle `L F ≤ 0` at a local maximum of a `C²` function `F`
+where `∇²φ` is positive definite (`hessianInverseOperator_nonpos_of_isLocalMax`); no equation for `φ`
+and no global maximum principle are involved. Section
 `QuadraticForm` (Letwin Lemma A.4, p. 17): at a point with positive definite `C²` Hessian, the inverse-Hessian quadratic
 form `Σ_ij ((∇²φ)⁻¹)_{ij} a_i a_j` is nonnegative in every orthonormal basis and every rank
 (`sum_inverseHessianEntry_mul_mul_nonneg`). Section
@@ -257,6 +260,105 @@ theorem inv_hessianMatrixIn_posSemidef {m : ℕ} (b : OrthonormalBasis (Fin m) �
   · exact (hPD v hv).le
 
 end HessianPositivity
+
+section LocalMaximum
+
+section HessianSign
+
+omit [FiniteDimensional ℝ E]
+
+/-- A one-variable second-derivative test: at a local maximum `0` of a differentiable `g`,
+a derivative `d` of `g'` at `0` is nonpositive. -/
+private theorem deriv_deriv_nonpos_of_isLocalMax {g : ℝ → ℝ}
+    (hg : Differentiable ℝ g) (hm : IsLocalMax g 0) {d : ℝ}
+    (hd : HasDerivAt (deriv g) d 0) : d ≤ 0 := by
+  by_contra hn
+  have hdpos : 0 < d := lt_of_not_ge hn
+  have hs : Tendsto (fun t : ℝ => t⁻¹ * (deriv g t - deriv g 0)) (𝓝[≠] 0) (𝓝 d) := by
+    simpa [smul_eq_mul, slope] using hd.tendsto_slope_zero
+  have he : ∀ᶠ t : ℝ in 𝓝 0, t ≠ 0 → 0 < t⁻¹ * (deriv g t - deriv g 0) := by
+    simpa only [eventually_nhdsWithin_iff, Set.mem_compl_iff, Set.mem_singleton_iff] using
+      hs.eventually (lt_mem_nhds hdpos)
+  have hm' : ∀ᶠ t : ℝ in 𝓝 0, g t ≤ g 0 := hm
+  obtain ⟨ε, hε, hεprop⟩ := Metric.eventually_nhds_iff.mp (he.and hm')
+  have hb : (0 : ℝ) < ε / 2 := by linarith
+  have hgb : g (ε / 2) ≤ g 0 := (hεprop (by rw [Real.dist_eq, sub_zero, abs_of_pos hb]; linarith)).2
+  obtain ⟨c, hc, heq⟩ :=
+    exists_deriv_eq_slope g hb hg.continuous.continuousOn hg.differentiableOn
+  have hcp := (hεprop (show dist c 0 < ε by
+    rw [Real.dist_eq, sub_zero, abs_of_pos hc.1]; linarith [hc.2])).1 (ne_of_gt hc.1)
+  rw [hm.deriv_eq_zero, sub_zero] at hcp
+  have hcderiv : 0 < deriv g c := by
+    by_contra h
+    have hmul : c⁻¹ * deriv g c ≤ 0 :=
+      mul_nonpos_of_nonneg_of_nonpos (inv_pos.mpr hc.1).le (le_of_not_gt h)
+    linarith
+  have hslope : (g (ε / 2) - g 0) / (ε / 2 - 0) ≤ 0 :=
+    div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hgb) (by linarith)
+  rw [heq] at hcderiv
+  exact (not_lt_of_ge hslope) hcderiv
+
+/-- At a local maximum of a `C²` function the Hessian form is nonpositive. -/
+private theorem bilinearIteratedFDerivTwo_self_nonpos_of_isLocalMax {F : E → ℝ}
+    (hF : ContDiff ℝ 2 F) {x : E} (hmax : IsLocalMax F x) (v : E) :
+    bilinearIteratedFDerivTwo ℝ F x v v ≤ 0 := by
+  let g : ℝ → ℝ := fun t => F (x + t • v)
+  have hg : ∀ t, HasDerivAt g (fderiv ℝ F (x + t • v) v) t := fun t =>
+    (hF.differentiable (by norm_num) (x + t • v)).hasFDerivAt.comp_hasDerivAt t
+      (hasDerivAt_line x v t)
+  have hderiv : deriv g = fun t => fderiv ℝ F (x + t • v) v := funext fun t => (hg t).deriv
+  have ht : Tendsto (fun t : ℝ => x + t • v) (𝓝 0) (𝓝 x) := by
+    simpa only [zero_smul, add_zero] using (hasDerivAt_line x v 0).continuousAt.tendsto
+  have hm : IsLocalMax g 0 := by
+    change ∀ᶠ t : ℝ in 𝓝 0, F (x + t • v) ≤ F (x + (0 : ℝ) • v)
+    simpa only [zero_smul, add_zero] using ht.eventually (show ∀ᶠ y in 𝓝 x, F y ≤ F x from hmax)
+  have hd : HasDerivAt (fun t : ℝ => fderiv ℝ F (x + t • v) v)
+      (bilinearIteratedFDerivTwo ℝ F x v v) 0 := by
+    rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hF x v v]
+    simpa [Function.comp_def] using
+      (differentiable_fderiv_apply hF v (x + (0 : ℝ) • v)).hasFDerivAt.comp_hasDerivAt 0
+        (hasDerivAt_line x v 0)
+  rw [← hderiv] at hd
+  exact deriv_deriv_nonpos_of_isLocalMax (fun t => (hg t).differentiableAt) hm hd
+
+private theorem bilinearIteratedFDerivTwo_neg_apply {F : E → ℝ} (hF : ContDiff ℝ 2 F)
+    (x u v : E) :
+    bilinearIteratedFDerivTwo ℝ (fun y => -F y) x u v = -bilinearIteratedFDerivTwo ℝ F x u v := by
+  rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hF.neg x u v,
+    bilinearIteratedFDerivTwo_eq_fderiv_apply hF x u v]
+  have he : (fun y => fderiv ℝ (fun z => -F z) y v) = fun y => -(fderiv ℝ F y v) := by
+    funext y
+    exact congrArg (fun L : E →L[ℝ] ℝ => L v)
+      (hF.differentiable (by norm_num) y).hasFDerivAt.neg.fderiv
+  rw [he]
+  exact congrArg (fun L : E →L[ℝ] ℝ => L u)
+    (differentiable_fderiv_apply hF v x).hasFDerivAt.neg.fderiv
+
+end HessianSign
+
+/-- **Maximum principle, pointwise form**: `L F ≤ 0` at a local maximum of a `C²` function `F`,
+when `∇²φ` is positive definite at that point. -/
+theorem hessianInverseOperator_nonpos_of_isLocalMax {φ F : E → ℝ} (hφ : ContDiff ℝ 2 φ)
+    (V : E → ℝ) (hF : ContDiff ℝ 2 F) {x : E} (hmax : IsLocalMax F x)
+    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) :
+    hessianInverseOperator φ V F x ≤ 0 := by
+  let b := stdOrthonormalBasis ℝ E
+  have hC : (hessianMatrixIn (fun y => -F y) b x).PosSemidef := by
+    apply hessianMatrixIn_posSemidef b hF.neg.contDiffAt
+    intro v
+    rw [bilinearIteratedFDerivTwo_neg_apply hF x v v]
+    exact neg_nonneg.mpr (bilinearIteratedFDerivTwo_self_nonpos_of_isLocalMax hF hmax v)
+  have hA := inv_hessianMatrixIn_posSemidef b hφ hPD
+  rw [inv_hessianMatrixIn b hφ x hPD] at hA
+  have hsum := sum_entry_mul_nonneg hA hC
+  change 0 ≤ ∑ i, ∑ j, inverseHessianEntry φ b x i j *
+    bilinearIteratedFDerivTwo ℝ (fun y => -F y) x (b i) (b j) at hsum
+  simp_rw [bilinearIteratedFDerivTwo_neg_apply hF, mul_neg, Finset.sum_neg_distrib] at hsum
+  simpa only [hessianInverseOperator, nondivergenceOperator, hmax.fderiv_eq_zero,
+    zero_apply, mul_zero, Finset.sum_const_zero, sub_zero] using
+    neg_nonneg.mp hsum
+
+end LocalMaximum
 
 end Positivity
 
@@ -701,3 +803,26 @@ theorem sum_inverseHessianEntry_mul_mul_nonneg {E : Type*} [NormedAddCommGroup E
 end QuadraticForm
 
 end FunctionalInequalities.Analysis.BakryEmery
+
+namespace FunctionalInequalities.Analysis
+
+section StandardBasisLogDet
+
+open FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Stein
+
+variable {n : ℕ}
+local notation "E" => EuclideanSpace ℝ (Fin n)
+
+/-- `log det ∇²u` in the standard orthonormal basis equals the log-determinant of the coordinate Hessian matrix. -/
+theorem logDetHessian_std_eq_log_det_hessianMatrix {u : E → ℝ} (hu : ContDiff ℝ 2 u) (x : E) :
+    logDetHessian u (stdOrthonormalBasis ℝ E) x = Real.log (hessianMatrix u x).det := by
+  unfold logDetHessian
+  have hb : hessianMatrixIn u (EuclideanSpace.basisFun (Fin n) ℝ) x = hessianMatrix u x := rfl
+  rw [hessianMatrixIn_eq_toMatrix _ hu]
+  rw [LinearMap.det_toMatrix_eq_det_toMatrix (stdOrthonormalBasis ℝ E).toBasis
+    (EuclideanSpace.basisFun (Fin n) ℝ).toBasis]
+  rw [← hessianMatrixIn_eq_toMatrix _ hu, hb]
+
+end StandardBasisLogDet
+
+end FunctionalInequalities.Analysis

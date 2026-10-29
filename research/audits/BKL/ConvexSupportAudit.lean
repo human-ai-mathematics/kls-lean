@@ -1,15 +1,15 @@
-import FunctionalInequalities.Probability.ConvexSupport
+import FunctionalInequalities.Probability.Support.Convex
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 
-/-! Independent audit clients for the uniform open-halfspace mass bound (CEK arXiv:1304.0630v1 (54), probability
-specialization; Probability/ConvexSupport.lean). Merged verbatim from the reviewer receipts CEK54-UniformHalfspace-Independent
-(6ddf2368…: ScalarClients, PlaneClients, ZeroClients, UniformScalarClients, UniformPlaneClients, UniformZeroClients) and
-CEK54-PositiveNeighborhood-Independent (6926f5b0…: Clients), each in its own named section, re-pointed from the raw `Candidate`
-module to the production owner; contracts/axiom-enumeration tooling stays in the receipts. -/
+/-! Audit clients for the uniform open-halfspace mass bound (CEK arXiv:1304.0630v1 (54),
+probability specialization; `Probability/Support/Convex.lean`), each group in its own named
+section: ScalarClients, PlaneClients, ZeroClients, UniformScalarClients, UniformPlaneClients and
+UniformZeroClients for the uniform halfspace bound, and Clients for the mass of positive
+neighborhoods. -/
 
--- ===== reviewer module ScalarClients (CEK54-UniformHalfspace-Independent-20261009) =====
+-- ===== ScalarClients =====
 section ScalarClients
 set_option autoImplicit false
 noncomputable section
@@ -122,7 +122,7 @@ end CEK54Scalar
 end
 end ScalarClients
 
--- ===== reviewer module PlaneClients (CEK54-UniformHalfspace-Independent-20261009) =====
+-- ===== PlaneClients =====
 section PlaneClients
 set_option autoImplicit false
 noncomputable section
@@ -261,7 +261,7 @@ end CEK54Plane
 end
 end PlaneClients
 
--- ===== reviewer module ZeroClients (CEK54-UniformHalfspace-Independent-20261009) =====
+-- ===== ZeroClients =====
 section ZeroClients
 set_option autoImplicit false
 noncomputable section
@@ -304,7 +304,7 @@ end CEK54Zero
 end
 end ZeroClients
 
--- ===== reviewer module Clients (CEK54-PositiveNeighborhood-Independent-20261009) =====
+-- ===== Clients =====
 section NeighborhoodClients
 set_option autoImplicit false
 noncomputable section
@@ -371,7 +371,7 @@ end CEK54Neighborhood
 end
 end NeighborhoodClients
 
--- ===== reviewer module UniformScalarClients (CEK54-UniformHalfspace-Independent-20261009) =====
+-- ===== UniformScalarClients =====
 section UniformScalarClients
 set_option autoImplicit false
 noncomputable section
@@ -496,7 +496,7 @@ end UniformScalar
 end
 end UniformScalarClients
 
--- ===== reviewer module UniformPlaneClients (CEK54-UniformHalfspace-Independent-20261009) =====
+-- ===== UniformPlaneClients =====
 section UniformPlaneClients
 set_option autoImplicit false
 noncomputable section
@@ -568,7 +568,7 @@ end UniformPlane
 end
 end UniformPlaneClients
 
--- ===== reviewer module UniformZeroClients (CEK54-UniformHalfspace-Independent-20261009) =====
+-- ===== UniformZeroClients =====
 section UniformZeroClients
 set_option autoImplicit false
 noncomputable section

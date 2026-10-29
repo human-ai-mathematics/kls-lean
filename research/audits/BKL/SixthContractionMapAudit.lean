@@ -1,8 +1,9 @@
 import FunctionalInequalities.Probability.Moments
 
-/-! Independent audit clients for the third-moment contraction for an a.e.-measurable random vector (Probability/Moments section ThirdMomentContraction). Merged verbatim from the reviewer receipt `C69-Sixth-Contraction-Map-Independent-20261009 (receipt e16f27af…)` (modules Models, AEOnlyClient), each in its own named section, re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration tooling stays in the receipt. -/
+/-! Audit clients for the third-moment contraction for an a.e.-measurable random vector
+(`Probability/Moments` section ThirdMomentContraction), in the sections Models and AEOnlyClient. -/
 
--- ===== reviewer module Models (C69-Sixth-Contraction-Map-Independent-20261009 (receipt e16f27af…)) =====
+-- ===== Models =====
 section Models
 set_option autoImplicit false
 noncomputable section
@@ -120,7 +121,7 @@ end C69Models
 end
 end Models
 
--- ===== reviewer module AEOnlyClient (C69-Sixth-Contraction-Map-Independent-20261009 (receipt e16f27af…)) =====
+-- ===== AEOnlyClient =====
 section AEOnlyClient
 set_option autoImplicit false
 noncomputable section

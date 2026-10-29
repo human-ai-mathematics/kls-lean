@@ -25,7 +25,7 @@ the diffusion generator `ℒ f = Δ f - ⟪∇U, ∇f⟫` on a finite-dimensiona
   derivatives `∑ⱼ ∂ⱼf ∑ᵢ ∂ᵢ∂ᵢ∂ⱼf` produced by `Δ‖∇f‖²/2` and by `⟪∇f, ∇Δf⟫` cancel exactly, after
   the commutation `∂ⱼ∂ᵢ∂ᵢ f = ∂ᵢ∂ᵢ∂ⱼ f` (`fderiv_fderiv_fderiv_apply_comm`); the drift
   contributions `-⟪∇U, ∇‖∇f‖²⟫/2` and `+⟪∇f, ∇⟪∇U, ∇f⟫⟫` leave exactly `+D²U(∇f, ∇f)` after the
-  symmetry `∂ᵢ∂ⱼf = ∂ⱼ∂ᵢf` (route `B2`).
+  symmetry `∂ᵢ∂ⱼf = ∂ⱼ∂ᵢf`.
 * Γ₂ nonnegativity (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`): for convex `U`, `0 ≤ Γ₂(f)`, as a sum of
   squares plus a value of the positive semidefinite Hessian of `U`.
 
@@ -73,10 +73,6 @@ theorem convexOn_line {U : E → ℝ} (hU : ConvexOn ℝ Set.univ U) (x v : E) :
   simp only [smul_eq_mul] at hpt ⊢
   rw [hpt]
   exact h
-
-/-- The line `t ↦ x + t v` has derivative `v`. -/
-theorem hasDerivAt_line (x v : E) (t : ℝ) : HasDerivAt (fun t : ℝ => x + t • v) v t := by
-  simpa using ((hasDerivAt_id t).smul_const v).const_add x
 
 /-- The derivative of a `C¹` function along a line is the directional derivative. -/
 theorem deriv_line {U : E → ℝ} (hU : ContDiff ℝ 1 U) (x v : E) :

@@ -1,16 +1,16 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 
 /-!
 # Audit: centered range density for the standard Gaussian law
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.6 (support only: density of compact smooth diffusion images in centered
-`L²`). A real nonzero client: for the canonical Gaussian law `e^{−x²/2}` on `ℝ` (the regular potential `‖x‖²/2`), the class
-`g = id` has `‖g‖² = 1`, `g ≠ 0`, mean `0`, and lies in the closure of the compact smooth diffusion images, by the
-production theorem `centered_mem_closure_compactSmoothDiffusionImage`. Every premise is derived here. Not Brascamp–Lieb,
-A.6 or a moment-map client. Client body: strong-API candidate (`api-centered-range-gaussian-compiler-v6`, 527e35ef…),
-verbatim.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.6 (support only: density of compact smooth diffusion
+images in centered `L²`). A real nonzero client: for the canonical Gaussian law `e^{−x²/2}` on `ℝ`
+(the regular potential `‖x‖²/2`), the class `g = id` has `‖g‖² = 1`, `g ≠ 0`, mean `0`, and lies
+in the closure of the compact smooth diffusion images, by the library theorem
+`centered_mem_closure_compactSmoothDiffusionImage`. Every premise is derived here. Not
+Brascamp–Lieb, A.6 or a moment-map client.
 -/
 
 noncomputable section

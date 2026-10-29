@@ -17,7 +17,7 @@ open FunctionalInequalities.Probability.Stein
 namespace FunctionalInequalities.Analysis
 
 /-- The quadratic function with constant `c`, slope `b` and Hessian matrix `A` centred at `x₀`:
-`Q x = c + ⟪b, x − x₀⟫ + ½ ⟪x − x₀, A (x − x₀)⟫` (weak Letwin route, viscosity tests). -/
+`Q x = c + ⟪b, x − x₀⟫ + ½ ⟪x − x₀, A (x − x₀)⟫` (viscosity tests). -/
 def quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
     (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
   c + ⟪b, x - x₀⟫ + (1 / 2) * ⟪x - x₀, Matrix.toEuclideanLin A (x - x₀)⟫
@@ -50,7 +50,7 @@ theorem contDiff_quadraticAt_all {n : ℕ} {k : ℕ∞ω}
     (contDiff_const.mul ((contDiff_id.sub contDiff_const).inner ℝ
       (T.contDiff.comp (contDiff_id.sub contDiff_const))))
 
-/-- `quadraticAt A x₀ b c` is smooth (weak Letwin route). -/
+/-- `quadraticAt A x₀ b c` is smooth. -/
 theorem contDiff_quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n))
     (c : ℝ) : ContDiff ℝ 2 (quadraticAt A x₀ b c) := by
   exact contDiff_quadraticAt_all A x₀ b c
@@ -103,7 +103,8 @@ private lemma quadraticAt_second_apply {n : ℕ}
   simpa [fderivInnerCLM_apply, T, mul_add] using
     congrArg (fun L => L v) hh.fderiv
 
-private lemma quadraticAt_basis_entry {n : ℕ}
+/-- The `(i, j)` entry of a real matrix as an inner product of standard basis vectors. -/
+theorem inner_basisFun_toEuclideanLin {n : ℕ}
     (A : Matrix (Fin n) (Fin n) ℝ) (i j : Fin n) :
     ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
       Matrix.toEuclideanLin A (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ = A i j := by
@@ -112,7 +113,7 @@ private lemma quadraticAt_basis_entry {n : ℕ}
   simp [Matrix.mulVec, dotProduct]
 
 /-- The coordinate Hessian of `quadraticAt A x₀ b c` is `A` at every point when `A` is symmetric
-(weak Letwin route). -/
+. -/
 theorem hessianMatrix_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.IsHermitian)
     (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) (x : EuclideanSpace ℝ (Fin n)) :
     hessianMatrix (quadraticAt A x₀ b c) x = A := by
@@ -124,7 +125,7 @@ theorem hessianMatrix_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA
     (contDiff_quadraticAt A x₀ b c)]
   simp_rw [quadraticAt_fderiv_apply]
   rw [fderiv_const_add, quadraticAt_second_apply,
-    quadraticAt_basis_entry, quadraticAt_basis_entry]
+    inner_basisFun_toEuclideanLin, inner_basisFun_toEuclideanLin]
   have hs : A j i = A i j := by simpa using hA.apply i j
   rw [hs]
   ring

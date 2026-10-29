@@ -277,16 +277,6 @@ open Filter Topology Set
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-private theorem source_density_integrable {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) : Integrable ρ volume := by
-  apply (lintegral_ofReal_ne_top_iff_integrable hρ.measurable.aestronglyMeasurable
-    (ae_of_all _ fun y => hρ.nonneg y)).mp
-  have h : μ Set.univ = 1 := measure_univ
-  rw [← hρ.withDensity_eq, withDensity_apply _ MeasurableSet.univ] at h
-  have hi : (∫⁻ y : E, ENNReal.ofReal (ρ y)) = 1 := by simpa only [Measure.restrict_univ] using h
-  rw [hi]
-  simp
-
 private theorem density_integral (g : E → ℝ) (hg : Measurable g) (hg0 : ∀ y, 0 ≤ g y)
     (f : BoundedContinuousFunction E ℝ) : (∫ y, f y ∂(volume.withDensity (fun y => ENNReal.ofReal (g y)))) =
       ∫ y : E, g y * f y := by
@@ -309,7 +299,7 @@ private theorem bounded_density_integrable {g : E → ℝ} (hg : Integrable g vo
 theorem smoothedLaw_integral_bounded_tendsto {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) (f : BoundedContinuousFunction E ℝ) :
     Tendsto (fun s : ℝ => ∫ y, f y ∂(smoothedLaw μ s)) atTop (𝓝 (∫ y, f y ∂μ)) := by
-  have hρi := source_density_integrable hρ
+  have hρi := source_integrable hρ
   have hlim : Tendsto (fun s : ℝ => ‖f‖ * ∫ y : E, |normalizedDensity ρ s y - ρ y|)
       atTop (𝓝 (0 : ℝ)) := by simpa only [mul_zero] using (normalizedDensity_tendsto_L1 hρ).const_mul ‖f‖
   apply tendsto_iff_norm_sub_tendsto_zero.2

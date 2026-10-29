@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.Newtonian.Truncation
-import FunctionalInequalities.Analysis.Newtonian.Harmonic
+import FunctionalInequalities.Analysis.Newtonian.Truncation.Basic
+import FunctionalInequalities.Analysis.Newtonian.Kernel.Harmonic
 import FunctionalInequalities.Analysis.IteratedDerivative.Affine
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
 

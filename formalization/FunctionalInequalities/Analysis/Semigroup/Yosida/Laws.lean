@@ -14,12 +14,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis.Semigroup
 
-/-! ## `Y1`–`Y5` — the Yosida approximation of `T†T` -/
+/-! ## The Yosida approximation of `T†T` -/
 
 variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
-/-- `Y1`: the Yosida approximation is a nonnegative operator.  Indeed
+/-- The Yosida approximation is a nonnegative operator.  Indeed
 `⟪L_s f, f⟫ = s⁻¹ (⟪f, f⟫ - ⟪J_s f, f⟫)` and `⟪J_s f, f⟫ ≤ ‖J_s f‖ ‖f‖ ≤ ‖f‖ ^ 2 = ⟪f, f⟫` because
 `J_s` is a contraction. -/
 theorem yosida_nonneg (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs : 0 < s) (f : H₀) :
@@ -33,13 +33,13 @@ theorem yosida_nonneg (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (
   rw [yosida_apply, real_inner_smul_left, inner_sub_left]
   exact mul_nonneg (inv_nonneg.mpr hs.le) (by linarith)
 
-/-- `Y2`: the Yosida approximation is symmetric, because `J_s` is. -/
+/-- The Yosida approximation is symmetric, because `J_s` is. -/
 theorem yosida_symm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs : 0 < s) (f g : H₀) :
     ⟪yosida T hT hs f, g⟫ = ⟪f, yosida T hT hs g⟫ := by
   rw [yosida_apply, yosida_apply, real_inner_smul_left, real_inner_smul_right, inner_sub_left,
     inner_sub_right, resolventCLM_symm]
 
-/-- `Y3`: the Yosida family commutes, `L_s L_r = L_r L_s`.  Both sides expand to
+/-- The Yosida family commutes, `L_s L_r = L_r L_s`.  Both sides expand to
 `s⁻¹ r⁻¹ (1 - J_s - J_r + J_s J_r)`, and `J_s J_r = J_r J_s` is resolvent commutation
 (`resolventCLM_comp_comm`). -/
 theorem yosida_comp_comm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s r : ℝ} (hs : 0 < s)
@@ -51,7 +51,7 @@ theorem yosida_comp_comm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s r : �
   simp only [ContinuousLinearMap.comp_apply, yosida_apply, map_smul, map_sub, hcomm]
   module
 
-/-- `Y4`: on `D(T†T)` the Yosida approximation is `L_s = J_s T†T`.  This is the resolvent defect identity
+/-- On `D(T†T)` the Yosida approximation is `L_s = J_s T†T`.  This is the resolvent defect identity
 (`sub_resolvent_eq_smul`) divided by `s`. -/
 theorem yosida_apply_eq_resolventCLM_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {s : ℝ} (hs : 0 < s) (f : (adjointComp T).domain) :
@@ -59,7 +59,8 @@ theorem yosida_apply_eq_resolventCLM_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (h
   rw [yosida_apply, sub_resolvent_eq_smul T hT hd hs f, smul_smul, inv_mul_cancel₀ hs.ne',
     one_smul]
 
-/-- `Y5`: on `D(T†T)` the Yosida approximation converges strongly to `T†T` as `s ↓ 0`.  By `Y4`
+/-- On `D(T†T)` the Yosida approximation converges strongly to `T†T` as `s ↓ 0`.  By
+`yosida_apply_eq_resolventCLM_adjointComp`
 the difference is `J_s (T†T f) - T†T f`, which strong resolvent convergence
 (`exists_delta_norm_resolventCLM_sub_lt`) makes small. -/
 theorem exists_delta_norm_yosida_sub_adjointComp_lt (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)

@@ -575,9 +575,11 @@ $\operatorname{Var}(\langle MX,X\rangle)\le2\E|\nabla\langle MX,X\rangle|^2$
 for symmetric $M$, and $\psi_n\le C(\log n)^{1/4}$ for $n\ge2$
 \cite{Letwin2026QuadraticKLS}. In the convention
 $\tfrac14\le\psi_\mu^2/C_P(\mu)\le\pi$, the latter yields
-$C_P\le C'\sqrt{\log n}$, not a dimension-free bound. Chen--Klartag's bound is not Lean-certified here. For Letwin's Theorem~1.2 only the compact
-counterpart is certified (Theorem~\ref{thm:letwin-compact-quadratic-bound}), not the noncompact
-statement or the bound on $\psi_n$; thin-shell control alone is not a proof of KLS.
+$C_P\le C'\sqrt{\log n}$, not a dimension-free bound. Chen--Klartag's bound is not Lean-certified here. For Letwin's Theorem~1.2 the compact
+counterpart is certified (Theorem~\ref{thm:letwin-compact-quadratic-bound}); its separate
+noncompact constant-eight extension is also formalized locally. The bound on $\psi_n$ is
+now formalized through the stronger BKL result (Theorem~\ref{thm:letwin-log-quarter}),
+using a different proof route. Thin-shell control alone is not a proof of KLS.
 
 \paragraph{Spectral and screened localization.}
 Upstream restart de-weighting and
@@ -607,3 +609,32 @@ This rules out a degree-two polynomial dual refuter within the stated all-frame 
 it is not a full-$L^2$ gap bound or a solution of \cref{q:conditional-fiber-frame}.
 It is a candidate for a separate Lean statement audit after defining the simplex law,
 root frame and finite-dimensional polynomial quotient.
+
+\section{A downstream consequence of the BKL bound}
+
+\begin{theorem}[Letwin's logarithmic-quarter bound, via BKL]
+  \label{thm:letwin-log-quarter}
+  \lean{FunctionalInequalities.KLS.LogConcave.exists_logQuarter_isoperimetricBound,
+        Solutions.ThmLetwinIsoperimetricBound.certificate}
+  \leanok
+  \uses{thm:bkl-poincare}
+  There is one $C>0$ such that, for every integer $n\ge2$,
+  \[
+    \sup_{\substack{\mu\text{ isotropic log-concave}\\
+                     \text{probability law on }\mathbb R^n}}
+         \psi_\mu \le C(\log n)^{1/4}.
+  \]
+  Here $\psi_\mu$ is the literature inverse Cheeger scale. This is the exact conclusion
+  of Letwin, arXiv:2607.24164v1, Theorem~1.1, proved through the stronger BKL result.
+  No smoothness, compactness or uniform-convexity premise is added. The paper's original
+  third-moment argument and traced Klartag bound remain unformalized. The registered
+  paper-target certificate covers this main-theorem conclusion through the alternative route;
+  it does not certify every supporting statement or the original proof.
+\end{theorem}
+\begin{proof}
+  \leanok
+  The BKL bound gives a universal Poincar\'e bound $A$. The literature
+  Cheeger--Buser comparison gives $\psi_\mu^2\le\pi A$, so
+  $\psi_\mu\le B=1+\pi A$. Since $\log n\ge\log2>0$,
+  choose $C=B/(\log2)^{1/4}$ and take the supremum over the laws.
+\end{proof}

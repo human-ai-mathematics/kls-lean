@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoL2CompletionCompensator
 
 /-!
@@ -327,7 +330,7 @@ lemma stochasticIntegralBrownianLp_mem_lpMeas (t : ℝ) :
     stochasticIntegralBrownianLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t
       ∈ MeasureTheory.lpMeas ℝ ℝ
         (ℱ t) 2 P := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   have hcs : CauchySeq (fun n => masterLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t n) := by
     rcases le_or_gt 0 t with ht | ht
     · exact masterLp_cauchySeq W ℱ hℱ H h_meas h_progMeas h_sq_int_global ht
@@ -383,7 +386,7 @@ lemma masterApprox_tendsto_L2 {t : ℝ} (ht_nn : 0 ≤ t) :
         (fun ω => simpleIntegral W (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n) t ω
           - stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas h_sq_int_global t ω) 2 P)
       Filter.atTop (nhds 0) := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   set Flp := stochasticIntegralBrownianLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t with hFlp
   have h1 : Filter.Tendsto (fun n => masterLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t n)
       Filter.atTop (nhds Flp) :=
@@ -477,7 +480,7 @@ lemma masterApprox_evalNorm_tendsto {T : ℝ} (hT : 0 < T) :
           ∂volume ∂P)
       Filter.atTop
       (nhds (∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖H ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P)) := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   set ν : MeasureTheory.Measure ℝ := volume.restrict (Set.Icc (0 : ℝ) T) with hν
   set Hp : Ω × ℝ → ℝ := fun p => H p.1 p.2 with hHp
   set Gp : ℕ → Ω × ℝ → ℝ := fun n p =>

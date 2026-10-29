@@ -8,6 +8,33 @@ import literature
 
 
 class LiteratureTests(unittest.TestCase):
+    def test_background_and_later_citations_are_not_presented_as_primary_papers(self):
+        catalog = {'papers': [{'authors': 'Original authors', 'date': '1995',
+                              'additional_sources': [
+                                  {'url': 'https://example.org/notes', 'label': 'Later lecture notes',
+                                   'role': 'background'},
+                                  {'url': 'https://example.org/citation', 'label': 'Later discussion',
+                                   'role': 'secondary citation'}]}]}
+        text = '\n'.join(literature.supplementary_references(catalog))
+        self.assertIn('[Later lecture notes](https://example.org/notes) (background)', text)
+        self.assertIn('[Later discussion](https://example.org/citation) (secondary citation)', text)
+        self.assertNotIn('additional primary source', text)
+
+    def test_supplementary_references_require_an_explicit_source_role(self):
+        catalog = json.loads((Path(__file__).parent / 'literature.json').read_text())
+        records = {i['node']: {'state': 'formalized'} for p in catalog['papers'] for i in p['local_results']}
+        paper = next(p for p in catalog['papers'] if p.get('additional_sources'))
+        paper['additional_sources'][0]['role'] = 'primary by default'
+        with self.assertRaisesRegex(ValueError, 'source role'):
+            literature.validate(catalog, records)
+
+    def test_url_only_links_in_an_older_selected_index_stay_unclassified(self):
+        text = '\n'.join(literature.supplementary_references({'papers': [
+            {'authors': 'Authors', 'date': '1995',
+             'additional_sources': ['https://example.org/notes']}]}))
+        self.assertIn('(unclassified)', text)
+        self.assertNotIn('additional primary source', text)
+
     def test_published_result_is_not_local_formalization(self):
         paper = {'publication': 'Journal article', 'local_results': []}
         self.assertEqual(literature.coverage(paper, {}), 'pending')

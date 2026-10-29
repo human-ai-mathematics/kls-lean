@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
-import FunctionalInequalities.Analysis.Newtonian.Potential
+import FunctionalInequalities.Analysis.Newtonian.Potential.Basic
 import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
 import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
 import FunctionalInequalities.Analysis.Tensor.Coefficients

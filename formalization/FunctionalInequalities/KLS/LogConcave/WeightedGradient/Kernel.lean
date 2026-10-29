@@ -18,7 +18,7 @@ supported weights. Elements of `L²(ν)` are locally integrable for `m`, because
 below on compact sets. With `Energy.Euclidean.exists_ae_eq_const_of_integral_mul_fderiv_eq_zero`
 this shows that `T̄ h = 0` forces `h` to be the constant `∫ h dν`
 (`eq_const_mean_of_closedWeightedOperator_eq_zero`); the converse and the resulting identification
-of `ker T̄` with the constants are in `HeatSemigroup/Curvature.lean`.
+of `ker T̄` with the constants are in `HeatSemigroup/SpectralGap/Curvature.lean`.
 -/
 
 noncomputable section
@@ -331,7 +331,7 @@ theorem integral_mul_fderiv_eq_neg_integral_mul_inner_gradient {g φ : V → ℝ
         ∫ x, φ x * fderiv ℝ g x w ∂m := by
     apply integral_congr_ae
     filter_upwards [] with x
-    rw [Energy.Euclidean.inner_gradient_eq_fderiv_apply]
+    rw [inner_gradient_left]
   linarith
 
 /-- **Weak gradient of an element of the closed domain**: for `h ∈ D(T̄)`, smooth compactly

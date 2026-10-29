@@ -1,0 +1,1173 @@
+{
+ "version": 1,
+ "review_date": "2026-10-29",
+ "status": "source/interface accepted (build/history/2026-10-29-letwin-style-20261029T091203Z/source-interface-acceptance.json); final verification result governed by build/history/2026-10-29-letwin-style-20261029T091203Z/verification.json, full acceptance only when it reports status passed. Not staged or committed.",
+ "spec": "research/workflow.md and research/naming.md (classification, placement, migration checks). Mathematical scope: supporting infrastructure for Letwin arXiv:2607.24164v1 Lemma 2.2, Theorem 2.5 and their source consumers, and CEK arXiv:1304.0630v1 Theorem 2; no mathematical change.",
+ "scope": "Readability maintenance of six Lean files supporting Letwin arXiv:2607.24164v1 Lemma 2.2, Theorem 2.5 and their source consumers, and CEK arXiv:1304.0630v1 Theorem 2. No mathematical progress, hypothesis, constant, dimension, proof-body, certificate or status change.",
+ "literature_targets": [
+  "Letwin arXiv:2607.24164v1 Lemma 2.2 and Theorem 2.5 (KLS/Letwin/MomentMap.lean, KLS/Letwin/SteinKernel.lean)",
+  "CEK arXiv:1304.0630v1 Theorem 2 (KLS/CEK/Uniqueness.lean)"
+ ],
+ "module_migrations": [],
+ "declaration_moves": [
+  {
+   "name": "FunctionalInequalities.Analysis.bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef",
+   "old_module": "FunctionalInequalities.KLS.Letwin.MomentCalculus",
+   "new_module": "FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates",
+   "placement": "section PositiveDefinite in the existing FunctionalInequalities.Analysis region; variable {n : ℕ}; local notation E",
+   "reason": "generic coordinate-Hessian positivity bridge; owner of hessianMatrix"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.logDetHessian_std_eq_log_det_hessianMatrix",
+   "old_module": "FunctionalInequalities.KLS.Letwin.MomentCalculus",
+   "new_module": "FunctionalInequalities.Analysis.BakryEmery.MongeAmpere",
+   "placement": "namespace FunctionalInequalities.Analysis, section StandardBasisLogDet at the end of the file, outside the generic-E BakryEmery context; opens BakryEmery and Probability.Stein; variable {n : ℕ}; local notation E",
+   "reason": "owner of hessianMatrixIn, logDetHessian and hessianMatrixIn_eq_toMatrix"
+  }
+ ],
+ "declaration_counts": {
+  "total_existing": 101,
+  "public_api": 64,
+  "private": 35,
+  "generated_internal_equation_theorems": 2,
+  "note": "public_api matches the compiler API index (build/api-index public-api.json) for these six modules; the two generated equation theorems are non-private but not public API"
+ },
+ "declarations": [
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.contDiff_hessianMatrixIn",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.contDiff_inverseHessianEntry",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.density_hessianInverseOperator_flux",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.density_inverseHessian_divergence",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.det_hessianMatrixIn_ne_zero",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_hessianMatrixIn_apply",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_eq_sum",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_eq_trace",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_of_mongeAmpere",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_mongeAmpere_first_lhs",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_mongeAmpere_first_rhs",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_nonpos_of_isLocalMax",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.hessianMatrixIn",
+   "visibility": "public",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.hessianMatrixIn.eq_1",
+   "visibility": "internal",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged",
+   "generated": "compiler-generated equation theorem of the definition; non-private but not part of the public API"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.hessianMatrixIn_eq_toMatrix",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.hessianMatrixIn_posSemidef",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.inv_hessianMatrixIn",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.inv_hessianMatrixIn_posSemidef",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry_mul_hessianMatrixIn",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessian_divergence",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.logDetHessian",
+   "visibility": "public",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative_on_range",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative_coordinate",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative_on_range",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.posSemidef_hessian_conj_hessian",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.posSemidef_hessian_conj_hessian_on_range",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.posSemidef_inverseHessian_third_gram",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_mul_nonneg",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": "PositiveDefinite",
+   "change": "moved to lower owner; full name, type and proof body unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.exists_regular_smooth_moment_calculus",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.exists_regular_smooth_moment_stein_kernel",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": "RegularClass",
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.exists_regular_smooth_moment_stein_kernel_L2",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": "RegularClass",
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.hessianMatrix_add_of_contDiffAt",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.hessianMatrix_const_fun",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.hessianMatrix_const_mul_of_contDiffAt",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.hessianMatrix_neg_of_contDiffAt",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.hessianMatrix_sub_of_contDiffAt",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.logDetHessian_std_eq_log_det_hessianMatrix",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": "StandardBasisLogDet",
+   "change": "moved to lower owner; full name, type and proof body unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.KLS.CEK.exists_eq_translate_of_ofPotential_eq_of_essentiallyContinuous",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "section": "EssentiallyContinuousPotential",
+   "change": "context consolidated; placed in named section; statement and proof unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.KLS.CEK.exists_eq_translate_of_ofPotential_eq_of_ne_top",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "section": "FinitePotential",
+   "change": "context consolidated; placed in named section; statement and proof unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.KLS.CEK.exists_essentiallyContinuous_ofPotential_eq_unique",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "section": "EssentiallyContinuousPotential",
+   "change": "context consolidated; placed in named section; statement and proof unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_centered_regular_potential",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_calculus_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_trace_le_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_stein_kernel_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_moment_potential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_ofPotential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_moment_potential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_ofPotential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_moment_potential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_ofPotential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smooth_of_moment_potential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smooth_of_ofPotential_of_bounded_open_convex",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.chain_coordinate",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.continuous_gradientDerivativeMatrix",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.gradientDerivativeMatrix",
+   "visibility": "public",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessianMatrix",
+   "visibility": "public",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessianMatrix.eq_1",
+   "visibility": "internal",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged",
+   "generated": "compiler-generated equation theorem of the definition; non-private but not part of the public API"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_comp_affine_at",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_eq_gradientDerivativeMatrix",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessian_entry_continuous",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.Stein.hessian_eq_inner_fderiv_gradient",
+   "visibility": "public",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_neg_apply",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_self_nonpos_of_isLocalMax",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_nonpos_of_isLocalMax",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_nonpos_of_isLocalMax._simp_1_1",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_nonpos_of_isLocalMax._simp_1_2",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_nonpos_of_isLocalMax._simp_1_3",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_exp_neg_apply",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.BakryEmery.third_cyclic",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.KLS.CEK.convexPotential_essentiallyContinuous_sub_const",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "section": "EssentiallyContinuousPotential",
+   "change": "context consolidated; placed in named section; statement and proof unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.KLS.CEK.exists_normalized_of_ofPotential_eq",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "section": "FinitePotential",
+   "change": "context consolidated; placed in named section; statement and proof unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.KLS.CEK.sub_coe_add_coe",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "section": null,
+   "change": "placed before the E structure block; redundant omit removed; statement and proof unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis._aux_FunctionalInequalities_KLS_Letwin_MomentCalculus___macroRules__private_FunctionalInequalities_KLS_Letwin_MomentCalculus_0_FunctionalInequalities_Analysis_termE_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis._aux_FunctionalInequalities_KLS_Letwin_MomentCalculus___unexpand_EuclideanSpace_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.termE",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure._aux_FunctionalInequalities_KLS_Letwin_MomentMap___macroRules__private_FunctionalInequalities_KLS_Letwin_MomentMap_0_FunctionalInequalities_Probability_MomentMeasure_termE_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure._aux_FunctionalInequalities_KLS_Letwin_MomentMap___unexpand_EuclideanSpace_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.bilinearIteratedFDerivTwo_le_of_lipschitzWith_gradient",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.bilinearIteratedFDerivTwo_le_of_smul_one_sub_posSemidef",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_ae_norm_le_of_bounded",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "block hoisted verbatim before the source section; own binders retained"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.exists_eq_coe_of_ofPotential_eq_of_bounded",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "block hoisted verbatim before the source section; own binders retained"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.gradient_comp_add_right",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "Translation",
+   "change": "block hoisted verbatim before the source section; own binders retained"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.hessianMatrix_comp_add_right",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "Translation",
+   "change": "block hoisted verbatim before the source section; own binders retained"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_potential",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "block hoisted verbatim before the source section; own binders retained"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smooth_moment_potential_translate",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": "Translation",
+   "change": "block hoisted verbatim before the source section; own binders retained"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smul_one_sub_hessianMatrix_posSemidef",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.smul_one_sub_hessianMatrix_posSemidef._simp_1_1",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.termE",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis._aux_FunctionalInequalities_KLS_Letwin_SteinKernel___macroRules__private_FunctionalInequalities_KLS_Letwin_SteinKernel_0_FunctionalInequalities_Analysis_termE_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis._aux_FunctionalInequalities_KLS_Letwin_SteinKernel___unexpand_EuclideanSpace_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.sharp_smooth_stein_of_trace_bound",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Analysis.termE",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure._aux_FunctionalInequalities_KLS_Letwin_SteinKernel___macroRules__private_FunctionalInequalities_KLS_Letwin_SteinKernel_0_FunctionalInequalities_Probability_MomentMeasure_termE_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure._aux_FunctionalInequalities_KLS_Letwin_SteinKernel___unexpand_EuclideanSpace_1",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.stein_kernel_of_smooth_potential",
+   "visibility": "private",
+   "kind": "theorem",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": "BoundedOpenConvexSource",
+   "change": "source-class prefix declared once as section variables; theorem-local include; telescope unchanged"
+  },
+  {
+   "name": "FunctionalInequalities.Probability.MomentMeasure.termE",
+   "visibility": "private",
+   "kind": "def",
+   "old_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "new_source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "section": null,
+   "change": "unchanged"
+  }
+ ],
+ "added_private_constants": [
+  {
+   "name": "_private.FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates.0.FunctionalInequalities.Analysis._aux_FunctionalInequalities_Analysis_BakryEmery_Hessian_Coordinates___macroRules__private_FunctionalInequalities_Analysis_BakryEmery_Hessian_Coordinates_0_FunctionalInequalities_Analysis_termE_1",
+   "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "visibility": "private",
+   "note": "auxiliary constant generated by the new section-local `local notation \"E\"` (same machinery as the existing per-file notations)"
+  },
+  {
+   "name": "_private.FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates.0.FunctionalInequalities.Analysis._aux_FunctionalInequalities_Analysis_BakryEmery_Hessian_Coordinates___unexpand_EuclideanSpace_1",
+   "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "visibility": "private",
+   "note": "auxiliary constant generated by the new section-local `local notation \"E\"` (same machinery as the existing per-file notations)"
+  },
+  {
+   "name": "_private.FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates.0.FunctionalInequalities.Analysis.termE",
+   "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "visibility": "private",
+   "note": "auxiliary constant generated by the new section-local `local notation \"E\"` (same machinery as the existing per-file notations)"
+  },
+  {
+   "name": "_private.FunctionalInequalities.Analysis.BakryEmery.MongeAmpere.0.FunctionalInequalities.Analysis._aux_FunctionalInequalities_Analysis_BakryEmery_MongeAmpere___macroRules__private_FunctionalInequalities_Analysis_BakryEmery_MongeAmpere_0_FunctionalInequalities_Analysis_termE_1",
+   "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "visibility": "private",
+   "note": "auxiliary constant generated by the new section-local `local notation \"E\"` (same machinery as the existing per-file notations)"
+  },
+  {
+   "name": "_private.FunctionalInequalities.Analysis.BakryEmery.MongeAmpere.0.FunctionalInequalities.Analysis._aux_FunctionalInequalities_Analysis_BakryEmery_MongeAmpere___unexpand_EuclideanSpace_1",
+   "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "visibility": "private",
+   "note": "auxiliary constant generated by the new section-local `local notation \"E\"` (same machinery as the existing per-file notations)"
+  },
+  {
+   "name": "_private.FunctionalInequalities.Analysis.BakryEmery.MongeAmpere.0.FunctionalInequalities.Analysis.termE",
+   "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "visibility": "private",
+   "note": "auxiliary constant generated by the new section-local `local notation \"E\"` (same machinery as the existing per-file notations)"
+  }
+ ],
+ "context_changes": [
+  {
+   "source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "kind": "context",
+   "note": "private given-potential calculus helper, section Translation and the two bounded-support/coercion helpers hoisted verbatim before one named section BoundedOpenConvexSource (no forward dependency: their code references none of the nine public source theorems); the section declares (hn) {K U} (hKb) (hKo) (hKc) (hKne) (hU) (hKU) {V} (hV) (hVc) (μ) (hμ) (hiso) once in the original order and binder kinds; each public theorem has its own include ... in; φ/ψ binders stay in the headers"
+  },
+  {
+   "source": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "kind": "context",
+   "note": "section BoundedOpenConvexSource in namespace Probability.MomentMeasure with the same variable block and per-declaration include ... in, covering the private stein_kernel_of_smooth_potential (already full prefix) and the three public Stein-kernel producers; sharp_smooth_stein_of_trace_bound and section RegularClass unchanged"
+  },
+  {
+   "source": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "kind": "context",
+   "note": "one noncomputable section, namespace, open set and E-structure variable block; the scalar EReal helper sub_coe_add_coe precedes the E block (its redundant omit removed); named sections FinitePotential and EssentiallyContinuousPotential; relative order unchanged"
+  },
+  {
+   "source": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "kind": "removal",
+   "note": "the two generic bridges deleted after the move; no alias or wrapper"
+  }
+ ],
+ "variable_block_note": "Section variables spell out EuclideanSpace ℝ (Fin n) instead of these files' local notation E => EuclideanSpace ℝ (Fin n): under Lean 4.33, this E (a notation over the section variable n) in these section-variable types was observed in this batch to elaborate the affected declarations to sorry (attempts and a minimal reproduction in the task history); no broader claim about notations is made. The expansion is the same term; headers and proofs keep E.",
+ "namespace_review": {
+  "decision": "review only; no public rename or namespace migration in this batch",
+  "finding": "moment-potential existence/normalization/transport conclusions live in Probability.MomentMeasure, Stein conclusions may belong to Probability.Stein, generic Hessian calculus to Analysis; the regular/literal distinction and existing names are retained. A future producer migration needs its own declaration-by-declaration ownership review."
+ },
+ "imports": "none changed (LinearMap.det_toMatrix_eq_det_toMatrix is transitively available in MongeAmpere; MomentCalculus keeps its now-redundant Mathlib.LinearAlgebra.Determinant import)",
+ "records_updated": [
+  "HANDOFF.md",
+  "research/progress/source-layout-review.md",
+  "research/tasks.json (evidence-pin refresh of the eleven Coordinates pins; see evidence_pins)"
+ ],
+ "files_created": [
+  "research/progress/2026-10-29-letwin-readability-map.json"
+ ],
+ "generated_views": "formalization/API.md, the module inventory and the research/progress generated views are regenerated by the root task with the original generators, not edited by hand in this batch.",
+ "evidence_pins": {
+  "file": "research/tasks.json",
+  "rule": "a pin was refreshed only when its old sha256 equalled the task before-snapshot hash of that path; only sha256 values changed",
+  "refreshed": [
+   {
+    "node": "lem:letwin-weak-hessian-identification",
+    "evidence_index": 0,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:letwin-weak-inverse-hessian-integrability",
+    "evidence_index": 1,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:letwin-weak-generator-symmetry",
+    "evidence_index": 3,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:hessian-entry-measurable-bounded",
+    "evidence_index": 0,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:hessian-entry-local-l2",
+    "evidence_index": 0,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:letwin-cutoff-hessian-difference-energy",
+    "evidence_index": 2,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:hessian-adjugate-weak-derivative",
+    "evidence_index": 2,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:weak-inverse-hessian-of-logdet",
+    "evidence_index": 14,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:letwin-regular-moment-weak-inverse",
+    "evidence_index": 19,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:c1-gradient-chain",
+    "evidence_index": 0,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   },
+   {
+    "node": "lem:hessian-action-l2",
+    "evidence_index": 0,
+    "status": "available",
+    "old_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+    "new_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+   }
+  ],
+  "semantic_review": "All eleven pins name Analysis/BakryEmery/Hessian/Coordinates.lean. Its source change only appends section PositiveDefinite with the moved FunctionalInequalities.Analysis.bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef (full name, type and proof unchanged) and the three private notation constants of its local E; every pre-existing declaration of the module is Expr.equal to its pre-batch form. The evidence each node relied on is therefore unchanged and the moved bridge is added evidence only. No node status, assumption, mathematics class, scope, certificate or lemma-map relation is changed.",
+  "paths_without_pins": [
+   "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+  ],
+  "state": "source/interface accepted with the batch; final verification result governed by the task verification.json"
+ },
+ "source_hashes": [
+  {
+   "path": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+   "before_sha256": "63aebb3afd8d149c894789e695a65eefbf759c775680d2865d174f3d984536ef",
+   "after_sha256": "8bc18c19b0a690bf5bbc6663d67e3588515db43d77ac745846324c733d3c3b5b"
+  },
+  {
+   "path": "formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean",
+   "before_sha256": "ffc030f811398bbb50dae8eb97980b1f595e00776120d062a8659afaa3f185b5",
+   "after_sha256": "fa637fc580346db1aad3428cbfd29b963d29261279eae9848b8cca3a812af91e"
+  },
+  {
+   "path": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+   "before_sha256": "4d365caa52c365bbe752946e9e4aaf5d778e3d43ddfdf06c813bb384a59d879e",
+   "after_sha256": "82eefa766b8cccee06d5c713a4b14122e45fdb4a8ba462ab94b9bf306ce054fb"
+  },
+  {
+   "path": "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+   "before_sha256": "42391a284117ca37f7e43a47e114fa2e1af1e07b94e76273880d142f5974a70b",
+   "after_sha256": "ab1728069da4ad7044310d16725d833cb88fd1c83f8235676e1f2e4b400519ee"
+  },
+  {
+   "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+   "before_sha256": "3bcc422cb280a102f894ccaa77ab72b98b8063aff02a56aef65b28b4c4344cb1",
+   "after_sha256": "d7f1642d5754a0619752c53a0db1310b622da53baf3710d9cd11a78218905ab4"
+  },
+  {
+   "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+   "before_sha256": "68afa0e19361d45faec7bf592a49b0eeab220566b21a724d6bd4140d6414e880",
+   "after_sha256": "802d9518ab34055d5255fa895e3f615cada36fa7ae633c3901eac35b33ecfbef"
+  }
+ ],
+ "verification_state": {
+  "baseline": "build/history/2026-10-29-letwin-style-20261029T091203Z/before/ (snapshot 13aa77fc…, 1219 frozen compiled artifacts)",
+  "worker": "build/history/2026-10-29-letwin-style-20261029T091203Z/claude/REPORT.md and CHANGES.json (supporting evidence only)",
+  "source_interface": "build/history/2026-10-29-letwin-style-20261029T091203Z/source-interface-acceptance.json (accepted)",
+  "final": "build/history/2026-10-29-letwin-style-20261029T091203Z/verification.json governs the final result; full acceptance only when it reports status passed"
+ },
+ "source_interface_acceptance": {
+  "record": "build/history/2026-10-29-letwin-style-20261029T091203Z/source-interface-acceptance.json",
+  "production_build": "lake --wfail build, exit code 0",
+  "replay_scope_build": "1127 modules / 1219 compiled artifacts, exit code 0",
+  "strict_expr_equal": {
+   "public_compared": 7086,
+   "existing_local_compared": 12557,
+   "existing_interface_differences": 0,
+   "owner_moves": [
+    "FunctionalInequalities.Analysis.bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef",
+    "FunctionalInequalities.Analysis.logDetHessian_std_eq_log_det_hessianMatrix"
+   ],
+   "reviewed_added_private_constants": 6
+  },
+  "proof_and_definition_bodies": {
+   "compared": 83,
+   "differences": 0
+  },
+  "frozen_before_manifest_drift": 0
+ }
+}

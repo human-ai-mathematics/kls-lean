@@ -8,7 +8,9 @@ import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 Read `KLS/LogConcave/Density/AbsoluteContinuity.lean` for intrinsic absolute continuity, then
 `Poincare/LocalSlope/SmoothTestComparison.lean` for the test-class comparison. This module removes the explicit absolute-continuity premise
 from the comparison when the probability law is compact-set log-concave. It also supplies the
-gradient-form optimum `Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave`.
+gradient-form optimum `Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave`
+and, for an absolutely continuous law, the ambient unit-energy form
+`localSlope_constant_eq_ambient_gradient` of Letwin arXiv:2607.24164v1, Equation (1.1).
 Ambient singularity,
 zero-dimensional affine support, and infinite optimal constants are included. No dimension-free
 bound, Cheeger energy identification, or raw/core agreement is asserted.
@@ -49,6 +51,30 @@ theorem intrinsicSmooth_constant_eq_localSlope
   Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope μ Measure.addHaar
     (hμ.intrinsic_absolutelyContinuous Measure.addHaar)
 
+open ProbabilityTheory in
+/-- **Letwin's Poincaré constant** (arXiv:2607.24164v1, Equation (1.1)). For a log-concave law
+absolutely continuous with respect to a Haar measure `m` of the ambient space, the literature
+optimum is the infimum of the finite `C ≥ 0` such that `Var_μ g ≤ C E_μ |∇g|²` for every locally
+Lipschitz `g : E → ℝ` with `E_μ |∇g|² ≤ 1`. Here `∇g` is the Fréchet gradient, defined `μ`-a.e.
+by Rademacher's theorem, the variance is the extended variance, and no `L²` premise is imposed on
+`g`. With `m = volume` on `EuclideanSpace ℝ (Fin n)` this is the paper's `C_P(μ)` for every
+log-concave `μ` with a density. -/
+theorem localSlope_constant_eq_ambient_gradient {μ : ProbabilityMeasure E}
+    (hμ : KLS.LogConcave μ) (m : Measure E) [Measure.IsAddHaarMeasure m]
+    (hac : (μ : Measure E) ≪ m) :
+    Poincare.LocalSlope.Intrinsic.constant μ =
+      ⨅ C : {C : NNReal // ∀ g : E → ℝ, LocallyLipschitz g →
+          ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(μ : Measure E) ≤ 1 →
+          evariance g (μ : Measure E) ≤
+            (C : ENNReal) * ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(μ : Measure E)},
+        (C.1 : ENNReal) := by
+  rw [← hμ.smoothTest_constant_eq_localSlope,
+    Poincare.SmoothTest.constant_eq_localSlope_infimum μ m hac]
+  have hiff := Poincare.LocalSlope.holds_iff_lintegral_gradient_le_one μ m hac
+  apply le_antisymm
+  · exact le_iInf fun C ↦ iInf_le_of_le ⟨C.1, (hiff C.1).mpr C.2⟩ le_rfl
+  · exact le_iInf fun C ↦ iInf_le_of_le ⟨C.1, (hiff C.1).mp C.2⟩ le_rfl
+
 end FunctionalInequalities.KLS.LogConcave
 
 namespace FunctionalInequalities.Poincare.LocalSlope
@@ -61,7 +87,7 @@ variable {E : Type u_2} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Comple
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 omit [CompleteSpace E] in
-/-- `Q0`: the literature-Poincaré clause of `thm:klartag-density-frontend-identification`.
+/-- The literature-Poincaré clause of `thm:klartag-density-frontend-identification`.
 
 Every finite-dimensional log-concave law has an absolutely continuous intrinsic law, so its
 literature optimum is the gradient-form optimum. The reference Haar measure is produced here

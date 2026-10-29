@@ -1,5 +1,5 @@
 import FunctionalInequalities.Poincare.Product.Geometry
-import FunctionalInequalities.Probability.ProductVariance
+import FunctionalInequalities.Probability.Variance.Product
 
 /-!
 # Almost-everywhere admissibility of Hilbert-product sections

@@ -154,7 +154,7 @@ The concrete closed quadratic form uses a finite-dimensional real Hilbert space 
 measurable space and second-countable topology. It applies to any probability measure, without
 a density, log-concavity, compact support, or nondegenerate covariance assumption.
 
-[AffineSupport.lean](../Probability/AffineSupport.lean) takes the affine span of the topological
+[Support/Affine.lean](../Probability/Support/Affine.lean) takes the affine span of the topological
 support and proves closedness, measurability, full measure, and minimality. After choosing an
 origin in the support, the measure is represented on the direction space of its affine support.
 [intrinsicL2Equiv](../Energy/SmoothGradient/Intrinsic/Basic.lean) is a linear isometric

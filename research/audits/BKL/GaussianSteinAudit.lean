@@ -12,8 +12,7 @@ identity (normalized weighted-Laplacian integration by parts), the linear unit-e
 from the test), the input is a nonzero `L²` class, and A.7 is exercised on the nonsmooth norm test.
 This audit is outside the active implication chain: it constructs no general Stein kernel and
 asserts nothing about the moment map, Letwin Theorems 1.1–1.2 or BKL Theorem 4.1. The heavy
-`GaussianTaylor` import is client-only. Adapted from the Codex bundle `Letwin-A7` Gaussian clients
-(independently accepted, receipt 50fa25b8…).
+`GaussianTaylor` import is client-only.
 -/
 
 open MeasureTheory FunctionalInequalities
@@ -114,7 +113,7 @@ theorem gaussian_compact_identity (f : E → ℝ) (hf : ContDiff ℝ ∞ f)
   have h'' := neg_injective h'
   simpa only [kernel, Probability.Stein.action, Matrix.one_mulVec, WithLp.toLp_ofLp] using h''
 
-/-- The actual law and identity matrix satisfy precisely frozen Definition2.6. -/
+/-- The actual law and identity matrix satisfy precisely Definition 2.6. -/
 theorem gaussian_stein : Probability.Stein.IsSteinKernel gaussian kernel where
   integrable_id := gaussian_id_memLp.integrable (by norm_num)
   mean_zero := KLS.integral_id_tilted_half_norm_sq
@@ -215,7 +214,7 @@ theorem linearInput_ne_zero : linearInput ≠ 0 := by
   rw [Energy.Dual.pairing, hzero, inner_zero_left] at h
   norm_num at h
 
-/-- Source A7 is exercised on the true nonsmooth/noncompact norm test and true Gaussian kernel. -/
+/-- Source A.7 is exercised on the true nonsmooth/noncompact norm test and true Gaussian kernel. -/
 theorem actual_norm_test_A7 :
     (∫ x, ⟪x, direction⟫ * ‖x‖ ∂(gaussian : Measure E)) =
       (∫ x, ⟪Probability.Stein.action (kernel x) direction, gradient (fun x : E => ‖x‖) x⟫ ∂(gaussian : Measure E)) ∧

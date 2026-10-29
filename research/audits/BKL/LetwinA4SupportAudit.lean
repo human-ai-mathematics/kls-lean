@@ -16,7 +16,7 @@ Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Clients of the coercivity
 * dimension zero: an arbitrary `φ` on `EuclideanSpace ℝ (Fin 0)` with its volume (an additive Haar measure); convexity
   and integrability of `e^{-φ}` are derived from the space being a single point (finite Haar measure on a compact space).
 
-Axiom reports for the four Lemma A.4 support declarations and the clients follow. Client bodies: Claude.
+Axiom reports for the four Lemma A.4 support declarations and the clients follow.
 -/
 
 open MeasureTheory

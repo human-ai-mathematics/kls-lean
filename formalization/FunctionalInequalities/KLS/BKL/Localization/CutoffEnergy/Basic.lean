@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
-import FunctionalInequalities.KLS.BKL.CumulantEnvelope
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
 
 /-!
 # The cutoff-weighted energy claim

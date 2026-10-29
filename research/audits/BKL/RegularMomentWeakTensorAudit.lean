@@ -10,7 +10,7 @@ open FunctionalInequalities.Probability.Stein
 
 namespace RegularMomentWeakTensorAudit
 namespace Difference
-/-- Consume the actual R0 producer and export its source-law global difference input;
+/-- Consume the actual regular-moment producer and export its source-law global difference input;
 no centered-difference bound is assumed. -/
 theorem produced_regular_moment_with_second_difference {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -56,7 +56,8 @@ theorem gradient_bound_from_exported_source_difference {n : ℕ}
   exact hLip
 end Difference
 namespace Exponent
-/-- Produce the actual R0 moment exponent, retaining normalization and actual pushforward. -/
+/-- Produce the actual regular-moment Lipschitz exponent, retaining normalization and actual
+pushforward. -/
 theorem produced_regular_moment_with_lipschitz_exponent {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)

@@ -4,6 +4,15 @@ import FunctionalInequalities.Analysis.Cutoff.Profile
 
 /-! # Integration against rough weak tests and integrable weak divergence
 
+* `integral_weakDeriv_mul_eq_swap`: the curl identity of two weak derivatives of one scalar
+  function persists against compact rough `H¹` tests (Letwin (2.6)).
+* `compact_bounded_test_domination`: a common integrable bound for rough bounded tests.
+* `integral_flux_eq_neg_forcing_of_bounded_weak_test` and
+  `integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test`: a divergence identity
+  `∫ Σᵢ Jᵢ ∂ᵢψ = -∫ F ψ` tested against compact `C¹` functions extends to bounded weak tests.
+* `integral_eq_zero_of_integrable_weak_derivative`: a globally integrable weak directional
+  derivative of an integrable function has integral zero (Letwin (2.1), Lemma 2.7).
+
 Supporting weak calculus for Letwin arXiv:2607.24164v1 and the
 local elliptic estimates of Gilbarg--Trudinger (2001). Each declaration
 retains its own support, integrability and dimensional hypotheses.
@@ -280,7 +289,7 @@ open MeasureTheory Filter Set
 open scoped Topology ContDiff
 namespace FunctionalInequalities.Analysis
 
-/-! Bounded weak-test extension of compact-test divergence identities (accepted H2 generic part). -/
+/-! Bounded weak-test extension of compact-test divergence identities. -/
 
 /-- A compact-local L1 density admits a common integrable bound for rough bounded tests. -/
 theorem compact_bounded_test_domination {n : ℕ}

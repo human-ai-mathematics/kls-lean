@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "review_date": "2026-10-28",
+  "status": "source cleanup complete and verified: strict builds, interface comparison, audit clients, axiom audit, generated views and full research/verify.py passed (2026-10-28)",
+  "spec": "build/history/2026-10-28-klartag-hessian-bound/CLEANUP-PLAN.md",
+  "scope": "Declarations and modules created or generalised on 2026-10-28 for the Letwin Lemma 2.2 / Theorem 2.5 moment-map route and Klartag arXiv:1309.2767v1 Lemma 2.3 / Proposition 2.1: generic tools moved from per-paper modules to object families, the mixed module Analysis/BakryEmery/Hessian/Maximum.lean dissolved, LiteralMomentMap renamed. No change of mathematical content, constants, dimensional scope, proof status or certificate status; the only hypothesis change is the removal of an unused hypothesis of exists_translate_centered, the only generalisation is the carrier of exists_contDiff_eqOn_closure.",
+  "literature_targets": [
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 and Theorem 2.5 (KLS/Letwin/MomentMap.lean)",
+    "Klartag arXiv:1309.2767v1 Lemma 2.3 and Proposition 2.1, supporting maximum-principle Hessian bound for Theorem 1.1 (KLS/Klartag/)"
+  ],
+  "module_migrations": [
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_path": null,
+      "kind": "dissolve",
+      "note": "declarations moved to Hessian/Diffusion.lean, MongeAmpere.lean, Hessian/Operator.lean and Convex/SecondDifference.lean; no compatibility module"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+      "kind": "move",
+      "note": "module FunctionalInequalities.KLS.Letwin.LiteralMomentMap -> FunctionalInequalities.KLS.Letwin.MomentMap; no compatibility module"
+    },
+    {
+      "old_path": "research/audits/Letwin/LiteralMomentMap.lean",
+      "new_path": "research/audits/Letwin/MomentMap.lean",
+      "kind": "move",
+      "note": "audit namespace LetwinLiteralMomentMapAudit -> LetwinMomentMapAudit"
+    }
+  ],
+  "public_declarations": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sum",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sum",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "kind": "move"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sub_const_mul",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sub_const_mul",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "kind": "move"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_hessian_hessian",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_hessian_hessian",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "kind": "move"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_nonpos_of_isLocalMax",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_nonpos_of_isLocalMax",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+      "kind": "move",
+      "note": "needs inv_hessianMatrixIn_posSemidef / hessianMatrixIn_posSemidef / inv_hessianMatrixIn owned by MongeAmpere.lean"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_le_trace_mul_norm_sq",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_le_trace_mul_norm_sq",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "kind": "move",
+      "note": "deviation from plan (Calculus.lean): the proof uses hessianOperator and bilinearIteratedFDerivTwo_eq_inner_hessianOperator from Hessian/Operator.lean, which imports Calculus.lean, so Calculus.lean would create an import cycle; placed in the owner of hessianOperator"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.second_difference_le_of_bilinearIteratedFDerivTwo_le",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.secondDifference_le_of_bilinearIteratedFDerivTwo_le",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+      "kind": "move+rename",
+      "note": "namespace BakryEmery -> Analysis, family spelling secondDifference_; proof uses a local line derivative instead of BakryEmery.hasDerivAt_line, so SecondDifference.lean gains only the Mathlib import InnerProductSpace.Laplacian"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.centeredDifference_le_of_lipschitzWith_gradient",
+      "old_source": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+      "new_name": "FunctionalInequalities.Analysis.secondDifference_le_of_lipschitzWith_gradient",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+      "kind": "rename",
+      "note": "no centeredDifference definition exists; the statement bounds the raw expression u (x + h) + u (x - h) - 2 * u x"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.integrable_norm_pow_mul_exp_neg_mul_norm",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+      "new_name": "FunctionalInequalities.Probability.integrable_norm_pow_mul_exp_neg_mul_norm",
+      "new_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean",
+      "kind": "move+rename",
+      "note": "namespace MomentMeasure -> Probability; no existing equivalent in the owner or pinned Mathlib"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.tendsto_gradient_of_tendsto_of_convexOn",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Analysis.tendsto_gradient_of_tendsto_of_convexOn",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "kind": "move+rename",
+      "note": "namespace MomentMeasure -> Analysis"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_subseq_tendsto_of_linear_bounds",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Analysis.exists_subseq_tendsto_of_linear_bounds",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/PointwiseCompactness.lean",
+      "kind": "move+rename",
+      "note": "namespace MomentMeasure -> Analysis; the inner-product-space carrier is retained (PointwiseCompactness.lean gains the Mathlib import InnerProductSpace.Defs); the statement does not use the inner product"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.translate_moment_potential",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.translate_moment_potential",
+      "new_source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean",
+      "kind": "move"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_translate_centered",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.exists_translate_centered",
+      "new_source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean",
+      "kind": "move+hypothesis-removal",
+      "note": "unused explicit hypothesis (hc : ConvexOn ℝ univ u) removed together with set_option linter.unusedVariables false; caller exists_centered_regular_potential updated"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_contDiff_eqOn_closure",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_name": "FunctionalInequalities.Analysis.exists_contDiff_eqOn_closure",
+      "new_source": "formalization/FunctionalInequalities/Analysis/LocalExtension.lean",
+      "kind": "move+rename+generalisation",
+      "note": "namespace MomentMeasure -> Analysis; carrier EuclideanSpace ℝ (Fin n) generalised to {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E] (binder style of exists_contDiff_eqOn_ball); proof unchanged apart from the carrier name"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_centered_regular_potential",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.exists_centered_regular_potential",
+      "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+      "kind": "move",
+      "note": "file rename only"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_of_literal",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_of_bounded_open_convex",
+      "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+      "kind": "move+rename"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_trace_le_of_literal",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_trace_le_of_bounded_open_convex",
+      "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+      "kind": "move+rename"
+    }
+  ],
+  "private_declarations": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_nonpos_of_isLocalMax",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_nonpos_of_isLocalMax",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+      "kind": "move",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_self_nonpos_of_isLocalMax",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_self_nonpos_of_isLocalMax",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+      "kind": "move",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_neg_apply",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_neg_apply",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+      "kind": "move",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.inner_le_basis_trace_mul_norm_sq",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Maximum.lean",
+      "new_name": "FunctionalInequalities.Analysis.BakryEmery.inner_le_basis_trace_mul_norm_sq",
+      "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "kind": "move",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.integrable_exp_neg_mul_norm",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+      "new_name": "FunctionalInequalities.Probability.integrable_exp_neg_mul_norm",
+      "new_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean",
+      "kind": "move+rename",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.tendsto_slope_line",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Analysis.tendsto_slope_line",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "kind": "move+rename",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.convex_support_le",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Analysis.convex_support_le",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "kind": "move+rename",
+      "note": "its second consumer, the private exists_subgradient_of_tendsto in MomentLimit.lean, now uses a local have built on Analysis.convex_support_of_hasFDerivWithinAt (no duplicate declaration)",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.eventually_fderiv_apply_lt",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Analysis.eventually_fderiv_apply_lt",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "kind": "move+rename",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.tendsto_fderiv_apply_of_convexOn",
+      "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "new_name": "FunctionalInequalities.Analysis.tendsto_fderiv_apply_of_convexOn",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "kind": "move+rename",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.literal_matrix_upper_bound",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.smul_one_sub_posSemidef_of_abs_le",
+      "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+      "kind": "move+rename",
+      "note": "scope word \"literal\" dropped from a private helper name",
+      "visibility": "private"
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.MomentMeasure.literal_hessian_entry_bound",
+      "old_source": "formalization/FunctionalInequalities/KLS/Letwin/LiteralMomentMap.lean",
+      "new_name": "FunctionalInequalities.Probability.MomentMeasure.abs_hessianMatrix_le_of_lipschitzWith_gradient",
+      "new_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+      "kind": "move+rename",
+      "note": "scope word \"literal\" dropped from a private helper name",
+      "visibility": "private"
+    }
+  ],
+  "private_dedupe": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_add",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean",
+      "visibility": "private",
+      "kind": "dedupe",
+      "replacement": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sum",
+      "note": "only used by the removed private _finsetSum"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_finsetSum",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean",
+      "visibility": "private",
+      "kind": "dedupe",
+      "replacement": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sum",
+      "note": "same statement as the public lemma except an unused ContDiff hypothesis on φ"
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sum",
+      "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean",
+      "visibility": "private",
+      "kind": "dedupe",
+      "replacement": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_sum",
+      "note": "Finset.univ case of the public lemma; the three call sites now pass Finset.univ and (f := ...); the private name would also clash with the public one now imported through MongeAmpere.lean"
+    }
+  ],
+  "context_changes": [
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Klartag/HessianBound.lean",
+      "kind": "context",
+      "note": "named section MaximumPrinciple with variables {φ V} (hφ) {K U} (hK) (hU) (hKU) (hV) (hc) (hRange) in the original parameter order and theorem-local include; hMA, hPD, R, hR, hbound, hcoer and pointwise data stay in the headers (R and hR precede hMA in trace_hessian_add_sq_le). Elaborated signatures of the three theorems identical (binder names, order, binder info, types)."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+      "kind": "context",
+      "note": "four identical per-lemma omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] replaced by section LineConvexity (variables {E} [NormedAddCommGroup E] [InnerProductSpace ℝ E] only; the four line lemmas, reordered before (15)) and section Haar (variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]); one heterogeneous local omit retained (exp_norm_integral_pos). Elaborated signatures unchanged."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "kind": "context",
+      "note": "section GradientConvergence: the four private helpers need no FiniteDimensional (previously four identical omits); variable [FiniteDimensional ℝ E] added before the public theorem."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+      "kind": "context",
+      "note": "section LocalMaximum with nested section HessianSign carrying omit [FiniteDimensional ℝ E] for the three private helpers (same context as in the dissolved module)."
+    }
+  ],
+  "imports": [
+    "KLS/Klartag/HessianBound.lean: Analysis.BakryEmery.Hessian.Maximum -> Analysis.BakryEmery.MongeAmpere",
+    "KLS/Klartag/LinearBounds.lean: + Probability.ExponentialMoments.Norm; - Mathlib.Analysis.SpecialFunctions.JapaneseBracket (now used only by Norm.lean)",
+    "KLS/Klartag/MomentLimit.lean: + Analysis.Convex.Subgradient.Stability, + Probability.MomentMeasure.Gradient",
+    "KLS/Letwin/MomentMap.lean: + Analysis.LocalExtension",
+    "Analysis/Convex/SecondDifference.lean: + Mathlib.Analysis.InnerProductSpace.Laplacian",
+    "Analysis/Convex/PointwiseCompactness.lean: + Mathlib.Analysis.InnerProductSpace.Defs",
+    "Probability/ExponentialMoments/Norm.lean: + Mathlib.Analysis.SpecialFunctions.JapaneseBracket",
+    "formalization/FunctionalInequalities.lean: - Analysis.BakryEmery.Hessian.Maximum, KLS.Letwin.LiteralMomentMap -> KLS.Letwin.MomentMap",
+    "research/audits/Klartag/HessianBound.lean: - Analysis.BakryEmery.Hessian.Maximum, + Analysis.Convex.SecondDifference (for the renamed second-difference lemma)",
+    "No object-family module imports a per-paper module; no import cycle."
+  ],
+  "deviations": [
+    "bilinearIteratedFDerivTwo_le_trace_mul_norm_sq: Hessian/Operator.lean instead of Calculus.lean (import cycle; owner of hessianOperator).",
+    "secondDifference_le_of_bilinearIteratedFDerivTwo_le: proof inlines the line derivative (BakryEmery.hasDerivAt_line) to avoid importing BakryEmery.Calculus into Convex/SecondDifference.lean; statement unchanged.",
+    "exists_subseq_tendsto_of_linear_bounds keeps its inner-product-space carrier (no hypothesis change authorised); PointwiseCompactness.lean gains the Mathlib import InnerProductSpace.Defs. The statement and proof use only the normed-space structure (follow-up option: generalise, recorded as a generalisation).",
+    "Private helpers literal_matrix_upper_bound / literal_hessian_entry_bound renamed (scope word dropped).",
+    "Private convex_support_le moved with its Stability consumers; MomentLimit.lean's private exists_subgradient_of_tendsto uses a local have instead of a duplicate."
+  ],
+  "records_updated": [
+    "research/progress/literature.json (Letwin L22/T25 declaration names and sources, notes, target text)",
+    "research/progress/letwin-smooth-route.json (R7K/R7C/R7G declaration owners)",
+    "research/progress/PROOF-PATH.md, research/progress/README.md (hand-written link)",
+    "HANDOFF.md",
+    "research/tasks.json (33 evidence pins of 5 changed files; build/history/2026-10-28-moment-map-cleanup/EVIDENCE-MAP.txt)",
+    "formalization/API.md (api_index.py), formalization/MODULES.md (module_inventory.py), generated progress views (update.py with a temporary index)"
+  ],
+  "verification_state": {
+    "baseline": "build/history/2026-10-28-moment-map-cleanup/before/ (copies of every touched file; before-hashes.txt); main-tree .lake was up to date before the edits (lake build --no-build: 4850 jobs)",
+    "lean_build": "main tree: lake build FunctionalInequalities.KLS.Letwin.MomentMap (closure of all touched library modules) and the root lake build of all default targets (4906 jobs) passed; no warnings in any build log (build/history/2026-10-28-moment-map-cleanup/build{1,2,3,-root}.log; build1 failed only on the missing InnerProductSpace import of PointwiseCompactness.lean, build2 only on one stale call site, both fixed)",
+    "interface_comparison": "compiler dumps of every FunctionalInequalities constant incl. privates (type hash, value hash, universe params) before/after: delta exactly the map (module moves, renames, 3 removed HessianTrace privates); only exists_translate_centered and exists_contDiff_eqOn_closure change type, as recorded; no other declaration changed type or value (build/history/2026-10-28-moment-map-cleanup/interface/{all-base,all-new}.tsv, compare.py, compare-result.txt). Binder-level signature dump (names, binder info, pp.explicit types): all listed declarations identical modulo the module part of anonymous-instance hygiene names; the three HessianBound theorems byte-identical; exists_translate_centered differs by exactly the deleted hc binder (sig-base.txt, sig-new.txt, compare_sig.py, compare-sig-result.txt)",
+    "audit_clients": "strict (-DwarningAsError=true) lake env lean of research/audits/Klartag/{HessianBound,LinearBounds,MomentLimit}.lean and research/audits/Letwin/MomentMap.lean passed; 32 axiom reports, all within propext/Classical.choice/Quot.sound",
+    "axiom_audit": "build/history/2026-10-28-moment-map-cleanup/interface/AxiomsCheck.lean (strict): 24 moved/renamed/changed public declarations, standard axioms only; old names absent (no aliases)",
+    "api_index": "python3 research/api_index.py regenerated formalization/API.md (6819 public declarations, 813 modules); --check fresh",
+    "module_inventory": "python3 research/module_inventory.py regenerated formalization/MODULES.md (was stale before this cleanup); --check fresh",
+    "progress_views": "update.py and update.py --check passed with a temporary GIT_INDEX_FILE (copy of the real index plus the 394 update.py inputs); real .git/index byte-identical",
+    "evidence_hashes": "research/tasks.json: 33 pins of 5 changed files refreshed after confirming they matched the baseline (build/history/2026-10-28-moment-map-cleanup/EVIDENCE-MAP.txt); research/atlas.py check passed",
+    "whitespace": "git diff --no-index --check of every touched file against its baseline copy (new files against /dev/null): clean",
+    "research_verify_py": "full local research/verify.py passed after the first pass (2026-10-28)"
+  },
+  "second_pass": {
+    "review_date": "2026-10-28",
+    "label": "second pass: optimization of the 2026-10-28 cleanup (audits A and B)",
+    "status": "source optimization complete and verified: strict builds, root lake build, interface comparison, audit clients, axiom audit, generated views and full research/verify.py passed (2026-10-28)",
+    "spec": "build/history/2026-10-28-klartag-hessian-bound/OPTIMIZE-BRIEF.md",
+    "scope": "Proof shortening, deduplication against Mathlib and existing library lemmas, placement of two one-dimensional lemmas and one helper in their object families, one module move inside Analysis/BakryEmery/Hessian, removal of an unused Lipschitz hypothesis from two Klartag Lemma 2.3 intermediate statements, and carrier generalisations of four generic lemmas. No change of mathematical content, constants in statements, dimensional scope, proof status or certificate status beyond the entries below. The Letwin Lemma 2.2 Hessian-bound witness changes from n * 12R^2 to 12R^2 (existential constant C; statement unchanged).",
+    "module_migrations": [],
+    "public_declarations": [
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.lintegral_Ioi_deriv_mul_exp_neg_eq",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+        "new_name": "FunctionalInequalities.Probability.Line.lintegral_Ioi_deriv_mul_exp_neg_eq",
+        "new_source": "formalization/FunctionalInequalities/Probability/Line/ExpIntegral.lean",
+        "kind": "move+rename",
+        "note": "one-dimensional calculus, not Klartag-specific; extends the existing line exponential-integral module (section TotalVariation), namespace Probability.MomentMeasure -> Probability.Line; statement identical"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.lintegral_abs_deriv_mul_exp_neg_eq",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+        "new_name": "FunctionalInequalities.Probability.Line.lintegral_abs_deriv_mul_exp_neg_eq",
+        "new_source": "formalization/FunctionalInequalities/Probability/Line/ExpIntegral.lean",
+        "kind": "move+rename",
+        "note": "as above; proof shortened (A3: Continuous.exists_forall_le on cocompact, ConvexOn.monotoneOn_deriv); statement identical"
+      },
+      {
+        "old_name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_hessian_hessian",
+        "old_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+        "new_name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_hessian_hessian",
+        "new_source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+        "kind": "move",
+        "note": "pure inverseHessianEntry contraction, next to its only dependency sum_inverseHessianEntry_mul_hessian (B7); statement identical"
+      }
+    ],
+    "private_declarations": [
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.differentiableAt_of_second_difference_le",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+        "new_name": "FunctionalInequalities.Analysis.differentiableAt_of_second_difference_le",
+        "new_source": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+        "kind": "move+rename",
+        "visibility": "private -> public",
+        "note": "generic convex-analysis lemma placed next to lipschitzWith_gradient_of_second_difference_le with a docstring; the family suffix _of_second_difference_le already matches its neighbours, so only the namespace changes; statement identical (carrier [NormedAddCommGroup E] [InnerProductSpace ℝ E], no FiniteDimensional/measure instances)"
+      }
+    ],
+    "private_removals": [
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.exists_subgradient_of_tendsto",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+        "replacement": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add",
+        "kind": "dedupe",
+        "note": "A2; subgradients of the convex limit come directly from Subgradient/Existence.lean"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.tilted_neg_eq_withDensity",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+        "replacement": "MeasureTheory.integral_tilted, MeasureTheory.isProbabilityMeasure_tilted",
+        "kind": "dedupe",
+        "note": "A1; the tilted measure is used directly"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.integral_withDensity_exp_neg",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+        "replacement": "MeasureTheory.integral_tilted",
+        "kind": "dedupe",
+        "note": "A1"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.convex_deriv_nonneg_right_of_min",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+        "replacement": "ConvexOn.monotoneOn_deriv",
+        "kind": "dedupe",
+        "note": "A3"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.exp_norm_integral_pos",
+        "old_source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+        "replacement": "MeasureTheory.integral_exp_pos",
+        "kind": "dedupe",
+        "note": "A4"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.smul_one_sub_posSemidef_of_abs_le",
+        "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+        "replacement": "FunctionalInequalities.Probability.MomentMeasure.smul_one_sub_hessianMatrix_posSemidef (private, same module)",
+        "kind": "replace",
+        "note": "A7; entrywise bound n*G replaced by the Hessian-form bound G"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.abs_hessianMatrix_le_of_lipschitzWith_gradient",
+        "old_source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+        "replacement": "FunctionalInequalities.Probability.MomentMeasure.bilinearIteratedFDerivTwo_le_of_lipschitzWith_gradient (private, same module)",
+        "kind": "replace",
+        "note": "A7"
+      },
+      {
+        "old_name": "FunctionalInequalities.Probability.integrable_exp_neg_mul_norm",
+        "old_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean",
+        "replacement": "MeasureTheory.integrable_fun_norm_addHaar, integrableOn_rpow_mul_exp_neg_mul_rpow",
+        "kind": "dedupe",
+        "note": "B3; public integrable_norm_pow_mul_exp_neg_mul_norm now proved from Mathlib's polar-coordinate integrability"
+      }
+    ],
+    "hypothesis_removals": [
+      {
+        "name": "FunctionalInequalities.Probability.MomentMeasure.exists_lintegral_line_abs_inner_gradient",
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+        "removed": "{L : NNReal} (hL : LipschitzWith L ψ)",
+        "note": "A6; unused (continuity from ContDiff ℝ 1 ψ); docstring updated"
+      },
+      {
+        "name": "FunctionalInequalities.Probability.MomentMeasure.abs_le_of_mem_levelSet_of_centered",
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+        "removed": "{L : NNReal} (hL : LipschitzWith L ψ)",
+        "note": "A6; docstring updated; private passers centered_level_norm_bound and centered_uniform_growth also drop {L} (hLip); exists_two_sided_linear_bounds keeps its Lipschitz hypothesis (used for the upper bound)"
+      }
+    ],
+    "generalisations": [
+      {
+        "name": "FunctionalInequalities.Analysis.secondDifference_le_of_lipschitzWith_gradient",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+        "old_carrier": "EuclideanSpace ℝ (Fin n) ({n : ℕ})",
+        "new_carrier": "{E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]",
+        "note": "B6; proof unchanged"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.secondDifference_le_of_bilinearIteratedFDerivTwo_le",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+        "old_carrier": "[InnerProductSpace ℝ E]",
+        "new_carrier": "[NormedSpace ℝ E]",
+        "note": "B6; proof unchanged"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_subseq_tendsto_of_linear_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/PointwiseCompactness.lean",
+        "old_carrier": "[InnerProductSpace ℝ E] [FiniteDimensional ℝ E]",
+        "new_carrier": "[NormedSpace ℝ E] [FiniteDimensional ℝ E]",
+        "note": "B6; follow-up option of the first pass; the Mathlib import InnerProductSpace.Defs is dropped; statement otherwise unchanged (B12 hypothesis weakening not done)"
+      },
+      {
+        "name": "FunctionalInequalities.Probability.integrable_norm_pow_mul_exp_neg_mul_norm",
+        "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean",
+        "old_carrier": "[InnerProductSpace ℝ E] [FiniteDimensional ℝ E]",
+        "new_carrier": "[NormedSpace ℝ E] [FiniteDimensional ℝ E]",
+        "note": "B3; new proof"
+      }
+    ],
+    "binder_renames": [
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/HessianBound.lean",
+        "renames": {
+          "hc": "hVc",
+          "hRange": "hrange"
+        },
+        "affected": [
+          "FunctionalInequalities.Probability.MomentMeasure.trace_sub_two_mul_sq_le_hessianInverseOperator",
+          "FunctionalInequalities.Probability.MomentMeasure.trace_hessian_add_sq_le"
+        ],
+        "note": "named-argument interface only (match MomentMap/HessianTrace); types, order and binder info unchanged"
+      }
+    ],
+    "context_changes": [
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+        "kind": "context",
+        "note": "variable {n : ℕ} + local notation \"E\" => EuclideanSpace ℝ (Fin n) (as in GivenGradient); FunctionalInequalities.KLS. prefixes shortened to KLS.; elaborated signatures of the three public theorems byte-identical (binder names, order, binder info, pp.explicit types)"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/HessianBound.lean",
+        "kind": "context",
+        "note": "unneeded `classical` dropped (A10)"
+      }
+    ],
+    "imports": [
+      "Probability/Line/ExpIntegral.lean: + Mathlib.Analysis.Convex.Deriv",
+      "KLS/Klartag/LinearBounds.lean: + Probability.Line.ExpIntegral; - Mathlib.Analysis.SpecialFunctions.ExpDeriv, - Mathlib.MeasureTheory.Integral.IntegralEqImproper (needed only by the moved lemmas)",
+      "KLS/Klartag/MomentLimit.lean: + Analysis.Convex.Subgradient.Existence",
+      "Analysis/Convex/SecondDifference.lean: + Mathlib.Analysis.Convex.Strong (strongConvexOn_iff_convex for the strong ⇒ convex one-liner, upstream of all eight sites)",
+      "Analysis/Convex/PointwiseCompactness.lean: - Mathlib.Analysis.InnerProductSpace.Defs",
+      "Probability/ExponentialMoments/Norm.lean: - Mathlib.Analysis.SpecialFunctions.JapaneseBracket, + Mathlib.MeasureTheory.Constructions.HaarToSphere, + Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral",
+      "research/audits/Klartag/LinearBounds.lean: names updated; research/audits/Klartag/MomentLimit.lean: + #print axioms Analysis.differentiableAt_of_second_difference_le; research/audits/Letwin/MomentMap.lean: + #print axioms of the two GivenGradient theorems",
+      "No object-family module imports a per-paper module; no import cycle."
+    ],
+    "proof_changes": [
+      "A1 exists_limit_potential: normalisation and weak convergence via tendsto_integral_comp_gradient_mul_exp_neg on the subsequence and the tilted measure directly; inv_le_integral_abs_inner_gradient_of_isotropic via integral_tilted",
+      "A5 Integrable.of_integral_ne_zero at four sites; A8/B4 strong => convex one-liner UniformConvexOn.convexOn (strongConvexOn_iff_convex.mpr h) at eight sites (SecondDifference, HessianHolder, Letwin/MomentMap, GivenGradient, CEK WeakDerivative, TraceStein x2, WeakHessian); A9 ConvexOn.translate_left; A10 `classical` dropped",
+      "A7 Letwin Lemma 2.2: Hessian bound witness C = ((4 * (3 * R ^ 2)).toNNReal : ℝ) = 12 R² (was n * 12 R²); statement is existential in C and unchanged",
+      "B2 sd_support / convex_fderiv_le_sub via Analysis.convex_support_of_hasFDerivWithinAt (sd_support drops its unused [FiniteDimensional ℝ E]); B5 LocalExtension Finset inductions removed; B8 Tilted frontier-null one-liner; B9 Stability hgrad without differentiability"
+    ],
+    "records_to_review": [
+      "research/progress/literature.json:10680 (Letwin L22 note, mirrored in generated research/progress/LITERATURE.md:2521): 'the proof gives C = 12 n R^2' -> 12 R^2",
+      "research/progress/letwin-smooth-route.json:446 and :572: proof's Hessian bound 12 n R^2 -> 12 R^2",
+      "research/progress/letwin-smooth-route.json R7K declarations (:413): sum_inverseHessianEntry_mul_hessian_hessian is now owned by Analysis/BakryEmery/Hessian/Operator.lean, not Hessian/Diffusion.lean",
+      "HANDOFF.md:29 (C = 12 n R²) and HANDOFF.md:62 (optional generalisation of Analysis.exists_subseq_tendsto_of_linear_bounds is now done)",
+      "No declaration named in literature.json or in a Blueprint \\lean{} anchor moved or changed type"
+    ],
+    "verification_state": {
+      "baseline": "build/history/2026-10-28-optimization-pass/before/ (copies of every touched file; before-hashes.txt); main-tree .lake up to date before the edits (lake build --no-build: 4906 jobs)",
+      "lean_build": "lake build of every touched module, then the root lake build (4907 jobs; +1 = the newly imported Mathlib.Analysis.Convex.Strong) passed with no warnings; a final blank-line cleanup of CEK WeakDerivative/WeakHessian was followed by a second root build, also clean (build/history/2026-10-28-optimization-pass/build-root.log, build-root-2.log)",
+      "interface_comparison": "all-constant dumps (type hash, def value hash, levels) and binder-level signatures (names, binder info, pp.explicit types) of all 117 public declarations of the 19 touched library modules before/after: deltas exactly as recorded here (2 moves+renames, 1 module move, 1 private promotion, 2 hypothesis removals, 4 carrier generalisations, 2 binder renames, removed/added privates); the three Letwin MomentMap theorems and all other public declarations byte-identical (interface/compare-result.txt, compare-sig-result.txt); the only other delta is the compiler-generated equation lemma Probability.Stein.gradientDerivativeMatrix.eq_1, no longer materialised in KLS/Letwin/MomentMap.lean",
+      "audit_clients": "strict (-DwarningAsError=true) lake env lean of the 31 audit clients importing a touched module, rerun on the final tree: all pass, 415 axiom reports, standard axioms only (build/history/2026-10-28-optimization-pass/audits/)",
+      "axiom_audit": "interface/AxiomsCheck.lean (strict): 23 moved/generalised/changed declarations, standard axioms only; old names absent",
+      "research_verify_py": "full local research/verify.py passed on the tree that includes this pass and the record updates below (2026-10-28)",
+      "generated_and_checks": "api_index.py regenerated + --check fresh; module_inventory.py regenerated + --check fresh; check_blueprint.py 0 errors; atlas.py check passed; build/check_markdown_links.py 0 broken links; no stale tasks.json pin",
+      "git_index": ".git/index byte-identical to the copy saved before the pass (sha256 f4b66483…5b87)"
+    },
+    "records_updated": [
+      "research/tasks.json (69 evidence pins of 11 changed files; rows appended to build/history/2026-10-28-klartag-hessian-bound/EVIDENCE-MAP.md)",
+      "formalization/API.md (api_index.py; 6820 public declarations), formalization/MODULES.md (module_inventory.py; ExpIntegral title)",
+      "research/audits/Klartag/{LinearBounds,MomentLimit}.lean, research/audits/Letwin/MomentMap.lean",
+      "records_to_review applied: literature.json L22 note and letwin-smooth-route.json scope/nonclaim now give the proof constant 12 R^2; R7K lists sum_inverseHessianEntry_mul_hessian_hessian under Hessian/Operator.lean; HANDOFF.md constant and next options updated"
+    ]
+  }
+}

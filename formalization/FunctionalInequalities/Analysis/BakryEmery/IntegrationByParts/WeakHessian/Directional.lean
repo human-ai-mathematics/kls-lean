@@ -157,11 +157,11 @@ theorem integral_directional_hessian_flux_le {n : ℕ}
   rw [hleft, hright] at hmain
   exact hmain
 
-/-- **Directional weak subsolution against bounded weak tests**: under the hypotheses of
-`integral_directional_hessian_flux_le`, for a bounded compactly supported locally integrable `η ≥ 0` a.e. whose coordinate
-weak derivatives `dη k` are compactly supported and globally L², both scalar pairings are integrable and
-`∫ e^{-u} Σ_k (Σ_b (∇²u)⁻¹_{bk} ∂_b h_v) dη_k ≤ ∫ e^{-u} h_v η`. No C1 test or positivity-preserving approximation. -/
-theorem integral_directional_hessian_flux_le_of_bounded_weak_test {n : ℕ}
+/-- **Directional weak subsolution against bounded weak tests, convexity on the gradient range**: as
+`integral_directional_hessian_flux_le_of_bounded_weak_test`, with `W` convex only on an open set `Ω`
+containing every gradient value `∇u x`; the convexity enters only through the positive semidefinite
+Hessian of `W` at the points `∇u x`. -/
+theorem integral_directional_hessian_flux_le_of_bounded_weak_test_on_range {n : ℕ}
     {u W : EuclideanSpace ℝ (Fin n) → ℝ} {L G LF : NNReal}
     (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
     (hG : LipschitzWith G (gradient u)) (hW : ContDiff ℝ 2 W)
@@ -193,7 +193,8 @@ theorem integral_directional_hessian_flux_le_of_bounded_weak_test {n : ℕ}
           -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i) +
           ∑ a : Fin n, hessianMatrix u x i a *
             fderiv ℝ W (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ a))
-    (hconvW : ConvexOn ℝ Set.univ W)
+    {Ω : Set (EuclideanSpace ℝ (Fin n))} (hΩo : IsOpen Ω) (hconvW : ConvexOn ℝ Ω W)
+    (hΩ : ∀ x, gradient u x ∈ Ω)
     (hPD : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))), (hessianMatrix u x).PosDef)
     (v : Fin n → ℝ) {η : EuclideanSpace ℝ (Fin n) → ℝ}
     {dη : Fin n → EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
@@ -253,7 +254,8 @@ theorem integral_directional_hessian_flux_le_of_bounded_weak_test {n : ℕ}
     have hHW : (hessianMatrix W (gradient u x)).PosSemidef := by
       change (hessianMatrixIn W (EuclideanSpace.basisFun (Fin n) ℝ) (gradient u x)).PosSemidef
       exact hessianMatrixIn_posSemidef _ hW.contDiffAt
-        (fun w => bilinearIteratedFDerivTwo_nonneg_of_convexOn hW hconvW _ w)
+        (fun w => bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open hΩo hW.contDiffOn
+          hconvW (hΩ x) w)
     have hcurv : (hessianMatrix u x * hessianMatrix W (gradient u x) * hessianMatrix u x).PosSemidef := by
       simpa only [hx.isHermitian.eq] using hHW.mul_mul_conjTranspose_same (hessianMatrix u x)
     have hgram := traceGram_posSemidef ((hessianMatrix u x)⁻¹) hx.posSemidef.inv
@@ -296,6 +298,69 @@ theorem integral_directional_hessian_flux_le_of_bounded_weak_test {n : ℕ}
   rw [hright] at hrightInt
   rw [hleft, hright] at hmain
   exact ⟨hleftInt,hrightInt,hmain⟩
+
+
+/-- **Directional weak subsolution against bounded weak tests**: under the hypotheses of
+`integral_directional_hessian_flux_le`, for a bounded compactly supported locally integrable `η ≥ 0` a.e. whose coordinate
+weak derivatives `dη k` are compactly supported and globally L², both scalar pairings are integrable and
+`∫ e^{-u} Σ_k (Σ_b (∇²u)⁻¹_{bk} ∂_b h_v) dη_k ≤ ∫ e^{-u} h_v η`. No C1 test or positivity-preserving approximation. -/
+theorem integral_directional_hessian_flux_le_of_bounded_weak_test {n : ℕ}
+    {u W : EuclideanSpace ℝ (Fin n) → ℝ} {L G LF : NNReal}
+    (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
+    (hG : LipschitzWith G (gradient u)) (hW : ContDiff ℝ 2 W)
+    (hF : LipschitzWith LF (fun x => -u x + W (gradient u x)))
+    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)))
+    (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ)
+    (hT : ∀ k i j : Fin n,
+      HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
+        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+        MemLp (fun x => T x k i j) 2
+          ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (hInv : ∀ k i j : Fin n,
+        HasWeakDerivAlong (fun x => (hessianMatrix u x)⁻¹ i j)
+          (fun x => -(((hessianMatrix u x)⁻¹ *
+            (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j))
+          (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+        (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+          MemLp (fun x => -(((hessianMatrix u x)⁻¹ *
+            (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j))
+            2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+          MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
+            ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (hFirst : ∀ i : Fin n,
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        ((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x i a b)).trace =
+          -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i) +
+          ∑ a : Fin n, hessianMatrix u x i a *
+            fderiv ℝ W (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ a))
+    (hconvW : ConvexOn ℝ Set.univ W)
+    (hPD : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))), (hessianMatrix u x).PosDef)
+    (v : Fin n → ℝ) {η : EuclideanSpace ℝ (Fin n) → ℝ}
+    {dη : Fin n → EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
+    (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hbound : ∀ x, ‖η x‖ ≤ C) (hηc : HasCompactSupport η)
+    (hweak : ∀ k : Fin n, HasWeakDerivAlong η (dη k)
+      (EuclideanSpace.basisFun (Fin n) ℝ k))
+    (hdηc : ∀ k : Fin n, HasCompactSupport (dη k))
+    (hdη2 : ∀ k : Fin n, MemLp (dη k) 2
+      (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hηnonneg : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))), 0 ≤ η x) :
+    Integrable (fun x => Real.exp (-u x) * (∑ k : Fin n,
+          (∑ b : Fin n, (hessianMatrix u x)⁻¹ b k *
+            (∑ i : Fin n, ∑ j : Fin n, v i * v j * T x b i j)) * dη k x)) (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      Integrable (fun x => Real.exp (-u x) *
+          (∑ i : Fin n, ∑ j : Fin n, v i * v j * hessianMatrix u x i j) * η x) (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      (∫ x, (fun x => Real.exp (-u x) * (∑ k : Fin n,
+          (∑ b : Fin n, (hessianMatrix u x)⁻¹ b k *
+            (∑ i : Fin n, ∑ j : Fin n, v i * v j * T x b i j)) * dη k x)) x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) ≤
+        ∫ x, (fun x => Real.exp (-u x) *
+          (∑ i : Fin n, ∑ j : Fin n, v i * v j * hessianMatrix u x i j) * η x) x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+  integral_directional_hessian_flux_le_of_bounded_weak_test_on_range hu hL hG hW hF hdet T hT hInv
+    hFirst isOpen_univ hconvW (fun x => mem_univ (gradient u x)) hPD v hη hbound hηc hweak hdηc
+    hdη2 hηnonneg
 
 /-- **Rough square test** `η = (χ · vᵀ∇²u v)²`: under the hypotheses of the bounded directional theorem and a compactly
 supported C1 cutoff `χ`, `η` has weak derivatives `a_k b + b a_k` (with `b = χ h_v`, `a_k` from `directional_cutoff_data`),

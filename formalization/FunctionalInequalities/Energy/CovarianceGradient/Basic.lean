@@ -1,6 +1,6 @@
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
 import FunctionalInequalities.Energy.Relaxation.Basic
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import FunctionalInequalities.Probability.Covariance.Basic
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.MeasureTheory.Function.L2Space

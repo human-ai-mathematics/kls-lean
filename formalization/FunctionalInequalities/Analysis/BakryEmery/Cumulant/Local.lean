@@ -387,7 +387,7 @@ end SecondCumulant
 section CompactSupport
 
 /-! The compact-support moment lemmas are stated for a finite-dimensional normed space (no inner
-product), as in the accepted source. -/
+product). -/
 
 variable {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
   [MeasurableSpace F] [BorelSpace F]

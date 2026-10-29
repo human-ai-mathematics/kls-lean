@@ -3,8 +3,8 @@ import FunctionalInequalities.Analysis.Hausdorff.Slice.Critical
 
 /-! # Weighted coarea for an arbitrary `C¹` function
 
-Property C¹ coarea of the weighted coarea route: the regular-domain identity regular-domain coarea and the null
-critical slices critical-slice nullity combine into the weighted coarea formula for **any** `C¹` real function on a
+The regular-domain coarea identity and the nullity of
+critical slices combine into the weighted coarea formula for **any** `C¹` real function on a
 finite-dimensional inner-product space, over any measurable set and any measurable `ℝ≥0∞` weight.
 
 No Lipschitz bound on `u`, no boundedness or finiteness of `S`, no integrability of `g`, and no
@@ -45,7 +45,7 @@ theorem isOpen_regular {u : V → ℝ} (hu : ContDiff ℝ 1 u) :
   rw [h]
   exact (isClosed_critical hu).isOpen_compl
 
-/-- **Weighted coarea for an arbitrary `C¹` function** (obligation C¹ coarea), including almost
+/-- **Weighted coarea for an arbitrary `C¹` function**, including almost
 everywhere measurability of the weighted slices. -/
 theorem coarea_of_contDiff {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
     (hu : ContDiff ℝ 1 u) (hS : MeasurableSet S) (hg : Measurable g) :

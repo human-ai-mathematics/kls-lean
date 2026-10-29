@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Lipschitz.Annuli
 import FunctionalInequalities.Analysis.Lipschitz.Extension
-import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
+import FunctionalInequalities.Analysis.Vector.Coarea.Lipschitz
 import FunctionalInequalities.Analysis.Vector.Jacobian
 import FunctionalInequalities.Analysis.Hausdorff.Measure
 

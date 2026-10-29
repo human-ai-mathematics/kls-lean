@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoOptionalStopping
 import LevyStochCalc.Brownian.ItoIncrement
 
@@ -64,7 +67,7 @@ theorem isStoppingTime_stepStop {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
   · have hset : {ω | stepStop τ c ω ≤ ((i : ℝ) : WithTop ℝ)}
         = {ω | τ ω < ((c : ℝ) : WithTop ℝ)} := by
       ext ω
-      simp only [stepStop, Set.mem_setOf_eq]
+      simp only [stepStop, Set.mem_ofPred_eq]
       by_cases h : ((c : ℝ) : WithTop ℝ) ≤ τ ω
       · simp only [if_pos h, top_le_iff]
         constructor
@@ -78,7 +81,7 @@ theorem isStoppingTime_stepStop {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
     exact ℱ.mono hci _ (hτ.measurableSet_lt c)
   · have hset : {ω | stepStop τ c ω ≤ ((i : ℝ) : WithTop ℝ)} = ∅ := by
       ext ω
-      simp only [stepStop, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false]
+      simp only [stepStop, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
       by_cases h : ((c : ℝ) : WithTop ℝ) ≤ τ ω
       · simp only [if_pos h, top_le_iff]
         simp
@@ -157,7 +160,7 @@ theorem isStoppingTime_gridStopAux {ℱ : Filtration ℝ ‹MeasurableSpace Ω�
   have hset : {ω | gridStopAux τ t n k ω ≤ ((i : ℝ) : WithTop ℝ)}
       = ⋃ j : Fin (k + 1), {ω | stepStop τ (gridPt t n j) ω ≤ ((i : ℝ) : WithTop ℝ)} := by
     ext ω
-    simp only [Set.mem_setOf_eq, Set.mem_iUnion, gridStopAux_le_iff]
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion, gridStopAux_le_iff]
     constructor
     · rintro ⟨j, hj, hjle⟩
       exact ⟨⟨j, Nat.lt_succ_of_le hj⟩, hjle⟩
@@ -324,7 +327,7 @@ theorem stochasticIntegralBrownian_stopped_eq_of_le
   have hAmeas : MeasurableSet A := by
     have hcompl : A = {ω | τ ω < ((t : ℝ) : WithTop ℝ)}ᶜ := by
       ext ω
-      simp only [hAdef, Set.mem_setOf_eq, Set.mem_compl_iff, not_lt]
+      simp only [hAdef, Set.mem_ofPred_eq, Set.mem_compl_iff, not_lt]
     rw [hcompl]
     exact (ℱ.le t _ (hτ.measurableSet_lt t)).compl
   -- on that event the approximations already agree with the uncut integral

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 
 noncomputable section
 
@@ -29,7 +29,7 @@ theorem supplied_gradient_derivative {n : ℕ} {u : EuclideanSpace ℝ (Fin n) �
   rw [hessianMatrix_toEuclideanLin_of_differentiableAt_gradient hu hT.differentiableAt,
     hT.fderiv]
 
-/-- The actual R0 consumer: a gradient Lipschitz constant bounds the Hessian in matrix order. -/
+/-- The consumer: a gradient Lipschitz constant bounds the Hessian in matrix order. -/
 theorem upper_bound_of_lipschitz_gradient {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
     {x : EuclideanSpace ℝ (Fin n)} {G : NNReal} (hu : ContDiff ℝ 1 u)
     (hG : LipschitzWith G (gradient u)) (hx : DifferentiableAt ℝ (gradient u) x) :

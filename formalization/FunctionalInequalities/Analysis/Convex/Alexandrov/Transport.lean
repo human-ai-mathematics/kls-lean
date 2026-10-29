@@ -68,7 +68,7 @@ private lemma alexandrov_gradient_support [CompleteSpace E]
         (zero_lt_one : (0 : ℝ) < 1) hl
   linarith
 
-/-- **Alexandrov identity in push-forward form** (weak Letwin route): for a convex Lipschitz
+/-- **Alexandrov identity in push-forward form**: for a convex Lipschitz
 `u` with `ν ≪ volume`, `ν.map (gradient u) = μ ≪ volume`, integrals of nonnegative functions over the subgradient
 image `∂u(S)` of a compact `S` against `μ` equal integrals over `S` of the composition with `∇u`
 against `ν`. -/
@@ -199,7 +199,7 @@ private lemma isCompact_subgradientImage_local [BorelSpace E]
   rw [← hEq]
   exact hTimage
 
-/-- **Local two-sided Alexandrov bounds** (weak Letwin route, input of the Caffarelli
+/-- **Local two-sided Alexandrov bounds** (input of the Caffarelli
 argument): if `u` is convex and Lipschitz, `ν = e^{-u} dx` (normalized), `ν.map ∇u = μ` has a
 density `ρ` bounded above and below on a closed convex `K` containing `∇u` a.e., then on every compact
 `Q` the volume of the subgradient image is comparable to the volume of the set:

@@ -218,15 +218,6 @@ theorem integral_inner_gradCoord_gradCoord_eq {V : E → ℝ} (hV : V.HasTempera
       _ = α * ∫ x, ‖gradCoord h x‖ ^ 2 ∂(m.tilted (-V)) := by
         linarith [hIBP', hleft]
 
-omit [CompleteSpace E] in
-private theorem energyPyth_integrable {H : Type*} [NormedAddCommGroup H]
-    [NormedSpace ℝ H] (μ : Measure E)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
-    {f : E → H} (hf : f.HasTemperateGrowth) : Integrable f μ := by
-  obtain ⟨k, C, hb⟩ := hf.2 0
-  exact FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hf.1.continuous.aestronglyMeasurable
-    (fun x => by simpa only [norm_iteratedFDeriv_zero] using hb x)
-
 /-- (39): `‖∇²g‖² = α² ‖∇h‖² + χ` with `χ = ‖∇²g - α ∇h‖²`. -/
 theorem integral_norm_sq_gradCoord_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
@@ -245,11 +236,11 @@ theorem integral_norm_sq_gradCoord_gradCoord_eq {V : E → ℝ} (hV : V.HasTempe
     hasTemperateGrowth_gradCoord (hasTemperateGrowth_gradCoord hg)
   have hY : Y.HasTemperateGrowth := hasTemperateGrowth_gradCoord hh
   have hXi : Integrable (fun x => ‖X x‖ ^ 2) (m.tilted (-V)) :=
-    energyPyth_integrable _ hexp ((Function.hasTemperateGrowth_norm_sq _).comp hX)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((Function.hasTemperateGrowth_norm_sq _).comp hX)
   have hYi : Integrable (fun x => ‖Y x‖ ^ 2) (m.tilted (-V)) :=
-    energyPyth_integrable _ hexp ((Function.hasTemperateGrowth_norm_sq _).comp hY)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((Function.hasTemperateGrowth_norm_sq _).comp hY)
   have hXYi : Integrable (fun x => ⟪X x, Y x⟫) (m.tilted (-V)) :=
-    energyPyth_integrable _ hexp ((innerSL ℝ).bilinear_hasTemperateGrowth hX hY)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((innerSL ℝ).bilinear_hasTemperateGrowth hX hY)
   have hp := integral_inner_gradCoord_gradCoord_eq m hV hexp hg hh h30 h33
   have heq : (fun x => ‖X x - α • Y x‖ ^ 2) =
       (fun x => (‖X x‖ ^ 2 - (2 * α) * ⟪X x, Y x⟫) + α ^ 2 * ‖Y x‖ ^ 2) := by
@@ -871,7 +862,7 @@ theorem norm_sq_integral_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth
   rw [PiLp.norm_sq_eq_of_L2, Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   have hint : Integrable (gradCoord h) (m.tilted (-V)) :=
-    energyPyth_integrable _ hexp (hasTemperateGrowth_gradCoord hh)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (hasTemperateGrowth_gradCoord hh)
   let _ : NormedAddCommGroup (E →L[ℝ] PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) :=
     inferInstance
   have hintD : Integrable (fun x => fderiv ℝ h x) (m.tilted (-V)) := by

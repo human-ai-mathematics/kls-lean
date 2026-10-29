@@ -6,14 +6,12 @@ import FunctionalInequalities.KLS.BKL.GaussianTaylor
 # Audit: the isotropic log-concave reduction and the conditional Theorem 1.1 (BKL)
 
 Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2 (p. 5) and p. 30. Clients: in
-dimension one the regular-isotropic premise is discharged by the certified bound `C_P ≤ 4 Var`, so every
-isotropic log-concave law on `ℝ` has `C_P ≤ 4` through the full approximation passage, exercised on
-the standard Gaussian (variance `1`); the zero-dimensional Dirac law has constant `0` without any
-positive-dimensional premise. These clients test the conditional reduction. The all-dimensional
-bound and Theorem 4.1 have separate closed producers in `KLS/BKL/Poincare.lean` and
-`KLS/BKL/CumulantBound.lean`.
-Clients adapted from the Codex bundle `Full-Isotropic-Regular-Reduction/Clients.lean`
-(independently accepted, receipt 4590bfb8…).
+dimension one the regular-isotropic premise is discharged by the certified bound `C_P ≤ 4 Var`, so
+every isotropic log-concave law on `ℝ` has `C_P ≤ 4` through the full approximation passage,
+exercised on the standard Gaussian (variance `1`); the zero-dimensional Dirac law has constant `0`
+without any positive-dimensional premise. These clients test the conditional reduction. The
+all-dimensional bound and Theorem 4.1 have separate closed producers in
+`KLS/BKL/Poincare.lean` and `KLS/BKL/Cumulant/Bound.lean`.
 -/
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities
@@ -29,8 +27,8 @@ theorem variance_one_of_real_isotropic {μ : ProbabilityMeasure ℝ} (hiso : KLS
   norm_num at h
   exact h.symm
 
-/-- The fixed-carrier conditional premise is truly discharged, so this invokes the new
-actual approximation/W3 passage with no future-bound premise remaining. -/
+/-- The fixed-carrier conditional premise is truly discharged, so this invokes the actual
+approximation passage with no unproved-bound premise remaining. -/
 theorem real_isotropic_lc_four (μ : ProbabilityMeasure ℝ)
     (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ) :
     Poincare.LocalSlope.Intrinsic.constant μ ≤ (4 : ENNReal) := by
@@ -69,7 +67,7 @@ private theorem gaussian_isotropic : KLS.Isotropic hG.law := by
     ring
   rw [heq, integral_const_mul, gaussian_second, mul_one]
 
-/-- A concrete genuine nonzero-variance source consumes the full passage without a future
+/-- A concrete genuine nonzero-variance source consumes the full passage without an unproved
 premise. Source LC/isotropy are established from actual Gaussian moments. -/
 theorem actual_gaussian_four :
     variance id (hG.law : Measure ℝ) = 1 ∧
@@ -87,8 +85,8 @@ private theorem zero_isotropic : KLS.Isotropic μ0 := by
   · simp [μ0, Probability.ofMeasure]
   · exact Subsingleton.elim _ _
 
-/-- The actual rank-zero source needs no future n=0 hypothesis. Its fixed-carrier zero
-bound is discharged for every regular law by actual Subsingleton CP0. -/
+/-- The actual rank-zero source needs no separate `n = 0` hypothesis. Its fixed-carrier zero
+bound is discharged for every regular law by the subsingleton bound `C_P = 0`. -/
 theorem actual_rank_zero : Poincare.LocalSlope.Intrinsic.constant μ0 = 0 := by
   have hLC : KLS.LogConcave μ0 := KLS.logConcave_dirac 0
   have h := KLS.LogConcave.localSlope_le_of_regular_isotropic_bound

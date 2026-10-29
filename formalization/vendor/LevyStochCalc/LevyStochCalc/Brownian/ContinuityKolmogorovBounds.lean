@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ContinuityDyadicChaining
 
 /-!
@@ -87,7 +90,7 @@ lemma kolmogorov_real_tail_bound
     (kolmogorov_markov_bound P X hX s t
       (ENNReal.ofReal_pos.mpr hlam) ENNReal.ofReal_ne_top)
   intro ω hω
-  simp only [Set.mem_setOf_eq] at hω ⊢
+  simp only [Set.mem_ofPred_eq] at hω ⊢
   rw [edist_dist, Real.dist_eq]
   exact ENNReal.ofReal_le_ofReal (le_of_lt hω)
 
@@ -249,7 +252,7 @@ lemma kc_ae_increment_bound
   have hlimsup : P (Filter.limsup A Filter.atTop) = 0 :=
     measure_limsup_atTop_eq_zero htsum_ne
   have hae : ∀ᵐ ω ∂P, ω ∉ Filter.limsup A Filter.atTop := by
-    rw [ae_iff]; simp only [not_not, Set.setOf_mem_eq]; exact hlimsup
+    rw [ae_iff]; simp only [not_not, Set.ofPred_mem_eq]; exact hlimsup
   filter_upwards [hae] with ω hω
   rw [Filter.mem_limsup_iff_frequently_mem, Filter.not_frequently,
       Filter.eventually_atTop] at hω
@@ -257,7 +260,7 @@ lemma kc_ae_increment_bound
   refine ⟨N, fun n hn k hk0 hk1 => ?_⟩
   have hωn : ω ∉ A n := hN n hn
   rw [hA_def] at hωn
-  simp only [Set.mem_iUnion, Set.mem_setOf_eq, not_exists, not_lt] at hωn
+  simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hωn
   have hk'mem : k.toNat ∈ Finset.range (2 ^ n) := by
     rw [Finset.mem_range]
     have hcast2 : ((2 ^ n : ℕ) : ℤ) = (2 : ℤ) ^ n := by push_cast; ring

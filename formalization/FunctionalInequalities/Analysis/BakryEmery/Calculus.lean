@@ -327,7 +327,8 @@ theorem bilinearIteratedFDerivTwo_symm_at {f : E → ℝ} {x : E} (hf : ContDiff
   rw [bilinearIteratedFDerivTwo_eq_iteratedFDeriv, bilinearIteratedFDerivTwo_eq_iteratedFDeriv]
   exact (hf.isSymmSndFDerivAt (by simp)).iteratedFDeriv_cons
 
-private theorem line_deriv (x v : E) (t : ℝ) : HasDerivAt (fun t : ℝ => x + t • v) v t := by
+/-- The line `t ↦ x + t v` has derivative `v`. -/
+theorem hasDerivAt_line (x v : E) (t : ℝ) : HasDerivAt (fun t : ℝ => x + t • v) v t := by
   simpa using ((hasDerivAt_id t).smul_const v).const_add x
 
 open Filter Topology in
@@ -348,7 +349,7 @@ theorem bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open {V : E → ℝ} {
   have hd (t : ℝ) (ht : t ∈ S) : HasDerivAt (fun t : ℝ => V (x + t • v))
       (fderiv ℝ V (x + t • v) v) t :=
     ((hV.contDiffAt (hU.mem_nhds ht)).differentiableAt (by norm_num)).hasFDerivAt.comp_hasDerivAt t
-      (line_deriv x v t)
+      (hasDerivAt_line x v t)
   have hmono : MonotoneOn (deriv (fun t : ℝ => V (x + t • v))) S :=
     hfconv.monotoneOn_deriv (fun t ht => (hd t ht).differentiableAt)
   have hnonneg := hmono.derivWithin_nonneg (x := (0 : ℝ))
@@ -366,7 +367,7 @@ theorem bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open {V : E → ℝ} {
       simp only [zero_smul, add_zero]
       exact hdF.hasFDerivAt
     have hcomp : HasDerivAt (fun t : ℝ => fderiv ℝ V (x + t • v))
-        (fderiv ℝ (fderiv ℝ V) x v) 0 := hd0.comp_hasDerivAt 0 (line_deriv x v 0)
+        (fderiv ℝ (fderiv ℝ V) x v) 0 := hd0.comp_hasDerivAt 0 (hasDerivAt_line x v 0)
     simpa using hcomp.clm_apply (hasDerivAt_const (0 : ℝ) v)
   rw [hder.deriv] at hnonneg
   exact hnonneg

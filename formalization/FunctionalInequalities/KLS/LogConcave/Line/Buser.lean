@@ -5,10 +5,9 @@ import FunctionalInequalities.Poincare.SmoothTest.Linear
 import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
-# Stage 1 of the Buser route: `Ψ² ≤ 12 C_P` in dimension one
+# A Buser comparison with constant twelve: `Ψ² ≤ 12 C_P` in dimension one
 
-Source: Stage 1 of the Buser route, obligations `Q0`, `Q0'`, `Q3`,
-`Q4`, `Q5` of `research/audits/BuserRouteStatements.lean`.  Read
+Read
 `evariance_le_smoothTest_constant` (the linear test), `LineDensity.one_div_le_evariance` (a
 bounded density has variance at least `1 / (12 M²)`), then the assembly
 `LogConcave.inv_minkowskiConstant_sq_le` and its affine-support form
@@ -18,8 +17,9 @@ On the line the identity is a smooth test of unit gradient energy, so
 `Var_ν(id) ≤ C_P^smooth(ν)`.  A log-concave law has a finite second moment
 (`LogConcave.memLp_id_two`), so the extended and the real variance agree.  A law with a Borell
 density has support with nonempty interior, hence a median `m`; Bobkov's variance bound
-`1 / (12 ρ(m)²) ≤ Var` of `Line/Variance.lean` and the density bound `ρ(m) ≤ M` give `Q3` without
-a separate rearrangement argument.  Combining `2 ρ(m) ≤ h_M` (`Line/Isoperimetry.lean`) with
+`1 / (12 ρ(m)²) ≤ Var` of `Line/Variance.lean` and the density bound `ρ(m) ≤ M` give
+`LineDensity.one_div_le_evariance` without a separate rearrangement argument.  Combining
+`2 ρ(m) ≤ h_M` (`Line/Isoperimetry.lean`) with
 `1 / (12 ρ(m)²) ≤ Var ≤ C_P^smooth` gives
 `h_M⁻² ≤ 1 / (4 ρ(m)²) ≤ 1 / ρ(m)² ≤ 12 C_P^smooth`; Dirac laws on the line have `h_M = ⊤` and a
 vanishing left side.
@@ -76,19 +76,6 @@ theorem nonempty_linearIsometryEquiv_real {V : Type*} [NormedAddCommGroup V]
 
 namespace Isoperimetry
 
-/-- A surjective isometry pulls thickenings back to thickenings. -/
-theorem thickening_preimage_isometry {α β : Type*} [PseudoEMetricSpace α]
-    [PseudoEMetricSpace β] {f : α → β} (hf : Isometry f) (hsurj : Function.Surjective f)
-    (r : ℝ) (B : Set β) :
-    Metric.thickening r (f ⁻¹' B) = f ⁻¹' Metric.thickening r B := by
-  ext x
-  have himg : f '' (f ⁻¹' B) = B := Set.image_preimage_eq _ hsurj
-  have hdist : Metric.infEDist x (f ⁻¹' B) = Metric.infEDist (f x) B := by
-    have hkey := Metric.infEDist_image (Φ := f) (x := x) (t := f ⁻¹' B) hf
-    rw [himg] at hkey
-    exact hkey.symm
-  simp only [Set.mem_preimage, Metric.mem_thickening_iff_infEDist_lt, hdist]
-
 variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [CompleteSpace W]
@@ -96,54 +83,18 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complet
 
 omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] [CompleteSpace W]
   [SecondCountableTopology W] [FiniteDimensional ℝ W] in
-/-- The Minkowski Cheeger infimum is invariant under a linear isometry equivalence: admissible
-Borel sets correspond, and the outer contents agree because thickenings are transported. -/
+/-- The Minkowski Cheeger infimum is invariant under a linear isometry equivalence; the special
+case of `minkowskiConstant_eq_of_isometryEquiv` for the push-forward law. -/
 theorem minkowskiConstant_map (e : V ≃ₗᵢ[ℝ] W) (ν : ProbabilityMeasure V) :
-    minkowskiConstant (ν.map e.continuous.measurable.aemeasurable) = minkowskiConstant ν := by
-  set ν' := ν.map e.continuous.measurable.aemeasurable with hν'
-  have hcoe : (ν' : Measure W) = (ν : Measure V).map e := ProbabilityMeasure.toMeasure_map _ _
-  have hiso : Isometry (e : V → W) := e.isometry
-  have hsurj : Function.Surjective (e : V → W) := e.surjective
-  have hmass : ∀ B : Set W, MeasurableSet B →
-      (ν : Measure V) ((e : V → W) ⁻¹' B) = (ν' : Measure W) B := by
-    intro B hB
-    rw [hcoe, Measure.map_apply e.continuous.measurable hB]
-  have hcontent : ∀ B : Set W, MeasurableSet B →
-      minkowskiContent (ν : Measure V) ((e : V → W) ⁻¹' B) = minkowskiContent (ν' : Measure W) B := by
-    intro B hB
-    unfold minkowskiContent
-    congr 1
-    funext r
-    rw [thickening_preimage_isometry hiso hsurj, hmass _ hB,
-      hmass _ Metric.isOpen_thickening.measurableSet]
-  rw [minkowskiConstant, minkowskiConstant]
-  refine le_antisymm ?_ ?_
-  · refine le_iInf fun B ↦ le_iInf fun hB ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
-    have hBmeas : MeasurableSet ((e.symm : W → V) ⁻¹' B) := e.symm.continuous.measurable hB
-    have hpre : (e : V → W) ⁻¹' ((e.symm : W → V) ⁻¹' B) = B := by
-      ext x; simp
-    have hmass' : (ν' : Measure W) ((e.symm : W → V) ⁻¹' B) = (ν : Measure V) B := by
-      rw [← hmass _ hBmeas, hpre]
-    have hcont' : minkowskiContent (ν' : Measure W) ((e.symm : W → V) ⁻¹' B) = minkowskiContent (ν : Measure V) B := by
-      rw [← hcontent _ hBmeas, hpre]
-    refine iInf_le_of_le ((e.symm : W → V) ⁻¹' B) ?_
-    refine iInf_le_of_le hBmeas ?_
-    refine iInf_le_of_le (by rwa [hmass']) ?_
-    refine iInf_le_of_le (by rwa [hmass']) ?_
-    rw [hmass', hcont']
-  · refine le_iInf fun B ↦ le_iInf fun hB ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
-    have hBmeas : MeasurableSet ((e : V → W) ⁻¹' B) := e.continuous.measurable hB
-    refine iInf_le_of_le ((e : V → W) ⁻¹' B) ?_
-    refine iInf_le_of_le hBmeas ?_
-    refine iInf_le_of_le (by rw [hmass _ hB]; exact hpos) ?_
-    refine iInf_le_of_le (by rw [hmass _ hB]; exact hlt) ?_
-    rw [hmass _ hB, hcontent _ hB]
+    minkowskiConstant (ν.map e.continuous.measurable.aemeasurable) = minkowskiConstant ν :=
+  minkowskiConstant_eq_of_isometryEquiv e.toIsometryEquiv
+    ⟨e.continuous.measurable, (ProbabilityMeasure.toMeasure_map _ _).symm⟩
 
 end Isoperimetry
 
-/-! ### `Q4`: the linear test -/
+/-! ### The linear test -/
 
-/-- `Q4`: the identity is a smooth test of unit gradient energy on the line, so
+/-- The identity is a smooth test of unit gradient energy on the line, so
 the variance is at most the smooth-test Poincaré constant. -/
 theorem evariance_le_smoothTest_constant (ν : ProbabilityMeasure ℝ)
     (h : MemLp id 2 (ν : Measure ℝ)) :
@@ -161,7 +112,7 @@ theorem evariance_le_smoothTest_constant (ν : ProbabilityMeasure ℝ)
   rwa [Poincare.SmoothTest.rayleigh, henergy, ENNReal.ofReal_one, div_one,
     ofReal_variance h] at hray
 
-/-! ### `Q3`: a bounded density forces a lower bound on the variance -/
+/-! ### A bounded density forces a lower bound on the variance -/
 
 namespace LineDensity
 
@@ -198,7 +149,7 @@ theorem interior_support_nonempty : (interior (μ : Measure ℝ).support).Nonemp
   · rw [ha, d.measure_singleton] at hfull
     simp at hfull
 
-/-- `Q3`: a law on the line whose density is bounded by `M` has extended
+/-- A law on the line whose density is bounded by `M` has extended
 variance at least `1 / (12 M²)`. -/
 theorem one_div_le_evariance {M : ℝ} (hM : 0 < M) (hbd : ∀ x, d.ρ x ≤ M) :
     ENNReal.ofReal (1 / (12 * M ^ 2)) ≤ evariance id (μ : Measure ℝ) := by
@@ -217,7 +168,7 @@ theorem one_div_le_evariance {M : ℝ} (hM : 0 < M) (hbd : ∀ x, d.ρ x ≤ M) 
 
 end LineDensity
 
-/-! ### `Q0` and `Q0'`: the Stage 1 assembly -/
+/-! ### The assembly -/
 
 namespace LogConcave
 
@@ -283,7 +234,7 @@ theorem minkowskiConstant_eq_top_of_interior_empty (hν : LogConcave ν)
       exact iInf_neg (by rw [hB0]; exact lt_irrefl 0)
   · exact iInf_neg hB
 
-/-- `Q0`: on the line the squared inverse Cheeger scale is at most twelve times
+/-- On the line the squared inverse Cheeger scale is at most twelve times
 the smooth-test Poincaré constant. -/
 theorem inv_minkowskiConstant_sq_le (hν : LogConcave ν) :
     (Isoperimetry.minkowskiConstant ν)⁻¹ ^ 2 ≤
@@ -329,7 +280,7 @@ theorem inv_minkowskiConstant_sq_le (hν : LogConcave ν) :
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
-/-- `Q0'`: a log-concave law whose affine support has dimension at most one
+/-- A log-concave law whose affine support has dimension at most one
 satisfies the Buser comparison with constant twelve.  Dirac laws have both sides zero on the
 left. -/
 theorem inverseScale_sq_le_of_finrank_le_one {μ : ProbabilityMeasure E} (hμ : LogConcave μ)

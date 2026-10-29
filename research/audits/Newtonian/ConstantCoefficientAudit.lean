@@ -1,10 +1,10 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.ConstantCoefficientSchauder
+import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.ConstantCoefficient
 
 /-!
 # Audit: GT Lemma 6.1 (interior form) for `2 D₀₀ + D₀₁ + D₁₀ + 2 D₁₁` on a planar solution
 
 Real client of `constant_coefficient_interior_hessian_holder`
-(`FunctionalInequalities/Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean`;
+(`FunctionalInequalities/Analysis/IteratedDerivative/Schauder/ConstantCoefficient.lean`;
 Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001, Lemma
 6.1, p. 88) with `n = 2`, `A = !![2, 1; 1, 2]` (ellipticity constants `λ = 1`, `Λ = 3`), `α = 1/2`,
 `c = 0`, `R = 1`, on the saddle `u(x) = x₀ x₁`, whose Hessian `!![0, 1; 1, 0]` is seen only by the

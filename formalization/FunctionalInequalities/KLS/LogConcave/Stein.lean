@@ -10,8 +10,11 @@ import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moment
 Letwin, arXiv:2607.24164v1, Appendix A.7 and Lemma 2.9, for a centered log-concave law `μ` on `ℝⁿ`
 of full affine dimension (hence `μ ≪ volume` with finite second moment): the Stein identity extends
 to all locally Lipschitz `f` with `f, ∇f ∈ L²(μ)`, and the `H^{-1}(μ)` norm of `⟪·, v⟫` is bounded by
-`∫ ‖τ(x) v‖² dμ`. No isotropy, regularity or Stein-kernel construction is assumed or provided; the
-moment-map kernel of the paper (Lemma 2.2, Proposition 2.8) and Theorems 1.1–1.2 remain open.
+`∫ ‖τ(x) v‖² dμ`. No isotropy, regularity or Stein-kernel construction is assumed or provided. This
+module neither uses nor constructs the moment-map kernel of the paper: smooth moment potentials
+(Lemma 2.2) are produced in `KLS/Letwin/MomentMap.lean`, the `C²` form of the `H^{-1}` variance
+inequality (Proposition 2.8) is in `KLS/LogConcave/HminusOne.lean`, and Theorem 1.2 is in
+`KLS/Letwin/QuadraticBound.lean`.
 -/
 
 open MeasureTheory

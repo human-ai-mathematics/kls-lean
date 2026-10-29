@@ -1,12 +1,12 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.ProductCoupling
 import FunctionalInequalities.KLS.LogConcave.HminusOne
-import FunctionalInequalities.Probability.QuadraticVariance
+import FunctionalInequalities.Probability.Variance.Quadratic
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.LinearImage
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import FunctionalInequalities.Probability.Moments
 import FunctionalInequalities.Probability.Stein.Kernel
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates

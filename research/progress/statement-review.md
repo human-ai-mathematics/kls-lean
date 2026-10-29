@@ -42,8 +42,11 @@ replay are separate checks with the snapshot scopes in the [verification guide](
   `n > 0` and every self-adjoint `M`, including singular and indefinite operators. It does not
   certify the noncompact source theorem. The separate
   [`letwinQuadraticBound`](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean)
-  now proves that theorem, with the same constant and no compact-support premise; no new
-  registered certificate is claimed. The inspected BKL and Letwin PDF hashes match the
+  now proves that theorem, with the same constant and no compact-support premise; the
+  separate `thm:letwin-quadratic-bound` certificate registers that full statement. Theorem 1.1
+  has the paper-target `thm:letwin-log-quarter` through the BKL alternative route; the original
+  third-moment/traced Klartag route remains unformalized, and Proposition 2.8 remains partial
+  for full-dimensional laws. The inspected BKL and Letwin PDF hashes match the
   pins in the [literature register](LITERATURE.md).
 - ADMG [arXiv:1603.08412v1](https://arxiv.org/html/1603.08412v1), Definition 3.3 and Theorem 3.6:
   the left relaxation uses measurable set sequences; the right uses globally Lipschitz function
@@ -148,9 +151,9 @@ namespaces; they do not introduce forwarding modules or change mathematical scop
 | `KLS/Geometry/Perimeter/MetricBV/Finite.lean` | [Analysis/MetricBV/Finite.lean](../../formalization/FunctionalInequalities/Analysis/MetricBV/Finite.lean) |
 | `KLS/Geometry/Perimeter/MetricBV/Scaling.lean` | [Analysis/MetricBV/Scaling.lean](../../formalization/FunctionalInequalities/Analysis/MetricBV/Scaling.lean) |
 | `KLS/Geometry/Perimeter/MetricBV/Transport.lean` | [Analysis/MetricBV/Transport.lean](../../formalization/FunctionalInequalities/Analysis/MetricBV/Transport.lean) |
-| `Poincare/Product/Variance.lean` | [Probability/ProductVariance.lean](../../formalization/FunctionalInequalities/Probability/ProductVariance.lean) |
+| `Poincare/Product/Variance.lean` | [Probability/Variance/Product.lean](../../formalization/FunctionalInequalities/Probability/Variance/Product.lean) |
 | `KLS/Definitions.lean` | [Probability/LogConcave.lean](../../formalization/FunctionalInequalities/Probability/LogConcave.lean) |
-| `KLS/BKL/Theorem41.lean` | [KLS/BKL/CumulantInduction.lean](../../formalization/FunctionalInequalities/KLS/BKL/CumulantInduction.lean) |
+| `KLS/BKL/Theorem41.lean` | [KLS/BKL/Cumulant/Induction.lean](../../formalization/FunctionalInequalities/KLS/BKL/Cumulant/Induction.lean) |
 | `KLS/BKL/Proposition71.lean` | [KLS/BKL/TaylorBound.lean](../../formalization/FunctionalInequalities/KLS/BKL/TaylorBound.lean) |
 
 Public-name changes are a separate migration. The namespace for each row is

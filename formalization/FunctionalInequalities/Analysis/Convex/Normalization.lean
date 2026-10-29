@@ -7,7 +7,7 @@ import Mathlib.Order.CompletePartialOrder
 # Affine normalisation of convex bodies
 
 Maximal-volume simplices in a convex body and the elementary geometry of the standard simplex, used for the
-affine normalisation step of Caffarelli's strict convexity argument (weak Letwin route).
+affine normalisation step of Caffarelli's strict convexity argument.
 
 * `simplexEdgeMatrix`, `exists_max_simplexEdgeMatrix_det`;
 * `abs_simplexCoord_le_one_of_max`;
@@ -29,8 +29,8 @@ private def simplexVolume {n : ℕ} :
     (Fin (n + 1) → EuclideanSpace ℝ (Fin n)) → ℝ :=
   fun v => |(simplexEdgeMatrix v).det|
 
-/-- **A compact convex body contains a simplex of maximal volume with positive volume** (weak Letwin
-route, Caffarelli's argument, affine normalisation). -/
+/-- **A compact convex body contains a simplex of maximal volume with positive volume**
+(Caffarelli's argument, affine normalisation). -/
 theorem exists_max_simplexEdgeMatrix_det {n : ℕ} {K : Set (EuclideanSpace ℝ (Fin n))}
     (hK : IsCompact K) (hint : (interior K).Nonempty) :
     ∃ v : Fin (n + 1) → EuclideanSpace ℝ (Fin n), (∀ i, v i ∈ K) ∧
@@ -172,8 +172,8 @@ private lemma simplexEdgeMatrix_update_succ_det
   simpa [smul_eq_mul] using
     Matrix.det_updateCol_sum (simplexEdgeMatrix v) j c
 
-/-- **Maximality of the simplex confines the body to a box in simplex coordinates** (weak Letwin
-route, Caffarelli's argument): if `v` is a nondegenerate simplex of maximal volume in `K`,
+/-- **Maximality of the simplex confines the body to a box in simplex coordinates** (Caffarelli's
+argument): if `v` is a nondegenerate simplex of maximal volume in `K`,
 then every `y ∈ K` has simplex coordinates `c = (M v)⁻¹ (y − v 0)` with `|cⱼ| ≤ 1` and
 `|1 − ∑ cⱼ| ≤ 1`. -/
 theorem abs_simplexCoord_le_one_of_max {n : ℕ} {K : Set (EuclideanSpace ℝ (Fin n))}
@@ -347,7 +347,7 @@ private lemma barycentre_ofLp_apply {n : ℕ} (i : Fin n) :
   simp [Finset.sum_apply]
 
 /-- **The standard simplex contains a ball around its barycentre, and the coordinate box lies in a
-ball** (weak Letwin route, Caffarelli's argument). -/
+ball** (Caffarelli's argument). -/
 theorem closedBall_subset_stdSimplex_and_box_subset_closedBall {n : ℕ} (hn : 0 < n) :
     closedBall ((1 / ((n : ℝ) + 1)) • ∑ i, EuclideanSpace.single i (1 : ℝ))
         (1 / (2 * ((n : ℝ) + 1) * Real.sqrt n)) ⊆
@@ -516,8 +516,8 @@ open Set Metric
 namespace FunctionalInequalities.Analysis
 
 set_option maxHeartbeats 4000000 in
-/-- **Affine normalisation of convex bodies** (John-type, via a maximal-volume simplex; weak Letwin
-route, Caffarelli's argument): there is a constant `C` depending only on the space such that every
+/-- **Affine normalisation of convex bodies** (John-type, via a maximal-volume simplex; Caffarelli's
+argument): there is a constant `C` depending only on the space such that every
 compact convex set with nonempty interior is affinely equivalent to a set squeezed between the unit
 ball and the ball of radius `C`. -/
 theorem exists_affine_normalization {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

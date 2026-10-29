@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Basic
 import LevyStochCalc.Poisson.PoissonSuperposition
 import LevyStochCalc.Poisson.RegionIndependence
@@ -217,7 +220,7 @@ theorem PoissonRandomMeasure.exists_of_sigmaFinite
   let ι := {q : ℕ × ℕ // Λ (A q) ≠ 0}
   let r : ι → ℝ≥0 := fun p => (Λ (A p.1)).toNNReal
   let ρ : ι → Measure (ℝ × E) := fun p => (Λ (A p.1))⁻¹ • Λ.restrict (A p.1)
-  haveI : ∀ p, IsProbabilityMeasure (ρ p) := fun p => ⟨by
+  have : ∀ p, IsProbabilityMeasure (ρ p) := fun p => ⟨by
     change ((Λ (A p.1))⁻¹ • Λ.restrict (A p.1)) Set.univ = 1
     rw [Measure.smul_apply, Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
       smul_eq_mul, ENNReal.inv_mul_cancel p.2 (hA_fin p.1)]⟩

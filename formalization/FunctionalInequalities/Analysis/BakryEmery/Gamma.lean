@@ -98,7 +98,7 @@ theorem gammaTwo_apply (U f : E → ℝ) (x : E) :
     gammaTwo U f x =
       weightedLaplacian U (fun y => gamma f f y) x / 2 - gamma f (weightedLaplacian U f) x := rfl
 
-/-- `Γ₂` written out in gradients and Laplacians, exactly the left-hand side of route the Bochner identity. -/
+/-- `Γ₂` written out in gradients and Laplacians, exactly the left-hand side of the Bochner identity. -/
 theorem gammaTwo_eq_expanded (U f : E → ℝ) (x : E) :
     gammaTwo U f x =
       (Laplacian.laplacian (fun y => ‖gradient f y‖ ^ 2) x -

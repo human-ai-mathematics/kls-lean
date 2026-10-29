@@ -1,13 +1,15 @@
-import FunctionalInequalities.Analysis.Convex.HessianIncrement
+import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
 import Lean
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
-/-! Audit client for the integrated Hessian-increment energy support of the weak Letwin route (Letwin arXiv:2607.24164v1,
-toward Theorem 2.5): centered second-difference regularity and bounds (`Analysis/Convex/SecondDifference.lean`), total
-coordinate Hessian-entry measurability and the Lipschitz-gradient entry bound (`Probability/Stein/HessianKernel.lean`), weak
-generator integrability (`Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean`) and the weighted increment
-integrability with the original integrated energy estimate (`Analysis/Convex/HessianIncrement.lean`). Each section restates the
-exact frozen statement and consumes it in an actual client, including the integrable uniform difference-quotient bound.
-Canonical imports only. -/
+/-! Audit client for the integrated Hessian-increment energy support of the weak Letwin route
+(Letwin arXiv:2607.24164v1, toward Theorem 2.5): centered second-difference regularity and bounds
+(`Analysis/Convex/SecondOrder/Difference.lean`), total coordinate Hessian-entry measurability and
+the Lipschitz-gradient entry bound (`Probability/Stein/HessianKernel.lean`), weak generator
+integrability (`Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean`) and the weighted
+increment integrability with the original integrated energy estimate
+(`Analysis/Convex/SecondOrder/HessianIncrement.lean`). Each section restates the exact library
+statement and consumes it in an actual client, including the integrable uniform
+difference-quotient bound. Canonical imports only. -/
 
 noncomputable section
 
@@ -130,8 +132,8 @@ open FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
 
 namespace HessianIncrementAudit.IncrementEnergyIntegrability
 
-/-- The exact rescaled density needed when integrating the already canonical
-pointwise N11a coercivity, using the original N11b C1/C2 inputs. -/
+/-- The exact rescaled density needed when integrating the canonical pointwise increment
+coercivity, using the original `C¹`/`C²` inputs. -/
 theorem integrable_original_increment_coercivity_density {n : ℕ}
     {u η : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u))
@@ -158,7 +160,7 @@ open FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
 namespace HessianIncrementAudit.GeneratorIntegrability
 
 /-- Derive the actual centered test and determinant input from the original
-N11b hypotheses, then consume all three genuine integrability outputs. -/
+hypotheses, then consume all three genuine integrability outputs. -/
 theorem original_centered_generator_integrability {n : ℕ}
     {u V η : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u))

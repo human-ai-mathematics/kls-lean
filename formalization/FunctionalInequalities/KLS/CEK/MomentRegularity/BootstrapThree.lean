@@ -1,7 +1,8 @@
+import FunctionalInequalities.Analysis.EuclideanCoordinates
 import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
 import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
-import FunctionalInequalities.Analysis.BakryEmery.EllipticGradientForcing
-import FunctionalInequalities.Analysis.IteratedDerivative.HolderBootstrapStep
+import FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic
+import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
 
 /-!
 # The regular moment potential is `C³` with locally Hölder third derivative
@@ -20,7 +21,7 @@ is bounded and Hölder on every ball `ball 0 s`, and the gradient inverse `Ψ` i
 first-order coefficients, zero right-hand side), fed into the one-step gain
 `contDiffOn_three_of_quotient_equations`.
 
-Supporting lemmas: `opNorm_le_sum_sum_abs_basisFun` (operator norm of a bilinear form by its
+Supporting lemmas: `norm_le_sum_abs_apply_basisFun_apply` (operator norm of a bilinear form by its
 standard-basis entries), `hessian_holder_of_entries` (entrywise Hölder Hessian gives
 operator-norm Hölder Hessian), `hessianMatrix_isSymm`, `averagedInverse_symm`,
 `abs_differenceQuotient_le_of_lipschitz`, and `contDiffOn_three_balls_of_regular_fields`
@@ -54,35 +55,6 @@ theorem clm_apply_eq_sum_basisFun {F : Type*} [NormedAddCommGroup F] [NormedSpac
   simp only [map_smul]
   rfl
 
-/-- The operator norm of a bilinear form on `ℝⁿ` is at most the sum of the absolute values of
-its standard-basis entries. -/
-theorem opNorm_le_sum_sum_abs_basisFun (B : E →L[ℝ] E →L[ℝ] ℝ) :
-    ‖B‖ ≤ ∑ i, ∑ j, |B (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)| := by
-  refine ContinuousLinearMap.opNorm_le_bound₂ B (by positivity) fun h k => ?_
-  rw [clm_apply_eq_sum_basisFun B h, sum_apply, Real.norm_eq_abs]
-  simp only [smul_apply, smul_eq_mul]
-  calc |∑ i, h i * B (EuclideanSpace.basisFun (Fin n) ℝ i) k|
-      ≤ ∑ i, |h i * B (EuclideanSpace.basisFun (Fin n) ℝ i) k| := Finset.abs_sum_le_sum_abs _ _
-    _ ≤ ∑ i, ‖h‖ * (∑ j, |B (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)| * ‖k‖) := by
-        refine Finset.sum_le_sum fun i _ => ?_
-        rw [abs_mul]
-        refine mul_le_mul (by simpa using PiLp.norm_apply_le h i) ?_ (abs_nonneg _) (norm_nonneg _)
-        rw [clm_apply_eq_sum_basisFun (B (EuclideanSpace.basisFun (Fin n) ℝ i)) k]
-        simp only [smul_eq_mul]
-        calc |∑ j, k j * B (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)|
-            ≤ ∑ j, |k j * B (EuclideanSpace.basisFun (Fin n) ℝ i)
-                (EuclideanSpace.basisFun (Fin n) ℝ j)| := Finset.abs_sum_le_sum_abs _ _
-          _ ≤ ∑ j, |B (EuclideanSpace.basisFun (Fin n) ℝ i)
-                (EuclideanSpace.basisFun (Fin n) ℝ j)| * ‖k‖ := by
-              refine Finset.sum_le_sum fun j _ => ?_
-              rw [abs_mul, mul_comm]
-              exact mul_le_mul_of_nonneg_left (by simpa using PiLp.norm_apply_le k j) (abs_nonneg _)
-    _ = (∑ i, ∑ j, |B (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)|) * ‖h‖ * ‖k‖ := by
-        simp only [Finset.mul_sum, Finset.sum_mul]
-        exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
-
 /-- Entrywise Hölder continuity of the Hessian matrix on a set gives operator-norm Hölder
 continuity of the Hessian `D²u` there, with constant `n² C`. -/
 theorem hessian_holder_of_entries {u : E → ℝ} {s : Set E} {C η : ℝ≥0}
@@ -90,7 +62,7 @@ theorem hessian_holder_of_entries {u : E → ℝ} {s : Set E} {C η : ℝ≥0}
     ∀ x ∈ s, ∀ y ∈ s, ‖fderiv ℝ (fderiv ℝ u) x - fderiv ℝ (fderiv ℝ u) y‖ ≤
       ((n : ℝ) ^ 2 * C) * ‖x - y‖ ^ (η : ℝ) := by
   intro x hx y hy
-  refine (opNorm_le_sum_sum_abs_basisFun _).trans ?_
+  refine (norm_le_sum_abs_apply_basisFun_apply _).trans ?_
   have hentry : ∀ i j, |(fderiv ℝ (fderiv ℝ u) x - fderiv ℝ (fderiv ℝ u) y)
       (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
       C * ‖x - y‖ ^ (η : ℝ) := by

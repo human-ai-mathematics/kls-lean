@@ -1,0 +1,3459 @@
+{
+  "version": 1,
+  "review_date": "2026-10-26",
+  "scope": "Mathematical ownership, shared infrastructure and private proof stages. No literature coverage, theorem constants, normalization, dimensional endpoint or certificate status is advanced.",
+  "literature_targets": [
+    "Bizeul–Klartag–Lehec arXiv:2610.05474v1 Theorems 3.1, 4.1 and 1.1",
+    "Letwin arXiv:2607.24164v1 Lemma 2.2 via Berman–Berndtsson arXiv:1207.6128v1 Theorem 2.24(ii)"
+  ],
+  "module_path_map": [
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean",
+        "formalization/FunctionalInequalities/Analysis/Tensor/Multilinear.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/Gamma.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Gamma.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/LocalDerivatives.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/LocalDerivatives.lean",
+        "formalization/FunctionalInequalities/Analysis/Tensor/Multilinear.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean",
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Transport.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Boundary.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Sublevel.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionCovering.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
+        "formalization/FunctionalInequalities/Analysis/LocalExtension.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/LocalExtension.lean",
+        "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/LocalExtension.lean",
+        "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+        "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+        "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
+        "formalization/FunctionalInequalities/L2/Pairing.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/BKL/CompactReduction.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Operator/Coordinates.lean",
+        "formalization/FunctionalInequalities/Analysis/Operator/InverseSqrt.lean",
+        "formalization/FunctionalInequalities/Analysis/Operator/Positive.lean",
+        "formalization/FunctionalInequalities/KLS/BKL/CompactReduction.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Criterion.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Criterion.lean",
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Homothety.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Hausdorff/SurfaceSlicing.lean",
+        "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Homothety.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClass.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClass.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/Covariance.lean",
+        "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean"
+      ]
+    }
+  ],
+  "public_relocations": [
+    {
+      "name": "ContDiffBump.mk.congr_simp",
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/LocalExtension.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3896368422",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3896368422",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.abs_hessianInverseOperator_comp_sub_div_le",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4119011445",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4119011445",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_inner_hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3973861853",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3973861853",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_inner_hessianOperator_at",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3970857884",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3970857884",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.bounded_hessianInverseOperator_self",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1020336337",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1020336337",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.contDiffAt_inverseHessianEntry",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "566097570",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "566097570",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.continuous_hessianInverseOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1140786047",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1140786047",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_fderiv_comp_gradient_apply",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3997056997",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3997056997",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "389916253",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "389916253",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_ringInverse_hessianOperator_apply",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2226155587",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2226155587",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1461247587",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1461247587",
+      "before_value_hash": "2765437768",
+      "after_value_hash": "2762602966"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator.congr_simp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4008073796",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4008073796",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_comp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2014426296",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2014426296",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_mul",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3048469556",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3048469556",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_self",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1524979193",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1524979193",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4175111516",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4175111516",
+      "before_value_hash": "4098847072",
+      "after_value_hash": "4098847072"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator.congr_simp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "218469842",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "218469842",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator_isSelfAdjoint",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2658828326",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2658828326",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator_isUnit_of_posDef",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3976301913",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3976301913",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inner_ringInverse_hessianOperator_pos",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1289442595",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1289442595",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2880170099",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2880170099",
+      "before_value_hash": "2645295865",
+      "after_value_hash": "2645295865"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry.congr_simp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3740861497",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3740861497",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1324011574",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1324011574",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.operatorEntry_hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1345960454",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1345960454",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_fderiv_comp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Diffusion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2364441636",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2364441636",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_hessian",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Operator.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "166707300",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "166707300",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.weightedLaplacian.congr_simp",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/Gamma.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean",
+      "before_levels": [
+        "u"
+      ],
+      "before_type_hash": "2850095010",
+      "after_levels": [
+        "u"
+      ],
+      "after_type_hash": "2850095010",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.compact_mul_data",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "2000187144",
+      "after_levels": [],
+      "after_type_hash": "2000187144",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "1675526490",
+      "after_levels": [],
+      "after_type_hash": "1675526490",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "1355563796",
+      "after_levels": [],
+      "after_type_hash": "1355563796",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "794188879",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2530557943",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.bregman_comparison_of_sections",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "1564326163",
+      "after_levels": [],
+      "after_type_hash": "1564326163",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.defect",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3992693317",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3992693317",
+      "before_value_hash": "4248062030",
+      "after_value_hash": "4248062030"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.defect.congr_simp",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "180095253",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "180095253",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.defect_le_of_lipschitz_soft",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3252641789",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3252641789",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.defect_le_sphere_bound_of_soft",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4044628250",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4044628250",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.defect_ray_le_of_soft",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2632685899",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2632685899",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_bregman_comparison",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "3197422727",
+      "after_levels": [],
+      "after_type_hash": "3197422727",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_disjoint_section_cover",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionCovering.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1783921020",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1783921020",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_holder_gradient_of_lipschitz_local_soft",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2967046665",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2967046665",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_normalized_margin",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "2389172760",
+      "after_levels": [],
+      "after_type_hash": "2389172760",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_section_engulfing",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "3359840102",
+      "after_levels": [],
+      "after_type_hash": "3359840102",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.monotoneOn_ray_quotient_of_soft",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "840759070",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "840759070",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.SoftEngulfing.section_subset_of_intersection",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionCovering.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean",
+      "before_levels": [],
+      "before_type_hash": "2694997408",
+      "after_levels": [],
+      "after_type_hash": "2694997408",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.abs_det_linear_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3687603729",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3687603729",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.abs_sub_le_of_alexandrov_density_close",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [],
+      "before_type_hash": "1681044289",
+      "after_levels": [],
+      "after_type_hash": "1681044289",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.abs_sub_le_of_domain_alexandrov_density_close",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [],
+      "before_type_hash": "3491869070",
+      "after_levels": [],
+      "after_type_hash": "3491869070",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_eventually_mem_subgradientImageOn_of_locally_uniform",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "732757217",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "732757217",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.analyticSet_subgradientImageOn",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3807840535",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3807840535",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_data",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean",
+      "before_levels": [],
+      "before_type_hash": "3950378540",
+      "after_levels": [],
+      "after_type_hash": "3950378540",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean",
+      "before_levels": [],
+      "before_type_hash": "4223946430",
+      "after_levels": [],
+      "after_type_hash": "4223946430",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.bounds_of_alexandrov_density_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [],
+      "before_type_hash": "3776072592",
+      "after_levels": [],
+      "after_type_hash": "3776072592",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.bounds_of_domain_alexandrov_density_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [],
+      "before_type_hash": "3386759246",
+      "after_levels": [],
+      "after_type_hash": "3386759246",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.compact_bounded_test_domination",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
+      "before_levels": [],
+      "before_type_hash": "2904751209",
+      "after_levels": [],
+      "after_type_hash": "2904751209",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_one_of_map_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "976969290",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "976969290",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contactSet_eq_singleton_of_exposed_of_local_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3203749319",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3203749319",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contactSet_eq_singleton_of_local_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4063829454",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4063829454",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.convexOn_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [],
+      "before_type_hash": "2504652006",
+      "after_levels": [],
+      "after_type_hash": "2504652006",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.convexOn_truncatedConjugate",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1360487530",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1360487530",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.domain_constant_density_of_locally_uniform",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "848592709",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "848592709",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_contact_of_sublevel_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Sublevel.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2941911774",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2941911774",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_domain_unit_contact",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2779484108",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2779484108",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_primal_supports_of_open_dual_mass",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4146383374",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4146383374",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_truncatedConjugate_eq_of_subgradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2921801151",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2921801151",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_bounded_weak_log_extension",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [],
+      "before_type_hash": "2330242030",
+      "after_levels": [],
+      "after_type_hash": "2330242030",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_common_boundary_modulus_domain",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3480009928",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3480009928",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_common_boundary_modulus_of_domain_mass",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1876281148",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1876281148",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_common_lower_boundary_modulus_domain",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3756702918",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3756702918",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_common_lower_boundary_modulus_of_domain_mass",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3565289207",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3565289207",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_compact_sections_subset_and_shrink",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1324167773",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1324167773",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+      "old": "formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/LocalExtension.lean",
+      "before_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "before_type_hash": "2186672466",
+      "after_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "after_type_hash": "618780860",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_contact_of_uniform_close",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2768466974",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2768466974",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_contact_of_uniform_close_on_open",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3970656131",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3970656131",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_contained_section_unique_supports",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3839724476",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3839724476",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_disjoint_section_cover_of_alexandrov_density",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionCovering.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1851682257",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1851682257",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measure",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1350169046",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1350169046",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measures_local_limits",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3722582318",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3722582318",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_exposed_contact_of_lt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2990477317",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2990477317",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_farthest_point_exposed",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2197886350",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2197886350",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_holder_gradient_of_alexandrov_density",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "2120184565",
+      "after_levels": [],
+      "after_type_hash": "2120184565",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_holder_gradient_of_growth",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2121393555",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2121393555",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_inverse_subgradient_volume_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1185790372",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1185790372",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_local_subgradientImage_volume_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Transport.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1160849026",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1160849026",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_alexandrov_maximum_principle",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3899260939",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3899260939",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_alexandrov_maximum_principle_domain",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1913946122",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1913946122",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_boundary_power_bound_domain",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2049712460",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2049712460",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_boundary_power_bound_of_domain_mass",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1752711073",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1752711073",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_pos_volume_convexHull_closedBall_union_singleton_ge",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2947045189",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2947045189",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_quantitative_weak_type_section_cover",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionCovering.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3843347103",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3843347103",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_residual_contact_of_alexandrov_density_close",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [],
+      "before_type_hash": "1563699450",
+      "after_levels": [],
+      "after_type_hash": "1563699450",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_residual_contact_of_domain_alexandrov_density_close",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [],
+      "before_type_hash": "4067657738",
+      "after_levels": [],
+      "after_type_hash": "4067657738",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_alexandrov_estimate",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "572644831",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "572644831",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_alexandrov_estimate_of_density_bound",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3557949571",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3557949571",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_alexandrov_estimate_real",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2690200502",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2690200502",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_engulfing_of_alexandrov_density",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "3650969630",
+      "after_levels": [],
+      "after_type_hash": "3650969630",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_estimate_of_continuous_density",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1659201730",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1659201730",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_power_inclusion_of_alexandrov_density",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionEngulfing.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_levels": [],
+      "before_type_hash": "3109886257",
+      "after_levels": [],
+      "after_type_hash": "3109886257",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_volume_bound_of_continuous_density",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [],
+      "before_type_hash": "3639030362",
+      "after_levels": [],
+      "after_type_hash": "3639030362",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_section_volume_upper_bound",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [],
+      "before_type_hash": "1973133295",
+      "after_levels": [],
+      "after_type_hash": "1973133295",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_truncatedConjugate_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1881759841",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1881759841",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_uniform_section_density_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2442678753",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2442678753",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_uniform_section_subset_ball",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "197177083",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "197177083",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_unit_inner_le_infDist_frontier",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3522195925",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3522195925",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.gradient_tangent_gap_pos",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2097009054",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2097009054",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.growth_of_closedBall_subset_section",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "462616143",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "462616143",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [],
+      "before_type_hash": "503201583",
+      "after_levels": [],
+      "after_type_hash": "503201583",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_compact_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [],
+      "before_type_hash": "3580488705",
+      "after_levels": [],
+      "after_type_hash": "3580488705",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [
+        "u"
+      ],
+      "before_type_hash": "4120033372",
+      "after_levels": [
+        "u"
+      ],
+      "after_type_hash": "4120033372",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "608913713",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "608913713",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1288651072",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1288651072",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_max_shift_of_ae_nonneg_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [],
+      "before_type_hash": "2119769755",
+      "after_levels": [],
+      "after_type_hash": "2119769755",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_shift_of_ae_nonneg_compact_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [],
+      "before_type_hash": "658297163",
+      "after_levels": [],
+      "after_type_hash": "658297163",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_rpow_shift_of_ae_nonneg_compact_bounded",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean",
+      "before_levels": [],
+      "before_type_hash": "2424867558",
+      "after_levels": [],
+      "after_type_hash": "2424867558",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.infDist_frontier_image_le_of_width",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2896064041",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2896064041",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.infDist_frontier_le_diam_of_mem",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Boundary.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1096154129",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1096154129",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.infDist_frontier_le_of_forall_inner_le",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "817572602",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "817572602",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
+      "before_levels": [],
+      "before_type_hash": "3796699129",
+      "after_levels": [],
+      "after_type_hash": "3796699129",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_eq_zero_of_integrable_weak_derivative",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
+      "before_levels": [],
+      "before_type_hash": "2787524551",
+      "after_levels": [],
+      "after_type_hash": "2787524551",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
+      "before_levels": [],
+      "before_type_hash": "2221377870",
+      "after_levels": [],
+      "after_type_hash": "2221377870",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
+      "before_levels": [],
+      "before_type_hash": "1067109491",
+      "after_levels": [],
+      "after_type_hash": "1067109491",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.isOpen_setOf_truncatedConjugate_maximizer_lt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1430938764",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1430938764",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.le_neg_of_lower_alexandrov_bound",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [],
+      "before_type_hash": "936774271",
+      "after_levels": [],
+      "after_type_hash": "936774271",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.le_of_strict_alexandrov_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4230205026",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4230205026",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.le_of_strict_domain_alexandrov_bounds",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2116373881",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2116373881",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.limsup_volume_subgradientImageOn_le_of_locally_uniform",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2962507806",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2962507806",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.lintegral_subgradientImage_eq_of_map_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Transport.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3793045516",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3793045516",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_data",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean",
+      "before_levels": [],
+      "before_type_hash": "3960301142",
+      "after_levels": [],
+      "after_type_hash": "3960301142",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_test",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/PowerTests.lean",
+      "before_levels": [],
+      "before_type_hash": "1032548877",
+      "after_levels": [],
+      "after_type_hash": "1032548877",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.locallyIntegrable_mul_of_compact_L2",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "1857561923",
+      "after_levels": [],
+      "after_type_hash": "1857561923",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.locallyIntegrable_of_compact_local_memLp_two",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "971576337",
+      "after_levels": [],
+      "after_type_hash": "971576337",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.measurableSet_subgradientImageOn_of_isOpen",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "968260310",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "968260310",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.memLp_mul_of_hasCompactSupport",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "1235953988",
+      "after_levels": [],
+      "after_type_hash": "1235953988",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.memLp_top_restrict_of_continuous",
+      "old": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+      "before_levels": [],
+      "before_type_hash": "2714637437",
+      "after_levels": [],
+      "after_type_hash": "2714637437",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.mem_subgradientImage_of_affine_le_of_nonneg_frontier",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1868563103",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1868563103",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.nonpos_of_pos_domain_alexandrov_lower",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2798449757",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2798449757",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.norm_gradient_sub_le_of_growth",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2805741190",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2805741190",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.nullMeasurableSet_subgradientImageOn_of_measurableSet",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1508249391",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1508249391",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.optimizer_transport_of_domain_measure",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2110041496",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2110041496",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.section_volume_mul_le",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [],
+      "before_type_hash": "2167014121",
+      "after_levels": [],
+      "after_type_hash": "2167014121",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.strictConvexOn_of_contact_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "946137562",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "946137562",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.strictConvexOn_of_domain_contact_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1193751730",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1193751730",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.strictConvexOn_of_map_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1760712826",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1760712826",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.strictConvexOn_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [],
+      "before_type_hash": "1683725140",
+      "after_levels": [],
+      "after_type_hash": "1683725140",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_comp_affineEquiv_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "348319576",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "348319576",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_mul_pos",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4246366308",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4246366308",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_sub_inner_add_const",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3274234243",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3274234243",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_truncatedConjugate_eq",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1759639282",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1759639282",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_mem_interior_of_strictConvexOn",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3693768701",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3693768701",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_volume_lower_bound_of_compact",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/SectionGrowth.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_levels": [],
+      "before_type_hash": "1776916195",
+      "after_levels": [],
+      "after_type_hash": "1776916195",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.truncatedConjugate",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1455353129",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1455353129",
+      "before_value_hash": "3431870544",
+      "after_value_hash": "3431870544"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.truncatedConjugate_centered_spec",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1345863144",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1345863144",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_domain_subgradient_two_points_eq_zero",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "615978514",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "615978514",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_image_affineEquiv",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3133680831",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3133680831",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_inter_subgradientImageOn_eq_zero_of_disjoint",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1982398727",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1982398727",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_le_subgradientImageOn_of_open_lower",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2984414533",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2984414533",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_affine_scalar_covariance",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "123353123",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "123353123",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_comp_affineEquiv_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3371866035",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3371866035",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_const",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1469819132",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1469819132",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_iUnion_of_pairwise_disjoint_open",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "before_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "before_type_hash": "614490120",
+      "after_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "after_type_hash": "614490120",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_le_liminf_of_locally_uniform",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1533623094",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1533623094",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_le_of_density_le",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2977718102",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2977718102",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1452840078",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1452840078",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos_comp_affineEquiv_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "996658928",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "996658928",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [],
+      "before_type_hash": "233447619",
+      "after_levels": [],
+      "after_type_hash": "233447619",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_comp_affineEquiv_symm",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "4144442912",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "4144442912",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_eq_lintegral_of_isOpen",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3407028088",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3407028088",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1510462682",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1510462682",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map_on_open",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "120896524",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "120896524",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_mul_pos",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/AlexandrovComparison.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2414296547",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2414296547",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_quadraticAt",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [],
+      "before_type_hash": "3943677066",
+      "after_levels": [],
+      "after_type_hash": "3943677066",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradientImage_sub_inner_add_const",
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3919944244",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3919944244",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator.congr_simp",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+      "new": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2358466722",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2358466722",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.norm_taylorField_sq_le",
+      "old": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Criterion.lean",
+      "new": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "132855328",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "132855328",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator.congr_simp",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClass.lean",
+      "new": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2923525063",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2923525063",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.KLS.relativePerimeter.congr_simp",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+      "new": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
+      "before_levels": [
+        "u"
+      ],
+      "before_type_hash": "2668295166",
+      "after_levels": [
+        "u"
+      ],
+      "after_type_hash": "2668295166",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.KLS.surfaceMeasure.congr_simp",
+      "old": "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Homothety.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/Hausdorff/SurfaceSlicing.lean",
+      "before_levels": [
+        "u"
+      ],
+      "before_type_hash": "2606833582",
+      "after_levels": [
+        "u"
+      ],
+      "after_type_hash": "2606833582",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.chain_coordinate",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "3673145579",
+      "after_levels": [],
+      "after_type_hash": "3673145579",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.continuous_gradientDerivativeMatrix",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "2331734381",
+      "after_levels": [],
+      "after_type_hash": "2331734381",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.gradientDerivativeMatrix",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "2323005377",
+      "after_levels": [],
+      "after_type_hash": "2323005377",
+      "before_value_hash": "2781895922",
+      "after_value_hash": "2781895922"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessianMatrix",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "2268714768",
+      "after_levels": [],
+      "after_type_hash": "2268714768",
+      "before_value_hash": "501952569",
+      "after_value_hash": "501952569"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_comp_affine_at",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "3513436618",
+      "after_levels": [],
+      "after_type_hash": "3513436618",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_eq_gradientDerivativeMatrix",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "1420156157",
+      "after_levels": [],
+      "after_type_hash": "1420156157",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "745182524",
+      "after_levels": [],
+      "after_type_hash": "745182524",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessian_entry_continuous",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [],
+      "before_type_hash": "1224763389",
+      "after_levels": [],
+      "after_type_hash": "1224763389",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.hessian_eq_inner_fderiv_gradient",
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+      "new": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2033067734",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2033067734",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integrable_exp_abs_of_moment_growth",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "353330841",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "353330841",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_moment_growth",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "925064968",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "925064968",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_scaled_high_moment_growth",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2743604392",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2743604392",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.integral_rpow_mul_integral_rpow_neg_le_of_log_exp",
+      "old": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean",
+      "new": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Growth.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1217274440",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1217274440",
+      "before_value_hash": null,
+      "after_value_hash": null
+    },
+    {
+      "name": "FunctionalInequalities.Probability.intrinsicMeasure.congr_simp",
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
+      "new": "formalization/FunctionalInequalities/KLS/LogConcave/Covariance.lean",
+      "before_levels": [
+        "u"
+      ],
+      "before_type_hash": "4006309722",
+      "after_levels": [
+        "u"
+      ],
+      "after_type_hash": "4006309722",
+      "before_value_hash": null,
+      "after_value_hash": null
+    }
+  ],
+  "public_api_migrations": [
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.integrable_norm_pow_of_exp_cond",
+      "new": "FunctionalInequalities.Probability.integrable_norm_pow_of_exp",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.integrable_of_norm_le_pow",
+      "new": "FunctionalInequalities.Probability.integrable_of_norm_le_pow",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.integrable_prod_inner_cond",
+      "new": "FunctionalInequalities.Probability.integrable_prod_inner_of_exp",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.norm_prod_inner_le_cond",
+      "new": "FunctionalInequalities.Analysis.Tensor.norm_prod_inner_le",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.MorseSard.exists_contDiff_eventuallyEq_nat",
+      "new": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+      "exact_type_and_levels": false,
+      "changed_fields": [
+        "type_hash"
+      ],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.Analysis.exists_contDiff_one_eqOn_ball",
+      "new": "FunctionalInequalities.Analysis.exists_contDiff_eqOn_ball",
+      "exact_type_and_levels": false,
+      "changed_fields": [
+        "type_hash"
+      ],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.inner_self_pos_of_norm_sub_one_lt",
+      "new": "FunctionalInequalities.Analysis.inner_self_pos_of_norm_sub_one_lt",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_sub_one_le_of_isPositive_mul_self",
+      "new": "FunctionalInequalities.Analysis.norm_sub_one_le_of_isPositive_mul_self",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.opNorm_le_of_inner_eq",
+      "new": "FunctionalInequalities.Analysis.opNorm_le_of_inner_eq",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    },
+    {
+      "old": "FunctionalInequalities.KLS.LogConcave.Suspension.tendsto_inverseSqrt_one",
+      "new": "FunctionalInequalities.Analysis.tendsto_inverseSqrt_one",
+      "exact_type_and_levels": true,
+      "changed_fields": [],
+      "accepted": true
+    }
+  ],
+  "retained_generalizations": [
+    {
+      "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+      "old": "EuclideanSpace over Fin n, volume and one fixed direction",
+      "new": "Arbitrary finite-dimensional real inner-product space with its Borel structure, volume and one fixed direction",
+      "client": "research/audits/SourceLayout/WeakProducts.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+      "old": "C-infinity local extension",
+      "new": "Finite-order or C-infinity local extension; no real-analytic claim",
+      "client": "research/audits/SourceLayout/LocalExtension.lean"
+    }
+  ],
+  "private_consolidations": [
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.Alexandrov.0.FunctionalInequalities.Analysis.subgradientImage_open_measure_of_compact_eq",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Alexandrov",
+      "new": "FunctionalInequalities.Analysis.subgradientImage_open_measure_of_compact_eq",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_2"
+      ],
+      "before_type_hash": "742631602",
+      "after_levels": [
+        "u_2"
+      ],
+      "after_type_hash": "742631602",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate.0.FunctionalInequalities.KLS.LogConcave.memLp_two_of_hasTemperateGrowth'",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate",
+      "new": "FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth",
+      "new_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "before_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "before_type_hash": "497671131",
+      "after_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "after_type_hash": "710395493",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.SectionGrowth.0.FunctionalInequalities.Analysis.section_eq_sublevel",
+      "old_module": "FunctionalInequalities.Analysis.Convex.SectionGrowth",
+      "new": "FunctionalInequalities.Analysis.section_eq_sublevel",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2854520217",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2854520217",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Matrix.Piola.0.FunctionalInequalities.Analysis.measurable_fderiv_apply",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Piola",
+      "new": "measurable_fderiv_apply_const",
+      "new_source": "Pinned Mathlib",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1939604591",
+      "after_levels": null,
+      "after_type_hash": null,
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_fderiv_apply_eq_zero_off_tsupport",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "new": "fderiv_of_notMem_tsupport",
+      "new_source": "Pinned Mathlib",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3683435470",
+      "after_levels": null,
+      "after_type_hash": null,
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_exists_compact_contDiff_eq_one_near",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "new": "FunctionalInequalities.Analysis.exists_compact_contDiff_eq_one_near",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3846867210",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3846867210",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives.0.FunctionalInequalities.Analysis.BakryEmery.moment_product_norm_le",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives",
+      "new": "FunctionalInequalities.Analysis.Tensor.norm_prod_inner_le",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Tensor/Multilinear.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2807766684",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2807766684",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Matrix.Piola.0.FunctionalInequalities.Analysis.exists_cutoff_eventuallyEq_one",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Piola",
+      "new": "FunctionalInequalities.Analysis.exists_compact_contDiff_eq_one_near",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3846867210",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3846867210",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.SectionGrowth.0.FunctionalInequalities.Analysis.convexOn_sub_inner_add_const",
+      "old_module": "FunctionalInequalities.Analysis.Convex.SectionGrowth",
+      "new": "FunctionalInequalities.Analysis.convexOn_sub_inner_add_const",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3692582118",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3692582118",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.Alexandrov.0.FunctionalInequalities.Analysis.alexandrov_isClosed_subgradientImage",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Alexandrov",
+      "new": "FunctionalInequalities.Analysis.isClosed_subgradientImage_of_isCompact",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1392046005",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "1392046005",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion.0.FunctionalInequalities.KLS.LogConcave.PoissonIterate.norm_taylorField_sq_le_of_bound",
+      "old_module": "FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion",
+      "new": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.norm_taylorField_sq_le",
+      "new_source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "132855328",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "132855328",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_measurable_fderiv_apply",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "new": "measurable_fderiv_apply_const",
+      "new_source": "Pinned Mathlib",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1939604591",
+      "after_levels": null,
+      "after_type_hash": null,
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.SectionEngulfing.0.FunctionalInequalities.Analysis.SoftEngulfing.section_eq_sublevel",
+      "old_module": "FunctionalInequalities.Analysis.Convex.SectionEngulfing",
+      "new": "FunctionalInequalities.Analysis.section_eq_sublevel",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2854520217",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2854520217",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_norm_fderiv_apply_le",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "new": "FunctionalInequalities.Analysis.norm_fderiv_apply_le_of_lipschitz",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2031270011",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2031270011",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.Caffarelli.0.FunctionalInequalities.Analysis.contact_affine_volume",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Caffarelli",
+      "new": "FunctionalInequalities.Analysis.volume_image_affineEquiv",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3133680831",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3133680831",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Convex.SectionEngulfing.0.FunctionalInequalities.Analysis.SoftEngulfing.convexOn_sub_inner_add_const",
+      "old_module": "FunctionalInequalities.Analysis.Convex.SectionEngulfing",
+      "new": "FunctionalInequalities.Analysis.convexOn_sub_inner_add_const",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "3692582118",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "3692582118",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.Matrix.Piola.0.FunctionalInequalities.Analysis.norm_fderiv_apply_le",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Piola",
+      "new": "FunctionalInequalities.Analysis.norm_fderiv_apply_le_of_lipschitz",
+      "new_source": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "2031270011",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "2031270011",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_l2",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "new": "FunctionalInequalities.L2.tendsto_integral_mul_of_eLpNorm_sub",
+      "new_source": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1243534487",
+      "after_levels": [
+        "u_3"
+      ],
+      "after_type_hash": "3119162572",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.BakryEmery.TensorEnergy.0.FunctionalInequalities.Analysis.BakryEmery.memLp_two_of_hasTemperateGrowth_aux",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.TensorEnergy",
+      "new": "FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth",
+      "new_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Temperate.lean",
+      "before_levels": [
+        "u",
+        "u_2"
+      ],
+      "before_type_hash": "4047440697",
+      "after_levels": [
+        "u_1",
+        "u_2"
+      ],
+      "after_type_hash": "710395493",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    },
+    {
+      "old_private": "_private.FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives.0.FunctionalInequalities.Analysis.BakryEmery.norm_moment_integrable",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives",
+      "new": "FunctionalInequalities.Probability.integrable_norm_pow_of_exp",
+      "new_source": "formalization/FunctionalInequalities/Probability/ExponentialMoments/Norm.lean",
+      "before_levels": [
+        "u_1"
+      ],
+      "before_type_hash": "1978333039",
+      "after_levels": [
+        "u_1"
+      ],
+      "after_type_hash": "63964342",
+      "scope_note": "Finite-measure/source-space generalization or the equivalent operator-zero form is checked by the narrow clients and actual consumers; no compatibility alias is retained."
+    }
+  ],
+  "private_proof_stages": [
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Integral.lean",
+      "names": [
+        "cutoff_tensor_energy_lower_bound",
+        "cutoff_weighted_path_bounds"
+      ],
+      "role": "Separate finite tensor Cauchy–Schwarz and pathwise cutoff bounds from stochastic integration; preserve the public source constants and assumptions."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean",
+      "names": [
+        "mollified_difference_caccioppoli",
+        "localized_toLp_tendsto"
+      ],
+      "role": "Separate the mollified weak PDE estimate and weighted L2 localization limit from the closed-operator graph argument."
+    }
+  ],
+  "semantic_comparison": {
+    "before_public": 6705,
+    "after_public": 6712,
+    "retained_public": 6695,
+    "exact_retained_public_types": 6693,
+    "retained_definition_closure_vertices": 7539,
+    "private_closure_vertices": 835,
+    "retained_changes": [
+      {
+        "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator",
+        "fields": [
+          "value_hash"
+        ]
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+        "fields": [
+          "levels",
+          "type_hash"
+        ]
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+        "fields": [
+          "type_hash"
+        ]
+      }
+    ],
+    "closure_changes": [
+      {
+        "before": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator",
+        "after": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator",
+        "fields": [
+          "value_hash"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+        "after": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+        "fields": [
+          "levels",
+          "type_hash"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Analysis.exists_contDiff_one_eqOn_ball",
+        "after": "FunctionalInequalities.Analysis.exists_contDiff_eqOn_ball",
+        "fields": [
+          "type_hash"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+        "after": "FunctionalInequalities.Analysis.exists_contDiff_eventuallyEq",
+        "fields": [
+          "type_hash"
+        ]
+      }
+    ],
+    "completeness_proof_witness_map": {
+      "old": "FunctionalInequalities.Analysis.BakryEmery.hessianOperator._proof_1",
+      "new": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator._proof_1",
+      "exact_type_hash": "3797725200",
+      "old_value_hash": "2765437768",
+      "new_raw_value_hash": "2762602966",
+      "normalized_value_hash": "2765437768",
+      "client": "research/audits/SourceLayout/HessianDiffusion.lean"
+    },
+    "kind_unsafe_partial_preserved": true,
+    "printed_binder_interfaces_preserved_outside_mapped_generalizations": true
+  },
+  "narrow_mathlib_imports": [
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Normalization.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Algebra.Order.Star.Real",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.LinearAlgebra.Matrix.SchurComplement",
+        "Mathlib.Order.CompletePartialOrder"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Algebra.Order.Star.Real",
+        "Mathlib.Algebra.Ring.IsFormallyReal",
+        "Mathlib.Analysis.Calculus.ContDiff.Operations",
+        "Mathlib.Analysis.Calculus.Deriv.Basic",
+        "Mathlib.Analysis.Calculus.FDeriv.Add",
+        "Mathlib.Analysis.Calculus.Gradient.Basic",
+        "Mathlib.Analysis.Convex.Deriv",
+        "Mathlib.Analysis.Convex.Mul",
+        "Mathlib.Analysis.InnerProductSpace.Basic",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Real.Sqrt",
+        "Mathlib.LinearAlgebra.AffineSpace.Slope",
+        "Mathlib.LinearAlgebra.FiniteDimensional.Defs"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Mollification/Hessian.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Analysis.Calculus.BumpFunction.Basic",
+        "Mathlib.Analysis.Calculus.ContDiff.Convolution",
+        "Mathlib.Analysis.Calculus.FDeriv.Measurable",
+        "Mathlib.Analysis.Calculus.Gradient.Basic",
+        "Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts",
+        "Mathlib.Analysis.Normed.Module.Basic",
+        "Mathlib.Analysis.Normed.Module.FiniteDimension",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Basic",
+        "Mathlib.MeasureTheory.Function.L2Space"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Operator/HilbertSchmidt.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Algebra.Order.Star.Real",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.InnerProductSpace.Positive",
+        "Mathlib.Analysis.InnerProductSpace.Trace"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Tensor/SlotAction.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+        "Mathlib.Algebra.BigOperators.Group.Finset.Defs",
+        "Mathlib.Algebra.BigOperators.Group.Finset.Sigma",
+        "Mathlib.Algebra.BigOperators.Ring.Finset",
+        "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+        "Mathlib.Algebra.Order.Chebyshev",
+        "Mathlib.Algebra.Order.Star.Real",
+        "Mathlib.Data.Fintype.Basic",
+        "Mathlib.Data.Fintype.BigOperators",
+        "Mathlib.Data.Fintype.Card",
+        "Mathlib.Data.Fintype.Pi",
+        "Mathlib.Data.Matrix.Mul",
+        "Mathlib.Data.Real.Basic",
+        "Mathlib.LinearAlgebra.Matrix.Defs",
+        "Mathlib.LinearAlgebra.Matrix.Hermitian",
+        "Mathlib.LinearAlgebra.Matrix.Symmetric",
+        "Mathlib.Tactic.Linarith.Frontend",
+        "Mathlib.Tactic.Ring.RingNF"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/MaximumPrinciple.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Algebra.Order.Archimedean.Real.Hom",
+        "Mathlib.Algebra.Order.Star.Real",
+        "Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected",
+        "Mathlib.Analysis.Calculus.Deriv.AffineMap",
+        "Mathlib.Analysis.Calculus.Gradient.Basic",
+        "Mathlib.Analysis.Convex.Contractible",
+        "Mathlib.Analysis.InnerProductSpace.Basic",
+        "Mathlib.Analysis.InnerProductSpace.Dual",
+        "Mathlib.Analysis.LocallyConvex.Separation",
+        "Mathlib.Analysis.Normed.MulAction",
+        "Mathlib.Analysis.Normed.Order.Lattice",
+        "Mathlib.LinearAlgebra.AffineSpace.Slope",
+        "Mathlib.LinearAlgebra.Dimension.Finite",
+        "Mathlib.LinearAlgebra.FiniteDimensional.Defs",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Basic",
+        "Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar",
+        "Mathlib.MeasureTheory.Measure.Tilted",
+        "Mathlib.Order.CompletePartialOrder",
+        "Mathlib.RingTheory.Flat.TorsionFree",
+        "Mathlib.RingTheory.SimpleRing.Principal",
+        "Mathlib.Topology.MetricSpace.HausdorffDistance"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "current_mathlib_imports": [
+        "Mathlib.Analysis.Calculus.ContDiff.Defs",
+        "Mathlib.Analysis.Calculus.ContDiff.Operations",
+        "Mathlib.Analysis.Calculus.FDeriv.Mul",
+        "Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts",
+        "Mathlib.Analysis.Calculus.Rademacher",
+        "Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff",
+        "Mathlib.MeasureTheory.Function.LocallyIntegrable",
+        "Mathlib.MeasureTheory.Integral.Bochner.Basic",
+        "Mathlib.MeasureTheory.Measure.Haar.OfBasis"
+      ]
+    }
+  ],
+  "validation_inputs": [
+    "research/audits/SourceLayout/Derivative.lean",
+    "research/audits/SourceLayout/DiffusionRegularity.lean",
+    "research/audits/SourceLayout/DomainMeasure.lean",
+    "research/audits/SourceLayout/ExponentialMoments.lean",
+    "research/audits/SourceLayout/GraphGradient.lean",
+    "research/audits/SourceLayout/HessianCoordinates.lean",
+    "research/audits/SourceLayout/HessianDiffusion.lean",
+    "research/audits/SourceLayout/HessianObjects.lean",
+    "research/audits/SourceLayout/LocalExtension.lean",
+    "research/audits/SourceLayout/MigrationAbsence.lean",
+    "research/audits/SourceLayout/OperatorPerturbation.lean",
+    "research/audits/SourceLayout/PointwiseTruncation.lean",
+    "research/audits/SourceLayout/Quadratic.lean",
+    "research/audits/SourceLayout/SectionAffine.lean",
+    "research/audits/SourceLayout/TaylorField.lean",
+    "research/audits/SourceLayout/Transport.lean",
+    "research/audits/SourceLayout/WeakProducts.lean"
+  ],
+  "protected_source": {
+    "current": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+    "allowed_change": "Path/import migration and deletion of two shared affine-helper declarations only; all other proof text and inherited whitespace are preserved."
+  },
+  "nonclaims": [
+    "The generated Dirichlet reference has interior C1, not the C2/C4 hypotheses of the given-classical Pogorelov estimates.",
+    "The literal merely convex source class of Letwin Lemma 2.2 and the other recorded open targets remain unchanged.",
+    "Compiler fingerprints and local checks do not independently re-prove fidelity to every paper or supply remote certification."
+  ]
+}

@@ -38,8 +38,8 @@ theorem norm_exp_smul_neg_apply_le (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 ≤ 
   have h := norm_exp_neg_smul_apply_le L hL hc f
   rwa [neg_smul, ← smul_neg] at h
 
-/-- **`Y6`.** Two commuting bounded nonnegative operators have exponentials that differ, pointwise
-at `f` and for `t ≥ 0`, by at most `t ‖A f - B f‖`:
+/-- **Exponential difference bound.** Two commuting bounded nonnegative operators have
+exponentials that differ, pointwise at `f` and for `t ≥ 0`, by at most `t ‖A f - B f‖`:
 `‖exp (-t • A) f - exp (-t • B) f‖ ≤ t * ‖A f - B f‖`.
 
 The proof differentiates the interpolation path `τ ↦ exp (τ • (-A)) (exp ((τ - t) • B) f)` on
@@ -103,7 +103,7 @@ variable {H₀ : Type*} [NormedAddCommGroup H₀] [CompleteSpace H₀]
 form, converges as `s ↓ 0`, again in the `ε`–`δ` form.
 
 Only completeness of the normed group is used; no inner product, no operators. This is the
-completeness step of `Y7`. -/
+completeness step of `exists_limit_exp_neg_smul`. -/
 theorem exists_limit_of_cauchy_along_pos (u : ∀ s : ℝ, 0 < s → H₀)
     (hu : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
       ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ → ‖u s hs - u r hr‖ < ε) :
@@ -151,14 +151,14 @@ section Limit
 
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
 
-/-- **`Y7`, the corrected abstract the adjoint-product identification.** Let `L s hs` be bounded, nonnegative and pairwise
-commuting for `s > 0`, and suppose the values `L s hs v` are Cauchy as `s ↓ 0` for every `v` in a
+/-- **The corrected abstract adjoint-product identification.** Let `L s hs` be bounded,
+nonnegative and pairwise commuting for `s > 0`, and suppose the values `L s hs v` are Cauchy as `s ↓ 0` for every `v` in a
 dense set `D`. Then for every `f : H₀` and every `t ≥ 0` the family `exp (-t • L s hs) f`
 converges as `s ↓ 0`.
 
-`Y6` gives the Cauchy property of `exp (-t • L s hs) v` for `v ∈ D`, the contraction bound resolvent contraction
-transports it to every `f` by an `ε/3` argument, and `exists_limit_of_cauchy_along_pos` produces
-the limit. -/
+`norm_exp_neg_smul_sub_le` gives the Cauchy property of `exp (-t • L s hs) v` for `v ∈ D`, the
+contraction bound `norm_exp_neg_smul_apply_le` transports it to every `f` by an `ε/3` argument, and
+`exists_limit_of_cauchy_along_pos` produces the limit. -/
 theorem exists_limit_exp_neg_smul (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H₀)
     (hL : ∀ (s : ℝ) (hs : 0 < s) (f : H₀), 0 ≤ ⟪L s hs f, f⟫)
     (hcomm : ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r),
@@ -169,7 +169,7 @@ theorem exists_limit_exp_neg_smul (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H�
     (f : H₀) {t : ℝ} (ht : 0 ≤ t) :
     ∃ g : H₀, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
       ∀ (s : ℝ) (hs : 0 < s), s < δ → ‖NormedSpace.exp (-t • L s hs) f - g‖ < ε := by
-  -- Step 1: the Cauchy property on the dense set, from `Y6`.
+  -- Step 1: the Cauchy property on the dense set, from `norm_exp_neg_smul_sub_le`.
   have key : ∀ v ∈ D, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
       ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ →
         ‖NormedSpace.exp (-t • L s hs) v - NormedSpace.exp (-t • L r hr) v‖ < ε := by

@@ -26,7 +26,7 @@ namespace FunctionalInequalities.Analysis
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V]
 
-/-- **`V3`: finitely many countable measurable partitions of conull sets have a countable
+/-- **Finitely many countable measurable partitions of conull sets have a countable
 measurable common refinement.**  Each piece of the refinement sits inside one piece of every given
 partition, the refinement is again disjoint and measurable, and its complement is still null.
 

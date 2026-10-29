@@ -2,10 +2,10 @@ import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
 
 /-! # The codimension-`m` area formula for `C¹` graphs
 
-Property vector-valued graph area, fifth and last phase.  The `k`-dimensional measure of the graph of a `C¹`
+The `k`-dimensional measure of the graph of a `C¹`
 `K`-valued map over a measurable set is the integral of `√det (1 + Dγᵀ Dγ)`.
 
-One step differs from codimension one and is the reason this phase needed its own partition.  The
+One step differs from codimension one and is the reason this step needs its own partition.  The
 codimension-one proof uses that the Jacobian `√(1 + ‖a‖²)` is **globally `1`-Lipschitz** in the
 slope, so that closeness of the derivatives transfers to closeness of the Jacobians.  In
 codimension `m` the Jacobian `√det (1 + AᵀA)` is **not** uniformly Lipschitz — already for
@@ -316,9 +316,9 @@ theorem hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K 
     fun m => hausdorffMeasure_image_vectorGraphMap_of_finite ι κ hperp hγ (hsmmeas m) (hsmfin m)
   simpa only [heq] using hRlim
 
-/-- **`B2`: the codimension-`m` area formula in the normalized convention**, integrated against
-Lebesgue measure on the parameter space.  This is the form the codimension-`m` coarea program
-consumes. -/
+/-- **The codimension-`m` area formula in the normalized convention**, integrated against
+Lebesgue measure on the parameter space.  This is the form the codimension-`m` coarea formula
+uses. -/
 theorem hausdorffNormalized_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ))
     {γ : H → K} (hγ : ContDiff ℝ 1 γ) {s : Set H} (hs : MeasurableSet s) :

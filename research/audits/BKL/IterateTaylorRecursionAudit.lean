@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
 
 /-!
-# Audit: Lemma 3.8 for the BKL iterates (route `J1`)
+# Audit: Lemma 3.8 for the BKL iterates
 
 The proposition `J1` of `research/audits/BKL/IterateRouteStatements.lean` (operator route to
 Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
@@ -34,7 +34,8 @@ variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSp
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-/-- `J1`, verbatim: Lemma 3.8 with the explicit constant `c = 2^20 max(1, β)²`. -/
+/-- `J1` of `IterateRouteStatements.lean`, verbatim: Lemma 3.8 with the explicit constant
+`c = 2^20 max(1, β)²`. -/
 theorem j1 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →

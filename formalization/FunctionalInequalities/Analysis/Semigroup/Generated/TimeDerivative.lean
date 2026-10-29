@@ -46,18 +46,6 @@ theorem norm_map_sq_le_mul (x : (adjointComp T).domain) :
   rw [← inner_adjointComp_self hd x]
   exact real_inner_le_norm _ _
 
-/-- The right derivative at time zero, in the normalized form
-`‖h⁻¹ (P_h f - f) + A f‖ < ε` for small `h > 0`. -/
-theorem right_derivative_zero (f : (adjointComp T).domain) {ε : ℝ} (hε : 0 < ε) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ h : ℝ, 0 < h → h < δ →
-      ‖h⁻¹ • (apply T hT hd h f - f) + adjointComp T f‖ < ε := by
-  obtain ⟨δ, hδ, hr⟩ := right_derivative T hT hd f le_rfl hε
-  refine ⟨δ, hδ, fun h hh hhδ => ?_⟩
-  have h0 : (⟨apply T hT hd 0 f, preserves_domain T hT hd f le_rfl⟩ :
-      (adjointComp T).domain) = f := Subtype.ext (zero_time T hT hd f)
-  have := hr h hh hhδ
-  rwa [zero_add, h0, zero_time] at this
-
 /-- **Right derivative of the orbit**: for `f ∈ D(A)` and `t ≥ 0`,
 `d/ds P_s f = -A (P_t f)` from the right at `s = t`. -/
 theorem hasDerivWithinAt_apply_Ici (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t) :
@@ -81,7 +69,7 @@ theorem hasDerivWithinAt_apply_Iic (f : (adjointComp T).domain) {t : ℝ} (ht : 
       (-adjointComp T ⟨apply T hT hd t f, preserves_domain T hT hd f ht.le⟩) (Iic t) t := by
   rw [hasDerivWithinAt_iff_tendsto_slope, Iic_sdiff_right, Metric.tendsto_nhdsWithin_nhds]
   intro ε hε
-  obtain ⟨δ₁, hδ₁, h₁⟩ := right_derivative_zero T hT hd f (half_pos hε)
+  obtain ⟨δ₁, hδ₁, h₁⟩ := generator_limit T hT hd f (half_pos hε)
   obtain ⟨δ₂, hδ₂, h₂⟩ := Metric.continuousWithinAt_iff.mp
     ((continuousOn T hT hd (adjointComp T f)) t ht.le) (ε / 2) (half_pos hε)
   refine ⟨min (min δ₁ δ₂) t, lt_min (lt_min hδ₁ hδ₂) ht, fun s hs hsd => ?_⟩
@@ -192,8 +180,8 @@ theorem hasDerivWithinAt_map_apply_Ici (g : H₀) {u : ℝ → H₁}
   set G : (adjointComp T).domain := ⟨_, hG⟩ with hGdef
   rw [hasDerivWithinAt_iff_tendsto_slope, Ici_sdiff_left, Metric.tendsto_nhdsWithin_nhds]
   intro ε hε
-  obtain ⟨δ₁, hδ₁, h₁⟩ := right_derivative_zero T hT hd F hε
-  obtain ⟨δ₂, hδ₂, h₂⟩ := right_derivative_zero T hT hd G hε
+  obtain ⟨δ₁, hδ₁, h₁⟩ := generator_limit T hT hd F hε
+  obtain ⟨δ₂, hδ₂, h₂⟩ := generator_limit T hT hd G hε
   refine ⟨min δ₁ δ₂, lt_min hδ₁ hδ₂, fun s hs hsd => ?_⟩
   have hs0 : 0 < s := ht.trans hs
   have hh : 0 < s - t := sub_pos.mpr hs

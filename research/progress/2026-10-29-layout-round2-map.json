@@ -1,0 +1,2231 @@
+{
+  "version": 1,
+  "review_date": "2026-10-29",
+  "status": "path-only moves and content-only merges executed and locally checked on 2026-10-29: root lake --wfail build, strict compile and axiom check of all 442 audit clients, statement snapshot, API index, module inventory, Blueprint, atlas and Markdown link checks. Not staged or committed; research/verify.py and research/progress/update.py are controller steps.",
+  "spec": "build/history/2026-10-29-layout-round2/map.json (read-only survey) and DECISIONS.md (controller decisions 1-8, which override the survey); research/naming.md \"Family names belong in directories, not filenames\" rules 1-7 and \"Migration checks\"; research/workflow.md section 6 \"Module split/move\"; round-1 precedent research/progress/2026-10-29-layout-map.json",
+  "scope": "Path-only moves of 91 library modules (Analysis/Newtonian into Kernel/, BallGrowth/, Truncation/, HessianIntegral/, Potential/, Schauder/; six Analysis top-level modules; KLS/LogConcave/HeatSemigroup into Generator/, BakryEmery/, GradientEstimate/, SpectralGap/, SmallTime/; Probability/MomentMeasure into Maximality/ and Uniqueness/; KLS/CEK/EssentialContinuity) and three content-only merges (Maximality/Finite, Uniqueness/Finite, KLS/CEK/Uniqueness), plus the reference rewrites they require. Namespaces, declaration names, statements, proofs, assumptions, constants, dimensional scope, proof status and certificate status are unchanged; no wrappers or aliases. Only module-qualified private names (_private.<module>.0.<name>) follow the module path.",
+  "literature_targets": [],
+  "owner_decisions": [
+    "(1) Analysis/Newtonian/ (52 flat files): group into family subdirectories by object and role",
+    "(2) Probability/MomentMeasure/ (22 flat files) with KLS/CEK Theorem 2 files (Uniqueness, EssentialUniqueness, EssentialContinuity, GeneralExistence): mathematical structure; merges listed separately",
+    "(3) the 29 loose files directly under Analysis/: group where a real family of 3+ exists or the file clearly belongs to an existing family",
+    "(4) KLS/LogConcave/HeatSemigroup/ (28 flat files): subfamilies; check Analysis/BakryEmery and Analysis/Semigroup ownership under the dependency rule",
+    "(5) confusable same-name files: Convex/EssentialContinuity vs CEK/EssentialContinuity; MomentMeasure/EssentialUniqueness vs CEK/EssentialUniqueness; Analysis/HessianRegularity vs Analysis/Convex/HessianRegularity; scan for others",
+    "controller DECISIONS.md (2026-10-29): MidpointEquality and ExtendedMidpointEquality moved to Uniqueness/ instead of merged; three merges accepted; KernelBounds import removal with Schauder/KernelBounds.lean fallback; HANDOFF.md path updated; private-name guards rewritten; no optional renames; Convex/HessianRegularity unchanged; stray copies untouched"
+  ],
+  "namespace_policy": "Leave every namespace alone. The moved modules keep their namespaces (FunctionalInequalities.Analysis for Newtonian and Iteration files, FunctionalInequalities.KLS.LogConcave(.HeatSemigroup) for heat files, FunctionalInequalities.Probability(.MomentMeasure) and FunctionalInequalities.KLS.CEK). Only module-qualified private names (_private.<module>.0.<name>) change with the module path; two guard strings depend on them.",
+  "basename_rule": "Family term moves into the directory; basename keeps only the distinguishing term. naming.md rule 3: a module that would sit next to its new directory becomes <Dir>/Basic.lean only when it is the genuine foundation (Kernel, Truncation, Potential, Generator, GradientEstimate); Newtonian/Schauder.lean is not the foundation of Schauder/ (it imports two siblings) and becomes Schauder/Potential.lean. Prefixes that are not the family (Near*, Far*, Kernel* inside BallGrowth/, Radial* inside Kernel/) are kept. Renames beyond dropping the family term carry a reason field.",
+  "totals": {
+    "library_modules_before": 840,
+    "library_modules_after": 837,
+    "path_only_moves": 91,
+    "merges": 3,
+    "merge_source_modules": 6,
+    "merge_source_files_deleted": 5,
+    "reference_files_edited": 158,
+    "files_created": 3,
+    "evidence_pins_refreshed": 46,
+    "evidence_files_refreshed": 45,
+    "evidence_pins_stale_before_and_left_unchanged": 0
+  },
+  "module_migrations": [
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Kernel",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Basic",
+      "batch": "N1-kernel",
+      "rule": "opens the family: omega_n, the kernel Gamma, (2.13)/(2.14); naming.md rule 3 (Kernel.lean next to Kernel/ -> Kernel/Basic.lean)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/RadialKernel.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Radial.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.RadialKernel",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Radial",
+      "batch": "N1-kernel",
+      "rule": "the two radial branches powerKernel/logKernel of Gamma and their Hessians; family term Kernel dropped",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/RadialDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/RadialDerivative.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.RadialDerivative",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.RadialDerivative",
+      "batch": "N1-kernel",
+      "rule": "off-origin calculus of norm powers behind Gamma (only consumer chain RadialLogDerivative -> RadialKernel -> Kernel)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/RadialLogDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/RadialLogDerivative.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.RadialLogDerivative",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.RadialLogDerivative",
+      "batch": "N1-kernel",
+      "rule": "off-origin calculus of log norm, planar branch of Gamma",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/KernelEntryBound.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/EntryBound.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.KernelEntryBound",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.EntryBound",
+      "batch": "N1-kernel",
+      "rule": "entrywise Hessian bound (2.14) of the radial kernel expressions; family term Kernel dropped",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/First.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/First.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.First",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.First",
+      "batch": "N1-kernel",
+      "rule": "first derivatives, smoothness, measurability of Gamma",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Third.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Third.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Third",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Third",
+      "batch": "N1-kernel",
+      "rule": "third derivatives of Gamma",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/ThirdBound.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/ThirdBound.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.ThirdBound",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.ThirdBound",
+      "batch": "N1-kernel",
+      "rule": "explicit third-derivative bound of Gamma",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Measurable.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Measurable.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Measurable",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Measurable",
+      "batch": "N1-kernel",
+      "rule": "measurability of the Hessian of Gamma",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Trace.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Trace",
+      "batch": "N1-kernel",
+      "rule": "trace of the Hessian of Gamma (harmonicity off 0)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Harmonic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Harmonic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Harmonic",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Harmonic",
+      "batch": "N1-kernel",
+      "rule": "harmonicity of Gamma off the origin (Mathlib vocabulary)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Difference.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Difference.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Difference",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.Difference",
+      "batch": "N1-kernel",
+      "rule": "pointwise differences of Hessian entries of Gamma (mean value)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/FarDifference.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/FarDifference.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.FarDifference",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.FarDifference",
+      "batch": "N1-kernel",
+      "rule": "pointwise far-field shift difference of Hessian entries of Gamma",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/KernelBounds.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/KernelBounds.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.KernelBounds",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.KernelBounds",
+      "batch": "N1-kernel",
+      "rule": "pointwise kernel estimates (far bounds, second derivative of D_i Gamma, mean-value bounds, |B_r|); family term Kernel dropped",
+      "content_changed": true,
+      "survey_new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Bounds.lean",
+      "note": "DECISIONS.md 3 fallback: moved first to Kernel/Bounds.lean; removing its import of Truncation.Error failed the build (opNorm_le_sum_abs_basisFun is declared in Truncation/Error.lean), so the import was restored and the module placed at Schauder/KernelBounds.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/L1.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/L1.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.L1",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.L1",
+      "batch": "N1-kernel",
+      "rule": "local integrability of Gamma and its gradient on balls",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/LogL1.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/LogL1.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.LogL1",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Kernel.LogL1",
+      "batch": "N1-kernel",
+      "rule": "local integrability of the planar kernel",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/NearKernel.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/NearKernel.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.NearKernel",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.NearKernel",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/FarKernel.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/FarKernel.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.FarKernel",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.FarKernel",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/CancelledNearKernel.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/CancelledNearKernel.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.CancelledNearKernel",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.CancelledNearKernel",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/CancelledNearIntegral.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/CancelledNearIntegral.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.CancelledNearIntegral",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.CancelledNearIntegral",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/FarCancelledAE.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/FarCancelledAE.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.FarCancelledAE",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.FarCancelledAE",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Layercake.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/Layercake.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Layercake",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.Layercake",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/LogNear.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/LogNear.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.LogNear",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.LogNear",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/AbsLogNear.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/AbsLogNear.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.AbsLogNear",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.BallGrowth.AbsLogNear",
+      "batch": "N2-ballgrowth",
+      "rule": "kernel-free estimate for an arbitrary measure with power ball growth nu(B(x,r)) <= K r^d (no Newtonian kernel in the statement); basename kept because Near/Far/Kernel are not the family term",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Truncation",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.Basic",
+      "batch": "N3-truncation",
+      "rule": "defines truncatedNewtonianKernel; naming.md rule 3",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/TruncationDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Derivative.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.TruncationDerivative",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.Derivative",
+      "batch": "N3-truncation",
+      "rule": "derivative error of the truncated kernel; family term dropped",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/TruncationL1.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/L1.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.TruncationL1",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.L1",
+      "batch": "N3-truncation",
+      "rule": "global L1 derivative error of the truncated kernel; family term dropped",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/CutoffMajorant.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/CutoffMajorant.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.CutoffMajorant",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.CutoffMajorant",
+      "batch": "N3-truncation",
+      "rule": "integrated cutoff majorant of the truncation error (n >= 3)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/KernelError.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Error.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.KernelError",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.Error",
+      "batch": "N3-truncation",
+      "rule": "scalar truncation error and vanishing majorants of Lemma 4.1 (newtonianScalarErrorBound, newtonianDerivErrorBound); renamed: the object is the truncation error",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/RadialCutoffMass.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/CutoffMass.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.RadialCutoffMass",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.CutoffMass",
+      "batch": "N3-truncation",
+      "rule": "the radial cutoff profile newtonianCutoffProfile and its unit mass; Radial dropped (cutoff profile of the truncation)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/RadialCutoffLipschitz.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/CutoffLipschitz.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.RadialCutoffLipschitz",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.CutoffLipschitz",
+      "batch": "N3-truncation",
+      "rule": "Lipschitz cap of the radial cutoff used by the truncation errors",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientCutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Gradient.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.GradientCutoff",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.Gradient",
+      "batch": "N3-truncation",
+      "rule": "the truncated kernel gradient chi_eps D_i Gamma and its divergence",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientCutoffBounds.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/GradientBounds.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.GradientCutoffBounds",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Truncation.GradientBounds",
+      "batch": "N3-truncation",
+      "rule": "bounds for the truncated kernel gradient",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Annulus.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/Annulus.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Annulus",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.HessianIntegral.Annulus",
+      "batch": "N4-hessian",
+      "rule": "singular integral of the kernel Hessian D^2 Gamma against a Hoelder difference (Lemma 4.4 inputs, also used by Lemma 4.2): annular cancellation of the kernel Hessian integral",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/CriticalDomain.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/CriticalDomain.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.CriticalDomain",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.HessianIntegral.CriticalDomain",
+      "batch": "N4-hessian",
+      "rule": "singular integral of the kernel Hessian D^2 Gamma against a Hoelder difference (Lemma 4.4 inputs, also used by Lemma 4.2): residual kernel Hessian integral on critical domains",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/NearExponent.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/NearExponent.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.NearExponent",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.HessianIntegral.NearExponent",
+      "batch": "N4-hessian",
+      "rule": "singular integral of the kernel Hessian D^2 Gamma against a Hoelder difference (Lemma 4.4 inputs, also used by Lemma 4.2): near-field integral of D_ij Gamma (f(y)-f(x)), 0<alpha<n",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Near.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/Near.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Near",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.HessianIntegral.Near",
+      "batch": "N4-hessian",
+      "rule": "singular integral of the kernel Hessian D^2 Gamma against a Hoelder difference (Lemma 4.4 inputs, also used by Lemma 4.2): near-field integral, 0<alpha<1 case",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Far.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/Far.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Far",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.HessianIntegral.Far",
+      "batch": "N4-hessian",
+      "rule": "singular integral of the kernel Hessian D^2 Gamma against a Hoelder difference (Lemma 4.4 inputs, also used by Lemma 4.2): far-field Hessian difference integral",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Potential",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.Basic",
+      "batch": "N5-potential",
+      "rule": "defines newtonianPotential, Lemma 4.1; naming.md rule 3",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/PotentialC2.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/C2.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.PotentialC2",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.C2",
+      "batch": "N5-potential",
+      "rule": "Lemma 4.2: w in C^2, Delta w = f; family term dropped",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientApprox.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/GradientApprox.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.GradientApprox",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.GradientApprox",
+      "batch": "N5-potential",
+      "rule": "approximants v_eps of the potential gradient (Lemma 4.2 first step)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/GradientBound.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/GradientBound.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.GradientBound",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.GradientBound",
+      "batch": "N5-potential",
+      "rule": "first-derivative estimate (4.14) of the potential on a ball",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BoundaryFormula.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/BoundaryFormula.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.BoundaryFormula",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.BoundaryFormula",
+      "batch": "N5-potential",
+      "rule": "boundary form (4.9) of the potential Hessian",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BoxFlux.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/BoxFlux.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.BoxFlux",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.BoxFlux",
+      "batch": "N5-potential",
+      "rule": "divergence theorem on coordinate boxes; sole consumer BoundaryFormula",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Representation.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/Representation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Representation",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Potential.Representation",
+      "batch": "N5-potential",
+      "rule": "representation (4.15) u = Gamma * Delta u of compactly supported C^2 functions",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/Potential.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.Schauder",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.Potential",
+      "batch": "N6-schauder",
+      "rule": "Lemma 4.4: Hoelder estimate of the potential Hessian on balls; renamed because Schauder is the family term and Basic would not be the foundation (it imports CancelledHessian/BoxCorrection)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/CancelledHessian.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/CancelledHessian.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.CancelledHessian",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.CancelledHessian",
+      "batch": "N6-schauder",
+      "rule": "cancelled volume term T_ij of the Lemma 4.4 decomposition (sole consumer Schauder)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/BoxCorrection.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/BoxCorrection.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.BoxCorrection",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.BoxCorrection",
+      "batch": "N6-schauder",
+      "rule": "box correction term of the Lemma 4.4 decomposition (sole consumer Schauder)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/LocalHolder.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/LocalHolder.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.LocalHolder",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.LocalHolder",
+      "batch": "N6-schauder",
+      "rule": "Lemma 4.4 for locally Hoelder sources",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/InteriorSchauder.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/Interior.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.InteriorSchauder",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.Interior",
+      "batch": "N6-schauder",
+      "rule": "Theorem 4.6 interior estimate for Poisson solutions; family term dropped",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/CompactPoisson.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/CompactPoisson.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.CompactPoisson",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.CompactPoisson",
+      "batch": "N6-schauder",
+      "rule": "Theorem 4.5 for compactly supported solutions",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Newtonian/PoissonFreezing.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/PoissonFreezing.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Newtonian.PoissonFreezing",
+      "new_module": "FunctionalInequalities.Analysis.Newtonian.Schauder.PoissonFreezing",
+      "batch": "N6-schauder",
+      "rule": "bridge Theorem 4.5 caps -> Theorem 6.2 coefficient freezing",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/AbsorptionIteration.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Iteration/Absorption.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.AbsorptionIteration",
+      "new_module": "FunctionalInequalities.Analysis.Iteration.Absorption",
+      "batch": "A1-iteration",
+      "rule": "scalar radius-absorption iteration lemma; new family of scalar iteration lemmas",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/MoserIteration.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Iteration/LpNorm.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.MoserIteration",
+      "new_module": "FunctionalInequalities.Analysis.Iteration.LpNorm",
+      "batch": "A1-iteration",
+      "rule": "radius-normalized (Moser) iteration of extended L^p norms; the PDE one-step estimate is a premise. Named LpNorm, not Moser, to avoid a same-basename pair with Analysis/WeakDerivative/Moser.lean (the PDE Moser endpoints that consume it)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Modulus.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Iteration/Modulus.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Modulus",
+      "new_module": "FunctionalInequalities.Analysis.Iteration.Modulus",
+      "batch": "A1-iteration",
+      "rule": "GT Lemma 8.23 iteration lemma for oscillation moduli",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/DyadicSummation.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Iteration/DyadicSummation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.DyadicSummation",
+      "new_module": "FunctionalInequalities.Analysis.Iteration.DyadicSummation",
+      "batch": "A1-iteration",
+      "rule": "summation of a dyadic recursion for real sequences (BKL Thm 3.1 step, generic statement)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/GradientSegment.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/SegmentCoefficient.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.GradientSegment",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.GradientForcing.SegmentCoefficient",
+      "batch": "A2-forcing",
+      "rule": "defines segmentMeanCoefficient/segmentForcingCoefficient; its only consumers are GradientForcing/{Linearization,Uniform}; SegmentCoefficient (not Segment) avoids a same-basename pair with Analysis/Matrix/LogDet/Segment.lean",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/HessianRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/ContinuousHessian.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.HessianRegularity",
+      "new_module": "FunctionalInequalities.Analysis.ContinuousHessian",
+      "batch": "C1-confusable",
+      "rule": "confusable pair with Analysis/Convex/HessianRegularity; content: C^2 from a continuous a.e. Hessian representative (parallel to ContinuousDerivative.lean)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic",
+      "batch": "H1-generator",
+      "rule": "generator identification T*T f = -L f on C_c^infty; foundation of Generator/; naming.md rule 3",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/OperatorCore.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.OperatorCore",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Core",
+      "batch": "H1-generator",
+      "rule": "operator-core reduction for the generator; Operator dropped (the family is the generator)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/InteriorRegularity.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity",
+      "batch": "H1-generator",
+      "rule": "interior regularity of deficiency elements, completing the operator core",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/FormRange.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/FormRange.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.FormRange",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.FormRange",
+      "batch": "H1-generator",
+      "rule": "density of (I + A) C_c^infty in the form domain",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Range.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Range.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range",
+      "batch": "H1-generator",
+      "rule": "density of compact smooth diffusion images in centered L2",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Hessian.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian",
+      "batch": "H1-generator",
+      "rule": "weak Hessian on the generator domain (BKL (16))",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Tilt.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Tilt.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt",
+      "batch": "H1-generator",
+      "rule": "tilt identity and BKL Lemma 3.6 on the generator domain",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Gamma.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/Gamma.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Gamma",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.Gamma",
+      "batch": "H2-bakryemery",
+      "rule": "weak Gamma/Gamma_2 calculus of the closed gradient (concrete specialization of Analysis/BakryEmery; cannot move there: imports KLS modules)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GammaTwo.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/GammaTwo.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.GammaTwo",
+      "batch": "H2-bakryemery",
+      "rule": "weak Gamma/Gamma_2 calculus of the closed gradient (concrete specialization of Analysis/BakryEmery; cannot move there: imports KLS modules)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClass.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClass",
+      "batch": "H2-bakryemery",
+      "rule": "weak Gamma/Gamma_2 calculus of the closed gradient (concrete specialization of Analysis/BakryEmery; cannot move there: imports KLS modules)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClassExtension.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClassExtension.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClassExtension",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClassExtension",
+      "batch": "H2-bakryemery",
+      "rule": "weak Gamma/Gamma_2 calculus of the closed gradient (concrete specialization of Analysis/BakryEmery; cannot move there: imports KLS modules)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ChainRule.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/ChainRule.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ChainRule",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.ChainRule",
+      "batch": "H2-bakryemery",
+      "rule": "weak Gamma/Gamma_2 calculus of the closed gradient (concrete specialization of Analysis/BakryEmery; cannot move there: imports KLS modules)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.Basic",
+      "batch": "H3-gradient",
+      "rule": "time interpolation and the square estimate Gamma(P_t f) <= P_t Gamma(f); foundation of GradientEstimate/; naming.md rule 3",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ReversePoincare.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/ReversePoincare.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ReversePoincare",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.ReversePoincare",
+      "batch": "H3-gradient",
+      "rule": "reverse local Poincare inequality",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SelfImprovement",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.SelfImprovement",
+      "batch": "H3-gradient",
+      "rule": "Bakry L1 self-improvement",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Interpolation.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Interpolation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Interpolation",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.Interpolation",
+      "batch": "H3-gradient",
+      "rule": "tested nonlinear heat interpolation derivative (input to the Gaussian profile)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GaussianProfile.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/GaussianProfile.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GaussianProfile",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile",
+      "batch": "H3-gradient",
+      "rule": "shifted Gaussian profile and the Gaussian BGL inequality",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Decay.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Decay",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay",
+      "batch": "H4-spectral",
+      "rule": "Poincare constant / spectral gap of the generator: centered decay under a form-domain gap",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Curvature.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature",
+      "batch": "H4-spectral",
+      "rule": "Poincare constant / spectral gap of the generator: curvature bound and the Bakry-Emery Poincare bound (BGL Cor. 4.8.2); centering and literature-constant interfaces",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Inverse.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Inverse.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse",
+      "batch": "H4-spectral",
+      "rule": "Poincare constant / spectral gap of the generator: centered inverse of the generator under C_P (BKL Lemma 2.1, operator part)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ApproximateEigenfunction.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/ApproximateEigenfunction.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction",
+      "batch": "H4-spectral",
+      "rule": "Poincare constant / spectral gap of the generator: approximate first eigenfunctions at C_P (BKL (19))",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Temperate.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate",
+      "batch": "H4-spectral",
+      "rule": "Poincare constant / spectral gap of the generator: temperate class in the generator domain and Poincare on A (BKL Lemma 2.1 bridge, Lemmas 3.2-3.3)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Approximation.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Approximation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Approximation",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Approximation",
+      "batch": "H5-smalltime",
+      "rule": "small-time L1 displacement of the heat semigroup (Buser inputs): small-time L1 approximation |f - P_t f|_1 <= 2 sqrt(t/pi)|Tf|",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Perimeter.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Perimeter",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter",
+      "batch": "H5-smalltime",
+      "rule": "small-time L1 displacement of the heat semigroup (Buser inputs): small-time heat approximation of smooth domains",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Correlation.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Correlation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Correlation",
+      "new_module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Correlation",
+      "batch": "H5-smalltime",
+      "rule": "small-time L1 displacement of the heat semigroup (Buser inputs): indicator heat correlation and L1 displacement",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/EssentialMaximality.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/EssentiallyContinuous.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.EssentialMaximality",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Maximality.EssentiallyContinuous",
+      "batch": "M1-maximality",
+      "rule": "CEK Theorem 8 for essentially continuous potentials",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/BallTruncation.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.BallTruncation",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation",
+      "batch": "M1-maximality",
+      "rule": "ball truncations psi_k used only in the proof of Theorem 8",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/GradientVariation.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/GradientVariation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.GradientVariation",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Maximality.GradientVariation",
+      "batch": "M1-maximality",
+      "rule": "directional variation (CEK Lemma 3/4) controlling the Theorem 8 boundary term; sole consumer EssentialMaximality",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/MaximizerUniqueness.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Maximizer.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.MaximizerUniqueness",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer",
+      "batch": "M2-uniqueness",
+      "rule": "uniqueness of normalized maximizers of I_mu up to translation",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/EssentialUniqueness.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/BoundedSupport.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.EssentialUniqueness",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport",
+      "batch": "M2-uniqueness",
+      "rule": "confusable with KLS/CEK/EssentialUniqueness; content: essentially continuous potentials whose moment measure is carried by a ball are finite, Lipschitz and unique up to translation",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/EssentialContinuity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MaximizerContinuity.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.CEK.EssentialContinuity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MaximizerContinuity",
+      "batch": "M3-cek",
+      "rule": "confusable with Analysis/Convex/EssentialContinuity (the CEK Definition 2 object); content: CEK Proposition 10, the conjugate of a maximizer is essentially continuous",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/MidpointEquality.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/MidpointEquality.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.MidpointEquality",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality",
+      "batch": "M2-uniqueness",
+      "rule": "DECISIONS.md 1: base/extension pair moved, not merged",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/ExtendedMidpointEquality.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/ExtendedMidpointEquality.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.MomentMeasure.ExtendedMidpointEquality",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.ExtendedMidpointEquality",
+      "batch": "M2-uniqueness",
+      "rule": "DECISIONS.md 1: base/extension pair moved, not merged",
+      "content_changed": true
+    }
+  ],
+  "merge_migrations": [
+    {
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/Finite.lean",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite",
+      "kind": "merge",
+      "batch": "M1-maximality-merge",
+      "sources": [
+        {
+          "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality.lean",
+          "old_module": "FunctionalInequalities.Probability.MomentMeasure.Maximality",
+          "lines": 449,
+          "sha256_before": "1d171584361061ea929944d641fab3b277c11cc06c8a007b16f5843fa5b4b621"
+        },
+        {
+          "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/IntegrableMaximality.lean",
+          "old_module": "FunctionalInequalities.Probability.MomentMeasure.IntegrableMaximality",
+          "lines": 280,
+          "sha256_before": "f24e10a8d7ae124b333693dd4c80019fb9e8663add39c30bd9438559cf1f374c"
+        }
+      ],
+      "imports": [
+        "FunctionalInequalities.Probability.BrunnMinkowski",
+        "FunctionalInequalities.Analysis.Convex.Legendre",
+        "FunctionalInequalities.Analysis.Convex.Coercivity",
+        "FunctionalInequalities.Analysis.Convex.Subgradient.Measure",
+        "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable",
+        "FunctionalInequalities.Probability.ExponentialMoments.Norm",
+        "Mathlib.MeasureTheory.Measure.Tilted"
+      ],
+      "lines": 726,
+      "private_duplicate_dropped": null,
+      "docstring": "one module docstring: a combined title, the first source docstring body, then the second under a subheading (text verbatim except the merged-away cross-reference noted in deviations)",
+      "context": "bodies concatenated in source order; a bare `end` after the first body closes its `noncomputable section`, opens and variables; no declaration, statement or proof changed",
+      "sha256_after": "02be5245c64f753d74125e416d190c8015f3d504215cddab1b59343ae52c18e7"
+    },
+    {
+      "new_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Finite.lean",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite",
+      "kind": "merge",
+      "batch": "M2-uniqueness-merge",
+      "sources": [
+        {
+          "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness.lean",
+          "old_module": "FunctionalInequalities.Probability.MomentMeasure.Uniqueness",
+          "lines": 194,
+          "sha256_before": "31123b99a77154bca8622eb625de28715583d70ff0a22a99990ef6158070468e"
+        },
+        {
+          "old_path": "formalization/FunctionalInequalities/Probability/MomentMeasure/UnboundedUniqueness.lean",
+          "old_module": "FunctionalInequalities.Probability.MomentMeasure.UnboundedUniqueness",
+          "lines": 153,
+          "sha256_before": "2d83fb8b73c62466bc9ba61f20ea9a8aa73503e156383c85d9e3a3b8a6401ca1"
+        }
+      ],
+      "imports": [
+        "FunctionalInequalities.Probability.MomentMeasure.Gradient",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite"
+      ],
+      "lines": 333,
+      "private_duplicate_dropped": {
+        "name": "ae_legendre_gradient_ne_top",
+        "kept_in": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness.lean",
+        "dropped_from": "formalization/FunctionalInequalities/Probability/MomentMeasure/UnboundedUniqueness.lean",
+        "block_sha256": "44d3519011c9dfc5d8aac51ef51276aa9c8485d6a5401483ef8f838179ac32da",
+        "block_lines": 13
+      },
+      "docstring": "one module docstring: a combined title, the first source docstring body, then the second under a subheading (text verbatim except the merged-away cross-reference noted in deviations)",
+      "context": "bodies concatenated in source order; a bare `end` after the first body closes its `noncomputable section`, opens and variables; no declaration, statement or proof changed",
+      "sha256_after": "25a9f43440d8ad0580de254fbf1c557e798174f41e29e748b4e0edad499925f5"
+    },
+    {
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+      "new_module": "FunctionalInequalities.KLS.CEK.Uniqueness",
+      "kind": "merge",
+      "batch": "M3-cek-merge",
+      "sources": [
+        {
+          "old_path": "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+          "old_module": "FunctionalInequalities.KLS.CEK.Uniqueness",
+          "lines": 107,
+          "sha256_before": "346fb16554eb40e330996409c1b81aeecda2cf0e462ba73f250b80b61a626aa3"
+        },
+        {
+          "old_path": "formalization/FunctionalInequalities/KLS/CEK/EssentialUniqueness.lean",
+          "old_module": "FunctionalInequalities.KLS.CEK.EssentialUniqueness",
+          "lines": 166,
+          "sha256_before": "5a8d7023a41fea18b8c499a247c323e254f733b0b2850cf2d07fdc3978509993"
+        }
+      ],
+      "imports": [
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.EssentiallyContinuous",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer",
+        "FunctionalInequalities.KLS.CEK.GeneralExistence",
+        "FunctionalInequalities.Analysis.Convex.Affine"
+      ],
+      "lines": 275,
+      "private_duplicate_dropped": null,
+      "docstring": "one module docstring: a combined title, the first source docstring body, then the second under a subheading (text verbatim except the merged-away cross-reference noted in deviations)",
+      "context": "bodies concatenated in source order; a bare `end` after the first body closes its `noncomputable section`, opens and variables; no declaration, statement or proof changed",
+      "sha256_after": "f2bc3b7c383985774f1eaffc3fcc893fb5b4de6de7f0ac0160b82326d91aa8bb"
+    }
+  ],
+  "import_migrations": [
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/KernelBounds.lean",
+      "kind": "attempted import-only change (reverted)",
+      "change": "remove `import FunctionalInequalities.Analysis.Newtonian.Truncation.Error` (DECISIONS.md 3)",
+      "result": "lake --wfail build failed: unknown identifiers abs_fderiv_newtonianKernel_basis_le, contDiffAt_newtonianKernel (Kernel/First, reached only through Truncation/Error) and opNorm_le_sum_abs_basisFun (declared in Truncation/Error.lean); the import was restored byte-for-byte and the DECISIONS.md fallback placement Schauder/KernelBounds.lean was applied, which removes the Kernel/ -> Truncation/ directory back-edge",
+      "final_imports_changed": false
+    },
+    {
+      "path": "formalization/FunctionalInequalities.lean",
+      "kind": "merge consequence",
+      "change": "root import lines of the merged-away sources renamed in place; the three lines that became duplicates were removed",
+      "removed_lines": [
+        "import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite",
+        "import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite",
+        "import FunctionalInequalities.KLS.CEK.Uniqueness"
+      ]
+    }
+  ],
+  "directory_changes": {
+    "created_library_directories": [
+      "Analysis/Iteration",
+      "Analysis/Newtonian/BallGrowth",
+      "Analysis/Newtonian/HessianIntegral",
+      "Analysis/Newtonian/Kernel",
+      "Analysis/Newtonian/Potential",
+      "Analysis/Newtonian/Schauder",
+      "Analysis/Newtonian/Truncation",
+      "KLS/LogConcave/HeatSemigroup/BakryEmery",
+      "KLS/LogConcave/HeatSemigroup/Generator",
+      "KLS/LogConcave/HeatSemigroup/GradientEstimate",
+      "KLS/LogConcave/HeatSemigroup/SmallTime",
+      "KLS/LogConcave/HeatSemigroup/SpectralGap",
+      "Probability/MomentMeasure/Maximality",
+      "Probability/MomentMeasure/Uniqueness"
+    ],
+    "removed_library_directories": [],
+    "flat_directories_emptied_of_modules": [
+      "Analysis/Newtonian (all 52 modules moved into 6 subdirectories)"
+    ],
+    "remaining_flat_modules": {
+      "KLS/LogConcave/HeatSemigroup": [
+        "Basic",
+        "Domain",
+        "Markov"
+      ],
+      "Probability/MomentMeasure": [
+        "Affine",
+        "Baseline",
+        "Basic",
+        "Coercivity",
+        "Compactness",
+        "ConjugateMass",
+        "FirstVariation",
+        "Gradient",
+        "Integrability",
+        "Normalization",
+        "Truncation"
+      ]
+    }
+  },
+  "declaration_migrations": {
+    "class": "none: no declaration renamed, moved between namespaces, or changed; the only removed declaration copy is the byte-identical private ae_legendre_gradient_ne_top of UnboundedUniqueness.lean (kept from Uniqueness.lean)",
+    "entries": []
+  },
+  "records_updated": [
+    "HANDOFF.md",
+    "README.md",
+    "formalization/API.md",
+    "formalization/FunctionalInequalities.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Integrated.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/Linearization.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/Uniform.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/Gradient/Inverse.lean",
+    "formalization/FunctionalInequalities/Analysis/EssentialExtrema/Oscillation.lean",
+    "formalization/FunctionalInequalities/Analysis/Harmonic/AnnularKernel.lean",
+    "formalization/FunctionalInequalities/Analysis/Harmonic/CompactReproduction.lean",
+    "formalization/FunctionalInequalities/Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean",
+    "formalization/FunctionalInequalities/Analysis/IteratedDerivative/VariableCoefficientSchauder.lean",
+    "formalization/FunctionalInequalities/Analysis/Iteration/LpNorm.lean",
+    "formalization/FunctionalInequalities/Analysis/Mollification/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/AbsLogNear.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/CancelledNearIntegral.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/CancelledNearKernel.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/FarCancelledAE.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/BallGrowth/FarKernel.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/Annulus.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/CriticalDomain.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/Far.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/Near.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/HessianIntegral/NearExponent.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Difference.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/EntryBound.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/FarDifference.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/First.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Harmonic.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/L1.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/LogL1.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Measurable.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Radial.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/RadialLogDerivative.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Third.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/ThirdBound.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Trace.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/BoundaryFormula.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/C2.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/GradientApprox.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/GradientBound.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/Representation.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/BoxCorrection.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/CancelledHessian.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/CompactPoisson.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/Interior.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/KernelBounds.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/LocalHolder.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/PoissonFreezing.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Schauder/Potential.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/CutoffMajorant.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/CutoffMass.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Derivative.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Error.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Gradient.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/GradientBounds.lean",
+    "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/L1.lean",
+    "formalization/FunctionalInequalities/Analysis/WaveSplitting/Potential.lean",
+    "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Basic.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Criterion.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Taylor.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/GeneralExistence.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean",
+    "formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/BrascampLieb.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/ChainRule.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/Gamma.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/GammaTwo.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClassExtension.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/FormRange.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/InteriorRegularity.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Range.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Tilt.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/GaussianProfile.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Interpolation.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/ReversePoincare.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Approximation.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Correlation.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Perimeter.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/ApproximateEigenfunction.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Curvature.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Inverse.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Temperate.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HminusOne.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Regular/Basic.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient/Kernel.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/EssentiallyContinuous.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/GradientVariation.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/BoundedSupport.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/ExtendedMidpointEquality.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Maximizer.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/MidpointEquality.lean",
+    "formalization/MODULES.md",
+    "research/a-series/ledger.yaml",
+    "research/audits/BKL/ApproximateEigenfunctionAudit.lean",
+    "research/audits/BKL/DyadicSummationAudit.lean",
+    "research/audits/BKL/FoundationsAudit.lean",
+    "research/audits/BKL/GeneratorTiltAudit.lean",
+    "research/audits/BKL/IterateRouteStatements.lean",
+    "research/audits/BKL/LetwinCenteredRangeAudit.lean",
+    "research/audits/BKL/OperatorRouteStatements.lean",
+    "research/audits/BKL/RegularLawAudit.lean",
+    "research/audits/BKL/WeakHessianAudit.lean",
+    "research/audits/BakryEmery/ErgodicityAudit.lean",
+    "research/audits/BakryEmery/GeneratorGammaTwoAudit.lean",
+    "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+    "research/audits/BakryEmery/GradientEstimateAudit.lean",
+    "research/audits/BakryEmery/HeatApproximationAudit.lean",
+    "research/audits/BakryEmery/HeatTestClassAudit.lean",
+    "research/audits/BakryEmery/HeatTestExtensionAudit.lean",
+    "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+    "research/audits/BakryEmery/InteriorRegularityAudit.lean",
+    "research/audits/BakryEmery/OperatorCoreAudit.lean",
+    "research/audits/BakryEmery/ReverseSelfImprovementAudit.lean",
+    "research/audits/BakryEmery/WeakGammaAudit.lean",
+    "research/audits/HeatSemigroup/AlmostEverywhereAudit.lean",
+    "research/audits/HeatSemigroup/ChainRuleAudit.lean",
+    "research/audits/HeatSemigroup/CompositionDerivativeAudit.lean",
+    "research/audits/HeatSemigroup/CompositionDomainAudit.lean",
+    "research/audits/HeatSemigroup/FormRangeAudit.lean",
+    "research/audits/HeatSemigroup/IntegratedProfileAudit.lean",
+    "research/audits/HeatSemigroup/PiCoefficientAudit.lean",
+    "research/audits/HeatSemigroup/ProfileLimitAudit.lean",
+    "research/audits/HeatSemigroup/SmallTimeAudit.lean",
+    "research/audits/HeatSemigroup/SpectralDecayAudit.lean",
+    "research/audits/HeatSemigroup/StrongInterpolationAudit.lean",
+    "research/audits/HeatSemigroup/WeightedCauchyAudit.lean",
+    "research/audits/IteratedDerivative/SchauderToolsAudit.lean",
+    "research/audits/Letwin/EssentialUniqueness.lean",
+    "research/audits/Letwin/MomentUniqueness.lean",
+    "research/audits/Letwin/UnboundedUniqueness.lean",
+    "research/audits/Newtonian/CompactPoissonAudit.lean",
+    "research/audits/Newtonian/InteriorSchauderAudit.lean",
+    "research/audits/Newtonian/RepresentationAudit.lean",
+    "research/audits/SourceLayout/ConsolidatedOwners.lean",
+    "research/audits/SourceLayout/CrossFilePrivateMergers.lean",
+    "research/audits/SourceLayout/PrivatePromotionMergers.lean",
+    "research/progress/README.md",
+    "research/progress/letwin-smooth-route.json",
+    "research/progress/literature.json",
+    "research/progress/nodes.json",
+    "research/progress/source-layout-review.md",
+    "research/tasks.json",
+    "solutions/README.md",
+    "solutions/ThmBakryEmeryPoincare.lean"
+  ],
+  "files_created": [
+    "research/progress/2026-10-29-layout-round2-map.json",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/Finite.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Finite.lean"
+  ],
+  "generated_views_pending": [
+    "research/progress/README.md (generated blocks)",
+    "research/progress/STATUS.md",
+    "research/progress/TREE.mmd",
+    "research/progress/LITERATURE.md",
+    "regenerate with research/progress/update.py from staged nodes.json/literature.json"
+  ],
+  "historical_unchanged": [
+    "research/progress/2026-10-29-layout-map.json",
+    "research/progress/completed-chain-organization-map.json",
+    "research/progress/consolidated-proof-organization-map.json",
+    "research/progress/cross-file-private-merge-map.json",
+    "research/progress/cross-file-private-reuse-merge-map.json",
+    "research/progress/foundation-organization-map.json",
+    "research/progress/mathematical-organization-map.json",
+    "research/progress/private-promotion-merge-map.json",
+    "research/progress/public-statement-merge-map.json",
+    "build/history/** (including the round-1 archive and the round-2 survey map.json)",
+    "iCloud conflict copies (\" 2\" files, e.g. research/check_blueprint 2.py, formalization/blueprint/route-composition 2.yaml, formalization/FunctionalInequalities/Poincare/README 2.md)",
+    "stray untracked .lean copies at the repository root (Analysis/{Convex,Tensor,WaveSplitting}, KLS/{BKL,LogConcave,Geometry,CEK}, including KLS/LogConcave/HeatSemigroup/{Approximation,Perimeter}.lean)",
+    "research/decisions/ and statement-snapshot/IndependentTargets review records (name no moved module)"
+  ],
+  "deviations": [
+    "Files were moved with plain mv (owner rule), not git mv; merge sources were deleted with rm after the merged modules built; the index still lists the old paths of the 83 HEAD-tracked moved files until the controller stages the moves; the 8 Probability/MomentMeasure and KLS/CEK moves and all 6 merge sources were untracked at HEAD (new in the dirty baseline).",
+    "DECISIONS.md 1 overrides the survey: MidpointEquality.lean and ExtendedMidpointEquality.lean were moved path-only to Probability/MomentMeasure/Uniqueness/{MidpointEquality,ExtendedMidpointEquality}.lean instead of being merged into Uniqueness/MidpointEquality.lean (91 moves and 3 merges instead of 89 and 4; 837 modules instead of 836).",
+    "DECISIONS.md 3: removing `import ...Truncation.Error` from Kernel/Bounds.lean failed the build (opNorm_le_sum_abs_basisFun is declared in Truncation/Error.lean; abs_fderiv_newtonianKernel_basis_le and contDiffAt_newtonianKernel came through it from Kernel/First). The survey note that the import names none of its declarations was wrong. The import was restored and the module placed at Analysis/Newtonian/Schauder/KernelBounds.lean (the DECISIONS fallback) instead of the survey destination Kernel/Bounds.lean; no import-only change remains.",
+    "Merged module docstrings follow the controller instruction (one combined module docstring) rather than the survey merge_procedure (second docstring as a separate /-! block): a combined title, both source docstring bodies verbatim under subheadings, except two sentences: in Maximality/Finite the second source opening (which restated the setting and began \"This module removes\") reads \"Here no assumption is made on the support of `μ`. This part removes ...\"; in KLS/CEK/Uniqueness the cross-reference \"covered by `KLS.CEK.EssentialUniqueness`\" (the survey proposed rewriting it to the self-referential `KLS.CEK.Uniqueness`) reads \"covered in the next part\".",
+    "Root library imports: the renamed import lines of the merged-away sources IntegrableMaximality, UnboundedUniqueness and KLS.CEK.EssentialUniqueness became duplicates and were removed; every other root line kept its position.",
+    "References rewritten beyond the survey list: research/progress/README.md line 60 (prose link and label outside the generated blocks), research/progress/literature.json bare `(Generator.lean)` -> `(KLS/LogConcave/HeatSemigroup/Generator/Basic.lean)`, and the bare `Gamma.lean` in HeatSemigroup/BakryEmery/Gamma.lean qualified as `Analysis/BakryEmery/Gamma.lean` (survey same_basename_review note). The two bare-sibling mentions (FormRange, TestClassExtension) were written as `HeatSemigroup/BakryEmery/TestClassExtension.lean` and `HeatSemigroup/Generator/FormRange.lean` and rewrapped.",
+    "Reviewed bare basenames that stay valid were left unchanged (siblings that moved together, e.g. TestClass.lean, BallTruncation.lean, GradientVariation.lean, the HeatSemigroup GammaTwo mention of Gamma.lean, and same-named files in other directories).",
+    "Optional documentation updates in the survey (KLS/README.md HeatSemigroup row) were not made (DECISIONS.md 6: no optional changes).",
+    "Generated progress views were not regenerated (update.py is the controller step); formalization/MODULES.md and formalization/API.md were regenerated with module_inventory.py and api_index.py."
+  ],
+  "evidence_pins": {
+    "file": "research/tasks.json",
+    "path_fields_rewritten": 18,
+    "rule": "a pin was refreshed only when it equalled the sha256 of the saved pre-edit copy (build/history/2026-10-29-layout-round2/before/); only path and sha256 values changed",
+    "refreshed": [
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Basic.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "old_sha256": "c5a0df1328dcd39f128f4f89defa89923495783878db6585ca163ed1d5ce8122",
+        "new_sha256": "c5a0df1328dcd39f128f4f89defa89923495783878db6585ca163ed1d5ce8122",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+        "old_path": "",
+        "old_sha256": "a318e394c6140ec438d0c7b7a78d911026f1d9cdbdd9f29acce517a10f697dd9",
+        "new_sha256": "d1bd922f360b7555a1c187760f5ea4299a63b9be34884b31f166bef1fd5e3847",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+        "old_path": "",
+        "old_sha256": "4fa2daafa2d12e9b8bc00149262d78ae475296e4662d653a3e0138036ca7dc3a",
+        "new_sha256": "00ce48cb74c7c2c2b10693312cb03cd42a45e114409fb238f39d73aad7708fd0",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Integrated.lean",
+        "old_path": "",
+        "old_sha256": "a3d8d874090f4beef3547d19150c0ce90573490e3dab1e8adbfbb7d99d763e2d",
+        "new_sha256": "644b0e8d53516d16aa5d6ec5ad6ea5f342a12f50d0905e56fe13320763f84c7b",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/Gamma.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Gamma.lean",
+        "old_sha256": "d768817665867fefa7597d7873bffd800815bfdd2a53f7ab2b527ec5a0751549",
+        "new_sha256": "dc0fd2621823dfd8d7473f8c7842a43a2d3c9ee9ebe08d98dfe2b68397d2e6f0",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/WeakGammaAudit.lean",
+        "old_path": "",
+        "old_sha256": "2246eb16900624b465fe38a3c9dae821a2b9230f7d45f8066856b84e1ef395bd",
+        "new_sha256": "d8e949f164ccac1bdc572d3ceadf9a81dd5867d36c72b4b80d9ee4b23c8613fc",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/GammaTwo.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GammaTwo.lean",
+        "old_sha256": "57127432c11a26e7fd53eb5544483b9408b5b129a9d7f373721d8affa474f261",
+        "new_sha256": "4b28411700fd0a898ce63f1e4cd94fa7d10cc2c45609b108565c4455846e3f1e",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/GeneratorGammaTwoAudit.lean",
+        "old_path": "",
+        "old_sha256": "e103e2114685453db7a61dadd29ef62c3c19c93b099e6e26b26c36388cbf542b",
+        "new_sha256": "78f110f9b4d1960210e8288a09ab27ce91a9dfc572e101626c155318e2983ad6",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/OperatorCore.lean",
+        "old_sha256": "7bc0a12200faf382e2181446c8e9dfde96d289852049ae9722dadb00340bd365",
+        "new_sha256": "8375fe53f31b52a9d8be2ae6f02eb027c3d27e2c6d9fde4da142d19d9c8b9769",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/OperatorCoreAudit.lean",
+        "old_path": "",
+        "old_sha256": "529e65edd00efc7410cd55eabca0fd086ee049c08d77111a25128a9873dbdedb",
+        "new_sha256": "d91ad449d5395bc1fa723a35bbe099f82bedb5595e480b1413f708df14f4d085",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Mollification/Basic.lean",
+        "old_path": "",
+        "old_sha256": "188b0a1d8e4a38d90516d369015a0f4298c40d1bf6d5c725c6c4364f6ee54f8e",
+        "new_sha256": "4267d140ca70e99e6fb0f385ef659f28cce973584e0e527df944c3b3268ad29a",
+        "pins": 2,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison",
+          "lem:weak-product-global-l2"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/InteriorRegularity.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean",
+        "old_sha256": "de34fbb637a9f29db26188ad0f5c352eae7c3a6c21c7f9a03e86812ae8c1b8d5",
+        "new_sha256": "2dfdc87290d0a95ed5b27a03b895b46ae7beb2ea80359a45960c3e89a523694a",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/InteriorRegularityAudit.lean",
+        "old_path": "",
+        "old_sha256": "6d54ae0d6e121bdd9fef07ac817993f99624796ce2ff9e631252889cf05f784e",
+        "new_sha256": "6d1eca7f618bfb90f83eefba88ef2ff27e8ff9cf2ecff79055876975956d2952",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Decay.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+        "old_sha256": "b05544b9331f2176a4775f03c2f44562960aaaec3278d77e92ff618c10f54621",
+        "new_sha256": "b05544b9331f2176a4775f03c2f44562960aaaec3278d77e92ff618c10f54621",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClass.lean",
+        "old_sha256": "145152bc2771ed100e46baecebeb600b48e77f58cfd2e909896ee4c3da7ce10a",
+        "new_sha256": "f90502d76ca9646e14608fa730223088f464f856599874584e8b36677c05c910",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/HeatTestClassAudit.lean",
+        "old_path": "",
+        "old_sha256": "fd561f6aa187b617cacaad9626749c8d4f3ead3953afb069dc6a244181b9aaa8",
+        "new_sha256": "9d13e89008e73e6adaffe156c7f54042d3ba1f9e5c51db42d054fb0592d80f79",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/HeatApproximationAudit.lean",
+        "old_path": "",
+        "old_sha256": "7d7089a56a2c21a088125be495694dc60be88db1a83e9d0e8f783b116dd11db3",
+        "new_sha256": "1200c8f4f674cec71e7d3fd51bf46940a956b2e5dac35aa2bab90b71dd1afb8d",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Potential.lean",
+        "old_path": "",
+        "old_sha256": "f26e056b3596933eebee7c5c1149f9f8edf6a320323b0fd8631572259b1762b0",
+        "new_sha256": "ee48d0ecab9d5769f3f9611cf50493782976412e98ae2f8e9f711d4057957028",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/FormRange.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/FormRange.lean",
+        "old_sha256": "843cfc154e79be7a7e80b9f8ba0e3c269f0cd7a9241d5a31082aa55dbe330610",
+        "new_sha256": "1b3116b4320037d87fb5679b0057b8dc4d27338c7545c5b219f6191d88544844",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/FormRangeAudit.lean",
+        "old_path": "",
+        "old_sha256": "2f1070d855bd0aab298c4f193362430fcfbf85e3ad34143ac16419507076899f",
+        "new_sha256": "12351f79b7c4b0884640c29713210a6dc02a76128f283fe21ad33ec8aa30427d",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClassExtension.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/TestClassExtension.lean",
+        "old_sha256": "9264bd0c4840c5a287feb8898f3ff0b56b52f04675ba47b761c2700e6df56070",
+        "new_sha256": "4e432a04c867dfea1b076bb381288200c478c8e8eb48fddfa0ef572561d18591",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/HeatTestExtensionAudit.lean",
+        "old_path": "",
+        "old_sha256": "29bd34944043fcb036d9f21cc6e696e7eeffb669c1c8a6728d700b9fecd15187",
+        "new_sha256": "bdd407a42e597b974959c2469c9e17a3bdd48fa69635009f9e9000d3f107053c",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean",
+        "old_sha256": "4dc39db74c972e5c5ae2a3eb8d22b1af6f74360ad25db526d2fea11473b40e0e",
+        "new_sha256": "470d3f5a568e55451dbd273f53b268a719e27fc38a5f59e0458024d2419ddd20",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/GradientEstimateAudit.lean",
+        "old_path": "",
+        "old_sha256": "56c146e58355de78fd67236f98867d0177ffc8eadbd2dbf5d09e6bb1215f3f21",
+        "new_sha256": "183c267d8059e2105f8d0f8a20dc7c16a103f53a7b8911aee26acbd423cded7d",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/ReversePoincare.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ReversePoincare.lean",
+        "old_sha256": "078b93c017a43fc1595a0b50e1f78dee8c769c860c7760ffe612421fe9886ab0",
+        "new_sha256": "ec4d7e08a782466e400102edeb7ef3e75f931982d7c245a73401c38ae831b930",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+        "old_sha256": "2d1585c782ccfd2c2d95acfb6e93a894b9b62edf5093d7e6133492bb55f5927d",
+        "new_sha256": "8a47dcbdf7d0501eb13ea87ab9f67f12bff557d4a5d39a4bb16a77b6754de8a9",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/BakryEmery/ReverseSelfImprovementAudit.lean",
+        "old_path": "",
+        "old_sha256": "4ef8d40d491facec65ec76ad7dee145f0ca9d64937ea8bbda982aa8d1ee3155b",
+        "new_sha256": "9079a1901cf39d3e1ed0c504df43fa6613413866e97b6160ddc1a4f599038c94",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/AlmostEverywhereAudit.lean",
+        "old_path": "",
+        "old_sha256": "691c95ec9e8383f496ed28e264973498fe71cfc999717064ea40a323d8f941ae",
+        "new_sha256": "0b3abef57c92b2ab567439792e3b8444e10ffc3bccb1da726ee544cb41a2341e",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Approximation.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Approximation.lean",
+        "old_sha256": "c0b3c13a02004794efb988a634f68c243f89280866bce309daf6fe67a9021310",
+        "new_sha256": "5ed723f7a1c8ec0bc1f6b0aac856a591e40b93c176dbf69a7fa3432537303028",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Perimeter.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+        "old_sha256": "c2c551143a593aab04772126d487157b6a65cbce70b48296d7ea2d7d78e9dace",
+        "new_sha256": "81ee6fec5793c7281fa7d3c55651aaaa5781adb4b967efaffab7256c92f40654",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/SmallTimeAudit.lean",
+        "old_path": "",
+        "old_sha256": "9d8cc4cca200f6c0ad0e146ea4538a3090816f0c65c37e45ef42390e62b2c06f",
+        "new_sha256": "a0fb53fcb1e51c1df8d880effe1174e6ce1e665fef9e71d1d5c79199b4f15f82",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/ChainRule.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ChainRule.lean",
+        "old_sha256": "d593ee37120bbecf08f723f2690dd847d9e947318b1d0e09bf2428efee1db9c4",
+        "new_sha256": "2620ca763c8da2ae6f3d635102669d6aea2431dddf84409c871eb67c3b3505f5",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/GaussianProfile.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GaussianProfile.lean",
+        "old_sha256": "e9dc6a33a3b5b26afc32d253a103d2d4c8e3a4904a0cc6c92ca8b4208705cf2e",
+        "new_sha256": "00e0dc5f9d7c4ec5e9b80b40a975792a825fdcd577028c85d73c8c11c73ca01b",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/ChainRuleAudit.lean",
+        "old_path": "",
+        "old_sha256": "12ab1c5c6a32bbb0c718b11f75819c5cd26b82d995c3fdb68c3d65b52a68e0dc",
+        "new_sha256": "475753176ed3d7675ab7569dd3f54308bbda6e8d97d8331c02c66f02599d5abf",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/CompositionDomainAudit.lean",
+        "old_path": "",
+        "old_sha256": "6d2c085937853e8f2ce87a63413fa508148f61bcdd2851073059d27050656504",
+        "new_sha256": "1d2531d49573f75b9ca0e5f07c0c4a087b854357e964c9c397caa10b7dbd127a",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Interpolation.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Interpolation.lean",
+        "old_sha256": "3a29e971e1c246f5fdcb19c473b077f0910f221b54f977b3b485679f09aff5d6",
+        "new_sha256": "f96cce0ebd8d4ebcae1e06b9868491fc3dd9ae242d3bd65afe957b825635ccf9",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/CompositionDerivativeAudit.lean",
+        "old_path": "",
+        "old_sha256": "153924df29c5dc46436e6c744bec61541a24620a4d857f1972f8a644149c87be",
+        "new_sha256": "d4f0d13b5bf1f14224c6add8dbd5161e48dbdd9fbe5bc181f600071394c1889a",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/StrongInterpolationAudit.lean",
+        "old_path": "",
+        "old_sha256": "14c3767f9a7c37feddac753f1715f5270807627672adae7fbc06179e31fb49f4",
+        "new_sha256": "94f82b6ff3a87c208f3228e55839435e257f387985ada4cb8130fa6e1786831b",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/WeightedCauchyAudit.lean",
+        "old_path": "",
+        "old_sha256": "f9773af07acfe5e71e3ef8797b8401323dec169a301f8adbfa4411668fdb1eb7",
+        "new_sha256": "c6f8060c8203d1a14fc745773ad6c7baba76f6bb76b67bd311ba14be478ad921",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/IntegratedProfileAudit.lean",
+        "old_path": "",
+        "old_sha256": "b6673f70f175b1b3845ec518cc6f51fc5ab27b307793cb272c0c8a3f323c8f2e",
+        "new_sha256": "1d67c704bab96fceea093c43c77c9e23ca1c1bf1b68d7dd2b2aaeb1847b7ac0a",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/ProfileLimitAudit.lean",
+        "old_path": "",
+        "old_sha256": "a4f9abc625c41ea0d5862421447fbb20d9b309c8457e165d7f92d726d6b8998c",
+        "new_sha256": "46c8654dab81c8735acaac280c74e4f7e3cf743cb74848b7747baec77a1857b8",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/PiCoefficientAudit.lean",
+        "old_path": "",
+        "old_sha256": "66c40172ba6aad9b7055a9f5a90f816f7185e009c7f20e16fa8def94197f9dd1",
+        "new_sha256": "751f41606774c1de7d143fad0fce14ee7f8ff192cd198f043ded8c0fa47a0a53",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Correlation.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Correlation.lean",
+        "old_sha256": "004fb75389d9279e988d56e05a18118a1195cddc00e9be2658b871cfdf19e829",
+        "new_sha256": "027cf570901278bfa032c1c55b9f9c575ad98419350cab925473c7de851b329a",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
+        "old_path": "",
+        "old_sha256": "cd6b669f9a917636d436def42438e301990970a87b101daf12052be6bbec1e28",
+        "new_sha256": "62bf58279763d7687470fea422d481e9e27115093e5a40bad5a85918383b1324",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "research/audits/HeatSemigroup/SpectralDecayAudit.lean",
+        "old_path": "",
+        "old_sha256": "12d90dbc183c1bc8dc96cf8c66a89781c76a4bfdffc6661cfec74dda3c4e2326",
+        "new_sha256": "9091b9582f2dcf2ed2a7e3860aeb8167e1fd0942e12b8073a52edc797d5738b6",
+        "pins": 1,
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      }
+    ],
+    "stale_before_migration_left_unchanged": []
+  },
+  "validation_inputs": [
+    "research/audits/BKL/AffineRegularAudit.lean",
+    "research/audits/BKL/ApproximateEigenfunctionAudit.lean",
+    "research/audits/BKL/BasisChangeAudit.lean",
+    "research/audits/BKL/ConditioningAudit.lean",
+    "research/audits/BKL/ConvexHessianAudit.lean",
+    "research/audits/BKL/ConvexSupportAudit.lean",
+    "research/audits/BKL/CovarianceSupportAudit.lean",
+    "research/audits/BKL/CumulantBoundAudit.lean",
+    "research/audits/BKL/CumulantEnvelopeAudit.lean",
+    "research/audits/BKL/CutoffEnergyAudit.lean",
+    "research/audits/BKL/DyadicSummationAudit.lean",
+    "research/audits/BKL/FoundationsAudit.lean",
+    "research/audits/BKL/GaussianGrowthAudit.lean",
+    "research/audits/BKL/GaussianHessianAudit.lean",
+    "research/audits/BKL/GaussianMomentsAudit.lean",
+    "research/audits/BKL/GaussianPosteriorAudit.lean",
+    "research/audits/BKL/GaussianSteinAudit.lean",
+    "research/audits/BKL/GaussianTaylorAudit.lean",
+    "research/audits/BKL/GeneratorTiltAudit.lean",
+    "research/audits/BKL/GroupedCumulantAudit.lean",
+    "research/audits/BKL/GroupingSupportAudit.lean",
+    "research/audits/BKL/HessianIncrementAudit.lean",
+    "research/audits/BKL/HessianSteinAudit.lean",
+    "research/audits/BKL/IsotropicReductionAudit.lean",
+    "research/audits/BKL/IterateDefectAudit.lean",
+    "research/audits/BKL/IterateDomainAudit.lean",
+    "research/audits/BKL/IterateRouteStatements.lean",
+    "research/audits/BKL/IterateSymmetryAudit.lean",
+    "research/audits/BKL/IterateTaylorAudit.lean",
+    "research/audits/BKL/IterateTaylorRecursionAudit.lean",
+    "research/audits/BKL/IteratedLeibnizAudit.lean",
+    "research/audits/BKL/KlsAudit.lean",
+    "research/audits/BKL/LetwinA4SupportAudit.lean",
+    "research/audits/BKL/LetwinBoundedPrimalAudit.lean",
+    "research/audits/BKL/LetwinCenteredRangeAudit.lean",
+    "research/audits/BKL/LetwinCompactApproximationAudit.lean",
+    "research/audits/BKL/LetwinCompactBoundAudit.lean",
+    "research/audits/BKL/LetwinCutoffAudit.lean",
+    "research/audits/BKL/LetwinCutoffPrimitiveAudit.lean",
+    "research/audits/BKL/LetwinCutoffProfileAudit.lean",
+    "research/audits/BKL/LetwinEnergyDefectAudit.lean",
+    "research/audits/BKL/LetwinFiniteEnergyAudit.lean",
+    "research/audits/BKL/LetwinHessianTraceAudit.lean",
+    "research/audits/BKL/LetwinInverseHessianAudit.lean",
+    "research/audits/BKL/LetwinLegendreVariationAudit.lean",
+    "research/audits/BKL/LetwinMongeAmpereTraceAudit.lean",
+    "research/audits/BKL/LetwinOperatorContinuityAudit.lean",
+    "research/audits/BKL/LetwinRealExhaustionAudit.lean",
+    "research/audits/BKL/LetwinRescalingPositivityAudit.lean",
+    "research/audits/BKL/LetwinScalarBrascampLiebAudit.lean",
+    "research/audits/BKL/LetwinSteinAudit.lean",
+    "research/audits/BKL/LetwinSupportAudit.lean",
+    "research/audits/BKL/LetwinSymmetricIntegralAudit.lean",
+    "research/audits/BKL/LetwinSymmetricJordanAudit.lean",
+    "research/audits/BKL/LetwinUniformIntervalAudit.lean",
+    "research/audits/BKL/LetwinWeightedEnergyAudit.lean",
+    "research/audits/BKL/LocalThirdCumulantAudit.lean",
+    "research/audits/BKL/MappedCovarianceAudit.lean",
+    "research/audits/BKL/MatrixTraceIntegralCoefficientAudit.lean",
+    "research/audits/BKL/MollificationConvexRangeAudit.lean",
+    "research/audits/BKL/MomentTailAudit.lean",
+    "research/audits/BKL/NoiseEntryAudit.lean",
+    "research/audits/BKL/NondivergenceAudit.lean",
+    "research/audits/BKL/OperatorRouteStatements.lean",
+    "research/audits/BKL/PermutationAudit.lean",
+    "research/audits/BKL/PosteriorParameterAudit.lean",
+    "research/audits/BKL/PrincipalInverseSqrtAudit.lean",
+    "research/audits/BKL/Proposition71RouteStatements.lean",
+    "research/audits/BKL/Proposition71SupportAudit.lean",
+    "research/audits/BKL/QuadraticCovarianceAudit.lean",
+    "research/audits/BKL/RawCumulantExpansionAudit.lean",
+    "research/audits/BKL/ReductionAudit.lean",
+    "research/audits/BKL/RegularApproximationAudit.lean",
+    "research/audits/BKL/RegularIsometryAudit.lean",
+    "research/audits/BKL/RegularIsotropicAudit.lean",
+    "research/audits/BKL/RegularLawAudit.lean",
+    "research/audits/BKL/RegularMomentPotentialAudit.lean",
+    "research/audits/BKL/RegularMomentWeakTensorAudit.lean",
+    "research/audits/BKL/RegularPoincareAudit.lean",
+    "research/audits/BKL/SelectedPartitionAudit.lean",
+    "research/audits/BKL/SingletonAllocationAudit.lean",
+    "research/audits/BKL/SixthContractionMapAudit.lean",
+    "research/audits/BKL/SixthMomentAudit.lean",
+    "research/audits/BKL/SuspensionAudit.lean",
+    "research/audits/BKL/TaylorCriterionAudit.lean",
+    "research/audits/BKL/ThirdCumulantWitnessAudit.lean",
+    "research/audits/BKL/ThirdMomentContractionAudit.lean",
+    "research/audits/BKL/TraceEnergyAudit.lean",
+    "research/audits/BKL/WeakDeterminantJacobiAudit.lean",
+    "research/audits/BKL/WeakHessianAudit.lean",
+    "research/audits/BKL/WeakHessianEvolutionAudit.lean",
+    "research/audits/BKL/WeakHessianIdentificationAudit.lean",
+    "research/audits/BKL/WeakHessianInverseAudit.lean",
+    "research/audits/BKL/WeakHessianPolynomialAudit.lean",
+    "research/audits/BKL/WeakHessianProductAudit.lean",
+    "research/audits/BKL/WeakHessianRegularityAudit.lean",
+    "research/audits/BKL/WeakHessianSymmetryAudit.lean",
+    "research/audits/BKL/WeakHessianTraceAudit.lean",
+    "research/audits/BKL/WeakInverseHessianAudit.lean",
+    "research/audits/BKL/WeakInverseHessianCutoffAudit.lean",
+    "research/audits/BKL/WeakLimitAudit.lean",
+    "research/audits/BKL/WeakMongeAmpereFirstAudit.lean",
+    "research/audits/BakryEmery/BochnerAudit.lean",
+    "research/audits/BakryEmery/ErgodicityAudit.lean",
+    "research/audits/BakryEmery/GeneratorGammaTwoAudit.lean",
+    "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+    "research/audits/BakryEmery/GradientEstimateAudit.lean",
+    "research/audits/BakryEmery/HeatApproximationAudit.lean",
+    "research/audits/BakryEmery/HeatTestClassAudit.lean",
+    "research/audits/BakryEmery/HeatTestExtensionAudit.lean",
+    "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+    "research/audits/BakryEmery/InteriorRegularityAudit.lean",
+    "research/audits/BakryEmery/OperatorCoreAudit.lean",
+    "research/audits/BakryEmery/ReverseSelfImprovementAudit.lean",
+    "research/audits/BakryEmery/WeakGammaAudit.lean",
+    "research/audits/CEK/ConjugateMassAudit.lean",
+    "research/audits/CEK/DifferenceQuotientAudit.lean",
+    "research/audits/CEK/EllipticityAudit.lean",
+    "research/audits/CEK/FunctionalLimitAudit.lean",
+    "research/audits/CEK/LegendreAudit.lean",
+    "research/audits/CEK/Lemma17Audit.lean",
+    "research/audits/CEK/PointControlAudit.lean",
+    "research/audits/CEK/Proposition12Audit.lean",
+    "research/audits/Cheeger/BuserRouteStatements.lean",
+    "research/audits/Cheeger/EqualityAudit.lean",
+    "research/audits/Cheeger/InequalityAudit.lean",
+    "research/audits/Cheeger/InequalityRouteStatements.lean",
+    "research/audits/Cheeger/InfimumRouteStatements.lean",
+    "research/audits/Coarea/IsoperimetryAudit.lean",
+    "research/audits/Coarea/LipschitzAudit.lean",
+    "research/audits/Coarea/LipschitzMigrationAudit.lean",
+    "research/audits/Coarea/LocallyLipschitzAudit.lean",
+    "research/audits/Coarea/RegularAudit.lean",
+    "research/audits/Coarea/SmoothAudit.lean",
+    "research/audits/Coarea/WeightedInfrastructure.lean",
+    "research/audits/Coarea/WeightedRouteStatements.lean",
+    "research/audits/Density/BorellContinuityAudit.lean",
+    "research/audits/Density/BorellLogConcavityAudit.lean",
+    "research/audits/Density/ConvolutionLogConcavityAudit.lean",
+    "research/audits/Density/GaussianApproximationAudit.lean",
+    "research/audits/Density/GaussianBuserPassageAudit.lean",
+    "research/audits/Density/GaussianFirstRegularityAudit.lean",
+    "research/audits/Density/GaussianInfiniteRegularityAudit.lean",
+    "research/audits/Density/GaussianPoincareStabilityAudit.lean",
+    "research/audits/Density/GaussianSecondRegularityAudit.lean",
+    "research/audits/Density/GaussianSmoothingAudit.lean",
+    "research/audits/Elliptic/BarrierGeometry.lean",
+    "research/audits/Elliptic/BarrierValues.lean",
+    "research/audits/Elliptic/CoefficientScope.lean",
+    "research/audits/Elliptic/DriftCoordinates.lean",
+    "research/audits/Elliptic/EllipticBarrier.lean",
+    "research/audits/Elliptic/FlatSupport.lean",
+    "research/audits/Elliptic/HalfBall.lean",
+    "research/audits/Elliptic/Linearized.lean",
+    "research/audits/Elliptic/LogRadialAmbient.lean",
+    "research/audits/Elliptic/LogRadialBoundary.lean",
+    "research/audits/Elliptic/LogRadialCalculus.lean",
+    "research/audits/Elliptic/LogRadialContinuity.lean",
+    "research/audits/Elliptic/LogRadialDrift.lean",
+    "research/audits/Elliptic/LogRadialGradient.lean",
+    "research/audits/Elliptic/LogRadialPlane.lean",
+    "research/audits/Elliptic/LogRadialPoint.lean",
+    "research/audits/Elliptic/LogRadialZeroth.lean",
+    "research/audits/Elliptic/Nonsymmetric.lean",
+    "research/audits/Elliptic/OperatorLinearity.lean",
+    "research/audits/Elliptic/WithinSupport.lean",
+    "research/audits/Energy/SlopeComparisonAudit.lean",
+    "research/audits/Energy/SlopeDensityAudit.lean",
+    "research/audits/Energy/SlopeRecoveryAudit.lean",
+    "research/audits/Energy/SlopeRouteStatements.lean",
+    "research/audits/Graph/AreaFormulaRouteStatements.lean",
+    "research/audits/Graph/JacobianAudit.lean",
+    "research/audits/Graph/LinearAreaFormulaAudit.lean",
+    "research/audits/Graph/OpenIntegralAudit.lean",
+    "research/audits/Hausdorff/BorelSliceAudit.lean",
+    "research/audits/Hausdorff/CompactSliceAudit.lean",
+    "research/audits/Hausdorff/CriticalSliceAudit.lean",
+    "research/audits/Hausdorff/EilenbergMajorantAudit.lean",
+    "research/audits/Hausdorff/LevelSetMeasurableAudit.lean",
+    "research/audits/Hausdorff/NullSlicingAudit.lean",
+    "research/audits/HeatSemigroup/AlmostEverywhereAudit.lean",
+    "research/audits/HeatSemigroup/BasicAudit.lean",
+    "research/audits/HeatSemigroup/BuserBridgeAudit.lean",
+    "research/audits/HeatSemigroup/ChainRuleAudit.lean",
+    "research/audits/HeatSemigroup/CompositionDerivativeAudit.lean",
+    "research/audits/HeatSemigroup/CompositionDomainAudit.lean",
+    "research/audits/HeatSemigroup/DomainStabilityAudit.lean",
+    "research/audits/HeatSemigroup/FormDomainStabilityAudit.lean",
+    "research/audits/HeatSemigroup/FormRangeAudit.lean",
+    "research/audits/HeatSemigroup/IntegratedProfileAudit.lean",
+    "research/audits/HeatSemigroup/MarkovAudit.lean",
+    "research/audits/HeatSemigroup/MarkovRouteStatements.lean",
+    "research/audits/HeatSemigroup/PiCoefficientAudit.lean",
+    "research/audits/HeatSemigroup/ProfileLimitAudit.lean",
+    "research/audits/HeatSemigroup/SmallTimeAudit.lean",
+    "research/audits/HeatSemigroup/SmoothingAudit.lean",
+    "research/audits/HeatSemigroup/SpectralDecayAudit.lean",
+    "research/audits/HeatSemigroup/StrongInterpolationAudit.lean",
+    "research/audits/HeatSemigroup/WeightedCauchyAudit.lean",
+    "research/audits/IteratedDerivative/AffineDerivativeScaleAudit.lean",
+    "research/audits/IteratedDerivative/CoefficientFreezingAudit.lean",
+    "research/audits/IteratedDerivative/HessianInterpolationAudit.lean",
+    "research/audits/IteratedDerivative/SchauderToolsAudit.lean",
+    "research/audits/KLS/CompletedChainScopeAudit.lean",
+    "research/audits/Klartag/DualLaplacian.lean",
+    "research/audits/Klartag/GeneratorBound.lean",
+    "research/audits/Klartag/HessianBound.lean",
+    "research/audits/Klartag/LinearBounds.lean",
+    "research/audits/Klartag/LinearGrowth.lean",
+    "research/audits/Klartag/MomentLimit.lean",
+    "research/audits/Klartag/PowerSupersolution.lean",
+    "research/audits/Klartag/TransportLaplacian.lean",
+    "research/audits/Letwin/BootstrapInduction.lean",
+    "research/audits/Letwin/BootstrapThree.lean",
+    "research/audits/Letwin/C0CompactExtension.lean",
+    "research/audits/Letwin/C0Subgradient.lean",
+    "research/audits/Letwin/Caccioppoli.lean",
+    "research/audits/Letwin/CompactExtension.lean",
+    "research/audits/Letwin/CompactTilt.lean",
+    "research/audits/Letwin/ContactDensity.lean",
+    "research/audits/Letwin/ContactImage.lean",
+    "research/audits/Letwin/ContactMeasure.lean",
+    "research/audits/Letwin/ContactPerturbation.lean",
+    "research/audits/Letwin/ContactQuadratic.lean",
+    "research/audits/Letwin/ContactReference.lean",
+    "research/audits/Letwin/ConvexMomentPotential.lean",
+    "research/audits/Letwin/ConvexSectionGrowth.lean",
+    "research/audits/Letwin/DeterminantContact.lean",
+    "research/audits/Letwin/DirectionalSubsolution.lean",
+    "research/audits/Letwin/DirichletEnvelope.lean",
+    "research/audits/Letwin/DirichletSolution.lean",
+    "research/audits/Letwin/DomainAffineMA.lean",
+    "research/audits/Letwin/DomainBoundary.lean",
+    "research/audits/Letwin/DomainComparison.lean",
+    "research/audits/Letwin/DomainContact.lean",
+    "research/audits/Letwin/DomainContactGain.lean",
+    "research/audits/Letwin/DomainContactMeasure.lean",
+    "research/audits/Letwin/DomainEquicontinuity.lean",
+    "research/audits/Letwin/DomainGradient.lean",
+    "research/audits/Letwin/DomainMAImage.lean",
+    "research/audits/Letwin/DomainMaximum.lean",
+    "research/audits/Letwin/DomainOverlap.lean",
+    "research/audits/Letwin/DomainReferenceMass.lean",
+    "research/audits/Letwin/DomainResidualContact.lean",
+    "research/audits/Letwin/DomainTotalMass.lean",
+    "research/audits/Letwin/EssentialContinuity.lean",
+    "research/audits/Letwin/EssentialUniqueness.lean",
+    "research/audits/Letwin/EveryMomentPotential.lean",
+    "research/audits/Letwin/GaugeCone.lean",
+    "research/audits/Letwin/GeneralContactMeasure.lean",
+    "research/audits/Letwin/GradientDerivative.lean",
+    "research/audits/Letwin/GradientHolder.lean",
+    "research/audits/Letwin/GradientInverse.lean",
+    "research/audits/Letwin/HessianHolder.lean",
+    "research/audits/Letwin/HessianTrace.lean",
+    "research/audits/Letwin/HminusOne.lean",
+    "research/audits/Letwin/IsoperimetricBound.lean",
+    "research/audits/Letwin/LocalContactMeasure.lean",
+    "research/audits/Letwin/LocalGradient.lean",
+    "research/audits/Letwin/LocalReference.lean",
+    "research/audits/Letwin/MomentCalculus.lean",
+    "research/audits/Letwin/MomentMap.lean",
+    "research/audits/Letwin/MomentMeasureEssentialExistence.lean",
+    "research/audits/Letwin/MomentMeasureExistence.lean",
+    "research/audits/Letwin/MomentUniqueness.lean",
+    "research/audits/Letwin/Pogorelov.lean",
+    "research/audits/Letwin/PrekopaEquality.lean",
+    "research/audits/Letwin/QuadraticBound.lean",
+    "research/audits/Letwin/ReferenceContactGain.lean",
+    "research/audits/Letwin/RegularApproximation.lean",
+    "research/audits/Letwin/RoughTesting.lean",
+    "research/audits/Letwin/SectionComparison.lean",
+    "research/audits/Letwin/SectionCovering.lean",
+    "research/audits/Letwin/SectionOneConstants.lean",
+    "research/audits/Letwin/SectionVolume.lean",
+    "research/audits/Letwin/SectionVolumeBoundary.lean",
+    "research/audits/Letwin/SmoothTrace.lean",
+    "research/audits/Letwin/UnboundedUniqueness.lean",
+    "research/audits/Letwin/WeakHessianKernel.lean",
+    "research/audits/Line/BuserAudit.lean",
+    "research/audits/Line/GaussianProfileAudit.lean",
+    "research/audits/Line/GaussianRegularizationAudit.lean",
+    "research/audits/MetricBV/CheegerAudit.lean",
+    "research/audits/MetricBV/CheegerIdentificationAudit.lean",
+    "research/audits/MetricBV/CoareaRadiusAudit.lean",
+    "research/audits/MetricBV/ComplementAudit.lean",
+    "research/audits/MetricBV/ConvexSupportAudit.lean",
+    "research/audits/MetricBV/DefinitionClassAudit.lean",
+    "research/audits/MetricBV/FiniteNeighborhoodAudit.lean",
+    "research/audits/MetricBV/FiniteRecoveryAudit.lean",
+    "research/audits/MetricBV/FiniteScalingAudit.lean",
+    "research/audits/MetricBV/FiniteTargetAudit.lean",
+    "research/audits/MetricBV/GlobalLipschitzAudit.lean",
+    "research/audits/MetricBV/HypothesisBoundaryAudit.lean",
+    "research/audits/MetricBV/InterfaceAudit.lean",
+    "research/audits/MetricBV/IntrinsicIdentificationAudit.lean",
+    "research/audits/MetricBV/LocalL1Audit.lean",
+    "research/audits/MetricBV/LocalL1RelaxationAudit.lean",
+    "research/audits/MetricBV/LocalLipschitzAudit.lean",
+    "research/audits/MetricBV/LocalLipschitzTargetTailAudit.lean",
+    "research/audits/MetricBV/LocallyFiniteLowerAudit.lean",
+    "research/audits/MetricBV/LocallyFiniteUpperAudit.lean",
+    "research/audits/MetricBV/LowerSemicontinuityAudit.lean",
+    "research/audits/MetricBV/MinkowskiAudit.lean",
+    "research/audits/MetricBV/MinkowskiCoareaAudit.lean",
+    "research/audits/MetricBV/MinkowskiInfiniteMassGenericAudit.lean",
+    "research/audits/MetricBV/MinkowskiLemma21ArbitraryMeasureAudit.lean",
+    "research/audits/MetricBV/MinkowskiMetricChainAudit.lean",
+    "research/audits/MetricBV/MinkowskiRecoveryAudit.lean",
+    "research/audits/MetricBV/MinkowskiRelaxedUpperAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperBVRecoveryAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperIntegratedAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperRecoveryAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperThickeningAudit.lean",
+    "research/audits/MetricBV/NonproperTargetAudit.lean",
+    "research/audits/MetricBV/RatioRecoveryAudit.lean",
+    "research/audits/MetricBV/RecoveryAudit.lean",
+    "research/audits/MetricBV/RecoverySequenceAudit.lean",
+    "research/audits/MetricBV/RelaxedMinkowskiAudit.lean",
+    "research/audits/MetricBV/SuperlevelSelectionAudit.lean",
+    "research/audits/MetricBV/SupportCostAudit.lean",
+    "research/audits/MetricBV/SupportRestrictionAudit.lean",
+    "research/audits/MetricBV/SupportRetractionAudit.lean",
+    "research/audits/MetricBV/TestClassAudit.lean",
+    "research/audits/Newtonian/CompactPoissonAudit.lean",
+    "research/audits/Newtonian/ConstantCoefficientAudit.lean",
+    "research/audits/Newtonian/HarmonicKernelAudit.lean",
+    "research/audits/Newtonian/InteriorSchauderAudit.lean",
+    "research/audits/Newtonian/RepresentationAudit.lean",
+    "research/audits/Newtonian/VariableCoefficientAudit.lean",
+    "research/audits/Poincare/KlartagLiteratureAudit.lean",
+    "research/audits/Poincare/KlartagLiteratureRouteStatements.lean",
+    "research/audits/Sard/EquidimensionalAudit.lean",
+    "research/audits/Sard/PlanarAudit.lean",
+    "research/audits/Sard/SharpAudit.lean",
+    "research/audits/Sard/SharpRouteStatements.lean",
+    "research/audits/Semigroup/ExpMeanValueAudit.lean",
+    "research/audits/Semigroup/ExponentialContractionAudit.lean",
+    "research/audits/Semigroup/ExponentialLimitAudit.lean",
+    "research/audits/Semigroup/FormAudit.lean",
+    "research/audits/Semigroup/GeneratedRouteStatements.lean",
+    "research/audits/Semigroup/GenerationRouteStatements.lean",
+    "research/audits/Semigroup/GeneratorAudit.lean",
+    "research/audits/Semigroup/LawsAudit.lean",
+    "research/audits/Semigroup/ResolventLimitAudit.lean",
+    "research/audits/Semigroup/VonNeumannAudit.lean",
+    "research/audits/Semigroup/VonNeumannRouteStatements.lean",
+    "research/audits/Semigroup/YosidaFamilyAudit.lean",
+    "research/audits/Semigroup/YosidaLimitAudit.lean",
+    "research/audits/Semigroup/YosidaLimitRouteStatements.lean",
+    "research/audits/SourceLayout/BackwardSemigroup.lean",
+    "research/audits/SourceLayout/CompactPairing.lean",
+    "research/audits/SourceLayout/ConsolidatedOwners.lean",
+    "research/audits/SourceLayout/CoverSelection.lean",
+    "research/audits/SourceLayout/CrossFileContracts.lean",
+    "research/audits/SourceLayout/CrossFilePrivateMergers.lean",
+    "research/audits/SourceLayout/CrossFileReuseContracts.lean",
+    "research/audits/SourceLayout/CrossFileReuseMergers.lean",
+    "research/audits/SourceLayout/Derivative.lean",
+    "research/audits/SourceLayout/DiffusionRegularity.lean",
+    "research/audits/SourceLayout/DomainMeasure.lean",
+    "research/audits/SourceLayout/ExponentialMoments.lean",
+    "research/audits/SourceLayout/GaussianCharacteristic.lean",
+    "research/audits/SourceLayout/GaussianFoundations.lean",
+    "research/audits/SourceLayout/GaussianPoincare.lean",
+    "research/audits/SourceLayout/GraphGradient.lean",
+    "research/audits/SourceLayout/HessianComposition.lean",
+    "research/audits/SourceLayout/HessianCoordinates.lean",
+    "research/audits/SourceLayout/HessianDiffusion.lean",
+    "research/audits/SourceLayout/HessianObjects.lean",
+    "research/audits/SourceLayout/HolderInterpolation.lean",
+    "research/audits/SourceLayout/LinearImageMoments.lean",
+    "research/audits/SourceLayout/LocalExtension.lean",
+    "research/audits/SourceLayout/MeasurablePartition.lean",
+    "research/audits/SourceLayout/MigrationAbsence.lean",
+    "research/audits/SourceLayout/MomentReuse.lean",
+    "research/audits/SourceLayout/NormExponentialRadius.lean",
+    "research/audits/SourceLayout/OperatorNorm.lean",
+    "research/audits/SourceLayout/OperatorPerturbation.lean",
+    "research/audits/SourceLayout/PiCoordinates.lean",
+    "research/audits/SourceLayout/PointwiseTruncation.lean",
+    "research/audits/SourceLayout/PositiveContinuousWeight.lean",
+    "research/audits/SourceLayout/PrivateMergers.lean",
+    "research/audits/SourceLayout/PrivatePromotionMergers.lean",
+    "research/audits/SourceLayout/Quadratic.lean",
+    "research/audits/SourceLayout/SardChart.lean",
+    "research/audits/SourceLayout/SardCoordinateChange.lean",
+    "research/audits/SourceLayout/SardDisk.lean",
+    "research/audits/SourceLayout/SardSharp.lean",
+    "research/audits/SourceLayout/SectionAffine.lean",
+    "research/audits/SourceLayout/StateExtensionality.lean",
+    "research/audits/SourceLayout/StatementCoordinates.lean",
+    "research/audits/SourceLayout/StatementMergers.lean",
+    "research/audits/SourceLayout/SubgradientFoundations.lean",
+    "research/audits/SourceLayout/TaylorField.lean",
+    "research/audits/SourceLayout/TemperateIntegrability.lean",
+    "research/audits/SourceLayout/TouchingLayer.lean",
+    "research/audits/SourceLayout/Transport.lean",
+    "research/audits/SourceLayout/TruncationNames.lean",
+    "research/audits/SourceLayout/WaveFoundations.lean",
+    "research/audits/SourceLayout/WeakProducts.lean",
+    "research/audits/StochasticCalculus/Regularization.lean",
+    "research/audits/Vector/CoareaGraphJacobianAudit.lean",
+    "research/audits/Vector/CoareaJacobianAudit.lean",
+    "research/audits/Vector/CriticalSliceAudit.lean",
+    "research/audits/Vector/ExponentObstructionAudit.lean",
+    "research/audits/Vector/FiberIntegralAudit.lean",
+    "research/audits/Vector/GraphAreaAudit.lean",
+    "research/audits/Vector/GraphAudit.lean",
+    "research/audits/Vector/GraphSandwichAudit.lean",
+    "research/audits/Vector/HausdorffSlicingAudit.lean",
+    "research/audits/Vector/LipschitzCoareaAudit.lean",
+    "research/audits/Vector/LipschitzCoareaRouteStatements.lean",
+    "research/audits/Vector/LocalCoareaAudit.lean",
+    "research/audits/Vector/LocallyLipschitzCoareaAudit.lean",
+    "research/audits/Vector/LocallyLipschitzCoareaRouteStatements.lean",
+    "research/audits/Vector/NormDetContinuityAudit.lean",
+    "research/audits/Vector/RankDeficientCoareaAudit.lean",
+    "research/audits/Vector/RankDeficientRouteStatements.lean",
+    "research/audits/Vector/RankStratificationAudit.lean",
+    "research/audits/Vector/RegularChartAudit.lean",
+    "research/audits/Vector/RegularCoareaAudit.lean",
+    "research/audits/Vector/RegularFibreFiniteAudit.lean",
+    "research/audits/Vector/RightInverseBoundAudit.lean",
+    "research/audits/Vector/SliceMeasurableAudit.lean",
+    "research/audits/Vector/StratumSlicingAudit.lean",
+    "research/audits/Vector/StratumSlicingRouteStatements.lean",
+    "research/audits/Vector/TangentialLipschitzAudit.lean",
+    "research/audits/Vector/TargetSplitFubiniAudit.lean",
+    "research/audits/WaveSplitting/AverageErrorAudit.lean",
+    "research/audits/WaveSplitting/ConsistencyAudit.lean",
+    "research/audits/WaveSplitting/EnergyAudit.lean",
+    "research/audits/WaveSplitting/FiniteConstructionAudit.lean",
+    "research/audits/WaveSplitting/GeneratorBoundsAudit.lean",
+    "research/audits/WaveSplitting/LocalizationAudit.lean",
+    "research/audits/WaveSplitting/ResidualAudit.lean",
+    "research/audits/WaveSplitting/StabilityAudit.lean",
+    "research/audits/WaveSplitting/TimeAverageAudit.lean",
+    "research/audits/WaveSplitting/WeightedEnergyAudit.lean",
+    "research/audits/Whitney/ConstructionAudit.lean",
+    "research/audits/Whitney/ExtensionAudit.lean",
+    "research/audits/Whitney/FirstOrderJetAudit.lean"
+  ],
+  "verification_state": {
+    "baseline": "build/history/2026-10-29-layout-round2/before/ (pre-edit copies at old paths, before-hashes.txt, git-index.bytes); baseline lake --wfail build passed (4934 jobs, build-baseline.log)",
+    "lean_build": "lake --wfail build passed after the moves (4934 jobs, build-after-moves.log), after the merges (4931 jobs, build-after-merges.log) and after the KernelBounds placement (4931 jobs, no warnings, build-final.log); the import-removal attempt failed (build-kernelbounds.log) and was reverted",
+    "audit_clients": "all 442 research/audits/**/*.lean clients compiled with lean -DwarningAsError=true from formalization/ with the lake search path (verify.py check_research_audits command and parse_axioms); 4843 axiom reports, only propext, Classical.choice, Quot.sound; no sorryAx (audits/summary.json)",
+    "import_resolution": "all 3817 FunctionalInequalities imports in the library, root, research, solutions, examples, integrations and formalization/Dev resolve to current source files (stale .olean files of old module names remain under formalization/.lake/build)",
+    "public_api_comparison": "all 6993 public declarations keep name, kind, elaborated type, universes, unsafe/partial flags; 486 changed module only as mapped; 6 declaration docstrings differ only in rewritten paths (api-compare.json)",
+    "statement_snapshot": "python3 research/statement_snapshot.py check passed (26 local declarations)",
+    "api_index": "python3 research/api_index.py regenerated; --check fresh (6993 public declarations, 837 modules)",
+    "module_inventory": "python3 research/module_inventory.py regenerated MODULES.md; --check: 837 modules, 2047 local import edges, no layout errors",
+    "blueprint": "python3 research/check_blueprint.py: 0 errors",
+    "atlas": "python3 research/atlas.py check (temporary index copy): pass, 402 mathematical nodes, 34 certificates; all 1150 tasks.json pins match the current files",
+    "markdown_links": "python3 build/check_markdown_links.py (temporary index copy): broken links only inside the generated views LITERATURE.md, STATUS.md and progress README.md pending update.py",
+    "residual_references": "no old module name or path outside the historical maps and generated views; remaining bare basenames reviewed",
+    "not_run": "research/verify.py and research/progress/update.py (controller)"
+  }
+}

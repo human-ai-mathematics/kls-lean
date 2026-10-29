@@ -4,8 +4,8 @@ import Mathlib.Analysis.Convex.Mul
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! Audit clients for Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Proposition 12 and its coercivity,
-normalization and competitor reduction (`Probability/MomentMeasure/`, `KLS/CEK/`). Bodies are verbatim from the
-accepted clients of `independent-p12-attainment` (CoercivityClients, NormalizedClients, AttainmentClients):
+normalization and competitor reduction (`Probability/MomentMeasure/`, `KLS/CEK/`), in three sections
+(coercivity, normalization, attainment):
 a centered two-atom probability law at the endpoints of `[-1, 1]` (boundary support), norm and quadratic scales,
 zero mass and functional, a signed nonconvex input infinite at the origin, the variational range, dimension zero,
 and the final all-competitor maximum. -/
@@ -13,7 +13,7 @@ and the final all-competitor maximum. -/
 noncomputable section
 
 section
--- Accepted client `CoercivityClients.lean`.
+-- Coercivity clients.
 
 
 open MeasureTheory Filter Set
@@ -84,7 +84,7 @@ theorem boundary_all_norm_scales :
   have h := (hc _ hnn (by simp) hconv hp).1
   simpa only [EReal.toReal_coe, hM, Module.finrank_self, pow_one] using h
 
-/-- The source conditions and polynomial degree zero are accepted literally. -/
+/-- The source conditions and polynomial degree zero are taken literally. -/
 theorem zeroDim_probability :
     let E := EuclideanSpace ℝ (Fin 0)
     ∃ A : ℝ, 0 < A ∧ mass volume (legendre (fun _ : E => (0 : EReal))) ≤ ENNReal.ofReal A := by
@@ -201,7 +201,7 @@ end CEKCoercivityClients
 end
 
 section
--- Accepted client `NormalizedClients.lean`.
+-- Normalization clients.
 
 
 /-! Genuine unrestricted signed/nonconvex and finite-mass scope consumers. -/
@@ -257,7 +257,7 @@ theorem boundary_variational_range :
   exact ⟨L, U, hL, hLU, hU signedInput signedInput_admissible, hU⟩
 
 /-- Baseline finiteness has its actual broader scope: a mass-two measure is
-accepted here, without extending the probability-only normalization invariance. -/
+admitted here, without extending the probability-only normalization invariance. -/
 theorem mass_two_zeroDim_baseline :
     let E := EuclideanSpace ℝ (Fin 0)
     let μ : Measure E := (2 : ℝ≥0∞) • Measure.dirac 0
@@ -277,7 +277,7 @@ end CEKNormalizedClients
 end
 
 section
--- Accepted client `AttainmentClients.lean`.
+-- Attainment clients.
 
 
 /-! Actual CEK Proposition12 clients: a full-span centered atomic probability,
@@ -344,7 +344,7 @@ end CEKAttainmentClients
 end
 
 section NewInstantiations
--- New in this candidate (not from the accepted clients): small instantiations of the migrated API.
+-- Small instantiations of the API.
 
 open MeasureTheory
 open scoped ENNReal

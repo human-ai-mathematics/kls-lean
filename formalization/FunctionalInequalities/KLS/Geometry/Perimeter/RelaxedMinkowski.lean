@@ -467,7 +467,7 @@ theorem relaxedMinkowskiContent_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : Measu
     (fun h => absurd (ENNReal.coe_eq_zero.1 h) hc)]
   refine le_iInf fun A => (iInf_le _ (A.smul c)).trans (le_of_eq ?_)
   simp only [MinkowskiApproximatingSequence.smul, Isoperimetry.minkowskiContent_smul]
-  exact Isoperimetry.liminf_coe_mul c _
+  exact ENNReal.liminf_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top
 
 /-- **Relaxed lower content scaling** for every nonzero `c : ℝ≥0`. -/
 theorem relaxedMinkowskiContent_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure V) (B : Set V) :
@@ -488,7 +488,7 @@ theorem relaxedUpperMinkowskiContent_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : 
     (fun h => absurd (ENNReal.coe_eq_zero.1 h) hc)]
   refine le_iInf fun A => (iInf_le _ (A.smul c)).trans (le_of_eq ?_)
   simp only [MinkowskiApproximatingSequence.smul, Isoperimetry.upperMinkowskiContent_smul]
-  exact Isoperimetry.liminf_coe_mul c _
+  exact ENNReal.liminf_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top
 
 /-- **Relaxed upper content scaling** for every nonzero `c : ℝ≥0`. -/
 theorem relaxedUpperMinkowskiContent_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure V) (B : Set V) :

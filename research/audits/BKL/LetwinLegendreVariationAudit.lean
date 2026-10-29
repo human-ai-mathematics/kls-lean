@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.Convex.LegendreVariation.Derivative
-import FunctionalInequalities.Analysis.Convex.Legendre
+import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Derivative
+import FunctionalInequalities.Analysis.Convex.Legendre.Basic
 import Mathlib.Tactic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Calculus.Gradient.Basic
@@ -16,10 +16,8 @@ arXiv:2607.24164v1, Theorem 2.5. Real clients with every premise derived:
   `min |z| 1` gives the derivative `−1` at `y = 1`;
 * the constant potential `−3` on the zero-dimensional space with perturbation `−2` gives the derivative `2` (signed, `Fin 0`).
 
-Both invoke `hasDerivAt_legendre_add_smul_of_dualDifferentiable`. Not a source-law Euler–Lagrange, push-forward or
-moment-map client. Client bodies: strong-API constructions (reviewed; revalidated literal sources `IntervalConjugate`,
-`VariationInputs`, `VariationClients`), verbatim up to the namespace `KLSConstruction.API.FirstVariation.BoundaryClient` →
-`DirectVariationBoundaryClient`.
+Both invoke `hasDerivAt_legendre_add_smul_of_dualDifferentiable`. Not a source-law Euler–Lagrange,
+push-forward or moment-map client.
 -/
 
 noncomputable section

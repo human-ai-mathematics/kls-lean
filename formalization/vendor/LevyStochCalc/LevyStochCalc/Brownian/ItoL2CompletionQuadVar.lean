@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoL2CompletionMaster
 
 /-!
@@ -44,7 +47,7 @@ lemma isometry_stochasticIntegralBrownian {T : ℝ} (hT : 0 < T) :
     ∫⁻ ω, (‖stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas
       h_sq_int_global T ω‖₊ : ℝ≥0∞) ^ 2 ∂P
       = ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖H ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   set Flp := stochasticIntegralBrownianLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global T with hFlp
   have htend : Filter.Tendsto (fun n => masterLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global T n)
       Filter.atTop (nhds Flp) :=

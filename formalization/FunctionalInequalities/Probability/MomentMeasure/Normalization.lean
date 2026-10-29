@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.Convex.Affine
-import FunctionalInequalities.Probability.ConvexSupport
+import FunctionalInequalities.Analysis.Convex.Legendre.Affine
+import FunctionalInequalities.Probability.Support.Convex
 import FunctionalInequalities.Probability.MomentMeasure.Affine
 import FunctionalInequalities.Probability.MomentMeasure.Truncation
 import FunctionalInequalities.Probability.MomentMeasure.Coercivity
@@ -19,14 +19,14 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `NormalizedCompetitors.lean`.
+-- The origin is interior to the domain under a constant lower bound.
 
 open MeasureTheory Filter Set
 open scoped ENNReal Topology
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-/-- An actual constant lower bound reduces a signed convex potential to the
-accepted nonnegative finite-near producer by an actual constant shift. -/
+/-- A constant lower bound `-M ≤ c` reduces a signed convex potential, after the constant shift
+by `M`, to the nonnegative case `mem_interior_setOf_ne_top_of_lintegral_ne_top`. -/
 theorem origin_mem_interior_domain_of_lower_bound (μ : Measure E) [IsFiniteMeasure μ]
     (h0 : (0 : E) ∈ interior (convexHull ℝ μ.support))
     (hfirst : Integrable (fun x : E => x) μ)

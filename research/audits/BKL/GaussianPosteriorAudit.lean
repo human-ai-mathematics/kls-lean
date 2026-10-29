@@ -10,8 +10,7 @@ inputs for the polynomial growth of the smoothed potential's derivatives). Clien
 Gaussian source on `ℝ` at base point `2`, `s = 3`, direction `1` (variance and trace `≤ 1/6`, fourth
 moment with the shared constant), dimension-zero moments, and all moments of isotropic log-concave
 laws on `ℝⁿ` through the quantitative Borell bounds. Neither all-order potential growth nor the
-regular approximation theorem is asserted. Clients adapted from the Codex bundle
-`Gaussian-Posterior-Centered/Clients.lean` and `Borell-Uniform-Moments/IsotropicClient.lean`.
+regular approximation theorem is asserted.
 -/
 
 open MeasureTheory ProbabilityTheory Set FunctionalInequalities

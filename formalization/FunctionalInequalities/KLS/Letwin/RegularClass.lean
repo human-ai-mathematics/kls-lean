@@ -11,15 +11,15 @@ import FunctionalInequalities.Analysis.Matrix.Sign
 import FunctionalInequalities.Analysis.Operator.Coordinates
 import FunctionalInequalities.Probability.Stein.Kernel
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
 import FunctionalInequalities.KLS.LogConcave.Density.Tilted
-import FunctionalInequalities.Probability.AffineSupport
-import FunctionalInequalities.Probability.QuadraticVariance
+import FunctionalInequalities.Probability.Support.Affine
+import FunctionalInequalities.Probability.Variance.Quadratic
 import FunctionalInequalities.Probability.Transport
 
 /-!

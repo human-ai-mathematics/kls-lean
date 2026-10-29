@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
-import FunctionalInequalities.Analysis.BakryEmery.EllipticGradientForcing
+import FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic
 
 /-!
 # Audit: uniformly elliptic difference-quotient equations of the regular moment potential

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Matrix.LogDet
+import FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities
 import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
 import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
@@ -242,7 +242,8 @@ private lemma exists_quadratic_comparison_at_maximum {n : ℕ}
       (hlog (x + h)) (hlog (x - h))) hdet
 
 set_option maxHeartbeats 800000 in
-/-- **A penalised maximum with the log-density comparison** (weak Letwin route): let the convex, Lipschitz, coercive `u` be an Alexandrov
+/-- **A penalised maximum with the log-density comparison**: let the convex, Lipschitz, coercive `u`
+be an Alexandrov
 solution `vol ∂u(G) = ∫_G e^F` with continuous `F`, and let `uₖ` be `C²` approximations, uniformly close to `u`,
 with positive definite Hessians satisfying `Fₖ ≤ log det ∇²uₖ` for `Fₖ → F` locally uniformly. Then for
 every `η > 0`, `Δ²ₕu − η u` has a maximiser `x₀` with `F(x₀ + h) + F(x₀ − h) − 2 F(x₀) ≤ η n`. -/

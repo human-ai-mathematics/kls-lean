@@ -8,7 +8,6 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5 (regular a
 Clients: the unit direction at `s = 3` gives the bound `6` and the posterior variance bound `1/6`
 for every probability law with a Borell density on `ℝ¹`; dimension zero gives the bound `0`.
 Neither polynomial growth of all derivatives nor the regular approximation theorem is asserted.
-Clients adapted from the Codex bundle `Gaussian-Hessian-Upper/Clients.lean`.
 -/
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities.KLS.LogConcave.GaussianSmoothing

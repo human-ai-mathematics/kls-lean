@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Poisson.CompensatedDensityRectSimple
 
 /-!
@@ -51,11 +54,11 @@ lemma exists_markSimple_adapted_within
           - ∑ k, c k ω * (B k).indicator (fun _ => (1 : ℝ)) e‖₊ : ℝ≥0∞) ^ 2 ∂ν ∂P ≤ δ := by
   classical
   -- finite product measure on the trimmed space.
-  haveI hPt : IsFiniteMeasure (P.trim hm) := MeasureTheory.isFiniteMeasure_trim hm
-  haveI hνS : IsFiniteMeasure (ν.restrict S) :=
+  have hPt : IsFiniteMeasure (P.trim hm) := MeasureTheory.isFiniteMeasure_trim hm
+  have hνS : IsFiniteMeasure (ν.restrict S) :=
     ⟨by rw [Measure.restrict_apply_univ]; exact lt_of_le_of_ne le_top hSfin⟩
   set μ : @Measure (Ω × E) (m.prod inferInstance) := (P.trim hm).prod (ν.restrict S) with hμ
-  haveI : IsFiniteMeasure μ := by rw [hμ]; infer_instance
+  have : IsFiniteMeasure μ := by rw [hμ]; infer_instance
   set f : Ω × E → ℝ := fun q => h q.1 q.2 with hf
   -- `f ∈ L²(μ)`: bounded on a finite measure.
   have hmem : MeasureTheory.MemLp f 2 μ := by

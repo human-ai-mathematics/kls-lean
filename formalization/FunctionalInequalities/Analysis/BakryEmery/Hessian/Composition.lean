@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Lipschitz.Gradient
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import Mathlib.Analysis.Calculus.Rademacher
 
 /-!
@@ -158,8 +158,8 @@ private theorem exists_lipschitz_comp_gradient {n : ℕ}
   rw [hCancel] at hSum
   exact ⟨LF + L, hSum⟩
 
-/-- The scalar derivative bound and compact-local L2 calculation already used
-by the accepted Piola-row consumer, with an arbitrary Lipschitz scalar f. -/
+/-- The scalar derivative bound and compact-local L2 calculation for a coordinate derivative
+of an arbitrary Lipschitz scalar f. -/
 private theorem memLp_coordinate_fderiv_of_lipschitz {n : ℕ}
     {f : EuclideanSpace ℝ (Fin n) → ℝ} {C : NNReal}
     (hLip : LipschitzWith C f) (j : Fin n)

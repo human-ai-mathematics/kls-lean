@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment
+import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
 import Mathlib.Topology.MetricSpace.Thickening
 
 /-!
@@ -22,17 +22,50 @@ open scoped RealInnerProductSpace
 
 /-! Max formula and existence of subgradients. -/
 
-/-- **Max formula for the one-sided directional derivative of a finite convex function** (weak
-Letwin route: "singleton subdifferential ⇒ C¹"): for a convex `u : E → ℝ` on a
+/-- Riesz representation turns a linear minorant of the directional envelope
+into a supporting vector. This is the common last step of both Hahn–Banach cases. -/
+private theorem exists_supporting_vector_of_linear_minorant
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    (u : E → ℝ) (x : E) (p : E → ℝ)
+    (hp : ∀ w, p w ≤ u (x + w) - u x)
+    (ℓ : E →ₗ[ℝ] ℝ) (hℓ : ∀ w, ℓ w ≤ p w) :
+    ∃ g : E, (∀ w, ⟪g, w⟫ = ℓ w) ∧ ∀ y, u x + ⟪g, y - x⟫ ≤ u y := by
+  let L : E →L[ℝ] ℝ :=
+    { toLinearMap := ℓ
+      cont := LinearMap.continuous_of_finiteDimensional ℓ }
+  let g : E := (InnerProductSpace.toDual ℝ E).symm L
+  have hpair : ∀ w : E, ⟪g, w⟫ = ℓ w := by
+    intro w
+    change inner ℝ ((InnerProductSpace.toDual ℝ E).symm L) w = ℓ w
+    calc
+      inner ℝ ((InnerProductSpace.toDual ℝ E).symm L) w = L w :=
+        InnerProductSpace.toDual_symm_apply
+      _ = ℓ w := rfl
+  refine ⟨g, hpair, ?_⟩
+  intro y
+  have hq := hp (y - x)
+  have hy : x + (y - x) = y := by abel
+  rw [hy] at hq
+  have hminorant := hℓ (y - x)
+  rw [← hpair] at hminorant
+  linarith
+
+/-- **Max formula for the one-sided directional derivative of a finite convex function** ("singleton
+subdifferential ⇒ C¹"): for a convex `u : E → ℝ` on a
 finite-dimensional inner product space, every point `x` and every direction `v`, there is a
 subgradient `g` of `u` at `x` whose pairing with `v` is the right derivative
 `inf_{t>0} (u(x + t v) - u(x))/t`: it is a subgradient and the difference quotients come
-arbitrarily close to `⟪g, v⟫` (they are `≥ ⟪g, v⟫` by the subgradient inequality). -/
+arbitrarily close to `⟪g, v⟫` (they are `≥ ⟪g, v⟫` by the subgradient inequality).
+
+First construct the sublinear right-derivative envelope. Hahn–Banach extends its
+minorant on the line spanned by v (the zero direction is handled separately).
+The private Riesz step supplies the supporting vector in both cases. -/
 theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (x v : E) :
     ∃ g : E, (∀ y, u x + ⟪g, y - x⟫ ≤ u y) ∧
       ∀ ε > 0, ∃ t > 0, (u (x + t • v) - u x) / t ≤ ⟪g, v⟫ + ε := by
+  -- Positive difference quotients and their finite infimum.
   let slope : E → ℝ → ℝ := fun w t => (u (x + t • w) - u x) / t
   let p : E → ℝ := fun w =>
     sInf (Set.range (fun t : {t : ℝ // 0 < t} => slope w t))
@@ -133,6 +166,7 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
     rw [smul_smul, mul_comm t c]
     have hct : 0 < c * t := mul_pos hc ht
     field_simp [ne_of_gt hc, ne_of_gt ht, ne_of_gt hct]
+  -- Positive homogeneity and subadditivity make p a sublinear envelope.
   have hp_scale :
       ∀ {w : E} {c : ℝ}, 0 < c → p (c • w) = c * p w := by
     intro w c hc
@@ -244,6 +278,11 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
         _ = p w₁ + p w₂ + 2 * ε := by ring
     dsimp [ε] at hε hbound ⊢
     linarith
+  -- The unit difference quotient bounds the envelope by the actual increment.
+  have hp_increment : ∀ w, p w ≤ u (x + w) - u x := by
+    intro w
+    simpa [slope] using hp_le w ⟨1, by norm_num⟩
+  -- Extend a linear minorant, then use the shared supporting-vector construction.
   by_cases hv : v = 0
   · let f : E →ₗ.[ℝ] ℝ := (0 : E →ₗ[ℝ] ℝ).toPMap ⊥
     have hf : ∀ z : f.domain, f z ≤ p z := by
@@ -259,38 +298,16 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
       exists_extension_of_le_sublinear f p
         (fun c hc w => hp_scale (w := w) hc)
         (fun w₁ w₂ => hp_add w₁ w₂) hf
-    let L : E →L[ℝ] ℝ :=
-      { toLinearMap := ℓ
-        cont := LinearMap.continuous_of_finiteDimensional ℓ }
-    let g : E := (InnerProductSpace.toDual ℝ E).symm L
-    have hpair : ∀ w : E, ⟪g, w⟫ = ℓ w := by
-      intro w
-      change inner ℝ ((InnerProductSpace.toDual ℝ E).symm L) w = ℓ w
-      calc
-        inner ℝ ((InnerProductSpace.toDual ℝ E).symm L) w = L w :=
-          InnerProductSpace.toDual_symm_apply
-        _ = ℓ w := rfl
-    refine ⟨g, ?_, ?_⟩
-    · intro y
-      have hp₁ := hp_le (y - x) ⟨1, by norm_num⟩
-      have hq : p (y - x) ≤ u y - u x := by
-        have hq' := hp₁
-        change p (y - x) ≤
-          (u (x + 1 • (y - x)) - u x) / 1 at hq'
-        rw [one_smul, div_one] at hq'
-        have heq : x + (y - x) = y := by abel
-        rw [heq] at hq'
-        exact hq'
-      have hℓ := hℓp (y - x)
-      rw [← hpair] at hℓ
-      linarith
-    · intro ε hε
-      refine ⟨1, by norm_num, ?_⟩
-      have hg0 : ⟪g, (0 : E)⟫ = 0 := by
-        rw [hpair]
-        exact ℓ.map_zero
-      simp only [hv, smul_zero, add_zero, sub_self, zero_div, hg0, add_zero]
-      linarith
+    obtain ⟨g, hpair, hsubgradient⟩ :=
+      exists_supporting_vector_of_linear_minorant u x p hp_increment ℓ hℓp
+    refine ⟨g, hsubgradient, ?_⟩
+    intro ε hε
+    refine ⟨1, by norm_num, ?_⟩
+    have hg0 : ⟪g, (0 : E)⟫ = 0 := by
+      rw [hpair]
+      exact ℓ.map_zero
+    simp only [hv, smul_zero, add_zero, sub_self, zero_div, hg0, add_zero]
+    linarith
   · let f : E →ₗ.[ℝ] ℝ :=
       LinearPMap.mkSpanSingleton v (p v) hv
     have hf : ∀ z : f.domain, f z ≤ p z := by
@@ -330,17 +347,8 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
       exists_extension_of_le_sublinear f p
         (fun c hc w => hp_scale (w := w) hc)
         (fun w₁ w₂ => hp_add w₁ w₂) hf
-    let L : E →L[ℝ] ℝ :=
-      { toLinearMap := ℓ
-        cont := LinearMap.continuous_of_finiteDimensional ℓ }
-    let g : E := (InnerProductSpace.toDual ℝ E).symm L
-    have hpair : ∀ w : E, ⟪g, w⟫ = ℓ w := by
-      intro w
-      change inner ℝ ((InnerProductSpace.toDual ℝ E).symm L) w = ℓ w
-      calc
-        inner ℝ ((InnerProductSpace.toDual ℝ E).symm L) w = L w :=
-          InnerProductSpace.toDual_symm_apply
-        _ = ℓ w := rfl
+    obtain ⟨g, hpair, hsubgradient⟩ :=
+      exists_supporting_vector_of_linear_minorant u x p hp_increment ℓ hℓp
     have hℓv : ℓ v = p v := by
       let z₀ : f.domain :=
         ⟨v, Submodule.mem_span_singleton.mpr ⟨1, by simp⟩⟩
@@ -352,28 +360,15 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
         ℓ v = ℓ (z₀ : E) := rfl
         _ = f z₀ := hℓf z₀
         _ = p v := hf₀
-    refine ⟨g, ?_, ?_⟩
-    · intro y
-      have hp₁ := hp_le (y - x) ⟨1, by norm_num⟩
-      have hq : p (y - x) ≤ u y - u x := by
-        have hq' := hp₁
-        change p (y - x) ≤
-          (u (x + 1 • (y - x)) - u x) / 1 at hq'
-        rw [one_smul, div_one] at hq'
-        have heq : x + (y - x) = y := by abel
-        rw [heq] at hq'
-        exact hq'
-      have hℓ := hℓp (y - x)
-      rw [← hpair] at hℓ
-      linarith
-    · intro ε hε
-      obtain ⟨t, ht⟩ := hexists v hε
-      refine ⟨(t : ℝ), t.property, ?_⟩
-      have hlt : slope v t < p v + ε := ht
-      have heq : p v + ε = ⟪g, v⟫ + ε := by
-        rw [← hℓv, hpair]
-      dsimp [slope] at hlt
-      exact le_of_lt (heq ▸ hlt)
+    refine ⟨g, hsubgradient, ?_⟩
+    intro ε hε
+    obtain ⟨t, ht⟩ := hexists v hε
+    refine ⟨(t : ℝ), t.property, ?_⟩
+    have hlt : slope v t < p v + ε := ht
+    have heq : p v + ε = ⟪g, v⟫ + ε := by
+      rw [← hℓv, hpair]
+    dsimp [slope] at hlt
+    exact le_of_lt (heq ▸ hlt)
 
 end SubgradientMaxFormula
 

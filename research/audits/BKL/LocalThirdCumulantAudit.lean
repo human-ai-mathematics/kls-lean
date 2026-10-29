@@ -11,25 +11,24 @@ import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 /-!
 # Audit: BKL Lemma 4.2, the Theorem 4.1 base case and the posterior covariance domain
 
-Source: Bizeul–Klartag–Lehec arXiv:2610.05474v1, Lemma 4.2. Clients compiled against the accepted
-`Analysis/BakryEmery/Cumulant/Local.lean` and `KLS/BKL/LocalThirdCumulant.lean` owners:
+Source: Bizeul–Klartag–Lehec arXiv:2610.05474v1, Lemma 4.2. Clients of
+`Analysis/BakryEmery/Cumulant/Local.lean` and `KLS/BKL/LocalThirdCumulant.lean`:
 the Laplace law (log-concave, isotropic for `β² = 2`, with only a small exponential radius and no
 exponential moment at the rate itself, so excluded from the all-radii `Cumulant` statement),
 a symmetric two-point law (isotropic, Letwin bound checked directly, unconditional contraction),
-a skew two-point law with `κ₃ = 2`, the one-dimensional Gaussian and the rank-zero law; for the second
-cumulant (`KLS/BKL/SecondCumulant.lean`): a noncentered two-point law where the mean correction matters
-(`κ₂ = 1`, raw second moment `2`), the Laplace and Gaussian sources, Parseval and the rank-zero
-`CumulantBound 1 1` instance; for the posterior covariance domain (`KLS/BKL/PosteriorDomain.lean`): the
-atomic isotropic non-log-concave prior at all signed `(c, Q)` (unit covariance with a self-adjoint positive
-inverse), the noncentered full-support prior, a positive-dimensional Dirac prior whose posterior
-covariance is `0` and not a unit, and the rank-zero prior whose zero covariance is a unit; for the generator at the source rate
-(`Isotropic.compactPosterior_generator_cancellation`): the atomic prior at signed `(1, −Id)` with a strictly
-positive linear response, and the rank-zero initial pair; for the diffusion coefficient
-(`Isotropic.compactPosterior_inverseSqrt_spec`, bundle `Principal-Inverse-SquareRoot`): the atomic prior at
-`(1, −Id)`, its initial root `Id`, rank zero, and the excluded positive-dimensional Dirac law. Client bodies:
-Codex route bundles `Local-Third-Cumulant`, `Local-Second-Cumulant` and the Codex bkl bundle
-`Posterior-Covariance-Domain` and the Codex q_batch bundle `Posterior-Generator-Inverse` (independently accepted); the one-use normalization
-helper in the Laplace client copies the reviewed helper of `KLS/BKL/SuspensionDensity.lean`.
+a skew two-point law with `κ₃ = 2`, the one-dimensional Gaussian and the rank-zero law; for the
+second cumulant (`KLS/BKL/SecondCumulant.lean`): a noncentered two-point law where the mean
+correction matters (`κ₂ = 1`, raw second moment `2`), the Laplace and Gaussian sources, Parseval and
+the rank-zero `CumulantBound 1 1` instance; for the posterior covariance domain
+(`KLS/BKL/PosteriorDomain.lean`): the atomic isotropic non-log-concave prior at all signed `(c, Q)`
+(unit covariance with a self-adjoint positive inverse), the noncentered full-support prior, a
+positive-dimensional Dirac prior whose posterior covariance is `0` and not a unit, and the
+rank-zero prior whose zero covariance is a unit; for the generator at the source rate
+(`Isotropic.compactPosterior_generator_cancellation`): the atomic prior at signed `(1, −Id)` with a
+strictly positive linear response, and the rank-zero initial pair; for the diffusion coefficient
+(`Isotropic.compactPosterior_inverseSqrt_spec`): the atomic prior at `(1, −Id)`, its initial root
+`Id`, rank zero, and the excluded positive-dimensional Dirac law. The one-use normalization helper
+in the Laplace client copies the helper of `KLS/BKL/SuspensionDensity.lean`.
 -/
 
 noncomputable section
@@ -274,8 +273,8 @@ theorem variance_two : (∫ x : ℝ, x ^ 2 ∂(μ : Measure ℝ)) = 2 := by
 end ActualSkewLocalThird
 
 /-! Actual log-concave Laplace scope client. The one-use normalization body below is copied
-exactly from the already reviewed root-Codex helper in actual SuspensionDensity; client-only
-reuse is explicit, not new distribution work or an API-output claim. -/
+exactly from the helper in `KLS/BKL/SuspensionDensity.lean`; client-only reuse is explicit, not new
+distribution work or an API-output claim. -/
 namespace ActualLaplaceLocalThird
 
 private theorem normalized_of_probability_density {A : Type*} [MeasurableSpace A]
@@ -777,9 +776,9 @@ end ActualPrincipalSource
 #print axioms ActualPrincipalSource.positive_dim_dirac_excluded
 
 namespace IndependentCGFJets
-/-! CGF gradient jets (`Analysis/BakryEmery/Cumulant/Local.lean` section `GradientJets`; units CGF1-M, CGF1-C,
-independently accepted, receipt 279f7bea…): the Codex reviewer's consumers — the noncentred atom at `3` has
-`∇Λ(0) = 3`, the scalar covariance identity, and dimension zero for both statements. -/
+/-! CGF gradient jets (`Analysis/BakryEmery/Cumulant/Local.lean` section `GradientJets`):
+consumers — the noncentred atom at `3` has `∇Λ(0) = 3`, the scalar covariance identity, and
+dimension zero for both statements. -/
 open FunctionalInequalities.Analysis
 
 theorem mean_contract {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -828,13 +827,13 @@ end IndependentCGFJets
 #print axioms IndependentCGFJets.actual_scalar_covariance
 #print axioms IndependentCGFJets.covariance_empty
 
-/-! Higher jets of the centred CGF gradient (`Analysis/BakryEmery/Cumulant/Local.lean` section `GradientJets`,
-`iteratedFDeriv_centeredGradient_logLaplace_zero_of_compact`, with the generic supports of
-`Analysis/IteratedDerivative/GradientJet.lean`; Luna units CGF1-J2a/J2b and the J2c v2 assembly, independently accepted
-2026-10-08, receipt `CGF-J2a-J2c-Independent-20261008/VERIFICATION.json` 2adda06e…): the independent Codex reviewer's
-consumers — the noncentred two-atom law `(δ₀ + δ₂)/2` (gradient `1` at `0`, centred value `0`, first jet `1`, the
-order-three jet paired with the literal fourth cumulant in slots `1, 2, 3; 4`), rank zero at all positive orders, and
-the generic shift contract with a quartic on the max-norm product `ℝ × ℝ` (no inner product supplied). -/
+/-! Higher jets of the centred CGF gradient (`Analysis/BakryEmery/Cumulant/Local.lean` section
+`GradientJets`, `iteratedFDeriv_centeredGradient_logLaplace_zero_of_compact`, with the generic
+supports of `Analysis/IteratedDerivative/GradientJet.lean`): consumers — the noncentred two-atom
+law `(δ₀ + δ₂)/2` (gradient `1` at `0`, centred value `0`, first jet `1`, the order-three jet
+paired with the literal fourth cumulant in slots `1, 2, 3; 4`), rank zero at all positive orders,
+and the generic shift statement with a quartic on the max-norm product `ℝ × ℝ` (no inner product
+supplied). -/
 namespace IndependentCGFHigherJets
 def μ : ProbabilityMeasure ℝ :=
   ⟨(1 / 2 : ENNReal) • Measure.dirac 0 + (1 / 2 : ENNReal) • Measure.dirac 2, by

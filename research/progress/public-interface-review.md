@@ -1,7 +1,8 @@
 # Public interfaces and maintainer review
 
-Source/interface inspection: 2026-10-20 against `2639e79`; maintainer review report
-updated 2026-10-26. This document records an agent
+Source/interface inspection: 2026-10-20 against `2639e79`; focused agent follow-up
+2026-10-27 against `0233f0b8`; maintainer review report updated 2026-10-26.
+This document records an agent
 interface/source inspection and the maintainer's reported review scope. It is not a human
 signoff or a new proof receipt. The [statement review](statement-review.md) owns the 34 certificate
 contracts; the [target reviews](target-reviews.md) and [literature register](LITERATURE.md) own
@@ -33,7 +34,7 @@ Separate Claude/GPT review passes and compiler/axiom/kernel checks keep their ow
 | [Closed BKL producer](../../formalization/FunctionalInequalities/KLS/BKL/Poincare.lean#L24) and [proof path](PROOF-PATH.md) | Universal positive bound from the cutoff route and the proved compact Letwin input. `153` is a cumulant witness, not the final KLS constant. | Closed and conditional producers are distinct; the uncut Eldan construction and literal stochastic identities remain separate. |
 | [Noncompact Letwin](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean#L41) and [matrix form](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean#L56) | Every `n > 0`, isotropic log-concave probability law and symmetric matrix; `Var(XᵀMX) ≤ 8 tr(M²)`, including singular and indefinite matrices. | No compactness or extra fourth-moment premise. The compact certificate remains compact; the separate theorem is now proved. Earlier review text has been clarified accordingly. |
 | [OpenAI model](../../integrations/openai/OAI/Analysis/KLS/Model.lean), [bridge](../../integrations/openai/KLSOpenAI/Bridge.lean) and [closed target](../../integrations/openai/KLSOpenAI/Target.lean) | Exact pinned density statement; measurable log-concavity, explicit coordinate moments, positive universal constant and smooth compactly supported tests. The bridge uses `C + 1` and the target supplies the existing closed proof. | Source copy/hash and the two endpoint types agree. The maintainer reports personally reviewing the statement and bridge conversion proof on 2026-10-26; upstream dependency review is separate. |
-| [Application client](../../examples/KlsApplications.lean), [first-use guide](../../examples/FIRST-USE.md) and [smooth-test variance consumer](../../formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean#L74) | Consumers preserve L² and finite squared-gradient energy; the Gaussian convolution bound is `C + t`, including `t = 0`. | The demonstrated caller path is present. `Holds.variance_le` lacks a source docstring: a documentation improvement, not a missing hypothesis or a request for new mathematical proof. |
+| [Application client](../../examples/KlsApplications.lean), [first-use guide](../../examples/FIRST-USE.md) and [smooth-test variance consumer](../../formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean#L74) | Consumers preserve L² and finite squared-gradient energy; the Gaussian convolution bound is `C + t`, including `t = 0`. | The demonstrated caller path is present. `Holds.variance_le` now documents its smooth L² and finite-energy premises; the follow-up adds no mathematical premise. |
 
 The compiler inventory at the review baseline has 5,783 public declarations across 586 source modules plus
 the aggregate root, with no `unsafe` or `partial` flags. It reports 1,245 rows without a
@@ -74,6 +75,39 @@ success does not answer these mathematical and usability questions.
 UP-1 remains an explicit personal semantic-review gap. API-1 is a focused usability
 check and LET-1 a coverage confirmation. Existing important-definition/API review and
 the newly reported OpenAI reviews are preserved; this is not a request to reread the whole library.
+
+## Focused agent follow-up
+
+The follow-up inspects the committed source at `0233f0b8` and the narrowly scoped
+review changes below. It supplies agent review and executable clients, not a
+personal human approval or a review of the entire stochastic-calculus library.
+The human statuses in the checklist above are unchanged.
+
+| Entry | Contract inspected and outcome | Reproducible input |
+| --- | --- | --- |
+| UP-1 | Finite measure and right-continuous filtration are retained. Martingale modification uses no expectation-continuity premise; submartingale modification retains it. The Levy interface keeps right-continuity in measure. Its real-time extension also requires vanishing at negative times. Fixed-time a.e. equality is distinct from a common a.s. event of càdlàg paths. No missing premise was found in these contracts or the local port. | The [regularization client](../audits/StochasticCalculus/Regularization.lean) checks both time domains, the exact hypotheses, the obsolete-name exclusion and the standard axioms of the modification endpoints. The [vendor lock](../../formalization/vendor/README.md#provenance-lock) checks the pinned upstream bytes and port. |
+| LET-1 | The noncompact endpoint derives fourth-moment integrability from log-concavity. Growing-ball conditioning has nonzero mass eventually; covariance converges to the identity and is eventually invertible; centering and whitening give compact isotropic approximants. Degree-two and degree-four moments control the mean and second moment of each quadratic form, so its variance passes to the limit with constant 8. No common support, positive-definite matrix or extra moment assumption enters. | [Compact approximation](../../formalization/FunctionalInequalities/KLS/BKL/CompactReduction.lean), [moment limit](../../formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean), [expanded endpoint](../audits/Letwin/QuadraticBound.lean) and the [independent Lemma A.1 derivation](../audits/Letwin/RegularApproximation.lean). |
+| API-1 | The first-use example selects one constant before all dimensions and laws, then supplies smoothness, L² and finite squared-gradient energy when applying a variance bound. The isotropic and Gaussian-convolution calls preserve dimension zero and `t = 0`. The `variance_le` field now has a source docstring. | [First-use guide](../../examples/FIRST-USE.md), [calling client](../../examples/KlsApplications.lean), [smooth-test contract](../../formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean). |
+
+For Letwin arXiv:2607.24164v1, the operator/matrix endpoint has the normalization
+`Var ⟨MX,X⟩ ≤ 8 tr(M²)`. This is the form displayed in the source's
+[Equation (2.22)](https://arxiv.org/html/2607.24164v1#S2.E22); isotropy identifies
+it with Theorem 1.2's factor-two gradient-energy bound. The inspected extension
+retains `n > 0` and arbitrary symmetric matrices, including singular and
+indefinite ones. This review does not complete the original Theorem 1.1 route
+or the general-convex smooth moment-map construction in Lemma 2.2.
+
+The committed revision `0233f0b8` passed the separate Git-dependency runner's
+three narrow clients, primary declaration axiom audit and primary/client kernel
+replay. The [examples guide](../../examples/README.md#connect-a-separate-lake-project)
+now pins that checked revision. This acceptance excludes KLS imports; the
+[separate KLS caller](../../examples/FIRST-USE.md) and full source verification
+have their own scopes. Pinned third-party compiled caches remain trusted.
+
+The OpenAI model was compared again with the exact upstream commit
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`; its bytes and recorded SHA-256 agree.
+Both provenance metadata files validate against the pinned official v0.4 schema.
+These source and metadata checks do not broaden the maintainer's personal review.
 
 ## Publication reading notes
 

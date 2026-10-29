@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import FunctionalInequalities.Probability.Covariance.Basic
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 import Mathlib.Analysis.InnerProductSpace.Adjoint

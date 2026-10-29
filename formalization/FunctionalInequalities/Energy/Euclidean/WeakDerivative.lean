@@ -45,11 +45,6 @@ universe u
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
 
 
-/-- The inner product with the canonical gradient is the Fréchet derivative. -/
-theorem inner_gradient_eq_fderiv_apply (f : V → ℝ) (x w : V) :
-    inner ℝ (gradient f x) w = fderiv ℝ f x w := by
-  rw [← toDual_apply_apply, toDual_gradient]
-
 omit [CompleteSpace V] in
 /-- The derivative of a compactly supported `C¹` function is globally bounded. -/
 theorem exists_bound_fderiv_of_hasCompactSupport {u : V → ℝ} (hu : ContDiff ℝ 1 u)
@@ -169,7 +164,7 @@ theorem integral_mul_inner_gradient {g : V → ℝ} {K : NNReal} (hg : Lipschitz
   have hid : ∀ j, ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m =
       -∫ x, mollify m (radius j) g x * fderiv ℝ φ x w ∂m := by
     intro j
-    simp_rw [inner_gradient_eq_fderiv_apply]
+    simp_rw [inner_gradient_left]
     exact integral_mul_fderiv_apply m hφ hφs (contDiff_mollify m (radius_pos j) hg.continuous) w
   have hφ' : HasCompactSupport fun x ↦ fderiv ℝ φ x w :=
     (hφs.fderiv ℝ).comp_left (g := fun L : V →L[ℝ] ℝ ↦ L w) (by simp)

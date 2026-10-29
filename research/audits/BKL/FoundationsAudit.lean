@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Tensor.Coordinate
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
@@ -12,7 +12,7 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: first dependencies of Bizeul–Klartag–Lehec (arXiv:2610.05474v1)
 
-This client checks the 2026-10-07 BKL foundations against nonvacuous instances.
+This client checks the BKL foundations against nonvacuous instances.
 
 * **Lemma 2.2 (complete).** `norm_le_four_pow_mul_norm_symmetrize` is applied to the all-ones
   tensor with `n = 1`, `k = 3`, `d = 1` (nonzero, both symmetry hypotheses discharged), with

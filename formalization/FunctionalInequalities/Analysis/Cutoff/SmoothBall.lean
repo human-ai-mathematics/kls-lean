@@ -13,8 +13,6 @@ import Mathlib.Analysis.Calculus.FDeriv.Norm
 /-!
 # Smooth norm-ball cutoffs and compact localization
 
-Existing names, statements and proof payloads are preserved.
-
 `exists_smooth_concentric_cutoff_norm_fderiv_le` (namespace `FunctionalInequalities.Analysis`) adds generic concentric
 cutoffs in a finite-dimensional real inner product space: one constant `D > 0` serves every center and every pair of
 radii `0 ≤ r < R`, with `‖Dχ‖ ≤ D/(R − r)`. These are the cutoffs of a Moser-type iteration

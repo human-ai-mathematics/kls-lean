@@ -10,8 +10,7 @@ import FunctionalInequalities.Analysis.Convex.Alexandrov.MaximumPrinciple
 
 Supports the domain Monge--Ampere infrastructure for Letwin
 arXiv:2607.24164v1 Lemma 2.2 through BB arXiv:1207.6128v1
-Theorem 2.24(ii). No new regularity, finiteness or equation assumptions
-are introduced by this owner separation.
+Theorem 2.24(ii).
 -/
 
 noncomputable section
@@ -296,7 +295,7 @@ private lemma volume_subgradientImage_quadraticAt_aux
       rw [hdet, abs_of_pos hdetpos]
 
 /-- **Subgradient images of a positive definite quadratic are exact affine images, with volume
-`det A · vol G`** (weak Letwin route). -/
+`det A · vol G`**. -/
 theorem volume_subgradientImage_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
     (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) {G : Set (EuclideanSpace ℝ (Fin n))}
     (hG : MeasurableSet G) :
@@ -328,11 +327,12 @@ section InfdistLeWidth
 open Set Metric
 open scoped RealInnerProductSpace
 
-/-! Distance to the frontier is bounded by the directional width (weak Letwin route, Caffarelli's argument). -/
+/-! Distance to the frontier is bounded by the directional width (Caffarelli's argument). -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Distance to the frontier is at most the width in any direction** (weak Letwin route, Caffarelli's argument): for a bounded open `S`, a point `x ∈ S` and a unit vector `θ`, if
+/-- **Distance to the frontier is at most the width in any direction** (Caffarelli's argument): for
+a bounded open `S`, a point `x ∈ S` and a unit vector `θ`, if
 `⟪y − x, θ⟫ ≤ t` for all `y ∈ S`, then `infDist x (frontier S) ≤ t`. -/
 theorem infDist_frontier_le_of_forall_inner_le {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] {S : Set E} (hS : IsOpen S) (hb : Bornology.IsBounded S)
@@ -496,7 +496,8 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Minimum estimate on a normalised section by quadratic comparison** (weak Letwin route, Caffarelli's argument; Gutiérrez Lemma via the comparison with `½κ(‖x‖² − 1)`): if `v` is convex, `≤ 0` on
+/-- **Minimum estimate on a normalised section by quadratic comparison** (Caffarelli's argument;
+Gutiérrez Lemma via the comparison with `½κ(‖x‖² − 1)`): if `v` is convex, `≤ 0` on
 the frontier of a bounded open `S ⊇ closedBall 0 1`, and `a · vol G ≤ vol ∂v(G)` for open `G ⊆ S`, then
 `v 0 ≤ −½ (a/2)^{1/n}`. -/
 theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -655,7 +656,8 @@ section InnerProduct
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/-- **Subtracting an affine function translates subgradient images** (weak Letwin route, Caffarelli's argument, bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
+/-- **Subtracting an affine function translates subgradient images** (Caffarelli's argument,
+bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
 theorem subgradientImage_sub_inner_add_const (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
     subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G = (fun q => q - p) '' subgradientImage u G := by
   ext q
@@ -739,7 +741,7 @@ theorem subgradientImage_open_measure_of_compact_eq
     _ = μ G := congrArg μ hSunion
 
 
-/-- **Alexandrov identity on open sets for the moment potential** (weak Letwin route):
+/-- **Alexandrov identity on open sets for the moment potential**:
 if `u` is convex, Lipschitz, `ν = e^{-u} dx` is normalised and `ν.map ∇u = μ = 1_K e^{-V} dx` for a closed convex
 `K` and a measurable `V`, then the subgradient image of every open `G` has volume `∫_G e^{-u + V(∇u)}`. -/
 theorem volume_subgradientImage_eq_lintegral_of_isOpen [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -912,7 +914,7 @@ private lemma inverse_subgradient_measurableSet
   exact MeasurableSet.iUnion fun n =>
     (inverse_subgradient_isClosed hu (hScompact n)).measurableSet
 
-/-- **Reciprocal Alexandrov bounds** (weak Letwin route): for the moment potential `u` (convex, Lipschitz,
+/-- **Reciprocal Alexandrov bounds**: for the moment potential `u` (convex, Lipschitz,
 `ν = e^{-u} dx` normalised, `ν.map ∇u = μ = ρ dx` with `c ≤ ρ ≤ C` on a closed convex `K`) and a radius `M`,
 the set `(∂u)⁻¹(G) = {x | ∃ p ∈ G, p ∈ ∂u(x)}` of an open `G ⊆ K` that lies in `closedBall 0 M` has volume
 comparable to `vol G`. -/

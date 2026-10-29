@@ -1,0 +1,3520 @@
+{
+  "version": 1,
+  "review_date": "2026-10-29",
+  "status": "path-only migration executed and locally checked on 2026-10-29: root lake --wfail build, strict compile and axiom check of all 442 audit clients, statement snapshot, API index, module inventory, Blueprint and atlas checks (atlas: only the 20 pins already stale before the migration). Not staged or committed; generated progress views await research/progress/update.py; research/verify.py not run.",
+  "spec": "build/history/2026-10-28-layout-survey/final-map.json and FINAL-REPORT.md (owner decisions (1)-(3)); research/naming.md \"Family names belong in directories, not filenames\" rules 1-7 and \"Migration checks\"; research/workflow.md section 6 \"Module split/move\"; report build/history/2026-10-29-layout-migration/REPORT.md",
+  "scope": "Path-only moves of 32 library modules under formalization/FunctionalInequalities/ and of all 179 audit clients that sat directly in research/audits/ into family directories, plus the reference rewrites they require. Namespaces, declaration names, statements, proofs, assumptions, constants, dimensional scope, proof status and certificate status are unchanged; no compatibility module, wrapper or alias. A second, declaration-level class records the optional cleanup listed under declaration_migrations.",
+  "literature_targets": [],
+  "owner_decisions": [
+    "(1) the 30 rule-based library moves of proposed-map.json",
+    "(2) group the 179 loose top-level research/audits/*.lean clients into per-family subdirectories",
+    "(3) Analysis/EssentialExtrema/{Basic,Oscillation}.lean from Analysis/EssentialExtrema.lean + Analysis/EssentialOscillation.lean"
+  ],
+  "namespace_policy": "Leave every namespace alone in this migration. Path/namespace mismatches that already exist (e.g. Probability/ProductVariance.lean in namespace FunctionalInequalities.ProductVariance; BakryEmery/WeakHessian.lean in namespaces Analysis and Probability.Stein; KLS/BKL/CumulantBound.lean in KLS.BKL.Localization) stay as they are; any namespace change is a separate API migration. Audit-client namespaces (e.g. namespace HeatSemigroupAudit) also stay unchanged.",
+  "audit_basename_rule": "Directory = the library family the client audits (one level under research/audits/). Basename = old basename minus the family term; the kind suffix Audit / RouteStatements is kept (README.md identifies kinds by it, as in BKL/, CEK/, Newtonian/). When stripping leaves no distinguishing term, the audited module or theorem name is used. No same-directory collisions; 2 cross-directory duplicate basenames remain intentionally (Hausdorff/ and Vector/ CriticalSliceAudit.lean mirror Analysis/{Hausdorff,Vector}/Slice/Critical.lean; BKL/ and MetricBV/ ConvexSupportAudit.lean audit different objects).",
+  "totals": {
+    "library_moves": 32,
+    "audit_moves": 179,
+    "reference_files_edited": 177,
+    "files_created": 3,
+    "evidence_pins_refreshed": 180,
+    "evidence_files_refreshed": 86,
+    "evidence_pins_stale_before_and_left_unchanged": 20
+  },
+  "module_migrations": [
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/EllipticOperator.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Elliptic/Operator.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.EllipticOperator",
+      "new_module": "FunctionalInequalities.Analysis.Elliptic.Operator",
+      "batch": "B1-elliptic",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/EllipticMaximum.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.EllipticMaximum",
+      "new_module": "FunctionalInequalities.Analysis.Elliptic.Maximum",
+      "batch": "B1-elliptic",
+      "rule": "naming.md 1",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/EllipticBarrier.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.EllipticBarrier",
+      "new_module": "FunctionalInequalities.Analysis.Elliptic.Barrier",
+      "batch": "B1-elliptic",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/VectorCoarea.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Lipschitz.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Lipschitz.VectorCoarea",
+      "new_module": "FunctionalInequalities.Analysis.Vector.Coarea.Lipschitz",
+      "batch": "B5-vector",
+      "rule": "naming.md 4-5 (primary object: codimension-m coarea formula; family Vector/Coarea/)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/BKL/CumulantBound.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Bound.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.BKL.CumulantBound",
+      "new_module": "FunctionalInequalities.KLS.BKL.Cumulant.Bound",
+      "batch": "B9-bkl-cumulant",
+      "rule": "naming.md 1 (per-paper folder; drop family prefix)",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/BKL/CumulantInduction.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Induction.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.BKL.CumulantInduction",
+      "new_module": "FunctionalInequalities.KLS.BKL.Cumulant.Induction",
+      "batch": "B9-bkl-cumulant",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnvelope.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Envelope.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.BKL.CumulantEnvelope",
+      "new_module": "FunctionalInequalities.KLS.BKL.Cumulant.Envelope",
+      "batch": "B9-bkl-cumulant",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnergy/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Energy/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic",
+      "new_module": "FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic",
+      "batch": "B9-bkl-cumulant",
+      "rule": "naming.md 1 (family name in directory; CumulantEnergy/ becomes Cumulant/Energy/)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnergy/Bound.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Energy/Bound.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.BKL.CumulantEnergy.Bound",
+      "new_module": "FunctionalInequalities.KLS.BKL.Cumulant.Energy.Bound",
+      "batch": "B9-bkl-cumulant",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnergy/Conjugation.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Energy/Conjugation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.KLS.BKL.CumulantEnergy.Conjugation",
+      "new_module": "FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation",
+      "batch": "B9-bkl-cumulant",
+      "rule": "naming.md 1",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/HolderRepresentative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Holder/Representative.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.HolderRepresentative",
+      "new_module": "FunctionalInequalities.Analysis.Holder.Representative",
+      "batch": "B2-holder",
+      "rule": "naming.md 1 (existing family Holder/), family name in directory",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/LogDet.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Inequalities.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.LogDet",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities",
+      "batch": "B3-matrix",
+      "rule": "naming.md 1 (+3 for the new LogDet/)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Oscillation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.LogDetOscillation",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.LogDet.Oscillation",
+      "batch": "B3-matrix",
+      "rule": "naming.md 1",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Segment.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.LogDetSegment",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.LogDet.Segment",
+      "batch": "B3-matrix",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/TraceGram.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Gram.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.TraceGram",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Gram",
+      "batch": "B3-matrix",
+      "rule": "naming.md 1 (existing family Trace/), family name in directory",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/Linearization.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.GradientForcing",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Linearization",
+      "batch": "B4-bakryemery",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/UniformGradientForcing.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/Uniform.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.UniformGradientForcing",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Uniform",
+      "batch": "B4-bakryemery",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/EllipticGradientForcing.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/Elliptic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.EllipticGradientForcing",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic",
+      "batch": "B4-bakryemery",
+      "rule": "naming.md 1",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Trace.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.HessianTrace",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace",
+      "batch": "B4-bakryemery",
+      "rule": "naming.md 1 (existing family Hessian/), family name in directory",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.WeakHessian",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak",
+      "batch": "B4-bakryemery",
+      "rule": "naming.md 1 (existing family Hessian/), family name in directory",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/CompactHessian.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Compact.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.BakryEmery.CompactHessian",
+      "new_module": "FunctionalInequalities.Analysis.BakryEmery.Hessian.Compact",
+      "batch": "B4-bakryemery",
+      "rule": "naming.md 1 (existing family Hessian/), family name in directory",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/ProductVariance.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/Variance/Product.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.ProductVariance",
+      "new_module": "FunctionalInequalities.Probability.Variance.Product",
+      "batch": "B6-probability-variance",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.QuadraticVariance",
+      "new_module": "FunctionalInequalities.Probability.Variance.Quadratic",
+      "batch": "B6-probability-variance",
+      "rule": "naming.md 1",
+      "content_changed": true
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/TwoPointVariance.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/Variance/TwoPoint.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.TwoPointVariance",
+      "new_module": "FunctionalInequalities.Probability.Variance.TwoPoint",
+      "batch": "B6-probability-variance",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/Support.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/Support/Topological.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.Support",
+      "new_module": "FunctionalInequalities.Probability.Support.Topological",
+      "batch": "B7-probability-support",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/Support/Affine.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.AffineSupport",
+      "new_module": "FunctionalInequalities.Probability.Support.Affine",
+      "batch": "B7-probability-support",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean",
+      "new_path": "formalization/FunctionalInequalities/Probability/Support/Convex.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Probability.ConvexSupport",
+      "new_module": "FunctionalInequalities.Probability.Support.Convex",
+      "batch": "B7-probability-support",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/GradientImage.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Gradient/Image.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Convex.GradientImage",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Gradient.Image",
+      "batch": "B8-convex",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Gradient/Inverse.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Convex.GradientInverse",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Gradient.Inverse",
+      "batch": "B8-convex",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Gradient/Lipschitz.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.Convex.GradientLipschitz",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz",
+      "batch": "B8-convex",
+      "rule": "naming.md 1",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/EssentialExtrema/Basic.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.EssentialExtrema",
+      "new_module": "FunctionalInequalities.Analysis.EssentialExtrema.Basic",
+      "batch": "B10-essential-extrema",
+      "rule": "naming.md 2 (genuine foundation/extension pair: Oscillation imports Extrema) + 3 (no X.lean beside X/: Extrema becomes EssentialExtrema/Basic.lean)",
+      "content_changed": false
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/EssentialOscillation.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/EssentialExtrema/Oscillation.lean",
+      "kind": "move",
+      "old_module": "FunctionalInequalities.Analysis.EssentialOscillation",
+      "new_module": "FunctionalInequalities.Analysis.EssentialExtrema.Oscillation",
+      "batch": "B10-essential-extrema",
+      "rule": "naming.md 2 (genuine foundation/extension pair: Oscillation imports Extrema) + 3 (no X.lean beside X/: Extrema becomes EssentialExtrema/Basic.lean)",
+      "content_changed": true
+    }
+  ],
+  "audit_migrations": [
+    {
+      "old_path": "research/audits/AffineDerivativeScaleAudit.lean",
+      "new_path": "research/audits/IteratedDerivative/AffineDerivativeScaleAudit.lean",
+      "kind": "move",
+      "family": "IteratedDerivative",
+      "namespace": [
+        "AffineDerivativeScaleAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/AreaFormulaRouteStatements.lean",
+      "new_path": "research/audits/Graph/AreaFormulaRouteStatements.lean",
+      "kind": "move",
+      "family": "Graph",
+      "namespace": [],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryBochnerAudit.lean",
+      "new_path": "research/audits/BakryEmery/BochnerAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryBochnerAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/BakryEmeryErgodicityAudit.lean",
+      "new_path": "research/audits/BakryEmery/ErgodicityAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryErgodicityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryGeneratorAudit.lean",
+      "new_path": "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryGeneratorAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/BakryEmeryGeneratorGammaTwoAudit.lean",
+      "new_path": "research/audits/BakryEmery/GeneratorGammaTwoAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryGeneratorGammaTwoAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryGradientEstimateAudit.lean",
+      "new_path": "research/audits/BakryEmery/GradientEstimateAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryGradientEstimateAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryHeatApproximationAudit.lean",
+      "new_path": "research/audits/BakryEmery/HeatApproximationAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryHeatApproximationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryHeatTestClassAudit.lean",
+      "new_path": "research/audits/BakryEmery/HeatTestClassAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryHeatTestClassAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryHeatTestExtensionAudit.lean",
+      "new_path": "research/audits/BakryEmery/HeatTestExtensionAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryHeatTestExtensionAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryInteriorRegularityAudit.lean",
+      "new_path": "research/audits/BakryEmery/InteriorRegularityAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryInteriorRegularityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryOperatorCoreAudit.lean",
+      "new_path": "research/audits/BakryEmery/OperatorCoreAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryOperatorCoreAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryReverseSelfImprovementAudit.lean",
+      "new_path": "research/audits/BakryEmery/ReverseSelfImprovementAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryReverseSelfImprovementAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BakryEmeryRouteStatements.lean",
+      "new_path": "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/BakryEmeryWeakGammaAudit.lean",
+      "new_path": "research/audits/BakryEmery/WeakGammaAudit.lean",
+      "kind": "move",
+      "family": "BakryEmery",
+      "namespace": [
+        "BakryEmeryWeakGammaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BorelSliceAudit.lean",
+      "new_path": "research/audits/Hausdorff/BorelSliceAudit.lean",
+      "kind": "move",
+      "family": "Hausdorff",
+      "namespace": [
+        "BorelSliceAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BorellDensityContinuityAudit.lean",
+      "new_path": "research/audits/Density/BorellContinuityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "BorellDensityContinuityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BorellDensityLogConcavityAudit.lean",
+      "new_path": "research/audits/Density/BorellLogConcavityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "BorellDensityLogConcavityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/BuserLineAudit.lean",
+      "new_path": "research/audits/Line/BuserAudit.lean",
+      "kind": "move",
+      "family": "Line",
+      "namespace": [
+        "BuserLineAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/BuserRouteStatements.lean",
+      "new_path": "research/audits/Cheeger/BuserRouteStatements.lean",
+      "kind": "move",
+      "family": "Cheeger",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/CheegerEqualityAudit.lean",
+      "new_path": "research/audits/Cheeger/EqualityAudit.lean",
+      "kind": "move",
+      "family": "Cheeger",
+      "namespace": [
+        "CheegerEqualityAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/CheegerInequalityAudit.lean",
+      "new_path": "research/audits/Cheeger/InequalityAudit.lean",
+      "kind": "move",
+      "family": "Cheeger",
+      "namespace": [
+        "CheegerInequalityAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/CheegerInequalityRouteStatements.lean",
+      "new_path": "research/audits/Cheeger/InequalityRouteStatements.lean",
+      "kind": "move",
+      "family": "Cheeger",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/CheegerInfimumRouteStatements.lean",
+      "new_path": "research/audits/Cheeger/InfimumRouteStatements.lean",
+      "kind": "move",
+      "family": "Cheeger",
+      "namespace": [],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/CoareaGraphJacobianAudit.lean",
+      "new_path": "research/audits/Vector/CoareaGraphJacobianAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "CoareaGraphJacobianAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/CoareaJacobianAudit.lean",
+      "new_path": "research/audits/Vector/CoareaJacobianAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "CoareaJacobianAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/CoefficientFreezingAudit.lean",
+      "new_path": "research/audits/IteratedDerivative/CoefficientFreezingAudit.lean",
+      "kind": "move",
+      "family": "IteratedDerivative",
+      "namespace": [
+        "CoefficientFreezingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/CompactSliceAudit.lean",
+      "new_path": "research/audits/Hausdorff/CompactSliceAudit.lean",
+      "kind": "move",
+      "family": "Hausdorff",
+      "namespace": [
+        "CompactSliceAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/ConvolutionLogConcavityAudit.lean",
+      "new_path": "research/audits/Density/ConvolutionLogConcavityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "ConvolutionLogConcavityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/CriticalSliceAudit.lean",
+      "new_path": "research/audits/Hausdorff/CriticalSliceAudit.lean",
+      "kind": "move",
+      "family": "Hausdorff",
+      "namespace": [
+        "CriticalSliceAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/EilenbergMajorantAudit.lean",
+      "new_path": "research/audits/Hausdorff/EilenbergMajorantAudit.lean",
+      "kind": "move",
+      "family": "Hausdorff",
+      "namespace": [
+        "EilenbergMajorantAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/EnergySlopeComparisonAudit.lean",
+      "new_path": "research/audits/Energy/SlopeComparisonAudit.lean",
+      "kind": "move",
+      "family": "Energy",
+      "namespace": [
+        "EnergySlopeComparisonAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/EnergySlopeDensityAudit.lean",
+      "new_path": "research/audits/Energy/SlopeDensityAudit.lean",
+      "kind": "move",
+      "family": "Energy",
+      "namespace": [
+        "EnergySlopeDensityAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/EnergySlopeRecoveryAudit.lean",
+      "new_path": "research/audits/Energy/SlopeRecoveryAudit.lean",
+      "kind": "move",
+      "family": "Energy",
+      "namespace": [
+        "EnergySlopeRecoveryAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/EnergySlopeRouteStatements.lean",
+      "new_path": "research/audits/Energy/SlopeRouteStatements.lean",
+      "kind": "move",
+      "family": "Energy",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/EquidimensionalSardAudit.lean",
+      "new_path": "research/audits/Sard/EquidimensionalAudit.lean",
+      "kind": "move",
+      "family": "Sard",
+      "namespace": [
+        "EquidimensionalSardAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/ExpMeanValueAudit.lean",
+      "new_path": "research/audits/Semigroup/ExpMeanValueAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "ExpMeanValueAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/ExponentObstructionAudit.lean",
+      "new_path": "research/audits/Vector/ExponentObstructionAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "ExponentObstructionAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/FirstOrderJetAudit.lean",
+      "new_path": "research/audits/Whitney/FirstOrderJetAudit.lean",
+      "kind": "move",
+      "family": "Whitney",
+      "namespace": [
+        "FirstOrderJetAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianApproximationAudit.lean",
+      "new_path": "research/audits/Density/GaussianApproximationAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianApproximationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianBuserPassageAudit.lean",
+      "new_path": "research/audits/Density/GaussianBuserPassageAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianBuserPassageAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianFirstRegularityAudit.lean",
+      "new_path": "research/audits/Density/GaussianFirstRegularityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianFirstRegularityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianInfiniteRegularityAudit.lean",
+      "new_path": "research/audits/Density/GaussianInfiniteRegularityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianInfiniteRegularityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianPoincareStabilityAudit.lean",
+      "new_path": "research/audits/Density/GaussianPoincareStabilityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianPoincareStabilityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianProfileAudit.lean",
+      "new_path": "research/audits/Line/GaussianProfileAudit.lean",
+      "kind": "move",
+      "family": "Line",
+      "namespace": [
+        "GaussianProfileAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianRegularizationAudit.lean",
+      "new_path": "research/audits/Line/GaussianRegularizationAudit.lean",
+      "kind": "move",
+      "family": "Line",
+      "namespace": [
+        "GaussianRegularizationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianSecondRegularityAudit.lean",
+      "new_path": "research/audits/Density/GaussianSecondRegularityAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianSecondRegularityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GaussianSmoothingAudit.lean",
+      "new_path": "research/audits/Density/GaussianSmoothingAudit.lean",
+      "kind": "move",
+      "family": "Density",
+      "namespace": [
+        "GaussianSmoothingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/GeneratedSemigroupRouteStatements.lean",
+      "new_path": "research/audits/Semigroup/GeneratedRouteStatements.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/GeneratorAudit.lean",
+      "new_path": "research/audits/Semigroup/GeneratorAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "GeneratorAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/GraphJacobianAudit.lean",
+      "new_path": "research/audits/Graph/JacobianAudit.lean",
+      "kind": "move",
+      "family": "Graph",
+      "namespace": [
+        "GraphJacobianAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/HeatAlmostEverywhereAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/AlmostEverywhereAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatAlmostEverywhereAudit",
+        "SmoothTestOrderAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatBuserBridgeAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/BuserBridgeAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatBuserBridgeAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatChainRuleAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/ChainRuleAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatChainRuleAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatCompositionDerivativeAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/CompositionDerivativeAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatCompositionDerivativeAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatCompositionDomainAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/CompositionDomainAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatCompositionDomainAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatIntegratedProfileAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/IntegratedProfileAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatIntegratedProfileAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatPiCoefficientAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/PiCoefficientAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatPiCoefficientAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatProfileLimitAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/ProfileLimitAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatProfileLimitAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatSemigroupAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/BasicAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatSemigroupAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatSemigroupMarkovAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/MarkovAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "FunctionalInequalities"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatSmallTimeAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/SmallTimeAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatSmallTimeAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatSpectralDecayAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/SpectralDecayAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatSpectralDecayAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatStrongInterpolationAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/StrongInterpolationAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatStrongInterpolationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HeatWeightedCauchyAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/WeightedCauchyAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "HeatWeightedCauchyAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/HessianInterpolationAudit.lean",
+      "new_path": "research/audits/IteratedDerivative/HessianInterpolationAudit.lean",
+      "kind": "move",
+      "family": "IteratedDerivative",
+      "namespace": [
+        "HessianInterpolationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/IsoperimetryCoareaAudit.lean",
+      "new_path": "research/audits/Coarea/IsoperimetryAudit.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [
+        "IsoperimetryCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/KlartagLiteraturePoincareAudit.lean",
+      "new_path": "research/audits/Poincare/KlartagLiteratureAudit.lean",
+      "kind": "move",
+      "family": "Poincare",
+      "namespace": [
+        "KlartagLiteraturePoincareAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/KlartagLiteraturePoincareRouteStatements.lean",
+      "new_path": "research/audits/Poincare/KlartagLiteratureRouteStatements.lean",
+      "kind": "move",
+      "family": "Poincare",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/LevelSetMeasurableAudit.lean",
+      "new_path": "research/audits/Hausdorff/LevelSetMeasurableAudit.lean",
+      "kind": "move",
+      "family": "Hausdorff",
+      "namespace": [
+        "LevelSetMeasurableAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/LinearAreaFormulaAudit.lean",
+      "new_path": "research/audits/Graph/LinearAreaFormulaAudit.lean",
+      "kind": "move",
+      "family": "Graph",
+      "namespace": [
+        "LinearAreaFormulaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/LipschitzCoareaAudit.lean",
+      "new_path": "research/audits/Coarea/LipschitzAudit.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [
+        "LipschitzCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/LipschitzCoareaMigrationAudit.lean",
+      "new_path": "research/audits/Coarea/LipschitzMigrationAudit.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [
+        "LipschitzCoareaMigrationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/LipschitzVectorCoareaAudit.lean",
+      "new_path": "research/audits/Vector/LipschitzCoareaAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "LipschitzVectorCoareaAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/LipschitzVectorCoareaRouteStatements.lean",
+      "new_path": "research/audits/Vector/LipschitzCoareaRouteStatements.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/LocallyLipschitzCoareaAudit.lean",
+      "new_path": "research/audits/Coarea/LocallyLipschitzAudit.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [
+        "LocallyLipschitzCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/LocallyLipschitzVectorCoareaAudit.lean",
+      "new_path": "research/audits/Vector/LocallyLipschitzCoareaAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "LocallyLipschitzVectorCoareaAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean",
+      "new_path": "research/audits/Vector/LocallyLipschitzCoareaRouteStatements.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/MarkovRouteStatements.lean",
+      "new_path": "research/audits/HeatSemigroup/MarkovRouteStatements.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "FunctionalInequalities"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MatrixTraceIntegralCoefficientAudit.lean",
+      "new_path": "research/audits/BKL/MatrixTraceIntegralCoefficientAudit.lean",
+      "kind": "move",
+      "family": "BKL",
+      "namespace": [
+        "MatrixTraceIntegralCoefficientAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVCheegerAudit.lean",
+      "new_path": "research/audits/MetricBV/CheegerAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVCheegerAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVCheegerIdentificationAudit.lean",
+      "new_path": "research/audits/MetricBV/CheegerIdentificationAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVCheegerIdentificationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVCoareaRadiusAudit.lean",
+      "new_path": "research/audits/MetricBV/CoareaRadiusAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVCoareaRadiusAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVComplementAudit.lean",
+      "new_path": "research/audits/MetricBV/ComplementAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVComplementAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVConvexSupportAudit.lean",
+      "new_path": "research/audits/MetricBV/ConvexSupportAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVConvexSupportAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVDefinitionClassAudit.lean",
+      "new_path": "research/audits/MetricBV/DefinitionClassAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVDefinitionClassAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVFiniteNeighborhoodAudit.lean",
+      "new_path": "research/audits/MetricBV/FiniteNeighborhoodAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVFiniteNeighborhoodAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVFiniteRecoveryAudit.lean",
+      "new_path": "research/audits/MetricBV/FiniteRecoveryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVFiniteRecoveryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVFiniteScalingAudit.lean",
+      "new_path": "research/audits/MetricBV/FiniteScalingAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVFiniteScalingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVFiniteTargetAudit.lean",
+      "new_path": "research/audits/MetricBV/FiniteTargetAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVFiniteTargetAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVHypothesisBoundaryAudit.lean",
+      "new_path": "research/audits/MetricBV/HypothesisBoundaryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVHypothesisBoundaryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVInterfaceAudit.lean",
+      "new_path": "research/audits/MetricBV/InterfaceAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVInterfaceAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVIntrinsicIdentificationAudit.lean",
+      "new_path": "research/audits/MetricBV/IntrinsicIdentificationAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVIntrinsicIdentificationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLipschitzAudit.lean",
+      "new_path": "research/audits/MetricBV/GlobalLipschitzAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLipschitzAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLocalL1Audit.lean",
+      "new_path": "research/audits/MetricBV/LocalL1Audit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLocalL1Audit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLocalL1RelaxationAudit.lean",
+      "new_path": "research/audits/MetricBV/LocalL1RelaxationAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLocalL1RelaxationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLocalLipschitzAudit.lean",
+      "new_path": "research/audits/MetricBV/LocalLipschitzAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLocalLipschitzAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLocalLipschitzTargetTailAudit.lean",
+      "new_path": "research/audits/MetricBV/LocalLipschitzTargetTailAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLocalLipschitzTargetTailAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLocallyFiniteLowerAudit.lean",
+      "new_path": "research/audits/MetricBV/LocallyFiniteLowerAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLocallyFiniteLowerAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLocallyFiniteUpperAudit.lean",
+      "new_path": "research/audits/MetricBV/LocallyFiniteUpperAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLocallyFiniteUpperAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVLowerSemicontinuityAudit.lean",
+      "new_path": "research/audits/MetricBV/LowerSemicontinuityAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVLowerSemicontinuityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVMinkowskiAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVMinkowskiAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVMinkowskiCoareaAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiCoareaAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVMinkowskiCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVMinkowskiRecoveryAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiRecoveryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVMinkowskiRecoveryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVNonproperTargetAudit.lean",
+      "new_path": "research/audits/MetricBV/NonproperTargetAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVNonproperTargetAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVRatioRecoveryAudit.lean",
+      "new_path": "research/audits/MetricBV/RatioRecoveryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVRatioRecoveryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVRecoveryAudit.lean",
+      "new_path": "research/audits/MetricBV/RecoveryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVRecoveryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVRecoverySequenceAudit.lean",
+      "new_path": "research/audits/MetricBV/RecoverySequenceAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVRecoverySequenceAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVRelaxedMinkowskiAudit.lean",
+      "new_path": "research/audits/MetricBV/RelaxedMinkowskiAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVRelaxedMinkowskiAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVSuperlevelSelectionAudit.lean",
+      "new_path": "research/audits/MetricBV/SuperlevelSelectionAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVSuperlevelSelectionAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVSupportCostAudit.lean",
+      "new_path": "research/audits/MetricBV/SupportCostAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVSupportCostAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVSupportRestrictionAudit.lean",
+      "new_path": "research/audits/MetricBV/SupportRestrictionAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVSupportRestrictionAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVSupportRetractionAudit.lean",
+      "new_path": "research/audits/MetricBV/SupportRetractionAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVSupportRetractionAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MetricBVTestClassAudit.lean",
+      "new_path": "research/audits/MetricBV/TestClassAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MetricBVTestClassAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiInfiniteMassGenericAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiInfiniteMassGenericAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiInfiniteMassGenericAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiLemma21ArbitraryMeasureAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiLemma21ArbitraryMeasureAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiLemma21ArbitraryMeasureAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiMetricChainAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiMetricChainAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiMetricChainAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiRelaxedUpperAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiRelaxedUpperAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiRelaxedUpperAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiUpperBVRecoveryAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiUpperBVRecoveryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiUpperBVRecoveryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiUpperIntegratedAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiUpperIntegratedAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiUpperIntegratedAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiUpperRecoveryAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiUpperRecoveryAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiUpperRecoveryAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/MinkowskiUpperThickeningAudit.lean",
+      "new_path": "research/audits/MetricBV/MinkowskiUpperThickeningAudit.lean",
+      "kind": "move",
+      "family": "MetricBV",
+      "namespace": [
+        "MinkowskiUpperThickeningAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/NormDetContinuityAudit.lean",
+      "new_path": "research/audits/Vector/NormDetContinuityAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "NormDetContinuityAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/NullSlicingAudit.lean",
+      "new_path": "research/audits/Hausdorff/NullSlicingAudit.lean",
+      "kind": "move",
+      "family": "Hausdorff",
+      "namespace": [
+        "NullSlicingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/OpenGraphAudit.lean",
+      "new_path": "research/audits/Graph/OpenIntegralAudit.lean",
+      "kind": "move",
+      "family": "Graph",
+      "namespace": [
+        "OpenGraphAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/PlanarSardAudit.lean",
+      "new_path": "research/audits/Sard/PlanarAudit.lean",
+      "kind": "move",
+      "family": "Sard",
+      "namespace": [
+        "PlanarSardAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/RankDeficientCoareaAudit.lean",
+      "new_path": "research/audits/Vector/RankDeficientCoareaAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "RankDeficientCoareaAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/RankDeficientRouteStatements.lean",
+      "new_path": "research/audits/Vector/RankDeficientRouteStatements.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/RankStratificationAudit.lean",
+      "new_path": "research/audits/Vector/RankStratificationAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "RankStratificationAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/RegularCoareaAudit.lean",
+      "new_path": "research/audits/Coarea/RegularAudit.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [
+        "RegularCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/RegularFibreFiniteAudit.lean",
+      "new_path": "research/audits/Vector/RegularFibreFiniteAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "RegularFibreFiniteAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/ResolventLimitAudit.lean",
+      "new_path": "research/audits/Semigroup/ResolventLimitAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "ResolventLimitAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/RightInverseBoundAudit.lean",
+      "new_path": "research/audits/Vector/RightInverseBoundAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "RightInverseBoundAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SchauderToolsAudit.lean",
+      "new_path": "research/audits/IteratedDerivative/SchauderToolsAudit.lean",
+      "kind": "move",
+      "family": "IteratedDerivative",
+      "namespace": [
+        "SchauderToolsAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/SemigroupDomainStabilityAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/DomainStabilityAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "SemigroupDomainStabilityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/SemigroupFormAudit.lean",
+      "new_path": "research/audits/Semigroup/FormAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "SemigroupFormAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SemigroupFormDomainStabilityAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/FormDomainStabilityAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "SemigroupFormDomainStabilityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/SemigroupGenerationRouteStatements.lean",
+      "new_path": "research/audits/Semigroup/GenerationRouteStatements.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SemigroupLawsAudit.lean",
+      "new_path": "research/audits/Semigroup/LawsAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "SemigroupLawsAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SemigroupLimitAudit.lean",
+      "new_path": "research/audits/Semigroup/ExponentialLimitAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "SemigroupLimitAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SemigroupSmoothingAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/SmoothingAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "SemigroupSmoothingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/SemigroupYosidaAudit.lean",
+      "new_path": "research/audits/Semigroup/ExponentialContractionAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "SemigroupYosidaAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SharpSardAudit.lean",
+      "new_path": "research/audits/Sard/SharpAudit.lean",
+      "kind": "move",
+      "family": "Sard",
+      "namespace": [
+        "SharpSardAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SharpSardRouteStatements.lean",
+      "new_path": "research/audits/Sard/SharpRouteStatements.lean",
+      "kind": "move",
+      "family": "Sard",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/SmoothCoareaAudit.lean",
+      "new_path": "research/audits/Coarea/SmoothAudit.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [
+        "SmoothCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/StratumSlicingAudit.lean",
+      "new_path": "research/audits/Vector/StratumSlicingAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "StratumSlicingAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/StratumSlicingRouteStatements.lean",
+      "new_path": "research/audits/Vector/StratumSlicingRouteStatements.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/TangentialLipschitzAudit.lean",
+      "new_path": "research/audits/Vector/TangentialLipschitzAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "TangentialLipschitzAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/TargetSplitFubiniAudit.lean",
+      "new_path": "research/audits/Vector/TargetSplitFubiniAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "TargetSplitFubiniAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/VectorCriticalSliceAudit.lean",
+      "new_path": "research/audits/Vector/CriticalSliceAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorCriticalSliceAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorFiberIntegralAudit.lean",
+      "new_path": "research/audits/Vector/FiberIntegralAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorFiberIntegralAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorGraphAreaAudit.lean",
+      "new_path": "research/audits/Vector/GraphAreaAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorGraphAreaAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/VectorGraphAudit.lean",
+      "new_path": "research/audits/Vector/GraphAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorGraphAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorGraphSandwichAudit.lean",
+      "new_path": "research/audits/Vector/GraphSandwichAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorGraphSandwichAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorHausdorffSlicingAudit.lean",
+      "new_path": "research/audits/Vector/HausdorffSlicingAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorHausdorffSlicingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorLocalCoareaAudit.lean",
+      "new_path": "research/audits/Vector/LocalCoareaAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorLocalCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorRegularChartAudit.lean",
+      "new_path": "research/audits/Vector/RegularChartAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorRegularChartAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorRegularCoareaAudit.lean",
+      "new_path": "research/audits/Vector/RegularCoareaAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorRegularCoareaAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VectorSliceMeasurableAudit.lean",
+      "new_path": "research/audits/Vector/SliceMeasurableAudit.lean",
+      "kind": "move",
+      "family": "Vector",
+      "namespace": [
+        "VectorSliceMeasurableAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/VonNeumannAudit.lean",
+      "new_path": "research/audits/Semigroup/VonNeumannAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "VonNeumannAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/VonNeumannRouteStatements.lean",
+      "new_path": "research/audits/Semigroup/VonNeumannRouteStatements.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/WaveSplittingAudit.lean",
+      "new_path": "research/audits/WaveSplitting/FiniteConstructionAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingAverageErrorAudit.lean",
+      "new_path": "research/audits/WaveSplitting/AverageErrorAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingAverageErrorAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingConsistencyAudit.lean",
+      "new_path": "research/audits/WaveSplitting/ConsistencyAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingConsistencyAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingEnergyAudit.lean",
+      "new_path": "research/audits/WaveSplitting/EnergyAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingEnergyAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingFormRangeAudit.lean",
+      "new_path": "research/audits/HeatSemigroup/FormRangeAudit.lean",
+      "kind": "move",
+      "family": "HeatSemigroup",
+      "namespace": [
+        "WaveSplittingFormRangeAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingGeneratorBoundsAudit.lean",
+      "new_path": "research/audits/WaveSplitting/GeneratorBoundsAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingGeneratorBoundsAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingLocalizationAudit.lean",
+      "new_path": "research/audits/WaveSplitting/LocalizationAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingLocalizationAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingResidualAudit.lean",
+      "new_path": "research/audits/WaveSplitting/ResidualAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingResidualAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingStabilityAudit.lean",
+      "new_path": "research/audits/WaveSplitting/StabilityAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingStabilityAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingTimeAverageAudit.lean",
+      "new_path": "research/audits/WaveSplitting/TimeAverageAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingTimeAverageAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WaveSplittingWeightedEnergyAudit.lean",
+      "new_path": "research/audits/WaveSplitting/WeightedEnergyAudit.lean",
+      "kind": "move",
+      "family": "WaveSplitting",
+      "namespace": [
+        "WaveSplittingWeightedEnergyAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WeightedCoareaInfrastructure.lean",
+      "new_path": "research/audits/Coarea/WeightedInfrastructure.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WeightedCoareaRouteStatements.lean",
+      "new_path": "research/audits/Coarea/WeightedRouteStatements.lean",
+      "kind": "move",
+      "family": "Coarea",
+      "namespace": [],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WhitneyConstructionAudit.lean",
+      "new_path": "research/audits/Whitney/ConstructionAudit.lean",
+      "kind": "move",
+      "family": "Whitney",
+      "namespace": [
+        "WhitneyConstructionAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/WhitneyExtensionAudit.lean",
+      "new_path": "research/audits/Whitney/ExtensionAudit.lean",
+      "kind": "move",
+      "family": "Whitney",
+      "namespace": [
+        "WhitneyExtensionAudit"
+      ],
+      "content_changed": false
+    },
+    {
+      "old_path": "research/audits/YosidaFamilyAudit.lean",
+      "new_path": "research/audits/Semigroup/YosidaFamilyAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "YosidaFamilyAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/YosidaLimitAudit.lean",
+      "new_path": "research/audits/Semigroup/YosidaLimitAudit.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [
+        "YosidaLimitAudit"
+      ],
+      "content_changed": true
+    },
+    {
+      "old_path": "research/audits/YosidaLimitRouteStatements.lean",
+      "new_path": "research/audits/Semigroup/YosidaLimitRouteStatements.lean",
+      "kind": "move",
+      "family": "Semigroup",
+      "namespace": [],
+      "content_changed": true
+    }
+  ],
+  "directory_changes": {
+    "created_library_directories": [
+      "Analysis/Elliptic",
+      "Analysis/EssentialExtrema",
+      "Analysis/BakryEmery/GradientForcing",
+      "Analysis/Convex/Gradient",
+      "Analysis/Matrix/LogDet",
+      "KLS/BKL/Cumulant",
+      "KLS/BKL/Cumulant/Energy",
+      "Probability/Support",
+      "Probability/Variance"
+    ],
+    "removed_library_directories": [
+      "KLS/BKL/CumulantEnergy"
+    ],
+    "created_audit_directories": [
+      "BakryEmery",
+      "Cheeger",
+      "Coarea",
+      "Density",
+      "Energy",
+      "Graph",
+      "Hausdorff",
+      "HeatSemigroup",
+      "IteratedDerivative",
+      "Line",
+      "MetricBV",
+      "Poincare",
+      "Sard",
+      "Semigroup",
+      "Vector",
+      "WaveSplitting",
+      "Whitney"
+    ],
+    "audit_root_after_migration": "research/audits/ holds only README.md and directories"
+  },
+  "declaration_migrations": {
+    "class": "second class: declaration-level cleanup after all path-only checks passed",
+    "entries": [
+      {
+        "old_name": "FunctionalInequalities.Probability.MomentMeasure.measurable_gradient_real",
+        "visibility": "private",
+        "old_source": "formalization/FunctionalInequalities/Probability/MomentMeasure/EssentialUniqueness.lean",
+        "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.measurable_gradient",
+        "new_source": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "kind": "dedupe",
+        "note": "identical statement (Measurable (gradient f)) and proof term; the public lemma needs [BorelSpace E] [CompleteSpace E], available from the module context ([FiniteDimensional ℝ E]); its owner was already in the import closure, so no import was added; file-local open as in Uniqueness.lean"
+      },
+      {
+        "old_name": "FunctionalInequalities.KLS.ConditionalFiber.affineSupport_eq_top_of_absolutelyContinuous",
+        "old_source": "formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+        "new_name": null,
+        "kind": "not moved",
+        "note": "skipped: keeping the full name would place a KLS.ConditionalFiber declaration inside the Probability object module Probability/Support/Affine.lean (research/naming.md: use the object namespace) and add Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar to that dependency-light module; the clean placement needs a public name migration to the Probability namespace, which is a separate API migration"
+      }
+    ]
+  },
+  "records_updated": [
+    "formalization/API.md",
+    "formalization/FunctionalInequalities.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/GradientForcing/Elliptic.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+    "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/MaximumComparison.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Mollification.lean",
+    "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean",
+    "formalization/FunctionalInequalities/Analysis/EssentialExtrema/Oscillation.lean",
+    "formalization/FunctionalInequalities/Analysis/Holder/Representative.lean",
+    "formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+    "formalization/FunctionalInequalities/Analysis/Matrix/AveragedInverse.lean",
+    "formalization/FunctionalInequalities/Analysis/Matrix/Holder.lean",
+    "formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Oscillation.lean",
+    "formalization/FunctionalInequalities/Analysis/Matrix/Trace/README.md",
+    "formalization/FunctionalInequalities/Analysis/Sard/Equidimensional.lean",
+    "formalization/FunctionalInequalities/Analysis/Semigroup/AdjointComp.lean",
+    "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Basic.lean",
+    "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+    "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Approximation.lean",
+    "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+    "formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/ExponentObstruction.lean",
+    "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean",
+    "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Comparison.lean",
+    "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Density.lean",
+    "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Recovery.lean",
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Basic.lean",
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/NormalDirection.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Bound.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Energy/Conjugation.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CumulantGenerator.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Base.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Basic.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Boundary.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Step.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/ToCumulant.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Bound.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Generator.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Integral.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/Energy/Regularity.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Localization/NoiseBound.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/README.md",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVConstant.lean",
+    "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
+    "formalization/FunctionalInequalities/KLS/Klartag/PowerSupersolution.lean",
+    "formalization/FunctionalInequalities/KLS/Letwin/HessianTrace.lean",
+    "formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean",
+    "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Line/Isoperimetry.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/WeakBrascampLieb.lean",
+    "formalization/FunctionalInequalities/KLS/README.md",
+    "formalization/FunctionalInequalities/Poincare/Foundation.lean",
+    "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+    "formalization/FunctionalInequalities/Poincare/LocalSlope/Gradient.lean",
+    "formalization/FunctionalInequalities/Poincare/Product/Admissible.lean",
+    "formalization/FunctionalInequalities/Poincare/README.md",
+    "formalization/FunctionalInequalities/Probability/Covariance/Factorization.lean",
+    "formalization/FunctionalInequalities/Probability/Covariance/Intrinsic.lean",
+    "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Coercivity.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Compactness.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/EssentialUniqueness.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean",
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Normalization.lean",
+    "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+    "formalization/FunctionalInequalities/Probability/Transport.lean",
+    "formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean",
+    "formalization/MODULES.md",
+    "research/a-series/ledger.yaml",
+    "research/a-series/statement-snapshot/golden.json",
+    "research/audits/BKL/ConvexSupportAudit.lean",
+    "research/audits/BKL/CumulantEnvelopeAudit.lean",
+    "research/audits/BKL/CutoffEnergyAudit.lean",
+    "research/audits/BKL/GroupingSupportAudit.lean",
+    "research/audits/BKL/IndependentTargets/config.json",
+    "research/audits/BKL/IndependentTargets/golden.json",
+    "research/audits/BKL/IsotropicReductionAudit.lean",
+    "research/audits/BKL/LetwinCompactApproximationAudit.lean",
+    "research/audits/BKL/LetwinHessianTraceAudit.lean",
+    "research/audits/BKL/LetwinMongeAmpereTraceAudit.lean",
+    "research/audits/BKL/WeakHessianIdentificationAudit.lean",
+    "research/audits/BKL/WeakHessianRegularityAudit.lean",
+    "research/audits/BKL/WeakHessianSymmetryAudit.lean",
+    "research/audits/BakryEmery/BochnerAudit.lean",
+    "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+    "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+    "research/audits/CEK/EllipticityAudit.lean",
+    "research/audits/CEK/PointControlAudit.lean",
+    "research/audits/Cheeger/BuserRouteStatements.lean",
+    "research/audits/Cheeger/EqualityAudit.lean",
+    "research/audits/Cheeger/InequalityAudit.lean",
+    "research/audits/Cheeger/InequalityRouteStatements.lean",
+    "research/audits/Elliptic/BarrierValues.lean",
+    "research/audits/Elliptic/EllipticBarrier.lean",
+    "research/audits/Elliptic/Linearized.lean",
+    "research/audits/Elliptic/Nonsymmetric.lean",
+    "research/audits/Elliptic/OperatorLinearity.lean",
+    "research/audits/Energy/SlopeComparisonAudit.lean",
+    "research/audits/Energy/SlopeDensityAudit.lean",
+    "research/audits/Energy/SlopeRecoveryAudit.lean",
+    "research/audits/Energy/SlopeRouteStatements.lean",
+    "research/audits/Graph/JacobianAudit.lean",
+    "research/audits/Letwin/LocalReference.lean",
+    "research/audits/Line/BuserAudit.lean",
+    "research/audits/Poincare/KlartagLiteratureAudit.lean",
+    "research/audits/Poincare/KlartagLiteratureRouteStatements.lean",
+    "research/audits/README.md",
+    "research/audits/Sard/EquidimensionalAudit.lean",
+    "research/audits/Sard/SharpAudit.lean",
+    "research/audits/Sard/SharpRouteStatements.lean",
+    "research/audits/Semigroup/ExpMeanValueAudit.lean",
+    "research/audits/Semigroup/ExponentialContractionAudit.lean",
+    "research/audits/Semigroup/ExponentialLimitAudit.lean",
+    "research/audits/Semigroup/FormAudit.lean",
+    "research/audits/Semigroup/GeneratedRouteStatements.lean",
+    "research/audits/Semigroup/GenerationRouteStatements.lean",
+    "research/audits/Semigroup/GeneratorAudit.lean",
+    "research/audits/Semigroup/LawsAudit.lean",
+    "research/audits/Semigroup/ResolventLimitAudit.lean",
+    "research/audits/Semigroup/VonNeumannAudit.lean",
+    "research/audits/Semigroup/VonNeumannRouteStatements.lean",
+    "research/audits/Semigroup/YosidaFamilyAudit.lean",
+    "research/audits/Semigroup/YosidaLimitAudit.lean",
+    "research/audits/Semigroup/YosidaLimitRouteStatements.lean",
+    "research/audits/SourceLayout/CompactPairing.lean",
+    "research/audits/SourceLayout/CrossFileContracts.lean",
+    "research/audits/SourceLayout/CrossFilePrivateMergers.lean",
+    "research/audits/SourceLayout/HessianCoordinates.lean",
+    "research/audits/SourceLayout/StatementMergers.lean",
+    "research/audits/Vector/CoareaGraphJacobianAudit.lean",
+    "research/audits/Vector/ExponentObstructionAudit.lean",
+    "research/audits/Vector/GraphAreaAudit.lean",
+    "research/audits/Vector/LipschitzCoareaAudit.lean",
+    "research/audits/Vector/LipschitzCoareaRouteStatements.lean",
+    "research/audits/Vector/LocallyLipschitzCoareaAudit.lean",
+    "research/audits/Vector/LocallyLipschitzCoareaRouteStatements.lean",
+    "research/audits/Vector/NormDetContinuityAudit.lean",
+    "research/audits/Vector/RankDeficientCoareaAudit.lean",
+    "research/audits/Vector/RankDeficientRouteStatements.lean",
+    "research/audits/Vector/RankStratificationAudit.lean",
+    "research/audits/Vector/RegularFibreFiniteAudit.lean",
+    "research/audits/Vector/RightInverseBoundAudit.lean",
+    "research/audits/Vector/StratumSlicingAudit.lean",
+    "research/audits/Vector/StratumSlicingRouteStatements.lean",
+    "research/audits/Vector/TangentialLipschitzAudit.lean",
+    "research/audits/Vector/TargetSplitFubiniAudit.lean",
+    "research/naming.md",
+    "research/progress/PROOF-PATH.md",
+    "research/progress/infrastructure-review.md",
+    "research/progress/letwin-smooth-route.json",
+    "research/progress/literature.json",
+    "research/progress/nodes.json",
+    "research/progress/source-layout-review.md",
+    "research/progress/statement-review.md",
+    "research/tasks.json",
+    "research/workflow.md",
+    "solutions/LemBklCutoffEnergy.lean",
+    "solutions/README.md",
+    "solutions/ThmBklCumulantBound.lean"
+  ],
+  "files_created": [
+    "research/progress/2026-10-29-layout-map.json",
+    "research/a-series/statement-snapshot/2026-10-29-module-paths.md",
+    "research/audits/BKL/IndependentTargets/2026-10-29-module-paths.md"
+  ],
+  "generated_views_pending": [
+    "research/progress/README.md (generated blocks)",
+    "research/progress/STATUS.md",
+    "research/progress/TREE.mmd",
+    "research/progress/LITERATURE.md",
+    "research/progress/LITERATURE.mmd and PAPERS.mmd if affected; regenerate with research/progress/update.py from staged nodes.json/literature.json"
+  ],
+  "historical_unchanged": [
+    "research/progress/2026-10-28-moment-map-cleanup-map.json",
+    "research/progress/completed-chain-organization-map.json",
+    "research/progress/consolidated-proof-organization-map.json",
+    "research/progress/cover-coordinate-gaussian-map.json",
+    "research/progress/cross-file-private-merge-map.json",
+    "research/progress/cross-file-private-reuse-merge-map.json",
+    "research/progress/foundation-organization-map.json",
+    "research/progress/mathematical-organization-map.json",
+    "research/progress/norm-gaussian-wave-map.json",
+    "research/progress/private-promotion-merge-map.json",
+    "research/progress/public-statement-merge-map.json",
+    "research/progress/sard-organization-map.json",
+    "research/progress/source-layout-map.json",
+    "research/progress/temperate-private-merge-map.json",
+    "research/a-series/statement-snapshot/{REVIEW.md,2026-10-19-module-ownership.md}",
+    "research/audits/BKL/IndependentTargets/{REVIEW.md,2026-10-19-module-ownership.md}",
+    "HANDOFF.md (owner rule; it names no moved path)",
+    "build/history/**"
+  ],
+  "deviations": [
+    "Files were moved with plain mv (owner rule), not git mv; the index still lists the old paths until the controller stages the moves.",
+    "Generated progress views were not regenerated (update.py is the controller step); formalization/MODULES.md and formalization/API.md were regenerated with module_inventory.py and api_index.py.",
+    "Statement goldens: the 12 module fields per golden were rewritten and each golden now names a new decision record 2026-10-29-module-paths.md (2026-10-19 precedent); BKL/IndependentTargets/config.json review points to it.",
+    "References the survey did not list were also rewritten: relative Markdown links and labels (KLS/BKL/README.md incl. the CumulantEnergy/ directory link, KLS/README.md, Poincare/README.md, Analysis/Matrix/Trace/README.md), the bare CumulantInduction.lean in KLS/BKL/Cumulant/Bound.lean, the private-name string in research/audits/SourceLayout/CrossFilePrivateMergers.lean, research/progress/PROOF-PATH.md, research/progress/statement-review.md and solutions/README.md.",
+    "The brace path Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces,VectorCoarea}.lean in research/audits/Vector/LipschitzCoareaAudit.lean was split into Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces}.lean and Analysis/Vector/Coarea/Lipschitz.lean.",
+    "The batch timing of final-map.json (B2-B4, B6-B8, B10 and A2 after the lanes) was not waited for; dirty lane files were edited on top of the dirty baseline.",
+    "research/audits/README.md: besides the per-family rows, the existing Klartag/, Elliptic/, SourceLayout/, StochasticCalculus/ and KLS/ directories were added; research/naming.md records the audit-family rule (optional survey item).",
+    "Optional declaration step (b) skipped; see declaration_migrations."
+  ],
+  "evidence_pins": {
+    "file": "research/tasks.json",
+    "path_fields_rewritten": {
+      "audit": 112,
+      "library": 27
+    },
+    "rule": "a pin was refreshed only when it equalled the sha256 of the saved pre-edit copy (build/history/2026-10-29-layout-migration/before/); only path and sha256 values changed",
+    "refreshed": [
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+        "old_sha256": "48f6cf67d0842153e083da0a2ee8db784e2ab73b734df82becbe752a3f9b95a9",
+        "new_sha256": "b77867edc0fc047127bd97902dcf325d1f268658d7aae0162af9c6bcb148c6fa",
+        "pins": 15
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "old_sha256": "5b8d4fc5c4c616776f77fc1ed7e44a55dc624e5a974287233795460cddf00212",
+        "new_sha256": "b254804eca143ce06209ee0c28ad041a5bdfb2c97dfe13cbb10234821e271a8a",
+        "pins": 9
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+        "old_sha256": "7df9d1778da783d68b6650c39e60200a3c3626d91503a6deed544104c990d7f5",
+        "new_sha256": "de4b4bc5f1e87abc06ec185eca3d1de84c0b8204bf6f1ffa8f39e027e3db5880",
+        "pins": 4
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+        "old_sha256": "f193df2ccd8571eed8ccdb40574b6f11d2c506e1d861fa9d7ed7e9cb81ea8f89",
+        "new_sha256": "9f8ae9d62ad8a5d9463bd30097e79e3d1525478f3cc50390b400b07842c83e13",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Sard/Equidimensional.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Sard/Equidimensional.lean",
+        "old_sha256": "02a033884d6a0aa494e5e466007c1964240bde37e27c80011037da0de2819c22",
+        "new_sha256": "a4530fcfae576b56dd9ea1ffd9c403fb632935c1b4e10abb5208aca69e63f976",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/AdjointComp.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/AdjointComp.lean",
+        "old_sha256": "9a37bdf8634aebec883a912b9119bd9ff0ef6cf1a6d47d0b5d7f829fcbd301c8",
+        "new_sha256": "735ca3dd238e434833201074e929990f58e74e55a7fca27c346680e8ea9b4fa8",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+        "old_sha256": "b786bc340529d402ab3ef352d3913d05a1a03b74d88d8db6b704bf8b45852d4a",
+        "new_sha256": "274aef985e8b04d4340b4b786342263fbc265d60096d659943e94c3bf5b310e4",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Basic.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Basic.lean",
+        "old_sha256": "ca9339e7765c07f3f532f9500be726387e92e23e28566ff93db384eab133a16b",
+        "new_sha256": "5b7039c1a059f6fa5529e80aae1b0c3a9489fb457cc89896a43ea962f67ef071",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+        "old_sha256": "e924f8ce362564802e0239fc7252d238e20a5e399c2bdc0ded45838e386099fc",
+        "new_sha256": "cfee5f1cd9e1d40ecef9f1b271576c43c13303da12c8d8263d5dff0de60e32a0",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Approximation.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Approximation.lean",
+        "old_sha256": "b8ae7966169f91ff234d1597f080bc88e16344e96cb217f7a3ac570ba0c9584a",
+        "new_sha256": "57345b07b4782dffbbf853bb6cd9bf983e1623bd3b256c8a1cf477e894120494",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+        "old_sha256": "a7578112ea022861ff18583ffabd2185af77bb16a1948093cbddf0d95df42be0",
+        "new_sha256": "53a37cd472a3a014776cce4eb17d940b2f61576b8f8e91940b5fce34b3fda194",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/ExponentObstruction.lean",
+        "old_path": "formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/ExponentObstruction.lean",
+        "old_sha256": "9b642beef51326ba06bcf1a83951b28b1a2b3ff23e532eee23f647edb3555be2",
+        "new_sha256": "0d911f50d8ba60cfe9705cbaecb52e5e0d008c979388e2949bf094a62f88274d",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean",
+        "old_path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean",
+        "old_sha256": "ad32fc2f304a5e9fd35bd09a3f30d7a5fefdc22723ce19a165b244863e6dfacb",
+        "new_sha256": "15497b742853983eed6d28ec04e0aad309266099ddcb74608f882bf17bae2180",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Comparison.lean",
+        "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Comparison.lean",
+        "old_sha256": "d2173a19df57c2901f043db16253c51419f68611390072b58f0a2f71207ca91f",
+        "new_sha256": "632ce5675efd9cc5b40fa8f5e221d78163bff274b5ccb0885c082103ce6f02b0",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Density.lean",
+        "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Density.lean",
+        "old_sha256": "1ac33dd4990727a5732fb7fec61b3bedf690624bd35f1d5d9e1ab50e2e51f850",
+        "new_sha256": "6030ca6f6cc32d2c4359225f2580a72b67414879e2696b0174d0c7599eb8b6b8",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Recovery.lean",
+        "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Recovery.lean",
+        "old_sha256": "23370c4b82d377bc6d47d06d793afc2441fb80a2c578b1a5d122e3a469908654",
+        "new_sha256": "c85fd9d74f191f28038ba0c09cba079c050b64fc094057b953e4b90847acf7dc",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Basic.lean",
+        "old_path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Basic.lean",
+        "old_sha256": "1cd5dcf6759219b43f3f5c573b44b159173eff6ee34ce43e1d226009feab3699",
+        "new_sha256": "b38ae51e136458661061f6fb44baadb5335dfe387129066bafcd8f9c9f5efd22",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/NormalDirection.lean",
+        "old_path": "formalization/FunctionalInequalities/Energy/SmoothGradient/NormalDirection.lean",
+        "old_sha256": "cb7d002ef5b3e78d3ff8ba76bdccb7c4928318c8781556d73046122b41a9f467",
+        "new_sha256": "3f70f9dee5fcdd07580c755f78d7a6885ee0ac995affc14c5a9db97ffef69477",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean",
+        "old_sha256": "72d8d32fc6a7b524b4bbd97a388865ef4568a53edacea100ea3a4ce5e4d7612d",
+        "new_sha256": "1c06c27554237c21e6649e597853d3fef06510c984de04836d75b6966574798c",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+        "old_sha256": "d5086755ba3e31a42875bb083bfd180c883815cf12658fc3112b4e1805677c7f",
+        "new_sha256": "570fba959aef1d1ea485dc2c1c5fe6ea91ff2d54539bc6d8fc864d1fe642e235",
+        "pins": 10
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+        "old_sha256": "27d01d5de5de6740ea54c80b98c1a1e20aebfe18da85f46ae91a816080fc6b68",
+        "new_sha256": "a87057281fe6de6cd583480bc1782fe9315ada8734f8645a2ada665c1a573c21",
+        "pins": 10
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+        "old_sha256": "c898ac976535919e63f9bf10c5d566e2758e78baaaf6b7f54c45ea376fa7f2f4",
+        "new_sha256": "18a9f3bf3295b513f7110cb7c032a145daea85b06c23105177b8df25a98fbe72",
+        "pins": 10
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "old_sha256": "f57d390765798ac90b575be1f3434cbdafbd5711b9ed1fd3d2d1b8563a4d2b68",
+        "new_sha256": "11d748f29c15b9a576e27ce7bf834d90a2c166a3416c7be4a9b7d5fcdec1ee72",
+        "pins": 10
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+        "old_sha256": "a00f4e3cfe5de1305ee49c19f6670d60e39516029284641bad516408142f73ad",
+        "new_sha256": "77a1a219325081c82b02d9825e2c1ca74b37b2584e94eb4ea566e8180b39ba91",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
+        "old_sha256": "db185cf4fe869347881fff739e0dd0808a6ad7dd8a160c28b5aa0b74bc4e4248",
+        "new_sha256": "b72d28102a8d05bd54fcf90482fa74df97d2a74fda981e0944e4fd4124a3b535",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+        "old_sha256": "4359ead9ace60a89d453c728d4b6c90399945dee6a39492176dbcc654e5aafee",
+        "new_sha256": "bc15e46dc6db5831ab28ee90e02f52114cd222330dbb27d751a24fbb01ef00d6",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+        "old_sha256": "3744e07414a694608558c56ef80b5acb20e63c16e70690c131e0d3e83781420d",
+        "new_sha256": "64a3e786d5f410342dafbe797843a08764f1790632689d24217da4b0d47b1be2",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+        "old_sha256": "4a0a12813b330cdb41cf3cf5eececfb3914cfbf72d7625de278944b77d769869",
+        "new_sha256": "6893138bc48f76999d223dcea84f3033cc62df5c85dfeab4929071860f6a2ec5",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+        "old_sha256": "315bf4be017071d0a75b924d882bfa12914b2162631dc90d367b3eaf47ca0c57",
+        "new_sha256": "cd732612ba5fae30a6929d7e1fd488164c44d7a5fbe2e131169e1d8825ad6ca3",
+        "pins": 3
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "old_sha256": "d671321c4e62ea64ff15d7a270491203fb0ef9b788ce8f1463087d5de6c473f1",
+        "new_sha256": "439144bf2717e9995cfa5520f8fea2b4191757cdbec53dc38505387e5f815b61",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+        "old_sha256": "9c77a488d4a0a4e8ec74b77293e7efe61458cb4dc6785699ddbc779c74811417",
+        "new_sha256": "97effe876b90fca067fc307e28a106682a71c5760994992af479851528702a77",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+        "old_sha256": "b5ff8e41c2b73c90db6db681597cf8379a478062bcba4a9068afdf6982cdff9f",
+        "new_sha256": "f73aed46ef82dc7df0693d8e5549e40124fae069f29425475ce2df56374cf283",
+        "pins": 7
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeakBrascampLieb.lean",
+        "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/WeakBrascampLieb.lean",
+        "old_sha256": "831312db566c95e0534fcd065268ec0c04f6ce561f99a1cdd97500c95a8cd20d",
+        "new_sha256": "5c98c0639ff210d8f394f91c546bc81ecd826ea3ccf1ad690c17c520405fd456",
+        "pins": 1
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/Covariance/Factorization.lean",
+        "old_path": "formalization/FunctionalInequalities/Probability/Covariance/Factorization.lean",
+        "old_sha256": "88cf12a730dc507c9a5cc2e1e005591b1c1367412a803e6c67d17f61c51f7c5d",
+        "new_sha256": "2354cb7745e95c9a000e1f587506e04abc78b6a5e83f0e7f2fbdb7939f38a284",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/Covariance/Intrinsic.lean",
+        "old_path": "formalization/FunctionalInequalities/Probability/Covariance/Intrinsic.lean",
+        "old_sha256": "a59a898b099c39fd466499547d1f8586227b646adcc19c89da49a9a2b8076aca",
+        "new_sha256": "5b151150b75f46a39751196036aa121e7295dc9f8d2ca438390d49270d3f6d3c",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+        "old_path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+        "old_sha256": "e80bf0be1e0d5b03fb31b2293bf8f305c55448a3abb181ed403ec52d454a3c7e",
+        "new_sha256": "cb00c01023313bd5d88d4e005a4bca7802a34b6fc1441d5e890ddde7af1d699a",
+        "pins": 2
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "old_path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "old_sha256": "be8e07ae6023d03c2898f038b16484a4bc81665eabf634fb6730e2de29a44e56",
+        "new_sha256": "17abf11dca750f83ca3c6b401446e48590c369db657dc6fc6c493c75e7377f73",
+        "pins": 6
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
+        "old_path": "formalization/FunctionalInequalities/Probability/Transport.lean",
+        "old_sha256": "b822c0990df6601ae64b80ea8811c088754c8bd643c07642709943eb096a74e0",
+        "new_sha256": "b0a1919acc61549164d8e29ce76ea220c83dda4c8607f76daaef6260a2fec540",
+        "pins": 5
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean",
+        "old_path": "formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+        "old_sha256": "1398ea08886c54d1925bbfc156c667c4908599cac8c6836a182939193e2449fd",
+        "new_sha256": "c1d7401f7c9b676ed271f53a59c78938890b3121511742519f3b2cc8067461f3",
+        "pins": 3
+      },
+      {
+        "path": "research/audits/BakryEmery/BochnerAudit.lean",
+        "old_path": "research/audits/BakryEmeryBochnerAudit.lean",
+        "old_sha256": "57c2483a38e20cdfb95a07317124a91ca040cafe6809fb4122decb44811abbd0",
+        "new_sha256": "416579ce562ef4a1d27c1e2fd1263f9756635676a5c99adea620de3500057b88",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+        "old_path": "research/audits/BakryEmeryGeneratorAudit.lean",
+        "old_sha256": "72cb89ea16a35bfa05e94963af1ad44cb21219d9b38bce3f8d511801f828422c",
+        "new_sha256": "4fa2daafa2d12e9b8bc00149262d78ae475296e4662d653a3e0138036ca7dc3a",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+        "old_path": "research/audits/BakryEmeryRouteStatements.lean",
+        "old_sha256": "4970f1a8c7756f6144507b114b444cfd64455c153adea5558f5516d1e8c9178d",
+        "new_sha256": "a318e394c6140ec438d0c7b7a78d911026f1d9cdbdd9f29acce517a10f697dd9",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Cheeger/EqualityAudit.lean",
+        "old_path": "research/audits/CheegerEqualityAudit.lean",
+        "old_sha256": "d53c1f357c2edafb5906fd1bc6f8086124317e171ff5a7c06e1cf24db9dbc556",
+        "new_sha256": "5b83cb6048ad21d198c73f9a04f3bc69cccd2dd69c4dc3380506da03b3a98d00",
+        "pins": 2
+      },
+      {
+        "path": "research/audits/Cheeger/InequalityAudit.lean",
+        "old_path": "research/audits/CheegerInequalityAudit.lean",
+        "old_sha256": "bfe377dc8ca2c1adbccf7ea15781eb11d632f1b24d1c3b82d55bdc997b2baccc",
+        "new_sha256": "e795943210ae692fa732b3a83a78c17860bc9a29ffe6732a988a45100b8ab30a",
+        "pins": 2
+      },
+      {
+        "path": "research/audits/Cheeger/InequalityRouteStatements.lean",
+        "old_path": "research/audits/CheegerInequalityRouteStatements.lean",
+        "old_sha256": "e1f3fa5523d40001b2853e64fac752454a5bca7189b289d3bb2933d32fc9f29c",
+        "new_sha256": "e8a62808ff0af8288e2345fe10a391ea6df5b68d073192f85df14284568deb35",
+        "pins": 2
+      },
+      {
+        "path": "research/audits/Energy/SlopeComparisonAudit.lean",
+        "old_path": "research/audits/EnergySlopeComparisonAudit.lean",
+        "old_sha256": "e7f102baf82ac2206d41db82e60c9324f9ef97f58ac8f3bb79362d7c7f1549e9",
+        "new_sha256": "eedf42a0fe950d2a576053643edb43f18adb026f012a2c06a072cdcb9d8894d5",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Energy/SlopeDensityAudit.lean",
+        "old_path": "research/audits/EnergySlopeDensityAudit.lean",
+        "old_sha256": "83fc09ea366cc223a635e459002da093d3fde56895beabea342d3b27d7cc03e2",
+        "new_sha256": "976df267b212cde56b25f9d6076920022f4d5ef084c7b217070f2d9cf7dd9ab1",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Energy/SlopeRecoveryAudit.lean",
+        "old_path": "research/audits/EnergySlopeRecoveryAudit.lean",
+        "old_sha256": "017cb3f9c4495593f7c41cf8a680bc0ebdeb00f074c4defc7f86d86d96d2b78d",
+        "new_sha256": "4a028bfb9ed5f2521e05ac15580844a06aad52c32100f96bc343cf82e22fd2e1",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Energy/SlopeRouteStatements.lean",
+        "old_path": "research/audits/EnergySlopeRouteStatements.lean",
+        "old_sha256": "f35749626e4bcafd06f6fec08929095970479e3da2270e898c5233e1091c7fac",
+        "new_sha256": "0ecc6f8ea566b5a768f0f93363076a807ae201840fe1284bc0b0a6dc4cc6a961",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Graph/JacobianAudit.lean",
+        "old_path": "research/audits/GraphJacobianAudit.lean",
+        "old_sha256": "69ad83064985ea50e7d8d755f71d8ce1d12e6db0ca598573f92d290274321070",
+        "new_sha256": "82d11bd4510b53ed3b0ee2fd4c90326ac552ca66f05d5e5681cb4679c7523f78",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Sard/EquidimensionalAudit.lean",
+        "old_path": "research/audits/EquidimensionalSardAudit.lean",
+        "old_sha256": "f82c6a1069a8488e6f229be41c05e83ec7c63318d633f717d2b681c2548782ac",
+        "new_sha256": "e2fc52ec81cd6a3f0bd48b1073523f9d4c48eb909161a27fed11825880b252ef",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Sard/SharpAudit.lean",
+        "old_path": "research/audits/SharpSardAudit.lean",
+        "old_sha256": "93c01dd7cb39acea4ace7f7d5df9442b1d0d6cc6a848e8057b89184fec773087",
+        "new_sha256": "02f45170674b76347d59ea860216fcbdfe0037b71d72b7198fa358e768f9e83c",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Sard/SharpRouteStatements.lean",
+        "old_path": "research/audits/SharpSardRouteStatements.lean",
+        "old_sha256": "6b9b2e9d9d738dea3b8f0ea30bce67636ec549a4591f98520ec0f9ac9051ecb5",
+        "new_sha256": "5e483f48d69effa478c862dbe88a23202034ea3632ff857e23271b89cebbf9fa",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/ExpMeanValueAudit.lean",
+        "old_path": "research/audits/ExpMeanValueAudit.lean",
+        "old_sha256": "68edd14bc275884b5e90d98271f9df30ae644c18294a174f4672aa2b8360d9f6",
+        "new_sha256": "2d4fe92bb0de48806069310708407488207902ba8d44f8daa409999a4230c5a6",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/ExponentialContractionAudit.lean",
+        "old_path": "research/audits/SemigroupYosidaAudit.lean",
+        "old_sha256": "e2acb065a3a71c1e71807af9ee81f0dd4c4b231ec82fe0e1c3307335a8af7f76",
+        "new_sha256": "c6f9ca7356877795c9f57718bfe0cba435e1fc6ca6fb6ec775b63c85c2c0156e",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/ExponentialLimitAudit.lean",
+        "old_path": "research/audits/SemigroupLimitAudit.lean",
+        "old_sha256": "61133d59395b32456f5de46481ed89f301ee749b5413b37426802acb93d37a60",
+        "new_sha256": "1eec7b219807861a9fea746b4357265b0e2e9829e59ba9b344db490448001da7",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/FormAudit.lean",
+        "old_path": "research/audits/SemigroupFormAudit.lean",
+        "old_sha256": "8bc04b4f31683d30206b72406eca4ee8596b4aacc67b4b84f7aca4e09cb56438",
+        "new_sha256": "ee958c75d0c9bfe299bf36b2b5d3563acb5d2390ff26385d70118e191e1aeb73",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/GeneratedRouteStatements.lean",
+        "old_path": "research/audits/GeneratedSemigroupRouteStatements.lean",
+        "old_sha256": "22abb14578cc2a35900e2cc094592a4751b4df3f6ce8430ec75cd297ed0cced6",
+        "new_sha256": "901cd022cae90609ff927350ee023cf0892b3df0d285b6d9af1770eae1138766",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/GenerationRouteStatements.lean",
+        "old_path": "research/audits/SemigroupGenerationRouteStatements.lean",
+        "old_sha256": "3c1cad7acc301e01805f0d726e58a203cd05bb88008cd62148bb4576a6aeb723",
+        "new_sha256": "01f5aefe9734de6c4f466bd69db4e2e6824a3813119823e67c88320b71376a71",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/GeneratorAudit.lean",
+        "old_path": "research/audits/GeneratorAudit.lean",
+        "old_sha256": "d64cb886087b05b927b14df7124fa34fc2537f970285caa1dc4abf2a592eb5c7",
+        "new_sha256": "f17ad6217ce59b9c8c208bf83391a4175ec68a0497788c8511ca098dbf6da6b6",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/LawsAudit.lean",
+        "old_path": "research/audits/SemigroupLawsAudit.lean",
+        "old_sha256": "88a130a47830d59e79e07bd62fae210262522e37f0888f3da0eb7afaeadf53d9",
+        "new_sha256": "4276873c49e0c4a14e1afc9ed55956ef9524c9beae1aee472555c21d90ea1fd0",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/ResolventLimitAudit.lean",
+        "old_path": "research/audits/ResolventLimitAudit.lean",
+        "old_sha256": "d26bfde6c8f42f53f72f517f3e8efd16d23f34be1ff4fd3eb88fc88ced3d8ad1",
+        "new_sha256": "91b65e20c21cf63deda45f54631f76add341bcad2c0528d7e3ca7f3b3a41507d",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/VonNeumannAudit.lean",
+        "old_path": "research/audits/VonNeumannAudit.lean",
+        "old_sha256": "2b606f7436575e8fc39ab557d21dd354e89b3b021ec9c266388451e8be43ce77",
+        "new_sha256": "cfa647ad83a1c00bdccd217ff943288ab9d718a85963c13f4ec0f019f89e6f25",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/VonNeumannRouteStatements.lean",
+        "old_path": "research/audits/VonNeumannRouteStatements.lean",
+        "old_sha256": "279dfdd34c2c675a12fd6418094813046cb5ecedeba2161fc99494aac7e06a30",
+        "new_sha256": "694d8b6ef68cbc819468ca55e6ace3ec90345b468a01e11b039fd2db83ab04fb",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/YosidaFamilyAudit.lean",
+        "old_path": "research/audits/YosidaFamilyAudit.lean",
+        "old_sha256": "de23ecb981e3e2576312c91012d00045093e3906e21fa3355a6f5286a2a258e6",
+        "new_sha256": "552a31a414e773f90a0406ca55a51382676dc297b00e45b75d1d966476ef2f93",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/YosidaLimitAudit.lean",
+        "old_path": "research/audits/YosidaLimitAudit.lean",
+        "old_sha256": "404ff9cc570f41a3065b8b5a94398680156f9f9d7cffa00ae1ba20f54a2fdb2d",
+        "new_sha256": "91413ca4a598606662ee631d3673e5756d100ecc9c88590706337ed5f5acb46f",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Semigroup/YosidaLimitRouteStatements.lean",
+        "old_path": "research/audits/YosidaLimitRouteStatements.lean",
+        "old_sha256": "b43fdef489d62aae90b3efef9ebf9bebb0ee87217e5b43f553ee169ebead8d9d",
+        "new_sha256": "6985481daf657448bc543eefd3310628d8539771c2ca867b9b471e6c6c969fed",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/CoareaGraphJacobianAudit.lean",
+        "old_path": "research/audits/CoareaGraphJacobianAudit.lean",
+        "old_sha256": "a094f5fca90ca4d802cf8c1dc1f1b65d417e693881c7349a42faa886694d4b4e",
+        "new_sha256": "6be66c58a7383f7e3661d9b0fc871c61ae91bf318cc980e3c2387f9b225dd19a",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/ExponentObstructionAudit.lean",
+        "old_path": "research/audits/ExponentObstructionAudit.lean",
+        "old_sha256": "7d5d682bffbac05b7b3726c47ebc2e6849414a2cf5884c1b6b12adf14bab4a60",
+        "new_sha256": "c6487c24e1a1c8bc9cc30ecc0fc929924a6cc2f72d1e3fa28faff921bfc0ed11",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/GraphAreaAudit.lean",
+        "old_path": "research/audits/VectorGraphAreaAudit.lean",
+        "old_sha256": "3e8324aaa56227318467cf4c17585bf9e52af4d63bcfcdb1053fbfa68ee7a9e1",
+        "new_sha256": "c0840111626016f187bfccdb09f617ec9a3cdf4e90c15733b1483c4280341596",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/LipschitzCoareaAudit.lean",
+        "old_path": "research/audits/LipschitzVectorCoareaAudit.lean",
+        "old_sha256": "cfc3c1907b07cfac2d4a3fae91f417ee115cf5ff399f12c7e596fbdebe4ad0b6",
+        "new_sha256": "b9bfe77e48b2e95e9d1d89f5615476f06075552edab1dd2170edff85eb3d9eb6",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/LipschitzCoareaRouteStatements.lean",
+        "old_path": "research/audits/LipschitzVectorCoareaRouteStatements.lean",
+        "old_sha256": "3a011490d434960456bc29cb2901d160d72b2e7b7dd1bad369d3633534af3963",
+        "new_sha256": "5c21faffcc49070de4a981e8df2da2488cc4b0066369fa73a489ae9ddc1c4aaa",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/LocallyLipschitzCoareaAudit.lean",
+        "old_path": "research/audits/LocallyLipschitzVectorCoareaAudit.lean",
+        "old_sha256": "7b95e129a1d7b3d61aa3828f38b5f8c84c622f1a3a1c1c186bceee0ccfedd334",
+        "new_sha256": "83f2b26f455afbd2b8164845c607db674e4db624038e9a153c2afa6944b51c39",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/LocallyLipschitzCoareaRouteStatements.lean",
+        "old_path": "research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean",
+        "old_sha256": "272943c1a27ec1371c65b2f2419f22f379c15fb6ae0468a97c32eb99770ebaa5",
+        "new_sha256": "83a346884c544ab82966713f54c7f85b1af2346f88a333400ccda2a8c8708017",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/NormDetContinuityAudit.lean",
+        "old_path": "research/audits/NormDetContinuityAudit.lean",
+        "old_sha256": "23c3747fe67c655e4888eb27fc0e0faf5e4f550302cfb1282d5fa4aa3f9c296a",
+        "new_sha256": "a8793e97f4ff789adab827da49ce3f61513723b4b009a4b6b13c4fbec28c429f",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/RankDeficientCoareaAudit.lean",
+        "old_path": "research/audits/RankDeficientCoareaAudit.lean",
+        "old_sha256": "d93d919d7a5847ac36b455d005601249a1c3c56ca3ee23b341021f9ad7c2aad9",
+        "new_sha256": "35eecaecc8c03a838d817fff3c25282c256f6057c209750bf117b3bf9eb13316",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/RankDeficientRouteStatements.lean",
+        "old_path": "research/audits/RankDeficientRouteStatements.lean",
+        "old_sha256": "2873c52c506f3cd5e2de37887b7fad5f537eea89340a9c0c844a9fb6c7e95cfe",
+        "new_sha256": "d4cba3d4bb9608ab49a4c840f65b5b054393d3cfcab8adb954a20033e29a1d85",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/RankStratificationAudit.lean",
+        "old_path": "research/audits/RankStratificationAudit.lean",
+        "old_sha256": "7f0c8171775c3dcf528ce9ff9cf24fbb5820d7b260f4fa59acfcb8f8d931fe63",
+        "new_sha256": "12466438a998ed04b589fe1e2eb795a4d7f9e4e057e85ae4e33bc30339e61d23",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/RegularFibreFiniteAudit.lean",
+        "old_path": "research/audits/RegularFibreFiniteAudit.lean",
+        "old_sha256": "455ccc69ea03cbb58dce296e41ddbe2bcd5d0234b7a6dbd1d626633c73386578",
+        "new_sha256": "136a6a7ed210385e3e53bad92d6ea9548afd30f21f0997d64e7999aadde48108",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/RightInverseBoundAudit.lean",
+        "old_path": "research/audits/RightInverseBoundAudit.lean",
+        "old_sha256": "5e7f3132f6d82668539199c7d7e053bef5e2bea6a193c644799b259e977a87cb",
+        "new_sha256": "76b8fd9357942865a33971ce91292b6426452870333e06c3d169594d65aede84",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/StratumSlicingAudit.lean",
+        "old_path": "research/audits/StratumSlicingAudit.lean",
+        "old_sha256": "bb367505eaf783ea25dfcc04fe57d3b57d10cfa2f25d7efd8c39c35377da8aaa",
+        "new_sha256": "01c7598b7f5684b1ef0d0b2ae06eeb05ad2f1a50f3025e0eb4197d15c1f3f51a",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/StratumSlicingRouteStatements.lean",
+        "old_path": "research/audits/StratumSlicingRouteStatements.lean",
+        "old_sha256": "a7c551314e00bde8eadb7fdc585ac14c026aa1191fe64864d27263862e0675c1",
+        "new_sha256": "fef7b49aa8b57a010c445468296ba902657bb0b35a61a680151fa7a7fc726550",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/TangentialLipschitzAudit.lean",
+        "old_path": "research/audits/TangentialLipschitzAudit.lean",
+        "old_sha256": "8adb65d01ded9e61d181deadb8d1fcd41d21e94b498cd54de3f9ca18933370ba",
+        "new_sha256": "f996159b98b79a6f05d9f98990f5ad52efe90cb201c387d054ae60964ac87aa3",
+        "pins": 1
+      },
+      {
+        "path": "research/audits/Vector/TargetSplitFubiniAudit.lean",
+        "old_path": "research/audits/TargetSplitFubiniAudit.lean",
+        "old_sha256": "dd94ec825dd97fb6443d7805df9a944f63efcd0ad418c3d14f12d753bdb09290",
+        "new_sha256": "271683a4070a478087b6a007b1feb5882a0425dec211f554c7a52be594bfc616",
+        "pins": 1
+      },
+      {
+        "path": "research/naming.md",
+        "old_path": "research/naming.md",
+        "old_sha256": "74fb719dd597361413bc29f492d82b5c548813c3f81c70d6f3c5a85276217d00",
+        "new_sha256": "447b19a223282e9500b10671d45c81ff881ea469100086923dbb0a51e1d22751",
+        "pins": 1
+      },
+      {
+        "path": "research/progress/infrastructure-review.md",
+        "old_path": "research/progress/infrastructure-review.md",
+        "old_sha256": "c076d814d5bdaf953a944d431da923f215f2209c22f0297c237a0130ae51bc0d",
+        "new_sha256": "41c3862ee725c28d0935c3863eb9ee25646679ac1638cce6e97b9e6ff2b06c28",
+        "pins": 4
+      }
+    ],
+    "stale_before_migration_left_unchanged": [
+      {
+        "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+        "pin": "2f83b7a39de0dc606c70f806c84a6a9f195575cac5e48da15d777fa0e18c92a9",
+        "nodes": [
+          "lem:relative-perimeter-cheeger-infimum",
+          "lem:relative-perimeter-smoothing"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
+        "pin": "c5012095af240e570f5cab00eaef5e708b2d7ba8f34495fa3556ecf40998d4fc",
+        "nodes": [
+          "lem:relative-perimeter-cheeger-infimum",
+          "lem:relative-perimeter-smoothing",
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+        "pin": "be50f00d543de4cd4292e850cd87f4991bea7640662a08a0c7f42ed1990de795",
+        "nodes": [
+          "cor:conditional-fiber-twelve-bound",
+          "thm:affine-isotropic-reduction",
+          "thm:one-dimensional-logconcave-poincare"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
+        "pin": "ea21c4b8bfb7fccb8b54b99d729605fd49adcddb4e0eca2254c96e6278e3b230",
+        "nodes": [
+          "thm:logconcave-cheeger-poincare-comparison"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+        "pin": "42c2a87ac38cbcc3a7f765fbbec15f1774247bd682d643c0c60ef8c51d32135a",
+        "nodes": [
+          "thm:affine-isotropic-reduction",
+          "thm:klartag-density-frontend-identification",
+          "thm:one-dimensional-logconcave-poincare",
+          "thm:selected-literature-constant-equivalence"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+        "pin": "5d764d2856ffd8abce4fca447cc018d98e706bfb5c063c7d85fe300ea7943363",
+        "nodes": [
+          "lem:conditional-fiber-energy-comparison",
+          "lem:logconcave-intrinsic-absolute-continuity",
+          "thm:one-dimensional-logconcave-poincare",
+          "thm:selected-literature-constant-equivalence",
+          "thm:smooth-lipschitz-constant-equivalence"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Gradient.lean",
+        "pin": "220361ff49f97d1415c1056292549e7fe92d4a02d71cc978595ff9e7a5b4fcee",
+        "nodes": [
+          "thm:klartag-density-frontend-identification"
+        ]
+      },
+      {
+        "path": "formalization/FunctionalInequalities/Probability/BrunnMinkowski.lean",
+        "pin": "e7c27648a6c2dfa33a1a4406bb284c2679222d9747e3e918d7d27487f3fc3271",
+        "nodes": [
+          "lem:relative-perimeter-smoothing"
+        ]
+      }
+    ]
+  },
+  "validation_inputs": [
+    "research/audits/BKL/AffineRegularAudit.lean",
+    "research/audits/BKL/ApproximateEigenfunctionAudit.lean",
+    "research/audits/BKL/BasisChangeAudit.lean",
+    "research/audits/BKL/ConditioningAudit.lean",
+    "research/audits/BKL/ConvexHessianAudit.lean",
+    "research/audits/BKL/ConvexSupportAudit.lean",
+    "research/audits/BKL/CovarianceSupportAudit.lean",
+    "research/audits/BKL/CumulantBoundAudit.lean",
+    "research/audits/BKL/CumulantEnvelopeAudit.lean",
+    "research/audits/BKL/CutoffEnergyAudit.lean",
+    "research/audits/BKL/DyadicSummationAudit.lean",
+    "research/audits/BKL/FoundationsAudit.lean",
+    "research/audits/BKL/GaussianGrowthAudit.lean",
+    "research/audits/BKL/GaussianHessianAudit.lean",
+    "research/audits/BKL/GaussianMomentsAudit.lean",
+    "research/audits/BKL/GaussianPosteriorAudit.lean",
+    "research/audits/BKL/GaussianSteinAudit.lean",
+    "research/audits/BKL/GaussianTaylorAudit.lean",
+    "research/audits/BKL/GeneratorTiltAudit.lean",
+    "research/audits/BKL/GroupedCumulantAudit.lean",
+    "research/audits/BKL/GroupingSupportAudit.lean",
+    "research/audits/BKL/HessianIncrementAudit.lean",
+    "research/audits/BKL/HessianSteinAudit.lean",
+    "research/audits/BKL/IsotropicReductionAudit.lean",
+    "research/audits/BKL/IterateDefectAudit.lean",
+    "research/audits/BKL/IterateDomainAudit.lean",
+    "research/audits/BKL/IterateRouteStatements.lean",
+    "research/audits/BKL/IterateSymmetryAudit.lean",
+    "research/audits/BKL/IterateTaylorAudit.lean",
+    "research/audits/BKL/IterateTaylorRecursionAudit.lean",
+    "research/audits/BKL/IteratedLeibnizAudit.lean",
+    "research/audits/BKL/KlsAudit.lean",
+    "research/audits/BKL/LetwinA4SupportAudit.lean",
+    "research/audits/BKL/LetwinBoundedPrimalAudit.lean",
+    "research/audits/BKL/LetwinCenteredRangeAudit.lean",
+    "research/audits/BKL/LetwinCompactApproximationAudit.lean",
+    "research/audits/BKL/LetwinCompactBoundAudit.lean",
+    "research/audits/BKL/LetwinCutoffAudit.lean",
+    "research/audits/BKL/LetwinCutoffPrimitiveAudit.lean",
+    "research/audits/BKL/LetwinCutoffProfileAudit.lean",
+    "research/audits/BKL/LetwinEnergyDefectAudit.lean",
+    "research/audits/BKL/LetwinFiniteEnergyAudit.lean",
+    "research/audits/BKL/LetwinHessianTraceAudit.lean",
+    "research/audits/BKL/LetwinInverseHessianAudit.lean",
+    "research/audits/BKL/LetwinLegendreVariationAudit.lean",
+    "research/audits/BKL/LetwinMongeAmpereTraceAudit.lean",
+    "research/audits/BKL/LetwinOperatorContinuityAudit.lean",
+    "research/audits/BKL/LetwinRealExhaustionAudit.lean",
+    "research/audits/BKL/LetwinRescalingPositivityAudit.lean",
+    "research/audits/BKL/LetwinScalarBrascampLiebAudit.lean",
+    "research/audits/BKL/LetwinSteinAudit.lean",
+    "research/audits/BKL/LetwinSupportAudit.lean",
+    "research/audits/BKL/LetwinSymmetricIntegralAudit.lean",
+    "research/audits/BKL/LetwinSymmetricJordanAudit.lean",
+    "research/audits/BKL/LetwinUniformIntervalAudit.lean",
+    "research/audits/BKL/LetwinWeightedEnergyAudit.lean",
+    "research/audits/BKL/LocalThirdCumulantAudit.lean",
+    "research/audits/BKL/MappedCovarianceAudit.lean",
+    "research/audits/BKL/MatrixTraceIntegralCoefficientAudit.lean",
+    "research/audits/BKL/MollificationConvexRangeAudit.lean",
+    "research/audits/BKL/MomentTailAudit.lean",
+    "research/audits/BKL/NoiseEntryAudit.lean",
+    "research/audits/BKL/NondivergenceAudit.lean",
+    "research/audits/BKL/OperatorRouteStatements.lean",
+    "research/audits/BKL/PermutationAudit.lean",
+    "research/audits/BKL/PosteriorParameterAudit.lean",
+    "research/audits/BKL/PrincipalInverseSqrtAudit.lean",
+    "research/audits/BKL/Proposition71RouteStatements.lean",
+    "research/audits/BKL/Proposition71SupportAudit.lean",
+    "research/audits/BKL/QuadraticCovarianceAudit.lean",
+    "research/audits/BKL/RawCumulantExpansionAudit.lean",
+    "research/audits/BKL/ReductionAudit.lean",
+    "research/audits/BKL/RegularApproximationAudit.lean",
+    "research/audits/BKL/RegularIsometryAudit.lean",
+    "research/audits/BKL/RegularIsotropicAudit.lean",
+    "research/audits/BKL/RegularLawAudit.lean",
+    "research/audits/BKL/RegularMomentPotentialAudit.lean",
+    "research/audits/BKL/RegularMomentWeakTensorAudit.lean",
+    "research/audits/BKL/RegularPoincareAudit.lean",
+    "research/audits/BKL/SelectedPartitionAudit.lean",
+    "research/audits/BKL/SingletonAllocationAudit.lean",
+    "research/audits/BKL/SixthContractionMapAudit.lean",
+    "research/audits/BKL/SixthMomentAudit.lean",
+    "research/audits/BKL/SuspensionAudit.lean",
+    "research/audits/BKL/TaylorCriterionAudit.lean",
+    "research/audits/BKL/ThirdCumulantWitnessAudit.lean",
+    "research/audits/BKL/ThirdMomentContractionAudit.lean",
+    "research/audits/BKL/TraceEnergyAudit.lean",
+    "research/audits/BKL/WeakDeterminantJacobiAudit.lean",
+    "research/audits/BKL/WeakHessianAudit.lean",
+    "research/audits/BKL/WeakHessianEvolutionAudit.lean",
+    "research/audits/BKL/WeakHessianIdentificationAudit.lean",
+    "research/audits/BKL/WeakHessianInverseAudit.lean",
+    "research/audits/BKL/WeakHessianPolynomialAudit.lean",
+    "research/audits/BKL/WeakHessianProductAudit.lean",
+    "research/audits/BKL/WeakHessianRegularityAudit.lean",
+    "research/audits/BKL/WeakHessianSymmetryAudit.lean",
+    "research/audits/BKL/WeakHessianTraceAudit.lean",
+    "research/audits/BKL/WeakInverseHessianAudit.lean",
+    "research/audits/BKL/WeakInverseHessianCutoffAudit.lean",
+    "research/audits/BKL/WeakLimitAudit.lean",
+    "research/audits/BKL/WeakMongeAmpereFirstAudit.lean",
+    "research/audits/BakryEmery/BochnerAudit.lean",
+    "research/audits/BakryEmery/ErgodicityAudit.lean",
+    "research/audits/BakryEmery/GeneratorGammaTwoAudit.lean",
+    "research/audits/BakryEmery/GeneratorIdentificationAudit.lean",
+    "research/audits/BakryEmery/GradientEstimateAudit.lean",
+    "research/audits/BakryEmery/HeatApproximationAudit.lean",
+    "research/audits/BakryEmery/HeatTestClassAudit.lean",
+    "research/audits/BakryEmery/HeatTestExtensionAudit.lean",
+    "research/audits/BakryEmery/InterfaceRouteStatements.lean",
+    "research/audits/BakryEmery/InteriorRegularityAudit.lean",
+    "research/audits/BakryEmery/OperatorCoreAudit.lean",
+    "research/audits/BakryEmery/ReverseSelfImprovementAudit.lean",
+    "research/audits/BakryEmery/WeakGammaAudit.lean",
+    "research/audits/CEK/ConjugateMassAudit.lean",
+    "research/audits/CEK/DifferenceQuotientAudit.lean",
+    "research/audits/CEK/EllipticityAudit.lean",
+    "research/audits/CEK/FunctionalLimitAudit.lean",
+    "research/audits/CEK/LegendreAudit.lean",
+    "research/audits/CEK/Lemma17Audit.lean",
+    "research/audits/CEK/PointControlAudit.lean",
+    "research/audits/CEK/Proposition12Audit.lean",
+    "research/audits/Cheeger/BuserRouteStatements.lean",
+    "research/audits/Cheeger/EqualityAudit.lean",
+    "research/audits/Cheeger/InequalityAudit.lean",
+    "research/audits/Cheeger/InequalityRouteStatements.lean",
+    "research/audits/Cheeger/InfimumRouteStatements.lean",
+    "research/audits/Coarea/IsoperimetryAudit.lean",
+    "research/audits/Coarea/LipschitzAudit.lean",
+    "research/audits/Coarea/LipschitzMigrationAudit.lean",
+    "research/audits/Coarea/LocallyLipschitzAudit.lean",
+    "research/audits/Coarea/RegularAudit.lean",
+    "research/audits/Coarea/SmoothAudit.lean",
+    "research/audits/Coarea/WeightedInfrastructure.lean",
+    "research/audits/Coarea/WeightedRouteStatements.lean",
+    "research/audits/Density/BorellContinuityAudit.lean",
+    "research/audits/Density/BorellLogConcavityAudit.lean",
+    "research/audits/Density/ConvolutionLogConcavityAudit.lean",
+    "research/audits/Density/GaussianApproximationAudit.lean",
+    "research/audits/Density/GaussianBuserPassageAudit.lean",
+    "research/audits/Density/GaussianFirstRegularityAudit.lean",
+    "research/audits/Density/GaussianInfiniteRegularityAudit.lean",
+    "research/audits/Density/GaussianPoincareStabilityAudit.lean",
+    "research/audits/Density/GaussianSecondRegularityAudit.lean",
+    "research/audits/Density/GaussianSmoothingAudit.lean",
+    "research/audits/Elliptic/BarrierGeometry.lean",
+    "research/audits/Elliptic/BarrierValues.lean",
+    "research/audits/Elliptic/CoefficientScope.lean",
+    "research/audits/Elliptic/DriftCoordinates.lean",
+    "research/audits/Elliptic/EllipticBarrier.lean",
+    "research/audits/Elliptic/FlatSupport.lean",
+    "research/audits/Elliptic/HalfBall.lean",
+    "research/audits/Elliptic/Linearized.lean",
+    "research/audits/Elliptic/LogRadialAmbient.lean",
+    "research/audits/Elliptic/LogRadialBoundary.lean",
+    "research/audits/Elliptic/LogRadialCalculus.lean",
+    "research/audits/Elliptic/LogRadialContinuity.lean",
+    "research/audits/Elliptic/LogRadialDrift.lean",
+    "research/audits/Elliptic/LogRadialGradient.lean",
+    "research/audits/Elliptic/LogRadialPlane.lean",
+    "research/audits/Elliptic/LogRadialPoint.lean",
+    "research/audits/Elliptic/LogRadialZeroth.lean",
+    "research/audits/Elliptic/Nonsymmetric.lean",
+    "research/audits/Elliptic/OperatorLinearity.lean",
+    "research/audits/Elliptic/WithinSupport.lean",
+    "research/audits/Energy/SlopeComparisonAudit.lean",
+    "research/audits/Energy/SlopeDensityAudit.lean",
+    "research/audits/Energy/SlopeRecoveryAudit.lean",
+    "research/audits/Energy/SlopeRouteStatements.lean",
+    "research/audits/Graph/AreaFormulaRouteStatements.lean",
+    "research/audits/Graph/JacobianAudit.lean",
+    "research/audits/Graph/LinearAreaFormulaAudit.lean",
+    "research/audits/Graph/OpenIntegralAudit.lean",
+    "research/audits/Hausdorff/BorelSliceAudit.lean",
+    "research/audits/Hausdorff/CompactSliceAudit.lean",
+    "research/audits/Hausdorff/CriticalSliceAudit.lean",
+    "research/audits/Hausdorff/EilenbergMajorantAudit.lean",
+    "research/audits/Hausdorff/LevelSetMeasurableAudit.lean",
+    "research/audits/Hausdorff/NullSlicingAudit.lean",
+    "research/audits/HeatSemigroup/AlmostEverywhereAudit.lean",
+    "research/audits/HeatSemigroup/BasicAudit.lean",
+    "research/audits/HeatSemigroup/BuserBridgeAudit.lean",
+    "research/audits/HeatSemigroup/ChainRuleAudit.lean",
+    "research/audits/HeatSemigroup/CompositionDerivativeAudit.lean",
+    "research/audits/HeatSemigroup/CompositionDomainAudit.lean",
+    "research/audits/HeatSemigroup/DomainStabilityAudit.lean",
+    "research/audits/HeatSemigroup/FormDomainStabilityAudit.lean",
+    "research/audits/HeatSemigroup/FormRangeAudit.lean",
+    "research/audits/HeatSemigroup/IntegratedProfileAudit.lean",
+    "research/audits/HeatSemigroup/MarkovAudit.lean",
+    "research/audits/HeatSemigroup/MarkovRouteStatements.lean",
+    "research/audits/HeatSemigroup/PiCoefficientAudit.lean",
+    "research/audits/HeatSemigroup/ProfileLimitAudit.lean",
+    "research/audits/HeatSemigroup/SmallTimeAudit.lean",
+    "research/audits/HeatSemigroup/SmoothingAudit.lean",
+    "research/audits/HeatSemigroup/SpectralDecayAudit.lean",
+    "research/audits/HeatSemigroup/StrongInterpolationAudit.lean",
+    "research/audits/HeatSemigroup/WeightedCauchyAudit.lean",
+    "research/audits/IteratedDerivative/AffineDerivativeScaleAudit.lean",
+    "research/audits/IteratedDerivative/CoefficientFreezingAudit.lean",
+    "research/audits/IteratedDerivative/HessianInterpolationAudit.lean",
+    "research/audits/IteratedDerivative/SchauderToolsAudit.lean",
+    "research/audits/KLS/CompletedChainScopeAudit.lean",
+    "research/audits/Klartag/DualLaplacian.lean",
+    "research/audits/Klartag/GeneratorBound.lean",
+    "research/audits/Klartag/HessianBound.lean",
+    "research/audits/Klartag/LinearBounds.lean",
+    "research/audits/Klartag/LinearGrowth.lean",
+    "research/audits/Klartag/MomentLimit.lean",
+    "research/audits/Klartag/PowerSupersolution.lean",
+    "research/audits/Klartag/TransportLaplacian.lean",
+    "research/audits/Letwin/BootstrapInduction.lean",
+    "research/audits/Letwin/BootstrapThree.lean",
+    "research/audits/Letwin/C0CompactExtension.lean",
+    "research/audits/Letwin/C0Subgradient.lean",
+    "research/audits/Letwin/Caccioppoli.lean",
+    "research/audits/Letwin/CompactExtension.lean",
+    "research/audits/Letwin/CompactTilt.lean",
+    "research/audits/Letwin/ContactDensity.lean",
+    "research/audits/Letwin/ContactImage.lean",
+    "research/audits/Letwin/ContactMeasure.lean",
+    "research/audits/Letwin/ContactPerturbation.lean",
+    "research/audits/Letwin/ContactQuadratic.lean",
+    "research/audits/Letwin/ContactReference.lean",
+    "research/audits/Letwin/ConvexMomentPotential.lean",
+    "research/audits/Letwin/ConvexSectionGrowth.lean",
+    "research/audits/Letwin/DeterminantContact.lean",
+    "research/audits/Letwin/DirectionalSubsolution.lean",
+    "research/audits/Letwin/DirichletEnvelope.lean",
+    "research/audits/Letwin/DirichletSolution.lean",
+    "research/audits/Letwin/DomainAffineMA.lean",
+    "research/audits/Letwin/DomainBoundary.lean",
+    "research/audits/Letwin/DomainComparison.lean",
+    "research/audits/Letwin/DomainContact.lean",
+    "research/audits/Letwin/DomainContactGain.lean",
+    "research/audits/Letwin/DomainContactMeasure.lean",
+    "research/audits/Letwin/DomainEquicontinuity.lean",
+    "research/audits/Letwin/DomainGradient.lean",
+    "research/audits/Letwin/DomainMAImage.lean",
+    "research/audits/Letwin/DomainMaximum.lean",
+    "research/audits/Letwin/DomainOverlap.lean",
+    "research/audits/Letwin/DomainReferenceMass.lean",
+    "research/audits/Letwin/DomainResidualContact.lean",
+    "research/audits/Letwin/DomainTotalMass.lean",
+    "research/audits/Letwin/EssentialContinuity.lean",
+    "research/audits/Letwin/EssentialUniqueness.lean",
+    "research/audits/Letwin/EveryMomentPotential.lean",
+    "research/audits/Letwin/GaugeCone.lean",
+    "research/audits/Letwin/GeneralContactMeasure.lean",
+    "research/audits/Letwin/GradientDerivative.lean",
+    "research/audits/Letwin/GradientHolder.lean",
+    "research/audits/Letwin/GradientInverse.lean",
+    "research/audits/Letwin/HessianHolder.lean",
+    "research/audits/Letwin/HessianTrace.lean",
+    "research/audits/Letwin/HminusOne.lean",
+    "research/audits/Letwin/IsoperimetricBound.lean",
+    "research/audits/Letwin/LocalContactMeasure.lean",
+    "research/audits/Letwin/LocalGradient.lean",
+    "research/audits/Letwin/LocalReference.lean",
+    "research/audits/Letwin/MomentCalculus.lean",
+    "research/audits/Letwin/MomentMap.lean",
+    "research/audits/Letwin/MomentMeasureEssentialExistence.lean",
+    "research/audits/Letwin/MomentMeasureExistence.lean",
+    "research/audits/Letwin/MomentUniqueness.lean",
+    "research/audits/Letwin/Pogorelov.lean",
+    "research/audits/Letwin/PrekopaEquality.lean",
+    "research/audits/Letwin/QuadraticBound.lean",
+    "research/audits/Letwin/ReferenceContactGain.lean",
+    "research/audits/Letwin/RegularApproximation.lean",
+    "research/audits/Letwin/RoughTesting.lean",
+    "research/audits/Letwin/SectionComparison.lean",
+    "research/audits/Letwin/SectionCovering.lean",
+    "research/audits/Letwin/SectionOneConstants.lean",
+    "research/audits/Letwin/SectionVolume.lean",
+    "research/audits/Letwin/SectionVolumeBoundary.lean",
+    "research/audits/Letwin/SmoothTrace.lean",
+    "research/audits/Letwin/UnboundedUniqueness.lean",
+    "research/audits/Letwin/WeakHessianKernel.lean",
+    "research/audits/Line/BuserAudit.lean",
+    "research/audits/Line/GaussianProfileAudit.lean",
+    "research/audits/Line/GaussianRegularizationAudit.lean",
+    "research/audits/MetricBV/CheegerAudit.lean",
+    "research/audits/MetricBV/CheegerIdentificationAudit.lean",
+    "research/audits/MetricBV/CoareaRadiusAudit.lean",
+    "research/audits/MetricBV/ComplementAudit.lean",
+    "research/audits/MetricBV/ConvexSupportAudit.lean",
+    "research/audits/MetricBV/DefinitionClassAudit.lean",
+    "research/audits/MetricBV/FiniteNeighborhoodAudit.lean",
+    "research/audits/MetricBV/FiniteRecoveryAudit.lean",
+    "research/audits/MetricBV/FiniteScalingAudit.lean",
+    "research/audits/MetricBV/FiniteTargetAudit.lean",
+    "research/audits/MetricBV/GlobalLipschitzAudit.lean",
+    "research/audits/MetricBV/HypothesisBoundaryAudit.lean",
+    "research/audits/MetricBV/InterfaceAudit.lean",
+    "research/audits/MetricBV/IntrinsicIdentificationAudit.lean",
+    "research/audits/MetricBV/LocalL1Audit.lean",
+    "research/audits/MetricBV/LocalL1RelaxationAudit.lean",
+    "research/audits/MetricBV/LocalLipschitzAudit.lean",
+    "research/audits/MetricBV/LocalLipschitzTargetTailAudit.lean",
+    "research/audits/MetricBV/LocallyFiniteLowerAudit.lean",
+    "research/audits/MetricBV/LocallyFiniteUpperAudit.lean",
+    "research/audits/MetricBV/LowerSemicontinuityAudit.lean",
+    "research/audits/MetricBV/MinkowskiAudit.lean",
+    "research/audits/MetricBV/MinkowskiCoareaAudit.lean",
+    "research/audits/MetricBV/MinkowskiInfiniteMassGenericAudit.lean",
+    "research/audits/MetricBV/MinkowskiLemma21ArbitraryMeasureAudit.lean",
+    "research/audits/MetricBV/MinkowskiMetricChainAudit.lean",
+    "research/audits/MetricBV/MinkowskiRecoveryAudit.lean",
+    "research/audits/MetricBV/MinkowskiRelaxedUpperAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperBVRecoveryAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperIntegratedAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperRecoveryAudit.lean",
+    "research/audits/MetricBV/MinkowskiUpperThickeningAudit.lean",
+    "research/audits/MetricBV/NonproperTargetAudit.lean",
+    "research/audits/MetricBV/RatioRecoveryAudit.lean",
+    "research/audits/MetricBV/RecoveryAudit.lean",
+    "research/audits/MetricBV/RecoverySequenceAudit.lean",
+    "research/audits/MetricBV/RelaxedMinkowskiAudit.lean",
+    "research/audits/MetricBV/SuperlevelSelectionAudit.lean",
+    "research/audits/MetricBV/SupportCostAudit.lean",
+    "research/audits/MetricBV/SupportRestrictionAudit.lean",
+    "research/audits/MetricBV/SupportRetractionAudit.lean",
+    "research/audits/MetricBV/TestClassAudit.lean",
+    "research/audits/Newtonian/CompactPoissonAudit.lean",
+    "research/audits/Newtonian/ConstantCoefficientAudit.lean",
+    "research/audits/Newtonian/HarmonicKernelAudit.lean",
+    "research/audits/Newtonian/InteriorSchauderAudit.lean",
+    "research/audits/Newtonian/RepresentationAudit.lean",
+    "research/audits/Newtonian/VariableCoefficientAudit.lean",
+    "research/audits/Poincare/KlartagLiteratureAudit.lean",
+    "research/audits/Poincare/KlartagLiteratureRouteStatements.lean",
+    "research/audits/Sard/EquidimensionalAudit.lean",
+    "research/audits/Sard/PlanarAudit.lean",
+    "research/audits/Sard/SharpAudit.lean",
+    "research/audits/Sard/SharpRouteStatements.lean",
+    "research/audits/Semigroup/ExpMeanValueAudit.lean",
+    "research/audits/Semigroup/ExponentialContractionAudit.lean",
+    "research/audits/Semigroup/ExponentialLimitAudit.lean",
+    "research/audits/Semigroup/FormAudit.lean",
+    "research/audits/Semigroup/GeneratedRouteStatements.lean",
+    "research/audits/Semigroup/GenerationRouteStatements.lean",
+    "research/audits/Semigroup/GeneratorAudit.lean",
+    "research/audits/Semigroup/LawsAudit.lean",
+    "research/audits/Semigroup/ResolventLimitAudit.lean",
+    "research/audits/Semigroup/VonNeumannAudit.lean",
+    "research/audits/Semigroup/VonNeumannRouteStatements.lean",
+    "research/audits/Semigroup/YosidaFamilyAudit.lean",
+    "research/audits/Semigroup/YosidaLimitAudit.lean",
+    "research/audits/Semigroup/YosidaLimitRouteStatements.lean",
+    "research/audits/SourceLayout/BackwardSemigroup.lean",
+    "research/audits/SourceLayout/CompactPairing.lean",
+    "research/audits/SourceLayout/ConsolidatedOwners.lean",
+    "research/audits/SourceLayout/CoverSelection.lean",
+    "research/audits/SourceLayout/CrossFileContracts.lean",
+    "research/audits/SourceLayout/CrossFilePrivateMergers.lean",
+    "research/audits/SourceLayout/CrossFileReuseContracts.lean",
+    "research/audits/SourceLayout/CrossFileReuseMergers.lean",
+    "research/audits/SourceLayout/Derivative.lean",
+    "research/audits/SourceLayout/DiffusionRegularity.lean",
+    "research/audits/SourceLayout/DomainMeasure.lean",
+    "research/audits/SourceLayout/ExponentialMoments.lean",
+    "research/audits/SourceLayout/GaussianCharacteristic.lean",
+    "research/audits/SourceLayout/GaussianFoundations.lean",
+    "research/audits/SourceLayout/GaussianPoincare.lean",
+    "research/audits/SourceLayout/GraphGradient.lean",
+    "research/audits/SourceLayout/HessianComposition.lean",
+    "research/audits/SourceLayout/HessianCoordinates.lean",
+    "research/audits/SourceLayout/HessianDiffusion.lean",
+    "research/audits/SourceLayout/HessianObjects.lean",
+    "research/audits/SourceLayout/HolderInterpolation.lean",
+    "research/audits/SourceLayout/LinearImageMoments.lean",
+    "research/audits/SourceLayout/LocalExtension.lean",
+    "research/audits/SourceLayout/MeasurablePartition.lean",
+    "research/audits/SourceLayout/MigrationAbsence.lean",
+    "research/audits/SourceLayout/MomentReuse.lean",
+    "research/audits/SourceLayout/NormExponentialRadius.lean",
+    "research/audits/SourceLayout/OperatorNorm.lean",
+    "research/audits/SourceLayout/OperatorPerturbation.lean",
+    "research/audits/SourceLayout/PiCoordinates.lean",
+    "research/audits/SourceLayout/PointwiseTruncation.lean",
+    "research/audits/SourceLayout/PositiveContinuousWeight.lean",
+    "research/audits/SourceLayout/PrivateMergers.lean",
+    "research/audits/SourceLayout/PrivatePromotionMergers.lean",
+    "research/audits/SourceLayout/Quadratic.lean",
+    "research/audits/SourceLayout/SardChart.lean",
+    "research/audits/SourceLayout/SardCoordinateChange.lean",
+    "research/audits/SourceLayout/SardDisk.lean",
+    "research/audits/SourceLayout/SardSharp.lean",
+    "research/audits/SourceLayout/SectionAffine.lean",
+    "research/audits/SourceLayout/StateExtensionality.lean",
+    "research/audits/SourceLayout/StatementCoordinates.lean",
+    "research/audits/SourceLayout/StatementMergers.lean",
+    "research/audits/SourceLayout/SubgradientFoundations.lean",
+    "research/audits/SourceLayout/TaylorField.lean",
+    "research/audits/SourceLayout/TemperateIntegrability.lean",
+    "research/audits/SourceLayout/TouchingLayer.lean",
+    "research/audits/SourceLayout/Transport.lean",
+    "research/audits/SourceLayout/TruncationNames.lean",
+    "research/audits/SourceLayout/WaveFoundations.lean",
+    "research/audits/SourceLayout/WeakProducts.lean",
+    "research/audits/StochasticCalculus/Regularization.lean",
+    "research/audits/Vector/CoareaGraphJacobianAudit.lean",
+    "research/audits/Vector/CoareaJacobianAudit.lean",
+    "research/audits/Vector/CriticalSliceAudit.lean",
+    "research/audits/Vector/ExponentObstructionAudit.lean",
+    "research/audits/Vector/FiberIntegralAudit.lean",
+    "research/audits/Vector/GraphAreaAudit.lean",
+    "research/audits/Vector/GraphAudit.lean",
+    "research/audits/Vector/GraphSandwichAudit.lean",
+    "research/audits/Vector/HausdorffSlicingAudit.lean",
+    "research/audits/Vector/LipschitzCoareaAudit.lean",
+    "research/audits/Vector/LipschitzCoareaRouteStatements.lean",
+    "research/audits/Vector/LocalCoareaAudit.lean",
+    "research/audits/Vector/LocallyLipschitzCoareaAudit.lean",
+    "research/audits/Vector/LocallyLipschitzCoareaRouteStatements.lean",
+    "research/audits/Vector/NormDetContinuityAudit.lean",
+    "research/audits/Vector/RankDeficientCoareaAudit.lean",
+    "research/audits/Vector/RankDeficientRouteStatements.lean",
+    "research/audits/Vector/RankStratificationAudit.lean",
+    "research/audits/Vector/RegularChartAudit.lean",
+    "research/audits/Vector/RegularCoareaAudit.lean",
+    "research/audits/Vector/RegularFibreFiniteAudit.lean",
+    "research/audits/Vector/RightInverseBoundAudit.lean",
+    "research/audits/Vector/SliceMeasurableAudit.lean",
+    "research/audits/Vector/StratumSlicingAudit.lean",
+    "research/audits/Vector/StratumSlicingRouteStatements.lean",
+    "research/audits/Vector/TangentialLipschitzAudit.lean",
+    "research/audits/Vector/TargetSplitFubiniAudit.lean",
+    "research/audits/WaveSplitting/AverageErrorAudit.lean",
+    "research/audits/WaveSplitting/ConsistencyAudit.lean",
+    "research/audits/WaveSplitting/EnergyAudit.lean",
+    "research/audits/WaveSplitting/FiniteConstructionAudit.lean",
+    "research/audits/WaveSplitting/GeneratorBoundsAudit.lean",
+    "research/audits/WaveSplitting/LocalizationAudit.lean",
+    "research/audits/WaveSplitting/ResidualAudit.lean",
+    "research/audits/WaveSplitting/StabilityAudit.lean",
+    "research/audits/WaveSplitting/TimeAverageAudit.lean",
+    "research/audits/WaveSplitting/WeightedEnergyAudit.lean",
+    "research/audits/Whitney/ConstructionAudit.lean",
+    "research/audits/Whitney/ExtensionAudit.lean",
+    "research/audits/Whitney/FirstOrderJetAudit.lean"
+  ],
+  "verification_state": {
+    "baseline": "build/history/2026-10-29-layout-migration/before/ (pre-edit copies at old paths, before-hashes.txt, git-index.bytes); baseline lake --wfail build passed (4934 jobs, build-baseline.log)",
+    "lean_build": "lake --wfail build of all default targets passed after the moves (4934 jobs, no warnings; build-after.log) and again after the declaration step (build-final.log)",
+    "audit_clients": "all 442 research/audits/**/*.lean clients compiled with lean -DwarningAsError=true from formalization/ with the lake search path (verify.py check_research_audits command); 4843 axiom reports, only propext, Classical.choice, Quot.sound; no sorryAx (audits/summary.json); the 6 clients depending on the declaration step re-run afterwards (audits-step7a/)",
+    "import_resolution": "every FunctionalInequalities import in research/audits, solutions, examples and research/*.lean resolves to a current source file (stale .olean files of the old module names remain under formalization/.lake/build)",
+    "statement_snapshot": "python3 research/statement_snapshot.py check passed (26 local declarations)",
+    "api_index": "python3 research/api_index.py regenerated; --check fresh (6993 public declarations, 840 modules)",
+    "module_inventory": "python3 research/module_inventory.py regenerated MODULES.md; --check: 840 modules, 2050 local import edges, no layout errors",
+    "blueprint": "python3 research/check_blueprint.py: 0 errors",
+    "atlas": "python3 research/atlas.py check (temporary index copy): exactly the 20 stale-pin errors of the pre-migration baseline (8 files), no path errors",
+    "markdown_links": "python3 build/check_markdown_links.py (temporary index copy): 127 broken links, all inside the generated views LITERATURE.md, STATUS.md and progress README.md pending update.py",
+    "not_run": "research/verify.py and research/progress/update.py (controller)"
+  }
+}

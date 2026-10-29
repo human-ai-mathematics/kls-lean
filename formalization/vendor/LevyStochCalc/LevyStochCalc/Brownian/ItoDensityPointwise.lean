@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoDensityShiftedAverages
 
 /-!
@@ -199,7 +202,7 @@ private lemma convergence_set_measurable
           - g p.1 p.2)
         Filter.atTop (nhds 0)} := by
     ext p
-    simp only [Set.mem_setOf_eq]
+    simp only [Set.mem_ofPred_eq]
     constructor
     · intro hp
       have h_const : Filter.Tendsto (fun _ : ℕ => g p.1 p.2)
@@ -260,13 +263,13 @@ lemma dyadicSimplePredictable_brownian_L2_converges
           : ℝ≥0∞) ^ 2 ∂volume ∂P)
       Filter.atTop (nhds 0) := by
   -- Setup: finite measure on the product.
-  haveI h_finite_vol : MeasureTheory.IsFiniteMeasure
+  have h_finite_vol : MeasureTheory.IsFiniteMeasure
       (volume.restrict (Set.Icc (0 : ℝ) T)) := by
     refine ⟨?_⟩
     rw [MeasureTheory.Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
         Real.volume_Icc]
     exact ENNReal.ofReal_lt_top
-  haveI h_finite_prod : MeasureTheory.IsFiniteMeasure
+  have h_finite_prod : MeasureTheory.IsFiniteMeasure
       (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := inferInstance
   -- The constant bound: 2(|M|+1) ≥ |g - eval| everywhere (using triangle ineq + boundedness).
   set CC : ℝ := 2 * (|M| + 1) with hCC

@@ -4,8 +4,6 @@ import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 
 /-!
 # Cutoff gluing and compact smooth weak-derivative approximation
-
-Existing names, statements and proof payloads are preserved.
 -/
 
 noncomputable section
@@ -21,7 +19,7 @@ open scoped Topology
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Gluing local weak derivatives** (weak Letwin route, generic): if for every `C¹` cutoff `χ` with
+/-- **Gluing local weak derivatives**: if for every `C¹` cutoff `χ` with
 compact support the product `χ f` has a weak derivative along `v` that is locally `L²`, then `f` itself has a weak
 derivative along `v` that is `L²` on every compact set. -/
 theorem exists_hasWeakDerivAlong_of_forall_cutoff {E : Type*} [NormedAddCommGroup E]

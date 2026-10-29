@@ -4,14 +4,16 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: Letwin Lemma A.4 operator continuity
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17): `Lχ_R` is measurable, hence in `L¹(ν)` once dominated. Actual
-clients of `continuous_hessianInverseOperator`, every premise derived here:
-- `continuous_profile_generator`: the generator of the actual rescaled profile `η((φ − c)/R)` is continuous, for every
-  real `c`, `R` (the profile's smoothness is the adopted Q1);
-- `integrable_generator_mul_of_hasCompactSupport`: `L f · g` is integrable for continuous compactly supported `g` and any
-  measure finite on compacts (the cutoff-product integrability used by Lemma A.5);
-- `continuous_generator_self`: `L φ` itself is continuous (the self-generator of the energy identity).
-These are not the Lemma A.4 producer or a source-law client. Client bodies: Claude.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17): `Lχ_R` is measurable, hence in `L¹(ν)`
+once dominated. Actual clients of `continuous_hessianInverseOperator`, every premise derived here:
+- `continuous_profile_generator`: the generator of the actual rescaled profile `η((φ − c)/R)` is
+  continuous, for every real `c`, `R` (the profile is smooth);
+- `integrable_generator_mul_of_hasCompactSupport`: `L f · g` is integrable for continuous compactly
+  supported `g` and any measure finite on compacts (the cutoff-product integrability used by
+  Lemma A.5);
+- `continuous_generator_self`: `L φ` itself is continuous (the self-generator of the energy
+  identity).
+These are not the Lemma A.4 producer or a source-law client.
 -/
 
 open MeasureTheory

@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.MetricBV.Basic
 import FunctionalInequalities.Analysis.MetricBV.Complement
 import FunctionalInequalities.Analysis.MetricBV.Transport
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 
 /-!
 # Metric BV Cheeger constants on the closed intrinsic support

@@ -4,17 +4,18 @@ import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! Audit clients for the grouped expansion of Bizeul–Klartag–Lehec, arXiv:2610.05474v1, (72)–(74)
-(`Analysis/BakryEmery/Cumulant/Leibniz.lean`, `iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`):
-at `m = 3` the middle sum (72) is empty and the expansion is `6 κ₃`; at `m = 4` exactly three middle masks contain
-`i0`, written out as the three pairings `{0,1|2,3}`, `{0,2|1,3}`, `{0,3|1,2}`; the theorem through its frozen binder
-names (`mu`, `hc`, `hA`, `hm`, `h`, `i0`); and the actual compactly supported skew two-point law, whose covariance unit
-is derived from its actual isotropy (never assumed), with `D³⟪v, Cov⁻¹ v⟫(0)[1,1,1] = 6 κ₃ = 9 ≠ 0` on repeated
-data. Section `SkewLaw` and `law`/`law_compact` are verbatim from `RawCumulantExpansionAudit.lean` (receipt
-f17f3495…), with the fixture namespace renamed to `BKLGroupedSkewLaw` so that no fixture name is shared with the other
-BKL audits. -/
+(`Analysis/BakryEmery/Cumulant/Leibniz.lean`,
+`iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`): at `m = 3` the middle sum (72) is
+empty and the expansion is `6 κ₃`; at `m = 4` exactly three middle masks contain `i0`, written out
+as the three pairings `{0,1|2,3}`, `{0,2|1,3}`, `{0,3|1,2}`; the theorem through its binder names
+(`mu`, `hc`, `hA`, `hm`, `h`, `i0`); and the actual compactly supported skew two-point law, whose
+covariance unit is derived from its actual isotropy (never assumed), with
+`D³⟪v, Cov⁻¹ v⟫(0)[1,1,1] = 6 κ₃ = 9 ≠ 0` on repeated data. Section `SkewLaw` and
+`law`/`law_compact` repeat the fixture of `RawCumulantExpansionAudit.lean`, in the namespace
+`BKLGroupedSkewLaw` so that no fixture name is shared with the other BKL audits. -/
 
 
--- ===== reviewer module SkewLaw (D74-Raw-Assembly-Independent-20261009 (receipt f17f3495…)) =====
+-- ===== SkewLaw =====
 section SkewLaw
 set_option autoImplicit false
 noncomputable section
@@ -167,7 +168,8 @@ theorem grouped_four_pairs (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Mea
     Finset.sum_singleton]
   rfl
 
-/-- The sealed interface through its frozen binder names as named arguments (`mu`, `hc`, `hA`, `hm`, `h`, `i0`). -/
+/-- The interface through its binder names as named arguments (`mu`, `hc`, `hA`, `hm`, `h`,
+`i0`). -/
 theorem grouped_named (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
     (hA : IsUnit (Covariance.operator (μ : Measure E))) {m : ℕ} (hm : 3 ≤ m) (h : Fin m → E) (i0 : Fin m) :
     iteratedFDeriv ℝ m (fun z : E =>

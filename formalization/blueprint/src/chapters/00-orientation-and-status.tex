@@ -201,7 +201,7 @@ the named affine-support and whitening bridge \cref{thm:affine-isotropic-reducti
 The statement keeps its stable label and environment, and it is proved here.
 The Lean name \texttt{FunctionalInequalities.KLS.Conjecture} is a \texttt{def \ldots : Prop}: it names the sentence.
 The theorem \texttt{FunctionalInequalities.KLS.kls} in \texttt{KLS/Target.lean} proves it through the BKL route, on the
-owner-selected cutoff localization. Its axiom audit uses the standard axioms only, and no local declaration is excluded from the
+cutoff localization. Its axiom audit uses the standard axioms only, and no local declaration is excluded from the
 declaration audit. The route evidence of this node is local Lean evidence; the pinned upstream record is not promoted.
 The four exploratory route records remain separate and open; this proof does not complete them.
 
@@ -232,7 +232,7 @@ Historical freeze records remain dated review snapshots. The current development
 
 There are four levels, and their names are not interchangeable.  The energy-parametrized optimizer
 of \cref{chap:canonical-basic} accepts any extended energy.  The selected canonical frontend of
-\cref{chap:smooth-affine} chooses the intrinsic-affine smooth-gradient relaxation.  The accepted
+\cref{chap:smooth-affine} chooses the intrinsic-affine smooth-gradient relaxation.  The
 smooth-test frontend of \cref{chap:certified-models} quantifies over globally smooth finite-energy
 tests, while \cref{def:literature-poincare-constant} quantifies over locally Lipschitz tests.  The
 first two are Lean definitions. The selected and legacy constants are now proved equal in

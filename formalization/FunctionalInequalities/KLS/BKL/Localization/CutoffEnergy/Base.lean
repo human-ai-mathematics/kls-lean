@@ -1,9 +1,9 @@
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
 import FunctionalInequalities.KLS.BKL.Localization.Standardization
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.CompactReduction
-import FunctionalInequalities.KLS.BKL.CumulantEnvelope
+import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
 import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance

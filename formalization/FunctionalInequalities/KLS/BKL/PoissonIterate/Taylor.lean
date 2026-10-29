@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
 
 /-!
 # Corollary 3.7 and Lemma 3.9 of BKL for the iterates in `D(A)`
@@ -23,7 +23,7 @@ unit-weight gradient, `A = T̄†T̄ = -ℒ` and `C_P(ν) ≤ C`. Coefficient ar
   `|∫ ∇h|² = |T₁(-L h)|²`; `meanGradSq_step`: **(61)**, `p_{k+2} = α_{k+2}² |T₁(∇₀h_{k+1})|²`;
 * `sum_mean_partialDeriv_sq_le`, `meanGradSq_iter_zero_le`: the first energy drop
   `p₁ = |∫ ∇f|² ≤ ‖A f‖²` when `∫ ⟪v, x⟫² dν ≤ ‖v‖²` for all `v`;
-* `sum_meanGradSq_iter_le`: **Lemma 3.9 in the route form**, if `α_{j+2}² ≤ β/C` for
+* `sum_meanGradSq_iter_le`: **Lemma 3.9 in the form used here**, if `α_{j+2}² ≤ β/C` for
   `j + 1 < N` then `Σ_{k<N} p_{k+1} ≤ ‖L h₁‖² + (β/C) Σ_{k<N-1} |T₁(∇₀h_{k+1})|²`.
 
 Generic facts on the way: `T_d` is homogeneous on `L²` classes (`taylorTensor_Lp_smul`,
@@ -46,8 +46,8 @@ reads `T₁(A u)(e_j) = ∫ ∂_j u` (49), whence (61) by (30). For the first te
 
 ## What this is not
 
-The covariance hypothesis is used only as `∫ ⟪v, x⟫² dν ≤ ‖v‖²`; the centering `∫ x dν = 0` of
-the route statement is not needed. Lemma 3.8, the bound of Lemma 3.9 by `R` and Theorem 3.1 are
+The covariance hypothesis is used only as `∫ ⟪v, x⟫² dν ≤ ‖v‖²`; the centering `∫ x dν = 0` is
+not needed. Lemma 3.8, the bound of Lemma 3.9 by `R` and Theorem 3.1 are
 not proved here.
 -/
 
@@ -412,7 +412,7 @@ theorem meanGradSq_iter_zero_le
   exact sum_mean_partialDeriv_sq_le m hν hi hexp hcov hf
 
 include hνU hU hexp hC in
-/-- **BKL Lemma 3.9 in the route form**: if `∫ ⟪v, x⟫² dν ≤ ‖v‖²` for every `v` and
+/-- **BKL Lemma 3.9 in the form used here**: if `∫ ⟪v, x⟫² dν ≤ ‖v‖²` for every `v` and
 `α_{j+2}² ≤ β/C` for `j + 1 < N`, then
 `Σ_{k<N} p_{k+1} ≤ ‖L h₁‖² + (β/C) Σ_{k<N-1} |T₁(∇₀h_{k+1})|²`. -/
 theorem sum_meanGradSq_iter_le

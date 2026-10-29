@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Ito.VectorItoVersionUnbounded
 
 /-!
@@ -446,7 +449,7 @@ theorem exists_isVectorItoVersion_of_unbounded
       refine Measurable.indicator ?_ hGt
       exact ((hXj (ms N)).adapted (max t 0)).measurable.mono hmaxle le_rfl
     refine Measurable.stronglyMeasurable ?_
-    letI : MeasurableSpace Ω := ℱ t
+    let : MeasurableSpace Ω := ℱ t
     refine measurable_of_tendsto_metrizable' Filter.atTop hFN ?_
     rw [tendsto_pi_nhds]
     intro ω

@@ -1,6 +1,6 @@
-import FunctionalInequalities.Probability.Support
-import FunctionalInequalities.Analysis.Convex.GradientImage
-import FunctionalInequalities.Analysis.Convex.GradientInverse
+import FunctionalInequalities.Probability.Support.Topological
+import FunctionalInequalities.Analysis.Convex.Gradient.Image
+import FunctionalInequalities.Analysis.Convex.Gradient.Inverse
 import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
 import Mathlib.MeasureTheory.Measure.Tilted
 
@@ -12,6 +12,11 @@ For a given `C¹` convex Lipschitz `u` on `ℝⁿ`, `n > 0`, with `∫ e^{−u} 
 (`K` compact convex with nonempty interior, `W` continuous), strict convexity follows from `strictConvexOn_of_map_gradient`;
 hence `∇u` is a homeomorphism `ℝⁿ ≃ₜ interior K`, and with `C^{k+1}` regularity and a positive definite Hessian it has a `C^k`
 inverse on `interior K`. The potential is a hypothesis here; its existence and regularity are proved in the CEK modules.
+
+Section `Translation`, for a normalized potential `u` (no regularity): `x ↦ u(x + a)` is again normalized with the same
+moment measure `(∇u)_* e^{-u} dx` (`translate_moment_potential_of_normalized` on a finite-dimensional inner-product
+space; the earlier `ℝⁿ` form `translate_moment_potential` carries a `C¹` hypothesis), and some translate is centered
+(`exists_translate_centered`).
 -/
 
 noncomputable section
@@ -158,5 +163,149 @@ theorem exists_regular_inverse_of_map_gradient
     exact contDiffOn_invFun_gradient_of_posDef hk hu hs hp
 
 end TransportInverse
+
+section Translation
+
+open Set MeasureTheory
+
+/-- **Translation invariance of the moment measure**, with no regularity assumption: on a
+finite-dimensional real inner-product space, if `u` has `∫ e^{-u} = 1` and `∇u` pushes
+`e^{-u(x)} dx` forward to `ν`, then `x ↦ u (x + a)` is again normalized, has the same moment
+measure, and its gradient is `∇u (· + a)`. (`gradient` is the Fréchet gradient, `0` where `u` is
+not differentiable; it is Borel measurable for every `u`.) -/
+theorem translate_moment_potential_of_normalized {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {u : E → ℝ} (hnorm : (∫ x, Real.exp (-u x) ∂(volume : Measure E)) = 1)
+    (ν : Measure E) (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) = ν) (a : E) :
+    (∫ x, Real.exp (-u (x + a)) ∂(volume : Measure E)) = 1 ∧
+      ((volume : Measure E).tilted (fun x => -u (x + a))).map
+          (gradient fun x => u (x + a)) = ν ∧
+      ∀ x, gradient (fun y => u (y + a)) x = gradient u (x + a) := by
+  classical
+  have hnorm' : (∫ x, Real.exp (-u (x + a)) ∂(volume : Measure E)) = 1 := by
+    calc
+      _ = ∫ x, Real.exp (-u x) ∂(volume : Measure E) :=
+        integral_add_right_eq_self (fun x => Real.exp (-u x)) a
+      _ = 1 := hnorm
+  have hg : ∀ x, gradient (fun y => u (y + a)) x = gradient u (x + a) := by
+    intro x
+    simp only [gradient, fderiv_comp_add_right]
+  have hgu : Measurable (gradient u) :=
+    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp (measurable_fderiv ℝ u)
+  have hgv : Measurable (gradient fun x => u (x + a)) := by
+    have he : (gradient fun x => u (x + a)) = (fun x => gradient u (x + a)) := funext hg
+    rw [he]
+    exact hgu.comp (continuous_id.add continuous_const).measurable
+  refine ⟨hnorm', ?_, hg⟩
+  rw [← hmap]
+  ext s hs
+  rw [Measure.map_apply hgv hs, Measure.map_apply hgu hs]
+  simp only [Measure.tilted, Pi.neg_apply, hnorm, hnorm', div_one]
+  rw [withDensity_apply _ (hs.preimage hgv), withDensity_apply _ (hs.preimage hgu)]
+  rw [← lintegral_indicator (hs.preimage hgv), ← lintegral_indicator (hs.preimage hgu)]
+  calc
+    _ = ∫⁻ x, ((gradient u ⁻¹' s).indicator
+        (fun y => ENNReal.ofReal (Real.exp (-u y)))) (x + a) ∂(volume : Measure E) := by
+      apply lintegral_congr
+      intro x
+      simp only [Set.indicator]
+      change
+        (if gradient (fun y => u (y + a)) x ∈ s then
+          ENNReal.ofReal (Real.exp (-u (x + a))) else 0) =
+        (if gradient u (x + a) ∈ s then
+          ENNReal.ofReal (Real.exp (-u (x + a))) else 0)
+      rw [hg x]
+    _ = _ := lintegral_add_right_eq_self _ a
+
+/-- Translating a normalized potential keeps its moment measure. -/
+theorem translate_moment_potential {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hu : ContDiff ℝ 1 u)
+    (hnorm : (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1)
+    (ν : Measure (EuclideanSpace ℝ (Fin n)))
+    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) = ν)
+    (a : EuclideanSpace ℝ (Fin n)) :
+    (∫ x, Real.exp (-u (x + a)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (fun x => -u (x + a))).map
+          (gradient fun x => u (x + a)) = ν ∧
+      ∀ x, gradient (fun y => u (y + a)) x = gradient u (x + a) := by
+  classical
+  have hnorm' :
+      (∫ x, Real.exp (-u (x + a))
+        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 := by
+    calc
+      _ = ∫ x, Real.exp (-u x)
+          ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+        integral_add_right_eq_self (fun x => Real.exp (-u x)) a
+      _ = 1 := hnorm
+  have hg : ∀ x, gradient (fun y => u (y + a)) x = gradient u (x + a) := by
+    intro x
+    simp only [gradient, fderiv_comp_add_right]
+  have hgu : Measurable (gradient u) := (Analysis.BakryEmery.continuous_gradient hu).measurable
+  have hgv : Measurable (gradient fun x => u (x + a)) := by
+    have he : (gradient fun x => u (x + a)) =
+        (fun x => gradient u (x + a)) := funext hg
+    rw [he]
+    exact hgu.comp (continuous_id.add continuous_const).measurable
+  refine ⟨hnorm', ?_, hg⟩
+  rw [← hmap]
+  ext s hs
+  rw [Measure.map_apply hgv hs, Measure.map_apply hgu hs]
+  simp only [Measure.tilted, Pi.neg_apply, hnorm, hnorm', div_one]
+  rw [withDensity_apply _ (hs.preimage hgv),
+    withDensity_apply _ (hs.preimage hgu)]
+  rw [← lintegral_indicator (hs.preimage hgv),
+    ← lintegral_indicator (hs.preimage hgu)]
+  calc
+    _ = ∫⁻ x, ((gradient u ⁻¹' s).indicator
+        (fun y => ENNReal.ofReal (Real.exp (-u y)))) (x + a)
+        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+      apply lintegral_congr
+      intro x
+      simp only [Set.indicator]
+      change
+        (if gradient (fun y => u (y + a)) x ∈ s then
+          ENNReal.ofReal (Real.exp (-u (x + a))) else 0) =
+        (if gradient u (x + a) ∈ s then
+          ENNReal.ofReal (Real.exp (-u (x + a))) else 0)
+      rw [hg x]
+    _ = _ := lintegral_add_right_eq_self _ a
+
+/-- A normalized potential becomes centered after translation by its barycenter:
+`∫ e^{-u(x + a)} x dx = 0` for some `a`. No convexity is needed; if `x ↦ e^{-u(x)} x` is not
+integrable, Lean's integral is `0` and `a = 0` works. -/
+theorem exists_translate_centered {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hnorm : (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1) :
+    ∃ a : EuclideanSpace ℝ (Fin n),
+      ∫ x, Real.exp (-u (x + a)) • x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 0 := by
+  by_cases hi : Integrable (fun x => Real.exp (-u x) • x)
+      (volume : Measure (EuclideanSpace ℝ (Fin n)))
+  · have hd : Integrable (fun x => Real.exp (-u x))
+        (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+      by_contra h
+      rw [integral_undef h] at hnorm
+      norm_num at hnorm
+    let b : EuclideanSpace ℝ (Fin n) :=
+      ∫ x, Real.exp (-u x) • x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))
+    refine ⟨b, ?_⟩
+    calc
+      (∫ x, Real.exp (-u (x + b)) • x ∂volume) =
+          ∫ x, Real.exp (-u x) • (x - b) ∂volume := by
+        have ht :
+            (∫ x, Real.exp (-u (x + b)) • ((x + b) - b) ∂volume) =
+              ∫ x, Real.exp (-u x) • (x - b) ∂volume :=
+          integral_add_right_eq_self
+            (fun x : EuclideanSpace ℝ (Fin n) => Real.exp (-u x) • (x - b)) b
+        simpa only [add_sub_cancel_right] using ht
+      _ = (∫ x, Real.exp (-u x) • x ∂volume) -
+          (∫ x, Real.exp (-u x) ∂volume) • b := by
+        simp_rw [smul_sub]
+        rw [integral_sub hi (hd.smul_const b), integral_smul_const]
+      _ = 0 := by
+        rw [hnorm, one_smul]
+        exact sub_self b
+  · refine ⟨0, ?_⟩
+    simpa only [add_zero] using integral_undef hi
+
+end Translation
 
 end FunctionalInequalities.Probability.MomentMeasure

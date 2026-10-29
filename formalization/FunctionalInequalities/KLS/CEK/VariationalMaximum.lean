@@ -23,7 +23,7 @@ open FunctionalInequalities.Probability
 open FunctionalInequalities.Probability.MomentMeasure
 
 section
--- Accepted source `MaximizingSequence.lean`.
+-- A normalized maximizing sequence.
 
 open MeasureTheory Filter Set
 open scoped ENNReal Topology
@@ -76,7 +76,7 @@ theorem exists_normalized_maximizing_sequence (dx μ : Measure E)
 end
 
 section
--- Accepted source `Attainment.lean`.
+-- Attainment of the variational maximum.
 
 open MeasureTheory Filter Set
 open scoped ENNReal Topology

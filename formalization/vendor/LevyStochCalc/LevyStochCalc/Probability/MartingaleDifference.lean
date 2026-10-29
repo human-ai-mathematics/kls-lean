@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import Mathlib.Probability.Martingale.Basic
 
 /-!
@@ -51,8 +54,8 @@ include h𝒢le h𝒢mono hY hYmeas hYcond in
 /-- A partial sum of martingale differences is orthogonal to the next difference. -/
 theorem integral_sum_mul_of_condExp_eq_zero (n : ℕ) :
     ∫ ω, (∑ i ∈ Finset.range n, Y i ω) * Y n ω ∂P = 0 := by
-  haveI : SigmaFinite (P.trim (h𝒢le n)) := by
-    haveI : IsFiniteMeasure (P.trim (h𝒢le n)) :=
+  have : SigmaFinite (P.trim (h𝒢le n)) := by
+    have : IsFiniteMeasure (P.trim (h𝒢le n)) :=
       ⟨by rw [MeasureTheory.trim_measurableSet_eq (h𝒢le n) MeasurableSet.univ]
           exact measure_lt_top P Set.univ⟩
     infer_instance

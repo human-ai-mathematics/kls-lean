@@ -22,8 +22,8 @@ calculation with no regularity outside `O`. Neither representative is a global e
 of `O`. Second countability and disjoint Borel pieces assemble the final equality; weighted
 slice measurability is established independently in `OpenSliceMeasurable`.
 
-This proves only the regular-domain result regular-domain coarea. It does not use critical slicing, Sard, WIP,
-or Whitney extension, and does not migrate any existing coarea hole.
+This proves only the regular-domain coarea identity. It does not use critical slicing, Sard
+or Whitney extension.
 -/
 
 noncomputable section

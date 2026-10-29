@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Vector.JacobianContinuity
 
 /-! # Graphs of vector-valued maps
 
-Property vector-valued graph area of the area formula route, first part: the `C¹` infrastructure for the graph of a
+The `C¹` infrastructure for the graph of a
 **`K`-valued** map, `dim K = m`, which is what a codimension-`m` fibre looks like.  The
 codimension-one case lives in `Analysis/Graph/Area.lean`; this module mirrors its second and third
 phases — the graph map, its retraction, injectivity, derivative, image measurability and linear
@@ -179,7 +179,7 @@ theorem hausdorffMeasure_image_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K 
   exact LinearMap.hausdorffMeasure_image ((graphMapLinear ι κ A : H →ₗ[ℝ] V)) s
 
 omit [MeasurableSpace V] [BorelSpace V] in
-/-- The volume factor along a `C¹` slope is measurable, from obligation `A1`. -/
+/-- The volume factor along a `C¹` slope is measurable, from `continuous_normDet`. -/
 theorem measurable_vectorGraphJacobian (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V) (γ : H → K) :
     Measurable (fun y : H =>
       LinearMap.normDet ((graphMapLinear ι κ (fderiv ℝ γ y) : H →ₗ[ℝ] V))) := by

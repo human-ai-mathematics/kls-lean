@@ -1,4 +1,5 @@
-import FunctionalInequalities.Analysis.Convex.Legendre
+import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLogExp
 import Mathlib.MeasureTheory.Measure.WithDensity
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
@@ -14,8 +15,10 @@ objects of Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), P
 the monotonicity `mass_legendre_mono` used for the truncation (61), and Borel measurability of the conjugate density for
 an arbitrary, possibly nonmeasurable primal (`measurable_density_legendre`).
 
-The gradient push-forward (moment measure), the effective domain and essential continuity of CEK Definition 2 and
-Theorem 2 are not defined in this module.
+`ofPotential dx ψ` is the moment measure of an extended-real potential (CEK, Section 1): the push-forward of
+`exp(-ψ) dx` under the gradient of the real function `x ↦ (ψ x).toReal`. Off the effective domain `{ψ ≠ ⊤}` the density
+vanishes, so only the gradient on the domain matters; no convexity, finiteness or normalization is built in. The effective
+domain and essential continuity of CEK Definition 2 are not defined in this module.
 
 Supporting definitions for Cordero-Erausquin–Klartag, Lemma 17.
 -/
@@ -56,6 +59,13 @@ def mass (dx : Measure E) (φ : E → EReal) : ℝ≥0∞ := ∫⁻ x, density �
 /-- CEK's functional `I_μ(f) = log ∫ exp(-f*) - ∫ f dμ`, with extended logarithm. -/
 def variationalFunctional (dx μ : Measure E) (φ : E → EReal) : EReal :=
   ENNReal.log (mass dx (legendre φ)) - (∫ x, (φ x).toReal ∂μ : ℝ)
+
+/-- The moment measure of an extended-real potential `ψ` (Cordero-Erausquin–Klartag, arXiv:1304.0630v1, Section 1):
+the push-forward of `exp(-ψ(x)) dx` under `x ↦ ∇(ψ.toReal)(x)`. The density `exp(-ψ)` vanishes where `ψ = ⊤`; the
+gradient is Mathlib's `gradient`, which is zero at non-differentiability points. `μ` is the moment measure of `ψ` when
+`ofPotential dx ψ = μ`; CEK additionally require `ψ` convex with `0 < ∫ exp(-ψ) < ∞`, which are separate hypotheses. -/
+def ofPotential (dx : Measure E) (ψ : E → EReal) : Measure E :=
+  (weightedMeasure dx ψ).map (gradient fun x => (ψ x).toReal)
 
 end Haar
 

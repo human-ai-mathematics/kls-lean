@@ -17,8 +17,8 @@ open scoped RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 section ConvexC1
 
-/-- **A differentiable convex function on a finite-dimensional space is `C¹`** (weak Letwin
-route): convexity makes the derivative map continuous. -/
+/-- **A differentiable convex function on a finite-dimensional space is `C¹`**: convexity makes the
+derivative map continuous. -/
 theorem contDiff_one_of_convexOn_of_differentiable {E : Type*} [NormedAddCommGroup E]
     [NormedSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (hdiff : Differentiable ℝ u) :
@@ -314,8 +314,8 @@ private lemma hasFDerivAt_of_convexOn_of_unique_subgradient {u : E → ℝ}
   rw [hasFDerivAt_iff_isLittleO_nhds_zero]
   simpa only [InnerProductSpace.toDual_apply_apply, R] using hlittle
 
-/-- **A convex function with a unique subgradient at every point is differentiable** (weak Letwin
-route: "singleton subdifferential ⇒ C¹", differentiability half): on a finite-dimensional
+/-- **A convex function with a unique subgradient at every point is differentiable** ("singleton
+subdifferential ⇒ C¹", differentiability half): on a finite-dimensional
 inner product space, if the subgradient inequality `u x + ⟪g, y - x⟫ ≤ u y` (all `y`) is satisfied by
 exactly one `g` at every `x`, then `u` is differentiable (with that `g` as gradient; `C¹` then follows
 from `contDiff_one_of_convexOn_of_differentiable`). -/
@@ -341,7 +341,7 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Singleton subdifferential ⇒ `C¹`** (weak Letwin route): a
+/-- **Singleton subdifferential ⇒ `C¹`**: a
 convex function on a finite-dimensional inner product space with exactly one subgradient at every
 point is continuously differentiable. -/
 theorem contDiff_one_of_convexOn_of_unique_subgradient {E : Type*} [NormedAddCommGroup E]

@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoProcessVersion
 import LevyStochCalc.Brownian.ItoQuadVarSum
 import LevyStochCalc.Brownian.AugmentedFiltration
@@ -179,7 +182,7 @@ theorem exists_continuousAdapted_modification
         rw [heq]
         exact Filter.Tendsto.comp ((hNcont ω hω).continuousAt (x := u))
           (tendsto_dyadicApprox hu)
-    letI : MeasurableSpace Ω := ℱ u
+    let : MeasurableSpace Ω := ℱ u
     exact measurable_of_tendsto_metrizable hstep hlim
   refine ⟨fun t ω => if ω ∈ N then 0 else Y (max t 0) ω, ?_, ?_, ?_⟩
   · intro ω

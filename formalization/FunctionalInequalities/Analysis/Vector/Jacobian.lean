@@ -3,7 +3,7 @@ import Mathlib.Analysis.Calculus.Gradient.Basic
 
 /-! # The coarea Jacobian of a linear map
 
-The scalar weighted coarea formula proved in `KLS/Geometry/` integrates `‖gradient u x‖` against
+The scalar weighted coarea formula proved in `Analysis/Coarea/` integrates `‖gradient u x‖` against
 Lebesgue measure and slices along the fibres of `u : V → ℝ`.  For a map into an `m`-dimensional
 target the corresponding density is the **coarea Jacobian**
 

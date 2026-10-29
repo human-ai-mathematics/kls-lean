@@ -46,7 +46,7 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- **A farthest point of a compact set is exposed** (weak Letwin route, Caffarelli's argument):
+/-- **A farthest point of a compact set is exposed** (Caffarelli's argument):
 for a nonempty compact `C` in an inner product space and any `y`, there is `x_e ∈ C` with
 `⟪x − x_e, x_e − y⟫ < 0` for every other `x ∈ C`; moreover `‖x_e − y‖ ≥ ‖x − y‖` for all `x ∈ C`. -/
 theorem exists_farthest_point_exposed {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -100,7 +100,7 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Sliding lemma for the Alexandrov maximum principle** (weak Letwin route, Caffarelli's argument):
+/-- **Sliding lemma for the Alexandrov maximum principle** (Caffarelli's argument):
 if `u` is convex, `u ≥ 0` on the frontier of a bounded open `Ω`, `u x₀ < 0` at some `x₀ ∈ Ω`, and the
 affine function `x ↦ u x₀ + ⟪p, x − x₀⟫` is `≤ 0` on `closure Ω`, then `p` is a subgradient of `u` at
 some point of `Ω`. In particular, `closedBall 0 (-u x₀ / diam Ω) ⊆ ∂u(Ω)`, and the cone over the ball
@@ -185,8 +185,8 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Supporting half-space at a nearest boundary point of an open convex set** (weak Letwin route,
-Caffarelli's argument, the `dist(x₀, ∂Ω)` factor of the Alexandrov estimate): for a bounded open convex
+/-- **Supporting half-space at a nearest boundary point of an open convex set** (Caffarelli's
+argument, the `dist(x₀, ∂Ω)` factor of the Alexandrov estimate): for a bounded open convex
 `Ω` and `x₀ ∈ Ω`, with `d := infDist x₀ (frontier Ω)`, there is a unit vector `e` such that
 `⟪x − x₀, e⟫ ≤ d` for every `x ∈ Ω`. -/
 theorem exists_unit_inner_le_infDist_frontier {E : Type*} [NormedAddCommGroup E]
@@ -311,7 +311,7 @@ open scoped ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Volume of the cone over a ball** (weak Letwin route, Caffarelli's argument, Alexandrov maximum
+/-- **Volume of the cone over a ball** (Caffarelli's argument, Alexandrov maximum
 principle): there is `c > 0`, depending only on `E`, such that the convex hull of the closed ball of
 radius `r` and a point `q` with `‖q‖ ≥ r` has volume at least `c · r^(n−1) · ‖q‖`, `n = dim E`. -/
 theorem exists_pos_volume_convexHull_closedBall_union_singleton_ge {E : Type*}

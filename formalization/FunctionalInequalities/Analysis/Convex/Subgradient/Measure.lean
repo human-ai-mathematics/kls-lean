@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment
+import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.Analysis.Convex.Measure
 
@@ -24,7 +24,7 @@ open MeasureTheory Set
 /-! Convex functions on open sets are differentiable almost everywhere. -/
 
 /-- **A convex function on an open set is differentiable almost everywhere on it** (Rademacher for
-convex functions; weak Letwin route, support for the a.e. injectivity of the subgradient map). -/
+convex functions; support for the a.e. injectivity of the subgradient map). -/
 theorem ConvexOn.ae_differentiableAt_of_isOpen {E : Type*} [NormedAddCommGroup E]
     [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (μ : Measure E) [μ.IsAddHaarMeasure]
@@ -83,7 +83,7 @@ namespace FunctionalInequalities.Analysis
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **Subgradients of a convex Lipschitz function lie in the closed convex range of its a.e.
-gradient** (weak Letwin route: `∂u(x) ⊆ K̄` for the weak moment map, whose gradient lies
+gradient** (`∂u(x) ⊆ K̄` for the weak moment map, whose gradient lies
 a.e. in the target `K`): if `u` is convex and Lipschitz on a finite-dimensional inner product space,
 `K` is closed and convex and `∇u(x) ∈ K` for a.e. `x`, then every subgradient `p` of `u` at every
 point `x` (`u(x) + ⟪p, y − x⟫ ≤ u(y)` for all `y`) lies in `K`. -/
@@ -161,29 +161,7 @@ private theorem legendre_eq_of_subgradient (u : E → ℝ) (x p : E)
     simpa only [EReal.coe_sub] using
       (EReal.coe_le_coe_iff.mpr hz')
 
-private theorem convex_legendre_finite_domain (φ : E → EReal) (hφ : ProperPotential φ) :
-    Convex ℝ {q : E | legendre φ q ≠ ⊤} := by
-  intro q₁ hq₁ q₂ hq₂ a b ha hb hab
-  have hq₁bot : legendre φ q₁ ≠ ⊥ := legendre_ne_bot φ hφ q₁
-  have hq₂bot : legendre φ q₂ ≠ ⊥ := legendre_ne_bot φ hφ q₂
-  have hq₁epi :
-      (q₁, (legendre φ q₁).toReal) ∈
-        {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
-    change legendre φ q₁ ≤ ((legendre φ q₁).toReal : EReal)
-    rw [EReal.coe_toReal hq₁ hq₁bot]
-  have hq₂epi :
-      (q₂, (legendre φ q₂).toReal) ∈
-        {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
-    change legendre φ q₂ ≤ ((legendre φ q₂).toReal : EReal)
-    rw [EReal.coe_toReal hq₂ hq₂bot]
-  have hcomb := (convex_epigraph_legendre φ) hq₁epi hq₂epi ha hb hab
-  change legendre φ (a • q₁ + b • q₂) ≤
-    ((a * (legendre φ q₁).toReal + b * (legendre φ q₂).toReal : ℝ) : EReal) at hcomb
-  intro htop
-  rw [htop] at hcomb
-  exact (not_le_of_gt (EReal.coe_lt_top _)) hcomb
-
-/-- **Almost every subgradient belongs to a single point** (weak Letwin route, the
+/-- **Almost every subgradient belongs to a single point** (the
 Alexandrov identity): for a convex Lipschitz `u` on a finite-dimensional inner product space, the
 set of `p` that are subgradients of `u` at two distinct points is Lebesgue-null (such `p` are
 non-differentiability points of the conjugate `u*`, or frontier points of its domain). -/
@@ -206,41 +184,10 @@ theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [Measura
     · intro x
       exact EReal.coe_ne_bot _
     · exact EReal.coe_ne_top _
-  have hDom : Convex ℝ Dom := by
-    simpa only [Dom] using convex_legendre_finite_domain φ hφ
-  have hconvG : ConvexOn ℝ (interior Dom) g := by
-    refine ⟨hDom.interior, ?_⟩
-    intro q₁ hq₁ q₂ hq₂ a b ha hb hab
-    have hq₁D : q₁ ∈ Dom := interior_subset hq₁
-    have hq₂D : q₂ ∈ Dom := interior_subset hq₂
-    have hqD : a • q₁ + b • q₂ ∈ Dom :=
-      hDom hq₁D hq₂D ha hb hab
-    have hq₁bot : legendre φ q₁ ≠ ⊥ := legendre_ne_bot φ hφ q₁
-    have hq₂bot : legendre φ q₂ ≠ ⊥ := legendre_ne_bot φ hφ q₂
-    have hqbot : legendre φ (a • q₁ + b • q₂) ≠ ⊥ :=
-      legendre_ne_bot φ hφ (a • q₁ + b • q₂)
-    have hq₁epi :
-        (q₁, g q₁) ∈ {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
-      change legendre φ q₁ ≤ ((legendre φ q₁).toReal : EReal)
-      rw [EReal.coe_toReal hq₁D hq₁bot]
-    have hq₂epi :
-        (q₂, g q₂) ∈ {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
-      change legendre φ q₂ ≤ ((legendre φ q₂).toReal : EReal)
-      rw [EReal.coe_toReal hq₂D hq₂bot]
-    have hE := (convex_epigraph_legendre φ) hq₁epi hq₂epi ha hb hab
-    change legendre φ (a • q₁ + b • q₂) ≤
-      ((a * g q₁ + b * g q₂ : ℝ) : EReal) at hE
-    have hcoe :
-        (g (a • q₁ + b • q₂) : EReal) =
-          legendre φ (a • q₁ + b • q₂) := by
-      dsimp [g]
-      exact EReal.coe_toReal hqD hqbot
-    have hreal :
-        g (a • q₁ + b • q₂) ≤ a * g q₁ + b * g q₂ := by
-      apply EReal.coe_le_coe_iff.mp
-      rw [hcoe]
-      exact hE
-    simpa only [smul_eq_mul] using hreal
+  have hconvφ : ConvexPotential (legendre φ) := convexPotential_legendre φ hφ.2
+  have hDom : Convex ℝ Dom := hconvφ.convex_domain
+  have hconvG : ConvexOn ℝ (interior Dom) g :=
+    hconvφ.convexOn_toReal.subset interior_subset hDom.interior
   have hae :
       ∀ᵐ q : E ∂(volume : Measure E),
         q ∈ interior Dom → DifferentiableAt ℝ g q :=
@@ -312,7 +259,8 @@ section InnerProduct
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/-- **A function affine along a full line pins every subgradient** (weak Letwin route, Caffarelli's argument): if `u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
+/-- **A function affine along a full line pins every subgradient** (Caffarelli's argument): if
+`u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
 any point satisfies `⟪p, θ⟫ = c`. -/
 theorem inner_subgradient_eq_of_affine_on_line {u : E → ℝ} {x₀ θ : E} {c : ℝ}
     (hline : ∀ t : ℝ, u (x₀ + t • θ) = u x₀ + t * c) {x p : E}

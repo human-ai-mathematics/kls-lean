@@ -10,6 +10,8 @@ import FunctionalInequalities.Poincare.L2.Comparison
 import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.Probability.Covariance.Whitening
 import FunctionalInequalities.Probability.Covariance.Intrinsic
+import FunctionalInequalities.Poincare.SmoothTest.Linear
+import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # Affine and isotropic KLS formulations
@@ -37,8 +39,12 @@ The zero-dimensional law is included in all three statements; there every consta
 
 `conjecture_of_affineBound` specializes (2) to the Euclidean family `EuclideanSpace ℝ (Fin n)`:
 item (3) for some finite `K` implies the literal KLS proposition `KLS.Conjecture`. The converse
-passage from the `Fin n` family to arbitrary spaces is not stated here. Nothing here asserts that
-any of the three statements holds for some `K`.
+passage from the `Fin n` family to arbitrary spaces is not stated here.
+`conjecture_iff_isotropic` is the isotropic formulation of Letwin arXiv:2607.24164v1, Section 1:
+`KLS.Conjecture` holds exactly when one finite constant bounds `C_P^lit` over all isotropic
+log-concave laws on all `EuclideanSpace ℝ (Fin n)`. `one_le_localSlope_constant` is the linear-test
+bound `C_P ≥ 1` for isotropic laws in positive dimension. Nothing here asserts that any of the
+three statements holds for some `K`; no proof of the conjecture is used.
 -/
 
 noncomputable section
@@ -211,6 +217,26 @@ theorem localSlope_le_mul_intrinsicCovariance {μ : ProbabilityMeasure E}
   congr 2
   exact NNReal.eq (Covariance.opNorm_operator_intrinsic μ hμ.memLp_id_two)
 
+/-- Letwin arXiv:2607.24164v1, Section 1, after (1.1): testing linear functions gives
+`C_P(μ) ≥ 1` for an isotropic log-concave law in positive dimension. A unit vector `v` gives the
+test `x ↦ ⟪v, x⟫` of variance `1` and unit gradient energy, so the covariance Rayleigh bound
+`Covariance.lambdaMax_le_constant` applies with `Cov μ = id`. -/
+theorem one_le_localSlope_constant [Nontrivial E] {μ : ProbabilityMeasure E}
+    (hμ : LogConcave μ) (hiso : Isotropic μ) :
+    1 ≤ Poincare.LocalSlope.Intrinsic.constant μ := by
+  rw [← hμ.smoothTest_constant_eq_localSlope]
+  refine le_trans ?_ (Covariance.lambdaMax_le_constant hiso.memLp_two)
+  rw [Covariance.lambdaMax, Covariance.rayleighMax, hiso.covariance_identity]
+  obtain ⟨x, hx⟩ := exists_ne (0 : E)
+  have h1 : ∀ y : {y : E // y ≠ 0}, (ContinuousLinearMap.id ℝ E).rayleighQuotient y = 1 := by
+    intro y
+    have hy : ‖(y : E)‖ ≠ 0 := norm_ne_zero_iff.mpr y.2
+    simp only [ContinuousLinearMap.rayleighQuotient, ContinuousLinearMap.reApplyInnerSelf,
+      ContinuousLinearMap.id_apply, RCLike.re_to_real, real_inner_self_eq_norm_sq]
+    field_simp
+  have : Nonempty {y : E // y ≠ 0} := ⟨⟨x, hx⟩⟩
+  simp only [h1, ciSup_const, ENNReal.ofReal_one, le_refl]
+
 end KLS.LogConcave
 
 namespace KLS
@@ -247,6 +273,35 @@ theorem affine_isotropic_reduction (K : NNReal) :
 /-- Item (3) for some finite `K` implies the literal KLS proposition on the Euclidean family. -/
 theorem conjecture_of_affineBound {K : NNReal} (h : AffineBound.{0} K) : Conjecture :=
   ⟨K, fun n μ hμ _ ↦ covarianceBound_of_affineBound h (EuclideanSpace ℝ (Fin n)) μ hμ⟩
+
+/-- **The KLS conjecture in isotropic form** (Letwin arXiv:2607.24164v1, Section 1): the
+covariance-normalized proposition `Conjecture` holds if and only if one finite constant bounds
+the literature Poincaré constant of every isotropic log-concave probability law on every
+`EuclideanSpace ℝ (Fin n)`, dimension zero included. The converse direction centers and whitens
+the intrinsic law (`exists_isotropic_localSlope_constant_eq`) and moves it to
+`EuclideanSpace ℝ (Fin d)` by a linear isometry. -/
+theorem conjecture_iff_isotropic :
+    Conjecture ↔ ∃ C : NNReal, ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),
+      LogConcave μ → Isotropic μ → Poincare.LocalSlope.Intrinsic.constant μ ≤ (C : ENNReal) := by
+  constructor
+  · rintro ⟨C, hC⟩
+    refine ⟨C, fun n μ hμ hiso ↦ (hC n μ hμ hiso.memLp_two).trans ?_⟩
+    rw [hiso.covariance_identity]
+    exact mul_le_of_le_one_right' (ENNReal.ofReal_le_one.mpr ContinuousLinearMap.norm_id_le)
+  · rintro ⟨C, hC⟩
+    refine ⟨C, fun n μ hμ _ ↦ hμ.localSlope_le_mul_intrinsicCovariance ?_⟩
+    obtain ⟨ν, hν, hiso, heq⟩ := hμ.exists_isotropic_localSlope_constant_eq
+    let e := (stdOrthonormalBasis ℝ (Probability.affineSupport μ).direction).repr
+    let ν' := Probability.mapContinuousLinearEquiv ν e.toContinuousLinearEquiv
+    have hν' : LogConcave ν' := hν.mapContinuousLinearEquiv _
+    have hiso' : Isotropic ν' := hiso.map_linearIsometryEquiv e
+    have hconst : Poincare.LocalSlope.Intrinsic.constant ν' =
+        Poincare.LocalSlope.Intrinsic.constant ν := by
+      rw [← hν'.smoothTest_constant_eq_localSlope, ← hν.smoothTest_constant_eq_localSlope,
+        Probability.coe_mapContinuousLinearEquiv]
+      exact Poincare.SmoothTest.constant_map_linearIsometryEquiv e _
+    rw [heq, ← hconst]
+    exact hC _ ν' hν' hiso'
 
 end KLS
 

@@ -8,7 +8,7 @@
 
 Statements retain their individual finite-index, natural-dimension, symmetry, positivity and
 exponent hypotheses. Elementary identities have no added symmetry premise. The tensor proof
-keeps its shared private supports with the spectral-energy arguments. The existing
-[TraceGram](../TraceGram.lean) owns the separate analytic/Gram integration boundary.
+keeps its shared private supports with the spectral-energy arguments. The
+[Gram](Gram.lean) module owns the separate analytic/Gram integration boundary.
 
 Qualified declaration names are unchanged.

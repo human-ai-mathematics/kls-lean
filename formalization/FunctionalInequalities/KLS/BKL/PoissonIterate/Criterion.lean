@@ -1,18 +1,17 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
 import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
 import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.Analysis.DyadicSummation
+import FunctionalInequalities.Analysis.Iteration.DyadicSummation
 import FunctionalInequalities.Analysis.Tensor.BasisChange
 
 /-!
 # The Taylor-coefficient criterion of BKL Theorem 3.1
 
-Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1 (p. 10) and its proof (p. 17), in the
-operator route (`research/audits/BKL/IterateRouteStatements.lean`): the final argument that
-turns the estimates on the iterates `iter T̄ f k` (the source's `h_{k+1}`) of an approximate first
-eigenfunction into `C_P(μ) ≤ K R²`.
+Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1 (p. 10) and its proof (p. 17):
+the final argument that turns the estimates on the iterates `iter T̄ f k` (the source's `h_{k+1}`)
+of an approximate first eigenfunction into `C_P(μ) ≤ K R²`.
 
 ## What is proved
 
@@ -24,12 +23,12 @@ eigenfunction into `C_P(μ) ≤ K R²`.
   fields, componentwise.
 * `taylorCriterion`: in the heat model `ν = m.tilted (-U)` (`U` temperate, all exponential
   moments, `∇²U ≥ a > 0`, `∫ ⟪v, x⟫² dν ≤ ‖v‖²`) with (29) for `R ≥ 1`, `C_P(ν) ≤ K R²`;
-* `KLS.RegularPotential.poincare_le_of_taylor`: **BKL Theorem 3.1**, the exact statement `M` of
-  the route file for regular laws on `ℝⁿ` (centered, `Cov ≤ Id`, (29) in the Hilbert–Schmidt norm
+* `KLS.RegularPotential.poincare_le_of_taylor`: **BKL Theorem 3.1**, the exact statement
+  for regular laws on `ℝⁿ` (centered, `Cov ≤ Id`, (29) in the Hilbert–Schmidt norm
   of the standard basis).
 
 The constant is `K = taylorCriterionConstant = 100 c²` with `c = 2^20 max(1, 3)² = 9 · 2^20`, the
-constant of the route statement `J1` at `β = 3`.
+constant of Lemma 3.8 at `β = 3`.
 
 ## The argument
 
@@ -274,7 +273,7 @@ defect, `L k = ‖L h_{k+1}‖²`, `α k = α_{k+2}` and `t d k = |T_d(∇₀h_{
 (36), `v₀ ≥ λ`, `v_k → 0` and `Σ χ ≤ ‖L h₁‖² ≤ (1.1 λ)²` (Corollary 3.5), the monotonicity of
 `‖L h‖²` (Lemma 3.4), (46), (32), `α ≥ 0` with `α_k = 0 ⇒ v_{k+1} = 0`, the Taylor bound
 `t_d(k) ≤ R^{2d} v_{k+1}` ((29) and (33)), Lemma 3.8 with constant `c ≥ 1` and Lemma 3.9 (both
-with `β = 3`, in the shapes of the route statements `J1`, `J2`). Then `C ≤ 100 c² R²`. -/
+with `β = 3`). Then `C ≤ 100 c² R²`. -/
 theorem le_of_iterate_bounds {C c R : ℝ} {v p χ L α : ℕ → ℝ} {t : ℕ → ℕ → ℝ}
     (hC : 0 < C) (hc : 1 ≤ c) (hR : 1 ≤ R)
     (hv : ∀ k, 0 ≤ v k) (hv0 : C⁻¹ ≤ v 0) (hvlim : Tendsto v atTop (𝓝 0))
@@ -335,8 +334,8 @@ end Scalar
 
 /-! ### The criterion in the heat model -/
 
-/-- The universal constant of BKL Theorem 3.1 obtained in the operator route: `K = 100 c²` with
-`c = 2^20 max(1, 3)² = 9 · 2^20`, the constant of Lemma 3.8 (route statement `J1`) at `β = 3`. -/
+/-- The universal constant of BKL Theorem 3.1 obtained here: `K = 100 c²` with
+`c = 2^20 max(1, 3)² = 9 · 2^20`, the constant of Lemma 3.8 at `β = 3`. -/
 def taylorCriterionConstant : ℝ := 100 * (2 ^ 20 * max 1 3 ^ 2) ^ 2
 
 section HeatModel
@@ -492,8 +491,8 @@ namespace FunctionalInequalities.KLS.RegularPotential
 
 open FunctionalInequalities.KLS.LogConcave FunctionalInequalities.KLS.LogConcave.PoissonIterate
 
-/-- **BKL Theorem 3.1** (arXiv:2610.05474v1, p. 10, proof p. 17, operator route), the exact
-statement `M` of the route file, with `K = taylorCriterionConstant`: for every regular potential
+/-- **BKL Theorem 3.1** (arXiv:2610.05474v1, p. 10, proof p. 17), the exact
+statement, with `K = taylorCriterionConstant`: for every regular potential
 `V` on `ℝⁿ` (BKL (12)) whose law `μ` is centered with `Cov μ ≤ Id`, and every `R ≥ 1` with
 `|T_d f| ≤ R^d ‖f‖_{L²(μ)}` for all `f ∈ L²(μ)` and `d ≥ 1` (29) (Hilbert–Schmidt norm in the
 standard basis), `C_P(μ) ≤ K R²`.

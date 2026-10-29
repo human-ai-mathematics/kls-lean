@@ -184,4 +184,28 @@ theorem hessianMatrix_neg_of_contDiffAt {n : ℕ} {u : EuclideanSpace ℝ (Fin n
   rw [hessianMatrix_const_fun, zero_sub] at h
   simpa only [zero_sub] using h
 
+section PositiveDefinite
+
+variable {n : ℕ}
+local notation "E" => EuclideanSpace ℝ (Fin n)
+
+/-- A positive definite coordinate Hessian matrix makes the Hessian bilinear form positive on nonzero vectors. -/
+theorem bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef {u : E → ℝ} {x : E}
+    (hp : (hessianMatrix u x).PosDef) (v : E) (hv : v ≠ 0) :
+    0 < bilinearIteratedFDerivTwo ℝ u x v v := by
+  let b := EuclideanSpace.basisFun (Fin n) ℝ
+  have hz : (fun i => v i) ≠ 0 := by
+    intro h
+    apply hv
+    ext i
+    exact congrFun h i
+  have h := hp.dotProduct_mulVec_pos hz
+  have he : (∑ i, v i • b i) = v := b.sum_repr v
+  rw [← he]
+  rw [bilinear_sum_smul_sum_smul]
+  simpa only [b, hessianMatrix, dotProduct, Matrix.mulVec, star_trivial, Finset.mul_sum,
+    mul_assoc, mul_left_comm, mul_comm] using h
+
+end PositiveDefinite
+
 end FunctionalInequalities.Analysis

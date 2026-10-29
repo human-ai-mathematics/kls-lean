@@ -1,10 +1,10 @@
-import FunctionalInequalities.Analysis.Newtonian.CompactPoisson
+import FunctionalInequalities.Analysis.Newtonian.Schauder.CompactPoisson
 import FunctionalInequalities.Analysis.Holder.Cutoff
 
 /-!
 # Audit: GT Theorem 4.5 for compactly supported Poisson solutions
 
-Real clients of `compactPoisson_GT4_5` (`FunctionalInequalities/Analysis/Newtonian/CompactPoisson.lean`;
+Real clients of `compactPoisson_GT4_5` (`FunctionalInequalities/Analysis/Newtonian/Schauder/CompactPoisson.lean`;
 Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001, Theorem 4.5,
 p. 60) with `α = 3/4` and the ball `B = B_2(0)` (`R = 2`, diameter `4`):
 

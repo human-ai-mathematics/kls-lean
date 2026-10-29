@@ -10,8 +10,7 @@ open FunctionalInequalities.Probability.Gaussian
 Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5. Clients: smoothing the Dirac
 mass at `1` with `s = 3` keeps the mean `1`, has raw second moment `7/6` and variance `1/6`, and its
 covariance converges as `s → ∞`; the zero-dimensional law converges weakly and has no spurious
-second-moment increment. Clients adapted from the Codex bundle `Gaussian-Moments-Convergence/Clients.lean`
-(independently accepted, receipt 205f603e…).
+second-moment increment.
 -/
 
 open MeasureTheory Filter Topology FunctionalInequalities

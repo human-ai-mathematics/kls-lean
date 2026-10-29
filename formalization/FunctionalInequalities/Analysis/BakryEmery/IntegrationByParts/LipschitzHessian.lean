@@ -25,7 +25,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
 
 set_option maxHeartbeats 800000 in
 /-- **Mean Hessian identity for a `C¹` potential with Lipschitz gradient** (Letwin
-arXiv:2607.24164v1, Lemma 2.3, analytic part, at `C^{1,1}`; weak Letwin route):
+arXiv:2607.24164v1, Lemma 2.3, analytic part, at `C^{1,1}`):
 `∫ ⟪D(∇φ)(x) u, v⟫ dν = ∫ ∂_uφ ∂_vφ dν` for convex `φ ∈ C¹` with `G`-Lipschitz gradient,
 `e^{-φ}` a probability density and `∇φ ∈ L²(ν)`, where `D(∇φ)` is the a.e. (Rademacher)
 derivative of the Lipschitz map `∇φ`. -/

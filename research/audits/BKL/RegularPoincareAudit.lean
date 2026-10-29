@@ -9,9 +9,8 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5. Clients: 
 universal premise is discharged by the proved bound `C_P ≤ 4 Var` for isotropic regular laws, so the
 non-isotropic input `‖2x+3‖²/2` (covariance `1/4`) gets `C_P ≤ 1`; in dimension zero the premise is
 the zero constant and the transfer gives `0`; the envelope coefficient stays positive. The
-all-dimensional universal premise is not proved. Clients adapted from the Codex bundle
-`Regular-Poincare-Reduction/RealConsumers.lean` (independently accepted, receipt 215b0ade…), with
-the input law reconstructed as in `RegularIsotropicAudit`.
+all-dimensional universal premise is not proved. The input law is constructed as in
+`RegularIsotropicAudit`.
 -/
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities FunctionalInequalities.KLS
@@ -142,12 +141,13 @@ theorem zero_regular_isotropic_bound {V : ZeroSpace → ℝ} {a b : ℝ}
     Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (0 : ENNReal) := by
   rw [Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton]
 
-/-- Negative old upperb is permitted in rank0; the actual producer/transfer still gives CP0. -/
+/-- A negative upper bound `b` is permitted in rank zero; the actual producer/transfer still
+gives `C_P = 0`. -/
 theorem zero_input_poincare : Poincare.LocalSlope.Intrinsic.constant zero_regular.law ≤ 0 := by
   have h := KLS.RegularPotential.localSlope_le_covariance_norm (K := (0 : NNReal)) zero_regular_isotropic_bound zero_regular
   simpa only [ENNReal.coe_zero, zero_mul] using h
 
-/-- The identity norm is really zero; the future positive envelope does not divide by it. -/
+/-- The identity norm is really zero; the positive envelope does not divide by it. -/
 theorem zero_identity_norm : ‖ContinuousLinearMap.id ℝ ZeroSpace‖ = 0 := by
   have h : ContinuousLinearMap.id ℝ ZeroSpace = 0 := Subsingleton.elim _ _
   rw [h, norm_zero]

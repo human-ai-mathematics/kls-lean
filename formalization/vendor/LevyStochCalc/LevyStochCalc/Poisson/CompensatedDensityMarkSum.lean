@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Poisson.CompensatedDensityBoxIsometry
 
 /-!
@@ -335,7 +338,7 @@ lemma timeIndicator_sq_integral
         simp [Set.indicator_of_mem, Set.indicator_of_notMem, hs, hns]
       · simp [Set.indicator_of_notMem hs]
     · intro h; exact absurd (Finset.mem_univ i) h
-  haveI hfin : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
+  have hfin : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
         exact ENNReal.ofReal_lt_top⟩
   have hintg : ∀ i : Fin N₀, MeasureTheory.Integrable
@@ -555,7 +558,7 @@ lemma exists_L2_limit_of_memLp_cauchySeq
     (hcs : CauchySeq (fun n => (hmem n).toLp (Mₙ n))) :
     ∃ M : Ω → ℝ, MeasureTheory.MemLp M 2 P ∧
       Filter.Tendsto (fun n => MeasureTheory.eLpNorm (Mₙ n - M) 2 P) Filter.atTop (nhds 0) := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   obtain ⟨g, hg⟩ := cauchySeq_tendsto_of_complete hcs
   refine ⟨g, MeasureTheory.Lp.memLp g, ?_⟩
   rw [← MeasureTheory.Lp.tendsto_Lp_iff_tendsto_eLpNorm'' Mₙ hmem (↑↑g)

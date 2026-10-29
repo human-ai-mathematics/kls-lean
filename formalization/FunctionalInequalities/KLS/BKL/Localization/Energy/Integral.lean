@@ -2,11 +2,11 @@ import FunctionalInequalities.KLS.BKL.Localization.Coefficients
 import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Regularity
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Conjugation
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Bound
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
 import FunctionalInequalities.Analysis.Tensor.EnergyForm
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 
 /-!

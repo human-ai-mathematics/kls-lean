@@ -6,7 +6,7 @@ import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 # Compact-set log-concavity of probability laws
 
 `KLS.LogConcave` tests log-concavity on compact sets and admits laws on proper affine supports.
-The public property namespace is retained independently of this probability-theoretic owner.
+The property keeps the namespace `KLS.LogConcave` although this module lies in `Probability/`.
 The affine combination of compact sets is compact in every real normed space. Equivalence with density
 representations belongs to the separate log-concave representation modules; no Poincaré energy,
 constant, approximation theorem or nondegeneracy premise is part of this definition.

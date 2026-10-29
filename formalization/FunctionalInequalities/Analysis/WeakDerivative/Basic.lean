@@ -11,8 +11,6 @@ import Mathlib.MeasureTheory.Measure.Haar.OfBasis
 
 /-!
 # Weak directional derivatives and classical identification
-
-Existing names, statements and proof payloads are preserved.
 -/
 
 noncomputable section
@@ -26,8 +24,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDim
   [MeasurableSpace E] [BorelSpace E]
 
 /-- `g` is the **weak directional derivative** of `f` along `v`, tested against `C¹` functions with
-compact support; both functions are locally integrable (so the integrals are not junk). Weak Letwin
-route (routes/letwin-weak-definitions.md, item 4). -/
+compact support; both functions are locally integrable (so the integrals are not junk). -/
 def HasWeakDerivAlong (f g : E → ℝ) (v : E) : Prop :=
   LocallyIntegrable f (volume : Measure E) ∧ LocallyIntegrable g (volume : Measure E) ∧
     ∀ ψ : E → ℝ, ContDiff ℝ 1 ψ → HasCompactSupport ψ →

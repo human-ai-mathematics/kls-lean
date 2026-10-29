@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.Dissipation
 /-!
 # Positive-time smoothing for `P_t = exp (-t T†T)`
 
-`Generated/Domain.lean` (operator-domain invariance) and `Generated/FormDomain.lean` (the operator-domain energy bound–`F4`) both start from a
+`Generated/Domain.lean` (operator-domain invariance) and `Generated/FormDomain.lean` (the operator-domain energy bound) both start from a
 datum that already lies in `D(T†T)` or `D(T)`. This module removes that assumption: for `T` closed
 and densely defined and **every** `g : H₀`,
 
@@ -16,8 +16,7 @@ and densely defined and **every** `g : H₀`,
 * `tendsto_map_apply_of_pos` / `tendsto_map_adjointComp_apply_of_pos`: both fields converge
   under convergence of the initial data, at each fixed strictly positive time.
 
-These are the two statements that the audits of the previous two rounds carried as
-**type-checked candidates only**; they are now proved. The constants are the ones the proof
+The constants are the ones the proof
 produces: `‖T (P_t g)‖ ≤ ‖g‖ / √(2t)` and `‖T†T (P_t g)‖ ≤ ‖g‖ / t`. The sharp scalar maxima
 `sup_{λ ≥ 0} λ exp (-2tλ) = 1/(2et)` and `sup_{λ ≥ 0} λ ² exp (-2tλ) = 1/(et) ²` are **not**
 claimed, so the sharp constants `1/√(2et)` and `1/(et)` remain unproved.
@@ -28,7 +27,8 @@ claimed, so the sharp constants `1/√(2et)` and `1/(et)` remain unproved.
 for a bounded symmetric `L` and `u ≥ 0` with `v = exp (-u • L) y`,
 `2 u ⟪L v, v⟫ ≤ ‖y‖ ² - ‖v‖ ²` and (for `L ≥ 0`) `2 u ‖L v‖ ² ≤ ⟪L y, y⟫ - ⟪L v, v⟫`. Applied to
 the Yosida approximation `L_s` and passed to the limit `s ↓ 0` along any positive null sequence,
-using `L_s (exp (-t • L_s) f) = exp (-t • L_s) (L_s f)`, `Y5` and the adjoint-product identification, they become
+using `L_s (exp (-t • L_s) f) = exp (-t • L_s) (L_s f)`, the strong convergence
+`exists_delta_norm_yosida_sub_adjointComp_lt` and the adjoint-product identification, they become
 
 `2 t ‖T (P_t f)‖ ² ≤ ‖f‖ ² - ‖P_t f‖ ²` and `2 t ‖T†T (P_t f)‖ ² ≤ ‖T f‖ ² - ‖T (P_t f)‖ ²`
 
@@ -40,7 +40,7 @@ with operator-domain invariance.
 differences, which turns it into a Cauchy estimate: from `g_n → g` with `g_n ∈ D(T†T)` the
 sequence `T (P_t g_n)` is Cauchy because `2 t ‖T (P_t (g_n - g_m))‖ ² ≤ ‖g_n - g_m‖ ²`, and
 `exists_mem_domain_apply_eq_of_tendsto` (closedness of `T`) identifies the limit. The same
-argument with graph-norm density's graph-norm approximation and closedness of `T†T` (self-adjoint, so closed)
+argument with graph-norm approximation and closedness of `T†T` (self-adjoint, so closed)
 upgrades the second estimate to every `f ∈ D(T)`
 (`mem_adjointComp_domain_apply_of_mem_domain`). Composing the two through
 `P_t = P_{t/2} P_{t/2}` gives the operator-domain statement for arbitrary data.
@@ -87,7 +87,7 @@ theorem tendsto_exp_neg_smul_yosida (g : H₀) {t : ℝ} (ht : 0 ≤ t) :
   exact hlt (hs n) habs
 
 include hT hd hs hs0 in
-/-- `Y5` along a sequence: `L_{s n} f → T†T f` for `f ∈ D(T†T)`. -/
+/-- Strong Yosida convergence along a sequence: `L_{s n} f → T†T f` for `f ∈ D(T†T)`. -/
 theorem tendsto_yosida_apply (f : (adjointComp T).domain) :
     Filter.Tendsto (fun n : ℕ => yosida T hT (hs n) (f : H₀))
       Filter.atTop (nhds (adjointComp T f)) := by
@@ -180,7 +180,7 @@ theorem two_mul_norm_map_apply_sq_le_sub (f : (adjointComp T).domain) {t : ℝ} 
 `2 t ‖T†T (P_t f)‖ ² ≤ ‖T f‖ ² - ‖T (P_t f)‖ ²`.
 
 `two_mul_norm_apply_exp_neg_smul_sq_le` for the Yosida approximation, passed to the limit;
-nonnegativity of `L_s` (`Y1`) is what makes the bounded-level estimate available. -/
+nonnegativity of `L_s` (`yosida_nonneg`) is what makes the bounded-level estimate available. -/
 theorem two_mul_norm_adjointComp_apply_sq_le_sub (f : (adjointComp T).domain) {t : ℝ}
     (ht : 0 ≤ t) (hft : apply T hT hd t (f : H₀) ∈ T.domain) :
     2 * t * ‖adjointComp T ⟨apply T hT hd t (f : H₀), preserves_domain T hT hd f ht⟩‖ ^ 2
@@ -296,8 +296,7 @@ theorem exists_mem_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t) :
   exact le_of_tendsto_of_tendsto' ((hη.norm.pow 2).const_mul (2 * t)) (hug.norm.pow 2) hbound
 
 /-- **Positive-time smoothing into the form domain.**  For every `g : H₀` and `t > 0`,
-`P_t g ∈ D(T)`.  This is the statement that the audits of the two previous rounds carried as a
-type-checked candidate. -/
+`P_t g ∈ D(T)`. -/
 theorem mem_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t) :
     apply T hT hd t g ∈ T.domain := by
   obtain ⟨h, _⟩ := exists_mem_domain_apply_of_pos T hT hd g ht
@@ -397,7 +396,7 @@ theorem exists_mem_adjointComp_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 
     sq_nonneg (t * ‖adjointComp T ⟨apply T hT hd t g, hmem⟩‖ - ‖g‖)]
 
 /-- **Positive-time smoothing into the generator domain.**  For every `g : H₀` and `t > 0`,
-`P_t g ∈ D(T†T)`.  This is the statement operator-domain invariance carried as a type-checked candidate. -/
+`P_t g ∈ D(T†T)`. -/
 theorem mem_adjointComp_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t) :
     apply T hT hd t g ∈ (adjointComp T).domain := by
   obtain ⟨h, _⟩ := exists_mem_adjointComp_domain_apply_of_pos T hT hd g ht
@@ -415,9 +414,11 @@ theorem mul_norm_adjointComp_apply_le (g : H₀) {t : ℝ} (ht : 0 < t)
 /-- **Second-order positive-time regularity.**  For every `g : H₀` and every `t > 0`, the
 generator image `T†T (P_t g)` again lies in the **form** domain `D(T)`.
 
-Split the time, `P_t = P_{t/2} P_{t/2}`.  The inner half puts `g` in `D(T†T)` (`E4`), so
+Split the time, `P_t = P_{t/2} P_{t/2}`.  The inner half puts `g` in `D(T†T)`
+(`mem_adjointComp_domain_apply_of_pos`), so
 commutation gives `T†T (P_t g) = P_{t/2} (T†T (P_{t/2} g))`, and the outer half sends that
-`H₀`-vector into `D(T)` (`E2`).  Nothing beyond `E2`, `E4` and operator-domain invariance's commutation is used; in
+`H₀`-vector into `D(T)` (`mem_domain_apply_of_pos`).  Nothing beyond these two statements and
+the generator commutation `generator_comm` is used; in
 particular no classical representative and no second application of the adjoint. -/
 theorem mem_domain_adjointComp_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t)
     (h : apply T hT hd t g ∈ (adjointComp T).domain) :

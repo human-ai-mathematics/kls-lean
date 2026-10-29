@@ -1,7 +1,7 @@
 import FunctionalInequalities.Energy.SmoothGradient.Quadratic
 import FunctionalInequalities.Energy.Form.Core
 import FunctionalInequalities.Poincare.SmoothTest.Basic
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
 
 /-!

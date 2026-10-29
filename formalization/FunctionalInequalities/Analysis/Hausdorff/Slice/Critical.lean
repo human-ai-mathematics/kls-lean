@@ -4,7 +4,7 @@ import Mathlib.MeasureTheory.Function.Jacobian
 
 /-! # The critical part of a `C¹` function has null level slices
 
-Property critical-slice nullity of the weighted coarea route: for a `C¹` real function on a finite-dimensional
+For a `C¹` real function on a finite-dimensional
 inner-product space, almost every level meets the critical set `{x | fderiv ℝ u x = 0}` in a set of
 zero `surfaceMeasure`.
 
@@ -125,7 +125,7 @@ theorem ae_surfaceMeasure_critical_ball_eq_zero {u : V → ℝ} (hu : ContDiff �
   refine le_antisymm ?_ (by simp)
   simpa [ht] using le_iInf fun k => hGdom k t
 
-/-- **The critical part of almost every level is null** (obligation critical-slice nullity).
+/-- **The critical part of almost every level is null.**
 
 Not Sard's theorem: nothing is claimed about the Lebesgue measure of the set of critical *values*,
 which for a merely `C¹` function may well be positive. -/

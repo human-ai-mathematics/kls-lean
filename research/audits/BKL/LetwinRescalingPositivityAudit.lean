@@ -9,12 +9,10 @@ conclusion:
 
 * rescaling (`deriv_comp_sub_div_and_deriv_deriv`): the actual function `exp` with the nontrivial shift `c = 1` and scale
   `R = 2` at `t = 3` (coefficients `2⁻¹ e` and `(2⁻¹)² e`); the total-derivative convention at `R = 0` for arbitrary `f`
-  (both derivatives `0`); and the Lemma A.4 use with the adopted profile bound: `|(η((· − c)/R))″| ≤ (R⁻¹)² B`;
+  (both derivatives `0`); and the Lemma A.4 use with the fixed profile bound: `|(η((· − c)/R))″| ≤ (R⁻¹)² B`;
 * positivity (`sum_inverseHessianEntry_mul_mul_nonneg`): the scaled Gaussian potential `δ/2 ‖y‖²` (`δ > 0`) on the genuine
   two-dimensional `EuclideanSpace ℝ (Fin 2)`, positive definite by the existing Hessian lemma; the coordinate form of the
   chain rule (`a_i = DW(x)(b_i)` for an arbitrary `W`); and the rank-zero boundary `EuclideanSpace ℝ (Fin 0)`.
-
-Client bodies: Claude.
 -/
 
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
@@ -41,7 +39,7 @@ theorem zero_scale (f : ℝ → ℝ) (c t : ℝ) :
   · rw [h1]; simp
   · rw [h2]; simp
 
-/-- The Lemma A.4 use: with the adopted profile bound `B`, `|(η((· − c)/R))″(t)| ≤ (R⁻¹)² B` for all `c`, `R`, `t`. -/
+/-- The Lemma A.4 use: with the fixed profile bound `B`, `|(η((· − c)/R))″(t)| ≤ (R⁻¹)² B` for all `c`, `R`, `t`. -/
 theorem profile_second_derivative_bound :
     ∃ B : ℝ, 0 ≤ B ∧ ∀ c R t : ℝ,
       |deriv (deriv (fun s : ℝ => Real.smoothTransition (2 - (s - c) / R))) t| ≤ (R⁻¹) ^ 2 * B := by

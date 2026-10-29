@@ -47,19 +47,39 @@ Also formalized:
 - **The exact OpenAI statement**, through the separate [bridge package](integrations/openai/README.md).
 - **[Letwin Theorem 1.2](formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean)**
   with exact constant **8**, for every positive-dimensional isotropic log-concave law
-  and every self-adjoint quadratic form, without compact support.
+  and every self-adjoint quadratic form, without compact support;
+  [source-form certificate](solutions/ThmLetwinQuadraticBound.lean).
+- **[Letwin Theorem 1.1](solutions/ThmLetwinIsoperimetricBound.lean)**:
+  the logarithmic-quarter bound for n ≥ 2, certified through the stronger BKL result.
 - **[Letwin Lemma A.1](formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean)**:
   regular approximation preserving exact isotropy, with convergence of mixed moments
   of degree at most four.
+- **[Letwin Lemma 2.2 and Theorem 2.5](formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean)**
+  for the paper's merely convex source class, at every moment potential: the moment map
+  is smooth with the stated properties and satisfies the trace bound with exact constant
+  **2**; Lemmas 2.3, 2.4, 2.7, 2.9 and A.4–A.6 hold at the same potential.
+- **[Cordero-Erausquin–Klartag Theorem 2](formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean)**
+  (Letwin Lemma 2.1): existence of essentially continuous moment potentials and their
+  uniqueness up to translation.
+- **[Letwin Proposition 2.8](formalization/FunctionalInequalities/KLS/Letwin/HminusOne.lean)**
+  for every full-dimensional log-concave law, and the Section 1 constants with the
+  [Cheeger–Buser ratio](formalization/FunctionalInequalities/KLS/Letwin/IsoperimetricBound.lean)
+  1/4 ≤ ψ²/C_P ≤ π in every positive dimension.
 
 ## Limits
 
 - **No explicit numerical KLS constant is extracted.** Letwin's constant 8 bounds
   quadratic-form variance; it is separate from the final KLS constant.
 - **Letwin's original proof of Theorem 1.1 remains incomplete locally.** Its conclusion
-  is implied by the stronger BKL bound. Full moment-map regularity in Lemma 2.2 for
-  the paper's merely convex source class also remains incomplete. See the
-  [smooth-route gap map](research/progress/letwin-smooth-route.json).
+  is implied by the stronger BKL bound.
+- **Letwin coverage is its certified main-theorem conclusion**, through the BKL alternative
+  route; Proposition 2.8 retains its full-dimensional restriction. Cordero-Erausquin–Klartag
+  has no paper-target certificate. The [smooth-route map](research/progress/letwin-smooth-route.json)
+  records the moment-map results and remaining auxiliary gaps.
+- **The superseded variational route to Letwin Lemma 2.2 is not part of this release.**
+  Its auxiliary Lean files (Alexandrov sections, Caffarelli W²,p, Dirichlet/Pogorelov
+  references, CNS barriers) are excluded; their mathematical gaps remain open and are not
+  needed. The [delivery map](research/progress/completed-letwin-delivery-map.json) lists them.
 - **The uncut Eldan construction remains unformalized**, including strong solution,
   uniqueness, non-explosion and the literal stochastic identities (68)–(73).
   The proved KLS route uses finite-horizon cutoff localization.

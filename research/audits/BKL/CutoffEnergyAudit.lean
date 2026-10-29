@@ -1,5 +1,5 @@
 import solutions.LemBklCutoffEnergy
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.ToCumulant
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
@@ -71,7 +71,7 @@ theorem actualProcess (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fi
     hℱ0 hnull (ballCutoff R) (isCutoff_ballCutoff R)
   exact ⟨Ω, inferInstance, P, inferInstance, W, ℱ, hW, hright, hℱ0, hnull, p, hp⟩
 
-/-- Exact compact cumulant interface consumed by the next roadmap stage, derived
+/-- Exact compact cumulant interface consumed by the compact cumulant step, derived
 from the cutoff certificate, with arbitrary direction (no unit-vector premise). -/
 theorem handoff (d : ℕ) (hd : 1 ≤ d) :
     ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),

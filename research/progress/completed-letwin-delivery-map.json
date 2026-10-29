@@ -1,0 +1,2395 @@
+{
+  "title": "Completed Letwin/CEK delivery: release scope and excluded auxiliary development",
+  "date": "2026-10-29",
+  "spec": "AGENTS.md, research/workflow.md (section 6, delivery evidence) and research/naming.md; Letwin arXiv:2607.24164v1 and Cordero-Erausquin-Klartag arXiv:1304.0630v1 Theorem 2 as recorded in research/progress/literature.json. This map records release scope only: no statement, hypothesis, constant, dimension, proof body, certificate or exploratory-route structure changes.",
+  "selection": {
+    "base": {
+      "ref": "origin/main",
+      "commit": "0233f0b837131da5bb20420c4152d13260b8260a"
+    },
+    "unpublished_predecessor": {
+      "commit": "04ef79859edd554e202e914875da748d39935503",
+      "subject": "feat: complete CEK Theorem 2 and remaining Letwin lemmas; reorganize layout",
+      "scope": "Unpublished local commit (949 files) combining the completed CEK/Letwin results, a four-round layout migration and unused auxiliary research on an earlier variational route to Letwin Lemma 2.2. It is not delivered as such."
+    },
+    "rule": "Keep every module and public declaration owner already published on origin/main with its complete import closure; add the completed Letwin/CEK results (Lemma 2.2, Theorem 2.5 and their consumers for every moment potential, CEK Theorem 2, Letwin Theorems 1.1 and 1.2 and their certificates), Proposition 2.8 for full-dimensional laws and the proved Klartag supports, with their import closures, plus the reviewed certificate registration and readability maintenance. Library files used only by the unfinished alternative route are not copied.",
+    "roots": [
+      "FunctionalInequalities.KLS.Letwin.MomentMap",
+      "FunctionalInequalities.KLS.Letwin.SteinKernel",
+      "FunctionalInequalities.KLS.Letwin.MomentCalculus",
+      "FunctionalInequalities.KLS.CEK.Uniqueness",
+      "FunctionalInequalities.KLS.Letwin.QuadraticBound",
+      "FunctionalInequalities.KLS.Letwin.IsoperimetricBound",
+      "FunctionalInequalities.KLS.Letwin.HminusOne",
+      "FunctionalInequalities.KLS.Klartag.GeneratorBound",
+      "FunctionalInequalities.KLS.Klartag.PowerSupersolution",
+      "FunctionalInequalities.KLS.Klartag.TransportLaplacian",
+      "FunctionalInequalities.KLS.Klartag.DualLaplacian"
+    ],
+    "retained_library_modules": 798,
+    "retained_new_modules_outside_root_closure": [
+      "formalization/FunctionalInequalities/Analysis/Convex/LipschitzEnvelope.lean",
+      "formalization/FunctionalInequalities/Analysis/Mollification/Convex.lean",
+      "formalization/FunctionalInequalities/KLS/Klartag/DualLaplacian.lean",
+      "formalization/FunctionalInequalities/KLS/Klartag/GeneratorBound.lean",
+      "formalization/FunctionalInequalities/KLS/Klartag/PowerSupersolution.lean",
+      "formalization/FunctionalInequalities/KLS/Klartag/TransportLaplacian.lean",
+      "formalization/FunctionalInequalities/KLS/Letwin/HminusOne.lean",
+      "formalization/FunctionalInequalities/KLS/LogConcave/Density/LowerApproximation.lean",
+      "formalization/FunctionalInequalities/KLS/LogConcave/HminusOneApproximation.lean"
+    ],
+    "excluded_library_modules": 39,
+    "excluded_audit_clients": 55,
+    "excluded_examples": [],
+    "retained_sources": "Every retained Lean file is byte-identical to the primary checkout whose full local verification passed; that receipt is evidence of the selected source bytes, not of this candidate.",
+    "origin_public_names_absent": {
+      "summary": "Nine public names present on origin/main are absent here. None is dropped by this selection: six were merged into existing statements and two replaced by pinned Mathlib lemmas in earlier recorded batches, and one is compiler-generated. No alias is added.",
+      "names": [
+        {
+          "name": "FunctionalInequalities.Analysis.BakryEmery.gradient_pairing_eq_fderiv",
+          "class": "earlier public statement merger",
+          "record": "research/progress/public-statement-merge-map.json",
+          "replacement": "inner_gradient_left",
+          "replacement_source": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Gradient/Basic.lean",
+          "relation": "pinned-Mathlib-specialization"
+        },
+        {
+          "name": "ContinuousLinearMap.compLpL.congr_simp",
+          "class": "compiler-generated congruence lemma",
+          "note": "Generated contract x = y -> compLpL x = compLpL y, with no source position or documentation; ordinary congruence supplies it. It is not handwritten stable API, and no alias is added."
+        },
+        {
+          "name": "FunctionalInequalities.Analysis.clm_eq_sum_basisFun_smul_proj",
+          "class": "earlier public statement merger",
+          "record": "research/progress/public-statement-merge-map.json",
+          "replacement": "FunctionalInequalities.Analysis.eq_sum_apply_basisFun_smul_proj",
+          "replacement_source": "formalization/FunctionalInequalities/Analysis/EuclideanCoordinates.lean",
+          "relation": "same-statement-modulo-bound-variable-names"
+        },
+        {
+          "name": "FunctionalInequalities.Analysis.Semigroup.Generated.right_derivative_zero",
+          "class": "earlier public statement merger",
+          "record": "research/progress/public-statement-merge-map.json",
+          "replacement": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit",
+          "replacement_source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+          "relation": "same-statement-modulo-bound-variable-names"
+        },
+        {
+          "name": "FunctionalInequalities.Energy.Euclidean.inner_gradient_eq_fderiv_apply",
+          "class": "earlier public statement merger",
+          "record": "research/progress/public-statement-merge-map.json",
+          "replacement": "inner_gradient_left",
+          "replacement_source": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Gradient/Basic.lean",
+          "relation": "pinned-Mathlib-specialization"
+        },
+        {
+          "name": "FunctionalInequalities.KLS.BKL.sum_sq_contract_le_rows",
+          "class": "earlier public statement merger",
+          "record": "research/progress/public-statement-merge-map.json",
+          "replacement": "FunctionalInequalities.Analysis.Tensor.sum_sq_contract_le",
+          "replacement_source": "formalization/FunctionalInequalities/Analysis/Tensor/Coordinate.lean",
+          "relation": "same-statement-modulo-bound-variable-names"
+        },
+        {
+          "name": "FunctionalInequalities.Analysis.opNorm_le_sum_sum_abs_basisFun",
+          "class": "earlier public statement merger",
+          "record": "research/progress/public-statement-merge-map.json",
+          "replacement": "FunctionalInequalities.Analysis.norm_le_sum_abs_apply_basisFun_apply",
+          "replacement_source": "formalization/FunctionalInequalities/Analysis/EuclideanCoordinates.lean",
+          "relation": "same-statement-modulo-bound-variable-names"
+        },
+        {
+          "name": "FunctionalInequalities.KLS.Isoperimetry.liminf_coe_mul",
+          "class": "earlier replacement by a pinned Mathlib lemma",
+          "record": "research/progress/private-promotion-merge-map.json",
+          "replacement": "ENNReal.liminf_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top",
+          "replacement_source": "pinned Mathlib db584cd6d46c92f209a44c0f1c829460d327499d: Mathlib/Order/Filter/ENNReal.lean"
+        },
+        {
+          "name": "FunctionalInequalities.KLS.Isoperimetry.limsup_coe_mul",
+          "class": "earlier replacement by a pinned Mathlib lemma",
+          "record": "research/progress/private-promotion-merge-map.json",
+          "replacement": "ENNReal.limsup_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top",
+          "replacement_source": "pinned Mathlib db584cd6d46c92f209a44c0f1c829460d327499d: Mathlib/Order/Filter/ENNReal.lean"
+        }
+      ]
+    }
+  },
+  "mathematical_status": "The excluded files belong to the superseded auxiliary variational development toward Letwin Lemma 2.2 (Caffarelli C^{1,alpha} and W^{2,p} section and contact supports, domain Monge-Ampere measures, the UNIT Dirichlet reference and compact-dual sections, the classical Savin/Pogorelov estimate and the Caffarelli-Nirenberg-Spruck 1984 Lemma 5.1 supports). The completed moment-map route does not use them. Their statements remain in the Blueprint with unchanged hypotheses and without Lean completion markers; their open mathematical gaps (W^{2,p}, Dirichlet/Pogorelov reference existence and regularity, the contact-density estimate, the combined CNS barrier comparison and classical solvability) remain open. They are historical records, not formalization targets to resume.",
+  "excluded_library_modules": [
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Compact.lean",
+      "module": "FunctionalInequalities.Analysis.BakryEmery.Hessian.Compact",
+      "excluded_public_declarations": 2,
+      "blueprint_nodes": [
+        "lem:compact-posDef-gradient-bounds"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/LocalReference.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison",
+      "excluded_public_declarations": 18,
+      "blueprint_nodes": [
+        "lem:alexandrov-density-comparison",
+        "lem:convex-contact-perturbation"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/ContactPerturbation.lean",
+        "research/audits/Letwin/DomainAffineMA.lean",
+        "research/audits/Letwin/DomainBoundary.lean",
+        "research/audits/Letwin/DomainComparison.lean",
+        "research/audits/Letwin/DomainContact.lean",
+        "research/audits/Letwin/DomainResidualContact.lean",
+        "research/audits/Letwin/SectionComparison.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Alexandrov.DomainTransport",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:compact-dual-capacity",
+        "lem:compact-dual-ma",
+        "lem:open-dual-ma"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletSolution.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Alexandrov.Measure",
+      "excluded_public_declarations": 7,
+      "blueprint_nodes": [
+        "lem:domain-ma-overlap",
+        "lem:domain-monge-ampere-measure",
+        "lem:domain-support-images"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/C0Subgradient.lean",
+        "research/audits/Letwin/DomainMAImage.lean",
+        "research/audits/Letwin/DomainOverlap.lean",
+        "research/audits/Letwin/DomainTotalMass.lean",
+        "research/audits/SourceLayout/DomainMeasure.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Alexandrov.Stability",
+      "excluded_public_declarations": 6,
+      "blueprint_nodes": [
+        "lem:domain-ma-lower-borel",
+        "lem:domain-ma-stability"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/C0Subgradient.lean",
+        "research/audits/Letwin/DomainAffineMA.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Caffarelli.DomainContact",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:contained-dual-sections",
+        "lem:domain-unit-interior-strictness"
+      ],
+      "audit_clients": []
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.ContactImage",
+      "excluded_public_declarations": 9,
+      "blueprint_nodes": [
+        "lem:compact-posDef-gradient-bounds",
+        "lem:convex-contact-null-image",
+        "lem:convex-gradient-null-image",
+        "lem:convex-quadratic-contact-measure",
+        "lem:convex-reference-contact-measure",
+        "lem:convex-reference-contact-null-image"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/ContactImage.lean",
+        "research/audits/Letwin/ContactReference.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+      "excluded_public_declarations": 15,
+      "blueprint_nodes": [
+        "lem:convex-contact-determinant",
+        "lem:convex-quadratic-contact-measure",
+        "lem:convex-reference-contact-gain",
+        "lem:convex-reference-contact-measure",
+        "lem:convex-unit-ball-contact-gain"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/ContactDensity.lean",
+        "research/audits/Letwin/ContactMeasure.lean",
+        "research/audits/Letwin/ContactQuadratic.lean",
+        "research/audits/Letwin/DomainContactGain.lean",
+        "research/audits/Letwin/DomainContactMeasure.lean",
+        "research/audits/Letwin/DomainReferenceMass.lean",
+        "research/audits/Letwin/GeneralContactMeasure.lean",
+        "research/audits/Letwin/LocalContactMeasure.lean",
+        "research/audits/Letwin/LocalReference.lean",
+        "research/audits/Letwin/ReferenceContactGain.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Compactness.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Dirichlet.Compactness",
+      "excluded_public_declarations": 4,
+      "blueprint_nodes": [
+        "lem:domain-dirichlet-equicontinuity",
+        "lem:domain-dirichlet-subsequence"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DomainEquicontinuity.lean",
+        "research/audits/Letwin/DomainTotalMass.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Dirichlet.Duality",
+      "excluded_public_declarations": 9,
+      "blueprint_nodes": [
+        "lem:coercive-dual-sections",
+        "lem:compact-conjugate-value",
+        "lem:compact-dual-capacity",
+        "lem:compact-dual-ma",
+        "lem:compact-tilt-optimizer",
+        "lem:contained-dual-sections",
+        "lem:open-dual-ma",
+        "lem:unit-all-point-supports"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletSolution.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Dirichlet.Envelope",
+      "excluded_public_declarations": 10,
+      "blueprint_nodes": [
+        "lem:dirichlet-envelope"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletEnvelope.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularity.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Dirichlet.Regularity",
+      "excluded_public_declarations": 1,
+      "blueprint_nodes": [
+        "lem:unit-primal-c1"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletSolution.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularization.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Dirichlet.Regularization",
+      "excluded_public_declarations": 5,
+      "blueprint_nodes": [
+        "lem:perron-quadratic-lower-test",
+        "lem:regularized-ae-det",
+        "lem:regularized-image-upper"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletEnvelope.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Solution.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Dirichlet.Solution",
+      "excluded_public_declarations": 4,
+      "blueprint_nodes": [
+        "lem:dirichlet-unit-solution"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletEnvelope.lean",
+        "research/audits/Letwin/DirichletSolution.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.GaugeCone.Basic",
+      "excluded_public_declarations": 7,
+      "blueprint_nodes": [
+        "lem:gauge-cone-atomic"
+      ],
+      "audit_clients": []
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Measure.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.GaugeCone.Measure",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:gauge-cone-atomic"
+      ],
+      "audit_clients": []
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/PrescribedAtom.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.GaugeCone.PrescribedAtom",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:gauge-cone-atomic"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/GaugeCone.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Pogorelov",
+      "excluded_public_declarations": 5,
+      "blueprint_nodes": [
+        "lem:classical-pogorelov"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DirichletEnvelope.lean",
+        "research/audits/Letwin/Pogorelov.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Section/Affine.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Section.Affine",
+      "excluded_public_declarations": 2,
+      "blueprint_nodes": [],
+      "audit_clients": [
+        "research/audits/SourceLayout/SectionAffine.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Section.Covering",
+      "excluded_public_declarations": 4,
+      "blueprint_nodes": [
+        "lem:convex-section-covering",
+        "lem:convex-section-weak-type"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/SectionCovering.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Section.Engulfing",
+      "excluded_public_declarations": 13,
+      "blueprint_nodes": [
+        "lem:convex-gradient-holder",
+        "lem:convex-section-covering"
+      ],
+      "audit_clients": []
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Section.Growth",
+      "excluded_public_declarations": 14,
+      "blueprint_nodes": [
+        "lem:convex-contact-perturbation",
+        "lem:convex-section-growth",
+        "lem:convex-section-volume",
+        "lem:convex-section-weak-type"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/ConvexMomentPotential.lean",
+        "research/audits/Letwin/ConvexSectionGrowth.lean",
+        "research/audits/Letwin/SectionVolume.lean",
+        "research/audits/Letwin/SectionVolumeBoundary.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/HalfBall.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Subgradient.HalfBall",
+      "excluded_public_declarations": 1,
+      "blueprint_nodes": [
+        "lem:normalized-flat-support"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/FlatSupport.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+      "module": "FunctionalInequalities.Analysis.Convex.Subgradient.Piecewise",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:convex-local-max-gluing"
+      ],
+      "audit_clients": []
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean",
+      "module": "FunctionalInequalities.Analysis.Elliptic.Barrier",
+      "excluded_public_declarations": 4,
+      "blueprint_nodes": [
+        "lem:halfball-polynomial"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/BarrierValues.lean",
+        "research/audits/Elliptic/EllipticBarrier.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean",
+      "module": "FunctionalInequalities.Analysis.Elliptic.HalfBall",
+      "excluded_public_declarations": 6,
+      "blueprint_nodes": [
+        "lem:halfball-radius-frontier",
+        "lem:halfball-within-normal"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/BarrierGeometry.lean",
+        "research/audits/Elliptic/FlatSupport.lean",
+        "research/audits/Elliptic/HalfBall.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean",
+      "module": "FunctionalInequalities.Analysis.Elliptic.Maximum",
+      "excluded_public_declarations": 4,
+      "blueprint_nodes": [
+        "lem:elliptic-maximum"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/Linearized.lean",
+        "research/audits/Elliptic/Nonsymmetric.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Elliptic/Operator.lean",
+      "module": "FunctionalInequalities.Analysis.Elliptic.Operator",
+      "excluded_public_declarations": 1,
+      "blueprint_nodes": [
+        "lem:elliptic-operator-linearity"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/OperatorLinearity.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Jacobian.lean",
+      "module": "FunctionalInequalities.Analysis.Jacobian",
+      "excluded_public_declarations": 1,
+      "blueprint_nodes": [
+        "lem:ae-jacobian-image-upper"
+      ],
+      "audit_clients": []
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Boundary.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Boundary",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:log-radial-calculus"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/BarrierValues.lean",
+        "research/audits/Elliptic/LogRadialBoundary.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Bounds.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Bounds",
+      "excluded_public_declarations": 2,
+      "blueprint_nodes": [
+        "lem:log-radial-calculus"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/BarrierValues.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Calculus",
+      "excluded_public_declarations": 10,
+      "blueprint_nodes": [
+        "lem:log-radial-calculus"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/LogRadialCalculus.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Continuity.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Continuity",
+      "excluded_public_declarations": 2,
+      "blueprint_nodes": [
+        "lem:log-radial-calculus"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/LogRadialContinuity.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Geometry.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Geometry",
+      "excluded_public_declarations": 1,
+      "blueprint_nodes": [
+        "lem:halfball-radius-frontier"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/BarrierGeometry.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Gradient.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Gradient",
+      "excluded_public_declarations": 2,
+      "blueprint_nodes": [
+        "lem:log-radial-calculus"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/LogRadialGradient.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/LogRadial/Operator.lean",
+      "module": "FunctionalInequalities.Analysis.LogRadial.Operator",
+      "excluded_public_declarations": 5,
+      "blueprint_nodes": [
+        "lem:log-radial-operator"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/LogRadialAmbient.lean",
+        "research/audits/Elliptic/LogRadialDrift.lean",
+        "research/audits/Elliptic/LogRadialPlane.lean",
+        "research/audits/Elliptic/LogRadialZeroth.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Matrix/DeterminantInequalities.lean",
+      "module": "FunctionalInequalities.Analysis.Matrix.DeterminantInequalities",
+      "excluded_public_declarations": 3,
+      "blueprint_nodes": [
+        "lem:matrix-determinant-minkowski"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/DeterminantContact.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/OrthonormalPair.lean",
+      "module": "FunctionalInequalities.Analysis.OrthonormalPair",
+      "excluded_public_declarations": 2,
+      "blueprint_nodes": [
+        "lem:orthogonal-frame-coordinates"
+      ],
+      "audit_clients": [
+        "research/audits/Elliptic/BarrierGeometry.lean"
+      ]
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/GradientHolder.lean",
+      "module": "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder",
+      "excluded_public_declarations": 1,
+      "blueprint_nodes": [
+        "lem:convex-gradient-holder"
+      ],
+      "audit_clients": [
+        "research/audits/Letwin/ContactImage.lean",
+        "research/audits/Letwin/ContactMeasure.lean",
+        "research/audits/Letwin/ContactQuadratic.lean",
+        "research/audits/Letwin/ContactReference.lean",
+        "research/audits/Letwin/DomainComparison.lean",
+        "research/audits/Letwin/DomainContactGain.lean",
+        "research/audits/Letwin/DomainContactMeasure.lean",
+        "research/audits/Letwin/DomainResidualContact.lean",
+        "research/audits/Letwin/GeneralContactMeasure.lean",
+        "research/audits/Letwin/GradientDerivative.lean",
+        "research/audits/Letwin/GradientHolder.lean",
+        "research/audits/Letwin/LocalContactMeasure.lean",
+        "research/audits/Letwin/LocalGradient.lean",
+        "research/audits/Letwin/LocalReference.lean",
+        "research/audits/Letwin/SectionCovering.lean"
+      ]
+    }
+  ],
+  "excluded_generated_declarations": [
+    "FunctionalInequalities.Analysis.SoftEngulfing.defect.congr_simp"
+  ],
+  "excluded_audit_clients": [
+    {
+      "path": "research/audits/Elliptic/LogRadialContinuity.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Continuity"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialZeroth.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Operator"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/Nonsymmetric.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.Maximum"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/Linearized.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.Maximum"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/BarrierGeometry.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.HalfBall",
+        "FunctionalInequalities.Analysis.LogRadial.Geometry",
+        "FunctionalInequalities.Analysis.OrthonormalPair"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialCalculus.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Calculus"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialBoundary.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Boundary"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/OperatorLinearity.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.Operator"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/EllipticBarrier.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.Barrier"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialPlane.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Operator"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/FlatSupport.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Subgradient.HalfBall",
+        "FunctionalInequalities.Analysis.Elliptic.HalfBall"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialGradient.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Gradient"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialDrift.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Operator"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/BarrierValues.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.Barrier",
+        "FunctionalInequalities.Analysis.LogRadial.Boundary",
+        "FunctionalInequalities.Analysis.LogRadial.Bounds"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/LogRadialAmbient.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.LogRadial.Operator"
+      ]
+    },
+    {
+      "path": "research/audits/Elliptic/HalfBall.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Elliptic.HalfBall"
+      ]
+    },
+    {
+      "path": "research/audits/SourceLayout/DomainMeasure.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Measure"
+      ]
+    },
+    {
+      "path": "research/audits/SourceLayout/SectionAffine.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Section.Affine"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/LocalContactMeasure.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainBoundary.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ContactImage.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactImage",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainTotalMass.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Measure",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Compactness"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DeterminantContact.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Matrix.DeterminantInequalities"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/SectionComparison.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ConvexMomentPotential.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Section.Growth"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/GeneralContactMeasure.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ContactMeasure.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ContactReference.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactImage",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainEquicontinuity.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Compactness"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ContactPerturbation.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/LocalReference.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.BakryEmery.Hessian.Compact",
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ConvexSectionGrowth.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Section.Growth"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/GaugeCone.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.GaugeCone.PrescribedAtom"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainOverlap.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Measure"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/SectionVolumeBoundary.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Section.Growth"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainComparison.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DirichletEnvelope.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Envelope",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Regularization",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Solution",
+        "FunctionalInequalities.Analysis.Convex.Pogorelov"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ContactQuadratic.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/SectionVolume.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Section.Growth"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainAffineMA.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison",
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Stability"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DirichletSolution.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.DomainTransport",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Duality",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Regularity",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Solution"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/LocalGradient.lean",
+      "imports": [
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/GradientDerivative.lean",
+      "imports": [
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainResidualContact.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/C0Subgradient.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Measure",
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Stability"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ReferenceContactGain.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainContactMeasure.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/Pogorelov.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Pogorelov"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainMAImage.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Measure"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/GradientHolder.lean",
+      "imports": [
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainContact.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Alexandrov.Comparison"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainReferenceMass.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/SectionCovering.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Section.Covering",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/DomainContactGain.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder"
+      ]
+    },
+    {
+      "path": "research/audits/Letwin/ContactDensity.lean",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure"
+      ]
+    }
+  ],
+  "blueprint_nodes": [
+    {
+      "node": "lem:convex-section-growth",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_holder_gradient_of_growth",
+        "FunctionalInequalities.Analysis.exists_section_estimate_of_continuous_density",
+        "FunctionalInequalities.Analysis.growth_of_closedBall_subset_section",
+        "FunctionalInequalities.Analysis.norm_gradient_sub_le_of_growth"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-section-volume",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_section_volume_bound_of_continuous_density",
+        "FunctionalInequalities.Analysis.exists_section_volume_upper_bound",
+        "FunctionalInequalities.Analysis.subgradient_volume_lower_bound_of_compact"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-gradient-holder",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_holder_gradient_of_alexandrov_density",
+        "FunctionalInequalities.Analysis.exists_moment_potential_holder_gradient_of_bounded_open_convex",
+        "FunctionalInequalities.Analysis.exists_section_power_inclusion_of_alexandrov_density"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:alexandrov-density-comparison",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.abs_sub_le_of_alexandrov_density_close",
+        "FunctionalInequalities.Analysis.abs_sub_le_of_domain_alexandrov_density_close",
+        "FunctionalInequalities.Analysis.bounds_of_alexandrov_density_bounds",
+        "FunctionalInequalities.Analysis.bounds_of_domain_alexandrov_density_bounds",
+        "FunctionalInequalities.Analysis.exists_common_boundary_modulus_domain",
+        "FunctionalInequalities.Analysis.le_of_strict_alexandrov_bounds",
+        "FunctionalInequalities.Analysis.le_of_strict_domain_alexandrov_bounds",
+        "FunctionalInequalities.Analysis.nonpos_of_pos_domain_alexandrov_lower",
+        "FunctionalInequalities.Analysis.subgradientImage_mul_pos",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_affine_scalar_covariance",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_const",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos_comp_affineEquiv_symm",
+        "FunctionalInequalities.Analysis.volume_subgradientImage_mul_pos"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.subgradientImageOn",
+        "FunctionalInequalities.Analysis.subgradientImageOn_univ",
+        "FunctionalInequalities.Analysis.subgradientImageOn_closure",
+        "FunctionalInequalities.Analysis.subgradientImageOn_eq_subgradientImage",
+        "FunctionalInequalities.Analysis.subgradientImageOn_mul_pos",
+        "FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le",
+        "FunctionalInequalities.Analysis.subgradientImageOn_comp_affineEquiv_symm",
+        "FunctionalInequalities.Analysis.volume_image_affineEquiv",
+        "FunctionalInequalities.Analysis.abs_det_linear_symm",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_comp_affineEquiv_symm",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_quadraticAt"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:domain-dirichlet-equicontinuity",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.equicontinuousOn_of_domain_alexandrov_bounds",
+        "FunctionalInequalities.Analysis.exists_uniform_bound_equicontinuousOn_of_domain_mass"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_le_of_density_le"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:domain-dirichlet-subsequence",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_convex_subseq_uniform_of_domain_mass",
+        "FunctionalInequalities.Analysis.exists_subseq_uniform_on_closure_of_domain_mass"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-section-covering",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.SoftEngulfing.exists_disjoint_section_cover",
+        "FunctionalInequalities.Analysis.SoftEngulfing.exists_section_engulfing",
+        "FunctionalInequalities.Analysis.SoftEngulfing.section_subset_of_intersection",
+        "FunctionalInequalities.Analysis.exists_disjoint_section_cover_of_alexandrov_density",
+        "FunctionalInequalities.Analysis.exists_section_engulfing_of_alexandrov_density"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-section-weak-type",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_quantitative_weak_type_section_cover",
+        "FunctionalInequalities.Analysis.section_volume_mul_le"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-contact-perturbation",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_contact_of_uniform_close",
+        "FunctionalInequalities.Analysis.exists_contact_of_uniform_close_on_open",
+        "FunctionalInequalities.Analysis.exists_residual_contact_of_alexandrov_density_close",
+        "FunctionalInequalities.Analysis.exists_residual_contact_of_domain_alexandrov_density_close",
+        "FunctionalInequalities.Analysis.gradient_tangent_gap_pos"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.gradient_tangent_gap_pos_of_strictConvexOn"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:matrix-determinant-minkowski",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.det_le_pow_of_det_add_smul_le",
+        "FunctionalInequalities.Analysis.det_root_add_le",
+        "FunctionalInequalities.Analysis.det_root_le_trace_div"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-contact-determinant",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.ae_det_residual_le_on_contact_of_alexandrov_density",
+        "FunctionalInequalities.Analysis.det_residual_le_of_contact_expansions",
+        "FunctionalInequalities.Analysis.posSemidef_of_contact_expansion"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-contact-null-image",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_quadratic_contacts"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-quadratic-contact-measure",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.full_quadratic_contact_image_bound",
+        "FunctionalInequalities.Analysis.measurableSet_quadratic_contacts",
+        "FunctionalInequalities.Analysis.volume_image_residual_le_of_quadratic_contacts"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-unit-ball-contact-gain",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_contact_volume_gain_unitBall"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.strictConvexOn_quadraticAt",
+        "FunctionalInequalities.Analysis.gradient_quadraticAt"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:convex-gradient-null-image",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.volume_gradient_image_eq_zero_of_alexandrov_upper"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:compact-posDef-gradient-bounds",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.BakryEmery.exists_uniform_gradient_bounds_of_posDef_hessian",
+        "FunctionalInequalities.Analysis.BakryEmery.exists_uniform_gradient_bounds_of_posDef_hessianOn",
+        "FunctionalInequalities.Analysis.exists_residual_gradient_bound_of_posDef_reference",
+        "FunctionalInequalities.Analysis.exists_residual_gradient_bound_of_posDef_referenceOn"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.BakryEmery.contDiffOn_gradient",
+        "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_inner_hessianOperator_at"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:convex-reference-contact-null-image",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_posDef_reference",
+        "FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_posDef_referenceOn"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:convex-reference-contact-measure",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.full_reference_contact_image_bound",
+        "FunctionalInequalities.Analysis.full_reference_contact_image_bound_on_open",
+        "FunctionalInequalities.Analysis.full_strict_reference_contact_image_bound",
+        "FunctionalInequalities.Analysis.measurableSet_support_contacts",
+        "FunctionalInequalities.Analysis.measurableSet_support_contactsOn",
+        "FunctionalInequalities.Analysis.volume_image_residual_le_of_posDef_reference",
+        "FunctionalInequalities.Analysis.volume_image_residual_le_of_posDef_reference_on_open",
+        "FunctionalInequalities.Analysis.volume_image_residual_le_of_strict_reference_on_domain",
+        "FunctionalInequalities.Analysis.volume_le_gradient_image_closure_of_domain_alexandrov"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.subgradientImageOn_subset_gradient_image"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:convex-reference-contact-gain",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_contact_volume_gain_of_posDef_reference",
+        "FunctionalInequalities.Analysis.exists_contact_volume_gain_of_strict_reference_on_domain"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.subgradient_eq_gradient"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:domain-ma-overlap",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.volume_domain_subgradient_two_points_eq_zero",
+        "FunctionalInequalities.Analysis.volume_inter_subgradientImageOn_eq_zero_of_disjoint"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:domain-support-images",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.analyticSet_subgradientImageOn",
+        "FunctionalInequalities.Analysis.measurableSet_subgradientImageOn_of_isOpen",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_iUnion_of_pairwise_disjoint_open"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.isClosed_subgradient_graphOn",
+        "FunctionalInequalities.Analysis.isCompact_subgradientImageOn_of_isCompact",
+        "FunctionalInequalities.Analysis.exists_eventual_support_slope_bound_of_locally_uniform",
+        "FunctionalInequalities.Analysis.eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:domain-monge-ampere-measure",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measure",
+        "FunctionalInequalities.Analysis.nullMeasurableSet_subgradientImageOn_of_measurableSet"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.subgradientImageOn_iUnion"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:domain-ma-stability",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.ae_eventually_mem_subgradientImageOn_of_locally_uniform",
+        "FunctionalInequalities.Analysis.domain_constant_density_of_locally_uniform",
+        "FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measures_local_limits",
+        "FunctionalInequalities.Analysis.limsup_volume_subgradientImageOn_le_of_locally_uniform",
+        "FunctionalInequalities.Analysis.volume_subgradientImageOn_le_liminf_of_locally_uniform"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.eventually_mem_subgradientImageOn_of_unique_contact"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:convex-local-max-gluing",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.continuousOn_piecewise_max_ball",
+        "FunctionalInequalities.Analysis.convexOn_closure_piecewise_max_ball",
+        "FunctionalInequalities.Analysis.subgradient_le_piecewise_max_ball"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:domain-ma-lower-borel",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.volume_le_subgradientImageOn_of_open_lower"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:dirichlet-envelope",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_boundary_barrier",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_continuous_envelope",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_local_comparison",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_finite_convex_envelope",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_quadratic_subsolution",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_uniform_class_approximation",
+        "FunctionalInequalities.Analysis.Dirichlet.finite_sup_mem_subsolutions",
+        "FunctionalInequalities.Analysis.Dirichlet.max_mem_subsolutions",
+        "FunctionalInequalities.Analysis.Dirichlet.piecewise_max_ball_mem_subsolutions",
+        "FunctionalInequalities.Analysis.Dirichlet.subsolutions"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.convexOn_sSup_image_of_bddAbove",
+        "FunctionalInequalities.Analysis.subgradientImageOn_eq_subgradientImage_of_isOpen",
+        "FunctionalInequalities.Analysis.subgradientImageOn_subset_max_of_le",
+        "FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le_of_eqOn"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:perron-quadratic-lower-test",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_c2_lower_test_bound",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_quadratic_lower_test_bound"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:regularized-ae-det",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau_ae_matrix"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:ae-jacobian-image-upper",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.addHaar_image_le_mul_of_ae_derivative"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:regularized-image-upper",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau_image_upper"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:dirichlet-unit-solution",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_local_ma_upper",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_strict_unit_solution",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution_neg"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:gauge-cone-atomic",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.GaugeCone.convex_polar",
+        "FunctionalInequalities.Analysis.GaugeCone.exists_height_of_mass",
+        "FunctionalInequalities.Analysis.GaugeCone.exists_mongeAmpere_measure_of_mass",
+        "FunctionalInequalities.Analysis.GaugeCone.exists_one_atom",
+        "FunctionalInequalities.Analysis.GaugeCone.geometry",
+        "FunctionalInequalities.Analysis.GaugeCone.image_nonvertex_subset_frontier",
+        "FunctionalInequalities.Analysis.GaugeCone.isClosed_polar",
+        "FunctionalInequalities.Analysis.GaugeCone.isCompact_polar",
+        "FunctionalInequalities.Analysis.GaugeCone.polar",
+        "FunctionalInequalities.Analysis.GaugeCone.potential",
+        "FunctionalInequalities.Analysis.GaugeCone.volume_image",
+        "FunctionalInequalities.Analysis.GaugeCone.volume_polar_lt_top",
+        "FunctionalInequalities.Analysis.GaugeCone.volume_polar_pos"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:domain-unit-interior-strictness",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.eq_of_domain_unit_contact"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.strictConvexOn_of_domain_contact_eq",
+        "FunctionalInequalities.Analysis.strictConvexOn_of_contact_eq",
+        "FunctionalInequalities.Analysis.eq_of_contact_of_sublevel_bounds"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:compact-tilt-optimizer",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_tilt_optimizers"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.exists_continuous_tilt_optimizer"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:compact-conjugate-value",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_conjugate"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.exists_value_of_optimizer",
+        "FunctionalInequalities.Analysis.exists_compact_conjugate"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:compact-dual-capacity",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_conjugate_capacity",
+        "FunctionalInequalities.Analysis.optimizer_transport_of_domain_measure"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.subgradientImageOn_eq_optimizer_preimage"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:compact-dual-ma",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_dual_mass",
+        "FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.lintegral_subgradientImage_eq_of_map_gradient"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:open-dual-ma",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_open_dual_mass",
+        "FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map_on_open"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.volume_subgradientImage_eq_lintegral_of_isOpen"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:coercive-dual-sections",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_coercive_dual"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.exists_tilt_lower_bound_of_compact_sup",
+        "FunctionalInequalities.Analysis.exists_compact_tilt_sublevels"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:contained-dual-sections",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_contained_dual_sections",
+        "FunctionalInequalities.Analysis.eq_of_primal_supports_of_open_dual_mass",
+        "FunctionalInequalities.Analysis.exists_contained_section_unique_supports"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.exists_contained_dual_section"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:unit-all-point-supports",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unique_support_of_unit_data",
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_unique_supports"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:unit-primal-c1",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Dirichlet.exists_unit_c1_solution"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:classical-pogorelov",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.Pogorelov.bound_of_diagonal_local_max",
+        "FunctionalInequalities.Analysis.Pogorelov.bound_of_local_max",
+        "FunctionalInequalities.Analysis.Pogorelov.exists_directional_height_bound",
+        "FunctionalInequalities.Analysis.Pogorelov.exists_hessian_height_and_interior_bound",
+        "FunctionalInequalities.Analysis.Pogorelov.logarithmic_maximum_conditions"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:elliptic-maximum",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.abs_le_linearized_c0_barrier",
+        "FunctionalInequalities.Analysis.linearized_maximum_principle",
+        "FunctionalInequalities.Analysis.strict_drift_maximum_principle",
+        "FunctionalInequalities.Analysis.strict_drift_maximum_principle_of_quadratic_nonneg"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:halfball-within-normal",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.closure_halfBall",
+        "FunctionalInequalities.Analysis.convex_closedHalfBall",
+        "FunctionalInequalities.Analysis.interior_closedHalfBall",
+        "FunctionalInequalities.Analysis.normal_derivative_halfBall",
+        "FunctionalInequalities.Analysis.uniqueDiffOn_closure_halfBall"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:normalized-flat-support",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.normalized_flat_support"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:log-radial-calculus",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.contDiffAt_fderiv_fderiv_log_radial_profile",
+        "FunctionalInequalities.Analysis.continuous_log_radial_barrier",
+        "FunctionalInequalities.Analysis.fderiv_log_radial_profile_norm_le",
+        "FunctionalInequalities.Analysis.flat_log_radial_profile_normal",
+        "FunctionalInequalities.Analysis.hasFDerivAt_log_radial_profile_of_pos",
+        "FunctionalInequalities.Analysis.log_radial_profile_flat_value",
+        "FunctionalInequalities.Analysis.log_radial_profile_value_bounds",
+        "FunctionalInequalities.Analysis.log_radial_profile_value_le_radius_add",
+        "FunctionalInequalities.Analysis.tendsto_log_radial_positive_normal_slope"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:log-radial-operator",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_log_radial_drift_margin_radius",
+        "FunctionalInequalities.Analysis.exists_log_radial_zeroth_margin_radius",
+        "FunctionalInequalities.Analysis.plane_log_radial_barrier_trace_lower",
+        "FunctionalInequalities.Analysis.tangent_normal_log_radial_barrier_trace_lower"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:halfball-polynomial",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.exists_halfball_polynomial_negative_operator",
+        "FunctionalInequalities.Analysis.halfball_polynomial_curved_lower",
+        "FunctionalInequalities.Analysis.halfball_polynomial_differential_data",
+        "FunctionalInequalities.Analysis.halfball_polynomial_norm_floor"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:orthogonal-frame-coordinates",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.orthogonal_pair_inner_sq_le",
+        "FunctionalInequalities.Analysis.orthogonal_pair_norm_sq"
+      ],
+      "retained_lean": [
+        "FunctionalInequalities.Analysis.clm_apply_eq_sum_single",
+        "FunctionalInequalities.Analysis.norm_le_card_mul_of_coord_bound"
+      ],
+      "status_in_snapshot": "not formalized (retained declarations are partial supports)"
+    },
+    {
+      "node": "lem:halfball-radius-frontier",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.frontier_halfBall",
+        "FunctionalInequalities.Analysis.tangent_normal_radius_le"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    },
+    {
+      "node": "lem:elliptic-operator-linearity",
+      "removed_lean": [
+        "FunctionalInequalities.Analysis.elliptic_operator_linear_combination"
+      ],
+      "retained_lean": [],
+      "status_in_snapshot": "not formalized"
+    }
+  ],
+  "records_updated": {
+    "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex": "52 statements and their proofs lose \\leanok; excluded names leave \\lean (retained names stay); each proof states the release scope; one introductory paragraph. Statement text, labels and \\uses unchanged.",
+    "research/tasks.json": "The 52 nodes are classified (local_argument, infrastructure unchecked, priority 9, superseded auxiliary note); the three reviewed chapter-45 evidence pins are refreshed.",
+    "research/progress/nodes.json": "The 52 descriptions and diagram labels state the release scope; 46 diagram sources that named excluded files point to the Blueprint chapter. Status remains derived from the Blueprint.",
+    "research/progress/literature.json": "Letwin local results for the 52 nodes and the excluded L22 declarations are removed; the L22 note, Letwin remaining text and priority 6 restate the superseded route. No lemma-map state, relation, numbered item or certificate changes.",
+    "research/progress/letwin-smooth-route.json": "Entries in excluded files move to release_excluded; R3L becomes NOT_NEEDED_FOR_ROUTE; R7L keeps its status."
+  },
+  "superseded_records": {
+    "literature_letwin_local_results": [
+      {
+        "node": "lem:convex-section-growth",
+        "scope": "Literal-source section supports: quantitative Alexandrov bounds, compact-uniform small-section localization and two-sided density floors/ceilings, section-inradius to growth and growth to Holder. Closed C1alpha/power radii are supplied separately by lem:convex-gradient-holder."
+      },
+      {
+        "node": "lem:convex-section-volume",
+        "scope": "BB arXiv:1207.6128v1 Theorem 2.24(i) / Letwin v1 Lemma 2.2 quantitative support: a positive lower Alexandrov density gives |S_h| <= C(n) sqrt(h^n/a), with C before u, centre, slope, height and a; affine normalization and the normalized quadratic comparison prove the bound. A positive continuous density gives one floor per compact Q before all sections there. Actual literal convex-body source client supplies the witness and MA equation, with no kappa or volume-estimate input. The actual-source C1alpha/power-radius gain is supplied separately by lem:convex-gradient-holder; W2p remains pending."
+      },
+      {
+        "node": "lem:convex-gradient-holder",
+        "scope": "Literal convex-body source class, n > 0: one actual normalized Lipschitz C1 transporting potential retaining gradient homeomorphism, MA/viscosity fields, with a Holder gradient on every compact Q and uniform section radius c h^(1/(1+alpha)), 0<h<=1. W continuous on closure K suffices; no uniform convexity or supplied section/Holder estimate. Not W2p/C2/full Lemma2.2."
+      },
+      {
+        "node": "lem:alexandrov-density-comparison",
+        "scope": "W2p perturbation support only: strict Alexandrov comparison, positive scaling, multiplicative Dirichlet bracketing and |u-v| <= epsilon |v| relative to a given unit-density reference. The audit constructs a quadratic reference. No W2p or full Lemma2.2 conclusion."
+      },
+      {
+        "node": "lem:convex-section-covering",
+        "scope": "Every n>0: actual strictly convex C1 Alexandrov solution with continuous positive density has compact-uniform small-section engulfing and countable disjoint selection whose fixed height enlargements cover every original indexed family. The literal-source client retains normalization, transport, gradient homeomorphism and Holder gradient at the same u. No supplied engulfing estimate, bounded overlap, contact density or W2p conclusion. The derived weak-type measure estimate has constants before the set, positive density threshold and indexed family; no finite-volume premise or target estimate is supplied."
+      },
+      {
+        "node": "lem:convex-section-weak-type",
+        "scope": "Quantitative weak type from actual section geometry and pure convex height-volume scaling, with dimensional/compact-local constants before all measurable sets, positive density thresholds and indexed families; actual literal-source consumer. Not the nonlinear contact-density gain or W2p."
+      },
+      {
+        "node": "lem:convex-contact-perturbation",
+        "scope": "Uniform C0 proximity to a globally strictly convex C1 reference on the closure of a bounded open domain yields actual interior supporting contacts at every reference slope from a fixed compact subset; tolerance precedes all C1 perturbations, which need not be convex. Generic finite-dimensional inner-product spaces include dimension zero. For n>0, actual Alexandrov bounds (1±epsilon)^n and zero boundary values yield contacts for u-(1-delta)v, realizing delta grad v on a compact set, with epsilon chosen before u. The unit-density reference v is given with its actual equation. Quadratic clients construct that equation. No reference existence, contact-measure gain, Hessian estimate or W2p conclusion."
+      },
+      {
+        "node": "lem:matrix-determinant-minkowski",
+        "scope": "Nonlinear Caffarelli/BB1207.6128v1 Theorem2.24(ii) matrix support, every n>0: actual scalar AMGM on PSD eigenvalues proves det(A)^(1/n)<=trace(A)/n including singular A. CFC positive-square-root normalization proves determinant-root Minkowski for PSD A,B whose sum is PD, with no commutation or individual invertibility premise. Consequently PSD residual A, PD unit-det B, 0<delta<1 and epsilon>=0 with det(A+(1-delta)B)<=(1+epsilon)^n imply detA<=(epsilon+delta)^n. Actual shear-Gram noncommuting and singular clients plus n=1 specialization. No contact MA measure gain, reference existence or W2p conclusion."
+      },
+      {
+        "node": "lem:convex-contact-determinant",
+        "scope": "Letwin Lemma2.2 / BB1207.6128v1 Theorem2.24(ii) pointwise support: genuine affine support and quadratic expansion derive residual PSD without convexity or C2 of the expanded function. The two actual expansions and a PD unit-det reference then give det(U-(1-delta)B)<=(epsilon+delta)^n from actual detU upper data. Genuine local open-set Alexandrov equations construct both matrices/expansions a.e.; every actual contact at those points has the bound. Actual quadratic reference, singular residual/n=1 and same literal-source normalized transporting Holder witness clients. Given-reference scope only; no contact MA image measure, reference existence or W2p conclusion."
+      },
+      {
+        "node": "lem:convex-contact-null-image",
+        "scope": "Quadratic-reference contact null-image support: for generic finite-dimensional real inner-product spaces (including n=0), genuine convex C1 u and a finite open-set MA upper bound imply that every arbitrary volume-null subset of actual supporting contacts of u-t norm(x)^2/2 has null image under grad u-t x. Actual MA upper derives grad u null-image property; actual contact inequalities construct contraction and Lipschitz factor. Actual quadratic and same normalized transporting Holder literal-source clients. No general-reference null-image, full contact-image determinant measure gain, reference existence or W2p conclusion."
+      },
+      {
+        "node": "lem:convex-quadratic-contact-measure",
+        "scope": "Quadratic-reference contact image-measure upper bound: actual convex C1 u and a continuous positive local MA equation with f<=(1+epsilon)^n imply volume((grad u-(1-delta)Id) image Gamma)<=(epsilon+delta)^n volumeGamma for 0<delta<1,n>0 and actual measurable contacts. Same derivative/expansion MA matrix gives contact PSD/det, Jacobian controls measurable good image, and actual null-contact image theorem kills the bad remainder. Infinite volume/nonmeasurable images allowed. C1 continuity derives Borel measurability of the actual full contact set (generic n=0 included there); actual full-set and same normalized transporting Holder source clients, no N/derivative/PSD/image estimate premise. This is QUADRATIC reference only, not general contact volume-density gain, Dirichlet/Pogorelov or W2p."
+      },
+      {
+        "node": "lem:convex-unit-ball-contact-gain",
+        "scope": "Unit-ball quadratic contact volume gain: for n>0,0<r<1 and delta,eta in(0,1), epsilon in(0,1) is chosen BEFORE both unknown u and f. A globally convex C1 solution with zero boundary on the unit ball and genuine positive continuous local MA density (1-epsilon)^n<=f<=(1+epsilon)^n has actual full quadratic-residual contact volume >=(1-eta)*volume(closedBall0r). Actual comparison contacts give delta K image inclusion; genuine image upper bound, Haar scaling and Bernoulli give the gain. No desired contact inclusion/gain/N/gradient derivative/Hessian/W2p premise. Only a positive finite scalar coefficient is cancelled. Genuine quadratic Dirichlet client; general PD strictness and symmetric quadratic gradient reused by existing actual consumers, including zero-dimensional primitives. UNIT BALL/QUADRATIC only; general normalized domains, reference existence/Pogorelov, arbitrary-p tails, weak derivatives remain open; this node does not supply literal Lemma2.2."
+      },
+      {
+        "node": "lem:convex-gradient-null-image",
+        "scope": "For a globally convex C1 function on a finite-dimensional real inner-product space, a genuine finite open-set Alexandrov measure upper bound on open Omega implies that every arbitrary null subset of Omega has null gradient image. No N property, measurability of null subset/image or derivative bound is supplied. The original actual outer-regularity/tangent proof is retained once, with original quadratic and new general-reference consumers; dimension0 included."
+      },
+      {
+        "node": "lem:compact-posDef-gradient-bounds",
+        "scope": "Given a genuinely globally C2 reference whose actual Hessian quadratic form is positive on compact convex K, compact derivative continuity, positive minimum, normalization and mean value produce uniform kappa,L>0 with strong-monotone/Lipschitz gradient. Actual residual supports then give ||dp||<=C||dgrad u||, C before arbitrary unknown u,t>0,Gamma. No regularity/Hessian bound of unknown u, reference floor/cap or desired estimate is an input. Generic finite-dimensional real inner-product spaces includingn0. Reference existence and merely local-C2 production are not asserted."
+      },
+      {
+        "node": "lem:convex-reference-contact-null-image",
+        "scope": "For genuine globally convex C1 u with finite open-set MA upper bound and a given genuinely globally C2 reference v with actual positive Hessian on open Omega, every arbitrary null subset of actual contacts of u-t v (t>0) has null residual-gradient image. Compact reference bounds produce a local relative inequality; it proves constancy on grad-u fibres and an actual Lipschitz factor without injectivity assumption. Actual positive-radius contained closed balls and a genuine Lindelof countable subcover yield global nullity. Omega need not be convex, contact/null sets and images need not be measurable, dimension0 included. Actual constructed quadratic and same normalized transporting Holder literal-source clients; no factor/N/cover/contraction/Hessian/W2p input. The reference is given globally C2; local-C2 reference localization, Dirichlet/Pogorelov, general contact image/volume gain and W2p remain separate gaps."
+      },
+      {
+        "node": "lem:convex-reference-contact-measure",
+        "scope": "Given genuinely globally convex C2 reference v with actual positive Hessian and actual local unit MA, unknown globally convex C1 u with continuous positive actual MA density f<=(1+epsilon)^n, measurable actual residual contacts Gamma and 0<delta<1,n>0 give volume((grad u-(1-delta)grad v) image Gamma)<=(epsilon+delta)^n volumeGamma. Actual MA equations for BOTH functions yield their own same derivative/expansion matrices, deriving reference det1. Actual support gives PSD/exact determinant, Jacobian controls the good image and actual general-reference null-image removes the bad remainder. No N/derivative/PSD/desired estimate, image measurability or finite-volume premise. The actual full contact set is Borel by a shared continuous supporting-set producer, including generic n0 for Borelness. Old quadratic upper is a meaningful constructed-reference specialization with exact old interface. No Dirichlet/Pogorelov existence, general-domain contact volume gain or W2p assertion."
+      },
+      {
+        "node": "lem:convex-reference-contact-gain",
+        "scope": "A GIVEN globally C2 strictly convex reference v with actual positive Hessian, zero frontier and local unit MA on bounded open Omega gives compact-interior contact volume gain for any relatively compact OPEN G with closureG subsetOmega. n>0,delta/eta in(0,1); epsilon before BOTH unknown globally convex C1 u and continuous positive MA density f. True unit MA and differentiable-subgradient uniqueness derive reference gradient-image mass>=volumeG; actual compact C0/density contacts, Haar, actual general image upper and Bernoulli yield (1-eta)volumeG<=volume actual full residual contacts. EmptyG/infiniteGamma allowed, only positive finite coefficients cancelled. No desired image mass/inclusion/gain/N/derivative or unknown-u Hessian/W2p input. Existing private subgradient uniqueness shared once at Subgradient with precise full type/proof and legacy inverse consumer; duplicate tangent support removed in favor of existing gradient_le_increment. Old unitBall exact API is a meaningful true quadratic/reference/G=ball specialization with actual Haar closedBall=ball volume and n>0 Nontrivial construction. Actual quadratic Dirichlet client/n0 unique-subgradient/legacy generic tangent clients. GLOBAL C2/given-reference restriction explicit; no actual reference existence, local-C2 production or W2p claim."
+      },
+      {
+        "node": "lem:classical-pogorelov",
+        "scope": "Savin (2005), Proposition4.1 proof(10)-(15), pp13-14: for a GIVEN local C4 potential with actual positive Hessian, local nonzero constant determinant, negative value and a genuine logarithmic local maximum, derive the original-coordinate directional height bound. Actual axis-fixing diagonal coordinates are GENERATED. On a bounded OPEN domain, not necessarily convex, C4 at every interior point and AMBIENT C2 at EVERY closure point, negative interior values, zero WHOLE frontier, positive Hessian and constant nonzero determinant generate a positive closure gradient cap B, an actual interior maximizing point, norm(Hess u)*(-u) <= (n+B)*exp(B^2/2) in the ELEMENTWISE norm, and a positive cap on every compact interior set. Empty domains and n=0 are honest cases. No supplied frame, maximizer, Hessian/gradient cap, PDE derivative identity or unknown-U regularity. This is a classical estimate, not C2/PD of the actual C1 UNIT reference, classical solver existence, full Savin Proposition4.1, W2p or full Letwin Lemma2.2."
+      },
+      {
+        "node": "lem:elliptic-maximum",
+        "scope": "On any bounded OPEN domain, including nonconvex and empty domains in every dimension n>=0, actual C2 inside and C0 on the closure plus a whole-frontier threshold and strict tr(A Hess u)+b.grad u>0 only above that threshold give the bound. Drift is arbitrary; coefficients have no continuity or boundedness requirement. The nonsymmetric version generates the symmetric part and actual local-C2 Hessian symmetry. The weak zero-drift theorem requires positive trace and genuinely calls the strict core with a quadratic perturbation. A trace floor tau>0 yields the explicit |u|<=B+F/(2tau)*(R^2-|x-c|^2) barrier. ONE compact-maximum proof and the canonical upper-touch/PSD trace proof serve the real consumers. Ordinary tools for CNS1984 section2 pp374-376 and Lemma5.1 comparison pp385-387 only; no full Lemma5.1, boundary modulus, inverse, classical existence or C2 of canonical U."
+      },
+      {
+        "node": "lem:halfball-within-normal",
+        "scope": "The open half-ball in ambient R^(m+1) has the generated convex closed half-ball as its closure, with actual unique differentiability. Given only C1 WITHIN that FULL closure, at any flat point of norm<R the inward normal ray stays in the SAME closure on generated [0,R-normz] and gives the actual HasDerivWithinAt and positive-ray slope limit. ONE within-chain production supplies both conclusions; no ambient C1 or default ambient gradient is substituted. All m>=0, with m=0 ambient dimension1 rather than ambient Fin0. Actual |lastcoordinate| has within-normal derivative1 but is not ambient differentiable/default fderiv0; nonzero-flat-point affine and ambientFin1 interval clients apply the source. CNS1984 Lemma5.1 p385 prerequisite, not full boundary modulus/inverse/solvability."
+      },
+      {
+        "node": "lem:normalized-flat-support",
+        "scope": "Given C1 WITHIN the full closed half-ball, convex flat trace, zero value/tangential derivative at0 and the ordinary tangential derivative boundC, generate actual derivative coordinatesg, alpha=normg<=C, flat nonnegativity and either alpha0 or a unit tangent zeta and intercept beta with 0<=beta<=normzbar and true max-support. The generic within-support source is called at0 and zbar; no supportplane/intercept/cap/PDE/unknown regularity is supplied. All m>=0 ambientm+1, including the actual ambientFin1 zero-tangent branch. A genuine nonempty quartic Fin2 at(1/4,0) generates alpha1/16 and beta3/16 before applying the same theorem. CNS1984 (5.3)/(5.3)prime only, not generated barrier comparison/log modulus/classical existence or canonicalU-C2."
+      }
+    ],
+    "literature_L22_declarations": [
+      {
+        "name": "FunctionalInequalities.Analysis.exists_section_estimate_of_continuous_density",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.norm_gradient_sub_le_of_growth",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_holder_gradient_of_growth",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.growth_of_closedBall_subset_section",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_section_volume_upper_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.subgradient_volume_lower_bound_of_compact",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_section_volume_bound_of_continuous_density",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_moment_potential_holder_gradient_of_bounded_open_convex",
+        "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/GradientHolder.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_holder_gradient_of_alexandrov_density",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_section_power_inclusion_of_alexandrov_density",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.le_of_strict_alexandrov_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.bounds_of_alexandrov_density_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.abs_sub_le_of_alexandrov_density_close",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_section_engulfing",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_section_engulfing_of_alexandrov_density",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.SoftEngulfing.section_subset_of_intersection",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.SoftEngulfing.exists_disjoint_section_cover",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_disjoint_section_cover_of_alexandrov_density",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.section_volume_mul_le",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_quantitative_weak_type_section_cover",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Covering.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_quadratic_contacts",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.measurableSet_quadratic_contacts",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_le_of_quadratic_contacts",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.full_quadratic_contact_image_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_contact_volume_gain_unitBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.BakryEmery.exists_uniform_gradient_bounds_of_posDef_hessian",
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Compact.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_gradient_image_eq_zero_of_alexandrov_upper",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_residual_gradient_bound_of_posDef_reference",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_posDef_reference",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.measurableSet_support_contacts",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_le_of_posDef_reference",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.full_reference_contact_image_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_contact_volume_gain_of_posDef_reference",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.BakryEmery.exists_uniform_gradient_bounds_of_posDef_hessianOn",
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Compact.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_residual_gradient_bound_of_posDef_referenceOn",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_posDef_referenceOn",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.measurableSet_support_contactsOn",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_le_of_posDef_reference_on_open",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.full_reference_contact_image_bound_on_open",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_contact_of_uniform_close_on_open",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_image_residual_le_of_strict_reference_on_domain",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.full_strict_reference_contact_image_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.le_of_strict_domain_alexandrov_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.bounds_of_domain_alexandrov_density_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.abs_sub_le_of_domain_alexandrov_density_close",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_residual_contact_of_domain_alexandrov_density_close",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_le_gradient_image_closure_of_domain_alexandrov",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_contact_volume_gain_of_strict_reference_on_domain",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/ContactMeasure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos_comp_affineEquiv_symm",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_affine_scalar_covariance",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_const",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.nonpos_of_pos_domain_alexandrov_lower",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_common_boundary_modulus_domain",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Comparison.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.equicontinuousOn_of_domain_alexandrov_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Compactness.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_uniform_bound_equicontinuousOn_of_domain_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Compactness.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_subseq_uniform_on_closure_of_domain_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Compactness.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_domain_subgradient_two_points_eq_zero",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_inter_subgradientImageOn_eq_zero_of_disjoint",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_convex_subseq_uniform_of_domain_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Compactness.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.analyticSet_subgradientImageOn",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.measurableSet_subgradientImageOn_of_isOpen",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_iUnion_of_pairwise_disjoint_open",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.nullMeasurableSet_subgradientImageOn_of_measurableSet",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measure",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.limsup_volume_subgradientImageOn_le_of_locally_uniform",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.ae_eventually_mem_subgradientImageOn_of_locally_uniform",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImageOn_le_liminf_of_locally_uniform",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measures_local_limits",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.domain_constant_density_of_locally_uniform",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.subsolutions",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_quadratic_subsolution",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_finite_convex_envelope",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.potential",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.polar",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.isClosed_polar",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.convex_polar",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.geometry",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.image_nonvertex_subset_frontier",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.isCompact_polar",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Basic.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.volume_polar_lt_top",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.volume_image",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.volume_polar_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Measure.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.exists_height_of_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/PrescribedAtom.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.exists_mongeAmpere_measure_of_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/PrescribedAtom.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.GaugeCone.exists_one_atom",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/PrescribedAtom.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_boundary_barrier",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_continuous_envelope",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_le_subgradientImageOn_of_open_lower",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/Stability.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.max_mem_subsolutions",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.finite_sup_mem_subsolutions",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_uniform_class_approximation",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.subgradient_le_piecewise_max_ball",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.continuousOn_piecewise_max_ball",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.convexOn_closure_piecewise_max_ball",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.piecewise_max_ball_mem_subsolutions",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_local_comparison",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_quadratic_lower_test_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularization.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_c2_lower_test_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularization.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularization.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau_ae_matrix",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularization.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.addHaar_image_le_mul_of_ae_derivative",
+        "source": "formalization/FunctionalInequalities/Analysis/Jacobian.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau_image_upper",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularization.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_local_ma_upper",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Solution.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Solution.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution_neg",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Solution.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.eq_of_domain_unit_contact",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_strict_unit_solution",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Solution.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_tilt_optimizers",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_conjugate",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_conjugate_capacity",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_dual_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map_on_open",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_open_dual_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_coercive_dual",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.eq_of_primal_supports_of_open_dual_mass",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_contained_section_unique_supports",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/DomainContact.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_contained_dual_sections",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.optimizer_transport_of_domain_measure",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/DomainTransport.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unique_support_of_unit_data",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_unique_supports",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Duality.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Dirichlet.exists_unit_c1_solution",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Regularity.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Pogorelov.logarithmic_maximum_conditions",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Pogorelov.bound_of_diagonal_local_max",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Pogorelov.bound_of_local_max",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Pogorelov.exists_directional_height_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.Pogorelov.exists_hessian_height_and_interior_bound",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.strict_drift_maximum_principle",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.linearized_maximum_principle",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.abs_le_linearized_c0_barrier",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.strict_drift_maximum_principle_of_quadratic_nonneg",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Maximum.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.interior_closedHalfBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.convex_closedHalfBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.closure_halfBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.uniqueDiffOn_closure_halfBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.normal_derivative_halfBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.normalized_flat_support",
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.barrierQuadratic_prep",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.barrierQuadratic_prep_of_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.contDiffAt_fderiv_fderiv_log_radial_profile",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.contDiffAt_log_radial_barrier",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.contDiffAt_log_radial_barrier_of_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.contDiffAt_log_radial_profile_of_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.continuous_log_radial_barrier",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Continuity.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_halfball_polynomial_negative_operator",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_log_radial_drift_budget_radius",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Operator.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_log_radial_drift_margin_radius",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Operator.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.exists_log_radial_zeroth_margin_radius",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Operator.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.fderiv_fderiv_log_radial_barrier",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.fderiv_log_radial_profile_norm_le",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Gradient.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.flat_log_radial_profile_normal",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Boundary.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.halfball_polynomial_curved_lower",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.halfball_polynomial_differential_data",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.halfball_polynomial_norm_floor",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.hasFDerivAt_log_radial_barrier",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.hasFDerivAt_log_radial_barrier_of_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.hasFDerivAt_log_radial_profile_of_pos",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Calculus.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.log_radial_profile_flat_value",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Boundary.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.log_radial_profile_value_bounds",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Bounds.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.log_radial_profile_value_le_radius_add",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Bounds.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.plane_log_radial_barrier_trace_lower",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Operator.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.tangent_log_radial_profile_normal_at_zero",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Boundary.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.tangent_normal_log_radial_barrier_trace_lower",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Operator.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.tangent_normal_log_radial_profile_fderiv_norm_le",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Gradient.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.tendsto_log_radial_positive_normal_slope",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Continuity.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.elliptic_operator_linear_combination",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/Operator.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.frontier_halfBall",
+        "source": "formalization/FunctionalInequalities/Analysis/Elliptic/HalfBall.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.orthogonal_pair_inner_sq_le",
+        "source": "formalization/FunctionalInequalities/Analysis/OrthonormalPair.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.orthogonal_pair_norm_sq",
+        "source": "formalization/FunctionalInequalities/Analysis/OrthonormalPair.lean"
+      },
+      {
+        "name": "FunctionalInequalities.Analysis.tangent_normal_radius_le",
+        "source": "formalization/FunctionalInequalities/Analysis/LogRadial/Geometry.lean"
+      }
+    ],
+    "literature_L22_note_tail": "The declarations below lead with the literal producer and retain the strong-class producers and the supporting measure, convex, weak-derivative, local Schauder and contact-estimate statements with their own hypotheses; the W^{2,p} and Dirichlet-reference supports described below are no longer on the route to this lemma.\n\nFor the auxiliary UNIT Dirichlet reference, positive dimension and a bounded open convex domain (EMPTY allowed) now generate ONE SAME U and measure mu BEFORE every interior point. U is convex and continuous on the closure, zero on the WHOLE frontier, negative and strictly convex inside; flat zero-boundary faces are allowed. The same measure has every Borel DOMAIN supporting-image formula and contained-compact finite mass, equals volume restricted to the domain and satisfies the actual OPEN unit equation. The actual Perron envelope, buffered Moreau regularization, genuine gradient-derivative/value-expansion matrix, shared Haar/Jacobian null-image control, supporting-image stability and same-measure finite restrictions/countable cover construct these fields. No supplied potential, equation, regularity, measure or total-mass cap is an input.\n\nProper negative sublevels give global Lipschitz convex patches with PROVED full ambient level and interior supporting-image identities. Actual continuous compact affine-tilt optimizers and finite conjugate values give C1 of the conjugate psi, compact and OPEN dual measure identities and contained full dual sections. Contact-point uniqueness and supporting-SLOPE uniqueness are distinct. A GIVEN-U construction works at all vertices for the ONE previously chosen U/mu; it does not commute forall with exists or rechoose the potential. Local convex C0 and unique DOMAIN supports then generate an actual continuous slope selection, Frechet derivatives at EVERY interior point, the actual gradient identity and C1 of PRIMAL U on the open domain. No C1 on the closure, C2/PD or continuous Hessian of this U is claimed.\n\nNew classical support: Savin, The obstacle problem for Monge Ampere equation, DOI10.1007/s00526-004-0275-8, Proposition4.1 proof(10)-(15), pp13-14, author PDF https://www.math.columbia.edu/~savin/calc275.pdf, SHA256 013bd4dd466d04ec43e6025b0c097f56e2e6234e19eee481643ba9348c5243e9. Actual local constant-determinant differential identities, finite-order commutation, an axis-fixing positive-matrix frame and genuine logarithmic maximum conditions prove the point bound for a GIVEN C4 potential. On a bounded OPEN domain (convexity NOT required), C4 at every interior point, AMBIENT C2 at EVERY closure point, negative interior values, zero WHOLE frontier, positive Hessian and nonzero constant determinant generate the closure gradient cap B and an actual interior maximum. They yield the full ELEMENTWISE bound norm(Hess u)*(-u) <= (n+B)*exp(B^2/2) and a positive Hessian cap on every compact interior set. Empty domains and zero dimension are included; the zero-dimensional carrier is a point and its empty Hessian has norm zero, with no Haar-zero assertion. The coordinates, maximum, gradient/Hessian caps and PDE derivative identities are generated, not assumed. Shared local proofs replace the old global C3/Cinfinity commutation and C2 affine-equivalence bodies; the separate noninvertible cross-type linear-map scope is retained. These are supporting classical estimates, not full Proposition4.1 or Savin paper coverage.\n\nNamed source: L. Caffarelli, L. Nirenberg and J. Spruck, The Dirichlet Problem for Nonlinear Second-Order Elliptic Equations I. Monge-Ampere Equation, CPAM37(1984),369-402, author-hosted34pagePDF, DOI10.1002/cpa.3160370306, author PDF https://math.jhu.edu/~js/Math742/cns1.pdf, SHA256 e4355f850e3c27c3ada6ce688271af6a9de4fcae965169319d529eb7e40a6889. Ordinary CNS1984 maximum/comparison supports are now canonical: local C2 Hessian algebra, the actual squared-distance Hessian, finite symmetric-part PSD/trace normalization and its ELEMENTWISE norm ceiling, a strict maximum principle with arbitrary drift, the weak positive-trace maximum and an explicit quadratic C0 barrier. The bounded OPEN domain need not be convex and n=0/empty cases are retained. Coefficients need not be continuous or bounded. The nonsymmetric caller generates local-C2 Hessian symmetry and the SAME symmetric coefficient before applying the strict core; no raw skew-part bound is inferred. These support section2 pp374-376 and Lemma5.1 comparison pp385-387, not the full boundary lemma, a boundary inverse, classical existence or regularity of the generated C1 UNIT reference. Three actual old global Hessian algebra proof bodies share the new pointwise producers, and the weak maximum shares ONE strict compact-maximum core.\n\nAdditional CNS1984 Lemma5.1 pp385-387 supports are canonical: convex support from a derivative WITHIN an arbitrary convex domain, actual half-ball closure/unique-differentiability/one-sided normal slope from C1 WITHIN the FULL closure, and normalized convex flat support with generated alpha, unit tangent and beta. The generic real-normed source has no inner-product/finite-dimension/completeness/Nontrivial/UniqueDiff premise and actually replaces the old global gradient tangent proof. The half-ball is ambient m+1 for all m>=0; m0 is ambient1, not an empty carrier. Actual nonambient absolute-value and nonempty quartic clients distinguish the derivative scopes and generate the support data. No ambient derivative of the unknown boundary function is substituted. These are (5.3)/(5.3)prime and normal-derivative prerequisites, not the generated combined barrier/comparison, full logarithmic modulus, classical solvability or C2 of canonical U.\n\nCanonical CNS1984 Lemma5.1 p386 profile supports now also include genuine arbitrary-real-normed positive-radius Frechet calculus and first-derivative norm bounds; global singular continuity and the divergent positive normal-ray slope; exact flat max-value and positive-shift normal derivative; generated plane-to-ambient trace coupling; and generated drift/zeroth-order radii before every coefficient, dimension and candidate point. Coefficients may be nonsymmetric, with only their quadratic bounds assumed; the symmetric-part elementwise norm source controls the actual off-diagonal sum. The actual polynomial barrier has generated negative operator margin and an ordinary height-budget norm floor, including the curved radius-squared bound. Ambient dimensions and empty finite-index scopes follow the individual statements; no nonexistent positive normal direction in Fin0 is claimed. Real old/new scalar, skew, nonzero-drift, singular, ambientFin1/Fin2/Fin3 and genericFin0 clients apply the sources. Shared positive-radius/first-derivative, scalar value and polynomial-floor producers replace the previous inline bodies. Conservative constants24/4/8/16 are derived support constants. These are not a generated combined-barrier comparison, normal-slope estimate for an unknown function, full all-pairs log modulus, a linear inverse, classical existence or canonical U-C2.\n\nFurther canonical CNS1984 Lemma5.1 p386 preparation generates actual orthogonal-frame/Bessel, shifted-radius, same-half-ball frontier and coefficient/derivative coupling. A single Mathlib orthonormal-pair preparation supplies both the old ambient-frame norm consumer and the new projection bound, in arbitrary real inner-product spaces without finite-dimensionality/completeness. One finite-coordinate producer for arbitrary real-normed codomains replaces the old Holder and flat-support expansions; real component bounds generate the drift norm including empty finite indices. Actual local-C2 Hessian/gradient/value linearity replaces the old C0-barrier difference algebra and serves the same combined elliptic expression, including dimension zero. Real nonzero-drift quadratic/affine, empty-coordinate, shifted-radius and flat/curved clients apply the sources. No independent coordinate coupling, radius bound or operator identity is assumed. The generated combined barrier/comparison and full logarithmic modulus are still unproved.\n\nOn the superseded W^{2,p} route, the open obstruction is production of actual classical solutions and regularity for THIS SAME generated C1 UNIT reference: linear boundary solvability, the required a priori Hessian/modulus estimates, continuity-method closure, a genuine C4 UNIT family, convergence and same-U identification. The independently checked support packages outside the canonical library are not asserted by this source register. A GIVEN-local-C2 reference contact gain is not yet a geometry-only factory. Normalized contact scales, arbitrary finite-p tail estimates, weak derivatives and W2p remain incomplete on that route; they are not needed for this lemma. The pinned BB proof obtains smoothness AFTER W2p and cannot supply its missing reference circularly; plain mollification does not preserve determinant one, and AE positive-definite determinant-one data do not imply whole-open C2. No lower-only Perron total cap, ambient narrow convergence from local uniform convergence plus a finite cap, compact-only whole-frontier extension or atomic-weight addition from maxima is assumed. The effect of the CNS1987 correction has not been assessed; no corrected classical-existence theorem or full CNS coverage is claimed.",
+    "literature_letwin_remaining_tail": "The same literal-source witness now has compact-local C1alpha and uniform section power-radius bounds, through normalized Bregman comparison and Forzani-Maldonado ray powers. W2p/interior second-order regularity remain pending; they are no longer needed for Lemma 2.2. Full small-section engulfing and countable disjoint enlargement covering are proved from the actual continuous positive Alexandrov density, including an actual literal-source client; bounded-overlap/contact-density and W2p remain pending. Convex section-height dilation |S_(A h)| <= A^n |S_h| (including n=0/infinite volume) and compact-uniform quantitative weak-type section covering delta|union S_i| <= M|E| are proved, with actual literal-source consumers. The nonlinear contact-density estimate remains unproved. Uniform C0 perturbations of a strictly convex C1 reference now give actual interior supporting contacts; combined with the actual density comparison they realize delta grad v at residual-gradient contacts of u-(1-delta)v, with epsilon before u. The unit-density reference is given; its existence and the nonlinear contact-measure gain remain unproved. The actual matrix determinant step is now proved: PSD eigenvalue AMGM, determinant-root Minkowski for PSD summands with PD sum (no commutation/invertible residual), and detA<=(epsilon+delta)^n for the unit-determinant positive reference from det(A+(1-delta)B)<=(1+epsilon)^n. Singular and noncommuting clients and n=1 are checked. The contact MA measure gain remains missing. Actual supporting contacts and quadratic expansions now derive residual PSD and the exact determinant bound, without C2/convexity of the residual or supplied residual PSD. Local actual MA equations yield the matrices/expansions and contact-point bound a.e.; an actual literal-source client retains the same normalized transporting Holder witness against a given unit-density reference. This is pointwise a.e. control, not the missing contact-gradient-image measure estimate or W2p. Quadratic-reference null-image control is now proved from actual finite local MA upper bounds and actual supporting contacts, with arbitrary null subsets and no supplied N property/contraction/factor. The generic theorem includes n=0; the actual literal-source client derives the local upper bound from its continuous density while retaining the same transporting Holder potential. General-reference null images, the full contact-image determinant estimate and W2p remain missing. The actual strong subgradient expansion is now retained in one shared Alexandrov producer; globally convex differentiable u has a genuine ae Frechet derivative of grad u with the SAME symmetric operator as the quadratic value expansion. Shared coordinate conversion and actual local MA equations identify positive definiteness and det=f of that very derivative matrix. Constructed quadratic/n=0 and same normalized transporting Holder literal-source clients supply actual inputs. This is not weak-derivative identification, W2p or interior C2. The actual quadratic-reference residual contact image is now bounded by (epsilon+delta)^n times contact volume, from actual local MA/contacts via same-matrix derivative determinant, Jacobian on a measurable good set and a proved null bad image. Actual full-contact-set measurability is derived, not supplied, and the same literal-source witness is used in a real client. No finite-volume or measurable-image premise. General comparison references, the contact volume-density lower gain and W2p remain open. Local-C2 reference bounds and arbitrary-null-contact residual images are now proved for actual ContDiffOn2 only on the open working domain with positive Hessian there. A genuine pointwise C2At Hessian/gradient bridge is shared by the local compact producer and the old global bridge. Local compact/relative/null proofs are single producers; old global interfaces are exact-type univ specializations. Actual interval/ball references equal a quadratic inside and zero outside; generic n0 and the same normalized transporting Holder literal-source client are checked. No global smooth extension, reference outside-domain convexity, N/factor/cover, unknown-u Hessian or W2p input. General image upper now allows a GIVEN globally convex LOCALLY C2 reference; compact volume gain still requires GLOBAL C2; domain-only MA identification and local volume-gain localization, actual Dirichlet/Pogorelov existence, scale tails and weak derivatives remain open. The same-operator gradient derivative and coordinate/actual-MA producers now require differentiability only on the open working domain, with ae restricted-volume output. Global convexity remains explicit; no global differentiability/C1/C2 extension, desired derivative/expansion, unknown-u Hessian/C11/W2p input. One local substantive gradient/coordinate/MA proof each, three old global public types retained as true univ/on-domain specializations; retained strong/value prefix and actual private coordinate conversion unchanged. Actual abs positive-half-line client includes a formal nonglobal differentiability obstruction; actual quadratic/unit-MA/open-ball/n0 and same normalized transporting Holder literal-source clients retain SAME derivative/expansion/PD/det witness. This does not identify weak derivatives or construct/localize a domain-only Dirichlet reference. General reference image/gain remains GIVEN GLOBAL convex/GLOBAL C2; its local-C2 image/Borel candidate is separate. Dirichlet/Pogorelov existence, normalized-domain scale iteration, arbitrary-p tails/weak derivatives/interior C2 remain open on that W2p route, which is no longer needed for Lemma 2.2.",
+    "literature_priority_6_sentence": "The W2p, Dirichlet-reference and Pogorelov supports retain their scopes but are no longer needed for Lemma 2.2.",
+    "smooth_route": {
+      "R3L": {
+        "declarations": 2,
+        "proved_supports": 2
+      },
+      "R7L": {
+        "declarations": 83,
+        "proved_supports": 30
+      },
+      "R3L_status": {
+        "old": "PROVED_IN_LIBRARY",
+        "new": "NOT_NEEDED_FOR_ROUTE"
+      }
+    }
+  },
+  "unchanged": [
+    "research/a-series/ledger.yaml and every certificate",
+    "KLS.kls and the accepted BKL main line",
+    "formalization/blueprint/route-composition.yaml (four exploratory routes, AND/OR structure)",
+    "all 798 retained library Lean sources; statements and proof bodies in the retained examples",
+    "earlier migration maps and dated review records"
+  ],
+  "verification": "Sources, interfaces and metadata of the selection were reviewed (strict and exact-scope builds, strict Expr.equal comparison of retained declarations, unchanged Blueprint statements and \\uses edges). The complete verification result is decided only by the delivery task's candidate-verification.json reporting status passed for the exact source snapshot; this map asserts no full-verification result.",
+  "delivery_review_corrections": [
+    {
+      "source": "examples/EllipticDrift.lean",
+      "change": "Remove one redundant final blank line; all source tokens and proof bodies unchanged."
+    },
+    {
+      "source": "research/progress/test_update.py",
+      "change": "Assert Mermaid node-class membership rather than a singleton serialization line. The same four hypothesis nodes, the superseded-to-todo transition for MH, unchanged proof markers and Git-index isolation remain checked. Runtime generators and verification gates are unchanged."
+    }
+  ]
+}

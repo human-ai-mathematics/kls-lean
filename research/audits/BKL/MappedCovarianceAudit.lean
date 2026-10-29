@@ -3,13 +3,14 @@ import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.KLS.LogConcave.Translation
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
-/-! Audit clients for the mapped covariance of Letwin, arXiv:2607.24164v1, proof of Theorem 1.2, p. 14 (the covariance
-step `Cov Z = |M|`, `Z = |M|^{1/2} X`, preceding (2.21)) (consumer chain: Letwin Theorem 1.2,
-then Bizeul–Klartag–Lehec Lemma 4.2): `KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix` in `KLS/Isotropic.lean`
-(root-accepted Astra v5 proof) and its spectral prerequisites in `Analysis/Matrix/Sign.lean`. Inputs are genuine: an
-arbitrary isotropic law, an indefinite matrix, the singular zero matrix, an actual isotropic law on `Fin 0`, the scale
-matrix `-4 • 1` (factor `2`, covariance `4 ⟪a, b⟫`), and the actual standard Gaussian on `EuclideanSpace ℝ (Fin 1)`,
-whose isotropy proof is verbatim from `LocalThirdCumulantAudit.lean`. No transformed covariance is assumed. -/
+/-! Audit clients for the mapped covariance of Letwin, arXiv:2607.24164v1, proof of Theorem 1.2,
+p. 14 (the covariance step `Cov Z = |M|`, `Z = |M|^{1/2} X`, preceding (2.21)) (consumer chain:
+Letwin Theorem 1.2, then Bizeul–Klartag–Lehec Lemma 4.2):
+`KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix` in `KLS/Isotropic.lean` and its spectral
+prerequisites in `Analysis/Matrix/Sign.lean`. Inputs are genuine: an arbitrary isotropic law, an
+indefinite matrix, the singular zero matrix, an actual isotropic law on `Fin 0`, the scale matrix
+`-4 • 1` (factor `2`, covariance `4 ⟪a, b⟫`), and the actual standard Gaussian on
+`EuclideanSpace ℝ (Fin 1)`. No transformed covariance is assumed. -/
 
 noncomputable section
 open MeasureTheory

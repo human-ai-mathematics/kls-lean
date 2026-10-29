@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoIntegrandComplete
 import LevyStochCalc.Probability.Progressive
 
@@ -101,7 +104,7 @@ theorem exists_markedEnergy_limit
       ∧ Tendsto (fun n => eLpNorm
           ((fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2) - g) 2 (markedEnergyMeasure P ν T))
           atTop (𝓝 0) := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   have hMem : ∀ n, MemLp (fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2) 2
       (markedEnergyMeasure P ν T) := fun n => memLp_of_markedEnergy_ne_top (hm n) (hfin n)
   have hcs : CauchySeq fun n => (hMem n).toLp fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2 := by
@@ -148,7 +151,7 @@ theorem markedProgressivelyMeasurable_limsup {ℱ : Filtration ℝ ‹Measurable
     Probability.MarkedProgressivelyMeasurable ℱ
       fun ω s e => limsup (fun k => φ k ω s e) atTop := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hind : (fun p : Ω × ℝ × E => (Set.Iic t).indicator
         (fun s => limsup (fun k => φ k p.1 s p.2.2) atTop) p.2.1)
       = fun p : Ω × ℝ × E =>

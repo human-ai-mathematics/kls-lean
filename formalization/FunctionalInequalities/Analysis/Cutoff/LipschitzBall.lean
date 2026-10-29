@@ -5,8 +5,6 @@ import Mathlib.Topology.Algebra.Support
 
 /-!
 # Lipschitz norm-ball cutoffs and compact localization
-
-Existing names, statements and proof payloads are preserved.
 -/
 
 noncomputable section
@@ -50,7 +48,7 @@ theorem hasCompactSupport_ballCutoff (R : ℝ) : HasCompactSupport (ballCutoff (
       simpa only [Metric.mem_closedBall, dist_zero_right] using hx))
   exact max_eq_left (le_trans (min_le_right _ _) (sub_nonpos.mpr hr))
 
-/-- **S5d.** A Lipschitz cutoff with compact support times a locally Lipschitz map is globally
+/-- A Lipschitz cutoff with compact support times a locally Lipschitz map is globally
 Lipschitz and bounded. -/
 theorem exists_lipschitzWith_smul_of_locallyLipschitz {γ : V → ℝ} {Kγ : ℝ≥0}
     (hγ : LipschitzWith Kγ γ) (hγs : HasCompactSupport γ) {f : V → V'}

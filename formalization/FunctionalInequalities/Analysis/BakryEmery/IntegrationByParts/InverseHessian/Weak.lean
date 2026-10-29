@@ -6,7 +6,7 @@ import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
 import FunctionalInequalities.Analysis.WeakDerivative.Products
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
@@ -26,7 +26,7 @@ functions with the weight `e^{−u}` (Letwin arXiv:2607.24164v1, equation (2.2),
 The proof applies the weak inverse-Hessian divergence identity and the inverse-Hessian integrability interface of
 `Analysis/Matrix/Piola.lean` to weighted gradient tests. Its one-use supports are private: the Lipschitz constant and
 compact support of the test `η e^{−u} ∂ᵢw`, its almost-everywhere derivative (with two coordinate lemmas reproduced
-privately from `Analysis/BakryEmery/WeakHessian.lean`, which requires only differentiability of the gradient at the
+privately from `Analysis/BakryEmery/Hessian/Weak.lean`, which requires only differentiability of the gradient at the
 point), and a finite inverse-matrix cancellation. The almost-everywhere chain derivative of the
 Monge–Ampère exponent `−u + V(∇u)` is also public as `ae_fderiv_mongeAmpere_exponent`,
 for use by the actual-source weak Monge–Ampère identification bridge. No `C²` regularity of `u` or `w` is used. These are supporting identities; Letwin Theorems 2.5 and 1.2
@@ -609,8 +609,38 @@ private lemma energy_swap {n : ℕ}
   rw [hs i j]
   ring
 
-/-- **The Hessian-metric generator at `C^{1,1}` is symmetric** (Letwin arXiv:2607.24164v1 (2.2), weak form; weak Letwin
-route): for the `C^{1,1}` Monge–Ampère solution `u` (`det ∇²u = e^{−u + V(∇u)}` a.e., the right side
+/-- C1 compact multiplier version of the closed weak generator identity.
+Weak-source support for Letwin A.4; no new regularity hypothesis on u. -/
+theorem integral_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
+    {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
+    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
+    (hw : ContDiff ℝ 1 w) {Gw : NNReal} (hGw : LipschitzWith Gw (gradient w))
+    (hη : ContDiff ℝ 1 η) (hηc : HasCompactSupport η) :
+    ∫ x, η x * (((hessianMatrix u x)⁻¹ * hessianMatrix w x).trace -
+        fderiv ℝ V (gradient u x) (gradient w x)) * Real.exp (-u x)
+        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) =
+      -∫ x, (∑ i, ∑ j, (hessianMatrix u x)⁻¹ i j *
+          fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
+          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x)
+        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hη1 : ContDiff ℝ 1 η := hη
+  have hE : Integrable (energyDensity u η w)
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    apply integrable_energy hu hG hF.continuous hdet
+      (continuous_coord hη1) (continuous_coord hw)
+    intro i j
+    exact
+      ((hηc.fderiv_apply ℝ (EuclideanSpace.basisFun (Fin n) ℝ i)).mul_right :
+        HasCompactSupport (fun x => coord η i x * coord w j x)).mul_right
+  exact assemble_generator hu hG hV hF hdet
+    (fun i => exists_lipschitz_compact_exp_gradient_test hu hη1 hηc hGw i)
+    (fun i => ae_fderiv_exp_gradient_test hu hη1 hGw i) hE
+
+/-- **The Hessian-metric generator at `C^{1,1}` is symmetric** (Letwin arXiv:2607.24164v1 (2.2),
+weak form): for the `C^{1,1}` Monge–Ampère solution `u` (`det ∇²u = e^{−u + V(∇u)}` a.e., the right
+side
 Lipschitz), with `L f := tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f)`, every `w ∈ C¹` with Lipschitz gradient and every `η ∈ C²` with compact
 support satisfy `∫ η (L w) e^{−u} = −∫ ⟨(∇²u)⁻¹ ∇η, ∇w⟩ e^{−u}`. -/
 theorem integral_mul_generator_eq_neg_energy {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -627,18 +657,8 @@ theorem integral_mul_generator_eq_neg_energy {n : ℕ} {u V w η : EuclideanSpac
           fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
           fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-  have hη1 : ContDiff ℝ 1 η := hη.of_le (by norm_num)
-  have hE : Integrable (energyDensity u η w)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    apply integrable_energy hu hG hF.continuous hdet
-      (continuous_coord hη1) (continuous_coord hw)
-    intro i j
-    exact
-      ((hηc.fderiv_apply ℝ (EuclideanSpace.basisFun (Fin n) ℝ i)).mul_right :
-        HasCompactSupport (fun x => coord η i x * coord w j x)).mul_right
-  exact assemble_generator hu hG hV hF hdet
-    (fun i => exists_lipschitz_compact_exp_gradient_test hu hη1 hηc hGw i)
-    (fun i => ae_fderiv_exp_gradient_test hu hη1 hGw i) hE
+  exact integral_mul_generator_eq_neg_energy_of_contDiff_one hu hG hV hF hdet hw hGw
+    (hη.of_le (by norm_num)) hηc
 
 /-- The same identity with the roles exchanged (`η` inside the generator, `w` outside). -/
 theorem integral_mul_generator_eq_neg_energy' {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -985,47 +1005,6 @@ theorem hasWeakDerivAlong_inverse_hessian_of_logdet {n : ℕ}
 
 end FunctionalInequalities.Analysis
 end WeakInverseDerivative
-
-
-section C1GeneratorTestReuse
-open MeasureTheory
-open FunctionalInequalities.Probability.Stein
-open scoped ContDiff RealInnerProductSpace
-namespace FunctionalInequalities.Analysis
-
-/-- C1 compact multiplier version of the closed weak generator identity.
-Weak-source support for Letwin A.4; no new regularity hypothesis on u. -/
-theorem integral_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
-    {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
-    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
-    (hw : ContDiff ℝ 1 w) {Gw : NNReal} (hGw : LipschitzWith Gw (gradient w))
-    (hη : ContDiff ℝ 1 η) (hηc : HasCompactSupport η) :
-    ∫ x, η x * (((hessianMatrix u x)⁻¹ * hessianMatrix w x).trace -
-        fderiv ℝ V (gradient u x) (gradient w x)) * Real.exp (-u x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) =
-      -∫ x, (∑ i, ∑ j, (hessianMatrix u x)⁻¹ i j *
-          fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
-          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-  have hη1 : ContDiff ℝ 1 η := hη
-  have hE : Integrable (energyDensity u η w)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    apply integrable_energy hu hG hF.continuous hdet
-      (continuous_coord hη1) (continuous_coord hw)
-    intro i j
-    exact
-      ((hηc.fderiv_apply ℝ (EuclideanSpace.basisFun (Fin n) ℝ i)).mul_right :
-        HasCompactSupport (fun x => coord η i x * coord w j x)).mul_right
-  exact assemble_generator hu hG hV hF hdet
-    (fun i => exists_lipschitz_compact_exp_gradient_test hu hη1 hηc hGw i)
-    (fun i => ae_fderiv_exp_gradient_test hu hη1 hGw i) hE
-
-
-end FunctionalInequalities.Analysis
-end C1GeneratorTestReuse
-
 
 section WeakInverseRowDivergence
 open MeasureTheory Set

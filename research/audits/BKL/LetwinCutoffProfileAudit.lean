@@ -3,10 +3,11 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: scalar cutoff profile of Letwin Lemma A.4
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients of the three scalar results, every premise
-derived here: the profile is not constant (`η 0 = 1`, `η 3 = 0`); the majorant `w` of `|η″|` is interval-integrable on
-`[0, 3]` and vanishes at `4`; the exhaustion `η(5/(n+1))` starts at `0` for `n = 0`, is monotone and tends to `1`, so it is
-not constant either. Client bodies: Claude.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients of the three scalar
+results, every premise derived here: the profile is not constant (`η 0 = 1`, `η 3 = 0`); the
+majorant `w` of `|η″|` is interval-integrable on `[0, 3]` and vanishes at `4`; the exhaustion
+`η(5/(n+1))` starts at `0` for `n = 0`, is monotone and tends to `1`, so it is not constant
+either.
 -/
 
 open Filter

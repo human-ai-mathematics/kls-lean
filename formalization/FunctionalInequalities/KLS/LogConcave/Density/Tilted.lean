@@ -23,8 +23,6 @@ namespace FunctionalInequalities.KLS.LogConcave
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V] {ν : ProbabilityMeasure V}
 
-
-
 section TiltedDensityIntegrability
 
 omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V]
@@ -75,10 +73,11 @@ theorem integral_exp_neg_pos_of_eq_tilted {m : Measure V} {W : V → ℝ}
 end TiltedDensityIntegrability
 
 omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
-/-- For convex `W` and `Z > 0`, the normalized weight `e^{-W} / Z` is log-concave:
-`ρ(x)^t ρ(y)^{1-t} ≤ ρ(t x + (1 - t) y)` for `0 < t < 1`. -/
-theorem rpow_mul_rpow_le_of_convexOn {W : V → ℝ} (hconv : ConvexOn ℝ Set.univ W) {Z : ℝ}
-    (hZ : 0 < Z) (x y : V) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
+/-- For `W` convex on a set `s` and `Z > 0`, the normalized weight `e^{-W} / Z` satisfies
+`ρ(x)^t ρ(y)^{1-t} ≤ ρ(t x + (1 - t) y)` for `x, y ∈ s` and `0 < t < 1`. -/
+theorem rpow_mul_rpow_le_of_convexOn_of_mem {s : Set V} {W : V → ℝ} (hconv : ConvexOn ℝ s W)
+    {Z : ℝ} (hZ : 0 < Z) {x y : V} (hx : x ∈ s) (hy : y ∈ s) {t : ℝ} (ht0 : 0 < t)
+    (ht1 : t < 1) :
     (Real.exp (-W x) / Z) ^ t * (Real.exp (-W y) / Z) ^ (1 - t) ≤
       Real.exp (-W (t • x + (1 - t) • y)) / Z := by
   have hAx : 0 < Real.exp (-W x) / Z :=
@@ -109,8 +108,7 @@ theorem rpow_mul_rpow_le_of_convexOn {W : V → ℝ} (hconv : ConvexOn ℝ Set.u
   rw [hleft, hright]
   apply Real.exp_le_exp.mpr
   have hW0 :=
-    hconv.2 (Set.mem_univ x) (Set.mem_univ y) ht0.le
-      (by linarith : 0 ≤ 1 - t) (by ring : t + (1 - t) = 1)
+    hconv.2 hx hy ht0.le (by linarith : 0 ≤ 1 - t) (by ring : t + (1 - t) = 1)
   have hW :
       W (t • x + (1 - t) • y) ≤ t * W x + (1 - t) * W y := by
     simpa [smul_eq_mul] using hW0
@@ -118,6 +116,15 @@ theorem rpow_mul_rpow_le_of_convexOn {W : V → ℝ} (hconv : ConvexOn ℝ Set.u
     (-W x - Real.log Z) * t + (-W y - Real.log Z) * (1 - t) =
         -(t * W x + (1 - t) * W y) - Real.log Z := by ring
     _ ≤ -W (t • x + (1 - t) • y) - Real.log Z := by linarith
+
+omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+/-- For convex `W` and `Z > 0`, the normalized weight `e^{-W} / Z` is log-concave:
+`ρ(x)^t ρ(y)^{1-t} ≤ ρ(t x + (1 - t) y)` for `0 < t < 1`. -/
+theorem rpow_mul_rpow_le_of_convexOn {W : V → ℝ} (hconv : ConvexOn ℝ Set.univ W) {Z : ℝ}
+    (hZ : 0 < Z) (x y : V) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
+    (Real.exp (-W x) / Z) ^ t * (Real.exp (-W y) / Z) ^ (1 - t) ≤
+      Real.exp (-W (t • x + (1 - t) • y)) / Z :=
+  rpow_mul_rpow_le_of_convexOn_of_mem hconv hZ (Set.mem_univ x) (Set.mem_univ y) ht0 ht1
 
 omit [FiniteDimensional ℝ V] in
 /-- For continuous convex `W`, the density `e^{-W} / ∫ e^{-W} dm` of `ν = m.tilted (-W)` is a
@@ -230,7 +237,9 @@ end FunctionalInequalities.KLS.LogConcave
 
 /-! ### Restricted exponential densities
 
-For closed convex `K` and continuous convex `W`, `1_K e^{-W}` is a Borell density of `μ = (1_K e^{-W}) dx`, so `μ` is log-concave; in particular every regular-class law (`W - κ/2 ‖·‖²` convex) is log-concave. -/
+For closed convex `K` and `W` continuous and convex on `K`, `1_K e^{-W}` is a Borell density of `μ = (1_K e^{-W}) dx`, so `μ` is log-concave; in particular every regular-class law (`W - κ/2 ‖·‖²` convex) is log-concave. For a
+convex `K` that need not be closed (Letwin's bounded open convex bodies), continuity on `closure K` and convexity on `K`
+suffice (`logConcave_of_eq_restricted_exp_on_closure`). -/
 
 noncomputable section
 open MeasureTheory Set
@@ -242,29 +251,35 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 set_option maxHeartbeats 500000 in
-theorem isBorellDensity_of_eq_restricted_exp
+/-- For closed convex `K` and `W` continuous and convex on `K`, `1_K e^{-W}` is a log-concave Borell
+density of `μ = (1_K e^{-W}) dx`. Only the values of `W` on `K` enter. -/
+theorem isBorellDensity_of_eq_restricted_exp_on
     (μ : ProbabilityMeasure E) {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
-    {W : E → ℝ} (hW : Continuous W) (hWc : ConvexOn ℝ univ W)
+    {W : E → ℝ} (hW : ContinuousOn W K) (hWc : ConvexOn ℝ K W)
     (hμ : (μ : Measure E) = (volume : Measure E).withDensity
       (K.indicator fun x => ENNReal.ofReal (Real.exp (-W x)))) :
     IsBorellDensity (μ : Measure E) volume (K.indicator fun x => Real.exp (-W x)) := by
+  classical
   let f : E → ℝ := fun x => Real.exp (-W x)
-  have hf : Continuous f := Real.continuous_exp.comp hW.neg
+  have hf : ContinuousOn f K := hW.neg.rexp
   have hnonneg : ∀ x, 0 ≤ K.indicator f x := fun x =>
     Set.indicator_nonneg (fun y _ => (Real.exp_pos (-W y)).le) x
   refine
-    { measurable := hf.measurable.indicator hK.measurableSet
+    { measurable := ?_
       nonneg := hnonneg
       upperSemicontinuous := ?_
       logConcave := ?_
       withDensity_eq := ?_ }
+  · rw [← Set.piecewise_eq_indicator]
+    exact hf.measurable_piecewise continuousOn_const hK.measurableSet
   · intro x a hxa
     by_cases hx : x ∈ K
     · have hfa : f x < a := by simpa only [Set.indicator_of_mem hx] using hxa
       have ha : 0 < a := (Real.exp_pos (-W x)).trans hfa
-      filter_upwards [hf.upperSemicontinuous x a hfa] with y hy
+      filter_upwards [eventually_nhdsWithin_iff.mp ((hf x hx).eventually (gt_mem_nhds hfa))]
+        with y hy
       by_cases hyK : y ∈ K
-      · simpa only [Set.indicator_of_mem hyK] using hy
+      · simpa only [Set.indicator_of_mem hyK] using hy hyK
       · simpa only [Set.indicator_of_notMem hyK] using ha
     · have ha : 0 < a := by simpa only [Set.indicator_of_notMem hx] using hxa
       filter_upwards [hK.isOpen_compl.mem_nhds hx] with y hy
@@ -275,8 +290,8 @@ theorem isBorellDensity_of_eq_restricted_exp
       · have hz : t • x + (1-t) • y ∈ K :=
           hKc hx hy ht.le (by linarith) (by ring)
         simp only [Set.indicator_of_mem hx,Set.indicator_of_mem hy,Set.indicator_of_mem hz]
-        simpa only [div_one] using rpow_mul_rpow_le_of_convexOn hWc
-          (by norm_num : (0 : ℝ) < 1) x y ht ht1
+        simpa only [div_one] using rpow_mul_rpow_le_of_convexOn_of_mem hWc
+          (by norm_num : (0 : ℝ) < 1) hx hy ht ht1
       · rw [Set.indicator_of_notMem hy,Real.zero_rpow (by linarith : 1-t ≠ 0),mul_zero]
         exact hnonneg _
     · rw [Set.indicator_of_notMem hx,Real.zero_rpow ht.ne',zero_mul]
@@ -286,13 +301,70 @@ theorem isBorellDensity_of_eq_restricted_exp
     funext x
     by_cases hx : x ∈ K <;> simp [hx]
 
+theorem isBorellDensity_of_eq_restricted_exp
+    (μ : ProbabilityMeasure E) {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
+    {W : E → ℝ} (hW : Continuous W) (hWc : ConvexOn ℝ univ W)
+    (hμ : (μ : Measure E) = (volume : Measure E).withDensity
+      (K.indicator fun x => ENNReal.ofReal (Real.exp (-W x)))) :
+    IsBorellDensity (μ : Measure E) volume (K.indicator fun x => Real.exp (-W x)) :=
+  isBorellDensity_of_eq_restricted_exp_on μ hK hKc hW.continuousOn
+    (hWc.subset (subset_univ K) hKc) hμ
+
+/-- **Log-concavity of restricted exponential laws.** For closed convex `K` and `W` continuous and
+convex on `K` (no condition off `K`), the law `μ = (1_K e^{-W}) dx` is log-concave. -/
+theorem logConcave_of_eq_restricted_exp_on
+    (μ : ProbabilityMeasure E) {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
+    {W : E → ℝ} (hW : ContinuousOn W K) (hWc : ConvexOn ℝ K W)
+    (hμ : (μ : Measure E) = (volume : Measure E).withDensity
+      (K.indicator fun x => ENNReal.ofReal (Real.exp (-W x)))) :
+    FunctionalInequalities.KLS.LogConcave μ :=
+  IsBorellDensity.compactLogConcave (isBorellDensity_of_eq_restricted_exp_on μ hK hKc hW hWc hμ)
+
 theorem logConcave_of_eq_restricted_exp
     (μ : ProbabilityMeasure E) {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
     {W : E → ℝ} (hW : Continuous W) (hWc : ConvexOn ℝ univ W)
     (hμ : (μ : Measure E) = (volume : Measure E).withDensity
       (K.indicator fun x => ENNReal.ofReal (Real.exp (-W x)))) :
     FunctionalInequalities.KLS.LogConcave μ :=
-  IsBorellDensity.compactLogConcave (isBorellDensity_of_eq_restricted_exp μ hK hKc hW hWc hμ)
+  logConcave_of_eq_restricted_exp_on μ hK hKc hW.continuousOn (hWc.subset (subset_univ K) hKc) hμ
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+/-- A function continuous on the closure of a convex set and convex on the set is convex on the
+closure. -/
+private theorem convexOn_closure_of_continuousOn {K : Set E} (hKc : Convex ℝ K) {W : E → ℝ}
+    (hW : ContinuousOn W (closure K)) (hWc : ConvexOn ℝ K W) : ConvexOn ℝ (closure K) W := by
+  refine ⟨hKc.closure, fun x hx y hy a b ha hb hab => ?_⟩
+  let g : E × E → ℝ := fun p => a • W p.1 + b • W p.2 - W (a • p.1 + b • p.2)
+  have hg : ContinuousOn g (closure K ×ˢ closure K) := by
+    have h1 : ContinuousOn (fun p : E × E => W p.1) (closure K ×ˢ closure K) :=
+      hW.comp continuousOn_fst fun p hp => hp.1
+    have h2 : ContinuousOn (fun p : E × E => W p.2) (closure K ×ˢ closure K) :=
+      hW.comp continuousOn_snd fun p hp => hp.2
+    have h3 : ContinuousOn (fun p : E × E => W (a • p.1 + b • p.2)) (closure K ×ˢ closure K) :=
+      hW.comp (by fun_prop) fun p hp => hKc.closure hp.1 hp.2 ha hb hab
+    exact ((h1.const_smul a).add (h2.const_smul b)).sub h3
+  have hxy : (x, y) ∈ closure (K ×ˢ K) := by rw [closure_prod_eq]; exact ⟨hx, hy⟩
+  have hmem : g (x, y) ∈ closure (Ici (0 : ℝ)) :=
+    ((hg (x, y) ⟨hx, hy⟩).mono (prod_mono subset_closure subset_closure)).mem_closure hxy
+      fun p hp => sub_nonneg.mpr (hWc.2 hp.1 hp.2 ha hb hab)
+  rw [closure_Ici] at hmem
+  exact sub_nonneg.mp hmem
+
+/-- **Log-concavity of `1_K e^{-W} dx` on a convex set.** For convex `K` (for instance a bounded open
+convex body) and `W` continuous on `closure K` and convex on `K`, the law `μ = (1_K e^{-W}) dx` is
+log-concave: the frontier of `K` is Lebesgue-null, so `μ = (1_{closure K} e^{-W}) dx`, and `W` is
+convex on `closure K` by continuity. -/
+theorem logConcave_of_eq_restricted_exp_on_closure
+    (μ : ProbabilityMeasure E) {K : Set E} (hKc : Convex ℝ K)
+    {W : E → ℝ} (hW : ContinuousOn W (closure K)) (hWc : ConvexOn ℝ K W)
+    (hμ : (μ : Measure E) = (volume : Measure E).withDensity
+      (K.indicator fun x => ENNReal.ofReal (Real.exp (-W x)))) :
+    FunctionalInequalities.KLS.LogConcave μ := by
+  refine logConcave_of_eq_restricted_exp_on μ isClosed_closure hKc.closure hW
+    (convexOn_closure_of_continuousOn hKc hW hWc) ?_
+  rw [hμ]
+  exact withDensity_congr_ae
+    (indicator_ae_eq_of_ae_eq_set (closure_ae_eq_of_null_frontier (hKc.addHaar_frontier volume)).symm)
 
 theorem logConcave_of_eq_regularClass
     (μ : ProbabilityMeasure E) {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)

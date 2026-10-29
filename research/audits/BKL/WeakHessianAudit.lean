@@ -1,11 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
 
 /-!
-# Audit: the weak Hessian on `D(A)` and the curvature form of BKL (16) (route obligation `O3`)
+# Audit: the weak Hessian on `D(A)` and the curvature form of BKL (16)
 
 The two `O3` propositions of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
 to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim and discharged by the
-library theorems of `KLS/LogConcave/HeatSemigroup/Hessian.lean`:
+library theorems of `KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean`:
 
 * `o3_mem_domain`: for `ν = m.tilted (-U)` log-concave with `U` of temperate growth and all
   exponential moments, and `F ∈ D(A)`, each `∂ᵢ F = ⟪eᵢ, T̄ F⟫` lies in `D(T̄)`
@@ -27,7 +27,8 @@ open scoped ENNReal NNReal RealInnerProductSpace InnerProductSpace ContDiff
 
 namespace BKLWeakHessianAudit
 
-/-- `O3`, first proposition: the weak first derivatives of `F ∈ D(A)` lie in `D(T̄)`. -/
+/-- `O3` of `OperatorRouteStatements.lean`, first proposition: the weak first derivatives of
+`F ∈ D(A)` lie in `D(T̄)`. -/
 theorem o3_mem_domain :
     (∀ {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
@@ -43,7 +44,8 @@ theorem o3_mem_domain :
   fun m _ hν hi _ hνU hUt hexp F i =>
     KLS.LogConcave.compLp_innerSL_mem_closedWeightedOperator_domain m hν hi hνU hUt hexp F i
 
-/-- `O3`, second proposition: symmetry of the weak Hessian and the curvature form of (16). -/
+/-- `O3` of `OperatorRouteStatements.lean`, second proposition: symmetry of the weak Hessian and
+the curvature form of (16). -/
 theorem o3_symm_and_bochner :
     (∀ {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]

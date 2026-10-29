@@ -1,6 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.Regular.Affine
 import FunctionalInequalities.KLS.LogConcave.Translation
 import FunctionalInequalities.Probability.Covariance.Whitening
+import FunctionalInequalities.Probability.Transport
 import FunctionalInequalities.KLS.Isotropic
 
 /-!
@@ -63,13 +64,6 @@ theorem covariance_pos (hV : KLS.RegularPotential V a b) {v : E} (hv : v ≠ 0) 
   rw [← h0, real_inner_self_eq_norm_sq] at hvv
   exact hv (norm_eq_zero.mp (sq_eq_zero_iff.mp hvv))
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
-private theorem memLp_two_translate (μ : ProbabilityMeasure E) (c : E)
-    (h2 : MemLp id 2 (μ : Measure E)) :
-    MemLp id 2 (Probability.translateLaw μ c : Measure E) := by
-  rw [Probability.coe_translateLaw]
-  exact (measurableEmbedding_addLeft c).memLp_map_measure_iff.mpr ((memLp_const c).add h2)
-
 /-- Centering and whitening by a self-adjoint `W` with `⟪Cov (W u), W v⟫ = ⟪u, v⟫` makes the affine
 regular potential `V (W⁻¹ · + mean)` isotropic. -/
 theorem isotropic_comp_affine_of_whitening (hV : KLS.RegularPotential V a b)
@@ -80,7 +74,7 @@ theorem isotropic_comp_affine_of_whitening (hV : KLS.RegularPotential V a b)
   let c : E := ∫ x, x ∂(hV.law : Measure E)
   let μc := Probability.translateLaw hV.law (-c)
   let μt := Probability.mapContinuousLinearEquiv μc W
-  have hc2 : MemLp id 2 (μc : Measure E) := memLp_two_translate _ _ (memLp_id_two hV)
+  have hc2 : MemLp id 2 (μc : Measure E) := Probability.memLp_id_two_translateLaw _ _ (memLp_id_two hV)
   have ht2 : MemLp id 2 (μt : Measure E) := Probability.memLp_id_two_mapContinuousLinearEquiv μc W hc2
   have hmean_c : ∫ x, x ∂(μc : Measure E) = 0 :=
     Probability.integral_id_translateLaw_neg_integral hV.law ((memLp_id_two hV).integrable one_le_two)

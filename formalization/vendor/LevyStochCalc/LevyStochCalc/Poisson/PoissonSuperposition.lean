@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Poisson.PoissonSplitting
 import LevyStochCalc.Probability.IndepGrouping
 import Mathlib.Probability.Independence.CharacteristicFunction
@@ -39,7 +42,7 @@ noncomputable def pieceLaw (r : ℝ≥0) (ρ : Measure 𝓧) : Measure (PieceSpa
 
 instance (r : ℝ≥0) (ρ : Measure 𝓧) [IsProbabilityMeasure ρ] :
     IsProbabilityMeasure (pieceLaw r ρ) := by
-  haveI : IsProbabilityMeasure (Po(r).map ULift.up) :=
+  have : IsProbabilityMeasure (Po(r).map ULift.up) :=
     Measure.isProbabilityMeasure_map measurable_up.aemeasurable
   unfold pieceLaw
   infer_instance
@@ -501,7 +504,7 @@ theorem ae_eq_top_superposition {B : Set 𝓧} (hB : MeasurableSet B)
   have hset : {ω : ι → PieceSpace 𝓧 | ¬ superposition ω B = ⊤}
       = ⋃ k : ℕ, {ω | superposition ω B ≤ k} := by
     ext ω
-    simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
     constructor
     · intro h
       refine ⟨⌈(superposition ω B).toReal⌉₊, (ENNReal.ofReal_toReal h).symm.le.trans ?_⟩

@@ -9,8 +9,7 @@ norm test `x ↦ ‖x‖` (locally Lipschitz, not compactly supported) satisfies
 full-dimensional log-concave law with a Stein kernel and is a unit-energy test; constant inputs
 have infinite `H^{-1}` norm (constants are zero-energy tests), so the extended-valued definition is
 needed. No Stein kernel is constructed; Letwin Theorems 1.1–1.2 and the moment-map kernel are not
-asserted. Clients adapted from the Codex bundle `Letwin-A7` (author `SourceClients.lean`, reviewer
-`UnboundedClient.lean`).
+asserted.
 -/
 
 open MeasureTheory FunctionalInequalities
@@ -28,7 +27,8 @@ theorem identity_two_hs_sq : Probability.Stein.hsNorm (1 : Probability.Stein.Ker
   norm_num [Matrix.one_apply, Fin.sum_univ_two]
 
 /-- The actual Lipschitz norm test is generally nonsmooth and not compactly supported.
-LC derives its value-L2 data; the actual global Lipschitz gradient bound derives gradient-L2. -/
+Log-concavity derives its value-`L²` data; the actual global Lipschitz gradient bound derives
+gradient-`L²`. -/
 theorem norm_test_source_A7 {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (τ : EuclideanSpace ℝ (Fin n) → Probability.Stein.KernelMatrix n) (hK : Probability.Stein.IsSteinKernel μ τ)
     (hLC : KLS.LogConcave μ) (hfull : Probability.affineSupport μ = ⊤)

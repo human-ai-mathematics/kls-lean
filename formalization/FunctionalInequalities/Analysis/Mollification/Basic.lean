@@ -33,7 +33,7 @@ argument needs and that Mathlib does not state:
   applied twice, directionally.
 
 Nothing here involves a probability law, a weighted operator or a semigroup; the consumer is the
-interior-regularity argument of `KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean`.
+interior-regularity argument of `KLS/LogConcave/HeatSemigroup/Generator/InteriorRegularity.lean`.
 -/
 
 noncomputable section
@@ -512,7 +512,7 @@ private theorem integral_fderiv_kernel_eq
         (volume : Measure E) x
   exact ha.symm.trans (hb'.trans hz)
 
-/-- **Derivative of the mollification of a Lipschitz map** (weak Letwin route, support for the
+/-- **Derivative of the mollification of a Lipschitz map** (support for the
 mollification identities): for a Lipschitz map `F : E → E` and a bump `φ`, the convolution
 `φ.normed ⋆ F` is differentiable with derivative `φ.normed ⋆ DF`, where `DF = fderiv ℝ F` is the
 almost-everywhere (Rademacher) derivative of `F` (a bounded measurable map). -/
@@ -575,7 +575,7 @@ open scoped Topology Convolution
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Mollified values stay in a closed convex set** (weak Letwin route, generic): if the vector of values
+/-- **Mollified values stay in a closed convex set**: if the vector of values
 `(f k x)ₖ` lies in a closed convex `C` for almost every `x` in `cthickening r S`, then for every bump `φ` with
 `φ.rOut ≤ r` and every `x ∈ S`, the mollified vector `((φ.normed ⋆ f k) x)ₖ` lies in `C`. -/
 theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

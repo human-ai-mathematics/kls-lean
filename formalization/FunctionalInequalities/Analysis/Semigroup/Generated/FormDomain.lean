@@ -29,7 +29,7 @@ semigroup law the semigroup law,
   = ⟪T f, T (P_{2t} f)⟫ ≤ ‖T f‖ ‖T (P_{2t} f)‖`,
 
 which is `norm_map_apply_sq_le_mul`: the energy at time `t` is controlled by the **doubled** time.
-The `L²` contraction contraction bounds all these energies at once by `‖T†T f‖ ‖f‖`
+The `L²` contraction bounds all these energies at once by `‖T†T f‖ ‖f‖`
 (`norm_map_apply_sq_le_mul_norm`), so `M = sup_{t ≥ 0} ‖T (P_t f)‖` is finite and satisfies
 `M ² ≤ ‖T f‖ M`, i.e. `M ≤ ‖T f‖`.  No time derivative, no monotonicity theorem and no spectral
 calculus is used, and the doubling step is applied to a supremum rather than iterated.
@@ -111,7 +111,7 @@ theorem norm_map_apply_sq_le_mul (f : (adjointComp T).domain) {t u : ℝ} (ht : 
 
 `‖T (P_t f)‖ ² = ⟪P_t (T†T f), P_t f⟫ ≤ ‖T†T f‖ ‖f‖`,
 
-using only the operator-domain invariance commutation and the `L²` contraction contraction. -/
+using only the operator-domain invariance commutation and the `L²` contraction. -/
 theorem norm_map_apply_sq_le_mul_norm (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t)
     (hft : apply T hT hd t (f : H₀) ∈ T.domain) :
     ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2 ≤ ‖adjointComp T f‖ * ‖(f : H₀)‖ := by

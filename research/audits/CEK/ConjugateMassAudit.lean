@@ -2,9 +2,9 @@ import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
 
 /-! Audit clients for exponential potential measures, the CEK functional and conjugate-mass semicontinuity
 (`Probability/MomentMeasure/{Basic,ConjugateMass}.lean`; Cordero-Erausquin–Klartag, arXiv:1304.0630v1, Proposition 12
-and Lemma 17, (56b)). Section `AcceptedClients` is verbatim from the accepted `ConjugateMassClients.lean` (16e578f1…):
+and Lemma 17, (56b)). Section `AcceptedClients`:
 zero conjugate mass, infinite conjugate mass, and a sequence with infinite initial dual mass and zero tail.
-Section `ExtendedValueClients` is new in this candidate: the functional takes the values `⊥` and `⊤` at zero and
+Section `ExtendedValueClients`: the functional takes the values `⊥` and `⊤` at zero and
 infinite dual mass, and an infinite-mass exponential measure is not finite. -/
 
 noncomputable section

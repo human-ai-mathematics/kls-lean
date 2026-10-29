@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
 import FunctionalInequalities.Analysis.BakryEmery.Curvature
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
 
 /-!
 # The scalar Brascamp–Lieb inequality for a given potential

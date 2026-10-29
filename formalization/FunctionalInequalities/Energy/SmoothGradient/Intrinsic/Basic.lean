@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
 /-!

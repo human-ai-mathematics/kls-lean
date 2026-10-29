@@ -3,11 +3,11 @@ import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
 import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import FunctionalInequalities.Analysis.Cutoff.Conservativity
 import FunctionalInequalities.Analysis.Matrix.Integral
 import FunctionalInequalities.Analysis.Matrix.Positivity
-import FunctionalInequalities.Analysis.Matrix.TraceGram
+import FunctionalInequalities.Analysis.Matrix.Trace.Gram
 import FunctionalInequalities.Analysis.Matrix.WeakDerivative
 import FunctionalInequalities.Analysis.Matrix.WeakTrace
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
@@ -420,17 +420,8 @@ private theorem ae_weak_trace_density_add_twice_energy_nonneg {n : ℕ}
             (Matrix.of fun a b => T x j a b)).trace) +
         2 * (B * hessianMatrix u x * B * hessianMatrix u x).trace := by
   have hW2 : ContDiff ℝ 2 W := hW.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hVc : ConvexOn ℝ univ W := by
-    have hn' : ConvexOn ℝ univ (fun y : EuclideanSpace ℝ (Fin n) => ‖y‖ ^ 2) :=
-      convexOn_univ_norm.pow (fun _ _ => norm_nonneg _) 2
-    have hq := hn'.smul (show 0 ≤ κ / 2 by positivity)
-    have he :
-        (fun y => W y - κ / 2 * ‖y‖ ^ 2) +
-          (fun y => (κ / 2) • ‖y‖ ^ 2) = W := by
-      funext y
-      simp only [Pi.add_apply, smul_eq_mul, sub_add_cancel]
-    rw [← he]
-    exact hstrong.add hq
+  have hVc : ConvexOn ℝ univ W :=
+    UniformConvexOn.convexOn (strongConvexOn_iff_convex.mpr hstrong) fun r => by positivity
   have hWP (x : EuclideanSpace ℝ (Fin n)) : (hessianMatrix W x).PosSemidef :=
     hessianMatrixIn_posSemidef (EuclideanSpace.basisFun (Fin n) ℝ) hW2.contDiffAt
       (bilinearIteratedFDerivTwo_nonneg_of_convexOn hW2 hVc x)
@@ -660,17 +651,8 @@ private theorem trace_energy_bound {u : EuclideanSpace ℝ (Fin n) → ℝ} {L L
     _hfirst, hInv, _hmean, _hq, _hflux, _hweighted, _hbounded⟩
   obtain ⟨_c, _C, _hC, _hlower, _hreg, _hmono, _hpoint, _hint, _hbound, _hdecay, hrough⟩ := hcutoffs
   have hW2 : ContDiff ℝ 2 W := hW.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hVc : ConvexOn ℝ univ W := by
-    have hn' : ConvexOn ℝ univ (fun y : EuclideanSpace ℝ (Fin n) => ‖y‖ ^ 2) :=
-      convexOn_univ_norm.pow (fun _ _ => norm_nonneg _) 2
-    have hq := hn'.smul (show 0 ≤ κ / 2 by positivity)
-    have he :
-        (fun y => W y - κ / 2 * ‖y‖ ^ 2) +
-          (fun y => (κ / 2) • ‖y‖ ^ 2) = W := by
-      funext y
-      simp only [Pi.add_apply, smul_eq_mul, sub_add_cancel]
-    rw [← he]
-    exact hstrong.add hq
+  have hVc : ConvexOn ℝ univ W :=
+    UniformConvexOn.convexOn (strongConvexOn_iff_convex.mpr hstrong) fun r => by positivity
   have hWP (x : EuclideanSpace ℝ (Fin n)) : (hessianMatrix W x).PosSemidef :=
     hessianMatrixIn_posSemidef (EuclideanSpace.basisFun (Fin n) ℝ) hW2.contDiffAt
       (bilinearIteratedFDerivTwo_nonneg_of_convexOn hW2 hVc x)

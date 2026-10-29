@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Laplacian.GreenSymmetry
 import FunctionalInequalities.Analysis.Harmonic.AnnularKernel
-import FunctionalInequalities.Analysis.Newtonian.Representation
+import FunctionalInequalities.Analysis.Newtonian.Potential.Representation
 
 /-!
 # Annular reproduction of compactly supported functions harmonic near a point

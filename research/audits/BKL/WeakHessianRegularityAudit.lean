@@ -1,8 +1,8 @@
 import FunctionalInequalities.Analysis.Cutoff.Translation
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
-import FunctionalInequalities.Analysis.Convex.HessianIncrement
-import FunctionalInequalities.Analysis.Convex.HessianRegularity
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
+import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianRegularity
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import FunctionalInequalities.Analysis.WeakDerivative.Mollification
 import FunctionalInequalities.Analysis.WeakDerivative.Approximation
@@ -35,8 +35,8 @@ theorem exists_integrable_weighted_majorant {n : ℕ}
     simp
   simpa only [mul_assoc, he, mul_one] using hb
 
-/-- Produce the SAME genuine cutoff for all small translates, then consume the
-original canonical N11b estimate at every shift; the energy is not a premise. -/
+/-- Produce the SAME genuine cutoff for all small translates, then consume the original
+integrated increment-energy estimate at every shift; the energy is not a premise. -/
 theorem exists_uniform_original_energy_tests {n : ℕ} {u V χ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) (hconv : ConvexOn ℝ univ u) {G : NNReal}
     (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V) (hVc : ConvexOn ℝ univ V)
@@ -91,8 +91,8 @@ theorem consume_global_criterion {n : ℕ}
   exact exists_hasWeakDerivAlong_of_sq_difference_le
     (memLp_cutoff_mul_hessianMatrix_entry hG i j hχ.continuous hχc) v hdiff
 
-/-- The actual canonical gluing boundary consumes both new L2 interfaces.
-This is conditional on cutoff difference bounds; it is not original N11d. -/
+/-- The canonical cutoff gluing consumes both `L²` interfaces. This is conditional on cutoff
+difference bounds; it is not the unconditional entry-wise weak-derivative statement. -/
 theorem consume_cutoff_gluing {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
     (hG : LipschitzWith G (gradient u)) (i j : Fin n)
@@ -121,7 +121,7 @@ open scoped Topology ContDiff RealInnerProductSpace
 open FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
 namespace WeakHessianRegularityAudit.DifferenceEnergy
 
-/-- Actual original PDE data now produce the cutoff weak derivative; the
+/-- Actual original PDE data produce the cutoff weak derivative; the
 difference bound, L2 membership and envelope are all conclusions of supports. -/
 theorem consume_cutoff_criterion {n : ℕ}
     {u V χ : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -144,8 +144,8 @@ theorem consume_cutoff_criterion {n : ℕ}
   exact exists_hasWeakDerivAlong_of_sq_difference_le
     (memLp_cutoff_mul_hessianMatrix_entry hG i j hχ.continuous hχc) v hC
 
-/-- Produce actual entry-wise weak derivatives from original N11d hypotheses
-using canonical cutoff gluing. No desired difference/tensor/H1 premise. -/
+/-- Produce actual entry-wise weak derivatives from the original hypotheses
+using canonical cutoff gluing. No desired difference/tensor/H¹ premise. -/
 theorem consume_original_gluing {n : ℕ}
     {u V : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) (hconv : ConvexOn ℝ univ u) {G : NNReal}
@@ -176,8 +176,8 @@ open scoped Topology RealInnerProductSpace
 open FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
 namespace WeakHessianRegularityAudit.Tensor
 
-/-- Canonical N11e now consumes an actual produced tensor, rather than taking
-the desired third tensor as a hypothesis. No promotion from C1 to C2. -/
+/-- The symmetric locally `L²` third tensor is an actual produced tensor rather than a
+hypothesis. No upgrade from `C¹` to `C²`. -/
 theorem produced_symmetric_locally_l2_tensor {n : ℕ}
     {u V : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) (hconv : ConvexOn ℝ univ u) {G : NNReal}

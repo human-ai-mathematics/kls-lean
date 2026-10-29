@@ -9,8 +9,7 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5. Clients: 
 `ℝ` transported to `ℝ¹` keeps the constants `1, 1`, its law, isotropy, normalizer and literature
 constant, and round-trips; a positive-dimensional Euclidean bound (hypothetical, not asserted) would
 transfer to the real law; a zero-dimensional potential moves between carriers in different universes
-with constants `2, −4` and literature constant `0`. Clients adapted from the Codex bundle
-`Regular-Isometry-Transport/Clients.lean` (independently accepted, receipt a30a9de3…).
+with constants `2, −4` and literature constant `0`.
 -/
 
 open MeasureTheory FunctionalInequalities
@@ -76,7 +75,7 @@ private theorem gaussian_isotropic : KLS.Isotropic gaussianRegular.law := by
     ring
   rw [heq, integral_const_mul, gaussian_second, mul_one]
 
-/-- Isotropy on Fin1 is actually derived from canonical Gaussian moments and the new true
+/-- Isotropy on Fin1 is actually derived from canonical Gaussian moments and the true
 law identity; it is not a supplied isotropic image-law hypothesis. -/
 theorem fin1_actual_isotropic : KLS.Isotropic (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates).law :=
   KLS.RegularPotential.isotropic_comp_isometry gaussianRegular gaussian_isotropic realCoordinates
@@ -99,7 +98,7 @@ theorem fin1_literature_constant :
       Poincare.LocalSlope.Intrinsic.constant gaussianRegular.law :=
   KLS.RegularPotential.localSlope_constant_comp_isometry gaussianRegular realCoordinates
 
-/-- A future positive-dimensional Euclidean regular-isotropic bound has a real-law consumer;
+/-- A hypothetical positive-dimensional Euclidean regular-isotropic bound has a real-law consumer;
 all concrete law/regularity/isotropy premises are discharged from actual source facts. -/
 theorem real_bound_consumer {K : NNReal}
     (hK : ∀ (n : ℕ), 0 < n → ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ)
@@ -134,7 +133,7 @@ theorem zero_actual_law : (KLS.RegularPotential.comp_isometry zero_regular zeroC
     Probability.mapLinearIsometryEquiv zero_regular.law zeroCoordinates :=
   KLS.RegularPotential.law_comp_isometry_eq_map zero_regular zeroCoordinates
 
-/-- Rank-zero literature constants are zero on both actual laws, without a future n=0
+/-- Rank-zero literature constants are zero on both actual laws, without a separate `n = 0`
 Euclidean bound premise. -/
 theorem zero_actual_constants :
     Poincare.LocalSlope.Intrinsic.constant zero_regular.law = 0 ∧

@@ -4,9 +4,10 @@ import FunctionalInequalities.Analysis.Cutoff.Profile
 /-! # Inverse-Hessian diffusion calculus
 
 The nondivergence operator with inverse-Hessian coefficients and drift
-`∇V ∘ ∇φ`: product, self-generator, composition, continuity and cutoff
-bounds for given potentials (Letwin arXiv:2607.24164v1, (2.3) and Lemma A.4).
-No semigroup generation or source-potential regularity is inferred.
+`∇V ∘ ∇φ`: product, linearity over finite sums and `f − c g`, self-generator,
+composition, continuity and cutoff bounds for given potentials (Letwin
+arXiv:2607.24164v1, (2.3) and Lemma A.4). No semigroup generation or
+source-potential regularity is inferred.
 -/
 
 noncomputable section
@@ -37,6 +38,65 @@ theorem hessianInverseOperator_mul {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (V
     (fun y i => fderiv ℝ V (gradient φ y) (stdOrthonormalBasis ℝ E i)) hf hg x
 
 end Diffusion
+
+section Linearity
+
+/-- The operator is additive over finite sums of `C²` functions. -/
+theorem hessianInverseOperator_sum {ι : Type*} (s : Finset ι) (φ V : E → ℝ)
+    {f : ι → E → ℝ} (hf : ∀ i ∈ s, ContDiff ℝ 2 (f i)) (x : E) :
+    hessianInverseOperator φ V (fun y => ∑ i ∈ s, f i y) x =
+      ∑ i ∈ s, hessianInverseOperator φ V (f i) x := by
+  have hsum : ContDiff ℝ 2 (fun y => ∑ i ∈ s, f i y) := ContDiff.sum hf
+  have hD (y v : E) :
+      fderiv ℝ (fun z => ∑ i ∈ s, f i z) y v = ∑ i ∈ s, fderiv ℝ (f i) y v :=
+    fderiv_sum_apply s (fun i hi => ((hf i hi).differentiable (by norm_num)).differentiableAt) v
+  have hH (u v : E) :
+      bilinearIteratedFDerivTwo ℝ (fun y => ∑ i ∈ s, f i y) x u v =
+        ∑ i ∈ s, bilinearIteratedFDerivTwo ℝ (f i) x u v := by
+    rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hsum]
+    simp_rw [hD]
+    rw [fderiv_sum_apply s (fun i hi => (differentiable_fderiv_apply (hf i hi) v).differentiableAt)
+      u]
+    exact Finset.sum_congr rfl fun i hi =>
+      (bilinearIteratedFDerivTwo_eq_fderiv_apply (hf i hi) x u v).symm
+  simp only [hessianInverseOperator, nondivergenceOperator]
+  simp_rw [hH, hD, Finset.mul_sum]
+  rw [Finset.sum_sub_distrib]
+  congr 1
+  · conv_lhs =>
+      arg 2
+      ext a
+      rw [Finset.sum_comm]
+    rw [Finset.sum_comm]
+  · exact Finset.sum_comm
+
+/-- The operator of `f − c g` for `C²` functions `f`, `g`. -/
+theorem hessianInverseOperator_sub_const_mul (φ V : E → ℝ) {f g : E → ℝ}
+    (hf : ContDiff ℝ 2 f) (hg : ContDiff ℝ 2 g) (c : ℝ) (x : E) :
+    hessianInverseOperator φ V (fun y => f y - c * g y) x =
+      hessianInverseOperator φ V f x - c * hessianInverseOperator φ V g x := by
+  have hcg : ContDiff ℝ 2 (fun y => c * g y) := contDiff_const.mul hg
+  have hD (y v : E) :
+      fderiv ℝ (fun z => f z - c * g z) y v = fderiv ℝ f y v - c * fderiv ℝ g y v := by
+    rw [fderiv_sub_apply ((hf.differentiable (by norm_num)).differentiableAt)
+      ((hcg.differentiable (by norm_num)).differentiableAt) v,
+      fderiv_const_mul_apply ((hg.differentiable (by norm_num)).differentiableAt) c v]
+  have hH (u v : E) :
+      bilinearIteratedFDerivTwo ℝ (fun y => f y - c * g y) x u v =
+        bilinearIteratedFDerivTwo ℝ f x u v - c * bilinearIteratedFDerivTwo ℝ g x u v := by
+    rw [bilinearIteratedFDerivTwo_eq_fderiv_apply (hf.sub hcg)]
+    simp_rw [hD]
+    rw [fderiv_sub_apply (differentiable_fderiv_apply hf v).differentiableAt
+      ((differentiable_fderiv_apply hg v).const_mul c).differentiableAt u,
+      fderiv_const_mul_apply (differentiable_fderiv_apply hg v).differentiableAt c u,
+      ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf x u v,
+      ← bilinearIteratedFDerivTwo_eq_fderiv_apply hg x u v]
+  have hmul (a b : ℝ) : a * (c * b) = c * (a * b) := by ring
+  simp only [hessianInverseOperator, nondivergenceOperator]
+  simp only [hH, hD, mul_sub, hmul, Finset.sum_sub_distrib, ← Finset.mul_sum]
+  ring
+
+end Linearity
 
 end FunctionalInequalities.Analysis.BakryEmery
 

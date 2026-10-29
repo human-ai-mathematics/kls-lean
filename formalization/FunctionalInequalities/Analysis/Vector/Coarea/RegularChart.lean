@@ -22,9 +22,9 @@ inverse function theorem, through the repository's `exists_contDiffOn_localInver
 
 `exists_levelGraphFamily` packages this with a globally `C¹` representative `ψ` of the height, an
 open parameter domain `Ω` and the open neighbourhood `N` it parametrizes bijectively.  Combined with
-the fibre Jacobian identity of `CoareaGraphJacobian.lean` and the area formula `B2` of
-`VectorGraphArea.lean`, this is everything the local coarea equality needs except the fibrewise
-`m`-dimensional change of variables.
+the fibre Jacobian identity of `Graph/CoareaJacobian.lean` and the area formula
+`hausdorffNormalized_image_vectorGraphMap` of `Graph/Area.lean`, this is everything the local
+coarea equality needs except the fibrewise `m`-dimensional change of variables.
 
 **No coarea formula is proved here**, and no integration is performed.  There is no regularity
 hypothesis outside `O`: the chart is built from the local `C¹` representative
@@ -340,8 +340,9 @@ theorem slice_eq_image_vectorGraphMap {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗ�
 
 omit [FiniteDimensional ℝ W] in
 /-- **The measure of a fibre of the chart.**  The slice at level `t` is a graph, so the proved
-normalized area formula `B2` computes its normalized `(n - m)`-dimensional measure as a Lebesgue
-integral of the graph area density over the parameter slice.  This is the inner integral of the
+normalized area formula `hausdorffNormalized_image_vectorGraphMap` computes its normalized
+`(n - m)`-dimensional measure as a Lebesgue integral of the graph area density over the parameter
+slice.  This is the inner integral of the
 codimension-`m` coarea formula **with weight one**; the weighted form, which the general statement
 needs, is **not** proved — it is the codimension-`m` analogue of `setLIntegral_image_graphMap`. -/
 theorem hausdorffNormalized_slice_of_levelGraphFamily [MeasurableSpace H] [BorelSpace H]
@@ -364,9 +365,9 @@ theorem hausdorffNormalized_slice_of_levelGraphFamily [MeasurableSpace H] [Borel
 
 /-- **The two densities match at every point of the chart.**  The level family produced above
 satisfies exactly the hypotheses of `normDet_fderiv_mul_coareaJacobian`, so on the chart domain the
-ambient coarea density and the graph area density that `B2` integrates agree.  This is the interface
-the local coarea equality will consume; **it is not that equality**, which still needs the fibrewise
-`m`-dimensional change of variables. -/
+ambient coarea density and the graph area density of the normalized area formula agree.  This is
+the interface the local coarea equality will consume; **it is not that equality**, which still
+needs the fibrewise `m`-dimensional change of variables. -/
 theorem normDet_fderiv_mul_coareaJacobian_of_levelGraphFamily {ι : H →ₗᵢ[ℝ] V} {κ : K →ₗᵢ[ℝ] V}
     (hs : IsVectorGraphSplitting ι κ) (hdim : finrank ℝ K = finrank ℝ W)
     {u : V → W} {O : Set V} (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O)

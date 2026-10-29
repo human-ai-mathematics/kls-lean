@@ -12,7 +12,7 @@ symmetric matrix, including singular and indefinite matrices.
 
 The standardized growing-ball truncations of `Suspension.exists_compact_moment_approximation` (conditioned on
 expanding closed balls, centered and covariance-whitened) are compactly supported isotropic log-concave laws whose
-mixed moments of degree at most four converge. The accepted compact bound then passes to the limit. The growing-ball
+mixed moments of degree at most four converge. The compact bound then passes to the limit. The growing-ball
 step does not require a common compact support or an additional moment premise: log-concavity supplies a positive
 exponential moment.
 

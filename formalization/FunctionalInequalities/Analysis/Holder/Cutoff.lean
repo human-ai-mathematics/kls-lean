@@ -1,4 +1,5 @@
-import FunctionalInequalities.Analysis.Newtonian.KernelBounds
+import Mathlib.Topology.MetricSpace.Holder
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # Hölder bounds from Lipschitz bounds and Lipschitz cutoffs
@@ -20,6 +21,15 @@ noncomputable section
 open scoped NNReal
 
 namespace FunctionalInequalities.Analysis
+
+/-- A pointwise distance bound gives `HolderOnWith` with the corresponding nonnegative cap. -/
+theorem holderOnWith_of_dist_le {X Y : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y] {g : X → Y} {s : Set X}
+    {C : ℝ} {r : ℝ≥0} (hC : 0 ≤ C) (h : ∀ x ∈ s, ∀ y ∈ s, dist (g x) (g y) ≤ C * dist x y ^ (r:ℝ)) :
+    HolderOnWith (Real.toNNReal C) r g s := by
+  intro x hx y hy
+  rw [edist_dist, edist_dist, ENNReal.ofReal_rpow_of_nonneg dist_nonneg r.coe_nonneg, ← ENNReal.ofReal_coe_nnreal,
+    Real.coe_toNNReal C hC, ← ENNReal.ofReal_mul hC]
+  exact ENNReal.ofReal_le_ofReal (h x hx y hy)
 
 section Holder
 

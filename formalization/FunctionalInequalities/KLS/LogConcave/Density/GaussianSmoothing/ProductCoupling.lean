@@ -10,7 +10,7 @@ import FunctionalInequalities.L2.Pairing
 import FunctionalInequalities.Probability.Stein.Kernel
 import FunctionalInequalities.Probability.Stein.SourceDualBound
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import FunctionalInequalities.Probability.Stein.HessianKernel
 
 /-!

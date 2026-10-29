@@ -4,16 +4,15 @@ import Mathlib.LinearAlgebra.Matrix.Notation
 /-!
 # Audit: the principal inverse square root
 
-Clients of `Analysis/PrincipalInverseSqrt.lean`: the Mathlib matrix `CFC.sqrt` API facts the construction
-relies on (square, positive self-adjoint branch, uniqueness; namespace `PrincipalSqrtAPI`, from the bundle's
-probe), the scalar operator `4·Id ↦ ½·Id` with the negative factor rejected, and the Codex reviewer's
-nondiagonal consumer `B = [[2,1],[1,2]]`, `A = (B²)⁻¹`, `inverseSqrt A = B`, off-diagonal action `1`,
-operator norm `> 1` (credited to the Codex `review_p71_route` reviewer). Bundle `Principal-Inverse-SquareRoot`,
-independently accepted (receipt 6c95c5b5…). Local regularity clients (section `LocalLipschitz`, bundle
-`Principal-Root-Regularity`, receipt 94bf7e52…, independently accepted): the canonical roots `B = [[2,1],[1,2]]` and
-`T = diag(1,2)` of two operators do not commute, their Frobenius difference squared is `3`, the squared-root
-difference has norm `7`, and the Sylvester estimate gives `2‖B − T‖_F ≤ 7`; the empty-coordinate canonical
-coefficient is locally Lipschitz and zero. No claim that these operators are covariances of a source law.
+Clients of `Analysis/PrincipalInverseSqrt.lean`: the Mathlib matrix `CFC.sqrt` API facts the
+construction relies on (square, positive self-adjoint branch, uniqueness; namespace
+`PrincipalSqrtAPI`), the scalar operator `4·Id ↦ ½·Id` with the negative factor rejected, and the
+nondiagonal consumer `B = [[2,1],[1,2]]`, `A = (B²)⁻¹`, `inverseSqrt A = B`, off-diagonal action
+`1`, operator norm `> 1`. Local regularity clients (section `LocalLipschitz`): the canonical roots
+`B = [[2,1],[1,2]]` and `T = diag(1,2)` of two operators do not commute, their Frobenius
+difference squared is `3`, the squared-root difference has norm `7`, and the Sylvester estimate
+gives `2‖B − T‖_F ≤ 7`; the empty-coordinate canonical coefficient is locally Lipschitz and zero.
+No claim that these operators are covariances of a source law.
 -/
 
 noncomputable section
@@ -339,8 +338,8 @@ end ActualPrincipalRegularityClients
 #print axioms ActualPrincipalRegularityClients.actual_rank0_canonical
 
 namespace IndependentRootSandwich
-/-! `σ A σ = 1` (`Analysis/PrincipalInverseSqrt.lean`, unit NB2, independently accepted, receipt 279f7bea…):
-the Codex reviewer's consumers in dimensions `2` and `0` with `A = 1`. -/
+/-! `σ A σ = 1` (`Analysis/PrincipalInverseSqrt.lean`): consumers in dimensions `2` and `0` with
+`A = 1`. -/
 theorem actual_identity :
     inverseSqrt (1 : EuclideanSpace ℝ (Fin 2) →L[ℝ] EuclideanSpace ℝ (Fin 2)) *
     1 * inverseSqrt 1 = 1 :=

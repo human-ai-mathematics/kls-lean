@@ -10,11 +10,10 @@ This module names that limit: `Generated.apply T hT hd t f` is the chosen limit 
 itself for `t < 0`. Formally it is `P_t f = exp (-t T†T) f`.
 
 Everything about `P_t` beyond its defining convergence — linearity, contraction, symmetry, the
-semigroup law `P_{t+u} = P_t P_u`, strong continuity (the exponential approximation) and the generator identity
-`(P_t f - f)/t → -T†T f` on `D(T†T)` (the semigroup limit) — is **not** proved in this module. the exponential approximation is
-`Analysis/Semigroup/Generated/Laws.lean` and the semigroup limit is `Analysis/Semigroup/Generated/Generator.lean`;
-`research/audits/GeneratedSemigroupRouteStatements.lean` states the propertys as they
-stood at its snapshot and certifies nothing. Nothing here is the
+semigroup law `P_{t+u} = P_t P_u`, strong continuity and the generator identity
+`(P_t f - f)/t → -T†T f` on `D(T†T)` — is **not** proved in this module. The semigroup laws
+are in `Analysis/Semigroup/Generated/Laws.lean` and the generator identity is in
+`Analysis/Semigroup/Generated/Generator.lean`. Nothing here is the
 Markov property, Bakry–Émery calculus, a heat estimate or any step of Buser's inequality.
 -/
 

@@ -1,0 +1,878 @@
+{
+  "version": 1,
+  "review_date": "2026-10-27",
+  "scope": "Shared support tools, subgradient/viscosity/weak-Hessian responsibilities, extensionality and two exact public renames; no mathematical coverage or certificate-status changes.",
+  "literature_targets": [
+    "BKL arXiv:2610.05474v1 Theorems 4.1 and 1.1",
+    "Letwin arXiv:2607.24164v1 Theorem 1.2 and Lemma 2.2",
+    "BB arXiv:1207.6128v1 Theorem 2.24(ii)"
+  ],
+  "module_path_map": [
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Cutoff.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Cutoff.lean",
+        "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+        "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
+        "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Image.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Taylor.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Mollification.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Pointwise.lean",
+        "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/AverageError.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/AverageError.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Compatibility.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Compatibility.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Consistency.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Consistency.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/FlowDerivative.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/FlowDerivative.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Residual.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Residual.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/TimeAverage.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/TimeAverage.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/Analysis/WaveSplitting/WeightedEnergy.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/WeightedEnergy.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ChainRule.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ChainRule.lean",
+        "formalization/FunctionalInequalities/L2/Pairing.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ReversePoincare.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ReversePoincare.lean",
+        "formalization/FunctionalInequalities/L2/Pairing.lean"
+      ]
+    },
+    {
+      "old": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+      "current_sources": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SelfImprovement.lean",
+        "formalization/FunctionalInequalities/L2/Pairing.lean"
+      ]
+    }
+  ],
+  "public_relocations": [
+    {
+      "name": "FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+      "type_hash": "1993832416",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_gradient_posDef_det_eq",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "147060330",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_gradient_posDef_det_eq_of_strictConvexOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "4275400722",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_gradient_posDef_det_eq_on_open",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "3222752888",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_gradient_quadraticAt_expansion",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "664171349",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_gradient_quadraticAt_expansion_on_open",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "1541618624",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_posDef_det_eq",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "3241046209",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_exists_quadraticAt_expansion",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean",
+      "type_hash": "2636148609",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.ae_fderiv_mongeAmpere_exponent",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+      "type_hash": "2739830079",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "77746147",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_unique_subgradient",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "877394924",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.continuousOn_piecewise_max_ball",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+      "type_hash": "3077082626",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.continuous_of_compact_closed_relation",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "3548397890",
+      "levels": [
+        "u_1",
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.convexOn_closure_piecewise_max_ball",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+      "type_hash": "115505973",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.det_hessianMatrix_le_of_lower_touch",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean",
+      "type_hash": "2916629414",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.det_hessianMatrix_le_of_quadratic_lower_tests",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean",
+      "type_hash": "277095972",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.differentiable_of_convexOn_of_unique_subgradient",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "1455241093",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Taylor.lean",
+      "type_hash": "2211728148",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eventually_mem_subgradientImageOn_of_unique_contact",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "type_hash": "4169223087",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "type_hash": "80349341",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_c1_of_unique_supports",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "2959855539",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_continuous_supports",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "4100095871",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_eventual_support_slope_bound_of_locally_uniform",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Stability.lean",
+      "type_hash": "1244606513",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_lipschitzWith_weak_fderiv_comp_gradient",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
+      "type_hash": "932161432",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+      "type_hash": "3692797709",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_taylor_two_hessianMatrix_bound",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean",
+      "type_hash": "2026263076",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.exists_uniform_subgradient_bound_on_compact",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+      "type_hash": "752269676",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.gradient_le_increment",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "272018003",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.gradient_tangent_gap_pos_of_strictConvexOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "2113823271",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasFDerivAt_of_variational_remainder",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "2004799838",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_mongeAmpere_first_rhs",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
+      "type_hash": "491761471",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.injective_gradient_of_strictConvexOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+      "type_hash": "2923114045",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+      "type_hash": "1163381450",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
+      "type_hash": "3628936155",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le_of_bounded_weak_test",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
+      "type_hash": "945716092",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
+      "type_hash": "3563390011",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram_of_bounded_weak_test",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
+      "type_hash": "361186835",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.integral_weak_hessian_flux_eq_trace_derivative",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
+      "type_hash": "1899551126",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.isClosed_subgradientImage_of_isCompact",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "1392046005",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.isClosed_subgradient_graphOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "893246889",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.isCompact_subgradientImageOn_of_isCompact",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Image.lean",
+      "type_hash": "1480144629",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.le_det_hessianMatrix_of_upper_touch",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean",
+      "type_hash": "803719406",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.localLp_hessian_flux_trace_forcing",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
+      "type_hash": "539356129",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posDef_and_convolution_le_log_det_hessianMatrix",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Mollification.lean",
+      "type_hash": "3916190682",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posDef_and_det_eq_of_quadratic_expansion",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Pointwise.lean",
+      "type_hash": "1887690637",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posSemidef_hessianMatrix_of_upper_touch",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Touching.lean",
+      "type_hash": "1911301099",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.posSemidef_of_quadratic_expansion",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Pointwise.lean",
+      "type_hash": "2984117420",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.rough_square_test_of_weak_data",
+      "before": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
+      "type_hash": "3076825929",
+      "levels": []
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "3292266342",
+      "levels": [
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "3456145005",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_closure",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "4265497776",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_comp_affineEquiv_symm",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Image.lean",
+      "type_hash": "1568172076",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_const_subset_singleton",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "3206818123",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_eq_of_isOpen_subset",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "1240356948",
+      "levels": [
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_eq_subgradientImage",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "4253457198",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_eq_subgradientImage_of_isOpen",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "4031324375",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_iUnion",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "2760918321",
+      "levels": [
+        "u_1",
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_mono",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "3708958746",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_mul_pos",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "1828966704",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_subset_gradient_image",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "3459994671",
+      "levels": [
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_subset_max_of_le",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "740950958",
+      "levels": [
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "2253814833",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le_of_eqOn",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "625076075",
+      "levels": [
+        "u_2"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImageOn_univ",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "3439609653",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientImage_subset_of_le",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "2869326551",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradientOn_eq_gradient",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "324073171",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_eq_gradient",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "2083707474",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_le_on_of_isOpen",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+      "type_hash": "361080221",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_le_piecewise_max_ball",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+      "type_hash": "2381094844",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.subgradient_mem_of_ae_gradient_mem",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+      "type_hash": "3741524583",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_setOf_subgradient_eq_zero_of_affine_on_line",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+      "type_hash": "230392398",
+      "levels": [
+        "u_1"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.volume_subgradient_two_points_eq_zero",
+      "before": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "after": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Measure.lean",
+      "type_hash": "3187645662",
+      "levels": [
+        "u_1"
+      ]
+    }
+  ],
+  "public_renames": {
+    "FunctionalInequalities.Analysis.BakryEmery.eventually_measure_closedBall_ne_zero_cond": "FunctionalInequalities.Analysis.BakryEmery.eventually_measure_closedBall_ne_zero",
+    "FunctionalInequalities.Analysis.BakryEmery.cumulant_eq_taylorComp_cond": "FunctionalInequalities.Analysis.BakryEmery.cumulant_eq_taylorComp"
+  },
+  "public_additions": [
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.cumulant_eq_taylorComp",
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.BakryEmery.eventually_measure_closedBall_ne_zero",
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.WaveSplitting.State.ext",
+      "source": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.WaveSplitting.State.ext_iff",
+      "source": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasCompactSupport_comp_of_isCompact_sublevel",
+      "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.norm_subgradient_le_of_closedBall",
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean"
+    },
+    {
+      "name": "FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport",
+      "source": "formalization/FunctionalInequalities/L2/Pairing.lean"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.memLp_top_hessianMatrix_entry_of_isCompact",
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean"
+    }
+  ],
+  "shared_tools": [
+    {
+      "name": "FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport",
+      "owner": "formalization/FunctionalInequalities/L2/Pairing.lean",
+      "scope": "Topological measurable source, opens measurable and measure finite on compact sets; no probability, log-concavity, normed-source or finite-dimensional assumption.",
+      "removed_private_copies": [
+        "KLS/LogConcave/HeatSemigroup/ChainRule:integrable_Lp_mul_compact",
+        "KLS/LogConcave/HeatSemigroup/ReversePoincare:integrable_Lp_mul_compact",
+        "KLS/LogConcave/HeatSemigroup/SelfImprovement:integrable_Lp_mul_compact"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.hasCompactSupport_comp_of_isCompact_sublevel",
+      "owner": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean",
+      "scope": "Topological source, continuous potential, compact contained sublevel and vanishing scalar profile; no convexity or smoothness assumption.",
+      "removed_private_copies": [
+        "Analysis/BakryEmery/IntegrationByParts/InverseHessian/Cutoff:hasCompactSupport_comp_of_isCompact_sublevel",
+        "Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff:hasCompactSupport_comp_of_isCompact_sublevel"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Stein.memLp_top_hessianMatrix_entry_of_isCompact",
+      "owner": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+      "scope": "Total coordinate Hessian of a function with Lipschitz gradient, all finite dimensions, compact-local L-infinity; the retained L2 theorem uses the same bound.",
+      "removed_private_copies": [
+        "Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution:memLp_top_hessianMatrix_entry_of_isCompact",
+        "KLS/CEK/MomentRegularity/WeakHessian:memLp_top_hessianMatrix_entry_of_isCompact"
+      ]
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.WaveSplitting.State.ext",
+      "owner": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Basic.lean",
+      "scope": "Arbitrary source and coordinate index types, without topology, norm or finite index.",
+      "removed_private_copies": [
+        "Analysis/WaveSplitting/AverageError:state_ext",
+        "Analysis/WaveSplitting/TimeAverage:state_ext",
+        "Analysis/WaveSplitting/FlowDerivative:state_ext",
+        "Analysis/WaveSplitting/Consistency:state_ext",
+        "Analysis/WaveSplitting/Residual:state_ext",
+        "Analysis/WaveSplitting/WeightedEnergy:state_ext",
+        "Analysis/WaveSplitting/Compatibility:state_ext"
+      ]
+    },
+    {
+      "name": "ENNReal.orderIsoRpow / ENNReal.orderIsoRpow_apply / OrderIso.map_iSup",
+      "owner": "Pinned Mathlib",
+      "scope": "Positive real powers commute with arbitrary ENNReal suprema, including dependent/empty indices.",
+      "removed_private_copies": [
+        "Probability/Line/BrunnMinkowski:rpow_iSup",
+        "Probability/BrunnMinkowski:rpow_iSup",
+        "KLS/LogConcave/Borel:rpow_iSup",
+        "KLS/LogConcave/Density/BorellRepresentation/Construction:rpow_iSup"
+      ]
+    }
+  ],
+  "shared_support_bound": {
+    "old_visibility": "private",
+    "name": "FunctionalInequalities.Analysis.norm_subgradient_le_of_closedBall",
+    "owner": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+    "reason": "Used by compact-local existence bounds and locally uniform stability after their responsibility split; no convexity/differentiability/dimension premise."
+  },
+  "semantic_comparison": {
+    "before_public": 6712,
+    "after_public": 6718,
+    "retained_public": 6710,
+    "exact_retained_public_types": 6710,
+    "retained_definition_closure_vertices": 7547,
+    "private_closure_vertices": 835,
+    "public_changes": [],
+    "closure_changes": [],
+    "printed_binder_kind_safety_comparison": "passed"
+  },
+  "validation_inputs": [
+    "research/audits/SourceLayout/CompactPairing.lean",
+    "research/audits/SourceLayout/Derivative.lean",
+    "research/audits/SourceLayout/DiffusionRegularity.lean",
+    "research/audits/SourceLayout/DomainMeasure.lean",
+    "research/audits/SourceLayout/ExponentialMoments.lean",
+    "research/audits/SourceLayout/GraphGradient.lean",
+    "research/audits/SourceLayout/HessianComposition.lean",
+    "research/audits/SourceLayout/HessianCoordinates.lean",
+    "research/audits/SourceLayout/HessianDiffusion.lean",
+    "research/audits/SourceLayout/HessianObjects.lean",
+    "research/audits/SourceLayout/LocalExtension.lean",
+    "research/audits/SourceLayout/MigrationAbsence.lean",
+    "research/audits/SourceLayout/OperatorPerturbation.lean",
+    "research/audits/SourceLayout/PointwiseTruncation.lean",
+    "research/audits/SourceLayout/Quadratic.lean",
+    "research/audits/SourceLayout/SectionAffine.lean",
+    "research/audits/SourceLayout/StateExtensionality.lean",
+    "research/audits/SourceLayout/SubgradientFoundations.lean",
+    "research/audits/SourceLayout/TaylorField.lean",
+    "research/audits/SourceLayout/TouchingLayer.lean",
+    "research/audits/SourceLayout/Transport.lean",
+    "research/audits/SourceLayout/TruncationNames.lean",
+    "research/audits/SourceLayout/WeakProducts.lean"
+  ],
+  "nonclaims": [
+    "The generated Dirichlet reference remains C1 inside its domain, without the C2/C4 premises of the given-classical Pogorelov estimates.",
+    "Literal Letwin Lemma 2.2, arbitrary finite-p W2p and the other recorded mathematical gaps are unchanged.",
+    "Compiler comparisons do not independently establish paper fidelity or remote certification."
+  ]
+}

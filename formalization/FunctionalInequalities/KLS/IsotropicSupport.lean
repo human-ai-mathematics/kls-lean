@@ -5,7 +5,8 @@ import FunctionalInequalities.Probability.Covariance.Positivity
 # Full affine support of isotropic laws
 
 An isotropic law has identity covariance, hence an injective covariance operator and full affine
-support. Light owner of this fact (the Section 2 reduction module restates it with heavier imports).
+support. This module proves the fact with light imports; the Section 2 reduction module restates
+it with heavier imports.
 -/
 
 open MeasureTheory

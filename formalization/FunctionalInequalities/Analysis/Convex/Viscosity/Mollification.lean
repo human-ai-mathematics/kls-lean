@@ -1,6 +1,6 @@
-import FunctionalInequalities.Analysis.Convex.SecondOrder
+import FunctionalInequalities.Analysis.Convex.SecondOrder.Expansion
 import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
-import FunctionalInequalities.Analysis.Matrix.LogDet
+import FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities
 import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
 /-!
@@ -356,7 +356,8 @@ private lemma trace_integral_bound {n : ℕ}
         rw [hH]
   exact he ▸ hi
 
-/-- **Mollified log-det lower bound** (weak Letwin route, via Fatou instead of the viscosity–distribution lemma): if the
+/-- **Mollified log-det lower bound** (via Fatou instead of the viscosity–distribution lemma): if
+the
 convex `u` has at almost every point a second-order expansion with a positive definite symmetric matrix
 `B` with `F x ≤ log det B`, `F` continuous, then every mollification `uφ := φ.normed ⋆ u` has a positive
 definite Hessian with `(φ.normed ⋆ F)(x) ≤ log det ∇²uφ(x)`. -/

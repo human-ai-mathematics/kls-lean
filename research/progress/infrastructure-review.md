@@ -28,11 +28,12 @@ and `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` (Cheeger–Buser comparison), proved as
   its generator, Markov, domain-stability, Γ/Γ₂, operator-core, interior-regularity, gradient,
   reverse-Poincaré, chain-rule, interpolation, decay and correlation layers are proved in
   `Analysis/Semigroup/` and `KLS/LogConcave/HeatSemigroup/`, with audit clients
-  `Semigroup*Audit.lean`, `VonNeumannAudit.lean`, `Yosida*Audit.lean`, `Generator*Audit.lean`,
-  `BakryEmery*Audit.lean`, `Heat*Audit.lean` and `GaussianBuserPassageAudit.lean` and route
-  statements `SemigroupGenerationRouteStatements.lean`, `VonNeumannRouteStatements.lean`,
-  `YosidaLimitRouteStatements.lean`, `GeneratedSemigroupRouteStatements.lean`,
-  `MarkovRouteStatements.lean` and `BakryEmeryRouteStatements.lean`. The abstract strong-convergence
+  in `research/audits/Semigroup/` (including `VonNeumannAudit.lean`, the `Yosida*Audit.lean` clients and
+  `GeneratorAudit.lean`), `research/audits/HeatSemigroup/`, `research/audits/BakryEmery/` and
+  `research/audits/Density/GaussianBuserPassageAudit.lean` and route
+  statements `research/audits/Semigroup/GenerationRouteStatements.lean`, `research/audits/Semigroup/VonNeumannRouteStatements.lean`,
+  `research/audits/Semigroup/YosidaLimitRouteStatements.lean`, `research/audits/Semigroup/GeneratedRouteStatements.lean`,
+  `research/audits/HeatSemigroup/MarkovRouteStatements.lean` and `research/audits/BakryEmery/InterfaceRouteStatements.lean`. The abstract strong-convergence
   statement for merely nonnegative commuting families is false and is recorded as a
   counterexample (`Analysis/Semigroup/Exponential/Counterexample.lean`); the proved limit uses the
   actual Yosida approximation.
@@ -53,8 +54,8 @@ finite-dimensional inner product space, certified by
   `Slope/Comparison.lean`; the absolutely continuous special case
   (`cor:absolutely-continuous-relaxation-two-cheeger`) and the log-concave case
   (`KLS/LogConcave/Cheeger.lean`) are consequences.
-- Audit clients: `EnergySlopeComparisonAudit.lean`, `EnergySlopeRecoveryAudit.lean`,
-  `EnergySlopeDensityAudit.lean`; route statements `EnergySlopeRouteStatements.lean`.
+- Audit clients: `research/audits/Energy/SlopeComparisonAudit.lean`, `research/audits/Energy/SlopeRecoveryAudit.lean`,
+  `research/audits/Energy/SlopeDensityAudit.lean`; route statements `research/audits/Energy/SlopeRouteStatements.lean`.
 - **Boundary.** Nothing here is a Poincaré inequality, a finiteness statement or a Cheeger–Buser
   comparison. Closest literature: Eriksson-Bique, Calc. Var. PDE 62 (2023), Thm 1.1;
   Ambrosio–Gigli–Savaré, Rev. Mat. Iberoam. 29 (2013), §8.3.
@@ -75,13 +76,14 @@ mollification radius.
   the compact Whitney extension (`Analysis/Whitney/`), the linear area formula, the codimension-`m`
   coarea formula for Lipschitz and locally Lipschitz maps (`Analysis/Lipschitz/`,
   `Analysis/Vector/`), the rank-deficient stratification, and the smooth-domain Gauss–Green layer.
-  Audit clients carry each step (`*CoareaAudit.lean`, `*SliceAudit.lean`, `Whitney*Audit.lean`,
-  `Sard*Audit.lean`, `Vector*Audit.lean`, `RankDeficient*Audit.lean`, `ExponentObstructionAudit.lean`)
-  with the route statements `WeightedCoareaRouteStatements.lean`, `SharpSardRouteStatements.lean`,
-  `RankDeficientRouteStatements.lean`, `StratumSlicingRouteStatements.lean`,
-  `LipschitzVectorCoareaRouteStatements.lean` and `LocallyLipschitzVectorCoareaRouteStatements.lean`.
+  Audit clients carry each step (`research/audits/Coarea/`, the slice clients in `research/audits/Hausdorff/`,
+  `research/audits/Whitney/`, `research/audits/Sard/` and `research/audits/Vector/`, including
+  `research/audits/Vector/ExponentObstructionAudit.lean`)
+  with the route statements `research/audits/Coarea/WeightedRouteStatements.lean`, `research/audits/Sard/SharpRouteStatements.lean`,
+  `research/audits/Vector/RankDeficientRouteStatements.lean`, `research/audits/Vector/StratumSlicingRouteStatements.lean`,
+  `research/audits/Vector/LipschitzCoareaRouteStatements.lean` and `research/audits/Vector/LocallyLipschitzCoareaRouteStatements.lean`.
 - **Boundary.** The Federer area formula in general codimension is not proved
-  (`AreaFormulaRouteStatements.lean` is a type-check file); the proved area formula is codimension
+  (`research/audits/Graph/AreaFormulaRouteStatements.lean` is a type-check file); the proved area formula is codimension
   one. No separate ledger certificate is attached to this node; its `leanok` rests on the exact
   theorem above.
 
@@ -99,9 +101,9 @@ dimension zero. Certified by `Solutions.LemRelativePerimeterCheegerInfimum.certi
   Sard for almost every strict superlevel set and the weighted `C¹` coarea formula for the
   density, with the balance error subtracted rather than multiplied so that no finiteness of
   `h_S` is used (`KLS/Geometry/Cheeger/Equality.lean`, `DistanceCutoff.lean`, `Median.lean`,
-  `SmoothDomain/RegularSuperlevel.lean`).
-- Audit clients: `CheegerEqualityAudit.lean`, `CheegerInequalityAudit.lean`,
-  `LipschitzCoareaMigrationAudit.lean`; route statements `CheegerInfimumRouteStatements.lean`,
-  `CheegerInequalityRouteStatements.lean`.
+  `Analysis/SmoothDomain/RegularSuperlevel.lean`).
+- Audit clients: `research/audits/Cheeger/EqualityAudit.lean`, `research/audits/Cheeger/InequalityAudit.lean`,
+  `research/audits/Coarea/LipschitzMigrationAudit.lean`; route statements `research/audits/Cheeger/InfimumRouteStatements.lean`,
+  `research/audits/Cheeger/InequalityRouteStatements.lean`.
 - **Boundary.** The node contains no Poincaré inequality and no Cheeger–Buser comparison; those
   belong to `thm:logconcave-cheeger-poincare-comparison` above.

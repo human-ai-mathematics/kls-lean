@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import Mathlib.Probability.Independence.Integration
 import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
@@ -35,7 +38,7 @@ lemma setIntegral_eq_measure_mul_of_indep (hm : m ≤ mΩ) {X : Ω → 𝓧}
     change Indep (MeasurableSpace.comap _ _) (MeasurableSpace.comap _ _) P
     refine indep_of_indep_of_le_right (indep_of_indep_of_le_left hind ?_) ?_
     · have hmeas : Measurable[m] (A.indicator (1 : Ω → ℝ)) := by
-        letI := m
+        let := m
         exact measurable_const.indicator hA
       exact hmeas.comap_le
     · rw [show (fun ω => f (X ω)) = f ∘ X from rfl, ← MeasurableSpace.comap_comp]
@@ -62,7 +65,7 @@ theorem indep_comap_of_tendsto_ae (hm : m ≤ mΩ) {X : ℕ → Ω → 𝓧}
   intro A B hA hB
   obtain ⟨S, hS, rfl⟩ := hB
   have hA' : MeasurableSet[mΩ] A := hm _ hA
-  haveI : IsFiniteMeasure ((P A) • P.map Y) :=
+  have : IsFiniteMeasure ((P A) • P.map Y) :=
     ⟨by simpa [Measure.smul_apply] using
       ENNReal.mul_lt_top (measure_lt_top P A) (measure_lt_top (P.map Y) Set.univ)⟩
   have hbound : ∀ (Z : Ω → 𝓧), Measurable[mΩ] Z → ∀ f : 𝓧 →ᵇ ℝ,

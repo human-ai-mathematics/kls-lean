@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
-import FunctionalInequalities.Analysis.Convex.SecondOrder
+import FunctionalInequalities.Analysis.Convex.SecondOrder.Expansion
 
 /-!
 # Almost-everywhere Monge–Ampère identification
@@ -58,7 +58,7 @@ private theorem quadraticAt_expansion_of_linear_expansion {n : ℕ}
     filter_upwards [hexp ε hε] with y hy
     simpa only [quadraticAt, hquad, sub_add_eq_sub_sub] using hy
 
-/-- **Alexandrov's theorem in coordinates** (weak Letwin route): a convex function on
+/-- **Alexandrov's theorem in coordinates**: a convex function on
 `EuclideanSpace ℝ (Fin n)` has, at almost every point `x`, a second-order expansion
 `|u y − quadraticAt B x g (u x) y| ≤ ε ‖y − x‖²` near `x` with a symmetric matrix `B`. -/
 theorem ae_exists_quadraticAt_expansion {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -303,7 +303,7 @@ theorem ae_exists_gradient_posDef_det_eq {n : ℕ}
           |u y - quadraticAt A x (gradient u x) (u x) y| ≤ ε * ‖y - x‖ ^ 2 := by
   exact ae_exists_gradient_posDef_det_eq_on_open hconv hΩ hdiff.differentiableOn hf hfpos hMA
 
-/-- **The a.e. Monge–Ampère equation for an Alexandrov solution** (weak Letwin route):
+/-- **The a.e. Monge–Ampère equation for an Alexandrov solution**:
 if the subgradient images of the convex `u` on open sets carry a continuous positive density `f`, then at
 almost every point `u` has a second-order expansion with a positive definite symmetric `B`, `det B = f x`. -/
 theorem ae_exists_posDef_det_eq {n : ℕ} {u f : EuclideanSpace ℝ (Fin n) → ℝ}

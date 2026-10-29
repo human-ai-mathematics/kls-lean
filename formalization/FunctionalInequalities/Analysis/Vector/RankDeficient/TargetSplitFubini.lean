@@ -50,8 +50,8 @@ theorem measurableSet_splitPreimage (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂
 /-- **target-split Fubini: Fubini across an orthogonal splitting of the target.**  If almost every first-coordinate
 slice of `N` is null, then `N` is null.
 
-This is what turns the route's "for almost every `s`, for almost every `τ`" into "for almost every
-`t`".  The splitting is an arbitrary linear isometry onto `WithLp 2 (W₁ × W₂)`; for the route it is
+This is what turns "for almost every `s`, for almost every `τ`" into "for almost every
+`t`".  The splitting is an arbitrary linear isometry onto `WithLp 2 (W₁ × W₂)`; in applications it is
 the orthogonal decomposition along the range of the differential. -/
 theorem measure_eq_zero_of_ae_slice_eq_zero (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂)) {N : Set W}
     (hN : MeasurableSet N)

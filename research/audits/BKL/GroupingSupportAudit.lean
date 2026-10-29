@@ -1,10 +1,12 @@
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
 import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
 import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
-/-! Independent audit clients for the cumulant permutation symmetry (LocalCumulant section CumulantSymmetry) and the Boolean-mask complement pairing (IteratedDerivative/Bilinear). Merged verbatim from the reviewer receipt `D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)` (modules SkewLaw, PlaneLaw, PermutationClients, PairClients), each in its own named section, re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration tooling stays in the receipt. -/
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+/-! Audit clients for the cumulant permutation symmetry (LocalCumulant section CumulantSymmetry)
+and the Boolean-mask complement pairing (IteratedDerivative/Bilinear), in the sections SkewLaw,
+PlaneLaw, PermutationClients and PairClients. -/
 
--- ===== reviewer module SkewLaw (D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)) =====
+-- ===== SkewLaw =====
 section SkewLaw
 set_option autoImplicit false
 noncomputable section
@@ -59,7 +61,7 @@ end D74rSkewLaw
 end
 end SkewLaw
 
--- ===== reviewer module PlaneLaw (D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)) =====
+-- ===== PlaneLaw =====
 section PlaneLaw
 set_option autoImplicit false
 noncomputable section
@@ -121,7 +123,7 @@ end D74RawPlane
 end
 end PlaneLaw
 
--- ===== reviewer module PermutationClients (D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)) =====
+-- ===== PermutationClients =====
 section PermutationClients
 set_option autoImplicit false
 noncomputable section
@@ -225,7 +227,7 @@ end D74GroupingPermutation
 end
 end PermutationClients
 
--- ===== reviewer module PairClients (D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)) =====
+-- ===== PairClients =====
 section PairClients
 set_option autoImplicit false
 open FunctionalInequalities.Analysis

@@ -25,7 +25,7 @@ No integrability hypothesis appears: `integral_map` and `integral_withDensity_eq
 hold verbatim, both sides being zero when the integrand is not integrable.  Combined with the
 normal formula `ν (Ψ y) = (ι (-∇g y) + e)/√(1 + ‖∇g y‖²)` of a boundary chart, the Jacobian
 `√(1 + ‖∇g y‖²)` cancels exactly against the denominator of the unit normal; that cancellation is
-carried out in `KLS/Geometry/SmoothDomain/LocalGaussGreen.lean`.
+carried out in `Analysis/SmoothDomain/LocalGaussGreen.lean`.
 
 Every statement here is proved and uses only the standard axioms; the module contains no hole.
 -/

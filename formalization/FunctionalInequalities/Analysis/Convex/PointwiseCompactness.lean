@@ -14,6 +14,11 @@ Theorem 10.9, used in the proof of Cordero-Erausquin–Klartag, *Moment measures
 Proof: the pointwise supremum is convex and finite on `K`, hence locally bounded, giving common local Lipschitz bounds; a
 subsequence converges on a countable dense subset (one diagonal extraction over `ℕ` coordinates) and the convergence extends
 to all of `K` by the Cauchy criterion; convexity passes to the limit. Four private helpers.
+
+Section `LinearBounds`: convex functions on a finite-dimensional real normed space with uniform two-sided linear
+bounds `α‖x‖ − β ≤ ψ_l(x) ≤ L‖x‖ + γ`, `α ≥ 0`, have a subsequence converging pointwise on the whole space to a convex
+function (`exists_subseq_tendsto_of_linear_bounds`), as used in Klartag, *Logarithmically-concave moment measures I*
+(arXiv:1309.2767v1), Proposition 2.1.
 -/
 
 noncomputable section
@@ -70,7 +75,6 @@ private theorem exists_uniform_local_lipschitz {K : Set E} (hK : IsOpen K)
     have hradius : r - r / 2 = r / 2 := by ring
     simpa only [hradius] using h
 
-
 private theorem exists_subseq_pointwise_on_nat (f : ℕ → ℕ → ℝ)
     (hnn : ∀ n i, 0 ≤ f n i)
     (hbdd : ∀ i, BddAbove (Set.range fun n => f n i)) :
@@ -87,7 +91,6 @@ private theorem exists_subseq_pointwise_on_nat (f : ℕ → ℕ → ℝ)
   refine ⟨s, g, hs, ?_⟩
   intro i
   exact (tendsto_pi_nhds.mp hlim) i
-
 
 private theorem cauchy_at_point_of_dense_local_lipschitz {E : Type*} [PseudoMetricSpace E]
     {K : Set E} (f : ℕ → E → ℝ) (d : ℕ → E)
@@ -125,7 +128,6 @@ private theorem cauchy_at_point_of_dense_local_lipschitz {E : Type*} [PseudoMetr
   have htri' := dist_triangle (f m (d i)) (f n (d i)) (f n x)
   rw [dist_comm (f n (d i)) (f n x)] at htri'
   linarith
-
 
 /-- Nonnegative convex functions on an open set, bounded at every point, have a subsequence converging at every point of
 the set to a convex function. -/
@@ -169,5 +171,50 @@ theorem exists_subseq_tendsto_of_convexOn_of_bddAbove {K : Set E} (hK : IsOpen K
 end FiniteDimensional
 
 end NormedSpace
+
+section LinearBounds
+
+open Set Filter
+open scoped Topology
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+
+/-- Convex functions with uniform two-sided linear bounds have a subsequence converging pointwise
+to a convex function. -/
+theorem exists_subseq_tendsto_of_linear_bounds {ψ : ℕ → E → ℝ} {α β γ L : ℝ}
+    (hψ : ∀ l, ConvexOn ℝ univ (ψ l)) (hα : 0 ≤ α)
+    (hb : ∀ l x, α * ‖x‖ - β ≤ ψ l x ∧ ψ l x ≤ L * ‖x‖ + γ) :
+    ∃ (s : ℕ → ℕ) (F : E → ℝ), StrictMono s ∧ ConvexOn ℝ univ F ∧
+      ∀ x, Tendsto (fun j => ψ (s j) x) atTop (𝓝 (F x)) := by
+  let f : ℕ → E → ℝ := fun l x => ψ l x + β
+  have hf : ∀ l, ConvexOn ℝ univ (f l) := by
+    intro l
+    exact (hψ l).add_const β
+  have hnn : ∀ l, ∀ x ∈ (univ : Set E), 0 ≤ f l x := by
+    intro l x _
+    dsimp [f]
+    have hmul := mul_nonneg hα (norm_nonneg x)
+    have hlo := (hb l x).1
+    linarith
+  have hbdd : ∀ x ∈ (univ : Set E), BddAbove (Set.range fun l => f l x) := by
+    intro x _
+    refine ⟨L * ‖x‖ + γ + β, ?_⟩
+    rintro y ⟨l, rfl⟩
+    dsimp [f]
+    have hhi := (hb l x).2
+    linarith
+  obtain ⟨s, g, hs, hg, hlim⟩ :=
+    Analysis.exists_subseq_tendsto_of_convexOn_of_bddAbove isOpen_univ f hf hnn hbdd
+  refine ⟨s, fun x => g x - β, hs, ?_, ?_⟩
+  · have heq : (fun x => g x - β) = g + (fun _ => -β) := by
+      funext x
+      exact sub_eq_add_neg (g x) β
+    rw [heq]
+    exact hg.add_const (-β)
+  · intro x
+    simpa only [f, add_sub_cancel_right] using
+      (hlim x (mem_univ x)).sub_const β
+
+end LinearBounds
 
 end FunctionalInequalities.Analysis

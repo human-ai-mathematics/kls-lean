@@ -312,7 +312,7 @@ theorem hasDecompRel_self : ∀ (k n : ℕ) (A : Set (Fin n → ℝ)), HasDecomp
         · exact Or.inl hxU
         · exact Or.inr ⟨hx, hxU⟩)
 
-/-- **The Morse vanishing lemma, in Mathlib notions only.**  This is the form used by the route:
+/-- **The Morse vanishing lemma, in Mathlib notions only.**  This is the form used for Sard:
 a countable set `A₀` and countably many pieces carried by `C¹` parametrized disks that are
 antilipschitz on the closed unit ball, such that every `C^k` function vanishing on `A` is flat of
 order `k` along the disk on each piece. -/

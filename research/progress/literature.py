@@ -18,6 +18,16 @@ def validate(catalog, records):
         for key in ('title', 'authors', 'date', 'publication', 'locator', 'result', 'remaining'):
             if not p.get(key, '').strip():
                 raise ValueError(f'{p["id"]}: missing {key}')
+        for reference in p.get('additional_sources', []):
+            # Older selected Git indices contain URL-only links. Keep their role
+            # unclassified rather than interpreting them as primary sources.
+            if isinstance(reference, str) and reference.startswith('https://'):
+                continue
+            if (not isinstance(reference, dict)
+                    or reference.get('role') not in ('paper', 'background', 'author page', 'secondary citation')
+                    or not reference.get('label', '').strip()
+                    or not reference.get('url', '').startswith('https://')):
+                raise ValueError(f'{p["id"]}: supplementary references need a label, URL and source role')
         for item in p['local_results']:
             if item['node'] not in records or not item.get('scope'):
                 raise ValueError(f'{p["id"]}: invalid local result mapping')
@@ -48,6 +58,22 @@ def validate(catalog, records):
                 or not priority.get('target') or not priority.get('next_step')):
             raise ValueError('Literature priorities need source papers, target and next step')
     return papers
+
+
+def supplementary_references(catalog):
+    """Keep the role of each extra link distinct from the paper's primary source."""
+    lines = ['### Supplementary references', '',
+             'The paper links above identify the primary sources. Background notes, author pages',
+             'and later citations below have their own roles; they are not substitutes for those papers.', '']
+    for paper in catalog['papers']:
+        for reference in paper.get('additional_sources', []):
+            if isinstance(reference, str):
+                reference = {'label': 'Supplementary reference', 'url': reference,
+                             'role': 'unclassified'}
+            lines.append(f'- {paper["authors"]}, {paper["date"]}: '
+                         f'[{reference["label"]}]({reference["url"]}) '
+                         f'({reference["role"]}).')
+    return lines
 
 
 LEMMA_MARKS = {'formalized': '✓', 'partial': '◐', 'pending': '○', 'improved': '⇑'}
@@ -341,7 +367,8 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         'The literature has advanced to an inverse-Cheeger bound of order `(log n)^(1/4)` in the',
         '[July 2026 Letwin preprint](https://arxiv.org/html/2607.24164v1). Our repository currently',
         'formalizes selected analytic foundations and reductions, and the dimension-free KLS bound through',
-        'Bizeul–Klartag–Lehec\'s Theorem 1.1; the dimension-dependent frontier proofs below are not formalized as such.', '',
+        'Bizeul–Klartag–Lehec\'s Theorem 1.1. Letwin\'s logarithmic-quarter conclusion is also proved',
+        'as a downstream consequence of that stronger bound, through a different proof route.', '',
         'Publication status and local Lean status are separate columns. **◐ means named fragments or',
         'restricted counterparts, never an entire paper; ○ means the selected main result is not',
         'locally formalized.** A ✓ beside an individual local result is derived from the existing',
@@ -429,14 +456,18 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
                 statements.append('  This auxiliary assessment links to source; it has no separate Blueprint declaration inventory or ledger certificate.')
         statements.append('')
     footer = [
-        '## What the July papers would require here', '',
-        'Both July results need a local moment-measure construction and its regularity theory.',
-        'The sharp thin-shell paper then needs the weighted Hessian identities and third-order',
-        'tensor estimates. The quadratic-form paper additionally needs its matrix inequality,',
-        'Stein/H⁻¹ argument and the conversion through the directional third-moment parameter.',
-        'These are missing mathematical developments, despite our existing density, closed-form',
-        'and Euclidean calculus infrastructure. The existing CMH and spectral route propositions',
-        'are conditional research routes and do not certify either paper.', '',
+        '## Reading the July paper scopes', '',
+        'The July papers have different targets and hypotheses. Read their individual theorem maps',
+        'and remaining-scope records above: proved moment-map, Hessian and Stein/H⁻¹ results retain',
+        'their stated source classes and do not automatically complete the full regularity theory.',
+        'Letwin Theorem 1.2 is formalized with exact constant 8, without compact support;',
+        'its logarithmic-quarter conclusion is paper-target certified through the stronger BKL result.',
+        'The original third-moment/traced Klartag route remains unformalized, and Proposition 2.8',
+        'is partial for full-dimensional laws. Lemma 2.2 and Theorem 2.5 hold at every moment',
+        'potential of their literal bounded source class; unused auxiliary regularity routes retain their gaps.',
+        'The stronger BKL result and the selected compact Letwin certificate likewise have their',
+        'own scopes. Paper coverage still requires the registered main-theorem certificate.',
+        'The historical CMH and spectral route propositions remain conditional research records.', '',
         '## Source and coverage notes', '',
         '- July statements are pinned to `2607.23307v1` and `2607.24164v1`. Both are preprints;',
         '  this map checks bibliographic data, main statements and normalization, not every proof step.',
@@ -450,20 +481,17 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         '  in the [supporting node register](STATUS.md); it is not automatically credited',
         '  as a completed fragment of every paper that could use it.',
         '- No percentage of a paper is reported: result counts do not measure proof coverage.', '',
-        '### Additional primary-source metadata', '',
     ]
-    for p in catalog['papers']:
-        for i, url in enumerate(p.get('additional_sources', []), 1):
-            footer.append(f'- {p["authors"]}, {p["date"]}: [additional primary source {i}]({url}).')
+    footer += supplementary_references(catalog)
     footer += ['', '### Maintenance', '',
                'Edit [literature.json](literature.json), then run `python3 research/progress/update.py`',
                'with the intended canonical proof/metadata inputs staged. Coverage is derived from',
                'the same resolved node records as the route map. Generated files are not edited by hand.', '']
     readme = [f'**{len(papers)} selected sources, from foundational results to July 2026.**', '',
               'The [paper-by-paper literature register](LITERATURE.md) records statements, publication',
-              'versions, exact local coverage and remaining work. The general KLS-bound milestones',
-              'in this diagram are all still pending locally; completed supporting results appear in',
-              'the paper and node registers. Dashed edges mean chronology or related methods, not proof.', '',
+              'versions, exact local coverage and remaining work. KLS is proved through the accepted',
+              'BKL main line. The paper and node registers distinguish that completed route from',
+              'pending results of the other displayed sources. Dashed edges mean chronology or related methods, not proof.', '',
               '```mermaid', tree.rstrip(), '```', '',
               '| Latest source | Literature result | Our Lean status |', '| --- | --- | --- |']
     for key in ('ChenKlartag2026', 'Letwin2026'):

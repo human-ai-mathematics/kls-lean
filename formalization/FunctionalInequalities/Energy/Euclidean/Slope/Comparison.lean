@@ -3,15 +3,13 @@ import FunctionalInequalities.Energy.Cheeger.Basic
 /-!
 # The slope sandwich: smooth tests, the asymptotic Lipschitz constant, and the two relaxations
 
-Source: obligations `A1`–`A3` of the energy-slope route, as stated in
-`research/audits/EnergySlopeRouteStatements.lean`.  Read
-`AsymptoticLipschitz.apply_eq_norm_gradient` first, then `SmoothGradient.Test.asymptoticLipschitz_*`
-and `SmoothGradient.asymptoticLipschitz_relaxation_le`, then
-`LocalSlope.relaxation_eq_asymptoticLipschitz_of_smoothGradient`.
+Read `AsymptoticLipschitz.apply_eq_norm_gradient` first, then
+`SmoothGradient.Test.asymptoticLipschitz_*` and `SmoothGradient.asymptoticLipschitz_relaxation_le`,
+then `LocalSlope.relaxation_eq_asymptoticLipschitz_of_smoothGradient`.
 
 ## What is proved
 
-`A1` (`AsymptoticLipschitz.apply_eq_norm_gradient`, specialized to smooth tests by
+**Smooth functions.**  `AsymptoticLipschitz.apply_eq_norm_gradient` (specialized to smooth tests by
 `SmoothGradient.Test.asymptoticLipschitz_apply`): for a continuously differentiable real function
 the **two-moving-point** asymptotic Lipschitz constant `Lip_a f (x) = inf_{r > 0} Lip(f, B(x, r))`
 equals the canonical Hilbert gradient norm `‖∇f x‖ₑ`, at every point and with no measure in sight.
@@ -20,7 +18,8 @@ The lower bound is the one-moving-point slope
 the upper bound is the mean value inequality on a ball small enough that `fderiv` stays within `ε`
 of its value at the centre, the ball being convex.
 
-`A2` (`SmoothGradient.asymptoticLipschitz_relaxation_le`): consequently a smooth-gradient test is an
+**The third side of the sandwich.**  `SmoothGradient.asymptoticLipschitz_relaxation_le`:
+consequently a smooth-gradient test is an
 asymptotic-Lipschitz test with the *same* energy
 (`SmoothGradient.Test.asymptoticLipschitz_energy`), so relaxing over the larger class gives the
 smaller functional, `AsymptoticLipschitz.relaxation ν ≤ SmoothGradient.relaxation ν`, for **every**
@@ -29,7 +28,7 @@ Borel probability law.  With `Energy.LocalSlope.relaxation_le_asymptoticLipschit
 
 `    LocalSlope.relaxation ν ≤ AsymptoticLipschitz.relaxation ν ≤ SmoothGradient.relaxation ν.`
 
-`A3` (`LocalSlope.relaxation_eq_asymptoticLipschitz_of_smoothGradient`): the collapse.  If the two
+**The collapse.**  `LocalSlope.relaxation_eq_asymptoticLipschitz_of_smoothGradient`: if the two
 ends of the sandwich agree — the hypothesis `SmoothGradient.relaxation ν = LocalSlope.relaxation ν`,
 which is the open singular-case obligation and is proved here for no law — then the two Cheeger
 conventions relax to the same functional.
@@ -64,7 +63,7 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
 omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
-/-- `A1`: for a differentiable function with continuous derivative the two-moving-point asymptotic
+/-- For a differentiable function with continuous derivative the two-moving-point asymptotic
 Lipschitz constant is the canonical Hilbert gradient norm at every point.
 
 The lower bound is the one-moving-point local slope, which is already the gradient norm.  For the
@@ -146,7 +145,7 @@ variable {ν : ProbabilityMeasure V}
 section AsymptoticSlope
 
 omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-/-- `A1` at a smooth test: its asymptotic Lipschitz constant is the gradient norm at every point.
+/-- At a smooth test, the asymptotic Lipschitz constant is the gradient norm at every point.
 `ContDiff ℝ ∞` supplies both differentiability everywhere and continuity of `fderiv`. -/
 theorem asymptoticLipschitz_apply (f : Test ν) (x : V) :
     AsymptoticLipschitz.apply f.toFun x = ‖gradient f.toFun x‖ₑ :=
@@ -176,7 +175,7 @@ end AsymptoticSlope
 
 end Test
 
-/-- `A2`: the third side of the sandwich.  Every smooth-gradient test is an asymptotic-Lipschitz
+/-- The third side of the sandwich.  Every smooth-gradient test is an asymptotic-Lipschitz
 test with the same energy, so relaxing over the larger class gives the smaller relaxed functional.
 Holds for every Borel probability law, singular laws included. -/
 theorem asymptoticLipschitz_relaxation_le (ν : ProbabilityMeasure V)
@@ -196,7 +195,7 @@ namespace LocalSlope
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-/-- `A3`, the collapse: once the two ends of the sandwich
+/-- The collapse: once the two ends of the sandwich
 `LocalSlope.relaxation ν ≤ AsymptoticLipschitz.relaxation ν ≤ SmoothGradient.relaxation ν` agree,
 the two Cheeger conventions relax to the same `L²(ν)` functional.  The hypothesis is the open
 singular-case obligation; it is assumed, never proved here. -/

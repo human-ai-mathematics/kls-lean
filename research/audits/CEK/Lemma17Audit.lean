@@ -3,8 +3,8 @@ import Mathlib.Analysis.Normed.Module.Convex
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! Audit clients for Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Lemma 17 (56)
-(`Probability/MomentMeasure/Compactness.lean`). Client blocks are verbatim from the accepted `Lemma17Clients.lean`
-(67758a78…): a mass-two measure at the endpoints of `[-1, 1]` (not a probability measure, all mass outside the open
+(`Probability/MomentMeasure/Compactness.lean`):
+a mass-two measure at the endpoints of `[-1, 1]` (not a probability measure, all mass outside the open
 support hull) and the zero-dimensional case with mass three. Both use the single joint producer, so one subsequence and
 one limit satisfy (56a) and (56b). -/
 

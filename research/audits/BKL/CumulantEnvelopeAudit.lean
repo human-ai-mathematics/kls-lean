@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.BKL.CumulantEnvelope
+import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
 import FunctionalInequalities.Analysis.Tensor.Coordinate
 
 /-!

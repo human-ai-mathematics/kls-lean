@@ -7,12 +7,10 @@ import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 # Audit: the Hessian–Stein kernel of a given potential (Letwin Lemma 2.7, analytic part)
 
 Source: Letwin, arXiv:2607.24164v1, Lemma 2.7. Clients: for the normalized Gaussian potential
-`‖x‖²/2 + log Z` on `ℝ¹` (gradient `id`, inverse `id`) the constructed kernel is a symmetric integrable
-Stein kernel with mean `1`, and is positive definite (a concrete fact of this example, not a generic
-claim); the injective-gradient producer applies; the zero-dimensional constant potential also yields a
-kernel. No moment map for an arbitrary law is constructed. Clients adapted from the Codex bundle
-`Hessian-Stein-Kernel` (`GaussianClient.lean`, `ZeroClient.lean`; independently accepted, receipt
-1793c140…).
+`‖x‖²/2 + log Z` on `ℝ¹` (gradient `id`, inverse `id`) the constructed kernel is a symmetric
+integrable Stein kernel with mean `1`, and is positive definite (a concrete fact of this example,
+not a generic claim); the injective-gradient producer applies; the zero-dimensional constant
+potential also yields a kernel. No moment map for an arbitrary law is constructed.
 -/
 
 open MeasureTheory FunctionalInequalities
@@ -98,7 +96,7 @@ theorem inverse_id : ∀ᵐ y ∂(μ : Measure E), (id : E → E) (gradient φ y
   rw [phi_gradient]
   exact Filter.Eventually.of_forall fun _ => rfl
 
-/-- The new actual given-potential producer constructs the canonical kernel from this real law. -/
+/-- The actual given-potential producer constructs the canonical kernel from this real law. -/
 theorem actual_hessian_stein : Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ id) :=
   KLS.LogConcave.hessianKernel_isSteinKernel φ phi_smooth phi_convex phi_normalized μ μ phi_law
     gradient_push actual_isotropic id measurable_id inverse_id

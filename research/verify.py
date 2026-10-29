@@ -99,7 +99,7 @@ def replay_sources(snapshot: dict) -> dict[str, str]:
 def build_replay_inputs(root: Path, snapshot: dict, destination: Path, run) -> dict:
     """Build the exact replay scope, including modules outside default import closures."""
     targets = ["+" + module for module in replay_sources(snapshot)]
-    run("lake-build-replay-scope", ["lake", "build", *targets], cwd=root / "formalization")
+    run("lake-build-replay-scope", ["lake", "--wfail", "build", *targets], cwd=root / "formalization")
     return prepare_replay(root, snapshot, destination)
 
 
@@ -465,7 +465,7 @@ def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: b
             internal_gate("vendor-provenance-lock", errors,
                           "Checked vendored files, port.patch and upstream hashes against vendor-lock.json")
             run("python-tests", [sys.executable, "-m", "unittest", "discover", "-s", "research/tests", "-p", "test_*.py"])
-        run("lake-build", ["lake", "build"], cwd=root / "formalization")
+        run("lake-build", ["lake", "--wfail", "build"], cwd=root / "formalization")
         view = output_dir / "local-olean"
         replay = build_replay_inputs(root, before, view, run)
         report["replay_inputs"] = replay

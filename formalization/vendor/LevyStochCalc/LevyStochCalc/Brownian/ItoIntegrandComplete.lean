@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoLinear
 
 /-!
@@ -67,7 +70,7 @@ theorem progressivelyMeasurable_indicator_Icc {ℱ : Filtration ℝ ‹Measurabl
     Probability.ProgressivelyMeasurable ℱ
       fun ω s => Set.indicator (Set.Icc (0 : ℝ) T) (H ω) s := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have key : (fun p : Ω × ℝ => (Set.Iic t).indicator
         (fun s => Set.indicator (Set.Icc (0 : ℝ) T) (H p.1) s) p.2)
       = Set.indicator ((fun p : Ω × ℝ => p.2) ⁻¹' Set.Icc (0 : ℝ) T)
@@ -119,7 +122,7 @@ theorem exists_energy_limit (hm : ∀ n, Measurable (Function.uncurry (H n)))
     ∃ g : Ω × ℝ → ℝ, MemLp g 2 (energyMeasure P T)
       ∧ Tendsto (fun n => eLpNorm ((fun p : Ω × ℝ => H n p.1 p.2) - g) 2 (energyMeasure P T))
           atTop (𝓝 0) := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
   have hMem : ∀ n, MemLp (fun p : Ω × ℝ => H n p.1 p.2) 2 (energyMeasure P T) :=
     fun n => memLp_of_energy_ne_top (hm n) (hfin n)
   have hcs : CauchySeq fun n => (hMem n).toLp (fun p : Ω × ℝ => H n p.1 p.2) := by

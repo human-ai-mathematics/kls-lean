@@ -8,17 +8,18 @@ import FunctionalInequalities.KLS.CEK.BoundedPrimal
 /-!
 # Audit: the bounded-source normalized primal for the uniform law on `[-√3, √3]`
 
-Source: Cordero-Erausquin–Klartag Proposition 12 / Theorem 2 and Letwin, arXiv:2607.24164v1, Lemmas 2.1–2.2 (support only).
-The fixed law is the uniform law on `[-√3, √3]`; its boundedness (`‖y‖ ≤ √3` almost everywhere), finite second moment, zero
-mean, isotropy and second moment `1` are derived here with no premise, and the production producer
-`bounded_source_lipschitz_primal` is invoked, retaining every conclusion; the density `ofReal (exp (−ψ))` is a probability.
-A weak normalized primal: no Euler–Lagrange identification, gradient pushforward, smoothness, positive Hessian,
-diffeomorphism, Monge–Ampère equation or Theorem 2.5.
+Source: Cordero-Erausquin–Klartag Proposition 12 / Theorem 2 and Letwin, arXiv:2607.24164v1,
+Lemmas 2.1–2.2 (support only). The fixed law is the uniform law on `[-√3, √3]`; its boundedness
+(`‖y‖ ≤ √3` almost everywhere), finite second moment, zero mean, isotropy and second moment `1` are
+derived here with no premise, and the library producer `bounded_source_lipschitz_primal` is
+invoked, retaining every conclusion; the density `ofReal (exp (−ψ))` is a probability. A weak
+normalized primal: no Euler–Lagrange identification, gradient pushforward, smoothness, positive
+Hessian, diffeomorphism, Monge–Ampère equation or Theorem 2.5.
 
-Witness blocks: `unifSym`, `isProbabilityMeasure_unifSym`, `integral_unifSym`, `centered_unifSym` and `isotropic_unifSym`
-are verbatim from `SingletonAllocationAudit.lean` (namespace `BKLThirdCumulantWitness` there, `LetwinBoundedPrimalWitness`
-here; ad61a96b…); no other block of that audit is copied. Client body: strong-API candidate
-(`api-bounded-primal-uniform-client-v1`, da4b503c…), verbatim up to the witness namespace and the producer's library name.
+Witness blocks: `unifSym`, `isProbabilityMeasure_unifSym`, `integral_unifSym`, `centered_unifSym`
+and `isotropic_unifSym` repeat those of `SingletonAllocationAudit.lean` (namespace
+`BKLThirdCumulantWitness` there, `LetwinBoundedPrimalWitness` here); no other block of that audit is
+copied.
 -/
 
 noncomputable section
@@ -111,7 +112,7 @@ def mu : ProbabilityMeasure ℝ :=
 /-- The fixed nonnegative bound, not a client parameter. -/
 def L : NNReal := ⟨Real.sqrt 3, Real.sqrt_nonneg _⟩
 
-/-- The bundled measure is definitionally the accepted uniform witness. -/
+/-- The bundled measure is definitionally the uniform witness. -/
 theorem mu_measure :
     (mu : Measure ℝ) = LetwinBoundedPrimalWitness.unifSym := rfl
 
@@ -141,7 +142,7 @@ theorem mu_memLp_two : MemLp id 2 (mu : Measure ℝ) := by
   exact MemLp.of_bound continuous_id.aestronglyMeasurable
     (L : ℝ) mu_ae_norm_le
 
-/-- The accepted scalar centering identity gives the actual barycenter. -/
+/-- The scalar centering identity gives the actual barycenter. -/
 theorem mu_mean_zero :
     (∫ x : ℝ, x ∂(mu : Measure ℝ)) = 0 := by
   change (∫ x : ℝ, x ∂LetwinBoundedPrimalWitness.unifSym) = 0

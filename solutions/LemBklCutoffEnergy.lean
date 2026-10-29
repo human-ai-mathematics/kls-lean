@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.BKL.CumulantBound
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Bound
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.ToCumulant
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic

@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Probability.Progressive
 import Mathlib.Probability.Process.Stopping
 
@@ -42,7 +45,7 @@ theorem mem_stoppedRegion {τ : Ω → WithTop ℝ} {t : ℝ} {p : Ω × ℝ} :
 theorem measurableSet_stoppedRegion {ℱ : Filtration ℝ mΩ} {τ : Ω → WithTop ℝ}
     (hτ : MeasureTheory.IsStoppingTime ℱ τ) (t : ℝ) :
     MeasurableSet[@Prod.instMeasurableSpace Ω ℝ (ℱ t) inferInstance] (stoppedRegion τ t) := by
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   set U : Set (Ω × ℝ) := ⋃ q : ℚ, {ω : Ω | τ ω ≤ ((min (q : ℝ) t : ℝ) : WithTop ℝ)}
     ×ˢ (Set.Ioi (q : ℝ) ∩ Set.Iic t) with hUdef
   have hU : MeasurableSet[@Prod.instMeasurableSpace Ω ℝ (ℱ t) inferInstance] U := by
@@ -89,7 +92,7 @@ theorem ProgressivelyMeasurable.stopped {ℱ : Filtration ℝ mΩ} {τ : Ω → 
     (hH : ProgressivelyMeasurable ℱ H) :
     ProgressivelyMeasurable ℱ (LevyStochCalc.Probability.stopped τ H) := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have key : (fun p : Ω × ℝ =>
         (Set.Iic t).indicator (LevyStochCalc.Probability.stopped τ H p.1) p.2)
       = Set.indicator (stoppedRegion τ t)
@@ -118,7 +121,7 @@ theorem measurableSet_stoppedSet {ℱ : Filtration ℝ mΩ} {τ : Ω → WithTop
   have hcompl : (stoppedSet τ)ᶜ
       = ⋃ q : ℚ, {ω : Ω | τ ω ≤ ((q : ℝ) : WithTop ℝ)} ×ˢ Set.Ioi (q : ℝ) := by
     ext p
-    simp only [stoppedSet, Set.mem_compl_iff, Set.mem_setOf_eq, not_le, Set.mem_iUnion,
+    simp only [stoppedSet, Set.mem_compl_iff, Set.mem_ofPred_eq, not_le, Set.mem_iUnion,
       Set.mem_prod, Set.mem_Ioi]
     constructor
     · intro hlt

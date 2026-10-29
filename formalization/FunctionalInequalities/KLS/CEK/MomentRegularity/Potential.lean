@@ -1,9 +1,9 @@
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
 import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
-import FunctionalInequalities.Analysis.Convex.GradientLipschitz
-import FunctionalInequalities.Analysis.Convex.HessianRegularity
+import FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz
+import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianRegularity
 import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
 import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
 import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
@@ -176,53 +176,43 @@ theorem exists_moment_potential_of_bounded_open_convex (hn : 0 < n)
 
 end ContinuousTarget
 
-/-- A regular-class isotropic law has a convex Lipschitz C1 moment potential with
-16/kappa-Lipschitz gradient and the a.e. Hessian/log-det package. -/
-theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))}
-    {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+/-- **A.e. Hessian package at a given moment potential with Lipschitz gradient**: if a normalized convex
+Lipschitz `C¹` potential `u` with `G`-Lipschitz gradient pushes `e^{-u} dx` forward by `∇u` onto
+`1_K e^{-W} dx` (`K` compact convex, `W` continuous, positive dimension), then a.e. its Hessian is
+positive definite, satisfies `log det ∇²u = -u + W(∇u)` and is capped by `G·Id`. The potential is
+given; no convexity or smoothness of `W` is used. -/
+theorem ae_hessianMatrix_posDef_log_det_of_map_gradient {n : ℕ} (hn : 0 < n)
+    {u W : EuclideanSpace ℝ (Fin n) → ℝ} {L G : NNReal} (huLip : LipschitzWith L u)
+    (huconv : ConvexOn ℝ univ u)
+    (hunorm : ∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
+    {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hW : Continuous W)
+    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
       (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal), ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef := by
+    (huC1 : ContDiff ℝ 1 u) (hgradLip : LipschitzWith G (gradient u)) :
+    ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      (hessianMatrix u x).PosDef ∧
+      Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+      ((G : ℝ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef := by
   classical
   let E := EuclideanSpace ℝ (Fin n)
   have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
   have : Nontrivial E := inferInstance
-  obtain ⟨u, L, hstrict, huLip, hunorm, humap, huC1, _he, _hf, _hMA, _hae, _hUpper, _hLower⟩ :=
-    exists_moment_potential_of_continuousOn hn hK hKc hKint hW.continuous.continuousOn μ hμ hiso
-  have huconv := hstrict.convexOn
-  have hmap : ((volume : Measure E).tilted (-u)).map (gradient u) =
-      (volume : Measure E).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := humap.trans hμ
-  have hgradLip : LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) :=
-    lipschitzWith_gradient_of_map_gradient huLip huconv hunorm hK hKc
-      (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hκ hstrong hmap huC1
   let f : E → ℝ := fun x => Real.exp (-u x + W (gradient u x))
   have hgradc : Continuous (gradient u) :=
     (InnerProductSpace.toDual ℝ E).symm.continuous.comp
       (huC1.continuous_fderiv (by norm_num))
   have hf : Continuous f :=
     Real.continuous_exp.comp
-      (huC1.continuous.neg.add (hW.continuous.comp hgradc))
+      (huC1.continuous.neg.add (hW.comp hgradc))
   have hfpos : ∀ x, 0 < f x := fun x => Real.exp_pos _
-  have hMA : ∀ G : Set E, IsOpen G →
-      volume (subgradientImage u G) =
-        ∫⁻ x in G, ENNReal.ofReal (f x) := by
-    intro G hG
+  have hMA : ∀ O : Set E, IsOpen O →
+      volume (subgradientImage u O) =
+        ∫⁻ x in O, ENNReal.ofReal (f x) := by
+    intro O hO
     exact volume_subgradientImage_eq_lintegral_of_isOpen huLip huconv hunorm
-      hK.isClosed hKc hW.continuous.measurable hmap hG
+      hK.isClosed hKc hW.measurable hmap hO
   have hdiff :
       ∀ᵐ x ∂(volume : Measure E), DifferentiableAt ℝ (gradient u) x :=
     hgradLip.ae_differentiableAt
@@ -286,7 +276,7 @@ theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (Euclide
       rw [real_inner_comm (T (y - x)) (y - x)]
       simpa only [sub_add_eq_sub_sub] using hy
     have hres := posDef_and_det_eq_of_quadratic_expansion huconv
-      isOpen_univ (fun G hG _ => hMA G hG) (mem_univ x)
+      isOpen_univ (fun O hO _ => hMA O hO) (mem_univ x)
       hf.continuousAt (hfpos x)
       (hessianMatrix_isHermitian_of_differentiableAt_gradient huC1 hx) hquad'
     refine ⟨hres.1, ?_⟩
@@ -295,15 +285,10 @@ theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (Euclide
         rw [hres.2]
       _ = -u x + W (gradient u x) := by
         simp [f]
-  refine ⟨u, L, huconv, huLip, hunorm, humap, huC1, hgradLip, ?_⟩
   filter_upwards [hmain, hdiff] with x hx hxd
   refine ⟨hx.1, hx.2, ?_⟩
   let T : E →L[ℝ] E := fderiv ℝ (gradient u) x
-  have hTnorm : ‖T‖ ≤ 16 / κ := by
-    have h := norm_fderiv_le_of_lipschitz ℝ hgradLip (x₀ := x)
-    have hc : (0 : ℝ) ≤ 16 / κ := by positivity
-    rw [Real.coe_toNNReal (16 / κ) hc] at h
-    exact h
+  have hTnorm : ‖T‖ ≤ (G : ℝ) := norm_fderiv_le_of_lipschitz ℝ hgradLip (x₀ := x)
   have hmat := hessianMatrix_toEuclideanLin_of_differentiableAt_gradient huC1 hxd
   have hH : (hessianMatrix u x).IsHermitian :=
     hessianMatrix_isHermitian_of_differentiableAt_gradient huC1 hxd
@@ -319,9 +304,9 @@ theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (Euclide
     Matrix.toLin_one _
   have hop :
       Matrix.toEuclideanLin
-          ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) -
+          ((G : ℝ) • (1 : Matrix (Fin n) (Fin n) ℝ) -
             hessianMatrix u x) =
-        (16 / κ) • LinearMap.id - T.toLinearMap := by
+        (G : ℝ) • LinearMap.id - T.toLinearMap := by
     have hmat' := hmat
     rw [Matrix.toEuclideanLin_eq_toLin_orthonormal] at hmat'
     rw [Matrix.toEuclideanLin_eq_toLin_orthonormal, map_sub, map_smul, hone, hmat']
@@ -329,22 +314,59 @@ theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (Euclide
   constructor
   · intro v w
     change
-      ⟪(16 / κ) • v - T v, w⟫ =
-        ⟪v, (16 / κ) • w - T w⟫
+      ⟪(G : ℝ) • v - T v, w⟫ =
+        ⟪v, (G : ℝ) • w - T w⟫
     rw [inner_sub_left, inner_sub_right, real_inner_smul_left,
       real_inner_smul_right]
     have hsw : ⟪T v, w⟫ = ⟪v, T w⟫ := hsym v w
     rw [hsw]
   · intro v
-    change 0 ≤ ⟪(16 / κ) • v - T v, v⟫
+    change 0 ≤ ⟪(G : ℝ) • v - T v, v⟫
     rw [inner_sub_left, real_inner_smul_left,
       real_inner_self_eq_norm_sq]
     have hv := T.le_opNorm v
-    have hv' : ‖T v‖ ≤ (16 / κ) * ‖v‖ :=
+    have hv' : ‖T v‖ ≤ (G : ℝ) * ‖v‖ :=
       hv.trans (mul_le_mul_of_nonneg_right hTnorm (norm_nonneg v))
     have hi := real_inner_le_norm (T v) v
     have hq := mul_le_mul_of_nonneg_right hv' (norm_nonneg v)
     nlinarith
+
+
+
+
+/-- A regular-class isotropic law has a convex Lipschitz C1 moment potential with
+16/kappa-Lipschitz gradient and the a.e. Hessian/log-det package. -/
+theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))}
+    {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal), ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).PosDef ∧
+        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef := by
+  obtain ⟨u, L, hstrict, huLip, hunorm, humap, huC1, _he, _hf, _hMA, _hae, _hUpper, _hLower⟩ :=
+    exists_moment_potential_of_continuousOn hn hK hKc hKint hW.continuous.continuousOn μ hμ hiso
+  have huconv := hstrict.convexOn
+  have hmap := humap.trans hμ
+  have hgradLip : LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) :=
+    lipschitzWith_gradient_of_map_gradient huLip huconv hunorm hK hKc
+      (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hκ hstrong hmap huC1
+  have hdata := ae_hessianMatrix_posDef_log_det_of_map_gradient hn huLip huconv hunorm hK hKc
+    hW.continuous hmap huC1 hgradLip
+  have hcap : ((Real.toNNReal (16 / κ) : NNReal) : ℝ) = 16 / κ :=
+    Real.coe_toNNReal _ (by positivity)
+  refine ⟨u, L, huconv, huLip, hunorm, humap, huC1, hgradLip, ?_⟩
+  simpa only [hcap] using hdata
 
 
 

@@ -4,14 +4,15 @@ import FunctionalInequalities.Analysis.Operator.Coordinates
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 
-
 /-! # Hessian operators and their inverses
 
 The Hessian as a continuous linear operator, its symmetry, positivity,
-inverse entries and their local regularity. Supports Letwin
+inverse entries and their local regularity, the contraction
+`Σ_{a,c} ((∇²φ)⁻¹)_{ac} φ_{ai} φ_{ci} = φ_{ii}` for a positive definite Hessian, and the trace
+bound `∇²φ(x)[v, v] ≤ Δφ(x) ‖v‖²` for a positive semidefinite Hessian form. Supports Letwin
 arXiv:2607.24164v1, pp. 5--7, without assuming an equation or constructing
-any moment potential. Coordinate matrices and the diffusion generator have
-separate owners.
+any moment potential. Coordinate matrices and the diffusion generator are
+defined in separate modules.
 -/
 
 noncomputable section
@@ -133,6 +134,29 @@ theorem sum_inverseHessianEntry_mul_hessian {m : ℕ} (b : OrthonormalBasis (Fin
   rw [← operatorEntry_mul, hInv]
   simp [operatorEntry, b.inner_eq_ite]
 
+/-- `Σ_{a,c} ((∇²φ)⁻¹)_{ac} φ_{ai} φ_{ci} = φ_{ii}` in the standard orthonormal basis. -/
+theorem sum_inverseHessianEntry_mul_hessian_hessian {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E)
+    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
+    (i : Fin (Module.finrank ℝ E)) :
+    (∑ a, ∑ c, inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a c *
+      bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E a) (stdOrthonormalBasis ℝ E i) *
+      bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E c) (stdOrthonormalBasis ℝ E i)) =
+      bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E i) := by
+  classical
+  let b := stdOrthonormalBasis ℝ E
+  calc
+    (∑ a, ∑ c, inverseHessianEntry φ b x a c * bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) *
+        bilinearIteratedFDerivTwo ℝ φ x (b c) (b i)) =
+        ∑ a, bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) *
+          ∑ c, inverseHessianEntry φ b x a c * bilinearIteratedFDerivTwo ℝ φ x (b c) (b i) := by
+      refine Finset.sum_congr rfl fun a _ => ?_
+      rw [Finset.mul_sum]
+      exact Finset.sum_congr rfl fun c _ => by ring
+    _ = ∑ a, bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) * (if a = i then 1 else 0) := by
+      refine Finset.sum_congr rfl fun a _ => ?_
+      rw [sum_inverseHessianEntry_mul_hessian b hφ x hPD a i]
+    _ = bilinearIteratedFDerivTwo ℝ φ x (b i) (b i) := by simp
+
 /-- **Letwin (2.5), operator form**: `D((∇²φ)⁻¹)(x)[v] = −(∇²φ)⁻¹ (D(∇²φ)(x)[v]) (∇²φ)⁻¹` for a smooth `φ`
 with positive definite Hessian at `x`. -/
 theorem fderiv_ringInverse_hessianOperator_apply {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
@@ -171,6 +195,63 @@ theorem fderiv_inverseHessianEntry_apply {m : ℕ} (b : OrthonormalBasis (Fin m)
     exact operatorEntry_hessianOperator b h2 y a c
   rw [← operatorEntry_fderiv_apply b hd a c (b k), heq]
   rfl
+
+section TraceBound
+
+omit [FiniteDimensional ℝ E] in
+/-- `⟪T v, v⟫ ≤ tr T ‖v‖²` for a positive semidefinite operator `T`, with the trace taken in an
+orthonormal basis. -/
+private theorem inner_le_basis_trace_mul_norm_sq {ι : Type*} [Fintype ι]
+    (b : OrthonormalBasis ι ℝ E) (T : E →L[ℝ] E)
+    (hT : ∀ w : E, 0 ≤ ⟪T w, w⟫) (v : E) :
+    ⟪T v, v⟫ ≤ (∑ i, ⟪T (b i), b i⟫) * ‖v‖ ^ 2 := by
+  classical
+  by_cases hv : v = 0
+  · simp [hv]
+  let a : ι → ℝ := fun i => ⟪b i, v⟫
+  let s : ℝ := ‖v‖ ^ 2
+  have hs : 0 < s := pow_pos (norm_pos_iff.mpr hv) 2
+  have ha : (∑ i, a i • b i) = v := by
+    simpa only [a, OrthonormalBasis.repr_apply_apply] using b.sum_repr v
+  have hsq : (∑ i, (a i) ^ 2) = s := by
+    simpa only [sum_inner, real_inner_smul_left, real_inner_self_eq_norm_sq, a, s, pow_two] using
+      congrArg (fun w : E => ⟪w, v⟫) ha
+  have h₁ : (∑ i, a i * ⟪T (b i), v⟫) = ⟪T v, v⟫ := by
+    calc
+      _ = ⟪T (∑ i, a i • b i), v⟫ := by
+        simp only [map_sum, map_smul, sum_inner, real_inner_smul_left]
+      _ = _ := by rw [ha]
+  have h₂ : (∑ i, a i * ⟪T v, b i⟫) = ⟪T v, v⟫ := by
+    calc
+      _ = ⟪T v, ∑ i, a i • b i⟫ := by simp only [inner_sum, real_inner_smul_right]
+      _ = _ := by rw [ha]
+  have hexp (i : ι) :
+      ⟪T (s • b i - a i • v), s • b i - a i • v⟫ =
+        s ^ 2 * ⟪T (b i), b i⟫ - s * (a i * ⟪T (b i), v⟫) - s * (a i * ⟪T v, b i⟫) +
+          (a i) ^ 2 * ⟪T v, v⟫ := by
+    simp only [map_sub, map_smul, inner_sub_left, inner_sub_right, real_inner_smul_left,
+      real_inner_smul_right]
+    ring
+  have hnonneg : 0 ≤ s ^ 2 * (∑ i, ⟪T (b i), b i⟫) - s * ⟪T v, v⟫ := by
+    have h := Finset.sum_nonneg (fun i (_ : i ∈ Finset.univ) => hT (s • b i - a i • v))
+    simp_rw [hexp] at h
+    simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum,
+      ← Finset.sum_mul] at h
+    rw [h₁, h₂, hsq] at h
+    nlinarith
+  exact (mul_le_mul_iff_right₀ hs).mp (by nlinarith [hnonneg])
+
+/-- A positive semidefinite Hessian form is bounded by its trace:
+`∇²φ(x)[v, v] ≤ (Σ_i ∇²φ(x)[e_i, e_i]) ‖v‖²`. -/
+theorem bilinearIteratedFDerivTwo_le_trace_mul_norm_sq {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E)
+    (hPSD : ∀ v : E, 0 ≤ bilinearIteratedFDerivTwo ℝ φ x v v) (v : E) :
+    bilinearIteratedFDerivTwo ℝ φ x v v ≤
+      (∑ i, bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i)
+        (stdOrthonormalBasis ℝ E i)) * ‖v‖ ^ 2 := by
+  simp_rw [bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ x] at hPSD ⊢
+  exact inner_le_basis_trace_mul_norm_sq (stdOrthonormalBasis ℝ E) (hessianOperator φ x) hPSD v
+
+end TraceBound
 
 section LocalRegularity
 

@@ -18,7 +18,7 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `TruncationConvergence.lean`.
+-- Convergence of lower truncations.
 
 open MeasureTheory
 variable {E : Type*} [MeasurableSpace E] {μ : Measure E}
@@ -98,7 +98,7 @@ theorem tendsto_integral_pointwise_lowerTruncate_error [IsFiniteMeasure μ]
 end
 
 section
--- Accepted source `TruncationTail.lean`.
+-- A tail bound for the lower-truncation error.
 
 open MeasureTheory
 /-- Pointwise truncation error is bounded by the actual lower-tail norm. -/
@@ -167,7 +167,7 @@ theorem integral_lowerTruncate_error_le_tail [IsFiniteMeasure μ]
 end
 
 section
--- Accepted source `VariationalCompetitor.lean`.
+-- Convexified lower truncations as variational competitors.
 
 open MeasureTheory
 /-- The finite integral error controls subtraction from any extended logarithm,

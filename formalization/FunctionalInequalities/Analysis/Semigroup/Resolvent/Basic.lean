@@ -4,8 +4,7 @@ import Mathlib.Analysis.InnerProductSpace.ProdL2
 /-!
 # The resolvent: unique solvability of the weak equation
 
-resolvent solvability of the semigroup-generation route (statements in
-`research/audits/SemigroupGenerationRouteStatements.lean`), proved here as
+Resolvent solvability, proved here as
 `existsUnique_weakResolvent`. See `Resolvent/Form.lean` for the form construction, the shifted weak form and the resolvent operator.
 
 The proof uses **orthogonal projection, not Lax–Milgram**. Rescaling the second coordinate by
@@ -15,12 +14,12 @@ The proof uses **orthogonal projection, not Lax–Milgram**. Rescaling the secon
 therefore exactly the orthogonal projection of `(f, 0)` onto the rescaled graph, which is closed
 because `T` is. No coercive bilinear form, no `IsCoercive` and no Riesz representation is needed.
 
-Two hypotheses of the route statement turn out to be unnecessary and are **not** assumed by the
+Two natural hypotheses turn out to be unnecessary and are **not** assumed by the
 theorems here: uniqueness needs neither closedness nor density, and existence needs closedness but
 **not density** — density matters only if one wants to identify the solution as `(1 + s T*T)⁻¹ f`
 through the adjoint, which this module does not do.
 
-resolvent contraction–the semigroup limit are not proved here.
+The Yosida approximation and the semigroup limit are not proved here.
 -/
 
 noncomputable section
@@ -35,10 +34,10 @@ variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H�
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
 omit [CompleteSpace H₀] [CompleteSpace H₁] in
-/-- resolvent solvability, uniqueness half: the weak resolvent equation has at most one solution.
+/-- Resolvent solvability, uniqueness half: the weak resolvent equation has at most one solution.
 
 The difference of two solutions is tested against itself, giving `‖w‖² + s ‖T w‖² = 0`; strict
-positivity of `s` is not even needed for the norm to vanish, but it is kept to match the route.
+positivity of `s` is not even needed for the norm to vanish, but it is kept for uniformity.
 No closedness, density or Lax–Milgram input is used. -/
 theorem weakResolvent_unique {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀} {u₁ u₂ : T.domain}
     (h₁ : WeakResolvent T s f u₁) (h₂ : WeakResolvent T s f u₂) : u₁ = u₂ := by
@@ -184,7 +183,7 @@ theorem existsUnique_weakResolvent (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed
 
 resolvent solvability gives unique solvability, so the solution map is a well-defined function; linearity follows
 from uniqueness, the norm bound from the resolvent operator, and self-adjointness from symmetry of the form. This is
-the operator `J_s = (1 + s T*T)⁻¹` that the Yosida approximation of resolvent contraction–the semigroup limit is built from.
+the operator `J_s = (1 + s T*T)⁻¹` from which the Yosida approximation is built.
 -/
 
 section ResolventOperator

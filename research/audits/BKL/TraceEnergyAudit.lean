@@ -3,15 +3,12 @@ import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 /-!
 # Audit: trace–energy inequality (support of the BKL (67) log-determinant non-explosion route)
 
-Current owner: `Analysis/Matrix/Trace/Algebra.lean`. The following paragraph records the original
-2026-10-08 client-acceptance provenance.
+Module: `Analysis/Matrix/Trace/Algebra.lean`.
 
-Clients compiled against `Analysis/Matrix/Trace.lean` section `TraceEnergy`
-(`sum_trace_sq_le_card_mul_sum_sq`, Luna unit TE1, independently accepted 2026-10-08, receipt
-`TE1-Independent-20261008/VERIFICATION.json` e0a50de9…). The consumers are the independent Codex reviewer's:
-the full original contract, a signed nonsymmetric two-dimensional family (`64 ≤ 94`), saturation of the
-dimension-two identity, and the `Fin 0` instance. Deterministic support only: no covariance dynamics,
-stochastic integral, Itô formula, strong solution or non-explosion theorem is involved.
+Clients of `sum_trace_sq_le_card_mul_sum_sq`: the full original statement, a signed nonsymmetric
+two-dimensional family (`64 ≤ 94`), saturation of the dimension-two identity, and the `Fin 0`
+instance. Deterministic support only: no covariance dynamics, stochastic integral, Itô formula,
+strong solution or non-explosion theorem is involved.
 -/
 
 noncomputable section

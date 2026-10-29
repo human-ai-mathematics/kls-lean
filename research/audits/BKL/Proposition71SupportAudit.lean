@@ -11,9 +11,8 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: supporting endpoints of BKL Proposition 7.1 with source-style consumers
 
-Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Proposition 7.1, pp. 28–30. Supporting results
-integrated in the continuous goal (`build/reviews/2026-10-07-bkl-continuous/`); none of them is
-Proposition 7.1.
+Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Proposition 7.1, pp. 28–30. Supporting
+results; none of them is Proposition 7.1.
 
 * `blocks_source`: the Hilbert–Schmidt step after (112) — if every copy-block entry equals
   `d!/(σ√N) T_J`, then `(d!)²/σ² |T|² ≤ |κ(e₀)|²` (`card_mul_sq_mul_sum_sq_le_of_blocks`).

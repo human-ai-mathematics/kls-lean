@@ -3,11 +3,10 @@ import FunctionalInequalities.Probability.Moments
 /-!
 # Audit: third-moment contraction (support of the BKL (67) log-determinant non-explosion route)
 
-Clients compiled against `Probability/Moments.lean` section `ThirdMomentContraction`
-(`Probability.sum_sq_integral_mul_mul_le_integral_norm_pow_six`, Luna unit TM1b round 6, independently accepted
-2026-10-08, receipt `TM1b-Independent-20261008/VERIFICATION.json` f1225d95…). The consumers are the independent Codex
-reviewer's: every Dirac atom in every dimension, the noncentred atom `(2, −1)` where the full mixed tensor equals the
-sixth moment `125` (sharp), the normalised two-atom law at `1, 3` with `196 ≤ 365` and gap `169`, and rank zero.
+Clients of `Probability/Moments.lean` section `ThirdMomentContraction`
+(`Probability.sum_sq_integral_mul_mul_le_integral_norm_pow_six`). Consumers: every Dirac atom in
+every dimension, the noncentred atom `(2, −1)` where the full mixed tensor equals the sixth moment
+`125` (sharp), the normalised two-atom law at `1, 3` with `196 ≤ 365` and gap `169`, and rank zero.
 Deterministic support only: no covariance dynamics, Itô, strong solution or non-explosion theorem.
 -/
 

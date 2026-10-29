@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Convex.Legendre
+import FunctionalInequalities.Analysis.Convex.Legendre.Basic
 import FunctionalInequalities.Probability.MomentMeasure.Basic
 import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
 import Mathlib.MeasureTheory.Constructions.BorelSpace.Real
@@ -21,7 +21,7 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `PotentialIntegrability.lean`.
+-- Potential integrability and lower truncation.
 
 open MeasureTheory
 open scoped ENNReal

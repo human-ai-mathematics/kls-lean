@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
 import FunctionalInequalities.Analysis.Semigroup.VonNeumann

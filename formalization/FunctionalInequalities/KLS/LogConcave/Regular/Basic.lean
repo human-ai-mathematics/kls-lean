@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
 import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 
 /-!

@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoFinsetSum
 import LevyStochCalc.Brownian.ItoPullOut
 import LevyStochCalc.Probability.StoppedProgressive
@@ -67,7 +70,7 @@ theorem measurable_hitInd {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
 theorem stronglyMeasurable_hitInd {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
     (hτ : MeasureTheory.IsStoppingTime ℱ τ) (c : ℝ) :
     @MeasureTheory.StronglyMeasurable Ω ℝ _ (ℱ c) (hitInd τ c) := by
-  letI : MeasurableSpace Ω := ℱ c
+  let : MeasurableSpace Ω := ℱ c
   exact (measurable_const.indicator (hτ.measurableSet_eq c)).stronglyMeasurable
 
 /-- The part of the integrand that the cut at `τ = c` removes from the window `(c, t]`. -/

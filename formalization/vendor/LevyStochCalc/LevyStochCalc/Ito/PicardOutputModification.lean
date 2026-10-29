@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Ito.PicardOutputMoments
 
 /-!
@@ -113,7 +116,7 @@ theorem ae_integrableOn_of_lintegral_sq {f : Ω → ℝ → ℝ}
       ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) b, (‖f ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤) :
     ∀ᵐ ω ∂P, ∀ b : ℝ, MeasureTheory.IntegrableOn (f ω) (Set.Icc (0 : ℝ) b) volume := by
   filter_upwards [ae_memLp_two_of_lintegral_sq hf hfin] with ω hω b
-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
+  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
         exact ENNReal.ofReal_lt_top⟩
   exact (hω b).integrable (by norm_num)

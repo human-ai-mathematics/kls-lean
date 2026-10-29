@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor
 
 /-!
-# Audit: Corollary 3.7 and Lemma 3.9 (route form) for the BKL iterates (route `S2`, `J2`)
+# Audit: Corollary 3.7 and Lemma 3.9 (route form) for the BKL iterates
 
 The propositions `S2` and `J2` of `research/audits/BKL/IterateRouteStatements.lean` (operator route
 to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
@@ -36,7 +36,8 @@ variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSp
 
 local notation "T̄" => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
 
-/-- `S2`, verbatim: Corollary 3.7 (52) along the iterates. -/
+/-- `S2` of `IterateRouteStatements.lean`, verbatim: Corollary 3.7 (52) along the
+iterates. -/
 theorem s2 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →
@@ -50,7 +51,7 @@ theorem s2 :
   exact KLS.LogConcave.PoissonIterate.symmetrize_taylorField_grad0_iter_succ m hν hi hνU
     (hU.1.of_le (WithTop.coe_le_coe.mpr le_top)) hexp hC f k hd J
 
-/-- `J2`, verbatim: Lemma 3.9 in the route form. -/
+/-- `J2` of `IterateRouteStatements.lean`, verbatim: Lemma 3.9 in the route form. -/
 theorem j2 :
     ((ν : Measure V) = m.tilted (-U) → U.HasTemperateGrowth →
     (∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) →

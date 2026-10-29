@@ -22,8 +22,9 @@ Then select the release commit, complete the local checks below, and push
 `milestone/v1.0` to trigger Lean certification. Both that CI run and the Linux sandboxed
 Comparator runs for `kls` and `openai` must pass for the **same final commit** before
 publishing the GitHub release with its receipts. Follow with the Zenodo archive/DOI
-and Palomar registration. The reported Comparator passes at `2639e79` and any CI run
-for an earlier revision do not cover a later release commit.
+and Palomar registration. The 2026-10-27 Linux Comparator passes for both targets
+and CI run 40477880376 cover `0233f0b837131da5bb20420c4152d13260b8260a`.
+They do not cover the subsequent uncommitted maintenance or a later release commit.
 
 Prepare the Formal Conjectures proposal before the Mathlib contribution, as agreed
 in the issue. The external proof annotation needs an accessible, immutable proof
@@ -38,6 +39,12 @@ dimension ranges faithful to their pinned sources. Review license and vendor not
 contribution and citation links, and reachable Git history for material unsuitable for
 publication. Automated credential-pattern checks are a limited screening step, not a complete
 privacy or security audit. Do not rewrite previously pushed history as a cleanup shortcut.
+
+If the working tree contains concurrent uncommitted development, prepare and verify the
+release in a separate clean checkout of the chosen commit. Keep the original files and Git
+index intact. A passing check of a larger working tree does not certify a smaller committed
+release; bind every receipt to the source it actually checked. Local, uncommitted modules
+are not part of the release simply because they are available in the development checkout.
 
 Archive superseded operational notes verbatim with hashes under ignored `build/history/`.
 Current instructions and acceptance inputs must remain in their tracked owning directories,
@@ -89,6 +96,33 @@ Only then claim remote certification for that revision. Public access may alread
 been enabled under the README-first decision above; the verified release still waits
 for both final-commit sandboxed Comparator passes and the remaining local checks.
 Do not describe an older, cancelled, timed-out or incomplete run as current acceptance.
+
+## Review and Linux handoff
+
+Use the [focused maintainer checklist](progress/public-interface-review.md#focused-maintainer-checklist)
+to record the actual personal review scope. The agent follow-up supplies contract inspection
+and executable clients for UP-1, API-1 and LET-1; it cannot supply a maintainer's or Nicolas's
+personal approval. Record a correction or an explicit review boundary when an item remains
+open. The README positioning pass and the source diff must refer to the proposed public
+revision. The maintainer has already accepted the Mathlib contact and review-discussion role;
+that agreement does not need to be requested again.
+
+For the Linux reviewer, identify the full final commit first and follow the pinned
+[Comparator preparation](audits/KLS/Comparator/README.md#pinned-tools-and-preparation),
+including both packages' Mathlib caches, the Landrun pin and the toolchain `PATH`. Run both
+targets against that checkout:
+
+```bash
+python3 research/comparator.py --target kls --mode sandbox --tools /absolute/path/to/comparator
+python3 research/comparator.py --target openai --mode sandbox --tools /absolute/path/to/comparator
+```
+
+Return both complete `receipt.json` files and their logs, with the full source commit and
+source hashes. Confirm `COMPARATOR_PASSED_LINUX_SANDBOX`, `source_preserved` and
+`staging_preserved` for each. A comment reporting success, a macOS development receipt or a
+run for an earlier commit remains evidence only for its stated scope. Keep received raw
+artifacts in the local verification archive and attach the reviewed receipts to the release;
+do not replace them with truncated hashes in the issue discussion.
 
 ## Diagnose a long or failed run
 

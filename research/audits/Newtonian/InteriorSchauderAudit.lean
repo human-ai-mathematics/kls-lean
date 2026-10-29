@@ -1,9 +1,9 @@
-import FunctionalInequalities.Analysis.Newtonian.InteriorSchauder
+import FunctionalInequalities.Analysis.Newtonian.Schauder.Interior
 
 /-!
 # Audit: GT Theorem 4.6 (Hessian form) on a planar Poisson solution
 
-Real client of `poisson_interior_hessian_holder` (`FunctionalInequalities/Analysis/Newtonian/InteriorSchauder.lean`;
+Real client of `poisson_interior_hessian_holder` (`FunctionalInequalities/Analysis/Newtonian/Schauder/Interior.lean`;
 Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001, Theorem 4.6, p. 60) with
 `n = 2`, `α = 1/2`, `c = 0`, `R = 1`, on the nonharmonic quadratic `u(x) = x₀² + x₁²`:
 

@@ -5,11 +5,12 @@ import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 /-!
 # Audit: the scalar Brascamp–Lieb inequality is sharp for the standard Gaussian law on `ℝ`
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.6 for a given potential (support only). For the canonical regular-potential
-Gaussian law `e^{−x²/2}` on `ℝ`, potential `U = x²/2` and test `f = id`: the actual gradient is `1`, the actual Hessian operator
-and its ring inverse are the identity, the energy is integrable with integral `1`, the law is isotropic (from its actual
-moments), the variance is `1`, and `scalar_brascamp_lieb_finite_energy` is invoked, so equality holds. No premise. Not a
-source-law moment-map client. Client body: strong-API candidate (`api-scalar-bl-extended-gaussian-v5`, 394a24b1…), verbatim.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.6 for a given potential (support only). For the
+canonical regular-potential Gaussian law `e^{−x²/2}` on `ℝ`, potential `U = x²/2` and test
+`f = id`: the actual gradient is `1`, the actual Hessian operator and its ring inverse are the
+identity, the energy is integrable with integral `1`, the law is isotropic (from its actual
+moments), the variance is `1`, and `scalar_brascamp_lieb_finite_energy` is invoked, so equality
+holds. No premise. Not a source-law moment-map client.
 -/
 
 noncomputable section
@@ -31,7 +32,7 @@ theorem canonicalGaussian_real_gradient_id (x : ℝ) :
     gradient (id : ℝ → ℝ) x = 1 := by
   apply ext_inner_right ℝ
   intro v
-  rw [gradient_pairing_eq_fderiv]
+  rw [inner_gradient_left]
   have hd : fderiv ℝ (id : ℝ → ℝ) x v = v := by
     simp
   have hi : inner ℝ (1 : ℝ) v = v := by

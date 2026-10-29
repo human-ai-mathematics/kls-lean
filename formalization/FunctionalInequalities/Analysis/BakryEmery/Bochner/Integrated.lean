@@ -25,7 +25,7 @@ claimed or needed, and none is available in general.
 `f` and `φ` are classical smooth compactly supported functions. Nothing here applies to
 `P_t g`: the heat semigroup does not preserve compact support or smoothness, and passing to a
 limit requires the convergence hypotheses of
-`KLS/LogConcave/HeatSemigroup/Gamma.lean`. No gradient estimate, no time interpolation and no
+`KLS/LogConcave/HeatSemigroup/BakryEmery/Gamma.lean`. No gradient estimate, no time interpolation and no
 Buser inequality follows from this module alone.
 -/
 

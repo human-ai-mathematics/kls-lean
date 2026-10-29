@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Correlation
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Correlation
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic

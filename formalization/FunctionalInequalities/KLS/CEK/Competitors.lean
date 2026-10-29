@@ -20,7 +20,7 @@ open FunctionalInequalities.Probability
 open FunctionalInequalities.Probability.MomentMeasure
 
 section
--- Accepted source `NormalizedCompetitors.lean`.
+-- Normalized competitors and a uniform upper bound for the functional.
 
 open MeasureTheory Filter Set
 open scoped ENNReal Topology
@@ -84,7 +84,7 @@ theorem exists_uniform_functional_upper (dx μ : Measure E) [dx.IsAddHaarMeasure
 end
 
 section
--- Accepted source `Baseline.lean`.
+-- A finite baseline value and an upper bound for the functional.
 
 open MeasureTheory Set Filter
 open scoped ENNReal Topology

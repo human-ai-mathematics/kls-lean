@@ -123,13 +123,6 @@ private theorem partitionLaw_compact (μ : ProbabilityMeasure E)
 
 end PosteriorSupport
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E]
-  [MeasurableSpace E] [BorelSpace E] in
-private theorem line_hasDerivAt (c h : E) :
-    HasDerivAt (fun t : ℝ => c + t • h) h 0 := by
-  convert! ((hasDerivAt_id (0 : ℝ)).smul_const h).const_add c using 1
-  simp only [one_smul]
-
 /-- The log-partition function `ψ(c, Q) = log ∫ e^{⟪c,x⟫ − ½⟪Qx,x⟫} dμ(x)` of the BKL posterior (67). -/
 def logPartition (μ : ProbabilityMeasure E) (c : E) (Q : E →L[ℝ] E) : ℝ :=
   Real.log (∫ x, Real.exp (quadraticExponent c Q x) ∂(μ : Measure E))
@@ -356,7 +349,7 @@ theorem fderiv_logPartition_c_apply (μ : ProbabilityMeasure E)
     simpa only [hphase] using hN
   have hlogD :=
     ((hlog.differentiable (by norm_num) c).hasFDerivAt).comp_hasDerivAt_of_eq
-      (0 : ℝ) (line_hasDerivAt c h) (by simp)
+      (0 : ℝ) (Analysis.BakryEmery.hasDerivAt_line c h 0) (by simp)
   have hlogDfun :
       ((fun y : E =>
           Real.log (∫ x, Real.exp (quadraticExponent y Q x)

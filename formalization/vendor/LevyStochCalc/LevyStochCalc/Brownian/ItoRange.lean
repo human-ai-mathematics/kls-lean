@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoIntegrandComplete
 
 /-!
@@ -45,7 +48,7 @@ variable {T : ℝ}
 theorem progressivelyMeasurable_const (ℱ : Filtration ℝ ‹MeasurableSpace Ω›) (c : ℝ) :
     Probability.ProgressivelyMeasurable ℱ (fun (_ : Ω) (_ : ℝ) => c) := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   exact Measurable.stronglyMeasurable
     ((measurable_const.indicator measurableSet_Iic).comp measurable_snd)
 
@@ -199,7 +202,7 @@ theorem integral_mean_zero (hT : 0 ≤ T) (G : HorizonIntegrand P ℱ T) :
     ∫ ω, G.integral W hℱ ω ∂P = 0 := by
   obtain ⟨F, hF⟩ := martingale_stochasticIntegral W ℱ hℱ G.toFun G.measurable_uncurry
     G.progressive G.sq_int_global
-  haveI : SigmaFinite (P.trim (F.le 0)) := (isFiniteMeasure_trim (F.le 0)).toSigmaFinite
+  have : SigmaFinite (P.trim (F.le 0)) := (isFiniteMeasure_trim (F.le 0)).toSigmaFinite
   have hcond := hF.2 0 T hT
   have hz : stochasticIntegral W ℱ hℱ G.toFun G.measurable_uncurry G.progressive
       G.sq_int_global 0 =ᵐ[P] 0 :=
@@ -326,10 +329,10 @@ theorem exists_horizonIntegrand_of_mean_zero (hT : 0 < T)
     {Z : Ω → ℝ} (hZ2 : MemLp Z 2 P) (hZm : AEStronglyMeasurable[ℱ T] Z P)
     (hZ0 : ∫ ω, Z ω ∂P = 0) :
     ∃ G : HorizonIntegrand P ℱ T, Z =ᵐ[P] G.integral W hℱ := by
-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
-  haveI hcl : IsClosed ((itoRange W hℱ hT : Submodule ℝ (Lp ℝ 2 P)) : Set (Lp ℝ 2 P)) :=
+  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+  have hcl : IsClosed ((itoRange W hℱ hT : Submodule ℝ (Lp ℝ 2 P)) : Set (Lp ℝ 2 P)) :=
     isClosed_itoRange W hℱ hT
-  haveI : CompleteSpace (itoRange W hℱ hT) := hcl.completeSpace_coe
+  have : CompleteSpace (itoRange W hℱ hT) := hcl.completeSpace_coe
   obtain ⟨y, hy, z, hz, hyz⟩ :=
     (itoRange W hℱ hT).exists_add_mem_mem_orthogonal (hZ2.toLp Z)
   obtain ⟨G₀, hG₀⟩ := hy

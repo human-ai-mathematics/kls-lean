@@ -16,7 +16,7 @@ Read [compact-set log-concavity](../Probability/LogConcave.lean) and [Statement.
 | [LogConcave/HeatSemigroup/](LogConcave/HeatSemigroup/) | Concrete weighted-gradient heat model and generator interfaces |
 | [BKL/Reduction.lean](BKL/Reduction.lean) | Regular-law reduction and assembly conditional on the universal cumulant bounds |
 | [BKL/](BKL/README.md) | Responsibility-based guide to the paper construction and its reusable prerequisites |
-| [BKL/CumulantInduction.lean](BKL/CumulantInduction.lean) | Theorem 4.1 interfaces from the cutoff-energy induction |
+| [BKL/Cumulant/Induction.lean](BKL/Cumulant/Induction.lean) | Theorem 4.1 interfaces from the cutoff-energy induction |
 | [BKL/Poincare.lean](BKL/Poincare.lean) | The closed producers `exists_isotropicBound` (BKL Theorem 1.1) and `conjecture` |
 | [BKL/TaylorBound.lean](BKL/TaylorBound.lean) · [BKL/Suspension/](BKL/Suspension/) | Source Proposition 7.1 and its suspension construction |
 | [BKL/LocalThirdCumulant.lean](BKL/LocalThirdCumulant.lean) | BKL Lemma 4.2 counterpart retaining the Letwin quadratic bound |
@@ -24,7 +24,7 @@ Read [compact-set log-concavity](../Probability/LogConcave.lean) and [Statement.
 | [CEK/MomentRegularity/](CEK/MomentRegularity/README.md) | Actual-source weak regularity stages, cutoffs and the same-witness trace/Stein producer |
 | [ConditionalFiber/](ConditionalFiber/) | Conditional laws, forms and energy comparisons |
 | [Geometry/](Geometry/) · [Isoperimetry.lean](Isoperimetry.lean) | Boundary/perimeter and Cheeger applications |
-| [Analysis/Coarea/](../Analysis/Coarea/README.md) · [Analysis/MetricBV/](../Analysis/MetricBV/README.md) | General coarea and metric BV foundations used by the geometric applications |
+| [Analysis/Coarea/](../Analysis/Coarea/README.md) · [Analysis/MetricBV/](../Analysis/MetricBV/README.md) · [Analysis/SmoothDomain/](../Analysis/SmoothDomain/) | General coarea, metric BV and smooth-domain (Gauss–Green) foundations used by the geometric applications |
 
 Follow the generated BKL navigation for source theorem numbers, declarations, retained inputs
 and certificates. It distinguishes conditional interfaces from the closed producers and from the separate

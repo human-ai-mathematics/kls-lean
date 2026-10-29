@@ -16,9 +16,7 @@ standard axioms; the module contains no hole.
 `divergence_smul_const` is the bridge: for a fixed vector `v`, the field `F x = η x • v` has
 `div F = ⟪∇η, v⟫`, because the derivative `D F x = (Dη x) ⊗ v` is a rank-one map whose trace is
 `Dη x v`.  Taking `F = η • v` in the vector-field Gauss–Green identity and using `integral_inner`
-in both integrals gives the scalar-test identity `∫_U ∇η = ∫_{∂U} η ν`.  The definition moved here
-from the former `KLS/WIP/AnalyticPrerequisites.lean` (now deleted, its last hole proved in
-`Analysis/Sard/Sharp.lean`).
+in both integrals gives the scalar-test identity `∫_U ∇η = ∫_{∂U} η ν`.
 
 `traceLM` presents `divergence` as the composition of the continuous linear functional
 `M ↦ tr M` on `V →L[ℝ] V` with `x ↦ DF x`.  That is what gives `continuous_divergence`,

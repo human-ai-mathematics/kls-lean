@@ -3,11 +3,12 @@ import FunctionalInequalities.Analysis.Cutoff.Profile
 /-!
 # Audit: real-parameter monotone exhaustion of Letwin Lemma A.4
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17), `χ_R = η(W/R) ↑ 1` for real `R ≥ 1` with `W ≥ 1`. Actual clients of
-`monotoneOn_and_tendsto_smoothTransition_two_sub_div`, every premise derived here: the restriction to `[1, ∞)` used by
-the real-parameter producer; the genuinely nonconstant family `a = 3` (`η(3/1) = 0`, `η(3/3) = 1`, monotone on `[1, ∞)`,
-limit `1`); the negative case `a = −2` (constant `1`, consistent with the limit); and agreement with the natural-index Q4
-along `R = n + 1`. Client bodies: Claude.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17), `χ_R = η(W/R) ↑ 1` for real `R ≥ 1` with
+`W ≥ 1`. Actual clients of `monotoneOn_and_tendsto_smoothTransition_two_sub_div`, every premise
+derived here: the restriction to `[1, ∞)` used by the real-parameter producer; the genuinely
+nonconstant family `a = 3` (`η(3/1) = 0`, `η(3/3) = 1`, monotone on `[1, ∞)`, limit `1`); the
+negative case `a = −2` (constant `1`, consistent with the limit); and agreement with the
+natural-index exhaustion `η(a/(n+1))` along `R = n + 1`.
 -/
 
 open Filter
@@ -41,7 +42,8 @@ theorem negative_constant (R : ℝ) (hR : 0 < R) :
   rw [neg_div]
   linarith
 
-/-- Agreement with the natural-index Q4 along `R = n + 1`: both give monotone sequences tending to `1`. -/
+/-- Agreement with the natural-index exhaustion along `R = n + 1`: both give monotone sequences
+tending to `1`. -/
 theorem natural_agreement (a : ℝ) :
     Monotone (fun n : ℕ => Real.smoothTransition (2 - a / ((n : ℝ) + 1))) ∧
       Tendsto (fun n : ℕ => Real.smoothTransition (2 - a / ((n : ℝ) + 1))) atTop (nhds 1) := by
@@ -51,7 +53,8 @@ theorem natural_agreement (a : ℝ) :
   refine ⟨fun m n hmn => (monotoneOn_Ici_one a).1 (h1 m) (h1 n) (add_le_add_left (Nat.cast_le.mpr hmn) 1),
     (monotoneOn_Ici_one a).2.comp (tendsto_atTop_add_const_right _ 1 tendsto_natCast_atTop_atTop)⟩
 
-/-- Cross-check with the adopted natural-index Q4 (independent route): identical conclusions. -/
+/-- Cross-check with the natural-index exhaustion (an independent derivation): identical
+conclusions. -/
 theorem natural_crosscheck (a : ℝ) :
     Monotone (fun n : ℕ => Real.smoothTransition (2 - a / ((n : ℝ) + 1))) ∧
       Tendsto (fun n : ℕ => Real.smoothTransition (2 - a / ((n : ℝ) + 1))) atTop (nhds 1) :=

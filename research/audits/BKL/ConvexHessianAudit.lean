@@ -9,8 +9,7 @@ import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 Source: Letwin, arXiv:2607.24164v1, Lemma 2.3. Clients: the normalized Gaussian potential
 `‖x‖²/2 + log Z` on `ℝ¹` has mean Hessian `1` in the unit direction (all integrability derived, none
 assumed); the zero-dimensional constant potential gives `0` through the isotropic adapter. No moment
-map is constructed. Clients adapted from the Codex bundle `Convex-Hessian-Moment/Clients.lean`
-(independently accepted, receipt dbe003c7…).
+map is constructed.
 -/
 
 open MeasureTheory FunctionalInequalities

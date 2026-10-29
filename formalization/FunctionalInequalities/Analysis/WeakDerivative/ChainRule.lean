@@ -4,6 +4,18 @@ import FunctionalInequalities.Analysis.Cutoff.Profile
 
 /-! # Weak chain rules for bounded compositions and Lipschitz exponents
 
+Weak chain rules for scalar functions with coordinate weak derivatives.
+
+* `hasWeakDerivAlong_exp_neg_of_lipschitz`: `e^{-F}` for globally Lipschitz `F` on a
+  finite-dimensional inner product space, with chain density in `L²` on compact sets.
+* `hasWeakDerivAlong_comp_of_compact_bounded`: `Φ ∘ η` for `C¹` Lipschitz `Φ` with `Φ 0 = 0` and
+  bounded compactly supported `η` with compactly supported, globally `L²` weak derivatives; the
+  shifted logarithm `log (δ + η) - log δ` and shifted real powers `(δ + η)^q - δ^q` of such data.
+* `hasWeakDerivAlong_comp_of_bounded`: `Φ ∘ η` for bounded `η` with `L²_loc` weak derivatives
+  (no compact support, no `Φ 0 = 0`); the shifted logarithm `log (δ + max w 0)` for `w ≥ 0` a.e.,
+  and a bounded weak extension of it agreeing a.e. on every set where `w ≥ 0`
+  (`exists_bounded_weak_log_extension`).
+
 Supporting weak calculus for Letwin arXiv:2607.24164v1 and the
 local elliptic estimates of Gilbarg--Trudinger (2001). Each declaration
 retains its own support, integrability and dimensional hypotheses.

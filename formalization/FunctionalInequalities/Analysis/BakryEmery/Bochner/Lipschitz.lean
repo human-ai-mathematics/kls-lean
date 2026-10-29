@@ -128,8 +128,8 @@ variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
   [MeasurableSpace E] [BorelSpace E]
 
-/-- **Bochner identity for a Lipschitz potential with Lipschitz gradient** (weak Letwin route,
-Brascamp–Lieb at `C^{1,1}`): for `U ∈ C¹` Lipschitz with `G`-Lipschitz gradient and integrable
+/-- **Bochner identity for a Lipschitz potential with Lipschitz gradient** (Brascamp–Lieb at
+`C^{1,1}`): for `U ∈ C¹` Lipschitz with `G`-Lipschitz gradient and integrable
 `e^{-U}`, and `f ∈ C_c^∞`, `∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D(∇U) ∇f, ∇f⟫) dν` with `ν = e^{-U} dx`
 normalized, `ℒf = Δf − ⟪∇U, ∇f⟫`, and `D(∇U)` the a.e. derivative of the Lipschitz map `∇U`. -/
 theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}

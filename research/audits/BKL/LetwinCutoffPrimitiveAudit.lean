@@ -3,12 +3,13 @@ import FunctionalInequalities.Analysis.Cutoff.Profile
 /-!
 # Audit: tail primitive of Letwin Lemma A.4
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17), `q_R(t) = R⁻¹ ∫_{t/R}^∞ w`. Actual clients of
-`inv_mul_intervalIntegral_div_three_cutoff`, with every hypothesis derived here, never the primitive's conclusions:
-the explicit smooth bump `w t = smoothTransition t · smoothTransition (3 − t)` (nonnegative, zero for `t ≤ 0` and `t ≥ 3`,
-`w 1 = 1`) at `R = 1` and `R = 2`, on both sides (`t = −1 < 0` and `t > 3R`), with the source coefficient
-`q_R′(R) = −R⁻² w(1) = −R⁻²`; and the accepted majorant of `|η″|` composed with the primitive for any `R ≥ 1`.
-Client bodies: Claude.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17), `q_R(t) = R⁻¹ ∫_{t/R}^∞ w`. Actual
+clients of `inv_mul_intervalIntegral_div_three_cutoff`, with every hypothesis derived here, never
+the primitive's conclusions: the explicit smooth bump
+`w t = smoothTransition t · smoothTransition (3 − t)` (nonnegative, zero for `t ≤ 0` and `t ≥ 3`,
+`w 1 = 1`) at `R = 1` and `R = 2`, on both sides (`t = −1 < 0` and `t > 3R`), with the source
+coefficient `q_R′(R) = −R⁻² w(1) = −R⁻²`; and the majorant of `|η″|` composed with the primitive
+for any `R ≥ 1`.
 -/
 
 open FunctionalInequalities.Analysis
@@ -62,7 +63,8 @@ theorem primitive_two :
   · rw [h2 2, div_self (two_ne_zero), bump_one]; norm_num
   · rw [h2 (-1), bump_eq_zero _ (Or.inl (by norm_num))]; norm_num
 
-/-- The accepted majorant of `|η″|` composed with the primitive, for every `R ≥ 1` (the Lemma A.4 energy weight). -/
+/-- The majorant of `|η″|` composed with the primitive, for every `R ≥ 1` (the Lemma A.4
+energy weight). -/
 theorem majorant_primitive (R : ℝ) (hR : 1 ≤ R) :
     ∃ w : ℝ → ℝ, (∀ t, |deriv (deriv (fun s : ℝ => Real.smoothTransition (2 - s))) t| ≤ w t) ∧
       ContDiff ℝ ∞ (fun t => R⁻¹ * ∫ s in t / R..3, w s) ∧

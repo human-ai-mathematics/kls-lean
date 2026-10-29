@@ -1,10 +1,13 @@
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Probability.CoordinateThirdMoment
 import FunctionalInequalities.KLS.BKL.Posterior.Noise
-/-! Independent audit clients for the (69) entry chain (Analysis/OperatorCoordinates.lean section EuclideanCoordinates, Probability/Moments.lean section CoordinateMonomials, Probability/CoordinateThirdMoment.lean, Probability/Posterior/CompactDomain.lean, KLS/BKL/PosteriorDomain.lean section NoiseEntries). Merged verbatim from the reviewer receipt `B69-Full-Chain-Independent-20261009 (receipt b467cf7a…)` (modules
-ABCClients, ChainClients, PosteriorClients), re-pointed from the raw `Candidate*` modules to the production owners; the namespace map Analysis → Probability of the moved B69 lemmas is applied by one added `open FunctionalInequalities.Probability` after each `open … FunctionalInequalities.Analysis` line; contracts/axiom-enumeration tooling stays in the receipt. -/
+/-! Audit clients for the (69) entry chain (`Analysis/OperatorCoordinates.lean` section
+EuclideanCoordinates, `Probability/Moments.lean` section CoordinateMonomials,
+`Probability/CoordinateThirdMoment.lean`, `Probability/Posterior/CompactDomain.lean`,
+`KLS/BKL/PosteriorDomain.lean` section NoiseEntries), in the sections ABCClients, ChainClients and
+PosteriorClients. -/
 
--- ===== reviewer module ABCClients (B69-Full-Chain-Independent-20261009 (receipt b467cf7a…)) =====
+-- ===== ABCClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory FunctionalInequalities.Analysis
@@ -170,7 +173,7 @@ theorem Fin0_cubic {ν : Measure E0} [IsFiniteMeasure ν] (a : E0) (R : ℝ)
   exact integrable_coord_mul_coord_mul_coord_of_ae_norm_sub_le a R hR p q r
 end B69Clients
 
--- ===== reviewer module ChainClients (B69-Full-Chain-Independent-20261009 (receipt b467cf7a…)) =====
+-- ===== ChainClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory FunctionalInequalities.Analysis B69Clients
@@ -295,7 +298,7 @@ theorem Fin0_d2 (ν:Measure E0) [IsFiniteMeasure ν] (a:E0) (R:ℝ)
   exact operatorMatrix_mul_coordinateThirdMoment_mul_apply_of_ae_norm_sub_le a R hR T hT i j k
 end B69ChainClients
 
--- ===== reviewer module PosteriorClients (B69-Full-Chain-Independent-20261009 (receipt b467cf7a…)) =====
+-- ===== PosteriorClients =====
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set FunctionalInequalities

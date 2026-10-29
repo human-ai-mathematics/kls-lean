@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
 import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.Probability.Posterior.LogPartition
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 /-!

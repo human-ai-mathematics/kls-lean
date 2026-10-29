@@ -1,5 +1,5 @@
 import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 
 /-! # Translation of the affine support, intrinsic law, and barycenter -/
 

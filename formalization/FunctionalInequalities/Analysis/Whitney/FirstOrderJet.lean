@@ -5,7 +5,7 @@ import Mathlib.Topology.MetricSpace.Thickening
 
 /-! # The first-order jet condition of the Whitney extension problem
 
-Property compact Whitney extension of the weighted coarea route asks for the converse of what is proved here: that a
+Compact Whitney extension is the converse of what is proved here: that a
 compatible first-order jet `(f, F)` on a compact set extends to a globally `C¹` function with
 exactly those values and derivatives.  **compact Whitney extension itself is not proved in this module**, and the pinned
 Mathlib contains no Whitney extension theorem — only the unrelated `WhitneyEmbedding` for manifolds

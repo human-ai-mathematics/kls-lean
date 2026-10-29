@@ -24,8 +24,8 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Width ratios control the distance to the frontier after an affine normalisation** (weak Letwin
-route, Caffarelli's argument): if a bounded open `S ∋ x` has width at most `α` above `x` and
+/-- **Width ratios control the distance to the frontier after an affine normalisation**
+(Caffarelli's argument): if a bounded open `S ∋ x` has width at most `α` above `x` and
 at least `β > 0` below `x` in the unit direction `θ`, and `e` is an affine equivalence with
 `e '' S ⊆ closedBall 0 C₀`, then `infDist (e x) (frontier (e '' S)) ≤ 2 C₀ α / β`. -/
 theorem infDist_frontier_image_le_of_width {E : Type*} [NormedAddCommGroup E]
@@ -175,7 +175,7 @@ private lemma caffarelli_gap_segment {u : E → ℝ} (hc : ConvexOn ℝ univ u)
   nlinarith [ha]
 
 /-- **Sections at an exposed point of a compact contact set are bounded and shrink to the slab piece
-of the contact set** (weak Letwin route, Caffarelli's argument): with `w := u − ℓ ≥ 0`
+of the contact set** (Caffarelli's argument): with `w := u − ℓ ≥ 0`
 (`ℓ` the supporting affine function at `x₀`), compact contact set `C = {w = 0}`, an exposed point
 `xe ∈ C` in the unit direction `θ`, and `h > 0`, the sections
 `S ε := {x | w x < ε (⟪x − xe, θ⟫ + h)}` lie in a fixed compact set for small `ε`, and for every `δ > 0`
@@ -656,7 +656,7 @@ section MeasurableSpace
 variable [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
 
 set_option maxHeartbeats 4000000 in
-/-- **Caffarelli's contact-set lemma, localised form** (weak Letwin route): let `C` be the
+/-- **Caffarelli's contact-set lemma, localised form**: let `C` be the
 compact contact set of a supporting affine function of the convex `u`, `z ∈ C` strictly exposed in the unit
 direction `θ`, `h > 0`, and suppose the two-sided Alexandrov bounds hold only on compact subsets of an open `U`
 containing the slab piece `C ∩ {⟪· − z, θ⟫ ≥ −h}`. Then `C = {z}`. -/
@@ -1148,7 +1148,7 @@ section FiniteDimensional
 
 variable [FiniteDimensional ℝ E]
 
-/-- **Singleton contact sets give strict convexity** (weak Letwin route): if every
+/-- **Singleton contact sets give strict convexity**: if every
 supporting affine function of the convex `u` touches its graph at exactly one point, `u` is strictly
 convex. -/
 theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
@@ -1177,8 +1177,8 @@ theorem strictConvexOn_of_domain_contact_eq
     hΩ hconv hC (isCompact_singleton (x := x)) (singleton_subset_iff.mpr hx)
   exact hs x (mem_singleton x)
 
-/-- **Slopes of a strictly convex function lie in the interior of a convex slope range** (weak Letwin
-route): if all subgradients of the strictly convex `u` lie in a convex `K` with nonempty
+/-- **Slopes of a strictly convex function lie in the interior of a convex slope range**: if all
+subgradients of the strictly convex `u` lie in a convex `K` with nonempty
 interior, they lie in `interior K`. -/
 theorem subgradient_mem_interior_of_strictConvexOn {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {K : Set E} (hKc : Convex ℝ K)
@@ -1220,7 +1220,8 @@ theorem subgradient_mem_interior_of_strictConvexOn {u : E → ℝ}
   rw [hqv] at hback
   linarith
 
-/-- **A strictly exposed contact point below a level** (weak Letwin route): if `{u ≤ R}` is compact and `u x < R`, the contact set of a
+/-- **A strictly exposed contact point below a level**: if `{u ≤ R}` is compact and `u x < R`, the
+contact set of a
 supporting affine function at `x` has a point `z` with `u z < R` that is strictly exposed in the direction
 `θ` among the contact points with `u ≤ R`. -/
 theorem exists_exposed_contact_of_lt {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x p : E}

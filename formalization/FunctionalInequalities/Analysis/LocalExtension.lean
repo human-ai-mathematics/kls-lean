@@ -5,7 +5,10 @@ import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 A function of class `C^m`, for `m ≤ ∞`, on an open set agrees locally with a
 function of the same class on the whole finite-dimensional real normed space.
 The bump construction gives agreement on a ball; it does not extend the
-function on its entire domain or assert real analyticity.
+function on its entire domain or assert real analyticity. A finite partition
+of bumps covering the compact closure of a bounded set `K` gives a global `C^∞`
+function agreeing with a given `C^∞` function on `closure K`
+(`exists_contDiff_eqOn_closure`).
 -/
 
 noncomputable section
@@ -49,7 +52,6 @@ theorem exists_contDiff_eqOn_ball {E F : Type*} [NormedAddCommGroup E] [NormedSp
       simpa [Metric.mem_closedBall, hχ] using (Metric.mem_ball.mp hy).le)
     simp [hyO, hone]
 
-
 /-- Local extension expressed as equality in a neighbourhood of the chosen point. -/
 theorem exists_contDiff_eventuallyEq {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
@@ -59,5 +61,80 @@ theorem exists_contDiff_eventuallyEq {E F : Type*} [NormedAddCommGroup E] [Norme
   obtain ⟨r, g, hr, _, hg, heq⟩ := exists_contDiff_eqOn_ball hO hf hz
   exact ⟨g, hg, Filter.eventuallyEq_iff_exists_mem.mpr
     ⟨Metric.ball z r, Metric.ball_mem_nhds z hr, heq⟩⟩
+
+/-- Extension from a neighbourhood of a compact closure: a function `C^∞` on an open set `U`
+containing the closure of a bounded set `K` agrees on `closure K` with a function `C^∞` on the whole
+finite-dimensional real normed space. -/
+theorem exists_contDiff_eqOn_closure {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] {K U : Set E}
+    (hKb : Bornology.IsBounded K) (hU : IsOpen U) (hKU : closure K ⊆ U)
+    {V : E → ℝ} (hV : ContDiffOn ℝ ∞ V U) :
+    ∃ W : E → ℝ, ContDiff ℝ ∞ W ∧ EqOn W V (closure K) := by
+  classical
+  choose ε hε hball using
+    (fun x : closure K => Metric.isOpen_iff.mp hU x.1 (hKU x.2))
+  let b : (i : closure K) → ContDiffBump i.1 :=
+    fun i =>
+      { rIn := ε i / 4
+        rOut := ε i / 2
+        rIn_pos := div_pos (hε i) (by norm_num)
+        rIn_lt_rOut := by
+          have := hε i
+          linarith }
+  have hb : ∀ i : closure K, ContDiff ℝ ∞ (b i) := fun i => (b i).contDiff
+  have hcover : closure K ⊆
+      ⋃ i : closure K, Metric.ball i.1 (ε i / 4) := by
+    intro x hx
+    refine mem_iUnion.mpr ⟨⟨x, hx⟩, ?_⟩
+    exact Metric.mem_ball_self (div_pos (hε ⟨x, hx⟩) (by norm_num))
+  obtain ⟨t, ht⟩ := hKb.isCompact_closure.elim_finite_subcover
+    (fun i : closure K => Metric.ball i.1 (ε i / 4))
+    (fun _ => Metric.isOpen_ball) hcover
+  let χ : E → ℝ :=
+    fun x => 1 - ∏ i ∈ t, (1 - b i x)
+  have hχ : ContDiff ℝ ∞ χ :=
+    contDiff_const.sub (contDiff_prod fun i _ => contDiff_const.sub (hb i))
+  have hzero : ∀ x ∉ U, ∀ᶠ y in 𝓝 x, χ y = 0 := by
+    intro x hx
+    have hz : ∀ i : closure K, ∀ᶠ y in 𝓝 x, b i y = 0 := by
+      intro i
+      have hxball : x ∉ Metric.closedBall i.1 (ε i / 2) := by
+        intro hm
+        apply hx
+        apply hball i
+        exact lt_of_le_of_lt hm (half_lt_self (hε i))
+      have hsupp : Function.support (b i) ⊆
+          Metric.closedBall i.1 (ε i / 2) := by
+        rw [(b i).support_eq]
+        exact Metric.ball_subset_closedBall
+      filter_upwards [Metric.isClosed_closedBall.isOpen_compl.mem_nhds hxball] with y hy
+      by_contra hyzero
+      exact hy (hsupp hyzero)
+    filter_upwards [(Filter.eventually_all_finset t).2 fun i _ => hz i] with y hy
+    have hp : ∏ i ∈ t, (1 - b i y) = 1 :=
+      Finset.prod_eq_one fun i hi => by rw [hy i hi, sub_zero]
+    simp only [χ, hp, sub_self]
+  have hone : EqOn χ (fun _ => 1) (closure K) := by
+    intro x hx
+    rcases mem_iUnion.mp (ht hx) with ⟨i, hi⟩
+    rcases mem_iUnion.mp hi with ⟨hit, hxi⟩
+    have hbi : b i x = 1 := (b i).one_of_mem_closedBall (Metric.ball_subset_closedBall hxi)
+    have hp : (∏ j ∈ t, (1 - b j x)) = 0 :=
+      Finset.prod_eq_zero_iff.mpr ⟨i, hit, by rw [hbi, sub_self]⟩
+    dsimp only [χ]
+    rw [hp, sub_zero]
+  refine ⟨fun x => χ x * V x, ?_, ?_⟩
+  · rw [contDiff_iff_contDiffAt]
+    intro x
+    by_cases hx : x ∈ U
+    · exact hχ.contDiffAt.mul ((hV x hx).contDiffAt (hU.mem_nhds hx))
+    · have he :
+          (fun y => χ y * V y) =ᶠ[𝓝 x] (fun _ => (0 : ℝ)) := by
+        filter_upwards [hzero x hx] with y hy
+        rw [hy, zero_mul]
+      exact contDiffAt_const.congr_of_eventuallyEq he
+  · intro x hx
+    change χ x * V x = V x
+    rw [hone hx, one_mul]
 
 end FunctionalInequalities.Analysis

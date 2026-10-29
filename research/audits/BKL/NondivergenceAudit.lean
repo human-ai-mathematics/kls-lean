@@ -7,8 +7,8 @@ Source: Letwin, arXiv:2607.24164v1, p. 6, (2.3). Clients of the nondivergence op
 `L_{A,b} f = Σ_ij A_ij ∂_ij f − Σ_i b_i ∂_i f` and its Leibniz rule: in dimension zero the operator
 vanishes identically for every coefficient field, drift and function (empty coordinate sums); on a
 product of two coordinate functions the Leibniz rule exposes the off-diagonal coefficient entry,
-`L_{A,b}(⟪e_i,·⟫⟪e_j,·⟫)(x) = 2 A_ij(x) − b_i(x)⟪e_j,x⟫ − b_j(x)⟪e_i,x⟫`, so a nondiagonal, nonidentity
-coefficient field is genuinely consumed (Luna task LET23-C, round 6, accepted; frozen header unchanged).
+`L_{A,b}(⟪e_i,·⟫⟪e_j,·⟫)(x) = 2 A_ij(x) − b_i(x)⟪e_j,x⟫ − b_j(x)⟪e_i,x⟫`, so a nondiagonal,
+nonidentity coefficient field is genuinely consumed.
 -/
 
 open FunctionalInequalities.Analysis.BakryEmery
@@ -132,9 +132,8 @@ theorem nondivergenceOperator_inner_mul_inner
 
 end FunctionalInequalities.Analysis.BakryEmery
 
-/-! A concrete two-dimensional coefficient field `[[2,1],[1,3]]` (nonidentity, nondiagonal) with zero
-drift: the cross-direction value is the off-diagonal entry times `2`. Client authored by the Codex
-reviewer (reviews/LET23-C-independent/ActualTwoDimensional.lean, strict, standard axioms). -/
+/-! A concrete two-dimensional coefficient field `[[2,1],[1,3]]` (nonidentity, nondiagonal) with
+zero drift: the cross-direction value is the off-diagonal entry times `2`. -/
 namespace IndependentNondivergence
 
 abbrev E := EuclideanSpace ℝ (Fin 2)

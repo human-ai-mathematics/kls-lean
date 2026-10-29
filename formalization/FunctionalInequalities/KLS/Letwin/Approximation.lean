@@ -15,9 +15,10 @@ Letwin arXiv:2607.24164v1, Lemma A.1 (PDF p. 16): every isotropic log-concave la
 `e^{-V} 1_K dx`, `K` bounded open convex and `V` smooth convex on a neighbourhood of `closure K`, with convergent
 expectations of polynomials of degree at most four.
 
-* `exists_regularClass_seq_of_compact`: compactly supported isotropic log-concave laws are limits of isotropic laws
-  `1_K e^{-W} dx` (`K` compact convex with nonempty interior, `W` smooth and uniformly convex), by Gaussian smoothing,
-  fixed-ball conditioning and whitening.
+* `exists_regularClass_seq_tendsto_of_compact`: compactly supported isotropic log-concave laws are weak and
+  degree-`≤ 4` moment limits of isotropic laws `1_K e^{-W} dx` (`K` compact convex with nonempty interior inside one
+  fixed ball, `W` smooth and uniformly convex), by Gaussian smoothing, fixed-ball conditioning and whitening;
+  `exists_regularClass_seq_of_compact` keeps the moment statement.
 * `exists_regular_approximation`: Lemma A.1 in sequential form for every isotropic log-concave law. It composes the
   compact approximation `Suspension.exists_compact_moment_approximation` with the compact regular approximation by a
   diagonal choice over the finitely many coordinate monomials of degree `≤ 4`, and passes from the compact body to its
@@ -84,23 +85,27 @@ private theorem integrable_coord_of_logConcave {n : ℕ} (ν : ProbabilityMeasur
   refine h.congr (ae_of_all _ fun x => ?_)
   simp [EuclideanSpace.inner_single_right]
 
-/-- **Compact regular approximation.** A compactly supported isotropic log-concave law is the limit, in all mixed
-linear moments of degree `≤ 4`, of isotropic laws `1_K e^{-W} dx` with `K` compact convex with nonempty interior and `W`
-smooth and uniformly convex. Every term is isotropic: the whitened Gaussian-smoothed ball conditionings are taken beyond
-the index where whitening is exact. Log-concavity of each term follows from its density (`logConcave_of_eq_regularClass`). -/
-theorem exists_regularClass_seq_of_compact {n : ℕ}
+/-- **Compact regular approximation with weak convergence and uniform support.** A compactly supported isotropic
+log-concave law `μ` is the weak limit of isotropic laws `ζ j = 1_{K j} e^{-W j} dx`, with `K j` compact convex with
+nonempty interior and `W j` smooth and uniformly convex, such that all mixed linear moments of degree `≤ 4` converge
+and the bodies `K j` lie in one fixed ball. The terms are whitened Gaussian-smoothed conditionings on a fixed ball,
+taken beyond the index where whitening is exact; `K j` is the affine image of that ball under maps converging to the
+identity, which gives the uniform bound. -/
+theorem exists_regularClass_seq_tendsto_of_compact {n : ℕ}
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ)
     (hcompact : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support) :
-    ∃ ζ : ℕ → ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
-      (∀ j, KLS.Isotropic (ζ j) ∧ ∃ (K : Set (EuclideanSpace ℝ (Fin n))) (W : EuclideanSpace ℝ (Fin n) → ℝ)
-        (κ : ℝ), 0 < κ ∧ IsCompact K ∧ Convex ℝ K ∧ (interior K).Nonempty ∧ ContDiff ℝ ∞ W ∧
-          ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) ∧
-          (ζ j : Measure (EuclideanSpace ℝ (Fin n))) =
-            (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-              (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) ∧
-      ∀ d ≤ 4, ∀ v : Fin d → EuclideanSpace ℝ (Fin n),
+    ∃ (ζ : ℕ → ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (K : ℕ → Set (EuclideanSpace ℝ (Fin n)))
+      (W : ℕ → EuclideanSpace ℝ (Fin n) → ℝ) (κ : ℕ → ℝ),
+      (∀ j, KLS.Isotropic (ζ j) ∧ 0 < κ j ∧ IsCompact (K j) ∧ Convex ℝ (K j) ∧ (interior (K j)).Nonempty ∧
+        ContDiff ℝ ∞ (W j) ∧ ConvexOn ℝ univ (fun y => W j y - (κ j / 2) * ‖y‖ ^ 2) ∧
+        (ζ j : Measure (EuclideanSpace ℝ (Fin n))) =
+          (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+            ((K j).indicator fun p => ENNReal.ofReal (Real.exp (-W j p)))) ∧
+      (∀ d ≤ 4, ∀ v : Fin d → EuclideanSpace ℝ (Fin n),
         Tendsto (fun j => ∫ x, ∏ i, ⟪v i, x⟫ ∂(ζ j : Measure (EuclideanSpace ℝ (Fin n)))) atTop
-          (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n))))) := by
+          (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))))) ∧
+      Tendsto ζ atTop (𝓝 μ) ∧
+      ∃ R : ℝ, ∀ j, ∀ y ∈ K j, ‖y‖ ≤ R := by
   classical
   let E := EuclideanSpace ℝ (Fin n)
   obtain ⟨r, hr⟩ :=
@@ -173,8 +178,8 @@ theorem exists_regularClass_seq_of_compact {n : ℕ}
     intro d _hd v
     exact FunctionalInequalities.KLS.tendsto_integral_cond_closedBall
       hweak' hrR hr₀ (by fun_prop)
-  obtain ⟨L, c, hwhite, hwhmom⟩ :=
-    FunctionalInequalities.KLS.exists_whitening_tendsto_moments
+  obtain ⟨L, c, hL, hc, hwhite, hwhmom⟩ :=
+    FunctionalInequalities.KLS.exists_whitening_tendsto_one_tendsto_moments
       hiso hlam_supp hμR hlam_mom
   let η : ℕ → ProbabilityMeasure E := fun j =>
     MeasureTheory.ProbabilityMeasure.map (lam j)
@@ -229,20 +234,63 @@ theorem exists_regularClass_seq_of_compact {n : ℕ}
     filter_upwards [] with j
     exact (hηintegral j
       (f := fun x : E => ∏ i, ⟪v i, x⟫) (by fun_prop)).symm
-  refine ⟨fun j => η (j + j₀), fun j => ⟨hηiso (j + j₀) (by omega), ?_⟩, ?_⟩
-  · obtain ⟨K, W, κ, hκ, hK, hKconv, hKint, hW, hWconv, hmap⟩ :=
-      FunctionalInequalities.KLS.exists_regularClass_of_cond_closedBall_map
-        (hνV (j + j₀)) hR (L (j + j₀)) (c (j + j₀))
-    refine ⟨K, W, κ, hκ, hK, hKconv, hKint, hW, hWconv, ?_⟩
-    change
+  have hηweak : Tendsto η atTop (𝓝 μ) := by
+    refine MeasureTheory.ProbabilityMeasure.tendsto_iff_forall_integral_tendsto.2 fun f => ?_
+    have hp := FunctionalInequalities.KLS.tendsto_integral_comp_affine_sub hlam_supp hL hc
+      f.continuous
+    have hr := FunctionalInequalities.KLS.tendsto_integral_cond_closedBall
+      hweak' hrR hr₀ f.continuous
+    have hs := hp.add hr
+    rw [zero_add] at hs
+    refine hs.congr fun j => ?_
+    rw [hηintegral j f.continuous]
+    exact sub_add_cancel _ _
+  have hreg (j : ℕ) :=
+    FunctionalInequalities.KLS.exists_regularClass_eq_image_of_cond_closedBall_map
+      (hνV (j + j₀)) hR (L (j + j₀)) (c (j + j₀))
+  choose K W κ hKeq hκ hK hKconv hKint hW hWconv hmap using hreg
+  obtain ⟨B, hB⟩ :=
+    ((hL.norm.mul (tendsto_const_nhds.add hc.norm)).comp (tendsto_add_atTop_nat j₀)).bddAbove_range
+  refine ⟨fun j => η (j + j₀), K, W, κ, fun j => ⟨hηiso (j + j₀) (by omega), hκ j, hK j, hKconv j,
+    hKint j, hW j, hWconv j, ?_⟩, fun d hd v => (hηmom d hd v).comp (tendsto_add_atTop_nat j₀),
+    hηweak.comp (tendsto_add_atTop_nat j₀), B, fun j y hy => ?_⟩
+  · change
       Measure.map (fun x : E => L (j + j₀) (x - c (j + j₀)))
           (ProbabilityTheory.cond (ν (j + j₀) : Measure E) (closedBall (0 : E) R)) =
         (volume : Measure E).withDensity
-          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))
+          ((K j).indicator fun p => ENNReal.ofReal (Real.exp (-W j p)))
     rw [hνeq (j + j₀)]
-    exact hmap
-  · intro d hd v
-    exact (hηmom d hd v).comp (tendsto_add_atTop_nat j₀)
+    exact hmap j
+  · rw [hKeq j] at hy
+    obtain ⟨x, hx, rfl⟩ := hy
+    rw [mem_closedBall, dist_zero_right] at hx
+    calc ‖L (j + j₀) (x - c (j + j₀))‖
+        ≤ ‖(L (j + j₀) : E →L[ℝ] E)‖ * ‖x - c (j + j₀)‖ :=
+          (L (j + j₀) : E →L[ℝ] E).le_opNorm _
+      _ ≤ ‖(L (j + j₀) : E →L[ℝ] E)‖ * (R + ‖c (j + j₀)‖) :=
+          mul_le_mul_of_nonneg_left ((norm_sub_le _ _).trans (by linarith)) (norm_nonneg _)
+      _ ≤ B := hB ⟨j, rfl⟩
+
+/-- **Compact regular approximation.** A compactly supported isotropic log-concave law is the limit, in all mixed
+linear moments of degree `≤ 4`, of isotropic laws `1_K e^{-W} dx` with `K` compact convex with nonempty interior and `W`
+smooth and uniformly convex. Every term is isotropic: the whitened Gaussian-smoothed ball conditionings are taken beyond
+the index where whitening is exact. Log-concavity of each term follows from its density (`logConcave_of_eq_regularClass`).
+Weak convergence and a uniform bound on the bodies are added in `exists_regularClass_seq_tendsto_of_compact`. -/
+theorem exists_regularClass_seq_of_compact {n : ℕ}
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ)
+    (hcompact : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support) :
+    ∃ ζ : ℕ → ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
+      (∀ j, KLS.Isotropic (ζ j) ∧ ∃ (K : Set (EuclideanSpace ℝ (Fin n))) (W : EuclideanSpace ℝ (Fin n) → ℝ)
+        (κ : ℝ), 0 < κ ∧ IsCompact K ∧ Convex ℝ K ∧ (interior K).Nonempty ∧ ContDiff ℝ ∞ W ∧
+          ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) ∧
+          (ζ j : Measure (EuclideanSpace ℝ (Fin n))) =
+            (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+              (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) ∧
+      ∀ d ≤ 4, ∀ v : Fin d → EuclideanSpace ℝ (Fin n),
+        Tendsto (fun j => ∫ x, ∏ i, ⟪v i, x⟫ ∂(ζ j : Measure (EuclideanSpace ℝ (Fin n)))) atTop
+          (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n))))) := by
+  obtain ⟨ζ, K, W, κ, hζ, hmom, -, -⟩ := exists_regularClass_seq_tendsto_of_compact μ hLC hiso hcompact
+  exact ⟨ζ, fun j => ⟨(hζ j).1, K j, W j, κ j, (hζ j).2⟩, hmom⟩
 
 /-- **Letwin arXiv:2607.24164v1, Lemma A.1 (regular approximation), sequential form.** Every isotropic log-concave
 probability law `μ` on `ℝⁿ` is the limit, in every mixed linear moment `∫ ∏_{i<d} ⟪v i, x⟫` of degree `d ≤ 4` (hence in

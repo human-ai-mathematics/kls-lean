@@ -83,7 +83,8 @@ theorem posSemidef_of_quadratic_expansion {n : ℕ}
   have hp := posSemidef_hessianMatrix_of_upper_touch hconv hψ hc htouch
   rwa [hessianMatrix_quadraticAt hs] at hp
 
-/-- **The Monge–Ampère equation at points of second-order differentiability** (weak Letwin route): if the subgradient images of the convex `u` on open subsets of `Ω` carry the density `f`,
+/-- **The Monge–Ampère equation at points of second-order differentiability**: if the subgradient
+images of the convex `u` on open subsets of `Ω` carry the density `f`,
 `f` is continuous and positive at `x₀ ∈ Ω`, and `u` has a second-order expansion at `x₀` with a symmetric
 matrix `B` (`|u x − (u x₀ + ⟪g, x − x₀⟫ + ½ ⟪x − x₀, B (x − x₀)⟫)| ≤ ε ‖x − x₀‖²` near `x₀` for every
 `ε > 0`), then `B` is positive definite and `det B = f x₀`. -/

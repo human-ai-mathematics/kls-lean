@@ -5,17 +5,17 @@ import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
-# Audit: covariance Cauchy–Schwarz and whitened-statistic variance (supports of the BKL (68) noise estimate)
+# Audit: covariance Cauchy–Schwarz and whitened-statistic variance (supports of the BKL (68)
+noise estimate)
 
-Clients compiled against `Probability/Covariance/CauchySchwarz.lean`
-(`Probability.covariance_sq_le_variance_mul_variance`, Luna unit NB1) and `Probability/Covariance/Whitening.lean`
-section `WhitenedStatistic` (`Covariance.variance_inner_eq_of_sandwich`, Luna unit NB3), both independently
-accepted 2026-10-08 (receipt `NB1-NB3-Independent-20261008/VERIFICATION.json` 12ff438e…). The consumers are the
-independent Codex reviewer's: the normalized two-atom law `(δ₋₂ + δ₂)/2` with the statistic `3x + 5` (covariance
-`12`, variances `4` and `36`, so the Cauchy–Schwarz bound is tight), the constant statistic for the zero-variance
-branch, the actual covariance operator `4·Id` with the self-adjoint `S = Id/2` and its derived sandwich, and the
-rank-zero Dirac model where the operator ring has `0 = 1`. No posterior, root construction or stochastic
-statement is involved; the sandwich is derived, not assumed.
+Clients of `Probability/Covariance/CauchySchwarz.lean`
+(`Probability.covariance_sq_le_variance_mul_variance`) and `Probability/Covariance/Whitening.lean`
+section `WhitenedStatistic` (`Covariance.variance_inner_eq_of_sandwich`). Consumers: the normalized
+two-atom law `(δ₋₂ + δ₂)/2` with the statistic `3x + 5` (covariance `12`, variances `4` and `36`,
+so the Cauchy–Schwarz bound is tight), the constant statistic for the zero-variance branch, the
+actual covariance operator `4·Id` with the self-adjoint `S = Id/2` and its derived sandwich, and
+the rank-zero Dirac model where the operator ring has `0 = 1`. No posterior, root construction or
+stochastic statement is involved; the sandwich is derived, not assumed.
 -/
 noncomputable section
 open MeasureTheory ProbabilityTheory

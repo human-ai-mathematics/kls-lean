@@ -10,7 +10,7 @@ For `T` closed and densely defined between real Hilbert spaces and `A = T†T`, 
 This is the abstract ergodicity step of Bakry–Gentil–Ledoux (2014), Section 4.8: once `ker T`
 consists of the constants, centered data relax to zero.
 
-The route: `ker A = ker T` on the operator domain; a vector orthogonal to `range A` lies in
+The argument: `ker A = ker T` on the operator domain; a vector orthogonal to `range A` lies in
 `ker A` (self-adjointness of `A`); hence a vector orthogonal to `ker A` lies in the closure of
 `range A`; on `range A`, `P_t (A y) = A (P_t y)` has norm at most `‖y‖ / t`, and the
 contraction `‖P_t‖ ≤ 1` extends the convergence to the closure.

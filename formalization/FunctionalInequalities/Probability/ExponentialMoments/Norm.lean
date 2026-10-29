@@ -3,13 +3,18 @@ import Mathlib.Probability.Moments.IntegrableExpMul
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Constructions.HaarToSphere
+import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 
 /-! # Norm moments and polynomial integrability from exponential moments
 
 A finite measure with one positive norm exponential moment has every norm
 moment. All norm exponential moments make polynomially bounded measurable
 functions integrable. Rank-one moment products use the shared multilinear
-norm bound; finite dimension is not required.
+norm bound; finite dimension is not required. Conversely, for an additive Haar
+measure on a finite-dimensional real normed space, `‖x‖^k e^{-a‖x‖}` is
+integrable for every `a > 0` (`integrable_norm_pow_mul_exp_neg_mul_norm`), by polar
+coordinates and the one-dimensional integral `∫_{(0, ∞)} r^s e^{-a r}`.
 -/
 
 noncomputable section
@@ -40,7 +45,6 @@ theorem integrable_norm_pow_of_exp (μ : Measure E) [IsFiniteMeasure μ]
     exact Real.exp_le_one_iff.2 (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.2 hr.le) (norm_nonneg x))
   simpa only [abs_norm] using
     ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul hr.ne' hexp hneg d
-
 
 end NormMoments
 
@@ -88,10 +92,7 @@ theorem integrable_of_norm_le_pow {F : Type*} [NormedAddCommGroup F] (μ : Measu
       (ae_of_all _ (fun x => ?_))
     simpa [smul_eq_mul] using hdom x
 
-
-
 end PolynomialGrowth
-
 
 section InnerMoments
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -105,8 +106,28 @@ theorem integrable_prod_inner_of_exp (μ : Measure E) [IsFiniteMeasure μ]
   ((integrable_norm_pow_of_exp μ hr hexp d).mul_const (∏ j, ‖h j‖)).mono' (by fun_prop)
     (ae_of_all _ fun x => Analysis.Tensor.norm_prod_inner_le d h x)
 
-
 end InnerMoments
 
+section HaarExponentialDecay
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
+
+/-- `‖x‖^k e^{-a‖x‖}` is integrable for an additive Haar measure and `a > 0`. -/
+theorem integrable_norm_pow_mul_exp_neg_mul_norm (m : Measure E) [m.IsAddHaarMeasure] {a : ℝ}
+    (ha : 0 < a) (k : ℕ) :
+    Integrable (fun x => ‖x‖ ^ k * Real.exp (-(a * ‖x‖))) m := by
+  rcases subsingleton_or_nontrivial E with _ | _
+  · exact (by fun_prop : Continuous fun x : E => ‖x‖ ^ k * Real.exp (-(a * ‖x‖)))
+      |>.integrable_of_hasCompactSupport (HasCompactSupport.of_compactSpace _)
+  · rw [integrable_fun_norm_addHaar m (f := fun y : ℝ => y ^ k * Real.exp (-(a * y)))]
+    refine (integrableOn_rpow_mul_exp_neg_mul_rpow (p := 1) (b := a)
+      (s := ((Module.finrank ℝ E - 1 + k : ℕ) : ℝ))
+      (by linarith [Nat.cast_nonneg (α := ℝ) (Module.finrank ℝ E - 1 + k)]) one_pos ha).congr_fun
+      (fun y _ => ?_) measurableSet_Ioi
+    simp only [Real.rpow_one, Real.rpow_natCast, smul_eq_mul, pow_add, neg_mul]
+    ring
+
+end HaarExponentialDecay
 
 end FunctionalInequalities.Probability

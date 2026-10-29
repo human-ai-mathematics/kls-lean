@@ -2,8 +2,8 @@ import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
 import Mathlib.Tactic.NormNum
 
 /-! Audit clients for the extended-logarithm limit comparison of CEK Proposition 12
-(`log_sub_ge_of_integral_limits`, `Probability/MomentMeasure/ConjugateMass.lean`). Body verbatim from the accepted
-`FunctionalLimitClients.lean`: zero and infinite masses at a finite prefix. -/
+(`log_sub_ge_of_integral_limits`, `Probability/MomentMeasure/ConjugateMass.lean`):
+zero and infinite masses at a finite prefix. -/
 
 
 set_option autoImplicit false

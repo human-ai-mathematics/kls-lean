@@ -4,7 +4,7 @@ import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import FunctionalInequalities.Probability.Transport
 
 /-!

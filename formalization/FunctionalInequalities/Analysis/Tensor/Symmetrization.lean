@@ -741,14 +741,16 @@ theorem fixingOutside_mono {s t : Finset Ω} (hst : s ⊆ t) : fixingOutside s �
       exact hx (hst hxs)
     simpa [fixingOutside] using h
 
-private lemma mul_mem_fixingOutside {s : Finset Ω} {σ τ : Equiv.Perm Ω}
+/-- `fixingOutside s` is closed under multiplication. -/
+theorem mul_mem_fixingOutside {s : Finset Ω} {σ τ : Equiv.Perm Ω}
     (hσ : σ ∈ fixingOutside s) (hτ : τ ∈ fixingOutside s) :
     σ * τ ∈ fixingOutside s := by
   simp only [fixingOutside, mem_filter, mem_univ, true_and] at hσ hτ ⊢
   intro x hx
   simp [Equiv.Perm.coe_mul, hσ x hx, hτ x hx]
 
-private lemma inv_mem_fixingOutside {s : Finset Ω} {σ : Equiv.Perm Ω}
+/-- `fixingOutside s` is closed under inversion. -/
+theorem inv_mem_fixingOutside {s : Finset Ω} {σ : Equiv.Perm Ω}
     (hσ : σ ∈ fixingOutside s) :
     (σ⁻¹ : Equiv.Perm Ω) ∈ fixingOutside s := by
   simp only [fixingOutside, mem_filter, mem_univ, true_and] at hσ ⊢

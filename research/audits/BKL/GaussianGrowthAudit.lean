@@ -10,8 +10,7 @@ local weighted derivative formula on a Dirac mass gives the raw value `−16` (n
 the third-derivative transfer at `s = 3` carries the factor `−216`; the lower polynomial degrees
 `1, 2, 3` are derived from the order-three bound; second Laplace moment tensor of a Dirac mass,
 dimension-zero vanishing and order zero. Neither the regular approximation nor Theorem 1.1 is
-asserted. Clients adapted from the Codex bundle `Gaussian-AllOrder-Growth` (author clients and
-reviewer consumers).
+asserted.
 -/
 
 open MeasureTheory Set FunctionalInequalities

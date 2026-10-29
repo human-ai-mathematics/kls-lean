@@ -2,9 +2,10 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
 /-!
 # Weak Hessian evolution audit
 
-Clients of the weak Hessian evolution and bounded H1 testing package (Letwin arXiv:2607.24164v1, weak (2.6)):
-original full source-contract retention by the two regular-class producers, the actual ψ·H_lk weak test at
-one witness, and a zero-dimensional generic approximation client. Not a proof of (2.14), Theorem 2.5 or KLS.
+Clients of the weak Hessian evolution and bounded `H¹` testing package (Letwin arXiv:2607.24164v1,
+weak (2.6)): retention of the original full source statement by the two regular-class producers,
+the actual ψ·H_lk weak test at one witness, and a zero-dimensional generic approximation client.
+Not a proof of (2.14), Theorem 2.5 or KLS.
 -/
 noncomputable section
 open MeasureTheory Set Filter
@@ -13,8 +14,8 @@ open FunctionalInequalities FunctionalInequalities.Analysis
 open FunctionalInequalities.Probability.Stein
 namespace WeakHessianEvolutionAudit
 
-/-- Original full unweighted source contract (R0, mean, inverse, first Monge–Ampère, trace derivative and
-flux identity at one witness) retained by the weighted evolution producer. -/
+/-- Original full unweighted source statement (regularity, mean, inverse, first Monge–Ampère,
+trace derivative and flux identity at one witness) retained by the weighted evolution producer. -/
 theorem weighted_evolution_retains_flux_source_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -131,7 +132,8 @@ theorem weighted_evolution_retains_flux_source_contract {n : ℕ} (hn : 0 < n)
     exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux⟩
 
-/-- Original full weighted source contract retained by the bounded testing producer at one witness. -/
+/-- Original full weighted source statement retained by the bounded testing producer at one
+witness. -/
 theorem bounded_testing_retains_weighted_source_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -269,7 +271,7 @@ theorem bounded_testing_retains_weighted_source_contract {n : ℕ} (hn : 0 < n)
     exists_regular_moment_bounded_weak_hessian_testing hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, hweighted⟩
 
-/-- Actual ψ·H_lk weak testing at the production witness: the same `u` and the same weak Hessian tensor `T`
+/-- Actual ψ·H_lk weak testing at the producer's witness: the same `u` and the same weak Hessian tensor `T`
 satisfy the weighted evolution identity against every bounded test `ψ * H_lk`. -/
 theorem actual_source_hessian_entry_weak_test {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}

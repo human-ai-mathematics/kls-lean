@@ -3,8 +3,8 @@ import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Moment
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Bound
-import FunctionalInequalities.KLS.BKL.CumulantEnvelope
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Boundary
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Regularity
 import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Bound

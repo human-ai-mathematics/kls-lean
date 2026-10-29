@@ -9,8 +9,7 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5 (stability
 potential on `ℝ` is regular with the explicit constants `4/9 ≤ ∇² ≤ 9`, its law is the image law with
 mean `−3/2` and centered second moment `1/4`, and its normalizer carries the factor `1/2`; the
 zero-dimensional law with the original `b = −4` still yields positive constants. No whitening
-operator is chosen and the approximation theorem is not asserted. Clients adapted from the Codex
-bundle `Affine-Regular-Transport/Clients.lean` (independently accepted, receipt bf559a36…).
+operator is chosen and the approximation theorem is not asserted.
 -/
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.KLS
@@ -79,7 +78,7 @@ theorem scaled_translated_normalizer :
   rw [hdet] at h
   simpa only [scaleTwo_apply, show |(2 : ℝ)⁻¹| = 1 / 2 by norm_num] using h
 
-/-- Zero dimension admits an original negative upper coefficient. The new strictly positive
+/-- Zero dimension admits an original negative upper coefficient. The strictly positive
 upper coefficient is produced without any positive inverse-operator-norm assumption. -/
 private theorem zero_regular :
     KLS.RegularPotential (fun _ : EuclideanSpace ℝ (Fin 0) => (7 : ℝ)) 2 (-4) := by

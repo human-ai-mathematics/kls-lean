@@ -440,13 +440,6 @@ private lemma inverse_line_at_unit
   simpa only [Function.comp_def, _root_.neg_apply,
     ContinuousLinearMap.mulLeftRight_apply, ← Ring.inverse_unit, ht.unit_spec] using hc
 
-private lemma inverse_line_at_zero (H : R) :
-    HasDerivAt (fun t : ℝ => Ring.inverse (1 + t • H)) (-H) 0 := by
-  have hu : IsUnit ((1 : R) + (0 : ℝ) • H) := by
-    simpa only [zero_smul, add_zero] using (isUnit_one : IsUnit (1 : R))
-  simpa only [zero_smul, add_zero, Ring.inverse_one, one_mul, mul_one] using
-    inverse_line_at_unit H 0 hu
-
 end StructuredSpace
 
 section NormedSpace
@@ -468,7 +461,7 @@ private lemma inverse_entry_second
     (H : E →L[ℝ] E) (L : E →L[ℝ] ℝ) (v : E) :
     HasDerivAt (deriv fun t : ℝ => L (Ring.inverse (1 + t • H) v))
       (2 * L (H (H v))) 0 := by
-  have hR := inverse_line_at_zero H
+  have hR := inverse_line H
   have hv := hR.clm_apply (hasDerivAt_const (0 : ℝ) v)
   have hHv := (hasDerivAt_const (0 : ℝ) H).clm_apply hv
   have hboth := hR.clm_apply hHv

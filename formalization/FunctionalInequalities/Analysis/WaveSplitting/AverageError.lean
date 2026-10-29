@@ -20,14 +20,6 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 /-- A scalar function viewed as the displacement of a classical state. -/
 def scalarState (f : E → ℝ) : State E ι := ⟨f, 0, fun _ => 0⟩
 
-private theorem fderiv_eq_zero_of_vanishing {f : E → ℝ} {R : ℝ}
-    (hf : ∀ y, R < ‖y‖ → f y = 0) {x : E} (hx : R < ‖x‖) : fderiv ℝ f x = 0 := by
-  have h : f =ᶠ[nhds x] fun _ => (0 : ℝ) :=
-    Filter.eventually_of_mem ((isOpen_lt continuous_const continuous_norm).mem_nhds hx)
-      fun y hy => hf y hy
-  rw [h.fderiv_eq]
-  simp
-
 omit [NormedSpace ℝ E] in
 theorem scalarState_supported {f : E → ℝ} {R : ℝ} (hf : ∀ y, R < ‖y‖ → f y = 0) :
     (scalarState f : State E ι).Supported R := fun x hx => ⟨hf x hx, rfl, fun _ => rfl⟩
@@ -38,7 +30,7 @@ theorem scalarState_smooth {f : E → ℝ} (hf : ContDiff ℝ ∞ f) :
 theorem formState_supported {Y : State E ι} (a : ι → E) {R : ℝ} (hY : Y.Supported R) :
     (formState a Y).Supported R := fun x hx =>
   ⟨(hY x hx).1, rfl, fun j => by
-    simp [formState, fderiv_eq_zero_of_vanishing (fun y hy => (hY y hy).1) hx]⟩
+    simp [formState, fderiv_eq_zero_of_supported (fun y hy => (hY y hy).1) hx]⟩
 
 omit [NormedSpace ℝ E] in
 private theorem hasCompactSupport_of_vanishing [ProperSpace E] {f : E → ℝ} {R : ℝ}
@@ -291,7 +283,7 @@ private theorem weightedDivergence_vanishing [Fintype ι] (a : ι → E) (b : ι
     {P : ι → E → ℝ} {T : ℝ} (hP : ∀ j y, T < ‖y‖ → P j y = 0) :
     ∀ y, T < ‖y‖ → weightedDivergence a b P y = 0 := fun y hy => by
   simp [weightedDivergence, hP _ y hy,
-    fderiv_eq_zero_of_vanishing (fun z hz => hP _ z hz) hy]
+    fderiv_eq_zero_of_supported (fun z hz => hP _ z hz) hy]
 
 
 

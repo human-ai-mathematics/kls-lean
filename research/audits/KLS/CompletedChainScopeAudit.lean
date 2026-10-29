@@ -1,4 +1,4 @@
-import FunctionalInequalities
+import FunctionalInequalities.KLS.Target
 import Lean
 
 namespace CompletedChainScope
@@ -15,6 +15,6 @@ run_cmd do
       `FunctionalInequalities.Analysis.Dirichlet.exists_unit_c1_solution,
       `FunctionalInequalities.Analysis.elliptic_operator_linear_combination] do
     if env.contains n then
-      throwError "Deferred Letwin/CNS source entered the completed-chain aggregate: {n}"
+      throwError "Deferred Letwin/CNS source entered the completed-chain dependency closure: {n}"
 
 end CompletedChainScope

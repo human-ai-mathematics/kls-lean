@@ -1,3 +1,275 @@
+--- a/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
++++ b/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
+@@ -1,14 +1,10 @@
++-- Modified by kls-lean for Lean/Mathlib v4.33.0; see formalization/vendor/port.patch.
++
+ module
+ 
+ public import Mathlib.LinearAlgebra.Dimension.Finite
+ 
+ @[expose] public section
+-
+--- TODO: remove if https://github.com/leanprover-community/mathlib4/pull/40909 has merged.
+-lemma Set.indicator_apply_apply {ι Ω M : Type*} [Zero M] (s : Set ι) (f : ι → Ω → M) (i : ι)
+-    (ω : Ω) :
+-    s.indicator f i ω = s.indicator (fun j ↦ f j ω) i := by
+-  by_cases h : i ∈ s <;> simp [h]
+ 
+ /-- A finite sum of monotone functions is monotone. -/
+ lemma Monotone.finset_sum {ι κ M : Type*} [Preorder ι] [AddCommMonoid M] [Preorder M]
+--- a/BrownianMotion/BrownianMotion/Auxiliary/Topology.lean
++++ b/BrownianMotion/BrownianMotion/Auxiliary/Topology.lean
+@@ -1,4 +1,7 @@
+ module
++
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+ 
+ public import Mathlib.Topology.MetricSpace.HolderNorm
+ 
+@@ -43,7 +46,7 @@
+     letI := PseudoEMetricSpace.toPseudoMetricSpace
+       fun x y ↦ ne_top_of_le_ne_top ENNReal.coe_ne_top (hX x y)
+     BoundedSpace X := by
+-  letI := PseudoEMetricSpace.toPseudoMetricSpace
++  let := PseudoEMetricSpace.toPseudoMetricSpace
+     fun x y ↦ ne_top_of_le_ne_top ENNReal.coe_ne_top (hX x y)
+   rw [Metric.boundedSpace_iff]
+   refine ⟨C, fun x y ↦ ?_⟩
+@@ -71,7 +74,7 @@
+     {f : X → Y} {r s : ℝ≥0} (hf : MemHolder r f) (hs : s ≤ r) {C' : ℝ≥0}
+     (hX : ∀ x y : X, edist x y ≤ C') :
+     MemHolder s f := by
+-  letI := PseudoEMetricSpace.toPseudoMetricSpace
++  let := PseudoEMetricSpace.toPseudoMetricSpace
+     fun x y ↦ ne_top_of_le_ne_top ENNReal.coe_ne_top (hX x y)
+   have := PseudoEMetricSpace.boundedSpace_toPseudoMetricSpace hX
+   exact hf.mono hs
+@@ -88,7 +91,7 @@
+     {C' : ℝ≥0} (ht : ∀ ⦃x⦄, x ∈ t → ∀ ⦃y⦄, y ∈ t → edist x y ≤ C') :
+     ∃ C', HolderOnWith C' s f t := by
+   simp_rw [← HolderWith.restrict_iff] at *
+-  letI := PseudoEMetricSpace.toPseudoMetricSpace
++  let := PseudoEMetricSpace.toPseudoMetricSpace
+     fun x y : t ↦ ne_top_of_le_ne_top ENNReal.coe_ne_top (ht x.2 y.2)
+   have : BoundedSpace t :=
+     PseudoEMetricSpace.boundedSpace_toPseudoMetricSpace fun x y : t ↦ ht x.2 y.2
+--- a/BrownianMotion/BrownianMotion/StochasticIntegral/Predictable.lean
++++ b/BrownianMotion/BrownianMotion/StochasticIntegral/Predictable.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Kexing Ying, Greg Neustroev, Shehzad Hathi
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ module
+ 
+ public import Mathlib.MeasureTheory.SetSemiring
+@@ -157,7 +160,7 @@
+ private lemma StronglyAdapted.isStronglyPredictable_roundDown {times : Finset ι}
+     (h_adap : StronglyAdapted 𝓕 X) :
+     IsStronglyPredictable 𝓕 (fun i ω ↦ X (roundDown times i) ω) := by
+-  letI : MeasurableSpace (ι × Ω) := 𝓕.predictable
++  let : MeasurableSpace (ι × Ω) := 𝓕.predictable
+   -- `X_ap i` approximates X at times `i`
+   let X_ap n i := (h_adap i).approx n
+   -- For `Y` and `Y_ap`, we keep `s` as a variable for use in the induction step
+--- a/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean
++++ b/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean
+@@ -1,3 +1,5 @@
++-- Modified by kls-lean for the selected proved dependency closure; see formalization/vendor/port.patch.
++
+ /-
+ Copyright (c) 2026 Kexing Ying. All rights reserved.
+ Released under Apache 2.0 license as described in the file LICENSE.
+@@ -12,7 +14,7 @@
+ public import BrownianMotion.StochasticIntegral.Cadlag
+ public import BrownianMotion.StochasticIntegral.Predictable
+ public import BrownianMotion.StochasticIntegral.Quasimartingale.MaximalInequality
+-public import BrownianMotion.StochasticIntegral.UniformIntegrable
++public import BrownianMotion.Auxiliary.Jensen
+ public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+ 
+ /-! # Cadlag modification of quasimartingales
+@@ -58,6 +60,53 @@
+ lemma not_isMax_of_nhdsGT_neBot {α : Type*} [Preorder α] [TopologicalSpace α] {a : α}
+     [h : (𝓝[>] a).NeBot] : ¬ IsMax a :=
+   fun ha ↦ h.ne ha.nhdsGT_eq_bot
++
++/- The three stability helpers below use the proved upstream bodies from
++BrownianMotion/StochasticIntegral/UniformIntegrable.lean at a7ad7af. They are private
++to this consumer, so the unrelated optional-sampling and limit-process placeholders
++from that module are outside the selected dependency closure. -/
++section UniformIntegrableStability
++
++variable {ι κ Ω E F : Type*} {mΩ : MeasurableSpace Ω} {μ : Measure Ω}
++
++private lemma MeasureTheory.UniformIntegrable.add [NormedAddCommGroup E] {X Y : ι → Ω → E} {p : ℝ≥0∞} (hp : 1 ≤ p)
++    (hX : UniformIntegrable X p μ) (hY : UniformIntegrable Y p μ) :
++    UniformIntegrable (X + Y) p μ := by
++  refine ⟨fun _ ↦ (hX.1 _).add (hY.1 _), ?_, ?_⟩
++  · rcases hX with ⟨hX₁, hX₂, hX₃⟩
++    rcases hY with ⟨hY₁, hY₂, hY₃⟩
++    exact hX₂.add hY₂ hp hX₁ hY₁
++  · obtain ⟨C_X, hC_X⟩ := hX.2.2
++    obtain ⟨C_Y, hC_Y⟩ := hY.2.2
++    exact ⟨C_X + C_Y,
++      fun i ↦ le_trans (eLpNorm_add_le (hX.1 i) (hY.1 i) hp) (add_le_add (hC_X i) (hC_Y i))⟩
++
++private lemma MeasureTheory.uniformIntegrable_of_dominated [NormedAddCommGroup E] [NormedAddCommGroup F]
++    {X : ι → Ω → E} {Y : κ → Ω → F} {p : ℝ≥0∞}
++    (hY : UniformIntegrable Y p μ) (mX : ∀ i, AEStronglyMeasurable (X i) μ)
++    (hX : ∀ i, ∃ j, ∀ᵐ ω ∂μ, ‖X i ω‖ ≤ ‖Y j ω‖) :
++    UniformIntegrable X p μ := by
++  refine ⟨mX, fun ε hε ↦ ?_, ?_⟩
++  · obtain ⟨δ, hδ, h⟩ := hY.2.1 hε
++    refine ⟨δ, hδ, fun i s hs hμs ↦ let ⟨j, hj⟩ := hX i
++      le_trans (eLpNorm_mono_ae ?_) <| h j s hs hμs⟩
++    filter_upwards [hj] with ω hω
++    rw [Set.indicator]
++    split_ifs with hmem
++    · rw [Set.indicator_of_mem hmem]
++      exact hω
++    · simp [Set.indicator_of_notMem hmem]
++  · obtain ⟨C, hC⟩ := hY.2.2
++    exact ⟨C, fun i ↦ let ⟨j, hj⟩ := hX i
++      le_trans (eLpNorm_mono_ae hj) <| hC j⟩
++
++private lemma MeasureTheory.UniformIntegrable.norm [NormedAddCommGroup E] {X : ι → Ω → E} {p : ℝ≥0∞}
++    (hY : UniformIntegrable X p μ) :
++    UniformIntegrable (fun t ω ↦ ‖X t ω‖) p μ := by
++  refine uniformIntegrable_of_dominated hY ?_ (fun i ↦ ⟨i, by simp⟩)
++  exact fun i ↦ (UniformIntegrable.aestronglyMeasurable hY i).norm
++
++end UniformIntegrableStability
+ 
+ section UniformIntegrableAux
+ 
+--- a/KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean
++++ b/KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Rémy Degenne, Peter Pfaffelhuber
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ module
+ 
+ public import Mathlib.MeasureTheory.Constructions.ClosedCompactCylinders
+@@ -140,7 +143,7 @@
+     x ∈ piCylinderSet hs ↔
+     ∀ i, x i ∈ (fun a : Π j : Js (hs (indexProj hs i)), α j ↦ a ⟨i, mem_indexProj hs i⟩) ''
+       (As (hs (indexProj hs i))) := by
+-  simp only [piCylinderSet, mem_image, Subtype.forall, mem_setOf_eq]
++  simp only [piCylinderSet, mem_image, Subtype.forall, mem_ofPred_eq]
+ 
+ theorem isCompact_piCylinderSet (hs : ∀ n, s n ∈ closedCompactCylinders α) :
+     IsCompact (piCylinderSet hs) :=
+@@ -171,7 +174,7 @@
+   have hb_mem i : b i ∈ As (hs (indexProj hs i)) := (hs_nonempty' (indexProj hs i)).choose_spec
+   let a : Π i : allProj hs, α i := fun i ↦ b i ⟨i, mem_indexProj hs i⟩
+   refine ⟨a, ?_⟩
+-  simp only [piCylinderSet, mem_image, SetCoe.forall, mem_setOf_eq]
++  simp only [piCylinderSet, mem_image, SetCoe.forall, mem_ofPred_eq]
+   exact fun j hj ↦ ⟨b ⟨j, hj⟩, hb_mem _, rfl⟩
+ 
+ end piCylinderSet
+--- a/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
++++ b/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Rémy Degenne, Peter Pfaffelhuber
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ module
+ 
+ public import KolmogorovExtension4.RegularContent
+@@ -143,9 +145,10 @@
+   swap; · exact J.measurable_restrict
+   have h_mem : J.restrict ⁻¹' s ∈ measurableCylinders α :=
+     (mem_measurableCylinders _).mpr ⟨J, s, hs, rfl⟩
+-  rw [projectiveLimit, AddContent.measure_eq _ _ _ _ h_mem,
+-    projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs]
+-  exact generateFrom_measurableCylinders.symm
++  rw [projectiveLimit]
++  exact (AddContent.measure_eq _ isSetSemiring_measurableCylinders
++    generateFrom_measurableCylinders.symm (projectiveFamilyContent_iUnion_le_sum hP) h_mem).trans
++    (projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs)
+ 
+ instance isFiniteMeasure_projectiveLimit (hP : IsProjectiveMeasureFamily P) :
+     IsFiniteMeasure (projectiveLimit P hP) :=
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ContinuityKolmogorovBounds.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ContinuityKolmogorovBounds.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ContinuityDyadicChaining
+ 
+ /-!
+@@ -87,7 +90,7 @@
+     (kolmogorov_markov_bound P X hX s t
+       (ENNReal.ofReal_pos.mpr hlam) ENNReal.ofReal_ne_top)
+   intro ω hω
+-  simp only [Set.mem_setOf_eq] at hω ⊢
++  simp only [Set.mem_ofPred_eq] at hω ⊢
+   rw [edist_dist, Real.dist_eq]
+   exact ENNReal.ofReal_le_ofReal (le_of_lt hω)
+ 
+@@ -249,7 +252,7 @@
+   have hlimsup : P (Filter.limsup A Filter.atTop) = 0 :=
+     measure_limsup_atTop_eq_zero htsum_ne
+   have hae : ∀ᵐ ω ∂P, ω ∉ Filter.limsup A Filter.atTop := by
+-    rw [ae_iff]; simp only [not_not, Set.setOf_mem_eq]; exact hlimsup
++    rw [ae_iff]; simp only [not_not, Set.ofPred_mem_eq]; exact hlimsup
+   filter_upwards [hae] with ω hω
+   rw [Filter.mem_limsup_iff_frequently_mem, Filter.not_frequently,
+       Filter.eventually_atTop] at hω
+@@ -257,7 +260,7 @@
+   refine ⟨N, fun n hn k hk0 hk1 => ?_⟩
+   have hωn : ω ∉ A n := hN n hn
+   rw [hA_def] at hωn
+-  simp only [Set.mem_iUnion, Set.mem_setOf_eq, not_exists, not_lt] at hωn
++  simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hωn
+   have hk'mem : k.toNat ∈ Finset.range (2 ^ n) := by
+     rw [Finset.mem_range]
+     have hcast2 : ((2 ^ n : ℕ) : ℤ) = (2 : ℤ) ^ n := by push_cast; ring
+--- a/LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityLimit.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityLimit.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.CrossOrthogonalityDirectCross
+ 
+ /-!
+@@ -319,7 +322,7 @@
+ /-- The `L²` inner product of two `Lp` representatives is the integral of their product. -/
+ lemma inner_toLp_eq_integral_mul {f g : Ω → ℝ} (hf : MemLp f 2 P) (hg : MemLp g 2 P) :
+     (inner ℝ (hf.toLp f) (hg.toLp g) : ℝ) = ∫ ω, f ω * g ω ∂P := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   rw [MeasureTheory.L2.inner_def]
+   refine integral_congr_ae ?_
+   filter_upwards [hf.coeFn_toLp, hg.coeFn_toLp] with ω h1 h2
+@@ -336,7 +339,7 @@
+     (hcu : Filter.Tendsto (fun n => eLpNorm (fun ω => un n ω - u ω) 2 P) Filter.atTop (nhds 0))
+     (hcv : Filter.Tendsto (fun n => eLpNorm (fun ω => vn n ω - v ω) 2 P) Filter.atTop (nhds 0)) :
+     ∫ ω, u ω * v ω ∂P = 0 := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   have hUn : Filter.Tendsto (fun n => (hun n).toLp (un n)) Filter.atTop (nhds (hu.toLp u)) := by
+     rw [MeasureTheory.Lp.tendsto_Lp_iff_tendsto_eLpNorm _ u hu]
+     have heq : ∀ n, eLpNorm (⇑((hun n).toLp (un n)) - u) 2 P
 --- a/LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean
 @@ -3,6 +3,8 @@
@@ -44,6 +316,134 @@
      simp only [ite_self, zero_add]
      exact if_neg h
  
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoL2Completion
+ 
+ /-!
+@@ -92,7 +95,7 @@
+       rw [Set.indicator_of_notMem]
+       rintro ⟨-, -, hmem⟩
+       exact hp (Set.mem_Iic.mp hmem)
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   rw [key]
+   refine Finset.stronglyMeasurable_fun_sum _ fun i _ => ?_
+   by_cases hi : a i < t
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityDyadicAverages.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityDyadicAverages.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoSimple
+ import LevyStochCalc.Probability.Progressive
+ 
+@@ -171,9 +174,9 @@
+     MeasureTheory.MemLp (Function.uncurry g)
+       2 (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := by
+   -- Volume.restrict (Icc 0 T) is finite (volume(Icc 0 T) = T < ∞).
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
+     ⟨by simp [Real.volume_Icc, ENNReal.ofReal_lt_top]⟩
+-  haveI : MeasureTheory.IsFiniteMeasure
++  have : MeasureTheory.IsFiniteMeasure
+       (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := inferInstance
+   refine MeasureTheory.MemLp.of_bound h_meas.aestronglyMeasurable M ?_
+   refine Filter.Eventually.of_forall (fun p => ?_)
+@@ -322,7 +325,7 @@
+       refine Filter.Eventually.of_forall (fun s => ?_)
+       rw [Real.norm_eq_abs]
+       exact h_bound ω s
+-    haveI h_finite_restrict :
++    have h_finite_restrict :
+         MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Ioc t_i t_succ)) := by
+       refine ⟨?_⟩
+       rw [MeasureTheory.Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPointwise.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPointwise.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoDensityShiftedAverages
+ 
+ /-!
+@@ -199,7 +202,7 @@
+           - g p.1 p.2)
+         Filter.atTop (nhds 0)} := by
+     ext p
+-    simp only [Set.mem_setOf_eq]
++    simp only [Set.mem_ofPred_eq]
+     constructor
+     · intro hp
+       have h_const : Filter.Tendsto (fun _ : ℕ => g p.1 p.2)
+@@ -260,13 +263,13 @@
+           : ℝ≥0∞) ^ 2 ∂volume ∂P)
+       Filter.atTop (nhds 0) := by
+   -- Setup: finite measure on the product.
+-  haveI h_finite_vol : MeasureTheory.IsFiniteMeasure
++  have h_finite_vol : MeasureTheory.IsFiniteMeasure
+       (volume.restrict (Set.Icc (0 : ℝ) T)) := by
+     refine ⟨?_⟩
+     rw [MeasureTheory.Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
+         Real.volume_Icc]
+     exact ENNReal.ofReal_lt_top
+-  haveI h_finite_prod : MeasureTheory.IsFiniteMeasure
++  have h_finite_prod : MeasureTheory.IsFiniteMeasure
+       (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := inferInstance
+   -- The constant bound: 2(|M|+1) ≥ |g - eval| everywhere (using triangle ineq + boundedness).
+   set CC : ℝ := 2 * (|M| + 1) with hCC
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPredictableL2.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPredictableL2.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoDensityPointwise
+ 
+ /-!
+@@ -42,7 +45,7 @@
+           - g p.1 p.2)
+         Filter.atTop (nhds 0)} := by
+     ext p
+-    simp only [Set.mem_setOf_eq]
++    simp only [Set.mem_ofPred_eq]
+     constructor
+     · intro hp
+       have h_const : Filter.Tendsto (fun _ : ℕ => g p.1 p.2)
+@@ -105,13 +108,13 @@
+         (‖g ω s - (predictableDyadicSimple_brownian hT g h_meas M h_bound n).eval s ω‖₊
+           : ℝ≥0∞) ^ 2 ∂volume ∂P)
+       Filter.atTop (nhds 0) := by
+-  haveI h_finite_vol : MeasureTheory.IsFiniteMeasure
++  have h_finite_vol : MeasureTheory.IsFiniteMeasure
+       (volume.restrict (Set.Icc (0 : ℝ) T)) := by
+     refine ⟨?_⟩
+     rw [MeasureTheory.Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
+         Real.volume_Icc]
+     exact ENNReal.ofReal_lt_top
+-  haveI h_finite_prod : MeasureTheory.IsFiniteMeasure
++  have h_finite_prod : MeasureTheory.IsFiniteMeasure
+       (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := inferInstance
+   -- Bound: 2(|M|+1) ≥ |g - eval|.
+   set CC : ℝ := 2 * (|M| + 1) with hCC
 --- a/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean
 @@ -3,6 +3,8 @@
@@ -66,6 +466,57 @@
  
  /-- Odd moments of a Brownian increment vanish. -/
  theorem integral_increment_pow_odd {a b : ℝ} (ha : 0 ≤ a) (hab : a < b) {m : ℕ} (hm : Odd m) :
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoIntegrandComplete.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoIntegrandComplete.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoLinear
+ 
+ /-!
+@@ -67,7 +70,7 @@
+     Probability.ProgressivelyMeasurable ℱ
+       fun ω s => Set.indicator (Set.Icc (0 : ℝ) T) (H ω) s := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have key : (fun p : Ω × ℝ => (Set.Iic t).indicator
+         (fun s => Set.indicator (Set.Icc (0 : ℝ) T) (H p.1) s) p.2)
+       = Set.indicator ((fun p : Ω × ℝ => p.2) ⁻¹' Set.Icc (0 : ℝ) T)
+@@ -119,7 +122,7 @@
+     ∃ g : Ω × ℝ → ℝ, MemLp g 2 (energyMeasure P T)
+       ∧ Tendsto (fun n => eLpNorm ((fun p : Ω × ℝ => H n p.1 p.2) - g) 2 (energyMeasure P T))
+           atTop (𝓝 0) := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   have hMem : ∀ n, MemLp (fun p : Ω × ℝ => H n p.1 p.2) 2 (energyMeasure P T) :=
+     fun n => memLp_of_energy_ne_top (hm n) (hfin n)
+   have hcs : CauchySeq fun n => (hMem n).toLp (fun p : Ω × ℝ => H n p.1 p.2) := by
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionApi.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionApi.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoL2CompletionQuadVar
+ 
+ /-!
+@@ -329,7 +332,7 @@
+         - stochasticIntegralBrownian W ℱ hℱ H₂ h_meas₂ h_progMeas₂ h_sq₂ T ω‖₊ : ℝ≥0∞) ^ 2 ∂P
+       = ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T,
+           (‖H₁ ω s - H₂ ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   have ht_nn : (0 : ℝ) ≤ T := le_of_lt hT
+   set ν : MeasureTheory.Measure ℝ := volume.restrict (Set.Icc (0 : ℝ) T) with hν
+   -- abbreviations for the two simple-integral sequences and the two limits
 --- a/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionIncrement.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionIncrement.lean
 @@ -3,6 +3,8 @@
@@ -97,6 +548,135 @@
      (p := 2) (by norm_num)
    convert h using 1; ext x; change x ^ 2 = ‖x‖ ^ 2; rw [Real.norm_eq_abs, sq_abs]
  
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoL2CompletionCompensator
+ 
+ /-!
+@@ -327,7 +330,7 @@
+     stochasticIntegralBrownianLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t
+       ∈ MeasureTheory.lpMeas ℝ ℝ
+         (ℱ t) 2 P := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   have hcs : CauchySeq (fun n => masterLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t n) := by
+     rcases le_or_gt 0 t with ht | ht
+     · exact masterLp_cauchySeq W ℱ hℱ H h_meas h_progMeas h_sq_int_global ht
+@@ -383,7 +386,7 @@
+         (fun ω => simpleIntegral W (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n) t ω
+           - stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas h_sq_int_global t ω) 2 P)
+       Filter.atTop (nhds 0) := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   set Flp := stochasticIntegralBrownianLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t with hFlp
+   have h1 : Filter.Tendsto (fun n => masterLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t n)
+       Filter.atTop (nhds Flp) :=
+@@ -477,7 +480,7 @@
+           ∂volume ∂P)
+       Filter.atTop
+       (nhds (∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖H ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P)) := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   set ν : MeasureTheory.Measure ℝ := volume.restrict (Set.Icc (0 : ℝ) T) with hν
+   set Hp : Ω × ℝ → ℝ := fun p => H p.1 p.2 with hHp
+   set Gp : ℕ → Ω × ℝ → ℝ := fun n p =>
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionQuadVar.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionQuadVar.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoL2CompletionMaster
+ 
+ /-!
+@@ -44,7 +47,7 @@
+     ∫⁻ ω, (‖stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas
+       h_sq_int_global T ω‖₊ : ℝ≥0∞) ^ 2 ∂P
+       = ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖H ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   set Flp := stochasticIntegralBrownianLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global T with hFlp
+   have htend : Filter.Tendsto (fun n => masterLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global T n)
+       Filter.atTop (nhds Flp) :=
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoOptionalStopping
+ import LevyStochCalc.Brownian.ItoIncrement
+ 
+@@ -64,7 +67,7 @@
+   · have hset : {ω | stepStop τ c ω ≤ ((i : ℝ) : WithTop ℝ)}
+         = {ω | τ ω < ((c : ℝ) : WithTop ℝ)} := by
+       ext ω
+-      simp only [stepStop, Set.mem_setOf_eq]
++      simp only [stepStop, Set.mem_ofPred_eq]
+       by_cases h : ((c : ℝ) : WithTop ℝ) ≤ τ ω
+       · simp only [if_pos h, top_le_iff]
+         constructor
+@@ -78,7 +81,7 @@
+     exact ℱ.mono hci _ (hτ.measurableSet_lt c)
+   · have hset : {ω | stepStop τ c ω ≤ ((i : ℝ) : WithTop ℝ)} = ∅ := by
+       ext ω
+-      simp only [stepStop, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false]
++      simp only [stepStop, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
+       by_cases h : ((c : ℝ) : WithTop ℝ) ≤ τ ω
+       · simp only [if_pos h, top_le_iff]
+         simp
+@@ -157,7 +160,7 @@
+   have hset : {ω | gridStopAux τ t n k ω ≤ ((i : ℝ) : WithTop ℝ)}
+       = ⋃ j : Fin (k + 1), {ω | stepStop τ (gridPt t n j) ω ≤ ((i : ℝ) : WithTop ℝ)} := by
+     ext ω
+-    simp only [Set.mem_setOf_eq, Set.mem_iUnion, gridStopAux_le_iff]
++    simp only [Set.mem_ofPred_eq, Set.mem_iUnion, gridStopAux_le_iff]
+     constructor
+     · rintro ⟨j, hj, hjle⟩
+       exact ⟨⟨j, Nat.lt_succ_of_le hj⟩, hjle⟩
+@@ -324,7 +327,7 @@
+   have hAmeas : MeasurableSet A := by
+     have hcompl : A = {ω | τ ω < ((t : ℝ) : WithTop ℝ)}ᶜ := by
+       ext ω
+-      simp only [hAdef, Set.mem_setOf_eq, Set.mem_compl_iff, not_lt]
++      simp only [hAdef, Set.mem_ofPred_eq, Set.mem_compl_iff, not_lt]
+     rw [hcompl]
+     exact (ℱ.le t _ (hτ.measurableSet_lt t)).compl
+   -- on that event the approximations already agree with the uncut integral
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoFinsetSum
+ import LevyStochCalc.Brownian.ItoPullOut
+ import LevyStochCalc.Probability.StoppedProgressive
+@@ -67,7 +70,7 @@
+ theorem stronglyMeasurable_hitInd {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
+     (hτ : MeasureTheory.IsStoppingTime ℱ τ) (c : ℝ) :
+     @MeasureTheory.StronglyMeasurable Ω ℝ _ (ℱ c) (hitInd τ c) := by
+-  letI : MeasurableSpace Ω := ℱ c
++  let : MeasurableSpace Ω := ℱ c
+   exact (measurable_const.indicator (hτ.measurableSet_eq c)).stronglyMeasurable
+ 
+ /-- The part of the integrand that the cut at `τ = c` removes from the window `(c, t]`. -/
 --- a/LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean
 @@ -3,6 +3,8 @@
@@ -130,6 +710,50 @@
      rw [if_neg h]
      ring
  
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoRange.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoRange.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoIntegrandComplete
+ 
+ /-!
+@@ -45,7 +48,7 @@
+ theorem progressivelyMeasurable_const (ℱ : Filtration ℝ ‹MeasurableSpace Ω›) (c : ℝ) :
+     Probability.ProgressivelyMeasurable ℱ (fun (_ : Ω) (_ : ℝ) => c) := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   exact Measurable.stronglyMeasurable
+     ((measurable_const.indicator measurableSet_Iic).comp measurable_snd)
+ 
+@@ -199,7 +202,7 @@
+     ∫ ω, G.integral W hℱ ω ∂P = 0 := by
+   obtain ⟨F, hF⟩ := martingale_stochasticIntegral W ℱ hℱ G.toFun G.measurable_uncurry
+     G.progressive G.sq_int_global
+-  haveI : SigmaFinite (P.trim (F.le 0)) := (isFiniteMeasure_trim (F.le 0)).toSigmaFinite
++  have : SigmaFinite (P.trim (F.le 0)) := (isFiniteMeasure_trim (F.le 0)).toSigmaFinite
+   have hcond := hF.2 0 T hT
+   have hz : stochasticIntegral W ℱ hℱ G.toFun G.measurable_uncurry G.progressive
+       G.sq_int_global 0 =ᵐ[P] 0 :=
+@@ -326,10 +329,10 @@
+     {Z : Ω → ℝ} (hZ2 : MemLp Z 2 P) (hZm : AEStronglyMeasurable[ℱ T] Z P)
+     (hZ0 : ∫ ω, Z ω ∂P = 0) :
+     ∃ G : HorizonIntegrand P ℱ T, Z =ᵐ[P] G.integral W hℱ := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+-  haveI hcl : IsClosed ((itoRange W hℱ hT : Submodule ℝ (Lp ℝ 2 P)) : Set (Lp ℝ 2 P)) :=
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have hcl : IsClosed ((itoRange W hℱ hT : Submodule ℝ (Lp ℝ 2 P)) : Set (Lp ℝ 2 P)) :=
+     isClosed_itoRange W hℱ hT
+-  haveI : CompleteSpace (itoRange W hℱ hT) := hcl.completeSpace_coe
++  have : CompleteSpace (itoRange W hℱ hT) := hcl.completeSpace_coe
+   obtain ⟨y, hy, z, hz, hyz⟩ :=
+     (itoRange W hℱ hT).exists_add_mem_mem_orthogonal (hZ2.toLp Z)
+   obtain ⟨G₀, hG₀⟩ := hy
 --- a/LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean
 @@ -3,6 +3,8 @@
@@ -159,6 +783,27 @@
    have h := h_memLp.integrable_norm_pow (p := 2) (by norm_num)
    convert h using 1
    ext x
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoProcessVersion
+ import LevyStochCalc.Brownian.ItoQuadVarSum
+ import LevyStochCalc.Brownian.AugmentedFiltration
+@@ -179,7 +182,7 @@
+         rw [heq]
+         exact Filter.Tendsto.comp ((hNcont ω hω).continuousAt (x := u))
+           (tendsto_dyadicApprox hu)
+-    letI : MeasurableSpace Ω := ℱ u
++    let : MeasurableSpace Ω := ℱ u
+     exact measurable_of_tendsto_metrizable hstep hlim
+   refine ⟨fun t ω => if ω ∈ N then 0 else Y (max t 0) ω, ?_, ?_, ?_⟩
+   · intro ω
 --- a/LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean
 @@ -3,6 +3,8 @@
@@ -265,6 +910,201 @@
  
  lemma SimplePredictable.appendInterval_xi_castSucc
      {T : ℝ} (H : SimplePredictable Ω T) {T' : ℝ}
+--- a/LevyStochCalc/LevyStochCalc/Brownian/VectorItoVersionExists.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/VectorItoVersionExists.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoVersionExists
+ import LevyStochCalc.Brownian.VectorItoProcessVersion
+ 
+@@ -80,7 +83,7 @@
+       exact (((hbp p).stronglyMeasurable_setIntegral measurableSet_Icc
+         Set.Icc_subset_Iic_self volume).mono le_rfl).measurable
+     refine Measurable.stronglyMeasurable ?_
+-    letI : MeasurableSpace Ω := ℱ t
++    let : MeasurableSpace Ω := ℱ t
+     exact measurable_pi_lambda _ hcoordm
+   · intro t ht
+     have hall : ∀ᵐ ω ∂P, ∀ (p : Fin n) (k : Fin d),
+--- a/LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedClamp.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedClamp.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Ito.VectorItoProcessDiff
+ import LevyStochCalc.Brownian.ItoCutoff
+ 
+@@ -402,7 +405,7 @@
+     ∃ ms : ℕ → ℕ, (∀ i : ℕ, i ≤ ms i) ∧
+       ∀ᵐ a ∂μ, ∀ c : ι, Filter.Tendsto (fun i : ℕ => u (ms i) c a) Filter.atTop (𝓝 (v c a)) := by
+   classical
+-  haveI := Fintype.ofFinite ι
++  have := Fintype.ofFinite ι
+   have hsumTendsto : Filter.Tendsto
+       (fun i : ℕ => ∑ c : ι, ∫⁻ a, (‖u i c a - v c a‖₊ : ℝ≥0∞) ^ 2 ∂μ)
+       Filter.atTop (𝓝 0) := by
+--- a/LevyStochCalc/LevyStochCalc/Ito/PicardGlobal.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/PicardGlobal.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Ito.PicardWindow
+ 
+ /-!
+@@ -105,7 +108,7 @@
+     (i : Fin n) :
+     Probability.ProgressivelyMeasurable ℱ fun ω s => globalPatch Y s ω i := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hsum : (fun p : Ω × ℝ => (Set.Iic t).indicator (fun s => globalPatch Y s p.1 i) p.2)
+       = ∑ k ∈ Finset.range (⌈t⌉₊ + 1),
+           (fun p : Ω × ℝ => Set.indicator {q : Ω × ℝ | ⌈q.2⌉₊ = k}
+--- a/LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandBounds.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandBounds.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Ito.Picard
+ 
+ /-!
+@@ -363,7 +366,7 @@
+     Probability.ProgressivelyMeasurable ℱ (fun ω s => f s (X s ω)) := by
+   refine Probability.ProgressivelyMeasurable.of_isStronglyProgressive ?_
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hXm : Measurable fun q : Set.Iic t × Ω => (X (q.1 : ℝ) q.2 : Fin n → ℝ) :=
+     measurable_pi_lambda _ fun i => ((hX i).isStronglyProgressive t).measurable
+   have hq : Measurable fun q : Set.Iic t × Ω => ((q.1 : ℝ), X (q.1 : ℝ) q.2) :=
+@@ -379,7 +382,7 @@
+     (hg : Measurable fun p : ℝ × (Fin n → ℝ) × E => g p.1 p.2.1 p.2.2) :
+     Probability.MarkedProgressivelyMeasurable ℱ (fun ω s e => g s (X s ω) e) := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hXm : Measurable fun q : Set.Iic t × Ω => (X (q.1 : ℝ) q.2 : Fin n → ℝ) :=
+     measurable_pi_lambda _ fun i => ((hX i).isStronglyProgressive t).measurable
+   have hbase : Measurable fun q : (Set.Iic t × Ω) × E =>
+--- a/LevyStochCalc/LevyStochCalc/Ito/PicardOutputModification.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/PicardOutputModification.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Ito.PicardOutputMoments
+ 
+ /-!
+@@ -113,7 +116,7 @@
+       ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) b, (‖f ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤) :
+     ∀ᵐ ω ∂P, ∀ b : ℝ, MeasureTheory.IntegrableOn (f ω) (Set.Icc (0 : ℝ) b) volume := by
+   filter_upwards [ae_memLp_two_of_lintegral_sq hf hfin] with ω hω b
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   exact (hω b).integrable (by norm_num)
+--- a/LevyStochCalc/LevyStochCalc/Ito/PicardOutputMoments.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/PicardOutputMoments.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Ito.PicardIntegrand
+ import LevyStochCalc.Probability.ProgressiveCadlag
+ import LevyStochCalc.Ito.PicardSpace
+@@ -180,7 +183,7 @@
+ theorem integrableOn_of_lintegral_sq_lt_top {f : ℝ → ℝ} (hf : Measurable f) {b : ℝ}
+     (hfin : ∫⁻ s in Set.Icc (0 : ℝ) b, (‖f s‖₊ : ℝ≥0∞) ^ 2 ∂volume < ⊤) :
+     MeasureTheory.IntegrableOn f (Set.Icc (0 : ℝ) b) volume := by
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) b)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   exact (memLp_two_of_lintegral_sq_lt_top hf hfin).integrable (by norm_num)
+@@ -193,7 +196,7 @@
+     ∫⁻ ω, (‖∫ s in Set.Icc (0 : ℝ) t, f ω s‖₊ : ℝ≥0∞) ^ 2 ∂P
+       ≤ ENNReal.ofReal t
+         * ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) t, (‖f ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   have hinner_meas : Measurable fun ω : Ω =>
+@@ -294,7 +297,7 @@
+ theorem measurable_setIntegral_slice {f : Ω → ℝ → ℝ}
+     (hf : Measurable (Function.uncurry f)) (t : ℝ) :
+     Measurable fun ω => ∫ s in Set.Icc (0 : ℝ) t, f ω s := by
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   exact (hf.stronglyMeasurable.integral_prod_right'
+--- a/LevyStochCalc/LevyStochCalc/Ito/VectorItoProcessDiff.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/VectorItoProcessDiff.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoTruncate
+ import LevyStochCalc.Ito.PicardOutput
+ 
+@@ -43,7 +46,7 @@
+     (hbm : Measurable (Function.uncurry b)) {t : ℝ}
+     (hbq : ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) t, (‖b ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤) :
+     ∀ᵐ ω ∂P, IntegrableOn (b ω) (Set.Icc (0 : ℝ) t) volume := by
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   filter_upwards [MeasureTheory.ae_lt_top (measurable_energyDensity hbm t) hbq.ne] with ω hω
+--- a/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean
++++ b/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Ito.VectorItoVersionUnbounded
+ 
+ /-!
+@@ -446,7 +449,7 @@
+       refine Measurable.indicator ?_ hGt
+       exact ((hXj (ms N)).adapted (max t 0)).measurable.mono hmaxle le_rfl
+     refine Measurable.stronglyMeasurable ?_
+-    letI : MeasurableSpace Ω := ℱ t
++    let : MeasurableSpace Ω := ℱ t
+     refine measurable_of_tendsto_metrizable' Filter.atTop hFN ?_
+     rw [tendsto_pi_nhds]
+     intro ω
 --- a/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean
 +++ b/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean
 @@ -1,3 +1,5 @@
@@ -301,118 +1141,619 @@
  
  end NNReal
  
---- a/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
-+++ b/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
-@@ -1,14 +1,10 @@
-+-- Modified by kls-lean for Lean/Mathlib v4.33.0; see formalization/vendor/port.patch.
-+
- module
- 
- public import Mathlib.LinearAlgebra.Dimension.Finite
- 
- @[expose] public section
--
---- TODO: remove if https://github.com/leanprover-community/mathlib4/pull/40909 has merged.
--lemma Set.indicator_apply_apply {ι Ω M : Type*} [Zero M] (s : Set ι) (f : ι → Ω → M) (i : ι)
--    (ω : Ω) :
--    s.indicator f i ω = s.indicator (fun j ↦ f j ω) i := by
--  by_cases h : i ∈ s <;> simp [h]
- 
- /-- A finite sum of monotone functions is monotone. -/
- lemma Monotone.finset_sum {ι κ M : Type*} [Preorder ι] [AddCommMonoid M] [Preorder M]
---- a/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean
-+++ b/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean
-@@ -1,3 +1,5 @@
-+-- Modified by kls-lean for the selected proved dependency closure; see formalization/vendor/port.patch.
-+
- /-
- Copyright (c) 2026 Kexing Ying. All rights reserved.
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityLimit.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityLimit.lean
+@@ -3,6 +3,9 @@
  Released under Apache 2.0 license as described in the file LICENSE.
-@@ -12,7 +14,7 @@
- public import BrownianMotion.StochasticIntegral.Cadlag
- public import BrownianMotion.StochasticIntegral.Predictable
- public import BrownianMotion.StochasticIntegral.Quasimartingale.MaximalInequality
--public import BrownianMotion.StochasticIntegral.UniformIntegrable
-+public import BrownianMotion.Auxiliary.Jensen
- public import Mathlib.MeasureTheory.Integral.DominatedConvergence
- 
- /-! # Cadlag modification of quasimartingales
-@@ -58,6 +60,53 @@
- lemma not_isMax_of_nhdsGT_neBot {α : Type*} [Preorder α] [TopologicalSpace α] {a : α}
-     [h : (𝓝[>] a).NeBot] : ¬ IsMax a :=
-   fun ha ↦ h.ne ha.nhdsGT_eq_bot
-+
-+/- The three stability helpers below use the proved upstream bodies from
-+BrownianMotion/StochasticIntegral/UniformIntegrable.lean at a7ad7af. They are private
-+to this consumer, so the unrelated optional-sampling and limit-process placeholders
-+from that module are outside the selected dependency closure. -/
-+section UniformIntegrableStability
-+
-+variable {ι κ Ω E F : Type*} {mΩ : MeasurableSpace Ω} {μ : Measure Ω}
-+
-+private lemma MeasureTheory.UniformIntegrable.add [NormedAddCommGroup E] {X Y : ι → Ω → E} {p : ℝ≥0∞} (hp : 1 ≤ p)
-+    (hX : UniformIntegrable X p μ) (hY : UniformIntegrable Y p μ) :
-+    UniformIntegrable (X + Y) p μ := by
-+  refine ⟨fun _ ↦ (hX.1 _).add (hY.1 _), ?_, ?_⟩
-+  · rcases hX with ⟨hX₁, hX₂, hX₃⟩
-+    rcases hY with ⟨hY₁, hY₂, hY₃⟩
-+    exact hX₂.add hY₂ hp hX₁ hY₁
-+  · obtain ⟨C_X, hC_X⟩ := hX.2.2
-+    obtain ⟨C_Y, hC_Y⟩ := hY.2.2
-+    exact ⟨C_X + C_Y,
-+      fun i ↦ le_trans (eLpNorm_add_le (hX.1 i) (hY.1 i) hp) (add_le_add (hC_X i) (hC_Y i))⟩
-+
-+private lemma MeasureTheory.uniformIntegrable_of_dominated [NormedAddCommGroup E] [NormedAddCommGroup F]
-+    {X : ι → Ω → E} {Y : κ → Ω → F} {p : ℝ≥0∞}
-+    (hY : UniformIntegrable Y p μ) (mX : ∀ i, AEStronglyMeasurable (X i) μ)
-+    (hX : ∀ i, ∃ j, ∀ᵐ ω ∂μ, ‖X i ω‖ ≤ ‖Y j ω‖) :
-+    UniformIntegrable X p μ := by
-+  refine ⟨mX, fun ε hε ↦ ?_, ?_⟩
-+  · obtain ⟨δ, hδ, h⟩ := hY.2.1 hε
-+    refine ⟨δ, hδ, fun i s hs hμs ↦ let ⟨j, hj⟩ := hX i
-+      le_trans (eLpNorm_mono_ae ?_) <| h j s hs hμs⟩
-+    filter_upwards [hj] with ω hω
-+    rw [Set.indicator]
-+    split_ifs with hmem
-+    · rw [Set.indicator_of_mem hmem]
-+      exact hω
-+    · simp [Set.indicator_of_notMem hmem]
-+  · obtain ⟨C, hC⟩ := hY.2.2
-+    exact ⟨C, fun i ↦ let ⟨j, hj⟩ := hX i
-+      le_trans (eLpNorm_mono_ae hj) <| hC j⟩
-+
-+private lemma MeasureTheory.UniformIntegrable.norm [NormedAddCommGroup E] {X : ι → Ω → E} {p : ℝ≥0∞}
-+    (hY : UniformIntegrable X p μ) :
-+    UniformIntegrable (fun t ω ↦ ‖X t ω‖) p μ := by
-+  refine uniformIntegrable_of_dominated hY ?_ (fun i ↦ ⟨i, by simp⟩)
-+  exact fun i ↦ (UniformIntegrable.aestronglyMeasurable hY i).norm
-+
-+end UniformIntegrableStability
- 
- section UniformIntegrableAux
- 
---- a/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
-+++ b/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
-@@ -3,6 +3,8 @@
- Released under Apache 2.0 license as described in the file LICENSE.
- Authors: Rémy Degenne, Peter Pfaffelhuber
+ Authors: Christian Garry
  -/
-+-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
-+-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
- module
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedDensityRefinement
  
- public import KolmogorovExtension4.RegularContent
-@@ -143,9 +145,10 @@
-   swap; · exact J.measurable_restrict
-   have h_mem : J.restrict ⁻¹' s ∈ measurableCylinders α :=
-     (mem_measurableCylinders _).mpr ⟨J, s, hs, rfl⟩
--  rw [projectiveLimit, AddContent.measure_eq _ _ _ _ h_mem,
--    projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs]
--  exact generateFrom_measurableCylinders.symm
-+  rw [projectiveLimit]
-+  exact (AddContent.measure_eq _ isSetSemiring_measurableCylinders
-+    generateFrom_measurableCylinders.symm (projectiveFamilyContent_iUnion_le_sum hP) h_mem).trans
-+    (projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs)
+ /-!
+@@ -96,7 +99,7 @@
+     ENNReal.ofReal (∫ ω, ∫ e, ∫ s in Set.Icc (0 : ℝ) T, (h ω s e) ^ 2 ∂volume ∂ν ∂P)
+       = ∫⁻ ω, ∫⁻ e, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖h ω s e‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂ν ∂P := by
+   classical
+-  haveI : IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
++  have : IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
+     ⟨by rw [Measure.restrict_apply_univ]; exact measure_Icc_lt_top⟩
+   set vT : ℝ := (volume (Set.Icc (0 : ℝ) T)).toReal with hvT
+   have hvT0 : 0 ≤ vT := ENNReal.toReal_nonneg
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedDensityRectSimple
  
- instance isFiniteMeasure_projectiveLimit (hP : IsProjectiveMeasureFamily P) :
-     IsFiniteMeasure (projectiveLimit P hP) :=
+ /-!
+@@ -51,11 +54,11 @@
+           - ∑ k, c k ω * (B k).indicator (fun _ => (1 : ℝ)) e‖₊ : ℝ≥0∞) ^ 2 ∂ν ∂P ≤ δ := by
+   classical
+   -- finite product measure on the trimmed space.
+-  haveI hPt : IsFiniteMeasure (P.trim hm) := MeasureTheory.isFiniteMeasure_trim hm
+-  haveI hνS : IsFiniteMeasure (ν.restrict S) :=
++  have hPt : IsFiniteMeasure (P.trim hm) := MeasureTheory.isFiniteMeasure_trim hm
++  have hνS : IsFiniteMeasure (ν.restrict S) :=
+     ⟨by rw [Measure.restrict_apply_univ]; exact lt_of_le_of_ne le_top hSfin⟩
+   set μ : @Measure (Ω × E) (m.prod inferInstance) := (P.trim hm).prod (ν.restrict S) with hμ
+-  haveI : IsFiniteMeasure μ := by rw [hμ]; infer_instance
++  have : IsFiniteMeasure μ := by rw [hμ]; infer_instance
+   set f : Ω × E → ℝ := fun q => h q.1 q.2 with hf
+   -- `f ∈ L²(μ)`: bounded on a finite measure.
+   have hmem : MeasureTheory.MemLp f 2 μ := by
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkSum.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkSum.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedDensityBoxIsometry
+ 
+ /-!
+@@ -335,7 +338,7 @@
+         simp [Set.indicator_of_mem, Set.indicator_of_notMem, hs, hns]
+       · simp [Set.indicator_of_notMem hs]
+     · intro h; exact absurd (Finset.mem_univ i) h
+-  haveI hfin : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
++  have hfin : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   have hintg : ∀ i : Fin N₀, MeasureTheory.Integrable
+@@ -555,7 +558,7 @@
+     (hcs : CauchySeq (fun n => (hmem n).toLp (Mₙ n))) :
+     ∃ M : Ω → ℝ, MeasureTheory.MemLp M 2 P ∧
+       Filter.Tendsto (fun n => MeasureTheory.eLpNorm (Mₙ n - M) 2 P) Filter.atTop (nhds 0) := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   obtain ⟨g, hg⟩ := cauchySeq_tendsto_of_complete hcs
+   refine ⟨g, MeasureTheory.Lp.memLp g, ?_⟩
+   rw [← MeasureTheory.Lp.tendsto_Lp_iff_tendsto_eLpNorm'' Mₙ hmem (↑↑g)
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedIntegrandComplete.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedIntegrandComplete.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Brownian.ItoIntegrandComplete
+ import LevyStochCalc.Probability.Progressive
+ 
+@@ -101,7 +104,7 @@
+       ∧ Tendsto (fun n => eLpNorm
+           ((fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2) - g) 2 (markedEnergyMeasure P ν T))
+           atTop (𝓝 0) := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   have hMem : ∀ n, MemLp (fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2) 2
+       (markedEnergyMeasure P ν T) := fun n => memLp_of_markedEnergy_ne_top (hm n) (hfin n)
+   have hcs : CauchySeq fun n => (hMem n).toLp fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2 := by
+@@ -148,7 +151,7 @@
+     Probability.MarkedProgressivelyMeasurable ℱ
+       fun ω s e => limsup (fun k => φ k ω s e) atTop := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hind : (fun p : Ω × ℝ × E => (Set.Iic t).indicator
+         (fun s => limsup (fun k => φ k p.1 s p.2.2) atTop) p.2.1)
+       = fun p : Ω × ℝ × E =>
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleAdapted.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleAdapted.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedSimple
+ import LevyStochCalc.Poisson.CompensatedIsometry
+ import LevyStochCalc.Poisson.CompensatedIsometryL2
+@@ -231,7 +234,7 @@
+       exact compensated_condExp_future_eq_zero N ℱ hℱ hs (hsa_eq ▸ hab_lt) hA hA_fin
+     · have h_base := compensated_condExp_future_eq_zero N ℱ hℱ (le_trans hs hsa) hab_lt hA hA_fin
+       have hm₂a := ℱ.le' a
+-      haveI : SigmaFinite (P.trim hm₂a) := inferInstance
++      have : SigmaFinite (P.trim hm₂a) := inferInstance
+       have h_tower := MeasureTheory.condExp_condExp_of_le (μ := P)
+         (f := fun ω => N.compensated (Set.Ioc a b ×ˢ A) ω)
+         (ℱ.mono hsa) hm₂a
+@@ -404,7 +407,7 @@
+       filter_upwards [hpull, ht_zero] with ω hp hz
+       rw [hp]; simp only [Pi.mul_apply]; rw [hz]; ring
+     have hm₂pc := ℱ.le' (φ.partition i.castSucc)
+-    haveI : SigmaFinite (P.trim hm₂pc) := inferInstance
++    have : SigmaFinite (P.trim hm₂pc) := inferInstance
+     have htower := MeasureTheory.condExp_condExp_of_le (μ := P) (f := ft)
+       (ℱ.mono hpc_s.le) hm₂pc
+     refine htower.symm.trans ((MeasureTheory.condExp_congr_ae hpc_eq_zero).trans ?_)
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcess.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcess.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedApprox
+ 
+ /-!
+@@ -161,7 +164,7 @@
+     Tendsto (fun n => eLpNorm (fun ω => stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n
+       t ω
+       - process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t ω) 2 P) atTop (𝓝 0) := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+   have h1 := stageLp_tendsto N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t
+   have hmem : MemLp (↑↑(processLp N ℱ φ h_meas h_progMeas h_sq_int_global t) : Ω → ℝ) 2 P :=
+     Lp.memLp _
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedPullOut.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedPullOut.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedRange
+ 
+ /-!
+@@ -93,7 +96,7 @@
+     {M : ℝ} (hUb : ∀ ω, |U ω| ≤ M) :
+     ∫ ω, U ω * (stochasticIntegral N ℱ hℱ φ hm hp hq T ω) ^ 2 ∂P
+       = ∫ ω, U ω * compensator ν φ T ω ∂P := by
+-  haveI : SigmaFinite (P.trim (ℱ.rightCont.le a)) := by infer_instance
++  have : SigmaFinite (P.trim (ℱ.rightCont.le a)) := by infer_instance
+   set f : ℝ → Ω → ℝ := fun t ω =>
+     (stochasticIntegral N ℱ hℱ φ hm hp hq t ω) ^ 2 - compensator ν φ t ω with hf
+   have hmart : Martingale f ℱ.rightCont P :=
+--- a/LevyStochCalc/LevyStochCalc/Poisson/CompensatedRange.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/CompensatedRange.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.CompensatedLinear
+ import LevyStochCalc.Brownian.ItoRange
+ 
+@@ -185,7 +188,7 @@
+     ∫ ω, G.integral N hℱ ω ∂P = 0 := by
+   obtain ⟨F, hF⟩ := martingale_stochasticIntegral N ℱ hℱ G.toFun G.measurable_uncurry
+     G.progressive G.sq_int_global
+-  haveI : SigmaFinite (P.trim (F.le 0)) := (isFiniteMeasure_trim (F.le 0)).toSigmaFinite
++  have : SigmaFinite (P.trim (F.le 0)) := (isFiniteMeasure_trim (F.le 0)).toSigmaFinite
+   have hcond := hF.2 0 T hT
+   have hz : stochasticIntegral N ℱ hℱ G.toFun G.measurable_uncurry G.progressive
+       G.sq_int_global 0 =ᵐ[P] 0 :=
+@@ -316,10 +319,10 @@
+     {Z : Ω → ℝ} (hZ2 : MemLp Z 2 P) (hZm : AEStronglyMeasurable[ℱ T] Z P)
+     (hZ0 : ∫ ω, Z ω ∂P = 0) :
+     ∃ G : MarkedHorizonIntegrand P ν ℱ T, Z =ᵐ[P] G.integral N hℱ := by
+-  haveI : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
+-  haveI hcl : IsClosed ((compensatedRange N hℱ hT : Submodule ℝ (Lp ℝ 2 P)) : Set (Lp ℝ 2 P)) :=
++  have : Fact ((1 : ℝ≥0∞) ≤ 2) := ⟨by norm_num⟩
++  have hcl : IsClosed ((compensatedRange N hℱ hT : Submodule ℝ (Lp ℝ 2 P)) : Set (Lp ℝ 2 P)) :=
+     isClosed_compensatedRange N hℱ hT
+-  haveI : CompleteSpace (compensatedRange N hℱ hT) := hcl.completeSpace_coe
++  have : CompleteSpace (compensatedRange N hℱ hT) := hcl.completeSpace_coe
+   obtain ⟨y, hy, z, hz, hyz⟩ :=
+     (compensatedRange N hℱ hT).exists_add_mem_mem_orthogonal (hZ2.toLp Z)
+   obtain ⟨G₀, hG₀⟩ := hy
+--- a/LevyStochCalc/LevyStochCalc/Poisson/PoissonSuperposition.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/PoissonSuperposition.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Poisson.PoissonSplitting
+ import LevyStochCalc.Probability.IndepGrouping
+ import Mathlib.Probability.Independence.CharacteristicFunction
+@@ -39,7 +42,7 @@
+ 
+ instance (r : ℝ≥0) (ρ : Measure 𝓧) [IsProbabilityMeasure ρ] :
+     IsProbabilityMeasure (pieceLaw r ρ) := by
+-  haveI : IsProbabilityMeasure (Po(r).map ULift.up) :=
++  have : IsProbabilityMeasure (Po(r).map ULift.up) :=
+     Measure.isProbabilityMeasure_map measurable_up.aemeasurable
+   unfold pieceLaw
+   infer_instance
+@@ -501,7 +504,7 @@
+   have hset : {ω : ι → PieceSpace 𝓧 | ¬ superposition ω B = ⊤}
+       = ⋃ k : ℕ, {ω | superposition ω B ≤ k} := by
+     ext ω
+-    simp only [Set.mem_setOf_eq, Set.mem_iUnion]
++    simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
+     constructor
+     · intro h
+       refine ⟨⌈(superposition ω B).toReal⌉₊, (ENNReal.ofReal_toReal h).symm.le.trans ?_⟩
+--- a/LevyStochCalc/LevyStochCalc/Poisson/RandomMeasure.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/RandomMeasure.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Basic
+ import LevyStochCalc.Poisson.PoissonSuperposition
+ import LevyStochCalc.Poisson.RegionIndependence
+@@ -217,7 +220,7 @@
+   let ι := {q : ℕ × ℕ // Λ (A q) ≠ 0}
+   let r : ι → ℝ≥0 := fun p => (Λ (A p.1)).toNNReal
+   let ρ : ι → Measure (ℝ × E) := fun p => (Λ (A p.1))⁻¹ • Λ.restrict (A p.1)
+-  haveI : ∀ p, IsProbabilityMeasure (ρ p) := fun p => ⟨by
++  have : ∀ p, IsProbabilityMeasure (ρ p) := fun p => ⟨by
+     change ((Λ (A p.1))⁻¹ • Λ.restrict (A p.1)) Set.univ = 1
+     rw [Measure.smul_apply, Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,
+       smul_eq_mul, ENNReal.inv_mul_cancel p.2 (hA_fin p.1)]⟩
+--- a/LevyStochCalc/LevyStochCalc/Poisson/RegionIndependence.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/RegionIndependence.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import Mathlib.Probability.Independence.Basic
+ import LevyStochCalc.Poisson.RegionPartition
+ import LevyStochCalc.Probability.IndepJoin
+@@ -42,7 +45,7 @@
+     refine MeasurableSet.inter ?_ (MeasurableSet.iUnion hC)
+     have : {x | ∀ i, x ∈ C i ↔ i ∈ S} = ⋂ i, (if i ∈ S then C i else (C i)ᶜ) := by
+       ext x
+-      simp only [Set.mem_setOf_eq, Set.mem_iInter]
++      simp only [Set.mem_ofPred_eq, Set.mem_iInter]
+       refine forall_congr' fun i => ?_
+       by_cases h : i ∈ S <;> simp [h]
+     rw [this]
+@@ -99,7 +102,7 @@
+   · refine iSup_le fun i => ?_
+     rw [hcount i]
+     refine Measurable.comap_le ?_
+-    letI : MeasurableSpace Ω :=
++    let : MeasurableSpace Ω :=
+       ⨆ o ∈ Set.range (fun S : Finset (Fin n) => some S),
+         MeasurableSpace.comap (fun ω => N ω (F o)) inferInstance
+     exact Finset.measurable_sum _ fun S _ =>
+@@ -187,7 +190,7 @@
+       funext fun ω => measure_eq_sum_partitionAtom (N ω) hD j
+     rw [hcount]
+     refine Measurable.comap_le ?_
+-    letI : MeasurableSpace Ω :=
++    let : MeasurableSpace Ω :=
+       ⨆ o ∈ Set.range (Sum.inr : Finset (Fin p) → Finset (Fin n) ⊕ Finset (Fin p)),
+         MeasurableSpace.comap (fun ω => N ω (F o)) inferInstance
+     exact Finset.measurable_sum _ fun T _ =>
+@@ -199,7 +202,7 @@
+       funext fun ω => measure_eq_sum_partitionAtom (N ω) hC i
+     rw [hcount]
+     refine Measurable.comap_le ?_
+-    letI : MeasurableSpace Ω :=
++    let : MeasurableSpace Ω :=
+       ⨆ o ∈ Set.range (Sum.inl : Finset (Fin n) → Finset (Fin n) ⊕ Finset (Fin p)),
+         MeasurableSpace.comap (fun ω => N ω (F o)) inferInstance
+     exact Finset.measurable_sum _ fun S _ =>
+--- a/LevyStochCalc/LevyStochCalc/Poisson/RegionPartition.lean
++++ b/LevyStochCalc/LevyStochCalc/Poisson/RegionPartition.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import Mathlib.MeasureTheory.Measure.MeasureSpace
+ 
+ /-!
+@@ -39,7 +42,7 @@
+   refine MeasurableSet.inter ?_ (MeasurableSet.iUnion hC)
+   have h : {x | ∀ i, x ∈ C i ↔ i ∈ S} = ⋂ i, (if i ∈ S then C i else (C i)ᶜ) := by
+     ext x
+-    simp only [Set.mem_setOf_eq, Set.mem_iInter]
++    simp only [Set.mem_ofPred_eq, Set.mem_iInter]
+     refine forall_congr' fun i => ?_
+     by_cases h : i ∈ S <;> simp [h]
+   rw [h]
+--- a/LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean
++++ b/LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import Mathlib.Probability.Process.Stopping
+ import Mathlib.Data.Rat.Denumerable
+ import Mathlib.Topology.Order.Compact
+@@ -46,7 +49,7 @@
+     IsClosed (exitSet X k ω) := by
+   have h : exitSet X k ω = Set.Ici (0 : ℝ) ∩ (fun r => ‖X ω r‖) ⁻¹' Set.Ici k := by
+     ext r
+-    simp only [exitSet, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_Ici, Set.mem_preimage]
++    simp only [exitSet, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_Ici, Set.mem_preimage]
+   rw [h]
+   exact isClosed_Ici.inter (isClosed_Ici.preimage hX.norm)
+ 
+@@ -143,7 +146,7 @@
+ theorem measurable_norm_of_adapted [MeasurableSpace E] [OpensMeasurableSpace E]
+     {ℱ : Filtration ℝ mΩ} {X : Ω → ℝ → E} (hadapt : Adapted ℱ fun r ω => X ω r) (r : ℝ) :
+     Measurable[ℱ r] fun ω => ‖X ω r‖ := by
+-  letI : MeasurableSpace Ω := ℱ r
++  let : MeasurableSpace Ω := ℱ r
+   exact Measurable.norm (hadapt r)
+ 
+ theorem measurableSet_exitTime_le {ℱ : Filtration ℝ mΩ} [MeasurableSpace E]
+@@ -153,7 +156,7 @@
+   rcases lt_or_ge t 0 with ht | ht
+   · have hempty : {ω | exitTime X k ω ≤ (t : WithTop ℝ)} = (∅ : Set Ω) := by
+       ext ω
+-      simp only [Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false]
++      simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
+       intro hle
+       obtain ⟨s, hs, -⟩ := (exitTime_le_iff (hcont ω) k t).1 hle
+       exact absurd (hs.1.trans hs.2) (not_le.2 ht)
+@@ -162,13 +165,13 @@
+   · have hset : {ω | exitTime X k ω ≤ (t : WithTop ℝ)}
+         = ⋂ n : ℕ, ⋃ m : ℕ, {ω | k - ((n : ℝ) + 1)⁻¹ < ‖X ω (gridPt t m)‖} := by
+       ext ω
+-      simp only [Set.mem_setOf_eq, Set.mem_iInter, Set.mem_iUnion]
++      simp only [Set.mem_ofPred_eq, Set.mem_iInter, Set.mem_iUnion]
+       exact exitTime_le_iff_forall (hcont ω) k ht
+     rw [hset]
+     have hmeas : ∀ m : ℕ, Measurable[ℱ t] fun ω => ‖X ω (gridPt t m)‖ := fun m =>
+       (measurable_norm_of_adapted hadapt (gridPt t m)).mono
+         (ℱ.mono (gridPt_mem_Icc ht m).2) le_rfl
+-    letI : MeasurableSpace Ω := ℱ t
++    let : MeasurableSpace Ω := ℱ t
+     exact MeasurableSet.iInter fun n => MeasurableSet.iUnion fun m =>
+       measurableSet_lt measurable_const (hmeas m)
+ 
+--- a/LevyStochCalc/LevyStochCalc/Probability/IndepLimit.lean
++++ b/LevyStochCalc/LevyStochCalc/Probability/IndepLimit.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import Mathlib.Probability.Independence.Integration
+ import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
+ import Mathlib.MeasureTheory.Integral.DominatedConvergence
+@@ -35,7 +38,7 @@
+     change Indep (MeasurableSpace.comap _ _) (MeasurableSpace.comap _ _) P
+     refine indep_of_indep_of_le_right (indep_of_indep_of_le_left hind ?_) ?_
+     · have hmeas : Measurable[m] (A.indicator (1 : Ω → ℝ)) := by
+-        letI := m
++        let := m
+         exact measurable_const.indicator hA
+       exact hmeas.comap_le
+     · rw [show (fun ω => f (X ω)) = f ∘ X from rfl, ← MeasurableSpace.comap_comp]
+@@ -62,7 +65,7 @@
+   intro A B hA hB
+   obtain ⟨S, hS, rfl⟩ := hB
+   have hA' : MeasurableSet[mΩ] A := hm _ hA
+-  haveI : IsFiniteMeasure ((P A) • P.map Y) :=
++  have : IsFiniteMeasure ((P A) • P.map Y) :=
+     ⟨by simpa [Measure.smul_apply] using
+       ENNReal.mul_lt_top (measure_lt_top P A) (measure_lt_top (P.map Y) Set.univ)⟩
+   have hbound : ∀ (Z : Ω → 𝓧), Measurable[mΩ] Z → ∀ f : 𝓧 →ᵇ ℝ,
+--- a/LevyStochCalc/LevyStochCalc/Probability/MartingaleDifference.lean
++++ b/LevyStochCalc/LevyStochCalc/Probability/MartingaleDifference.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import Mathlib.Probability.Martingale.Basic
+ 
+ /-!
+@@ -51,8 +54,8 @@
+ /-- A partial sum of martingale differences is orthogonal to the next difference. -/
+ theorem integral_sum_mul_of_condExp_eq_zero (n : ℕ) :
+     ∫ ω, (∑ i ∈ Finset.range n, Y i ω) * Y n ω ∂P = 0 := by
+-  haveI : SigmaFinite (P.trim (h𝒢le n)) := by
+-    haveI : IsFiniteMeasure (P.trim (h𝒢le n)) :=
++  have : SigmaFinite (P.trim (h𝒢le n)) := by
++    have : IsFiniteMeasure (P.trim (h𝒢le n)) :=
+       ⟨by rw [MeasureTheory.trim_measurableSet_eq (h𝒢le n) MeasurableSet.univ]
+           exact measure_lt_top P Set.univ⟩
+     infer_instance
+--- a/LevyStochCalc/LevyStochCalc/Probability/Progressive.lean
++++ b/LevyStochCalc/LevyStochCalc/Probability/Progressive.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import Mathlib.Probability.Process.Adapted
+ import Mathlib.MeasureTheory.Integral.Prod
+ import Mathlib.MeasureTheory.Integral.Bochner.Set
+@@ -43,7 +46,7 @@
+ /-- A progressively measurable process is adapted. -/
+ theorem stronglyMeasurable_eval (h : ProgressivelyMeasurable ℱ H) (t : ℝ) :
+     StronglyMeasurable[ℱ t] fun ω => H ω t := by
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have := (h t).comp_measurable (measurable_prodMk_right (y := t))
+   simpa [Function.comp_def] using this
+ 
+@@ -69,7 +72,7 @@
+ theorem minTime (h : ProgressivelyMeasurable ℱ H) (T : ℝ) :
+     ProgressivelyMeasurable ℱ fun ω s => H ω (min s T) := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hmono : ℱ (min t T) ≤ ℱ t := ℱ.mono (min_le_left t T)
+   have hG : StronglyMeasurable fun q : Ω × ℝ => (Set.Iic (min t T)).indicator (H q.1) q.2 :=
+     (h (min t T)).mono (sup_le_sup (MeasurableSpace.comap_mono hmono) le_rfl)
+@@ -94,7 +97,7 @@
+ theorem isStronglyProgressive (h : ProgressivelyMeasurable ℱ H) :
+     IsStronglyProgressive ℱ fun s ω => H ω s := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have he : Measurable fun q : Set.Iic t × Ω => (q.2, (q.1 : ℝ)) :=
+     measurable_snd.prodMk (measurable_subtype_coe.comp measurable_fst)
+   have := (h t).comp_measurable he
+@@ -110,7 +113,7 @@
+ theorem of_isStronglyProgressive (h : IsStronglyProgressive ℱ fun s ω => H ω s) :
+     ProgressivelyMeasurable ℱ H := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   let e : Ω × ℝ → Set.Iic t × Ω := fun p => (⟨min p.2 t, Set.mem_Iic.mpr (min_le_right _ _)⟩, p.1)
+   have he : Measurable e :=
+     ((measurable_snd.min measurable_const).subtype_mk).prodMk measurable_fst
+@@ -209,7 +212,7 @@
+ theorem ProgressivelyMeasurable.stronglyMeasurable_setIntegral (h : ProgressivelyMeasurable ℱ H)
+     {t : ℝ} {S : Set ℝ} (hS : MeasurableSet S) (hSt : S ⊆ Set.Iic t) (μ : Measure ℝ)
+     [SFinite μ] : StronglyMeasurable[ℱ t] fun ω => ∫ s in S, H ω s ∂μ := by
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have h1 : StronglyMeasurable fun ω => ∫ s in S, (Set.Iic t).indicator (H ω) s ∂μ :=
+     (h t).integral_prod_right' (ν := μ.restrict S)
+   have : (fun ω => ∫ s in S, H ω s ∂μ)
+@@ -257,7 +260,7 @@
+     (hS : MeasurableSet S) :
+     MarkedProgressivelyMeasurable ℱ fun ω s e => S.indicator (fun _ => φ ω s e) e := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have : (fun p : Ω × ℝ × E =>
+         (Set.Iic t).indicator (fun s => S.indicator (fun _ => φ p.1 s p.2.2) p.2.2) p.2.1)
+       = {p : Ω × ℝ × E | p.2.2 ∈ S}.indicator
+@@ -274,7 +277,7 @@
+     (hS : MeasurableSet S) :
+     MarkedProgressivelyMeasurable ℱ fun ω s e => S.indicator (fun _ => φ ω s e) s := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hrw : (fun p : Ω × ℝ × E =>
+         (Set.Iic t).indicator (fun s => S.indicator (fun _ => φ p.1 s p.2.2) s) p.2.1)
+       = {p : Ω × ℝ × E | p.2.1 ∈ S}.indicator
+@@ -300,7 +303,7 @@
+     (hSt : S ⊆ Set.Iic t) (μ : Measure ℝ) [SFinite μ] :
+     @StronglyMeasurable (Ω × E) F _ (@Prod.instMeasurableSpace Ω E (ℱ t) inferInstance)
+       fun q : Ω × E => ∫ s in S, φ q.1 s q.2 ∂μ := by
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hr : Measurable fun r : (Ω × E) × ℝ => (r.1.1, r.2, r.1.2) :=
+     (measurable_fst.comp measurable_fst).prodMk
+       (measurable_snd.prodMk (measurable_snd.comp measurable_fst))
+@@ -321,7 +324,7 @@
+     (h : MarkedProgressivelyMeasurable ℱ φ) {t : ℝ} {S : Set ℝ} (hS : MeasurableSet S)
+     (hSt : S ⊆ Set.Iic t) (μ : Measure ℝ) [SFinite μ] (ν : Measure E) [SFinite ν] :
+     StronglyMeasurable[ℱ t] fun ω => ∫ s in S, ∫ e, φ ω s e ∂ν ∂μ := by
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have h1 : StronglyMeasurable fun r : (Ω × ℝ) × E =>
+       (Set.Iic t).indicator (fun s => φ r.1.1 s r.2) r.1.2 :=
+     (h t).comp_measurable MeasurableEquiv.prodAssoc.measurable
+@@ -350,7 +353,7 @@
+     (h : ∀ k, ProgressivelyMeasurable ℱ (H k)) :
+     ProgressivelyMeasurable ℱ fun ω s => Filter.limsup (fun k => H k ω s) Filter.atTop := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have hind : (fun p : Ω × ℝ =>
+         (Set.Iic t).indicator (fun s => Filter.limsup (fun k => H k p.1 s) Filter.atTop) p.2)
+       = fun p : Ω × ℝ =>
+--- a/LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean
++++ b/LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Probability.Progressive
+ import Mathlib.MeasureTheory.Function.Floor
+ import Mathlib.MeasureTheory.Integral.Prod
+@@ -94,7 +97,7 @@
+     ProgressivelyMeasurable ℱ (fun ω s => X s ω) := by
+   refine ProgressivelyMeasurable.of_isStronglyProgressive ?_
+   intro i
+-  letI : MeasurableSpace Ω := ℱ i
++  let : MeasurableSpace Ω := ℱ i
+   -- the staircase, as a function of a dyadic index and the sample point
+   have hslice : ∀ (n : ℕ) (k : ℤ),
+       Measurable fun ω : Ω => X (min ((k : ℝ) / 2 ^ n) i) ω := by
+@@ -197,8 +200,8 @@
+     {ℱ : MeasureTheory.Filtration ℝ ‹MeasurableSpace Ω›} {H : Ω → ℝ → ℝ}
+     (h : ProgressivelyMeasurable ℱ H) (t : ℝ) :
+     Measurable[ℱ t] fun ω => ∫ s in Set.Icc (0 : ℝ) t, H ω s ∂volume := by
+-  letI : MeasurableSpace Ω := ℱ t
+-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
++  let : MeasurableSpace Ω := ℱ t
++  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) t)) :=
+     ⟨by rw [MeasureTheory.Measure.restrict_apply_univ, Real.volume_Icc]
+         exact ENNReal.ofReal_lt_top⟩
+   have hind : Measurable fun ω : Ω =>
+--- a/LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean
++++ b/LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean
+@@ -3,6 +3,9 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
++-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
++
+ import LevyStochCalc.Probability.Progressive
+ import Mathlib.Probability.Process.Stopping
+ 
+@@ -42,7 +45,7 @@
+ theorem measurableSet_stoppedRegion {ℱ : Filtration ℝ mΩ} {τ : Ω → WithTop ℝ}
+     (hτ : MeasureTheory.IsStoppingTime ℱ τ) (t : ℝ) :
+     MeasurableSet[@Prod.instMeasurableSpace Ω ℝ (ℱ t) inferInstance] (stoppedRegion τ t) := by
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   set U : Set (Ω × ℝ) := ⋃ q : ℚ, {ω : Ω | τ ω ≤ ((min (q : ℝ) t : ℝ) : WithTop ℝ)}
+     ×ˢ (Set.Ioi (q : ℝ) ∩ Set.Iic t) with hUdef
+   have hU : MeasurableSet[@Prod.instMeasurableSpace Ω ℝ (ℱ t) inferInstance] U := by
+@@ -89,7 +92,7 @@
+     (hH : ProgressivelyMeasurable ℱ H) :
+     ProgressivelyMeasurable ℱ (LevyStochCalc.Probability.stopped τ H) := by
+   intro t
+-  letI : MeasurableSpace Ω := ℱ t
++  let : MeasurableSpace Ω := ℱ t
+   have key : (fun p : Ω × ℝ =>
+         (Set.Iic t).indicator (LevyStochCalc.Probability.stopped τ H p.1) p.2)
+       = Set.indicator (stoppedRegion τ t)
+@@ -118,7 +121,7 @@
+   have hcompl : (stoppedSet τ)ᶜ
+       = ⋃ q : ℚ, {ω : Ω | τ ω ≤ ((q : ℝ) : WithTop ℝ)} ×ˢ Set.Ioi (q : ℝ) := by
+     ext p
+-    simp only [stoppedSet, Set.mem_compl_iff, Set.mem_setOf_eq, not_le, Set.mem_iUnion,
++    simp only [stoppedSet, Set.mem_compl_iff, Set.mem_ofPred_eq, not_le, Set.mem_iUnion,
+       Set.mem_prod, Set.mem_Ioi]
+     constructor
+     · intro hlt

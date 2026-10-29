@@ -4,7 +4,7 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 # Actual-source first weak Monge–Ampère identity
 
 Letwin arXiv:2607.24164v1 (2.4), first derivative only. This client
-retains every field of the source-law tensor producer, verifies the new
+retains every field of the source-law tensor producer, verifies the
 determinant/logarithmic weak identities, and recovers the original interface.
 No C2 regularity or given tensor is supplied. The second evolution identity,
 trace-square bound, Brascamp–Lieb and constant-8 conclusions remain open.

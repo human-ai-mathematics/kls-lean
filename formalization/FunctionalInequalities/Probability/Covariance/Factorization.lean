@@ -1,5 +1,5 @@
 import FunctionalInequalities.Probability.Covariance.Basic
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!

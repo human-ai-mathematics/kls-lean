@@ -1,0 +1,367 @@
+{
+  "version": 1,
+  "review_date": "2026-10-28",
+  "status": "source cleanup complete and verified: snapshot build, audit clients, interface comparison, evidence refresh and full research/verify.py passed (2026-10-28)",
+  "verification_state": {
+    "lean_build": "passed in the isolated snapshot /private/tmp/kls-batch4-check (main-tree Lean sources at 2026-10-28 ~03:45 CST, including batch 4 and the concurrent Letwin files): lake build of all default targets, 4896 jobs, exit 0, no warnings",
+    "audit_clients": "strict (-DwarningAsError=true) elaboration of research/audits/SourceLayout/PrivatePromotionMergers.lean passed in the snapshot; nine printed axiom reports standard (propext, Classical.choice, Quot.sound); removed-name absence and owner-module checks passed",
+    "axiom_audit": "full declaration audit passed within the research/verify.py receipt above",
+    "kernel_replay": "passed within the research/verify.py receipt above",
+    "research_verify_py": "research/verify.py (full scope) passed: receipt build/verification/20261027T192312.895493Z/report.json, snapshot sha256 c36595e15784c17ebffa9d725ce9b54f7496ba98221aff20027d6deccfbbfad0, 438 gates, 423 strict research audit clients, 11902 local declarations axiom-audited (standard axioms), 1091 modules kernel-replayed (leanchecker). The receipt certifies that snapshot only; later edits (including this status text) are outside it.",
+    "interface_comparison": "passed for batches 4 and 5 together: compiler-derived dump of every FunctionalInequalities constant (type hash, definition value hash, universe parameters) in a baseline snapshot with the pre-batch-4/5 sources restored versus the edited snapshot. Public delta exactly: owner moves hasDerivAt_line (Bochner.Basic → Calculus) and thickening_preimage_isometry (Line.Buser → Cheeger.Equality) with identical type hashes; added fderiv_eq_zero_of_supported, mul_mem_fixingOutside, inv_mem_fixingOutside, inner_basisFun_toEuclideanLin, two_mul_sqrt_div_pi_le_sqrt_two_mul, eq_of_strictConvexOn_of_support; removed Isoperimetry.liminf_coe_mul, limsup_coe_mul. Private delta exactly the recorded removals and promotions (plus their auxiliary _simp lemmas). No other declaration changed type or definition value. Dumps: build/history/2026-10-28-private-promotion-batch5/interface/"
+  },
+  "scope": "Batch 5 of the private duplicate cleanup: groups retained in cross-file-private-reuse-merge-map.json whose lower copy is already in every consumer's import closure, plus the two public Mathlib duplicates in Cheeger/MinkowskiContent. No new import, no hypothesis, instance, constant, normalization or dimension change; no compatibility alias. Owner asleep; judgment delegated (2026-10-28).",
+  "literature_targets": "unchanged; no paper coverage, proof progress or certificate status changes",
+  "placement_plan": "build/history/2026-10-28-private-promotion-batch5/PLAN.md",
+  "new_public_declarations": [
+    {
+      "name": "FunctionalInequalities.Analysis.WaveSplitting.fderiv_eq_zero_of_supported",
+      "source": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Residual.lean",
+      "class": "promotion of the existing private lemma in place (docstring added, statement and proof unchanged)"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.Tensor.mul_mem_fixingOutside",
+      "source": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+      "class": "promotion in place"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.Tensor.inv_mem_fixingOutside",
+      "source": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+      "class": "promotion in place"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.inner_basisFun_toEuclideanLin",
+      "old_private_name": "quadraticAt_basis_entry",
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean",
+      "class": "promotion in place with a descriptive name (statement is a general matrix-entry identity)"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_sqrt_div_pi_le_sqrt_two_mul",
+      "old_private_name": "pi_coefficient_le",
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Approximation.lean",
+      "class": "promotion in place with a descriptive name"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.eq_of_strictConvexOn_of_support",
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+      "class": "promotion in place (InnerProduct section, no FiniteDimensional)"
+    }
+  ],
+  "removed_public_declarations": [
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.liminf_coe_mul",
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+      "replacement": "ENNReal.liminf_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top",
+      "replacement_source": "pinned Mathlib db584cd6d46c92f209a44c0f1c829460d327499d: Mathlib/Order/Filter/ENNReal.lean",
+      "contract_basis": "Same [NeBot] instance, same codomain; c : ℝ≥0 specialises a ≠ ⊤.",
+      "consumers": [
+        "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean: minkowskiContent_smul",
+        "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean: relaxedMinkowskiContent_smul_le, relaxedUpperMinkowskiContent_smul_le"
+      ],
+      "compatibility_alias": false
+    },
+    {
+      "name": "FunctionalInequalities.KLS.Isoperimetry.limsup_coe_mul",
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+      "replacement": "ENNReal.limsup_const_mul_of_ne_top (a := (c : ℝ≥0∞)) ENNReal.coe_ne_top",
+      "replacement_source": "pinned Mathlib db584cd6d46c92f209a44c0f1c829460d327499d: Mathlib/Order/Filter/ENNReal.lean",
+      "contract_basis": "Mathlib statement needs no NeBot (strictly more general); same codomain.",
+      "consumers": [
+        "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/UpperMinkowskiContent.lean: upperMinkowskiContent_smul"
+      ],
+      "compatibility_alias": false
+    }
+  ],
+  "owner_moves": [],
+  "private_mergers": [
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WaveSplitting.Compatibility.0.FunctionalInequalities.Analysis.WaveSplitting.fderiv_eq_zero_of_supported",
+      "replacement_name": "FunctionalInequalities.Analysis.WaveSplitting.fderiv_eq_zero_of_supported",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/Compatibility.lean"
+      ],
+      "contract_basis": "identical text: [NormedAddCommGroup E] [NormedSpace ℝ E], f : E → ℝ, (hf : ∀ y, R < ‖y‖ → f y = 0) (hx : R < ‖x‖) : fderiv ℝ f x = 0; Compatibility imports Residual transitively",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WaveSplitting.AverageError.0.FunctionalInequalities.Analysis.WaveSplitting.fderiv_eq_zero_of_vanishing",
+      "replacement_name": "FunctionalInequalities.Analysis.WaveSplitting.fderiv_eq_zero_of_supported",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Analysis/WaveSplitting/AverageError.lean (2)"
+      ],
+      "contract_basis": "identical statement under a different name",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.PoissonIterate.Defect.0.FunctionalInequalities.KLS.LogConcave.PoissonIterate.contDiff_two",
+      "replacement_name": "inline term hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean (5)"
+      ],
+      "contract_basis": "the deleted body verbatim, elaborated against the same expected type ContDiff ℝ 2 U (type ascription added on the two `have`s); project-wide idiom",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry.0.FunctionalInequalities.KLS.LogConcave.PoissonIterate.contDiff_two",
+      "replacement_name": "inline term hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Symmetry.lean (1)"
+      ],
+      "contract_basis": "as above",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion.0.FunctionalInequalities.KLS.LogConcave.PoissonIterate.contDiff_two'",
+      "replacement_name": "inline term hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean (1)"
+      ],
+      "contract_basis": "as above",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion.0.FunctionalInequalities.KLS.LogConcave.PoissonIterate.mul_mem_fixingOutside'",
+      "replacement_name": "FunctionalInequalities.Analysis.Tensor.mul_mem_fixingOutside",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean (4)"
+      ],
+      "contract_basis": "identical: {Ω} [Fintype Ω] [DecidableEq Ω], σ τ ∈ fixingOutside s → σ * τ ∈ fixingOutside s; Analysis.Tensor opened",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion.0.FunctionalInequalities.KLS.LogConcave.PoissonIterate.inv_mem_fixingOutside'",
+      "replacement_name": "FunctionalInequalities.Analysis.Tensor.inv_mem_fixingOutside",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean (2)"
+      ],
+      "contract_basis": "identical (owner writes (σ⁻¹ : Equiv.Perm Ω), same term)",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.mean_hessian_basis_entry",
+      "replacement_name": "FunctionalInequalities.Analysis.inner_basisFun_toEuclideanLin",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean (1)"
+      ],
+      "contract_basis": "identical statement and proof text; explicit {n} binder shadows the section n, no section hypothesis included",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Perimeter.0.FunctionalInequalities.KLS.LogConcave.HeatSemigroup.pi_coefficient_le",
+      "replacement_name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_sqrt_div_pi_le_sqrt_two_mul",
+      "call_sites": [
+        "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean (2)"
+      ],
+      "contract_basis": "identical statement and proof; Perimeter imports Approximation",
+      "compatibility_alias": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity.0.FunctionalInequalities.Analysis.eq_of_common_supporting_slope",
+      "replacement_name": "FunctionalInequalities.Analysis.eq_of_strictConvexOn_of_support",
+      "call_sites": [
+        "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean (1)"
+      ],
+      "contract_basis": "identical statement: [NormedAddCommGroup E] [InnerProductSpace ℝ E], StrictConvexOn ℝ univ u, two supporting inequalities with common slope p ⊢ x = z; MomentRegularity imports TruncatedConjugate directly",
+      "compatibility_alias": false
+    }
+  ],
+  "retained_groups": [
+    {
+      "declarations": [
+        "Analysis/HessianRegularity.lean isClosed_psd_for_equation; Analysis/Matrix/RankOneFrame.lean isClosed_posSemidef_real"
+      ],
+      "reason": "Neither module imports the other; sharing needs a new owner/import edge."
+    },
+    {
+      "declarations": [
+        "KLS/BKL/Localization/{Energy/Generator,Lyapunov/Basic}.lean covariance C² lemmas"
+      ],
+      "reason": "Neither module imports the other."
+    },
+    {
+      "declarations": [
+        "Analysis/BakryEmery/Calculus.lean and Analysis/Convex/Pogorelov.lean: private abbrev D, smooth_D_at, D_congr"
+      ],
+      "reason": "Private definition; identifying definitions changes interfaces of downstream private lemmas; owner decision."
+    },
+    {
+      "declarations": [
+        "Probability/Posterior/{JointRegularity,LogPartition}.lean parameterScore/partitionParameterScore"
+      ],
+      "reason": "Private definitions; interface change."
+    },
+    {
+      "declarations": [
+        "Remaining contract-different groups of cross-file-private-reuse-merge-map.json (Newtonian volume_ball_le_*, Alexandrov strict_tangent_gap_of_local, hessian_comp_equiv_of_contDiffAt, locallyIntegrable_mul_of_memLp_top, integral_sq_le_of_integrable, contDiff_fderiv_apply, fderiv_sum_apply, fderiv_exp_neg_apply, OperatorCore cutoff, InteriorRegularity, ConditionalFiber)"
+      ],
+      "reason": "Real contract differences or missing import edges, unchanged from batch 4."
+    },
+    {
+      "declarations": [
+        "KLS/Letwin/HessianTrace.lean helpers copied from KLS/Letwin/MomentCalculus.lean"
+      ],
+      "reason": "Owned by the concurrent Letwin session, which schedules its own deduplication."
+    }
+  ],
+  "affected_modules": [
+    "formalization/FunctionalInequalities/Analysis/WaveSplitting/Residual.lean",
+    "formalization/FunctionalInequalities/Analysis/WaveSplitting/Compatibility.lean",
+    "formalization/FunctionalInequalities/Analysis/WaveSplitting/AverageError.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Symmetry.lean",
+    "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean",
+    "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean",
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Approximation.lean",
+    "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/TruncatedConjugate.lean",
+    "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/MomentRegularity.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/UpperMinkowskiContent.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
+  ],
+  "maintained_clients": [
+    "research/audits/SourceLayout/PrivatePromotionMergers.lean"
+  ],
+  "existing_clients_to_recheck": [
+    "all research/audits clients importing the affected modules (covered by research/verify.py)"
+  ],
+  "pending_index_updates": [
+    "formalization/API.md (generated)",
+    "formalization/MODULES.md (declaration-free module descriptions; recheck)"
+  ],
+  "evidence_reassessment": [
+    {
+      "node": "thm:logconcave-cheeger-poincare-comparison",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Approximation.lean",
+      "recorded_sha256": "f93994fcb9ff1339dce89f4a0c2c9d3ec7607f919395efd936a56815fee6d67c",
+      "baseline_sha256": "f93994fcb9ff1339dce89f4a0c2c9d3ec7607f919395efd936a56815fee6d67c",
+      "current_sha256": "c0b3c13a02004794efb988a634f68c243f89280866bce309daf6fe67a9021310",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "c0b3c13a02004794efb988a634f68c243f89280866bce309daf6fe67a9021310"
+    },
+    {
+      "node": "thm:logconcave-cheeger-poincare-comparison",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+      "recorded_sha256": "b228d4cd41ce0dbf021cf20234b7961be1c7da6110953dbd06c563f0a4333307",
+      "baseline_sha256": "b228d4cd41ce0dbf021cf20234b7961be1c7da6110953dbd06c563f0a4333307",
+      "current_sha256": "c2c551143a593aab04772126d487157b6a65cbce70b48296d7ea2d7d78e9dace",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "c2c551143a593aab04772126d487157b6a65cbce70b48296d7ea2d7d78e9dace"
+    },
+    {
+      "node": "lem:relative-perimeter-smoothing",
+      "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+      "recorded_sha256": "c942620635e0c59b449446dba865f44aa8b3cfaf8cc35608cfc589987c76be78",
+      "baseline_sha256": "c942620635e0c59b449446dba865f44aa8b3cfaf8cc35608cfc589987c76be78",
+      "current_sha256": "a501f9356c6d38ece8725050e14094ce09bc1616cf63ab68af8e2a66922cf43f",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "a501f9356c6d38ece8725050e14094ce09bc1616cf63ab68af8e2a66922cf43f"
+    },
+    {
+      "node": "lem:letwin-weak-regular-moment-potential",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-tensor",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-first-ma",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-inverse",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-mean-hessian",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-hessian-evolution",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-bounded-hessian-testing",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-weak-cutoffs",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "lem:letwin-regular-moment-bounded-weak-cutoff-testing",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    },
+    {
+      "node": "thm:letwin-regular-moment-weak-stein-coupling",
+      "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "recorded_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "baseline_sha256": "b609fffbdbe11fd243ce9442cb04ea44d1c6e312ca7ae0cf866669d50d342c93",
+      "current_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d",
+      "recorded_matches_baseline": true,
+      "status": "refreshed 2026-10-28 after snapshot build and interface comparison (no statement change in the pinned module beyond the recorded delta); research/atlas.py check passes",
+      "refreshed_sha256": "010e57bfff266354fd6f29987d4d799e4e1e2453bc72076e590f8fe22cb6fb4d"
+    }
+  ],
+  "review": "Source reading by Claude (Opus 5.5), 2026-10-28 03:10–03:45 CST; baselines and task-only patch under build/history/2026-10-28-private-promotion-batch5"
+}

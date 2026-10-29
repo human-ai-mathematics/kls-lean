@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
 import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
 import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.KLS.Geometry.SmoothDomain.RegularSuperlevel
+import FunctionalInequalities.Analysis.SmoothDomain.RegularSuperlevel
 import FunctionalInequalities.Analysis.Coarea.Lipschitz
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
@@ -71,6 +71,12 @@ a log-concave `μ` through `KLS.LogConcave.exists_isBorellDensity`.  Consequentl
 (`constant_eq_smoothConstant_intrinsic`), for a log-concave `μ` the affine-support isoperimetric
 constant `h_μ` of `def:isoperimetric-cheeger-scale` equals `h_ν^{sm,rel}`, and the inverse scales
 agree (`inverseScale_eq_inv_smoothConstant_intrinsic`).
+
+Ambient convention: `smoothConstant_univ_le_minkowskiConstant` runs the same argument with the
+boundary charged everywhere, so `minkowskiConstant_eq_smoothConstant_univ` gives
+`h_M = h_S(Set.univ)`; with `smoothConstant_mono` both relative infima agree. Under full affine
+support, `constant_eq_minkowskiConstant` identifies `h_μ` with the ambient `h_M(μ)` through the
+measure-preserving isometry invariance `minkowskiConstant_eq_of_isometryEquiv`.
 
 Not claimed: any relation between `ν⁺(B)` and `P_ρ(B)` for an individual set ("The statement
 compares infima, not the two perimeters of each test set"), the BV-perimeter identification of
@@ -197,6 +203,43 @@ theorem lintegral_enorm_gradient_eq_lintegral_levelSet_density {ν : Probability
 
 /-! ### The two coarea inequalities -/
 
+/-- Weighted coarea and Sard for the smooth infimum relative to an arbitrary charged region
+`Ω`: `h_S(Ω) ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν` for a smooth Lipschitz `u`. -/
+private theorem smoothConstant_mul_lintegral_min_superlevel_le_aux {ν : ProbabilityMeasure V}
+    {ρ : V → ℝ} (hρ : IsBorellDensity (ν : Measure V) volume ρ) (Ω : Set V) {u : V → ℝ}
+    (hu : ContDiff ℝ ∞ u) {K : ℝ≥0} (hK : LipschitzWith K u) :
+    smoothConstant ρ Ω ν *
+        ∫⁻ t in Set.Ioo (0 : ℝ) 1,
+          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
+      ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by
+  have hpt : ∀ᵐ t ∂(volume : Measure ℝ),
+      smoothConstant ρ Ω ν *
+          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
+        ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) := by
+    filter_upwards [SmoothDomain.ae_exists_superlevel hu] with t ht
+    obtain ⟨U, hU⟩ := ht
+    calc smoothConstant ρ Ω ν *
+          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x})
+        = smoothConstant ρ Ω ν *
+            min ((ν : Measure V) U.carrier) (1 - (ν : Measure V) U.carrier) := by rw [hU]
+      _ ≤ relativePerimeter ρ Ω U := smoothConstant_mul_min_le _ _ _ _
+      _ ≤ ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) :=
+          relativePerimeter_le_lintegral_levelSet _ _ hu.continuous U hU
+  calc smoothConstant ρ Ω ν *
+        ∫⁻ t in Set.Ioo (0 : ℝ) 1,
+          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x})
+      = ∫⁻ t in Set.Ioo (0 : ℝ) 1, smoothConstant ρ Ω ν *
+          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) :=
+        (lintegral_const_mul _ (measurable_min_measure_superlevel ν u)).symm
+    _ ≤ ∫⁻ t in Set.Ioo (0 : ℝ) 1,
+          ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) :=
+        lintegral_mono_ae (ae_restrict_of_ae hpt)
+    _ ≤ ∫⁻ t, ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V)
+          ∂(volume : Measure ℝ) :=
+        setLIntegral_le_lintegral _ _
+    _ = ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
+        (lintegral_enorm_gradient_eq_lintegral_levelSet_density hρ hK).symm
+
 -- `hu01` is part of the published interface and fixes the mathematical scope of the statement;
 -- the Sard route below needs no bound on the range of `u`, so the linter is silenced instead of
 -- the hypothesis being renamed.
@@ -209,35 +252,8 @@ theorem smoothConstant_mul_lintegral_min_superlevel_le {ν : ProbabilityMeasure 
     smoothConstant ρ (interior (ν : Measure V).support) ν *
         ∫⁻ t in Set.Ioo (0 : ℝ) 1,
           min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
-      ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by
-  have hpt : ∀ᵐ t ∂(volume : Measure ℝ),
-      smoothConstant ρ (interior (ν : Measure V).support) ν *
-          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
-        ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) := by
-    filter_upwards [SmoothDomain.ae_exists_superlevel hu] with t ht
-    obtain ⟨U, hU⟩ := ht
-    calc smoothConstant ρ (interior (ν : Measure V).support) ν *
-          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x})
-        = smoothConstant ρ (interior (ν : Measure V).support) ν *
-            min ((ν : Measure V) U.carrier) (1 - (ν : Measure V) U.carrier) := by rw [hU]
-      _ ≤ relativePerimeter ρ (interior (ν : Measure V).support) U :=
-          smoothConstant_mul_min_le _ _ _ _
-      _ ≤ ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) :=
-          relativePerimeter_le_lintegral_levelSet _ _ hu.continuous U hU
-  calc smoothConstant ρ (interior (ν : Measure V).support) ν *
-        ∫⁻ t in Set.Ioo (0 : ℝ) 1,
-          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x})
-      = ∫⁻ t in Set.Ioo (0 : ℝ) 1, smoothConstant ρ (interior (ν : Measure V).support) ν *
-          min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) :=
-        (lintegral_const_mul _ (measurable_min_measure_superlevel ν u)).symm
-    _ ≤ ∫⁻ t in Set.Ioo (0 : ℝ) 1,
-          ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) :=
-        lintegral_mono_ae (ae_restrict_of_ae hpt)
-    _ ≤ ∫⁻ t, ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V)
-          ∂(volume : Measure ℝ) :=
-        setLIntegral_le_lintegral _ _
-    _ = ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
-        (lintegral_enorm_gradient_eq_lintegral_levelSet_density hρ hK).symm
+      ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
+  smoothConstant_mul_lintegral_min_superlevel_le_aux hρ _ hu hK
 
 /-! ### The distance cutoff and the balance -/
 
@@ -403,16 +419,24 @@ theorem le_minkowskiConstant_of_smooth_test {ν : ProbabilityMeasure V} (H : ℝ
 
 end SmoothTestMinkowski
 
-/-- `h_S ≤ h_M`: distance cutoffs of a Borel set of finite content, smooth replacements, and the
-weighted coarea bound. -/
-theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V → ℝ}
+/-- `h_S ≤ h_M` with the boundary charged everywhere (`Ω = Set.univ`): distance cutoffs of a Borel
+set of finite content, smooth replacements, and the weighted coarea bound. -/
+theorem smoothConstant_univ_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V → ℝ}
     (hρ : IsBorellDensity (ν : Measure V) volume ρ) :
-    smoothConstant ρ (interior (ν : Measure V).support) ν ≤ minkowskiConstant ν := by
+    smoothConstant ρ Set.univ ν ≤ minkowskiConstant ν := by
   have hac : (ν : Measure V) ≪ volume := by
     rw [← hρ.withDensity_eq]
     exact withDensity_absolutelyContinuous _ _
   exact le_minkowskiConstant_of_smooth_test _ hac
-    (fun {u} hu {K} hK hu01 => smoothConstant_mul_lintegral_min_superlevel_le hρ hu hK hu01)
+    (fun {u} hu {K} hK _ => smoothConstant_mul_lintegral_min_superlevel_le_aux hρ Set.univ hu hK)
+
+/-- `h_S ≤ h_M`: the relative infimum is at most the ambient one (`smoothConstant_mono`), which is
+at most `h_M` (`smoothConstant_univ_le_minkowskiConstant`). -/
+theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V → ℝ}
+    (hρ : IsBorellDensity (ν : Measure V) volume ρ) :
+    smoothConstant ρ (interior (ν : Measure V).support) ν ≤ minkowskiConstant ν :=
+  (smoothConstant_mono ρ (Set.subset_univ _) ν).trans (smoothConstant_univ_le_minkowskiConstant hρ)
+
 /-- Blueprint `lem:relative-perimeter-cheeger-infimum`: for a probability law with a Borell density
 relative to Lebesgue measure, the Minkowski Cheeger infimum over Borel sets equals the
 relative-perimeter Cheeger infimum over smooth domains. -/
@@ -420,6 +444,17 @@ theorem minkowskiConstant_eq_smoothConstant {ν : ProbabilityMeasure V} {ρ : V 
     (hρ : IsBorellDensity (ν : Measure V) volume ρ) :
     minkowskiConstant ν = smoothConstant ρ (interior (ν : Measure V).support) ν :=
   le_antisymm (minkowskiConstant_le_smoothConstant hρ) (smoothConstant_le_minkowskiConstant hρ)
+
+/-- The ambient smooth-boundary convention: for a probability law with a Borell density relative to
+Lebesgue measure, `h_M` is the infimum over smooth domains `U` of intermediate mass of
+`∫_{∂U} ρ dℋ^{n-1} / min {ν U, 1 - ν U}`, with the boundary charged everywhere. The two relative
+infima `Ω = interior (supp ν)` and `Ω = Set.univ` therefore agree. -/
+theorem minkowskiConstant_eq_smoothConstant_univ {ν : ProbabilityMeasure V} {ρ : V → ℝ}
+    (hρ : IsBorellDensity (ν : Measure V) volume ρ) :
+    minkowskiConstant ν = smoothConstant ρ Set.univ ν :=
+  le_antisymm ((minkowskiConstant_le_smoothConstant hρ).trans
+      (smoothConstant_mono ρ (Set.subset_univ _) ν))
+    (smoothConstant_univ_le_minkowskiConstant hρ)
 
 end Isoperimetry
 
@@ -431,7 +466,7 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 /-- A surjective isometry pulls thickenings back to thickenings. -/
-private theorem thickening_preimage_of_isometry {α β : Type*} [PseudoEMetricSpace α]
+theorem thickening_preimage_isometry {α β : Type*} [PseudoEMetricSpace α]
     [PseudoEMetricSpace β] {f : α → β} (hf : Isometry f) (hsurj : Function.Surjective f)
     (r : ℝ) (B : Set β) :
     Metric.thickening r (f ⁻¹' B) = f ⁻¹' Metric.thickening r B := by
@@ -442,6 +477,54 @@ private theorem thickening_preimage_of_isometry {α β : Type*} [PseudoEMetricSp
     rw [himg] at hkey
     exact hkey.symm
   simp only [Set.mem_preimage, Metric.mem_thickening_iff_infEDist_lt, hdist]
+
+section IsometryEquiv
+
+variable {V W : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
+  [NormedAddCommGroup W] [MeasurableSpace W] [BorelSpace W]
+
+/-- The Minkowski Cheeger infimum is invariant under a measure-preserving isometric bijection:
+admissible Borel sets correspond through preimages, and outer contents agree because thickenings
+are transported. -/
+theorem minkowskiConstant_eq_of_isometryEquiv (e : V ≃ᵢ W) {ν : ProbabilityMeasure V}
+    {ν' : ProbabilityMeasure W} (he : MeasurePreserving e (ν : Measure V) (ν' : Measure W)) :
+    minkowskiConstant ν' = minkowskiConstant ν := by
+  have hmass : ∀ B : Set W, MeasurableSet B →
+      (ν : Measure V) (e ⁻¹' B) = (ν' : Measure W) B :=
+    fun B hB ↦ he.measure_preimage hB.nullMeasurableSet
+  have hcontent : ∀ B : Set W, MeasurableSet B →
+      minkowskiContent (ν : Measure V) (e ⁻¹' B) = minkowskiContent (ν' : Measure W) B := by
+    intro B hB
+    unfold minkowskiContent
+    congr 1
+    funext r
+    rw [thickening_preimage_isometry e.isometry e.surjective, hmass _ hB,
+      hmass _ Metric.isOpen_thickening.measurableSet]
+  rw [minkowskiConstant, minkowskiConstant]
+  refine le_antisymm ?_ ?_
+  · refine le_iInf fun B ↦ le_iInf fun hB ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
+    have hBmeas : MeasurableSet (e.symm ⁻¹' B) := e.symm.continuous.measurable hB
+    have hpre : e ⁻¹' (e.symm ⁻¹' B) = B := by
+      ext x; simp
+    have hmass' : (ν' : Measure W) (e.symm ⁻¹' B) = (ν : Measure V) B := by
+      rw [← hmass _ hBmeas, hpre]
+    have hcont' : minkowskiContent (ν' : Measure W) (e.symm ⁻¹' B) =
+        minkowskiContent (ν : Measure V) B := by
+      rw [← hcontent _ hBmeas, hpre]
+    refine iInf_le_of_le (e.symm ⁻¹' B) ?_
+    refine iInf_le_of_le hBmeas ?_
+    refine iInf_le_of_le (by rwa [hmass']) ?_
+    refine iInf_le_of_le (by rwa [hmass']) ?_
+    rw [hmass', hcont']
+  · refine le_iInf fun B ↦ le_iInf fun hB ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
+    have hBmeas : MeasurableSet (e ⁻¹' B) := e.continuous.measurable hB
+    refine iInf_le_of_le (e ⁻¹' B) ?_
+    refine iInf_le_of_le hBmeas ?_
+    refine iInf_le_of_le (by rwa [hmass _ hB]) ?_
+    refine iInf_le_of_le (by rwa [hmass _ hB]) ?_
+    rw [hmass _ hB, hcontent _ hB]
+
+end IsometryEquiv
 
 omit [CompleteSpace E] in
 /-- Intrinsic coordinates and the affine carrier are identified, as measure spaces, by the
@@ -490,7 +573,7 @@ theorem constant_eq_minkowskiConstant_intrinsic
     unfold minkowskiContent boundaryContent
     congr 1
     funext r
-    rw [thickening_preimage_of_isometry hiso hsurj, hmass _ hB,
+    rw [thickening_preimage_isometry hiso hsurj, hmass _ hB,
       hmass _ Metric.isOpen_thickening.measurableSet]
   by_cases hdim : Module.finrank ℝ (Probability.affineSupport μ).direction = 0
   · have hsub : Subsingleton (Probability.affineSupport μ).direction :=
@@ -529,6 +612,23 @@ theorem constant_eq_minkowskiConstant_intrinsic
       refine iInf_le_of_le (by rwa [hmass _ hB]) ?_
       refine iInf_le_of_le (by rwa [hmass _ hB]) ?_
       rw [hmass _ hB, hcontent _ hB]
+
+/-- For a law with full affine support the affine-support isoperimetric constant is the ambient
+Minkowski Cheeger infimum: reconstruction from intrinsic coordinates is then a surjective affine
+isometry carrying the intrinsic law to `μ`. -/
+theorem constant_eq_minkowskiConstant {μ : ProbabilityMeasure E}
+    (htop : Probability.affineSupport μ = ⊤) :
+    constant μ = minkowskiConstant μ := by
+  have hsurj : Function.Surjective (Probability.reconstruct μ) := by
+    intro x
+    have hx : x ∈ Probability.affineSupport μ := by rw [htop]; trivial
+    refine ⟨(Probability.coordinateEquiv μ).symm ⟨x, hx⟩, ?_⟩
+    simp [Probability.reconstruct]
+  let e : (Probability.affineSupport μ).direction ≃ᵢ E :=
+    { toEquiv := Equiv.ofBijective _ ⟨(Probability.reconstruct μ).injective, hsurj⟩
+      isometry_toFun := (Probability.reconstruct μ).isometry }
+  rw [constant_eq_minkowskiConstant_intrinsic,
+    minkowskiConstant_eq_of_isometryEquiv e (Probability.measurePreserving_reconstruct μ)]
 
 /-- The `h_μ = h_ν^{sm,rel}` clause of `thm:klartag-density-frontend-identification`: for a
 log-concave law with a Borell density `ρ` of its intrinsic law relative to Lebesgue measure on

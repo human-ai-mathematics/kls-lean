@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein
 /-!
 # Audit client of the weak Hessian–Stein kernel of the strong regular class
 
-* The frozen task statements of the determinant floor, strict-convex gradient injectivity and the two Hessian-kernel
+* The statements of the determinant floor, strict-convex gradient injectivity and the two Hessian-kernel
   transport lemmas are restated verbatim and discharged by the canonical declarations.
 * Edge cases: the floor in dimension one (`K ^ 0 = 1`) and gradient injectivity in dimension zero.
 * Same witness: the old flat conjunctions of `exists_regular_moment_potential` and
@@ -22,7 +22,7 @@ namespace LetwinWeakHessianKernelAudit
 open FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
 open FunctionalInequalities.Analysis.BakryEmery
 
-/-- Frozen statement: determinant floor. -/
+/-- Statement: determinant floor. -/
 theorem det_floor {n : ℕ} (hn : 0 < n)
     {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosSemidef)
     {K δ : ℝ} (hK : 0 < K) (hδ : 0 < δ)
@@ -37,7 +37,7 @@ theorem det_floor_one {A : Matrix (Fin 1) (Fin 1) ℝ} (hA : A.PosSemidef) {K δ
     (A - δ • (1 : Matrix (Fin 1) (Fin 1) ℝ)).PosSemidef := by
   simpa using posSemidef_sub_scalar_of_det_lower one_pos hA hK hδ hupper hdet
 
-/-- Frozen statement: strict-convex gradient injectivity. -/
+/-- Statement: strict-convex gradient injectivity. -/
 theorem strict_gradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
     {u : E → ℝ} (hu : Differentiable ℝ u) (hstrict : StrictConvexOn ℝ univ u) :
     Function.Injective (gradient u) :=
@@ -48,7 +48,7 @@ theorem strict_gradient_zero {u : EuclideanSpace ℝ (Fin 0) → ℝ} (hu : Diff
     (hs : StrictConvexOn ℝ univ u) : Function.Injective (gradient u) :=
   injective_gradient_of_strictConvexOn hu hs
 
-/-- Frozen statement: transport of a.e. positive definiteness. -/
+/-- Statement: transport of a.e. positive definiteness. -/
 theorem posDef_transport {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)
     (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
@@ -60,7 +60,7 @@ theorem posDef_transport {n : ℕ}
     ∀ᵐ x ∂(μ : Measure (EuclideanSpace ℝ (Fin n))), (hessianKernel u Ψ x).PosDef :=
   hessianKernel_posDefAE_of_map hu ν μ hmap hΨ hInv hPD
 
-/-- Frozen statement: transport of the Hilbert–Schmidt `L²` bound. -/
+/-- Statement: transport of the Hilbert–Schmidt `L²` bound. -/
 theorem hs_transport {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)
     (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))

@@ -5,15 +5,14 @@ import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 /-!
 # Audit: eighth-moment tail bounds (ball-conditioning stage of the moment-potential producer)
 
-Clients compiled against `Probability/Moments.lean` section `MomentTails`
-(`Probability.measure_ball_compl_toReal_le_integral_norm_pow_eight_div`, Luna unit CB2 round 5;
-`Probability.integrable_norm_pow_four_and_tail_le_of_integrable_pow_eight`, Luna unit CB3 round 2; both under the
-checked-context driver rev3, independently accepted 2026-10-08, receipt `CB2-CB3-Independent-20261008/VERIFICATION.json`
-1a08d848…). The consumers are the independent Codex reviewer's: the exact original generic contracts, real atoms at `0`
-(zero tails), at the boundary `1` of the open unit ball (both bounds sharp: complement mass `1 = M₈/R⁸`, fourth tail
-`1 = M₈/R⁴`), the signed atom `−2` with `R = 2` (sharp), the half law `(δ₀ + δ₁)/2` (sharp, mass `1/2`), rank zero with all
-values `0` and both integrability outputs consumed, and the radius-zero guard (the bound is false at `R = 0`, so `R > 0`
-is substantive). No conditional law, optimizer or potential is involved.
+Clients of `Probability/Moments.lean` section `MomentTails`
+(`Probability.measure_ball_compl_toReal_le_integral_norm_pow_eight_div` and
+`Probability.integrable_norm_pow_four_and_tail_le_of_integrable_pow_eight`). Consumers: the exact
+original generic statements, real atoms at `0` (zero tails), at the boundary `1` of the open unit
+ball (both bounds sharp: complement mass `1 = M₈/R⁸`, fourth tail `1 = M₈/R⁴`), the signed atom `−2`
+with `R = 2` (sharp), the half law `(δ₀ + δ₁)/2` (sharp, mass `1/2`), rank zero with all values `0`
+and both integrability outputs consumed, and the radius-zero guard (the bound is false at `R = 0`,
+so `R > 0` is substantive). No conditional law, optimizer or potential is involved.
 -/
 
 noncomputable section

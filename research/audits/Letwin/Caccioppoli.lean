@@ -2418,7 +2418,7 @@ theorem actual_joint_jn_moments_fixed_compact_same_witness (h2 : 2 ≤ n) :
     have hx' := Metric.mem_ball.mp hx
     have hy' := Metric.mem_ball.mp hy
     linarith [dist_triangle_right x y x0]
-  -- the accepted bounded weak JN for the SAME H on the convex ball B(x0, 3R), D_pot = 6R
+  -- the bounded weak JN for the SAME H on the convex ball B(x0, 3R), D_pot = 6R
   have hJN := integrable_exp_abs_sub_average_of_bounded_weak_morrey h2
     Metric.isOpen_ball (convex_ball x0 (3 * R)) ⟨x0, Metric.mem_ball_self (by linarith : (0 : ℝ) < 3 * R)⟩
     (by linarith : (0 : ℝ) < 6 * R) hK0 hdiam hHl hBH (fun k => (hHd k).1) (fun k => (hHd k).2) hmorH

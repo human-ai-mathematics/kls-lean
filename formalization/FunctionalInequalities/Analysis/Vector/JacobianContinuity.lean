@@ -3,7 +3,7 @@ import Mathlib.Analysis.Calculus.FDeriv.Measurable
 
 /-! # Continuity and measurability of the volume factors
 
-Property `A1` of the area formula route.  Mathlib proves the algebraic theory of
+Mathlib proves the algebraic theory of
 `LinearMap.normDet` but **not** its continuity in the operator, so the right-hand side of the area
 formula is not yet known to be an integral of a measurable function.  This module supplies that.
 
@@ -46,7 +46,7 @@ theorem continuous_adjoint_comp :
   exact (isBoundedBilinearMap_comp (𝕜 := ℝ) (E := H) (F := V) (G := H)).continuous.comp
     (hadj.prodMk continuous_id)
 
-/-- **`A1`**: the area-formula volume factor is continuous in the differential. -/
+/-- The area-formula volume factor is continuous in the differential. -/
 theorem continuous_normDet :
     Continuous (fun A : H →L[ℝ] V => LinearMap.normDet (A : H →ₗ[ℝ] V)) := by
   simp only [normDet_eq_sqrt_det]
@@ -56,7 +56,7 @@ theorem continuous_normDet :
 variable [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V]
 
 omit [MeasurableSpace V] [BorelSpace V] in
-/-- **`A1`**: the integrand of the area formula is measurable, for an **arbitrary** function.  No
+/-- The integrand of the area formula is measurable, for an **arbitrary** function.  No
 differentiability hypothesis is needed: `fderiv` is measurable unconditionally and is zero where the
 function is not differentiable. -/
 theorem measurable_normDet_fderiv (g : H → V) :

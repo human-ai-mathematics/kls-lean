@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
 import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 

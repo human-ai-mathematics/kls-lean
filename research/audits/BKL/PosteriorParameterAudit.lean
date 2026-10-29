@@ -16,24 +16,21 @@ open FunctionalInequalities.Probability.Gaussian
 # Audit: parameter response, generator and log-concavity of the BKL posterior (67)–(68)
 
 Source: Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19, the compact stage before (67) and the
-deterministic parameter response of (67). Clients compiled against the accepted
-`Probability/Posterior/*` owners and `KLS/BKL/PosteriorResponse.lean`: the one-dimensional Gaussian
-prior (log-concave, isotropic, unbounded) has coercive posterior response `1/2` in the linear parameter
-at `Q = Id`; the rank-zero compact source has response `0` at `c = Q = 0`; for the generator (`Probability/Posterior/Generator.lean`): a noncentered two-point
-prior with covariance `3/4` where the three generator terms are `1/2`, `−1`, `1/2` at the inverse rate
-`M = 4/3`, the rank-zero source, and the root reviewer's basis-independence and negative-rate
-consumers. Client bodies: Codex q_batch bundles `Posterior-Parameter-Calculus` (receipt 35b40b51…) and
-`Posterior-Generator-Cancellation` (receipt e9d04efb…), both independently accepted; the two root
-reviewer consumers are credited as such. Log-concavity clients (`KLS/BKL/PosteriorDomain.lean`,
-bundle `Posterior-LogConcavity`, receipt 4ad0ef6c…): the uniform law on `[0,1]` with `c = 2`, `Q = 3·Id` and
-`Q = 0`, a segment law on a line in `ℝ²` (singular, no ambient density), and rank zero. Joint `(c,Q)` regularity
-clients (`Probability/Posterior/JointRegularity.lean`, `KLS/BKL/PosteriorDomain.lean` section JointCoefficients;
-bundles `Posterior-Joint-Regularity` receipt fcb40842…/0b9bb359… and `Principal-Root-Regularity` receipt
-94bf7e52…, both independently accepted): a noncentered two-point prior with a measurable statistic that is
-discontinuous and unbounded off the support, the mixed parameter curve `t ↦ (2t, t·Id)` with derivative `1` at
-`0`, signed `Q`, the symmetric two-atom isotropic prior (inverse/drift smooth, initial rate `Id`, principal root
-locally Lipschitz with initial value `Id`), and rank zero. No stochastic equation, Itô formula or martingale
-statement is involved.
+deterministic parameter response of (67). Clients of `Probability/Posterior/*` and
+`KLS/BKL/PosteriorResponse.lean`: the one-dimensional Gaussian prior (log-concave, isotropic,
+unbounded) has coercive posterior response `1/2` in the linear parameter at `Q = Id`; the rank-zero
+compact source has response `0` at `c = Q = 0`; for the generator
+(`Probability/Posterior/Generator.lean`): a noncentered two-point prior with covariance `3/4` where
+the three generator terms are `1/2`, `−1`, `1/2` at the inverse rate `M = 4/3`, the rank-zero
+source, and basis-independence and negative-rate consumers. Log-concavity clients
+(`KLS/BKL/PosteriorDomain.lean`): the uniform law on `[0,1]` with `c = 2`, `Q = 3·Id` and `Q = 0`,
+a segment law on a line in `ℝ²` (singular, no ambient density), and rank zero. Joint `(c,Q)`
+regularity clients (`Probability/Posterior/JointRegularity.lean`, `KLS/BKL/PosteriorDomain.lean`
+section JointCoefficients): a noncentered two-point prior with a measurable statistic that is
+discontinuous and unbounded off the support, the mixed parameter curve `t ↦ (2t, t·Id)` with
+derivative `1` at `0`, signed `Q`, the symmetric two-atom isotropic prior (inverse/drift smooth,
+initial rate `Id`, principal root locally Lipschitz with initial value `Id`), and rank zero. No
+stochastic equation, Itô formula or martingale statement is involved.
 -/
 
 noncomputable section
@@ -287,7 +284,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
   {ι κ : Type*} [Fintype ι] [Fintype κ]
 
-/-- The Hessian trace is independent of the orthonormal basis (Codex root reviewer). -/
+/-- The Hessian trace is independent of the orthonormal basis. -/
 theorem trace_independent (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} (hf : Measurable f)
     {C : ℝ} (hC : 0 ≤ C) (hfb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C)
@@ -299,8 +296,8 @@ theorem trace_independent (μ : ProbabilityMeasure E)
   rw [sum_bilinearIteratedFDerivTwo_posteriorExpectation_c μ hc hf hC hfb c Q M b hM,
     sum_bilinearIteratedFDerivTwo_posteriorExpectation_c μ hc hf hC hfb c Q M d hM]
 
-/-- The identity holds for the negative symmetric rate `−Id` as well: a calculus consumer, with no claim that
-the rate is a diffusion covariance (Codex root reviewer). -/
+/-- The identity holds for the negative symmetric rate `−Id` as well: a calculus consumer, with no
+claim that the rate is a diffusion covariance. -/
 theorem negative_rate (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} (hf : Measurable f)
     {C : ℝ} (hC : 0 ≤ C) (hfb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C)
@@ -752,11 +749,10 @@ end ActualJointInverseClients
 #print axioms ActualJointInverseClients.actual_initial_principal
 #print axioms ActualJointInverseClients.actual_rank0_source
 
-/-! Canonical standardisation (`KLS/BKL/PosteriorDomain.lean` section `CanonicalStandardisation`, Luna unit TW1 with
-recorded Claude closing repairs, independently accepted 2026-10-08, receipt `TW1-Independent-20261008/VERIFICATION.json`
-6e339248…): the independent Codex reviewer's consumers — the full original contract, the symmetric two-atom prior at `±1`
-(compactness and isotropy derived) at an arbitrary tilt and `Q = −Id` with the image law's `L²`, zero mean and identity
-covariance extracted, and the rank-zero Dirac law. -/
+/-! Canonical standardisation (`KLS/BKL/PosteriorDomain.lean` section `CanonicalStandardisation`):
+consumers — the full original statement, the symmetric two-atom prior at `±1` (compactness and
+isotropy derived) at an arbitrary tilt and `Q = −Id` with the image law's `L²`, zero mean and
+identity covariance extracted, and the rank-zero Dirac law. -/
 namespace IndependentCanonicalStandardisation
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -861,11 +857,10 @@ theorem actual_empty :
 end IndependentCanonicalStandardisation
 
 /-! Covariance radius bound (`KLS/BKL/PosteriorDomain.lean` section `CovarianceRadius`,
-`KLS.opNorm_covariance_compactPosterior_le_sq_radius`, Luna unit TU1b round 8 with a recorded linter-only Claude closing
-repair, independently accepted 2026-10-08, receipt `TU1b-Independent-20261008/VERIFICATION.json` 41571c1b…): the
-independent Codex reviewer's consumers — the full original contract, a Dirac prior at radius `0` (posterior covariance
-`0` at every parameter, including a nonzero `c` and an explicitly non-self-adjoint `Q` in `ℝ²`), the sharp `±1` prior
-(initial norm `1`, bound `1` at every signed parameter), and rank zero. -/
+`KLS.opNorm_covariance_compactPosterior_le_sq_radius`): consumers — the full original statement, a
+Dirac prior at radius `0` (posterior covariance `0` at every parameter, including a nonzero `c` and
+an explicitly non-self-adjoint `Q` in `ℝ²`), the sharp `±1` prior (initial norm `1`, bound `1` at
+every signed parameter), and rank zero. -/
 namespace IndependentCovarianceRadius
 
 section Generic
@@ -1033,11 +1028,11 @@ theorem rank_zero_actual (ν : ProbabilityMeasure E0) (c : E0) (Q : E0 →L[ℝ]
 end IndependentCovarianceRadius
 
 /-! Noise bound of (68) (`KLS/BKL/PosteriorDomain.lean` section `NoiseBound`,
-`Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance` / `_le_sq`, Luna units NB4a/NB4b round 8
-in Claude's accepted assembly, independently accepted 2026-10-08, receipt `NB4-Assembly-Independent-20261008/VERIFICATION.json`
-f5b20cb8…): the independent Codex reviewer's consumers — the `±1` prior of `ActualJointInverseClients` with the nonconstant
-statistic `id` at `c = 1`, `Q = −Id` (variance and uniform bounds), the zero statistic, saturation `‖noise‖² = 1 = Var` at
-the initial pair, rank zero, and a four-atom isotropic prior in `ℝ²` with an explicitly signed, non-self-adjoint `Q`. -/
+`Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance` / `_le_sq`):
+consumers — the `±1` prior of `ActualJointInverseClients` with the nonconstant statistic `id` at
+`c = 1`, `Q = −Id` (variance and uniform bounds), the zero statistic, saturation
+`‖noise‖² = 1 = Var` at the initial pair, rank zero, and a four-atom isotropic prior in `ℝ²` with an
+explicitly signed, non-self-adjoint `Q`. -/
 namespace IndependentNoiseBound
 
 abbrev μ := ActualJointInverseClients.μ

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
 noncomputable section
 open MeasureTheory Set Filter
 open scoped Topology RealInnerProductSpace ContDiff

@@ -8,9 +8,8 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5 (reduction
 isotropic regular laws). Clients: the scaled and translated Gaussian potential `‖2x+3‖²/2` on `ℝ` is
 regular with mean `−3/2` and covariance `1/4`; the producer yields an explicit isotropic regular law
 with the predicted whitened potential and image law; the zero-dimensional case keeps positive
-constants and full support. No whitening operator is chosen in production; the approximation
-theorem is not asserted. Clients adapted from the Codex bundle `Regular-Isotropic-Producer/Clients.lean`
-(independently accepted, receipt 95e0c4c4…).
+constants and full support. No whitening operator is chosen in the library; the approximation
+theorem is not asserted.
 -/
 
 open MeasureTheory FunctionalInequalities

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import FunctionalInequalities.Probability.Transport
 import FunctionalInequalities.Probability.LogConcave
 import Mathlib.Analysis.Convex.Measure

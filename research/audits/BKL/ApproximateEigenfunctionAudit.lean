@@ -1,8 +1,8 @@
 import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvector
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction
 
 /-!
-# Audit: approximate eigenvectors of `T†T` and approximate first eigenfunctions (BKL route, O1–O2)
+# Audit: approximate eigenvectors of `T†T` and approximate first eigenfunctions (BKL)
 
 The obligations `O1` and `O2` of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
 to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1) are restated **verbatim** and proved from
@@ -17,7 +17,8 @@ the library:
   (`exists_centered_approx_eigenfunction`).
 
 Outside this client's scope: the existence of an exact first eigenfunction (19), the weak
-Hessian and tilt identities `O3`–`O5`, the iterates and Theorem 3.1 itself.
+Hessian and tilt identities (`O3`–`O5` of `OperatorRouteStatements.lean`), the iterates and
+Theorem 3.1 itself.
 -/
 
 noncomputable section
@@ -28,7 +29,7 @@ open scoped ENNReal NNReal RealInnerProductSpace InnerProductSpace
 
 namespace BKLApproximateEigenfunctionAudit
 
-/-- `O1`, verbatim. -/
+/-- `O1` of `OperatorRouteStatements.lean`, verbatim. -/
 theorem o1 : (∀ {H₀ H₁ : Type} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁), T.IsClosed → Dense (T.domain : Set H₀) →
@@ -44,7 +45,7 @@ theorem o1 : (∀ {H₀ H₁ : Type} [NormedAddCommGroup H₀] [InnerProductSpac
   intro H₀ H₁ _ _ _ _ _ _ T hT hd lam η hlam _ hgap y hy hy1 hTy
   exact Generated.exists_approx_eigenvector_of_gap T hT hd hlam hgap y hy hy1 hTy
 
-/-- `O2`, verbatim. -/
+/-- `O2` of `OperatorRouteStatements.lean`, verbatim. -/
 theorem o2 : (∀ {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
     {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : KLS.LogConcave ν)

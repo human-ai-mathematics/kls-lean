@@ -7,6 +7,10 @@ import Mathlib.MeasureTheory.Constructions.Pi
 
 The finite-dimensional inequalities follow from the line inequality by product induction and
 transport. Existing Analysis declaration names are retained; no log-concavity assumption is added.
+`lintegral_prekopaLeindler` states the `ℝ≥0∞`-valued inequality for an arbitrary additive Haar
+measure, and `lintegral_slice_prekopaLeindler` its consequence for integrals over parallel affine
+slices `W + a` of a linear subspace `W` (the slice step of the equality case of Prékopa–Leindler
+used for uniqueness of moment measures, Cordero-Erausquin–Klartag arXiv:1304.0630v1, Theorem 2).
 -/
 
 noncomputable section
@@ -193,6 +197,51 @@ theorem prekopaLeindler {f g h : V → ℝ} (hf : Measurable f) (hg : Measurable
   rw [ENNReal.ofReal_rpow_of_nonneg (hf0 x) ht0.le,
     ENNReal.ofReal_rpow_of_nonneg (hg0 y) ht1'.le, ← ENNReal.ofReal_mul (Real.rpow_nonneg (hf0 x) t)]
   exact ENNReal.ofReal_le_ofReal (hfgh x y)
+
+/-- **Prékopa–Leindler inequality** for `ℝ≥0∞`-valued functions and an arbitrary additive Haar
+measure `m` on a finite-dimensional inner-product space: if
+`f x ^ t * g y ^ (1 - t) ≤ h (t x + (1 - t) y)` for all `x, y`, with `0 < t < 1`, then
+`(∫ f dm) ^ t (∫ g dm) ^ (1 - t) ≤ ∫ h dm`. Infinite values and infinite integrals are allowed. -/
+theorem lintegral_prekopaLeindler (m : Measure V) [m.IsAddHaarMeasure] {f g h : V → ℝ≥0∞}
+    (hf : Measurable f) (hg : Measurable g) (hh : Measurable h) {t : ℝ} (ht0 : 0 < t)
+    (ht1 : t < 1) (hfgh : ∀ x y, f x ^ t * g y ^ (1 - t) ≤ h (t • x + (1 - t) • y)) :
+    (∫⁻ x, f x ∂m) ^ t * (∫⁻ y, g y ∂m) ^ (1 - t) ≤ ∫⁻ z, h z ∂m := by
+  have ht1' : (0:ℝ) ≤ 1 - t := by linarith
+  have hm : m = Measure.addHaarScalarFactor m volume • volume :=
+    Measure.isAddLeftInvariant_eq_smul m volume
+  set c : ℝ≥0∞ := (Measure.addHaarScalarFactor m volume : ℝ≥0∞)
+  have hPL := isPL_volume (E := V) ht0 ht1 f g h hf hg hh hfgh
+  rw [hm, lintegral_smul_measure, lintegral_smul_measure, lintegral_smul_measure]
+  change (c * ∫⁻ x, f x) ^ t * (c * ∫⁻ y, g y) ^ (1 - t) ≤ c * ∫⁻ z, h z
+  rw [ENNReal.mul_rpow_of_nonneg _ _ ht0.le, ENNReal.mul_rpow_of_nonneg _ _ ht1']
+  calc c ^ t * (∫⁻ x, f x) ^ t * (c ^ (1 - t) * (∫⁻ y, g y) ^ (1 - t))
+      = c ^ (t + (1 - t)) * ((∫⁻ x, f x) ^ t * (∫⁻ y, g y) ^ (1 - t)) := by
+        rw [ENNReal.rpow_add_of_nonneg _ _ ht0.le ht1']
+        ring
+    _ ≤ c * ∫⁻ z, h z := by
+        rw [add_sub_cancel, ENNReal.rpow_one]
+        exact mul_le_mul_right hPL c
+
+/-- **Prékopa–Leindler along parallel affine slices.** For a linear subspace `W` with an additive
+Haar measure `m`, the slice integrals `a ↦ ∫_W f(z + a) dm(z)` of functions satisfying the
+Prékopa–Leindler hypothesis at exponent `t ∈ (0, 1)` satisfy the same hypothesis:
+`(∫_W f(z + a))^t (∫_W g(z + b))^{1-t} ≤ ∫_W h(z + t a + (1 - t) b)`. -/
+theorem lintegral_slice_prekopaLeindler (W : Submodule ℝ V) (m : Measure W)
+    [m.IsAddHaarMeasure] {f g h : V → ℝ≥0∞} (hf : Measurable f) (hg : Measurable g)
+    (hh : Measurable h) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
+    (hfgh : ∀ x y, f x ^ t * g y ^ (1 - t) ≤ h (t • x + (1 - t) • y)) (a b : V) :
+    (∫⁻ z, f ((z : V) + a) ∂m) ^ t * (∫⁻ z, g ((z : V) + b) ∂m) ^ (1 - t) ≤
+      ∫⁻ z, h ((z : V) + (t • a + (1 - t) • b)) ∂m := by
+  have hs : ∀ (u : V → ℝ≥0∞) (c : V), Measurable u → Measurable fun z : W => u ((z : V) + c) :=
+    fun u c hu => hu.comp (continuous_subtype_val.add continuous_const).measurable
+  refine lintegral_prekopaLeindler m (hs f a hf) (hs g b hg) (hs h _ hh) ht0 ht1 ?_
+  intro x y
+  have harg : ((t • x + (1 - t) • y : W) : V) + (t • a + (1 - t) • b) =
+      t • ((x : V) + a) + (1 - t) • ((y : V) + b) := by
+    simp only [Submodule.coe_add, Submodule.coe_smul, smul_add]
+    abel
+  rw [harg]
+  exact hfgh _ _
 
 /-- The convolution integral of two measurable log-concave nonnegative densities is
 log-concave. The extended-real formulation also covers integrals equal to infinity;

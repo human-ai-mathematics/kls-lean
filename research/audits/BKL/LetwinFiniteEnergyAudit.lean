@@ -6,11 +6,12 @@ import Mathlib.LinearAlgebra.Matrix.Notation
 /-!
 # Audit: finite-energy Brascamp–Lieb supports
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.6 (supports only). A concrete client of the inverse-quadratic Young inequality
-`inverse_quadratic_young` for a nonidentity diagonal matrix: `H = diag(1, 2)` is shown positive definite, `H⁻¹ v` is computed
-from the actual inverse for `v = (1, −1)`, and the theorem is invoked with `w = (2, 3)`, giving `−2 ≤ 47/2`. The axiom
-reports also cover the compactly supported coercivity `compact_ordinary_diffusion_coercivity`. Not Brascamp–Lieb or A.6.
-Client body: strong-API candidate (`api-finite-energy-bl-compiler-v6`, cadc3b6c…), verbatim.
+Source: Letwin, arXiv:2607.24164v1, Lemma A.6 (supports only). A concrete client of the
+inverse-quadratic Young inequality `inverse_quadratic_young` for a nonidentity diagonal matrix:
+`H = diag(1, 2)` is shown positive definite, `H⁻¹ v` is computed from the actual inverse for
+`v = (1, −1)`, and the theorem is invoked with `w = (2, 3)`, giving `−2 ≤ 47/2`. The axiom reports
+also cover the compactly supported coercivity `compact_ordinary_diffusion_coercivity`. Not
+Brascamp–Lieb or A.6.
 -/
 
 open MeasureTheory

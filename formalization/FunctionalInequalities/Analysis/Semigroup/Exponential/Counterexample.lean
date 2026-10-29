@@ -17,7 +17,7 @@ section Counterexample
 /-- The reals of the form `1/(n+1)`, `n : ℕ`; a sequence accumulating at `0⁺`. -/
 def counterSet : Set ℝ := {s : ℝ | ∃ n : ℕ, s = 1 / (n + 1)}
 
-/-- The coefficient of the counterexample to the abstract the adjoint-product identification: the indicator of `counterSet`,
+/-- The coefficient of the counterexample to the abstract adjoint-product identification: the indicator of `counterSet`,
 i.e. `1` on `{1/(n+1) | n : ℕ}` and `0` elsewhere. -/
 def counterCoeff : ℝ → ℝ := counterSet.indicator fun _ => 1
 
@@ -36,13 +36,13 @@ theorem counterCoeff_of_notMem {s : ℝ} (hs : s ∉ counterSet) : counterCoeff 
 /-- The counterexample family: `L s = counterCoeff s • 1` on `ℝ`. -/
 def counterFamily (s : ℝ) : ℝ →L[ℝ] ℝ := counterCoeff s • (1 : ℝ →L[ℝ] ℝ)
 
-/-- The counterexample family is nonnegative, as the abstract the adjoint-product identification demands. -/
+/-- The counterexample family is nonnegative, as the abstract adjoint-product identification demands. -/
 theorem counterFamily_nonneg (s : ℝ) (_hs : 0 < s) (f : ℝ) : 0 ≤ ⟪counterFamily s f, f⟫ := by
   have hval : counterFamily s f = counterCoeff s * f := by simp [counterFamily]
   rw [Real.inner_apply, hval, mul_assoc]
   exact mul_nonneg (counterCoeff_nonneg s) (mul_self_nonneg f)
 
-/-- The counterexample family commutes, as the abstract the adjoint-product identification demands: scalar multiples of the
+/-- The counterexample family commutes, as the abstract adjoint-product identification demands: scalar multiples of the
 identity always do. -/
 theorem counterFamily_comm (s r : ℝ) (_hs : 0 < s) (_hr : 0 < r) :
     (counterFamily s).comp (counterFamily r) = (counterFamily r).comp (counterFamily s) := by
@@ -107,7 +107,7 @@ theorem counterCoeff_two_div (n : ℕ) : counterCoeff (2 / (2 * (n : ℝ) + 3)) 
   have := Nat.cast_injective (R := ℝ) hcast
   omega
 
-/-- `Y0`: **the abstract the adjoint-product identification is false**.  A family of nonnegative, pairwise commuting bounded
+/-- **The abstract adjoint-product identification is false.**  A family of nonnegative, pairwise commuting bounded
 operators on `ℝ` need not have `exp (-t • L s) f` convergent as `s ↓ 0`.  Witness:
 `counterFamily`, at `f = 1` and `t = 1`, whose values along `1/(n+1)` and along `2/(2n+3)` are the
 distinct constants `Real.exp (-1)` and `1`. -/

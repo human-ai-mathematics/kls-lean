@@ -6,13 +6,11 @@ import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
 /-!
 # Audit: raw Leibniz allocations and permutation symmetry of iterated derivatives
 
-Clients compiled against `Analysis/IteratedDerivative/Symmetry.lean` and `Bilinear.lean` (accepted owned snapshot
-`Takeover-Cumulant-Drift-20261008`, receipt 27404ff8…; Codex bundle `Cumulant-Leibniz-Drift`, source shas 39f3cea9… /
-49b27e53…). The consumers are the independent reviewer's: every raw subset allocation of the cubic `y ↦ y² · y` at
-order 3 sums to the unnormalised derivative `6` (no factorial); the unit-uniform law on `[0, 1]` is a genuine compact
-noncentred law with variance `1/12` whose actual scalar cumulants inherit real `C^∞` permutation symmetry. The
-namespace map `ReviewCumulantDrift → FunctionalInequalities.Analysis` is the only change. No (74) drift, parameter jet
-or stochastic statement is involved.
+Clients of `Analysis/IteratedDerivative/Symmetry.lean` and `Bilinear.lean`. Consumers: every raw
+subset allocation of the cubic `y ↦ y² · y` at order 3 sums to the unnormalised derivative `6` (no
+factorial); the unit-uniform law on `[0, 1]` is a genuine compact noncentred law with variance
+`1/12` whose actual scalar cumulants inherit real `C^∞` permutation symmetry. No (74) drift,
+parameter jet or stochastic statement is involved.
 -/
 
 noncomputable section

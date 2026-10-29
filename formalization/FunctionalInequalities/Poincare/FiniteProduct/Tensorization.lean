@@ -68,7 +68,7 @@ private theorem piStatement (ι : Type uι) [Fintype ι] : PiStatement.{uι, uE}
     have hsup : Finset.univ.sup C = 0 := by simp [Finset.univ_eq_empty]
     rw [hsup]
     simpa using holds_zero_of_subsingleton (piMeasure μ)
-  · -- split off the head coordinate and use the accepted binary upper bound
+  · -- split off the head coordinate and use the binary upper bound
     intro α hα ih E _ _ _ _ _ _ μ _ C h
     have htail := ih (fun i ↦ E (some i)) (fun i ↦ μ (some i)) (fun i ↦ C (some i))
       (fun i ↦ h (some i))

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.BKL.CumulantBound
+import FunctionalInequalities.KLS.BKL.Cumulant.Bound
 import FunctionalInequalities.KLS.BKL.Reduction
 
 /-!

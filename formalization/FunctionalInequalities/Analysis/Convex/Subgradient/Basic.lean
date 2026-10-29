@@ -7,7 +7,7 @@ import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Analysis.Convex.Continuous
 import Mathlib.Analysis.InnerProductSpace.Dual
 import Mathlib.Analysis.InnerProductSpace.Adjoint
-import FunctionalInequalities.Analysis.Convex.SupportingPlane
+import FunctionalInequalities.Analysis.Convex.Legendre.SupportingPlane
 
 /-!
 # Supporting inequalities and global/domain supporting images
@@ -175,8 +175,7 @@ private lemma support_on_of_max
   simp only [inner_sub_right] at hm ⊢
   linarith
 
-/-- The **subgradient image** `∂u(S) = {p | ∃ x ∈ S, p is a subgradient of u at x}` (weak Letwin
-route, routes/letwin-weak-definitions.md item 2). -/
+/-- The **subgradient image** `∂u(S) = {p | ∃ x ∈ S, p is a subgradient of u at x}`. -/
 def subgradientImage {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (u : E → ℝ)
     (S : Set E) : Set E :=
   {p | ∃ x ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y}
@@ -374,7 +373,7 @@ theorem subgradientImageOn_subset_of_le [FiniteDimensional ℝ E]
     exact ⟨x₀,hx₀,support_on_of_max hu hΩ hΩD x₀ x₀ p (v x₀) hx₀ hmax₀⟩
 
 /-- **Monotonicity of subgradient images under comparison** (Gutiérrez, *The Monge–Ampère
-equation*, Lemma 1.4.1; weak Letwin route, comparison principle): if `u ≤ v` on a
+equation*, Lemma 1.4.1; comparison principle): if `u ≤ v` on a
 bounded open `Ω` and `u = v` on its frontier, then `∂v(Ω) ⊆ ∂u(Ω)`. -/
 theorem subgradientImage_subset_of_le
     [FiniteDimensional ℝ E] {u v : E → ℝ} (hu : ConvexOn ℝ univ u) (hv : ConvexOn ℝ univ v)

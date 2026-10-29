@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
 import FunctionalInequalities.Analysis.BakryEmery.Curvature
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import FunctionalInequalities.KLS.LogConcave.BrascampLieb
@@ -13,7 +13,7 @@ Supports Letwin arXiv:2607.24164v1, Proposition 2.8, through three interfaces:
 - `variance_le_sum_of_partial_dual_bounds`, retaining the C² convex potential,
   C¹/L² function and L² partial-derivative hypotheses stated below.
 
-The variance assembly uses the heat-generator range density from `HeatSemigroup/Range.lean`.
+The variance assembly uses the heat-generator range density from `HeatSemigroup/Generator/Range.lean`.
 -/
 
 noncomputable section
@@ -257,7 +257,7 @@ private theorem gammaTwo_integrable [m.IsAddHaarMeasure]
   exact h₁
 
 /-- **Bochner bound for the coordinate Hessian under a convex `C²` potential** (Letwin
-arXiv:2607.24164v1, Proposition 2.8 via Barthe–Klartag; weak Letwin route): for
+arXiv:2607.24164v1, Proposition 2.8 via Barthe–Klartag): for
 `ν = e^{-W} dm` with `W` convex and `C²`, and `g ∈ C_c^∞`,
 `∑ᵢ ∫ ‖∇(∂ᵢ g)‖² dν ≤ ∫ (ℒg)² dν` with `ℒg = Δg − ⟪∇W, ∇g⟫` and `∂ᵢ g = Dg(eᵢ)` in the
 standard coordinates of `EuclideanSpace ℝ (Fin n)`. -/

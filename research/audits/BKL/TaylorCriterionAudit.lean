@@ -1,24 +1,25 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 
 /-!
-# Audit: BKL Theorem 3.1 for regular laws (route statement `M`)
+# Audit: BKL Theorem 3.1 for regular laws
 
 Operator route to Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1 (p. 10, proof p. 17);
 route statements
 `research/audits/BKL/IterateRouteStatements.lean`. Restated and discharged by the library theorems
 of `KLS/BKL/PoissonIterate/Criterion.lean`:
 
-* `m`: the route statement `M`, **verbatim**: there is a universal `K` such that every centered
-  regular law on `ℝⁿ` with `Cov ≤ Id` satisfying the Taylor bound (29) with `R ≥ 1` has
-  `C_P ≤ K R²` (`KLS.RegularPotential.poincare_le_of_taylor`);
+* `m`: the statement `M` of `IterateRouteStatements.lean`, **verbatim**: there is a universal `K`
+  such that every centered regular law on `ℝⁿ` with `Cov ≤ Id` satisfying the Taylor bound (29)
+  with `R ≥ 1` has `C_P ≤ K R²` (`KLS.RegularPotential.poincare_le_of_taylor`);
 * `taylorCriterionConstant_eq`: the constant obtained, `K = 100 (9 · 2^20)²`;
 * `taylor_criterion`: the heat-model form `C_P(ν) ≤ K R²` for `ν = m.tilted (-U)`
   (`taylorCriterion`);
 * `scalar_final_argument`: the final argument for real sequences (`le_of_iterate_bounds`).
 
-Lemma 3.8 (`J1`) enters through `norm_taylorField_grad0_iter_sq_le`, Lemma 3.9 (`J2`) through
-`sum_meanGradSq_iter_le`, and Lemma 3.4 / Corollary 3.5 through `KLS/BKL/PoissonIterate/Defect.lean`. This
-is Theorem 3.1 for regular laws; it is not the KLS bound (Theorem 1.1).
+Lemma 3.8 enters through `norm_taylorField_grad0_iter_sq_le`, Lemma 3.9 through
+`sum_meanGradSq_iter_le`, and Lemma 3.4 / Corollary 3.5 through
+`KLS/BKL/PoissonIterate/Defect.lean`. This is Theorem 3.1 for regular laws; it is not the KLS bound
+(Theorem 1.1).
 -/
 
 noncomputable section
@@ -30,7 +31,7 @@ open scoped ENNReal NNReal RealInnerProductSpace InnerProductSpace ContDiff
 
 namespace BKLTaylorCriterionAudit
 
-/-- `M`, verbatim: BKL Theorem 3.1 for regular laws. -/
+/-- `M` of `IterateRouteStatements.lean`, verbatim: BKL Theorem 3.1 for regular laws. -/
 theorem m : ∃ K : ℝ, ∀ (n : ℕ) (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ)
     (hV : KLS.RegularPotential V a b),
     (∫ x, x ∂(hV.law : Measure (EuclideanSpace ℝ (Fin n)))) = 0 →

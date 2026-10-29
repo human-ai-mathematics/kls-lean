@@ -94,6 +94,14 @@ REQUIRED_REPOSITORY_ADAPTERS = {
 
 # Blueprint label -> (ledger node, public Lean certificate declaration).
 CERTIFICATES: dict[str, tuple[str, str]] = {
+    "thm:letwin-log-quarter": (
+        "thm:letwin-log-quarter",
+        "Solutions.ThmLetwinIsoperimetricBound.certificate",
+    ),
+    "thm:letwin-quadratic-bound": (
+        "thm:letwin-quadratic-bound",
+        "Solutions.ThmLetwinQuadraticBound.certificate",
+    ),
     "cor:absolutely-continuous-relaxation-two-cheeger": (
         "cor:absolutely-continuous-relaxation-two-cheeger",
         "Solutions.CorAbsolutelyContinuousRelaxationTwoCheeger.certificate",

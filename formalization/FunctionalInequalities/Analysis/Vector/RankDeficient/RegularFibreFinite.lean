@@ -8,7 +8,7 @@ On relatively compact regular pieces, almost every fibre of the regular componen
 inside a fibre of the regular component `v = P ∘ u`, with `d = k` and a target of dimension
 `m − r`, so that `d + (m − r) = n − r`.  For that bound to say anything the fibre must carry
 **finite** `ℋ^{n−r}` measure — otherwise the right-hand side is `∞` and the estimate is vacuous,
-exactly as the false exponent-comparison diagnostic records for the one-step method.
+exactly as `ExponentObstruction.lean` records for the one-step method.
 
 **It is a corollary of the proved regular coarea formula**, not new analysis:
 `coarea_of_contDiffOn_of_coareaJacobian_ne_zero` with weight `1` says that the total fibre measure

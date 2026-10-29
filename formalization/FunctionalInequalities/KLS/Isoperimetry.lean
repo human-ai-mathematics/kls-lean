@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.Support.Affine
 import Mathlib.Topology.MetricSpace.Thickening
 import Mathlib.Order.LiminfLimsup
 

@@ -4,8 +4,7 @@ import Mathlib.Analysis.InnerProductSpace.LaxMilgram
 /-!
 # The form domain of a closed operator, and the weak resolvent equation
 
-First three obligations of the semigroup-generation route (statements in
-`research/audits/SemigroupGenerationRouteStatements.lean`): the construction of the heat semigroup
+The first steps of the construction of the heat semigroup
 used by the Buser half of `thm:logconcave-cheeger-poincare-comparison`.
 
 For a densely defined operator `T : H₀ →ₗ.[ℝ] H₁` the energy form is `E(u) = ‖T u‖²`, unbounded on
@@ -20,7 +19,7 @@ statements that make the Lax–Milgram construction of the resolvent applicable:
   resolvent equation is a contraction of the datum and pairs nonnegatively with it.
 
 Nothing here constructs the resolvent, the Yosida approximation or the semigroup; those are resolvent solvability,
-resolvent contraction–the semigroup limit of the route and are not proved. This module is general real Hilbert space material: it
+the Yosida approximation and the semigroup limit, and are not proved. This module is general real Hilbert space material: it
 mentions no measure, no log-concavity and no KLS quantity.
 -/
 
@@ -49,7 +48,7 @@ omit [CompleteSpace H₀] [CompleteSpace H₁] in
 The quadratic form `u ↦ ‖u‖² + s ‖T u‖²` dominates `min 1 s` times the squared graph norm. This is
 the coercivity hypothesis that `IsCoercive` asks for, with an explicit constant.
 
-The route stated this for `s > 0`, but positivity is not needed and is therefore not assumed: for
+Positivity of `s` is not needed and is therefore not assumed: for
 `s ≤ 1` the claim reduces to `(s - 1) ‖u‖² ≤ 0` and for `s > 1` to `‖T u‖² ≤ s ‖T u‖²`. Neither
 closedness nor density is used either. -/
 theorem min_one_mul_graphNormSq_le (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) (u : T.domain) :

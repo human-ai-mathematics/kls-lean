@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
+import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Standardization
 import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 /-!

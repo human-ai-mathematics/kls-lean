@@ -217,7 +217,7 @@ private lemma eq_of_two_contacts_below {u : E → ℝ}
   have hyz : y = z := mem_singleton_iff.mp (hsingle ▸ hyC)
   exact hne (hyz.trans hxz.symm)
 
-/-- **Caffarelli's contact-set lemma below a level** (weak Letwin route): if `{u ≤ R}` is compact and the convex `u` has
+/-- **Caffarelli's contact-set lemma below a level**: if `{u ≤ R}` is compact and the convex `u` has
 two-sided Alexandrov bounds on compact subsets of `{u < R}`, then a supporting affine function at `x₀`
 (`u x₀ < R`) touches the graph of `u` at no other point of `{u < R}`. No compactness of the full contact set
 is assumed. -/

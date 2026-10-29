@@ -36,7 +36,7 @@ python3 research/verify.py
 ```
 
 The full verifier runs structural/task checks and Python regressions, builds all current
-library, solution, example and vendored modules (including modules outside default import
+library, solution, example and vendored modules with `lake --wfail build` (including modules outside default import
 closures), and strictly compiles every live `research/audits/**/*.lean` client. It checks the
 statement baseline and registered declarations, audits transitive axioms, and replays the
 current local modules with Lean's kernel.
@@ -61,7 +61,7 @@ reverse application of the patch to the locked upstream hashes); `python3 resear
 --fetch` additionally compares the lock with the upstream repositories at the pinned commits. See
 the [provenance lock](../formalization/vendor/README.md#provenance-lock).
 
-Audit clients use warnings-as-errors. Proposition type checks remain candidate statements;
+Both library builds and audit clients use warnings-as-errors. Proposition type checks remain candidate statements;
 compiling them neither proves the proposition nor registers a certificate. Audit elaboration
 and local-module kernel replay are separately reported scopes.
 
@@ -140,8 +140,8 @@ and import-boundary audits, not just a successful build.
 
 ## Recorded remote certification
 
-Checked on 2026-10-26: [Lean certification run 40228537569](https://github.com/human-ai-mathematics/kls-lean/actions/runs/40228537569)
-succeeded for `ae11b0c4dc561936a5583454b5ad589ea9040559`. Its scope is the remote
+Checked on 2026-10-27: [Lean certification run 40477880376](https://github.com/human-ai-mathematics/kls-lean/actions/runs/40477880376)
+succeeded for `0233f0b837131da5bb20420c4152d13260b8260a`. Its scope is the remote
 Lean-only check described above, including the standard-axiom gates and excluding
 local-module replay and metadata/Python checks. It does not certify later commits
 or working-tree changes, and does not replace the separate bridge and Comparator checks.

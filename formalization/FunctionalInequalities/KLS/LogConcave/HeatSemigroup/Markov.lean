@@ -5,7 +5,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 /-!
 # Markov property of the log-concave heat semigroup
 
-This module closes **gap 2** of the semigroup route recorded for
+This module proves the Markov property used by the semigroup proof of
 `thm:logconcave-cheeger-poincare-comparison`. The closed weighted-gradient energy of a
 full-dimensional log-concave probability law is Markovian under every normal contraction. The
 abstract Beurling--Deny resolvent theorem from `Analysis/Semigroup/Generated/Markov.lean` then shows that
@@ -13,14 +13,14 @@ the heat semigroup preserves positivity and constants, is sub-Markov, preserves 
 satisfies `|P_t f| ≤ P_t |f|`, and contracts finite essential bounds.
 
 The only concrete analytic step is the Markov property of the closed energy. A normal contraction
-is mollified on the real line using the already-certified `NormalContraction.smoothed` family.
+is mollified on the real line using the `NormalContraction.smoothed` family.
 For a weighted-gradient test `g`, the smooth composition obeys the classical chain rule and its
 weighted gradient is a scalar of `B (gradient g)`, with scalar of norm at most one. These composed
 tests converge in `L²` to the nonsmooth contraction and give the required recovery sequence for
 the sequential relaxation. No almost-everywhere chain rule for the nonsmooth contraction is used.
 
-This file provides no Bakry--Émery `Γ`-calculus (gap 3), no small-time heat estimate (gap 4), and
-no step of Buser's inequality. The comparison node therefore gains no progress marker here.
+This file provides no Bakry--Émery `Γ`-calculus, no small-time heat estimate, and
+no step of Buser's inequality.
 -/
 
 noncomputable section

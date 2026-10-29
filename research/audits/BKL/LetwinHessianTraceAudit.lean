@@ -1,13 +1,13 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianTrace
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
 
 /-!
 # Audit: Hessian trace evolution for a nonconstant real potential
 
-Source: Letwin, arXiv:2607.24164v1, (2.8) in the proof of Theorem 2.5 (support only). For the real potential
-`φ(x) = x⁴/12 + x²/2` (smooth, Hessian `1 + x²`, positive and nonconstant: `H(0) ≠ H(1)`), `V = 0` and `B = 1`, the
-production identity `hessianInverseOperator_trace_stdHessianMatrix_sq` is invoked at every point. Every premise is derived.
-Not (2.10), the trace bound or a moment-map client. Client body: strong-API candidate (`api-trace-nonconstant-client-v10`,
-b37b32bf…), verbatim up to the declaration names of the generic layer.
+Source: Letwin, arXiv:2607.24164v1, (2.8) in the proof of Theorem 2.5 (support only). For the
+real potential `φ(x) = x⁴/12 + x²/2` (smooth, Hessian `1 + x²`, positive and nonconstant:
+`H(0) ≠ H(1)`), `V = 0` and `B = 1`, the library identity
+`hessianInverseOperator_trace_stdHessianMatrix_sq` is invoked at every point. Every premise is
+derived. Not (2.10), the trace bound or a moment-map client.
 -/
 
 noncomputable section

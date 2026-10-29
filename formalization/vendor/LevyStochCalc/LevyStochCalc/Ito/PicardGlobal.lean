@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Ito.PicardWindow
 
 /-!
@@ -105,7 +108,7 @@ theorem progressivelyMeasurable_globalPatch
     (i : Fin n) :
     Probability.ProgressivelyMeasurable ℱ fun ω s => globalPatch Y s ω i := by
   intro t
-  letI : MeasurableSpace Ω := ℱ t
+  let : MeasurableSpace Ω := ℱ t
   have hsum : (fun p : Ω × ℝ => (Set.Iic t).indicator (fun s => globalPatch Y s p.1 i) p.2)
       = ∑ k ∈ Finset.range (⌈t⌉₊ + 1),
           (fun p : Ω × ℝ => Set.indicator {q : Ω × ℝ | ⌈q.2⌉₊ = k}

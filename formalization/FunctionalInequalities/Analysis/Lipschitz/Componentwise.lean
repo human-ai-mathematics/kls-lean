@@ -32,7 +32,7 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteD
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
 
 omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
-/-- **`V4'`: the coordinates of a Lipschitz map are Lipschitz, with the same constant.**  Taking a
+/-- **The coordinates of a Lipschitz map are Lipschitz, with the same constant.**  Taking a
 coordinate of a Euclidean vector is `1`-Lipschitz and `e` is an isometry, so no constant is lost.
 This is what feeds the scalar `exists_contDiff_pieces`. -/
 theorem lipschitzWith_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ W))) {u : V → W}
@@ -46,7 +46,7 @@ theorem lipschitzWith_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finra
 section CoordinateDerivatives
 
 omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W]
-/-- **`V4''`: differentiability is detected coordinatewise.**  The map factors as `e.symm` after the
+/-- **Differentiability is detected coordinatewise.**  The map factors as `e.symm` after the
 Euclidean tuple of its coordinates, and both outer maps are continuous linear. -/
 theorem differentiableAt_of_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ W)))
     {u : V → W} {x : V} (h : ∀ i, DifferentiableAt ℝ (fun y => e (u y) i) x) :
@@ -73,7 +73,7 @@ theorem fderiv_coord_apply (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finran
   rw [hd.fderiv]
   rfl
 
-/-- **`V4`: componentwise first-order agreement is first-order agreement.**  If `u` and `v` are
+/-- **Componentwise first-order agreement is first-order agreement.**  If `u` and `v` are
 differentiable at `x` and every coordinate of `v` matches the corresponding coordinate of `u` there
 in value and in differential, then `v` matches `u` at `x` in value and in differential. -/
 theorem eq_and_fderiv_eq_of_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ W)))

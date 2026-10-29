@@ -5,11 +5,11 @@ import Mathlib.Topology.Semicontinuity.Basic
 /-!
 # Scalewise Hausdorff cover costs and measurability of compact slices
 
-Metric-space layer of the coarea route, depending on Mathlib only.  Mathlib's `μH[d]` is the
+Metric-space layer of the coarea formula, depending on Mathlib only.  Mathlib's `μH[d]` is the
 supremum over scales of an infimum over countable covers of that scale
 (`Measure.hausdorffMeasure_apply`).  This module names that scalewise infimum `coverCost`, adds the
 variant `openCoverCost` restricted to covers by **open** sets, and proves the two facts the coarea
-route needs about them:
+formula needs about them:
 
 * `iSup_openCoverCost_eq_hausdorffMeasure`: the open-cover costs have the same scalewise supremum,
   `⨆ n, openCoverCost d (n + 1)⁻¹ A = μH[d] A`, for every set `A` and every `0 ≤ d`.  The
@@ -18,7 +18,7 @@ route needs about them:
   `Metric.ediam_thickening_le` together with a summable choice of thickening radii
   (`ENNReal.exists_pos_sum_of_countable`).  Each `openCoverCost` on its own is generally **larger**
   than the `coverCost` of the same scale, so the equality genuinely needs the scale limit; this is
-  why the route's note forbids claiming semicontinuity of `μH[d]` itself.
+  why no semicontinuity of `μH[d]` itself is claimed.
 
 * `upperSemicontinuous_openCoverCost_slice`: at a **fixed** scale, the open-cover cost of the slice
   of a compact set by a level of a continuous function is upper semicontinuous in the level.  Here

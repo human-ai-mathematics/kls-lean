@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic
+import FunctionalInequalities.Analysis.SmoothDomain.Basic
 import Mathlib.Analysis.Calculus.BumpFunction.Normed
 import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 import Mathlib.Analysis.Calculus.ContDiff.Convolution

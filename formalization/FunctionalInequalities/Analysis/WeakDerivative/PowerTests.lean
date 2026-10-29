@@ -2,6 +2,13 @@ import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
 
 /-! # Nonnegative power tests localized by smooth cutoffs
 
+For bounded `w` with coordinate weak derivatives `a k` in `L²_loc`, `δ > 0`, every real `q` and a
+compactly supported `C¹` cutoff `χ`, with `s = δ + max w 0`: the linear cutoff energy variable
+`χ s^q` (`bounded_rpow_cutoff_weak_data`) and the nonnegative square cutoff test `χ² s^q`
+(`bounded_rpow_cutoff_weak_test`) are bounded and compactly supported in `tsupport χ`, with exact
+coordinate weak derivatives that are globally `L²`. The `local_` variants need `w ≥ 0` only a.e.
+on `tsupport χ`.
+
 Supporting weak calculus for Letwin arXiv:2607.24164v1 and the
 local elliptic estimates of Gilbarg--Trudinger (2001). Each declaration
 retains its own support, integrability and dimensional hypotheses.

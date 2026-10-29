@@ -22,7 +22,8 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- The **ball-truncated conjugate** `p ↦ sup_{‖x‖ ≤ M} (⟪p, x⟫ − u x)` (weak Letwin route): a globally finite convex function that agrees with the Legendre
+/-- The **ball-truncated conjugate** `p ↦ sup_{‖x‖ ≤ M} (⟪p, x⟫ − u x)`: a globally finite convex
+function that agrees with the Legendre
 transform of `u` wherever the supremum is attained inside the ball. -/
 def truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (u : E → ℝ)
     (M : ℝ) (p : E) : ℝ :=
@@ -226,7 +227,8 @@ private lemma isMinOn_sub_inner_of_support {u : E → ℝ} {x p : E}
   dsimp
   linarith
 
-private lemma eq_of_strictConvexOn_of_support {u : E → ℝ}
+/-- A strictly convex function has at most one point supported by a given slope `p`. -/
+theorem eq_of_strictConvexOn_of_support {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {x z p : E}
     (hx : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
     (hz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y) : x = z := by
@@ -293,7 +295,7 @@ private lemma support_of_truncatedConjugate_contact {u : E → ℝ}
   rw [inner_sub_right]
   linarith
 
-/-- The set of slopes whose ball maximisers all lie in the open ball is open (weak Letwin route). -/
+/-- The set of slopes whose ball maximisers all lie in the open ball is open. -/
 theorem isOpen_setOf_truncatedConjugate_maximizer_lt {u : E → ℝ} (hu : Continuous u) {M : ℝ}
     (hM : 0 ≤ M) :
     IsOpen {p : E | ∀ x ∈ closedBall (0 : E) M,
@@ -399,7 +401,7 @@ private lemma subgradient_truncatedConjugate_eq_maximizer {u : E → ℝ}
   have hgz : ⟪v, g⟫ ≤ ⟪v, z⟫ := (mul_le_mul_iff_right₀ ht).mp hle
   linarith
 
-/-- **Danskin identification of subgradient images** (weak Letwin route): for strictly convex continuous `u`, on a set
+/-- **Danskin identification of subgradient images**: for strictly convex continuous `u`, on a set
 `S` of slopes whose ball maximisers lie in the open ball, the subgradient image of the truncated conjugate is the
 inverse subgradient image `{x | ∃ p ∈ S, p ∈ ∂u(x)}`. -/
 theorem subgradientImage_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u)

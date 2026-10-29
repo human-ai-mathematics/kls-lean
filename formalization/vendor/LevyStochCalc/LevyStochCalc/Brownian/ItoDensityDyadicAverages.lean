@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Brownian.ItoSimple
 import LevyStochCalc.Probability.Progressive
 
@@ -171,9 +174,9 @@ private lemma bounded_memLp_brownian
     MeasureTheory.MemLp (Function.uncurry g)
       2 (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := by
   -- Volume.restrict (Icc 0 T) is finite (volume(Icc 0 T) = T < ∞).
-  haveI : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
+  have : MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Icc (0 : ℝ) T)) :=
     ⟨by simp [Real.volume_Icc, ENNReal.ofReal_lt_top]⟩
-  haveI : MeasureTheory.IsFiniteMeasure
+  have : MeasureTheory.IsFiniteMeasure
       (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) := inferInstance
   refine MeasureTheory.MemLp.of_bound h_meas.aestronglyMeasurable M ?_
   refine Filter.Eventually.of_forall (fun p => ?_)
@@ -322,7 +325,7 @@ lemma dyadicAvg_brownian_bounded
       refine Filter.Eventually.of_forall (fun s => ?_)
       rw [Real.norm_eq_abs]
       exact h_bound ω s
-    haveI h_finite_restrict :
+    have h_finite_restrict :
         MeasureTheory.IsFiniteMeasure (volume.restrict (Set.Ioc t_i t_succ)) := by
       refine ⟨?_⟩
       rw [MeasureTheory.Measure.restrict_apply MeasurableSet.univ, Set.univ_inter,

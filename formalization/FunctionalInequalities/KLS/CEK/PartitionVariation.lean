@@ -1,8 +1,8 @@
 import Mathlib.Analysis.Calculus.ParametricIntegral
 import Mathlib.Analysis.Calculus.Rademacher
 import FunctionalInequalities.KLS.CEK.BoundedPrimal
-import FunctionalInequalities.Analysis.Convex.LegendreVariation.Derivative
-import FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation
+import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Derivative
+import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Perturbation
 
 /-!
 # First variation of the CEK partition function
@@ -24,7 +24,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 /-- **First variation of the partition function of the conjugate** (Cordero-Erausquin–Klartag
-arXiv:1304.0630v1, proof of Theorem 2, first variation (42) integrated; weak Letwin route): for a proper lower semicontinuous potential `q` whose conjugate `ψ = q*` is real, Lipschitz
+arXiv:1304.0630v1, proof of Theorem 2, first variation (42) integrated): for a proper lower
+semicontinuous potential `q` whose conjugate `ψ = q*` is real, Lipschitz
 and has integrable `e^{-ψ}`, and a bounded continuous perturbation `b`, the map
 `t ↦ ∫ exp(−(q + t b)*(x)) dx` is differentiable at `0` with derivative
 `∫ exp(−ψ(x)) b(∇ψ(x)) dx` (`∇ψ` is the a.e. gradient of the Lipschitz function `ψ`). -/

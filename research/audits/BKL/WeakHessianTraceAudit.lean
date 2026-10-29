@@ -3,10 +3,11 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein
 /-!
 # Weak trace energy retention audit
 
-The public Stein producer `exists_regular_moment_weak_stein_coupling` retains, at its one witness, every earlier accepted
-contract: weighted pairing, all-symmetric and PSD Theorem 2.5, half energy, conservativity, weak trace contraction and
-trace-quadratic cutoff testing, whose producers are private in `KLS/CEK/MomentRegularity/TraceStein.lean`. Each step calls the
-immediately higher one; each statement is the accepted scratch retention type verbatim.
+The public Stein producer `exists_regular_moment_weak_stein_coupling` retains, at its one witness,
+every earlier property: weighted pairing, all-symmetric and PSD Theorem 2.5, half energy,
+conservativity, weak trace contraction and trace-quadratic cutoff testing, whose producers are
+private in `KLS/CEK/MomentRegularity/TraceStein.lean`. Each step calls the immediately higher one;
+each statement restates the corresponding property in full.
 -/
 
 noncomputable section
@@ -23,7 +24,8 @@ section SteinChain
 open FunctionalInequalities.Analysis.BakryEmery
 
 set_option maxHeartbeats 1000000 in
-/-- Retention 1: the final public Stein producer retains the complete accepted weighted-pairing contract. -/
+/-- Retention 1: the final public Stein producer retains the complete weighted-pairing
+statement. -/
 theorem weak_stein_coupling_retains_weighted_pairing_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -270,7 +272,7 @@ theorem weak_stein_coupling_retains_weighted_pairing_contract {n : ℕ} (hn : 0 
   exact ⟨u, L, LF, T, hOld⟩
 
 set_option maxHeartbeats 1000000 in
-/-- Retention 2: hence the complete accepted all-symmetric Theorem 2.5 contract. -/
+/-- Retention 2: hence the complete all-symmetric Theorem 2.5 statement. -/
 theorem weighted_pairing_retains_symmetric_trace_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -510,7 +512,7 @@ theorem weighted_pairing_retains_symmetric_trace_contract {n : ℕ} (hn : 0 < n)
   exact ⟨u, L, LF, T, hSym⟩
 
 set_option maxHeartbeats 1000000 in
-/-- Retention 3: hence the complete accepted PSD Theorem 2.5 contract (specialization). -/
+/-- Retention 3: hence the complete PSD Theorem 2.5 statement (specialization). -/
 theorem weak_symmetric_trace_retains_psd_theorem25_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -752,7 +754,7 @@ theorem weak_symmetric_trace_retains_psd_theorem25_contract {n : ℕ} (hn : 0 < 
   exact hSym B (Matrix.isHermitian_iff_isSymm.mp hB.isHermitian)
 
 set_option maxHeartbeats 1000000 in
-/-- Retention 4: hence the complete accepted half-energy contract (the former public energy producer type). -/
+/-- Retention 4: hence the complete half-energy statement (the public energy producer type). -/
 theorem weak_theorem25_retains_trace_energy_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -988,7 +990,8 @@ theorem weak_theorem25_retains_trace_energy_contract {n : ℕ} (hn : 0 < n)
 
 end SteinChain
 
-/-- Retention: the final energy producer retains the complete accepted conservativity contract at its witness. -/
+/-- Retention: the final energy producer retains the complete conservativity statement at its
+witness. -/
 theorem weak_trace_energy_retains_conservativity_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -1215,7 +1218,7 @@ theorem weak_trace_energy_retains_conservativity_contract {n : ℕ} (hn : 0 < n)
     hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, L, LF, T, hWhole⟩
 
-/-- Retention: hence the complete accepted weak trace contraction contract. -/
+/-- Retention: hence the complete weak trace contraction statement. -/
 theorem weak_trace_conservativity_retains_contraction_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
@@ -1431,7 +1434,7 @@ theorem weak_trace_conservativity_retains_contraction_contract {n : ℕ} (hn : 0
     hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, L, LF, T, hOld⟩
 
-/-- Retention: hence the complete accepted trace-quadratic cutoff testing contract. -/
+/-- Retention: hence the complete trace-quadratic cutoff testing statement. -/
 theorem weak_trace_contraction_retains_trace_cutoff_contract {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)

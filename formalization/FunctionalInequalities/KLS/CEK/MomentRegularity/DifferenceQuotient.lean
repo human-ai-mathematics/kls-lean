@@ -5,8 +5,9 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.Inverse
 # Difference quotients of the regular moment potential
 
 The strong regular class of Letwin, arXiv:2607.24164v1, Lemma 2.2 (smooth `κ`-uniformly convex `W`,
-compact convex `K` with nonempty interior, normalized isotropic law `1_K e^{−W}`). One call of the
-accepted producer supplies `u`, its transport, `C²` Hessian, positive definiteness, log-determinant
+compact convex `K` with nonempty interior, normalized isotropic law `1_K e^{−W}`). One call of
+`exists_regular_moment_potential_holder_hessian_inverse` supplies `u`, its transport, `C²` Hessian,
+positive definiteness, log-determinant
 equation and local Hölder modulus; the finite differences use exactly that `u` and `W`. This proves no
 regularity gain, lower ellipticity or merely convex Lemma 2.2 statement.
 -/

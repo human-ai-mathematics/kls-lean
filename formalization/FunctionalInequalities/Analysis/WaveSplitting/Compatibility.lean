@@ -30,14 +30,6 @@ omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 @[simp] theorem subState_zeroState (Y : State E ι) : subState Y zeroState = Y := by
   apply State.ext <;> funext <;> simp [subState, zeroState]
 
-private theorem fderiv_eq_zero_of_supported {f : E → ℝ} {R : ℝ}
-    (hf : ∀ y, R < ‖y‖ → f y = 0) {x : E} (hx : R < ‖x‖) : fderiv ℝ f x = 0 := by
-  have h : f =ᶠ[nhds x] fun _ => (0 : ℝ) :=
-    Filter.eventually_of_mem ((isOpen_lt continuous_const continuous_norm).mem_nhds hx)
-      fun y hy => hf y hy
-  rw [h.fderiv_eq]
-  simp
-
 theorem State.Smooth.compatibilityDefect {Y : State E ι} (hY : Y.Smooth) (a : ι → E) :
     (WaveSplitting.compatibilityDefect a Y).Smooth :=
   ⟨contDiff_const, contDiff_const, fun j =>

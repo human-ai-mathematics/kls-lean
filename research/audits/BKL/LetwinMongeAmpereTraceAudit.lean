@@ -1,17 +1,17 @@
-import FunctionalInequalities.Analysis.BakryEmery.HessianTrace
+import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
 import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
 
 /-!
 # Audit: (2.10) and the pointwise generator condition for a nonconstant interval potential
 
-Source: Letwin, arXiv:2607.24164v1, (2.9)–(2.10) in the proof of Theorem 2.5 (support only). The explicit given potential
-`φ(y) = 2 log cosh(√3 y/2) + log(4/√3)` with constant `V = log(2√3)`, `K = (−√3, √3)` and `U = ℝ`: smoothness, the
-Monge–Ampère relation, positive definiteness, gradient range in `K` and `∫ e^{−φ} = 1` are derived from
-`UniformIntervalPotential.lean`; the Hessian `3/(2 cosh²(√3x/2))` is nonconstant; the production identity
-`traceGenerator_210_on_range` and the generator condition `traceGeneratorCondition_on_range` are invoked with `B = 1`.
-`generator_const` is an audit-local helper. A given-potential client: not a push-forward to the uniform law, not a
-moment-map or A.5 consumption client. Client body: strong-API candidate (`api-trace-monge-ampere-210-v3`, de34b430…),
-verbatim up to the declaration names of the generic layer.
+Source: Letwin, arXiv:2607.24164v1, (2.9)–(2.10) in the proof of Theorem 2.5 (support only). The
+explicit given potential `φ(y) = 2 log cosh(√3 y/2) + log(4/√3)` with constant `V = log(2√3)`,
+`K = (−√3, √3)` and `U = ℝ`: smoothness, the Monge–Ampère relation, positive definiteness, gradient
+range in `K` and `∫ e^{−φ} = 1` are derived from `UniformIntervalPotential.lean`; the Hessian
+`3/(2 cosh²(√3x/2))` is nonconstant; the library identity `traceGenerator_210_on_range` and the
+generator condition `traceGeneratorCondition_on_range` are invoked with `B = 1`. `generator_const`
+is an audit-local helper. A given-potential client: not a push-forward to the uniform law, not a
+moment-map or A.5 consumption client.
 -/
 
 noncomputable section
@@ -48,7 +48,7 @@ def uniformIntervalK : Set ℝ := Set.Ioo (-Real.sqrt 3) (Real.sqrt 3)
 def uniformIntervalU : Set ℝ := Set.univ
 
 /-- All local source assumptions and exponential normalization are derived from
- the frozen explicit-potential package. -/
+ the explicit-potential package. -/
 theorem uniformInterval_source_data :
     ContDiff ℝ ∞ uniformIntervalPotential ∧
     IsOpen uniformIntervalK ∧
@@ -158,7 +158,7 @@ theorem uniformIntervalPotential_nonconstant :
   rw [hc, bilinearIteratedFDerivTwo_eq_fderiv_apply contDiff_const]
   simp
 
-/-- The new (2.10) applied to the explicit nonconstant uniform-interval potential,
+/-- (2.10) applied to the explicit nonconstant uniform-interval potential,
 with the constant matrix B = 1. -/
 theorem uniformInterval_trace_210 (x : ℝ) :
     hessianInverseOperator uniformIntervalPotential uniformIntervalV
@@ -183,7 +183,7 @@ theorem uniformInterval_trace_210 (x : ℝ) :
     (traceGenerator_210_on_range hφ hU hKU hV hRange hMA hPD
       (1 : Matrix (StdBasisIndex ℝ) (StdBasisIndex ℝ) ℝ) x)
 
-/-- A hypothesis-free explicit-potential client of the new pointwise generator
+/-- A hypothesis-free explicit-potential client of the pointwise generator
 condition. This is not a gradient-pushforward or source-law theorem. -/
 theorem uniformInterval_traceGeneratorCondition (x : ℝ) :
     0 ≤ hessianInverseOperator uniformIntervalPotential uniformIntervalV

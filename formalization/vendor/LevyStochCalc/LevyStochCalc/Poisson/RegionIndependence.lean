@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import Mathlib.Probability.Independence.Basic
 import LevyStochCalc.Poisson.RegionPartition
 import LevyStochCalc.Probability.IndepJoin
@@ -42,7 +45,7 @@ theorem indep_iSup_comap_of_disjoint_of_indep
     refine MeasurableSet.inter ?_ (MeasurableSet.iUnion hC)
     have : {x | ∀ i, x ∈ C i ↔ i ∈ S} = ⋂ i, (if i ∈ S then C i else (C i)ᶜ) := by
       ext x
-      simp only [Set.mem_setOf_eq, Set.mem_iInter]
+      simp only [Set.mem_ofPred_eq, Set.mem_iInter]
       refine forall_congr' fun i => ?_
       by_cases h : i ∈ S <;> simp [h]
     rw [this]
@@ -99,7 +102,7 @@ theorem indep_iSup_comap_of_disjoint_of_indep
   · refine iSup_le fun i => ?_
     rw [hcount i]
     refine Measurable.comap_le ?_
-    letI : MeasurableSpace Ω :=
+    let : MeasurableSpace Ω :=
       ⨆ o ∈ Set.range (fun S : Finset (Fin n) => some S),
         MeasurableSpace.comap (fun ω => N ω (F o)) inferInstance
     exact Finset.measurable_sum _ fun S _ =>
@@ -187,7 +190,7 @@ theorem indep_iSup_comap_of_disjoint_families
       funext fun ω => measure_eq_sum_partitionAtom (N ω) hD j
     rw [hcount]
     refine Measurable.comap_le ?_
-    letI : MeasurableSpace Ω :=
+    let : MeasurableSpace Ω :=
       ⨆ o ∈ Set.range (Sum.inr : Finset (Fin p) → Finset (Fin n) ⊕ Finset (Fin p)),
         MeasurableSpace.comap (fun ω => N ω (F o)) inferInstance
     exact Finset.measurable_sum _ fun T _ =>
@@ -199,7 +202,7 @@ theorem indep_iSup_comap_of_disjoint_families
       funext fun ω => measure_eq_sum_partitionAtom (N ω) hC i
     rw [hcount]
     refine Measurable.comap_le ?_
-    letI : MeasurableSpace Ω :=
+    let : MeasurableSpace Ω :=
       ⨆ o ∈ Set.range (Sum.inl : Finset (Fin n) → Finset (Fin n) ⊕ Finset (Fin p)),
         MeasurableSpace.comap (fun ω => N ω (F o)) inferInstance
     exact Finset.measurable_sum _ fun S _ =>

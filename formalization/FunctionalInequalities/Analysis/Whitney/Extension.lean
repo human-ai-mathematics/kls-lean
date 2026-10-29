@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
 /-!
 # Boundary gluing for the compact first-order Whitney extension problem
 
-This module starts the sufficiency direction of obligation compact Whitney extension. It proves the boundary step:
+This module starts the sufficiency direction of compact Whitney extension. It proves the boundary step:
 a candidate defined and differentiable off the compact set, with controlled value and derivative
 errors relative to nearest-point affine jets, extends the prescribed jet as a globally C¹ map.
 

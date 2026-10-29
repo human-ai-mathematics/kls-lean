@@ -1,10 +1,9 @@
-import FunctionalInequalities.Probability.ConvexSupport
+import FunctionalInequalities.Probability.Support.Convex
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
-/-! Audit clients for Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Lemma 16 (`Probability/ConvexSupport.lean`,
-sections `EffectiveDomain`, `FiniteMeasureHalfspace`, `PointControl`). Section `PromotionClients` is verbatim from the
-independently accepted canonical promotion (`Canonical-670-Public-Convexity-Independent-20261009/src/Clients.lean`):
-the public real-convexity helper and the point control in its owner. Section `MassClients` is new in this candidate:
+/-! Audit clients for Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Lemma 16 (`Probability/Support/Convex.lean`,
+sections `EffectiveDomain`, `FiniteMeasureHalfspace`, `PointControl`). Section `PromotionClients`: the public
+real-convexity helper and the point control in its module. Section `MassClients`:
 a mass-two measure at the endpoints of `[-1, 1]` (not a probability measure, all mass outside the open support hull),
 and the zero-dimensional halfspace bound for a mass-three Dirac measure. The probability bound (54) keeps its
 existing clients in `research/audits/BKL/ConvexSupportAudit.lean`. -/
@@ -23,7 +22,7 @@ theorem real_convexity {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ
     ConvexOn ℝ {x | φ x ≠ ⊤} (fun x => (φ x).toReal) :=
   real_convexOn_effective_domain hnn hphi
 
-/-- The accepted point control continues to be available in the promoted owner. -/
+/-- The point control is available in its module. -/
 theorem point_control {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [MeasurableSpace E] [FiniteDimensional ℝ E] [BorelSpace E]
     (μ : MeasureTheory.Measure E) [MeasureTheory.IsFiniteMeasure μ] (x : E)

@@ -5,15 +5,18 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformInte
 /-!
 # Audit: Letwin Lemmas A.4 and A.5 for the uniform-interval source law
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17) and Lemma A.5 (p. 18). Axiom reports for the source construction of
-the cutoffs (real parameter and natural index), Lemma A.5 for given cutoffs, the source-class facts of the explicit moment
-potential `φ(y) = 2 log cosh(√3 y / 2) + log(4 / √3)` of the uniform law on `K = (−√3, √3)` (`V ≡ log(2√3)`) and the facts
-of the nonconstant test function `f = tanh²(√3 y / 2)`. Dependency checks, enforced at elaboration:
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17) and Lemma A.5 (p. 18). Axiom reports for
+the source construction of the cutoffs (real parameter and natural index), Lemma A.5 for given
+cutoffs, the source-class facts of the explicit moment potential
+`φ(y) = 2 log cosh(√3 y / 2) + log(4 / √3)` of the uniform law on `K = (−√3, √3)` (`V ≡ log(2√3)`)
+and the facts of the nonconstant test function `f = tanh²(√3 y / 2)`. Dependency checks, enforced
+at elaboration:
 * the natural-index cutoffs are obtained by calling the real-parameter construction itself;
-* every constant (public, private and generated) of the three owning modules depends only on the standard axioms;
-* the client `uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero` calls the source package,
-  the natural-index cutoffs, Lemma A.5 and the test-function facts; no integral-zero statement for `f` is used (none is
-  defined: the checked names below are absent). Client bodies: Claude.
+* every constant (public, private and generated) of the three modules depends only on the standard
+  axioms;
+* the client `uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero` calls
+  the source package, the natural-index cutoffs, Lemma A.5 and the test-function facts; no
+  integral-zero statement for `f` is used (none is defined: the checked names below are absent).
 -/
 
 open Lean Elab Command

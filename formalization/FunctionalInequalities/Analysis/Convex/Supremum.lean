@@ -1,5 +1,5 @@
 import Mathlib.Analysis.Convex.Function
-import Mathlib.Data.Real.CompleteField
+import Mathlib.Algebra.Order.Archimedean.Real.Hom
 
 /-!
 # Finite real suprema of convex families

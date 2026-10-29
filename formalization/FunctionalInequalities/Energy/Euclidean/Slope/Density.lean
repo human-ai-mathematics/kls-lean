@@ -3,21 +3,20 @@ import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 /-!
 # Density of smooth tests in the local-slope energy
 
-Source: part `C` of the energy-slope route (`research/audits/EnergySlopeRouteStatements.lean`).
-Read `SmoothGradient.relaxation_le_localSlope` (`C6`) for the main contract, then
-`LocalSlope.measurable_apply` (`C1`), `LocalSlope.exists_patch` (`C2`, the McShane patch),
-`SmoothGradient.relaxation_le_localSlope_of_lipschitzWith` (`C4`) and
-`SmoothGradient.relaxation_le_localSlope_of_admissible` (`C5`).
+Read `SmoothGradient.relaxation_le_localSlope` for the main contract, then
+`LocalSlope.measurable_apply`, `LocalSlope.exists_patch` (the McShane patch),
+`SmoothGradient.relaxation_le_localSlope_of_lipschitzWith` and
+`SmoothGradient.relaxation_le_localSlope_of_admissible`.
 
 ## The argument
 
-`C1`.  The local slope of a continuous function is the countable infimum, over the radii
-`1 / (m + 1)`, of the secant suprema `LocalSlope.secant`, each of which is lower semicontinuous:
-a witness `y` realizing a value above a threshold satisfies two strict inequalities, both of which
-survive a small move of the base point, and the secant quotient is continuous there because the
-witness is at positive distance.
+**Measurability.**  The local slope of a continuous function is the countable infimum, over the
+radii `1 / (m + 1)`, of the secant suprema `LocalSlope.secant`, each of which is lower
+semicontinuous: a witness `y` realizing a value above a threshold satisfies two strict
+inequalities, both of which survive a small move of the base point, and the secant quotient is
+continuous there because the witness is at positive distance.
 
-`C2`, the McShane patch.  For a globally `L`-Lipschitz `f` the slope is stratified into bands of
+**The McShane patch.**  For a globally `L`-Lipschitz `f` the slope is stratified into bands of
 width `α`; each band is cut by the balls of a dense sequence into pieces of diameter below the
 radius witnessing the slope bound, and `disjointed` turns the countable family into a Borel
 partition on which `f` is Lipschitz with a constant within `α` of its slope.  Inner regularity
@@ -27,15 +26,17 @@ extended from each core by McShane with the core's own constant and the extensio
 linear cutoffs at that scale.  At most one block is active at any point, which is what keeps the
 global Lipschitz constant at `9 L + 8 α`, independently of `δ`.
 
-`C4`.  Taking `α = δ = 1 / (n + 1)` the patches converge to `g` in `L²(ν)` — they differ from `g`
+**Globally Lipschitz tests.**  Taking `α = δ = 1 / (n + 1)` the patches converge to `g` in
+`L²(ν)` — they differ from `g`
 by at most `2 L + 2 α` and only outside a set of mass `δ` — and smooth recovery bounds the relaxation at each
 patch by its asymptotic-Lipschitz energy, which a *measurable majorant* bounds by
 `(1 + 4 α) · LocalSlope.energy ν g + 4 α + 4 α² + M² δ`.  No measurability of the asymptotic
 Lipschitz constant is needed.  Lower semicontinuity of the relaxation finishes.
 
-`C5`.  A general admissible test is cut off by the smooth bump `scaled (n + 1)`; the local Lipschitz product rule and the bounded-support Lipschitz bound
+**General tests.**  A general admissible test is cut off by the smooth bump `scaled (n + 1)`; the
+local Lipschitz product rule and the bounded-support Lipschitz bound
 make the cutoff globally Lipschitz, dominated convergence gives `L²` convergence, and the local-slope product bound with
-Young's inequality bounds the energy of the cutoff.  `C6` feeds `C5` to
+Young's inequality bounds the energy of the cutoff.  The reverse inequality feeds this to
 `LocalSlope.le_relaxation_of_lowerSemicontinuous`.
 
 Closest literature: S. Eriksson-Bique, *Density of Lipschitz functions in energy*, Calc. Var. PDE
@@ -52,7 +53,7 @@ namespace FunctionalInequalities.Energy
 
 universe u
 
-/-! ### `C1` — the local slope of a continuous function is Borel -/
+/-! ### The local slope of a continuous function is Borel -/
 
 namespace LocalSlope
 
@@ -101,7 +102,7 @@ theorem apply_eq_iInf_nat (f : X → ℝ) (x : X) :
 
 variable [MeasurableSpace X] [OpensMeasurableSpace X]
 
-/-- `C1`.  The local slope of a continuous function is Borel measurable. -/
+/-- The local slope of a continuous function is Borel measurable. -/
 theorem measurable_apply {f : X → ℝ} (hf : Continuous f) : Measurable (apply f) := by
   have h : apply f = fun x ↦ ⨅ m : ℕ, secant f (1 / ((m : ℝ) + 1)) x :=
     funext fun x ↦ apply_eq_iInf_nat f x
@@ -163,11 +164,60 @@ section Gluing
 
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
+/-- A sum with at most one active correction at each point has at most two
+active corrections across a pair of points. -/
+private theorem abs_sum_sub_le_of_card_support_le_one {ι X : Type*}
+    [DecidableEq ι] [PseudoMetricSpace X] (S : Finset ι) (u : ι → X → ℝ) (M : ℝ)
+    (hM : 0 ≤ M) (hcard : ∀ x, (S.filter fun i ↦ u i x ≠ 0).card ≤ 1)
+    (hterm : ∀ i ∈ S, ∀ y z, |u i y - u i z| ≤ M * dist y z) (y z : X) :
+    |∑ i ∈ S, (u i y - u i z)| ≤ 2 * (M * dist y z) := by
+  classical
+  have hsumP : ∑ n ∈ S, (u n y - u n z) =
+      ∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), (u n y - u n z) := by
+    refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm
+    intro n hn hnP
+    rw [Finset.mem_filter] at hnP
+    push Not at hnP
+    obtain ⟨h1, h2⟩ := hnP hn
+    rw [h1, h2, sub_zero]
+  have hPcard : (S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0)).card ≤ 2 := by
+    have hsub : S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0) ⊆
+        (S.filter fun n ↦ u n y ≠ 0) ∪ (S.filter fun n ↦ u n z ≠ 0) := by
+      intro n hn
+      rw [Finset.mem_filter] at hn
+      rcases hn.2 with h | h
+      · exact Finset.mem_union_left _ (Finset.mem_filter.2 ⟨hn.1, h⟩)
+      · exact Finset.mem_union_right _ (Finset.mem_filter.2 ⟨hn.1, h⟩)
+    calc (S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0)).card
+        ≤ ((S.filter fun n ↦ u n y ≠ 0) ∪ (S.filter fun n ↦ u n z ≠ 0)).card :=
+          Finset.card_le_card hsub
+      _ ≤ (S.filter fun n ↦ u n y ≠ 0).card + (S.filter fun n ↦ u n z ≠ 0).card :=
+          Finset.card_union_le _ _
+      _ ≤ 1 + 1 := add_le_add (hcard y) (hcard z)
+      _ = 2 := rfl
+  rw [hsumP]
+  calc
+    |∑ i ∈ S.filter (fun i ↦ u i y ≠ 0 ∨ u i z ≠ 0), (u i y - u i z)|
+        ≤ ∑ i ∈ S.filter (fun i ↦ u i y ≠ 0 ∨ u i z ≠ 0), |u i y - u i z| :=
+      Finset.abs_sum_le_sum_abs _ _
+    _ ≤ (S.filter (fun i ↦ u i y ≠ 0 ∨ u i z ≠ 0)).card • (M * dist y z) :=
+      Finset.sum_le_card_nsmul _ _ _ fun i hi ↦ hterm i (Finset.mem_filter.mp hi).1 y z
+    _ = ((S.filter (fun i ↦ u i y ≠ 0 ∨ u i z ≠ 0)).card : ℝ) * (M * dist y z) := by
+      rw [nsmul_eq_mul]
+    _ ≤ 2 * (M * dist y z) := by
+      apply mul_le_mul_of_nonneg_right _ (mul_nonneg hM dist_nonneg)
+      exact_mod_cast hPcard
+
 omit [InnerProductSpace ℝ V] in
 /-- Gluing step.  Finitely many pairwise disjoint compact cores, each carrying a Lipschitz
 constant `c n ≤ L + α` for `f`, produce one globally Lipschitz patch with constant `9 L + 8 α`:
 it agrees with `f` on the cores, differs from `f` by at most `2 L + 2 α` everywhere, and has
-asymptotic Lipschitz constant at most `c n` at every point of the `n`-th core. -/
+asymptotic Lipschitz constant at most `c n` at every point of the `n`-th core.
+
+Extend each core separately, multiply its correction by a distance cutoff, then sum.
+Disjoint neighborhoods leave at most one correction at each point; the private
+finite-sum estimate controls the global Lipschitz bound. On a core, a shrinking-ball
+estimate recovers the sharper local constant. -/
 theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzWith L f) {α : ℝ≥0}
     (N : ℕ) (Kc : ℕ → Set V) (c : ℕ → ℝ≥0) (hcomp : ∀ n, IsCompact (Kc n))
     (hdisj : ∀ i j, i ≠ j → Disjoint (Kc i) (Kc j))
@@ -177,6 +227,7 @@ theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzW
       (∀ n < N, ∀ x ∈ Kc n, F x = f x) ∧
       (∀ n < N, ∀ x ∈ Kc n, AsymptoticLipschitz.apply F x ≤ (c n : ℝ≥0∞)) := by
   classical
+  -- Choose disjoint neighborhoods and extend the restriction of f on each core.
   obtain ⟨ρ₀, hρ₀, hsep₀⟩ := exists_thickening_pairwise_disjoint N Kc hcomp hdisj
   set ρ : ℝ := min ρ₀ 1 with hρdef
   have hρ : 0 < ρ := lt_min hρ₀ one_pos
@@ -364,55 +415,19 @@ theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzW
     have hFyz : F y - F z = (f y - f z) + ∑ n ∈ S, (u n y - u n z) := by
       simp [hFdef, Finset.sum_sub_distrib]
       ring
-    have hsumP : ∑ n ∈ S, (u n y - u n z) =
-        ∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), (u n y - u n z) := by
-      refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm
-      intro n hn hnP
-      rw [Finset.mem_filter] at hnP
-      push Not at hnP
-      obtain ⟨h1, h2⟩ := hnP hn
-      rw [h1, h2, sub_zero]
-    have hPcard : (S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0)).card ≤ 2 := by
-      have hsub : S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0) ⊆
-          (S.filter fun n ↦ u n y ≠ 0) ∪ (S.filter fun n ↦ u n z ≠ 0) := by
-        intro n hn
-        rw [Finset.mem_filter] at hn
-        rcases hn.2 with h | h
-        · exact Finset.mem_union_left _ (Finset.mem_filter.2 ⟨hn.1, h⟩)
-        · exact Finset.mem_union_right _ (Finset.mem_filter.2 ⟨hn.1, h⟩)
-      calc (S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0)).card
-          ≤ ((S.filter fun n ↦ u n y ≠ 0) ∪ (S.filter fun n ↦ u n z ≠ 0)).card :=
-            Finset.card_le_card hsub
-        _ ≤ (S.filter fun n ↦ u n y ≠ 0).card + (S.filter fun n ↦ u n z ≠ 0).card :=
-            Finset.card_union_le _ _
-        _ ≤ 1 + 1 := add_le_add (hcardone y) (hcardone z)
-        _ = 2 := rfl
-    have hterm : ∀ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0),
-        |u n y - u n z| ≤ 2 * (2 * (L : ℝ) + α) * dist y z := by
-      intro n hn
-      have hnS : n ∈ S := (Finset.mem_filter.1 hn).1
-      refine (hublock n (hSmem n hnS).2 y z).trans ?_
-      have h1 : (c n : ℝ) + L ≤ 2 * (L : ℝ) + α := hcbound n
-      nlinarith [dist_nonneg (x := y) (y := z)]
-    have hsumbound : |∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), (u n y - u n z)| ≤
+    have hsumbound : |∑ n ∈ S, (u n y - u n z)| ≤
         2 * (2 * (2 * (L : ℝ) + α) * dist y z) := by
-      calc |∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), (u n y - u n z)|
-          ≤ ∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), |u n y - u n z| :=
-            Finset.abs_sum_le_sum_abs _ _
-        _ ≤ (S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0)).card •
-              (2 * (2 * (L : ℝ) + α) * dist y z) :=
-            Finset.sum_le_card_nsmul _ _ _ hterm
-        _ = ((S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0)).card : ℝ) *
-              (2 * (2 * (L : ℝ) + α) * dist y z) := by
-            rw [nsmul_eq_mul]
-        _ ≤ 2 * (2 * (2 * (L : ℝ) + α) * dist y z) := by
-            apply mul_le_mul_of_nonneg_right _ (by positivity)
-            exact_mod_cast hPcard
+      apply abs_sum_sub_le_of_card_support_le_one S u (2 * (2 * (L : ℝ) + α))
+        (by positivity) hcardone
+      intro n hn y z
+      refine (hublock n (hSmem n hn).2 y z).trans ?_
+      have hc := hcbound n
+      nlinarith [dist_nonneg (x := y) (y := z)]
     have hf' : |f y - f z| ≤ (L : ℝ) * dist y z := by
       simpa [Real.dist_eq] using hf.dist_le_mul y z
-    rw [hFyz, hsumP]
-    calc |(f y - f z) + ∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), (u n y - u n z)|
-        ≤ |f y - f z| + |∑ n ∈ S.filter (fun n ↦ u n y ≠ 0 ∨ u n z ≠ 0), (u n y - u n z)| :=
+    rw [hFyz]
+    calc |(f y - f z) + ∑ n ∈ S, (u n y - u n z)|
+        ≤ |f y - f z| + |∑ n ∈ S, (u n y - u n z)| :=
           abs_add_le _ _
       _ ≤ (L : ℝ) * dist y z + 2 * (2 * (2 * (L : ℝ) + α) * dist y z) :=
           add_le_add hf' hsumbound
@@ -551,7 +566,7 @@ end Gluing
 
 end LocalSlope
 
-/-! ### `C2` — the McShane patch -/
+/-! ### The McShane patch -/
 
 namespace LocalSlope
 
@@ -679,7 +694,7 @@ theorem exists_partition {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzWith L f) 
       _ ≤ apply f x + (α : ℝ≥0∞) := add_le_add hk le_rfl
 
 omit [CompleteSpace V] in
-/-- `C2`.  The McShane patch: a globally Lipschitz `F` with constant `9 L + 8 α` independent of
+/-- The McShane patch: a globally Lipschitz `F` with constant `9 L + 8 α` independent of
 `δ`, equal to `f` on a Borel set of co-mass at most `δ`, uniformly within `2 L + 2 α` of `f`, and
 whose asymptotic Lipschitz constant on that set is within `2 α` of the local slope of `f`. -/
 theorem exists_patch (ν : ProbabilityMeasure V) {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzWith L f)
@@ -756,7 +771,7 @@ end Patch
 
 end LocalSlope
 
-/-! ### `C4` — density for globally Lipschitz tests -/
+/-! ### Density for globally Lipschitz tests -/
 
 section Density
 
@@ -795,7 +810,7 @@ theorem sq_add_two_mul_le (s a : ℝ≥0∞) :
 
 namespace SmoothGradient
 
-/-- `C4`.  Density for a globally Lipschitz test: the smooth-gradient relaxation of `g` is at most
+/-- Density for a globally Lipschitz test: the smooth-gradient relaxation of `g` is at most
 its raw local-slope energy.  The recovery is by McShane patches with `α = δ = 1 / (n + 1)`. -/
 theorem relaxation_le_localSlope_of_lipschitzWith (ν : ProbabilityMeasure V) {g : V → ℝ}
     {L : ℝ≥0} (hg : LipschitzWith L g) (hmem : MemLp g 2 (ν : Measure V)) :
@@ -961,7 +976,7 @@ end SmoothGradient
 
 end Density
 
-/-! ### `C5`, `C6` — density for every admissible test and the reverse inequality -/
+/-! ### Density for every admissible test and the reverse inequality -/
 
 section General
 
@@ -1010,7 +1025,7 @@ theorem sq_add_le_mul_sq_add {θ : ℝ≥0} (hθ : 0 < θ) (x y : ℝ≥0∞) :
 
 namespace SmoothGradient
 
-/-- `C5`.  Density for every admissible local-slope test: cutting off by the smooth bump
+/-- Density for every admissible local-slope test: cutting off by the smooth bump
 `scaled (n + 1)` produces globally Lipschitz tests converging in `L²(ν)` whose energies converge,
 after Young's inequality, to the local-slope energy of the test. -/
 theorem relaxation_le_localSlope_of_admissible (ν : ProbabilityMeasure V) {g : V → ℝ}
@@ -1186,7 +1201,7 @@ theorem relaxation_le_localSlope_of_admissible (ν : ProbabilityMeasure V) {g : 
     simpa using this
   exact ge_of_tendsto hlim (Eventually.of_forall fun k ↦ key (θ k) (hθ0 k))
 
-/-- `C6`.  The reverse inequality between the two relaxations, for every law: smooth tests are
+/-- The reverse inequality between the two relaxations, for every law: smooth tests are
 dense in the local-slope energy, so the smooth-gradient relaxation does not exceed the
 local-slope relaxation. -/
 theorem relaxation_le_localSlope (ν : ProbabilityMeasure V) (f : Lp ℝ 2 (ν : Measure V)) :

@@ -7,8 +7,8 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 /-!
 # Eilenberg slicing bound for Hausdorff measures along a Lipschitz real function
 
-Metric-space layer of the coarea route, depending on Mathlib only.  The main result
-`exists_measurable_majorant` is the Eilenberg inequality in the form the route needs: for `u`
+Metric-space layer of the coarea formula, depending on Mathlib only.  The main result
+`exists_measurable_majorant` is the Eilenberg inequality in the form needed for coarea: for `u`
 Lipschitz *on `S` only*, the slice function `t ↦ μH[d] (S ∩ {u = t})` admits a **measurable**
 majorant `F` with `∫⁻ F ≤ 2 K μH[d + 1] S`.  Both the majorant's measurability and the constant
 are part of the conclusion: the slice function itself is not known to be measurable, so a bound

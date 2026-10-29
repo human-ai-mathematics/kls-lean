@@ -41,7 +41,7 @@ No KLS500 source is included; its own port targets a different toolchain.
 ## Local changes
 
 The sources are ported to this package's Lean v4.33.0 and Mathlib `db584cd` (tag v4.33.0).
-Thirteen files differ from their respective pinned upstream sources:
+Fifty-six files differ from their respective pinned upstream sources:
 [`port.patch`](port.patch) is the exact unified diff and applies with `patch -p1` from this
 directory. Modification notices identify every changed source. The BrownianMotion update
 changes its upstream API; existing project and LevyStochCalc public contracts are retained.
@@ -57,6 +57,11 @@ No option, axiom or `sorry` is added by the local adaptations.
 | `LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean` | a `simp only` that no longer makes progress |
 | `LevyStochCalc/Brownian/{ItoAlgebraAssociativity, ItoPullOut, CrossVariation}.lean` | stale `Decidable` instance in `if` after `simp only`; goal restated with `show` |
 | `LevyStochCalc/Martingale/CadlagModification.lean` | migrate to the upstream `rightContModifReal` / `cadlagModifReal` names, retaining the existing hypotheses |
+| 43 further files, listed by `patch.files` in `vendor-lock.json` | apply Lean v4.33.0's recommended replacements for deprecated set aliases and proof-local `haveI`/`letI` bindings; each file has a dated modification notice |
+
+The warning maintenance changes proof scripts only. It preserves upstream pins, public
+declarations, mathematical assumptions and non-theorem definitions. It adds no linter
+suppression. The exact filenames and edits are recorded in the lock and `port.patch`.
 
 Each library compiles with the upstream package options `relaxedAutoImplicit = false` and
 `maxSynthPendingDepth = 3` (see `../lakefile.toml`).
@@ -104,6 +109,7 @@ To update a library, change its pin here and in `PINS` of `research/vendor_lock.
 modules from the new upstream revision, port and record the new diff in `port.patch`, keep the
 modification notices, regenerate the lock with `python3 research/vendor_lock.py --write --fetch`,
 and rerun the full verification. Record dependency overrides and the selected proved declaration closure explicitly, retain
-original authorship, and check affected public contracts. Do not edit these files for style;
-local changes serve toolchain compatibility, the documented proved dependency selection and
-migration of existing consumers.
+original authorship, and check affected public contracts. Keep local maintenance limited to
+toolchain compatibility, the documented proved dependency selection, migration of existing
+consumers and compiler-reported warnings. Warning fixes use the compiler's recommended
+substitutions and retain declaration interfaces; broader style rewrites remain outside this port.

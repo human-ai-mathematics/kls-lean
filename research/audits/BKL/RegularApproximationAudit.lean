@@ -9,8 +9,7 @@ open FunctionalInequalities.Probability.Gaussian
 Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5. Clients: the Gaussian source law
 on `ℝ` with covariance one (variance `1`, not a degenerate witness) has a selected diagonal of regular
 approximants with all four limits; the zero-dimensional Dirac law has one too. No whitened
-convergence or Poincaré limit is asserted. Clients adapted from the Codex bundle
-`Gaussian-Quadratic-Diagonal/Clients.lean` (independently accepted, receipt b147e4f4…).
+convergence or Poincaré limit is asserted.
 -/
 
 open scoped RealInnerProductSpace

@@ -109,11 +109,6 @@ theorem contDiff_posteriorExpectation_c (μ : ProbabilityMeasure E) (hc : IsComp
   rw [heq]
   exact hN.div hZ hpos
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem line_hasDerivAt (c h : E) : HasDerivAt (fun t : ℝ => c + t • h) h 0 := by
-  convert! ((hasDerivAt_id (0 : ℝ)).smul_const h).const_add c using 1
-  simp only [one_smul]
-
 /-- The `c`-gradient of the posterior expectation is the covariance with the linear score. -/
 theorem fderiv_posteriorExpectation_c_apply (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} (hf : Measurable f)
@@ -125,7 +120,7 @@ theorem fderiv_posteriorExpectation_c_apply (μ : ProbabilityMeasure E)
   have hsm2 : ContDiff ℝ 2 (fun y => posteriorExpectation μ y Q f) :=
     hsm.of_le (WithTop.coe_le_coe.mpr le_top)
   have hD := (hsm2.differentiable (by norm_num) c).hasFDerivAt.comp_hasDerivAt_of_eq
-    (0 : ℝ) (line_hasDerivAt c h) (by simp)
+    (0 : ℝ) (hasDerivAt_line c h 0) (by simp)
   have hN := expectation_hasDerivAt_quadraticExponent_of_compact μ hc c h Q 0 hf hC hfb
   have hg : quadraticExponent h (0 : E →L[ℝ] E) = fun x => ⟪h, x⟫ := by
     funext x
@@ -150,7 +145,7 @@ theorem bilinearIteratedFDerivTwo_posteriorExpectation_c (μ : ProbabilityMeasur
   have hsm2 : ContDiff ℝ 2 (fun y => posteriorExpectation μ y Q f) := hsm.of_le (WithTop.coe_le_coe.mpr le_top)
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hsm2]
   have hD := (differentiable_fderiv_apply hsm2 k c).hasFDerivAt.comp_hasDerivAt_of_eq
-    (0 : ℝ) (line_hasDerivAt c h) (by simp)
+    (0 : ℝ) (hasDerivAt_line c h 0) (by simp)
   have hφ : Continuous (quadraticExponent c Q) := by unfold quadraticExponent; fun_prop
   have hh : Continuous (fun x : E => ⟪h, x⟫) := by fun_prop
   have hk : Continuous (fun x : E => ⟪k, x⟫) := by fun_prop

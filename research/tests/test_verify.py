@@ -204,12 +204,17 @@ class ReplayBuildTests(unittest.TestCase):
             def run(name, command, *, cwd):
                 result = subprocess.run(command, cwd=cwd, text=True, capture_output=True,
                                         timeout=60, env={**os.environ, "LEAN_PATH": ""})
-                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                if result.returncode:
+                    raise RuntimeError(result.stdout + result.stderr)
                 return result.stdout
 
             run("default", ["lake", "build"], cwd=formalization)
             with self.assertRaisesRegex(RuntimeError, "Retained.lean has no built module"):
                 prepare_replay(root, snapshot, root / "default-view")
+            # The complete-scope build must also reject warnings in an unimported module.
+            with self.assertRaisesRegex(RuntimeError, "declaration uses .sorry."):
+                build_replay_inputs(root, snapshot, root / "warning-view", run)
+            (wip / "Retained.lean").write_text('theorem unfinished : True := by trivial\n')
             result = build_replay_inputs(root, snapshot, root / "replay-view", run)
             self.assertEqual(set(result["modules"]), {
                 "FunctionalInequalities", "FunctionalInequalities.WIP.Retained"})

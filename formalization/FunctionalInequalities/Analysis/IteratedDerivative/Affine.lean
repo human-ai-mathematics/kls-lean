@@ -115,7 +115,7 @@ theorem fderiv_affine (f : E → F) (c : E) (a : ℝ) (x : E) :
   simpa only [fderiv_comp_add_left] using
     (fderiv_comp_smul a (f := fun z ↦ f (c + z)) (x := x))
 
-/-- The actual nested-operator Hessian used by the accepted Poisson estimate
+/-- The nested-operator Hessian
 rescales by a², without any additional differentiability assumption. -/
 theorem hessian_affine (f : E → F) (c : E) (a : ℝ) (x : E) :
     fderiv ℝ (fderiv ℝ (fun z ↦ f (c + a • z))) x =

@@ -25,7 +25,7 @@ positive measure (Whitney), and nothing below says otherwise.  The rank-deficien
 **Relation to rank-deficient coarea.**  In the equidimensional case the coarea conclusion reads `μH[0] (C ∩ {u = t}) = 0` for almost
 every `t`, and a nonempty set has `μH[0] ≥ 1`, so the two conclusions are then *equivalent* statements.
 Nothing of that equivalence is used here: this module imports neither the rank-deficient coarea module nor any part of that route, so the two proofs are independent and the agreement is a real cross-check.
-It is recorded in `research/audits/EquidimensionalSardAudit.lean`, in both directions.
+It is recorded in `research/audits/Sard/EquidimensionalAudit.lean`, in both directions.
 -/
 
 noncomputable section
@@ -129,7 +129,7 @@ open MeasureTheory Set
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Lipschitz maps send null sets to null sets** (weak Letwin route, Alexandrov's second-order
+/-- **Lipschitz maps send null sets to null sets** (Alexandrov's second-order
 differentiability theorem): for a map of a finite-dimensional real inner product space into
 itself that is Lipschitz on `s`, a Lebesgue-null `s` has a Lebesgue-null image. No measurability of `s`
 is assumed. -/

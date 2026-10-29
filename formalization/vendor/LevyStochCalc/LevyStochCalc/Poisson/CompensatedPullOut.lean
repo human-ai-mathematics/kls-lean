@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import LevyStochCalc.Poisson.CompensatedRange
 
 /-!
@@ -93,7 +96,7 @@ theorem integral_mul_sq_stochasticIntegral {a T : ℝ} (ha : 0 ≤ a) (haT : a �
     {M : ℝ} (hUb : ∀ ω, |U ω| ≤ M) :
     ∫ ω, U ω * (stochasticIntegral N ℱ hℱ φ hm hp hq T ω) ^ 2 ∂P
       = ∫ ω, U ω * compensator ν φ T ω ∂P := by
-  haveI : SigmaFinite (P.trim (ℱ.rightCont.le a)) := by infer_instance
+  have : SigmaFinite (P.trim (ℱ.rightCont.le a)) := by infer_instance
   set f : ℝ → Ω → ℝ := fun t ω =>
     (stochasticIntegral N ℱ hℱ φ hm hp hq t ω) ^ 2 - compensator ν φ t ω with hf
   have hmart : Martingale f ℱ.rightCont P :=

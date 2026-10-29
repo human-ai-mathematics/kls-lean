@@ -65,7 +65,7 @@ The constant `c = ‖Q‖ (1 + ‖A‖ C ‖P‖)` depends only on the linear da
 `S` or on the fibre**, which is what makes it usable in the `ε → 0` limit.
 
 `f` is an arbitrary function, `S` an arbitrary set, and no finite-dimensionality, inner product,
-measurability or completeness is assumed.  This is the **explicit-constant** form; the route's
+measurability or completeness is assumed.  This is the **explicit-constant** form; the
 existential statement is `exists_lipschitzOnWith_of_ker_bound` just below. -/
 theorem lipschitzOnWith_of_ker_bound (A : V →L[ℝ] W) (P : W →L[ℝ] W₁) (Q : W →L[ℝ] W₂)
     (C : ℝ≥0) (hker : ∀ z : V, P (A z) = 0 → A z = 0)
@@ -99,8 +99,8 @@ theorem lipschitzOnWith_of_ker_bound (A : V →L[ℝ] W) (P : W →L[ℝ] W₁) 
         mul_le_mul_of_nonneg_left hfba (norm_nonneg Q)
     _ = ‖Q‖ * (1 + ‖A‖ * C * ‖P‖) * ε * ‖b - a‖ := by ring
 
-/-- **small tangential Lipschitz control: the tangential small-Lipschitz estimate, existential form.**  The route's statement;
-the constant supplied by `lipschitzOnWith_of_ker_bound` is `‖Q‖ (1 + ‖A‖ C ‖P‖)`, which depends
+/-- **The tangential small-Lipschitz estimate, existential form.**  The
+constant supplied by `lipschitzOnWith_of_ker_bound` is `‖Q‖ (1 + ‖A‖ C ‖P‖)`, which depends
 only on the linear data and **never on `ε`, on `f`, on `S` or on the fibre**.  The explicit form is
 what a per-stratum assembly needs, because the approximating partition produces a different linear
 model on every piece and the constant has to be uniform over them. -/

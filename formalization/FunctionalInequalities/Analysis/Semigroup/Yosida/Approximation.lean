@@ -10,8 +10,8 @@ the classical Yosida approximation of `T†T`; that identification is the resolv
 `Analysis/Semigroup/VonNeumann.lean`, not anything proved here.
 
 Its properties (nonnegativity, symmetry, commutation, convergence to `T†T` on `D(T†T)`, and the
-strong convergence of `exp (-t • L_s)` which is the adjoint-product identification) are the `Y`-series obligations of
-`research/audits/YosidaLimitRouteStatements.lean`. Everything here is definitional or `simp`-level
+strong convergence of `exp (-t • L_s)` which is the adjoint-product identification) are proved in
+`Yosida/Laws.lean` and `Yosida/Limit.lean`. Everything here is definitional or `simp`-level
 glue. No measure, no log-concavity and no KLS content.
 -/
 

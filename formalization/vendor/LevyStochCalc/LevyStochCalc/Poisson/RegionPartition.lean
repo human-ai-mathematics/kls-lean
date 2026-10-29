@@ -3,6 +3,9 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
+-- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
+-- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
+
 import Mathlib.MeasureTheory.Measure.MeasureSpace
 
 /-!
@@ -39,7 +42,7 @@ theorem measurableSet_partitionAtom (hC : ∀ i, MeasurableSet (C i)) (S : Finse
   refine MeasurableSet.inter ?_ (MeasurableSet.iUnion hC)
   have h : {x | ∀ i, x ∈ C i ↔ i ∈ S} = ⋂ i, (if i ∈ S then C i else (C i)ᶜ) := by
     ext x
-    simp only [Set.mem_setOf_eq, Set.mem_iInter]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter]
     refine forall_congr' fun i => ?_
     by_cases h : i ∈ S <;> simp [h]
   rw [h]

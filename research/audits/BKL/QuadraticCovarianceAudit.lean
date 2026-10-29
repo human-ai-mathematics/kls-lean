@@ -6,8 +6,7 @@ import FunctionalInequalities.Probability.QuadraticTilt
 Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5 (quadratic tilt step). Clients: the
 two-point law `(δ₀ + δ₂)/2` on `ℝ` (mean `1`, raw second moment `2`, covariance `1`) has tilted
 covariances converging to `1` as `δ → 0⁺`, and the tilts keep a finite second moment; the
-zero-dimensional law converges to the zero operator. Clients adapted from the Codex bundle
-`Quadratic-Covariance-Limit/Clients.lean` (independently accepted, receipt 6063263f…).
+zero-dimensional law converges to the zero operator.
 -/
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities Filter

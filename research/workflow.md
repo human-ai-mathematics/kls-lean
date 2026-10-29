@@ -32,7 +32,7 @@ make it fit a directory.
 | Concrete specialization | The concrete family's module; import the abstract result | `KLS/LogConcave/HeatSemigroup/Domain.lean` |
 | Identification between two objects | Place at their integration boundary, with a descriptive topic name | Closed-form normalization in `WeightedGradient/Energy.lean` |
 | Counterexample or obstruction | The family of the statement being refuted; independent from the successful construction | `Semigroup/Exponential/Counterexample.lean` |
-| Proof client, signature check, candidate statement | `research/audits/`; distinguish proved clients from type-checked candidates | `SemigroupDomainStabilityAudit.lean` |
+| Proof client, signature check, candidate statement | `research/audits/`; distinguish proved clients from type-checked candidates | `research/audits/HeatSemigroup/DomainStabilityAudit.lean` |
 | Historical rationale, route, verification record | Current normative reviews in `research/progress/` and the audit directories; neither is the canonical API index | Scope review plus an old-to-new migration map |
 
 Reuse the existing Energy, Probability, Poincare and KLS families when they own the mathematics.

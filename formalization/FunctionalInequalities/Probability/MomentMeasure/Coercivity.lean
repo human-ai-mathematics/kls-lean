@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.Convex.AffineMaximum
-import FunctionalInequalities.Probability.ConvexSupport
+import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
+import FunctionalInequalities.Probability.Support.Convex
 import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
 import FunctionalInequalities.Probability.MomentMeasure.Affine
 import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
@@ -22,7 +22,7 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `Coercivity.lean`.
+-- Lower integrals of nonnegative potentials.
 
 open MeasureTheory Filter Set
 open scoped ENNReal Topology
@@ -288,7 +288,7 @@ end FiniteDimensional
 end
 
 section
--- Accepted source `NormalizedCompetitors.lean`.
+-- A uniform real coercivity bound.
 
 open MeasureTheory Filter Set
 open scoped ENNReal Topology

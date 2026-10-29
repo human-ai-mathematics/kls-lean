@@ -73,6 +73,11 @@ flowchart LR
     end
     subgraph LETWINWEAK["Letwin constant 8 — compact and noncompact bounds; weak regularity and Gaussian route"]
     CEKMAP["✓ Bounded CEK source<br/>Actual moment map"]
+    CEKDEF["✓ CEK Definitions 1–2<br/>moment measure, essential continuity"]
+    CEKTHM8["✓ CEK Theorem 8<br/>ψ* maximizes I_μ"]
+    CEKPROP10["✓ CEK Proposition 10<br/>maximizers essentially continuous"]
+    CEKUNIQ["✓ Moment potentials<br/>unique up to translation (finite, bounded support)"]
+    CEKTHM2["✓ CEK Theorem 2 = Letwin Lemma 2.1<br/>moment measures: existence and uniqueness"]
     WEAKHESS["✓ C1 Hessian<br/>Gradient derivative at a point"]
     REGMOM["✓ Regular-class R0<br/>C1,1 and a.e. Hessian package"]
     WEAKINVINT["✓ Inverse Hessian<br/>Bounded compact integrability"]
@@ -167,6 +172,8 @@ flowchart LR
     CONVGRADINV["✓ Strictly convex gradient<br/>open map, homeomorphism, C^k inverse"]
     MAPGRADRANGE["✓ Transport gradient range = int K<br/>homeomorphism and inverse, given potential"]
     MOMENTGRADINV["✓ Gradient homeomorphism onto int K, C1 inverse<br/>regular moment potential, strong class"]
+    MOMENTSMOOTH["✓ Smooth moment potential and gradient inverse<br/>strong class, every n > 0"]
+    SMOOTHSTEIN["✓ Smooth moment-map Stein kernel<br/>strong class, exact coupling"]
     MNTRACE["✓ Trace identities<br/>noise shift, involution"]
     SPECGEO["✓ Spectral geometry<br/>B, S, sign Q"]
     SYMINV["✓ Invertible symmetric<br/>approximation"]
@@ -199,7 +206,80 @@ flowchart LR
     LA1REG["✓ Letwin Lemma A.1<br/>regular approximation"]
     LCOMPACT8["✓ Compact Letwin bound<br/>constant 8 (certified)"]
     AFFMOM["✓ Truncated affine laws<br/>mixed moments converge"]
-    LGENERAL8["✓ Letwin Theorem 1.2<br/>constant 8, no compactness"]
+    LGENERAL8["✓ Letwin Theorem 1.2<br/>constant 8, no compactness (certified)"]
+    SMOOTHCALC["✓ Smooth Hessian calculus and conservative cutoffs<br/>strong class, same potential"]
+    SMOOTHTRACE["✓ Smooth moment potential with sharp trace<br/>same u, exact 2, strong class"]
+    SMOOTHSTEINL2["✓ Smooth Stein kernel and sharp HS² ≤ 2n<br/>same u, mean Id, exact coupling"]
+    CONVEXMOM["✓ Convex-body source moment potential<br/>C¹, homeomorphism, Alexandrov and viscosity"]
+    KFREEHESS["✓ κ-free Hessian bound by the maximum principle<br/>Δφ + |∇φ|² ≤ 3R², supports Klartag Theorem 1.1"]
+    KLARTAGLIMIT["✓ Klartag Lemma 2.3 (C¹) and limit potential<br/>Proposition 2.1 compactness, no uniqueness"]
+    GIVENGRADSMOOTH["✓ Moment potential with Lipschitz gradient is smooth<br/>given potential, W convex on int K"]
+    LITERALMOMENT["✓ Letwin Lemma 2.2, merely convex class<br/>smooth potential, existence form"]
+    LITERALTRACE["✓ Letwin Theorem 2.5, merely convex class<br/>exact 2, existence form"]
+    LITERALCALC["✓ Letwin Lemmas 2.3, 2.4, A.4–A.6, merely convex class<br/>same φ, existence form"]
+    LITERALSTEIN["✓ Letwin Lemmas 2.7 and 2.9, merely convex class<br/>smooth Stein kernel, HS² ≤ 2n, existence form"]
+    EVERYMOMENT["✓ Letwin Lemmas 2.2–2.9, Theorem 2.5<br/>every moment potential"]
+    SECTIONGROWTH["○ Convex sections and gradient growth<br/>compact-uniform quantitative supports<br/>Superseded auxiliary · not in release"]
+    SECTIONVOLUME["○ Convex section volume upper bound<br/>actual source, C(n) sqrt(hⁿ/a)<br/>Superseded auxiliary · not in release"]
+    CONVEXHOLDER["○ Literal convex-body moment potential<br/>C¹,α and section power radii<br/>Superseded auxiliary · not in release"]
+    MACOMPARE["○ DOMAIN MA comparison and affine normalization<br/>Actual coefficients; W²p pending<br/>Superseded auxiliary · not in release"]
+    SECTIONCOVER["○ Small-section engulfing<br/>Disjoint enlargement cover; W²p pending<br/>Superseded auxiliary · not in release"]
+    SECTIONWEAK["○ Section height-volume bound<br/>Quantitative weak-type measure estimate<br/>Superseded auxiliary · not in release"]
+    MACONTACT["○ Actual DOMAIN density residual contacts<br/>Local reference; tolerance before unknown potential<br/>Superseded auxiliary · not in release"]
+    DETMINKOWSKI["○ PSD determinant AM–GM and Minkowski<br/>Exact residual determinant bound<br/>Superseded auxiliary · not in release"]
+    CONTACTDET["○ Actual contact residual PSD and determinant<br/>Local MA equations give a.e. pointwise control<br/>Superseded auxiliary · not in release"]
+    CONTACTNULL["○ Quadratic contact null-image property<br/>Actual MA bound and supporting contacts<br/>Superseded auxiliary · not in release"]
+    GRADDERIV["✓ Actual local a.e. gradient derivative<br/>Only open-domain differentiability; SAME MA matrix"]
+    CONTACTMEASURE["○ Actual quadratic contact image upper bound<br/>Jacobian good image and null bad image<br/>Superseded auxiliary · not in release"]
+    CONTACTGAIN["○ Unit-ball quadratic contact volume gain<br/>Tolerance before unknown solution and density<br/>Superseded auxiliary · not in release"]
+    GRADNULL["○ Actual MA upper gives gradient null images<br/>Shared real outer-regularity proof<br/>Superseded auxiliary · not in release"]
+    REFGRADBOUND["○ Local C2 positive-Hessian compact reference bounds<br/>Actual pointwise calculus and residual relative gradient<br/>Superseded auxiliary · not in release"]
+    REFCONTACTNULL["○ Local C2 positive-Hessian reference contact null images<br/>Actual fibres and contained-ball cover; no extension<br/>Superseded auxiliary · not in release"]
+    REFCONTACTMEASURE["○ Given DOMAIN-strict locally C2 unit-MA reference image upper<br/>Shared actual Jacobian and full Borel contacts<br/>Superseded auxiliary · not in release"]
+    REFCONTACTGAIN["○ Given DOMAIN-local C2 unit-MA reference contact gain<br/>Actual mass/contacts/image; tolerance before unknowns<br/>Superseded auxiliary · not in release"]
+    COMPACTEXT["✓ C0 Lipschitz compact convex patch<br/>Old COMPLETE C1 scope retained"]
+    DOMAINGRADDERIV["✓ Domain-relative MA: SAME ae gradient/expansion matrix<br/>Actual compact germs and buffered countable cover"]
+    DIRICHLETENV["○ Actual local MA class gluing / envelope comparison<br/>Increasing uniform class sequence; UNIT MA open<br/>Superseded auxiliary · not in release"]
+    GAUGECONE["○ Actual one-atom Dirichlet source<br/>Any interior vertex; nonnegative target weight<br/>Superseded auxiliary · not in release"]
+    LOWERBOREL["○ Actual DOMAIN lower MA<br/>OPEN source implies EVERY Borel subset<br/>Superseded auxiliary · not in release"]
+    LOCALMAXGLUE["○ Actual local max gluing<br/>ALL-domain support / closure convex C0<br/>Superseded auxiliary · not in release"]
+    PERRONQUADTEST["○ Actual U lower tests / buffered Moreau<br/>Generated C1,1 and SAME quadratic test matrix; UNIT open<br/>Superseded auxiliary · not in release"]
+    MORREG["✓ Actual compact Moreau regularization<br/>Generated C1 / Lipschitz gradient / uniform limit"]
+    REGMATAE["○ Actual SAME regularizer AE matrix<br/>Gradient derivative / value / PSD / det at most 1<br/>Superseded auxiliary · not in release"]
+    AEJACOBIAN["○ Actual AE Haar image bound<br/>ONE good/bad proof; two genuine sources<br/>Superseded auxiliary · not in release"]
+    REGIMAGEUPPER["○ Actual SAME regularizer image upper<br/>Generated singular control / gradient and DOMAIN images<br/>Superseded auxiliary · not in release"]
+    DOMSUPLOCAL["✓ Actual domain support localization<br/>No C1 / FD / smaller-domain convexity"]
+    UNITDIRICHLET["○ Actual C0 UNIT Dirichlet solution<br/>SAME measure / strict ONLY inside<br/>Superseded auxiliary · not in release"]
+    NEGATIVESUBLEVEL["✓ Actual proper negative-sublevel patch<br/>FULL ambient level identity; no coercivity input"]
+    DOMAINUNITSTRICT["○ Actual DOMAIN UNIT contact uniqueness<br/>C0 supports / shared strictness proof<br/>Superseded auxiliary · not in release"]
+    COMPACTTILTOPT["○ Actual continuous compact tilt optimizer<br/>Generated from SAME U / not C1 U<br/>Superseded auxiliary · not in release"]
+    COMPACTCONJVALUE["○ Actual compact conjugate value / C1 psi<br/>SAME optimizer; primal C1 separate<br/>Superseded auxiliary · not in release"]
+    COMPACTDUALCAP["○ Actual compact-dual capacity / local transport<br/>SAME witnesses; dual MA separate<br/>Superseded auxiliary · not in release"]
+    COMPACTDUALMA["○ Actual compact dual MA / SAME witnesses<br/>OPEN dual MA obtained separately<br/>Superseded auxiliary · not in release"]
+    OPENDUALMA["○ Actual OPEN dual MA / nonempty slope region<br/>Primal C1 follows via unique supports<br/>Superseded auxiliary · not in release"]
+    COERCIVEDUAL["○ Actual compact-conjugate tilt growth<br/>FULL compact sections; containment separate<br/>Superseded auxiliary · not in release"]
+    CONTAINEDDUAL["○ Actual contained full dual section / support SLOPES<br/>One proper sublevel; all-point source separate<br/>Superseded auxiliary · not in release"]
+    ALLPOINTSUPPORT["○ Actual ONE U before ALL x / unique supports<br/>Superseded auxiliary · not in release"]
+    LOCALCONVEXC1["✓ Actual local C0 unique supports -> C1<br/>Shared compact projection / variational derivative"]
+    UNITPRIMALC1["○ Actual SAME UNIT primal U C1<br/>SAME-reference C2/PD still open<br/>Superseded auxiliary · not in release"]
+    MATRIXLOGDET2["✓ Actual inverse / second logdet calculus<br/>Local constant determinant generates identities"]
+    CLASSICALMADIFF["✓ GIVEN C4 Hessian: actual trace identities<br/>No C2 construction / Pogorelov bound"]
+    QUADALLORDERS["✓ Actual all-order quadratic polynomial<br/>Shared old C2 / classical C4 source"]
+    MATRIXAXISFRAME["✓ PD form generates axis-fixing coordinates<br/>SAME axis / no supplied diagonalization"]
+    LOCALHESSCALC["✓ Local C3/C4 commutation / C2 affine Hessian<br/>Shared exact old global consumers"]
+    CLASSICALPOGORELOV["○ GIVEN classical solution: full Pogorelov estimate<br/>Generated coordinates / maximum / interior caps<br/>Superseded auxiliary · not in release"]
+    POINTWISEHESS["✓ Pointwise C2 Hessian algebra / quadratic Hessian<br/>Shared old global consumers"]
+    SYMCOEFF["✓ Raw quadratic coefficients generate symmetric PSD part<br/>Same trace / ELEMENTWISE ceiling"]
+    ELLIPTICMAX["○ Strict drift maximum / weak positive-trace maximum<br/>Explicit quadratic C0 barrier<br/>Superseded auxiliary · not in release"]
+    WITHINSUPP["✓ Convex support from derivative WITHIN domain<br/>Shared old global gradient consumer"]
+    HALFBALLNORMAL["○ SAME half-ball closure and one-sided normal derivative<br/>C1 WITHIN full closure / ambient m+1<br/>Superseded auxiliary · not in release"]
+    FLATSUPPORT["○ Actual normalized convex flat support<br/>Generated alpha / unit tangent / beta dichotomy<br/>Superseded auxiliary · not in release"]
+    LOGRADIAL["○ Actual radial/log calculus, singular C0 and flat normal profile<br/>Shared first derivatives / genuine scalar value bounds<br/>Superseded auxiliary · not in release"]
+    LOGBARRIEROP["○ Generated SAME-profile plane/ambient operator margins<br/>Arbitrary skew / drift / zeroth-order bounds<br/>Superseded auxiliary · not in release"]
+    HALFBALLPOLY["○ Actual polynomial barrier / generated negative operator<br/>Shared norm floor and curved-boundary bound<br/>Superseded auxiliary · not in release"]
+    FRAMECOORD["○ Actual orthogonal frame / Bessel / finite coordinates<br/>Shared old frame, Holder and flat consumers<br/>Superseded auxiliary · not in release"]
+    BARRIERRADIUS["○ Generated tangent-normal radius / SAME half-ball frontier<br/>Actual flat-or-curved geometry<br/>Superseded auxiliary · not in release"]
+    ELLIPTICLINEAR["○ SAME local-C2 Hessian / gradient / value coupling<br/>Old C0-barrier and actual nonzero-drift consumers<br/>Superseded auxiliary · not in release"]
     end
     subgraph BKLCUTOFF["BKL cutoff localization — supporting endpoint; uncut process open"]
     BCUT["✓ BKL (95) cutoff<br/>energy induction (certified)"]
@@ -213,9 +293,20 @@ flowchart LR
     BREG["✓ BKL Section 2<br/>regular approximation"]
     BKLMAIN["✓ BKL Theorem 1.1<br/>dimension-free Poincaré (certified)"]
     BKLAND{"AND<br/>BKL route"}
+    LETWINLOG["✓ Letwin Theorem 1.1<br/>via BKL (paper-target certified)"]
     end
     KLS["✓ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
+    DOMAINMAX["✓ DOMAIN Alexandrov maximum and lower boundary modulus<br/>Closure C0, actual MA upper bound"]
+    DOMAINMAEQUI["○ DOMAIN MA family closure equicontinuity<br/>Finite TOTAL mass, generated uniform C0<br/>Superseded auxiliary · not in release"]
+    CONVEXBDMAX["✓ Pure convex maximum rigidity<br/>Generic strong max / finite-dimensional frontier bound"]
+    DOMAINTOTALBD["✓ Finite TOTAL DOMAIN MA boundary control<br/>No positive lower density or density ceiling"]
+    DOMAINC0SUBGRAD["✓ C0 convex DOMAIN subgradients<br/>True existence and compact ALL-slope bound"]
+    DOMAINMASUBSEQ["○ Actual uniform Dirichlet subsequence<br/>Convex continuous zero-boundary limit<br/>Superseded auxiliary · not in release"]
+    DOMAINMAOVERLAP["○ C0 DOMAIN supporting-image overlaps<br/>Actual nullity, all dimensions<br/>Superseded auxiliary · not in release"]
+    DOMAINSUPPORTIMAGES["○ Actual DOMAIN supporting images<br/>Compact / Borel / analytic / upper stability<br/>Superseded auxiliary · not in release"]
+    DOMAINMAMEASURE["○ Actual C0 DOMAIN MA measure<br/>All Borel values, finite compact INSIDE<br/>Superseded auxiliary · not in release"]
+    DOMAINMASTABILITY["○ Actual DOMAIN MA local limits<br/>SAME measures / constant density preserved<br/>Superseded auxiliary · not in release"]
     EG --> EAND
     EC --> EAND
     CB --> EAND
@@ -468,10 +559,130 @@ flowchart LR
     CONVGRADINV --> MAPGRADRANGE
     MAPGRADRANGE --> MOMENTGRADINV
     HESSHOLDER --> MOMENTGRADINV
+    MOMENTGRADINV --> MOMENTSMOOTH
+    LOGDETAVG --> MOMENTSMOOTH
+    MOMENTSMOOTH --> SMOOTHSTEIN
+    BKLMAIN --> LETWINLOG
+    MOMENTSMOOTH --> SMOOTHCALC
+    WSTEINSRC --> SMOOTHTRACE
+    HESSHOLDER --> SMOOTHTRACE
+    MOMENTSMOOTH --> SMOOTHTRACE
+    SMOOTHTRACE --> SMOOTHSTEINL2
+    CEKMAP --> CONVEXMOM
+    MAPGRADRANGE --> CONVEXMOM
+    CONVEXMOM --> SECTIONGROWTH
+    CONVEXMOM --> SECTIONVOLUME
+    CONVEXMOM --> CONVEXHOLDER
+    SECTIONGROWTH --> CONVEXHOLDER
+    CONVEXMOM --> SECTIONCOVER
+    SECTIONGROWTH --> SECTIONCOVER
+    SECTIONCOVER --> SECTIONWEAK
+    MACOMPARE --> MACONTACT
+    SECTIONGROWTH --> MACONTACT
+    DETMINKOWSKI --> CONTACTDET
+    CONVEXHOLDER --> CONTACTDET
+    CONVEXHOLDER --> CONTACTNULL
+    CONVEXHOLDER --> GRADDERIV
+    CONTACTNULL --> CONTACTMEASURE
+    CONTACTDET --> CONTACTMEASURE
+    GRADDERIV --> CONTACTMEASURE
+    MACONTACT --> CONTACTGAIN
+    GRADNULL --> CONTACTNULL
+    GRADNULL --> REFCONTACTNULL
+    REFGRADBOUND --> REFCONTACTNULL
+    REFCONTACTNULL --> REFCONTACTMEASURE
+    GRADDERIV --> REFCONTACTMEASURE
+    REFCONTACTMEASURE --> CONTACTMEASURE
+    REFCONTACTMEASURE --> REFCONTACTGAIN
+    MACONTACT --> REFCONTACTGAIN
+    REFCONTACTGAIN --> CONTACTGAIN
+    COMPACTEXT --> DOMAINGRADDERIV
+    GRADDERIV --> DOMAINGRADDERIV
+    CONVEXBDMAX --> DIRICHLETENV
+    DOMAINSUPPORTIMAGES --> DIRICHLETENV
+    DOMAINSUPPORTIMAGES --> GAUGECONE
+    DOMAINMAMEASURE --> GAUGECONE
+    MACOMPARE --> GAUGECONE
+    DOMAINMAMEASURE --> LOWERBOREL
+    LOWERBOREL --> DIRICHLETENV
+    DOMAINC0SUBGRAD --> LOCALMAXGLUE
+    LOCALMAXGLUE --> DIRICHLETENV
+    DIRICHLETENV --> PERRONQUADTEST
+    MACOMPARE --> PERRONQUADTEST
+    COMPACTEXT --> MORREG
+    MORREG --> PERRONQUADTEST
+    PERRONQUADTEST --> REGMATAE
+    GRADDERIV --> REGMATAE
+    AEJACOBIAN --> REGIMAGEUPPER
+    REGMATAE --> REGIMAGEUPPER
+    AEJACOBIAN --> REFCONTACTMEASURE
+    DOMSUPLOCAL --> DIRICHLETENV
+    DOMSUPLOCAL --> UNITDIRICHLET
+    REGIMAGEUPPER --> UNITDIRICHLET
+    DIRICHLETENV --> UNITDIRICHLET
+    CONVEXBDMAX --> UNITDIRICHLET
+    COMPACTEXT --> NEGATIVESUBLEVEL
+    NEGATIVESUBLEVEL --> DOMAINUNITSTRICT
+    DOMAINC0SUBGRAD --> DOMAINUNITSTRICT
+    DOMAINUNITSTRICT --> UNITDIRICHLET
+    DOMAINSUPPORTIMAGES --> COMPACTTILTOPT
+    UNITDIRICHLET --> COMPACTTILTOPT
+    NEGATIVESUBLEVEL --> COMPACTTILTOPT
+    COMPACTTILTOPT --> COMPACTCONJVALUE
+    UNITDIRICHLET --> COMPACTCONJVALUE
+    COMPACTCONJVALUE --> COMPACTDUALCAP
+    UNITDIRICHLET --> COMPACTDUALCAP
+    COMPACTDUALCAP --> COMPACTDUALMA
+    COMPACTDUALMA --> OPENDUALMA
+    OPENDUALMA --> COERCIVEDUAL
+    COERCIVEDUAL --> CONTAINEDDUAL
+    CONTAINEDDUAL --> ALLPOINTSUPPORT
+    DOMAINC0SUBGRAD --> LOCALCONVEXC1
+    ALLPOINTSUPPORT --> UNITPRIMALC1
+    LOCALCONVEXC1 --> UNITPRIMALC1
+    MATRIXLOGDET2 --> CLASSICALMADIFF
+    QUADALLORDERS --> PERRONQUADTEST
+    MATRIXAXISFRAME --> CLASSICALPOGORELOV
+    LOCALHESSCALC --> CLASSICALPOGORELOV
+    CLASSICALMADIFF --> CLASSICALPOGORELOV
+    QUADALLORDERS --> POINTWISEHESS
+    POINTWISEHESS --> ELLIPTICMAX
+    SYMCOEFF --> ELLIPTICMAX
+    WITHINSUPP --> FLATSUPPORT
+    LOGRADIAL --> LOGBARRIEROP
+    SYMCOEFF --> LOGBARRIEROP
+    QUADALLORDERS --> HALFBALLPOLY
+    FRAMECOORD --> BARRIERRADIUS
+    HALFBALLNORMAL --> BARRIERRADIUS
+    POINTWISEHESS --> ELLIPTICLINEAR
+    MOMENTSMOOTH --> GIVENGRADSMOOTH
+    HESSHOLDER --> GIVENGRADSMOOTH
+    WEAKTHIRD --> GIVENGRADSMOOTH
+    LA1REG --> LITERALMOMENT
+    KFREEHESS --> LITERALMOMENT
+    KLARTAGLIMIT --> LITERALMOMENT
+    GIVENGRADSMOOTH --> LITERALMOMENT
+    LITERALMOMENT --> LITERALTRACE
+    LITERALMOMENT --> LITERALCALC
+    LITERALTRACE --> LITERALSTEIN
+    SMOOTHSTEINL2 --> LITERALSTEIN
+    CEKDEF --> CEKTHM8
+    CEKDEF --> CEKPROP10
+    CEKDEF --> CEKUNIQ
+    CEKTHM8 --> CEKTHM2
+    CEKPROP10 --> CEKTHM2
+    CEKUNIQ --> CEKTHM2
+    LITERALMOMENT --> EVERYMOMENT
+    LITERALTRACE --> EVERYMOMENT
+    LITERALCALC --> EVERYMOMENT
+    LITERALSTEIN --> EVERYMOMENT
+    CEKUNIQ --> EVERYMOMENT
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,REGINV,TGTSTEIN,DIRSUB,ROUGHTEST,H1ENERGY,MOSERIN,MORREYPOT,BOUNDEDJN,LOCALMOSER,WEAKHARNACK,FRAME1713,MODULUS823,ESSDEFICIT,GIVENHARNACK,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN,AFFMOM,LGENERAL8,LA1REG,FRAMEOSC,HOLDERREG,HESSHOLDER,LOGDETAVG,CONVGRADINV,MAPGRADRANGE,MOMENTGRADINV done;
+    class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,CEKDEF,CEKTHM8,CEKPROP10,CEKUNIQ,CEKTHM2,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,REGINV,TGTSTEIN,DIRSUB,ROUGHTEST,H1ENERGY,MOSERIN,MORREYPOT,BOUNDEDJN,LOCALMOSER,WEAKHARNACK,FRAME1713,MODULUS823,ESSDEFICIT,GIVENHARNACK,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN,AFFMOM,LA1REG,FRAMEOSC,HOLDERREG,HESSHOLDER,LOGDETAVG,CONVGRADINV,MAPGRADRANGE,MOMENTGRADINV,MOMENTSMOOTH,SMOOTHSTEIN,LETWINLOG,SMOOTHCALC,SMOOTHTRACE,SMOOTHSTEINL2,CONVEXMOM,KFREEHESS,KLARTAGLIMIT,GIVENGRADSMOOTH,LITERALMOMENT,LITERALTRACE,LITERALCALC,LITERALSTEIN,EVERYMOMENT,GRADDERIV,COMPACTEXT,DOMAINGRADDERIV,DOMAINMAX,CONVEXBDMAX,DOMAINTOTALBD,DOMAINC0SUBGRAD,MORREG,DOMSUPLOCAL,NEGATIVESUBLEVEL,LOCALCONVEXC1,MATRIXLOGDET2,CLASSICALMADIFF,QUADALLORDERS,MATRIXAXISFRAME,LOCALHESSCALC,POINTWISEHESS,SYMCOEFF,WITHINSUPP,LGENERAL8 done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
+    classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class SECTIONGROWTH,SECTIONVOLUME,CONVEXHOLDER,MACOMPARE,SECTIONCOVER,SECTIONWEAK,MACONTACT,DETMINKOWSKI,CONTACTDET,CONTACTNULL,CONTACTMEASURE,CONTACTGAIN,GRADNULL,REFGRADBOUND,REFCONTACTNULL,REFCONTACTMEASURE,REFCONTACTGAIN,DOMAINMAEQUI,DOMAINMASUBSEQ,DOMAINMAOVERLAP,DOMAINSUPPORTIMAGES,DOMAINMAMEASURE,DOMAINMASTABILITY,DIRICHLETENV,GAUGECONE,LOWERBOREL,LOCALMAXGLUE,PERRONQUADTEST,REGMATAE,AEJACOBIAN,REGIMAGEUPPER,UNITDIRICHLET,DOMAINUNITSTRICT,COMPACTTILTOPT,COMPACTCONJVALUE,COMPACTDUALCAP,COMPACTDUALMA,OPENDUALMA,COERCIVEDUAL,CONTAINEDDUAL,ALLPOINTSUPPORT,UNITPRIMALC1,CLASSICALPOGORELOV,ELLIPTICMAX,HALFBALLNORMAL,FLATSUPPORT,LOGRADIAL,LOGBARRIEROP,HALFBALLPOLY,FRAMECOORD,BARRIERRADIUS,ELLIPTICLINEAR todo;
     classDef hypothesis fill:#f1f5f9,stroke:#64748b,color:#334155;
     class MG,EG,FG,SG hypothesis;
     classDef superseded fill:#f8fafc,stroke:#94a3b8,color:#475569,stroke-dasharray:5 4;
@@ -507,7 +718,7 @@ flowchart LR
     click C1 href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/Smooth.lean" "General C¹ coarea" _blank
     click WHIT href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Whitney/Construction.lean" "Compact Whitney jets — Exact C¹ pieces" _blank
     click LIP href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/LocallyLipschitz.lean" "Coarea: Lipschitz — and locally Lipschitz" _blank
-    click GG href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean" "Global Gauss–Green" _blank
+    click GG href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothDomain/GaussGreen.lean" "Global Gauss–Green" _blank
     click REC href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean" "Smooth recovery" _blank
     click FWD href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean" "h_M ≤ h_S" _blank
     click SARD href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean" "Scalar Sard — Sharp finite regularity" _blank
@@ -524,12 +735,12 @@ flowchart LR
     click ANY href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "OR — Any completed route" _blank
     click VREG href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean" "Vector coarea — Regular region" _blank
     click VZERO href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean" "Vector slices — Zero derivative" _blank
-    click VR123 href "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean" "Rank and kernel — R1–R3" _blank
+    click VR123 href "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/audits/Vector/RightInverseBoundAudit.lean" "Rank and kernel — R1–R3" _blank
     click VR4 href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/TangentialLipschitz.lean" "Tangential estimate — R4" _blank
     click VFULL href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/Coarea.lean" "C¹ vector coarea — Rank-deficient part closed" _blank
     click SEMI href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean" "Weighted-gradient — Heat semigroup" _blank
     click MARKOV href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean" "Heat semigroup — Markov properties" _blank
-    click DECAY href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean" "Centered heat decay — and literature gap" _blank
+    click DECAY href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Decay.lean" "Centered heat decay — and literature gap" _blank
     click GAUSS href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean" "Gaussian convolution — Smooth potential" _blank
     click GSTAB href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean" "Gaussian convolution — Poincaré stability" _blank
     click BE href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean" "Generator / Bochner — Gradient estimates" _blank
@@ -538,21 +749,26 @@ flowchart LR
     click BT31 href "../../solutions/ThmBklTaylorCriterion.lean" "BKL Theorem 3.1 — Taylor criterion (certified)" _blank
     click BP71 href "../../solutions/PropBklSuspension.lean" "BKL Proposition 7.1 — suspension (certified)" _blank
     click BREG href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/RegularApproximation.lean" "BKL Section 2 — regular approximation" _blank
-    click WEAKHESS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean" "C1 Hessian — Gradient derivative at a point" _blank
+    click WEAKHESS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean" "C1 Hessian — Gradient derivative at a point" _blank
     click CEKMAP href "../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean" "Bounded CEK source — Actual moment map" _blank
+    click CEKDEF href "../../formalization/FunctionalInequalities/Analysis/Convex/EssentialContinuity.lean" "CEK Definitions 1–2 — moment measure, essential continuity" _blank
+    click CEKTHM8 href "../../formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/EssentiallyContinuous.lean" "CEK Theorem 8 — ψ* maximizes I_μ" _blank
+    click CEKPROP10 href "../../formalization/FunctionalInequalities/KLS/CEK/MaximizerContinuity.lean" "CEK Proposition 10 — maximizers essentially continuous" _blank
+    click CEKUNIQ href "../../formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/BoundedSupport.lean" "Moment potentials — unique up to translation (finite, bounded support)" _blank
+    click CEKTHM2 href "../../formalization/FunctionalInequalities/KLS/CEK/Uniqueness.lean" "CEK Theorem 2 = Letwin Lemma 2.1 — moment measures: existence and uniqueness" _blank
     click REGMOM href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean" "Regular-class R0 — C1,1 and a.e. Hessian package" _blank
     click WEAKINVINT href "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean" "Inverse Hessian — Bounded compact integrability" _blank
     click WEAKGEN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Weak generator identities — Letwin (2.2) at C1,1" _blank
-    click HESSENT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean" "Hessian entries — Measurable, bounded by G" _blank
-    click CDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean" "Centered difference — C1,1 and 0 <= w <= D|h|^2" _blank
+    click HESSENT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean" "Hessian entries — Measurable, bounded by G" _blank
+    click CDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/Difference.lean" "Centered difference — C1,1 and 0 <= w <= D|h|^2" _blank
     click WEAKGENINT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Weak generator — Density integrability" _blank
-    click INCINT href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian increments — Weighted integrability" _blank
-    click INCENERGY href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian-increment energy — Original N11b estimate" _blank
+    click INCINT href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean" "Hessian increments — Weighted integrability" _blank
+    click INCENERGY href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean" "Hessian-increment energy — Original N11b estimate" _blank
     click TRANSCUT href "../../formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean" "Translated cutoffs — Uniform smooth majorant" _blank
-    click HESSL2 href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean" "Hessian entries — Local and cutoff L2" _blank
-    click HESSDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Cutoff Hessian entries — Difference energy C t^2" _blank
-    click WEAKTHIRD href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean" "Weak third-derivative tensor — Original N11d (Hessian entries)" _blank
-    click SRCDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean" "Moment potential — Second differences ≤ 4/κ" _blank
+    click HESSL2 href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean" "Hessian entries — Local and cutoff L2" _blank
+    click HESSDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean" "Cutoff Hessian entries — Difference energy C t^2" _blank
+    click WEAKTHIRD href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianRegularity.lean" "Weak third-derivative tensor — Original N11d (Hessian entries)" _blank
+    click SRCDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/Gradient/Lipschitz.lean" "Moment potential — Second differences ≤ 4/κ" _blank
     click EXPLIP href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean" "Lipschitz exponent — −u + V(∇u)" _blank
     click REGTENSOR href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean" "Regular source law — Weak third-derivative tensor" _blank
     click WPRODG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak product — Global L2 factors" _blank
@@ -564,28 +780,28 @@ flowchart LR
     click WJAC href "../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean" "Weak determinant density — = outer Jacobi differential" _blank
     click EXPHALF href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean" "Exponential Lipschitz — on a half-line" _blank
     click WAECONGR href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean" "Weak derivative — a.e. transport" _blank
-    click AEEXP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "A.e. exponent derivative — −u + V(∇u)" _blank
+    click AEEXP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean" "A.e. exponent derivative — −u + V(∇u)" _blank
     click WMA1 href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean" "Regular source law — First weak Monge–Ampère (2.4)" _blank
-    click WEXPNEG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak negative exponential — Lipschitz exponent" _blank
+    click WEXPNEG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/ChainRule.lean" "Weak negative exponential — Lipschitz exponent" _blank
     click WPRODLB href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak product — Compact-locally bounded factors" _blank
     click WMATINV href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak matrix inverse — DR = −R DA R a.e." _blank
     click WADJ href "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean" "Hessian adjugate — Bound and weak derivative" _blank
     click WINVH href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Intrinsic weak inverse Hessian — Letwin (2.5)" _blank
     click WINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — Weak inverse Hessian (2.5)" _blank
     click WSMOOTH href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean" "Common-support smooth — approximation of weak derivatives" _blank
-    click WCURL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Rough compact curl testing — ∫ p b = ∫ q a" _blank
+    click WCURL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean" "Rough compact curl testing — ∫ p b = ∫ q a" _blank
     click WEAKGENC1 href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Weak generator identity — C¹ multipliers" _blank
     click MEANC11 href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean" "Mean Hessian identity — C¹,¹ potential" _blank
     click WMEANH href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — Mean Hessian = Id" _blank
     click WBAPPROX href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean" "Bounded all-coordinate approximation — common support, a.e. limit" _blank
-    click WBTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Bounded weak-test extension — of divergence identities" _blank
+    click WBTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean" "Bounded weak-test extension — of divergence identities" _blank
     click WINVROW href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean" "Weak Piola row divergence — of the inverse Hessian" _blank
-    click WGRADCOMP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weak derivative of — ∂ₐW(∇u)" _blank
-    click WMARHS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weak derivative of the — first Monge–Ampère right side" _blank
-    click WFLUXLOC href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Hessian flux L2 and — trace forcing locally L1" _blank
-    click WFLUX href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Unweighted weak — Hessian flux identity" _blank
+    click WGRADCOMP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean" "Weak derivative of — ∂ₐW(∇u)" _blank
+    click WMARHS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean" "Weak derivative of the — first Monge–Ampère right side" _blank
+    click WFLUXLOC href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean" "Hessian flux L2 and — trace forcing locally L1" _blank
+    click WFLUX href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean" "Unweighted weak — Hessian flux identity" _blank
     click WEVOL href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weighted weak Hessian evolution — Letwin (2.6)" _blank
-    click WEVOLB href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean" "Weak Hessian evolution — bounded H¹ tests" _blank
+    click WEVOLB href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean" "Weak Hessian evolution — bounded H¹ tests" _blank
     click WEVOLSRC href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — weak Hessian evolution (2.6)" _blank
     click WHTEST href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — bounded ψ·H tests" _blank
     click WCUTR href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean" "Weak inverse-Hessian cutoffs — real R ≥ 1, defect ≤ C/R" _blank
@@ -596,7 +812,7 @@ flowchart LR
     click WROUGH href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean" "Rough eta against — C1 cutoff generator" _blank
     click WTRCON href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean" "Weak trace contraction — (2.8)/(2.10)" _blank
     click TRPOS href "../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean" "Trace density — positivity" _blank
-    click TRGRAM href "../../formalization/FunctionalInequalities/Analysis/Matrix/TraceGram.lean" "Trace-Gram comparison — (2.12), 4D <= g + 2f" _blank
+    click TRGRAM href "../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Gram.lean" "Trace-Gram comparison — (2.12), 4D <= g + 2f" _blank
     click WCUTTEST href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean" "Regular source law — rough cutoff testing" _blank
     click WLAP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakLaplacian.lean" "Rough weak pairing — weighted Laplacian" _blank
     click C11COER href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Lipschitz.lean" "C^{1,1} ordinary — diffusion coercivity" _blank
@@ -605,17 +821,17 @@ flowchart LR
     click MVAR href "../../formalization/FunctionalInequalities/Probability/Moments.lean" "Random matrix — variance trace" _blank
     click WT25 href "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean" "Weak Hessian trace bound — (Theorem 2.5, PSD B)" _blank
     click SYMAE href "../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean" "AE PSD symmetric — trace extension" _blank
-    click S1 href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Integrable weak derivative — has zero integral" _blank
+    click S1 href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean" "Integrable weak derivative — has zero integral" _blank
     click WIBP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean" "Tilted IBP — bounded Lipschitz tests" _blank
-    click C1CHAIN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean" "C1 gradient — chain coordinate" _blank
+    click C1CHAIN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean" "C1 gradient — chain coordinate" _blank
     click SRCSTEIN href "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean" "Weak source — Stein identity" _blank
     click DUALB href "../../formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean" "Compact source — dual bound" _blank
-    click GAUSSID href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean" "Gaussian directional — identity (C1 tests)" _blank
+    click GAUSSID href "../../formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean" "Gaussian directional — identity (C1 tests)" _blank
     click WSTEINSRC href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean" "Regular source law — T2.5 exact 2 + source Stein" _blank
     click REGINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean" "Regular source law — gradient inverse, local ellipticity" _blank
     click TGTSTEIN href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean" "Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n)" _blank
     click DIRSUB href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — directional weak subsolution, local coefficient bounds" _blank
-    click ROUGHTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean" "Weak H1 tools — chain rule, log/power, rough tests" _blank
+    click ROUGHTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean" "Weak H1 tools — chain rule, log/power, rough tests" _blank
     click H1ENERGY href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "H1 energy tools — Caccioppoli, weak Sobolev" _blank
     click MOSERIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "Moser inputs — log/power energy, cutoffs, Lp limit" _blank
     click MORREYPOT href "../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean" "Morrey and potential inputs — all-ball Morrey, critical potential exp" _blank
@@ -623,8 +839,8 @@ flowchart LR
     click LOCALMOSER href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "Local Moser inputs — local energies, fixed-S joint inputs, one-step gain" _blank
     click WEAKHARNACK href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean" "Bounded weak Harnack — Moser iteration, essential infimum, n = 1, 2, > 2" _blank
     click FRAME1713 href "../../formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean" "Fixed rank-one frame — GT 17.13, coefficients in [lower, hi]" _blank
-    click MODULUS823 href "../../formalization/FunctionalInequalities/Analysis/Modulus.lean" "Scalar iteration lemma — GT 8.23" _blank
-    click ESSDEFICIT href "../../formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean" "Essential deficit identity — essinf(M - f) = M - esssup f" _blank
+    click MODULUS823 href "../../formalization/FunctionalInequalities/Analysis/Iteration/Modulus.lean" "Scalar iteration lemma — GT 8.23" _blank
+    click ESSDEFICIT href "../../formalization/FunctionalInequalities/Analysis/EssentialExtrema/Basic.lean" "Essential deficit identity — essinf(M - f) = M - esssup f" _blank
     click GIVENHARNACK href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean" "Given-data weak Harnack — GT 8.18 bounded, joint regular potential" _blank
     click MNTRACE href "../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean" "Trace identities — noise shift, involution" _blank
     click SPECGEO href "../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean" "Spectral geometry — B, S, sign Q" _blank
@@ -639,11 +855,11 @@ flowchart LR
     click NOISEINT href "../../formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean" "Integrated spectral — noise energy" _blank
     click QFOURTH href "../../formalization/FunctionalInequalities/Probability/Moments.lean" "Quadratic form in L2 — from L4" _blank
     click FINVAR href "../../formalization/FunctionalInequalities/L2/MeanVariance.lean" "Variance continuity — finite combinations" _blank
-    click QVARCONT href "../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean" "Variance continuity — quadratic matrix forms" _blank
-    click LA2EXT href "../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean" "Singular extension — (Lemma A.2, stronger)" _blank
-    click NOISECONV href "../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean" "Centered noise keeps — quadratic variance" _blank
-    click G4MOM href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean" "Gaussian, smoothed and — linear-image L4" _blank
-    click GTRANS href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean" "Translated Gaussian — directional identity" _blank
+    click QVARCONT href "../../formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean" "Variance continuity — quadratic matrix forms" _blank
+    click LA2EXT href "../../formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean" "Singular extension — (Lemma A.2, stronger)" _blank
+    click NOISECONV href "../../formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean" "Centered noise keeps — quadratic variance" _blank
+    click G4MOM href "../../formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean" "Gaussian, smoothed and — linear-image L4" _blank
+    click GTRANS href "../../formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean" "Translated Gaussian — directional identity" _blank
     click GLATENT href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean" "Product latent map — onto smoothed image" _blank
     click GPOT href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean" "Smooth convex potential — of smoothed image" _blank
     click SRCAFF href "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean" "Directional and affine — source Stein" _blank
@@ -661,12 +877,98 @@ flowchart LR
     click BKLMAIN href "../../solutions/ThmBklPoincare.lean" "BKL Theorem 1.1 — dimension-free Poincaré (certified)" _blank
     click BKLAND href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean" "AND — BKL route" _blank
     click AFFMOM href "../../formalization/FunctionalInequalities/Probability/Conditioning.lean" "Truncated affine laws — mixed moments converge" _blank
-    click LGENERAL8 href "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean" "Letwin Theorem 1.2 — constant 8, no compactness" _blank
     click LA1REG href "../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean" "Letwin Lemma A.1 — regular approximation" _blank
-    click FRAMEOSC href "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean" "Frame oscillation decay — log-det matrix field, GT 17.14 rough form" _blank
-    click HOLDERREG href "../../formalization/FunctionalInequalities/Analysis/HessianRegularity.lean" "Hölder representatives and C2 — continuous Hessian, everywhere equation" _blank
+    click FRAMEOSC href "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Oscillation.lean" "Frame oscillation decay — log-det matrix field, GT 17.14 rough form" _blank
+    click HOLDERREG href "../../formalization/FunctionalInequalities/Analysis/ContinuousHessian.lean" "Hölder representatives and C2 — continuous Hessian, everywhere equation" _blank
     click HESSHOLDER href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean" "C2 Hölder Hessian at the regular moment potential — everywhere log-det equation, strong class" _blank
-    click LOGDETAVG href "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean" "Averaged-inverse log-det coefficients — GT (17.56), Hölder averaged inverse" _blank
-    click CONVGRADINV href "../../formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean" "Strictly convex gradient — open map, homeomorphism, C^k inverse" _blank
+    click LOGDETAVG href "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Segment.lean" "Averaged-inverse log-det coefficients — GT (17.56), Hölder averaged inverse" _blank
+    click CONVGRADINV href "../../formalization/FunctionalInequalities/Analysis/Convex/Gradient/Inverse.lean" "Strictly convex gradient — open map, homeomorphism, C^k inverse" _blank
     click MAPGRADRANGE href "../../formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean" "Transport gradient range = int K — homeomorphism and inverse, given potential" _blank
     click MOMENTGRADINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean" "Gradient homeomorphism onto int K, C1 inverse — regular moment potential, strong class" _blank
+    click MOMENTSMOOTH href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/SchauderBootstrap.lean" "Smooth moment potential and gradient inverse — strong class, every n > 0" _blank
+    click SMOOTHSTEIN href "../../formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean" "Smooth moment-map Stein kernel — strong class, exact coupling" _blank
+    click LETWINLOG href "../../formalization/FunctionalInequalities/KLS/Letwin/IsoperimetricBound.lean" "Letwin Theorem 1.1 — via BKL (paper-target certified)" _blank
+    click SMOOTHCALC href "../../formalization/FunctionalInequalities/KLS/Letwin/MomentCalculus.lean" "Smooth Hessian calculus and conservative cutoffs — strong class, same potential" _blank
+    click SMOOTHTRACE href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/SmoothTrace.lean" "Smooth moment potential with sharp trace — same u, exact 2, strong class" _blank
+    click SMOOTHSTEINL2 href "../../formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean" "Smooth Stein kernel and sharp HS² ≤ 2n — same u, mean Id, exact coupling" _blank
+    click CONVEXMOM href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean" "Convex-body source moment potential — C¹, homeomorphism, Alexandrov and viscosity" _blank
+    click KFREEHESS href "../../formalization/FunctionalInequalities/KLS/Klartag/HessianBound.lean" "κ-free Hessian bound by the maximum principle — Δφ + |∇φ|² ≤ 3R², supports Klartag Theorem 1.1" _blank
+    click KLARTAGLIMIT href "../../formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean" "Klartag Lemma 2.3 (C¹) and limit potential — Proposition 2.1 compactness, no uniqueness" _blank
+    click GIVENGRADSMOOTH href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/GivenGradient.lean" "Moment potential with Lipschitz gradient is smooth — given potential, W convex on int K" _blank
+    click LITERALMOMENT href "../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean" "Letwin Lemma 2.2, merely convex class — smooth potential, existence form" _blank
+    click LITERALTRACE href "../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean" "Letwin Theorem 2.5, merely convex class — exact 2, existence form" _blank
+    click LITERALCALC href "../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean" "Letwin Lemmas 2.3, 2.4, A.4–A.6, merely convex class — same φ, existence form" _blank
+    click LITERALSTEIN href "../../formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean" "Letwin Lemmas 2.7 and 2.9, merely convex class — smooth Stein kernel, HS² ≤ 2n, existence form" _blank
+    click EVERYMOMENT href "../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean" "Letwin Lemmas 2.2–2.9, Theorem 2.5 — every moment potential" _blank
+    click SECTIONGROWTH href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Convex sections and gradient growth — compact-uniform quantitative supports — Superseded auxiliary · not in release" _blank
+    click SECTIONVOLUME href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Convex section volume upper bound — actual source, C(n) sqrt(hⁿ/a) — Superseded auxiliary · not in release" _blank
+    click CONVEXHOLDER href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Literal convex-body moment potential — C¹,α and section power radii — Superseded auxiliary · not in release" _blank
+    click MACOMPARE href "../../formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean" "DOMAIN MA comparison and affine normalization — Actual coefficients; W²p pending — Superseded auxiliary · not in release" _blank
+    click SECTIONCOVER href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Small-section engulfing — Disjoint enlargement cover; W²p pending — Superseded auxiliary · not in release" _blank
+    click SECTIONWEAK href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Section height-volume bound — Quantitative weak-type measure estimate — Superseded auxiliary · not in release" _blank
+    click MACONTACT href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual DOMAIN density residual contacts — Local reference; tolerance before unknown potential — Superseded auxiliary · not in release" _blank
+    click DETMINKOWSKI href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "PSD determinant AM–GM and Minkowski — Exact residual determinant bound — Superseded auxiliary · not in release" _blank
+    click CONTACTDET href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual contact residual PSD and determinant — Local MA equations give a.e. pointwise control — Superseded auxiliary · not in release" _blank
+    click CONTACTNULL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Quadratic contact null-image property — Actual MA bound and supporting contacts — Superseded auxiliary · not in release" _blank
+    click GRADDERIV href "../../formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean" "Actual local a.e. gradient derivative — Only open-domain differentiability; SAME MA matrix" _blank
+    click CONTACTMEASURE href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual quadratic contact image upper bound — Jacobian good image and null bad image — Superseded auxiliary · not in release" _blank
+    click CONTACTGAIN href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Unit-ball quadratic contact volume gain — Tolerance before unknown solution and density — Superseded auxiliary · not in release" _blank
+    click GRADNULL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual MA upper gives gradient null images — Shared real outer-regularity proof — Superseded auxiliary · not in release" _blank
+    click REFGRADBOUND href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Local C2 positive-Hessian compact reference bounds — Actual pointwise calculus and residual relative gradient — Superseded auxiliary · not in release" _blank
+    click REFCONTACTNULL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Local C2 positive-Hessian reference contact null images — Actual fibres and contained-ball cover; no extension — Superseded auxiliary · not in release" _blank
+    click REFCONTACTMEASURE href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Given DOMAIN-strict locally C2 unit-MA reference image upper — Shared actual Jacobian and full Borel contacts — Superseded auxiliary · not in release" _blank
+    click REFCONTACTGAIN href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Given DOMAIN-local C2 unit-MA reference contact gain — Actual mass/contacts/image; tolerance before unknowns — Superseded auxiliary · not in release" _blank
+    click COMPACTEXT href "../../formalization/FunctionalInequalities/Analysis/Convex/Extension.lean" "C0 Lipschitz compact convex patch — Old COMPLETE C1 scope retained" _blank
+    click DOMAINGRADDERIV href "../../formalization/FunctionalInequalities/Analysis/Convex/Viscosity/Equation.lean" "Domain-relative MA: SAME ae gradient/expansion matrix — Actual compact germs and buffered countable cover" _blank
+    click DOMAINMAX href "../../formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean" "DOMAIN Alexandrov maximum and lower boundary modulus — Closure C0, actual MA upper bound" _blank
+    click DOMAINMAEQUI href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "DOMAIN MA family closure equicontinuity — Finite TOTAL mass, generated uniform C0 — Superseded auxiliary · not in release" _blank
+    click CONVEXBDMAX href "../../formalization/FunctionalInequalities/Analysis/Convex/Boundary.lean" "Pure convex maximum rigidity — Generic strong max / finite-dimensional frontier bound" _blank
+    click DOMAINTOTALBD href "../../formalization/FunctionalInequalities/Analysis/Convex/Alexandrov/ImageVolume.lean" "Finite TOTAL DOMAIN MA boundary control — No positive lower density or density ceiling" _blank
+    click DOMAINC0SUBGRAD href "../../formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean" "C0 convex DOMAIN subgradients — True existence and compact ALL-slope bound" _blank
+    click DOMAINMASUBSEQ href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual uniform Dirichlet subsequence — Convex continuous zero-boundary limit — Superseded auxiliary · not in release" _blank
+    click DOMAINMAOVERLAP href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "C0 DOMAIN supporting-image overlaps — Actual nullity, all dimensions — Superseded auxiliary · not in release" _blank
+    click DOMAINSUPPORTIMAGES href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual DOMAIN supporting images — Compact / Borel / analytic / upper stability — Superseded auxiliary · not in release" _blank
+    click DOMAINMAMEASURE href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual C0 DOMAIN MA measure — All Borel values, finite compact INSIDE — Superseded auxiliary · not in release" _blank
+    click DOMAINMASTABILITY href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual DOMAIN MA local limits — SAME measures / constant density preserved — Superseded auxiliary · not in release" _blank
+    click DIRICHLETENV href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual local MA class gluing / envelope comparison — Increasing uniform class sequence; UNIT MA open — Superseded auxiliary · not in release" _blank
+    click GAUGECONE href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual one-atom Dirichlet source — Any interior vertex; nonnegative target weight — Superseded auxiliary · not in release" _blank
+    click LOWERBOREL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual DOMAIN lower MA — OPEN source implies EVERY Borel subset — Superseded auxiliary · not in release" _blank
+    click LOCALMAXGLUE href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual local max gluing — ALL-domain support / closure convex C0 — Superseded auxiliary · not in release" _blank
+    click PERRONQUADTEST href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual U lower tests / buffered Moreau — Generated C1,1 and SAME quadratic test matrix; UNIT open — Superseded auxiliary · not in release" _blank
+    click MORREG href "../../formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean" "Actual compact Moreau regularization — Generated C1 / Lipschitz gradient / uniform limit" _blank
+    click REGMATAE href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual SAME regularizer AE matrix — Gradient derivative / value / PSD / det at most 1 — Superseded auxiliary · not in release" _blank
+    click AEJACOBIAN href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual AE Haar image bound — ONE good/bad proof; two genuine sources — Superseded auxiliary · not in release" _blank
+    click REGIMAGEUPPER href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual SAME regularizer image upper — Generated singular control / gradient and DOMAIN images — Superseded auxiliary · not in release" _blank
+    click DOMSUPLOCAL href "../../formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean" "Actual domain support localization — No C1 / FD / smaller-domain convexity" _blank
+    click UNITDIRICHLET href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual C0 UNIT Dirichlet solution — SAME measure / strict ONLY inside — Superseded auxiliary · not in release" _blank
+    click NEGATIVESUBLEVEL href "../../formalization/FunctionalInequalities/Analysis/Convex/Extension.lean" "Actual proper negative-sublevel patch — FULL ambient level identity; no coercivity input" _blank
+    click DOMAINUNITSTRICT href "../../formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Sublevel.lean" "Actual DOMAIN UNIT contact uniqueness — C0 supports / shared strictness proof — Superseded auxiliary · not in release" _blank
+    click COMPACTTILTOPT href "../../formalization/FunctionalInequalities/Analysis/Convex/CompactTilt.lean" "Actual continuous compact tilt optimizer — Generated from SAME U / not C1 U — Superseded auxiliary · not in release" _blank
+    click COMPACTCONJVALUE href "../../formalization/FunctionalInequalities/Analysis/Convex/CompactTilt.lean" "Actual compact conjugate value / C1 psi — SAME optimizer; primal C1 separate — Superseded auxiliary · not in release" _blank
+    click COMPACTDUALCAP href "../../formalization/FunctionalInequalities/Analysis/Convex/CompactTilt.lean" "Actual compact-dual capacity / local transport — SAME witnesses; dual MA separate — Superseded auxiliary · not in release" _blank
+    click COMPACTDUALMA href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual compact dual MA / SAME witnesses — OPEN dual MA obtained separately — Superseded auxiliary · not in release" _blank
+    click OPENDUALMA href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual OPEN dual MA / nonempty slope region — Primal C1 follows via unique supports — Superseded auxiliary · not in release" _blank
+    click COERCIVEDUAL href "../../formalization/FunctionalInequalities/Analysis/Convex/CompactTilt.lean" "Actual compact-conjugate tilt growth — FULL compact sections; containment separate — Superseded auxiliary · not in release" _blank
+    click CONTAINEDDUAL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual contained full dual section / support SLOPES — One proper sublevel; all-point source separate — Superseded auxiliary · not in release" _blank
+    click ALLPOINTSUPPORT href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual ONE U before ALL x / unique supports — Superseded auxiliary · not in release" _blank
+    click LOCALCONVEXC1 href "../../formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean" "Actual local C0 unique supports -> C1 — Shared compact projection / variational derivative" _blank
+    click UNITPRIMALC1 href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual SAME UNIT primal U C1 — SAME-reference C2/PD still open — Superseded auxiliary · not in release" _blank
+    click MATRIXLOGDET2 href "../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean" "Actual inverse / second logdet calculus — Local constant determinant generates identities" _blank
+    click CLASSICALMADIFF href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/LinearizedEquation.lean" "GIVEN C4 Hessian: actual trace identities — No C2 construction / Pogorelov bound" _blank
+    click QUADALLORDERS href "../../formalization/FunctionalInequalities/Analysis/Convex/Quadratic.lean" "Actual all-order quadratic polynomial — Shared old C2 / classical C4 source" _blank
+    click MATRIXAXISFRAME href "../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean" "PD form generates axis-fixing coordinates — SAME axis / no supplied diagonalization" _blank
+    click LOCALHESSCALC href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean" "Local C3/C4 commutation / C2 affine Hessian — Shared exact old global consumers" _blank
+    click CLASSICALPOGORELOV href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "GIVEN classical solution: full Pogorelov estimate — Generated coordinates / maximum / interior caps — Superseded auxiliary · not in release" _blank
+    click POINTWISEHESS href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean" "Pointwise C2 Hessian algebra / quadratic Hessian — Shared old global consumers" _blank
+    click SYMCOEFF href "../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean" "Raw quadratic coefficients generate symmetric PSD part — Same trace / ELEMENTWISE ceiling" _blank
+    click ELLIPTICMAX href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Strict drift maximum / weak positive-trace maximum — Explicit quadratic C0 barrier — Superseded auxiliary · not in release" _blank
+    click WITHINSUPP href "../../formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean" "Convex support from derivative WITHIN domain — Shared old global gradient consumer" _blank
+    click HALFBALLNORMAL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "SAME half-ball closure and one-sided normal derivative — C1 WITHIN full closure / ambient m+1 — Superseded auxiliary · not in release" _blank
+    click FLATSUPPORT href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual normalized convex flat support — Generated alpha / unit tangent / beta dichotomy — Superseded auxiliary · not in release" _blank
+    click LOGRADIAL href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual radial/log calculus, singular C0 and flat normal profile — Shared first derivatives / genuine scalar value bounds — Superseded auxiliary · not in release" _blank
+    click LOGBARRIEROP href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Generated SAME-profile plane/ambient operator margins — Arbitrary skew / drift / zeroth-order bounds — Superseded auxiliary · not in release" _blank
+    click HALFBALLPOLY href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual polynomial barrier / generated negative operator — Shared norm floor and curved-boundary bound — Superseded auxiliary · not in release" _blank
+    click FRAMECOORD href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Actual orthogonal frame / Bessel / finite coordinates — Shared old frame, Holder and flat consumers — Superseded auxiliary · not in release" _blank
+    click BARRIERRADIUS href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Generated tangent-normal radius / SAME half-ball frontier — Actual flat-or-curved geometry — Superseded auxiliary · not in release" _blank
+    click ELLIPTICLINEAR href "../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "SAME local-C2 Hessian / gradient / value coupling — Old C0-barrier and actual nonzero-drift consumers — Superseded auxiliary · not in release" _blank
+    click LGENERAL8 href "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean" "Letwin Theorem 1.2 — constant 8, no compactness (certified)" _blank

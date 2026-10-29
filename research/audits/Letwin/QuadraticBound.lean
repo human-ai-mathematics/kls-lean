@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Letwin.QuadraticBound
+import solutions.ThmLetwinQuadraticBound
 
 noncomputable section
 open MeasureTheory ProbabilityTheory
@@ -24,7 +24,7 @@ theorem matrix_variance {n : ℕ} (hn : 0 < n)
     (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) :
     variance (fun x : EuclideanSpace ℝ (Fin n) => ∑ i, ∑ j, M i j * x i * x j)
       (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤ 8 * Matrix.trace (M * M) :=
-  hLC.matrix_variance_le_eight hn hiso M hM
+  Solutions.ThmLetwinQuadraticBound.certificate n hn μ hLC hiso M hM
 
 #print axioms FunctionalInequalities.Probability.tendsto_integral_cond_closedBall_of_dominated
 #print axioms FunctionalInequalities.Probability.tendsto_integral_cond_closedBall

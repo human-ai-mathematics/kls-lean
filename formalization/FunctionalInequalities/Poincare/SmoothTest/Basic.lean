@@ -72,6 +72,8 @@ nonnegativity are explicit; no source-domain or spectral-gap equivalence is asse
 structure Holds (μ : Measure E) (C : ℝ) : Prop where
   probability : IsProbabilityMeasure μ
   constant_nonneg : 0 ≤ C
+  /-- Apply the variance bound to a globally smooth L² test with integrable squared
+  gradient. The energy is `∫ ‖gradient f‖²`, with no factor `1/2`. -/
   variance_le : ∀ ⦃f : E → ℝ⦄, Admissible μ f →
     variance f μ ≤ C * energy μ f
 

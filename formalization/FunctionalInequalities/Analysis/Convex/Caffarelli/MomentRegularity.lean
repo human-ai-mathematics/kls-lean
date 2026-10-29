@@ -21,7 +21,8 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-/-- **The moment potential is strictly convex** (weak Letwin route): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes `e^{-u} dx` forward
+/-- **The moment potential is strictly convex**: a convex Lipschitz `u` with `∫ e^{-u} = 1` whose
+gradient pushes `e^{-u} dx` forward
 to `1_K e^{-V} dx` (`K` compact convex nonempty, `V` continuous) is strictly convex. -/
 theorem strictConvexOn_of_map_gradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
@@ -143,26 +144,9 @@ section InnerProduct
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-private lemma eq_of_common_supporting_slope {u : E → ℝ}
-    (hstrict : StrictConvexOn ℝ univ u) {x z p : E}
-    (hx : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
-    (hz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y) :
-    x = z := by
-  apply (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
-    ?_ ?_ (mem_univ x) (mem_univ z)
-  · intro y _
-    change u x - ⟪p, x⟫ ≤ u y - ⟪p, y⟫
-    have h := hx y
-    rw [inner_sub_right] at h
-    linarith
-  · intro y _
-    change u z - ⟪p, z⟫ ≤ u y - ⟪p, y⟫
-    have h := hz y
-    rw [inner_sub_right] at h
-    linarith
-
 set_option maxHeartbeats 800000 in
-/-- **The moment potential is `C¹`** (weak Letwin route): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes
+/-- **The moment potential is `C¹`**: a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient
+pushes
 `e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous) has exactly
 one subgradient at every point, hence is continuously differentiable. -/
 theorem contDiff_one_of_map_gradient
@@ -304,7 +288,7 @@ theorem contDiff_one_of_map_gradient
       have hpz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y := by
         apply ((truncatedConjugate_centered_spec hconv hzlt).2.1 p).mp
         linarith [heq]
-      have hxz : x = z := eq_of_common_supporting_slope hstrict hpx hpz
+      have hxz : x = z := eq_of_strictConvexOn_of_support hstrict hpx hpz
       exact hxz.symm ▸ hz
     have hvol :
         volume (subgradientImage f G) =

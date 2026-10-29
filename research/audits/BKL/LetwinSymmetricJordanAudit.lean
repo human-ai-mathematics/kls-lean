@@ -3,11 +3,11 @@ import FunctionalInequalities.Analysis.Matrix.Sign
 /-!
 # Audit: Jordan decomposition and trace energy of real symmetric matrices
 
-Source: Letwin, arXiv:2607.24164v1, Theorem 2.5 (support only: the extension from positive semidefinite to all symmetric
-`B`). A real indefinite, noncommuting client on `Fin 2`: `B = diag(1, −2)` is symmetric and neither `B` nor `−B` is
-positive semidefinite, `H = [[2, 1], [1, 2]]` is positive semidefinite, `B H ≠ H B`, and `tr(B H B H) = 16 ≥ 0`.
-A real algebraic example, not a moment-map or source-law certificate. Client body: strong-API candidate
-(`api-symmetric-compiler-patch-v3`, e735387e…), verbatim.
+Source: Letwin, arXiv:2607.24164v1, Theorem 2.5 (support only: the extension from positive
+semidefinite to all symmetric `B`). A real indefinite, noncommuting client on `Fin 2`:
+`B = diag(1, −2)` is symmetric and neither `B` nor `−B` is positive semidefinite,
+`H = [[2, 1], [1, 2]]` is positive semidefinite, `B H ≠ H B`, and `tr(B H B H) = 16 ≥ 0`.
+A real algebraic example, not a moment-map or source-law certificate.
 -/
 
 open Matrix

@@ -19,14 +19,12 @@ import Mathlib.LinearAlgebra.Determinant
 Source: Letwin, arXiv:2607.24164v1, pp. 5–7. Clients: the potential `exp` on `ℝ` (nonconstant
 Hessian; the inverse-Hessian derivative at `0` is `−1`; it is an analytic example, not a normalized
 moment potential and not a Monge–Ampère solution), a `V` smooth only on `(0, 3)` composed with the
-gradient, rank zero, and the Codex reviewer's coordinate and operator consumers (credited). Client
-bodies: Codex route bundles `MA-Inverse` (receipt d613c8f4…), `MA-Jacobi` (receipt e5938315…) and
-`MA-Second-Derivative` (receipt 43cc91b3…), all independently accepted; the reviewer consumers
-(basis independence of `log det`, a negative-determinant direction, a signed Gram value) are credited to
-the Codex reviewers. Jacobi clients: a nonsymmetric `2×2` matrix with `d(log det) = −1/6`, the `exp`
-potential satisfying a zero-order Monge–Ampère equation with a local `V` on `(0, ∞)` and first MA value `1`,
-the empty matrix; second-derivative clients: the `exp` potential with a non-convex `V` (negative `V`-term),
-the convex `V = ‖·‖²` (value `2`), a `2×2` weighted Gram `[[1,1],[1,4]]`, rank zero.
+gradient, rank zero, and coordinate and operator consumers (basis independence of `log det`, a
+negative-determinant direction, a signed Gram value). Jacobi clients: a nonsymmetric `2×2` matrix
+with `d(log det) = −1/6`, the `exp` potential satisfying a zero-order Monge–Ampère equation with a
+local `V` on `(0, ∞)` and first MA value `1`, the empty matrix; second-derivative clients: the
+`exp` potential with a non-convex `V` (negative `V`-term), the convex `V = ‖·‖²` (value `2`), a
+`2×2` weighted Gram `[[1,1],[1,4]]`, rank zero.
 -/
 
 noncomputable section
@@ -126,7 +124,7 @@ private theorem line_entry_exp (x : ℝ) :
   rw [hessian_exp]
   rw [mul_assoc, line_basis_sq, mul_one]
 
-/-- Coordinate form of (2.5) for `exp` (Codex reviewer consumer). -/
+/-- Coordinate form of (2.5) for `exp`. -/
 theorem exp_coordinate_inverse_derivative :
     fderiv ℝ (fun y : ℝ => inverseHessianEntry Real.exp lineBasis y 0 0) 0 (lineBasis 0) =
       -lineBasis 0 := by
@@ -148,7 +146,7 @@ theorem exp_coordinate_inverse_derivative :
   rw [hi, one_mul, mul_one, hd] at h
   exact h
 
-/-- The inverse-Hessian operator with zero drift applied to `x²` at `0` is `2` (Codex reviewer consumer). -/
+/-- The inverse-Hessian operator with zero drift applied to `x²` at `0` is `2`. -/
 theorem actual_operator_square_at_zero :
     hessianInverseOperator Real.exp (fun _ : ℝ => 0) (fun x : ℝ => x * x) 0 = 2 := by
   let b := stdOrthonormalBasis ℝ ℝ
@@ -494,12 +492,12 @@ end IndependentMASecond
 #print axioms IndependentMASecond.actual_signed_gram_positive
 
 namespace ActualMetricIBP
-/-! Compact-test integration by parts for `L` (`IntegrationByParts/InverseHessian.lean`, bundle
-`MA-Metric-IntegrationByParts`, receipt 719cbc2a…/e1a2fc36…): the normalised one-dimensional Gaussian
-potential (`∫ e^{−Φ} = 1`, `∇²Φ = Id`, MA equation with `V = Φ`) against a nonzero bump, with the
-unbounded test `id` and only the bump compactly supported; invariance `∫ L(bump) dν = 0`; and the
-exponential potential's inverse-Hessian divergence `−1` at `0`. The Gaussian is a normalised-MA consumer,
-not the source bounded-`K` moment map. -/
+/-! Compact-test integration by parts for `L` (`IntegrationByParts/InverseHessian.lean`): the
+normalised one-dimensional Gaussian potential (`∫ e^{−Φ} = 1`, `∇²Φ = Id`, MA equation with
+`V = Φ`) against a nonzero bump, with the unbounded test `id` and only the bump compactly
+supported; invariance `∫ L(bump) dν = 0`; and the exponential potential's inverse-Hessian
+divergence `−1` at `0`. The Gaussian is a normalised-MA consumer, not the source bounded-`K` moment
+map. -/
 open MeasureTheory FunctionalInequalities.Analysis.BakryEmery
 
 def Z : ℝ := Real.sqrt (2 * Real.pi)

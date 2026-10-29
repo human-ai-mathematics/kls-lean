@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Convex.Legendre
+import FunctionalInequalities.Analysis.Convex.Legendre.Basic
 import FunctionalInequalities.Probability.MomentMeasure.Basic
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 
@@ -18,7 +18,7 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 open FunctionalInequalities.Analysis
 
 section
--- Accepted source `Baseline.lean`.
+-- The norm baseline: density and mass of the Legendre transform of the norm.
 
 open MeasureTheory Set Filter
 open scoped ENNReal Topology

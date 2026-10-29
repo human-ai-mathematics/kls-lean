@@ -5,7 +5,7 @@ import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
 
 For a potential `U` with pointwise positive definite Hessian `H = hessianOperator U x` and a test `f`, the energy is
 `⟪∇f, H⁻¹ ∇f⟫` with the ring inverse `H⁻¹`. Young's inequality `2⟪v, w⟫ ≤ ⟪v, H⁻¹ v⟫ + D²U(w, w)`
-(`hessian_inverse_young`, no uniform curvature constant); `⟪∇f x, v⟫ = Df(x) v` (`gradient_pairing_eq_fderiv`); the energy
+(`hessian_inverse_young`, no uniform curvature constant); `⟪∇f x, v⟫ = Df(x) v` (Mathlib `inner_gradient_left`); the energy
 in any orthonormal basis is `Σ_ij (H⁻¹)_ij ∂_i f ∂_j f` (`inverse_hessian_energy_eq_coordinate_sum`); for smooth `U` and `C¹`
 `f` it is continuous (`continuous_inverse_hessian_gradient_energy`), and it is nonnegative
 (`inverse_hessian_gradient_energy_nonneg`) in every dimension, zero included. Used by the scalar Brascamp–Lieb inequality
@@ -65,15 +65,6 @@ theorem hessian_inverse_young
   rw [bilinearIteratedFDerivTwo_eq_inner_hessianOperator hU]
   linarith only [hnonneg]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-  [SecondCountableTopology E] in
-/-- The actual gradient represents the actual Fréchet derivative. -/
-theorem gradient_pairing_eq_fderiv (f : E → ℝ) (x v : E) :
-    inner ℝ (gradient f x) v = fderiv ℝ f x v := by
-  change ((InnerProductSpace.toDual ℝ E)
-    ((InnerProductSpace.toDual ℝ E).symm (fderiv ℝ f x))) v = _
-  simp
-
 section InverseHessianIdentities
 
 omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
@@ -99,7 +90,7 @@ theorem inverse_hessian_energy_eq_coordinate_sum
   have hc (i : Fin n) :
       b.repr (gradient f x) i = fderiv ℝ f x (b i) := by
     rw [b.repr_apply_apply, real_inner_comm]
-    exact gradient_pairing_eq_fderiv f x (b i)
+    exact inner_gradient_left
   calc
     inner ℝ (gradient f x)
         (Ring.inverse (hessianOperator U x) (gradient f x)) =
@@ -134,7 +125,7 @@ theorem continuous_inverse_hessian_gradient_energy
     have heq : (fun x => fderiv ℝ f x (b i)) =
         (fun x => inner ℝ (gradient f x) (b i)) := by
       funext x
-      exact (gradient_pairing_eq_fderiv f x (b i)).symm
+      exact (inner_gradient_left (𝕜 := ℝ) (f := f) (x := x) (y := b i)).symm
     rw [heq]
     exact (continuous_gradient hf).inner continuous_const
   have heq :
