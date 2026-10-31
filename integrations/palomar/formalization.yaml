@@ -26,7 +26,7 @@ project:
 
 classification:
   arxiv: [math.PR, math.FA, math.MG]
-  msc2020: [60E15, 52A40, 46E35]
+  msc2020: ["60E15", "52A40", "46E35"]
 
 sources:
   - title: Presenting a proof of the Kannan-Lovasz-Simonovits conjecture

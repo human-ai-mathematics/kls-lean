@@ -158,5 +158,14 @@
       "new_sha256": "c5ca4e0ea7d5fe486e0c2c3ede0546c031958c88d0853a0028a48c6abecb872c",
       "change": "Remove exactly one pre-existing blank EOF line in the publication checkout so the staged diff passes whitespace checks. All mathematical tokens, names, proofs, imports and data unchanged; original worktrees untouched."
     }
-  ]
+  ],
+  "metadata_encoding_review": {
+    "predecessor_commit": "f98e3b2a73293b60381581f13abd4eac592ba962",
+    "files": [
+      "formalization.yaml",
+      "integrations/palomar/formalization.yaml"
+    ],
+    "change": "Quote MSC 2020 codes so YAML 1.1 and YAML 1.2 both read them as strings. Bare codes such as 60E15 and 46E35 are scientific-notation numbers under the browser YAML 1.2 parser. The existing official Python loader uses YAML 1.1 and had accepted them as strings.",
+    "semantic_scope": "Preserve all parsed metadata values under the official Python loader; no Lean source, import, type, proof, name, mathematical scope, pin or certificate changes. The new commit needs its own final verification and registry intake."
+  }
 }

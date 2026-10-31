@@ -76,7 +76,7 @@ related_formalizations:
 
 classification:
   arxiv: [math.PR, math.FA]
-  msc2020: [60E15, 46E35]
+  msc2020: ["60E15", "46E35"]
 
 status:
   scope: >-
