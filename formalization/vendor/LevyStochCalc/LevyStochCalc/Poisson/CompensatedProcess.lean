@@ -6,7 +6,15 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedApprox
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_sq_eq_lintegral_nnnorm_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Poisson.CompensatedApprox
 
 /-!
 # The compensated-Poisson `L²` integral process
@@ -17,6 +25,8 @@ the `ℱ_t`-measurable representative of the `L²`-limit, so that it is adapted 
 filtration of the Poisson random measure; it is a square-integrable martingale, vanishes at
 nonpositive times, and satisfies the Itô–Lévy isometry at every time.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal
@@ -88,7 +98,12 @@ lemma stageLp_cauchySeq (t : ℝ) :
   have hsq : eLpNorm (fun ω => stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global m t ω
       - stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n t ω) 2 P ^ (2 : ℝ)
       < ε ^ (2 : ℝ) := by
-    rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq]
+    have hmeas : AEStronglyMeasurable
+        (fun ω => stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global m t ω
+          - stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n t ω) P :=
+      (memLp_stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global m t).aestronglyMeasurable.sub
+        (memLp_stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n t).aestronglyMeasurable
+    rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _ hmeas]
     rcases le_total m n with hmn | hnm
     · exact hbound hmn hm
     · have := hbound hnm hn
@@ -336,7 +351,8 @@ theorem process_lintegral_sq {t : ℝ} (ht : 0 ≤ t) :
             (‖G.eval p.2.1 p.2.2 p.1 - φ p.1 p.2.1 p.2.2‖₊ : ℝ≥0∞) ^ 2) :=
           (ENNReal.continuous_coe.measurable.comp
             (G.eval_measurable.sub h_meas).nnnorm).pow_const 2
-        rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq,
+        rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _
+            ((hgₙm n).sub hgm).aestronglyMeasurable,
           show (fun q => (‖(gₙ n - g) q‖₊ : ℝ≥0∞) ^ 2)
             = fun q : Ω × E × ℝ => (‖G.eval q.2.2 q.2.1 q.1 - φ q.1 q.2.2 q.2.1‖₊ : ℝ≥0∞) ^ 2
             from rfl,
@@ -372,7 +388,8 @@ theorem process_lintegral_sq {t : ℝ} (ht : 0 ≤ t) :
       lintegral_swap_es (fun ω s e => (‖φ ω s e‖₊ : ℝ≥0∞) ^ 2) hφsq ω
   have hgfin : eLpNorm g 2 μt ≠ ⊤ := by
     refine ((ENNReal.rpow_lt_top_iff_of_pos (by norm_num : (0 : ℝ) < 2)).1 ?_).ne
-    rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq, hgint]
+    rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _ hgm.aestronglyMeasurable,
+      hgint]
     exact horizonInt_lt_top φ h_sq_int_global t
   have h3 := LevyStochCalc.Brownian.Ito.tendsto_lintegral_nnnorm_sq_of_eLpNorm
     (fun n => (hgₙm n).aestronglyMeasurable) hgm.aestronglyMeasurable hgfin h2
@@ -407,8 +424,10 @@ theorem process_eLpNorm_two_right_tendsto (s : ℝ) :
     have h2 := hsq.ennrpow_const ((1 : ℝ) / 2)
     rw [ENNReal.zero_rpow_of_pos (by norm_num)] at h2
     refine h2.congr (fun r => ?_)
-    rw [← LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq, ← ENNReal.rpow_mul,
-      show (2 : ℝ) * (1 / 2) = 1 by norm_num, ENNReal.rpow_one]
+    rw [← LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _
+        ((process_memLp N ℱ hℱ φ h_meas h_progMeas h_sq_int_global r).sub
+          (process_memLp N ℱ hℱ φ h_meas h_progMeas h_sq_int_global s)).aestronglyMeasurable,
+      ← ENNReal.rpow_mul, show (2 : ℝ) * (1 / 2) = 1 by norm_num, ENNReal.rpow_one]
   rcases le_or_gt 0 s with hs | hs
   · have hFsq : ∀ {t : ℝ}, 0 ≤ t →
         ∫ ω, (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t ω) ^ 2 ∂P
@@ -463,14 +482,10 @@ theorem martingale_rightCont_process :
       ℱ.rightCont P := by
   refine LevyStochCalc.Martingale.martingale_rightCont_of_tendsto_eLpNorm_one
     (martingale_process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global) fun s => ?_
-  have hF_aesm : ∀ t, AEStronglyMeasurable (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t)
-    P :=
-    fun t => (process_memLp N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t).aestronglyMeasurable
   exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
     (process_eLpNorm_two_right_tendsto N ℱ hℱ φ h_meas h_progMeas h_sq_int_global s)
     (Eventually.of_forall fun r => bot_le)
-    (Eventually.of_forall fun r => eLpNorm_le_eLpNorm_of_exponent_le (by norm_num)
-      ((hF_aesm r).sub (hF_aesm s)))
+    (Eventually.of_forall fun r => eLpNorm_le_eLpNorm_of_exponent_le (by norm_num))
 
 end Isometry
 

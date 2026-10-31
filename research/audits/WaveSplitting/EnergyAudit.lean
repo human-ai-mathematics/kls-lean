@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Energy
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Energy
 
 /-! Independent clients of the actual splitting energy theorems. The coefficient bound below
 is an explicit hypothesis of zero-order stability, not a proved localization for a potential.
 No client here claims a high-order reaction estimate or a residual estimate. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

@@ -19,7 +19,7 @@ KolmogorovExtension4 and MathFin retain LevyStochCalc's original dependency revi
 BrownianMotion is an explicit override of its original `4d52fa7` dependency, synchronized
 to the corrected regularization interfaces. BrownianMotion itself pins KolmogorovExtension4
 to `7d76e18`; this package retains the tested `f33cbc3` revision. All libraries use this
-package's unchanged Lean/Mathlib v4.33.0. The lock records these original upstream manifest
+package's Lean/Mathlib v4.35.0. The lock records these original upstream manifest
 pins separately from the effective vendored commits; it does not claim that they agree.
 
 Each subdirectory keeps the upstream `LICENSE`, and
@@ -40,11 +40,13 @@ No KLS500 source is included; its own port targets a different toolchain.
 
 ## Local changes
 
-The sources are ported to this package's Lean v4.33.0 and Mathlib `db584cd` (tag v4.33.0).
-Fifty-six files differ from their respective pinned upstream sources:
+The sources are ported to this package's Lean v4.35.0 and Mathlib `56a0058` (tag v4.35.0) and to
+the Lean module system. 219 files differ from their respective pinned upstream sources
+(LevyStochCalc 196, BrownianMotion 20, KolmogorovExtension4 2, MathFin 1):
 [`port.patch`](port.patch) is the exact unified diff and applies with `patch -p1` from this
 directory. Modification notices identify every changed source. The BrownianMotion update
-changes its upstream API; existing project and LevyStochCalc public contracts are retained.
+changes its upstream API; existing project and LevyStochCalc public contracts are retained,
+except for the individually listed Mathlib v4.35.0 adaptations below.
 No option, axiom or `sorry` is added by the local adaptations.
 
 | File | Change |
@@ -58,6 +60,18 @@ No option, axiom or `sorry` is added by the local adaptations.
 | `LevyStochCalc/Brownian/{ItoAlgebraAssociativity, ItoPullOut, CrossVariation}.lean` | stale `Decidable` instance in `if` after `simp only`; goal restated with `show` |
 | `LevyStochCalc/Martingale/CadlagModification.lean` | migrate to the upstream `rightContModifReal` / `cadlagModifReal` names, retaining the existing hypotheses |
 | 43 further files, listed by `patch.files` in `vendor-lock.json` | apply Lean v4.33.0's recommended replacements for deprecated set aliases and proof-local `haveI`/`letI` bindings; each file has a dated modification notice |
+| all 196 LevyStochCalc sources | Lean module system: `module` header, every `import` made `public import`, `@[expose] public section` (BrownianMotion, KolmogorovExtension4 and MathFin are already modules upstream); dated 2026-10-31 notice |
+| LevyStochCalc and the other libraries, files listed in `port.patch` | Lean/Mathlib v4.35.0 drop-in replacements of deprecated names (for example `if_pos` → `ite_eq_left`, `.lipschitz` → `.lipschitzWith`); dated 2026-10-31 notice |
+| `LevyStochCalc/Brownian/SimplePredictableRefineCommon.lean` | `mergedIdxMap_left/_right`: the private existence lemma is passed through a fully stated `show … by exact …`, so the exposed definition body does not reference a private proof; the lemmas stay private |
+| `LevyStochCalc/Brownian/ItoL2CompletionMaster.lean` | `masterApprox`: the private `master_tol_pos n` is passed through `show (0 : ℝ≥0∞) < ((n : ℝ≥0∞) + 1)⁻¹ by exact …` (the same proposition; the chosen data are unchanged) |
+| LevyStochCalc and BrownianMotion files listed in `port.patch` | Mathlib v4.35.0 `eLpNorm`/`MemLp` API: `MemLp f p μ` is `eLpNorm f p μ < ∞`, triangle inequalities no longer take measurability arguments, norm formulas take an `AEStronglyMeasurable` argument; proofs pass existing witnesses (proof-only) |
+| `LevyStochCalc/Probability/DoobContinuous.lean` | `LevyStochCalc.Probability.eLpNorm_two_eq` gains `(hf : AEStronglyMeasurable f μ)` after `f`: its unconditional statement is false for the v4.35.0 `eLpNorm`, which is `∞` off the a.e.-strongly-measurable branch |
+| `LevyStochCalc/Poisson/CompensatedDensityLimit.lean`, `LevyStochCalc/Brownian/ItoL2CompletionConvergence.lean`, `LevyStochCalc/Brownian/ItoIntegrandComplete.lean` | for the same reason, exactly four further norm-formula helpers gain one `AEStronglyMeasurable` premise after the function: `Poisson.Compensated.eLpNorm_two_rpow_eq_lintegral_sq`, `Brownian.Ito.eLpNorm_two_rpow_eq_lintegral_sq`, `Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq`, `Brownian.Ito.eLpNorm_sq_eq_lintegral`; every caller passes an existing witness. No other public premise changes |
+| `LevyStochCalc/Brownian/ItoDensityUnbounded.lean`, `LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean` | private helpers only: two now-unused measurability binders renamed `_hf`/`_hg`/`_hfn` (types and order kept); private `eLpNorm_mul_le_of_bound` gains `(hcg : AEStronglyMeasurable (fun ω => c ω * g ω) P)` |
+| `BrownianMotion/Auxiliary/HasLaw.lean` | removed `hasLaw_map`, now provided by Mathlib (`Probability/HasLaw`) with the same statement; Mathlib orders the implicit binders `{𝓧}` before `{mΩ}` |
+| `BrownianMotion/Auxiliary/LeftLimWithin.lean` | removed `tendsto_atBot_of_mapClusterPt`, now provided by Mathlib (`Topology/Order/LeftRightLim`, generated from its `atTop` counterpart) with the same hypotheses |
+| `BrownianMotion/Auxiliary/Indistinguishable.lean` | the module body is identical to Mathlib v4.35.0 `Probability/Process/Indistinguishable` (apart from Mathlib's module docstring); it now only re-exports that module, so the predicate, its `≡ᵐ[P]` notation and its lemmas keep their names and statements under Mathlib ownership |
+| `BrownianMotion/StochasticIntegral/Cadlag.lean`, `BrownianMotion/Auxiliary/StoppedProcess.lean`, `LevyStochCalc/Martingale/CadlagModification.lean` | Mathlib v4.35.0 defines `IsRightContinuous` and `IsCadlag` (same predicates, fields `isRightContinuous`/`tendsto_nhdsLT`); the 29 colliding vendored declarations are removed in favour of Mathlib's and the vendored projections `IsCadlag.right_continuous`/`left_limit` are gone; the 16 other declarations keep their names and statements; callers use the Mathlib field names. Differences include `const_smul`/`fun_const_smul` generalised from `ℝ` with `ContinuousSMul` to any `R` with `ContinuousConstSMul` (scalar before the witness), `continuous_comp` taking the witness first, and `IsRightContinuous` a `def` instead of an `abbrev`. The project's migration review records every declaration, old and new type and caller; `research/tests/fixtures/mathlib435-semantics/` checks the predicate equivalence and recovers every old signature from Mathlib |
 
 The warning maintenance changes proof scripts only. It preserves upstream pins, public
 declarations, mathematical assumptions and non-theorem definitions. It adds no linter

@@ -1,6 +1,8 @@
-import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
-import Mathlib.Analysis.Convex.SpecificFunctions.Basic
-import Mathlib.MeasureTheory.Measure.Tilted
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
+public import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+public import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
 # Centered Gaussian kernels and laws
@@ -10,6 +12,8 @@ laws, including dimension zero. Definitions are total in `s`; probability and
 integrability results explicitly require `s > 0`. The variance is `1 / (2 * s)`.
 This is shared support for BKL arXiv:2610.05474v1, Section 2 and Theorem 3.1.
 -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set

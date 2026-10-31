@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Basic
-import Mathlib.MeasureTheory.Group.Integral
-import Mathlib.MeasureTheory.Function.LocallyIntegrable
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Basic
+public import Mathlib.MeasureTheory.Group.Integral
+public import Mathlib.MeasureTheory.Function.LocallyIntegrable
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
 
 /-!
 # Finite derivative energies for explicit wave splitting
@@ -10,6 +12,8 @@ Derivatives are evaluated on finite ordered tuples of directions and remain real
 The energy is the sum of their squared integrals, not a multilinear operator norm.
 These are energies on classical functions, not completed Sobolev spaces.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory
 open scoped ContDiff
@@ -30,9 +34,10 @@ def derivative {n : ℕ} (v : Fin n → E) (f : E → ℝ) (x : E) : ℝ :=
 def differentiate {n : ℕ} (v : Fin n → E) (Y : State E ι) : State E ι :=
   ⟨derivative v Y.u, derivative v Y.v, fun j => derivative v (Y.p j)⟩
 
-theorem continuous_derivative {n : ℕ} (v : Fin n → E) {f : E → ℝ}
-    (hf : ContDiff ℝ ∞ f) : Continuous (derivative v f) :=
-  (hf.continuous_iteratedFDeriv (m := n) (by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).eval continuous_const
+theorem continuous_derivative {n : ℕ} (v : Fin n → E) {f : E → ℝ} (hf : ContDiff ℝ ∞ f) :
+    Continuous (derivative v f) :=
+  (hf.continuous_iteratedFDeriv (m := n) (by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).eval
+    continuous_const
 
 theorem hasCompactSupport_derivative {n : ℕ} (v : Fin n → E) {f : E → ℝ}
     (hf : HasCompactSupport f) : HasCompactSupport (derivative v f) :=
@@ -42,26 +47,39 @@ theorem hasCompactSupport_derivative {n : ℕ} (v : Fin n → E) {f : E → ℝ}
   funext x
   exact iteratedFDeriv_zero_apply v
 
-@[simp] theorem derivative_add {n : ℕ} (v : Fin n → E) {f g : E → ℝ}
-    (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g) :
+@[simp]
+theorem derivative_add {n : ℕ} (v : Fin n → E) {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
+    (hg : ContDiff ℝ ∞ g) :
     derivative v (fun x => f x + g x) = fun x => derivative v f x + derivative v g x := by
   funext x
-  simp [derivative, fun_iteratedFDeriv_add_apply (hf.of_le (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt
-    (hg.of_le (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt]
+  simp [derivative,
+    fun_iteratedFDeriv_add_apply
+        (hf.of_le
+            (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt
+        (hg.of_le
+            (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt]
 
-@[simp] theorem derivative_sub {n : ℕ} (v : Fin n → E) {f g : E → ℝ}
-    (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g) :
+@[simp]
+theorem derivative_sub {n : ℕ} (v : Fin n → E) {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
+    (hg : ContDiff ℝ ∞ g) :
     derivative v (fun x => f x - g x) = fun x => derivative v f x - derivative v g x := by
   funext x
-  simp [derivative, fun_iteratedFDeriv_sub_apply (hf.of_le (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt
-    (hg.of_le (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt]
+  simp [derivative,
+    fun_iteratedFDeriv_sub_apply
+        (hf.of_le
+            (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt
+        (hg.of_le
+            (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt]
 
-@[simp] theorem derivative_const_mul {n : ℕ} (v : Fin n → E) (c : ℝ) {f : E → ℝ}
-    (hf : ContDiff ℝ ∞ f) :
+@[simp]
+theorem derivative_const_mul {n : ℕ} (v : Fin n → E) (c : ℝ) {f : E → ℝ} (hf : ContDiff ℝ ∞ f) :
     derivative v (fun x => c * f x) = fun x => c * derivative v f x := by
   funext x
-  simpa [derivative, smul_eq_mul] using congrArg (fun p : E [×n]→L[ℝ] ℝ => p v)
-    (iteratedFDeriv_const_smul_apply' (a := c) (hf.of_le (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt)
+  simpa [derivative, smul_eq_mul] using
+    congrArg (fun p : E [×n]→L[ℝ] ℝ => p v)
+      (iteratedFDeriv_const_smul_apply' (a := c)
+        (hf.of_le
+            (show (n : WithTop ℕ∞) ≤ ∞ by exact_mod_cast (le_top : (n : ℕ∞) ≤ ⊤))).contDiffAt)
 
 @[simp] theorem derivative_translate {n : ℕ} (v : Fin n → E) (a : E) (f : E → ℝ) :
     derivative v (fun x => f (x + a)) = fun x => derivative v f (x + a) := by
@@ -239,8 +257,7 @@ section SquareIntegrals
 
 omit [NormedSpace ℝ E]
 private theorem integrable_sq {f : E → ℝ} (hf : Continuous f) (hc : HasCompactSupport f) :
-    Integrable (fun x => f x ^ 2) m :=
-  by
+    Integrable (fun x => f x ^ 2) m := by
     have hp : HasCompactSupport (fun x => f x * f x) := hc.mul_left
     simpa only [pow_two, Pi.mul_def] using (hf.mul hf).integrable_of_hasCompactSupport hp
 
@@ -300,7 +317,7 @@ theorem transport_pair_energy [DecidableEq ι]
   have heqv : (transport a j t Y).v = fun x => (2 : ℝ)⁻¹ * (f x + g x) := by
     funext x; simp only [transport, f, g]; ring
   have heqp : (transport a j t Y).p j = fun x => (2 : ℝ)⁻¹ * (f x - g x) := by
-    funext x; simp only [transport, if_true, f, g]; ring
+    funext x; simp only [transport, ite_true, f, g]; ring
   rw [heqv, heqp, squareIntegral_const_mul, squareIntegral_const_mul]
   rw [htplus, htminus] at hpar
   linarith

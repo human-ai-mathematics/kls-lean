@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoProcessWindow
-import LevyStochCalc.Brownian.ItoGridPartition
-import LevyStochCalc.Brownian.ItoFormula
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoProcessWindow
+public import LevyStochCalc.Brownian.ItoGridPartition
+public import LevyStochCalc.Brownian.ItoFormula
 
 /-!
 # The martingale Riemann sum of the Itô formula
@@ -23,6 +27,8 @@ grid and pairing it with the Itô integral's increments gives a Riemann sum for
 * `LevyStochCalc.Brownian.Ito.IsItoVersion.lintegral_sq_martingaleRiemann_sub_le` — the `L²`
   error of the martingale Riemann sum.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

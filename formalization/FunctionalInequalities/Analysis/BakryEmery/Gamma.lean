@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Laplacian
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Laplacian
 
 /-!
 # The carre du champ and its iteration
@@ -6,6 +8,8 @@ import FunctionalInequalities.Analysis.BakryEmery.Laplacian
 Gamma, Gamma_2 and the product identity. Generic differential tools live in
 Calculus.lean. These pointwise statements provide no semigroup gradient estimate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -80,12 +84,16 @@ theorem weightedLaplacian_comp (U : E → ℝ) {h h' h'' : ℝ → ℝ} {G : E �
     ((hG.differentiable (by norm_num)) x), (hh x).deriv, inner_smul_right]
   ring
 
-/-- **the carré-du-champ product identity, the carré-du-champ product identity**: for `C²` functions `f`, `g` and any
+/--
+**the carré-du-champ product identity, the carré-du-champ product identity**: for `C²` functions
+`f`, `g` and any
 potential `U`, `(ℒ(fg) - f ℒg - g ℒf) / 2 = Γ(f, g) = ⟪∇f, ∇g⟫`. -/
 theorem gamma_eq_weightedLaplacian (U : E → ℝ) {f g : E → ℝ} (hf : ContDiff ℝ 2 f)
     (hg : ContDiff ℝ 2 g) (x : E) :
     (weightedLaplacian U (fun y => f y * g y) x - f x * weightedLaplacian U g x -
-        g x * weightedLaplacian U f x) / 2 = gamma f g x := by
+          g x * weightedLaplacian U f x) /
+        2 =
+      gamma f g x := by
   rw [weightedLaplacian_mul U hf hg x]
   ring
 
@@ -98,11 +106,13 @@ theorem gammaTwo_apply (U f : E → ℝ) (x : E) :
     gammaTwo U f x =
       weightedLaplacian U (fun y => gamma f f y) x / 2 - gamma f (weightedLaplacian U f) x := rfl
 
-/-- `Γ₂` written out in gradients and Laplacians, exactly the left-hand side of the Bochner identity. -/
+/--
+`Γ₂` written out in gradients and Laplacians, exactly the left-hand side of the Bochner identity. -/
 theorem gammaTwo_eq_expanded (U f : E → ℝ) (x : E) :
     gammaTwo U f x =
       (Laplacian.laplacian (fun y => ‖gradient f y‖ ^ 2) x -
-          ⟪gradient U x, gradient (fun y => ‖gradient f y‖ ^ 2) x⟫) / 2 -
+            ⟪gradient U x, gradient (fun y => ‖gradient f y‖ ^ 2) x⟫) /
+          2 -
         ⟪gradient f x,
           gradient (fun y => Laplacian.laplacian f y - ⟪gradient U y, gradient f y⟫) x⟫ := by
   simp only [gammaTwo_apply, gamma_self, weightedLaplacian_apply, gamma_apply]

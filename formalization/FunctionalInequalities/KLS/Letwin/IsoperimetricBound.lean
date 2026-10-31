@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.BKL.Poincare
-import FunctionalInequalities.KLS.Geometry.Cheeger.Comparison
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
+module
+
+public import FunctionalInequalities.KLS.BKL.Poincare
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Comparison
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # Letwin's logarithmic-quarter isoperimetric bound from the dimension-free KLS bound
@@ -18,6 +20,8 @@ Borell density, `0 < C_P(μ) < ∞` and the ratio lies in `[1/4, π]`. The famil
 `inv_smoothConstant_univ_sq_div_literatureConstant_mem_Icc` takes the KLS proposition as a premise
 for finiteness of `C_P`; here it is discharged by the dimension-free bound.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory
 open scoped ENNReal

@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.Klartag.LinearGrowth
+module
+
+public import FunctionalInequalities.KLS.Klartag.LinearGrowth
 
 /-! Klartag arXiv:1309.2767v1, Lemma 2.2, restated with Klartag's "centered" hypotheses (7):
 convex `ψ`, `∫ e^{-ψ} = 1` and barycenter `∫ x e^{-ψ(x)} dx = 0` for an additive Haar measure;
-conclusion (9) with `‖·‖_ψ` the gauge of `K(ψ) = {x ; ψ(x) ≤ 2n + inf ψ}`. Fradelizi's input (10)
+conclusion (9) with `‖·‖_ψ` the gauge of `K(ψ) = {x | ψ(x) ≤ 2n + inf ψ}`. Fradelizi's input (10)
 is restated separately. -/
+
+@[expose] public section
 set_option autoImplicit false
 open MeasureTheory
 

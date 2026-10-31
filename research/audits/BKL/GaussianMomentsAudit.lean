@@ -1,6 +1,10 @@
-import FunctionalInequalities.Probability.Gaussian.Moments
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Moments
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+
+@[expose] public section
 
 open FunctionalInequalities.Probability.Gaussian
 
@@ -35,9 +39,11 @@ theorem nonzero_raw_second : (∫ y : ℝ, ‖y‖ ^ 2 ∂(smoothedLaw (Measure.
   exact h
 
 theorem nonzero_true_variance :
-    ProbabilityTheory.variance (fun y : ℝ => ⟪(1 : ℝ), y⟫) (smoothedLaw (Measure.dirac 1) 3) = 1 / 6 := by
-  have h := smoothedLaw_variance (Measure.dirac (1 : ℝ)) dirac_one_memLp
-    (by norm_num : (0 : ℝ) < 3) (1 : ℝ)
+    ProbabilityTheory.variance (fun y : ℝ => ⟪(1 : ℝ), y⟫) (smoothedLaw (Measure.dirac 1) 3) =
+      1 / 6 := by
+  have h :=
+    smoothedLaw_variance (Measure.dirac (1 : ℝ)) dirac_one_memLp (by norm_num : (0 : ℝ) < 3)
+      (1 : ℝ)
   norm_num at h ⊢
   exact h
 
@@ -48,7 +54,8 @@ theorem nonzero_covariance_limit :
   smoothedLaw_covariance_operator_tendsto (Measure.dirac (1 : ℝ)) dirac_one_memLp
 
 private theorem zero_dim_density :
-    KLS.IsBorellDensity (Measure.dirac (0 : EuclideanSpace ℝ (Fin 0))) volume (fun _ => (1 : ℝ)) := by
+    KLS.IsBorellDensity (Measure.dirac (0 : EuclideanSpace ℝ (Fin 0))) volume
+      (fun _ => (1 : ℝ)) := by
   refine ⟨measurable_const, fun _ => zero_le_one, upperSemicontinuous_const, ?_, ?_⟩
   · intro x y t ht0 ht1
     simp
@@ -78,9 +85,11 @@ end GaussianMomentsAudit
 #print axioms FunctionalInequalities.Probability.Gaussian.mean_zero
 #print axioms FunctionalInequalities.Probability.Gaussian.integral_inner_sq
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_mean
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_norm_sq
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator_tendsto
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator_tendsto
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedProbabilityLaw_tendsto
 #print axioms GaussianMomentsAudit.nonzero_mean
 #print axioms GaussianMomentsAudit.nonzero_raw_second

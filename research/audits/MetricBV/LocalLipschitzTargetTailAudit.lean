@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Strict proof clients for the ADMG Remark 3.5 alternative classes on proper spaces at
 measurable finite-mass targets, for arbitrary Borel measures: the target-tail truncation
 estimates, the compact-local diagonal perimeter bound, and the identification of the locally
@@ -7,6 +9,8 @@ Lipschitz (global `L¹`) and compact-local relaxations with the bounded-support 
 Instances: Lebesgue measure (infinite total mass), counting measure on `ℝ` (not finite on
 bounded sets), the zero measure, and the boundary at an infinite-mass target where the
 compact-local relaxation vanishes but the perimeter is infinite. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

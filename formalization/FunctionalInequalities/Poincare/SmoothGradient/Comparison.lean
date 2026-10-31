@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison
-import FunctionalInequalities.Poincare.SmoothGradient.Intrinsic
-import FunctionalInequalities.Poincare.SmoothGradient.Ambient
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison
+public import FunctionalInequalities.Poincare.SmoothGradient.Intrinsic
+public import FunctionalInequalities.Poincare.SmoothGradient.Ambient
 
 /-!
 # Ambient and intrinsic-affine Poincaré comparisons
@@ -12,6 +14,8 @@ identical and energy equality identifies both their finite domains and their opt
 Source: Blueprint `cor:ambient-intrinsic-constant-equality` and its energy-level predecessor.
 Neither raw/core agreement nor a literature or Cheeger-energy identification is a premise.
 -/
+
+@[expose] public section
 
 noncomputable section
 

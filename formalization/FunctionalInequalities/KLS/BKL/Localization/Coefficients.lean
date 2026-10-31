@@ -1,16 +1,22 @@
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.Probability.Diffusion.Generator
-import FunctionalInequalities.Analysis.Cutoff.LipschitzBall
-import FunctionalInequalities.KLS.BKL.Posterior.Regularity
+module
+
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.Probability.Diffusion.Generator
+public import FunctionalInequalities.Analysis.Cutoff.LipschitzBall
+public import FunctionalInequalities.KLS.BKL.Posterior.Regularity
 /-!
 # Coefficients and generator of the Eldan localization equations
 
-Bizeul–Klartag–Lehec arXiv:2610.05474v1, (67), compact-prior stage: the parameter space `p = (c, Q)`, the posterior
+Bizeul–Klartag–Lehec arXiv:2610.05474v1, (67), compact-prior stage: the parameter space `p = (c,
+Q)`, the posterior
 covariance `A(p)`, the drift `(A⁻¹ a, A⁻¹)`, the noise columns `(A^{-1/2} e_k, 0)`, the generator
 `𝓛F = DF[(A⁻¹a, A⁻¹)] + ½ Σ_k D²F[(A^{-1/2}e_k, 0), (A^{-1/2}e_k, 0)]`, and the cutoff coefficients
-`γ² · drift`, `γ · noise` for an admissible cutoff `γ`, with `𝓛_γ F = γ² 𝓛F` and the admissibility of the cutoff
+`γ² · drift`, `γ · noise` for an admissible cutoff `γ`, with `𝓛_γ F = γ² 𝓛F` and the admissibility
+of the cutoff
 coefficients (globally Lipschitz, bounded, compactly supported) for an isotropic compact prior.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -41,7 +47,9 @@ def drift (p : Param n) : Param n :=
 def noise (p : Param n) (k : Fin n) : Param n :=
   (inverseSqrt (cov μ hc p) (EuclideanSpace.single k 1), 0)
 
-/-- The generator `𝓛` of (67): `𝓛F = DF[(A⁻¹a, A⁻¹)] + ½ Σ_k D²F[(A^{-1/2}e_k, 0), (A^{-1/2}e_k, 0)]`. -/
+/--
+The generator `𝓛` of (67): `𝓛F = DF[(A⁻¹a, A⁻¹)] + ½ Σ_k D²F[(A^{-1/2}e_k, 0), (A^{-1/2}e_k, 0)]`.
+-/
 def generator (F : Param n → ℝ) (p : Param n) : ℝ :=
   diffusionGenerator (drift μ hc) (noise μ hc) F p
 
@@ -92,7 +100,7 @@ theorem locallyLipschitz_noise (hiso : KLS.Isotropic μ) (k : Fin n) :
       ((ContinuousLinearMap.apply ℝ (EuclideanSpace ℝ (Fin n)) (EuclideanSpace.single k (1 : ℝ))) ∘
         (fun p : Param n => inverseSqrt (cov μ hc p))) :=
     ((ContinuousLinearMap.apply ℝ (EuclideanSpace ℝ (Fin n))
-      (EuclideanSpace.single k (1 : ℝ))).lipschitz.locallyLipschitz).comp
+      (EuclideanSpace.single k (1 : ℝ))).lipschitzWith.locallyLipschitz).comp
       (locallyLipschitz_inverseSqrt_cov μ hc hiso)
   have h2 : LocallyLipschitz
       (fun p : Param n => inverseSqrt (cov μ hc p) (EuclideanSpace.single k (1 : ℝ))) := by
@@ -157,28 +165,35 @@ theorem hasCompactSupport_cutoffNoise {γ : Param n → ℝ} (hγ : IsCutoff γ)
   rw [cutoffNoise, hγ0]
   exact zero_smul ℝ (noise μ hc p k)
 
-/-- The cutoff coefficients of (67) are globally Lipschitz, bounded, continuous and compactly supported
+/--
+The cutoff coefficients of (67) are globally Lipschitz, bounded, continuous and compactly supported
 for a compactly supported isotropic prior. -/
-theorem cutoffCoefficients_admissible (hiso : KLS.Isotropic μ) {γ : Param n → ℝ} (hγ : IsCutoff γ) :
-    (∃ K : ℝ≥0, LipschitzWith K (cutoffDrift μ hc γ) ∧
-        ∀ k, LipschitzWith K fun p => cutoffNoise μ hc γ p k) ∧
+theorem cutoffCoefficients_admissible (hiso : KLS.Isotropic μ) {γ : Param n → ℝ}
+    (hγ : IsCutoff γ) :
+    (∃ K : ℝ≥0,
+        LipschitzWith K (cutoffDrift μ hc γ) ∧
+          ∀ k, LipschitzWith K fun p => cutoffNoise μ hc γ p k) ∧
       (∃ B : ℝ, ∀ p, ‖cutoffDrift μ hc γ p‖ ≤ B ∧ ∀ k, ‖cutoffNoise μ hc γ p k‖ ≤ B) ∧
-      HasCompactSupport (cutoffDrift μ hc γ) ∧
-      ∀ k, HasCompactSupport fun p => cutoffNoise μ hc γ p k := by
+        HasCompactSupport (cutoffDrift μ hc γ) ∧
+          ∀ k, HasCompactSupport fun p => cutoffNoise μ hc γ p k := by
   classical
   obtain ⟨⟨K₀, hK₀⟩, B₀, hB₀⟩ := cutoffDrift_lipschitz_bounded μ hc hiso hγ
   choose Kn hKn using fun k => (cutoffNoise_lipschitz_bounded μ hc hiso hγ k).1
   choose Bn hBn using fun k => (cutoffNoise_lipschitz_bounded μ hc hiso hγ k).2
-  refine ⟨⟨K₀ + ∑ k, Kn k, ?_, ?_⟩, ⟨max B₀ (∑ k, max (Bn k) 0), ?_⟩,
-    hasCompactSupport_cutoffDrift μ hc hγ, hasCompactSupport_cutoffNoise μ hc hγ⟩
+  refine
+    ⟨⟨K₀ + ∑ k, Kn k, ?_, ?_⟩, ⟨max B₀ (∑ k, max (Bn k) 0), ?_⟩,
+      hasCompactSupport_cutoffDrift μ hc hγ, hasCompactSupport_cutoffNoise μ hc hγ⟩
   · exact hK₀.weaken (le_add_of_nonneg_right bot_le)
   · intro k
     refine (hKn k).weaken ?_
-    exact (Finset.single_le_sum (fun _ _ => bot_le) (Finset.mem_univ k)).trans
-      (le_add_of_nonneg_left bot_le)
+    exact
+      (Finset.single_le_sum (fun _ _ => bot_le) (Finset.mem_univ k)).trans
+        (le_add_of_nonneg_left bot_le)
   · intro p
     refine ⟨(hB₀ p).trans (le_max_left _ _), fun k => (hBn k p).trans ?_⟩
-    exact (le_max_left (Bn k) 0).trans ((Finset.single_le_sum (fun _ _ => le_max_right _ _)
-      (Finset.mem_univ k)).trans (le_max_right _ _))
+    exact
+      (le_max_left (Bn k) 0).trans
+        ((Finset.single_le_sum (fun _ _ => le_max_right _ _) (Finset.mem_univ k)).trans
+          (le_max_right _ _))
 
 end FunctionalInequalities.KLS.BKL.Localization

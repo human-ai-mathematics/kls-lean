@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
 
 /-!
 # Audit: Lemma 3.8 for the BKL iterates
@@ -15,6 +17,8 @@ block and notation, and discharged by the library theorem `norm_taylorField_grad
 The proof uses neither `R ≥ 1` nor the centering of `f`. This is a supporting result of the
 operator route: Theorem 3.1 is not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

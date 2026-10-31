@@ -1,22 +1,36 @@
-import FunctionalInequalities.Analysis.Matrix.Sign
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
+module
+
+public import FunctionalInequalities.Analysis.Matrix.Sign
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
 # Trace energies of symmetric matrix fields under a measure
 
-Letwin, arXiv:2607.24164v1, Theorem 2.5, the extension step from positive semidefinite to all symmetric `B`, for a
-measurable field `H : Ω → Matrix ι ι ℝ` of positive semidefinite matrices under an arbitrary measure `ν` on an arbitrary
-measurable space, over every finite index type (the empty one included): if every positive semidefinite `A` has
-`x ↦ tr(A H(x) A H(x))` integrable with `∫ tr(A H A H) dν ≤ C tr(A²)` for a real `C`, then every symmetric `B` has the
-same (`symmetric_trace_integral_extension_mul`, a.e. form `symmetric_trace_integral_extension_mul_of_ae_posSemidef`; the
-source coefficient `C = 2` is `symmetric_trace_integral_extension`). The integrability for `B` is derived (pointwise Jordan domination of
-`Matrix/Sign.lean` and `Matrix/Trace/Energy.lean`); no finiteness of `ν`, nonemptiness or commutation is assumed. The positive
-semidefinite bound is a named hypothesis: it is not constructed here, nor is the moment map, Brascamp–Lieb or Theorem
+Letwin, arXiv:2607.24164v1, Theorem 2.5, the extension step from positive semidefinite to all
+symmetric `B`, for a
+measurable field `H : Ω → Matrix ι ι ℝ` of positive semidefinite matrices under an arbitrary measure
+`ν` on an arbitrary
+measurable space, over every finite index type (the empty one included): if every positive
+semidefinite `A` has
+`x ↦ tr(A H(x) A H(x))` integrable with `∫ tr(A H A H) dν ≤ C tr(A²)` for a real `C`, then every
+symmetric `B` has the
+same (`symmetric_trace_integral_extension_mul`, a.e. form
+`symmetric_trace_integral_extension_mul_of_ae_posSemidef`; the
+source coefficient `C = 2` is `symmetric_trace_integral_extension`). The integrability for `B` is
+derived (pointwise Jordan domination of
+`Matrix/Sign.lean` and `Matrix/Trace/Energy.lean`); no finiteness of `ν`, nonemptiness or
+commutation is assumed. The positive
+semidefinite bound is a named hypothesis: it is not constructed here, nor is the moment map,
+Brascamp–Lieb or Theorem
 2.5 itself.
-Finite flux contraction (`integral_quadratic_flux_le_of_posSemidef`): entrywise integrable matrix fields with
-`∫ Fᵢⱼ = -∫ Eᵢⱼ` and `E + H` a.e. positive semidefinite satisfy `∫ v ⬝ Fv ≤ ∫ v ⬝ Hv`, under an arbitrary measure and finite index
+Finite flux contraction (`integral_quadratic_flux_le_of_posSemidef`): entrywise integrable matrix
+fields with
+`∫ Fᵢⱼ = -∫ Eᵢⱼ` and `E + H` a.e. positive semidefinite satisfy `∫ v ⬝ Fv ≤ ∫ v ⬝ Hv`, under an
+arbitrary measure and finite index
 type (the empty one included).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -26,28 +40,27 @@ namespace FunctionalInequalities.Analysis
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- Arbitrary real coefficient, almost-everywhere positive semidefinite field: if every positive semidefinite `A`
-has `x ↦ tr(A H(x) A H(x))` integrable with `∫ tr(A H A H) dν ≤ C tr(A²)`, then every symmetric `B` has the same.
+/--
+Arbitrary real coefficient, almost-everywhere positive semidefinite field: if every positive
+semidefinite `A`
+has `x ↦ tr(A H(x) A H(x))` integrable with `∫ tr(A H A H) dν ≤ C tr(A²)`, then every symmetric `B`
+has the same.
 No sign condition on `C`; arbitrary measure and finite index type (empty allowed). -/
-theorem symmetric_trace_integral_extension_mul_of_ae_posSemidef
-    {Ω : Type*} [MeasurableSpace Ω] (ν : Measure Ω) {C : ℝ}
-    (H : Ω → Matrix ι ι ℝ)
-    (hH_meas : ∀ i j, Measurable (fun x => H x i j))
-    (hH_psd : ∀ᵐ x ∂ν, (H x).PosSemidef)
-    (hPSD : ∀ A : Matrix ι ι ℝ, A.PosSemidef →
-      Integrable (fun x => (A * H x * A * H x).trace) ν ∧
-        (∫ x, (A * H x * A * H x).trace ∂ν) ≤
-          C * (A * A).trace)
+theorem symmetric_trace_integral_extension_mul_of_ae_posSemidef {Ω : Type*} [MeasurableSpace Ω]
+    (ν : Measure Ω) {C : ℝ} (H : Ω → Matrix ι ι ℝ)
+    (hH_meas : ∀ i j, Measurable (fun x => H x i j)) (hH_psd : ∀ᵐ x ∂ν, (H x).PosSemidef)
+    (hPSD :
+      ∀ A : Matrix ι ι ℝ,
+        A.PosSemidef →
+          Integrable (fun x => (A * H x * A * H x).trace) ν ∧
+            (∫ x, (A * H x * A * H x).trace ∂ν) ≤ C * (A * A).trace)
     {B : Matrix ι ι ℝ} (hB : B.IsSymm) :
     Integrable (fun x => (B * H x * B * H x).trace) ν ∧
-      (∫ x, (B * H x * B * H x).trace ∂ν) ≤
-        C * (B * B).trace := by
-  obtain ⟨P, N, hP, hN, hdec, hPN, hNP, htrace⟩ :=
-    symmetric_jordan_decomposition B hB
+      (∫ x, (B * H x * B * H x).trace ∂ν) ≤ C * (B * B).trace := by
+  obtain ⟨P, N, hP, hN, hdec, hPN, hNP, htrace⟩ := symmetric_jordan_decomposition B hB
   obtain ⟨hP_int, hP_bound⟩ := hPSD P hP
   obtain ⟨hN_int, hN_bound⟩ := hPSD N hN
-  have hmeas (A : Matrix ι ι ℝ) :
-      Measurable (fun x => (A * H x * A * H x).trace) := by
+  have hmeas (A : Matrix ι ι ℝ) : Measurable (fun x => (A * H x * A * H x).trace) := by
     simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
     refine Finset.measurable_sum _ (fun i _ => ?_)
     refine Finset.measurable_sum _ (fun j _ => ?_)
@@ -56,56 +69,51 @@ theorem symmetric_trace_integral_extension_mul_of_ae_posSemidef
     refine Measurable.mul ?_ measurable_const
     refine Finset.measurable_sum _ (fun l _ => ?_)
     exact measurable_const.mul (hH_meas l k)
-  have hP_nonneg : ∀ᵐ x ∂ν,
-      0 ≤ (P * H x * P * H x).trace := by
+  have hP_nonneg : ∀ᵐ x ∂ν, 0 ≤ (P * H x * P * H x).trace := by
     filter_upwards [hH_psd] with x hx
-    exact trace_energy_nonneg (Matrix.isHermitian_iff_isSymm.mp (Matrix.PosSemidef.isHermitian hP)) hx
-  have hN_nonneg : ∀ᵐ x ∂ν,
-      0 ≤ (N * H x * N * H x).trace := by
+    exact
+      trace_energy_nonneg (Matrix.isHermitian_iff_isSymm.mp (Matrix.PosSemidef.isHermitian hP))
+        hx
+  have hN_nonneg : ∀ᵐ x ∂ν, 0 ≤ (N * H x * N * H x).trace := by
     filter_upwards [hH_psd] with x hx
-    exact trace_energy_nonneg (Matrix.isHermitian_iff_isSymm.mp (Matrix.PosSemidef.isHermitian hN)) hx
-  have hB_nonneg : ∀ᵐ x ∂ν,
-      0 ≤ (B * H x * B * H x).trace := by
+    exact
+      trace_energy_nonneg (Matrix.isHermitian_iff_isSymm.mp (Matrix.PosSemidef.isHermitian hN))
+        hx
+  have hB_nonneg : ∀ᵐ x ∂ν, 0 ≤ (B * H x * B * H x).trace := by
     filter_upwards [hH_psd] with x hx
     exact trace_energy_nonneg hB hx
-  have hdom : ∀ᵐ x ∂ν,
-      (B * H x * B * H x).trace ≤
-        (P * H x * P * H x).trace + (N * H x * N * H x).trace := by
+  have hdom :
+    ∀ᵐ x ∂ν,
+      (B * H x * B * H x).trace ≤ (P * H x * P * H x).trace + (N * H x * N * H x).trace := by
     filter_upwards [hH_psd] with x hx
     rw [hdec]
-    exact jordan_trace_domination hP hN
-      (Matrix.isHermitian_iff_isSymm.mp (Matrix.PosSemidef.isHermitian hx))
+    exact
+      jordan_trace_domination hP hN
+        (Matrix.isHermitian_iff_isSymm.mp (Matrix.PosSemidef.isHermitian hx))
   have hsum_int :
-      Integrable
-        (fun x =>
-          (P * H x * P * H x).trace + (N * H x * N * H x).trace) ν := by
+    Integrable (fun x => (P * H x * P * H x).trace + (N * H x * N * H x).trace) ν := by
     exact hP_int.add hN_int
-  have hB_int :
-      Integrable (fun x => (B * H x * B * H x).trace) ν := by
+  have hB_int : Integrable (fun x => (B * H x * B * H x).trace) ν := by
     refine hsum_int.mono (hmeas B).aestronglyMeasurable ?_
     filter_upwards [hB_nonneg, hP_nonneg, hN_nonneg, hdom] with x hB0 hP0 hN0 hd
     rw [Real.norm_eq_abs, abs_of_nonneg hB0]
     rw [Real.norm_eq_abs, abs_of_nonneg (add_nonneg hP0 hN0)]
     exact hd
   have hIntDom :
-      (∫ x, (B * H x * B * H x).trace ∂ν) ≤
-        ∫ x, ((P * H x * P * H x).trace +
-          (N * H x * N * H x).trace) ∂ν := by
+    (∫ x, (B * H x * B * H x).trace ∂ν) ≤
+      ∫ x, ((P * H x * P * H x).trace + (N * H x * N * H x).trace) ∂ν := by
     exact integral_mono_ae hB_int hsum_int hdom
   refine ⟨hB_int, ?_⟩
   calc
     (∫ x, (B * H x * B * H x).trace ∂ν) ≤
-        ∫ x, ((P * H x * P * H x).trace +
-          (N * H x * N * H x).trace) ∂ν := hIntDom
-    _ = (∫ x, (P * H x * P * H x).trace ∂ν) +
-        ∫ x, (N * H x * N * H x).trace ∂ν :=
+        ∫ x, ((P * H x * P * H x).trace + (N * H x * N * H x).trace) ∂ν :=
+      hIntDom
+    _ = (∫ x, (P * H x * P * H x).trace ∂ν) + ∫ x, (N * H x * N * H x).trace ∂ν :=
       integral_add hP_int hN_int
-    _ ≤ C * (P * P).trace + C * (N * N).trace :=
-      add_le_add hP_bound hN_bound
+    _ ≤ C * (P * P).trace + C * (N * N).trace := add_le_add hP_bound hN_bound
     _ = C * (B * B).trace := by
       calc
-        C * (P * P).trace + C * (N * N).trace =
-            C * ((P * P).trace + (N * N).trace) := by ring
+        C * (P * P).trace + C * (N * N).trace = C * ((P * P).trace + (N * N).trace) := by ring
         _ = C * (B * B).trace := by rw [← htrace]
 
 
@@ -154,22 +162,23 @@ namespace FunctionalInequalities.Analysis
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- The symmetric trace-integral extension of `symmetric_trace_integral_extension` from almost-everywhere positive
-semidefinite matrix fields: the bound `∫ tr(A H A H) ≤ 2 tr(A A)` for every PSD `A` gives it for every symmetric `B`.
+/--
+The symmetric trace-integral extension of `symmetric_trace_integral_extension` from
+almost-everywhere positive
+semidefinite matrix fields: the bound `∫ tr(A H A H) ≤ 2 tr(A A)` for every PSD `A` gives it for
+every symmetric `B`.
 Arbitrary finite index type (empty allowed) and measure. -/
-theorem symmetric_trace_integral_extension_of_ae_posSemidef
-    {Ω : Type*} [MeasurableSpace Ω] (ν : Measure Ω)
-    (H : Ω → Matrix ι ι ℝ)
-    (hH_meas : ∀ i j, Measurable (fun x => H x i j))
+theorem symmetric_trace_integral_extension_of_ae_posSemidef {Ω : Type*} [MeasurableSpace Ω]
+    (ν : Measure Ω) (H : Ω → Matrix ι ι ℝ) (hH_meas : ∀ i j, Measurable (fun x => H x i j))
     (hH_psd : ∀ᵐ x ∂ν, (H x).PosSemidef)
-    (hPSD : ∀ A : Matrix ι ι ℝ, A.PosSemidef →
-      Integrable (fun x => (A * H x * A * H x).trace) ν ∧
-        (∫ x, (A * H x * A * H x).trace ∂ν) ≤
-          2 * (A * A).trace)
+    (hPSD :
+      ∀ A : Matrix ι ι ℝ,
+        A.PosSemidef →
+          Integrable (fun x => (A * H x * A * H x).trace) ν ∧
+            (∫ x, (A * H x * A * H x).trace ∂ν) ≤ 2 * (A * A).trace)
     {B : Matrix ι ι ℝ} (hB : B.IsSymm) :
     Integrable (fun x => (B * H x * B * H x).trace) ν ∧
-      (∫ x, (B * H x * B * H x).trace ∂ν) ≤
-        2 * (B * B).trace :=
+      (∫ x, (B * H x * B * H x).trace ∂ν) ≤ 2 * (B * B).trace :=
   symmetric_trace_integral_extension_mul_of_ae_posSemidef ν H hH_meas hH_psd hPSD hB
 
 end FunctionalInequalities.Analysis
@@ -178,7 +187,8 @@ end AEPosSemidefTraceIntegral
 
 /-! ### Trace against a mean-identity matrix field
 
-If every entry of a random matrix `H` is integrable with mean `Id`, then `tr (B H)` is integrable with integral `tr B`. -/
+If every entry of a random matrix `H` is integrable with mean `Id`, then `tr (B H)` is integrable
+with integral `tr B`. -/
 
 noncomputable section
 open MeasureTheory Matrix
@@ -186,11 +196,10 @@ open MeasureTheory Matrix
 namespace FunctionalInequalities.Analysis
 
 set_option maxHeartbeats 400000 in
-theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω]
-    [Fintype ι] [DecidableEq ι] (ρ : Measure Ω) (H : Ω → Matrix ι ι ℝ)
+theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω] [Fintype ι]
+    [DecidableEq ι] (ρ : Measure Ω) (H : Ω → Matrix ι ι ℝ)
     (hInt : ∀ i j, Integrable (fun y => H y i j) ρ)
-    (hmean : ∀ i j, (∫ y, H y i j ∂ρ) = (1 : Matrix ι ι ℝ) i j)
-    (B : Matrix ι ι ℝ) :
+    (hmean : ∀ i j, (∫ y, H y i j ∂ρ) = (1 : Matrix ι ι ℝ) i j) (B : Matrix ι ι ℝ) :
     Integrable (fun y => Matrix.trace (B * H y)) ρ ∧
       (∫ y, Matrix.trace (B * H y) ∂ρ) = Matrix.trace B := by
   have hterms (i j : ι) : Integrable (fun y => B i j * H y j i) ρ := (hInt j i).const_mul _
@@ -203,7 +212,7 @@ theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω]
     apply integrable_finsetSum
     intro i _
     exact hsum i
-  refine ⟨ht,?_⟩
+  refine ⟨ht, ?_⟩
   change (∫ y, ∑ i, ∑ j, B i j * H y j i ∂ρ) = _
   rw [MeasureTheory.integral_finsetSum Finset.univ (fun i _ => hsum i)]
   have he (i : ι) : (∫ y, ∑ j, B i j * H y j i ∂ρ) = B i i := by
@@ -212,7 +221,7 @@ theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω]
       (∑ j, ∫ y, B i j * H y j i ∂ρ) = ∑ j, B i j * (1 : Matrix ι ι ℝ) j i := by
         apply Finset.sum_congr rfl
         intro j _
-        rw [integral_const_mul,hmean]
+        rw [integral_const_mul, hmean]
       _ = (B * (1 : Matrix ι ι ℝ)) i i := rfl
       _ = B i i := by rw [Matrix.mul_one]
   simp_rw [he]

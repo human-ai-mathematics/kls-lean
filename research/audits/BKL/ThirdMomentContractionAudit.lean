@@ -1,4 +1,6 @@
-import FunctionalInequalities.Probability.Moments
+module
+
+public import FunctionalInequalities.Probability.Moments
 
 /-!
 # Audit: third-moment contraction (support of the BKL (67) log-determinant non-explosion route)
@@ -9,6 +11,8 @@ every dimension, the noncentred atom `(2, −1)` where the full mixed tensor equ
 `125` (sharp), the normalised two-atom law at `1, 3` with `196 ≤ 365` and gap `169`, and rank zero.
 Deterministic support only: no covariance dynamics, Itô, strong solution or non-explosion theorem.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

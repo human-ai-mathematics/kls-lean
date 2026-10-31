@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the `m`-dimensional fibre change of variables
@@ -25,6 +27,8 @@ codimension-`m` statement.
 failure rather than asserting it: for `t ↦ t • e` from `ℝ` into the plane on the unit interval the
 left-hand side is `0` and the right-hand side is `1`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

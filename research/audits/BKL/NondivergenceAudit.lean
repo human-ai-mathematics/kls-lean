@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
 
 /-!
 # Audit: the nondivergence operator and Letwin (2.3) (rank-zero client)
@@ -10,6 +12,8 @@ product of two coordinate functions the Leibniz rule exposes the off-diagonal co
 `L_{A,b}(⟪e_i,·⟫⟪e_j,·⟫)(x) = 2 A_ij(x) − b_i(x)⟪e_j,x⟫ − b_j(x)⟪e_i,x⟫`, so a nondiagonal,
 nonidentity coefficient field is genuinely consumed.
 -/
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff RealInnerProductSpace

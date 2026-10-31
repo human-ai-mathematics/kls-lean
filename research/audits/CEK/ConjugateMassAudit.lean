@@ -1,11 +1,18 @@
-import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+module
 
-/-! Audit clients for exponential potential measures, the CEK functional and conjugate-mass semicontinuity
-(`Probability/MomentMeasure/{Basic,ConjugateMass}.lean`; Cordero-Erausquin–Klartag, arXiv:1304.0630v1, Proposition 12
+public import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+
+/-! Audit clients for exponential potential measures, the CEK functional and conjugate-mass
+semicontinuity
+(`Probability/MomentMeasure/{Basic,ConjugateMass}.lean`; Cordero-Erausquin–Klartag,
+arXiv:1304.0630v1, Proposition 12
 and Lemma 17, (56b)). Section `AcceptedClients`:
-zero conjugate mass, infinite conjugate mass, and a sequence with infinite initial dual mass and zero tail.
+zero conjugate mass, infinite conjugate mass, and a sequence with infinite initial dual mass and
+zero tail.
 Section `ExtendedValueClients`: the functional takes the values `⊥` and `⊤` at zero and
 infinite dual mass, and an infinite-mass exponential measure is not finite. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -75,7 +82,7 @@ theorem infinite_initial_mass_zero_tail :
     intro x _
     apply Tendsto.congr' _ tendsto_const_nhds
     filter_upwards [eventually_gt_atTop 0] with j hj
-    simp only [φ, if_neg (ne_of_gt hj)]
+    simp only [φ, ite_eq_right (ne_of_gt hj)]
   have h := limsup_mass_legendre_le (volume : Measure ℝ) φ (fun _ => (0 : EReal))
     isOpen_univ convex_univ (mem_univ 0) (fun _ _ => by simp) hlim
     (fun _ => tendsto_const_nhds) (by simp)
@@ -94,12 +101,15 @@ open FunctionalInequalities.Analysis FunctionalInequalities.Probability.MomentMe
 
 namespace CEKConjugateMassClients
 
-/-- Zero dual mass: the extended logarithm gives `I_μ(0) = ⊥` for the Dirac mass at `0` on the line. -/
+/--
+Zero dual mass: the extended logarithm gives `I_μ(0) = ⊥` for the Dirac mass at `0` on the line. -/
 theorem variationalFunctional_zero_mass :
     variationalFunctional volume (Measure.dirac (0 : ℝ)) (fun _ => (0 : EReal)) = ⊥ := by
   simp [variationalFunctional, zero_exponential_mass]
 
-/-- Infinite dual mass: `I_μ = ⊤` for the potential concentrated at the origin, which is finite on the support. -/
+/--
+Infinite dual mass: `I_μ = ⊤` for the potential concentrated at the origin, which is finite on the
+support. -/
 theorem variationalFunctional_infinite_mass :
     variationalFunctional volume (Measure.dirac (0 : ℝ)) originPotential = ⊤ := by
   simp [variationalFunctional, infinite_origin_conjugate_mass, originPotential]
@@ -134,5 +144,6 @@ end ExtendedValueClients
 #print axioms FunctionalInequalities.Probability.MomentMeasure.measurable_density_legendre
 #print axioms FunctionalInequalities.Probability.integrable_exp_sub_norm
 #print axioms FunctionalInequalities.Probability.MomentMeasure.limsup_density_legendre_le
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_integrable_exponential_domination
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_integrable_exponential_domination
 #print axioms FunctionalInequalities.Probability.MomentMeasure.limsup_mass_legendre_le

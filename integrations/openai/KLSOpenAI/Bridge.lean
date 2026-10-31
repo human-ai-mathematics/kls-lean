@@ -1,10 +1,12 @@
-import OAI.Analysis.KLS.Model
-import FunctionalInequalities.KLS.Statement
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Borel
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Probability.BrunnMinkowski
-import FunctionalInequalities.Poincare.SmoothTest.WeakLimit
+module
+
+public import OAI.Analysis.KLS.Model
+public import FunctionalInequalities.KLS.Statement
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Borel
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.Probability.BrunnMinkowski
+public import FunctionalInequalities.Poincare.SmoothTest.WeakLimit
 
 /-!
 # From the covariance-normalized KLS conjecture to the OpenAI statement
@@ -16,6 +18,8 @@ extra moment hypotheses are imposed. The proof converts these assumptions to the
 library's compact-set log-concavity and isotropy, then applies the covariance bound
 to smooth compactly supported tests. It does not import a proof of KLS.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -143,8 +147,7 @@ theorem of_conjecture (hKLS : FunctionalInequalities.KLS.Conjecture) : KLSStatem
     apply hbound.trans
     calc
       (C : ENNReal) * ENNReal.ofReal ‖ContinuousLinearMap.id ℝ (Space n)‖ ≤
-          (C : ENNReal) * ENNReal.ofReal 1 :=
-        by
+          (C : ENNReal) * ENNReal.ofReal 1 := by
           simpa only [mul_comm] using mul_le_mul_left
             (ENNReal.ofReal_le_ofReal (ContinuousLinearMap.norm_id_le (𝕜 := ℝ) (E := Space n)))
             (C : ENNReal)

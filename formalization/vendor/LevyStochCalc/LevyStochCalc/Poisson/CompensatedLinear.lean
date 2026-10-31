@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.Compensated
-import LevyStochCalc.Poisson.CompensatedIntegrandComplete
-import LevyStochCalc.Brownian.ItoLinear
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.Compensated
+public import LevyStochCalc.Poisson.CompensatedIntegrandComplete
+public import LevyStochCalc.Brownian.ItoLinear
 
 /-!
 # Linearity of the compensated Poisson integral
@@ -16,6 +20,8 @@ linear construction, so linearity comes from the isometries instead: they fix ev
 for the marked energies then forces the sum relation. The same three-distance argument gives the
 scalar rule.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped NNReal ENNReal

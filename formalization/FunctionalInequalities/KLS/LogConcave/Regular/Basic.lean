@@ -1,21 +1,27 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
-import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 
 /-!
 # Regular log-concave laws
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Section 2, (12): a log-concave probability measure is
-regular if its density is `e^{-V}` with `V` smooth, every derivative of `V` of polynomial growth, and
+regular if its density is `e^{-V}` with `V` smooth, every derivative of `V` of polynomial growth,
+and
 `a Id ≤ ∇²V ≤ b Id` for some `a, b > 0`. `RegularPotential V a b` records exactly these source
 assumptions (and nothing derived). The law is `volume.tilted (-V)`, with density `e^{-V}/Z`,
 `Z = ∫ e^{-V}`; the paper's normalized potential is `V + log Z`, which has the same derivatives, so
-nothing is lost by not normalizing `V` itself. From them we derive the analytic premises of the general tilt,
+nothing is lost by not normalizing `V` itself. From them we derive the analytic premises of the
+general tilt,
 integration-by-parts and Bochner identities: `e^{-V}` is Lebesgue integrable with positive integral,
 `volume.tilted (-V)` is a probability measure with Gaussian tails and all exponential moments, and
 `∇V` grows polynomially. The general identities then hold for the regular law with these premises
 discharged.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -52,8 +58,7 @@ theorem quadratic_lower (hV : RegularPotential V a b) (x : E) :
   let f : ℝ → ℝ := fun t => V (t • x)
   let c : ℝ := a / 2 * ‖x‖ ^ 2
   let q : ℝ → ℝ := fun t => f t - c * t ^ 2
-  have hV2 : ContDiff ℝ 2 V :=
-    hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
   have hline (t : ℝ) : HasDerivAt (fun s : ℝ => s • x) x t := by
     simpa using (hasDerivAt_id t).smul_const x
   have hf (t : ℝ) : HasDerivAt f (fderiv ℝ V (t • x) x) t :=
@@ -64,12 +69,15 @@ theorem quadratic_lower (hV : RegularPotential V a b) (x : E) :
   have hqderiv : deriv q = fun t => fderiv ℝ V (t • x) x - c * (2 * t) :=
     funext fun t => (hq t).deriv
   have hq2 (t : ℝ) :
-      HasDerivAt (deriv q) (bilinearIteratedFDerivTwo ℝ V (t • x) x x - 2 * c) t := by
+    HasDerivAt (deriv q) (bilinearIteratedFDerivTwo ℝ V (t • x) x x - 2 * c) t := by
     rw [hqderiv]
-    have hsecond := (differentiable_fderiv_apply hV2 x (t • x)).hasFDerivAt.comp_hasDerivAt t (hline t)
+    have hsecond :=
+      (differentiable_fderiv_apply hV2 x (t • x)).hasFDerivAt.comp_hasDerivAt t (hline t)
     rw [← bilinearIteratedFDerivTwo_eq_fderiv_apply hV2] at hsecond
     convert hsecond.sub (((hasDerivAt_id t).const_mul 2).const_mul c) using 1 <;>
-      first | rfl | ring
+      first
+      | rfl
+      | ring
   have hconv : ConvexOn ℝ Set.univ q :=
     convexOn_of_deriv2_nonneg' convex_univ
       (fun t _ => (hq t).differentiableAt.differentiableWithinAt)
@@ -79,8 +87,8 @@ theorem quadratic_lower (hV : RegularPotential V a b) (x : E) :
         have hh := hV.lower (t • x) x
         dsimp [c]
         linarith)
-  have hs := hconv.le_slope_of_hasDerivAt (by simp) (by simp)
-    (show (0 : ℝ) < 1 by norm_num) (hq 0)
+  have hs :=
+    hconv.le_slope_of_hasDerivAt (by simp) (by simp) (show (0 : ℝ) < 1 by norm_num) (hq 0)
   simp [slope_def_field, q, f, c] at hs
   rw [inner_gradient_left]
   linarith
@@ -141,7 +149,9 @@ theorem integrable_exp_neg (hV : RegularPotential V a b) :
     simp [Complex.norm_exp, ← Complex.ofReal_pow]
   have hcont : Continuous fun x => Real.exp ((-V) x) :=
     Real.continuous_exp.comp hV.temperate.1.continuous.neg
-  refine (hgauss.const_mul C).mono' hcont.aestronglyMeasurable (Filter.Eventually.of_forall fun x => ?_)
+  refine
+    (hgauss.const_mul C).mono' hcont.aestronglyMeasurable
+      (Filter.Eventually.of_forall fun x => ?_)
   rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
   exact hC x
 
@@ -235,13 +245,15 @@ variable {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimension
 premise derived from (12). -/
 theorem taylorTensor_neg_weightedLaplacianVec (hV : RegularPotential V a b) {f : E → F}
     (hf : f.HasTemperateGrowth) (d : ℕ) :
-    taylorTensor ((volume : Measure E).tilted (-V)) (fun x => -weightedLaplacianVec V f x) (d + 1) =
-      symmetrizeML (taylorTensor ((volume : Measure E).tilted (-V)) (fderiv ℝ f) d).uncurryRight := by
-    obtain ⟨CV, kV, hVg⟩ := hV.exists_norm_gradient_le
-    exact
-      FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacianVec
-        (volume : Measure E) (hV.temperate.1.of_le (by simp)) hVg
-        (hV.integrable_exp_mul_norm) hf d
+    taylorTensor ((volume : Measure E).tilted (-V)) (fun x => -weightedLaplacianVec V f x)
+        (d + 1) =
+      symmetrizeML
+        (taylorTensor ((volume : Measure E).tilted (-V)) (fderiv ℝ f) d).uncurryRight := by
+  obtain ⟨CV, kV, hVg⟩ := hV.exists_norm_gradient_le
+  exact
+    FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacianVec
+      (volume : Measure E) (hV.temperate.1.of_le (by simp)) hVg (hV.integrable_exp_mul_norm) hf
+      d
 
 /-- **BKL Lemma 3.6, (49)**, for a regular law and a tensor-valued `u ∈ 𝒜`. -/
 theorem taylorTensor_one_neg_weightedLaplacianVec (hV : RegularPotential V a b) {f : E → F}
@@ -271,73 +283,52 @@ variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G] [FiniteDim
 theorem integral_inner_weightedLaplacianVec_eq_neg (hV : RegularPotential V a b) {f g : E → G}
     (hf : f.HasTemperateGrowth) (hg : g.HasTemperateGrowth) :
     ∫ x, ⟪weightedLaplacianVec V f x, g x⟫ ∂((volume : Measure E).tilted (-V)) =
-      -∫ x, ∑ i, ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫
-        ∂((volume : Measure E).tilted (-V)) := by
-    have hV1 : ContDiff ℝ 1 V :=
-      hV.temperate.1.of_le
-        (WithTop.coe_le_coe.mpr le_top)
-    have hV2 : ContDiff ℝ 2 V :=
-      hV.temperate.1.of_le
-        (WithTop.coe_le_coe.mpr le_top)
-    have hf1 : ContDiff ℝ 1 f :=
-      hf.1.of_le
-        (WithTop.coe_le_coe.mpr le_top)
-    have hg1 : ContDiff ℝ 1 g :=
-      hg.1.of_le
-        (WithTop.coe_le_coe.mpr le_top)
-    have hf2 : ContDiff ℝ 2 f :=
-      hf.1.of_le
-        (WithTop.coe_le_coe.mpr le_top)
-    have hg2 : ContDiff ℝ 2 g :=
-      hg.1.of_le
-        (WithTop.coe_le_coe.mpr le_top)
-    have hexp :
-        Integrable (fun x : E => Real.exp ((-V) x)) (volume : Measure E) :=
-      hV.integrable_exp_neg
-    have hpos :
-        0 < ∫ x, Real.exp ((-V) x) ∂(volume : Measure E) :=
-      hV.integral_exp_neg_pos
-    have hprob :
-        IsProbabilityMeasure ((volume : Measure E).tilted (-V)) :=
-      hV.isProbabilityMeasure
-    have hmom :
-        ∀ r : ℝ,
-          Integrable (fun x : E => Real.exp (r * ‖x‖))
-            ((volume : Measure E).tilted (-V)) :=
-      hV.integrable_exp_mul_norm
-    obtain ⟨CV, kV, hgrad⟩ := hV.exists_norm_gradient_le
-    apply
-      FunctionalInequalities.Analysis.BakryEmery.integral_inner_weightedLaplacianVec_eq_neg
-    all_goals
-      first
-      | exact hV1
-      | exact hV2
-      | exact hf1
-      | exact hg1
-      | exact hf2
-      | exact hg2
-      | exact hf
-      | exact hg
-      | exact hV.temperate
-      | exact hexp
-      | exact hpos
-      | exact hprob
-      | exact hmom
-      | exact CV
-      | exact kV
-      | exact hgrad
+      -∫ x,
+          ∑ i,
+            ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i),
+              fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫ ∂((volume : Measure E).tilted (-V)) := by
+  have hV1 : ContDiff ℝ 1 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hf1 : ContDiff ℝ 1 f := hf.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hg1 : ContDiff ℝ 1 g := hg.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hf2 : ContDiff ℝ 2 f := hf.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hg2 : ContDiff ℝ 2 g := hg.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hexp : Integrable (fun x : E => Real.exp ((-V) x)) (volume : Measure E) :=
+    hV.integrable_exp_neg
+  have hpos : 0 < ∫ x, Real.exp ((-V) x) ∂(volume : Measure E) := hV.integral_exp_neg_pos
+  have hprob : IsProbabilityMeasure ((volume : Measure E).tilted (-V)) :=
+    hV.isProbabilityMeasure
+  have hmom :
+    ∀ r : ℝ, Integrable (fun x : E => Real.exp (r * ‖x‖)) ((volume : Measure E).tilted (-V)) :=
+    hV.integrable_exp_mul_norm
+  obtain ⟨CV, kV, hgrad⟩ := hV.exists_norm_gradient_le
+  apply FunctionalInequalities.Analysis.BakryEmery.integral_inner_weightedLaplacianVec_eq_neg
+  all_goals
+    first
+    | exact hV1
+    | exact hf
+    | exact hg
+    | exact hmom
+    | exact hgrad
 
 /-- **BKL (16)** with the curvature bound `a` of (12), for a regular law and a tensor field of
 temperate growth: `∫ ‖∇²u‖²_HS + a ∫ ‖∇u‖²_HS ≤ ∫ ‖ℒu‖²` (the inequality of Lemma 3.4). -/
 theorem integral_hessian_add_le_norm_sq_weightedLaplacianVec (hV : RegularPotential V a b)
     {f : E → G} (hf : f.HasTemperateGrowth) :
-    ∫ x, ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2
-        ∂((volume : Measure E).tilted (-V)) +
-      a * ∫ x, ∑ i, ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^ 2 ∂((volume : Measure E).tilted (-V)) ≤
+    ∫ x,
+          ∑ i,
+            ∑ j,
+              ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^
+                2 ∂((volume : Measure E).tilted (-V)) +
+        a *
+          ∫ x,
+            ∑ i,
+              ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^
+                2 ∂((volume : Measure E).tilted (-V)) ≤
       ∫ x, ‖weightedLaplacianVec V f x‖ ^ 2 ∂((volume : Measure E).tilted (-V)) := by
-    exact
-      FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec
-        (volume : Measure E) hV.temperate hV.integrable_exp_mul_norm hf hV.lower (ρ := a)
+  exact
+    FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec
+      (volume : Measure E) hV.temperate hV.integrable_exp_mul_norm hf hV.lower (ρ := a)
 
 /-- **BKL Lemma 2.1, operator-domain part, for a regular law**: with `C = 1/a`, every centered
 `g ∈ L²` has a unique centered preimage under the closed generator, `‖u‖ ≤ a⁻¹ ‖g‖`. -/
@@ -358,19 +349,24 @@ theorem existsUnique_centered_adjointComp_eq (hV : RegularPotential V a b)
         hV.pos hV.lower g hg)
 
 /-- **BKL Lemma 2.1, operator-domain part, componentwise tensor lift, for a regular law**: with
-`C = 1/a`, for centered `g ∈ L²(μ; G)` and an orthonormal basis `e` of `G` there is exactly one family
+`C = 1/a`, for centered `g ∈ L²(μ; G)` and an orthonormal basis `e` of `G` there is exactly one
+family
 of centered `u_k` in the generator domain with `A u_k = ⟪e k, g⟫`, and `Σ_k ‖u_k‖² ≤ a⁻² ‖g‖²`. -/
 theorem existsUnique_centered_adjointComp_eq_components (hV : RegularPotential V a b)
     {ι : Type*} [Fintype ι] (e : OrthonormalBasis ι ℝ G)
     (g : Lp G 2 ((hV.law : ProbabilityMeasure E) : Measure E))
     (hg : ∫ x, g x ∂((hV.law : ProbabilityMeasure E) : Measure E) = 0) :
-    ∃! u : ι → (Analysis.Semigroup.adjointComp
-        ((hV.logConcave_law).closedWeightedOperator (volume : Measure E)
-          (ContinuousLinearMap.id ℝ E) hV.interior_support_law)).domain,
+    ∃! u :
+      ι →
+        (Analysis.Semigroup.adjointComp
+            ((hV.logConcave_law).closedWeightedOperator (volume : Measure E)
+              (ContinuousLinearMap.id ℝ E) hV.interior_support_law)).domain,
       (∀ k, L2.mean hV.law (u k : Lp ℝ 2 ((hV.law : ProbabilityMeasure E) : Measure E)) = 0) ∧
-        (∀ k, Analysis.Semigroup.adjointComp
-          ((hV.logConcave_law).closedWeightedOperator (volume : Measure E)
-            (ContinuousLinearMap.id ℝ E) hV.interior_support_law) (u k) =
+        (∀ k,
+            Analysis.Semigroup.adjointComp
+                ((hV.logConcave_law).closedWeightedOperator (volume : Measure E)
+                  (ContinuousLinearMap.id ℝ E) hV.interior_support_law)
+                (u k) =
               (innerSL ℝ (e k)).compLp g) ∧
           ∑ k, ‖(u k : Lp ℝ 2 ((hV.law : ProbabilityMeasure E) : Measure E))‖ ^ 2 ≤
             a⁻¹ ^ 2 * ‖g‖ ^ 2 :=
@@ -379,28 +375,40 @@ theorem existsUnique_centered_adjointComp_eq_components (hV : RegularPotential V
     (hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hV.pos hV.lower e g hg
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-/-- **Regular potential from a convex temperate potential with bounded Hessian**: if `f` is convex with
-`Function.HasTemperateGrowth` and `∇²f ≤ B`, then `f + δ/2‖·‖²` is a regular potential with curvature
-bounds `δ ≤ ∇² ≤ B + δ` (BKL Section 2, p. 5, the quadratic tilt step of the regular approximation). -/
+/--
+**Regular potential from a convex temperate potential with bounded Hessian**: if `f` is convex with
+`Function.HasTemperateGrowth` and `∇²f ≤ B`, then `f + δ/2‖·‖²` is a regular potential with
+curvature
+bounds `δ ≤ ∇² ≤ B + δ` (BKL Section 2, p. 5, the quadratic tilt step of the regular approximation).
+-/
 theorem of_convexOn_hasTemperateGrowth {f : E → ℝ} (hf : f.HasTemperateGrowth)
     (hc : ConvexOn ℝ Set.univ f) {B δ : ℝ} (hδ : 0 < δ)
     (hb : ∀ x v, bilinearIteratedFDerivTwo ℝ f x v v ≤ B * ‖v‖ ^ 2) :
-    RegularPotential (fun y => f y + δ / 2 * ‖y‖ ^ 2) δ (B + δ) where
+    RegularPotential (fun y => f y + δ / 2 * ‖y‖ ^ 2) δ (B + δ)
+    where
   temperate := by
-    have hq := (Function.HasTemperateGrowth.const (δ / 2 : ℝ)).mul
-      (Function.hasTemperateGrowth_norm_sq E)
+    have hq :=
+      (Function.HasTemperateGrowth.const (δ / 2 : ℝ)).mul
+        (Function.hasTemperateGrowth_norm_sq E)
     exact hf.add hq
   pos := hδ
-  lower x v := by
-    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))]
-    have h := Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn (hf.1.of_le (WithTop.coe_le_coe.mpr le_top)) hc x v
+  lower x
+    v := by
+    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic
+        (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))]
+    have h :=
+      Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn
+        (hf.1.of_le (WithTop.coe_le_coe.mpr le_top)) hc x v
     linarith
-  upper x v := by
-    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))]
+  upper x
+    v := by
+    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic
+        (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))]
     have h := hb x v
     nlinarith
 
-/-- Lower curvature constant of `V ∘ (L · + c)`: `a / (1 + ‖L⁻¹‖)²` (positive in every dimension). -/
+/--
+Lower curvature constant of `V ∘ (L · + c)`: `a / (1 + ‖L⁻¹‖)²` (positive in every dimension). -/
 noncomputable def affineLowerConstant (a : ℝ) (L : E ≃L[ℝ] E) : ℝ :=
   a / (1 + ‖(L.symm : E →L[ℝ] E)‖) ^ 2
 
@@ -420,11 +428,13 @@ theorem affineUpperConstant_pos (b : ℝ) (L : E ≃L[ℝ] E) : 0 < affineUpperC
   unfold affineUpperConstant
   exact mul_pos (lt_of_lt_of_le zero_lt_one (le_max_right b 1)) (sq_pos_of_pos (by positivity))
 
-/-- **Regular potentials are preserved by affine changes of variables**: `V ∘ (L · + c)` is regular with
+/--
+**Regular potentials are preserved by affine changes of variables**: `V ∘ (L · + c)` is regular with
 constants `affineLowerConstant a L`, `affineUpperConstant b L` (positive also in dimension zero). -/
-theorem comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (L : E ≃L[ℝ] E) (c : E) :
-    KLS.RegularPotential (fun x => V (L x + c)) (affineLowerConstant a L) (affineUpperConstant b L) := by
+theorem comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b) (L : E ≃L[ℝ] E)
+    (c : E) :
+    KLS.RegularPotential (fun x => V (L x + c)) (affineLowerConstant a L)
+      (affineUpperConstant b L) := by
   have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
   refine ⟨?_, affineLowerConstant_pos hV.pos L, ?_, ?_⟩
   · exact hV.temperate.comp (L.hasTemperateGrowth.add (Function.HasTemperateGrowth.const c))
@@ -443,7 +453,8 @@ theorem comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b
       simpa only [mul_comm] using hsq
     have hmul := mul_le_mul_of_nonneg_left hdiv hV.pos.le
     apply le_trans _ hbase
-    simpa only [affineLowerConstant, div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using hmul
+    simpa only [affineLowerConstant, div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using
+      hmul
   · intro x v
     rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_affine hV2 L c x v v]
     have hbase := hV.upper (L x + c) (L v)

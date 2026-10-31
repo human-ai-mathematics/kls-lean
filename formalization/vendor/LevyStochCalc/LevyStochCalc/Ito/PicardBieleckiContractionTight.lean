@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardBieleckiContraction
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardBieleckiContraction
 
 /-!
 # The Picard contraction at the literature-tight rate
@@ -13,6 +17,8 @@ in their tight form, without the redundant time factor, giving the constant `3 n
 place of `9 n L² T` and hence the contraction rate `3 n L² (T + 2) / (2β)`; together with the
 threshold `3 n L² (T + 2) < 2β` under which that rate is `< 1`.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

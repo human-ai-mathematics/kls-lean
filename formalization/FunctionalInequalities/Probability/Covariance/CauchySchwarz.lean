@@ -1,15 +1,21 @@
-import Mathlib.Probability.Moments.Covariance
-import Mathlib.Probability.Moments.Variance
+module
+
+public import Mathlib.Probability.Moments.Covariance
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Covariance Cauchy–Schwarz
 
-`cov[X, Y]² ≤ Var X · Var Y` for two square-integrable real statistics under a probability measure, on
+`cov[X, Y]² ≤ Var X · Var Y` for two square-integrable real statistics under a probability measure,
+on
 an arbitrary measurable space. The pinned Mathlib has `covariance_eq_sub`, `covariance_self`, the
-bilinearity lemmas and `variance_nonneg` but no such endpoint. It is a deterministic support of the BKL (68)
+bilinearity lemmas and `variance_nonneg` but no such endpoint. It is a deterministic support of the
+BKL (68)
 posterior noise estimate: the nonnegative variance polynomial of `Y − tX` is expanded by
 bilinearity, and both the zero-variance and positive-variance branches in `X` are treated.
 -/
+
+@[expose] public section
 
 noncomputable section
 

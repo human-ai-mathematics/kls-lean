@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Normed.Operator.Bilinear
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Topology.MetricSpace.Holder
+module
+
+public import Mathlib.Analysis.Normed.Operator.Bilinear
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Topology.MetricSpace.Holder
 
 /-!
 # Hölder transport of bilinear fields under a linear map
@@ -19,6 +21,8 @@ The zero map and zero-dimensional spaces are included; neither positivity of `�
 transformed Hölder estimate is a premise. This is a generic transport bound; it is independent of
 the Hessian pullback identity and asserts no Schauder estimate.
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis
 variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]

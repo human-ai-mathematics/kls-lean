@@ -6,7 +6,17 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoDensityShiftedAverages
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: add an explicit public import of
+-- Mathlib.MeasureTheory.Covering.DensityTheorem, which provides
+-- `IsUnifLocDoublingMeasure.ae_tendsto_average` and is no longer reachable transitively in
+-- Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoDensityShiftedAverages
+public import Mathlib.MeasureTheory.Covering.DensityTheorem
 
 /-!
 # Almost-everywhere convergence of the dyadic averages
@@ -15,6 +25,8 @@ Lebesgue differentiation for a bounded jointly measurable integrand: the dyadic 
 averages, shifted and unshifted, converge to the integrand at almost every point of
 `Ω × [0,T]`, and for the unshifted family the convergence also holds in `L²`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -547,7 +559,7 @@ lemma predictable_pointwise_tendsto_per_omega
     -- dyadicAvg_shifted T g n i ω = dyadicAvg_brownian g n ⟨i.val - 1, _⟩ ω (since i ≥ 1)
     -- = ⨍ over closedBall(midpt of (t_{i-1}, t_i], T/2^{n+1}) g(ω, ·)
     unfold dyadicAvg_shifted_brownian
-    rw [dif_neg (by omega : ¬ (dyadicIndex n T hT x hx).val = 0)]
+    rw [dite_eq_right (by omega : ¬ (dyadicIndex n T hT x hx).val = 0)]
     have h_lt : (dyadicIndex n T hT x hx).val - 1 < 2 ^ n := by
       have := (dyadicIndex n T hT x hx).isLt; omega
     set i' : Fin (2 ^ n) := ⟨(dyadicIndex n T hT x hx).val - 1, h_lt⟩

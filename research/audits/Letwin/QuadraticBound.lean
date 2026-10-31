@@ -1,4 +1,8 @@
-import solutions.ThmLetwinQuadraticBound
+module
+
+public import solutions.ThmLetwinQuadraticBound
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory
@@ -7,15 +11,21 @@ open scoped RealInnerProductSpace
 
 namespace LetwinQuadraticBoundAudit
 
-/-- The expanded contract has no compact-support, invertibility, positivity or extra moment premise. -/
+/--
+The expanded contract has no compact-support, invertibility, positivity or extra moment premise. -/
 theorem quadratic_variance {n : ℕ} (hn : 0 < n)
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ)
-    (M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hM : IsSelfAdjoint M) :
-    ∫ x, (⟪M x, x⟫ - ∫ y, ⟪M y, y⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) ^ 2
-        ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
-      8 * ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n)) i),
-        stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n)) j⟫ ^ 2 :=
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hLC : KLS.LogConcave μ)
+    (hiso : KLS.Isotropic μ) (M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (hM : IsSelfAdjoint M) :
+    ∫ x,
+        (⟪M x, x⟫ - ∫ y, ⟪M y, y⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) ^
+          2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+      8 *
+        ∑ i,
+          ∑ j,
+            ⟪M (stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n)) i),
+                stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n)) j⟫ ^
+              2 :=
   hLC.letwinQuadraticBound hn hiso M hM
 
 theorem matrix_variance {n : ℕ} (hn : 0 < n)

@@ -1,13 +1,16 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Local
-import Mathlib.Probability.Moments.Variance
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Local
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # The logarithmic Laplace transform and cumulant tensors
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Section 4 and the linear step of Proposition 7.1. For a
-nonzero finite measure `μ` with all exponential moments, `Λ_μ(z) = log ∫ e^{⟪z, x⟫} dμ(x)` is smooth,
+nonzero finite measure `μ` with all exponential moments, `Λ_μ(z) = log ∫ e^{⟪z, x⟫} dμ(x)` is
+smooth,
 the tilt average of a linear function is a directional derivative, `F_{⟪v,·⟫}(z) = DΛ_μ(z) v`, and
 the Taylor tensors of linear functions are cumulant tensors,
 `T_d ⟪v, ·⟫ = κ_{d+1}(v, ·, …, ·) / d!` with `κ_m = ∇^m Λ_μ(0)`.
@@ -23,6 +26,8 @@ Cumulants of order `k ≥ 2` transform along affine maps `x ↦ T(x − a)` thro
 `LetwinQuadraticBound` is closed under convergence of mixed moments of degree at most four
 (`letwinQuadraticBound_of_tendsto_moments`, Letwin arXiv:2607.24164v1, last sentence of Lemma A.1).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -336,23 +341,22 @@ for `ℓ = ⟪v, ·⟫`, `T_d ℓ = κ_{d+1}(v, ·, …, ·) / d!`. -/
 theorem taylorTensor_inner_eq_cumulant (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (v : E) (d : ℕ)
     (h : Fin d → E) :
-    taylorTensor μ (fun x => ⟪v, x⟫) d h = (d.factorial : ℝ)⁻¹ * cumulant μ (d + 1) (Fin.cons v h) := by
-  have heq : tiltAverage μ (fun x => ⟪v, x⟫) =
-      fun z => fderiv ℝ (logLaplace μ) z v := by
+    taylorTensor μ (fun x => ⟪v, x⟫) d h =
+      (d.factorial : ℝ)⁻¹ * cumulant μ (d + 1) (Fin.cons v h) := by
+  have heq : tiltAverage μ (fun x => ⟪v, x⟫) = fun z => fderiv ℝ (logLaplace μ) z v := by
     funext z
     exact tiltAverage_inner_eq_fderiv_logLaplace μ hexp v z
   have hL := contDiff_logLaplace μ hexp
-  have hd : ContDiff ℝ ∞ (fderiv ℝ (logLaplace μ)) :=
-    hL.fderiv_right (by simp)
+  have hd : ContDiff ℝ ∞ (fderiv ℝ (logLaplace μ)) := hL.fderiv_right (by simp)
   have hder :
-      iteratedFDeriv ℝ d (fun z => fderiv ℝ (logLaplace μ) z v) 0 h =
-        iteratedFDeriv ℝ d (fderiv ℝ (logLaplace μ)) 0 h v :=
+    iteratedFDeriv ℝ d (fun z => fderiv ℝ (logLaplace μ) z v) 0 h =
+      iteratedFDeriv ℝ d (fderiv ℝ (logLaplace μ)) 0 h v :=
     iteratedFDeriv_clm_apply_const_apply hd (by norm_cast; simp)
   simp only [taylorTensor, smul_apply, smul_eq_mul, heq]
   rw [hder]
   have hs := bkl_cumulant_cons_snoc hL d 0 v h
-  have ht := iteratedFDeriv_succ_apply_right
-    (𝕜 := ℝ) (f := logLaplace μ) (x := (0 : E)) (Fin.snoc h v)
+  have ht :=
+    iteratedFDeriv_succ_apply_right (𝕜 := ℝ) (f := logLaplace μ) (x := (0 : E)) (Fin.snoc h v)
   simp only [Fin.init_snoc, Fin.snoc_last] at ht
   rw [ht] at hs
   exact congrArg (fun a : ℝ => (d.factorial : ℝ)⁻¹ * a) hs.symm
@@ -447,7 +451,8 @@ include hexp in
 /-- For a centered law, the second Taylor tensor of a linear function is half the third moment:
 `T_2⟪u, ·⟫(v, w) = ½ ∫ ⟪u, x⟫ ⟪v, x⟫ ⟪w, x⟫ dμ`. -/
 theorem taylorTensor_two_inner_eq_of_centered (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0) (u v w : E) :
-    taylorTensor μ (fun x => ⟪u, x⟫) 2 ![v, w] = (1 / 2 : ℝ) * ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
+    taylorTensor μ (fun x => ⟪u, x⟫) 2 ![v, w] =
+      (1 / 2 : ℝ) * ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
   let F := tiltAverage μ (fun x => ⟪u, x⟫)
   let Z : E → ℝ := fun z => ∫ x, Real.exp ⟪z, x⟫ • (1 : ℝ) ∂μ
   let N : E → ℝ := fun z => ∫ x, Real.exp ⟪z, x⟫ • ⟪u, x⟫ ∂μ
@@ -455,26 +460,28 @@ theorem taylorTensor_two_inner_eq_of_centered (hc : ∀ v : E, ∫ x, ⟪v, x⟫
     have heq : F = fun z => fderiv ℝ (logLaplace μ) z u :=
       funext (tiltAverage_inner_eq_fderiv_logLaplace μ hexp u)
     rw [heq]
-    exact (ContinuousLinearMap.apply ℝ ℝ u).contDiff.comp
-      ((contDiff_logLaplace μ hexp).fderiv_right (by simp))
+    exact
+      (ContinuousLinearMap.apply ℝ ℝ u).contDiff.comp
+        ((contDiff_logLaplace μ hexp).fderiv_right (by simp))
   have hZ : ContDiff ℝ ∞ Z :=
-    contDiff_integral_exp_inner_smul_of_integrable μ
-      measurable_const.aestronglyMeasurable (by simpa using hexp)
+    contDiff_integral_exp_inner_smul_of_integrable μ measurable_const.aestronglyMeasurable
+      (by simpa using hexp)
   have hZ0 : Z 0 = 1 := by simp [Z]
   have hF0 : F 0 = 0 := by simpa [F, tiltAverage, expTilt] using hc u
   have hZ1 : fderiv ℝ Z 0 = 0 := by
     ext a
-    have h := iteratedFDeriv_integral_exp_inner_smul μ
-      (g := fun _ : E => (1 : ℝ)) measurable_const.aestronglyMeasurable
-      (by simpa using hexp) 1 0 ![a]
+    have h :=
+      iteratedFDeriv_integral_exp_inner_smul μ (g := fun _ : E => (1 : ℝ))
+        measurable_const.aestronglyMeasurable (by simpa using hexp) 1 0 ![a]
     have h' : fderiv ℝ Z 0 a = ∫ x, ⟪a, x⟫ ∂μ := by
       simpa [Z, iteratedFDeriv_one_apply, real_inner_comm] using h
     exact h'.trans (hc a)
   have hNZ : N = fun z => F z * Z z := by
     funext z
     have hi : Integrable (fun x : E => Real.exp ⟪z, x⟫) μ := by
-      refine (hexp ‖z‖).mono'
-        (by fun_prop : Continuous (fun x : E => Real.exp ⟪z, x⟫)).aestronglyMeasurable ?_
+      refine
+        (hexp ‖z‖).mono'
+          (by fun_prop : Continuous (fun x : E => Real.exp ⟪z, x⟫)).aestronglyMeasurable ?_
       filter_upwards [] with x
       rw [Real.norm_of_nonneg (Real.exp_pos _).le]
       exact Real.exp_le_exp.mpr (real_inner_le_norm z x)
@@ -482,21 +489,21 @@ theorem taylorTensor_two_inner_eq_of_centered (hc : ∀ v : E, ∫ x, ⟪v, x⟫
     dsimp [N, F, Z]
     rw [tiltAverage, expTilt, integral_tilted]
     simp only [smul_eq_mul, mul_one, div_eq_mul_inv]
-    rw [show (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * ⟪u, x⟫) =
-      (fun x => (Real.exp ⟪z, x⟫ * ⟪u, x⟫) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹) by
-        funext x; ring]
+    rw [show
+        (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * ⟪u, x⟫) =
+          (fun x => (Real.exp ⟪z, x⟫ * ⟪u, x⟫) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹)
+        by funext x; ring]
     rw [integral_mul_const]
     field_simp
   have hsecond := third_second_mul hF hZ 0 v w hF0 hZ0 hZ1
   rw [← hNZ] at hsecond
-  have hm := iteratedFDeriv_integral_exp_inner_smul μ
-    (g := fun x => ⟪u, x⟫)
-    (by fun_prop : Continuous (fun x : E => ⟪u, x⟫)).aestronglyMeasurable
-    (third_exp_inner_integrable μ hexp u) 2 0 ![v, w]
-  have hm' : iteratedFDeriv ℝ 2 N 0 ![v, w] =
-      ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
-    simpa [N, Fin.prod_univ_two, smul_eq_mul, real_inner_comm,
-      mul_comm, mul_left_comm, mul_assoc] using hm
+  have hm :=
+    iteratedFDeriv_integral_exp_inner_smul μ (g := fun x => ⟪u, x⟫)
+      (by fun_prop : Continuous (fun x : E => ⟪u, x⟫)).aestronglyMeasurable
+      (third_exp_inner_integrable μ hexp u) 2 0 ![v, w]
+  have hm' : iteratedFDeriv ℝ 2 N 0 ![v, w] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
+    simpa [N, Fin.prod_univ_two, smul_eq_mul, real_inner_comm, mul_comm, mul_left_comm,
+      mul_assoc] using hm
   simp only [taylorTensor, smul_apply, smul_eq_mul]
   change (Nat.factorial 2 : ℝ)⁻¹ * iteratedFDeriv ℝ 2 F 0 ![v, w] = _
   rw [← hsecond, hm']
@@ -506,15 +513,14 @@ include hexp in
 /-- The third cumulant of a centered law is its third moment. -/
 theorem cumulant_three_eq_integral (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0) (u v w : E) :
     cumulant μ 3 ![u, v, w] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
-    have hvec : Fin.cons u ![v, w] = ![u, v, w] := by
-      funext i
-      fin_cases i <;> rfl
-    have h :=
-      taylorTensor_inner_eq_cumulant μ hexp u 2 ![v, w]
-    rw [taylorTensor_two_inner_eq_of_centered μ hexp hc u v w] at h
-    rw [hvec] at h
-    norm_num [Nat.factorial] at h
-    linarith
+  have hvec : Fin.cons u ![v, w] = ![u, v, w] := by
+    funext i
+    fin_cases i <;> rfl
+  have h := taylorTensor_inner_eq_cumulant μ hexp u 2 ![v, w]
+  rw [taylorTensor_two_inner_eq_of_centered μ hexp hc u v w] at h
+  rw [hvec] at h
+  norm_num [Nat.factorial] at h
+  linarith
 
 omit [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
 omit [InnerProductSpace ℝ E] in
@@ -695,84 +701,89 @@ section CumulantEstimates
 
 omit [CompleteSpace E]
 
-/-- **Linear step of BKL Proposition 7.1** (p. 30): under the cumulant bound `R^μ_{d+1} ≤ b Id` in
+/--
+**Linear step of BKL Proposition 7.1** (p. 30): under the cumulant bound `R^μ_{d+1} ≤ b Id` in
 coordinates, `Σ_J κ_{d+1}(u, e_J)² ≤ b |u|²`, the Taylor tensor of `ℓ = ⟪v, ·⟫` satisfies
 `|T_d ℓ|² ≤ b |v|² / (d!)²` in the Hilbert–Schmidt norm, by `T_d ℓ = κ_{d+1}(v, ·, …, ·) / d!`. -/
 theorem norm_coordTensor_taylorTensor_inner_sq_le (μ : Measure E) [IsProbabilityMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {d : ℕ} {b : ℝ}
-    (hR : ∀ u : E, ∑ J : Fin d → Fin (Module.finrank ℝ E),
-      cumulant μ (d + 1) (Fin.cons u fun k => stdOrthonormalBasis ℝ E (J k)) ^ 2 ≤ b * ‖u‖ ^ 2)
+    (hR :
+      ∀ u : E,
+        ∑ J : Fin d → Fin (Module.finrank ℝ E),
+            cumulant μ (d + 1) (Fin.cons u fun k => stdOrthonormalBasis ℝ E (J k)) ^ 2 ≤
+          b * ‖u‖ ^ 2)
     (v : E) :
-    ‖Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E) (taylorTensor μ (fun x => ⟪v, x⟫) d)‖ ^ 2 ≤
+    ‖Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E)
+            (taylorTensor μ (fun x => ⟪v, x⟫) d)‖ ^
+        2 ≤
       b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
-    have hcoord :
-        ∀ J : Fin d → Fin (Module.finrank ℝ E),
-          (Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E)
-              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J =
-            (d.factorial : ℝ)⁻¹ *
-              cumulant μ (d + 1)
-                (Fin.cons v (fun k => stdOrthonormalBasis ℝ E (J k))) := by
-      intro J
-      simp [Analysis.Tensor.coordTensor_apply, taylorTensor_inner_eq_cumulant, hexp]
-    rw [EuclideanSpace.norm_sq_eq]
-    calc
-      ∑ J : Fin d → Fin (Module.finrank ℝ E),
+  have hcoord :
+    ∀ J : Fin d → Fin (Module.finrank ℝ E),
+      (Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E)
+              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp
+          J =
+        (d.factorial : ℝ)⁻¹ *
+          cumulant μ (d + 1) (Fin.cons v (fun k => stdOrthonormalBasis ℝ E (J k))) := by
+    intro J
+    simp [Analysis.Tensor.coordTensor_apply, taylorTensor_inner_eq_cumulant, hexp]
+  rw [EuclideanSpace.norm_sq_eq]
+  calc
+    ∑ J : Fin d → Fin (Module.finrank ℝ E),
           ‖(Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E)
-              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J‖ ^ 2 =
+                    (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp
+                J‖ ^
+            2 =
         ((d.factorial : ℝ)⁻¹) ^ 2 *
           ∑ J : Fin d → Fin (Module.finrank ℝ E),
-            cumulant μ (d + 1)
-              (Fin.cons v (fun k => stdOrthonormalBasis ℝ E (J k))) ^ 2 := by
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro J hJ
-        rw [hcoord J, norm_mul]
-        simp [Real.norm_eq_abs, sq_abs, mul_pow]
-      _ ≤ ((d.factorial : ℝ)⁻¹) ^ 2 * (b * ‖v‖ ^ 2) := by
-        exact mul_le_mul_of_nonneg_left (hR v) (sq_nonneg _)
-      _ = b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
-        simp [div_eq_mul_inv, inv_pow]
-        ring
+            cumulant μ (d + 1) (Fin.cons v (fun k => stdOrthonormalBasis ℝ E (J k))) ^ 2 := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro J hJ
+      rw [hcoord J, norm_mul]
+      simp [Real.norm_eq_abs, sq_abs, mul_pow]
+    _ ≤ ((d.factorial : ℝ)⁻¹) ^ 2 * (b * ‖v‖ ^ 2) := by
+      exact mul_le_mul_of_nonneg_left (hR v) (sq_nonneg _)
+    _ = b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
+      simp [div_eq_mul_inv, inv_pow]
+      ring
 
 
 /-- **Linear-function step in an arbitrary orthonormal basis** (BKL p. 30): the special case
-`norm_coordTensor_taylorTensor_inner_sq_le` with `stdOrthonormalBasis ℝ E` replaced by any orthonormal
+`norm_coordTensor_taylorTensor_inner_sq_le` with `stdOrthonormalBasis ℝ E` replaced by any
+orthonormal
 basis `bE`. -/
-theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E) [IsProbabilityMeasure μ]
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {m : ℕ}
-    (bE : OrthonormalBasis (Fin m) ℝ E) {d : ℕ} {b : ℝ}
-    (hR : ∀ u : E, ∑ J : Fin d → Fin m,
-      cumulant μ (d + 1) (Fin.cons u fun k => bE (J k)) ^ 2 ≤ b * ‖u‖ ^ 2) (v : E) :
+theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E)
+    [IsProbabilityMeasure μ] (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
+    {m : ℕ} (bE : OrthonormalBasis (Fin m) ℝ E) {d : ℕ} {b : ℝ}
+    (hR :
+      ∀ u : E,
+        ∑ J : Fin d → Fin m, cumulant μ (d + 1) (Fin.cons u fun k => bE (J k)) ^ 2 ≤
+          b * ‖u‖ ^ 2)
+    (v : E) :
     ‖Analysis.Tensor.coordTensor bE (taylorTensor μ (fun x => ⟪v, x⟫) d)‖ ^ 2 ≤
       b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
-    have hcoord :
-        ∀ J : Fin d → Fin m,
-          (Analysis.Tensor.coordTensor (bE)
-              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J =
-            (d.factorial : ℝ)⁻¹ *
-              cumulant μ (d + 1)
-                (Fin.cons v (fun k => bE (J k))) := by
-      intro J
-      simp [Analysis.Tensor.coordTensor_apply, taylorTensor_inner_eq_cumulant, hexp]
-    rw [EuclideanSpace.norm_sq_eq]
-    calc
-      ∑ J : Fin d → Fin m,
-          ‖(Analysis.Tensor.coordTensor (bE)
-              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J‖ ^ 2 =
+  have hcoord :
+    ∀ J : Fin d → Fin m,
+      (Analysis.Tensor.coordTensor (bE) (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J =
+        (d.factorial : ℝ)⁻¹ * cumulant μ (d + 1) (Fin.cons v (fun k => bE (J k))) := by
+    intro J
+    simp [Analysis.Tensor.coordTensor_apply, taylorTensor_inner_eq_cumulant, hexp]
+  rw [EuclideanSpace.norm_sq_eq]
+  calc
+    ∑ J : Fin d → Fin m,
+          ‖(Analysis.Tensor.coordTensor (bE) (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J‖ ^ 2 =
         ((d.factorial : ℝ)⁻¹) ^ 2 *
-          ∑ J : Fin d → Fin m,
-            cumulant μ (d + 1)
-              (Fin.cons v (fun k => bE (J k))) ^ 2 := by
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro J hJ
-        rw [hcoord J, norm_mul]
-        simp [Real.norm_eq_abs, sq_abs, mul_pow]
-      _ ≤ ((d.factorial : ℝ)⁻¹) ^ 2 * (b * ‖v‖ ^ 2) := by
-        exact mul_le_mul_of_nonneg_left (hR v) (sq_nonneg _)
-      _ = b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
-        simp [div_eq_mul_inv, inv_pow]
-        ring
+          ∑ J : Fin d → Fin m, cumulant μ (d + 1) (Fin.cons v (fun k => bE (J k))) ^ 2 := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro J hJ
+      rw [hcoord J, norm_mul]
+      simp [Real.norm_eq_abs, sq_abs, mul_pow]
+    _ ≤ ((d.factorial : ℝ)⁻¹) ^ 2 * (b * ‖v‖ ^ 2) := by
+      exact mul_le_mul_of_nonneg_left (hR v) (sq_nonneg _)
+    _ = b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
+      simp [div_eq_mul_inv, inv_pow]
+      ring
 
 -- Retain the positive-radius parameter of the established public contract.
 set_option linter.unusedVariables false in
@@ -975,10 +986,6 @@ theorem cumulant_map_affine [CompleteSpace E] [FiniteDimensional ℝ E] [Measura
     all_goals
       first
       | exact hΛ
-      | exact hΛk
-      | exact hΛ.contDiffAt
-      | exact hΛk.contDiffAt
-      | exact le_rfl
       | exact WithTop.coe_le_coe.mpr le_top
 
   change (iteratedFDeriv ℝ k
@@ -1029,7 +1036,7 @@ private lemma quadratic_coordinate_memLp
     norm_num
   have hu : MemLp (fun x => (⟪u, x⟫ : ℝ)) 4 ρ := hρ.const_inner u
   have hv : MemLp (fun x => (⟪v, x⟫ : ℝ)) 4 ρ := hρ.const_inner v
-  exact hv.mul hu (hpqr := ht)
+  exact hu.mul hv (hpqr := ht)
 
 private lemma tendsto_integral_finite_linear_combination
     {α ι : Type*} [MeasurableSpace α] [Fintype ι]
@@ -1070,11 +1077,15 @@ arXiv:2607.24164v1, Lemma A.1, last sentence: "both sides of (1.2) pass to the l
 probability laws `μ k` with finite fourth moments satisfy `LetwinQuadraticBound` and all mixed
 moments `∫ ∏ᵢ ⟪vᵢ, x⟫` of degree `d ≤ 4` converge to those of a law `ν` with finite fourth
 moment, then `ν` satisfies `LetwinQuadraticBound`. -/
-theorem letwinQuadraticBound_of_tendsto_moments [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] (μ : ℕ → Measure E) (ν : Measure E) [∀ k, IsProbabilityMeasure (μ k)]
-    [IsProbabilityMeasure ν] (hμ : ∀ k, MemLp id 4 (μ k)) (hν : MemLp id 4 ν)
-    (hmom : ∀ d : ℕ, d ≤ 4 → ∀ v : Fin d → E,
-      Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(μ k)) atTop (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂ν)))
+theorem letwinQuadraticBound_of_tendsto_moments [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] (μ : ℕ → Measure E) (ν : Measure E)
+    [∀ k, IsProbabilityMeasure (μ k)] [IsProbabilityMeasure ν] (hμ : ∀ k, MemLp id 4 (μ k))
+    (hν : MemLp id 4 ν)
+    (hmom :
+      ∀ d : ℕ,
+        d ≤ 4 →
+          ∀ v : Fin d → E,
+            Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(μ k)) atTop (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂ν)))
     (hL : ∀ k, LetwinQuadraticBound (μ k)) : LetwinQuadraticBound ν := by
   classical
   intro M hM
@@ -1089,55 +1100,44 @@ theorem letwinQuadraticBound_of_tendsto_moments [CompleteSpace E] [FiniteDimensi
     rw [Fintype.sum_prod_type]
     exact quadratic_basis_expansion b M x
   have hQsq :
-      (fun x => Q x ^ 2) =
-        (fun x => ∑ p : I × I,
-          (c p.1 * c p.2) * (f p.1 x * f p.2 x)) := by
+    (fun x => Q x ^ 2) = (fun x => ∑ p : I × I, (c p.1 * c p.2) * (f p.1 x * f p.2 x)) := by
     rw [hQ]
     exact square_finite_linear_combination c f
-  have hf (ρ : Measure E) (hρ : MemLp id 4 ρ) (p : I) :
-      MemLp (f p) 2 ρ :=
+  have hf (ρ : Measure E) (hρ : MemLp id 4 ρ) (p : I) : MemLp (f p) 2 ρ :=
     quadratic_coordinate_memLp hρ (b p.1) (b p.2)
-  have hQQ (ρ : Measure E) (hρ : MemLp id 4 ρ) :
-      MemLp Q 2 ρ := by
+  have hQQ (ρ : Measure E) (hρ : MemLp id 4 ρ) : MemLp Q 2 ρ := by
     rw [hQ]
     exact memLp_finsetSum _ (fun p _ => (hf ρ hρ p).const_mul (c p))
-  have ht2 (p : I) :
-      Tendsto (fun k => ∫ x, f p x ∂μ k) atTop (𝓝 (∫ x, f p x ∂ν)) := by
-    simpa [f, Fin.prod_univ_two] using
-      hmom 2 (by norm_num) ![b p.1, b p.2]
+  have ht2 (p : I) : Tendsto (fun k => ∫ x, f p x ∂μ k) atTop (𝓝 (∫ x, f p x ∂ν)) := by
+    simpa [f, Fin.prod_univ_two] using hmom 2 (by norm_num) ![b p.1, b p.2]
   have ht4 (p : I × I) :
-      Tendsto (fun k => ∫ x, f p.1 x * f p.2 x ∂μ k) atTop
-        (𝓝 (∫ x, f p.1 x * f p.2 x ∂ν)) := by
+    Tendsto (fun k => ∫ x, f p.1 x * f p.2 x ∂μ k) atTop (𝓝 (∫ x, f p.1 x * f p.2 x ∂ν)) := by
     simpa [f, Fin.prod_univ_four, mul_assoc] using
       hmom 4 (by norm_num) ![b p.1.1, b p.1.2, b p.2.1, b p.2.2]
-  have hfirst :
-      Tendsto (fun k => ∫ x, Q x ∂μ k) atTop (𝓝 (∫ x, Q x ∂ν)) := by
+  have hfirst : Tendsto (fun k => ∫ x, Q x ∂μ k) atTop (𝓝 (∫ x, Q x ∂ν)) := by
     rw [hQ]
-    exact tendsto_integral_finite_linear_combination μ ν c f
-      (fun k p => (hf (μ k) (hμ k) p).integrable (by norm_num))
-      (fun p => (hf ν hν p).integrable (by norm_num)) ht2
-  have hsecond :
-      Tendsto (fun k => ∫ x, Q x ^ 2 ∂μ k) atTop
-        (𝓝 (∫ x, Q x ^ 2 ∂ν)) := by
+    exact
+      tendsto_integral_finite_linear_combination μ ν c f
+        (fun k p => (hf (μ k) (hμ k) p).integrable (by norm_num))
+        (fun p => (hf ν hν p).integrable (by norm_num)) ht2
+  have hsecond : Tendsto (fun k => ∫ x, Q x ^ 2 ∂μ k) atTop (𝓝 (∫ x, Q x ^ 2 ∂ν)) := by
     rw [hQsq]
-    exact tendsto_integral_finite_linear_combination μ ν
-      (fun p : I × I => c p.1 * c p.2)
-      (fun p : I × I => fun x => f p.1 x * f p.2 x)
-      (fun k p => (hf (μ k) (hμ k) p.1).integrable_mul
-        (hf (μ k) (hμ k) p.2))
-      (fun p => (hf ν hν p.1).integrable_mul (hf ν hν p.2)) ht4
+    exact
+      tendsto_integral_finite_linear_combination μ ν (fun p : I × I => c p.1 * c p.2)
+        (fun p : I × I => fun x => f p.1 x * f p.2 x)
+        (fun k p => (hf (μ k) (hμ k) p.1).integrable_mul (hf (μ k) (hμ k) p.2))
+        (fun p => (hf ν hν p.1).integrable_mul (hf ν hν p.2)) ht4
   have hv (ρ : Measure E) [IsProbabilityMeasure ρ] (hρ : MemLp id 4 ρ) :
-      (∫ x, (Q x - ∫ y, Q y ∂ρ) ^ 2 ∂ρ) =
-        (∫ x, Q x ^ 2 ∂ρ) - (∫ x, Q x ∂ρ) ^ 2 := by
+    (∫ x, (Q x - ∫ y, Q y ∂ρ) ^ 2 ∂ρ) = (∫ x, Q x ^ 2 ∂ρ) - (∫ x, Q x ∂ρ) ^ 2 := by
     exact
       (ProbabilityTheory.variance_eq_integral (hQQ ρ hρ).aemeasurable).symm.trans
         (ProbabilityTheory.variance_eq_sub (hQQ ρ hρ))
   have hcenter :
-      Tendsto (fun k => ∫ x, (Q x - ∫ y, Q y ∂μ k) ^ 2 ∂μ k) atTop
-        (𝓝 (∫ x, (Q x - ∫ y, Q y ∂ν) ^ 2 ∂ν)) := by
+    Tendsto (fun k => ∫ x, (Q x - ∫ y, Q y ∂μ k) ^ 2 ∂μ k) atTop
+      (𝓝 (∫ x, (Q x - ∫ y, Q y ∂ν) ^ 2 ∂ν)) := by
     have heq :
-        (fun k => ∫ x, (Q x - ∫ y, Q y ∂μ k) ^ 2 ∂μ k) =
-          (fun k => (∫ x, Q x ^ 2 ∂μ k) - (∫ x, Q x ∂μ k) ^ 2) :=
+      (fun k => ∫ x, (Q x - ∫ y, Q y ∂μ k) ^ 2 ∂μ k) =
+        (fun k => (∫ x, Q x ^ 2 ∂μ k) - (∫ x, Q x ∂μ k) ^ 2) :=
       funext fun k => hv (μ k) (hμ k)
     rw [heq, hv ν hν]
     exact hsecond.sub (hfirst.pow 2)

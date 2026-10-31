@@ -1,4 +1,8 @@
-import KLSOpenAI
+module
+
+public import KLSOpenAI
+
+@[expose] public section
 
 noncomputable section
 

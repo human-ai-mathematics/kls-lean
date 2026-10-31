@@ -16,6 +16,7 @@ import time
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
 sys.path.insert(0, str(ROOT / 'research'))
+import lean_header
 import statement_snapshot
 import verify
 
@@ -24,8 +25,20 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def header_imports(source, where):
+    """Every import edge of a Lean header: plain, public, meta and `import all` alike."""
+    try:
+        return lean_header.parse_header(source).modules
+    except lean_header.HeaderError as exc:
+        raise ValueError(where + ': ' + str(exc)) from exc
+
+
 def specification_guard(source):
-    imports = re.findall(r'^(?:public )?import\s+(\S+)', source, re.M)
+    imports = header_imports(source, 'Standalone specification')
+    # Every line-leading import directive anywhere in the text, not only the parsed header, so an
+    # import placed after the header cannot slip past the Mathlib-only rule.
+    anywhere = re.findall(r'^[ \t]*(?:(?:public|meta)\s+)*import\s+(?:all\s+)?(\S+)', source, re.M)
+    imports = imports + [name for name in anywhere if name not in imports]
     if not imports or any(not name.startswith('Mathlib.') for name in imports):
         raise ValueError('Standalone specification must import Mathlib only')
     if re.search(r'\b(?:FunctionalInequalities|Solutions|sorry|axiom)\b', source):
@@ -62,7 +75,7 @@ def closure(modules):
         if not source.is_file():
             raise ValueError('Missing local import source: ' + name)
         found[name] = source
-        pending += re.findall(r'^(?:public )?import\s+(\S+)', source.read_text(), re.M)
+        pending += header_imports(source.read_text(), name)
     return dict(sorted(found.items()))
 
 
@@ -110,6 +123,7 @@ def main():
         modules = closure(config['certificate_modules'])
         scope_files = [*modules.values(), *sorted(HERE.glob('*')),
                        ROOT / 'research/StatementSnapshot.lean', ROOT / 'research/statement_snapshot.py',
+                       ROOT / 'research/lean_header.py',
                        ROOT / 'research/verify.py', ROOT / config['review'],
                        formalization / 'lean-toolchain', formalization / 'lakefile.toml',
                        formalization / 'lake-manifest.json']
@@ -126,14 +140,14 @@ def main():
         view.mkdir()
         compiled = formalization / '.lake/build/lib/lean'
         artifacts = {}
-        for name in modules:
+        for name, module_source_path in modules.items():
             relative = Path(name.replace('.', '/'))
-            for suffix in ['.olean', '.olean.private', '.olean.server', '.ir']:
+            # Lean v4.35 writes all five artifacts for a `module` source and only `.olean` otherwise;
+            # importing a module reads the server/private parts unconditionally (verify.replay_artifacts).
+            for suffix in verify.replay_artifacts(ROOT, str(module_source_path.relative_to(ROOT))):
                 source = compiled / relative.with_suffix(suffix)
                 if not source.exists():
-                    if suffix == '.olean':
-                        raise ValueError('Missing rebuilt artifact: ' + name)
-                    continue
+                    raise ValueError('Missing rebuilt artifact: ' + name + suffix)
                 destination = view / source.relative_to(compiled)
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, destination)
@@ -160,7 +174,8 @@ def main():
                 if errors:
                     raise ValueError('; '.join(errors))
                 report['axioms'] = axioms
-        inspection = 'import BKLIndependentChecks\n' + (ROOT / 'research/StatementSnapshot.lean').read_text()
+        # Generated NON-module client: the driver's own header is replaced, not concatenated.
+        inspection = statement_snapshot.driver_client(ROOT, ['BKLIndependentChecks'])
         inspection += '\n#statement_snapshot_owned ' + ' '.join(config['owners']) + ' => ' + ' '.join(config['roots']) + '\n'
         (output / 'Inspection.lean').write_text(inspection)
         result = run('statement-closure', [lean, '-DwarningAsError=true', '--stdin'], input=inspection, run_env=lean_env)

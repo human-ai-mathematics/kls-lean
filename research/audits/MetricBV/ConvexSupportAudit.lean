@@ -1,5 +1,8 @@
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.KLS.Geometry.Perimeter.ConvexSupport
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.KLS.Geometry.Perimeter.ConvexSupport
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-! Independent full-signature clients for the metric BV perimeter on a closed convex support:
 the nearest-point projection (infimum, variational inequality, fixed points, nonexpansiveness)
@@ -8,6 +11,8 @@ sole hypothesis that the support is convex. Checks: the measurable-`B` form, set
 trace have the same perimeter, a proper convex support (the uniform law on `[0, 1]` in `ℝ`, whose
 support is computed to be `Icc 0 1`), and a singleton support (`dirac 0` on `ℝ`), where every set
 has perimeter zero. No `intrinsicHalfConstant` identification is claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

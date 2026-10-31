@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Basic
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 
 /-!
 # Weighted smooth approximation of locally Lipschitz tests
@@ -32,7 +34,8 @@ differences, with membership conditions explicit.
   bounds and compact support, and is uniformly `2 K R`-close to `g`.
 * At every differentiability point `x` of `g`, `fderiv (mollify m R g) x → fderiv g x` as `R → 0`.
   The argument compares the convolution derivative with the affine model `g x + L (· - x)`, using
-  `integral_affine_smul_fderiv_kernel` and the scale-free derivative mass `kernelDerivativeMass m` of the kernel.
+  `integral_affine_smul_fderiv_kernel` and the scale-free derivative mass `kernelDerivativeMass m`
+  of the kernel.
   No weak derivative or Lebesgue differentiation argument is needed.
 * Dominated convergence in `L^p(ν)` (`tendsto_eLpNorm_zero_of_dominated`) transfers pointwise
   convergence to the weighted norms; the cutoff step uses the `L²` data `g` and `B ∘ gradient g`
@@ -45,6 +48,8 @@ establish a closed gradient operator, or prove KLS.
 The implementation is organized by responsibility: Basic, Measurable, Kernel, Approximation.
 Import the earliest layer containing the required interface.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -66,21 +71,20 @@ variable [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E]
 /-- Step 1 (cutoff): approximate in the weighted graph norm by globally Lipschitz tests
 with compact support. Suggested witnesses are smooth cutoffs times g; their Lipschitz constants
 may grow with j. This conclusion does not assert smoothness of the approximants. -/
-
-theorem exists_compactSupport_weighted_L2
-    (hν : (ν : Measure E) ≪ m) (B : E →L[ℝ] E) (g : E → ℝ)
+theorem exists_compactSupport_weighted_L2 (hν : (ν : Measure E) ≪ m) (B : E →L[ℝ] E) (g : E → ℝ)
     (hg : LocallyLipschitz g) (hg_L2 : MemLp g 2 (ν : Measure E))
     (hBg_L2 : MemLp (fun x ↦ B (gradient g x)) 2 (ν : Measure E)) :
     ∃ gSeq : ℕ → E → ℝ,
-      (∀ j, HasCompactSupport (gSeq j) ∧
-        (∃ K : NNReal, LipschitzWith K (gSeq j)) ∧
-        MemLp (gSeq j) 2 (ν : Measure E) ∧
-        MemLp (fun x ↦ B (gradient (gSeq j) x)) 2 (ν : Measure E)) ∧
-      Tendsto (fun j ↦ eLpNorm (fun x ↦ gSeq j x - g x) 2 (ν : Measure E))
-        atTop (𝓝 0) ∧
-      Tendsto (fun j ↦ eLpNorm
-        (fun x ↦ B (gradient (gSeq j) x) - B (gradient g x)) 2 (ν : Measure E))
-        atTop (𝓝 0) := by
+      (∀ j,
+          HasCompactSupport (gSeq j) ∧
+            (∃ K : NNReal, LipschitzWith K (gSeq j)) ∧
+              MemLp (gSeq j) 2 (ν : Measure E) ∧
+                MemLp (fun x ↦ B (gradient (gSeq j) x)) 2 (ν : Measure E)) ∧
+        Tendsto (fun j ↦ eLpNorm (fun x ↦ gSeq j x - g x) 2 (ν : Measure E)) atTop (𝓝 0) ∧
+          Tendsto
+            (fun j ↦
+              eLpNorm (fun x ↦ B (gradient (gSeq j) x) - B (gradient g x)) 2 (ν : Measure E))
+            atTop (𝓝 0) := by
   obtain ⟨M, hM0, hM⟩ := exists_bound_fderiv_bump (E := E)
   obtain ⟨Rs, hRs⟩ : ∃ Rs : ℕ → ℝ, ∀ j, Rs j = (j : ℝ) + 1 := ⟨_, fun j => rfl⟩
   have hRpos : ∀ j, 0 < Rs j := fun j => by rw [hRs]; positivity
@@ -92,7 +96,8 @@ theorem exists_compactSupport_weighted_L2
     rw [Metric.mem_closedBall, dist_zero_right] at hx
     exact scaled_eq_zero (hRpos j) (le_of_lt (not_le.mp hx))
   choose K hK using fun j =>
-    lipschitzOnWith_of_locallyLipschitz_of_isCompact hg (isCompact_closedBall (0 : E) (2 * Rs j))
+    lipschitzOnWith_of_locallyLipschitz_of_isCompact hg
+      (isCompact_closedBall (0 : E) (2 * Rs j))
   choose C hC using fun j =>
     (isCompact_closedBall (0 : E) (2 * Rs j)).exists_bound_of_continuousOn
       hg.continuous.continuousOn
@@ -101,52 +106,62 @@ theorem exists_compactSupport_weighted_L2
     have := hC j x hx
     rw [Real.norm_eq_abs] at this
     exact this.trans (le_max_left _ _)
-  have hχlip : ∀ j, LipschitzWith ((Rs j)⁻¹ * M).toNNReal (scaled (E := E) (Rs j)) :=
-    fun j => lipschitzWith_scaled (hRpos j) hM0 hM
+  have hχlip : ∀ j, LipschitzWith ((Rs j)⁻¹ * M).toNNReal (scaled (E := E) (Rs j)) := fun j =>
+    lipschitzWith_scaled (hRpos j) hM0 hM
   have hgrad_bound : ∀ j (x : E), ‖gradient (scaled (E := E) (Rs j)) x‖ ≤ M := fun j x => by
     rw [norm_gradient_eq_norm_fderiv]
-    calc ‖fderiv ℝ (scaled (Rs j)) x‖ ≤ (Rs j)⁻¹ * M := norm_fderiv_scaled_le (hRpos j) hM x
+    calc
+      ‖fderiv ℝ (scaled (Rs j)) x‖ ≤ (Rs j)⁻¹ * M := norm_fderiv_scaled_le (hRpos j) hM x
       _ ≤ 1 * M := by gcongr; exact inv_le_one_of_one_le₀ (hR1 j)
       _ = M := one_mul M
   have hgrad_zero : ∀ j (x : E), ‖x‖ < Rs j → gradient (scaled (E := E) (Rs j)) x = 0 :=
     fun j x hx => by
     show (InnerProductSpace.toDual ℝ E).symm (fderiv ℝ (scaled (Rs j)) x) = 0
     rw [fderiv_scaled_eq_zero (hRpos j) hx, map_zero]
-  have hprod : ∀ j, LipschitzWith (((Rs j)⁻¹ * M) * max (C j) 0 + K j).toNNReal
-      (fun x => scaled (Rs j) x * g x) := by
+  have hprod :
+    ∀ j,
+      LipschitzWith (((Rs j)⁻¹ * M) * max (C j) 0 + K j).toNNReal
+        (fun x => scaled (Rs j) x * g x) := by
     intro j
     have hRj := hRpos j
-    have key : ∀ x y, x ∈ Metric.closedBall (0 : E) (2 * Rs j) →
-        dist (scaled (Rs j) x * g x) (scaled (Rs j) y * g y) ≤
-          (((Rs j)⁻¹ * M) * max (C j) 0 + K j) * dist x y := by
+    have key :
+      ∀ x y,
+        x ∈ Metric.closedBall (0 : E) (2 * Rs j) →
+          dist (scaled (Rs j) x * g x) (scaled (Rs j) y * g y) ≤
+            (((Rs j)⁻¹ * M) * max (C j) 0 + K j) * dist x y := by
       intro x y hx
-      have e : scaled (Rs j) x * g x - scaled (Rs j) y * g y =
-          (scaled (Rs j) x - scaled (Rs j) y) * g x + scaled (Rs j) y * (g x - g y) := by ring
+      have e :
+        scaled (Rs j) x * g x - scaled (Rs j) y * g y =
+          (scaled (Rs j) x - scaled (Rs j) y) * g x + scaled (Rs j) y * (g x - g y) := by
+        ring
       rw [Real.dist_eq, e]
-      have h1 : |(scaled (Rs j) x - scaled (Rs j) y) * g x| ≤
-          ((Rs j)⁻¹ * M) * max (C j) 0 * dist x y := by
+      have h1 :
+        |(scaled (Rs j) x - scaled (Rs j) y) * g x| ≤ ((Rs j)⁻¹ * M) * max (C j) 0 * dist x y := by
         rw [abs_mul]
-        calc |scaled (Rs j) x - scaled (Rs j) y| * |g x|
-            ≤ ((Rs j)⁻¹ * M * dist x y) * max (C j) 0 := by
-              gcongr
-              · rw [← Real.dist_eq]
-                have := (hχlip j).dist_le_mul x y
-                rwa [Real.coe_toNNReal _ (by positivity)] at this
-              · exact hC' j x hx
+        calc
+          |scaled (Rs j) x - scaled (Rs j) y| * |g x| ≤
+              ((Rs j)⁻¹ * M * dist x y) * max (C j) 0 := by
+            gcongr
+            · rw [← Real.dist_eq]
+              have := (hχlip j).dist_le_mul x y
+              rwa [Real.coe_toNNReal _ (by positivity)] at this
+            · exact hC' j x hx
           _ = ((Rs j)⁻¹ * M) * max (C j) 0 * dist x y := by ring
       have h2 : |scaled (Rs j) y * (g x - g y)| ≤ K j * dist x y := by
         by_cases hy : y ∈ Metric.closedBall (0 : E) (2 * Rs j)
         · rw [abs_mul, abs_of_nonneg (scaled_nonneg _ _)]
-          calc scaled (Rs j) y * |g x - g y| ≤ 1 * |g x - g y| := by
-                gcongr
-                exact scaled_le_one _ _
+          calc
+            scaled (Rs j) y * |g x - g y| ≤ 1 * |g x - g y| := by
+              gcongr
+              exact scaled_le_one _ _
             _ = dist (g x) (g y) := by rw [one_mul, Real.dist_eq]
             _ ≤ K j * dist x y := (hK j).dist_le_mul x hx y hy
         · rw [hout j y hy, zero_mul, abs_zero]
           positivity
-      calc |(scaled (Rs j) x - scaled (Rs j) y) * g x + scaled (Rs j) y * (g x - g y)|
-          ≤ |(scaled (Rs j) x - scaled (Rs j) y) * g x| + |scaled (Rs j) y * (g x - g y)| :=
-            abs_add_le _ _
+      calc
+        |(scaled (Rs j) x - scaled (Rs j) y) * g x + scaled (Rs j) y * (g x - g y)| ≤
+            |(scaled (Rs j) x - scaled (Rs j) y) * g x| + |scaled (Rs j) y * (g x - g y)| :=
+          abs_add_le _ _
         _ ≤ ((Rs j)⁻¹ * M) * max (C j) 0 * dist x y + K j * dist x y := add_le_add h1 h2
         _ = (((Rs j)⁻¹ * M) * max (C j) 0 + K j) * dist x y := by ring
     refine LipschitzWith.of_dist_le' fun x y => ?_
@@ -158,84 +173,100 @@ theorem exists_compactSupport_weighted_L2
     · rw [hout j x hx, hout j y hy, zero_mul, zero_mul, dist_self]
       positivity
   refine ⟨fun j x => scaled (Rs j) x * g x, fun j => ⟨?_, ⟨_, hprod j⟩, ?_, ?_⟩, ?_, ?_⟩
-  · exact HasCompactSupport.intro (isCompact_closedBall (0 : E) (2 * Rs j)) fun x hx => by
-      beta_reduce
-      rw [hout j x hx, zero_mul]
-  · refine MemLp.of_bound ((continuous_scaled _).mul hg.continuous).aestronglyMeasurable
-      (max (C j) 0) (ae_of_all _ fun x => ?_)
+  · exact
+      HasCompactSupport.intro (isCompact_closedBall (0 : E) (2 * Rs j)) fun x hx => by
+        beta_reduce
+        rw [hout j x hx, zero_mul]
+  · refine
+      MemLp.of_bound ((continuous_scaled _).mul hg.continuous).aestronglyMeasurable
+        (max (C j) 0) (ae_of_all _ fun x => ?_)
     beta_reduce
     by_cases hx : x ∈ Metric.closedBall (0 : E) (2 * Rs j)
     · rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg (scaled_nonneg _ _)]
-      calc scaled (Rs j) x * |g x| ≤ 1 * max (C j) 0 := by
-            gcongr
-            · exact scaled_le_one _ _
-            · exact hC' j x hx
+      calc
+        scaled (Rs j) x * |g x| ≤ 1 * max (C j) 0 := by
+          gcongr
+          · exact scaled_le_one _ _
+          · exact hC' j x hx
         _ = max (C j) 0 := one_mul _
     · rw [hout j x hx, zero_mul, norm_zero]
       exact le_max_right _ _
   · have hRj := hRpos j
-    refine MemLp.of_bound
-      (B.continuous.measurable.comp (measurable_gradient _)).aestronglyMeasurable
-      (‖B‖ * (((Rs j)⁻¹ * M) * max (C j) 0 + K j)) (ae_of_all _ fun x => ?_)
+    refine
+      MemLp.of_bound (B.continuous.measurable.comp (measurable_gradient _)).aestronglyMeasurable
+        (‖B‖ * (((Rs j)⁻¹ * M) * max (C j) 0 + K j)) (ae_of_all _ fun x => ?_)
     beta_reduce
-    calc ‖B (gradient (fun x => scaled (Rs j) x * g x) x)‖
-        ≤ ‖B‖ * ‖gradient (fun x => scaled (Rs j) x * g x) x‖ := B.le_opNorm _
+    calc
+      ‖B (gradient (fun x => scaled (Rs j) x * g x) x)‖ ≤
+          ‖B‖ * ‖gradient (fun x => scaled (Rs j) x * g x) x‖ :=
+        B.le_opNorm _
       _ ≤ ‖B‖ * (((Rs j)⁻¹ * M) * max (C j) 0 + K j) := by
-          gcongr
-          have := norm_gradient_le_of_lipschitz (hprod j) x
-          rwa [Real.coe_toNNReal _ (by positivity)] at this
-  · refine tendsto_eLpNorm_zero_of_dominated (ν : Measure E) (by norm_num) (by norm_num)
-      (fun j => (((continuous_scaled _).mul hg.continuous).sub hg.continuous).aestronglyMeasurable)
-      (bound := fun x => ‖g x‖) hg_L2.norm (fun j => ae_of_all _ fun x => ?_)
-      (ae_of_all _ fun x => ?_)
+        gcongr
+        have := norm_gradient_le_of_lipschitz (hprod j) x
+        rwa [Real.coe_toNNReal _ (by positivity)] at this
+  · refine
+      tendsto_eLpNorm_zero_of_dominated (ν : Measure E) (by norm_num) (by norm_num)
+        (fun j =>
+          (((continuous_scaled _).mul hg.continuous).sub hg.continuous).aestronglyMeasurable)
+        (bound := fun x => ‖g x‖) hg_L2.norm (fun j => ae_of_all _ fun x => ?_)
+        (ae_of_all _ fun x => ?_)
     · beta_reduce
       have e : scaled (Rs j) x * g x - g x = (scaled (Rs j) x - 1) * g x := by ring
       rw [e, norm_mul]
-      calc ‖scaled (Rs j) x - 1‖ * ‖g x‖ ≤ 1 * ‖g x‖ := by
-            gcongr
-            rw [Real.norm_eq_abs, abs_le]
-            constructor <;> linarith [scaled_nonneg (Rs j) x, scaled_le_one (Rs j) x]
+      calc
+        ‖scaled (Rs j) x - 1‖ * ‖g x‖ ≤ 1 * ‖g x‖ := by
+          gcongr
+          rw [Real.norm_eq_abs, abs_le]
+          constructor <;> linarith [scaled_nonneg (Rs j) x, scaled_le_one (Rs j) x]
         _ = ‖g x‖ := one_mul _
     · refine tendsto_const_nhds.congr' ?_
       filter_upwards [eventually_ge_atTop ⌈‖x‖⌉₊] with j hj
       have hxR : ‖x‖ ≤ Rs j := by
         rw [hRs j]
-        calc ‖x‖ ≤ ⌈‖x‖⌉₊ := Nat.le_ceil _
+        calc
+          ‖x‖ ≤ ⌈‖x‖⌉₊ := Nat.le_ceil _
           _ ≤ (j : ℝ) := by exact_mod_cast hj
           _ ≤ j + 1 := by linarith
       rw [scaled_eq_one (hRpos j) hxR, one_mul, sub_self]
   · have hdiff := hν.ae_le (ae_differentiableAt_of_locallyLipschitz hg m)
-    refine tendsto_eLpNorm_zero_of_dominated (ν : Measure E) (by norm_num) (by norm_num)
-      (fun j => ((B.continuous.measurable.comp (measurable_gradient _)).aestronglyMeasurable).sub
-        (B.continuous.measurable.comp (measurable_gradient _)).aestronglyMeasurable)
-      (bound := fun x => ‖B (gradient g x)‖ + ‖B‖ * M * ‖g x‖)
-      (hBg_L2.norm.add (hg_L2.norm.const_mul _)) (fun j => ?_) ?_
+    refine
+      tendsto_eLpNorm_zero_of_dominated (ν : Measure E) (by norm_num) (by norm_num)
+        (fun j =>
+          ((B.continuous.measurable.comp (measurable_gradient _)).aestronglyMeasurable).sub
+            (B.continuous.measurable.comp (measurable_gradient _)).aestronglyMeasurable)
+        (bound := fun x => ‖B (gradient g x)‖ + ‖B‖ * M * ‖g x‖)
+        (hBg_L2.norm.add (hg_L2.norm.const_mul _)) (fun j => ?_) ?_
     · filter_upwards [hdiff] with x hx
       rw [gradient_scaled_mul hx, map_add, map_smul, map_smul]
-      have e : scaled (Rs j) x • B (gradient g x) + g x • B (gradient (scaled (Rs j)) x) -
-          B (gradient g x) =
+      have e :
+        scaled (Rs j) x • B (gradient g x) + g x • B (gradient (scaled (Rs j)) x) -
+            B (gradient g x) =
           (scaled (Rs j) x - 1) • B (gradient g x) + g x • B (gradient (scaled (Rs j)) x) := by
         rw [sub_smul, one_smul]
         abel
       rw [e]
-      calc ‖(scaled (Rs j) x - 1) • B (gradient g x) + g x • B (gradient (scaled (Rs j)) x)‖
-          ≤ ‖(scaled (Rs j) x - 1) • B (gradient g x)‖ +
-            ‖g x • B (gradient (scaled (Rs j)) x)‖ := norm_add_le _ _
+      calc
+        ‖(scaled (Rs j) x - 1) • B (gradient g x) + g x • B (gradient (scaled (Rs j)) x)‖ ≤
+            ‖(scaled (Rs j) x - 1) • B (gradient g x)‖ +
+              ‖g x • B (gradient (scaled (Rs j)) x)‖ :=
+          norm_add_le _ _
         _ ≤ 1 * ‖B (gradient g x)‖ + ‖g x‖ * (‖B‖ * M) := by
-            rw [norm_smul, norm_smul]
-            gcongr
-            · rw [Real.norm_eq_abs, abs_le]
-              constructor <;> linarith [scaled_nonneg (Rs j) x, scaled_le_one (Rs j) x]
-            · calc ‖B (gradient (scaled (Rs j)) x)‖ ≤ ‖B‖ * ‖gradient (scaled (Rs j)) x‖ :=
-                  B.le_opNorm _
-                _ ≤ ‖B‖ * M := by gcongr; exact hgrad_bound j x
+          rw [norm_smul, norm_smul]
+          gcongr
+          · rw [Real.norm_eq_abs, abs_le]
+            constructor <;> linarith [scaled_nonneg (Rs j) x, scaled_le_one (Rs j) x]
+          · calc
+              ‖B (gradient (scaled (Rs j)) x)‖ ≤ ‖B‖ * ‖gradient (scaled (Rs j)) x‖ :=
+                B.le_opNorm _
+              _ ≤ ‖B‖ * M := by gcongr; exact hgrad_bound j x
         _ = ‖B (gradient g x)‖ + ‖B‖ * M * ‖g x‖ := by ring
     · filter_upwards [hdiff] with x hx
       refine tendsto_const_nhds.congr' ?_
       filter_upwards [eventually_ge_atTop ⌈‖x‖⌉₊] with j hj
       have hxR : ‖x‖ < Rs j := by
         rw [hRs j]
-        calc ‖x‖ ≤ ⌈‖x‖⌉₊ := Nat.le_ceil _
+        calc
+          ‖x‖ ≤ ⌈‖x‖⌉₊ := Nat.le_ceil _
           _ ≤ (j : ℝ) := by exact_mod_cast hj
           _ < j + 1 := by linarith
       rw [gradient_scaled_mul hx, scaled_eq_one (hRpos j) hxR.le, hgrad_zero j x hxR, one_smul,
@@ -276,6 +307,8 @@ theorem exists_smooth_compactSupport_L2
         ENNReal.ofReal (K * (2 * radius j)) := by
       intro j
       have := eLpNorm_le_of_ae_bound (μ := (ν : Measure E)) (p := 2)
+        (f := fun x => mollify m (radius j) g x - g x) ((continuous_mollify m (radius_pos j) hg.continuous).sub
+          hg.continuous).aestronglyMeasurable
         (ae_of_all _ (norm_mollify_sub_le m (radius_pos j) hg))
       simpa [measure_univ] using this
     refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_
@@ -334,11 +367,7 @@ theorem exists_smooth_weighted_L2
   · refine MemLp.of_le ((hv j (k j)).2.2.2.2.norm.const_mul ‖B‖) (hmB _) (ae_of_all _ fun x => ?_)
     rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]
     exact B.le_opNorm _
-  · have hmeas_v : ∀ j, AEStronglyMeasurable (v j (k j)) (ν : Measure E) :=
-      fun j => (hv j (k j)).1.continuous.aestronglyMeasurable
-    have hmeas_u : ∀ j, AEStronglyMeasurable (u j) (ν : Measure E) := fun j => (hu j).2.2.1.1
-    have hmeas_g : AEStronglyMeasurable g (ν : Measure E) := hg.continuous.aestronglyMeasurable
-    have hle : ∀ j, eLpNorm (fun x => v j (k j) x - g x) 2 (ν : Measure E) ≤
+  · have hle : ∀ j, eLpNorm (fun x => v j (k j) x - g x) 2 (ν : Measure E) ≤
         ENNReal.ofReal (radius j) + eLpNorm (fun x => u j x - g x) 2 (ν : Measure E) := by
       intro j
       calc eLpNorm (fun x => v j (k j) x - g x) 2 (ν : Measure E)
@@ -348,7 +377,7 @@ theorem exists_smooth_weighted_L2
             simp
         _ ≤ eLpNorm (fun x => v j (k j) x - u j x) 2 (ν : Measure E) +
             eLpNorm (fun x => u j x - g x) 2 (ν : Measure E) :=
-            eLpNorm_add_le ((hmeas_v j).sub (hmeas_u j)) ((hmeas_u j).sub hmeas_g) one_le_two
+            eLpNorm_add_le one_le_two
         _ ≤ ENNReal.ofReal (radius j) + eLpNorm (fun x => u j x - g x) 2 (ν : Measure E) := by
             gcongr
             exact hk1 j
@@ -369,7 +398,7 @@ theorem exists_smooth_weighted_L2
             simp
         _ ≤ eLpNorm (fun x => B (gradient (v j (k j)) x) - B (gradient (u j) x)) 2 (ν : Measure E)
             + eLpNorm (fun x => B (gradient (u j) x) - B (gradient g x)) 2 (ν : Measure E) :=
-            eLpNorm_add_le ((hmB _).sub (hmB _)) ((hmB _).sub (hmB _)) one_le_two
+            eLpNorm_add_le one_le_two
         _ ≤ ‖B‖ₑ * ENNReal.ofReal (radius j) +
             eLpNorm (fun x => B (gradient (u j) x) - B (gradient g x)) 2 (ν : Measure E) := by
             gcongr
@@ -377,12 +406,14 @@ theorem exists_smooth_weighted_L2
                   (ν : Measure E)
                 ≤ eLpNorm (‖B‖ • fun x => ‖gradient (v j (k j)) x - gradient (u j) x‖) 2
                   (ν : Measure E) := by
-                  refine eLpNorm_mono_ae_real (ae_of_all _ fun x => ?_)
+                  refine eLpNorm_mono_ae_real ((hmB _).sub (hmB _)) (ae_of_all _ fun x => ?_)
                   rw [← map_sub]
                   exact B.le_opNorm _
               _ = ‖B‖ₑ * eLpNorm (fun x => gradient (v j (k j)) x - gradient (u j) x) 2
                   (ν : Measure E) := by
-                  rw [eLpNorm_const_smul, enorm_norm, eLpNorm_norm]
+                  rw [eLpNorm_const_smul, enorm_norm, eLpNorm_norm
+                    (fun x => gradient (v j (k j)) x - gradient (u j) x)
+                    ((aestronglyMeasurable_gradient _ _).sub (aestronglyMeasurable_gradient _ _))]
               _ ≤ ‖B‖ₑ * ENNReal.ofReal (radius j) := by
                   gcongr
                   exact hk2 j
@@ -432,6 +463,8 @@ theorem exists_smooth_bounded_L1
         ENNReal.ofReal (K * (2 * radius j)) := by
       intro j
       have := eLpNorm_le_of_ae_bound (μ := (ν : Measure E)) (p := 1)
+        (f := fun x => mollify m (radius j) g x - g x) ((continuous_mollify m (radius_pos j) hg.continuous).sub
+          hg.continuous).aestronglyMeasurable
         (ae_of_all _ (norm_mollify_sub_le m (radius_pos j) hg))
       simpa [measure_univ] using this
     refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_

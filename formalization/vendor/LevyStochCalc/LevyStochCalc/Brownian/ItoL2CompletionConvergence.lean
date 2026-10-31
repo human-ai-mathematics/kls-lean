@@ -3,7 +3,17 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoL2CompletionIncrement
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs
+-- follow the v4.35.0 `eLpNorm` triangle, zero and exponent-comparison lemmas and pass the
+-- measurability witnesses its norm formulas require.
+-- Modified 2026-10-31 by the KLS formalization project: `eLpNorm_two_rpow_eq_lintegral_sq` and
+-- `eLpNorm_sq_eq_lintegral_nnnorm_sq` take `hg : AEStronglyMeasurable g μ`, which
+-- `eLpNorm_nnreal_pow_eq_lintegral` requires in Mathlib v4.35.0 (where `eLpNorm` of a
+-- non-a.e.-strongly-measurable function is `∞`); their callers pass existing witnesses.
+module
+
+public import LevyStochCalc.Brownian.ItoL2CompletionIncrement
 
 /-!
 # Brownian Itô integral: `L¹`/`L²` convergence and adapted approximation
@@ -15,6 +25,8 @@ within a prescribed `L²([0, T] × Ω)` tolerance of a progressively measurable
 square-integrable integrand, together with the norm and increment identities they
 use.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -43,10 +55,6 @@ lemma martingale_of_tendsto_eLpNorm_one
       (fun n => MeasureTheory.eLpNorm (M n t - F t) 1 μ) Filter.atTop (nhds 0)) :
     MeasureTheory.Martingale F ℱ μ := by
   refine ⟨hadapt, fun s t hst => ?_⟩
-  have haesmC : MeasureTheory.AEStronglyMeasurable (μ[F t | ℱ s]) μ :=
-    MeasureTheory.integrable_condExp.aestronglyMeasurable
-  have haesm : MeasureTheory.AEStronglyMeasurable (μ[F t | ℱ s] - F s) μ :=
-    haesmC.sub (hint s).1
   -- The target seminorm is bounded by `‖Mₙt − Ft‖₁ + ‖Mₙs − Fs‖₁` for every `n`.
   have hbound : ∀ n, MeasureTheory.eLpNorm (μ[F t | ℱ s] - F s) 1 μ
       ≤ MeasureTheory.eLpNorm (M n t - F t) 1 μ
@@ -60,9 +68,7 @@ lemma martingale_of_tendsto_eLpNorm_one
           rw [hdecomp]
       _ ≤ MeasureTheory.eLpNorm (μ[F t | ℱ s] - μ[M n t | ℱ s]) 1 μ
           + MeasureTheory.eLpNorm (μ[M n t | ℱ s] - F s) 1 μ :=
-          MeasureTheory.eLpNorm_add_le
-            (haesmC.sub MeasureTheory.integrable_condExp.aestronglyMeasurable)
-            (MeasureTheory.integrable_condExp.aestronglyMeasurable.sub (hint s).1) (by norm_num)
+          MeasureTheory.eLpNorm_add_le (by norm_num)
       _ ≤ MeasureTheory.eLpNorm (M n t - F t) 1 μ
           + MeasureTheory.eLpNorm (M n s - F s) 1 μ := by
           gcongr
@@ -86,7 +92,7 @@ lemma martingale_of_tendsto_eLpNorm_one
     refine le_antisymm ?_ bot_le
     exact le_of_tendsto_of_tendsto tendsto_const_nhds htend2
       (Filter.Eventually.of_forall hbound)
-  rw [MeasureTheory.eLpNorm_eq_zero_iff haesm (by norm_num)] at hzero
+  rw [MeasureTheory.eLpNorm_eq_zero_iff (by norm_num)] at hzero
   filter_upwards [hzero] with ω hω
   simpa [Pi.sub_apply, sub_eq_zero] using hω
 
@@ -104,7 +110,9 @@ lemma tendsto_eLpNorm_one_of_eLpNorm_two
       Filter.atTop (nhds 0) :=
   tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h2
     (fun _ => bot_le)
-    (fun n => MeasureTheory.eLpNorm_le_eLpNorm_of_exponent_le (by norm_num) (hg n))
+    (fun n => (MeasureTheory.eLpNorm_le_eLpNorm_mul_rpow_measure_univ (q := 2) (by norm_num)
+      (hg n)).trans
+      (le_of_eq (by simp [MeasureTheory.measure_univ])))
 
 /-- **L² Hölder product.** `‖f·g‖₁ ≤ ‖f‖₂·‖g‖₂` (Cauchy–Schwarz). The
 conjunct-2 (quadratic-variation) limit needs `aₙ²→a²` in `L¹` from `aₙ→a` in
@@ -115,7 +123,7 @@ lemma eLpNorm_one_mul_le {μ : MeasureTheory.Measure Ω} {f g : Ω → ℝ}
       ≤ MeasureTheory.eLpNorm f 2 μ * MeasureTheory.eLpNorm g 2 μ := by
   have hpq : Real.HolderConjugate 2 2 :=
     Real.holderConjugate_iff.mpr ⟨by norm_num, by norm_num⟩
-  rw [MeasureTheory.eLpNorm_one_eq_lintegral_enorm]
+  rw [MeasureTheory.eLpNorm_one_eq_lintegral_enorm (hf.mul hg).aestronglyMeasurable]
   calc ∫⁻ x, ‖(f * g) x‖ₑ ∂μ
       = ∫⁻ x, ‖f x‖ₑ * ‖g x‖ₑ ∂μ := by
         refine lintegral_congr (fun x => ?_); rw [Pi.mul_apply, enorm_mul]
@@ -123,8 +131,10 @@ lemma eLpNorm_one_mul_le {μ : MeasureTheory.Measure Ω} {f g : Ω → ℝ}
         * (∫⁻ x, ‖g x‖ₑ ^ (2 : ℝ) ∂μ) ^ (1 / (2 : ℝ)) :=
         ENNReal.lintegral_mul_le_Lp_mul_Lq μ hpq hf.enorm hg.enorm
     _ = MeasureTheory.eLpNorm f 2 μ * MeasureTheory.eLpNorm g 2 μ := by
-        rw [MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num),
-            MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)]
+        rw [MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)
+              hf.aestronglyMeasurable,
+            MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)
+              hg.aestronglyMeasurable]
         norm_num
 
 /-- **Squares converge in L¹ from L²-convergence.** If `aₙ → b` in `L²` (with
@@ -153,8 +163,7 @@ lemma tendsto_eLpNorm_one_sq_sub
           congr 1; funext ω; simp only [Pi.add_apply, Pi.sub_apply, Pi.smul_apply,
             smul_eq_mul]; ring
       _ ≤ MeasureTheory.eLpNorm (a n - b) 2 μ + MeasureTheory.eLpNorm ((2 : ℝ) • b) 2 μ :=
-          MeasureTheory.eLpNorm_add_le ((ha n).sub hb).aestronglyMeasurable
-            (hb.aestronglyMeasurable.const_smul (2 : ℝ)) (by norm_num)
+          MeasureTheory.eLpNorm_add_le (by norm_num)
       _ ≤ MeasureTheory.eLpNorm (a n - b) 2 μ + 2 * MeasureTheory.eLpNorm b 2 μ := by
           gcongr
           refine le_trans MeasureTheory.eLpNorm_const_smul_le (le_of_eq ?_)
@@ -438,10 +447,11 @@ lemma exists_adaptedSimple_within
   exact ⟨Hn m, h_adapt m, hm⟩
 
 /-- `eLpNorm g 2 μ ^ (2:ℝ) = ∫⁻ ‖g‖₊² ∂μ`. -/
-lemma eLpNorm_two_rpow_eq_lintegral_sq {μ : MeasureTheory.Measure Ω} (g : Ω → ℝ) :
+lemma eLpNorm_two_rpow_eq_lintegral_sq {μ : MeasureTheory.Measure Ω} (g : Ω → ℝ)
+    (hg : AEStronglyMeasurable g μ) :
     MeasureTheory.eLpNorm g 2 μ ^ (2 : ℝ) = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂μ := by
   have h := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral (μ := μ) (p := (2 : NNReal))
-    (f := g) (by norm_num)
+    (f := g) (by norm_num) hg
   rw [show ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) from by simp,
       show ((2 : NNReal) : ℝ) = (2 : ℝ) from by norm_num] at h
   rw [h]
@@ -450,10 +460,10 @@ lemma eLpNorm_two_rpow_eq_lintegral_sq {μ : MeasureTheory.Measure Ω} (g : Ω �
 
 /-- `eLpNorm g 2 μ ^ (2:ℝ) = ∫⁻ ‖g‖₊² ∂μ`, over an arbitrary base type. -/
 lemma eLpNorm_sq_eq_lintegral_nnnorm_sq {β : Type*} [MeasurableSpace β]
-    {μ : MeasureTheory.Measure β} (g : β → ℝ) :
+    {μ : MeasureTheory.Measure β} (g : β → ℝ) (hg : AEStronglyMeasurable g μ) :
     MeasureTheory.eLpNorm g 2 μ ^ (2 : ℝ) = ∫⁻ x, (‖g x‖₊ : ℝ≥0∞) ^ 2 ∂μ := by
   have h := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral (μ := μ) (p := (2 : NNReal))
-    (f := g) (by norm_num)
+    (f := g) (by norm_num) hg
   rw [show ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) from by simp,
       show ((2 : NNReal) : ℝ) = (2 : ℝ) from by norm_num] at h
   rw [h]; refine lintegral_congr (fun x => ?_)

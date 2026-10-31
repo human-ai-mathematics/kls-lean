@@ -1,7 +1,9 @@
-import Mathlib.Analysis.Convex.Function
-import Mathlib.Analysis.Normed.Module.Basic
-import Mathlib.Order.ConditionallyCompleteLattice.Indexed
-import Mathlib.Topology.MetricSpace.Lipschitz
+module
+
+public import Mathlib.Analysis.Convex.Function
+public import Mathlib.Analysis.Normed.Module.Basic
+public import Mathlib.Order.ConditionallyCompleteLattice.Indexed
+public import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-!
 # The Pasch–Hausdorff Lipschitz envelope
@@ -22,6 +24,8 @@ to approximate a convex potential `φ : D → ℝ` from below by finite convex f
 
 No finite dimension, measure or smoothness is used.
 -/
+
+@[expose] public section
 
 open Set Metric
 

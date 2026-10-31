@@ -1,10 +1,12 @@
-import FunctionalInequalities.Analysis.Convex.Coercivity
-import Mathlib.Analysis.Convex.Gauge
-import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.Analysis.SpecialFunctions.Exp
-import Mathlib.MeasureTheory.Group.Integral
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
+module
+
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import Mathlib.Analysis.Convex.Gauge
+public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.Analysis.SpecialFunctions.Exp
+public import Mathlib.MeasureTheory.Group.Integral
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # Linear growth of centered convex potentials
@@ -12,7 +14,7 @@ import Mathlib.MeasureTheory.Integral.DominatedConvergence
 Klartag, *Logarithmically-concave moment measures I*, arXiv:1309.2767v1, Lemma 2.2. A convex
 `ψ : E → ℝ` on a finite-dimensional real inner-product space is *centered* (Klartag (7)) if
 `∫ e^{-ψ} = 1` and `∫ x e^{-ψ(x)} dx = 0` for an additive Haar measure. For
-`K(ψ) = {x ; ψ(x) ≤ 2n + inf ψ}` and its Minkowski functional `‖x‖_ψ = gauge K(ψ) x`,
+`K(ψ) = {x | ψ(x) ≤ 2n + inf ψ}` and its Minkowski functional `‖x‖_ψ = gauge K(ψ) x`,
 `ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x` (`MomentMeasure.linear_growth_of_centered`).
 
 The input (10) `ψ(0) ≤ n + inf ψ`, which Klartag quotes from Fradelizi, is proved here for
@@ -26,6 +28,8 @@ The deduction of (9) from (10) is Klartag's convexity argument
 points `x/λ ∉ K(ψ)`, `1 < λ < ‖x‖_ψ`, so that continuity of `ψ` is not invoked there.
 -/
 
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Filter Topology Set
 open scoped Pointwise
@@ -35,12 +39,15 @@ namespace FunctionalInequalities.Probability.MomentMeasure
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
   [MeasurableSpace E] [BorelSpace E]
 
-/-- Convexity about a minimiser: `u(x₀ + s(x - x₀)) ≤ s u(x)` for `s ∈ [0,1]` when `u(x₀) = 0`. -/
-private theorem convex_scale_le {F : Type*} [AddCommGroup F] [Module ℝ F] {u : F → ℝ} (hu : ConvexOn ℝ univ u) {x₀ : F} (hx₀ : u x₀ = 0)
-    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (x : F) : u (x₀ + s • (x - x₀)) ≤ s * u x := by
+/--
+Convexity about a minimiser: `u(x₀ + s(x - x₀)) ≤ s u(x)` for `s ∈ [0,1]` when `u(x₀) = 0`. -/
+private theorem convex_scale_le {F : Type*} [AddCommGroup F] [Module ℝ F] {u : F → ℝ}
+    (hu : ConvexOn ℝ univ u) {x₀ : F} (hx₀ : u x₀ = 0) {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s ≤ 1)
+    (x : F) : u (x₀ + s • (x - x₀)) ≤ s * u x := by
   have h := hu.2 (mem_univ x₀) (mem_univ x) (sub_nonneg.mpr hs1) hs0 (by ring)
   have he : (1 - s) • x₀ + s • x = x₀ + s • (x - x₀) := by
-    rw [smul_sub, sub_smul, one_smul]; abel
+    rw [smul_sub, sub_smul, one_smul];
+    abel
   rw [he, hx₀, smul_eq_mul, smul_eq_mul, mul_zero, zero_add] at h
   exact h
 
@@ -257,6 +264,7 @@ theorem le_finrank_add_iInf_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ
   refine ⟨hbdd, ?_⟩
   rw [hinf]
   -- the normalised potential `u = ψ - ψ x₀`
+
   set c := ψ x₀ with hc
   set u : E → ℝ := fun x => ψ x - c with hu_def
   have hu : ConvexOn ℝ univ u := hψ.sub (concaveOn_const c convex_univ)
@@ -264,19 +272,24 @@ theorem le_finrank_add_iInf_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ
   have hux₀ : u x₀ = 0 := sub_self c
   have hunn : ∀ x, 0 ≤ u x := fun x => sub_nonneg.mpr (hx₀ x)
   have hexp (x : E) : Real.exp (-u x) = Real.exp c * Real.exp (-ψ x) := by
-    rw [← Real.exp_add]; simp [hu_def]; ring_nf
+    rw [← Real.exp_add];
+    simp [hu_def]; ring_nf
   have huint : Integrable (fun x => Real.exp (-u x)) m := by
     simpa only [hexp] using hint.const_mul (Real.exp c)
   have hent := integral_mul_exp_neg_le m hu hucont hux₀ hunn huint
-  have hudom := integrable_mul_exp_neg m hu hucont hux₀ hunn huint
+  have hudom :=
+    integrable_mul_exp_neg m hu hucont hux₀ hunn
+      huint
   -- `∫ u e^{-ψ} ≤ n`
+
   have hec : 0 < Real.exp c := Real.exp_pos c
   have hent' : ∫ x, u x * Real.exp (-ψ x) ∂m ≤ (Module.finrank ℝ E : ℝ) := by
     have h1 : ∫ x, u x * Real.exp (-u x) ∂m = Real.exp c * ∫ x, u x * Real.exp (-ψ x) ∂m := by
       rw [← integral_const_mul]
       exact integral_congr_ae (Eventually.of_forall fun x => by simp only [hexp]; ring)
     have h2 : ∫ x, Real.exp (-u x) ∂m = Real.exp c := by
-      simp only [hexp]; rw [integral_const_mul, hnorm, mul_one]
+      simp only [hexp];
+      rw [integral_const_mul, hnorm, mul_one]
     rw [h1, h2] at hent
     nlinarith
   have hψint : Integrable (fun x => ψ x * Real.exp (-ψ x)) m := by
@@ -284,36 +297,42 @@ theorem le_finrank_add_iInf_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ
       have := hudom.const_mul (Real.exp (-c))
       refine this.congr (Eventually.of_forall fun x => ?_)
       simp only [hexp]
-      rw [← mul_assoc, mul_comm (Real.exp (-c)), mul_assoc, ← mul_assoc (Real.exp (-c)),
-        ← Real.exp_add]
+      rw [← mul_assoc, mul_comm (Real.exp (-c)), mul_assoc, ← mul_assoc (Real.exp (-c)), ←
+        Real.exp_add]
       simp
-    exact (h1.add (hint.const_mul c)).congr (Eventually.of_forall fun x => by
-      simp only [Pi.add_apply, hu_def]; ring)
+    exact
+      (h1.add (hint.const_mul c)).congr
+        (Eventually.of_forall fun x => by simp only [Pi.add_apply, hu_def]; ring)
   have hψbound : ∫ x, ψ x * Real.exp (-ψ x) ∂m ≤ c + (Module.finrank ℝ E : ℝ) := by
-    have : ∫ x, ψ x * Real.exp (-ψ x) ∂m =
+    have :
+      ∫ x, ψ x * Real.exp (-ψ x) ∂m =
         ∫ x, u x * Real.exp (-ψ x) ∂m + c * ∫ x, Real.exp (-ψ x) ∂m := by
       rw [← integral_const_mul, ← integral_add _ (hint.const_mul c)]
       · exact integral_congr_ae (Eventually.of_forall fun x => by simp only [hu_def]; ring)
-      · exact (hψint.sub (hint.const_mul c)).congr (Eventually.of_forall fun x => by
-          simp only [Pi.sub_apply, hu_def]; ring)
+      · exact
+          (hψint.sub (hint.const_mul c)).congr
+            (Eventually.of_forall fun x => by simp only [Pi.sub_apply, hu_def]; ring)
     rw [this, hnorm, mul_one]
     linarith
   -- integrability of the first moment, from linear growth
+
   have hS : Bornology.IsBounded {y | u y ≤ 1} := by
     have : {y | u y ≤ 1} = {y | ψ y ≤ c + 1} := by
-      ext y; simp only [mem_ofPred_eq, hu_def, sub_le_iff_le_add']
+      ext y;
+      simp only [mem_ofPred_eq, hu_def, sub_le_iff_le_add']
     rw [this]; exact (hcomp (c + 1)).isBounded
   obtain ⟨R, hR, hgrow⟩ := exists_norm_sub_le hu hux₀ hunn hS
   have hue : Integrable (fun x => u x * Real.exp (-ψ x)) m := by
     have := hudom.const_mul (Real.exp (-c))
     refine this.congr (Eventually.of_forall fun x => ?_)
     simp only [hexp]
-    rw [← mul_assoc, mul_comm (Real.exp (-c)), mul_assoc, ← mul_assoc (Real.exp (-c)),
-      ← Real.exp_add]
+    rw [← mul_assoc, mul_comm (Real.exp (-c)), mul_assoc, ← mul_assoc (Real.exp (-c)), ←
+      Real.exp_add]
     simp
   have hxint : Integrable (fun x => Real.exp (-ψ x) • x) m := by
-    refine ((hint.const_mul (‖x₀‖ + R)).add (hue.const_mul R)).mono' (by fun_prop)
-      (Eventually.of_forall fun x => ?_)
+    refine
+      ((hint.const_mul (‖x₀‖ + R)).add (hue.const_mul R)).mono' (by fun_prop)
+        (Eventually.of_forall fun x => ?_)
     rw [norm_smul, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
     have h1 : ‖x‖ ≤ ‖x₀‖ + R * (u x + 1) := by
       have := norm_le_norm_add_norm_sub' x x₀
@@ -323,9 +342,9 @@ theorem le_finrank_add_iInf_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ
     simp only [Pi.add_apply]
     nlinarith [mul_le_mul_of_nonneg_left h1 hpos]
   -- Jensen for the probability measure `e^{-ψ} dm`
+
   set f : E → NNReal := fun x => (Real.exp (-ψ x)).toNNReal with hf_def
-  have hfcoe (x : E) : (f x : ℝ) = Real.exp (-ψ x) :=
-    Real.coe_toNNReal _ (Real.exp_pos _).le
+  have hfcoe (x : E) : (f x : ℝ) = Real.exp (-ψ x) := Real.coe_toNNReal _ (Real.exp_pos _).le
   have hfmeas : Measurable f := (by fun_prop : Measurable fun x => (Real.exp (-ψ x)).toNNReal)
   set μ := m.withDensity (fun x => (f x : ENNReal)) with hμ
   have hprob : IsProbabilityMeasure μ := by
@@ -334,9 +353,11 @@ theorem le_finrank_add_iInf_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ
       lintegral_coe_eq_integral _ (by simpa only [hfcoe] using hint)]
     simp only [hfcoe, hnorm, ENNReal.ofReal_one]
   have hsmulE : (fun x : E => f x • x) = fun x => Real.exp (-ψ x) • x := by
-    funext x; rw [NNReal.smul_def, hfcoe]
+    funext x;
+    rw [NNReal.smul_def, hfcoe]
   have hsmulR : (fun x : E => f x • ψ x) = fun x => ψ x * Real.exp (-ψ x) := by
-    funext x; rw [NNReal.smul_def, hfcoe, smul_eq_mul, mul_comm]
+    funext x;
+    rw [NNReal.smul_def, hfcoe, smul_eq_mul, mul_comm]
   have hidμ : Integrable (fun x : E => x) μ := by
     rw [hμ, integrable_withDensity_iff_integrable_smul hfmeas, hsmulE]
     exact hxint
@@ -348,8 +369,9 @@ theorem le_finrank_add_iInf_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ
     exact hbar
   have hψμeq : ∫ x, ψ x ∂μ = ∫ x, ψ x * Real.exp (-ψ x) ∂m := by
     rw [hμ, integral_withDensity_eq_integral_smul hfmeas, hsmulR]
-  have hjensen := hψ.map_integral_le (μ := μ) (f := fun x => x) hcont.continuousOn isClosed_univ
-    (Eventually.of_forall fun _ => mem_univ _) hidμ hψμ
+  have hjensen :=
+    hψ.map_integral_le (μ := μ) (f := fun x => x) hcont.continuousOn isClosed_univ
+      (Eventually.of_forall fun _ => mem_univ _) hidμ hψμ
   simp only [hbarμ] at hjensen
   rw [hψμeq] at hjensen
   linarith
@@ -361,7 +383,7 @@ variable {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
 
 /-- **Klartag arXiv:1309.2767v1, Lemma 2.2**, given (10): if `ψ` is convex and bounded below with
 `ψ(0) ≤ n + inf ψ`, then `ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x`, where `‖·‖_ψ` is the gauge of
-`K(ψ) = {x ; ψ(x) ≤ 2n + inf ψ}`. -/
+`K(ψ) = {x | ψ(x) ≤ 2n + inf ψ}`. -/
 theorem linear_growth_of_le_finrank_add_iInf {ψ : F → ℝ} (hψ : ConvexOn ℝ Set.univ ψ)
     (hbdd : BddBelow (Set.range ψ))
     (hfrad : ψ 0 ≤ (Module.finrank ℝ F : ℝ) + ⨅ y, ψ y) (x : F) :
@@ -423,7 +445,7 @@ end Conditional
 
 /-- **Klartag arXiv:1309.2767v1, Lemma 2.2**: a centered convex `ψ` satisfies
 `ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x`, with `‖·‖_ψ` the gauge of
-`K(ψ) = {x ; ψ(x) ≤ 2n + inf ψ}`. -/
+`K(ψ) = {x | ψ(x) ≤ 2n + inf ψ}`. -/
 theorem linear_growth_of_centered (m : Measure E) [m.IsAddHaarMeasure] {ψ : E → ℝ}
     (hψ : ConvexOn ℝ univ ψ) (hnorm : ∫ x, Real.exp (-ψ x) ∂m = 1)
     (hbar : ∫ x, Real.exp (-ψ x) • x ∂m = 0) (x : E) :

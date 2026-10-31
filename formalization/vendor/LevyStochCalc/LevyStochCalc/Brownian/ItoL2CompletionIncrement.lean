@@ -5,7 +5,12 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.ItoL2CompletionExistence
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0; a proof
+-- supplies the measurability witness that the Mathlib v4.35.0 `MemLp` finiteness lemma requires.
+module
+
+public import LevyStochCalc.Brownian.ItoL2CompletionExistence
 
 /-!
 # Brownian Itô integral: increment expansions and the intermediate-time isometry
@@ -16,6 +21,8 @@ at an intermediate time, and the isometry
 `∫⁻ ‖simpleIntegral W H t‖₊² = ∫⁻ ∫⁻_{[0, t]} ‖H.eval‖₊²` it gives for every
 intermediate time `t`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -545,13 +552,13 @@ lemma simpleIntegral_memLp_intermediate_brownian
       (ℱ (H.partition i.castSucc)) (H.ξ i))
     {t : ℝ} (ht_nn : 0 ≤ t) (htT : t ≤ T) :
     MeasureTheory.MemLp (fun ω => simpleIntegral W H t ω) 2 P := by
-  refine ⟨?_, ?_⟩
-  · refine Measurable.aestronglyMeasurable ?_
+  have hmeas : MeasureTheory.AEStronglyMeasurable (fun ω => simpleIntegral W H t ω) P := by
+    refine Measurable.aestronglyMeasurable ?_
     unfold simpleIntegral
     refine Finset.measurable_sum _ (fun i _ => ?_)
     exact (H.ξ_measurable i).mul ((W.measurable_eval _).sub (W.measurable_eval _))
-  · rw [MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
-        (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤)]
+  · rw [MeasureTheory.memLp_iff, MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
+        (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤) hmeas]
     rw [show (2 : ℝ≥0∞).toReal = 2 from by simp]
     have h_rewrite : (fun ω => (‖simpleIntegral W H t ω‖ₑ : ℝ≥0∞) ^ (2 : ℝ))
           = (fun ω => (‖simpleIntegral W H t ω‖₊ : ℝ≥0∞) ^ 2) := by

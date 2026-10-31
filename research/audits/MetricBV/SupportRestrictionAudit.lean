@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Transport
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Transport
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for the restriction of metric BV tests, approximating
 sequences and perimeters to a measurable subset, in particular to the closed measure support:
@@ -8,6 +10,8 @@ lemma, the measurable-`B` form, a proper closed support (the two-atom law `(Î´â‚
 whose support contains `0` but not `1/2`) where the ambient perimeter of `Iic (1/2)` is zero and
 hence so is the restricted one, the empty set, top ambient perimeter, and the whole space. No
 reverse inequality or constant equality on the closed support is claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import Mathlib.Analysis.Calculus.ContDiff.RCLike
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import Mathlib.Analysis.Calculus.ContDiff.RCLike
 
 /-! Independent full-signature clients for the relaxation infima over globally and locally
 Lipschitz approximants: the classes carry no perimeter or energy field; the Lipschitz relaxation
@@ -12,6 +14,8 @@ gives `⊤`, infinite perimeter transfers, the zero measure and the empty carrie
 instances: the closed-support law of a proper law on `ℝ`, and the actual closed intrinsic support
 of a finite-dimensional probability law. `L¹_loc` convergence and non-proper spaces for the
 locally Lipschitz class are not claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -175,7 +179,7 @@ end Intrinsic
 
 /-- The intrinsic instance for an actual law on `ℝ`. -/
 theorem intrinsicUniform (B : Set (Probability.intrinsicMeasure uniformInterval :
-      Measure (Probability.affineSupport uniformInterval).direction).support) :
+    Measure (Probability.affineSupport uniformInterval).direction).support) :
     locallyLipschitzRelaxation (intrinsicClosedSupportLaw uniformInterval : Measure _) B =
       perimeter (intrinsicClosedSupportLaw uniformInterval : Measure _) B :=
   locallyLipschitzRelaxation_intrinsicClosedSupportLaw uniformInterval B

@@ -1,4 +1,8 @@
-import FunctionalInequalities.KLS.Letwin.SteinKernel
+module
+
+public import FunctionalInequalities.KLS.Letwin.SteinKernel
+
+@[expose] public section
 
 noncomputable section
 namespace LetwinSharpSmoothSteinAudit
@@ -38,24 +42,28 @@ theorem sharp_smooth_coupling :
   exact ⟨u, Ψ, hsm, hnorm, hm, hstein, htrace, hHS, hHSbound, hcoupling⟩
 end RegularClass
 
-/-- Letwin Lemmas 2.7 and 2.9 for the literal source class at one produced potential: the moment-map
+/--
+Letwin Lemmas 2.7 and 2.9 for the literal source class at one produced potential: the moment-map
 Stein kernel `τ` of `μ` has `∫ ‖τ‖²_HS dμ ≤ 2n` and bounds the `H^{-1}(μ)` norm of every linear
 function `⟪·, v⟫` by `(∫ ‖τ v‖² dμ)^{1/2}`, with no moment-map property supplied. -/
-theorem literal_stein_dual_client (hn : 0 < n)
-    {K U : Set E} (hKb : Bornology.IsBounded K) (hKo : IsOpen K)
-    (hKc : Convex ℝ K) (hKne : K.Nonempty) (hU : IsOpen U) (hKU : closure K ⊆ U)
-    {V : E → ℝ} (hV : ContDiffOn ℝ ∞ V U) (hVc : ConvexOn ℝ K V)
+theorem literal_stein_dual_client (hn : 0 < n) {K U : Set E} (hKb : Bornology.IsBounded K)
+    (hKo : IsOpen K) (hKc : Convex ℝ K) (hKne : K.Nonempty) (hU : IsOpen U)
+    (hKU : closure K ⊆ U) {V : E → ℝ} (hV : ContDiffOn ℝ ∞ V U) (hVc : ConvexOn ℝ K V)
     (μ : ProbabilityMeasure E)
-    (hμ : (μ : Measure E) =
-      (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
+    (hμ :
+      (μ : Measure E) =
+        (volume : Measure E).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
     (hiso : FunctionalInequalities.KLS.Isotropic μ) :
     ∃ (φ : E → ℝ) (Ψ : E → E),
       ((volume : Measure E).tilted (-φ)).map (gradient φ) = (μ : Measure E) ∧
-      IsSteinKernel μ (hessianKernel φ Ψ) ∧
-      (∫ x, hsNorm (hessianKernel φ Ψ x) ^ 2 ∂(μ : Measure E)) ≤ 2 * n ∧
-      ∀ v : E, (FunctionalInequalities.Energy.Dual.dualNorm μ
-          (linearLp μ hiso.memLp_two v)).toReal ^ 2 ≤
-        ∫ x, ‖action (hessianKernel φ Ψ x) v‖ ^ 2 ∂(μ : Measure E) := by
+        IsSteinKernel μ (hessianKernel φ Ψ) ∧
+          (∫ x, hsNorm (hessianKernel φ Ψ x) ^ 2 ∂(μ : Measure E)) ≤ 2 * n ∧
+            ∀ v : E,
+              (FunctionalInequalities.Energy.Dual.dualNorm μ
+                      (linearLp μ hiso.memLp_two v)).toReal ^
+                  2 ≤
+                ∫ x, ‖action (hessianKernel φ Ψ x) v‖ ^ 2 ∂(μ : Measure E) := by
   obtain ⟨φ, Ψ, -, -, -, hm, -, -, -, -, -, -, hstein, -, -, -, -, -, -, hHS, -, hdual⟩ :=
     FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_stein_kernel_of_bounded_open_convex
       hn hKb hKo hKc hKne hU hKU hV hVc μ hμ hiso
@@ -67,5 +75,6 @@ end LetwinSharpSmoothSteinAudit
 #print axioms FunctionalInequalities.Analysis.holder_hessian_of_weak_evolution_fields
 #print axioms FunctionalInequalities.Analysis.contDiff_three_of_regular_fields
 #print axioms FunctionalInequalities.Analysis.smooth_of_regular_moment_fields
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_stein_kernel_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_stein_kernel_of_bounded_open_convex
 #print axioms LetwinSharpSmoothSteinAudit.literal_stein_dual_client

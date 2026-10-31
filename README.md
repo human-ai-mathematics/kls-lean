@@ -6,7 +6,9 @@ literature, with the dimension-free Kannan–Lovász–Simonovits (KLS) bound as
 
 [Getting started](examples/FIRST-USE.md) · [Examples](examples/README.md) · [API](formalization/API.md) · [Proof path](research/progress/PROOF-PATH.md) · [Verification](research/verification.md)
 
-**Toolchain:** Lean and Mathlib **v4.33.0**.
+**Toolchain:** Lean and Mathlib **v4.35.0**; library, vendor, solution, example and audit sources use Lean `module` headers.
+**Palomar:** the contained [submission project](integrations/palomar/README.md) states the
+pinned OpenAI form of the dimension-free bound for Palomar's Comparator.
 
 ## Use the library
 
@@ -76,10 +78,6 @@ Also formalized:
   route; Proposition 2.8 retains its full-dimensional restriction. Cordero-Erausquin–Klartag
   has no paper-target certificate. The [smooth-route map](research/progress/letwin-smooth-route.json)
   records the moment-map results and remaining auxiliary gaps.
-- **The superseded variational route to Letwin Lemma 2.2 is not part of this release.**
-  Its auxiliary Lean files (Alexandrov sections, Caffarelli W²,p, Dirichlet/Pogorelov
-  references, CNS barriers) are excluded; their mathematical gaps remain open and are not
-  needed. The [delivery map](research/progress/completed-letwin-delivery-map.json) lists them.
 - **The uncut Eldan construction remains unformalized**, including strong solution,
   uniqueness, non-explosion and the literal stochastic identities (68)–(73).
   The proved KLS route uses finite-horizon cutoff localization.
@@ -117,8 +115,8 @@ python3 research/cache_mathlib.py
 (cd formalization && lake build)
 ```
 
-Private checkouts require GitHub read access. To use the library in another Lean
-project, follow the [separate-project walkthrough](examples/FIRST-USE.md).
+The public repository supports anonymous HTTPS cloning. To use the library in another
+Lean project, follow the [separate-project walkthrough](examples/FIRST-USE.md).
 
 For **full local verification**, run `python3 research/verify.py`. This builds sources,
 checks statements and metadata, audits local declarations and replays local modules.

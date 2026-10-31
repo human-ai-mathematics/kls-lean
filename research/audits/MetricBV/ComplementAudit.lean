@@ -1,11 +1,15 @@
-import FunctionalInequalities.Analysis.MetricBV.Counterexample
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Counterexample
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
+public import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for complement symmetry of the metric BV perimeter
 beyond finite spaces: the local-slope comparison, the finite-measure theorem, its closed-support
 and intrinsic closed-support specializations, a non-finite instance (the standard Gaussian law
 on `ℝ`), and the infinite-measure obstruction showing that finiteness cannot be dropped. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

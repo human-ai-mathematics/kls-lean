@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.MarkStepIsometry
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.MarkStepIsometry
 
 /-!
 # Sums, negations and weightings of mark-step integrands
@@ -16,6 +21,8 @@ given piece on by a bounded measurable weight `w`, and zeroing the earlier ones
 (`MarkStep.weight`), yields the isometry for the weighted increment of the integral over a
 grid interval.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -197,9 +204,9 @@ def weight (G : MarkStep Ω E ν g) (w : Ω → ℝ) (hw : ∃ C : ℝ, ∀ ω, 
       positivity
   ξ_measurable := fun i k => by
     by_cases h : a ≤ i
-    · simp only [h, if_true]
+    · simp only [h, ite_true]
       exact hwm.mul (G.ξ_measurable i k)
-    · simp only [h, if_false]
+    · simp only [h, ite_false]
       exact measurable_const
 
 variable (N : PoissonRandomMeasure P ν) {ℱ : Filtration ℝ ‹MeasurableSpace Ω›} (hℱ :
@@ -214,9 +221,9 @@ lemma Adapted.weight {G : MarkStep Ω E ν g} (hG : G.Adapted ℱ)
   change @StronglyMeasurable Ω ℝ _ (ℱ (g.p i))
     (fun ω => if a ≤ i then w ω * G.ξ i k ω else 0)
   by_cases h : a ≤ i
-  · simp only [h, if_true]
+  · simp only [h, ite_true]
     exact (hwa.mono (ℱ.mono (g.p_mono h hi.le))).mul (hG i hi k)
-  · simp only [h, if_false]
+  · simp only [h, ite_false]
     exact stronglyMeasurable_const
 
 /-- The integral of a mark-step integrand up to a grid point, as a sum over the pieces
@@ -304,7 +311,7 @@ lemma eval_weight_clamp {a b : ℕ} (hab : a ≤ b) (hb : b ≤ g.N₀) (s : ℝ
       (Finset.range_subset.2 fun i hi => Finset.mem_range.2 (lt_of_lt_of_le hi hb)) ?_)
     · rw [Finset.mem_range] at hi
       by_cases hai : a ≤ i
-      · simp only [hai, if_true, Finset.mul_sum, mul_assoc]
+      · simp only [hai, ite_true, Finset.mul_sum, mul_assoc]
         ring_nf
       · have hs0 : s ∉ Set.Ioc (g.p i) (g.p (i + 1)) := fun hs' =>
           absurd (hs'.2.trans (g.p_mono (Nat.succ_le_of_lt (not_le.1 hai)) (hab.trans hb)))
@@ -353,9 +360,9 @@ theorem integral_weight_increment_sq (hG : G.Adapted ℱ) {w : Ω → ℝ}
   rw [← Set.inter_eq_self_of_subset_right hsub, ← setIntegral_indicator measurableSet_Ioc]
   refine setIntegral_congr_fun measurableSet_Icc fun s _ => ?_
   by_cases hs : s ∈ Set.Ioc (g.p a) (g.p b)
-  · rw [Set.indicator_of_mem hs, if_pos (Set.mem_Ioc.1 hs)]
+  · rw [Set.indicator_of_mem hs, ite_eq_left (Set.mem_Ioc.1 hs)]
     ring
-  · rw [Set.indicator_of_notMem hs, if_neg (fun h => hs (Set.mem_Ioc.2 h))]
+  · rw [Set.indicator_of_notMem hs, ite_eq_right (fun h => hs (Set.mem_Ioc.2 h))]
     ring
 
 /-- The weighted integrand from index `0`: every coefficient is multiplied by `w`. -/
@@ -366,7 +373,7 @@ lemma full_weight_zero (ω : Ω) : (G.weight w hw hwm 0).full N ω = w ω * G.fu
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
   change (if 0 ≤ i then w ω * G.ξ i k ω else 0) * _ = _
-  rw [if_pos (Nat.zero_le i), mul_assoc]
+  rw [ite_eq_left (Nat.zero_le i), mul_assoc]
   rfl
 
 /-- The integrand of the integrand weighted from index `0`. -/
@@ -382,7 +389,7 @@ lemma eval_weight_zero (s : ℝ) (e : E) (ω : Ω) :
       * ∑ k : Fin G.K, G.ξ i k ω * (G.B k).indicator (fun _ => (1 : ℝ)) e)
   simp only [Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
-  rw [if_pos (Nat.zero_le i)]
+  rw [ite_eq_left (Nat.zero_le i)]
   ring
 
 include hw hwm in
@@ -409,7 +416,7 @@ theorem integral_weight_zero_sq (hG : G.Adapted ℱ) {t : ℝ} (ht : 0 ≤ t)
   beta_reduce
   rw [← integral_const_mul]
   refine setIntegral_congr_fun measurableSet_Icc fun s hs => ?_
-  rw [if_pos hs.2]
+  rw [ite_eq_left hs.2]
   ring
 
 end Weight

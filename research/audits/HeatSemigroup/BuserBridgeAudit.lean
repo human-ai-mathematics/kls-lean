@@ -1,7 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.SmoothBuser
+module
+
+public import FunctionalInequalities.KLS.LogConcave.SmoothBuser
 
 /-! Independent full-signature clients for the literature form gap, actual heat indicator
 correlation, and the pi comparison in the smooth convex tilted model. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

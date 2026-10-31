@@ -1,0 +1,44 @@
+name: Palomar full preflight
+
+# Predictive mechanical preflight of the Palomar entry integrations/palomar, using Palomar's
+# official reusable verification workflow pinned to a full PalomarSubmission commit. It runs the
+# same verifier as a registry submission (module/source-size scan, metadata, canonical Challenge,
+# sandboxed Solution build, toolchain `lake comparator` with Lean, NanoDa and con-ron replay) but
+# has no Palomar state or credentials: it is advisory and is not a submission or registration.
+# Manual dispatch only; it is independent of the Lean certification workflow and release steps.
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: Exactly 12 lowercase alphanumeric characters naming the preflight artifact
+        required: true
+        default: klspalomar01
+        type: string
+      authorization_relationship:
+        description: >-
+          Your truthful relationship to this formalization (Palomar records it); dispatch only if
+          one of these is actually true for you
+        required: true
+        type: choice
+        options:
+          - I am a responsible author or maintainer
+          - I have approval from a responsible author or maintainer
+
+permissions:
+  contents: read
+
+jobs:
+  palomar-preflight:
+    uses: PalomarRegistry/PalomarSubmission/.github/workflows/submission.yml@14aa8d6b3c2f14a8540605e37144560b9a00e7e7
+    with:
+      repository: ${{ github.repository }}
+      commit: ${{ github.sha }}
+      # Must equal the commit in the `uses` reference above.
+      pipeline_commit: 14aa8d6b3c2f14a8540605e37144560b9a00e7e7
+      request_id: ${{ inputs.request_id }}
+      mode: full
+      execution_profile: palomar-standard-v1
+      options: >-
+        {"comparator_config_path":"integrations/palomar/comparator.json",
+        "project_path":"integrations/palomar",
+        "authorization_relationship":"${{ inputs.authorization_relationship }}"}

@@ -1,6 +1,8 @@
-import FunctionalInequalities.L2.Pairing
-import FunctionalInequalities.Analysis.TestFunctionOrder
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.Basic
+module
+
+public import FunctionalInequalities.L2.Pairing
+public import FunctionalInequalities.Analysis.TestFunctionOrder
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.Basic
 
 /-!
 # The reverse local Poincaré inequality `2t Γ(P_t f) ≤ P_t(f²) - (P_t f)²`
@@ -28,6 +30,8 @@ general reverse inequality is integrated against `C_c^∞` tests. For bounded da
 consequence `|T̄P_t f| ≤ M/√(2t)` via smooth-test order separation.
 -/
 
+@[expose] public section
+
 set_option autoImplicit false
 noncomputable section
 
@@ -50,10 +54,14 @@ private theorem integral_carre_smooth (hνU : (ν : Measure V) = m.tilted (-U))
     (hU : ContDiff ℝ ∞ U)
     (ψ : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
     {q : V → ℝ} (hq : ContDiff ℝ ∞ q) (hqc : HasCompactSupport q) :
-    (∫ x, (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ :
-        Lp ℝ 2 (ν : Measure V)) x * (q x * q x) ∂(ν : Measure V)) -
-      2 * ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * -weightedLaplacian U q x)
-        ∂(ν : Measure V) =
+    (∫ x,
+          (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ :
+                Lp ℝ 2 (ν : Measure V))
+              x *
+            (q x * q x) ∂(ν : Measure V)) -
+        2 *
+          ∫ x,
+            (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * -weightedLaplacian U q x) ∂(ν : Measure V) =
       -2 * ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * gamma q q x ∂(ν : Measure V) := by
   have hU1 : ContDiff ℝ 1 U := hU.of_le (by decide)
   have hq2 : ContDiff ℝ ∞ (fun x => q x * q x) := hq.mul hq
@@ -61,28 +69,36 @@ private theorem integral_carre_smooth (hνU : (ν : Measure V) = m.tilted (-U))
   have hsym := integral_adjointComp_mul_toLp_eq m hν hi hνU hU1 ψ hq2 hq2c
   have hL : ContDiff ℝ ∞ (weightedLaplacian U q) :=
     contDiff_weightedLaplacian hU hq (by decide) (by decide)
-  have hmul : weightedLaplacian U (fun y => q y * q y) =
-      fun x => 2 * (q x * weightedLaplacian U q x) + 2 * gamma q q x := by
+  have hmul :
+    weightedLaplacian U (fun y => q y * q y) = fun x =>
+      2 * (q x * weightedLaplacian U q x) + 2 * gamma q q x := by
     funext x
     rw [weightedLaplacian_mul U (hq.of_le (by decide)) (hq.of_le (by decide)) x]
     ring
-  have i₁ : Integrable (fun x => (ψ : Lp ℝ 2 (ν : Measure V)) x *
-      (q x * weightedLaplacian U q x)) (ν : Measure V) :=
-    FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V))
-      (hq.continuous.mul hL.continuous) (hqc.mul_right)
-  have i₂ := FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport (ψ : Lp ℝ 2 (ν : Measure V))
-    (continuous_gamma (hq.of_le (by decide)) (hq.of_le (by decide)))
-    (hasCompactSupport_gamma_left q hqc)
+  have i₁ :
+    Integrable (fun x => (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * weightedLaplacian U q x))
+      (ν : Measure V) :=
+    FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport
+      (ψ : Lp ℝ 2 (ν : Measure V)) (hq.continuous.mul hL.continuous) (hqc.mul_right)
+  have i₂ :=
+    FunctionalInequalities.L2.integrable_mul_continuous_of_hasCompactSupport
+      (ψ : Lp ℝ 2 (ν : Measure V))
+      (continuous_gamma (hq.of_le (by decide)) (hq.of_le (by decide)))
+      (hasCompactSupport_gamma_left q hqc)
   rw [hsym, hmul]
-  have e1 : ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x *
-      (2 * (q x * weightedLaplacian U q x) + 2 * gamma q q x) ∂(ν : Measure V) =
-      2 * ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * weightedLaplacian U q x) ∂(ν : Measure V) +
-      2 * ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * gamma q q x ∂(ν : Measure V) := by
-    rw [← integral_const_mul, ← integral_const_mul, ← integral_add (i₁.const_mul 2)
-      (i₂.const_mul 2)]
+  have e1 :
+    ∫ x,
+        (ψ : Lp ℝ 2 (ν : Measure V)) x *
+          (2 * (q x * weightedLaplacian U q x) + 2 * gamma q q x) ∂(ν : Measure V) =
+      2 *
+          ∫ x,
+            (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * weightedLaplacian U q x) ∂(ν : Measure V) +
+        2 * ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * gamma q q x ∂(ν : Measure V) := by
+    rw [← integral_const_mul, ← integral_const_mul, ←
+      integral_add (i₁.const_mul 2) (i₂.const_mul 2)]
     congr 1; funext x; ring
-  have e2 : ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * -weightedLaplacian U q x)
-      ∂(ν : Measure V) =
+  have e2 :
+    ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * -weightedLaplacian U q x) ∂(ν : Measure V) =
       -∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * (q x * weightedLaplacian U q x) ∂(ν : Measure V) := by
     rw [← integral_neg]; congr 1; funext x; ring
   rw [e1, e2]
@@ -232,7 +248,7 @@ theorem two_mul_integral_mul_weakGamma_le (hνU : (ν : Measure V) = m.tilted (-
             (sub_pos.mpr hs.2)⟩) x ∂(ν : Measure V) else 0 with hΛ'def
   have hderiv : ∀ s ∈ Ico 0 t, HasDerivWithinAt Λ (Λ' s) (Ici s) s := by
     intro s hs
-    simp only [hΛ'def, dif_pos hs]
+    simp only [hΛ'def, dite_eq_left hs]
     have hts : 0 < t - s := sub_pos.mpr hs.2
     have hq := Generated.hasDerivWithinAt_apply_Ici T hT hd Φ hs.1
     have hg' := HasDerivAt.scomp s (Generated.hasDerivAt_apply_of_pos T hT hd f hts)
@@ -278,7 +294,7 @@ theorem two_mul_integral_mul_weakGamma_le (hνU : (ν : Measure V) = m.tilted (-
   -- the right derivative dominates `2c`
   have hsign : ∀ s ∈ Ico 0 t, 2 * c ≤ Λ' s := by
     intro s hs
-    simp only [hΛ'def, dif_pos hs]
+    simp only [hΛ'def, dite_eq_left hs]
     have hts : 0 < t - s := sub_pos.mpr hs.2
     set ψ : (adjointComp T).domain :=
       ⟨_, preserves_domain m (ContinuousLinearMap.id ℝ V) hν hi Φ hs.1⟩ with hψdef
@@ -349,16 +365,23 @@ theorem two_mul_integral_mul_weakGamma_le (hνU : (ν : Measure V) = m.tilted (-
 and nonnegative `φ ∈ C_c^∞(V)`, `2t ∫ φ Γ(T̄P_t f) dν ≤ M² ∫ φ dν`. This is the tested form of
 `|T̄P_t f|² ≤ M²/(2t)`. -/
 theorem two_mul_integral_mul_weakGamma_le_of_bounded (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U) (f : Lp ℝ 2 (ν : Measure V))
-    {M : ℝ} (hf : ∀ᵐ x ∂(ν : Measure V), |f x| ≤ M)
-    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x)
-    {t : ℝ} (ht : 0 < t) :
-    2 * t * ∫ x, φ x * WeakGamma.apply
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi f ht⟩)
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi f ht⟩) x
-        ∂(ν : Measure V) ≤ M ^ 2 * ∫ x, φ x ∂(ν : Measure V) := by
+    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U) (f : Lp ℝ 2 (ν : Measure V)) {M : ℝ}
+    (hf : ∀ᵐ x ∂(ν : Measure V), |f x| ≤ M) {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ)
+    (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x) {t : ℝ} (ht : 0 < t) :
+    2 * t *
+        ∫ x,
+          φ x *
+            WeakGamma.apply
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                ⟨_,
+                  mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi
+                    f ht⟩)
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                ⟨_,
+                  mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi
+                    f ht⟩)
+              x ∂(ν : Measure V) ≤
+      M ^ 2 * ∫ x, φ x ∂(ν : Measure V) := by
   have hU1 : ContDiff ℝ 1 U := hU.of_le (by decide)
   have hmain := two_mul_integral_mul_weakGamma_le m hν hi hνU hU hconv f hφ hφc hφ0 ht
   set φL := (memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ with hφLdef
@@ -369,27 +392,33 @@ theorem two_mul_integral_mul_weakGamma_le_of_bounded (hνU : (ν : Measure V) = 
     filter_upwards [(memLp_of_contDiff_hasCompactSupport ν hφ hφc).coeFn_toLp] with x hx
     rw [hx]; exact hφ0 x
   have hf2 : Integrable (fun x => (f x) ^ 2) (ν : Measure V) := (Lp.memLp f).integrable_sq
-  have hPf2 : Integrable (fun x => (operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f x) ^ 2)
-      (ν : Measure V) := (Lp.memLp _).integrable_sq
+  have hPf2 :
+    Integrable (fun x => (operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f x) ^ 2)
+      (ν : Measure V) :=
+    (Lp.memLp _).integrable_sq
   have hφb : ∃ K, ∀ x, |φ x| ≤ K := by
     obtain ⟨K, hK⟩ := hφ.continuous.bounded_above_of_compact_support hφc
     exact ⟨K, fun x => by simpa [Real.norm_eq_abs] using hK x⟩
   obtain ⟨K, hK⟩ := hφb
   have i₁ : Integrable (fun x => ψ x * (f x) ^ 2) (ν : Measure V) :=
-    hf2.bdd_mul (Lp.aestronglyMeasurable ψ) (by
-      filter_upwards [(hb t ht.le).1] with x hx; rwa [Real.norm_eq_abs])
-  have i₂ : Integrable (fun x => φ x * (operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f x) ^ 2)
+    hf2.bdd_mul (Lp.aestronglyMeasurable ψ)
+      (by filter_upwards [(hb t ht.le).1] with x hx; rwa [Real.norm_eq_abs])
+  have i₂ :
+    Integrable (fun x => φ x * (operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f x) ^ 2)
       (ν : Measure V) :=
     hPf2.bdd_mul hφ.continuous.aestronglyMeasurable
       (Eventually.of_forall fun x => by rw [Real.norm_eq_abs]; exact hK x)
-  have hnn : 0 ≤ ∫ x, φ x * (operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f x) ^ 2
-      ∂(ν : Measure V) :=
+  have hnn :
+    0 ≤
+      ∫ x,
+        φ x * (operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f x) ^ 2 ∂(ν : Measure V) :=
     integral_nonneg fun x => mul_nonneg (hφ0 x) (sq_nonneg _)
   have hle : ∫ x, ψ x * (f x) ^ 2 ∂(ν : Measure V) ≤ ∫ x, M ^ 2 * ψ x ∂(ν : Measure V) := by
     refine integral_mono_ae i₁ ((Lp.memLp ψ).integrable one_le_two |>.const_mul _) ?_
     filter_upwards [hψ0, hf] with x hx hfx
     have : (f x) ^ 2 ≤ M ^ 2 := by
-      have := sq_abs (f x) ▸ pow_le_pow_left₀ (abs_nonneg _) hfx 2; exact this
+      have := sq_abs (f x) ▸ pow_le_pow_left₀ (abs_nonneg _) hfx 2;
+      exact this
     nlinarith
   have hmass : ∫ x, M ^ 2 * ψ x ∂(ν : Measure V) = M ^ 2 * ∫ x, φ x ∂(ν : Measure V) := by
     rw [integral_const_mul, hψdef, HeatSemigroup.integral m _ hν hi ht.le]

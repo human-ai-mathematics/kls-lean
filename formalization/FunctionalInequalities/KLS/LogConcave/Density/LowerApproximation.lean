@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.Bounds
-import FunctionalInequalities.Analysis.Convex.LipschitzEnvelope
-import FunctionalInequalities.Analysis.Mollification.Convex
-import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
-import Mathlib.MeasureTheory.Measure.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.Bounds
+public import FunctionalInequalities.Analysis.Convex.LipschitzEnvelope
+public import FunctionalInequalities.Analysis.Mollification.Convex
+public import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
+public import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
 # Smooth log-concave approximation from below in density
@@ -31,6 +33,8 @@ arXiv:2607.24164v1, Proposition 2.8):
 3. **Mollification**: `W_k = ρ_{s_k} ⋆ W^{L_k} - L_k s_k` with `L_k s_k = 1/(k+1)`, so
    `W^{L_k} - 2/(k+1) ≤ W_k ≤ W^{L_k}`, `W_k` is `C^∞` and convex.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -102,10 +106,14 @@ theorem exists_le_mul_exp_neg_norm (h : IsBorellDensity (ν : Measure V) m ρ) {
     rw [hV₀, measureReal_def]
     exact ENNReal.toReal_pos (measure_ball_pos m 0 hr2).ne' measure_ball_lt_top.ne
   set I : ℝ := ∫ x, Real.exp (t * ‖x‖) ∂(ν : Measure V) with hI
-  have hI0 : 0 ≤ I := integral_nonneg fun x => (Real.exp_pos _).le
+  have hI0 : 0 ≤ I :=
+    integral_nonneg fun x =>
+      (Real.exp_pos _).le
   -- the local comparison, integrated over the ball
-  have hloc : ∀ x : V, ρ x * V₀ ≤
-      K * (ν : Measure V).real (ball ((1 / 2 : ℝ) • x + (1 / 2 : ℝ) • a) (r / 2)) := by
+
+  have hloc :
+    ∀ x : V,
+      ρ x * V₀ ≤ K * (ν : Measure V).real (ball ((1 / 2 : ℝ) • x + (1 / 2 : ℝ) • a) (r / 2)) := by
     intro x
     set c : V := (1 / 2 : ℝ) • x + (1 / 2 : ℝ) • a with hc
     have hpt : ∀ z ∈ ball c (r / 2), ρ x ≤ K * ρ z := by
@@ -117,27 +125,33 @@ theorem exists_le_mul_exp_neg_norm (h : IsBorellDensity (ν : Measure V) m ρ) {
         rw [hbe, norm_smul]
         simp only [Real.norm_ofNat]
         linarith
-      exact h.le_rpow_mul_of_combination (by norm_num) (by norm_num) hb₀ hM (hball b hbmem)
-        (by rw [hb]; module)
+      exact
+        h.le_rpow_mul_of_combination (by norm_num) (by norm_num) hb₀ hM (hball b hbmem)
+          (by rw [hb]; module)
     have hcball : m (ball c (r / 2)) = m (ball (0 : V) (r / 2)) :=
       Measure.addHaar_ball_center m c (r / 2)
-    have hint : ENNReal.ofReal (ρ x) * m (ball c (r / 2)) ≤
+    have hint :
+      ENNReal.ofReal (ρ x) * m (ball c (r / 2)) ≤
         ENNReal.ofReal K * (ν : Measure V) (ball c (r / 2)) := by
-      rw [← h.withDensity_eq, withDensity_apply _ isOpen_ball.measurableSet,
-        ← lintegral_const_mul _ h.measurable.ennreal_ofReal, ← setLIntegral_const]
+      rw [← h.withDensity_eq, withDensity_apply _ isOpen_ball.measurableSet, ←
+        lintegral_const_mul _ h.measurable.ennreal_ofReal, ← setLIntegral_const]
       refine setLIntegral_mono (measurable_const.mul h.measurable.ennreal_ofReal) fun z hz => ?_
       rw [← ENNReal.ofReal_mul hK0]
       exact ENNReal.ofReal_le_ofReal (hpt z hz)
     have hfin : (ν : Measure V) (ball c (r / 2)) ≠ ⊤ := measure_ne_top _ _
     have hreal := ENNReal.toReal_mono (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hfin) hint
     rwa [ENNReal.toReal_mul, ENNReal.toReal_mul, ENNReal.toReal_ofReal (h.nonneg x),
-      ENNReal.toReal_ofReal hK0, hcball, ← measureReal_def, ← measureReal_def] at hreal
+      ENNReal.toReal_ofReal hK0, hcball, ← measureReal_def, ←
+      measureReal_def] at hreal
   -- Markov's inequality for the exponential moment
-  have hmarkov : ∀ c : V, Real.exp (t * (‖c‖ - r / 2)) * (ν : Measure V).real (ball c (r / 2)) ≤ I := by
+
+  have hmarkov :
+    ∀ c : V, Real.exp (t * (‖c‖ - r / 2)) * (ν : Measure V).real (ball c (r / 2)) ≤ I := by
     intro c
-    have hm := mul_meas_ge_le_integral_of_nonneg (μ := (ν : Measure V))
-      (Eventually.of_forall fun x => (Real.exp_pos (t * ‖x‖)).le) hexp
-      (Real.exp (t * (‖c‖ - r / 2)))
+    have hm :=
+      mul_meas_ge_le_integral_of_nonneg (μ := (ν : Measure V))
+        (Eventually.of_forall fun x => (Real.exp_pos (t * ‖x‖)).le) hexp
+        (Real.exp (t * (‖c‖ - r / 2)))
     refine le_trans ?_ hm
     refine mul_le_mul_of_nonneg_left ?_ (Real.exp_pos _).le
     refine measureReal_mono (fun z hz => ?_) (measure_ne_top _ _)
@@ -153,10 +167,12 @@ theorem exists_le_mul_exp_neg_norm (h : IsBorellDensity (ν : Measure V) m ρ) {
   have h2 := hmarkov c
   have hcnorm : ‖x‖ / 2 - ‖a‖ / 2 ≤ ‖c‖ := by
     have := norm_sub_le c ((1 / 2 : ℝ) • a)
-    rw [show c - (1 / 2 : ℝ) • a = (1 / 2 : ℝ) • x by rw [hc]; abel, norm_smul, norm_smul] at this
+    rw [show c - (1 / 2 : ℝ) • a = (1 / 2 : ℝ) • x by rw [hc]; abel, norm_smul,
+      norm_smul] at this
     simp only [one_div, norm_inv, Real.norm_ofNat] at this
     linarith
-  have hexpc : Real.exp (-(t * (‖c‖ - r / 2))) ≤
+  have hexpc :
+    Real.exp (-(t * (‖c‖ - r / 2))) ≤
       Real.exp (t * r / 2 + t * ‖a‖ / 2) * Real.exp (-(t / 2) * ‖x‖) := by
     rw [← Real.exp_add]
     apply Real.exp_le_exp.mpr
@@ -167,14 +183,16 @@ theorem exists_le_mul_exp_neg_norm (h : IsBorellDensity (ν : Measure V) m ρ) {
     linarith
   have hρ : ρ x ≤ K * I / V₀ * Real.exp (-(t * (‖c‖ - r / 2))) := by
     rw [div_mul_eq_mul_div, le_div_iff₀ hV₀pos]
-    calc ρ x * V₀ ≤ K * (ν : Measure V).real (ball c (r / 2)) := h1
+    calc
+      ρ x * V₀ ≤ K * (ν : Measure V).real (ball c (r / 2)) := h1
       _ ≤ K * (I * Real.exp (-(t * (‖c‖ - r / 2)))) := mul_le_mul_of_nonneg_left hball_le hK0
       _ = K * I * Real.exp (-(t * (‖c‖ - r / 2))) := by ring
-  calc ρ x ≤ K * I / V₀ * Real.exp (-(t * (‖c‖ - r / 2))) := hρ
+  calc
+    ρ x ≤ K * I / V₀ * Real.exp (-(t * (‖c‖ - r / 2))) := hρ
     _ ≤ K * I / V₀ * (Real.exp (t * r / 2 + t * ‖a‖ / 2) * Real.exp (-(t / 2) * ‖x‖)) :=
-        mul_le_mul_of_nonneg_left hexpc (by positivity)
+      mul_le_mul_of_nonneg_left hexpc (by positivity)
     _ ≤ (K * I / V₀ * Real.exp (t * r / 2 + t * ‖a‖ / 2) + 1) * Real.exp (-(t / 2) * ‖x‖) := by
-        nlinarith [Real.exp_pos (-(t / 2) * ‖x‖)]
+      nlinarith [Real.exp_pos (-(t / 2) * ‖x‖)]
 
 end IsBorellDensity
 
@@ -213,8 +231,10 @@ private theorem tendsto_exp_neg_env (h : IsBorellDensity (ν : Measure V) m ρ) 
     (x : V) : Tendsto (fun L => Real.exp (-env ρ L x)) atTop (𝓝 (ρ x)) := by
   obtain ⟨hD, hb, -, -⟩ := potential_data h hM hB htail
   rw [Metric.tendsto_atTop]
-  intro ε hε
+  intro ε
+    hε
   -- upper semicontinuity: `ρ < ρ x + ε/2` near `x`
+
   have husc := h.upperSemicontinuous x (ρ x + ε / 2) (by linarith)
   obtain ⟨δ, hδ, hδball⟩ := Metric.eventually_nhds_iff.mp husc
   set c : ℝ := -Real.log (ρ x + ε / 2) with hcdef
@@ -231,15 +251,17 @@ private theorem tendsto_exp_neg_env (h : IsBorellDensity (ν : Measure V) m ρ) 
     have hlt : ρ y < ρ x + ε / 2 := hδball (by rw [dist_comm, dist_eq_norm]; exact hxy)
     exact neg_le_neg (Real.log_le_log hy' hlt.le)
   have hupper : Real.exp (-env ρ L x) ≤ ρ x + ε / 2 := by
-    calc Real.exp (-env ρ L x) ≤ Real.exp (-c) := Real.exp_le_exp.mpr (by linarith)
+    calc
+      Real.exp (-env ρ L x) ≤ Real.exp (-c) := Real.exp_le_exp.mpr (by linarith)
       _ = ρ x + ε / 2 := by rw [hcdef, neg_neg, Real.exp_log (by linarith)]
   have hlower : ρ x ≤ Real.exp (-env ρ L x) := by
     rcases hρx.eq_or_lt with h0 | hpos
     · rw [← h0]; exact (Real.exp_pos _).le
     · have hle := lipschitzEnvelope.le_self hL0 hb (show x ∈ {y | 0 < ρ y} from hpos)
-      calc ρ x = Real.exp (-(-Real.log (ρ x))) := by rw [neg_neg, Real.exp_log hpos]
-        _ ≤ Real.exp (-env ρ L x) := Real.exp_le_exp.mpr (by
-            change env ρ L x ≤ -Real.log (ρ x) at hle; linarith)
+      calc
+        ρ x = Real.exp (-(-Real.log (ρ x))) := by rw [neg_neg, Real.exp_log hpos]
+        _ ≤ Real.exp (-env ρ L x) :=
+          Real.exp_le_exp.mpr (by change env ρ L x ≤ -Real.log (ρ x) at hle; linarith)
   rw [Real.dist_eq, abs_lt]
   constructor <;> linarith
 

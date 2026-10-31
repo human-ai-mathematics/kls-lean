@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.SmoothDomain.Basic
-import FunctionalInequalities.Analysis.Sard.Smooth
+module
+
+public import FunctionalInequalities.Analysis.SmoothDomain.Basic
+public import FunctionalInequalities.Analysis.Sard.Smooth
 
 /-! # Regular superlevel sets of smooth functions
 
@@ -11,6 +13,8 @@ transitive `sorryAx`.
 
 `Analysis/SmoothDomain/Basic.lean` is deliberately kept independent of Sard, so the packaging
 lives one layer up here rather than beside the `SmoothDomain` structure itself. -/
+
+@[expose] public section
 
 noncomputable section
 

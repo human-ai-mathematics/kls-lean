@@ -20,6 +20,9 @@ from typing import Any, Iterable
 VENDOR_DIR = "formalization/vendor"
 LOCK_NAME = "vendor-lock.json"
 PATCH_NAME = "port.patch"
+# Toolchain and Mathlib the vendored sources are ported to; follows formalization/lean-toolchain
+# and the Mathlib pin in formalization/lake-manifest.json (v4.35.0 = 56a005855ea1...).
+PORT_PIN = {"lean": "v4.35.0", "mathlib": "56a0058"}
 
 PINS: dict[str, dict[str, Any]] = {
     "LevyStochCalc": {
@@ -315,7 +318,7 @@ def check_lock(root: Path, roots: set[str] | None = None) -> tuple[dict[str, Any
     if not isinstance(port, dict) or set(port) != {"lean", "mathlib"}:
         errors.append("lock port fields are incorrect")
         port = {}
-    if port.get("lean") != "v4.33.0" or port.get("mathlib") != "db584cd":
+    if port != PORT_PIN:
         errors.append("lock port does not match the port pin")
 
     patch_info = data.get("patch")
@@ -471,7 +474,7 @@ def check_lock(root: Path, roots: set[str] | None = None) -> tuple[dict[str, Any
                 errors.append(f"file fields are incorrect: {key}")
             rel = key[len(name) + 1 :]
             expected_module = (
-                key[:-5].replace("/", ".") if key.endswith(".lean") else None
+                rel[:-5].replace("/", ".") if rel.endswith(".lean") else None
             )
             if entry.get("upstream_path") != rel:
                 errors.append(f"upstream_path is incorrect: {key}")
@@ -799,7 +802,10 @@ def generate_lock(root: Path, clones: dict[str, Path]) -> dict[str, Any]:
 
             entries[key] = {
                 "upstream_path": upstream_path,
-                "module": key[:-5].replace("/", ".") if key.endswith(".lean") else None,
+                "module": (
+                    upstream_path[:-5].replace("/", ".")
+                    if upstream_path.endswith(".lean") else None
+                ),
                 "upstream_sha256": _sha256(upstream),
                 "upstream_git_blob": git_blob_sha1(upstream),
                 "vendored_sha256": _sha256(vendored),
@@ -826,7 +832,7 @@ def generate_lock(root: Path, clones: dict[str, Path]) -> dict[str, Any]:
     lock = {
         "schema": 2,
         "description": _DESCRIPTION,
-        "port": {"lean": "v4.33.0", "mathlib": "db584cd"},
+        "port": dict(PORT_PIN),
         "patch": {
             "path": PATCH_NAME,
             "sha256": _sha256(patch_bytes),

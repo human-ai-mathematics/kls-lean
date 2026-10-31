@@ -1,15 +1,20 @@
-import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
-import FunctionalInequalities.Analysis.Mollification.Hessian
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
+module
+
+public import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
+public import FunctionalInequalities.Analysis.Mollification.Hessian
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
 
 /-!
 # Bochner's identity at `C^{1,1}`
 
-`∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D∇U ∇f, ∇f⟫) dν` for compactly supported smooth `f` and a Lipschitz `C¹` potential `U` with
+`∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D∇U ∇f, ∇f⟫) dν` for compactly supported smooth `f` and a Lipschitz `C¹`
+potential `U` with
 Lipschitz gradient.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -132,13 +137,15 @@ variable {E : Type*}
 `C^{1,1}`): for `U ∈ C¹` Lipschitz with `G`-Lipschitz gradient and integrable
 `e^{-U}`, and `f ∈ C_c^∞`, `∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D(∇U) ∇f, ∇f⟫) dν` with `ν = e^{-U} dx`
 normalized, `ℒf = Δf − ⟪∇U, ∇f⟫`, and `D(∇U)` the a.e. derivative of the Lipschitz map `∇U`. -/
-theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
-    (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
-    (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E))
-    {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :
+theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (hU : ContDiff ℝ 1 U)
+    {G : NNReal} (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
+    (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E)) {f : E → ℝ}
+    (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :
     ∫ x, weightedLaplacian U f x ^ 2 ∂((volume : Measure E).tilted (-U)) =
-      ∫ x, (hessianSqStdBasis f x + ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫)
-        ∂((volume : Measure E).tilted (-U)) := by
+      ∫ x,
+        (hessianSqStdBasis f x +
+          ⟪fderiv ℝ (gradient U) x (gradient f x),
+            gradient f x⟫) ∂((volume : Measure E).tilted (-U)) := by
   classical
   have _hL := hL
   have _hexp := hexp
@@ -149,69 +156,59 @@ theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (
   have hf1 : ContDiff ℝ 1 f := hf.of_le (by decide)
   have hf2 : ContDiff ℝ 2 f := hf.of_le (by decide)
   have hf3 : ContDiff ℝ 3 f := hf.of_le (by decide)
-  have ha2 : ContDiff ℝ 2 a :=
-    contDiff_gamma hf3 hf3 (by norm_num) (by norm_num)
+  have ha2 : ContDiff ℝ 2 a := contDiff_gamma hf3 hf3 (by norm_num) (by norm_num)
   have ha1 : ContDiff ℝ 1 a := ha2.of_le (by norm_num)
   have hac : HasCompactSupport a := hasCompactSupport_gamma_left f hfc
   have hgf : Continuous (gradient f) := continuous_gradient hf1
   have hga : Continuous (gradient a) := continuous_gradient ha1
-  have hLf : Continuous (weightedLaplacian U f) :=
-    continuous_weightedLaplacian hU hf2
-  have hLa : Continuous (weightedLaplacian U a) :=
-    continuous_weightedLaplacian hU ha2
+  have hLf : Continuous (weightedLaplacian U f) := continuous_weightedLaplacian hU hf2
+  have hLa : Continuous (weightedLaplacian U a) := continuous_weightedLaplacian hU ha2
   have hS : Continuous (hessianSqStdBasis f) := continuous_hessian_square hf
   obtain ⟨B, hB0, hB⟩ := compact_norm_bound hgf (hasCompactSupport_gradient hfc)
   obtain ⟨D, hD0, hDb⟩ := compact_norm_bound hga (hasCompactSupport_gradient hac)
-  obtain ⟨M, hM0, hM⟩ :=
-    compact_norm_bound hLf (hasCompactSupport_weightedLaplacian U hfc)
-  obtain ⟨N, hN0, hN⟩ :=
-    compact_norm_bound hLa (hasCompactSupport_weightedLaplacian U hac)
+  obtain ⟨M, hM0, hM⟩ := compact_norm_bound hLf (hasCompactSupport_weightedLaplacian U hfc)
+  obtain ⟨N, hN0, hN⟩ := compact_norm_bound hLa (hasCompactSupport_weightedLaplacian U hac)
   obtain ⟨S, hS0, hSb⟩ := compact_norm_bound hS (compact_hessian_square hfc)
-  have herror (k : ℕ) (x : E) :
-      ‖gradient (V k) x - gradient U x‖ ≤ (G : ℝ) :=
-    (he k x).trans (div_le_self G.coe_nonneg (by
-      have hk : (0 : ℝ) ≤ (k : ℝ) := Nat.cast_nonneg k
-      linarith))
-  have hgradlim (x : E) :
-      Tendsto (fun k => gradient (V k) x) atTop (𝓝 (gradient U x)) := by
+  have herror (k : ℕ) (x : E) : ‖gradient (V k) x - gradient U x‖ ≤ (G : ℝ) :=
+    (he k x).trans
+      (div_le_self G.coe_nonneg
+        (by
+          have hk : (0 : ℝ) ≤ (k : ℝ) := Nat.cast_nonneg k
+          linarith))
+  have hgradlim (x : E) : Tendsto (fun k => gradient (V k) x) atTop (𝓝 (gradient U x)) := by
     apply tendsto_sub_nhds_zero_iff.mp
     apply squeeze_zero_norm (fun k => he k x)
     have ht := (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).const_mul (G : ℝ)
     simpa only [mul_zero, mul_one_div] using ht
   have hLVlim (g : E → ℝ) (x : E) :
-      Tendsto (fun k => weightedLaplacian (V k) g x) atTop
-        (𝓝 (weightedLaplacian U g x)) := by
+    Tendsto (fun k => weightedLaplacian (V k) g x) atTop (𝓝 (weightedLaplacian U g x)) := by
     exact tendsto_const_nhds.sub ((hgradlim x).inner tendsto_const_nhds)
-  have hLVf (k : ℕ) (x : E) :
-      ‖weightedLaplacian (V k) f x‖ ≤ M + (G : ℝ) * B := by
-    exact (laplacian_perturbation_bound U (V k) f x (herror k x)).trans
-      (add_le_add (hM x) (mul_le_mul_of_nonneg_left (hB x) G.coe_nonneg))
-  have hLVa (k : ℕ) (x : E) :
-      ‖weightedLaplacian (V k) a x‖ ≤ N + (G : ℝ) * D := by
-    exact (laplacian_perturbation_bound U (V k) a x (herror k x)).trans
-      (add_le_add (hN x) (mul_le_mul_of_nonneg_left (hDb x) G.coe_nonneg))
+  have hLVf (k : ℕ) (x : E) : ‖weightedLaplacian (V k) f x‖ ≤ M + (G : ℝ) * B := by
+    exact
+      (laplacian_perturbation_bound U (V k) f x (herror k x)).trans
+        (add_le_add (hM x) (mul_le_mul_of_nonneg_left (hB x) G.coe_nonneg))
+  have hLVa (k : ℕ) (x : E) : ‖weightedLaplacian (V k) a x‖ ≤ N + (G : ℝ) * D := by
+    exact
+      (laplacian_perturbation_bound U (V k) a x (herror k x)).trans
+        (add_le_add (hN x) (mul_le_mul_of_nonneg_left (hDb x) G.coe_nonneg))
   have hQ :
-      Tendsto (fun k => ∫ x, weightedLaplacian (V k) a x ∂μ) atTop
-        (𝓝 (∫ x, weightedLaplacian U a x ∂μ)) := by
-    apply tendsto_integral_of_dominated_convergence
-      (fun _ => N + (G : ℝ) * D)
+    Tendsto (fun k => ∫ x, weightedLaplacian (V k) a x ∂μ) atTop
+      (𝓝 (∫ x, weightedLaplacian U a x ∂μ)) := by
+    apply tendsto_integral_of_dominated_convergence (fun _ => N + (G : ℝ) * D)
     · intro k
-      exact (continuous_weightedLaplacian ((hV k).of_le (by decide))
-        ha2).aestronglyMeasurable
+      exact (continuous_weightedLaplacian ((hV k).of_le (by decide)) ha2).aestronglyMeasurable
     · exact integrable_const _
     · intro k
       exact Eventually.of_forall (hLVa k)
     · exact Eventually.of_forall (hLVlim a)
   have hP :
-      Tendsto
-        (fun k => ∫ x, weightedLaplacian U f x * weightedLaplacian (V k) f x ∂μ)
-        atTop (𝓝 (∫ x, weightedLaplacian U f x ^ 2 ∂μ)) := by
-    apply tendsto_integral_of_dominated_convergence
-      (fun _ => M * (M + (G : ℝ) * B))
+    Tendsto (fun k => ∫ x, weightedLaplacian U f x * weightedLaplacian (V k) f x ∂μ) atTop
+      (𝓝 (∫ x, weightedLaplacian U f x ^ 2 ∂μ)) := by
+    apply tendsto_integral_of_dominated_convergence (fun _ => M * (M + (G : ℝ) * B))
     · intro k
-      exact (hLf.mul
-        (continuous_weightedLaplacian ((hV k).of_le (by decide))
-          hf2)).aestronglyMeasurable
+      exact
+        (hLf.mul
+            (continuous_weightedLaplacian ((hV k).of_le (by decide)) hf2)).aestronglyMeasurable
     · exact integrable_const _
     · intro k
       apply Eventually.of_forall
@@ -220,65 +217,60 @@ theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (
       exact mul_le_mul (hM x) (hLVf k x) (norm_nonneg _) hM0
     · apply Eventually.of_forall
       intro x
-      simpa only [pow_two] using
-        (hLVlim f x).const_mul (weightedLaplacian U f x)
+      simpa only [pow_two] using (hLVlim f x).const_mul (weightedLaplacian U f x)
   have hHcont (k : ℕ) :
-      Continuous (fun x => hessianSqStdBasis f x +
-        ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫) := by
-    have hg : ContDiff ℝ 1 (gradient (V k)) :=
-      contDiff_gradient (hV k) (by decide)
+    Continuous
+      (fun x =>
+        hessianSqStdBasis f x + ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫) := by
+    have hg : ContDiff ℝ 1 (gradient (V k)) := contDiff_gradient (hV k) (by decide)
     exact hS.add (((hg.continuous_fderiv one_ne_zero).clm_apply hgf).inner hgf)
   have hHbound (k : ℕ) (x : E) :
-      ‖hessianSqStdBasis f x +
-          ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫‖ ≤
-        S + (G : ℝ) * B * B := by
-    have hop : ‖fderiv ℝ (gradient (V k)) x‖ ≤ (G : ℝ) :=
-      norm_fderiv_le_of_lipschitz ℝ (hVG k)
-    have happ :
-        ‖fderiv ℝ (gradient (V k)) x (gradient f x)‖ ≤ (G : ℝ) * B :=
+    ‖hessianSqStdBasis f x + ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫‖ ≤
+      S + (G : ℝ) * B * B := by
+    have hop : ‖fderiv ℝ (gradient (V k)) x‖ ≤ (G : ℝ) := norm_fderiv_le_of_lipschitz ℝ (hVG k)
+    have happ : ‖fderiv ℝ (gradient (V k)) x (gradient f x)‖ ≤ (G : ℝ) * B :=
       ((fderiv ℝ (gradient (V k)) x).le_opNorm (gradient f x)).trans
         (mul_le_mul hop (hB x) (norm_nonneg _) G.coe_nonneg)
-    exact (norm_add_le _ _).trans
-      (add_le_add (hSb x)
-        ((norm_inner_le_norm _ _).trans
-          (mul_le_mul happ (hB x) (norm_nonneg _) (mul_nonneg G.coe_nonneg hB0))))
+    exact
+      (norm_add_le _ _).trans
+        (add_le_add (hSb x)
+          ((norm_inner_le_norm _ _).trans
+            (mul_le_mul happ (hB x) (norm_nonneg _) (mul_nonneg G.coe_nonneg hB0))))
   have hDμ :
-      ∀ᵐ x ∂μ, Tendsto (fun k => fderiv ℝ (gradient (V k)) x) atTop
-        (𝓝 (fderiv ℝ (gradient U) x)) :=
+    ∀ᵐ x ∂μ,
+      Tendsto (fun k => fderiv ℝ (gradient (V k)) x) atTop (𝓝 (fderiv ℝ (gradient U) x)) :=
     (tilted_absolutelyContinuous (volume : Measure E) (-U)).ae_le hD
   have hH :
-      Tendsto
-        (fun k => ∫ x, hessianSqStdBasis f x +
-          ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫ ∂μ)
-        atTop
-        (𝓝 (∫ x, hessianSqStdBasis f x +
-          ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫ ∂μ)) := by
-    apply tendsto_integral_of_dominated_convergence
-      (fun _ => S + (G : ℝ) * B * B)
+    Tendsto
+      (fun k =>
+        ∫ x,
+          hessianSqStdBasis f x + ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫ ∂μ)
+      atTop
+      (𝓝
+        (∫ x,
+          hessianSqStdBasis f x + ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫ ∂μ)) := by
+    apply tendsto_integral_of_dominated_convergence (fun _ => S + (G : ℝ) * B * B)
     · intro k
       exact (hHcont k).aestronglyMeasurable
     · exact integrable_const _
     · intro k
       exact Eventually.of_forall (hHbound k)
     · filter_upwards [hDμ] with x hx
-      have hev :
-          Continuous (fun A : E →L[ℝ] E => A (gradient f x)) :=
+      have hev : Continuous (fun A : E →L[ℝ] E => A (gradient f x)) :=
         continuous_id.clm_apply continuous_const
-      exact tendsto_const_nhds.add
-        (((hev.tendsto _).comp hx).inner tendsto_const_nhds)
+      exact tendsto_const_nhds.add (((hev.tendsto _).comp hx).inner tendsto_const_nhds)
   have hzero : ∫ x, weightedLaplacian U a x ∂μ = 0 := by
     have hi :=
-      integral_inner_gradient_tilted (volume : Measure E)
-        (U := U) (f := a) (g := fun _ : E => (1 : ℝ))
-        hU ha2 hac (contDiff_const (c := (1 : ℝ)))
-    simp only [gradient_fun_const, inner_zero_right, integral_zero,
-      mul_one, integral_neg] at hi
+      integral_inner_gradient_tilted (volume : Measure E) (U := U) (f := a) (g := fun _ : E =>
+        (1 : ℝ)) hU ha2 hac (contDiff_const (c := (1 : ℝ)))
+    simp only [gradient_fun_const, inner_zero_right, integral_zero, mul_one, integral_neg] at hi
     exact neg_eq_zero.mp hi.symm
   have hlimit :
-      Tendsto
-        (fun k => ∫ x, hessianSqStdBasis f x +
-          ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫ ∂μ)
-        atTop (𝓝 (∫ x, weightedLaplacian U f x ^ 2 ∂μ)) := by
+    Tendsto
+      (fun k =>
+        ∫ x,
+          hessianSqStdBasis f x + ⟪fderiv ℝ (gradient (V k)) x (gradient f x), gradient f x⟫ ∂μ)
+      atTop (𝓝 (∫ x, weightedLaplacian U f x ^ 2 ∂μ)) := by
     have ht := (hQ.div_const 2).add hP
     rw [hzero, zero_div, zero_add] at ht
     apply ht.congr
@@ -287,27 +279,31 @@ theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (
   exact tendsto_nhds_unique hlimit hH
 
 set_option maxHeartbeats 2000000 in
-/-- Ordinary diffusion coercivity at `C^{1,1}`: for a C1 globally Lipschitz potential `U` with Lipschitz gradient and
-integrable `e^{-U}`, and `f ∈ C_c^∞`, the Hessian pairing `⟪D(∇U) ∇f, ∇f⟫` and `(ℒf)²` are integrable for the tilted
-measure and `∫ ⟪D(∇U) ∇f, ∇f⟫ ≤ ∫ (ℒf)²`. Lipschitz-gradient sibling of `compact_ordinary_diffusion_coercivity`. -/
-theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient
-    {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
-    (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
-    (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E))
+/--
+Ordinary diffusion coercivity at `C^{1,1}`: for a C1 globally Lipschitz potential `U` with Lipschitz
+gradient and
+integrable `e^{-U}`, and `f ∈ C_c^∞`, the Hessian pairing `⟪D(∇U) ∇f, ∇f⟫` and `(ℒf)²` are
+integrable for the tilted
+measure and `∫ ⟪D(∇U) ∇f, ∇f⟫ ≤ ∫ (ℒf)²`. Lipschitz-gradient sibling of
+`compact_ordinary_diffusion_coercivity`. -/
+theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient {U : E → ℝ}
+    (hU : ContDiff ℝ 1 U) {G : NNReal} (hG : LipschitzWith G (gradient U)) {L : NNReal}
+    (hL : LipschitzWith L U) (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E))
     {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :
     Integrable (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫)
-      ((volume : Measure E).tilted (-U)) ∧
-    Integrable (fun x => weightedLaplacian U f x ^ 2)
-      ((volume : Measure E).tilted (-U)) ∧
-    (∫ x, ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫
-        ∂((volume : Measure E).tilted (-U))) ≤
-      ∫ x, weightedLaplacian U f x ^ 2 ∂((volume : Measure E).tilted (-U)) := by
+        ((volume : Measure E).tilted (-U)) ∧
+      Integrable (fun x => weightedLaplacian U f x ^ 2) ((volume : Measure E).tilted (-U)) ∧
+        (∫ x,
+            ⟪fderiv ℝ (gradient U) x (gradient f x),
+              gradient f x⟫ ∂((volume : Measure E).tilted (-U))) ≤
+          ∫ x, weightedLaplacian U f x ^ 2 ∂((volume : Measure E).tilted (-U)) := by
   classical
   let mu : Measure E := (volume : Measure E).tilted (-U)
   have hf1 : ContDiff ℝ 1 f := hf.of_le (by decide)
   have hf2 : ContDiff ℝ 2 f := hf.of_le (by decide)
   have hgf : Continuous (gradient f) := continuous_gradient hf1
-  obtain ⟨C, hC⟩ := ((hasCompactSupport_gradient hfc).isCompact_range hgf).isBounded.exists_norm_le
+  obtain ⟨C, hC⟩ :=
+    ((hasCompactSupport_gradient hfc).isCompact_range hgf).isBounded.exists_norm_le
   have hb (x : E) : ‖gradient f x‖ ≤ C := hC _ ⟨x, rfl⟩
   have hC0 : 0 ≤ C := (norm_nonneg _).trans (hb 0)
   have hmD : Measurable (fderiv ℝ (gradient U)) := measurable_fderiv ℝ (gradient U)
@@ -315,22 +311,20 @@ theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient
     continuous_fst.clm_apply continuous_snd
   have hmQ : Measurable (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫) :=
     (hev.measurable.comp (hmD.prodMk hgf.measurable)).inner hgf.measurable
-  have hQ : Integrable
-      (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫) mu := by
+  have hQ : Integrable (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫) mu := by
     refine (integrable_const ((G : ℝ) * C * C)).mono' hmQ.aestronglyMeasurable ?_
     apply Filter.Eventually.of_forall
     intro x
-    have hop : ‖fderiv ℝ (gradient U) x‖ ≤ (G : ℝ) :=
-      norm_fderiv_le_of_lipschitz ℝ hG
+    have hop : ‖fderiv ℝ (gradient U) x‖ ≤ (G : ℝ) := norm_fderiv_le_of_lipschitz ℝ hG
     have happ : ‖fderiv ℝ (gradient U) x (gradient f x)‖ ≤ (G : ℝ) * C :=
       ((fderiv ℝ (gradient U) x).le_opNorm _).trans
         (mul_le_mul hop (hb x) (norm_nonneg _) G.coe_nonneg)
-    exact (norm_inner_le_norm _ _).trans
-      (mul_le_mul happ (hb x) (norm_nonneg _) (mul_nonneg G.coe_nonneg hC0))
+    exact
+      (norm_inner_le_norm _ _).trans
+        (mul_le_mul happ (hb x) (norm_nonneg _) (mul_nonneg G.coe_nonneg hC0))
   have hScont : Continuous (hessianSqStdBasis f) := continuous_hessian_square hf
   have hSsupp : HasCompactSupport (hessianSqStdBasis f) := compact_hessian_square hfc
-  have hS : Integrable (hessianSqStdBasis f) mu :=
-    hScont.integrable_of_hasCompactSupport hSsupp
+  have hS : Integrable (hessianSqStdBasis f) mu := hScont.integrable_of_hasCompactSupport hSsupp
   have hLap : Integrable (fun x => weightedLaplacian U f x ^ 2) mu := by
     have hc2 : HasCompactSupport (fun x => weightedLaplacian U f x ^ 2) :=
       (hasCompactSupport_weightedLaplacian U hfc).comp_left (g := fun t : ℝ => t ^ 2) (by simp)
@@ -338,9 +332,11 @@ theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient
       (continuous_weightedLaplacian hU hf2).pow 2
     exact hcont2.integrable_of_hasCompactSupport hc2
   have hIdentity := integral_weightedLaplacian_sq_eq_of_lipschitz_gradient hU hG hL hexp hf hfc
-  change (∫ x, weightedLaplacian U f x ^ 2 ∂mu) =
-    ∫ x, hessianSqStdBasis f x +
-      ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫ ∂mu at hIdentity
+  change
+    (∫ x, weightedLaplacian U f x ^ 2 ∂mu) =
+      ∫ x,
+        hessianSqStdBasis f x +
+          ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫ ∂mu at hIdentity
   rw [integral_add hS hQ] at hIdentity
   have hnonneg : 0 ≤ ∫ x, hessianSqStdBasis f x ∂mu :=
     integral_nonneg fun x => hessianSqStdBasis_nonneg f x

@@ -1,5 +1,7 @@
-import Mathlib.MeasureTheory.Integral.Prod
-import Mathlib.Probability.Moments.Variance
+module
+
+public import Mathlib.MeasureTheory.Integral.Prod
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Two-point representation of the variance
@@ -10,6 +12,8 @@ conditional-fiber energy. For a probability law `ν` the extended variance of a 
 equals one half of the integral of `‖X t - X s‖ₑ²` against `ν ⊗ ν`; the identity holds in
 `[0, ∞]` without a square-integrability premise, both sides being `⊤` exactly when `X ∉ L²(ν)`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 
@@ -50,7 +54,7 @@ theorem integral_sub_sq_prod {X : Ω → ℝ} (hX : MemLp X 2 ν) :
   have hsnd : ∫ p : Ω × Ω, Y p.2 ^ 2 ∂(ν.prod ν) = ∫ ω, Y ω ^ 2 ∂ν := by
     rw [integral_prod _ h2]
     simp
-  rw [hfst, hsnd, variance_eq_integral hX.1.aemeasurable]
+  rw [hfst, hsnd, variance_eq_integral hX.aestronglyMeasurable.aemeasurable]
   ring
 
 /-- The extended two-point identity: twice the extended variance is the integral of the squared
@@ -82,8 +86,10 @@ theorem two_mul_evariance_eq_lintegral_prod {X : Ω → ℝ} (hX : AEStronglyMea
     rw [lintegral_prod _ hae] at hlt
     obtain ⟨x₀, hx₀⟩ := (ae_lt_top' hae.lintegral_prod_right' hlt.ne).exists
     have hmem : MemLp (fun y ↦ X x₀ - X y) 2 ν := by
-      refine ⟨aestronglyMeasurable_const.sub hX, ?_⟩
-      rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top]
+      have hXm : AEStronglyMeasurable (fun y ↦ X x₀ - X y) ν :=
+        aestronglyMeasurable_const.sub hX
+      rw [memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+        ENNReal.ofNat_ne_top hXm]
       simpa [ENNReal.toReal_ofNat, ENNReal.rpow_two] using hx₀
     have : MemLp X 2 ν := by
       have h : MemLp (fun y ↦ X x₀ - (X x₀ - X y)) 2 ν := (memLp_const (X x₀)).sub hmem

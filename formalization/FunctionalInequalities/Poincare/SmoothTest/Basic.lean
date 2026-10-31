@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Probability.Moments.Variance
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Poincaré constants: source formula and local test domain
@@ -17,6 +19,8 @@ Fixed constants and energies are real-valued; `⊤` means no finite valid consta
 The source's identification with the reciprocal spectral gap, and a closed Sobolev-domain
 identification, are not established here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -66,16 +70,16 @@ theorem energy_eq_fderiv (μ : Measure E) (f : E → ℝ) :
     change ‖gradient f x‖ ^ 2 = ‖fderiv ℝ f x‖ ^ 2
     rw [norm_fderiv_eq_norm_gradient]
 
-/-- Source: the inequality in [Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25),
+/--
+Source: the inequality in [Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25),
 with the local Hilbert test domain `Admissible`. Probability and finite-constant
 nonnegativity are explicit; no source-domain or spectral-gap equivalence is asserted. -/
 structure Holds (μ : Measure E) (C : ℝ) : Prop where
   probability : IsProbabilityMeasure μ
   constant_nonneg : 0 ≤ C
   /-- Apply the variance bound to a globally smooth L² test with integrable squared
-  gradient. The energy is `∫ ‖gradient f‖²`, with no factor `1/2`. -/
-  variance_le : ∀ ⦃f : E → ℝ⦄, Admissible μ f →
-    variance f μ ≤ C * energy μ f
+    gradient. The energy is `∫ ‖gradient f‖²`, with no factor `1/2`. -/
+  variance_le : ∀ ⦃f : E → ℝ⦄, Admissible μ f → variance f μ ≤ C * energy μ f
 
 namespace Holds
 

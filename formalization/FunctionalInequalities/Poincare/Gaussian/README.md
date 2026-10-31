@@ -123,4 +123,4 @@ placeholders or forbidden proof escapes. Lean compilation checks the terms; the 
 checks certification structure and provenance; the completed human review supplies the separate
 semantic check.
 
-Lean and Mathlib remain pinned to v4.33.0.
+Lean and Mathlib remain pinned to v4.35.0.

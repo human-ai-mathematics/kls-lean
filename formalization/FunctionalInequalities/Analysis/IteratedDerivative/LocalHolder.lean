@@ -1,9 +1,12 @@
-import FunctionalInequalities.Analysis.EuclideanCoordinates
-import FunctionalInequalities.Analysis.Holder.Cutoff
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Topology.MetricSpace.Holder
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+module
+
+public import FunctionalInequalities.Analysis.EuclideanCoordinates
+public import FunctionalInequalities.Analysis.Holder.Cutoff
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import Mathlib.Analysis.Calculus.Deriv.Inv
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Topology.MetricSpace.Holder
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 
 /-!
 # Locally Hölder derivatives: the `C^{m,α}_loc` invariant of the Schauder bootstrap
@@ -31,6 +34,8 @@ functions closed under the algebraic operations appearing in the differentiated 
 Only the function class and its calculus are set up here; no equation and no regularity gain is
 proved in this module.
 -/
+
+@[expose] public section
 
 /-- Closes order goals between natural-number casts into `WithTop ℕ∞`. -/
 local macro "nat_cast_le" : tactic => `(tactic| first | (norm_cast; done) | (norm_cast; omega))
@@ -217,10 +222,12 @@ theorem LocHolderMap.of_le_norm {G' : Type*} [NormedAddCommGroup G'] {F : E → 
 
 theorem LocHolderMap.add {F₁ F₂ : E → G} (h₁ : LocHolderMap F₁) (h₂ : LocHolderMap F₂) :
     LocHolderMap (fun x => F₁ x + F₂ x) := by
-  refine LocHolderMap.of_le_sum (ι := Fin 2) (F := ![F₁, F₂]) (fun i => by fin_cases i <;> simpa)
-    fun s _ => ⟨fun _ => 1, fun _ => zero_le_one, fun x _ y _ => ?_⟩
+  refine
+    LocHolderMap.of_le_sum (ι := Fin 2) (F := ![F₁, F₂]) (fun i => by fin_cases i <;> simpa)
+      fun s _ => ⟨fun _ => 1, fun _ => zero_le_one, fun x _ y _ => ?_⟩
   simp only [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, one_mul]
-  calc ‖F₁ x + F₂ x - (F₁ y + F₂ y)‖ = ‖(F₁ x - F₁ y) + (F₂ x - F₂ y)‖ := by congr 1; abel
+  calc
+    ‖F₁ x + F₂ x - (F₁ y + F₂ y)‖ = ‖(F₁ x - F₁ y) + (F₂ x - F₂ y)‖ := by congr 1; abel
     _ ≤ ‖F₁ x - F₁ y‖ + ‖F₂ x - F₂ y‖ := norm_add_le _ _
 
 theorem LocHolderMap.neg {F : E → G} (h : LocHolderMap F) : LocHolderMap (fun x => -F x) :=
@@ -241,11 +248,13 @@ theorem LocHolderMap.const_smul {F : E → G} [NormedSpace ℝ G] (h : LocHolder
 theorem LocHolderMap.finset_sum {ι : Type*} (t : Finset ι) {F : ι → E → G}
     (h : ∀ i ∈ t, LocHolderMap (F i)) : LocHolderMap (fun x => ∑ i ∈ t, F i x) := by
   classical
-  induction t using Finset.induction_on with
+    induction t using Finset.induction_on with
   | empty => simpa using LocHolderMap.const (0 : G)
-  | insert a t ha ih =>
-      have := (h a (Finset.mem_insert_self a t)).add (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
-      simpa [Finset.sum_insert ha] using this
+  | insert a t ha
+    ih =>
+    have :=
+      (h a (Finset.mem_insert_self a t)).add (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
+    simpa [Finset.sum_insert ha] using this
 
 /-- A locally Hölder map is bounded on every ball. -/
 theorem LocHolderMap.exists_bound {F : E → G} (h : LocHolderMap F) {s : ℝ} (hs : 0 < s) :
@@ -266,21 +275,24 @@ theorem LocHolderMap.exists_bound {F : E → G} (h : LocHolderMap F) {s : ℝ} (
 /-- Products of locally Hölder real functions are locally Hölder. -/
 theorem LocHolderMap.mul {F₁ F₂ : E → ℝ} (h₁ : LocHolderMap F₁) (h₂ : LocHolderMap F₂) :
     LocHolderMap (fun x => F₁ x * F₂ x) := by
-  refine LocHolderMap.of_le_sum (ι := Fin 2) (F := ![F₁, F₂]) (fun i => by fin_cases i <;> simpa)
-    fun s hs => ?_
+  refine
+    LocHolderMap.of_le_sum (ι := Fin 2) (F := ![F₁, F₂]) (fun i => by fin_cases i <;> simpa)
+      fun s hs => ?_
   obtain ⟨B₁, hB₁, hb₁⟩ := h₁.exists_bound hs
   obtain ⟨B₂, hB₂, hb₂⟩ := h₂.exists_bound hs
   refine ⟨![B₂, B₁], fun i => by fin_cases i <;> simpa, fun x hx y hy => ?_⟩
   simp only [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Real.norm_eq_abs]
   have e : F₁ x * F₂ x - F₁ y * F₂ y = (F₁ x - F₁ y) * F₂ y + F₁ x * (F₂ x - F₂ y) := by ring
   rw [e]
-  calc |(F₁ x - F₁ y) * F₂ y + F₁ x * (F₂ x - F₂ y)|
-      ≤ |(F₁ x - F₁ y) * F₂ y| + |F₁ x * (F₂ x - F₂ y)| := abs_add_le _ _
+  calc
+    |(F₁ x - F₁ y) * F₂ y + F₁ x * (F₂ x - F₂ y)| ≤
+        |(F₁ x - F₁ y) * F₂ y| + |F₁ x * (F₂ x - F₂ y)| :=
+      abs_add_le _ _
     _ = |F₁ x - F₁ y| * |F₂ y| + |F₁ x| * |F₂ x - F₂ y| := by rw [abs_mul, abs_mul]
     _ ≤ |F₁ x - F₁ y| * B₂ + B₁ * |F₂ x - F₂ y| := by
-        gcongr
-        · exact hb₂ y hy
-        · exact hb₁ x hx
+      gcongr
+      · exact hb₂ y hy
+      · exact hb₁ x hx
     _ = B₂ * |F₁ x - F₁ y| + B₁ * |F₂ x - F₂ y| := by ring
 
 /-- A locally Hölder map is continuous. -/
@@ -289,8 +301,7 @@ theorem LocHolderMap.continuous {F : E → G} (h : LocHolderMap F) : Continuous 
   intro x
   obtain ⟨η, hη0, hη1, C, hC, hhol⟩ := h (‖x‖ + 1) (by positivity)
   have hx : x ∈ ball (0:E) (‖x‖ + 1) := mem_ball_zero_iff.mpr (by linarith)
-  have hH : HolderOnWith (Real.toNNReal C) η F (ball (0:E) (‖x‖ + 1)) :=
-    by
+  have hH : HolderOnWith (Real.toNNReal C) η F (ball (0:E) (‖x‖ + 1)) := by
       intro x hx y hy
       rw [edist_dist, edist_dist, ENNReal.ofReal_rpow_of_nonneg dist_nonneg η.coe_nonneg,
         ← ENNReal.ofReal_coe_nnreal, Real.coe_toNNReal C hC, ← ENNReal.ofReal_mul hC]
@@ -422,11 +433,13 @@ theorem LocHolderDeriv.const (m : ℕ) (c : ℝ) : LocHolderDeriv m (fun _ : E =
 theorem LocHolderDeriv.finset_sum {m : ℕ} {ι : Type*} (t : Finset ι) {f : ι → E → ℝ}
     (h : ∀ i ∈ t, LocHolderDeriv m (f i)) : LocHolderDeriv m (fun x => ∑ i ∈ t, f i x) := by
   classical
-  induction t using Finset.induction_on with
+    induction t using Finset.induction_on with
   | empty => simpa using LocHolderDeriv.const m 0
-  | insert a t ha ih =>
-      have := (h a (Finset.mem_insert_self a t)).add (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
-      simpa [Finset.sum_insert ha] using this
+  | insert a t ha
+    ih =>
+    have :=
+      (h a (Finset.mem_insert_self a t)).add (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
+    simpa [Finset.sum_insert ha] using this
 
 /-- **Weakening.** Locally `C^{m+1,α}` implies locally `C^{m,α}`. -/
 theorem LocHolderDeriv.weaken {m : ℕ} {h : E → ℝ} (hh : LocHolderDeriv (m + 1) h) :
@@ -487,13 +500,17 @@ last vector of the `m`-th iterated derivatives of the coordinate directional der
 theorem iteratedFDeriv_succ_apply_eq_sum_coordinate {m : ℕ} {h : E → ℝ}
     (hD : ContDiff ℝ m (fderiv ℝ h)) (x : E) (v : Fin (m + 1) → E) :
     iteratedFDeriv ℝ (m + 1) h x v =
-      ∑ i, (v (Fin.last m)) i * iteratedFDeriv ℝ m
-        (fun y => fderiv ℝ h y (EuclideanSpace.basisFun (Fin n) ℝ i)) x (Fin.init v) := by
+      ∑ i,
+        (v (Fin.last m)) i *
+          iteratedFDeriv ℝ m (fun y => fderiv ℝ h y (EuclideanSpace.basisFun (Fin n) ℝ i)) x
+            (Fin.init v) := by
   rw [iteratedFDeriv_succ_apply_right, clm_apply_eq_sum_coord]
   refine Finset.sum_congr rfl fun i _ => ?_
   congr 1
-  have hT : iteratedFDeriv ℝ m (fun y => fderiv ℝ h y (EuclideanSpace.basisFun (Fin n) ℝ i)) x =
-      (ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.basisFun (Fin n) ℝ i)).compContinuousMultilinearMap
+  have hT :
+    iteratedFDeriv ℝ m (fun y => fderiv ℝ h y (EuclideanSpace.basisFun (Fin n) ℝ i)) x =
+      (ContinuousLinearMap.apply ℝ ℝ
+            (EuclideanSpace.basisFun (Fin n) ℝ i)).compContinuousMultilinearMap
         (iteratedFDeriv ℝ m (fderiv ℝ h) x) :=
     ContinuousLinearMap.iteratedFDeriv_comp_left
       (ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.basisFun (Fin n) ℝ i)) hD.contDiffAt le_rfl
@@ -586,11 +603,13 @@ theorem LocHolderDeriv.mul {m : ℕ} {f g : E → ℝ} (hf : LocHolderDeriv m f)
 theorem LocHolderDeriv.finset_prod {m : ℕ} {ι : Type*} (t : Finset ι) {f : ι → E → ℝ}
     (h : ∀ i ∈ t, LocHolderDeriv m (f i)) : LocHolderDeriv m (fun x => ∏ i ∈ t, f i x) := by
   classical
-  induction t using Finset.induction_on with
+    induction t using Finset.induction_on with
   | empty => simpa using LocHolderDeriv.const m 1
-  | insert a t ha ih =>
-      have := (h a (Finset.mem_insert_self a t)).mul (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
-      simpa [Finset.prod_insert ha] using this
+  | insert a t ha
+    ih =>
+    have :=
+      (h a (Finset.mem_insert_self a t)).mul (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
+    simpa [Finset.prod_insert ha] using this
 
 /-- Reciprocals of nonvanishing locally `C^{m,α}` functions are locally `C^{m,α}`. -/
 theorem LocHolderDeriv.inv {m : ℕ} {f : E → ℝ} (hf : LocHolderDeriv m f) (h0 : ∀ x, f x ≠ 0) :

@@ -1,5 +1,8 @@
-import FunctionalInequalities.Probability.LogConcave
-import Mathlib.MeasureTheory.Measure.Regular
+module
+
+public import FunctionalInequalities.Probability.LogConcave
+public import Mathlib.MeasureTheory.Measure.Regular
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-!
 # Compact-set and Borel-set log-concavity
@@ -12,6 +15,8 @@ The definitions and the equivalence are fully proved. Neither density,
 full-dimensional support, positive dimension nor a second moment is assumed.
 The set function `innerMeasure` is not packaged as a countably additive `Measure`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -101,24 +106,34 @@ theorem LogConcave.borel_iff [FiniteDimensional ℝ E] (μ : ProbabilityMeasure 
   constructor
   · intro h B₀ B₁ hB₀ hB₁ t ht0 ht1
     have ht1' : 0 < 1 - t := by linarith
-    have key : ∀ K₀ K₁ : Set E, K₀ ⊆ B₀ → IsCompact K₀ → K₁ ⊆ B₁ → IsCompact K₁ →
-        (μ : Measure E) K₀ ^ t * (μ : Measure E) K₁ ^ (1 - t) ≤
-          innerMeasure (μ : Measure E) {z | ∃ x ∈ B₀, ∃ y ∈ B₁, z = t • x + (1 - t) • y} :=
+    have key :
+      ∀ K₀ K₁ : Set E,
+        K₀ ⊆ B₀ →
+          IsCompact K₀ →
+            K₁ ⊆ B₁ →
+              IsCompact K₁ →
+                (μ : Measure E) K₀ ^ t * (μ : Measure E) K₁ ^ (1 - t) ≤
+                  innerMeasure (μ : Measure E)
+                    {z | ∃ x ∈ B₀, ∃ y ∈ B₁, z = t • x + (1 - t) • y} :=
       fun K₀ K₁ h₀ hK₀ h₁ hK₁ ↦
-        (h K₀ K₁ hK₀ hK₁ t ht0 ht1).trans
-          (le_innerMeasure_of_isCompact _ (isCompact_combination hK₀ hK₁ t)
-            (combination_mono h₀ h₁ t))
-    calc (μ : Measure E) B₀ ^ t * (μ : Measure E) B₁ ^ (1 - t)
-        = (⨆ (K : Set E) (_ : K ⊆ B₀) (_ : IsCompact K), (μ : Measure E) K) ^ t *
+      (h K₀ K₁ hK₀ hK₁ t ht0 ht1).trans
+        (le_innerMeasure_of_isCompact _ (isCompact_combination hK₀ hK₁ t)
+          (combination_mono h₀ h₁ t))
+    calc
+      (μ : Measure E) B₀ ^ t * (μ : Measure E) B₁ ^ (1 - t) =
+          (⨆ (K : Set E) (_ : K ⊆ B₀) (_ : IsCompact K), (μ : Measure E) K) ^ t *
             (⨆ (K : Set E) (_ : K ⊆ B₁) (_ : IsCompact K), (μ : Measure E) K) ^ (1 - t) := by
-          rw [hB₀.measure_eq_iSup_isCompact, hB₁.measure_eq_iSup_isCompact]
-      _ = ⨆ (K₀ : Set E) (_ : K₀ ⊆ B₀) (_ : IsCompact K₀) (K₁ : Set E) (_ : K₁ ⊆ B₁)
-            (_ : IsCompact K₁), (μ : Measure E) K₀ ^ t * (μ : Measure E) K₁ ^ (1 - t) := by
-          simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
-          simp_rw (config := { congrConsts := false }) [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul, ENNReal.mul_iSup]
+        rw [hB₀.measure_eq_iSup_isCompact, hB₁.measure_eq_iSup_isCompact]
+      _ =
+          ⨆ (K₀ : Set E) (_ : K₀ ⊆ B₀) (_ : IsCompact K₀) (K₁ : Set E) (_ : K₁ ⊆ B₁) (_ :
+            IsCompact K₁), (μ : Measure E) K₀ ^ t * (μ : Measure E) K₁ ^ (1 - t) := by
+        simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ←
+          ENNReal.orderIsoRpow_apply (1 - t) ht1']
+        simp_rw (config := { congrConsts := false }) [(ENNReal.orderIsoRpow _ ht0).map_iSup _,
+          (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul, ENNReal.mul_iSup]
       _ ≤ _ := by
-          refine iSup₂_le fun K₀ h₀ ↦ iSup_le fun hK₀ ↦ iSup₂_le fun K₁ h₁ ↦ iSup_le fun hK₁ ↦ ?_
-          exact key K₀ K₁ h₀ hK₀ h₁ hK₁
+        refine iSup₂_le fun K₀ h₀ ↦ iSup_le fun hK₀ ↦ iSup₂_le fun K₁ h₁ ↦ iSup_le fun hK₁ ↦ ?_
+        exact key K₀ K₁ h₀ hK₀ h₁ hK₁
   · intro h K₀ K₁ hK₀ hK₁ t ht0 ht1
     exact (h K₀ K₁ hK₀.measurableSet hK₁.measurableSet t ht0 ht1).trans (innerMeasure_le _ _)
 

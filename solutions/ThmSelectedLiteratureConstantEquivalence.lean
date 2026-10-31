@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Poincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Poincare
 
 /-!
 # Lean certificate: `thm:selected-literature-constant-equivalence`
@@ -7,6 +9,8 @@ Every finite-dimensional compact-set log-concave probability law has the same se
 literature Poincare constant. No explicit density, full-dimensional ambient support, positive
 dimension, or finite-moment hypothesis is added. This is a frontend equality, not a KLS bound.
 -/
+
+@[expose] public section
 
 noncomputable section
 

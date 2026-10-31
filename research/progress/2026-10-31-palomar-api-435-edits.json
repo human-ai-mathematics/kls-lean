@@ -1,0 +1,3374 @@
+{
+ "version": 1,
+ "review_date": "2026-10-31",
+ "status": "source-level candidate; not compiled or validated",
+ "scope": "Identifier-only drop-in replacements of names deprecated or redirected between Lean v4.33.0 / Mathlib db584cd6 and Lean v4.35.0 / Mathlib v4.35.0, each confirmed against the pinned v4.35 sources. Statements, hypotheses and declaration names of this project are unchanged.",
+ "pins": {
+  "lean": {
+   "from": "leanprover/lean4:v4.33.0",
+   "to": "leanprover/lean4:v4.35.0",
+   "to_commit": "eb6cafb7290e8bd5f2937522d8d804f58f02bafc"
+  },
+  "mathlib": {
+   "from": "db584cd6d46c92f209a44c0f1c829460d327499d",
+   "to": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+   "to_tag": "v4.35.0"
+  }
+ },
+ "position_convention": "1-based line and column of the new identifier in the candidate source, after the module port and dated vendor notices",
+ "totals": {
+  "sites": 468,
+  "files": 155
+ },
+ "substitutions": [
+  {
+   "substitution": "Finset.prod_le_one -> Finset.prod_le_one₀",
+   "sites": 1,
+   "upstream_locator": "RENAME WITHOUT DEPRECATION: v4.33 GroupWithZero/Finset.lean:78 prod_le_one (h0 h1) = v4.35 prod_le_one₀ same file:78; v4.35 Finset.prod_le_one (Group/Finset.lean:172) is the monoid lemma"
+  },
+  {
+   "substitution": "Finset.prod_le_prod -> Finset.prod_le_prod₀",
+   "sites": 5,
+   "upstream_locator": "RENAME WITHOUT DEPRECATION: v4.33 Finset.prod_le_prod (h0 h1, ordered semiring; Algebra/Order/BigOperators/GroupWithZero/Finset.lean:38) is v4.35 Finset.prod_le_prod₀ at the same file:38 with identical context; v4.35 Finset.prod_le_prod (Algebra/Order/BigOperators/Group/Finset.lean:118) is the former monoid lemma prod_le_prod'"
+  },
+  {
+   "substitution": "MemLp.prod' -> MemLp.fun_prod",
+   "sites": 1,
+   "upstream_locator": "Mathlib v4.35 MeasureTheory/Function/LpSeminorm/CompareExp.lean:630 @[deprecated (since := \"2026-09-06\")] alias MemLp.prod' := MemLp.fun_prod"
+  },
+  {
+   "substitution": "antilipschitz -> antilipschitzWith",
+   "sites": 2,
+   "upstream_locator": "Mathlib v4.35: Isometry.antilipschitz Topology/MetricSpace/Isometry.lean:84; ContinuousLinearEquiv.antilipschitz Analysis/Normed/Operator/NormedSpace.lean:269-270"
+  },
+  {
+   "substitution": "dif_neg -> dite_eq_right",
+   "sites": 27,
+   "upstream_locator": "Lean v4.35 src/Init/Core.lean:1217-1218 @[deprecated dite_eq_right (since := \"2026-07-21\")]"
+  },
+  {
+   "substitution": "dif_pos -> dite_eq_left",
+   "sites": 72,
+   "upstream_locator": "Lean v4.35 src/Init/Core.lean:1208-1209 @[deprecated dite_eq_left (since := \"2026-07-21\")]"
+  },
+  {
+   "substitution": "eventuallyLE -> eventuallySubset",
+   "sites": 3,
+   "upstream_locator": "STATEMENT SPLIT: v4.33 LE.le.eventuallyLE {s t : Set α} (h : s ⊆ t) : s ≤ᶠ[l] t is v4.35 LE.le.eventuallySubset (Order/Filter/Basic.lean:1382, identical binders); v4.35 LE.le.eventuallyLE (Basic.lean:1385) is now the function version"
+  },
+  {
+   "substitution": "if_false -> ite_false",
+   "sites": 20,
+   "upstream_locator": "Lean v4.35 src/Init/ByCases.lean:32-33 @[deprecated ite_false (since := \"2026-07-21\")]; ite_false at Init/SimpLemmas.lean:238"
+  },
+  {
+   "substitution": "if_neg -> ite_eq_right",
+   "sites": 138,
+   "upstream_locator": "Lean v4.35 src/Init/Core.lean:1192-1193 @[deprecated ite_eq_right (since := \"2026-07-21\")]"
+  },
+  {
+   "substitution": "if_pos -> ite_eq_left",
+   "sites": 143,
+   "upstream_locator": "Lean v4.35 src/Init/Core.lean:1183-1184 @[deprecated ite_eq_left (since := \"2026-07-21\")]"
+  },
+  {
+   "substitution": "if_true -> ite_true",
+   "sites": 26,
+   "upstream_locator": "Lean v4.35 src/Init/ByCases.lean:29-30 @[deprecated ite_true (since := \"2026-07-21\")]; ite_true at Init/SimpLemmas.lean:237 has identical binders {_ : Decidable True} (a b : α)"
+  },
+  {
+   "substitution": "linearMap_vsub -> linear_apply_vsub",
+   "sites": 4,
+   "upstream_locator": "Mathlib v4.35 LinearAlgebra/AffineSpace/AffineMap.lean:133 @[deprecated (since := \"2026-09-22\")] alias linearMap_vsub := linear_apply_vsub"
+  },
+  {
+   "substitution": "lipschitz -> lipschitzWith",
+   "sites": 25,
+   "upstream_locator": "Mathlib v4.35: ContinuousLinearMap.lipschitz alias Analysis/Normed/Operator/NNNorm.lean:128; ContinuousLinearEquiv.lipschitz NNNorm.lean:156; Isometry.lipschitz Topology/MetricSpace/Isometry.lean:79; LinearIsometryEquiv.lipschitz Analysis/Normed/Operator/LinearIsometry.lean:926 (all @[deprecated (since := \"2026-08-16\"/\"2026-09-11\")] alias := lipschitzWith)"
+  },
+  {
+   "substitution": "on -> isLocalMinOn",
+   "sites": 1,
+   "upstream_locator": "Mathlib v4.35 Topology/Order/LocalExtr.lean:89 @[deprecated (since := \"2026-07-17\")] alias IsLocalMin.on := IsLocalMin.isLocalMinOn"
+  }
+ ],
+ "sites": [
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
+   "line": 191,
+   "column": 79,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+   "line": 86,
+   "column": 24,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+   "line": 322,
+   "column": 59,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
+   "line": 45,
+   "column": 28,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean",
+   "line": 462,
+   "column": 13,
+   "old": "Finset.prod_le_prod",
+   "new": "Finset.prod_le_prod₀"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Caffarelli/Contact.lean",
+   "line": 49,
+   "column": 32,
+   "old": "linearMap_vsub",
+   "new": "linear_apply_vsub"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean",
+   "line": 323,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/ContactImage.lean",
+   "line": 498,
+   "column": 11,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Compactness.lean",
+   "line": 363,
+   "column": 79,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean",
+   "line": 521,
+   "column": 25,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean",
+   "line": 530,
+   "column": 40,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean",
+   "line": 533,
+   "column": 40,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean",
+   "line": 534,
+   "column": 52,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Dirichlet/Envelope.lean",
+   "line": 572,
+   "column": 50,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/EssentialContinuity.lean",
+   "line": 216,
+   "column": 18,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Measure.lean",
+   "line": 81,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/Measure.lean",
+   "line": 95,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/GaugeCone/PrescribedAtom.lean",
+   "line": 149,
+   "column": 42,
+   "old": "antilipschitz",
+   "new": "antilipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Legendre/Basic.lean",
+   "line": 374,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Legendre/Basic.lean",
+   "line": 384,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean",
+   "line": 466,
+   "column": 24,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Pogorelov.lean",
+   "line": 497,
+   "column": 18,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/RadialExtension.lean",
+   "line": 159,
+   "column": 27,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/RadialExtension.lean",
+   "line": 196,
+   "column": 44,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/RadialExtension.lean",
+   "line": 233,
+   "column": 32,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/RadialExtension.lean",
+   "line": 259,
+   "column": 33,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/RadialExtension.lean",
+   "line": 259,
+   "column": 51,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+   "line": 43,
+   "column": 38,
+   "old": "linearMap_vsub",
+   "new": "linear_apply_vsub"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Basic.lean",
+   "line": 161,
+   "column": 58,
+   "old": "on",
+   "new": "isLocalMinOn"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+   "line": 427,
+   "column": 25,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+   "line": 429,
+   "column": 52,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+   "line": 431,
+   "column": 52,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Existence.lean",
+   "line": 447,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Image.lean",
+   "line": 33,
+   "column": 37,
+   "old": "linearMap_vsub",
+   "new": "linear_apply_vsub"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 37,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 39,
+   "column": 7,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 107,
+   "column": 27,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 108,
+   "column": 27,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 130,
+   "column": 53,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 145,
+   "column": 27,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Piecewise.lean",
+   "line": 147,
+   "column": 25,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient/Regularity.lean",
+   "line": 475,
+   "column": 20,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Elliptic/Barrier.lean",
+   "line": 98,
+   "column": 51,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+   "line": 223,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+   "line": 228,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Holder/Representative.lean",
+   "line": 214,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Holder/Representative.lean",
+   "line": 220,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Lipschitz/Extension.lean",
+   "line": 51,
+   "column": 78,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Lipschitz/Extension.lean",
+   "line": 66,
+   "column": 23,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/LogDet/Inequalities.lean",
+   "line": 106,
+   "column": 55,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+   "line": 126,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+   "line": 131,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+   "line": 136,
+   "column": 72,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+   "line": 244,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+   "line": 250,
+   "column": 21,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+   "line": 250,
+   "column": 37,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean",
+   "line": 575,
+   "column": 13,
+   "old": "Finset.prod_le_prod",
+   "new": "Finset.prod_le_prod₀"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean",
+   "line": 862,
+   "column": 40,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean",
+   "line": 479,
+   "column": 34,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean",
+   "line": 604,
+   "column": 55,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Mollification/Basic.lean",
+   "line": 533,
+   "column": 8,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Basic.lean",
+   "line": 81,
+   "column": 35,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/Basic.lean",
+   "line": 102,
+   "column": 35,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/EntryBound.lean",
+   "line": 35,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/First.lean",
+   "line": 49,
+   "column": 35,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/First.lean",
+   "line": 72,
+   "column": 35,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Kernel/First.lean",
+   "line": 124,
+   "column": 31,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Potential/BoundaryFormula.lean",
+   "line": 419,
+   "column": 45,
+   "old": "antilipschitz",
+   "new": "antilipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Error.lean",
+   "line": 56,
+   "column": 17,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Error.lean",
+   "line": 57,
+   "column": 17,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Error.lean",
+   "line": 117,
+   "column": 25,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/Error.lean",
+   "line": 118,
+   "column": 25,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/L1.lean",
+   "line": 72,
+   "column": 25,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Newtonian/Truncation/L1.lean",
+   "line": 75,
+   "column": 25,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Operator/InverseSqrt.lean",
+   "line": 241,
+   "column": 35,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/RieszPotential/Representation.lean",
+   "line": 247,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/RieszPotential/Representation.lean",
+   "line": 250,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+   "line": 48,
+   "column": 7,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+   "line": 56,
+   "column": 7,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Curvature.lean",
+   "line": 548,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/SmoothDomain/BoundaryChart.lean",
+   "line": 211,
+   "column": 22,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/SmoothDomain/BoundaryChart.lean",
+   "line": 222,
+   "column": 22,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/SmoothDomain/BoundaryChart.lean",
+   "line": 264,
+   "column": 63,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/SmoothDomain/GaussGreen.lean",
+   "line": 149,
+   "column": 26,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/SmoothDomain/GaussGreen.lean",
+   "line": 159,
+   "column": 24,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 60,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 68,
+   "column": 52,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 135,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 138,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 139,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 146,
+   "column": 38,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 511,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 514,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 515,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/EnergyForm.lean",
+   "line": 522,
+   "column": 37,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Multilinear.lean",
+   "line": 34,
+   "column": 13,
+   "old": "Finset.prod_le_prod",
+   "new": "Finset.prod_le_prod₀"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/SlotAction.lean",
+   "line": 287,
+   "column": 32,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/SlotAction.lean",
+   "line": 289,
+   "column": 32,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 492,
+   "column": 21,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 497,
+   "column": 21,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 497,
+   "column": 40,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 504,
+   "column": 21,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 504,
+   "column": 40,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 508,
+   "column": 21,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 513,
+   "column": 21,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 513,
+   "column": 40,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 520,
+   "column": 21,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean",
+   "line": 520,
+   "column": 40,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+   "line": 111,
+   "column": 11,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+   "line": 114,
+   "column": 11,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+   "line": 124,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean",
+   "line": 131,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Energy.lean",
+   "line": 320,
+   "column": 37,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean",
+   "line": 1405,
+   "column": 7,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
+   "line": 427,
+   "column": 12,
+   "old": "MemLp.prod'",
+   "new": "MemLp.fun_prod"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Whitney/Partition.lean",
+   "line": 110,
+   "column": 30,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Analysis/Whitney/Partition.lean",
+   "line": 139,
+   "column": 28,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+   "line": 97,
+   "column": 29,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Energy/CovarianceGradient/LinearEquiv.lean",
+   "line": 96,
+   "column": 64,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+   "line": 416,
+   "column": 7,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+   "line": 423,
+   "column": 7,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Comparison.lean",
+   "line": 114,
+   "column": 43,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Comparison.lean",
+   "line": 117,
+   "column": 46,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Cumulant/Energy/Basic.lean",
+   "line": 175,
+   "column": 16,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
+   "line": 243,
+   "column": 13,
+   "old": "Finset.prod_le_one",
+   "new": "Finset.prod_le_one₀"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
+   "line": 365,
+   "column": 9,
+   "old": "Finset.prod_le_prod",
+   "new": "Finset.prod_le_prod₀"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/Coefficients.lean",
+   "line": 103,
+   "column": 42,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Boundary.lean",
+   "line": 324,
+   "column": 55,
+   "old": "eventuallyLE",
+   "new": "eventuallySubset"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Step.lean",
+   "line": 314,
+   "column": 23,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process/Basic.lean",
+   "line": 78,
+   "column": 28,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process/Basic.lean",
+   "line": 81,
+   "column": 32,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process/Basic.lean",
+   "line": 95,
+   "column": 28,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process/Basic.lean",
+   "line": 98,
+   "column": 32,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean",
+   "line": 70,
+   "column": 3,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean",
+   "line": 75,
+   "column": 3,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean",
+   "line": 128,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean",
+   "line": 371,
+   "column": 50,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean",
+   "line": 394,
+   "column": 30,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean",
+   "line": 398,
+   "column": 64,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/CEK/BoundedPrimal.lean",
+   "line": 123,
+   "column": 15,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/CEK/BoundedPrimal.lean",
+   "line": 132,
+   "column": 15,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/CEK/BoundedPrimal.lean",
+   "line": 139,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/CEK/BoundedPrimal.lean",
+   "line": 145,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/CEK/BoundedPrimal.lean",
+   "line": 154,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean",
+   "line": 261,
+   "column": 18,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+   "line": 99,
+   "column": 7,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+   "line": 109,
+   "column": 7,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+   "line": 95,
+   "column": 54,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+   "line": 459,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+   "line": 466,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/SliceKernel.lean",
+   "line": 72,
+   "column": 44,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/SliceKernel.lean",
+   "line": 79,
+   "column": 44,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/ConditionalFiber/SliceKernel.lean",
+   "line": 85,
+   "column": 44,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+   "line": 591,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+   "line": 594,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/Klartag/DualLaplacian.lean",
+   "line": 89,
+   "column": 79,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/Klartag/LinearBounds.lean",
+   "line": 610,
+   "column": 30,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/BallConditioning.lean",
+   "line": 481,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+   "line": 281,
+   "column": 38,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+   "line": 448,
+   "column": 60,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+   "line": 450,
+   "column": 42,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+   "line": 538,
+   "column": 23,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/ReversePoincare.lean",
+   "line": 251,
+   "column": 24,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/ReversePoincare.lean",
+   "line": 297,
+   "column": 24,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+   "line": 275,
+   "column": 38,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+   "line": 305,
+   "column": 24,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+   "line": 332,
+   "column": 24,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+   "line": 452,
+   "column": 23,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+   "line": 489,
+   "column": 22,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
+   "line": 297,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 318,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 321,
+   "column": 17,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 334,
+   "column": 26,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 334,
+   "column": 43,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 336,
+   "column": 26,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 336,
+   "column": 43,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 338,
+   "column": 44,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 339,
+   "column": 30,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 352,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 418,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 421,
+   "column": 17,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 434,
+   "column": 26,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 434,
+   "column": 43,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 436,
+   "column": 26,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 436,
+   "column": 43,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 438,
+   "column": 44,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 439,
+   "column": 30,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+   "line": 452,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
+   "line": 197,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/Conditioning.lean",
+   "line": 305,
+   "column": 17,
+   "old": "Finset.prod_le_prod",
+   "new": "Finset.prod_le_prod₀"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/Line/GaussianProfile.lean",
+   "line": 122,
+   "column": 41,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Baseline.lean",
+   "line": 40,
+   "column": 40,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Baseline.lean",
+   "line": 43,
+   "column": 40,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 62,
+   "column": 33,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 76,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 76,
+   "column": 25,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 77,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 90,
+   "column": 23,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 91,
+   "column": 23,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 193,
+   "column": 23,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 221,
+   "column": 23,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+   "line": 478,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/GradientVariation.lean",
+   "line": 263,
+   "column": 17,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/GradientVariation.lean",
+   "line": 322,
+   "column": 27,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Truncation.lean",
+   "line": 116,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Truncation.lean",
+   "line": 119,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Truncation.lean",
+   "line": 150,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Maximizer.lean",
+   "line": 69,
+   "column": 36,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Maximizer.lean",
+   "line": 70,
+   "column": 36,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Maximizer.lean",
+   "line": 122,
+   "column": 39,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/MomentMeasure/Uniqueness/Maximizer.lean",
+   "line": 133,
+   "column": 41,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/Product.lean",
+   "line": 175,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/Product.lean",
+   "line": 178,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/Product.lean",
+   "line": 219,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/FunctionalInequalities/Probability/Product.lean",
+   "line": 220,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Analysis.lean",
+   "line": 51,
+   "column": 39,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Analysis.lean",
+   "line": 52,
+   "column": 17,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/LeftLimWithin.lean",
+   "line": 96,
+   "column": 73,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 195,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 199,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 206,
+   "column": 31,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 209,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 215,
+   "column": 31,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 218,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 224,
+   "column": 31,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+   "line": 227,
+   "column": 31,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/Chaining.lean",
+   "line": 39,
+   "column": 18,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/Chaining.lean",
+   "line": 47,
+   "column": 20,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/Chaining.lean",
+   "line": 49,
+   "column": 22,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/Chaining.lean",
+   "line": 129,
+   "column": 25,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/Chaining.lean",
+   "line": 130,
+   "column": 23,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/KolmogorovChentsov.lean",
+   "line": 977,
+   "column": 16,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Continuity/KolmogorovChentsov.lean",
+   "line": 1007,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/Gaussian/BrownianMotion.lean",
+   "line": 91,
+   "column": 56,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+   "line": 252,
+   "column": 20,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+   "line": 256,
+   "column": 20,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+   "line": 1061,
+   "column": 36,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+   "line": 1111,
+   "column": 33,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+   "line": 1142,
+   "column": 37,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+   "line": 1212,
+   "column": 24,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 44,
+   "column": 23,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 44,
+   "column": 52,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 49,
+   "column": 23,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 49,
+   "column": 40,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 62,
+   "column": 33,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 87,
+   "column": 18,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 132,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 356,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 360,
+   "column": 22,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 404,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 408,
+   "column": 22,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+   "line": 462,
+   "column": 24,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean",
+   "line": 764,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean",
+   "line": 209,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean",
+   "line": 226,
+   "column": 19,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean",
+   "line": 231,
+   "column": 19,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityDirectCross.lean",
+   "line": 137,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityDirectCross.lean",
+   "line": 146,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityDirectCross.lean",
+   "line": 147,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityDirectCross.lean",
+   "line": 217,
+   "column": 40,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean",
+   "line": 325,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean",
+   "line": 340,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraProduct.lean",
+   "line": 56,
+   "column": 52,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraProduct.lean",
+   "line": 58,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraProduct.lean",
+   "line": 63,
+   "column": 47,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean",
+   "line": 46,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean",
+   "line": 47,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPointwise.lean",
+   "line": 557,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 58,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 61,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 294,
+   "column": 15,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 296,
+   "column": 16,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 307,
+   "column": 14,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 485,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 489,
+   "column": 12,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 544,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+   "line": 548,
+   "column": 12,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 197,
+   "column": 13,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 212,
+   "column": 27,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 216,
+   "column": 74,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 236,
+   "column": 25,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 262,
+   "column": 30,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 268,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 271,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 282,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+   "line": 285,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentLintegral.lean",
+   "line": 54,
+   "column": 52,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentLintegral.lean",
+   "line": 56,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentLintegral.lean",
+   "line": 61,
+   "column": 47,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentPartialSums.lean",
+   "line": 251,
+   "column": 40,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentPartialSums.lean",
+   "line": 274,
+   "column": 40,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentBounds.lean",
+   "line": 92,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentBounds.lean",
+   "line": 93,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentBounds.lean",
+   "line": 97,
+   "column": 43,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 62,
+   "column": 21,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 64,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 78,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 123,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 128,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 131,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 153,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 154,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 165,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 166,
+   "column": 9,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 217,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+   "line": 230,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionExistence.lean",
+   "line": 503,
+   "column": 14,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+   "line": 229,
+   "column": 17,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+   "line": 267,
+   "column": 28,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+   "line": 272,
+   "column": 28,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+   "line": 346,
+   "column": 33,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+   "line": 424,
+   "column": 29,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 79,
+   "column": 20,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 85,
+   "column": 20,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 93,
+   "column": 20,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 95,
+   "column": 20,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 283,
+   "column": 19,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 599,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 599,
+   "column": 28,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 600,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+   "line": 600,
+   "column": 29,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean",
+   "line": 178,
+   "column": 36,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean",
+   "line": 189,
+   "column": 36,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean",
+   "line": 202,
+   "column": 34,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean",
+   "line": 91,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean",
+   "line": 108,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleIntegrand.lean",
+   "line": 99,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleIntegrand.lean",
+   "line": 101,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean",
+   "line": 182,
+   "column": 24,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean",
+   "line": 184,
+   "column": 24,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean",
+   "line": 198,
+   "column": 22,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean",
+   "line": 209,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 158,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 159,
+   "column": 27,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 181,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 182,
+   "column": 27,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 189,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 200,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 213,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 376,
+   "column": 30,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 443,
+   "column": 26,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 445,
+   "column": 26,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 477,
+   "column": 30,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 541,
+   "column": 26,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+   "line": 543,
+   "column": 26,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 166,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 166,
+   "column": 25,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 173,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 180,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 184,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 184,
+   "column": 30,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 185,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 196,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+   "line": 243,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/PicardSupL2.lean",
+   "line": 83,
+   "column": 60,
+   "old": "eventuallyLE",
+   "new": "eventuallySubset"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+   "line": 296,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+   "line": 379,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+   "line": 414,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+   "line": 441,
+   "column": 15,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+   "line": 467,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionSup.lean",
+   "line": 287,
+   "column": 68,
+   "old": "eventuallyLE",
+   "new": "eventuallySubset"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean",
+   "line": 203,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean",
+   "line": 204,
+   "column": 68,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+   "line": 230,
+   "column": 15,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+   "line": 232,
+   "column": 15,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+   "line": 236,
+   "column": 15,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+   "line": 238,
+   "column": 15,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+   "line": 244,
+   "column": 9,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+   "line": 261,
+   "column": 46,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityDyadic.lean",
+   "line": 273,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityDyadic.lean",
+   "line": 275,
+   "column": 12,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityDyadic.lean",
+   "line": 381,
+   "column": 48,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityDyadic.lean",
+   "line": 382,
+   "column": 50,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityDyadic.lean",
+   "line": 385,
+   "column": 40,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
+   "line": 316,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
+   "line": 316,
+   "column": 47,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
+   "line": 317,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
+   "line": 317,
+   "column": 64,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 108,
+   "column": 21,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 109,
+   "column": 21,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 112,
+   "column": 21,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 113,
+   "column": 21,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 116,
+   "column": 21,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 118,
+   "column": 21,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+   "line": 125,
+   "column": 63,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+   "line": 64,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+   "line": 66,
+   "column": 12,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+   "line": 94,
+   "column": 48,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+   "line": 95,
+   "column": 50,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+   "line": 98,
+   "column": 40,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+   "line": 216,
+   "column": 75,
+   "old": "dif_neg",
+   "new": "dite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedQuadVar.lean",
+   "line": 199,
+   "column": 28,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedQuadVar.lean",
+   "line": 202,
+   "column": 28,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedQuadVar.lean",
+   "line": 213,
+   "column": 22,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedQuadVar.lean",
+   "line": 221,
+   "column": 35,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedSimple.lean",
+   "line": 89,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/CompensatedSimple.lean",
+   "line": 94,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 232,
+   "column": 21,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 234,
+   "column": 21,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 250,
+   "column": 16,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 258,
+   "column": 34,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 286,
+   "column": 14,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 289,
+   "column": 32,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 366,
+   "column": 14,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 369,
+   "column": 32,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 472,
+   "column": 34,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+   "line": 474,
+   "column": 37,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIsometry.lean",
+   "line": 336,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIsometry.lean",
+   "line": 336,
+   "column": 34,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIsometry.lean",
+   "line": 352,
+   "column": 7,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIsometry.lean",
+   "line": 457,
+   "column": 26,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepIsometry.lean",
+   "line": 528,
+   "column": 26,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 207,
+   "column": 21,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 209,
+   "column": 21,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 224,
+   "column": 19,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 226,
+   "column": 19,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 314,
+   "column": 25,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 363,
+   "column": 34,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 365,
+   "column": 37,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 376,
+   "column": 7,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 392,
+   "column": 7,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+   "line": 419,
+   "column": 7,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean",
+   "line": 88,
+   "column": 19,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean",
+   "line": 212,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean",
+   "line": 194,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean",
+   "line": 200,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean",
+   "line": 113,
+   "column": 44,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean",
+   "line": 117,
+   "column": 73,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean",
+   "line": 165,
+   "column": 13,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean",
+   "line": 167,
+   "column": 13,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "formalization/vendor/MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean",
+   "line": 594,
+   "column": 23,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "formalization/vendor/MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean",
+   "line": 598,
+   "column": 23,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "formalization/vendor/MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean",
+   "line": 643,
+   "column": 28,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/BKL/GaussianSteinAudit.lean",
+   "line": 184,
+   "column": 45,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "research/audits/BKL/LetwinInverseHessianAudit.lean",
+   "line": 88,
+   "column": 22,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/BKL/LetwinInverseHessianAudit.lean",
+   "line": 169,
+   "column": 7,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "research/audits/BKL/LetwinLegendreVariationAudit.lean",
+   "line": 56,
+   "column": 39,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/BKL/LetwinLegendreVariationAudit.lean",
+   "line": 66,
+   "column": 39,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/BKL/LetwinLegendreVariationAudit.lean",
+   "line": 160,
+   "column": 30,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/CEK/ConjugateMassAudit.lean",
+   "line": 85,
+   "column": 19,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/CEK/FunctionalLimitAudit.lean",
+   "line": 36,
+   "column": 28,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/CEK/FunctionalLimitAudit.lean",
+   "line": 36,
+   "column": 45,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/Cheeger/EqualityAudit.lean",
+   "line": 315,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/C0CompactExtension.lean",
+   "line": 24,
+   "column": 24,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/Caccioppoli.lean",
+   "line": 3786,
+   "column": 5,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/Caccioppoli.lean",
+   "line": 4086,
+   "column": 5,
+   "old": "dif_pos",
+   "new": "dite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/CompactExtension.lean",
+   "line": 65,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/DirichletEnvelope.lean",
+   "line": 410,
+   "column": 11,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/Letwin/DomainAffineMA.lean",
+   "line": 119,
+   "column": 44,
+   "old": "linearMap_vsub",
+   "new": "linear_apply_vsub"
+  },
+  {
+   "file": "research/audits/Letwin/DomainComparison.lean",
+   "line": 130,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/DomainContactGain.lean",
+   "line": 162,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/DomainOverlap.lean",
+   "line": 36,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/DomainOverlap.lean",
+   "line": 36,
+   "column": 37,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/DomainOverlap.lean",
+   "line": 36,
+   "column": 66,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/DomainResidualContact.lean",
+   "line": 168,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/GaugeCone.lean",
+   "line": 64,
+   "column": 15,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/Letwin/GaugeCone.lean",
+   "line": 86,
+   "column": 7,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/LocalReference.lean",
+   "line": 56,
+   "column": 21,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/LocalReference.lean",
+   "line": 87,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Letwin/LocalReference.lean",
+   "line": 91,
+   "column": 11,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/Line/BuserAudit.lean",
+   "line": 132,
+   "column": 9,
+   "old": "if_pos",
+   "new": "ite_eq_left"
+  },
+  {
+   "file": "research/audits/MetricBV/MinkowskiLemma21ArbitraryMeasureAudit.lean",
+   "line": 85,
+   "column": 9,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  },
+  {
+   "file": "research/audits/MetricBV/NonproperTargetAudit.lean",
+   "line": 65,
+   "column": 31,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "research/audits/MetricBV/NonproperTargetAudit.lean",
+   "line": 109,
+   "column": 47,
+   "old": "lipschitz",
+   "new": "lipschitzWith"
+  },
+  {
+   "file": "research/audits/Newtonian/VariableCoefficientAudit.lean",
+   "line": 88,
+   "column": 58,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "research/audits/Newtonian/VariableCoefficientAudit.lean",
+   "line": 89,
+   "column": 46,
+   "old": "if_false",
+   "new": "ite_false"
+  },
+  {
+   "file": "research/audits/Newtonian/VariableCoefficientAudit.lean",
+   "line": 132,
+   "column": 29,
+   "old": "if_true",
+   "new": "ite_true"
+  },
+  {
+   "file": "research/audits/Whitney/ExtensionAudit.lean",
+   "line": 131,
+   "column": 19,
+   "old": "if_neg",
+   "new": "ite_eq_right"
+  }
+ ],
+ "not_applied": "Non-drop-in replacements, same-name binder changes and definition changes are left for the first consolidated compile; see the migration map."
+}

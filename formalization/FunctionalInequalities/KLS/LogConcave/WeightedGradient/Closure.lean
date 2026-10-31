@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 
 /-!
 # Closed weighted gradient for a full-dimensional log-concave law
@@ -7,6 +9,8 @@ The closure is closed and densely defined for every bounded linear weight `B`.
 This interface has no dependency on semigroup generation. The domain, core and zero-dimensional
 scope are inherited unchanged from the closable weighted-gradient construction.
 -/
+
+@[expose] public section
 
 noncomputable section
 

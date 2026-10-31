@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "lean_toolchain": "leanprover/lean4:v4.35.0",
+  "judge": "lake comparator",
+  "exporter": "leanexport (bundled with the toolchain; not configurable)",
+  "kernel": "leanchecker (bundled with the toolchain)",
+  "external_kernels": "only as registered by a configuration (enable_nanoda: true registers the toolchain's nanoda_bin)",
+  "sandbox": "bubblewrap (bwrap), Linux only; development mode passes --inadvisably-no-sandbox",
+  "historical_pin": "tools.json records the external Comparator v4.33.0 and lean4export pins that judged receipts made before the Lean v4.35 migration; it is not used by the current runner"
+}

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Lipschitz.Gradient
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
-import Mathlib.Analysis.Calculus.Rademacher
+module
+
+public import FunctionalInequalities.Analysis.Lipschitz.Gradient
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+public import Mathlib.Analysis.Calculus.Rademacher
 
 /-!
 # Coordinate derivatives of smooth functions of a Lipschitz gradient
@@ -9,6 +11,8 @@ Generic first-order composition and compact-local weak derivative data,
 used by Letwin arXiv:2607.24164v1 Lemma 2.2 infrastructure. No Monge–Ampère
 equation, inverse Hessian or integration-by-parts premise is required.
 -/
+
+@[expose] public section
 noncomputable section
 
 section MongeAmpereExponentDerivative

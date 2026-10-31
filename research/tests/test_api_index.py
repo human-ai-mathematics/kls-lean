@@ -45,6 +45,33 @@ class APIIndexTests(unittest.TestCase):
         self.assertEqual(source.count('import Lean\n'), 1)
         self.assertIn('run_cmd pure ()', source)
 
+    def test_module_driver_header_is_replaced_by_a_non_module_header(self):
+        driver = self.root / api_index.DRIVER
+        driver.parent.mkdir(parents=True)
+        body = '/-! doc -/\n\n@[expose] public section\n\nrun_cmd pure ()\n'
+        legacy = 'import Lean\n\n' + body
+        driver.write_text(legacy)
+        expected = api_index.observation_source(self.root, self.inventory)
+        for header in ('module\n\npublic import Lean\nmeta import Lean\n\n',
+                       '/- c -/\nmodule\n\npublic import Lean\npublic meta import Lean\n\n'):
+            with self.subTest(header=header):
+                driver.write_text(header + body)
+                source = api_index.observation_source(self.root, self.inventory)
+                self.assertEqual(source, expected)
+                header_info = api_index.lean_header.parse_header(source)
+                self.assertFalse(header_info.is_module)
+                self.assertEqual(header_info.modules, ['FunctionalInequalities',
+                                                       'FunctionalInequalities.Analysis.Test', 'Lean'])
+
+    def test_driver_with_library_import_or_misplaced_header_is_rejected(self):
+        driver = self.root / api_index.DRIVER
+        driver.parent.mkdir(parents=True)
+        for text in ('module\n\npublic import Lean\npublic import FunctionalInequalities\n',
+                     'import Lean\nmodule\n', 'module\n\npublic import\n'):
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                driver.write_text(text)
+                api_index.observation_source(self.root, self.inventory)
+
     def test_missing_imported_module_rejects_partial_inventory(self):
         payload = self.payload()
         payload['modules'].pop()

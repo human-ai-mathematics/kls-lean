@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Hausdorff.Slice.Critical
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Slice.Critical
 
 /-!
 # Strict audit client for the critical slices of a `C¹` function
@@ -19,6 +21,8 @@ measure — the conclusion really is only almost everywhere, and the exceptional
 be computed after discarding the critical set.  `not_lipschitz` applies the statement to a `C¹`
 function that is not globally Lipschitz.
 -/
+
+@[expose] public section
 
 noncomputable section
 

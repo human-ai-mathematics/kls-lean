@@ -5,12 +5,15 @@ Authors: Rémy Degenne, Peter Pfaffelhuber
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: explicit Polish-space import needed
+-- under Mathlib v4.35.0's module imports; see vendor/port.patch.
 module
 
 public import KolmogorovExtension4.RegularContent
 public import Mathlib.MeasureTheory.Constructions.ProjectiveFamilyContent
 public import Mathlib.MeasureTheory.Measure.RegularityCompacts
 public import Mathlib.MeasureTheory.OuterMeasure.OfAddContent
+public import Mathlib.Topology.MetricSpace.Polish
 
 @[expose] public section
 

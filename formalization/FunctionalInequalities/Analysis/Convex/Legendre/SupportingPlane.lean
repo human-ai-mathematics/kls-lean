@@ -1,17 +1,22 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import Mathlib.Analysis.Convex.Continuous
-import Mathlib.Analysis.LocallyConvex.Separation
-import Mathlib.Analysis.InnerProductSpace.Dual
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import Mathlib.Analysis.Convex.Continuous
+public import Mathlib.Analysis.LocallyConvex.Separation
+public import Mathlib.Analysis.InnerProductSpace.Dual
 
 /-!
 # Supporting affine plane at an interior point of the effective domain
 
-For an extended-real potential with convex real epigraph, no value `-∞`, and `0` in the interior of its effective
+For an extended-real potential with convex real epigraph, no value `-∞`, and `0` in the interior of
+its effective
 domain, a supporting affine function touching at `0` is produced by Hahn–Banach separation
 (`exists_supporting_affine_at_zero`); it is not supplied as a premise.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -54,9 +59,8 @@ private theorem linear_eq_zero_of_local_nonpos (L : E →L[ℝ] ℝ)
   exact (not_lt_of_ge htle) hpos
 /-- The source touching affine plane at0 is genuinely produced from convex
 epigraph geometry and the original interior-domain hypothesis. -/
-theorem exists_supporting_affine_at_zero [FiniteDimensional ℝ E]
-    (f : E → EReal) (hf : ConvexPotential f)
-    (h0 : (0 : E) ∈ interior {x | f x ≠ ⊤}) :
+theorem exists_supporting_affine_at_zero [FiniteDimensional ℝ E] (f : E → EReal)
+    (hf : ConvexPotential f) (h0 : (0 : E) ∈ interior {x | f x ≠ ⊤}) :
     ∃ a : E, ∀ x, ((inner ℝ a x + (f 0).toReal : ℝ) : EReal) ≤ f x := by
   let D : Set E := {x | f x ≠ ⊤}
   let K : Set E := interior D
@@ -86,12 +90,14 @@ theorem exists_supporting_affine_at_zero [FiniteDimensional ℝ E]
     exact EReal.coe_le_coe_iff.mpr hpt.le
   have hboundary : ((0 : E), F 0) ∉ interior A := by
     intro hint
-    have hpath : Filter.Tendsto (fun t : ℝ => ((0 : E), F 0 - t))
-        (nhdsWithin 0 (Set.Ioi 0)) (nhds ((0 : E), F 0)) := by
+    have hpath :
+      Filter.Tendsto (fun t : ℝ => ((0 : E), F 0 - t)) (nhdsWithin 0 (Set.Ioi 0))
+        (nhds ((0 : E), F 0)) := by
       have hc : Continuous (fun t : ℝ => ((0 : E), F 0 - t)) :=
         continuous_const.prodMk (continuous_const.sub continuous_id)
-      have hd : Filter.Tendsto (fun t : ℝ => ((0 : E), F 0 - t))
-          (nhdsWithin 0 (Set.Ioi 0)) (nhds ((0 : E), F 0 - 0)) :=
+      have hd :
+        Filter.Tendsto (fun t : ℝ => ((0 : E), F 0 - t)) (nhdsWithin 0 (Set.Ioi 0))
+          (nhds ((0 : E), F 0 - 0)) :=
         (hc.tendsto 0).mono_left nhdsWithin_le_nhds
       simpa only [sub_zero] using hd
     have hm := hpath.eventually (mem_interior_iff_mem_nhds.mp hint)
@@ -104,8 +110,7 @@ theorem exists_supporting_affine_at_zero [FiniteDimensional ℝ E]
   let L : E →L[ℝ] ℝ := S.comp (ContinuousLinearMap.inl ℝ E ℝ)
   let q : ℝ := S ((0 : E), 1)
   have hrepr (x : E) (t : ℝ) : S (x, t) = L x + t * q := by
-    have hp : (x, t) = (x, 0) + t • ((0 : E), (1 : ℝ)) := by
-      ext <;> simp
+    have hp : (x, t) = (x, 0) + t • ((0 : E), (1 : ℝ)) := by ext <;> simp
     rw [hp, map_add, map_smul]
     rfl
   have hqle : q ≤ 0 := by

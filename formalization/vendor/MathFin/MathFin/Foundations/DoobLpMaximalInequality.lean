@@ -3,6 +3,8 @@ Copyright (c) 2026 Raphael Coelho. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Raphael Coelho
 -/
+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 replacements
+-- of deprecated names (identifier-only); see vendor/port.patch.
 module
 
 public import Mathlib.Probability.Martingale.OptionalStopping
@@ -11,6 +13,7 @@ public import Mathlib.Analysis.SpecialFunctions.Pow.Integral
 public import Mathlib.MeasureTheory.Integral.MeanInequalities
 public import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 public import Mathlib.Analysis.MeanInequalities
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 
 /-!
 # Doob's Lᵖ maximal inequality
@@ -589,11 +592,11 @@ private lemma A_K_le_layer_integral
         if t ≤ K then μ {ω | t ≤ runMax f n ω} else 0 := by
     intro t ht
     by_cases hle : t ≤ K
-    · simp only [hle, if_true]
+    · simp only [hle, ite_true]
       congr 1
       ext ω
       simp [hle]
-    · simp only [hle, if_false]
+    · simp only [hle, ite_false]
       rw [show {ω | t ≤ min (runMax f n ω) K} = ∅ by
         ext ω
         simp [hle]]
@@ -638,7 +641,7 @@ private lemma A_K_le_layer_integral
       intro t ht
       change μ {ω | t ≤ min (runMax f n ω) K} * _ =
             μ {ω | t ≤ runMax f n ω} * _
-      rw [h_ZK_set t ht.1, if_pos ht.2]
+      rw [h_ZK_set t ht.1, ite_eq_left ht.2]
     rw [h_left, h_zero_right, add_zero]
   rw [h_split]
   -- Now apply layer_integrand_bound pointwise.
@@ -822,14 +825,14 @@ private lemma holder_step
 /-- Conversion lemma: for a non-negative `f : Ω → ℝ` and `1 < p`,
     `eLpNorm f (ofReal p) μ = (∫⁻ ω, ofReal(f ω ^ p) ∂μ)^(1/p)`. -/
 private lemma eLpNorm_eq_lintegral_ofReal_pow
-    {f : Ω → ℝ} (hf_nn : ∀ ω, 0 ≤ f ω) {p : ℝ} (hp : 1 < p) :
+    {f : Ω → ℝ} (hf_meas : AEStronglyMeasurable f μ) (hf_nn : ∀ ω, 0 ≤ f ω) {p : ℝ} (hp : 1 < p) :
     eLpNorm f (ENNReal.ofReal p) μ
       = (∫⁻ ω, ENNReal.ofReal (f ω ^ p) ∂μ) ^ (1 / p) := by
   have hp_pos : 0 < p := lt_trans zero_lt_one hp
   have hp_ne_zero : (ENNReal.ofReal p) ≠ 0 := by
     simp [hp_pos]
   have hp_ne_top : (ENNReal.ofReal p) ≠ ⊤ := ENNReal.ofReal_ne_top
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne_zero hp_ne_top]
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne_zero hp_ne_top hf_meas]
   rw [ENNReal.toReal_ofReal hp_pos.le]
   congr 1
   apply lintegral_congr_ae
@@ -946,8 +949,9 @@ theorem maximal_ineq_Lp
           eLpNorm (f n) (ENNReal.ofReal p) μ := by
   -- `Finset.sup'` is definitionally `runMax f n`.
   change eLpNorm (runMax f n) (ENNReal.ofReal p) μ ≤ _
-  rw [eLpNorm_eq_lintegral_ofReal_pow (runMax_nonneg hnonneg n) hp,
-      eLpNorm_eq_lintegral_ofReal_pow (hnonneg n) hp]
+  rw [eLpNorm_eq_lintegral_ofReal_pow (runMax_measurable hsub n).aestronglyMeasurable
+        (runMax_nonneg hnonneg n) hp,
+      eLpNorm_eq_lintegral_ofReal_pow (hsub.integrable n).aestronglyMeasurable (hnonneg n) hp]
   set A : ℝ≥0∞ := ∫⁻ ω, ENNReal.ofReal ((runMax f n ω) ^ p) ∂μ
   set B : ℝ≥0∞ := ∫⁻ ω, ENNReal.ofReal ((f n ω) ^ p) ∂μ
   set C : ℝ≥0∞ := ENNReal.ofReal (p / (p - 1)) with hC_def
@@ -1015,6 +1019,6 @@ theorem Martingale.eLpNorm_norm_runMax_le
       ≤ ENNReal.ofReal (p / (p - 1)) * eLpNorm (f n) (ENNReal.ofReal p) μ := by
   have hsub := martingale_norm_submartingale hf
   have hbound := maximal_ineq_Lp hsub (fun _ _ ↦ norm_nonneg _) hp n
-  rwa [eLpNorm_norm] at hbound
+  rwa [eLpNorm_norm _ (hf.integrable n).aestronglyMeasurable] at hbound
 
 end MeasureTheory

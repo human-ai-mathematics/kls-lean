@@ -1,18 +1,23 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
-import FunctionalInequalities.Analysis.BakryEmery.SchauderBootstrap
-import FunctionalInequalities.Analysis.BakryEmery.LineSmoothness
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
+public import FunctionalInequalities.Analysis.BakryEmery.SchauderBootstrap
+public import FunctionalInequalities.Analysis.BakryEmery.LineSmoothness
 
 /-!
 # The strong regular-class moment potential is smooth
 
 Letwin, arXiv:2607.24164v1, Lemma 2.2, restricted to smooth globally uniformly convex W.
-For every n > 0, the same regular moment potential retains every field of the C² producer and becomes C∞,
+For every n > 0, the same regular moment potential retains every field of the C² producer and
+becomes C∞,
 with locally Hölder derivatives of every order and a smooth gradient inverse on interior K.
 The source's merely convex class is treated separately: `GivenGradient.lean` proves smoothness of a
 given moment potential with Lipschitz gradient, and `KLS/Letwin/MomentMap.lean` applies it to a
 limit potential.
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis
 
@@ -85,11 +90,12 @@ private theorem exists_regular_moment_potential_smooth_of_two_le :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       ContDiff ℝ 2 u ∧ Continuous (hessianMatrix u) ∧
       (∀ x, (hessianMatrix u x).PosDef ∧
         Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16/κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
       (∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
         ∀ i j : Fin n, HolderWith C η
           (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j)) ∧
@@ -144,7 +150,8 @@ variable (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace
   (hiso : KLS.Isotropic μ)
 include hn hκ hK hKc hKint hW hstrong hμ hiso
 
-/-- The same strong regular-class moment potential and its gradient inverse are smooth, in every n > 0. -/
+/-- The same strong regular-class moment potential and its gradient inverse are smooth, in every n >
+0. -/
 theorem exists_regular_moment_potential_smooth :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
@@ -162,11 +169,12 @@ theorem exists_regular_moment_potential_smooth :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       ContDiff ℝ 2 u ∧ Continuous (hessianMatrix u) ∧
       (∀ x, (hessianMatrix u x).PosDef ∧
         Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16/κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
       (∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
         ∀ i j : Fin n, HolderWith C η
           (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j)) ∧

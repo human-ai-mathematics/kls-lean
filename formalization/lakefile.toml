@@ -6,7 +6,7 @@ defaultTargets = ["FunctionalInequalities", "Solutions", "Examples",
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.33.0"
+rev = "v4.35.0"
 
 [[require]]
 name = "checkdecls"
@@ -75,7 +75,8 @@ roots = [
   "examples.FiniteProductCovariance",
 ]
 
-# Vendored third-party stochastic calculus (Apache-2.0), ported to this toolchain and Mathlib.
+# Vendored third-party stochastic calculus (Apache-2.0), ported to this toolchain, Mathlib and the
+# Lean module system.
 # Pins, licenses, the module closure and every local change are recorded in vendor/README.md.
 # The options are the upstream package options under which the libraries were written.
 [[lean_lib]]

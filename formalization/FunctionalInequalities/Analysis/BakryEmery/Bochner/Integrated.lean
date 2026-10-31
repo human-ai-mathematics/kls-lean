@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
-import FunctionalInequalities.Analysis.BakryEmery.WeakGamma
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.WeakGamma
 
 /-!
 # The integrated Bochner inequality on smooth compactly supported tests
 
-`Bochner/Basic.lean` proves the **pointwise** inequality `0 ≤ Γ₂(f)` for a `C²` convex potential and a
+`Bochner/Basic.lean` proves the **pointwise** inequality `0 ≤ Γ₂(f)` for a `C²` convex potential and
+a
 `C³` function. A pointwise inequality is not a statement about the heat semigroup: to reach one,
 `Γ₂` must be integrated against a test function and the Laplacian moved off `Γ(f, f)`. This
 module performs exactly that step, and nothing more.
@@ -25,9 +28,12 @@ claimed or needed, and none is available in general.
 `f` and `φ` are classical smooth compactly supported functions. Nothing here applies to
 `P_t g`: the heat semigroup does not preserve compact support or smoothness, and passing to a
 limit requires the convergence hypotheses of
-`KLS/LogConcave/HeatSemigroup/BakryEmery/Gamma.lean`. No gradient estimate, no time interpolation and no
+`KLS/LogConcave/HeatSemigroup/BakryEmery/Gamma.lean`. No gradient estimate, no time interpolation
+and no
 Buser inequality follows from this module alone.
 -/
+
+@[expose] public section
 
 noncomputable section
 

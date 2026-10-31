@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.QuotientLimit
-import FunctionalInequalities.Analysis.Iteration.Absorption
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.QuotientLimit
+public import FunctionalInequalities.Analysis.Iteration.Absorption
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Audit: generic tools for the interior Schauder bootstrap
 
@@ -16,6 +18,8 @@ Real clients of `FunctionalInequalities/Analysis/IteratedDerivative/QuotientLimi
 * `exists_absorption_constant` is applied with `θ = 1/2`, `k = 1`, `R₀ = 1`, the non-constant
   function `A r = r` and nonzero `B = C = 1`; the recursion is verified.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Filter Topology Metric

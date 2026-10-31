@@ -1,12 +1,17 @@
-import Lean
-import Mathlib.Order.Filter.ENNReal
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
+module
+
+public import Lean
+public import Mathlib.Order.Filter.ENNReal
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+meta import Lean
 
 /-! Original finite-constant `liminf` scaling and affine-line derivative contracts.
 The `liminf` identity holds for every nontrivial filter on `ℝ≥0∞` (pinned Mathlib);
 the line derivative needs only a real inner-product space, without completeness,
 finite dimension or measurable structure.
 -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities Filter
 open scoped NNReal ENNReal

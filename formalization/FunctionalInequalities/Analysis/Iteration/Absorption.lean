@@ -1,6 +1,8 @@
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Algebra.Order.Field.GeomSum
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Algebra.Order.Field.GeomSum
 
 /-!
 # Radius absorption iteration
@@ -22,6 +24,8 @@ Powers `(r' - r) ^ k` are real powers (`Real.rpow`). The proof uses the chain
 `(θ, k)` alone are stated. The nonnegativity hypothesis on `A` is part of the stated interface but
 is not needed by the proof. No Schauder estimate is proved here.
 -/
+
+@[expose] public section
 
 open Filter Topology Finset
 
@@ -47,16 +51,28 @@ theorem absorption_le_chain {θ k R₀ B C : ℝ} {A : ℝ → ℝ} (hθ0 : 0 �
           ∑ i ∈ range (N + 1), θ ^ i * (B / (t (i + 1) - t i) ^ k + C) := by
         rw [sum_range_succ, pow_succ]; ring
 
-/-- **Radius absorption lemma.** Let `0 ≤ θ < 1` and `0 < k`. There is `c > 0`, depending only on
-`θ` and `k`, such that for every `R₀ > 0`, `B, C ≥ 0` and every function `A`, nonnegative and bounded
-above on `(0, R₀]`, satisfying `A r ≤ θ A r' + B / (r' - r) ^ k + C` for all `0 < r < r' ≤ R₀`, one has
+/--
+**Radius absorption lemma.** Let `0 ≤ θ < 1` and `0 < k`. There is `c > 0`, depending only on
+`θ` and `k`, such that for every `R₀ > 0`, `B, C ≥ 0` and every function `A`, nonnegative and
+bounded
+above on `(0, R₀]`, satisfying `A r ≤ θ A r' + B / (r' - r) ^ k + C` for all `0 < r < r' ≤ R₀`, one
+has
 `A r ≤ c (B / (R₀ - r) ^ k + C)` for all `0 < r < R₀`. -/
 theorem exists_absorption_constant {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < 1) {k : ℝ} (hk : 0 < k) :
-    ∃ c : ℝ, 0 < c ∧ ∀ (R₀ : ℝ), 0 < R₀ → ∀ (A : ℝ → ℝ) (B C : ℝ), 0 ≤ B → 0 ≤ C →
-      (∀ r ∈ Set.Ioc (0:ℝ) R₀, 0 ≤ A r) → (∃ Bd : ℝ, ∀ r ∈ Set.Ioc (0:ℝ) R₀, A r ≤ Bd) →
-      (∀ r r' : ℝ, 0 < r → r < r' → r' ≤ R₀ → A r ≤ θ * A r' + B / (r' - r) ^ k + C) →
-      ∀ r ∈ Set.Ioo (0:ℝ) R₀, A r ≤ c * (B / (R₀ - r) ^ k + C) := by
+    ∃ c : ℝ,
+      0 < c ∧
+        ∀ (R₀ : ℝ),
+          0 < R₀ →
+            ∀ (A : ℝ → ℝ) (B C : ℝ),
+              0 ≤ B →
+                0 ≤ C →
+                  (∀ r ∈ Set.Ioc (0 : ℝ) R₀, 0 ≤ A r) →
+                    (∃ Bd : ℝ, ∀ r ∈ Set.Ioc (0 : ℝ) R₀, A r ≤ Bd) →
+                      (∀ r r' : ℝ,
+                          0 < r → r < r' → r' ≤ R₀ → A r ≤ θ * A r' + B / (r' - r) ^ k + C) →
+                        ∀ r ∈ Set.Ioo (0 : ℝ) R₀, A r ≤ c * (B / (R₀ - r) ^ k + C) := by
   -- the ratio `τ` with `τ ^ k = σ := (1 + θ) / 2 ∈ (θ, 1)`
+
   set σ : ℝ := (1 + θ) / 2 with hσ_def
   have hσ0 : 0 < σ := by positivity
   have hσ1 : σ < 1 := by linarith
@@ -78,8 +94,11 @@ theorem exists_absorption_constant {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < 1) 
   intro R₀ _hR₀ A B C hB hC _hA ⟨Bd, hBd⟩ hrec r hr
   obtain ⟨hr0, hrR⟩ := hr
   set P : ℝ := (R₀ - r) ^ k with hP_def
-  have hP0 : 0 < P := Real.rpow_pos_of_pos (by linarith) _
+  have hP0 : 0 < P :=
+    Real.rpow_pos_of_pos (by linarith)
+      _
   -- the chain `t i = r + (R₀ - r) (1 - τ ^ i)`
+
   set t : ℕ → ℝ := fun i => r + (R₀ - r) * (1 - τ ^ i) with ht_def
   have hτi (i : ℕ) : 0 < τ ^ i := pow_pos hτ0 i
   have hτi1 (i : ℕ) : τ ^ i ≤ 1 := pow_le_one₀ hτ0.le hτ1.le
@@ -99,15 +118,18 @@ theorem exists_absorption_constant {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < 1) 
     rw [hstep i, Real.mul_rpow (mul_nonneg (by linarith) (hτi i).le) (by linarith),
       Real.mul_rpow (by linarith) (hτi i).le, ← hτk, Real.rpow_pow_comm hτ0.le, hD_def]
   -- each term of the iterated sum is dominated by a geometric term
+
   have hterm (i : ℕ) : θ ^ i * (B / (t (i + 1) - t i) ^ k + C) ≤ (B / (P * D) + C) * q ^ i := by
     rw [hpow i]
     have hσi : 0 < σ ^ i := pow_pos hσ0 i
     have h1 : θ ^ i * (B / (P * σ ^ i * D)) = B / (P * D) * q ^ i := by
-      rw [hq_def, div_pow]; field_simp
+      rw [hq_def, div_pow];
+      field_simp
     have h2 : θ ^ i * C ≤ C * q ^ i := by
-      rw [mul_comm]; exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hθ0 hθq i) hC
-    calc θ ^ i * (B / (P * σ ^ i * D) + C)
-        = θ ^ i * (B / (P * σ ^ i * D)) + θ ^ i * C := by ring
+      rw [mul_comm];
+      exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hθ0 hθq i) hC
+    calc
+      θ ^ i * (B / (P * σ ^ i * D) + C) = θ ^ i * (B / (P * σ ^ i * D)) + θ ^ i * C := by ring
       _ ≤ B / (P * D) * q ^ i + C * q ^ i := by rw [h1]; linarith
       _ = (B / (P * D) + C) * q ^ i := by ring
   set M : ℝ := (B / (P * D) + C) / (1 - q) with hM_def
@@ -119,8 +141,10 @@ theorem exists_absorption_constant {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < 1) 
     have hAN : θ ^ N * A (t N) ≤ θ ^ N * Bd :=
       mul_le_mul_of_nonneg_left (hBd _ ⟨ht0 N, hle N⟩) (pow_nonneg hθ0 N)
     have hsum : ∑ i ∈ range N, θ ^ i * (B / (t (i + 1) - t i) ^ k + C) ≤ M := by
-      calc ∑ i ∈ range N, θ ^ i * (B / (t (i + 1) - t i) ^ k + C)
-          ≤ ∑ i ∈ range N, (B / (P * D) + C) * q ^ i := sum_le_sum fun i _ => hterm i
+      calc
+        ∑ i ∈ range N, θ ^ i * (B / (t (i + 1) - t i) ^ k + C) ≤
+            ∑ i ∈ range N, (B / (P * D) + C) * q ^ i :=
+          sum_le_sum fun i _ => hterm i
         _ = (B / (P * D) + C) * ∑ i ∈ range N, q ^ i := by rw [mul_sum]
         _ ≤ (B / (P * D) + C) * (1 / (1 - q)) := by
           gcongr
@@ -131,12 +155,13 @@ theorem exists_absorption_constant {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < 1) 
   have hlim : Tendsto (fun N : ℕ => θ ^ N * Bd + M) atTop (𝓝 (0 * Bd + M)) :=
     ((tendsto_pow_atTop_nhds_zero_of_lt_one hθ0 hθ1).mul_const Bd).add_const M
   have hAM : A r ≤ M := by simpa using ge_of_tendsto' hlim hbound
-  calc A r ≤ M := hAM
-    _ = B / P / (D * (1 - q)) + C / (1 - q) := by
-      rw [hM_def]; field_simp
+  calc
+    A r ≤ M := hAM
+    _ = B / P / (D * (1 - q)) + C / (1 - q) := by rw [hM_def]; field_simp
     _ ≤ B / P / (D * (1 - q)) + C / (D * (1 - q)) := by
       gcongr
-      calc D * (1 - q) ≤ 1 * (1 - q) := by gcongr
+      calc
+        D * (1 - q) ≤ 1 * (1 - q) := by gcongr
         _ = 1 - q := one_mul _
     _ = 1 / (D * (1 - q)) * (B / P + C) := by ring
 

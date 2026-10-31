@@ -1,17 +1,22 @@
-import FunctionalInequalities.Probability.Diffusion.Generator
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Calculus.Deriv.Pow
-import Mathlib.Analysis.Calculus.Deriv.Mul
-import Mathlib.Tactic.NoncommRing
-import Mathlib.Tactic.Positivity
+module
+
+public import FunctionalInequalities.Probability.Diffusion.Generator
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Calculus.Deriv.Pow
+public import Mathlib.Analysis.Calculus.Deriv.Mul
+public import Mathlib.Tactic.NoncommRing
+public import Mathlib.Tactic.Positivity
 
 /-!
 # Generators of inverses and powers
 
-The derivative of `Ring.inverse ∘ G`, the generator of an inverse operator `𝓛(A⁻¹) = −A⁻¹(𝓛A)A⁻¹ + Σ_k A⁻¹H_kA⁻¹H_kA⁻¹`, and
+The derivative of `Ring.inverse ∘ G`, the generator of an inverse operator `𝓛(A⁻¹) = −A⁻¹(𝓛A)A⁻¹ +
+Σ_k A⁻¹H_kA⁻¹H_kA⁻¹`, and
 bounds for generators of powers.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -42,15 +47,18 @@ private theorem fderiv_product_apply {f g : V → R} {x : V}
 
 variable [CompleteSpace R]
 
-/-- **Derivative of the inverse of an operator-valued function**: `D(A⁻¹)(x)[v] = −A⁻¹ (DA[v]) A⁻¹` at a point where
+/--
+**Derivative of the inverse of an operator-valued function**: `D(A⁻¹)(x)[v] = −A⁻¹ (DA[v]) A⁻¹` at a
+point where
 `A x` is a unit. -/
-theorem fderiv_ringInverse_comp_apply (A : V → R) {x : V} (hA : DifferentiableAt ℝ A x) (hu : IsUnit (A x)) (v : V) :
+theorem fderiv_ringInverse_comp_apply (A : V → R) {x : V} (hA : DifferentiableAt ℝ A x)
+    (hu : IsUnit (A x)) (v : V) :
     fderiv ℝ (fun y => Ring.inverse (A y)) x v =
       -(Ring.inverse (A x) * fderiv ℝ A x v * Ring.inverse (A x)) := by
   have hi :
-      HasFDerivAt Ring.inverse
-        (-(ContinuousLinearMap.mulLeftRight ℝ R
-          (Ring.inverse (A x)) (Ring.inverse (A x)))) (A x) := by
+    HasFDerivAt Ring.inverse
+      (-(ContinuousLinearMap.mulLeftRight ℝ R (Ring.inverse (A x)) (Ring.inverse (A x))))
+      (A x) := by
     simpa only [← Ring.inverse_unit, hu.unit_spec] using
       (hasFDerivAt_ringInverse (𝕜 := ℝ) hu.unit)
   have hc := (hi.comp x hA.hasFDerivAt).fderiv
@@ -94,22 +102,27 @@ private theorem inverse_second_diagonal (A : V → R) {x : V}
     fderiv_evaluate hAf v v, two_smul ℝ]
   noncomm_ring
 
-/-- **Generator of the inverse** (the drift of `A_t⁻¹` in Itô's formula): for `A` that is `C²` at `x` with `A x` a unit,
-`𝓛(A⁻¹) = −A⁻¹ (𝓛A) A⁻¹ + Σ_k A⁻¹ (DA[σ_k]) A⁻¹ (DA[σ_k]) A⁻¹`, where `𝓛A = DA[b] + ½ Σ_k D²A[σ_k, σ_k]`. -/
+/--
+**Generator of the inverse** (the drift of `A_t⁻¹` in Itô's formula): for `A` that is `C²` at `x`
+with `A x` a unit,
+`𝓛(A⁻¹) = −A⁻¹ (𝓛A) A⁻¹ + Σ_k A⁻¹ (DA[σ_k]) A⁻¹ (DA[σ_k]) A⁻¹`, where `𝓛A = DA[b] + ½ Σ_k D²A[σ_k,
+σ_k]`. -/
 theorem generator_ringInverse_comp (b : V → V) (σ : V → Fin d → V) (A : V → R) {x : V}
     (hA : ContDiffAt ℝ 2 A x) (hu : IsUnit (A x)) :
     fderiv ℝ (fun y => Ring.inverse (A y)) x (b x) +
         (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ (fun y => Ring.inverse (A y))) x (σ x k) (σ x k) =
       -(Ring.inverse (A x) *
-          (fderiv ℝ A x (b x) + (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ A) x (σ x k) (σ x k)) *
-          Ring.inverse (A x)) +
-        ∑ k, Ring.inverse (A x) * fderiv ℝ A x (σ x k) * Ring.inverse (A x) * fderiv ℝ A x (σ x k) *
-          Ring.inverse (A x) := by
+              (fderiv ℝ A x (b x) +
+                (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ A) x (σ x k) (σ x k)) *
+            Ring.inverse (A x)) +
+        ∑ k,
+          Ring.inverse (A x) * fderiv ℝ A x (σ x k) * Ring.inverse (A x) *
+              fderiv ℝ A x (σ x k) *
+            Ring.inverse (A x) := by
   rw [fderiv_ringInverse_comp_apply A (hA.differentiableAt (by norm_num)) hu]
-  simp only [inverse_second_diagonal A hA hu, mul_add, add_mul,
-    mul_smul_comm, smul_mul_assoc, Finset.mul_sum, Finset.sum_mul,
-    Finset.sum_add_distrib, Finset.sum_neg_distrib, ← Finset.smul_sum,
-    smul_add, smul_neg, smul_smul]
+  simp only [inverse_second_diagonal A hA hu, mul_add, add_mul, mul_smul_comm, smul_mul_assoc,
+    Finset.mul_sum, Finset.sum_mul, Finset.sum_add_distrib, Finset.sum_neg_distrib,
+    ← Finset.smul_sum, smul_add, smul_neg, smul_smul]
   norm_num
   abel
 
@@ -142,10 +155,12 @@ private theorem power_second (n : ℕ) (t u : ℝ) :
   simp only [smul_eq_mul, Nat.add_sub_cancel, Nat.cast_add, Nat.cast_one]
   ring
 
-/-- **Generator of a power** (Lyapunov calculus): if `F > 0` at `x`, `𝓛F ≤ K₁ F` and the carré du champ
+/--
+**Generator of a power** (Lyapunov calculus): if `F > 0` at `x`, `𝓛F ≤ K₁ F` and the carré du champ
 `Σ_k (DF[σ_k])² ≤ K₂ F²` at `x`, then `𝓛(F^q) ≤ (q K₁ + q(q−1)/2 · K₂) F^q` at `x`. -/
-theorem diffusionGenerator_pow_le (b : V → V) (σ : V → Fin d → V) {F : V → ℝ} (hF : ContDiff ℝ 2 F)
-    {x : V} (hpos : 0 < F x) {K₁ K₂ : ℝ} (h1 : diffusionGenerator b σ F x ≤ K₁ * F x)
+theorem diffusionGenerator_pow_le (b : V → V) (σ : V → Fin d → V) {F : V → ℝ}
+    (hF : ContDiff ℝ 2 F) {x : V} (hpos : 0 < F x) {K₁ K₂ : ℝ}
+    (h1 : diffusionGenerator b σ F x ≤ K₁ * F x)
     (h2 : ∑ k, (fderiv ℝ F x (σ x k)) ^ 2 ≤ K₂ * F x ^ 2) (q : ℕ) :
     diffusionGenerator b σ (fun y => F y ^ q) x ≤
       ((q : ℝ) * K₁ + (q : ℝ) * ((q : ℝ) - 1) / 2 * K₂) * F x ^ q := by
@@ -154,29 +169,24 @@ theorem diffusionGenerator_pow_le (b : V → V) (σ : V → Fin d → V) {F : V 
   rcases q with _ | n
   · simpa using h1
   change diffusionGenerator b σ (fun y => F y ^ (n + 2)) x ≤ _
-  have hp : ContDiff ℝ 2 (fun t : ℝ => t ^ (n + 2)) :=
-    contDiff_id.pow (n + 2)
+  have hp : ContDiff ℝ 2 (fun t : ℝ => t ^ (n + 2)) := contDiff_id.pow (n + 2)
   have hg :
-      diffusionGenerator b σ (fun y => F y ^ (n + 2)) x =
-        ((n + 2 : ℝ) * F x ^ (n + 1)) * diffusionGenerator b σ F x +
-          ((n + 2 : ℝ) * (n + 1) / 2 * F x ^ n) *
-            ∑ k, (fderiv ℝ F x (σ x k)) ^ 2 := by
+    diffusionGenerator b σ (fun y => F y ^ (n + 2)) x =
+      ((n + 2 : ℝ) * F x ^ (n + 1)) * diffusionGenerator b σ F x +
+        ((n + 2 : ℝ) * (n + 1) / 2 * F x ^ n) * ∑ k, (fderiv ℝ F x (σ x k)) ^ 2 := by
     change diffusionGenerator b σ ((fun t : ℝ => t ^ (n + 2)) ∘ F) x = _
     rw [diffusionGenerator_comp b σ (fun t : ℝ => t ^ (n + 2)) F x hp hF]
-    simp only [power_first, power_second, smul_eq_mul, ← Finset.mul_sum,
-      diffusionGenerator]
+    simp only [power_first, power_second, smul_eq_mul, ← Finset.mul_sum, diffusionGenerator]
     ring
   rw [hg]
   calc
     ((n + 2 : ℝ) * F x ^ (n + 1)) * diffusionGenerator b σ F x +
-        ((n + 2 : ℝ) * (n + 1) / 2 * F x ^ n) *
-          ∑ k, (fderiv ℝ F x (σ x k)) ^ 2 ≤
-      ((n + 2 : ℝ) * F x ^ (n + 1)) * (K₁ * F x) +
-        ((n + 2 : ℝ) * (n + 1) / 2 * F x ^ n) *
-          (K₂ * F x ^ 2) := by
-      exact add_le_add
-        (mul_le_mul_of_nonneg_left h1 (by positivity))
-        (mul_le_mul_of_nonneg_left h2 (by positivity))
+          ((n + 2 : ℝ) * (n + 1) / 2 * F x ^ n) * ∑ k, (fderiv ℝ F x (σ x k)) ^ 2 ≤
+        ((n + 2 : ℝ) * F x ^ (n + 1)) * (K₁ * F x) +
+          ((n + 2 : ℝ) * (n + 1) / 2 * F x ^ n) * (K₂ * F x ^ 2) := by
+      exact
+        add_le_add (mul_le_mul_of_nonneg_left h1 (by positivity))
+          (mul_le_mul_of_nonneg_left h2 (by positivity))
     _ = _ := by
       simp only [Nat.cast_succ, pow_succ]
       ring

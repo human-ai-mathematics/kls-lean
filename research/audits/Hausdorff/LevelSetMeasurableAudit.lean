@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Hausdorff.Slice.Measurable
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import FunctionalInequalities.Analysis.Sard.Sharp
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Slice.Measurable
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import FunctionalInequalities.Analysis.Sard.Sharp
 
 /-!
 # Scope audit for level-set measurability
@@ -16,6 +18,8 @@ The sharp `C^(finrank)` `Analysis.sard` (in `Analysis/Sard/Sharp.lean`) and its 
 `Analysis.ae_forall_fderiv_ne_zero` are imported as well, so that all reports below come from a
 single consistent environment.
 -/
+
+@[expose] public section
 
 noncomputable section
 

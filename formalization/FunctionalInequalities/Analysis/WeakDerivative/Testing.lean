@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.Analysis.WeakDerivative.Approximation
-import FunctionalInequalities.Analysis.Cutoff.Profile
+module
+
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.Analysis.WeakDerivative.Approximation
+public import FunctionalInequalities.Analysis.Cutoff.Profile
 
 /-! # Integration against rough weak tests and integrable weak divergence
 
@@ -17,6 +19,8 @@ Supporting weak calculus for Letwin arXiv:2607.24164v1 and the
 local elliptic estimates of Gilbarg--Trudinger (2001). Each declaration
 retains its own support, integrability and dimensional hypotheses.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory
@@ -53,13 +57,15 @@ theorem integral_weakDeriv_mul_eq_swap {n : ℕ}
       hηv hηw hηc hac hbc ha2 hb2 with
     ⟨S, hS, _hηS, haS, hbS, θ, hθ, hconvv, hconvw⟩
 
+
+  -- Check the localized L2 products used in the test identities.
   have hpS : MemLp (S.indicator p) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_indicator_iff_restrict hS.measurableSet).2 (hp2 S hS)
+    (memLp_indicator_iff_restrict hS.measurableSet.nullMeasurableSet).2 (hp2 S hS)
 
   have hqS : MemLp (S.indicator q) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_indicator_iff_restrict hS.measurableSet).2 (hq2 S hS)
+    (memLp_indicator_iff_restrict hS.measurableSet.nullMeasurableSet).2 (hq2 S hS)
 
   have hθvS (m : ℕ) :
       Function.support (fun x => fderiv ℝ (θ m) x v) ⊆ S :=
@@ -138,6 +144,8 @@ theorem integral_weakDeriv_mul_eq_swap {n : ℕ}
             ((fderiv ℝ (fderiv ℝ chi) x) w) v := hv'
         _ = ((fderiv ℝ (fderiv ℝ chi) x) v) w := hs
         _ = fderiv ℝ (fun y => fderiv ℝ chi y w) x v := hw'.symm
+
+    -- Apply the two weak derivative identities to the smooth tests.
     have ep := hp.2.2 (fun x => fderiv ℝ chi x w) hchi_w hchi_wc
     have eq := hq.2.2 (fun x => fderiv ℝ chi x v) hchi_v hchi_vc
     have hleft :
@@ -192,6 +200,8 @@ theorem integral_weakDeriv_mul_eq_swap {n : ℕ}
       _ = ∫ x, S.indicator q x * fderiv ℝ (θ m) x v
             ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := hqind.symm
 
+
+  -- Pass to the mollification limits and remove the localization factors.
   have ht_p :
       Tendsto
           (fun m => ∫ x, S.indicator p x * fderiv ℝ (θ m) x w
@@ -377,7 +387,7 @@ private theorem tendsto_integral_mul_of_compact_local_l2 {n : ℕ}
       (𝓝 (∫ x, J x * b x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) := by
   have hJS : MemLp (S.indicator J) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_indicator_iff_restrict hS.measurableSet).2 (hJ S hS)
+    (memLp_indicator_iff_restrict hS.measurableSet.nullMeasurableSet).2 (hJ S hS)
   have heqb : (fun x => S.indicator J x * b x) = (fun x => J x * b x) := by
     funext x
     by_cases hx : x ∈ S
@@ -471,43 +481,53 @@ private theorem integral_flux_eq_neg_forcing_of_test_limits {n : ℕ}
   exact tendsto_nhds_unique hL hR
 
 
-/-- Bounded weak-test extension of a compact-test divergence identity: a compact-local L2 flux `J` and a
-locally integrable forcing `F` satisfying `∫ Σᵢ Jᵢ ∂ᵢψ = -∫ F ψ` for every compactly supported C1 `ψ`
-satisfy it for a bounded compactly supported locally integrable `η` whose coordinate weak derivatives are
-compactly supported and globally L2, with both sides integrable. Every finite dimension, zero included. -/
+/--
+Bounded weak-test extension of a compact-test divergence identity: a compact-local L2 flux `J` and a
+locally integrable forcing `F` satisfying `∫ Σᵢ Jᵢ ∂ᵢψ = -∫ F ψ` for every compactly supported C1
+`ψ`
+satisfy it for a bounded compactly supported locally integrable `η` whose coordinate weak
+derivatives are
+compactly supported and globally L2, with both sides integrable. Every finite dimension, zero
+included. -/
 theorem integral_flux_eq_neg_forcing_of_bounded_weak_test {n : ℕ}
-    {J a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
-    {F η : EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
-    (hJ : ∀ i : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (J i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    {J a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ} {F η : EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
+    (hJ :
+      ∀ i : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (J i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
     (hF : LocallyIntegrable F (volume : Measure (EuclideanSpace ℝ (Fin n))))
-    (hId : ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ 1 ψ → HasCompactSupport ψ →
-      (∫ x, ∑ i : Fin n, J i x * fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ i)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, F x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))))
+    (hId :
+      ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
+        ContDiff ℝ 1 ψ →
+          HasCompactSupport ψ →
+            (∫ x,
+                ∑ i : Fin n,
+                  J i x *
+                    fderiv ℝ ψ x
+                      (EuclideanSpace.basisFun (Fin n) ℝ
+                        i) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+              -(∫ x, F x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))))
     (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n))))
     (hbound : ∀ x, ‖η x‖ ≤ C) (hηc : HasCompactSupport η)
     (hweak : ∀ i : Fin n, HasWeakDerivAlong η (a i) (EuclideanSpace.basisFun (Fin n) ℝ i))
     (hac : ∀ i : Fin n, HasCompactSupport (a i))
     (ha2 : ∀ i : Fin n, MemLp (a i) 2 (volume : Measure (EuclideanSpace ℝ (Fin n)))) :
-    (∀ i : Fin n, Integrable (fun x => J i x * a i x)
-      (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
-    Integrable (fun x => F x * η x) (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-    (∫ x, ∑ i : Fin n, J i x * a i x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, F x * η x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
+    (∀ i : Fin n,
+        Integrable (fun x => J i x * a i x) (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
+      Integrable (fun x => F x * η x) (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+        (∫ x, ∑ i : Fin n, J i x * a i x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+          -(∫ x, F x * η x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
   obtain ⟨S, hS, hηS, haS, θ, hθ, hconv, hAE⟩ :=
     exists_contDiff_compact_bounded_all_weak_deriv_approximation hη hbound hηc hweak hac ha2
   have hC : 0 ≤ C := (norm_nonneg (η 0)).trans (hbound 0)
-  have hη3 (x : EuclideanSpace ℝ (Fin n)) : ‖η x‖ ≤ 3 * C :=
-    (hbound x).trans (by linarith)
-  exact integral_flux_eq_neg_forcing_of_test_limits hS hJ hF
-    hη.aestronglyMeasurable hηS hη3
-    (fun m => (hθ m).1.continuous.aestronglyMeasurable)
-    (fun m => (hθ m).2.2.1) (fun m => (hθ m).2.2.2.1) hAE ha2 haS
-    (fun m i => ((hθ m).2.2.2.2 i).2)
-    (fun m i => ((hθ m).2.2.2.2 i).1) hconv
-    (fun m => hId (θ m) ((hθ m).1.of_le (WithTop.coe_le_coe.mpr le_top)) (hθ m).2.1)
+  have hη3 (x : EuclideanSpace ℝ (Fin n)) : ‖η x‖ ≤ 3 * C := (hbound x).trans (by linarith)
+  exact
+    integral_flux_eq_neg_forcing_of_test_limits hS hJ hF hη.aestronglyMeasurable hηS hη3
+      (fun m => (hθ m).1.continuous.aestronglyMeasurable) (fun m => (hθ m).2.2.1)
+      (fun m => (hθ m).2.2.2.1) hAE ha2 haS (fun m i => ((hθ m).2.2.2.2 i).2)
+      (fun m i => ((hθ m).2.2.2.2 i).1) hconv
+      (fun m => hId (θ m) ((hθ m).1.of_le (WithTop.coe_le_coe.mpr le_top)) (hθ m).2.1)
 
 end FunctionalInequalities.Analysis
 end BoundedWeakDerivativeTesting
@@ -519,88 +539,99 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-/-- Integration by parts of a compactly supported compact-local L2 flux `J` with locally integrable forcing `F`
-(tested identity against compact C1 tests) against a globally bounded locally integrable weak function `η` whose
-coordinate weak derivatives are L2 on compact sets: both pairings are integrable and `∫ ∑ Jᵢ aᵢ = -∫ F η`. -/
+/--
+Integration by parts of a compactly supported compact-local L2 flux `J` with locally integrable
+forcing `F`
+(tested identity against compact C1 tests) against a globally bounded locally integrable weak
+function `η` whose
+coordinate weak derivatives are L2 on compact sets: both pairings are integrable and `∫ ∑ Jᵢ aᵢ = -∫
+F η`. -/
 theorem integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test {n : ℕ}
-    {J a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
-    {F η : EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
-    (hJ : ∀ i : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (J i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    {J a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ} {F η : EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
+    (hJ :
+      ∀ i : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (J i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
     (hF : LocallyIntegrable F (volume : Measure (EuclideanSpace ℝ (Fin n))))
     (hJc : ∀ i : Fin n, HasCompactSupport (J i)) (hFc : HasCompactSupport F)
-    (hId : ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ 1 ψ → HasCompactSupport ψ →
-      (∫ x, ∑ i : Fin n, J i x * fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ i)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, F x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))))
+    (hId :
+      ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
+        ContDiff ℝ 1 ψ →
+          HasCompactSupport ψ →
+            (∫ x,
+                ∑ i : Fin n,
+                  J i x *
+                    fderiv ℝ ψ x
+                      (EuclideanSpace.basisFun (Fin n) ℝ
+                        i) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+              -(∫ x, F x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))))
     (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n))))
     (hbound : ∀ x, ‖η x‖ ≤ C)
     (hweak : ∀ i : Fin n, HasWeakDerivAlong η (a i) (EuclideanSpace.basisFun (Fin n) ℝ i))
-    (ha2 : ∀ i : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (a i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
-    (∀ i : Fin n, Integrable (fun x => J i x * a i x)
-      (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
-    Integrable (fun x => F x * η x) (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-    (∫ x, ∑ i : Fin n, J i x * a i x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, F x * η x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
+    (ha2 :
+      ∀ i : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (a i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
+    (∀ i : Fin n,
+        Integrable (fun x => J i x * a i x) (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
+      Integrable (fun x => F x * η x) (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+        (∫ x, ∑ i : Fin n, J i x * a i x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+          -(∫ x, F x * η x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
   classical
   let S := tsupport F ∪ ⋃ i : Fin n, tsupport (J i)
   have hS : IsCompact S := hFc.union (isCompact_iUnion hJc)
   obtain ⟨R, hR, hRS⟩ := hS.isBounded.subset_ball_lt 0 (0 : EuclideanSpace ℝ (Fin n))
-  let χ : ContDiffBump (0 : EuclideanSpace ℝ (Fin n)) :=
-    ⟨R, R + 1, hR, lt_add_one R⟩
+  let χ : ContDiffBump (0 : EuclideanSpace ℝ (Fin n)) := ⟨R, R + 1, hR, lt_add_one R⟩
   have hχ1 (x : EuclideanSpace ℝ (Fin n)) (hx : x ∈ S) : χ x = 1 :=
     χ.one_of_mem_closedBall (ball_subset_closedBall (hRS hx))
   have hχd (x : EuclideanSpace ℝ (Fin n)) (hx : x ∈ S) (i : Fin n) :
-      fderiv ℝ (χ : EuclideanSpace ℝ (Fin n) → ℝ) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) = 0 := by
+    fderiv ℝ (χ : EuclideanSpace ℝ (Fin n) → ℝ) x (EuclideanSpace.basisFun (Fin n) ℝ i) = 0 := by
     have he := (χ.eventuallyEq_one_of_mem_ball (hRS hx)).fderiv_eq (𝕜 := ℝ)
-    simpa using congrArg (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ =>
-      L (EuclideanSpace.basisFun (Fin n) ℝ i)) he
-  let b := fun i x => χ x * a i x +
-    fderiv ℝ (χ : EuclideanSpace ℝ (Fin n) → ℝ) x
-      (EuclideanSpace.basisFun (Fin n) ℝ i) * η x
+    simpa using
+      congrArg
+        (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ => L (EuclideanSpace.basisFun (Fin n) ℝ i)) he
+  let b := fun i x =>
+    χ x * a i x +
+      fderiv ℝ (χ : EuclideanSpace ℝ (Fin n) → ℝ) x (EuclideanSpace.basisFun (Fin n) ℝ i) * η x
   have htop : MemLp η (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     memLp_top_of_bound hη.aestronglyMeasurable C (Filter.Eventually.of_forall hbound)
-  have hdata (i : Fin n) := HasWeakDerivAlong.compact_mul_data
-    (hweak i) (ha2 i) (fun T _ => htop.restrict T)
-    (χ.contDiff.of_le (WithTop.coe_le_coe.mpr le_top)) χ.hasCompactSupport
-  have hηχ : LocallyIntegrable (fun x => χ x * η x)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hdata (i : Fin n) :=
+    HasWeakDerivAlong.compact_mul_data (hweak i) (ha2 i) (fun T _ => htop.restrict T)
+      (χ.contDiff.of_le (WithTop.coe_le_coe.mpr le_top)) χ.hasCompactSupport
+  have hηχ :
+    LocallyIntegrable (fun x => χ x * η x) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     simpa only [mul_comm] using hη.continuous_mul χ.continuous
   have hbχ (x : EuclideanSpace ℝ (Fin n)) : ‖χ x * η x‖ ≤ C := by
     rw [norm_mul, Real.norm_eq_abs, abs_of_nonneg χ.nonneg]
-    exact (mul_le_mul_of_nonneg_right χ.le_one (norm_nonneg _)).trans
-      (by simpa only [one_mul] using hbound x)
-  obtain ⟨hprod, hforce, hEq⟩ := integral_flux_eq_neg_forcing_of_bounded_weak_test
-    hJ hF hId hηχ hbχ χ.hasCompactSupport.mul_right
-    (fun i => (hdata i).1) (fun i => (hdata i).2.2.1) (fun i => (hdata i).2.2.2)
-  have hJeq (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
-      J i x * b i x = J i x * a i x := by
+    exact
+      (mul_le_mul_of_nonneg_right χ.le_one (norm_nonneg _)).trans
+        (by simpa only [one_mul] using hbound x)
+  obtain ⟨hprod, hforce, hEq⟩ :=
+    integral_flux_eq_neg_forcing_of_bounded_weak_test hJ hF hId hηχ hbχ
+      χ.hasCompactSupport.mul_right (fun i => (hdata i).1) (fun i => (hdata i).2.2.1)
+      (fun i => (hdata i).2.2.2)
+  have hJeq (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) : J i x * b i x = J i x * a i x := by
     by_cases hx : J i x = 0
     · simp only [hx, zero_mul]
-    · have hxS : x ∈ S := Or.inr (Set.mem_iUnion.mpr
-        ⟨i, subset_tsupport (J i) hx⟩)
+    · have hxS : x ∈ S := Or.inr (Set.mem_iUnion.mpr ⟨i, subset_tsupport (J i) hx⟩)
       dsimp only [b]
       rw [hχ1 x hxS, hχd x hxS i]
       ring
-  have hFeq (x : EuclideanSpace ℝ (Fin n)) :
-      F x * (χ x * η x) = F x * η x := by
+  have hFeq (x : EuclideanSpace ℝ (Fin n)) : F x * (χ x * η x) = F x * η x := by
     by_cases hx : F x = 0
     · simp only [hx, zero_mul]
     · have hxS : x ∈ S := Or.inl (subset_tsupport F hx)
       rw [hχ1 x hxS, one_mul]
-  refine ⟨fun i => (hprod i).congr (Filter.Eventually.of_forall (hJeq i)),
-    hforce.congr (Filter.Eventually.of_forall hFeq), ?_⟩
+  refine
+    ⟨fun i => (hprod i).congr (Filter.Eventually.of_forall (hJeq i)),
+      hforce.congr (Filter.Eventually.of_forall hFeq), ?_⟩
   calc
-    _ = ∫ x, ∑ i : Fin n, J i x * b i x
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    _ = ∫ x, ∑ i : Fin n, J i x * b i x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
       apply integral_congr_ae
-      exact Filter.Eventually.of_forall fun x =>
-        Finset.sum_congr rfl fun i _ => (hJeq i x).symm
-    _ = -(∫ x, F x * (χ x * η x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := hEq
+      exact Filter.Eventually.of_forall fun x => Finset.sum_congr rfl fun i _ => (hJeq i x).symm
+    _ = -(∫ x, F x * (χ x * η x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := hEq
     _ = _ := congrArg Neg.neg (integral_congr_ae (Filter.Eventually.of_forall hFeq))
 
 end FunctionalInequalities.Analysis

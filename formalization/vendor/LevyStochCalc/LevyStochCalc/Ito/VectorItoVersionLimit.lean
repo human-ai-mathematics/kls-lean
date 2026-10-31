@@ -6,7 +6,12 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Ito.VectorItoVersionUnbounded
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Ito.VectorItoVersionUnbounded
 
 /-!
 # Continuous versions of vector Itô processes with unbounded coefficients
@@ -24,6 +29,8 @@ vector Itô process driven by the unclamped coefficients.
 * `LevyStochCalc.Brownian.Ito.exists_isVectorItoVersion_of_unbounded` — a continuous adapted
   version of a vector Itô process whose coefficients have finite energy on every window.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -286,7 +293,7 @@ theorem exists_isVectorItoVersion_of_unbounded
           (‖Xj (ms (i + 1)) (t : ℝ) ω - Xj (ms i) (t : ℝ) ω‖₊ : ℝ≥0∞) := by
       intro ω
       simp only [hSdef]
-      rw [if_pos hmi]
+      rw [ite_eq_left hmi]
       exact hSrawEq m i ω
     calc ∫⁻ ω, (S m i ω) ^ 2 ∂P
         = ∫⁻ ω, (⨆ t : Set.Icc (0 : ℝ) ((m : ℝ) + 1),
@@ -369,7 +376,7 @@ theorem exists_isVectorItoVersion_of_unbounded
       have hle : (‖Xj (ms (i + m + 1)) (max x 0) ω
           - Xj (ms (i + m)) (max x 0) ω‖₊ : ℝ≥0∞) ≤ S m (i + m) ω := by
         simp only [hSdef]
-        rw [if_pos (Nat.le_add_left m i), hSrawEq]
+        rw [ite_eq_left (Nat.le_add_left m i), hSrawEq]
         exact le_iSup (fun t : Set.Icc (0 : ℝ) ((m : ℝ) + 1) =>
           (‖Xj (ms (i + m + 1)) (t : ℝ) ω - Xj (ms (i + m)) (t : ℝ) ω‖₊ : ℝ≥0∞))
           ⟨max x 0, hmem⟩
@@ -404,7 +411,7 @@ theorem exists_isVectorItoVersion_of_unbounded
     have hLt := hL.tendsto_at hmem
     have hval : Xlim t ω = L t := by
       simp only [hXlim]
-      rw [if_pos hωG, hLt.limUnder_eq]
+      rw [ite_eq_left hωG, hLt.limUnder_eq]
     rw [hval]
     exact hLt
   -- continuity of the limit paths
@@ -431,7 +438,7 @@ theorem exists_isVectorItoVersion_of_unbounded
     · have hz : (fun t => Xlim t ω) = fun _ => (0 : Fin n → ℝ) := by
         funext t
         simp only [hXlim]
-        exact if_neg hωG
+        exact ite_eq_right hωG
       rw [hz]
       exact continuous_const
   -- adaptedness of the limit
@@ -457,7 +464,7 @@ theorem exists_isVectorItoVersion_of_unbounded
     · simpa [Set.indicator_of_mem hωG] using hPt ω hωG t
     · simp only [Set.indicator_of_notMem hωG]
       simp only [hXlim]
-      rw [if_neg hωG]
+      rw [ite_eq_right hωG]
       exact tendsto_const_nhds
   refine ⟨Xlim, hcont, hadapt, ?_⟩
   intro t ht

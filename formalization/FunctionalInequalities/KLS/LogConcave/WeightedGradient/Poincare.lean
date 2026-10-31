@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Poincare.SmoothGradient.Comparison
+module
+
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.Poincare.SmoothGradient.Comparison
 
 /-!
 # Literature Poincare constants on the actual closed gradient
@@ -9,6 +11,8 @@ For a full-dimensional log-concave law, the squared-norm form of the closed unit
 is the smooth-gradient relaxation. Its finite Poincare constants are therefore precisely
 the finite bounds on the intrinsic literature optimum. No heat estimate is assumed here.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

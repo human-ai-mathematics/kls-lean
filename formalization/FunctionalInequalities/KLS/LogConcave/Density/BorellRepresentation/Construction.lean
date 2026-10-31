@@ -1,12 +1,16 @@
-import Mathlib.MeasureTheory.Measure.Decomposition.RadonNikodym
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+module
+
+public import Mathlib.MeasureTheory.Measure.Decomposition.RadonNikodym
+public import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
 
 /-!
 # BorellRepresentation: Construction
 
 Ball-ratio densities and their measurable log-concave envelope for the Borell representation.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Topology Filter
@@ -140,18 +144,20 @@ theorem lowerDensity_logConcave {ν : ProbabilityMeasure V} (hlc : LogConcave ν
   have ht1' : 0 < 1 - t := sub_pos.mpr ht1
   unfold lowerDensity
   simp only [liminf_eq_iSup_iInf_of_nat]
-  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
-  rw [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht, ←
+    ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _,
+    ENNReal.iSup_mul]
   refine iSup_le fun i ↦ ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun j ↦ ?_
   refine le_iSup_of_le (max i j) ?_
   refine le_iInf₂ fun k hk ↦ ?_
-  calc (⨅ l ≥ i, ballRatio ν m l x) ^ t * (⨅ l ≥ j, ballRatio ν m l y) ^ (1 - t)
-      ≤ ballRatio ν m k x ^ t * ballRatio ν m k y ^ (1 - t) :=
-        mul_le_mul'
-          (ENNReal.rpow_le_rpow (iInf₂_le k (le_trans (le_max_left i j) hk)) ht.le)
-          (ENNReal.rpow_le_rpow (iInf₂_le k (le_trans (le_max_right i j) hk)) ht1'.le)
+  calc
+    (⨅ l ≥ i, ballRatio ν m l x) ^ t * (⨅ l ≥ j, ballRatio ν m l y) ^ (1 - t) ≤
+        ballRatio ν m k x ^ t * ballRatio ν m k y ^ (1 - t) :=
+      mul_le_mul' (ENNReal.rpow_le_rpow (iInf₂_le k (le_trans (le_max_left i j) hk)) ht.le)
+        (ENNReal.rpow_le_rpow (iInf₂_le k (le_trans (le_max_right i j) hk)) ht1'.le)
     _ ≤ _ := ballRatio_logConcave m hlc k x y ht ht1
 
 end LocalDensityConcavity
@@ -192,36 +198,45 @@ end EnvelopeBounds
 omit [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V] in
 /-- The envelope of a log-concave lower density is log-concave. -/
 theorem envelope_logConcave
-    (hψ : ∀ x y : V, ∀ t : ℝ, 0 < t → t < 1 →
-      lowerDensity ν m x ^ t * lowerDensity ν m y ^ (1 - t) ≤
-        lowerDensity ν m (t • x + (1 - t) • y))
+    (hψ :
+      ∀ x y : V,
+        ∀ t : ℝ,
+          0 < t →
+            t < 1 →
+              lowerDensity ν m x ^ t * lowerDensity ν m y ^ (1 - t) ≤
+                lowerDensity ν m (t • x + (1 - t) • y))
     (x y : V) {t : ℝ} (ht : 0 < t) (ht1 : t < 1) :
     envelope ν m x ^ t * envelope ν m y ^ (1 - t) ≤ envelope ν m (t • x + (1 - t) • y) := by
   have ht1' : 0 < 1 - t := sub_pos.mpr ht1
   refine le_iInf fun n ↦ ?_
-  calc envelope ν m x ^ t * envelope ν m y ^ (1 - t)
-      ≤ (⨆ x' ∈ Metric.ball x (radius n), lowerDensity ν m x') ^ t *
+  calc
+    envelope ν m x ^ t * envelope ν m y ^ (1 - t) ≤
+        (⨆ x' ∈ Metric.ball x (radius n), lowerDensity ν m x') ^ t *
           (⨆ y' ∈ Metric.ball y (radius n), lowerDensity ν m y') ^ (1 - t) :=
-        mul_le_mul' (ENNReal.rpow_le_rpow (iInf_le _ n) ht.le)
-          (ENNReal.rpow_le_rpow (iInf_le _ n) ht1'.le)
+      mul_le_mul' (ENNReal.rpow_le_rpow (iInf_le _ n) ht.le)
+        (ENNReal.rpow_le_rpow (iInf_le _ n) ht1'.le)
     _ ≤ ⨆ z ∈ Metric.ball (t • x + (1 - t) • y) (radius n), lowerDensity ν m z := by
-        simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
-        rw [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _]
-        simp (config := { congrConsts := false }) only [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul, ENNReal.mul_iSup]
-        refine iSup₂_le fun y' hy' ↦ iSup₂_le fun x' hx' ↦ ?_
-        refine le_iSup₂_of_le (t • x' + (1 - t) • y') ?_ (hψ x' y' t ht ht1)
-        rw [Metric.mem_ball, dist_eq_norm] at hx' hy' ⊢
-        have heq : t • x' + (1 - t) • y' - (t • x + (1 - t) • y) =
-            t • (x' - x) + (1 - t) • (y' - y) := by simp only [smul_sub]; abel
-        rw [heq]
-        calc ‖t • (x' - x) + (1 - t) • (y' - y)‖
-            ≤ ‖t • (x' - x)‖ + ‖(1 - t) • (y' - y)‖ := norm_add_le _ _
-          _ = t * ‖x' - x‖ + (1 - t) * ‖y' - y‖ := by
-              rw [norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos ht,
-                abs_of_pos ht1']
-          _ < t * radius n + (1 - t) * radius n :=
-              add_lt_add (mul_lt_mul_of_pos_left hx' ht) (mul_lt_mul_of_pos_left hy' ht1')
-          _ = radius n := by ring
+      simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht, ←
+        ENNReal.orderIsoRpow_apply (1 - t) ht1']
+      rw [(ENNReal.orderIsoRpow _ ht).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _]
+      simp (config := { congrConsts := false }) only [(ENNReal.orderIsoRpow _ ht).map_iSup _,
+        (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul, ENNReal.mul_iSup]
+      refine iSup₂_le fun y' hy' ↦ iSup₂_le fun x' hx' ↦ ?_
+      refine le_iSup₂_of_le (t • x' + (1 - t) • y') ?_ (hψ x' y' t ht ht1)
+      rw [Metric.mem_ball, dist_eq_norm] at hx' hy' ⊢
+      have heq :
+        t • x' + (1 - t) • y' - (t • x + (1 - t) • y) = t • (x' - x) + (1 - t) • (y' - y) := by
+        simp only [smul_sub]; abel
+      rw [heq]
+      calc
+        ‖t • (x' - x) + (1 - t) • (y' - y)‖ ≤ ‖t • (x' - x)‖ + ‖(1 - t) • (y' - y)‖ :=
+          norm_add_le _ _
+        _ = t * ‖x' - x‖ + (1 - t) * ‖y' - y‖ := by
+          rw [norm_smul, norm_smul, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos ht,
+            abs_of_pos ht1']
+        _ < t * radius n + (1 - t) * radius n :=
+          add_lt_add (mul_lt_mul_of_pos_left hx' ht) (mul_lt_mul_of_pos_left hy' ht1')
+        _ = radius n := by ring
 
 section PositiveDensityConcavity
 

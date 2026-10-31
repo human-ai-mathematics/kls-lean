@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedDensityShifted
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityShifted
 
 /-!
 # Rectangle-simple functions and their `L²` density
@@ -14,6 +18,8 @@ density is obtained from the monotone-class theorem over the rectangle π-system
 generation or standard-Borel hypothesis on `E` is required; a trimmed-product lemma transfers
 `L²` bounds along a sub-σ-algebra of `Ω`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -156,7 +162,7 @@ lemma rectApprox_indicator (μ : Measure (Ω × E)) [IsFiniteMeasure μ]
       refine ⟨fun _ => 0, IsRectSimple.zero, ?_⟩
       rw [show ((⋃ i, F i).indicator (fun _ => (1 : ℝ)) - fun _ => (0 : ℝ))
             = (⋃ i, F i).indicator (fun _ => (1 : ℝ)) from by funext x; simp,
-        MeasureTheory.eLpNorm_indicator_const (MeasurableSet.iUnion hFm)
+        MeasureTheory.eLpNorm_indicator_const (MeasurableSet.iUnion hFm).nullMeasurableSet
           (by norm_num) (by norm_num)]
       simp only [enorm_one, one_mul]
       exact ENNReal.rpow_lt_top_of_nonneg (by norm_num) (measure_ne_top _ _)
@@ -208,7 +214,7 @@ lemma rectApprox_indicator (μ : Measure (Ω × E)) [IsFiniteMeasure μ]
             = ((⋃ i, F i) \ S N).indicator (fun _ => 1) from
           (Set.indicator_sdiff (hSsub N) _).symm,
         MeasureTheory.eLpNorm_indicator_const
-          (MeasurableSet.diff (MeasurableSet.iUnion hFm) (hSmeas N))
+          (MeasurableSet.diff (MeasurableSet.iUnion hFm) (hSmeas N)).nullMeasurableSet
           (by norm_num) (by norm_num)]
       simp only [enorm_one, one_mul]
       calc (μ ((⋃ i, F i) \ S N)) ^ (1 / (2 : ℝ≥0∞).toReal)
@@ -222,9 +228,7 @@ lemma rectApprox_indicator (μ : Measure (Ω × E)) [IsFiniteMeasure μ]
     have hfin_le : MeasureTheory.eLpNorm
         ((S N).indicator (fun _ => (1 : ℝ)) - ∑ i ∈ Finset.range N, g i) 2 μ ≤ ε / 2 := by
       rw [hSsum, ← Finset.sum_sub_distrib]
-      refine le_trans (MeasureTheory.eLpNorm_sum_le
-        (fun i _ => ((measurable_const.indicator (hFm i)).aestronglyMeasurable.sub
-          ((hg i).aestronglyMeasurable μ))) (by norm_num)) ?_
+      refine le_trans (MeasureTheory.eLpNorm_sum_le (by norm_num)) ?_
       refine le_trans (Finset.sum_le_sum (fun i _ => (hgerr i).le)) ?_
       rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
       rcases Nat.eq_zero_or_pos N with hN0 | hN0
@@ -245,11 +249,7 @@ lemma rectApprox_indicator (μ : Measure (Ω × E)) [IsFiniteMeasure μ]
               funext x
               simp only [Pi.sub_apply, Pi.add_apply, Finset.sum_apply]
               ring]
-          exact MeasureTheory.eLpNorm_add_le
-            ((measurable_const.indicator (MeasurableSet.iUnion hFm)).aestronglyMeasurable.sub
-              (measurable_const.indicator (hSmeas N)).aestronglyMeasurable)
-            ((measurable_const.indicator (hSmeas N)).aestronglyMeasurable.sub
-              ((IsRectSimple.sum _ _ (fun i _ => hg i)).aestronglyMeasurable μ)) (by norm_num)
+          exact MeasureTheory.eLpNorm_add_le (by norm_num)
       _ < ε / 2 + ε / 2 := ENNReal.add_lt_add_of_lt_of_le hfin_ne htail hfin_le
       _ = ε := ENNReal.add_halves ε
 
@@ -296,7 +296,7 @@ lemma rectSimple_dense_L2 (μ : Measure (Ω × E)) [IsFiniteMeasure μ] {f : Ω 
     (fun c s hs hμs ε' hε' => by
       obtain ⟨g, hg, hgerr⟩ := rectApprox_indicator_const μ hs c ε' (pos_iff_ne_zero.mpr hε')
       exact ⟨g, by rw [MeasureTheory.eLpNorm_sub_comm]; exact hgerr.le, hg⟩)
-    (fun f g hf hg => hf.add hg) (fun f hf => hf.aestronglyMeasurable μ) hf hε
+    (fun f g hf hg => hf.add hg) hf hε
   exact ⟨g, hg, hgerr⟩
 
 /-- **Rectangle-simple `L²` approximating sequence.** Any `L²` function on `Ω × E`

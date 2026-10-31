@@ -1,10 +1,14 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Approximation
-import FunctionalInequalities.Analysis.MetricBV.Complement
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
+public import FunctionalInequalities.Analysis.MetricBV.Complement
 
 /-!
 # Metric BV subset restriction and closed-support laws
 -/
+
+@[expose] public section
 
 noncomputable section
 

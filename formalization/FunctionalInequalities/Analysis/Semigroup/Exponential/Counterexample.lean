@@ -1,9 +1,14 @@
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.SpecialFunctions.Exponential
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.SpecialFunctions.Exponential
+public import Mathlib.Algebra.Order.Group.Indicator
 
 /-! # A nonconvergent family of commuting nonnegative exponentials
 Nonnegativity and pairwise commutation alone do not ensure a strong limit.
 This counterexample is independent of the Yosida construction. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -17,9 +22,12 @@ section Counterexample
 /-- The reals of the form `1/(n+1)`, `n : ℕ`; a sequence accumulating at `0⁺`. -/
 def counterSet : Set ℝ := {s : ℝ | ∃ n : ℕ, s = 1 / (n + 1)}
 
-/-- The coefficient of the counterexample to the abstract adjoint-product identification: the indicator of `counterSet`,
+/--
+The coefficient of the counterexample to the abstract adjoint-product identification: the indicator
+of `counterSet`,
 i.e. `1` on `{1/(n+1) | n : ℕ}` and `0` elsewhere. -/
-def counterCoeff : ℝ → ℝ := counterSet.indicator fun _ => 1
+def counterCoeff : ℝ → ℝ :=
+  counterSet.indicator fun _ => 1
 
 /-- The counterexample coefficient is nonnegative. -/
 theorem counterCoeff_nonneg (s : ℝ) : 0 ≤ counterCoeff s :=
@@ -36,13 +44,16 @@ theorem counterCoeff_of_notMem {s : ℝ} (hs : s ∉ counterSet) : counterCoeff 
 /-- The counterexample family: `L s = counterCoeff s • 1` on `ℝ`. -/
 def counterFamily (s : ℝ) : ℝ →L[ℝ] ℝ := counterCoeff s • (1 : ℝ →L[ℝ] ℝ)
 
-/-- The counterexample family is nonnegative, as the abstract adjoint-product identification demands. -/
+/--
+The counterexample family is nonnegative, as the abstract adjoint-product identification demands. -/
 theorem counterFamily_nonneg (s : ℝ) (_hs : 0 < s) (f : ℝ) : 0 ≤ ⟪counterFamily s f, f⟫ := by
   have hval : counterFamily s f = counterCoeff s * f := by simp [counterFamily]
   rw [Real.inner_apply, hval, mul_assoc]
   exact mul_nonneg (counterCoeff_nonneg s) (mul_self_nonneg f)
 
-/-- The counterexample family commutes, as the abstract adjoint-product identification demands: scalar multiples of the
+/--
+The counterexample family commutes, as the abstract adjoint-product identification demands: scalar
+multiples of the
 identity always do. -/
 theorem counterFamily_comm (s r : ℝ) (_hs : 0 < s) (_hr : 0 < r) :
     (counterFamily s).comp (counterFamily r) = (counterFamily r).comp (counterFamily s) := by
@@ -107,24 +118,33 @@ theorem counterCoeff_two_div (n : ℕ) : counterCoeff (2 / (2 * (n : ℝ) + 3)) 
   have := Nat.cast_injective (R := ℝ) hcast
   omega
 
-/-- **The abstract adjoint-product identification is false.**  A family of nonnegative, pairwise commuting bounded
+/--
+**The abstract adjoint-product identification is false.**  A family of nonnegative, pairwise
+commuting bounded
 operators on `ℝ` need not have `exp (-t • L s) f` convergent as `s ↓ 0`.  Witness:
 `counterFamily`, at `f = 1` and `t = 1`, whose values along `1/(n+1)` and along `2/(2n+3)` are the
 distinct constants `Real.exp (-1)` and `1`. -/
 theorem not_forall_exists_tendsto_exp_neg_smul :
-    ¬ (∀ (L : ℝ → ℝ →L[ℝ] ℝ),
-      (∀ s : ℝ, 0 < s → ∀ f, 0 ≤ ⟪L s f, f⟫) →
-      (∀ s r : ℝ, 0 < s → 0 < r → (L s).comp (L r) = (L r).comp (L s)) →
-      (∀ f : ℝ, ∀ t : ℝ, 0 ≤ t →
-        ∃ g : ℝ, Tendsto (fun s : ℝ => NormedSpace.exp (-t • L s) f) (𝓝[>] 0) (𝓝 g))) := by
+    ¬(∀ (L : ℝ → ℝ →L[ℝ] ℝ),
+        (∀ s : ℝ, 0 < s → ∀ f, 0 ≤ ⟪L s f, f⟫) →
+          (∀ s r : ℝ, 0 < s → 0 < r → (L s).comp (L r) = (L r).comp (L s)) →
+            (∀ f : ℝ,
+              ∀ t : ℝ,
+                0 ≤ t →
+                  ∃ g : ℝ,
+                    Tendsto (fun s : ℝ => NormedSpace.exp (-t • L s) f) (𝓝[>] 0) (𝓝 g))) := by
   intro hS6
-  obtain ⟨g, hg⟩ := hS6 counterFamily counterFamily_nonneg counterFamily_comm 1 1 zero_le_one
+  obtain ⟨g, hg⟩ :=
+    hS6 counterFamily counterFamily_nonneg counterFamily_comm 1 1
+      zero_le_one
   -- Along `1/(n+1)` the family is the identity, and the value is `Real.exp (-1)`.
+
   have hA : Tendsto (fun _ : ℕ => Real.exp (-1)) atTop (𝓝 g) := by
     have hcomp := hg.comp tendsto_one_div_nhdsGT_zero
     refine hcomp.congr fun n => ?_
     simp only [Function.comp_apply, counterFamily_exp_apply, counterCoeff_one_div n, mul_one]
   -- Along `2/(2n+3)` the family vanishes, and the value is `1`.
+
   have hB : Tendsto (fun _ : ℕ => (1 : ℝ)) atTop (𝓝 g) := by
     have hcomp := hg.comp tendsto_two_div_nhdsGT_zero
     refine hcomp.congr fun n => ?_

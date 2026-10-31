@@ -1,14 +1,19 @@
-import Mathlib.MeasureTheory.Function.LpSpace.Indicator
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import Mathlib.MeasureTheory.Function.LpSpace.Indicator
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # `L²` pairings of vector fields
 
 Generic facts about the pairing `∫ ⟪a, f⟫ dμ` of two square-integrable fields: identification with
 the `L²` inner product, continuity along `L²` convergence, Cauchy–Schwarz, the energy identity
-`∫ ‖a‖² = ‖a‖₂²`, and integrability of the pointwise pairing. Used for the Stein-kernel identities of
+`∫ ‖a‖² = ‖a‖₂²`, and integrability of the pointwise pairing. Used for the Stein-kernel identities
+of
 Letwin arXiv:2607.24164v1 (Appendix A.7).
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter
 open scoped RealInnerProductSpace Topology
@@ -36,8 +41,8 @@ theorem integral_inner_toLp {a f : A → E} (ha : MemLp a 2 μ) (hf : MemLp f 2 
   rw [hax, hfx]
 
 /-- Pairing with a fixed `L²` field is continuous along `L²`-convergent sequences. -/
-theorem tendsto_integral_inner_of_eLpNorm_sub {a f : A → E} {seq : ℕ → A → E}
-    (ha : MemLp a 2 μ) (hf : MemLp f 2 μ) (hs : ∀ j, MemLp (seq j) 2 μ)
+theorem tendsto_integral_inner_of_eLpNorm_sub {a f : A → E} {seq : ℕ → A → E} (ha : MemLp a 2 μ)
+    (hf : MemLp f 2 μ) (hs : ∀ j, MemLp (seq j) 2 μ)
     (hlim : Tendsto (fun j => eLpNorm (fun x => seq j x - f x) 2 μ) atTop (𝓝 0)) :
     Tendsto (fun j => ∫ x, ⟪a x, seq j x⟫ ∂μ) atTop (𝓝 (∫ x, ⟪a x, f x⟫ ∂μ)) := by
   let F : Lp E 2 μ := hf.toLp f
@@ -51,7 +56,10 @@ theorem tendsto_integral_inner_of_eLpNorm_sub {a f : A → E} {seq : ℕ → A �
       (ENNReal.tendsto_toReal (by simp : (0 : ENNReal) ≠ ⊤)).comp hlim
   have hS : Tendsto S atTop (𝓝 F) := tendsto_iff_norm_sub_tendsto_zero.mpr hnormlim
   have hinner : Tendsto (fun j => ⟪ha.toLp a, S j⟫) atTop (𝓝 ⟪ha.toLp a, F⟫) :=
-    (((continuous_const : Continuous (fun _ : Lp E 2 μ => ha.toLp a)).inner continuous_id).tendsto F).comp hS
+    (((continuous_const : Continuous (fun _ : Lp E 2 μ => ha.toLp a)).inner
+              continuous_id).tendsto
+          F).comp
+      hS
   simpa only [S, F, ← integral_inner_toLp ha hf, ← integral_inner_toLp ha (hs _)] using
     (hinner : Tendsto (fun j => ⟪ha.toLp a, S j⟫) atTop (𝓝 ⟪ha.toLp a, F⟫))
 

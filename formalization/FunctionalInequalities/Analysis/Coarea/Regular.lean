@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Coarea.RegularChart
-import FunctionalInequalities.Analysis.Coarea.FiberIntegral
-import FunctionalInequalities.Analysis.Graph.Divergence
-import FunctionalInequalities.Analysis.Hausdorff.Slice.OpenMeasurable
+module
+
+public import FunctionalInequalities.Analysis.Coarea.RegularChart
+public import FunctionalInequalities.Analysis.Coarea.FiberIntegral
+public import FunctionalInequalities.Analysis.Graph.Divergence
+public import FunctionalInequalities.Analysis.Hausdorff.Slice.OpenMeasurable
 
 /-! # Weighted coarea on regular open C¹ domains (regular-domain coarea)
 
@@ -25,6 +27,8 @@ slice measurability is established independently in `OpenSliceMeasurable`.
 This proves only the regular-domain coarea identity. It does not use critical slicing, Sard
 or Whitney extension.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Filter Topology
@@ -186,13 +190,19 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 /-- Local regular coarea, with the repository's normalized surface measure and with no
 regularity outside the prescribed open domain. -/
-theorem exists_regular_coarea_neighborhood {O : Set V} {u : V → ℝ}
-    (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O)
-    (hreg : fderiv ℝ u x₀ ≠ 0) :
-    ∃ N : Set V, IsOpen N ∧ x₀ ∈ N ∧ N ⊆ O ∧
-      ∀ S : Set V, MeasurableSet S → S ⊆ N → ∀ g : V → ℝ≥0∞, Measurable g →
-        (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
-          ∫⁻ t, ∫⁻ x in S ∩ {x | u x = t}, g x ∂(surfaceMeasure V) := by
+theorem exists_regular_coarea_neighborhood {O : Set V} {u : V → ℝ} (hO : IsOpen O)
+    (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O) (hreg : fderiv ℝ u x₀ ≠ 0) :
+    ∃ N : Set V,
+      IsOpen N ∧
+        x₀ ∈ N ∧
+          N ⊆ O ∧
+            ∀ S : Set V,
+              MeasurableSet S →
+                S ⊆ N →
+                  ∀ g : V → ℝ≥0∞,
+                    Measurable g →
+                      (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+                        ∫⁻ t, ∫⁻ x in S ∩ {x | u x = t}, g x ∂(surfaceMeasure V) := by
   classical
   obtain ⟨r, w, hr, hrO, hw, heq⟩ := Analysis.exists_contDiff_eqOn_ball hO hu hx₀
   have hevent : ∀ x ∈ Metric.ball x₀ r, w =ᶠ[𝓝 x] u := fun x hx =>
@@ -217,32 +227,33 @@ theorem exists_regular_coarea_neighborhood {O : Set V} {u : V → ℝ}
     change Module.finrank ℝ ((ℝ ∙ e)ᗮ : Submodule ℝ V) = _
     omega
   obtain ⟨N, hN, hxN, hformula⟩ := Analysis.exists_coarea_neighborhood ι hsp hw hc hgrad
-  refine ⟨N ∩ Metric.ball x₀ r, hN.inter Metric.isOpen_ball,
-    ⟨hxN, Metric.mem_ball_self hr⟩, fun x hx => hrO hx.2, ?_⟩
+  refine
+    ⟨N ∩ Metric.ball x₀ r, hN.inter Metric.isOpen_ball, ⟨hxN, Metric.mem_ball_self hr⟩,
+      fun x hx => hrO hx.2, ?_⟩
   intro S hS hSN g hg
   have h := hformula S hS (fun x hx => (hSN hx).1) g hg
   have hsurf : hausdorffNormalized V (Module.finrank ℝ H) = surfaceMeasure V := by
-    rw [hdim]; rfl
+    rw [hdim];
+    rfl
   rw [hsurf] at h
   have hslice : ∀ t, S ∩ {x | w x = t} = S ∩ {x | u x = t} := by
     intro t
     ext x
-    constructor <;> rintro ⟨hx, ht⟩ <;>
-      exact ⟨hx, by simpa [heq (hSN hx).2] using ht⟩
+    constructor <;> rintro ⟨hx, ht⟩ <;> exact ⟨hx, by simpa [heq (hSN hx).2] using ht⟩
   simp_rw [hslice] at h
   rw [← h]
-  exact setLIntegral_congr_fun hS fun x hx => by
-    rw [(hevent x (hSN hx).2).gradient_eq]
+  exact setLIntegral_congr_fun hS fun x hx => by rw [(hevent x (hSN hx).2).gradient_eq]
 
-/-- **regular-domain coarea: weighted coarea on a regular open C¹ domain**, including a.e. measurability
+/--
+**regular-domain coarea: weighted coarea on a regular open C¹ domain**, including a.e. measurability
 of the weighted slices. All weights in ENNReal and all dimensions are covered. -/
 theorem coarea_of_contDiffOn_of_fderiv_ne_zero {O S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
     (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) (hreg : ∀ x ∈ O, fderiv ℝ u x ≠ 0)
     (hS : MeasurableSet S) (hSO : S ⊆ O) (hg : Measurable g) :
     AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V))
-      (volume : Measure ℝ) ∧
-    (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
-      ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
+        (volume : Measure ℝ) ∧
+      (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+        ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
   classical
   refine ⟨aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn hO hu hS hSO hg, ?_⟩
   rcases S.eq_empty_or_nonempty with hSe | ⟨z₀, hz₀⟩
@@ -258,14 +269,12 @@ theorem coarea_of_contDiffOn_of_fderiv_ne_zero {O S : Set V} {u : V → ℝ} {g 
     obtain ⟨z, hzT, -⟩ := Set.mem_iUnion₂.1 this
     exact ⟨z, hzT⟩
   obtain ⟨σ, hσ⟩ := hTc.exists_eq_range hTne
-  have hcov : O ⊆ ⋃ n, N (σ n) := by
-    rw [← hOcov, ← hTu, hσ, Set.biUnion_range]
+  have hcov : O ⊆ ⋃ n, N (σ n) := by rw [← hOcov, ← hTu, hσ, Set.biUnion_range]
   set P : ℕ → Set V := disjointed fun n => S ∩ N (σ n) with hP
   have hPm : ∀ n, MeasurableSet (P n) :=
     MeasurableSet.disjointed fun n => hS.inter (hN (σ n)).measurableSet
   have hPd : Pairwise (Function.onFun Disjoint P) := disjoint_disjointed _
-  have hPn : ∀ n, P n ⊆ N (σ n) := fun n =>
-    (disjointed_subset _ n).trans Set.inter_subset_right
+  have hPn : ∀ n, P n ⊆ N (σ n) := fun n => (disjointed_subset _ n).trans Set.inter_subset_right
   have hPO : ∀ n, P n ⊆ O := fun n => (hPn n).trans (hNO (σ n))
   have hPu : ⋃ n, P n = S := by
     rw [hP, iUnion_disjointed, ← Set.inter_iUnion]
@@ -279,8 +288,9 @@ theorem coarea_of_contDiffOn_of_fderiv_ne_zero {O S : Set V} {u : V → ℝ} {g 
       constructor <;> rintro ⟨hx, ht⟩ <;> exact ⟨hx, by simpa [hPO n hx] using ht⟩
     rw [heq]
     exact (hPm n).inter (hw (measurableSet_singleton t))
-  have hmeas : ∀ n, AEMeasurable
-      (fun t : ℝ => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) volume :=
+  have hmeas :
+    ∀ n,
+      AEMeasurable (fun t : ℝ => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) volume :=
     fun n => aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn hO hu (hPm n) (hPO n) hg
   calc
     (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
@@ -296,7 +306,8 @@ theorem coarea_of_contDiffOn_of_fderiv_ne_zero {O S : Set V} {u : V → ℝ} {g 
       intro t
       rw [← hPu, Set.iUnion_inter]
       symm
-      exact lintegral_iUnion (fun n => hslicem n t)
-        (fun i j hij => (hPd hij).mono Set.inter_subset_left Set.inter_subset_left) g
+      exact
+        lintegral_iUnion (fun n => hslicem n t)
+          (fun i j hij => (hPd hij).mono Set.inter_subset_left Set.inter_subset_left) g
 
 end FunctionalInequalities.KLS

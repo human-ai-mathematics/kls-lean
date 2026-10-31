@@ -1,4 +1,8 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Basic
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Basic
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis.WaveSplitting
 

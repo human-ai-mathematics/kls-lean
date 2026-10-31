@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Posterior
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Posterior
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 
 /-!
 # Audit: Gaussian posterior, centering and uniform moments (BKL Section 2)
@@ -22,7 +24,9 @@ namespace GaussianPosteriorAudit
 private noncomputable def W (y : ℝ) : ℝ := (1 / 2 : ℝ) * ‖y‖ ^ 2
 
 private theorem W_integrable : Integrable (fun y : ℝ => Real.exp (-W y)) volume := by
-  have h := FunctionalInequalities.Probability.Gaussian.integrable_kernel (V := ℝ) (by norm_num : (0 : ℝ) < 1 / 2)
+  have h :=
+    FunctionalInequalities.Probability.Gaussian.integrable_kernel (V := ℝ)
+      (by norm_num : (0 : ℝ) < 1 / 2)
   change Integrable (fun y : ℝ => Real.exp (-(1 / 2 : ℝ) * ‖y‖ ^ 2)) volume at h
   convert h using 1
   funext y
@@ -93,7 +97,8 @@ theorem zero_dimension_order_zero {μ : Measure (EuclideanSpace ℝ (Fin 0))}
 /-- Isotropic log-concave laws on `ℝ²` have a fourth moment bounded by a universal constant. -/
 theorem isotropic_plane_fourth_moment (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin 2)))
     (hlc : KLS.LogConcave ν) (hiso : KLS.Isotropic ν) :
-    Integrable (fun v : EuclideanSpace ℝ (Fin 2) => ‖v‖ ^ 4) (ν : Measure (EuclideanSpace ℝ (Fin 2))) :=
+    Integrable (fun v : EuclideanSpace ℝ (Fin 2) => ‖v‖ ^ 4)
+      (ν : Measure (EuclideanSpace ℝ (Fin 2))) :=
   (KLS.LogConcave.integral_norm_pow_le_of_isotropic hlc hiso 4).1
 
 end GaussianPosteriorAudit
@@ -108,15 +113,23 @@ end GaussianPosteriorAudit
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw_isBorellDensity
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw_logConcave
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.coe_centeredPosteriorLaw
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.centeredPosteriorLaw_logConcave
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.memLp_two_id_centeredPosteriorLaw
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_id_centeredPosteriorLaw
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_centeredPosteriorLaw
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_centeredPosteriorLaw_le
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_sq_centeredPosteriorLaw_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.centeredPosteriorLaw_logConcave
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.memLp_two_id_centeredPosteriorLaw
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_id_centeredPosteriorLaw
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_centeredPosteriorLaw
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_centeredPosteriorLaw_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_sq_centeredPosteriorLaw_le
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.centeredPosteriorLaw_data
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_pow_centeredPosteriorLaw_le
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_exp_norm_centeredPosteriorLaw_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_pow_centeredPosteriorLaw_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_exp_norm_centeredPosteriorLaw_le
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.centeredPosteriorRate_pos
 #print axioms GaussianPosteriorAudit.concrete_gaussian_posterior
 #print axioms GaussianPosteriorAudit.concrete_gaussian_fourth_moment

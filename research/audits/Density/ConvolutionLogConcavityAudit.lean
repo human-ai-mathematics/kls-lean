@@ -1,7 +1,11 @@
-import FunctionalInequalities.Probability.BrunnMinkowski
+module
+
+public import FunctionalInequalities.Probability.BrunnMinkowski
 
 /-! Independent full-signature client for convolution log-concavity from finite-dimensional
 Prékopa–Leindler. It asserts neither finite integrals nor smoothness. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

@@ -1,5 +1,8 @@
-import LevyStochCalc.Martingale.CadlagModification
-import Lean
+module
+
+public import LevyStochCalc.Martingale.CadlagModification
+public import Lean
+meta import Lean
 
 /-! Independent clients for the synchronized external regularization interfaces.
 
@@ -10,6 +13,8 @@ The real-time extension additionally retains vanishing at negative times;
 fixed-time almost-everywhere equality and a common almost-sure path event are
 checked as separate conclusions.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal

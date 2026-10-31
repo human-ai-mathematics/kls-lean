@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Cheeger
-import FunctionalInequalities.Probability.LogConcave
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Cheeger
+public import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `cor:absolutely-continuous-relaxation-two-cheeger`
@@ -21,6 +23,8 @@ KLS routes. The general Borel-law statement has its separate certificate in
 continuous scope. No Poincaré inequality, finiteness of a constant or Cheeger--Buser comparison
 follows from this certificate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -88,12 +92,13 @@ info: 'Solutions.CorAbsolutelyContinuousRelaxationTwoCheeger.certificate'
 #print axioms Solutions.CorAbsolutelyContinuousRelaxationTwoCheeger.certificate
 
 /--
-info: 'FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous'
+info:
+'FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms
-  FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous
+  #print axioms
+    FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous
 
 /--
 info: 'FunctionalInequalities.KLS.LogConcave.intrinsicSmooth_energy_eq_two_mul_cheeger'

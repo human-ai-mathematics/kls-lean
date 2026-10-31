@@ -1,10 +1,13 @@
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
 
 /-!
 # Scope audit for `R1`–`R3` of `VonNeumannRouteStatements.lean`
 
 The obligations `R1`, `R2` and `R3` — Part B, "resolvent limits" — of
-`research/audits/Semigroup/VonNeumannRouteStatements.lean` are restated here **verbatim**: the propositions
+`research/audits/Semigroup/VonNeumannRouteStatements.lean` are restated here **verbatim**: the
+propositions
 are copied character for character from that route file and discharged from the hole-free
 module `FunctionalInequalities/Analysis/Semigroup/Resolvent/Limit.lean`. A renamed binder, a
 reordered hypothesis or a weakened conclusion would fail to elaborate here.
@@ -28,6 +31,8 @@ progress marker from this client.
 The axiom reports at the end cover every public declaration of the new module and every theorem of
 this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

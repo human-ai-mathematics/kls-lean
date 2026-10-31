@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Stability
-import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Stability
+public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 
 /-! # Compact localization of smooth splitting coefficients -/
+
+@[expose] public section
 noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
@@ -12,30 +16,35 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 theorem exists_wordDerivative_bound (a : ι → E) (k : ℕ) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) (hc : ∀ j, HasCompactSupport (b j)) :
     ∃ B : ℝ, 0 ≤ B ∧ ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B := by
-  have hn : ∀ n : ℕ, ∃ B : ℝ, 0 ≤ B ∧ ∀ j (w : Fin n → ι) x,
-      derivative (fun i => a (w i)) (b j) x ^ 2 ≤ B := by
+  have hn :
+    ∀ n : ℕ,
+      ∃ B : ℝ, 0 ≤ B ∧ ∀ j (w : Fin n → ι) x, derivative (fun i => a (w i)) (b j) x ^ 2 ≤ B := by
     intro n
-    have hbnd : ∀ p : ι × (Fin n → ι), ∃ M : ℝ, ∀ x,
-        ‖derivative (fun i => a (p.2 i)) (b p.1) x‖ ≤ M := fun p =>
+    have hbnd :
+      ∀ p : ι × (Fin n → ι), ∃ M : ℝ, ∀ x, ‖derivative (fun i => a (p.2 i)) (b p.1) x‖ ≤ M :=
+      fun p =>
       (hasCompactSupport_derivative _ (hc p.1)).exists_bound_of_continuous
         (continuous_derivative _ (hb p.1))
     choose M hM using hbnd
     refine ⟨∑ p : ι × (Fin n → ι), (max (M p) 0) ^ 2, by positivity, ?_⟩
     intro j w x
-    have hm := (hM (j,w) x).trans (le_max_left (M (j,w)) 0)
-    have hsq : derivative (fun i => a (w i)) (b j) x ^ 2 ≤ (max (M (j,w)) 0) ^ 2 := by
+    have hm := (hM (j, w) x).trans (le_max_left (M (j, w)) 0)
+    have hsq : derivative (fun i => a (w i)) (b j) x ^ 2 ≤ (max (M (j, w)) 0) ^ 2 := by
       rw [Real.norm_eq_abs] at hm
-      nlinarith [sq_abs (derivative (fun i => a (w i)) (b j) x), abs_nonneg
-        (derivative (fun i => a (w i)) (b j) x), le_max_right (M (j,w)) 0]
-    exact hsq.trans (Finset.single_le_sum (fun p _ => sq_nonneg (max (M p) 0)) (Finset.mem_univ (j,w)))
+      nlinarith [sq_abs (derivative (fun i => a (w i)) (b j) x),
+        abs_nonneg (derivative (fun i => a (w i)) (b j) x), le_max_right (M (j, w)) 0]
+    exact
+      hsq.trans
+        (Finset.single_le_sum (fun p _ => sq_nonneg (max (M p) 0)) (Finset.mem_univ (j, w)))
   choose B hB hbound using hn
   refine ⟨∑ n ∈ Finset.range (k + 1), B n, Finset.sum_nonneg (fun n _ => hB n), ?_⟩
   intro j r hr x
   have he := congrFun (wordDerivative_ofFn a r.get (hb j)) x
   rw [List.ofFn_get] at he
   rw [he]
-  exact (hbound r.length j r.get x).trans
-    (Finset.single_le_sum (fun n _ => hB n) (Finset.mem_range.mpr (by omega)))
+  exact
+    (hbound r.length j r.get x).trans
+      (Finset.single_le_sum (fun n _ => hB n) (Finset.mem_range.mpr (by omega)))
 
 /-- Localize a smooth coefficient without imposing any global bound on it. The same cutoff
 works for every finite derivative order and every finite family of directions. -/

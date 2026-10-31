@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
-import FunctionalInequalities.Poincare.L2.Energy
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
+public import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Poincaré optimization in intrinsic affine coordinates
@@ -11,8 +13,11 @@ the linearly isometric intrinsic-coordinate presentation.
 
 The `Poincare.SmoothGradient.Intrinsic` namespace names the frontend selected by the repository: the
 intrinsic-affine smooth-gradient relaxation. Its construction remains explicit in
-`Energy.SmoothGradient.Intrinsic.energy`; the name itself asserts no Cheeger or spectral identification.
+`Energy.SmoothGradient.Intrinsic.energy`; the name itself asserts no Cheeger or spectral
+identification.
 -/
+
+@[expose] public section
 
 noncomputable section
 

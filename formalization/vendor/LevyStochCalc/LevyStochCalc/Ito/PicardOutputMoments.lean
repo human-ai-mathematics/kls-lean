@@ -6,9 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Ito.PicardIntegrand
-import LevyStochCalc.Probability.ProgressiveCadlag
-import LevyStochCalc.Ito.PicardSpace
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardIntegrand
+public import LevyStochCalc.Probability.ProgressiveCadlag
+public import LevyStochCalc.Ito.PicardSpace
 
 /-!
 # Second moments of the Picard step
@@ -19,6 +23,8 @@ stochastic integral and the compensated jump integral — is bounded in `L²` un
 and Itô–Lévy isometries for the two stochastic components; summing the three bounds gives a
 finite Bielecki norm for the step.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
-import Mathlib.Analysis.Calculus.AddTorsor.AffineMap
-import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
+public import Mathlib.Analysis.Calculus.AddTorsor.AffineMap
+public import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 
 /-!
 # Comparing ambient and intrinsic smooth-gradient relaxations
@@ -22,6 +24,8 @@ used as a globally smooth extension map.
 Source: local coordinate-comparison argument in Blueprint chapter 30, with the existing
 `Probability.reconstruct` and `Energy.Euclidean.intrinsicL2Equiv` as its checked geometric inputs.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -107,10 +111,10 @@ theorem exists_intrinsic_restriction (f : Energy.SmoothGradient.Test μ) :
       g.toL2 = toIntrinsicL2 μ f.toL2 ∧ g.energy ≤ f.energy := by
   let φ := Probability.reconstruct μ
   have hφ : ContDiff ℝ ∞ φ := φ.toContinuousAffineMap.contDiff
-  let g := pullbackTest f φ hφ φ.isometry.lipschitz
+  let g := pullbackTest f φ hφ φ.isometry.lipschitzWith
     (Probability.measurePreserving_reconstruct μ)
   exact ⟨g, fun _ ↦ rfl, rfl,
-    pullbackTest_energy_le f φ hφ φ.isometry.lipschitz
+    pullbackTest_energy_le f φ hφ φ.isometry.lipschitzWith
       (Probability.measurePreserving_reconstruct μ)⟩
 
 end Test

@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Normed.Operator.ContinuousLinearMap
-import Mathlib.LinearAlgebra.Pi
+module
+
+public import Mathlib.Analysis.Normed.Operator.ContinuousLinearMap
+public import Mathlib.LinearAlgebra.Pi
 
 /-!
 # Coordinate detection on finite real products
@@ -11,6 +13,8 @@ planar Sard charts used in regular-value and coarea constructions. It has no
 Euclidean-norm, differentiability or measure premise; empty finite indices are
 allowed (the nonzero-functional premise then cannot hold).
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis.PiCoordinates
 

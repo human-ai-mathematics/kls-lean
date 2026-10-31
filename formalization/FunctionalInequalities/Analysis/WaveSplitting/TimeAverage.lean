@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Compatibility
-import Mathlib.Analysis.Calculus.ParametricIntervalIntegral
-import Mathlib.Analysis.Calculus.ContDiff.FiniteDimension
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Compatibility
+public import Mathlib.Analysis.Calculus.ParametricIntervalIntegral
+public import Mathlib.Analysis.Calculus.ContDiff.FiniteDimension
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 
 /-!
 # The finite time average of the actual splitting cells
@@ -15,6 +17,8 @@ The proof uses differentiation under interval integrals, cellwise integration by
 and telescoping over the actual grid nodes. No wave existence, no `p = grad u` and no residual
 smallness are assumed.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff
@@ -127,17 +131,20 @@ private theorem contDiff_directional {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (
 divergence of the compatibility defect. This is exact; no `p = grad u` is imposed. -/
 theorem waveGenerator_v_eq [Fintype ι] (a : ι → E) (b : ι → E → ℝ) {Y : State E ι}
     (hY : Y.Smooth) (x : E) :
-    (waveGenerator a b Y).v x = -formOperator a b Y.u x +
-      weightedDivergence a b (compatibilityDefect a Y).p x := by
-  have hd (j : ι) : fderiv ℝ (fun y => Y.p j y - fderiv ℝ Y.u y (a j)) x (a j) =
+    (waveGenerator a b Y).v x =
+      -formOperator a b Y.u x + weightedDivergence a b (compatibilityDefect a Y).p x := by
+  have hd (j : ι) :
+    fderiv ℝ (fun y => Y.p j y - fderiv ℝ Y.u y (a j)) x (a j) =
       fderiv ℝ (Y.p j) x (a j) - fderiv ℝ (fun y => fderiv ℝ Y.u y (a j)) x (a j) := by
     rw [fderiv_fun_sub (((hY.2.2 j).differentiable (by simp)) x)
-      (((contDiff_directional hY.1 (a j)).differentiable (by simp)) x)]
+        (((contDiff_directional hY.1 (a j)).differentiable (by simp)) x)]
     rfl
   simp only [waveGenerator, formOperator, weightedDivergence, compatibilityDefect, coupling, hd]
-  have key : ∑ j, (fderiv ℝ (fun y => fderiv ℝ Y.u y (a j)) x (a j) - b j x * fderiv ℝ Y.u x (a j)) +
-      ∑ j, (fderiv ℝ (Y.p j) x (a j) - fderiv ℝ (fun y => fderiv ℝ Y.u y (a j)) x (a j) -
-        b j x * (Y.p j x - fderiv ℝ Y.u x (a j))) =
+  have key :
+    ∑ j, (fderiv ℝ (fun y => fderiv ℝ Y.u y (a j)) x (a j) - b j x * fderiv ℝ Y.u x (a j)) +
+        ∑ j,
+          (fderiv ℝ (Y.p j) x (a j) - fderiv ℝ (fun y => fderiv ℝ Y.u y (a j)) x (a j) -
+            b j x * (Y.p j x - fderiv ℝ Y.u x (a j))) =
       ∑ j, fderiv ℝ (Y.p j) x (a j) - ∑ j, b j x * Y.p j x := by
     rw [← Finset.sum_add_distrib, ← Finset.sum_sub_distrib]
     exact Finset.sum_congr rfl fun j _ => by ring

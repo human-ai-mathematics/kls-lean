@@ -6,7 +6,15 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedDensityRefinement
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+-- Modified 2026-10-31 by the KLS formalization project: `eLpNorm_two_rpow_eq_lintegral_sq`
+-- takes `hg : AEStronglyMeasurable g P`, which `eLpNorm_nnreal_pow_eq_lintegral` requires in
+-- Mathlib v4.35.0 (where `eLpNorm` of a non-a.e.-strongly-measurable function is `∞`); its
+-- caller passes an existing `MemLp` witness.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityRefinement
 
 /-!
 # The cross-resolution Cauchy estimate and the `L²` limit
@@ -17,6 +25,8 @@ in `L²(P)` it produces. Closing bricks on the regularity of monotone `ℝ≥0�
 time and the right-continuity of the intensity of shrinking time-mark boxes support the path
 regularity of that limit.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -393,10 +403,11 @@ lemma eulerStepIntegral_cauchy_le
             _]
 
 /-- `eLpNorm g 2 μ ^ (2:ℝ) = ∫⁻ ‖g‖₊²`. -/
-lemma eLpNorm_two_rpow_eq_lintegral_sq {P : Measure Ω} (g : Ω → ℝ) :
+lemma eLpNorm_two_rpow_eq_lintegral_sq {P : Measure Ω} (g : Ω → ℝ)
+    (hg : AEStronglyMeasurable g P) :
     MeasureTheory.eLpNorm g 2 P ^ (2 : ℝ) = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂P := by
   have h := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral (μ := P) (p := (2 : ℝ≥0))
-    (f := g) (by norm_num)
+    (f := g) (by norm_num) hg
   rw [show ((2 : ℝ≥0) : ℝ≥0∞) = (2 : ℝ≥0∞) from by simp,
     show ((2 : ℝ≥0) : ℝ) = (2 : ℝ) from by norm_num] at h
   rw [h]; refine lintegral_congr (fun ω => ?_)
@@ -454,7 +465,7 @@ theorem compensated_eulerSum_L2_limit
     refine ⟨N0, fun m hm n hn => ?_⟩
     rw [MeasureTheory.Lp.edist_toLp_toLp]
     have hsq : MeasureTheory.eLpNorm (I m - I n) 2 P ^ (2 : ℝ) < ε ^ (2 : ℝ) := by
-      rw [eLpNorm_two_rpow_eq_lintegral_sq]
+      rw [eLpNorm_two_rpow_eq_lintegral_sq _ ((hImem m).sub (hImem n)).aestronglyMeasurable]
       have hle : ∫⁻ ω, (‖(I m - I n) ω‖₊ : ℝ≥0∞) ^ 2 ∂P ≤ 2 * Aφ m + 2 * Aφ n := by
         change ∫⁻ ω, (‖I m ω - I n ω‖₊ : ℝ≥0∞) ^ 2 ∂P ≤ 2 * Aφ m + 2 * Aφ n
         rcases le_total m n with hmn | hnm

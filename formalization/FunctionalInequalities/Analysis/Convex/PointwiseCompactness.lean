@@ -1,25 +1,38 @@
-import Mathlib.Analysis.Convex.Continuous
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Topology.MetricSpace.Sequences
-import Mathlib.Topology.Bases
+module
+
+public import Mathlib.Analysis.Convex.Continuous
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Topology.MetricSpace.Sequences
+public import Mathlib.Topology.Bases
 
 /-!
 # Pointwise compactness of bounded convex functions
 
-A sequence of nonnegative real convex functions on an open set `K` of a finite-dimensional real normed space, bounded at
-every point of `K`, has one strictly increasing subsequence converging at every point of `K`, and the limit is convex on
-`K` (`exists_subseq_tendsto_of_convexOn_of_bddAbove`; `K = ∅` allowed). This is the case of Rockafellar, *Convex Analysis*,
-Theorem 10.9, used in the proof of Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), Lemma 17.
+A sequence of nonnegative real convex functions on an open set `K` of a finite-dimensional real
+normed space, bounded at
+every point of `K`, has one strictly increasing subsequence converging at every point of `K`, and
+the limit is convex on
+`K` (`exists_subseq_tendsto_of_convexOn_of_bddAbove`; `K = ∅` allowed). This is the case of
+Rockafellar, *Convex Analysis*,
+Theorem 10.9, used in the proof of Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1),
+Lemma 17.
 
-Proof: the pointwise supremum is convex and finite on `K`, hence locally bounded, giving common local Lipschitz bounds; a
-subsequence converges on a countable dense subset (one diagonal extraction over `ℕ` coordinates) and the convergence extends
+Proof: the pointwise supremum is convex and finite on `K`, hence locally bounded, giving common
+local Lipschitz bounds; a
+subsequence converges on a countable dense subset (one diagonal extraction over `ℕ` coordinates) and
+the convergence extends
 to all of `K` by the Cauchy criterion; convexity passes to the limit. Four private helpers.
 
-Section `LinearBounds`: convex functions on a finite-dimensional real normed space with uniform two-sided linear
-bounds `α‖x‖ − β ≤ ψ_l(x) ≤ L‖x‖ + γ`, `α ≥ 0`, have a subsequence converging pointwise on the whole space to a convex
-function (`exists_subseq_tendsto_of_linear_bounds`), as used in Klartag, *Logarithmically-concave moment measures I*
+Section `LinearBounds`: convex functions on a finite-dimensional real normed space with uniform
+two-sided linear
+bounds `α‖x‖ − β ≤ ψ_l(x) ≤ L‖x‖ + γ`, `α ≥ 0`, have a subsequence converging pointwise on the whole
+space to a convex
+function (`exists_subseq_tendsto_of_linear_bounds`), as used in Klartag, *Logarithmically-concave
+moment measures I*
 (arXiv:1309.2767v1), Proposition 2.1.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -129,13 +142,17 @@ private theorem cauchy_at_point_of_dense_local_lipschitz {E : Type*} [PseudoMetr
   rw [dist_comm (f n (d i)) (f n x)] at htri'
   linarith
 
-/-- Nonnegative convex functions on an open set, bounded at every point, have a subsequence converging at every point of
+/--
+Nonnegative convex functions on an open set, bounded at every point, have a subsequence converging
+at every point of
 the set to a convex function. -/
 theorem exists_subseq_tendsto_of_convexOn_of_bddAbove {K : Set E} (hK : IsOpen K)
     (f : ℕ → E → ℝ) (hf : ∀ ℓ, ConvexOn ℝ K (f ℓ)) (hnn : ∀ ℓ, ∀ x ∈ K, 0 ≤ f ℓ x)
     (hbdd : ∀ x ∈ K, BddAbove (Set.range fun ℓ => f ℓ x)) :
-    ∃ (s : ℕ → ℕ) (g : E → ℝ), StrictMono s ∧ ConvexOn ℝ K g ∧
-      ∀ x ∈ K, Filter.Tendsto (fun j => f (s j) x) Filter.atTop (nhds (g x)) := by
+    ∃ (s : ℕ → ℕ) (g : E → ℝ),
+      StrictMono s ∧
+        ConvexOn ℝ K g ∧
+          ∀ x ∈ K, Filter.Tendsto (fun j => f (s j) x) Filter.atTop (nhds (g x)) := by
   classical
   by_cases hne : K.Nonempty
   · let : Nonempty K := hne.to_subtype
@@ -143,25 +160,26 @@ theorem exists_subseq_tendsto_of_convexOn_of_bddAbove {K : Set E} (hK : IsOpen K
     let d : ℕ → E := fun i => d₀ i
     have hd : ∀ x ∈ K, ∀ ε > (0 : ℝ), ∃ i, dist x (d i) < ε := by
       intro x hx ε hε
-      obtain ⟨i, hi⟩ := (TopologicalSpace.denseRange_denseSeq K).exists_dist_lt
-        (⟨x, hx⟩ : K) hε
+      obtain ⟨i, hi⟩ := (TopologicalSpace.denseRange_denseSeq K).exists_dist_lt (⟨x, hx⟩ : K) hε
       exact ⟨i, hi⟩
-    obtain ⟨s, g₀, hs, hlim₀⟩ := exists_subseq_pointwise_on_nat
-      (fun n i => f n (d i)) (fun n i => hnn n (d i) (d₀ i).property)
-      (fun i => hbdd (d i) (d₀ i).property)
+    obtain ⟨s, g₀, hs, hlim₀⟩ :=
+      exists_subseq_pointwise_on_nat (fun n i => f n (d i))
+        (fun n i => hnn n (d i) (d₀ i).property) (fun i => hbdd (d i) (d₀ i).property)
     have hc : ∀ x ∈ K, CauchySeq (fun n => f (s n) x) := by
       intro x hx
       obtain ⟨r, hr, _, L, hL⟩ := exists_uniform_local_lipschitz hK f hf hnn hbdd hx
-      exact cauchy_at_point_of_dense_local_lipschitz (fun n => f (s n)) d hd
-        (fun i => (hlim₀ i).cauchySeq) hx r hr L (fun n => hL (s n))
+      exact
+        cauchy_at_point_of_dense_local_lipschitz (fun n => f (s n)) d hd
+          (fun i => (hlim₀ i).cauchySeq) hx r hr L (fun n => hL (s n))
     let g : E → ℝ := fun x => Filter.limUnder Filter.atTop (fun n => f (s n) x)
-    have hlim : ∀ x ∈ K, Filter.Tendsto (fun n => f (s n) x)
-        Filter.atTop (nhds (g x)) := fun x hx => (hc x hx).tendsto_limUnder
+    have hlim : ∀ x ∈ K, Filter.Tendsto (fun n => f (s n) x) Filter.atTop (nhds (g x)) :=
+      fun x hx => (hc x hx).tendsto_limUnder
     refine ⟨s, g, hs, ⟨(hf 0).1, ?_⟩, hlim⟩
     intro x hx y hy a b ha hb hab
     have hxy : a • x + b • y ∈ K := (hf 0).1 hx hy ha hb hab
-    apply le_of_tendsto_of_tendsto (hlim _ hxy)
-      (((hlim x hx).const_smul a).add ((hlim y hy).const_smul b))
+    apply
+      le_of_tendsto_of_tendsto (hlim _ hxy)
+        (((hlim x hx).const_smul a).add ((hlim y hy).const_smul b))
     exact Filter.Eventually.of_forall fun n => (hf (s n)).2 hx hy ha hb hab
   · have hKempty : K = ∅ := Set.not_nonempty_iff_eq_empty.mp hne
     subst K

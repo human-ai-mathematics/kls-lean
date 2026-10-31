@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Independent statement audit for positive-time smoothing of the generated semigroup.
 
 Every proposition below is restated in full and **proved** from the library. The two headline
@@ -8,6 +10,8 @@ domain `D(T)` and in the generator domain `D(T†T)`, with explicit constants. N
 class, no compact support and no classical representative is assumed or produced, and the sharp
 constants `1/√(2et)` and `1/(et)` are deliberately not claimed: the audited bounds are `1/√(2t)`
 and `1/t`. -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.Semigroup
 open scoped RealInnerProductSpace LinearPMap
@@ -177,16 +181,22 @@ end SemigroupSmoothingAudit
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_yosida_apply
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_yosida_exp_neg_smul_apply
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.two_mul_norm_map_apply_sq_le_sub
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.two_mul_norm_adjointComp_apply_sq_le_sub
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.two_mul_norm_adjointComp_apply_sq_le_sub
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_domain_apply_of_pos
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_apply_of_pos
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.two_mul_norm_map_apply_sq_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_adjointComp_domain_apply_of_mem_domain
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_adjointComp_domain_apply_of_pos
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.mem_adjointComp_domain_apply_of_pos
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_adjointComp_domain_apply_of_mem_domain
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_adjointComp_domain_apply_of_pos
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.mem_adjointComp_domain_apply_of_pos
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.mul_norm_adjointComp_apply_le
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_of_pos
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_norm_closedWeightedOperator_sq_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_of_pos
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_norm_closedWeightedOperator_sq_le
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mul_norm_adjointComp_le
 #print axioms SemigroupSmoothingAudit.E0

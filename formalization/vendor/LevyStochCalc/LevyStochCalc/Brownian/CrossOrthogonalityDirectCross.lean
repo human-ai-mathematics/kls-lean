@@ -3,9 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.MultidimFiltered
-import LevyStochCalc.Brownian.AugmentedFiltration
-import LevyStochCalc.Brownian.ItoFourthMoment
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.MultidimFiltered
+public import LevyStochCalc.Brownian.AugmentedFiltration
+public import LevyStochCalc.Brownian.ItoFourthMoment
 
 /-!
 # The direct cross identity for distinct Brownian coordinates
@@ -17,6 +22,8 @@ uniform grid of `[a, b]`, the product of the two increments telescopes into cell
 terms with a past factor are killed by conditioning, and the sum of the cell-wise cross products
 has second moment `(b - a)² / m` by the independence of the two coordinates.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -127,7 +134,7 @@ lemma integral_crossSum_sq (W : MultidimBrownianMotion P d) {i j : Fin d} (hij :
         = if k = l then h else 0 := by
     intro V hV k l
     rcases lt_trichotomy k l with hkl | rfl | hlk
-    · rw [if_neg hkl.ne]
+    · rw [ite_eq_right hkl.ne]
       exact integral_increment_mul_increment_eq_zero V hV
         (affineGrid_mono hh.le hkl.le) (affineGrid_mono hh.le hkl) (hg0 l) (hglt l)
     · have hsq := Ito.integral_increment_sq V (hg0 k) (hglt k)
@@ -136,8 +143,8 @@ lemma integral_crossSum_sq (W : MultidimBrownianMotion P d) {i j : Fin d} (hij :
           * (V.W (affineGrid a h (k + 1)) ω - V.W (affineGrid a h k) ω) ∂P
           = ∫ ω, (V.W (affineGrid a h (k + 1)) ω - V.W (affineGrid a h k) ω) ^ 2 ∂P :=
         integral_congr_ae (Filter.Eventually.of_forall fun ω => (sq _).symm)
-      rw [if_pos rfl, hsq', hsq]
-    · rw [if_neg hlk.ne']
+      rw [ite_eq_left rfl, hsq', hsq]
+    · rw [ite_eq_right hlk.ne']
       rw [show (fun ω => (V.W (affineGrid a h (k + 1)) ω - V.W (affineGrid a h k) ω)
           * (V.W (affineGrid a h (l + 1)) ω - V.W (affineGrid a h l) ω))
           = fun ω => (V.W (affineGrid a h (l + 1)) ω - V.W (affineGrid a h l) ω)
@@ -207,7 +214,7 @@ lemma integral_crossSum_sq (W : MultidimBrownianMotion P d) {i j : Fin d} (hij :
   refine ⟨integrable_finsetSum _ fun k _ => integrable_finsetSum _ fun l _ => hint k l, ?_⟩
   rw [integral_finsetSum _ fun k _ => integrable_finsetSum _ fun l _ => hint k l]
   simp_rw [integral_finsetSum _ fun l _ => hint _ l, hterm, Finset.sum_ite_eq]
-  rw [Finset.sum_congr rfl fun x hx => if_pos hx, Finset.sum_const, Finset.card_range,
+  rw [Finset.sum_congr rfl fun x hx => ite_eq_left hx, Finset.sum_const, Finset.card_range,
     nsmul_eq_mul]
 
 /-- A coefficient measurable at the start of an interval is orthogonal to the Brownian increment

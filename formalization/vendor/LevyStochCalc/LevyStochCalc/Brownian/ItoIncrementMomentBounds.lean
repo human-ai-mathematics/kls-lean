@@ -3,7 +3,17 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoIncrementMomentRestrict
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with source adaptations
+-- (deprecated names, proof-context visibility, the v4.35.0 `eLpNorm`/`MemLp` API,
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`) listed in
+-- vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_two_rpow_eq_lintegral_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoIncrementMomentRestrict
 
 /-!
 # Moments of an increment of the Itô integral
@@ -25,6 +35,8 @@ bounds the third absolute moment. The fourth-moment bound is the per-tile varian
 * `integral_abs_sub_pow_three_le` —
   `𝔼|∫_a^b H dW|³ ≤ ((C² + (6 + c)C⁴)/2)·(b − a)·√(b − a)`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -82,12 +94,12 @@ theorem lintegral_stochasticIntegralBrownian_pow_four_le_Ioc
     intro n j ω
     refine (hQxi n j ω).trans ?_
     by_cases h : a ≤ (Q n).partition j.castSucc ∧ (Q n).partition j.succ ≤ b
-    · rw [if_pos h]
-    · rw [if_neg h]; exact hC0
+    · rw [ite_eq_left h]
+    · rw [ite_eq_right h]; exact hC0
   have hQz : ∀ (n : ℕ) (j : Fin (Q n).N) (ω : Ω),
       ¬(a ≤ (Q n).partition j.castSucc ∧ (Q n).partition j.succ ≤ b) → (Q n).ξ j ω = 0 := by
     intro n j ω h
-    have := (hQxi n j ω).trans (le_of_eq (if_neg h))
+    have := (hQxi n j ω).trans (le_of_eq (ite_eq_right h))
     exact abs_nonpos_iff.mp this
   -- their elementary integrals at `b` are the ones the variance budget bounds
   have hQsimp : ∀ (n : ℕ) (ω : Ω),
@@ -163,7 +175,13 @@ theorem lintegral_stochasticIntegralBrownian_pow_four_le_Ioc
               ^ ((2 : ℝ))⁻¹ := by
       intro n
       rw [← eLpNorm_two_rpow_eq_lintegral_sq]
-      exact (ENNReal.rpow_rpow_inv (by norm_num) _).symm
+      · exact (ENNReal.rpow_rpow_inv (by norm_num) _).symm
+      · have hQm : Measurable (simpleIntegral W (Q n) b) := by
+          unfold simpleIntegral
+          exact Finset.measurable_sum _ fun i _ =>
+            ((Q n).ξ_measurable i).mul ((W.measurable_eval _).sub (W.measurable_eval _))
+        exact (hQm.sub ((stochasticIntegralBrownian_stronglyAdapted W ℱ hℱ F hm hp hq b).mono
+          (ℱ.le b)).measurable).aestronglyMeasurable
     simp_rw [hrw]
     have h := (ENNReal.continuous_rpow_const (y := ((2 : ℝ))⁻¹)).tendsto 0 |>.comp hsq
     simpa [Function.comp_def,
@@ -173,13 +191,10 @@ theorem lintegral_stochasticIntegralBrownian_pow_four_le_Ioc
     unfold simpleIntegral
     exact Finset.measurable_sum _ fun i _ =>
       ((Q n).ξ_measurable i).mul ((W.measurable_eval _).sub (W.measurable_eval _))
-  have hmeasSI : Measurable (stochasticIntegralBrownian W ℱ hℱ F hm hp hq b) :=
-    ((stochasticIntegralBrownian_stronglyAdapted W ℱ hℱ F hm hp hq b).mono (ℱ.le b)).measurable
   have hTIM : MeasureTheory.TendstoInMeasure P
       (fun n ω => simpleIntegral W (Q n) b ω) Filter.atTop
       (stochasticIntegralBrownian W ℱ hℱ F hm hp hq b) :=
-    MeasureTheory.tendstoInMeasure_of_tendsto_eLpNorm (by norm_num)
-      (fun n => (hmeasG n).aestronglyMeasurable) hmeasSI.aestronglyMeasurable heL
+    MeasureTheory.tendstoInMeasure_of_tendsto_eLpNorm (by norm_num) heL
   obtain ⟨ns, -, hns_ae⟩ := hTIM.exists_seq_tendsto_ae
   have hcont : Continuous fun x : ℝ => (‖x‖₊ : ℝ≥0∞) ^ 4 := by
     have hfun : (fun x : ℝ => (‖x‖₊ : ℝ≥0∞) ^ 4)
@@ -516,7 +531,7 @@ theorem integral_abs_sub_pow_three_le {a b : ℝ} (ha : 0 ≤ a) (hab : a < b) :
   have hint3 : MeasureTheory.Integrable
       (fun ω => |stochasticIntegralBrownian W ℱ hℱ H hm hp hq b ω
         - stochasticIntegralBrownian W ℱ hℱ H hm hp hq a ω| ^ 3) P := by
-    refine hdomint.mono ((hmeas.abs.pow_const 3).aestronglyMeasurable)
+    refine hdomint.mono (((continuous_abs.measurable.comp hmeas).pow_const 3).aestronglyMeasurable)
       (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, Real.norm_eq_abs,
       abs_of_nonneg (by positivity : (0 : ℝ) ≤ |stochasticIntegralBrownian W ℱ hℱ H hm hp hq b ω

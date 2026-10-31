@@ -1,6 +1,10 @@
-import FunctionalInequalities.L2.BoundedMultiplier
-import Mathlib.Analysis.Calculus.Deriv.Slope
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import FunctionalInequalities.L2.BoundedMultiplier
+public import Mathlib.Analysis.Calculus.Deriv.Slope
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.Calculus.Deriv.Comp
+public import Mathlib.Analysis.InnerProductSpace.Calculus
 
 /-!
 # Scalar composition along differentiable L2 curves
@@ -12,6 +16,8 @@ convergence and perturbations of affine curves by the Lipschitz bound. Bounded t
 also give differentiable quadratic integrals along L2 curves, with the exact mixed
 pairing derivative.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Topology
 open scoped RealInnerProductSpace NNReal
@@ -28,7 +34,7 @@ theorem tendsto_toLp_of_dominated {ι : Type*} {l : Filter ι} [l.IsCountablyGen
     Tendsto (fun i ↦ (hF i).toLp (F i)) l (𝓝 (hf.toLp f)) := by
   have hi := tendsto_integral_filter_of_dominated_convergence
     (fun x ↦ (2 * b x) ^ 2)
-    (Eventually.of_forall fun i ↦ ((hF i).1.sub hf.1).pow 2)
+    (Eventually.of_forall fun i ↦ ((hF i).aestronglyMeasurable.sub hf.aestronglyMeasurable).pow 2)
     (hFb.mono fun i hi ↦ by
       filter_upwards [hi, hfb] with x hx hy
       simp only [Pi.pow_apply, Pi.sub_apply, Real.norm_eq_abs, abs_sq]
@@ -50,19 +56,18 @@ theorem tendsto_toLp_of_dominated {ι : Type*} {l : Filter ι} [l.IsCountablyGen
 
 /-- Differentiation of a Lipschitz scalar composition along an affine L2 curve.
 The derivative is specified by its a.e. representative, not by a pointwise choice. -/
-theorem hasDerivAt_compLp_affine {Φ : ℝ → ℝ} {C : ℝ≥0}
-    (hΦ : Differentiable ℝ Φ) (hL : LipschitzWith C Φ) (h0 : Φ 0 = 0)
-    (u v w : Lp ℝ 2 μ) (hw : ∀ᵐ x ∂μ, w x = deriv Φ (u x) * v x) :
+theorem hasDerivAt_compLp_affine {Φ : ℝ → ℝ} {C : ℝ≥0} (hΦ : Differentiable ℝ Φ)
+    (hL : LipschitzWith C Φ) (h0 : Φ 0 = 0) (u v w : Lp ℝ 2 μ)
+    (hw : ∀ᵐ x ∂μ, w x = deriv Φ (u x) * v x) :
     HasDerivAt (fun s : ℝ ↦ hL.compLp h0 (u + s • v)) w 0 := by
   let Q (s : ℝ) (x : α) := s⁻¹ * (Φ (u x + s * v x) - Φ (u x))
   have hQ (s : ℝ) : MemLp (Q s) 2 μ := by
     refine MemLp.ae_eq ?_ (Lp.memLp (s⁻¹ • (hL.compLp h0 (u + s • v) - hL.compLp h0 u)))
     filter_upwards [Lp.coeFn_smul s⁻¹ (hL.compLp h0 (u + s • v) - hL.compLp h0 u),
-      Lp.coeFn_sub (hL.compLp h0 (u + s • v)) (hL.compLp h0 u),
-      hL.coeFn_compLp h0 (u + s • v), hL.coeFn_compLp h0 u,
-      Lp.coeFn_add u (s • v), Lp.coeFn_smul s v] with x h₁ h₂ h₃ h₄ h₅ h₆
-    simp only [h₁, Pi.smul_apply, h₂, Pi.sub_apply, h₃, h₄, Function.comp_def,
-      h₅, Pi.add_apply, h₆, smul_eq_mul, Q]
+      Lp.coeFn_sub (hL.compLp h0 (u + s • v)) (hL.compLp h0 u), hL.coeFn_compLp h0 (u + s • v),
+      hL.coeFn_compLp h0 u, Lp.coeFn_add u (s • v), Lp.coeFn_smul s v] with x h₁ h₂ h₃ h₄ h₅ h₆
+    simp only [h₁, Pi.smul_apply, h₂, Pi.sub_apply, h₃, h₄, Function.comp_def, h₅, Pi.add_apply,
+      h₆, smul_eq_mul, Q]
   have hQb (s : ℝ) : ∀ᵐ x ∂μ, |Q s x| ≤ C * |v x| := by
     apply ae_of_all
     intro x
@@ -71,32 +76,38 @@ theorem hasDerivAt_compLp_affine {Φ : ℝ → ℝ} {C : ℝ≥0}
       positivity
     · have h := hL.norm_sub_le (u x + s * v x) (u x)
       simp only [Real.norm_eq_abs, add_sub_cancel_left, abs_mul] at h
-      calc |Q s x| = |s|⁻¹ * |Φ (u x + s * v x) - Φ (u x)| := by simp [Q, abs_mul]
-           _ ≤ |s|⁻¹ * (C * (|s| * |v x|)) := mul_le_mul_of_nonneg_left h (by positivity)
-           _ = C * |v x| := by field_simp
+      calc
+        |Q s x| = |s|⁻¹ * |Φ (u x + s * v x) - Φ (u x)| := by simp [Q, abs_mul]
+        _ ≤ |s|⁻¹ * (C * (|s| * |v x|)) := mul_le_mul_of_nonneg_left h (by positivity)
+        _ = C * |v x| := by field_simp
   have hwb : ∀ᵐ x ∂μ, |w x| ≤ C * |v x| := by
     filter_upwards [hw] with x hx
     rw [hx, abs_mul]
-    exact mul_le_mul_of_nonneg_right (by simpa only [Real.norm_eq_abs] using
-      (norm_deriv_le_of_lipschitz (x₀ := u x) hL)) (abs_nonneg _)
+    exact
+      mul_le_mul_of_nonneg_right
+        (by simpa only [Real.norm_eq_abs] using (norm_deriv_le_of_lipschitz (x₀ := u x) hL))
+        (abs_nonneg _)
   have hlim : ∀ᵐ x ∂μ, Tendsto (fun s ↦ Q s x) (𝓝[≠] (0 : ℝ)) (𝓝 (w x)) := by
     filter_upwards [hw] with x hx
-    have h := ((hΦ (u x + (0 : ℝ) * v x)).hasDerivAt.comp 0
-      (((hasDerivAt_id (0 : ℝ)).mul_const (v x)).const_add (u x))).tendsto_slope_zero
-    simpa only [zero_add, zero_mul, add_zero, one_mul, smul_eq_mul, Function.comp_def, id_eq, Q, hx] using h
-  have ht := tendsto_toLp_of_dominated hQ (Lp.memLp w)
-    ((Lp.memLp v).norm.const_mul (C : ℝ)) (Eventually.of_forall hQb) hwb hlim
+    have h :=
+      ((hΦ (u x + (0 : ℝ) * v x)).hasDerivAt.comp 0
+          (((hasDerivAt_id (0 : ℝ)).mul_const (v x)).const_add (u x))).tendsto_slope_zero
+    simpa only [zero_add, zero_mul, add_zero, one_mul, smul_eq_mul, Function.comp_def, id_eq, Q,
+      hx] using h
+  have ht :=
+    tendsto_toLp_of_dominated hQ (Lp.memLp w) ((Lp.memLp v).norm.const_mul (C : ℝ))
+      (Eventually.of_forall hQb) hwb hlim
   rw [hasDerivAt_iff_tendsto_slope_zero]
   convert ht using 1
   · funext s
     apply Lp.ext
     filter_upwards [(hQ s).coeFn_toLp,
       Lp.coeFn_smul s⁻¹ (hL.compLp h0 (u + s • v) - hL.compLp h0 u),
-      Lp.coeFn_sub (hL.compLp h0 (u + s • v)) (hL.compLp h0 u),
-      hL.coeFn_compLp h0 (u + s • v), hL.coeFn_compLp h0 u,
-      Lp.coeFn_add u (s • v), Lp.coeFn_smul s v] with x h₀ h₁ h₂ h₃ h₄ h₅ h₆
-    simpa only [zero_add, zero_smul, add_zero, h₁, Pi.smul_apply, h₂, Pi.sub_apply,
-      h₃, h₄, Function.comp_def, h₅, Pi.add_apply, h₆, smul_eq_mul, Q] using h₀.symm
+      Lp.coeFn_sub (hL.compLp h0 (u + s • v)) (hL.compLp h0 u), hL.coeFn_compLp h0 (u + s • v),
+      hL.coeFn_compLp h0 u, Lp.coeFn_add u (s • v), Lp.coeFn_smul s v] with x h₀ h₁ h₂ h₃ h₄ h₅
+      h₆
+    simpa only [zero_add, zero_smul, add_zero, h₁, Pi.smul_apply, h₂, Pi.sub_apply, h₃, h₄,
+      Function.comp_def, h₅, Pi.add_apply, h₆, smul_eq_mul, Q] using h₀.symm
   · exact congrArg nhds (Lp.ext (Lp.memLp w).coeFn_toLp.symm)
 
 /-- A Lipschitz scalar composition preserves differentiability along L2 curves.

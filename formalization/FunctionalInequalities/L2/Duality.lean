@@ -1,6 +1,10 @@
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-! # Bounded tests for the integral absolute value of an L2 function -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter
@@ -13,8 +17,9 @@ theorem exists_bounded_inner_eq_integral_abs (f : Lp ℝ 2 μ) :
     ∃ g : Lp ℝ 2 μ, (∀ᵐ x ∂μ, |g x| ≤ 1) ∧ ⟪f, g⟫ = ∫ x, |f x| ∂μ := by
   classical
   let g : X → ℝ := fun x => if 0 ≤ f x then 1 else -1
-  have hg : Measurable g := Measurable.ite
-    (measurableSet_le measurable_const (Lp.stronglyMeasurable f).measurable) measurable_const measurable_const
+  have hg : Measurable g :=
+    Measurable.ite (measurableSet_le measurable_const (Lp.stronglyMeasurable f).measurable)
+      measurable_const measurable_const
   have hb : ∀ x, ‖g x‖ ≤ 1 := by intro x; dsimp [g]; split_ifs <;> norm_num
   have hL : MemLp g 2 μ := MemLp.of_bound hg.aestronglyMeasurable 1 (ae_of_all _ hb)
   refine ⟨hL.toLp g, ?_, ?_⟩

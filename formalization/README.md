@@ -75,8 +75,8 @@ under `blueprint/` are ignored outputs. Blueprint rendering runs locally when ne
 
 ## Build and validation
 
-Install Elan. `lean-toolchain` selects Lean v4.33.0; `lake-manifest.json` fixes Mathlib
-`db584cd6d46c92f209a44c0f1c829460d327499d` and the other package revisions. From this directory:
+Install Elan. `lean-toolchain` selects Lean v4.35.0; `lake-manifest.json` fixes Mathlib
+`56a005855ea17e0b0958f73ec801ae140b0a1679` and the other package revisions. From this directory:
 
 ```bash
 lake exe cache get

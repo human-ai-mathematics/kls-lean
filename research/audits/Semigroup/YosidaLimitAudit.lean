@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Limit
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Yosida.Limit
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for `Y8` of `YosidaLimitRouteStatements.lean`
 
@@ -24,6 +26,8 @@ Buser's inequality.
 The axiom reports at the end cover every public declaration of the new module and every theorem
 of this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

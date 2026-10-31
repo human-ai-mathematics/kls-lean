@@ -1,5 +1,9 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Set Matrix
 open scoped ContDiff Topology Matrix.Norms.Elementwise
@@ -33,7 +37,8 @@ theorem whole_source_interface {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -91,11 +96,11 @@ private theorem client_cutoff_memLp {n : ℕ}
   have hKm : MeasurableSet (tsupport χ) := (isClosed_tsupport χ).measurableSet
   have hind : MemLp ((tsupport χ).indicator f) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_indicator_iff_restrict hKm).mpr (hf (tsupport χ) hχc)
+    (memLp_indicator_iff_restrict hKm.nullMeasurableSet).mpr (hf (tsupport χ) hχc)
   have hχlp : MemLp χ (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     hχ.memLp_of_hasCompactSupport hχc
   have hm : MemLp (fun x => χ x * ((tsupport χ).indicator f) x) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := hind.mul' hχlp
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := hχlp.fun_mul hind
   convert hm using 1
   funext x
   by_cases hx : x ∈ tsupport χ
@@ -131,7 +136,8 @@ theorem actual_source_inverse_coefficient_curl {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -245,7 +251,8 @@ theorem actual_source_c1_generator_test {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -329,7 +336,8 @@ theorem whole_source_mean_interface {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,

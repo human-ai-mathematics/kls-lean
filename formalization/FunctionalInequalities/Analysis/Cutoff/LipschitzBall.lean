@@ -1,11 +1,15 @@
-import Mathlib.Topology.EMetricSpace.Lipschitz
-import Mathlib.Topology.Algebra.MetricSpace.Lipschitz
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Topology.Algebra.Support
+module
+
+public import Mathlib.Topology.EMetricSpace.Lipschitz
+public import Mathlib.Topology.Algebra.MetricSpace.Lipschitz
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Topology.Algebra.Support
 
 /-!
 # Lipschitz norm-ball cutoffs and compact localization
 -/
+
+@[expose] public section
 
 noncomputable section
 

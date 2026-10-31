@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import Mathlib.MeasureTheory.Function.LpSpace.Indicator
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import Mathlib.MeasureTheory.Function.LpSpace.Indicator
 
 /-!
 # The weighted Laplacian
@@ -7,6 +9,8 @@ import Mathlib.MeasureTheory.Function.LpSpace.Indicator
 The classical diffusion expression, continuity, compact support and finite-measure Lp membership.
 No integration-by-parts or closed-generator identification is assumed.
 -/
+
+@[expose] public section
 
 noncomputable section
 

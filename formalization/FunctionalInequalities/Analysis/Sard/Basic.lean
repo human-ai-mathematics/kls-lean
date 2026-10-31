@@ -1,13 +1,17 @@
-import Mathlib.Analysis.Calculus.FDeriv.Equiv
-import Mathlib.MeasureTheory.Function.Jacobian
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Equiv
+public import Mathlib.MeasureTheory.Function.Jacobian
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-! # Low-dimensional Sard theorem
 
 The critical values of a real-valued `C^n` function are null when the domain has
 dimension `n ≤ 1`. This independent base case does not establish general Sard.
 -/
+
+@[expose] public section
 
 noncomputable section
 

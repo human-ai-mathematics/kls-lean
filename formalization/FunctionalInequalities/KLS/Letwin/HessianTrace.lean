@@ -1,10 +1,12 @@
-import FunctionalInequalities.KLS.Letwin.MomentCalculus
-import FunctionalInequalities.KLS.LogConcave.BrascampLieb
-import FunctionalInequalities.KLS.LogConcave.HessianTrace
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Analysis.Matrix.Integral
-import FunctionalInequalities.Analysis.Matrix.Trace.Energy
-import FunctionalInequalities.Analysis.Matrix.Trace.Gram
+module
+
+public import FunctionalInequalities.KLS.Letwin.MomentCalculus
+public import FunctionalInequalities.KLS.LogConcave.BrascampLieb
+public import FunctionalInequalities.KLS.LogConcave.HessianTrace
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Analysis.Matrix.Integral
+public import FunctionalInequalities.Analysis.Matrix.Trace.Energy
+public import FunctionalInequalities.Analysis.Matrix.Trace.Gram
 
 /-!
 # Letwin Theorem 2.5 for a given smooth moment map
@@ -24,8 +26,11 @@ coordinate basis, and the tensor comparison (2.12) give `0 ≤ 4D ≤ Lf + 2f` f
 `f = tr(B ∇²φ B ∇²φ)` and the weighted third-derivative energy `D`; Lemmas A.4 and A.5 give
 `E_ν Lf = 0`, hence (2.14). Lemma 2.3 and the Brascamp–Lieb step are supplied by
 `KLS.LogConcave.integral_trace_quadratic_le_two_mul_trace_sq`. The Jordan decomposition extends the
-bound to every symmetric `B`. Lemma 2.2 for the source class and Klartag's bound are not proved here.
+bound to every symmetric `B`. Lemma 2.2 for the source class and Klartag's bound are not proved
+here.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Stein
@@ -46,7 +51,8 @@ private theorem std_eq_sum (n : ℕ) (a : Fin (Module.finrank ℝ (EuclideanSpac
 
 private theorem stdP_mul_transpose (n : ℕ) : stdP n * (stdP n)ᵀ = 1 := by
   ext a c
-  have h := orthonormal_iff_ite.mp (stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n))).orthonormal a c
+  have h :=
+    orthonormal_iff_ite.mp (stdOrthonormalBasis ℝ (EuclideanSpace ℝ (Fin n))).orthonormal a c
   rw [Matrix.one_apply, ← h]
   simp [stdP, Matrix.mul_apply, PiLp.inner_apply, mul_comm]
 
@@ -288,11 +294,10 @@ private theorem quad_single_add (H : Matrix (Fin n) (Fin n) ℝ) (i j : Fin n) (
     Matrix.col_apply, smul_eq_mul, one_mul]
   ring
 
-private theorem abs_entry_le_of_posSemidef {H : Matrix (Fin n) (Fin n) ℝ}
-    (hH : H.PosSemidef) {C : ℝ} (hC : (C • (1 : Matrix (Fin n) (Fin n) ℝ) - H).PosSemidef)
-    (i j : Fin n) : |H i j| ≤ C := by
-  have hsym : H j i = H i j := by
-    simpa only [star_trivial] using hH.isHermitian.apply i j
+private theorem abs_entry_le_of_posSemidef {H : Matrix (Fin n) (Fin n) ℝ} (hH : H.PosSemidef)
+    {C : ℝ} (hC : (C • (1 : Matrix (Fin n) (Fin n) ℝ) - H).PosSemidef) (i j : Fin n) :
+    |H i j| ≤ C := by
+  have hsym : H j i = H i j := by simpa only [star_trivial] using hH.isHermitian.apply i j
   have hdi : 0 ≤ (C • (1 : Matrix (Fin n) (Fin n) ℝ) - H) i i := hC.diag_nonneg
   have hdj : 0 ≤ (C • (1 : Matrix (Fin n) (Fin n) ℝ) - H) j j := hC.diag_nonneg
   simp only [Matrix.sub_apply, Matrix.smul_apply, Matrix.one_apply_eq, smul_eq_mul,
@@ -375,118 +380,135 @@ private theorem memLp_restrict_of_continuous {f : E → ℝ} (hf : Continuous f)
 
 private theorem continuous_trace_quartic {X Y : E → Matrix (Fin n) (Fin n) ℝ}
     (hX : ∀ i j, Continuous fun x => X x i j) (hY : ∀ i j, Continuous fun x => Y x i j)
-    (B : Matrix (Fin n) (Fin n) ℝ) :
-    Continuous fun x => (B * X x * B * Y x).trace := by
+    (B : Matrix (Fin n) (Fin n) ℝ) : Continuous fun x => (B * X x * B * Y x).trace := by
   have hXc : Continuous X := continuous_matrix hX
   have hYc : Continuous Y := continuous_matrix hY
-  exact (((continuous_const.matrix_mul hXc).matrix_mul continuous_const).matrix_mul hYc).matrix_trace
+  exact
+    (((continuous_const.matrix_mul hXc).matrix_mul continuous_const).matrix_mul
+        hYc).matrix_trace
 
 /-- Letwin arXiv:2607.24164v1 Theorem 2.5 for positive semidefinite `B`. -/
-private theorem integral_trace_hessian_quadratic_le_of_posSemidef
-    {K U : Set E} {V φ : E → ℝ}
-    (hKb : Bornology.IsBounded K) (hKo : IsOpen K)
-    (hU : IsOpen U) (hKU : closure K ⊆ U) (hV : ContDiffOn ℝ ∞ V U) (hVc : ConvexOn ℝ K V)
-    (μ : ProbabilityMeasure E) (hiso : KLS.Isotropic μ)
-    (hφ : ContDiff ℝ ∞ φ)
+private theorem integral_trace_hessian_quadratic_le_of_posSemidef {K U : Set E} {V φ : E → ℝ}
+    (hKb : Bornology.IsBounded K) (hKo : IsOpen K) (hU : IsOpen U) (hKU : closure K ⊆ U)
+    (hV : ContDiffOn ℝ ∞ V U) (hVc : ConvexOn ℝ K V) (μ : ProbabilityMeasure E)
+    (hiso : KLS.Isotropic μ) (hφ : ContDiff ℝ ∞ φ)
     (hnorm : (∫ x, Real.exp (-φ x) ∂(volume : Measure E)) = 1)
     (hmap : ((volume : Measure E).tilted (-φ)).map (gradient φ) = (μ : Measure E))
-    (hrange : Set.range (gradient φ) ⊆ K)
-    (hPD : ∀ x, (hessianMatrix φ x).PosDef)
+    (hrange : Set.range (gradient φ) ⊆ K) (hPD : ∀ x, (hessianMatrix φ x).PosDef)
     (hMA : ∀ x, Real.log (hessianMatrix φ x).det = -φ x + V (gradient φ x))
-    (hbound : ∃ C : ℝ, ∀ x,
-      (C • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix φ x).PosSemidef)
+    (hbound : ∃ C : ℝ, ∀ x, (C • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix φ x).PosSemidef)
     (B : Matrix (Fin n) (Fin n) ℝ) (hB : B.PosSemidef) :
     Integrable (fun x => (B * hessianMatrix φ x * B * hessianMatrix φ x).trace)
         ((volume : Measure E).tilted (-φ)) ∧
-      (∫ x, (B * hessianMatrix φ x * B * hessianMatrix φ x).trace
-        ∂((volume : Measure E).tilted (-φ))) ≤ 2 * (B * B).trace := by
+      (∫ x,
+          (B * hessianMatrix φ x * B *
+              hessianMatrix φ x).trace ∂((volume : Measure E).tilted (-φ))) ≤
+        2 * (B * B).trace := by
   classical
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hPD' : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v :=
-    fun x v hv => Analysis.bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef (hPD x) v hv
+  have hPD' : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v := fun x v hv =>
+    Analysis.bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef (hPD x) v hv
   have hMA' : ∀ y, logDetHessian φ (stdOrthonormalBasis ℝ E) y = -φ y + V (gradient φ y) :=
     fun y => by rw [Analysis.logDetHessian_std_eq_log_det_hessianMatrix h2]; exact hMA y
   have hconv : ConvexOn ℝ Set.univ φ := by
-    refine FunctionalInequalities.Analysis.BakryEmery.convexOn_of_hessian_ge h2 le_rfl
-      fun x v => ?_
+    refine
+      FunctionalInequalities.Analysis.BakryEmery.convexOn_of_hessian_ge h2 le_rfl fun x v => ?_
     rw [zero_mul]
     rcases eq_or_ne v 0 with rfl | hv
     · simp
     · exact (hPD' x v hv).le
   obtain ⟨C, hC⟩ := hbound
-  have hent : ∀ x i j, |hessianMatrix φ x i j| ≤ C :=
-    fun x => abs_entry_le_of_posSemidef (hPD x).posSemidef (hC x)
+  have hent : ∀ x i j, |hessianMatrix φ x i j| ≤ C := fun x =>
+    abs_entry_le_of_posSemidef (hPD x).posSemidef (hC x)
   obtain ⟨G, hG⟩ := lipschitzWith_gradient_of_entry_bound hφ hent
   obtain ⟨L, hL⟩ := lipschitzWith_of_gradient_mem hφ hKb hrange
   have hprob : IsProbabilityMeasure ((volume : Measure E).tilted (-φ)) :=
     isProbabilityMeasure_tilted_neg_of_integral_eq_one _ φ hnorm
   let nu : ProbabilityMeasure E := ⟨(volume : Measure E).tilted (-φ), hprob⟩
   have hnuU : (nu : Measure E) = (volume : Measure E).tilted (-φ) := rfl
-  have hHs : ∀ i j, ContDiff ℝ ∞ (fun x => hessianMatrix φ x i j) :=
-    fun i j => contDiff_bilinearIteratedFDerivTwo_apply hφ _ _
-  have hHc : ∀ i j, Continuous (fun x => hessianMatrix φ x i j) :=
-    fun i j => (hHs i j).continuous
+  have hHs : ∀ i j, ContDiff ℝ ∞ (fun x => hessianMatrix φ x i j) := fun i j =>
+    contDiff_bilinearIteratedFDerivTwo_apply hφ _ _
+  have hHc : ∀ i j, Continuous (fun x => hessianMatrix φ x i j) := fun i j =>
+    (hHs i j).continuous
   -- the classical third-derivative tensor
+
   let T : E → Fin n → Matrix (Fin n) (Fin n) ℝ := fun x k => hessDeriv φ x k
   have hTc : ∀ k i j, Continuous (fun x => T x k i j) := fun k i j =>
     ((hHs i j).continuous_fderiv (by simp)).clm_apply continuous_const
-  have hT : ∀ k i j : Fin n,
+  have hT :
+    ∀ k i j : Fin n,
       FunctionalInequalities.Analysis.HasWeakDerivAlong (fun x => hessianMatrix φ x i j)
-        (fun x => T x k i j) (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-      ∀ K : Set E, IsCompact K →
-        MemLp (fun x => T x k i j) 2 ((volume : Measure E).restrict K) := fun k i j =>
-    ⟨FunctionalInequalities.Analysis.hasWeakDerivAlong_of_contDiff
-        ((hHs i j).of_le (by simp)) _,
+          (fun x => T x k i j) (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+        ∀ K : Set E,
+          IsCompact K → MemLp (fun x => T x k i j) 2 ((volume : Measure E).restrict K) :=
+    fun k i j =>
+    ⟨FunctionalInequalities.Analysis.hasWeakDerivAlong_of_contDiff ((hHs i j).of_le (by simp))
+        _,
       fun _ hK => memLp_restrict_of_continuous (hTc k i j) 2 hK⟩
   -- the inverse Hessian
-  have hRe : ∀ x i j, (hessianMatrix φ x)⁻¹ i j =
-      inverseHessianEntry φ (EuclideanSpace.basisFun (Fin n) ℝ) x i j := by
+
+  have hRe :
+    ∀ x i j,
+      (hessianMatrix φ x)⁻¹ i j =
+        inverseHessianEntry φ (EuclideanSpace.basisFun (Fin n) ℝ) x i j := by
     intro x i j
     change (hessianMatrixIn φ (EuclideanSpace.basisFun (Fin n) ℝ) x)⁻¹ i j = _
     rw [inv_hessianMatrixIn _ h2 x (hPD' x), Matrix.of_apply]
   have hRc : ∀ i j, Continuous (fun x => (hessianMatrix φ x)⁻¹ i j) := by
     intro i j
     simp_rw [hRe]
-    exact continuous_iff_continuousAt.2 fun x =>
-      (contDiffAt_inverseHessianEntry _ hφ x (hPD' x) i j).continuousAt
-  have hR : ∀ i j : Fin n, ∀ K : Set E, IsCompact K →
-      MemLp (fun x => (hessianMatrix φ x)⁻¹ i j) (⊤ : ENNReal)
-        ((volume : Measure E).restrict K) :=
-    fun i j _ hK => memLp_restrict_of_continuous (hRc i j) ⊤ hK
+    exact
+      continuous_iff_continuousAt.2 fun x =>
+        (contDiffAt_inverseHessianEntry _ hφ x (hPD' x) i j).continuousAt
+  have hR :
+    ∀ i j : Fin n,
+      ∀ K : Set E,
+        IsCompact K →
+          MemLp (fun x => (hessianMatrix φ x)⁻¹ i j) (⊤ : ENNReal)
+            ((volume : Measure E).restrict K) :=
+    fun i j _ hK =>
+    memLp_restrict_of_continuous (hRc i j) ⊤
+      hK
   -- Lemma 2.3: mean Hessian
-  have hgm : Measurable (gradient φ) := (continuous_gradient (hφ.of_le (WithTop.coe_le_coe.mpr le_top))).measurable
-  have hiso' : KLS.Isotropic (nu.map hgm.aemeasurable) := by
-    have hmapP : nu.map hgm.aemeasurable = μ := ProbabilityMeasure.toMeasure_injective (by
-      rw [ProbabilityMeasure.toMeasure_map]
-      exact hmap)
+
+  have hiso' : KLS.Isotropic (nu.map (gradient φ)) := by
+    have hmapP : nu.map (gradient φ) = μ :=
+      ProbabilityMeasure.toMeasure_injective
+        (by
+          rw [ProbabilityMeasure.toMeasure_map]
+          exact hmap)
     rw [hmapP]
     exact hiso
   have hHI : ∀ i j, Integrable (fun x => hessianMatrix φ x i j) (nu : Measure E) := fun i j =>
     Integrable.of_bound (hHc i j).aestronglyMeasurable C
       (ae_of_all _ fun x => by rw [Real.norm_eq_abs]; exact hent x i j)
-  have hmean : ∀ i j : Fin n,
+  have hmean :
+    ∀ i j : Fin n,
       Integrable (fun x => hessianMatrix φ x i j) (nu : Measure E) ∧
-      (∫ x, hessianMatrix φ x i j ∂(nu : Measure E)) =
-        (1 : Matrix (Fin n) (Fin n) ℝ) i j := by
+        (∫ x, hessianMatrix φ x i j ∂(nu : Measure E)) = (1 : Matrix (Fin n) (Fin n) ℝ) i j := by
     intro i j
     refine ⟨hHI i j, ?_⟩
-    have h := KLS.integral_hessian_eq_inner_of_isotropic_map φ hφ hconv hnorm nu hnuU hiso'
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)
+    have h :=
+      KLS.integral_hessian_eq_inner_of_isotropic_map φ hφ hconv hnorm nu hnuU hiso'
+        (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)
     change (∫ x, bilinearIteratedFDerivTwo ℝ φ x _ _ ∂(nu : Measure E)) = _
     rw [h, EuclideanSpace.basisFun_inner, Matrix.one_apply]
     simp [EuclideanSpace.basisFun_apply]
   -- the trace function and its generator
+
   let f : E → ℝ := fun x => (B * hessianMatrix φ x * B * hessianMatrix φ x).trace
   have hfs : ContDiff ℝ ∞ f := by
-    have hfe : f = fun x => ∑ q : Fin n × Fin n × Fin n × Fin n,
-        (B q.1 q.2.1 * B q.2.2.1 q.2.2.2) *
-          (hessianMatrix φ x q.2.1 q.2.2.1 * hessianMatrix φ x q.2.2.2 q.1) := by
+    have hfe :
+      f = fun x =>
+        ∑ q : Fin n × Fin n × Fin n × Fin n,
+          (B q.1 q.2.1 * B q.2.2.1 q.2.2.2) *
+            (hessianMatrix φ x q.2.1 q.2.2.1 * hessianMatrix φ x q.2.2.2 q.1) := by
       funext x
       exact FunctionalInequalities.Analysis.trace_mul_mul_mul_eq_sum _ _ _ _
     rw [hfe]
     exact ContDiff.sum fun q _ => contDiff_const.mul ((hHs _ _).mul (hHs _ _))
-  set Df : ℝ := ∑ q : Fin n × Fin n × Fin n × Fin n,
-    |B q.1 q.2.1 * B q.2.2.1 q.2.2.2| * (C * C) with hDf
+  set Df : ℝ :=
+    ∑ q : Fin n × Fin n × Fin n × Fin n, |B q.1 q.2.1 * B q.2.2.1 q.2.2.2| * (C * C) with hDf
   have hfb : ∀ x, |f x| ≤ Df := by
     intro x
     change |(B * hessianMatrix φ x * B * hessianMatrix φ x).trace| ≤ Df
@@ -495,22 +517,24 @@ private theorem integral_trace_hessian_quadratic_le_of_posSemidef
     rw [abs_mul]
     refine mul_le_mul_of_nonneg_left ?_ (abs_nonneg _)
     rw [abs_mul]
-    exact mul_le_mul (hent x _ _) (hent x _ _) (abs_nonneg _)
-      ((abs_nonneg _).trans (hent x q.2.1 q.2.2.1))
+    exact
+      mul_le_mul (hent x _ _) (hent x _ _) (abs_nonneg _)
+        ((abs_nonneg _).trans (hent x q.2.1 q.2.2.1))
   have hfc : Continuous f := hfs.continuous
-  let D : E → ℝ := fun x => ∑ k : Fin n, ∑ l : Fin n, (hessianMatrix φ x)⁻¹ k l *
-    (B * T x k * B * T x l).trace
+  let D : E → ℝ := fun x =>
+    ∑ k : Fin n, ∑ l : Fin n, (hessianMatrix φ x)⁻¹ k l * (B * T x k * B * T x l).trace
   have hDc : Continuous D := by
     refine continuous_finsetSum _ fun k _ => continuous_finsetSum _ fun l _ => ?_
-    exact (hRc k l).mul (continuous_trace_quartic (fun i j => hTc k i j)
-      (fun i j => hTc l i j) B)
+    exact
+      (hRc k l).mul (continuous_trace_quartic (fun i j => hTc k i j) (fun i j => hTc l i j) B)
   let Lf : E → ℝ := hessianInverseOperator φ V f
   have hptw : ∀ x, 0 ≤ D x ∧ 4 * D x ≤ Lf x + 2 * f x := by
     intro x
     have hxK : gradient φ x ∈ K := hrange ⟨x, rfl⟩
     have hV2 : ContDiffOn ℝ 2 V K :=
       (hV.mono (subset_closure.trans hKU)).of_le (WithTop.coe_le_coe.mpr le_top)
-    have hW : (hessianMatrixIn V (EuclideanSpace.basisFun (Fin n) ℝ) (gradient φ x)).PosSemidef :=
+    have hW :
+      (hessianMatrixIn V (EuclideanSpace.basisFun (Fin n) ℝ) (gradient φ x)).PosSemidef :=
       hessianMatrixIn_posSemidef _ (hV2.contDiffAt (hKo.mem_nhds hxK))
         (bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open hKo hV2 hVc hxK)
     let Tt : Fin n → Fin n → Fin n → ℝ := fun i a b => hessDeriv φ x i a b
@@ -520,17 +544,21 @@ private theorem integral_trace_hessian_quadratic_le_of_posSemidef
       intro a b c
       have he : (fun y => hessianMatrix φ y b c) = fun y => hessianMatrix φ y c b :=
         funext fun y => bilinearIteratedFDerivTwo_symm h2 y _ _
-      change fderiv ℝ (fun y => hessianMatrix φ y b c) x _ =
-        fderiv ℝ (fun y => hessianMatrix φ y c b) x _
+      change
+        fderiv ℝ (fun y => hessianMatrix φ y b c) x _ =
+          fderiv ℝ (fun y => hessianMatrix φ y c b) x _
       rw [he]
-    have h4 := FunctionalInequalities.Analysis.four_tensor_trace_le_density_add_twice_energy
-      B (hessianMatrix φ x) _ hB (hPD x) hW Tt hT1 hT2
+    have h4 :=
+      FunctionalInequalities.Analysis.four_tensor_trace_le_density_add_twice_energy B
+        (hessianMatrix φ x) _ hB (hPD x) hW Tt hT1 hT2
     have hgen := hessianInverseOperator_trace_basisFun hφ hU hKU hV hrange hPD hMA B x
     change hessianInverseOperator φ V f x = _ at hgen
     change 0 ≤ D x ∧ 4 * D x ≤ hessianInverseOperator φ V f x + 2 * f x
     rw [hgen]
-    exact h4
+    exact
+      h4
   -- Lemmas A.4 and A.5
+
   obtain ⟨χ, Cχ, _hCχ, hχ, hχS, hχB, _hχM, hχL, hχI, _hχD, hχDL⟩ :=
     exists_cutoffs_hessianInverseOperator (volume : Measure E) hφ hconv hKb hrange hU hKU hV
       hMA' hPD' hnorm
@@ -538,9 +566,10 @@ private theorem integral_trace_hessian_quadratic_le_of_posSemidef
     have := hptw x
     change 0 ≤ D x ∧ 4 * D x ≤ hessianInverseOperator φ V f x + 2 * f x at this
     linarith [this.1, this.2]
-  obtain ⟨hLfI, hLf0⟩ := integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs
-    (volume : Measure E) hφ hfs hU hV (hrange.trans (subset_closure.trans hKU)) hMA' hPD' hnorm
-    Df hfb 2 two_pos hLower χ hχ hχS hχB hχL hχI hχDL
+  obtain ⟨hLfI, hLf0⟩ :=
+    integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs (volume : Measure E) hφ
+      hfs hU hV (hrange.trans (subset_closure.trans hKU)) hMA' hPD' hnorm Df hfb 2 two_pos
+      hLower χ hχ hχS hχB hχL hχI hχDL
   have hfI : Integrable f ((volume : Measure E).tilted (-φ)) :=
     Integrable.of_bound hfc.aestronglyMeasurable Df
       (ae_of_all _ fun x => by rw [Real.norm_eq_abs]; exact hfb x)
@@ -550,49 +579,59 @@ private theorem integral_trace_hessian_quadratic_le_of_posSemidef
     refine hSI.mono' hDc.aestronglyMeasurable (ae_of_all _ fun x => ?_)
     rw [Real.norm_eq_abs, abs_of_nonneg (hptw x).1]
     linarith [(hptw x).2]
-  have hhalf : (∫ x, D x ∂((volume : Measure E).tilted (-φ))) ≤
+  have hhalf :
+    (∫ x, D x ∂((volume : Measure E).tilted (-φ))) ≤
       (1 / 2 : ℝ) * ∫ x, f x ∂((volume : Measure E).tilted (-φ)) := by
-    calc (∫ x, D x ∂((volume : Measure E).tilted (-φ))) ≤
+    calc
+      (∫ x, D x ∂((volume : Measure E).tilted (-φ))) ≤
           ∫ x, (Lf x + 2 * f x) / 4 ∂((volume : Measure E).tilted (-φ)) :=
-          integral_mono hDI hSI fun x => by linarith [(hptw x).2]
+        integral_mono hDI hSI fun x => by linarith [(hptw x).2]
       _ = (1 / 2 : ℝ) * ∫ x, f x ∂((volume : Measure E).tilted (-φ)) := by
-          rw [integral_div, integral_add hLfI (hfI.const_mul 2), integral_const_mul]
-          change ((∫ x, hessianInverseOperator φ V f x ∂((volume : Measure E).tilted (-φ))) +
-            2 * _) / 4 = _
-          rw [hLf0]
-          ring
-  exact FunctionalInequalities.KLS.LogConcave.integral_trace_quadratic_le_two_mul_trace_sq
-    hnuU hconv (hφ.of_le (WithTop.coe_le_coe.mpr le_top)) hG hL hnorm (ae_of_all _ hPD) T hT hR
-    hmean B hB hDI hhalf
+        rw [integral_div, integral_add hLfI (hfI.const_mul 2), integral_const_mul]
+        change
+          ((∫ x, hessianInverseOperator φ V f x ∂((volume : Measure E).tilted (-φ))) + 2 * _) /
+              4 =
+            _
+        rw [hLf0]
+        ring
+  exact
+    FunctionalInequalities.KLS.LogConcave.integral_trace_quadratic_le_two_mul_trace_sq hnuU
+      hconv (hφ.of_le (WithTop.coe_le_coe.mpr le_top)) hG hL hnorm (ae_of_all _ hPD) T hT hR
+      hmean B hB hDI hhalf
 
 end PositiveSemidefinite
 
 /-- Letwin arXiv:2607.24164v1 Theorem 2.5, in the paper's conditional form: the moment-map
-properties that the paper imports from Klartag [41] (Lemma 2.2 and [41, Theorem 1]) are hypotheses. -/
-theorem integral_trace_hessian_quadratic_le {n : ℕ}
-    {K U : Set (EuclideanSpace ℝ (Fin n))} {V φ : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hKb : Bornology.IsBounded K) (hKo : IsOpen K)
+properties that the paper imports from Klartag [41] (Lemma 2.2 and [41, Theorem 1]) are hypotheses.
+-/
+theorem integral_trace_hessian_quadratic_le {n : ℕ} {K U : Set (EuclideanSpace ℝ (Fin n))}
+    {V φ : EuclideanSpace ℝ (Fin n) → ℝ} (hKb : Bornology.IsBounded K) (hKo : IsOpen K)
     (hU : IsOpen U) (hKU : closure K ⊆ U) (hV : ContDiffOn ℝ ∞ V U) (hVc : ConvexOn ℝ K V)
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hiso : KLS.Isotropic μ)
     (hφ : ContDiff ℝ ∞ φ)
     (hnorm : (∫ x, Real.exp (-φ x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1)
-    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ)).map (gradient φ) =
-      (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hrange : Set.range (gradient φ) ⊆ K)
-    (hPD : ∀ x, (hessianMatrix φ x).PosDef)
+    (hmap :
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ)).map (gradient φ) =
+        (μ : Measure (EuclideanSpace ℝ (Fin n))))
+    (hrange : Set.range (gradient φ) ⊆ K) (hPD : ∀ x, (hessianMatrix φ x).PosDef)
     (hMA : ∀ x, Real.log (hessianMatrix φ x).det = -φ x + V (gradient φ x))
-    (hbound : ∃ C : ℝ, ∀ x,
-      (C • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix φ x).PosSemidef)
+    (hbound : ∃ C : ℝ, ∀ x, (C • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix φ x).PosSemidef)
     (B : Matrix (Fin n) (Fin n) ℝ) (hB : B.IsSymm) :
     Integrable (fun x => (B * hessianMatrix φ x * B * hessianMatrix φ x).trace)
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ)) ∧
-      (∫ x, (B * hessianMatrix φ x * B * hessianMatrix φ x).trace
-        ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ))) ≤ 2 * (B * B).trace := by
-  exact FunctionalInequalities.Analysis.symmetric_trace_integral_extension
-    ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ)) (hessianMatrix φ)
-    (fun i j => (contDiff_bilinearIteratedFDerivTwo_apply hφ _ _).continuous.measurable)
-    (fun x => (hPD x).posSemidef)
-    (fun A hA => integral_trace_hessian_quadratic_le_of_posSemidef hKb hKo hU hKU hV hVc μ hiso
-      hφ hnorm hmap hrange hPD hMA hbound A hA) hB
+      (∫ x,
+          (B * hessianMatrix φ x * B *
+              hessianMatrix φ
+                x).trace ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ))) ≤
+        2 * (B * B).trace := by
+  exact
+    FunctionalInequalities.Analysis.symmetric_trace_integral_extension
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-φ)) (hessianMatrix φ)
+      (fun i j => (contDiff_bilinearIteratedFDerivTwo_apply hφ _ _).continuous.measurable)
+      (fun x => (hPD x).posSemidef)
+      (fun A hA =>
+        integral_trace_hessian_quadratic_le_of_posSemidef hKb hKo hU hKU hV hVc μ hiso hφ hnorm
+          hmap hrange hPD hMA hbound A hA)
+      hB
 
 end FunctionalInequalities.Probability.MomentMeasure

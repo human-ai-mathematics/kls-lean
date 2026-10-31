@@ -1,10 +1,14 @@
-import FunctionalInequalities
+module
+
+public import FunctionalInequalities
 
 /-! # Mathematical API calls and carrier boundaries
 
 These typed applications use the public objects directly, including proof receivers and the
 zero-dimensional carrier. They are compiled by the default Examples target.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-!
 # Replacing one coordinate by a scalar function
@@ -10,6 +12,8 @@ shared by the finite-regularity and smooth real-product Sard charts. They use
 the ordinary product norm and impose no measure or critical-set assumptions.
 The regularity lemma applies to finite, smooth and analytic orders alike.
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped ContDiff
@@ -25,7 +29,7 @@ theorem contDiff_update {k : ℕ∞ω} (i : Fin (n + 1)) {w : (Fin (n + 1) → �
   intro m
   rcases eq_or_ne m i with rfl | hm
   · simpa using hw
-  · simpa [Function.update_apply, hm] using contDiff_apply ℝ ℝ m
+  · simpa [Function.update_apply, hm] using contDiff_apply (𝕜 := ℝ) (F' := fun _ => ℝ) m
 
 /-- The differential of that chart. -/
 theorem hasFDerivAt_update (i : Fin (n + 1)) {w : (Fin (n + 1) → ℝ) → ℝ}

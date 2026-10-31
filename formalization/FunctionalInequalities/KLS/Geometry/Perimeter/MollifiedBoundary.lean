@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.SmoothDomain.GaussGreen
-import FunctionalInequalities.KLS.Geometry.Perimeter.Mollification
+module
+
+public import FunctionalInequalities.Analysis.SmoothDomain.GaussGreen
+public import FunctionalInequalities.KLS.Geometry.Perimeter.Mollification
 
 /-! # Boundary formula and norm bound for mollified indicators
 
 No coarea, Sard or perimeter-recovery dependency. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -26,16 +30,19 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
 `SmoothDomain.enorm_gradient_mollified_le`. -/
 theorem gradient_mollifiedIndicator_eq (U : SmoothDomain V) (φ : ContDiffBump (0 : V)) (x : V) :
     gradient (U.mollifiedIndicator φ volume) x =
-      -∫ y in frontier U.carrier, φ.normed volume (x - y) • U.outwardNormal y
-        ∂(surfaceMeasure V) := by
+      -∫ y in frontier U.carrier,
+          φ.normed volume (x - y) • U.outwardNormal y ∂(surfaceMeasure V) := by
   set η : V → ℝ := φ.normed volume with hη
   set f : V → ℝ := U.carrier.indicator 1 with hf
   have hcs : HasCompactSupport η := φ.hasCompactSupport_normed
   have hcd : ContDiff ℝ ∞ η := φ.contDiff_normed
   have hcontgrad : Continuous fun y => gradient η y := by
     have : Continuous (fderiv ℝ η) := hcd.continuous_fderiv (by simp)
-    exact (InnerProductSpace.toDual ℝ V).symm.continuous.comp this
+    exact
+      (InnerProductSpace.toDual ℝ V).symm.continuous.comp
+        this
   -- the reflected test function
+
   set ηx : V → ℝ := fun y => η (x - y) with hηx
   have hcdx : ContDiff ℝ 1 ηx := (hcd.of_le (by simp)).comp (contDiff_const.sub contDiff_id)
   have hcsx : HasCompactSupport ηx := by
@@ -49,37 +56,45 @@ theorem gradient_mollifiedIndicator_eq (U : SmoothDomain V) (φ : ContDiffBump (
       have h2 : HasFDerivAt η (fderiv ℝ η (x - y)) (x - y) :=
         (hcd.differentiable (by simp) (x - y)).hasFDerivAt
       have h3 := h2.comp y h1
-      rw [show (fderiv ℝ η (x - y)).comp (-(ContinuousLinearMap.id ℝ V))
-          = -(fderiv ℝ η (x - y)) by ext v; simp] at h3
+      rw [show (fderiv ℝ η (x - y)).comp (-(ContinuousLinearMap.id ℝ V)) = -(fderiv ℝ η (x - y))
+          by ext v; simp] at h3
       exact h3
     refine (InnerProductSpace.toDual ℝ V).injective ?_
     rw [map_neg, toDual_gradient (𝕜 := ℝ), toDual_gradient (𝕜 := ℝ), hd.fderiv]
   -- the convolution derivative
-  have hD : HasFDerivAt (U.mollifiedIndicator φ volume)
+
+  have hD :
+    HasFDerivAt (U.mollifiedIndicator φ volume)
       ((f ⋆[(ContinuousLinearMap.lsmul ℝ ℝ).precompR V, volume] fderiv ℝ η) x) x := by
     rw [U.mollifiedIndicator_eq φ volume]
-    exact hcs.hasFDerivAt_convolution_right _ (U.locallyIntegrable_indicator volume) (hcd.of_le (by simp)) x
+    exact
+      hcs.hasFDerivAt_convolution_right _ (U.locallyIntegrable_indicator volume)
+        (hcd.of_le (by simp)) x
   have hcsgrad : HasCompactSupport (fun y => gradient η y) := by
     have h1 : HasCompactSupport (fderiv ℝ η) := hcs.fderiv ℝ
-    have h2 := h1.comp_left (g := fun L : V →L[ℝ] ℝ => (InnerProductSpace.toDual ℝ V).symm L)
-      (by simp)
+    have h2 :=
+      h1.comp_left (g := fun L : V →L[ℝ] ℝ => (InnerProductSpace.toDual ℝ V).symm L) (by simp)
     simpa [gradient, Function.comp_def] using h2
   have hint : IntegrableOn (fun t => gradient η (x - t)) U.carrier volume :=
     (Continuous.integrable_of_hasCompactSupport
-      (hcontgrad.comp (continuous_const.sub continuous_id))
-      (hcsgrad.comp_homeomorph (Homeomorph.subLeft x))).integrableOn
-  have hkey : gradient (U.mollifiedIndicator φ volume) x
-      = ∫ t in U.carrier, gradient η (x - t) := by
+        (hcontgrad.comp (continuous_const.sub continuous_id))
+        (hcsgrad.comp_homeomorph (Homeomorph.subLeft x))).integrableOn
+  have hkey :
+    gradient (U.mollifiedIndicator φ volume) x = ∫ t in U.carrier, gradient η (x - t) := by
     refine ext_inner_right ℝ fun v => ?_
     rw [inner_gradient_left, hD.fderiv,
-      convolution_precompR_apply (ContinuousLinearMap.lsmul ℝ ℝ) (U.locallyIntegrable_indicator volume) (hcs.fderiv ℝ)
-        (hcd.continuous_fderiv (by simp)) x v, convolution_def]
-    have hind : ∀ t : V, (ContinuousLinearMap.lsmul ℝ ℝ) (f t) (fderiv ℝ η (x - t) v)
-        = U.carrier.indicator (fun t => ⟪v, gradient η (x - t)⟫) t := by
+      convolution_precompR_apply (ContinuousLinearMap.lsmul ℝ ℝ)
+        (U.locallyIntegrable_indicator volume) (hcs.fderiv ℝ) (hcd.continuous_fderiv (by simp))
+        x v,
+      convolution_def]
+    have hind :
+      ∀ t : V,
+        (ContinuousLinearMap.lsmul ℝ ℝ) (f t) (fderiv ℝ η (x - t) v) =
+          U.carrier.indicator (fun t => ⟪v, gradient η (x - t)⟫) t := by
       intro t
       by_cases ht : t ∈ U.carrier
-      · simp only [hf, Set.indicator_of_mem ht, Pi.one_apply,
-          ContinuousLinearMap.lsmul_apply, smul_eq_mul, one_mul]
+      · simp only [hf, Set.indicator_of_mem ht, Pi.one_apply, ContinuousLinearMap.lsmul_apply,
+          smul_eq_mul, one_mul]
         rw [real_inner_comm, inner_gradient_left]
       · simp [hf, Set.indicator_of_notMem ht]
     rw [integral_congr_ae (Eventually.of_forall hind), integral_indicator U.measurableSet,

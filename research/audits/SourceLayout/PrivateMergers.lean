@@ -1,14 +1,26 @@
-import Lean
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
-import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
-import FunctionalInequalities.Analysis.Tensor.EnergyForm
-import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
+public import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
+public import FunctionalInequalities.Analysis.Tensor.EnergyForm
+public import FunctionalInequalities.Energy.Cheeger.Basic
+public import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+meta import Lean
+import all FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
+import all FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
+import all FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
+import all FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+import all FunctionalInequalities.Analysis.Tensor.EnergyForm
+import all FunctionalInequalities.Energy.Cheeger.Basic
+import all FunctionalInequalities.KLS.BKL.Suspension.Derivatives
 
 /-! Removed private statements are absent with every module that held them imported.
 Existing public energy and source-cumulant entry points remain available. -/
+
+@[expose] public section
 
 set_option maxHeartbeats 0 in
 run_cmd do

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 
 /-!
 # Scope audit for `S1`–`S4` of `GenerationRouteStatements.lean`
@@ -7,7 +9,8 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 The obligations `S1`, `S2`, `S3` and `S4` of
 `research/audits/Semigroup/GenerationRouteStatements.lean` are restated here **verbatim** — the
 propositions are copied character for character from that route file — and discharged from the
-hole-free modules `Analysis/Semigroup/Resolvent/Form.lean` and `Analysis/Semigroup/Resolvent/Basic.lean`. A renamed binder, a reordered hypothesis or a
+hole-free modules `Analysis/Semigroup/Resolvent/Form.lean` and
+`Analysis/Semigroup/Resolvent/Basic.lean`. A renamed binder, a reordered hypothesis or a
 weakened conclusion would fail to elaborate here.
 
 The coercivity bound is discharged from a **strictly stronger** module lemma: the route assumed
@@ -32,6 +35,8 @@ norm.
 The axiom reports at the end cover every public declaration of the new module and every theorem of
 this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

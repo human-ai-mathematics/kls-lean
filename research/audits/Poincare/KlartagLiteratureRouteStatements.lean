@@ -1,9 +1,12 @@
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
+public import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
-# Route statements for the literature-Poincaré clause of `thm:klartag-density-frontend-identification`
+# Route statements for the literature-Poincaré clause of
+`thm:klartag-density-frontend-identification`
 
 **This file contains only `#check`s. A proposition that type-checks is not a proof.**
 It preserves the literature-Poincaré contracts `Q0`–`Q3`.
@@ -46,7 +49,8 @@ absolutely continuous law; `LogConcave.intrinsic_absolutelyContinuous` supplies 
 every finite-dimensional log-concave law, which is `Q0`.
 
 The Haar reference measure follows the established convention of
-`Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope`: `m` is an explicit parameter of the theorem carrying
+`Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope`: `m` is an explicit parameter of the
+theorem carrying
 `[m.IsAddHaarMeasure]`, not a field of a definition, so no measure needs to be chosen on the
 direction submodule.
 
@@ -54,10 +58,13 @@ direction submodule.
 
 `Energy.LocalSlope.energy_eq_lintegral_gradient`, `Energy.LocalSlope.admissible_iff_memLp_gradient`,
 `Poincare.LocalSlope.Holds`, `Poincare.LocalSlope.Intrinsic.constant`,
-`Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope`, `KLS.LogConcave.intrinsic_absolutelyContinuous`,
+`Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope`,
+`KLS.LogConcave.intrinsic_absolutelyContinuous`,
 `Probability.intrinsicMeasure`, `Probability.affineSupport_intrinsicMeasure`.  Mathlib supplies
 `MemLp`, `evariance` and the Rademacher theorem already used by `Gradient.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

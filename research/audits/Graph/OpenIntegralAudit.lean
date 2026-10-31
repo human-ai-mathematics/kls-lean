@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Graph.OpenIntegral
+module
+
+public import FunctionalInequalities.Analysis.Graph.OpenIntegral
 
 /-!
 # Strict audit client for the weighted graph area over an open domain
@@ -13,6 +15,8 @@ and admits **no** globally `C¹` extension — this is exactly what the countabl
 buys and what a single global extension could not.  `top_weight` uses a weight that is identically
 `∞`, and `empty_parameter_set` the degenerate parameter set.
 -/
+
+@[expose] public section
 
 noncomputable section
 

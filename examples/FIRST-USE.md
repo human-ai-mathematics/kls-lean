@@ -37,21 +37,24 @@ Fetch the pinned dependencies and prepare Mathlib before building. Commands belo
 new client directory. Its first `lake update` still fetches transitive Git dependencies even
 though the primary dependency is a local path. Preseed the current Mathlib tag with a shallow
 clone to avoid fetching its full Git history; Lake still checks out the revision recorded in
-the library's manifest. The current `v4.33.0` tag resolves to
-`db584cd6d46c92f209a44c0f1c829460d327499d`. Use the matching tag if the library pin changes.
+the library's manifest. The current `v4.35.0` tag resolves to
+`56a005855ea17e0b0958f73ec801ae140b0a1679`. Use the matching tag if the library pin changes.
 The environment variable suppresses Mathlib's automatic update-time cache request so the
 explicit cache command has a visible scope.
 
 ```bash
 cd "$kls_client"
 mkdir -p .lake/packages
-git clone --depth 1 --branch v4.33.0 \
+git clone --depth 1 --branch v4.35.0 \
   https://github.com/leanprover-community/mathlib4.git .lake/packages/mathlib
 MATHLIB_NO_CACHE_ON_UPDATE=1 lake update
 lake exe cache get Mathlib
 lake build KlsApplications
 lake env lean -DwarningAsError=true KlsApplications.lean
 ```
+
+`KlsApplications.lean` is a Lean `module` (as is every library file), so a client that edits it
+keeps `public import` for any import its public statements need.
 
 The pinned library includes aggregate `Mathlib` imports. Preparing only the direct imports
 visible in the small client can therefore miss the library's closure and cause a long Mathlib

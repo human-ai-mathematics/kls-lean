@@ -3,16 +3,20 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedDensityTruncation
-import LevyStochCalc.Poisson.CompensatedDensityDyadic
-import LevyStochCalc.Poisson.CompensatedDensityShifted
-import LevyStochCalc.Poisson.CompensatedDensityRectSimple
-import LevyStochCalc.Poisson.CompensatedDensityMarkApprox
-import LevyStochCalc.Poisson.CompensatedDensityStepIntegral
-import LevyStochCalc.Poisson.CompensatedDensityBoxIsometry
-import LevyStochCalc.Poisson.CompensatedDensityMarkSum
-import LevyStochCalc.Poisson.CompensatedDensityRefinement
-import LevyStochCalc.Poisson.CompensatedDensityLimit
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityTruncation
+public import LevyStochCalc.Poisson.CompensatedDensityDyadic
+public import LevyStochCalc.Poisson.CompensatedDensityShifted
+public import LevyStochCalc.Poisson.CompensatedDensityRectSimple
+public import LevyStochCalc.Poisson.CompensatedDensityMarkApprox
+public import LevyStochCalc.Poisson.CompensatedDensityStepIntegral
+public import LevyStochCalc.Poisson.CompensatedDensityBoxIsometry
+public import LevyStochCalc.Poisson.CompensatedDensityMarkSum
+public import LevyStochCalc.Poisson.CompensatedDensityRefinement
+public import LevyStochCalc.Poisson.CompensatedDensityLimit
 
 /-!
 # Density of adapted simple predictable integrands (compensated Poisson)

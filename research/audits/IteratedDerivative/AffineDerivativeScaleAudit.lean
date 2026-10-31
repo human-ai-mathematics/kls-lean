@@ -1,18 +1,25 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Affine
-import FunctionalInequalities.Analysis.Cutoff.LocalRegularity
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Tactic.FunProp
-import Mathlib.Tactic.Linarith
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Affine
+public import FunctionalInequalities.Analysis.Cutoff.LocalRegularity
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Tactic.FunProp
+public import Mathlib.Tactic.Linarith
 
 /-!
 # Audit: affine derivative scaling and local cutoffs
 
 Real clients of `FunctionalInequalities/Analysis/IteratedDerivative/Affine.lean` and
-`FunctionalInequalities/Analysis/Cutoff/LocalRegularity.lean` (support for Gilbarg–Trudinger, Classics 2001,
-Theorem 4.6, p. 60): nonzero harmonic linear functions on `ℝ` and `ℝ²` with their actual affine derivative and
-Laplacian scaling and a transferred physical derivative cap, and a reciprocal source regular only on the
+`FunctionalInequalities/Analysis/Cutoff/LocalRegularity.lean` (support for Gilbarg–Trudinger,
+Classics 2001,
+Theorem 4.6, p. 60): nonzero harmonic linear functions on `ℝ` and `ℝ²` with their actual affine
+derivative and
+Laplacian scaling and a transferred physical derivative cap, and a reciprocal source regular only on
+the
 cutoff domain. No harmonic representation or derivative estimate is assumed or claimed.
 -/
+
+@[expose] public section
 noncomputable section
 open scoped Topology
 open InnerProductSpace Laplacian

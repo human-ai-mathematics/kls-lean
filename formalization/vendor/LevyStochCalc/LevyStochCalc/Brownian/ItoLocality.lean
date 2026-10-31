@@ -6,8 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoOptionalStopping
-import LevyStochCalc.Brownian.ItoIncrement
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoOptionalStopping
+public import LevyStochCalc.Brownian.ItoIncrement
 
 /-!
 # The local property of the Itô integral
@@ -27,6 +32,8 @@ converges in energy, and an `L²` squeeze removes the approximation.
 * `LevyStochCalc.Brownian.Ito.stochasticIntegralBrownian_congr_of_le` — two integrands agreeing
   up to a stopping time have the same integral where that time has not been reached.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -69,13 +76,13 @@ theorem isStoppingTime_stepStop {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
       ext ω
       simp only [stepStop, Set.mem_ofPred_eq]
       by_cases h : ((c : ℝ) : WithTop ℝ) ≤ τ ω
-      · simp only [if_pos h, top_le_iff]
+      · simp only [ite_eq_left h, top_le_iff]
         constructor
         · intro hcon
           exact absurd hcon (by simp)
         · intro hcon
           exact absurd h (not_le.mpr hcon)
-      · simp only [if_neg h]
+      · simp only [ite_eq_right h]
         exact ⟨fun _ => not_le.mp h, fun _ => by exact_mod_cast hci⟩
     rw [hset]
     exact ℱ.mono hci _ (hτ.measurableSet_lt c)
@@ -83,9 +90,9 @@ theorem isStoppingTime_stepStop {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
       ext ω
       simp only [stepStop, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
       by_cases h : ((c : ℝ) : WithTop ℝ) ≤ τ ω
-      · simp only [if_pos h, top_le_iff]
+      · simp only [ite_eq_left h, top_le_iff]
         simp
-      · simp only [if_neg h]
+      · simp only [ite_eq_right h]
         exact fun hcon => hci (by exact_mod_cast hcon)
     rw [hset]
     exact @MeasurableSet.empty Ω (ℱ i)
@@ -273,7 +280,7 @@ theorem eventually_gridStop_lt {t : ℝ} (ht : 0 < t) (ω : Ω) {s : ℝ} (hs : 
       nlinarith
     linarith
   have hstep' : stepStop τ (gridPt t n j) ω = ((gridPt t n j : ℝ) : WithTop ℝ) := by
-    rw [stepStop, if_neg]
+    rw [stepStop, ite_eq_right]
     rw [← hr]
     intro hcon
     have : gridPt t n j ≤ r := by exact_mod_cast hcon
@@ -589,8 +596,8 @@ theorem stochasticIntegralBrownian_congr_of_le
     intro ω s hs
     unfold LevyStochCalc.Probability.stopped
     by_cases hle : ((s : ℝ) : WithTop ℝ) ≤ τ ω
-    · rw [if_pos hle, if_pos hle, hagree ω s hs hle]
-    · rw [if_neg hle, if_neg hle]
+    · rw [ite_eq_left hle, ite_eq_left hle, hagree ω s hs hle]
+    · rw [ite_eq_right hle, ite_eq_right hle]
   have e3 := stochasticIntegralBrownian_congr_of_pos W ℱ hℱ
     (Probability.measurable_uncurry_stopped hτ hm₁)
     (Probability.ProgressivelyMeasurable.stopped hτ hp₁)

@@ -1,11 +1,13 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Poincare
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
-import FunctionalInequalities.Analysis.Semigroup.Generated.Curvature
-import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Kernel
-import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Poincare
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Curvature
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Kernel
+public import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 
 /-!
 # The heat semigroup of a strongly log-concave law: curvature and the Poincaré bound
@@ -32,6 +34,8 @@ For the heat semigroup model of `HeatSemigroup/` (`ν = m.tilted (-U)`, closed u
   `literatureConstant_le_inv_of_eq_tilted` and the smooth-test inequality
   `smoothTest_holds_inv_of_eq_tilted`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

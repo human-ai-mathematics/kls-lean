@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.Operator.InverseSqrt
+module
+
+public import FunctionalInequalities.Analysis.Operator.InverseSqrt
 
 /-! Operator perturbation clients below the BKL compact reduction. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities Filter Topology
 open scoped RealInnerProductSpace

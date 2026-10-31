@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.WeakLimit
+module
+
+public import FunctionalInequalities.KLS.LogConcave.WeakLimit
 
 /-!
 # Audit: weak-limit transfer of the Poincaré bound (BKL Section 2)
@@ -9,6 +11,8 @@ smooth tests, the cutoff extension to all admissible tests, and the transfer to 
 constant of a log-concave limit law. Clients instantiate the transfer with a constant sequence and
 with the trivial sequence `μs j = μ`. Neither the approximating laws nor Theorem 1.1 is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology FunctionalInequalities
 

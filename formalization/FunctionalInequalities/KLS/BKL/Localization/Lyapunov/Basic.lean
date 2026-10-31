@@ -1,16 +1,20 @@
-import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
-import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
-import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
-import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
-import FunctionalInequalities.Probability.Diffusion.VectorGenerator
-import FunctionalInequalities.Probability.Diffusion.InverseCalculus
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.KLS.BKL.Posterior.Regularity
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
+public import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
+public import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
+public import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
+public import FunctionalInequalities.Probability.Diffusion.VectorGenerator
+public import FunctionalInequalities.Probability.Diffusion.InverseCalculus
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.KLS.BKL.Posterior.Regularity
+public import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
 # The Lyapunov function and its exact generator calculus
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -58,14 +62,12 @@ private theorem norm_sq_second {n : ℕ} (x u v : Vec n) :
 
 private theorem hsNormSq_path_deriv {n : ℕ} (Q R : Op n) :
     HasDerivAt (fun t : ℝ => hsNormSq (Q + t • R))
-      (2 * ∑ j, ⟪Q (EuclideanSpace.basisFun (Fin n) ℝ j),
-        R (EuclideanSpace.basisFun (Fin n) ℝ j)⟫) 0 := by
-  have hj (e : Vec n) :
-      HasDerivAt (fun t : ℝ => ‖(Q + t • R) e‖ ^ 2)
-        (2 * ⟪Q e, R e⟫) 0 := by
+      (2 *
+        ∑ j, ⟪Q (EuclideanSpace.basisFun (Fin n) ℝ j), R (EuclideanSpace.basisFun (Fin n) ℝ j)⟫)
+      0 := by
+  have hj (e : Vec n) : HasDerivAt (fun t : ℝ => ‖(Q + t • R) e‖ ^ 2) (2 * ⟪Q e, R e⟫) 0 := by
     have hp :=
-      (hasDerivAt_const (0 : ℝ) (Q e)).fun_add
-        ((hasDerivAt_id (0 : ℝ)).smul_const (R e))
+      (hasDerivAt_const (0 : ℝ) (Q e)).fun_add ((hasDerivAt_id (0 : ℝ)).smul_const (R e))
     convert hp.norm_sq using 1 <;> simp [add_apply, smul_apply]
   have hh :=
     HasDerivAt.fun_sum (u := Finset.univ)
@@ -178,7 +180,9 @@ private theorem cov_vector_generator (hiso : KLS.Isotropic μ) (p : Param n) :
     (vectorGenerator (drift μ hc) (noise μ hc) (cov μ hc) p x)] at hh
   simpa only [neg_apply, inner_neg_left] using hh
 
-/-- The Lyapunov function `𝒱(c, Q) = 1 + ‖c‖² + ‖Q‖²_HS + (tr A(p)⁻¹)²` of the localization (67) (non-explosion of
+/--
+The Lyapunov function `𝒱(c, Q) = 1 + ‖c‖² + ‖Q‖²_HS + (tr A(p)⁻¹)²` of the localization (67)
+(non-explosion of
 the cutoff Eldan processes, uniformly in the cutoff). -/
 def lyapunov (p : Param n) : ℝ :=
   1 + ‖p.1‖ ^ 2 + hsNormSq p.2 + stdTrace (Ring.inverse (cov μ hc p)) ^ 2
@@ -254,19 +258,17 @@ set_option maxHeartbeats 1000000 in
 /-- `𝓛 ‖c‖² = 2⟪c, A⁻¹ a⟫ + tr A⁻¹`. -/
 theorem generator_norm_sq_fst (hiso : KLS.Isotropic μ) (p : Param n) :
     generator μ hc (fun q : Param n => ‖q.1‖ ^ 2) p =
-      2 * ⟪p.1, Ring.inverse (cov μ hc p) (posteriorMean μ p.1 p.2)⟫ + stdTrace (Ring.inverse (cov μ hc p)) := by
+      2 * ⟪p.1, Ring.inverse (cov μ hc p) (posteriorMean μ p.1 p.2)⟫ +
+        stdTrace (Ring.inverse (cov μ hc p)) := by
   have hH : ContDiff ℝ 2 (fun q : Param n => ‖q.1‖ ^ 2) := by
-    have hf :
-        (fun q : Param n => ‖q.1‖ ^ 2) =
-          (fun q : Param n => ⟪q.1, q.1⟫) :=
+    have hf : (fun q : Param n => ‖q.1‖ ^ 2) = (fun q : Param n => ⟪q.1, q.1⟫) :=
       funext fun q => (real_inner_self_eq_norm_sq q.1).symm
     rw [hf]
     exact ContDiff.inner ℝ contDiff_fst contDiff_fst
   have htr :
-      (∑ i : Fin n,
-        ⟪Ring.inverse (cov μ hc p) (EuclideanSpace.single i 1),
-          EuclideanSpace.single i 1⟫) =
-        stdTrace (Ring.inverse (cov μ hc p)) := by
+    (∑ i : Fin n,
+        ⟪Ring.inverse (cov μ hc p) (EuclideanSpace.single i 1), EuclideanSpace.single i 1⟫) =
+      stdTrace (Ring.inverse (cov μ hc p)) := by
     unfold stdTrace
     apply Finset.sum_congr rfl
     intro i _
@@ -324,49 +326,52 @@ theorem generator_hsNormSq_snd (hiso : KLS.Isotropic μ) (p : Param n) :
 set_option maxHeartbeats 1000000 in
 /-- The noise derivative of `tr A⁻¹`: `D(tr A⁻¹)[σ e_k] = −Σ_i ⟪σ e_i, H̃_k σ e_i⟫` with
 `H̃_k = σ (D_cA[σ e_k]) σ`. -/
-theorem fderiv_stdTrace_ringInverse_cov_noise (hiso : KLS.Isotropic μ) (p : Param n) (k : Fin n) :
+theorem fderiv_stdTrace_ringInverse_cov_noise (hiso : KLS.Isotropic μ) (p : Param n)
+    (k : Fin n) :
     fderiv ℝ (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) p (noise μ hc p k) =
-      -∑ i, ⟪inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ i),
-        (inverseSqrt (cov μ hc p) * fderiv ℝ (cov μ hc) p (noise μ hc p k) * inverseSqrt (cov μ hc p))
-          (inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ i))⟫ := by
+      -∑ i,
+          ⟪inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ i),
+            (inverseSqrt (cov μ hc p) * fderiv ℝ (cov μ hc) p (noise μ hc p k) *
+                inverseSqrt (cov μ hc p))
+              (inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ i))⟫ := by
   have hA : DifferentiableAt ℝ (cov μ hc) p :=
     (cov_smooth_two μ hc).differentiable (by norm_num) p
-  have hR :
-      DifferentiableAt ℝ (fun q : Param n => Ring.inverse (cov μ hc q)) p :=
+  have hR : DifferentiableAt ℝ (fun q : Param n => Ring.inverse (cov μ hc q)) p :=
     (inverse_cov_smooth_two μ hc hiso).differentiable (by norm_num) p
   have hu : IsUnit (cov μ hc p) :=
     Isotropic.compactPosterior_covariance_isUnit μ hc hiso p.1 p.2
   have hfun :
-      (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) =
-        (fun q : Param n => traceMap (Ring.inverse (cov μ hc q))) :=
+    (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) =
+      (fun q : Param n => traceMap (Ring.inverse (cov μ hc q))) :=
     funext fun q => (traceMap_apply (Ring.inverse (cov μ hc q))).symm
-  have hSS :
-      inverseSqrt (cov μ hc p) * inverseSqrt (cov μ hc p) =
-        Ring.inverse (cov μ hc p) := by
+  have hSS : inverseSqrt (cov μ hc p) * inverseSqrt (cov μ hc p) = Ring.inverse (cov μ hc p) := by
     apply ContinuousLinearMap.ext
     intro v
     exact (inverseSqrt_cov_props μ hc hiso p).2 v
   rw [hfun, fderiv_clm_comp_apply_vec traceMap hR (noise μ hc p k)]
-  rw [FunctionalInequalities.Probability.Diffusion.fderiv_ringInverse_comp_apply
-    (cov μ hc) hA hu (noise μ hc p k)]
+  rw [FunctionalInequalities.Probability.Diffusion.fderiv_ringInverse_comp_apply (cov μ hc) hA
+      hu (noise μ hc p k)]
   rw [map_neg, traceMap_apply]
   apply congrArg Neg.neg
   unfold stdTrace
   apply Finset.sum_congr rfl
   intro i _
-  exact sandwich_inner
-    (inverseSqrt (cov μ hc p)) (Ring.inverse (cov μ hc p))
-    (fderiv ℝ (cov μ hc) p (noise μ hc p k))
-    (inverseSqrt_cov_props μ hc hiso p).1 hSS
-    (EuclideanSpace.basisFun (Fin n) ℝ i)
+  exact
+    sandwich_inner (inverseSqrt (cov μ hc p)) (Ring.inverse (cov μ hc p))
+      (fderiv ℝ (cov μ hc) p (noise μ hc p k)) (inverseSqrt_cov_props μ hc hiso p).1 hSS
+      (EuclideanSpace.basisFun (Fin n) ℝ i)
 
 set_option maxHeartbeats 1000000 in
 /-- `𝓛 tr A⁻¹ = tr A⁻¹ + Σ_k Σ_i ‖H̃_k σ e_i‖²` (BKL (69) and the inverse calculus). -/
 theorem generator_stdTrace_ringInverse_cov (hiso : KLS.Isotropic μ) (p : Param n) :
     generator μ hc (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) p =
       stdTrace (Ring.inverse (cov μ hc p)) +
-        ∑ k, ∑ i, ‖(inverseSqrt (cov μ hc p) * fderiv ℝ (cov μ hc) p (noise μ hc p k) * inverseSqrt (cov μ hc p))
-          (inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ i))‖ ^ 2 := by
+        ∑ k,
+          ∑ i,
+            ‖(inverseSqrt (cov μ hc p) * fderiv ℝ (cov μ hc) p (noise μ hc p k) *
+                    inverseSqrt (cov μ hc p))
+                  (inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ i))‖ ^
+              2 := by
   let R : Op n := Ring.inverse (cov μ hc p)
   let S : Op n := inverseSqrt (cov μ hc p)
   let H : Fin n → Op n := fun k => fderiv ℝ (cov μ hc) p (noise μ hc p k)
@@ -376,11 +381,9 @@ theorem generator_stdTrace_ringInverse_cov (hiso : KLS.Isotropic μ) (p : Param 
     apply ContinuousLinearMap.ext
     intro v
     exact (inverseSqrt_cov_props μ hc hiso p).2 v
-  have hS : ∀ x y, ⟪S x, y⟫ = ⟪x, S y⟫ :=
-    (inverseSqrt_cov_props μ hc hiso p).1
+  have hS : ∀ x y, ⟪S x, y⟫ = ⟪x, S y⟫ := (inverseSqrt_cov_props μ hc hiso p).1
   have hcancel : -(R * (-(cov μ hc p)) * R) = R := by
-    have hRA : R * cov μ hc p = 1 :=
-      Ring.inverse_mul_cancel (cov μ hc p) hu
+    have hRA : R * cov μ hc p = 1 := Ring.inverse_mul_cancel (cov μ hc p) hu
     calc
       -(R * (-(cov μ hc p)) * R) = (R * cov μ hc p) * R := by
         apply ContinuousLinearMap.ext
@@ -389,23 +392,21 @@ theorem generator_stdTrace_ringInverse_cov (hiso : KLS.Isotropic μ) (p : Param 
         rw [map_neg, neg_neg]
       _ = R := by rw [hRA, one_mul]
   have hLG :
-      vectorGenerator (drift μ hc) (noise μ hc)
-        (fun q : Param n => Ring.inverse (cov μ hc q)) p =
-          R + ∑ k, R * H k * R * H k * R := by
+    vectorGenerator (drift μ hc) (noise μ hc) (fun q : Param n => Ring.inverse (cov μ hc q)) p =
+      R + ∑ k, R * H k * R * H k * R := by
     have hi :=
-      FunctionalInequalities.Probability.Diffusion.generator_ringInverse_comp
-        (drift μ hc) (noise μ hc) (cov μ hc)
-        (cov_smooth_two μ hc).contDiffAt hu
+      FunctionalInequalities.Probability.Diffusion.generator_ringInverse_comp (drift μ hc)
+        (noise μ hc) (cov μ hc) (cov_smooth_two μ hc).contDiffAt hu
     change
-      vectorGenerator (drift μ hc) (noise μ hc)
-        (fun q : Param n => Ring.inverse (cov μ hc q)) p =
-          -(R * vectorGenerator (drift μ hc) (noise μ hc) (cov μ hc) p * R) +
-            ∑ k, R * H k * R * H k * R at hi
+      vectorGenerator (drift μ hc) (noise μ hc) (fun q : Param n => Ring.inverse (cov μ hc q))
+          p =
+        -(R * vectorGenerator (drift μ hc) (noise μ hc) (cov μ hc) p * R) +
+          ∑ k, R * H k * R * H k * R at hi
     rw [cov_vector_generator μ hc hiso p, hcancel] at hi
     exact hi
   have hfun :
-      (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) =
-        (fun q : Param n => traceMap (Ring.inverse (cov μ hc q))) :=
+    (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) =
+      (fun q : Param n => traceMap (Ring.inverse (cov μ hc q))) :=
     funext fun q => (traceMap_apply (Ring.inverse (cov μ hc q))).symm
   rw [hfun]
   unfold generator
@@ -420,8 +421,8 @@ theorem generator_stdTrace_ringInverse_cov (hiso : KLS.Isotropic μ) (p : Param 
   unfold stdTrace
   apply Finset.sum_congr rfl
   intro i _
-  exact sandwich_norm S R (H k) hS
-    (cov_derivative_symmetric μ hc p (noise μ hc p k)) hSS
-    (EuclideanSpace.basisFun (Fin n) ℝ i)
+  exact
+    sandwich_norm S R (H k) hS (cov_derivative_symmetric μ hc p (noise μ hc p k)) hSS
+      (EuclideanSpace.basisFun (Fin n) ℝ i)
 
 end FunctionalInequalities.KLS.BKL.Localization

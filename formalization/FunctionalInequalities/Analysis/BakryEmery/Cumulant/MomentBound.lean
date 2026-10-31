@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
-import FunctionalInequalities.Analysis.IteratedDerivative.Log
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
+public import FunctionalInequalities.Analysis.IteratedDerivative.Log
 
 /-!
 # Cumulant norm bounds from moment bounds
 -/
+
+@[expose] public section
 
 noncomputable section
 

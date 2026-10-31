@@ -65,6 +65,25 @@ class GuardTests(unittest.TestCase):
             check.client_guard(CLIENT.replace("#print axioms uniformConvexBodyKls\n", ""), SPEC_MODULE, REPORTS)
 
 
+class ModuleHeaderGuardTests(unittest.TestCase):
+    def test_module_headers_are_parsed_with_every_modifier(self):
+        spec = "module\n\npublic import Mathlib.Analysis.Normed.Group.Basic\nimport all Mathlib.Order.Basic\n"
+        self.assertEqual(check.specification_guard(spec + "def x : Nat := 1\n"),
+                         ["Mathlib.Analysis.Normed.Group.Basic", "Mathlib.Order.Basic"])
+        for extra in ("meta import Lean\n", "public meta import FunctionalInequalities.KLS.Statement\n",
+                      "  import all Batteries.Data.List\n"):
+            with self.subTest(extra=extra), self.assertRaises(ValueError):
+                check.specification_guard(spec + extra + "def x : Nat := 1\n")
+
+    def test_client_modifiers_do_not_hide_foreign_imports(self):
+        client = CLIENT.replace("import " + SPEC_MODULE + "\n", "public import " + SPEC_MODULE + "\n")
+        self.assertIn(SPEC_MODULE, check.client_guard(client, SPEC_MODULE, REPORTS))
+        for foreign in ("meta import BKLIndependentChecks\n", "public meta import Solutions.X\n",
+                        "import all BKLIndependentChecks\n"):
+            with self.subTest(foreign=foreign), self.assertRaises(ValueError):
+                check.client_guard(foreign + CLIENT, SPEC_MODULE, REPORTS)
+
+
 class PinTests(unittest.TestCase):
     def test_templates_match_reviewed_pins(self):
         pins = check.check_pins(CONFIG)

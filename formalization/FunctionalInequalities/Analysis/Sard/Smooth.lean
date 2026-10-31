@@ -1,12 +1,14 @@
-import FunctionalInequalities.Analysis.Sard.Basic
-import FunctionalInequalities.Analysis.PiCoordinates
-import FunctionalInequalities.Analysis.Sard.CoordinateChange
-import FunctionalInequalities.Analysis.LocalExtension
-import FunctionalInequalities.Analysis.Sard.QuadraticCover
-import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.Sard.Basic
+public import FunctionalInequalities.Analysis.PiCoordinates
+public import FunctionalInequalities.Analysis.Sard.CoordinateChange
+public import FunctionalInequalities.Analysis.LocalExtension
+public import FunctionalInequalities.Analysis.Sard.QuadraticCover
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 
 /-! # Ingredients for Sard's theorem in the smooth category
 
@@ -29,6 +31,8 @@ The dimension descent below combines these ingredients to prove `sard_smooth_pi`
 `Analysis.sard` is proved separately by Morse's decomposition in `Analysis/Sard/Sharp.lean`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Set Metric MeasureTheory
@@ -46,10 +50,13 @@ parameter map `p` is a fixed continuous projection onto the remaining coordinate
 the inverse function theorem applied to the map that replaces one coordinate by `w`. -/
 theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 1) → ℝ}
     (hw : ContDiff ℝ ∞ w) (hx₀ : w x₀ = 0) (hd : fderiv ℝ w x₀ ≠ 0) :
-    ∃ (p : (Fin (n + 1) → ℝ) → (Fin n → ℝ)) (γ : (Fin n → ℝ) → (Fin (n + 1) → ℝ))
-      (O : Set (Fin n → ℝ)),
-      Continuous p ∧ IsOpen O ∧ p x₀ ∈ O ∧ ContDiffOn ℝ ∞ γ O ∧ γ (p x₀) = x₀ ∧
-        ∀ᶠ x in 𝓝 x₀, w x = 0 → p x ∈ O ∧ γ (p x) = x := by
+    ∃ (p : (Fin (n + 1) → ℝ) → (Fin n → ℝ)) (γ : (Fin n → ℝ) → (Fin (n + 1) → ℝ)) (O :
+      Set (Fin n → ℝ)),
+      Continuous p ∧
+        IsOpen O ∧
+          p x₀ ∈ O ∧
+            ContDiffOn ℝ ∞ γ O ∧
+              γ (p x₀) = x₀ ∧ ∀ᶠ x in 𝓝 x₀, w x = 0 → p x ∈ O ∧ γ (p x) = x := by
   classical
   obtain ⟨i, hi⟩ := PiCoordinates.exists_apply_single_ne_zero hd
   have hne : (∞ : WithTop ℕ∞) ≠ 0 := by simp
@@ -57,7 +64,8 @@ theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 
   have hWopen : IsOpen {x : Fin (n + 1) → ℝ | fderiv ℝ w x (Pi.single i (1 : ℝ)) ≠ 0} :=
     isOpen_ne.preimage ((hw.continuous_fderiv (by simp)).clm_apply continuous_const)
   obtain ⟨Le, hLecoe⟩ := Sard.CoordinateChange.exists_updateEquiv i hi
-  have hΦd : HasFDerivAt (fun x => Function.update x i (w x))
+  have hΦd :
+    HasFDerivAt (fun x => Function.update x i (w x))
       (Le : (Fin (n + 1) → ℝ) →L[ℝ] (Fin (n + 1) → ℝ)) x₀ := by
     rw [hLecoe]
     exact Sard.CoordinateChange.hasFDerivAt_update i hdiff x₀
@@ -66,8 +74,8 @@ theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 
   set H := hΦc.toOpenPartialHomeomorph (fun x => Function.update x i (w x)) hΦd hne with hH
   have hHcoe : ⇑H = fun x => Function.update x i (w x) := rfl
   have hx₀src : x₀ ∈ H.source := hΦc.mem_toOpenPartialHomeomorph_source hΦd hne
-  have hsymm : ∀ y ∈ H.target, fderiv ℝ w (H.symm y) (Pi.single i (1 : ℝ)) ≠ 0 →
-      ContDiffAt ℝ ∞ H.symm y := by
+  have hsymm :
+    ∀ y ∈ H.target, fderiv ℝ w (H.symm y) (Pi.single i (1 : ℝ)) ≠ 0 → ContDiffAt ℝ ∞ H.symm y := by
     intro y hy hWy
     obtain ⟨Le', hLe'⟩ := Sard.CoordinateChange.exists_updateEquiv i hWy
     refine H.contDiffAt_symm (f₀' := Le') hy ?_ ?_
@@ -75,24 +83,28 @@ theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 
       exact Sard.CoordinateChange.hasFDerivAt_update i hdiff (H.symm y)
     · rw [hHcoe]
       exact (Sard.CoordinateChange.contDiff_update i hw).contDiffAt
-  have hembc : ContDiff ℝ ∞ (fun y : Fin n → ℝ => Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y) := by
+  have hembc :
+    ContDiff ℝ ∞ (fun y : Fin n → ℝ => Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y) := by
     rw [contDiff_pi]
     intro k
     rcases eq_or_ne k i with rfl | hk
     · simpa using contDiff_const (c := (0 : ℝ))
     · obtain ⟨j, rfl⟩ := Fin.exists_succAbove_eq hk
-      simpa using contDiff_apply ℝ ℝ j
-  have hkey : ∀ x : Fin (n + 1) → ℝ, w x = 0 →
-      Function.update x i (w x) = Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) (Fin.removeNth i x) := by
+      simpa using contDiff_apply (𝕜 := ℝ) (F' := fun _ => ℝ) j
+  have hkey :
+    ∀ x : Fin (n + 1) → ℝ,
+      w x = 0 →
+        Function.update x i (w x) =
+          Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) (Fin.removeNth i x) := by
     intro x hx
     simp only [Fin.insertNth_removeNth, hx]
-
   set T : Set (Fin (n + 1) → ℝ) :=
     H.target ∩ H.symm ⁻¹' {x : Fin (n + 1) → ℝ | fderiv ℝ w x (Pi.single i (1 : ℝ)) ≠ 0} with hT
-  have hTopen : IsOpen T :=
-    H.continuousOn_symm.isOpen_inter_preimage H.open_target hWopen
-  have hΦx₀ : Function.update x₀ i (w x₀) = Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ)
-      (Fin.removeNth i x₀) := hkey x₀ hx₀
+  have hTopen : IsOpen T := H.continuousOn_symm.isOpen_inter_preimage H.open_target hWopen
+  have hΦx₀ :
+    Function.update x₀ i (w x₀) =
+      Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) (Fin.removeNth i x₀) :=
+    hkey x₀ hx₀
   have hsymmx₀ : H.symm (Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) (Fin.removeNth i x₀)) = x₀ := by
     rw [← hΦx₀]
     exact H.left_inv hx₀src
@@ -102,10 +114,11 @@ theorem exists_local_graph {w : (Fin (n + 1) → ℝ) → ℝ} {x₀ : Fin (n + 
       exact hΦc.image_mem_toOpenPartialHomeomorph_target hΦd hne
     · rw [Set.mem_preimage, hsymmx₀]
       exact hi
-  refine ⟨fun x => Fin.removeNth i x, fun y => H.symm (Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y),
-    (fun y : Fin n → ℝ => Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y) ⁻¹' T,
-    continuous_pi fun j => continuous_apply _, hTopen.preimage hembc.continuous, hmemT, ?_,
-    hsymmx₀, ?_⟩
+  refine
+    ⟨fun x => Fin.removeNth i x, fun y => H.symm (Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y),
+      (fun y : Fin n → ℝ => Fin.insertNth (α := fun _ => ℝ) i (0 : ℝ) y) ⁻¹' T,
+      continuous_pi fun j => continuous_apply _, hTopen.preimage hembc.continuous, hmemT, ?_,
+      hsymmx₀, ?_⟩
   · intro y hy
     exact ((hsymm _ hy.1 hy.2).comp y hembc.contDiffAt).contDiffWithinAt
   · have hcont : ContinuousAt (fun x : Fin (n + 1) → ℝ => Fin.removeNth i x) x₀ :=

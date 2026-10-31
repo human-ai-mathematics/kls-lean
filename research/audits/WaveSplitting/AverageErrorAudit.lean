@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.WaveSplitting.AverageError
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.AverageError
 
 /-! Independent clients of the quantitative error of the finite time average. The weight is
 `exp (-U)` for an arbitrary smooth potential with `b_j = D_(a_j) U`; no convexity or global
 derivative bound is assumed. The density client chooses the horizon first and then the mesh. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

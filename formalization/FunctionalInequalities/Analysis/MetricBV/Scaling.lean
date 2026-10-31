@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
 
 /-!
 # Metric BV measure scaling and probability normalization
 -/
+
+@[expose] public section
 
 noncomputable section
 

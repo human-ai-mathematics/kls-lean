@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.RightInverseBound
-import FunctionalInequalities.Analysis.Vector.Jacobian
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.RightInverseBound
+public import FunctionalInequalities.Analysis.Vector.Jacobian
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the approximate right inverse, pointwise and locally uniform
@@ -31,6 +33,8 @@ vector is already in the kernel), a linear isomorphism (the right inverse is the
 zero map into a zero-dimensional target are covered.  The uniform statement is checked on a
 constant differential, where the neighbourhood may be taken to be the whole open set.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -147,12 +151,15 @@ the locally uniform half the hypothesis at the base point is doing real work.
 
 Along the family `t • id` of endomorphisms of `ℝ` the smallest admissible constant is `|t|⁻¹`: for
 `t ≠ 0` the kernel is trivial, so the only candidate is `w = 0` and the estimate at `z = 1` reads
-`1 ≤ C * t`.  Since `t • id` tends to the non-surjective `0` as `t → 0`, this particular family admits no single kernel-estimate constant on a neighbourhood of `t = 0`.
+`1 ≤ C * t`.  Since `t • id` tends to the non-surjective `0` as `t → 0`, this particular family
+admits no single kernel-estimate constant on a neighbourhood of `t = 0`.
 This does not rule out a uniform estimate for other non-surjective families, such as the
 constant zero family. -/
 theorem uniform_constant_degenerates (C : ℝ≥0) {t : ℝ} (ht : 0 < t) (htC : t * C < 1) :
-    ¬ ∀ z : ℝ, ∃ w : ℝ, (t • (ContinuousLinearMap.id ℝ ℝ)) w = 0 ∧
-        ‖z - w‖ ≤ C * ‖(t • (ContinuousLinearMap.id ℝ ℝ)) z‖ := by
+    ¬∀ z : ℝ,
+        ∃ w : ℝ,
+          (t • (ContinuousLinearMap.id ℝ ℝ)) w = 0 ∧
+            ‖z - w‖ ≤ C * ‖(t • (ContinuousLinearMap.id ℝ ℝ)) z‖ := by
   intro h
   obtain ⟨w, hw, hle⟩ := h 1
   have hw0 : w = 0 := by
@@ -192,15 +199,21 @@ theorem linear_equiv (e : V ≃L[ℝ] W₁) (z : V) :
 
 end DegenerateRightInverses
 
-/-- **A constant map on an open set**: the differential vanishes identically, so the surjectivity-based
+/--
+**A constant map on an open set**: the differential vanishes identically, so the surjectivity-based
 theorem applies when the target is zero-dimensional. The kernel-estimate conclusion itself also
 holds for constant maps into nonzero targets, with `C = M = 0`; this example uses the theorem. -/
 theorem constant_map [Subsingleton W₁] {O : Set V} {x₀ : V} (hO : IsOpen O) (hx₀ : x₀ ∈ O)
     (c : W₁) :
-    ∃ U ∈ nhds x₀, ∃ C M : ℝ≥0, U ⊆ O ∧ ∀ x ∈ U,
-      ‖fderiv ℝ (fun _ : V => c) x‖₊ ≤ M ∧
-        ∀ z : V, ∃ w : V, fderiv ℝ (fun _ : V => c) x w = 0 ∧
-          ‖z - w‖ ≤ C * ‖fderiv ℝ (fun _ : V => c) x z‖ := by
+    ∃ U ∈ nhds x₀,
+      ∃ C M : ℝ≥0,
+        U ⊆ O ∧
+          ∀ x ∈ U,
+            ‖fderiv ℝ (fun _ : V => c) x‖₊ ≤ M ∧
+              ∀ z : V,
+                ∃ w : V,
+                  fderiv ℝ (fun _ : V => c) x w = 0 ∧
+                    ‖z - w‖ ≤ C * ‖fderiv ℝ (fun _ : V => c) x z‖ := by
   refine exists_nhds_uniform_rightInverse_bound hO hx₀ contDiffOn_const ?_
   exact fun y => ⟨0, Subsingleton.elim _ _⟩
 

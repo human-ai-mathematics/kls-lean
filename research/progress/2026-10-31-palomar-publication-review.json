@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "review_date": "2026-10-31",
+  "status": "Selected publication source and validation contract; actual results are separately bound to the final commit.",
+  "scope": "Publish the already accepted Lean 4.35 closure and Palomar surface, excluding 33 paused Mathlib proposal files. No new literature target, Lean proof/type/name/constant/normalization/dimension/certificate or route status change.",
+  "placement_plan": {
+    "owner": "Existing handoff/documentation renderer and publication metadata",
+    "destination": "HANDOFF.md, research/check_documentation.py and owning research/progress records; Palomar formalization.yaml",
+    "decision": "Extend current metadata owners; no new Lean module or mathematical API",
+    "validation": "Exact preparation Lean/template bytes, existing documentation tests and guards; final clean-commit full verifier and Git consumer; exact-SHA Linux/remote/officialPalomar checks."
+  },
+  "preparation_snapshot_sha256": "598a184fbf3d02152af2b0d84afa0cb979d9c513f4e024121b7b1dd26f86817b",
+  "selected_preparation_files": 1820,
+  "published_lean_modules": 1590,
+  "preserved_unpublished_inputs": [
+    {
+      "path": "research/upstream/mathlib-prs/.gitignore",
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/HUMAN-REVIEW.md",
+      "sha256": "184cbe1b17e853ec6a54c129f4759a3c9c7a61f5a650af4c14d0d275e105b3fc"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/README.md",
+      "sha256": "7c6e5a27e4faa39b7e528813e3830a6006021eae47bc750063007f0e0f5a0c90"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/check.py",
+      "sha256": "b2c3c1790badba8f4a805b7c4ca930b9c4f27fb8487e3ac57ac11ec86bdcb030"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/patches/matrix.patch",
+      "sha256": "3a981f95c8629b3d50bea5e602fba34ab7825c59e9425f5e4f17167945a3abe8"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/patches/smooth.patch",
+      "sha256": "c4388ca72cc879638aa4e7ad1db35ab58e5dbbee9291df4ed242fb3ffea9cdbf"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/review.json",
+      "sha256": "0bfd55ea030d47f7e8b7c196e9ef312ce51063807590ff42e64f5bdb63feeb7c"
+    },
+    {
+      "path": "research/upstream/mathlib-prs/tests/test_scope.py",
+      "sha256": "90936e1859b1a00f00ce59839c83a4d28d0370970dcd803c06053a275a4b7907"
+    },
+    {
+      "path": "research/upstream/mathlib/.gitignore",
+      "sha256": "b34af236d1df9e39ed4f98fca51702530ce76bdee4e1a69512f6caed933c3374"
+    },
+    {
+      "path": "research/upstream/mathlib/Clients.lean",
+      "sha256": "5fe6ee107870b5231bc8d9d3d6d26d9deb04c8e8fd3d28f3acec1ec3512bb9c7"
+    },
+    {
+      "path": "research/upstream/mathlib/Clients/Conjugate.lean",
+      "sha256": "2e79bf3ae595ac4a044022efcfd71cb7372aaef2aecd2d1ed5318adaa37a8c14"
+    },
+    {
+      "path": "research/upstream/mathlib/Clients/Convex.lean",
+      "sha256": "08ed15de8f2643a19a012eb230a7b6326e35ce08fe05d8b6c3c9e308c5bdaa0b"
+    },
+    {
+      "path": "research/upstream/mathlib/Clients/LocalExtension.lean",
+      "sha256": "610c3ac49a2f0d16e66f2109b681273183f0b6e461a55ae57e0db5daf164f866"
+    },
+    {
+      "path": "research/upstream/mathlib/Clients/Matrix.lean",
+      "sha256": "a9540cd1cb840f918285d5859c84252eb84f44d10f4c6e5736947babadcd856b"
+    },
+    {
+      "path": "research/upstream/mathlib/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal.lean",
+      "sha256": "ccb00712b667cdb84868fef05c68aa899fa3fc16f7c3e32f0a8b6a2ea1835f2e"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Calculus/LocalExtension.lean",
+      "sha256": "d011a5bbd812349823bd4a52a4389f7f9075b1780343b3f0c775f17c18f10a8c"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Convex/Biconjugate.lean",
+      "sha256": "e3bc3c4cfa29a7f1b4836b750fad9221949c77123903463653878aa36d7276c4"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Convex/Coercivity.lean",
+      "sha256": "b412ba2dd86a109d38e83bc3055880c768e7f6df2b1e86aa97831734c992e9d2"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Convex/Conjugate.lean",
+      "sha256": "428a1b1dc56304bd72a0c210de7b18c783fd2a0b27394aadb7e144c7f3c51242"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Convex/Measure.lean",
+      "sha256": "ee27a916bd106cd16972f1dcf9695c5bd225bb5ebf6a4263da62c1bcfd9ebdc2"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Matrix/LogDet.lean",
+      "sha256": "de5353fbf9c8178772fa217741b7c14a0e4c37f4cd53cc7ed8270e51086d2bd9"
+    },
+    {
+      "path": "research/upstream/mathlib/MathlibProposal/Matrix/LogDetSecond.lean",
+      "sha256": "5db6acf3f0c1ff65bd82e45cef34bb31f8d0be0b8e5841872328806f00ed0e5f"
+    },
+    {
+      "path": "research/upstream/mathlib/README.md",
+      "sha256": "4a23b432e9a52d490d35225ae6a68c70a0e785a5556d977625ed6c00b0ecd040"
+    },
+    {
+      "path": "research/upstream/mathlib/REVIEW-NOTES.md",
+      "sha256": "ece54785dd7d763bc61d3b5261be9ba537ccf60abdc81633877c41bf166c5669"
+    },
+    {
+      "path": "research/upstream/mathlib/lake-manifest.json",
+      "sha256": "19cb7d294041f678da80305b6ec2541c417b527467d4182dee5a0bab1a465c1c"
+    },
+    {
+      "path": "research/upstream/mathlib/lakefile.lean",
+      "sha256": "55170e8b81fcd4d088341e99375b134d1ae3ece8f6e394ba15f41a01d1a2a2f4"
+    },
+    {
+      "path": "research/upstream/mathlib/lean-toolchain",
+      "sha256": "11c697aebe5b539d74f5069e497a588e7dfab1c4eeb74313f28357e351c55ca3"
+    },
+    {
+      "path": "research/upstream/mathlib/package.py",
+      "sha256": "5baacdb40167298fd8455894b75aa6cd1eec4c2b27b4ffd5570a8d1b5f721e35"
+    },
+    {
+      "path": "research/upstream/mathlib/source-map.json",
+      "sha256": "e10953640b792fe9e74fa7791ea5b5dd696016ee50e42e71a150cb25bd211d75"
+    },
+    {
+      "path": "research/upstream/mathlib/tests/test_packets.py",
+      "sha256": "65c861b5ddd13dc64f4ff7d99198fa84b138670e12d25b8d780147e7275d3c39"
+    },
+    {
+      "path": "research/upstream/mathlib/upstream_validate.py",
+      "sha256": "53675b8c75c9bc861c6e6183cffac15f062b65e6de4e71eadc2c7984f7c941b1"
+    },
+    {
+      "path": "research/upstream/mathlib/validate.py",
+      "sha256": "0dc21c50deb5f62d18539c0508fd0442a4c409dd0babefa627769f0f99b8c18d"
+    }
+  ],
+  "source_comparison": "All selected Lean sources/templates are byte-identical to the accepted preparation except one reviewed blank EOF line removed from VectorGenerator. All its tokens remain identical. All other publication changes concern current documentation/metadata; mathematical statements, proof bodies, names, imports, data and constants are unchanged.",
+  "human_identity": "Existing GitHub maintainer lyw-ops has public display name Lazyfill and is the existing public Git author. The Palomar authors field identifies that human; AI contributions remain in automation and existing credits. No unconfirmed coauthor or source-author endorsement added.",
+  "verification_boundary": "The earlier 1853-input preparation receipt is retained as its own evidence. It is not rebound to this smaller committed publication. Fresh final-commit receipts are required.",
+  "diagram_and_mathematics": "Canonical literature/proof metadata, hypotheses, assumptions, priorities and graph OR/AND logic remain unchanged; progress views are regenerated from the publication index.",
+  "downstream_instructions": "The old 0233f0b8 dependency example is retained only as a historical acceptance note. The current guide requires an explicit full commit SHA and its matching lean-toolchain, avoiding a v4.33 dependency paired with the current v4.35 toolchain. No self-referential commit hash is embedded in source.",
+  "publication_whitespace_adjustments": [
+    {
+      "path": "formalization/FunctionalInequalities/Probability/Diffusion/VectorGenerator.lean",
+      "old_sha256": "b33866f4a32619c92a258ad7c20d5e50d1cc99d8c922be4dacd2d4a20723262a",
+      "new_sha256": "c5ca4e0ea7d5fe486e0c2c3ede0546c031958c88d0853a0028a48c6abecb872c",
+      "change": "Remove exactly one pre-existing blank EOF line in the publication checkout so the staged diff passes whitespace checks. All mathematical tokens, names, proofs, imports and data unchanged; original worktrees untouched."
+    }
+  ]
+}

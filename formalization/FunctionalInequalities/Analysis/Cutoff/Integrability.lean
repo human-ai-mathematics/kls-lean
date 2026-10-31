@@ -1,5 +1,7 @@
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Integral.Lebesgue.Add
+module
+
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 
 /-!
 # Integrability from uniformly bounded cutoff integrals
@@ -9,19 +11,21 @@ integrals is integrable, by Fatou's lemma. Generic tool, used to pass from compa
 integration by parts to global integrability (Letwin Lemma 2.3 supports).
 -/
 
+@[expose] public section
+
 open MeasureTheory Filter Topology
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Integrability from bounded cutoff integrals** (Fatou): if `h ≥ 0`, the cutoffs `c_n h` are integrable with
+/--
+**Integrability from bounded cutoff integrals** (Fatou): if `h ≥ 0`, the cutoffs `c_n h` are
+integrable with
 `c_n ≥ 0`, `c_n → 1` pointwise and `∫ c_n h ≤ C`, then `h` is integrable. -/
-theorem integrable_of_cutoff_bounds {A : Type*} [MeasurableSpace A] (μ : Measure A)
-    {h : A → ℝ} (hh : AEStronglyMeasurable h μ) (hpos : ∀ x, 0 ≤ h x)
-    {c : ℕ → A → ℝ} (hcpos : ∀ n x, 0 ≤ c n x)
-    (hlim : ∀ x, Tendsto (fun n => c n x) atTop (𝓝 1))
-    (hi : ∀ n, Integrable (fun x => c n x * h x) μ)
-    {C : ℝ} (hbound : ∀ n, (∫ x, c n x * h x ∂μ) ≤ C) :
-    Integrable h μ := by
+theorem integrable_of_cutoff_bounds {A : Type*} [MeasurableSpace A] (μ : Measure A) {h : A → ℝ}
+    (hh : AEStronglyMeasurable h μ) (hpos : ∀ x, 0 ≤ h x) {c : ℕ → A → ℝ}
+    (hcpos : ∀ n x, 0 ≤ c n x) (hlim : ∀ x, Tendsto (fun n => c n x) atTop (𝓝 1))
+    (hi : ∀ n, Integrable (fun x => c n x * h x) μ) {C : ℝ}
+    (hbound : ∀ n, (∫ x, c n x * h x ∂μ) ≤ C) : Integrable h μ := by
   let F : ℕ → A → ENNReal := fun n x => ENNReal.ofReal (c n x * h x)
   have hm : ∀ n, AEMeasurable (F n) μ := fun n =>
     ENNReal.measurable_ofReal.comp_aemeasurable (hi n).aestronglyMeasurable.aemeasurable
@@ -29,15 +33,18 @@ theorem integrable_of_cutoff_bounds {A : Type*} [MeasurableSpace A] (μ : Measur
     apply ENNReal.continuous_ofReal.continuousAt.tendsto.comp
     simpa only [one_mul] using (hlim x).mul_const (h x)
   have hfatou := lintegral_liminf_le' (u := (atTop : Filter ℕ)) hm
-  have htarget : (∫⁻ x, ENNReal.ofReal (h x) ∂μ) ≤
-      liminf (fun n => ∫⁻ x, F n x ∂μ) atTop := by
+  have htarget : (∫⁻ x, ENNReal.ofReal (h x) ∂μ) ≤ liminf (fun n => ∫⁻ x, F n x ∂μ) atTop := by
     simpa only [(hFlim _).liminf_eq] using hfatou
   have hupper (n : ℕ) : (∫⁻ x, F n x ∂μ) ≤ ENNReal.ofReal C := by
     dsimp only [F]
-    rw [← ofReal_integral_eq_lintegral_ofReal (hi n) (ae_of_all μ fun x => mul_nonneg (hcpos n x) (hpos x))]
+    rw [←
+      ofReal_integral_eq_lintegral_ofReal (hi n)
+        (ae_of_all μ fun x => mul_nonneg (hcpos n x) (hpos x))]
     exact ENNReal.ofReal_le_ofReal (hbound n)
   have hfinite : (∫⁻ x, ENNReal.ofReal (h x) ∂μ) < ⊤ :=
-    (htarget.trans (liminf_le_of_frequently_le' (Filter.Eventually.of_forall hupper).frequently)).trans_lt
+    (htarget.trans
+          (liminf_le_of_frequently_le'
+            (Filter.Eventually.of_forall hupper).frequently)).trans_lt
       (ENNReal.ofReal_lt_top)
   exact (lintegral_ofReal_ne_top_iff_integrable hh (ae_of_all μ hpos)).mp hfinite.ne
 

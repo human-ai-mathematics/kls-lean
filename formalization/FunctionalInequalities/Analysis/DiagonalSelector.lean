@@ -1,5 +1,7 @@
-import Mathlib.Topology.MetricSpace.Sequences
-import Mathlib.Analysis.SpecificLimits.Basic
+module
+
+public import Mathlib.Topology.MetricSpace.Sequences
+public import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
 # Diagonal selection in pseudometric spaces
@@ -9,17 +11,19 @@ Generic tool: from row limits `G n k → F n` (`k → ∞`) and an outer limit `
 (Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2).
 -/
 
+@[expose] public section
+
 open Filter Topology
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Metric diagonal selection**: if each row `G n ·` converges to `F n` and `F → x` in a pseudometric
+/--
+**Metric diagonal selection**: if each row `G n ·` converges to `F n` and `F → x` in a pseudometric
 space, there are indices `k n ≥ n`, `k → ∞`, with `G n (k n) → x`. -/
-theorem exists_metric_diagonal {X : Type*} [PseudoMetricSpace X]
-    (G : ℕ → ℕ → X) (F : ℕ → X) (x : X)
-    (hrow : ∀ n : ℕ, Tendsto (G n) atTop (𝓝 (F n))) (houter : Tendsto F atTop (𝓝 x)) :
-    ∃ k : ℕ → ℕ, (∀ n, n ≤ k n) ∧ Tendsto k atTop atTop ∧
-      Tendsto (fun n => G n (k n)) atTop (𝓝 x) := by
+theorem exists_metric_diagonal {X : Type*} [PseudoMetricSpace X] (G : ℕ → ℕ → X) (F : ℕ → X)
+    (x : X) (hrow : ∀ n : ℕ, Tendsto (G n) atTop (𝓝 (F n))) (houter : Tendsto F atTop (𝓝 x)) :
+    ∃ k : ℕ → ℕ,
+      (∀ n, n ≤ k n) ∧ Tendsto k atTop atTop ∧ Tendsto (fun n => G n (k n)) atTop (𝓝 x) := by
   have hchoose (n : ℕ) : ∃ k : ℕ, n ≤ k ∧ dist (G n k) (F n) < 1 / ((n : ℝ) + 1) := by
     have hsmall : ∀ᶠ k in atTop, G n k ∈ Metric.ball (F n) (1 / ((n : ℝ) + 1)) :=
       (hrow n).eventually (Metric.ball_mem_nhds (F n) (by positivity))

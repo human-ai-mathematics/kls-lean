@@ -1,9 +1,11 @@
-import FunctionalInequalities.Analysis.Convex.ExpVariation
-import FunctionalInequalities.Analysis.Convex.EssentialContinuity
-import FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation
-import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
-import FunctionalInequalities.Probability.Line.Haar
-import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
+module
+
+public import FunctionalInequalities.Analysis.Convex.ExpVariation
+public import FunctionalInequalities.Analysis.Convex.EssentialContinuity
+public import FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation
+public import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+public import FunctionalInequalities.Probability.Line.Haar
+public import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
 
 /-!
 # Directional variation of the density of a moment potential
@@ -21,6 +23,8 @@ so `limsup_k ∫ |⟪∇ψₖ, θ⟫| e^{-ψₖ} ≤ ∫ |⟪∇ψ, θ⟫| e^{-�
 (`limsup_lintegral_directional_le`). This controls the gradient mass of `e^{-ψₖ}` in the region
 where the truncation is active, which is the boundary term in CEK Theorem 8.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -109,11 +113,12 @@ private theorem iInf_iSup_exp_neg_le {u : ℕ → ℝ → EReal} {v : ℝ → ER
       rw [← hlim s]
       exact iSup_le fun k => mem_iInter.mp hs.2 k
     exact absurd (hTv s) (not_lt.mpr hle)
-  obtain ⟨k, hk⟩ := isCompact_Icc.elim_directed_family_closed F hFc hempty hdir
+  obtain ⟨k, hk⟩ := isCompact_Icc.elim_directed_family_closed F hFc
+    (Set.disjoint_iff_inter_eq_empty.mpr hempty) hdir
   refine (iInf_le _ k).trans (iSup_le fun s => ?_)
   rw [← hrT, EReal.exp_le_exp_iff, EReal.neg_le_neg_iff]
   by_cases hs : s ∈ Icc (-R) R
-  · have : s ∉ F k := fun h => (eq_empty_iff_forall_notMem.mp hk) s ⟨hs, h⟩
+  · have : s ∉ F k := fun h => Set.disjoint_left.mp hk hs h
     exact (not_le.mp this).le
   · have hsR : R < |s| := by
       rw [mem_Icc, not_and_or, not_le, not_le] at hs
@@ -256,7 +261,7 @@ theorem addHaar_eq_zero_of_hausdorffMeasure_eq_zero {F : Type*} [NormedAddCommGr
   set d := Module.finrank ℝ F
   let e : F ≃L[ℝ] (Fin d → ℝ) := ContinuousLinearEquiv.ofFinrankEq (by simp [d])
   have h1 : μH[((Fintype.card (Fin d) : ℕ) : ℝ)] (e '' A) = 0 := by
-    have h := e.lipschitz.hausdorffMeasure_image_le (Nat.cast_nonneg d) A
+    have h := e.lipschitzWith.hausdorffMeasure_image_le (Nat.cast_nonneg d) A
     rw [Fintype.card_fin]
     rw [hA, mul_zero] at h
     exact le_antisymm h (zero_le)
@@ -315,7 +320,7 @@ theorem addHaar_setOf_exists_line_mem_eq_zero {θ : E} (hθ : ‖θ‖ = 1) {N :
   have hd0 : (0 : ℝ) ≤ (Module.finrank ℝ E : ℝ) - 1 := by
     have : (1 : ℝ) ≤ Module.finrank ℝ E := by exact_mod_cast hpos
     linarith
-  have h := (lineProj hθ).lipschitz.hausdorffMeasure_image_le hd0 N
+  have h := (lineProj hθ).lipschitzWith.hausdorffMeasure_image_le hd0 N
   rw [hN, mul_zero] at h
   exact le_antisymm h (zero_le)
 

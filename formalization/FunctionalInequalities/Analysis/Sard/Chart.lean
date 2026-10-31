@@ -1,13 +1,17 @@
-import FunctionalInequalities.Analysis.PiCoordinates
-import FunctionalInequalities.Analysis.Sard.CoordinateChange
-import FunctionalInequalities.Analysis.LocalExtension
-import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.PiCoordinates
+public import FunctionalInequalities.Analysis.Sard.CoordinateChange
+public import FunctionalInequalities.Analysis.LocalExtension
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-! # The `C^k` graph chart of a regular zero set
 
 The finite-regularity counterpart of the `C^∞` chart `Analysis.exists_local_graph`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -36,7 +40,7 @@ theorem contDiff_insertNth {k : ℕ} {θ : (Fin n → ℝ) → ℝ} (i : Fin (n 
   rcases eq_or_ne m i with rfl | hm
   · simpa using hθ
   · obtain ⟨j, rfl⟩ := Fin.exists_succAbove_eq hm
-    simpa using contDiff_apply ℝ ℝ j
+    simpa using contDiff_apply (𝕜 := ℝ) (F' := fun _ => ℝ) j
 
 /-- Graph maps are injective. -/
 theorem injective_insertNth (i : Fin (n + 1)) (θ : (Fin n → ℝ) → ℝ) :
@@ -89,7 +93,7 @@ theorem exists_graph {k : ℕ} (hk : 1 ≤ k) {w : (Fin (n + 1) → ℝ) → ℝ
       refine ContDiffAt.comp _ ?_ hembc.contDiffAt
       rw [hembx₀]
       exact hψc
-    exact (contDiff_apply ℝ ℝ i).contDiffAt.comp _ hcomp
+    exact (contDiff_apply (𝕜 := ℝ) (F' := fun _ => ℝ) i).contDiffAt.comp _ hcomp
   obtain ⟨u, hu, hθ₀u⟩ := hθ₀.contDiffOn (m := (k : ℕ)) le_rfl (by simp)
   obtain ⟨O, hOu, hOopen, hOmem⟩ := _root_.mem_nhds_iff.mp hu
   obtain ⟨θ, hθc, hθeq⟩ :=

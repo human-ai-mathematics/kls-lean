@@ -142,7 +142,7 @@ giving the Markov/Dirichlet property for every Borel probability law.
 [Energy.SmoothGradient.Test](../Energy/SmoothGradient/Basic.lean) consists of globally `C∞`
 real functions with proofs of `L²(μ)` membership and integrability of the squared gradient.
 Finite energy is `∫ ‖gradient f x‖² ∂μ`.
-**In the project's pinned Mathlib v4.33.0, ordinary `C∞` is `ContDiff ℝ ∞`;
+**In the project's pinned Mathlib v4.35.0, ordinary `C∞` is `ContDiff ℝ ∞`;
 `ContDiff ℝ ⊤` means analyticity.**
 
 Quadraticity of the smooth-gradient pre-energy and density of its realization are proved.

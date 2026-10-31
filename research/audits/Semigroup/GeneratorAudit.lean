@@ -1,13 +1,17 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
 
 /-!
 # Scope audit for `G1` and `G3` of `GeneratedRouteStatements.lean`
 
 The obligations `G1` and `G3` of `research/audits/Semigroup/GeneratedRouteStatements.lean` — the
 part of Part B complementary to the mean-value contract `G2`
-(`Analysis/Semigroup/Exponential/MeanValue.lean`) — are restated here **verbatim**, copied character for
+(`Analysis/Semigroup/Exponential/MeanValue.lean`) — are restated here **verbatim**, copied character
+for
 character from that route contract, and discharged from the hole-free module
-`Analysis/Semigroup/Generated/Generator.lean`. A renamed binder, a reordered hypothesis or a weakened
+`Analysis/Semigroup/Generated/Generator.lean`. A renamed binder, a reordered hypothesis or a
+weakened
 conclusion would fail to elaborate here.
 
 The first is the uniformity on `[0, t]` of the strong Yosida convergence
@@ -30,6 +34,8 @@ localization and Buser's inequality. The statements here concern abstract real H
 The `#print axioms` reports at the end must all read `[propext, Classical.choice, Quot.sound]`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Filter Topology InnerProductSpace FunctionalInequalities.Analysis.Semigroup
@@ -42,10 +48,20 @@ namespace GeneratorAudit
 uniform on `[0, t]`), discharged from `Analysis/Semigroup/Generated/Generator.lean`. -/
 theorem route_G1 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (g : H₀) {t : ℝ}, 0 ≤ t →
-      ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ → ∀ τ ∈ Set.Icc 0 t,
-        ‖NormedSpace.exp (-τ • yosida T hT hs) g - FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd τ g‖ < ε := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (g : H₀) {t : ℝ},
+      0 ≤ t →
+        ∀ {ε : ℝ},
+          0 < ε →
+            ∃ δ : ℝ,
+              0 < δ ∧
+                ∀ {s : ℝ} (hs : 0 < s),
+                  s < δ →
+                    ∀ τ ∈ Set.Icc 0 t,
+                      ‖NormedSpace.exp (-τ • yosida T hT hs) g -
+                            FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd τ
+                              g‖ <
+                        ε := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd g t ht ε hε
   exact FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges T hT hd g ht hε
 
@@ -53,11 +69,20 @@ theorem route_G1 :
 `-T†T` on `D(T†T)`), discharged from `Analysis/Semigroup/Generated/Generator.lean`. -/
 theorem route_G3 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀))
-    (f : (adjointComp T).domain) {ε : ℝ}, 0 < ε →
-      ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 < t → t < δ →
-        ‖t⁻¹ • (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f - f) + adjointComp T f‖ < ε := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : (adjointComp T).domain) {ε : ℝ},
+      0 < ε →
+        ∃ δ : ℝ,
+          0 < δ ∧
+            ∀ t : ℝ,
+              0 < t →
+                t < δ →
+                  ‖t⁻¹ •
+                          (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t
+                              f -
+                            f) +
+                        adjointComp T f‖ <
+                    ε := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd f ε hε
   exact FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit T hT hd f hε
 

@@ -1,4 +1,6 @@
-import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
+module
+
+public import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
 
 /-!
 # Measure domination from small-ball bounds
@@ -7,6 +9,8 @@ Besicovitch covering turns uniform small-ball estimates into domination of measu
 This is the last measure-theoretic step in the intended log-concave absolute-continuity
 argument. It does not prove the needed uniform bound from log-concavity.
 -/
+
+@[expose] public section
 
 noncomputable section
 

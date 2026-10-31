@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.Form.Comparison
-import FunctionalInequalities.Poincare.Comparison
-import FunctionalInequalities.Poincare.L2.Energy
+module
+
+public import FunctionalInequalities.Energy.Form.Comparison
+public import FunctionalInequalities.Poincare.Comparison
+public import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Comparing Poincaré constants of `L²` energies
@@ -10,6 +12,8 @@ the denominator on the remaining tests. Consequently its optimal Poincaré const
 decrease. The proof is an explicit Rayleigh map, so zero-energy tests and infinite optimal
 constants require no separate assumptions.
 -/
+
+@[expose] public section
 
 noncomputable section
 

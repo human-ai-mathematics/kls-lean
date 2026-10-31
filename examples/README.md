@@ -68,26 +68,28 @@ For a first local call of the main theorem, follow the complete
 client target, cache preparation and strict compilation. The path dependency uses the current
 local source tree. The Git procedure below instead selects a committed revision.
 
-Use the same [pinned Lean toolchain](../formalization/lean-toolchain). The package is in the
-repository's `formalization/` subdirectory. In an independent project's `lakefile.toml`, pin the
-reviewed commit. The pin below is the recorded downstream baseline; it is not a claim
-of acceptance for a later release revision:
+Select the reviewed full commit SHA and copy `formalization/lean-toolchain` from that same
+commit. The package is in the repository's `formalization/` subdirectory. In an independent
+project's `lakefile.toml`, replace `FULL_40_HEX_COMMIT` below with that SHA. When consuming a
+local checkout, obtain it with `git rev-parse HEAD`; do not mix a historical dependency pin
+with the toolchain from the moving default branch:
 
 ```toml
 [[require]]
 name = "functional-inequalities"
 git = "https://github.com/human-ai-mathematics/kls-lean.git"
-rev = "0233f0b837131da5bb20420c4152d13260b8260a"
+rev = "FULL_40_HEX_COMMIT"
 subDir = "formalization"
 ```
 
-While the repository is private, Lake's Git fetch needs GitHub read access (an authenticated
-HTTPS remote); anonymous fetching is not yet available. For local development, replace `git`,
-`rev` and `subDir` with `path = "../KLS/formalization"`. Import an owning module in the client
-and build the client's Lake target.
+The public HTTPS repository can be fetched anonymously. For local development, replace
+`git`, `rev` and `subDir` with `path = "../KLS/formalization"`. Import an owning module in
+the client and build the client's Lake target.
 
-This pin passed all three narrow clients with freshly compiled primary modules and trusted
-pinned third-party caches. Its receipt records the exact Git revision and results under the
+The earlier downstream baseline `0233f0b837131da5bb20420c4152d13260b8260a` passed all three
+narrow clients at its own toolchain and revision. It does not certify this Lean v4.35 publication.
+Run the consumer check below for the exact commit you select. Its receipt records freshly
+compiled primary modules and trusted pinned third-party caches under the
 [verification trust rules](../research/verification.md#receipts-and-trust-scope); these interface
 checks exclude KLS, solution and example imports.
 [API browsing](../formalization/API.md) provides compiler-derived signatures.

@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
-import FunctionalInequalities.Probability.Line.Cdf
-import Mathlib.Analysis.Convex.Slope
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
+public import FunctionalInequalities.Probability.Line.Cdf
+public import Mathlib.Analysis.Convex.Slope
 
 /-!
 # Log-concave laws on the real line: density, support interval and chord bounds
@@ -8,7 +10,8 @@ import Mathlib.Analysis.Convex.Slope
 Source: Blueprint `thm:one-dimensional-logconcave-poincare`, supporting structure. Read
 `LineDensity`, `LogConcave.exists_lineDensity`, the interior-support lemmas
 (`LogConcave.measure_compl_interior_support`, `LogConcave.mem_interior_support_of_cdf`), then the
-chord and tangent bounds (`LineDensity.mul_exp_le_of_mem_Icc`, `LineDensity.le_mul_exp_of_not_mem_Ioo`,
+chord and tangent bounds (`LineDensity.mul_exp_le_of_mem_Icc`,
+`LineDensity.le_mul_exp_of_not_mem_Ioo`,
 `LineDensity.exists_supergradient`).
 
 For a compact-set log-concave probability law `μ` on `ℝ` whose support has nonempty interior `Ω`
@@ -23,6 +26,8 @@ point `m` of `Ω` a supporting exponential `ρ s ≤ ρ m · exp (k (s - m))`.
 Nothing here is a Poincaré inequality; these are the pointwise inputs of the hazard-rate and
 variance estimates of the following modules.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -201,7 +206,8 @@ theorem le_mul_exp_of_not_mem_Ioo {x y s : ℝ} (hx : x ∈ interior (μ : Measu
     d.ρ s ≤ d.ρ x * Real.exp (d.logSlope x y * (s - x)) := by
   have hconc := d.concaveOn_log hμ
   suffices hlog : Real.log (d.ρ s) ≤ Real.log (d.ρ x) + d.logSlope x y * (s - x) by
-    calc d.ρ s = Real.exp (Real.log (d.ρ s)) := (Real.exp_log (d.pos hs)).symm
+    calc
+      d.ρ s = Real.exp (Real.log (d.ρ s)) := (Real.exp_log (d.pos hs)).symm
       _ ≤ Real.exp (Real.log (d.ρ x) + d.logSlope x y * (s - x)) := Real.exp_le_exp.mpr hlog
       _ = d.ρ x * Real.exp (d.logSlope x y * (s - x)) := by
         rw [Real.exp_add, Real.exp_log (d.pos hx)]
@@ -211,16 +217,22 @@ theorem le_mul_exp_of_not_mem_Ioo {x y s : ℝ} (hx : x ∈ interior (μ : Measu
     field_simp
   rcases lt_or_ge s x with hsx | hsx
   · -- `s < x < y`: the slope over `[s, x]` is at least the slope over `[x, y]`
-    have h := hconc.slope_anti_adjacent hs hy hsx hxy
+
+    have h :=
+      hconc.slope_anti_adjacent hs hy hsx
+        hxy
     -- h : (log ρ y - log ρ x) / (y - x) ≤ (log ρ x - log ρ s) / (x - s)
+
     have hxs : 0 < x - s := sub_pos.mpr hsx
     rw [div_le_div_iff₀ hyx hxs] at h
-    have hκ' : d.logSlope x y * (s - x) = -((Real.log (d.ρ y) - Real.log (d.ρ x)) * (x - s) / (y - x)) := by
+    have hκ' :
+      d.logSlope x y * (s - x) = -((Real.log (d.ρ y) - Real.log (d.ρ x)) * (x - s) / (y - x)) := by
       unfold logSlope
       field_simp
       ring
     rw [hκ']
-    have : (Real.log (d.ρ y) - Real.log (d.ρ x)) * (x - s) / (y - x) ≤
+    have :
+      (Real.log (d.ρ y) - Real.log (d.ρ x)) * (x - s) / (y - x) ≤
         Real.log (d.ρ x) - Real.log (d.ρ s) := by
       rw [div_le_iff₀ hyx]
       linarith
@@ -236,18 +248,22 @@ theorem le_mul_exp_of_not_mem_Ioo {x y s : ℝ} (hx : x ∈ interior (μ : Measu
       · subst hsy'
         linarith [hκ]
       · -- `x < y < s`: the slope over `[y, s]` is at most the slope over `[x, y]`
+
         have h := hconc.slope_anti_adjacent hx hs hxy hsy'
         have hsy0 : 0 < s - y := sub_pos.mpr hsy'
         rw [div_le_div_iff₀ hsy0 hyx] at h
         -- h : (log ρ s - log ρ y) * (y - x) ≤ (log ρ y - log ρ x) * (s - y)
-        have hκ' : d.logSlope x y * (s - x) =
+
+        have hκ' :
+          d.logSlope x y * (s - x) =
             (Real.log (d.ρ y) - Real.log (d.ρ x)) * (s - y) / (y - x) +
               (Real.log (d.ρ y) - Real.log (d.ρ x)) := by
           unfold logSlope
           field_simp
           ring
         rw [hκ']
-        have : Real.log (d.ρ s) - Real.log (d.ρ y) ≤
+        have :
+          Real.log (d.ρ s) - Real.log (d.ρ y) ≤
             (Real.log (d.ρ y) - Real.log (d.ρ x)) * (s - y) / (y - x) := by
           rw [le_div_iff₀ hyx]
           linarith

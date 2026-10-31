@@ -1,4 +1,6 @@
-import FunctionalInequalities.Energy.Form.Functional
+module
+
+public import FunctionalInequalities.Energy.Form.Functional
 
 /-!
 # Pointwise comparison of extended energies
@@ -7,6 +9,8 @@ This module keeps comparison data at the functional level. If `lower ≤ upper` 
 finite-energy point for `upper` also has finite `lower` energy. The direction of the induced
 Poincaré-constant comparison is stated later, after variance has been added.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.Energy.Functional
 

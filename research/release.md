@@ -107,19 +107,21 @@ open. The README positioning pass and the source diff must refer to the proposed
 revision. The maintainer has already accepted the Mathlib contact and review-discussion role;
 that agreement does not need to be requested again.
 
-For the Linux reviewer, identify the full final commit first and follow the pinned
-[Comparator preparation](audits/KLS/Comparator/README.md#pinned-tools-and-preparation),
-including both packages' Mathlib caches, the Landrun pin and the toolchain `PATH`. Run both
-targets against that checkout:
+For the Linux reviewer, identify the full final commit first and follow the
+[Comparator preparation](audits/KLS/Comparator/README.md#judge-and-preparation),
+including every package's Mathlib cache, bubblewrap, and a checkout outside the directories
+the toolchain-bundled `lake comparator` sandbox covers. Run the targets against that checkout:
 
 ```bash
-python3 research/comparator.py --target kls --mode sandbox --tools /absolute/path/to/comparator
-python3 research/comparator.py --target openai --mode sandbox --tools /absolute/path/to/comparator
+python3 research/comparator.py --target kls --mode sandbox
+python3 research/comparator.py --target openai --mode sandbox
+python3 research/comparator.py --target palomar --mode sandbox
 ```
 
-Return both complete `receipt.json` files and their logs, with the full source commit and
+Return the complete `receipt.json` files and their logs, with the full source commit and
 source hashes. Confirm `COMPARATOR_PASSED_LINUX_SANDBOX`, `source_preserved` and
-`staging_preserved` for each. A comment reporting success, a macOS development receipt or a
+`staging_preserved` for each. Palomar's official full preflight is separate from these
+receipts. A comment reporting success, a macOS development receipt or a
 run for an earlier commit remains evidence only for its stated scope. Keep received raw
 artifacts in the local verification archive and attach the reviewed receipts to the release;
 do not replace them with truncated hashes in the issue discussion.

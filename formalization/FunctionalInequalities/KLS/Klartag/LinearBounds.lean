@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.Klartag.LinearGrowth
-import FunctionalInequalities.Probability.Line.Haar
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import FunctionalInequalities.Probability.Line.ExpIntegral
-import Mathlib.Analysis.Calculus.Gradient.Basic
+module
+
+public import FunctionalInequalities.KLS.Klartag.LinearGrowth
+public import FunctionalInequalities.Probability.Line.Haar
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import FunctionalInequalities.Probability.Line.ExpIntegral
+public import Mathlib.Analysis.Calculus.Gradient.Basic
 
 /-!
 # Two-sided linear bounds for centered convex potentials
@@ -33,6 +35,8 @@ everywhere); this is an added restriction. The constants are explicit in the pro
 existence is stated.
 -/
 
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Filter Topology Set
 open scoped RealInnerProductSpace
@@ -45,19 +49,19 @@ section LineConvexity
 
 /-! Convex functions along the lines `s ↦ z + s θ`; no measure on `E`. -/
 
-private theorem line_tendsto_pair_of_compact_sublevel
-    {ψ : E → ℝ} (hcompact : ∀ b : ℝ, IsCompact {x : E | ψ x ≤ b})
-    {θ : E} (hθ : ‖θ‖ = 1) (z : E) :
+private theorem line_tendsto_pair_of_compact_sublevel {ψ : E → ℝ}
+    (hcompact : ∀ b : ℝ, IsCompact {x : E | ψ x ≤ b}) {θ : E} (hθ : ‖θ‖ = 1) (z : E) :
     Tendsto (fun s : ℝ => ψ (z + s • θ)) atTop atTop ∧
       Tendsto (fun s : ℝ => ψ (z + s • θ)) atBot atTop := by
   have hθ0 : θ ≠ 0 := fun h => by simp [h] at hθ
   have hψ : Tendsto ψ (cocompact E) atTop :=
-    tendsto_atTop.2 fun b => mem_cocompact.2 ⟨_, hcompact b, fun x (hx : ¬ψ x ≤ b) => (not_le.1 hx).le⟩
+    tendsto_atTop.2 fun b =>
+      mem_cocompact.2 ⟨_, hcompact b, fun x (hx : ¬ψ x ≤ b) => (not_le.1 hx).le⟩
   have hline : Tendsto (fun s : ℝ => z + s • θ) (cocompact ℝ) (cocompact E) :=
     ((Homeomorph.addLeft z).isClosedEmbedding.comp
-      (isClosedEmbedding_smul_left hθ0)).tendsto_cocompact
-  exact ⟨(hψ.comp hline).mono_left atTop_le_cocompact,
-    (hψ.comp hline).mono_left atBot_le_cocompact⟩
+        (isClosedEmbedding_smul_left hθ0)).tendsto_cocompact
+  exact
+    ⟨(hψ.comp hline).mono_left atTop_le_cocompact, (hψ.comp hline).mono_left atBot_le_cocompact⟩
 
 private theorem line_segment_bound {ψ : E → ℝ} (hψ : ConvexOn ℝ univ ψ)
     {θ : E} {t c : ℝ} (hzero : ψ 0 ≤ c) (ht : ψ (t • θ) ≤ c)
@@ -97,13 +101,10 @@ private theorem line_segment_bound {ψ : E → ℝ} (hψ : ConvexOn ℝ univ ψ)
         (mul_le_mul_of_nonneg_left ht hlam.1)
     _ = c := by ring
 
-private theorem lintegral_line_half_ge_at_point {ψ : E → ℝ}
-    (hψ : ConvexOn ℝ univ ψ) (hbdd : BddBelow (range ψ))
-    {n : ℝ} (hn : 0 ≤ n)
-    (hzero : ψ 0 ≤ 2 * n + ⨅ y, ψ y) {θ : E} {t : ℝ}
-    (ht : ψ (t • θ) ≤ 2 * n + ⨅ y, ψ y) (z : E) (s₀ : ℝ) :
-    ENNReal.ofReal (|t| * Real.exp (-2 * n) / 2 *
-        Real.exp (-ψ (z + s₀ • θ))) ≤
+private theorem lintegral_line_half_ge_at_point {ψ : E → ℝ} (hψ : ConvexOn ℝ univ ψ)
+    (hbdd : BddBelow (range ψ)) {n : ℝ} (hn : 0 ≤ n) (hzero : ψ 0 ≤ 2 * n + ⨅ y, ψ y) {θ : E}
+    {t : ℝ} (ht : ψ (t • θ) ≤ 2 * n + ⨅ y, ψ y) (z : E) (s₀ : ℝ) :
+    ENNReal.ofReal (|t| * Real.exp (-2 * n) / 2 * Real.exp (-ψ (z + s₀ • θ))) ≤
       ∫⁻ s : ℝ, ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) := by
   let a : ℝ := (min 0 t + s₀) / 2
   let b : ℝ := (max 0 t + s₀) / 2
@@ -114,54 +115,42 @@ private theorem lintegral_line_half_ge_at_point {ψ : E → ℝ}
       ring
     · rw [min_eq_right htneg, max_eq_left htneg, abs_of_nonpos htneg]
       ring
-  have hmeasure : volume (Icc a b) = ENNReal.ofReal (|t| / 2) := by
-    rw [Real.volume_Icc, hlen]
+  have hmeasure : volume (Icc a b) = ENNReal.ofReal (|t| / 2) := by rw [Real.volume_Icc, hlen]
   have hpoint (s : ℝ) (hs : s ∈ Icc a b) :
-      ENNReal.ofReal (Real.exp (-2 * n) * Real.exp (-ψ (z + s₀ • θ))) ≤
-        ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) := by
+    ENNReal.ofReal (Real.exp (-2 * n) * Real.exp (-ψ (z + s₀ • θ))) ≤
+      ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) := by
     have hr : 2 * s - s₀ ∈ Icc (min 0 t) (max 0 t) := by
       change a ≤ s ∧ s ≤ b at hs
       dsimp [a, b] at hs
       constructor <;> linarith [hs.1, hs.2]
     have hseg := line_segment_bound hψ hzero ht hr
     have hid :
-        (1 / 2 : ℝ) • (z + s₀ • θ) +
-            (1 / 2 : ℝ) • ((2 * s - s₀) • θ) =
-          (1 / 2 : ℝ) • z + s • θ := by
-      have hcoef :
-          (1 / 2 : ℝ) * s₀ + (1 / 2 : ℝ) * (2 * s - s₀) = s := by
-        ring
+      (1 / 2 : ℝ) • (z + s₀ • θ) + (1 / 2 : ℝ) • ((2 * s - s₀) • θ) = (1 / 2 : ℝ) • z + s • θ := by
+      have hcoef : (1 / 2 : ℝ) * s₀ + (1 / 2 : ℝ) * (2 * s - s₀) = s := by ring
       simp only [smul_add, smul_smul]
       rw [add_assoc, ← add_smul, hcoef]
-    have hc := hψ.2 (mem_univ (z + s₀ • θ))
-      (mem_univ ((2 * s - s₀) • θ))
-      (show (0 : ℝ) ≤ 1 / 2 by norm_num)
-      (show (0 : ℝ) ≤ 1 / 2 by norm_num)
-      (show (1 / 2 : ℝ) + 1 / 2 = 1 by norm_num)
+    have hc :=
+      hψ.2 (mem_univ (z + s₀ • θ)) (mem_univ ((2 * s - s₀) • θ))
+        (show (0 : ℝ) ≤ 1 / 2 by norm_num) (show (0 : ℝ) ≤ 1 / 2 by norm_num)
+        (show (1 / 2 : ℝ) + 1 / 2 = 1 by norm_num)
     rw [hid] at hc
     simp only [smul_eq_mul] at hc
     have hm : (⨅ y, ψ y) ≤ ψ (z + s₀ • θ) := ciInf_le hbdd _
-    have hp :
-        ψ ((1 / 2 : ℝ) • z + s • θ) ≤ 2 * n + ψ (z + s₀ • θ) := by
-      linarith
+    have hp : ψ ((1 / 2 : ℝ) • z + s • θ) ≤ 2 * n + ψ (z + s₀ • θ) := by linarith
     apply ENNReal.ofReal_le_ofReal
     rw [← Real.exp_add]
     apply Real.exp_le_exp.mpr
     linarith
   calc
-    ENNReal.ofReal (|t| * Real.exp (-2 * n) / 2 *
-        Real.exp (-ψ (z + s₀ • θ))) =
-        ∫⁻ _s in Icc a b,
-          ENNReal.ofReal (Real.exp (-2 * n) * Real.exp (-ψ (z + s₀ • θ))) := by
+    ENNReal.ofReal (|t| * Real.exp (-2 * n) / 2 * Real.exp (-ψ (z + s₀ • θ))) =
+        ∫⁻ _s in Icc a b, ENNReal.ofReal (Real.exp (-2 * n) * Real.exp (-ψ (z + s₀ • θ))) := by
       rw [lintegral_const, Measure.restrict_apply_univ, hmeasure]
       rw [← ENNReal.ofReal_mul (by positivity)]
       congr 1
       ring
-    _ ≤ ∫⁻ s in Icc a b,
-        ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) :=
+    _ ≤ ∫⁻ s in Icc a b, ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) :=
       setLIntegral_mono' measurableSet_Icc hpoint
-    _ ≤ ∫⁻ s : ℝ,
-        ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) := by
+    _ ≤ ∫⁻ s : ℝ, ENNReal.ofReal (Real.exp (-ψ ((1 / 2 : ℝ) • z + s • θ))) := by
       rw [← lintegral_indicator measurableSet_Icc]
       apply lintegral_mono
       intro s
@@ -618,7 +607,7 @@ theorem exists_two_sided_linear_bounds (m : Measure E) [m.IsAddHaarMeasure] {L �
       have hn : 0 ≤ n := by dsimp [n]; positivity
       rw [hx, norm_zero, mul_zero]
       linarith
-    · have ha : α = n / R := if_neg hE
+    · have ha : α = n / R := ite_eq_right hE
       rw [ha]
       apply centered_uniform_growth m hψ hψ1 hnorm hbar hε h13 hR
       change r < R

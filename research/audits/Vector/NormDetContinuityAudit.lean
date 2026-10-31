@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.JacobianContinuity
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Vector.JacobianContinuity
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for continuity of the volume factor
 
@@ -15,6 +17,8 @@ records the stronger form applied to a function that is nowhere differentiable.
 
 **No area formula and no coarea formula are proved**, here or in the audited module.
 -/
+
+@[expose] public section
 
 noncomputable section
 

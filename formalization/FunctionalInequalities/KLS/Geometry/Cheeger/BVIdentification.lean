@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
-import FunctionalInequalities.KLS.Geometry.Perimeter.ConvexSupport
-import FunctionalInequalities.KLS.LogConcave.Transport
-import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+public import FunctionalInequalities.KLS.Geometry.Perimeter.ConvexSupport
+public import FunctionalInequalities.KLS.LogConcave.Transport
+public import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
 
 /-!
 # Identification of the metric BV and Minkowski Cheeger constants
@@ -43,6 +45,8 @@ Nonconvex supports for the constant identification and general metric-measure co
 remain outside these results.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter
@@ -57,7 +61,8 @@ omit [BorelSpace V] in
 theorem minkowskiConstant_le_div (ν : ProbabilityMeasure V) {A : Set V} (hA : MeasurableSet A)
     (h0 : 0 < (ν : Measure V) A) (h1 : (ν : Measure V) A < 1) :
     Isoperimetry.minkowskiConstant ν ≤
-      Isoperimetry.minkowskiContent (ν : Measure V) A / min ((ν : Measure V) A) (1 - (ν : Measure V) A) := by
+      Isoperimetry.minkowskiContent (ν : Measure V) A /
+        min ((ν : Measure V) A) (1 - (ν : Measure V) A) := by
   unfold Isoperimetry.minkowskiConstant
   exact iInf_le_of_le A (iInf_le_of_le hA (iInf_le_of_le h0 (iInf_le _ h1)))
 
@@ -81,9 +86,12 @@ theorem minkowskiConstant_le_symmetricConstant (ν : ProbabilityMeasure V) :
     rw [htop, ENNReal.top_div_of_ne_top hmin]
     exact le_top
   · have hB : perimeter (ν : Measure V) B < ⊤ := lt_top_iff_ne_top.2 hfin
-    refine ge_of_tendsto (tendsto_minkowskiContent_div_min_minkowskiRecoverySet ν hBm hB h0 h1) ?_
+    refine
+      ge_of_tendsto (tendsto_minkowskiContent_div_min_minkowskiRecoverySet ν hBm hB h0 h1) ?_
     filter_upwards [eventually_measure_minkowskiRecoverySet_mem_Ioo ν hBm hB h0 h1] with n hn
-    exact minkowskiConstant_le_div ν (measurableSet_minkowskiRecoverySet (ν : Measure V) hB n) hn.1 hn.2
+    exact
+      minkowskiConstant_le_div ν (measurableSet_minkowskiRecoverySet (ν : Measure V) hB n) hn.1
+        hn.2
 
 /-- BV--Minkowski Cheeger identification: the symmetric metric BV constant equals the Minkowski
 Cheeger constant for every probability law on a normed group. -/

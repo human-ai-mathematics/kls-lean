@@ -5,7 +5,12 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.ItoAlgebra
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoAlgebra
 
 /-!
 # Moments of a Brownian increment and the partial sums of the elementary integral
@@ -18,6 +23,8 @@ their measurability, adaptedness and `Lᵖ` membership, and the variance budget
 `SimplePredictable.varClock c k = ∑_{j < k} c_j² (τ_{j+1} − τ_j)` of a per-tile coefficient
 bound `c`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -187,7 +194,7 @@ theorem partialSum_card (ω : Ω) : G.partialSum W G.N ω = simpleIntegral W G T
   rw [simpleIntegral_eq_sum, partialSum, ← Fin.sum_univ_eq_sum_range
     (fun i => G.term W i ω) G.N]
   refine Finset.sum_congr rfl fun i _ => ?_
-  rw [term, dif_pos i.isLt]
+  rw [term, dite_eq_left i.isLt]
 
 omit [MeasurableSpace Ω] in
 /-- A finite sum of processes measurable for a sub-σ-algebra is measurable for it. -/
@@ -202,11 +209,11 @@ theorem memLp_term {C : ℝ} (hC : ∀ (i : Fin G.N) (ω : Ω), |G.ξ i ω| ≤ 
   · have hterm : G.term W i = fun ω => G.ξ ⟨i, h⟩ ω
         * (W.W (G.partition (⟨i, h⟩ : Fin G.N).succ) ω
           - W.W (G.partition (⟨i, h⟩ : Fin G.N).castSucc) ω) := by
-      funext ω; rw [term, dif_pos h]
+      funext ω; rw [term, dite_eq_left h]
     rw [hterm]
     exact memLp_mul_increment W (G.partition_nonneg _)
       (G.partition_strictMono Fin.castSucc_lt_succ) p hp (G.ξ_measurable _) (hC ⟨i, h⟩)
-  · have hterm : G.term W i = fun _ => (0 : ℝ) := by funext ω; rw [term, dif_neg h]
+  · have hterm : G.term W i = fun _ => (0 : ℝ) := by funext ω; rw [term, dite_eq_right h]
     rw [hterm]; exact memLp_const 0
 
 theorem memLp_partialSum {C : ℝ} (hC : ∀ (i : Fin G.N) (ω : Ω), |G.ξ i ω| ≤ C)
@@ -226,7 +233,7 @@ theorem stronglyMeasurable_partialSum (ℱ : Filtration ℝ ‹MeasurableSpace �
   have hterm : G.term W i = fun ω => G.ξ ⟨i, hiN⟩ ω
       * (W.W (G.partition (⟨i, hiN⟩ : Fin G.N).succ) ω
         - W.W (G.partition (⟨i, hiN⟩ : Fin G.N).castSucc) ω) := by
-    funext ω; rw [term, dif_pos hiN]
+    funext ω; rw [term, dite_eq_left hiN]
   rw [hterm]
   have hle1 : G.partition (⟨i, hiN⟩ : Fin G.N).castSucc
       ≤ G.partition (⟨k, by omega⟩ : Fin (G.N + 1)) :=
@@ -252,16 +259,16 @@ theorem varClock_succ (c : Fin G.N → ℝ) {k : ℕ} (hk : k < G.N) :
       + c ⟨k, hk⟩ ^ 2 * (G.partition (⟨k, hk⟩ : Fin G.N).succ
         - G.partition (⟨k, hk⟩ : Fin G.N).castSucc) := by
   unfold varClock
-  rw [Finset.sum_range_succ, dif_pos hk]
+  rw [Finset.sum_range_succ, dite_eq_left hk]
 
 theorem varClock_nonneg (c : Fin G.N → ℝ) (k : ℕ) : 0 ≤ G.varClock c k := by
   unfold varClock
   refine Finset.sum_nonneg fun j _ => ?_
   by_cases h : j < G.N
-  · rw [dif_pos h]
+  · rw [dite_eq_left h]
     exact mul_nonneg (sq_nonneg _)
       (sub_nonneg.mpr (G.partition_strictMono Fin.castSucc_lt_succ).le)
-  · rw [dif_neg h]
+  · rw [dite_eq_right h]
 
 theorem varClock_mono (c : Fin G.N → ℝ) {k l : ℕ} (h : k ≤ l) :
     G.varClock c k ≤ G.varClock c l := by
@@ -272,10 +279,10 @@ theorem varClock_mono (c : Fin G.N → ℝ) {k l : ℕ} (h : k ≤ l) :
     omega
   refine Finset.sum_le_sum_of_subset_of_nonneg hsub fun j _ _ => ?_
   by_cases hj : j < G.N
-  · rw [dif_pos hj]
+  · rw [dite_eq_left hj]
     exact mul_nonneg (sq_nonneg _)
       (sub_nonneg.mpr (G.partition_strictMono Fin.castSucc_lt_succ).le)
-  · rw [dif_neg hj]
+  · rw [dite_eq_right hj]
 
 end SimplePredictable
 

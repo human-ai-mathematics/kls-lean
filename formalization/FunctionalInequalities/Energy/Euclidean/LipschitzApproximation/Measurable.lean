@@ -1,12 +1,17 @@
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Calculus.FDeriv.Measurable
-import FunctionalInequalities.Analysis.Cutoff.SmoothBall
+module
+
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Calculus.FDeriv.Measurable
+public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 
 /-!
 # LipschitzApproximation: Measurable
 
-Measurability of gradients, almost-everywhere differentiability and dominated Lp convergence for approximation.
+Measurability of gradients, almost-everywhere differentiability and dominated Lp convergence for
+approximation.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -33,7 +38,9 @@ theorem tendsto_eLpNorm_zero_of_dominated {V : Type*} [NormedAddCommGroup V]
     (hlim : ∀ᵐ x ∂μ, Tendsto (fun n => F n x) atTop (𝓝 0)) :
     Tendsto (fun n => eLpNorm (F n) p μ) atTop (𝓝 0) := by
   have hq : 0 < p.toReal := ENNReal.toReal_pos hp0 hp
-  simp_rw [eLpNorm_eq_eLpNorm' hp0 hp, eLpNorm']
+  have heq : ∀ n, eLpNorm (F n) p μ = eLpNorm' (F n) p.toReal μ := fun n =>
+    eLpNorm_eq_eLpNorm' hp0 hp (hF n)
+  simp_rw [heq, eLpNorm']
   have h : Tendsto (fun n => ∫⁻ x, ‖F n x‖ₑ ^ p.toReal ∂μ) atTop (𝓝 (∫⁻ x, (0 : ℝ≥0∞) ∂μ)) := by
     refine tendsto_lintegral_of_dominated_convergence' (fun x => ‖bound x‖ₑ ^ p.toReal)
       (fun n => ((hF n).enorm.pow_const _)) (fun n => ?_) ?_ ?_
@@ -77,7 +84,8 @@ theorem ae_differentiableAt_of_locallyLipschitz {f : E → ℝ} (hf : LocallyLip
     (m : Measure E) [m.IsAddHaarMeasure] : ∀ᵐ x ∂m, DifferentiableAt ℝ f x := by
   have h : ∀ n : ℕ, ∀ᵐ x ∂m, x ∈ Metric.ball (0 : E) n → DifferentiableAt ℝ f x := by
     intro n
-    obtain ⟨K, hK⟩ := lipschitzOnWith_of_locallyLipschitz_of_isCompact hf (isCompact_closedBall (0 : E) n)
+    obtain ⟨K, hK⟩ :=
+      lipschitzOnWith_of_locallyLipschitz_of_isCompact hf (isCompact_closedBall (0 : E) n)
     obtain ⟨g, hg, hfg⟩ := hK.extend_real
     filter_upwards [hg.ae_differentiableAt (μ := m)] with x hx hxn
     have : f =ᶠ[𝓝 x] g := by

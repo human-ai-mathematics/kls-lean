@@ -1,4 +1,6 @@
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Medians of a measurable real function
@@ -16,6 +18,8 @@ the sets `{g ≤ m - 1/(n+1)}`, each of mass less than `1/2` because `m` is a lo
 No topology, no density, no continuity and no finite dimension are involved: the ambient space is
 an arbitrary measurable space carrying a probability measure.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,15 +1,21 @@
-import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
-import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.Probability.Posterior.LogPartition
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
+public import FunctionalInequalities.KLS.BKL.Localization.Coefficients
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.Probability.Posterior.LogPartition
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 /-!
 # BKL Lemma 4.3 in generator form
 
-For `m ≥ 3`, every slot `i₀` and directions `h`, `𝓛_p κ_m(μ_p)(h) = −(m κ_m(h) + L_m(h))` with `L_m` the middle term (72)
-(`generator_cumulant_posterior`): the generator commutes with `D_z^m` (coefficients independent of `z`), (71) gives
+For `m ≥ 3`, every slot `i₀` and directions `h`, `𝓛_p κ_m(μ_p)(h) = −(m κ_m(h) + L_m(h))` with `L_m`
+the middle term (72)
+(`generator_cumulant_posterior`): the generator commutes with `D_z^m` (coefficients independent of
+`z`), (71) gives
 `𝓛Λ_p(z) = −½⟪v, A⁻¹v⟫`, and the grouped Leibniz expansion (74) finishes.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -39,21 +45,18 @@ private theorem dir_comm {f : U → ℝ} (hf : ContDiff ℝ ∞ f)
   rw [← dir_append, ← dir_append]
   exact directional_perm hf List.perm_append_comm
 
-private theorem dir_affine {f : U → ℝ} (hf : ContDiff ℝ ∞ f)
-    (L : V →L[ℝ] U) (a : U) (l : List V) (x : V) :
-    directional l (fun y => f (a + L y)) x =
-      directional (l.map L) f (a + L x) := by
+private theorem dir_affine {f : U → ℝ} (hf : ContDiff ℝ ∞ f) (L : V →L[ℝ] U) (a : U)
+    (l : List V) (x : V) :
+    directional l (fun y => f (a + L y)) x = directional (l.map L) f (a + L x) := by
   induction l generalizing x with
   | nil => rfl
   | cons v l ih =>
-      simp only [List.map_cons, directional]
-      rw [show directional l (fun y => f (a + L y)) =
-          (fun y => directional (l.map L) f (a + L y)) from funext ih]
-      have hd := (directional_contDiff hf (l.map L)).differentiable
-        (by simp) (a + L x)
-      have he := (hd.hasFDerivAt.comp x
-        (HasFDerivAt.const_add a L.hasFDerivAt)).fderiv
-      convert congrArg (fun T : V →L[ℝ] ℝ => T v) he using 1 <;> rfl
+    simp only [List.map_cons, directional]
+    rw [show directional l (fun y => f (a + L y)) = (fun y => directional (l.map L) f (a + L y))
+        from funext ih]
+    have hd := (directional_contDiff hf (l.map L)).differentiable (by simp) (a + L x)
+    have he := (hd.hasFDerivAt.comp x (HasFDerivAt.const_add a L.hasFDerivAt)).fderiv
+    convert congrArg (fun T : V →L[ℝ] ℝ => T v) he using 1 <;> rfl
 
 private theorem dir_add {f g : U → ℝ}
     (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)
@@ -219,36 +222,40 @@ variable {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
   (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
 
 set_option maxHeartbeats 2000000 in
-/-- **BKL Lemma 4.3, (73), in generator form**: for `m ≥ 3`, every slot `i₀` and directions `h`, the generator of
-(67) applied to the posterior cumulant `p ↦ κ_m(μ_p)(h)` is `−(m κ_m(h) + L_m(h))`, where `L_m` is the middle term
+/--
+**BKL Lemma 4.3, (73), in generator form**: for `m ≥ 3`, every slot `i₀` and directions `h`, the
+generator of
+(67) applied to the posterior cumulant `p ↦ κ_m(μ_p)(h)` is `−(m κ_m(h) + L_m(h))`, where `L_m` is
+the middle term
 (72) taken at the slot `i₀`. -/
 theorem generator_cumulant_posterior (hiso : KLS.Isotropic μ) {m : ℕ} (hm : 3 ≤ m)
     (h : Fin m → EuclideanSpace ℝ (Fin n)) (i₀ : Fin m) (p : Param n) :
     generator μ hc
-        (fun q : Param n => cumulant (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) m h) p =
-      -((m : ℝ) * cumulant (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) m h +
-        lowerDrift (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) h i₀) := by
+        (fun q : Param n =>
+          cumulant (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) m h)
+        p =
+      -((m : ℝ) *
+            cumulant (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) m h +
+          lowerDrift (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) h
+            i₀) := by
   classical
   let F : Param n × EuclideanSpace ℝ (Fin n) → ℝ := fun r =>
-    logLaplace (compactPosterior μ hc r.1.1 r.1.2 :
-      Measure (EuclideanSpace ℝ (Fin n))) r.2
+    logLaplace (compactPosterior μ hc r.1.1 r.1.2 : Measure (EuclideanSpace ℝ (Fin n))) r.2
   have hF : ContDiff ℝ ∞ F := by
-    have hmap : ContDiff ℝ ∞
-        (fun r : Param n × EuclideanSpace ℝ (Fin n) =>
-          ((r.1.1 + r.2, r.1.2) : Param n)) :=
+    have hmap :
+      ContDiff ℝ ∞
+        (fun r : Param n × EuclideanSpace ℝ (Fin n) => ((r.1.1 + r.2, r.1.2) : Param n)) :=
       ((contDiff_fst.fst).add contDiff_snd).prodMk contDiff_fst.snd
-    have h₁ : ContDiff ℝ ∞
-        (fun r : Param n × EuclideanSpace ℝ (Fin n) =>
-          logPartition μ (r.1.1 + r.2) r.1.2) := by
+    have h₁ :
+      ContDiff ℝ ∞
+        (fun r : Param n × EuclideanSpace ℝ (Fin n) => logPartition μ (r.1.1 + r.2) r.1.2) := by
       convert (contDiff_logPartition_joint μ hc).comp hmap using 1
       rfl
-    have h₂ : ContDiff ℝ ∞
-        (fun r : Param n × EuclideanSpace ℝ (Fin n) =>
-          logPartition μ r.1.1 r.1.2) := by
+    have h₂ :
+      ContDiff ℝ ∞ (fun r : Param n × EuclideanSpace ℝ (Fin n) => logPartition μ r.1.1 r.1.2) := by
       convert (contDiff_logPartition_joint μ hc).comp contDiff_fst using 1
       rfl
-    have heq : F = fun r =>
-        logPartition μ (r.1.1 + r.2) r.1.2 - logPartition μ r.1.1 r.1.2 := by
+    have heq : F = fun r => logPartition μ (r.1.1 + r.2) r.1.2 - logPartition μ r.1.1 r.1.2 := by
       funext r
       exact logLaplace_compactPosterior μ hc r.1.1 r.1.2 r.2
     rw [heq]
@@ -259,14 +266,11 @@ theorem generator_cumulant_posterior (hiso : KLS.Isotropic μ) {m : ℕ} (hm : 3
     rw [compactPosterior_support]
     exact hc
   let Λ := logLaplace (ν : Measure (EuclideanSpace ℝ (Fin n)))
-  have hΛ : ContDiff ℝ ∞ Λ :=
-    contDiff_logLaplace _ (compact_support_integrable_exp _ hν)
-  have hlog : Λ = fun z =>
-      logPartition μ (p.1 + z) p.2 - logPartition μ p.1 p.2 := by
+  have hΛ : ContDiff ℝ ∞ Λ := contDiff_logLaplace _ (compact_support_integrable_exp _ hν)
+  have hlog : Λ = fun z => logPartition μ (p.1 + z) p.2 - logPartition μ p.1 p.2 := by
     funext z
     exact logLaplace_compactPosterior μ hc p.1 p.2 z
-  have hgrad (z : EuclideanSpace ℝ (Fin n)) :
-      gradient Λ z = posteriorMean μ (p.1 + z) p.2 := by
+  have hgrad (z : EuclideanSpace ℝ (Fin n)) : gradient Λ z = posteriorMean μ (p.1 + z) p.2 := by
     apply ext_inner_right ℝ
     intro w
     rw [inner_gradient_left, hlog, fderiv_sub_const]
@@ -274,52 +278,49 @@ theorem generator_cumulant_posterior (hiso : KLS.Isotropic μ) {m : ℕ} (hm : 3
     rw [fderiv_logPartition_c_apply μ hc]
     exact (real_inner_comm w (posteriorMean μ (p.1 + z) p.2)).symm
   have hg : ContDiff ℝ ∞ (gradient Λ) := by
-    let T : ((EuclideanSpace ℝ (Fin n)) →L[ℝ] ℝ) ≃L[ℝ]
-        EuclideanSpace ℝ (Fin n) :=
+    let T : ((EuclideanSpace ℝ (Fin n)) →L[ℝ] ℝ) ≃L[ℝ] EuclideanSpace ℝ (Fin n) :=
       (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).symm.toContinuousLinearEquiv
     exact T.contDiff.comp (hΛ.fderiv_right (by simp))
-  let v : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) :=
-    fun z => gradient Λ z - gradient Λ 0
-  let R : EuclideanSpace ℝ (Fin n) → ℝ :=
-    fun z => ⟪v z, Ring.inverse (cov μ hc p) (v z)⟫
+  let v : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) := fun z =>
+    gradient Λ z - gradient Λ 0
+  let R : EuclideanSpace ℝ (Fin n) → ℝ := fun z => ⟪v z, Ring.inverse (cov μ hc p) (v z)⟫
   have hv : ContDiff ℝ ∞ v := hg.sub contDiff_const
-  have hR : ContDiff ℝ ∞ R :=
-    hv.inner ℝ ((Ring.inverse (cov μ hc p)).contDiff.comp hv)
-  have h71 :
-      (fun z => generator μ hc (fun q => F (q, z)) p) =
-        (fun z => -(1 / 2 : ℝ) * R z) := by
+  have hR : ContDiff ℝ ∞ R := hv.inner ℝ ((Ring.inverse (cov μ hc p)).contDiff.comp hv)
+  have h71 : (fun z => generator μ hc (fun q => F (q, z)) p) = (fun z => -(1 / 2 : ℝ) * R z) := by
     funext z
     simpa only [F, logLaplace_compactPosterior, R, v, hgrad, add_zero] using
       generator_logLaplace_posterior μ hc hiso z p
-  change fixedOp (drift μ hc p) (noise μ hc p)
-      (fun q => iteratedFDeriv ℝ m (fun z => F (q, z)) 0 h) p = _
+  change
+    fixedOp (drift μ hc p) (noise μ hc p) (fun q => iteratedFDeriv ℝ m (fun z => F (q, z)) 0 h)
+        p =
+      _
   rw [fixedOp_iterated hF]
-  change iteratedFDeriv ℝ m
-      (fun z => generator μ hc (fun q => F (q, z)) p) 0 h = _
+  change iteratedFDeriv ℝ m (fun z => generator μ hc (fun q => F (q, z)) p) 0 h = _
   rw [h71]
   have hscale :
-      iteratedFDeriv ℝ m (fun z => -(1 / 2 : ℝ) * R z) 0 h =
-        -(1 / 2 : ℝ) * iteratedFDeriv ℝ m R 0 h := by
-    have hRm : ContDiffAt ℝ m R 0 :=
-      (hR.of_le (WithTop.coe_le_coe.mpr le_top)).contDiffAt
-    have hs : iteratedFDeriv ℝ m (fun z => (-(1 / 2 : ℝ)) • R z) 0 =
+    iteratedFDeriv ℝ m (fun z => -(1 / 2 : ℝ) * R z) 0 h =
+      -(1 / 2 : ℝ) * iteratedFDeriv ℝ m R 0 h := by
+    have hRm : ContDiffAt ℝ m R 0 := (hR.of_le (WithTop.coe_le_coe.mpr le_top)).contDiffAt
+    have hs :
+      iteratedFDeriv ℝ m (fun z => (-(1 / 2 : ℝ)) • R z) 0 =
         (-(1 / 2 : ℝ)) • iteratedFDeriv ℝ m R 0 :=
       iteratedFDeriv_const_smul_apply' hRm
-    simpa only [smul_eq_mul, smul_apply] using
-      congrArg (fun T => T h) hs
+    simpa only [smul_eq_mul, smul_apply] using congrArg (fun T => T h) hs
   rw [hscale]
   have hgroup :
-      iteratedFDeriv ℝ m R 0 h =
-        (2 * (m : ℝ)) * cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m h +
-          2 * lowerDrift (ν : Measure (EuclideanSpace ℝ (Fin n))) h i₀ := by
-    exact iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact ν hν
-      (Isotropic.compactPosterior_covariance_isUnit μ hc hiso p.1 p.2) hm h i₀
+    iteratedFDeriv ℝ m R 0 h =
+      (2 * (m : ℝ)) * cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m h +
+        2 * lowerDrift (ν : Measure (EuclideanSpace ℝ (Fin n))) h i₀ := by
+    exact
+      iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact ν hν
+        (Isotropic.compactPosterior_covariance_isUnit μ hc hiso p.1 p.2) hm h i₀
   rw [hgroup]
-  change -(1 / 2 : ℝ) *
-      ((2 * (m : ℝ)) * cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m h +
-        2 * lowerDrift (ν : Measure (EuclideanSpace ℝ (Fin n))) h i₀) =
-    -((m : ℝ) * cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m h +
-        lowerDrift (ν : Measure (EuclideanSpace ℝ (Fin n))) h i₀)
+  change
+    -(1 / 2 : ℝ) *
+        ((2 * (m : ℝ)) * cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m h +
+          2 * lowerDrift (ν : Measure (EuclideanSpace ℝ (Fin n))) h i₀) =
+      -((m : ℝ) * cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m h +
+          lowerDrift (ν : Measure (EuclideanSpace ℝ (Fin n))) h i₀)
   ring
 
 end FunctionalInequalities.KLS.BKL.Localization

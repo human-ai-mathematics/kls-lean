@@ -1,17 +1,23 @@
-import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
+module
+
+public import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
 
 /-!
 # Boundary gluing for the compact first-order Whitney extension problem
 
-This module starts the sufficiency direction of compact Whitney extension. It proves the boundary step:
+This module starts the sufficiency direction of compact Whitney extension. It proves the boundary
+step:
 a candidate defined and differentiable off the compact set, with controlled value and derivative
 errors relative to nearest-point affine jets, extends the prescribed jet as a globally C¹ map.
 
 It does **not** construct that candidate. The quantitative covering, partition and affine-jet
 estimates are supplied by `WhitneyCover`, `WhitneyBump`, `WhitneyPartition` and
-`WhitneyConstruction`. The last module proves the full compact-set compact Whitney extension extension theorem;
+`WhitneyConstruction`. The last module proves the full compact-set compact Whitney extension
+extension theorem;
 this module provides its boundary step. `FirstOrderJet` supplies the necessity direction.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -148,35 +154,55 @@ theorem continuousAt_of_nearby_field {S : Set V} (hS : IsCompact S)
     have := dist_triangle (D y) (F a) (F x)
     linarith
 
-/-- The boundary gluing criterion for compact Whitney extension. The hypotheses concern a candidate and a continuous
+/--
+The boundary gluing criterion for compact Whitney extension. The hypotheses concern a candidate and
+a continuous
 derivative field on the **complement** of the compact set, together with two quantitative
 nearest-jet estimates. The conclusion includes the ambient derivative on `S`, even when `S`
 has empty interior. `WhitneyConstruction` constructs such candidates in finite dimension. -/
-theorem contDiff_of_nearby_jet {S : Set V} (hS : IsCompact S)
-    {f v : V → ℝ} {F D : V → V →L[ℝ] ℝ} (hF : ContinuousOn F S)
-    (hR : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ x ∈ S, ∀ y ∈ S, ‖y - x‖ < δ →
-        ‖f y - f x - F x (y - x)‖ ≤ ε * ‖y - x‖)
-    (hv : EqOn v f S) (hD : EqOn D F S)
-    (hdiff : ∀ x ∉ S, HasFDerivAt v (D x) x) (hDc : ContinuousOn D Sᶜ)
-    (happrox : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ →
-        ‖v y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖D y - F a‖ ≤ ε) :
+theorem contDiff_of_nearby_jet {S : Set V} (hS : IsCompact S) {f v : V → ℝ}
+    {F D : V → V →L[ℝ] ℝ} (hF : ContinuousOn F S)
+    (hR :
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧ ∀ x ∈ S, ∀ y ∈ S, ‖y - x‖ < δ → ‖f y - f x - F x (y - x)‖ ≤ ε * ‖y - x‖)
+    (hv : EqOn v f S) (hD : EqOn D F S) (hdiff : ∀ x ∉ S, HasFDerivAt v (D x) x)
+    (hDc : ContinuousOn D Sᶜ)
+    (happrox :
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧
+              ∀ y ∉ S,
+                ∀ a ∈ S,
+                  infDist y S = dist y a →
+                    infDist y S < δ →
+                      ‖v y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖D y - F a‖ ≤ ε) :
     ContDiff ℝ 1 v ∧ ∀ x ∈ S, fderiv ℝ v x = F x := by
-  have hvalue : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ →
-        ‖v y - affine f F a y‖ ≤ ε * infDist y S := by
+  have hvalue :
+    ∀ ε : ℝ,
+      0 < ε →
+        ∃ δ : ℝ,
+          0 < δ ∧
+            ∀ y ∉ S,
+              ∀ a ∈ S,
+                infDist y S = dist y a →
+                  infDist y S < δ → ‖v y - affine f F a y‖ ≤ ε * infDist y S := by
     intro ε hε
     obtain ⟨δ, hδ, h⟩ := happrox ε hε
     exact ⟨δ, hδ, fun y hy a ha hn hd => (h y hy a ha hn hd).1⟩
-  have hfield : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ →
-        ‖D y - F a‖ ≤ ε := by
+  have hfield :
+    ∀ ε : ℝ,
+      0 < ε →
+        ∃ δ : ℝ,
+          0 < δ ∧
+            ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ → ‖D y - F a‖ ≤ ε := by
     intro ε hε
     obtain ⟨δ, hδ, h⟩ := happrox ε hε
     exact ⟨δ, hδ, fun y hy a ha hn hd => (h y hy a ha hn hd).2⟩
-  have hboundary : ∀ x ∈ S, HasFDerivAt v (F x) x :=
-    fun _ hx => hasFDerivAt_of_nearby_affine hS hF hR hv hvalue hx
+  have hboundary : ∀ x ∈ S, HasFDerivAt v (F x) x := fun _ hx =>
+    hasFDerivAt_of_nearby_affine hS hF hR hv hvalue hx
   refine ⟨contDiff_one_iff_hasFDerivAt.2 ⟨D, ?_, ?_⟩, fun x hx => (hboundary x hx).fderiv⟩
   · rw [continuous_iff_continuousAt]
     intro x
@@ -188,22 +214,32 @@ theorem contDiff_of_nearby_jet {S : Set V} (hS : IsCompact S)
     · rw [hD hx]; exact hboundary x hx
     · exact hdiff x hx
 
-/-- Reduction of compact Whitney extension to a controlled C¹ function on the complement. The input `w` need not
+/--
+Reduction of compact Whitney extension to a controlled C¹ function on the complement. The input `w`
+need not
 agree with `f`, be continuous, or have the prescribed derivative on `S`. The extension is
 constructed by replacing its values on `S` with `f`; boundary gluing proves it is globally C¹.
 Existence of such a controlled `w` is proved separately in `WhitneyConstruction`; it is an
 explicit hypothesis of this boundary-gluing theorem. -/
-theorem exists_contDiff_of_compl_approx {S : Set V} (hS : IsCompact S)
-    {f w : V → ℝ} {F : V → V →L[ℝ] ℝ} (hF : ContinuousOn F S)
-    (hR : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ x ∈ S, ∀ y ∈ S, ‖y - x‖ < δ →
-        ‖f y - f x - F x (y - x)‖ ≤ ε * ‖y - x‖)
+theorem exists_contDiff_of_compl_approx {S : Set V} (hS : IsCompact S) {f w : V → ℝ}
+    {F : V → V →L[ℝ] ℝ} (hF : ContinuousOn F S)
+    (hR :
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧ ∀ x ∈ S, ∀ y ∈ S, ‖y - x‖ < δ → ‖f y - f x - F x (y - x)‖ ≤ ε * ‖y - x‖)
     (hw : ContDiffOn ℝ 1 w Sᶜ)
-    (happrox : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ →
-        ‖w y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖fderiv ℝ w y - F a‖ ≤ ε) :
-    ∃ v : V → ℝ, ContDiff ℝ 1 v ∧ EqOn v f S ∧
-      ∀ x ∈ S, fderiv ℝ v x = F x := by
+    (happrox :
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧
+              ∀ y ∉ S,
+                ∀ a ∈ S,
+                  infDist y S = dist y a →
+                    infDist y S < δ →
+                      ‖w y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖fderiv ℝ w y - F a‖ ≤ ε) :
+    ∃ v : V → ℝ, ContDiff ℝ 1 v ∧ EqOn v f S ∧ ∀ x ∈ S, fderiv ℝ v x = F x := by
   classical
   let v := S.piecewise f w
   let D := S.piecewise F (fderiv ℝ w)
@@ -217,14 +253,23 @@ theorem exists_contDiff_of_compl_approx {S : Set V} (hS : IsCompact S)
     intro x hx
     dsimp [D]
     rw [piecewise_eq_of_notMem S F (fderiv ℝ w) hx]
-    exact ((hw.differentiableOn one_ne_zero x hx).differentiableAt
-      (hS.isClosed.isOpen_compl.mem_nhds hx)).hasFDerivAt.congr_of_eventuallyEq (hvout x hx)
+    exact
+      ((hw.differentiableOn one_ne_zero x hx).differentiableAt
+            (hS.isClosed.isOpen_compl.mem_nhds hx)).hasFDerivAt.congr_of_eventuallyEq
+        (hvout x hx)
   have hDc : ContinuousOn D Sᶜ :=
     (hw.continuousOn_fderiv_of_isOpen hS.isClosed.isOpen_compl le_rfl).congr
       (fun x hx => piecewise_eq_of_notMem S F (fderiv ℝ w) hx)
-  have happ : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ →
-        ‖v y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖D y - F a‖ ≤ ε := by
+  have happ :
+    ∀ ε : ℝ,
+      0 < ε →
+        ∃ δ : ℝ,
+          0 < δ ∧
+            ∀ y ∉ S,
+              ∀ a ∈ S,
+                infDist y S = dist y a →
+                  infDist y S < δ →
+                    ‖v y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖D y - F a‖ ≤ ε := by
     intro ε hε
     obtain ⟨δ, hδ, h⟩ := happrox ε hε
     refine ⟨δ, hδ, fun y hy a ha hn hd => ?_⟩

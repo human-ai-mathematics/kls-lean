@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvector
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvector
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction
 
 /-!
 # Audit: approximate eigenvectors of `T†T` and approximate first eigenfunctions (BKL)
@@ -20,6 +22,8 @@ Outside this client's scope: the existence of an exact first eigenfunction (19),
 Hessian and tilt identities (`O3`–`O5` of `OperatorRouteStatements.lean`), the iterates and
 Theorem 3.1 itself.
 -/
+
+@[expose] public section
 
 noncomputable section
 

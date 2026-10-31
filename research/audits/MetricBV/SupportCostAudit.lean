@@ -1,9 +1,14 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-! Strict clients for finite test cost without finite total mass. The general client uses
 exactly finite mass on bounded Borel sets, with no properness assumption. On proper spaces
 Mathlib's finite-on-compacts condition suffices. Real Lebesgue measure supplies a genuine
 infinite-total-mass instance. These estimates do not prove the ADMG relaxation endpoint. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Poincare
-import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
-import FunctionalInequalities.L2.MeanVariance
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Poincare
+public import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
+public import FunctionalInequalities.L2.MeanVariance
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
 /-!
 # Centered heat decay under a form-domain Poincare inequality
@@ -12,6 +14,8 @@ The operator is the actual closed weighted gradient of a full-dimensional log-co
 The gap is an explicit hypothesis on its entire form domain. Positive-time smoothing and the
 energy derivative extend the result from generator-domain data to arbitrary L2 data.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -70,12 +74,12 @@ theorem hasDerivAt_norm_sq_of_pos (f : Lp ℝ 2 (ν : Measure V))
 /-- An explicit form-domain Poincare inequality gives squared-norm decay of every centered
 L2 datum, including time zero. -/
 theorem norm_center_operator_sq_le_exp (C : ℝ) (hC : 0 < C)
-    (hgap : ∀ u : (hν.closedWeightedOperator m B hi).domain,
-      ‖L2.center ν (u : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤
-        C * ‖hν.closedWeightedOperator m B hi u‖ ^ 2)
+    (hgap :
+      ∀ u : (hν.closedWeightedOperator m B hi).domain,
+        ‖L2.center ν (u : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤
+          C * ‖hν.closedWeightedOperator m B hi u‖ ^ 2)
     (f : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 ≤ t) :
-    ‖L2.center ν (operator m B hν hi ht f)‖ ^ 2 ≤
-      Real.exp (-2 * t / C) * ‖L2.center ν f‖ ^ 2 := by
+    ‖L2.center ν (operator m B hν hi ht f)‖ ^ 2 ≤ Real.exp (-2 * t / C) * ‖L2.center ν f‖ ^ 2 := by
   let T := hν.closedWeightedOperator m B hi
   let hT := hν.closedWeightedOperator_isClosed m B hi
   let hd := hν.dense_domain_closedWeightedOperator m B hi
@@ -86,20 +90,30 @@ theorem norm_center_operator_sq_le_exp (C : ℝ) (hC : 0 < C)
     change L2.mean ν (operator m B hν hi hs g) = 0
     rw [HeatSemigroup.mean m B hν hi hs g]
     exact L2.mean_center ν f
-  have hcenter : ∀ s : ℝ, 0 ≤ s →
-      L2.center ν (Generated.apply T hT hd s g) = Generated.apply T hT hd s g := by
+  have hcenter :
+    ∀ s : ℝ, 0 ≤ s → L2.center ν (Generated.apply T hT hd s g) = Generated.apply T hT hd s g := by
     intro s hs
     simp [L2.center, hmean s hs]
   have hcont : ContinuousOn F (Ici 0) := by
     exact (((Generated.continuousOn T hT hd g).norm).pow 2)
-  have hder : ∀ s : ℝ, ∀ hs : 0 < s,
-      HasDerivAt F (-2 * ‖T ⟨Generated.apply T hT hd s g,
-        (Generated.mem_adjointComp_domain_apply_of_pos T hT hd g hs).2⟩‖ ^ 2) s := by
+  have hder :
+    ∀ s : ℝ,
+      ∀ hs : 0 < s,
+        HasDerivAt F
+          (-2 *
+            ‖T
+                  ⟨Generated.apply T hT hd s g,
+                    (Generated.mem_adjointComp_domain_apply_of_pos T hT hd g hs).2⟩‖ ^
+              2)
+          s := by
     intro s hs
     convert hasDerivAt_norm_sq_of_pos m B hν hi g hs using 1
   let G : ℝ → ℝ := fun s => Real.exp (2 * s / C) * F s
   have hGcont : ContinuousOn G (Ici 0) := by
-    exact ((Real.continuous_exp.comp (continuous_const.mul continuous_id |>.div_const C)).continuousOn).mul hcont
+    exact
+      ((Real.continuous_exp.comp
+              (continuous_const.mul continuous_id |>.div_const C)).continuousOn).mul
+        hcont
   have hGder : ∀ s ∈ interior (Ici (0 : ℝ)), deriv G s ≤ 0 := by
     intro s hs
     have hspos : 0 < s := by simpa using hs
@@ -107,15 +121,16 @@ theorem norm_center_operator_sq_le_exp (C : ℝ) (hC : 0 < C)
     have hgap' := hgap ⟨Generated.apply T hT hd s g, hmem.2⟩
     rw [hcenter s hspos.le] at hgap'
     have hF := hder s hspos
-    have he : HasDerivAt (fun x : ℝ => Real.exp (2 * x / C))
-        (Real.exp (2 * s / C) * (2 / C)) s := by
-      have h := (Real.hasDerivAt_exp ((2 / C) * s)).comp s
-        ((hasDerivAt_id s).const_mul (2 / C))
+    have he :
+      HasDerivAt (fun x : ℝ => Real.exp (2 * x / C)) (Real.exp (2 * s / C) * (2 / C)) s := by
+      have h := (Real.hasDerivAt_exp ((2 / C) * s)).comp s ((hasDerivAt_id s).const_mul (2 / C))
       have heq (x : ℝ) : (2 / C) * x = 2 * x / C := by ring
       simpa only [Function.comp_def, heq, mul_one] using h
     have hprod := he.mul hF
-    have hvalue : deriv G s = Real.exp (2 * s / C) * (2 / C) * F s +
-        Real.exp (2 * s / C) * (-2 * ‖T ⟨Generated.apply T hT hd s g, hmem.2⟩‖ ^ 2) := by
+    have hvalue :
+      deriv G s =
+        Real.exp (2 * s / C) * (2 / C) * F s +
+          Real.exp (2 * s / C) * (-2 * ‖T ⟨Generated.apply T hT hd s g, hmem.2⟩‖ ^ 2) := by
       change HasDerivAt G _ s at hprod
       convert hprod.deriv using 1
     rw [hvalue]
@@ -125,14 +140,17 @@ theorem norm_center_operator_sq_le_exp (C : ℝ) (hC : 0 < C)
         _ ≤ 2 * ‖T ⟨Generated.apply T hT hd s g, hmem.2⟩‖ ^ 2 :=
           (div_le_iff₀ hC).2 (by dsimp [F]; nlinarith [hgap'])
     nlinarith [Real.exp_pos (2 * s / C)]
-  have hanti := antitoneOn_of_deriv_nonpos (convex_Ici 0) hGcont
-    (fun s hs => (by
-      have hspos : 0 < s := by simpa using hs
-      have hF := hder s hspos
-      have he : DifferentiableAt ℝ (fun x : ℝ => Real.exp (2 * x / C)) s :=
-        ((Real.hasDerivAt_exp _).comp s
-          (((hasDerivAt_id s).const_mul 2).div_const C)).differentiableAt
-      exact (he.mul hF.differentiableAt).differentiableWithinAt)) hGder
+  have hanti :=
+    antitoneOn_of_deriv_nonpos (convex_Ici 0) hGcont
+      (fun s hs =>
+        (by
+          have hspos : 0 < s := by simpa using hs
+          have hF := hder s hspos
+          have he : DifferentiableAt ℝ (fun x : ℝ => Real.exp (2 * x / C)) s :=
+            ((Real.hasDerivAt_exp _).comp s
+                (((hasDerivAt_id s).const_mul 2).div_const C)).differentiableAt
+          exact (he.mul hF.differentiableAt).differentiableWithinAt))
+      hGder
   have hGle := hanti (by simp : (0 : ℝ) ∈ Ici 0) ht ht
   have hzero : F 0 = ‖g‖ ^ 2 := by simp [F, Generated.zero_time]
   have hmain : F t ≤ Real.exp (-2 * t / C) * ‖g‖ ^ 2 := by

@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.WaveSplitting.TimeAverage
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.TimeAverage
 
 /-!
 # Quantitative error of the finite time average
@@ -10,6 +12,8 @@ is bounded in the weighted coordinate form energy
 `1/L`. The residual and defect terms are controlled by the mesh-uniform residual and defect
 bounds, a time-integral energy lemma and Minkowski's inequality.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff
@@ -364,6 +368,7 @@ theorem exists_timeAverage_error_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d
       √(weightedFormEnergy m w a (fun x =>
           formOperator a b (timeAverage a b (List.finRange d) δ (initial h) N) x - h x)) ≤
         √(∫ x, w x * h x ^ 2 ∂m) / L + C * δ := by
+  -- Fix a common support radius and the weight bounds.
   set js := List.finRange d
   obtain ⟨R, _, hR⟩ := supported_initial (ι := Fin d) hhc
   have hY : (initial h : State E (Fin d)).Smooth := smooth_initial hh
@@ -411,6 +416,8 @@ theorem exists_timeAverage_error_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d
       nlinarith [hθ.2]
     exact h₁.mono (by nlinarith [mul_le_mul_of_nonneg_right hkL htr])
   -- the three remainder functions
+
+  -- Integrate the residual components over each time step.
   let e : ℕ → ℝ → State E (Fin d) := fun k θ => residual a b js (nodes a b js δ (initial h) k) θ
   have hej (k : ℕ) : JointSmooth (e k) :=
     jointSmooth_residual a hb js (hY.nodes a hb js δ k)
@@ -504,6 +511,8 @@ theorem exists_timeAverage_error_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d
     rw [e₁, one_div_mul_eq_div]
     exact div_le_div_of_nonneg_right hc hL.le
   -- the remainder: weighted form energy by the first-order scalar energy
+
+  -- Estimate the accumulated scalar and form energies before averaging.
   have hrem₁ : √(weightedFormEnergy m w a (fun x => (1 / L) *
       ∑ k ∈ Finset.range (n + 1), Q k x + ∑ k ∈ Finset.range (n + 1), R₃ k x)) ≤
       √K * √(scalarEnergy m a 1 (fun x => (1 / L) * ∑ k ∈ Finset.range (n + 1), Q k x +

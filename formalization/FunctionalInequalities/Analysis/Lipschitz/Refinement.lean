@@ -1,4 +1,6 @@
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! # A countable common refinement of finitely many countable partitions
 
@@ -16,6 +18,8 @@ union, so the complement lies in the union of the `m` null complements.
 
 No analysis: `volume` enters only through countable subadditivity of a null family.
 -/
+
+@[expose] public section
 
 noncomputable section
 

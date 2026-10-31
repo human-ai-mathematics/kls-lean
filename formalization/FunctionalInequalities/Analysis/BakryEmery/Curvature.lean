@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 
 /-!
 # The curvature condition `CD(ρ, ∞)` for a potential with Hessian bounded below
@@ -15,12 +17,18 @@ by `ρ ≥ 0` makes `U` convex, and the integrated form against `μ = m.tilted (
 `ρ ∫ Γ(f) dμ ≤ ∫ (ℒf)² dμ`, the inequality behind BGL Proposition 4.8.3. The Hessian bound is
 `∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ U x v v`.
 
-Compactly supported coercivity (`compact_ordinary_diffusion_coercivity`): for `U` of class `C²` and a smooth compactly
-supported `u`, the functions `∇∇U(∇u, ∇u)` and `(ℒu)²` are `μ`-integrable and `∫ ∇∇U(∇u, ∇u) dμ ≤ ∫ (ℒu)² dμ`, from
-`Γ₂(u) = ‖∇∇u‖² + ∇∇U(∇u, ∇u)` and the integrated identity; no lower Hessian bound is assumed. This concerns the ordinary
-weighted Laplacian `ℒ`, not the inverse-Hessian operator: support for the finite-energy Brascamp–Lieb argument of Letwin,
+Compactly supported coercivity (`compact_ordinary_diffusion_coercivity`): for `U` of class `C²` and
+a smooth compactly
+supported `u`, the functions `∇∇U(∇u, ∇u)` and `(ℒu)²` are `μ`-integrable and `∫ ∇∇U(∇u, ∇u) dμ ≤ ∫
+(ℒu)² dμ`, from
+`Γ₂(u) = ‖∇∇u‖² + ∇∇U(∇u, ∇u)` and the integrated identity; no lower Hessian bound is assumed. This
+concerns the ordinary
+weighted Laplacian `ℒ`, not the inverse-Hessian operator: support for the finite-energy
+Brascamp–Lieb argument of Letwin,
 arXiv:2607.24164v1, Lemma A.6, not that lemma.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -323,18 +331,16 @@ private theorem integrable_hessianSqStdBasis
     exact hentry_integrable i j
   simpa [μ, hessianSqStdBasis_apply] using hsum
 
-/-- Compactly supported ordinary diffusion coercivity for a finite-dimensional real inner-product space. -/
-theorem compact_ordinary_diffusion_coercivity
-    (m : Measure E) [m.IsAddHaarMeasure]
-    {U u : E → ℝ} (hU : ContDiff ℝ 2 U) (hu : ContDiff ℝ ∞ u)
-    (huc : HasCompactSupport u) :
-    Integrable
-        (fun x => bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x))
+/--
+Compactly supported ordinary diffusion coercivity for a finite-dimensional real inner-product space.
+-/
+theorem compact_ordinary_diffusion_coercivity (m : Measure E) [m.IsAddHaarMeasure] {U u : E → ℝ}
+    (hU : ContDiff ℝ 2 U) (hu : ContDiff ℝ ∞ u) (huc : HasCompactSupport u) :
+    Integrable (fun x => bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x))
         (m.tilted (-U)) ∧
       Integrable (fun x => weightedLaplacian U u x ^ 2) (m.tilted (-U)) ∧
-      ∫ x, bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x)
-          ∂(m.tilted (-U)) ≤
-        ∫ x, weightedLaplacian U u x ^ 2 ∂(m.tilted (-U)) := by
+        ∫ x, bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) ∂(m.tilted (-U)) ≤
+          ∫ x, weightedLaplacian U u x ^ 2 ∂(m.tilted (-U)) := by
   classical
   have hU1 : ContDiff ℝ 1 U := hU.of_le (by norm_num)
   have hu2 : ContDiff ℝ 2 u := hu.of_le (WithTop.coe_le_coe.mpr le_top)
@@ -345,12 +351,15 @@ theorem compact_ordinary_diffusion_coercivity
       hasCompactSupport_weightedLaplacian U huc
     have hL_sq_support : HasCompactSupport (fun x => weightedLaplacian U u x ^ 2) := by
       exact hL_support.comp_left (g := fun t : ℝ => t ^ 2) (by simp)
-    exact ((continuous_weightedLaplacian hU1 hu2).pow 2).integrable_of_hasCompactSupport
-      hL_sq_support
+    exact
+      ((continuous_weightedLaplacian hU1 hu2).pow 2).integrable_of_hasCompactSupport
+        hL_sq_support
   have hgamma_integrable : Integrable (fun x => gammaTwo U u x) μ := by
-    have h₁ : Integrable
+    have h₁ :
+      Integrable
         ((fun x => weightedLaplacian U (fun y => gamma u u y) x / 2) -
-          (fun x => gamma u (weightedLaplacian U u) x)) μ := by
+          (fun x => gamma u (weightedLaplacian U u) x))
+        μ := by
       exact
         ((integrable_weightedLaplacian_gamma m hU hu3 huc).div_const 2).sub
           (integrable_gamma_weightedLaplacian m hU hu3 huc)
@@ -359,17 +368,18 @@ theorem compact_ordinary_diffusion_coercivity
     rfl
   have hhessianSq_integrable : Integrable (fun x => hessianSqStdBasis u x) μ := by
     exact integrable_hessianSqStdBasis (U := U) m hu huc
-  have henergy_integrable : Integrable
-      (fun x => bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x)) μ := by
+  have henergy_integrable :
+    Integrable (fun x => bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x)) μ := by
     have hsub := hgamma_integrable.sub hhessianSq_integrable
     convert hsub using 1
     funext x
-    change bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) =
-      gammaTwo U u x - hessianSqStdBasis u x
+    change
+      bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) =
+        gammaTwo U u x - hessianSqStdBasis u x
     rw [gammaTwo_eq_hessianSqStdBasis_add hU hu3 x]
     ring
-  have hpoint : ∀ x,
-      bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) ≤ gammaTwo U u x := by
+  have hpoint :
+    ∀ x, bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) ≤ gammaTwo U u x := by
     intro x
     rw [gammaTwo_eq_hessianSqStdBasis_add hU hu3 x]
     linarith [hessianSqStdBasis_nonneg u x]
@@ -377,11 +387,10 @@ theorem compact_ordinary_diffusion_coercivity
   · simpa [μ] using henergy_integrable
   · simpa [μ] using hL_integrable
   · calc
-      ∫ x, bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) ∂μ
-          ≤ ∫ x, gammaTwo U u x ∂μ :=
+      ∫ x, bilinearIteratedFDerivTwo ℝ U x (gradient u x) (gradient u x) ∂μ ≤
+          ∫ x, gammaTwo U u x ∂μ :=
         integral_mono henergy_integrable hgamma_integrable hpoint
-      _ = ∫ x, weightedLaplacian U u x ^ 2 ∂μ :=
-        integral_gammaTwo_eq m hU hu3 huc
+      _ = ∫ x, weightedLaplacian U u x ^ 2 ∂μ := integral_gammaTwo_eq m hU hu3 huc
 
 end CompactCoercivity
 

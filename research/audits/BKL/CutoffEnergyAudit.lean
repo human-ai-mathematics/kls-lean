@@ -1,7 +1,9 @@
-import solutions.LemBklCutoffEnergy
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.ToCumulant
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import solutions.LemBklCutoffEnergy
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.ToCumulant
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 Independent source specification and substantive clients of the BKL cutoff endpoint.
 The handwritten specification retains all quantifiers, the exact half, universal153,
@@ -9,6 +11,8 @@ The handwritten specification retains all quantifiers, the exact half, universal
 constructed; the downstream compact cumulant consumer is checked separately.
 No uncut process or unconditional BKL main theorem is registered here.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery

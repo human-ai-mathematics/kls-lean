@@ -1,11 +1,15 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Energy
-import Mathlib.Analysis.Calculus.ContDiff.Comp
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Energy
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
 
 /-!
 # Ordered directional derivatives of products
 
 Finite words retain the actual scalar derivatives used by the splitting energies.
 -/
+
+@[expose] public section
 noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
@@ -96,8 +100,8 @@ theorem wordDerivative_mul (a : ι → E) (w : List ι) {f g : E → ℝ}
     ring
 
 /-- Each factor receives at most the number of derivatives in the original word. -/
-theorem lengths_mem_wordSplits (w : List ι) {p : List ι × List ι}
-    (hp : p ∈ wordSplits w) : p.1.length + p.2.length = w.length := by
+theorem lengths_mem_wordSplits (w : List ι) {p : List ι × List ι} (hp : p ∈ wordSplits w) :
+    p.1.length + p.2.length = w.length := by
   induction w generalizing p with
   | nil => simp [wordSplits] at hp; subst p; rfl
   | cons j w ih =>
@@ -135,20 +139,23 @@ theorem jetSquare_nonneg [Fintype ι] (a : ι → E) (k : ℕ) (f : E → ℝ) (
     0 ≤ jetSquare a k f x :=
   Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => sq_nonneg _
 
-theorem wordDerivative_sq_le_jetSquare [Fintype ι] (a : ι → E) (k : ℕ)
-    (w : List ι) (hw : w.length ≤ k) {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (x : E) :
+theorem wordDerivative_sq_le_jetSquare [Fintype ι] (a : ι → E) (k : ℕ) (w : List ι)
+    (hw : w.length ≤ k) {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (x : E) :
     wordDerivative a w f x ^ 2 ≤ jetSquare a k f x := by
   have he := congrFun (wordDerivative_ofFn a w.get hf) x
   rw [List.ofFn_get] at he
   rw [he]
-  have h₁ : derivative (fun j => a (w.get j)) f x ^ 2 ≤
+  have h₁ :
+    derivative (fun j => a (w.get j)) f x ^ 2 ≤
       ∑ i : Fin w.length → ι, derivative (fun j => a (i j)) f x ^ 2 :=
-    Finset.single_le_sum (fun i _ => sq_nonneg (derivative (fun j => a (i j)) f x)) (Finset.mem_univ w.get)
-  have h₂ : (∑ i : Fin w.length → ι, derivative (fun j => a (i j)) f x ^ 2) ≤
-      jetSquare a k f x :=
+    Finset.single_le_sum (fun i _ => sq_nonneg (derivative (fun j => a (i j)) f x))
+      (Finset.mem_univ w.get)
+  have h₂ :
+    (∑ i : Fin w.length → ι, derivative (fun j => a (i j)) f x ^ 2) ≤ jetSquare a k f x :=
     Finset.single_le_sum (f := fun n => ∑ i : Fin n → ι, derivative (fun j => a (i j)) f x ^ 2)
-      (fun n _ => Finset.sum_nonneg fun (i : Fin n → ι) _ =>
-        sq_nonneg (derivative (fun j => a (i j)) f x))
+      (fun n _ =>
+        Finset.sum_nonneg fun (i : Fin n → ι) _ =>
+          sq_nonneg (derivative (fun j => a (i j)) f x))
       (Finset.mem_range.mpr (show w.length < k + 1 by omega))
   exact h₁.trans h₂
 
@@ -246,10 +253,11 @@ def scalarEnergy [Fintype ι] (a : ι → E) (k : ℕ) (f : E → ℝ) : ℝ :=
 private theorem integrable_derivative_sq {n : ℕ} (v : Fin n → E) {f : E → ℝ}
     (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f) :
     Integrable (fun x => derivative v f x ^ 2) m := by
-  have hs := (hasCompactSupport_derivative v hc).mul_left
-    (f := derivative v f)
+  have hs := (hasCompactSupport_derivative v hc).mul_left (f := derivative v f)
   simpa only [pow_two, Pi.mul_def] using
-    ((continuous_derivative v hf).mul (continuous_derivative v hf)).integrable_of_hasCompactSupport hs
+    ((continuous_derivative v hf).mul
+          (continuous_derivative v hf)).integrable_of_hasCompactSupport
+      hs
 
 theorem integrable_jetSquare [Fintype ι] (a : ι → E) (k : ℕ) {f : E → ℝ}
     (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f) : Integrable (jetSquare a k f) m :=

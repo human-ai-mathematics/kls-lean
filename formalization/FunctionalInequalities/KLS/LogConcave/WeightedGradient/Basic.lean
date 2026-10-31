@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.WeightedGradient.Closable
-import FunctionalInequalities.Energy.WeightedGradient.Core
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
+module
+
+public import FunctionalInequalities.Energy.WeightedGradient.Closable
+public import FunctionalInequalities.Energy.WeightedGradient.Core
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
 
 /-!
 # Closable weighted gradient on a full-dimensional log-concave law
@@ -29,6 +31,8 @@ zero-dimensional direction space, where the operator vanishes on the whole `L²`
 
 No Poincaré inequality, translation invariance, isotropic reduction or KLS statement is made.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -206,12 +210,18 @@ include hμ in
 /-- The affine covariance relaxation of the definition node is the operator relaxation for any
 `B` with `⟪Σ v, v⟫ = ‖B v‖²`, `Σ` the intrinsic covariance. -/
 theorem intrinsicCovariance_energy_eq_operator
-    (hB : ∀ v, inner ℝ (Covariance.operator
-      (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) v) v =
-        ‖B v‖ ^ 2) :
+    (hB :
+      ∀ v,
+        inner ℝ
+            (Covariance.operator
+              (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
+              v)
+            v =
+          ‖B v‖ ^ 2) :
     Energy.CovarianceGradient.Intrinsic.energy μ =
       (PreEnergy.ofLinearPMap (hμ.intrinsicWeightedOperator m B)).sequentialRelaxation :=
-  hμ.intrinsicMeasure.covariance_relaxation_eq_operator m B hμ.interior_intrinsic_support_nonempty hB
+  hμ.intrinsicMeasure.covariance_relaxation_eq_operator m B
+    hμ.interior_intrinsic_support_nonempty hB
 
 end IntrinsicProperties
 

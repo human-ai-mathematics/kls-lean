@@ -1,8 +1,10 @@
-import FunctionalInequalities.Energy.SmoothGradient.Quadratic
-import FunctionalInequalities.Energy.Form.Core
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import FunctionalInequalities.Probability.Support.Affine
-import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Quadratic
+public import FunctionalInequalities.Energy.Form.Core
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import FunctionalInequalities.Probability.Support.Affine
+public import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
 
 /-!
 # Ambient raw gradient energy sees normal derivatives
@@ -21,6 +23,8 @@ away from the affine support, even when the intrinsic law has a regular density.
 This is an obstruction, not a ledger node: it records why the raw/core agreement question must be
 posed intrinsically (or must quotient out normal derivatives) on proper affine supports.
 -/
+
+@[expose] public section
 
 noncomputable section
 

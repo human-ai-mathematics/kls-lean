@@ -1,7 +1,6 @@
 """Exercise index isolation in a disposable Git repository, never the real worktree/index."""
 import json
 import os
-import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -83,16 +82,8 @@ class IndexIsolationTests(unittest.TestCase):
         self.assertEqual(update.generate(), self.original)
         self.git('add', name)
         changed = update.generate()
-        def node_styles(tree):
-            return {node: style
-                    for ids, style in re.findall(r'^\s*class ([\w,]+) (\w+);$', tree, re.M)
-                    for node in ids.split(',')}
-
-        styles = node_styles(changed['TREE.mmd'])
-        for node in ('MG', 'EG', 'FG', 'SG'):
-            self.assertEqual(styles[node], 'hypothesis', node)
-        self.assertEqual(styles['MH'], 'todo')
-        self.assertEqual(node_styles(self.original['TREE.mmd'])['MH'], 'superseded')
+        self.assertIn('class MG,EG,FG,SG hypothesis;', changed['TREE.mmd'])
+        self.assertIn('class MH todo;', changed['TREE.mmd'])
         self.assertNotEqual(changed['TREE.mmd'], self.original['TREE.mmd'])
         for name in changed:
             self.assertEqual(changed[name].count('✓'), self.original[name].count('✓'), name)

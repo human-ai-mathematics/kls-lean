@@ -1,19 +1,23 @@
-import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
-import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
-import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
-import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
-import FunctionalInequalities.Probability.Diffusion.VectorGenerator
-import FunctionalInequalities.Probability.Diffusion.InverseCalculus
-import FunctionalInequalities.KLS.BKL.Localization.Energy.Generator
-import FunctionalInequalities.KLS.BKL.Localization.Energy.Bound
-import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.KLS.BKL.Posterior.Regularity
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
+public import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
+public import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
+public import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
+public import FunctionalInequalities.Probability.Diffusion.VectorGenerator
+public import FunctionalInequalities.Probability.Diffusion.InverseCalculus
+public import FunctionalInequalities.KLS.BKL.Localization.Energy.Generator
+public import FunctionalInequalities.KLS.BKL.Localization.Energy.Bound
+public import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.KLS.BKL.Posterior.Regularity
+public import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
 # Generator bounds for the localization Lyapunov function
 -/
+
+@[expose] public section
 
 noncomputable section
 section LyapunovBound
@@ -24,7 +28,8 @@ open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysi
   FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
   FunctionalInequalities.Analysis.CoordinateTensor
 
-/-! Generator bound `𝓛𝒱 ≤ K𝒱` on symmetric positive semidefinite `Q` under `CumulantBoundCompact 2 8`. -/
+/-! Generator bound `𝓛𝒱 ≤ K𝒱` on symmetric positive semidefinite `Q` under `CumulantBoundCompact 2
+8`. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 
@@ -222,90 +227,83 @@ theorem generator_stdTrace_ringInverse_cov_le (hiso : KLS.Isotropic μ) (hLC : K
     _ = (1 + 8 * n) * G := by ring
 
 set_option maxHeartbeats 1000000 in
-theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
-    (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) (p : Param n)
+theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ)
+    (hLC : KLS.LogConcave μ) (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) (p : Param n)
     (hSym : IsSelfAdjoint p.2) (hQ : ∀ x, 0 ≤ ⟪p.2 x, x⟫) :
-    ∑ k, (fderiv ℝ (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) p (noise μ hc p k)) ^ 2 ≤
+    ∑ k,
+        (fderiv ℝ (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) p
+            (noise μ hc p k)) ^
+          2 ≤
       8 * n * stdTrace (Ring.inverse (cov μ hc p)) ^ 2 := by
   classical
-  let S : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) :=
-    inverseSqrt (cov μ hc p)
-  let R : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) :=
-    Ring.inverse (cov μ hc p)
+  let S : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) := inverseSqrt (cov μ hc p)
+  let R : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) := Ring.inverse (cov μ hc p)
   let G : ℝ := stdTrace R
-  have hRpos : R.IsPositive := by
-    simpa [R] using ringInverse_isPositive μ hc hiso p
-  have hG : 0 ≤ G := by
-    simpa [G] using stdTrace_nonneg hRpos
+  have hRpos : R.IsPositive := by simpa [R] using ringInverse_isPositive μ hc hiso p
+  have hG : 0 ≤ G := by simpa [G] using stdTrace_nonneg hRpos
   have hSS : S * S = R := by
     apply ContinuousLinearMap.ext
     intro v
-    simpa [R, S] using
-      (inverseSqrt_cov_props μ hc hiso p).2 v
-  have hSself : ∀ x y, ⟪S x, y⟫ = ⟪x, S y⟫ :=
-    (inverseSqrt_cov_props μ hc hiso p).1
-  have htrace :
-      ∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2 = G := by
+    simpa [R, S] using (inverseSqrt_cov_props μ hc hiso p).2 v
+  have hSself : ∀ x y, ⟪S x, y⟫ = ⟪x, S y⟫ := (inverseSqrt_cov_props μ hc hiso p).1
+  have htrace : ∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2 = G := by
     calc
       ∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2 =
-          ∑ i, ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
-            S (EuclideanSpace.basisFun (Fin n) ℝ i)⟫ := by
+          ∑ i,
+            ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
+              S (EuclideanSpace.basisFun (Fin n) ℝ i)⟫ := by
         apply Finset.sum_congr rfl
         intro i hi
         exact (real_inner_self_eq_norm_sq _).symm
-      _ = ∑ i, ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-          S (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫ := by
+      _ =
+          ∑ i,
+            ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+              S (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫ := by
         apply Finset.sum_congr rfl
         intro i hi
         exact hSself _ _
-      _ = ∑ i, ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-          R (EuclideanSpace.basisFun (Fin n) ℝ i)⟫ := by
+      _ = ∑ i, ⟪EuclideanSpace.basisFun (Fin n) ℝ i, R (EuclideanSpace.basisFun (Fin n) ℝ i)⟫ := by
         apply Finset.sum_congr rfl
         intro i hi
         rw [← mul_apply_eq_comp, hSS]
       _ = G := rfl
   have hterm (k : Fin n) :
-      (∑ i, ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
-          (conjugatedNoiseOperator μ hc p k)
-            (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫) ^ 2 ≤
-        hsNormSq (conjugatedNoiseOperator μ hc p k) * G ^ 2 := by
+    (∑ i,
+          ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
+            (conjugatedNoiseOperator μ hc p k) (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫) ^
+        2 ≤
+      hsNormSq (conjugatedNoiseOperator μ hc p k) * G ^ 2 := by
     let T := conjugatedNoiseOperator μ hc p k
     let B : ℝ :=
-      ∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
-        ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖
-    let W : ℝ :=
-      ∑ i, ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖ ^ 2
+      ∑ i,
+        ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
+          ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖
+    let W : ℝ := ∑ i, ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖ ^ 2
     let A : ℝ :=
-      ∑ i, ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
-        T (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫
+      ∑ i,
+        ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i), T (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫
     have hW : W ≤ hsNormSq T * G := by
       calc
-        W ≤ ∑ i, hsNormSq T *
-            ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2 := by
+        W ≤ ∑ i, hsNormSq T * ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2 := by
           apply Finset.sum_le_sum
           intro i hi
-          exact norm_apply_sq_le_hsNormSq_mul T
-            (S (EuclideanSpace.basisFun (Fin n) ℝ i))
-        _ = hsNormSq T * G := by
-          rw [← Finset.mul_sum, htrace]
+          exact norm_apply_sq_le_hsNormSq_mul T (S (EuclideanSpace.basisFun (Fin n) ℝ i))
+        _ = hsNormSq T * G := by rw [← Finset.mul_sum, htrace]
     have hBnonneg : 0 ≤ B := by
       dsimp [B]
-      exact Finset.sum_nonneg fun i hi =>
-        mul_nonneg (norm_nonneg _) (norm_nonneg _)
+      exact Finset.sum_nonneg fun i hi => mul_nonneg (norm_nonneg _) (norm_nonneg _)
     have hBcs : B ≤ Real.sqrt G * Real.sqrt W := by
       dsimp [B, W]
       calc
-        (∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
-            ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖) ≤
-            Real.sqrt
-              (∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2) *
-              Real.sqrt
-                (∑ i, ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖ ^ 2) :=
+        (∑ i,
+              ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
+                ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖) ≤
+            Real.sqrt (∑ i, ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2) *
+              Real.sqrt (∑ i, ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖ ^ 2) :=
           Real.sum_mul_le_sqrt_mul_sqrt Finset.univ
             (fun i => ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖)
             (fun i => ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖)
-        _ = Real.sqrt G * Real.sqrt W := by
-          rw [htrace]
+        _ = Real.sqrt G * Real.sqrt W := by rw [htrace]
     have hWnonneg : 0 ≤ W := by
       dsimp [W]
       exact Finset.sum_nonneg fun i hi => sq_nonneg _
@@ -313,29 +311,29 @@ theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ
       have hprod : 0 ≤ Real.sqrt G * Real.sqrt W :=
         mul_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
       calc
-        B ^ 2 ≤ (Real.sqrt G * Real.sqrt W) ^ 2 :=
-          (sq_le_sq₀ hBnonneg hprod).mpr hBcs
-        _ = G * W := by
-          rw [mul_pow, Real.sq_sqrt hG, Real.sq_sqrt hWnonneg]
+        B ^ 2 ≤ (Real.sqrt G * Real.sqrt W) ^ 2 := (sq_le_sq₀ hBnonneg hprod).mpr hBcs
+        _ = G * W := by rw [mul_pow, Real.sq_sqrt hG, Real.sq_sqrt hWnonneg]
     have hupper : A ≤ B := by
       dsimp [A, B]
       exact Finset.sum_le_sum fun i hi => real_inner_le_norm _ _
     have hlower : -B ≤ A := by
       have h :
-          ∑ i, -(‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
-              ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖) ≤
-            ∑ i, ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
+        ∑ i,
+            -(‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
+                ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖) ≤
+          ∑ i,
+            ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
               T (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫ := by
         apply Finset.sum_le_sum
         intro i hi
-        have h' := real_inner_le_norm
-          (-(S (EuclideanSpace.basisFun (Fin n) ℝ i)))
-          (T (S (EuclideanSpace.basisFun (Fin n) ℝ i)))
+        have h' :=
+          real_inner_le_norm (-(S (EuclideanSpace.basisFun (Fin n) ℝ i)))
+            (T (S (EuclideanSpace.basisFun (Fin n) ℝ i)))
         have h'' :
-            -⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
+          -⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
                 T (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫ ≤
-              ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
-                ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖ := by
+            ‖S (EuclideanSpace.basisFun (Fin n) ℝ i)‖ *
+              ‖T (S (EuclideanSpace.basisFun (Fin n) ℝ i))‖ := by
           simpa only [inner_neg_left, norm_neg] using h'
         have h''' := neg_le_neg h''
         simpa only [neg_neg] using h'''
@@ -348,16 +346,19 @@ theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ
       calc
         A ^ 2 ≤ B ^ 2 := hA_sq
         _ ≤ G * W := hBsq
-        _ ≤ G * (hsNormSq T * G) :=
-          mul_le_mul_of_nonneg_left hW hG
+        _ ≤ G * (hsNormSq T * G) := mul_le_mul_of_nonneg_left hW hG
         _ = hsNormSq T * G ^ 2 := by ring
     simpa [A, T] using hAsq
   calc
-    ∑ k, (fderiv ℝ (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q)))
-        p (noise μ hc p k)) ^ 2 =
-        ∑ k, (∑ i, ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
-          (conjugatedNoiseOperator μ hc p k)
-            (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫) ^ 2 := by
+    ∑ k,
+          (fderiv ℝ (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) p
+              (noise μ hc p k)) ^
+            2 =
+        ∑ k,
+          (∑ i,
+              ⟪S (EuclideanSpace.basisFun (Fin n) ℝ i),
+                (conjugatedNoiseOperator μ hc p k) (S (EuclideanSpace.basisFun (Fin n) ℝ i))⟫) ^
+            2 := by
       apply Finset.sum_congr rfl
       intro k hk
       rw [fderiv_stdTrace_ringInverse_cov_noise μ hc hiso p k]
@@ -367,8 +368,7 @@ theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ
       apply Finset.sum_le_sum
       intro k hk
       exact hterm k
-    _ = (∑ k, hsNormSq (conjugatedNoiseOperator μ hc p k)) * G ^ 2 := by
-      rw [Finset.sum_mul]
+    _ = (∑ k, hsNormSq (conjugatedNoiseOperator μ hc p k)) * G ^ 2 := by rw [Finset.sum_mul]
     _ ≤ (8 * n) * G ^ 2 := by
       gcongr
       exact sum_hsNormSq_conjugatedNoiseOperator_le μ hc hiso hLC h8 p hSym hQ
@@ -387,6 +387,8 @@ theorem exists_generator_lyapunov_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogCon
   · dsimp [K]
     positivity
   · intro p hSym hQ
+
+    -- Control the resolvent and the posterior mean.
     let R : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) :=
       Ring.inverse (cov μ hc p)
     let G : ℝ := stdTrace R
@@ -480,6 +482,8 @@ theorem exists_generator_lyapunov_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogCon
           8 * n * G ^ 2 := by
       simpa [G, R] using
         sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le μ hc hiso hLC h8 p hSym hQ
+
+    -- Compute the generator on the remaining coordinate terms.
     have hC : ContDiff ℝ 2 (fun q : Param n => ‖q.1‖ ^ 2) := by
       have hf : ContDiff ℝ 2 (fun q : Param n => q.1) := contDiff_fst
       simpa only [real_inner_self_eq_norm_sq] using ContDiff.inner ℝ hf hf
@@ -580,6 +584,8 @@ theorem exists_generator_lyapunov_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogCon
         _ ≤ 2 * (1 + 8 * n) * G ^ 2 + 8 * n * G ^ 2 :=
           add_le_add hfirst hGcarre
         _ = (2 * (1 + 8 * n) + 8 * n) * G ^ 2 := by ring
+
+    -- Combine the bounds under a single Lyapunov constant.
     have hbound :
         generator μ hc (lyapunov μ hc) p ≤
           ‖p.1‖ ^ 2 + hsNormSq p.2 + 1 +

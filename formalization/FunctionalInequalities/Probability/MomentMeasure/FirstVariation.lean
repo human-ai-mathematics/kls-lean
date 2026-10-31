@@ -1,34 +1,44 @@
-import FunctionalInequalities.Probability.MomentMeasure.Basic
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Derivative
-import FunctionalInequalities.Analysis.Convex.Subgradient.Measure
-import Mathlib.Analysis.Calculus.FDeriv.Measurable
-import Mathlib.Analysis.Calculus.ParametricIntegral
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
-import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Basic
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Derivative
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Measure
+public import Mathlib.Analysis.Calculus.FDeriv.Measurable
+public import Mathlib.Analysis.Calculus.ParametricIntegral
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+public import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 
 /-!
 # First variation of the CEK functional for extended-real potentials
 
-Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), proof of Theorem 2, (42)–(44), for an arbitrary
+Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), proof of Theorem 2, (42)–(44), for
+an arbitrary
 lower semicontinuous primal `φ` whose conjugate `ψ = φ*` may take the value `+∞`.
 
-* Moment measure of an extended-real potential `ofPotential dx ψ`: total mass `mass dx ψ` (`ofPotential_univ`) and the
+* Moment measure of an extended-real potential `ofPotential dx ψ`: total mass `mass dx ψ`
+  (`ofPotential_univ`) and the
   integral formula `∫ g d(ofPotential dx ψ) = ∫ e^{-ψ} g(∇ψ) dx` (`integral_ofPotential`).
 * A convex potential with nonzero exponential mass has an effective domain with nonempty interior
   (`interior_domain_nonempty_of_mass_ne_zero`).
-* Normalization: subtracting a real constant `b` multiplies the density, the mass and, for a Borel convex potential,
+* Normalization: subtracting a real constant `b` multiplies the density, the mass and, for a Borel
+  convex potential,
   the moment measure by `e^b` (`density_sub_const`, `mass_sub_const`, `ofPotential_sub_const`).
 * Integrated first variation (42): for a bounded continuous `b`,
   `t ↦ ∫ exp(-(φ + t b)*)` is differentiable at `0` with derivative `∫ b d(ofPotential dx φ*)`
-  (`hasDerivAt_mass_legendre_add_smul`). The effective domain of `φ*` is convex, so its frontier is Lebesgue-null, and
-  `φ*` is differentiable almost everywhere on its interior; outside the domain all perturbed densities vanish.
-* Euler–Lagrange equation (44): a lower semicontinuous maximizer `φ` of `I_μ` over all `PotentialIntegrable`
+  (`hasDerivAt_mass_legendre_add_smul`). The effective domain of `φ*` is convex, so its frontier is
+  Lebesgue-null, and
+  `φ*` is differentiable almost everywhere on its interior; outside the domain all perturbed
+  densities vanish.
+* Euler–Lagrange equation (44): a lower semicontinuous maximizer `φ` of `I_μ` over all
+  `PotentialIntegrable`
   competitors with `∫ exp(-φ*) = 1` has `μ` as the moment measure of `φ*`
   (`ofPotential_legendre_eq_of_maximizer`).
 
 No essential continuity, finiteness of `φ*` or bounded support is assumed or concluded.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -72,9 +82,10 @@ private theorem exp_neg_eq_ofReal {e : EReal} (htop : e ≠ ⊤) (hbot : e ≠ �
   lift e to ℝ using ⟨htop, hbot⟩
   rw [← EReal.coe_neg, EReal.exp_coe, EReal.toReal_coe]
 
-/-- Pointwise comparison of the perturbed conjugate density: `e^{-(φ + t b)*} ≤ e^{|t| M} e^{-φ*}`. -/
-private theorem density_legendre_add_smul_le {φ : E → EReal} (hφ : ProperPotential φ) {b : E → ℝ}
-    {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ z, |b z| ≤ M) (t : ℝ) (x : E) :
+/--
+Pointwise comparison of the perturbed conjugate density: `e^{-(φ + t b)*} ≤ e^{|t| M} e^{-φ*}`. -/
+private theorem density_legendre_add_smul_le {φ : E → EReal} (hφ : ProperPotential φ)
+    {b : E → ℝ} {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ z, |b z| ≤ M) (t : ℝ) (x : E) :
     density (legendre (fun z => φ z + ((t * b z : ℝ) : EReal))) x ≤
       ENNReal.ofReal (Real.exp (|t| * M)) * density (legendre φ) x := by
   by_cases hx : legendre φ x = ⊤
@@ -84,8 +95,9 @@ private theorem density_legendre_add_smul_le {φ : E → EReal} (hφ : ProperPot
     rw [density, ht, EReal.neg_top, EReal.exp_bot]
     exact zero_le
   · obtain ⟨htop, hbot, hc⟩ := legendre_bounded_perturbation_finite_curve φ hφ x hx b M hM0 hM t
-    rw [density, density, exp_neg_eq_ofReal htop hbot, exp_neg_eq_ofReal hx (legendre_ne_bot φ hφ x),
-      ← ENNReal.ofReal_mul (Real.exp_pos _).le, ← Real.exp_add]
+    rw [density, density, exp_neg_eq_ofReal htop hbot,
+      exp_neg_eq_ofReal hx (legendre_ne_bot φ hφ x), ← ENNReal.ofReal_mul (Real.exp_pos _).le, ←
+      Real.exp_add]
     apply ENNReal.ofReal_le_ofReal
     apply Real.exp_le_exp.mpr
     have := (abs_le.mp hc).1
@@ -97,10 +109,13 @@ variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 section MomentMeasure
 
-/-- The gradient of the real part of an extended-real potential is Borel measurable, for every `ψ`. -/
+/--
+The gradient of the real part of an extended-real potential is Borel measurable, for every `ψ`. -/
 theorem measurable_gradient_toReal (ψ : E → EReal) :
     Measurable (gradient fun x => (ψ x).toReal) := by
-  change Measurable (fun x => (InnerProductSpace.toDual ℝ E).symm (fderiv ℝ (fun x => (ψ x).toReal) x))
+  change
+    Measurable
+      (fun x => (InnerProductSpace.toDual ℝ E).symm (fderiv ℝ (fun x => (ψ x).toReal) x))
   exact (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp (measurable_fderiv ℝ _)
 
 /-- Values of the moment measure on Borel sets. -/
@@ -118,14 +133,18 @@ theorem isFiniteMeasure_ofPotential (dx : Measure E) (ψ : E → EReal) (h : mas
     IsFiniteMeasure (ofPotential dx ψ) :=
   ⟨by rw [ofPotential_univ]; exact lt_top_iff_ne_top.mpr h⟩
 
-/-- **Integral against the moment measure**: for a Borel potential `ψ` that never takes `⊥` and a Borel real `g`,
+/--
+**Integral against the moment measure**: for a Borel potential `ψ` that never takes `⊥` and a Borel
+real `g`,
 `∫ g d(ofPotential dx ψ) = ∫ e^{-ψ(x)} g(∇ψ(x)) dx` (both sides are `0` when not integrable). -/
-theorem integral_ofPotential (dx : Measure E) {ψ : E → EReal} (hψ : Measurable ψ) (hbot : ∀ x, ψ x ≠ ⊥)
-    {g : E → ℝ} (hg : Measurable g) :
+theorem integral_ofPotential (dx : Measure E) {ψ : E → EReal} (hψ : Measurable ψ)
+    (hbot : ∀ x, ψ x ≠ ⊥) {g : E → ℝ} (hg : Measurable g) :
     ∫ y, g y ∂ofPotential dx ψ =
       ∫ x, (density ψ x).toReal * g (gradient (fun x => (ψ x).toReal) x) ∂dx := by
-  rw [ofPotential, integral_map (measurable_gradient_toReal ψ).aemeasurable hg.aestronglyMeasurable,
-    weightedMeasure, integral_withDensity_eq_integral_toReal_smul₀ (f := density ψ)
+  rw [ofPotential,
+    integral_map (measurable_gradient_toReal ψ).aemeasurable hg.aestronglyMeasurable,
+    weightedMeasure,
+    integral_withDensity_eq_integral_toReal_smul₀ (f := density ψ)
       (EReal.measurable_exp.comp hψ.neg).aemeasurable]
   · simp only [smul_eq_mul]
   · refine Filter.Eventually.of_forall fun x => ?_
@@ -137,10 +156,13 @@ end MomentMeasure
 
 section DomainMeasure
 
-/-- A convex potential whose exponential mass is nonzero has an effective domain with nonempty interior: otherwise
+/--
+A convex potential whose exponential mass is nonzero has an effective domain with nonempty interior:
+otherwise
 the convex domain lies in its Lebesgue-null frontier and `exp(-ψ)` vanishes almost everywhere. -/
-theorem interior_domain_nonempty_of_mass_ne_zero (dx : Measure E) [dx.IsAddHaarMeasure] {ψ : E → EReal}
-    (hψ : ConvexPotential ψ) (h : mass dx ψ ≠ 0) : (interior {x | ψ x ≠ ⊤}).Nonempty := by
+theorem interior_domain_nonempty_of_mass_ne_zero (dx : Measure E) [dx.IsAddHaarMeasure]
+    {ψ : E → EReal} (hψ : ConvexPotential ψ) (h : mass dx ψ ≠ 0) :
+    (interior {x | ψ x ≠ ⊤}).Nonempty := by
   by_contra hne
   rw [not_nonempty_iff_eq_empty] at hne
   apply h
@@ -160,8 +182,10 @@ end DomainMeasure
 section Normalization
 
 omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-  [BorelSpace E] in
-/-- Subtracting a real constant from the potential multiplies the density: `e^{-(ψ - b)} = e^b e^{-ψ}`, including the
+    [BorelSpace E] in
+/--
+Subtracting a real constant from the potential multiplies the density: `e^{-(ψ - b)} = e^b e^{-ψ}`,
+including the
 values `ψ = ±∞`. -/
 theorem density_sub_const (ψ : E → EReal) (b : ℝ) (x : E) :
     density (fun y => ψ y - (b : EReal)) x = ENNReal.ofReal (Real.exp b) * density ψ x := by
@@ -169,7 +193,9 @@ theorem density_sub_const (ψ : E → EReal) (b : ℝ) (x : E) :
     induction ψ x using EReal.rec with
     | bot => simp
     | top => simp
-    | coe r => rw [← EReal.coe_sub, ← EReal.coe_neg, ← EReal.coe_neg, ← EReal.coe_add]; congr 1; ring
+    | coe r =>
+      rw [← EReal.coe_sub, ← EReal.coe_neg, ← EReal.coe_neg, ← EReal.coe_add]; congr 1;
+      ring
   rw [density, density, hneg, EReal.exp_add, EReal.exp_coe, mul_comm]
 
 omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [BorelSpace E] in
@@ -179,16 +205,22 @@ theorem mass_sub_const (dx : Measure E) (ψ : E → EReal) (b : ℝ) :
   rw [mass, mass, ← lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
   exact lintegral_congr fun x => density_sub_const ψ b x
 
-/-- **Normalization of the moment measure**: for a Borel convex potential `ψ` and an additive Haar measure `dx`,
-subtracting a real constant `b` scales the moment measure by `e^b`. The real parts of `ψ - b` and `ψ` differ by `b` on
-the interior of the effective domain, whose complement in the domain is the Lebesgue-null frontier. -/
-theorem ofPotential_sub_const (dx : Measure E) [dx.IsAddHaarMeasure] {ψ : E → EReal} (hψ : ConvexPotential ψ)
-    (hm : Measurable ψ) (b : ℝ) :
-    ofPotential dx (fun y => ψ y - (b : EReal)) = ENNReal.ofReal (Real.exp b) • ofPotential dx ψ := by
+/--
+**Normalization of the moment measure**: for a Borel convex potential `ψ` and an additive Haar
+measure `dx`,
+subtracting a real constant `b` scales the moment measure by `e^b`. The real parts of `ψ - b` and
+`ψ` differ by `b` on
+the interior of the effective domain, whose complement in the domain is the Lebesgue-null frontier.
+-/
+theorem ofPotential_sub_const (dx : Measure E) [dx.IsAddHaarMeasure] {ψ : E → EReal}
+    (hψ : ConvexPotential ψ) (hm : Measurable ψ) (b : ℝ) :
+    ofPotential dx (fun y => ψ y - (b : EReal)) =
+      ENNReal.ofReal (Real.exp b) • ofPotential dx ψ := by
   set D : Set E := {x | ψ x ≠ ⊤} with hD
   have hdens : density (fun y => ψ y - (b : EReal)) = ENNReal.ofReal (Real.exp b) • density ψ :=
     funext fun x => density_sub_const ψ b x
-  have hW : weightedMeasure dx (fun y => ψ y - (b : EReal)) =
+  have hW :
+    weightedMeasure dx (fun y => ψ y - (b : EReal)) =
       ENNReal.ofReal (Real.exp b) • weightedMeasure dx ψ := by
     rw [weightedMeasure, weightedMeasure, hdens, withDensity_smul' _ _ ENNReal.ofReal_ne_top]
   have hdm : Measurable (density ψ) := EReal.measurable_exp.comp hm.neg
@@ -203,7 +235,8 @@ theorem ofPotential_sub_const (dx : Measure E) [dx.IsAddHaarMeasure] {ψ : E →
   have hWfr : ∀ᵐ x ∂weightedMeasure dx ψ, x ∉ frontier D :=
     withDensity_absolutelyContinuous dx (density ψ)
       (measure_eq_zero_iff_ae_notMem.mp (hψ.convex_domain.addHaar_frontier dx))
-  have hgrad : (gradient fun y => (ψ y - (b : EReal)).toReal) =ᵐ[weightedMeasure dx ψ]
+  have hgrad :
+    (gradient fun y => (ψ y - (b : EReal)).toReal) =ᵐ[weightedMeasure dx ψ]
       gradient fun y => (ψ y).toReal := by
     filter_upwards [hWD, hWfr] with x hx hxf
     have hxint : x ∈ interior D := by
@@ -211,11 +244,14 @@ theorem ofPotential_sub_const (dx : Measure E) [dx.IsAddHaarMeasure] {ψ : E →
       exact hxf ⟨subset_closure hx, hni⟩
     have hloc : (fun y => (ψ y - (b : EReal)).toReal) =ᶠ[𝓝 x] fun y => (ψ y).toReal - b := by
       filter_upwards [isOpen_interior.mem_nhds hxint] with y hy
-      rw [EReal.toReal_sub (interior_subset hy) (hψ.1 y) (EReal.coe_ne_top b) (EReal.coe_ne_bot b),
+      rw [EReal.toReal_sub (interior_subset hy) (hψ.1 y) (EReal.coe_ne_top b)
+          (EReal.coe_ne_bot b),
         EReal.toReal_coe]
     unfold gradient
     rw [hloc.fderiv_eq, fderiv_sub_const]
-  rw [ofPotential, ofPotential, hW, Measure.map_smul, Measure.map_congr hgrad]
+  rw [ofPotential, ofPotential, hW,
+    Measure.map_smul _ (measurable_gradient_toReal fun y => ψ y - (b : EReal)).aemeasurable,
+    Measure.map_congr hgrad]
 
 end Normalization
 
@@ -223,12 +259,13 @@ section Perturbation
 
 omit [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Two-sided comparison of the exponential masses of `(φ + t b)*` and `φ*`. -/
-private theorem mass_legendre_add_smul_bounds (dx : Measure E) {φ : E → EReal} (hφ : ProperPotential φ)
-    {b : E → ℝ} {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ z, |b z| ≤ M) (t : ℝ) :
+private theorem mass_legendre_add_smul_bounds (dx : Measure E) {φ : E → EReal}
+    (hφ : ProperPotential φ) {b : E → ℝ} {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ z, |b z| ≤ M) (t : ℝ) :
     mass dx (legendre (fun z => φ z + ((t * b z : ℝ) : EReal))) ≤
         ENNReal.ofReal (Real.exp (|t| * M)) * mass dx (legendre φ) ∧
       mass dx (legendre φ) ≤
-        ENNReal.ofReal (Real.exp (|t| * M)) * mass dx (legendre (fun z => φ z + ((t * b z : ℝ) : EReal))) := by
+        ENNReal.ofReal (Real.exp (|t| * M)) *
+          mass dx (legendre (fun z => φ z + ((t * b z : ℝ) : EReal))) := by
   constructor
   · rw [mass, mass, ← lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
     exact lintegral_mono fun x => density_legendre_add_smul_le hφ hM0 hM t x
@@ -241,10 +278,14 @@ private theorem mass_legendre_add_smul_bounds (dx : Measure E) {φ : E → EReal
     simp only [hfun] at h
     exact h
 
-/-- **Integrated first variation of the conjugate partition function** (Cordero-Erausquin–Klartag
-arXiv:1304.0630v1, proof of Theorem 2, (42); Berman–Berndtsson arXiv:1207.6128v1, Lemma 2.7): let `φ` be proper and
-lower semicontinuous with `∫ exp(-φ*) dx < ∞` (`dx` an additive Haar measure; `φ*` may be `+∞`), and let `b` be
-continuous with `|b| ≤ M`. Then `t ↦ ∫ exp(-(φ + t b)*) dx` (real part of the mass) is differentiable at `0` with
+/--
+**Integrated first variation of the conjugate partition function** (Cordero-Erausquin–Klartag
+arXiv:1304.0630v1, proof of Theorem 2, (42); Berman–Berndtsson arXiv:1207.6128v1, Lemma 2.7): let
+`φ` be proper and
+lower semicontinuous with `∫ exp(-φ*) dx < ∞` (`dx` an additive Haar measure; `φ*` may be `+∞`), and
+let `b` be
+continuous with `|b| ≤ M`. Then `t ↦ ∫ exp(-(φ + t b)*) dx` (real part of the mass) is
+differentiable at `0` with
 derivative `∫ b d(ofPotential dx φ*) = ∫ exp(-φ*) b(∇φ*) dx`. -/
 theorem hasDerivAt_mass_legendre_add_smul (dx : Measure E) [dx.IsAddHaarMeasure] {φ : E → EReal}
     (hφ : ProperPotential φ) (hlsc : LowerSemicontinuous φ) (hmass : mass dx (legendre φ) ≠ ⊤)
@@ -256,18 +297,21 @@ theorem hasDerivAt_mass_legendre_add_smul (dx : Measure E) [dx.IsAddHaarMeasure]
   have hfin : ∃ x, φ x ≠ ⊤ := hφ.2
   let ψr : E → ℝ := fun x => (legendre φ x).toReal
   let D : Set E := {x | legendre φ x ≠ ⊤}
-  let F : ℝ → E → ℝ := fun t x => (density (legendre fun z => φ z + ((t * b z : ℝ) : EReal)) x).toReal
+  let F : ℝ → E → ℝ := fun t x =>
+    (density (legendre fun z => φ z + ((t * b z : ℝ) : EReal)) x).toReal
   let F' : E → ℝ := fun x => (density (legendre φ) x).toReal * b (gradient ψr x)
   let bound : E → ℝ := fun x => M * Real.exp M * (density (legendre φ) x).toReal
   have hF0 : F 0 = fun x => (density (legendre φ) x).toReal := by
     funext x
     simp only [F, add_smul_zero]
-  have hdens_fin : ∀ x, legendre φ x ≠ ⊤ →
-      (density (legendre φ) x).toReal = Real.exp (-ψr x) := by
+  have hdens_fin : ∀ x, legendre φ x ≠ ⊤ → (density (legendre φ) x).toReal = Real.exp (-ψr x) := by
     intro x hx
-    rw [density, exp_neg_eq_ofReal hx (legendre_ne_bot φ hφ x), ENNReal.toReal_ofReal (Real.exp_pos _).le]
-  have hF_fin : ∀ x, legendre φ x ≠ ⊤ → ∀ t,
-      F t x = Real.exp (-(legendre (fun z => φ z + ((t * b z : ℝ) : EReal)) x).toReal) := by
+    rw [density, exp_neg_eq_ofReal hx (legendre_ne_bot φ hφ x),
+      ENNReal.toReal_ofReal (Real.exp_pos _).le]
+  have hF_fin :
+    ∀ x,
+      legendre φ x ≠ ⊤ →
+        ∀ t, F t x = Real.exp (-(legendre (fun z => φ z + ((t * b z : ℝ) : EReal)) x).toReal) := by
     intro x hx t
     have htop := (legendre_add_smul_ne_top_iff hφ hM0 hM t x).mpr hx
     simp only [F]
@@ -291,13 +335,14 @@ theorem hasDerivAt_mass_legendre_add_smul (dx : Measure E) [dx.IsAddHaarMeasure]
   have hψr_meas : Measurable ψr := (lowerSemicontinuous_legendre φ).measurable.ereal_toReal
   have hF'_meas : AEStronglyMeasurable F' dx :=
     ((measurable_density_legendre φ).ennreal_toReal.mul
-      (hb.measurable.comp (measurable_gradient_toReal (legendre φ)))).aestronglyMeasurable
+        (hb.measurable.comp (measurable_gradient_toReal (legendre φ)))).aestronglyMeasurable
   have hbound_nonneg : ∀ x, 0 ≤ bound x := fun x =>
     mul_nonneg (mul_nonneg hM0 (Real.exp_pos M).le) ENNReal.toReal_nonneg
   have hbound_int : Integrable bound dx := by
     simpa only [bound] using hdens_int.const_mul (M * Real.exp M)
   have h_lipsch : ∀ᵐ x ∂dx, LipschitzOnWith (Real.nnabs (bound x)) (F · x) (ball (0 : ℝ) 1) := by
-    refine Filter.Eventually.of_forall fun x => LipschitzOnWith.of_dist_le_mul fun u hu v hv => ?_
+    refine
+      Filter.Eventually.of_forall fun x => LipschitzOnWith.of_dist_le_mul fun u hu v hv => ?_
     have hcoef : (↑(Real.nnabs (bound x)) : ℝ) = bound x := by
       rw [Real.nnabs_of_nonneg (hbound_nonneg x), Real.coe_toNNReal _ (hbound_nonneg x)]
     rw [hcoef]
@@ -314,9 +359,11 @@ theorem hasDerivAt_mass_legendre_add_smul (dx : Measure E) [dx.IsAddHaarMeasure]
       simpa [Real.dist_eq] using hv'.le
     have hu_curve := legendre_bounded_perturbation_finite_curve φ hφ x hx b M hM0 hM u
     have hv_curve := legendre_bounded_perturbation_finite_curve φ hφ x hx b M hM0 hM v
-    have huv_curve := legendre_bounded_perturbation_finite_curve
-      (fun z => φ z + ((v * b z : ℝ) : EReal)) (proper_add_smul hφ b v) x hv_curve.1 b M hM0 hM (u - v)
-    have hfun : (fun z : E => φ z + ((v * b z : ℝ) : EReal) + (((u - v) * b z : ℝ) : EReal)) =
+    have huv_curve :=
+      legendre_bounded_perturbation_finite_curve (fun z => φ z + ((v * b z : ℝ) : EReal))
+        (proper_add_smul hφ b v) x hv_curve.1 b M hM0 hM (u - v)
+    have hfun :
+      (fun z : E => φ z + ((v * b z : ℝ) : EReal) + (((u - v) * b z : ℝ) : EReal)) =
         (fun z : E => φ z + ((u * b z : ℝ) : EReal)) := by
       funext z
       rw [add_assoc, ← EReal.coe_add]
@@ -324,8 +371,11 @@ theorem hasDerivAt_mass_legendre_add_smul (dx : Measure E) [dx.IsAddHaarMeasure]
       ring
     have hdiff : |P u - P v| ≤ M * |u - v| := by
       have h := huv_curve.2.2
-      change |(legendre (fun z : E => φ z + ((v * b z : ℝ) : EReal) +
-          (((u - v) * b z : ℝ) : EReal)) x).toReal - P v| ≤ |u - v| * M at h
+      change
+        |(legendre (fun z : E => φ z + ((v * b z : ℝ) : EReal) + (((u - v) * b z : ℝ) : EReal))
+                  x).toReal -
+              P v| ≤
+          |u - v| * M at h
       rw [hfun] at h
       simpa [P, mul_comm] using h
     have hu_shift : |P u - A| ≤ M := by
@@ -386,45 +436,56 @@ theorem hasDerivAt_mass_legendre_add_smul (dx : Measure E) [dx.IsAddHaarMeasure]
     have hxint : x ∈ interior D := by
       by_contra hni
       exact hxf ⟨subset_closure hx, hni⟩
-    have hv := hasDerivAt_legendre_add_smul_of_dualDifferentiable φ hφ hlsc x hxint (hxd hxint) b hb
-      ⟨M, by rintro _ ⟨z, rfl⟩; exact hM z⟩
-    have hfun : (F · x) = fun t =>
+    have hv :=
+      hasDerivAt_legendre_add_smul_of_dualDifferentiable φ hφ hlsc x hxint (hxd hxint) b hb
+        ⟨M, by rintro _ ⟨z, rfl⟩; exact hM z⟩
+    have hfun :
+      (F · x) = fun t =>
         Real.exp (-(legendre (fun z => φ z + ((t * b z : ℝ) : EReal)) x).toReal) :=
       funext fun t => hF_fin x hx t
     rw [hfun]
     have h3 := hv.neg.exp
     simp only [Pi.neg_apply, neg_neg, zero_mul, EReal.coe_zero, add_zero] at h3
     exact h3.congr_deriv (by simp only [F']; rw [hdens_fin x hx])
-  have hresult := hasDerivAt_integral_of_dominated_loc_of_lip (F := F) (F' := F') (bound := bound)
-    (x₀ := (0 : ℝ)) (s := ball (0 : ℝ) 1) (ball_mem_nhds (0 : ℝ) zero_lt_one)
-    hF_meas hF_int hF'_meas h_lipsch hbound_int h_diff
-  have hmassF : (fun t : ℝ => (mass dx (legendre fun z => φ z + ((t * b z : ℝ) : EReal))).toReal) =
-      fun t => ∫ x, F t x ∂dx := by
+  have hresult :=
+    hasDerivAt_integral_of_dominated_loc_of_lip (F := F) (F' := F') (bound := bound) (x₀ :=
+      (0 : ℝ)) (s := ball (0 : ℝ) 1) (ball_mem_nhds (0 : ℝ) zero_lt_one) hF_meas hF_int hF'_meas
+      h_lipsch hbound_int h_diff
+  have hmassF :
+    (fun t : ℝ => (mass dx (legendre fun z => φ z + ((t * b z : ℝ) : EReal))).toReal) = fun t =>
+      ∫ x, F t x ∂dx := by
     funext t
     rw [mass, ← integral_toReal (measurable_density_legendre _).aemeasurable]
     refine Filter.Eventually.of_forall fun x => ?_
     rw [density, EReal.exp_lt_top_iff, lt_top_iff_ne_top]
     intro h
     exact legendre_ne_bot _ (proper_add_smul hφ b t) x (EReal.neg_eq_top_iff.mp h)
-  rw [hmassF, integral_ofPotential dx (lowerSemicontinuous_legendre φ).measurable
-    (legendre_ne_bot φ hφ) hb.measurable]
+  rw [hmassF,
+    integral_ofPotential dx (lowerSemicontinuous_legendre φ).measurable (legendre_ne_bot φ hφ)
+      hb.measurable]
   exact hresult.2
 
 end Perturbation
 
 section EulerLagrange
 
-/-- **Euler–Lagrange equation for the CEK functional** (Cordero-Erausquin–Klartag arXiv:1304.0630v1, proof of
-Theorem 2, (43)–(44)): let `μ ≠ 0` be finite and `dx` an additive Haar measure. If a lower semicontinuous
-`PotentialIntegrable` potential `φ` with `∫ exp(-φ*) dx = 1` maximizes `I_μ(f) = log ∫ exp(-f*) dx - ∫ f dμ` over all
-`PotentialIntegrable` competitors, then `μ` is the moment measure of the (possibly infinite-valued) conjugate `φ*`.
+/--
+**Euler–Lagrange equation for the CEK functional** (Cordero-Erausquin–Klartag arXiv:1304.0630v1,
+proof of
+Theorem 2, (43)–(44)): let `μ ≠ 0` be finite and `dx` an additive Haar measure. If a lower
+semicontinuous
+`PotentialIntegrable` potential `φ` with `∫ exp(-φ*) dx = 1` maximizes `I_μ(f) = log ∫ exp(-f*) dx -
+∫ f dμ` over all
+`PotentialIntegrable` competitors, then `μ` is the moment measure of the (possibly infinite-valued)
+conjugate `φ*`.
 Each bounded continuous `b` gives the competitor `φ + t b`; differentiating at `t = 0` gives
 `∫ b d(ofPotential dx φ*) = ∫ b dμ`. -/
-theorem ofPotential_legendre_eq_of_maximizer (dx μ : Measure E) [dx.IsAddHaarMeasure] [IsFiniteMeasure μ]
-    (hμ : μ ≠ 0) {φ : E → EReal} (hlsc : LowerSemicontinuous φ) (hφ : PotentialIntegrable φ μ)
-    (hmass : mass dx (legendre φ) = 1)
-    (hmax : ∀ f : E → EReal, PotentialIntegrable f μ →
-      variationalFunctional dx μ f ≤ variationalFunctional dx μ φ) :
+theorem ofPotential_legendre_eq_of_maximizer (dx μ : Measure E) [dx.IsAddHaarMeasure]
+    [IsFiniteMeasure μ] (hμ : μ ≠ 0) {φ : E → EReal} (hlsc : LowerSemicontinuous φ)
+    (hφ : PotentialIntegrable φ μ) (hmass : mass dx (legendre φ) = 1)
+    (hmax :
+      ∀ f : E → EReal,
+        PotentialIntegrable f μ → variationalFunctional dx μ f ≤ variationalFunctional dx μ φ) :
     ofPotential dx (legendre φ) = μ := by
   classical
   have hproper : ProperPotential φ := by
@@ -439,13 +500,13 @@ theorem ofPotential_legendre_eq_of_maximizer (dx μ : Measure E) [dx.IsAddHaarMe
     simpa only [Real.norm_eq_abs] using b.norm_coe_le_norm z
   set A : ℝ := ∫ z, (φ z).toReal ∂μ with hA
   set B : ℝ := ∫ z, b z ∂μ with hB
-  have hreal : ∀ t : ℝ, ∀ᵐ z ∂μ,
-      (φ z + ((t * b z : ℝ) : EReal)).toReal = (φ z).toReal + t * b z := by
+  have hreal :
+    ∀ t : ℝ, ∀ᵐ z ∂μ, (φ z + ((t * b z : ℝ) : EReal)).toReal = (φ z).toReal + t * b z := by
     intro t
     filter_upwards [hφ.2.1] with z hz
-    rw [EReal.toReal_add hz (hφ.1 z) (EReal.coe_ne_top _) (EReal.coe_ne_bot _), EReal.toReal_coe]
-  have hbint : ∀ t : ℝ, Integrable (fun z => t * b z) μ := fun t =>
-    (b.integrable μ).const_mul t
+    rw [EReal.toReal_add hz (hφ.1 z) (EReal.coe_ne_top _) (EReal.coe_ne_bot _),
+      EReal.toReal_coe]
+  have hbint : ∀ t : ℝ, Integrable (fun z => t * b z) μ := fun t => (b.integrable μ).const_mul t
   have hpot : ∀ t : ℝ, PotentialIntegrable (fun z => φ z + ((t * b z : ℝ) : EReal)) μ := by
     intro t
     refine ⟨fun z hz => ?_, ?_, ?_⟩
@@ -455,9 +516,11 @@ theorem ofPotential_legendre_eq_of_maximizer (dx μ : Measure E) [dx.IsAddHaarMe
       · exact EReal.coe_ne_bot _ hz
     · filter_upwards [hφ.2.1] with z hz
       exact EReal.add_ne_top hz (EReal.coe_ne_top _)
-    · exact (hφ.2.2.add (hbint t)).congr (by
-        filter_upwards [hreal t] with z hz
-        exact hz.symm)
+    · exact
+        (hφ.2.2.add (hbint t)).congr
+          (by
+            filter_upwards [hreal t] with z hz
+            exact hz.symm)
   have hIntq : ∀ t : ℝ, ∫ z, (φ z + ((t * b z : ℝ) : EReal)).toReal ∂μ = A + t * B := by
     intro t
     rw [integral_congr_ae (hreal t), integral_add hφ.2.2 (hbint t), integral_const_mul]
@@ -468,13 +531,18 @@ theorem ofPotential_legendre_eq_of_maximizer (dx μ : Measure E) [dx.IsAddHaarMe
     have h' := (hbounds t).2
     rw [h, mul_zero, hmass] at h'
     exact one_ne_zero (le_zero_iff.mp h')
-  have hZnetop : ∀ t : ℝ, mass dx (legendre fun z => φ z + ((t * b z : ℝ) : EReal)) ≠ ⊤ := fun t =>
-    ne_top_of_le_ne_top (ENNReal.mul_ne_top ENNReal.ofReal_ne_top (by rw [hmass]; exact ENNReal.one_ne_top))
+  have hZnetop : ∀ t : ℝ, mass dx (legendre fun z => φ z + ((t * b z : ℝ) : EReal)) ≠ ⊤ :=
+    fun t =>
+    ne_top_of_le_ne_top
+      (ENNReal.mul_ne_top ENNReal.ofReal_ne_top (by rw [hmass]; exact ENNReal.one_ne_top))
       (hbounds t).1
-  have hJt : ∀ t : ℝ, variationalFunctional dx μ (fun z => φ z + ((t * b z : ℝ) : EReal)) =
-      ((Real.log (Z t) - (A + t * B) : ℝ) : EReal) := by
+  have hJt :
+    ∀ t : ℝ,
+      variationalFunctional dx μ (fun z => φ z + ((t * b z : ℝ) : EReal)) =
+        ((Real.log (Z t) - (A + t * B) : ℝ) : EReal) := by
     intro t
-    rw [variationalFunctional, ENNReal.log_pos_real (hZne0 t) (hZnetop t), hIntq t, ← EReal.coe_sub]
+    rw [variationalFunctional, ENNReal.log_pos_real (hZne0 t) (hZnetop t), hIntq t, ←
+      EReal.coe_sub]
   have hJ : variationalFunctional dx μ φ = ((-A : ℝ) : EReal) := by
     rw [variationalFunctional, hmass, ENNReal.log_one, zero_sub, EReal.coe_neg]
   have hZ0 : Z 0 = 1 := by
@@ -489,7 +557,8 @@ theorem ofPotential_legendre_eq_of_maximizer (dx μ : Measure E) [dx.IsAddHaarMe
     rw [hZ0, Real.log_one]
     linarith
   have hderiv : HasDerivAt Z (∫ y, b y ∂ofPotential dx (legendre φ)) 0 :=
-    hasDerivAt_mass_legendre_add_smul dx hproper hlsc (by rw [hmass]; exact ENNReal.one_ne_top) hb hM
+    hasDerivAt_mass_legendre_add_smul dx hproper hlsc (by rw [hmass]; exact ENNReal.one_ne_top)
+      hb hM
   have hlog := hderiv.log (by rw [hZ0]; exact one_ne_zero)
   have hmul : HasDerivAt (fun t : ℝ => t * B) B 0 := by
     simpa only [one_mul, id] using (hasDerivAt_id (0 : ℝ)).mul_const B

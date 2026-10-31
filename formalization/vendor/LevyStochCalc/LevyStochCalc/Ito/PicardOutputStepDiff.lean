@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardOutputWeighting
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardOutputWeighting
 
 /-!
 # The contraction estimate for the Picard step
@@ -14,6 +18,8 @@ into a single per-time second-moment bound for the difference of two steps by th
 the difference of the two frozen paths. Weighting that bound back into the Bielecki norm
 gives a contraction factor that tends to `0` as the rate `β` grows.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

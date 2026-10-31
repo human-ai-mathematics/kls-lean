@@ -25,6 +25,7 @@ Use the pinned Lean toolchain and dependency manifest. From the repository root:
 ```bash
 python3 research/cache_mathlib.py
 python3 research/check_ledger.py
+python3 research/check_documentation.py
 python3 research/verify.py
 ```
 
@@ -39,6 +40,14 @@ a Lean build. Proof, dependency and interface changes need the checks specified 
 [workflow](research/workflow.md). Keep generated progress views synchronized through
 `research/progress/update.py` using the intended Git index; preserve unrelated local work.
 Do not edit generated blocks directly.
+
+The local documentation gate checks source headings, module-directory freshness, local
+Markdown links, declaration-bound Lean line anchors and reviewed current scope passages.
+Use `python3 research/module_inventory.py` to refresh the module directory and
+`python3 research/check_documentation.py --write` to refresh the two current-scope blocks
+and bound line anchors. Review changes to their tracked inputs in
+`research/progress/documentation-checks.json`; the gate does not infer mathematical truth
+from prose. It runs in full local verification and is outside remote Lean-only certification.
 
 ## Reviews and releases
 

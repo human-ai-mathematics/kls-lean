@@ -1,10 +1,12 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Line.Buser
-import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
-import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
-import FunctionalInequalities.Probability.Covariance.Positivity
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Line.Buser
+public import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
+public import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
+public import FunctionalInequalities.Probability.Covariance.Positivity
 
 /-!
 # The ambient isoperimetric constant and the Cheeger–Buser comparison
@@ -15,7 +17,8 @@ from Cheeger, Buser, Ledoux and De Ponti–Mondino), and the two equivalent stat
 conjecture.
 
 * `Isoperimetry.constant_eq_smoothConstant_univ` and
-  `Isoperimetry.inverseScale_eq_inv_smoothConstant_univ`: for a probability law with a Borell density `ρ` relative to Lebesgue measure, `h_μ` is the
+  `Isoperimetry.inverseScale_eq_inv_smoothConstant_univ`: for a probability law with a Borell
+  density `ρ` relative to Lebesgue measure, `h_μ` is the
   infimum over open sets with smooth boundary of `∫_{∂A} ρ dℋ^{n-1} / min {μ(A), 1 - μ(A)}`, the
   boundary charged everywhere, and `Isoperimetry.inverseScale μ = ψ_μ`. The Borell density is the
   upper-semicontinuous log-concave representative; the boundary integral depends on the
@@ -35,6 +38,8 @@ conjecture.
 `C_P(μ)` is `Poincare.LocalSlope.Intrinsic.constant μ`; for a log-concave law with a density it is
 the paper's Equation (1.1) by `LogConcave.localSlope_constant_eq_ambient_gradient`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,9 +1,12 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
 
 /-!
 # The Minkowski Cheeger infimum and its integrated coarea bound
 
-Hole-free layer on top of `KLS/Geometry/Cheeger/MinkowskiContent.lean`.  It owns the Minkowski Cheeger
+Hole-free layer on top of `KLS/Geometry/Cheeger/MinkowskiContent.lean`.  It owns the Minkowski
+Cheeger
 infimum
 
 `h_M = minkowskiConstant ν = ⨅_{0 < ν B < 1} ν⁺(B) / min {ν B, 1 - ν B}`
@@ -27,6 +30,8 @@ Nothing here depends on the weighted coarea formula, Sard, the smooth recovery s
 relative perimeter: the only local import is the likewise hole-free
 `MinkowskiContent`, whose own import closure is Mathlib.
 -/
+
+@[expose] public section
 
 noncomputable section
 

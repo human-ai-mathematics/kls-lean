@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.UpperSemicontinuity
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Hessian
-import FunctionalInequalities.KLS.LogConcave.Translation
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+module
+
+public import FunctionalInequalities.Analysis.UpperSemicontinuity
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Hessian
+public import FunctionalInequalities.KLS.LogConcave.Translation
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
 
 /-!
 # Gaussian posterior of the smoothing and its uniform moments
@@ -16,6 +18,8 @@ on `x`. This is the moment input for the polynomial growth of the derivatives of
 potential, which is not treated here.
 -/
 
+@[expose] public section
+
 open MeasureTheory ProbabilityTheory Set FunctionalInequalities
 open scoped RealInnerProductSpace Topology
 
@@ -26,11 +30,12 @@ open FunctionalInequalities.Probability.Gaussian
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-/-- The Gaussian posterior `P_x = μ.tilted (-s‖x-·‖²)` of a probability law `μ`, as a probability law. -/
-noncomputable def posteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s) (x : E) :
-    ProbabilityMeasure E :=
-  ⟨μ.tilted (fun y => -s * ‖x - y‖ ^ 2),
-    isProbabilityMeasure_posterior μ hs x⟩
+/--
+The Gaussian posterior `P_x = μ.tilted (-s‖x-·‖²)` of a probability law `μ`, as a probability law.
+-/
+noncomputable def posteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s)
+    (x : E) : ProbabilityMeasure E :=
+  ⟨μ.tilted (fun y => -s * ‖x - y‖ ^ 2), isProbabilityMeasure_posterior μ hs x⟩
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem gaussian_weight_logConcave {s Z : ℝ} (hs : 0 ≤ s) (hZ : 0 < Z)
@@ -57,34 +62,40 @@ private theorem gaussian_weight_logConcave {s Z : ℝ} (hs : 0 ≤ s) (hZ : 0 < 
 section PosteriorDensity
 
 omit [CompleteSpace E]
-/-- The posterior has the Borell density `ρ(y) e^{-s‖x-y‖²}/Z_x` with respect to Lebesgue measure. -/
-theorem posteriorLaw_isBorellDensity {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
+/--
+The posterior has the Borell density `ρ(y) e^{-s‖x-y‖²}/Z_x` with respect to Lebesgue measure. -/
+theorem posteriorLaw_isBorellDensity {μ : Measure E} [IsProbabilityMeasure μ] {ρ : E → ℝ}
+    (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
     KLS.IsBorellDensity (posteriorLaw μ hs x : Measure E) volume
-      (fun y => ρ y * (Real.exp (-s * ‖x - y‖ ^ 2) /
-        ∫ z, Real.exp (-s * ‖x - z‖ ^ 2) ∂μ)) := by
+      (fun y => ρ y * (Real.exp (-s * ‖x - y‖ ^ 2) / ∫ z, Real.exp (-s * ‖x - z‖ ^ 2) ∂μ)) := by
   let Z : ℝ := ∫ z, Real.exp (-s * ‖x - z‖ ^ 2) ∂μ
   have hZ : 0 < Z := integral_exp_pos (integrable_shiftedKernel μ hs x)
   let g : E → ℝ := fun y => Real.exp (-s * ‖x - y‖ ^ 2) / Z
   have hg : Continuous g := by dsimp [g]; fun_prop
   have hgpos : ∀ y, 0 < g y := fun y => div_pos (Real.exp_pos _) hZ
-  refine ⟨hρ.measurable.mul hg.measurable, fun y => mul_nonneg (hρ.nonneg y) (hgpos y).le,
-    FunctionalInequalities.Analysis.upperSemicontinuous_mul_of_continuous_pos hρ.upperSemicontinuous hg hgpos, ?_, ?_⟩
+  refine
+    ⟨hρ.measurable.mul hg.measurable, fun y => mul_nonneg (hρ.nonneg y) (hgpos y).le,
+      FunctionalInequalities.Analysis.upperSemicontinuous_mul_of_continuous_pos
+        hρ.upperSemicontinuous hg hgpos,
+      ?_, ?_⟩
   · intro a b t ht0 ht1
     have hgLC := gaussian_weight_logConcave hs.le hZ x a b ht0 ht1
     have hρLC := hρ.logConcave a b t ht0 ht1
     change (ρ a * g a) ^ t * (ρ b * g b) ^ (1 - t) ≤ _
-    rw [Real.mul_rpow (hρ.nonneg a) (hgpos a).le,
-      Real.mul_rpow (hρ.nonneg b) (hgpos b).le]
+    rw [Real.mul_rpow (hρ.nonneg a) (hgpos a).le, Real.mul_rpow (hρ.nonneg b) (hgpos b).le]
     calc
       ρ a ^ t * g a ^ t * (ρ b ^ (1 - t) * g b ^ (1 - t)) =
-          (ρ a ^ t * ρ b ^ (1 - t)) * (g a ^ t * g b ^ (1 - t)) := by ring
+          (ρ a ^ t * ρ b ^ (1 - t)) * (g a ^ t * g b ^ (1 - t)) := by
+        ring
       _ ≤ ρ (t • a + (1 - t) • b) * g (t • a + (1 - t) • b) :=
-        mul_le_mul hρLC hgLC (mul_nonneg (Real.rpow_nonneg (hgpos a).le _)
-          (Real.rpow_nonneg (hgpos b).le _)) (hρ.nonneg _)
-  · change volume.withDensity (fun y => ENNReal.ofReal (ρ y * g y)) =
-      μ.withDensity (fun y => ENNReal.ofReal (g y))
-    have heq : (fun y => ENNReal.ofReal (ρ y * g y)) =
+        mul_le_mul hρLC hgLC
+          (mul_nonneg (Real.rpow_nonneg (hgpos a).le _) (Real.rpow_nonneg (hgpos b).le _))
+          (hρ.nonneg _)
+  · change
+      volume.withDensity (fun y => ENNReal.ofReal (ρ y * g y)) =
+        μ.withDensity (fun y => ENNReal.ofReal (g y))
+    have heq :
+      (fun y => ENNReal.ofReal (ρ y * g y)) =
         (fun y => ENNReal.ofReal (ρ y)) * fun y => ENNReal.ofReal (g y) := by
       funext y
       exact ENNReal.ofReal_mul (hρ.nonneg y)
@@ -101,10 +112,9 @@ end PosteriorDensity
 
 
 /-- The centered posterior `(y ↦ y − ∫ y dP_x)_* P_x`. -/
-noncomputable def centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s) (x : E) :
-    ProbabilityMeasure E :=
-  Probability.translateLaw (posteriorLaw μ hs x)
-    (-∫ y, y ∂(posteriorLaw μ hs x : Measure E))
+noncomputable def centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ}
+    (hs : 0 < s) (x : E) : ProbabilityMeasure E :=
+  Probability.translateLaw (posteriorLaw μ hs x) (-∫ y, y ∂(posteriorLaw μ hs x : Measure E))
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- The centered posterior is the pushforward of `P_x` under `y ↦ y − ∫ z dP_x`. -/
@@ -128,38 +138,42 @@ theorem centeredPosteriorLaw_logConcave {μ : Measure E} [IsProbabilityMeasure �
     KLS.LogConcave (centeredPosteriorLaw μ hs x) :=
   (posteriorLaw_logConcave hρ hs x).translateLaw _
 
-theorem memLp_two_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s)
-    (x : E) : MemLp id 2 (centeredPosteriorLaw μ hs x : Measure E) := by
+theorem memLp_two_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ}
+    (hs : 0 < s) (x : E) : MemLp id 2 (centeredPosteriorLaw μ hs x : Measure E) := by
   let P : ProbabilityMeasure E := posteriorLaw μ hs x
   let c : E := -∫ y, y ∂(P : Measure E)
   have hp : MemLp id 2 (P : Measure E) := memLp_two_id_posterior μ hs x
   have hc : MemLp (fun _ : E => c) 2 (P : Measure E) := memLp_const c
   change MemLp id 2 ((P : Measure E).map (fun y => c + y))
-  apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable
-    (measurable_const_add c).aemeasurable).2
+  apply
+    (memLp_map_measure_iff continuous_id.aestronglyMeasurable
+        (measurable_const_add c).aemeasurable).2
   exact hc.add hp
 
 end CenteredPosteriorDensity
 
 /-- The centered posterior has mean zero (the barycenter is integrable). -/
-theorem integral_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s)
-    (x : E) : (∫ y, y ∂(centeredPosteriorLaw μ hs x : Measure E)) = 0 := by
-  exact Probability.integral_id_translateLaw_neg_integral (posteriorLaw μ hs x)
-    ((memLp_two_id_posterior μ hs x).integrable one_le_two)
+theorem integral_id_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ}
+    (hs : 0 < s) (x : E) : (∫ y, y ∂(centeredPosteriorLaw μ hs x : Measure E)) = 0 := by
+  exact
+    Probability.integral_id_translateLaw_neg_integral (posteriorLaw μ hs x)
+      ((memLp_two_id_posterior μ hs x).integrable one_le_two)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- Directional variances are unchanged by centering. -/
-theorem variance_inner_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ} (hs : 0 < s)
-    (x v : E) : variance (fun y => ⟪y, v⟫) (centeredPosteriorLaw μ hs x : Measure E) =
+theorem variance_inner_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ] {s : ℝ}
+    (hs : 0 < s) (x v : E) :
+    variance (fun y => ⟪y, v⟫) (centeredPosteriorLaw μ hs x : Measure E) =
       variance (fun y => ⟪y, v⟫) (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) := by
-  rw [coe_centeredPosteriorLaw, variance_map (by fun_prop : AEMeasurable (fun y : E => ⟪y, v⟫) _)
-    (by fun_prop : AEMeasurable (fun y : E => y - ∫ z, z ∂(μ.tilted (fun z => -s * ‖x - z‖ ^ 2))) _)]
+  rw [coe_centeredPosteriorLaw,
+    variance_map (by fun_prop : AEMeasurable (fun y : E => ⟪y, v⟫) _)
+      (by fun_prop :
+        AEMeasurable (fun y : E => y - ∫ z, z ∂(μ.tilted (fun z => -s * ‖x - z‖ ^ 2))) _)]
   let P := μ.tilted (fun y => -s * ‖x - y‖ ^ 2)
   let _ : IsProbabilityMeasure P := isProbabilityMeasure_posterior μ hs x
   have hY : AEStronglyMeasurable (fun y : E => ⟪y, v⟫) P :=
     ((by fun_prop : Continuous (fun y : E => ⟪y, v⟫))).aestronglyMeasurable
-  simpa only [Function.comp_def, inner_sub_left] using
-    variance_sub_const hY ⟪∫ z, z ∂P, v⟫
+  simpa only [Function.comp_def, inner_sub_left] using variance_sub_const hY ⟪∫ z, z ∂P, v⟫
 
 omit [CompleteSpace E] in
 theorem variance_inner_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilityMeasure μ]
@@ -172,7 +186,8 @@ theorem variance_inner_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilityMe
 (dimension zero included). -/
 theorem integral_norm_sq_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
-    (∫ y, ‖y‖ ^ 2 ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤ (Module.finrank ℝ E : ℝ) / (2 * s) := by
+    (∫ y, ‖y‖ ^ 2 ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤
+      (Module.finrank ℝ E : ℝ) / (2 * s) := by
   let Q := centeredPosteriorLaw μ hs x
   let b := stdOrthonormalBasis ℝ E
   have hQ2 : MemLp id 2 (Q : Measure E) := memLp_two_id_centeredPosteriorLaw μ hs x
@@ -182,17 +197,18 @@ theorem integral_norm_sq_centeredPosteriorLaw_le {μ : Measure E} [IsProbability
     have hleft : MemLp (fun y : E => ⟪v, y⟫) 2 (Q : Measure E) := by
       simpa only [id_eq, innerSL_apply_apply] using hQ2.continuousLinearMap_comp (innerSL ℝ v)
     exact hleft.ae_eq (ae_of_all _ fun y => (real_inner_comm v y).symm)
-  have hsq (i : Fin (Module.finrank ℝ E)) : Integrable (fun y : E => ⟪y, b i⟫ ^ 2) (Q : Measure E) :=
+  have hsq (i : Fin (Module.finrank ℝ E)) :
+    Integrable (fun y : E => ⟪y, b i⟫ ^ 2) (Q : Measure E) :=
     (memLp_two_iff_integrable_sq (hproj (b i)).aestronglyMeasurable).1 (hproj (b i))
   have hmproj (v : E) : (∫ y, ⟪y, v⟫ ∂(Q : Measure E)) = 0 := by
-    calc (∫ y, ⟪y, v⟫ ∂(Q : Measure E)) = ∫ y, (innerSL ℝ v) y ∂(Q : Measure E) := by
-          apply integral_congr_ae
-          exact ae_of_all _ fun y => real_inner_comm _ _
-      _ = (innerSL ℝ v) (∫ y, y ∂(Q : Measure E)) :=
-        (innerSL ℝ v).integral_comp_comm hQi
+    calc
+      (∫ y, ⟪y, v⟫ ∂(Q : Measure E)) = ∫ y, (innerSL ℝ v) y ∂(Q : Measure E) := by
+        apply integral_congr_ae
+        exact ae_of_all _ fun y => real_inner_comm _ _
+      _ = (innerSL ℝ v) (∫ y, y ∂(Q : Measure E)) := (innerSL ℝ v).integral_comp_comm hQi
       _ = 0 := by rw [hmean]; simp
-  have hv (v : E) : (∫ y, ⟪y, v⟫ ^ 2 ∂(Q : Measure E)) =
-      variance (fun y => ⟪y, v⟫) (Q : Measure E) := by
+  have hv (v : E) :
+    (∫ y, ⟪y, v⟫ ^ 2 ∂(Q : Measure E)) = variance (fun y => ⟪y, v⟫) (Q : Measure E) := by
     rw [variance_eq_sub (hproj v), hmproj]
     simp
   have heq : (fun y : E => ‖y‖ ^ 2) = fun y => ∑ i, ⟪y, b i⟫ ^ 2 := by
@@ -201,7 +217,8 @@ theorem integral_norm_sq_centeredPosteriorLaw_le {μ : Measure E} [IsProbability
   rw [heq, integral_finsetSum Finset.univ (fun i _ => hsq i)]
   calc
     ∑ i, (∫ y, ⟪y, b i⟫ ^ 2 ∂(Q : Measure E)) =
-        ∑ i, variance (fun y => ⟪y, b i⟫) (Q : Measure E) := by simp_rw [hv]
+        ∑ i, variance (fun y => ⟪y, b i⟫) (Q : Measure E) := by
+      simp_rw [hv]
     _ ≤ ∑ _i : Fin (Module.finrank ℝ E), 1 / (2 * s) := by
       apply Finset.sum_le_sum
       intro i _
@@ -209,21 +226,28 @@ theorem integral_norm_sq_centeredPosteriorLaw_le {μ : Measure E} [IsProbability
       simpa only [b.norm_eq_one, one_pow] using h
     _ = (Module.finrank ℝ E : ℝ) / (2 * s) := by simp; ring
 
-/-- The centered posterior is Borel log-concave, square integrable, centered, with directional variance
+/--
+The centered posterior is Borel log-concave, square integrable, centered, with directional variance
 `≤ ‖v‖²/(2s)` and trace `≤ n/(2s)`: the inputs of the quantitative Borell bounds. -/
-theorem centeredPosteriorLaw_data {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
+theorem centeredPosteriorLaw_data {μ : Measure E} [IsProbabilityMeasure μ] {ρ : E → ℝ}
+    (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
     KLS.BorelLogConcave (centeredPosteriorLaw μ hs x) ∧
       MemLp id 2 (centeredPosteriorLaw μ hs x : Measure E) ∧
-      (∫ y, y ∂(centeredPosteriorLaw μ hs x : Measure E)) = 0 ∧
-      (∀ v : E, variance (fun y => ⟪y, v⟫) (centeredPosteriorLaw μ hs x : Measure E) ≤
-        ‖v‖ ^ 2 / (2 * s)) ∧
-      (∫ y, ‖y‖ ^ 2 ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤ (Module.finrank ℝ E : ℝ) / (2 * s) :=
-  ⟨(KLS.LogConcave.borel_iff _).1 (centeredPosteriorLaw_logConcave hρ hs x), memLp_two_id_centeredPosteriorLaw μ hs x,
-    integral_id_centeredPosteriorLaw μ hs x, variance_inner_centeredPosteriorLaw_le hρ hs x, integral_norm_sq_centeredPosteriorLaw_le hρ hs x⟩
+        (∫ y, y ∂(centeredPosteriorLaw μ hs x : Measure E)) = 0 ∧
+          (∀ v : E,
+              variance (fun y => ⟪y, v⟫) (centeredPosteriorLaw μ hs x : Measure E) ≤
+                ‖v‖ ^ 2 / (2 * s)) ∧
+            (∫ y, ‖y‖ ^ 2 ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤
+              (Module.finrank ℝ E : ℝ) / (2 * s) :=
+  ⟨(KLS.LogConcave.borel_iff _).1 (centeredPosteriorLaw_logConcave hρ hs x),
+    memLp_two_id_centeredPosteriorLaw μ hs x, integral_id_centeredPosteriorLaw μ hs x,
+    variance_inner_centeredPosteriorLaw_le hρ hs x,
+    integral_norm_sq_centeredPosteriorLaw_le hρ hs x⟩
 
-/-- **Uniform moments of the centered posterior**: every order `p` is bounded by `p!/q^p · C₀` with the
-rate `q = log 3/(4R)`, `R = 2√(n/(2s)+1)`, independent of the base point `x` (BKL Section 2, p. 5). -/
+/--
+**Uniform moments of the centered posterior**: every order `p` is bounded by `p!/q^p · C₀` with the
+rate `q = log 3/(4R)`, `R = 2√(n/(2s)+1)`, independent of the base point `x` (BKL Section 2, p. 5).
+-/
 theorem integral_norm_pow_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) (p : ℕ) :
     let R : ℝ := 2 * Real.sqrt ((Module.finrank ℝ E : ℝ) / (2 * s) + 1)
@@ -235,16 +259,19 @@ theorem integral_norm_pow_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilit
   have h2 := memLp_two_id_centeredPosteriorLaw μ hs x
   have hi : Integrable (fun y : E => ‖y‖ ^ 2) (centeredPosteriorLaw μ hs x : Measure E) :=
     (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).1 h2
-  exact hb.integral_norm_pow_le_of_second_bound hi
-    (integral_norm_sq_centeredPosteriorLaw_le hρ hs x) p
+  exact
+    hb.integral_norm_pow_le_of_second_bound hi
+      (integral_norm_sq_centeredPosteriorLaw_le hρ hs x) p
 
-/-- Uniform exponential moment `∫ e^{q‖y‖} dQ_x ≤ C₀` of the centered posterior, same rate `q`. -/
+/--
+Uniform exponential moment `∫ e^{q‖y‖} dQ_x ≤ C₀` of the centered posterior, same rate `q`. -/
 theorem integral_exp_norm_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x : E) :
     let R : ℝ := 2 * Real.sqrt ((Module.finrank ℝ E : ℝ) / (2 * s) + 1)
     Integrable (fun y : E => Real.exp ((Real.log 3 / (4 * R)) * ‖y‖))
         (centeredPosteriorLaw μ hs x : Measure E) ∧
-      (∫ y, Real.exp ((Real.log 3 / (4 * R)) * ‖y‖) ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤
+      (∫ y,
+          Real.exp ((Real.log 3 / (4 * R)) * ‖y‖) ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤
         (3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ))) := by
   dsimp only
   let M : ℝ := (Module.finrank ℝ E : ℝ) / (2 * s)
@@ -254,16 +281,19 @@ theorem integral_exp_norm_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilit
   have hR2 : (2 * Real.sqrt (M + 1)) ^ 2 = 4 * (M + 1) := by
     rw [mul_pow, Real.sq_sqrt hplus.le]; norm_num
   have hi : Integrable (fun y : E => ‖y‖ ^ 2) (centeredPosteriorLaw μ hs x : Measure E) :=
-    (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).1 (memLp_two_id_centeredPosteriorLaw μ hs x)
-  have hsecond : (∫ y, ‖y‖ ^ 2 ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤
+    (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).1
+      (memLp_two_id_centeredPosteriorLaw μ hs x)
+  have hsecond :
+    (∫ y, ‖y‖ ^ 2 ∂(centeredPosteriorLaw μ hs x : Measure E)) ≤
       (2 * Real.sqrt (M + 1)) ^ 2 / 4 := by
     rw [hR2]
     have h := integral_norm_sq_centeredPosteriorLaw_le hρ hs x
     change _ ≤ M at h
     nlinarith
   have hb := (KLS.LogConcave.borel_iff _).1 (centeredPosteriorLaw_logConcave hρ hs x)
-  exact hb.integral_exp_norm_le_of_ball hR
-    (Probability.measure_ball_ge_of_integral_norm_sq_le hR hi hsecond)
+  exact
+    hb.integral_exp_norm_le_of_ball hR
+      (Probability.measure_ball_ge_of_integral_norm_sq_le hR hi hsecond)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- The common rate `q = log 3/(8√(n/(2s)+1))` is positive (also in dimension zero). -/

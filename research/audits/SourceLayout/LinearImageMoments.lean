@@ -1,5 +1,10 @@
-import FunctionalInequalities.Probability.Moments
-import Lean
+module
+
+public import FunctionalInequalities.Probability.Moments
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities MeasureTheory
 

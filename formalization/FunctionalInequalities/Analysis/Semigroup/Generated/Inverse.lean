@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
 
 /-!
 # The inverse of `T†T` on the orthogonal complement of `ker T`
@@ -9,6 +11,8 @@ on `(ker T)ᗮ`: every `g ⊥ ker T` is `A u` for exactly one `u ⊥ ker T` in t
 `‖u‖ ≤ C ‖g‖`, `‖T u‖² = ⟪g, u⟫` and `⟪g, u⟫ ≤ C ‖g‖²`. This is the operator-theoretic core of
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 2.1, with `C = λ⁻¹`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

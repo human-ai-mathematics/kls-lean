@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.LocalExtension
-import FunctionalInequalities.Analysis.Graph.Integral
-import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.LocalExtension
+public import FunctionalInequalities.Analysis.Graph.Integral
+public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 
 /-! # Weighted graph area over an open parameter domain
 
@@ -30,6 +32,8 @@ extension; this module uses its explicit agreement ball.
 No integrability, boundedness or finiteness hypothesis is used; the weight may be unbounded or
 identically `∞`, `S` need not be bounded or of finite measure, and `O = ∅` or `S = ∅` are covered.
 -/
+
+@[expose] public section
 
 noncomputable section
 

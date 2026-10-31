@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Convex.Measure
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Convex.Measure
 
 /-!
 # Almost-everywhere differentiability and supporting-slope uniqueness
@@ -10,6 +12,8 @@ Supporting convex infrastructure for Letwin arXiv:2607.24164v1
 Theorem 1.2 and Lemma 2.2. Mathematical scopes and source attributions
 are retained in the individual declarations.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set
@@ -87,40 +91,37 @@ gradient** (`∂u(x) ⊆ K̄` for the weak moment map, whose gradient lies
 a.e. in the target `K`): if `u` is convex and Lipschitz on a finite-dimensional inner product space,
 `K` is closed and convex and `∇u(x) ∈ K` for a.e. `x`, then every subgradient `p` of `u` at every
 point `x` (`u(x) + ⟪p, y − x⟫ ≤ u(y)` for all `y`) lies in `K`. -/
-theorem subgradient_mem_of_ae_gradient_mem [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
+theorem subgradient_mem_of_ae_gradient_mem [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
-    (hae : ∀ᵐ x ∂(volume : Measure E), gradient u x ∈ K)
-    {x p : E} (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) : p ∈ K := by
+    (hae : ∀ᵐ x ∂(volume : Measure E), gradient u x ∈ K) {x p : E}
+    (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) : p ∈ K := by
   by_contra hpn
-  obtain ⟨f, s, hps, hsep⟩ :=
-    geometric_hahn_banach_point_closed hKc hK hpn
+  obtain ⟨f, s, hps, hsep⟩ := geometric_hahn_banach_point_closed hKc hK hpn
   let θ : E := (InnerProductSpace.toDual ℝ E).symm f
   have hθ : ∀ q : E, ⟪q, θ⟫ = f q := by
     intro q
     rw [real_inner_comm]
-    exact InnerProductSpace.toDual_symm_apply
-
+    exact
+      InnerProductSpace.toDual_symm_apply
   -- The differentiability points with gradient in K form a dense set.
+
   have hdense : Dense {z | DifferentiableAt ℝ u z ∧ gradient u z ∈ K} :=
     MeasureTheory.Measure.dense_of_ae
       ((hu.ae_differentiableAt (μ := (volume : Measure E))).and hae)
-
   -- Convexity gives the bound on the dense set; continuity extends it everywhere.
-  have hbound :
-      ∀ z ∈ {z | DifferentiableAt ℝ u z ∧ gradient u z ∈ K},
-        s ≤ u (z + θ) - u z := by
+
+  have hbound : ∀ z ∈ {z | DifferentiableAt ℝ u z ∧ gradient u z ∈ K}, s ≤ u (z + θ) - u z := by
     intro z hz
-    exact (hsep _ hz.2).le.trans
-      ((hθ (gradient u z)) ▸ gradient_le_increment hconv z θ hz.1)
+    exact (hsep _ hz.2).le.trans ((hθ (gradient u z)) ▸ gradient_le_increment hconv z θ hz.1)
   have hb : ∀ z : E, s ≤ u (z + θ) - u z := by
     intro z
-    exact hdense.induction hbound
-      (isClosed_le continuous_const
-        ((hu.continuous.comp (continuous_id.add_const θ)).sub hu.continuous)) z
-
-  have hb' : s ≤ u x - u (x - θ) := by
-    simpa only [sub_add_cancel] using hb (x - θ)
+    exact
+      hdense.induction hbound
+        (isClosed_le continuous_const
+          ((hu.continuous.comp (continuous_id.add_const θ)).sub hu.continuous))
+        z
+  have hb' : s ≤ u x - u (x - θ) := by simpa only [sub_add_cancel] using hb (x - θ)
   have hp' := hp (x - θ)
   simp only [sub_sub_cancel_left, inner_neg_right, hθ] at hp'
   linarith
@@ -165,19 +166,21 @@ private theorem legendre_eq_of_subgradient (u : E → ℝ) (x p : E)
 Alexandrov identity): for a convex Lipschitz `u` on a finite-dimensional inner product space, the
 set of `p` that are subgradients of `u` at two distinct points is Lebesgue-null (such `p` are
 non-differentiability points of the conjugate `u*`, or frontier points of its domain). -/
-theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u) :
-    (volume : Measure E) {p : E | ∃ x y : E, x ≠ y ∧ (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧
-      (∀ z, u y + ⟪p, z - y⟫ ≤ u z)} = 0 := by
+theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u)
+    (hconv : ConvexOn ℝ univ u) :
+    (volume : Measure E)
+        {p : E |
+          ∃ x y : E, x ≠ y ∧ (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧ (∀ z, u y + ⟪p, z - y⟫ ≤ u z)} =
+      0 := by
   have _ := hu
   have _ := hconv
   classical
   let φ : E → EReal := fun x => (u x : EReal)
   let Dom : Set E := {q | legendre φ q ≠ ⊤}
   let g : E → ℝ := fun q => (legendre φ q).toReal
-  let S : Set E := {p : E | ∃ x y : E, x ≠ y ∧
-    (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧
-    (∀ z, u y + ⟪p, z - y⟫ ≤ u z)}
+  let S : Set E :=
+    {p : E | ∃ x y : E, x ≠ y ∧ (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧ (∀ z, u y + ⟪p, z - y⟫ ≤ u z)}
   change (volume : Measure E) S = 0
   have hφ : ProperPotential φ := by
     refine ⟨?_, ⟨0, ?_⟩⟩
@@ -188,20 +191,18 @@ theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [Measura
   have hDom : Convex ℝ Dom := hconvφ.convex_domain
   have hconvG : ConvexOn ℝ (interior Dom) g :=
     hconvφ.convexOn_toReal.subset interior_subset hDom.interior
-  have hae :
-      ∀ᵐ q : E ∂(volume : Measure E),
-        q ∈ interior Dom → DifferentiableAt ℝ g q :=
-    FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen
-      (volume : Measure E) isOpen_interior hconvG
-  let B : Set E := {q | q ∈ interior Dom ∧ ¬ DifferentiableAt ℝ g q}
+  have hae : ∀ᵐ q : E ∂(volume : Measure E), q ∈ interior Dom → DifferentiableAt ℝ g q :=
+    FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen (volume : Measure E)
+      isOpen_interior hconvG
+  let B : Set E := {q | q ∈ interior Dom ∧ ¬DifferentiableAt ℝ g q}
   have hB : (volume : Measure E) B = 0 := by
     have hnot : ∀ᵐ q : E ∂(volume : Measure E), q ∉ B := by
       filter_upwards [hae] with q hq
       intro hqB
-      change q ∈ interior Dom ∧ ¬ DifferentiableAt ℝ g q at hqB
+      change q ∈ interior Dom ∧ ¬DifferentiableAt ℝ g q at hqB
       exact hqB.2 (hq hqB.1)
     have hz := ae_iff.mp hnot
-    have hset : {q : E | ¬ q ∉ B} = B := by
+    have hset : {q : E | ¬q ∉ B} = B := by
       ext q
       simp
     rw [hset] at hz
@@ -217,8 +218,7 @@ theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [Measura
       simpa only [φ] using legendre_eq_of_subgradient u y p hy
     have hterm : (⟪x, p⟫ : EReal) - φ x ≠ ⊤ := by
       intro ht
-      have ht' : ((⟪x, p⟫ - u x : ℝ) : EReal) = ⊤ := by
-        simpa only [φ, EReal.coe_sub] using ht
+      have ht' : ((⟪x, p⟫ - u x : ℝ) : EReal) = ⊤ := by simpa only [φ, EReal.coe_sub] using ht
       exact EReal.coe_ne_top _ ht'
     have hpD : p ∈ Dom := by
       intro htop
@@ -227,11 +227,10 @@ theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [Measura
     rw [closure_eq_interior_union_frontier] at hpcl
     rcases hpcl with hpI | hpF
     · right
-      change p ∈ interior Dom ∧ ¬ DifferentiableAt ℝ g p
+      change p ∈ interior Dom ∧ ¬DifferentiableAt ℝ g p
       refine ⟨hpI, ?_⟩
       intro hd
-      have hd' : DifferentiableAt ℝ
-          (fun q => (legendre φ q).toReal) p := by
+      have hd' : DifferentiableAt ℝ (fun q => (legendre φ q).toReal) p := by
         simpa only [g] using hd
       have hxg := conjugate_maximizer_eq_gradient φ hφ hpI hd' x hxEq
       have hyg := conjugate_maximizer_eq_gradient φ hφ hpI hd' y hyEq
@@ -290,8 +289,8 @@ theorem inner_subgradient_eq_of_affine_on_line {u : E → ℝ} {x₀ θ : E} {c 
 
 /-- The set of subgradients of a function affine along a line in a nonzero direction is
 Lebesgue-null (it lies in an affine hyperplane). -/
-theorem volume_setOf_subgradient_eq_zero_of_affine_on_line [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {x₀ θ : E} (hθ : θ ≠ 0) {c : ℝ}
+theorem volume_setOf_subgradient_eq_zero_of_affine_on_line [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] {u : E → ℝ} {x₀ θ : E} (hθ : θ ≠ 0) {c : ℝ}
     (hline : ∀ t : ℝ, u (x₀ + t • θ) = u x₀ + t * c) :
     (volume : Measure E) {p | ∃ x, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} = 0 := by
   let L : E →ₗ[ℝ] ℝ :=
@@ -313,12 +312,9 @@ theorem volume_setOf_subgradient_eq_zero_of_affine_on_line [FiniteDimensional �
   have hq : p₀ + θ ∉ H := by
     intro hmem
     change p₀ + θ ∈ AffineSubspace.mk' p₀ L.ker at hmem
-    have hv : (p₀ + θ) -ᵥ p₀ ∈ L.ker :=
-      (AffineSubspace.mem_mk').mp hmem
-    have hz : L ((p₀ + θ) -ᵥ p₀) = 0 :=
-      (LinearMap.mem_ker).mp hv
-    have hz' : ⟪θ, θ⟫ = 0 := by
-      simpa [L] using hz
+    have hv : (p₀ + θ) -ᵥ p₀ ∈ L.ker := (AffineSubspace.mem_mk').mp hmem
+    have hz : L ((p₀ + θ) -ᵥ p₀) = 0 := (LinearMap.mem_ker).mp hv
+    have hz' : ⟪θ, θ⟫ = 0 := by simpa [L] using hz
     exact hθθ hz'
   have hHtop : H ≠ (⊤ : AffineSubspace ℝ E) := by
     intro htop
@@ -328,10 +324,8 @@ theorem volume_setOf_subgradient_eq_zero_of_affine_on_line [FiniteDimensional �
   apply measure_mono_null ?_ (Measure.addHaar_affineSubspace volume H hHtop)
   intro p hp
   rcases hp with ⟨x, hx⟩
-  have hpc : ⟪p, θ⟫ = c :=
-    inner_subgradient_eq_of_affine_on_line hline hx
-  have hpL : L p = c := by
-    simpa [L] using hpc
+  have hpc : ⟪p, θ⟫ = c := inner_subgradient_eq_of_affine_on_line hline hx
+  have hpL : L p = c := by simpa [L] using hpc
   change p ∈ AffineSubspace.mk' p₀ L.ker
   apply (AffineSubspace.mem_mk').2
   apply (LinearMap.mem_ker).2

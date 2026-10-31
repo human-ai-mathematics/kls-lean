@@ -1,5 +1,8 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Interpolation
-import Mathlib.Analysis.Normed.Operator.NormedSpace
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Interpolation
+public import Mathlib.Analysis.Calculus.Deriv.Pow
+public import Mathlib.Analysis.Normed.Operator.NormedSpace
 
 /-! # Audit: local Hessian interpolation
 
@@ -8,6 +11,8 @@ Gilbarg–Trudinger, Classics 2001, Section 6.1 (6.8) and Theorem 6.2).
 A nonquadratic concrete client: q(t) = t² + t⁴ on [-1,1].
 The actual Hessian at zero is nonzero, and its central-difference remainder
 at step 1/2 is nonzero. The Hölder exponent is the GT-relevant alpha=1/2. -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric

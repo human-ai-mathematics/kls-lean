@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Truncation
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Truncation
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open MeasureTheory Filter
 open FunctionalInequalities.Analysis.BakryEmery

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Relaxation.Recovery
-import FunctionalInequalities.Poincare.L2.Energy
+module
+
+public import FunctionalInequalities.Energy.Relaxation.Recovery
+public import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Poincaré constants before and after relaxation
@@ -15,6 +17,8 @@ Source: local abstract formulation of Blueprint `thm:legacy-relaxed-holds-equiva
 The Euclidean specialization is in `Poincare.SmoothTest.Comparison`; these statements
 are not claimed as a separate theorem in the cited KLS literature.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,4 +1,6 @@
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+module
+
+public import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
 
 /-!
 # Contraction bounds under sequential relaxation
@@ -11,6 +13,8 @@ test class.
 Continuity of the transformation and lower semicontinuity of the relaxation then extend the bound
 to every ambient point. No lattice, truncation, or Markov structure is asserted here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

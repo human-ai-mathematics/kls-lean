@@ -1,4 +1,6 @@
-import FunctionalInequalities.Energy.Cheeger.Basic
+module
+
+public import FunctionalInequalities.Energy.Cheeger.Basic
 
 /-!
 # The slope sandwich: smooth tests, the asymptotic Lipschitz constant, and the two relaxations
@@ -47,6 +49,8 @@ the asymptotic-Lipschitz relaxation is identically zero
 (`AsymptoticLipschitz.relaxation_eq_zero_of_subsingleton`), so the sandwich collapses
 unconditionally there.
 -/
+
+@[expose] public section
 
 noncomputable section
 

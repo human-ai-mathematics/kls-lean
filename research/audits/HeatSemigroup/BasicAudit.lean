@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-!
 # Axiom audit for the heat semigroup of a log-concave law
@@ -14,6 +16,8 @@ the transfer of the contraction bound to the intrinsic semigroup.
 Out of scope: the Markov property, Bakry–Émery calculus, heat estimates, Buser's inequality.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.KLS.LogConcave
@@ -26,18 +30,24 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   (hν : KLS.LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty)
 
 /-- Boundary case `t = 0`: the heat semigroup is the identity. -/
-theorem boundary_t_zero (f : Lp ℝ 2 (ν : Measure V)) : FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator m B hν hi le_rfl f = f :=
+theorem boundary_t_zero (f : Lp ℝ 2 (ν : Measure V)) :
+    FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator m B hν hi le_rfl f = f :=
   FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero m B hν hi f
 
-/-- The contraction bound transfers to the intrinsic semigroup of an arbitrary log-concave law. -/
+/--
+The contraction bound transfers to the intrinsic semigroup of an arbitrary log-concave law. -/
 theorem intrinsic_contraction {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
     {μ : ProbabilityMeasure E} (m : Measure (Probability.affineSupport μ).direction)
-    [m.IsAddHaarMeasure] (B : (Probability.affineSupport μ).direction →L[ℝ]
-      (Probability.affineSupport μ).direction) (hμ : KLS.LogConcave μ) {t : ℝ} (ht : 0 ≤ t)
-    (f : Lp ℝ 2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :
+    [m.IsAddHaarMeasure]
+    (B : (Probability.affineSupport μ).direction →L[ℝ] (Probability.affineSupport μ).direction)
+    (hμ : KLS.LogConcave μ) {t : ℝ} (ht : 0 ≤ t)
+    (f :
+      Lp ℝ 2
+        (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :
     ‖FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic m B hμ ht f‖ ≤ ‖f‖ :=
-  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le m B hμ.intrinsicMeasure hμ.interior_intrinsic_support_nonempty ht f
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le m B hμ.intrinsicMeasure
+    hμ.interior_intrinsic_support_nonempty ht f
 
 end HeatSemigroupAudit
 

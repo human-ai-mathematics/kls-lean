@@ -1,16 +1,21 @@
-import Mathlib.Analysis.Normed.Module.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import Mathlib.Analysis.Normed.Module.Basic
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Compact-set log-concavity of probability laws
 
 `KLS.LogConcave` tests log-concavity on compact sets and admits laws on proper affine supports.
 The property keeps the namespace `KLS.LogConcave` although this module lies in `Probability/`.
-The affine combination of compact sets is compact in every real normed space. Equivalence with density
+The affine combination of compact sets is compact in every real normed space. Equivalence with
+density
 representations belongs to the separate log-concave representation modules; no Poincaré energy,
 constant, approximation theorem or nondegeneracy premise is part of this definition.
 -/
+
+@[expose] public section
 
 noncomputable section
 

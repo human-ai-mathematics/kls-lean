@@ -1,8 +1,10 @@
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Calculus.ContDiff.FTaylorSeries
-import Mathlib.Analysis.Calculus.BumpFunction.Normed
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+public import Mathlib.Analysis.Calculus.ContDiff.FTaylorSeries
+public import Mathlib.Analysis.Calculus.BumpFunction.Normed
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 
 /-!
 # Iterated derivatives: a Leibniz rule and symmetry
@@ -21,6 +23,8 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1, Lemma 3.6):
   transposition of the first two, the latter handled by Schwarz's theorem; and its local version
   for maps that are `C^∞` on an open set, by a smooth cutoff.
 -/
+
+@[expose] public section
 
 noncomputable section
 

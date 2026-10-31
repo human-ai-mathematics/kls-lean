@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.MomentBound
-import FunctionalInequalities.KLS.LogConcave.Isotropic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.MomentBound
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
 
 /-!
 # A-priori cumulant bounds for isotropic log-concave laws
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -18,9 +22,13 @@ variable {n : ℕ}
 
 /-- A-priori cumulant bound in a fixed dimension. -/
 theorem exists_norm_cumulant_le_isotropic (m : ℕ) :
-    ∃ C : ℝ, 0 ≤ C ∧ ∀ ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
-      KLS.LogConcave ν → KLS.Isotropic ν → IsCompact (ν : Measure (EuclideanSpace ℝ (Fin n))).support →
-        ‖cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m‖ ≤ C := by
+    ∃ C : ℝ,
+      0 ≤ C ∧
+        ∀ ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
+          KLS.LogConcave ν →
+            KLS.Isotropic ν →
+              IsCompact (ν : Measure (EuclideanSpace ℝ (Fin n))).support →
+                ‖cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) m‖ ≤ C := by
   classical
   let R : ℝ := 2 * Real.sqrt ((n : ℝ) + 1)
   let M : ℕ → ℝ := fun i =>
@@ -30,17 +38,17 @@ theorem exists_norm_cumulant_le_isotropic (m : ℕ) :
   have hsum : 0 ≤ ∑ i ∈ Finset.range (m + 1), |M i| :=
     Finset.sum_nonneg (fun i _ => abs_nonneg (M i))
   have hD : 1 ≤ D := by dsimp [D]; linarith
-  refine ⟨(m.factorial : ℝ) ^ 2 * D ^ m,
-    mul_nonneg (sq_nonneg _) (pow_nonneg (by linarith) _), ?_⟩
+  refine
+    ⟨(m.factorial : ℝ) ^ 2 * D ^ m, mul_nonneg (sq_nonneg _) (pow_nonneg (by linarith) _), ?_⟩
   intro ν hlc hiso hc
-  apply norm_cumulant_le_of_moment_bounds (ν : Measure (EuclideanSpace ℝ (Fin n)))
-    (r := 1) zero_lt_one (compact_support_integrable_exp _ hc 1)
+  apply
+    norm_cumulant_le_of_moment_bounds (ν : Measure (EuclideanSpace ℝ (Fin n))) (r := 1)
+      zero_lt_one (compact_support_integrable_exp _ hc 1)
   intro i hi him
   have hmoment : (∫ x, ‖x‖ ^ i ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) ≤ M i :=
     (KLS.LogConcave.integral_norm_pow_le_of_isotropic hlc hiso i).2
   have hterm : |M i| ≤ ∑ j ∈ Finset.range (m + 1), |M j| :=
-    Finset.single_le_sum (fun j _ => abs_nonneg (M j))
-      (Finset.mem_range.mpr (by omega))
+    Finset.single_le_sum (fun j _ => abs_nonneg (M j)) (Finset.mem_range.mpr (by omega))
   calc
     (∫ x, ‖x‖ ^ i ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) ≤ M i := hmoment
     _ ≤ |M i| := le_abs_self _
@@ -50,11 +58,18 @@ theorem exists_norm_cumulant_le_isotropic (m : ℕ) :
 
 /-- A-priori energy bound in a fixed dimension. -/
 theorem exists_sum_sq_cumulant_le_isotropic (d : ℕ) :
-    ∃ b : ℝ, 0 ≤ b ∧ ∀ ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
-      KLS.LogConcave ν → KLS.Isotropic ν → IsCompact (ν : Measure (EuclideanSpace ℝ (Fin n))).support →
-        ∀ u : EuclideanSpace ℝ (Fin n),
-          ∑ J : Fin d → Fin n, cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
-            (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) ^ 2 ≤ b * ‖u‖ ^ 2 := by
+    ∃ b : ℝ,
+      0 ≤ b ∧
+        ∀ ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
+          KLS.LogConcave ν →
+            KLS.Isotropic ν →
+              IsCompact (ν : Measure (EuclideanSpace ℝ (Fin n))).support →
+                ∀ u : EuclideanSpace ℝ (Fin n),
+                  ∑ J : Fin d → Fin n,
+                      cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
+                          (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) ^
+                        2 ≤
+                    b * ‖u‖ ^ 2 := by
   classical
   obtain ⟨C, hC, hbound⟩ := exists_norm_cumulant_le_isotropic (n := n) (d + 1)
   refine ⟨(n : ℝ) ^ d * C ^ 2, by positivity, ?_⟩
@@ -62,28 +77,29 @@ theorem exists_sum_sq_cumulant_le_isotropic (d : ℕ) :
   have hbasis (j : Fin n) : ‖EuclideanSpace.basisFun (Fin n) ℝ j‖ = 1 :=
     (EuclideanSpace.basisFun (Fin n) ℝ).orthonormal.norm_eq_one j
   have hterm (J : Fin d → Fin n) :
-      cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
-        (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) ^ 2 ≤
-          C ^ 2 * ‖u‖ ^ 2 := by
-    have hop := (cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)).le_opNorm
-      (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k))
+    cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
+          (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) ^
+        2 ≤
+      C ^ 2 * ‖u‖ ^ 2 := by
+    have hop :=
+      (cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)).le_opNorm
+        (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k))
     have habs :
-        |cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
-          (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k))| ≤ C * ‖u‖ := by
+      |cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
+            (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k))| ≤
+        C * ‖u‖ := by
       calc
         _ ≤ ‖cumulant (ν : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)‖ * ‖u‖ := by
-          simpa only [Real.norm_eq_abs, Fin.prod_univ_succ, Fin.cons_zero,
-            Fin.cons_succ, hbasis, Finset.prod_const_one, mul_one] using hop
-        _ ≤ C * ‖u‖ :=
-          mul_le_mul_of_nonneg_right (hbound ν hlc hiso hc) (norm_nonneg u)
+          simpa only [Real.norm_eq_abs, Fin.prod_univ_succ, Fin.cons_zero, Fin.cons_succ,
+            hbasis, Finset.prod_const_one, mul_one] using hop
+        _ ≤ C * ‖u‖ := mul_le_mul_of_nonneg_right (hbound ν hlc hiso hc) (norm_nonneg u)
     have hsq := (sq_le_sq₀ (abs_nonneg _) (mul_nonneg hC (norm_nonneg u))).2 habs
     simpa only [sq_abs, mul_pow] using hsq
   calc
-    _ ≤ ∑ _J : Fin d → Fin n, C ^ 2 * ‖u‖ ^ 2 :=
-      Finset.sum_le_sum (fun J _ => hterm J)
+    _ ≤ ∑ _J : Fin d → Fin n, C ^ 2 * ‖u‖ ^ 2 := Finset.sum_le_sum (fun J _ => hterm J)
     _ = ((n : ℝ) ^ d * C ^ 2) * ‖u‖ ^ 2 := by
-      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fun,
-        Fintype.card_fin, nsmul_eq_mul, Nat.cast_pow]
+      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fun, Fintype.card_fin,
+        nsmul_eq_mul, Nat.cast_pow]
       ring
 
 

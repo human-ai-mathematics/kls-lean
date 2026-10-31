@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent clients for the operator-domain and actual Gaussian-profile identities. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology Set
@@ -15,20 +19,30 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
-theorem pairings {Φ : ℝ → ℝ} (hΦ : ContDiff ℝ ∞ Φ)
-    {M C : ℝ} (hC : 0 ≤ C)
+theorem pairings {Φ : ℝ → ℝ} (hΦ : ContDiff ℝ ∞ Φ) {M C : ℝ} (hC : 0 ≤ C)
     (hbound : ∀ r, |Φ r| ≤ M ∧ |deriv Φ r| ≤ M ∧ |deriv (deriv Φ) r| ≤ M)
     (ψ : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
     (hψb : ∀ᵐ x ∂(ν : Measure V), |(ψ : Lp ℝ 2 (ν : Measure V)) x| ≤ C)
     (g : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain) :
-    Integrable (fun x ↦ (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
-      Φ ((g : Lp ℝ 2 (ν : Measure V)) x)) (ν : Measure V) ∧
-    Integrable (fun x ↦ deriv Φ ((g : Lp ℝ 2 (ν : Measure V)) x) *
-      WeakGamma.apply (ψ : Lp ℝ 2 (ν : Measure V))
-        (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) g) x) (ν : Measure V) ∧
-    Integrable (fun x ↦ ((ψ : Lp ℝ 2 (ν : Measure V)) x * deriv (deriv Φ) ((g : Lp ℝ 2 (ν : Measure V)) x)) *
-      WeakGamma.apply (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩) x) (ν : Measure V) :=
+    Integrable
+        (fun x ↦
+          (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
+            Φ ((g : Lp ℝ 2 (ν : Measure V)) x))
+        (ν : Measure V) ∧
+      Integrable
+          (fun x ↦
+            deriv Φ ((g : Lp ℝ 2 (ν : Measure V)) x) *
+              WeakGamma.apply (ψ : Lp ℝ 2 (ν : Measure V))
+                (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) g) x)
+          (ν : Measure V) ∧
+        Integrable
+          (fun x ↦
+            ((ψ : Lp ℝ 2 (ν : Measure V)) x *
+                deriv (deriv Φ) ((g : Lp ℝ 2 (ν : Measure V)) x)) *
+              WeakGamma.apply
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩) x)
+          (ν : Measure V) :=
   integrable_chain_pairings m hν hi hΦ hC hbound ψ hψb g
 
 theorem domain_chain (hνU : (ν : Measure V) = m.tilted (-U))

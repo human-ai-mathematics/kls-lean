@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
 
 /-!
 # Exponential-weight integrals under local moments
@@ -12,6 +14,8 @@ Proposition 7.1. Then `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ` is `C^∞` on the open
 * `weightedExp_integral_hasFDerivAt_of_lt`: differentiation under the integral inside the ball.
 * `weighted_integral_contDiffOn`: `C^∞` on `ball 0 r`, by induction on the order.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped RealInnerProductSpace ContDiff

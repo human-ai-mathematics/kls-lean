@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Letwin.CompactBound
-import FunctionalInequalities.Probability.Conditioning
+module
+
+public import FunctionalInequalities.KLS.Letwin.CompactBound
+public import FunctionalInequalities.Probability.Conditioning
 
 /-!
 # Letwin's constant-eight bound without compact support
@@ -10,15 +12,23 @@ is at most eight times the squared Hilbert–Schmidt norm. `letwinQuadraticBound
 operator form; `matrix_variance_le_eight` gives the source normalization `8 tr(M²)` for every
 symmetric matrix, including singular and indefinite matrices.
 
-The standardized growing-ball truncations of `Suspension.exists_compact_moment_approximation` (conditioned on
-expanding closed balls, centered and covariance-whitened) are compactly supported isotropic log-concave laws whose
-mixed moments of degree at most four converge. The compact bound then passes to the limit. The growing-ball
-step does not require a common compact support or an additional moment premise: log-concavity supplies a positive
+The standardized growing-ball truncations of `Suspension.exists_compact_moment_approximation`
+(conditioned on
+expanding closed balls, centered and covariance-whitened) are compactly supported isotropic
+log-concave laws whose
+mixed moments of degree at most four converge. The compact bound then passes to the limit. The
+growing-ball
+step does not require a common compact support or an additional moment premise: log-concavity
+supplies a positive
 exponential moment.
 
-This proves the noncompact quadratic bound using the compact counterpart. The regular approximants of Lemma A.1
-are `exists_regular_approximation` (`KLS/Letwin/Approximation.lean`); Theorem 1.1 is not established here.
+This proves the noncompact quadratic bound using the compact counterpart. The regular approximants
+of Lemma A.1
+are `exists_regular_approximation` (`KLS/Letwin/Approximation.lean`); Theorem 1.1 is not established
+here.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory Filter Topology
@@ -39,17 +49,18 @@ private lemma memLp_four_of_exp {E : Type*} [NormedAddCommGroup E] [InnerProduct
 /-- Letwin arXiv:2607.24164v1, Theorem 1.2: the constant-eight quadratic-form variance bound
 for arbitrary isotropic log-concave probability laws, with no compact-support assumption. -/
 theorem letwinQuadraticBound {n : ℕ} (hn : 0 < n)
-    {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
-    (hLC : LogConcave ν) (hiso : Isotropic ν) :
-    LetwinQuadraticBound (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+    {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hLC : LogConcave ν)
+    (hiso : Isotropic ν) : LetwinQuadraticBound (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
   obtain ⟨η, hη, hmom⟩ := Suspension.exists_compact_moment_approximation hLC hiso
   have hmem (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hμ : LogConcave μ) :
-      MemLp id 4 (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
+    MemLp id 4 (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
     obtain ⟨r, hr, hexp⟩ := ((KLS.LogConcave.borel_iff μ).1 hμ).exists_integrable_exp_norm
     exact memLp_four_of_exp _ hr hexp
-  exact letwinQuadraticBound_of_tendsto_moments (fun k => (η k : Measure (EuclideanSpace ℝ (Fin n))))
-    (ν : Measure (EuclideanSpace ℝ (Fin n))) (fun k => hmem (η k) (hη k).1) (hmem ν hLC) hmom
-    fun k => letwinCompactBound n hn (η k) (hη k).1 (hη k).2.1 (hη k).2.2
+  exact
+    letwinQuadraticBound_of_tendsto_moments
+      (fun k => (η k : Measure (EuclideanSpace ℝ (Fin n))))
+      (ν : Measure (EuclideanSpace ℝ (Fin n))) (fun k => hmem (η k) (hη k).1) (hmem ν hLC) hmom
+      fun k => letwinCompactBound n hn (η k) (hη k).1 (hη k).2.1 (hη k).2.2
 
 /-- Matrix form of Letwin Theorem 1.2, with the source normalization `8 tr(M²)`.
 Singular and indefinite symmetric matrices are included. -/

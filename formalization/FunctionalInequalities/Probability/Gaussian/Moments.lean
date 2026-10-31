@@ -1,8 +1,10 @@
-import FunctionalInequalities.Probability.Gaussian.Kernel
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Testing
-import FunctionalInequalities.Probability.Covariance.Basic
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Kernel
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.Testing
+public import FunctionalInequalities.Probability.Covariance.Basic
 
 /-!
 # Gaussian moments and integration by parts
@@ -12,6 +14,8 @@ The centered law with kernel `exp (-s * ‖x‖²)`, `s > 0`, has Laplace transf
 The moment and bounded Lipschitz C1 integration-by-parts results include dimension
 zero and support BKL arXiv:2610.05474v1, Section 2 and Theorem 3.1.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory ProbabilityTheory Filter Topology
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
@@ -102,8 +106,10 @@ theorem memLp_two {s : ℝ} (hs : 0 < s) : MemLp id 2 (law (V := E) s) := by
   let _ : IsProbabilityMeasure (law (V := E) s) := law_probability hs
   have he : Integrable (fun y : E => Real.exp ((1 : ℝ) * ‖y‖)) (law s) := by
     simpa only [one_mul] using exp_norm_integrable (E := E) hs
-  exact (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).2
-    (FunctionalInequalities.Probability.integrable_norm_pow_of_exp _ (by norm_num : (0 : ℝ) < 1) he 2)
+  exact
+    (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).2
+      (FunctionalInequalities.Probability.integrable_norm_pow_of_exp _
+        (by norm_num : (0 : ℝ) < 1) he 2)
 
 end GaussianMoments
 
@@ -227,16 +233,17 @@ theorem variance_inner {s : ℝ} (hs : 0 < s) (v : E) :
 end Moments
 
 set_option maxHeartbeats 800000 in
-/-- Gaussian integration by parts for C1 bounded globally Lipschitz tests: under `law s` (`s > 0`, all dimensions),
+/--
+Gaussian integration by parts for C1 bounded globally Lipschitz tests: under `law s` (`s > 0`, all
+dimensions),
 `∫ ⟪x, v⟫ f = (2 s)⁻¹ ∫ D_v f`, with both integrands integrable. -/
-theorem directional_identity_of_bounded_lipschitz_test {n : ℕ}
-    {s : ℝ} (hs : 0 < s) {f : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal}
-    (hf : ContDiff ℝ 1 f) (hLip : LipschitzWith L f) (C : ℝ) (hbound : ∀ x, ‖f x‖ ≤ C)
+theorem directional_identity_of_bounded_lipschitz_test {n : ℕ} {s : ℝ} (hs : 0 < s)
+    {f : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal} (hf : ContDiff ℝ 1 f)
+    (hLip : LipschitzWith L f) (C : ℝ) (hbound : ∀ x, ‖f x‖ ≤ C)
     (v : EuclideanSpace ℝ (Fin n)) :
     Integrable (fun x => ⟪x, v⟫ * f x) (law s) ∧
-    Integrable (fun x => fderiv ℝ f x v) (law s) ∧
-    (∫ x, ⟪x, v⟫ * f x ∂(law s)) =
-      (2 * s)⁻¹ * ∫ x, fderiv ℝ f x v ∂(law s) := by
+      Integrable (fun x => fderiv ℝ f x v) (law s) ∧
+        (∫ x, ⟪x, v⟫ * f x ∂(law s)) = (2 * s)⁻¹ * ∫ x, fderiv ℝ f x v ∂(law s) := by
   let E := EuclideanSpace ℝ (Fin n)
   let w : E → ℝ := fun x => Real.exp (-s * ‖x‖ ^ 2)
   let mu : Measure E := law s
@@ -252,8 +259,10 @@ theorem directional_identity_of_bounded_lipschitz_test {n : ℕ}
     (continuous_id.clm_apply continuous_const).measurable.comp (measurable_fderiv ℝ f)
   have hDF : Integrable (fun x : E => fderiv ℝ f x v) mu := by
     apply (integrable_const ((L : ℝ) * ‖v‖)).mono' hdfmeas.aestronglyMeasurable
-    exact ae_of_all _ fun x => ((fderiv ℝ f x).le_opNorm v).trans
-      (mul_le_mul_of_nonneg_right (norm_fderiv_le_of_lipschitz ℝ hLip) (norm_nonneg v))
+    exact
+      ae_of_all _ fun x =>
+        ((fderiv ℝ f x).le_opNorm v).trans
+          (mul_le_mul_of_nonneg_right (norm_fderiv_le_of_lipschitz ℝ hLip) (norm_nonneg v))
   have raw (k : E → ℝ) (hk : Integrable k mu) : Integrable (fun x => w x * k x) volume := by
     have hkt : Integrable k ((volume : Measure E).tilted (fun x => -s * ‖x‖ ^ 2)) := by
       rwa [← law_eq_tilted hs]
@@ -264,7 +273,8 @@ theorem directional_identity_of_bounded_lipschitz_test {n : ℕ}
   have hw : ContDiff ℝ 1 w := by
     have hn : ContDiff ℝ 1 (fun x : E => ‖x‖ ^ 2) := contDiff_norm_sq ℝ
     exact ((contDiff_const : ContDiff ℝ 1 (fun _ : E => -s)).mul hn).exp
-  have hd (x : E) : fderiv ℝ (fun y => w y * f y) x v =
+  have hd (x : E) :
+    fderiv ℝ (fun y => w y * f y) x v =
       w x * fderiv ℝ f x v - (2 * s) * (w x * (⟪x, v⟫ * f x)) := by
     have hwx : HasFDerivAt w (w x • ((-s) • (2 • innerSL ℝ x))) x :=
       ((hasStrictFDerivAt_norm_sq x).hasFDerivAt.const_mul (-s)).exp
@@ -276,20 +286,20 @@ theorem directional_identity_of_bounded_lipschitz_test {n : ℕ}
     apply (hRawDF.sub (hRawXF.const_mul (2 * s))).congr
     filter_upwards [] with x
     exact (hd x).symm
-  have hz := integral_eq_zero_of_integrable_weak_derivative
-    (hasWeakDerivAlong_of_contDiff (hw.mul hf) v) hRawF hRawD
-  have hRawEq : (∫ x, w x * fderiv ℝ f x v ∂volume) =
-      (2 * s) * ∫ x, w x * (⟪x, v⟫ * f x) ∂volume := by
-    have heq : (∫ x, fderiv ℝ (fun y => w y * f y) x v ∂volume) =
-        (∫ x, w x * fderiv ℝ f x v ∂volume) -
-        (2 * s) * ∫ x, w x * (⟪x, v⟫ * f x) ∂volume := by
+  have hz :=
+    integral_eq_zero_of_integrable_weak_derivative (hasWeakDerivAlong_of_contDiff (hw.mul hf) v)
+      hRawF hRawD
+  have hRawEq :
+    (∫ x, w x * fderiv ℝ f x v ∂volume) = (2 * s) * ∫ x, w x * (⟪x, v⟫ * f x) ∂volume := by
+    have heq :
+      (∫ x, fderiv ℝ (fun y => w y * f y) x v ∂volume) =
+        (∫ x, w x * fderiv ℝ f x v ∂volume) - (2 * s) * ∫ x, w x * (⟪x, v⟫ * f x) ∂volume := by
       calc
         _ = ∫ x, w x * fderiv ℝ f x v - (2 * s) * (w x * (⟪x, v⟫ * f x)) ∂volume :=
           integral_congr_ae (ae_of_all _ hd)
         _ = _ := by rw [integral_sub hRawDF (hRawXF.const_mul (2 * s)), integral_const_mul]
     linarith
-  have htilt (k : E → ℝ) : (∫ x, k x ∂mu) =
-      (∫ x, w x * k x ∂volume) / (∫ x, w x ∂volume) := by
+  have htilt (k : E → ℝ) : (∫ x, k x ∂mu) = (∫ x, w x * k x ∂volume) / (∫ x, w x ∂volume) := by
     dsimp only [mu]
     rw [law_eq_tilted hs, integral_tilted]
     change (∫ x, (w x / (∫ y, w y ∂volume)) * k x ∂volume) = _
@@ -315,24 +325,24 @@ theorem memLp_four {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 
 theorem translated_directional_identity_of_bounded_lipschitz_test {n : ℕ}
-    {h : EuclideanSpace ℝ (Fin n) → ℝ} {Lh : NNReal}
-    (hh : ContDiff ℝ 1 h) (hhLip : LipschitzWith Lh h)
-    (C : ℝ) (hbound : ∀ x, ‖h x‖ ≤ C)
+    {h : EuclideanSpace ℝ (Fin n) → ℝ} {Lh : NNReal} (hh : ContDiff ℝ 1 h)
+    (hhLip : LipschitzWith Lh h) (C : ℝ) (hbound : ∀ x, ‖h x‖ ≤ C)
     (a v : EuclideanSpace ℝ (Fin n)) {s : ℝ} (hs : 0 < s) :
-    Integrable (fun z => ⟪z,v⟫ * h (a+z)) (law s) ∧
-    Integrable (fun z => fderiv ℝ h (a+z) v) (law s) ∧
-    (∫ z, ⟪z,v⟫ * h (a+z) ∂(law s)) =
-      (2*s)⁻¹ * ∫ z, fderiv ℝ h (a+z) v ∂(law s) := by
+    Integrable (fun z => ⟪z, v⟫ * h (a + z)) (law s) ∧
+      Integrable (fun z => fderiv ℝ h (a + z) v) (law s) ∧
+        (∫ z, ⟪z, v⟫ * h (a + z) ∂(law s)) = (2 * s)⁻¹ * ∫ z, fderiv ℝ h (a + z) v ∂(law s) := by
   let E := EuclideanSpace ℝ (Fin n)
-  have hf : ContDiff ℝ 1 (fun z : E => h (a+z)) := hh.comp (contDiff_const.add contDiff_id)
-  have hp := directional_identity_of_bounded_lipschitz_test hs hf
-    (hhLip.comp ((LipschitzWith.const a).add LipschitzWith.id)) C (fun z => hbound (a+z)) v
-  have hd (z : E) : fderiv ℝ (fun w => h (a+w)) z v = fderiv ℝ h (a+z) v := by
-    have ha : HasFDerivAt (fun w : E => a+w) (ContinuousLinearMap.id ℝ E) z :=
+  have hf : ContDiff ℝ 1 (fun z : E => h (a + z)) := hh.comp (contDiff_const.add contDiff_id)
+  have hp :=
+    directional_identity_of_bounded_lipschitz_test hs hf
+      (hhLip.comp ((LipschitzWith.const a).add LipschitzWith.id)) C (fun z => hbound (a + z)) v
+  have hd (z : E) : fderiv ℝ (fun w => h (a + w)) z v = fderiv ℝ h (a + z) v := by
+    have ha : HasFDerivAt (fun w : E => a + w) (ContinuousLinearMap.id ℝ E) z :=
       (hasFDerivAt_id z).const_add a
-    exact congrArg (fun T : E →L[ℝ] ℝ => T v)
-      ((hh.differentiable one_ne_zero (a+z)).hasFDerivAt.comp z ha).fderiv
-  refine ⟨hp.1,hp.2.1.congr (ae_of_all _ hd),hp.2.2.trans ?_⟩
+    exact
+      congrArg (fun T : E →L[ℝ] ℝ => T v)
+        ((hh.differentiable one_ne_zero (a + z)).hasFDerivAt.comp z ha).fderiv
+  refine ⟨hp.1, hp.2.1.congr (ae_of_all _ hd), hp.2.2.trans ?_⟩
   congr 1
   exact integral_congr_ae (ae_of_all _ hd)
 

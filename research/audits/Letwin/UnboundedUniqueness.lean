@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
-import FunctionalInequalities.KLS.CEK.Uniqueness
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
+public import FunctionalInequalities.KLS.CEK.Uniqueness
 
 /-! Client of the uniqueness of moment potentials without a support bound
 (Cordero-Erausquin–Klartag arXiv:1304.0630v1, Theorem 2, uniqueness; Letwin arXiv:2607.24164v1,
@@ -9,6 +11,8 @@ Lemma 2.1): finite convex potentials of an arbitrary moment measure, the maximal
 Proposition 7) for finite potentials, the equality case of the midpoint Prékopa–Leindler
 inequality for finite and for extended-real potentials, and the uniqueness of the maximizers of
 the CEK functional up to translation. -/
+
+@[expose] public section
 noncomputable section
 namespace LetwinUnboundedUniquenessAudit
 open MeasureTheory Set FunctionalInequalities.Analysis
@@ -47,14 +51,20 @@ end LetwinUnboundedUniquenessAudit
 #print axioms FunctionalInequalities.Probability.MomentMeasure.measurable_midpointDensity
 #print axioms FunctionalInequalities.Probability.MomentMeasure.le_midpointDensity
 #print axioms FunctionalInequalities.Probability.MomentMeasure.midpointDensity_le_of_legendre
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_lintegral_midpointDensity_le_one
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_lintegral_midpointDensity_le_one
 #print axioms FunctionalInequalities.Probability.MomentMeasure.integrable_of_map_gradient_of_le
-#print axioms FunctionalInequalities.Probability.MomentMeasure.lintegral_le_exp_integral_of_map_gradient_of_integrable
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.lintegral_le_exp_integral_of_map_gradient_of_integrable
 #print axioms FunctionalInequalities.Probability.MomentMeasure.integrable_legendre_toReal
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_map_gradient_eq_unbounded
-#print axioms FunctionalInequalities.Probability.MomentMeasure.map_gradient_eq_iff_exists_eq_translate_unbounded
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_midpoint_le_of_lintegral_le_one
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_legendre_of_maximizer
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_map_gradient_eq_unbounded
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.map_gradient_eq_iff_exists_eq_translate_unbounded
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_midpoint_le_of_lintegral_le_one
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_legendre_of_maximizer
 #print axioms FunctionalInequalities.KLS.CEK.exists_eq_translate_of_ofPotential_eq_of_ne_top
 #print axioms LetwinUnboundedUniquenessAudit.translate_client
 #print axioms LetwinUnboundedUniquenessAudit.maximizer_client

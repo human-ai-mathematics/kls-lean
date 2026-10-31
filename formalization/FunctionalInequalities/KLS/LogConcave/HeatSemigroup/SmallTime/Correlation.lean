@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
-import Mathlib.Analysis.Real.Pi.Bounds
-import Mathlib.Analysis.Complex.Exponential
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
+public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.Analysis.Complex.Exponential
 
 /-!
 # Indicator heat correlation and L1 displacement
@@ -11,6 +13,8 @@ of an indicator equals twice its loss of uncentered heat correlation. This ident
 zero and full mass, and all nonnegative times. It is the algebraic interface between the
 spectral decay estimate and small-time perimeter estimate.
 -/
+
+@[expose] public section
 
 open MeasureTheory Set InnerProductSpace
 open scoped ContDiff

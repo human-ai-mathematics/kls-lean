@@ -6,9 +6,14 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoProcessVersion
-import LevyStochCalc.Brownian.ItoQuadVarSum
-import LevyStochCalc.Brownian.AugmentedFiltration
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoProcessVersion
+public import LevyStochCalc.Brownian.ItoQuadVarSum
+public import LevyStochCalc.Brownian.AugmentedFiltration
 
 /-!
 # Existence of a continuous adapted version of an Itô process
@@ -30,6 +35,8 @@ value and the drift's (Lipschitz, hence continuous) window integral gives an `Is
 * `LevyStochCalc.Brownian.Ito.exists_isItoVersion_aug` — the same over the augmented
   filtration, with no side conditions.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -172,9 +179,9 @@ theorem exists_continuousAdapted_modification
       rw [tendsto_pi_nhds]
       intro ω
       by_cases hω : ω ∈ N
-      · simp only [hω, if_true]
+      · simp only [hω, ite_true]
         exact tendsto_const_nhds
-      · simp only [hω, if_false]
+      · simp only [hω, ite_false]
         have heq : (fun n : ℕ => stochasticIntegralBrownian W ℱ hℱ H hm hp hq
             (dyadicApprox n u) ω) = fun n => Y (dyadicApprox n u) ω := by
           funext n
@@ -188,7 +195,7 @@ theorem exists_continuousAdapted_modification
   · intro ω
     by_cases hω : ω ∈ N
     · simpa [hω] using continuous_const
-    · simp only [hω, if_false]
+    · simp only [hω, ite_false]
       exact (hNcont ω hω).comp (continuous_id.max continuous_const)
   · intro u
     rcases le_or_gt 0 u with hu | hu
@@ -199,7 +206,7 @@ theorem exists_continuousAdapted_modification
   · intro t ht
     filter_upwards [hYmod t ht,
       MeasureTheory.compl_mem_ae_iff.mpr hNzero] with ω hω hωN
-    rw [if_neg hωN, max_eq_left ht]
+    rw [ite_eq_right hωN, max_eq_left ht]
     exact hω
 
 include hℱ hC0 hCH in

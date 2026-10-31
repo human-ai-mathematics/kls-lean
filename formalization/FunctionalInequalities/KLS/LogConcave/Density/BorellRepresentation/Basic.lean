@@ -1,17 +1,22 @@
-import Mathlib.MeasureTheory.Measure.Support
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import FunctionalInequalities.KLS.LogConcave.Borel
-import Mathlib.Topology.Semicontinuity.Basic
-import Mathlib.Analysis.SpecialFunctions.Exp
-import Mathlib.Analysis.Convex.Continuous
-import Mathlib.Analysis.Convex.Measure
+module
+
+public import Mathlib.MeasureTheory.Measure.Support
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import FunctionalInequalities.KLS.LogConcave.Borel
+public import Mathlib.Topology.Semicontinuity.Basic
+public import Mathlib.Analysis.SpecialFunctions.Exp
+public import Mathlib.Analysis.Convex.Continuous
+public import Mathlib.Analysis.Convex.Measure
 
 
 /-!
 # BorellRepresentation: Basic
 
-Convexity of the positive-density set, concavity of its logarithm and continuity on the interior support.
+Convexity of the positive-density set, concavity of its logarithm and continuity on the interior
+support.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Topology Filter

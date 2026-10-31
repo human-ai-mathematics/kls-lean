@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Isoperimetry
-import FunctionalInequalities.KLS.LogConcave.Line.OfDensity
-import FunctionalInequalities.KLS.LogConcave.Line.Poincare
-import FunctionalInequalities.Poincare.SmoothTest.Linear
-import FunctionalInequalities.Poincare.SmoothTest.Transport
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Isoperimetry
+public import FunctionalInequalities.KLS.LogConcave.Line.OfDensity
+public import FunctionalInequalities.KLS.LogConcave.Line.Poincare
+public import FunctionalInequalities.Poincare.SmoothTest.Linear
+public import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # A Buser comparison with constant twelve: `Ψ² ≤ 12 C_P` in dimension one
@@ -35,6 +37,8 @@ dimension one a linear isometry equivalence with `ℝ` transports log-concavity
 The constant is `12`, not `π`: nothing here is the sharp Buser inequality, and nothing here says
 anything in dimension two or more.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -86,9 +90,9 @@ omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] [Co
 /-- The Minkowski Cheeger infimum is invariant under a linear isometry equivalence; the special
 case of `minkowskiConstant_eq_of_isometryEquiv` for the push-forward law. -/
 theorem minkowskiConstant_map (e : V ≃ₗᵢ[ℝ] W) (ν : ProbabilityMeasure V) :
-    minkowskiConstant (ν.map e.continuous.measurable.aemeasurable) = minkowskiConstant ν :=
+    minkowskiConstant (ν.map e) = minkowskiConstant ν :=
   minkowskiConstant_eq_of_isometryEquiv e.toIsometryEquiv
-    ⟨e.continuous.measurable, (ProbabilityMeasure.toMeasure_map _ _).symm⟩
+    ⟨e.continuous.measurable, (ProbabilityMeasure.toMeasure_map _).symm⟩
 
 end Isoperimetry
 
@@ -290,17 +294,17 @@ theorem inverseScale_sq_le_of_finrank_le_one {μ : ProbabilityMeasure E} (hμ : 
   · have hz : Module.finrank ℝ (Probability.affineSupport μ).direction = 0 := Nat.lt_one_iff.mp h0
     have htop : Isoperimetry.constant μ = ⊤ := by
       unfold Isoperimetry.constant
-      rw [if_pos hz]
+      rw [ite_eq_left hz]
     rw [Isoperimetry.inverseScale, htop]
     simp
   have hdim1 : Module.finrank ℝ (Probability.affineSupport μ).direction = 1 :=
     le_antisymm hdim h1
   obtain ⟨e⟩ := nonempty_linearIsometryEquiv_real hdim1
   set ν' := Probability.intrinsicMeasure μ with hν'
-  set ν := ν'.map e.continuous.measurable.aemeasurable with hνdef
+  set ν := ν'.map e with hνdef
   have hcoe : (ν : Measure ℝ) =
       (ν' : Measure (Probability.affineSupport μ).direction).map e :=
-    ProbabilityMeasure.toMeasure_map _ _
+    ProbabilityMeasure.toMeasure_map _
   have hlc' : LogConcave ν' := hμ.intrinsicMeasure
   have hlc : LogConcave ν := by
     refine hlc'.of_affineIsometry_map ν (e.symm.toLinearIsometry.toAffineIsometry) ?_

@@ -3,11 +3,15 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.FutureIndependence
-import LevyStochCalc.Brownian.MartingaleCondExp
-import LevyStochCalc.Probability.ComapTuple
-import LevyStochCalc.Probability.IndepJoin
-import LevyStochCalc.Probability.IndepLimit
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.FutureIndependence
+public import LevyStochCalc.Brownian.MartingaleCondExp
+public import LevyStochCalc.Probability.ComapTuple
+public import LevyStochCalc.Probability.IndepJoin
+public import LevyStochCalc.Probability.IndepLimit
 
 /-!
 # Brownian motion with respect to a filtration
@@ -20,6 +24,8 @@ smaller filtration to which `W` is adapted is one, and so is the right-continuou
 since for a finite family of times `t₁, …, tₙ > s` the increments `W tᵢ − W r`, jointly
 independent of `ℱ r ⊇ ℱ₊ s`, converge to `W tᵢ − W s` along the continuous paths as `r ↓ s`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 
@@ -92,9 +98,9 @@ theorem IsBrownianFiltration.rightCont {W : BrownianMotion P} {ℱ : Filtration 
       rw [← hYcomap]
       refine Probability.indep_comap_of_tendsto_ae (ℱ.rightCont.le s)
         (X := fun k ω (i : Fin n) => W.W (u i) ω - W.W (r (k + K)) ω)
-        (fun k => measurable_pi_lambda _ fun i =>
+        (fun k => Measurable.of_eval fun i =>
           (W.measurable_eval (u i)).sub (W.measurable_eval (r (k + K))))
-        (measurable_pi_lambda _ fun i => (W.measurable_eval (u i)).sub (W.measurable_eval s))
+        (Measurable.of_eval fun i => (W.measurable_eval (u i)).sub (W.measurable_eval s))
         (fun k => ?_) ?_
       · have hkcomap : MeasurableSpace.comap
               (fun ω (i : Fin n) => W.W (u i) ω - W.W (r (k + K)) ω) inferInstance

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.Product.Tensorization
-import FunctionalInequalities.Poincare.SmoothTest.Transport
+module
+
+public import FunctionalInequalities.Poincare.Product.Tensorization
+public import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # Binary reverse bounds and equality
@@ -14,6 +16,8 @@ steps toward that identity, rather than separately stated manuscript results. Th
 Borel, finite-energy and extended-real formulation is the present realization. BGL
 Proposition 4.3.1 supplies the upper bound used by `constant_prod_eq`, not these reverse steps.
 -/
+
+@[expose] public section
 
 noncomputable section
 

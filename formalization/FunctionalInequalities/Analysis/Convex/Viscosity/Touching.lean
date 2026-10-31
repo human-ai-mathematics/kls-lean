@@ -1,11 +1,13 @@
-import FunctionalInequalities.Analysis.Convex.Quadratic
-import FunctionalInequalities.Analysis.Convex.CompactTilt
-import FunctionalInequalities.Analysis.Convex.Caffarelli.Contact
-import FunctionalInequalities.Analysis.Convex.Extension
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import Mathlib.Analysis.Calculus.DerivativeTest
-import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
-import FunctionalInequalities.Analysis.Matrix.Positivity
+module
+
+public import FunctionalInequalities.Analysis.Convex.Quadratic
+public import FunctionalInequalities.Analysis.Convex.CompactTilt
+public import FunctionalInequalities.Analysis.Convex.Caffarelli.Contact
+public import FunctionalInequalities.Analysis.Convex.Extension
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import Mathlib.Analysis.Calculus.DerivativeTest
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
+public import FunctionalInequalities.Analysis.Matrix.Positivity
 
 /-!
 # Touching tests and their second-order Taylor bounds
@@ -14,6 +16,8 @@ Supporting the convex Monge–Ampère infrastructure for Letwin
 arXiv:2607.24164v1 Lemma 2.2. The declarations retain their original
 source hypotheses, dimensional scope and mathematical conclusions.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric Filter
@@ -257,21 +261,18 @@ private lemma hessianMatrix_quadratic
   simp_rw [hentry, ← hc]
   rw [← hsum, hv]
 
-private lemma local_taylor_two
-    {n : ℕ} {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
-    {x₀ : EuclideanSpace ℝ (Fin n)}
-    (hψ : ContDiffAt ℝ 2 ψ x₀) {ε : ℝ} (hε : 0 < ε) :
-    ∃ r > 0, ∀ x ∈ ball x₀ r,
-      |ψ x - (ψ x₀ + fderiv ℝ ψ x₀ (x - x₀) +
-        (1 / 2 : ℝ) *
-          (fderiv ℝ (fderiv ℝ ψ) x₀ (x - x₀)) (x - x₀))| ≤
-        ε * ‖x - x₀‖ ^ 2 := by
+private lemma local_taylor_two {n : ℕ} {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
+    {x₀ : EuclideanSpace ℝ (Fin n)} (hψ : ContDiffAt ℝ 2 ψ x₀) {ε : ℝ} (hε : 0 < ε) :
+    ∃ r > 0,
+      ∀ x ∈ ball x₀ r,
+        |ψ x -
+              (ψ x₀ + fderiv ℝ ψ x₀ (x - x₀) +
+                (1 / 2 : ℝ) * (fderiv ℝ (fderiv ℝ ψ) x₀ (x - x₀)) (x - x₀))| ≤
+          ε * ‖x - x₀‖ ^ 2 := by
   classical
-  let B : EuclideanSpace ℝ (Fin n) →L[ℝ]
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ :=
+  let B : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ :=
     fderiv ℝ (fderiv ℝ ψ) x₀
-  have hsymm :
-      ∀ v w : EuclideanSpace ℝ (Fin n), B v w = B w v := by
+  have hsymm : ∀ v w : EuclideanSpace ℝ (Fin n), B v w = B w v := by
     intro v w
     exact hψ.isSymmSndFDerivAt (by norm_num) v w
   rcases hψ.contDiffOn (m := 2) le_rfl (by simp) with ⟨u, hu, hψu⟩
@@ -280,102 +281,80 @@ private lemma local_taylor_two
   have hs : Convex ℝ s := convex_ball x₀ ρ
   have hx₀s : x₀ ∈ s := mem_ball_self hρ
   have hψs : ContDiffOn ℝ 2 ψ s := hψu.mono hρu
-  let q : EuclideanSpace ℝ (Fin n) → ℝ :=
-    fun y => (1 / 2 : ℝ) * B (y - x₀) (y - x₀)
-  let g : EuclideanSpace ℝ (Fin n) → ℝ :=
-    fun y => ψ y - ψ x₀ - fderiv ℝ ψ x₀ (y - x₀) - q y
-  let dg : EuclideanSpace ℝ (Fin n) →
-      EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ :=
-    fun y => fderiv ℝ ψ y - fderiv ℝ ψ x₀ - B (y - x₀)
-  have hderiv :
-      ∀ y ∈ s, HasFDerivWithinAt g (dg y) s y := by
+  let q : EuclideanSpace ℝ (Fin n) → ℝ := fun y => (1 / 2 : ℝ) * B (y - x₀) (y - x₀)
+  let g : EuclideanSpace ℝ (Fin n) → ℝ := fun y => ψ y - ψ x₀ - fderiv ℝ ψ x₀ (y - x₀) - q y
+  let dg : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ := fun y =>
+    fderiv ℝ ψ y - fderiv ℝ ψ x₀ - B (y - x₀)
+  have hderiv : ∀ y ∈ s, HasFDerivWithinAt g (dg y) s y := by
     intro y hy
-    have hy' : ContDiffAt ℝ 2 ψ y :=
-      (hψs y hy).contDiffAt (Metric.isOpen_ball.mem_nhds hy)
+    have hy' : ContDiffAt ℝ 2 ψ y := (hψs y hy).contDiffAt (Metric.isOpen_ball.mem_nhds hy)
     have hψy : HasFDerivAt ψ (fderiv ℝ ψ y) y :=
       (hy'.differentiableAt (by norm_num)).hasFDerivAt
-    have hsub : HasFDerivAt
-        (fun z : EuclideanSpace ℝ (Fin n) => z - x₀)
+    have hsub :
+      HasFDerivAt (fun z : EuclideanSpace ℝ (Fin n) => z - x₀)
         (ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n))) y :=
       (hasFDerivAt_id y).sub_const x₀
-    have hlin :=
-      (ContinuousLinearMap.hasFDerivAt (fderiv ℝ ψ x₀)).comp y hsub
+    have hlin := (ContinuousLinearMap.hasFDerivAt (fderiv ℝ ψ x₀)).comp y hsub
     rw [ContinuousLinearMap.comp_id] at hlin
-    have hB :=
-      (ContinuousLinearMap.hasFDerivAt B).comp y hsub
+    have hB := (ContinuousLinearMap.hasFDerivAt B).comp y hsub
     rw [ContinuousLinearMap.comp_id] at hB
     have hquad₀ := hB.clm_apply hsub
     simp only [Function.comp_apply] at hquad₀
     have hquad_eq :
-        B (y - x₀) ∘SL
-              (ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n))) +
-            B.flip (y - x₀) =
-          2 • B (y - x₀) := by
+      B (y - x₀) ∘SL (ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n))) + B.flip (y - x₀) =
+        2 • B (y - x₀) := by
       ext z
-      simp only [ContinuousLinearMap.comp_id, add_apply,
-        ContinuousLinearMap.flip_apply, smul_apply]
+      simp only [ContinuousLinearMap.comp_id, add_apply, ContinuousLinearMap.flip_apply,
+        smul_apply]
       rw [hsymm z (y - x₀)]
       ring
     rw [hquad_eq] at hquad₀
     have hq : HasFDerivAt q (B (y - x₀)) y := by
-      convert hquad₀.const_mul (1 / 2 : ℝ) using 1 <;>
-        first
-        | rfl
-        | (ext z; norm_num [smul_apply, smul_eq_mul]; ring)
+      convert hquad₀.const_mul (1 / 2 : ℝ) using 1
+      ext z
+      norm_num [smul_apply, smul_eq_mul]
+      ring
     have hg₀ := ((hψy.sub_const (ψ x₀)).sub hlin).sub hq
     have hg : HasFDerivAt g (dg y) y := by
-      convert hg₀ using 1 <;> rfl
+      convert hg₀ using 1
+      rfl
     convert hg.hasFDerivWithinAt (s := s) using 1
   have hB₀ :
-      (fun y : EuclideanSpace ℝ (Fin n) =>
-        fderiv ℝ ψ y - fderiv ℝ ψ x₀ - B (y - x₀)) =o[𝓝 x₀]
-        fun y => ‖y - x₀‖ := by
+    (fun y : EuclideanSpace ℝ (Fin n) => fderiv ℝ ψ y - fderiv ℝ ψ x₀ - B (y - x₀)) =o[𝓝 x₀]
+      fun y => ‖y - x₀‖ := by
     have hfd : HasFDerivAt (fderiv ℝ ψ) B x₀ := by
       exact
-        ((hψ.fderiv_right (m := 1) (by norm_num)).differentiableAt
-          (by norm_num)).hasFDerivAt
+        ((hψ.fderiv_right (m := 1) (by norm_num)).differentiableAt (by norm_num)).hasFDerivAt
     simpa [B] using hfd.isLittleO.norm_right
-  have hB₀' :
-      dg =o[𝓝[s] x₀] fun y => ‖y - x₀‖ := by
+  have hB₀' : dg =o[𝓝[s] x₀] fun y => ‖y - x₀‖ := by
     rw [Asymptotics.isLittleO_iff] at hB₀ ⊢
     intro c hc
     exact Filter.Eventually.filter_mono nhdsWithin_le_nhds (hB₀ hc)
-  have hB₀'' :
-      dg =o[𝓝[s] x₀] fun y => ‖y - x₀‖ ^ 1 := by
-    simpa using hB₀'
-  have hg₀ :
-      (fun y => g y - g x₀) =o[𝓝[s] x₀]
-        fun y => ‖y - x₀‖ ^ (1 + 1) :=
+  have hB₀'' : dg =o[𝓝[s] x₀] fun y => ‖y - x₀‖ ^ 1 := by simpa using hB₀'
+  have hg₀ : (fun y => g y - g x₀) =o[𝓝[s] x₀] fun y => ‖y - x₀‖ ^ (1 + 1) :=
     hs.isLittleO_pow_succ hx₀s hderiv hB₀''
-  have hgzero : g x₀ = 0 := by
-    simp [g, q]
-  have hg₀' :
-      g =o[𝓝[s] x₀] fun y => ‖y - x₀‖ ^ 2 := by
-    simpa [hgzero, pow_two] using hg₀
-  have hev :
-      ∀ᶠ y in 𝓝[s] x₀, ‖g y‖ ≤ ε * ‖y - x₀‖ ^ 2 := by
+  have hgzero : g x₀ = 0 := by simp [g, q]
+  have hg₀' : g =o[𝓝[s] x₀] fun y => ‖y - x₀‖ ^ 2 := by simpa [hgzero, pow_two] using hg₀
+  have hev : ∀ᶠ y in 𝓝[s] x₀, ‖g y‖ ≤ ε * ‖y - x₀‖ ^ 2 := by
     have h := Asymptotics.IsLittleO.bound hg₀' hε
     filter_upwards [h] with y hy
     calc
       ‖g y‖ ≤ ε * ‖‖y - x₀‖ ^ 2‖ := hy
-      _ = ε * ‖y - x₀‖ ^ 2 := by
-        rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg (‖y - x₀‖))]
+      _ = ε * ‖y - x₀‖ ^ 2 := by rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg (‖y - x₀‖))]
   rcases Metric.mem_nhdsWithin_iff.mp hev with ⟨δ, hδ, hδev⟩
   refine ⟨min ρ δ, lt_min hρ hδ, ?_⟩
   intro x hx
   have hx' : dist x x₀ < min ρ δ := Metric.mem_ball.mp hx
-  have hxρ : x ∈ s :=
-    Metric.mem_ball.mpr (lt_of_lt_of_le hx' (min_le_left ρ δ))
-  have hxδ : x ∈ ball x₀ δ :=
-    Metric.mem_ball.mpr (lt_of_lt_of_le hx' (min_le_right ρ δ))
+  have hxρ : x ∈ s := Metric.mem_ball.mpr (lt_of_lt_of_le hx' (min_le_left ρ δ))
+  have hxδ : x ∈ ball x₀ δ := Metric.mem_ball.mpr (lt_of_lt_of_le hx' (min_le_right ρ δ))
   have hbound : ‖g x‖ ≤ ε * ‖x - x₀‖ ^ 2 := by
     have h := hδev ⟨hxδ, hxρ⟩
     simpa [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg (‖x - x₀‖))] using h
   have hgexpr :
-      g x =
-        ψ x - (ψ x₀ + fderiv ℝ ψ x₀ (x - x₀) +
-          (1 / 2 : ℝ) *
-            (fderiv ℝ (fderiv ℝ ψ) x₀ (x - x₀)) (x - x₀)) := by
+    g x =
+      ψ x -
+        (ψ x₀ + fderiv ℝ ψ x₀ (x - x₀) +
+          (1 / 2 : ℝ) * (fderiv ℝ (fderiv ℝ ψ) x₀ (x - x₀)) (x - x₀)) := by
     simp [g, q, sub_eq_add_neg]
     ring
   rw [hgexpr] at hbound
@@ -406,7 +385,8 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! Viscosity inequalities for Alexandrov solutions: the determinant of the Hessian of a `C²` test touching from above (below) is bounded below (above) by the Monge–Ampère density. -/
+/-! Viscosity inequalities for Alexandrov solutions: the determinant of the Hessian of a `C²` test
+touching from above (below) is bounded below (above) by the Monge–Ampère density. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -574,16 +554,21 @@ private lemma touching_cancel_volume {n : ℕ}
       (by simpa only [mul_comm] using h)
 
 set_option maxHeartbeats 800000 in
-/-- **Upper touching test for an Alexandrov solution** (viscosity inequality): if the subgradient
+/--
+**Upper touching test for an Alexandrov solution** (viscosity inequality): if the subgradient
 images of the convex `u` on open subsets of `Ω` carry the density `f`
-(`vol (∂u(G)) = ∫_G f`), `f` is continuous at `x₀ ∈ Ω`, and a `C²` function `ψ` touches `u` from above
+(`vol (∂u(G)) = ∫_G f`), `f` is continuous at `x₀ ∈ Ω`, and a `C²` function `ψ` touches `u` from
+above
 at `x₀` (`u ≤ ψ` near `x₀`, `u x₀ = ψ x₀`), then `f x₀ ≤ det ∇²ψ(x₀)` (standard coordinates of
 `EuclideanSpace ℝ (Fin n)`, `hessianMatrix ψ x₀ i j = D²ψ(x₀)(eᵢ, eⱼ)`). -/
 theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ u) {Ω : Set (EuclideanSpace ℝ (Fin n))} (hΩ : IsOpen Ω)
-    (hMA : ∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G → G ⊆ Ω →
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage u G) =
-        ∫⁻ x in G, ENNReal.ofReal (f x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hMA :
+      ∀ G : Set (EuclideanSpace ℝ (Fin n)),
+        IsOpen G →
+          G ⊆ Ω →
+            (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage u G) =
+              ∫⁻ x in G, ENNReal.ofReal (f x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))
     {x₀ : EuclideanSpace ℝ (Fin n)} (hx₀ : x₀ ∈ Ω) (hf : ContinuousAt f x₀)
     (hψ : ContDiffAt ℝ 2 ψ x₀) (hcontact : u x₀ = ψ x₀) (htouch : ∀ᶠ x in 𝓝 x₀, u x ≤ ψ x) :
     f x₀ ≤ (hessianMatrix ψ x₀).det := by
@@ -591,16 +576,14 @@ theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace �
   apply le_of_not_gt
   intro hbad
   let A := hessianMatrix ψ x₀
-  have hA : A.PosSemidef :=
-    posSemidef_hessianMatrix_of_upper_touch hconv hψ hcontact htouch
+  have hA : A.PosSemidef := posSemidef_hessianMatrix_of_upper_touch hconv hψ hcontact htouch
   change A.det < f x₀ at hbad
   obtain ⟨a, hAa, haf⟩ := exists_between hbad
   have hdcont : Continuous (fun t : ℝ => (A + (4 * t) • 1).det) :=
     (continuous_const.add
-      ((continuous_const.mul continuous_id).smul continuous_const)).matrix_det
+        ((continuous_const.mul continuous_id).smul continuous_const)).matrix_det
   have hdnear : ∀ᶠ t : ℝ in 𝓝 0, (A + (4 * t) • 1).det < a :=
-    hdcont.continuousAt.eventually_lt continuous_const.continuousAt
-      (by simpa using hAa)
+    hdcont.continuousAt.eventually_lt continuous_const.continuousAt (by simpa using hAa)
   obtain ⟨ε, hε, hdet⟩ := touching_positive_parameter hdnear
   let M : Matrix (Fin n) (Fin n) ℝ := A + (4 * ε) • 1
   have hM : M.PosDef := by
@@ -609,34 +592,25 @@ theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace �
       (Matrix.PosDef.one.smul (show 0 < 4 * ε by positivity)).add_posSemidef hA
   have hMdet : M.det < a := hdet
   let b : EuclideanSpace ℝ (Fin n) :=
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).symm
-      (fderiv ℝ ψ x₀)
+    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).symm (fderiv ℝ ψ x₀)
   let q := quadraticAt A x₀ b (ψ x₀)
   obtain ⟨ρ, hρ, htaylor⟩ := exists_taylor_two_hessianMatrix_bound hψ hε
   have htaylor' (x : EuclideanSpace ℝ (Fin n)) (hx : x ∈ ball x₀ ρ) :
-      |ψ x - q x| ≤ ε * ‖x - x₀‖ ^ 2 := by
-    simpa only [q, A, b, quadraticAt, InnerProductSpace.toDual_symm_apply]
-      using htaylor x hx
-  have hfnear : ∀ᶠ x in 𝓝 x₀, a < f x :=
-    continuous_const.continuousAt.eventually_lt hf haf
-  have hnear : ∀ᶠ x in 𝓝 x₀,
-      x ∈ Ω ∧ u x ≤ ψ x ∧ a ≤ f x ∧
-        |ψ x - q x| ≤ ε * ‖x - x₀‖ ^ 2 := by
-    filter_upwards [hΩ.mem_nhds hx₀, htouch, hfnear, ball_mem_nhds x₀ hρ]
-      with x hxΩ hxu hxf hxt
+    |ψ x - q x| ≤ ε * ‖x - x₀‖ ^ 2 := by
+    simpa only [q, A, b, quadraticAt, InnerProductSpace.toDual_symm_apply] using htaylor x hx
+  have hfnear : ∀ᶠ x in 𝓝 x₀, a < f x := continuous_const.continuousAt.eventually_lt hf haf
+  have hnear : ∀ᶠ x in 𝓝 x₀, x ∈ Ω ∧ u x ≤ ψ x ∧ a ≤ f x ∧ |ψ x - q x| ≤ ε * ‖x - x₀‖ ^ 2 := by
+    filter_upwards [hΩ.mem_nhds hx₀, htouch, hfnear, ball_mem_nhds x₀ hρ] with x hxΩ hxu hxf hxt
     exact ⟨hxΩ, hxu, le_of_lt hxf, htaylor' x hxt⟩
   obtain ⟨r, hr, hlocal⟩ := touching_closedBall hnear
   let w := quadraticAt M x₀ b (ψ x₀ - ε * r ^ 2)
-  have hwconv : ConvexOn ℝ univ w :=
-    convexOn_quadraticAt hM.posSemidef x₀ b (ψ x₀ - ε * r ^ 2)
+  have hwconv : ConvexOn ℝ univ w := convexOn_quadraticAt hM.posSemidef x₀ b (ψ x₀ - ε * r ^ 2)
   have hwformula (x : EuclideanSpace ℝ (Fin n)) :
-      w x = q x - ε * r ^ 2 + 2 * ε * ‖x - x₀‖ ^ 2 := by
+    w x = q x - ε * r ^ 2 + 2 * ε * ‖x - x₀‖ ^ 2 := by
     dsimp only [w, M, q]
-    rw [touching_quadratic_shift A x₀ b x
-      (ψ x₀ - ε * r ^ 2) (ψ x₀) (4 * ε)]
+    rw [touching_quadratic_shift A x₀ b x (ψ x₀ - ε * r ^ 2) (ψ x₀) (4 * ε)]
     ring
-  have hwcenter : w x₀ = ψ x₀ - ε * r ^ 2 := by
-    simp [w, quadraticAt]
+  have hwcenter : w x₀ = ψ x₀ - ε * r ^ 2 := by simp [w, quadraticAt]
   have hcenter : w x₀ < u x₀ := by
     rw [hwcenter, hcontact]
     have hpos : 0 < ε * r ^ 2 := mul_pos hε (sq_pos_of_pos hr)
@@ -657,26 +631,20 @@ theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace �
     exact (hlocal x (ball_subset_closedBall (hGball hx))).1
   have hGpos : 0 < (volume : Measure (EuclideanSpace ℝ (Fin n))) G :=
     IsOpen.measure_pos volume hGo hGne
-  have hGfin : (volume : Measure (EuclideanSpace ℝ (Fin n))) G < ∞ :=
-    hGb.measure_lt_top
-  have hmul :
-      ENNReal.ofReal a * volume G ≤ ENNReal.ofReal M.det * volume G := by
+  have hGfin : (volume : Measure (EuclideanSpace ℝ (Fin n))) G < ∞ := hGb.measure_lt_top
+  have hmul : ENNReal.ofReal a * volume G ≤ ENNReal.ofReal M.det * volume G := by
     calc
-      ENNReal.ofReal a * volume G =
-          ∫⁻ x in G, ENNReal.ofReal a ∂volume :=
+      ENNReal.ofReal a * volume G = ∫⁻ x in G, ENNReal.ofReal a ∂volume :=
         (setLIntegral_const G (ENNReal.ofReal a)).symm
       _ ≤ ∫⁻ x in G, ENNReal.ofReal (f x) ∂volume := by
         apply setLIntegral_mono' hGo.measurableSet
         intro x hx
-        exact ENNReal.ofReal_mono
-          (hlocal x (ball_subset_closedBall (hGball hx))).2.2.1
+        exact ENNReal.ofReal_mono (hlocal x (ball_subset_closedBall (hGball hx))).2.2.1
       _ = volume (subgradientImage u G) := (hMA G hGo hGΩ).symm
       _ ≤ volume (subgradientImage w G) := measure_mono hcomp
       _ = ENNReal.ofReal M.det * volume G :=
-        volume_subgradientImage_quadraticAt hM x₀ b
-          (ψ x₀ - ε * r ^ 2) hGo.measurableSet
-  have hcoef : a ≤ M.det :=
-    touching_cancel_volume hGpos hGfin hM.det_pos.le hmul
+        volume_subgradientImage_quadraticAt hM x₀ b (ψ x₀ - ε * r ^ 2) hGo.measurableSet
+  have hcoef : a ≤ M.det := touching_cancel_volume hGpos hGfin hM.det_pos.le hmul
   exact (not_le_of_gt hMdet) hcoef
 
 set_option maxHeartbeats 800000 in
@@ -785,40 +753,37 @@ open Classical Matrix
 /-- A bound on positive-definite quadratic lower tests also bounds the determinant
 of every positive-semidefinite C² lower test at the same point. -/
 theorem det_hessianMatrix_le_of_quadratic_lower_tests {n : ℕ}
-    {U ψ : EuclideanSpace ℝ (Fin n) → ℝ}
-    {Ω : Set (EuclideanSpace ℝ (Fin n))}
-    (hquad : ∀ (A : Matrix (Fin n) (Fin n) ℝ), A.PosDef → ∀ x∈Ω, ∀ b,
-      (∀ᶠ y in 𝓝 x, quadraticAt A x b (U x) y≤U y) → A.det≤1)
-    {x₀ : EuclideanSpace ℝ (Fin n)} (hx₀ : x₀∈Ω)
-    (hψ : ContDiffAt ℝ 2 ψ x₀) (hH : (hessianMatrix ψ x₀).PosSemidef)
-    (hcontact : U x₀=ψ x₀) (htouch : ∀ᶠ x in 𝓝 x₀, ψ x≤U x) :
-    (hessianMatrix ψ x₀).det≤1 := by
+    {U ψ : EuclideanSpace ℝ (Fin n) → ℝ} {Ω : Set (EuclideanSpace ℝ (Fin n))}
+    (hquad :
+      ∀ (A : Matrix (Fin n) (Fin n) ℝ),
+        A.PosDef → ∀ x ∈ Ω, ∀ b, (∀ᶠ y in 𝓝 x, quadraticAt A x b (U x) y ≤ U y) → A.det ≤ 1)
+    {x₀ : EuclideanSpace ℝ (Fin n)} (hx₀ : x₀ ∈ Ω) (hψ : ContDiffAt ℝ 2 ψ x₀)
+    (hH : (hessianMatrix ψ x₀).PosSemidef) (hcontact : U x₀ = ψ x₀)
+    (htouch : ∀ᶠ x in 𝓝 x₀, ψ x ≤ U x) : (hessianMatrix ψ x₀).det ≤ 1 := by
   apply le_of_not_gt
   intro hbad
   let A := hessianMatrix ψ x₀
-  change 1<A.det at hbad
+  change 1 < A.det at hbad
   have hA : A.PosDef := hH.posDef_iff_det_ne_zero.mpr (ne_of_gt (lt_trans zero_lt_one hbad))
-  obtain ⟨ε,hε,hpd,hdet,ρ,hρ,htaylor⟩ :=
-    touching_lower_quadratic_data hψ hA hbad
-  let M : Matrix (Fin n) (Fin n) ℝ := A+(-(4*ε)) • 1
+  obtain ⟨ε, hε, hpd, hdet, ρ, hρ, htaylor⟩ := touching_lower_quadratic_data hψ hA hbad
+  let M : Matrix (Fin n) (Fin n) ℝ := A + (-(4 * ε)) • 1
   let b : EuclideanSpace ℝ (Fin n) :=
     (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).symm (fderiv ℝ ψ x₀)
   let q := quadraticAt A x₀ b (ψ x₀)
-  have htaylor' (y : EuclideanSpace ℝ (Fin n)) (hy : y∈ball x₀ ρ) :
-      |ψ y-q y|≤ε*‖y-x₀‖^2 := by
-    simpa only [q,A,b] using htaylor y hy
-  have htest : ∀ᶠ y in 𝓝 x₀, quadraticAt M x₀ b (U x₀) y≤U y := by
-    filter_upwards [htouch,ball_mem_nhds x₀ hρ] with y hy hball
+  have htaylor' (y : EuclideanSpace ℝ (Fin n)) (hy : y ∈ ball x₀ ρ) :
+    |ψ y - q y| ≤ ε * ‖y - x₀‖ ^ 2 := by simpa only [q, A, b] using htaylor y hy
+  have htest : ∀ᶠ y in 𝓝 x₀, quadraticAt M x₀ b (U x₀) y ≤ U y := by
+    filter_upwards [htouch, ball_mem_nhds x₀ hρ] with y hy hball
     have hT := htaylor' y hball
-    have hshift : quadraticAt M x₀ b (U x₀) y=q y-2*ε*‖y-x₀‖^2 := by
+    have hshift : quadraticAt M x₀ b (U x₀) y = q y - 2 * ε * ‖y - x₀‖ ^ 2 := by
       rw [hcontact]
-      dsimp only [M,q]
+      dsimp only [M, q]
       rw [quadraticAt_shift]
       ring
     rw [hshift]
     have hab := (abs_le.mp hT).1
-    have hn : 0≤ε*‖y-x₀‖^2 := mul_nonneg hε.le (sq_nonneg _)
-    nlinarith only [hab,hy,hn]
+    have hn : 0 ≤ ε * ‖y - x₀‖ ^ 2 := mul_nonneg hε.le (sq_nonneg _)
+    nlinarith only [hab, hy, hn]
   have hd := hquad M hpd x₀ hx₀ b htest
   exact (not_lt_of_ge hd) hdet
 

@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoSimple
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoSimple
 
 /-!
 # Refinement of a simple predictable integrand
@@ -15,6 +20,8 @@ stochastic integral under such a refinement
 (`SimplePredictable.simpleIntegral_refine`), obtained by telescoping the driving
 increments over each fiber of the refining index map.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -148,8 +155,8 @@ lemma SimplePredictable.refine_eval
     have h_lhs : (∑ j : Fin M, if π' j.castSucc < s ∧ s ≤ π' j.succ
         then H.ξ (idxMap j) ω else 0) = H.ξ (idxMap j₀) ω := by
       rw [Finset.sum_eq_single j₀]
-      · rw [if_pos hj₀]
-      · intro k _ hk; rw [if_neg (h_unique_j k hk)]
+      · rw [ite_eq_left hj₀]
+      · intro k _ hk; rw [ite_eq_right (h_unique_j k hk)]
       · intro h_not; exact absurd (Finset.mem_univ _) h_not
     -- s is in old piece (idxMap j₀); RHS picks out the (idxMap j₀)-th term.
     have hs_in_old : H.partition (idxMap j₀).castSucc < s ∧
@@ -171,15 +178,15 @@ lemma SimplePredictable.refine_eval
     have h_rhs : (∑ i : Fin H.N, if H.partition i.castSucc < s ∧
         s ≤ H.partition i.succ then H.ξ i ω else 0) = H.ξ (idxMap j₀) ω := by
       rw [Finset.sum_eq_single (idxMap j₀)]
-      · rw [if_pos hs_in_old]
-      · intro k _ hk; rw [if_neg (h_unique_i k hk)]
+      · rw [ite_eq_left hs_in_old]
+      · intro k _ hk; rw [ite_eq_right (h_unique_i k hk)]
       · intro h_not; exact absurd (Finset.mem_univ _) h_not
     rw [h_lhs, h_rhs]
   · -- s not in any new piece.
     have h_lhs_zero : (∑ j : Fin M, if π' j.castSucc < s ∧ s ≤ π' j.succ
         then H.ξ (idxMap j) ω else 0) = 0 := by
       refine Finset.sum_eq_zero (fun j _ => ?_)
-      rw [if_neg (fun hjp => h_any_new ⟨j, hjp⟩)]
+      rw [ite_eq_right (fun hjp => h_any_new ⟨j, hjp⟩)]
     -- Use `strictMono_partition_tiles` to derive `s ≤ π' 0` or `s > π' Fin.last`.
     have hs_out : s ≤ π' 0 ∨ π' (Fin.last M) < s := by
       by_contra h_inside
@@ -190,7 +197,7 @@ lemma SimplePredictable.refine_eval
     · have h_rhs_zero : (∑ i : Fin H.N, if H.partition i.castSucc < s ∧
           s ≤ H.partition i.succ then H.ξ i ω else 0) = 0 := by
         refine Finset.sum_eq_zero (fun i _ => ?_)
-        rw [if_neg]
+        rw [ite_eq_right]
         intro ⟨h_lt, _⟩
         have : H.partition 0 ≤ H.partition i.castSucc :=
           H.partition_strictMono.monotone (Fin.zero_le _)
@@ -203,7 +210,7 @@ lemma SimplePredictable.refine_eval
       have h_rhs_zero : (∑ i : Fin H.N, if H.partition i.castSucc < s ∧
           s ≤ H.partition i.succ then H.ξ i ω else 0) = 0 := by
         refine Finset.sum_eq_zero (fun i _ => ?_)
-        rw [if_neg]
+        rw [ite_eq_right]
         intro ⟨_, h_le⟩
         have : H.partition i.succ ≤ H.partition (Fin.last H.N) :=
           H.partition_strictMono.monotone (Fin.le_last _)
@@ -366,7 +373,7 @@ lemma SimplePredictable.W_telescope_via_g
     (fun n : ℕ => if h : n < M + 1 then W.W (π' ⟨n, h⟩) ω else 0)]
   have h_b_lt : b < M + 1 := by omega
   have h_a_lt : a < M + 1 := by omega
-  simp only [h_b_lt, h_a_lt, dif_pos]
+  simp only [h_b_lt, h_a_lt, dite_eq_left]
 
 /-- **Per-fiber telescope assembly:** for `i : Fin H.N`, the sum
 `∑ j ∈ filter (idxMap j = i), H.ξ (idxMap j) ω · (W (π' j.succ) ω - W (π' j.castSucc) ω)`
@@ -433,9 +440,9 @@ lemma SimplePredictable.fiber_sum_telescope
         - W.W (π' ⟨j.val, h_lt_M1⟩) ω)
       = H.ξ i ω * (g (j.val + 1) - g j.val)
     have hg_succ : g (j.val + 1) = W.W (π' ⟨j.val + 1, h_succ_lt⟩) ω := by
-      rw [hg_def]; exact dif_pos h_succ_lt
+      rw [hg_def]; exact dite_eq_left h_succ_lt
     have hg_val : g j.val = W.W (π' ⟨j.val, h_lt_M1⟩) ω := by
-      rw [hg_def]; exact dif_pos h_lt_M1
+      rw [hg_def]; exact dite_eq_left h_lt_M1
     rw [hg_succ, hg_val]
   rw [h_bij_eq]
   -- Now: ∑ n ∈ Ico, H.ξ i ω · (g (n+1) - g n)
@@ -467,7 +474,7 @@ lemma SimplePredictable.W_telescope_via_g_clamped
     (fun n : ℕ => if h : n < M + 1 then W.W (min (π' ⟨n, h⟩) t) ω else 0)]
   have h_b_lt : b < M + 1 := by omega
   have h_a_lt : a < M + 1 := by omega
-  simp only [h_b_lt, h_a_lt, dif_pos]
+  simp only [h_b_lt, h_a_lt, dite_eq_left]
 
 /-- **Clamped per-fiber telescope assembly.** The `min (·) t`-clamped analogue of
 `fiber_sum_telescope`. The fiber/Ico bijection (`val_mem_Ico_of_idxMap_eq`,
@@ -531,9 +538,9 @@ lemma SimplePredictable.fiber_sum_telescope_clamped
         - W.W (min (π' ⟨j.val, h_lt_M1⟩) t) ω)
       = H.ξ i ω * (g (j.val + 1) - g j.val)
     have hg_succ : g (j.val + 1) = W.W (min (π' ⟨j.val + 1, h_succ_lt⟩) t) ω := by
-      rw [hg_def]; exact dif_pos h_succ_lt
+      rw [hg_def]; exact dite_eq_left h_succ_lt
     have hg_val : g j.val = W.W (min (π' ⟨j.val, h_lt_M1⟩) t) ω := by
-      rw [hg_def]; exact dif_pos h_lt_M1
+      rw [hg_def]; exact dite_eq_left h_lt_M1
     rw [hg_succ, hg_val]
   rw [h_bij_eq, ← Finset.mul_sum]
   rw [SimplePredictable.W_telescope_via_g_clamped (Ω := Ω) (P := P) W π' ω t

@@ -1,8 +1,13 @@
-import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
-import FunctionalInequalities.Poincare.Gaussian.Real
-import FunctionalInequalities.Probability.Transport
+module
 
-/-! A Gaussian product with variances 1, 0, 4, its empty boundary and covariance under translation. -/
+public import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
+public import FunctionalInequalities.Poincare.Gaussian.Real
+public import FunctionalInequalities.Probability.Transport
+
+/-! A Gaussian product with variances 1, 0, 4, its empty boundary and covariance under translation.
+-/
+
+@[expose] public section
 noncomputable section
 namespace Examples.FiniteProductCovariance
 open MeasureTheory

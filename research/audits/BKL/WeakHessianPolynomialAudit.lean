@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+module
+
+public import FunctionalInequalities.Analysis.Matrix.WeakDerivative
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 
 /-!
 # Genuine weak Hessian polynomial clients
@@ -9,6 +11,8 @@ quadratics consume the produced Hessian/tensor and the generic weak matrix API.
 Empty products, zero matrix size and singleton cofactors retain their scopes.
 These clients do not establish a generator identity, trace estimate or constant 8.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Matrix
@@ -49,9 +53,9 @@ theorem produced_normalized_weak_cofactors {n : ℕ} (hn : 0 < n)
     (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
       (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ)
+    (hiso : KLS.Isotropic μ) :
 
-    : ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ),
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
       ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
         (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
@@ -126,9 +130,9 @@ theorem produced_normalized_weak_determinant {n : ℕ} (hn : 0 < n)
     (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
       (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ)
+    (hiso : KLS.Isotropic μ) :
 
-    : ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
       ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
@@ -169,45 +173,46 @@ namespace Trace
 /-- Actual normalized source-law trace polynomial and first weak directional
 derivative, without symmetry/PSD of B or smoothness of the raw Hessian. -/
 theorem produced_normalized_weak_trace_quadratic {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ)
-
-    (B : Matrix (Fin n) (Fin n) ℝ) :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) (B : Matrix (Fin n) (Fin n) ℝ) :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (T :
+      EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ∀ k : Fin n,
-        HasWeakDerivAlong
-          (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace)
-          (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
-          (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-        ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-          MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace) 2
-            ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
-  obtain ⟨u, _L, _LF, T, _hconv, _hLip, hnorm, hmap, _hC1, hG,
-      _hF, _hw, _hdata, hT⟩ :=
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+            (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+          ∀ k : Fin n,
+            HasWeakDerivAlong (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace)
+                (fun x =>
+                  2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+                (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+              ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+                IsCompact S →
+                  MemLp
+                    (fun x =>
+                      2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+                    2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+  obtain ⟨u, _L, _LF, T, _hconv, _hLip, hnorm, hmap, _hC1, hG, _hF, _hw, _hdata, hT⟩ :=
     exists_regular_moment_weak_tensor hn hκ hK hKc hKint hW hstrong μ hμ hiso
   refine ⟨u, T, hnorm, hmap, ?_⟩
   intro k
-  have hbound (r s : Fin n) : MemLp (fun x => hessianMatrix u x r s)
-      (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+  have hbound (r s : Fin n) :
+    MemLp (fun x => hessianMatrix u x r s) (⊤ : ENNReal)
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     memLp_top_of_bound (measurable_hessianMatrix_entry u r s).aestronglyMeasurable
       (Real.toNNReal (16 / κ) : ℝ)
       (Filter.Eventually.of_forall fun x =>
         norm_hessianMatrix_entry_le_of_lipschitz_gradient hG x r s)
-  exact hasWeakDerivAlong_trace_quadratic_of_locally_memLp_two B
-    (A := fun x => hessianMatrix u x)
-    (DA := fun x => Matrix.of fun i j => T x k i j)
-    (fun i j => (hT k i j).1) hbound (fun i j => (hT k i j).2)
+  exact
+    hasWeakDerivAlong_trace_quadratic_of_locally_memLp_two B (A := fun x => hessianMatrix u x)
+      (DA := fun x => Matrix.of fun i j => T x k i j) (fun i j => (hT k i j).1) hbound
+      (fun i j => (hT k i j).2)
 
 /-- Zero matrix size is retained independently of the ambient dimension. -/
 theorem zero_matrix_size {d : ℕ} (v : EuclideanSpace ℝ (Fin d))

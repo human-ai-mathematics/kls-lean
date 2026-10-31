@@ -6,7 +6,16 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoLinear
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+-- Modified 2026-10-31 by the KLS formalization project: `eLpNorm_sq_eq_lintegral` takes
+-- `hf : AEStronglyMeasurable f μ`, which `eLpNorm_eq_lintegral_rpow_enorm_toReal` requires in
+-- Mathlib v4.35.0 (where `eLpNorm` of a non-a.e.-strongly-measurable function is `∞`); its callers
+-- pass existing witnesses.
+module
+
+public import LevyStochCalc.Brownian.ItoLinear
 
 /-!
 # Completeness of the admissible integrands on a horizon
@@ -16,6 +25,8 @@ the sample measure with Lebesgue measure on the horizon. A sequence of integrand
 for that energy therefore has an `L²`-limit, and the pointwise `limsup` of an almost everywhere
 convergent subsequence is a representative of that limit which is again progressively measurable.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -35,9 +46,10 @@ noncomputable def energy (P : Measure Ω) (T : ℝ) (H : Ω → ℝ → ℝ) : �
   ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖H ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P
 
 /-- The square of the `L²`-seminorm as an extended integral of squares. -/
-theorem eLpNorm_sq_eq_lintegral {α : Type*} [MeasurableSpace α] (μ : Measure α) (f : α → ℝ) :
+theorem eLpNorm_sq_eq_lintegral {α : Type*} [MeasurableSpace α] (μ : Measure α) (f : α → ℝ)
+    (hf : AEStronglyMeasurable f μ) :
     eLpNorm f 2 μ ^ 2 = ∫⁻ x, (‖f x‖₊ : ℝ≥0∞) ^ 2 ∂μ := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)]
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num) hf]
   have h2 : ((2 : ℝ≥0∞)).toReal = (2 : ℝ) := by simp
   rw [h2, ← ENNReal.rpow_natCast ((∫⁻ x, ‖f x‖ₑ ^ (2 : ℝ) ∂μ) ^ (1 / (2 : ℝ))) 2,
     ← ENNReal.rpow_mul]
@@ -51,7 +63,8 @@ theorem energy_eq_eLpNorm_sq {H : Ω → ℝ → ℝ} (hm : Measurable (Function
   have hme : AEMeasurable (fun p : Ω × ℝ => (‖H p.1 p.2‖₊ : ℝ≥0∞) ^ 2)
       (P.prod (volume.restrict (Set.Icc (0 : ℝ) T))) :=
     (((measurable_nnnorm.comp hm).coe_nnreal_ennreal).pow_const 2).aemeasurable
-  rw [eLpNorm_sq_eq_lintegral, energyMeasure, energy,
+  rw [eLpNorm_sq_eq_lintegral _ (fun p : Ω × ℝ => H p.1 p.2) hm.aestronglyMeasurable,
+    energyMeasure, energy,
     lintegral_prod (fun p : Ω × ℝ => (‖H p.1 p.2‖₊ : ℝ≥0∞) ^ 2) hme]
 
 omit [IsProbabilityMeasure P] in
@@ -59,7 +72,7 @@ omit [IsProbabilityMeasure P] in
 theorem memLp_of_energy_ne_top {H : Ω → ℝ → ℝ} (hm : Measurable (Function.uncurry H)) {T : ℝ}
     (hfin : energy P T H ≠ ⊤) :
     MemLp (fun p : Ω × ℝ => H p.1 p.2) 2 (energyMeasure P T) := by
-  refine ⟨hm.stronglyMeasurable.aestronglyMeasurable, ?_⟩
+  rw [memLp_iff]
   refine lt_top_iff_ne_top.mpr fun hcon => hfin ?_
   rw [energy_eq_eLpNorm_sq hm T, hcon]
   simp
@@ -179,11 +192,8 @@ theorem exists_progressive_energy_limit (ℱ : Filtration ℝ ‹MeasurableSpace
       ∧ energy P T K ≠ ⊤
       ∧ Tendsto (fun n => energy P T (fun ω s => H n ω s - K ω s)) atTop (𝓝 0) := by
   obtain ⟨g, hgMem, hgt⟩ := exists_energy_limit hm hfin hcau
-  have hMem : ∀ n, MemLp (fun p : Ω × ℝ => H n p.1 p.2) 2 (energyMeasure P T) :=
-    fun n => memLp_of_energy_ne_top (hm n) (hfin n)
   obtain ⟨ns, -, hae⟩ := (tendstoInMeasure_of_tendsto_eLpNorm (μ := energyMeasure P T) (p := 2)
-    (by norm_num) (fun n => (hMem n).aestronglyMeasurable)
-    hgMem.aestronglyMeasurable hgt).exists_seq_tendsto_ae
+    (by norm_num) hgt).exists_seq_tendsto_ae
   have hKm : Measurable (Function.uncurry (limsupIntegrand H ns)) :=
     Measurable.limsup fun i => hm (ns i)
   have hKp : Probability.ProgressivelyMeasurable ℱ (limsupIntegrand H ns) :=

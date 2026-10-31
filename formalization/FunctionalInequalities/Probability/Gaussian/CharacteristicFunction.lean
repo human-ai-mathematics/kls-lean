@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.Gaussian.Kernel
-import Mathlib.Probability.Distributions.Gaussian.Multivariate
-import Mathlib.MeasureTheory.Measure.CharacteristicFunction.Basic
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Kernel
+public import Mathlib.Probability.Distributions.Gaussian.Multivariate
+public import Mathlib.MeasureTheory.Measure.CharacteristicFunction.Basic
 
 /-!
 # Characteristic function and standard-law identification of radial Gaussians
@@ -11,6 +13,8 @@ standard Gaussian by `(sqrt (2s))⁻¹`. These identities include dimension zero
 and retain variance `1/(2s)`. They support the Gaussian channel in BKL
 arXiv:2610.05474v1, Section 2, independently of convolution or Poincaré bounds.
 -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory
@@ -61,12 +65,11 @@ theorem charFun_law {s : ℝ} (hs : 0 < s) (t : V) :
   rw [hexp, ← mul_assoc, inv_mul_cancel₀ hm, one_mul]
 
 
-set_option linter.style.haveILetI false in
 /-- The Gaussian law is the indicated scalar image of the standard Gaussian. -/
 theorem law_eq_scaled_stdGaussian {s : ℝ} (hs : 0 < s) :
     law (V := V) s =
       (stdGaussian V).map (fun x : V => (Real.sqrt (2 * s))⁻¹ • x) := by
-  haveI : IsProbabilityMeasure (law (V := V) s) :=
+  have : IsProbabilityMeasure (law (V := V) s) :=
     law_probability hs
   apply Measure.ext_of_charFun
   funext t

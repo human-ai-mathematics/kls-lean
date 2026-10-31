@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent full-signature clients for strong Gaussian interpolation and its square. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 set_option maxHeartbeats 800000
@@ -15,11 +19,13 @@ section Hilbert
 variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
   (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀))
-theorem varying {F : ℝ → H₀} {v : H₀} {t : ℝ}
-    (hF : HasDerivAt F v t) (ht : 0 < t) :
+theorem varying {F : ℝ → H₀} {v : H₀} {t : ℝ} (hF : HasDerivAt F v t) (ht : 0 < t) :
     HasDerivAt (fun s ↦ Generated.apply T hT hd s (F s))
-      (Generated.apply T hT hd t v - adjointComp T
-        ⟨Generated.apply T hT hd t (F t), Generated.mem_adjointComp_domain_apply_of_pos T hT hd (F t) ht⟩) t :=
+      (Generated.apply T hT hd t v -
+        adjointComp T
+          ⟨Generated.apply T hT hd t (F t),
+            Generated.mem_adjointComp_domain_apply_of_pos T hT hd (F t) ht⟩)
+      t :=
   Generated.hasDerivAt_apply_curve T hT hd hF ht
 
 theorem domain {F : ℝ → H₀} {v : H₀} {t : ℝ}

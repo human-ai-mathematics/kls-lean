@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedSimple
-import LevyStochCalc.Poisson.Filtered
-import Mathlib.Probability.Independence.Integration
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedSimple
+public import LevyStochCalc.Poisson.Filtered
+public import Mathlib.Probability.Independence.Integration
 
 /-!
 # Second moments and L²-isometry of the simple compensated-Poisson integral
@@ -31,6 +35,8 @@ along `poisson_law` to `Ñ(B)`.
   `(∑_i ξ_i · Ñ(B_i))²`, the isometry `simpleIntegral_isometry` with its sum form, and
   the membership `simpleIntegral_memLp_compensated`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

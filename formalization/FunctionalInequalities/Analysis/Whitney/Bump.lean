@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Whitney.Cover
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+module
+
+public import FunctionalInequalities.Analysis.Whitney.Cover
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 
 /-!
 # Uniformly scaled bumps for the Whitney cover
@@ -8,6 +10,8 @@ A single fixed bump, equal to one on the radius-five ball and supported in the r
 ball, is translated and scaled. Its derivatives are uniformly bounded by a constant divided
 by the scale. This quantitative estimate is needed for the Whitney affine-jet sum.
 -/
+
+@[expose] public section
 
 noncomputable section
 

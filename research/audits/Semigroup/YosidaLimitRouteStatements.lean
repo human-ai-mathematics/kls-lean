@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Approximation
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+public import FunctionalInequalities.Analysis.Semigroup.Yosida.Approximation
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Route statements: strong convergence of the Yosida exponentials
@@ -18,10 +20,13 @@ Independent clients are `research/audits/Semigroup/YosidaFamilyAudit.lean` and
 
 The abstract `S6` of `GenerationRouteStatements.lean` asks for strong convergence of
 `exp (-t • L s) f` as `s ↓ 0` for an **abstract** family `L : ℝ → H₀ →L[ℝ] H₀` assumed only
-nonnegative and commuting.  **That abstract statement is false**: `L s = c s • 1` with `c` taking the
+nonnegative and commuting.  **That abstract statement is false**: `L s = c s • 1` with `c` taking
+the
 values `0` and `1` on two sequences accumulating at `0⁺` is nonnegative and commuting, and
-`exp (-t • L s) f = exp (-t c s) • f` has no limit.  `Y0` states this counterexample so the correction
-is explicit alongside the positive contracts. The anonymous propositions retain their mathematical signatures.
+`exp (-t • L s) f = exp (-t c s) • f` has no limit.  `Y0` states this counterexample so the
+correction
+is explicit alongside the positive contracts. The anonymous propositions retain their mathematical
+signatures.
 
 The correct statement needs a **Cauchy hypothesis on a dense set**: `Y7` is the corrected abstract
 `S6` of `GenerationRouteStatements.lean`, and `Y8` is that statement for the actual Yosida
@@ -46,6 +51,8 @@ Limits `s ↓ 0` are written in `ε`–`δ` form because `resolventCLM` and `yos
 `GenerationRouteStatements.lean`.
 Families are written `L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H₀` for the same reason.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -72,7 +79,8 @@ open scoped RealInnerProductSpace
 The original `S6` of `GenerationRouteStatements.lean`, specialised to `H₀ = ℝ`, fails:
 nonnegativity and commutation alone do not force `exp (-t • L s) f` to converge.  Take
 `L s = c s • 1` with `c s = 1` when `s = 1/n` for some `n` and
-`c s = 0` otherwise, `f = 1`, `t = 1`: the values `e⁻¹` and `1` both occur along sequences `s ↓ 0`. -/
+`c s = 0` otherwise, `f = 1`, `t = 1`: the values `e⁻¹` and `1` both occur along sequences `s ↓ 0`.
+-/
 
 #check (¬ (∀ (L : ℝ → ℝ →L[ℝ] ℝ),
       (∀ s : ℝ, 0 < s → ∀ f, 0 ≤ ⟪L s f, f⟫) →
@@ -135,10 +143,12 @@ in `s, r`. -/
 /-! ### `Y6` — two commuting nonnegative exponentials differ by at most `t ‖A f - B f‖`
 
 For bounded nonnegative `A, B` that commute and `t ≥ 0`,
-`‖exp (-t • A) f - exp (-t • B) f‖ ≤ t ‖A f - B f‖`.  Proof: `φ τ = exp (-τ • A) (exp (-(t - τ) • B) f)`
-has `φ' τ = exp (-τ • A) (exp (-(t - τ) • B) ((B - A) f))` (product rule, `hasDerivAt_exp_smul_const`,
-and `Commute.exp_right` to move `A` past `exp (-(t - τ) • B)`), whose norm is at most `‖(B - A) f‖` by
-`norm_exp_neg_smul_apply_le` twice; the mean value inequality
+`‖exp (-t • A) f - exp (-t • B) f‖ ≤ t ‖A f - B f‖`.  Proof: `φ τ = exp (-τ • A) (exp (-(t - τ) • B)
+f)`
+has `φ' τ = exp (-τ • A) (exp (-(t - τ) • B) ((B - A) f))` (product rule,
+`hasDerivAt_exp_smul_const`,
+and `Commute.exp_right` to move `A` past `exp (-(t - τ) • B)`), whose norm is at most `‖(B - A) f‖`
+by `norm_exp_neg_smul_apply_le` twice; the mean value inequality
 `norm_image_sub_le_of_norm_deriv_le_segment'` on `[0, t]` gives the bound for `φ t - φ 0`. -/
 
 #check (∀ {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -149,7 +159,8 @@ and `Commute.exp_right` to move `A` past `exp (-(t - τ) • B)`), whose norm is
 /-! ### `Y7` — the corrected abstract `S6` of `GenerationRouteStatements.lean`
 
 A family `L s hs` of nonnegative commuting bounded operators whose values `L s hs f` are Cauchy as
-`s ↓ 0` for every `f` in a dense set `D` has `exp (-t • L s hs) f` convergent as `s ↓ 0` for **every**
+`s ↓ 0` for every `f` in a dense set `D` has `exp (-t • L s hs) f` convergent as `s ↓ 0` for
+**every**
 `f` and every `t ≥ 0`.  Proof: for `f ∈ D`, `Y6` makes `exp (-t • L s hs) f` Cauchy, so it converges
 (`H₀` complete); for general `f` approximate by `g ∈ D` and use the uniform contraction bound
 `norm_exp_neg_smul_apply_le` on `f - g` (`ε/3` argument), then completeness again. -/

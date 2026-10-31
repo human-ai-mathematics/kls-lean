@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.Regular
-import FunctionalInequalities.Analysis.Coarea.Regular
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.Regular
+public import FunctionalInequalities.Analysis.Coarea.Regular
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for codimension-`m` weighted slice measurability and the regular coarea formula
@@ -26,6 +28,8 @@ also why **nothing is claimed about the critical set**, and why the general codi
 formula — the analogue of the scalar `C¹`, Lipschitz and locally Lipschitz formulas, which needs
 Sard or a critical-slice argument — is not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -150,7 +154,8 @@ end VectorRegularCoareaAudit
 
 /-! ### Axiom audit: every report is standard-only -/
 
-#print axioms FunctionalInequalities.Analysis.measurable_setLIntegral_inter_levelSet_levelGraphFamily
+#print axioms
+  FunctionalInequalities.Analysis.measurable_setLIntegral_inter_levelSet_levelGraphFamily
 #print axioms FunctionalInequalities.Analysis.exists_vector_coarea_neighborhood_measurable
 #print axioms FunctionalInequalities.Analysis.coarea_of_contDiffOn_of_coareaJacobian_ne_zero
 #print axioms VectorRegularCoareaAudit.regular_coarea

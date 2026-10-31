@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+public import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
 # Integrals of bounded functionals of cutoff Eldan processes
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -23,45 +27,37 @@ variable {μ hc} {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} [IsProbabili
   {W : MultidimBrownianMotion P n} {ℱ : Filtration ℝ ‹MeasurableSpace Ω›}
   {hW : ∀ k, IsBrownianFiltration (W.W k) ℱ} {γ : Param n → ℝ} {p : ℝ → Ω → Param n}
 
-/-- **Time integrals of bounded functionals along the cutoff Eldan process** are integrable in `ω`: for a continuous
+/--
+**Time integrals of bounded functionals along the cutoff Eldan process** are integrable in `ω`: for
+a continuous
 `φ` with `|φ(p_s)| ≤ B` for all `s ≥ 0` almost surely, `ω ↦ ∫₀ᵀ φ(p_s(ω)) ds` is integrable. -/
 theorem IsEldanCutoff.integrable_integral_of_ae_bound (h : IsEldanCutoff μ hc W ℱ hW γ p)
     {φ : Param n → ℝ} (hφ : Continuous φ) {B : ℝ}
     (hB : ∀ᵐ ω ∂P, ∀ s : ℝ, 0 ≤ s → |φ (p s ω)| ≤ B) {T : ℝ} (hT : 0 ≤ T) :
     Integrable (fun ω => ∫ s in Set.Ioc (0 : ℝ) T, φ (p s ω)) P := by
   have hpcont := h.continuous
-  let Φ : Param n ≃L[ℝ] (Fin (Module.finrank ℝ (Param n)) → ℝ) :=
-    stateEquiv (Param n)
-  change IsDiffusion W ℱ hW
-    (transportDrift Φ (cutoffDrift μ hc γ))
-    (transportNoise Φ (cutoffNoise μ hc γ)) (Φ 0)
-    (fun t ω => Φ (p t ω)) at h
+  let Φ : Param n ≃L[ℝ] (Fin (Module.finrank ℝ (Param n)) → ℝ) := stateEquiv (Param n)
+  change
+    IsDiffusion W ℱ hW (transportDrift Φ (cutoffDrift μ hc γ))
+      (transportNoise Φ (cutoffNoise μ hc γ)) (Φ 0) (fun t ω => Φ (p t ω)) at h
   obtain ⟨_, _, _, hv⟩ := h
-  have h1 :
-      Measurable (fun z : Ω × ℝ => Φ (p z.2 z.1)) := by
+  have h1 : Measurable (fun z : Ω × ℝ => Φ (p z.2 z.1)) := by
     change Measurable (Function.uncurry (fun ω s => Φ (p s ω)))
     exact hv.measurable_uncurry
-  have hpmeas :
-      Measurable (fun z : Ω × ℝ => p z.2 z.1) := by
+  have hpmeas : Measurable (fun z : Ω × ℝ => p z.2 z.1) := by
     have h' := Φ.symm.continuous.measurable.comp h1
     change Measurable (fun z : Ω × ℝ => Φ.symm (Φ (p z.2 z.1))) at h'
     simpa only [Φ.symm_apply_apply] using h'
-  have hm :
-      Measurable (fun z : Ω × ℝ => φ (p z.2 z.1)) :=
-    hφ.measurable.comp hpmeas
+  have hm : Measurable (fun z : Ω × ℝ => φ (p z.2 z.1)) := hφ.measurable.comp hpmeas
   let ν : Measure ℝ := volume.restrict (Set.Ioc (0 : ℝ) T)
-  have hmeas :
-      AEStronglyMeasurable (fun z : Ω × ℝ => φ (p z.2 z.1)) (P.prod ν) :=
+  have hmeas : AEStronglyMeasurable (fun z : Ω × ℝ => φ (p z.2 z.1)) (P.prod ν) :=
     hm.aestronglyMeasurable
-  have hsm :
-      AEStronglyMeasurable (fun ω => ∫ s, φ (p s ω) ∂ν) P :=
-    hmeas.integral_prod_right'
+  have hsm : AEStronglyMeasurable (fun ω => ∫ s, φ (p s ω) ∂ν) P := hmeas.integral_prod_right'
   change Integrable (fun ω => ∫ s, φ (p s ω) ∂ν) P
   apply Integrable.of_bound hsm (B * T)
   filter_upwards [hB] with ω hω
   calc
-    ‖∫ s, φ (p s ω) ∂ν‖ ≤ ∫ s, ‖φ (p s ω)‖ ∂ν :=
-      norm_integral_le_integral_norm _
+    ‖∫ s, φ (p s ω) ∂ν‖ ≤ ∫ s, ‖φ (p s ω)‖ ∂ν := norm_integral_le_integral_norm _
     _ ≤ ∫ s in Set.Ioc (0 : ℝ) T, B := by
       apply setIntegral_mono_on
       · exact ((hφ.comp (hpcont ω)).norm).integrableOn_Ioc
@@ -73,12 +69,16 @@ theorem IsEldanCutoff.integrable_integral_of_ae_bound (h : IsEldanCutoff μ hc W
       simp [hT]
       ring
 
-/-- **Monotonicity of the iterated integrals** along the cutoff Eldan process: if `0 ≤ φ(p_s) ≤ ψ(p_s)` for all
-`s ≥ 0` almost surely and `ψ(p_s)` is almost surely bounded, then `E ∫₀ᵀ φ(p_s) ds ≤ E ∫₀ᵀ ψ(p_s) ds`. -/
+/--
+**Monotonicity of the iterated integrals** along the cutoff Eldan process: if `0 ≤ φ(p_s) ≤ ψ(p_s)`
+for all
+`s ≥ 0` almost surely and `ψ(p_s)` is almost surely bounded, then `E ∫₀ᵀ φ(p_s) ds ≤ E ∫₀ᵀ ψ(p_s)
+ds`. -/
 theorem IsEldanCutoff.integral_integral_mono (h : IsEldanCutoff μ hc W ℱ hW γ p)
     {φ ψ : Param n → ℝ} (hφ : Continuous φ) (hψ : Continuous ψ) {B : ℝ}
     (hB : ∀ᵐ ω ∂P, ∀ s : ℝ, 0 ≤ s → |ψ (p s ω)| ≤ B)
-    (hle : ∀ᵐ ω ∂P, ∀ s : ℝ, 0 ≤ s → 0 ≤ φ (p s ω) ∧ φ (p s ω) ≤ ψ (p s ω)) {T : ℝ} (hT : 0 ≤ T) :
+    (hle : ∀ᵐ ω ∂P, ∀ s : ℝ, 0 ≤ s → 0 ≤ φ (p s ω) ∧ φ (p s ω) ≤ ψ (p s ω)) {T : ℝ}
+    (hT : 0 ≤ T) :
     ∫ ω, ∫ s in Set.Ioc (0 : ℝ) T, φ (p s ω) ∂volume ∂P ≤
       ∫ ω, ∫ s in Set.Ioc (0 : ℝ) T, ψ (p s ω) ∂volume ∂P := by
   have hψi := h.integrable_integral_of_ae_bound hψ hB hT
@@ -90,13 +90,12 @@ theorem IsEldanCutoff.integral_integral_mono (h : IsEldanCutoff μ hc W ℱ hW �
       _ ≤ ψ (p s ω) := (hωle s hs).2
       _ ≤ |ψ (p s ω)| := le_abs_self _
       _ ≤ B := hω s hs
-  apply integral_mono_ae
-    (h.integrable_integral_of_ae_bound hφ hφB hT) hψi
+  apply integral_mono_ae (h.integrable_integral_of_ae_bound hφ hφB hT) hψi
   filter_upwards [hle] with ω hω
-  exact setIntegral_mono_on
-    (hφ.comp (h.continuous ω)).integrableOn_Ioc
-    (hψ.comp (h.continuous ω)).integrableOn_Ioc
-    measurableSet_Ioc (fun s hs => (hω s hs.1.le).2)
+  exact
+    setIntegral_mono_on (hφ.comp (h.continuous ω)).integrableOn_Ioc
+      (hψ.comp (h.continuous ω)).integrableOn_Ioc measurableSet_Ioc
+      (fun s hs => (hω s hs.1.le).2)
 
 end Integrals
 section Process

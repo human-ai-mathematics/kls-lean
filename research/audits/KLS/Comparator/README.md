@@ -15,41 +15,48 @@ new ignored `build/comparator/` fixture. No placeholder enters the library or it
 proof-development counts. The [config](config.json) permits only `propext`,
 `Classical.choice` and `Quot.sound`; there are no definition holes.
 
-## Pinned tools and preparation
+## Judge and preparation
 
-[tools.json](tools.json) fixes Comparator v4.33.0 and its exact lean4export dependency,
-matching this project's unchanged toolchain. Comparator was incorporated into Lake
-in Lean 4.35; upgrading is a separate decision. For this 4.33 project use these pins.
+The judge is the `lake comparator` bundled with the pinned Lean toolchain
+([bundled-judge.json](bundled-judge.json): `leanprover/lean4:v4.35.0`). It builds and exports
+the challenge and solution, compares the configured theorem statements and their definition
+closure, rejects axioms outside `permitted_axioms`, and replays the solution export in Lean's
+kernel (`leanchecker`). Its exporter `leanexport` is the toolchain's own. NanoDa runs only when
+a configuration registers it (`enable_nanoda: true`); the `kls` and `openai` configs do not,
+the Palomar config does. `--paranoid` and the other bundled checkers are not used.
 
-From the repository root, build the project normally and prepare the tools in an
-unused local directory (the following path is an example):
+[tools.json](tools.json) is the historical pin of the external Comparator v4.33.0
+(`3927ad38`) and lean4export (`15f6055e`) that judged the receipts made before the Lean v4.35
+migration. It is kept unchanged for those receipts and for the metadata-schema pin below; the
+current runner records its hash but never uses it, and rejects the old `--tools` option.
+
+From the repository root, prepare and build the trusted projects normally:
 
 ```sh
 python3 research/cache_mathlib.py --project all
 lake -d formalization build
 lake -d integrations/openai build
-git clone https://github.com/leanprover/comparator.git build/comparator-tools
-git -C build/comparator-tools checkout 3927ad383f208ae977c340a91c48ac9b497d2097
-lake -d build/comparator-tools build lean4export comparator
+lake -d integrations/palomar build Solution
 ```
 
-Keep its committed `lake-manifest.json`: it pins lean4export to
-`15f6055e299ad5b89345e533cc2192f4cc00f659`. The runner refuses another revision or
-modified source in either tool checkout. It uses the existing local dependency
-checkouts and their build caches, not a pristine Git downstream reconstruction.
+The runner uses the existing local dependency checkouts and their build caches, not a
+pristine Git downstream reconstruction. It writes a new fixture with an explicit
+`lake-manifest.json` (which `lake comparator` requires) whose entries are absolute paths to
+the same pinned checkouts, and records the toolchain prefix, `lean --githash` and the SHA-256
+of the bundled `lake`, `lean`, `leanexport`, `leanchecker` (and `nanoda_bin` when registered).
 
-The library and OpenAI bridge are separate Lake packages. On a fresh checkout,
-the bridge can have its own `.lake/packages/mathlib`; preparing only the library's
-cache leaves that copy without compiled Mathlib modules. The `--project all`
+The library and OpenAI bridge are separate Lake packages, and the Palomar project is a third.
+On a fresh checkout each can have its own `.lake/packages/mathlib`; preparing only the
+library's cache leaves the others without compiled Mathlib modules. The `--project all`
 command above fetches the required Mathlib closure in each package and checks each
 package's own `.olean` files before a build. It includes both aggregate `Mathlib`
 imports and dotted imports, including the bridge's library dependency.
 This addresses the source rebuild reported in [Issue #10](https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6290311466).
 
-Use `--project openai` to prepare only the bridge, or add `--check` to check the
-selected caches without fetching. The default remains `--project formalization`
-for the main-library build and CI. Dependency pins are unchanged; precompiled
-third-party imports remain trusted. Project and bridge sources still build normally.
+Use `--project openai` or `--project palomar` to prepare one contained project, or add
+`--check` to check the selected caches without fetching. The default remains
+`--project formalization` for the main-library build and CI. Precompiled third-party imports
+remain trusted. Project and bridge sources still build normally.
 
 ## Run
 
@@ -59,68 +66,58 @@ Strictly compile the original-declaration client and print its transitive axioms
 python3 research/comparator.py --target kls --mode compile
 ```
 
-On macOS, explicitly request the upstream **unsandboxed development mode**:
+On macOS, explicitly request the **unsandboxed development mode**:
 
 ```sh
-python3 research/comparator.py --target kls --mode development --tools build/comparator-tools
+python3 research/comparator.py --target kls --mode development
 ```
 
-This executes the actual pinned Comparator and lean4export, including statement
-comparison, axiom checks and Lean kernel replay. It uses upstream `fake-landrun.sh`,
-so the receipt says `COMPARATOR_PASSED_WITHOUT_SANDBOX`. Use it only with the trusted
-local project. It is not a Linux sandbox or independent-kernel result.
+This runs the bundled `lake comparator --inadvisably-no-sandbox`, including statement
+comparison, axiom checks and Lean kernel replay; the receipt says
+`COMPARATOR_PASSED_WITHOUT_SANDBOX`, and the runner requires the tool's own
+sandbox-disabled warning in that mode. Use it only with the trusted local project. It is not
+a sandboxed or independent-kernel result.
 
-On Linux, install real [Landrun](https://github.com/Zouuup/landrun) and ensure a
-working unprivileged systemd user session. Before running the sandbox mode, address
-the two setup issues reported in [Issue #10](https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6289895395):
-
-**Landrun version.** Use a source build from upstream `main`. The reported Linux
-setup used [`ec104f6`](https://github.com/Zouuup/landrun/commit/ec104f6edc1e14d7fec6d31146f1ec6f9c192c5a)
-(v0.1.18); the tagged v0.1.15 failed with `permission denied` in that setup.
-For reproducibility, check out that exact commit before building rather than
-following a moving `main`, and ensure the built `landrun` is on `PATH`.
-
-**Lean toolchain on PATH.** With a standard elan installation, `lake` may resolve
-to the proxy at `~/.elan/bin/lake`. Comparator grants execution access (`--rox`)
-to the Lean toolchain prefix, which does not include that proxy. This can make the
-sandboxed run fail immediately with `permission denied`. Put the pinned toolchain's
-`bin` first on `PATH` in the shell that launches the runner:
+On Linux, install [bubblewrap](https://github.com/containers/bubblewrap) (`bwrap` on `PATH`,
+with unprivileged user namespaces or a setuid installation) and run:
 
 ```sh
-export PATH="$HOME/.elan/toolchains/leanprover--lean4---v4.33.0/bin:$PATH"
-command -v lake
+python3 research/comparator.py --target kls --mode sandbox
 ```
 
-The printed path should end in
-`leanprover--lean4---v4.33.0/bin/lake`, not `.elan/bin/lake`. Adjust the prefix if
-elan is installed elsewhere. Then run:
-
-```sh
-python3 research/comparator.py --target kls --mode sandbox --tools build/comparator-tools
-```
-
-The runner invokes the upstream systemd restriction on Unix-domain sockets. This
-mode requires Linux and real Landrun; it never falls back to the development shim.
-It performs no unsandboxed Solution preflight: Comparator itself builds and exports
-the challenge and solution inside Landrun. Prebuild only the trusted project dependencies
-as above; the separate strict client command is for trusted local development.
-The OS, sandbox, pinned tool binaries and trusted prebuilt dependencies retain the
-trust assumptions in the [upstream documentation](https://github.com/leanprover/comparator/tree/3927ad383f208ae977c340a91c48ac9b497d2097).
-No extra proof kernel is enabled by these configs.
+`lake comparator` binds `/` read-only and covers `/home`, `/root`, `/run/user` and `/tmp`
+with empty file systems; only the fixture, the toolchain prefix and Lake's home are bound
+back, only the fixture's `.lake` is writable, and the build, export and kernels have no
+network. The trusted dependency checkouts must therefore live outside those covered
+directories and be fully prebuilt; the runner refuses sandbox mode otherwise. It performs
+no unsandboxed Solution preflight in this mode. The OS, sandbox, toolchain binaries and
+trusted prebuilt dependencies retain the trust assumptions of `lake help comparator`.
 
 The separate [OpenAI bridge package](../../../../integrations/openai/README.md) is
-included at `integrations/openai`. Its challenge imports the unmodified upstream OpenAI
-model, and its solution imports `KLSOpenAI.Target`. The runner checks the model's
-hash against that project's `UPSTREAM.json`:
+included at `integrations/openai`. Its challenge imports the upstream OpenAI model, and its
+solution imports `KLSOpenAI.Target`. The runner reverses the recorded module-header
+adaptation of the model and checks the original upstream SHA-256 and the local SHA-256 in
+that project's `UPSTREAM.json`:
 
 ```sh
-python3 research/comparator.py --target openai --mode development --tools build/comparator-tools
+python3 research/comparator.py --target openai --mode development
 ```
 
-Use `--bridge-root /absolute/path/to/bridge` to select another location, and
-`--mode sandbox` on the Linux setup above. This independent Lake project uses the
-substantive KLS library from the same repository revision through a relative path
-dependency. Build it as described in its README before running Comparator.
+The [Palomar project](../../../../integrations/palomar) is checked with `--target palomar`.
+Its committed `Challenge.lean`, `Solution.lean` and `comparator.json` are staged unchanged;
+the runner requires module headers, a Challenge importing only Mathlib, a configuration with
+exactly `KLSOpenAI.kls`, the standard axioms, no definition holes and `enable_nanoda: true`,
+and the same dependency pins as the OpenAI bridge. In compile mode its axiom report comes
+from a generated non-module client, because the Palomar Solution prints none. This local
+check does not replace Palomar's official full preflight (protected configuration, con-ron).
+
+```sh
+python3 research/comparator.py --target palomar --mode development
+```
+
+Use `--bridge-root` or `--palomar-root` with an absolute path to select another location.
+These independent Lake projects use the substantive KLS library from the same repository
+revision through relative path dependencies. Build them as described above first.
 
 Each invocation preserves a new fixture, logs and `receipt.json`, with source/input
 hashes and staging checks. Read the terminal status and full receipt. Failed runs

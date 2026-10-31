@@ -1,10 +1,14 @@
-import Mathlib.Data.ENNReal.Basic
+module
+
+public import Mathlib.Basic.ENNReal.Basic
 
 /-!
 # Extended nonnegative energy functionals
 
 This module separates tests from the subtype on which an extended nonnegative energy is finite.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.Energy
 

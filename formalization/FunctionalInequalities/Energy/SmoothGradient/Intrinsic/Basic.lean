@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Probability.Support.Affine
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Basic
+public import FunctionalInequalities.Probability.Support.Affine
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
 /-!
 # Smooth-gradient relaxation in intrinsic affine coordinates
@@ -9,10 +11,13 @@ The affine-support construction expresses a finite-dimensional probability law o
 vector space of the affine span of its support. This module evaluates the smooth-gradient
 relaxation in that intrinsic Hilbert space and pulls the result back to the original `L²` space.
 
-This removes energy in directions normal to the affine support. `Energy.SmoothGradient.Intrinsic.energy`
+This removes energy in directions normal to the affine support.
+`Energy.SmoothGradient.Intrinsic.energy`
 names this selected construction; identification with the metric-measure energy `2 Ch`
 remains a separate theorem, especially for singular laws inside their affine support.
 -/
+
+@[expose] public section
 
 noncomputable section
 

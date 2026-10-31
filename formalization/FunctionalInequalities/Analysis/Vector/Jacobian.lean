@@ -1,5 +1,7 @@
-import Mathlib.Analysis.InnerProductSpace.NormDet
-import Mathlib.Analysis.Calculus.Gradient.Basic
+module
+
+public import Mathlib.Analysis.InnerProductSpace.NormDet
+public import Mathlib.Analysis.Calculus.Gradient.Basic
 
 /-! # The coarea Jacobian of a linear map
 
@@ -21,6 +23,8 @@ The point of the module is the compatibility with everything already proved: `co
 real-valued differential is exactly `‖gradient u x‖` (`coareaJacobian_fderiv`), so the scalar
 theory is literally the `m = 1` case of this density and nothing already certified has to change.
 -/
+
+@[expose] public section
 
 noncomputable section
 

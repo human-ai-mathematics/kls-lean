@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.Probability.Transport
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Poincare.SmoothTest.Transport
-import FunctionalInequalities.KLS.LogConcave.Poincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import FunctionalInequalities.Probability.Transport
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Poincare.SmoothTest.Transport
+public import FunctionalInequalities.KLS.LogConcave.Poincare
 
 /-!
 # Regular potentials under linear isometries
@@ -15,6 +17,8 @@ regular law on an abstract space has a regular law in standard coordinates on `�
 bound for isotropic regular laws on `ℝⁿ` transfers with the same constant. No non-isometric
 invariance of the constant is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ContDiff
@@ -28,20 +32,24 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
   [CompleteSpace F] [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [CompleteSpace F] [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F] in
-/-- **Regular potentials are preserved by linear isometries** `L : E ≃ F`, with the same constants `a, b`. -/
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [CompleteSpace F] [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F] in
+/--
+**Regular potentials are preserved by linear isometries** `L : E ≃ F`, with the same constants `a,
+b`. -/
 theorem RegularPotential.comp_isometry {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (L : E ≃ₗᵢ[ℝ] F) :
-    KLS.RegularPotential (fun y => V (L.symm y)) a b := by
+    (L : E ≃ₗᵢ[ℝ] F) : KLS.RegularPotential (fun y => V (L.symm y)) a b := by
   have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
   refine ⟨hV.temperate.comp L.symm.toContinuousLinearEquiv.hasTemperateGrowth, hV.pos, ?_, ?_⟩
   · intro y w
-    have hh := Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_clm hV2 (L.symm : F →L[ℝ] E) y w w
+    have hh :=
+      Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_clm hV2 (L.symm : F →L[ℝ] E) y w w
     simp only [LinearIsometryEquiv.coe_coe''] at hh
     rw [hh]
     simpa only [LinearIsometryEquiv.norm_map] using hV.lower (L.symm y) (L.symm w)
   · intro y w
-    have hh := Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_clm hV2 (L.symm : F →L[ℝ] E) y w w
+    have hh :=
+      Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_clm hV2 (L.symm : F →L[ℝ] E) y w w
     simp only [LinearIsometryEquiv.coe_coe''] at hh
     rw [hh]
     simpa only [LinearIsometryEquiv.norm_map] using hV.upper (L.symm y) (L.symm w)
@@ -58,8 +66,8 @@ theorem RegularPotential.law_comp_isometry {V : E → ℝ} {a b : ℝ} (hV : KLS
   exact ht.symm
 
 /-- The same identity for probability laws. -/
-theorem RegularPotential.law_comp_isometry_eq_map {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (L : E ≃ₗᵢ[ℝ] F) :
+theorem RegularPotential.law_comp_isometry_eq_map {V : E → ℝ} {a b : ℝ}
+    (hV : KLS.RegularPotential V a b) (L : E ≃ₗᵢ[ℝ] F) :
     (RegularPotential.comp_isometry hV L).law = Probability.mapLinearIsometryEquiv hV.law L := by
   apply ProbabilityMeasure.toMeasure_injective
   exact RegularPotential.law_comp_isometry hV L
@@ -73,23 +81,23 @@ theorem RegularPotential.integral_exp_neg_comp_isometry (V : E → ℝ) (L : E �
     L.symm.toMeasurableEquiv.measurableEmbedding (fun x => Real.exp (-V x))
 
 /-- Isotropy is preserved. -/
-theorem RegularPotential.isotropic_comp_isometry {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (hiso : KLS.Isotropic hV.law) (L : E ≃ₗᵢ[ℝ] F) :
+theorem RegularPotential.isotropic_comp_isometry {V : E → ℝ} {a b : ℝ}
+    (hV : KLS.RegularPotential V a b) (hiso : KLS.Isotropic hV.law) (L : E ≃ₗᵢ[ℝ] F) :
     KLS.Isotropic (RegularPotential.comp_isometry hV L).law := by
   rw [RegularPotential.law_comp_isometry_eq_map]
   exact hiso.map_linearIsometryEquiv L
 
 /-- The smooth-test Poincaré constant is preserved. -/
-theorem RegularPotential.smoothTest_constant_comp_isometry {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (L : E ≃ₗᵢ[ℝ] F) :
+theorem RegularPotential.smoothTest_constant_comp_isometry {V : E → ℝ} {a b : ℝ}
+    (hV : KLS.RegularPotential V a b) (L : E ≃ₗᵢ[ℝ] F) :
     Poincare.SmoothTest.constant ((RegularPotential.comp_isometry hV L).law : Measure F) =
       Poincare.SmoothTest.constant (hV.law : Measure E) := by
   rw [RegularPotential.law_comp_isometry]
   exact Poincare.SmoothTest.constant_map_linearIsometryEquiv L (hV.law : Measure E)
 
 /-- The literature Poincaré constant is preserved. -/
-theorem RegularPotential.localSlope_constant_comp_isometry {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (L : E ≃ₗᵢ[ℝ] F) :
+theorem RegularPotential.localSlope_constant_comp_isometry {V : E → ℝ} {a b : ℝ}
+    (hV : KLS.RegularPotential V a b) (L : E ≃ₗᵢ[ℝ] F) :
     Poincare.LocalSlope.Intrinsic.constant (RegularPotential.comp_isometry hV L).law =
       Poincare.LocalSlope.Intrinsic.constant hV.law := by
   rw [← (RegularPotential.comp_isometry hV L).logConcave_law.smoothTest_constant_eq_localSlope,
@@ -97,36 +105,46 @@ theorem RegularPotential.localSlope_constant_comp_isometry {V : E → ℝ} {a b 
   exact RegularPotential.smoothTest_constant_comp_isometry hV L
 
 omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] in
-/-- Standard orthonormal coordinates give a regular potential on `ℝⁿ`, `n = dim E`, with the same constants. -/
+/--
+Standard orthonormal coordinates give a regular potential on `ℝⁿ`, `n = dim E`, with the same
+constants. -/
 theorem RegularPotential.toEuclidean {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b) :
     KLS.RegularPotential
       (fun y : EuclideanSpace ℝ (Fin (Module.finrank ℝ E)) =>
-        V ((stdOrthonormalBasis ℝ E).repr.symm y)) a b :=
+        V ((stdOrthonormalBasis ℝ E).repr.symm y))
+      a b :=
   RegularPotential.comp_isometry hV (stdOrthonormalBasis ℝ E).repr
 
 /-- Its law is the coordinate image of the original law, isotropic when the original is. -/
-theorem RegularPotential.toEuclidean_law_isotropic {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (hiso : KLS.Isotropic hV.law) :
+theorem RegularPotential.toEuclidean_law_isotropic {V : E → ℝ} {a b : ℝ}
+    (hV : KLS.RegularPotential V a b) (hiso : KLS.Isotropic hV.law) :
     (RegularPotential.toEuclidean hV).law =
-      Probability.mapLinearIsometryEquiv hV.law (stdOrthonormalBasis ℝ E).repr ∧
+        Probability.mapLinearIsometryEquiv hV.law (stdOrthonormalBasis ℝ E).repr ∧
       KLS.Isotropic (RegularPotential.toEuclidean hV).law :=
-  ⟨RegularPotential.law_comp_isometry_eq_map hV _, RegularPotential.isotropic_comp_isometry hV hiso _⟩
+  ⟨RegularPotential.law_comp_isometry_eq_map hV _,
+    RegularPotential.isotropic_comp_isometry hV hiso _⟩
 
-/-- A Poincaré bound for isotropic regular laws on `ℝⁿ` (`n > 0`) transfers to every isotropic regular law
-on a finite-dimensional inner product space (dimension zero has constant `0`). No such bound is asserted. -/
+/--
+A Poincaré bound for isotropic regular laws on `ℝⁿ` (`n > 0`) transfers to every isotropic regular
+law
+on a finite-dimensional inner product space (dimension zero has constant `0`). No such bound is
+asserted. -/
 theorem RegularPotential.localSlope_le_of_euclidean_bound {K : NNReal}
-    (hK : ∀ (n : ℕ), 0 < n → ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ)
-      (hV : KLS.RegularPotential V a b), KLS.Isotropic hV.law →
-        Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal))
-    {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
-    (hiso : KLS.Isotropic hV.law) :
+    (hK :
+      ∀ (n : ℕ),
+        0 < n →
+          ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ) (hV : KLS.RegularPotential V a b),
+            KLS.Isotropic hV.law →
+              Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal))
+    {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b) (hiso : KLS.Isotropic hV.law) :
     Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal) := by
   by_cases hdim : Module.finrank ℝ E = 0
   · have : Subsingleton E := Module.finrank_zero_iff.mp hdim
     rw [Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton]
     exact bot_le
   rw [← RegularPotential.localSlope_constant_comp_isometry hV (stdOrthonormalBasis ℝ E).repr]
-  exact hK (Module.finrank ℝ E) (Nat.pos_of_ne_zero hdim) _ a b (RegularPotential.toEuclidean hV)
-    (RegularPotential.isotropic_comp_isometry hV hiso _)
+  exact
+    hK (Module.finrank ℝ E) (Nat.pos_of_ne_zero hdim) _ a b (RegularPotential.toEuclidean hV)
+      (RegularPotential.isotropic_comp_isometry hV hiso _)
 
 end FunctionalInequalities.KLS

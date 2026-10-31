@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff
 /-!
 # Weak inverse-Hessian cutoff audit
 
@@ -7,6 +9,8 @@ form): retention of the whole bounded-testing source statement by the cutoff pro
 substantive χ_R · H_lk weak test at one witness. The generic family carries no dimension hypothesis
 (n = 0 included). Not A.5, (2.14), Theorem 2.5 or KLS.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Set Metric Matrix
 open FunctionalInequalities.Probability.Stein
@@ -43,7 +47,8 @@ theorem weak_cutoffs_retain_bounded_testing_source_contract {n : ℕ} (hn : 0 < 
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -157,11 +162,13 @@ theorem weak_cutoffs_retain_bounded_testing_source_contract {n : ℕ} (hn : 0 < 
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
@@ -169,8 +176,10 @@ theorem weak_cutoffs_retain_bounded_testing_source_contract {n : ℕ} (hn : 0 < 
     hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, L, LF, T, hrest⟩
 
-/-- Substantive actual-source client: the whole old payload, the full cutoff family and, for every R ≥ 1 and all
-l, k, i, j, both pairing integrabilities and the weighted weak identity for the bounded tests χ_R * H_lk, at one
+/-- Substantive actual-source client: the whole old payload, the full cutoff family and, for every R
+≥ 1 and all
+l, k, i, j, both pairing integrabilities and the weighted weak identity for the bounded tests χ_R *
+H_lk, at one
 `u, L, LF, T, c, C`. -/
 theorem actual_source_cutoff_hessian_entry_test {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -199,7 +208,8 @@ theorem actual_source_cutoff_hessian_entry_test {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -313,11 +323,13 @@ theorem actual_source_cutoff_hessian_entry_test {n : ℕ} (hn : 0 < n)
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -344,12 +356,14 @@ theorem actual_source_cutoff_hessian_entry_test {n : ℕ} (hn : 0 < n)
           (Matrix.of fun a b => T x j a b)).trace
       ∀ r : ℝ, 1 ≤ r → ∀ l k i j : Fin n,
       (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b *
-        (χ r x * T x b l k + fderiv ℝ (χ r) x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+        (χ r x * T x b l k + fderiv ℝ (χ r) x (EuclideanSpace.basisFun (Fin n) ℝ b) *
+          hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (χ r x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
       (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b *
-        (χ r x * T x b l k + fderiv ℝ (χ r) x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+        (χ r x * T x b l k + fderiv ℝ (χ r) x (EuclideanSpace.basisFun (Fin n) ℝ b) *
+          hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (χ r x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by

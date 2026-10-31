@@ -1,9 +1,12 @@
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 
 /-!
 # Scope audit for `V1`–`V5` of `VonNeumannRouteStatements.lean`
 
-The five obligations of Part A of `research/audits/Semigroup/VonNeumannRouteStatements.lean` are restated
+The five obligations of Part A of `research/audits/Semigroup/VonNeumannRouteStatements.lean` are
+restated
 here **verbatim** — each proposition is copied character for character from that route file —
 and discharged from the hole-free module `Analysis/Semigroup/VonNeumann.lean`. A renamed
 binder, a reordered hypothesis or a weakened conclusion would fail to elaborate here.
@@ -32,6 +35,8 @@ it**, and nothing here mentions a measure, log-concavity or any KLS quantity.
 The axiom reports at the end cover every public declaration of the new module and every theorem of
 this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

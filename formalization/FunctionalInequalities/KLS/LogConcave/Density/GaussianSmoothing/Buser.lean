@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Stability
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Poincare
-import FunctionalInequalities.KLS.LogConcave.SmoothBuser
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Stability
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Poincare
+public import FunctionalInequalities.KLS.LogConcave.SmoothBuser
 
 /-!
 # Nonsmooth pi Buser through actual Gaussian convolution
@@ -12,6 +14,8 @@ Cheeger bound passes through the smooth-test inequality to the nonsmooth
 source law. The final theorem transports this coordinate result to any
 finite-dimensional affine support, including dimension zero.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -27,14 +31,14 @@ private def sequence (ν : ProbabilityMeasure V) (n : ℕ) : ProbabilityMeasure 
   smoothedProbabilityLaw ν ((n : ℝ) + 1) (by positivity)
 
 private theorem sequence_set_tendsto (ν : ProbabilityMeasure V) {ρ : V → ℝ}
-    (hρ : FunctionalInequalities.KLS.IsBorellDensity (ν : Measure V) volume ρ)
-    (D : Set V) (hD : MeasurableSet D) :
-    Tendsto (fun n => (sequence ν n : Measure V) D) atTop
-      (𝓝 ((ν : Measure V) D)) := by
+    (hρ : FunctionalInequalities.KLS.IsBorellDensity (ν : Measure V) volume ρ) (D : Set V)
+    (hD : MeasurableSet D) :
+    Tendsto (fun n => (sequence ν n : Measure V) D) atTop (𝓝 ((ν : Measure V) D)) := by
   have hs : Tendsto (fun n : ℕ => (n : ℝ) + 1) atTop atTop :=
     tendsto_natCast_atTop_atTop.atTop_add tendsto_const_nhds
   have h := (smoothedLaw_set_tendsto hρ hD).comp hs
-  simpa only [Function.comp_def, sequence, smoothedProbabilityLaw, ProbabilityMeasure.coe_mk] using h
+  simpa only [Function.comp_def, sequence, smoothedProbabilityLaw,
+    ProbabilityMeasure.coe_mk] using h
 
 private theorem error_tendsto_zero :
     Tendsto (fun n : ℕ => ENNReal.ofReal (1 / (2 * ((n : ℝ) + 1))))

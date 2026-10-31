@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.Form.ClosedQuadratic
-import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.Energy.Relaxation.Recovery
-import Mathlib.Data.ENNReal.Inv
-import Mathlib.Order.Filter.ENNReal
+module
+
+public import FunctionalInequalities.Energy.Form.ClosedQuadratic
+public import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
+public import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+public import FunctionalInequalities.Energy.Relaxation.Recovery
+public import Mathlib.Basic.ENNReal.Inv
+public import Mathlib.Order.Filter.ENNReal
 
 /-!
 # Quadratic structure of sequential relaxation
@@ -16,6 +18,8 @@ The parallelogram identity itself does not require density. At finite-energy poi
 combining recovery sequences; if one input has energy `⊤`, the relevant inequality is automatic.
 Density enters only when the resulting quadratic functional is packaged as densely defined.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -215,18 +219,17 @@ theorem sequentialRelaxation_parallelogram (h : P.Quadratic) (x y : X) :
     P.sequentialRelaxation (x + y) + P.sequentialRelaxation (x - y) =
       2 * P.sequentialRelaxation x + 2 * P.sequentialRelaxation y := by
   apply le_antisymm (h.sequentialRelaxation_parallelogram_le x y)
-  have hdouble :=
-    h.sequentialRelaxation_parallelogram_le (x + y) (x - y)
+  have hdouble := h.sequentialRelaxation_parallelogram_le (x + y) (x - y)
   have hsum_sub : (x + y) + (x - y) = (2 : ℝ) • x := by
     simp [two_smul, sub_eq_add_neg, add_assoc, add_left_comm]
   have hsub_sub : (x + y) - (x - y) = (2 : ℝ) • y := by
     simp [two_smul, sub_eq_add_neg, add_assoc, add_left_comm]
-  rw [hsum_sub, hsub_sub,
-    h.sequentialRelaxation_smul_of_ne_zero 2 (by norm_num) x,
+  rw [hsum_sub, hsub_sub, h.sequentialRelaxation_smul_of_ne_zero 2 (by norm_num) x,
     h.sequentialRelaxation_smul_of_ne_zero 2 (by norm_num) y] at hdouble
   norm_num at hdouble
-  rw [← ENNReal.mul_le_mul_iff_right (by norm_num : (2 : ENNReal) ≠ 0)
-    (by norm_num : (2 : ENNReal) ≠ ⊤)]
+  rw [←
+    ENNReal.mul_le_mul_iff_right (by norm_num : (2 : ENNReal) ≠ 0)
+      (by norm_num : (2 : ENNReal) ≠ ⊤)]
   convert hdouble using 1 <;> ring
 
 /-- The coefficient used by the finite pre-energy is the `ENNReal.ofReal` coefficient expected

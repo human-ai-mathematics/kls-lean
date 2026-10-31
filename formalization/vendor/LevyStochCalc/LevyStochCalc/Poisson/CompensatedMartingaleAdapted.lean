@@ -6,14 +6,18 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedSimple
-import LevyStochCalc.Poisson.CompensatedIsometry
-import LevyStochCalc.Poisson.CompensatedIsometryL2
-import LevyStochCalc.Poisson.NaturalFiltration
-import Mathlib.Probability.Process.Adapted
-import Mathlib.Probability.ConditionalExpectation
-import Mathlib.Probability.Martingale.Basic
-import Mathlib.MeasureTheory.Function.ConditionalExpectation.PullOut
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedSimple
+public import LevyStochCalc.Poisson.CompensatedIsometry
+public import LevyStochCalc.Poisson.CompensatedIsometryL2
+public import LevyStochCalc.Poisson.NaturalFiltration
+public import Mathlib.Probability.Process.Adapted
+public import Mathlib.Probability.ConditionalExpectation
+public import Mathlib.Probability.Martingale.Basic
+public import Mathlib.MeasureTheory.Function.ConditionalExpectation.PullOut
 
 /-!
 # Martingale property of the simple compensated-Poisson integral
@@ -25,6 +29,8 @@ vanishing before). Each summand is `P`-integrable, its conditional expectation s
 `𝔼[ξᵢ·Ñ(timeRect i t) | ℱ_s] =ᵐ ξᵢ·Ñ(timeRect i s)` for `0 ≤ s ≤ t`, and summing over the
 partition gives the martingale property of `t ↦ simpleIntegral N φ t`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

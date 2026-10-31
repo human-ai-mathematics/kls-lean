@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
-import FunctionalInequalities.KLS.ConditionalFiber.SliceKernel
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Line.OfDensity
-import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
+module
+
+public import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
+public import FunctionalInequalities.KLS.ConditionalFiber.SliceKernel
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Line.OfDensity
+public import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
 
 /-!
 # Log-concave conditional fibers
@@ -27,6 +29,8 @@ compact-set log-concavity; the remaining base points carry a Dirac law, which is
 
 No ledger, certificate, or Blueprint `\leanok` claim is made by this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 

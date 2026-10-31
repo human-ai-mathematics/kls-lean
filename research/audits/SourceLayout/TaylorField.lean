@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
 
 /-! The shared field estimate is available before the final Taylor criterion. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Analysis.Tensor

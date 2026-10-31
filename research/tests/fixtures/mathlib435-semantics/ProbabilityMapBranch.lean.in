@@ -1,0 +1,24 @@
+import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+
+/-! Upstream map representation audit: this checks only the measurable branch,
+which is the exact old construction. No KLS endpoint or nonmeasurable branch is certified. -/
+
+open MeasureTheory
+namespace ProbabilityMapBranchAudit
+
+variable {X Y : Type*} [MeasurableSpace X] [MeasurableSpace Y]
+
+theorem map_underlying_legacy_branch (mu : ProbabilityMeasure X) (f : X → Y)
+    (hf : AEMeasurable f (mu : Measure X)) :
+    (mu.map f : Measure Y) = Measure.mapₗ (hf.mk f) (mu : Measure X) := by
+  rw [ProbabilityMeasure.toMeasure_map, Measure.map, dite_eq_left hf]
+
+theorem map_on_measurable_sets (mu : ProbabilityMeasure X) (f : X → Y)
+    (hf : AEMeasurable f (mu : Measure X)) (s : Set Y) (hs : MeasurableSet s) :
+    (mu.map f : Measure Y) s = (mu : Measure X) (f ⁻¹' s) := by
+  simpa only [ProbabilityMeasure.toMeasure_map] using
+    (Measure.map_apply_of_aemeasurable hf hs)
+
+#print axioms map_underlying_legacy_branch
+#print axioms map_on_measurable_sets
+end ProbabilityMapBranchAudit

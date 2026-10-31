@@ -1,6 +1,8 @@
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
+module
+
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 
 /-!
 # Normalized Hausdorff and codimension-one measures
@@ -10,6 +12,8 @@ codimension-one measure with natural subtraction in dimension zero. The existing
 is retained as a public interface; the definitions have no log-concavity or smooth-domain input.
 The top-dimensional convention check is in `Analysis/Hausdorff/Volume.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

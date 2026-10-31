@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
 
 /-!
 # Integration by parts for tests of temperate growth
@@ -7,6 +9,8 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), eq. (15): for `μ = m.tilted (-V)
 of polynomial growth and all exponential moments, and `u, v` of temperate growth (the class `𝒜`),
 `∫ (ℒu) v dμ = -∫ ⟪∇u, ∇v⟫ dμ = ∫ u (ℒv) dμ`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -195,18 +199,17 @@ theorem integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth {V f g : E �
         · exact abs_cutoff_le_one _ _
         · exact (hgb x).1
       _ = _ := one_mul _
-  have hgw (n : ℕ) (x : E) :
-      ‖gradient (w n) x‖ ≤ (Cg + Cg * K) * (1 + ‖x‖) ^ kg := by
+  have hgw (n : ℕ) (x : E) : ‖gradient (w n) x‖ ≤ (Cg + Cg * K) * (1 + ‖x‖) ^ kg := by
     have hc : ContDiff ℝ 2 (cutoff ((n : ℝ) + 1) : E → ℝ) :=
       (contDiff_cutoff _).of_le (WithTop.coe_le_coe.mpr le_top)
     dsimp only [w]
-    rw [gradient_mul (hc.differentiable (by norm_num) x)
-      (hg2.differentiable (by norm_num) x)]
+    rw [gradient_mul (hc.differentiable (by norm_num) x) (hg2.differentiable (by norm_num) x)]
     calc
-      _ ≤ ‖cutoff ((n : ℝ) + 1) x • gradient g x‖ +
-          ‖g x • gradient (cutoff ((n : ℝ) + 1)) x‖ := norm_add_le _ _
-      _ = |cutoff ((n : ℝ) + 1) x| * ‖gradient g x‖ +
-          |g x| * ‖gradient (cutoff ((n : ℝ) + 1)) x‖ := by
+      _ ≤ ‖cutoff ((n : ℝ) + 1) x • gradient g x‖ + ‖g x • gradient (cutoff ((n : ℝ) + 1)) x‖ :=
+        norm_add_le _ _
+      _ =
+          |cutoff ((n : ℝ) + 1) x| * ‖gradient g x‖ +
+            |g x| * ‖gradient (cutoff ((n : ℝ) + 1)) x‖ := by
         simp only [norm_smul, Real.norm_eq_abs]
       _ ≤ 1 * (Cg * (1 + ‖x‖) ^ kg) + (Cg * (1 + ‖x‖) ^ kg) * K := by
         gcongr
@@ -217,8 +220,7 @@ theorem integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth {V f g : E �
       _ = _ := by ring
   let F : ℕ → E → ℝ := fun n x => weightedLaplacian V f x * w n x
   let G : ℕ → E → ℝ := fun n x => ⟪gradient f x, gradient (w n) x⟫
-  have hFbound (n : ℕ) (x : E) :
-      ‖F n x‖ ≤ (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg) := by
+  have hFbound (n : ℕ) (x : E) : ‖F n x‖ ≤ (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg) := by
     dsimp only [F]
     rw [Real.norm_eq_abs, abs_mul]
     calc
@@ -227,8 +229,7 @@ theorem integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth {V f g : E �
         · exact hLf x
         · exact hwb n x
       _ = _ := by rw [pow_add]; ring
-  have hGbound (n : ℕ) (x : E) :
-      ‖G n x‖ ≤ (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg) := by
+  have hGbound (n : ℕ) (x : E) : ‖G n x‖ ≤ (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg) := by
     dsimp only [G]
     rw [Real.norm_eq_abs]
     calc
@@ -238,15 +239,17 @@ theorem integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth {V f g : E �
         · exact (hfb x).2.1
         · exact hgw n x
       _ = _ := by rw [pow_add]; ring
-  have hFi : Integrable (fun x : E => (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg))
-      (m.tilted (-V)) := by
-    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C := A * Cg) (k := kf + kV + kg)
+  have hFi : Integrable (fun x : E => (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg)) (m.tilted (-V)) := by
+    apply
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C :=
+        A * Cg) (k := kf + kV + kg)
     intro x
     rw [Real.norm_of_nonneg (by positivity)]
-  have hGi : Integrable (fun x : E => (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg))
-      (m.tilted (-V)) := by
-    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop)
-      (C := Cf * (Cg + Cg * K)) (k := kf + kg)
+  have hGi :
+    Integrable (fun x : E => (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg)) (m.tilted (-V)) := by
+    apply
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C :=
+        Cf * (Cg + Cg * K)) (k := kf + kg)
     intro x
     rw [Real.norm_of_nonneg (by positivity)]
   have hlocal (x : E) : ∀ᶠ n : ℕ in atTop, w n =ᶠ[𝓝 x] g := by
@@ -257,29 +260,30 @@ theorem integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth {V f g : E �
     filter_upwards [(isOpen_lt continuous_norm continuous_const).mem_nhds hx] with y hy
     dsimp only [w]
     rw [cutoff_eq_one (by positivity) hy.le, one_mul]
-  have hFlim (x : E) :
-      Tendsto (fun n => F n x) atTop (𝓝 (weightedLaplacian V f x * g x)) := by
+  have hFlim (x : E) : Tendsto (fun n => F n x) atTop (𝓝 (weightedLaplacian V f x * g x)) := by
     apply tendsto_const_nhds.congr'
     filter_upwards [hlocal x] with n hn
     dsimp only [F]
     rw [hn.eq_of_nhds]
-  have hGlim (x : E) :
-      Tendsto (fun n => G n x) atTop (𝓝 ⟪gradient f x, gradient g x⟫) := by
+  have hGlim (x : E) : Tendsto (fun n => G n x) atTop (𝓝 ⟪gradient f x, gradient g x⟫) := by
     apply tendsto_const_nhds.congr'
     filter_upwards [hlocal x] with n hn
     dsimp only [G]
     rw [hn.gradient_eq]
-  have hFt := tendsto_integral_of_dominated_convergence
-    (fun x : E => (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg))
-    (fun n => ((continuous_weightedLaplacian hV hf2).mul (hw n).continuous).aestronglyMeasurable)
-    hFi (fun n => ae_of_all _ (hFbound n)) (ae_of_all _ hFlim)
-  have hGt := tendsto_integral_of_dominated_convergence
-    (fun x : E => (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg))
-    (fun n => ((continuous_gradient (hf2.of_le (by norm_num))).inner
-      (continuous_gradient ((hw n).of_le (by norm_num)))).aestronglyMeasurable)
-    hGi (fun n => ae_of_all _ (hGbound n)) (ae_of_all _ hGlim)
-  have hIBP (n : ℕ) : (∫ x, F n x ∂(m.tilted (-V))) =
-      -(∫ x, G n x ∂(m.tilted (-V))) :=
+  have hFt :=
+    tendsto_integral_of_dominated_convergence
+      (fun x : E => (A * Cg) * (1 + ‖x‖) ^ (kf + kV + kg))
+      (fun n =>
+        ((continuous_weightedLaplacian hV hf2).mul (hw n).continuous).aestronglyMeasurable)
+      hFi (fun n => ae_of_all _ (hFbound n)) (ae_of_all _ hFlim)
+  have hGt :=
+    tendsto_integral_of_dominated_convergence
+      (fun x : E => (Cf * (Cg + Cg * K)) * (1 + ‖x‖) ^ (kf + kg))
+      (fun n =>
+        ((continuous_gradient (hf2.of_le (by norm_num))).inner
+            (continuous_gradient ((hw n).of_le (by norm_num)))).aestronglyMeasurable)
+      hGi (fun n => ae_of_all _ (hGbound n)) (ae_of_all _ hGlim)
+  have hIBP (n : ℕ) : (∫ x, F n x ∂(m.tilted (-V))) = -(∫ x, G n x ∂(m.tilted (-V))) :=
     integral_weightedLaplacian_mul_eq_neg_of_hasCompactSupport m hV hf2 (hw n)
       ((hasCompactSupport_cutoff (by positivity)).mul_right)
   have hneg := hGt.neg

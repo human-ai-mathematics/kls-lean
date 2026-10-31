@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Cutoff.Profile
+module
+
+public import FunctionalInequalities.Analysis.Cutoff.Profile
 
 /-!
 # Audit: real-parameter monotone exhaustion of Letwin Lemma A.4
@@ -11,13 +13,17 @@ negative case `a = −2` (constant `1`, consistent with the limit); and agreemen
 natural-index exhaustion `η(a/(n+1))` along `R = n + 1`.
 -/
 
+@[expose] public section
+
 open Filter
 open FunctionalInequalities.Analysis
 open scoped ContDiff
 
 namespace A4RealExhaustionClient
 
-/-- The producer's form: monotone on `[1, ∞)` (restricted from `(0, ∞)`) with limit `1`, for every real `a`. -/
+/--
+The producer's form: monotone on `[1, ∞)` (restricted from `(0, ∞)`) with limit `1`, for every real
+`a`. -/
 theorem monotoneOn_Ici_one (a : ℝ) :
     MonotoneOn (fun R : ℝ => Real.smoothTransition (2 - a / R)) (Set.Ici 1) ∧
       Tendsto (fun R : ℝ => Real.smoothTransition (2 - a / R)) atTop (nhds 1) :=
@@ -25,19 +31,26 @@ theorem monotoneOn_Ici_one (a : ℝ) :
       Set.mem_Ioi.mpr (lt_of_lt_of_le one_pos hR),
     (monotoneOn_and_tendsto_smoothTransition_two_sub_div a).2⟩
 
-/-- A genuinely nonconstant real family: `η(3/1) = 0`, `η(3/3) = 1`, monotone on `[1, ∞)`, limit `1`. -/
+/--
+A genuinely nonconstant real family: `η(3/1) = 0`, `η(3/3) = 1`, monotone on `[1, ∞)`, limit `1`. -/
 theorem nonconstant_three :
-    Real.smoothTransition (2 - 3 / 1) = 0 ∧ Real.smoothTransition (2 - 3 / 3) = 1 ∧
-      MonotoneOn (fun R : ℝ => Real.smoothTransition (2 - 3 / R)) (Set.Ici 1) ∧
-      Tendsto (fun R : ℝ => Real.smoothTransition (2 - 3 / R)) atTop (nhds 1) := by
-  refine ⟨Real.smoothTransition.zero_of_nonpos (by norm_num), Real.smoothTransition.one_of_one_le (by norm_num),
-    (monotoneOn_Ici_one 3).1, (monotoneOn_Ici_one 3).2⟩
+    Real.smoothTransition (2 - 3 / 1) = 0 ∧
+      Real.smoothTransition (2 - 3 / 3) = 1 ∧
+        MonotoneOn (fun R : ℝ => Real.smoothTransition (2 - 3 / R)) (Set.Ici 1) ∧
+          Tendsto (fun R : ℝ => Real.smoothTransition (2 - 3 / R)) atTop (nhds 1) := by
+  refine
+    ⟨Real.smoothTransition.zero_of_nonpos (by norm_num),
+      Real.smoothTransition.one_of_one_le (by norm_num), (monotoneOn_Ici_one 3).1,
+      (monotoneOn_Ici_one 3).2⟩
 
-/-- The negative case `a = −2`: every value is `1` (independent check), consistent with the limit. -/
+/--
+The negative case `a = −2`: every value is `1` (independent check), consistent with the limit. -/
 theorem negative_constant (R : ℝ) (hR : 0 < R) :
     Real.smoothTransition (2 - (-2) / R) = 1 ∧
       Tendsto (fun R : ℝ => Real.smoothTransition (2 - (-2) / R)) atTop (nhds 1) := by
-  refine ⟨Real.smoothTransition.one_of_one_le ?_, (monotoneOn_and_tendsto_smoothTransition_two_sub_div (-2)).2⟩
+  refine
+    ⟨Real.smoothTransition.one_of_one_le ?_,
+      (monotoneOn_and_tendsto_smoothTransition_two_sub_div (-2)).2⟩
   have : 0 < 2 / R := div_pos two_pos hR
   rw [neg_div]
   linarith
@@ -50,8 +63,11 @@ theorem natural_agreement (a : ℝ) :
   have h1 : ∀ n : ℕ, (1 : ℝ) ≤ (n : ℝ) + 1 := fun n => by
     have := n.cast_nonneg (α := ℝ)
     linarith
-  refine ⟨fun m n hmn => (monotoneOn_Ici_one a).1 (h1 m) (h1 n) (add_le_add_left (Nat.cast_le.mpr hmn) 1),
-    (monotoneOn_Ici_one a).2.comp (tendsto_atTop_add_const_right _ 1 tendsto_natCast_atTop_atTop)⟩
+  refine
+    ⟨fun m n hmn =>
+      (monotoneOn_Ici_one a).1 (h1 m) (h1 n) (add_le_add_left (Nat.cast_le.mpr hmn) 1),
+      (monotoneOn_Ici_one a).2.comp
+        (tendsto_atTop_add_const_right _ 1 tendsto_natCast_atTop_atTop)⟩
 
 /-- Cross-check with the natural-index exhaustion (an independent derivation): identical
 conclusions. -/

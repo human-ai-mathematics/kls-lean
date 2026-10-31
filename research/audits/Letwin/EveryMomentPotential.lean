@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.Letwin.SteinKernel
+module
+
+public import FunctionalInequalities.KLS.Letwin.SteinKernel
 
 /-! Client of the "every moment potential" forms of Letwin arXiv:2607.24164v1, Lemma 2.2,
 Theorem 2.5, Lemmas 2.3, 2.4, A.4–A.6, 2.7 and 2.9, through the uniqueness part of Lemma 2.1
 (Cordero-Erausquin–Klartag arXiv:1304.0630v1, Theorem 2) for essentially continuous potentials of
 bounded-support laws. -/
+
+@[expose] public section
 noncomputable section
 namespace LetwinEveryMomentPotentialAudit
 open Set MeasureTheory FunctionalInequalities.Analysis FunctionalInequalities.Probability.Stein
@@ -54,17 +58,29 @@ end LetwinEveryMomentPotentialAudit
 #print axioms FunctionalInequalities.Probability.MomentMeasure.ofPotential_coe_eq_map_gradient
 #print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_coe_of_ofPotential_eq
 #print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_ofPotential_eq
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_ofPotential_eq_of_map_gradient_eq
-#print axioms FunctionalInequalities.Probability.MomentMeasure.ofPotential_eq_iff_exists_eq_translate
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_ofPotential_eq_of_map_gradient_eq
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.ofPotential_eq_iff_exists_eq_translate
 #print axioms FunctionalInequalities.Probability.MomentMeasure.exists_centered_regular_potential
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_calculus_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.smooth_of_moment_potential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_moment_potential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_moment_potential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.smooth_of_ofPotential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_ofPotential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_ofPotential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_stein_kernel_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_moment_potential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_ofPotential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_calculus_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.smooth_of_moment_potential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_moment_potential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_moment_potential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.smooth_of_ofPotential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_ofPotential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.smooth_moment_calculus_of_ofPotential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_stein_kernel_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_moment_potential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_ofPotential_of_bounded_open_convex
 #print axioms LetwinEveryMomentPotentialAudit.every_moment_map_client

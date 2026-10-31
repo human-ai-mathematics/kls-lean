@@ -1,15 +1,26 @@
-import Lean
-import FunctionalInequalities.Analysis.MetricBV.Scaling
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Probability.Posterior.Generator
-import FunctionalInequalities.Probability.Posterior.LogPartition
-import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Boundary
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.LogConcave.Line.Buser
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.MetricBV.Scaling
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.Probability.Posterior.Generator
+public import FunctionalInequalities.Probability.Posterior.LogPartition
+public import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Boundary
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.KLS.LogConcave.Line.Buser
+meta import Lean
+import all FunctionalInequalities.Analysis.BakryEmery.Calculus
+import all FunctionalInequalities.Probability.Posterior.Generator
+import all FunctionalInequalities.Probability.Posterior.LogPartition
+import all FunctionalInequalities.Analysis.MetricBV.Scaling
+import all FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Boundary
+import all FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 
 /-! All modules that held the private copies use the existing public producers; the six duplicate
 private names are absent and the existing application entry points remain.
 The isometric thickening identity needs only pseudo-extended-metric spaces. -/
+
+@[expose] public section
 set_option maxHeartbeats 0 in
 run_cmd do
   let removed : Array String := #[

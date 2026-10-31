@@ -6,9 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import Mathlib.Probability.Independence.Integration
-import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Independence.Integration
+public import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # Independence survives almost-everywhere limits
@@ -18,6 +22,8 @@ everywhere, then `Y` is independent of `m`: for a set `A ∈ m` the laws of `Y` 
 under `P(A) • P` have the same integrals against bounded continuous functions, by dominated
 convergence, hence coincide.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped BoundedContinuousFunction
@@ -66,8 +72,7 @@ theorem indep_comap_of_tendsto_ae (hm : m ≤ mΩ) {X : ℕ → Ω → 𝓧}
   obtain ⟨S, hS, rfl⟩ := hB
   have hA' : MeasurableSet[mΩ] A := hm _ hA
   have : IsFiniteMeasure ((P A) • P.map Y) :=
-    ⟨by simpa [Measure.smul_apply] using
-      ENNReal.mul_lt_top (measure_lt_top P A) (measure_lt_top (P.map Y) Set.univ)⟩
+    ⟨by simp [Measure.smul_apply]⟩
   have hbound : ∀ (Z : Ω → 𝓧), Measurable[mΩ] Z → ∀ f : 𝓧 →ᵇ ℝ,
       Integrable (fun ω => f (Z ω)) P := fun Z hZ f =>
     Integrable.of_bound (f.continuous.measurable.comp hZ).aestronglyMeasurable ‖f‖

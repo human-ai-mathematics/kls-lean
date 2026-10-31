@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
-import FunctionalInequalities.Analysis.IteratedDerivative.LocalHolder
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
+public import FunctionalInequalities.Analysis.IteratedDerivative.LocalHolder
 
 /-!
 # Linearized-equation bootstrap: `C^{2,α}` solutions with `C^{1,α}` data are `C^{3,α}`
@@ -27,11 +29,14 @@ Hence `UniformQuotientEquations` holds and `contDiffOn_three_of_quotient_equatio
   bounded and `α`-Hölder there by a constant `Kc` chosen before the centre `c` and the functions,
   depending only on `n, α, λ, Λ, S` and the caps of the data;
 * `directional_linear_equation`: once `w` is `C³`, every directional derivative `D_f w` solves
-  `Σ aⁱʲ D_{ij}(D_f w) + Σ bⁱ D_i (D_f w) + D_f w = D_f g − Σ (D_f aⁱʲ) D_{ij} w − Σ (D_f bⁱ) D_i w`.
+  `Σ aⁱʲ D_{ij}(D_f w) + Σ bⁱ D_i (D_f w) + D_f w = D_f g − Σ (D_f aⁱʲ) D_{ij} w − Σ (D_f bⁱ) D_i
+  w`.
 
 No `C^k` for `k ≥ 4`, no `C^∞` and no boundary regularity is claimed here; the induction is in
 `IteratedDerivative/Bootstrap/Induction`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -275,279 +280,420 @@ theorem contDiffOn_three_ball_of_linear_equation (hn : 2 ≤ n) {α : ℝ≥0} (
         ∀ x ∈ ball c R, ∀ y ∈ ball c R,
           ‖fderiv ℝ (fderiv ℝ (fderiv ℝ w)) x - fderiv ℝ (fderiv ℝ (fderiv ℝ w)) y‖ ≤
             Kc * ‖x - y‖ ^ (α:ℝ) := by
-  have hαr : (0:ℝ) < α := hα0
-  have hα1r : (α:ℝ) ≤ 1 := by exact_mod_cast hα1.le
-  -- the radii and the caps
-  set R : ℝ := min (S / 4) 1 with hR_def
-  have hR : 0 < R := lt_min (by positivity) one_pos
-  have hR1 : R ≤ 1 := min_le_right _ _
-  have hRS : R ≤ S / 4 := min_le_left _ _
-  set q₀ : ℝ := S / 2 with hq₀_def
-  have hq₀ : 0 < q₀ := by positivity
-  set D : ℝ := (2 * S) ^ (1 - (α:ℝ)) with hD_def
-  have hD : 0 ≤ D := Real.rpow_nonneg (by positivity) _
-  set K : ℝ := Ka * D with hK_def
-  set Kb' : ℝ := Kb * (1 + D) with hKb'_def
-  set V : ℝ := Nw with hV_def
-  set M : ℝ := Kg + (n:ℝ) ^ 2 * (Ka * Nw) + (n:ℝ) * (Kb * Nw) with hM_def
-  set H0 : ℝ := Kg + (n:ℝ) ^ 2 * (Ka * Nw + Ka * Nw) + (n:ℝ) * (Kb * Nw + Kb * (Nw * D))
-    with hH0_def
-  have hH0 : 0 ≤ H0 := by positivity
-  set H : ℝ≥0 := Real.toNNReal H0 with hH_def
-  obtain ⟨C, hC, hstep⟩ := contDiffOn_three_of_quotient_equations hn hα0 hα1 hlam hLam
-    (K := K) (Kb := Kb') (by positivity) (by positivity)
-  refine ⟨R, C * (V * R ^ (-(2:ℝ) - α) + M * R ^ (-(α:ℝ)) + H), hR, by positivity, ?_⟩
-  intro c w g a b hw ha hb hg hsymm hell haN hahol hbN hbdN hbhol hgN hghol hwN hw2N hw2hol heq
-  -- memberships
-  have hsub2 : closedBall c (2 * R) ⊆ closedBall c S :=
-    closedBall_subset_closedBall (by linarith)
-  have hsub3 : closedBall c (2 * R + q₀) ⊆ closedBall c S :=
-    closedBall_subset_closedBall (by linarith)
-  have hshift : ∀ (f : E), ‖f‖ = 1 → ∀ (q : ℝ), 0 < q → q ≤ q₀ →
-      ∀ x ∈ closedBall c (2 * R), x + q • f ∈ closedBall c (2 * R + q₀) := by
-    intro f hf q hq hqq x hx
-    rw [mem_closedBall, dist_eq_norm] at hx ⊢
-    calc ‖x + q • f - c‖ = ‖(x - c) + q • f‖ := by congr 1; abel
-      _ ≤ ‖x - c‖ + ‖q • f‖ := norm_add_le _ _
-      _ ≤ 2 * R + q₀ := by
+    have hαr : (0 : ℝ) < α := hα0
+    have hα1r : (α : ℝ) ≤ 1 := by
+      exact_mod_cast
+        hα1.le
+    -- the radii and the caps
+
+
+    -- Choose the interior radius and uniform coefficient bounds.
+    set R : ℝ := min (S / 4) 1 with hR_def
+    have hR : 0 < R := lt_min (by positivity) one_pos
+    have hR1 : R ≤ 1 := min_le_right _ _
+    have hRS : R ≤ S / 4 := min_le_left _ _
+    set q₀ : ℝ := S / 2 with hq₀_def
+    have hq₀ : 0 < q₀ := by positivity
+    set D : ℝ := (2 * S) ^ (1 - (α : ℝ)) with hD_def
+    have hD : 0 ≤ D := Real.rpow_nonneg (by positivity) _
+    set K : ℝ := Ka * D with hK_def
+    set Kb' : ℝ := Kb * (1 + D) with hKb'_def
+    set V : ℝ := Nw with hV_def
+    set M : ℝ := Kg + (n : ℝ) ^ 2 * (Ka * Nw) + (n : ℝ) * (Kb * Nw) with hM_def
+    set H0 : ℝ :=
+      Kg + (n : ℝ) ^ 2 * (Ka * Nw + Ka * Nw) + (n : ℝ) * (Kb * Nw + Kb * (Nw * D)) with
+      hH0_def
+    have hH0 : 0 ≤ H0 := by positivity
+    set H : ℝ≥0 := Real.toNNReal H0 with hH_def
+    obtain ⟨C, hC, hstep⟩ :=
+      contDiffOn_three_of_quotient_equations hn hα0 hα1 hlam hLam (K := K) (Kb := Kb')
+        (by positivity) (by positivity)
+    refine
+      ⟨R, C * (V * R ^ (-(2 : ℝ) - α) + M * R ^ (-(α : ℝ)) + H), hR, by positivity, ?_⟩
+    intro c w g a b hw ha hb hg hsymm hell haN hahol hbN hbdN hbhol hgN hghol hwN hw2N
+      hw2hol
+      heq
+    -- memberships
+
+    have hsub2 : closedBall c (2 * R) ⊆ closedBall c S :=
+      closedBall_subset_closedBall (by linarith)
+    have hsub3 : closedBall c (2 * R + q₀) ⊆ closedBall c S :=
+      closedBall_subset_closedBall (by linarith)
+
+    -- Control shifts and the inherited Holder bounds on the smaller ball.
+    have hshift :
+      ∀ (f : E),
+        ‖f‖ = 1 →
+          ∀ (q : ℝ),
+            0 < q →
+              q ≤ q₀ →
+                ∀ x ∈ closedBall c (2 * R), x + q • f ∈ closedBall c (2 * R + q₀) := by
+      intro f hf q hq hqq x hx
+      rw [mem_closedBall, dist_eq_norm] at hx ⊢
+      calc
+        ‖x + q • f - c‖ = ‖(x - c) + q • f‖ := by congr 1; abel
+        _ ≤ ‖x - c‖ + ‖q • f‖ := norm_add_le _ _
+        _ ≤ 2 * R + q₀ := by
           rw [norm_smul, hf, mul_one, Real.norm_eq_abs, abs_of_pos hq]
           linarith
-  -- Lipschitz-to-Hölder on the data ball
-  have hlipHol : ∀ (h : E → ℝ) (N : ℝ), 0 ≤ N → Differentiable ℝ h →
-      (∀ z ∈ closedBall c S, ‖fderiv ℝ h z‖ ≤ N) →
-      ∀ x ∈ closedBall c S, ∀ y ∈ closedBall c S, |h x - h y| ≤ N * D * ‖x - y‖ ^ (α:ℝ) := by
-    intro h N hN hh hhN x hx y hy
-    have h1 := norm_sub_le_of_fderiv_bound_closedBall hh hhN hx hy
-    rw [Real.norm_eq_abs] at h1
-    have h2 := le_rpow_one_sub_mul_rpow (norm_nonneg (x - y))
-      (norm_sub_le_two_mul_of_mem_closedBall hx hy) hα1r
-    calc |h x - h y| ≤ N * ‖x - y‖ := h1
-      _ ≤ N * (D * ‖x - y‖ ^ (α:ℝ)) := mul_le_mul_of_nonneg_left h2 hN
-      _ = N * D * ‖x - y‖ ^ (α:ℝ) := by ring
-  -- entry bounds of the Hessian and the gradient of `w`
-  have hWN : ∀ x ∈ closedBall c S, ∀ i j, |fderiv ℝ (fderiv ℝ w) x
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤ Nw :=
-    fun x hx i j => (abs_apply_basisFun_le_opNorm _ i j).trans (hw2N x hx)
-  have hWhol : ∀ x ∈ closedBall c S, ∀ y ∈ closedBall c S, ∀ i j,
-      |fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j) -
-        fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤ Nw * ‖x - y‖ ^ (α:ℝ) := by
-    intro x hx y hy i j
-    have := abs_apply_basisFun_le_opNorm (fderiv ℝ (fderiv ℝ w) x - fderiv ℝ (fderiv ℝ w) y) i j
-    rw [sub_apply, sub_apply] at this
-    exact this.trans (hw2hol x hx y hy)
-  have hVN : ∀ x ∈ closedBall c S, ∀ i,
-      |fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤ Nw :=
-    fun x hx i => (abs_apply_basisFun_le_opNorm' _ i).trans (hwN x hx)
-  have hVhol : ∀ x ∈ closedBall c S, ∀ y ∈ closedBall c S, ∀ i,
-      |fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) -
-        fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤ Nw * D * ‖x - y‖ ^ (α:ℝ) := by
-    intro x hx y hy i
-    have h1 := abs_apply_basisFun_le_opNorm' (fderiv ℝ w x - fderiv ℝ w y) i
-    rw [sub_apply] at h1
-    have hwd : Differentiable ℝ (fderiv ℝ w) :=
-      (hw.fderiv_right (m := 1) (by norm_num)).differentiable (by norm_num)
-    have h2 := norm_sub_le_of_fderiv_bound_closedBall hwd hw2N hx hy
-    have h3 := le_rpow_one_sub_mul_rpow (norm_nonneg (x - y))
-      (norm_sub_le_two_mul_of_mem_closedBall hx hy) hα1r
-    calc |fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) -
-          fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)|
-        ≤ ‖fderiv ℝ w x - fderiv ℝ w y‖ := h1
-      _ ≤ Nw * ‖x - y‖ := h2
-      _ ≤ Nw * (D * ‖x - y‖ ^ (α:ℝ)) := mul_le_mul_of_nonneg_left h3 hNw
-      _ = Nw * D * ‖x - y‖ ^ (α:ℝ) := by ring
-  -- the uniform quotient equations
-  have hUQE : UniformQuotientEquations α lam Lam K Kb' c R w q₀ V M H := by
-    intro f hf q hq hqq
-    have hmem : ∀ x ∈ closedBall c (2 * R), x + q • f ∈ closedBall c S :=
-      fun x hx => hsub3 (hshift f hf q hq hqq x hx)
-    have hmemS : ∀ x ∈ closedBall c (2 * R), x ∈ closedBall c S := fun x hx => hsub2 hx
-    have hshiftsub : ∀ x ∈ closedBall c (2 * R), ∀ y ∈ closedBall c (2 * R),
-        (x + q • f) - (y + q • f) = x - y := fun x _ y _ => by abel
-    -- the step range for the Hölder bounds of the quotients: `2R + q₀ ≤ S`
-    have hS' : 2 * R + q₀ ≤ S := by linarith
-    refine ⟨fun i j x => a i j (x + q • f), fun i x => b i (x + q • f),
-      shiftedForcing w g a b f q, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-    · intro x hx i j
-      exact hsymm _ (hmem x hx) i j
-    · intro x hx ξ
-      exact hell _ (hmem x hx) ξ
-    · intro i j x hx y hy
-      have := hlipHol (a i j) Ka hKa ((ha i j).differentiable one_ne_zero) (haN i j) _ (hmem x hx) _
-        (hmem y hy)
-      rwa [hshiftsub x hx y hy] at this
-    · intro i x hx
-      exact (hbN i _ (hmem x hx)).trans (by rw [hKb'_def]; nlinarith)
-    · intro i x hx y hy
-      have := hlipHol (b i) Kb hKb ((hb i).differentiable one_ne_zero) (hbdN i) _ (hmem x hx) _
-        (hmem y hy)
-      rw [hshiftsub x hx y hy] at this
-      refine this.trans (mul_le_mul_of_nonneg_right ?_ (by positivity))
-      rw [hKb'_def]; nlinarith
-    · intro x hx
-      exact shifted_quotient_equation hw f q x (heq _ (hmem x hx)) (heq _ (hmemS x hx))
-    · intro x hx
-      exact abs_differenceQuotient_le_of_fderiv_bound (hw.differentiable (by norm_num)) hwN hf hq
-        (hmemS x hx) (hmem x hx)
-    · intro x hx
-      unfold shiftedForcing
-      have hg1 := abs_differenceQuotient_le_of_fderiv_bound (hg.differentiable one_ne_zero) hgN hf hq
-        (hmemS x hx) (hmem x hx)
-      have ha1 : ∀ i j, |differenceQuotient (a i j) (q • f) q x *
-          fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-            (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤ Ka * Nw := by
-        intro i j
-        rw [abs_mul]
-        exact mul_le_mul (abs_differenceQuotient_le_of_fderiv_bound
-          ((ha i j).differentiable one_ne_zero) (haN i j) hf hq (hmemS x hx) (hmem x hx))
-          (hWN x (hmemS x hx) i j) (abs_nonneg _) hKa
-      have hb1 : ∀ i, |differenceQuotient (b i) (q • f) q x *
-          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤ Kb * Nw := by
-        intro i
-        rw [abs_mul]
-        exact mul_le_mul (abs_differenceQuotient_le_of_fderiv_bound
-          ((hb i).differentiable one_ne_zero) (hbdN i) hf hq (hmemS x hx) (hmem x hx))
-          (hVN x (hmemS x hx) i) (abs_nonneg _) hKb
-      have hsa : |∑ i, ∑ j, differenceQuotient (a i j) (q • f) q x *
-          fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-            (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤ (n:ℝ) ^ 2 * (Ka * Nw) := by
-        refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
-        refine (Finset.sum_le_sum fun i _ => (Finset.abs_sum_le_sum_abs _ _).trans
-          (Finset.sum_le_sum fun j _ => ha1 i j)).trans ?_
-        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-        apply le_of_eq; ring
-      have hsb : |∑ i, differenceQuotient (b i) (q • f) q x *
-          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤ (n:ℝ) * (Kb * Nw) := by
-        refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
-        refine (Finset.sum_le_sum fun i _ => hb1 i).trans ?_
-        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-        exact le_rfl
-      rw [hM_def]
-      calc |differenceQuotient g (q • f) q x -
-            (∑ i, ∑ j, differenceQuotient (a i j) (q • f) q x *
-              fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-                (EuclideanSpace.basisFun (Fin n) ℝ j)) -
-            (∑ i, differenceQuotient (b i) (q • f) q x *
-              fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i))|
-          ≤ |differenceQuotient g (q • f) q x| +
-            |∑ i, ∑ j, differenceQuotient (a i j) (q • f) q x *
-              fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-                (EuclideanSpace.basisFun (Fin n) ℝ j)| +
-            |∑ i, differenceQuotient (b i) (q • f) q x *
-              fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| := by
+    -- Lipschitz-to-Hölder on the data ball
+
+    have hlipHol :
+      ∀ (h : E → ℝ) (N : ℝ),
+        0 ≤ N →
+          Differentiable ℝ h →
+            (∀ z ∈ closedBall c S, ‖fderiv ℝ h z‖ ≤ N) →
+              ∀ x ∈ closedBall c S,
+                ∀ y ∈ closedBall c S, |h x - h y| ≤ N * D * ‖x - y‖ ^ (α : ℝ) := by
+      intro h N hN hh hhN x hx y hy
+      have h1 := norm_sub_le_of_fderiv_bound_closedBall hh hhN hx hy
+      rw [Real.norm_eq_abs] at h1
+      have h2 :=
+        le_rpow_one_sub_mul_rpow (norm_nonneg (x - y))
+          (norm_sub_le_two_mul_of_mem_closedBall hx hy) hα1r
+      calc
+        |h x - h y| ≤ N * ‖x - y‖ := h1
+        _ ≤ N * (D * ‖x - y‖ ^ (α : ℝ)) := mul_le_mul_of_nonneg_left h2 hN
+        _ = N * D * ‖x - y‖ ^ (α : ℝ) := by
+          ring
+    -- entry bounds of the Hessian and the gradient of `w`
+
+    have hWN :
+      ∀ x ∈ closedBall c S,
+        ∀ i j,
+          |fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
+            Nw :=
+      fun x hx i j => (abs_apply_basisFun_le_opNorm _ i j).trans (hw2N x hx)
+    have hWhol :
+      ∀ x ∈ closedBall c S,
+        ∀ y ∈ closedBall c S,
+          ∀ i j,
+            |fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                    (EuclideanSpace.basisFun (Fin n) ℝ j) -
+                  fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                    (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
+              Nw * ‖x - y‖ ^ (α : ℝ) := by
+      intro x hx y hy i j
+      have :=
+        abs_apply_basisFun_le_opNorm (fderiv ℝ (fderiv ℝ w) x - fderiv ℝ (fderiv ℝ w) y)
+          i j
+      rw [sub_apply, sub_apply] at this
+      exact this.trans (hw2hol x hx y hy)
+    have hVN :
+      ∀ x ∈ closedBall c S,
+        ∀ i, |fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤ Nw :=
+      fun x hx i => (abs_apply_basisFun_le_opNorm' _ i).trans (hwN x hx)
+    have hVhol :
+      ∀ x ∈ closedBall c S,
+        ∀ y ∈ closedBall c S,
+          ∀ i,
+            |fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) -
+                  fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
+              Nw * D * ‖x - y‖ ^ (α : ℝ) := by
+      intro x hx y hy i
+      have h1 := abs_apply_basisFun_le_opNorm' (fderiv ℝ w x - fderiv ℝ w y) i
+      rw [sub_apply] at h1
+      have hwd : Differentiable ℝ (fderiv ℝ w) :=
+        (hw.fderiv_right (m := 1) (by norm_num)).differentiable (by norm_num)
+      have h2 := norm_sub_le_of_fderiv_bound_closedBall hwd hw2N hx hy
+      have h3 :=
+        le_rpow_one_sub_mul_rpow (norm_nonneg (x - y))
+          (norm_sub_le_two_mul_of_mem_closedBall hx hy) hα1r
+      calc
+        |fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) -
+                fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
+            ‖fderiv ℝ w x - fderiv ℝ w y‖ :=
+          h1
+        _ ≤ Nw * ‖x - y‖ := h2
+        _ ≤ Nw * (D * ‖x - y‖ ^ (α : ℝ)) := mul_le_mul_of_nonneg_left h3 hNw
+        _ = Nw * D * ‖x - y‖ ^ (α : ℝ) := by
+          ring
+    -- the uniform quotient equations
+
+
+    -- Package the quotient equations for the regularity bootstrap.
+    have hUQE : UniformQuotientEquations α lam Lam K Kb' c R w q₀ V M H := by
+      intro f hf q hq hqq
+      have hmem : ∀ x ∈ closedBall c (2 * R), x + q • f ∈ closedBall c S := fun x hx =>
+        hsub3 (hshift f hf q hq hqq x hx)
+      have hmemS : ∀ x ∈ closedBall c (2 * R), x ∈ closedBall c S := fun x hx =>
+        hsub2 hx
+      have hshiftsub :
+        ∀ x ∈ closedBall c (2 * R),
+          ∀ y ∈ closedBall c (2 * R), (x + q • f) - (y + q • f) = x - y :=
+        fun x _ y _ => by
+        abel
+      -- the step range for the Hölder bounds of the quotients: `2R + q₀ ≤ S`
+
+      have hS' : 2 * R + q₀ ≤ S := by linarith
+      refine
+        ⟨fun i j x => a i j (x + q • f), fun i x => b i (x + q • f),
+          shiftedForcing w g a b f q, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · intro x hx i j
+        exact hsymm _ (hmem x hx) i j
+      · intro x hx ξ
+        exact hell _ (hmem x hx) ξ
+      · intro i j x hx y hy
+        have :=
+          hlipHol (a i j) Ka hKa ((ha i j).differentiable one_ne_zero) (haN i j) _
+            (hmem x hx) _ (hmem y hy)
+        rwa [hshiftsub x hx y hy] at this
+      · intro i x hx
+        exact (hbN i _ (hmem x hx)).trans (by rw [hKb'_def]; nlinarith)
+      · intro i x hx y hy
+        have :=
+          hlipHol (b i) Kb hKb ((hb i).differentiable one_ne_zero) (hbdN i) _
+            (hmem x hx) _ (hmem y hy)
+        rw [hshiftsub x hx y hy] at this
+        refine this.trans (mul_le_mul_of_nonneg_right ?_ (by positivity))
+        rw [hKb'_def]; nlinarith
+      · intro x hx
+        exact
+          shifted_quotient_equation hw f q x (heq _ (hmem x hx)) (heq _ (hmemS x hx))
+      · intro x hx
+        exact
+          abs_differenceQuotient_le_of_fderiv_bound (hw.differentiable (by norm_num))
+            hwN hf hq (hmemS x hx) (hmem x hx)
+      · intro x hx
+        unfold shiftedForcing
+        have hg1 :=
+          abs_differenceQuotient_le_of_fderiv_bound (hg.differentiable one_ne_zero) hgN
+            hf hq (hmemS x hx) (hmem x hx)
+        have ha1 :
+          ∀ i j,
+            |differenceQuotient (a i j) (q • f) q x *
+                  fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                    (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
+              Ka * Nw := by
+          intro i j
+          rw [abs_mul]
+          exact
+            mul_le_mul
+              (abs_differenceQuotient_le_of_fderiv_bound
+                ((ha i j).differentiable one_ne_zero) (haN i j) hf hq (hmemS x hx)
+                (hmem x hx))
+              (hWN x (hmemS x hx) i j) (abs_nonneg _) hKa
+        have hb1 :
+          ∀ i,
+            |differenceQuotient (b i) (q • f) q x *
+                  fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
+              Kb * Nw := by
+          intro i
+          rw [abs_mul]
+          exact
+            mul_le_mul
+              (abs_differenceQuotient_le_of_fderiv_bound
+                ((hb i).differentiable one_ne_zero) (hbdN i) hf hq (hmemS x hx)
+                (hmem x hx))
+              (hVN x (hmemS x hx) i) (abs_nonneg _) hKb
+        have hsa :
+          |∑ i,
+                ∑ j,
+                  differenceQuotient (a i j) (q • f) q x *
+                    fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                      (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
+            (n : ℝ) ^ 2 * (Ka * Nw) := by
+          refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
+          refine
+            (Finset.sum_le_sum fun i _ =>
+                  (Finset.abs_sum_le_sum_abs _ _).trans
+                    (Finset.sum_le_sum fun j _ => ha1 i j)).trans
+              ?_
+          simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+          apply le_of_eq; ring
+        have hsb :
+          |∑ i,
+                differenceQuotient (b i) (q • f) q x *
+                  fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
+            (n : ℝ) * (Kb * Nw) := by
+          refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
+          refine (Finset.sum_le_sum fun i _ => hb1 i).trans ?_
+          simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+          exact le_rfl
+        rw [hM_def]
+        calc
+          |differenceQuotient g (q • f) q x -
+                    (∑ i,
+                      ∑ j,
+                        differenceQuotient (a i j) (q • f) q x *
+                          fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                            (EuclideanSpace.basisFun (Fin n) ℝ j)) -
+                  (∑ i,
+                    differenceQuotient (b i) (q • f) q x *
+                      fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i))| ≤
+              |differenceQuotient g (q • f) q x| +
+                  |∑ i,
+                      ∑ j,
+                        differenceQuotient (a i j) (q • f) q x *
+                          fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                            (EuclideanSpace.basisFun (Fin n) ℝ j)| +
+                |∑ i,
+                    differenceQuotient (b i) (q • f) q x *
+                      fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)| := by
             refine (abs_sub _ _).trans ?_
             linarith [abs_sub (differenceQuotient g (q • f) q x)
-              (∑ i, ∑ j, differenceQuotient (a i j) (q • f) q x *
-                fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-                  (EuclideanSpace.basisFun (Fin n) ℝ j))]
-        _ ≤ Kg + (n:ℝ) ^ 2 * (Ka * Nw) + (n:ℝ) * (Kb * Nw) := by linarith
-    · -- Hölder bound of the shifted forcing
-      refine holderOnWith_of_dist_le hH0 fun x hx y hy => ?_
-      rw [Real.dist_eq, dist_eq_norm]
-      unfold shiftedForcing
-      have hpow : 0 ≤ ‖x - y‖ ^ (α:ℝ) := by positivity
-      have hg1 := abs_differenceQuotient_sub_le_of_fderiv_holder (hg.differentiable one_ne_zero)
-        hS' hghol hf hq hqq hx hy
-      have ha1 : ∀ i j, |differenceQuotient (a i j) (q • f) q x *
-          fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-            (EuclideanSpace.basisFun (Fin n) ℝ j) -
-          differenceQuotient (a i j) (q • f) q y *
-          fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
-            (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
-          (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α:ℝ) := by
-        intro i j
-        set P := differenceQuotient (a i j) (q • f) q x
-        set P' := differenceQuotient (a i j) (q • f) q y
-        set Q := fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)
-        set Q' := fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)
-        have hP := abs_differenceQuotient_sub_le_of_fderiv_holder
-          ((ha i j).differentiable one_ne_zero) hS' (hahol i j) hf hq hqq hx hy
-        have hP' := abs_differenceQuotient_le_of_fderiv_bound ((ha i j).differentiable one_ne_zero)
-          (haN i j) hf hq (hmemS y hy) (hmem y hy)
-        have hQ := hWN x (hmemS x hx) i j
-        have hQQ := hWhol x (hmemS x hx) y (hmemS y hy) i j
-        have e : P * Q - P' * Q' = (P - P') * Q + P' * (Q - Q') := by ring
-        rw [e]
-        calc |(P - P') * Q + P' * (Q - Q')| ≤ |(P - P') * Q| + |P' * (Q - Q')| := abs_add_le _ _
-          _ = |P - P'| * |Q| + |P'| * |Q - Q'| := by rw [abs_mul, abs_mul]
-          _ ≤ (Ka * ‖x - y‖ ^ (α:ℝ)) * Nw + Ka * (Nw * ‖x - y‖ ^ (α:ℝ)) := by
-              gcongr
-          _ = (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α:ℝ) := by ring
-      have hb1 : ∀ i, |differenceQuotient (b i) (q • f) q x *
-          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) -
-          differenceQuotient (b i) (q • f) q y *
-          fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
-          (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α:ℝ) := by
-        intro i
-        set P := differenceQuotient (b i) (q • f) q x
-        set P' := differenceQuotient (b i) (q • f) q y
-        set Q := fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)
-        set Q' := fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)
-        have hP := abs_differenceQuotient_sub_le_of_fderiv_holder
-          ((hb i).differentiable one_ne_zero) hS' (hbhol i) hf hq hqq hx hy
-        have hP' := abs_differenceQuotient_le_of_fderiv_bound ((hb i).differentiable one_ne_zero)
-          (hbdN i) hf hq (hmemS y hy) (hmem y hy)
-        have hQ := hVN x (hmemS x hx) i
-        have hQQ := hVhol x (hmemS x hx) y (hmemS y hy) i
-        have e : P * Q - P' * Q' = (P - P') * Q + P' * (Q - Q') := by ring
-        rw [e]
-        calc |(P - P') * Q + P' * (Q - Q')| ≤ |(P - P') * Q| + |P' * (Q - Q')| := abs_add_le _ _
-          _ = |P - P'| * |Q| + |P'| * |Q - Q'| := by rw [abs_mul, abs_mul]
-          _ ≤ (Kb * ‖x - y‖ ^ (α:ℝ)) * Nw + Kb * (Nw * D * ‖x - y‖ ^ (α:ℝ)) := by
-              gcongr
-          _ = (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α:ℝ) := by ring
-      have hsa : |(∑ i, ∑ j, differenceQuotient (a i j) (q • f) q x *
+                (∑ i,
+                  ∑ j,
+                    differenceQuotient (a i j) (q • f) q x *
+                      fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                        (EuclideanSpace.basisFun (Fin n) ℝ j))]
+          _ ≤ Kg + (n : ℝ) ^ 2 * (Ka * Nw) + (n : ℝ) * (Kb * Nw) := by linarith
+      · -- Hölder bound of the shifted forcing
+
+        refine holderOnWith_of_dist_le hH0 fun x hx y hy => ?_
+        rw [Real.dist_eq, dist_eq_norm]
+        unfold shiftedForcing
+        have hpow : 0 ≤ ‖x - y‖ ^ (α : ℝ) := by positivity
+        have hg1 :=
+          abs_differenceQuotient_sub_le_of_fderiv_holder (hg.differentiable one_ne_zero)
+            hS' hghol hf hq hqq hx hy
+        have ha1 :
+          ∀ i j,
+            |differenceQuotient (a i j) (q • f) q x *
+                    fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                      (EuclideanSpace.basisFun (Fin n) ℝ j) -
+                  differenceQuotient (a i j) (q • f) q y *
+                    fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                      (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
+              (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α : ℝ) := by
+          intro i j
+          set P := differenceQuotient (a i j) (q • f) q x
+          set P' := differenceQuotient (a i j) (q • f) q y
+          set Q :=
             fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-              (EuclideanSpace.basisFun (Fin n) ℝ j)) -
-          (∑ i, ∑ j, differenceQuotient (a i j) (q • f) q y *
+              (EuclideanSpace.basisFun (Fin n) ℝ j)
+          set Q' :=
             fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
-              (EuclideanSpace.basisFun (Fin n) ℝ j))| ≤
-          (n:ℝ) ^ 2 * (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α:ℝ) := by
-        rw [← Finset.sum_sub_distrib]
-        simp_rw [← Finset.sum_sub_distrib]
-        refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
-        refine (Finset.sum_le_sum fun i _ => (Finset.abs_sum_le_sum_abs _ _).trans
-          (Finset.sum_le_sum fun j _ => ha1 i j)).trans ?_
-        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-        apply le_of_eq; ring
-      have hsb : |(∑ i, differenceQuotient (b i) (q • f) q x *
-            fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
-          (∑ i, differenceQuotient (b i) (q • f) q y *
-            fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i))| ≤
-          (n:ℝ) * (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α:ℝ) := by
-        rw [← Finset.sum_sub_distrib]
-        refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
-        refine (Finset.sum_le_sum fun i _ => hb1 i).trans ?_
-        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-        apply le_of_eq; ring
-      set Gx := differenceQuotient g (q • f) q x
-      set Gy := differenceQuotient g (q • f) q y
-      set Ax := ∑ i, ∑ j, differenceQuotient (a i j) (q • f) q x *
-        fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)
-      set Ay := ∑ i, ∑ j, differenceQuotient (a i j) (q • f) q y *
-        fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)
-      set Bx := ∑ i, differenceQuotient (b i) (q • f) q x *
-        fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)
-      set By := ∑ i, differenceQuotient (b i) (q • f) q y *
-        fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)
-      have e : Gx - Ax - Bx - (Gy - Ay - By) = (Gx - Gy) - (Ax - Ay) - (Bx - By) := by ring
-      rw [e, hH0_def]
-      calc |(Gx - Gy) - (Ax - Ay) - (Bx - By)| ≤ |Gx - Gy| + |Ax - Ay| + |Bx - By| := by
+              (EuclideanSpace.basisFun (Fin n) ℝ j)
+          have hP :=
+            abs_differenceQuotient_sub_le_of_fderiv_holder
+              ((ha i j).differentiable one_ne_zero) hS' (hahol i j) hf hq hqq hx hy
+          have hP' :=
+            abs_differenceQuotient_le_of_fderiv_bound
+              ((ha i j).differentiable one_ne_zero) (haN i j) hf hq (hmemS y hy)
+              (hmem y hy)
+          have hQ := hWN x (hmemS x hx) i j
+          have hQQ := hWhol x (hmemS x hx) y (hmemS y hy) i j
+          have e : P * Q - P' * Q' = (P - P') * Q + P' * (Q - Q') := by ring
+          rw [e]
+          calc
+            |(P - P') * Q + P' * (Q - Q')| ≤ |(P - P') * Q| + |P' * (Q - Q')| :=
+              abs_add_le _ _
+            _ = |P - P'| * |Q| + |P'| * |Q - Q'| := by rw [abs_mul, abs_mul]
+            _ ≤ (Ka * ‖x - y‖ ^ (α : ℝ)) * Nw + Ka * (Nw * ‖x - y‖ ^ (α : ℝ)) := by
+              gcongr
+            _ = (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α : ℝ) := by ring
+        have hb1 :
+          ∀ i,
+            |differenceQuotient (b i) (q • f) q x *
+                    fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) -
+                  differenceQuotient (b i) (q • f) q y *
+                    fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
+              (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α : ℝ) := by
+          intro i
+          set P := differenceQuotient (b i) (q • f) q x
+          set P' := differenceQuotient (b i) (q • f) q y
+          set Q := fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)
+          set Q' := fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)
+          have hP :=
+            abs_differenceQuotient_sub_le_of_fderiv_holder
+              ((hb i).differentiable one_ne_zero) hS' (hbhol i) hf hq hqq hx hy
+          have hP' :=
+            abs_differenceQuotient_le_of_fderiv_bound
+              ((hb i).differentiable one_ne_zero) (hbdN i) hf hq (hmemS y hy)
+              (hmem y hy)
+          have hQ := hVN x (hmemS x hx) i
+          have hQQ := hVhol x (hmemS x hx) y (hmemS y hy) i
+          have e : P * Q - P' * Q' = (P - P') * Q + P' * (Q - Q') := by ring
+          rw [e]
+          calc
+            |(P - P') * Q + P' * (Q - Q')| ≤ |(P - P') * Q| + |P' * (Q - Q')| :=
+              abs_add_le _ _
+            _ = |P - P'| * |Q| + |P'| * |Q - Q'| := by rw [abs_mul, abs_mul]
+            _ ≤ (Kb * ‖x - y‖ ^ (α : ℝ)) * Nw + Kb * (Nw * D * ‖x - y‖ ^ (α : ℝ)) := by
+              gcongr
+            _ = (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α : ℝ) := by ring
+        have hsa :
+          |(∑ i,
+                  ∑ j,
+                    differenceQuotient (a i j) (q • f) q x *
+                      fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                        (EuclideanSpace.basisFun (Fin n) ℝ j)) -
+                (∑ i,
+                  ∑ j,
+                    differenceQuotient (a i j) (q • f) q y *
+                      fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                        (EuclideanSpace.basisFun (Fin n) ℝ j))| ≤
+            (n : ℝ) ^ 2 * (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α : ℝ) := by
+          rw [← Finset.sum_sub_distrib]
+          simp_rw [← Finset.sum_sub_distrib]
+          refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
+          refine
+            (Finset.sum_le_sum fun i _ =>
+                  (Finset.abs_sum_le_sum_abs _ _).trans
+                    (Finset.sum_le_sum fun j _ => ha1 i j)).trans
+              ?_
+          simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+          apply le_of_eq; ring
+        have hsb :
+          |(∑ i,
+                  differenceQuotient (b i) (q • f) q x *
+                    fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
+                (∑ i,
+                  differenceQuotient (b i) (q • f) q y *
+                    fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i))| ≤
+            (n : ℝ) * (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α : ℝ) := by
+          rw [← Finset.sum_sub_distrib]
+          refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
+          refine (Finset.sum_le_sum fun i _ => hb1 i).trans ?_
+          simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+          apply le_of_eq; ring
+        set Gx := differenceQuotient g (q • f) q x
+        set Gy := differenceQuotient g (q • f) q y
+        set Ax :=
+          ∑ i,
+            ∑ j,
+              differenceQuotient (a i j) (q • f) q x *
+                fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                  (EuclideanSpace.basisFun (Fin n) ℝ j)
+        set Ay :=
+          ∑ i,
+            ∑ j,
+              differenceQuotient (a i j) (q • f) q y *
+                fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                  (EuclideanSpace.basisFun (Fin n) ℝ j)
+        set Bx :=
+          ∑ i,
+            differenceQuotient (b i) (q • f) q x *
+              fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)
+        set By :=
+          ∑ i,
+            differenceQuotient (b i) (q • f) q y *
+              fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)
+        have e : Gx - Ax - Bx - (Gy - Ay - By) = (Gx - Gy) - (Ax - Ay) - (Bx - By) := by
+          ring
+        rw [e, hH0_def]
+        calc
+          |(Gx - Gy) - (Ax - Ay) - (Bx - By)| ≤ |Gx - Gy| + |Ax - Ay| + |Bx - By| := by
             have h1 := abs_sub ((Gx - Gy) - (Ax - Ay)) (Bx - By)
             have h2 := abs_sub (Gx - Gy) (Ax - Ay)
             linarith
-        _ ≤ Kg * ‖x - y‖ ^ (α:ℝ) + (n:ℝ) ^ 2 * (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α:ℝ) +
-            (n:ℝ) * (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α:ℝ) := by linarith
-        _ = (Kg + (n:ℝ) ^ 2 * (Ka * Nw + Ka * Nw) + (n:ℝ) * (Kb * Nw + Kb * (Nw * D))) *
-            ‖x - y‖ ^ (α:ℝ) := by ring
-  -- the one-step gain
-  exact hstep c R hR hR1 w hw q₀ Nw hq₀ hNw
-    (fun x hx y hy => hw2hol x (hsub3 hx) y (hsub3 hy)) V M H hUQE
+          _ ≤
+              Kg * ‖x - y‖ ^ (α : ℝ) +
+                  (n : ℝ) ^ 2 * (Ka * Nw + Ka * Nw) * ‖x - y‖ ^ (α : ℝ) +
+                (n : ℝ) * (Kb * Nw + Kb * (Nw * D)) * ‖x - y‖ ^ (α : ℝ) := by
+            linarith
+          _ =
+              (Kg + (n : ℝ) ^ 2 * (Ka * Nw + Ka * Nw) +
+                  (n : ℝ) * (Kb * Nw + Kb * (Nw * D))) *
+                ‖x - y‖ ^ (α : ℝ) := by
+            ring
+    -- the one-step gain
+
+    exact
+      hstep c R hR hR1 w hw q₀ Nw hq₀ hNw
+        (fun x hx y hy => hw2hol x (hsub3 hx) y (hsub3 hy)) V M H hUQE
 
 end BallStep
 
@@ -576,96 +722,182 @@ theorem fderiv_gradient_entry_apply {w : E → ℝ} (hw : ContDiff ℝ 2 w) (e f
 /-- **The differentiated linear equation.** If `w` is `C³`, `a`, `b` are differentiable and
 `Σ aⁱʲ D_{ij} w + Σ bⁱ D_i w + w = g` holds everywhere, then for every direction `f` the
 directional derivative `D_f w` solves
-`Σ aⁱʲ D_{ij}(D_f w) + Σ bⁱ D_i (D_f w) + D_f w = D_f g − Σ (D_f aⁱʲ) D_{ij} w − Σ (D_f bⁱ) D_i w`. -/
+`Σ aⁱʲ D_{ij}(D_f w) + Σ bⁱ D_i (D_f w) + D_f w = D_f g − Σ (D_f aⁱʲ) D_{ij} w − Σ (D_f bⁱ) D_i w`.
+-/
 theorem directional_linear_equation {w g : E → ℝ} {a : Fin n → Fin n → E → ℝ}
     {b : Fin n → E → ℝ} (hw : ContDiff ℝ 3 w) (ha : ∀ i j, Differentiable ℝ (a i j))
     (hb : ∀ i, Differentiable ℝ (b i))
-    (heq : ∀ x, (∑ i, ∑ j, a i j x * fderiv ℝ (fderiv ℝ w) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
-        (∑ i, b i x * fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)) + w x = g x)
+    (heq :
+      ∀ x,
+        (∑ i,
+                ∑ j,
+                  a i j x *
+                    fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                      (EuclideanSpace.basisFun (Fin n) ℝ j)) +
+              (∑ i, b i x * fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+            w x =
+          g x)
     (f x : E) :
-    (∑ i, ∑ j, a i j x * fderiv ℝ (fderiv ℝ (fun y => fderiv ℝ w y f)) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
-      (∑ i, b i x * fderiv ℝ (fun y => fderiv ℝ w y f) x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
-      fderiv ℝ w x f =
+    (∑ i,
+            ∑ j,
+              a i j x *
+                fderiv ℝ (fderiv ℝ (fun y => fderiv ℝ w y f)) x
+                  (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
+          (∑ i,
+            b i x *
+              fderiv ℝ (fun y => fderiv ℝ w y f) x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+        fderiv ℝ w x f =
       fderiv ℝ g x f -
-        (∑ i, ∑ j, fderiv ℝ (a i j) x f * fderiv ℝ (fderiv ℝ w) x
-          (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) -
+          (∑ i,
+            ∑ j,
+              fderiv ℝ (a i j) x f *
+                fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                  (EuclideanSpace.basisFun (Fin n) ℝ j)) -
         (∑ i, fderiv ℝ (b i) x f * fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i)) := by
   have hw2 : ContDiff ℝ 2 w := hw.of_le (by norm_num)
   have hD1 : ContDiff ℝ 2 (fderiv ℝ w) := hw.fderiv_right (by norm_num)
   have hD2 : ContDiff ℝ 1 (fderiv ℝ (fderiv ℝ w)) := hD1.fderiv_right (by norm_num)
   have hD2d : Differentiable ℝ (fderiv ℝ (fderiv ℝ w)) := hD2.differentiable one_ne_zero
   have hD1d : Differentiable ℝ (fderiv ℝ w) := hD1.differentiable (by norm_num)
-  have hwd : Differentiable ℝ w := hw.differentiable (by norm_num)
+  have hwd : Differentiable ℝ w :=
+    hw.differentiable
+      (by norm_num)
   -- the function identity
-  have hΦ : (fun y => (∑ i, ∑ j, a i j y * fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
-      (∑ i, b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)) + w y) = g :=
-    funext heq
+
+  have hΦ :
+    (fun y =>
+        (∑ i,
+              ∑ j,
+                a i j y *
+                  fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                    (EuclideanSpace.basisFun (Fin n) ℝ j)) +
+            (∑ i, b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+          w y) =
+      g :=
+    funext
+      heq
   -- differentiability of the pieces
-  have hWd : ∀ i j, DifferentiableAt ℝ (fun y => fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) x :=
-    fun i j => ((hD2d x).clm_apply (differentiableAt_const _)).clm_apply (differentiableAt_const _)
-  have hVd : ∀ i, DifferentiableAt ℝ (fun y => fderiv ℝ w y
-      (EuclideanSpace.basisFun (Fin n) ℝ i)) x :=
+
+  have hWd :
+    ∀ i j,
+      DifferentiableAt ℝ
+        (fun y =>
+          fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+            (EuclideanSpace.basisFun (Fin n) ℝ j))
+        x :=
+    fun i j =>
+    ((hD2d x).clm_apply (differentiableAt_const _)).clm_apply (differentiableAt_const _)
+  have hVd :
+    ∀ i, DifferentiableAt ℝ (fun y => fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)) x :=
     fun i => (hD1d x).clm_apply (differentiableAt_const _)
-  have hAd : ∀ i j, DifferentiableAt ℝ (fun y => a i j y * fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) x :=
+  have hAd :
+    ∀ i j,
+      DifferentiableAt ℝ
+        (fun y =>
+          a i j y *
+            fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+              (EuclideanSpace.basisFun (Fin n) ℝ j))
+        x :=
     fun i j => (ha i j x).mul (hWd i j)
-  have hBd : ∀ i, DifferentiableAt ℝ (fun y => b i y * fderiv ℝ w y
-      (EuclideanSpace.basisFun (Fin n) ℝ i)) x :=
+  have hBd :
+    ∀ i,
+      DifferentiableAt ℝ (fun y => b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i))
+        x :=
     fun i => (hb i x).mul (hVd i)
-  have hSAd : ∀ i, DifferentiableAt ℝ (fun y => ∑ j, a i j y * fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) x :=
+  have hSAd :
+    ∀ i,
+      DifferentiableAt ℝ
+        (fun y =>
+          ∑ j,
+            a i j y *
+              fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                (EuclideanSpace.basisFun (Fin n) ℝ j))
+        x :=
     fun i => DifferentiableAt.fun_sum fun j _ => hAd i j
-  have hSA : DifferentiableAt ℝ (fun y => ∑ i, ∑ j, a i j y * fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) x :=
+  have hSA :
+    DifferentiableAt ℝ
+      (fun y =>
+        ∑ i,
+          ∑ j,
+            a i j y *
+              fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                (EuclideanSpace.basisFun (Fin n) ℝ j))
+      x :=
     DifferentiableAt.fun_sum fun i _ => hSAd i
-  have hSB : DifferentiableAt ℝ (fun y => ∑ i, b i y * fderiv ℝ w y
-      (EuclideanSpace.basisFun (Fin n) ℝ i)) x :=
-    DifferentiableAt.fun_sum fun i _ => hBd i
+  have hSB :
+    DifferentiableAt ℝ
+      (fun y => ∑ i, b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)) x :=
+    DifferentiableAt.fun_sum fun i _ =>
+      hBd
+        i
   -- differentiate the identity at `x` in direction `f`
+
   have hder := congrArg (fun φ => fderiv ℝ φ x f) hΦ
-  have hSAB : DifferentiableAt ℝ (fun y => (∑ i, ∑ j, a i j y * fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
-      (∑ i, b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i))) x := hSA.add hSB
+  have hSAB :
+    DifferentiableAt ℝ
+      (fun y =>
+        (∑ i,
+            ∑ j,
+              a i j y *
+                fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                  (EuclideanSpace.basisFun (Fin n) ℝ j)) +
+          (∑ i, b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)))
+      x :=
+    hSA.add hSB
   rw [fderiv_fun_add hSAB (hwd x), fderiv_fun_add hSA hSB, fderiv_fun_sum fun i _ => hSAd i,
     fderiv_fun_sum fun i _ => hBd i] at hder
   simp only [add_apply, sum_apply] at hder
   have hsym3 : IsSymmSndFDerivAt ℝ (fderiv ℝ w) x := hD1.contDiffAt.isSymmSndFDerivAt (by simp)
   have hsym2 : IsSymmSndFDerivAt ℝ w x := hw2.contDiffAt.isSymmSndFDerivAt (by simp)
-  have hder2 : ∀ i, fderiv ℝ (fun y => ∑ j, a i j y * fderiv ℝ (fderiv ℝ w) y
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) x f =
-      ∑ j, (a i j x * fderiv ℝ (fderiv ℝ (fderiv ℝ w)) x f (EuclideanSpace.basisFun (Fin n) ℝ i)
-        (EuclideanSpace.basisFun (Fin n) ℝ j) +
-        fderiv ℝ (a i j) x f * fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j)) := by
+  have hder2 :
+    ∀ i,
+      fderiv ℝ
+          (fun y =>
+            ∑ j,
+              a i j y *
+                fderiv ℝ (fderiv ℝ w) y (EuclideanSpace.basisFun (Fin n) ℝ i)
+                  (EuclideanSpace.basisFun (Fin n) ℝ j))
+          x f =
+        ∑ j,
+          (a i j x *
+              fderiv ℝ (fderiv ℝ (fderiv ℝ w)) x f (EuclideanSpace.basisFun (Fin n) ℝ i)
+                (EuclideanSpace.basisFun (Fin n) ℝ j) +
+            fderiv ℝ (a i j) x f *
+              fderiv ℝ (fderiv ℝ w) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                (EuclideanSpace.basisFun (Fin n) ℝ j)) := by
     intro i
     rw [fderiv_fun_sum fun j _ => hAd i j, sum_apply]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [fderiv_fun_mul (ha i j x) (hWd i j), add_apply, smul_apply, smul_apply, smul_eq_mul,
       smul_eq_mul, fderiv_hessian_entry_apply (hD2d x)]
     ring
-  have hder3 : ∀ i, fderiv ℝ (fun y => b i y * fderiv ℝ w y
-      (EuclideanSpace.basisFun (Fin n) ℝ i)) x f =
-      b i x * fderiv ℝ (fderiv ℝ w) x f (EuclideanSpace.basisFun (Fin n) ℝ i) +
-        fderiv ℝ (b i) x f * fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) := by
+  have hder3 :
+    ∀ i,
+      fderiv ℝ (fun y => b i y * fderiv ℝ w y (EuclideanSpace.basisFun (Fin n) ℝ i)) x f =
+        b i x * fderiv ℝ (fderiv ℝ w) x f (EuclideanSpace.basisFun (Fin n) ℝ i) +
+          fderiv ℝ (b i) x f * fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ i) := by
     intro i
     rw [fderiv_fun_mul (hb i x) (hVd i), add_apply, smul_apply, smul_apply, smul_eq_mul,
-      smul_eq_mul, fderiv_gradient_entry_apply hw2, hsym2 (EuclideanSpace.basisFun (Fin n) ℝ i) f]
+      smul_eq_mul, fderiv_gradient_entry_apply hw2,
+      hsym2 (EuclideanSpace.basisFun (Fin n) ℝ i) f]
     ring
-  simp only [hder2, hder3, Finset.sum_add_distrib] at hder
+  simp only [hder2, hder3,
+    Finset.sum_add_distrib] at hder
   -- rewrite the left-hand side through the symmetry of the derivatives
-  have hL1 : ∀ i j, fderiv ℝ (fderiv ℝ (fun y => fderiv ℝ w y f)) x
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j) =
-      fderiv ℝ (fderiv ℝ (fderiv ℝ w)) x f (EuclideanSpace.basisFun (Fin n) ℝ i)
-        (EuclideanSpace.basisFun (Fin n) ℝ j) := by
+
+  have hL1 :
+    ∀ i j,
+      fderiv ℝ (fderiv ℝ (fun y => fderiv ℝ w y f)) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+          (EuclideanSpace.basisFun (Fin n) ℝ j) =
+        fderiv ℝ (fderiv ℝ (fderiv ℝ w)) x f (EuclideanSpace.basisFun (Fin n) ℝ i)
+          (EuclideanSpace.basisFun (Fin n) ℝ j) := by
     intro i j
     rw [fderiv_fderiv_directional_apply hw2 (hD2d x)]
     exact congrArg (fun L : E →L[ℝ] ℝ => L (EuclideanSpace.basisFun (Fin n) ℝ j)) (hsym3 _ f)
-  have hL2 : ∀ i, fderiv ℝ (fun y => fderiv ℝ w y f) x (EuclideanSpace.basisFun (Fin n) ℝ i) =
-      fderiv ℝ (fderiv ℝ w) x f (EuclideanSpace.basisFun (Fin n) ℝ i) := by
+  have hL2 :
+    ∀ i,
+      fderiv ℝ (fun y => fderiv ℝ w y f) x (EuclideanSpace.basisFun (Fin n) ℝ i) =
+        fderiv ℝ (fderiv ℝ w) x f (EuclideanSpace.basisFun (Fin n) ℝ i) := by
     intro i
     rw [fderiv_gradient_entry_apply hw2]
   simp only [hL1, hL2]

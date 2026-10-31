@@ -1,11 +1,15 @@
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import Mathlib.Analysis.Calculus.FDeriv.Norm
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import Mathlib.Analysis.Calculus.FDeriv.Norm
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! Compact jet extraction, the Whitney–Lusin decomposition, the Lipschitz weighted coarea formula
 and the second original target (`L6a`, `L7`, `L12` and `T2` of
 `research/audits/Coarea/WeightedRouteStatements.lean`), with their complete assumptions, proved as
 clients. -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis
@@ -36,13 +40,19 @@ theorem original_L7 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 
   intro V _ _ _ _ _ _ u K hu
   exact Analysis.exists_contDiff_pieces hu
 
-theorem original_L12 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
-    {S : Set V} {u : V → ℝ} {K : ℝ≥0} {g : V → ℝ≥0∞},
-    LipschitzWith K u → MeasurableSet S → Measurable g →
-    AEMeasurable (fun t : ℝ ↦ ∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.surfaceMeasure V)) (volume : Measure ℝ) ∧
-    (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
-      ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.surfaceMeasure V) ∂(volume : Measure ℝ) := by
+theorem original_L12 :
+    ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+      [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] {S : Set V} {u : V → ℝ}
+      {K : ℝ≥0} {g : V → ℝ≥0∞},
+      LipschitzWith K u →
+        MeasurableSet S →
+          Measurable g →
+            AEMeasurable (fun t : ℝ ↦ ∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.surfaceMeasure V))
+                (volume : Measure ℝ) ∧
+              (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+                ∫⁻ t,
+                  ∫⁻ y in S ∩ {x | u x = t},
+                    g y ∂(KLS.surfaceMeasure V) ∂(volume : Measure ℝ) := by
   intro V _ _ _ _ _ _ S u K g hu hS hg
   exact KLS.coarea_of_lipschitz hu hS hg
 

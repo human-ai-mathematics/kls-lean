@@ -1,14 +1,19 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import Mathlib.Probability.Moments.IntegrableExpMul
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import Mathlib.Probability.Moments.IntegrableExpMul
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 
 /-!
 # BorellRepresentation: Moments
 
 Exponential and polynomial moment bounds for Borell log-concave probability laws.
-`KLS.LogConcave.integrable_norm_pow` gives integrability of `‖x‖ ^ d` for every `d` and every log-concave law.
+`KLS.LogConcave.integrable_norm_pow` gives integrability of `‖x‖ ^ d` for every `d` and every
+log-concave law.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Topology Filter
@@ -111,22 +116,26 @@ theorem measure_norm_ge_le {ν : ProbabilityMeasure V} (hν : BorelLogConcave ν
 /-- A Borel log-concave probability law on a finite-dimensional space has an exponential
 moment. The radius is chosen from the exhaustion by balls, the tail from Borell's lemma, and
 the integral is dominated by a geometric series. -/
-theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V}
-    (hν : BorelLogConcave ν) :
+theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V} (hν : BorelLogConcave ν) :
     ∃ t : ℝ, 0 < t ∧ Integrable (fun v ↦ Real.exp (t * ‖v‖)) (ν : Measure V) := by
   -- a ball of integer radius carrying mass at least 3/4
+
   have hmono : Monotone fun n : ℕ ↦ Metric.ball (0 : V) n := fun i j hij ↦
     Metric.ball_subset_ball (by exact_mod_cast hij)
   have htend := tendsto_measure_iUnion_atTop (μ := (ν : Measure V)) hmono
   rw [Metric.iUnion_ball_nat, measure_univ] at htend
   obtain ⟨n, hn1, hball⟩ :=
     ((eventually_ge_atTop 1).and
-      (htend.eventually_const_le (ENNReal.ofReal_lt_one.mpr (by norm_num : (3 / 4 : ℝ) < 1)))).exists
+        (htend.eventually_const_le
+          (ENNReal.ofReal_lt_one.mpr (by norm_num : (3 / 4 : ℝ) < 1)))).exists
   set R : ℝ := (n : ℝ) with hR_def
   have hR : 0 < R := by rw [hR_def]; exact Nat.cast_pos.mpr hn1
   have hball' : ENNReal.ofReal (3 / 4) ≤ (ν : Measure V) (Metric.ball (0 : V) R) := hball
-  have tail := hν.measure_norm_ge_le hball'
+  have tail :=
+    hν.measure_norm_ge_le
+      hball'
   -- the rate and the dominating series
+
   set t₀ : ℝ := Real.log 3 / (4 * R) with ht₀_def
   have hlog3 : 0 < Real.log 3 := Real.log_pos (by norm_num)
   have ht₀ : 0 < t₀ := by positivity
@@ -137,8 +146,11 @@ theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V}
     (isClosed_le continuous_const continuous_norm).measurableSet
   set f : ℕ → V → ENNReal := fun k ↦ (A k).indicator fun _ ↦ ENNReal.ofReal (c k) with hf_def
   have hc_pos : ∀ k, 0 < c k := fun k ↦ Real.exp_pos _
-  have hb_pos : ∀ k, 0 < b k := fun k ↦ Real.rpow_pos_of_pos (by norm_num) _
+  have hb_pos : ∀ k, 0 < b k := fun k ↦
+    Real.rpow_pos_of_pos (by norm_num)
+      _
   -- pointwise domination
+
   have hpt : ∀ v : V, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ≤ ∑' k, f k v := by
     intro v
     set n := ⌊‖v‖ / R⌋₊ with hn_def
@@ -148,14 +160,17 @@ theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V}
       show (n : ℝ) * R ≤ ‖v‖
       exact (le_div_iff₀ hR).mp hn1
     have hlt : ‖v‖ < ((n : ℝ) + 1) * R := (div_lt_iff₀ hR).mp hn2
-    calc ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ≤ ENNReal.ofReal (c n) := by
-          apply ENNReal.ofReal_le_ofReal
-          apply Real.exp_le_exp.mpr
-          rw [mul_assoc]
-          exact mul_le_mul_of_nonneg_left hlt.le ht₀.le
+    calc
+      ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ≤ ENNReal.ofReal (c n) := by
+        apply ENNReal.ofReal_le_ofReal
+        apply Real.exp_le_exp.mpr
+        rw [mul_assoc]
+        exact mul_le_mul_of_nonneg_left hlt.le ht₀.le
       _ = f n v := by simp [hf_def, Set.indicator_of_mem hmem]
-      _ ≤ ∑' k, f k v := ENNReal.le_tsum n
+      _ ≤ ∑' k, f k v :=
+        ENNReal.le_tsum (f := fun k : ℕ ↦ f k v) n
   -- the series
+
   have hcb : ∀ k, c k * b k = (3 : ℝ) ^ ((3 : ℝ) / 4) * ((3 : ℝ) ^ (-(1 / 4 : ℝ))) ^ k := by
     intro k
     have hc : c k = (3 : ℝ) ^ (((k : ℝ) + 1) / 4) := by
@@ -164,33 +179,40 @@ theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V}
       field_simp
     rw [hc, hb_def]
     simp only
-    rw [← Real.rpow_add (by norm_num), ← Real.rpow_natCast, ← Real.rpow_mul (by norm_num),
-      ← Real.rpow_add (by norm_num)]
+    rw [← Real.rpow_add (by norm_num), ← Real.rpow_natCast, ← Real.rpow_mul (by norm_num), ←
+      Real.rpow_add (by norm_num)]
     congr 1
     ring
   have hq1 : (3 : ℝ) ^ (-(1 / 4 : ℝ)) < 1 :=
     Real.rpow_lt_one_of_one_lt_of_neg (by norm_num) (by norm_num)
   have hq0 : 0 ≤ (3 : ℝ) ^ (-(1 / 4 : ℝ)) := Real.rpow_nonneg (by norm_num) _
   have hsum : Summable fun k ↦ c k * b k :=
-    ((summable_geometric_of_lt_one hq0 hq1).mul_left _).congr fun k ↦ (hcb k).symm
+    ((summable_geometric_of_lt_one hq0 hq1).mul_left _).congr fun k ↦
+      (hcb k).symm
   -- the integral bound
+
   have hbound : ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V) < ⊤ := by
-    calc ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V)
-        ≤ ∫⁻ v, ∑' k, f k v ∂(ν : Measure V) := lintegral_mono hpt
+    calc
+      ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V) ≤
+          ∫⁻ v, ∑' k, f k v ∂(ν : Measure V) :=
+        lintegral_mono hpt
       _ = ∑' k, ∫⁻ v, f k v ∂(ν : Measure V) :=
-          lintegral_tsum fun k ↦ (measurable_const.indicator (hA k)).aemeasurable
+        lintegral_tsum fun k ↦ (measurable_const.indicator (hA k)).aemeasurable
       _ = ∑' k, ENNReal.ofReal (c k) * (ν : Measure V) (A k) := by
-          congr 1; ext k; exact lintegral_indicator_const (hA k) _
+        congr 1; ext k;
+        exact lintegral_indicator_const (hA k) _
       _ ≤ ∑' k, ENNReal.ofReal (c k) * ENNReal.ofReal (b k) :=
-          ENNReal.tsum_le_tsum fun k ↦ mul_le_mul' le_rfl (tail k)
+        ENNReal.tsum_le_tsum fun k ↦ mul_le_mul' le_rfl (tail k)
       _ = ∑' k, ENNReal.ofReal (c k * b k) := by
-          congr 1; ext k; rw [ENNReal.ofReal_mul (hc_pos k).le]
+        congr 1; ext k;
+        rw [ENNReal.ofReal_mul (hc_pos k).le]
       _ = ENNReal.ofReal (∑' k, c k * b k) :=
-          (ENNReal.ofReal_tsum_of_nonneg (fun k ↦ (mul_pos (hc_pos k) (hb_pos k)).le) hsum).symm
+        (ENNReal.ofReal_tsum_of_nonneg (fun k ↦ (mul_pos (hc_pos k) (hb_pos k)).le) hsum).symm
       _ < ⊤ := ENNReal.ofReal_lt_top
   refine ⟨t₀, ht₀, ?_, ?_⟩
-  · exact (Real.continuous_exp.comp (continuous_const.mul continuous_norm)).measurable
-      |>.aestronglyMeasurable
+  · exact
+      (Real.continuous_exp.comp
+            (continuous_const.mul continuous_norm)).measurable |>.aestronglyMeasurable
   · rw [hasFiniteIntegral_iff_ofReal (Eventually.of_forall fun v ↦ (Real.exp_pos _).le)]
     exact hbound
 
@@ -233,18 +255,21 @@ namespace KLS.BorelLogConcave
 section QuantitativeMoments
 
 omit [FiniteDimensional ℝ V]
-/-- **Quantitative Borell exponential moment**: if a ball of radius `R` carries mass `≥ 3/4`, then
+/--
+**Quantitative Borell exponential moment**: if a ball of radius `R` carries mass `≥ 3/4`, then
 `∫ e^{q‖v‖} dν ≤ 3^{3/4}/(1 − 3^{−1/4})` with the explicit rate `q = log 3/(4R)`; constants do not
 depend on the law (BKL Section 2, p. 5, uniform moments of the regular approximation). -/
-theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V}
-    (hν : KLS.BorelLogConcave ν) {R : ℝ} (hR : 0 < R)
+theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V} (hν : KLS.BorelLogConcave ν)
+    {R : ℝ} (hR : 0 < R)
     (hball : ENNReal.ofReal (3 / 4) ≤ (ν : Measure V) (Metric.ball (0 : V) R)) :
     Integrable (fun v : V => Real.exp ((Real.log 3 / (4 * R)) * ‖v‖)) (ν : Measure V) ∧
       (∫ v, Real.exp ((Real.log 3 / (4 * R)) * ‖v‖) ∂(ν : Measure V)) ≤
         (3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ))) := by
-
-  have tail := hν.measure_norm_ge_le hball
+  have tail :=
+    hν.measure_norm_ge_le
+      hball
   -- the rate and the dominating series
+
   set t₀ : ℝ := Real.log 3 / (4 * R) with ht₀_def
   have hlog3 : 0 < Real.log 3 := Real.log_pos (by norm_num)
   have ht₀ : 0 < t₀ := by positivity
@@ -255,8 +280,11 @@ theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V}
     (isClosed_le continuous_const continuous_norm).measurableSet
   set f : ℕ → V → ENNReal := fun k ↦ (A k).indicator fun _ ↦ ENNReal.ofReal (c k) with hf_def
   have hc_pos : ∀ k, 0 < c k := fun k ↦ Real.exp_pos _
-  have hb_pos : ∀ k, 0 < b k := fun k ↦ Real.rpow_pos_of_pos (by norm_num) _
+  have hb_pos : ∀ k, 0 < b k := fun k ↦
+    Real.rpow_pos_of_pos (by norm_num)
+      _
   -- pointwise domination
+
   have hpt : ∀ v : V, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ≤ ∑' k, f k v := by
     intro v
     set n := ⌊‖v‖ / R⌋₊ with hn_def
@@ -266,14 +294,17 @@ theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V}
       show (n : ℝ) * R ≤ ‖v‖
       exact (le_div_iff₀ hR).mp hn1
     have hlt : ‖v‖ < ((n : ℝ) + 1) * R := (div_lt_iff₀ hR).mp hn2
-    calc ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ≤ ENNReal.ofReal (c n) := by
-          apply ENNReal.ofReal_le_ofReal
-          apply Real.exp_le_exp.mpr
-          rw [mul_assoc]
-          exact mul_le_mul_of_nonneg_left hlt.le ht₀.le
+    calc
+      ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ≤ ENNReal.ofReal (c n) := by
+        apply ENNReal.ofReal_le_ofReal
+        apply Real.exp_le_exp.mpr
+        rw [mul_assoc]
+        exact mul_le_mul_of_nonneg_left hlt.le ht₀.le
       _ = f n v := by simp [hf_def, Set.indicator_of_mem hmem]
-      _ ≤ ∑' k, f k v := ENNReal.le_tsum n
+      _ ≤ ∑' k, f k v :=
+        ENNReal.le_tsum (f := fun k : ℕ ↦ f k v) n
   -- the series
+
   have hcb : ∀ k, c k * b k = (3 : ℝ) ^ ((3 : ℝ) / 4) * ((3 : ℝ) ^ (-(1 / 4 : ℝ))) ^ k := by
     intro k
     have hc : c k = (3 : ℝ) ^ (((k : ℝ) + 1) / 4) := by
@@ -282,42 +313,54 @@ theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V}
       field_simp
     rw [hc, hb_def]
     simp only
-    rw [← Real.rpow_add (by norm_num), ← Real.rpow_natCast, ← Real.rpow_mul (by norm_num),
-      ← Real.rpow_add (by norm_num)]
+    rw [← Real.rpow_add (by norm_num), ← Real.rpow_natCast, ← Real.rpow_mul (by norm_num), ←
+      Real.rpow_add (by norm_num)]
     congr 1
     ring
   have hq1 : (3 : ℝ) ^ (-(1 / 4 : ℝ)) < 1 :=
     Real.rpow_lt_one_of_one_lt_of_neg (by norm_num) (by norm_num)
   have hq0 : 0 ≤ (3 : ℝ) ^ (-(1 / 4 : ℝ)) := Real.rpow_nonneg (by norm_num) _
   have hsum : Summable fun k ↦ c k * b k :=
-    ((summable_geometric_of_lt_one hq0 hq1).mul_left _).congr fun k ↦ (hcb k).symm
+    ((summable_geometric_of_lt_one hq0 hq1).mul_left _).congr fun k ↦
+      (hcb k).symm
   -- the integral bound
-  have hbound : ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V) ≤
+
+  have hbound :
+    ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V) ≤
       ENNReal.ofReal (∑' k, c k * b k) := by
-    calc ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V)
-        ≤ ∫⁻ v, ∑' k, f k v ∂(ν : Measure V) := lintegral_mono hpt
+    calc
+      ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V) ≤
+          ∫⁻ v, ∑' k, f k v ∂(ν : Measure V) :=
+        lintegral_mono hpt
       _ = ∑' k, ∫⁻ v, f k v ∂(ν : Measure V) :=
-          lintegral_tsum fun k ↦ (measurable_const.indicator (hA k)).aemeasurable
+        lintegral_tsum fun k ↦ (measurable_const.indicator (hA k)).aemeasurable
       _ = ∑' k, ENNReal.ofReal (c k) * (ν : Measure V) (A k) := by
-          congr 1; ext k; exact lintegral_indicator_const (hA k) _
+        congr 1; ext k;
+        exact lintegral_indicator_const (hA k) _
       _ ≤ ∑' k, ENNReal.ofReal (c k) * ENNReal.ofReal (b k) :=
-          ENNReal.tsum_le_tsum fun k ↦ mul_le_mul' le_rfl (tail k)
+        ENNReal.tsum_le_tsum fun k ↦ mul_le_mul' le_rfl (tail k)
       _ = ∑' k, ENNReal.ofReal (c k * b k) := by
-          congr 1; ext k; rw [ENNReal.ofReal_mul (hc_pos k).le]
+        congr 1; ext k;
+        rw [ENNReal.ofReal_mul (hc_pos k).le]
       _ = ENNReal.ofReal (∑' k, c k * b k) :=
-          (ENNReal.ofReal_tsum_of_nonneg (fun k ↦ (mul_pos (hc_pos k) (hb_pos k)).le) hsum).symm
+        (ENNReal.ofReal_tsum_of_nonneg (fun k ↦ (mul_pos (hc_pos k) (hb_pos k)).le) hsum).symm
   have hfinite : ∫⁻ v, ENNReal.ofReal (Real.exp (t₀ * ‖v‖)) ∂(ν : Measure V) < ⊤ :=
     hbound.trans_lt ENNReal.ofReal_lt_top
   have hint : Integrable (fun v : V => Real.exp (t₀ * ‖v‖)) (ν : Measure V) := by
-    refine ⟨((Real.continuous_exp.comp (continuous_const.mul continuous_norm)).measurable
-      |>.aestronglyMeasurable), ?_⟩
+    refine
+      ⟨((Real.continuous_exp.comp
+              (continuous_const.mul continuous_norm)).measurable |>.aestronglyMeasurable),
+        ?_⟩
     rw [hasFiniteIntegral_iff_ofReal (Eventually.of_forall fun v => (Real.exp_pos _).le)]
     exact hfinite
   have hreal : (∫ v, Real.exp (t₀ * ‖v‖) ∂(ν : Measure V)) ≤ ∑' k, c k * b k := by
-    rw [← ofReal_integral_eq_lintegral_ofReal hint (ae_of_all _ fun v => (Real.exp_pos _).le)] at hbound
-    exact (ENNReal.ofReal_le_ofReal_iff (tsum_nonneg fun k => (mul_pos (hc_pos k) (hb_pos k)).le)).1 hbound
-  have htsum : (∑' k, c k * b k) =
-      (3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ))) := by
+    rw [←
+      ofReal_integral_eq_lintegral_ofReal hint
+        (ae_of_all _ fun v => (Real.exp_pos _).le)] at hbound
+    exact
+      (ENNReal.ofReal_le_ofReal_iff (tsum_nonneg fun k => (mul_pos (hc_pos k) (hb_pos k)).le)).1
+        hbound
+  have htsum : (∑' k, c k * b k) = (3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ))) := by
     simp_rw [hcb]
     rw [tsum_mul_left]
     rw [tsum_geometric_of_lt_one hq0 hq1]
@@ -365,7 +408,9 @@ theorem integral_norm_pow_le_of_second_moment {ν : ProbabilityMeasure V}
       (∫ v, ‖v‖ ^ p ∂(ν : Measure V)) ≤
         (p.factorial : ℝ) / (Real.log 3 / (4 * R)) ^ p *
           ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) := by
-  exact integral_norm_pow_le_of_ball hν hR (Probability.measure_ball_ge_of_integral_norm_sq_le hR hint hsecond) p
+  exact
+    integral_norm_pow_le_of_ball hν hR
+      (Probability.measure_ball_ge_of_integral_norm_sq_le hR hint hsecond) p
 
 /-- All-order moment bounds from log-concavity and a second-moment bound `∫‖v‖² ≤ M`, with the
 common radius `R = 2√(M+1)` and rate `log 3/(8√(M+1))`; uniform over all such laws. -/
@@ -408,16 +453,21 @@ open scoped ContDiff in
 /-- **A log-concave law has a smooth logarithmic Laplace transform near `0`**: for some `r > 0`,
 `∫ e^{r‖x‖} dν < ∞` and `Λ_ν` is `C^∞` on the ball of radius `r` (BKL p. 29, through the Borell
 exponential moment and `contDiffOn_logLaplace_ball`). -/
-theorem KLS.LogConcave.exists_integrable_exp_norm_contDiffOn_logLaplace {ν : ProbabilityMeasure E} (hν : KLS.LogConcave ν) :
-    ∃ r : ℝ, 0 < r ∧ Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure E) ∧
-      ContDiffOn ℝ ∞ (Analysis.BakryEmery.logLaplace (ν : Measure E)) (Metric.ball 0 r) := by
+theorem KLS.LogConcave.exists_integrable_exp_norm_contDiffOn_logLaplace
+    {ν : ProbabilityMeasure E} (hν : KLS.LogConcave ν) :
+    ∃ r : ℝ,
+      0 < r ∧
+        Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure E) ∧
+          ContDiffOn ℝ ∞ (Analysis.BakryEmery.logLaplace (ν : Measure E)) (Metric.ball 0 r) := by
   obtain ⟨r, hr, hi⟩ := ((KLS.LogConcave.borel_iff ν).1 hν).exists_integrable_exp_norm
   exact ⟨r, hr, hi, Analysis.BakryEmery.contDiffOn_logLaplace_ball (ν : Measure E) hr hi⟩
 
-/-- **A log-concave law has norm moments of every order**: `‖x‖ ^ d` is integrable for every `d`, from the Borell
+/--
+**A log-concave law has norm moments of every order**: `‖x‖ ^ d` is integrable for every `d`, from
+the Borell
 exponential moment. -/
-theorem KLS.LogConcave.integrable_norm_pow {ν : ProbabilityMeasure E}
-    (hν : KLS.LogConcave ν) (d : ℕ) : Integrable (fun x : E => ‖x‖ ^ d) (ν : Measure E) := by
+theorem KLS.LogConcave.integrable_norm_pow {ν : ProbabilityMeasure E} (hν : KLS.LogConcave ν)
+    (d : ℕ) : Integrable (fun x : E => ‖x‖ ^ d) (ν : Measure E) := by
   obtain ⟨r, hr, hi⟩ := ((KLS.LogConcave.borel_iff ν).1 hν).exists_integrable_exp_norm
   exact Probability.integrable_norm_pow_of_exp _ hr hi d
 

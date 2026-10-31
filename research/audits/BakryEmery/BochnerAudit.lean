@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
 
 /-!
 # Scope audit for the local `Γ`/`Γ₂` calculus
@@ -31,6 +33,8 @@ the `L¹` gradient bound), about general log-concave laws, or about Buser is cla
 The axiom reports at the end cover every public declaration of the two imported modules and every
 theorem of this client; each must list only `propext`, `Classical.choice` and `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -126,9 +130,12 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 /-- `U = 0`: the Euclidean Bochner identity `Δ‖∇f‖²/2 - ⟪∇f, ∇Δf⟫ = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))²`. -/
 theorem boundary_euclidean {f : V → ℝ} (hf : ContDiff ℝ 3 f) (x : V) :
     Laplacian.laplacian (fun y => ‖gradient f y‖ ^ 2) x / 2 -
-      ⟪gradient f x, gradient (Laplacian.laplacian f) x⟫ =
-    ∑ i, ∑ j,
-      (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ V i) (stdOrthonormalBasis ℝ V j)) ^ 2 := by
+        ⟪gradient f x, gradient (Laplacian.laplacian f) x⟫ =
+      ∑ i,
+        ∑ j,
+          (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ V i)
+              (stdOrthonormalBasis ℝ V j)) ^
+            2 := by
   have h := gammaTwo_zero_potential hf x
   rw [gammaTwo_eq_expanded, hessianSqStdBasis_apply] at h
   simpa only [gradient_fun_const, inner_zero_left, sub_zero] using h
@@ -219,7 +226,8 @@ end BakryEmeryBochnerAudit
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hasDerivAt_line
 #print axioms FunctionalInequalities.Analysis.BakryEmery.deriv_line
 #print axioms FunctionalInequalities.Analysis.BakryEmery.deriv_deriv_line
-#print axioms FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hessianSqStdBasis
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hessianSqStdBasis_apply
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hessianSqStdBasis_nonneg

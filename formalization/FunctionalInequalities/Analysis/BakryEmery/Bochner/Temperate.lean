@@ -1,7 +1,9 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
 
 /-!
 # The integrated Bochner formula on the class `𝒜`
@@ -13,6 +15,8 @@ exponential moments, every `u` of temperate growth satisfies
 `∫ (ℒu)² dμ ≥ ∫ ‖∇²u‖²_HS dμ + ρ ∫ ‖∇u‖² dμ`, the inequality behind Lemma 3.4. The class `𝒜` is
 closed under `∇`, `Δ`, `ℒ` and `Γ`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -35,11 +39,16 @@ theorem hasTemperateGrowth_iteratedFDeriv {f : E → ℝ} (hf : f.HasTemperateGr
     (iteratedFDeriv ℝ n f).HasTemperateGrowth := by
   induction n with
   | zero =>
-      rw [iteratedFDeriv_zero_eq_comp]
-      exact (continuousMultilinearCurryFin0 ℝ E ℝ).symm.toContinuousLinearEquiv.hasTemperateGrowth.comp hf
+    rw [iteratedFDeriv_zero_eq_comp]
+    exact
+      (continuousMultilinearCurryFin0 ℝ E
+            ℝ).symm.toContinuousLinearEquiv.hasTemperateGrowth.comp
+        hf
   | succ n ih =>
-      rw [iteratedFDeriv_succ_eq_comp_left]
-      exact (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (n + 1) => E) ℝ).symm.toContinuousLinearEquiv.hasTemperateGrowth.comp
+    rw [iteratedFDeriv_succ_eq_comp_left]
+    exact
+      (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (n + 1) => E)
+            ℝ).symm.toContinuousLinearEquiv.hasTemperateGrowth.comp
         (hasTemperateGrowth_fderiv ih)
 
 private theorem hasTemperateGrowth_comp_linearIsometryEquiv
@@ -145,18 +154,22 @@ theorem integral_gammaTwo_eq_of_hasTemperateGrowth {V f : E → ℝ} (hV : V.Has
     ∫ x, gammaTwo V f x ∂(m.tilted (-V)) = ∫ x, weightedLaplacian V f x ^ 2 ∂(m.tilted (-V)) := by
   have hLf := hasTemperateGrowth_weightedLaplacian hV hf
   have hG := hasTemperateGrowth_gamma hf hf
-  have hLGi := FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
-    (hasTemperateGrowth_weightedLaplacian hV hG)
-  have hGi := FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (hasTemperateGrowth_gamma hf hLf)
+  have hLGi :=
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (hasTemperateGrowth_weightedLaplacian hV hG)
+  have hGi :=
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (hasTemperateGrowth_gamma hf hLf)
   have hzero := bochner_temperate_generator_zero m hV hexp hG
   obtain ⟨kV, CV, hVb⟩ := hV.2 1
-  have hibp := integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth m
-    (hV.1.of_le (WithTop.coe_le_coe.mpr le_top))
-    (fun x => by simpa only [norm_gradient_eq_norm_iteratedFDeriv_one] using hVb x)
-    hexp hf hLf
+  have hibp :=
+    integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth m
+      (hV.1.of_le (WithTop.coe_le_coe.mpr le_top))
+      (fun x => by simpa only [norm_gradient_eq_norm_iteratedFDeriv_one] using hVb x) hexp hf
+      hLf
   have hsq :
-      (∫ x, weightedLaplacian V f x ^ 2 ∂(m.tilted (-V))) =
-        -(∫ x, gamma f (weightedLaplacian V f) x ∂(m.tilted (-V))) := by
+    (∫ x, weightedLaplacian V f x ^ 2 ∂(m.tilted (-V))) =
+      -(∫ x, gamma f (weightedLaplacian V f) x ∂(m.tilted (-V))) := by
     simpa only [pow_two, gamma_apply] using hibp
   simp only [gammaTwo_apply]
   rw [integral_sub (hLGi.div_const 2) hGi, integral_div, hzero]
@@ -186,24 +199,30 @@ theorem integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth {V f : E → ℝ}
     intro i _
     apply Function.HasTemperateGrowth.sum
     intro j _
-    exact (bochner_sq_temperate_hessian_eval hf
-      (Function.HasTemperateGrowth.const (stdOrthonormalBasis ℝ E i))
-      (Function.HasTemperateGrowth.const (stdOrthonormalBasis ℝ E j))).pow 2
-  have hB := bochner_sq_temperate_hessian_eval hV
-    (hasTemperateGrowth_gradient hf) (hasTemperateGrowth_gradient hf)
+    exact
+      (bochner_sq_temperate_hessian_eval hf
+            (Function.HasTemperateGrowth.const (stdOrthonormalBasis ℝ E i))
+            (Function.HasTemperateGrowth.const (stdOrthonormalBasis ℝ E j))).pow
+        2
+  have hB :=
+    bochner_sq_temperate_hessian_eval hV (hasTemperateGrowth_gradient hf)
+      (hasTemperateGrowth_gradient hf)
   rw [← integral_gammaTwo_eq_of_hasTemperateGrowth m hV hexp hf]
-  have hpoint : gammaTwo V f = fun x => hessianSqStdBasis f x +
-      bilinearIteratedFDerivTwo ℝ V x (gradient f x) (gradient f x) := by
+  have hpoint :
+    gammaTwo V f = fun x =>
+      hessianSqStdBasis f x + bilinearIteratedFDerivTwo ℝ V x (gradient f x) (gradient f x) := by
     funext x
-    exact gammaTwo_eq_hessianSqStdBasis_add
-      (hV.1.of_le (WithTop.coe_le_coe.mpr le_top))
-      (hf.1.of_le (WithTop.coe_le_coe.mpr le_top)) x
-  rw [hpoint, integral_add (FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp hH)
-    (FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp hB)]
+    exact
+      gammaTwo_eq_hessianSqStdBasis_add (hV.1.of_le (WithTop.coe_le_coe.mpr le_top))
+        (hf.1.of_le (WithTop.coe_le_coe.mpr le_top)) x
+  rw [hpoint,
+    integral_add (FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp hH)
+      (FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp hB)]
 
 /-- The curvature form of (16) used in BKL Lemma 3.4: if `∇²V ≥ ρ`, then
 `∫ (ℒu)² dμ ≥ ∫ ‖∇²u‖²_HS dμ + ρ ∫ ‖∇u‖² dμ` for `u ∈ 𝒜`. -/
-theorem integral_hessianSq_add_le_of_hasTemperateGrowth {V f : E → ℝ} (hV : V.HasTemperateGrowth)
+theorem integral_hessianSq_add_le_of_hasTemperateGrowth {V f : E → ℝ}
+    (hV : V.HasTemperateGrowth)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
     (hf : f.HasTemperateGrowth) {ρ : ℝ}
     (hH : ∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ V x v v) :
@@ -213,13 +232,16 @@ theorem integral_hessianSq_add_le_of_hasTemperateGrowth {V f : E → ℝ} (hV : 
   have hdd := hasTemperateGrowth_fderiv (hasTemperateGrowth_fderiv hV)
   have h1 : (fun x => fderiv ℝ (fderiv ℝ V) x (gradient f x)).HasTemperateGrowth :=
     (ContinuousLinearMap.apply ℝ (E →L[ℝ] ℝ)).bilinear_hasTemperateGrowth hgrad hdd
-  have hB : (fun x => bilinearIteratedFDerivTwo ℝ V x
-      (gradient f x) (gradient f x)).HasTemperateGrowth :=
+  have hB :
+    (fun x =>
+        bilinearIteratedFDerivTwo ℝ V x (gradient f x) (gradient f x)).HasTemperateGrowth :=
     (ContinuousLinearMap.apply ℝ ℝ).bilinear_hasTemperateGrowth hgrad h1
   have hBi := FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp hB
   have hGi : Integrable (fun x => ‖gradient f x‖ ^ 2) (m.tilted (-V)) := by
     rw [← gamma_self_fun f]
-    exact FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (hasTemperateGrowth_gamma hf hf)
+    exact
+      FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+        (hasTemperateGrowth_gamma hf hf)
   rw [integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth m hV hexp hf]
   apply add_le_add le_rfl
   rw [← integral_const_mul]

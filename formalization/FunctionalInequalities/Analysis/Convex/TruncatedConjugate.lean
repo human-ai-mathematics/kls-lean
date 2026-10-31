@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Coercivity
-import FunctionalInequalities.Analysis.Convex.Extension
-import Mathlib.Analysis.Convex.Extrema
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import FunctionalInequalities.Analysis.Convex.Extension
+public import Mathlib.Analysis.Convex.Extrema
 
 /-! # TruncatedConjugate in convex Monge--Ampere analysis
 
@@ -10,6 +12,8 @@ Lemma 2.2 through BB arXiv:1207.6128v1 Theorem 2.24(ii).
 The declarations retain their given-source hypotheses; domain contact
 rigidity and moment-source regularity have separate consumers.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -73,20 +77,18 @@ theorem convexOn_truncatedConjugate {u : E → ℝ} (hu : Continuous u) {M : ℝ
         (mul_le_mul_of_nonneg_left hqx hb)
 
 /-- **Zeros of the centred truncated conjugate are the subgradients**: for convex `u` and
-`‖xc‖ < M`, `f p := truncatedConjugate u M p − ⟪p, xc⟫ + u xc` is nonnegative, vanishes exactly at the
+`‖xc‖ < M`, `f p := truncatedConjugate u M p − ⟪p, xc⟫ + u xc` is nonnegative, vanishes exactly at
+the
 subgradients of `u` at `xc`, and has compact sublevel sets. -/
-theorem truncatedConjugate_centered_spec {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {M : ℝ} {xc : E}
-    (hxc : ‖xc‖ < M) :
+theorem truncatedConjugate_centered_spec {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {M : ℝ}
+    {xc : E} (hxc : ‖xc‖ < M) :
     (∀ p, 0 ≤ truncatedConjugate u M p - ⟪p, xc⟫ + u xc) ∧
-    (∀ p, truncatedConjugate u M p - ⟪p, xc⟫ + u xc = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y) ∧
-    ∀ R : ℝ, IsCompact {p | truncatedConjugate u M p - ⟪p, xc⟫ + u xc ≤ R} := by
-  have hu : Continuous u :=
-    continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hconv)
+      (∀ p, truncatedConjugate u M p - ⟪p, xc⟫ + u xc = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y) ∧
+        ∀ R : ℝ, IsCompact {p | truncatedConjugate u M p - ⟪p, xc⟫ + u xc ≤ R} := by
+  have hu : Continuous u := continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hconv)
   have hM : 0 ≤ M := (norm_nonneg xc).trans hxc.le
-  have hxc_mem : xc ∈ closedBall (0 : E) M :=
-    mem_closedBall_zero_iff.mpr hxc.le
-  have hnonneg (p : E) :
-      0 ≤ truncatedConjugate u M p - ⟪p, xc⟫ + u xc := by
+  have hxc_mem : xc ∈ closedBall (0 : E) M := mem_closedBall_zero_iff.mpr hxc.le
+  have hnonneg (p : E) : 0 ≤ truncatedConjugate u M p - ⟪p, xc⟫ + u xc := by
     have h := (exists_truncatedConjugate_eq hu hM p).2 xc hxc_mem
     linarith
   refine ⟨hnonneg, ?_, ?_⟩
@@ -97,23 +99,19 @@ theorem truncatedConjugate_centered_spec {u : E → ℝ} (hconv : ConvexOn ℝ u
         refine ⟨convex_univ, ?_⟩
         intro x hx y hy a b ha hb hab
         have hc := hconv.2 hx hy ha hb hab
-        change u (a • x + b • y) - ⟪p, a • x + b • y⟫ ≤
-          a * (u x - ⟪p, x⟫) + b * (u y - ⟪p, y⟫)
+        change u (a • x + b • y) - ⟪p, a • x + b • y⟫ ≤ a * (u x - ⟪p, x⟫) + b * (u y - ⟪p, y⟫)
         rw [inner_add_right, real_inner_smul_right, real_inner_smul_right]
         change u (a • x + b • y) ≤ a * u x + b * u y at hc
         linarith
-      have hmin :
-          IsMinOn (fun x => u x - ⟪p, x⟫) (closedBall (0 : E) M) xc := by
+      have hmin : IsMinOn (fun x => u x - ⟪p, x⟫) (closedBall (0 : E) M) xc := by
         intro x hx
         have h := (exists_truncatedConjugate_eq hu hM p).2 x hx
         change u xc - ⟪p, xc⟫ ≤ u x - ⟪p, x⟫
         linarith
       have hnbhd : closedBall (0 : E) M ∈ nhds xc :=
-        Filter.mem_of_superset
-          (isOpen_ball.mem_nhds (mem_ball_zero_iff.mpr hxc))
+        Filter.mem_of_superset (isOpen_ball.mem_nhds (mem_ball_zero_iff.mpr hxc))
           ball_subset_closedBall
-      have hglobal :=
-        IsMinOn.of_isLocalMin_of_convex_univ (hmin.isLocalMin hnbhd) htilt
+      have hglobal := IsMinOn.of_isLocalMin_of_convex_univ (hmin.isLocalMin hnbhd) htilt
       intro y
       have hy := hglobal y
       rw [inner_sub_right]
@@ -147,8 +145,8 @@ theorem truncatedConjugate_centered_spec {u : E → ℝ} (hconv : ConvexOn ℝ u
     · have hn : ‖p‖ ≠ 0 := norm_ne_zero_iff.mpr hp0
       let x : E := xc + ((M - ‖xc‖) / ‖p‖) • p
       have hnorm : ‖((M - ‖xc‖) / ‖p‖) • p‖ = M - ‖xc‖ := by
-        rw [norm_smul, Real.norm_eq_abs,
-          abs_of_nonneg (div_nonneg hd.le (norm_nonneg p)), div_mul_cancel₀ _ hn]
+        rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (div_nonneg hd.le (norm_nonneg p)),
+          div_mul_cancel₀ _ hn]
       have hx : x ∈ closedBall (0 : E) M := by
         apply mem_closedBall_zero_iff.mpr
         calc
@@ -322,7 +320,8 @@ theorem isOpen_setOf_truncatedConjugate_maximizer_lt {u : E → ℝ} (hu : Conti
 
 end FiniteDimensional
 
-/-- For strictly convex `u`, a subgradient `p` at a point `x` of the open ball has `x` as its only ball
+/--
+For strictly convex `u`, a subgradient `p` at a point `x` of the open ball has `x` as its only ball
 maximiser. -/
 theorem eq_of_truncatedConjugate_eq_of_subgradient [FiniteDimensional ℝ E] {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} {x p : E} (hx : ‖x‖ < M)
@@ -334,9 +333,10 @@ theorem eq_of_truncatedConjugate_eq_of_subgradient [FiniteDimensional ℝ E] {u 
     have h := hp y
     rw [inner_sub_right] at h ⊢
     linarith [heq, hxeq]
-  exact (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
-    (isMinOn_sub_inner_of_support hp') (isMinOn_sub_inner_of_support hp)
-    ((subset_univ (closedBall (0 : E) M)) hx') (mem_univ x)
+  exact
+    (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
+      (isMinOn_sub_inner_of_support hp') (isMinOn_sub_inner_of_support hp)
+      ((subset_univ (closedBall (0 : E) M)) hx') (mem_univ x)
 
 section FiniteDimensional
 
@@ -401,12 +401,15 @@ private lemma subgradient_truncatedConjugate_eq_maximizer {u : E → ℝ}
   have hgz : ⟪v, g⟫ ≤ ⟪v, z⟫ := (mul_le_mul_iff_right₀ ht).mp hle
   linarith
 
-/-- **Danskin identification of subgradient images**: for strictly convex continuous `u`, on a set
-`S` of slopes whose ball maximisers lie in the open ball, the subgradient image of the truncated conjugate is the
+/--
+**Danskin identification of subgradient images**: for strictly convex continuous `u`, on a set
+`S` of slopes whose ball maximisers lie in the open ball, the subgradient image of the truncated
+conjugate is the
 inverse subgradient image `{x | ∃ p ∈ S, p ∈ ∂u(x)}`. -/
 theorem subgradientImage_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u)
     (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} (hM : 0 ≤ M) {S : Set E}
-    (hS : ∀ p ∈ S, ∀ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M) :
+    (hS :
+      ∀ p ∈ S, ∀ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M) :
     subgradientImage (truncatedConjugate u M) S = {x | ∃ p ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
   ext g
   constructor
@@ -439,4 +442,3 @@ end InnerProduct
 end FunctionalInequalities.Analysis
 
 end TruncatedConjugateSubgradients
-

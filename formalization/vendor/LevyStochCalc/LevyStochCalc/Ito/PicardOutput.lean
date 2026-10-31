@@ -3,10 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardOutputMoments
-import LevyStochCalc.Ito.PicardOutputModification
-import LevyStochCalc.Ito.PicardOutputWeighting
-import LevyStochCalc.Ito.PicardOutputStepDiff
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardOutputMoments
+public import LevyStochCalc.Ito.PicardOutputModification
+public import LevyStochCalc.Ito.PicardOutputWeighting
+public import LevyStochCalc.Ito.PicardOutputStepDiff
 
 /-!
 # The Picard step's output fields

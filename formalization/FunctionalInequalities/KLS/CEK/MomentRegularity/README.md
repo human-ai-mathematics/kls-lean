@@ -8,6 +8,7 @@ uniform convexity, density identification and isotropy hypotheses exactly. Quali
 | Owner | Producer stage |
 | --- | --- |
 | [Potential.lean](Potential.lean) | Continuous-target C¹ moment potential, strict convexity, gradient homeomorphism, Alexandrov/viscosity equation; strong-class Lipschitz-gradient and a.e. Hessian/log-det data |
+| [GradientHolder.lean](GradientHolder.lean) | Literal continuous convex-body source: same-witness C¹,α gradient and compact-uniform section power radii |
 | [WeakDerivative.lean](WeakDerivative.lean) | Weak third tensor and first weak Monge--Ampere derivatives at the same source witness |
 | [WeakHessian.lean](WeakHessian.lean) | Weak inverse, mean Hessian, weak evolution and bounded Hessian testing |
 | [Cutoff.lean](Cutoff.lean) | C¹ height cutoffs, inverse-Hessian generator control and bounded weak cutoff testing |
@@ -37,12 +38,12 @@ For the literal bounded open convex K, `exists_moment_potential_of_bounded_open_
 needs only continuity of W on closure K: it produces a normalized Lipschitz C¹ strictly convex u,
 a gradient homeomorphism onto K, positive continuous Monge–Ampère right side and both viscosity
 test inequalities. Its a.e. second-order expansion matrix is not asserted to equal the total
-Hessian without differentiability of the gradient. The C^{1,α} and section power-radius
-extension of this witness belonged to the superseded auxiliary variational route and is not
-part of this release (see the
-[delivery map](../../../../../research/progress/completed-letwin-delivery-map.json)).
-W^{2,p}, interior second-order regularity and smoothness of this same variational witness are
-not proved: no uniqueness statement identifies it with another moment potential. A smooth moment potential for the literal source class is produced separately, as a
+Hessian without differentiability of the gradient. `GradientHolder.lean` now retains these
+fields at that same u and adds C^{1,α} on every compact set, together with uniform section
+power radii c h^{1/(1+α)} for all h in (0,1]. The exponent and coefficients precede all
+centres and scales. W^{2,p}, interior second-order regularity and smoothness of this same
+variational witness are not proved: no uniqueness statement identifies it with another moment
+potential. A smooth moment potential for the literal source class is produced separately, as a
 limit of strong-class potentials, by [GivenGradient.lean](GivenGradient.lean) and
 [Letwin/MomentMap.lean](../../Letwin/MomentMap.lean). The constant-8 assembly belongs to
 [Letwin/RegularClass.lean](../../Letwin/RegularClass.lean).

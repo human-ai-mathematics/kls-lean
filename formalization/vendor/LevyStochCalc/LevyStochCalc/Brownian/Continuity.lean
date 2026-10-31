@@ -3,11 +3,15 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Construction
-import LevyStochCalc.Brownian.ContinuityDyadicChaining
-import LevyStochCalc.Brownian.ContinuityKolmogorovBounds
-import Mathlib.Probability.Process.Kolmogorov
-import Mathlib.Probability.Distributions.Gaussian.Fernique
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Construction
+public import LevyStochCalc.Brownian.ContinuityDyadicChaining
+public import LevyStochCalc.Brownian.ContinuityKolmogorovBounds
+public import Mathlib.Probability.Process.Kolmogorov
+public import Mathlib.Probability.Distributions.Gaussian.Fernique
 
 /-!
 # Kolmogorov-Chentsov continuous modification
@@ -30,6 +34,8 @@ regularity and the modification identity). This module assembles them into
 fourth increment moment is computed here from the Gaussian moment generating
 function.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal Topology

@@ -1,5 +1,7 @@
-import Mathlib.Analysis.InnerProductSpace.LinearPMap
-import Mathlib.Analysis.InnerProductSpace.LaxMilgram
+module
+
+public import Mathlib.Analysis.InnerProductSpace.LinearPMap
+public import Mathlib.Analysis.InnerProductSpace.LaxMilgram
 
 /-!
 # The form domain of a closed operator, and the weak resolvent equation
@@ -11,17 +13,23 @@ For a densely defined operator `T : H₀ →ₗ.[ℝ] H₁` the energy form is `
 `H₀` but bounded on the form domain `D(T)` in the graph norm. This module supplies the three
 statements that make the Lax–Milgram construction of the resolvent applicable:
 
-* `completeSpace_graph` (the form construction): the graph of a closed operator is complete, which is the
+* `completeSpace_graph` (the form construction): the graph of a closed operator is complete, which
+  is the
   completeness the form domain needs;
-* `min_one_mul_graphNormSq_le` (the shifted weak form): the shifted form `⟪u, v⟫ + s ⟪T u, T v⟫` is coercive in the
+* `min_one_mul_graphNormSq_le` (the shifted weak form): the shifted form `⟪u, v⟫ + s ⟪T u, T v⟫` is
+  coercive in the
   graph norm, with explicit constant `min 1 s`;
-* `norm_le_of_weak_resolvent` and `inner_nonneg_of_weak_resolvent` (the resolvent operator): any solution of the weak
+* `norm_le_of_weak_resolvent` and `inner_nonneg_of_weak_resolvent` (the resolvent operator): any
+  solution of the weak
   resolvent equation is a contraction of the datum and pairs nonnegatively with it.
 
-Nothing here constructs the resolvent, the Yosida approximation or the semigroup; those are resolvent solvability,
-the Yosida approximation and the semigroup limit, and are not proved. This module is general real Hilbert space material: it
-mentions no measure, no log-concavity and no KLS quantity.
+This module supplies weak-form estimates. The resolvent construction is in
+`Resolvent/Basic.lean`; Yosida limits and the generated semigroup have their separate owners.
+The statements here are general real Hilbert space material, with no measure, log-concavity or
+KLS quantity.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -77,11 +85,12 @@ theorem graphNormSq_eq_inner_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : 
   have := hu u
   rwa [real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq] at this
 
-/-- the resolvent operator, first half: a solution of the weak resolvent equation is a contraction of its datum,
+/--
+the resolvent operator, first half: a solution of the weak resolvent equation is a contraction of
+its datum,
 so the resolvent is norm-nonexpansive. Test against `u` and apply Cauchy–Schwarz. -/
 theorem norm_le_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀} {u : T.domain}
-    (hu : WeakResolvent T s f u) :
-    ‖(u : H₀)‖ ≤ ‖f‖ := by
+    (hu : WeakResolvent T s f u) : ‖(u : H₀)‖ ≤ ‖f‖ := by
   have key := graphNormSq_eq_inner_of_weakResolvent hu
   have hcs : ⟪f, (u : H₀)⟫ ≤ ‖f‖ * ‖(u : H₀)‖ := real_inner_le_norm _ _
   have hb : (0 : ℝ) ≤ s * ‖T u‖ ^ 2 := mul_nonneg hs.le (sq_nonneg _)
@@ -90,11 +99,12 @@ theorem norm_le_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 
   · have hmul : ‖(u : H₀)‖ * ‖(u : H₀)‖ ≤ ‖f‖ * ‖(u : H₀)‖ := by nlinarith
     exact le_of_mul_le_mul_right hmul h0
 
-/-- the resolvent operator, second half: a solution pairs nonnegatively with its datum, so the resolvent is a
+/--
+the resolvent operator, second half: a solution pairs nonnegatively with its datum, so the resolvent
+is a
 nonnegative operator. The pairing equals the squared graph norm. -/
 theorem inner_nonneg_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀}
-    {u : T.domain} (hu : WeakResolvent T s f u) :
-    0 ≤ ⟪(u : H₀), f⟫ := by
+    {u : T.domain} (hu : WeakResolvent T s f u) : 0 ≤ ⟪(u : H₀), f⟫ := by
   have key := graphNormSq_eq_inner_of_weakResolvent hu
   have hb : (0 : ℝ) ≤ s * ‖T u‖ ^ 2 := mul_nonneg hs.le (sq_nonneg _)
   rw [real_inner_comm]

@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoProcessVersion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.ItoProcessVersion
 
 /-!
 # Window averages of an Itô process's increments
@@ -17,6 +22,8 @@ the resulting displacement over the window and the sample space gives a bound of
 * `LevyStochCalc.Brownian.Ito.IsItoVersion.lintegral_window_abs_sub_le` — the `L¹` window bound.
 * `LevyStochCalc.Brownian.Ito.IsItoVersion.lintegral_window_sq_sub_le` — the `L²` window bound.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -49,7 +56,8 @@ theorem IsItoVersion.lintegral_window_abs_sub_le
       ≤ ENNReal.ofReal ((v - u) * (B * (v - u) + C * Real.sqrt (v - u))) := by
   have hjoint : Measurable (Function.uncurry fun ω s => ENNReal.ofReal |X s ω - X u ω|) :=
     (ENNReal.measurable_ofReal.comp
-      ((h.measurable_uncurry.sub ((h.measurable u).comp measurable_fst)).abs))
+      ((continuous_abs.measurable.comp
+        (h.measurable_uncurry.sub ((h.measurable u).comp measurable_fst)))))
   have hswap := MeasureTheory.lintegral_lintegral_swap
     (μ := P) (ν := volume.restrict (Set.Ioc u v))
     (f := fun ω s => ENNReal.ofReal |X s ω - X u ω|) hjoint.aemeasurable

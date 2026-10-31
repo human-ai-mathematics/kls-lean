@@ -1,9 +1,12 @@
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-!
 # Strict audit client for the Eilenberg measurable majorant
 
-Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and `Analysis/Hausdorff/Slicing.lean`.
+Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and
+`Analysis/Hausdorff/Slicing.lean`.
 `target` states obligation `L1` of `research/audits/Coarea/WeightedRouteStatements.lean` quantifier
 for quantifier — including its `∃ C : ℝ≥0, 0 < C` and its `[Nontrivial V]` — and proves it;
 `target_of_trivial` proves the same conclusion with `[Nontrivial V]` dropped, so the library
@@ -18,6 +21,8 @@ slice has *finite* surface measure.
 all. `eilenbergConstant_real` and `eilenbergConstant_euclidean_zero` compute the constant in two
 dimensions, so it is an explicit number rather than an abstract existential.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -121,12 +126,19 @@ and discharged by the library declaration applied with **named** arguments, so a
 a changed hypothesis order would fail to elaborate here. -/
 
 theorem preserved_exists_cover_of_hausdorffMeasure_eq_zero :
-    ∀ {X : Type*} [EMetricSpace X] [MeasurableSpace X] [BorelSpace X]
-      {d : ℝ} {N : Set X}, μH[d] N = 0 → ∀ {r c : ℝ≥0∞}, 0 < r → 0 < c →
-      ∃ T : ℕ → Set X, N ⊆ ⋃ i, T i ∧ (∀ i, Metric.ediam (T i) ≤ r) ∧
-        ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d < c := by
+    ∀ {X : Type*} [EMetricSpace X] [MeasurableSpace X] [BorelSpace X] {d : ℝ} {N : Set X},
+      μH[d] N = 0 →
+        ∀ {r c : ℝ≥0∞},
+          0 < r →
+            0 < c →
+              ∃ T : ℕ → Set X,
+                N ⊆ ⋃ i, T i ∧
+                  (∀ i, Metric.ediam (T i) ≤ r) ∧
+                    ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d < c := by
   intro X _ _ _ d N hN r c hr hc
-  exact Analysis.exists_cover_of_hausdorffMeasure_eq_zero (d := d) (N := N) (r := r) (c := c) hN hr hc
+  exact
+    Analysis.exists_cover_of_hausdorffMeasure_eq_zero (d := d) (N := N) (r := r) (c := c) hN hr
+      hc
 
 theorem preserved_exists_levelSlab :
     ∀ {X : Type*} [EMetricSpace X] {u : X → ℝ} {K : ℝ≥0} {N : Set X},

@@ -1,16 +1,20 @@
-import FunctionalInequalities.Analysis.Vector.Slice.Critical
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Vector.Slice.Critical
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the rank-deficient part of the codimension-`m` critical set
 
 **This file contains only `#check`s. A proposition that type-checks is not a proof.**
 The anonymous propositions preserve the rank-deficient coarea contracts `R0`–`R10`, `N1` and `N2`.
 Current source is in `Analysis/Vector/RankDeficient/`; independent clients include
-`research/audits/Vector/RankStratificationAudit.lean` and `research/audits/Vector/RankDeficientCoareaAudit.lean`.
+`research/audits/Vector/RankStratificationAudit.lean` and
+`research/audits/Vector/RankDeficientCoareaAudit.lean`.
 The route explanations below distinguish the vanishing-derivative argument from intermediate rank.
 
-Same convention as `research/audits/Graph/AreaFormulaRouteStatements.lean` and `research/audits/Coarea/WeightedRouteStatements.lean`.
+Same convention as `research/audits/Graph/AreaFormulaRouteStatements.lean` and
+`research/audits/Coarea/WeightedRouteStatements.lean`.
 
 ## Regular and vanishing-derivative scope
 
@@ -21,7 +25,8 @@ space **under the hypothesis that the derivative vanishes wherever it fails to b
 
 For `m ≥ 2` that hypothesis is a genuine restriction: the coarea critical set is
 `{x | fderiv ℝ u x` is not surjective`}`, where the rank drops below `m`, and it is strictly larger
-than the vanishing-derivative set.  Everything below is about the difference — the **rank-deficient**
+than the vanishing-derivative set.  Everything below is about the difference — the
+**rank-deficient**
 part, where the derivative is nonzero but not surjective.
 
 ## Why the vanishing-derivative method does not cover intermediate rank
@@ -69,6 +74,8 @@ The repository's rank-stratum assembly and exponent diagnostics are in
 `Analysis/Vector/RankDeficient/Coarea.lean` and
 `Analysis/Vector/RankDeficient/ExponentObstruction.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -187,7 +194,8 @@ relatively compact piece, so the fibre measure is finite at almost every level. 
 The two slicings produce "for almost every `s ∈ W₁`, for almost every `τ ∈ W₁ᗮ`"; the conclusion
 is about almost every `t ∈ W`.  Mathlib supplies `Submodule.orthogonalDecomposition`,
 `LinearIsometryEquiv.measurePreserving` and `WithLp.volume_preserving_ofLp`, so this is
-the measure-theoretic transport contract. See `Analysis/Vector/RankDeficient/TargetSplitFubini.lean`. -/
+the measure-theoretic transport contract. See
+`Analysis/Vector/RankDeficient/TargetSplitFubini.lean`. -/
 
 #check (∀ {W W₁ W₂ : Type*}
     [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]

@@ -1,16 +1,23 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
+module
+
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!
 # Weak trace contraction of rough matrix fields
 
-Generic finite trace/integral algebra behind the weak trace identity of Letwin arXiv:2607.24164v1 (2.8)/(2.10):
-a fixed-test finite integral contraction from given L1 coordinate pairings, local integrability of the contracted
+Generic finite trace/integral algebra behind the weak trace identity of Letwin arXiv:2607.24164v1
+(2.8)/(2.10):
+a fixed-test finite integral contraction from given L1 coordinate pairings, local integrability of
+the contracted
 coefficients from compact-local Lp entry data, and the full contracted identity
-`integral_trace_quadratic_flux_eq_neg_density` for arbitrary rough fields `H`, `R`, `E`, `T`, `ρ`. No Hessian,
+`integral_trace_quadratic_flux_eq_neg_density` for arbitrary rough fields `H`, `R`, `E`, `T`, `ρ`.
+No Hessian,
 potential or source premise; all finite dimensions. Actual Hessian-evolution specializations live in
 `KLS/CEK/MomentRegularity/TraceStein.lean`. One-use supports are private.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -242,7 +249,7 @@ private theorem locallyIntegrable_mul_of_memLp_top {n : ℕ}
   intro S hS
   have hg1 : MemLp g 1 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
     memLp_one_iff_integrable.mpr (locallyIntegrable_iff.mp hg S hS)
-  exact memLp_one_iff_integrable.mp (hg1.mul' (hf.restrict S))
+  exact memLp_one_iff_integrable.mp ((hf.restrict S).fun_mul hg1)
 
 private theorem locallyIntegrable_trace_four_of_entry_products {n : ℕ}
     (A B : Matrix (Fin n) (Fin n) ℝ)
@@ -319,68 +326,94 @@ open scoped ContDiff Topology
 namespace FunctionalInequalities.Analysis
 
 set_option maxHeartbeats 1000000 in
-/-- Weak trace contraction of a tested Hessian-type flux identity (Letwin arXiv:2607.24164v1, weak counterpart of
-Lemma 2.4 (2.8)/(2.10)): for rough matrix fields `H`, `R`, `E`, a tensor field `T` and a weight `ρ` with the stated
-compact-local integrability, weak derivatives and tested identities, the contracted trace flux against every compact
+/--
+Weak trace contraction of a tested Hessian-type flux identity (Letwin arXiv:2607.24164v1, weak
+counterpart of
+Lemma 2.4 (2.8)/(2.10)): for rough matrix fields `H`, `R`, `E`, a tensor field `T` and a weight `ρ`
+with the stated
+compact-local integrability, weak derivatives and tested identities, the contracted trace flux
+against every compact
 C1 test equals minus the contracted density. All finite dimensions, every constant matrix `B`. -/
-theorem integral_trace_quadratic_flux_eq_neg_density {n : ℕ}
-    (B : Matrix (Fin n) (Fin n) ℝ)
+theorem integral_trace_quadratic_flux_eq_neg_density {n : ℕ} (B : Matrix (Fin n) (Fin n) ℝ)
     (H R E : EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ)
     (T : EuclideanSpace ℝ (Fin n) → Fin n → Matrix (Fin n) (Fin n) ℝ)
-    (ρ : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hρ : Continuous ρ)
-    (hH : ∀ i j : Fin n, MemLp (fun x => H x i j) (⊤ : ENNReal)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))))
-    (hT : ∀ a i j : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (fun x => T x a i j) 2
-        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
-    (hJ : ∀ i j a : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (fun x => ∑ b : Fin n, R x b a * T x b i j) 2
-        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
-    (hE : ∀ i j : Fin n, LocallyIntegrable (fun x => E x i j)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))))
-    (hTest : ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∫ x, ρ x * (∑ a : Fin n, (∑ b : Fin n, R x b a * T x b i j) *
-        (ψ x * T x a l k +
-          fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ a) * H x l k))
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, ρ x * E x i j * (ψ x * H x l k)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) :
+    (ρ : EuclideanSpace ℝ (Fin n) → ℝ) (hρ : Continuous ρ)
+    (hH :
+      ∀ i j : Fin n,
+        MemLp (fun x => H x i j) (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hT :
+      ∀ a i j : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (fun x => T x a i j) 2
+              ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (hJ :
+      ∀ i j a : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (fun x => ∑ b : Fin n, R x b a * T x b i j) 2
+              ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (hE :
+      ∀ i j : Fin n,
+        LocallyIntegrable (fun x => E x i j) (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hTest :
+      ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
+        ContDiff ℝ 1 ψ →
+          HasCompactSupport ψ →
+            ∀ l k i j : Fin n,
+              (∫ x,
+                  ρ x *
+                    (∑ a : Fin n,
+                      (∑ b : Fin n, R x b a * T x b i j) *
+                        (ψ x * T x a l k +
+                          fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ a) *
+                            H x l k)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+                -(∫ x,
+                    ρ x * E x i j *
+                      (ψ x * H x l k) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) :
     let a := fun x i => 2 * (B * H x * B * T x i).trace
-    let g := fun x => 2 * (B * H x * B * E x).trace +
-      2 * ∑ i : Fin n, ∑ j : Fin n, R x i j * (B * T x i * B * T x j).trace
+    let g := fun x =>
+      2 * (B * H x * B * E x).trace +
+        2 * ∑ i : Fin n, ∑ j : Fin n, R x i j * (B * T x i * B * T x j).trace
     LocallyIntegrable g (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-    ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ 1 ψ → HasCompactSupport ψ →
-      Integrable (fun x => ρ x * g x * ψ x)
-        (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∀ j : Fin n, Integrable (fun x => ρ x *
-        (∑ i : Fin n, R x i j * a x i) *
-        fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j))
-        (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
-      (∫ x, ρ x * (∑ j : Fin n, (∑ i : Fin n, R x i j * a x i) *
-        fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j))
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, ρ x * g x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
+      ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
+        ContDiff ℝ 1 ψ →
+          HasCompactSupport ψ →
+            Integrable (fun x => ρ x * g x * ψ x)
+                (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+              (∀ j : Fin n,
+                  Integrable
+                    (fun x =>
+                      ρ x * (∑ i : Fin n, R x i j * a x i) *
+                        fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j))
+                    (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
+                (∫ x,
+                    ρ x *
+                      (∑ j : Fin n,
+                        (∑ i : Fin n, R x i j * a x i) *
+                          fderiv ℝ ψ x
+                            (EuclideanSpace.basisFun (Fin n) ℝ
+                              j)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+                  -(∫ x, ρ x * g x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
   classical
   let Jn := fun x a => ∑ b : Fin n, R x b a • T x b
   have hJn (a i j : Fin n) (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
-      MemLp (fun x => Jn x a i j) 2
-        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+    MemLp (fun x => Jn x a i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
     simpa only [Jn, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hJ i j a S hS
   obtain ⟨hFE, hQF, hJT, hHJ, hHE⟩ :=
     trace_quadratic_contraction_local_coefficients B H E T Jn hH hT hJn hE
-  let g := fun x => 2 * (B * H x * B * E x).trace +
-    2 * ∑ i : Fin n, ∑ j : Fin n, R x i j * (B * T x i * B * T x j).trace
-  let gJ := fun x => 2 * (B * H x * B * E x).trace +
-    ∑ a : Fin n, 2 * (B * T x a * B * Jn x a).trace
+  let g := fun x =>
+    2 * (B * H x * B * E x).trace +
+      2 * ∑ i : Fin n, ∑ j : Fin n, R x i j * (B * T x i * B * T x j).trace
+  let gJ := fun x =>
+    2 * (B * H x * B * E x).trace + ∑ a : Fin n, 2 * (B * T x a * B * Jn x a).trace
   have hgJ : LocallyIntegrable gJ (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     apply locallyIntegrable_iff.mpr
     intro S hS
-    exact ((hFE.integrableOn_isCompact hS).const_mul 2).add
-      (integrable_finsetSum Finset.univ fun a _ =>
-        ((hQF a).1.integrableOn_isCompact hS).const_mul 2)
+    exact
+      ((hFE.integrableOn_isCompact hS).const_mul 2).add
+        (integrable_finsetSum Finset.univ fun a _ =>
+          ((hQF a).1.integrableOn_isCompact hS).const_mul 2)
   have hgEq : g = gJ := by
     funext x
     dsimp only [g, gJ, Jn]
@@ -399,40 +432,41 @@ theorem integral_trace_quadratic_flux_eq_neg_density {n : ℕ}
   have hwpsi : Continuous (fun x => ρ x * psi x) := hρ.mul hpsi.continuous
   have hcwpsi : HasCompactSupport (fun x => ρ x * psi x) := hcpsi.mul_left
   have hwdpsi (a : Fin n) : Continuous (fun x => ρ x * dpsi a x) := hρ.mul (hdpsi a)
-  have hcwdpsi (a : Fin n) : HasCompactSupport (fun x => ρ x * dpsi a x) :=
-    (hcdpsi a).mul_left
+  have hcwdpsi (a : Fin n) : HasCompactSupport (fun x => ρ x * dpsi a x) := (hcdpsi a).mul_left
   have hweight {f w : EuclideanSpace ℝ (Fin n) → ℝ}
-      (hf : LocallyIntegrable f (volume : Measure (EuclideanSpace ℝ (Fin n))))
-      (hw : Continuous w) (hcw : HasCompactSupport w) :
-      Integrable (fun x => w x * f x) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    (hf : LocallyIntegrable f (volume : Measure (EuclideanSpace ℝ (Fin n)))) (hw : Continuous w)
+    (hcw : HasCompactSupport w) :
+    Integrable (fun x => w x * f x) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     simpa only [smul_eq_mul] using hf.integrable_smul_left_of_hasCompactSupport hw hcw
-  have hTensor (a : Fin n) : Integrable
-      (fun x => ρ x * psi x * (2 * (B * T x a * B * Jn x a).trace))
+  have hTensor (a : Fin n) :
+    Integrable (fun x => ρ x * psi x * (2 * (B * T x a * B * Jn x a).trace))
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     have hh := (hweight (hQF a).1 hwpsi hcwpsi).const_mul 2
     apply hh.congr
     filter_upwards [] with x
     ring
-  have hFlux (a : Fin n) : Integrable
-      (fun x => ρ x * dpsi a x * (2 * (B * H x * B * Jn x a).trace))
+  have hFlux (a : Fin n) :
+    Integrable (fun x => ρ x * dpsi a x * (2 * (B * H x * B * Jn x a).trace))
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     have hh := (hweight (hQF a).2 (hwdpsi a) (hcwdpsi a)).const_mul 2
     apply hh.congr
     filter_upwards [] with x
     ring
-  have hTraceForce : Integrable
-      (fun x => ρ x * psi x * (2 * (B * H x * B * E x).trace))
+  have hTraceForce :
+    Integrable (fun x => ρ x * psi x * (2 * (B * H x * B * E x).trace))
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     have hh := (hweight hFE hwpsi hcwpsi).const_mul 2
     apply hh.congr
     filter_upwards [] with x
     ring
-  have hPair (l k i j : Fin n) : Integrable (fun x => ρ x *
-      (∑ a : Fin n, Jn x a i j * (psi x * T x a l k + dpsi a x * H x l k)))
+  have hPair (l k i j : Fin n) :
+    Integrable
+      (fun x => ρ x * (∑ a : Fin n, Jn x a i j * (psi x * T x a l k + dpsi a x * H x l k)))
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    have hh := integrable_finsetSum Finset.univ fun a _ =>
-      (hweight (hJT a l k i j) hwpsi hcwpsi).add
-        (hweight (hHJ a l k i j) (hwdpsi a) (hcwdpsi a))
+    have hh :=
+      integrable_finsetSum Finset.univ fun a _ =>
+        (hweight (hJT a l k i j) hwpsi hcwpsi).add
+          (hweight (hHJ a l k i j) (hwdpsi a) (hcwdpsi a))
     apply hh.congr
     filter_upwards [] with x
     rw [Finset.mul_sum]
@@ -440,25 +474,29 @@ theorem integral_trace_quadratic_flux_eq_neg_density {n : ℕ}
     intro a _
     simp only [Pi.add_apply]
     ring
-  have hForce (l k i j : Fin n) : Integrable
-      (fun x => ρ x * E x i j * (psi x * H x l k))
+  have hForce (l k i j : Fin n) :
+    Integrable (fun x => ρ x * E x i j * (psi x * H x l k))
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     apply (hweight (hHE l k i j) hwpsi hcwpsi).congr
     filter_upwards [] with x
     ring
   have hTestJn (l k i j : Fin n) :
-      (∫ x, ρ x * (∑ a : Fin n, Jn x a i j *
-        (psi x * T x a l k + dpsi a x * H x l k))
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, ρ x * E x i j * (psi x * H x l k)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
+    (∫ x,
+        ρ x *
+          (∑ a : Fin n,
+            Jn x a i j *
+              (psi x * T x a l k +
+                dpsi a x * H x l k)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+      -(∫ x,
+          ρ x * E x i j * (psi x * H x l k) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
     simpa only [Jn, dpsi, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using
       hTest psi hpsi hcpsi l k i j
-  have hID := integral_trace_contraction_of_coordinate_pairings
-    (volume : Measure (EuclideanSpace ℝ (Fin n))) B H E T Jn ρ psi dpsi
-    hPair hForce hTensor hFlux hTraceForce hTestJn
+  have hID :=
+    integral_trace_contraction_of_coordinate_pairings
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) B H E T Jn ρ psi dpsi hPair hForce hTensor
+      hFlux hTraceForce hTestJn
   have hfluxEq (a : Fin n) (x) :
-      (∑ i : Fin n, R x i a * (2 * (B * H x * B * T x i).trace)) =
+    (∑ i : Fin n, R x i a * (2 * (B * H x * B * T x i).trace)) =
       2 * (B * H x * B * Jn x a).trace :=
     trace_quadratic_flux_contraction B (H x) (R x) (T x) a
   refine ⟨?_, ?_, ?_⟩
@@ -472,10 +510,13 @@ theorem integral_trace_quadratic_flux_eq_neg_density {n : ℕ}
     filter_upwards [] with x
     rw [hfluxEq a x]
     ring
-  · change (∫ x, ρ x * (∑ a : Fin n,
-      (∑ i : Fin n, R x i a * (2 * (B * H x * B * T x i).trace)) * dpsi a x)
-      ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, ρ x * g x * psi x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))
+  · change
+      (∫ x,
+          ρ x *
+            (∑ a : Fin n,
+              (∑ i : Fin n, R x i a * (2 * (B * H x * B * T x i).trace)) *
+                dpsi a x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+        -(∫ x, ρ x * g x * psi x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))
     simpa only [hfluxEq, hgApply] using hID
 
 end FunctionalInequalities.Analysis

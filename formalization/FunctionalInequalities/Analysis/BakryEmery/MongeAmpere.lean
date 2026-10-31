@@ -1,36 +1,48 @@
-import FunctionalInequalities.Analysis.Operator.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
-import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
-import FunctionalInequalities.Analysis.Matrix.Positivity
-import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import Mathlib.LinearAlgebra.Matrix.PosDef
-import Mathlib.Analysis.Matrix.Normed
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.Operator.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
+public import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
+public import FunctionalInequalities.Analysis.Matrix.Positivity
+public import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+public import Mathlib.LinearAlgebra.Matrix.PosDef
+public import Mathlib.Analysis.Matrix.Normed
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-!
 # The Monge–Ampère log-determinant relation: right-hand-side derivative
 
 Letwin arXiv:2607.24164v1, (2.2)–(2.4): for a smooth `φ` and a `V` smooth on an open set containing
 the gradient image, the zero-order equation `log det ∇²φ = −φ + V ∘ ∇φ` (a hypothesis here)
-differentiates on its right-hand side to `−Dφ + DV(∇φ)[∇²φ ·]`; Jacobi's formula for the Hessian gives the
-left-hand side, hence the first derivative (2.4) of the equation; differentiating once more gives (2.6)
-with the inverse-Hessian operator, whose two right-hand-side matrices (`∇²φ ∇²V(∇φ) ∇²φ` for convex `V`,
+differentiates on its right-hand side to `−Dφ + DV(∇φ)[∇²φ ·]`; Jacobi's formula for the Hessian
+gives the
+left-hand side, hence the first derivative (2.4) of the equation; differentiating once more gives
+(2.6)
+with the inverse-Hessian operator, whose two right-hand-side matrices (`∇²φ ∇²V(∇φ) ∇²φ` for convex
+`V`,
 and the inverse-Hessian-weighted third-derivative Gram matrix) are positive semidefinite. Section
 `LocalMaximum`: the pointwise maximum principle `L F ≤ 0` at a local maximum of a `C²` function `F`
-where `∇²φ` is positive definite (`hessianInverseOperator_nonpos_of_isLocalMax`); no equation for `φ`
+where `∇²φ` is positive definite (`hessianInverseOperator_nonpos_of_isLocalMax`); no equation for
+`φ`
 and no global maximum principle are involved. Section
-`QuadraticForm` (Letwin Lemma A.4, p. 17): at a point with positive definite `C²` Hessian, the inverse-Hessian quadratic
+`QuadraticForm` (Letwin Lemma A.4, p. 17): at a point with positive definite `C²` Hessian, the
+inverse-Hessian quadratic
 form `Σ_ij ((∇²φ)⁻¹)_{ij} a_i a_j` is nonnegative in every orthonormal basis and every rank
 (`sum_inverseHessianEntry_mul_mul_nonneg`). Section
-`Divergence`: the coordinate divergence of the inverse Hessian `Σ_i ∂_i A_{ij} = Σ_i A_{ij} ∂_iφ − ∂_jV(∇φ)`
+`Divergence`: the coordinate divergence of the inverse Hessian `Σ_i ∂_i A_{ij} = Σ_i A_{ij} ∂_iφ −
+∂_jV(∇φ)`
 (from the zero-order equation, Jacobi and the third-slot commutation), the flux form
-`Σ_i ∂_i (e^{−φ} A_{ij}) = −e^{−φ} ∂_jV(∇φ)` and the density divergence form of the operator `L` of (2.2). The
-potential `φ` is given; moment-map existence (Lemma 2.2), Theorem 2.5, Brascamp–Lieb and Proposition 2.8 are
+`Σ_i ∂_i (e^{−φ} A_{ij}) = −e^{−φ} ∂_jV(∇φ)` and the density divergence form of the operator `L` of
+(2.2). The
+potential `φ` is given; moment-map existence (Lemma 2.2), Theorem 2.5, Brascamp–Lieb and Proposition
+2.8 are
 not provided.
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped ContDiff RealInnerProductSpace Matrix.Norms.Elementwise
@@ -50,14 +62,17 @@ def hessianMatrixIn {m : ℕ} (φ : E → ℝ) (b : OrthonormalBasis (Fin m) ℝ
 def logDetHessian {m : ℕ} (φ : E → ℝ) (b : OrthonormalBasis (Fin m) ℝ E) (x : E) : ℝ :=
   Real.log (hessianMatrixIn φ b x).det
 
-/-- **Derivative of the right-hand side of the Monge–Ampère equation** `log det ∇²φ = −φ + V ∘ ∇φ`, taken as a
-hypothesis (Letwin (2.2)): `D(log det ∇²φ)(x)[v] = −Dφ(x)[v] + DV(∇φ x)[∇²φ(x) v]`, for `V` smooth on an open set
-containing `∇φ(x)`. Jacobi's derivative of the determinant (the left-hand side, Lemma 2.4) is not provided. -/
+/--
+**Derivative of the right-hand side of the Monge–Ampère equation** `log det ∇²φ = −φ + V ∘ ∇φ`,
+taken as a
+hypothesis (Letwin (2.2)): `D(log det ∇²φ)(x)[v] = −Dφ(x)[v] + DV(∇φ x)[∇²φ(x) v]`, for `V` smooth
+on an open set
+containing `∇φ(x)`. Jacobi's derivative of the determinant (the left-hand side, Lemma 2.4) is not
+provided. -/
 theorem fderiv_logDetHessian_of_mongeAmpere {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U)
-    (hV : ContDiffOn ℝ ∞ V U)
-    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y))
-    {x : E} (hx : gradient φ x ∈ U) (v : E) :
+    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
+    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y)) {x : E} (hx : gradient φ x ∈ U)
+    (v : E) :
     fderiv ℝ (logDetHessian φ b) x v =
       -fderiv ℝ φ x v + fderiv ℝ V (gradient φ x) (hessianOperator φ x v) := by
   have heq : logDetHessian φ b = fun y => -φ y + V (gradient φ y) := funext hMA
@@ -65,9 +80,10 @@ theorem fderiv_logDetHessian_of_mongeAmpere {m : ℕ} (b : OrthonormalBasis (Fin
   have hp := hφ.differentiable (by simp) x
   have hVx := (hV.contDiffAt (hU.mem_nhds hx)).differentiableAt (by simp)
   have hcomp := (contDiffAt_comp_gradient_of_mem hφ hU hV hx).differentiableAt (by simp)
-  rw [heq, fderiv_fun_add (f := fun y => -φ y) (g := fun y => V (gradient φ y))
-    hp.neg hcomp, fderiv_fun_neg]
-  have hc : fderiv ℝ (fun y => V (gradient φ y)) x =
+  rw [heq, fderiv_fun_add (f := fun y => -φ y) (g := fun y => V (gradient φ y)) hp.neg hcomp,
+    fderiv_fun_neg]
+  have hc :
+    fderiv ℝ (fun y => V (gradient φ y)) x =
       fderiv ℝ V (gradient φ x) ∘L fderiv ℝ (gradient φ) x :=
     fderiv_comp x hVx (hg.differentiable (by simp) x)
   rw [hc]
@@ -76,9 +92,10 @@ theorem fderiv_logDetHessian_of_mongeAmpere {m : ℕ} (b : OrthonormalBasis (Fin
 section MatrixBridge
 
 /-- The Hessian matrix is the matrix of the Hessian operator in the basis. -/
-theorem hessianMatrixIn_eq_toMatrix {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E) :
-    hessianMatrixIn φ b x = LinearMap.toMatrix b.toBasis b.toBasis (hessianOperator φ x).toLinearMap := by
+theorem hessianMatrixIn_eq_toMatrix {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ 2 φ) (x : E) :
+    hessianMatrixIn φ b x =
+      LinearMap.toMatrix b.toBasis b.toBasis (hessianOperator φ x).toLinearMap := by
   ext i j
   rw [LinearMap.toMatrix_apply]
   simp only [OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.repr_apply_apply]
@@ -128,8 +145,8 @@ end MatrixBridge
 
 section Jacobi
 
-theorem fderiv_hessianMatrixIn_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x v : E) (i j : Fin m) :
+theorem fderiv_hessianMatrixIn_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (x v : E) (i j : Fin m) :
     (fderiv ℝ (hessianMatrixIn φ b) x v) i j =
       fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j)) x v := by
   let L₀ : Matrix (Fin m) (Fin m) ℝ →ₗ[ℝ] ℝ :=
@@ -137,30 +154,37 @@ theorem fderiv_hessianMatrixIn_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ
       map_add' := fun _ _ => rfl
       map_smul' := fun _ _ => rfl }
   let L : Matrix (Fin m) (Fin m) ℝ →L[ℝ] ℝ := L₀.toContinuousLinearMap
-  have hD := L.hasFDerivAt.comp x ((contDiff_hessianMatrixIn b hφ).differentiable (by simp) x).hasFDerivAt
+  have hD :=
+    L.hasFDerivAt.comp x
+      ((contDiff_hessianMatrixIn b hφ).differentiable (by simp) x).hasFDerivAt
   symm
   change fderiv ℝ (L ∘ hessianMatrixIn φ b) x v = L (fderiv ℝ (hessianMatrixIn φ b) x v)
   rw [hD.fderiv]
   rfl
 
-/-- **Jacobi for the Hessian**: `D(log det ∇²φ)(x)[v] = tr((∇²φ)⁻¹ D(∇²φ)(x)[v])` at a point of positive
+/--
+**Jacobi for the Hessian**: `D(log det ∇²φ)(x)[v] = tr((∇²φ)⁻¹ D(∇²φ)(x)[v])` at a point of positive
 definiteness. -/
-theorem fderiv_logDetHessian_eq_trace {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
+theorem fderiv_logDetHessian_eq_trace {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (v : E) :
     fderiv ℝ (logDetHessian φ b) x v =
       Matrix.trace ((hessianMatrixIn φ b x)⁻¹ * fderiv ℝ (hessianMatrixIn φ b) x v) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
-  exact fderiv_logDet_comp_apply ((contDiff_hessianMatrixIn b hφ).differentiable (by simp) x)
-    (det_hessianMatrixIn_ne_zero b h2 x hPD) v
+  exact
+    fderiv_logDet_comp_apply ((contDiff_hessianMatrixIn b hφ).differentiable (by simp) x)
+      (det_hessianMatrixIn_ne_zero b h2 x hPD) v
 
-/-- Jacobi for the Hessian in coordinates: `D(log det ∇²φ)[v] = Σ_{a,c} ((∇²φ)⁻¹)_{ac} ∂_v ∂_{ac}φ`. -/
-theorem fderiv_logDetHessian_eq_sum {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
+/--
+Jacobi for the Hessian in coordinates: `D(log det ∇²φ)[v] = Σ_{a,c} ((∇²φ)⁻¹)_{ac} ∂_v ∂_{ac}φ`. -/
+theorem fderiv_logDetHessian_eq_sum {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (v : E) :
     fderiv ℝ (logDetHessian φ b) x v =
-      ∑ a, ∑ c, inverseHessianEntry φ b x a c *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x v := by
+      ∑ a,
+        ∑ c,
+          inverseHessianEntry φ b x a c *
+            fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x v := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   rw [fderiv_logDetHessian_eq_trace b hφ x hPD v, inv_hessianMatrixIn b h2 x hPD]
   simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.of_apply]
@@ -169,24 +193,28 @@ theorem fderiv_logDetHessian_eq_sum {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ 
   apply Finset.sum_congr rfl
   intro c _hc
   rw [fderiv_hessianMatrixIn_apply b hφ x v c a]
-  have heq : (fun y => bilinearIteratedFDerivTwo ℝ φ y (b c) (b a)) =
-      fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c) := by
+  have heq :
+    (fun y => bilinearIteratedFDerivTwo ℝ φ y (b c) (b a)) = fun y =>
+      bilinearIteratedFDerivTwo ℝ φ y (b a) (b c) := by
     ext y
     exact bilinearIteratedFDerivTwo_symm h2 y (b c) (b a)
   rw [heq]
 
-/-- **Letwin (2.4), first derivative of the Monge–Ampère equation**: given `log det ∇²φ = −φ + V∘∇φ` and `V`
-smooth on an open set containing `∇φ(x)`, `Σ_{a,c} ((∇²φ)⁻¹)_{ac} ∂_{iac}φ = −∂_iφ + Σ_a ∂_aV(∇φ) ∂_{ai}φ`. -/
-theorem mongeAmpere_first_derivative {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U)
-    (hV : ContDiffOn ℝ ∞ V U)
-    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y))
-    {x : E} (hx : gradient φ x ∈ U)
+/--
+**Letwin (2.4), first derivative of the Monge–Ampère equation**: given `log det ∇²φ = −φ + V∘∇φ` and
+`V`
+smooth on an open set containing `∇φ(x)`, `Σ_{a,c} ((∇²φ)⁻¹)_{ac} ∂_{iac}φ = −∂_iφ + Σ_a ∂_aV(∇φ)
+∂_{ai}φ`. -/
+theorem mongeAmpere_first_derivative {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ V : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
+    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y)) {x : E} (hx : gradient φ x ∈ U)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (i : Fin m) :
-    (∑ a, ∑ c, inverseHessianEntry φ b x a c *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i)) =
-      -fderiv ℝ φ x (b i) + ∑ a, fderiv ℝ V (gradient φ x) (b a) *
-        bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) := by
+    (∑ a,
+        ∑ c,
+          inverseHessianEntry φ b x a c *
+            fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i)) =
+      -fderiv ℝ φ x (b i) +
+        ∑ a, fderiv ℝ V (gradient φ x) (b a) * bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   rw [← fderiv_logDetHessian_eq_sum b hφ x hPD (b i),
     fderiv_logDetHessian_of_mongeAmpere b hφ hU hV hMA hx (b i)]
@@ -200,20 +228,23 @@ theorem mongeAmpere_first_derivative {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ
   ring
 
 
-/-- (2.4) with the source scope: `V` smooth on an open neighbourhood `U` of `closure K`, `∇φ` ranging in `K`. -/
+/--
+(2.4) with the source scope: `V` smooth on an open neighbourhood `U` of `closure K`, `∇φ` ranging in
+`K`. -/
 theorem mongeAmpere_first_derivative_on_range {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {K U : Set E} (hU : IsOpen U)
-    (hKU : closure K ⊆ U) (hV : ContDiffOn ℝ ∞ V U)
-    (hRange : Set.range (gradient φ) ⊆ K)
+    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {K U : Set E} (hU : IsOpen U) (hKU : closure K ⊆ U)
+    (hV : ContDiffOn ℝ ∞ V U) (hRange : Set.range (gradient φ) ⊆ K)
     (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y))
-    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    (x : E) (i : Fin m) :
-    (∑ a, ∑ c, inverseHessianEntry φ b x a c *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i)) =
-      -fderiv ℝ φ x (b i) + ∑ a, fderiv ℝ V (gradient φ x) (b a) *
-        bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) := by
-  exact mongeAmpere_first_derivative b hφ hU hV hMA
-    (hKU (subset_closure (hRange (Set.mem_range_self x)))) (hPD x) i
+    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (x : E) (i : Fin m) :
+    (∑ a,
+        ∑ c,
+          inverseHessianEntry φ b x a c *
+            fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i)) =
+      -fderiv ℝ φ x (b i) +
+        ∑ a, fderiv ℝ V (gradient φ x) (b a) * bilinearIteratedFDerivTwo ℝ φ x (b a) (b i) := by
+  exact
+    mongeAmpere_first_derivative b hφ hU hV hMA
+      (hKU (subset_closure (hRange (Set.mem_range_self x)))) (hPD x) i
 
 end Jacobi
 
@@ -365,27 +396,50 @@ end Positivity
 section SecondDerivative
 
 /-- Derivative of the left-hand side of (2.4) in the direction `b j`. -/
-theorem fderiv_mongeAmpere_first_lhs {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
+theorem fderiv_mongeAmpere_first_lhs {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (i j : Fin m) :
-    fderiv ℝ (fun y => ∑ a, ∑ c, inverseHessianEntry φ b y a c *
-      fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) x (b j) =
-      (∑ a, ∑ c, inverseHessianEntry φ b x a c *
-        bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j)) x (b a) (b c)) -
-      ∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry φ b x a p * inverseHessianEntry φ b x c q *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b p) (b q)) x (b j) := by
+    fderiv ℝ
+        (fun y =>
+          ∑ a,
+            ∑ c,
+              inverseHessianEntry φ b y a c *
+                fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i))
+        x (b j) =
+      (∑ a,
+          ∑ c,
+            inverseHessianEntry φ b x a c *
+              bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j))
+                x (b a) (b c)) -
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry φ b x a p * inverseHessianEntry φ b x c q *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i) *
+                  fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b p) (b q)) x (b j) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hA (a c : Fin m) : DifferentiableAt ℝ (fun y => inverseHessianEntry φ b y a c) x :=
     (contDiffAt_inverseHessianEntry b hφ x hPD a c).differentiableAt (by simp)
-  have hT (a c : Fin m) : ContDiff ℝ ∞ (fun y =>
-      fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) :=
-    contDiff_fderiv_apply (contDiff_bilinearIteratedFDerivTwo_apply hφ (b a) (b c)) (by simp) (b i)
-  have hp (a c : Fin m) : DifferentiableAt ℝ (fun y => inverseHessianEntry φ b y a c *
-      fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) x :=
+  have hT (a c : Fin m) :
+    ContDiff ℝ ∞
+      (fun y => fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) :=
+    contDiff_fderiv_apply (contDiff_bilinearIteratedFDerivTwo_apply hφ (b a) (b c)) (by simp)
+      (b i)
+  have hp (a c : Fin m) :
+    DifferentiableAt ℝ
+      (fun y =>
+        inverseHessianEntry φ b y a c *
+          fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i))
+      x :=
     (hA a c).mul ((hT a c).differentiable (by simp) x)
-  have hs (a : Fin m) : DifferentiableAt ℝ (fun y => ∑ c, inverseHessianEntry φ b y a c *
-      fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) x :=
+  have hs (a : Fin m) :
+    DifferentiableAt ℝ
+      (fun y =>
+        ∑ c,
+          inverseHessianEntry φ b y a c *
+            fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i))
+      x :=
     DifferentiableAt.fun_sum (fun c _ => hp a c)
   rw [fderiv_sum_apply Finset.univ (fun a _ => hs a)]
   simp_rw [fderiv_sum_apply Finset.univ (fun c _ => hp _ c)]
@@ -398,7 +452,8 @@ theorem fderiv_mongeAmpere_first_lhs {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ
   rw [fderiv_mul_apply (hA a c) ((hT a c).differentiable (by simp) x),
     fderiv_inverseHessianEntry_apply b hφ x hPD a c j]
   have hH2 : ContDiff ℝ 2 (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) :=
-    (contDiff_bilinearIteratedFDerivTwo_apply hφ (b a) (b c)).of_le (WithTop.coe_le_coe.mpr le_top)
+    (contDiff_bilinearIteratedFDerivTwo_apply hφ (b a) (b c)).of_le
+      (WithTop.coe_le_coe.mpr le_top)
   rw [← bilinearIteratedFDerivTwo_eq_fderiv_apply hH2,
     bilinearIteratedFDerivTwo_symm hH2 x (b j) (b i),
     bilinearIteratedFDerivTwo_bilinearIteratedFDerivTwo_comm hφ x (b a) (b c) (b i) (b j)]
@@ -495,60 +550,92 @@ theorem posSemidef_hessian_conj_hessian {m : ℕ} (b : OrthonormalBasis (Fin m) 
     ring
   exact heq ▸ h
 
-/-- The same with the source scope: `V` convex on the open `K ⊇ range ∇φ` and smooth on a neighbourhood of
+/--
+The same with the source scope: `V` convex on the open `K ⊇ range ∇φ` and smooth on a neighbourhood
+of
 `closure K`. -/
 theorem posSemidef_hessian_conj_hessian_on_range {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ 2 φ) {K U : Set E} (hK : IsOpen K)
-    (hKU : closure K ⊆ U) (hV : ContDiffOn ℝ 2 V U) (hc : ConvexOn ℝ K V)
-    (hRange : Set.range (gradient φ) ⊆ K) (x : E) :
-    (Matrix.of fun i j => ∑ a, ∑ c, bilinearIteratedFDerivTwo ℝ φ x (b i) (b a) *
-      bilinearIteratedFDerivTwo ℝ V (gradient φ x) (b a) (b c) *
-      bilinearIteratedFDerivTwo ℝ φ x (b c) (b j)).PosSemidef := by
-  exact posSemidef_hessian_conj_hessian b hφ hK (hV.mono (subset_closure.trans hKU)) hc
-    (hRange (Set.mem_range_self x))
+    {φ V : E → ℝ} (hφ : ContDiff ℝ 2 φ) {K U : Set E} (hK : IsOpen K) (hKU : closure K ⊆ U)
+    (hV : ContDiffOn ℝ 2 V U) (hc : ConvexOn ℝ K V) (hRange : Set.range (gradient φ) ⊆ K)
+    (x : E) :
+    (Matrix.of fun i j =>
+        ∑ a,
+          ∑ c,
+            bilinearIteratedFDerivTwo ℝ φ x (b i) (b a) *
+                bilinearIteratedFDerivTwo ℝ V (gradient φ x) (b a) (b c) *
+              bilinearIteratedFDerivTwo ℝ φ x (b c) (b j)).PosSemidef := by
+  exact
+    posSemidef_hessian_conj_hessian b hφ hK (hV.mono (subset_closure.trans hKU)) hc
+      (hRange (Set.mem_range_self x))
 
-/-- The third-derivative Gram matrix weighted by the inverse Hessian (the second term of (2.6)) is positive
+/--
+The third-derivative Gram matrix weighted by the inverse Hessian (the second term of (2.6)) is
+positive
 semidefinite. -/
 theorem posSemidef_inverseHessian_third_gram {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
     {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) :
-    (Matrix.of fun i j => ∑ a, ∑ c, ∑ p, ∑ q,
-      inverseHessianEntry φ b x a p * inverseHessianEntry φ b x c q *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i) *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b p) (b q)) x (b j)).PosSemidef := by
+    (Matrix.of fun i j =>
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry φ b x a p * inverseHessianEntry φ b x c q *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i) *
+                  fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b p) (b q)) x
+                    (b j)).PosSemidef := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hA := inv_hessianMatrixIn_posSemidef b h2 hPD
   rw [inv_hessianMatrixIn b h2 x hPD] at hA
-  exact posSemidef_weightedGram _ hA
-    (fun i => Matrix.of fun a c => fderiv ℝ
-      (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i))
+  exact
+    posSemidef_weightedGram _ hA
+      (fun i =>
+        Matrix.of fun a c =>
+          fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i))
 
-/-- **Letwin (2.6), second derivative of the Monge–Ampère equation** in coordinates: given the zero-order equation,
-`Σ_{ac} ((∇²φ)⁻¹)_{ac} ∂_{ac}∂_{ij}φ − Σ_a ∂_aV(∇φ) ∂_a∂_{ij}φ + ∂_{ij}φ = (∇²φ ∇²V(∇φ) ∇²φ)_{ij} + Gram_{ij}`. -/
+/--
+**Letwin (2.6), second derivative of the Monge–Ampère equation** in coordinates: given the
+zero-order equation,
+`Σ_{ac} ((∇²φ)⁻¹)_{ac} ∂_{ac}∂_{ij}φ − Σ_a ∂_aV(∇φ) ∂_a∂_{ij}φ + ∂_{ij}φ = (∇²φ ∇²V(∇φ) ∇²φ)_{ij} +
+Gram_{ij}`. -/
 theorem mongeAmpere_second_derivative_coordinate {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U)
-    (hV : ContDiffOn ℝ ∞ V U)
+    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
     (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y))
-    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    {x : E} (hx : gradient φ x ∈ U) (i j : Fin m) :
-    (∑ a, ∑ c, inverseHessianEntry φ b x a c *
-      bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j)) x (b a) (b c)) -
-      (∑ a, fderiv ℝ V (gradient φ x) (b a) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j)) x (b a)) +
-      bilinearIteratedFDerivTwo ℝ φ x (b i) (b j) =
-      (∑ a, ∑ c, bilinearIteratedFDerivTwo ℝ φ x (b i) (b a) *
-        bilinearIteratedFDerivTwo ℝ V (gradient φ x) (b a) (b c) *
-        bilinearIteratedFDerivTwo ℝ φ x (b c) (b j)) +
-      ∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry φ b x a p * inverseHessianEntry φ b x c q *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b p) (b q)) x (b j) := by
+    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) {x : E}
+    (hx : gradient φ x ∈ U) (i j : Fin m) :
+    (∑ a,
+            ∑ c,
+              inverseHessianEntry φ b x a c *
+                bilinearIteratedFDerivTwo ℝ
+                  (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j)) x (b a) (b c)) -
+          (∑ a,
+            fderiv ℝ V (gradient φ x) (b a) *
+              fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b j)) x (b a)) +
+        bilinearIteratedFDerivTwo ℝ φ x (b i) (b j) =
+      (∑ a,
+          ∑ c,
+            bilinearIteratedFDerivTwo ℝ φ x (b i) (b a) *
+                bilinearIteratedFDerivTwo ℝ V (gradient φ x) (b a) (b c) *
+              bilinearIteratedFDerivTwo ℝ φ x (b c) (b j)) +
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry φ b x a p * inverseHessianEntry φ b x c q *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b i) *
+                  fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b p) (b q)) x (b j) := by
   have hg : ContDiff ℝ ∞ (gradient φ) := contDiff_gradient hφ (by simp)
   have hmem : ∀ᶠ y in 𝓝 x, gradient φ y ∈ U :=
     hg.continuous.continuousAt.tendsto.eventually (hU.mem_nhds hx)
-  have heq : (fun y => ∑ a, ∑ c, inverseHessianEntry φ b y a c *
-      fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) =ᶠ[𝓝 x]
-      (fun y => -fderiv ℝ φ y (b i) + ∑ a, fderiv ℝ V (gradient φ y) (b a) *
-        bilinearIteratedFDerivTwo ℝ φ y (b a) (b i)) := by
+  have heq :
+    (fun y =>
+        ∑ a,
+          ∑ c,
+            inverseHessianEntry φ b y a c *
+              fderiv ℝ (fun z => bilinearIteratedFDerivTwo ℝ φ z (b a) (b c)) y (b i)) =ᶠ[𝓝 x]
+      (fun y =>
+        -fderiv ℝ φ y (b i) +
+          ∑ a, fderiv ℝ V (gradient φ y) (b a) * bilinearIteratedFDerivTwo ℝ φ y (b a) (b i)) := by
     filter_upwards [hmem] with y hy
     exact mongeAmpere_first_derivative b hφ hU hV hMA hy (hPD y) i
   have hd := congrArg (fun L : E →L[ℝ] ℝ => L (b j)) heq.fderiv_eq
@@ -556,48 +643,92 @@ theorem mongeAmpere_second_derivative_coordinate {m : ℕ} (b : OrthonormalBasis
     fderiv_mongeAmpere_first_rhs b hφ hU hV hx i j] at hd
   linarith
 
-/-- **Letwin (2.6)** with the inverse-Hessian operator: `L(∂_{ij}φ) + ∂_{ij}φ = (∇²φ ∇²V(∇φ) ∇²φ)_{ij} + Gram_{ij}`
+/--
+**Letwin (2.6)** with the inverse-Hessian operator: `L(∂_{ij}φ) + ∂_{ij}φ = (∇²φ ∇²V(∇φ) ∇²φ)_{ij} +
+Gram_{ij}`
 (the zero-order Monge–Ampère equation is a hypothesis; moment-map existence is not provided). -/
-theorem mongeAmpere_second_derivative {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
-    {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
+theorem mongeAmpere_second_derivative {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E}
+    (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
     (hMA : ∀ y, logDetHessian φ (stdOrthonormalBasis ℝ E) y = -φ y + V (gradient φ y))
-    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    {x : E} (hx : gradient φ x ∈ U) (i j : Fin (Module.finrank ℝ E)) :
-    hessianInverseOperator φ V (fun y => bilinearIteratedFDerivTwo ℝ φ y
-      (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) x +
-      bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j) =
-      (∑ a, ∑ c, bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E a) *
-        bilinearIteratedFDerivTwo ℝ V (gradient φ x) (stdOrthonormalBasis ℝ E a) (stdOrthonormalBasis ℝ E c) *
-        bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E c) (stdOrthonormalBasis ℝ E j)) +
-      ∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a p *
-        inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x c q *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y
-          (stdOrthonormalBasis ℝ E a) (stdOrthonormalBasis ℝ E c)) x (stdOrthonormalBasis ℝ E i) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y
-          (stdOrthonormalBasis ℝ E p) (stdOrthonormalBasis ℝ E q)) x (stdOrthonormalBasis ℝ E j) := by
-  exact mongeAmpere_second_derivative_coordinate (stdOrthonormalBasis ℝ E) hφ hU hV hMA hPD hx i j
+    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) {x : E}
+    (hx : gradient φ x ∈ U) (i j : Fin (Module.finrank ℝ E)) :
+    hessianInverseOperator φ V
+          (fun y =>
+            bilinearIteratedFDerivTwo ℝ φ y (stdOrthonormalBasis ℝ E i)
+              (stdOrthonormalBasis ℝ E j))
+          x +
+        bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i)
+          (stdOrthonormalBasis ℝ E j) =
+      (∑ a,
+          ∑ c,
+            bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i)
+                  (stdOrthonormalBasis ℝ E a) *
+                bilinearIteratedFDerivTwo ℝ V (gradient φ x) (stdOrthonormalBasis ℝ E a)
+                  (stdOrthonormalBasis ℝ E c) *
+              bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E c)
+                (stdOrthonormalBasis ℝ E j)) +
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a p *
+                      inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x c q *
+                    fderiv ℝ
+                      (fun y =>
+                        bilinearIteratedFDerivTwo ℝ φ y (stdOrthonormalBasis ℝ E a)
+                          (stdOrthonormalBasis ℝ E c))
+                      x (stdOrthonormalBasis ℝ E i) *
+                  fderiv ℝ
+                    (fun y =>
+                      bilinearIteratedFDerivTwo ℝ φ y (stdOrthonormalBasis ℝ E p)
+                        (stdOrthonormalBasis ℝ E q))
+                    x (stdOrthonormalBasis ℝ E j) := by
+  exact
+    mongeAmpere_second_derivative_coordinate (stdOrthonormalBasis ℝ E) hφ hU hV hMA hPD hx i j
 
-/-- (2.6) with the source scope: `V` smooth on an open neighbourhood of `closure K`, `∇φ` ranging in `K`. -/
-theorem mongeAmpere_second_derivative_on_range {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
-    {K U : Set E} (hU : IsOpen U) (hKU : closure K ⊆ U) (hV : ContDiffOn ℝ ∞ V U)
+/--
+(2.6) with the source scope: `V` smooth on an open neighbourhood of `closure K`, `∇φ` ranging in
+`K`. -/
+theorem mongeAmpere_second_derivative_on_range {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {K U : Set E}
+    (hU : IsOpen U) (hKU : closure K ⊆ U) (hV : ContDiffOn ℝ ∞ V U)
     (hRange : Set.range (gradient φ) ⊆ K)
     (hMA : ∀ y, logDetHessian φ (stdOrthonormalBasis ℝ E) y = -φ y + V (gradient φ y))
-    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    (x : E) (i j : Fin (Module.finrank ℝ E)) :
-    hessianInverseOperator φ V (fun y => bilinearIteratedFDerivTwo ℝ φ y
-      (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) x +
-      bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j) =
-      (∑ a, ∑ c, bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E a) *
-        bilinearIteratedFDerivTwo ℝ V (gradient φ x) (stdOrthonormalBasis ℝ E a) (stdOrthonormalBasis ℝ E c) *
-        bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E c) (stdOrthonormalBasis ℝ E j)) +
-      ∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a p *
-        inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x c q *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y
-          (stdOrthonormalBasis ℝ E a) (stdOrthonormalBasis ℝ E c)) x (stdOrthonormalBasis ℝ E i) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y
-          (stdOrthonormalBasis ℝ E p) (stdOrthonormalBasis ℝ E q)) x (stdOrthonormalBasis ℝ E j) := by
-  exact mongeAmpere_second_derivative hφ hU hV hMA hPD
-    (hKU (subset_closure (hRange (Set.mem_range_self x)))) i j
+    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (x : E)
+    (i j : Fin (Module.finrank ℝ E)) :
+    hessianInverseOperator φ V
+          (fun y =>
+            bilinearIteratedFDerivTwo ℝ φ y (stdOrthonormalBasis ℝ E i)
+              (stdOrthonormalBasis ℝ E j))
+          x +
+        bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i)
+          (stdOrthonormalBasis ℝ E j) =
+      (∑ a,
+          ∑ c,
+            bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E i)
+                  (stdOrthonormalBasis ℝ E a) *
+                bilinearIteratedFDerivTwo ℝ V (gradient φ x) (stdOrthonormalBasis ℝ E a)
+                  (stdOrthonormalBasis ℝ E c) *
+              bilinearIteratedFDerivTwo ℝ φ x (stdOrthonormalBasis ℝ E c)
+                (stdOrthonormalBasis ℝ E j)) +
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a p *
+                      inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x c q *
+                    fderiv ℝ
+                      (fun y =>
+                        bilinearIteratedFDerivTwo ℝ φ y (stdOrthonormalBasis ℝ E a)
+                          (stdOrthonormalBasis ℝ E c))
+                      x (stdOrthonormalBasis ℝ E i) *
+                  fderiv ℝ
+                    (fun y =>
+                      bilinearIteratedFDerivTwo ℝ φ y (stdOrthonormalBasis ℝ E p)
+                        (stdOrthonormalBasis ℝ E q))
+                    x (stdOrthonormalBasis ℝ E j) := by
+  exact
+    mongeAmpere_second_derivative hφ hU hV hMA hPD
+      (hKU (subset_closure (hRange (Set.mem_range_self x)))) i j
 
 end SecondDerivative
 
@@ -622,57 +753,77 @@ private theorem third_cyclic {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x u v
   rw [he]
   exact fderiv_bilinearIteratedFDerivTwo_comm hφ x v u w
 
-/-- **Divergence of the inverse Hessian** (Letwin (2.2)–(2.4) consequence): with `A = (∇²φ)⁻¹` and the
+/--
+**Divergence of the inverse Hessian** (Letwin (2.2)–(2.4) consequence): with `A = (∇²φ)⁻¹` and the
 zero-order equation `log det ∇²φ = −φ + V ∘ ∇φ` near `∇φ(x)`,
 `Σ_i ∂_i A_{ij}(x) = Σ_i A_{ij}(x) ∂_iφ(x) − ∂_jV(∇φ(x))`. -/
-theorem inverseHessian_divergence {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U)
-    (hV : ContDiffOn ℝ ∞ V U)
-    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y))
-    {x : E} (hx : gradient φ x ∈ U)
+theorem inverseHessian_divergence {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ V : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
+    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y)) {x : E} (hx : gradient φ x ∈ U)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (j : Fin m) :
     (∑ i, fderiv ℝ (fun y => inverseHessianEntry φ b y i j) x (b i)) =
       (∑ i, inverseHessianEntry φ b x i j * fderiv ℝ φ x (b i)) -
         fderiv ℝ V (gradient φ x) (b j) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hHA (d : Fin m) :
-      (∑ c, bilinearIteratedFDerivTwo ℝ φ x (b d) (b c) * inverseHessianEntry φ b x c j) =
-        if d = j then 1 else 0 := by
+    (∑ c, bilinearIteratedFDerivTwo ℝ φ x (b d) (b c) * inverseHessianEntry φ b x c j) =
+      if d = j then 1 else 0 := by
     calc
       _ = ∑ c, inverseHessianEntry φ b x j c * bilinearIteratedFDerivTwo ℝ φ x (b c) (b d) := by
         apply Finset.sum_congr rfl
         intro c _hc
-        rw [inverseHessianEntry_symm b h2 x c j, bilinearIteratedFDerivTwo_symm h2 x (b d) (b c)]
+        rw [inverseHessianEntry_symm b h2 x c j,
+          bilinearIteratedFDerivTwo_symm h2 x (b d) (b c)]
         ring
       _ = if j = d then 1 else 0 := sum_inverseHessianEntry_mul_hessian b h2 x hPD j d
       _ = _ := by simp only [eq_comm]
   calc
-    _ = -(∑ i, ∑ a, ∑ c, inverseHessianEntry φ b x i a *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b a)) x (b c) *
-        inverseHessianEntry φ b x c j) := by
+    _ =
+        -(∑ i,
+            ∑ a,
+              ∑ c,
+                inverseHessianEntry φ b x i a *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b a)) x (b c) *
+                  inverseHessianEntry φ b x c j) := by
       simp_rw [fderiv_inverseHessianEntry_apply b hφ x hPD, third_cyclic hφ]
       rw [Finset.sum_neg_distrib]
-    _ = -(∑ c, (∑ i, ∑ a, inverseHessianEntry φ b x i a *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b a)) x (b c)) *
-        inverseHessianEntry φ b x c j) := by
+    _ =
+        -(∑ c,
+            (∑ i,
+                ∑ a,
+                  inverseHessianEntry φ b x i a *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b a)) x (b c)) *
+              inverseHessianEntry φ b x c j) := by
       congr 1
       calc
-        _ = ∑ i, ∑ c, ∑ a, inverseHessianEntry φ b x i a *
-            fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b a)) x (b c) *
-            inverseHessianEntry φ b x c j :=
+        _ =
+            ∑ i,
+              ∑ c,
+                ∑ a,
+                  inverseHessianEntry φ b x i a *
+                      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b i) (b a)) x (b c) *
+                    inverseHessianEntry φ b x c j :=
           Finset.sum_congr rfl fun _ _ => Finset.sum_comm
         _ = _ := by rw [Finset.sum_comm]; simp_rw [Finset.sum_mul]
-    _ = -(∑ c, (-fderiv ℝ φ x (b c) + ∑ d, fderiv ℝ V (gradient φ x) (b d) *
-        bilinearIteratedFDerivTwo ℝ φ x (b d) (b c)) * inverseHessianEntry φ b x c j) := by
+    _ =
+        -(∑ c,
+            (-fderiv ℝ φ x (b c) +
+                ∑ d,
+                  fderiv ℝ V (gradient φ x) (b d) *
+                    bilinearIteratedFDerivTwo ℝ φ x (b d) (b c)) *
+              inverseHessianEntry φ b x c j) := by
       congr 1
       apply Finset.sum_congr rfl
       intro c _hc
       rw [mongeAmpere_first_derivative b hφ hU hV hMA hx hPD c]
-    _ = (∑ c, inverseHessianEntry φ b x c j * fderiv ℝ φ x (b c)) -
-        ∑ d, fderiv ℝ V (gradient φ x) (b d) *
-          (∑ c, bilinearIteratedFDerivTwo ℝ φ x (b d) (b c) * inverseHessianEntry φ b x c j) := by
-      simp_rw [add_mul, Finset.sum_add_distrib, neg_mul, Finset.sum_neg_distrib,
-        Finset.sum_mul, Finset.mul_sum]
+    _ =
+        (∑ c, inverseHessianEntry φ b x c j * fderiv ℝ φ x (b c)) -
+          ∑ d,
+            fderiv ℝ V (gradient φ x) (b d) *
+              (∑ c,
+                bilinearIteratedFDerivTwo ℝ φ x (b d) (b c) * inverseHessianEntry φ b x c j) := by
+      simp_rw [add_mul, Finset.sum_add_distrib, neg_mul, Finset.sum_neg_distrib, Finset.sum_mul,
+        Finset.mul_sum]
       rw [Finset.sum_comm (f := fun c d => _)]
       simp only [neg_add, neg_neg, sub_eq_add_neg]
       congr 1
@@ -694,88 +845,106 @@ private theorem fderiv_exp_neg_apply {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ
   simp only [smul_apply, neg_apply, smul_eq_mul]
   ring
 
-/-- **Flux form**: `Σ_i ∂_i (e^{−φ} A_{ij}) = −e^{−φ} ∂_jV(∇φ)` (no normalisation needed pointwise). -/
+/--
+**Flux form**: `Σ_i ∂_i (e^{−φ} A_{ij}) = −e^{−φ} ∂_jV(∇φ)` (no normalisation needed pointwise). -/
 theorem density_inverseHessian_divergence {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U)
-    (hV : ContDiffOn ℝ ∞ V U)
-    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y))
-    {x : E} (hx : gradient φ x ∈ U)
+    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
+    (hMA : ∀ y, logDetHessian φ b y = -φ y + V (gradient φ y)) {x : E} (hx : gradient φ x ∈ U)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (j : Fin m) :
     (∑ i, fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i)) =
       -Real.exp (-φ x) * fderiv ℝ V (gradient φ x) (b j) := by
   have hw := (hφ.neg.exp).differentiable (by simp) x
-  have hA (i : Fin m) := (contDiffAt_inverseHessianEntry b hφ x hPD i j).differentiableAt (by simp)
+  have hA (i : Fin m) :=
+    (contDiffAt_inverseHessianEntry b hφ x hPD i j).differentiableAt (by simp)
   simp_rw [fderiv_mul_apply hw (hA _), fderiv_exp_neg_apply hφ]
   rw [Finset.sum_add_distrib]
-  have he : (∑ i, inverseHessianEntry φ b x i j *
-      (-Real.exp (-φ x) * fderiv ℝ φ x (b i))) =
+  have he :
+    (∑ i, inverseHessianEntry φ b x i j * (-Real.exp (-φ x) * fderiv ℝ φ x (b i))) =
       -Real.exp (-φ x) * ∑ i, inverseHessianEntry φ b x i j * fderiv ℝ φ x (b i) := by
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl; intro i _hi; ring
   rw [he, ← Finset.mul_sum, inverseHessian_divergence b hφ hU hV hMA hx hPD j]
   ring
 
-/-- **Density divergence form of `L`** (Letwin (2.2)): `Σ_{ij} ∂_i (e^{−φ} A_{ij} ∂_jf) = e^{−φ} L f` in the
+/--
+**Density divergence form of `L`** (Letwin (2.2)): `Σ_{ij} ∂_i (e^{−φ} A_{ij} ∂_jf) = e^{−φ} L f` in
+the
 standard orthonormal basis, where `L f = Σ_{ij} A_{ij} ∂_{ij}f − Σ_i ∂_iV(∇φ) ∂_if`. -/
 theorem density_hessianInverseOperator_flux {φ V f : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
     (hf : ContDiff ℝ ∞ f) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
-    (hMA : ∀ y, logDetHessian φ (stdOrthonormalBasis ℝ E) y = -φ y + V (gradient φ y))
-    {x : E} (hx : gradient φ x ∈ U)
-    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) :
-    (∑ i, ∑ j, fderiv ℝ (fun y => Real.exp (-φ y) *
-      inverseHessianEntry φ (stdOrthonormalBasis ℝ E) y i j *
-      fderiv ℝ f y (stdOrthonormalBasis ℝ E j)) x (stdOrthonormalBasis ℝ E i)) =
+    (hMA : ∀ y, logDetHessian φ (stdOrthonormalBasis ℝ E) y = -φ y + V (gradient φ y)) {x : E}
+    (hx : gradient φ x ∈ U) (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) :
+    (∑ i,
+        ∑ j,
+          fderiv ℝ
+            (fun y =>
+              Real.exp (-φ y) * inverseHessianEntry φ (stdOrthonormalBasis ℝ E) y i j *
+                fderiv ℝ f y (stdOrthonormalBasis ℝ E j))
+            x (stdOrthonormalBasis ℝ E i)) =
       Real.exp (-φ x) * hessianInverseOperator φ V f x := by
   let b := stdOrthonormalBasis ℝ E
   have hf2 : ContDiff ℝ 2 f := hf.of_le (WithTop.coe_le_coe.mpr le_top)
   have hw := (hφ.neg.exp).differentiable (by simp) x
   have hA (i j : Fin (Module.finrank ℝ E)) :=
     (contDiffAt_inverseHessianEntry b hφ x hPD i j).differentiableAt (by simp)
-  have hwa (i j : Fin (Module.finrank ℝ E)) : DifferentiableAt ℝ
-      (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x := by
+  have hwa (i j : Fin (Module.finrank ℝ E)) :
+    DifferentiableAt ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x := by
     exact hw.fun_mul (hA i j)
   have hdf (j : Fin (Module.finrank ℝ E)) :=
     (contDiff_fderiv_apply hf (m := ∞) (by simp) (b j)).differentiable (by simp) x
   have hFirst :
-      (∑ i, ∑ j, (Real.exp (-φ x) * inverseHessianEntry φ b x i j) *
-        bilinearIteratedFDerivTwo ℝ f x (b i) (b j)) =
-        Real.exp (-φ x) * ∑ i, ∑ j, inverseHessianEntry φ b x i j *
-          bilinearIteratedFDerivTwo ℝ f x (b i) (b j) := by
+    (∑ i,
+        ∑ j,
+          (Real.exp (-φ x) * inverseHessianEntry φ b x i j) *
+            bilinearIteratedFDerivTwo ℝ f x (b i) (b j)) =
+      Real.exp (-φ x) *
+        ∑ i, ∑ j, inverseHessianEntry φ b x i j * bilinearIteratedFDerivTwo ℝ f x (b i) (b j) := by
     simp_rw [Finset.mul_sum]
     apply Finset.sum_congr rfl; intro i _hi
     apply Finset.sum_congr rfl; intro j _hj; ring
   have hSecond :
-      (∑ i, ∑ j, fderiv ℝ f x (b j) *
-        fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i)) =
-        -Real.exp (-φ x) * ∑ j, fderiv ℝ V (gradient φ x) (b j) * fderiv ℝ f x (b j) := by
+    (∑ i,
+        ∑ j,
+          fderiv ℝ f x (b j) *
+            fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i)) =
+      -Real.exp (-φ x) * ∑ j, fderiv ℝ V (gradient φ x) (b j) * fderiv ℝ f x (b j) := by
     rw [Finset.sum_comm]
     calc
-      _ = ∑ j, fderiv ℝ f x (b j) * ∑ i,
-          fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i) := by
+      _ =
+          ∑ j,
+            fderiv ℝ f x (b j) *
+              ∑ i,
+                fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i) := by
         simp_rw [Finset.mul_sum]
       _ = _ := by
         simp_rw [density_inverseHessian_divergence b hφ hU hV hMA hx hPD]
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl; intro j _hj; ring
   calc
-    _ = ∑ i, ∑ j,
-        ((Real.exp (-φ x) * inverseHessianEntry φ b x i j) *
-          bilinearIteratedFDerivTwo ℝ f x (b i) (b j) +
-          fderiv ℝ f x (b j) *
-          fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i)) := by
+    _ =
+        ∑ i,
+          ∑ j,
+            ((Real.exp (-φ x) * inverseHessianEntry φ b x i j) *
+                bilinearIteratedFDerivTwo ℝ f x (b i) (b j) +
+              fderiv ℝ f x (b j) *
+                fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j) x (b i)) := by
       apply Finset.sum_congr rfl; intro i _hi
       apply Finset.sum_congr rfl; intro j _hj
-      change fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j *
-        fderiv ℝ f y (b j)) x (b i) = _
-      rw [fderiv_mul_apply (hwa i j) (hdf j),
-        ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
+      change
+        fderiv ℝ (fun y => Real.exp (-φ y) * inverseHessianEntry φ b y i j * fderiv ℝ f y (b j))
+            x (b i) =
+          _
+      rw [fderiv_mul_apply (hwa i j) (hdf j), ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
     _ = _ := by
       simp_rw [Finset.sum_add_distrib]
       rw [hFirst, hSecond]
-      change _ = Real.exp (-φ x) *
-        ((∑ i, ∑ j, inverseHessianEntry φ b x i j *
-          bilinearIteratedFDerivTwo ℝ f x (b i) (b j)) -
-          ∑ i, fderiv ℝ V (gradient φ x) (b i) * fderiv ℝ f x (b i))
+      change
+        _ =
+          Real.exp (-φ x) *
+            ((∑ i,
+                ∑ j,
+                  inverseHessianEntry φ b x i j * bilinearIteratedFDerivTwo ℝ f x (b i) (b j)) -
+              ∑ i, fderiv ℝ V (gradient φ x) (b i) * fderiv ℝ f x (b i))
       ring
 
 end Divergence
@@ -786,19 +955,22 @@ namespace FunctionalInequalities.Analysis.BakryEmery
 
 section QuadraticForm
 
-/-- **Nonnegative inverse-Hessian quadratic form** (Letwin Lemma A.4, p. 17, `φ^{ij}∂_iW∂_jW ≥ 0`): for a `C²` `φ`
-whose Hessian at `x` is positive definite, any orthonormal basis `b` (any rank `m`) and any coefficients `a`,
+/--
+**Nonnegative inverse-Hessian quadratic form** (Letwin Lemma A.4, p. 17, `φ^{ij}∂_iW∂_jW ≥ 0`): for
+a `C²` `φ`
+whose Hessian at `x` is positive definite, any orthonormal basis `b` (any rank `m`) and any
+coefficients `a`,
 `0 ≤ Σ_ij ((∇²φ(x))⁻¹)_{ij} a_i a_j`. -/
-theorem sum_inverseHessianEntry_mul_mul_nonneg {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ)
-    (x : E) (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (a : Fin m → ℝ) :
+theorem sum_inverseHessianEntry_mul_mul_nonneg {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
+    {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E)
+    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (a : Fin m → ℝ) :
     0 ≤ ∑ i, ∑ j, inverseHessianEntry φ b x i j * a i * a j := by
-    have hquad :=
-      Matrix.PosSemidef.dotProduct_mulVec_nonneg
-        (inv_hessianMatrixIn_posSemidef (b := b) (x := x)
-          (hφ := hφ) (hPD := hPD)) a
-    simpa [dotProduct, Matrix.mulVec, Finset.mul_sum, Finset.sum_mul,
-      inv_hessianMatrixIn b hφ x hPD, mul_assoc, mul_comm, mul_left_comm] using hquad
+  have hquad :=
+    Matrix.PosSemidef.dotProduct_mulVec_nonneg
+      (inv_hessianMatrixIn_posSemidef (b := b) (x := x) (hφ := hφ) (hPD := hPD)) a
+  simpa [dotProduct, Matrix.mulVec, Finset.mul_sum, Finset.sum_mul,
+    inv_hessianMatrixIn b hφ x hPD, mul_assoc, mul_comm, mul_left_comm] using hquad
 
 end QuadraticForm
 
@@ -813,14 +985,16 @@ open FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probabili
 variable {n : ℕ}
 local notation "E" => EuclideanSpace ℝ (Fin n)
 
-/-- `log det ∇²u` in the standard orthonormal basis equals the log-determinant of the coordinate Hessian matrix. -/
+/--
+`log det ∇²u` in the standard orthonormal basis equals the log-determinant of the coordinate Hessian
+matrix. -/
 theorem logDetHessian_std_eq_log_det_hessianMatrix {u : E → ℝ} (hu : ContDiff ℝ 2 u) (x : E) :
     logDetHessian u (stdOrthonormalBasis ℝ E) x = Real.log (hessianMatrix u x).det := by
   unfold logDetHessian
   have hb : hessianMatrixIn u (EuclideanSpace.basisFun (Fin n) ℝ) x = hessianMatrix u x := rfl
   rw [hessianMatrixIn_eq_toMatrix _ hu]
   rw [LinearMap.det_toMatrix_eq_det_toMatrix (stdOrthonormalBasis ℝ E).toBasis
-    (EuclideanSpace.basisFun (Fin n) ℝ).toBasis]
+      (EuclideanSpace.basisFun (Fin n) ℝ).toBasis]
   rw [← hessianMatrixIn_eq_toMatrix _ hu, hb]
 
 end StandardBasisLogDet

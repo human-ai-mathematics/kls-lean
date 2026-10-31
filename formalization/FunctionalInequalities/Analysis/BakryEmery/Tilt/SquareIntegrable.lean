@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Bounds
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Bounds
 
 /-!
 # Tilt averages of square-integrable functions
@@ -11,6 +13,8 @@ tensor `T_d f` is linear in `f`, and `f ↦ T_d f` is continuous on `L²(μ)`:
 Laplace-type integral `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ(x)` are the weighted moments
 `∫ e^{⟪z, x⟫} ⟪x, h₁⟫ ⋯ ⟪x, h_d⟫ g(x) dμ(x)`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -189,7 +193,7 @@ theorem iteratedFDeriv_integral_exp_inner_smul (μ : Measure E) {g : E → F}
     iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ • g x ∂μ) z h =
       ∫ x, (Real.exp ⟪z, x⟫ * ∏ j, ⟪x, h j⟫) • g x ∂μ := by
   classical
-  induction d generalizing g with
+    induction d generalizing g with
   | zero => simp
   | succ d IH =>
     let N : E → F := fun w => ∫ x, Real.exp ⟪w, x⟫ • g x ∂μ
@@ -201,29 +205,26 @@ theorem iteratedFDeriv_integral_exp_inner_smul (μ : Measure E) {g : E → F}
     have hgi' : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖) * ‖g' x‖) μ := by
       intro r
       refine ((weightedExpD_integrable hg hgi r).const_mul ‖a‖).mono' ?_ ?_
-      · exact (by fun_prop : Continuous (fun x : E => Real.exp (r * ‖x‖))).aestronglyMeasurable.mul hg'.norm
+      · exact
+          (by fun_prop : Continuous (fun x : E => Real.exp (r * ‖x‖))).aestronglyMeasurable.mul
+            hg'.norm
       · filter_upwards [] with x
         rw [Real.norm_of_nonneg (by positivity)]
         calc
-          Real.exp (r * ‖x‖) * ‖g' x‖ ≤
-              Real.exp (r * ‖x‖) * (‖weightedExpD g x‖ * ‖a‖) := by
+          Real.exp (r * ‖x‖) * ‖g' x‖ ≤ Real.exp (r * ‖x‖) * (‖weightedExpD g x‖ * ‖a‖) := by
             gcongr
             exact (weightedExpD g x).le_opNorm a
           _ = ‖a‖ * (Real.exp (r * ‖x‖) * ‖weightedExpD g x‖) := by ring
-    have hN : ContDiff ℝ ∞ N :=
-      contDiff_integral_exp_inner_smul_of_integrable μ hg hgi
-    have hfd : fderiv ℝ N =
-        fun w => ∫ x, Real.exp ⟪w, x⟫ • weightedExpD g x ∂μ := by
+    have hN : ContDiff ℝ ∞ N := contDiff_integral_exp_inner_smul_of_integrable μ hg hgi
+    have hfd : fderiv ℝ N = fun w => ∫ x, Real.exp ⟪w, x⟫ • weightedExpD g x ∂μ := by
       funext w
       exact (weightedExp_integral_hasFDeriv μ hg hgi w).fderiv
-    have heval : ev ∘ fderiv ℝ N =
-        fun w => ∫ x, Real.exp ⟪w, x⟫ • g' x ∂μ := by
+    have heval : ev ∘ fderiv ℝ N = fun w => ∫ x, Real.exp ⟪w, x⟫ • g' x ∂μ := by
       funext w
       rw [Function.comp_apply, hfd]
       change (∫ x, Real.exp ⟪w, x⟫ • weightedExpD g x ∂μ) a = _
       rw [ContinuousLinearMap.integral_apply
-        (weightedExp_integrable μ (weightedExpD_meas hg)
-          (weightedExpD_integrable hg hgi) w)]
+          (weightedExp_integrable μ (weightedExpD_meas hg) (weightedExpD_integrable hg hgi) w)]
       rfl
     rw [iteratedFDeriv_succ_apply_right]
     change ev (iteratedFDeriv ℝ d (fderiv ℝ N) z (Fin.init h)) = _
@@ -231,8 +232,9 @@ theorem iteratedFDeriv_integral_exp_inner_smul (μ : Measure E) {g : E → F}
       ev (iteratedFDeriv ℝ d (fderiv ℝ N) z (Fin.init h)) =
           iteratedFDeriv ℝ d (ev ∘ fderiv ℝ N) z (Fin.init h) := by
         have hN' : ContDiff ℝ ∞ (fderiv ℝ N) := hN.fderiv_right (by simp)
-        have H := ev.iteratedFDeriv_comp_left
-          (hN'.contDiffAt (x := z)) (i := d) (by exact_mod_cast le_top (a := (d : ℕ∞)))
+        have H :=
+          ev.iteratedFDeriv_comp_left (hN'.contDiffAt (x := z)) (i := d)
+            (by exact_mod_cast le_top (a := (d : ℕ∞)))
         exact (congrArg (fun T => T (Fin.init h)) H).symm
       _ = ∫ x, (Real.exp ⟪z, x⟫ * ∏ j, ⟪x, Fin.init h j⟫) • g' x ∂μ := by
         rw [heval]
@@ -240,8 +242,8 @@ theorem iteratedFDeriv_integral_exp_inner_smul (μ : Measure E) {g : E → F}
       _ = ∫ x, (Real.exp ⟪z, x⟫ * ∏ j, ⟪x, h j⟫) • g x ∂μ := by
         apply integral_congr_ae
         filter_upwards [] with x
-        simp only [g', weightedExpD, ContinuousLinearMap.smulRight_apply,
-          innerSL_apply_apply, smul_smul]
+        simp only [g', weightedExpD, ContinuousLinearMap.smulRight_apply, innerSL_apply_apply,
+          smul_smul]
         rw [Fin.prod_univ_castSucc]
         simp only [a, Fin.init_def, mul_assoc]
 
@@ -253,28 +255,26 @@ all exponential moments. The moment at rate `0` already implies that `μ` is fin
 theorem integrable_exp_mul_norm_of_memLp (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → ℝ} (hf : MemLp f 2 μ)
     (r : ℝ) : Integrable (fun x => Real.exp (r * ‖x‖) * ‖f x‖) μ := by
-    have hmeas : AEStronglyMeasurable (fun x : E => Real.exp (r * ‖x‖)) μ :=
-      (Real.continuous_exp.comp
-        (continuous_const.mul (continuous_norm : Continuous (fun x : E => ‖x‖)))).aestronglyMeasurable
-    have hsquare :
-        Integrable (fun x => (Real.exp (r * ‖x‖)) ^ (2 : ℕ)) μ := by
-      convert hexp (2 * r) using 1
-      funext x
-      rw [pow_two, ← Real.exp_add]
-      congr 1
-      ring
-    have hg : MemLp (fun x : E => Real.exp (r * ‖x‖)) 2 μ :=
-      (memLp_two_iff_integrable_sq hmeas).2 hsquare
-    have hprod :
-        Integrable
-          ((fun x : E => Real.exp (r * ‖x‖)) * (fun x : E => ‖f x‖)) μ :=
-      hg.integrable_mul hf.norm
-    have heq :
-        (fun x : E => Real.exp (r * ‖x‖)) * (fun x : E => ‖f x‖) =
-          (fun x : E => Real.exp (r * ‖x‖) * ‖f x‖) := by
-      funext x
-      rfl
-    exact heq ▸ hprod
+  have hmeas : AEStronglyMeasurable (fun x : E => Real.exp (r * ‖x‖)) μ :=
+    (Real.continuous_exp.comp
+        (continuous_const.mul
+          (continuous_norm : Continuous (fun x : E => ‖x‖)))).aestronglyMeasurable
+  have hsquare : Integrable (fun x => (Real.exp (r * ‖x‖)) ^ (2 : ℕ)) μ := by
+    convert hexp (2 * r) using 1
+    funext x
+    rw [pow_two, ← Real.exp_add]
+    congr 1
+    ring
+  have hg : MemLp (fun x : E => Real.exp (r * ‖x‖)) 2 μ :=
+    (memLp_two_iff_integrable_sq hmeas).2 hsquare
+  have hprod : Integrable ((fun x : E => Real.exp (r * ‖x‖)) * (fun x : E => ‖f x‖)) μ :=
+    hg.integrable_mul hf.norm
+  have heq :
+    (fun x : E => Real.exp (r * ‖x‖)) * (fun x : E => ‖f x‖) =
+      (fun x : E => Real.exp (r * ‖x‖) * ‖f x‖) := by
+    funext x
+    rfl
+  exact heq ▸ hprod
 
 omit [FiniteDimensional ℝ E] in
 private lemma integrable_exp_inner_of_all_exp (μ : Measure E)
@@ -327,8 +327,6 @@ theorem contDiff_tiltAverage_of_memLp (μ : Measure E) [IsFiniteMeasure μ] [NeZ
       hD.inv (fun z => ne_of_gt (hDpos z))
     have hmul : ContDiff ℝ ∞ (fun z => (D z)⁻¹ * N z) := by
       convert hDinv.smul hN using 1
-      ext z
-      rfl
     have htilt : tiltAverage μ f = (fun z => (D z)⁻¹ * N z) := by
       funext z
       simp only [tiltAverage, MeasureTheory.integral_tilted, expTilt, D, N,
@@ -446,7 +444,7 @@ private theorem tiltExp_cauchy_schwarz (μ : Measure E)
     ⟪hw.toLp (fun x => Real.exp (r * ‖x‖)), hf.norm.toLp (fun x => ‖f x‖)⟫ ≤
         ‖hw.toLp (fun x => Real.exp (r * ‖x‖))‖ *
           ‖hf.norm.toLp (fun x => ‖f x‖)‖ := real_inner_le_norm _ _
-    _ = _ := by rw [Lp.norm_toLp, Lp.norm_toLp, eLpNorm_norm]
+    _ = _ := by rw [Lp.norm_toLp, Lp.norm_toLp, eLpNorm_norm f hf.aestronglyMeasurable]
 
 end NormWeights
 
@@ -459,7 +457,7 @@ private theorem tiltMoment_product_bound (d : ℕ) (h : Fin d → E) (x : E) :
   calc
     ‖∏ j, ⟪x, h j⟫‖ = ∏ j, ‖⟪x, h j⟫‖ := norm_prod _ _
     _ ≤ ∏ j, (Real.exp ‖x‖ * ‖h j‖) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro j hj
         exact norm_nonneg _
       · intro j hj

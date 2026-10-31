@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.Setting
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.Setting
 
 /-!
 # Bielecki norm, the process space `S²`, and the drift step of Picard iteration
@@ -16,6 +20,8 @@ component `picardStep_drift` of the Picard map is defined here, with its per-com
 identities, its `L¹` Lipschitz bound, the Cauchy-Schwarz bound `(∫_0^t f)² ≤ t ∫_0^t f²` on a
 window, and the per-component `L²` Lipschitz bound that follows from them.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

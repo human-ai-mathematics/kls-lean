@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent full-signature clients for continuity and integrated Gaussian interpolation. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 set_option maxHeartbeats 800000

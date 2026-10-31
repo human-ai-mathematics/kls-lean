@@ -1,0 +1,51 @@
+import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
+import Mathlib.Analysis.Calculus.FDeriv.Measurable
+import Mathlib.Analysis.Calculus.Gradient.Basic
+
+/-! Semantic compatibility checks for the fixed Mathlib4.35 port. This reconstructs the4.33
+norm formula and checks the admissibility predicate and the actual gradient measurability fact.
+It does not prove the KLS or Letwin endpoints. -/
+
+noncomputable section
+open MeasureTheory
+open scoped ENNReal
+
+namespace SemanticCompatibilityAudit
+
+variable {α E : Type*} [MeasurableSpace α] [NormedAddCommGroup E]
+
+/-- The literal old norm formula, using unchanged integral/essential-supremum primitives. -/
+def baselineNorm (f : α → E) (p : ℝ≥0∞) (μ : Measure α) : ℝ≥0∞ := by
+  classical
+  exact if p = 0 then 0 else if p = ∞ then eLpNormEssSup f μ
+    else eLpNorm' f p.toReal μ
+
+/-- The new finite-norm predicate is equivalent to the old measurable-and-finite predicate. -/
+theorem memLp_iff_baseline (f : α → E) (p : ℝ≥0∞) (μ : Measure α) :
+    MemLp f p μ ↔ AEStronglyMeasurable f μ ∧ baselineNorm f p μ < ∞ := by
+  classical
+  by_cases hf : AEStronglyMeasurable f μ
+  · simp [MemLp, eLpNorm, baselineNorm, hf]
+  · simp [MemLp, eLpNorm, hf]
+
+section Gradient
+variable [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
+
+/-- Arbitrary gradients in this actual finite-dimensional Borel setting are measurable. -/
+theorem gradient_measurable (u : E → ℝ) : Measurable (gradient u) :=
+  (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
+    (measurable_fderiv ℝ u)
+
+/-- The pushforward map in the raw moment-measure construction is measurable. -/
+theorem potential_gradient_aemeasurable (ψ : E → EReal) (μ : Measure E) :
+    AEMeasurable (gradient fun x => (ψ x).toReal) μ :=
+  (gradient_measurable (fun x => (ψ x).toReal)).aemeasurable
+
+end Gradient
+
+#print axioms memLp_iff_baseline
+#print axioms gradient_measurable
+#print axioms potential_gradient_aemeasurable
+
+end SemanticCompatibilityAudit

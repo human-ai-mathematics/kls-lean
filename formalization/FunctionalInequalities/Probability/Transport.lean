@@ -1,14 +1,18 @@
-import FunctionalInequalities.Probability.Covariance.Basic
-import FunctionalInequalities.Probability.Support.Affine
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.MeasureTheory.Measure.Tilted
-import Mathlib.MeasureTheory.Measure.Support
+module
+
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import FunctionalInequalities.Probability.Support.Affine
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import Mathlib.MeasureTheory.Measure.Support
 
 /-! # Pushforwards by translations and linear equivalences
 
 The law is pushed forward in the direction of the underlying map. Covariance and moment
 identities are statements about that probability law. L² pullbacks are in `L2.Transport`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -45,25 +49,30 @@ theorem Probability.ae_mem_of_map_tilted_eq_withDensity_indicator
     exact hs
   exact (absolutelyContinuous_tilted hint).ae_le ht
 
-/-- Pushing a density through a measurable equivalence: the new density is the old one composed with
+/--
+Pushing a density through a measurable equivalence: the new density is the old one composed with
 the inverse. -/
-theorem Probability.map_withDensity_measurableEquiv
-    (e : A ≃ᵐ B) (μ : Measure A) (w : A → ENNReal) (hw : Measurable w) :
+theorem Probability.map_withDensity_measurableEquiv (e : A ≃ᵐ B) (μ : Measure A)
+    (w : A → ENNReal) (hw : Measurable w) :
     (μ.withDensity w).map e = (μ.map e).withDensity (fun y => w (e.symm y)) := by
   apply Measure.ext_of_lintegral
   intro φ hφ
   rw [lintegral_map hφ e.measurable,
-    lintegral_withDensity_eq_lintegral_mul μ hw (show Measurable (fun x => φ (e x)) from hφ.comp e.measurable),
-    lintegral_withDensity_eq_lintegral_mul (μ.map e) (show Measurable (fun y => w (e.symm y)) from hw.comp e.symm.measurable) hφ]
+    lintegral_withDensity_eq_lintegral_mul μ hw
+      (show Measurable (fun x => φ (e x)) from hφ.comp e.measurable),
+    lintegral_withDensity_eq_lintegral_mul (μ.map e)
+      (show Measurable (fun y => w (e.symm y)) from hw.comp e.symm.measurable) hφ]
   simp only [Pi.mul_apply]
-  rw [lintegral_map (show Measurable (fun y => w (e.symm y) * φ y) from (hw.comp e.symm.measurable).mul hφ) e.measurable]
+  rw [lintegral_map
+      (show Measurable (fun y => w (e.symm y) * φ y) from (hw.comp e.symm.measurable).mul hφ)
+      e.measurable]
   simp only [e.symm_apply_apply]
 
-/-- The tilted measure transported through a measurable equivalence is the tilt of the image measure by
+/--
+The tilted measure transported through a measurable equivalence is the tilt of the image measure by
 the composed weight. -/
-theorem Probability.map_tilted_measurableEquiv
-    (e : A ≃ᵐ B) (μ : Measure A) (f : A → ℝ) (hf : Measurable f) :
-    (μ.tilted f).map e = (μ.map e).tilted (fun y => f (e.symm y)) := by
+theorem Probability.map_tilted_measurableEquiv (e : A ≃ᵐ B) (μ : Measure A) (f : A → ℝ)
+    (hf : Measurable f) : (μ.tilted f).map e = (μ.map e).tilted (fun y => f (e.symm y)) := by
   have hZ : (∫ y, Real.exp (f (e.symm y)) ∂(μ.map e)) = ∫ x, Real.exp (f x) ∂μ := by
     simpa only [Function.comp_def, e.symm_apply_apply] using
       integral_map e.measurable.aemeasurable
@@ -119,11 +128,11 @@ section TiltAbsoluteContinuity
 
 variable {Ω : Type*} [MeasurableSpace Ω]
 
-/-- A normalized exponential tilt has the same null sets as the base law (Mathlib absolute continuity in
+/--
+A normalized exponential tilt has the same null sets as the base law (Mathlib absolute continuity in
 both directions). -/
 theorem Probability.tilted_null_iff (μ : Measure Ω) {φ : Ω → ℝ}
-    (hi : Integrable (fun x => Real.exp (φ x)) μ) (s : Set Ω) :
-    μ.tilted φ s = 0 ↔ μ s = 0 :=
+    (hi : Integrable (fun x => Real.exp (φ x)) μ) (s : Set Ω) : μ.tilted φ s = 0 ↔ μ s = 0 :=
   ⟨fun hs => absolutelyContinuous_tilted hi hs, fun hs => tilted_absolutelyContinuous μ φ hs⟩
 
 /-- A normalized tilt has the same a.e. filter as the base law. -/
@@ -148,7 +157,10 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 /-- The image of `ν` under the translation `x ↦ c + x`. -/
 def Probability.translateLaw : ProbabilityMeasure V :=
-  ν.map (measurable_const_add c).aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := measurable_const_add c
+  ν.map (fun x ↦ c + x)
 
 section TranslationLaws
 
@@ -163,9 +175,11 @@ theorem Probability.measurePreserving_translate :
 
 /-- The inverse translation is measure preserving from the translated law back to `ν`. -/
 theorem Probability.measurePreserving_translate_symm :
-    MeasurePreserving (fun x ↦ -c + x) (Probability.translateLaw ν c : Measure V) (ν : Measure V) := by
+    MeasurePreserving (fun x ↦ -c + x) (Probability.translateLaw ν c : Measure V)
+      (ν : Measure V) := by
   refine ⟨measurable_const_add _, ?_⟩
-  rw [Probability.coe_translateLaw, Measure.map_map (measurable_const_add _) (measurable_const_add _)]
+  rw [Probability.coe_translateLaw,
+    Measure.map_map (measurable_const_add _) (measurable_const_add _)]
   have : ((fun x ↦ -c + x) ∘ fun x ↦ c + x) = id := by
     funext x
     simp
@@ -190,7 +204,8 @@ variable [CompleteSpace V]
 
 /-- Translation does not change the covariance operator. -/
 theorem Covariance.operator_translateLaw :
-    Covariance.operator (Probability.translateLaw ν c : Measure V) = Covariance.operator (ν : Measure V) := by
+    Covariance.operator (Probability.translateLaw ν c : Measure V) =
+      Covariance.operator (ν : Measure V) := by
   unfold Covariance.operator
   rw [Probability.coe_translateLaw, ProbabilityTheory.covarianceBilin_map_const_add]
 
@@ -207,9 +222,14 @@ variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
 
 /-- The image of `ν` under the linear isometric equivalence `L`. -/
 def Probability.mapLinearIsometryEquiv : ProbabilityMeasure V₂ :=
-  ν.map L.continuous.measurable.aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := L.continuous.measurable
+  ν.map L
 
-theorem Probability.coe_mapLinearIsometryEquiv : (Probability.mapLinearIsometryEquiv ν L : Measure V₂) = (ν : Measure V₁).map L := rfl
+theorem Probability.coe_mapLinearIsometryEquiv :
+    (Probability.mapLinearIsometryEquiv ν L : Measure V₂) = (ν : Measure V₁).map L :=
+  rfl
 
 /-- `L` is measure preserving from `ν` to its image law. -/
 theorem Probability.measurePreserving_mapLinearIsometryEquiv :
@@ -218,15 +238,18 @@ theorem Probability.measurePreserving_mapLinearIsometryEquiv :
 
 /-- `L⁻¹` is measure preserving from the image law back to `ν`. -/
 theorem Probability.measurePreserving_mapLinearIsometryEquiv_symm :
-    MeasurePreserving L.symm (Probability.mapLinearIsometryEquiv ν L : Measure V₂) (ν : Measure V₁) := by
+    MeasurePreserving L.symm (Probability.mapLinearIsometryEquiv ν L : Measure V₂)
+      (ν : Measure V₁) := by
   refine ⟨L.symm.continuous.measurable, ?_⟩
-  rw [Probability.coe_mapLinearIsometryEquiv, Measure.map_map L.symm.continuous.measurable L.continuous.measurable]
+  rw [Probability.coe_mapLinearIsometryEquiv,
+    Measure.map_map L.symm.continuous.measurable L.continuous.measurable]
   have : (⇑L.symm ∘ ⇑L) = id := by
     funext x
     simp
   rw [this, Measure.map_id]
 
-variable [CompleteSpace V₁] [SecondCountableTopology V₁] [CompleteSpace V₂] [SecondCountableTopology V₂]
+variable [CompleteSpace V₁] [SecondCountableTopology V₁] [CompleteSpace V₂]
+  [SecondCountableTopology V₂]
 
 /-- Without a finite second moment Mathlib's covariance operator is zero. -/
 theorem Covariance.operator_of_not_memLp {W : Type*}
@@ -241,10 +264,11 @@ theorem Covariance.operator_of_not_memLp {W : Type*}
 section IsometricCovariance
 
 omit [SecondCountableTopology V₁]
-/-- Pushing a law forward along a linear isometric equivalence conjugates its covariance operator.
+/--
+Pushing a law forward along a linear isometric equivalence conjugates its covariance operator.
 Without a second moment both operators are zero. -/
-theorem Covariance.operator_map_linearIsometryEquiv
-    (ν : Measure V₁) [IsFiniteMeasure ν] (L : V₁ ≃ₗᵢ[ℝ] V₂) :
+theorem Covariance.operator_map_linearIsometryEquiv (ν : Measure V₁) [IsFiniteMeasure ν]
+    (L : V₁ ≃ₗᵢ[ℝ] V₂) :
     Covariance.operator (ν.map L) =
       ((L : V₁ →L[ℝ] V₂).comp (Covariance.operator ν)).comp (L.symm : V₂ →L[ℝ] V₁) := by
   have hcoe : ⇑(L : V₁ →L[ℝ] V₂) = ⇑L := rfl
@@ -252,15 +276,17 @@ theorem Covariance.operator_map_linearIsometryEquiv
   · ext u
     apply ext_inner_right ℝ
     intro v
-    rw [Covariance.operator_inner, ← hcoe, ProbabilityTheory.covarianceBilin_map h (L : V₁ →L[ℝ] V₂),
+    rw [Covariance.operator_inner, ← hcoe,
+      ProbabilityTheory.covarianceBilin_map h (L : V₁ →L[ℝ] V₂),
       LinearIsometryEquiv.adjoint_eq_symm, ← Covariance.operator_inner]
     simp only [ContinuousLinearMap.comp_apply, LinearIsometryEquiv.coe_coe'']
     rw [← L.inner_map_map (Covariance.operator ν (L.symm u)) (L.symm v), L.apply_symm_apply]
-  · have h' : ¬ MemLp id 2 (ν.map L) := by
+  · have h' : ¬MemLp id 2 (ν.map L) := by
       intro h'
       apply h
       have h1 : MemLp (fun x ↦ L x) 2 ν :=
-        (memLp_map_measure_iff aestronglyMeasurable_id L.continuous.measurable.aemeasurable).mp h'
+        (memLp_map_measure_iff aestronglyMeasurable_id L.continuous.measurable.aemeasurable).mp
+          h'
       have h2 := (L.symm : V₂ →L[ℝ] V₁).comp_memLp' h1
       have h3 : (⇑(L.symm : V₂ →L[ℝ] V₁) ∘ fun x ↦ L x) = id := by
         funext x
@@ -287,7 +313,8 @@ theorem Covariance.inner_operator_mapLinearIsometryEquiv (w : V₂) :
 /-- The covariance quadratic form of `ν`, read through `L`. -/
 theorem Covariance.inner_operator_mapLinearIsometryEquiv_apply (w : V₁) :
     inner ℝ (Covariance.operator (ν : Measure V₁) w) w =
-      inner ℝ (Covariance.operator (Probability.mapLinearIsometryEquiv ν L : Measure V₂) (L w)) (L w) := by
+      inner ℝ (Covariance.operator (Probability.mapLinearIsometryEquiv ν L : Measure V₂) (L w))
+        (L w) := by
   rw [Covariance.inner_operator_mapLinearIsometryEquiv, L.symm_apply_apply]
 
 end IsometricCovariance
@@ -305,9 +332,14 @@ variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
 
 /-- The image of `ν` under the continuous linear equivalence `T`. -/
 def Probability.mapContinuousLinearEquiv : ProbabilityMeasure V₂ :=
-  ν.map T.continuous.measurable.aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := T.continuous.measurable
+  ν.map T
 
-theorem Probability.coe_mapContinuousLinearEquiv : (Probability.mapContinuousLinearEquiv ν T : Measure V₂) = (ν : Measure V₁).map T := rfl
+theorem Probability.coe_mapContinuousLinearEquiv :
+    (Probability.mapContinuousLinearEquiv ν T : Measure V₂) = (ν : Measure V₁).map T :=
+  rfl
 
 /-- `T` is measure preserving from `ν` to its image law. -/
 theorem Probability.measurePreserving_mapContinuousLinearEquiv :
@@ -316,23 +348,27 @@ theorem Probability.measurePreserving_mapContinuousLinearEquiv :
 
 /-- `T⁻¹` is measure preserving from the image law back to `ν`. -/
 theorem Probability.measurePreserving_mapContinuousLinearEquiv_symm :
-    MeasurePreserving T.symm (Probability.mapContinuousLinearEquiv ν T : Measure V₂) (ν : Measure V₁) := by
+    MeasurePreserving T.symm (Probability.mapContinuousLinearEquiv ν T : Measure V₂)
+      (ν : Measure V₁) := by
   refine ⟨T.symm.continuous.measurable, ?_⟩
-  rw [Probability.coe_mapContinuousLinearEquiv, Measure.map_map T.symm.continuous.measurable T.continuous.measurable]
+  rw [Probability.coe_mapContinuousLinearEquiv,
+    Measure.map_map T.symm.continuous.measurable T.continuous.measurable]
   have : (⇑T.symm ∘ ⇑T) = id := by
     funext x
     simp
   rw [this, Measure.map_id]
 
-variable [CompleteSpace V₁] [SecondCountableTopology V₁] [CompleteSpace V₂] [SecondCountableTopology V₂]
+variable [CompleteSpace V₁] [SecondCountableTopology V₁] [CompleteSpace V₂]
+  [SecondCountableTopology V₂]
 
 section EquivalentCovariance
 
 omit [SecondCountableTopology V₁]
-/-- Pushing a law forward along a continuous linear equivalence conjugates its covariance operator
+/--
+Pushing a law forward along a continuous linear equivalence conjugates its covariance operator
 by the map and its adjoint. Without a second moment both operators are zero. -/
-theorem Covariance.operator_map_continuousLinearEquiv
-    (ν : Measure V₁) [IsFiniteMeasure ν] (T : V₁ ≃L[ℝ] V₂) :
+theorem Covariance.operator_map_continuousLinearEquiv (ν : Measure V₁) [IsFiniteMeasure ν]
+    (T : V₁ ≃L[ℝ] V₂) :
     Covariance.operator (ν.map T) =
       ((T : V₁ →L[ℝ] V₂).comp (Covariance.operator ν)).comp (T : V₁ →L[ℝ] V₂).adjoint := by
   have hcoe : ⇑(T : V₁ →L[ℝ] V₂) = ⇑T := rfl
@@ -340,16 +376,18 @@ theorem Covariance.operator_map_continuousLinearEquiv
   · ext u
     apply ext_inner_right ℝ
     intro v
-    rw [Covariance.operator_inner, ← hcoe, ProbabilityTheory.covarianceBilin_map h (T : V₁ →L[ℝ] V₂),
-      ← Covariance.operator_inner]
+    rw [Covariance.operator_inner, ← hcoe,
+      ProbabilityTheory.covarianceBilin_map h (T : V₁ →L[ℝ] V₂), ← Covariance.operator_inner]
     simp only [ContinuousLinearMap.comp_apply]
-    exact ContinuousLinearMap.adjoint_inner_right (T : V₁ →L[ℝ] V₂)
-      (Covariance.operator ν ((T : V₁ →L[ℝ] V₂).adjoint u)) v
-  · have h' : ¬ MemLp id 2 (ν.map T) := by
+    exact
+      ContinuousLinearMap.adjoint_inner_right (T : V₁ →L[ℝ] V₂)
+        (Covariance.operator ν ((T : V₁ →L[ℝ] V₂).adjoint u)) v
+  · have h' : ¬MemLp id 2 (ν.map T) := by
       intro h'
       apply h
       have h1 : MemLp (fun x ↦ T x) 2 ν :=
-        (memLp_map_measure_iff aestronglyMeasurable_id T.continuous.measurable.aemeasurable).mp h'
+        (memLp_map_measure_iff aestronglyMeasurable_id T.continuous.measurable.aemeasurable).mp
+          h'
       have h2 := (T.symm : V₂ →L[ℝ] V₁).comp_memLp' h1
       have h3 : (⇑(T.symm : V₂ →L[ℝ] V₁) ∘ fun x ↦ T x) = id := by
         funext x
@@ -390,10 +428,12 @@ theorem Covariance.inner_operator_mapContinuousLinearEquiv_symm (w : V₁) :
   rw [hT]
 
 /-- The barycenter of the image law is the image of the barycenter. -/
-theorem Probability.integral_id_mapContinuousLinearEquiv (hint : Integrable id (ν : Measure V₁)) :
-    ∫ y, y ∂(Probability.mapContinuousLinearEquiv ν T : Measure V₂) = T (∫ x, x ∂(ν : Measure V₁)) := by
-  rw [Probability.coe_mapContinuousLinearEquiv, integral_map T.continuous.measurable.aemeasurable
-    continuous_id'.aestronglyMeasurable]
+theorem Probability.integral_id_mapContinuousLinearEquiv
+    (hint : Integrable id (ν : Measure V₁)) :
+    ∫ y, y ∂(Probability.mapContinuousLinearEquiv ν T : Measure V₂) =
+      T (∫ x, x ∂(ν : Measure V₁)) := by
+  rw [Probability.coe_mapContinuousLinearEquiv,
+    integral_map T.continuous.measurable.aemeasurable continuous_id'.aestronglyMeasurable]
   have hint' : Integrable (fun x : V₁ ↦ x) (ν : Measure V₁) := hint
   exact (T : V₁ →L[ℝ] V₂).integral_comp_comm hint'
 
@@ -414,19 +454,24 @@ section AffineSupports
 omit [CompleteSpace V₁] [CompleteSpace V₂] [FiniteDimensional ℝ V₁]
 /-- The affine support of the image law is the image of the affine support. -/
 theorem Probability.affineSupport_mapContinuousLinearEquiv :
-    affineSupport (mapContinuousLinearEquiv ν T) = (affineSupport ν).map (T : V₁ →ₗ[ℝ] V₂).toAffineMap := by
+    affineSupport (mapContinuousLinearEquiv ν T) =
+      (affineSupport ν).map (T : V₁ →ₗ[ℝ] V₂).toAffineMap := by
   apply le_antisymm
   · apply affineSupport_le_of_ae_mem
     · exact ((affineSupport ν).map (T : V₁ →ₗ[ℝ] V₂).toAffineMap).closed_of_finiteDimensional
     · rw [coe_mapContinuousLinearEquiv]
-      refine (ae_map_iff T.continuous.measurable.aemeasurable
-        ((affineSupport ν).map
-          (T : V₁ →ₗ[ℝ] V₂).toAffineMap).closed_of_finiteDimensional.measurableSet).2 ?_
+      refine
+        (ae_map_iff T.continuous.measurable.aemeasurable
+              ((affineSupport ν).map
+                  (T : V₁ →ₗ[ℝ] V₂).toAffineMap).closed_of_finiteDimensional.measurableSet).2
+          ?_
       filter_upwards [ae_mem_affineSupport ν] with x hx
       exact ⟨x, hx, rfl⟩
   · rw [AffineSubspace.map_le_iff_le_comap]
     apply affineSupport_le_of_ae_mem
-    · change IsClosed ((fun x : V₁ ↦ T x) ⁻¹' (affineSupport (mapContinuousLinearEquiv ν T) : Set V₂))
+    · change
+        IsClosed
+          ((fun x : V₁ ↦ T x) ⁻¹' (affineSupport (mapContinuousLinearEquiv ν T) : Set V₂))
       exact (isClosed_affineSupport _).preimage T.continuous
     · have h := ae_mem_affineSupport (mapContinuousLinearEquiv ν T)
       rw [coe_mapContinuousLinearEquiv] at h

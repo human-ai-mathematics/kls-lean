@@ -1,6 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Stability
-import FunctionalInequalities.Analysis.WaveSplitting.FlowDerivative
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Stability
+public import FunctionalInequalities.Analysis.WaveSplitting.FlowDerivative
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting
 open scoped ContDiff

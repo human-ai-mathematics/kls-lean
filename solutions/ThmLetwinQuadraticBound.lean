@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Letwin.QuadraticBound
+module
+
+public import FunctionalInequalities.KLS.Letwin.QuadraticBound
 
 /-!
 # Lean source-form certificate: `thm:letwin-quadratic-bound`
@@ -15,6 +17,8 @@ four. The compact certificate keeps its narrower statement and remains the BKL i
 This certificate packages Theorem 1.2; Theorem 1.1 has its own alternative-route certificate.
 -/
 
+@[expose] public section
+
 open MeasureTheory ProbabilityTheory
 
 namespace Solutions.ThmLetwinQuadraticBound
@@ -29,9 +33,10 @@ theorem certificate (n : ℕ) (hn : 0 < n)
   hLC.matrix_variance_le_eight hn hiso M hM
 
 /--
-info: 'Solutions.ThmLetwinQuadraticBound.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmLetwinQuadraticBound.certificate' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmLetwinQuadraticBound.certificate
+  #print axioms Solutions.ThmLetwinQuadraticBound.certificate
 
 end Solutions.ThmLetwinQuadraticBound

@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.Gamma
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.Gamma
 
 /-! Independent statement audit for the weak `Γ` interface.
 
@@ -22,6 +24,8 @@ Deliberately **not** audited, because they are not proved: `Γ(P_t f) ≤ P_t Γ
 any pointwise gradient bound, the time derivative of `s ↦ P_s Γ(P_{t-s} f)`, and the existence
 of the approximating sequences that the transfer theorem `W3_closed_transfer` takes as
 hypotheses when the datum is `P_t g`. -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Topology InnerProductSpace
 open FunctionalInequalities FunctionalInequalities.KLS FunctionalInequalities.Analysis.Semigroup
@@ -370,34 +374,48 @@ theorem W3_nonvacuous (hν : LogConcave ν) (hi : (interior (ν : Measure V).sup
     (hconv : ConvexOn ℝ Set.univ U) {φ : V → ℝ} (hφ : ContDiff ℝ 2 φ)
     (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x) {f : V → ℝ} (hf : ContDiff ℝ ∞ f)
     (hfc : HasCompactSupport f) :
-    ∃ (F : (adjointComp
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
-      (hAF : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F :
+    ∃ (F : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
+      (hAF :
+      (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F :
           Lp ℝ 2 (ν : Measure V)) ∈
         (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain),
-      0 ≤ (∫ a, weightedLaplacian U φ a *
-            WeakGamma.apply
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-                ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-                ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩) a ∂(ν : Measure V)) / 2 +
-          ∫ a, φ a * WeakGamma.apply
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-                ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hAF⟩) a
-            ∂(ν : Measure V) := by
-  refine ⟨⟨_, hν.toLp_mem_adjointComp_domain m hi hνU (hU.of_le (by norm_num)) hf hfc⟩,
-    KLS.LogConcave.adjointComp_toLp_mem_closedWeightedOperator_domain m hν hi hνU hU hf hfc, ?_⟩
-  refine KLS.LogConcave.integral_mul_weakGamma_adjointComp_nonneg_of_tendsto m hν hi hνU
-    (hU.of_le (by decide)) hconv hφ hφc hφ0 (fn := fun _ => f)
-    (fun _ => hf.of_le (by decide)) (fun _ => hfc) _ _
-    (u := fun _ => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-      ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi hf hfc⟩)
-    (w := fun _ => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-      ⟨_, KLS.LogConcave.adjointComp_toLp_mem_closedWeightedOperator_domain m hν hi hνU hU hf hfc⟩)
-    (fun _ => hν.coeFn_closedWeightedOperator_toLp_gradient m hi hf hfc)
-    (fun _ => KLS.LogConcave.coeFn_closedWeightedOperator_adjointComp_toLp m hν hi hνU hU hf hfc _)
-    ?_ ?_ <;> simp
+      0 ≤
+        (∫ a,
+              weightedLaplacian U φ a *
+                WeakGamma.apply
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)
+                  a ∂(ν : Measure V)) /
+            2 +
+          ∫ a,
+            φ a *
+              WeakGamma.apply
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                  ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hAF⟩)
+                a ∂(ν : Measure V) := by
+  refine
+    ⟨⟨_, hν.toLp_mem_adjointComp_domain m hi hνU (hU.of_le (by norm_num)) hf hfc⟩,
+      KLS.LogConcave.adjointComp_toLp_mem_closedWeightedOperator_domain m hν hi hνU hU hf hfc,
+      ?_⟩
+  refine
+      KLS.LogConcave.integral_mul_weakGamma_adjointComp_nonneg_of_tendsto m hν hi hνU
+        (hU.of_le (by decide)) hconv hφ hφc hφ0 (fn := fun _ => f)
+        (fun _ => hf.of_le (by decide)) (fun _ => hfc) _ _ (u := fun _ =>
+        hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+          ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi hf hfc⟩)
+        (w := fun _ =>
+        hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+          ⟨_,
+            KLS.LogConcave.adjointComp_toLp_mem_closedWeightedOperator_domain m hν hi hνU hU hf
+              hfc⟩)
+        (fun _ => hν.coeFn_closedWeightedOperator_toLp_gradient m hi hf hfc)
+        (fun _ =>
+          KLS.LogConcave.coeFn_closedWeightedOperator_adjointComp_toLp m hν hi hνU hU hf hfc _)
+        ?_ ?_ <;>
+    simp
 
 /-- **Integrated `Γ` contraction along the heat flow.** -/
 theorem W3_heat_contraction (hν : LogConcave ν)
@@ -515,7 +533,8 @@ end BakryEmeryWeakGammaAudit
 #print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.integral_abs_sub_le
 #print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.abs_integral_mul_sub_le
 #print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.tendsto_integral_mul
-#print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.integral_eq_integral_mul_adjointComp
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.WeakGamma.integral_eq_integral_mul_adjointComp
 #print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.integral_self_eq_norm_map_sq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.gradient_neg
 #print axioms FunctionalInequalities.Analysis.BakryEmery.gradient_comp
@@ -545,12 +564,16 @@ end BakryEmeryWeakGammaAudit
 #print axioms FunctionalInequalities.KLS.LogConcave.integral_weakGamma_toLp_eq
 #print axioms FunctionalInequalities.KLS.LogConcave.coeFn_closedWeightedOperator_mul
 #print axioms FunctionalInequalities.KLS.LogConcave.coeFn_closedWeightedOperator_comp
-#print axioms FunctionalInequalities.KLS.LogConcave.adjointComp_toLp_mem_closedWeightedOperator_domain
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.adjointComp_toLp_mem_closedWeightedOperator_domain
 #print axioms FunctionalInequalities.KLS.LogConcave.coeFn_closedWeightedOperator_adjointComp_toLp
-#print axioms FunctionalInequalities.KLS.LogConcave.integral_mul_weakGamma_adjointComp_nonneg_of_tendsto
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.integral_mul_weakGamma_adjointComp_nonneg_of_tendsto
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_apply_le
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_weakGamma_apply_le
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_apply_eq_integral_mul_adjointComp
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_weakGamma_apply_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_apply_eq_integral_mul_adjointComp
 #print axioms BakryEmeryWeakGammaAudit.W0_def
 #print axioms BakryEmeryWeakGammaAudit.W0_measurable
 #print axioms BakryEmeryWeakGammaAudit.W0_integrable
@@ -589,6 +612,9 @@ end BakryEmeryWeakGammaAudit
 #print axioms BakryEmeryWeakGammaAudit.W3_heat_weak_ibp
 #print axioms BakryEmeryWeakGammaAudit.W3_heat_second_order
 #print axioms BakryEmeryWeakGammaAudit.W3_heat_gamma_two
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_adjointComp_apply_of_pos
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_adjointComp_of_pos
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg_of_tendsto
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_adjointComp_apply_of_pos
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_adjointComp_of_pos
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg_of_tendsto

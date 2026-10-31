@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.GammaTwo
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.GammaTwo
 
 /-! Independent statement audit for the **interior regularity of deficiency elements** and its
 two consequences: the operator-core property of `C_c^∞(V)` for the log-concave generator, and the
@@ -23,6 +25,8 @@ Deliberately **not** audited, because **not** proved: `Γ(P_t f) ≤ P_t Γ(f)`,
 interpolation with the outer semigroup, the extension of the test class from `C_c^∞` to
 `{P_s φ}`, the square and first-order gradient estimates, the general-law passage, the constant
 `π`, Buser and KLS. -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Topology InnerProductSpace
 open FunctionalInequalities FunctionalInequalities.KLS FunctionalInequalities.Analysis.Semigroup
@@ -124,15 +128,18 @@ theorem R1_is_hreg (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 
 theorem R1_sign (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 1 U)
     (u : Lp ℝ 2 (ν : Measure V)) (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :
     ⟪(adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ :
-            Lp ℝ 2 (ν : Measure V)), u⟫ +
-        ⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f :
-          Lp ℝ 2 (ν : Measure V)), u⟫ = 0 ↔
+                ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ :
+              Lp ℝ 2 (ν : Measure V)),
+            u⟫ +
+          ⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f : Lp ℝ 2 (ν : Measure V)),
+            u⟫ =
+        0 ↔
       ⟪(adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ :
-            Lp ℝ 2 (ν : Measure V)), u⟫ =
-        -⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f :
-          Lp ℝ 2 (ν : Measure V)), u⟫ := by
+              ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ :
+            Lp ℝ 2 (ν : Measure V)),
+          u⟫ =
+        -⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f : Lp ℝ 2 (ν : Measure V)),
+            u⟫ := by
   constructor <;> intro h <;> linarith
 
 /-- **The operator core.** For every `C¹` potential, every `F ∈ D(A)` is the limit of
@@ -196,52 +203,77 @@ theorem R3_heat (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞
     (hconv : ConvexOn ℝ Set.univ U) :
     ∀ (g : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t) {φ : V → ℝ} (_hφ : ContDiff ℝ ∞ φ)
       (_hφc : HasCompactSupport φ) (_hφ0 : ∀ y, 0 ≤ φ y),
-    0 ≤ (∫ y, weightedLaplacian U φ y *
-          WeakGamma.apply
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩) y
-          ∂(ν : Measure V)) / 2 +
-        ∫ y, φ y * WeakGamma.apply
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨_, LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_adjointComp_of_pos m
-                (ContinuousLinearMap.id ℝ V) hν hi g ht
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht)⟩) y
-          ∂(ν : Measure V) :=
+      0 ≤
+        (∫ y,
+              weightedLaplacian U φ y *
+                WeakGamma.apply
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi
+                        ht.le g,
+                      (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                          (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi
+                        ht.le g,
+                      (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                          (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
+                  y ∂(ν : Measure V)) /
+            2 +
+          ∫ y,
+            φ y *
+              WeakGamma.apply
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                  ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le
+                      g,
+                    (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                        (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                  ⟨_,
+                    LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_adjointComp_of_pos
+                      m (ContinuousLinearMap.id ℝ V) hν hi g ht
+                      (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                        (ContinuousLinearMap.id ℝ V) hν hi g ht)⟩)
+                y ∂(ν : Measure V) :=
   fun g _t ht _φ hφ hφc hφ0 =>
-    LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg m hν hi hνU hU hconv hφ hφc hφ0 g
-      ht
+  LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg m hν hi hνU hU hconv hφ hφc hφ0 g
+    ht
 
 /-- The conditional frontend with the local hypothesis is a consequence of the
 unconditional one: its extra hypothesis is not consulted. -/
-theorem R3_conditional_consequence (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U)
-    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (hφ0 : ∀ y, 0 ≤ φ y)
-    (g : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t) :
-    0 ≤ (∫ y, weightedLaplacian U φ y *
-          WeakGamma.apply
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩) y
-          ∂(ν : Measure V)) / 2 +
-        ∫ y, φ y * WeakGamma.apply
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-              ⟨_, LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_adjointComp_of_pos m
-                (ContinuousLinearMap.id ℝ V) hν hi g ht
-                (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ht)⟩) y
-          ∂(ν : Measure V) :=
+theorem R3_conditional_consequence (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ Set.univ U) {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ)
+    (hφc : HasCompactSupport φ) (hφ0 : ∀ y, 0 ≤ φ y) (g : Lp ℝ 2 (ν : Measure V)) {t : ℝ}
+    (ht : 0 < t) :
+    0 ≤
+      (∫ y,
+            weightedLaplacian U φ y *
+              WeakGamma.apply
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                  ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le
+                      g,
+                    (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                        (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                  ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le
+                      g,
+                    (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                        (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
+                y ∂(ν : Measure V)) /
+          2 +
+        ∫ y,
+          φ y *
+            WeakGamma.apply
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                ⟨LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le g,
+                  (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                      (ContinuousLinearMap.id ℝ V) hν hi g ht).2⟩)
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                ⟨_,
+                  LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain_adjointComp_of_pos
+                    m (ContinuousLinearMap.id ℝ V) hν hi g ht
+                    (LogConcave.HeatSemigroup.mem_adjointComp_domain_of_pos m
+                      (ContinuousLinearMap.id ℝ V) hν hi g ht)⟩)
+              y ∂(ν : Measure V) :=
   LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg_of_localRegularity m hν hi hνU hU
     hconv (R1_is_hreg m hν hi hνU (hU.of_le (by norm_num))) hφ hφc hφ0 g ht
 
@@ -251,14 +283,17 @@ end BakryEmeryInteriorRegularityAudit
 
 #print axioms FunctionalInequalities.Analysis.Mollification.eLpNorm_convolution_le
 #print axioms FunctionalInequalities.Analysis.Mollification.memLp_convolution
-#print axioms FunctionalInequalities.Analysis.Mollification.tendsto_eLpNorm_convolution_sub_of_continuous
+#print axioms
+  FunctionalInequalities.Analysis.Mollification.tendsto_eLpNorm_convolution_sub_of_continuous
 #print axioms FunctionalInequalities.Analysis.Mollification.tendsto_eLpNorm_convolution_sub
 #print axioms FunctionalInequalities.Analysis.Mollification.integral_inner_convolution_eq
 #print axioms FunctionalInequalities.Analysis.Mollification.gradient_convolution
 #print axioms FunctionalInequalities.Analysis.Mollification.laplacian_convolution
-#print axioms FunctionalInequalities.KLS.LogConcave.toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
 #print axioms FunctionalInequalities.KLS.LogConcave.exists_seq_smooth_tendsto_adjointComp
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg
 #print axioms BakryEmeryInteriorRegularityAudit.M0_contraction
 #print axioms BakryEmeryInteriorRegularityAudit.M1_convergence
 #print axioms BakryEmeryInteriorRegularityAudit.M2_symmetric

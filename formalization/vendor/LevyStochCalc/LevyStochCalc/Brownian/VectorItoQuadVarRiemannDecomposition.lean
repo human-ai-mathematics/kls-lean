@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoQuadVarRiemannTermBounds
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoQuadVarRiemannTermBounds
 
 /-!
 # Decomposition and convergence of the quadratic-variation Riemann sum
@@ -26,6 +30,8 @@ in `L¹` to that integral at rate `√(T/m)`.
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.integral_abs_quadVarRiemann_sub_le` — the `L¹`
   rate of convergence of the weighted quadratic-variation Riemann sum.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

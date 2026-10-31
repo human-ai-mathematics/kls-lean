@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.MathlibBridge
-import LevyStochCalc.Brownian.Martingale
-import LevyStochCalc.Probability.TrivialSigma
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.MathlibBridge
+public import LevyStochCalc.Brownian.Martingale
+public import LevyStochCalc.Probability.TrivialSigma
 
 /-!
 # Independence of the past of a Brownian motion from its future increments
@@ -27,6 +31,8 @@ null-or-conull σ-algebra at the negative times, where `W` vanishes almost surel
 * `BrownianMotion.indep_naturalFiltration_increments` — independence of the natural filtration at
   `s` from the family of increments over subintervals of `[s, ∞)`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian
 
@@ -98,7 +104,7 @@ theorem indep_naturalFiltration_future (W : BrownianMotion P) {s : ℝ} (hs : 0 
   refine indep_of_indep_of_le_left (Probability.IsTrivialSigma.indep_sup ?_
     Probability.trivialSigma_le ?_ Probability.isTrivialSigma_trivialSigma
     (indep_of_indep_of_le_right hindep hfut)) hnat
-  · exact Measurable.comap_le (measurable_pi_lambda _ fun r => W.measurable_eval ((r : ℝ≥0) : ℝ))
+  · exact Measurable.comap_le (Measurable.of_eval fun r => W.measurable_eval ((r : ℝ≥0) : ℝ))
   · exact iSup₂_le fun t _ => Measurable.comap_le
       ((W.measurable_eval t).sub (W.measurable_eval s))
 

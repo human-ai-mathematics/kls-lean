@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.Stratification
-import FunctionalInequalities.Analysis.Vector.Slice.Critical
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.Stratification
+public import FunctionalInequalities.Analysis.Vector.Slice.Critical
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the rank stratification and the kernel lemma
@@ -31,6 +33,8 @@ in the kernel lemma are all covered.  No finiteness, inner product, completeness
 hypothesis is used by the kernel lemma, and the measurability half of the stratification needs no
 finite-dimensionality of the target.
 -/
+
+@[expose] public section
 
 noncomputable section
 

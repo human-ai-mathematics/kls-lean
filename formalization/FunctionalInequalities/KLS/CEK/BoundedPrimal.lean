@@ -1,27 +1,42 @@
-import FunctionalInequalities.KLS.CEK.VariationalMaximum
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Probability.Covariance.Positivity
-import FunctionalInequalities.Probability.MomentMeasure.Integrability
-import FunctionalInequalities.Analysis.Convex.Legendre.BoundedDomain
+module
+
+public import FunctionalInequalities.KLS.CEK.VariationalMaximum
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Probability.Covariance.Positivity
+public import FunctionalInequalities.Probability.MomentMeasure.Integrability
+public import FunctionalInequalities.Analysis.Convex.Legendre.BoundedDomain
 
 /-!
 # A normalized Lipschitz primal for a bounded isotropic source law
 
-For a bundled isotropic probability law `μ` on a finite-dimensional real inner-product space (dimension zero included) and
-`L : ℝ≥0` with `‖y‖ ≤ L` `μ`-almost everywhere, the CEK variational maximiser (`exists_variational_maximum`, Proposition 12)
-capped to `closedBall 0 L` is again a maximiser: convex, lower semicontinuous, `μ`-integrable, with effective domain in the
-ball, conjugate mass `1` and every competitor's functional at most its own (`bounded_source_cap_lsc`; the original interface
-`bounded_source_cap`). It attains a real minimum and has a globally finite conjugate (`bounded_source_finite_conjugate`),
-whose real representative `ψ` is convex, `L`-Lipschitz and continuous, with `exp(−ψ)` Bochner integrable, `∫ exp(−ψ) = 1`
-and `weightedMeasure volume ψ` a probability measure (`bounded_source_lipschitz_primal`); consequences for the density
+For a bundled isotropic probability law `μ` on a finite-dimensional real inner-product space
+(dimension zero included) and
+`L : ℝ≥0` with `‖y‖ ≤ L` `μ`-almost everywhere, the CEK variational maximiser
+(`exists_variational_maximum`, Proposition 12)
+capped to `closedBall 0 L` is again a maximiser: convex, lower semicontinuous, `μ`-integrable, with
+effective domain in the
+ball, conjugate mass `1` and every competitor's functional at most its own
+(`bounded_source_cap_lsc`; the original interface
+`bounded_source_cap`). It attains a real minimum and has a globally finite conjugate
+(`bounded_source_finite_conjugate`),
+whose real representative `ψ` is convex, `L`-Lipschitz and continuous, with `exp(−ψ)` Bochner
+integrable, `∫ exp(−ψ) = 1`
+and `weightedMeasure volume ψ` a probability measure (`bounded_source_lipschitz_primal`);
+consequences for the density
 `exp(−ψ)` (Fenchel contact at the origin, Lipschitz envelope, positivity, midpoint log-concavity):
-`bounded_source_real_density_client`. The source inputs are only `μ`, its isotropy, `L` and the almost-everywhere bound.
+`bounded_source_real_density_client`. The source inputs are only `μ`, its isotropy, `L` and the
+almost-everywhere bound.
 
-This is a weak normalized convex Lipschitz primal linked to the source law, a support toward the moment map of
-Cordero-Erausquin–Klartag Theorem 2 and Letwin, arXiv:2607.24164v1, Lemmas 2.1–2.2. Not provided: the Euler–Lagrange
-identification, the gradient pushforward `(∇ψ)_# e^{−ψ} = μ`, smoothness, a positive definite Hessian, the gradient
+This is a weak normalized convex Lipschitz primal linked to the source law, a support toward the
+moment map of
+Cordero-Erausquin–Klartag Theorem 2 and Letwin, arXiv:2607.24164v1, Lemmas 2.1–2.2. Not provided:
+the Euler–Lagrange
+identification, the gradient pushforward `(∇ψ)_# e^{−ψ} = μ`, smoothness, a positive definite
+Hessian, the gradient
 diffeomorphism, the Monge–Ampère equation, Letwin Theorem 2.5.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -105,7 +120,7 @@ theorem bounded_source_cap_lsc
           change
             (if p.1 ∈ closedBall (0 : E) (L : ℝ) then q0 p.1 else ⊤) ≤
               (p.2 : EReal) at hp
-          rw [if_neg hpB] at hp
+          rw [ite_eq_right hpB] at hp
           exact hp
         exact (not_le_of_gt (EReal.coe_lt_top p.2)) htop
       have hrB : r.1 ∈ closedBall (0 : E) (L : ℝ) := by
@@ -114,20 +129,20 @@ theorem bounded_source_cap_lsc
           change
             (if r.1 ∈ closedBall (0 : E) (L : ℝ) then q0 r.1 else ⊤) ≤
               (r.2 : EReal) at hr
-          rw [if_neg hrB] at hr
+          rw [ite_eq_right hrB] at hr
           exact hr
         exact (not_le_of_gt (EReal.coe_lt_top r.2)) htop
       have hp0 : q0 p.1 ≤ (p.2 : EReal) := by
         change
           (if p.1 ∈ closedBall (0 : E) (L : ℝ) then q0 p.1 else ⊤) ≤
             (p.2 : EReal) at hp
-        rw [if_pos hpB] at hp
+        rw [ite_eq_left hpB] at hp
         exact hp
       have hr0 : q0 r.1 ≤ (r.2 : EReal) := by
         change
           (if r.1 ∈ closedBall (0 : E) (L : ℝ) then q0 r.1 else ⊤) ≤
             (r.2 : EReal) at hr
-        rw [if_pos hrB] at hr
+        rw [ite_eq_left hrB] at hr
         exact hr
       have habB : a • p.1 + b • r.1 ∈ closedBall (0 : E) (L : ℝ) :=
         (convex_closedBall (0 : E) (L : ℝ)) hpB hrB ha hb hab
@@ -136,7 +151,7 @@ theorem bounded_source_cap_lsc
             q0 (a • p.1 + b • r.1)
           else ⊤) ≤
           (↑a : EReal) * ↑p.2 + (↑b : EReal) * ↑r.2
-      rw [if_pos habB]
+      rw [ite_eq_left habB]
       exact hq0conv.2 hp0 hr0 ha hb hab
   have hqpot : PotentialIntegrable q (μ : Measure E) := by
     refine ⟨?_, ?_, ?_⟩

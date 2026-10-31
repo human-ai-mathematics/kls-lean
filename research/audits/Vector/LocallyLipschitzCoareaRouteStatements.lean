@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+public import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
 
 /-!
 # Route statements for the codimension-`m` coarea formula of locally Lipschitz maps
@@ -42,10 +44,13 @@ these contracts.
 
 ## What Mathlib has
 
-`LipschitzOnWith.extend_pi` (componentwise McShane), `LocallyLipschitzOn.exists_lipschitzOnWith_of_compact`
+`LipschitzOnWith.extend_pi` (componentwise McShane),
+`LocallyLipschitzOn.exists_lipschitzOnWith_of_compact`
 (a locally Lipschitz map is Lipschitz on a compact set), `Filter.EventuallyEq.fderiv_eq`, and the
 `PiLp` Lipschitz equivalences.  These are the extension and localization tools used in the route.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,7 +1,12 @@
-import FunctionalInequalities.Analysis.Sard.Chart
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Sard.Chart
+public import Lean
+meta import Lean
 
 /-! The finite-regularity graph theorem is usable without the smooth chart or covering layer. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities.Analysis Filter Topology
 open scoped ContDiff

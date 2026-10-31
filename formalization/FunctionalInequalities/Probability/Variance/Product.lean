@@ -1,5 +1,7 @@
-import Mathlib.Probability.Moments.Variance
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import Mathlib.Probability.Moments.Variance
+public import Mathlib.MeasureTheory.Integral.Prod
 
 /-!
 # L2 sections and the two-factor variance bound
@@ -16,6 +18,8 @@ averaging lemma. Mathlib's pinned v4.33.0 sources are
 [Fubini and product integrals](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Integral/Prod.lean),
 and [the L² integrability criterion](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Function/L2Space.lean).
 -/
+
+@[expose] public section
 
 noncomputable section
 

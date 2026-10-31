@@ -1,12 +1,15 @@
-import FunctionalInequalities.L2.MeanVariance
-import FunctionalInequalities.Energy.CovarianceGradient.Basic
-import FunctionalInequalities.Energy.Relaxation.LinearPMap
+module
+
+public import FunctionalInequalities.L2.MeanVariance
+public import FunctionalInequalities.Energy.CovarianceGradient.Basic
+public import FunctionalInequalities.Energy.Relaxation.LinearPMap
 
 /-!
 # The weighted gradient as a partially defined operator on `L²(ν)`
 
 Source: Blueprint `lem:covariance-core-closure`, the operator `T g = Σ^{1/2} ∇g` on globally
-Lipschitz `L²(ν)` functions. Read `Energy.WeightedGradient.apply`, `Energy.WeightedGradient.IsTest`, `Energy.WeightedGradient.graph`,
+Lipschitz `L²(ν)` functions. Read `Energy.WeightedGradient.apply`, `Energy.WeightedGradient.IsTest`,
+`Energy.WeightedGradient.graph`,
 `KLS.LogConcave.weightedOperator`, its domain and value lemmas, and finally
 `Energy.CovarianceGradient.relaxation_eq_ofLinearPMap`.
 
@@ -28,6 +31,8 @@ What this module does not claim: closability of the operator (proved in `Closabl
 local density bounds), density of its domain, or any Poincaré statement. In dimension zero every
 function is constant, the operator vanishes and its domain is all of `L²(ν)`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -146,25 +151,32 @@ theorem const (c : ℝ) : IsTest ν B (fun _ ↦ c) :=
 variable [BorelSpace V] [FiniteDimensional ℝ V] {m : Measure V} [m.IsAddHaarMeasure]
 
 /-- Under absolute continuity, the weighted gradient is additive `ν`-almost everywhere. -/
-theorem apply_add_ae (hac : (ν : Measure V) ≪ m) {g₁ g₂ : V → ℝ}
-    (h₁ : IsTest ν B g₁) (h₂ : IsTest ν B g₂) :
+theorem apply_add_ae (hac : (ν : Measure V) ≪ m) {g₁ g₂ : V → ℝ} (h₁ : IsTest ν B g₁)
+    (h₂ : IsTest ν B g₂) :
     Energy.WeightedGradient.apply B g₁ + Energy.WeightedGradient.apply B g₂ =ᵐ[(ν : Measure V)]
       Energy.WeightedGradient.apply B (g₁ + g₂) := by
   obtain ⟨K₁, hK₁⟩ := h₁.1
   obtain ⟨K₂, hK₂⟩ := h₂.1
-  filter_upwards [hac.ae_le (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz
-    hK₁.locallyLipschitz m), hac.ae_le (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz
-    hK₂.locallyLipschitz m)] with x hx₁ hx₂
-  simp only [Pi.add_apply, Energy.WeightedGradient.apply, Energy.WeightedGradient.gradient_add_of_differentiableAt hx₁ hx₂, map_add]
+  filter_upwards [hac.ae_le
+      (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz hK₁.locallyLipschitz m),
+    hac.ae_le
+      (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz hK₂.locallyLipschitz
+        m)] with
+    x hx₁ hx₂
+  simp only [Pi.add_apply, Energy.WeightedGradient.apply,
+    Energy.WeightedGradient.gradient_add_of_differentiableAt hx₁ hx₂, map_add]
 
 /-- Under absolute continuity, the weighted gradient is homogeneous `ν`-almost everywhere. -/
 theorem apply_smul_ae (hac : (ν : Measure V) ≪ m) (c : ℝ) (h : IsTest ν B g) :
-    c • Energy.WeightedGradient.apply B g =ᵐ[(ν : Measure V)] Energy.WeightedGradient.apply B (c • g) := by
+    c • Energy.WeightedGradient.apply B g =ᵐ[(ν : Measure V)]
+      Energy.WeightedGradient.apply B (c • g) := by
   obtain ⟨K, hK⟩ := h.1
-  filter_upwards [hac.ae_le (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz
-    hK.locallyLipschitz m)] with x hx
-  simp only [Pi.smul_apply, Energy.WeightedGradient.apply, Energy.WeightedGradient.gradient_const_smul_of_differentiableAt c hx,
-    map_smul]
+  filter_upwards [hac.ae_le
+      (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz hK.locallyLipschitz
+        m)] with
+    x hx
+  simp only [Pi.smul_apply, Energy.WeightedGradient.apply,
+    Energy.WeightedGradient.gradient_const_smul_of_differentiableAt c hx, map_smul]
 
 
 theorem add (hac : (ν : Measure V) ≪ m) {g₁ g₂ : V → ℝ}
@@ -175,11 +187,11 @@ theorem add (hac : (ν : Measure V) ≪ m) {g₁ g₂ : V → ℝ}
     (h₁.memLp_apply.add h₂.memLp_apply).ae_eq
       (apply_add_ae hac h₁ h₂)⟩
 
-theorem smul (hac : (ν : Measure V) ≪ m) (c : ℝ) (h : IsTest ν B g) :
-    IsTest ν B (c • g) := by
+theorem smul (hac : (ν : Measure V) ≪ m) (c : ℝ) (h : IsTest ν B g) : IsTest ν B (c • g) := by
   obtain ⟨K, hK⟩ := h.1
-  exact ⟨⟨‖c‖₊ * K, Energy.WeightedGradient.lipschitzWith_const_smul_real hK c⟩, h.memLp.const_smul c,
-    (h.memLp_apply.const_smul c).ae_eq (apply_smul_ae hac c h)⟩
+  exact
+    ⟨⟨‖c‖₊ * K, Energy.WeightedGradient.lipschitzWith_const_smul_real hK c⟩,
+      h.memLp.const_smul c, (h.memLp_apply.const_smul c).ae_eq (apply_smul_ae hac c h)⟩
 
 end WeightedGradient.IsTest
 

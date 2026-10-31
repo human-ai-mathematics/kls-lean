@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.ConstantCoefficient
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientCoordinates
-import FunctionalInequalities.Analysis.Iteration.Absorption
-import FunctionalInequalities.Analysis.Newtonian.Schauder.KernelBounds
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.ConstantCoefficient
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientCoordinates
+public import FunctionalInequalities.Analysis.Iteration.Absorption
+public import FunctionalInequalities.Analysis.Newtonian.Schauder.KernelBounds
 
 /-!
 # Interior a priori Schauder estimate for variable Hölder coefficients (GT Theorem 6.2)
@@ -20,7 +22,8 @@ bound on `closedBall c (2R)`, satisfies on `ball c R`
 The finite a priori bounds `N`, `N2` of the Hessian enter only as hypotheses, never the constant.
 
 The proof follows GT pp. 90–92 in the ball/absorption form. For `0 < r ≤ 2R` let `T(r)` be the
-`α`-Hölder seminorm of `D²v` on `closedBall c r` (`hessianHolderSeminorm`). For `x₀ ∈ closedBall c r`
+`α`-Hölder seminorm of `D²v` on `closedBall c r` (`hessianHolderSeminorm`). For `x₀ ∈ closedBall c
+r`
 and a small radius `ρ` the coefficients are frozen at `x₀` (`freezing_step`): `v` solves the
 constant-coefficient equation `Σ_{ij} aⁱʲ(x₀) D_{ij} v = F` on `ball x₀ (2ρ)` with
 `F = g - v - Σ_i bⁱ D_i v + (Σ_{ij} (aⁱʲ(x₀) - aⁱʲ) D_{ij} v)`; the sup and Hölder bounds of `F`
@@ -42,6 +45,8 @@ coefficients are bounded and Hölder with the same constant `Kb`. The global wei
 norms of GT (6.14)–(6.16), the case `α = 1`, boundary estimates and the existence theory are not
 claimed. The constant is coarse and only its dependence on `(n, α, λ, Λ, K, Kb)` is recorded.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -213,41 +218,59 @@ on `closedBall x₀ (4ρ)` and a Hölder cap `T'` on `closedBall x₀ (2ρ)`, th
 quotient of `D²v` between `x₀` and the points of `ball x₀ ρ`. -/
 private theorem freezing_step {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα1 : α < 1)
     {lam Lam K Kb C₀ : ℝ} (hK : 0 ≤ K) (hKb : 0 ≤ Kb)
-    (hP : ConstantCoefficientBound n α lam Lam C₀)
-    {c : EuclideanSpace ℝ (Fin n)} {Rd : ℝ}
+    (hP : ConstantCoefficientBound n α lam Lam C₀) {c : EuclideanSpace ℝ (Fin n)} {Rd : ℝ}
     {a : Fin n → Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
     {b : Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
     (hsymm : ∀ x ∈ closedBall c Rd, ∀ i j, a i j x = a j i x)
-    (hell : ∀ x ∈ closedBall c Rd, ∀ ξ : EuclideanSpace ℝ (Fin n),
-      lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, a i j x * ξ i * ξ j ∧
-        ∑ i, ∑ j, a i j x * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2)
-    (haH : ∀ i j, ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd,
-      |a i j x - a i j y| ≤ K * ‖x - y‖ ^ (α:ℝ))
+    (hell :
+      ∀ x ∈ closedBall c Rd,
+        ∀ ξ : EuclideanSpace ℝ (Fin n),
+          lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, a i j x * ξ i * ξ j ∧
+            ∑ i, ∑ j, a i j x * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2)
+    (haH :
+      ∀ i j,
+        ∀ x ∈ closedBall c Rd,
+          ∀ y ∈ closedBall c Rd, |a i j x - a i j y| ≤ K * ‖x - y‖ ^ (α : ℝ))
     (hb : ∀ i, ∀ x ∈ closedBall c Rd, |b i x| ≤ Kb)
-    (hbH : ∀ i, ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd,
-      |b i x - b i y| ≤ Kb * ‖x - y‖ ^ (α:ℝ))
+    (hbH :
+      ∀ i,
+        ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd, |b i x - b i y| ≤ Kb * ‖x - y‖ ^ (α : ℝ))
     {v g : EuclideanSpace ℝ (Fin n) → ℝ} {V M : ℝ} {H : ℝ≥0} (hv : ContDiff ℝ 2 v)
-    (heq : ∀ x ∈ closedBall c Rd, (∑ i, ∑ j, a i j x * fderiv ℝ (fderiv ℝ v) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
-        (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) + v x = g x)
+    (heq :
+      ∀ x ∈ closedBall c Rd,
+        (∑ i,
+                ∑ j,
+                  a i j x *
+                    fderiv ℝ (fderiv ℝ v) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                      (EuclideanSpace.basisFun (Fin n) ℝ j)) +
+              (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+            v x =
+          g x)
     (hV : ∀ x ∈ closedBall c Rd, |v x| ≤ V) (hM : ∀ x ∈ closedBall c Rd, |g x| ≤ M)
-    (hH : HolderOnWith H α g (closedBall c Rd))
-    {x₀ : EuclideanSpace ℝ (Fin n)} {ρ : ℝ} (hρ : 0 < ρ) (hρ1 : ρ ≤ 1)
-    (hsub : closedBall x₀ (4 * ρ) ⊆ closedBall c Rd)
-    {S T' : ℝ} (hS0 : 0 ≤ S) (hT0 : 0 ≤ T')
+    (hH : HolderOnWith H α g (closedBall c Rd)) {x₀ : EuclideanSpace ℝ (Fin n)} {ρ : ℝ}
+    (hρ : 0 < ρ) (hρ1 : ρ ≤ 1) (hsub : closedBall x₀ (4 * ρ) ⊆ closedBall c Rd) {S T' : ℝ}
+    (hS0 : 0 ≤ S) (hT0 : 0 ≤ T')
     (hS : ∀ z ∈ closedBall x₀ (4 * ρ), ‖fderiv ℝ (fderiv ℝ v) z‖ ≤ S)
-    (hT : ∀ x ∈ closedBall x₀ (2 * ρ), ∀ y ∈ closedBall x₀ (2 * ρ),
-      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤ T' * ‖x - y‖ ^ (α:ℝ))
+    (hT :
+      ∀ x ∈ closedBall x₀ (2 * ρ),
+        ∀ y ∈ closedBall x₀ (2 * ρ),
+          ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤ T' * ‖x - y‖ ^ (α : ℝ))
     {G MF HF : ℝ} (hG : G = 2 * V / (2 * ρ) + S * (2 * ρ))
-    (hMF : MF = M + V + n * (Kb * G) + (n:ℝ) ^ 2 * K * (2 * ρ) ^ (α:ℝ) * S)
-    (hHF : HF = H + 4 * G + n * (Kb * G + Kb * (4 * S)) +
-      (n:ℝ) ^ 2 * K * (S + (2 * ρ) ^ (α:ℝ) * T')) :
-    ∀ y ∈ ball x₀ ρ, ‖fderiv ℝ (fderiv ℝ v) x₀ - fderiv ℝ (fderiv ℝ v) y‖ ≤
-      C₀ * (V * ρ ^ (-(2:ℝ) - α) + MF * ρ ^ (-(α:ℝ)) + HF) * ‖x₀ - y‖ ^ (α:ℝ) := by
+    (hMF : MF = M + V + n * (Kb * G) + (n : ℝ) ^ 2 * K * (2 * ρ) ^ (α : ℝ) * S)
+    (hHF :
+      HF =
+        H + 4 * G + n * (Kb * G + Kb * (4 * S)) +
+          (n : ℝ) ^ 2 * K * (S + (2 * ρ) ^ (α : ℝ) * T')) :
+    ∀ y ∈ ball x₀ ρ,
+      ‖fderiv ℝ (fderiv ℝ v) x₀ - fderiv ℝ (fderiv ℝ v) y‖ ≤
+        C₀ * (V * ρ ^ (-(2 : ℝ) - α) + MF * ρ ^ (-(α : ℝ)) + HF) * ‖x₀ - y‖ ^ (α : ℝ) := by
   intro y hy
-  have hαr : (0:ℝ) < α := hα0
-  have hα1r : (α:ℝ) ≤ 1 := by exact_mod_cast hα1.le
+  have hαr : (0 : ℝ) < α := hα0
+  have hα1r : (α : ℝ) ≤ 1 := by
+    exact_mod_cast
+      hα1.le
   -- geometry of the nested balls
+
   have h2sub : closedBall x₀ (2 * ρ) ⊆ closedBall x₀ (4 * ρ) :=
     closedBall_subset_closedBall (by linarith)
   have hball : ball x₀ (2 * ρ) ⊆ closedBall x₀ (2 * ρ) := ball_subset_closedBall
@@ -257,19 +280,23 @@ private theorem freezing_step {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα1 : �
   have hbasis : ∀ i, ‖EuclideanSpace.basisFun (Fin n) ℝ i‖ = 1 :=
     (EuclideanSpace.basisFun (Fin n) ℝ).norm_eq_one
   -- gradient bounds on the doubled ball
+
   have hG0 : 0 ≤ G := by rw [hG]; positivity
   have hgrad : ∀ x ∈ closedBall x₀ (2 * ρ), ‖fderiv ℝ v x‖ ≤ G := by
     intro x hx
     rw [hG]
     have hxs : closedBall x (2 * ρ) ⊆ closedBall x₀ (4 * ρ) :=
       closedBall_subset_closedBall' (by rw [mem_closedBall] at hx; linarith)
-    exact gradient_bound_of_hessian hv (by positivity) hS0
-      (fun z hz => hV z (hsub (hxs hz))) (fun z hz => hS z (hxs hz))
-  have hgradL : ∀ x ∈ closedBall x₀ (2 * ρ), ∀ y ∈ closedBall x₀ (2 * ρ),
-      ‖fderiv ℝ v x - fderiv ℝ v y‖ ≤ S * ‖x - y‖ := fun x hx y hy =>
+    exact
+      gradient_bound_of_hessian hv (by positivity) hS0 (fun z hz => hV z (hsub (hxs hz)))
+        (fun z hz => hS z (hxs hz))
+  have hgradL :
+    ∀ x ∈ closedBall x₀ (2 * ρ),
+      ∀ y ∈ closedBall x₀ (2 * ρ), ‖fderiv ℝ v x - fderiv ℝ v y‖ ≤ S * ‖x - y‖ :=
+    fun x hx y hy =>
     gradient_lipschitz_of_hessian hv (convex_closedBall _ _) (fun z hz => hS z (h2sub hz)) hy hx
-  have hdist4 : ∀ x ∈ closedBall x₀ (2 * ρ), ∀ y ∈ closedBall x₀ (2 * ρ),
-      ‖x - y‖ ≤ 4 * ‖x - y‖ ^ (α:ℝ) := by
+  have hdist4 :
+    ∀ x ∈ closedBall x₀ (2 * ρ), ∀ y ∈ closedBall x₀ (2 * ρ), ‖x - y‖ ≤ 4 * ‖x - y‖ ^ (α : ℝ) := by
     intro x hx y hy
     apply le_four_mul_rpow (norm_nonneg _) _ hαr hα1r
     have := dist_triangle_right x y x₀
@@ -277,179 +304,242 @@ private theorem freezing_step {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα1 : �
     rw [← dist_eq_norm]
     linarith
   -- freezing error bounds
-  obtain ⟨herr, herrH⟩ := euclidean_freezing_bounds (a := a) (u := v) (c := x₀) (r := 2 * ρ)
-    (α := (α:ℝ)) (K := K) (N := S) (H := T') (by positivity) hαr.le hK
-    (fun i j x hx y hy => haH i j x (hsub (h2sub hx)) y (hsub (h2sub hy)))
-    (fun x hx => hS x (h2sub hx)) hT
+
+  obtain ⟨herr, herrH⟩ :=
+    euclidean_freezing_bounds (a := a) (u := v) (c := x₀) (r := 2 * ρ) (α := (α : ℝ)) (K := K)
+      (N := S) (H := T') (by positivity) hαr.le hK
+      (fun i j x hx y hy => haH i j x (hsub (h2sub hx)) y (hsub (h2sub hy)))
+      (fun x hx => hS x (h2sub hx))
+      hT
   -- the frozen matrix
+
   set A : Matrix (Fin n) (Fin n) ℝ := Matrix.of fun i j => a i j x₀ with hA
-  have hAsymm : A.IsSymm := Matrix.IsSymm.ext fun i j => by
-    simp only [hA, Matrix.of_apply]
-    exact hsymm x₀ hx₀ j i
-  have hAell : ∀ ξ : EuclideanSpace ℝ (Fin n), lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, A i j * ξ i * ξ j ∧
-      ∑ i, ∑ j, A i j * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2 := fun ξ => by
-    simpa only [hA, Matrix.of_apply] using hell x₀ hx₀ ξ
+  have hAsymm : A.IsSymm :=
+    Matrix.IsSymm.ext fun i j => by
+      simp only [hA, Matrix.of_apply]
+      exact hsymm x₀ hx₀ j i
+  have hAell :
+    ∀ ξ : EuclideanSpace ℝ (Fin n),
+      lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, A i j * ξ i * ξ j ∧
+        ∑ i, ∑ j, A i j * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2 :=
+    fun ξ => by
+    simpa only [hA, Matrix.of_apply] using
+      hell x₀ hx₀
+        ξ
   -- the frozen right-hand side
-  set F : EuclideanSpace ℝ (Fin n) → ℝ := fun x => ∑ i, ∑ j, A i j * fderiv ℝ (fderiv ℝ v) x
-    (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j) with hF
-  have hFeq : ∀ x ∈ closedBall x₀ (2 * ρ), F x = g x - v x -
-      (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
-      euclideanError a v x₀ x := by
+
+  set F : EuclideanSpace ℝ (Fin n) → ℝ := fun x =>
+    ∑ i,
+      ∑ j,
+        A i j *
+          fderiv ℝ (fderiv ℝ v) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+            (EuclideanSpace.basisFun (Fin n) ℝ j) with
+    hF
+  have hFeq :
+    ∀ x ∈ closedBall x₀ (2 * ρ),
+      F x =
+        g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+          euclideanError a v x₀ x := by
     intro x hx
     have h := heq x (hsub (h2sub hx))
     rw [euclideanError_eq_sum]
     simp only [hF, hA, Matrix.of_apply, sub_mul, Finset.sum_sub_distrib]
     linarith
   -- sup bound of `F`
-  have hbsum : ∀ x ∈ closedBall x₀ (2 * ρ),
+
+  have hbsum :
+    ∀ x ∈ closedBall x₀ (2 * ρ),
       |∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤ n * (Kb * G) := by
     intro x hx
-    have := abs_sum_le_card_mul (fun i => b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i))
-      (Kb * G) (fun i => by
-        rw [abs_mul]
-        apply mul_le_mul (hb i x (hsub (h2sub hx))) _ (abs_nonneg _) hKb
-        calc |fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)|
-            = ‖fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)‖ := (Real.norm_eq_abs _).symm
-          _ ≤ ‖fderiv ℝ v x‖ * ‖EuclideanSpace.basisFun (Fin n) ℝ i‖ := (fderiv ℝ v x).le_opNorm _
-          _ ≤ G := by rw [hbasis, mul_one]; exact hgrad x hx)
+    have :=
+      abs_sum_le_card_mul (fun i => b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i))
+        (Kb * G)
+        (fun i => by
+          rw [abs_mul]
+          apply mul_le_mul (hb i x (hsub (h2sub hx))) _ (abs_nonneg _) hKb
+          calc
+            |fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)| =
+                ‖fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)‖ :=
+              (Real.norm_eq_abs _).symm
+            _ ≤ ‖fderiv ℝ v x‖ * ‖EuclideanSpace.basisFun (Fin n) ℝ i‖ :=
+              (fderiv ℝ v x).le_opNorm _
+            _ ≤ G := by rw [hbasis, mul_one]; exact hgrad x hx)
     rwa [Fintype.card_fin] at this
   have hFbound : ∀ x ∈ ball x₀ (2 * ρ), |F x| ≤ MF := by
     intro x hx
     have hx' := hball hx
     rw [hFeq x hx', hMF]
-    calc |g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
-          euclideanError a v x₀ x|
-        ≤ |g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i))| +
-          |euclideanError a v x₀ x| := abs_add_le _ _
-      _ ≤ (|g x - v x| + |∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
-          |euclideanError a v x₀ x| := add_le_add (abs_sub _ _) le_rfl
-      _ ≤ ((|g x| + |v x|) + |∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
-          |euclideanError a v x₀ x| := add_le_add (add_le_add (abs_sub _ _) le_rfl) le_rfl
-      _ ≤ ((M + V) + n * (Kb * G)) + (n:ℝ) ^ 2 * K * (2 * ρ) ^ (α:ℝ) * S :=
-          add_le_add (add_le_add (add_le_add (hM x (hsub (h2sub hx'))) (hV x (hsub (h2sub hx'))))
-            (hbsum x hx')) (herr x hx')
+    calc
+      |g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+              euclideanError a v x₀ x| ≤
+          |g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i))| +
+            |euclideanError a v x₀ x| :=
+        abs_add_le _ _
+      _ ≤
+          (|g x - v x| + |∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
+            |euclideanError a v x₀ x| :=
+        add_le_add (abs_sub _ _) le_rfl
+      _ ≤
+          ((|g x| + |v x|) +
+              |∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
+            |euclideanError a v x₀ x| :=
+        add_le_add (add_le_add (abs_sub _ _) le_rfl) le_rfl
+      _ ≤ ((M + V) + n * (Kb * G)) + (n : ℝ) ^ 2 * K * (2 * ρ) ^ (α : ℝ) * S :=
+        add_le_add
+          (add_le_add (add_le_add (hM x (hsub (h2sub hx'))) (hV x (hsub (h2sub hx'))))
+            (hbsum x hx'))
+          (herr x hx')
   -- Hölder bound of `F`
-  have hFholder : ∀ x ∈ ball x₀ (2 * ρ), ∀ y ∈ ball x₀ (2 * ρ),
-      |F x - F y| ≤ HF * ‖x - y‖ ^ (α:ℝ) := by
+
+  have hFholder :
+    ∀ x ∈ ball x₀ (2 * ρ), ∀ y ∈ ball x₀ (2 * ρ), |F x - F y| ≤ HF * ‖x - y‖ ^ (α : ℝ) := by
     intro x hx y hy
     have hx' := hball hx
     have hy' := hball hy
     have hxd := hsub (h2sub hx')
     have hyd := hsub (h2sub hy')
     rw [hFeq x hx', hFeq y hy', hHF]
-    have hg : |g x - g y| ≤ H * ‖x - y‖ ^ (α:ℝ) := by
+    have hg : |g x - g y| ≤ H * ‖x - y‖ ^ (α : ℝ) := by
       have := hH.dist_le hxd hyd
       rwa [Real.dist_eq, dist_eq_norm] at this
-    have hvv : |v x - v y| ≤ 4 * G * ‖x - y‖ ^ (α:ℝ) := by
+    have hvv : |v x - v y| ≤ 4 * G * ‖x - y‖ ^ (α : ℝ) := by
       have h1 : ‖v x - v y‖ ≤ G * ‖x - y‖ :=
         (convex_closedBall x₀ (2 * ρ)).norm_image_sub_le_of_norm_fderiv_le
           (fun z _ => (hv.differentiable (by norm_num)) z) hgrad hy' hx'
       rw [Real.norm_eq_abs] at h1
-      calc |v x - v y| ≤ G * ‖x - y‖ := h1
-        _ ≤ G * (4 * ‖x - y‖ ^ (α:ℝ)) := mul_le_mul_of_nonneg_left (hdist4 x hx' y hy') hG0
-        _ = 4 * G * ‖x - y‖ ^ (α:ℝ) := by ring
-    have hbb : |(∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
-        ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
-        n * (Kb * G + Kb * (4 * S)) * ‖x - y‖ ^ (α:ℝ) := by
+      calc
+        |v x - v y| ≤ G * ‖x - y‖ := h1
+        _ ≤ G * (4 * ‖x - y‖ ^ (α : ℝ)) := mul_le_mul_of_nonneg_left (hdist4 x hx' y hy') hG0
+        _ = 4 * G * ‖x - y‖ ^ (α : ℝ) := by ring
+    have hbb :
+      |(∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
+            ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)| ≤
+        n * (Kb * G + Kb * (4 * S)) * ‖x - y‖ ^ (α : ℝ) := by
       rw [← Finset.sum_sub_distrib]
-      have := abs_sum_le_card_mul
-        (fun i => b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i) -
-          b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i))
-        ((Kb * G + Kb * (4 * S)) * ‖x - y‖ ^ (α:ℝ)) (fun i => by
-          have he : b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i) -
-              b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i) =
-              (b i x - b i y) * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i) +
-              b i y * ((fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i)) := by
-            simp only [sub_apply]
-            ring
-          rw [he]
-          calc _ ≤ |(b i x - b i y) * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)| +
-                |b i y * ((fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i))| :=
+      have :=
+        abs_sum_le_card_mul
+          (fun i =>
+            b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i) -
+              b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i))
+          ((Kb * G + Kb * (4 * S)) * ‖x - y‖ ^ (α : ℝ))
+          (fun i => by
+            have he :
+              b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i) -
+                  b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i) =
+                (b i x - b i y) * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i) +
+                  b i y *
+                    ((fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i)) := by
+              simp only [sub_apply]
+              ring
+            rw [he]
+            calc
+              _ ≤
+                  |(b i x - b i y) * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)| +
+                    |b i y *
+                        ((fderiv ℝ v x - fderiv ℝ v y)
+                          (EuclideanSpace.basisFun (Fin n) ℝ i))| :=
                 abs_add_le _ _
-            _ ≤ (Kb * ‖x - y‖ ^ (α:ℝ)) * G + Kb * (S * (4 * ‖x - y‖ ^ (α:ℝ))) := by
+              _ ≤ (Kb * ‖x - y‖ ^ (α : ℝ)) * G + Kb * (S * (4 * ‖x - y‖ ^ (α : ℝ))) := by
                 rw [abs_mul, abs_mul]
                 apply add_le_add
                 · apply mul_le_mul (hbH i x hxd y hyd) _ (abs_nonneg _) (by positivity)
-                  calc |fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)|
-                      = ‖fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)‖ :=
-                        (Real.norm_eq_abs _).symm
+                  calc
+                    |fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)| =
+                        ‖fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)‖ :=
+                      (Real.norm_eq_abs _).symm
                     _ ≤ ‖fderiv ℝ v x‖ * ‖EuclideanSpace.basisFun (Fin n) ℝ i‖ :=
-                        (fderiv ℝ v x).le_opNorm _
+                      (fderiv ℝ v x).le_opNorm _
                     _ ≤ G := by rw [hbasis, mul_one]; exact hgrad x hx'
                 · apply mul_le_mul (hb i y hyd) _ (abs_nonneg _) hKb
-                  calc |(fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i)|
-                      = ‖(fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i)‖ :=
-                        (Real.norm_eq_abs _).symm
+                  calc
+                    |(fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i)| =
+                        ‖(fderiv ℝ v x - fderiv ℝ v y) (EuclideanSpace.basisFun (Fin n) ℝ i)‖ :=
+                      (Real.norm_eq_abs _).symm
                     _ ≤ ‖fderiv ℝ v x - fderiv ℝ v y‖ * ‖EuclideanSpace.basisFun (Fin n) ℝ i‖ :=
-                        (fderiv ℝ v x - fderiv ℝ v y).le_opNorm _
+                      (fderiv ℝ v x - fderiv ℝ v y).le_opNorm _
                     _ ≤ S * ‖x - y‖ := by rw [hbasis, mul_one]; exact hgradL x hx' y hy'
-                    _ ≤ S * (4 * ‖x - y‖ ^ (α:ℝ)) :=
-                        mul_le_mul_of_nonneg_left (hdist4 x hx' y hy') hS0
-            _ = _ := by ring)
+                    _ ≤ S * (4 * ‖x - y‖ ^ (α : ℝ)) :=
+                      mul_le_mul_of_nonneg_left (hdist4 x hx' y hy') hS0
+              _ = _ := by ring)
       rw [Fintype.card_fin, ← mul_assoc] at this
       exact this
     have herr' := herrH x hx' y hy'
-    calc |(g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
-          euclideanError a v x₀ x) -
-          (g y - v y - (∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)) +
-          euclideanError a v x₀ y)|
-        = |((g x - g y) - (v x - v y) -
-            ((∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
-              ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i))) +
-            (euclideanError a v x₀ x - euclideanError a v x₀ y)| := by congr 1; ring
-      _ ≤ |(g x - g y) - (v x - v y) -
-            ((∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
-              ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i))| +
-            |euclideanError a v x₀ x - euclideanError a v x₀ y| := abs_add_le _ _
-      _ ≤ (|(g x - g y) - (v x - v y)| +
-            |(∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
-              ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
+    calc
+      |(g x - v x - (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+                euclideanError a v x₀ x) -
+              (g y - v y - (∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+                euclideanError a v x₀ y)| =
+          |((g x - g y) - (v x - v y) -
+                ((∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
+                  ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i))) +
+              (euclideanError a v x₀ x - euclideanError a v x₀ y)| := by
+        congr 1; ring
+      _ ≤
+          |(g x - g y) - (v x - v y) -
+                ((∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
+                  ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i))| +
             |euclideanError a v x₀ x - euclideanError a v x₀ y| :=
-          add_le_add (abs_sub _ _) le_rfl
-      _ ≤ ((|g x - g y| + |v x - v y|) +
-            |(∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
-              ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
+        abs_add_le _ _
+      _ ≤
+          (|(g x - g y) - (v x - v y)| +
+              |(∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
+                  ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
             |euclideanError a v x₀ x - euclideanError a v x₀ y| :=
-          add_le_add (add_le_add (abs_sub _ _) le_rfl) le_rfl
-      _ ≤ ((H * ‖x - y‖ ^ (α:ℝ) + 4 * G * ‖x - y‖ ^ (α:ℝ)) +
-            n * (Kb * G + Kb * (4 * S)) * ‖x - y‖ ^ (α:ℝ)) +
-            (n:ℝ) ^ 2 * K * (S + (2 * ρ) ^ (α:ℝ) * T') * ‖x - y‖ ^ (α:ℝ) :=
-          add_le_add (add_le_add (add_le_add hg hvv) hbb) herr'
+        add_le_add (abs_sub _ _) le_rfl
+      _ ≤
+          ((|g x - g y| + |v x - v y|) +
+              |(∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) -
+                  ∑ i, b i y * fderiv ℝ v y (EuclideanSpace.basisFun (Fin n) ℝ i)|) +
+            |euclideanError a v x₀ x - euclideanError a v x₀ y| :=
+        add_le_add (add_le_add (abs_sub _ _) le_rfl) le_rfl
+      _ ≤
+          ((H * ‖x - y‖ ^ (α : ℝ) + 4 * G * ‖x - y‖ ^ (α : ℝ)) +
+              n * (Kb * G + Kb * (4 * S)) * ‖x - y‖ ^ (α : ℝ)) +
+            (n : ℝ) ^ 2 * K * (S + (2 * ρ) ^ (α : ℝ) * T') * ‖x - y‖ ^ (α : ℝ) :=
+        add_le_add (add_le_add (add_le_add hg hvv) hbb) herr'
       _ = _ := by ring
   have hHF0 : 0 ≤ HF := by rw [hHF]; positivity
   have hFH : HolderOnWith (Real.toNNReal HF) α F (ball x₀ (2 * ρ)) := by
     apply holderOnWith_of_dist_le hHF0
     intro x hx y hy
     rw [Real.dist_eq, dist_eq_norm]
-    exact hFholder x hx y hy
+    exact
+      hFholder x hx y
+        hy
   -- GT Lemma 6.1 on `ball x₀ (2ρ)`
+
   have hcont : ContDiffOn ℝ 2 v (ball x₀ (2 * ρ)) := hv.contDiffOn
-  have hmain := (hP A hAsymm hAell x₀ ρ hρ v F V MF (Real.toNNReal HF) hcont (fun x _ => rfl)
-    (fun x hx => hV x (hsub (h2sub (hball hx)))) hFbound hFH).2 x₀ (mem_ball_self hρ) y hy
+  have hmain :=
+    (hP A hAsymm hAell x₀ ρ hρ v F V MF (Real.toNNReal HF) hcont (fun x _ => rfl)
+          (fun x hx => hV x (hsub (h2sub (hball hx)))) hFbound hFH).2
+      x₀ (mem_ball_self hρ) y hy
   rwa [Real.coe_toNNReal _ hHF0] at hmain
 
 /-- Algebra of the recursion step. With `p = ρ⁻¹` and `qi = (ρ^α)⁻¹`, the near-point cap
 `C₀ (V ρ^(-2-α) + MF ρ^(-α) + HF)` of the freezing step plus the far-point cap `2 S ρ^(-α)` is at
 most `½ T' + Γ_V V ρ^(-2-α) + C₀ M ρ^(-α) + C₀ H`, where the sup bound `S` of the Hessian comes from
 interpolation with `ε = 1/8` and `ρ` is below the freezing threshold. -/
-private theorem recursion_algebra {n K Kb C₀ Cε V M H T' ρ q p qi w S G MF HF : ℝ}
-    (hn : 0 ≤ n) (hK : 0 ≤ K) (hKb : 0 ≤ Kb) (hC₀ : 0 < C₀) (hCε : 0 < Cε)
-    (hV : 0 ≤ V) (hT : 0 ≤ T')
-    (hρ : 0 < ρ) (hρ1 : ρ ≤ 1) (hq : 0 < q) (hq1 : q ≤ 1) (hρq : ρ ≤ q)
-    (hp : ρ * p = 1) (hqi : q * qi = 1) (hw : w ≤ 2 * q)
-    (hsmall : C₀ * (1 + n * Kb + 3 * n ^ 2 * K) * q ≤ 1 / 4)
-    (hS : S = Cε * V * p ^ 2 + 1 / 8 * q * T')
-    (hG : G = 2 * V / (2 * ρ) + S * (2 * ρ))
+private theorem recursion_algebra {n K Kb C₀ Cε V M H T' ρ q p qi w S G MF HF : ℝ} (hn : 0 ≤ n)
+    (hK : 0 ≤ K) (hKb : 0 ≤ Kb) (hC₀ : 0 < C₀) (hCε : 0 < Cε) (hV : 0 ≤ V) (hT : 0 ≤ T')
+    (hρ : 0 < ρ) (hρ1 : ρ ≤ 1) (hq : 0 < q) (hq1 : q ≤ 1) (hρq : ρ ≤ q) (hp : ρ * p = 1)
+    (hqi : q * qi = 1) (hw : w ≤ 2 * q) (hsmall : C₀ * (1 + n * Kb + 3 * n ^ 2 * K) * q ≤ 1 / 4)
+    (hS : S = Cε * V * p ^ 2 + 1 / 8 * q * T') (hG : G = 2 * V / (2 * ρ) + S * (2 * ρ))
     (hMF : MF = M + V + n * (Kb * G) + n ^ 2 * K * w * S)
     (hHF : HF = H + 4 * G + n * (Kb * G + Kb * (4 * S)) + n ^ 2 * K * (S + w * T')) :
     C₀ * (V * (p ^ 2 * qi) + MF * qi + HF) + 2 * S * qi ≤
-      1 / 2 * T' + (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) *
-        (V * (p ^ 2 * qi)) + C₀ * M * qi + C₀ * H := by
+      1 / 2 * T' +
+            (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) *
+              (V * (p ^ 2 * qi)) +
+          C₀ * M * qi +
+        C₀ * H := by
   have hp1 : 1 ≤ p := le_of_mul_le_mul_left (by rw [hp, mul_one]; exact hρ1 : ρ * 1 ≤ ρ * p) hρ
-  have hqi1 : 1 ≤ qi := le_of_mul_le_mul_left (by rw [hqi, mul_one]; exact hq1 : q * 1 ≤ q * qi) hq
+  have hqi1 : 1 ≤ qi :=
+    le_of_mul_le_mul_left (by rw [hqi, mul_one]; exact hq1 : q * 1 ≤ q * qi) hq
   have hp0 : 0 ≤ p := by linarith
-  have hqi0 : 0 ≤ qi := by linarith
+  have hqi0 : 0 ≤ qi := by
+    linarith
   -- the atoms `Y = V p²`, `q T'`, `q² T'`
+
   set Y := V * p ^ 2 with hY
   have hY0 : 0 ≤ Y := by positivity
   have hp2 : 1 ≤ p ^ 2 := one_le_pow₀ hp1
@@ -462,7 +552,8 @@ private theorem recursion_algebra {n K Kb C₀ Cε V M H T' ρ q p qi w S G MF H
     rw [div_eq_iff (by positivity)]
     linear_combination (-2 * V) * hp
   have hρS : ρ * S = Cε * (V * p) + 1 / 8 * (ρ * q) * T' := by
-    rw [hS]; linear_combination (Cε * V) * hρp2
+    rw [hS];
+    linear_combination (Cε * V) * hρp2
   have hGe : G = V * p + 2 * (ρ * S) := by rw [hG, hdiv]; ring
   have hρqT : ρ * q * T' ≤ q ^ 2 * T' := by
     rw [pow_two]
@@ -472,15 +563,15 @@ private theorem recursion_algebra {n K Kb C₀ Cε V M H T' ρ q p qi w S G MF H
     exact mul_le_mul_of_nonneg_right (mul_le_of_le_one_left hq.le hq1) hT
   have hG' : G ≤ (1 + 2 * Cε) * Y + 1 / 4 * (q ^ 2 * T') := by
     rw [hGe, hρS]
-    have h1 := mul_le_mul_of_nonneg_left hVpY (by positivity : (0:ℝ) ≤ 1 + 2 * Cε)
+    have h1 := mul_le_mul_of_nonneg_left hVpY (by positivity : (0 : ℝ) ≤ 1 + 2 * Cε)
     linarith
-  have hG0 : 0 ≤ G := by
-    rw [hGe, hρS]; positivity
+  have hG0 : 0 ≤ G := by rw [hGe, hρS]; positivity
   have hS' : S = Cε * Y + 1 / 8 * (q * T') := by rw [hS, hY]; ring
   have hS0 : 0 ≤ S := by rw [hS']; positivity
   have hwS : w * S ≤ 2 * Cε * Y + 1 / 4 * (q ^ 2 * T') := by
-    have h1 := mul_le_mul_of_nonneg_left hqY (by positivity : (0:ℝ) ≤ 2 * Cε)
-    calc w * S ≤ 2 * q * S := mul_le_mul_of_nonneg_right hw hS0
+    have h1 := mul_le_mul_of_nonneg_left hqY (by positivity : (0 : ℝ) ≤ 2 * Cε)
+    calc
+      w * S ≤ 2 * q * S := mul_le_mul_of_nonneg_right hw hS0
       _ = 2 * Cε * (q * Y) + 1 / 4 * (q ^ 2 * T') := by rw [hS']; ring
       _ ≤ _ := by linarith
   have hqG : q * G ≤ (1 + 2 * Cε) * Y + 1 / 4 * (q ^ 2 * T') :=
@@ -493,17 +584,22 @@ private theorem recursion_algebra {n K Kb C₀ Cε V M H T' ρ q p qi w S G MF H
     have h1 := mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_right hw hT) hq.le
     linarith
   -- bounds for `MF` and `q HF`
+
   have hnKb : 0 ≤ n * Kb := by positivity
   have hn2K : 0 ≤ n ^ 2 * K := by positivity
-  have hMF' : MF ≤ M + (1 + n * Kb * (1 + 2 * Cε) + 2 * n ^ 2 * K * Cε) * Y +
-      (n * Kb / 4 + n ^ 2 * K / 4) * (q ^ 2 * T') := by
+  have hMF' :
+    MF ≤
+      M + (1 + n * Kb * (1 + 2 * Cε) + 2 * n ^ 2 * K * Cε) * Y +
+        (n * Kb / 4 + n ^ 2 * K / 4) * (q ^ 2 * T') := by
     rw [hMF]
     have h1 := mul_le_mul_of_nonneg_left hG' hnKb
     have h2 := mul_le_mul_of_nonneg_left hwS hn2K
     linarith
-  have hqHF : q * HF ≤ q * H + (4 * (1 + 2 * Cε) + n * Kb * (1 + 2 * Cε) + 4 * n * Kb * Cε +
-      n ^ 2 * K * Cε) * Y + (1 + n * Kb / 4 + n * Kb / 2 + n ^ 2 * K / 8 + 2 * n ^ 2 * K) *
-      (q ^ 2 * T') := by
+  have hqHF :
+    q * HF ≤
+      q * H +
+          (4 * (1 + 2 * Cε) + n * Kb * (1 + 2 * Cε) + 4 * n * Kb * Cε + n ^ 2 * K * Cε) * Y +
+        (1 + n * Kb / 4 + n * Kb / 2 + n ^ 2 * K / 8 + 2 * n ^ 2 * K) * (q ^ 2 * T') := by
     rw [hHF]
     have h1 := mul_le_mul_of_nonneg_left hqG hnKb
     have h2 := mul_le_mul_of_nonneg_left hqS hnKb
@@ -511,38 +607,52 @@ private theorem recursion_algebra {n K Kb C₀ Cε V M H T' ρ q p qi w S G MF H
     have h4 := mul_le_mul_of_nonneg_left hqwT hn2K
     linarith
   -- the absorbed term
+
   have hT'small : C₀ * (1 + n * Kb + 3 * n ^ 2 * K) * (q ^ 2 * T') ≤ 1 / 4 * (q * T') := by
     have := mul_le_mul_of_nonneg_right hsmall (mul_nonneg hq.le hT)
     linarith
   -- multiply the claim by `q > 0`
+
   apply le_of_mul_le_mul_left _ hq
-  have hqY' : q * (V * (p ^ 2 * qi)) = Y := by
-    rw [hY]; linear_combination (V * p ^ 2) * hqi
+  have hqY' : q * (V * (p ^ 2 * qi)) = Y := by rw [hY]; linear_combination (V * p ^ 2) * hqi
   have hZ0 : 0 ≤ q ^ 2 * T' := by positivity
-  have hcoefY : (C₀ * (6 + 8 * Cε + 2 * n * Kb + 8 * n * Kb * Cε + 3 * n ^ 2 * K * Cε) + 2 * Cε) * Y ≤
+  have hcoefY :
+    (C₀ * (6 + 8 * Cε + 2 * n * Kb + 8 * n * Kb * Cε + 3 * n ^ 2 * K * Cε) + 2 * Cε) * Y ≤
       (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) * Y := by
     apply mul_le_mul_of_nonneg_right _ hY0
     linarith [mul_nonneg hC₀.le hCε.le, mul_nonneg hC₀.le hn2K,
       mul_nonneg (mul_nonneg hC₀.le hn2K) hCε.le]
-  have hcoefZ : C₀ * (1 + n * Kb / 4 + n * Kb / 2 + n ^ 2 * K / 8 + 2 * n ^ 2 * K +
-      (n * Kb / 4 + n ^ 2 * K / 4)) * (q ^ 2 * T') ≤
+  have hcoefZ :
+    C₀ *
+          (1 + n * Kb / 4 + n * Kb / 2 + n ^ 2 * K / 8 + 2 * n ^ 2 * K +
+            (n * Kb / 4 + n ^ 2 * K / 4)) *
+        (q ^ 2 * T') ≤
       C₀ * (1 + n * Kb + 3 * n ^ 2 * K) * (q ^ 2 * T') := by
     apply mul_le_mul_of_nonneg_right _ hZ0
     linarith [mul_nonneg hC₀.le hn2K]
   have hMF'' := mul_le_mul_of_nonneg_left hMF' hC₀.le
   have hqHF' := mul_le_mul_of_nonneg_left hqHF hC₀.le
-  have hlhs : q * (C₀ * (V * (p ^ 2 * qi) + MF * qi + HF) + 2 * S * qi) =
+  have hlhs :
+    q * (C₀ * (V * (p ^ 2 * qi) + MF * qi + HF) + 2 * S * qi) =
       C₀ * (Y + MF + q * HF) + 2 * S := by
     linear_combination (C₀ * (V * p ^ 2) + C₀ * MF + 2 * S) * hqi
-  have hrhs : q * (1 / 2 * T' + (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) *
-      (V * (p ^ 2 * qi)) + C₀ * M * qi + C₀ * H) = 1 / 2 * (q * T') +
-      (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) * Y + C₀ * M + C₀ * (q * H) := by
+  have hrhs :
+    q *
+        (1 / 2 * T' +
+              (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) *
+                (V * (p ^ 2 * qi)) +
+            C₀ * M * qi +
+          C₀ * H) =
+      1 / 2 * (q * T') + (C₀ * (6 + 2 * n * Kb + 3 * n ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) * Y +
+          C₀ * M +
+        C₀ * (q * H) := by
     rw [← hqY']
     linear_combination (C₀ * M) * hqi
   rw [hlhs, hrhs, hS']
   linarith
 
-/-- **Recursion for the Hessian Hölder seminorm** (GT pp. 91–92, the step before the absorption).
+/--
+**Recursion for the Hessian Hölder seminorm** (GT pp. 91–92, the step before the absorption).
 For `0 < r < r' ≤ Rd` and a radius `ρ ≤ ρ₀` with `8ρ ≤ r' - r`, the seminorm on `closedBall c r`
 is at most half the seminorm on `closedBall c r'` plus `Γ_V V ρ^(-2-α) + C₀ M ρ^(-α) + C₀ H`.
 The sup of the Hessian on `closedBall c (r + 4ρ)` is interpolated between `V` and the seminorm on
@@ -551,44 +661,67 @@ use the sup bound, and `recursion_algebra` collects the terms. -/
 private theorem seminorm_recursion {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα1 : α < 1)
     {lam Lam K Kb C₀ Cε : ℝ} (hK : 0 ≤ K) (hKb : 0 ≤ Kb) (hC₀ : 0 < C₀) (hCε : 0 < Cε)
     (hP : ConstantCoefficientBound n α lam Lam C₀)
-    (hI : ∀ (r : ℝ), 0 < r → ∀ (f : EuclideanSpace ℝ (Fin n) → ℝ)
-      (f' : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)
-      (f'' : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ),
-      (∀ z, HasFDerivAt f (f' z) z) → (∀ z, HasFDerivAt f' (f'' z) z) →
-      ∀ (x : EuclideanSpace ℝ (Fin n)) (M H : ℝ), 0 ≤ H →
-      (∀ z ∈ closedBall x r, |f z| ≤ M) →
-      (∀ z ∈ closedBall x r, ‖f'' z - f'' x‖ ≤ H * ‖z - x‖ ^ (α:ℝ)) →
-      r ^ 2 * ‖f'' x‖ ≤ Cε * M + 1 / 8 * H * r ^ (2 + (α:ℝ)))
+    (hI :
+      ∀ (r : ℝ),
+        0 < r →
+          ∀ (f : EuclideanSpace ℝ (Fin n) → ℝ)
+            (f' : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ)
+            (f'' :
+              EuclideanSpace ℝ (Fin n) →
+                EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ),
+            (∀ z, HasFDerivAt f (f' z) z) →
+              (∀ z, HasFDerivAt f' (f'' z) z) →
+                ∀ (x : EuclideanSpace ℝ (Fin n)) (M H : ℝ),
+                  0 ≤ H →
+                    (∀ z ∈ closedBall x r, |f z| ≤ M) →
+                      (∀ z ∈ closedBall x r, ‖f'' z - f'' x‖ ≤ H * ‖z - x‖ ^ (α : ℝ)) →
+                        r ^ 2 * ‖f'' x‖ ≤ Cε * M + 1 / 8 * H * r ^ (2 + (α : ℝ)))
     {ρ₀ : ℝ} (hρ₀1 : ρ₀ ≤ 1)
-    (hsmall : ∀ ρ : ℝ, 0 < ρ → ρ ≤ ρ₀ →
-      C₀ * (1 + n * Kb + 3 * (n:ℝ) ^ 2 * K) * ρ ^ (α:ℝ) ≤ 1 / 4)
-    {c : EuclideanSpace ℝ (Fin n)} {Rd : ℝ}
-    {a : Fin n → Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
+    (hsmall :
+      ∀ ρ : ℝ, 0 < ρ → ρ ≤ ρ₀ → C₀ * (1 + n * Kb + 3 * (n : ℝ) ^ 2 * K) * ρ ^ (α : ℝ) ≤ 1 / 4)
+    {c : EuclideanSpace ℝ (Fin n)} {Rd : ℝ} {a : Fin n → Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
     {b : Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
     (hsymm : ∀ x ∈ closedBall c Rd, ∀ i j, a i j x = a j i x)
-    (hell : ∀ x ∈ closedBall c Rd, ∀ ξ : EuclideanSpace ℝ (Fin n),
-      lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, a i j x * ξ i * ξ j ∧
-        ∑ i, ∑ j, a i j x * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2)
-    (haH : ∀ i j, ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd,
-      |a i j x - a i j y| ≤ K * ‖x - y‖ ^ (α:ℝ))
+    (hell :
+      ∀ x ∈ closedBall c Rd,
+        ∀ ξ : EuclideanSpace ℝ (Fin n),
+          lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, a i j x * ξ i * ξ j ∧
+            ∑ i, ∑ j, a i j x * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2)
+    (haH :
+      ∀ i j,
+        ∀ x ∈ closedBall c Rd,
+          ∀ y ∈ closedBall c Rd, |a i j x - a i j y| ≤ K * ‖x - y‖ ^ (α : ℝ))
     (hb : ∀ i, ∀ x ∈ closedBall c Rd, |b i x| ≤ Kb)
-    (hbH : ∀ i, ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd,
-      |b i x - b i y| ≤ Kb * ‖x - y‖ ^ (α:ℝ))
+    (hbH :
+      ∀ i,
+        ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd, |b i x - b i y| ≤ Kb * ‖x - y‖ ^ (α : ℝ))
     {v g : EuclideanSpace ℝ (Fin n) → ℝ} {V M : ℝ} {H : ℝ≥0} (hv : ContDiff ℝ 2 v)
-    (heq : ∀ x ∈ closedBall c Rd, (∑ i, ∑ j, a i j x * fderiv ℝ (fderiv ℝ v) x
-        (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)) +
-        (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) + v x = g x)
+    (heq :
+      ∀ x ∈ closedBall c Rd,
+        (∑ i,
+                ∑ j,
+                  a i j x *
+                    fderiv ℝ (fderiv ℝ v) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+                      (EuclideanSpace.basisFun (Fin n) ℝ j)) +
+              (∑ i, b i x * fderiv ℝ v x (EuclideanSpace.basisFun (Fin n) ℝ i)) +
+            v x =
+          g x)
     (hV : ∀ x ∈ closedBall c Rd, |v x| ≤ V) (hM : ∀ x ∈ closedBall c Rd, |g x| ≤ M)
-    (hH : HolderOnWith H α g (closedBall c Rd))
-    {N2 : ℝ} (hN2 : ∀ x ∈ closedBall c Rd, ∀ y ∈ closedBall c Rd,
-      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤ N2 * ‖x - y‖ ^ (α:ℝ))
-    {r r' : ℝ} (hr : 0 < r) (hr'R : r' ≤ Rd)
-    {ρ : ℝ} (hρ : 0 < ρ) (hρρ₀ : ρ ≤ ρ₀) (h8 : 8 * ρ ≤ r' - r) :
-    hessianHolderSeminorm v α c r ≤ 1 / 2 * hessianHolderSeminorm v α c r' +
-      (C₀ * (6 + 2 * n * Kb + 3 * (n:ℝ) ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) * V *
-        ρ ^ (-(2:ℝ) - α) + C₀ * M * ρ ^ (-(α:ℝ)) + C₀ * H := by
-  have hαr : (0:ℝ) < α := hα0
-  have hα1r : (α:ℝ) ≤ 1 := by exact_mod_cast hα1.le
+    (hH : HolderOnWith H α g (closedBall c Rd)) {N2 : ℝ}
+    (hN2 :
+      ∀ x ∈ closedBall c Rd,
+        ∀ y ∈ closedBall c Rd,
+          ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤ N2 * ‖x - y‖ ^ (α : ℝ))
+    {r r' : ℝ} (hr : 0 < r) (hr'R : r' ≤ Rd) {ρ : ℝ} (hρ : 0 < ρ) (hρρ₀ : ρ ≤ ρ₀)
+    (h8 : 8 * ρ ≤ r' - r) :
+    hessianHolderSeminorm v α c r ≤
+      1 / 2 * hessianHolderSeminorm v α c r' +
+            (C₀ * (6 + 2 * n * Kb + 3 * (n : ℝ) ^ 2 * K) * (1 + 4 * Cε) + 2 * Cε) * V *
+              ρ ^ (-(2 : ℝ) - α) +
+          C₀ * M * ρ ^ (-(α : ℝ)) +
+        C₀ * H := by
+  have hαr : (0 : ℝ) < α := hα0
+  have hα1r : (α : ℝ) ≤ 1 := by exact_mod_cast hα1.le
   have hρ1 : ρ ≤ 1 := hρρ₀.trans hρ₀1
   have hsubr' : closedBall c r' ⊆ closedBall c Rd := closedBall_subset_closedBall hr'R
   have hc : c ∈ closedBall c Rd := mem_closedBall_self (by linarith)
@@ -596,51 +729,63 @@ private theorem seminorm_recursion {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα
   have hM0 : 0 ≤ M := (abs_nonneg _).trans (hM c hc)
   set T' := hessianHolderSeminorm v α c r' with hT'def
   have hT0 : 0 ≤ T' := hessianHolderSeminorm_nonneg v α c r'
-  have hT : ∀ x ∈ closedBall c r', ∀ y ∈ closedBall c r',
-      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤ T' * ‖x - y‖ ^ (α:ℝ) :=
-    fun x hx y hy => le_hessianHolderSeminorm hαr
-      (fun x hx y hy => hN2 x (hsubr' hx) y (hsubr' hy)) hx hy
+  have hT :
+    ∀ x ∈ closedBall c r',
+      ∀ y ∈ closedBall c r',
+        ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤ T' * ‖x - y‖ ^ (α : ℝ) :=
+    fun x hx y hy =>
+    le_hessianHolderSeminorm hαr (fun x hx y hy => hN2 x (hsubr' hx) y (hsubr' hy)) hx
+      hy
   -- derivative witnesses
+
   have hdv : ∀ z, HasFDerivAt v (fderiv ℝ v z) z := fun z =>
     ((hv.differentiable (by norm_num)) z).hasFDerivAt
   have hddv : ∀ z, HasFDerivAt (fderiv ℝ v) (fderiv ℝ (fderiv ℝ v) z) z := fun z =>
     (((hv.fderiv_right (m := 1) (by norm_num)).differentiable (by norm_num)) z).hasFDerivAt
   -- powers of `ρ`
-  set q := ρ ^ (α:ℝ) with hqdef
+
+  set q := ρ ^ (α : ℝ) with hqdef
   have hq0 : 0 < q := Real.rpow_pos_of_pos hρ _
   have hq1 : q ≤ 1 := Real.rpow_le_one hρ.le hρ1 hαr.le
   have hρq : ρ ≤ q := Real.self_le_rpow_of_le_one hρ.le hρ1 hα1r
-  have hρ2α : ρ ^ (2 + (α:ℝ)) = ρ ^ 2 * q := by rw [Real.rpow_add hρ, Real.rpow_two]
-  have hw : (2 * ρ) ^ (α:ℝ) ≤ 2 * q := by
+  have hρ2α : ρ ^ (2 + (α : ℝ)) = ρ ^ 2 * q := by rw [Real.rpow_add hρ, Real.rpow_two]
+  have hw : (2 * ρ) ^ (α : ℝ) ≤ 2 * q := by
     rw [Real.mul_rpow (by norm_num) hρ.le]
     apply mul_le_mul_of_nonneg_right _ hq0.le
-    have := Real.rpow_le_rpow_of_exponent_le (by norm_num : (1:ℝ) ≤ 2) hα1r
+    have := Real.rpow_le_rpow_of_exponent_le (by norm_num : (1 : ℝ) ≤ 2) hα1r
     rwa [Real.rpow_one] at this
   -- sup bound of the Hessian on `closedBall c (r + 4ρ)` by interpolation
+
   set S := Cε * V * ρ⁻¹ ^ 2 + 1 / 8 * q * T' with hSdef
   have hS0 : 0 ≤ S := by positivity
   have hSbound : ∀ z ∈ closedBall c (r + 4 * ρ), ‖fderiv ℝ (fderiv ℝ v) z‖ ≤ S := by
     intro z hz
     have hzsub : closedBall z ρ ⊆ closedBall c r' :=
       closedBall_subset_closedBall' (by rw [mem_closedBall] at hz; linarith)
-    have h := hI ρ hρ v (fderiv ℝ v) (fderiv ℝ (fderiv ℝ v)) hdv hddv z V T' hT0
-      (fun w hw => hV w (hsubr' (hzsub hw)))
-      (fun w hw => hT w (hzsub hw) z (hzsub (mem_closedBall_self hρ.le)))
+    have h :=
+      hI ρ hρ v (fderiv ℝ v) (fderiv ℝ (fderiv ℝ v)) hdv hddv z V T' hT0
+        (fun w hw => hV w (hsubr' (hzsub hw)))
+        (fun w hw => hT w (hzsub hw) z (hzsub (mem_closedBall_self hρ.le)))
     rw [hρ2α] at h
     have hρ2 : 0 < ρ ^ 2 := by positivity
-    have hS2 : ρ ^ 2 * S = Cε * V + 1 / 8 * T' * (ρ ^ 2 * q) := by
-      rw [hSdef]; field_simp
+    have hS2 : ρ ^ 2 * S = Cε * V + 1 / 8 * T' * (ρ ^ 2 * q) := by rw [hSdef]; field_simp
     rw [← mul_le_mul_iff_right₀ hρ2, hS2]
     linarith
   -- the quantities of the freezing step
+
   set G := 2 * V / (2 * ρ) + S * (2 * ρ) with hGdef
-  set MF := M + V + n * (Kb * G) + (n:ℝ) ^ 2 * K * (2 * ρ) ^ (α:ℝ) * S with hMFdef
-  set HF := H + 4 * G + n * (Kb * G + Kb * (4 * S)) +
-    (n:ℝ) ^ 2 * K * (S + (2 * ρ) ^ (α:ℝ) * T') with hHFdef
+  set MF := M + V + n * (Kb * G) + (n : ℝ) ^ 2 * K * (2 * ρ) ^ (α : ℝ) * S with hMFdef
+  set HF :=
+    H + 4 * G + n * (Kb * G + Kb * (4 * S)) +
+      (n : ℝ) ^ 2 * K * (S + (2 * ρ) ^ (α : ℝ) * T') with
+    hHFdef
   -- near pairs: the freezing step
-  have hnear : ∀ x ∈ closedBall c r, ∀ y ∈ ball x ρ,
-      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
-        C₀ * (V * ρ ^ (-(2:ℝ) - α) + MF * ρ ^ (-(α:ℝ)) + HF) * ‖x - y‖ ^ (α:ℝ) := by
+
+  have hnear :
+    ∀ x ∈ closedBall c r,
+      ∀ y ∈ ball x ρ,
+        ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
+          C₀ * (V * ρ ^ (-(2 : ℝ) - α) + MF * ρ ^ (-(α : ℝ)) + HF) * ‖x - y‖ ^ (α : ℝ) := by
     intro x hx y hy
     rw [mem_closedBall] at hx
     have hsub4 : closedBall x (4 * ρ) ⊆ closedBall c Rd :=
@@ -649,58 +794,73 @@ private theorem seminorm_recursion {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα
       closedBall_subset_closedBall' (by linarith)
     have hsub2 : closedBall x (2 * ρ) ⊆ closedBall c r' :=
       closedBall_subset_closedBall' (by linarith)
-    exact freezing_step hα0 hα1 hK hKb hP hsymm hell haH hb hbH hv heq hV hM hH hρ hρ1 hsub4
-      hS0 hT0 (fun z hz => hSbound z (hsub4' hz))
-      (fun x' hx' y' hy' => hT x' (hsub2 hx') y' (hsub2 hy')) hGdef hMFdef hHFdef y hy
+    exact
+      freezing_step hα0 hα1 hK hKb hP hsymm hell haH hb hbH hv heq hV hM hH hρ hρ1 hsub4 hS0 hT0
+        (fun z hz => hSbound z (hsub4' hz))
+        (fun x' hx' y' hy' => hT x' (hsub2 hx') y' (hsub2 hy')) hGdef hMFdef hHFdef y
+        hy
   -- far pairs: twice the sup bound
-  have hfar : ∀ x ∈ closedBall c r, ∀ y ∈ closedBall c r, ρ ≤ ‖x - y‖ →
-      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
-        2 * S * ρ ^ (-(α:ℝ)) * ‖x - y‖ ^ (α:ℝ) := by
+
+  have hfar :
+    ∀ x ∈ closedBall c r,
+      ∀ y ∈ closedBall c r,
+        ρ ≤ ‖x - y‖ →
+          ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
+            2 * S * ρ ^ (-(α : ℝ)) * ‖x - y‖ ^ (α : ℝ) := by
     intro x hx y hy hxy
     have hsubr : closedBall c r ⊆ closedBall c (r + 4 * ρ) :=
       closedBall_subset_closedBall (by linarith)
     have h1 := hSbound x (hsubr hx)
     have h2 := hSbound y (hsubr hy)
-    have hqxy : q ≤ ‖x - y‖ ^ (α:ℝ) := Real.rpow_le_rpow hρ.le hxy hαr.le
-    calc ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖
-        ≤ ‖fderiv ℝ (fderiv ℝ v) x‖ + ‖fderiv ℝ (fderiv ℝ v) y‖ := by
-          rw [sub_eq_add_neg]
-          exact (ContinuousLinearMap.opNorm_add_le _ _).trans
-            (by rw [ContinuousLinearMap.opNorm_neg])
+    have hqxy : q ≤ ‖x - y‖ ^ (α : ℝ) := Real.rpow_le_rpow hρ.le hxy hαr.le
+    calc
+      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
+          ‖fderiv ℝ (fderiv ℝ v) x‖ + ‖fderiv ℝ (fderiv ℝ v) y‖ := by
+        rw [sub_eq_add_neg]
+        exact
+          (ContinuousLinearMap.opNorm_add_le _ _).trans (by rw [ContinuousLinearMap.opNorm_neg])
       _ ≤ 2 * S := by linarith
-      _ = 2 * S * ρ ^ (-(α:ℝ)) * q := by
-          rw [Real.rpow_neg hρ.le, ← hqdef]; field_simp
-      _ ≤ 2 * S * ρ ^ (-(α:ℝ)) * ‖x - y‖ ^ (α:ℝ) :=
-          mul_le_mul_of_nonneg_left hqxy (by positivity)
+      _ = 2 * S * ρ ^ (-(α : ℝ)) * q := by rw [Real.rpow_neg hρ.le, ← hqdef]; field_simp
+      _ ≤ 2 * S * ρ ^ (-(α : ℝ)) * ‖x - y‖ ^ (α : ℝ) :=
+        mul_le_mul_of_nonneg_left hqxy
+          (by positivity)
   -- the seminorm on `closedBall c r` is at most the sum of the two caps
-  have hA0 : 0 ≤ C₀ * (V * ρ ^ (-(2:ℝ) - α) + MF * ρ ^ (-(α:ℝ)) + HF) := by
+
+  have hA0 : 0 ≤ C₀ * (V * ρ ^ (-(2 : ℝ) - α) + MF * ρ ^ (-(α : ℝ)) + HF) := by
     have : 0 ≤ MF := by rw [hMFdef]; positivity
     have : 0 ≤ HF := by rw [hHFdef]; positivity
     positivity
-  have hB0 : 0 ≤ 2 * S * ρ ^ (-(α:ℝ)) := by positivity
-  have hcap : ∀ x ∈ closedBall c r, ∀ y ∈ closedBall c r,
-      ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
-        (C₀ * (V * ρ ^ (-(2:ℝ) - α) + MF * ρ ^ (-(α:ℝ)) + HF) + 2 * S * ρ ^ (-(α:ℝ))) *
-          ‖x - y‖ ^ (α:ℝ) := by
+  have hB0 : 0 ≤ 2 * S * ρ ^ (-(α : ℝ)) := by positivity
+  have hcap :
+    ∀ x ∈ closedBall c r,
+      ∀ y ∈ closedBall c r,
+        ‖fderiv ℝ (fderiv ℝ v) x - fderiv ℝ (fderiv ℝ v) y‖ ≤
+          (C₀ * (V * ρ ^ (-(2 : ℝ) - α) + MF * ρ ^ (-(α : ℝ)) + HF) + 2 * S * ρ ^ (-(α : ℝ))) *
+            ‖x - y‖ ^ (α : ℝ) := by
     intro x hx y hy
-    have hd0 : 0 ≤ ‖x - y‖ ^ (α:ℝ) := by positivity
+    have hd0 : 0 ≤ ‖x - y‖ ^ (α : ℝ) := by positivity
     by_cases hxy : ‖x - y‖ < ρ
     · have hy' : y ∈ ball x ρ := by rw [mem_ball, dist_comm, dist_eq_norm]; exact hxy
       exact (hnear x hx y hy').trans (mul_le_mul_of_nonneg_right (by linarith) hd0)
-    · exact (hfar x hx y hy (not_lt.mp hxy)).trans
-        (mul_le_mul_of_nonneg_right (by linarith) hd0)
-  have hTr := hessianHolderSeminorm_le (add_nonneg hA0 hB0) hcap
+    · exact
+        (hfar x hx y hy (not_lt.mp hxy)).trans (mul_le_mul_of_nonneg_right (by linarith) hd0)
+  have hTr :=
+    hessianHolderSeminorm_le (add_nonneg hA0 hB0)
+      hcap
   -- algebra
-  have e1 : ρ ^ (-(2:ℝ) - α) = ρ⁻¹ ^ 2 * q⁻¹ := by
-    rw [show -(2:ℝ) - α = -(2 + α) by ring, Real.rpow_neg hρ.le, hρ2α, mul_inv, inv_pow]
-  have e2 : ρ ^ (-(α:ℝ)) = q⁻¹ := by rw [Real.rpow_neg hρ.le]
-  have halg := recursion_algebra (n := (n:ℝ)) (K := K) (Kb := Kb) (C₀ := C₀) (Cε := Cε) (V := V)
-    (M := M) (H := H) (T' := T') (ρ := ρ) (q := q) (p := ρ⁻¹) (qi := q⁻¹) (w := (2 * ρ) ^ (α:ℝ))
-    (S := S) (G := G) (MF := MF) (HF := HF) (Nat.cast_nonneg n) hK hKb hC₀ hCε hV0 hT0 hρ hρ1
-    hq0 hq1 hρq (mul_inv_cancel₀ hρ.ne') (mul_inv_cancel₀ hq0.ne') hw
-    (hsmall ρ hρ hρρ₀) hSdef hGdef hMFdef hHFdef
+
+  have e1 : ρ ^ (-(2 : ℝ) - α) = ρ⁻¹ ^ 2 * q⁻¹ := by
+    rw [show -(2 : ℝ) - α = -(2 + α) by ring, Real.rpow_neg hρ.le, hρ2α, mul_inv, inv_pow]
+  have e2 : ρ ^ (-(α : ℝ)) = q⁻¹ := by rw [Real.rpow_neg hρ.le]
+  have halg :=
+    recursion_algebra (n := (n : ℝ)) (K := K) (Kb := Kb) (C₀ := C₀) (Cε := Cε) (V := V) (M := M)
+      (H := H) (T' := T') (ρ := ρ) (q := q) (p := ρ⁻¹) (qi := q⁻¹) (w := (2 * ρ) ^ (α : ℝ))
+      (S := S) (G := G) (MF := MF) (HF := HF) (Nat.cast_nonneg n) hK hKb hC₀ hCε hV0 hT0 hρ hρ1
+      hq0 hq1 hρq (mul_inv_cancel₀ hρ.ne') (mul_inv_cancel₀ hq0.ne') hw (hsmall ρ hρ hρρ₀) hSdef
+      hGdef hMFdef hHFdef
   rw [e1, e2] at hTr ⊢
-  calc hessianHolderSeminorm v α c r ≤ _ := hTr
+  calc
+    hessianHolderSeminorm v α c r ≤ _ := hTr
     _ ≤ _ := halg
     _ = _ := by ring
 
@@ -747,6 +907,8 @@ theorem variable_coefficient_interior_hessian_holder {n : ℕ} (hn : 2 ≤ n) {�
   have hα1r : (α:ℝ) ≤ 1 := by exact_mod_cast hα1.le
   -- the constants: GT Lemma 6.1, interpolation with `ε = 1/8`, the freezing threshold `ρ₀`,
   -- the absorption constant
+
+  -- Choose the constant-coefficient estimate and the absorption scale.
   obtain ⟨C₀, hC₀, hP⟩ := constant_coefficient_interior_hessian_holder hn hα0 hα1 hlam hLam
   obtain ⟨Cε, hCε, hI⟩ := exists_hessian_interpolation_constant (E := EuclideanSpace ℝ (Fin n))
     (α:ℝ) hαr (1 / 8) (by norm_num)
@@ -790,6 +952,8 @@ theorem variable_coefficient_interior_hessian_holder {n : ℕ} (hn : 2 ≤ n) {�
     have h8 : 8 * ρ ≤ r' - r := by
       have := min_le_right ρ₀ ((r' - r) / 8)
       linarith
+
+    -- Apply the seminorm recursion with the chosen smallness parameters.
     have hTr := seminorm_recursion hα0 hα1 hK hKb hC₀ hCε hP hI hρ₀1 hsmall' hsymm hell haH hb
       hbH hv heq hV hM hH hN2 hr hr'R hρ0 hρρ₀ h8
     -- `ρ⁻¹ ≤ κ / (r' - r)`
@@ -964,6 +1128,8 @@ theorem variable_coefficient_interior_hessian_holder {n : ℕ} (hn : 2 ≤ n) {�
   · -- the sup bound by interpolation on `closedBall x (R/2) ⊆ closedBall c (3R/2)`
     have hxsub : closedBall x (R / 2) ⊆ closedBall c (3 * R / 2) :=
       closedBall_subset_closedBall' (by rw [mem_ball] at hx; linarith)
+
+    -- Return from the scaled seminorm estimate to the original Hessian entries.
     have hdv : ∀ z, HasFDerivAt v (fderiv ℝ v z) z := fun z =>
       ((hv.differentiable (by norm_num)) z).hasFDerivAt
     have hddv : ∀ z, HasFDerivAt (fderiv ℝ v) (fderiv ℝ (fderiv ℝ v) z) z := fun z =>

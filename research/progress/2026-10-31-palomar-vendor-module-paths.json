@@ -1,0 +1,1227 @@
+{
+  "version": 1,
+  "review_date": "2026-10-31",
+  "scope": "Correct the pre-existing vendor lock module-name metadata. Package directory is not part of a Lake import module. No Lean source, import, declaration, upstream/vendored content hash, port.patch hunk or patched status changes.",
+  "example": {
+    "path": "BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean",
+    "old": "BrownianMotion.BrownianMotion.Auxiliary.Algebra",
+    "new": "BrownianMotion.Auxiliary.Algebra"
+  },
+  "old_lock_sha256": "4728f4201a37f50d8f947ea01306601f84b38a16fe09c104be6a3c59f8798427",
+  "new_lock_sha256": "7b20eeed50c18be8fd01068eab2665e19f95b77083b1719313139ccf749619ba",
+  "preservation": "Removing only the242 module-field changes makes the complete new JSON equal to the old JSON. The219 patched statuses and all file/patch hashes are identical. Generation re-reads pinned upstream Git blobs and reverse-applies the unchanged patch.",
+  "compiler_check": "The242 corrected module names equal the actual imported vendor-module name set observed by the pinned Lean4.35 compiler. This source/module observation is separate from proof certification.",
+  "regression_checks": "Two meaningful tests reproduce the defect on the old implementation: exact known Lake import names for all4 fixture libraries; reject doubled-prefix metadata. The corrected strict checker still derives its expected module from the validated file key and separately checks upstream_path. No schema or hash/patch validation is weakened.",
+  "mapping": [
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Algebra",
+      "module": "BrownianMotion.Auxiliary.Algebra"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Analysis.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Analysis",
+      "module": "BrownianMotion.Auxiliary.Analysis"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/ContinuousBilinForm.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.ContinuousBilinForm",
+      "module": "BrownianMotion.Auxiliary.ContinuousBilinForm"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/ConvergenceInMeasure.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.ConvergenceInMeasure",
+      "module": "BrownianMotion.Auxiliary.ConvergenceInMeasure"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/DenseCountable.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.DenseCountable",
+      "module": "BrownianMotion.Auxiliary.DenseCountable"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/ENNReal.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.ENNReal",
+      "module": "BrownianMotion.Auxiliary.ENNReal"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Filtration.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Filtration",
+      "module": "BrownianMotion.Auxiliary.Filtration"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/FiniteInf.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.FiniteInf",
+      "module": "BrownianMotion.Auxiliary.FiniteInf"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/HasLaw.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.HasLaw",
+      "module": "BrownianMotion.Auxiliary.HasLaw"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Indistinguishable.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Indistinguishable",
+      "module": "BrownianMotion.Auxiliary.Indistinguishable"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Jensen.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Jensen",
+      "module": "BrownianMotion.Auxiliary.Jensen"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/LeftLimWithin.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.LeftLimWithin",
+      "module": "BrownianMotion.Auxiliary.LeftLimWithin"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/LinearAlgebra.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.LinearAlgebra",
+      "module": "BrownianMotion.Auxiliary.LinearAlgebra"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Martingale.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Martingale",
+      "module": "BrownianMotion.Auxiliary.Martingale"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/MeanInequalities.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.MeanInequalities",
+      "module": "BrownianMotion.Auxiliary.MeanInequalities"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/MeasureTheory.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.MeasureTheory",
+      "module": "BrownianMotion.Auxiliary.MeasureTheory"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Metric.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Metric",
+      "module": "BrownianMotion.Auxiliary.Metric"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/NNReal.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.NNReal",
+      "module": "BrownianMotion.Auxiliary.NNReal"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Nat.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Nat",
+      "module": "BrownianMotion.Auxiliary.Nat"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/StoppedProcess.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.StoppedProcess",
+      "module": "BrownianMotion.Auxiliary.StoppedProcess"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Topology.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Topology",
+      "module": "BrownianMotion.Auxiliary.Topology"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Auxiliary.Upcrossing",
+      "module": "BrownianMotion.Auxiliary.Upcrossing"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/Chaining.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.Chaining",
+      "module": "BrownianMotion.Continuity.Chaining"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/CoveringNumber.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.CoveringNumber",
+      "module": "BrownianMotion.Continuity.CoveringNumber"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/HasBoundedInternalCoveringNumber.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.HasBoundedInternalCoveringNumber",
+      "module": "BrownianMotion.Continuity.HasBoundedInternalCoveringNumber"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/IsKolmogorovProcess.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.IsKolmogorovProcess",
+      "module": "BrownianMotion.Continuity.IsKolmogorovProcess"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/KolmogorovChentsov.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.KolmogorovChentsov",
+      "module": "BrownianMotion.Continuity.KolmogorovChentsov"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/KolmogorovChentsovInequality.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.KolmogorovChentsovInequality",
+      "module": "BrownianMotion.Continuity.KolmogorovChentsovInequality"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Continuity/LimitModification.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Continuity.LimitModification",
+      "module": "BrownianMotion.Continuity.LimitModification"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/BrownianMotion.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.BrownianMotion",
+      "module": "BrownianMotion.Gaussian.BrownianMotion"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/CovMatrix.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.CovMatrix",
+      "module": "BrownianMotion.Gaussian.CovMatrix"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/Gaussian.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.Gaussian",
+      "module": "BrownianMotion.Gaussian.Gaussian"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/GaussianProcess.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.GaussianProcess",
+      "module": "BrownianMotion.Gaussian.GaussianProcess"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/Moment.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.Moment",
+      "module": "BrownianMotion.Gaussian.Moment"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/ProjectiveLimit.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.ProjectiveLimit",
+      "module": "BrownianMotion.Gaussian.ProjectiveLimit"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/Gaussian/StochasticProcesses.lean",
+      "old_module": "BrownianMotion.BrownianMotion.Gaussian.StochasticProcesses",
+      "module": "BrownianMotion.Gaussian.StochasticProcesses"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/StochasticIntegral/Cadlag.lean",
+      "old_module": "BrownianMotion.BrownianMotion.StochasticIntegral.Cadlag",
+      "module": "BrownianMotion.StochasticIntegral.Cadlag"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/StochasticIntegral/Predictable.lean",
+      "old_module": "BrownianMotion.BrownianMotion.StochasticIntegral.Predictable",
+      "module": "BrownianMotion.StochasticIntegral.Predictable"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/Basic.lean",
+      "old_module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.Basic",
+      "module": "BrownianMotion.StochasticIntegral.Quasimartingale.Basic"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
+      "old_module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification",
+      "module": "BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
+      "old_module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.MaximalInequality",
+      "module": "BrownianMotion.StochasticIntegral.Quasimartingale.MaximalInequality"
+    },
+    {
+      "path": "BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean",
+      "old_module": "BrownianMotion.BrownianMotion.StochasticIntegral.SimpleProcess",
+      "module": "BrownianMotion.StochasticIntegral.SimpleProcess"
+    },
+    {
+      "path": "KolmogorovExtension4/KolmogorovExtension4/CompactSystem.lean",
+      "old_module": "KolmogorovExtension4.KolmogorovExtension4.CompactSystem",
+      "module": "KolmogorovExtension4.CompactSystem"
+    },
+    {
+      "path": "KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean",
+      "old_module": "KolmogorovExtension4.KolmogorovExtension4.KolmogorovExtension",
+      "module": "KolmogorovExtension4.KolmogorovExtension"
+    },
+    {
+      "path": "KolmogorovExtension4/KolmogorovExtension4/RegularContent.lean",
+      "old_module": "KolmogorovExtension4.KolmogorovExtension4.RegularContent",
+      "module": "KolmogorovExtension4.RegularContent"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Basic.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Basic",
+      "module": "LevyStochCalc.Basic"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/AugmentedFiltration.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.AugmentedFiltration",
+      "module": "LevyStochCalc.Brownian.AugmentedFiltration"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/Construction.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.Construction",
+      "module": "LevyStochCalc.Brownian.Construction"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/Continuity.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.Continuity",
+      "module": "LevyStochCalc.Brownian.Continuity"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ContinuityDyadicChaining.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ContinuityDyadicChaining",
+      "module": "LevyStochCalc.Brownian.ContinuityDyadicChaining"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ContinuityKolmogorovBounds.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ContinuityKolmogorovBounds",
+      "module": "LevyStochCalc.Brownian.ContinuityKolmogorovBounds"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/CoordDerivative.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.CoordDerivative",
+      "module": "LevyStochCalc.Brownian.CoordDerivative"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonality.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.CrossOrthogonality",
+      "module": "LevyStochCalc.Brownian.CrossOrthogonality"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityDirectCross.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.CrossOrthogonalityDirectCross",
+      "module": "LevyStochCalc.Brownian.CrossOrthogonalityDirectCross"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/CrossOrthogonalityLimit.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.CrossOrthogonalityLimit",
+      "module": "LevyStochCalc.Brownian.CrossOrthogonalityLimit"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.CrossVariation",
+      "module": "LevyStochCalc.Brownian.CrossVariation"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/CrossVariationSum.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.CrossVariationSum",
+      "module": "LevyStochCalc.Brownian.CrossVariationSum"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/DriftIncrement.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.DriftIncrement",
+      "module": "LevyStochCalc.Brownian.DriftIncrement"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/Existence.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.Existence",
+      "module": "LevyStochCalc.Brownian.Existence"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/Filtered.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.Filtered",
+      "module": "LevyStochCalc.Brownian.Filtered"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/FutureIndependence.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.FutureIndependence",
+      "module": "LevyStochCalc.Brownian.FutureIndependence"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebra.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoAlgebra",
+      "module": "LevyStochCalc.Brownian.ItoAlgebra"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoAlgebraAssociativity",
+      "module": "LevyStochCalc.Brownian.ItoAlgebraAssociativity"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraProduct.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoAlgebraProduct",
+      "module": "LevyStochCalc.Brownian.ItoAlgebraProduct"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraSimpleIntegrand.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoAlgebraSimpleIntegrand",
+      "module": "LevyStochCalc.Brownian.ItoAlgebraSimpleIntegrand"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoCutoff.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoCutoff",
+      "module": "LevyStochCalc.Brownian.ItoCutoff"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoDensity.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensity",
+      "module": "LevyStochCalc.Brownian.ItoDensity"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityDyadicAverages.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityDyadicAverages",
+      "module": "LevyStochCalc.Brownian.ItoDensityDyadicAverages"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPointwise.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityPointwise",
+      "module": "LevyStochCalc.Brownian.ItoDensityPointwise"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityPredictableL2.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityPredictableL2",
+      "module": "LevyStochCalc.Brownian.ItoDensityPredictableL2"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityShiftedAverages.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityShiftedAverages",
+      "module": "LevyStochCalc.Brownian.ItoDensityShiftedAverages"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoDensityUnbounded.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoDensityUnbounded",
+      "module": "LevyStochCalc.Brownian.ItoDensityUnbounded"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFinsetSum.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFinsetSum",
+      "module": "LevyStochCalc.Brownian.ItoFinsetSum"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFormula.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFormula",
+      "module": "LevyStochCalc.Brownian.ItoFormula"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFormulaGrid.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFormulaGrid",
+      "module": "LevyStochCalc.Brownian.ItoFormulaGrid"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFormulaScalar.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFormulaScalar",
+      "module": "LevyStochCalc.Brownian.ItoFormulaScalar"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMoment.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFourthMoment",
+      "module": "LevyStochCalc.Brownian.ItoFourthMoment"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFourthMomentIncrements",
+      "module": "LevyStochCalc.Brownian.ItoFourthMomentIncrements"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentLintegral.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFourthMomentLintegral",
+      "module": "LevyStochCalc.Brownian.ItoFourthMomentLintegral"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentPartialSums.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoFourthMomentPartialSums",
+      "module": "LevyStochCalc.Brownian.ItoFourthMomentPartialSums"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoGridPartition.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoGridPartition",
+      "module": "LevyStochCalc.Brownian.ItoGridPartition"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoIncrement.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoIncrement",
+      "module": "LevyStochCalc.Brownian.ItoIncrement"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMoment.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoIncrementMoment",
+      "module": "LevyStochCalc.Brownian.ItoIncrementMoment"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentBounds.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoIncrementMomentBounds",
+      "module": "LevyStochCalc.Brownian.ItoIncrementMomentBounds"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoIncrementMomentRestrict.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoIncrementMomentRestrict",
+      "module": "LevyStochCalc.Brownian.ItoIncrementMomentRestrict"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoIntegrandComplete.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoIntegrandComplete",
+      "module": "LevyStochCalc.Brownian.ItoIntegrandComplete"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2Completion.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2Completion",
+      "module": "LevyStochCalc.Brownian.ItoL2Completion"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionApi.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionApi",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionApi"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionCompensator.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionCompensator",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionCompensator"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionConvergence.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionConvergence",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionConvergence"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionExistence.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionExistence",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionExistence"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionIncrement.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionIncrement",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionIncrement"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionLp.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionLp",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionLp"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionMaster.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionMaster",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionMaster"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionQuadVar.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoL2CompletionQuadVar",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionQuadVar"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoLinear.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoLinear",
+      "module": "LevyStochCalc.Brownian.ItoLinear"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoLocality.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoLocality",
+      "module": "LevyStochCalc.Brownian.ItoLocality"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoMartingale.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoMartingale",
+      "module": "LevyStochCalc.Brownian.ItoMartingale"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoMartingaleRiemann.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoMartingaleRiemann",
+      "module": "LevyStochCalc.Brownian.ItoMartingaleRiemann"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoOptionalStopping.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoOptionalStopping",
+      "module": "LevyStochCalc.Brownian.ItoOptionalStopping"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoProcess.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoProcess",
+      "module": "LevyStochCalc.Brownian.ItoProcess"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoProcessVersion.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoProcessVersion",
+      "module": "LevyStochCalc.Brownian.ItoProcessVersion"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoProcessWindow.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoProcessWindow",
+      "module": "LevyStochCalc.Brownian.ItoProcessWindow"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoPullOut",
+      "module": "LevyStochCalc.Brownian.ItoPullOut"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoQuadVarRiemann.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoQuadVarRiemann",
+      "module": "LevyStochCalc.Brownian.ItoQuadVarRiemann"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoQuadVarSum.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoQuadVarSum",
+      "module": "LevyStochCalc.Brownian.ItoQuadVarSum"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoRange.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoRange",
+      "module": "LevyStochCalc.Brownian.ItoRange"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoRiemannIntegrand.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoRiemannIntegrand",
+      "module": "LevyStochCalc.Brownian.ItoRiemannIntegrand"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoSimple.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoSimple",
+      "module": "LevyStochCalc.Brownian.ItoSimple"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleIntegrand.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoSimpleIntegrand",
+      "module": "LevyStochCalc.Brownian.ItoSimpleIntegrand"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleIsometry.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoSimpleIsometry",
+      "module": "LevyStochCalc.Brownian.ItoSimpleIsometry"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoSimpleMoments",
+      "module": "LevyStochCalc.Brownian.ItoSimpleMoments"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoTimeRiemann.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoTimeRiemann",
+      "module": "LevyStochCalc.Brownian.ItoTimeRiemann"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoTruncate.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoTruncate",
+      "module": "LevyStochCalc.Brownian.ItoTruncate"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoVersionExists.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoVersionExists",
+      "module": "LevyStochCalc.Brownian.ItoVersionExists"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/ItoZero.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.ItoZero",
+      "module": "LevyStochCalc.Brownian.ItoZero"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.Martingale",
+      "module": "LevyStochCalc.Brownian.Martingale"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/MartingaleCondExp.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.MartingaleCondExp",
+      "module": "LevyStochCalc.Brownian.MartingaleCondExp"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/MathlibBridge.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.MathlibBridge",
+      "module": "LevyStochCalc.Brownian.MathlibBridge"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/Multidim.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.Multidim",
+      "module": "LevyStochCalc.Brownian.Multidim"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/MultidimFiltered.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.MultidimFiltered",
+      "module": "LevyStochCalc.Brownian.MultidimFiltered"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/MultidimIto.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.MultidimIto",
+      "module": "LevyStochCalc.Brownian.MultidimIto"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/PolarisedQuadVar.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.PolarisedQuadVar",
+      "module": "LevyStochCalc.Brownian.PolarisedQuadVar"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/RiemannSum.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.RiemannSum",
+      "module": "LevyStochCalc.Brownian.RiemannSum"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefine.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.SimplePredictableRefine",
+      "module": "LevyStochCalc.Brownian.SimplePredictableRefine"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.SimplePredictableRefineAppend",
+      "module": "LevyStochCalc.Brownian.SimplePredictableRefineAppend"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineCommon.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.SimplePredictableRefineCommon",
+      "module": "LevyStochCalc.Brownian.SimplePredictableRefineCommon"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineInvariance.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.SimplePredictableRefineInvariance",
+      "module": "LevyStochCalc.Brownian.SimplePredictableRefineInvariance"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/SmoothCutoff.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.SmoothCutoff",
+      "module": "LevyStochCalc.Brownian.SmoothCutoff"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/TaylorTwo.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.TaylorTwo",
+      "module": "LevyStochCalc.Brownian.TaylorTwo"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/TaylorTwoModulus.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.TaylorTwoModulus",
+      "module": "LevyStochCalc.Brownian.TaylorTwoModulus"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/TaylorTwoVector.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.TaylorTwoVector",
+      "module": "LevyStochCalc.Brownian.TaylorTwoVector"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoFormula.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoFormula",
+      "module": "LevyStochCalc.Brownian.VectorItoFormula"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoFormulaDecomp.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoFormulaDecomp",
+      "module": "LevyStochCalc.Brownian.VectorItoFormulaDecomp"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoMartingaleRiemann.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoMartingaleRiemann",
+      "module": "LevyStochCalc.Brownian.VectorItoMartingaleRiemann"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoProcess.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoProcess",
+      "module": "LevyStochCalc.Brownian.VectorItoProcess"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoProcessVersion.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoProcessVersion",
+      "module": "LevyStochCalc.Brownian.VectorItoProcessVersion"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoProcessWindow.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoProcessWindow",
+      "module": "LevyStochCalc.Brownian.VectorItoProcessWindow"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoQuadVarRiemann.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoQuadVarRiemann",
+      "module": "LevyStochCalc.Brownian.VectorItoQuadVarRiemann"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoQuadVarRiemannDecomposition.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoQuadVarRiemannDecomposition",
+      "module": "LevyStochCalc.Brownian.VectorItoQuadVarRiemannDecomposition"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoQuadVarRiemannTermBounds.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoQuadVarRiemannTermBounds",
+      "module": "LevyStochCalc.Brownian.VectorItoQuadVarRiemannTermBounds"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoTaylor.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoTaylor",
+      "module": "LevyStochCalc.Brownian.VectorItoTaylor"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoThirdMoment.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoThirdMoment",
+      "module": "LevyStochCalc.Brownian.VectorItoThirdMoment"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoTimeRiemann.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoTimeRiemann",
+      "module": "LevyStochCalc.Brownian.VectorItoTimeRiemann"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Brownian/VectorItoVersionExists.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Brownian.VectorItoVersionExists",
+      "module": "LevyStochCalc.Brownian.VectorItoVersionExists"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnbounded.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnbounded",
+      "module": "LevyStochCalc.Ito.ItoFormulaUnbounded"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedClamp.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnboundedClamp",
+      "module": "LevyStochCalc.Ito.ItoFormulaUnboundedClamp"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedIntegrands.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnboundedIntegrands",
+      "module": "LevyStochCalc.Ito.ItoFormulaUnboundedIntegrands"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/ItoFormulaUnboundedLimit.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.ItoFormulaUnboundedLimit",
+      "module": "LevyStochCalc.Ito.ItoFormulaUnboundedLimit"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/Picard.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.Picard",
+      "module": "LevyStochCalc.Ito.Picard"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardBieleckiContraction.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardBieleckiContraction",
+      "module": "LevyStochCalc.Ito.PicardBieleckiContraction"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardBieleckiContractionTight.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardBieleckiContractionTight",
+      "module": "LevyStochCalc.Ito.PicardBieleckiContractionTight"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardBieleckiNorm.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardBieleckiNorm",
+      "module": "LevyStochCalc.Ito.PicardBieleckiNorm"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardContraction.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardContraction",
+      "module": "LevyStochCalc.Ito.PicardContraction"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardContractionEstimate.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardContractionEstimate",
+      "module": "LevyStochCalc.Ito.PicardContractionEstimate"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardContractionFixedPoint.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardContractionFixedPoint",
+      "module": "LevyStochCalc.Ito.PicardContractionFixedPoint"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardGlobal.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardGlobal",
+      "module": "LevyStochCalc.Ito.PicardGlobal"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrand.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardIntegrand",
+      "module": "LevyStochCalc.Ito.PicardIntegrand"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandBounds.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardIntegrandBounds",
+      "module": "LevyStochCalc.Ito.PicardIntegrandBounds"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardIntegrandFrozen.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardIntegrandFrozen",
+      "module": "LevyStochCalc.Ito.PicardIntegrandFrozen"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardLimit.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardLimit",
+      "module": "LevyStochCalc.Ito.PicardLimit"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardLocality.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardLocality",
+      "module": "LevyStochCalc.Ito.PicardLocality"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardOutput.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutput",
+      "module": "LevyStochCalc.Ito.PicardOutput"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardOutputModification.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputModification",
+      "module": "LevyStochCalc.Ito.PicardOutputModification"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardOutputMoments.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputMoments",
+      "module": "LevyStochCalc.Ito.PicardOutputMoments"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardOutputStepDiff.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputStepDiff",
+      "module": "LevyStochCalc.Ito.PicardOutputStepDiff"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardOutputWeighting.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardOutputWeighting",
+      "module": "LevyStochCalc.Ito.PicardOutputWeighting"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardSelfMap.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardSelfMap",
+      "module": "LevyStochCalc.Ito.PicardSelfMap"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardSpace.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardSpace",
+      "module": "LevyStochCalc.Ito.PicardSpace"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardSpaceBieleckiEDist.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardSpaceBieleckiEDist",
+      "module": "LevyStochCalc.Ito.PicardSpaceBieleckiEDist"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardSpaceBieleckiQuotient.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardSpaceBieleckiQuotient",
+      "module": "LevyStochCalc.Ito.PicardSpaceBieleckiQuotient"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardSpaceDiscrete.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardSpaceDiscrete",
+      "module": "LevyStochCalc.Ito.PicardSpaceDiscrete"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardStepMap.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardStepMap",
+      "module": "LevyStochCalc.Ito.PicardStepMap"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardStochasticLipschitz.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardStochasticLipschitz",
+      "module": "LevyStochCalc.Ito.PicardStochasticLipschitz"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardSupL2.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardSupL2",
+      "module": "LevyStochCalc.Ito.PicardSupL2"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/PicardWindow.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.PicardWindow",
+      "module": "LevyStochCalc.Ito.PicardWindow"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/Setting.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.Setting",
+      "module": "LevyStochCalc.Ito.Setting"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/VectorItoProcessDiff.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoProcessDiff",
+      "module": "LevyStochCalc.Ito.VectorItoProcessDiff"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionLimit.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoVersionLimit",
+      "module": "LevyStochCalc.Ito.VectorItoVersionLimit"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionSup.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoVersionSup",
+      "module": "LevyStochCalc.Ito.VectorItoVersionSup"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Ito/VectorItoVersionUnbounded.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Ito.VectorItoVersionUnbounded",
+      "module": "LevyStochCalc.Ito.VectorItoVersionUnbounded"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Martingale.CadlagModification",
+      "module": "LevyStochCalc.Martingale.CadlagModification"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Martingale/RightCont.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Martingale.RightCont",
+      "module": "LevyStochCalc.Martingale.RightCont"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Martingale/SquareCompensator.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Martingale.SquareCompensator",
+      "module": "LevyStochCalc.Martingale.SquareCompensator"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/Compensated.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.Compensated",
+      "module": "LevyStochCalc.Poisson.Compensated"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedApprox.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedApprox",
+      "module": "LevyStochCalc.Poisson.CompensatedApprox"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensity.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensity",
+      "module": "LevyStochCalc.Poisson.CompensatedDensity"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityBoxIsometry.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityBoxIsometry",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityBoxIsometry"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityDyadic.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityDyadic",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityDyadic"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityLimit.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityLimit",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityLimit"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkApprox.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityMarkApprox",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityMarkApprox"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityMarkSum.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityMarkSum",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityMarkSum"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRectSimple.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityRectSimple",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityRectSimple"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityRefinement.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityRefinement",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityRefinement"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityShifted.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityShifted",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityShifted"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityStepIntegral.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityStepIntegral",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityStepIntegral"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDensityTruncation.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDensityTruncation",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityTruncation"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedDiff.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedDiff",
+      "module": "LevyStochCalc.Poisson.CompensatedDiff"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIntegrandComplete.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedIntegrandComplete",
+      "module": "LevyStochCalc.Poisson.CompensatedIntegrandComplete"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIsometry.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedIsometry",
+      "module": "LevyStochCalc.Poisson.CompensatedIsometry"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIsometryL2.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedIsometryL2",
+      "module": "LevyStochCalc.Poisson.CompensatedIsometryL2"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedIsometryOrthogonality.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedIsometryOrthogonality",
+      "module": "LevyStochCalc.Poisson.CompensatedIsometryOrthogonality"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedLinear.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedLinear",
+      "module": "LevyStochCalc.Poisson.CompensatedLinear"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingale.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedMartingale",
+      "module": "LevyStochCalc.Poisson.CompensatedMartingale"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleAdapted.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedMartingaleAdapted",
+      "module": "LevyStochCalc.Poisson.CompensatedMartingaleAdapted"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleIncrement.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedMartingaleIncrement",
+      "module": "LevyStochCalc.Poisson.CompensatedMartingaleIncrement"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedMartingaleQuadratic.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedMartingaleQuadratic",
+      "module": "LevyStochCalc.Poisson.CompensatedMartingaleQuadratic"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcess.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedProcess",
+      "module": "LevyStochCalc.Poisson.CompensatedProcess"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedProcessQuadVar.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedProcessQuadVar",
+      "module": "LevyStochCalc.Poisson.CompensatedProcessQuadVar"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedPullOut.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedPullOut",
+      "module": "LevyStochCalc.Poisson.CompensatedPullOut"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedQuadVar.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedQuadVar",
+      "module": "LevyStochCalc.Poisson.CompensatedQuadVar"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedRange.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedRange",
+      "module": "LevyStochCalc.Poisson.CompensatedRange"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/CompensatedSimple.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.CompensatedSimple",
+      "module": "LevyStochCalc.Poisson.CompensatedSimple"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/Filtered.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.Filtered",
+      "module": "LevyStochCalc.Poisson.Filtered"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/IndependentScattering.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.IndependentScattering",
+      "module": "LevyStochCalc.Poisson.IndependentScattering"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/L2Isometry.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.L2Isometry",
+      "module": "LevyStochCalc.Poisson.L2Isometry"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/MarkStep.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.MarkStep",
+      "module": "LevyStochCalc.Poisson.MarkStep"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/MarkStepIncrement.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.MarkStepIncrement",
+      "module": "LevyStochCalc.Poisson.MarkStepIncrement"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/MarkStepIsometry.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.MarkStepIsometry",
+      "module": "LevyStochCalc.Poisson.MarkStepIsometry"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/MarkStepWeight.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.MarkStepWeight",
+      "module": "LevyStochCalc.Poisson.MarkStepWeight"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/NaturalFiltration.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.NaturalFiltration",
+      "module": "LevyStochCalc.Poisson.NaturalFiltration"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/PastFutureIndependence.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.PastFutureIndependence",
+      "module": "LevyStochCalc.Poisson.PastFutureIndependence"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/PoissonSplitting.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.PoissonSplitting",
+      "module": "LevyStochCalc.Poisson.PoissonSplitting"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/PoissonSuperposition.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.PoissonSuperposition",
+      "module": "LevyStochCalc.Poisson.PoissonSuperposition"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/RandomMeasure.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.RandomMeasure",
+      "module": "LevyStochCalc.Poisson.RandomMeasure"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/RegionIndependence.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.RegionIndependence",
+      "module": "LevyStochCalc.Poisson.RegionIndependence"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Poisson/RegionPartition.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Poisson.RegionPartition",
+      "module": "LevyStochCalc.Poisson.RegionPartition"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/AbsMoment.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.AbsMoment",
+      "module": "LevyStochCalc.Probability.AbsMoment"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/Augmentation.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.Augmentation",
+      "module": "LevyStochCalc.Probability.Augmentation"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/ComapTuple.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.ComapTuple",
+      "module": "LevyStochCalc.Probability.ComapTuple"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/DoobContinuous.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.DoobContinuous",
+      "module": "LevyStochCalc.Probability.DoobContinuous"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.ExitTime",
+      "module": "LevyStochCalc.Probability.ExitTime"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/IndepGrouping.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.IndepGrouping",
+      "module": "LevyStochCalc.Probability.IndepGrouping"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/IndepJoin.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.IndepJoin",
+      "module": "LevyStochCalc.Probability.IndepJoin"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/IndepLimit.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.IndepLimit",
+      "module": "LevyStochCalc.Probability.IndepLimit"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/MartingaleDifference.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.MartingaleDifference",
+      "module": "LevyStochCalc.Probability.MartingaleDifference"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/Progressive.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.Progressive",
+      "module": "LevyStochCalc.Probability.Progressive"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.ProgressiveCadlag",
+      "module": "LevyStochCalc.Probability.ProgressiveCadlag"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.StoppedProgressive",
+      "module": "LevyStochCalc.Probability.StoppedProgressive"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/Transport.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.Transport",
+      "module": "LevyStochCalc.Probability.Transport"
+    },
+    {
+      "path": "LevyStochCalc/LevyStochCalc/Probability/TrivialSigma.lean",
+      "old_module": "LevyStochCalc.LevyStochCalc.Probability.TrivialSigma",
+      "module": "LevyStochCalc.Probability.TrivialSigma"
+    },
+    {
+      "path": "MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean",
+      "old_module": "MathFin.MathFin.Foundations.DoobLpMaximalInequality",
+      "module": "MathFin.Foundations.DoobLpMaximalInequality"
+    }
+  ]
+}

@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
 
 /-!
 # Metric BV complement symmetry for finite measures
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -109,7 +113,7 @@ def Test.reflect (x₀ : X) (R : ℝ) (f : Test X) : Test X where
     have hu1 := cutoff_le_one x₀ R x
     have hc0 := clampUnit_nonneg (f x)
     have hc1 := clampUnit_le_one (f x)
-    exact ⟨mul_nonneg hu0 (by linarith), mul_le_one₀ hu1 (by linarith) (by linarith)⟩
+    exact ⟨mul_nonneg hu0 (by linarith), (mul_le_of_le_one_left (by linarith) hu1).trans (by linarith)⟩
   boundedSupport := by
     refine (Metric.isBounded_ball (x := x₀) (r := R + 1)).subset fun x hx => ?_
     by_contra hnot
@@ -143,14 +147,18 @@ indicator of the complement of the inner ball. -/
 theorem apply_reflect_le (x₀ : X) (R : ℝ) (f : Test X) (x : X) :
     Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
       Energy.LocalSlope.apply f x + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
-  have hsec : Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
+  have hsec :
+    Energy.LocalSlope.apply (Test.reflect x₀ R f) x ≤
       Energy.LocalSlope.apply f x + Energy.LocalSlope.apply (cutoff x₀ R) x := by
     refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
-    change |cutoff x₀ R y * (1 - clampUnit (f y)) - cutoff x₀ R x * (1 - clampUnit (f x))| ≤
-      dist (f y) (f x) + dist (cutoff x₀ R y) (cutoff x₀ R x)
+    change
+      |cutoff x₀ R y * (1 - clampUnit (f y)) - cutoff x₀ R x * (1 - clampUnit (f x))| ≤
+        dist (f y) (f x) + dist (cutoff x₀ R y) (cutoff x₀ R x)
     rw [Real.dist_eq, Real.dist_eq]
-    exact (abs_mul_one_sub_sub_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y)
-      (clampUnit_nonneg _) (clampUnit_le_one _)).trans (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
+    exact
+      (abs_mul_one_sub_sub_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y) (clampUnit_nonneg _)
+            (clampUnit_le_one _)).trans
+        (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
   exact hsec.trans (add_le_add le_rfl (apply_cutoff_le x₀ R x))
 /-- The reflected test is `L¹`-close to the complementary indicator, up to the indicator of the
 complement of the inner ball. -/
@@ -158,23 +166,24 @@ theorem enorm_reflect_sub_le (x₀ : X) (R : ℝ) (f : Test X) (B : Set X) (x : 
     ‖Test.reflect x₀ R f x - Bᶜ.indicator (1 : X → ℝ) x‖ₑ ≤
       ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
   set i := B.indicator (1 : X → ℝ) x
-  have hi : Bᶜ.indicator (1 : X → ℝ) x = 1 - i := by
-    by_cases hx : x ∈ B <;> simp [i, hx]
-  have hi01 : 0 ≤ i ∧ i ≤ 1 := by
-    by_cases hx : x ∈ B <;> simp [i, hx]
+  have hi : Bᶜ.indicator (1 : X → ℝ) x = 1 - i := by by_cases hx : x ∈ B <;> simp [i, hx]
+  have hi01 : 0 ≤ i ∧ i ≤ 1 := by by_cases hx : x ∈ B <;> simp [i, hx]
   have hci : clampUnit i = i := clampUnit_of_mem hi01.1 hi01.2
   have hc0 : 0 ≤ clampUnit (f x) := clampUnit_nonneg _
   have hc1 : clampUnit (f x) ≤ 1 := clampUnit_le_one _
   have hu0 : 0 ≤ cutoff x₀ R x := cutoff_nonneg x₀ R x
   have hu1 : cutoff x₀ R x ≤ 1 := cutoff_le_one x₀ R x
   have hcf : |i - clampUnit (f x)| ≤ |f x - i| := by
-    calc |i - clampUnit (f x)| = |clampUnit i - clampUnit (f x)| := by rw [hci]
+    calc
+      |i - clampUnit (f x)| = |clampUnit i - clampUnit (f x)| := by rw [hci]
       _ ≤ |i - f x| := abs_clampUnit_sub_le _ _
       _ = |f x - i| := abs_sub_comm _ _
-  have hreal : |cutoff x₀ R x * (1 - clampUnit (f x)) - (1 - i)| ≤
-      |f x - i| + (1 - cutoff x₀ R x) := by
-    have key : cutoff x₀ R x * (1 - clampUnit (f x)) - (1 - i) =
-        (i - clampUnit (f x)) - (1 - cutoff x₀ R x) * (1 - clampUnit (f x)) := by ring
+  have hreal :
+    |cutoff x₀ R x * (1 - clampUnit (f x)) - (1 - i)| ≤ |f x - i| + (1 - cutoff x₀ R x) := by
+    have key :
+      cutoff x₀ R x * (1 - clampUnit (f x)) - (1 - i) =
+        (i - clampUnit (f x)) - (1 - cutoff x₀ R x) * (1 - clampUnit (f x)) := by
+      ring
     rw [key]
     refine (abs_sub _ _).trans (add_le_add hcf ?_)
     rw [abs_mul, abs_of_nonneg (by linarith : (0 : ℝ) ≤ 1 - cutoff x₀ R x),

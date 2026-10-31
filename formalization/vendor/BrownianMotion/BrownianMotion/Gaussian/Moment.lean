@@ -1,6 +1,9 @@
+-- Modified 2026-10-31 by the KLS formalization project: explicit import of the square-root
+-- calculus needed under Mathlib v4.35.0's module imports; see vendor/port.patch.
 module
 
 public import Mathlib.Probability.Distributions.Gaussian.Real
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 @[expose] public section
 

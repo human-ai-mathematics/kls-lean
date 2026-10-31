@@ -1,13 +1,18 @@
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.Analysis.Matrix.Normed
-import Mathlib.MeasureTheory.Function.LocallyIntegrable
-import FunctionalInequalities.L2.Pairing
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.Operator.Coordinates
+module
+
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.Analysis.Matrix.Normed
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+public import Mathlib.MeasureTheory.Function.LocallyIntegrable
+public import FunctionalInequalities.L2.Pairing
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Analysis.Operator.Coordinates
 
 /-!
 # Stein kernel object and compact-test identities
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter
 open FunctionalInequalities.Analysis.BakryEmery
@@ -18,28 +23,39 @@ noncomputable section
 namespace FunctionalInequalities.Probability.Stein
 
 
-/-- The Hilbert–Schmidt (Frobenius) norm of a kernel matrix: `|T|_HS² = ∑_{ij} T_{ij}²` (Letwin (2.19)). -/
-def hsNorm {n : ℕ} (T : KernelMatrix n) : ℝ := ‖T‖
+/--
+The Hilbert–Schmidt (Frobenius) norm of a kernel matrix: `|T|_HS² = ∑_{ij} T_{ij}²` (Letwin (2.19)).
+-/
+def hsNorm {n : ℕ} (T : KernelMatrix n) : ℝ :=
+  ‖T‖
 
 /-- The action `T v` of a kernel matrix on a Euclidean vector. -/
 def action {n : ℕ} (T : KernelMatrix n) (v : EuclideanSpace ℝ (Fin n)) : EuclideanSpace ℝ (Fin n) :=
   WithLp.toLp 2 (T.mulVec v.ofLp)
 
-/-- **Stein kernel** (Letwin Definition 2.6): `μ` is centered with finite first moment, the entries of
-`τ` are measurable and locally integrable, and `∫ x_i f dμ = ∫ (τ(x) ∇f(x))_i dμ` for every `C_c^∞` test `f`.
+/--
+**Stein kernel** (Letwin Definition 2.6): `μ` is centered with finite first moment, the entries of
+`τ` are measurable and locally integrable, and `∫ x_i f dμ = ∫ (τ(x) ∇f(x))_i dμ` for every `C_c^∞`
+test `f`.
 Only compactly supported smooth tests enter the definition. -/
 structure IsSteinKernel {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (τ : EuclideanSpace ℝ (Fin n) → KernelMatrix n) : Prop where
-  integrable_id : Integrable (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (μ : Measure _)
+  integrable_id :
+    Integrable (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (μ : Measure _)
   mean_zero : ∫ x, x ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) = 0
   measurable_entries : ∀ i j, Measurable (fun x => τ x i j)
   local_entries : ∀ i j, LocallyIntegrable (fun x => τ x i j) (μ : Measure _)
-  compact_identity : ∀ f : EuclideanSpace ℝ (Fin n) → ℝ, ContDiff ℝ ∞ f → HasCompactSupport f →
-    ∀ i : Fin n, (∫ x, x i * f x ∂(μ : Measure _)) =
-      ∫ x, action (τ x) (gradient f x) i ∂(μ : Measure _)
+  compact_identity :
+    ∀ f : EuclideanSpace ℝ (Fin n) → ℝ,
+      ContDiff ℝ ∞ f →
+        HasCompactSupport f →
+          ∀ i : Fin n,
+            (∫ x, x i * f x ∂(μ : Measure _)) =
+              ∫ x, action (τ x) (gradient f x) i ∂(μ : Measure _)
 
 /-- `τ(x)` is symmetric for `μ`-a.e. `x` (the symmetry clause of Definition 2.6). -/
-def SymmetricAE {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (τ : EuclideanSpace ℝ (Fin n) → KernelMatrix n) : Prop :=
+def SymmetricAE {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (τ : EuclideanSpace ℝ (Fin n) → KernelMatrix n) : Prop :=
   ∀ᵐ x ∂(μ : Measure _), ∀ i j, τ x i j = τ x j i
 
 /-- `‖T v‖ ≤ |T|_HS ‖v‖`. -/
@@ -74,15 +90,14 @@ theorem memLp_hsNorm_iff_integrable_sq {X : Type*} [MeasurableSpace X] {ν : Mea
     memLp_two_iff_integrable_sq_norm (hsNorm_measurable hτ).aestronglyMeasurable
 
 /-- Measurability of `x ↦ τ(x) v`. -/
-theorem action_measurable {X : Type*} [MeasurableSpace X] {n : ℕ}
-    {τ : X → KernelMatrix n} (hτ : ∀ i j, Measurable (fun x => τ x i j)) (v : EuclideanSpace ℝ (Fin n)) :
+theorem action_measurable {X : Type*} [MeasurableSpace X] {n : ℕ} {τ : X → KernelMatrix n}
+    (hτ : ∀ i j, Measurable (fun x => τ x i j)) (v : EuclideanSpace ℝ (Fin n)) :
     Measurable (fun x => action (τ x) v) := by
   apply (WithLp.measurable_toLp 2 _).comp
   rw [measurable_pi_iff]
   intro i
   change Measurable (fun x => ∑ j, τ x i j * v j)
-  exact Finset.measurable_sum _ (fun j _ =>
-    (hτ i j).mul measurable_const)
+  exact Finset.measurable_sum _ (fun j _ => (hτ i j).mul measurable_const)
 
 /-- `x ↦ τ(x) v` is in `L²(ν)` when `|τ|_HS ∈ L²(ν)`. -/
 theorem action_memLp {X : Type*} [MeasurableSpace X] {ν : Measure X} {n : ℕ}
@@ -107,13 +122,16 @@ theorem inner_action_swap {n : ℕ} (T : KernelMatrix n) (hT : ∀ i j, T i j = 
   rw [hT i j]
   ring
 
-/-- **Directional Stein identity on compact tests**: `∫ ⟪x, v⟫ f dμ = ∫ ⟪τ(x) v, ∇f(x)⟫ dμ` for `f ∈ C_c^∞`
+/--
+**Directional Stein identity on compact tests**: `∫ ⟪x, v⟫ f dμ = ∫ ⟪τ(x) v, ∇f(x)⟫ dμ` for `f ∈
+C_c^∞`
 (from the coordinate identities of Definition 2.6 and a.e. symmetry). -/
 theorem compact_directional_identity {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (τ : EuclideanSpace ℝ (Fin n) → KernelMatrix n) (hK : IsSteinKernel μ τ)
     (hμ2 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 2 (μ : Measure _))
     (hSym : SymmetricAE μ τ) (hHS : MemLp (fun x => hsNorm (τ x)) 2 (μ : Measure _))
-    (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f) (v : EuclideanSpace ℝ (Fin n)) :
+    (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f)
+    (v : EuclideanSpace ℝ (Fin n)) :
     (∫ x, ⟪x, v⟫ * f x ∂(μ : Measure _)) =
       ∫ x, ⟪action (τ x) v, gradient f x⟫ ∂(μ : Measure _) := by
   classical
@@ -133,7 +151,8 @@ theorem compact_directional_identity {n : ℕ} (μ : ProbabilityMeasure (Euclide
     have hpair := L2.integrable_inner_of_memLp ha hg2
     apply hpair.congr
     filter_upwards [hSym] with x hx
-    have hswap := inner_action_swap (τ x) hx (EuclideanSpace.basisFun (Fin n) ℝ i) (gradient f x)
+    have hswap :=
+      inner_action_swap (τ x) hx (EuclideanSpace.basisFun (Fin n) ℝ i) (gradient f x)
     simpa only [R, EuclideanSpace.basisFun_inner] using hswap.symm
   have hLfun : (fun x : EuclideanSpace ℝ (Fin n) => ⟪x, v⟫ * f x) = fun x => ∑ i, v i * L i x := by
     funext x
@@ -142,7 +161,9 @@ theorem compact_directional_identity {n : ℕ} (μ : ProbabilityMeasure (Euclide
     intro i _
     simp only [Real.inner_apply, L]
     ring
-  have hRfun : (fun x : EuclideanSpace ℝ (Fin n) => ∑ i, v i * R i x) =ᵐ[(μ : Measure (EuclideanSpace ℝ (Fin n)))]
+  have hRfun :
+    (fun x : EuclideanSpace ℝ (Fin n) =>
+        ∑ i, v i * R i x) =ᵐ[(μ : Measure (EuclideanSpace ℝ (Fin n)))]
       fun x => ⟪action (τ x) v, gradient f x⟫ := by
     filter_upwards [hSym] with x hx
     calc
@@ -156,8 +177,8 @@ theorem compact_directional_identity {n : ℕ} (μ : ProbabilityMeasure (Euclide
     (∫ x, ⟪x, v⟫ * f x ∂(μ : Measure _)) = ∑ i, v i * ∫ x, L i x ∂(μ : Measure _) := by
       rw [hLfun]
       simpa only [integral_const_mul] using
-        (integral_finsetSum (s := (Finset.univ : Finset (Fin n)))
-          (f := fun i x => v i * L i x) (fun i _ => (hLi i).const_mul (v i)))
+        (integral_finsetSum (s := (Finset.univ : Finset (Fin n))) (f := fun i x => v i * L i x)
+          (fun i _ => (hLi i).const_mul (v i)))
     _ = ∑ i, v i * ∫ x, R i x ∂(μ : Measure _) := by
       apply Finset.sum_congr rfl
       intro i _
@@ -165,8 +186,8 @@ theorem compact_directional_identity {n : ℕ} (μ : ProbabilityMeasure (Euclide
     _ = ∫ x, ∑ i, v i * R i x ∂(μ : Measure _) := by
       symm
       simpa only [integral_const_mul] using
-        (integral_finsetSum (s := (Finset.univ : Finset (Fin n)))
-          (f := fun i x => v i * R i x) (fun i _ => (hRi i).const_mul (v i)))
+        (integral_finsetSum (s := (Finset.univ : Finset (Fin n))) (f := fun i x => v i * R i x)
+          (fun i _ => (hRi i).const_mul (v i)))
     _ = _ := integral_congr_ae hRfun
 
 
@@ -174,7 +195,8 @@ end FunctionalInequalities.Probability.Stein
 end
 /-! ### Algebra of the matrix action
 
-`action` is multiplicative, additive, homogeneous and unital; its basis columns and the trace formula `Σᵢ ‖A eᵢ‖² = tr (Aᵀ A)`. -/
+`action` is multiplicative, additive, homogeneous and unital; its basis columns and the trace
+formula `Σᵢ ‖A eᵢ‖² = tr (Aᵀ A)`. -/
 
 noncomputable section
 open scoped RealInnerProductSpace
@@ -185,12 +207,12 @@ theorem action_eq_toEuclideanLin {n : ℕ} (A : KernelMatrix n) (x : EuclideanSp
     action A x = Matrix.toEuclideanLin A x := rfl
 
 theorem action_mul {n : ℕ} (A B : KernelMatrix n) (x : EuclideanSpace ℝ (Fin n)) :
-    action (A*B) x = action A (action B x) := by
+    action (A * B) x = action A (action B x) := by
   apply WithLp.ofLp_injective
   exact (Matrix.mulVec_mulVec x.ofLp A B).symm
 
 theorem action_add {n : ℕ} (A B : KernelMatrix n) (x : EuclideanSpace ℝ (Fin n)) :
-    action (A+B) x = action A x + action B x := by
+    action (A + B) x = action A x + action B x := by
   apply WithLp.ofLp_injective
   exact Matrix.add_mulVec A B x.ofLp
 
@@ -212,10 +234,11 @@ theorem action_basis_apply {n : ℕ} (A : KernelMatrix n) (i j : Fin n) :
   rfl
 
 theorem sum_norm_action_basis_sq_eq_trace_transpose_mul {n : ℕ} (A : KernelMatrix n) :
-    (∑ i, ‖action A (EuclideanSpace.basisFun (Fin n) ℝ i)‖^2) = Matrix.trace (A.transpose*A) := by
+    (∑ i, ‖action A (EuclideanSpace.basisFun (Fin n) ℝ i)‖ ^ 2) =
+      Matrix.trace (A.transpose * A) := by
   simp_rw [EuclideanSpace.real_norm_sq_eq]
-  simp only [action_basis_apply,Matrix.trace,Matrix.diag_apply,
-    Matrix.mul_apply,Matrix.transpose_apply,pow_two]
+  simp only [action_basis_apply, Matrix.trace, Matrix.diag_apply, Matrix.mul_apply,
+    Matrix.transpose_apply, pow_two]
 
 end FunctionalInequalities.Probability.Stein
 

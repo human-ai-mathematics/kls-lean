@@ -1,21 +1,31 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import Mathlib.Analysis.Normed.Affine.Convex
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import Mathlib.Analysis.Normed.Affine.Convex
 
 /-!
 # Finite affine maxima below a Legendre transform
 
-`affineMaximum s hs a y` is the maximum of the affine functions `y ↦ ⟪x, y⟫ - a x` over a nonempty finite set `s`
-(`continuous_affineMaximum`). Every open neighbourhood of `0` in a finite-dimensional space contains such a set whose
-convex hull has `0` in its interior, including in dimension zero (`exists_finite_hull_neighborhood`), and then the
+`affineMaximum s hs a y` is the maximum of the affine functions `y ↦ ⟪x, y⟫ - a x` over a nonempty
+finite set `s`
+(`continuous_affineMaximum`). Every open neighbourhood of `0` in a finite-dimensional space contains
+such a set whose
+convex hull has `0` in its interior, including in dimension zero
+(`exists_finite_hull_neighborhood`), and then the
 maximum grows at least linearly with a constant independent of intercepts bounded at the vertices
-(`affineMaximum_coercive`). With intercepts `(ψ ·).toReal` at finite values it lies below `legendre ψ`
-(`affineMaximum_le_legendre`); convergence at the finitely many vertices gives one eventual uniform lower bound for the
-transforms of a sequence (`eventually_affineMaximum_sub_le_legendre`, Cordero-Erausquin–Klartag, *Moment measures*,
+(`affineMaximum_coercive`). With intercepts `(ψ ·).toReal` at finite values it lies below `legendre
+ψ`
+(`affineMaximum_le_legendre`); convergence at the finitely many vertices gives one eventual uniform
+lower bound for the
+transforms of a sequence (`eventually_affineMaximum_sub_le_legendre`, Cordero-Erausquin–Klartag,
+*Moment measures*,
 arXiv:1304.0630v1, (60)).
 
 This is the geometric part of the proof of Lemma 17, (56b); the integration step is in
 `Probability/MomentMeasure/ConjugateMass.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Filter Set

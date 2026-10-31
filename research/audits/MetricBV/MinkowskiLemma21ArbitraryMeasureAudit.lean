@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Strict proof clients for ADMG Lemma 2.1's equality of the relaxed lower and upper Minkowski
 contents under arbitrary Borel measures at measurable finite-mass targets, with the
@@ -7,6 +9,8 @@ Instances: Lebesgue measure (infinite total mass), counting measure on `ℝ` (no
 bounded sets, outside the paper's standing hypothesis), the zero measure, an approximating
 sequence with an infinite-mass finite prefix, and a nonmeasurable limit for the
 semicontinuity. No perimeter identity is asserted for these measures. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -78,7 +82,7 @@ def withInfinitePrefix : MinkowskiApproximatingSequence (volume : Measure ℝ) (
     refine tendsto_atTop_of_eventually_const (i₀ := 1) fun n hn => ?_
     show ∫⁻ x, ‖(if n = 0 then (univ : Set ℝ) else Icc 0 1).indicator (1 : ℝ → ℝ) x -
       (Icc (0 : ℝ) 1).indicator 1 x‖ₑ ∂volume = 0
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
     simp⟩
 
 theorem infinitePrefix :

@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.ConditionalFiber.Basic
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import FunctionalInequalities.Poincare.LocalSlope.Basic
-import FunctionalInequalities.L2.MeanVariance
-import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+module
+
+public import FunctionalInequalities.KLS.ConditionalFiber.Basic
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import FunctionalInequalities.Poincare.LocalSlope.Basic
+public import FunctionalInequalities.L2.MeanVariance
+public import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 
 /-!
 # Conditional-fiber comparison with an explicit input constant
@@ -22,6 +24,8 @@ disintegration, and combines the fiber bound with Tonelli and the frame identity
 
 No ledger, certificate, or Blueprint `\leanok` claim is made by this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -88,7 +92,7 @@ private theorem holds_of_isometryEquiv (e : X ≃ᵢ Y) {ν : ProbabilityMeasure
     funext x
     simp only [Function.comp_apply, IsometryEquiv.symm_apply_apply]
   have hadm : Energy.LocalSlope.Admissible ν' (g ∘ e.symm) := by
-    refine ⟨hg.locallyLipschitz.comp e.symm.isometry.lipschitz.locallyLipschitz,
+    refine ⟨hg.locallyLipschitz.comp e.symm.isometry.lipschitzWith.locallyLipschitz,
       hg.memLp_two.comp_measurePreserving hmp', ?_⟩
     rw [localSlope_energy_comp_isometryEquiv e hmp, hcomp]
     exact hg.finite_energy
@@ -318,13 +322,15 @@ private theorem ae_memLp_comp_reconstruct (μ : ProbabilityMeasure E)
     rw [lintegral_prod_symm _ hFm.aemeasurable]
     simp only [lintegral_const, measure_univ, mul_one]
     have h := (eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (f := f) (μ := (μ : Measure E))
-      (p := 2) two_ne_zero ENNReal.ofNat_ne_top).1 hf₂.2
+      (p := 2) two_ne_zero ENNReal.ofNat_ne_top hf₂.aestronglyMeasurable).1 hf₂.eLpNorm_lt_top
     simpa using h
   have hm : Measurable fun b ↦ ∫⁻ t, ‖f (reconstruct b t)‖ₑ ^ (2 : ℝ) ∂kernel μ ρ b :=
     Measurable.lintegral_kernel_prod_right' hmeas
   filter_upwards [ae_lt_top hm hfin.ne] with b hb
-  refine ⟨(hfm.comp (measurable_reconstruct_left b)).aestronglyMeasurable, ?_⟩
-  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top]
+  change eLpNorm (fun t ↦ f (reconstruct b t)) 2 (kernel μ ρ b) < ⊤
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (f := fun t ↦ f (reconstruct b t))
+    two_ne_zero ENNReal.ofNat_ne_top
+    (hfm.comp (measurable_reconstruct_left b)).aestronglyMeasurable]
   simpa using hb
 
 end ReconstructedFibers
@@ -452,14 +458,14 @@ theorem energy_le_of_fiberBound (μ : ProbabilityMeasure E) (ρ : ProbabilityMea
       have hineq := evariance_le_mul_energy_of_iInf_le ν htop hconst hadm
       rw [henergy] at hineq
       unfold energyAt
-      rw [if_pos hnd, ENNReal.div_le_iff hnd.2.2 hV]
+      rw [ite_eq_left hnd, ENNReal.div_le_iff hnd.2.2 hV]
       calc evariance (fun t ↦ f (reconstruct b t)) (kernel μ ρ b)
           ≤ (κ : ENNReal) * evariance id (kernel μ ρ b) *
             ∫⁻ t, directionalIntegrand f (b, t) ∂kernel μ ρ b := hineq
         _ = (κ : ENNReal) * (∫⁻ t, directionalIntegrand f (b, t) ∂kernel μ ρ b) *
             evariance id (kernel μ ρ b) := by ring
     · unfold energyAt
-      rw [if_neg hnd]
+      rw [ite_eq_right hnd]
       exact zero_le
   -- Assemble.
   have hmain : energy μ ρ f ≤ (κ : ENNReal) * Energy.LocalSlope.energy μ f := by

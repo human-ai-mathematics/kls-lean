@@ -1,7 +1,13 @@
-import FunctionalInequalities
-import Lean
+module
 
-/-! Removed specializations and paper-local aliases are absent from the complete production environment. -/
+public import FunctionalInequalities
+public import Lean
+meta import Lean
+
+/-! Removed specializations and paper-local aliases are absent from the complete production
+environment. -/
+
+@[expose] public section
 open Lean Elab Command in
 run_cmd do
   let env ← getEnv

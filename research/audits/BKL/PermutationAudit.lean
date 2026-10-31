@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
 
 /-!
 # Audit: the permutation bound (44) of BKL Lemma 3.3
@@ -12,6 +14,8 @@ specializes it to `k = q = 2`, where the only adjacent transposition is `swap 0 
 
 This is a supporting combinatorial lemma; it does not prove Lemma 3.3 or Theorem 3.1.
 -/
+
+@[expose] public section
 
 noncomputable section
 

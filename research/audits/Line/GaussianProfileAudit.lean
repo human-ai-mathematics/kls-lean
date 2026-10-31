@@ -1,6 +1,10 @@
-import FunctionalInequalities.Probability.Line.GaussianProfile
+module
+
+public import FunctionalInequalities.Probability.Line.GaussianProfile
 
 /-! Independent scalar inputs for the Gaussian-profile BGL route. No heat estimate is claimed. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open Set MeasureTheory ProbabilityTheory

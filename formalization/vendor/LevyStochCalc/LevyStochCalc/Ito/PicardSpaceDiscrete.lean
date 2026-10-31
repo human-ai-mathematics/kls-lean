@@ -3,11 +3,16 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.Picard
-import Mathlib.Topology.MetricSpace.Basic
-import Mathlib.Topology.MetricSpace.Contracting
-import Mathlib.Topology.UniformSpace.Cauchy
-import Mathlib.Topology.UniformSpace.UniformEmbedding
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Ito.Picard
+public import Mathlib.Topology.MetricSpace.Basic
+public import Mathlib.Topology.MetricSpace.Contracting
+public import Mathlib.Topology.UniformSpace.Cauchy
+public import Mathlib.Topology.UniformSpace.UniformEmbedding
 
 /-!
 # Discrete metric on the space of bounded processes
@@ -20,6 +25,8 @@ norm; it only supplies the `MetricSpace`/`CompleteSpace` typeclass arguments of 
 Banach fixed-point shim, the analytic contraction being carried by the Bielecki β-weighted
 pseudo-edist of `Ito/PicardSpaceBieleckiEDist.lean`.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 
@@ -156,26 +163,26 @@ lemma discreteDist_comm (X Y : SBoundedProcess (n := n) P ℱ T) :
   by_cases h : X = Y
   · subst h; rfl
   · have h' : ¬ Y = X := fun heq => h heq.symm
-    rw [if_neg h, if_neg h']
+    rw [ite_eq_right h, ite_eq_right h']
 
 lemma discreteDist_triangle (X Y Z : SBoundedProcess (n := n) P ℱ T) :
     discreteDist X Z ≤ discreteDist X Y + discreteDist Y Z := by
   unfold discreteDist
   by_cases hXZ : X = Z
   · -- LHS = 0; RHS ≥ 0.
-    rw [if_pos hXZ]
+    rw [ite_eq_left hXZ]
     have h₁ : (0 : ℝ) ≤ (if X = Y then (0 : ℝ) else 1) := by
       split_ifs <;> norm_num
     have h₂ : (0 : ℝ) ≤ (if Y = Z then (0 : ℝ) else 1) := by
       split_ifs <;> norm_num
     linarith
   · -- LHS = 1; need 1 ≤ RHS.
-    rw [if_neg hXZ]
+    rw [ite_eq_right hXZ]
     by_cases hXY : X = Y
     · by_cases hYZ : Y = Z
       · exact absurd (hXY.trans hYZ) hXZ
-      · rw [if_pos hXY, if_neg hYZ]; linarith
-    · rw [if_neg hXY]
+      · rw [ite_eq_left hXY, ite_eq_right hYZ]; linarith
+    · rw [ite_eq_right hXY]
       have h₂ : (0 : ℝ) ≤ (if Y = Z then (0 : ℝ) else 1) := by
         split_ifs <;> norm_num
       linarith
@@ -186,7 +193,7 @@ lemma discreteDist_eq_zero_iff
   unfold discreteDist
   by_cases h : X = Y
   · simp [h]
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     exact ⟨fun h₀ => by linarith, fun heq => absurd heq h⟩
 
 lemma discreteDist_nonneg (X Y : SBoundedProcess (n := n) P ℱ T) :
@@ -233,7 +240,7 @@ lemma cauchySeq_eventually_constant
   have h_eq : (dist (u n) (u N) : ℝ) = 1 := by
     change discreteDist (u n) (u N) = 1
     unfold discreteDist
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
   rw [h_eq] at h_dist
   linarith
 

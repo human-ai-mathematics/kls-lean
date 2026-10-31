@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.MultidimFiltered
-import LevyStochCalc.Brownian.ItoL2Completion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.MultidimFiltered
+public import LevyStochCalc.Brownian.ItoL2Completion
 
 /-!
 # Multidimensional Brownian Itô integral
@@ -34,6 +38,8 @@ the multidim integral here breaks the cycle.
 * Karatzas–Shreve §3.2 (multidim Itô integral as component sum).
 * Le Gall §5.4 (Itô integral of vector-valued processes).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

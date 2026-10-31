@@ -1,7 +1,9 @@
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Topology.Algebra.Support
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Topology.Algebra.Support
 
 /-!
 # Explicit finite wave splitting
@@ -10,6 +12,8 @@ Classical scalar/velocity/coordinate-field flows with explicit translation direc
 No L² representative is differentiated. Stability, consistency and the heat-test theorem
 are not asserted here.
 -/
+
+@[expose] public section
 noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
@@ -79,8 +83,8 @@ omit [NormedAddCommGroup E] [NormedSpace ℝ E] [DecidableEq ι] in
   simp [WaveSplitting.reaction]
 
 omit [Fintype ι] in
-@[simp] theorem transport_zero (a : E) (j : ι) (Y : State E ι) :
-    transport a j 0 Y = Y := by
+@[simp]
+theorem transport_zero (a : E) (j : ι) (Y : State E ι) : transport a j 0 Y = Y := by
   cases Y with
   | mk u v p =>
     unfold transport
@@ -91,10 +95,9 @@ omit [Fintype ι] in
 omit [Fintype ι] in
 /-- The two characteristic fields translate in opposite directions. -/
 theorem transport_characteristics (a : E) (j : ι) (t : ℝ) (Y : State E ι) (x : E) :
-    (transport a j t Y).v x + (transport a j t Y).p j x =
-      Y.v (x + t • a) + Y.p j (x + t • a) ∧
-    (transport a j t Y).v x - (transport a j t Y).p j x =
-      Y.v (x - t • a) - Y.p j (x - t • a) := by
+    (transport a j t Y).v x + (transport a j t Y).p j x = Y.v (x + t • a) + Y.p j (x + t • a) ∧
+      (transport a j t Y).v x - (transport a j t Y).p j x =
+        Y.v (x - t • a) - Y.p j (x - t • a) := by
   simp only [WaveSplitting.transport, ↓reduceIte]
   constructor <;> ring
 
@@ -140,8 +143,8 @@ theorem State.Supported.reaction {Y : State E ι} {R : ℝ} (hY : Y.Supported R)
   obtain ⟨hu, hv, hp⟩ := hY x hx
   simp [WaveSplitting.reaction, coupling, hu, hv, hp]
 
-private theorem norm_shift_gt {R : ℝ} (x a : E) (t : ℝ)
-    (hx : R + |t| * ‖a‖ < ‖x‖) : R < ‖x + t • a‖ ∧ R < ‖x - t • a‖ := by
+private theorem norm_shift_gt {R : ℝ} (x a : E) (t : ℝ) (hx : R + |t| * ‖a‖ < ‖x‖) :
+    R < ‖x + t • a‖ ∧ R < ‖x - t • a‖ := by
   have hp : ‖x‖ ≤ ‖x + t • a‖ + |t| * ‖a‖ := by
     simpa [norm_smul, Real.norm_eq_abs] using norm_sub_le (x + t • a) (t • a)
   have hm : ‖x‖ ≤ ‖x - t • a‖ + |t| * ‖a‖ := by
@@ -190,9 +193,8 @@ theorem State.Smooth.sweep {Y : State E ι} (hY : Y.Smooth)
   | nil => exact hY
   | cons j js ih => exact ih (hY.transport (a j) j t)
 
-theorem State.Supported.sweep {Y : State E ι} {R : ℝ} (hY : Y.Supported R)
-    (a : ι → E) (t : ℝ) (js : List ι) :
-    (sweep a t js Y).Supported (R + |t| * travel a js) := by
+theorem State.Supported.sweep {Y : State E ι} {R : ℝ} (hY : Y.Supported R) (a : ι → E) (t : ℝ)
+    (js : List ι) : (sweep a t js Y).Supported (R + |t| * travel a js) := by
   induction js generalizing Y R with
   | nil => simpa [WaveSplitting.sweep, travel] using hY
   | cons j js ih =>
@@ -235,8 +237,8 @@ theorem State.Smooth.cell {Y : State E ι} (hY : Y.Smooth)
     (js : List ι) (δ : ℝ) (k : ℕ) (θ : ℝ) : (cell a b js δ Y k θ).Smooth :=
   ((hY.nodes a hb js δ k).sweep a θ js).reaction hb θ
 
-theorem State.Supported.nodes {Y : State E ι} {R : ℝ} (hY : Y.Supported R)
-    (a : ι → E) (b : ι → E → ℝ) (js : List ι) (δ : ℝ) (k : ℕ) :
+theorem State.Supported.nodes {Y : State E ι} {R : ℝ} (hY : Y.Supported R) (a : ι → E)
+    (b : ι → E → ℝ) (js : List ι) (δ : ℝ) (k : ℕ) :
     (nodes a b js δ Y k).Supported (R + k * (|δ| * travel a js)) := by
   induction k with
   | zero => simpa [WaveSplitting.nodes] using hY

@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Hazard
-import FunctionalInequalities.Poincare.Gaussian.Hardy
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Hazard
+public import FunctionalInequalities.Poincare.Gaussian.Hardy
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 
 /-!
 # A Hardy inequality for log-concave laws on the line
@@ -21,6 +23,8 @@ Poincaré inequality holds with constant `(1 / c)²`.
 Only the smooth-test inequality is asserted here; the comparison with the variance is in the
 variance module and the final constant `12 · Var` is assembled afterwards.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -285,48 +289,54 @@ theorem setIntegral_Ioi_sq_sub_le_of_le {f : ℝ → ℝ}
     hf.energy_integrable.congr (ae_of_all _ fun s ↦ norm_gradient_sq_eq_deriv_sq f s)
   set K := (1 / d.ρ m) ^ 2 * ∫ s in Ioi p, deriv f s ^ 2 ∂(μ : Measure ℝ) with hK
   have hK0 : 0 ≤ K := mul_nonneg (by positivity) (integral_nonneg fun s ↦ sq_nonneg _)
-  have hstep : ∀ q : ℝ, q ∈ interior (μ : Measure ℝ).support → p < q →
-      ∫ s in Ioc p q, (f s - f p) ^ 2 ∂(μ : Measure ℝ) ≤ K := by
+  have hstep :
+    ∀ q : ℝ,
+      q ∈ interior (μ : Measure ℝ).support →
+        p < q → ∫ s in Ioc p q, (f s - f p) ^ 2 ∂(μ : Measure ℝ) ≤ K := by
     intro q hq hpq
-    rw [d.setIntegral_eq_integral_mul _ measurableSet_Ioc, ← intervalIntegral.integral_of_le hpq.le]
+    rw [d.setIntegral_eq_integral_mul _ measurableSet_Ioc, ←
+      intervalIntegral.integral_of_le hpq.le]
     refine (d.integral_sq_sub_mul_le_right_of_le hμ hi hm hf1 hpΩ hmp hq hpq.le).trans ?_
     rw [hK]
     refine mul_le_mul_of_nonneg_left ?_ (by positivity)
-    rw [intervalIntegral.integral_of_le hpq.le, ← d.setIntegral_eq_integral_mul _ measurableSet_Ioc]
-    exact setIntegral_mono_set hf'2.integrableOn (ae_of_all _ fun s ↦ sq_nonneg _)
-      (ae_of_all _ Ioc_subset_Ioi_self)
-  set ν : Measure ℝ := (μ : Measure ℝ).withDensity fun s ↦ ENNReal.ofReal ((f s - f p) ^ 2)
-    with hν
-  have hνS : ∀ S : Set ℝ, MeasurableSet S →
-      ν S = ENNReal.ofReal (∫ s in S, (f s - f p) ^ 2 ∂(μ : Measure ℝ)) := fun S hS ↦
-    withDensity_apply_eq_ofReal hg2 (fun s ↦ sq_nonneg _) hS
+    rw [intervalIntegral.integral_of_le hpq.le, ←
+      d.setIntegral_eq_integral_mul _ measurableSet_Ioc]
+    exact
+      setIntegral_mono_set hf'2.integrableOn (ae_of_all _ fun s ↦ sq_nonneg _)
+        (ae_of_all _ Ioc_subset_Ioi_self)
+  set ν : Measure ℝ := (μ : Measure ℝ).withDensity fun s ↦ ENNReal.ofReal ((f s - f p) ^ 2) with
+    hν
+  have hνS :
+    ∀ S : Set ℝ,
+      MeasurableSet S → ν S = ENNReal.ofReal (∫ s in S, (f s - f p) ^ 2 ∂(μ : Measure ℝ)) :=
+    fun S hS ↦ withDensity_apply_eq_ofReal hg2 (fun s ↦ sq_nonneg _) hS
   set S : ℚ → Set ℝ := fun q ↦
     if (q : ℝ) ∈ interior (μ : Measure ℝ).support ∧ p < q then Ioc p q else ∅ with hS
   have hSle : ∀ q, ν (S q) ≤ ENNReal.ofReal K := by
     intro q
     by_cases hq : (q : ℝ) ∈ interior (μ : Measure ℝ).support ∧ p < q
-    · simp only [hS, if_pos hq]
+    · simp only [hS, ite_eq_left hq]
       rw [hνS _ measurableSet_Ioc]
       exact ENNReal.ofReal_le_ofReal (hstep q hq.1 hq.2)
-    · simp [hS, if_neg hq]
+    · simp [hS, ite_eq_right hq]
   have hdir : Directed (· ⊆ ·) S := by
     intro i j
     by_cases hi' : (i : ℝ) ∈ interior (μ : Measure ℝ).support ∧ p < i
     · by_cases hj' : (j : ℝ) ∈ interior (μ : Measure ℝ).support ∧ p < j
-      · have hmax : ((max i j : ℚ) : ℝ) ∈ interior (μ : Measure ℝ).support ∧
-            p < ((max i j : ℚ) : ℝ) := by
+      · have hmax :
+          ((max i j : ℚ) : ℝ) ∈ interior (μ : Measure ℝ).support ∧ p < ((max i j : ℚ) : ℝ) := by
           rcases le_total i j with h | h
           · rw [max_eq_right h]
             exact hj'
           · rw [max_eq_left h]
             exact hi'
         refine ⟨max i j, ?_, ?_⟩
-        · simp only [hS, if_pos hi', if_pos hmax]
+        · simp only [hS, ite_eq_left hi', ite_eq_left hmax]
           exact Ioc_subset_Ioc_right (by exact_mod_cast le_max_left i j)
-        · simp only [hS, if_pos hj', if_pos hmax]
+        · simp only [hS, ite_eq_left hj', ite_eq_left hmax]
           exact Ioc_subset_Ioc_right (by exact_mod_cast le_max_right i j)
-      · exact ⟨i, subset_rfl, by simp [hS, if_neg hj']⟩
-    · exact ⟨j, by simp [hS, if_neg hi'], subset_rfl⟩
+      · exact ⟨i, subset_rfl, by simp [hS, ite_eq_right hj']⟩
+    · exact ⟨j, by simp [hS, ite_eq_right hi'], subset_rfl⟩
   have hcover : Ioi p ∩ interior (μ : Measure ℝ).support ⊆ ⋃ q, S q := by
     rintro y ⟨hyp, hyΩ⟩
     obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp isOpen_interior y hyΩ
@@ -339,19 +349,20 @@ theorem setIntegral_Ioi_sq_sub_le_of_le {f : ℝ → ℝ}
     refine mem_iUnion.mpr ⟨q, ?_⟩
     have hSq : S q = Ioc p q := by
       simp only [hS]
-      exact if_pos (And.intro hqΩ (hpy.trans hyq))
+      exact ite_eq_left (And.intro hqΩ (hpy.trans hyq))
     rw [hSq]
     exact ⟨hpy, hyq.le⟩
   have hν_le : ν (Ioi p) ≤ ENNReal.ofReal K := by
-    calc ν (Ioi p) ≤ ν ((⋃ q, S q) ∪ (interior (μ : Measure ℝ).support)ᶜ) := by
-          apply measure_mono
-          intro y hy
-          by_cases hyΩ : y ∈ interior (μ : Measure ℝ).support
-          · exact Or.inl (hcover (mem_inter hy hyΩ))
-          · exact Or.inr hyΩ
+    calc
+      ν (Ioi p) ≤ ν ((⋃ q, S q) ∪ (interior (μ : Measure ℝ).support)ᶜ) := by
+        apply measure_mono
+        intro y hy
+        by_cases hyΩ : y ∈ interior (μ : Measure ℝ).support
+        · exact Or.inl (hcover (mem_inter hy hyΩ))
+        · exact Or.inr hyΩ
       _ ≤ ν (⋃ q, S q) + ν (interior (μ : Measure ℝ).support)ᶜ := measure_union_le _ _
       _ = ⨆ q, ν (S q) := by
-          rw [withDensity_compl_interior_support hμ hi _, add_zero, hdir.measure_iUnion]
+        rw [withDensity_compl_interior_support hμ hi _, add_zero, hdir.measure_iUnion]
       _ ≤ ENNReal.ofReal K := iSup_le hSle
   rw [hνS _ measurableSet_Ioi] at hν_le
   exact (ENNReal.ofReal_le_ofReal_iff hK0).mp hν_le
@@ -378,48 +389,54 @@ theorem setIntegral_Iic_sq_sub_le_of_le {f : ℝ → ℝ}
     hf.energy_integrable.congr (ae_of_all _ fun s ↦ norm_gradient_sq_eq_deriv_sq f s)
   set K := (1 / d.ρ m) ^ 2 * ∫ s in Iic p, deriv f s ^ 2 ∂(μ : Measure ℝ) with hK
   have hK0 : 0 ≤ K := mul_nonneg (by positivity) (integral_nonneg fun s ↦ sq_nonneg _)
-  have hstep : ∀ q : ℝ, q ∈ interior (μ : Measure ℝ).support → q < p →
-      ∫ s in Ioc q p, (f s - f p) ^ 2 ∂(μ : Measure ℝ) ≤ K := by
+  have hstep :
+    ∀ q : ℝ,
+      q ∈ interior (μ : Measure ℝ).support →
+        q < p → ∫ s in Ioc q p, (f s - f p) ^ 2 ∂(μ : Measure ℝ) ≤ K := by
     intro q hq hqp
-    rw [d.setIntegral_eq_integral_mul _ measurableSet_Ioc, ← intervalIntegral.integral_of_le hqp.le]
+    rw [d.setIntegral_eq_integral_mul _ measurableSet_Ioc, ←
+      intervalIntegral.integral_of_le hqp.le]
     refine (d.integral_sq_sub_mul_le_left_of_le hμ hi hm hf1 hpΩ hpm hq hqp.le).trans ?_
     rw [hK]
     refine mul_le_mul_of_nonneg_left ?_ (by positivity)
-    rw [intervalIntegral.integral_of_le hqp.le, ← d.setIntegral_eq_integral_mul _ measurableSet_Ioc]
-    exact setIntegral_mono_set hf'2.integrableOn (ae_of_all _ fun s ↦ sq_nonneg _)
-      (ae_of_all _ fun s hs ↦ hs.2)
-  set ν : Measure ℝ := (μ : Measure ℝ).withDensity fun s ↦ ENNReal.ofReal ((f s - f p) ^ 2)
-    with hν
-  have hνS : ∀ S : Set ℝ, MeasurableSet S →
-      ν S = ENNReal.ofReal (∫ s in S, (f s - f p) ^ 2 ∂(μ : Measure ℝ)) := fun S hS ↦
-    withDensity_apply_eq_ofReal hg2 (fun s ↦ sq_nonneg _) hS
+    rw [intervalIntegral.integral_of_le hqp.le, ←
+      d.setIntegral_eq_integral_mul _ measurableSet_Ioc]
+    exact
+      setIntegral_mono_set hf'2.integrableOn (ae_of_all _ fun s ↦ sq_nonneg _)
+        (ae_of_all _ fun s hs ↦ hs.2)
+  set ν : Measure ℝ := (μ : Measure ℝ).withDensity fun s ↦ ENNReal.ofReal ((f s - f p) ^ 2) with
+    hν
+  have hνS :
+    ∀ S : Set ℝ,
+      MeasurableSet S → ν S = ENNReal.ofReal (∫ s in S, (f s - f p) ^ 2 ∂(μ : Measure ℝ)) :=
+    fun S hS ↦ withDensity_apply_eq_ofReal hg2 (fun s ↦ sq_nonneg _) hS
   set S : ℚ → Set ℝ := fun q ↦
     if (q : ℝ) ∈ interior (μ : Measure ℝ).support ∧ (q : ℝ) < p then Ioc q p else ∅ with hS
   have hSle : ∀ q, ν (S q) ≤ ENNReal.ofReal K := by
     intro q
     by_cases hq : (q : ℝ) ∈ interior (μ : Measure ℝ).support ∧ (q : ℝ) < p
-    · simp only [hS, if_pos hq]
+    · simp only [hS, ite_eq_left hq]
       rw [hνS _ measurableSet_Ioc]
       exact ENNReal.ofReal_le_ofReal (hstep q hq.1 hq.2)
-    · simp [hS, if_neg hq]
+    · simp [hS, ite_eq_right hq]
   have hdir : Directed (· ⊆ ·) S := by
     intro i j
     by_cases hi' : (i : ℝ) ∈ interior (μ : Measure ℝ).support ∧ (i : ℝ) < p
     · by_cases hj' : (j : ℝ) ∈ interior (μ : Measure ℝ).support ∧ (j : ℝ) < p
-      · have hmin : ((min i j : ℚ) : ℝ) ∈ interior (μ : Measure ℝ).support ∧
-            ((min i j : ℚ) : ℝ) < p := by
+      · have hmin :
+          ((min i j : ℚ) : ℝ) ∈ interior (μ : Measure ℝ).support ∧ ((min i j : ℚ) : ℝ) < p := by
           rcases le_total i j with h | h
           · rw [min_eq_left h]
             exact hi'
           · rw [min_eq_right h]
             exact hj'
         refine ⟨min i j, ?_, ?_⟩
-        · simp only [hS, if_pos hi', if_pos hmin]
+        · simp only [hS, ite_eq_left hi', ite_eq_left hmin]
           exact Ioc_subset_Ioc_left (by exact_mod_cast min_le_left i j)
-        · simp only [hS, if_pos hj', if_pos hmin]
+        · simp only [hS, ite_eq_left hj', ite_eq_left hmin]
           exact Ioc_subset_Ioc_left (by exact_mod_cast min_le_right i j)
-      · exact ⟨i, subset_rfl, by simp [hS, if_neg hj']⟩
-    · exact ⟨j, by simp [hS, if_neg hi'], subset_rfl⟩
+      · exact ⟨i, subset_rfl, by simp [hS, ite_eq_right hj']⟩
+    · exact ⟨j, by simp [hS, ite_eq_right hi'], subset_rfl⟩
   have hcover : Iic p ∩ interior (μ : Measure ℝ).support ⊆ ⋃ q, S q := by
     rintro y ⟨hyp, hyΩ⟩
     obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp isOpen_interior y hyΩ
@@ -432,19 +449,20 @@ theorem setIntegral_Iic_sq_sub_le_of_le {f : ℝ → ℝ}
     refine mem_iUnion.mpr ⟨q, ?_⟩
     have hSq : S q = Ioc (q : ℝ) p := by
       simp only [hS]
-      exact if_pos (And.intro hqΩ (hyq.trans_le hyp'))
+      exact ite_eq_left (And.intro hqΩ (hyq.trans_le hyp'))
     rw [hSq]
     exact ⟨hyq, hyp'⟩
   have hν_le : ν (Iic p) ≤ ENNReal.ofReal K := by
-    calc ν (Iic p) ≤ ν ((⋃ q, S q) ∪ (interior (μ : Measure ℝ).support)ᶜ) := by
-          apply measure_mono
-          intro y hy
-          by_cases hyΩ : y ∈ interior (μ : Measure ℝ).support
-          · exact Or.inl (hcover (mem_inter hy hyΩ))
-          · exact Or.inr hyΩ
+    calc
+      ν (Iic p) ≤ ν ((⋃ q, S q) ∪ (interior (μ : Measure ℝ).support)ᶜ) := by
+        apply measure_mono
+        intro y hy
+        by_cases hyΩ : y ∈ interior (μ : Measure ℝ).support
+        · exact Or.inl (hcover (mem_inter hy hyΩ))
+        · exact Or.inr hyΩ
       _ ≤ ν (⋃ q, S q) + ν (interior (μ : Measure ℝ).support)ᶜ := measure_union_le _ _
       _ = ⨆ q, ν (S q) := by
-          rw [withDensity_compl_interior_support hμ hi _, add_zero, hdir.measure_iUnion]
+        rw [withDensity_compl_interior_support hμ hi _, add_zero, hdir.measure_iUnion]
       _ ≤ ENNReal.ofReal K := iSup_le hSle
   rw [hνS _ measurableSet_Iic] at hν_le
   exact (ENNReal.ofReal_le_ofReal_iff hK0).mp hν_le
@@ -457,26 +475,30 @@ theorem setIntegral_Iic_sq_sub_le {f : ℝ → ℝ}
   d.setIntegral_Iic_sq_sub_le_of_le hμ hi hm hf (median_mem hμ hi hm) le_rfl
 
 /-- The smooth-test Poincaré inequality with constant `(1 / ρ m)²` at a median `m`. -/
-theorem smoothTest_holds :
-    Poincare.SmoothTest.Holds (μ : Measure ℝ) ((1 / d.ρ m) ^ 2) := by
+theorem smoothTest_holds : Poincare.SmoothTest.Holds (μ : Measure ℝ) ((1 / d.ρ m) ^ 2) := by
   refine ⟨inferInstance, by positivity, fun f hf ↦ ?_⟩
   have hg2 : Integrable (fun s ↦ (f s - f m) ^ 2) (μ : Measure ℝ) :=
     (hf.memLp_two.sub (memLp_const (f m))).integrable_sq
   have hf'2 : Integrable (fun s ↦ deriv f s ^ 2) (μ : Measure ℝ) :=
     hf.energy_integrable.congr (ae_of_all _ fun s ↦ norm_gradient_sq_eq_deriv_sq f s)
-  have henergy : Poincare.SmoothTest.energy (μ : Measure ℝ) f = ∫ s, deriv f s ^ 2 ∂(μ : Measure ℝ) := by
+  have henergy :
+    Poincare.SmoothTest.energy (μ : Measure ℝ) f = ∫ s, deriv f s ^ 2 ∂(μ : Measure ℝ) := by
     unfold Poincare.SmoothTest.energy
     exact integral_congr_ae (ae_of_all _ fun s ↦ norm_gradient_sq_eq_deriv_sq f s)
-  calc ProbabilityTheory.variance f (μ : Measure ℝ)
-      ≤ ∫ s, (f s - f m) ^ 2 ∂(μ : Measure ℝ) := hf.variance_le_integral_sq_sub (f m)
-    _ = ∫ s in Ioi m, (f s - f m) ^ 2 ∂(μ : Measure ℝ) +
+  calc
+    ProbabilityTheory.variance f (μ : Measure ℝ) ≤ ∫ s, (f s - f m) ^ 2 ∂(μ : Measure ℝ) :=
+      hf.variance_le_integral_sq_sub (f m)
+    _ =
+        ∫ s in Ioi m, (f s - f m) ^ 2 ∂(μ : Measure ℝ) +
           ∫ s in Iic m, (f s - f m) ^ 2 ∂(μ : Measure ℝ) := by
-        rw [← compl_Ioi, integral_add_compl measurableSet_Ioi hg2]
-    _ ≤ (1 / d.ρ m) ^ 2 * ∫ s in Ioi m, deriv f s ^ 2 ∂(μ : Measure ℝ) +
+      rw [← compl_Ioi, integral_add_compl measurableSet_Ioi hg2]
+    _ ≤
+        (1 / d.ρ m) ^ 2 * ∫ s in Ioi m, deriv f s ^ 2 ∂(μ : Measure ℝ) +
           (1 / d.ρ m) ^ 2 * ∫ s in Iic m, deriv f s ^ 2 ∂(μ : Measure ℝ) :=
-        add_le_add (d.setIntegral_Ioi_sq_sub_le hμ hi hm hf) (d.setIntegral_Iic_sq_sub_le hμ hi hm hf)
+      add_le_add (d.setIntegral_Ioi_sq_sub_le hμ hi hm hf)
+        (d.setIntegral_Iic_sq_sub_le hμ hi hm hf)
     _ = (1 / d.ρ m) ^ 2 * Poincare.SmoothTest.energy (μ : Measure ℝ) f := by
-        rw [← mul_add, ← compl_Ioi, integral_add_compl measurableSet_Ioi hf'2, henergy]
+      rw [← mul_add, ← compl_Ioi, integral_add_compl measurableSet_Ioi hf'2, henergy]
 
 end HalfLine
 

@@ -1,6 +1,8 @@
-import Mathlib.Analysis.InnerProductSpace.LinearMap
-import Mathlib.Analysis.Normed.Module.Multilinear.Curry
-import Mathlib.Data.Fintype.Perm
+module
+
+public import Mathlib.Analysis.InnerProductSpace.LinearMap
+public import Mathlib.Analysis.Normed.Module.Multilinear.Curry
+public import Mathlib.Data.Fintype.Perm
 
 /-!
 # Rank-one bounds and symmetrization of real multilinear maps
@@ -12,6 +14,8 @@ the original index after the `d` Taylor indices as in BKL Lemma 3.6. The countin
 `sum_perm_inner_init_last` evaluates `S_{d+1}` of such a pairing when the `d`-linear map is
 symmetric.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -27,7 +31,7 @@ theorem norm_prod_inner_le (d : ℕ) (h : Fin d → E) (x : E) :
   rw [norm_prod]
   calc
     ∏ j, ‖⟪x, h j⟫‖ ≤ ∏ j, ‖x‖ * ‖h j‖ := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro j _; exact norm_nonneg _
       · intro j _; exact norm_inner_le_norm _ _
     _ = ‖x‖ ^ d * ∏ j, ‖h j‖ := by rw [Finset.prod_mul_distrib]; simp
@@ -242,10 +246,10 @@ theorem sum_perm_inner_init_last {d : ℕ} (Φ : ContinuousMultilinearMap ℝ (f
 theorem clm_comp_symmetrizeML {G H : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
     [NormedAddCommGroup H] [NormedSpace ℝ H] {q : ℕ}
     (Φ : ContinuousMultilinearMap ℝ (fun _ : Fin q => E) G) (L : G →L[ℝ] H) :
-    L.compContinuousMultilinearMap (symmetrizeML Φ) = symmetrizeML (L.compContinuousMultilinearMap Φ) := by
-    ext h
-    simp [symmetrizeML, map_smul, map_sum,
-      ContinuousLinearMap.compContinuousMultilinearMap_coe,
-      ContinuousMultilinearMap.domDomCongr_apply]
+    L.compContinuousMultilinearMap (symmetrizeML Φ) =
+      symmetrizeML (L.compContinuousMultilinearMap Φ) := by
+  ext h
+  simp [symmetrizeML, map_smul, map_sum, ContinuousLinearMap.compContinuousMultilinearMap_coe,
+    ContinuousMultilinearMap.domDomCongr_apply]
 
 end FunctionalInequalities.Analysis.Tensor

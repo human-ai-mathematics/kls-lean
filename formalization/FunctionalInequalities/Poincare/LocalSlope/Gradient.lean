@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import FunctionalInequalities.Poincare.LocalSlope.Basic
+module
+
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import FunctionalInequalities.Poincare.LocalSlope.Basic
 
 /-!
 # The literature Poincaré constant in gradient form
@@ -22,6 +24,8 @@ log-concave specialization in `KLS/LogConcave/Poincare.lean`.
 Equation (1.1): locally Lipschitz tests with `E|∇g|² ≤ 1` and no `L²` premise.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory ProbabilityTheory TopologicalSpace
@@ -31,16 +35,20 @@ namespace FunctionalInequalities.Poincare.LocalSlope
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-/-- fixed-constant equivalence: for an absolutely continuous law the local-slope and gradient descriptions of a valid
+/--
+fixed-constant equivalence: for an absolutely continuous law the local-slope and gradient
+descriptions of a valid
 finite constant agree. Both directions rewrite the same two proved identifications, so no
 inequality is weakened: the admissible class and the energy are transported simultaneously. -/
 theorem holds_iff_memLp_gradient (ν : ProbabilityMeasure V) (m : Measure V)
     [Measure.IsAddHaarMeasure m] (hν : (ν : Measure V) ≪ m) (C : NNReal) :
     Holds ν C ↔
-      ∀ g : V → ℝ, LocallyLipschitz g → MemLp g 2 (ν : Measure V) →
-        MemLp (gradient g) 2 (ν : Measure V) →
-        evariance g (ν : Measure V) ≤
-          (C : ENNReal) * ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(ν : Measure V) := by
+      ∀ g : V → ℝ,
+        LocallyLipschitz g →
+          MemLp g 2 (ν : Measure V) →
+            MemLp (gradient g) 2 (ν : Measure V) →
+              evariance g (ν : Measure V) ≤
+                (C : ENNReal) * ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(ν : Measure V) := by
   constructor
   · intro hC g hlip hL2 hgrad
     have hadm : Energy.LocalSlope.Admissible ν g :=
@@ -122,24 +130,33 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 omit [CompleteSpace E] in
-/-- the optimal-constant identity: the literature optimum of an absolutely continuous intrinsic law, in gradient form.
+/--
+the optimal-constant identity: the literature optimum of an absolutely continuous intrinsic law, in
+gradient form.
 The two infima range over subtypes cut out by equivalent predicates, so each bounds the other. -/
 theorem Intrinsic.constant_eq_iInf_gradient (μ : ProbabilityMeasure E)
     (m : Measure (Probability.affineSupport μ).direction) [Measure.IsAddHaarMeasure m]
-    (hμ : (Probability.intrinsicMeasure μ :
-      Measure (Probability.affineSupport μ).direction) ≪ m) :
+    (hμ :
+      (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ≪ m) :
     Poincare.LocalSlope.Intrinsic.constant μ =
-      ⨅ C : {C : NNReal //
-          ∀ g : (Probability.affineSupport μ).direction → ℝ, LocallyLipschitz g →
-            MemLp g 2 (Probability.intrinsicMeasure μ :
-              Measure (Probability.affineSupport μ).direction) →
-            MemLp (gradient g) 2 (Probability.intrinsicMeasure μ :
-              Measure (Probability.affineSupport μ).direction) →
-            evariance g (Probability.intrinsicMeasure μ :
-                Measure (Probability.affineSupport μ).direction) ≤
-              (C : ENNReal) * ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2
-                ∂(Probability.intrinsicMeasure μ :
-                  Measure (Probability.affineSupport μ).direction)},
+      ⨅ C :
+        { C : NNReal //
+          ∀ g : (Probability.affineSupport μ).direction → ℝ,
+            LocallyLipschitz g →
+              MemLp g 2
+                  (Probability.intrinsicMeasure μ :
+                    Measure (Probability.affineSupport μ).direction) →
+                MemLp (gradient g) 2
+                    (Probability.intrinsicMeasure μ :
+                      Measure (Probability.affineSupport μ).direction) →
+                  evariance g
+                      (Probability.intrinsicMeasure μ :
+                        Measure (Probability.affineSupport μ).direction) ≤
+                    (C : ENNReal) *
+                      ∫⁻ x,
+                        (ENNReal.ofReal ‖gradient g x‖) ^
+                          2 ∂(Probability.intrinsicMeasure μ :
+                          Measure (Probability.affineSupport μ).direction) },
         (C.1 : ENNReal) := by
   have hiff := holds_iff_memLp_gradient (Probability.intrinsicMeasure μ) m hμ
   apply le_antisymm

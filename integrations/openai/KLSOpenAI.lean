@@ -1,1 +1,3 @@
-import KLSOpenAI.Target
+module
+
+public import KLSOpenAI.Target

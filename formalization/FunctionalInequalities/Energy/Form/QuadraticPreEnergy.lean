@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Relaxation.Basic
-import Mathlib.Analysis.Normed.Module.Basic
+module
+
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import Mathlib.Analysis.Normed.Module.Basic
 
 /-!
 # Quadratic finite pre-energies
@@ -13,6 +15,8 @@ lower semicontinuity, density, closability, or that relaxation preserves the qua
 The closure theorem is `Quadratic.closedQuadratic_sequentialRelaxation` in
 `Energy.Relaxation.Quadratic`; agreement on tests remains a separate analytic question.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.Energy.PreEnergy
 

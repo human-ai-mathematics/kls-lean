@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
+public import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
 # The adjoint-product identification: the Yosida exponentials converge strongly
@@ -11,14 +13,18 @@ The adjoint-product identification for the Yosida approximation
 The proof is pure composition. The corrected abstract statement
 (`exists_limit_exp_neg_smul`, `Exponential/Limit.lean`) is applied to the family `s ↦ L_s` with the
 dense set `D(T†T)`: nonnegativity is `yosida_nonneg`, commutation is
-(`yosida_comp_comm`), density is density of D(T†T) (`dense_adjointComp_domain`), and the Cauchy property on
+(`yosida_comp_comm`), density is density of D(T†T) (`dense_adjointComp_domain`), and the Cauchy
+property on
 `D(T†T)` follows from the convergence `L_s f → T†T f`
 (`exists_delta_norm_yosida_sub_adjointComp_lt`) by the triangle inequality.
 
-The limit `g` is not yet named as an operator: the exponential approximation (the limit defines a strongly continuous
-semigroup of self-adjoint contractions) and the semigroup limit (its generator is `T†T`) are not proved here. Nothing
-here is the Markov property, Bakry–Émery calculus, a heat estimate or any step of Buser's inequality.
+This module proves convergence to `g`. The named operator and semigroup laws are constructed in
+`Generated/{Basic,Laws}.lean`, and `Generated/Generator.lean` identifies the generator on its
+stated domain. Markov properties, Bakry–Émery calculus and heat/Buser estimates belong to
+separate consumers.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -51,17 +57,25 @@ theorem yosida_cauchy_on_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T
     _ < ε / 2 + ε / 2 := add_lt_add h1 h2
     _ = ε := add_halves ε
 
-/-- **The adjoint-product identification for the Yosida approximation.** For `T` closed and densely defined, every
+/--
+**The adjoint-product identification for the Yosida approximation.** For `T` closed and densely
+defined, every
 `t ≥ 0` and every `f : H₀`, the vectors `exp (-t • L_s) f` converge as `s ↓ 0`, in the `ε`–`δ`
 sense forced by the proof argument `0 < s` carried by `L_s`. -/
 theorem exists_limit_exp_neg_smul_yosida (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : H₀) {t : ℝ} (ht : 0 ≤ t) :
-    ∃ g : H₀, ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ {s : ℝ} (hs : 0 < s), s < δ → ‖NormedSpace.exp (-t • yosida T hT hs) f - g‖ < ε := by
-  obtain ⟨g, hg⟩ := exists_limit_exp_neg_smul (fun s hs => yosida T hT hs)
-    (fun s hs v => yosida_nonneg T hT hs v) (fun s r hs hr => yosida_comp_comm T hT hs hr)
-    ((adjointComp T).domain : Set H₀) (dense_adjointComp_domain T hT hd)
-    (fun v hv ε hε => yosida_cauchy_on_adjointComp_domain T hT hd v hv hε) f ht
+    ∃ g : H₀,
+      ∀ {ε : ℝ},
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧
+              ∀ {s : ℝ} (hs : 0 < s),
+                s < δ → ‖NormedSpace.exp (-t • yosida T hT hs) f - g‖ < ε := by
+  obtain ⟨g, hg⟩ :=
+    exists_limit_exp_neg_smul (fun s hs => yosida T hT hs)
+      (fun s hs v => yosida_nonneg T hT hs v) (fun s r hs hr => yosida_comp_comm T hT hs hr)
+      ((adjointComp T).domain : Set H₀) (dense_adjointComp_domain T hT hd)
+      (fun v hv ε hε => yosida_cauchy_on_adjointComp_domain T hT hd v hv hε) f ht
   refine ⟨g, fun {ε} hε => ?_⟩
   obtain ⟨δ, hδ, h⟩ := hg ε hε
   exact ⟨δ, hδ, fun {s} hs hsδ => h s hs hsδ⟩

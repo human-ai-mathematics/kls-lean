@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.InnerProductSpace.Dual
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.InnerProductSpace.Dual
 
 /-!
 # Iterated derivatives of a shifted map and of a gradient
@@ -16,6 +18,8 @@ Generic calculus supports for the jets of the centred cumulant-generating-functi
   `⟪Dʳ(∇f)(x)[h], w⟫ = Dʳ⁺¹f(x)[h, w]` with `w` in the last slot.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open scoped RealInnerProductSpace ContDiff
@@ -24,25 +28,24 @@ namespace FunctionalInequalities.Analysis
 
 section Shift
 
-variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
+variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F]
+  [NormedSpace ℝ F]
 
 /-- **Shift invariance of higher iterated derivatives**: for `r ≥ 1`,
 `Dʳ(f − c)(x) = Dʳf(x)`. -/
-theorem iteratedFDeriv_sub_const_of_pos {f : E → F} (hf : ContDiff ℝ ∞ f) (c : F) {r : ℕ} (hr : 1 ≤ r)
-    (x : E) : iteratedFDeriv ℝ r (fun z => f z - c) x = iteratedFDeriv ℝ r f x := by
-    have hf' : ContDiff ℝ r f :=
-      hf.of_le (WithTop.coe_le_coe.mpr (le_top : r ≤ (⊤ : ℕ∞)))
-    have hc' : ContDiff ℝ r (fun _ : E => c) := contDiff_const
-    calc
-      iteratedFDeriv ℝ r (fun z => f z - c) x =
-          iteratedFDeriv ℝ r f x -
-            iteratedFDeriv ℝ r (fun _ : E => c) x := by
-        exact
-          (iteratedFDeriv_sub_apply (𝕜 := ℝ) (i := r) (f := f)
-            (g := fun _ : E => c) hf'.contDiffAt hc'.contDiffAt)
-      _ = iteratedFDeriv ℝ r f x := by
-        rw [iteratedFDeriv_const_of_ne (by omega : r ≠ 0) c]
-        simp
+theorem iteratedFDeriv_sub_const_of_pos {f : E → F} (hf : ContDiff ℝ ∞ f) (c : F) {r : ℕ}
+    (hr : 1 ≤ r) (x : E) : iteratedFDeriv ℝ r (fun z => f z - c) x = iteratedFDeriv ℝ r f x := by
+  have hf' : ContDiff ℝ r f := hf.of_le (WithTop.coe_le_coe.mpr (le_top : r ≤ (⊤ : ℕ∞)))
+  have hc' : ContDiff ℝ r (fun _ : E => c) := contDiff_const
+  calc
+    iteratedFDeriv ℝ r (fun z => f z - c) x =
+        iteratedFDeriv ℝ r f x - iteratedFDeriv ℝ r (fun _ : E => c) x := by
+      exact
+        (iteratedFDeriv_sub_apply (𝕜 := ℝ) (i := r) (f := f) (g := fun _ : E => c)
+          hf'.contDiffAt hc'.contDiffAt)
+    _ = iteratedFDeriv ℝ r f x := by
+      rw [iteratedFDeriv_const_of_ne (by omega : r ≠ 0) c]
+      simp
 
 end Shift
 

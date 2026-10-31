@@ -1,11 +1,16 @@
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
 
 /-!
 # LipschitzApproximation: Kernel
 
-The normalized smooth kernel, its compact support and derivative bounds for Euclidean Lipschitz approximation.
+The normalized smooth kernel, its compact support and derivative bounds for Euclidean Lipschitz
+approximation.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -37,11 +42,13 @@ theorem norm_le_of_kernel_ne_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : kernel m 
   push Not at h
   exact hx (kernel_eq_zero m hR h)
 
-theorem hasCompactSupport_kernel [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) : HasCompactSupport (kernel m R) :=
+theorem hasCompactSupport_kernel [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) :
+    HasCompactSupport (kernel m R) :=
   HasCompactSupport.intro (isCompact_closedBall (0 : E) (2 * R)) fun x hx =>
-    kernel_eq_zero m hR (by
-      rw [Metric.mem_closedBall, dist_zero_right] at hx
-      exact le_of_lt (not_le.mp hx))
+    kernel_eq_zero m hR
+      (by
+        rw [Metric.mem_closedBall, dist_zero_right] at hx
+        exact le_of_lt (not_le.mp hx))
 
 theorem tsupport_kernel_subset {R : ℝ} (hR : 0 < R) :
     tsupport (kernel m R) ⊆ Metric.closedBall (0 : E) (2 * R) :=
@@ -70,7 +77,8 @@ theorem norm_fderiv_kernel {R : ℝ} (hR : 0 < R) (x : E) :
 def kernelDerivativeMass : ℝ := (∫ x, ‖fderiv ℝ (⇑(bump (E := E))) x‖ ∂m) / ∫ x, bump (E := E) x ∂m
 
 theorem kernelDerivativeMass_nonneg : 0 ≤ kernelDerivativeMass (E := E) m :=
-  div_nonneg (integral_nonneg fun _ => norm_nonneg _) (integral_nonneg fun _ => (bump (E := E)).nonneg)
+  div_nonneg (integral_nonneg fun _ => norm_nonneg _)
+    (integral_nonneg fun _ => (bump (E := E)).nonneg)
 
 theorem continuous_fderiv_kernel (R : ℝ) : Continuous (fderiv ℝ (kernel m R)) :=
   (contDiff_kernel m R).continuous_fderiv (by simp)
@@ -88,8 +96,8 @@ theorem norm_le_of_fderiv_kernel_ne_zero {R : ℝ} (hR : 0 < R) {x : E}
 def mollify (R : ℝ) (g : E → ℝ) : E → ℝ :=
   g ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] kernel m R
 
-theorem hasCompactSupport_mollify [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : HasCompactSupport g) :
-    HasCompactSupport (mollify m R g) :=
+theorem hasCompactSupport_mollify [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) {g : E → ℝ}
+    (hg : HasCompactSupport g) : HasCompactSupport (mollify m R g) :=
   hg.convolution (ContinuousLinearMap.lsmul ℝ ℝ) (hasCompactSupport_kernel m hR)
 
 section HaarNormalization

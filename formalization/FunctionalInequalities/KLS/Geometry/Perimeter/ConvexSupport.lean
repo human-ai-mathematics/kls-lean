@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Transport
-import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Transport
+public import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
 
 /-!
 # Metric BV perimeter on a closed convex support
@@ -14,6 +16,8 @@ support (`nearestPoint`), which fixes the support (`nearestPoint_coe`) and is `1
 is nonempty and carries all mass for every probability law on a second-countable space; it may be
 unbounded or a single point, and no density or full ambient support is assumed.
 -/
+
+@[expose] public section
 
 noncomputable section
 

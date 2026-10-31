@@ -1,9 +1,11 @@
-import Mathlib.Analysis.Calculus.ContDiff.Comp
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Analysis.Normed.Operator.Bilinear
-import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
-import Mathlib.Topology.UniformSpace.LocallyUniformConvergence
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Analysis.Normed.Operator.Bilinear
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+public import Mathlib.Topology.UniformSpace.LocallyUniformConvergence
 
 /-!
 # C² regularity of limits with uniformly Hölder Hessians
@@ -26,6 +28,8 @@ compact closed balls uses `FiniteDimensional ℝ E`). The Hölder seminorm is th
 all pairs of points of `U` (no oscillation over balls, no interior weights). No elliptic estimate is
 proved here.
 -/
+
+@[expose] public section
 
 open Filter Topology Metric
 

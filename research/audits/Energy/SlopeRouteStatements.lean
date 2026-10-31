@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Energy.Cheeger.Basic
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the singular-law Cheeger identification `𝓔^can = 2 Ch`
 
@@ -16,15 +18,18 @@ and `research/audits/Energy/SlopeDensityAudit.lean`.
 
 The contracts state, for every Borel probability law `ν` on a finite-dimensional
 inner-product space: `E0a` the smooth-gradient relaxation is the relaxed squared local slope; `E0b`
-the two Cheeger conventions relax to the same functional; `E0c` the two Cheeger energies agree; `E0d`
+the two Cheeger conventions relax to the same functional; `E0c` the two Cheeger energies agree;
+`E0d`
 `𝓔 = 2 Ch` on the coordinate space; `E0e` the Blueprint identity
 `thm:smooth-gradient-relaxation-two-cheeger` on the affine support.  The certified corollary
 `cor:absolutely-continuous-relaxation-two-cheeger` proves all five under absolute continuity of `ν`
-(`Energy/Cheeger/Basic.lean`).  **`E0a` is the substantive identification**: `E0b` follows from the sandwich
+(`Energy/Cheeger/Basic.lean`).  **`E0a` is the substantive identification**: `E0b` follows from the
+sandwich
 `LocalSlope.relaxation ≤ AsymptoticLipschitz.relaxation ≤ SmoothGradient.relaxation` (`A2`) once
 `E0a` collapses its ends (`A3`), `E0c` is `E0b` halved, `E0d` is `Cheeger.two_mul_energy`, and `E0e`
 is `E0a` on the intrinsic law transported as in the absolutely continuous corollary.
-For singular laws the substantive step is **density of smooth tests in the local-slope energy**, i.e. the reverse inequality
+For singular laws the substantive step is **density of smooth tests in the local-slope energy**,
+i.e. the reverse inequality
 `SmoothGradient.relaxation ≤ LocalSlope.relaxation` without a density (`C6`).
 
 ## The route
@@ -35,8 +40,10 @@ slope, upper bound by the mean value inequality on small balls), so smooth tests
 asymptotic-Lipschitz test class with the same energy and `A2` follows by relaxing over the larger
 class.  `A3` records the collapse.
 
-**B — recovery for globally Lipschitz tests** (`Energy/Euclidean/Slope/Recovery.lean`).  Mollifying a
-globally `K`-Lipschitz `g` at radius `2R` with the repository's kernel: the mollifier at `x` sees `g`
+**B — recovery for globally Lipschitz tests** (`Energy/Euclidean/Slope/Recovery.lean`).  Mollifying
+a
+globally `K`-Lipschitz `g` at radius `2R` with the repository's kernel: the mollifier at `x` sees
+`g`
 only within `2R`, so on the ball of radius `δ` it inherits the Lipschitz constant of `g` on the ball
 of radius `δ + 2R`, whence `limsup_{R→0} ‖∇(g ⋆ ρ_R)(x)‖ ≤ Lip_a g (x)` pointwise; the global
 constant `K` bounds the integrand uniformly, so reverse Fatou applies and
@@ -50,15 +57,18 @@ for both slopes (`B4`, `B5`).
 
 **C — density** (`Energy/Euclidean/Slope/Density.lean`).  `C1`: the local slope of a continuous
 function is Borel, as the countable infimum over radii `1/(m+1)` of the lower-semicontinuous secant
-suprema.  `C2`, the McShane patch: for a globally `L`-Lipschitz `f` and `α, δ > 0`, stratify the slope
+suprema.  `C2`, the McShane patch: for a globally `L`-Lipschitz `f` and `α, δ > 0`, stratify the
+slope
 into bands of width `α`, cut each band into small balls of a dense sequence and disjoint the family
 into a Borel partition on which `f` is Lipschitz with constant within `2α` of its slope; inner
-regularity gives finitely many disjoint compact cores carrying all but `δ` of the mass; extend `f` from
+regularity gives finitely many disjoint compact cores carrying all but `δ` of the mass; extend `f`
+from
 each core by McShane with the core's constant and glue with linear cutoffs at a scale below the
 separation of the cores.  The patch `F` is globally Lipschitz with a constant `9L + 8α`
 independent of `δ`, equals `f` on the cores, and its asymptotic Lipschitz constant on the cores is
 within `2α` of the local slope of `f`.  `C4`: with `α = δ = 1/(n+1)`, the patches converge to `g` in
-`L²(ν)`, `B1` bounds the relaxation at each patch by its asymptotic-Lipschitz energy, which is at most
+`L²(ν)`, `B1` bounds the relaxation at each patch by its asymptotic-Lipschitz energy, which is at
+most
 `(1 + 4α) · LocalSlope.energy ν g + 4α + 4α² + M² δ` (no measurability of the asymptotic constant
 needed: bound by a measurable majorant), and lower semicontinuity of the relaxation finishes.  `C5`:
 a general admissible test is cut off with `scaled (n+1)`; `B2`, `B3` make the cutoff globally
@@ -78,8 +88,11 @@ conclusion through Hopf–Lax.
 `norm_mollify_sub_le`), the smooth cutoff `scaled` with its Lipschitz bound,
 `tendsto_eLpNorm_zero_of_dominated`, the certified absolutely continuous scope.  Mathlib has McShane
 (`LipschitzOnWith.extend_real`), `Disjoint.exists_thickenings`, inner regularity
-(`MeasurableSet.exists_isCompact_sdiff_lt`), reverse Fatou (`limsup_lintegral_le`), as the approximation and integration tools used by the route.
+(`MeasurableSet.exists_isCompact_sdiff_lt`), reverse Fatou (`limsup_lintegral_le`), as the
+approximation and integration tools used by the route.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -91,7 +104,8 @@ open scoped ENNReal NNReal ContDiff
 #check @FunctionalInequalities.Energy.LocalSlope.relaxation_le_asymptoticLipschitz
 #check @FunctionalInequalities.Energy.SmoothGradient.localSlope_relaxation_le
 #check @FunctionalInequalities.Energy.LocalSlope.le_relaxation_of_lowerSemicontinuous
-#check @FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_localSlope_of_absolutelyContinuous
+#check
+  @FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_localSlope_of_absolutelyContinuous
 #check @FunctionalInequalities.Energy.Cheeger.two_mul_energy
 
 /-! ### E0a–E0e — the identification contracts, verbatim -/
@@ -214,8 +228,10 @@ Lipschitz constant on `K` is within `2α` of the local slope of `f`. -/
 /-! ### D1 — diagnostic: the uniform-radius approach cannot work in general
 
 Stated as the existence, on the line, of a probability law and a bounded locally Lipschitz `g` of
-finite local-slope energy whose asymptotic-Lipschitz constant vanishes on the support while, for every
-radius `r > 0`, the ball Lipschitz constant `Lip(g, B(·, r))` has infinite square integral.  Recorded
+finite local-slope energy whose asymptotic-Lipschitz constant vanishes on the support while, for
+every
+radius `r > 0`, the ball Lipschitz constant `Lip(g, B(·, r))` has infinite square integral.
+Recorded
 for the route record; proving it is not an obligation. -/
 
 #check (∃ (ν : ProbabilityMeasure ℝ) (g : ℝ → ℝ), LocallyLipschitz g ∧

@@ -1,8 +1,10 @@
-import FunctionalInequalities.Energy.Relaxation.LinearPMap
-import Mathlib.Analysis.InnerProductSpace.LaxMilgram
-import Mathlib.Analysis.InnerProductSpace.LinearPMap
-import Mathlib.Analysis.Normed.Algebra.Exponential
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Energy.Relaxation.LinearPMap
+public import Mathlib.Analysis.InnerProductSpace.LaxMilgram
+public import Mathlib.Analysis.InnerProductSpace.LinearPMap
+public import Mathlib.Analysis.Normed.Algebra.Exponential
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for semigroup generation from a closed energy form
 
@@ -56,6 +58,8 @@ The classical Yosida construction uses the following contracts:
 together with its closability API. The generated operator semigroup is defined in
 `Analysis/Semigroup/Generated/Basic.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

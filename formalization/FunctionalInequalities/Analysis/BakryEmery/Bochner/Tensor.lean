@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
 
 /-!
 # Integration by parts and the Bochner formula for tensor fields of temperate growth
@@ -15,6 +17,8 @@ Lemma 3.4 for the tensor-valued iterates. The proofs sum the scalar identities o
 `⟪b_α, u⟫`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter Topology
@@ -28,20 +32,20 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
   {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F] in
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [FiniteDimensional ℝ F] in
 /-- Components of a temperate tensor field are temperate. -/
 theorem hasTemperateGrowth_inner_left_comp {f : E → F} (hf : f.HasTemperateGrowth) (c : F) :
     (fun x => ⟪c, f x⟫).HasTemperateGrowth := by
-    have h :=
-      ContinuousLinearMap.bilinear_hasTemperateGrowth (innerSL ℝ)
-        (Function.HasTemperateGrowth.const c) hf
-    have heq :
-        (fun x => ⟪c, f x⟫) = (innerSL ℝ c) ∘ f := by
-      funext x
-      change ⟪c, f x⟫ = (innerSL ℝ c) (f x)
-      rw [innerSL_apply_apply]
-    rw [heq]
-    exact h
+  have h :=
+    ContinuousLinearMap.bilinear_hasTemperateGrowth (innerSL ℝ)
+      (Function.HasTemperateGrowth.const c) hf
+  have heq : (fun x => ⟪c, f x⟫) = (innerSL ℝ c) ∘ f := by
+    funext x
+    change ⟪c, f x⟫ = (innerSL ℝ c) (f x)
+    rw [innerSL_apply_apply]
+  rw [heq]
+  exact h
 
 omit [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F] in
 private theorem inner_weightedLaplacianVec_inner (V : E → ℝ) {f : E → F}
@@ -141,18 +145,17 @@ theorem sum_inner_fderiv_eq_sum_inner_gradient {f g : E → F} {x : E}
                 gradient (fun y => ⟪b α, g y⟫) x⟫ :=
             e.sum_inner_mul_inner _ _
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F] in
-private theorem inner_iteratedFDeriv_two_component
-    {f : E → F} (hf : ContDiff ℝ 2 f) (c : F) (x v w : E) :
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [FiniteDimensional ℝ F] in
+private theorem inner_iteratedFDeriv_two_component {f : E → F} (hf : ContDiff ℝ 2 f) (c : F)
+    (x v w : E) :
     ⟪c, iteratedFDeriv ℝ 2 f x ![v, w]⟫ =
       bilinearIteratedFDerivTwo ℝ (fun y => ⟪c, f y⟫) x v w := by
   rw [bilinearIteratedFDerivTwo_eq_iteratedFDeriv]
   have h :=
-    ContinuousLinearMap.iteratedFDeriv_comp_left
-      (f := f) (g := innerSL ℝ c) (x := x) (i := 2)
+    ContinuousLinearMap.iteratedFDeriv_comp_left (f := f) (g := innerSL ℝ c) (x := x) (i := 2)
       hf.contDiffAt (by norm_num)
-  simpa [Function.comp_def, innerSL_apply_apply] using
-    (congrArg (fun L => L ![v, w]) h).symm
+  simpa [Function.comp_def, innerSL_apply_apply] using (congrArg (fun L => L ![v, w]) h).symm
 
 omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] in
 /-- `∑_{i,j} ‖∇²u(e_i, e_j)‖² = ∑_α ‖∇²u_α‖²_HS`. -/
@@ -236,11 +239,17 @@ private theorem tensorCurv_expand (B : E →ₗ[ℝ] E →ₗ[ℝ] ℝ) (v : E) 
 
 omit [MeasurableSpace E] [BorelSpace E] in
 /-- `∑_{i,j} ∇²V(e_i, e_j) ⟪Du(e_i), Du(e_j)⟫ = ∑_α ∇²V(∇u_α, ∇u_α)`. -/
-theorem sum_hessian_inner_fderiv_eq {V : E → ℝ} {f : E → F} {x : E} (hf : DifferentiableAt ℝ f x) :
-    ∑ i, ∑ j, bilinearIteratedFDerivTwo ℝ V x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j) *
-        ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ f x (stdOrthonormalBasis ℝ E j)⟫ =
-      ∑ α, bilinearIteratedFDerivTwo ℝ V x (gradient (fun y => ⟪stdOrthonormalBasis ℝ F α, f y⟫) x)
-        (gradient (fun y => ⟪stdOrthonormalBasis ℝ F α, f y⟫) x) := by
+theorem sum_hessian_inner_fderiv_eq {V : E → ℝ} {f : E → F} {x : E}
+    (hf : DifferentiableAt ℝ f x) :
+    ∑ i,
+        ∑ j,
+          bilinearIteratedFDerivTwo ℝ V x (stdOrthonormalBasis ℝ E i)
+              (stdOrthonormalBasis ℝ E j) *
+            ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i),
+              fderiv ℝ f x (stdOrthonormalBasis ℝ E j)⟫ =
+      ∑ α,
+        bilinearIteratedFDerivTwo ℝ V x (gradient (fun y => ⟪stdOrthonormalBasis ℝ F α, f y⟫) x)
+          (gradient (fun y => ⟪stdOrthonormalBasis ℝ F α, f y⟫) x) := by
   classical
   conv_lhs =>
     arg 2
@@ -256,16 +265,17 @@ theorem sum_hessian_inner_fderiv_eq {V : E → ℝ} {f : E → F} {x : E} (hf : 
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro α _
-  exact (tensorCurv_expand (bilinearIteratedFDerivTwo ℝ V x)
-    (gradient (fun y => ⟪stdOrthonormalBasis ℝ F α, f y⟫) x)).symm
+  exact
+    (tensorCurv_expand (bilinearIteratedFDerivTwo ℝ V x)
+        (gradient (fun y => ⟪stdOrthonormalBasis ℝ F α, f y⟫) x)).symm
 
 variable (m : Measure E) [m.IsAddHaarMeasure]
 
 omit [m.IsAddHaarMeasure] in
-private theorem tensorIBP_integrable_product {V : E → ℝ} (hV : ContDiff ℝ 1 V)
-    {CV : ℝ} {kV : ℕ} (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
-    (hexp : ∀ s : ℝ, Integrable (fun x => Real.exp (s * ‖x‖)) (m.tilted (-V)))
-    {q r : E → ℝ} (hq : q.HasTemperateGrowth) (hr : r.HasTemperateGrowth) :
+private theorem tensorIBP_integrable_product {V : E → ℝ} (hV : ContDiff ℝ 1 V) {CV : ℝ} {kV : ℕ}
+    (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
+    (hexp : ∀ s : ℝ, Integrable (fun x => Real.exp (s * ‖x‖)) (m.tilted (-V))) {q r : E → ℝ}
+    (hq : q.HasTemperateGrowth) (hr : r.HasTemperateGrowth) :
     Integrable (fun x => weightedLaplacian V q x * r x) (m.tilted (-V)) := by
   obtain ⟨kq, Cq, hCq, hbq⟩ := hq.norm_iteratedFDeriv_le_uniform 1
   obtain ⟨kr, Cr, hCr, hbr⟩ := hr.norm_iteratedFDeriv_le_uniform 0
@@ -278,20 +288,19 @@ private theorem tensorIBP_integrable_product {V : E → ℝ} (hV : ContDiff ℝ 
   have hrv : ∀ x, ‖r x‖ ≤ Cr * (1 + ‖x‖) ^ kr := by
     intro x
     simpa only [norm_iteratedFDeriv_zero] using hbr 0 le_rfl x
-  have hDi : Integrable (fun x => ⟪gradient V x, gradient q x⟫ * r x)
-      (m.tilted (-V)) := by
-    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp
-      (((continuous_gradient hV).inner
-        (continuous_gradient (hq.1.of_le (WithTop.coe_le_coe.mpr le_top)))).mul
-        hr.1.continuous).aestronglyMeasurable (C := CV * Cq * Cr) (k := kV + kq + kr)
+  have hDi : Integrable (fun x => ⟪gradient V x, gradient q x⟫ * r x) (m.tilted (-V)) := by
+    apply
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp
+        (((continuous_gradient hV).inner
+                (continuous_gradient (hq.1.of_le (WithTop.coe_le_coe.mpr le_top)))).mul
+            hr.1.continuous).aestronglyMeasurable
+        (C := CV * Cq * Cr) (k := kV + kq + kr)
     intro x
     calc
-      ‖⟪gradient V x, gradient q x⟫ * r x‖ ≤
-          ‖gradient V x‖ * ‖gradient q x‖ * ‖r x‖ := by
+      ‖⟪gradient V x, gradient q x⟫ * r x‖ ≤ ‖gradient V x‖ * ‖gradient q x‖ * ‖r x‖ := by
         rw [norm_mul]
         exact mul_le_mul_of_nonneg_right (norm_inner_le_norm _ _) (norm_nonneg _)
-      _ ≤ (CV * (1 + ‖x‖) ^ kV) * (Cq * (1 + ‖x‖) ^ kq) *
-          (Cr * (1 + ‖x‖) ^ kr) := by
+      _ ≤ (CV * (1 + ‖x‖) ^ kV) * (Cq * (1 + ‖x‖) ^ kq) * (Cr * (1 + ‖x‖) ^ kr) := by
         gcongr
         · exact hVg x
         · exact hqg x
@@ -299,36 +308,43 @@ private theorem tensorIBP_integrable_product {V : E → ℝ} (hV : ContDiff ℝ 
       _ = (CV * Cq * Cr) * (1 + ‖x‖) ^ (kV + kq + kr) := by
         rw [pow_add, pow_add]
         ring
-  have hEq : (fun x => weightedLaplacian V q x * r x) =
+  have hEq :
+    (fun x => weightedLaplacian V q x * r x) =
       (fun x => Laplacian.laplacian q x * r x - ⟪gradient V x, gradient q x⟫ * r x) := by
     funext x
     rw [weightedLaplacian_apply, sub_mul]
   rw [hEq]
-  exact (FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((hasTemperateGrowth_laplacian hq).mul hr)).sub hDi
+  exact
+    (FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+          ((hasTemperateGrowth_laplacian hq).mul hr)).sub
+      hDi
 
 /-- **BKL (15)** for tensor fields of temperate growth. -/
 theorem integral_inner_weightedLaplacianVec_eq_neg {V : E → ℝ} (hV : ContDiff ℝ 1 V) {CV : ℝ}
     {kV : ℕ} (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {f g : E → F} (hf : f.HasTemperateGrowth) (hg : g.HasTemperateGrowth) :
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {f g : E → F}
+    (hf : f.HasTemperateGrowth) (hg : g.HasTemperateGrowth) :
     ∫ x, ⟪weightedLaplacianVec V f x, g x⟫ ∂(m.tilted (-V)) =
-      -∫ x, ∑ i, ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫
-        ∂(m.tilted (-V)) := by
+      -∫ x,
+          ∑ i,
+            ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i),
+              fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫ ∂(m.tilted (-V)) := by
   classical
   let b := stdOrthonormalBasis ℝ F
   let c := fun α (x : E) => ⟪b α, f x⟫
   let d := fun α (x : E) => ⟪b α, g x⟫
-  have hc : ∀ α, (c α).HasTemperateGrowth :=
-    fun α => (innerSL ℝ (b α)).hasTemperateGrowth.comp hf
-  have hd : ∀ α, (d α).HasTemperateGrowth :=
-    fun α => (innerSL ℝ (b α)).hasTemperateGrowth.comp hg
-  have hLi : ∀ α, Integrable (fun x => weightedLaplacian V (c α) x * d α x)
-      (m.tilted (-V)) :=
+  have hc : ∀ α, (c α).HasTemperateGrowth := fun α =>
+    (innerSL ℝ (b α)).hasTemperateGrowth.comp hf
+  have hd : ∀ α, (d α).HasTemperateGrowth := fun α =>
+    (innerSL ℝ (b α)).hasTemperateGrowth.comp hg
+  have hLi : ∀ α, Integrable (fun x => weightedLaplacian V (c α) x * d α x) (m.tilted (-V)) :=
     fun α => tensorIBP_integrable_product m hV hVg hexp (hc α) (hd α)
-  have hGi : ∀ α, Integrable (fun x => ⟪gradient (c α) x, gradient (d α) x⟫)
-      (m.tilted (-V)) :=
-    fun α => FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (hasTemperateGrowth_gamma (hc α) (hd α))
-  have hLeft : (fun x => ⟪weightedLaplacianVec V f x, g x⟫) =
+  have hGi : ∀ α, Integrable (fun x => ⟪gradient (c α) x, gradient (d α) x⟫) (m.tilted (-V)) :=
+    fun α =>
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (hasTemperateGrowth_gamma (hc α) (hd α))
+  have hLeft :
+    (fun x => ⟪weightedLaplacianVec V f x, g x⟫) =
       (fun x => ∑ α, weightedLaplacian V (c α) x * d α x) := by
     funext x
     rw [← b.sum_inner_mul_inner]
@@ -336,19 +352,23 @@ theorem integral_inner_weightedLaplacianVec_eq_neg {V : E → ℝ} (hV : ContDif
     intro α _
     rw [real_inner_comm (b α)]
     congr 1
-    exact clm_apply_weightedLaplacianVec V
-      (hf.1.of_le (WithTop.coe_le_coe.mpr le_top)) (innerSL ℝ (b α)) x
-  have hRight : (fun x => ∑ i,
-      ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫) =
+    exact
+      clm_apply_weightedLaplacianVec V (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))
+        (innerSL ℝ (b α)) x
+  have hRight :
+    (fun x =>
+        ∑ i,
+          ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i),
+            fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫) =
       (fun x => ∑ α, ⟪gradient (c α) x, gradient (d α) x⟫) := by
     funext x
-    exact sum_inner_fderiv_eq_sum_inner_gradient
-      (hf.1.differentiable (by simp) x) (hg.1.differentiable (by simp) x)
-  rw [hLeft, hRight,
-    integral_finsetSum _ (fun α _ => hLi α),
+    exact
+      sum_inner_fderiv_eq_sum_inner_gradient (hf.1.differentiable (by simp) x)
+        (hg.1.differentiable (by simp) x)
+  rw [hLeft, hRight, integral_finsetSum _ (fun α _ => hLi α),
     integral_finsetSum _ (fun α _ => hGi α)]
-  simp_rw [integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth
-    m hV hVg hexp (hc _) (hd _)]
+  simp_rw [integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth m hV hVg hexp (hc _)
+      (hd _)]
   simp only [Finset.sum_neg_distrib]
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
@@ -374,109 +394,138 @@ private theorem tensorEq_hessianSq_growth {q : E → ℝ} (hq : q.HasTemperateGr
 
 /-- **BKL (16)** for tensor fields of temperate growth. -/
 theorem integral_norm_sq_weightedLaplacianVec_eq {V : E → ℝ} (hV : V.HasTemperateGrowth)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {f : E → F} (hf : f.HasTemperateGrowth) :
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {f : E → F}
+    (hf : f.HasTemperateGrowth) :
     ∫ x, ‖weightedLaplacianVec V f x‖ ^ 2 ∂(m.tilted (-V)) =
-      ∫ x, ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2
-          ∂(m.tilted (-V)) +
-        ∫ x, ∑ i, ∑ j, bilinearIteratedFDerivTwo ℝ V x (stdOrthonormalBasis ℝ E i)
-            (stdOrthonormalBasis ℝ E j) *
-          ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ f x (stdOrthonormalBasis ℝ E j)⟫
-          ∂(m.tilted (-V)) := by
+      ∫ x,
+          ∑ i,
+            ∑ j,
+              ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^
+                2 ∂(m.tilted (-V)) +
+        ∫ x,
+          ∑ i,
+            ∑ j,
+              bilinearIteratedFDerivTwo ℝ V x (stdOrthonormalBasis ℝ E i)
+                  (stdOrthonormalBasis ℝ E j) *
+                ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i),
+                  fderiv ℝ f x (stdOrthonormalBasis ℝ E j)⟫ ∂(m.tilted (-V)) := by
   classical
   let b := stdOrthonormalBasis ℝ F
   let c := fun α (x : E) => ⟪b α, f x⟫
-  have hc : ∀ α, (c α).HasTemperateGrowth :=
-    fun α => (innerSL ℝ (b α)).hasTemperateGrowth.comp hf
+  have hc : ∀ α, (c α).HasTemperateGrowth := fun α =>
+    (innerSL ℝ (b α)).hasTemperateGrowth.comp hf
   have hf2 : ContDiff ℝ 2 f := hf.1.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hL : ∀ x, ‖weightedLaplacianVec V f x‖ ^ 2 =
-      ∑ α, weightedLaplacian V (c α) x ^ 2 := by
+  have hL : ∀ x, ‖weightedLaplacianVec V f x‖ ^ 2 = ∑ α, weightedLaplacian V (c α) x ^ 2 := by
     intro x
     rw [← b.sum_sq_inner_right]
     apply Finset.sum_congr rfl
     intro α _
     congr 1
     exact clm_apply_weightedLaplacianVec V hf2 (innerSL ℝ (b α)) x
-  have hLi : ∀ α, Integrable (fun x => weightedLaplacian V (c α) x ^ 2)
-      (m.tilted (-V)) := fun α =>
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((hasTemperateGrowth_weightedLaplacian hV (hc α)).pow 2)
-  have hHi : ∀ α, Integrable (hessianSqStdBasis (c α)) (m.tilted (-V)) :=
-    fun α => FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (tensorEq_hessianSq_growth (hc α))
-  have hBi : ∀ α, Integrable
-      (fun x => bilinearIteratedFDerivTwo ℝ V x (gradient (c α) x) (gradient (c α) x))
-      (m.tilted (-V)) := fun α =>
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (tensorEq_hessian_growth hV
-      (hasTemperateGrowth_gradient (hc α)) (hasTemperateGrowth_gradient (hc α)))
-  have hHess : (fun x => ∑ i, ∑ j,
-      ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2) =
+  have hLi : ∀ α, Integrable (fun x => weightedLaplacian V (c α) x ^ 2) (m.tilted (-V)) :=
+    fun α =>
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      ((hasTemperateGrowth_weightedLaplacian hV (hc α)).pow 2)
+  have hHi : ∀ α, Integrable (hessianSqStdBasis (c α)) (m.tilted (-V)) := fun α =>
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (tensorEq_hessianSq_growth (hc α))
+  have hBi :
+    ∀ α,
+      Integrable
+        (fun x => bilinearIteratedFDerivTwo ℝ V x (gradient (c α) x) (gradient (c α) x))
+        (m.tilted (-V)) :=
+    fun α =>
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (tensorEq_hessian_growth hV (hasTemperateGrowth_gradient (hc α))
+        (hasTemperateGrowth_gradient (hc α)))
+  have hHess :
+    (fun x =>
+        ∑ i,
+          ∑ j,
+            ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^
+              2) =
       (fun x => ∑ α, hessianSqStdBasis (c α) x) := by
     funext x
     exact sum_norm_sq_iteratedFDeriv_two_eq hf2 x
-  have hCurv : (fun x => ∑ i, ∑ j,
-      bilinearIteratedFDerivTwo ℝ V x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j) *
-        ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ f x (stdOrthonormalBasis ℝ E j)⟫) =
-      (fun x => ∑ α,
-        bilinearIteratedFDerivTwo ℝ V x (gradient (c α) x) (gradient (c α) x)) := by
+  have hCurv :
+    (fun x =>
+        ∑ i,
+          ∑ j,
+            bilinearIteratedFDerivTwo ℝ V x (stdOrthonormalBasis ℝ E i)
+                (stdOrthonormalBasis ℝ E j) *
+              ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i),
+                fderiv ℝ f x (stdOrthonormalBasis ℝ E j)⟫) =
+      (fun x => ∑ α, bilinearIteratedFDerivTwo ℝ V x (gradient (c α) x) (gradient (c α) x)) := by
     funext x
     exact sum_hessian_inner_fderiv_eq (hf.1.differentiable (by simp) x)
   simp_rw [hL]
   rw [hHess, hCurv]
-  rw [integral_finsetSum _ (fun α _ => hLi α),
-    integral_finsetSum _ (fun α _ => hHi α),
+  rw [integral_finsetSum _ (fun α _ => hLi α), integral_finsetSum _ (fun α _ => hHi α),
     integral_finsetSum _ (fun α _ => hBi α)]
   simp_rw [integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth m hV hexp (hc _)]
   exact Finset.sum_add_distrib
 
 /-- The curvature form of (16) for tensor fields (the inequality in BKL Lemma 3.4). -/
-theorem integral_hessian_add_le_norm_sq_weightedLaplacianVec {V : E → ℝ} (hV : V.HasTemperateGrowth)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {f : E → F} (hf : f.HasTemperateGrowth) {ρ : ℝ}
+theorem integral_hessian_add_le_norm_sq_weightedLaplacianVec {V : E → ℝ}
+    (hV : V.HasTemperateGrowth)
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {f : E → F}
+    (hf : f.HasTemperateGrowth) {ρ : ℝ}
     (hH : ∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ V x v v) :
-    ∫ x, ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2
-        ∂(m.tilted (-V)) +
-      ρ * ∫ x, ∑ i, ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^ 2 ∂(m.tilted (-V)) ≤
+    ∫ x,
+          ∑ i,
+            ∑ j,
+              ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^
+                2 ∂(m.tilted (-V)) +
+        ρ * ∫ x, ∑ i, ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^ 2 ∂(m.tilted (-V)) ≤
       ∫ x, ‖weightedLaplacianVec V f x‖ ^ 2 ∂(m.tilted (-V)) := by
   classical
   let b := stdOrthonormalBasis ℝ F
   let c := fun α (x : E) => ⟪b α, f x⟫
-  have hc : ∀ α, (c α).HasTemperateGrowth :=
-    fun α => (innerSL ℝ (b α)).hasTemperateGrowth.comp hf
+  have hc : ∀ α, (c α).HasTemperateGrowth := fun α =>
+    (innerSL ℝ (b α)).hasTemperateGrowth.comp hf
   have hf2 : ContDiff ℝ 2 f := hf.1.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hL : ∀ x, ‖weightedLaplacianVec V f x‖ ^ 2 =
-      ∑ α, weightedLaplacian V (c α) x ^ 2 := by
+  have hL : ∀ x, ‖weightedLaplacianVec V f x‖ ^ 2 = ∑ α, weightedLaplacian V (c α) x ^ 2 := by
     intro x
     rw [← b.sum_sq_inner_right]
     apply Finset.sum_congr rfl
     intro α _
     congr 1
     exact clm_apply_weightedLaplacianVec V hf2 (innerSL ℝ (b α)) x
-  have hLi : ∀ α, Integrable (fun x => weightedLaplacian V (c α) x ^ 2)
-      (m.tilted (-V)) := fun α =>
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((hasTemperateGrowth_weightedLaplacian hV (hc α)).pow 2)
-  have hHi : ∀ α, Integrable (hessianSqStdBasis (c α)) (m.tilted (-V)) :=
-    fun α => FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (tensorEq_hessianSq_growth (hc α))
+  have hLi : ∀ α, Integrable (fun x => weightedLaplacian V (c α) x ^ 2) (m.tilted (-V)) :=
+    fun α =>
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      ((hasTemperateGrowth_weightedLaplacian hV (hc α)).pow 2)
+  have hHi : ∀ α, Integrable (hessianSqStdBasis (c α)) (m.tilted (-V)) := fun α =>
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (tensorEq_hessianSq_growth (hc α))
   have hGi : ∀ α, Integrable (fun x => ‖gradient (c α) x‖ ^ 2) (m.tilted (-V)) := by
     intro α
     rw [← gamma_self_fun (c α)]
-    exact FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (hasTemperateGrowth_gamma (hc α) (hc α))
-  have hHess : (fun x => ∑ i, ∑ j,
-      ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2) =
+    exact
+      FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+        (hasTemperateGrowth_gamma (hc α) (hc α))
+  have hHess :
+    (fun x =>
+        ∑ i,
+          ∑ j,
+            ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^
+              2) =
       (fun x => ∑ α, hessianSqStdBasis (c α) x) := by
     funext x
     exact sum_norm_sq_iteratedFDeriv_two_eq hf2 x
-  have hGrad : (fun x => ∑ i, ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^ 2) =
+  have hGrad :
+    (fun x => ∑ i, ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^ 2) =
       (fun x => ∑ α, ‖gradient (c α) x‖ ^ 2) := by
     funext x
     simpa only [real_inner_self_eq_norm_sq] using
-      (sum_inner_fderiv_eq_sum_inner_gradient
-        (hf.1.differentiable (by simp) x) (hf.1.differentiable (by simp) x))
+      (sum_inner_fderiv_eq_sum_inner_gradient (hf.1.differentiable (by simp) x)
+        (hf.1.differentiable (by simp) x))
   rw [hHess, hGrad]
   simp_rw [hL]
-  rw [integral_finsetSum _ (fun α _ => hHi α),
-    integral_finsetSum _ (fun α _ => hGi α),
-    integral_finsetSum _ (fun α _ => hLi α),
-    Finset.mul_sum, ← Finset.sum_add_distrib]
-  exact Finset.sum_le_sum (fun α _ =>
-    integral_hessianSq_add_le_of_hasTemperateGrowth m hV hexp (hc α) hH)
+  rw [integral_finsetSum _ (fun α _ => hHi α), integral_finsetSum _ (fun α _ => hGi α),
+    integral_finsetSum _ (fun α _ => hLi α), Finset.mul_sum, ← Finset.sum_add_distrib]
+  exact
+    Finset.sum_le_sum
+      (fun α _ => integral_hessianSq_add_le_of_hasTemperateGrowth m hV hexp (hc α) hH)
 
 end FunctionalInequalities.Analysis.BakryEmery

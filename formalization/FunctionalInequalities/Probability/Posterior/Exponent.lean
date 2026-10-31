@@ -1,19 +1,24 @@
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.Continuous
-import Mathlib.MeasureTheory.Measure.Tilted
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.Analysis.Convex.Function
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.InnerProductSpace.Continuous
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.Analysis.Convex.Function
 
 /-!
 # The linear–quadratic exponent of the BKL posterior
 
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19, (67): the localization posterior of a prior `μ` with
-parameters `(c, Q)` is the tilt of `μ` by the exponent `x ↦ ⟪c, x⟫ − ½⟪Q x, x⟫`. This module defines the
+parameters `(c, Q)` is the tilt of `μ` by the exponent `x ↦ ⟪c, x⟫ − ½⟪Q x, x⟫`. This module defines
+the
 exponent, records that it is affine in the parameters, bounds it polynomially, and writes a tilted
 expectation as a ratio of prior integrals. Analytic inputs for the parameter response are in
 `Probability/Posterior/{CompactPrior, Coercive, CompactQuadratic}.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Topology ProbabilityTheory
@@ -29,7 +34,8 @@ def quadraticExponent (c : E) (Q : E →L[ℝ] E) (x : E) : ℝ :=
 
 /-- The exponent is affine along a parameter line: `E_{c+th, Q+tH} = E_{c,Q} + t E_{h,H}`. -/
 theorem quadraticExponent_add_smul (c h : E) (Q H : E →L[ℝ] E) (t : ℝ) (x : E) :
-    quadraticExponent (c + t • h) (Q + t • H) x = quadraticExponent c Q x + t * quadraticExponent h H x := by
+    quadraticExponent (c + t • h) (Q + t • H) x =
+      quadraticExponent c Q x + t * quadraticExponent h H x := by
   simp only [quadraticExponent, inner_add_left, real_inner_smul_left, add_apply, smul_apply]
   ring
 

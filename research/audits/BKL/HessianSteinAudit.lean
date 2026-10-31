@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.HessianStein
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Translation
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HessianStein
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Translation
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Audit: the Hessian–Stein kernel of a given potential (Letwin Lemma 2.7, analytic part)
@@ -97,21 +99,26 @@ theorem inverse_id : ∀ᵐ y ∂(μ : Measure E), (id : E → E) (gradient φ y
   exact Filter.Eventually.of_forall fun _ => rfl
 
 /-- The actual given-potential producer constructs the canonical kernel from this real law. -/
-theorem actual_hessian_stein : Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ id) :=
+theorem actual_hessian_stein :
+    Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ id) :=
   KLS.LogConcave.hessianKernel_isSteinKernel φ phi_smooth phi_convex phi_normalized μ μ phi_law
     gradient_push actual_isotropic id measurable_id inverse_id
 
-theorem actual_hessian_symmetric : Probability.Stein.SymmetricAE μ (Probability.Stein.hessianKernel φ id) :=
-  Probability.Stein.hessianKernel_symmetricAE (phi_smooth.of_le (WithTop.coe_le_coe.mpr le_top)) id μ
+theorem actual_hessian_symmetric :
+    Probability.Stein.SymmetricAE μ (Probability.Stein.hessianKernel φ id) :=
+  Probability.Stein.hessianKernel_symmetricAE (phi_smooth.of_le (WithTop.coe_le_coe.mpr le_top))
+    id μ
 
 theorem actual_hessian_entry_integrable (i j : Fin 1) :
     Integrable (fun x => Probability.Stein.hessianKernel φ id x i j) (μ : Measure E) :=
-  KLS.LogConcave.integrable_hessianKernel_of_isotropic_map φ phi_smooth phi_convex phi_normalized μ μ phi_law
-    gradient_push actual_isotropic id measurable_id inverse_id i j
+  KLS.LogConcave.integrable_hessianKernel_of_isotropic_map φ phi_smooth phi_convex
+    phi_normalized μ μ phi_law gradient_push actual_isotropic id measurable_id inverse_id i j
 
-theorem actual_kernel_mean_one : (∫ x, Probability.Stein.hessianKernel φ id x 0 0 ∂(μ : Measure E)) = 1 := by
-  have h := KLS.LogConcave.integral_hessianKernel_eq_one φ phi_smooth phi_convex phi_normalized μ μ phi_law
-    gradient_push actual_isotropic id measurable_id inverse_id 0 0
+theorem actual_kernel_mean_one :
+    (∫ x, Probability.Stein.hessianKernel φ id x 0 0 ∂(μ : Measure E)) = 1 := by
+  have h :=
+    KLS.LogConcave.integral_hessianKernel_eq_one φ phi_smooth phi_convex phi_normalized μ μ
+      phi_law gradient_push actual_isotropic id measurable_id inverse_id 0 0
   simpa only [Matrix.one_apply, ite_true] using h
 
 /-- This concrete inverse geometry is actually proved, not a source existence assumption. -/
@@ -121,17 +128,24 @@ theorem actual_gradient_injective : Function.Injective (gradient φ) := by
 
 /-- The conditional geometric variant is consumed with every source prerequisite discharged. -/
 theorem actual_constructed_inverse_kernel :
-    ∃ Ψ : E → E, Measurable Ψ ∧ Function.LeftInverse Ψ (gradient φ) ∧
-      Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ Ψ) ∧
-      Probability.Stein.SymmetricAE μ (Probability.Stein.hessianKernel φ Ψ) ∧
-      (∀ i j, Integrable (fun x => Probability.Stein.hessianKernel φ Ψ x i j) (μ : Measure E)) := by
-  obtain ⟨Ψ, hΨ, hi, hK, hS, hL, _⟩ := KLS.LogConcave.exists_hessianSteinKernel_of_injective_gradient
-    φ phi_smooth phi_convex phi_normalized μ μ phi_law gradient_push actual_isotropic actual_gradient_injective
+    ∃ Ψ : E → E,
+      Measurable Ψ ∧
+        Function.LeftInverse Ψ (gradient φ) ∧
+          Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ Ψ) ∧
+            Probability.Stein.SymmetricAE μ (Probability.Stein.hessianKernel φ Ψ) ∧
+              (∀ i j,
+                Integrable (fun x => Probability.Stein.hessianKernel φ Ψ x i j)
+                  (μ : Measure E)) := by
+  obtain ⟨Ψ, hΨ, hi, hK, hS, hL, _⟩ :=
+    KLS.LogConcave.exists_hessianSteinKernel_of_injective_gradient φ phi_smooth phi_convex
+      phi_normalized μ μ phi_law gradient_push actual_isotropic actual_gradient_injective
   exact ⟨Ψ, hΨ, hi, hK, hS, hL⟩
 
-/-- Genuine Hessian identity for the concrete potential, computed from its actual first derivative. -/
+/--
+Genuine Hessian identity for the concrete potential, computed from its actual first derivative. -/
 theorem phi_hessian (x u v : E) : bilinearIteratedFDerivTwo ℝ φ x u v = ⟪u, v⟫ := by
-  rw [bilinearIteratedFDerivTwo_eq_fderiv_apply (phi_smooth.of_le (WithTop.coe_le_coe.mpr le_top))]
+  rw [bilinearIteratedFDerivTwo_eq_fderiv_apply
+      (phi_smooth.of_le (WithTop.coe_le_coe.mpr le_top))]
   have hf : (fun y : E => fderiv ℝ φ y v) = fun y => ⟪v, y⟫ := by
     funext y
     rw [(phi_hasFDerivAt y).fderiv, innerSL_apply_apply, real_inner_comm]
@@ -183,18 +197,22 @@ theorem isotropic : KLS.Isotropic μ where
 
 /-- The same actual givenpotential construction and inverse selector works in dimensionzero. -/
 theorem actual_constructed_kernel :
-    ∃ Ψ : E → E, Measurable Ψ ∧ Function.LeftInverse Ψ (gradient φ) ∧
-      Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ Ψ) := by
+    ∃ Ψ : E → E,
+      Measurable Ψ ∧
+        Function.LeftInverse Ψ (gradient φ) ∧
+          Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ Ψ) := by
   have hi : Function.Injective (gradient φ) := fun _ _ _ => Subsingleton.elim _ _
-  obtain ⟨Ψ, hΨ, hinv, hK, _⟩ := KLS.LogConcave.exists_hessianSteinKernel_of_injective_gradient
-    φ contDiff_const (convexOn_const 0 convex_univ) phi_normalized μ μ phi_law gradient_push isotropic hi
+  obtain ⟨Ψ, hΨ, hinv, hK, _⟩ :=
+    KLS.LogConcave.exists_hessianSteinKernel_of_injective_gradient φ contDiff_const
+      (convexOn_const 0 convex_univ) phi_normalized μ μ phi_law gradient_push isotropic hi
   exact ⟨Ψ, hΨ, hinv, hK⟩
 
 end HessianSteinAuditZero
 
 #print axioms FunctionalInequalities.Probability.Stein.chain_coordinate
 #print axioms FunctionalInequalities.Probability.Stein.hessianKernel_quadratic_nonneg
-#print axioms FunctionalInequalities.Probability.Stein.exists_measurable_leftInverse_gradient_of_injective
+#print axioms
+  FunctionalInequalities.Probability.Stein.exists_measurable_leftInverse_gradient_of_injective
 #print axioms FunctionalInequalities.KLS.LogConcave.hessianKernel_compact_identity
 #print axioms FunctionalInequalities.KLS.LogConcave.hessianKernel_isSteinKernel
 #print axioms FunctionalInequalities.KLS.LogConcave.integral_hessianKernel_eq_one

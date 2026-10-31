@@ -1,3 +1,5 @@
+-- Modified 2026-10-31 by the KLS formalization project: Mathlib v4.35.0 `IsCadlag` field names
+-- (`isRightContinuous`, `tendsto_nhdsLT`) in one proof (proof-only); see vendor/port.patch.
 module
 
 public import BrownianMotion.Auxiliary.Indistinguishable
@@ -108,10 +110,10 @@ lemma _root_.IsCadlag.stoppedProcess (hX : IsCadlag (X · ω)) (τ : Ω → With
   cases h : τ ω with
   | top => simpa [h]
   | coe t =>
-    refine ⟨hX.right_continuous.stoppedProcess τ, fun s ↦ ?_⟩
+    refine ⟨hX.isRightContinuous.stoppedProcess τ, fun s ↦ ?_⟩
     simp only [h, WithTop.coe_inj, stoppedProcess_of_eq_coe]
     obtain hst | hts := le_or_gt s t
-    · obtain ⟨l, hl⟩ := hX.left_limit s
+    · obtain ⟨l, hl⟩ := hX.tendsto_nhdsLT s
       exact ⟨l, hl.congr' (Set.EqOn.eventuallyEq_nhdsWithin fun s hs ↦ by grind)⟩
     · refine ⟨X t ω, tendsto_const_nhds.congr' ?_⟩
       rw [eventuallyEq_nhdsWithin_iff, eventually_nhds_iff]

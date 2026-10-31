@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.UpperSemicontinuity
+module
+
+public import FunctionalInequalities.Analysis.UpperSemicontinuity
 
 /-! The source is an arbitrary topological space; no measurable or normed structure. -/
+
+@[expose] public section
 example {X : Type*} [TopologicalSpace X] {f g : X → ℝ}
     (hf : UpperSemicontinuous f) (hg : Continuous g) (hp : ∀ x, 0 < g x) :
     UpperSemicontinuous (fun x => f x * g x) :=

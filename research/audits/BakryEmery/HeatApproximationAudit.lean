@@ -1,8 +1,12 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClass
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClass
 
 /-! Independent clients for partial progress only. No client here proves the requested
 arbitrary-data inequality at positive test time. In particular, a heat evolution of a smooth
 compactly supported function is not assumed to be a compactly supported smooth function. -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Topology InnerProductSpace
@@ -112,38 +116,54 @@ theorem test_time_zero
 for the actual fields of arbitrary positive-time heat data. -/
 theorem zero_test (g : Lp ℝ 2 (ν : Measure V)) {r s : ℝ} (hr : 0 < r) (hs : 0 ≤ s) :
     let T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-    let u := T ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g,
-      mem_closedWeightedOperator_domain_of_pos m _ hν hi g hr⟩
-    let w := T ⟨adjointComp T ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g,
-      mem_adjointComp_domain_of_pos m _ hν hi g hr⟩,
-      mem_closedWeightedOperator_domain_adjointComp_of_pos m _ hν hi g hr _⟩
+    let u :=
+      T
+        ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g,
+          mem_closedWeightedOperator_domain_of_pos m _ hν hi g hr⟩
+    let w :=
+      T
+        ⟨adjointComp T
+            ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g,
+              mem_adjointComp_domain_of_pos m _ hν hi g hr⟩,
+          mem_closedWeightedOperator_domain_adjointComp_of_pos m _ hν hi g hr _⟩
     let ψ := operator m (ContinuousLinearMap.id ℝ V) hν hi hs (0 : Lp ℝ 2 (ν : Measure V))
-    let hψ := preserves_domain m (ContinuousLinearMap.id ℝ V) hν hi
-      (0 : (adjointComp T).domain) hs;
+    let hψ :=
+      preserves_domain m (ContinuousLinearMap.id ℝ V) hν hi (0 : (adjointComp T).domain) hs;
     -(∫ x, (adjointComp T ⟨ψ, hψ⟩) x * WeakGamma.apply u u x ∂(ν : Measure V)) / 2 +
-      (∫ x, ψ x * WeakGamma.apply u w x ∂(ν : Measure V)) = 0 := by
+        (∫ x, ψ x * WeakGamma.apply u w x ∂(ν : Measure V)) =
+      0 := by
   dsimp only
   simp only [map_zero]
-  have hz : (⟨0, (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain.zero_mem⟩ :
-      (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain) = 0 := rfl
+  have hz :
+    (⟨0,
+          (adjointComp
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain.zero_mem⟩ :
+        (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain) =
+      0 :=
+    rfl
   rw [hz, LinearPMap.map_zero]
   have hzero := Lp.coeFn_zero ℝ 2 (ν : Measure V)
   have h1 : ∀ a : V → ℝ, (∫ x, (0 : Lp ℝ 2 (ν : Measure V)) x * a x ∂(ν : Measure V)) = 0 := by
     intro a
     calc
-      _ = ∫ _x, (0 : ℝ) ∂(ν : Measure V) := integral_congr_ae (by
-        filter_upwards [hzero] with x hx
-        simp only [hx, Pi.zero_apply, zero_mul])
+      _ = ∫ _x, (0 : ℝ) ∂(ν : Measure V) :=
+        integral_congr_ae
+          (by
+            filter_upwards [hzero] with x hx
+            simp only [hx, Pi.zero_apply, zero_mul])
       _ = 0 := integral_zero _ _
   rw [h1, h1]
   norm_num
 
 end BakryEmeryHeatApproximationAudit
 
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.pow_three_mul_norm_map_adjointComp_apply_sq_le
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.pow_three_mul_norm_map_adjointComp_apply_sq_le
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_map_apply_of_pos
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_map_adjointComp_apply_of_pos
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.exists_seq_smooth_tendsto_regularized_fields
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_map_adjointComp_apply_of_pos
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.exists_seq_smooth_tendsto_regularized_fields
 #print axioms BakryEmeryHeatApproximationAudit.regularized_approximation
 #print axioms BakryEmeryHeatApproximationAudit.second_field_bound
 #print axioms BakryEmeryHeatApproximationAudit.arbitrary_heat_pairings

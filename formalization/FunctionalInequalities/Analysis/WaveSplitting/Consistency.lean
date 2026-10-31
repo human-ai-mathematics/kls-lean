@@ -1,24 +1,33 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Basic
-import Mathlib.Analysis.Calculus.Deriv.Prod
-import Mathlib.Analysis.Calculus.ContDiff.Comp
-import Mathlib.Analysis.Calculus.ContDiff.Deriv
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Basic
+public import Mathlib.Analysis.Calculus.Deriv.Prod
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-! # First-order consistency of the actual finite splitting composition -/
+
+@[expose] public section
 noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {ι : Type*}
 
-private theorem diagonal_hasDerivAt {F : ℝ × ℝ → ℝ} (hF : ContDiff ℝ ∞ F)
-    {d₁ d₂ : ℝ} (h₁ : HasDerivAt (fun t => F (t,0)) d₁ 0)
-    (h₂ : HasDerivAt (fun t => F (0,t)) d₂ 0) :
-    HasDerivAt (fun t => F (t,t)) (d₁ + d₂) 0 := by
-  have hf := (hF.differentiable (by simp) (0,0)).hasFDerivAt
-  have hp := hf.comp_hasDerivAt (f := fun t : ℝ => (t, 0)) 0 ((hasDerivAt_id (0 : ℝ)).prodMk (hasDerivAt_const (0 : ℝ) (0 : ℝ)))
-  have hq := hf.comp_hasDerivAt (f := fun t : ℝ => (0, t)) 0 ((hasDerivAt_const (0 : ℝ) (0 : ℝ)).prodMk (hasDerivAt_id (0 : ℝ)))
-  have hd := hf.comp_hasDerivAt (f := fun t : ℝ => (t, t)) 0 ((hasDerivAt_id (0 : ℝ)).prodMk (hasDerivAt_id (0 : ℝ)))
+private theorem diagonal_hasDerivAt {F : ℝ × ℝ → ℝ} (hF : ContDiff ℝ ∞ F) {d₁ d₂ : ℝ}
+    (h₁ : HasDerivAt (fun t => F (t, 0)) d₁ 0) (h₂ : HasDerivAt (fun t => F (0, t)) d₂ 0) :
+    HasDerivAt (fun t => F (t, t)) (d₁ + d₂) 0 := by
+  have hf := (hF.differentiable (by simp) (0, 0)).hasFDerivAt
+  have hp :=
+    hf.comp_hasDerivAt (f := fun t : ℝ => (t, 0)) 0
+      ((hasDerivAt_id (0 : ℝ)).prodMk (hasDerivAt_const (0 : ℝ) (0 : ℝ)))
+  have hq :=
+    hf.comp_hasDerivAt (f := fun t : ℝ => (0, t)) 0
+      ((hasDerivAt_const (0 : ℝ) (0 : ℝ)).prodMk (hasDerivAt_id (0 : ℝ)))
+  have hd :=
+    hf.comp_hasDerivAt (f := fun t : ℝ => (t, t)) 0
+      ((hasDerivAt_id (0 : ℝ)).prodMk (hasDerivAt_id (0 : ℝ)))
   have he₁ := hp.unique h₁
   have he₂ := hq.unique h₂
   apply HasDerivAt.congr_deriv hd
@@ -62,29 +71,33 @@ private theorem transport_joint_parameters {Y : ℝ → State E ι}
       (hY.2.2 i).comp (contDiff_snd.prodMk contDiff_const)
 
 /-- Differentiate a coordinate flow whose input state itself varies with time. -/
-theorem HasTimeDerivative.transport_zero {Y : ℝ → State E ι}
-    {D : State E ι} (hD : HasTimeDerivative Y D 0) (hY : JointSmooth Y) (a : E) (j : ι) :
+theorem HasTimeDerivative.transport_zero {Y : ℝ → State E ι} {D : State E ι}
+    (hD : HasTimeDerivative Y D 0) (hY : JointSmooth Y) (a : E) (j : ι) :
     HasTimeDerivative (fun t => transport a j t (Y t))
       (addState D (coordinateGenerator a j (Y 0))) 0 := by
-  have hs : (Y 0).Smooth := ⟨hY.1.comp (contDiff_const.prodMk contDiff_id),
-    hY.2.1.comp (contDiff_const.prodMk contDiff_id),
-    fun i => (hY.2.2 i).comp (contDiff_const.prodMk contDiff_id)⟩
+  have hs : (Y 0).Smooth :=
+    ⟨hY.1.comp (contDiff_const.prodMk contDiff_id),
+      hY.2.1.comp (contDiff_const.prodMk contDiff_id), fun i =>
+      (hY.2.2 i).comp (contDiff_const.prodMk contDiff_id)⟩
   refine ⟨fun x => by simpa [addState, coordinateGenerator, transport] using hD.1 x, ?_, ?_⟩
   · intro x
-    have h := diagonal_hasDerivAt (transport_joint_parameters hY a j x).1
-      (transport_hasDerivAt_v_zero a j (Y 0) x
-        (hs.2.1.differentiable (by simp) x) ((hs.2.2 j).differentiable (by simp) x))
-      (by simpa using hD.2.1 x)
+    have h :=
+      diagonal_hasDerivAt (transport_joint_parameters hY a j x).1
+        (transport_hasDerivAt_v_zero a j (Y 0) x (hs.2.1.differentiable (by simp) x)
+          ((hs.2.2 j).differentiable (by simp) x))
+        (by simpa using hD.2.1 x)
     simpa only [addState, coordinateGenerator, add_comm] using h
   · intro i x
     by_cases hi : i = j
     · subst i
-      have h := diagonal_hasDerivAt ((transport_joint_parameters hY a j x).2 j)
-        (transport_hasDerivAt_p_zero a j (Y 0) x
-          (hs.2.1.differentiable (by simp) x) ((hs.2.2 j).differentiable (by simp) x))
-        (by simpa using hD.2.2 j x)
+      have h :=
+        diagonal_hasDerivAt ((transport_joint_parameters hY a j x).2 j)
+          (transport_hasDerivAt_p_zero a j (Y 0) x (hs.2.1.differentiable (by simp) x)
+            ((hs.2.2 j).differentiable (by simp) x))
+          (by simpa using hD.2.2 j x)
       simpa only [addState, coordinateGenerator, ↓reduceIte, add_comm] using h
-    · simpa only [addState, coordinateGenerator, transport, hi, ↓reduceIte, add_zero] using hD.2.2 i x
+    · simpa only [addState, coordinateGenerator, transport, hi, ↓reduceIte, add_zero] using
+        hD.2.2 i x
 
 end FiniteIndex
 
@@ -236,14 +249,14 @@ theorem residual_zero [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E
   rfl
 
 private theorem smooth_time_derivative {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) :
-    ContDiff ℝ ∞ (fun z : ℝ × E => deriv (fun t => F (t,z.2)) z.1) := by
-  have h : ContDiff ℝ ∞ (fun p : (ℝ × E) × ℝ => F (p.2,p.1.2)) :=
+    ContDiff ℝ ∞ (fun z : ℝ × E => deriv (fun t => F (t, z.2)) z.1) := by
+  have h : ContDiff ℝ ∞ (fun p : (ℝ × E) × ℝ => F (p.2, p.1.2)) :=
     hF.comp (contDiff_snd.prodMk (contDiff_snd.comp contDiff_fst))
   exact (h.fderiv contDiff_fst (by simp)).clm_apply contDiff_const
 
 private theorem smooth_space_derivative {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) (a : E) :
-    ContDiff ℝ ∞ (fun z : ℝ × E => fderiv ℝ (fun x => F (z.1,x)) z.2 a) := by
-  have h : ContDiff ℝ ∞ (fun p : (ℝ × E) × E => F (p.1.1,p.2)) :=
+    ContDiff ℝ ∞ (fun z : ℝ × E => fderiv ℝ (fun x => F (z.1, x)) z.2 a) := by
+  have h : ContDiff ℝ ∞ (fun p : (ℝ × E) × E => F (p.1.1, p.2)) :=
     hF.comp ((contDiff_fst.comp contDiff_fst).prodMk contDiff_snd)
   exact (h.fderiv contDiff_snd (by simp)).clm_apply contDiff_const
 

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Poincare.Product.Tensorization
-import FunctionalInequalities.Energy.CovarianceGradient.Translation
-import Mathlib.MeasureTheory.Group.Convolution
+module
+
+public import FunctionalInequalities.Poincare.Product.Tensorization
+public import FunctionalInequalities.Energy.CovarianceGradient.Translation
+public import Mathlib.MeasureTheory.Group.Convolution
 
 /-!
 # Poincaré bounds under addition of independent probability laws
@@ -9,6 +11,8 @@ The sum map from the Hilbert product sends the product law to convolution.
 The separate coordinate terms in product tensorization give an additive
 fixed-constant bound for the convolution law.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -103,7 +107,7 @@ theorem Holds.conv {μ ν : Measure V} {C C' : ℝ}
   let hmap := sumMap_measurePreserving μ ν
   have hprob : IsProbabilityMeasure (μ.conv ν) := by
     rw [← map_prodMeasure_sumMap μ ν]
-    exact Measure.isProbabilityMeasure_map sumMap_measurable.aemeasurable
+    exact (Measure.isProbabilityMeasure_map_iff sumMap_measurable.aemeasurable).2 inferInstance
   refine ⟨hprob, add_nonneg hμ.constant_nonneg hν.constant_nonneg, ?_⟩
   intro f hf
   let g : WithLp 2 (V × V) → ℝ := fun p => f (sumMap p)

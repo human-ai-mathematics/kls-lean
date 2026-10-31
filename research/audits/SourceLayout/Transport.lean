@@ -1,8 +1,12 @@
-import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.KLS.LogConcave.Transport
+module
+
+public import FunctionalInequalities.Probability.Transport
+public import FunctionalInequalities.KLS.LogConcave.Transport
 
 /-! Narrow-import clients for the transport modules. No isotropic or Poincaré assembly is
 imported. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false
@@ -18,13 +22,14 @@ theorem translated_second_moment {E : Type*} [NormedAddCommGroup E]
     MemLp id 2 (Probability.translateLaw ν c : Measure E) :=
   Probability.memLp_id_two_translateLaw ν c h
 
-/-- Linear transport of compact-set log-concavity is independent of finite dimension and completeness. -/
-theorem logConcave_pullback {E F : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E] [MeasurableSpace E] [BorelSpace E]
-    [NormedAddCommGroup F] [NormedSpace ℝ F] [MeasurableSpace F] [BorelSpace F]
-    {μ : ProbabilityMeasure E} (hμ : KLS.LogConcave μ) (ν : ProbabilityMeasure F)
-    (T : F ≃L[ℝ] E) (hmap : Measure.map T (ν : Measure F) = (μ : Measure E)) :
-    KLS.LogConcave ν :=
+/--
+Linear transport of compact-set log-concavity is independent of finite dimension and completeness.
+-/
+theorem logConcave_pullback {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [MeasurableSpace E] [BorelSpace E] [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [MeasurableSpace F] [BorelSpace F] {μ : ProbabilityMeasure E} (hμ : KLS.LogConcave μ)
+    (ν : ProbabilityMeasure F) (T : F ≃L[ℝ] E)
+    (hmap : Measure.map T (ν : Measure F) = (μ : Measure E)) : KLS.LogConcave ν :=
   hμ.of_continuousLinearEquiv_map ν T hmap
 
 #print axioms SourceLayout.translated_second_moment

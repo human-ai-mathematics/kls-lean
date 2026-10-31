@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent full-signature clients for generator composition and positive-time Gaussian data. -/
+
+@[expose] public section
 set_option maxHeartbeats 800000
 noncomputable section
 set_option autoImplicit false
@@ -58,42 +62,50 @@ theorem heat_gamma (hνU : (ν : Measure V) = m.tilted (-U))
       2 (ν : Measure V) :=
   memLp_weakGamma_of_bounded m hν hi hνU hU hconv f hf ht
 
-theorem gaussian_domain (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ 1 U) {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
+theorem gaussian_domain (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 1 U) {ε : ℝ}
+    (hε : 0 < ε) (hε' : ε < 1 / 2)
     (g : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
     (hg : ∀ᵐ x ∂(ν : Measure V), (g : Lp ℝ 2 (ν : Measure V)) x ∈ Icc (0 : ℝ) (1 - 2 * ε))
-    (hΓ : MemLp (WeakGamma.apply
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)) 2 (ν : Measure V)) :
-    ∃ u : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain,
-      (∀ᵐ x ∂(ν : Measure V), (u : Lp ℝ 2 (ν : Measure V)) x = shifted ε ((g : Lp ℝ 2 (ν : Measure V)) x)) ∧
-      (∀ᵐ x ∂(ν : Measure V),
-        (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) u) x =
-        -quantile ((g : Lp ℝ 2 (ν : Measure V)) x + ε) *
-          (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) g) x +
-        (profile ((g : Lp ℝ 2 (ν : Measure V)) x + ε))⁻¹ * WeakGamma.apply
+    (hΓ :
+      MemLp
+        (WeakGamma.apply
           (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩) x) :=
+          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩))
+        2 (ν : Measure V)) :
+    ∃ u : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain,
+      (∀ᵐ x ∂(ν : Measure V),
+          (u : Lp ℝ 2 (ν : Measure V)) x = shifted ε ((g : Lp ℝ 2 (ν : Measure V)) x)) ∧
+        (∀ᵐ x ∂(ν : Measure V),
+          (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) u) x =
+            -quantile ((g : Lp ℝ 2 (ν : Measure V)) x + ε) *
+                (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) g)
+                  x +
+              (profile ((g : Lp ℝ 2 (ν : Measure V)) x + ε))⁻¹ *
+                WeakGamma.apply
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩) x) :=
   exists_shifted_mem_domain m hν hi hνU hU hε hε' g hg hΓ
 
-theorem heat_gaussian_domain (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U)
-    {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
-    (f : Lp ℝ 2 (ν : Measure V))
-    (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) (1 - 2 * ε))
+theorem heat_gaussian_domain (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ Set.univ U) {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
+    (f : Lp ℝ 2 (ν : Measure V)) (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) (1 - 2 * ε))
     {t : ℝ} (ht : 0 < t) :
-    let g : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain :=
+    let g :
+      (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain :=
       ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi ht.le f,
         mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi f ht⟩
     ∃ u : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain,
-      (∀ᵐ x ∂(ν : Measure V), (u : Lp ℝ 2 (ν : Measure V)) x = shifted ε ((g : Lp ℝ 2 (ν : Measure V)) x)) ∧
       (∀ᵐ x ∂(ν : Measure V),
-        (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) u) x =
-        -quantile ((g : Lp ℝ 2 (ν : Measure V)) x + ε) *
-          (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) g) x +
-        (profile ((g : Lp ℝ 2 (ν : Measure V)) x + ε))⁻¹ * WeakGamma.apply
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩) x) :=
+          (u : Lp ℝ 2 (ν : Measure V)) x = shifted ε ((g : Lp ℝ 2 (ν : Measure V)) x)) ∧
+        (∀ᵐ x ∂(ν : Measure V),
+          (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) u) x =
+            -quantile ((g : Lp ℝ 2 (ν : Measure V)) x + ε) *
+                (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) g)
+                  x +
+              (profile ((g : Lp ℝ 2 (ν : Measure V)) x + ε))⁻¹ *
+                WeakGamma.apply
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩)
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, g.2.2⟩) x) :=
   exists_shifted_operator_mem_domain m hν hi hνU hU hconv hε hε' f hf ht
 
 end HeatCompositionDomainAudit

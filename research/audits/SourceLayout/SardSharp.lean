@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Sard.Sharp
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Sard.Sharp
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis MeasureTheory
 open scoped ContDiff

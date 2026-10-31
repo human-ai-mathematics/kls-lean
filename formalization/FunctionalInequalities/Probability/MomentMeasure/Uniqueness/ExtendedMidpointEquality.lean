@@ -1,8 +1,10 @@
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality
-import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
-import FunctionalInequalities.Analysis.Convex.EssentialContinuity
-import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
-import Mathlib.MeasureTheory.Group.Convolution
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality
+public import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
+public import FunctionalInequalities.Analysis.Convex.EssentialContinuity
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
+public import Mathlib.MeasureTheory.Group.Convolution
 
 /-!
 # Equality in the midpoint Prékopa–Leindler inequality for extended-real potentials
@@ -23,6 +25,8 @@ translates of each other; the characteristic function of the Gaussian has no zer
 densities themselves agree almost everywhere up to the translation; finally two lower
 semicontinuous convex potentials that agree almost everywhere agree everywhere.
 -/
+
+@[expose] public section
 
 noncomputable section
 

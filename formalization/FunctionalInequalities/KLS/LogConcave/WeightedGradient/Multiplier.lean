@@ -1,8 +1,10 @@
-import FunctionalInequalities.Energy.WeightedGradient.Leibniz
-import FunctionalInequalities.Energy.Relaxation.LinearPMap
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Closure
-import FunctionalInequalities.L2.BoundedMultiplier
-import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
+module
+
+public import FunctionalInequalities.Energy.WeightedGradient.Leibniz
+public import FunctionalInequalities.Energy.Relaxation.LinearPMap
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Closure
+public import FunctionalInequalities.L2.BoundedMultiplier
+public import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 
 /-!
 # Smooth compactly supported multipliers on the domain of the closed weighted gradient
@@ -29,6 +31,8 @@ converge; no boundedness of `x` is assumed and none is available.
 
 Nothing here is a statement about the generator `T̄†T̄`, about a semigroup, or about `Γ₂`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

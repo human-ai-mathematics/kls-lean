@@ -1,13 +1,17 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.TangentialLipschitz
-import FunctionalInequalities.Analysis.Vector.RankDeficient.RegularFibreFinite
-import FunctionalInequalities.Analysis.Vector.RankDeficient.TargetSplitFubini
-import FunctionalInequalities.Analysis.Vector.Slice.Critical
-import Mathlib.MeasureTheory.Function.Jacobian
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.TangentialLipschitz
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.RegularFibreFinite
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.TargetSplitFubini
+public import FunctionalInequalities.Analysis.Vector.Slice.Critical
+public import Mathlib.MeasureTheory.Function.Jacobian
+public import Mathlib.MeasureTheory.Integral.Prod
 
 /-! # The per-stratum slicing
 
-`exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero` gives a neighbourhood of each rank-stratum point in which almost every level meets the stratum in an `ℋ^k`-null set. Global localization belongs to `Analysis/Vector/RankDeficient/Coarea.lean`.
+`exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero` gives a neighbourhood of each
+rank-stratum point in which almost every level meets the stratum in an `ℋ^k`-null set. Global
+localization belongs to `Analysis/Vector/RankDeficient/Coarea.lean`.
 
 **The argument.**  Near a point of the stratum let `K` be the range of the differential there and
 `P`, `Q` the orthogonal projections onto `K` and `Kᗮ`.
@@ -16,8 +20,10 @@ import Mathlib.MeasureTheory.Integral.Prod
   closure on which `P ∘ u` is a submersion, together with **one** constant `c` such that for
   **every** stratum point `y` in it, every `ε` and every set on which `u` is `ε`-approximated by
   `fderiv ℝ u y`, the projected map `Q ∘ u` is `c ε`-Lipschitz along every fibre of `P ∘ u`.  The
-  uniformity of `c` over `y` is the difficulty, since small tangential Lipschitz control's constant depends on the piece's linear
-  model; it comes from the kernel identity, the **locally uniform** half of the uniform right-inverse bound, and a bound on `‖fderiv ℝ u‖`.
+  uniformity of `c` over `y` is the difficulty, since small tangential Lipschitz control's constant
+  depends on the piece's linear
+  model; it comes from the kernel identity, the **locally uniform** half of the uniform
+  right-inverse bound, and a bound on `‖fderiv ℝ u‖`.
 * `lintegral_split_target` — an integral over the target is the iterated integral over an orthogonal
   splitting of it, by `LinearIsometryEquiv.measurePreserving`, `WithLp.volume_preserving_toLp` and
   Tonelli.  This is the integral form of what target-split Fubini does for null sets.
@@ -39,6 +45,8 @@ bound in the ambient space would force the exponent `k + r`, and forcing it back
 the right-hand side `μH[n − r]` of a set of positive Lebesgue measure, which is `∞`.  Inside a fibre
 the same bound is used at `k` and the right-hand side is the fibre's own finite `ℋ^{n−r}` measure.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Module Set Filter Topology
 open scoped ENNReal NNReal
@@ -76,15 +84,17 @@ theorem surjective_proj_comp (u : V → W) (x₀ : V) :
   exact Submodule.orthogonalProjectionOnto_mem_subspace_eq_self y
 
 omit [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ W] [MeasurableSpace W]
-  [BorelSpace W] in
+    [BorelSpace W] in
 theorem finrank_tangentRange_eq {u : V → W} {r : ℕ} {x₀ x : V} (hx₀ : x₀ ∈ stratum u r)
     (hx : x ∈ stratum u r) :
     finrank ℝ (tangentRange u x₀) = finrank ℝ (LinearMap.range ((fderiv ℝ u x).toLinearMap)) := by
   have h0 := rank_toLinearMap_eq (fderiv ℝ u x₀)
   have h1 := rank_toLinearMap_eq (fderiv ℝ u x)
   have e0 : (finrank ℝ (tangentRange u x₀) : Cardinal) = (r : Cardinal) := by
-    rw [← h0]; exact hx₀
-  have e1 : (finrank ℝ (LinearMap.range ((fderiv ℝ u x).toLinearMap)) : Cardinal) = (r : Cardinal) := by
+    rw [← h0];
+    exact hx₀
+  have e1 :
+    (finrank ℝ (LinearMap.range ((fderiv ℝ u x).toLinearMap)) : Cardinal) = (r : Cardinal) := by
     rw [← h1]; exact hx
   exact_mod_cast e0.trans e1.symm
 
@@ -178,27 +188,32 @@ variable {W₁ W₂ : Type*}
   [MeasurableSpace W₂] [BorelSpace W₂]
 
 /-- **The integral form of the target splitting.**  An integral over the target is the iterated
-integral over an orthogonal splitting of it.  This is what target-split Fubini does for null sets, in the form the
+integral over an orthogonal splitting of it.  This is what target-split Fubini does for null sets,
+in the form the
 per-scale estimate has to be integrated against: the inner integral is over the directions the
 second slicing uses, the outer one over the fibre parameter of the regular component. -/
 theorem lintegral_split_target (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂)) {f : W → ℝ≥0∞}
     (hf : AEMeasurable f (volume : Measure W)) :
-    ∫⁻ t, f t ∂(volume : Measure W)
-      = ∫⁻ s, ∫⁻ τ, f (e.symm (WithLp.toLp 2 (s, τ))) ∂(volume : Measure W₂)
-          ∂(volume : Measure W₁) := by
-  have h1 := (e.symm.measurePreserving).lintegral_comp_emb
-    (e.symm.toHomeomorph.measurableEmbedding) f
-  have h2 := (WithLp.volume_preserving_toLp W₁ W₂).lintegral_comp_emb
-    (MeasurableEquiv.toLp 2 (W₁ × W₂)).measurableEmbedding (fun q => f (e.symm q))
-  have hmp : MeasurePreserving (fun p : W₁ × W₂ => e.symm (WithLp.toLp 2 p))
-      (volume : Measure (W₁ × W₂)) (volume : Measure W) :=
+    ∫⁻ t, f t ∂(volume : Measure W) =
+      ∫⁻ s,
+        ∫⁻ τ, f (e.symm (WithLp.toLp 2 (s, τ))) ∂(volume : Measure W₂) ∂(volume : Measure W₁) := by
+  have h1 :=
+    (e.symm.measurePreserving).lintegral_comp_emb (e.symm.toHomeomorph.measurableEmbedding) f
+  have h2 :=
+    (WithLp.volume_preserving_toLp W₁ W₂).lintegral_comp_emb
+      (MeasurableEquiv.toLp 2 (W₁ × W₂)).measurableEmbedding (fun q => f (e.symm q))
+  have hmp :
+    MeasurePreserving (fun p : W₁ × W₂ => e.symm (WithLp.toLp 2 p)) (volume : Measure (W₁ × W₂))
+      (volume : Measure W) :=
     (e.symm.measurePreserving).comp (WithLp.volume_preserving_toLp W₁ W₂)
-  have hmeas : AEMeasurable (fun p : W₁ × W₂ => f (e.symm (WithLp.toLp 2 p)))
+  have hmeas :
+    AEMeasurable (fun p : W₁ × W₂ => f (e.symm (WithLp.toLp 2 p)))
       (volume : Measure (W₁ × W₂)) :=
     hf.comp_quasiMeasurePreserving hmp.quasiMeasurePreserving
-  have h3 : ∫⁻ p, f (e.symm (WithLp.toLp 2 p)) ∂(volume : Measure (W₁ × W₂))
-      = ∫⁻ s, ∫⁻ τ, f (e.symm (WithLp.toLp 2 (s, τ))) ∂(volume : Measure W₂)
-          ∂(volume : Measure W₁) := by
+  have h3 :
+    ∫⁻ p, f (e.symm (WithLp.toLp 2 p)) ∂(volume : Measure (W₁ × W₂)) =
+      ∫⁻ s,
+        ∫⁻ τ, f (e.symm (WithLp.toLp 2 (s, τ))) ∂(volume : Measure W₂) ∂(volume : Measure W₁) := by
     rw [Measure.volume_eq_prod]
     exact lintegral_prod _ (by rwa [Measure.volume_eq_prod] at hmeas)
   rw [← h1, ← h2, h3]

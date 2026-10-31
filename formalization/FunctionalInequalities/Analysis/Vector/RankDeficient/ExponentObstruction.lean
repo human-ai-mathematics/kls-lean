@@ -1,9 +1,12 @@
-import FunctionalInequalities.Analysis.Hausdorff.Volume
-import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Volume
+public import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
 
 /-! # What the small-Lipschitz method actually yields: the exponent of the obstruction
 
-The projected small-Lipschitz argument gives nullity at an exponent larger than the one needed for critical-fibre nullity. The distinction is quantified below.
+The projected small-Lipschitz argument gives nullity at an exponent larger than the one needed for
+critical-fibre nullity. The distinction is quantified below.
 
 Suppose the composite `Q ∘ u` — the part of `u` orthogonal to the range of its differential — can,
 at every scale `ε`, be made `ε`-Lipschitz on the pieces of a countable measurable partition of `S`.
@@ -13,9 +16,11 @@ Running the codimension-`dim W₂` Eilenberg inequality on each piece and lettin
 
 **That exponent is `k + r`, not `k`.**  On the rank-`r` stratum `W₂` is the orthogonal complement of
 the rank-`r` range, so `dim W₂ = m − r` and the exponent is `n − (m − r) = k + r`.  For `r ≥ 1` this
-is strictly weaker than critical-fibre nullity in the useless direction: a set can be `μH[k + r]`-null and still carry
+is strictly weaker than critical-fibre nullity in the useless direction: a set can be `μH[k +
+r]`-null and still carry
 infinite `μH[k]`.  Hence critical-fibre nullity is proved by slicing **inside a fibre**, which is
-what `Analysis/Vector/RankDeficient/StratumSlicing.lean` does, and why this file is a diagnostic with **no consumer**.
+what `Analysis/Vector/RankDeficient/StratumSlicing.lean` does, and why this file is a diagnostic
+with **no consumer**.
 
 **Both side conditions are used and both are real.**  `S` must be measurable
 for the majorants of the disjoint pieces to add up to the majorant of `S`, and `0 < finrank ℝ W₂`
@@ -35,9 +40,12 @@ below is its repair: below the top dimension a set of positive Lebesgue measure 
 Hausdorff measure, **provided the dimension is positive**.  That proviso is necessary: in
 dimension zero a nonempty set has `μH[0] = 1`.  The repaired statement is also what makes the
 weaker-exponent statement
-useless for critical-fibre nullity: at the exponent `k` the measure is already infinite, so nullity at `k + r` says
+useless for critical-fibre nullity: at the exponent `k` the measure is already infinite, so nullity
+at `k + r` says
 nothing.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -67,15 +75,15 @@ theorem hausdorffMeasure_truncated_add_le (S : Set V) (m : ℕ) :
 /-! ### The exponent comparison, repaired -/
 
 omit [FiniteDimensional ℝ W] [MeasurableSpace W₂] [BorelSpace W₂] in
-/-- **The exponent comparison, repaired.**  Below the top dimension the Hausdorff measure of a set of positive
+/--
+**The exponent comparison, repaired.**  Below the top dimension the Hausdorff measure of a set of
+positive
 Lebesgue measure is infinite.  The hypothesis `0 < finrank ℝ V` is **necessary**: without
 it the statement is false, because the truncated subtraction `finrank ℝ V - r` collapses to `0` in a
 zero-dimensional space, where a nonempty set has `μH[0] = 1` rather than `⊤`. -/
-theorem hausdorffMeasure_finrank_sub_eq_top {S : Set V} {r : ℕ}
-    (hn : 0 < finrank ℝ V) (hS : (volume : Measure V) S ≠ 0) (hr : 0 < r) :
-    μH[((finrank ℝ V - r : ℕ) : ℝ)] S = ⊤ := by
-  have hωpos : 0 < KLS.unitBallVolume (finrank ℝ V) := by
-    unfold KLS.unitBallVolume; positivity
+theorem hausdorffMeasure_finrank_sub_eq_top {S : Set V} {r : ℕ} (hn : 0 < finrank ℝ V)
+    (hS : (volume : Measure V) S ≠ 0) (hr : 0 < r) : μH[((finrank ℝ V - r : ℕ) : ℝ)] S = ⊤ := by
+  have hωpos : 0 < KLS.unitBallVolume (finrank ℝ V) := by unfold KLS.unitBallVolume; positivity
   have hcpos : (0 : ℝ) < 2 ^ finrank ℝ V / KLS.unitBallVolume (finrank ℝ V) := by positivity
   have htop : μH[((finrank ℝ V : ℕ) : ℝ)] S ≠ 0 := by
     rw [show ((finrank ℝ V : ℕ) : ℝ) = (finrank ℝ V : ℝ) from rfl,
@@ -143,19 +151,27 @@ theorem exists_measurable_majorant_of_lipschitz_pieces {u : V → W} {S : Set V}
           rw [hddef]
           exact hausdorffMeasure_truncated_add_le S _
 
-/-- **The weaker-exponent statement: the obstruction, stated.**  Projecting away the range of the differential and running
+/--
+**The weaker-exponent statement: the obstruction, stated.**  Projecting away the range of the
+differential and running
 the proved Eilenberg bound gives a null slicing statement at the exponent `n − dim W₂`, which in
-the notation above is `k + r`, **not** `k`.  For `r ≥ 1` this is strictly weaker than critical-fibre nullity in the
+the notation above is `k + r`, **not** `k`.  For `r ≥ 1` this is strictly weaker than critical-fibre
+nullity in the
 useless direction: a set can be `μH[k + r]`-null and have infinite `μH[k]`.
 
-This is a **diagnostic**: it is not a step towards critical-fibre nullity, which was proved independently in
+This is a **diagnostic**: it is not a step towards critical-fibre nullity, which was proved
+independently in
 `Analysis/Vector/RankDeficient/Coarea.lean` by slicing inside a fibre instead. -/
 theorem ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces {u : V → W} {S : Set V}
     (Q : W →L[ℝ] W₂) (hS : MeasurableSet S) (hW₂ : 0 < finrank ℝ W₂)
     (hSfin : μH[((finrank ℝ V : ℕ) : ℝ)] S ≠ ⊤)
-    (hpieces : ∀ ε : ℝ≥0, ε ≠ 0 → ∃ T : ℕ → Set V, Pairwise (Function.onFun Disjoint T) ∧
-        (∀ n, MeasurableSet (T n)) ∧ S ⊆ ⋃ n, T n ∧
-        ∀ n, LipschitzOnWith ε (fun x => Q (u x)) (S ∩ T n)) :
+    (hpieces :
+      ∀ ε : ℝ≥0,
+        ε ≠ 0 →
+          ∃ T : ℕ → Set V,
+            Pairwise (Function.onFun Disjoint T) ∧
+              (∀ n, MeasurableSet (T n)) ∧
+                S ⊆ ⋃ n, T n ∧ ∀ n, LipschitzOnWith ε (fun x => Q (u x)) (S ∩ T n)) :
     ∀ᵐ τ ∂(volume : Measure W₂),
       μH[((finrank ℝ V - finrank ℝ W₂ : ℕ) : ℝ)] (S ∩ {x : V | Q (u x) = τ}) = 0 := by
   classical
@@ -167,22 +183,30 @@ theorem ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces {u : V �
   have hepos : ∀ j, e j ≠ 0 := fun j => by
     simp [hedef, inv_eq_zero]
   -- a measurable majorant at every scale
-  have hscale : ∀ j : ℕ, ∃ G : W₂ → ℝ≥0∞, Measurable G ∧
-      (∀ τ, μH[d] (S ∩ {x : V | Q (u x) = τ}) ≤ G τ) ∧
-      (∫⁻ τ, G τ ∂(volume : Measure W₂)) ≤ C * (e j : ℝ≥0∞) ^ (finrank ℝ W₂) * M := by
+
+  have hscale :
+    ∀ j : ℕ,
+      ∃ G : W₂ → ℝ≥0∞,
+        Measurable G ∧
+          (∀ τ, μH[d] (S ∩ {x : V | Q (u x) = τ}) ≤ G τ) ∧
+            (∫⁻ τ, G τ ∂(volume : Measure W₂)) ≤ C * (e j : ℝ≥0∞) ^ (finrank ℝ W₂) * M := by
     intro j
     obtain ⟨T, hdisj, hTmeas, hcover, hlip⟩ := hpieces (e j) (hepos j)
     exact exists_measurable_majorant_of_lipschitz_pieces Q hS (e j) hdisj hTmeas hcover hlip
-  choose G hGmeas hGdom hGint using hscale
+  choose G hGmeas hGdom hGint using
+    hscale
   -- their pointwise infimum still dominates, and its integral beats every scale
+
   set H : W₂ → ℝ≥0∞ := fun τ => ⨅ j, G j τ with hHdef
   have hHmeas : Measurable H := Measurable.iInf hGmeas
   have hHdom : ∀ τ, μH[d] (S ∩ {x : V | Q (u x) = τ}) ≤ H τ := fun τ =>
     le_iInf fun j => hGdom j τ
-  have hHint : ∀ j, (∫⁻ τ, H τ ∂(volume : Measure W₂))
-      ≤ C * (e j : ℝ≥0∞) ^ (finrank ℝ W₂) * M := fun j =>
-    (lintegral_mono fun τ => iInf_le _ j).trans (hGint j)
+  have hHint :
+    ∀ j, (∫⁻ τ, H τ ∂(volume : Measure W₂)) ≤ C * (e j : ℝ≥0∞) ^ (finrank ℝ W₂) * M := fun j =>
+    (lintegral_mono fun τ => iInf_le _ j).trans
+      (hGint j)
   -- the bound tends to zero, because the codimension is positive and `μH[n] S` is finite
+
   have htend : Tendsto (fun j : ℕ => C * (e j : ℝ≥0∞) ^ (finrank ℝ W₂) * M) atTop (nhds 0) := by
     have hbase : Tendsto (fun j : ℕ => ((j : ℝ≥0∞) + 1)⁻¹) atTop (nhds 0) := by
       have he : (fun j : ℕ => ((j : ℝ≥0∞) + 1)⁻¹) = fun j : ℕ => ((j + 1 : ℕ) : ℝ≥0∞)⁻¹ := by

@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
 
 /-! Independent full-signature clients for the identification of the metric BV Cheeger constants
 with the Minkowski Cheeger constant on probability laws on normed groups, and of the BV constants
@@ -7,6 +9,8 @@ separately, the empty admissible family (dimension zero, both constants `⊤`), 
 intermediate-mass case (the two-atom law `(δ₀ + δ₁)/2` on `ℝ` with `B = Iic (1/2)`, both
 constants `0`), and the half-mass form. The closed-support constant `intrinsicHalfConstant`, the
 literature test-class equivalence and general metric-measure comparisons are not claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -49,11 +53,13 @@ variable {E : Type*}
   [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 theorem frontendSymmetric (μ : ProbabilityMeasure E) :
-    symmetricConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) = Isoperimetry.constant μ := by
+    symmetricConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) =
+      Isoperimetry.constant μ := by
   exact symmetricConstant_intrinsicMeasure_eq_constant μ
 
 theorem frontendHalf (μ : ProbabilityMeasure E) :
-    halfConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) = Isoperimetry.constant μ := by
+    halfConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) =
+      Isoperimetry.constant μ := by
   exact halfConstant_intrinsicMeasure_eq_constant μ
 
 end FiniteDimensional

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Graph.Area
-import FunctionalInequalities.Analysis.Vector.Jacobian
+module
+
+public import FunctionalInequalities.Analysis.Graph.Area
+public import FunctionalInequalities.Analysis.Vector.Jacobian
 
 /-! # The graph Jacobian in arbitrary codimension
 
@@ -19,10 +21,12 @@ a determinant on the **parameter** space `H`.  The codimension-one case is recov
 `normDet (graphLinear ι e a) = graphJacobian a`, which also identifies the repository's existing
 codimension-one Jacobian with Mathlib's general `normDet`, so the two frameworks agree.
 
-**No area formula is proved here**: everything below is about linear maps.  The nonlinear
-statement — the `k`-dimensional measure of a `C¹` parametrized image as the integral of
-`normDet (fderiv)` — remains open, and is type-checked but *not* proved in the audit client.
+Everything below concerns linear maps. Nonlinear vector-graph area and weighted parametrization
+are supplied separately by `Analysis/Vector/Graph/{Area,Integral}.lean`. A general
+parametrized-image area formula is outside the statements of this linear module.
 -/
+
+@[expose] public section
 
 noncomputable section
 

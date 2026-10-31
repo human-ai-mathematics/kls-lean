@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
 
 /-! Original source equation of the inverse-Hessian generator. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities
 namespace SourceLayout

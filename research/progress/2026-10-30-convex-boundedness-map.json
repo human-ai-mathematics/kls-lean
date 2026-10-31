@@ -1,0 +1,347 @@
+{
+  "version": 1,
+  "review_date": "2026-10-30",
+  "scope": "Shared convex finite-Haar-measure boundedness support",
+  "placement_plan": {
+    "owner": "Existing Analysis/Convex/Coercivity.lean, namespace FunctionalInequalities.Analysis",
+    "scope": "One generic finite-Haar-measure convex-set boundedness proof shared by the Letwin A.4 compact-sublevel producer and CEK Theorem 8 ball-truncation growth support (arXiv:2607.24164v1 A.4; arXiv:1304.0630v1 (7), Theorem 8).",
+    "destination": "formalization/FunctionalInequalities/Analysis/Convex/Coercivity.lean",
+    "imports": "Add one downward import from Probability/MomentMeasure/Maximality/BallTruncation to existing Analysis/Convex/Coercivity; no reverse imports.",
+    "decision": "Extend the existing coercivity owner; no new production module, directory, namespace migration, compatibility wrapper or renamed public theorem.",
+    "api_impact": "One additive generic support declaration; all existing public types, binder names/order, universes, flags, definitions, owners and theorem scopes retained. Remove one private duplicate and one inline local proof.",
+    "generality": "NormedAddCommGroup, NormedSpace real, MeasurableSpace/BorelSpace, additive Haar measure. No InnerProductSpace, FiniteDimensional, CompleteSpace, Nontrivial, convex-set measurability or closedness assumption. Positive origin ball and finite measure retained.",
+    "validation": [
+      "Exact duplicate and call graph before editing",
+      "Narrow generic client without finite dimension/inner product/completeness; zero-dimensional and nonempty-interior premise checks",
+      "Existing real Gaussian/dimension-zero A.4 and CEK growth clients",
+      "Direct Lean Expr.equal comparison of all existing public types and definition values; owner/universe/visibility preservation",
+      "Strict build, local declaration/vendor axiom audits, full local module replay and full research/verify.py on frozen final snapshot",
+      "Canonical evidence old-hash checks before rebinding; private intended index for progress views; preserve real index and dirty worktree"
+    ],
+    "non_claims": "No new paper coverage, constants, dimensional restrictions, source hypotheses, certificate or human-review approval; no commit, push or remote CI."
+  },
+  "duplicate_review": {
+    "code_equal_modulo_comments_whitespace": true,
+    "non_whitespace_code_characters": 3342,
+    "origins": [
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Coercivity.lean",
+        "local_name": "hbounded",
+        "consumer": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+        "private_name": "isBounded_of_convex_of_measure_lt_top",
+        "consumer": "FunctionalInequalities.Probability.MomentMeasure.exists_linear_lower_bound_of_mass"
+      }
+    ]
+  },
+  "call_graph_before": {
+    "FunctionalInequalities.Analysis.Convex.Coercivity": {
+      "direct_importers": [
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli.Contact",
+        "FunctionalInequalities.Analysis.Convex.Gradient.Image",
+        "FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz",
+        "FunctionalInequalities.Analysis.Convex.TruncatedConjugate",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+        "FunctionalInequalities.KLS.Klartag.LinearGrowth",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite"
+      ],
+      "transitive_importers_including_owner": [
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformIntervalClient",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli.Contact",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli.DomainContact",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli.Sublevel",
+        "FunctionalInequalities.Analysis.Convex.Coercivity",
+        "FunctionalInequalities.Analysis.Convex.ContactMeasure",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Duality",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Regularity",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Regularization",
+        "FunctionalInequalities.Analysis.Convex.Dirichlet.Solution",
+        "FunctionalInequalities.Analysis.Convex.Gradient.Image",
+        "FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz",
+        "FunctionalInequalities.Analysis.Convex.MaximumComparison",
+        "FunctionalInequalities.Analysis.Convex.Pogorelov",
+        "FunctionalInequalities.Analysis.Convex.TruncatedConjugate",
+        "FunctionalInequalities.Analysis.Convex.Viscosity.Equation",
+        "FunctionalInequalities.Analysis.Convex.Viscosity.Mollification",
+        "FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise",
+        "FunctionalInequalities.Analysis.Convex.Viscosity.Touching",
+        "FunctionalInequalities.Analysis.Elliptic.Maximum",
+        "FunctionalInequalities.KLS.BKL.Cumulant.Bound",
+        "FunctionalInequalities.KLS.BKL.Poincare",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.DifferenceQuotient",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GivenGradient",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.GradientHolder",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.HessianHolder",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Inverse",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Potential",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Smooth",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.SmoothTrace",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+        "FunctionalInequalities.KLS.CEK.Uniqueness",
+        "FunctionalInequalities.KLS.Klartag.LinearBounds",
+        "FunctionalInequalities.KLS.Klartag.LinearGrowth",
+        "FunctionalInequalities.KLS.Klartag.MomentLimit",
+        "FunctionalInequalities.KLS.Letwin.CompactBound",
+        "FunctionalInequalities.KLS.Letwin.HessianTrace",
+        "FunctionalInequalities.KLS.Letwin.HminusOne",
+        "FunctionalInequalities.KLS.Letwin.IsoperimetricBound",
+        "FunctionalInequalities.KLS.Letwin.MomentCalculus",
+        "FunctionalInequalities.KLS.Letwin.MomentMap",
+        "FunctionalInequalities.KLS.Letwin.QuadraticBound",
+        "FunctionalInequalities.KLS.Letwin.RegularClass",
+        "FunctionalInequalities.KLS.Letwin.SteinKernel",
+        "FunctionalInequalities.KLS.Target",
+        "FunctionalInequalities.Probability.MomentMeasure.Gradient",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.EssentiallyContinuous",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.ExtendedMidpointEquality",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer",
+        "FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality"
+      ]
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation": {
+      "direct_importers": [
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.GradientVariation"
+      ],
+      "transitive_importers_including_owner": [
+        "FunctionalInequalities.KLS.CEK.Uniqueness",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.EssentiallyContinuous",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.GradientVariation"
+      ]
+    }
+  },
+  "shared_producer": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top",
+  "verification": "Final outcome is governed by build/history/2026-10-30-shared-convex-boundedness/verification.json; only status passed confirms full local acceptance.",
+  "call_graph_after": {
+    "FunctionalInequalities.Analysis.Convex.Coercivity": {
+      "direct_importers": [
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli.Contact",
+        "FunctionalInequalities.Analysis.Convex.Gradient.Image",
+        "FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz",
+        "FunctionalInequalities.Analysis.Convex.TruncatedConjugate",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+        "FunctionalInequalities.KLS.Klartag.LinearGrowth",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation",
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite"
+      ]
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation": {
+      "direct_importers": [
+        "FunctionalInequalities.Probability.MomentMeasure.Maximality.GradientVariation"
+      ]
+    }
+  },
+  "source_preservation": {
+    "errors": [],
+    "two_production_files_only": true,
+    "shared_proof_body_exact_dedent_of_original": true,
+    "all_other_original_source_lines_preserved": true,
+    "only_new_downward_production_import": true,
+    "canonical_math_records_and_progress_views_byte_identical": true,
+    "root_readme_and_old_maps_preserved": true,
+    "staging_entries_preserved": true,
+    "net_production_lines_removed": 134
+  },
+  "narrow_clients": [
+    {
+      "source": "research/audits/SourceLayout/ConvexBoundedness.lean",
+      "scope": "Normed space without InnerProductSpace, FiniteDimensional, CompleteSpace or Nontrivial; derived single-point inputs; lower-layer import guard and actual compact-sublevel proof reference."
+    },
+    {
+      "source": "research/audits/SourceLayout/MomentGrowth.lean",
+      "scope": "Existing exact CEK growth contract; actual shared producer reference and private duplicate absence."
+    }
+  ],
+  "reference_guard_mutation_controls": "Both deliberately changed consumer inspections fail at the expected missing shared-producer-reference error.",
+  "evidence_rebinding": "No current canonical evidence hash points directly to either edited source; canonical mathematical metadata remains byte-identical.",
+  "progress_generation": "Generated and checked from an isolated intended index; all four progress views remain byte-identical.",
+  "handoff_maintenance": "Current generated handoff now reads its active maintenance scope from reviewed configuration; the prior handoff is retained verbatim in the ignored baseline archive.",
+  "interface_acceptance": {
+    "existing_public_api": "All 6993 pre-existing public API entries retain names, exact rendered types, universes, owner, flags and docstrings; only source positions may move.",
+    "all_declarations": "Direct Lean Expr.equal of every retained local declaration type and nonproof value, including binder names/annotations. Explicit expected removals are the private duplicate and its eight compiler-generated proof supports, plus eight equivalent generated supports of the old inline proof; one shared producer and its eight generated supports replace both copies.",
+    "result": "build/history/2026-10-30-shared-convex-boundedness/exact-interfaces.json",
+    "required": "No changes to retained declarations or owners; exactly the listed private/generated theorem removals and the shared producer/generated theorem additions."
+  },
+  "new_public_declaration": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top",
+  "existing_public_name_migrations": [],
+  "removed_private_declaration": {
+    "old_module": "FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation",
+    "old_basename": "isBounded_of_convex_of_measure_lt_top",
+    "replacement": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top",
+    "compatibility_alias": false
+  },
+  "before_after_lines": {
+    "formalization/FunctionalInequalities/Analysis/Convex/Coercivity.lean": [
+      323,
+      331
+    ],
+    "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean": [
+      700,
+      558
+    ]
+  },
+  "review": {
+    "meaning_scope": "pass: retained source proof and upper contracts; no paper/proof/certificate status change.",
+    "reuse_generality": "pass: exact duplicate, real consumers and generic normed-space audit; pinned Mathlib search found no matching replacement.",
+    "placement_dependency": "pass: existing convex-analysis owner, one new downward import, no module moves or cycles.",
+    "documentation_credit": "pass: Letwin A.4 and CEK (7)/Theorem 8 context retained; previous records preserved.",
+    "consumer_compatibility": "pass: both narrow clients, single-point case and actual producer-reference/absence guards; mutation controls reject missing references.",
+    "evidence_preservation": "Final source-bound receipt, exact interface comparison and frozen baseline/index govern acceptance; no commit/push/remote CI."
+  },
+  "source_changes": [
+    {
+      "source": "HANDOFF.md",
+      "before_sha256": "3a54963b6290e6b72f8d888f0f2dfd8d180c6cc01b109d037f799edda93546bb",
+      "after_sha256": "869f60e36491f2acff8367d990435aa42bd7ed6e32edb09148bb2af1373ea169"
+    },
+    {
+      "source": "formalization/API.md",
+      "before_sha256": "01f98f21b4a5845917b14a998c9ace13eef146bbf46bf1bf8a673dd948630751",
+      "after_sha256": "b900fce6afbb5ceb941e2ddacf0c39d98c631dbcaa2d19b998405f7b50fd4224"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Coercivity.lean",
+      "before_sha256": "c3d2e6acc5482abf7b26088511e0879e8e5bfc39abd532049bfd7ad1b5b73095",
+      "after_sha256": "f3162fe4e59f17c9bddb5e8c35c3038fa7018f479eff9bc782f1282180eae2cc"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+      "before_sha256": "86b7ed783458d614161fd2a6682f5288260496f6f252cc3465dd52bf5368d3f7",
+      "after_sha256": "5077b70c2d58d14ef94e1d3f9f7abc870447eb33f3299d497a8b071759f44d8d"
+    },
+    {
+      "source": "research/check_documentation.py",
+      "before_sha256": "ed9b9c8839a8708b1ca284f4d848c82860b6980b762edf00be7a1d5e942c08cf",
+      "after_sha256": "f9205ed84272c02a3432b1efb16bcb058fbcdb72f8f404be3a3822fecd4a6e1d"
+    },
+    {
+      "source": "research/progress/documentation-checks.json",
+      "before_sha256": "b5f4bc2696706113710e246f57c514e43b8397787e00cab2b3ac4204180fe1af",
+      "after_sha256": "09ddb91697067a407818d592ffe8a3afdc74b0c5595bed0185df61258c095297"
+    },
+    {
+      "source": "research/progress/source-layout-review.md",
+      "before_sha256": "67fa513e8c0b6d6b824a5a1da8b2f8cc0dc810a062e5c94eb1cde3d6c6301a9e",
+      "after_sha256": "c5760241f3be523ba5bba854bf09c1ae28e3d99911393426300c0fbf12878c0d"
+    },
+    {
+      "source": "research/tests/test_check_documentation.py",
+      "before_sha256": "e3ab7d43d89d0f7b958c558fadd69a4498fd422b780b1663d1d96e0adcbb1cc8",
+      "after_sha256": "6df63cacaedac419954cc1fe2f1c159821ec1255f5a62138fec05a9f0e7b191d"
+    }
+  ],
+  "new_audit_inputs": [
+    {
+      "source": "research/audits/SourceLayout/ConvexBoundedness.lean",
+      "sha256": "ddef5c81c01515dfe439dbf4782ec9858b97bbeac33a149b6fb931a0b5b9ac17"
+    },
+    {
+      "source": "research/audits/SourceLayout/MomentGrowth.lean",
+      "sha256": "3081cf9c335355e9310dbbfcfe5ccdee3d162724cd4acba0fa87b02f9dd65c66"
+    }
+  ],
+  "superseded_handoff": {
+    "sha256": "3a54963b6290e6b72f8d888f0f2dfd8d180c6cc01b109d037f799edda93546bb",
+    "verbatim_archive": "build/history/2026-10-30-shared-convex-boundedness/baseline/source/HANDOFF.md"
+  },
+  "compiler_generated_proof_support_map": [
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_1",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_1",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_2",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_2",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_3",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_3",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_4",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_4",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_5",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_5",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_6",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_6",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._simp_1_7",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_7",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "_private.FunctionalInequalities.Probability.MomentMeasure.Maximality.BallTruncation.0.FunctionalInequalities.Probability.MomentMeasure.isBounded_of_convex_of_measure_lt_top._proof_1_8",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._proof_1_8",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_1",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_1",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_2",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_2",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_3",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_3",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_4",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_4",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_5",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_5",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_6",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_6",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._simp_1_7",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._simp_1_7",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    },
+    {
+      "before": "FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg._proof_1_8",
+      "after": "FunctionalInequalities.Analysis.isBounded_of_convex_of_measure_lt_top._proof_1_8",
+      "kind": "Compiler-generated theorem support; two proof copies collapse to one."
+    }
+  ],
+  "first_exact_comparison": "All retained types and nonproof values agree; its only presence differences are the sixteen compiler-generated proof supports listed here. Their names are explicitly mapped; they are not retained API declarations."
+}

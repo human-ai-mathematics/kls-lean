@@ -1,15 +1,21 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import FunctionalInequalities.Probability.MomentMeasure.Basic
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import FunctionalInequalities.Probability.MomentMeasure.Basic
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-!
 # The norm potential as a baseline
 
-The Legendre transform of the norm (zero on the closed unit ball, `⊤` outside), its density and finite positive Haar
-mass, and the finite functional value of the norm potential for finite first moment, including dimension zero.
+The Legendre transform of the norm (zero on the closed unit ball, `⊤` outside), its density and
+finite positive Haar
+mass, and the finite functional value of the norm potential for finite first moment, including
+dimension zero.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -29,10 +35,13 @@ theorem density_legendre_norm :
       (Metric.closedBall (0 : E) 1).indicator (fun _ => (1 : ℝ≥0∞)) := by
   funext y
   by_cases hy : ‖y‖ ≤ 1
-  · have hm : y ∈ Metric.closedBall (0 : E) 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using hy
-    simp only [density, legendre_norm, if_pos hy, neg_zero, EReal.exp_zero, indicator_of_mem hm]
-  · have hm : y ∉ Metric.closedBall (0 : E) 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using hy
-    simp only [density, legendre_norm, if_neg hy, EReal.neg_top, EReal.exp_bot, indicator_of_notMem hm]
+  · have hm : y ∈ Metric.closedBall (0 : E) 1 := by
+      simpa only [Metric.mem_closedBall, dist_zero_right] using hy
+    simp only [density, legendre_norm, ite_eq_left hy, neg_zero, EReal.exp_zero, indicator_of_mem hm]
+  · have hm : y ∉ Metric.closedBall (0 : E) 1 := by
+      simpa only [Metric.mem_closedBall, dist_zero_right] using hy
+    simp only [density, legendre_norm, ite_eq_right hy, EReal.neg_top, EReal.exp_bot,
+      indicator_of_notMem hm]
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 /-- The baseline exponential mass is the actual positive finite Haar volume of
 the closed unit ball, not a supplied mass value or probability normalization. -/
@@ -57,7 +66,7 @@ theorem norm_baseline_finite (dx μ : Measure E) [dx.IsAddHaarMeasure]
     (hfirst : Integrable (fun x : E => x) μ) :
     ConvexPotential (fun x : E => (‖x‖ : EReal)) ∧
       PotentialIntegrable (fun x : E => (‖x‖ : EReal)) μ ∧
-      (∃ L : ℝ, variationalFunctional dx μ (fun x : E => (‖x‖ : EReal)) = (L : EReal)) := by
+        (∃ L : ℝ, variationalFunctional dx μ (fun x : E => (‖x‖ : EReal)) = (L : EReal)) := by
   have hc : ConvexPotential (fun x : E => (‖x‖ : EReal)) := by
     refine ⟨fun _ => EReal.coe_ne_bot _, ?_⟩
     simpa only [mem_univ, true_and, EReal.coe_le_coe_iff] using
@@ -66,8 +75,11 @@ theorem norm_baseline_finite (dx μ : Measure E) [dx.IsAddHaarMeasure]
     ⟨fun _ => EReal.coe_ne_bot _, Eventually.of_forall fun _ => EReal.coe_ne_top _, by
       simpa only [EReal.toReal_coe] using hfirst.norm⟩
   obtain ⟨_heq, hpos, hfin⟩ := mass_legendre_norm dx
-  refine ⟨hc, hp, Real.log (mass dx (legendre (fun x : E => (‖x‖ : EReal)))).toReal - ∫ x, ‖x‖ ∂μ, ?_⟩
-  simp only [variationalFunctional, EReal.toReal_coe, ENNReal.log_pos_real hpos.ne' hfin, ← EReal.coe_sub]
+  refine
+    ⟨hc, hp, Real.log (mass dx (legendre (fun x : E => (‖x‖ : EReal)))).toReal - ∫ x, ‖x‖ ∂μ,
+      ?_⟩
+  simp only [variationalFunctional, EReal.toReal_coe, ENNReal.log_pos_real hpos.ne' hfin,
+    ← EReal.coe_sub]
 
 end
 

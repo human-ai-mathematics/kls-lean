@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Euclidean.Slope.Density
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Energy.Euclidean.Slope.Density
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the density module `Energy/Euclidean/Slope/Density.lean`
 
@@ -25,11 +27,15 @@ and the right one is the pointwise domination of the local slope by the asymptot
 constant.
 
 The boundary section records the constant test and the zero-dimensional convention (on a one-point
-coordinate space the smooth-gradient relaxation vanishes identically without an absolute-continuity hypothesis).
+coordinate space the smooth-gradient relaxation vanishes identically without an absolute-continuity
+hypothesis).
 
-The axiom reports at the end cover every public declaration of the density module and every theorem of
+The axiom reports at the end cover every public declaration of the density module and every theorem
+of
 this client; each of them must list only `propext`, `Classical.choice` and `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

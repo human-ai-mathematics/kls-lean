@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.Support.Affine
-import Mathlib.Topology.MetricSpace.Thickening
-import Mathlib.Order.LiminfLimsup
+module
+
+public import FunctionalInequalities.Probability.Support.Affine
+public import Mathlib.Topology.MetricSpace.Thickening
+public import Mathlib.Order.LiminfLimsup
 
 /-!
 # Isoperimetric boundary content and inverse scale on the affine support
@@ -14,6 +16,8 @@ constant infinity and inverse scale zero. These definitions do not identify BV p
 the density frontend, a Poincare constant, or a metric energy.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter
@@ -26,7 +30,10 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
 
 /-- The law on its affine carrier, equipped with the distance inherited from the ambient space. -/
 def carrierMeasure (μ : ProbabilityMeasure E) : ProbabilityMeasure (Probability.affineSupport μ) :=
-  μ.map (Probability.measurable_retraction μ).aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := Probability.measurable_retraction μ
+  μ.map (Probability.retraction μ)
 
 /-- Outer Minkowski boundary content, with the limit taken through strictly positive radii.
 For positive radii, the original set is contained in its thickening, so ENNReal subtraction

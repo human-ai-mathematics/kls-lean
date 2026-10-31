@@ -1,16 +1,21 @@
-import Lean
-import FunctionalInequalities.Analysis.IteratedDerivative.LocalHolder
-import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
-import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
-import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
-import FunctionalInequalities.Energy.Euclidean.WeakDerivative
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.IteratedDerivative.LocalHolder
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
+public import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
+public import FunctionalInequalities.Energy.Euclidean.WeakDerivative
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
+meta import Lean
 
 /-! Legacy contracts through their shared producers, with every module that held them imported.
 Checks finite-index scope, partial-operator domains, named parameters and removed-name absence.
 -/
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis
 open FunctionalInequalities.Analysis.Semigroup

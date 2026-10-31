@@ -1,20 +1,22 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
-import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
-import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
-import FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz
-import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianRegularity
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
-import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
-import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
-import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
-import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
-import FunctionalInequalities.Probability.MomentMeasure.Gradient
-import Mathlib.Topology.TietzeExtension
-import FunctionalInequalities.KLS.CEK.MomentMap
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Probability.Stein.HessianKernel
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
+public import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
+public import FunctionalInequalities.Analysis.Convex.Gradient.Lipschitz
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianRegularity
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
+public import FunctionalInequalities.Probability.MomentMeasure.Gradient
+public import Mathlib.Topology.TietzeExtension
+public import FunctionalInequalities.KLS.CEK.MomentMap
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Probability.Stein.HessianKernel
 
 /-!
 # Moment potentials for continuous convex-body targets and the strong regular class
@@ -23,11 +25,16 @@ The continuous-target producers require only continuity of W on the compact body
 of a bounded open convex body). They yield C¹, strict convexity, a gradient homeomorphism and
 the Alexandrov/viscosity equation without uniform convexity. Higher regularity remains separate.
 
-The regular-class moment witness (`exists_regular_moment_potential`) and two extensions at the same `u` and `L`: a
-measurable everywhere left inverse of the injective gradient (`exists_regular_moment_potential_with_inverse`, via the
-given-witness adapter `measurable_inverse_gradient_of_map_gradient`) and compact-local uniform ellipticity
+The regular-class moment witness (`exists_regular_moment_potential`) and two extensions at the same
+`u` and `L`: a
+measurable everywhere left inverse of the injective gradient
+(`exists_regular_moment_potential_with_inverse`, via the
+given-witness adapter `measurable_inverse_gradient_of_map_gradient`) and compact-local uniform
+ellipticity
 (`exists_regular_moment_potential_locally_elliptic`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -126,37 +133,57 @@ theorem exists_moment_potential_of_continuousOn (hn : 0 < n)
       hψ hH hcontact htouch
 /-- The literal bounded open convex-body inputs of Letwin Lemma 2.2 yield a normalized finite C¹
 moment potential, a gradient homeomorphism onto K and the Alexandrov/viscosity equation.
-Continuity on closure K suffices here; smoothness and convexity of W are not needed for this step. -/
-theorem exists_moment_potential_of_bounded_open_convex (hn : 0 < n)
-    {K : Set E} (hKb : Bornology.IsBounded K) (hKo : IsOpen K) (hKc : Convex ℝ K)
-    (hKne : K.Nonempty) {W : E → ℝ} (hW : ContinuousOn W (closure K))
-    (μ : ProbabilityMeasure E)
-    (hμ : (μ : Measure E) = (volume : Measure E).withDensity
-      (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+Continuity on closure K suffices here; smoothness and convexity of W are not needed for this step.
+-/
+theorem exists_moment_potential_of_bounded_open_convex (hn : 0 < n) {K : Set E}
+    (hKb : Bornology.IsBounded K) (hKo : IsOpen K) (hKc : Convex ℝ K) (hKne : K.Nonempty)
+    {W : E → ℝ} (hW : ContinuousOn W (closure K)) (μ : ProbabilityMeasure E)
+    (hμ :
+      (μ : Measure E) =
+        (volume : Measure E).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : KLS.Isotropic μ) :
-    ∃ (u : E → ℝ) (L : NNReal), StrictConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure E)) = 1 ∧
-      ((volume : Measure E).tilted (-u)).map (gradient u) = (μ : Measure E) ∧
-      ContDiff ℝ 1 u ∧
-      (∃ e : E ≃ₜ K, ∀ x, (e x : E) = gradient u x) ∧
-      Continuous (fun x => Real.exp (-u x + W (gradient u x))) ∧
-      (∀ G : Set E, IsOpen G → volume (subgradientImage u G) =
-        ∫⁻ x in G, ENNReal.ofReal (Real.exp (-u x + W (gradient u x)))) ∧
-      (∀ᵐ x ∂(volume : Measure E), ∃ B : Matrix (Fin n) (Fin n) ℝ,
-        B.IsHermitian ∧ B.PosDef ∧ B.det = Real.exp (-u x + W (gradient u x)) ∧
-        ∃ g : E, ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-          |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2) ∧
-      (∀ (x : E) (ψ : E → ℝ), ContDiffAt ℝ 2 ψ x → u x = ψ x →
-        (∀ᶠ y in 𝓝 x, u y ≤ ψ y) →
-        Real.exp (-u x + W (gradient u x)) ≤ (hessianMatrix ψ x).det) ∧
-      ∀ (x : E) (ψ : E → ℝ), ContDiffAt ℝ 2 ψ x → (hessianMatrix ψ x).PosSemidef →
-        u x = ψ x → (∀ᶠ y in 𝓝 x, ψ y ≤ u y) →
-        (hessianMatrix ψ x).det ≤ Real.exp (-u x + W (gradient u x)) := by
+    ∃ (u : E → ℝ) (L : NNReal),
+      StrictConvexOn ℝ univ u ∧
+        LipschitzWith L u ∧
+          (∫ x, Real.exp (-u x) ∂(volume : Measure E)) = 1 ∧
+            ((volume : Measure E).tilted (-u)).map (gradient u) = (μ : Measure E) ∧
+              ContDiff ℝ 1 u ∧
+                (∃ e : E ≃ₜ K, ∀ x, (e x : E) = gradient u x) ∧
+                  Continuous (fun x => Real.exp (-u x + W (gradient u x))) ∧
+                    (∀ G : Set E,
+                        IsOpen G →
+                          volume (subgradientImage u G) =
+                            ∫⁻ x in G, ENNReal.ofReal (Real.exp (-u x + W (gradient u x)))) ∧
+                      (∀ᵐ x ∂(volume : Measure E),
+                          ∃ B : Matrix (Fin n) (Fin n) ℝ,
+                            B.IsHermitian ∧
+                              B.PosDef ∧
+                                B.det = Real.exp (-u x + W (gradient u x)) ∧
+                                  ∃ g : E,
+                                    ∀ ε > 0,
+                                      ∀ᶠ y in 𝓝 x,
+                                        |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2) ∧
+                        (∀ (x : E) (ψ : E → ℝ),
+                            ContDiffAt ℝ 2 ψ x →
+                              u x = ψ x →
+                                (∀ᶠ y in 𝓝 x, u y ≤ ψ y) →
+                                  Real.exp (-u x + W (gradient u x)) ≤
+                                    (hessianMatrix ψ x).det) ∧
+                          ∀ (x : E) (ψ : E → ℝ),
+                            ContDiffAt ℝ 2 ψ x →
+                              (hessianMatrix ψ x).PosSemidef →
+                                u x = ψ x →
+                                  (∀ᶠ y in 𝓝 x, ψ y ≤ u y) →
+                                    (hessianMatrix ψ x).det ≤
+                                      Real.exp (-u x + W (gradient u x)) := by
   have hInt : interior (closure K) = K := by
     rw [hKc.interior_closure_eq_interior_of_nonempty_interior, hKo.interior_eq]
     simpa only [hKo.interior_eq] using hKne
-  have hμcl : (μ : Measure E) = (volume : Measure E).withDensity
-      ((closure K).indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
+  have hμcl :
+    (μ : Measure E) =
+      (volume : Measure E).withDensity
+        ((closure K).indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
     rw [hμ]
     apply withDensity_congr_ae
     have hnull : ∀ᵐ x ∂(volume : Measure E), x ∉ frontier K :=
@@ -171,12 +198,14 @@ theorem exists_moment_potential_of_bounded_open_convex (hn : 0 < n)
   obtain ⟨u, L, hstrict, hl, hnorm, hm, hC1, ⟨e, he⟩, hf, hMA, hae, hUpper, hLower⟩ :=
     exists_moment_potential_of_continuousOn hn hKb.isCompact_closure hKc.closure
       (by simpa only [hInt] using hKne) hW μ hμcl hiso
-  exact ⟨u, L, hstrict, hl, hnorm, hm, hC1, ⟨e.trans (Homeomorph.setCongr hInt), he⟩,
-    hf, hMA, hae, hUpper, hLower⟩
+  exact
+    ⟨u, L, hstrict, hl, hnorm, hm, hC1, ⟨e.trans (Homeomorph.setCongr hInt), he⟩, hf, hMA, hae,
+      hUpper, hLower⟩
 
 end ContinuousTarget
 
-/-- **A.e. Hessian package at a given moment potential with Lipschitz gradient**: if a normalized convex
+/--
+**A.e. Hessian package at a given moment potential with Lipschitz gradient**: if a normalized convex
 Lipschitz `C¹` potential `u` with `G`-Lipschitz gradient pushes `e^{-u} dx` forward by `∇u` onto
 `1_K e^{-W} dx` (`K` compact convex, `W` continuous, positive dimension), then a.e. its Hessian is
 positive definite, satisfies `log det ∇²u = -u + W(∇u)` and is capped by `G·Id`. The potential is
@@ -187,104 +216,90 @@ theorem ae_hessianMatrix_posDef_log_det_of_map_gradient {n : ℕ} (hn : 0 < n)
     (hunorm : ∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
     {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K) (hKc : Convex ℝ K)
     (hW : Continuous W)
-    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hmap :
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (huC1 : ContDiff ℝ 1 u) (hgradLip : LipschitzWith G (gradient u)) :
     ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
       (hessianMatrix u x).PosDef ∧
-      Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-      ((G : ℝ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef := by
+        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+          ((G : ℝ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef := by
   classical
   let E := EuclideanSpace ℝ (Fin n)
   have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
   have : Nontrivial E := inferInstance
   let f : E → ℝ := fun x => Real.exp (-u x + W (gradient u x))
   have hgradc : Continuous (gradient u) :=
-    (InnerProductSpace.toDual ℝ E).symm.continuous.comp
-      (huC1.continuous_fderiv (by norm_num))
-  have hf : Continuous f :=
-    Real.continuous_exp.comp
-      (huC1.continuous.neg.add (hW.comp hgradc))
+    (InnerProductSpace.toDual ℝ E).symm.continuous.comp (huC1.continuous_fderiv (by norm_num))
+  have hf : Continuous f := Real.continuous_exp.comp (huC1.continuous.neg.add (hW.comp hgradc))
   have hfpos : ∀ x, 0 < f x := fun x => Real.exp_pos _
-  have hMA : ∀ O : Set E, IsOpen O →
-      volume (subgradientImage u O) =
-        ∫⁻ x in O, ENNReal.ofReal (f x) := by
+  have hMA :
+    ∀ O : Set E, IsOpen O → volume (subgradientImage u O) = ∫⁻ x in O, ENNReal.ofReal (f x) := by
     intro O hO
-    exact volume_subgradientImage_eq_lintegral_of_isOpen huLip huconv hunorm
-      hK.isClosed hKc hW.measurable hmap hO
-  have hdiff :
-      ∀ᵐ x ∂(volume : Measure E), DifferentiableAt ℝ (gradient u) x :=
+    exact
+      volume_subgradientImage_eq_lintegral_of_isOpen huLip huconv hunorm hK.isClosed hKc
+        hW.measurable hmap hO
+  have hdiff : ∀ᵐ x ∂(volume : Measure E), DifferentiableAt ℝ (gradient u) x :=
     hgradLip.ae_differentiableAt
   have hmain :
-      ∀ᵐ x ∂(volume : Measure E),
-        (hessianMatrix u x).PosDef ∧
-          Real.log (hessianMatrix u x).det = -u x + W (gradient u x) := by
+    ∀ᵐ x ∂(volume : Measure E),
+      (hessianMatrix u x).PosDef ∧ Real.log (hessianMatrix u x).det = -u x + W (gradient u x) := by
     filter_upwards [hdiff] with x hx
     let T : E →L[ℝ] E := fderiv ℝ (gradient u) x
     have hT : HasFDerivAt (gradient u) T x := hx.hasFDerivAt
-    have hfd : ∀ y, HasFDerivAt u (fderiv ℝ u y) y :=
-      fun y => (huC1.differentiable (by norm_num) y).hasFDerivAt
-    have hsub (y q : E)
-        (hq : ∀ w, u y + ⟪q, w - y⟫ ≤ u w) :
-        q = gradient u y := by
-      have hm : IsLocalMin (fun z => u z -
-          (InnerProductSpace.toDual ℝ E q) z) y := by
+    have hfd : ∀ y, HasFDerivAt u (fderiv ℝ u y) y := fun y =>
+      (huC1.differentiable (by norm_num) y).hasFDerivAt
+    have hsub (y q : E) (hq : ∀ w, u y + ⟪q, w - y⟫ ≤ u w) : q = gradient u y := by
+      have hm : IsLocalMin (fun z => u z - (InnerProductSpace.toDual ℝ E q) z) y := by
         filter_upwards [] with z
-        change u y - (InnerProductSpace.toDual ℝ E q) y ≤
-          u z - (InnerProductSpace.toDual ℝ E q) z
+        change
+          u y - (InnerProductSpace.toDual ℝ E q) y ≤ u z - (InnerProductSpace.toDual ℝ E q) z
         simp only [InnerProductSpace.toDual_apply_apply]
         have hz := hq z
         rw [inner_sub_right] at hz
         linarith
-      have hz := hm.hasFDerivAt_eq_zero
-        ((hfd y).sub (InnerProductSpace.toDual ℝ E q).hasFDerivAt)
-      have hdu :
-          fderiv ℝ u y =
-            (InnerProductSpace.toDual ℝ E) (gradient u y) :=
+      have hz :=
+        hm.hasFDerivAt_eq_zero ((hfd y).sub (InnerProductSpace.toDual ℝ E q).hasFDerivAt)
+      have hdu : fderiv ℝ u y = (InnerProductSpace.toDual ℝ E) (gradient u y) :=
         (toDual_gradient (f := u) (x := y)).symm
       rw [hdu] at hz
-      exact ((InnerProductSpace.toDual ℝ E).injective
-        (sub_eq_zero.mp hz)).symm
+      exact ((InnerProductSpace.toDual ℝ E).injective (sub_eq_zero.mp hz)).symm
     have hexp :
-        ∀ ε > 0, ∀ᶠ y in 𝓝 x, ∀ q : E,
-          (∀ w, u y + ⟪q, w - y⟫ ≤ u w) →
-            ‖q - gradient u x - T (y - x)‖ ≤ ε * ‖y - x‖ := by
+      ∀ ε > 0,
+        ∀ᶠ y in 𝓝 x,
+          ∀ q : E,
+            (∀ w, u y + ⟪q, w - y⟫ ≤ u w) → ‖q - gradient u x - T (y - x)‖ ≤ ε * ‖y - x‖ := by
       intro ε hε
       have hlittle := hT.isLittleO
       filter_upwards [hlittle.bound hε] with y hy q hq
       have hqeq := hsub y q hq
       simpa only [hqeq] using hy
     have hquad :
-        ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-          |u y - u x - ⟪gradient u x, y - x⟫ -
-              1 / 2 * ⟪T (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 :=
-      fun ε hε =>
-        eventually_abs_sub_quadratic_le_of_subgradient_expansion
-          huconv hexp ε hε
+      ∀ ε > 0,
+        ∀ᶠ y in 𝓝 x,
+          |u y - u x - ⟪gradient u x, y - x⟫ - 1 / 2 * ⟪T (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 :=
+      fun ε hε => eventually_abs_sub_quadratic_le_of_subgradient_expansion huconv hexp ε hε
     have hmat := hessianMatrix_toEuclideanLin_of_differentiableAt_gradient huC1 hx
     have hquad' :
-        ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-          |u y - quadraticAt (hessianMatrix u x) x
-              (gradient u x) (u x) y| ≤ ε * ‖y - x‖ ^ 2 := by
+      ∀ ε > 0,
+        ∀ᶠ y in 𝓝 x,
+          |u y - quadraticAt (hessianMatrix u x) x (gradient u x) (u x) y| ≤ ε * ‖y - x‖ ^ 2 := by
       intro ε hε
       filter_upwards [hquad ε hε] with y hy
       rw [quadraticAt, hmat]
       change
-        |u y - (u x + ⟪gradient u x, y - x⟫ +
-          1 / 2 * ⟪y - x, T (y - x)⟫)| ≤ ε * ‖y - x‖ ^ 2
+        |u y - (u x + ⟪gradient u x, y - x⟫ + 1 / 2 * ⟪y - x, T (y - x)⟫)| ≤ ε * ‖y - x‖ ^ 2
       rw [real_inner_comm (T (y - x)) (y - x)]
       simpa only [sub_add_eq_sub_sub] using hy
-    have hres := posDef_and_det_eq_of_quadratic_expansion huconv
-      isOpen_univ (fun O hO _ => hMA O hO) (mem_univ x)
-      hf.continuousAt (hfpos x)
-      (hessianMatrix_isHermitian_of_differentiableAt_gradient huC1 hx) hquad'
+    have hres :=
+      posDef_and_det_eq_of_quadratic_expansion huconv isOpen_univ (fun O hO _ => hMA O hO)
+        (mem_univ x) hf.continuousAt (hfpos x)
+        (hessianMatrix_isHermitian_of_differentiableAt_gradient huC1 hx) hquad'
     refine ⟨hres.1, ?_⟩
     calc
-      Real.log (hessianMatrix u x).det = Real.log (f x) := by
-        rw [hres.2]
-      _ = -u x + W (gradient u x) := by
-        simp [f]
+      Real.log (hessianMatrix u x).det = Real.log (f x) := by rw [hres.2]
+      _ = -u x + W (gradient u x) := by simp [f]
   filter_upwards [hmain, hdiff] with x hx hxd
   refine ⟨hx.1, hx.2, ?_⟩
   let T : E →L[ℝ] E := fderiv ℝ (gradient u) x
@@ -297,33 +312,24 @@ theorem ae_hessianMatrix_posDef_log_det_of_map_gradient {n : ℕ} (hn : 0 < n)
     rw [hmat] at hs
     exact hs
   let b := EuclideanSpace.basisFun (Fin n) ℝ
-  have hone :
-      Matrix.toLin b.toBasis b.toBasis
-          (1 : Matrix (Fin n) (Fin n) ℝ) =
-        LinearMap.id :=
+  have hone : Matrix.toLin b.toBasis b.toBasis (1 : Matrix (Fin n) (Fin n) ℝ) = LinearMap.id :=
     Matrix.toLin_one _
   have hop :
-      Matrix.toEuclideanLin
-          ((G : ℝ) • (1 : Matrix (Fin n) (Fin n) ℝ) -
-            hessianMatrix u x) =
-        (G : ℝ) • LinearMap.id - T.toLinearMap := by
+    Matrix.toEuclideanLin ((G : ℝ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x) =
+      (G : ℝ) • LinearMap.id - T.toLinearMap := by
     have hmat' := hmat
     rw [Matrix.toEuclideanLin_eq_toLin_orthonormal] at hmat'
     rw [Matrix.toEuclideanLin_eq_toLin_orthonormal, map_sub, map_smul, hone, hmat']
   rw [← Matrix.isPositive_toEuclideanLin_iff, hop]
   constructor
   · intro v w
-    change
-      ⟪(G : ℝ) • v - T v, w⟫ =
-        ⟪v, (G : ℝ) • w - T w⟫
-    rw [inner_sub_left, inner_sub_right, real_inner_smul_left,
-      real_inner_smul_right]
+    change ⟪(G : ℝ) • v - T v, w⟫ = ⟪v, (G : ℝ) • w - T w⟫
+    rw [inner_sub_left, inner_sub_right, real_inner_smul_left, real_inner_smul_right]
     have hsw : ⟪T v, w⟫ = ⟪v, T w⟫ := hsym v w
     rw [hsw]
   · intro v
     change 0 ≤ ⟪(G : ℝ) • v - T v, v⟫
-    rw [inner_sub_left, real_inner_smul_left,
-      real_inner_self_eq_norm_sq]
+    rw [inner_sub_left, real_inner_smul_left, real_inner_self_eq_norm_sq]
     have hv := T.le_opNorm v
     have hv' : ‖T v‖ ≤ (G : ℝ) * ‖v‖ :=
       hv.trans (mul_le_mul_of_nonneg_right hTnorm (norm_nonneg v))
@@ -380,85 +386,108 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Gradient inverse at a given moment witness**: if a normalized convex Lipschitz `C¹` potential `u` pushes `e^{-u} dx`
-forward by `∇u` onto `1_K e^{-W} dx` (`K` compact convex nonempty, `W` continuous, positive dimension), then `∇u` is
-injective and has a measurable everywhere left inverse. Applies to the given `u`; no new potential is chosen. -/
-theorem measurable_inverse_gradient_of_map_gradient
-    {n : ℕ} (hn : 0 < n) {u : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal}
-    (hLip : LipschitzWith L u) (hc : ConvexOn ℝ univ u)
+/--
+**Gradient inverse at a given moment witness**: if a normalized convex Lipschitz `C¹` potential `u`
+pushes `e^{-u} dx`
+forward by `∇u` onto `1_K e^{-W} dx` (`K` compact convex nonempty, `W` continuous, positive
+dimension), then `∇u` is
+injective and has a measurable everywhere left inverse. Applies to the given `u`; no new potential
+is chosen. -/
+theorem measurable_inverse_gradient_of_map_gradient {n : ℕ} (hn : 0 < n)
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal} (hLip : LipschitzWith L u)
+    (hc : ConvexOn ℝ univ u)
     (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
-    (hC1 : ContDiff ℝ 1 u)
-    {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKne : K.Nonempty) {W : EuclideanSpace ℝ (Fin n) → ℝ} (hW : Continuous W)
-    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) :
+    (hC1 : ContDiff ℝ 1 u) {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K)
+    (hKc : Convex ℝ K) (hKne : K.Nonempty) {W : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hW : Continuous W)
+    (hmap :
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) :
     Function.Injective (gradient u) ∧
       ∃ Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n),
         Measurable Ψ ∧ Function.LeftInverse Ψ (gradient u) := by
   have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
   have hstrict := strictConvexOn_of_map_gradient hLip hc hnorm hK hKc hKne hW hmap
-  have hinj := injective_gradient_of_strictConvexOn
-    (hC1.differentiable (by norm_num)) hstrict
-  exact ⟨hinj,
-    Probability.Stein.exists_measurable_leftInverse_gradient_of_injective hC1 hinj⟩
+  have hinj := injective_gradient_of_strictConvexOn (hC1.differentiable (by norm_num)) hstrict
+  exact ⟨hinj, Probability.Stein.exists_measurable_leftInverse_gradient_of_injective hC1 hinj⟩
 
-/-- The actual regular moment potential of `exists_regular_moment_potential`, with all of its fields at the same `u` and `L`,
-has an injective gradient with a measurable everywhere left inverse. No `C²`, surjectivity or smoothness claim. -/
-theorem exists_regular_moment_potential_with_inverse
-    {n : ℕ} (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))}
-    {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K)
-    (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+/--
+The actual regular moment potential of `exists_regular_moment_potential`, with all of its fields at
+the same `u` and `L`,
+has an injective gradient with a measurable everywhere left inverse. No `C²`, surjectivity or
+smoothness claim. -/
+theorem exists_regular_moment_potential_with_inverse {n : ℕ} (hn : 0 < n)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) (hiso : KLS.Isotropic μ) :
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal),
-      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      Function.Injective (gradient u) ∧
-      ∃ Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n),
-        Measurable Ψ ∧ Function.LeftInverse Ψ (gradient u) := by
-  obtain ⟨u,L,hc,hl,hnorm,hm,hC1,hG,hdata⟩ :=
+      ConvexOn ℝ univ u ∧
+        LipschitzWith L u ∧
+          (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+            ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+                (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+              ContDiff ℝ 1 u ∧
+                LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+                  (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+                      (hessianMatrix u x).PosDef ∧
+                        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+                          ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) -
+                              hessianMatrix u x).PosSemidef) ∧
+                    Function.Injective (gradient u) ∧
+                      ∃ Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n),
+                        Measurable Ψ ∧ Function.LeftInverse Ψ (gradient u) := by
+  obtain ⟨u, L, hc, hl, hnorm, hm, hC1, hG, hdata⟩ :=
     exists_regular_moment_potential hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  have hInv := measurable_inverse_gradient_of_map_gradient hn hl hc hnorm hC1 hK hKc
-    (hKint.mono interior_subset) hW.continuous (hm.trans hμ)
-  exact ⟨u,L,hc,hl,hnorm,hm,hC1,hG,hdata,hInv⟩
+  have hInv :=
+    measurable_inverse_gradient_of_map_gradient hn hl hc hnorm hC1 hK hKc
+      (hKint.mono interior_subset) hW.continuous (hm.trans hμ)
+  exact ⟨u, L, hc, hl, hnorm, hm, hC1, hG, hdata, hInv⟩
 
-/-- The actual regular moment potential of `exists_regular_moment_potential`, with all of its fields at the same `u` and `L`,
-is compact-locally uniformly elliptic: on every compact `S` its Hessian is a.e. at least `δ·Id` for some `δ > 0` depending
-on `S` (the upper bound `16/κ` is already a field). Support for interior regularity; no `C²`, smoothness or everywhere
+/--
+The actual regular moment potential of `exists_regular_moment_potential`, with all of its fields at
+the same `u` and `L`,
+is compact-locally uniformly elliptic: on every compact `S` its Hessian is a.e. at least `δ·Id` for
+some `δ > 0` depending
+on `S` (the upper bound `16/κ` is already a field). Support for interior regularity; no `C²`,
+smoothness or everywhere
 positive definiteness claim. -/
 theorem exists_regular_moment_potential_locally_elliptic {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))}
-    {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : KLS.Isotropic μ) :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal), ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
-      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).PosDef ∧
-        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
-      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-        ∃ δ : ℝ, 0 < δ ∧ ∀ᵐ x ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S),
-          (hessianMatrix u x - δ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef := by
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal),
+      ConvexOn ℝ univ u ∧
+        LipschitzWith L u ∧
+          (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+            ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+                (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+              ContDiff ℝ 1 u ∧
+                LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+                  (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+                      (hessianMatrix u x).PosDef ∧
+                        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+                          ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) -
+                              hessianMatrix u x).PosSemidef) ∧
+                    ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+                      IsCompact S →
+                        ∃ δ : ℝ,
+                          0 < δ ∧
+                            ∀ᵐ x ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S),
+                              (hessianMatrix u x -
+                                  δ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef := by
   obtain ⟨u, L, hconv, hLip, hnorm, hmap, hC1, hgradLip, hdata⟩ :=
     exists_regular_moment_potential hn hκ hK hKc hKint hW hstrong μ hμ hiso
   refine ⟨u, L, hconv, hLip, hnorm, hmap, hC1, hgradLip, hdata, ?_⟩
@@ -468,8 +497,9 @@ theorem exists_regular_moment_potential_locally_elliptic {n : ℕ} (hn : 0 < n)
   have hg : Continuous (fun x => -u x + W (gradient u x)) :=
     hC1.continuous.neg.add (hW.continuous.comp hgradc)
   intro S hS
-  exact ae_posSemidef_hessianMatrix_sub_of_log_det hn
-    (div_pos (by norm_num : (0 : ℝ) < 16) hκ) hg hdata hS
+  exact
+    ae_posSemidef_hessianMatrix_sub_of_log_det hn (div_pos (by norm_num : (0 : ℝ) < 16) hκ) hg
+      hdata hS
 
 end FunctionalInequalities.Analysis
 

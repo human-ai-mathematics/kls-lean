@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Probability.Covariance.Positivity
+module
+
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Probability.Covariance.Positivity
 
 /-!
 # Full affine support of isotropic laws
@@ -8,6 +10,8 @@ An isotropic law has identity covariance, hence an injective covariance operator
 support. This module proves the fact with light imports; the Section 2 reduction module restates
 it with heavier imports.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 

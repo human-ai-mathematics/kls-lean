@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
 
 /-!
 # Affine transport and compactness of supporting images
@@ -7,6 +9,8 @@ Supporting convex infrastructure for Letwin arXiv:2607.24164v1
 Theorem 1.2 and Lemma 2.2. Mathematical scopes and source attributions
 are retained in the individual declarations.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set
@@ -26,7 +30,7 @@ private lemma affineEquiv_linear_sub
     (e.linear : E →ₗ[ℝ] E) (a - b) = e a - e b := by
   change (AffineEquiv.toAffineMap e).linear (a - b) =
     (AffineEquiv.toAffineMap e) a - (AffineEquiv.toAffineMap e) b
-  exact (AffineEquiv.toAffineMap e).linearMap_vsub a b
+  exact (AffineEquiv.toAffineMap e).linear_apply_vsub a b
 
 variable [FiniteDimensional ℝ E]
 
@@ -143,30 +147,29 @@ open scoped Topology
 /-- Actual domain supporting slopes based on a compact subset of an open C0
 convex domain form a compact set. The bound and closed graph are produced, not
 assumed; empty compact sets and zero dimension are included. -/
-theorem isCompact_subgradientImageOn_of_isCompact
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {v : E → ℝ} {Ω K : Set E}
-    (hΩ : IsOpen Ω) (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω)
-    (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
+theorem isCompact_subgradientImageOn_of_isCompact {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {v : E → ℝ} {Ω K : Set E} (hΩ : IsOpen Ω)
+    (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
     IsCompact (subgradientImageOn v Ω K) := by
-  obtain ⟨R,_hR,_hex,hbound⟩ := exists_uniform_subgradient_bound_on_compact hΩ hv hvc hK hKΩ
+  obtain ⟨R, _hR, _hex, hbound⟩ := exists_uniform_subgradient_bound_on_compact hΩ hv hvc hK hKΩ
   let : CompactSpace K := isCompact_iff_compactSpace.mp hK
-  let A : Set (K × E) := {q | q.2 ∈ closedBall (0 : E) R ∧
-    ∀ y ∈ Ω, v q.1.val + ⟪q.2,y-q.1.val⟫ ≤ v y}
+  let A : Set (K × E) :=
+    {q | q.2 ∈ closedBall (0 : E) R ∧ ∀ y ∈ Ω, v q.1.val + ⟪q.2, y - q.1.val⟫ ≤ v y}
   have hAc : IsClosed A :=
-    (isClosed_closedBall.preimage continuous_snd).inter (isClosed_subgradient_graphOn (hvc.mono hKΩ))
+    (isClosed_closedBall.preimage continuous_snd).inter
+      (isClosed_subgradient_graphOn (hvc.mono hKΩ))
   have hAk : IsCompact A :=
     (isCompact_univ.prod (isCompact_closedBall (0 : E) R)).of_isClosed_subset hAc
-      (fun _ hq => ⟨mem_univ _,hq.1⟩)
+      (fun _ hq => ⟨mem_univ _, hq.1⟩)
   have heq : Prod.snd '' A = subgradientImageOn v Ω K := by
     ext p
     constructor
-    · rintro ⟨⟨x,q⟩,hx,rfl⟩
-      exact ⟨x.val,x.property,hx.2⟩
-    · rintro ⟨x,hx,hp⟩
-      refine ⟨(⟨x,hx⟩,p),⟨?_,hp⟩,rfl⟩
-      simpa only [mem_closedBall,dist_zero_right] using hbound x hx p hp
-  rw [←heq]
+    · rintro ⟨⟨x, q⟩, hx, rfl⟩
+      exact ⟨x.val, x.property, hx.2⟩
+    · rintro ⟨x, hx, hp⟩
+      refine ⟨(⟨x, hx⟩, p), ⟨?_, hp⟩, rfl⟩
+      simpa only [mem_closedBall, dist_zero_right] using hbound x hx p hp
+  rw [← heq]
   exact hAk.image continuous_snd
 
 end FunctionalInequalities.Analysis

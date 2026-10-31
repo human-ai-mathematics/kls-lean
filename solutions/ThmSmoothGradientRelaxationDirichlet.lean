@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `thm:smooth-gradient-relaxation-dirichlet`
@@ -13,6 +15,8 @@ No absolute continuity, density or log-concavity is assumed and dimension zero i
 Nothing here identifies the relaxation with a Cheeger energy, asserts a Poincaré inequality, or
 transfers the Markov property to the covariance-weighted relaxations.
 -/
+
+@[expose] public section
 
 noncomputable section
 

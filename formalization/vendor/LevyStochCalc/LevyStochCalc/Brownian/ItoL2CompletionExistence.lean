@@ -3,7 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoL2CompletionLp
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility, the measurability witness the
+-- v4.35.0 `eLpNorm` norm formula requires) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoL2CompletionLp
 
 /-!
 # Brownian Itô integral: existence of the `L²` integral
@@ -14,6 +20,8 @@ the `L²` Itô integral of a bounded, respectively progressively measurable and
 square-integrable, integrand against a Brownian motion `W` on a Brownian
 filtration `ℱ`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -447,7 +455,7 @@ theorem itoIsometry_brownian_existence
   -- Bridge eLpNorm² to lintegral_sq.
   have h_pow_lemma := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
     (μ := P) (p := (2 : NNReal)) (f := (↑↑Mlp : Ω → ℝ))
-    (by norm_num : (2 : NNReal) ≠ 0)
+    (by norm_num : (2 : NNReal) ≠ 0) (MeasureTheory.Lp.aestronglyMeasurable Mlp)
   have h_two_R : ((2 : NNReal) : ℝ) = (2 : ℝ) := by norm_num
   have h_two_ENNReal : ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) := by simp
   rw [h_two_ENNReal, h_two_R] at h_pow_lemma
@@ -493,7 +501,7 @@ theorem stochasticIntegral_isometry_only_brownian
           (h_sq_int_global T hT)) ω
     else 0, ?_⟩
   intro T hT
-  simp only [dif_pos hT]
+  simp only [dite_eq_left hT]
   exact (Classical.choose_spec
     (itoIsometry_brownian_existence W ℱ hℱ hT H h_meas h_progMeas
       (h_sq_int_global T hT))).2

@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.RegularFibreFinite
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.RegularFibreFinite
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the finiteness of the regular fibres
 
 **What is proved.**  Exactly route obligation `R5` of
-`research/audits/Vector/RankDeficientRouteStatements.lean`, whose proposition is restated **verbatim**
+`research/audits/Vector/RankDeficientRouteStatements.lean`, whose proposition is restated
+**verbatim**
 below as `route_R5` and discharged.  **No coarea formula in a new case, no slicing statement about
 the critical set and no Sard theorem is proved here.**
 
@@ -22,6 +25,8 @@ the rest of the obligations.
 **Boundary cases.**  The empty piece, and the transfer between the normalized and the raw Hausdorff
 measure in both directions (`hausdorffNormalized_ne_top_iff`), are covered.
 -/
+
+@[expose] public section
 
 noncomputable section
 

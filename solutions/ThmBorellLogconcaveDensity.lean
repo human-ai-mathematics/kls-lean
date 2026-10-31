@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `thm:borell-logconcave-density`
@@ -11,11 +13,14 @@ the support and positive two-sided bounds on its compact subsets. These properti
 the certificate's existential quantifier. The separate `IsBorellDensity` theorems
 `pos_of_mem_interior_support`, `continuousOn_interior_support` and `exists_bounds_of_isCompact`
 establish positivity, continuity and compact bounds for every such representative.
-The certificate also states that the support is its own closed convex hull; the law has no mass outside the interior of
+The certificate also states that the support is its own closed convex hull; the law has no mass
+outside the interior of
 its support; and it has an exponential moment, hence finite moments of every order. Singular
 ambient laws and zero-dimensional affine supports are included. No Poincaré, Cheeger, Dirichlet
 or KLS conclusion is packaged here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -144,4 +149,5 @@ info: 'FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_interior_
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_interior_support_nonempty
+  #print axioms
+    FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_interior_support_nonempty

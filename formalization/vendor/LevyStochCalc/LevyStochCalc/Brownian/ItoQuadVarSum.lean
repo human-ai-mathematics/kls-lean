@@ -3,8 +3,16 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoIncrementMoment
-import LevyStochCalc.Probability.MartingaleDifference
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_two_rpow_eq_lintegral_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoIncrementMoment
+public import LevyStochCalc.Probability.MartingaleDifference
 
 /-!
 # Compensated square increments of the Itô integral
@@ -27,6 +35,8 @@ partition is a sum of martingale differences.
 * `LevyStochCalc.Brownian.Ito.exists_continuous_modification_stochasticIntegralBrownian` — the
   Itô integral of a bounded integrand has a modification with continuous paths.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -144,10 +154,10 @@ end QuadVarIncrement
 theorem memLp_two_of_lintegral_sq_lt_top {P' : Measure Ω} {f : Ω → ℝ}
     (hf : MeasureTheory.AEStronglyMeasurable f P')
     (h : ∫⁻ ω, (‖f ω‖₊ : ℝ≥0∞) ^ 2 ∂P' < ⊤) : MemLp f 2 P' := by
-  refine ⟨hf, ?_⟩
+  rw [MeasureTheory.memLp_iff]
   by_contra hcon
   have htop : MeasureTheory.eLpNorm f 2 P' = ⊤ := top_le_iff.mp (not_lt.mp hcon)
-  rw [← eLpNorm_two_rpow_eq_lintegral_sq f, htop,
+  rw [← eLpNorm_two_rpow_eq_lintegral_sq f hf, htop,
     ENNReal.top_rpow_of_pos (by norm_num : (0 : ℝ) < 2)] at h
   exact lt_irrefl _ h
 

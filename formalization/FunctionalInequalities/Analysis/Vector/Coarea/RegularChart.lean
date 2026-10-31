@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Vector.Graph.CoareaJacobian
-import FunctionalInequalities.Analysis.LocalInverse
-import FunctionalInequalities.Analysis.Graph.OpenIntegral
-import FunctionalInequalities.Analysis.Vector.Graph.Area
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.CoareaJacobian
+public import FunctionalInequalities.Analysis.LocalInverse
+public import FunctionalInequalities.Analysis.Graph.OpenIntegral
+public import FunctionalInequalities.Analysis.Vector.Graph.Area
 
 /-! # Codimension-`m` charts for a family of regular levels
 
@@ -14,7 +16,8 @@ codimension-`m` analogue of `RegularChart.lean`, whose scalar chart is
 The chart here maps into a **product**, `Φ x = (ιᵀ x, u x) : H × W`, so no identification of the
 normal factor with the ambient space is needed.  Its derivative at a regular point is the
 continuous linear equivalence `flattenVectorEquiv`, whose inverse is written down explicitly —
-`(y, w) ↦ ι y + κ (Q⁻¹ w)` with `Q = L ∘ κ` — rather than obtained from a dimension count.  Mathlib's
+`(y, w) ↦ ι y + κ (Q⁻¹ w)` with `Q = L ∘ κ` — rather than obtained from a dimension count.
+Mathlib's
 inverse function theorem, through the repository's `exists_contDiffOn_localInverse`, then gives a
 `C¹` chart with a `C¹` inverse, and the splitting turns the inverse into a graph:
 
@@ -23,13 +26,16 @@ inverse function theorem, through the repository's `exists_contDiffOn_localInver
 `exists_levelGraphFamily` packages this with a globally `C¹` representative `ψ` of the height, an
 open parameter domain `Ω` and the open neighbourhood `N` it parametrizes bijectively.  Combined with
 the fibre Jacobian identity of `Graph/CoareaJacobian.lean` and the area formula
-`hausdorffNormalized_image_vectorGraphMap` of `Graph/Area.lean`, this is everything the local
+`hausdorffNormalized_image_vectorGraphMap` of
+`Analysis/Vector/Graph/Area.lean`, this is everything the local
 coarea equality needs except the fibrewise `m`-dimensional change of variables.
 
 **No coarea formula is proved here**, and no integration is performed.  There is no regularity
 hypothesis outside `O`: the chart is built from the local `C¹` representative
 `exists_contDiff_eqOn_ball`, exactly as in the scalar file.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Euclidean.WeakDerivative
-import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
+module
+
+public import FunctionalInequalities.Energy.Euclidean.WeakDerivative
+public import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
 
 /-!
 # A locally integrable function with zero weak gradient is almost everywhere constant
@@ -14,6 +16,8 @@ invariance and the fundamental lemma of the calculus of variations this gives `h
 almost everywhere, for every `v`. A Fubini argument on `V × V` then shows that a function
 invariant under every translation up to null sets is almost everywhere constant.
 -/
+
+@[expose] public section
 
 noncomputable section
 

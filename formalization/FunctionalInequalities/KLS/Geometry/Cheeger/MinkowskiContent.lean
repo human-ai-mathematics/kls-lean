@@ -1,10 +1,12 @@
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.MeasureTheory.Measure.Prod
-import Mathlib.MeasureTheory.Integral.Lebesgue.DominatedConvergence
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.Topology.MetricSpace.Thickening
+module
+
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.MeasureTheory.Measure.Prod
+public import Mathlib.MeasureTheory.Integral.Lebesgue.DominatedConvergence
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.Topology.MetricSpace.Thickening
 
 /-!
 # Outer Minkowski content and the Minkowski coarea inequality
@@ -29,6 +31,8 @@ the near-neighbour witness `thickening_superlevel_subset`, then the coarea inequ
 Nothing here depends on the weighted coarea formula, Sard or the relative perimeter:
 the module imports no local module at all, only Mathlib.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -103,8 +107,8 @@ theorem lowerSemicontinuous_openBallSup (hK : LipschitzWith K u) (hr : 0 < r) :
   exact hta.trans_le (le_csSup (bddAbove_image_ball hK r y) ⟨z, hzy, rfl⟩)
 
 /-- The open-ball supremum of a Lipschitz function is Borel measurable. -/
-theorem measurable_openBallSup [MeasurableSpace V] [OpensMeasurableSpace V] (hK : LipschitzWith K u) (hr : 0 < r) :
-    Measurable (openBallSup u r) :=
+theorem measurable_openBallSup [MeasurableSpace V] [OpensMeasurableSpace V]
+    (hK : LipschitzWith K u) (hr : 0 < r) : Measurable (openBallSup u r) :=
   (lowerSemicontinuous_openBallSup hK hr).measurable
 
 /-- Near-neighbour witness with open balls: a point of the open `r`-thickening of a closed
@@ -170,16 +174,16 @@ theorem exists_measure_thickening_lt_top (ν : Measure V) {B : Set V} (hνB : ν
 
 /-- Restriction preserves the lower content when a positive thickening is contained in
 the measurable restriction region. No mass-finiteness assumption is needed. -/
-theorem minkowskiContent_restrict_of_thickening_subset (ν : Measure V) {B U : Set V} (hU : MeasurableSet U)
-    {δ : ℝ} (hδ : 0 < δ) (hsub : Metric.thickening δ B ⊆ U) :
+theorem minkowskiContent_restrict_of_thickening_subset (ν : Measure V) {B U : Set V}
+    (hU : MeasurableSet U) {δ : ℝ} (hδ : 0 < δ) (hsub : Metric.thickening δ B ⊆ U) :
     minkowskiContent (ν.restrict U) B = minkowskiContent ν B := by
   have hB : B ⊆ U := (Metric.self_subset_thickening hδ B).trans hsub
   unfold minkowskiContent
   apply liminf_congr
   filter_upwards [Ioo_mem_nhdsGT hδ] with r hr
   have ht : Metric.thickening r B ⊆ U := (Metric.thickening_mono hr.2.le B).trans hsub
-  rw [Measure.restrict_apply' hU, Measure.restrict_apply' hU,
-    Set.inter_eq_left.2 ht, Set.inter_eq_left.2 hB]
+  rw [Measure.restrict_apply' hU, Measure.restrict_apply' hU, Set.inter_eq_left.2 ht,
+    Set.inter_eq_left.2 hB]
 /-- The whole carrier has zero lower content for every measure, including infinite total mass.
 This fact about truncated content does not assert zero bounded-support perimeter. -/
 theorem minkowskiContent_univ (ν : Measure V) : minkowskiContent ν (Set.univ : Set V) = 0 := by
@@ -193,17 +197,19 @@ theorem minkowskiContent_univ (ν : Measure V) : minkowskiContent ν (Set.univ :
   rw [liminf_congr he, liminf_const]
 
 /-- Finite Minkowski content forces the closure to carry no extra mass. -/
-theorem measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
-    (h : minkowskiContent ν B ≠ ⊤) :
+theorem measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure V) [IsFiniteMeasure ν]
+    {B : Set V} (h : minkowskiContent ν B ≠ ⊤) :
     (ν : Measure V) (closure B) = (ν : Measure V) B := by
   by_contra hne
   have hle : (ν : Measure V) B ≤ (ν : Measure V) (closure B) := measure_mono subset_closure
   have hlt : (ν : Measure V) B < (ν : Measure V) (closure B) := lt_of_le_of_ne hle (Ne.symm hne)
   set δ : ℝ≥0∞ := (ν : Measure V) (closure B) - (ν : Measure V) B with hδ
   have hδpos : 0 < δ := tsub_pos_of_lt hlt
-  have hle2 : ∀ r : ℝ, 0 < r →
-      δ / ENNReal.ofReal r ≤
-        ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r := by
+  have hle2 :
+    ∀ r : ℝ,
+      0 < r →
+        δ / ENNReal.ofReal r ≤
+          ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r := by
     intro r hr
     apply ENNReal.div_le_div_right
     have hsub : closure B ⊆ Metric.thickening r B := Metric.closure_subset_thickening hr B
@@ -220,10 +226,13 @@ theorem measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure V) [IsFinite
     refine h2.congr' ?_
     filter_upwards [self_mem_nhdsWithin] with r hr
     rw [ENNReal.ofReal_inv_of_pos hr, div_eq_mul_inv]
-  have hliminf_top : liminf (fun r : ℝ ↦ δ / ENNReal.ofReal r) (𝓝[>] 0) = ⊤ := htendsto.liminf_eq
-  have hmono2 : liminf (fun r : ℝ ↦ δ / ENNReal.ofReal r) (𝓝[>] 0) ≤
-      liminf (fun r : ℝ ↦
-        ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r)
+  have hliminf_top : liminf (fun r : ℝ ↦ δ / ENNReal.ofReal r) (𝓝[>] 0) = ⊤ :=
+    htendsto.liminf_eq
+  have hmono2 :
+    liminf (fun r : ℝ ↦ δ / ENNReal.ofReal r) (𝓝[>] 0) ≤
+      liminf
+        (fun r : ℝ ↦
+          ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r)
         (𝓝[>] 0) :=
     liminf_le_liminf (by filter_upwards [self_mem_nhdsWithin] with r hr; exact hle2 r hr)
   rw [hliminf_top] at hmono2
@@ -235,17 +244,18 @@ variable {V : Type*} [MetricSpace V] [MeasurableSpace V] [BorelSpace V]
 /-- Measurable-strip layer cake and Fatou bound the content integral by the liminf
 of integrated majorant growth at any positive radii tending to zero. This is the
 sequence-growth step before dominated reverse Fatou, on arbitrary metric Borel spaces. -/
-theorem lintegral_minkowskiContent_superlevel_le_liminf_of_majorant (ν : Measure V) [IsFiniteMeasure ν]
-    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) {r : ℕ → ℝ} (hrpos : ∀ n, 0 < r n)
-    (hr0 : Tendsto r atTop (𝓝 0)) {w : ℕ → V → ℝ} (hwmeas : ∀ n, Measurable (w n))
-    (hwit : ∀ n t, Metric.thickening (r n) {x | t ≤ u x} ⊆
-      {x | u x < t ∧ t ≤ w n x} ∪ {x | t ≤ u x}) :
+theorem lintegral_minkowskiContent_superlevel_le_liminf_of_majorant (ν : Measure V)
+    [IsFiniteMeasure ν] {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) {r : ℕ → ℝ}
+    (hrpos : ∀ n, 0 < r n) (hr0 : Tendsto r atTop (𝓝 0)) {w : ℕ → V → ℝ}
+    (hwmeas : ∀ n, Measurable (w n))
+    (hwit :
+      ∀ n t,
+        Metric.thickening (r n) {x | t ≤ u x} ⊆ {x | u x < t ∧ t ≤ w n x} ∪ {x | t ≤ u x}) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       liminf (fun n : ℕ => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂ν) atTop := by
   classical
   have hrW : Tendsto r atTop (𝓝[>] (0 : ℝ)) :=
-    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hr0
-      (Eventually.of_forall hrpos)
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hr0 (Eventually.of_forall hrpos)
   have humeas : Measurable u := hK.continuous.measurable
   set T : ℕ → Set (ℝ × V) := fun n => {p | u p.2 < p.1 ∧ p.1 ≤ w n p.2} with hTdef
   have hTmeas : ∀ n, MeasurableSet (T n) := fun n =>
@@ -258,58 +268,80 @@ theorem lintegral_minkowskiContent_superlevel_le_liminf_of_majorant (ν : Measur
   have hGmeas : ∀ n, Measurable (G n) := by
     intro n
     simpa [hGdef, div_eq_mul_inv] using
-      (hmeasfun n).mul_const ((ENNReal.ofReal (r n))⁻¹)
+      (hmeasfun n).mul_const
+        ((ENNReal.ofReal (r n))⁻¹)
   -- Step 1: the near-neighbour witness bounds the content by a measurable strip quotient.
+
   have step1 : ∀ t : ℝ, minkowskiContent ν {x | t ≤ u x} ≤ liminf (fun n => G n t) atTop := by
     intro t
-    have h1 : minkowskiContent ν {x | t ≤ u x} ≤
-        liminf (fun n => ((ν : Measure V) (Metric.thickening (r n) {x | t ≤ u x}) -
-          (ν : Measure V) {x | t ≤ u x}) / ENNReal.ofReal (r n)) atTop := by
-      have hcomp := hrW.liminf_le_liminf_comp (u := fun s : ℝ =>
-        ((ν : Measure V) (Metric.thickening s {x | t ≤ u x}) -
-          (ν : Measure V) {x | t ≤ u x}) / ENNReal.ofReal s)
+    have h1 :
+      minkowskiContent ν {x | t ≤ u x} ≤
+        liminf
+          (fun n =>
+            ((ν : Measure V) (Metric.thickening (r n) {x | t ≤ u x}) -
+                (ν : Measure V) {x | t ≤ u x}) /
+              ENNReal.ofReal (r n))
+          atTop := by
+      have hcomp :=
+        hrW.liminf_le_liminf_comp (u := fun s : ℝ =>
+          ((ν : Measure V) (Metric.thickening s {x | t ≤ u x}) -
+              (ν : Measure V) {x | t ≤ u x}) /
+            ENNReal.ofReal s)
       simpa [minkowskiContent, Function.comp_def] using hcomp
     refine h1.trans (liminf_le_liminf (Eventually.of_forall fun n => ?_))
     refine ENNReal.div_le_div_right (tsub_le_iff_right.mpr ?_) _
-    calc (ν : Measure V) (Metric.thickening (r n) {x | t ≤ u x})
-        ≤ (ν : Measure V) (S n t ∪ {x | t ≤ u x}) := measure_mono (hwit n t)
-      _ ≤ (ν : Measure V) (S n t) + (ν : Measure V) {x | t ≤ u x} := measure_union_le _ _
+    calc
+      (ν : Measure V) (Metric.thickening (r n) {x | t ≤ u x}) ≤
+          (ν : Measure V) (S n t ∪ {x | t ≤ u x}) :=
+        measure_mono (hwit n t)
+      _ ≤ (ν : Measure V) (S n t) + (ν : Measure V) {x | t ≤ u x} :=
+        measure_union_le _
+          _
   -- Step 2: Tonelli turns the strip integral into the growth quotient.
-  have step2 : ∀ n, ∫⁻ t, G n t ∂(volume : Measure ℝ) =
-      ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂(ν : Measure V) := by
+
+  have step2 :
+    ∀ n,
+      ∫⁻ t, G n t ∂(volume : Measure ℝ) =
+        ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂(ν : Measure V) := by
     intro n
-    have hrne : ENNReal.ofReal (r n) ≠ 0 := by
-      simp [ENNReal.ofReal_eq_zero, not_le, hrpos n]
+    have hrne : ENNReal.ofReal (r n) ≠ 0 := by simp [ENNReal.ofReal_eq_zero, not_le, hrpos n]
     have hinvne : (ENNReal.ofReal (r n))⁻¹ ≠ ⊤ := ENNReal.inv_ne_top.mpr hrne
     have hsec : ∀ x : V, (fun t : ℝ => (t, x)) ⁻¹' T n = Set.Ioc (u x) (w n x) := by
       intro x
       ext t
       simp [hTdef, Set.mem_Ioc]
-    calc ∫⁻ t, G n t ∂(volume : Measure ℝ)
-        = ∫⁻ t, (ν : Measure V) (Prod.mk t ⁻¹' T n) * (ENNReal.ofReal (r n))⁻¹
-            ∂(volume : Measure ℝ) := by
-          simp [hGdef, hTdef, hSdef, div_eq_mul_inv]
-      _ = (∫⁻ t, (ν : Measure V) (Prod.mk t ⁻¹' T n) ∂(volume : Measure ℝ)) *
-            (ENNReal.ofReal (r n))⁻¹ := lintegral_mul_const' _ _ hinvne
+    calc
+      ∫⁻ t, G n t ∂(volume : Measure ℝ) =
+          ∫⁻ t,
+            (ν : Measure V) (Prod.mk t ⁻¹' T n) *
+              (ENNReal.ofReal (r n))⁻¹ ∂(volume : Measure ℝ) := by
+        simp [hGdef, hTdef, hSdef, div_eq_mul_inv]
+      _ =
+          (∫⁻ t, (ν : Measure V) (Prod.mk t ⁻¹' T n) ∂(volume : Measure ℝ)) *
+            (ENNReal.ofReal (r n))⁻¹ :=
+        lintegral_mul_const' _ _ hinvne
       _ = ((volume : Measure ℝ).prod (ν : Measure V)) (T n) * (ENNReal.ofReal (r n))⁻¹ := by
-          rw [Measure.prod_apply (hTmeas n)]
-      _ = (∫⁻ x, (volume : Measure ℝ) ((fun t : ℝ => (t, x)) ⁻¹' T n) ∂(ν : Measure V)) *
-            (ENNReal.ofReal (r n))⁻¹ := by rw [Measure.prod_apply_symm (hTmeas n)]
-      _ = (∫⁻ x, ENNReal.ofReal (w n x - u x) ∂(ν : Measure V)) *
+        rw [Measure.prod_apply (hTmeas n)]
+      _ =
+          (∫⁻ x, (volume : Measure ℝ) ((fun t : ℝ => (t, x)) ⁻¹' T n) ∂(ν : Measure V)) *
             (ENNReal.ofReal (r n))⁻¹ := by
-          congr 1
-          refine lintegral_congr fun x => ?_
-          rw [hsec x, Real.volume_Ioc]
-      _ = ∫⁻ x, ENNReal.ofReal (w n x - u x) * (ENNReal.ofReal (r n))⁻¹
-            ∂(ν : Measure V) := (lintegral_mul_const' _ _ hinvne).symm
+        rw [Measure.prod_apply_symm (hTmeas n)]
+      _ = (∫⁻ x, ENNReal.ofReal (w n x - u x) ∂(ν : Measure V)) * (ENNReal.ofReal (r n))⁻¹ := by
+        congr 1
+        refine lintegral_congr fun x => ?_
+        rw [hsec x, Real.volume_Ioc]
+      _ = ∫⁻ x, ENNReal.ofReal (w n x - u x) * (ENNReal.ofReal (r n))⁻¹ ∂(ν : Measure V) :=
+        (lintegral_mul_const' _ _ hinvne).symm
       _ = ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂(ν : Measure V) := by
-          refine lintegral_congr fun x => ?_
-          rw [ENNReal.ofReal_div_of_pos (hrpos n), div_eq_mul_inv]
-  calc ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ)
-      ≤ ∫⁻ t, liminf (fun n => G n t) atTop ∂(volume : Measure ℝ) := lintegral_mono step1
+        refine lintegral_congr fun x => ?_
+        rw [ENNReal.ofReal_div_of_pos (hrpos n), div_eq_mul_inv]
+  calc
+    ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
+        ∫⁻ t, liminf (fun n => G n t) atTop ∂(volume : Measure ℝ) :=
+      lintegral_mono step1
     _ ≤ liminf (fun n => ∫⁻ t, G n t ∂(volume : Measure ℝ)) atTop := lintegral_liminf_le hGmeas
-    _ = liminf (fun n => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n)
-          ∂(ν : Measure V)) atTop := by simp only [step2]
+    _ = liminf (fun n => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂(ν : Measure V)) atTop := by
+      simp only [step2]
 
 
 /-- Layer cake for a globally Lipschitz function with an abstract measurable majorant family
@@ -318,21 +350,24 @@ at most `K · r n`, the superlevel-content integral is at most the integrated li
 quotients `(w n x - u x) / r n`.  The proof is the near-neighbour witness, measurable strips,
 Tonelli, Fatou and reverse Fatou under the uniform Lipschitz bound; it holds on every metric
 space with a Borel probability law. -/
-theorem lintegral_minkowskiContent_superlevel_le_limsup_of_majorant (ν : Measure V) [IsFiniteMeasure ν]
-    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) {r : ℕ → ℝ} (hrpos : ∀ n, 0 < r n)
-    (hr0 : Tendsto r atTop (𝓝 0)) {w : ℕ → V → ℝ} (hwmeas : ∀ n, Measurable (w n))
-    (hwit : ∀ n t, Metric.thickening (r n) {x | t ≤ u x} ⊆
-      {x | u x < t ∧ t ≤ w n x} ∪ {x | t ≤ u x})
+theorem lintegral_minkowskiContent_superlevel_le_limsup_of_majorant (ν : Measure V)
+    [IsFiniteMeasure ν] {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) {r : ℕ → ℝ}
+    (hrpos : ∀ n, 0 < r n) (hr0 : Tendsto r atTop (𝓝 0)) {w : ℕ → V → ℝ}
+    (hwmeas : ∀ n, Measurable (w n))
+    (hwit :
+      ∀ n t, Metric.thickening (r n) {x | t ≤ u x} ⊆ {x | u x < t ∧ t ≤ w n x} ∪ {x | t ≤ u x})
     (hwle : ∀ n x, w n x ≤ u x + K * r n) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, limsup (fun n : ℕ => ENNReal.ofReal ((w n x - u x) / r n)) atTop ∂(ν : Measure V) := by
-  have hlower := lintegral_minkowskiContent_superlevel_le_liminf_of_majorant ν hK hrpos hr0 hwmeas hwit
-  have humeas : Measurable u := hK.continuous.measurable
+  have hlower :=
+    lintegral_minkowskiContent_superlevel_le_liminf_of_majorant ν hK hrpos hr0 hwmeas hwit
+  have humeas : Measurable u :=
+    hK.continuous.measurable
   -- Step 3: the growth quotients are uniformly bounded by the Lipschitz constant.
-  have hqmeas : ∀ n, Measurable fun x : V => ENNReal.ofReal ((w n x - u x) / r n) :=
-    fun n => (((hwmeas n).sub humeas).div_const _).ennreal_ofReal
-  have hqbound : ∀ n, ∀ x : V,
-      ENNReal.ofReal ((w n x - u x) / r n) ≤ ENNReal.ofReal (K : ℝ) := by
+
+  have hqmeas : ∀ n, Measurable fun x : V => ENNReal.ofReal ((w n x - u x) / r n) := fun n =>
+    (((hwmeas n).sub humeas).div_const _).ennreal_ofReal
+  have hqbound : ∀ n, ∀ x : V, ENNReal.ofReal ((w n x - u x) / r n) ≤ ENNReal.ofReal (K : ℝ) := by
     intro n x
     refine ENNReal.ofReal_le_ofReal ?_
     rw [div_le_iff₀ (hrpos n)]
@@ -340,9 +375,12 @@ theorem lintegral_minkowskiContent_superlevel_le_limsup_of_majorant (ν : Measur
   have hgfin : ∫⁻ _ : V, ENNReal.ofReal (K : ℝ) ∂(ν : Measure V) ≠ ⊤ := by
     rw [lintegral_const]
     exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (measure_ne_top _ _)
-  calc ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ)
-      ≤ liminf (fun n => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂ν) atTop := hlower
-    _ ≤ limsup (fun n => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂ν) atTop := liminf_le_limsup
+  calc
+    ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
+        liminf (fun n => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂ν) atTop :=
+      hlower
+    _ ≤ limsup (fun n => ∫⁻ x, ENNReal.ofReal ((w n x - u x) / r n) ∂ν) atTop :=
+      liminf_le_limsup
     _ ≤ ∫⁻ x, limsup (fun n => ENNReal.ofReal ((w n x - u x) / r n)) atTop ∂ν :=
       limsup_lintegral_le _ hqmeas (fun n => Eventually.of_forall (hqbound n)) hgfin
 

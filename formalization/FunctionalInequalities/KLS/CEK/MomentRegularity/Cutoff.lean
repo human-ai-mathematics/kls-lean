@@ -1,13 +1,17 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
 
 /-!
 # Regular-source height cutoffs and bounded weak cutoff testing
 -/
+
+@[expose] public section
 
 section RegularSource
 
@@ -41,9 +45,12 @@ open scoped ContDiff Topology RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-/-- The regular-class moment potential with weak inverse-Hessian height cutoffs: the same `u, L, LF, T` and the
-whole payload of `exists_regular_moment_bounded_weak_hessian_testing`, plus one shift `c` and one constant `C`
-with the real-parameter cutoff family of `exists_scaled_weak_inverse_hessian_cutoffs` for this `u` and `W`.
+/-- The regular-class moment potential with weak inverse-Hessian height cutoffs: the same `u, L, LF,
+T` and the
+whole payload of `exists_regular_moment_bounded_weak_hessian_testing`, plus one shift `c` and one
+constant `C`
+with the real-parameter cutoff family of `exists_scaled_weak_inverse_hessian_cutoffs` for this `u`
+and `W`.
 No analytic premise is added. Not A.5, (2.14), Theorem 2.5 or constant 8. -/
 theorem exists_regular_moment_weak_cutoffs :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
@@ -63,7 +70,8 @@ theorem exists_regular_moment_weak_cutoffs :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -177,11 +185,13 @@ theorem exists_regular_moment_weak_cutoffs :
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -227,8 +237,10 @@ namespace FunctionalInequalities.Analysis
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- At the same regular moment witness `u`, `L`, `LF`, `T` and common cutoff family as
-`exists_regular_moment_weak_cutoffs` (whole payload retained), every globally bounded locally integrable weak `η`
-with compact-local L2 coordinate derivatives satisfies the rough inverse-Hessian cutoff-generator identity for all `r ≥ 1`. -/
+`exists_regular_moment_weak_cutoffs` (whole payload retained), every globally bounded locally
+integrable weak `η`
+with compact-local L2 coordinate derivatives satisfies the rough inverse-Hessian cutoff-generator
+identity for all `r ≥ 1`. -/
 theorem exists_regular_moment_bounded_weak_cutoff_testing :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
@@ -247,7 +259,8 @@ theorem exists_regular_moment_bounded_weak_cutoff_testing :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -361,11 +374,13 @@ theorem exists_regular_moment_bounded_weak_cutoff_testing :
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧

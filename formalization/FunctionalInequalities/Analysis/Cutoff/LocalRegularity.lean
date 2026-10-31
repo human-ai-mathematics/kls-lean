@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
-import Mathlib.Analysis.Calculus.ContDiff.Operations
+module
+
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
 
 /-!
 # Cutting off a locally regular function
@@ -17,6 +19,8 @@ set containing the cutoff's support.
 
 No Green representation or harmonic derivative estimate is proved here.
 -/
+
+@[expose] public section
 noncomputable section
 open scoped Topology ContDiff
 namespace FunctionalInequalities.Analysis

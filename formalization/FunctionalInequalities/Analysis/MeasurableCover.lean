@@ -1,7 +1,9 @@
-import Mathlib.MeasureTheory.MeasurableSpace.Constructions
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.Topology.Compactness.Lindelof
-import Mathlib.Order.Disjointed
+module
+
+public import Mathlib.MeasureTheory.MeasurableSpace.Constructions
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.Topology.Compactness.Lindelof
+public import Mathlib.Order.Disjointed
 
 /-! # Countable measurable partitions subordinate to open covers
 
@@ -9,6 +11,8 @@ A nonempty measurable subset of a second-countable space is partitioned into
 countably many measurable pieces, each inside one member of an open cover
 indexed by the points of a containing set. No measure or finiteness is needed.
 -/
+
+@[expose] public section
 noncomputable section
 open Set
 namespace FunctionalInequalities.Analysis

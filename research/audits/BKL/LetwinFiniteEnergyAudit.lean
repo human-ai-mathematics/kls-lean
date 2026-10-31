@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
-import FunctionalInequalities.Analysis.Matrix.Positivity
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import Mathlib.LinearAlgebra.Matrix.Notation
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
+public import FunctionalInequalities.Analysis.Matrix.Positivity
+public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+public import Mathlib.LinearAlgebra.Matrix.Notation
 
 /-!
 # Audit: finite-energy Brascamp–Lieb supports
@@ -13,6 +15,8 @@ inverse-quadratic Young inequality `inverse_quadratic_young` for a nonidentity d
 also cover the compactly supported coercivity `compact_ordinary_diffusion_coercivity`. Not
 Brascamp–Lieb or A.6.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
@@ -44,8 +48,7 @@ theorem inverse_quadratic_young_diag_client : (-2 : ℝ) ≤ 47 / 2 := by
     change Hᵀ = H
     ext i j
     fin_cases i <;> fin_cases j <;> simp [H]
-  have hposvec : ∀ ⦃x : Fin 2 → ℝ⦄, x ≠ 0 →
-      0 < star x ⬝ᵥ (H *ᵥ x) := by
+  have hposvec : ∀ ⦃x : Fin 2 → ℝ⦄, x ≠ 0 → 0 < star x ⬝ᵥ (H *ᵥ x) := by
     intro x hx
     have hquad : star x ⬝ᵥ (H *ᵥ x) = x 0 ^ 2 + 2 * x 1 ^ 2 := by
       simp [H, Matrix.mulVec, dotProduct, Fin.sum_univ_two, pow_two]
@@ -78,8 +81,7 @@ theorem inverse_quadratic_young_diag_client : (-2 : ℝ) ≤ 47 / 2 := by
       linarith
   have hyoung := inverse_quadratic_young H hH v w
   rw [hinv_v] at hyoung
-  convert hyoung using 1 <;>
-    norm_num [H, v, w, Matrix.mulVec, dotProduct, Fin.sum_univ_two]
+  convert hyoung using 1 <;> norm_num [H, v, w, Matrix.mulVec, dotProduct, Fin.sum_univ_two]
 
 end LetwinFiniteEnergyAudit
 

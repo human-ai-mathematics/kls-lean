@@ -1,12 +1,16 @@
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.MeasureTheory.Measure.Prod
-import Mathlib.Analysis.InnerProductSpace.ProdL2
+module
+
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+public import Mathlib.MeasureTheory.Measure.Prod
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-! # Fubini across an orthogonal splitting of the target
 
-An orthogonal splitting of the target combines two iterated almost-everywhere statements into one almost-everywhere statement about the target level.
+An orthogonal splitting of the target combines two iterated almost-everywhere statements into one
+almost-everywhere statement about the target level.
 
-**What target-split Fubini is for.**  The route slices twice: first in codimension `r` by the regular component
+**What target-split Fubini is for.**  The route slices twice: first in codimension `r` by the
+regular component
 `P ∘ u`, then in codimension `m − r` by `Q ∘ u` inside each fibre.  What that produces is "for
 almost every `s ∈ W₁`, for almost every `τ ∈ W₁ᗮ`", while the conclusion has to be about almost
 every `t ∈ W`.  Target-split Fubini combines the quantifiers that joins the two levels.
@@ -20,6 +24,8 @@ complement `Submodule.orthogonalDecomposition` is exactly such an isometry.
 No differentiability, no Hausdorff measure and no regularity appears: this is a statement about one
 measurable set.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -47,15 +53,19 @@ theorem measurableSet_splitPreimage (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂
     e.symm.continuous.measurable.comp (MeasurableEquiv.toLp 2 (W₁ × W₂)).measurable
   exact hmeas hN
 
-/-- **target-split Fubini: Fubini across an orthogonal splitting of the target.**  If almost every first-coordinate
+/--
+**target-split Fubini: Fubini across an orthogonal splitting of the target.**  If almost every
+first-coordinate
 slice of `N` is null, then `N` is null.
 
 This is what turns "for almost every `s`, for almost every `τ`" into "for almost every
-`t`".  The splitting is an arbitrary linear isometry onto `WithLp 2 (W₁ × W₂)`; in applications it is
+`t`".  The splitting is an arbitrary linear isometry onto `WithLp 2 (W₁ × W₂)`; in applications it
+is
 the orthogonal decomposition along the range of the differential. -/
 theorem measure_eq_zero_of_ae_slice_eq_zero (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂)) {N : Set W}
     (hN : MeasurableSet N)
-    (h : ∀ᵐ s ∂(volume : Measure W₁),
+    (h :
+      ∀ᵐ s ∂(volume : Measure W₁),
         (volume : Measure W₂) {τ : W₂ | e.symm (WithLp.toLp 2 (s, τ)) ∈ N} = 0) :
     (volume : Measure W) N = 0 := by
   classical
@@ -63,16 +73,20 @@ theorem measure_eq_zero_of_ae_slice_eq_zero (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁
   have hN'meas : MeasurableSet N' := e.symm.continuous.measurable hN
   set M : Set (W₁ × W₂) := {p : W₁ × W₂ | e.symm (WithLp.toLp 2 p) ∈ N} with hM
   have hMmeas : MeasurableSet M := measurableSet_splitPreimage e hN
-  have hMeq : M = (fun p : W₁ × W₂ => WithLp.toLp 2 p) ⁻¹' N' := rfl
+  have hMeq : M = (fun p : W₁ × W₂ => WithLp.toLp 2 p) ⁻¹' N' :=
+    rfl
   -- the `WithLp` synonym and the isometry are both measure preserving
+
   have hprod : (volume : Measure (W₁ × W₂)) M = (volume : Measure (WithLp 2 (W₁ × W₂))) N' := by
     rw [hMeq]
     exact (WithLp.volume_preserving_toLp W₁ W₂).measure_preimage hN'meas.nullMeasurableSet
   have hiso : (volume : Measure (WithLp 2 (W₁ × W₂))) N' = (volume : Measure W) N :=
-    (e.symm.measurePreserving).measure_preimage hN.nullMeasurableSet
+    (e.symm.measurePreserving).measure_preimage
+      hN.nullMeasurableSet
   -- Fubini for the product measure
-  have hslice : (volume : Measure (W₁ × W₂)) M
-      = ∫⁻ s, (volume : Measure W₂) (Prod.mk s ⁻¹' M) := by
+
+  have hslice :
+    (volume : Measure (W₁ × W₂)) M = ∫⁻ s, (volume : Measure W₂) (Prod.mk s ⁻¹' M) := by
     rw [Measure.volume_eq_prod, Measure.prod_apply hMmeas]
   have hzero : ∫⁻ s, (volume : Measure W₂) (Prod.mk s ⁻¹' M) = 0 := by
     refine lintegral_eq_zero_of_ae_eq_zero ?_

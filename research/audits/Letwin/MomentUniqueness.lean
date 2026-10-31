@@ -1,8 +1,12 @@
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
 
 /-! Client of the uniqueness of finite moment potentials with bounded-support moment measure
 (Cordero-Erausquin–Klartag arXiv:1304.0630v1, Theorem 2; Letwin arXiv:2607.24164v1, Lemma 2.1),
 with its Prékopa–Leindler, maximality and translation supports. -/
+
+@[expose] public section
 noncomputable section
 namespace LetwinMomentUniquenessAudit
 open MeasureTheory Set FunctionalInequalities.Probability.MomentMeasure
@@ -44,16 +48,22 @@ theorem iff_client {n : ℕ} {ψ₀ : EuclideanSpace ℝ (Fin n) → ℝ}
 end LetwinMomentUniquenessAudit
 #print axioms FunctionalInequalities.Analysis.lintegral_prekopaLeindler
 #print axioms FunctionalInequalities.Analysis.lintegral_slice_prekopaLeindler
-#print axioms FunctionalInequalities.Probability.MomentMeasure.translate_moment_potential_of_normalized
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_linear_lower_bound_of_integrable_exp_neg
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.translate_moment_potential_of_normalized
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_linear_lower_bound_of_integrable_exp_neg
 #print axioms FunctionalInequalities.Probability.MomentMeasure.ae_norm_gradient_le
 #print axioms FunctionalInequalities.Probability.MomentMeasure.legendre_gradient
 #print axioms FunctionalInequalities.Probability.MomentMeasure.inner_sub_le_legendre_toReal
 #print axioms FunctionalInequalities.Probability.MomentMeasure.measurable_legendre_toReal
 #print axioms FunctionalInequalities.Probability.MomentMeasure.ae_legendre_ne_top
-#print axioms FunctionalInequalities.Probability.MomentMeasure.lintegral_le_exp_integral_of_map_gradient
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_integrable_exp_mul_abs_legendre
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_map_gradient_eq
-#print axioms FunctionalInequalities.Probability.MomentMeasure.map_gradient_eq_iff_exists_eq_translate
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.lintegral_le_exp_integral_of_map_gradient
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_integrable_exp_mul_abs_legendre
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_eq_translate_of_map_gradient_eq
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.map_gradient_eq_iff_exists_eq_translate
 #print axioms LetwinMomentUniquenessAudit.translate_client
 #print axioms LetwinMomentUniquenessAudit.iff_client

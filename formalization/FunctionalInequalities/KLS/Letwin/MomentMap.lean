@@ -1,10 +1,12 @@
-import FunctionalInequalities.KLS.Letwin.Approximation
-import FunctionalInequalities.KLS.Letwin.HessianTrace
-import FunctionalInequalities.KLS.CEK.MomentRegularity.GivenGradient
-import FunctionalInequalities.KLS.Klartag.HessianBound
-import FunctionalInequalities.KLS.Klartag.MomentLimit
-import FunctionalInequalities.Analysis.LocalExtension
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport
+module
+
+public import FunctionalInequalities.KLS.Letwin.Approximation
+public import FunctionalInequalities.KLS.Letwin.HessianTrace
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.GivenGradient
+public import FunctionalInequalities.KLS.Klartag.HessianBound
+public import FunctionalInequalities.KLS.Klartag.MomentLimit
+public import FunctionalInequalities.Analysis.LocalExtension
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport
 
 /-!
 # Smooth moment potentials for bounded open convex supports
@@ -62,6 +64,8 @@ Not claimed: Klartag's Theorem 1.1 constant `2R²` (the statement gives some uni
 bound suffices for Theorem 2.5); Klartag Lemma 2.3 is used only for `C¹` potentials; uniqueness
 for laws with unbounded support.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Topology Set
@@ -303,9 +307,7 @@ private theorem smooth_moment_calculus_of_potential
   have hprob : IsProbabilityMeasure ((volume : Measure E).tilted (-φ)) :=
     isProbabilityMeasure_tilted_neg_of_integral_eq_one _ φ hnorm
   let ν : ProbabilityMeasure E := ⟨(volume : Measure E).tilted (-φ), hprob⟩
-  have hgm : Measurable (gradient φ) :=
-    (continuous_gradient (hφ.of_le (WithTop.coe_le_coe.mpr le_top))).measurable
-  have hνμ : ν.map hgm.aemeasurable = μ := by
+  have hνμ : ν.map (gradient φ) = μ := by
     apply ProbabilityMeasure.toMeasure_injective
     rw [ProbabilityMeasure.toMeasure_map]
     exact hmap
@@ -572,31 +574,40 @@ include hn hKb hKo hKc hKne hU hKU hV hVc hμ hiso in
 also satisfies `E_ν tr(B ∇²φ B ∇²φ) ≤ 2 tr(B²)` for every real symmetric `B`, with
 `ν = e^{-φ} dx`, and the integrand is `ν`-integrable. -/
 theorem exists_smooth_moment_potential_trace_le_of_bounded_open_convex :
-    ∃ (φ : E → ℝ) (C : ℝ), ConvexOn ℝ univ φ ∧ ContDiff ℝ ∞ φ ∧
-      (∫ x, Real.exp (-φ x) ∂(volume : Measure E)) = 1 ∧
-      ((volume : Measure E).tilted (-φ)).map (gradient φ) =
-        (μ : Measure E) ∧
-      (∀ x, (hessianMatrix φ x).PosDef) ∧
-      (∀ x, Real.log (hessianMatrix φ x).det = -φ x + V (gradient φ x)) ∧
-      (∃ e : E ≃ₜ K, ∀ x, (e x : E) = gradient φ x) ∧
-      (∃ Ψ : E → E,
-        Function.LeftInverse Ψ (gradient φ) ∧ (∀ y ∈ K, gradient φ (Ψ y) = y) ∧
-          ContDiffOn ℝ ∞ Ψ K) ∧
-      (∀ x, (C • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix φ x).PosSemidef) ∧
-      ∀ B : Matrix (Fin n) (Fin n) ℝ, B.IsSymm →
-        Integrable (fun x => (B * hessianMatrix φ x * B * hessianMatrix φ x).trace)
-            ((volume : Measure E).tilted (-φ)) ∧
-          (∫ x, (B * hessianMatrix φ x * B * hessianMatrix φ x).trace
-            ∂((volume : Measure E).tilted (-φ))) ≤ 2 * (B * B).trace := by
+    ∃ (φ : E → ℝ) (C : ℝ),
+      ConvexOn ℝ univ φ ∧
+        ContDiff ℝ ∞ φ ∧
+          (∫ x, Real.exp (-φ x) ∂(volume : Measure E)) = 1 ∧
+            ((volume : Measure E).tilted (-φ)).map (gradient φ) = (μ : Measure E) ∧
+              (∀ x, (hessianMatrix φ x).PosDef) ∧
+                (∀ x, Real.log (hessianMatrix φ x).det = -φ x + V (gradient φ x)) ∧
+                  (∃ e : E ≃ₜ K, ∀ x, (e x : E) = gradient φ x) ∧
+                    (∃ Ψ : E → E,
+                        Function.LeftInverse Ψ (gradient φ) ∧
+                          (∀ y ∈ K, gradient φ (Ψ y) = y) ∧ ContDiffOn ℝ ∞ Ψ K) ∧
+                      (∀ x,
+                          (C • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix φ x).PosSemidef) ∧
+                        ∀ B : Matrix (Fin n) (Fin n) ℝ,
+                          B.IsSymm →
+                            Integrable
+                                (fun x => (B * hessianMatrix φ x * B * hessianMatrix φ x).trace)
+                                ((volume : Measure E).tilted (-φ)) ∧
+                              (∫ x,
+                                  (B * hessianMatrix φ x * B *
+                                      hessianMatrix φ
+                                        x).trace ∂((volume : Measure E).tilted (-φ))) ≤
+                                2 * (B * B).trace := by
   obtain ⟨φ, C, hc, hφ, hnorm, hmap, hPD, hMA, ⟨e, he⟩, hΨ, hC⟩ :=
-    exists_smooth_moment_potential_of_bounded_open_convex hn hKb hKo hKc hKne hU hKU hV hVc μ hμ hiso
+    exists_smooth_moment_potential_of_bounded_open_convex hn hKb hKo hKc hKne hU hKU hV hVc μ hμ
+      hiso
   have hrange : range (gradient φ) ⊆ K := by
     rintro _ ⟨x, rfl⟩
     rw [← he x]
     exact (e x).property
-  exact ⟨φ, C, hc, hφ, hnorm, hmap, hPD, hMA, ⟨e, he⟩, hΨ, hC, fun B hB =>
-    integral_trace_hessian_quadratic_le hKb hKo hU hKU hV hVc μ hiso hφ hnorm hmap hrange hPD hMA
-      ⟨C, hC⟩ B hB⟩
+  exact
+    ⟨φ, C, hc, hφ, hnorm, hmap, hPD, hMA, ⟨e, he⟩, hΨ, hC, fun B hB =>
+      integral_trace_hessian_quadratic_le hKb hKo hU hKU hV hVc μ hiso hφ hnorm hmap hrange hPD
+        hMA ⟨C, hC⟩ B hB⟩
 
 include hn hKb hKo hKc hKne hU hKU hV hVc hμ hiso in
 /-- **Letwin arXiv:2607.24164v1, Lemmas 2.3, 2.4, A.4, A.5 and A.6 at the produced potential.**

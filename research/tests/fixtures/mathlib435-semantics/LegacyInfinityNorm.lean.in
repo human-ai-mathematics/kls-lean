@@ -1,0 +1,21 @@
+import Mathlib.MeasureTheory.Function.LpSeminorm.Defs
+
+/-! This checks the literal old infinity-norm representation at the FC4.33 pin.
+It supplies statement correspondence, not a KLS theorem or current norm identity. -/
+
+open MeasureTheory
+open scoped ENNReal
+namespace LegacyInfinityNormAudit
+
+theorem old_norm_formula {X : Type*} [MeasurableSpace X] (μ : Measure X) (f : X → ℝ) :
+    eLpNorm f ∞ μ = eLpNormEssSup f μ := by
+  exact eLpNorm_exponent_top
+
+theorem original_statement_iff_explicit_formula {X : Type*} [MeasurableSpace X]
+    (μ : Measure X) (f : X → ℝ) (A : ℝ≥0∞) :
+    (eLpNorm f ∞ μ = A) ↔ (eLpNormEssSup f μ = A) := by
+  rw [old_norm_formula]
+
+#print axioms old_norm_formula
+#print axioms original_statement_iff_explicit_formula
+end LegacyInfinityNormAudit

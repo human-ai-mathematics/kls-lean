@@ -6,7 +6,15 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoL2Completion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_two_rpow_eq_lintegral_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoL2Completion
 
 /-!
 # Simple integrands as integrands of the `L²` Brownian Itô integral
@@ -18,6 +26,8 @@ elementary integrals of adapted simple integrands obey the Itô isometry for the
 an intermediate time, and the `L²` Itô integral of a simple integrand agrees almost everywhere
 with its elementary integral.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -36,8 +46,8 @@ theorem SimplePredictable.exists_eval_bound {T : ℝ} (G : SimplePredictable Ω 
     fun s ω => ?_⟩
   refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun i _ => ?_)
   by_cases h : G.partition i.castSucc < s ∧ s ≤ G.partition i.succ
-  · rw [if_pos h]; exact (hM i ω).trans (le_max_left _ _)
-  · rw [if_neg h, abs_zero]; exact le_max_right _ _
+  · rw [ite_eq_left h]; exact (hM i ω).trans (le_max_left _ _)
+  · rw [ite_eq_right h, abs_zero]; exact le_max_right _ _
 
 /-- The `L²`-mass of a simple integrand over any time window is finite. -/
 theorem SimplePredictable.lintegral_eval_sq_lt_top {T : ℝ} (G : SimplePredictable Ω T)
@@ -269,10 +279,11 @@ theorem stochasticIntegralBrownian_eval_simple {t : ℝ} (ht : 0 ≤ t) :
       MeasureTheory.setLIntegral_congr_fun measurableSet_Icc fun s _ => ?_
     rw [← nnnorm_neg, neg_sub]
   -- and to the `L²` Itô integral
-  have hconv : ∀ g : Ω → ℝ, MeasureTheory.eLpNorm g 2 P * MeasureTheory.eLpNorm g 2 P
-      = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂P := by
-    intro g
-    rw [← eLpNorm_two_rpow_eq_lintegral_sq,
+  have hconv : ∀ g : Ω → ℝ, MeasureTheory.AEStronglyMeasurable g P →
+      MeasureTheory.eLpNorm g 2 P * MeasureTheory.eLpNorm g 2 P
+        = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂P := by
+    intro g hg
+    rw [← eLpNorm_two_rpow_eq_lintegral_sq g hg,
       show (2 : ℝ) = ((2 : ℕ) : ℝ) from by norm_num, ENNReal.rpow_natCast, pow_two]
   have hB : Filter.Tendsto (fun n => ∫⁻ ω,
       (‖simpleIntegral W (masterApprox ℱ (fun ω s => G.eval s ω) hm hp hq n) t ω
@@ -280,7 +291,7 @@ theorem stochasticIntegralBrownian_eval_simple {t : ℝ} (ht : 0 ≤ t) :
           : ℝ≥0∞) ^ 2 ∂P) Filter.atTop (nhds 0) := by
     have h := masterApprox_tendsto_L2 W ℱ hℱ (fun ω s => G.eval s ω) hm hp hq ht
     have h2 := ENNReal.Tendsto.mul h (Or.inr (by simp)) h (Or.inr (by simp))
-    simpa [hconv] using h2
+    simpa using h2.congr fun n => hconv _ ((hIn n).sub hSI).aestronglyMeasurable
   -- squeeze
   have hle : ∫⁻ ω, (‖stochasticIntegralBrownian W ℱ hℱ (fun ω s => G.eval s ω) hm hp
       hq t ω - simpleIntegral W G t ω‖₊ : ℝ≥0∞) ^ 2 ∂P ≤ 0 := by

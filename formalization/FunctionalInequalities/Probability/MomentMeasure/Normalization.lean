@@ -1,16 +1,21 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Affine
-import FunctionalInequalities.Probability.Support.Convex
-import FunctionalInequalities.Probability.MomentMeasure.Affine
-import FunctionalInequalities.Probability.MomentMeasure.Truncation
-import FunctionalInequalities.Probability.MomentMeasure.Coercivity
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Affine
+public import FunctionalInequalities.Probability.Support.Convex
+public import FunctionalInequalities.Probability.MomentMeasure.Affine
+public import FunctionalInequalities.Probability.MomentMeasure.Truncation
+public import FunctionalInequalities.Probability.MomentMeasure.Coercivity
 
 /-!
 # Effective-domain interior from a lower bound
 
-`origin_mem_interior_domain_of_lower_bound`: the generic interior step used before supporting-plane normalization.
+`origin_mem_interior_domain_of_lower_bound`: the generic interior step used before supporting-plane
+normalization.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 

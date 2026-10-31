@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Sard.Planar
-import FunctionalInequalities.Analysis.Sard.Sharp
+module
+
+public import FunctionalInequalities.Analysis.Sard.Planar
+public import FunctionalInequalities.Analysis.Sard.Sharp
 
 /-!
 # Scope and axiom audit for the planar Sard theorem
@@ -22,6 +24,8 @@ sharp theorem already covers the planar statement, so the planar module is a sel
 elementary proof of a special case, not an ingredient of the sharp one; nothing here weakens or
 re-proves the sharp theorem.  No Cheeger, semigroup, Bakry–Émery or KLS content is involved.
 -/
+
+@[expose] public section
 
 noncomputable section
 

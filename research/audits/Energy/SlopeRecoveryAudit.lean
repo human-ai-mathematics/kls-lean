@@ -1,4 +1,6 @@
-import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
+module
+
+public import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 
 /-!
 # Scope audit for the smooth-recovery module `Energy/Euclidean/Slope/Recovery.lean`
@@ -23,6 +25,8 @@ Lipschitz constant vanishes).
 The axiom reports at the end cover every public declaration of the recovery module and every
 theorem of this client; each of them must list only `propext`, `Classical.choice` and `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

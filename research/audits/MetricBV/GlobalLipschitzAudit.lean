@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.Analysis.MetricBV.Approximation
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
+public import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for the globally Lipschitz test-class bridge of the metric
 BV perimeter on a finite Borel measure: the explicit truncated test and its pointwise bounds,
@@ -10,6 +12,8 @@ upper bound. An application uses an approximant that is not a test (the constant
 unbounded support). Only global Lipschitz functions and global `L¹` convergence are involved; no
 identification with local Lipschitz or `L¹_loc` classes and no BV--Minkowski identification is
 stated. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

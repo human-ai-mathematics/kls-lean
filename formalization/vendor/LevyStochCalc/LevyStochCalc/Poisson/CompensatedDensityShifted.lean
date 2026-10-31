@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedDensityDyadic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityDyadic
 
 /-!
 # The adapted (left-shifted) dyadic eval
@@ -14,6 +19,8 @@ measurable `φ`. Its almost-everywhere and `L²(P ⊗ ds ⊗ ν)` convergence to
 same Lebesgue-density and dominated-convergence arguments, the left shift contributing a
 vanishing displacement.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -54,9 +61,9 @@ lemma dyadicEvalShifted_eq_at_index
     rw [h_pcast, h_psucc]; exact hi_mem
   unfold dyadicEvalShifted
   rw [Finset.sum_eq_single i]
-  · rw [if_pos h_i_fires]
+  · rw [ite_eq_left h_i_fires]
   · intro j _ hji
-    refine if_neg (fun ⟨hj1, hj2⟩ => ?_)
+    refine ite_eq_right (fun ⟨hj1, hj2⟩ => ?_)
     rcases lt_trichotomy i j with hlt | heq | hgt
     · have := (dyadicPartition_strictMono hT n).monotone (Fin.succ_le_castSucc_iff.mpr hlt)
       linarith [h_i_fires.2]
@@ -84,11 +91,11 @@ lemma dyadicEvalShifted_bounded {T : ℝ} (hT : 0 < T) (φ : Ω → ℝ → E �
       · exact hj heq.symm
       · have := (dyadicPartition_strictMono hT n).monotone (Fin.succ_le_castSucc_iff.mpr hgt)
         linarith [hi₀.1]
-    rw [Finset.sum_eq_single i₀ (fun j _ hj => if_neg (huniq j hj))
-        (fun h => absurd (Finset.mem_univ _) h), if_pos hi₀]
+    rw [Finset.sum_eq_single i₀ (fun j _ hj => ite_eq_right (huniq j hj))
+        (fun h => absurd (Finset.mem_univ _) h), ite_eq_left hi₀]
     exact dyadicAvg_shifted_bounded hT φ hM n i₀ ω e
   · rw [not_exists] at h
-    rw [Finset.sum_eq_zero (fun i _ => if_neg (h i)), abs_zero]; exact le_max_right _ _
+    rw [Finset.sum_eq_zero (fun i _ => ite_eq_right (h i)), abs_zero]; exact le_max_right _ _
 
 /-- Joint `(ω, s, e)`-measurability of the shifted eval. -/
 lemma dyadicEvalShifted_measurable_triple
@@ -206,7 +213,7 @@ lemma dyadicEvalShifted_ae_tendsto_per_param
       dyadicEvalShifted T φ n x ω e = ⨍ y in Metric.closedBall (w n) (δ n), φ ω y e ∂volume := by
     filter_upwards [hev1] with n hn1
     have hival : (dyadicIndex n T hT x hx).val ≠ 0 := by omega
-    rw [dyadicEvalShifted_eq_at_index hT φ n x hx ω e, dyadicAvg_shifted, dif_neg hival]
+    rw [dyadicEvalShifted_eq_at_index hT φ n x hx ω e, dyadicAvg_shifted, dite_eq_right hival]
     change dyadicAvg T φ n (jp n) ω e = _
     rw [dyadicAvg_eq_average_closedBall hT φ n (jp n) ω e]
   exact Filter.Tendsto.congr' (hbridge.mono (fun n h => h.symm)) (h_leb_x w δ hδ_nhds hxball)

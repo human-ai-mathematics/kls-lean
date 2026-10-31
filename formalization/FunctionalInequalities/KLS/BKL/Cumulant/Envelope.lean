@@ -1,7 +1,9 @@
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Data.Nat.Choose.Basic
-import Mathlib.Algebra.Order.BigOperators.Group.Finset
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
+public import Mathlib.Data.Nat.Choose.Basic
+public import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
 /-!
 # The cumulant envelope of BKL Section 6
@@ -11,6 +13,8 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Section 6, (94)–(106): the enve
 `C(m-1, a-1) √(b_a b_{m-a+1}) = √b_m` and the recurrence `b_m = K (m-1)² b_{m-1}`. These are the
 deterministic arithmetic of the induction; they prove nothing about cumulants by themselves.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -85,12 +89,12 @@ theorem choose_mul_sqrt_envelope {K : ℝ} (hK : 0 ≤ K) {m a : ℕ} (ha : 1 �
       _ = Real.sqrt (K ^ (m - 1)) * ((m - 1).factorial : ℝ) := by
         rw [hfac]
 
-/-- **The envelope recurrence** used to close the induction: `b_m = K (m-1)² b_{m-1}` for `m ≥ 2`. -/
+/--
+**The envelope recurrence** used to close the induction: `b_m = K (m-1)² b_{m-1}` for `m ≥ 2`. -/
 theorem envelope_succ (K : ℝ) {m : ℕ} (hm : 2 ≤ m) :
     envelope K m = K * ((m - 1 : ℕ) : ℝ) ^ 2 * envelope K (m - 1) := by
   obtain ⟨k, rfl⟩ : ∃ k, m = k + 2 := ⟨m - 2, by omega⟩
-  simp only [envelope, show k + 2 - 1 = k + 1 by omega,
-    Nat.factorial_succ, pow_succ]
+  simp only [envelope, show k + 2 - 1 = k + 1 by omega, Nat.factorial_succ, pow_succ]
   push_cast
   ring
 

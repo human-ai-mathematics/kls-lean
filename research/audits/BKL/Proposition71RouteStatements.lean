@@ -1,21 +1,28 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Law
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import FunctionalInequalities.Analysis.Tensor.Coefficients
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Law
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import FunctionalInequalities.Analysis.Tensor.Coefficients
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements: BKL Proposition 7.1
 
 This file contains only `#check`s. A proposition that type-checks is not a proof. Source:
-Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Proposition 7.1 and its proof, pp. 28–30. The joint law of `(S, X₁, …, X_N)`
-lives on `JointSpace N n = EuclideanSpace ℝ (Option (Fin N × Fin n))` (`KLS/BKL/Suspension/Law.lean`):
+Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Proposition 7.1 and its proof, pp. 28–30. The joint law of
+`(S, X₁, …, X_N)`
+lives on `JointSpace N n = EuclideanSpace ℝ (Option (Fin N × Fin n))`
+(`KLS/BKL/Suspension/Law.lean`):
 `none` is `S`, `some (i, j)` the `j`-th coordinate of `X_i`.
 
 * `R1` isotropy of the joint law from (108); `R2` the density (109); `R3` its log-concavity under
-  (110); `R4` (111) and `R5` (112) for the source's chosen `N`; `R6` the Hilbert–Schmidt lower bound; `R7` (113) for smooth `f`
+  (110); `R4` (111) and `R5` (112) for the source's chosen `N`; `R6` the Hilbert–Schmidt lower
+  bound; `R7` (113) for smooth `f`
   satisfying (108); `R8` (113) for every `f` orthogonal to the affine functions; `M71` (107).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -57,7 +64,8 @@ open scoped RealInnerProductSpace ContDiff
 
 /-! ## `R4` (111) and `R5` (112), for a regular law and `f ∈ C²` with bounded Hessian, under (110)
 
-The source fixes `N` by (110), `β M/√N ≤ a`; the joint law is then log-concave (`logConcave_jointLaw`)
+The source fixes `N` by (110), `β M/√N ≤ a`; the joint law is then log-concave
+(`logConcave_jointLaw`)
 and `Λ_ν` is smooth near `0` (`exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw`).
 `R4`: at a point `z` with `z none = 0`, the derivative of `Λ_ν` along `e_none` is
 `(σ√N)⁻¹ Σ_i F_f(z_i)`. `R5`: the mixed cumulant entries, for `d ≥ 1` (for `d = 0` the sum over the
@@ -86,15 +94,26 @@ and `Λ_ν` is smooth near `0` (`exists_integrable_exp_norm_contDiffOn_logLaplac
 
 /-! ## `R6`: the Hilbert–Schmidt lower bound after (112), `|κ(e₀)|² ≥ (d!)²/σ² |T_d f|²` -/
 
-#check (∀ {n N : ℕ}, 0 < N → ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
-    (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M : ℝ},
-    ContDiff ℝ ∞ f → (∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) → ∀ {β : ℝ}, 0 < β →
-    ∀ d : ℕ, 1 ≤ d →
-      (d.factorial : ℝ) ^ 2 / sigma β ^ 2 *
-          ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
-        ∑ K : Fin d → Option (Fin N × Fin n),
-          cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
-            (Fin.cons (EuclideanSpace.single none 1) fun k => EuclideanSpace.single (K k) 1) ^ 2)
+#check
+  (∀ {n N : ℕ},
+    0 < N →
+      ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ} (hV : KLS.RegularPotential V a b')
+        {f : EuclideanSpace ℝ (Fin n) → ℝ} {M : ℝ},
+        ContDiff ℝ ∞ f →
+          (∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) →
+            ∀ {β : ℝ},
+              0 < β →
+                ∀ d : ℕ,
+                  1 ≤ d →
+                    (d.factorial : ℝ) ^ 2 / sigma β ^ 2 *
+                        ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
+                              (taylorTensor (hV.law : Measure _) f d)‖ ^
+                          2 ≤
+                      ∑ K : Fin d → Option (Fin N × Fin n),
+                        cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
+                            (Fin.cons (EuclideanSpace.single none 1) fun k =>
+                              EuclideanSpace.single (K k) 1) ^
+                          2)
 
 /-! ## `R7`: (113) for smooth `f` with bounded Hessian satisfying (108) -/
 

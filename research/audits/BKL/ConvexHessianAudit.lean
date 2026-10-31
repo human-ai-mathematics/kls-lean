@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Translation
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Translation
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Audit: mean Hessian of a convex potential (Letwin Lemma 2.3, analytic part)
@@ -20,7 +22,8 @@ namespace ConvexHessianAudit
 
 abbrev E := EuclideanSpace ℝ (Fin 1)
 /-- The standard Gaussian on `ℝ¹` as the law of the regular potential `‖x‖²/2`. -/
-noncomputable def gaussian : ProbabilityMeasure E := (KLS.regularPotential_half_norm_sq (E := E)).law
+noncomputable def gaussian : ProbabilityMeasure E :=
+  (KLS.regularPotential_half_norm_sq (E := E)).law
 noncomputable def direction : E := EuclideanSpace.basisFun (Fin 1) ℝ 0
 theorem gaussian_id_memLp : MemLp (id : E → E) 2 (gaussian : Measure E) :=
   KLS.LogConcave.memLp_id_two (KLS.regularPotential_half_norm_sq (E := E)).logConcave_law
@@ -83,11 +86,13 @@ private theorem phi_gradL2 : MemLp (gradient φ) 2 ((volume : Measure E).tilted 
 
 theorem actual_nonzero_mean_hessian :
     (∫ x, bilinearIteratedFDerivTwo ℝ φ x direction direction ∂(gaussian : Measure E)) = 1 := by
-  have h := Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn φ phi_smooth phi_convex
-    (Integrable.of_integral_ne_zero (by rw [phi_normalized]; norm_num)) phi_normalized phi_gradL2 direction direction
+  have h :=
+    Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn φ phi_smooth
+      phi_convex (Integrable.of_integral_ne_zero (by rw [phi_normalized]; norm_num))
+      phi_normalized phi_gradL2 direction direction
   rw [phi_law] at h
-  have hf : (fun x => fderiv ℝ φ x direction * fderiv ℝ φ x direction) =
-      fun x => ⟪direction, x⟫ ^ 2 := by
+  have hf :
+    (fun x => fderiv ℝ φ x direction * fderiv ℝ φ x direction) = fun x => ⟪direction, x⟫ ^ 2 := by
     funext x
     rw [(phi_hasFDerivAt x).fderiv]
     simp only [innerSL_apply_apply, real_inner_comm, pow_two]
@@ -136,7 +141,8 @@ end ConvexHessianAudit
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_scaled_mul_hessian_tilted_eq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integrable_hessian_diag_tilted_of_convexOn
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integrable_hessian_tilted_of_convexOn
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn
 #print axioms FunctionalInequalities.KLS.integral_hessian_eq_inner_of_isotropic_map
 #print axioms ConvexHessianAudit.actual_nonzero_mean_hessian
 #print axioms ConvexHessianAudit.actual_zero_dimension_mean_hessian

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Cutoff.Profile
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Cutoff.Profile
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: scalar cutoff profile of Letwin Lemma A.4
 
@@ -9,6 +11,8 @@ majorant `w` of `|η″|` is interval-integrable on `[0, 3]` and vanishes at `4`
 `η(5/(n+1))` starts at `0` for `n = 0`, is monotone and tends to `1`, so it is not constant
 either.
 -/
+
+@[expose] public section
 
 open Filter
 open FunctionalInequalities.Analysis
@@ -21,13 +25,17 @@ theorem profile_values :
   ⟨smoothTransition_two_sub_cutoff.2.2.2.1 0 (by norm_num),
     smoothTransition_two_sub_cutoff.2.2.2.2.1 3 (by norm_num)⟩
 
-/-- The majorant is interval-integrable on `[0, 3]` (its integral is the constant of the defect bound) and vanishes at `4`. -/
+/--
+The majorant is interval-integrable on `[0, 3]` (its integral is the constant of the defect bound)
+and vanishes at `4`. -/
 theorem majorant_integrable_and_vanishing :
-    ∃ w : ℝ → ℝ, (∀ t, |deriv (deriv (fun s : ℝ => Real.smoothTransition (2 - s))) t| ≤ w t) ∧
-      IntervalIntegrable w MeasureTheory.volume 0 3 ∧ w 4 = 0 ∧ 0 ≤ ∫ t in (0 : ℝ)..3, w t := by
+    ∃ w : ℝ → ℝ,
+      (∀ t, |deriv (deriv (fun s : ℝ => Real.smoothTransition (2 - s))) t| ≤ w t) ∧
+        IntervalIntegrable w MeasureTheory.volume 0 3 ∧ w 4 = 0 ∧ 0 ≤ ∫ t in (0 : ℝ)..3, w t := by
   obtain ⟨w, hw, -, hw0, hws, hmaj⟩ := exists_majorant_abs_deriv_deriv_smoothTransition_two_sub
-  exact ⟨w, hmaj, hw.continuous.intervalIntegrable 0 3, hws 4 (Or.inr (by norm_num)),
-    intervalIntegral.integral_nonneg (by norm_num) (fun t _ => hw0 t)⟩
+  exact
+    ⟨w, hmaj, hw.continuous.intervalIntegrable 0 3, hws 4 (Or.inr (by norm_num)),
+      intervalIntegral.integral_nonneg (by norm_num) (fun t _ => hw0 t)⟩
 
 /-- The exhaustion at `a = 5` starts at `0`, is monotone and tends to `1`. -/
 theorem exhaustion_five :

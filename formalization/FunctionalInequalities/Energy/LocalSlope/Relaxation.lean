@@ -1,7 +1,9 @@
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.L2.MeanVariance
+module
+
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
+public import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+public import FunctionalInequalities.L2.MeanVariance
 
 /-!
 # The asymptotic Lipschitz constant and the `L²` relaxation of the local-slope energy
@@ -28,6 +30,8 @@ for every Borel probability law on a finite-dimensional inner-product space in
 foundational module does not use that equality. The identification concerns relaxed energies,
 not agreement on individual tests, a finiteness assertion, or a Poincaré inequality.
 -/
+
+@[expose] public section
 
 noncomputable section
 

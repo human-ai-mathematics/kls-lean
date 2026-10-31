@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the vector-valued sandwich estimates
@@ -11,6 +13,8 @@ that feeds the limit argument of the codimension-`m` graph area formula.
 **The area formula is not proved here**: the limit `ε → 0` and the countable patching are audited
 in `GraphAreaAudit.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

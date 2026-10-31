@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 
 /-!
 # Audit: centered range density for the standard Gaussian law
@@ -12,6 +14,8 @@ in the closure of the compact smooth diffusion images, by the library theorem
 `centered_mem_closure_compactSmoothDiffusionImage`. Every premise is derived here. Not
 Brascamp–Lieb, A.6 or a moment-map client.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -94,6 +98,8 @@ theorem gaussian_nonzero_client :
 
 end LetwinCenteredRangeAudit
 
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.centered_mem_closure_compactSmoothDiffusionImage
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.center_mem_closure_compactSmoothDiffusionImage
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.centered_mem_closure_compactSmoothDiffusionImage
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.center_mem_closure_compactSmoothDiffusionImage
 #print axioms LetwinCenteredRangeAudit.gaussian_nonzero_client

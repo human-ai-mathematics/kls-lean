@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Energy.SmoothGradient.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Const
-import Mathlib.Analysis.Normed.Lp.SmoothApprox
-import Mathlib.MeasureTheory.Function.LocallyIntegrable
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Energy.SmoothGradient.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Const
+public import Mathlib.Analysis.Normed.Lp.SmoothApprox
+public import Mathlib.MeasureTheory.Function.LocallyIntegrable
 
 /-!
 # Density of the smooth-gradient realization
@@ -15,6 +17,8 @@ the exact `PreEnergy.DenseRealization` interface used by sequential relaxation.
 Here `C∞` is represented by `ContDiff ℝ ∞`. No analytic (`ContDiff ℝ ⊤`) regularity
 is imposed.
 -/
+
+@[expose] public section
 
 noncomputable section
 

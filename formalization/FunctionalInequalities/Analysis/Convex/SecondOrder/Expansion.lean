@@ -1,25 +1,31 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
-import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
-import FunctionalInequalities.Analysis.Convex.Proximal
-import Mathlib.MeasureTheory.Integral.Lebesgue.Add
-import Mathlib.Analysis.Calculus.Taylor
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import FunctionalInequalities.Analysis.Sard.Equidimensional
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.MeasureTheory.Function.Jacobian
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Taylor
+public import FunctionalInequalities.Analysis.Convex.Proximal
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Add
+public import Mathlib.Analysis.Calculus.Taylor
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import FunctionalInequalities.Analysis.Sard.Equidimensional
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.MeasureTheory.Function.Jacobian
 
 /-!
 # Second-order differentiability of convex functions (Alexandrov's theorem)
 
-First-order expansions of the subgradient through the resolvent of the subdifferential, integrated second
-differences, and Alexandrov's theorem that a convex function has a second-order Taylor expansion almost everywhere
+First-order expansions of the subgradient through the resolvent of the subdifferential, integrated
+second
+differences, and Alexandrov's theorem that a convex function has a second-order Taylor expansion
+almost everywhere
 .
 
 * `subgradient_expansion_of_hasFDerivAt_resolvent`;
 * `tendsto_integral_secondDifference_mul`, `integral_mul_le_integral_mul_sum_iteratedFDeriv`;
 * `ae_exists_secondOrder_expansion`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -147,18 +153,25 @@ private lemma resolvent_absorb_remainder (T : E ≃L[ℝ] E) {K c : ℝ}
   nlinarith only [hb, hm]
 
 set_option maxHeartbeats 800000 in
-/-- **Inverting the resolvent at a point of invertible differentiability** (Alexandrov's theorem):
+/--
+**Inverting the resolvent at a point of invertible differentiability** (Alexandrov's theorem):
 let `P` be the resolvent of `f` (`z − P z` is a subgradient of `f` at
-`P z` for every `z`). If `P` is differentiable at `z` with invertible derivative `T`, then `p₀ := z − P z` is
-the only subgradient of `f` at `x := P z`, and every subgradient `q` of `f` at `y` near `x` satisfies
+`P z` for every `z`). If `P` is differentiable at `z` with invertible derivative `T`, then `p₀ := z
+− P z` is
+the only subgradient of `f` at `x := P z`, and every subgradient `q` of `f` at `y` near `x`
+satisfies
 `‖q − p₀ − (T⁻¹ (y − x) − (y − x))‖ ≤ ε ‖y − x‖`. -/
 theorem subgradient_expansion_of_hasFDerivAt_resolvent {f : E → ℝ} {P : E → E}
     (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) {z : E} {T : E ≃L[ℝ] E}
     (hT : HasFDerivAt P (T : E →L[ℝ] E) z) :
     (∀ q : E, (∀ y, f (P z) + ⟪q, y - P z⟫ ≤ f y) → q = z - P z) ∧
-    ∀ ε > 0, ∀ᶠ y in 𝓝 (P z), ∀ q : E, (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
-      ‖q - (z - P z) - (T.symm (y - P z) - (y - P z))‖ ≤ ε * ‖y - P z‖ := by
+      ∀ ε > 0,
+        ∀ᶠ y in 𝓝 (P z),
+          ∀ q : E,
+            (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
+              ‖q - (z - P z) - (T.symm (y - P z) - (y - P z))‖ ≤ ε * ‖y - P z‖ := by
   -- Adding one also covers the zero-dimensional case without a case split.
+
   let K : ℝ := ‖(T.symm : E →L[ℝ] E)‖ + 1
   have hK : 0 < K := by
     dsimp [K]
@@ -174,36 +187,33 @@ theorem subgradient_expansion_of_hasFDerivAt_resolvent {f : E → ℝ} {P : E �
     dsimp [c]
     field_simp
   have hexp :
-      ∀ ε > 0, ∀ᶠ y in 𝓝 (P z), ∀ q : E,
-        (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
-          ‖q - (z - P z) - (T.symm (y - P z) - (y - P z))‖
-            ≤ ε * ‖y - P z‖ := by
+    ∀ ε > 0,
+      ∀ᶠ y in 𝓝 (P z),
+        ∀ q : E,
+          (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
+            ‖q - (z - P z) - (T.symm (y - P z) - (y - P z))‖ ≤ ε * ‖y - P z‖ := by
     intro ε hε
     let η : ℝ := min c (ε / (2 * K ^ 2))
     have hη : 0 < η := lt_min hc (by positivity)
     have hηc : η ≤ c := min_le_left _ _
     have hηε : 2 * K ^ 2 * η ≤ ε := by
-      have h := (le_div_iff₀ (by positivity : 0 < 2 * K ^ 2)).mp
-        (min_le_right c (ε / (2 * K ^ 2)))
+      have h :=
+        (le_div_iff₀ (by positivity : 0 < 2 * K ^ 2)).mp (min_le_right c (ε / (2 * K ^ 2)))
       nlinarith only [h]
-    obtain ⟨δ, hδ, hd⟩ :=
-      Metric.eventually_nhds_iff.mp (hT.isLittleO.def hη)
-    have hr (w : E) (hw : ‖w - z‖ < δ) :
-        ‖P w - P z - T (w - z)‖ ≤ η * ‖w - z‖ :=
-      hd (by
-        rw [dist_eq_norm]
-        exact hw)
-    have hlocal (w : E) (hw : ‖w - z‖ < δ) :
-        ‖w - z‖ ≤ 2 * K * ‖P w - P z‖ :=
+    obtain ⟨δ, hδ, hd⟩ := Metric.eventually_nhds_iff.mp (hT.isLittleO.def hη)
+    have hr (w : E) (hw : ‖w - z‖ < δ) : ‖P w - P z - T (w - z)‖ ≤ η * ‖w - z‖ :=
+      hd
+        (by
+          rw [dist_eq_norm]
+          exact hw)
+    have hlocal (w : E) (hw : ‖w - z‖ < δ) : ‖w - z‖ ≤ 2 * K * ‖P w - P z‖ :=
       resolvent_absorb_remainder T hK hnorm hKc (w - z) (P w - P z)
         ((hr w hw).trans (mul_le_mul_of_nonneg_right hηc (norm_nonneg _)))
-    have hl (w : E) (hw : ‖w - z‖ < δ) :
-        c * ‖w - z‖ ≤ ‖P w - P z‖ := by
+    have hl (w : E) (hw : ‖w - z‖ < δ) : c * ‖w - z‖ ≤ ‖P w - P z‖ := by
       have hm := mul_le_mul_of_nonneg_left (hlocal w hw) hc.le
       have he : c * (2 * K * ‖P w - P z‖) = ‖P w - P z‖ := by
         calc
-          c * (2 * K * ‖P w - P z‖) =
-              (2 * (K * c)) * ‖P w - P z‖ := by ring
+          c * (2 * K * ‖P w - P z‖) = (2 * (K * c)) * ‖P w - P z‖ := by ring
           _ = ‖P w - P z‖ := by rw [hKc]; ring
       rw [he] at hm
       exact hm
@@ -217,28 +227,21 @@ theorem subgradient_expansion_of_hasFDerivAt_resolvent {f : E → ℝ} {P : E �
         (by simpa only [hinv] using hy)
     have hR : ‖y - P z - T (y + q - z)‖ ≤ η * ‖y + q - z‖ := by
       simpa only [hinv] using hr (y + q) hnear
-    have hD : ‖y + q - z‖ ≤ 2 * K * ‖y - P z‖ := by
-      simpa only [hinv] using hlocal (y + q) hnear
-    have he :
-        T.symm (y - P z - T (y + q - z)) =
-          T.symm (y - P z) - (y + q - z) := by
+    have hD : ‖y + q - z‖ ≤ 2 * K * ‖y - P z‖ := by simpa only [hinv] using hlocal (y + q) hnear
+    have he : T.symm (y - P z - T (y + q - z)) = T.symm (y - P z) - (y + q - z) := by
       rw [map_sub, T.symm_apply_apply]
-    have hA :
-        ‖(y + q - z) - T.symm (y - P z)‖ ≤
-          K * ‖y - P z - T (y + q - z)‖ := by
+    have hA : ‖(y + q - z) - T.symm (y - P z)‖ ≤ K * ‖y - P z - T (y + q - z)‖ := by
       rw [norm_sub_rev, ← he]
-      exact ((T.symm : E →L[ℝ] E).le_opNorm _).trans
-        (mul_le_mul_of_nonneg_right hnorm (norm_nonneg _))
+      exact
+        ((T.symm : E →L[ℝ] E).le_opNorm _).trans
+          (mul_le_mul_of_nonneg_right hnorm (norm_nonneg _))
     have h₁ := mul_le_mul_of_nonneg_left hR hK.le
     have h₂ := mul_le_mul_of_nonneg_left hD (mul_nonneg hK.le hη.le)
     have h₃ := mul_le_mul_of_nonneg_right hηε (norm_nonneg (y - P z))
-    have hfinal :
-        ‖(y + q - z) - T.symm (y - P z)‖ ≤ ε * ‖y - P z‖ := by
+    have hfinal : ‖(y + q - z) - T.symm (y - P z)‖ ≤ ε * ‖y - P z‖ := by
       nlinarith only [hA, h₁, h₂, h₃]
     have halg :
-        q - (z - P z) - (T.symm (y - P z) - (y - P z)) =
-          (y + q - z) - T.symm (y - P z) := by
-      abel
+      q - (z - P z) - (T.symm (y - P z) - (y - P z)) = (y + q - z) - T.symm (y - P z) := by abel
     rw [halg]
     exact hfinal
   refine ⟨?_, hexp⟩
@@ -463,12 +466,20 @@ private lemma ofReal_mul_le_of_sub (a k : ℝ) (B : ENNReal)
 distributional log-det inequality): if `g` is below the lower limit of a
 nonnegative combination of second difference quotients of the convex `u` almost everywhere, then
 `∫ g χ ≤ ∫ u ∑ᵢ cᵢ ∂²_{vᵢ} χ` for every nonnegative `χ ∈ C²` with compact support. -/
-theorem integral_mul_le_integral_mul_sum_iteratedFDeriv [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {ι : Type*} [Fintype ι] (v : ι → E) {c : ι → ℝ}
-    (hc : ∀ i, 0 ≤ c i) {χ : E → ℝ} (hχ : ContDiff ℝ 2 χ) (hχc : HasCompactSupport χ)
-    (hχ0 : ∀ x, 0 ≤ χ x) {g : E → ℝ} (hgm : AEStronglyMeasurable g (volume : Measure E))
-    (hg : ∀ᵐ x ∂(volume : Measure E), ∀ ε > 0, ∃ δ > 0, ∀ t : ℝ, 0 < t → t < δ →
-      g x - ε ≤ ∑ i, c i * ((u (x + t • v i) + u (x - t • v i) - 2 * u x) / t ^ 2)) :
+theorem integral_mul_le_integral_mul_sum_iteratedFDeriv [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {ι : Type*}
+    [Fintype ι] (v : ι → E) {c : ι → ℝ} (hc : ∀ i, 0 ≤ c i) {χ : E → ℝ} (hχ : ContDiff ℝ 2 χ)
+    (hχc : HasCompactSupport χ) (hχ0 : ∀ x, 0 ≤ χ x) {g : E → ℝ}
+    (hgm : AEStronglyMeasurable g (volume : Measure E))
+    (hg :
+      ∀ᵐ x ∂(volume : Measure E),
+        ∀ ε > 0,
+          ∃ δ > 0,
+            ∀ t : ℝ,
+              0 < t →
+                t < δ →
+                  g x - ε ≤
+                    ∑ i, c i * ((u (x + t • v i) + u (x - t • v i) - 2 * u x) / t ^ 2)) :
     ∫ x, g x * χ x ≤ ∫ x, u x * ∑ i, c i * iteratedFDeriv ℝ 2 χ x (fun _ => v i) := by
   classical
   have hu : Continuous u := continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
@@ -483,37 +494,35 @@ theorem integral_mul_le_integral_mul_sum_iteratedFDeriv [FiniteDimensional ℝ E
   have hF0 (t : ℝ) (x : E) : 0 ≤ F t x := by
     apply Finset.sum_nonneg
     intro i _
-    exact mul_nonneg (hc i)
-      (mul_nonneg
-        (div_nonneg (convex_secondDifference_nonneg hconv x (t • v i))
-          (sq_nonneg t)) (hχ0 x))
+    exact
+      mul_nonneg (hc i)
+        (mul_nonneg
+          (div_nonneg (convex_secondDifference_nonneg hconv x (t • v i)) (sq_nonneg t)) (hχ0 x))
   have hDi (i : ι) :
-      Integrable (fun x => u x * iteratedFDeriv ℝ 2 χ x (fun _ => v i))
-        (volume : Measure E) := by
+    Integrable (fun x => u x * iteratedFDeriv ℝ 2 χ x (fun _ => v i)) (volume : Measure E) := by
     obtain ⟨hdc, hds⟩ := second_derivative_continuous_compact hχ hχc (v i)
     exact (hu.mul hdc).integrable_of_hasCompactSupport hds.mul_left
   have hR : R = ∑ i, c i * (∫ x, u x * iteratedFDeriv ℝ 2 χ x (fun _ => v i)) := by
     have heq :
-        (fun x => u x * ∑ i, c i * iteratedFDeriv ℝ 2 χ x (fun _ => v i)) =
-          (fun x => ∑ i, c i * (u x * iteratedFDeriv ℝ 2 χ x (fun _ => v i))) := by
+      (fun x => u x * ∑ i, c i * iteratedFDeriv ℝ 2 χ x (fun _ => v i)) =
+        (fun x => ∑ i, c i * (u x * iteratedFDeriv ℝ 2 χ x (fun _ => v i))) := by
       funext x
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro i _
       ring
     dsimp only [R]
-    rw [heq, integral_finsetSum Finset.univ
-      (fun i _ => (hDi i).const_mul (c i))]
+    rw [heq, integral_finsetSum Finset.univ (fun i _ => (hDi i).const_mul (c i))]
     simp_rw [integral_const_mul]
-  have hI (t : ℝ) :
-      (∫ x, F t x) = ∑ i, c i * (∫ x, A t i x) := by
+  have hI (t : ℝ) : (∫ x, F t x) = ∑ i, c i * (∫ x, A t i x) := by
     dsimp only [F]
     rw [integral_finsetSum Finset.univ (fun i _ => (hAi t i).const_mul (c i))]
     simp_rw [integral_const_mul]
   have hlim : Tendsto (fun t : ℝ => ∫ x, F t x) (𝓝[>] 0) (𝓝 R) := by
     rw [hR]
-    have H := tendsto_finsetSum Finset.univ (fun i _ =>
-      (tendsto_integral_secondDifference_mul hu hχ hχc (v i)).const_mul (c i))
+    have H :=
+      tendsto_finsetSum Finset.univ
+        (fun i _ => (tendsto_integral_secondDifference_mul hu hχ hχc (v i)).const_mul (c i))
     exact H.congr' (.of_forall fun t => (hI t).symm)
   have hR0 : 0 ≤ R :=
     le_of_tendsto_of_tendsto tendsto_const_nhds hlim
@@ -522,25 +531,21 @@ theorem integral_mul_le_integral_mul_sum_iteratedFDeriv [FiniteDimensional ℝ E
   · have hgi' : Integrable (fun x => g x * χ x) (volume : Measure E) :=
       ⟨hgm.mul hχ.continuous.aestronglyMeasurable, hgi.2⟩
     have hpoint :
-        ∀ᵐ x ∂(volume : Measure E),
-          ENNReal.ofReal (g x * χ x) ≤
-            liminf (fun t : ℝ => ENNReal.ofReal (F t x)) (𝓝[>] 0) := by
+      ∀ᵐ x ∂(volume : Measure E),
+        ENNReal.ofReal (g x * χ x) ≤ liminf (fun t : ℝ => ENNReal.ofReal (F t x)) (𝓝[>] 0) := by
       filter_upwards [hg] with x hx
       apply ofReal_mul_le_of_sub
       intro ε hε
       obtain ⟨δ, hδ, hbound⟩ := hx ε hε
       have hev :
-          ∀ᶠ t : ℝ in 𝓝[>] 0,
-            ENNReal.ofReal ((g x - ε) * χ x) ≤ ENNReal.ofReal (F t x) := by
+        ∀ᶠ t : ℝ in 𝓝[>] 0, ENNReal.ofReal ((g x - ε) * χ x) ≤ ENNReal.ofReal (F t x) := by
         have hδevent : ∀ᶠ t : ℝ in 𝓝[>] 0, t ∈ Ioo 0 δ :=
           (nhdsGT_basis (0 : ℝ)).mem_iff.mpr ⟨δ, hδ, subset_rfl⟩
         filter_upwards [hδevent] with t ht
         apply ENNReal.ofReal_le_ofReal
         calc
           (g x - ε) * χ x ≤
-              (∑ i, c i *
-                ((u (x + t • v i) + u (x - t • v i) - 2 * u x) / t ^ 2)) *
-                χ x :=
+              (∑ i, c i * ((u (x + t • v i) + u (x - t • v i) - 2 * u x) / t ^ 2)) * χ x :=
             mul_le_mul_of_nonneg_right (hbound t ht.1 ht.2) (hχ0 x)
           _ = F t x := by
             dsimp only [F, A]
@@ -550,32 +555,31 @@ theorem integral_mul_le_integral_mul_sum_iteratedFDeriv [FiniteDimensional ℝ E
             ring
       exact le_liminf_of_le (h := hev)
     have hL :
-        Tendsto (fun t : ℝ => ∫⁻ x, ENNReal.ofReal (F t x))
-          (𝓝[>] 0) (𝓝 (ENNReal.ofReal R)) := by
-      exact (ENNReal.tendsto_ofReal hlim).congr' (.of_forall fun t =>
-        ofReal_integral_eq_lintegral_ofReal (hFi t) (.of_forall (hF0 t)))
-    have hfatou :
-        (∫⁻ x, ENNReal.ofReal (g x * χ x)) ≤ ENNReal.ofReal R := by
+      Tendsto (fun t : ℝ => ∫⁻ x, ENNReal.ofReal (F t x)) (𝓝[>] 0) (𝓝 (ENNReal.ofReal R)) := by
+      exact
+        (ENNReal.tendsto_ofReal hlim).congr'
+          (.of_forall fun t => ofReal_integral_eq_lintegral_ofReal (hFi t) (.of_forall (hF0 t)))
+    have hfatou : (∫⁻ x, ENNReal.ofReal (g x * χ x)) ≤ ENNReal.ofReal R := by
       calc
         _ ≤ ∫⁻ x, liminf (fun t : ℝ => ENNReal.ofReal (F t x)) (𝓝[>] 0) :=
           lintegral_mono_ae hpoint
         _ ≤ liminf (fun t : ℝ => ∫⁻ x, ENNReal.ofReal (F t x)) (𝓝[>] 0) :=
-          lintegral_liminf_le' (fun t =>
-            ENNReal.continuous_ofReal.measurable.comp_aemeasurable
-              (hFi t).aestronglyMeasurable.aemeasurable)
+          lintegral_liminf_le'
+            (fun t =>
+              ENNReal.continuous_ofReal.measurable.comp_aemeasurable
+                (hFi t).aestronglyMeasurable.aemeasurable)
         _ = ENNReal.ofReal R := hL.liminf_eq
-    have hp :
-        ENNReal.ofReal (∫ x, max (g x * χ x) 0) ≤ ENNReal.ofReal R := by
+    have hp : ENNReal.ofReal (∫ x, max (g x * χ x) 0) ≤ ENNReal.ofReal R := by
       calc
         _ = ∫⁻ x, ENNReal.ofReal (g x * χ x) := by
           rw [ofReal_integral_eq_lintegral_ofReal hgi'.pos_part
-            (.of_forall fun x => le_max_right (g x * χ x) 0)]
+              (.of_forall fun x => le_max_right (g x * χ x) 0)]
           apply lintegral_congr
           intro x
           simp
         _ ≤ ENNReal.ofReal R := hfatou
-    exact (integral_mono hgi' hgi'.pos_part
-      (fun x => le_max_left (g x * χ x) 0)).trans
+    exact
+      (integral_mono hgi' hgi'.pos_part (fun x => le_max_left (g x * χ x) 0)).trans
         ((ENNReal.ofReal_le_ofReal_iff hR0).mp hp)
   · rw [integral_undef hgi]
     exact hR0
@@ -593,7 +597,8 @@ section AlexandrovTheorem
 open MeasureTheory Set Filter
 open scoped RealInnerProductSpace Topology
 
-/-! **Alexandrov's theorem**: a convex function on a finite-dimensional space has a second-order Taylor expansion at almost every point. -/
+/-! **Alexandrov's theorem**: a convex function on a finite-dimensional space has a second-order
+Taylor expansion at almost every point. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -697,20 +702,23 @@ theorem ae_exists_subgradient_secondOrder_expansion
     exact hy q hq
   exact ⟨z - x, B, hBsymm, hExpansion.1, hExpansion.2, hTaylor⟩
 
-/-- **Alexandrov's theorem** (A. D. Alexandrov 1939; Evans–Gariepy, *Measure theory and fine properties of
+/--
+**Alexandrov's theorem** (A. D. Alexandrov 1939; Evans–Gariepy, *Measure theory and fine properties
+of
 functions*, Thm 6.9): a convex function on a finite-dimensional real inner
 product space has, at almost every point, a unique subgradient `p` and a second-order expansion
 `f y = f x + ⟪p, y − x⟫ + ½ ⟪B (y − x), y − x⟫ + o(‖y − x‖²)` with a symmetric `B`. -/
-theorem ae_exists_secondOrder_expansion
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {f : E → ℝ}
-    (hconv : ConvexOn ℝ univ f) :
-    ∀ᵐ x ∂(volume : Measure E), ∃ p : E, ∃ B : E →L[ℝ] E,
-      (∀ v w, ⟪B v, w⟫ = ⟪v, B w⟫) ∧
-      (∀ q : E, (∀ y, f x + ⟪q, y - x⟫ ≤ f y) → q = p) ∧
-      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-        |f y - f x - ⟪p, y - x⟫ -
-            (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+theorem ae_exists_secondOrder_expansion {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {f : E → ℝ} (hconv : ConvexOn ℝ univ f) :
+    ∀ᵐ x ∂(volume : Measure E),
+      ∃ p : E,
+        ∃ B : E →L[ℝ] E,
+          (∀ v w, ⟪B v, w⟫ = ⟪v, B w⟫) ∧
+            (∀ q : E, (∀ y, f x + ⟪q, y - x⟫ ≤ f y) → q = p) ∧
+              ∀ ε > 0,
+                ∀ᶠ y in 𝓝 x,
+                  |f y - f x - ⟪p, y - x⟫ - (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
   filter_upwards [ae_exists_subgradient_secondOrder_expansion hconv] with x hx
   rcases hx with ⟨p, B, hBsymm, huniq, _hfirst, hTaylor⟩
   exact ⟨p, B, hBsymm, huniq, hTaylor⟩

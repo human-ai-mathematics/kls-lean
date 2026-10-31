@@ -1,4 +1,6 @@
-import FunctionalInequalities.Poincare.SmoothTest.Linear
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Linear
 
 /-!
 # Lean certificate for `KLS.pdf`, Remark 3.8 (`lem:linear-test-lower`)
@@ -12,10 +14,13 @@ https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf4
 
 This certificate combines the admissible-test Rayleigh lower bound and the covariance lower
 bound on `ℝ^D`. The explicit `MemLp id 2 μ` premise, the zero-dimensional convention, and the
-`ENNReal` encoding are local specifications; the test domain is the one in `Poincare.SmoothTest.Basic`.
+`ENNReal` encoding are local specifications; the test domain is the one in
+`Poincare.SmoothTest.Basic`.
 The Gaussian equality and mode-indicator claims in the same remark are outside this certificate.
 The ledger binds this file through `lean_solution`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -26,13 +31,14 @@ namespace Solutions.LemLinearTestLower
 
 /-- Source: the two Poincaré lower bounds in manuscript Remark 3.8, linked above, with the
 finite-second-moment premise made explicit as in the linear-baseline dossier. This local
-certificate combines `Poincare.SmoothTest.rayleigh_le_constant` and `Covariance.lambdaMax_le_constant`
+certificate combines `Poincare.SmoothTest.rayleigh_le_constant` and
+`Covariance.lambdaMax_le_constant`
 for the repository's admissible tests, including `D = 0`. -/
-theorem certificate {D : ℕ}
-    (μ : Measure (EuclideanSpace ℝ (Fin D))) [IsProbabilityMeasure μ]
+theorem certificate {D : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin D))) [IsProbabilityMeasure μ]
     (hμ : MemLp (id : EuclideanSpace ℝ (Fin D) → EuclideanSpace ℝ (Fin D)) 2 μ) :
     (∀ ⦃f : EuclideanSpace ℝ (Fin D) → ℝ⦄,
-      Poincare.SmoothTest.Admissible μ f → Poincare.SmoothTest.rayleigh μ f ≤ Poincare.SmoothTest.constant μ) ∧
+        Poincare.SmoothTest.Admissible μ f →
+          Poincare.SmoothTest.rayleigh μ f ≤ Poincare.SmoothTest.constant μ) ∧
       Covariance.lambdaMax μ ≤ Poincare.SmoothTest.constant μ := by
   constructor
   · intro f hf
@@ -42,7 +48,8 @@ theorem certificate {D : ℕ}
 end Solutions.LemLinearTestLower
 
 /--
-info: 'Solutions.LemLinearTestLower.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.LemLinearTestLower.certificate' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.LemLinearTestLower.certificate
+  #print axioms Solutions.LemLinearTestLower.certificate

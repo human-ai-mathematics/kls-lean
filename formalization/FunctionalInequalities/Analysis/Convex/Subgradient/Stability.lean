@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
-import Mathlib.Topology.UniformSpace.UniformApproximation
-import Mathlib.Topology.MetricSpace.Thickening
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+public import Mathlib.Topology.UniformSpace.UniformApproximation
+public import Mathlib.Topology.MetricSpace.Thickening
 
 /-!
 # Supporting images under locally uniform convergence
@@ -14,6 +16,8 @@ all the functions are differentiable (Rockafellar, *Convex Analysis*, Theorem 24
 `tendsto_gradient_of_tendsto_of_convexOn`).
 -/
 
+@[expose] public section
+
 noncomputable section
 open Set
 open scoped RealInnerProductSpace
@@ -24,33 +28,30 @@ open scoped Topology
 /-- Locally uniform convergence to a continuous function generates an eventual uniform
 bound for ALL actual supporting slopes on a compact interior set. The approximating
 functions need not be convex, continuous, or differentiable. -/
-theorem exists_eventual_support_slope_bound_of_locally_uniform
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    {f : ℕ → E → ℝ} {v : E → ℝ} {Ω K : Set E}
-    (hΩ : IsOpen Ω) (hvc : ContinuousOn v Ω)
-    (hlim : TendstoLocallyUniformlyOn f v atTop Ω)
-    (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
-    ∃ R : ℝ, 0 ≤ R ∧ ∀ᶠ n in atTop,
-      ∀ x ∈ K, ∀ p : E,
-        (∀ y ∈ Ω, f n x + ⟪p,y-x⟫ ≤ f n y) → ‖p‖ ≤ R := by
-  obtain ⟨δ,hδ,hLΩ⟩ := hK.exists_cthickening_subset_open hΩ hKΩ
+theorem exists_eventual_support_slope_bound_of_locally_uniform {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : ℕ → E → ℝ}
+    {v : E → ℝ} {Ω K : Set E} (hΩ : IsOpen Ω) (hvc : ContinuousOn v Ω)
+    (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
+    ∃ R : ℝ,
+      0 ≤ R ∧
+        ∀ᶠ n in atTop, ∀ x ∈ K, ∀ p : E, (∀ y ∈ Ω, f n x + ⟪p, y - x⟫ ≤ f n y) → ‖p‖ ≤ R := by
+  obtain ⟨δ, hδ, hLΩ⟩ := hK.exists_cthickening_subset_open hΩ hKΩ
   let L := cthickening δ K
   have hL : IsCompact L := hK.cthickening
-  obtain ⟨C,hC⟩ := hL.exists_bound_of_continuousOn (hvc.mono hLΩ)
+  obtain ⟨C, hC⟩ := hL.exists_bound_of_continuousOn (hvc.mono hLΩ)
   let M : ℝ := max C 0 + 1
-  have hM : 0 < M := by dsimp [M];positivity
+  have hM : 0 < M := by dsimp [M]; positivity
   have hu : TendstoUniformlyOn f v atTop L :=
     (tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hL).mp (hlim.mono hLΩ)
   have herr : ∀ᶠ n in atTop, ∀ y ∈ L, dist (v y) (f n y) < 1 :=
     hu _ (dist_mem_uniformity zero_lt_one)
-  refine ⟨2*M/δ,by positivity,?_⟩
+  refine ⟨2 * M / δ, by positivity, ?_⟩
   filter_upwards [herr] with n hn
   have hfn : ∀ y ∈ L, |f n y| ≤ M := by
     intro y hy
     have hvy : |v y| ≤ C := by simpa only [Real.norm_eq_abs] using hC y hy
-    have hdiff : |f n y-v y| < 1 := by simpa only [Real.dist_eq,abs_sub_comm] using hn y hy
-    have hh := abs_add_le (f n y-v y) (v y)
+    have hdiff : |f n y - v y| < 1 := by simpa only [Real.dist_eq, abs_sub_comm] using hn y hy
+    have hh := abs_add_le (f n y - v y) (v y)
     rw [sub_add_cancel] at hh
     have hmax : C ≤ max C 0 := le_max_left _ _
     dsimp [M]
@@ -59,40 +60,38 @@ theorem exists_eventual_support_slope_bound_of_locally_uniform
   have hball : closedBall x δ ⊆ L := by
     intro y hy
     exact mem_cthickening_of_dist_le y x δ K hx (mem_closedBall.mp hy)
-  exact norm_subgradient_le_of_closedBall hδ (hball.trans hLΩ)
-    (fun y hy => hfn y (hball hy)) hp
+  exact norm_subgradient_le_of_closedBall hδ (hball.trans hLΩ) (fun y hy => hfn y (hball hy)) hp
 
 /-- Actual supporting images of compact interior sets are upper stable under
 locally uniform convergence to a continuous function. Compactness produces the SAME
 limit basepoint and slope, and every domain support inequality passes to that limit.
 No convexity or regularity of the approximating functions is required. -/
-theorem eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    {f : ℕ → E → ℝ} {v : E → ℝ} {Ω K U : Set E}
-    (hΩ : IsOpen Ω) (hvc : ContinuousOn v Ω)
-    (hlim : TendstoLocallyUniformlyOn f v atTop Ω)
-    (hK : IsCompact K) (hKΩ : K ⊆ Ω)
+theorem eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : ℕ → E → ℝ}
+    {v : E → ℝ} {Ω K U : Set E} (hΩ : IsOpen Ω) (hvc : ContinuousOn v Ω)
+    (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω)
     (hU : IsOpen U) (hI : subgradientImageOn v Ω K ⊆ U) :
     ∀ᶠ n in atTop, subgradientImageOn (f n) Ω K ⊆ U := by
   classical
-  obtain ⟨R,_hR,hcap⟩ := exists_eventual_support_slope_bound_of_locally_uniform hΩ hvc hlim hK hKΩ
+  obtain ⟨R, _hR, hcap⟩ :=
+    exists_eventual_support_slope_bound_of_locally_uniform hΩ hvc hlim hK hKΩ
   by_contra hno
   have hbad : ∃ᶠ n in atTop, ¬subgradientImageOn (f n) Ω K ⊆ U := by
     simpa only [Filter.Frequently, not_not] using hno
-  obtain ⟨j,hj,hjbad⟩ := exists_seq_forall_of_frequently (hbad.and_eventually hcap)
-  have hex : ∀ n : ℕ, ∃ x ∈ K, ∃ p : E,
-      (∀ y ∈ Ω, f (j n) x + ⟪p,y-x⟫ ≤ f (j n) y) ∧ p ∉ U ∧ ‖p‖ ≤ R := by
+  obtain ⟨j, hj, hjbad⟩ := exists_seq_forall_of_frequently (hbad.and_eventually hcap)
+  have hex :
+    ∀ n : ℕ,
+      ∃ x ∈ K, ∃ p : E, (∀ y ∈ Ω, f (j n) x + ⟪p, y - x⟫ ≤ f (j n) y) ∧ p ∉ U ∧ ‖p‖ ≤ R := by
     intro n
-    obtain ⟨p,hp,hpU⟩ := Set.not_subset.mp (hjbad n).1
-    obtain ⟨x,hx,hxp⟩ := hp
-    exact ⟨x,hx,p,hxp,hpU,(hjbad n).2 x hx p hxp⟩
+    obtain ⟨p, hp, hpU⟩ := Set.not_subset.mp (hjbad n).1
+    obtain ⟨x, hx, hxp⟩ := hp
+    exact ⟨x, hx, p, hxp, hpU, (hjbad n).2 x hx p hxp⟩
   choose x hx p hp hpU hpR using hex
   have hcompact : IsCompact (K ×ˢ closedBall (0 : E) R) := hK.prod (isCompact_closedBall 0 R)
-  have hmem : ∀ n : ℕ, (x n,p n) ∈ K ×ˢ closedBall (0 : E) R := by
+  have hmem : ∀ n : ℕ, (x n, p n) ∈ K ×ˢ closedBall (0 : E) R := by
     intro n
-    exact ⟨hx n,by simpa only [mem_closedBall,dist_zero_right] using hpR n⟩
-  obtain ⟨z,hz,k,hk,hzk⟩ := hcompact.tendsto_subseq hmem
+    exact ⟨hx n, by simpa only [mem_closedBall, dist_zero_right] using hpR n⟩
+  obtain ⟨z, hz, k, hk, hzk⟩ := hcompact.tendsto_subseq hmem
   have hxlim : Tendsto (fun n => x (k n)) atTop (𝓝 z.1) := by
     simpa only [Function.comp_def] using (continuous_fst.tendsto z).comp hzk
   have hplim : Tendsto (fun n => p (k n)) atTop (𝓝 z.2) := by
@@ -100,23 +99,23 @@ theorem eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn
   have hjk : Tendsto (fun n => j (k n)) atTop atTop := hj.comp hk.tendsto_atTop
   have hres : TendstoLocallyUniformlyOn (fun n => f (j (k n))) v atTop Ω := by
     intro V hV a ha
-    obtain ⟨t,ht,h⟩ := hlim V hV a ha
-    exact ⟨t,ht,hjk.eventually h⟩
+    obtain ⟨t, ht, h⟩ := hlim V hV a ha
+    exact ⟨t, ht, hjk.eventually h⟩
   have hxwithin : Tendsto (fun n => x (k n)) atTop (𝓝[Ω] z.1) :=
-    tendsto_nhdsWithin_iff.mpr ⟨hxlim,Eventually.of_forall (fun n => hKΩ (hx (k n)))⟩
+    tendsto_nhdsWithin_iff.mpr ⟨hxlim, Eventually.of_forall (fun n => hKΩ (hx (k n)))⟩
   have hval : Tendsto (fun n => f (j (k n)) (x (k n))) atTop (𝓝 (v z.1)) :=
     hres.tendsto_comp (hvc z.1 (hKΩ hz.1)) (hKΩ hz.1) hxwithin
-  have hs : ∀ y ∈ Ω, v z.1 + ⟪z.2,y-z.1⟫ ≤ v y := by
+  have hs : ∀ y ∈ Ω, v z.1 + ⟪z.2, y - z.1⟫ ≤ v y := by
     intro y hy
-    have hyval : Tendsto (fun n => f (j (k n)) y) atTop (𝓝 (v y)) :=
-      hres.tendsto_at hy
-    have hin : Tendsto (fun n => ⟪p (k n), y-x (k n)⟫) atTop (𝓝 ⟪z.2,y-z.1⟫) :=
+    have hyval : Tendsto (fun n => f (j (k n)) y) atTop (𝓝 (v y)) := hres.tendsto_at hy
+    have hin : Tendsto (fun n => ⟪p (k n), y - x (k n)⟫) atTop (𝓝 ⟪z.2, y - z.1⟫) :=
       hplim.inner (tendsto_const_nhds.sub hxlim)
-    exact le_of_tendsto_of_tendsto (hval.add hin) hyval
-      (Eventually.of_forall (fun n => hp (k n) y hy))
-  have hzU : z.2 ∈ U := hI ⟨z.1,hz.1,hs⟩
+    exact
+      le_of_tendsto_of_tendsto (hval.add hin) hyval
+        (Eventually.of_forall (fun n => hp (k n) y hy))
+  have hzU : z.2 ∈ U := hI ⟨z.1, hz.1, hs⟩
   have hev : ∀ᶠ n in atTop, p (k n) ∈ U := hplim.eventually (hU.mem_nhds hzU)
-  obtain ⟨n,hn⟩ := hev.exists
+  obtain ⟨n, hn⟩ := hev.exists
   exact hpU (k n) hn
 
 end FunctionalInequalities.Analysis
@@ -127,20 +126,16 @@ open scoped Topology
 any open neighborhood under locally uniform convergence of convex continuous
 potentials. The sphere gap and interior minimum are produced from the source
 conditions; no contact of the approximants is assumed. All finite dimensions. -/
-theorem eventually_mem_subgradientImageOn_of_unique_contact
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    {f : ℕ → E → ℝ} {v : E → ℝ} {Ω G : Set E} {x p : E}
-    (hΩ : IsOpen Ω)
-    (hf : ∀ n, ConvexOn ℝ Ω (f n)) (hfc : ∀ n, ContinuousOn (f n) Ω)
-    (hvc : ContinuousOn v Ω) (hlim : TendstoLocallyUniformlyOn f v atTop Ω)
-    (hG : IsOpen G) (hGΩ : G ⊆ Ω) (hx : x ∈ G)
-    (hp : ∀ y ∈ Ω, v x + ⟪p,y-x⟫ ≤ v y)
-    (hunique : ∀ y ∈ Ω, v y = v x + ⟪p,y-x⟫ → y=x) :
+theorem eventually_mem_subgradientImageOn_of_unique_contact {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : ℕ → E → ℝ} {v : E → ℝ} {Ω G : Set E}
+    {x p : E} (hΩ : IsOpen Ω) (hf : ∀ n, ConvexOn ℝ Ω (f n)) (hfc : ∀ n, ContinuousOn (f n) Ω)
+    (hvc : ContinuousOn v Ω) (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hG : IsOpen G)
+    (hGΩ : G ⊆ Ω) (hx : x ∈ G) (hp : ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y)
+    (hunique : ∀ y ∈ Ω, v y = v x + ⟪p, y - x⟫ → y = x) :
     ∀ᶠ n in atTop, p ∈ subgradientImageOn (f n) Ω G := by
-  obtain ⟨ε,hε,hεG⟩ := Metric.mem_nhds_iff.mp ((hG.inter hΩ).mem_nhds ⟨hx,hGΩ hx⟩)
-  let r : ℝ := ε/2
-  have hr : 0<r := by dsimp [r];positivity
+  obtain ⟨ε, hε, hεG⟩ := Metric.mem_nhds_iff.mp ((hG.inter hΩ).mem_nhds ⟨hx, hGΩ hx⟩)
+  let r : ℝ := ε / 2
+  have hr : 0 < r := by dsimp [r]; positivity
   have hBGO : closedBall x r ⊆ G ∩ Ω := by
     intro y hy
     apply hεG
@@ -151,37 +146,38 @@ theorem eventually_mem_subgradientImageOn_of_unique_contact
   have hBG : closedBall x r ⊆ G := fun _ hy => (hBGO hy).1
   have hBO : closedBall x r ⊆ Ω := fun _ hy => (hBGO hy).2
   have hSO : sphere x r ⊆ Ω := sphere_subset_closedBall.trans hBO
-  let F : E → ℝ := fun y => v y-v x-⟪p,y-x⟫
+  let F : E → ℝ := fun y => v y - v x - ⟪p, y - x⟫
   have hFc : ContinuousOn F (sphere x r) := by
     dsimp [F]
-    exact ((hvc.mono hSO).sub continuousOn_const).sub
-      (continuous_const.inner (continuous_id.sub continuous_const)).continuousOn
-  have hFp : ∀ y∈sphere x r, 0<F y := by
+    exact
+      ((hvc.mono hSO).sub continuousOn_const).sub
+        (continuous_const.inner (continuous_id.sub continuous_const)).continuousOn
+  have hFp : ∀ y ∈ sphere x r, 0 < F y := by
     intro y hy
-    have hxy : y≠x := by
+    have hxy : y ≠ x := by
       intro hyx
       have heq := mem_sphere.mp hy
-      rw [hyx,dist_self] at heq
+      rw [hyx, dist_self] at heq
       linarith
     have hs := hp y (hSO hy)
-    have hlt : v x+⟪p,y-x⟫<v y := by
+    have hlt : v x + ⟪p, y - x⟫ < v y := by
       by_contra hh
-      have heq : v y=v x+⟪p,y-x⟫ := by linarith
+      have heq : v y = v x + ⟪p, y - x⟫ := by linarith
       exact hxy (hunique y (hSO hy) heq)
     dsimp [F]
     linarith
-  obtain ⟨ρ,hρ,hgap⟩ := (isCompact_sphere x r).exists_forall_le' hFc hFp
+  obtain ⟨ρ, hρ, hgap⟩ := (isCompact_sphere x r).exists_forall_le' hFc hFp
   have hB : IsCompact (closedBall x r) := isCompact_closedBall x r
   have hu : TendstoUniformlyOn f v atTop (closedBall x r) :=
     (tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hB).mp (hlim.mono hBO)
-  have herr : ∀ᶠ n in atTop, ∀ y∈closedBall x r,
-      dist (v y) (f n y)<ρ/4 := hu _ (dist_mem_uniformity (by positivity))
+  have herr : ∀ᶠ n in atTop, ∀ y ∈ closedBall x r, dist (v y) (f n y) < ρ / 4 :=
+    hu _ (dist_mem_uniformity (by positivity))
   filter_upwards [herr] with n hn
-  let Ψ : E → ℝ := fun y => f n y-⟪p,y⟫
+  let Ψ : E → ℝ := fun y => f n y - ⟪p, y⟫
   have hΨ : ContinuousOn Ψ (closedBall x r) :=
     (hfc n |>.mono hBO).sub (continuous_const.inner continuous_id).continuousOn
-  have hxB : x∈closedBall x r := mem_closedBall_self hr.le
-  have hstrict : ∀ y∈sphere x r, Ψ x<Ψ y := by
+  have hxB : x ∈ closedBall x r := mem_closedBall_self hr.le
+  have hstrict : ∀ y ∈ sphere x r, Ψ x < Ψ y := by
     intro y hy
     have hfx := hn x hxB
     have hfy := hn y (sphere_subset_closedBall hy)
@@ -193,18 +189,23 @@ theorem eventually_mem_subgradientImageOn_of_unique_contact
     rw [inner_sub_right] at hg
     dsimp [Ψ]
     linarith
-  obtain ⟨z,hzB,hmin⟩ := hB.exists_isMinOn_mem_subset (s:=ball x r) hΨ hxB
-    (fun y hy => hstrict y (mem_sphere.mpr
-      (le_antisymm (mem_closedBall.mp hy.1) (not_lt.mp (fun h => hy.2 (mem_ball.mpr h))))))
-  have hz : z∈closedBall x r := ball_subset_closedBall hzB
-  have hpB : ∀ y∈ball x r, f n z+⟪p,y-z⟫≤f n y := by
+  obtain ⟨z, hzB, hmin⟩ :=
+    hB.exists_isMinOn_mem_subset (s := ball x r) hΨ hxB
+      (fun y hy =>
+        hstrict y
+          (mem_sphere.mpr
+            (le_antisymm (mem_closedBall.mp hy.1)
+              (not_lt.mp (fun h => hy.2 (mem_ball.mpr h))))))
+  have hz : z ∈ closedBall x r := ball_subset_closedBall hzB
+  have hpB : ∀ y ∈ ball x r, f n z + ⟪p, y - z⟫ ≤ f n y := by
     intro y hy
     have hm := hmin (ball_subset_closedBall hy)
     dsimp [Ψ] at hm
     rw [inner_sub_right]
     linarith
-  exact ⟨z,hBG hz,subgradient_le_on_of_isOpen (hf n) isOpen_ball
-    (ball_subset_closedBall.trans hBO) hzB hpB⟩
+  exact
+    ⟨z, hBG hz,
+      subgradient_le_on_of_isOpen (hf n) isOpen_ball (ball_subset_closedBall.trans hBO) hzB hpB⟩
 
 section GradientConvergence
 
@@ -261,10 +262,8 @@ private theorem eventually_fderiv_apply_lt {ψ : ℕ → E → ℝ} {F : E → �
   exact lt_of_le_of_lt hb' hn
 
 private theorem tendsto_fderiv_apply_of_convexOn {ψ : ℕ → E → ℝ} {F : E → ℝ}
-    (hψ : ∀ n, ConvexOn ℝ univ (ψ n))
-    (hlim : ∀ y, Tendsto (fun n => ψ n y) atTop (𝓝 (F y)))
-    {x : E} (hF : DifferentiableAt ℝ F x)
-    (hd : ∀ n, DifferentiableAt ℝ (ψ n) x) (v : E) :
+    (hψ : ∀ n, ConvexOn ℝ univ (ψ n)) (hlim : ∀ y, Tendsto (fun n => ψ n y) atTop (𝓝 (F y)))
+    {x : E} (hF : DifferentiableAt ℝ F x) (hd : ∀ n, DifferentiableAt ℝ (ψ n) x) (v : E) :
     Tendsto (fun n => fderiv ℝ (ψ n) x v) atTop (𝓝 (fderiv ℝ F x v)) := by
   apply Metric.tendsto_nhds.2
   intro ε hε

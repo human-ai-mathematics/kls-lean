@@ -1,4 +1,6 @@
-import solutions.LemPoincareGaussianOneDimensional
+module
+
+public import solutions.LemPoincareGaussianOneDimensional
 
 /-!
 # Transitive axiom audit for the Gaussian certificate
@@ -8,8 +10,11 @@ propositional-extensionality, and classical-choice axioms for the accepted certi
 `#guard_msgs` makes any change to that transitive set fail the default build.
 -/
 
+@[expose] public section
+
 /--
-info: 'Solutions.LemPoincareGaussianOneDimensional.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.LemPoincareGaussianOneDimensional.certificate' depends on axioms: [propext,
+Classical.choice, Quot.sound]
 -/
 #guard_msgs in
-#print axioms Solutions.LemPoincareGaussianOneDimensional.certificate
+  #print axioms Solutions.LemPoincareGaussianOneDimensional.certificate

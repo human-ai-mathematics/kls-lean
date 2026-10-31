@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for the one-sided bridge "metric BV perimeter ≤ outer
 Minkowski content" for a probability law and a measurable set. Checks: the plateau-ramp
@@ -8,6 +10,8 @@ top content, the zero-dimensional coordinate space, the atom on the boundary of 
 the naive ramp would cost `1/r` but the content is zero), and the consequences of finite
 content (finite perimeter, closure mass, a recovery sequence). One inequality only; no
 identification of the two quantities or of their Cheeger infima. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -59,26 +63,33 @@ theorem topContent (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet 
   exact h ▸ perimeter_le_minkowskiContent (ν : Measure V) hBm
 
 /-- The zero-dimensional coordinate space `Fin 0 → ℝ`. -/
-theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ))
-    {B : Set (Fin 0 → ℝ)} (hBm : MeasurableSet B) :
-    perimeter (ν : Measure (Fin 0 → ℝ)) B ≤ Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) B ∧
+theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ)) {B : Set (Fin 0 → ℝ)}
+    (hBm : MeasurableSet B) :
+    perimeter (ν : Measure (Fin 0 → ℝ)) B ≤
+        Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) B ∧
       perimeter (ν : Measure (Fin 0 → ℝ)) B = 0 := by
-  exact ⟨perimeter_le_minkowskiContent (ν : Measure (Fin 0 → ℝ)) hBm, perimeter_eq_zero_of_subsingleton _ _⟩
+  exact
+    ⟨perimeter_le_minkowskiContent (ν : Measure (Fin 0 → ℝ)) hBm,
+      perimeter_eq_zero_of_subsingleton _ _⟩
 
 /-- An atom on the boundary of the half-line `[0, ∞)`: the Minkowski content is zero, so the
 metric BV perimeter is zero, although the naive distance ramp has slope `1/r` at `0`. -/
-theorem diracHalfLine :
-    perimeter (Measure.dirac (0 : ℝ)) (Set.Ici 0) = 0 := by
+theorem diracHalfLine : perimeter (Measure.dirac (0 : ℝ)) (Set.Ici 0) = 0 := by
   let ν : ProbabilityMeasure ℝ := ⟨Measure.dirac 0, inferInstance⟩
   have h1 : (ν : Measure ℝ) (Set.Ici 0) = 1 := by
     simp [ν, Measure.dirac_apply_of_mem (Set.mem_Ici.2 le_rfl : (0 : ℝ) ∈ Set.Ici 0)]
-  have hzero : ∀ r : ℝ, ((ν : Measure ℝ) (Metric.thickening r (Set.Ici 0)) -
-      (ν : Measure ℝ) (Set.Ici 0)) / ENNReal.ofReal r = 0 := fun r => by
-    rw [h1, tsub_eq_zero_of_le prob_le_one, ENNReal.zero_div]
+  have hzero :
+    ∀ r : ℝ,
+      ((ν : Measure ℝ) (Metric.thickening r (Set.Ici 0)) - (ν : Measure ℝ) (Set.Ici 0)) /
+          ENNReal.ofReal r =
+        0 :=
+    fun r => by rw [h1, tsub_eq_zero_of_le prob_le_one, ENNReal.zero_div]
   have hc : Isoperimetry.minkowskiContent (ν : Measure ℝ) (Set.Ici 0) = 0 := by
     unfold Isoperimetry.minkowskiContent
     simp only [hzero, liminf_const]
-  have h := perimeter_le_minkowskiContent (ν : Measure ℝ) (measurableSet_Ici : MeasurableSet (Set.Ici (0 : ℝ)))
+  have h :=
+    perimeter_le_minkowskiContent (ν : Measure ℝ)
+      (measurableSet_Ici : MeasurableSet (Set.Ici (0 : ℝ)))
   rw [hc] at h
   exact le_antisymm h bot_le
 

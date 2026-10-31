@@ -1,8 +1,13 @@
-import Lean
-import FunctionalInequalities.Analysis.EuclideanCoordinates
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.EuclideanCoordinates
+meta import Lean
 
 /-! Exact legacy coordinate contracts through the shared low-level module; all dimensions,
 including zero. -/
+
+@[expose] public section
 
 universe u u_1 u_2 u_3
 

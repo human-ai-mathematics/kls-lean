@@ -1,17 +1,24 @@
-import Mathlib.Topology.Semicontinuity.Basic
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Topology.Instances.EReal.Lemmas
+module
+
+public import Mathlib.Topology.Semicontinuity.Basic
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Topology.Instances.EReal.Lemmas
 
 /-!
 # Finite maxima of upper semicontinuous extended-real functions
 
-`exists_finite_maximum_of_upperSemicontinuous_linear_decay`: on a finite-dimensional real inner-product space (dimension zero
-included), an upper semicontinuous `G : E → EReal` that never takes `⊤`, takes a finite value somewhere and satisfies a linear
-decay `G x ≤ b − a‖x‖` with `a > 0` attains a finite global maximum. Values `⊥` elsewhere are allowed and no maximizing point
+`exists_finite_maximum_of_upperSemicontinuous_linear_decay`: on a finite-dimensional real
+inner-product space (dimension zero
+included), an upper semicontinuous `G : E → EReal` that never takes `⊤`, takes a finite value
+somewhere and satisfies a linear
+decay `G x ≤ b − a‖x‖` with `a > 0` attains a finite global maximum. Values `⊥` elsewhere are
+allowed and no maximizing point
 is supplied. A generic tool, used for the attainment of the Legendre supremum
 (`Analysis/Convex/Legendre/Variation/Attainment.lean`).
 -/
+
+@[expose] public section
 
 noncomputable section
 

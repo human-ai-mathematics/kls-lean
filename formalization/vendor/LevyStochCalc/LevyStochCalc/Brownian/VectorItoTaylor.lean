@@ -3,8 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoThirdMoment
-import LevyStochCalc.Brownian.TaylorTwoModulus
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.VectorItoThirdMoment
+public import LevyStochCalc.Brownian.TaylorTwoModulus
 
 /-!
 # The Taylor remainder of a vector Itô process along a uniform grid
@@ -23,6 +28,8 @@ cells the bound is of order `m^{-1/2}`.
 * `LevyStochCalc.Brownian.Ito.integral_abs_vectorTaylorRemainder_le_affine` — the `L¹` bound under
   an affine oscillation bound on the second derivative.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -163,7 +170,8 @@ theorem integral_abs_vectorTaylorRemainder_le_affine (X₀ : Ω → Fin n → �
       ((MeasureTheory.integrable_finsetSum _ hcu).const_mul K)
   have hRint : Integrable (fun ω : Ω => |taylorRemainderNormed f f' f''
       (fun i => vectorItoProcess W ℱ hcoord H hHm hHp hHs X₀ bdrift (unifGrid T m i) ω) m|) P := by
-    refine hsumint.mono hR.abs.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
+    refine hsumint.mono (continuous_abs.measurable.comp hR).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_abs]
     exact (hptw ω).trans (le_abs_self _)
   have hRint0 : Integrable (fun ω : Ω => taylorRemainderNormed f f' f''

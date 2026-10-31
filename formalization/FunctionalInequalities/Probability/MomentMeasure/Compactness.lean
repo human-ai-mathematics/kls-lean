@@ -1,41 +1,57 @@
-import FunctionalInequalities.Probability.Support.Convex
-import FunctionalInequalities.Analysis.Convex.PointwiseCompactness
-import FunctionalInequalities.Analysis.Convex.RadialExtension
-import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
-import Mathlib.MeasureTheory.Integral.Lebesgue.Add
-import Mathlib.MeasureTheory.Integral.IntegrableOn
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.Topology.Instances.EReal.Lemmas
+module
+
+public import FunctionalInequalities.Probability.Support.Convex
+public import FunctionalInequalities.Analysis.Convex.PointwiseCompactness
+public import FunctionalInequalities.Analysis.Convex.RadialExtension
+public import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Add
+public import Mathlib.MeasureTheory.Integral.IntegrableOn
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.Topology.Instances.EReal.Lemmas
 
 /-!
 # Compactness of convex potentials (CEK Lemma 17)
 
-Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), Lemma 17, for a finite Borel measure `μ` (not
-normalized) on a finite-dimensional real inner product space whose support hull has `0` in its interior, and nonnegative
-extended-real potentials `φ ℓ` with convex real epigraphs, `φ ℓ 0 = 0`, a.e.-measurable `toENNReal` and uniformly bounded
+Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), Lemma 17, for a finite Borel
+measure `μ` (not
+normalized) on a finite-dimensional real inner product space whose support hull has `0` in its
+interior, and nonnegative
+extended-real potentials `φ ℓ` with convex real epigraphs, `φ ℓ 0 = 0`, a.e.-measurable `toENNReal`
+and uniformly bounded
 integrals. Dimension zero is included.
 
-* (56a), `Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph`: a subsequence and a nonnegative convex limit,
-  finite and attained pointwise on the interior of the support hull, radially closed, `⊤` off its closure and Borel,
+* (56a), `Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph`: a subsequence and a
+  nonnegative convex limit,
+  finite and attained pointwise on the interior of the support hull, radially closed, `⊤` off its
+  closure and Borel,
   whose integral is at most the liminf of the integrals. Pointwise bounds come from Lemma 16
-  (`Probability/Support/Convex.lean`), the subsequence from `Analysis/Convex/PointwiseCompactness.lean`, the limit from
-  `Analysis/Convex/RadialExtension.lean`; Fatou is applied to the scaled potentials and then along the radial limit.
-* Full (56), `MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph`: the same subsequence and limit also satisfy
-  (56b) for every additive Haar `dx`, `limsup ∫ exp(-(φ (s j))*) dx ≤ ∫ exp(-ψ*) dx`, with `ψ` integrable against `μ` and
-  finite conjugate mass derived (`MomentMeasure/ConjugateMass.lean`), not assumed. Zero conjugate mass is allowed.
+  (`Probability/Support/Convex.lean`), the subsequence from
+  `Analysis/Convex/PointwiseCompactness.lean`, the limit from
+  `Analysis/Convex/RadialExtension.lean`; Fatou is applied to the scaled potentials and then along
+  the radial limit.
+* Full (56), `MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph`: the same subsequence
+  and limit also satisfy
+  (56b) for every additive Haar `dx`, `limsup ∫ exp(-(φ (s j))*) dx ≤ ∫ exp(-ψ*) dx`, with `ψ`
+  integrable against `μ` and
+  finite conjugate mass derived (`MomentMeasure/ConjugateMass.lean`), not assumed. Zero conjugate
+  mass is allowed.
 
-Not provided: attainment in Proposition 12, essential continuity, the Euler–Lagrange identification, existence or
+Not provided: attainment in Proposition 12, essential continuity, the Euler–Lagrange identification,
+existence or
 uniqueness of moment potentials (Theorem 2).
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal
 
 namespace FunctionalInequalities.Probability
 
-private theorem aemeasurable_toENNReal_comp_of_continuousOn_toReal {X E : Type*} [TopologicalSpace X]
-    [MeasurableSpace X] [OpensMeasurableSpace X] [TopologicalSpace E] {μ : Measure X} {K : Set E} (hK : IsOpen K)
-    {g : X → E} (hg : Continuous g) {φ : E → EReal} (hnn : ∀ y ∈ K, 0 ≤ φ y) (hfin : ∀ y ∈ K, φ y ≠ ⊤)
+private theorem aemeasurable_toENNReal_comp_of_continuousOn_toReal {X E : Type*}
+    [TopologicalSpace X] [MeasurableSpace X] [OpensMeasurableSpace X] [TopologicalSpace E]
+    {μ : Measure X} {K : Set E} (hK : IsOpen K) {g : X → E} (hg : Continuous g) {φ : E → EReal}
+    (hnn : ∀ y ∈ K, 0 ≤ φ y) (hfin : ∀ y ∈ K, φ y ≠ ⊤)
     (hcont : ContinuousOn (fun y => (φ y).toReal) K) (hae : ∀ᵐ x ∂μ, g x ∈ K) :
     AEMeasurable (fun x => (φ (g x)).toENNReal) μ := by
   let S : Set X := g ⁻¹' K
@@ -43,8 +59,8 @@ private theorem aemeasurable_toENNReal_comp_of_continuousOn_toReal {X E : Type*}
   have hcore : ContinuousOn (fun x => ENNReal.ofReal ((φ (g x)).toReal)) S :=
     ENNReal.continuous_ofReal.comp_continuousOn
       (hcont.comp hg.continuousOn (by intro x hx; exact hx))
-  have heq : Set.EqOn (fun x => (φ (g x)).toENNReal)
-      (fun x => ENNReal.ofReal ((φ (g x)).toReal)) S := by
+  have heq :
+    Set.EqOn (fun x => (φ (g x)).toENNReal) (fun x => ENNReal.ofReal ((φ (g x)).toReal)) S := by
     intro x hx
     change (φ (g x)).toENNReal = ENNReal.ofReal ((φ (g x)).toReal)
     have hc : ((φ (g x)).toReal : EReal) = φ (g x) :=
@@ -56,10 +72,10 @@ private theorem aemeasurable_toENNReal_comp_of_continuousOn_toReal {X E : Type*}
   have hrestrict : μ.restrict S = μ := Measure.restrict_eq_self_of_ae_mem hae
   rwa [hrestrict] at hm
 
-private theorem le_of_smul_of_convex_epigraph {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    {φ : E → EReal} (hnn : ∀ x, 0 ≤ φ x) (hφ0 : φ 0 = 0)
-    (hconv : Convex ℝ {p : E × ℝ | φ p.1 ≤ (p.2 : EReal)}) {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ 1) (x : E) :
-    φ (t • x) ≤ φ x := by
+private theorem le_of_smul_of_convex_epigraph {E : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E] {φ : E → EReal} (hnn : ∀ x, 0 ≤ φ x) (hφ0 : φ 0 = 0)
+    (hconv : Convex ℝ {p : E × ℝ | φ p.1 ≤ (p.2 : EReal)}) {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (x : E) : φ (t • x) ≤ φ x := by
   by_cases htop : φ x = ⊤
   · rw [htop]
     exact le_top
@@ -78,12 +94,14 @@ private theorem le_of_smul_of_convex_epigraph {E : Type*} [NormedAddCommGroup E]
   have hle : φ (t • x) ≤ (t * q : ℝ) := by
     change φ (t • x + (1 - t) • 0) ≤ (t * q + (1 - t) * 0 : ℝ) at hepi
     simpa only [smul_zero, mul_zero, add_zero] using hepi
-  exact hle.trans (EReal.coe_le_coe_iff.mpr (by
-    simpa only [one_mul] using mul_le_mul_of_nonneg_right ht1 hq0))
+  exact
+    hle.trans
+      (EReal.coe_le_coe_iff.mpr
+        (by simpa only [one_mul] using mul_le_mul_of_nonneg_right ht1 hq0))
 
-private theorem ae_mem_closure_and_smul_mem_interior_convexHull_support {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] (μ : Measure E)
-    (h0 : (0 : E) ∈ interior (convexHull ℝ μ.support)) :
+private theorem ae_mem_closure_and_smul_mem_interior_convexHull_support {E : Type*}
+    [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] (μ : Measure E) (h0 : (0 : E) ∈ interior (convexHull ℝ μ.support)) :
     (∀ᵐ x ∂μ, x ∈ closure (interior (convexHull ℝ μ.support))) ∧
       ∀ t : ℝ, 0 ≤ t → t < 1 → ∀ᵐ x ∂μ, t • x ∈ interior (convexHull ℝ μ.support) := by
   let C := convexHull ℝ μ.support
@@ -98,13 +116,18 @@ private theorem ae_mem_closure_and_smul_mem_interior_convexHull_support {E : Typ
   intro t ht0 ht1
   filter_upwards [hae] with x hx
   have hxC : x ∈ closure C := by simpa only [hclosed] using hx
-  have hh := hc.combo_interior_closure_mem_interior h0 hxC
-    (sub_pos.mpr ht1) ht0 (by ring : (1 - t) + t = 1)
+  have hh :=
+    hc.combo_interior_closure_mem_interior h0 hxC (sub_pos.mpr ht1) ht0
+      (by ring : (1 - t) + t = 1)
   simpa only [smul_zero, zero_add] using hh
 
-/-- **CEK Lemma 17, first half (56a).** For a finite measure whose support hull contains `0` in its interior, nonnegative
-convex extended-real functions vanishing at `0` with uniformly bounded lintegrals have a subsequence and a nonnegative convex
-limit (finite and attained pointwise on the interior of the support hull, radially closed, `⊤` off its closure, Borel) whose
+/--
+**CEK Lemma 17, first half (56a).** For a finite measure whose support hull contains `0` in its
+interior, nonnegative
+convex extended-real functions vanishing at `0` with uniformly bounded lintegrals have a subsequence
+and a nonnegative convex
+limit (finite and attained pointwise on the interior of the support hull, radially closed, `⊤` off
+its closure, Borel) whose
 lintegral is at most the liminf of the lintegrals. -/
 theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -113,15 +136,20 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
     (hconv : ∀ ℓ, Convex ℝ {p : E × ℝ | φ ℓ p.1 ≤ (p.2 : EReal)})
     (hmeas : ∀ ℓ, AEMeasurable (fun x => (φ ℓ x).toENNReal) μ)
     (hbdd : (⨆ ℓ, ∫⁻ x, (φ ℓ x).toENNReal ∂μ) ≠ ⊤) :
-    ∃ (s : ℕ → ℕ) (ψ : E → EReal), StrictMono s ∧ (∀ x, 0 ≤ ψ x) ∧ ψ 0 = 0 ∧
-      Convex ℝ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} ∧
-      Measurable (fun x => (ψ x).toENNReal) ∧
-      (∀ x ∈ interior (convexHull ℝ μ.support),
-        ψ x ≠ ⊤ ∧ Filter.Tendsto (fun j => φ (s j) x) Filter.atTop (nhds (ψ x))) ∧
-      (∀ x, Filter.Tendsto (fun t : ℝ => ψ (t • x)) (nhdsWithin 1 (Set.Iio 1)) (nhds (ψ x))) ∧
-      (∀ x ∉ closure (interior (convexHull ℝ μ.support)), ψ x = ⊤) ∧
-      ∫⁻ x, (ψ x).toENNReal ∂μ ≤
-        Filter.liminf (fun j => ∫⁻ x, (φ (s j) x).toENNReal ∂μ) Filter.atTop := by
+    ∃ (s : ℕ → ℕ) (ψ : E → EReal),
+      StrictMono s ∧
+        (∀ x, 0 ≤ ψ x) ∧
+          ψ 0 = 0 ∧
+            Convex ℝ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} ∧
+              Measurable (fun x => (ψ x).toENNReal) ∧
+                (∀ x ∈ interior (convexHull ℝ μ.support),
+                    ψ x ≠ ⊤ ∧ Filter.Tendsto (fun j => φ (s j) x) Filter.atTop (nhds (ψ x))) ∧
+                  (∀ x,
+                      Filter.Tendsto (fun t : ℝ => ψ (t • x)) (nhdsWithin 1 (Set.Iio 1))
+                        (nhds (ψ x))) ∧
+                    (∀ x ∉ closure (interior (convexHull ℝ μ.support)), ψ x = ⊤) ∧
+                      ∫⁻ x, (ψ x).toENNReal ∂μ ≤
+                        Filter.liminf (fun j => ∫⁻ x, (φ (s j) x).toENNReal ∂μ) Filter.atTop := by
   let K : Set E := interior (convexHull ℝ μ.support)
   have hK : IsOpen K := isOpen_interior
   have hKconv : Convex ℝ K := (convex_convexHull ℝ μ.support).interior
@@ -145,12 +173,11 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
     exact ne_of_lt ((hM ℓ).trans_lt (EReal.coe_lt_top M))
   have hcoe : ∀ ℓ, ∀ x ∈ K, ((φ ℓ x).toReal : EReal) = φ ℓ x := by
     intro ℓ x hx
-    exact EReal.coe_toReal (hfin ℓ x hx)
-      (ne_of_gt (EReal.bot_lt_zero.trans_le (hnn ℓ x)))
+    exact EReal.coe_toReal (hfin ℓ x hx) (ne_of_gt (EReal.bot_lt_zero.trans_le (hnn ℓ x)))
   have hrealconv : ∀ ℓ, ConvexOn ℝ K (fun x => (φ ℓ x).toReal) := by
     intro ℓ
-    exact (real_convexOn_effective_domain (hnn ℓ) (hconv ℓ)).subset
-      (fun x hx => hfin ℓ x hx) hKconv
+    exact
+      (real_convexOn_effective_domain (hnn ℓ) (hconv ℓ)).subset (fun x hx => hfin ℓ x hx) hKconv
   have hrealbdd : ∀ x ∈ K, BddAbove (Set.range fun ℓ => (φ ℓ x).toReal) := by
     intro x hx
     obtain ⟨M, hM⟩ := hbounds x hx
@@ -161,12 +188,13 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
     exact hM ℓ
   obtain ⟨s, g, hs, hgconv, hglim⟩ :=
     FunctionalInequalities.Analysis.exists_subseq_tendsto_of_convexOn_of_bddAbove hK
-      (fun ℓ x => (φ ℓ x).toReal) hrealconv
-      (fun ℓ x hx => EReal.toReal_nonneg (hnn ℓ x)) hrealbdd
+      (fun ℓ x => (φ ℓ x).toReal) hrealconv (fun ℓ x hx => EReal.toReal_nonneg (hnn ℓ x))
+      hrealbdd
   have hgnn : ∀ x ∈ K, 0 ≤ g x := by
     intro x hx
-    exact ge_of_tendsto (hglim x hx)
-      (Filter.Eventually.of_forall fun j => EReal.toReal_nonneg (hnn (s j) x))
+    exact
+      ge_of_tendsto (hglim x hx)
+        (Filter.Eventually.of_forall fun j => EReal.toReal_nonneg (hnn (s j) x))
   have hg0 : g 0 = 0 := by
     have hz : Filter.Tendsto (fun j => (φ (s j) 0).toReal) Filter.atTop (nhds (0 : ℝ)) := by
       simpa only [hφ0, EReal.toReal_zero] using
@@ -193,11 +221,14 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
       have himage : ∀ᵐ x ∂μ, t • x ∈ K := hscale t ht0 ht1
       have hscaledmeas : ∀ j, AEMeasurable (fun x => (φ (s j) (t • x)).toENNReal) μ := by
         intro j
-        exact aemeasurable_toENNReal_comp_of_continuousOn_toReal hK
-          (continuous_const.smul continuous_id) (fun y hy => hnn (s j) y)
-          (hfin (s j)) ((hrealconv (s j)).continuousOn hK) himage
-      have hscaledlim : ∀ᵐ x ∂μ, Filter.Tendsto
-          (fun j => (φ (s j) (t • x)).toENNReal) Filter.atTop (nhds ((ψ (t • x)).toENNReal)) := by
+        exact
+          aemeasurable_toENNReal_comp_of_continuousOn_toReal hK
+            (continuous_const.smul continuous_id) (fun y hy => hnn (s j) y) (hfin (s j))
+            ((hrealconv (s j)).continuousOn hK) himage
+      have hscaledlim :
+        ∀ᵐ x ∂μ,
+          Filter.Tendsto (fun j => (φ (s j) (t • x)).toENNReal) Filter.atTop
+            (nhds ((ψ (t • x)).toENNReal)) := by
         filter_upwards [himage] with x hx
         exact (EReal.continuous_toENNReal.tendsto (ψ (t • x))).comp (hlim _ hx)
       calc
@@ -206,11 +237,17 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
           lintegral_congr_ae (hscaledlim.mono fun x hx => hx.liminf_eq.symm)
         _ ≤ Filter.liminf (fun j => ∫⁻ x, (φ (s j) (t • x)).toENNReal ∂μ) Filter.atTop :=
           lintegral_liminf_le' hscaledmeas
-        _ ≤ L := Filter.liminf_le_liminf (Filter.Eventually.of_forall fun j =>
-          lintegral_mono fun x => EReal.toENNReal_le_toENNReal
-            (le_of_smul_of_convex_epigraph (hnn (s j)) (hφ0 (s j)) (hconv (s j)) ht0 ht1.le x))
-    have hradial : ∀ x, Filter.Tendsto (fun t : ℝ => (ψ (t • x)).toENNReal)
-        (nhdsWithin 1 (Set.Iio 1)) (nhds ((ψ x).toENNReal)) := by
+        _ ≤ L :=
+          Filter.liminf_le_liminf
+            (Filter.Eventually.of_forall fun j =>
+              lintegral_mono fun x =>
+                EReal.toENNReal_le_toENNReal
+                  (le_of_smul_of_convex_epigraph (hnn (s j)) (hφ0 (s j)) (hconv (s j)) ht0
+                    ht1.le x))
+    have hradial :
+      ∀ x,
+        Filter.Tendsto (fun t : ℝ => (ψ (t • x)).toENNReal) (nhdsWithin 1 (Set.Iio 1))
+          (nhds ((ψ x).toENNReal)) := by
       intro x
       exact (EReal.continuous_toENNReal.tendsto (ψ x)).comp (hψrad x)
     have hev : ∀ᶠ t : ℝ in nhdsWithin 1 (Set.Iio 1), ∫⁻ x, (ψ (t • x)).toENNReal ∂μ ≤ L := by
@@ -220,10 +257,14 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
       exact hcontract t ht0.le ht1
     calc
       ∫⁻ x, (ψ x).toENNReal ∂μ =
-          ∫⁻ x, Filter.liminf (fun t : ℝ => (ψ (t • x)).toENNReal) (nhdsWithin 1 (Set.Iio 1)) ∂μ :=
+          ∫⁻ x,
+            Filter.liminf (fun t : ℝ => (ψ (t • x)).toENNReal) (nhdsWithin 1 (Set.Iio 1)) ∂μ :=
         lintegral_congr_ae (Filter.Eventually.of_forall fun x => (hradial x).liminf_eq.symm)
-      _ ≤ Filter.liminf (fun t : ℝ => ∫⁻ x, (ψ (t • x)).toENNReal ∂μ) (nhdsWithin 1 (Set.Iio 1)) :=
-        lintegral_liminf_le (fun t => hψmeas.comp (continuous_const.smul continuous_id).measurable)
+      _ ≤
+          Filter.liminf (fun t : ℝ => ∫⁻ x, (ψ (t • x)).toENNReal ∂μ)
+            (nhdsWithin 1 (Set.Iio 1)) :=
+        lintegral_liminf_le
+          (fun t => hψmeas.comp (continuous_const.smul continuous_id).measurable)
       _ ≤ L := Filter.liminf_le_of_frequently_le' hev.frequently
 
 end FunctionalInequalities.Probability

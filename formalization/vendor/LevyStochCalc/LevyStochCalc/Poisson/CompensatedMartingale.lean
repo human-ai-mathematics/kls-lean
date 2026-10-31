@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedMartingaleAdapted
-import LevyStochCalc.Poisson.CompensatedMartingaleIncrement
-import LevyStochCalc.Poisson.CompensatedMartingaleQuadratic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedMartingaleAdapted
+public import LevyStochCalc.Poisson.CompensatedMartingaleIncrement
+public import LevyStochCalc.Poisson.CompensatedMartingaleQuadratic
 
 /-!
 # Martingale property of the simple compensated-Poisson integral

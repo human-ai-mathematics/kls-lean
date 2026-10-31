@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Basic
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Basic
 
 /-! Independent clients for the explicit finite construction. No residual estimate or
 form-range density is asserted. Empty coordinates and zero initial data are checked explicitly. -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open FunctionalInequalities.Analysis.WaveSplitting

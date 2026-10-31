@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
-import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
-import FunctionalInequalities.KLS.Isoperimetry
-import Mathlib.Probability.Moments.Variance
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
+public import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+public import FunctionalInequalities.KLS.Isoperimetry
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Route statements for Cheeger's inequality `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²`
@@ -42,7 +44,8 @@ test, giving the same bound for every admissible test (`P6`), hence
 `C_P^smooth(ν) ≤ 4 / h_M²` (`P1`; when `h_M = 0` the right side is `⊤`).  Finally the
 identification of the literature constant with the smooth-test constant of the intrinsic law
 (`Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope`, under the absolute continuity
-every log-concave law has) and `h_μ = h_M(ν)` (`Isoperimetry.constant_eq_minkowskiConstant_intrinsic`,
+every log-concave law has) and `h_μ = h_M(ν)`
+(`Isoperimetry.constant_eq_minkowskiConstant_intrinsic`,
 `K11` of `InfimumRouteStatements.lean`) transport `P1` to the target `P0`.
 
 ## What is already there
@@ -54,6 +57,8 @@ every log-concave law has) and `h_μ = h_M(ν)` (`Isoperimetry.constant_eq_minko
 `lintegral_eq_lintegral_meas_le`, `ENNReal.lintegral_mul_le_Lp_mul_Lq` (Hölder), `evariance` and
 `variance`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

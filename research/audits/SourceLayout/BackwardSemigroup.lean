@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open Filter Topology Set FunctionalInequalities.Analysis.Semigroup
 

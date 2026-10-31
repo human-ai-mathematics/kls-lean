@@ -1,8 +1,10 @@
-import FunctionalInequalities.Probability.Support.Affine
-import FunctionalInequalities.Probability.Covariance.Basic
-import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.Convex.Integral
+module
+
+public import FunctionalInequalities.Probability.Support.Affine
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.Convex.Integral
 
 /-!
 # Ambient and intrinsic covariance
@@ -31,6 +33,8 @@ The second-moment hypothesis is explicit; without it Mathlib's covariance form i
 convention and the statements would be vacuous. Nothing here assumes log-concavity, a density,
 or positive dimension, and no Poincaré, whitening or KLS statement is asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory
@@ -134,22 +138,24 @@ theorem operator_coe_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 (μ
   apply ext_inner_right ℝ
   intro y
   have hy : y = (P y : E) + (y - P y) := (add_sub_cancel _ _).symm
-  have hperp : y - (P y : E) ∈ (affineSupport μ).directionᗮ := Submodule.sub_starProjection_mem_orthogonal y
-  calc inner ℝ (operator (μ : Measure E) v) y = covarianceBilin (μ : Measure E) v y :=
-        operator_inner _ _ _
+  have hperp : y - (P y : E) ∈ (affineSupport μ).directionᗮ :=
+    Submodule.sub_starProjection_mem_orthogonal y
+  calc
+    inner ℝ (operator (μ : Measure E) v) y = covarianceBilin (μ : Measure E) v y :=
+      operator_inner _ _ _
     _ = covarianceBilin (μ : Measure E) v (P y) + covarianceBilin (μ : Measure E) v (y - P y) := by
-        conv_lhs => rw [hy]
-        rw [map_add]
+      conv_lhs => rw [hy]
+      rw [map_add]
     _ = covarianceBilin (μ : Measure E) v (P y) := by
-        rw [covarianceBilin_comm (v : E) (y - P y), ← operator_inner (μ : Measure E) (y - P y) v,
-          operator_apply_eq_zero_of_mem_orthogonal μ hμ hperp, inner_zero_left, add_zero]
+      rw [covarianceBilin_comm (v : E) (y - P y), ← operator_inner (μ : Measure E) (y - P y) v,
+        operator_apply_eq_zero_of_mem_orthogonal μ hμ hperp, inner_zero_left, add_zero]
     _ = covarianceBilin ν v (P y) := (bilin_intrinsic μ hμ v (P y)).symm
     _ = inner ℝ (operator ν v) (P y) := (operator_inner _ _ _).symm
     _ = inner ℝ (operator ν v : E) (P y : E) := rfl
     _ = inner ℝ (operator ν v : E) y := by
-        conv_rhs => rw [hy]
-        rw [inner_add_right, Submodule.inner_right_of_mem_orthogonal (operator ν v).property hperp,
-          add_zero]
+      conv_rhs => rw [hy]
+      rw [inner_add_right,
+        Submodule.inner_right_of_mem_orthogonal (operator ν v).property hperp, add_zero]
 
 /-- Ambient and intrinsic covariance operators have the same operator norm. -/
 theorem opNorm_operator_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 (μ : Measure E)) :
@@ -159,24 +165,28 @@ theorem opNorm_operator_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 
   set ν : Measure (affineSupport μ).direction := (intrinsicMeasure μ).toMeasure
   apply le_antisymm
   · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun v ↦ ?_
-    calc ‖operator ν v‖ = ‖(operator ν v : E)‖ := (Submodule.norm_coe _).symm
+    calc
+      ‖operator ν v‖ = ‖(operator ν v : E)‖ := (Submodule.norm_coe _).symm
       _ = ‖operator (μ : Measure E) v‖ := by rw [operator_coe_intrinsic μ hμ v]
       _ ≤ ‖operator (μ : Measure E)‖ * ‖(v : E)‖ := ContinuousLinearMap.le_opNorm _ _
       _ = ‖operator (μ : Measure E)‖ * ‖v‖ := by rw [Submodule.norm_coe]
   · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun y ↦ ?_
     have hy : y = (P y : E) + (y - P y) := (add_sub_cancel _ _).symm
-    have hperp : y - (P y : E) ∈ (affineSupport μ).directionᗮ := Submodule.sub_starProjection_mem_orthogonal y
+    have hperp : y - (P y : E) ∈ (affineSupport μ).directionᗮ :=
+      Submodule.sub_starProjection_mem_orthogonal y
     have h0 : operator (μ : Measure E) (y - P y) = 0 :=
       operator_apply_eq_zero_of_mem_orthogonal μ hμ hperp
-    calc ‖operator (μ : Measure E) y‖
-        = ‖operator (μ : Measure E) (P y) + operator (μ : Measure E) (y - P y)‖ := by
-          conv_lhs => rw [hy]
-          rw [map_add]
+    calc
+      ‖operator (μ : Measure E) y‖ =
+          ‖operator (μ : Measure E) (P y) + operator (μ : Measure E) (y - P y)‖ := by
+        conv_lhs => rw [hy]
+        rw [map_add]
       _ = ‖(operator ν (P y) : E)‖ := by rw [h0, add_zero, operator_coe_intrinsic μ hμ]
       _ = ‖operator ν (P y)‖ := Submodule.norm_coe _
       _ ≤ ‖operator ν‖ * ‖P y‖ := ContinuousLinearMap.le_opNorm _ _
       _ ≤ ‖operator ν‖ * ‖y‖ :=
-          mul_le_mul_of_nonneg_left ((affineSupport μ).direction.norm_orthogonalProjectionOnto_apply_le y) (norm_nonneg _)
+        mul_le_mul_of_nonneg_left
+          ((affineSupport μ).direction.norm_orthogonalProjectionOnto_apply_le y) (norm_nonneg _)
 
 omit [CompleteSpace E] in
 /-- The intrinsic covariance operator is positive definite on the direction space. -/
@@ -184,9 +194,13 @@ theorem intrinsic_operator_inner_self_pos (μ : ProbabilityMeasure E)
     (hμ : MemLp id 2 (μ : Measure E)) {v : (affineSupport μ).direction} (hv : v ≠ 0) :
     0 < inner ℝ (operator (intrinsicMeasure μ : Measure (affineSupport μ).direction) v) v := by
   set ν := intrinsicMeasure μ
-  have hν : MemLp id 2 (ν : Measure (affineSupport μ).direction) := memLp_id_two_intrinsicMeasure μ hμ
+  have hν : MemLp id 2 (ν : Measure (affineSupport μ).direction) :=
+    memLp_id_two_intrinsicMeasure μ hμ
   rw [operator_inner, covarianceBilin_self hν]
-  rcases (variance_nonneg (fun u ↦ inner ℝ v u) (ν : Measure (affineSupport μ).direction)).lt_or_eq with h | h
+  rcases
+    (variance_nonneg (fun u ↦ inner ℝ v u)
+        (ν : Measure (affineSupport μ).direction)).lt_or_eq with
+    h | h
   · exact h
   exfalso
   have hX : MemLp (fun u ↦ inner ℝ v u) 2 (ν : Measure (affineSupport μ).direction) := by
@@ -197,8 +211,10 @@ theorem intrinsic_operator_inner_self_pos (μ : ProbabilityMeasure E)
   have hae := (evariance_eq_zero_iff hX.aestronglyMeasurable.aemeasurable).mp hev
   set c : ℝ := ∫ u, inner ℝ v u ∂(ν : Measure (affineSupport μ).direction)
   have hv' : ‖v‖ ≠ 0 := norm_ne_zero_iff.mpr hv
-  set H : AffineSubspace ℝ (affineSupport μ).direction := AffineSubspace.mk' ((c / ‖v‖ ^ 2) • v) (Submodule.span ℝ {v})ᗮ
-  have hHclosed : IsClosed (H : Set (affineSupport μ).direction) := H.closed_of_finiteDimensional
+  set H : AffineSubspace ℝ (affineSupport μ).direction :=
+    AffineSubspace.mk' ((c / ‖v‖ ^ 2) • v) (Submodule.span ℝ { v })ᗮ
+  have hHclosed : IsClosed (H : Set (affineSupport μ).direction) :=
+    H.closed_of_finiteDimensional
   have hmem : ∀ᵐ u ∂(ν : Measure (affineSupport μ).direction), u ∈ H := by
     filter_upwards [hae] with u hu
     have hu' : inner ℝ v u = c := hu
@@ -208,7 +224,7 @@ theorem intrinsic_operator_inner_self_pos (μ : ProbabilityMeasure E)
   have hle := affineSupport_le_of_ae_mem ν H hHclosed hmem
   rw [affineSupport_intrinsicMeasure] at hle
   have hH : H = ⊤ := top_le_iff.mp hle
-  have hdir : (Submodule.span ℝ {v})ᗮ = ⊤ := by
+  have hdir : (Submodule.span ℝ { v })ᗮ = ⊤ := by
     have := congrArg AffineSubspace.direction hH
     rwa [AffineSubspace.direction_mk', AffineSubspace.direction_top] at this
   exact hv (Submodule.span_singleton_eq_bot.mp ((Submodule.orthogonal_eq_top_iff _).mp hdir))

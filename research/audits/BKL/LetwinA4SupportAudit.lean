@@ -1,23 +1,32 @@
-import FunctionalInequalities.Analysis.Convex.Coercivity
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
-import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
-import Mathlib.Analysis.Convex.Mul
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+public import Mathlib.Analysis.Convex.Mul
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Audit: Letwin Lemma A.4 support results
 
 Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Clients of the coercivity theorem
-`exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg`, every premise derived here:
+`exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg`, every premise derived
+here:
 
-* the real Gaussian potential `φ x = x²` on `ℝ` with Lebesgue measure: convexity from `Even.convexOn_pow`, integrability
-  of `e^{-x²}` from Mathlib's `integrable_exp_neg_mul_sq` (not assumed); consumers: every global minimiser is `0`
+* the real Gaussian potential `φ x = x²` on `ℝ` with Lebesgue measure: convexity from
+  `Even.convexOn_pow`, integrability
+  of `e^{-x²}` from Mathlib's `integrable_exp_neg_mul_sq` (not assumed); consumers: every global
+  minimiser is `0`
   (independent arithmetic) and the sublevel `{x² ≤ 1}` is bounded;
-* dimension zero: an arbitrary `φ` on `EuclideanSpace ℝ (Fin 0)` with its volume (an additive Haar measure); convexity
-  and integrability of `e^{-φ}` are derived from the space being a single point (finite Haar measure on a compact space).
+* dimension zero: an arbitrary `φ` on `EuclideanSpace ℝ (Fin 0)` with its volume (an additive Haar
+  measure); convexity
+  and integrability of `e^{-φ}` are derived from the space being a single point (finite Haar measure
+  on a compact space).
 
 Axiom reports for the four Lemma A.4 support declarations and the clients follow.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
@@ -34,12 +43,16 @@ theorem integrable_exp_neg_sq : Integrable (fun x : ℝ => Real.exp (-(x ^ 2))) 
 /-- The coercivity theorem for the Gaussian: a global minimiser and compact sublevels. -/
 theorem minimum_and_compact_sublevels :
     (∃ y₀ : ℝ, ∀ y, y₀ ^ 2 ≤ y ^ 2) ∧ ∀ c : ℝ, IsCompact {y : ℝ | y ^ 2 ≤ c} :=
-  exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg volume convexOn_sq integrable_exp_neg_sq
+  exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg volume convexOn_sq
+    integrable_exp_neg_sq
 
 /-- Consumer: the minimiser provided by the theorem is `0` (independent arithmetic check). -/
 theorem minimiser_eq_zero : ∃ y₀ : ℝ, (∀ y, y₀ ^ 2 ≤ y ^ 2) ∧ y₀ = 0 := by
   obtain ⟨y₀, h⟩ := minimum_and_compact_sublevels.1
-  exact ⟨y₀, h, pow_eq_zero_iff (n := 2) two_ne_zero |>.mp (le_antisymm (by simpa using h 0) (sq_nonneg y₀))⟩
+  exact
+    ⟨y₀, h,
+      pow_eq_zero_iff (n := 2) two_ne_zero |>.mp
+        (le_antisymm (by simpa using h 0) (sq_nonneg y₀))⟩
 
 /-- Consumer: a compact sublevel is bounded. -/
 theorem isBounded_sublevel_one : Bornology.IsBounded {y : ℝ | y ^ 2 ≤ 1} :=
@@ -58,19 +71,24 @@ attribute [local instance] subsingleton
 /-- Every potential on a point is convex. -/
 theorem convexOn (φ : EuclideanSpace ℝ (Fin 0) → ℝ) : ConvexOn ℝ Set.univ φ := by
   refine ⟨convex_univ, fun x _ y _ a b _ _ hab => ?_⟩
-  rw [Subsingleton.elim y x, Subsingleton.elim (a • x + b • x) x, smul_eq_mul, smul_eq_mul, ← add_mul, hab, one_mul]
+  rw [Subsingleton.elim y x, Subsingleton.elim (a • x + b • x) x, smul_eq_mul, smul_eq_mul, ←
+    add_mul, hab, one_mul]
 
-/-- `e^{-φ}` is integrable for the volume of the point: a constant on a finite (compact, Haar) measure space. -/
+/--
+`e^{-φ}` is integrable for the volume of the point: a constant on a finite (compact, Haar) measure
+space. -/
 theorem integrable (φ : EuclideanSpace ℝ (Fin 0) → ℝ) :
     Integrable (fun x => Real.exp (-φ x)) (volume : Measure (EuclideanSpace ℝ (Fin 0))) := by
-  have h : (fun x => Real.exp (-φ x)) = fun _ => Real.exp (-φ 0) := funext fun x => by rw [Subsingleton.elim x 0]
+  have h : (fun x => Real.exp (-φ x)) = fun _ => Real.exp (-φ 0) :=
+    funext fun x => by rw [Subsingleton.elim x 0]
   rw [h]
   exact integrable_const _
 
 /-- The coercivity theorem in dimension zero, every premise derived. -/
 theorem minimum_and_compact_sublevels (φ : EuclideanSpace ℝ (Fin 0) → ℝ) :
     (∃ y₀, ∀ y, φ y₀ ≤ φ y) ∧ ∀ c : ℝ, IsCompact {y | φ y ≤ c} :=
-  exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg volume (convexOn φ) (integrable φ)
+  exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg volume (convexOn φ)
+    (integrable φ)
 
 end A4DimensionZeroCoercivity
 

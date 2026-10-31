@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Lipschitz.Componentwise
-import FunctionalInequalities.Analysis.Lipschitz.Refinement
-import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
+module
+
+public import FunctionalInequalities.Analysis.Lipschitz.Componentwise
+public import FunctionalInequalities.Analysis.Lipschitz.Refinement
+public import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
 
 /-! # Exact `C¹` pieces of a Lipschitz map into a finite-dimensional target
 
@@ -18,6 +20,8 @@ agreement to agreement of `u` with the assembled `C¹` map `e.symm ∘ (represen
 
 The target carries no measurable structure: only the domain is integrated over.
 -/
+
+@[expose] public section
 
 noncomputable section
 

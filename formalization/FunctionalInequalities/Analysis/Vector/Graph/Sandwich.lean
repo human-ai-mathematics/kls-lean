@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MeasurableCover
-import FunctionalInequalities.Analysis.Vector.Graph.Basic
+module
+
+public import FunctionalInequalities.Analysis.MeasurableCover
+public import FunctionalInequalities.Analysis.Vector.Graph.Basic
 
 /-! # Two-sided estimates for vector-valued graphs
 
@@ -14,9 +16,11 @@ embeddings have orthogonal ranges.  Its consequence `‖y - y'‖ ≤ ‖Ψ y - 
 map expansive, and that is exactly the lower bound the general area-formula route has to obtain
 from an inverse it does not have.
 
-**The area formula itself is still not proved**: the limit `ε → 0` and the countable patching are
-the fifth and last phase.
+This module supplies the two-sided estimates. `Analysis/Vector/Graph/Area.lean` takes the
+`ε → 0` limit and performs the countable patching for the area formula.
 -/
+
+@[expose] public section
 
 noncomputable section
 

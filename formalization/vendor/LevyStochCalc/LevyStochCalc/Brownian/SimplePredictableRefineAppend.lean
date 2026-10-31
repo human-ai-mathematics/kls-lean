@@ -5,7 +5,11 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.SimplePredictableRefineCommon
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.SimplePredictableRefineCommon
 
 /-!
 # Zero-extension of a simple predictable to a larger horizon
@@ -16,6 +20,8 @@ Appending one interval carrying the coefficient `0`
 simple integral and the same adaptedness, so that two approximants on different
 horizons can be compared on a common endpoint.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

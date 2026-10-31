@@ -1,29 +1,35 @@
-import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-import Mathlib.Algebra.BigOperators.Group.Finset.Defs
-import Mathlib.Algebra.BigOperators.Group.Finset.Sigma
-import Mathlib.Algebra.BigOperators.Ring.Finset
-import Mathlib.Algebra.Order.BigOperators.Group.Finset
-import Mathlib.Algebra.Order.Chebyshev
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Data.Fintype.Basic
-import Mathlib.Data.Fintype.BigOperators
-import Mathlib.Data.Fintype.Card
-import Mathlib.Data.Fintype.Pi
-import Mathlib.Data.Matrix.Mul
-import Mathlib.Data.Real.Basic
-import Mathlib.LinearAlgebra.Matrix.Defs
-import Mathlib.LinearAlgebra.Matrix.Hermitian
-import Mathlib.LinearAlgebra.Matrix.Symmetric
-import Mathlib.Tactic.Linarith.Frontend
-import Mathlib.Tactic.Ring.RingNF
+module
+
+public import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+public import Mathlib.Algebra.BigOperators.Group.Finset.Defs
+public import Mathlib.Algebra.BigOperators.Group.Finset.Sigma
+public import Mathlib.Algebra.BigOperators.Ring.Finset
+public import Mathlib.Algebra.Order.BigOperators.Group.Finset
+public import Mathlib.Algebra.Order.Chebyshev
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.Data.Fintype.Basic
+public import Mathlib.Data.Fintype.BigOperators
+public import Mathlib.Data.Fintype.Card
+public import Mathlib.Data.Fintype.Pi
+public import Mathlib.Data.Matrix.Mul
+public import Mathlib.Basic.Real.Basic
+public import Mathlib.LinearAlgebra.Matrix.Defs
+public import Mathlib.LinearAlgebra.Matrix.Hermitian
+public import Mathlib.LinearAlgebra.Matrix.Symmetric
+public import Mathlib.Tactic.Linarith.Frontend
+public import Mathlib.Tactic.Ring.RingNF
 
 /-!
 # Matrices acting on one slot of a coordinate tensor
 
-Order-`r` coordinate tensors on `ℝⁿ`, their Euclidean inner product, the action `H^{(s)}` of a matrix on the `s`-th input
-and `Σ_H = Σ_s H^{(s)}` (BKL arXiv:2610.05474v1, p. 23), and the algebra (89)–(91) of the proof of Lemma 5.1 at `A = Id`:
+Order-`r` coordinate tensors on `ℝⁿ`, their Euclidean inner product, the action `H^{(s)}` of a
+matrix on the `s`-th input
+and `Σ_H = Σ_s H^{(s)}` (BKL arXiv:2610.05474v1, p. 23), and the algebra (89)–(91) of the proof of
+Lemma 5.1 at `A = Id`:
 the drift expression is at least `½ Σ|W_i|² − 17 m² |T|² − 2⟨T, L⟩` when `Σ_i H_i² ≤ 8 Id`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -36,9 +42,11 @@ variable {n r : ℕ}
 /-- The Euclidean inner product of two order-`r` coordinate tensors on `ℝⁿ`. -/
 def inner (T S : (Fin r → Fin n) → ℝ) : ℝ := ∑ J, T J * S J
 
-/-- `H^{(s)}`: the matrix `H` acting on the `s`-th input of an order-`r` tensor (BKL arXiv:2610.05474v1, p. 23). -/
-def actOn (H : Matrix (Fin n) (Fin n) ℝ) (s : Fin r) (T : (Fin r → Fin n) → ℝ) : (Fin r → Fin n) → ℝ :=
-  fun J => ∑ k, H (J s) k * T (Function.update J s k)
+/--
+`H^{(s)}`: the matrix `H` acting on the `s`-th input of an order-`r` tensor (BKL arXiv:2610.05474v1,
+p. 23). -/
+def actOn (H : Matrix (Fin n) (Fin n) ℝ) (s : Fin r) (T : (Fin r → Fin n) → ℝ) :
+    (Fin r → Fin n) → ℝ := fun J => ∑ k, H (J s) k * T (Function.update J s k)
 
 /-- `Σ_H = Σ_s H^{(s)}`. -/
 def actSum (H : Matrix (Fin n) (Fin n) ℝ) (T : (Fin r → Fin n) → ℝ) : (Fin r → Fin n) → ℝ :=
@@ -188,80 +196,72 @@ private lemma sum_sq_nonneg {α : Type*} [Fintype α] (f : α → ℝ) :
     0 ≤ ∑ x, f x ^ 2 := by
   exact Finset.sum_nonneg (fun x hx => sq_nonneg (f x))
 
-/-- **The algebra of BKL Lemma 5.1, (89)–(91)** at `A = Id`: for symmetric `H_i` with `Σ_i H_i² ≤ 8 Id` and any
+/--
+**The algebra of BKL Lemma 5.1, (89)–(91)** at `A = Id`: for symmetric `H_i` with `Σ_i H_i² ≤ 8 Id`
+and any
 tensors `T, W_i, L` of order `r = m − 1 ≥ 1`, the drift expression of (89),
-`−(m+1)|T|² − 2⟨T, L⟩ + Σ|W_i|² − 2Σ⟨W_i, Σ_{H_i}T⟩ + ½Σ|Σ_{H_i}T|² + ½ΣΣ_s|H_i^{(s)}T|²`, is at least
+`−(m+1)|T|² − 2⟨T, L⟩ + Σ|W_i|² − 2Σ⟨W_i, Σ_{H_i}T⟩ + ½Σ|Σ_{H_i}T|² + ½ΣΣ_s|H_i^{(s)}T|²`, is at
+least
 `½ Σ|W_i|² − 17 m² |T|² − 2⟨T, L⟩`. -/
 theorem drift_expression_ge {m : ℕ} (hm : r + 1 = m) (H : Fin n → Matrix (Fin n) (Fin n) ℝ)
     (hH : ∀ i, (H i).IsHermitian)
     (h8 : ∀ v : Fin n → ℝ, ∑ i, ∑ a, (∑ b, H i a b * v b) ^ 2 ≤ 8 * ∑ a, v a ^ 2)
     (T L : (Fin r → Fin n) → ℝ) (W : Fin n → (Fin r → Fin n) → ℝ) :
     (1 / 2 : ℝ) * ∑ i, inner (W i) (W i) - 17 * (m : ℝ) ^ 2 * inner T T - 2 * inner T L ≤
-      -((m : ℝ) + 1) * inner T T - 2 * inner T L + ∑ i, inner (W i) (W i)
-        - 2 * ∑ i, inner (W i) (actSum (H i) T)
-        + (1 / 2 : ℝ) * ∑ i, inner (actSum (H i) T) (actSum (H i) T)
-        + (1 / 2 : ℝ) * ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) := by
+      -((m : ℝ) + 1) * inner T T - 2 * inner T L + ∑ i, inner (W i) (W i) -
+            2 * ∑ i, inner (W i) (actSum (H i) T) +
+          (1 / 2 : ℝ) * ∑ i, inner (actSum (H i) T) (actSum (H i) T) +
+        (1 / 2 : ℝ) * ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) := by
   classical
-  have hH_used : (0 : ℝ) ≤ 0 := by
-    exact (fun _ : ∀ i, (H i).IsHermitian => le_rfl) hH
+  have hH_used : (0 : ℝ) ≤ 0 := by exact (fun _ : ∀ i, (H i).IsHermitian => le_rfl) hH
   have hcross :
-      -(1 / 2 : ℝ) * ∑ i, inner (W i) (W i) -
-          2 * ∑ i, inner (actSum (H i) T) (actSum (H i) T) ≤
-        -2 * ∑ i, inner (W i) (actSum (H i) T) := by
+    -(1 / 2 : ℝ) * ∑ i, inner (W i) (W i) - 2 * ∑ i, inner (actSum (H i) T) (actSum (H i) T) ≤
+      -2 * ∑ i, inner (W i) (actSum (H i) T) := by
     have hi (i : Fin n) := cross_bound (W i) (actSum (H i) T)
     calc
-      -(1 / 2 : ℝ) * ∑ i, inner (W i) (W i) -
-            2 * ∑ i, inner (actSum (H i) T) (actSum (H i) T) =
-          ∑ i, (-(1 / 2 : ℝ) * inner (W i) (W i) -
-            2 * inner (actSum (H i) T) (actSum (H i) T)) := by
-              rw [Finset.sum_sub_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
+      -(1 / 2 : ℝ) * ∑ i, inner (W i) (W i) - 2 * ∑ i, inner (actSum (H i) T) (actSum (H i) T) =
+          ∑ i,
+            (-(1 / 2 : ℝ) * inner (W i) (W i) - 2 * inner (actSum (H i) T) (actSum (H i) T)) := by
+        rw [Finset.sum_sub_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
       _ ≤ ∑ i, -2 * inner (W i) (actSum (H i) T) := by
-            apply Finset.sum_le_sum
-            intro i hi'
-            exact hi i
-      _ = -2 * ∑ i, inner (W i) (actSum (H i) T) := by
-            rw [Finset.mul_sum]
-  have hslot :
-      ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) ≤
-        8 * (r : ℝ) * inner T T := by
+        apply Finset.sum_le_sum
+        intro i hi'
+        exact hi i
+      _ = -2 * ∑ i, inner (W i) (actSum (H i) T) := by rw [Finset.mul_sum]
+  have hslot : ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) ≤ 8 * (r : ℝ) * inner T T := by
     calc
       ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) =
           ∑ s, ∑ i, inner (actOn (H i) s T) (actOn (H i) s T) := by
-            rw [Finset.sum_comm]
+        rw [Finset.sum_comm]
       _ ≤ ∑ s, 8 * ∑ J, T J ^ 2 := by
-            apply Finset.sum_le_sum
-            intro s hs
-            simpa only [inner, actOn, pow_two] using slot_bound H h8 T s
+        apply Finset.sum_le_sum
+        intro s hs
+        simpa only [inner, actOn, pow_two] using slot_bound H h8 T s
       _ = 8 * (r : ℝ) * inner T T := by
-            rw [fin_sum_const_mul]
-            unfold inner
-            simp only [pow_two]
-            ring
+        rw [fin_sum_const_mul]
+        unfold inner
+        simp only [pow_two]
+        ring
   have hact := actSum_bound H T
   have hr : 0 ≤ (r : ℝ) := Nat.cast_nonneg r
   have hC :
-      ∑ i, inner (actSum (H i) T) (actSum (H i) T) ≤
-        (r : ℝ) * (8 * (r : ℝ) * inner T T) :=
+    ∑ i, inner (actSum (H i) T) (actSum (H i) T) ≤ (r : ℝ) * (8 * (r : ℝ) * inner T T) :=
     le_trans hact (mul_le_mul_of_nonneg_left hslot hr)
   have hA : 0 ≤ inner T T := by
     unfold inner
     simpa only [pow_two] using sum_sq_nonneg T
-  have hDnonneg :
-      0 ≤ ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) := by
+  have hDnonneg : 0 ≤ ∑ i, ∑ s, inner (actOn (H i) s T) (actOn (H i) s T) := by
     simp only [inner]
     apply Finset.sum_nonneg
     intro i hi
     apply Finset.sum_nonneg
     intro s hs
     simpa only [pow_two] using sum_sq_nonneg (actOn (H i) s T)
-  have hmcast : (m : ℝ) = (r : ℝ) + 1 := by
-    exact_mod_cast hm.symm
-  have hcoef :
-      0 ≤ 17 * (m : ℝ) ^ 2 - (m : ℝ) - 1 - 16 * (r : ℝ) ^ 2 := by
+  have hmcast : (m : ℝ) = (r : ℝ) + 1 := by exact_mod_cast hm.symm
+  have hcoef : 0 ≤ 17 * (m : ℝ) ^ 2 - (m : ℝ) - 1 - 16 * (r : ℝ) ^ 2 := by
     rw [hmcast]
     nlinarith [sq_nonneg (r : ℝ)]
-  have hprod :
-      0 ≤ (17 * (m : ℝ) ^ 2 - (m : ℝ) - 1 - 16 * (r : ℝ) ^ 2) * inner T T :=
+  have hprod : 0 ≤ (17 * (m : ℝ) ^ 2 - (m : ℝ) - 1 - 16 * (r : ℝ) ^ 2) * inner T T :=
     mul_nonneg hcoef hA
   nlinarith [hcross, hC, hA, hDnonneg, hprod, hH_used]
 
@@ -284,9 +284,9 @@ theorem actOn_actOn_comm (M N : Matrix (Fin n) (Fin n) ℝ) {s t : Fin r} (hst :
   funext J
   simp only [actOn]
   have hNt (k : Fin n) : Function.update J s k t = J t := by
-    rw [Function.update_apply, if_neg (Ne.symm hst)]
+    rw [Function.update_apply, ite_eq_right (Ne.symm hst)]
   have hNs (l : Fin n) : Function.update J t l s = J s := by
-    rw [Function.update_apply, if_neg hst]
+    rw [Function.update_apply, ite_eq_right hst]
   have hupd (k l : Fin n) :
       Function.update (Function.update J s k) t l =
         Function.update (Function.update J t l) s k := by
@@ -421,59 +421,60 @@ theorem inner_actOn_left (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (s : F
 
 /-- `⟨T, (M²)^{(s)} T⟩ = |M^{(s)} T|²` for symmetric `M`. -/
 theorem inner_actOn_mul_self (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (s : Fin r)
-    (T : (Fin r → Fin n) → ℝ) : inner T (actOn (M * M) s T) = inner (actOn M s T) (actOn M s T) := by
+    (T : (Fin r → Fin n) → ℝ) :
+    inner T (actOn (M * M) s T) = inner (actOn M s T) (actOn M s T) := by
   rw [actOn_mul]
   exact (inner_actOn_left M hM s T (actOn M s T)).symm
 
-/-- `|Σ_M T|² = Σ_s |M^{(s)} T|² + Σ_{s ≠ t} ⟨T, M^{(s)} M^{(t)} T⟩` for symmetric `M` (BKL (87)–(88)). -/
-theorem inner_actSum_actSum (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (T : (Fin r → Fin n) → ℝ) :
+/--
+`|Σ_M T|² = Σ_s |M^{(s)} T|² + Σ_{s ≠ t} ⟨T, M^{(s)} M^{(t)} T⟩` for symmetric `M` (BKL (87)–(88)).
+-/
+theorem inner_actSum_actSum (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm)
+    (T : (Fin r → Fin n) → ℝ) :
     inner (actSum M T) (actSum M T) =
       ∑ s, inner (actOn M s T) (actOn M s T) +
         ∑ s, ∑ t ∈ Finset.univ.erase s, inner T (actOn M s (actOn M t T)) := by
   classical
   have hexpand :
-      inner (actSum M T) (actSum M T) =
-        ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := by
+    inner (actSum M T) (actSum M T) = ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := by
     unfold inner actSum
     calc
       (∑ J, (∑ s, actOn M s T J) * (∑ t, actOn M t T J)) =
           ∑ J, ∑ s, ∑ t, (actOn M s T J) * (actOn M t T J) := by
-            apply Finset.sum_congr rfl
-            intro J hJ
-            rw [Finset.sum_mul_sum]
-      _ = ∑ s, ∑ J, ∑ t, (actOn M s T J) * (actOn M t T J) := by
-            rw [Finset.sum_comm]
+        apply Finset.sum_congr rfl
+        intro J hJ
+        rw [Finset.sum_mul_sum]
+      _ = ∑ s, ∑ J, ∑ t, (actOn M s T J) * (actOn M t T J) := by rw [Finset.sum_comm]
       _ = ∑ s, ∑ t, ∑ J, (actOn M s T J) * (actOn M t T J) := by
-            apply Finset.sum_congr rfl
-            intro s hs
-            rw [Finset.sum_comm]
-      _ = ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := by
-            rfl
+        apply Finset.sum_congr rfl
+        intro s hs
+        rw [Finset.sum_comm]
+      _ = ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := by rfl
   calc
-    inner (actSum M T) (actSum M T) =
-        ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := hexpand
-    _ = ∑ s, (inner (actOn M s T) (actOn M s T) +
-          ∑ t ∈ Finset.univ.erase s, inner (actOn M s T) (actOn M t T)) := by
-          apply Finset.sum_congr rfl
-          intro s hs
-          symm
-          exact Finset.add_sum_erase (Finset.univ : Finset (Fin r))
-            (fun t => inner (actOn M s T) (actOn M t T))
-            (Finset.mem_univ s)
-    _ = (∑ s, inner (actOn M s T) (actOn M s T)) +
-          ∑ s, ∑ t ∈ Finset.univ.erase s,
-            inner (actOn M s T) (actOn M t T) := by
-          rw [Finset.sum_add_distrib]
-    _ = (∑ s, inner (actOn M s T) (actOn M s T)) +
-          ∑ s, ∑ t ∈ Finset.univ.erase s,
-            inner T (actOn M s (actOn M t T)) := by
-          apply congrArg (fun x : ℝ =>
-            (∑ s, inner (actOn M s T) (actOn M s T)) + x)
-          apply Finset.sum_congr rfl
-          intro s hs
-          apply Finset.sum_congr rfl
-          intro t ht
-          exact inner_actOn_left M hM s T (actOn M t T)
+    inner (actSum M T) (actSum M T) = ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := hexpand
+    _ =
+        ∑ s,
+          (inner (actOn M s T) (actOn M s T) +
+            ∑ t ∈ Finset.univ.erase s, inner (actOn M s T) (actOn M t T)) := by
+      apply Finset.sum_congr rfl
+      intro s hs
+      symm
+      exact
+        Finset.add_sum_erase (Finset.univ : Finset (Fin r))
+          (fun t => inner (actOn M s T) (actOn M t T)) (Finset.mem_univ s)
+    _ =
+        (∑ s, inner (actOn M s T) (actOn M s T)) +
+          ∑ s, ∑ t ∈ Finset.univ.erase s, inner (actOn M s T) (actOn M t T) := by
+      rw [Finset.sum_add_distrib]
+    _ =
+        (∑ s, inner (actOn M s T) (actOn M s T)) +
+          ∑ s, ∑ t ∈ Finset.univ.erase s, inner T (actOn M s (actOn M t T)) := by
+      apply congrArg (fun x : ℝ => (∑ s, inner (actOn M s T) (actOn M s T)) + x)
+      apply Finset.sum_congr rfl
+      intro s hs
+      apply Finset.sum_congr rfl
+      intro t ht
+      exact inner_actOn_left M hM s T (actOn M t T)
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 

@@ -1,8 +1,10 @@
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.LocalExtr.Basic
-import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.Topology.MetricSpace.Thickening
+module
+
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.LocalExtr.Basic
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.Topology.MetricSpace.Thickening
 
 /-!
 # Distance cutoffs and their gradient integral
@@ -36,6 +38,8 @@ is assumed.  The empty set is a separate branch: Mathlib's `Metric.infDist x ∅
 `distanceCutoff ∅ r` the constant `1`, not `0`, while `Metric.thickening r ∅ = ∅`, so both sides
 vanish.  The module imports no local module at all, only Mathlib.
 -/
+
+@[expose] public section
 
 noncomputable section
 

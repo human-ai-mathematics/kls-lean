@@ -3,6 +3,8 @@ Copyright (c) 2025 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne, Thomas Zhu
 -/
+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 replacements
+-- of deprecated names (identifier-only); see vendor/port.patch.
 module
 
 public import BrownianMotion.Auxiliary.StoppedProcess
@@ -759,7 +761,7 @@ lemma integral_indicator_apply (S : ElementaryPredictableSet 𝓕)
   rw [SimpleProcess.integral, indicator, Finsupp.onFinset_sum]
   · apply Finset.sum_congr rfl
     intro p hp
-    rw [if_pos hp, Set.indicator, Set.indicator]
+    rw [ite_eq_left hp, Set.indicator, Set.indicator]
     split_ifs <;> simp
   simp
 

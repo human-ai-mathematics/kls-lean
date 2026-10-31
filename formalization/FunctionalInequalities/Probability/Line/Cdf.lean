@@ -1,10 +1,12 @@
-import FunctionalInequalities.Probability.Basic
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.WithDensity
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import Mathlib.MeasureTheory.Measure.Support
+module
+
+public import FunctionalInequalities.Probability.Basic
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Measure.WithDensity
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.MeasureTheory.Measure.Support
 
 /-!
 # Distribution functions of probability laws on the real line
@@ -21,6 +23,8 @@ continuous, differentiable at continuity points of `ρ` with derivative `ρ`, at
 
 Nothing here uses log-concavity. The lemmas are stated for an arbitrary Lebesgue density.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -101,19 +105,22 @@ theorem cdf_pos_of_mem_interior_support {x : ℝ} (hx : x ∈ interior (μ : Mea
     0 < cdf μ x := by
   obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp isOpen_interior x hx
   have hy : x - ε / 2 ∈ (μ : Measure ℝ).support :=
-    interior_subset (hball (by rw [Metric.mem_ball, Real.dist_eq]; rw [abs_lt]; constructor <;> linarith))
+    interior_subset
+      (hball (by rw [Metric.mem_ball, Real.dist_eq]; rw [abs_lt]; constructor <;> linarith))
   have hpos : 0 < (μ : Measure ℝ) (Iio x) :=
     (Measure.mem_support_iff_forall _).mp hy (Iio x) (Iio_mem_nhds (by linarith))
   unfold cdf
   rw [measureReal_def]
-  exact ENNReal.toReal_pos (ne_of_gt (hpos.trans_le (measure_mono Iio_subset_Iic_self)))
-    (measure_ne_top _ _)
+  exact
+    ENNReal.toReal_pos (ne_of_gt (hpos.trans_le (measure_mono Iio_subset_Iic_self)))
+      (measure_ne_top _ _)
 
 theorem cdf_lt_one_of_mem_interior_support {x : ℝ} (hx : x ∈ interior (μ : Measure ℝ).support) :
     cdf μ x < 1 := by
   obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp isOpen_interior x hx
   have hy : x + ε / 2 ∈ (μ : Measure ℝ).support :=
-    interior_subset (hball (by rw [Metric.mem_ball, Real.dist_eq]; rw [abs_lt]; constructor <;> linarith))
+    interior_subset
+      (hball (by rw [Metric.mem_ball, Real.dist_eq]; rw [abs_lt]; constructor <;> linarith))
   have hpos : 0 < (μ : Measure ℝ) (Ioi x) :=
     (Measure.mem_support_iff_forall _).mp hy (Ioi x) (Ioi_mem_nhds (by linarith))
   have h := measureReal_Ioi μ x

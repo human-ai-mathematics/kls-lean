@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Scaling
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Scaling
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Independent full-signature clients for the content chain at finite Borel measures, scaling of
 costs, indicator distances, approximating classes, perimeter and both contents by a nonnegative
@@ -8,6 +10,8 @@ of a finite nonzero measure, the probability instances through the coercion, a n
 and the empty/full sets.  Scalars are `ℝ≥0` (finite by type); the zero scalar is treated
 separately where the statement needs `c ≠ 0`.  Not claimed: the finite-measure recovery and
 relaxed identities, infinite total mass. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Density
-import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Density
+public import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 
 /-!
 # Derivatives of the logarithmic Laplace transform of the suspension (BKL (111), (112))
@@ -23,6 +25,8 @@ The first-derivative steps are also exposed by `hasDerivAt_log_integral_exp_lapl
 `tiltAverage_inner_eq_fderiv_logLaplace_of_lt` and `hasDerivAt_log_integral_exp_copy`.
 -/
 
+@[expose] public section
+
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Line
 open scoped RealInnerProductSpace
@@ -34,12 +38,12 @@ namespace FunctionalInequalities.KLS.LogConcave.Suspension
 open FunctionalInequalities.KLS.LogConcave.Suspension
 open scoped Topology ContDiff
 
-private theorem local_laplace_derivative_and_integrable {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] (ν : Measure E) {r : ℝ}
-    (hexp : Integrable (fun y => Real.exp (r * ‖y‖)) ν) {q : E} (hq : ‖q‖ < r) :
+private theorem local_laplace_derivative_and_integrable {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    (ν : Measure E) {r : ℝ} (hexp : Integrable (fun y => Real.exp (r * ‖y‖)) ν) {q : E}
+    (hq : ‖q‖ < r) :
     HasFDerivAt (fun w : E => ∫ y, Real.exp ⟪w, y⟫ ∂ν)
-      (∫ y, Real.exp ⟪q, y⟫ • weightedExpD (fun _ : E => (1 : ℝ)) y ∂ν) q ∧
+        (∫ y, Real.exp ⟪q, y⟫ • weightedExpD (fun _ : E => (1 : ℝ)) y ∂ν) q ∧
       Integrable (fun y => Real.exp ⟪q, y⟫ • weightedExpD (fun _ : E => (1 : ℝ)) y) ν := by
   have hgi : ∀ t < r, Integrable (fun y : E => Real.exp (t * ‖y‖) * ‖(1 : ℝ)‖) ν := by
     intro t ht
@@ -48,31 +52,37 @@ private theorem local_laplace_derivative_and_integrable {E : Type*}
     · filter_upwards [] with y
       simp only [norm_one, mul_one, Real.norm_of_nonneg (Real.exp_pos _).le]
       exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right ht.le (norm_nonneg y))
-  have hDgi := weightedExpD_integrable_lt (g := fun _ : E => (1 : ℝ))
-    measurable_const.aestronglyMeasurable hgi
+  have hDgi :=
+    weightedExpD_integrable_lt (g := fun _ : E => (1 : ℝ)) measurable_const.aestronglyMeasurable
+      hgi
   refine ⟨?_, ?_⟩
   · simpa only [smul_eq_mul, mul_one] using
       weightedExp_integral_hasFDerivAt_of_lt ν measurable_const.aestronglyMeasurable hgi hq
   · refine (hDgi ‖q‖ hq).mono' ?_ ?_
-    · exact ((by fun_prop : Continuous (fun y : E => Real.exp ⟪q, y⟫)).aestronglyMeasurable).smul
-        (weightedExpD_meas measurable_const.aestronglyMeasurable)
+    · exact
+        ((by fun_prop : Continuous (fun y : E => Real.exp ⟪q, y⟫)).aestronglyMeasurable).smul
+          (weightedExpD_meas measurable_const.aestronglyMeasurable)
     · filter_upwards [] with y
       rw [norm_smul, Real.norm_of_nonneg (Real.exp_pos _).le]
-      exact mul_le_mul_of_nonneg_right (Real.exp_le_exp.mpr (real_inner_le_norm q y)) (norm_nonneg _)
+      exact
+        mul_le_mul_of_nonneg_right (Real.exp_le_exp.mpr (real_inner_le_norm q y))
+          (norm_nonneg _)
 
 /-- The local mixed first derivative, derived from the actual Euclidean graph norm moment. -/
 private theorem graph_log_integral_hasDerivAt_zero {n : ℕ}
     (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ]
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) {r : ℝ} (_hr : 0 < r)
-    (hexp : Integrable (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp (r * ‖y‖))
-      (μ.map (fun x : EuclideanSpace ℝ (Fin n) =>
-        (WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j :
-          EuclideanSpace ℝ (Option (Fin n))))))
+    (hexp :
+      Integrable (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp (r * ‖y‖))
+        (μ.map
+          (fun x : EuclideanSpace ℝ (Fin n) =>
+            (WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j :
+              EuclideanSpace ℝ (Option (Fin n))))))
     (z : EuclideanSpace ℝ (Fin n)) (hz : ‖z‖ < r) :
-    HasDerivAt (fun w : ℝ => Real.log (∫ x, Real.exp (w * f x + ⟪z, x⟫) ∂μ))
-      (tiltAverage μ f z) 0 := by
-  let g : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Option (Fin n)) :=
-    fun x => WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j
+    HasDerivAt (fun w : ℝ => Real.log (∫ x, Real.exp (w * f x + ⟪z, x⟫) ∂μ)) (tiltAverage μ f z)
+      0 := by
+  let g : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Option (Fin n)) := fun x =>
+    WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j
   let Γ := μ.map g
   have hgm : Measurable g := by
     dsimp [g]
@@ -82,11 +92,10 @@ private theorem graph_log_integral_hasDerivAt_zero {n : ℕ}
     cases o with
     | none => exact hf
     | some j => exact (measurable_pi_apply j).comp (WithLp.measurable_ofLp 2 _)
-  let _ : IsProbabilityMeasure Γ := Measure.isProbabilityMeasure_map hgm.aemeasurable
+  let _ : IsProbabilityMeasure Γ := (Measure.isProbabilityMeasure_map_iff hgm.aemeasurable).2 inferInstance
   let q : EuclideanSpace ℝ (Option (Fin n)) :=
     WithLp.toLp 2 fun o => Option.elim o 0 fun j => z j
-  let e0 : EuclideanSpace ℝ (Option (Fin n)) :=
-    EuclideanSpace.basisFun (Option (Fin n)) ℝ none
+  let e0 : EuclideanSpace ℝ (Option (Fin n)) := EuclideanSpace.basisFun (Option (Fin n)) ℝ none
   have hqnorm : ‖q‖ = ‖z‖ := by
     have hsq : ‖q‖ ^ 2 = ‖z‖ ^ 2 := by
       rw [EuclideanSpace.real_norm_sq_eq, Fintype.sum_option]
@@ -97,30 +106,36 @@ private theorem graph_log_integral_hasDerivAt_zero {n : ℕ}
   have hq : ‖q‖ < r := hqnorm.trans_lt hz
   obtain ⟨hZ, hDint⟩ := local_laplace_derivative_and_integrable Γ hexp hq
   let D : EuclideanSpace ℝ (Option (Fin n)) →L[ℝ] ℝ :=
-    ∫ y, Real.exp ⟪q, y⟫ • weightedExpD (fun _ : EuclideanSpace ℝ (Option (Fin n)) => (1 : ℝ)) y ∂Γ
-  have hinner (w : ℝ) (x : EuclideanSpace ℝ (Fin n)) :
-      ⟪w • e0 + q, g x⟫ = w * f x + ⟪z, x⟫ := by
+    ∫ y,
+      Real.exp ⟪q, y⟫ • weightedExpD (fun _ : EuclideanSpace ℝ (Option (Fin n)) => (1 : ℝ)) y ∂Γ
+  have hinner (w : ℝ) (x : EuclideanSpace ℝ (Fin n)) : ⟪w • e0 + q, g x⟫ = w * f x + ⟪z, x⟫ := by
     simp [g, q, e0, PiLp.inner_apply, Fintype.sum_option, mul_comm]
   have hmap (w : ℝ) :
-      (∫ y, Real.exp ⟪w • e0 + q, y⟫ ∂Γ) = ∫ x, Real.exp (w * f x + ⟪z, x⟫) ∂μ := by
+    (∫ y, Real.exp ⟪w • e0 + q, y⟫ ∂Γ) = ∫ x, Real.exp (w * f x + ⟪z, x⟫) ∂μ := by
     dsimp [Γ]
     rw [integral_map hgm.aemeasurable
-      ((by fun_prop : Continuous
-        (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp ⟪w • e0 + q, y⟫)).aestronglyMeasurable)]
+        ((by fun_prop :
+            Continuous
+              (fun y : EuclideanSpace ℝ (Option (Fin n)) =>
+                Real.exp ⟪w • e0 + q, y⟫)).aestronglyMeasurable)]
     simp_rw [hinner]
   have hNumΓ : Integrable (fun y => Real.exp ⟪q, y⟫ * y none) Γ := by
     have he := (ContinuousLinearMap.apply ℝ ℝ e0).integrable_comp hDint
-    change Integrable (fun y => (Real.exp ⟪q, y⟫ •
-      weightedExpD (fun _ : EuclideanSpace ℝ (Option (Fin n)) => (1 : ℝ)) y) e0) Γ at he
-    simpa only [smul_apply, weightedExpD,
-      ContinuousLinearMap.smulRight_apply, innerSL_apply_apply, smul_eq_mul, mul_one,
-      e0, EuclideanSpace.inner_basisFun_real] using he
+    change
+      Integrable
+        (fun y =>
+          (Real.exp ⟪q, y⟫ •
+              weightedExpD (fun _ : EuclideanSpace ℝ (Option (Fin n)) => (1 : ℝ)) y)
+            e0)
+        Γ at he
+    simpa only [smul_apply, weightedExpD, ContinuousLinearMap.smulRight_apply,
+      innerSL_apply_apply, smul_eq_mul, mul_one, e0, EuclideanSpace.inner_basisFun_real] using
+      he
   have hDe0 : D e0 = ∫ x, Real.exp ⟪z, x⟫ * f x ∂μ := by
     dsimp [D]
     rw [ContinuousLinearMap.integral_apply hDint]
-    simp only [smul_apply, weightedExpD,
-      ContinuousLinearMap.smulRight_apply, innerSL_apply_apply, smul_eq_mul, mul_one,
-      e0, EuclideanSpace.inner_basisFun_real]
+    simp only [smul_apply, weightedExpD, ContinuousLinearMap.smulRight_apply,
+      innerSL_apply_apply, smul_eq_mul, mul_one, e0, EuclideanSpace.inner_basisFun_real]
     dsimp [Γ]
     rw [integral_map hgm.aemeasurable hNumΓ.aestronglyMeasurable]
     apply integral_congr_ae
@@ -134,28 +149,37 @@ private theorem graph_log_integral_hasDerivAt_zero {n : ℕ}
     have hZ' : HasFDerivAt (fun v => ∫ y, Real.exp ⟪v, y⟫ ∂Γ) D ((0 : ℝ) • e0 + q) := by
       simpa only [zero_smul, zero_add] using hZ
     exact hZ'.comp_hasDerivAt 0 hline
-  have hQ : HasDerivAt (fun w : ℝ => ∫ x, Real.exp (w * f x + ⟪z, x⟫) ∂μ)
+  have hQ :
+    HasDerivAt (fun w : ℝ => ∫ x, Real.exp (w * f x + ⟪z, x⟫) ∂μ)
       (∫ x, Real.exp ⟪z, x⟫ * f x ∂μ) 0 := by
     simpa only [hmap, hDe0] using hZline
   have hZint : Integrable (fun y => Real.exp ⟪q, y⟫) Γ := by
-    refine hexp.mono' ((by fun_prop : Continuous
-      (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp ⟪q, y⟫)).aestronglyMeasurable) ?_
+    refine
+      hexp.mono'
+        ((by fun_prop :
+            Continuous
+              (fun y : EuclideanSpace ℝ (Option (Fin n)) =>
+                Real.exp ⟪q, y⟫)).aestronglyMeasurable)
+        ?_
     filter_upwards [] with y
     rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-    exact Real.exp_le_exp.mpr ((real_inner_le_norm q y).trans
-      (mul_le_mul_of_nonneg_right hq.le (norm_nonneg y)))
+    exact
+      Real.exp_le_exp.mpr
+        ((real_inner_le_norm q y).trans (mul_le_mul_of_nonneg_right hq.le (norm_nonneg y)))
   have hZpos : 0 < ∫ x, Real.exp ⟪z, x⟫ ∂μ := by
     have hp := integral_exp_pos hZint
     have heq : (∫ y, Real.exp ⟪q, y⟫ ∂Γ) = ∫ x, Real.exp ⟪z, x⟫ ∂μ := by
       simpa only [zero_smul, zero_add, zero_mul, zero_add] using hmap 0
     rwa [heq] at hp
-  have htilt : tiltAverage μ f z =
-      (∫ x, Real.exp ⟪z, x⟫ * f x ∂μ) / (∫ x, Real.exp ⟪z, x⟫ ∂μ) := by
+  have htilt :
+    tiltAverage μ f z = (∫ x, Real.exp ⟪z, x⟫ * f x ∂μ) / (∫ x, Real.exp ⟪z, x⟫ ∂μ) := by
     rw [tiltAverage, expTilt, integral_tilted]
     simp only [smul_eq_mul, div_eq_mul_inv]
-    rw [show (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * f x) =
-      (fun x => (Real.exp ⟪z, x⟫ * f x) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹) by
-        funext x; ring, integral_mul_const]
+    rw [show
+        (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * f x) =
+          (fun x => (Real.exp ⟪z, x⟫ * f x) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹)
+        by funext x; ring,
+      integral_mul_const]
   simpa only [zero_mul, zero_add, ← htilt] using
     hQ.log (by simpa only [zero_mul, zero_add] using hZpos.ne')
 
@@ -245,11 +269,14 @@ private theorem integrable_exp_inner_of_norm_radius {E : Type*} [NormedAddCommGr
     [InnerProductSpace ℝ E] [MeasurableSpace E] [BorelSpace E] (ν : Measure E) {r : ℝ}
     (hexp : Integrable (fun p => Real.exp (r * ‖p‖)) ν) (q : E) (hq : ‖q‖ ≤ r) :
     Integrable (fun p => Real.exp ⟪q, p⟫) ν := by
-  refine hexp.mono' ((by fun_prop : Continuous (fun p : E => Real.exp ⟪q, p⟫)).aestronglyMeasurable) ?_
+  refine
+    hexp.mono' ((by fun_prop : Continuous (fun p : E => Real.exp ⟪q, p⟫)).aestronglyMeasurable)
+      ?_
   filter_upwards [] with p
   rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-  exact Real.exp_le_exp.mpr ((real_inner_le_norm q p).trans
-    (mul_le_mul_of_nonneg_right hq (norm_nonneg p)))
+  exact
+    Real.exp_le_exp.mpr
+      ((real_inner_le_norm q p).trans (mul_le_mul_of_nonneg_right hq (norm_nonneg p)))
 
 /-- Full actual joint-law HasDerivAt identity (111), under genuine local analytic radii. -/
 private theorem joint_first_derivative_of_radii {n N : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
@@ -521,7 +548,7 @@ private theorem iteratedFDeriv_swap_front_on {g : E → F} {U : Set E}
     fderiv_clm_apply
       (ha.fderiv_right (m := ∞) (by simp) |>.differentiableAt (by norm_num))
       (differentiableAt_const v)]
-  simpa using (ha.isSymmSndFDerivAt (by simp; norm_cast)).eq v w
+  simpa using (ha.isSymmSndFDerivAt (by simp)).eq v w
 
 /-- Move the distinguished direction from the first to the last slot locally. -/
 private theorem iteratedFDeriv_cons_snoc_on {g : E → F} {U : Set E}
@@ -626,43 +653,42 @@ private theorem contDiffAt_component_of_scaled_copy_sum
   exact contDiffAt_component_of_copy_sum F hsum i
 
 /-- Local (111) on a linear spatial slice implies the finite-copy mixed derivative rule. -/
-private theorem mixed_copies_from_first_derivative_germ
-    (g : G → ℝ) (L : (ι → E) →L[ℝ] G) (e : G) (F : ι → E → ℝ)
-    (c : ℝ) (x : ι → E) {U : Set G} (hU : IsOpen U) (hx : L x ∈ U)
-    (hg : ContDiffOn ℝ ∞ g U) (d : ℕ) (k0 : Fin d)
-    (hF : ∀ i, ContDiffAt ℝ d (F i) (x i))
-    (hfirst : (fun y => fderiv ℝ g (L y) e) =ᶠ[𝓝 x]
-      fun y => c * ∑ i, F i (y i)) (labels : Fin d → ι) (v : Fin d → E) :
-    iteratedFDeriv ℝ (d + 1) g (L x)
-      (Fin.cons e (fun k => L (Pi.single (labels k) (v k)))) =
-      if ∀ k, labels k = labels k0 then
-        c * iteratedFDeriv ℝ d (F (labels k0)) (x (labels k0)) v else 0 := by
+private theorem mixed_copies_from_first_derivative_germ (g : G → ℝ) (L : (ι → E) →L[ℝ] G)
+    (e : G) (F : ι → E → ℝ) (c : ℝ) (x : ι → E) {U : Set G} (hU : IsOpen U) (hx : L x ∈ U)
+    (hg : ContDiffOn ℝ ∞ g U) (d : ℕ) (k0 : Fin d) (hF : ∀ i, ContDiffAt ℝ d (F i) (x i))
+    (hfirst : (fun y => fderiv ℝ g (L y) e) =ᶠ[𝓝 x] fun y => c * ∑ i, F i (y i))
+    (labels : Fin d → ι) (v : Fin d → E) :
+    iteratedFDeriv ℝ (d + 1) g (L x) (Fin.cons e (fun k => L (Pi.single (labels k) (v k)))) =
+      if ∀ k, labels k = labels k0 then c * iteratedFDeriv ℝ d (F (labels k0)) (x (labels k0)) v
+      else 0 := by
   classical
   let q : Fin d → ι → E := fun k => Pi.single (labels k) (v k)
   have hgat : ContDiffAt ℝ ∞ g (L x) := (hg (L x) hx).contDiffAt (hU.mem_nhds hx)
   have hdirectional : ContDiffAt ℝ d (fun y => fderiv ℝ g y e) (L x) := by
-    exact ((ContinuousLinearMap.apply ℝ ℝ e).contDiff.contDiffAt.comp (L x)
-      (hgat.fderiv_right (m := ∞) (by simp))).of_le (by norm_cast; simp)
+    exact
+      ((ContinuousLinearMap.apply ℝ ℝ e).contDiff.contDiffAt.comp (L x)
+            (hgat.fderiv_right (m := ∞) (by simp))).of_le
+        (by norm_cast; simp)
   have hrestrict := iteratedFDeriv_comp_clm_at L hdirectional
   have hrestrict' :
-      iteratedFDeriv ℝ d (fun y => fderiv ℝ g (L y) e) x q =
-        iteratedFDeriv ℝ d (fun y => fderiv ℝ g y e) (L x) (fun k => L (q k)) := by
-    simpa only [Function.comp_def, ContinuousMultilinearMap.compContinuousLinearMap_apply]
-      using congrArg (fun a => a q) hrestrict
+    iteratedFDeriv ℝ d (fun y => fderiv ℝ g (L y) e) x q =
+      iteratedFDeriv ℝ d (fun y => fderiv ℝ g y e) (L x) (fun k => L (q k)) := by
+    simpa only [Function.comp_def, ContinuousMultilinearMap.compContinuousLinearMap_apply] using
+      congrArg (fun a => a q) hrestrict
   have hmixed := iteratedFDeriv_directional_on hg hU d (L x) hx e (fun k => L (q k))
   have heq := (hfirst.iteratedFDeriv ℝ d).self_of_nhds
   have hsum : ContDiffAt ℝ d (fun y : ι → E => ∑ i, F i (y i)) x := by
-    exact ContDiffAt.sum (fun i _ => (hF i).comp x
-      (ContinuousLinearMap.proj i : (ι → E) →L[ℝ] E).contDiff.contDiffAt)
+    exact
+      ContDiffAt.sum
+        (fun i _ =>
+          (hF i).comp x (ContinuousLinearMap.proj i : (ι → E) →L[ℝ] E).contDiff.contDiffAt)
   have hscale := iteratedFDeriv_const_smul_apply' (a := c) hsum
   have hscale' :
-      iteratedFDeriv ℝ d (fun y : ι → E => c * ∑ i, F i (y i)) x q =
-        c * iteratedFDeriv ℝ d (fun y : ι → E => ∑ i, F i (y i)) x q := by
-    simpa only [smul_eq_mul, smul_apply] using
-      congrArg (fun a => a q) hscale
+    iteratedFDeriv ℝ d (fun y : ι → E => c * ∑ i, F i (y i)) x q =
+      c * iteratedFDeriv ℝ d (fun y : ι → E => ∑ i, F i (y i)) x q := by
+    simpa only [smul_eq_mul, smul_apply] using congrArg (fun a => a q) hscale
   calc
-    _ = iteratedFDeriv ℝ d (fun y => fderiv ℝ g (L y) e) x q :=
-      (hrestrict'.trans hmixed).symm
+    _ = iteratedFDeriv ℝ d (fun y => fderiv ℝ g (L y) e) x q := (hrestrict'.trans hmixed).symm
     _ = iteratedFDeriv ℝ d (fun y : ι → E => c * ∑ i, F i (y i)) x q :=
       congrArg (fun a => a q) heq
     _ = c * iteratedFDeriv ℝ d (fun y : ι → E => ∑ i, F i (y i)) x q := hscale'
@@ -672,12 +698,15 @@ private theorem mixed_copies_from_first_derivative_germ
 
 end FiniteIndex
 
-/-- Actual spatial slice in the source's joint space: auxiliary coordinate zero, copies intact. -/
-private noncomputable def jointSpatialSlice (N n : ℕ) :
+/--
+Actual spatial slice in the source's joint space: auxiliary coordinate zero, copies intact. -/
+noncomputable def jointSpatialSlice (N n : ℕ) :
     (Fin N → EuclideanSpace ℝ (Fin n)) →L[ℝ]
       FunctionalInequalities.KLS.LogConcave.Suspension.JointSpace N n :=
-  (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Option (Fin N × Fin n) => ℝ)).symm.toContinuousLinearMap.comp
-    (ContinuousLinearMap.pi fun o => match o with
+  (PiLp.continuousLinearEquiv 2 ℝ
+        (fun _ : Option (Fin N × Fin n) => ℝ)).symm.toContinuousLinearMap.comp
+    (ContinuousLinearMap.pi fun o =>
+      match o with
       | none => 0
       | some ij => (EuclideanSpace.proj ij.2).comp (ContinuousLinearMap.proj ij.1))
 
@@ -710,12 +739,14 @@ open scoped RealInnerProductSpace ContDiff Topology
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.KLS.LogConcave.Suspension
-/-- BKL (112), derived from actual local (111), local smoothness of the actual joint log-Laplace,
+/--
+BKL (112), derived from actual local (111), local smoothness of the actual joint log-Laplace,
 and the finite-copy derivative selection rule. The same-copy tensor retains all repeated slots. -/
 theorem cumulant_jointLaw_none_entries {n N : ℕ} (hN : 0 < N) (V : EuclideanSpace ℝ (Fin n) → ℝ)
     {a b' : ℝ} (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ}
     (hβ : 0 < β) (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
-    (h110 : β / Real.sqrt N * M ≤ a) {d : ℕ} (hd : 1 ≤ d) (I : Fin d → Fin N) (J : Fin d → Fin n) :
+    (h110 : β / Real.sqrt N * M ≤ a) {d : ℕ} (hd : 1 ≤ d) (I : Fin d → Fin N)
+    (J : Fin d → Fin n) :
     cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
         (Fin.cons (EuclideanSpace.single none 1) fun k =>
           EuclideanSpace.single (some (I k, J k)) 1) =
@@ -730,49 +761,57 @@ theorem cumulant_jointLaw_none_entries {n N : ℕ} (hN : 0 < N) (V : EuclideanSp
   let k0 : Fin d := ⟨0, by omega⟩
   have hμeq : μ = volume.tilted (fun x => -V x) := rfl
   have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
-  obtain ⟨r, hr, _, hcd⟩ := exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw
-    V f hβ hV2 hf hV.lower hfM h110 hV.integrable_exp_neg
+  obtain ⟨r, hr, _, hcd⟩ :=
+    exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw V f hβ hV2 hf hV.lower hfM h110
+      hV.integrable_exp_neg
   have hcd' : ContDiffOn ℝ ∞ (logLaplace ν) (Metric.ball 0 r) := by
     simpa only [ν, hμeq] using hcd
-  obtain ⟨δ, hδ, h111⟩ := fderiv_logLaplace_jointLaw_none
-    hN V hV hβ hf hfM h110
+  obtain ⟨δ, hδ, h111⟩ := fderiv_logLaplace_jointLaw_none hN V hV hβ hf hfM h110
   have hfirst :
-      (fun y => fderiv ℝ (logLaplace ν) (L y) (EuclideanSpace.single none 1)) =ᶠ[𝓝 0]
-        fun y : Fin N → EuclideanSpace ℝ (Fin n) =>
-          (sigma β * Real.sqrt N)⁻¹ * ∑ i, tiltAverage μ f (y i) := by
+    (fun y => fderiv ℝ (logLaplace ν) (L y) (EuclideanSpace.single none 1)) =ᶠ[𝓝 0]
+      fun y : Fin N → EuclideanSpace ℝ (Fin n) =>
+      (sigma β * Real.sqrt N)⁻¹ * ∑ i, tiltAverage μ f (y i) := by
     have hpre : L ⁻¹' Metric.ball 0 δ ∈ 𝓝 0 :=
       (Metric.isOpen_ball.preimage L.continuous).mem_nhds (by simp [hδ])
     filter_upwards [hpre] with y hy
     have hyδ : ‖L y‖ < δ := by simpa using hy
     have heq := h111 (L y) hyδ (jointSpatialSlice_none y)
     simpa only [ν, μ, L, jointSpatialSlice_some, WithLp.toLp_ofLp] using heq
-  have hF : ∀ i : Fin N, ContDiffAt ℝ d (tiltAverage μ f) ((0 : Fin N → EuclideanSpace ℝ (Fin n)) i) := by
+  have hF :
+    ∀ i : Fin N, ContDiffAt ℝ d (tiltAverage μ f) ((0 : Fin N → EuclideanSpace ℝ (Fin n)) i) := by
     intro i
     have hgat : ContDiffAt ℝ ∞ (logLaplace ν) (L 0) := by
       simpa using hcd'.contDiffAt (Metric.isOpen_ball.mem_nhds (by simpa using hr))
-    have hdir : ContDiffAt ℝ d
-        (fun y => fderiv ℝ (logLaplace ν) (L y) (EuclideanSpace.single none 1)) 0 := by
-      have hdirinf : ContDiffAt ℝ ∞
-          (fun y => fderiv ℝ (logLaplace ν) (L y) (EuclideanSpace.single none 1)) 0 := by
+    have hdir :
+      ContDiffAt ℝ d (fun y => fderiv ℝ (logLaplace ν) (L y) (EuclideanSpace.single none 1))
+        0 := by
+      have hdirinf :
+        ContDiffAt ℝ ∞ (fun y => fderiv ℝ (logLaplace ν) (L y) (EuclideanSpace.single none 1))
+          0 := by
         simpa only [Function.comp_def, ContinuousLinearMap.apply_apply] using
-          ((ContinuousLinearMap.apply ℝ ℝ (EuclideanSpace.single none 1)).contDiff.contDiffAt.comp
-            (L 0) (hgat.fderiv_right (m := ∞) (by simp))).comp 0 L.contDiff.contDiffAt
+          ((ContinuousLinearMap.apply ℝ ℝ
+                    (EuclideanSpace.single none 1)).contDiff.contDiffAt.comp
+                (L 0) (hgat.fderiv_right (m := ∞) (by simp))).comp
+            0 L.contDiff.contDiffAt
       exact hdirinf.of_le (by norm_cast; simp)
-    have hscaled : ContDiffAt ℝ d
+    have hscaled :
+      ContDiffAt ℝ d
         (fun y : Fin N → EuclideanSpace ℝ (Fin n) =>
-          (sigma β * Real.sqrt N)⁻¹ * ∑ j, tiltAverage μ f (y j)) 0 :=
+          (sigma β * Real.sqrt N)⁻¹ * ∑ j, tiltAverage μ f (y j))
+        0 :=
       hdir.congr_of_eventuallyEq hfirst.symm
     have hσ : 0 < sigma β := by
       apply Real.sqrt_pos.mpr
       positivity
     have hc : (sigma β * Real.sqrt N)⁻¹ ≠ 0 :=
       inv_ne_zero (mul_ne_zero hσ.ne' (Real.sqrt_pos.mpr (by exact_mod_cast hN)).ne')
-    exact contDiffAt_component_of_scaled_copy_sum (fun _ : Fin N => tiltAverage μ f) hc hscaled i
-  have hmixed := mixed_copies_from_first_derivative_germ (logLaplace ν) L
-    (EuclideanSpace.single none 1) (fun _ : Fin N => tiltAverage μ f)
-    ((sigma β * Real.sqrt N)⁻¹) 0 Metric.isOpen_ball
-    (by simpa using hr) hcd' d k0 hF hfirst I
-    (fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k))
+    exact
+      contDiffAt_component_of_scaled_copy_sum (fun _ : Fin N => tiltAverage μ f) hc hscaled i
+  have hmixed :=
+    mixed_copies_from_first_derivative_germ (logLaplace ν) L (EuclideanSpace.single none 1)
+      (fun _ : Fin N => tiltAverage μ f) ((sigma β * Real.sqrt N)⁻¹) 0 Metric.isOpen_ball
+      (by simpa using hr) hcd' d k0 hF hfirst I
+      (fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k))
   have hsame : (∀ k, I k = I k0) ↔ (∀ k k', I k = I k') := by
     constructor
     · intro h k k'

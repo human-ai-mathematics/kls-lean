@@ -6,8 +6,12 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoTruncate
-import LevyStochCalc.Ito.PicardOutput
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoTruncate
+public import LevyStochCalc.Ito.PicardOutput
 
 /-!
 # The `L²` distance between two vector Itô processes
@@ -25,6 +29,8 @@ Picard construction itself.
 
 * `LevyStochCalc.Brownian.Ito.lintegral_sq_norm_vectorItoProcess_sub_le` — the bound.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

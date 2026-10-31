@@ -1,9 +1,11 @@
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.Normed.Operator.LinearIsometry
-import Mathlib.Data.Nat.Choose.Central
-import Mathlib.Data.Nat.Choose.Vandermonde
-import Mathlib.GroupTheory.Perm.Basic
-import Mathlib.Data.Fintype.Perm
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.Normed.Operator.LinearIsometry
+public import Mathlib.Data.Nat.Choose.Central
+public import Mathlib.Data.Nat.Choose.Vandermonde
+public import Mathlib.GroupTheory.Perm.Basic
+public import Mathlib.Data.Fintype.Perm
 
 /-!
 # Partial symmetrization in orthogonal permutation representations
@@ -21,6 +23,8 @@ is invariant under the permutations supported in `A` and under those supported i
 holds for every family of vectors indexed by `d`-subsets, and the identification of each inner
 sum with `C(2d, d)` times a translate of `S_Q v`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -217,46 +221,44 @@ theorem sum_choose_mul_card_filter_subset (U : Finset α) {d : ℕ} {F F' : Fins
     simp_rw [hcard]
     exact sum_choose_mul_choose d (F ∩ F').card
 
-/-- Expanding squared norms of filtered sums: for a family `𝓔`, a finite index set `P` and a relation
+/--
+Expanding squared norms of filtered sums: for a family `𝓔`, a finite index set `P` and a relation
 `r`, `∑_{E ∈ 𝓔} ‖∑_{F ∈ P, r F E} x_F‖² = ∑_{F, F' ∈ P} #{E ∈ 𝓔 : r F E ∧ r F' E} ⟪x_F, x_F'⟫`. -/
 theorem sum_norm_sq_sum_filter {β ι : Type*} (𝓔 : Finset β) (P : Finset ι) (r : ι → β → Prop)
     [∀ F E, Decidable (r F E)] (x : ι → V) :
     ∑ E ∈ 𝓔, ‖∑ F ∈ P.filter (fun F => r F E), x F‖ ^ 2 =
       ∑ F ∈ P, ∑ F' ∈ P, ((𝓔.filter fun E => r F E ∧ r F' E).card : ℝ) * inner ℝ (x F) (x F') := by
-    classical
+  classical
     calc
-      ∑ E ∈ 𝓔, ‖∑ F ∈ P.filter (fun F => r F E), x F‖ ^ 2 =
-          ∑ E ∈ 𝓔, ∑ F ∈ P, ∑ F' ∈ P,
-            if r F E ∧ r F' E then inner ℝ (x F) (x F') else 0 := by
-        apply Finset.sum_congr rfl
-        intro E hE
-        rw [norm_sq_sum_eq_sum_sum_inner]
-        simp only [Finset.sum_filter]
-        apply Finset.sum_congr rfl
-        intro F hF
-        by_cases h : r F E
-        · simp only [h, ↓reduceIte]
-          apply Finset.sum_congr rfl
-          intro F' hF'
-          by_cases h' : r F' E <;> simp [h']
-        · simp [h]
-      _ = ∑ F ∈ P, ∑ E ∈ 𝓔, ∑ F' ∈ P,
-            if r F E ∧ r F' E then inner ℝ (x F) (x F') else 0 := by
-        rw [Finset.sum_comm]
-      _ = ∑ F ∈ P, ∑ F' ∈ P, ∑ E ∈ 𝓔,
-            if r F E ∧ r F' E then inner ℝ (x F) (x F') else 0 := by
-        apply Finset.sum_congr rfl
-        intro F hF
-        rw [Finset.sum_comm]
-      _ = ∑ F ∈ P, ∑ F' ∈ P,
-            ((𝓔.filter (fun E => r F E ∧ r F' E)).card : ℝ) *
-              inner ℝ (x F) (x F') := by
-        apply Finset.sum_congr rfl
-        intro F hF
+    ∑ E ∈ 𝓔, ‖∑ F ∈ P.filter (fun F => r F E), x F‖ ^ 2 =
+        ∑ E ∈ 𝓔, ∑ F ∈ P, ∑ F' ∈ P, if r F E ∧ r F' E then inner ℝ (x F) (x F') else 0 := by
+      apply Finset.sum_congr rfl
+      intro E hE
+      rw [norm_sq_sum_eq_sum_sum_inner]
+      simp only [Finset.sum_filter]
+      apply Finset.sum_congr rfl
+      intro F hF
+      by_cases h : r F E
+      · simp only [h, ↓reduceIte]
         apply Finset.sum_congr rfl
         intro F' hF'
-        rw [← Finset.sum_filter]
-        simp [nsmul_eq_mul]
+        by_cases h' : r F' E <;> simp [h']
+      · simp [h]
+    _ = ∑ F ∈ P, ∑ E ∈ 𝓔, ∑ F' ∈ P, if r F E ∧ r F' E then inner ℝ (x F) (x F') else 0 := by
+      rw [Finset.sum_comm]
+    _ = ∑ F ∈ P, ∑ F' ∈ P, ∑ E ∈ 𝓔, if r F E ∧ r F' E then inner ℝ (x F) (x F') else 0 := by
+      apply Finset.sum_congr rfl
+      intro F hF
+      rw [Finset.sum_comm]
+    _ =
+        ∑ F ∈ P,
+          ∑ F' ∈ P, ((𝓔.filter (fun E => r F E ∧ r F' E)).card : ℝ) * inner ℝ (x F) (x F') := by
+      apply Finset.sum_congr rfl
+      intro F hF
+      apply Finset.sum_congr rfl
+      intro F' hF'
+      rw [← Finset.sum_filter]
+      simp [nsmul_eq_mul]
 
 /-- For `E ⊆ U`, the `d`-subsets of `E` are the `d`-subsets of `U` contained in `E`. -/
 theorem powersetCard_eq_filter_subset {U E : Finset α} (hE : E ⊆ U) (d : ℕ) :
@@ -487,35 +489,35 @@ theorem exists_mem_fixingOutside_image_eq {W s t : Finset Ω} (hs : s ⊆ W) (ht
     have hf_s : ∀ (x : Ω) (hx : x ∈ s),
         f x = (e₁ ⟨x, hx⟩ : Ω) := by
       intro x hx
-      simp only [f, dif_pos hx]
+      simp only [f, dite_eq_left hx]
     have hf_ws : ∀ (x : Ω) (hx : x ∈ W \ s),
         f x = (e₂ ⟨x, hx⟩ : Ω) := by
       intro x hx
       have hxs : x ∉ s := (Finset.mem_sdiff.mp hx).2
-      simp only [f, dif_neg hxs, dif_pos hx]
+      simp only [f, dite_eq_right hxs, dite_eq_left hx]
     have hf_out : ∀ (x : Ω) (hx : x ∉ W), f x = x := by
       intro x hx
       have hxs : x ∉ s := fun h => hx (hs h)
       have hws : x ∉ W \ s := by
         intro h
         exact hx (Finset.mem_sdiff.mp h).1
-      simp only [f, dif_neg hxs, dif_neg hws]
+      simp only [f, dite_eq_right hxs, dite_eq_right hws]
     have hg_t : ∀ (x : Ω) (hx : x ∈ t),
         g x = (e₁.symm ⟨x, hx⟩ : Ω) := by
       intro x hx
-      simp only [g, dif_pos hx]
+      simp only [g, dite_eq_left hx]
     have hg_wt : ∀ (x : Ω) (hx : x ∈ W \ t),
         g x = (e₂.symm ⟨x, hx⟩ : Ω) := by
       intro x hx
       have hxt : x ∉ t := (Finset.mem_sdiff.mp hx).2
-      simp only [g, dif_neg hxt, dif_pos hx]
+      simp only [g, dite_eq_right hxt, dite_eq_left hx]
     have hg_out : ∀ (x : Ω) (hx : x ∉ W), g x = x := by
       intro x hx
       have hxt : x ∉ t := fun h => hx (ht h)
       have hwt : x ∉ W \ t := by
         intro h
         exact hx (Finset.mem_sdiff.mp h).1
-      simp only [g, dif_neg hxt, dif_neg hwt]
+      simp only [g, dite_eq_right hxt, dite_eq_right hwt]
     have hfg : ∀ x, g (f x) = x := by
       intro x
       by_cases hxs : x ∈ s
@@ -949,174 +951,147 @@ private lemma image_image_perm (A : Finset Ω) (g τ : Equiv.Perm Ω) :
 
 end PermutationSubsets
 
-/-- **BKL Lemma 2.2** (orthogonal-representation form, with the stronger binomial factor `C(2d, d)`). -/
+/--
+**BKL Lemma 2.2** (orthogonal-representation form, with the stronger binomial factor `C(2d, d)`). -/
 theorem norm_le_choose_mul_norm_blockAverage (ρ : Equiv.Perm Ω →* (V ≃ₗᵢ[ℝ] V))
     {A B Q : Finset Ω} {d : ℕ} (hA : A.card = d) (hB : B.card = 2 * d) (hAB : Disjoint A B)
     (hAQ : A ⊆ Q) (hQ : Q ⊆ A ∪ B) (hQc : Q.card = 2 * d) (v : V)
     (hvA : ∀ σ ∈ fixingOutside A, ρ σ v = v) (hvB : ∀ σ ∈ fixingOutside B, ρ σ v = v) :
     ‖v‖ ≤ ((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖ := by
-    classical
-    let W := A ∪ B
-    let T : Finset Ω → V := fun F =>
-      if h : ∃ σ ∈ fixingOutside W, A.image σ = F then
-        ρ (Classical.choose h) v
-      else 0
-    have hAW : A ⊆ W := by
-      intro x hx
-      exact mem_union_left B hx
-    have hWQ : Q ⊆ W := by
-      simpa [W] using hQ
-    have hWcard : W.card = 3 * d := by
-      dsimp [W]
-      rw [card_union_of_disjoint hAB, hA, hB]
-      omega
-    have hT : ∀ σ ∈ fixingOutside W, ρ σ v = T (A.image σ) := by
-      intro σ hσ
-      let hh : ∃ τ ∈ fixingOutside W, A.image τ = A.image σ := ⟨σ, hσ, rfl⟩
-      have hc := Classical.choose_spec hh
-      have heq : ρ σ v = ρ (Classical.choose hh) v := by
-        apply apply_eq_of_image_eq ρ v hvA hvB
-        · exact hσ
-        · exact hc.1
-        · exact hc.2.symm
-      simpa [T, hh] using heq
-    have hprod :
-        ∀ {g τ : Equiv.Perm Ω}, g ∈ fixingOutside W →
-          τ ∈ fixingOutside W → g * τ ∈ fixingOutside W := by
-      intro g τ hg hτ
-      simp only [fixingOutside, mem_filter, mem_univ, true_and] at hg hτ ⊢
-      intro x hx
-      simp [Equiv.Perm.mul_apply, hg x hx, hτ x hx]
-    have hTinvariant :
-        ∀ g ∈ fixingOutside W, ∀ F, ρ g (T F) = T (F.image g) := by
-      intro g hg F
-      by_cases hF : ∃ τ ∈ fixingOutside W, A.image τ = F
-      · rcases hF with ⟨τ, hτ, rfl⟩
-        have hgt : g * τ ∈ fixingOutside W := hprod hg hτ
-        have him := image_image_perm A g τ
-        calc
-          ρ g (T (A.image τ)) = ρ g (ρ τ v) := by rw [hT τ hτ]
-          _ = ρ (g * τ) v := by
-            simp
-          _ = T (A.image (g * τ)) := hT (g * τ) hgt
-          _ = T ((A.image τ).image g) := by rw [him]
-      · have hF' : ¬ ∃ τ ∈ fixingOutside W, A.image τ = F.image g := by
-          intro h'
-          rcases h' with ⟨τ, hτ, hτim⟩
-          have hgi : (g⁻¹ : Equiv.Perm Ω) ∈ fixingOutside W :=
-            inv_mem_fixingOutside hg
-          have hgt : (g⁻¹ : Equiv.Perm Ω) * τ ∈ fixingOutside W :=
-            hprod hgi hτ
-          have him : A.image ((g⁻¹ : Equiv.Perm Ω) * τ) = F := by
-            calc
-              A.image ((g⁻¹ : Equiv.Perm Ω) * τ) =
-                  (A.image τ).image (g⁻¹ : Equiv.Perm Ω) := by
-                    rw [image_image_perm]
-              _ = (F.image g).image (g⁻¹ : Equiv.Perm Ω) := by rw [hτim]
-              _ = F := by
-                ext x
-                simp
-          exact hF ⟨(g⁻¹ : Equiv.Perm Ω) * τ, hgt, him⟩
-        simp [T, hF, hF', map_zero]
-    have hTnorm : ∀ F ∈ W.powersetCard d, ‖T F‖ = ‖v‖ := by
-      intro F hF
-      have hFsub : F ⊆ W := (mem_powersetCard.mp hF).1
-      have hFcard : F.card = d := (mem_powersetCard.mp hF).2
-      obtain ⟨σ, hσ, hσim⟩ :=
-        exists_mem_fixingOutside_image_eq hAW hFsub (by simp [hA, hFcard])
-      have hTF : T F = ρ σ v := by
-        rw [← hσim]
-        exact (hT σ hσ).symm
-      rw [hTF, (ρ σ).norm_map]
-    have hsum :
-        ∑ σ ∈ fixingOutside Q, ρ σ v =
-          (((fixingOutside Q).card : ℝ) / ((2 * d).choose d : ℝ)) •
-            ∑ F ∈ Q.powersetCard d, T F := by
-      simpa [hA, hQc] using
-        (sum_fixingOutside_eq_smul_sum ρ (A := A) (B := B) (Q := Q)
-          hAQ hQ v T hT)
-    have hS :
-        (∑ F ∈ Q.powersetCard d, T F) =
-          ((2 * d).choose d : ℝ) • blockAverage ρ Q v := by
-      rw [blockAverage, hsum]
-      have hN : (fixingOutside Q).card ≠ 0 := by
-        apply Finset.card_ne_zero.mpr
-        exact ⟨1, by simp [fixingOutside]⟩
-      have hC : (2 * d).choose d ≠ 0 := by
-        have hp : 0 < (2 * d).choose d := by
-          apply Nat.choose_pos
-          omega
-        omega
-      simp only [smul_smul]
-      field_simp [hN, hC]
-      simp
-    have hinner :
-        ∀ E ∈ W.powersetCard (2 * d),
-          ‖∑ F ∈ E.powersetCard d, T F‖ =
-            ((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖ := by
-      intro E hE
-      have hEsub : E ⊆ W := (mem_powersetCard.mp hE).1
-      have hEcard : E.card = 2 * d := (mem_powersetCard.mp hE).2
-      obtain ⟨g, hg, hgim⟩ :=
-        exists_mem_fixingOutside_image_eq hWQ hEsub (by simp [hQc, hEcard])
-      have hs := sum_powersetCard_image_eq ρ g T
-        (fun F => hTinvariant g hg F) Q d
-      have hsumE :
-          ∑ F ∈ E.powersetCard d, T F =
-            ρ g (∑ F ∈ Q.powersetCard d, T F) := by
-        rw [← hgim]
-        exact hs
-      rw [hsumE, (ρ g).norm_map, hS, norm_smul]
-      congr 1
-      exact abs_of_nonneg (by positivity)
-    have hineq :=
-      sum_norm_sq_le_sum_norm_sq_sum_subset W (d := d) hWcard T
-    have hleft :
-        ∑ F ∈ W.powersetCard d, ‖T F‖ ^ 2 =
-          ((3 * d).choose d : ℝ) * ‖v‖ ^ 2 := by
+  classical
+  let W := A ∪ B
+  let T : Finset Ω → V := fun F =>
+    if h : ∃ σ ∈ fixingOutside W, A.image σ = F then ρ (Classical.choose h) v else 0
+  have hAW : A ⊆ W := by
+    intro x hx
+    exact mem_union_left B hx
+  have hWQ : Q ⊆ W := by simpa [W] using hQ
+  have hWcard : W.card = 3 * d := by
+    dsimp [W]
+    rw [card_union_of_disjoint hAB, hA, hB]
+    omega
+  have hT : ∀ σ ∈ fixingOutside W, ρ σ v = T (A.image σ) := by
+    intro σ hσ
+    let hh : ∃ τ ∈ fixingOutside W, A.image τ = A.image σ := ⟨σ, hσ, rfl⟩
+    have hc := Classical.choose_spec hh
+    have heq : ρ σ v = ρ (Classical.choose hh) v := by
+      apply apply_eq_of_image_eq ρ v hvA hvB
+      · exact hσ
+      · exact hc.1
+      · exact hc.2.symm
+    simpa [T, hh] using heq
+  have hprod :
+    ∀ {g τ : Equiv.Perm Ω},
+      g ∈ fixingOutside W → τ ∈ fixingOutside W → g * τ ∈ fixingOutside W := by
+    intro g τ hg hτ
+    simp only [fixingOutside, mem_filter, mem_univ, true_and] at hg hτ ⊢
+    intro x hx
+    simp [Equiv.Perm.mul_apply, hg x hx, hτ x hx]
+  have hTinvariant : ∀ g ∈ fixingOutside W, ∀ F, ρ g (T F) = T (F.image g) := by
+    intro g hg F
+    by_cases hF : ∃ τ ∈ fixingOutside W, A.image τ = F
+    · rcases hF with ⟨τ, hτ, rfl⟩
+      have hgt : g * τ ∈ fixingOutside W := hprod hg hτ
+      have him := image_image_perm A g τ
       calc
-        ∑ F ∈ W.powersetCard d, ‖T F‖ ^ 2 =
-            ∑ F ∈ W.powersetCard d, ‖v‖ ^ 2 := by
-              apply Finset.sum_congr rfl
-              intro F hF
-              rw [hTnorm F hF]
-        _ = ((W.powersetCard d).card : ℝ) * ‖v‖ ^ 2 := by simp
-        _ = ((3 * d).choose d : ℝ) * ‖v‖ ^ 2 := by
-          rw [card_powersetCard, hWcard]
-    have hright :
-        ∑ E ∈ W.powersetCard (2 * d),
-            ‖∑ F ∈ E.powersetCard d, T F‖ ^ 2 =
-          ((3 * d).choose (2 * d) : ℝ) *
-            (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
-      calc
-        ∑ E ∈ W.powersetCard (2 * d),
-            ‖∑ F ∈ E.powersetCard d, T F‖ ^ 2 =
-            ∑ E ∈ W.powersetCard (2 * d),
-              (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
-                apply Finset.sum_congr rfl
-                intro E hE
-                rw [hinner E hE]
-        _ = ((W.powersetCard (2 * d)).card : ℝ) *
-            (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by simp
-        _ = ((3 * d).choose (2 * d) : ℝ) *
-            (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
-          rw [card_powersetCard, hWcard]
-    rw [hleft, hright] at hineq
-    have hchoose : (3 * d).choose d = (3 * d).choose (2 * d) := by
-      have h := Nat.choose_symm (by omega : d ≤ 3 * d)
-      have hd : 3 * d - d = 2 * d := by omega
-      simpa [hd] using h.symm
-    have hc : 0 < ((3 * d).choose d : ℝ) := by
-      have hp : 0 < (3 * d).choose d := by
+        ρ g (T (A.image τ)) = ρ g (ρ τ v) := by rw [hT τ hτ]
+        _ = ρ (g * τ) v := by simp
+        _ = T (A.image (g * τ)) := hT (g * τ) hgt
+        _ = T ((A.image τ).image g) := by rw [him]
+    · have hF' : ¬∃ τ ∈ fixingOutside W, A.image τ = F.image g := by
+        intro h'
+        rcases h' with ⟨τ, hτ, hτim⟩
+        have hgi : (g⁻¹ : Equiv.Perm Ω) ∈ fixingOutside W := inv_mem_fixingOutside hg
+        have hgt : (g⁻¹ : Equiv.Perm Ω) * τ ∈ fixingOutside W := hprod hgi hτ
+        have him : A.image ((g⁻¹ : Equiv.Perm Ω) * τ) = F := by
+          calc
+            A.image ((g⁻¹ : Equiv.Perm Ω) * τ) = (A.image τ).image (g⁻¹ : Equiv.Perm Ω) := by
+              rw [image_image_perm]
+            _ = (F.image g).image (g⁻¹ : Equiv.Perm Ω) := by rw [hτim]
+            _ = F := by
+              ext x
+              simp
+        exact hF ⟨(g⁻¹ : Equiv.Perm Ω) * τ, hgt, him⟩
+      simp [T, hF, hF', map_zero]
+  have hTnorm : ∀ F ∈ W.powersetCard d, ‖T F‖ = ‖v‖ := by
+    intro F hF
+    have hFsub : F ⊆ W := (mem_powersetCard.mp hF).1
+    have hFcard : F.card = d := (mem_powersetCard.mp hF).2
+    obtain ⟨σ, hσ, hσim⟩ := exists_mem_fixingOutside_image_eq hAW hFsub (by simp [hA, hFcard])
+    have hTF : T F = ρ σ v := by
+      rw [← hσim]
+      exact (hT σ hσ).symm
+    rw [hTF, (ρ σ).norm_map]
+  have hsum :
+    ∑ σ ∈ fixingOutside Q, ρ σ v =
+      (((fixingOutside Q).card : ℝ) / ((2 * d).choose d : ℝ)) • ∑ F ∈ Q.powersetCard d, T F := by
+    simpa [hA, hQc] using
+      (sum_fixingOutside_eq_smul_sum ρ (A := A) (B := B) (Q := Q) hAQ hQ v T hT)
+  have hS : (∑ F ∈ Q.powersetCard d, T F) = ((2 * d).choose d : ℝ) • blockAverage ρ Q v := by
+    rw [blockAverage, hsum]
+    have hN : (fixingOutside Q).card ≠ 0 := by
+      apply Finset.card_ne_zero.mpr
+      exact ⟨1, by simp [fixingOutside]⟩
+    have hC : (2 * d).choose d ≠ 0 := by
+      have hp : 0 < (2 * d).choose d := by
         apply Nat.choose_pos
         omega
-      exact_mod_cast hp
-    have hsq :
-        ‖v‖ ^ 2 ≤
-          (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
-      rw [← hchoose] at hineq
-      exact le_of_mul_le_mul_left hineq hc
-    exact (pow_le_pow_iff_left₀ (norm_nonneg v) (by positivity) two_ne_zero).1 hsq
+      omega
+    simp only [smul_smul]
+    field_simp [hN, hC]
+    simp
+  have hinner :
+    ∀ E ∈ W.powersetCard (2 * d),
+      ‖∑ F ∈ E.powersetCard d, T F‖ = ((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖ := by
+    intro E hE
+    have hEsub : E ⊆ W := (mem_powersetCard.mp hE).1
+    have hEcard : E.card = 2 * d := (mem_powersetCard.mp hE).2
+    obtain ⟨g, hg, hgim⟩ := exists_mem_fixingOutside_image_eq hWQ hEsub (by simp [hQc, hEcard])
+    have hs := sum_powersetCard_image_eq ρ g T (fun F => hTinvariant g hg F) Q d
+    have hsumE : ∑ F ∈ E.powersetCard d, T F = ρ g (∑ F ∈ Q.powersetCard d, T F) := by
+      rw [← hgim]
+      exact hs
+    rw [hsumE, (ρ g).norm_map, hS, norm_smul]
+    congr 1
+    exact abs_of_nonneg (by positivity)
+  have hineq := sum_norm_sq_le_sum_norm_sq_sum_subset W (d := d) hWcard T
+  have hleft : ∑ F ∈ W.powersetCard d, ‖T F‖ ^ 2 = ((3 * d).choose d : ℝ) * ‖v‖ ^ 2 := by
+    calc
+      ∑ F ∈ W.powersetCard d, ‖T F‖ ^ 2 = ∑ F ∈ W.powersetCard d, ‖v‖ ^ 2 := by
+        apply Finset.sum_congr rfl
+        intro F hF
+        rw [hTnorm F hF]
+      _ = ((W.powersetCard d).card : ℝ) * ‖v‖ ^ 2 := by simp
+      _ = ((3 * d).choose d : ℝ) * ‖v‖ ^ 2 := by rw [card_powersetCard, hWcard]
+  have hright :
+    ∑ E ∈ W.powersetCard (2 * d), ‖∑ F ∈ E.powersetCard d, T F‖ ^ 2 =
+      ((3 * d).choose (2 * d) : ℝ) * (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
+    calc
+      ∑ E ∈ W.powersetCard (2 * d), ‖∑ F ∈ E.powersetCard d, T F‖ ^ 2 =
+          ∑ E ∈ W.powersetCard (2 * d), (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
+        apply Finset.sum_congr rfl
+        intro E hE
+        rw [hinner E hE]
+      _ =
+          ((W.powersetCard (2 * d)).card : ℝ) *
+            (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
+        simp
+      _ = ((3 * d).choose (2 * d) : ℝ) * (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
+        rw [card_powersetCard, hWcard]
+  rw [hleft, hright] at hineq
+  have hchoose : (3 * d).choose d = (3 * d).choose (2 * d) := by
+    have h := Nat.choose_symm (by omega : d ≤ 3 * d)
+    have hd : 3 * d - d = 2 * d := by omega
+    simpa [hd] using h.symm
+  have hc : 0 < ((3 * d).choose d : ℝ) := by
+    have hp : 0 < (3 * d).choose d := by
+      apply Nat.choose_pos
+      omega
+    exact_mod_cast hp
+  have hsq : ‖v‖ ^ 2 ≤ (((2 * d).choose d : ℝ) * ‖blockAverage ρ Q v‖) ^ 2 := by
+    rw [← hchoose] at hineq
+    exact le_of_mul_le_mul_left hineq hc
+  exact (pow_le_pow_iff_left₀ (norm_nonneg v) (by positivity) two_ne_zero).1 hsq
 
 /-- **BKL Lemma 2.2** (orthogonal-representation form): `‖v‖ ≤ 4^d ‖S_Q v‖`. -/
 theorem norm_le_four_pow_mul_norm_blockAverage (ρ : Equiv.Perm Ω →* (V ≃ₗᵢ[ℝ] V))

@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.ExponentObstruction
-import FunctionalInequalities.Analysis.Hausdorff.LevelSet
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.ExponentObstruction
+public import FunctionalInequalities.Analysis.Hausdorff.LevelSet
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the exponent obstructions of the rank-deficient route
 
-`N1` and `N2` of `research/audits/Vector/RankDeficientRouteStatements.lean` are the two **diagnostic**
+`N1` and `N2` of `research/audits/Vector/RankDeficientRouteStatements.lean` are the two
+**diagnostic**
 items of the rank-deficient route: they record what the small-Lipschitz method yields and why its
 exponent cannot simply be lowered.  Neither is a step towards the rank-deficient null slicing,
 which is proved.
@@ -45,6 +48,8 @@ obstruction in the route record survives the correction unchanged.
 `RankDeficientRouteStatements.lean` is left byte-identical, its `N2` still an open and — as
 recorded here — false obligation.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -113,23 +118,27 @@ end Useless
 
 /-! ### The side condition `0 < finrank ℝ W₂` is necessary -/
 
-/-- **The first obstruction fails without `0 < finrank ℝ W₂`.**  With a zero-dimensional `W₂` the
+/--
+**The first obstruction fails without `0 < finrank ℝ W₂`.**  With a zero-dimensional `W₂` the
 Eilenberg constant `ε ^ (dim W₂)` is `1`, nothing tends to zero, and the conclusion is simply false:
 take `V = W = ℝ`, `Q = 0`, `u = id` and `S = [0, 1]`, where every piece hypothesis holds trivially
 because `Q ∘ u` is constant, while the single fibre is all of `S` and carries `μH[1] S = 1`. -/
 theorem N1_needs_positive_codimension :
-    ¬ (∀ {V W W₂ : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-        [MeasurableSpace V] [BorelSpace V]
-        [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-        [NormedAddCommGroup W₂] [InnerProductSpace ℝ W₂] [FiniteDimensional ℝ W₂]
-        [MeasurableSpace W₂] [BorelSpace W₂]
-        {u : V → W} {S : Set V} (Q : W →L[ℝ] W₂),
-        MeasurableSet S → μH[((finrank ℝ V : ℕ) : ℝ)] S ≠ ⊤ →
-        (∀ ε : ℝ≥0, ε ≠ 0 → ∃ T : ℕ → Set V, Pairwise (Function.onFun Disjoint T) ∧
-            (∀ n, MeasurableSet (T n)) ∧ S ⊆ ⋃ n, T n ∧
-            ∀ n, LipschitzOnWith ε (fun x => Q (u x)) (S ∩ T n)) →
-        ∀ᵐ τ ∂(volume : Measure W₂),
-          μH[((finrank ℝ V - finrank ℝ W₂ : ℕ) : ℝ)] (S ∩ {x : V | Q (u x) = τ}) = 0) := by
+    ¬(∀ {V W W₂ : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+        [MeasurableSpace V] [BorelSpace V] [NormedAddCommGroup W] [InnerProductSpace ℝ W]
+        [FiniteDimensional ℝ W] [NormedAddCommGroup W₂] [InnerProductSpace ℝ W₂]
+        [FiniteDimensional ℝ W₂] [MeasurableSpace W₂] [BorelSpace W₂] {u : V → W} {S : Set V}
+        (Q : W →L[ℝ] W₂),
+        MeasurableSet S →
+          μH[((finrank ℝ V : ℕ) : ℝ)] S ≠ ⊤ →
+            (∀ ε : ℝ≥0,
+                ε ≠ 0 →
+                  ∃ T : ℕ → Set V,
+                    Pairwise (Function.onFun Disjoint T) ∧
+                      (∀ n, MeasurableSet (T n)) ∧
+                        S ⊆ ⋃ n, T n ∧ ∀ n, LipschitzOnWith ε (fun x => Q (u x)) (S ∩ T n)) →
+              ∀ᵐ τ ∂(volume : Measure W₂),
+                μH[((finrank ℝ V - finrank ℝ W₂ : ℕ) : ℝ)] (S ∩ {x : V | Q (u x) = τ}) = 0) := by
   intro hN1
   classical
   set S : Set ℝ := Set.Icc (0 : ℝ) 1 with hSdef
@@ -138,9 +147,14 @@ theorem N1_needs_positive_codimension :
     rw [finrank_self]
     simp [hSdef]
   have hfin : μH[((finrank ℝ ℝ : ℕ) : ℝ)] S ≠ ⊤ := by rw [hH1]; simp
-  have hpieces : ∀ ε : ℝ≥0, ε ≠ 0 → ∃ T : ℕ → Set ℝ, Pairwise (Function.onFun Disjoint T) ∧
-      (∀ n, MeasurableSet (T n)) ∧ S ⊆ ⋃ n, T n ∧
-      ∀ n, LipschitzOnWith ε (fun x => (0 : ℝ →L[ℝ] Pt) (id x)) (S ∩ T n) := by
+  have hpieces :
+    ∀ ε : ℝ≥0,
+      ε ≠ 0 →
+        ∃ T : ℕ → Set ℝ,
+          Pairwise (Function.onFun Disjoint T) ∧
+            (∀ n, MeasurableSet (T n)) ∧
+              S ⊆ ⋃ n, T n ∧
+                ∀ n, LipschitzOnWith ε (fun x => (0 : ℝ →L[ℝ] Pt) (id x)) (S ∩ T n) := by
     intro ε _
     refine ⟨fun n => if n = 0 then Set.univ else ∅, ?_, ?_, ?_, ?_⟩
     · intro i j hij
@@ -155,12 +169,14 @@ theorem N1_needs_positive_codimension :
   have hae := hN1 (V := ℝ) (W := ℝ) (W₂ := Pt) (u := id) (S := S) 0 hmeasS hfin hpieces
   have hdim : (finrank ℝ ℝ - finrank ℝ Pt : ℕ) = (finrank ℝ ℝ : ℕ) := by
     simp [finrank_euclideanSpace]
-  have hall : ∀ τ : Pt,
-      ¬ μH[((finrank ℝ ℝ - finrank ℝ Pt : ℕ) : ℝ)]
-          (S ∩ {x : ℝ | (0 : ℝ →L[ℝ] Pt) (id x) = τ}) = 0 := by
+  have hall :
+    ∀ τ : Pt,
+      ¬μH[((finrank ℝ ℝ - finrank ℝ Pt : ℕ) : ℝ)] (S ∩ {x : ℝ | (0 : ℝ →L[ℝ] Pt) (id x) = τ}) =
+          0 := by
     intro τ
     have hslice : S ∩ {x : ℝ | (0 : ℝ →L[ℝ] Pt) (id x) = τ} = S := by
-      ext x; simp [Subsingleton.elim (0 : Pt) τ]
+      ext x;
+      simp [Subsingleton.elim (0 : Pt) τ]
     rw [hslice, hdim, hH1]
     exact one_ne_zero
   rw [ae_iff] at hae
@@ -224,7 +240,8 @@ end ExponentObstructionAudit
 
 #print axioms FunctionalInequalities.Analysis.hausdorffMeasure_truncated_add_le
 #print axioms FunctionalInequalities.Analysis.exists_measurable_majorant_of_lipschitz_pieces
-#print axioms FunctionalInequalities.Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces
+#print axioms
+  FunctionalInequalities.Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces
 #print axioms ExponentObstructionAudit.route_N1
 #print axioms ExponentObstructionAudit.N1_exponent_is_k_add_r
 #print axioms ExponentObstructionAudit.N1_null_at_higher_exponent_says_nothing_at_k

@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.Potential
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
-import FunctionalInequalities.Analysis.Lipschitz.Gradient
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.Potential
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+public import FunctionalInequalities.Analysis.Lipschitz.Gradient
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set
@@ -82,56 +86,65 @@ theorem produced_regular_moment_with_lipschitz_exponent {n : ℕ} (hn : 0 < n)
   exact ⟨u, L, LF, hconv, hLip, hnorm, hmap, hC1, hG, hF⟩
 end Exponent
 namespace Tensor
-/-- The source-law producer supplies actual normalized potentials and a symmetric local-L2 tensor. -/
+/--
+The source-law producer supplies actual normalized potentials and a symmetric local-L2 tensor. -/
 theorem produced_symmetric_normalized_tensor {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : KLS.Isotropic μ) :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (T :
+      EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-          (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-        ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-          MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
-      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        ∀ k i j, T x k i j = T x i k j ∧ T x k i j = T x k j i) := by
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+            (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+          (∀ k i j,
+              HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
+                  (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+                ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+                  IsCompact S →
+                    MemLp (fun x => T x k i j) 2
+                      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+              ∀ k i j, T x k i j = T x i k j ∧ T x k i j = T x k j i) := by
   obtain ⟨u, _L, _LF, T, _hconv, _hLip, hnorm, hmap, hC1, hG, _hF, _hw, _hdata, hT⟩ :=
     exists_regular_moment_weak_tensor hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  exact ⟨u, T, hnorm, hmap, hT,
-    ae_weak_third_derivative_symm hC1 hG (fun k i j => (hT k i j).1)⟩
+  exact
+    ⟨u, T, hnorm, hmap, hT, ae_weak_third_derivative_symm hC1 hG (fun k i j => (hT k i j).1)⟩
 
-/-- Actual source-law tensor derivatives supply the weak test identity and locally integrable densities. -/
+/--
+Actual source-law tensor derivatives supply the weak test identity and locally integrable densities.
+-/
 theorem produced_normalized_weak_testing {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : KLS.Isotropic μ) :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (T :
+      EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ∀ k i j, LocallyIntegrable (fun x => T x k i j)
-          (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-        ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ, ContDiff ℝ 1 ψ → HasCompactSupport ψ →
-          (∫ x, hessianMatrix u x i j * fderiv ℝ ψ x
-            (EuclideanSpace.basisFun (Fin n) ℝ k)) =
-            -∫ x, T x k i j * ψ x := by
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+            (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+          ∀ k i j,
+            LocallyIntegrable (fun x => T x k i j)
+                (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+              ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
+                ContDiff ℝ 1 ψ →
+                  HasCompactSupport ψ →
+                    (∫ x,
+                        hessianMatrix u x i j *
+                          fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ k)) =
+                      -∫ x, T x k i j * ψ x := by
   obtain ⟨u, _L, _LF, T, _hconv, _hLip, hnorm, hmap, _hC1, _hG, _hF, _hw, _hdata, hT⟩ :=
     exists_regular_moment_weak_tensor hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, T, hnorm, hmap, fun k i j => ⟨(hT k i j).1.2.1, (hT k i j).1.2.2⟩⟩

@@ -1,10 +1,12 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
-import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.Analysis.Iteration.DyadicSummation
-import FunctionalInequalities.Analysis.Tensor.BasisChange
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.ApproximateEigenfunction
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import FunctionalInequalities.Analysis.Iteration.DyadicSummation
+public import FunctionalInequalities.Analysis.Tensor.BasisChange
 
 /-!
 # The Taylor-coefficient criterion of BKL Theorem 3.1
@@ -58,6 +60,8 @@ used in `taylorCriterion`: the second-moment bound `∫ ⟪v, x⟫² dν ≤ ‖
 `poincare_le_of_taylor` keeps the source's centering hypothesis. This is Theorem 3.1 for regular
 laws only; Theorem 1.1 (the KLS bound) is not addressed here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -501,22 +505,34 @@ The law is `volume.tilted (-V)`; (29) passes from functions to `L²` classes (`L
 `Lp.norm_def`) and from `EuclideanSpace.basisFun` to `stdOrthonormalBasis`
 (`norm_coordTensor_eq`), and `taylorCriterion` applies; the centering hypothesis is not used. -/
 theorem poincare_le_of_taylor :
-    ∃ K : ℝ, 0 < K ∧ ∀ (n : ℕ) (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ)
-      (hV : KLS.RegularPotential V a b),
-      (∫ x, x ∂(hV.law : Measure (EuclideanSpace ℝ (Fin n)))) = 0 →
-      (∀ v : EuclideanSpace ℝ (Fin n),
-        ∫ x, ⟪v, x⟫ ^ 2 ∂(hV.law : Measure (EuclideanSpace ℝ (Fin n))) ≤ ‖v‖ ^ 2) →
-      ∀ R : ℝ, 1 ≤ R →
-      (∀ (f : EuclideanSpace ℝ (Fin n) → ℝ),
-        MemLp f 2 (hV.law : Measure (EuclideanSpace ℝ (Fin n))) → ∀ d : ℕ, 1 ≤ d →
-        ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
-            (taylorTensor (hV.law : Measure (EuclideanSpace ℝ (Fin n))) f d)‖ ≤
-          R ^ d * (eLpNorm f 2 (hV.law : Measure (EuclideanSpace ℝ (Fin n)))).toReal) →
-      Poincare.LocalSlope.Intrinsic.constant hV.law ≤ ENNReal.ofReal (K * R ^ 2) := by
-  refine ⟨taylorCriterionConstant, by norm_num [taylorCriterionConstant], fun n V a b hV _ hcov R hR h29 => ?_⟩
+    ∃ K : ℝ,
+      0 < K ∧
+        ∀ (n : ℕ) (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ)
+          (hV : KLS.RegularPotential V a b),
+          (∫ x, x ∂(hV.law : Measure (EuclideanSpace ℝ (Fin n)))) = 0 →
+            (∀ v : EuclideanSpace ℝ (Fin n),
+                ∫ x, ⟪v, x⟫ ^ 2 ∂(hV.law : Measure (EuclideanSpace ℝ (Fin n))) ≤ ‖v‖ ^ 2) →
+              ∀ R : ℝ,
+                1 ≤ R →
+                  (∀ (f : EuclideanSpace ℝ (Fin n) → ℝ),
+                      MemLp f 2 (hV.law : Measure (EuclideanSpace ℝ (Fin n))) →
+                        ∀ d : ℕ,
+                          1 ≤ d →
+                            ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
+                                  (taylorTensor (hV.law : Measure (EuclideanSpace ℝ (Fin n))) f
+                                    d)‖ ≤
+                              R ^ d *
+                                (eLpNorm f 2
+                                    (hV.law : Measure (EuclideanSpace ℝ (Fin n)))).toReal) →
+                    Poincare.LocalSlope.Intrinsic.constant hV.law ≤
+                      ENNReal.ofReal (K * R ^ 2) := by
+  refine
+    ⟨taylorCriterionConstant, by norm_num [taylorCriterionConstant],
+      fun n V a b hV _ hcov R hR h29 => ?_⟩
   have hνU : (hV.law : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-V) := rfl
-  refine taylorCriterion volume hV.logConcave_law hV.interior_support_law
-    hνU hV.temperate hV.integrable_exp_mul_norm hV.pos hV.lower hcov hR (fun u d hd => ?_)
+  refine
+    taylorCriterion volume hV.logConcave_law hV.interior_support_law hνU hV.temperate
+      hV.integrable_exp_mul_norm hV.pos hV.lower hcov hR (fun u d hd => ?_)
   rw [norm_coordTensor_eq _ (EuclideanSpace.basisFun (Fin n) ℝ), Lp.norm_def]
   exact h29 u (Lp.memLp u) d hd
 

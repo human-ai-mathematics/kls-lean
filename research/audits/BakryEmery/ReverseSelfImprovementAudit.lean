@@ -1,10 +1,14 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.ReversePoincare
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.SelfImprovement
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.ReversePoincare
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.SelfImprovement
 
 /-! Independent clients of the reverse local Poincaré inequality and of Bakry's `L¹`
 self-improvement. The law is `ν = m.tilted (-U)` for a smooth convex potential, with unit
 weight. The clients instantiate arbitrary `L²` data, bounded data, form-domain data and heat
 data `P_ε g`, the time `t = 0`, the zero test, and the two pointwise inequalities. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology
@@ -132,15 +136,20 @@ theorem pointwise_inputs {W f : V → ℝ} (hW : ContDiff ℝ 2 W) (hconv : Conv
 #print axioms FunctionalInequalities.Analysis.BakryEmery.tendsto_regularizedNorm
 #print axioms FunctionalInequalities.Analysis.BakryEmery.tendsto_integral_mul_regularizedNorm
 #print axioms FunctionalInequalities.Analysis.BakryEmery.tendsto_integral_mul_inner_regularizedUnit
-#print axioms FunctionalInequalities.Analysis.BakryEmery.hasDerivWithinAt_integral_mul_regularizedNorm
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.hasDerivWithinAt_integral_mul_regularizedNorm
 #print axioms FunctionalInequalities.Analysis.BakryEmery.tendsto_integral_mul_regularizedNorm_zero
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.hasDerivAt_apply_of_pos
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_adjointComp_mul_apply_sub_eq
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_adjointComp_mul_apply_sub_eq
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_mul_weakGamma_le
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_mul_weakGamma_le_of_bounded
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_regularizedNorm_smooth_nonneg
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_mul_weakGamma_le_of_bounded
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_regularizedNorm_smooth_nonneg
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_regularizedNorm_nonneg
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_regularizedNorm_le_of_pos
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_regularizedNorm_le_of_pos
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_regularizedNorm_le
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_norm_le
 end BakryEmeryReverseSelfImprovementAudit

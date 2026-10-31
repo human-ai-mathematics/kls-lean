@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Energy.WeightedGradient.Basic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Energy.WeightedGradient.Basic
 
 /-!
 # Product and chain rules on the weighted-gradient test class
@@ -25,6 +27,8 @@ exactly as `operator_apply` does.
 Nothing here is a statement about the **closure** `T̄` beyond its restriction to the test domain,
 and nothing here concerns `Γ`, a semigroup or log-concavity.
 -/
+
+@[expose] public section
 
 noncomputable section
 

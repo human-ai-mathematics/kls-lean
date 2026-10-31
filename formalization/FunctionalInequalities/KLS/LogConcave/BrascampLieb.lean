@@ -1,26 +1,38 @@
-import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
 
 /-!
 # The scalar Brascamp–Lieb inequality for a given potential
 
-Let `ν = m.tilted (−U)` be a log-concave probability law on a finite-dimensional real inner-product space (any dimension,
-zero included), `m` an additive Haar measure, and let the Hessian of `U` be positive definite at every point (no uniform
+Let `ν = m.tilted (−U)` be a log-concave probability law on a finite-dimensional real inner-product
+space (any dimension,
+zero included), `m` an additive Haar measure, and let the Hessian of `U` be positive definite at
+every point (no uniform
 lower bound). For a `C¹` test `f` in `L²(ν)`, not necessarily compactly supported:
 
 * `scalar_brascamp_lieb_finite_energy` (`U ∈ C²`): if the energy `⟪∇f, H⁻¹∇f⟫` is integrable, then
   `Var_ν f ≤ ∫ ⟪∇f, H⁻¹∇f⟫ dν`;
 * `scalar_brascamp_lieb_extended_energy` (`U ∈ C^∞`): with no energy premise,
-  `ofReal (Var_ν f) ≤ ∫⁻ ofReal ⟪∇f, H⁻¹∇f⟫ dν`, the right side possibly infinite; `…_of_bounded` derives `L²` for bounded
+  `ofReal (Var_ν f) ≤ ∫⁻ ofReal ⟪∇f, H⁻¹∇f⟫ dν`, the right side possibly infinite; `…_of_bounded`
+  derives `L²` for bounded
   `f`.
 
-Route: by Young, compact integration by parts and the ordinary-diffusion coercivity (`compact_variational_estimate`), the
-centered class of `f` satisfies `2⟪f̄, w⟫ − ‖w‖² ≤ ∫ energy` on the compact smooth diffusion images `w`, which are dense in the
-centered classes (`center_mem_closure_compactSmoothDiffusionImage`). This is the inequality of Letwin, arXiv:2607.24164v1,
-Lemma A.6, for a GIVEN potential: the source moment map, its Euler–Lagrange identification, push-forward and regularity, and
-therefore A.6 for the source law and Theorem 2.5, are not provided. The one-use Hilbert-closure and `L²`-pairing helpers are private here.
+Route: by Young, compact integration by parts and the ordinary-diffusion coercivity
+(`compact_variational_estimate`), the
+centered class of `f` satisfies `2⟪f̄, w⟫ − ‖w‖² ≤ ∫ energy` on the compact smooth diffusion images
+`w`, which are dense in the
+centered classes (`center_mem_closure_compactSmoothDiffusionImage`). This is the inequality of
+Letwin, arXiv:2607.24164v1,
+Lemma A.6, for a GIVEN potential: the source moment map, its Euler–Lagrange identification,
+push-forward and regularity, and
+therefore A.6 for the source law and Theorem 2.5, are not provided. The one-use Hilbert-closure and
+`L²`-pairing helpers are private here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

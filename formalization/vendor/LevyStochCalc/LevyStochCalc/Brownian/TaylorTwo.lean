@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Analysis.Calculus.MeanValue
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Second-order Taylor bound with a Lipschitz second derivative
@@ -19,6 +23,8 @@ second-order Taylor polynomial approximates the function to within `K|y − x|³
 * `LevyStochCalc.taylorRemainder` — the telescoped remainder as a function of the sequence.
 * `LevyStochCalc.abs_taylorRemainder_le` — its bound.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: centering and whitening of regular laws (BKL Section 2)
 
@@ -55,7 +57,8 @@ private theorem gaussian_covariance :
   intro u
   apply ext_inner_right ℝ
   intro v
-  rw [Covariance.operator_inner, ProbabilityTheory.covarianceBilin_apply (KLS.RegularPotential.memLp_id_two gaussianRegular)]
+  rw [Covariance.operator_inner,
+    ProbabilityTheory.covarianceBilin_apply (KLS.RegularPotential.memLp_id_two gaussianRegular)]
   have h0 : ∫ y, id y ∂(gaussianRegular.law : Measure ℝ) = 0 := gaussian_mean
   rw [h0]
   simp only [sub_zero, Real.inner_apply, ContinuousLinearMap.id_apply]
@@ -64,19 +67,23 @@ private theorem gaussian_covariance :
     ring
   rw [heq, integral_const_mul, gaussian_second, mul_one]
 
-theorem inputRegular : KLS.RegularPotential (fun x : ℝ => ‖scaleTwo x + 3‖ ^ 2 / 2)
-    (KLS.RegularPotential.affineLowerConstant 1 scaleTwo) (KLS.RegularPotential.affineUpperConstant 1 scaleTwo) :=
+theorem inputRegular :
+    KLS.RegularPotential (fun x : ℝ => ‖scaleTwo x + 3‖ ^ 2 / 2)
+      (KLS.RegularPotential.affineLowerConstant 1 scaleTwo)
+      (KLS.RegularPotential.affineUpperConstant 1 scaleTwo) :=
   KLS.RegularPotential.comp_affine gaussianRegular scaleTwo (3 : ℝ)
 
 /-- Before normalization the actual input barycenter is −3/2. -/
 theorem input_mean : ∫ x, x ∂(inputRegular.law : Measure ℝ) = -3 / 2 := by
   have htr2 : MemLp id 2 (Probability.translateLaw gaussianRegular.law (-3) : Measure ℝ) := by
     rw [Probability.coe_translateLaw]
-    exact (measurableEmbedding_addLeft (-3 : ℝ)).memLp_map_measure_iff.mpr
-      ((memLp_const (-3 : ℝ)).add (KLS.RegularPotential.memLp_id_two gaussianRegular))
+    exact
+      (measurableEmbedding_addLeft (-3 : ℝ)).memLp_map_measure_iff.mpr
+        ((memLp_const (-3 : ℝ)).add (KLS.RegularPotential.memLp_id_two gaussianRegular))
   rw [KLS.RegularPotential.law_comp_affine_eq_map gaussianRegular scaleTwo 3,
     Probability.integral_id_mapContinuousLinearEquiv _ _ (htr2.integrable one_le_two),
-    Probability.integral_id_translateLaw _ ((KLS.RegularPotential.memLp_id_two gaussianRegular).integrable one_le_two),
+    Probability.integral_id_translateLaw _
+      ((KLS.RegularPotential.memLp_id_two gaussianRegular).integrable one_le_two),
     gaussian_mean]
   norm_num [scaleTwo_symm_apply]
 
@@ -118,9 +125,11 @@ theorem input_actual_producer :
 
 /-- The explicit covariance whitening 2 gives genuine isotropy of the concrete output law. -/
 theorem input_explicit_isotropic :
-    KLS.Isotropic (KLS.RegularPotential.comp_affine inputRegular scaleTwo.symm
-      (∫ x, x ∂(inputRegular.law : Measure ℝ))).law :=
-  KLS.RegularPotential.isotropic_comp_affine_of_whitening inputRegular scaleTwo scaleTwo_adjoint input_whitening
+    KLS.Isotropic
+      (KLS.RegularPotential.comp_affine inputRegular scaleTwo.symm
+          (∫ x, x ∂(inputRegular.law : Measure ℝ))).law :=
+  KLS.RegularPotential.isotropic_comp_affine_of_whitening inputRegular scaleTwo scaleTwo_adjoint
+    input_whitening
 
 /-- Combining actual input mean and actual inverse map gives the original standard Gaussian
 potential after centering and whitening. This tests both directions of affine transport. -/
@@ -136,13 +145,14 @@ theorem input_whitened_potential (x : ℝ) :
 explicit covariance whitening. The Jacobian-normalized law is the original Gaussian. -/
 theorem input_whitened_law :
     (KLS.RegularPotential.comp_affine inputRegular scaleTwo.symm
-      (∫ x, x ∂(inputRegular.law : Measure ℝ))).law = gaussianRegular.law := by
+          (∫ x, x ∂(inputRegular.law : Measure ℝ))).law =
+      gaussianRegular.law := by
   apply ProbabilityMeasure.toMeasure_injective
-  rw [KLS.RegularPotential.law_comp_affine inputRegular scaleTwo.symm _, ContinuousLinearEquiv.symm_symm,
-    input_mean, KLS.RegularPotential.law_comp_affine gaussianRegular scaleTwo 3,
+  rw [KLS.RegularPotential.law_comp_affine inputRegular scaleTwo.symm _,
+    ContinuousLinearEquiv.symm_symm, input_mean,
+    KLS.RegularPotential.law_comp_affine gaussianRegular scaleTwo 3,
     Measure.map_map (by fun_prop) (by fun_prop)]
-  have heq : ((fun y : ℝ => scaleTwo (y - -3 / 2)) ∘
-      (fun y => scaleTwo.symm (y - 3))) = id := by
+  have heq : ((fun y : ℝ => scaleTwo (y - -3 / 2)) ∘ (fun y => scaleTwo.symm (y - 3))) = id := by
     funext y
     simp only [Function.comp_apply, scaleTwo_apply, scaleTwo_symm_apply, id_eq]
     ring

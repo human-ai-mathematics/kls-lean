@@ -1,7 +1,9 @@
-import FunctionalInequalities.Energy.Form.Functional
-import Mathlib.Data.ENNReal.Inv
-import Mathlib.Topology.Instances.ENNReal.Lemmas
-import Mathlib.Topology.Order.LiminfLimsup
+module
+
+public import FunctionalInequalities.Energy.Form.Functional
+public import Mathlib.Basic.ENNReal.Inv
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
+public import Mathlib.Topology.Order.LiminfLimsup
 
 /-!
 # Sequential relaxation of a finite pre-energy
@@ -14,6 +16,8 @@ The definition is intentionally sequential. The intended applications use real `
 metrizable topology; identifying it with an abstract lower-semicontinuous envelope is a later
 theorem, not part of this definition.
 -/
+
+@[expose] public section
 
 noncomputable section
 

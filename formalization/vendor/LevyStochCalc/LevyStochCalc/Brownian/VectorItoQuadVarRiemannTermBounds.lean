@@ -3,10 +3,15 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoTimeRiemann
-import LevyStochCalc.Brownian.CrossVariationSum
-import LevyStochCalc.Brownian.PolarisedQuadVar
-import LevyStochCalc.Probability.AbsMoment
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.VectorItoTimeRiemann
+public import LevyStochCalc.Brownian.CrossVariationSum
+public import LevyStochCalc.Brownian.PolarisedQuadVar
+public import LevyStochCalc.Probability.AbsMoment
 
 /-!
 # Cell sums and the error terms of the quadratic-variation Riemann sum
@@ -27,6 +32,8 @@ that diagonal by `O(m^{-1/2})`.
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.integral_abs_sum_driftCross_le` — a
   drift–martingale term.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -255,7 +262,7 @@ theorem IsVectorItoVersion.integral_abs_sum_driftCross_le
         |(∫ s in Set.Ioc (unifGrid T m i) (unifGrid T m (i + 1)), bdrift p ω s ∂volume)
           * (vectorItoMartingale W ℱ hcoord H hHm hHp hHs q (unifGrid T m (i + 1)) ω
             - vectorItoMartingale W ℱ hcoord H hHm hHp hHs q (unifGrid T m i) ω)|) P := by
-      refine hdom.mono (hRm i).abs.aestronglyMeasurable
+      refine hdom.mono (continuous_abs.measurable.comp (hRm i)).aestronglyMeasurable
         (Filter.Eventually.of_forall fun ω => ?_)
       rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_abs]
       exact (hpt ω).trans (le_abs_self _)

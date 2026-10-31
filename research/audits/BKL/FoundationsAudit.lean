@@ -1,14 +1,16 @@
-import FunctionalInequalities.Analysis.Tensor.Coordinate
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
-import solutions.ThmBakryEmeryPoincare
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Tensor.Coordinate
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
+public import solutions.ThmBakryEmeryPoincare
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: first dependencies of Bizeul–Klartag–Lehec (arXiv:2610.05474v1)
 
@@ -46,6 +48,8 @@ Nothing here covers a paper: Lemma 2.1 is a restricted counterpart (no class `�
 representatives or pointwise equation), and Theorem 1.1 is not addressed.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Finset FunctionalInequalities FunctionalInequalities.Analysis.Tensor
@@ -60,7 +64,8 @@ namespace BKLFoundationsAudit
 /-- The all-ones tensor with `k` indices over `Fin n`. -/
 def ones (n k : ℕ) : Coord n k := WithLp.toLp 2 fun _ => 1
 
-theorem slotPerm_ones (n k : ℕ) (σ : Equiv.Perm (Fin k)) : slotPerm n k σ (ones n k) = ones n k := by
+theorem slotPerm_ones (n k : ℕ) (σ : Equiv.Perm (Fin k)) :
+    slotPerm n k σ (ones n k) = ones n k := by
   ext i
   rw [slotPerm_apply]
   rfl
@@ -141,12 +146,20 @@ end GaussianLaw
 theorem gaussian_inverse {ρ : ℝ} (hρ : 0 < ρ)
     (g : Lp ℝ 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V))
     (hg : L2.mean (gaussianLaw (V := V) hρ) g = 0) :
-    ∃! u : (adjointComp ((gaussian_logConcave hρ).closedWeightedOperator (volume : Measure V)
-        (ContinuousLinearMap.id ℝ V) (gaussian_interior hρ))).domain,
-      L2.mean (gaussianLaw (V := V) hρ) (u : Lp ℝ 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V)) = 0 ∧
-        adjointComp ((gaussian_logConcave hρ).closedWeightedOperator (volume : Measure V)
-          (ContinuousLinearMap.id ℝ V) (gaussian_interior hρ)) u = g ∧
-          ‖(u : Lp ℝ 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V))‖ ≤ ρ⁻¹ * ‖g‖ :=
+    ∃! u :
+      (adjointComp
+          ((gaussian_logConcave hρ).closedWeightedOperator (volume : Measure V)
+            (ContinuousLinearMap.id ℝ V) (gaussian_interior hρ))).domain,
+      L2.mean (gaussianLaw (V := V) hρ)
+            (u : Lp ℝ 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V)) =
+          0 ∧
+        adjointComp
+              ((gaussian_logConcave hρ).closedWeightedOperator (volume : Measure V)
+                (ContinuousLinearMap.id ℝ V) (gaussian_interior hρ))
+              u =
+            g ∧
+          ‖(u : Lp ℝ 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V))‖ ≤
+            ρ⁻¹ * ‖g‖ :=
   existsUnique_centered_adjointComp_eq_of_hessian (volume : Measure V) (gaussian_logConcave hρ)
     (gaussian_interior hρ) rfl (contDiff_potential ρ) hρ
     (fun x v => (bilinearIteratedFDerivTwo_potential ρ x v).ge) g hg
@@ -181,90 +194,71 @@ theorem gaussian_bounds {ρ : ℝ} (hρ : 0 < ρ)
 
 /-! ## Lemma 3.6 and cumulants for the scaled Gaussian -/
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
-private lemma exp_mul_norm_le_gaussian
-    {ρ r : ℝ} (hρ : 0 < ρ) (x : V) :
-    Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) *
-        Real.exp (r * ‖x‖) ≤
-      Real.exp (r ^ 2 / ρ) *
-        Real.exp (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x) := by
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [MeasurableSpace V] [BorelSpace V]
+    [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+private lemma exp_mul_norm_le_gaussian {ρ r : ℝ} (hρ : 0 < ρ) (x : V) :
+    Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) * Real.exp (r * ‖x‖) ≤
+      Real.exp (r ^ 2 / ρ) * Real.exp (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x) := by
   calc
-    Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) *
-          Real.exp (r * ‖x‖) =
-        Real.exp
-          (-Solutions.ThmBakryEmeryPoincare.potential ρ x + r * ‖x‖) := by
+    Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) * Real.exp (r * ‖x‖) =
+        Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x + r * ‖x‖) := by
       rw [← Real.exp_add]
-    _ ≤ Real.exp
-          (r ^ 2 / ρ -
-            Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x) := by
+    _ ≤ Real.exp (r ^ 2 / ρ - Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x) := by
       apply Real.exp_le_exp.mpr
       dsimp [Solutions.ThmBakryEmeryPoincare.potential]
-      have hs :
-          ρ *
-              (-(ρ / 2 * ‖x‖ ^ 2) + r * ‖x‖ +
-                ρ / 4 * ‖x‖ ^ 2) ≤ r ^ 2 := by
+      have hs : ρ * (-(ρ / 2 * ‖x‖ ^ 2) + r * ‖x‖ + ρ / 4 * ‖x‖ ^ 2) ≤ r ^ 2 := by
         nlinarith [sq_nonneg (ρ * ‖x‖ / 2 - r)]
-      have ha :
-          -(ρ / 2 * ‖x‖ ^ 2) + r * ‖x‖ + ρ / 4 * ‖x‖ ^ 2
-            ≤ r ^ 2 / ρ := by
+      have ha : -(ρ / 2 * ‖x‖ ^ 2) + r * ‖x‖ + ρ / 4 * ‖x‖ ^ 2 ≤ r ^ 2 / ρ := by
         apply (le_div_iff₀ hρ).2
         simpa [mul_comm] using hs
       nlinarith
-    _ = Real.exp (r ^ 2 / ρ) *
+    _ =
+        Real.exp (r ^ 2 / ρ) *
           Real.exp (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x) := by
       rw [show
-        r ^ 2 / ρ -
-            Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x =
-          r ^ 2 / ρ +
-            (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x) by ring]
+          r ^ 2 / ρ - Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x =
+            r ^ 2 / ρ + (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x)
+          by ring]
       rw [Real.exp_add]
 
 omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- The scaled Gaussian law `volume.tilted (-(ρ/2)‖·‖²)` has all exponential moments. -/
 theorem integrable_exp_mul_norm_gaussianLaw {ρ : ℝ} (hρ : 0 < ρ) (r : ℝ) :
     Integrable (fun x : V => Real.exp (r * ‖x‖))
-      ((Solutions.ThmBakryEmeryPoincare.gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V) := by
-    change Integrable
-      (fun x : V => Real.exp (r * ‖x‖))
+      ((Solutions.ThmBakryEmeryPoincare.gaussianLaw (V := V) hρ : ProbabilityMeasure V) :
+        Measure V) := by
+  change
+    Integrable (fun x : V => Real.exp (r * ‖x‖))
       (volume.tilted (-Solutions.ThmBakryEmeryPoincare.potential ρ))
-    rw [MeasureTheory.integrable_tilted_iff
+  rw [MeasureTheory.integrable_tilted_iff
       (Solutions.ThmBakryEmeryPoincare.integrable_exp_neg_potential hρ)]
-    have hg :
-        Integrable
-          (fun x : V =>
-            Real.exp (r ^ 2 / ρ) *
-              Real.exp
-                (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x))
-          volume := by
-      simpa [smul_eq_mul] using
-        (Solutions.ThmBakryEmeryPoincare.integrable_exp_neg_potential
-          (half_pos hρ)).const_mul (Real.exp (r ^ 2 / ρ))
-    have hc :
-        Continuous
-          (fun x : V =>
-            Solutions.ThmBakryEmeryPoincare.potential ρ x) := by
-      dsimp [Solutions.ThmBakryEmeryPoincare.potential]
-      exact continuous_const.mul (continuous_norm.pow 2)
-    have hc₂ : Continuous (fun x : V => r * ‖x‖) :=
-      continuous_const.mul continuous_norm
-    have hcont :
-        Continuous
-          (fun x : V =>
-            Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) *
-              Real.exp (r * ‖x‖)) :=
-      (Real.continuous_exp.comp hc.neg).mul
-        (Real.continuous_exp.comp hc₂)
-    have hmeas :
-        AEStronglyMeasurable
-          (fun x : V =>
-            Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) *
-              Real.exp (r * ‖x‖))
-          volume := by
-      exact hcont.aestronglyMeasurable
-    refine hg.mono' hmeas ?_
-    filter_upwards [] with x
-    simpa [norm_smul, abs_of_nonneg (Real.exp_nonneg _)] using
-      (exp_mul_norm_le_gaussian (ρ := ρ) (r := r) hρ x)
+  have hg :
+    Integrable
+      (fun x : V =>
+        Real.exp (r ^ 2 / ρ) * Real.exp (-Solutions.ThmBakryEmeryPoincare.potential (ρ / 2) x))
+      volume := by
+    simpa [smul_eq_mul] using
+      (Solutions.ThmBakryEmeryPoincare.integrable_exp_neg_potential (half_pos hρ)).const_mul
+        (Real.exp (r ^ 2 / ρ))
+  have hc : Continuous (fun x : V => Solutions.ThmBakryEmeryPoincare.potential ρ x) := by
+    dsimp [Solutions.ThmBakryEmeryPoincare.potential]
+    exact continuous_const.mul (continuous_norm.pow 2)
+  have hc₂ : Continuous (fun x : V => r * ‖x‖) := continuous_const.mul continuous_norm
+  have hcont :
+    Continuous
+      (fun x : V =>
+        Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) * Real.exp (r * ‖x‖)) :=
+    (Real.continuous_exp.comp hc.neg).mul (Real.continuous_exp.comp hc₂)
+  have hmeas :
+    AEStronglyMeasurable
+      (fun x : V =>
+        Real.exp (-Solutions.ThmBakryEmeryPoincare.potential ρ x) * Real.exp (r * ‖x‖))
+      volume := by
+    exact hcont.aestronglyMeasurable
+  refine hg.mono' hmeas ?_
+  filter_upwards [] with x
+  simpa [norm_smul, abs_of_nonneg (Real.exp_nonneg _)] using
+    (exp_mul_norm_le_gaussian (ρ := ρ) (r := r) hρ x)
 
 omit [SecondCountableTopology V] in
 /-- **Nonvacuity of the restricted Lemma 3.6, (50).** -/
@@ -290,18 +284,24 @@ omit [SecondCountableTopology V]
 /-- (50) for the nonzero bump test, every `d`. -/
 theorem gaussian_taylorTensor_bump {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
-        (fun x => -Analysis.BakryEmery.weightedLaplacian (potential ρ) (bump : ContDiffBump (0 : V)) x)
+        (fun x =>
+          -Analysis.BakryEmery.weightedLaplacian (potential ρ) (bump : ContDiffBump (0 : V)) x)
         (d + 1) =
-      symmetrizeML (appendInner (Analysis.BakryEmery.taylorTensor
-        ((volume : Measure V).tilted (-potential ρ)) (gradient (bump : ContDiffBump (0 : V))) d)) :=
+      symmetrizeML
+        (appendInner
+          (Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
+            (gradient (bump : ContDiffBump (0 : V))) d)) :=
   gaussian_taylorTensor hρ (ContDiffBump.contDiff _) (ContDiffBump.hasCompactSupport _) d
 
 /-- (49) for the bump test. -/
 theorem gaussian_taylorTensor_one_bump {ρ : ℝ} (hρ : 0 < ρ) (h : Fin 1 → V) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
-        (fun x => -Analysis.BakryEmery.weightedLaplacian (potential ρ) (bump : ContDiffBump (0 : V)) x)
+        (fun x =>
+          -Analysis.BakryEmery.weightedLaplacian (potential ρ) (bump : ContDiffBump (0 : V)) x)
         1 h =
-      ⟪∫ x, gradient (bump : ContDiffBump (0 : V)) x ∂((volume : Measure V).tilted (-potential ρ)),
+      ⟪∫ x,
+          gradient (bump : ContDiffBump (0 : V))
+            x ∂((volume : Measure V).tilted (-potential ρ)),
         h 0⟫ :=
   Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian (volume : Measure V)
     ((contDiff_potential ρ).of_le (by norm_num)) (ContDiffBump.contDiff _)
@@ -312,11 +312,14 @@ end GaussianBumps
 omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- The cumulant identity for linear functions under the Gaussian. -/
 theorem gaussian_cumulant {ρ : ℝ} (hρ : 0 < ρ) (v : V) (d : ℕ) (h : Fin d → V) :
-    Analysis.BakryEmery.taylorTensor ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V)
-        (fun x => ⟪v, x⟫) d h =
-      (d.factorial : ℝ)⁻¹ * Analysis.BakryEmery.cumulant
-        ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V) (d + 1) (Fin.cons v h) :=
-  Analysis.BakryEmery.taylorTensor_inner_eq_cumulant _ (integrable_exp_mul_norm_gaussianLaw hρ) v d h
+    Analysis.BakryEmery.taylorTensor
+        ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V) (fun x => ⟪v, x⟫) d h =
+      (d.factorial : ℝ)⁻¹ *
+        Analysis.BakryEmery.cumulant
+          ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V) (d + 1)
+          (Fin.cons v h) :=
+  Analysis.BakryEmery.taylorTensor_inner_eq_cumulant _ (integrable_exp_mul_norm_gaussianLaw hρ)
+    v d h
 
 
 omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
@@ -335,25 +338,32 @@ theorem norm_gradient_potential_le (ρ : ℝ) (x : V) :
 section GaussianLinearTests
 
 omit [SecondCountableTopology V]
-/-- **Nonvacuity of Lemma 3.6 beyond compact support.** For the scaled Gaussian and the linear test
+/--
+**Nonvacuity of Lemma 3.6 beyond compact support.** For the scaled Gaussian and the linear test
 `u = ⟪v, ·⟫` (temperate growth, not compactly supported), (50) holds for every `d`. -/
 theorem gaussian_taylorTensor_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) (d : ℕ) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
-        (fun x => -Analysis.BakryEmery.weightedLaplacian (potential ρ) (fun y => ⟪v, y⟫) x) (d + 1) =
-      symmetrizeML (appendInner (Analysis.BakryEmery.taylorTensor
-        ((volume : Measure V).tilted (-potential ρ)) (gradient fun y => ⟪v, y⟫) d)) :=
-  Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth (volume : Measure V)
-    ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
-    (integrable_exp_mul_norm_gaussianLaw hρ) (Function.hasTemperateGrowth_inner_right v) d
+        (fun x => -Analysis.BakryEmery.weightedLaplacian (potential ρ) (fun y => ⟪v, y⟫) x)
+        (d + 1) =
+      symmetrizeML
+        (appendInner
+          (Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
+            (gradient fun y => ⟪v, y⟫) d)) :=
+  Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth
+    (volume : Measure V) ((contDiff_potential ρ).of_le (by norm_num))
+    (norm_gradient_potential_le ρ) (integrable_exp_mul_norm_gaussianLaw hρ)
+    (Function.hasTemperateGrowth_inner_right v) d
 
 /-- (49) for the linear test: `T_1(-ℒ⟪v, ·⟫)(h) = ⟪∫ ∇⟪v, ·⟫ dμ, h₀⟫`. -/
 theorem gaussian_taylorTensor_one_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) (h : Fin 1 → V) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
-        (fun x => -Analysis.BakryEmery.weightedLaplacian (potential ρ) (fun y => ⟪v, y⟫) x) 1 h =
+        (fun x => -Analysis.BakryEmery.weightedLaplacian (potential ρ) (fun y => ⟪v, y⟫) x) 1
+        h =
       ⟪∫ x, gradient (fun y => ⟪v, y⟫) x ∂((volume : Measure V).tilted (-potential ρ)), h 0⟫ :=
-  Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth (volume : Measure V)
-    ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
-    (integrable_exp_mul_norm_gaussianLaw hρ) (Function.hasTemperateGrowth_inner_right v) h
+  Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth
+    (volume : Measure V) ((contDiff_potential ρ).of_le (by norm_num))
+    (norm_gradient_potential_le ρ) (integrable_exp_mul_norm_gaussianLaw hρ)
+    (Function.hasTemperateGrowth_inner_right v) h
 
 end GaussianLinearTests
 
@@ -395,17 +405,20 @@ omit [SecondCountableTopology V] in
 /-- **BKL (15) on `𝒜`** for the Gaussian and two linear tests (not compactly supported):
 `∫ (ℒ⟪v, ·⟫) ⟪w, ·⟫ dμ = -∫ ⟪∇⟪v, ·⟫, ∇⟪w, ·⟫⟫ dμ`. -/
 theorem gaussian_integration_by_parts_linear {ρ : ℝ} (hρ : 0 < ρ) (v w : V) :
-    ∫ x, Analysis.BakryEmery.weightedLaplacian (potential ρ) (fun y => ⟪v, y⟫) x * ⟪w, x⟫
-        ∂((volume : Measure V).tilted (-potential ρ)) =
-      -∫ x, ⟪gradient (fun y => ⟪v, y⟫) x, gradient (fun y => ⟪w, y⟫) x⟫
-        ∂((volume : Measure V).tilted (-potential ρ)) :=
-  Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth (volume : Measure V)
-    ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
-    (integrable_exp_mul_norm_gaussianLaw hρ) (Function.hasTemperateGrowth_inner_right v)
-    (Function.hasTemperateGrowth_inner_right w)
+    ∫ x,
+        Analysis.BakryEmery.weightedLaplacian (potential ρ) (fun y => ⟪v, y⟫) x *
+          ⟪w, x⟫ ∂((volume : Measure V).tilted (-potential ρ)) =
+      -∫ x,
+          ⟪gradient (fun y => ⟪v, y⟫) x,
+            gradient (fun y => ⟪w, y⟫) x⟫ ∂((volume : Measure V).tilted (-potential ρ)) :=
+  Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth
+    (volume : Measure V) ((contDiff_potential ρ).of_le (by norm_num))
+    (norm_gradient_potential_le ρ) (integrable_exp_mul_norm_gaussianLaw hρ)
+    (Function.hasTemperateGrowth_inner_right v) (Function.hasTemperateGrowth_inner_right w)
 
 
-omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
+    [FiniteDimensional ℝ V] in
 theorem hasTemperateGrowth_potential (ρ : ℝ) : (potential (V := V) ρ).HasTemperateGrowth :=
   (Function.HasTemperateGrowth.const (ρ / 2)).mul (Function.hasTemperateGrowth_norm_sq V)
 
@@ -439,9 +452,11 @@ theorem gaussian_bochner_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) :
 (temperate growth, values in the tensor space `V`), (49) and (50) hold for every `d`. -/
 theorem gaussian_taylorTensor_vec_id {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
-        (fun x => -Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => y) x) (d + 1) =
-      symmetrizeML (Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
-        (fderiv ℝ fun y : V => y) d).uncurryRight :=
+        (fun x => -Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => y) x)
+        (d + 1) =
+      symmetrizeML
+        (Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
+            (fderiv ℝ fun y : V => y) d).uncurryRight :=
   Analysis.BakryEmery.taylorTensor_neg_weightedLaplacianVec (volume : Measure V)
     ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
     (integrable_exp_mul_norm_gaussianLaw hρ) Function.HasTemperateGrowth.id' d
@@ -501,32 +516,53 @@ theorem gaussian_taylorTensor_vec_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a b c : V
       (Function.HasTemperateGrowth.const ((innerSL ℝ a).smulRight b))) d
 
 
-/-- **Tensor-valued (16)** for the Gaussian and the quadratic vector field `u(x) = ⟪c, x⟫² • a` with
+/--
+**Tensor-valued (16)** for the Gaussian and the quadratic vector field `u(x) = ⟪c, x⟫² • a` with
 values in `V`, with the curvature form of Lemma 3.4. -/
 theorem gaussian_tensor_bochner_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a c : V) :
-    (∫ x, ‖Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫ ^ 2 • a) x‖ ^ 2
-        ∂((volume : Measure V).tilted (-potential ρ)) =
-      ∫ x, ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 (fun y : V => ⟪c, y⟫ ^ 2 • a) x
-          ![stdOrthonormalBasis ℝ V i, stdOrthonormalBasis ℝ V j]‖ ^ 2
-          ∂((volume : Measure V).tilted (-potential ρ)) +
-        ∫ x, ∑ i, ∑ j, bilinearIteratedFDerivTwo ℝ (potential ρ) x (stdOrthonormalBasis ℝ V i)
-            (stdOrthonormalBasis ℝ V j) *
-          ⟪fderiv ℝ (fun y : V => ⟪c, y⟫ ^ 2 • a) x (stdOrthonormalBasis ℝ V i),
-            fderiv ℝ (fun y : V => ⟪c, y⟫ ^ 2 • a) x (stdOrthonormalBasis ℝ V j)⟫
-          ∂((volume : Measure V).tilted (-potential ρ))) ∧
-    (∫ x, ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 (fun y : V => ⟪c, y⟫ ^ 2 • a) x
-          ![stdOrthonormalBasis ℝ V i, stdOrthonormalBasis ℝ V j]‖ ^ 2
-          ∂((volume : Measure V).tilted (-potential ρ)) +
-        ρ * ∫ x, ∑ i, ‖fderiv ℝ (fun y : V => ⟪c, y⟫ ^ 2 • a) x (stdOrthonormalBasis ℝ V i)‖ ^ 2
-          ∂((volume : Measure V).tilted (-potential ρ)) ≤
-      ∫ x, ‖Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫ ^ 2 • a) x‖ ^ 2
-        ∂((volume : Measure V).tilted (-potential ρ))) :=
+    (∫ x,
+          ‖Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫ ^ 2 • a)
+                x‖ ^
+            2 ∂((volume : Measure V).tilted (-potential ρ)) =
+        ∫ x,
+            ∑ i,
+              ∑ j,
+                ‖iteratedFDeriv ℝ 2 (fun y : V => ⟪c, y⟫ ^ 2 • a) x
+                      ![stdOrthonormalBasis ℝ V i, stdOrthonormalBasis ℝ V j]‖ ^
+                  2 ∂((volume : Measure V).tilted (-potential ρ)) +
+          ∫ x,
+            ∑ i,
+              ∑ j,
+                bilinearIteratedFDerivTwo ℝ (potential ρ) x (stdOrthonormalBasis ℝ V i)
+                    (stdOrthonormalBasis ℝ V j) *
+                  ⟪fderiv ℝ (fun y : V => ⟪c, y⟫ ^ 2 • a) x (stdOrthonormalBasis ℝ V i),
+                    fderiv ℝ (fun y : V => ⟪c, y⟫ ^ 2 • a) x
+                      (stdOrthonormalBasis ℝ V
+                        j)⟫ ∂((volume : Measure V).tilted (-potential ρ))) ∧
+      (∫ x,
+            ∑ i,
+              ∑ j,
+                ‖iteratedFDeriv ℝ 2 (fun y : V => ⟪c, y⟫ ^ 2 • a) x
+                      ![stdOrthonormalBasis ℝ V i, stdOrthonormalBasis ℝ V j]‖ ^
+                  2 ∂((volume : Measure V).tilted (-potential ρ)) +
+          ρ *
+            ∫ x,
+              ∑ i,
+                ‖fderiv ℝ (fun y : V => ⟪c, y⟫ ^ 2 • a) x (stdOrthonormalBasis ℝ V i)‖ ^
+                  2 ∂((volume : Measure V).tilted (-potential ρ)) ≤
+        ∫ x,
+          ‖Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫ ^ 2 • a)
+                x‖ ^
+            2 ∂((volume : Measure V).tilted (-potential ρ))) :=
   ⟨Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_eq (volume : Measure V)
       (hasTemperateGrowth_potential ρ) (integrable_exp_mul_norm_gaussianLaw hρ)
-      (((Function.hasTemperateGrowth_inner_right c).pow 2).smul (Function.HasTemperateGrowth.const a)),
-    Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec (volume : Measure V)
-      (hasTemperateGrowth_potential ρ) (integrable_exp_mul_norm_gaussianLaw hρ)
-      (((Function.hasTemperateGrowth_inner_right c).pow 2).smul (Function.HasTemperateGrowth.const a))
+      (((Function.hasTemperateGrowth_inner_right c).pow 2).smul
+        (Function.HasTemperateGrowth.const a)),
+    Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec
+      (volume : Measure V) (hasTemperateGrowth_potential ρ)
+      (integrable_exp_mul_norm_gaussianLaw hρ)
+      (((Function.hasTemperateGrowth_inner_right c).pow 2).smul
+        (Function.HasTemperateGrowth.const a))
       (fun x w => (bilinearIteratedFDerivTwo_potential ρ x w).ge)⟩
 
 
@@ -600,10 +636,14 @@ end BKLFoundationsAudit
 #print axioms BKLFoundationsAudit.gaussian_taylorTensor_bump
 #print axioms BKLFoundationsAudit.gaussian_taylorTensor_one_bump
 #print axioms BKLFoundationsAudit.gaussian_cumulant
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_eq_zero_of_growth
-#print axioms FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_eq_zero_of_growth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth
 #print axioms BKLFoundationsAudit.gaussian_taylorTensor_linear
 #print axioms BKLFoundationsAudit.gaussian_taylorTensor_one_linear
 #print axioms FunctionalInequalities.Analysis.Tensor.coordTensor_symmetrizeML
@@ -616,13 +656,18 @@ end BKLFoundationsAudit
 #print axioms FunctionalInequalities.Analysis.BakryEmery.exists_norm_taylorTensor_le
 #print axioms BKLFoundationsAudit.gaussian_coordTensor_taylorTensor_symmetric
 #print axioms BKLFoundationsAudit.gaussian_taylorTensor_continuous
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasCompactSupport
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_comm_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasCompactSupport
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_comm_of_hasTemperateGrowth
 #print axioms BKLFoundationsAudit.gaussian_integration_by_parts_linear
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_gammaTwo_eq_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessianSq_add_le_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_hessianSq_add_le_of_hasTemperateGrowth
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hasTemperateGrowth_weightedLaplacian
 #print axioms BKLFoundationsAudit.gaussian_bochner_linear
 #print axioms FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacianVec
@@ -637,7 +682,8 @@ end BKLFoundationsAudit
 #print axioms BKLFoundationsAudit.gaussian_taylorTensor_vec_quadratic
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_inner_weightedLaplacianVec_eq_neg
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_eq
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec
 #print axioms BKLFoundationsAudit.gaussian_tensor_bochner_quadratic
 #print axioms BKLFoundationsAudit.gaussian_tensor_ibp_quadratic
 #print axioms FunctionalInequalities.Analysis.BakryEmery.symmetrizeML_taylorTensor_centeredFDeriv

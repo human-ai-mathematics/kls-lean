@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Hausdorff.Isodiametric
-import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Isodiametric
+public import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
 
 /-!
 # Hausdorff normalization and volume
@@ -8,6 +10,8 @@ Covering and the isodiametric inequality identify Mathlib’s diameter-gauge Hau
 with a scalar multiple of volume. The normalized top-dimensional measure equals volume,
 including dimension zero. Existing Analysis and KLS namespaces are preserved.
 -/
+
+@[expose] public section
 
 noncomputable section
 

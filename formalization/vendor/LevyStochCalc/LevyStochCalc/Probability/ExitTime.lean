@@ -6,10 +6,15 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import Mathlib.Probability.Process.Stopping
-import Mathlib.Data.Rat.Denumerable
-import Mathlib.Topology.Order.Compact
-import Mathlib.Topology.Order.Monotone
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import Mathlib.Probability.Process.Stopping
+public import Mathlib.Data.Rat.Denumerable
+public import Mathlib.Topology.Order.Compact
+public import Mathlib.Topology.Order.Monotone
 
 /-!
 # Exit times of a process with continuous paths
@@ -20,6 +25,8 @@ is decided by the values of the path on the rationals of `[0, t]`, so the exit t
 time for any filtration the process is adapted to. Letting `k` grow gives a localising sequence:
 every time lies strictly below `exitTime X k` for all large `k`.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 
@@ -78,7 +85,7 @@ theorem exitTime_le_iff {X : Ω → ℝ → E} {ω : Ω} (hX : Continuous (X ω)
     · exact absurd hle (by simp)
   · rintro ⟨s, ⟨hs0, hst⟩, hks⟩
     have hne : (exitSet X k ω).Nonempty := ⟨s, hs0, hks⟩
-    rw [exitTime, if_pos hne]
+    rw [exitTime, ite_eq_left hne]
     have hle : sInf (exitSet X k ω) ≤ t :=
       le_trans (csInf_le (bddBelow_exitSet X k ω) ⟨hs0, hks⟩) hst
     exact_mod_cast hle
@@ -202,7 +209,7 @@ theorem norm_le_of_le_exitTime {X : Ω → ℝ → E} {ω : Ω} (hX : Continuous
     by_contra hcon
     have hmem : u ∈ exitSet X k ω := ⟨hu0, (not_le.mp hcon).le⟩
     have : exitTime X k ω ≤ ((u : ℝ) : WithTop ℝ) := by
-      rw [exitTime, if_pos ⟨u, hmem⟩]
+      rw [exitTime, ite_eq_left ⟨u, hmem⟩]
       exact_mod_cast csInf_le (bddBelow_exitSet X k ω) hmem
     have hsu : ((s : ℝ) : WithTop ℝ) ≤ ((u : ℝ) : WithTop ℝ) := hle.trans this
     exact absurd (by exact_mod_cast hsu : s ≤ u) (not_le.mpr hus)

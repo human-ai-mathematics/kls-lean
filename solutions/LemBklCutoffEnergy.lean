@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.BKL.Cumulant.Bound
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
-import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.ToCumulant
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.Cumulant.Bound
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.ToCumulant
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Lean supporting certificate: `lem:bkl-cutoff-energy`
 
@@ -19,6 +21,8 @@ or prove the literal stochastic identities (68)–(73). No BKL main theorem
 or KLS certificate is registered by this supporting endpoint.
 -/
 
+@[expose] public section
+
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
@@ -34,7 +38,7 @@ theorem bound (d : ℕ) (hd : 1 ≤ d) : CutoffEnergyClaim 153 d :=
 
 /-- BKL (95), explicitly in finite-horizon cutoff form; the uncut assertion is not claimed. -/
 theorem certificate (d : ℕ) (hd : 1 ≤ d) :
-  ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support),
     FunctionalInequalities.KLS.Isotropic μ →
     FunctionalInequalities.KLS.LogConcave μ →
@@ -64,15 +68,17 @@ theorem certificate (d : ℕ) (hd : 1 ≤ d) :
   simpa only [weightedEnergyIntegral, envelope_succ_eq] using h
 
 /--
-info: 'Solutions.LemBklCutoffEnergy.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.LemBklCutoffEnergy.bound' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.LemBklCutoffEnergy.bound
+  #print axioms Solutions.LemBklCutoffEnergy.bound
 
 /--
-info: 'Solutions.LemBklCutoffEnergy.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.LemBklCutoffEnergy.certificate' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.LemBklCutoffEnergy.certificate
+  #print axioms Solutions.LemBklCutoffEnergy.certificate
 
 end Solutions.LemBklCutoffEnergy

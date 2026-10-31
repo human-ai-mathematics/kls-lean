@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Graph.Jacobian
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Graph.Jacobian
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the codimension-`m` graph Jacobian
@@ -17,6 +19,8 @@ repository's codimension-one framework with Mathlib's general `normDet`.
 **The nonlinear area formula is NOT proved.**  The final `#check` in this file is a proposition
 type-check of that open target, not a proof of it, in the style of the weighted coarea route file.
 -/
+
+@[expose] public section
 
 noncomputable section
 

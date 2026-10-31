@@ -1,18 +1,22 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
-import FunctionalInequalities.Energy.Relaxation.Basic
-import FunctionalInequalities.Probability.Support.Affine
-import FunctionalInequalities.Probability.Covariance.Basic
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.MeasureTheory.Measure.Support
-import Mathlib.Topology.MetricSpace.Lipschitz
+module
+
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import FunctionalInequalities.Probability.Support.Affine
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.MeasureTheory.Measure.Support
+public import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-!
 # Covariance-weighted gradient pre-energy of globally Lipschitz tests
 
 Source: Blueprint `def:affine-poincare-constant`, pre-energy part. Read
-`Energy.CovarianceGradient.density`, `Energy.CovarianceGradient.Test`, `Energy.CovarianceGradient.preEnergy` and
-`Energy.CovarianceGradient.relaxation`; the affine specialization to the intrinsic law is `Energy.CovarianceGradient.Intrinsic.preEnergy`
+`Energy.CovarianceGradient.density`, `Energy.CovarianceGradient.Test`,
+`Energy.CovarianceGradient.preEnergy` and
+`Energy.CovarianceGradient.relaxation`; the affine specialization to the intrinsic law is
+`Energy.CovarianceGradient.Intrinsic.preEnergy`
 and `Energy.CovarianceGradient.Intrinsic.energy` at the end.
 
 For a probability law `ν` on a finite-dimensional real Hilbert space `V`, a test is a globally
@@ -31,7 +35,8 @@ contracts that hold for every law on `V`:
   (`Energy.CovarianceGradient.Test.ae_hasGradientAt`, Rademacher);
 * if the frontier of the support of `ν` is `ν`-null, continuous representatives of one `L²(ν)`
   class have `ν`-almost everywhere equal gradients, so two tests with the same realization have
-  the same energy (`gradient_ae_eq_of_ae_eq`, `Energy.CovarianceGradient.Test.energy_eq_of_toL2_eq`).
+  the same energy (`gradient_ae_eq_of_ae_eq`,
+  `Energy.CovarianceGradient.Test.energy_eq_of_toL2_eq`).
 
 What this module does not claim: density of the realization, closability, quadraticity,
 lower semicontinuity of the relaxation, any Markov property, a Poincaré inequality, or a
@@ -42,6 +47,8 @@ the log-concave discharge of the two contract hypotheses is in
 the one with a second moment. The zero-dimensional direction space is included: every test is
 constant there and every energy is zero.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -267,13 +274,17 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
 /-- The affine covariance pre-energy `P^aff_μ`: the covariance pre-energy of the intrinsic law
 of `μ` on the direction space of its affine support, with `Σ = Covariance.operator ν`. -/
 def preEnergy (μ : ProbabilityMeasure E) :
-    PreEnergy (Lp ℝ 2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :=
+    PreEnergy
+      (Lp ℝ 2
+        (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :=
   Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)
 
 /-- The affine covariance relaxation `𝓔^aff_μ`: the sequential `L²(ν)` relaxation of the
 affine covariance pre-energy on the intrinsic law `ν`. -/
 def energy (μ : ProbabilityMeasure E) :
-    Functional (Lp ℝ 2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :=
+    Functional
+      (Lp ℝ 2
+        (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :=
   (preEnergy μ).sequentialRelaxation
 
 omit [CompleteSpace E] in
@@ -293,8 +304,13 @@ theorem energy_eq_relaxation_intrinsicMeasure (μ : ProbabilityMeasure E) :
 
 /-- Unfolding the affine relaxation exposes the generic sequential relaxation. -/
 theorem energy_apply (μ : ProbabilityMeasure E)
-    (f : Lp ℝ 2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :
-    energy μ f = (Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).sequentialRelaxation f :=
+    (f :
+      Lp ℝ 2
+        (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :
+    energy μ f =
+      (Energy.CovarianceGradient.preEnergy
+            (Probability.intrinsicMeasure μ)).sequentialRelaxation
+        f :=
   rfl
 
 end IntrinsicEnergy

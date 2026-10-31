@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.CovarianceGradient.Basic
-import FunctionalInequalities.Poincare.L2.Energy
+module
+
+public import FunctionalInequalities.Energy.CovarianceGradient.Basic
+public import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # The affine covariance Poincaré constant
@@ -7,9 +9,11 @@ import FunctionalInequalities.Poincare.L2.Energy
 Source: Blueprint `def:affine-poincare-constant`, constant part. Read `constant`, `Holds`,
 `holds_iff_constant_le`, then the zero-dimensional theorems.
 
-`Poincare.CovarianceGradient.Intrinsic.constant μ` is `C_P^aff(μ)`: the generic `L²` Poincaré optimizer
+`Poincare.CovarianceGradient.Intrinsic.constant μ` is `C_P^aff(μ)`: the generic `L²` Poincaré
+optimizer
 `Poincare.L2Energy.constant` of the intrinsic law `ν` of `μ` evaluated at the affine covariance
-relaxation `Energy.CovarianceGradient.Intrinsic.energy μ`, the sequential `L²(ν)` relaxation of the globally Lipschitz
+relaxation `Energy.CovarianceGradient.Intrinsic.energy μ`, the sequential `L²(ν)` relaxation of the
+globally Lipschitz
 covariance pre-energy with `Σ = Covariance.operator ν`. `Holds μ C` is validity of the finite
 constant `C` on the finite-energy domain of that relaxation.
 
@@ -19,11 +23,14 @@ carrier has zero variance.
 
 What this module does not claim: finiteness of the constant for any law, closability or the
 closed-form identification of the relaxation, translation invariance, the isotropic reduction,
-any comparison with `Poincare.SmoothGradient.Intrinsic.constant` or `Poincare.LocalSlope.Intrinsic.constant`, or a KLS bound.
+any comparison with `Poincare.SmoothGradient.Intrinsic.constant` or
+`Poincare.LocalSlope.Intrinsic.constant`, or a KLS bound.
 Log-concavity is not assumed by the definition; the Blueprint states it because the covariance is
 then the honest second-moment covariance and the gradient is defined almost everywhere, see
 `KLS/LogConcave/Covariance.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -54,13 +61,16 @@ omit [CompleteSpace E]
 optimal extended constant. -/
 theorem holds_iff_constant_le (μ : ProbabilityMeasure E) (C : NNReal) :
     Holds μ C ↔ constant μ ≤ (C : ENNReal) :=
-  L2Energy.holds_iff_constant_le (Probability.intrinsicMeasure μ) (Energy.CovarianceGradient.Intrinsic.energy μ) C
+  L2Energy.holds_iff_constant_le (Probability.intrinsicMeasure μ)
+    (Energy.CovarianceGradient.Intrinsic.energy μ) C
 
 /-- Unfolding the affine constant exposes the generic `L²` optimizer of the intrinsic law at the
 sequential relaxation of the covariance pre-energy. -/
 theorem constant_eq (μ : ProbabilityMeasure E) :
-    constant μ = L2Energy.constant (Probability.intrinsicMeasure μ)
-      ((Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).sequentialRelaxation) :=
+    constant μ =
+      L2Energy.constant (Probability.intrinsicMeasure μ)
+        ((Energy.CovarianceGradient.preEnergy
+            (Probability.intrinsicMeasure μ)).sequentialRelaxation) :=
   rfl
 
 /-- A zero-dimensional direction space gives affine constant zero: every intrinsic `L²` class

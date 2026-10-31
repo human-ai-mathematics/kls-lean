@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
 /-!
 # Weak Hessian evolution audit
 
@@ -7,6 +9,8 @@ weak (2.6)): retention of the original full source statement by the two regular-
 the actual ψ·H_lk weak test at one witness, and a zero-dimensional generic approximation client.
 Not a proof of (2.14), Theorem 2.5 or KLS.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Set Filter
 open scoped ContDiff Topology
@@ -43,7 +47,8 @@ theorem weighted_evolution_retains_flux_source_contract {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -128,9 +133,14 @@ theorem weighted_evolution_retains_flux_source_contract {n : ℕ} (hn : 0 < n)
           fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ a)
           ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
         -(∫ x, C x i j * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) := by
-  obtain ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, _⟩ :=
-    exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  exact ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux⟩
+    obtain
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux, _⟩ :=
+      exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ
+        hiso
+    exact
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux⟩
 
 /-- Original full weighted source statement retained by the bounded testing producer at one
 witness. -/
@@ -161,7 +171,8 @@ theorem bounded_testing_retains_weighted_source_contract {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -267,60 +278,89 @@ theorem bounded_testing_retains_weighted_source_contract {n : ℕ} (hn : 0 < n)
           ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
         -(∫ x, Real.exp (-u x) * E x i j * ψ x
           ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) := by
-  obtain ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, hweighted, _⟩ :=
-    exists_regular_moment_bounded_weak_hessian_testing hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  exact ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, hweighted⟩
+    obtain
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux, hweighted, _⟩ :=
+      exists_regular_moment_bounded_weak_hessian_testing hn hκ hK hKc hKint hW hstrong μ
+        hμ hiso
+    exact
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux, hweighted⟩
 
-/-- Actual ψ·H_lk weak testing at the producer's witness: the same `u` and the same weak Hessian tensor `T`
+/--
+Actual ψ·H_lk weak testing at the producer's witness: the same `u` and the same weak Hessian tensor
+`T`
 satisfy the weighted evolution identity against every bounded test `ψ * H_lk`. -/
 theorem actual_source_hessian_entry_weak_test {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : KLS.Isotropic μ) :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (T :
+      EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∀ k i j,
-        HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
-            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-          ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
-    let R := fun x => (hessianMatrix u x)⁻¹
-    let J := fun x i j a => ∑ b : Fin n, R x b a * T x b i j
-    let E := fun x i j => -hessianMatrix u x i j +
-      (hessianMatrix u x * hessianMatrix W (gradient u x) * hessianMatrix u x) i j +
-      (R x * (Matrix.of fun a b => T x i a b) * R x *
-        (Matrix.of fun a b => T x j a b)).trace
-    ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
-        (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
-      Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
-        (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-      -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
-  obtain ⟨u, _L, _LF, T, _hc, _hl, _hnrm, _hm, _hC1, _hG, _hF, _hw, _hd, hT, _he, _hfirst, _hInv, _hmean, _hq,
-      _hflux, _hweighted, htest⟩ :=
+          HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
+              (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+            ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+              IsCompact S →
+                MemLp (fun x => T x k i j) 2
+                  ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+        let R := fun x => (hessianMatrix u x)⁻¹
+        let J := fun x i j a => ∑ b : Fin n, R x b a * T x b i j
+        let E := fun x i j =>
+          -hessianMatrix u x i j +
+              (hessianMatrix u x * hessianMatrix W (gradient u x) * hessianMatrix u x) i j +
+            (R x * (Matrix.of fun a b => T x i a b) * R x *
+                (Matrix.of fun a b => T x j a b)).trace
+        ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
+          ContDiff ℝ 1 ψ →
+            HasCompactSupport ψ →
+              ∀ l k i j : Fin n,
+                (∀ b : Fin n,
+                    Integrable
+                      (fun x =>
+                        Real.exp (-u x) * J x i j b *
+                          (ψ x * T x b l k +
+                            fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) *
+                              hessianMatrix u x l k))
+                      (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
+                  Integrable
+                      (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
+                      (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+                    (∫ x,
+                        Real.exp (-u x) *
+                          (∑ b : Fin n,
+                            J x i j b *
+                              (ψ x * T x b l k +
+                                fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) *
+                                  hessianMatrix u x l
+                                    k)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+                      -(∫ x,
+                          Real.exp (-u x) * E x i j *
+                            (ψ x *
+                              hessianMatrix u x l
+                                k) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
+  obtain
+    ⟨u, _L, _LF, T, _hc, _hl, _hnrm, _hm, _hC1, _hG, _hF, _hw, _hd, hT, _he, _hfirst, _hInv,
+      _hmean, _hq, _hflux, _hweighted, htest⟩ :=
     exists_regular_moment_bounded_weak_hessian_testing hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, T, hT, htest⟩
 
-/-- Zero-dimensional client of the bounded all-coordinate approximation: the generic interface needs no
+/--
+Zero-dimensional client of the bounded all-coordinate approximation: the generic interface needs no
 positive dimension and no chosen coordinate. -/
 theorem bounded_approximation_zero_dimension :
     ∃ θ : ℕ → EuclideanSpace ℝ (Fin 0) → ℝ,
       ∀ m : ℕ, ContDiff ℝ ∞ (θ m) ∧ HasCompactSupport (θ m) ∧ ∀ x, ‖θ m x‖ ≤ 3 * 0 := by
   obtain ⟨_S, _hS, _hηS, _haS, θ, hθ, _hconv, _hAE⟩ :=
-    exists_contDiff_compact_bounded_all_weak_deriv_approximation (n := 0)
-      (η := fun _ => (0 : ℝ)) (a := fun i => i.elim0) (C := 0)
-      (locallyIntegrable_const 0) (fun _ => by simp) HasCompactSupport.zero
-      (fun i => i.elim0) (fun i => i.elim0) (fun i => i.elim0)
+    exists_contDiff_compact_bounded_all_weak_deriv_approximation (n := 0) (η := fun _ =>
+      (0 : ℝ)) (a := fun i => i.elim0) (C := 0) (locallyIntegrable_const 0) (fun _ => by simp)
+      HasCompactSupport.zero (fun i => i.elim0) (fun i => i.elim0) (fun i => i.elim0)
   exact ⟨θ, fun m => ⟨(hθ m).1, (hθ m).2.1, (hθ m).2.2.2.1⟩⟩
 
 end WeakHessianEvolutionAudit

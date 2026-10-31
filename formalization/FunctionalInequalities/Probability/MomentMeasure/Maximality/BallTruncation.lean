@@ -1,7 +1,10 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Biconjugate
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
-import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import FunctionalInequalities.Analysis.Convex.Legendre.Biconjugate
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
+public import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
 
 /-!
 # Linear growth and ball truncation of a moment potential
@@ -21,6 +24,8 @@ inner-product space with `0 < ∫ e^{-ψ} < ∞`, and let `φ = ψ*`.
   potentials.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Set Filter Metric
@@ -35,12 +40,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 section Convexity
 
 /-- Convexity of an extended-real potential in finite-value form. -/
-private theorem le_combo_of_convexPotential {ψ : E → EReal} (hψ : ConvexPotential ψ) {a b : E} {s A B : ℝ}
-    (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (ha : ψ a ≤ A) (hb : ψ b ≤ B) :
+private theorem le_combo_of_convexPotential {ψ : E → EReal} (hψ : ConvexPotential ψ) {a b : E}
+    {s A B : ℝ} (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (ha : ψ a ≤ A) (hb : ψ b ≤ B) :
     ψ ((1 - s) • a + s • b) ≤ (((1 - s) * A + s * B : ℝ) : EReal) := by
-  have h := hψ.2 (show ((a, A) : E × ℝ) ∈ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} from ha)
-    (show ((b, B) : E × ℝ) ∈ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} from hb)
-    (show (0 : ℝ) ≤ 1 - s by linarith) hs0 (by ring)
+  have h :=
+    hψ.2 (show ((a, A) : E × ℝ) ∈ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} from ha)
+      (show ((b, B) : E × ℝ) ∈ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} from hb)
+      (show (0 : ℝ) ≤ 1 - s by linarith) hs0 (by ring)
   simp only [Prod.smul_mk, Prod.mk_add_mk, smul_eq_mul] at h
   exact h
 
@@ -53,7 +59,7 @@ def ballTruncate (φ : E → EReal) (k : ℝ) (p : E) : EReal := if ‖p‖ ≤ 
 
 omit [InnerProductSpace ℝ E] in
 theorem ballTruncate_of_norm_le (φ : E → EReal) {k : ℝ} {p : E} (hp : ‖p‖ ≤ k) :
-    ballTruncate φ k p = φ p := if_pos hp
+    ballTruncate φ k p = φ p := ite_eq_left hp
 
 omit [InnerProductSpace ℝ E] in
 theorem le_ballTruncate (φ : E → EReal) (k : ℝ) (p : E) : φ p ≤ ballTruncate φ k p := by
@@ -67,8 +73,8 @@ theorem ballTruncate_anti (φ : E → EReal) {k k' : ℝ} (hk : k ≤ k') (p : E
     ballTruncate φ k' p ≤ ballTruncate φ k p := by
   unfold ballTruncate
   by_cases hp : ‖p‖ ≤ k
-  · rw [if_pos hp, if_pos (hp.trans hk)]
-  · rw [if_neg hp]; exact le_top
+  · rw [ite_eq_left hp, ite_eq_left (hp.trans hk)]
+  · rw [ite_eq_right hp]; exact le_top
 
 omit [InnerProductSpace ℝ E] in
 theorem lowerSemicontinuous_ballTruncate {φ : E → EReal} (hφ : LowerSemicontinuous φ) (k : ℝ) :
@@ -81,8 +87,8 @@ theorem lowerSemicontinuous_ballTruncate {φ : E → EReal} (hφ : LowerSemicont
   · have hopen : IsOpen {q : E | k < ‖q‖} := isOpen_lt continuous_const continuous_norm
     filter_upwards [hopen.mem_nhds (not_le.mp hp)] with q hq
     have hq' : ¬‖q‖ ≤ k := not_le.mpr hq
-    rw [ballTruncate, if_neg hq']
-    rw [ballTruncate, if_neg hp] at hy
+    rw [ballTruncate, ite_eq_right hq']
+    rw [ballTruncate, ite_eq_right hp] at hy
     exact hy
 
 /-- A primal potential above `c‖x‖ − b` has conjugate at most `b` on the ball of radius `c`. -/
@@ -184,7 +190,7 @@ theorem legendre_ballTruncate_le_add {x₁ : E} {A : ℝ} (hx₁ : ψ x₁ ≤ A
           EReal.sub_le_sub le_rfl hφ
       _ = ((inner ℝ p x - (inner ℝ x₁ p - A) : ℝ) : EReal) := by norm_cast
       _ ≤ ((k * ‖x - x₁‖ + A : ℝ) : EReal) := EReal.coe_le_coe_iff.mpr (by linarith)
-  · rw [ballTruncate, if_neg hp]; simp
+  · rw [ballTruncate, ite_eq_right hp]; simp
 
 /-- Conjugates of ball truncations of radius `k` are `k`-Lipschitz from above. -/
 theorem legendre_ballTruncate_le_add_norm (φ : E → EReal) (k : ℝ) (x y : E) :
@@ -212,7 +218,7 @@ theorem legendre_ballTruncate_le_add_norm (φ : E → EReal) (k : ℝ) (x y : E)
             ((k * ‖x - y‖ : ℝ) : EReal) := by
             rw [← EReal.coe_add, EReal.coe_le_coe_iff]; linarith
         _ ≤ _ := by gcongr
-  · rw [ballTruncate, if_neg hp]; simp
+  · rw [ballTruncate, ite_eq_right hp]; simp
 
 end Conjugate
 
@@ -221,149 +227,6 @@ end Truncation
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 section Growth
-
-omit [FiniteDimensional ℝ E] in
-/-- A convex set of finite Haar measure containing a ball around the origin is bounded. -/
-private theorem isBounded_of_convex_of_measure_lt_top (m : Measure E) [m.IsAddHaarMeasure]
-    (s : Set E) (hcs : Convex ℝ s) (hms : m s < (⊤ : ENNReal))
-    (hrball : ∃ r : ℝ, 0 < r ∧ Metric.ball (0 : E) r ⊆ s) : Bornology.IsBounded s := by
-  obtain ⟨r, hr, hball⟩ := hrball
-  have hzero : (0 : E) ∈ s := hball (by simpa using hr)
-  let b : ENNReal := m (Metric.ball (0 : E) (r / 2))
-  have hbfinite : b < (⊤ : ENNReal) := by
-    apply lt_of_le_of_lt _ hms
-    apply measure_mono
-    exact (Metric.ball_subset_ball (by linarith : r / 2 ≤ r)).trans hball
-  have hbne : b ≠ 0 :=
-    ne_of_gt (Metric.measure_ball_pos m (0 : E) (by linarith : 0 < r / 2))
-  have hbpos : 0 < b.toReal := by
-    by_contra hh
-    have hz : b.toReal = 0 :=
-      le_antisymm (le_of_not_gt hh) ENNReal.toReal_nonneg
-    have he := ENNReal.ofReal_toReal (ne_of_lt hbfinite)
-    rw [hz, ENNReal.ofReal_zero] at he
-    exact hbne he.symm
-  have hballmeasure (z : E) :
-      m (Metric.ball z (r / 2)) = b := by
-    dsimp [b]
-    have hh :
-        Metric.ball (0 : E) (r / 2) =
-          (z + ·) ⁻¹' Metric.ball z (r / 2) := by
-      simp [preimage_add_ball]
-    rw [hh, measure_preimage_add]
-  obtain ⟨N, hN⟩ := exists_nat_gt (max ((m s).toReal / b.toReal) 1)
-  have hNratio : (m s).toReal / b.toReal < (N : ℝ) :=
-    lt_of_le_of_lt (le_max_left _ _) hN
-  have hNpos : 0 < (N : ℝ) :=
-    lt_trans (by norm_num : (0 : ℝ) < 1)
-      (lt_of_le_of_lt (le_max_right _ _) hN)
-  apply (Metric.isBounded_iff_subset_closedBall (0 : E)).2
-  refine ⟨2 * (N : ℝ) * r, ?_⟩
-  intro x hx
-  change dist x 0 ≤ 2 * (N : ℝ) * r
-  rw [dist_zero_right]
-  by_contra hnx
-  have hlarge : 2 * (N : ℝ) * r < ‖x‖ := lt_of_not_ge hnx
-  have hxpos : 0 < ‖x‖ :=
-    lt_trans (by positivity) hlarge
-  let f : Fin N → E := fun i => ((i.val : ℝ) * r / ‖x‖) • x
-  have hinside (i : Fin N) :
-      Metric.ball (f i) (r / 2) ⊆ s := by
-    intro z hz
-    let t : ℝ := (i.val : ℝ) * r / ‖x‖
-    have ht : 0 ≤ t := by
-      dsimp [t]
-      positivity
-    have hi : (i.val : ℝ) < (N : ℝ) := by
-      exact_mod_cast i.isLt
-    have hir : (i.val : ℝ) * r < (N : ℝ) * r :=
-      mul_lt_mul_of_pos_right hi hr
-    have htupper : 2 * t ≤ 1 := by
-      dsimp [t]
-      rw [← mul_div_assoc, div_le_iff₀ hxpos]
-      nlinarith [hir, hlarge]
-    have hu : (2 : ℝ) • (z - t • x) ∈ s := by
-      apply hball
-      rw [Metric.mem_ball, dist_eq_norm, sub_zero, norm_smul,
-        Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
-      have hz' : ‖z - t • x‖ < r / 2 := by
-        rw [Metric.mem_ball, dist_eq_norm] at hz
-        simpa [f, t] using hz
-      linarith
-    have hv : (2 * t) • x ∈ s := by
-      have hv' := hcs hzero hx
-        (a := 1 - 2 * t) (b := 2 * t)
-        (by linarith) (by positivity) (by ring)
-      simpa using hv'
-    have hm := hcs hu hv
-      (a := (1 / 2 : ℝ)) (b := (1 / 2 : ℝ))
-      (by norm_num) (by norm_num) (by norm_num)
-    have he :
-        (1 / 2 : ℝ) • ((2 : ℝ) • (z - t • x)) +
-            (1 / 2 : ℝ) • ((2 * t) • x) = z := by
-      module
-    rwa [he] at hm
-  have hdis :
-      Set.PairwiseDisjoint (↑(Finset.univ : Finset (Fin N)))
-        (fun i => Metric.ball (f i) (r / 2)) := by
-    intro i _ j _ hij
-    apply Metric.ball_disjoint_ball
-    have hdist :
-        dist (f i) (f j) = |(i.val : ℝ) - (j.val : ℝ)| * r := by
-      dsimp [f]
-      rw [dist_eq_norm, ← sub_smul, norm_smul, Real.norm_eq_abs]
-      have he :
-          (i.val : ℝ) * r / ‖x‖ - (j.val : ℝ) * r / ‖x‖ =
-            ((i.val : ℝ) - (j.val : ℝ)) * (r / ‖x‖) := by
-        ring
-      rw [he, abs_mul, abs_of_pos (div_pos hr hxpos)]
-      field_simp [ne_of_gt hxpos]
-    have hval : i.val ≠ j.val := by
-      intro he
-      exact hij (Fin.ext he)
-    have habs : 1 ≤ |(i.val : ℝ) - (j.val : ℝ)| := by
-      have hord : i.val + 1 ≤ j.val ∨ j.val + 1 ≤ i.val := by
-        omega
-      rcases hord with hij' | hji'
-      · have hh : (i.val : ℝ) + 1 ≤ (j.val : ℝ) := by
-          exact_mod_cast hij'
-        rw [abs_of_nonpos (by linarith)]
-        linarith
-      · have hh : (j.val : ℝ) + 1 ≤ (i.val : ℝ) := by
-          exact_mod_cast hji'
-        rw [abs_of_nonneg (by linarith)]
-        linarith
-    have hmul :
-        (1 : ℝ) * r ≤ |(i.val : ℝ) - (j.val : ℝ)| * r :=
-      mul_le_mul_of_nonneg_right habs (le_of_lt hr)
-    rw [hdist]
-    nlinarith [hmul]
-  have hmass : (N : ENNReal) * b ≤ m s := by
-    calc
-      _ = ∑ i : Fin N, b := by
-        simp [nsmul_eq_mul]
-      _ = ∑ i : Fin N, m (Metric.ball (f i) (r / 2)) := by
-        apply Finset.sum_congr rfl
-        intro i hi
-        exact (hballmeasure (f i)).symm
-      _ = ∑ i ∈ (Finset.univ : Finset (Fin N)),
-          m (Metric.ball (f i) (r / 2)) := by
-        simp
-      _ = m (⋃ i ∈ (Finset.univ : Finset (Fin N)),
-          Metric.ball (f i) (r / 2)) :=
-        (measure_biUnion_finset hdis
-          (fun _ _ => measurableSet_ball)).symm
-      _ ≤ m s := by
-        apply measure_mono
-        intro z hz
-        obtain ⟨i, _, hzi⟩ := Set.mem_iUnion₂.mp hz
-        exact hinside i hzi
-  have hreal := ENNReal.toReal_mono (ne_of_lt hms) hmass
-  simp only [ENNReal.toReal_mul, ENNReal.toReal_natCast] at hreal
-  have hstrict : (m s).toReal < (N : ℝ) * b.toReal :=
-    (div_lt_iff₀ hbpos).mp hNratio
-  exact (not_lt_of_ge hreal) hstrict
-
 
 omit [MeasurableSpace E] [BorelSpace E] in
 /-- A lower semicontinuous convex potential that is finite somewhere has an affine minorant
@@ -612,7 +475,7 @@ theorem legendre_gradient_toReal_legendre_ballTruncate {c b : ℝ}
   have hzk : ‖z‖ ≤ k := by
     by_contra hzk
     unfold ballTruncate at hz
-    rw [if_neg hzk, EReal.sub_top] at hz
+    rw [ite_eq_right hzk, EReal.sub_top] at hz
     exact (hfin x).2 hz.symm
   refine ⟨hzk, ?_⟩
   rw [ballTruncate_of_norm_le _ hzk] at hz

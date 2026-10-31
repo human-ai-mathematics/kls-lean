@@ -35,11 +35,134 @@ depend on the KLS target statement and on each other.
 The [2026-10-29 Letwin/CEK readability map](2026-10-29-letwin-readability-map.json) records the
 section reorganization of six Lean files, two declaration-owner moves and the complete declaration list of
 the affected modules (see [below](#letwincek-readability-batch-2026-10-29)).
-The [completed Letwin delivery map](completed-letwin-delivery-map.json) records the release scope: the 39
-auxiliary library files and 55 audit clients of the superseded variational route that are not part of the
-release snapshot (see [below](#completed-letwin-delivery-scope-2026-10-29)).
 Old paths in those maps are migration inputs. The
 [compiler API directory](../../formalization/API.md) gives current owners.
+
+## Quality gate follow-up (2026-10-31)
+
+The [quality follow-up](2026-10-31-quality-gate-map.json) closes the empty-module-summary
+false negative and the ambiguous source-reference fallback. The first module synopsis must
+contain text, even when later sections have documentation. References with no explicit local
+owner must resolve to one suffix match. Four references are qualified to their actual owners,
+and five path-expanded comment lines are reflowed individually. All nine source edits are
+comment-only; the existing hierarchy, names, mathematical code and interfaces are retained.
+Focused full-gate mutations cover these failures and valid explicit or unique references.
+Source positions and checked evidence pins are refreshed without changing mathematical states.
+Linux validation is delegated on the exact finalized working-tree manifest, with its scope and
+receipt separate from the preceding full local verification.
+
+## Remaining maintenance closure (2026-10-30)
+
+The [closure review](2026-10-30-maintenance-closure-map.json) records the final disposition of
+every finding and exact/name-normalized reuse candidate from the full code/text review. Three
+missing module summaries and three obsolete process headings are corrected, source attribution
+is retained, and nine production axiom reports have explicit narrow audit owners. Six avoidable
+`haveILetI` suppressions are removed using ordinary local-instance binders. The nine remaining
+unused-parameter exceptions are declaration-local and preserve named hypotheses or instance
+binders in the existing public interfaces.
+
+The repeated open-convex interior-ball step is shared by the two affine-normalized section
+consumers through the existing `Analysis/Convex/Boundary` owner. The generic normed-space and
+single-point clients preserve its full scope. The other repeated setup and finite-sum fragments
+retain their different frontends and source contracts, with the already shared substantive
+producers identified in the review. No reuse candidate remains unclassified.
+
+The source-document pass also corrects fourteen stale file references and sixteen module-scope
+passages. Current owners replace migration-era basenames, and per-file limitations are kept
+separate from results supplied by later consumers. Valid conditional statements and the
+unproved generality of stronger targets retain their boundaries.
+
+Persistent local checks cover module summaries, obsolete process labels, production audit
+output, exact declaration-local exceptions, migrated axiom reports and owned Lean whitespace.
+Source-file references in production comments are also checked, including repository-root
+clients and brace-group references.
+Mathematical Unicode notation and existing identifiers retain their reviewed typography. The
+Canadian-syllabics character used accidentally as a fraction slash is corrected in prose.
+Module hierarchy, existing public interfaces and paper/certificate states are retained.
+The final outcome is governed by `build/history/2026-10-30-remaining-maintenance/verification.json`;
+only `status: passed` confirms full local acceptance. Earlier records retain their snapshots.
+No commit, push or remote CI is part of this pass.
+
+## Shared convex boundedness proof (2026-10-30)
+
+The [shared-boundedness review](2026-10-30-convex-boundedness-map.json) records the identical
+disjoint-ball proof in the compact-sublevel construction and the CEK ball-truncation growth
+support, its exact hypotheses and the direct and transitive consumer graph. One producer in
+the existing `Analysis/Convex/Coercivity` owner now serves both. It needs a real normed space
+with an additive Haar measure, a convex set of finite measure and a positive origin ball in
+the set; it adds no finite-dimensionality, inner-product, completeness, nontriviality,
+closedness or set-measurability premise.
+
+The original public contracts, module hierarchy, names and paper/certificate states are
+retained. No compatibility wrapper remains for the removed private duplicate. Narrow clients
+check the generic and single-point cases, both actual consumer proof dependencies and the
+downward import direction. Exact compiler-expression comparisons and the full local verifier
+govern acceptance. The final outcome is recorded in
+`build/history/2026-10-30-shared-convex-boundedness/verification.json`; only `status: passed`
+confirms complete local validation. Earlier maps and receipts retain their recorded snapshots.
+No commit, push or remote certification is part of this pass.
+
+## Current text and navigation correction (2026-10-30)
+
+The [text and navigation review](2026-10-30-text-navigation-map.json) records five complete
+source-document headings in four existing modules, the regenerated module directory,
+twelve corrected line anchors and all nineteen declaration-bound links. Current descriptions
+distinguish the proved Letwin paper-source conclusions from intermediate gaps in the earlier
+variational route. Auxiliary statuses, source assumptions and the dated continuation records
+retain their scopes. The current handoff replaces superseded operational detail, preserved
+verbatim with hashes in the ignored local archive.
+
+The local [documentation gate](../check_documentation.py) and its
+[reviewed inputs](documentation-checks.json) check these relationships in full local
+verification. Mathematical code, module boundaries, names and interfaces are unchanged.
+Shared convex finite-Haar-measure proof cleanup is deferred to the next batch. The final
+outcome is governed by `build/history/2026-10-30-text-navigation-fix/verification.json`;
+only `status: passed` confirms completed local validation. Earlier maps and receipts retain
+their recorded snapshots. No commit, push or remote certification is part of this pass.
+
+## Comment alignment correction (2026-10-30)
+
+The [individual comment review](2026-10-30-comment-layout-map.json) records all 359 candidates
+from the readability follow-up, their mathematical attachments and explicit dispositions. Each was
+confirmed against its original and current context. The correction aligns 369 physical comment
+lines in 80 existing modules with the intended proof step, including the appropriate local branch
+rather than blindly restoring the original indentation. One unchanged phase explanation in
+`Analysis/WeakDerivative/Caccioppoli` moves from the result type to the proof's `intro s` step.
+
+All non-comment nonblank source lines remain byte-identical, including proof indentation.
+Comment wording, module boundaries, imports, scope commands, names, mathematical interfaces,
+hypotheses and certificate states are retained. The full production comment rescan finds zero
+remaining new indentation-deviation candidates and preserves all 8,300 original comment anchors.
+Earlier source maps and verification receipts retain their original snapshots.
+
+The final verification outcome for this correction is governed by
+`build/history/2026-10-30-comment-layout-fix/verification.json`; completion requires `status: passed`.
+No remote CI result, mathematical progress change, commit or push is part of this correction.
+
+## Repository readability maintenance (2026-10-29)
+
+The [source and proof-phase map](2026-10-29-style-map.json) records the full owned-source
+readability pass. Existing mathematical owners, module boundaries, imports, namespaces and public
+names are retained. Statements, binder labels and order, hypotheses, constants, normalization,
+dimensions and proof/certificate states are unchanged. The pass reflows long statements and
+comments, restores operator and comma spacing, and divides 30 coherent long proofs into 100
+documented mathematical phases without extracting new declarations.
+
+The strict production build passed. A direct Lean `Expr.equal` comparison with the frozen dirty
+baseline found zero differences across all 12,563 local declarations, including binder names and
+annotations, universe parameters, nonproof definition values, safety flags and module owners.
+The public API directory was regenerated. Existing source-evidence pins were rebound only after
+their old hashes were checked against that baseline and the interface comparison passed.
+
+Third-party vendor sources and historical records are unchanged. Metaprogramming commands retain
+their original layout because quotation, `do` and `let` alternative indentation can affect meaning.
+Long URLs and three unbroken qualified references or projection chains remain explicit exceptions.
+The Git staging entries are preserved; no commit or push is part of this maintenance.
+
+The final local verification outcome is governed by
+`build/history/2026-10-29-style-cleanup/verification.json`. Completion requires that receipt to
+report `status: passed`; this source review is not itself a verification receipt or a new
+mathematical acceptance. No remote CI result is claimed for style maintenance.
 
 ## Letwin/CEK readability batch (2026-10-29)
 
@@ -123,34 +246,6 @@ The worker's strict compiles, narrow-import clients and axiom audit are supporti
 final verification result is governed by
 `build/history/2026-10-29-letwin-style-20261029T091203Z/verification.json`. The batch is fully accepted
 only when that file reports `status: passed`.
-
-## Completed Letwin delivery scope (2026-10-29)
-
-The release candidate is rebuilt from `origin/main` rather than from the unpublished local commit
-`04ef798`. It keeps every published module and public declaration owner with its import closure, and adds
-the completed Letwin/CEK results, Proposition 2.8 for full-dimensional laws and the proved Klartag supports.
-That gives 798 library modules, each byte-identical to the verified primary checkout. The
-[delivery map](completed-letwin-delivery-map.json) lists the selection rule and roots.
-
-**Not copied:**
-- 39 library files used only by the superseded auxiliary variational route to Letwin Lemma 2.2 (Alexandrov
-  sections, Caffarelli W²,p contacts, domain Monge–Ampère measures, Dirichlet and gauge-cone references,
-  Pogorelov, CNS elliptic and log-radial barriers);
-- the 55 audit clients that import them.
-
-No retained file imports an excluded module, and no excluded path is the owner of a module published on
-`origin/main`.
-
-**Metadata changes:**
-- The 52 Blueprint statements formalized only in those files keep their text, hypotheses and `\uses`, but
-  lose `\leanok` and the excluded `\lean` names.
-- Mixed statements keep their retained declarations as partial supports, not as completion.
-- The register and the smooth-route record no longer cite excluded declarations.
-- Their mathematical gaps remain open; they are not formalization targets.
-
-This is a scope selection. It changes no statement, proof body, namespace or certificate. Earlier migration
-maps and dated records below keep their original paths. Rows and paragraphs that describe excluded files are
-marked as outside the release snapshot.
 
 ## Public statement mergers
 
@@ -356,7 +451,7 @@ comments without changing theorem statements, proof status or paper coverage.
 | `Subgradient/Measure` | Almost-everywhere differentiability and supporting-slope uniqueness |
 | `Subgradient/Taylor` | Quadratic expansion from support expansion |
 | `Subgradient/Stability` | Supporting images under locally uniform convergence |
-| `Subgradient/Piecewise` | Support transport and convex gluing across a ball (superseded auxiliary route; not in the release snapshot) |
+| `Subgradient/Piecewise` | Support transport and convex gluing across a ball |
 | `Convex/Viscosity/Touching` | C2 touching tests, Taylor bounds and lower-quadratic-test transfer |
 | `Viscosity/Pointwise` | Equation identification at an actual quadratic expansion |
 | `Viscosity/Mollification` | Mollified log-determinant inequality |
@@ -371,8 +466,7 @@ Basic subgradient clients do not load support existence, C1, AE uniqueness or
 stability producers. Touching-only clients do not load mollification or AE
 identification. Hessian composition does not import inverse-Hessian integration
 by parts. Actual affine-image, stability, Dirichlet-envelope, log-det and
-Hessian-bound consumers import the owning layers they use; the Dirichlet-envelope
-consumer belongs to the excluded auxiliary development.
+Hessian-bound consumers import the owning layers they use.
 
 The public namespaces and statements are preserved across file moves.
 The shared ball slope bound is public in Basic because existence and stability
@@ -407,11 +501,10 @@ kernel checks.
 
 Shared concrete skew-coefficient and drift-point models live in
 `examples/EllipticDrift`, registered in the existing Examples build and replay
-scope. The standalone elliptic audits, now excluded from the release snapshot with
-their auxiliary library modules, imported this model instead of other audit modules. Seven original declarations keep their exact types,
+scope. The standalone elliptic audits import this model instead of importing
+other audit modules. Seven original declarations keep their exact types,
 universes, definition values and parameter signatures, with proof blocks moved
-verbatim. Checker scripts remain unchanged; the production CNS/elliptic sources are
-not part of the release snapshot.
+verbatim. Production CNS/elliptic sources and checker scripts remain unchanged.
 
 Four additional strict narrow-import clients exercise the new partition,
 negative-radius exponential, subsingleton-L2, finite-coordinate and generic
@@ -423,9 +516,9 @@ standard-axiom dependencies and current local/vendor-module kernel replay.
 Pinned compiled Mathlib imports remain trusted. Interface fingerprints exclude
 theorem proof bodies and do not independently certify every paper statement.
 
-In the excluded auxiliary development, the generated Dirichlet reference was C1 inside
-the domain, and the given-classical Pogorelov estimates assumed interior C4 and ambient C2
-at every closure point, with their equation, positivity, sign and boundary inputs. The mathematical
+The generated Dirichlet reference remains C1 inside the domain. The given-classical
+Pogorelov estimates still assume interior C4 and ambient C2 at every closure point,
+with their equation, positivity, sign and boundary inputs. The mathematical
 completion boundary in [HANDOFF.md](../../HANDOFF.md) is unchanged.
 
 Current owner/evidence references, API/module navigation and generated progress

@@ -1,5 +1,7 @@
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
-import Mathlib.Analysis.Normed.Group.Basic
+module
+
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
+public import Mathlib.Analysis.Normed.Group.Basic
 
 /-! # The half-open annuli of a normed space
 
@@ -14,6 +16,8 @@ This is the codimension-`m` copy of the decomposition used by
 same four facts.  Nothing about the dimension, the inner product or the measure is used: only the
 norm, and for measurability the Borel structure.
 -/
+
+@[expose] public section
 
 noncomputable section
 

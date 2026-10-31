@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Poincare
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Poincare
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
 
 /-!
 # Audit: conditional Poincaré transfer (BKL Section 2)
@@ -56,7 +58,8 @@ private theorem gaussian_covariance :
   intro u
   apply ext_inner_right ℝ
   intro v
-  rw [Covariance.operator_inner, ProbabilityTheory.covarianceBilin_apply (KLS.RegularPotential.memLp_id_two gaussianRegular)]
+  rw [Covariance.operator_inner,
+    ProbabilityTheory.covarianceBilin_apply (KLS.RegularPotential.memLp_id_two gaussianRegular)]
   have h0 : ∫ y, id y ∂(gaussianRegular.law : Measure ℝ) = 0 := gaussian_mean
   rw [h0]
   simp only [sub_zero, Real.inner_apply, ContinuousLinearMap.id_apply]
@@ -65,19 +68,23 @@ private theorem gaussian_covariance :
     ring
   rw [heq, integral_const_mul, gaussian_second, mul_one]
 
-theorem inputRegular : KLS.RegularPotential (fun x : ℝ => ‖scaleTwo x + 3‖ ^ 2 / 2)
-    (KLS.RegularPotential.affineLowerConstant 1 scaleTwo) (KLS.RegularPotential.affineUpperConstant 1 scaleTwo) :=
+theorem inputRegular :
+    KLS.RegularPotential (fun x : ℝ => ‖scaleTwo x + 3‖ ^ 2 / 2)
+      (KLS.RegularPotential.affineLowerConstant 1 scaleTwo)
+      (KLS.RegularPotential.affineUpperConstant 1 scaleTwo) :=
   KLS.RegularPotential.comp_affine gaussianRegular scaleTwo (3 : ℝ)
 
 /-- Before normalization the actual input barycenter is −3/2. -/
 theorem input_mean : ∫ x, x ∂(inputRegular.law : Measure ℝ) = -3 / 2 := by
   have htr2 : MemLp id 2 (Probability.translateLaw gaussianRegular.law (-3) : Measure ℝ) := by
     rw [Probability.coe_translateLaw]
-    exact (measurableEmbedding_addLeft (-3 : ℝ)).memLp_map_measure_iff.mpr
-      ((memLp_const (-3 : ℝ)).add (KLS.RegularPotential.memLp_id_two gaussianRegular))
+    exact
+      (measurableEmbedding_addLeft (-3 : ℝ)).memLp_map_measure_iff.mpr
+        ((memLp_const (-3 : ℝ)).add (KLS.RegularPotential.memLp_id_two gaussianRegular))
   rw [KLS.RegularPotential.law_comp_affine_eq_map gaussianRegular scaleTwo 3,
     Probability.integral_id_mapContinuousLinearEquiv _ _ (htr2.integrable one_le_two),
-    Probability.integral_id_translateLaw _ ((KLS.RegularPotential.memLp_id_two gaussianRegular).integrable one_le_two),
+    Probability.integral_id_translateLaw _
+      ((KLS.RegularPotential.memLp_id_two gaussianRegular).integrable one_le_two),
     gaussian_mean]
   norm_num [scaleTwo_symm_apply]
 
@@ -93,37 +100,47 @@ theorem input_covariance : Covariance.operator (inputRegular.law : Measure ℝ) 
     smul_apply, smul_eq_mul, ContinuousLinearEquiv.coe_coe, scaleTwo_symm_apply]
   ring
 
-/-- One-dimensional regular-isotropic premise actually follows from proved 4Var, not an assumption. -/
-theorem real_regular_isotropic_four {V : ℝ → ℝ} {a b : ℝ}
-    (hV : KLS.RegularPotential V a b) (_hb : 0 < b) (hiso : KLS.Isotropic hV.law) :
+/--
+One-dimensional regular-isotropic premise actually follows from proved 4Var, not an assumption. -/
+theorem real_regular_isotropic_four {V : ℝ → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
+    (_hb : 0 < b) (hiso : KLS.Isotropic hV.law) :
     Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (4 : ENNReal) := by
   have hv : variance id (hV.law : Measure ℝ) = 1 := by
     have h := Covariance.operator_inner (hV.law : Measure ℝ) (1 : ℝ) 1
     rw [hiso.covariance_identity, covarianceBilin_self hiso.memLp_two] at h
-    simpa only [ContinuousLinearMap.id_apply, Real.inner_apply, one_mul, Function.id_def] using h.symm
+    simpa only [ContinuousLinearMap.id_apply, Real.inner_apply, one_mul, Function.id_def] using
+      h.symm
   have h := hV.logConcave_law.localSlope_constant_le_four_variance
   rw [hv] at h
   norm_num at h
   exact h
 
 /-- The actual nonorthogonal input has covariance1/4; the conditional transfer derives CP<=1. -/
-theorem nonorthogonal_input_poincare : Poincare.LocalSlope.Intrinsic.constant inputRegular.law ≤ 1 := by
+theorem nonorthogonal_input_poincare :
+    Poincare.LocalSlope.Intrinsic.constant inputRegular.law ≤ 1 := by
   have hn : ‖Covariance.operator (inputRegular.law : Measure ℝ)‖ = 1 / 4 := by
     rw [input_covariance, norm_smul, ContinuousLinearMap.norm_id]
     norm_num
-  have h := KLS.RegularPotential.localSlope_le_covariance_norm (K := (4 : NNReal)) real_regular_isotropic_four inputRegular
+  have h :=
+    KLS.RegularPotential.localSlope_le_covariance_norm (K := (4 : NNReal))
+      real_regular_isotropic_four inputRegular
   rw [hn] at h
   have he : ((4 : NNReal) : ENNReal) * ENNReal.ofReal (1 / 4 : ℝ) = 1 := by
     norm_num [ENNReal.ofReal_div_of_pos]
     exact ENNReal.mul_inv_cancel (by norm_num) (by simp)
   exact h.trans_eq he
 
-/-- The same actual input consumes the source envelope, with no moment/covariance/CP output premise. -/
+/--
+The same actual input consumes the source envelope, with no moment/covariance/CP output premise. -/
 theorem nonorthogonal_input_envelope :
     Poincare.LocalSlope.Intrinsic.constant inputRegular.law ≤
-      ENNReal.ofReal ((4 : ℝ) * (1 + ‖Covariance.operator (inputRegular.law : Measure ℝ) -
-        ContinuousLinearMap.id ℝ ℝ‖)) :=
-  KLS.RegularPotential.localSlope_le_covariance_envelope (K := (4 : NNReal)) real_regular_isotropic_four inputRegular
+      ENNReal.ofReal
+        ((4 : ℝ) *
+          (1 +
+            ‖Covariance.operator (inputRegular.law : Measure ℝ) -
+                ContinuousLinearMap.id ℝ ℝ‖)) :=
+  KLS.RegularPotential.localSlope_le_covariance_envelope (K := (4 : NNReal))
+    real_regular_isotropic_four inputRegular
 
 abbrev ZeroSpace := EuclideanSpace ℝ (Fin 0)
 private theorem zero_regular : KLS.RegularPotential (fun _ : ZeroSpace => (7 : ℝ)) 2 (-4) := by
@@ -144,7 +161,9 @@ theorem zero_regular_isotropic_bound {V : ZeroSpace → ℝ} {a b : ℝ}
 /-- A negative upper bound `b` is permitted in rank zero; the actual producer/transfer still
 gives `C_P = 0`. -/
 theorem zero_input_poincare : Poincare.LocalSlope.Intrinsic.constant zero_regular.law ≤ 0 := by
-  have h := KLS.RegularPotential.localSlope_le_covariance_norm (K := (0 : NNReal)) zero_regular_isotropic_bound zero_regular
+  have h :=
+    KLS.RegularPotential.localSlope_le_covariance_norm (K := (0 : NNReal))
+      zero_regular_isotropic_bound zero_regular
   simpa only [ENNReal.coe_zero, zero_mul] using h
 
 /-- The identity norm is really zero; the positive envelope does not divide by it. -/

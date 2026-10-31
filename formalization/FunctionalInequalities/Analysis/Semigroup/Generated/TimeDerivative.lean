@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
 
 /-!
 # Time derivatives of `P_t = exp (-t T†T)` and of its gradient orbit
@@ -26,6 +28,8 @@ Because `T` is only partially defined, the gradient orbit is passed as any funct
 agrees with `s ↦ T (P_s g)` where that is defined; no total extension of `T` is introduced.
 Nothing here uses a measure, a Markov property or a Bakry–Émery estimate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -235,15 +239,17 @@ theorem continuousOn_map_apply (g : H₀) {u : ℝ → H₁}
     ⟨apply T hT hd (t / 2) g, mem_adjointComp_domain_apply_of_pos T hT hd g hhalf⟩ with hGdef
   rw [Metric.continuousWithinAt_iff]
   intro ε hε
-  obtain ⟨δ₁, hδ₁, h₁⟩ := Metric.continuousWithinAt_iff.mp
-    ((continuousOn T hT hd (G : H₀)) (t / 2) hhalf.le) ε hε
-  obtain ⟨δ₂, hδ₂, h₂⟩ := Metric.continuousWithinAt_iff.mp
-    ((continuousOn T hT hd (adjointComp T G)) (t / 2) hhalf.le) ε hε
+  obtain ⟨δ₁, hδ₁, h₁⟩ :=
+    Metric.continuousWithinAt_iff.mp ((continuousOn T hT hd (G : H₀)) (t / 2) hhalf.le) ε hε
+  obtain ⟨δ₂, hδ₂, h₂⟩ :=
+    Metric.continuousWithinAt_iff.mp ((continuousOn T hT hd (adjointComp T G)) (t / 2) hhalf.le)
+      ε hε
   refine ⟨min (min δ₁ δ₂) (t / 2), lt_min (lt_min hδ₁ hδ₂) hhalf, fun s hs hsd => ?_⟩
   have hs0 : 0 < s := hs
   have hd' : |s - t| < min (min δ₁ δ₂) (t / 2) := by rwa [Real.dist_eq] at hsd
   have hτ : 0 ≤ s - t / 2 := by
-    have := (abs_lt.mp (hd'.trans_le (min_le_right _ _))).1; linarith
+    have := (abs_lt.mp (hd'.trans_le (min_le_right _ _))).1;
+    linarith
   have hPs : apply T hT hd s g = apply T hT hd (s - t / 2) (G : H₀) := by
     rw [hGdef, ← add_time T hT hd hτ hhalf.le, sub_add_cancel]
   have hPt : apply T hT hd t g = apply T hT hd (t / 2) (G : H₀) := by
@@ -258,24 +264,28 @@ theorem continuousOn_map_apply (g : H₀) {u : ℝ → H₁}
     have e : (⟨_, hy.2⟩ : T.domain) = ⟨_, hm₁.2⟩ - ⟨_, hm₂.2⟩ := rfl
     rw [e, LinearPMap.map_sub]
     congr 2 <;> exact Subtype.ext (by assumption)
-  have hAy : adjointComp T ⟨_, hy⟩ = apply T hT hd (s - t / 2) (adjointComp T G) -
-      apply T hT hd (t / 2) (adjointComp T G) := by
+  have hAy :
+    adjointComp T ⟨_, hy⟩ =
+      apply T hT hd (s - t / 2) (adjointComp T G) - apply T hT hd (t / 2) (adjointComp T G) := by
     have e : (⟨_, hy⟩ : (adjointComp T).domain) = ⟨_, hm₁⟩ - ⟨_, hm₂⟩ := rfl
     rw [e, LinearPMap.map_sub, generator_comm T hT hd G hτ, generator_comm T hT hd G hhalf.le]
-  have hdist : dist (s - t / 2) (t / 2) = |s - t| := by
-    rw [Real.dist_eq]; congr 1; ring
+  have hdist : dist (s - t / 2) (t / 2) = |s - t| := by rw [Real.dist_eq]; congr 1; ring
   have hd₁ : dist (s - t / 2) (t / 2) < δ₁ := by
-    rw [hdist]; exact hd'.trans_le ((min_le_left _ _).trans (min_le_left _ _))
+    rw [hdist];
+    exact hd'.trans_le ((min_le_left _ _).trans (min_le_left _ _))
   have hd₂ : dist (s - t / 2) (t / 2) < δ₂ := by
-    rw [hdist]; exact hd'.trans_le ((min_le_left _ _).trans (min_le_right _ _))
+    rw [hdist];
+    exact hd'.trans_le ((min_le_left _ _).trans (min_le_right _ _))
   have hyn : ‖apply T hT hd (s - t / 2) (G : H₀) - apply T hT hd (t / 2) (G : H₀)‖ < ε := by
     rw [← dist_eq_norm]
     exact h₁ (mem_Ici.mpr hτ) hd₁
   have hAyn : ‖adjointComp T ⟨_, hy⟩‖ < ε := by
     rw [hAy, ← dist_eq_norm]
     exact h₂ (mem_Ici.mpr hτ) hd₂
-  have hsq : ‖T ⟨_, hy.2⟩‖ ^ 2 ≤ ‖adjointComp T ⟨_, hy⟩‖ *
-      ‖apply T hT hd (s - t / 2) (G : H₀) - apply T hT hd (t / 2) (G : H₀)‖ :=
+  have hsq :
+    ‖T ⟨_, hy.2⟩‖ ^ 2 ≤
+      ‖adjointComp T ⟨_, hy⟩‖ *
+        ‖apply T hT hd (s - t / 2) (G : H₀) - apply T hT hd (t / 2) (G : H₀)‖ :=
     norm_map_sq_le_mul T hd ⟨_, hy⟩
   rw [dist_eq_norm, hus]
   by_contra hcon

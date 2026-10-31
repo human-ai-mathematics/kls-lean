@@ -1,11 +1,16 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
-import FunctionalInequalities.Probability.MomentMeasure.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
+public import FunctionalInequalities.Probability.MomentMeasure.Basic
 
 /-! Audit clients for the extended-real Legendre transform and finite affine maxima
-(`Analysis/Convex/Legendre/Basic.lean`, `Analysis/Convex/Legendre/AffineMaximum.lean`; Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
+(`Analysis/Convex/Legendre/Basic.lean`, `Analysis/Convex/Legendre/AffineMaximum.lean`;
+Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
 (61) and the proof of Proposition 12), stated in the owning namespaces: a nonconstant affine primal
 negative on half the line, the infinite-value density boundary, a nonconvex discontinuous
 two-point primal and the empty effective domain. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -58,8 +63,9 @@ def twoPoint (x : ℝ) : EReal := if x = 0 ∨ x = 1 then 0 else ⊤
 although the original potential has neither convexity nor continuity. -/
 theorem twoPoint_convexification :
     let c := legendre (legendre twoPoint)
-    ¬ ConvexPotential twoPoint ∧ ConvexPotential c ∧ LowerSemicontinuous c ∧
-      c (1 / 2 : ℝ) = 0 ∧ (∀ y, legendre c y = legendre twoPoint y) := by
+    ¬ConvexPotential twoPoint ∧
+      ConvexPotential c ∧
+        LowerSemicontinuous c ∧ c (1 / 2 : ℝ) = 0 ∧ (∀ y, legendre c y = legendre twoPoint y) := by
   dsimp only
   have hfinite : ∃ x, twoPoint x ≠ ⊤ := ⟨0, by simp [twoPoint]⟩
   have htrunc : lowerTruncate twoPoint 0 = twoPoint := by
@@ -77,26 +83,23 @@ theorem twoPoint_convexification :
     apply le_antisymm
     · simpa [twoPoint] using (hbound 1).2
     · simpa using (hbound 1).1
-  have hp : ((0, 0) : ℝ × ℝ) ∈
-      {p : ℝ × ℝ | legendre (legendre twoPoint) p.1 ≤ (p.2 : EReal)} := by
+  have hp : ((0, 0) : ℝ × ℝ) ∈ {p : ℝ × ℝ | legendre (legendre twoPoint) p.1 ≤ (p.2 : EReal)} := by
     simp [hz]
-  have hq : ((1, 0) : ℝ × ℝ) ∈
-      {p : ℝ × ℝ | legendre (legendre twoPoint) p.1 ≤ (p.2 : EReal)} := by
+  have hq : ((1, 0) : ℝ × ℝ) ∈ {p : ℝ × ℝ | legendre (legendre twoPoint) p.1 ≤ (p.2 : EReal)} := by
     simp [ho]
-  have hm := hc.2 hp hq
-    (show 0 ≤ (1 / 2 : ℝ) from by norm_num)
-    (show 0 ≤ (1 / 2 : ℝ) from by norm_num) (by norm_num)
-  have hmid : legendre (legendre twoPoint) (1 / 2 : ℝ) ≤ 0 := by
-    simpa using hm
+  have hm :=
+    hc.2 hp hq (show 0 ≤ (1 / 2 : ℝ) from by norm_num) (show 0 ≤ (1 / 2 : ℝ) from by norm_num)
+      (by norm_num)
+  have hmid : legendre (legendre twoPoint) (1 / 2 : ℝ) ≤ 0 := by simpa using hm
   refine ⟨?_, hc, hls, le_antisymm hmid ?_, hdual⟩
   · intro hf
     have hp₀ : ((0, 0) : ℝ × ℝ) ∈ {p : ℝ × ℝ | twoPoint p.1 ≤ (p.2 : EReal)} := by
       simp [twoPoint]
     have hq₀ : ((1, 0) : ℝ × ℝ) ∈ {p : ℝ × ℝ | twoPoint p.1 ≤ (p.2 : EReal)} := by
       simp [twoPoint]
-    have hbad := hf.2 hp₀ hq₀
-      (show 0 ≤ (1 / 2 : ℝ) from by norm_num)
-      (show 0 ≤ (1 / 2 : ℝ) from by norm_num) (by norm_num)
+    have hbad :=
+      hf.2 hp₀ hq₀ (show 0 ≤ (1 / 2 : ℝ) from by norm_num)
+        (show 0 ≤ (1 / 2 : ℝ) from by norm_num) (by norm_num)
     norm_num [twoPoint] at hbad
   · simpa using (hbound (1 / 2 : ℝ)).1
 

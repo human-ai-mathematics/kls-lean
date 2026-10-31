@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
-import Mathlib.Topology.Maps.Proper.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+public import Mathlib.Topology.Maps.Proper.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 
 /-!
 # Differentiability and continuous selections from unique supports
@@ -9,6 +11,8 @@ Supporting convex infrastructure for Letwin arXiv:2607.24164v1
 Theorem 1.2 and Lemma 2.2. Mathematical scopes and source attributions
 are retained in the individual declarations.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set
@@ -316,8 +320,9 @@ private lemma hasFDerivAt_of_convexOn_of_unique_subgradient {u : E → ℝ}
 
 /-- **A convex function with a unique subgradient at every point is differentiable** ("singleton
 subdifferential ⇒ C¹", differentiability half): on a finite-dimensional
-inner product space, if the subgradient inequality `u x + ⟪g, y - x⟫ ≤ u y` (all `y`) is satisfied by
-exactly one `g` at every `x`, then `u` is differentiable (with that `g` as gradient; `C¹` then follows
+inner product space, if the subgradient inequality `u x + ⟪g, y - x⟫ ≤ u y` (all `y`) is satisfied
+by exactly one `g` at every `x`, then `u` is differentiable (with that `g` as gradient; `C¹` then
+follows
 from `contDiff_one_of_convexOn_of_differentiable`). -/
 theorem differentiable_of_convexOn_of_unique_subgradient {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (hsub : ∀ x, ∃! g : E, ∀ y, u x + ⟪g, y - x⟫ ≤ u y) :
@@ -403,125 +408,135 @@ namespace FunctionalInequalities.Analysis
 open Set Metric Filter
 open scoped RealInnerProductSpace Topology
 
-/-- Generic compact-range closed-relation continuity, shared by compact affine-tilt optimizers and local support selections. -/
-theorem continuous_of_compact_closed_relation
-    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] [CompactSpace Y]
-    (R : Set (Y × X)) (hR : IsClosed R) (f : X → Y)
-    (hf : ∀ x, (f x,x) ∈ R) (huniq : ∀ x y, (y,x) ∈ R → y=f x) : Continuous f := by
+/--
+Generic compact-range closed-relation continuity, shared by compact affine-tilt optimizers and local
+support selections. -/
+theorem continuous_of_compact_closed_relation {X Y : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] [CompactSpace Y] (R : Set (Y × X)) (hR : IsClosed R) (f : X → Y)
+    (hf : ∀ x, (f x, x) ∈ R) (huniq : ∀ x y, (y, x) ∈ R → y = f x) : Continuous f := by
   apply continuous_iff_isClosed.mpr
   intro A hA
-  have he : f ⁻¹' A=Prod.snd '' (R ∩ Prod.fst ⁻¹' A) := by
+  have he : f ⁻¹' A = Prod.snd '' (R ∩ Prod.fst ⁻¹' A) := by
     ext x
     constructor
     · intro hx
-      exact ⟨(f x,x),⟨hf x,hx⟩,rfl⟩
-    · rintro ⟨⟨y,z⟩,⟨hy,hA'⟩,hz⟩
-      change z=x at hz
+      exact ⟨(f x, x), ⟨hf x, hx⟩, rfl⟩
+    · rintro ⟨⟨y, z⟩, ⟨hy, hA'⟩, hz⟩
+      change z = x at hz
       subst z
       change f x ∈ A
-      rw [←huniq x y hy]
+      rw [← huniq x y hy]
       exact hA'
   rw [he]
   exact isClosedMap_snd_of_compactSpace _ (hR.inter (hA.preimage continuous_fst))
 
 /-- Actual continuous variational remainders give a genuine Frechet derivative.
 Shared by compact-conjugate values and local convex primal derivatives. -/
-theorem hasFDerivAt_of_variational_remainder
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    {u : E → ℝ} {g : E → E} {x : E} (hg : ContinuousAt g x)
-    (hb : ∀ᶠ y in 𝓝 x, 0 ≤ u y-u x-⟪g x,y-x⟫ ∧
-      u y-u x-⟪g x,y-x⟫ ≤ ⟪y-x,g y-g x⟫) :
+theorem hasFDerivAt_of_variational_remainder {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] {u : E → ℝ} {g : E → E} {x : E} (hg : ContinuousAt g x)
+    (hb :
+      ∀ᶠ y in 𝓝 x,
+        0 ≤ u y - u x - ⟪g x, y - x⟫ ∧ u y - u x - ⟪g x, y - x⟫ ≤ ⟪y - x, g y - g x⟫) :
     HasFDerivAt u (innerSL ℝ (g x)) x := by
   apply HasFDerivAt.of_isLittleO
   apply Asymptotics.IsLittleO.of_bound
   intro c hc
-  have hn : ContinuousAt (fun y => ‖g y-g x‖) x := (hg.sub continuousAt_const).norm
-  have hev : ∀ᶠ y in 𝓝 x, ‖g y-g x‖ < c :=
+  have hn : ContinuousAt (fun y => ‖g y - g x‖) x := (hg.sub continuousAt_const).norm
+  have hev : ∀ᶠ y in 𝓝 x, ‖g y - g x‖ < c :=
     hn.eventually_lt continuousAt_const (by simpa using hc)
-  filter_upwards [hb,hev] with y hy hgy
-  change ‖u y-u x-⟪g x,y-x⟫‖ ≤ c*‖y-x‖
-  rw [Real.norm_eq_abs,abs_of_nonneg hy.1]
+  filter_upwards [hb, hev] with y hy hgy
+  change ‖u y - u x - ⟪g x, y - x⟫‖ ≤ c * ‖y - x‖
+  rw [Real.norm_eq_abs, abs_of_nonneg hy.1]
   calc
-    _ ≤ ⟪y-x,g y-g x⟫ := hy.2
-    _ ≤ ‖y-x‖*‖g y-g x‖ := real_inner_le_norm _ _
-    _ ≤ c*‖y-x‖ := by nlinarith [norm_nonneg (y-x)]
+    _ ≤ ⟪y - x, g y - g x⟫ := hy.2
+    _ ≤ ‖y - x‖ * ‖g y - g x‖ := real_inner_le_norm _ _
+    _ ≤ c * ‖y - x‖ := by nlinarith [norm_nonneg (y - x)]
 
 /-- Local C0 convexity/actual unique domain supports GENERATE a continuous
 actual slope selection; compact local bounds/closed graph are not inputs. -/
-theorem exists_continuous_supports
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hu : ConvexOn ℝ Ω u)
+theorem exists_continuous_supports {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hu : ConvexOn ℝ Ω u)
     (hC : ContinuousOn u Ω)
-    (hs : ∀ x ∈ Ω, ∃ p : E, (∀ y ∈ Ω, u x+⟪p,y-x⟫ ≤ u y) ∧
-      ∀ q : E, (∀ y ∈ Ω, u x+⟪q,y-x⟫ ≤ u y) → q=p) :
-    ∃ g : E → E, ContinuousOn g Ω ∧ ∀ x ∈ Ω,
-      (∀ y ∈ Ω, u x+⟪g x,y-x⟫ ≤ u y) ∧
-      ∀ q : E, (∀ y ∈ Ω, u x+⟪q,y-x⟫ ≤ u y) → q=g x := by
+    (hs :
+      ∀ x ∈ Ω,
+        ∃ p : E,
+          (∀ y ∈ Ω, u x + ⟪p, y - x⟫ ≤ u y) ∧
+            ∀ q : E, (∀ y ∈ Ω, u x + ⟪q, y - x⟫ ≤ u y) → q = p) :
+    ∃ g : E → E,
+      ContinuousOn g Ω ∧
+        ∀ x ∈ Ω,
+          (∀ y ∈ Ω, u x + ⟪g x, y - x⟫ ≤ u y) ∧
+            ∀ q : E, (∀ y ∈ Ω, u x + ⟪q, y - x⟫ ≤ u y) → q = g x := by
   classical
   let g : E → E := fun x => if hx : x ∈ Ω then (hs x hx).choose else 0
   have hspec (x : E) (hx : x ∈ Ω) :
-      (∀ y ∈ Ω, u x+⟪g x,y-x⟫ ≤ u y) ∧
-      ∀ q : E, (∀ y ∈ Ω, u x+⟪q,y-x⟫ ≤ u y) → q=g x := by
-    simpa only [g,dif_pos hx] using (hs x hx).choose_spec
-  refine ⟨g,?_,hspec⟩
+    (∀ y ∈ Ω, u x + ⟪g x, y - x⟫ ≤ u y) ∧
+      ∀ q : E, (∀ y ∈ Ω, u x + ⟪q, y - x⟫ ≤ u y) → q = g x := by
+    simpa only [g, dite_eq_left hx] using (hs x hx).choose_spec
+  refine ⟨g, ?_, hspec⟩
   apply continuousOn_of_forall_continuousAt
   intro x hx
-  obtain ⟨ε,hε,hball⟩ := Metric.mem_nhds_iff.mp (hΩ.mem_nhds hx)
-  let r : ℝ := ε/2
-  have hr : 0<r := by dsimp [r]; linarith
+  obtain ⟨ε, hε, hball⟩ := Metric.mem_nhds_iff.mp (hΩ.mem_nhds hx)
+  let r : ℝ := ε / 2
+  have hr : 0 < r := by dsimp [r]; linarith
   have hKΩ : closedBall x r ⊆ Ω := by
     intro y hy
     apply hball
     exact mem_ball.mpr ((mem_closedBall.mp hy).trans_lt (by dsimp [r]; linarith))
   let T : Set E := ball x r
   have hTΩ : T ⊆ Ω := ball_subset_closedBall.trans hKΩ
-  obtain ⟨R,_hR,_hsex,hcap⟩ := exists_uniform_subgradient_bound_on_compact
-    hΩ hu hC (isCompact_closedBall x r) hKΩ
+  obtain ⟨R, _hR, _hsex, hcap⟩ :=
+    exists_uniform_subgradient_bound_on_compact hΩ hu hC (isCompact_closedBall x r) hKΩ
   let B : Set E := closedBall 0 R
   have hB : IsCompact B := isCompact_closedBall 0 R
   let : CompactSpace B := isCompact_iff_compactSpace.mp hB
   have hbound (y : E) (hy : y ∈ T) : g y ∈ B := by
     have hh := hcap y (ball_subset_closedBall hy) (g y) (hspec y (hTΩ hy)).1
-    simpa only [B,mem_closedBall,dist_zero_right] using hh
-  let f : T → B := fun y => ⟨g y.val,hbound y.val y.property⟩
-  let Rel : Set (B × T) := {q | ∀ y ∈ T,
-    u q.2.val+⟪q.1.val,y-q.2.val⟫ ≤ u y}
-  have hGraph0 : IsClosed {q : T × E | ∀ y ∈ T,
-      u q.1.val+⟪q.2,y-q.1.val⟫ ≤ u y} := isClosed_subgradient_graphOn (hC.mono hTΩ)
+    simpa only [B, mem_closedBall, dist_zero_right] using hh
+  let f : T → B := fun y => ⟨g y.val, hbound y.val y.property⟩
+  let Rel : Set (B × T) := {q | ∀ y ∈ T, u q.2.val + ⟪q.1.val, y - q.2.val⟫ ≤ u y}
+  have hGraph0 : IsClosed {q : T × E | ∀ y ∈ T, u q.1.val + ⟪q.2, y - q.1.val⟫ ≤ u y} :=
+    isClosed_subgradient_graphOn (hC.mono hTΩ)
   have hGraph : IsClosed Rel :=
     hGraph0.preimage (continuous_snd.prodMk (continuous_subtype_val.comp continuous_fst))
-  have hf (y : T) : (f y,y) ∈ Rel := by
+  have hf (y : T) : (f y, y) ∈ Rel := by
     intro z hz
     exact (hspec y.val (hTΩ y.property)).1 z (hTΩ hz)
-  have huniq (y : T) (p : B) (hp : (p,y) ∈ Rel) : p=f y := by
+  have huniq (y : T) (p : B) (hp : (p, y) ∈ Rel) : p = f y := by
     apply Subtype.ext
-    have hpΩ : ∀ z ∈ Ω, u y.val+⟪p.val,z-y.val⟫ ≤ u z :=
+    have hpΩ : ∀ z ∈ Ω, u y.val + ⟪p.val, z - y.val⟫ ≤ u z :=
       subgradient_le_on_of_isOpen hu isOpen_ball hTΩ y.property hp
     exact (hspec y.val (hTΩ y.property)).2 p.val hpΩ
   have hfC : Continuous f := continuous_of_compact_closed_relation Rel hGraph f hf huniq
-  have hgT : ContinuousOn g T := continuousOn_iff_continuous_domRestrict.mpr
-    (continuous_subtype_val.comp hfC)
+  have hgT : ContinuousOn g T :=
+    continuousOn_iff_continuous_domRestrict.mpr (continuous_subtype_val.comp hfC)
   exact hgT.continuousAt (isOpen_ball.mem_nhds (mem_ball_self hr))
 
 /-- Actual local convex C0/unique domain supports produce genuine local C1,
 actual Frechet derivatives and actual gradient values, no AE shortcut. -/
-theorem exists_c1_of_unique_supports
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hu : ConvexOn ℝ Ω u)
+theorem exists_c1_of_unique_supports {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hu : ConvexOn ℝ Ω u)
     (hC : ContinuousOn u Ω)
-    (hs : ∀ x ∈ Ω, ∃ p : E, (∀ y ∈ Ω, u x+⟪p,y-x⟫ ≤ u y) ∧
-      ∀ q : E, (∀ y ∈ Ω, u x+⟪q,y-x⟫ ≤ u y) → q=p) :
-    ∃ g : E → E, ContinuousOn g Ω ∧ (∀ x ∈ Ω, HasFDerivAt u (innerSL ℝ (g x)) x) ∧
-      ContDiffOn ℝ 1 u Ω ∧ (∀ x ∈ Ω, gradient u x=g x) ∧
-      ∀ x ∈ Ω, (∀ y ∈ Ω, u x+⟪g x,y-x⟫ ≤ u y) ∧
-        ∀ q : E, (∀ y ∈ Ω, u x+⟪q,y-x⟫ ≤ u y) → q=g x := by
-  obtain ⟨g,hg,hsp⟩ := exists_continuous_supports hΩ hu hC hs
+    (hs :
+      ∀ x ∈ Ω,
+        ∃ p : E,
+          (∀ y ∈ Ω, u x + ⟪p, y - x⟫ ≤ u y) ∧
+            ∀ q : E, (∀ y ∈ Ω, u x + ⟪q, y - x⟫ ≤ u y) → q = p) :
+    ∃ g : E → E,
+      ContinuousOn g Ω ∧
+        (∀ x ∈ Ω, HasFDerivAt u (innerSL ℝ (g x)) x) ∧
+          ContDiffOn ℝ 1 u Ω ∧
+            (∀ x ∈ Ω, gradient u x = g x) ∧
+              ∀ x ∈ Ω,
+                (∀ y ∈ Ω, u x + ⟪g x, y - x⟫ ≤ u y) ∧
+                  ∀ q : E, (∀ y ∈ Ω, u x + ⟪q, y - x⟫ ≤ u y) → q = g x := by
+  obtain ⟨g, hg, hsp⟩ := exists_continuous_supports hΩ hu hC hs
   have hd (x : E) (hx : x ∈ Ω) : HasFDerivAt u (innerSL ℝ (g x)) x := by
     apply hasFDerivAt_of_variational_remainder (hg.continuousAt (hΩ.mem_nhds hx))
     filter_upwards [hΩ.mem_nhds hx] with y hy
     have hp := (hsp x hx).1 y hy
     have hq := (hsp y hy).1 x hx
-    simp only [inner_sub_left,inner_sub_right] at hp hq ⊢
+    simp only [inner_sub_left, inner_sub_right] at hp hq ⊢
     simp only [real_inner_comm] at hp hq ⊢
     constructor <;> linarith
   have hdf : ContinuousOn (fderiv ℝ u) Ω := by
@@ -532,8 +547,9 @@ theorem exists_c1_of_unique_supports
     exact (hd x hx).fderiv
   have hC1 : ContDiffOn ℝ 1 u Ω := by
     apply (contDiffOn_succ_iff_fderiv_of_isOpen (n := 0) hΩ).2
-    refine ⟨fun x hx => (hd x hx).differentiableAt.differentiableWithinAt,by simp,?_⟩
+    refine ⟨fun x hx => (hd x hx).differentiableAt.differentiableWithinAt, by simp, ?_⟩
     exact contDiffOn_zero.mpr hdf
-  exact ⟨g,hg,hd,hC1,fun x hx => (hasGradientAt_iff_hasFDerivAt.mpr (hd x hx)).gradient,hsp⟩
+  exact
+    ⟨g, hg, hd, hC1, fun x hx => (hasGradientAt_iff_hasFDerivAt.mpr (hd x hx)).gradient, hsp⟩
 
 end FunctionalInequalities.Analysis

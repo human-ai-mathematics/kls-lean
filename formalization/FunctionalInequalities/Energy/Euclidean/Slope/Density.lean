@@ -1,4 +1,6 @@
-import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
+module
+
+public import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 
 /-!
 # Density of smooth tests in the local-slope energy
@@ -28,20 +30,24 @@ global Lipschitz constant at `9 L + 8 α`, independently of `δ`.
 
 **Globally Lipschitz tests.**  Taking `α = δ = 1 / (n + 1)` the patches converge to `g` in
 `L²(ν)` — they differ from `g`
-by at most `2 L + 2 α` and only outside a set of mass `δ` — and smooth recovery bounds the relaxation at each
+by at most `2 L + 2 α` and only outside a set of mass `δ` — and smooth recovery bounds the
+relaxation at each
 patch by its asymptotic-Lipschitz energy, which a *measurable majorant* bounds by
 `(1 + 4 α) · LocalSlope.energy ν g + 4 α + 4 α² + M² δ`.  No measurability of the asymptotic
 Lipschitz constant is needed.  Lower semicontinuity of the relaxation finishes.
 
 **General tests.**  A general admissible test is cut off by the smooth bump `scaled (n + 1)`; the
 local Lipschitz product rule and the bounded-support Lipschitz bound
-make the cutoff globally Lipschitz, dominated convergence gives `L²` convergence, and the local-slope product bound with
+make the cutoff globally Lipschitz, dominated convergence gives `L²` convergence, and the
+local-slope product bound with
 Young's inequality bounds the energy of the cutoff.  The reverse inequality feeds this to
 `LocalSlope.le_relaxation_of_lowerSemicontinuous`.
 
 Closest literature: S. Eriksson-Bique, *Density of Lipschitz functions in energy*, Calc. Var. PDE
 62 (2023), Art. 60, Thm 1.1, of which this Euclidean argument is an elementary special case.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -228,6 +234,8 @@ theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzW
       (∀ n < N, ∀ x ∈ Kc n, AsymptoticLipschitz.apply F x ≤ (c n : ℝ≥0∞)) := by
   classical
   -- Choose disjoint neighborhoods and extend the restriction of f on each core.
+
+  -- Separate the compact pieces and choose localized corrections.
   obtain ⟨ρ₀, hρ₀, hsep₀⟩ := exists_thickening_pairwise_disjoint N Kc hcomp hdisj
   set ρ : ℝ := min ρ₀ 1 with hρdef
   have hρ : 0 < ρ := lt_min hρ₀ one_pos
@@ -315,6 +323,8 @@ theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzW
       |u n y - u n z| ≤ 2 * ((c n : ℝ) + L) * dist y z := by
     intro n hne y z
     have hcL : (0 : ℝ) ≤ (c n : ℝ) + L := by positivity
+
+    -- Control the correction across different cutoff supports.
     have key : ∀ y' z' : V, φ n z' ≠ 0 →
         |u n y' - u n z'| ≤ 2 * ((c n : ℝ) + L) * dist y' z' := by
       intro y' z' hz'
@@ -409,6 +419,7 @@ theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzW
             linarith
   -- the patch is globally Lipschitz
   have hFlip : LipschitzWith (9 * L + 8 * α) F := by
+    -- Prove the patched function is Lipschitz and control its local slopes.
     refine LipschitzWith.of_dist_le_mul fun y z ↦ ?_
     have hcoe : ((9 * L + 8 * α : ℝ≥0) : ℝ) = 9 * (L : ℝ) + 8 * (α : ℝ) := by push_cast; ring
     rw [Real.dist_eq, hcoe]
@@ -494,6 +505,8 @@ theorem exists_patch_of_isCompact {f : V → ℝ} {L : ℝ≥0} (hf : LipschitzW
     have hεr : (0 : ℝ) < (ε : ℝ) := hε
     have hd : (0 : ℝ) < 2 * ((c n : ℝ) + L) + 1 := by positivity
     set t : ℝ := ((ε : ℝ) * ρ) / (2 * ((c n : ℝ) + L) + 1) with htdef
+
+    -- Choose the final scale to meet the uniform approximation error.
     have ht0 : 0 < t := div_pos (mul_pos hεr hρ) hd
     have hteq : (2 * ((c n : ℝ) + L) + 1) * t = (ε : ℝ) * ρ := by
       rw [htdef]; field_simp
@@ -841,13 +854,22 @@ theorem relaxation_le_localSlope_of_lipschitzWith (ν : ProbabilityMeasure V) {g
     rw [heq]
     simpa [one_div] using (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
   set M : ℝ≥0 := 9 * L + 8 with hM
-  have hpatch : ∀ n : ℕ, ∃ (F : V → ℝ) (K : Set V), LipschitzWith (9 * L + 8 * a n) F ∧
-      MeasurableSet K ∧ (ν : Measure V) Kᶜ ≤ ((a n : ℝ≥0) : ℝ≥0∞) ∧ (∀ x ∈ K, F x = g x) ∧
-      (∀ x, |F x - g x| ≤ 2 * (L : ℝ) + 2 * ((a n : ℝ≥0) : ℝ)) ∧
-      ∀ x ∈ K, AsymptoticLipschitz.apply F x ≤ LocalSlope.apply g x + 2 * ((a n : ℝ≥0) : ℝ≥0∞) :=
+  have hpatch :
+    ∀ n : ℕ,
+      ∃ (F : V → ℝ) (K : Set V),
+        LipschitzWith (9 * L + 8 * a n) F ∧
+          MeasurableSet K ∧
+            (ν : Measure V) Kᶜ ≤ ((a n : ℝ≥0) : ℝ≥0∞) ∧
+              (∀ x ∈ K, F x = g x) ∧
+                (∀ x, |F x - g x| ≤ 2 * (L : ℝ) + 2 * ((a n : ℝ≥0) : ℝ)) ∧
+                  ∀ x ∈ K,
+                    AsymptoticLipschitz.apply F x ≤
+                      LocalSlope.apply g x + 2 * ((a n : ℝ≥0) : ℝ≥0∞) :=
     fun n ↦ LocalSlope.exists_patch ν hg (ha0 n) (by exact_mod_cast ha0 n)
-  choose F Kset hFlip hKmeas hKmass hFeq hFclose hFslope using hpatch
+  choose F Kset hFlip hKmeas hKmass hFeq hFclose hFslope using
+    hpatch
   -- the patches are `L²(ν)` functions
+
   have hFmem : ∀ n, MemLp (F n) 2 (ν : Measure V) := by
     intro n
     have hdiff : MemLp (fun x ↦ F n x - g x) 2 (ν : Measure V) := by
@@ -856,64 +878,87 @@ theorem relaxation_le_localSlope_of_lipschitzWith (ν : ProbabilityMeasure V) {g
       · simpa [Real.norm_eq_abs] using hFclose n x
     have hrw : F n = fun x ↦ (F n x - g x) + g x := by funext x; ring
     rw [hrw]
-    exact hdiff.add hmem
+    exact
+      hdiff.add
+        hmem
   -- the energy bound at each patch
+
   have hMbound : ∀ n, 9 * L + 8 * a n ≤ M := by
     intro n
     rw [hM]
     have : 8 * a n ≤ 8 := by
-      calc 8 * a n ≤ 8 * 1 := mul_le_mul_right (ha1 n) 8
+      calc
+        8 * a n ≤ 8 * 1 := mul_le_mul_right (ha1 n) 8
         _ = 8 := mul_one 8
     exact add_le_add le_rfl this
   have hmeas_s : Measurable (LocalSlope.apply g) := LocalSlope.measurable_apply hg.continuous
-  have henergy : ∀ n, AsymptoticLipschitz.energy ν (F n) ≤
-      (1 + 4 * ((a n : ℝ≥0) : ℝ≥0∞)) * E + (4 * ((a n : ℝ≥0) : ℝ≥0∞) +
-        4 * ((a n : ℝ≥0) : ℝ≥0∞) ^ 2) + (M : ℝ≥0∞) ^ 2 * ((a n : ℝ≥0) : ℝ≥0∞) := by
+  have henergy :
+    ∀ n,
+      AsymptoticLipschitz.energy ν (F n) ≤
+        (1 + 4 * ((a n : ℝ≥0) : ℝ≥0∞)) * E +
+            (4 * ((a n : ℝ≥0) : ℝ≥0∞) + 4 * ((a n : ℝ≥0) : ℝ≥0∞) ^ 2) +
+          (M : ℝ≥0∞) ^ 2 * ((a n : ℝ≥0) : ℝ≥0∞) := by
     intro n
     set an : ℝ≥0∞ := ((a n : ℝ≥0) : ℝ≥0∞) with handef
-    have hpt : ∀ x, AsymptoticLipschitz.apply (F n) x ^ 2 ≤
-        ((1 + 4 * an) * LocalSlope.apply g x ^ 2 + (4 * an + 4 * an ^ 2)) +
-          (Kset n)ᶜ.indicator (fun _ ↦ (M : ℝ≥0∞) ^ 2) x := by
+    have hpt :
+      ∀ x,
+        AsymptoticLipschitz.apply (F n) x ^ 2 ≤
+          ((1 + 4 * an) * LocalSlope.apply g x ^ 2 + (4 * an + 4 * an ^ 2)) +
+            (Kset n)ᶜ.indicator (fun _ ↦ (M : ℝ≥0∞) ^ 2) x := by
       intro x
       by_cases hx : x ∈ Kset n
       · have h1 : AsymptoticLipschitz.apply (F n) x ≤ LocalSlope.apply g x + 2 * an :=
           hFslope n x hx
-        have h2 : AsymptoticLipschitz.apply (F n) x ^ 2 ≤
-            (LocalSlope.apply g x + 2 * an) ^ 2 := pow_le_pow_left' h1 2
+        have h2 : AsymptoticLipschitz.apply (F n) x ^ 2 ≤ (LocalSlope.apply g x + 2 * an) ^ 2 :=
+          pow_le_pow_left' h1 2
         refine h2.trans ?_
         exact le_trans (sq_add_two_mul_le _ _) le_self_add
       · have h1 : AsymptoticLipschitz.apply (F n) x ≤ (M : ℝ≥0∞) := by
           refine (AsymptoticLipschitz.apply_le_of_lipschitzWith (hFlip n) x).trans ?_
           exact_mod_cast hMbound n
-        have h2 : AsymptoticLipschitz.apply (F n) x ^ 2 ≤ (M : ℝ≥0∞) ^ 2 := pow_le_pow_left' h1 2
+        have h2 : AsymptoticLipschitz.apply (F n) x ^ 2 ≤ (M : ℝ≥0∞) ^ 2 :=
+          pow_le_pow_left' h1 2
         have h3 : (Kset n)ᶜ.indicator (fun _ ↦ (M : ℝ≥0∞) ^ 2) x = (M : ℝ≥0∞) ^ 2 :=
           Set.indicator_of_mem hx _
         rw [h3]
         exact h2.trans le_add_self
-    calc AsymptoticLipschitz.energy ν (F n)
-        ≤ ∫⁻ x, (((1 + 4 * an) * LocalSlope.apply g x ^ 2 + (4 * an + 4 * an ^ 2)) +
-            (Kset n)ᶜ.indicator (fun _ ↦ (M : ℝ≥0∞) ^ 2) x) ∂(ν : Measure V) :=
-          lintegral_mono hpt
-      _ = (∫⁻ x, ((1 + 4 * an) * LocalSlope.apply g x ^ 2 + (4 * an + 4 * an ^ 2))
-            ∂(ν : Measure V)) + (M : ℝ≥0∞) ^ 2 * (ν : Measure V) (Kset n)ᶜ := by
-          rw [lintegral_add_right _ ((measurable_const.indicator (hKmeas n).compl)),
-            lintegral_indicator_const (hKmeas n).compl]
-      _ = ((1 + 4 * an) * E + (4 * an + 4 * an ^ 2)) +
+    calc
+      AsymptoticLipschitz.energy ν (F n) ≤
+          ∫⁻ x,
+            (((1 + 4 * an) * LocalSlope.apply g x ^ 2 + (4 * an + 4 * an ^ 2)) +
+              (Kset n)ᶜ.indicator (fun _ ↦ (M : ℝ≥0∞) ^ 2) x) ∂(ν : Measure V) :=
+        lintegral_mono hpt
+      _ =
+          (∫⁻ x,
+              ((1 + 4 * an) * LocalSlope.apply g x ^ 2 +
+                (4 * an + 4 * an ^ 2)) ∂(ν : Measure V)) +
             (M : ℝ≥0∞) ^ 2 * (ν : Measure V) (Kset n)ᶜ := by
-          rw [lintegral_add_right _ measurable_const,
-            lintegral_const_mul _ (hmeas_s.pow_const 2), lintegral_const, measure_univ, mul_one]
-          rfl
+        rw [lintegral_add_right _ ((measurable_const.indicator (hKmeas n).compl)),
+          lintegral_indicator_const (hKmeas n).compl]
+      _ =
+          ((1 + 4 * an) * E + (4 * an + 4 * an ^ 2)) +
+            (M : ℝ≥0∞) ^ 2 * (ν : Measure V) (Kset n)ᶜ := by
+        rw [lintegral_add_right _ measurable_const, lintegral_const_mul _ (hmeas_s.pow_const 2),
+          lintegral_const, measure_univ, mul_one]
+        rfl
       _ ≤ (1 + 4 * an) * E + (4 * an + 4 * an ^ 2) + (M : ℝ≥0∞) ^ 2 * an := by
-          exact add_le_add le_rfl (mul_le_mul_right (hKmass n) _)
+        exact
+          add_le_add le_rfl
+            (mul_le_mul_right (hKmass n) _)
   -- convergence of the patches in `L²(ν)`
+
   have hconv : Tendsto (fun n ↦ (hFmem n).toLp (F n)) atTop (𝓝 (hmem.toLp g)) := by
     refine (Lp.tendsto_Lp_iff_tendsto_eLpNorm'' (fun n ↦ F n) hFmem g hmem).mpr ?_
-    have hle : ∀ n, eLpNorm (F n - g) 2 (ν : Measure V) ≤
-        ‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2) := by
+    have hle :
+      ∀ n,
+        eLpNorm (F n - g) 2 (ν : Measure V) ≤
+          ‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2) := by
       intro n
-      have hmono : eLpNorm (F n - g) 2 (ν : Measure V) ≤
+      have hmono :
+        eLpNorm (F n - g) 2 (ν : Measure V) ≤
           eLpNorm ((Kset n)ᶜ.indicator fun _ ↦ (2 * (L : ℝ) + 2 : ℝ)) 2 (ν : Measure V) := by
-        refine eLpNorm_mono fun x ↦ ?_
+        refine eLpNorm_mono ((hFmem n).aestronglyMeasurable.sub hmem.aestronglyMeasurable)
+          fun x ↦ ?_
         by_cases hx : x ∈ Kset n
         · simp [hFeq n x hx]
         · rw [Set.indicator_of_mem hx (fun _ ↦ (2 * (L : ℝ) + 2 : ℝ))]
@@ -922,26 +967,33 @@ theorem relaxation_le_localSlope_of_lipschitzWith (ν : ProbabilityMeasure V) {g
             have : ((a n : ℝ≥0) : ℝ) ≤ 1 := by exact_mod_cast ha1 n
             linarith
           have : |F n x - g x| ≤ 2 * (L : ℝ) + 2 := by linarith
-          simpa [Real.norm_eq_abs, abs_of_nonneg (by positivity : (0:ℝ) ≤ 2 * (L : ℝ) + 2)] using this
+          simpa [Real.norm_eq_abs,
+            abs_of_nonneg (by positivity : (0 : ℝ) ≤ 2 * (L : ℝ) + 2)] using this
       refine hmono.trans ?_
-      rw [eLpNorm_indicator_const (hKmeas n).compl (by norm_num) (by norm_num)]
+      rw [eLpNorm_indicator_const (hKmeas n).compl.nullMeasurableSet (by norm_num) (by norm_num)]
       have h2 : ((2 : ℝ≥0∞).toReal) = 2 := by norm_num
       rw [h2]
       exact mul_le_mul_right (ENNReal.rpow_le_rpow (hKmass n) (by norm_num)) _
-    have hlim : Tendsto (fun n ↦ ‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ *
-        ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2)) atTop (𝓝 0) := by
+    have hlim :
+      Tendsto (fun n ↦ ‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2)) atTop
+        (𝓝 0) := by
       have h1 : Tendsto (fun n ↦ ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2)) atTop (𝓝 0) := by
         have := (ENNReal.continuous_rpow_const (y := (1 : ℝ) / 2)).tendsto 0 |>.comp hatend
-        simpa [Function.comp_def, ENNReal.zero_rpow_of_pos (by norm_num : (0:ℝ) < 1 / 2)] using this
-      have h2 : Tendsto (fun n ↦ ‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2))
-          atTop (𝓝 (‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * 0)) :=
+        simpa [Function.comp_def,
+          ENNReal.zero_rpow_of_pos (by norm_num : (0 : ℝ) < 1 / 2)] using this
+      have h2 :
+        Tendsto (fun n ↦ ‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * ((a n : ℝ≥0) : ℝ≥0∞) ^ ((1 : ℝ) / 2)) atTop
+          (𝓝 (‖(2 * (L : ℝ) + 2 : ℝ)‖ₑ * 0)) :=
         ENNReal.Tendsto.const_mul h1 (Or.inr (by simp))
       simpa using h2
-    exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hlim
-      (fun _ ↦ zero_le) hle
+    exact
+      tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hlim (fun _ ↦ zero_le)
+        hle
   -- lower semicontinuity finishes
-  have hlsc := le_liminf_of_lowerSemicontinuous (fun f ↦ relaxation ν f)
-    (preEnergy ν).lowerSemicontinuous_sequentialRelaxation hconv
+
+  have hlsc :=
+    le_liminf_of_lowerSemicontinuous (fun f ↦ relaxation ν f)
+      (preEnergy ν).lowerSemicontinuous_sequentialRelaxation hconv
   refine hlsc.trans ?_
   set C : ℝ≥0∞ := 4 * E + 8 + (M : ℝ≥0∞) ^ 2 with hC
   have hCtop : C ≠ ⊤ := by
@@ -953,15 +1005,18 @@ theorem relaxation_le_localSlope_of_lipschitzWith (ν : ProbabilityMeasure V) {g
     intro n
     set an : ℝ≥0∞ := ((a n : ℝ≥0) : ℝ≥0∞) with handef
     have han1 : an ≤ 1 := by rw [handef]; exact_mod_cast ha1 n
-    refine le_trans
-      (relaxation_le_asymptoticLipschitz_of_lipschitzWith ν (hFlip n) (hFmem n)) ?_
+    refine
+      le_trans (relaxation_le_asymptoticLipschitz_of_lipschitzWith ν (hFlip n) (hFmem n)) ?_
     refine (henergy n).trans ?_
     have hsq : an ^ 2 ≤ an := by
-      calc an ^ 2 = an * an := sq an
+      calc
+        an ^ 2 = an * an := sq an
         _ ≤ an * 1 := mul_le_mul_right han1 an
         _ = an := mul_one an
-    calc (1 + 4 * an) * E + (4 * an + 4 * an ^ 2) + (M : ℝ≥0∞) ^ 2 * an
-        = E + 4 * an * E + (4 * an + 4 * an ^ 2) + (M : ℝ≥0∞) ^ 2 * an := by ring
+    calc
+      (1 + 4 * an) * E + (4 * an + 4 * an ^ 2) + (M : ℝ≥0∞) ^ 2 * an =
+          E + 4 * an * E + (4 * an + 4 * an ^ 2) + (M : ℝ≥0∞) ^ 2 * an := by
+        ring
       _ ≤ E + 4 * an * E + (4 * an + 4 * an) + (M : ℝ≥0∞) ^ 2 * an := by gcongr
       _ = E + an * (4 * E + 8 + (M : ℝ≥0∞) ^ 2) := by ring
   refine le_trans (liminf_le_liminf (Eventually.of_forall hstep)) ?_
@@ -1040,7 +1095,7 @@ theorem relaxation_le_localSlope_of_admissible (ν : ProbabilityMeasure V) {g : 
   set G : ℝ≥0∞ := ∫⁻ x, ‖g x‖ₑ ^ 2 ∂(ν : Measure V) with hG
   have hGtop : G ≠ ⊤ := by
     have hint : Integrable (fun x ↦ ‖g x‖ ^ 2) (ν : Measure V) :=
-      (memLp_two_iff_integrable_sq_norm hg.memLp_two.1).mp hg.memLp_two
+      (memLp_two_iff_integrable_sq_norm hg.memLp_two.aestronglyMeasurable).mp hg.memLp_two
     have heq : G = ENNReal.ofReal (∫ x, ‖g x‖ ^ 2 ∂(ν : Measure V)) := by
       rw [hG, ofReal_integral_eq_lintegral_ofReal hint (ae_of_all _ fun x ↦ sq_nonneg _)]
       exact lintegral_congr fun x ↦ by

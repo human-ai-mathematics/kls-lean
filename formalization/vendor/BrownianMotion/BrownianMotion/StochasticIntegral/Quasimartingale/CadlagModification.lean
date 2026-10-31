@@ -5,6 +5,8 @@ Copyright (c) 2026 Kexing Ying. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Kexing Ying, Rohit Manokaran, Rémy Degenne
 -/
+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 adaptations
+-- (deprecated names; four proof bodies for the new MemLp/eLpNorm API); see vendor/port.patch.
 module
 
 public import BrownianMotion.Auxiliary.ConvergenceInMeasure
@@ -72,33 +74,30 @@ variable {ι κ Ω E F : Type*} {mΩ : MeasurableSpace Ω} {μ : Measure Ω}
 private lemma MeasureTheory.UniformIntegrable.add [NormedAddCommGroup E] {X Y : ι → Ω → E} {p : ℝ≥0∞} (hp : 1 ≤ p)
     (hX : UniformIntegrable X p μ) (hY : UniformIntegrable Y p μ) :
     UniformIntegrable (X + Y) p μ := by
-  refine ⟨fun _ ↦ (hX.1 _).add (hY.1 _), ?_, ?_⟩
-  · rcases hX with ⟨hX₁, hX₂, hX₃⟩
-    rcases hY with ⟨hY₁, hY₂, hY₃⟩
-    exact hX₂.add hY₂ hp hX₁ hY₁
-  · obtain ⟨C_X, hC_X⟩ := hX.2.2
-    obtain ⟨C_Y, hC_Y⟩ := hY.2.2
-    exact ⟨C_X + C_Y,
-      fun i ↦ le_trans (eLpNorm_add_le (hX.1 i) (hY.1 i) hp) (add_le_add (hC_X i) (hC_Y i))⟩
+  refine ⟨hX.1.add hY.1 hp, ?_⟩
+  obtain ⟨C_X, hC_X⟩ := hX.2
+  obtain ⟨C_Y, hC_Y⟩ := hY.2
+  exact ⟨C_X + C_Y, fun i ↦
+    le_trans (eLpNorm_add_le hp) (add_le_add (hC_X i) (hC_Y i))⟩
 
 private lemma MeasureTheory.uniformIntegrable_of_dominated [NormedAddCommGroup E] [NormedAddCommGroup F]
     {X : ι → Ω → E} {Y : κ → Ω → F} {p : ℝ≥0∞}
     (hY : UniformIntegrable Y p μ) (mX : ∀ i, AEStronglyMeasurable (X i) μ)
     (hX : ∀ i, ∃ j, ∀ᵐ ω ∂μ, ‖X i ω‖ ≤ ‖Y j ω‖) :
     UniformIntegrable X p μ := by
-  refine ⟨mX, fun ε hε ↦ ?_, ?_⟩
-  · obtain ⟨δ, hδ, h⟩ := hY.2.1 hε
-    refine ⟨δ, hδ, fun i s hs hμs ↦ let ⟨j, hj⟩ := hX i
-      le_trans (eLpNorm_mono_ae ?_) <| h j s hs hμs⟩
-    filter_upwards [hj] with ω hω
-    rw [Set.indicator]
-    split_ifs with hmem
-    · rw [Set.indicator_of_mem hmem]
-      exact hω
-    · simp [Set.indicator_of_notMem hmem]
-  · obtain ⟨C, hC⟩ := hY.2.2
-    exact ⟨C, fun i ↦ let ⟨j, hj⟩ := hX i
-      le_trans (eLpNorm_mono_ae hj) <| hC j⟩
+  refine ⟨?_, ?_⟩
+  · apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hY.1
+    · intro ε
+      exact zero_le
+    · intro ε
+      refine iSup_le fun i ↦ iSup_le fun s ↦ iSup_le fun hs ↦ ?_
+      obtain ⟨j, hj⟩ := hX i
+      exact (eLpNorm_mono_ae (mX i).restrict (ae_restrict_of_ae hj)).trans
+        (le_iSup_of_le j (le_iSup_of_le s (le_iSup_of_le hs le_rfl)))
+  · obtain ⟨C, hC⟩ := hY.2
+    exact ⟨C, fun i ↦
+      let ⟨j, hj⟩ := hX i
+      le_trans (eLpNorm_mono_ae (mX i) hj) (hC j)⟩
 
 private lemma MeasureTheory.UniformIntegrable.norm [NormedAddCommGroup E] {X : ι → Ω → E} {p : ℝ≥0∞}
     (hY : UniformIntegrable X p μ) :
@@ -120,7 +119,7 @@ lemma MeasureTheory.UniformIntegrable.tendsto_setIntegral [IsFiniteMeasure μ]
     (hfg : ∀ᵐ ω ∂μ, Tendsto (fun n ↦ f n ω) atTop (𝓝 (g ω))) (A : Set Ω) :
     Tendsto (fun n ↦ ∫ ω in A, f n ω ∂μ) atTop (𝓝 (∫ ω in A, g ω ∂μ)) := by
   have hg : MemLp g 1 μ := hUI.memLp_of_ae_tendsto hfg
-  refine tendsto_setIntegral_of_L1' g hg.aestronglyMeasurable
+  refine tendsto_setIntegral_of_L1' g
     (.of_forall fun n ↦ memLp_one_iff_integrable.1 (hUI.memLp n)) ?_ A
   exact tendsto_Lp_finite_of_tendsto_ae le_rfl ENNReal.one_ne_top hUI.aestronglyMeasurable hg
     hUI.unifIntegrable hfg
@@ -247,11 +246,11 @@ lemma measurableSet_altSet (hX : IsRealQuasimartingale 𝓕 X μ)
       refine ⟨fun k ↦ if h : k < 2 * m then g ⟨k, h⟩ else ⊥, by grind, by grind, ?_, ?_⟩
       · intro i hi
         have h2i : 2 * i < 2 * m := by lia
-        simp only [dif_pos h2i]
+        simp only [dite_eq_left h2i]
         exact hg3 ⟨i, hi⟩
       · intro i hi
         have h2i : 2 * i + 1 < 2 * m := by lia
-        simp only [dif_pos h2i]
+        simp only [dite_eq_left h2i]
         exact hg4 ⟨i, hi⟩
   rw [hset]
   refine Finset.measurableSet_biUnion _ fun g hg ↦ ?_
@@ -1056,7 +1055,7 @@ lemma continuousWithinAt_rightContModifOf (x : ι) (ω : Ω) :
     ContinuousWithinAt (rightContModifOf R X · ω) (Set.Ioi x) x := by
   by_cases hω : ω ∈ regularitySetRight (regularityTimes ι) R x
   · have hYx : rightContModifOf R X x ω = rightLimWithin (X · ω) (regularityTimes ι) x := by
-      simp only [rightContModifOf, if_pos hω]
+      simp only [rightContModifOf, ite_eq_left hω]
     rw [ContinuousWithinAt, hYx]
     exact tendsto_rightContModifOf_rightLimWithin hR hω
   · refine ContinuousWithinAt.congr_of_eventuallyEq ?_ (rightContModifOf_eq_zero hω) ?_
@@ -1106,7 +1105,7 @@ lemma rightContModifOf_ae_eq_of_rightLimWithin_ae_eq {t : ι}
     (ht : (fun ω ↦ rightLimWithin (X · ω) (regularityTimes ι) t) =ᵐ[μ] X t) :
     rightContModifOf R X t =ᵐ[μ] X t := by
   filter_upwards [hRae, ht] with ω hω hωR
-  simpa only [rightContModifOf, if_pos (hω _)]
+  simpa only [rightContModifOf, ite_eq_left (hω _)]
 
 /-- At a time `t` which is isolated on the right, `rightContModifOf R X t` is a.e. equal to
 `X t`. -/
@@ -1137,7 +1136,7 @@ lemma exists_seq_tendsto_rightContModifOf (hR : IsRegularityFamily (regularityTi
     hw.mono_right (nhdsWithin_mono _ Set.inter_subset_right), ?_⟩
   filter_upwards [hRae] with ω hω
   have hYω : rightContModifOf R X t ω = rightLimWithin (X · ω) T t := by
-    simp only [rightContModifOf, T, if_pos (hω t)]
+    simp only [rightContModifOf, T, ite_eq_left (hω t)]
   rw [hYω]
   exact (hR.tendsto_nhdsGT_rightLimWithin (hω t)).comp hw
 
@@ -1207,7 +1206,7 @@ lemma cadlagModifOf_ae_eq_rightContModifOf
     (hRae : ∀ᵐ ω ∂μ, ∀ t, ω ∈ regularitySetRight (regularityTimes ι) R t) :
     ∀ᵐ ω ∂μ, ∀ t, cadlagModifOf R X t ω = rightContModifOf R X t ω := by
   filter_upwards [hRae] with ω hω
-  simp [cadlagModifOf, if_pos hω]
+  simp [cadlagModifOf, ite_eq_left hω]
 
 omit [OrderTopology ι] in
 lemma cadlagModifOf_ae_eq_of_rightContModifOf_ae_eq
@@ -1521,13 +1520,13 @@ theorem _root_.MeasureTheory.Submartingale.rightContModifReal_ae_eq [𝓕.IsRigh
   set Y := rightContModifReal X t
   -- `Y` is integrable, by Fatou's lemma
   have hY_int : Integrable Y μ := by
-    refine memLp_one_iff_integrable.1
-      ⟨(measurable_rightContModifReal hXq t).aestronglyMeasurable, ?_⟩
+    refine memLp_one_iff_integrable.1 ?_
     refine (Lp.eLpNorm_lim_le_liminf_eLpNorm
-      (fun n ↦ (hX.integrable (w n)).aestronglyMeasurable) Y h_tendsto).trans_lt ?_
+      (fun n ↦ (hX.integrable (w n)).aestronglyMeasurable) Y
+      (measurable_rightContModifReal hXq t).aestronglyMeasurable h_tendsto).trans_lt ?_
     have h_le n : eLpNorm (X (w n)) 1 μ
         ≤ ENNReal.ofReal (2 * ∫ ω, X u ω ⊔ 0 ∂μ - ∫ ω, X t ω ∂μ) := by
-      rw [eLpNorm_one_eq_lintegral_enorm,
+      rw [eLpNorm_one_eq_lintegral_enorm (hX.integrable _).aestronglyMeasurable,
         ← ofReal_integral_norm_eq_lintegral_enorm (hX.integrable _)]
       exact ENNReal.ofReal_le_ofReal (hX.integral_abs_le (htw n).le (hwu n))
     refine (liminf_le_liminf (.of_forall h_le)).trans_lt ?_

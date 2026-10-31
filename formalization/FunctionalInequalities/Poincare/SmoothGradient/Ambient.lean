@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Poincare.L2.Energy
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Basic
+public import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Poincaré optimization for the smooth-gradient relaxation
@@ -8,6 +10,8 @@ This module attaches the generic `L²` Poincaré optimizer to the concrete seque
 of globally smooth finite-gradient tests. Its names retain `Energy.SmoothGradient.relaxation`: no
 unproved identification with Cheeger energy or a closed Sobolev form is hidden here.
 -/
+
+@[expose] public section
 
 -- `Ambient` refers to relaxation before passing to affine-support coordinates.
 

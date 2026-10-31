@@ -1,11 +1,13 @@
-import LevyStochCalc.Brownian.TaylorTwoModulus
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
-import Mathlib.Tactic.Abel
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Positivity
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+module
+
+public import LevyStochCalc.Brownian.TaylorTwoModulus
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+public import Mathlib.Tactic.Abel
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 
 /-!
 # Second central differences and local Hessian interpolation
@@ -19,14 +21,18 @@ Section 6.1, p. 89, and its use in Theorem 6.2, pp. 90–92.
 * `diagonal_interpolation`, `norm_bilinear_le_of_diagonal`, `hessian_interpolation`: interpolation
   of the actual Hessian in operator norm from value bounds and a local Hölder bound of the Hessian
   around the base point, via polarization of the symmetric second derivative;
-* `exists_hessian_interpolation_constant`: the constant is chosen from `α` and `ε` before the radius,
+* `exists_hessian_interpolation_constant`: the constant is chosen from `α` and `ε` before the
+  radius,
   the function and the value and Hölder bounds.
 
 Derivatives are given as global `HasFDerivAt` witnesses. This is not the full weighted-domain
 interpolation (6.8)/(6.9), the constant-coefficient transform of Lemma 6.1, or a Schauder estimate.
-The second-order Taylor remainder is the vendored `LevyStochCalc.abs_sub_taylor_two_le_modulus_normed`
+The second-order Taylor remainder is the vendored
+`LevyStochCalc.abs_sub_taylor_two_le_modulus_normed`
 (LevyStochCalc, Christian Garry, Apache-2.0).
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric
@@ -177,15 +183,19 @@ theorem hessian_interpolation
 
 /-- The interpolation constant is chosen from alpha and epsilon before the radius,
 function, value bound, or Hessian Hölder bound. The radius powers are explicit. -/
-theorem exists_hessian_interpolation_constant (α : ℝ) (hα : 0 < α)
-    (ε : ℝ) (hε : 0 < ε) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (R : ℝ), 0 < R →
-      ∀ (f : E → ℝ) (f' : E → E →L[ℝ] ℝ) (f'' : E → E →L[ℝ] E →L[ℝ] ℝ),
-      (∀ z, HasFDerivAt f (f' z) z) → (∀ z, HasFDerivAt f' (f'' z) z) →
-      ∀ (x : E) (M H : ℝ), 0 ≤ H →
-      (∀ z ∈ closedBall x R, |f z| ≤ M) →
-      (∀ z ∈ closedBall x R, ‖f'' z - f'' x‖ ≤ H * ‖z - x‖ ^ α) →
-      R ^ 2 * ‖f'' x‖ ≤ C * M + ε * H * R ^ (2 + α) := by
+theorem exists_hessian_interpolation_constant (α : ℝ) (hα : 0 < α) (ε : ℝ) (hε : 0 < ε) :
+    ∃ C : ℝ,
+      0 < C ∧
+        ∀ (R : ℝ),
+          0 < R →
+            ∀ (f : E → ℝ) (f' : E → E →L[ℝ] ℝ) (f'' : E → E →L[ℝ] E →L[ℝ] ℝ),
+              (∀ z, HasFDerivAt f (f' z) z) →
+                (∀ z, HasFDerivAt f' (f'' z) z) →
+                  ∀ (x : E) (M H : ℝ),
+                    0 ≤ H →
+                      (∀ z ∈ closedBall x R, |f z| ≤ M) →
+                        (∀ z ∈ closedBall x R, ‖f'' z - f'' x‖ ≤ H * ‖z - x‖ ^ α) →
+                          R ^ 2 * ‖f'' x‖ ≤ C * M + ε * H * R ^ (2 + α) := by
   let θ : ℝ := min 1 ((ε / 4) ^ α⁻¹)
   have hθ : 0 < θ := lt_min zero_lt_one (Real.rpow_pos_of_pos (by positivity) _)
   have hθ1 : θ ≤ 1 := min_le_left _ _
@@ -198,11 +208,11 @@ theorem exists_hessian_interpolation_constant (α : ℝ) (hα : 0 < α)
   have hstep : 0 < θ * R := mul_pos hθ hR
   have hstepR : θ * R ≤ R := by nlinarith
   have hsub : closedBall x (θ * R) ⊆ closedBall x R := closedBall_subset_closedBall hstepR
-  have hn := hessian_interpolation hf hf' hstep hH hα.le
-    (fun z hz => hb z (hsub hz)) (fun z hz => hholder z (hsub hz))
+  have hn :=
+    hessian_interpolation hf hf' hstep hH hα.le (fun z hz => hb z (hsub hz))
+      (fun z hz => hholder z (hsub hz))
   have hs : 0 < R ^ 2 := sq_pos_of_pos hR
-  have he : R ^ (2 + α) = R ^ 2 * R ^ α := by
-    rw [Real.rpow_add hR, Real.rpow_two]
+  have he : R ^ (2 + α) = R ^ 2 * R ^ α := by rw [Real.rpow_add hR, Real.rpow_two]
   have hn' : R ^ 2 * ‖f'' x‖ ≤ (8 / θ ^ 2) * M + (4 * θ ^ α) * H * (R ^ 2 * R ^ α) := by
     calc
       _ ≤ R ^ 2 * (8 * M / (θ * R) ^ 2 + 4 * H * (θ * R) ^ α) :=
@@ -210,10 +220,12 @@ theorem exists_hessian_interpolation_constant (α : ℝ) (hα : 0 < α)
       _ = _ := by
         rw [Real.mul_rpow hθ.le hR.le]
         field_simp [hθ.ne', hR.ne']
-
   rw [he]
-  exact hn'.trans (add_le_add le_rfl
-    (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hθa hH) (by positivity : 0 ≤ R ^ 2 * R ^ α)))
+  exact
+    hn'.trans
+      (add_le_add le_rfl
+        (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hθa hH)
+          (by positivity : 0 ≤ R ^ 2 * R ^ α)))
 
 
 end FunctionalInequalities.Analysis

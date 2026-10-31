@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare pinned Mathlib caches for the library and optional OpenAI bridge."""
+"""Prepare pinned Mathlib caches for the library, the OpenAI bridge and the Palomar project."""
 from __future__ import annotations
 
 import argparse
@@ -7,9 +7,16 @@ from pathlib import Path
 import subprocess
 
 from downstream import parse_imports
+import lean_header
 
 ROOT = Path(__file__).resolve().parents[1]
-PROJECTS = {"formalization": "formalization", "openai": "integrations/openai"}
+PROJECTS = {"formalization": "formalization", "openai": "integrations/openai",
+            "palomar": "integrations/palomar"}
+# Contained Lake projects and the in-repository path packages whose sources they build. Lake
+# may resolve their Git dependencies (Mathlib) to each project's own checkout, so each needs its
+# own cache. The Palomar project requires ../openai, which requires the library.
+CONTAINED_SOURCES = {"openai": ("integrations/openai",),
+                     "palomar": ("integrations/openai", "integrations/palomar")}
 
 
 def project_sources(root: Path, project: str = "formalization") -> list[Path]:
@@ -19,13 +26,14 @@ def project_sources(root: Path, project: str = "formalization") -> list[Path]:
     for directory in ("formalization/FunctionalInequalities", "formalization/vendor",
                       "solutions", "examples", "research/audits"):
         paths.extend((root / directory).rglob("*.lean"))
-    if project == "openai":
+    for package in CONTAINED_SOURCES.get(project, ()):
         # The bridge imports the substantive library as a path dependency, but
         # Lake may resolve its Git dependencies to the bridge's own checkouts.
-        bridge = root / PROJECTS[project]
+        bridge = root / package
         paths.extend(bridge.glob("*.lean"))
         for directory in ("OAI", "KLSOpenAI", "research/audits"):
-            paths.extend((bridge / directory).rglob("*.lean"))
+            if (bridge / directory).is_dir():
+                paths.extend((bridge / directory).rglob("*.lean"))
     return sorted(path for path in paths if path.is_file())
 
 
@@ -57,10 +65,25 @@ def required_modules(mathlib: Path, roots: list[str]) -> set[str]:
     return seen
 
 
-def check_cache(mathlib: Path, modules: set[str]) -> list[str]:
+def check_cache(mathlib: Path, modules: set[str]) -> list[tuple[str, str]]:
+    """Missing `(module, artifact)` pairs under the replay artifact policy.
+
+    Each pinned source's own header decides: a `module` needs `.olean`, `.olean.server`,
+    `.olean.private`, `.ir.sig` and `.ir` (an import reads the server/private parts
+    unconditionally); a non-module source keeps the legacy `.olean`-only requirement.
+    """
     compiled = mathlib / ".lake/build/lib/lean"
-    return sorted(module for module in modules
-                  if not compiled.joinpath(*module.split(".")).with_suffix(".olean").is_file())
+    missing = []
+    for module in sorted(modules):
+        source = mathlib.joinpath(*module.split(".")).with_suffix(".lean")
+        try:
+            required = lean_header.required_artifacts(source.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, lean_header.HeaderError) as exc:
+            raise ValueError(f"Cannot classify pinned Mathlib source {module}: {exc}") from exc
+        base = compiled.joinpath(*module.split("."))
+        missing.extend((module, suffix) for suffix in required
+                       if not base.with_suffix(suffix).is_file())
+    return missing
 
 
 def prepare_cache(root: Path, *, project: str = "formalization", check_only: bool = False) -> int:
@@ -87,12 +110,13 @@ def prepare_cache(root: Path, *, project: str = "formalization", check_only: boo
     modules = required_modules(mathlib, targets)
     missing = check_cache(mathlib, modules)
     if missing:
-        raise ValueError(f"[{project}] Mathlib cache incomplete: "
-                         f"{len(missing)} of {len(modules)} modules missing. "
-                         "Refusing an accidental source rebuild. First missing modules: "
-                         + ", ".join(missing[:20]))
-    print(f"[{project}] Mathlib cache complete: {len(modules)} required compiled modules found. "
-          "Pinned third-party compiled imports remain trusted.", flush=True)
+        incomplete = len({module for module, _ in missing})
+        raise ValueError(f"[{project}] Mathlib cache incomplete: {len(missing)} artifacts missing "
+                         f"for {incomplete} of {len(modules)} modules. "
+                         "Refusing an accidental source rebuild. First missing artifacts: "
+                         + ", ".join(f"{module} ({suffix})" for module, suffix in missing[:20]))
+    print(f"[{project}] Mathlib cache complete: every required artifact of {len(modules)} "
+          "compiled modules found. Pinned third-party compiled imports remain trusted.", flush=True)
     return 0
 
 

@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.UpperMinkowskiRecovery
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.UpperMinkowskiRecovery
 
 /-! Independent full-signature clients for the upper Minkowski recovery of the metric BV
 perimeter.  Checks: the recovery for an arbitrary target of finite perimeter (measurable
@@ -10,6 +12,8 @@ sequence and every target; the exact infinite boundary (`liminf = ⊤` at infini
 empty set, the full set, a measurable null set and zero perimeter (contents tending to `0`); and
 the uniform law on `[0, 1]` with the null target `{0}`.  Not claimed: any relaxation identity,
 pointwise equality of contents and perimeter, recovery at infinite perimeter. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -35,17 +39,30 @@ theorem recovery (ν : ProbabilityMeasure V) {B : Set V} (hB : perimeter (ν : M
 /-- The explicit sets: open, measurable, positive radii, step bounds and both limits. -/
 theorem explicitSets (ν : ProbabilityMeasure V) {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
-    (∀ n, 0 < upperRecoveryRadius (ν : Measure V) hB n) ∧ (∀ n, IsOpen (upperRecoverySet (ν : Measure V) hB n)) ∧
-      (∀ n, MeasurableSet (upperRecoverySet (ν : Measure V) hB n)) ∧
-      (∀ n, Isoperimetry.upperMinkowskiContent (ν : Measure V) (upperRecoverySet (ν : Measure V) hB n) ≤
-        Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) +
-          ENNReal.ofReal (1 / ((n : ℝ) + 1))) ∧
-      Tendsto (fun n => ∫⁻ x, ‖(upperRecoverySet (ν : Measure V) hB n).indicator (1 : V → ℝ) x -
-        B.indicator 1 x‖ₑ ∂(ν : Measure V)) atTop (𝓝 0) ∧
-      Tendsto (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (upperRecoverySet (ν : Measure V) hB n)) atTop
-        (𝓝 (perimeter (ν : Measure V) B)) :=
-  ⟨upperRecoveryRadius_pos (ν : Measure V) hB, isOpen_upperRecoverySet (ν : Measure V) hB, measurableSet_upperRecoverySet (ν : Measure V) hB,
-    upperMinkowskiContent_upperRecoverySet_le (ν : Measure V) hB, tendsto_indicator_upperRecoverySet (ν : Measure V) hB,
+    (∀ n, 0 < upperRecoveryRadius (ν : Measure V) hB n) ∧
+      (∀ n, IsOpen (upperRecoverySet (ν : Measure V) hB n)) ∧
+        (∀ n, MeasurableSet (upperRecoverySet (ν : Measure V) hB n)) ∧
+          (∀ n,
+              Isoperimetry.upperMinkowskiContent (ν : Measure V)
+                  (upperRecoverySet (ν : Measure V) hB n) ≤
+                Isoperimetry.minkowskiContent (ν : Measure V)
+                    (minkowskiRecoverySet (ν : Measure V) hB n) +
+                  ENNReal.ofReal (1 / ((n : ℝ) + 1))) ∧
+            Tendsto
+                (fun n =>
+                  ∫⁻ x,
+                    ‖(upperRecoverySet (ν : Measure V) hB n).indicator (1 : V → ℝ) x -
+                        B.indicator 1 x‖ₑ ∂(ν : Measure V))
+                atTop (𝓝 0) ∧
+              Tendsto
+                (fun n =>
+                  Isoperimetry.upperMinkowskiContent (ν : Measure V)
+                    (upperRecoverySet (ν : Measure V) hB n))
+                atTop (𝓝 (perimeter (ν : Measure V) B)) :=
+  ⟨upperRecoveryRadius_pos (ν : Measure V) hB, isOpen_upperRecoverySet (ν : Measure V) hB,
+    measurableSet_upperRecoverySet (ν : Measure V) hB,
+    upperMinkowskiContent_upperRecoverySet_le (ν : Measure V) hB,
+    tendsto_indicator_upperRecoverySet (ν : Measure V) hB,
     tendsto_upperMinkowskiContent_upperRecoverySet (ν : Measure V) hB⟩
 
 /-- Termwise finiteness of the lower contents of the lower recovery sets, from the explicit
@@ -69,11 +86,13 @@ theorem step (ν : ProbabilityMeasure V) {A : Set V} (hA : MeasurableSet A)
 /-- The diagonal error bound through the `n`-th lower recovery set. -/
 theorem diagonalError (ν : ProbabilityMeasure V) {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) :
-    ∫⁻ x, ‖(upperRecoverySet (ν : Measure V) hB n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
-        ∂(ν : Measure V) ≤
+    ∫⁻ x,
+        ‖(upperRecoverySet (ν : Measure V) hB n).indicator (1 : V → ℝ) x -
+            B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
       ENNReal.ofReal (1 / ((n : ℝ) + 1)) +
-        ∫⁻ x, ‖(minkowskiRecoverySet (ν : Measure V) hB n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
-          ∂(ν : Measure V) :=
+        ∫⁻ x,
+          ‖(minkowskiRecoverySet (ν : Measure V) hB n).indicator (1 : V → ℝ) x -
+              B.indicator 1 x‖ₑ ∂(ν : Measure V) :=
   lintegral_enorm_upperRecoverySet_sub_le (ν : Measure V) hB n
 
 /-- Lower bound for every target and every measurable `L¹`-convergent sequence (no finiteness). -/
@@ -114,10 +133,16 @@ theorem emptySet (ν : ProbabilityMeasure V) :
 /-- The full set has zero perimeter for a probability law (complement symmetry). -/
 theorem fullSet (ν : ProbabilityMeasure V) :
     perimeter (ν : Measure V) (univ : Set V) = 0 ∧
-      ∃ U : ℕ → Set V, (∀ n, MeasurableSet (U n)) ∧
-        Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - (univ : Set V).indicator 1 x‖ₑ
-          ∂(ν : Measure V)) atTop (𝓝 0) ∧
-        Tendsto (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (U n)) atTop (𝓝 0) := by
+      ∃ U : ℕ → Set V,
+        (∀ n, MeasurableSet (U n)) ∧
+          Tendsto
+              (fun n =>
+                ∫⁻ x,
+                  ‖(U n).indicator (1 : V → ℝ) x -
+                      (univ : Set V).indicator 1 x‖ₑ ∂(ν : Measure V))
+              atTop (𝓝 0) ∧
+            Tendsto (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (U n)) atTop
+              (𝓝 0) := by
   have h0 : perimeter (ν : Measure V) (univ : Set V) = 0 := by
     have := perimeter_compl_of_isFiniteMeasure (ν : Measure V) (∅ : Set V)
     rwa [compl_empty, perimeter_empty] at this
@@ -162,12 +187,20 @@ theorem uniform_singleton : (uniformInterval : Measure ℝ) {0} = 0 := by
 
 theorem uniformNullTarget :
     perimeter (uniformInterval : Measure ℝ) {0} = 0 ∧
-      ∃ U : ℕ → Set ℝ, (∀ n, MeasurableSet (U n)) ∧
-        Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : ℝ → ℝ) x - ({0} : Set ℝ).indicator 1 x‖ₑ
-          ∂(uniformInterval : Measure ℝ)) atTop (𝓝 0) ∧
-        Tendsto (fun n => Isoperimetry.upperMinkowskiContent (uniformInterval : Measure ℝ) (U n)) atTop (𝓝 0) :=
+      ∃ U : ℕ → Set ℝ,
+        (∀ n, MeasurableSet (U n)) ∧
+          Tendsto
+              (fun n =>
+                ∫⁻ x,
+                  ‖(U n).indicator (1 : ℝ → ℝ) x -
+                      ({0} : Set ℝ).indicator 1 x‖ₑ ∂(uniformInterval : Measure ℝ))
+              atTop (𝓝 0) ∧
+            Tendsto
+              (fun n => Isoperimetry.upperMinkowskiContent (uniformInterval : Measure ℝ) (U n))
+              atTop (𝓝 0) :=
   ⟨perimeter_eq_zero_of_measure_eq_zero uniformInterval (measurableSet_singleton 0)
-    uniform_singleton, nullSet uniformInterval (measurableSet_singleton 0) uniform_singleton⟩
+      uniform_singleton,
+    nullSet uniformInterval (measurableSet_singleton 0) uniform_singleton⟩
 
 #print axioms recovery
 #print axioms explicitSets

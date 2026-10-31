@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
-import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Regularity
 
 /-!
 # Proximal points, Moreau derivatives and resolvent symmetry
@@ -12,6 +14,8 @@ the original dimension-free resolvent derivative proof. This supports the
 local MA route of Letwin2607.24164v1 Lemma2.2 / BB1207.6128v1 Thm2.24(ii);
 no MA equation, reference existence or regularity of the unknown source is assumed.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set
@@ -132,10 +136,12 @@ private theorem subgradient_of_proximal_minimizer
   rw [hi]
   linarith
 
-/-- The **proximal point** (resolvent of the subdifferential) of `f` at `z`: a point `x` such that
+/--
+The **proximal point** (resolvent of the subdifferential) of `f` at `z`: a point `x` such that
 `z − x` is a subgradient of `f` at `x`, i.e. the minimiser of `x ↦ f x + ½‖x − z‖²` (Alexandrov's
 theorem). For convex `f` on a finite-dimensional space it exists and is unique. -/
-def proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (f : E → ℝ) (z : E) : E :=
+def proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (f : E → ℝ)
+    (z : E) : E :=
   Classical.epsilon fun x => ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y
 
 section FiniteDimensional
@@ -208,50 +214,53 @@ section InnerProduct
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-def moreauEnvelope (f : E→ℝ) (ε : ℝ) (x : E) : ℝ :=
-  ε⁻¹*(ε*f ((proximalPoint (fun z => ε * f z)) x)+(1/2:ℝ)*‖(proximalPoint (fun z => ε * f z)) x-x‖^2)
+def moreauEnvelope (f : E → ℝ) (ε : ℝ) (x : E) : ℝ :=
+  ε⁻¹ *
+    (ε * f ((proximalPoint (fun z => ε * f z)) x) +
+      (1 / 2 : ℝ) * ‖(proximalPoint (fun z => ε * f z)) x - x‖ ^ 2)
 
 /-- Actual quadratic minimum and dual-value bounds, shared by the old
 resolvent derivative and the scaled Moreau source. No dimension or completeness. -/
 private lemma proximal_quadratic_bounds {f : E → ℝ} {P : E → E}
-    (hP : ∀ z y, f (P z) + ⟪z-P z,y-P z⟫ ≤ f y) (z : E) :
-    let g : E → ℝ := fun w => (1/2:ℝ)*‖w‖^2-(f (P w)+(1/2:ℝ)*‖P w-w‖^2)
-    (∀ y, f (P z)+(1/2:ℝ)*‖P z-z‖^2 ≤ f y+(1/2:ℝ)*‖y-z‖^2) ∧
-      (∀ w,0≤g w-g z-⟪P z,w-z⟫ ∧ g w-g z-⟪P z,w-z⟫≤(1/2:ℝ)*‖w-z‖^2) := by
-  let g : E → ℝ := fun w => (1/2:ℝ)*‖w‖^2-(f (P w)+(1/2:ℝ)*‖P w-w‖^2)
-  refine ⟨?_,?_⟩
+    (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :
+    let g : E → ℝ := fun w => (1 / 2 : ℝ) * ‖w‖ ^ 2 - (f (P w) + (1 / 2 : ℝ) * ‖P w - w‖ ^ 2)
+    (∀ y, f (P z) + (1 / 2 : ℝ) * ‖P z - z‖ ^ 2 ≤ f y + (1 / 2 : ℝ) * ‖y - z‖ ^ 2) ∧
+      (∀ w,
+        0 ≤ g w - g z - ⟪P z, w - z⟫ ∧ g w - g z - ⟪P z, w - z⟫ ≤ (1 / 2 : ℝ) * ‖w - z‖ ^ 2) := by
+  let g : E → ℝ := fun w => (1 / 2 : ℝ) * ‖w‖ ^ 2 - (f (P w) + (1 / 2 : ℝ) * ‖P w - w‖ ^ 2)
+  refine ⟨?_, ?_⟩
   · intro y
     have hp := hP z y
-    have hs := sq_nonneg ‖y-P z‖
-    simp only [←real_inner_self_eq_norm_sq,inner_sub_left,inner_sub_right] at hp hs ⊢
+    have hs := sq_nonneg ‖y - P z‖
+    simp only [← real_inner_self_eq_norm_sq, inner_sub_left, inner_sub_right] at hp hs ⊢
     simp only [real_inner_comm] at hp hs ⊢
-    linarith only [hp,hs]
+    linarith only [hp, hs]
   · intro w
-    change 0≤g w-g z-⟪P z,w-z⟫ ∧ g w-g z-⟪P z,w-z⟫≤(1/2:ℝ)*‖w-z‖^2
+    change 0 ≤ g w - g z - ⟪P z, w - z⟫ ∧ g w - g z - ⟪P z, w - z⟫ ≤ (1 / 2 : ℝ) * ‖w - z‖ ^ 2
     have hpw := hP w (P z)
     have hpz := hP z (P w)
     have hsq := sq_nonneg ‖(w - z) - (P w - P z)‖
     have hsq' := sq_nonneg ‖P w - P z‖
     dsimp only [g]
-    simp only [← real_inner_self_eq_norm_sq, inner_sub_left, inner_sub_right]
-      at hpw hpz hsq hsq' ⊢
+    simp only [← real_inner_self_eq_norm_sq, inner_sub_left,
+      inner_sub_right] at hpw hpz hsq hsq' ⊢
     simp only [real_inner_comm] at hpw hpz hsq hsq' ⊢
     constructor
     · linarith only [hpw, hsq']
     · linarith only [hpz, hsq]
 
-/-- **The resolvent of a convex function is a gradient** (Alexandrov's theorem): if `P z` is a point
+/--
+**The resolvent of a convex function is a gradient** (Alexandrov's theorem): if `P z` is a point
 at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
-`w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at every `z`. -/
-theorem hasFDerivAt_half_sq_sub_moreau
-    {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :
+`w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at
+every `z`. -/
+theorem hasFDerivAt_half_sq_sub_moreau {f : E → ℝ} {P : E → E}
+    (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :
     HasFDerivAt (fun w => (1 / 2) * ‖w‖ ^ 2 - (f (P w) + (1 / 2) * ‖P w - w‖ ^ 2))
       (innerSL ℝ (P z)) z := by
-  let g : E → ℝ := fun w =>
-    (1 / 2) * ‖w‖ ^ 2 - (f (P w) + (1 / 2) * ‖P w - w‖ ^ 2)
+  let g : E → ℝ := fun w => (1 / 2) * ‖w‖ ^ 2 - (f (P w) + (1 / 2) * ‖P w - w‖ ^ 2)
   have hbound (w : E) :
-      0 ≤ g w - g z - ⟪P z, w - z⟫ ∧
-        g w - g z - ⟪P z, w - z⟫ ≤ (1 / 2) * ‖w - z‖ ^ 2 := by
+    0 ≤ g w - g z - ⟪P z, w - z⟫ ∧ g w - g z - ⟪P z, w - z⟫ ≤ (1 / 2) * ‖w - z‖ ^ 2 := by
     exact (proximal_quadratic_bounds hP z).2 w
   change HasFDerivAt g (innerSL ℝ (P z)) z
   apply HasFDerivAt.of_isLittleO
@@ -323,53 +332,63 @@ section MoreauRegularization
 variable [FiniteDimensional ℝ E]
 
 omit [FiniteDimensional ℝ E] in
-private lemma moreau_scaled_convex {f : E→ℝ} (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε) :
-    ConvexOn ℝ univ (fun y => ε*f y) := by
+private lemma moreau_scaled_convex {f : E → ℝ} (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0 < ε) :
+    ConvexOn ℝ univ (fun y => ε * f y) := by
   simpa only [smul_eq_mul] using ConvexOn.smul hε.le hf
 
-private lemma moreau_support (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε)
+private lemma moreau_support (f : E → ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0 < ε)
     (x y : E) :
-    moreauEnvelope f ε x+⟪ε⁻¹ • (x-(proximalPoint (fun z => ε * f z)) x),y-x⟫≤ moreauEnvelope f ε y := by
-  have hb := ((proximal_quadratic_bounds
-    (proximalPoint_spec (moreau_scaled_convex hf hε)) x).2 y).2
-  have he (z : E) : ε*moreauEnvelope f ε z=ε*f ((proximalPoint (fun z => ε * f z)) z)+(1/2:ℝ)*‖(proximalPoint (fun z => ε * f z)) z-z‖^2 := by
+    moreauEnvelope f ε x + ⟪ε⁻¹ • (x - (proximalPoint (fun z => ε * f z)) x), y - x⟫ ≤
+      moreauEnvelope f ε y := by
+  have hb :=
+    ((proximal_quadratic_bounds (proximalPoint_spec (moreau_scaled_convex hf hε)) x).2 y).2
+  have he (z : E) :
+    ε * moreauEnvelope f ε z =
+      ε * f ((proximalPoint (fun z => ε * f z)) z) +
+        (1 / 2 : ℝ) * ‖(proximalPoint (fun z => ε * f z)) z - z‖ ^ 2 := by
     dsimp [moreauEnvelope]
-    rw [←mul_assoc,mul_inv_cancel₀ hε.ne',one_mul]
+    rw [← mul_assoc, mul_inv_cancel₀ hε.ne', one_mul]
   apply (mul_le_mul_iff_right₀ hε).mp
-  rw [mul_add,he,he]
-  have hi : ε*⟪ε⁻¹ • (x-(proximalPoint (fun z => ε * f z)) x),y-x⟫=⟪x-(proximalPoint (fun z => ε * f z)) x,y-x⟫ := by
-    rw [real_inner_smul_left,←mul_assoc,mul_inv_cancel₀ hε.ne',one_mul]
+  rw [mul_add, he, he]
+  have hi :
+    ε * ⟪ε⁻¹ • (x - (proximalPoint (fun z => ε * f z)) x), y - x⟫ =
+      ⟪x - (proximalPoint (fun z => ε * f z)) x, y - x⟫ := by
+    rw [real_inner_smul_left, ← mul_assoc, mul_inv_cancel₀ hε.ne', one_mul]
   rw [hi]
-  simp only [←real_inner_self_eq_norm_sq,inner_sub_left,inner_sub_right] at hb ⊢
+  simp only [← real_inner_self_eq_norm_sq, inner_sub_left, inner_sub_right] at hb ⊢
   simp only [real_inner_comm] at hb ⊢
   linarith only [hb]
 
-private lemma moreau_convex (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε) :
+private lemma moreau_convex (f : E → ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0 < ε) :
     ConvexOn ℝ univ (moreauEnvelope f ε) := by
-  refine ⟨convex_univ,?_⟩
+  refine ⟨convex_univ, ?_⟩
   intro x _ y _ a b ha hb hab
-  let z := a • x+b • y
-  let g := ε⁻¹ • (z-(proximalPoint (fun z => ε * f z)) z)
+  let z := a • x + b • y
+  let g := ε⁻¹ • (z - (proximalPoint (fun z => ε * f z)) z)
   have hx := moreau_support f hf hε z x
   have hy := moreau_support f hf hε z y
-  have hvec : a • (x-z)+b • (y-z)=0 := by
+  have hvec : a • (x - z) + b • (y - z) = 0 := by
     calc
-      _ = a • x+b • y-(a+b) • z := by rw [add_smul,smul_sub,smul_sub];abel
-      _ = 0 := by rw [hab,one_smul];dsimp [z];abel
-  have hi := congrArg (fun w => ⟪g,w⟫) hvec
-  simp only [inner_add_right,real_inner_smul_right,inner_zero_right] at hi
+      _ = a • x + b • y - (a + b) • z := by rw [add_smul, smul_sub, smul_sub]; abel
+      _ = 0 := by rw [hab, one_smul]; dsimp [z]; abel
+  have hi := congrArg (fun w => ⟪g, w⟫) hvec
+  simp only [inner_add_right, real_inner_smul_right, inner_zero_right] at hi
   have hax := mul_le_mul_of_nonneg_left hx ha
   have hby := mul_le_mul_of_nonneg_left hy hb
-  change moreauEnvelope f ε z≤a*moreauEnvelope f ε x+b*moreauEnvelope f ε y
-  change a*⟪ε⁻¹ • (z-(proximalPoint (fun z => ε * f z)) z),x-z⟫+b*⟪ε⁻¹ • (z-(proximalPoint (fun z => ε * f z)) z),y-z⟫=0 at hi
-  have he : (a+b)*moreauEnvelope f ε z=moreauEnvelope f ε z := by rw [hab,one_mul]
-  nlinarith only [hax,hby,hi,he]
+  change moreauEnvelope f ε z ≤ a * moreauEnvelope f ε x + b * moreauEnvelope f ε y
+  change
+    a * ⟪ε⁻¹ • (z - (proximalPoint (fun z => ε * f z)) z), x - z⟫ +
+        b * ⟪ε⁻¹ • (z - (proximalPoint (fun z => ε * f z)) z), y - z⟫ =
+      0 at hi
+  have he : (a + b) * moreauEnvelope f ε z = moreauEnvelope f ε z := by rw [hab, one_mul]
+  nlinarith only [hax, hby, hi, he]
 
-private lemma moreau_derivative (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε)
-    (x : E) : HasFDerivAt (moreauEnvelope f ε)
-      (innerSL ℝ (ε⁻¹ • (x-(proximalPoint (fun z => ε * f z)) x))) x := by
-  have hhalf : HasFDerivAt (fun y : E => (1/2:ℝ)*‖y‖^2) (innerSL ℝ x) x := by
-    convert! ((hasStrictFDerivAt_norm_sq x).hasFDerivAt.const_mul (1/2:ℝ)) using 1
+private lemma moreau_derivative (f : E → ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0 < ε)
+    (x : E) :
+    HasFDerivAt (moreauEnvelope f ε)
+      (innerSL ℝ (ε⁻¹ • (x - (proximalPoint (fun z => ε * f z)) x))) x := by
+  have hhalf : HasFDerivAt (fun y : E => (1 / 2 : ℝ) * ‖y‖ ^ 2) (innerSL ℝ x) x := by
+    convert! ((hasStrictFDerivAt_norm_sq x).hasFDerivAt.const_mul (1 / 2 : ℝ)) using 1
     ext y
     simp
   have hd := hasFDerivAt_half_sq_sub_moreau (proximalPoint_spec (moreau_scaled_convex hf hε)) x
@@ -382,110 +401,142 @@ private lemma moreau_derivative (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : �
     simp
 
 /-- Actual positive-parameter Moreau regularity: no C1 or gradient supplied. -/
-theorem moreauEnvelope_regularization (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε) :
-    ConvexOn ℝ univ (moreauEnvelope f ε) ∧ ContDiff ℝ 1 (moreauEnvelope f ε) ∧
-    (∀ x,gradient (moreauEnvelope f ε) x=ε⁻¹ • (x-(proximalPoint (fun z => ε * f z)) x)) ∧
-    LipschitzWith (‖(ε⁻¹ : ℝ)‖₊*2) (gradient (moreauEnvelope f ε)) := by
+theorem moreauEnvelope_regularization (f : E → ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ}
+    (hε : 0 < ε) :
+    ConvexOn ℝ univ (moreauEnvelope f ε) ∧
+      ContDiff ℝ 1 (moreauEnvelope f ε) ∧
+        (∀ x,
+            gradient (moreauEnvelope f ε) x =
+              ε⁻¹ • (x - (proximalPoint (fun z => ε * f z)) x)) ∧
+          LipschitzWith (‖(ε⁻¹ : ℝ)‖₊ * 2) (gradient (moreauEnvelope f ε)) := by
   have hcv := moreau_convex f hf hε
   have hd := moreau_derivative f hf hε
-  have hg (x : E) : gradient (moreauEnvelope f ε) x=ε⁻¹ • (x-(proximalPoint (fun z => ε * f z)) x) :=
+  have hg (x : E) :
+    gradient (moreauEnvelope f ε) x = ε⁻¹ • (x - (proximalPoint (fun z => ε * f z)) x) :=
     (subgradient_eq_gradient (hd x).differentiableAt (moreau_support f hf hε x)).symm
-  refine ⟨hcv,contDiff_one_of_convexOn_of_differentiable hcv (fun x => (hd x).differentiableAt),hg,?_⟩
-  have hp : LipschitzWith 1 ((proximalPoint (fun z => ε * f z))) := lipschitzWith_proximalPoint (moreau_scaled_convex hf hε)
+  refine
+    ⟨hcv, contDiff_one_of_convexOn_of_differentiable hcv (fun x => (hd x).differentiableAt), hg,
+      ?_⟩
+  have hp : LipschitzWith 1 ((proximalPoint (fun z => ε * f z))) :=
+    lipschitzWith_proximalPoint (moreau_scaled_convex hf hε)
   apply LipschitzWith.of_dist_le_mul
   intro x y
-  have hpn : ‖(proximalPoint (fun z => ε * f z)) x-(proximalPoint (fun z => ε * f z)) y‖≤‖x-y‖ := by
-    simpa only [dist_eq_norm,NNReal.coe_one,one_mul] using hp.dist_le_mul x y
-  have hr : ‖(x-(proximalPoint (fun z => ε * f z)) x)-(y-(proximalPoint (fun z => ε * f z)) y)‖≤2*‖x-y‖ := by
-    rw [show (x-(proximalPoint (fun z => ε * f z)) x)-(y-(proximalPoint (fun z => ε * f z)) y)=(x-y)-((proximalPoint (fun z => ε * f z)) x-(proximalPoint (fun z => ε * f z)) y) by abel]
-    have hn := norm_sub_le (x-y) ((proximalPoint (fun z => ε * f z)) x-(proximalPoint (fun z => ε * f z)) y)
+  have hpn :
+    ‖(proximalPoint (fun z => ε * f z)) x - (proximalPoint (fun z => ε * f z)) y‖ ≤ ‖x - y‖ := by
+    simpa only [dist_eq_norm, NNReal.coe_one, one_mul] using hp.dist_le_mul x y
+  have hr :
+    ‖(x - (proximalPoint (fun z => ε * f z)) x) - (y - (proximalPoint (fun z => ε * f z)) y)‖ ≤
+      2 * ‖x - y‖ := by
+    rw [show
+        (x - (proximalPoint (fun z => ε * f z)) x) -
+            (y - (proximalPoint (fun z => ε * f z)) y) =
+          (x - y) -
+            ((proximalPoint (fun z => ε * f z)) x - (proximalPoint (fun z => ε * f z)) y)
+        by abel]
+    have hn :=
+      norm_sub_le (x - y)
+        ((proximalPoint (fun z => ε * f z)) x - (proximalPoint (fun z => ε * f z)) y)
     linarith
-  simp only [hg,dist_eq_norm,←smul_sub,norm_smul,NNReal.coe_mul,coe_nnnorm,NNReal.coe_ofNat]
+  simp only [hg, dist_eq_norm, ← smul_sub, norm_smul, NNReal.coe_mul, coe_nnnorm,
+    NNReal.coe_ofNat]
   calc
-    _ ≤ ‖ε⁻¹‖*(2*‖x-y‖) := mul_le_mul_of_nonneg_left hr (norm_nonneg _)
+    _ ≤ ‖ε⁻¹‖ * (2 * ‖x - y‖) := mul_le_mul_of_nonneg_left hr (norm_nonneg _)
     _ = _ := by ring
 
 /-- The value formula genuinely attains the infimal quadratic bound. -/
-theorem moreauEnvelope_le_quadratic_cost (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε)
-    (x w : E) : moreauEnvelope f ε x≤f w+(2*ε)⁻¹*‖w-x‖^2 := by
-  have hh := (proximal_quadratic_bounds
-    (proximalPoint_spec (moreau_scaled_convex hf hε)) x).1 w
+theorem moreauEnvelope_le_quadratic_cost (f : E → ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ}
+    (hε : 0 < ε) (x w : E) : moreauEnvelope f ε x ≤ f w + (2 * ε)⁻¹ * ‖w - x‖ ^ 2 := by
+  have hh := (proximal_quadratic_bounds (proximalPoint_spec (moreau_scaled_convex hf hε)) x).1 w
   calc
-    _ ≤ ε⁻¹*(ε*f w+(1/2:ℝ)*‖w-x‖^2) := mul_le_mul_of_nonneg_left hh (inv_pos.mpr hε).le
+    _ ≤ ε⁻¹ * (ε * f w + (1 / 2 : ℝ) * ‖w - x‖ ^ 2) :=
+      mul_le_mul_of_nonneg_left hh (inv_pos.mpr hε).le
     _ = _ := by field_simp
 
 /-- Actual lower germs transfer to the SAME proximal point, with actual contact. -/
-theorem lower_contact_moreauEnvelope (f : E→ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0<ε)
-    {x : E} {ψ : E→ℝ} (hc : moreauEnvelope f ε x=ψ x)
-    (ht : ∀ᶠ z in 𝓝 x,ψ z≤ moreauEnvelope f ε z) :
+theorem lower_contact_moreauEnvelope (f : E → ℝ) (hf : ConvexOn ℝ univ f) {ε : ℝ} (hε : 0 < ε)
+    {x : E} {ψ : E → ℝ} (hc : moreauEnvelope f ε x = ψ x)
+    (ht : ∀ᶠ z in 𝓝 x, ψ z ≤ moreauEnvelope f ε z) :
     let y := (proximalPoint (fun z => ε * f z)) x
-    let c := (2*ε)⁻¹*‖y-x‖^2
-    f y=ψ (y+(x-y))-c ∧
-      ∀ᶠ w in 𝓝 y,ψ (w+(x-y))-c≤f w := by
+    let c := (2 * ε)⁻¹ * ‖y - x‖ ^ 2
+    f y = ψ (y + (x - y)) - c ∧ ∀ᶠ w in 𝓝 y, ψ (w + (x - y)) - c ≤ f w := by
   let y := (proximalPoint (fun z => ε * f z)) x
-  let c := (2*ε)⁻¹*‖y-x‖^2
-  have he : moreauEnvelope f ε x=f y+c := by dsimp [moreauEnvelope,y,c];field_simp
-  refine ⟨?_,?_⟩
-  · rw [show y+(x-y)=x by abel,←hc,he]
+  let c := (2 * ε)⁻¹ * ‖y - x‖ ^ 2
+  have he : moreauEnvelope f ε x = f y + c := by dsimp [moreauEnvelope, y, c]; field_simp
+  refine ⟨?_, ?_⟩
+  · rw [show y + (x - y) = x by abel, ← hc, he]
     ring
-  · have hh : Tendsto (fun w : E => w+(x-y)) (𝓝 y) (𝓝 x) := by
-      have hc : Continuous (fun w : E => w+(x-y)) := by fun_prop
+  · have hh : Tendsto (fun w : E => w + (x - y)) (𝓝 y) (𝓝 x) := by
+      have hc : Continuous (fun w : E => w + (x - y)) := by fun_prop
       have hh := hc.tendsto y
-      rwa [show y+(x-y)=x by abel] at hh
+      rwa [show y + (x - y) = x by abel] at hh
     filter_upwards [hh.eventually ht] with w hw
-    have hm := moreauEnvelope_le_quadratic_cost f hf hε (w+(x-y)) w
-    have hnorm : ‖w-(w+(x-y))‖^2=‖y-x‖^2 := by congr 1;congr 1;abel
+    have hm := moreauEnvelope_le_quadratic_cost f hf hε (w + (x - y)) w
+    have hnorm : ‖w - (w + (x - y))‖ ^ 2 = ‖y - x‖ ^ 2 := by congr 1; congr 1; abel
     rw [hnorm] at hm
-    change ψ (w+(x-y))-c≤f w
-    change moreauEnvelope f ε (w+(x-y))≤f w+c at hm
+    change ψ (w + (x - y)) - c ≤ f w
+    change moreauEnvelope f ε (w + (x - y)) ≤ f w + c at hm
     linarith
 
 /-- Lipschitz source generates the uniform error and actual proximal displacement. -/
-theorem moreauEnvelope_approximation (f : E→ℝ) (hf : ConvexOn ℝ univ f) {L : NNReal}
-    (hL : LipschitzWith L f) {ε : ℝ} (hε : 0<ε) (x : E) :
-    moreauEnvelope f ε x≤f x ∧ |moreauEnvelope f ε x-f x|≤ε*(L:ℝ)^2/2 ∧
-      ‖(proximalPoint (fun z => ε * f z)) x-x‖≤ε*(L:ℝ) := by
-  have hu : moreauEnvelope f ε x≤f x := by simpa using moreauEnvelope_le_quadratic_cost f hf hε x x
-  have hLip : f x-f ((proximalPoint (fun z => ε * f z)) x)≤(L:ℝ)*‖(proximalPoint (fun z => ε * f z)) x-x‖ := by
+theorem moreauEnvelope_approximation (f : E → ℝ) (hf : ConvexOn ℝ univ f) {L : NNReal}
+    (hL : LipschitzWith L f) {ε : ℝ} (hε : 0 < ε) (x : E) :
+    moreauEnvelope f ε x ≤ f x ∧
+      |moreauEnvelope f ε x - f x| ≤ ε * (L : ℝ) ^ 2 / 2 ∧
+        ‖(proximalPoint (fun z => ε * f z)) x - x‖ ≤ ε * (L : ℝ) := by
+  have hu : moreauEnvelope f ε x ≤ f x := by
+    simpa using moreauEnvelope_le_quadratic_cost f hf hε x x
+  have hLip :
+    f x - f ((proximalPoint (fun z => ε * f z)) x) ≤
+      (L : ℝ) * ‖(proximalPoint (fun z => ε * f z)) x - x‖ := by
     have h := hL.dist_le_mul x ((proximalPoint (fun z => ε * f z)) x)
-    rw [Real.dist_eq,dist_eq_norm,norm_sub_rev] at h
+    rw [Real.dist_eq, dist_eq_norm, norm_sub_rev] at h
     exact (le_abs_self _).trans h
-  have he : ε*moreauEnvelope f ε x=ε*f ((proximalPoint (fun z => ε * f z)) x)+(1/2:ℝ)*‖(proximalPoint (fun z => ε * f z)) x-x‖^2 := by
-    dsimp [moreauEnvelope];rw [←mul_assoc,mul_inv_cancel₀ hε.ne',one_mul]
-  have herror : f x-moreauEnvelope f ε x≤ε*(L:ℝ)^2/2 := by
+  have he :
+    ε * moreauEnvelope f ε x =
+      ε * f ((proximalPoint (fun z => ε * f z)) x) +
+        (1 / 2 : ℝ) * ‖(proximalPoint (fun z => ε * f z)) x - x‖ ^ 2 := by
+    dsimp [moreauEnvelope]; rw [← mul_assoc, mul_inv_cancel₀ hε.ne', one_mul]
+  have herror : f x - moreauEnvelope f ε x ≤ ε * (L : ℝ) ^ 2 / 2 := by
     apply (mul_le_mul_iff_right₀ hε).mp
     have hh := mul_le_mul_of_nonneg_left hLip hε.le
-    nlinarith only [he,hh,sq_nonneg (‖(proximalPoint (fun z => ε * f z)) x-x‖-ε*(L:ℝ))]
+    nlinarith only [he, hh,
+      sq_nonneg (‖(proximalPoint (fun z => ε * f z)) x - x‖ - ε * (L : ℝ))]
   have hp := proximalPoint_spec (moreau_scaled_convex hf hε) x x
-  change ε*f ((proximalPoint (fun z => ε * f z)) x)+⟪x-(proximalPoint (fun z => ε * f z)) x,x-(proximalPoint (fun z => ε * f z)) x⟫≤ε*f x at hp
-  rw [real_inner_self_eq_norm_sq,norm_sub_rev] at hp
-  have hd : ‖(proximalPoint (fun z => ε * f z)) x-x‖^2≤ε*(L:ℝ)*‖(proximalPoint (fun z => ε * f z)) x-x‖ := by
+  change
+    ε * f ((proximalPoint (fun z => ε * f z)) x) +
+        ⟪x - (proximalPoint (fun z => ε * f z)) x, x - (proximalPoint (fun z => ε * f z)) x⟫ ≤
+      ε * f x at hp
+  rw [real_inner_self_eq_norm_sq, norm_sub_rev] at hp
+  have hd :
+    ‖(proximalPoint (fun z => ε * f z)) x - x‖ ^ 2 ≤
+      ε * (L : ℝ) * ‖(proximalPoint (fun z => ε * f z)) x - x‖ := by
     have hh := mul_le_mul_of_nonneg_left hLip hε.le
-    nlinarith only [hp,hh]
-  have hdisp : ‖(proximalPoint (fun z => ε * f z)) x-x‖≤ε*(L:ℝ) := by
+    nlinarith only [hp, hh]
+  have hdisp : ‖(proximalPoint (fun z => ε * f z)) x - x‖ ≤ ε * (L : ℝ) := by
     by_contra hbad
     have hh := lt_of_not_ge hbad
-    have hn : 0<‖(proximalPoint (fun z => ε * f z)) x-x‖ := lt_of_le_of_lt (by positivity) hh
+    have hn : 0 < ‖(proximalPoint (fun z => ε * f z)) x - x‖ :=
+      lt_of_le_of_lt (by positivity) hh
     have hm := mul_pos hn (sub_pos.mpr hh)
-    nlinarith only [hd,hm]
-  refine ⟨hu,?_,hdisp⟩
+    nlinarith only [hd, hm]
+  refine ⟨hu, ?_, hdisp⟩
   rw [abs_of_nonpos (sub_nonpos.mpr hu)]
   linarith
 
 /-- The actual quantitative error produces uniform convergence, not an input. -/
-theorem tendstoUniformlyOn_moreauEnvelope (f : E→ℝ) (hf : ConvexOn ℝ univ f) {L : NNReal}
+theorem tendstoUniformlyOn_moreauEnvelope (f : E → ℝ) (hf : ConvexOn ℝ univ f) {L : NNReal}
     (hL : LipschitzWith L f) :
     TendstoUniformlyOn (fun ε : ℝ => moreauEnvelope f ε) f (𝓝[>] (0 : ℝ)) univ := by
   rw [Metric.tendstoUniformlyOn_iff]
   intro δ hδ
-  have hs : ∀ᶠ ε : ℝ in 𝓝[>] 0, ε<δ/((L:ℝ)^2+1) :=
+  have hs : ∀ᶠ ε : ℝ in 𝓝[>] 0, ε < δ / ((L : ℝ) ^ 2 + 1) :=
     (eventually_lt_nhds (div_pos hδ (by positivity))).filter_mono nhdsWithin_le_nhds
-  filter_upwards [self_mem_nhdsWithin,hs] with ε hε he x _
-  have hpos : 0<ε := hε
+  filter_upwards [self_mem_nhdsWithin, hs] with ε hε he x _
+  have hpos : 0 < ε := hε
   have hb := (moreauEnvelope_approximation f hf hL hpos x).2.1
-  have hd : ε*((L:ℝ)^2+1)<δ := (lt_div_iff₀ (by positivity)).mp he
-  rw [Real.dist_eq,abs_sub_comm]
-  nlinarith only [hb,hd,hpos,sq_nonneg (L:ℝ)]
+  have hd : ε * ((L : ℝ) ^ 2 + 1) < δ := (lt_div_iff₀ (by positivity)).mp he
+  rw [Real.dist_eq, abs_sub_comm]
+  nlinarith only [hb, hd, hpos, sq_nonneg (L : ℝ)]
 
 end MoreauRegularization
 

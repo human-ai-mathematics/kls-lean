@@ -1,7 +1,9 @@
-import FunctionalInequalities.Energy.Relaxation.Approximation
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Topology.Instances.ENNReal.Lemmas
-import Mathlib.Topology.Semicontinuity.Basic
+module
+
+public import FunctionalInequalities.Energy.Relaxation.Approximation
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
+public import Mathlib.Topology.Semicontinuity.Basic
 
 /-!
 # Lower semicontinuity of sequential relaxation
@@ -15,6 +17,8 @@ No quadratic law, dense-realization hypothesis, or Markov property is used here.
 first-countable setting, a sequential relaxation need not describe the topological
 lower-semicontinuous envelope.
 -/
+
+@[expose] public section
 
 noncomputable section
 

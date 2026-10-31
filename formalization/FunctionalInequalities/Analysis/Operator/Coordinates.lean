@@ -1,21 +1,29 @@
-import FunctionalInequalities.Analysis.RingInverseDerivative
-import FunctionalInequalities.Analysis.Matrix.Positivity
-import Mathlib.Analysis.Normed.Operator.Banach
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.RingInverseDerivative
+public import FunctionalInequalities.Analysis.Matrix.Positivity
+public import Mathlib.Analysis.Normed.Operator.Banach
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-!
 # Orthonormal coordinates of operators
 
 Entries `⟪b i, M (b j)⟫` of a continuous linear operator in an orthonormal basis: products, triple
-products, entries of derivatives, and the coordinate form of the inverse derivative; and the full matrix
-`operatorMatrix b T = LinearMap.toMatrixOrthonormal b T` with its inverse `operatorOfMatrix`, positivity,
-unit and inverse transfer (identified with the entries by `operatorMatrix_apply_eq_operatorEntry`), and the
-continuous linear charts `operatorOfMatrixL`/`operatorMatrixL` between Euclidean matrix entries and operators
+products, entries of derivatives, and the coordinate form of the inverse derivative; and the full
+matrix
+`operatorMatrix b T = LinearMap.toMatrixOrthonormal b T` with its inverse `operatorOfMatrix`,
+positivity,
+unit and inverse transfer (identified with the entries by `operatorMatrix_apply_eq_operatorEntry`),
+and the
+continuous linear charts `operatorOfMatrixL`/`operatorMatrixL` between Euclidean matrix entries and
+operators
 (finite-dimensional norm comparison; no identification of the Frobenius and operator norms).
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped RealInnerProductSpace MatrixOrder
@@ -29,7 +37,8 @@ def operatorEntry {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (M : E →L[ℝ
   ⟪b i, M (b j)⟫
 
 /-- Entries of a product are the matrix product of entries. -/
-theorem operatorEntry_mul {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (M N : E →L[ℝ] E) (i j : Fin m) :
+theorem operatorEntry_mul {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (M N : E →L[ℝ] E)
+    (i j : Fin m) :
     operatorEntry b (M * N) i j = ∑ k, operatorEntry b M i k * operatorEntry b N k j := by
   change ⟪b i, M (N (b j))⟫ = _
   conv_lhs => rw [← b.sum_repr' (N (b j))]
@@ -38,9 +47,10 @@ theorem operatorEntry_mul {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (M N : 
   intro k _hk
   ring
 
-theorem operatorEntry_mul_three {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    (M N P : E →L[ℝ] E) (i j : Fin m) :
-    operatorEntry b (M * N * P) i j = ∑ a, ∑ c, operatorEntry b M i a * operatorEntry b N a c * operatorEntry b P c j := by
+theorem operatorEntry_mul_three {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (M N P : E →L[ℝ] E)
+    (i j : Fin m) :
+    operatorEntry b (M * N * P) i j =
+      ∑ a, ∑ c, operatorEntry b M i a * operatorEntry b N a c * operatorEntry b P c j := by
   rw [operatorEntry_mul]
   simp_rw [operatorEntry_mul, Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -60,13 +70,16 @@ section Inverse
 
 variable [CompleteSpace E]
 
-/-- Derivative of an entry of `H⁻¹` in coordinates: `−Σ_{a,c} (H⁻¹)_{ia} (DH[v])_{ac} (H⁻¹)_{cj}`. -/
+/--
+Derivative of an entry of `H⁻¹` in coordinates: `−Σ_{a,c} (H⁻¹)_{ia} (DH[v])_{ac} (H⁻¹)_{cj}`. -/
 theorem operatorEntry_ringInverse_fderiv_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
     {H : E → (E →L[ℝ] E)} {x : E} (hH : DifferentiableAt ℝ H x) (hunit : IsUnit (H x))
     (i j : Fin m) (v : E) :
     fderiv ℝ (fun y => operatorEntry b (Ring.inverse (H y)) i j) x v =
-      -(∑ a, ∑ c, operatorEntry b (Ring.inverse (H x)) i a *
-        operatorEntry b (fderiv ℝ H x v) a c * operatorEntry b (Ring.inverse (H x)) c j) := by
+      -(∑ a,
+          ∑ c,
+            operatorEntry b (Ring.inverse (H x)) i a * operatorEntry b (fderiv ℝ H x v) a c *
+              operatorEntry b (Ring.inverse (H x)) c j) := by
   rw [operatorEntry_fderiv_apply b (hH.inverse hunit), fderiv_ringInverse_comp_apply hH hunit]
   simp only [operatorEntry, neg_apply, inner_neg_right]
   change -operatorEntry b (Ring.inverse (H x) * fderiv ℝ H x v * Ring.inverse (H x)) i j = _
@@ -81,7 +94,9 @@ open Matrix
 
 variable [FiniteDimensional ℝ E] {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- The matrix of an operator in an orthonormal basis (`LinearMap.toMatrixOrthonormal`); its `(i, j)` entry is
+/--
+The matrix of an operator in an orthonormal basis (`LinearMap.toMatrixOrthonormal`); its `(i, j)`
+entry is
 `operatorEntry b T i j` (`operatorMatrix_apply_eq_operatorEntry`). -/
 def operatorMatrix (b : OrthonormalBasis ι ℝ E) (T : E →L[ℝ] E) : Matrix ι ι ℝ :=
   LinearMap.toMatrixOrthonormal b T.toLinearMap
@@ -99,7 +114,8 @@ def operatorOfMatrix (b : OrthonormalBasis ι ℝ E) (M : Matrix ι ι ℝ) : E 
   exact congrArg (fun f : E →ₗ[ℝ] E => f.toContinuousLinearMap)
     ((LinearMap.toMatrixOrthonormal b).symm_apply_apply T.toLinearMap)
 
-theorem operatorMatrix_injective (b : OrthonormalBasis ι ℝ E) : Function.Injective (operatorMatrix b) := by
+theorem operatorMatrix_injective (b : OrthonormalBasis ι ℝ E) :
+    Function.Injective (operatorMatrix b) := by
   intro S T h
   have := congrArg (operatorOfMatrix b) h
   simpa only [operatorOfMatrix_operatorMatrix] using this
@@ -112,7 +128,9 @@ theorem operatorMatrix_injective (b : OrthonormalBasis ι ℝ E) : Function.Inje
     operatorMatrix b (1 : E →L[ℝ] E) = 1 := by
   exact map_one (LinearMap.toMatrixOrthonormal b)
 
-/-- The matrix is positive semidefinite iff the operator is positive (Mathlib `posSemidef_toMatrix_iff`). -/
+/--
+The matrix is positive semidefinite iff the operator is positive (Mathlib
+`posSemidef_toMatrix_iff`). -/
 theorem operatorMatrix_posSemidef_iff (b : OrthonormalBasis ι ℝ E) (T : E →L[ℝ] E) :
     (operatorMatrix b T).PosSemidef ↔ T.IsPositive :=
   LinearMap.posSemidef_toMatrix_iff b
@@ -170,12 +188,14 @@ theorem operatorMatrix_apply_eq_operatorEntry {m : ℕ} (b : OrthonormalBasis (F
   rw [operatorMatrix, LinearMap.toMatrixOrthonormal_apply_apply]
   rfl
 
-private def matrixEntriesLinear : Matrix ι ι ℝ →ₗ[ℝ] EuclideanSpace ℝ (ι × ι) where
+/-- `matrixEntries` as a real-linear map, used to build `operatorMatrixL`. -/
+def matrixEntriesLinear : Matrix ι ι ℝ →ₗ[ℝ] EuclideanSpace ℝ (ι × ι) where
   toFun := matrixEntries
   map_add' A B := by ext ij; rfl
   map_smul' a A := by ext ij; rfl
 
-private def matrixOfEntriesLinear : EuclideanSpace ℝ (ι × ι) →ₗ[ℝ] Matrix ι ι ℝ where
+/-- The inverse of `matrixEntriesLinear`, used to build `operatorOfMatrixL`. -/
+def matrixOfEntriesLinear : EuclideanSpace ℝ (ι × ι) →ₗ[ℝ] Matrix ι ι ℝ where
   toFun z i j := z (i, j)
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -205,21 +225,23 @@ end OperatorMatrix
 
 section EuclideanCoordinates
 
-/-- Coordinates of an operator image in the standard basis: `(T v) j = Σ_r P j r v_r`, `P` the matrix of `T`. -/
+/--
+Coordinates of an operator image in the standard basis: `(T v) j = Σ_r P j r v_r`, `P` the matrix of
+`T`. -/
 theorem euclidean_clm_apply_eq_sum_operatorMatrix {n : ℕ}
-    (T : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (v : EuclideanSpace ℝ (Fin n)) (j : Fin n) :
+    (T : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (v : EuclideanSpace ℝ (Fin n))
+    (j : Fin n) :
     (T v) j = ∑ r : Fin n, operatorMatrix (EuclideanSpace.basisFun (Fin n) ℝ) T j r * v r := by
-    simp only [operatorMatrix_apply_eq_operatorEntry, operatorEntry]
-    have hc : ∀ w : EuclideanSpace ℝ (Fin n), ∀ k,
-        ⟪EuclideanSpace.basisFun (Fin n) ℝ k, w⟫ = w k := by
-      intro w k
-      simp [EuclideanSpace.basisFun_apply, EuclideanSpace.inner_single_left]
-    have hs : ∀ w : EuclideanSpace ℝ (Fin n), ∀ k,
-        ⟪EuclideanSpace.single k 1, w⟫ = w k := by
-      intro w k
-      simpa [EuclideanSpace.basisFun_apply] using hc w k
-    conv_lhs => rw [← (EuclideanSpace.basisFun (Fin n) ℝ).sum_repr v]
-    simp [map_sum, map_smul, hs, mul_comm]
+  simp only [operatorMatrix_apply_eq_operatorEntry, operatorEntry]
+  have hc :
+    ∀ w : EuclideanSpace ℝ (Fin n), ∀ k, ⟪EuclideanSpace.basisFun (Fin n) ℝ k, w⟫ = w k := by
+    intro w k
+    simp [EuclideanSpace.basisFun_apply, EuclideanSpace.inner_single_left]
+  have hs : ∀ w : EuclideanSpace ℝ (Fin n), ∀ k, ⟪EuclideanSpace.single k 1, w⟫ = w k := by
+    intro w k
+    simpa [EuclideanSpace.basisFun_apply] using hc w k
+  conv_lhs => rw [← (EuclideanSpace.basisFun (Fin n) ℝ).sum_repr v]
+  simp [map_sum, map_smul, hs, mul_comm]
 
 /-- For self-adjoint `T`, pairing `T e_i` against `v` reads off the `i`-th coordinate of `T v`. -/
 theorem euclidean_inner_selfAdjoint_basisFun {n : ℕ}
@@ -232,32 +254,31 @@ theorem euclidean_inner_selfAdjoint_basisFun {n : ℕ}
       _ = (T v) i := by
         simp [EuclideanSpace.basisFun_apply, EuclideanSpace.inner_single_left]
 
-/-- Entry algebra of a symmetric sandwich: `Σ_s Σ_t P j s (v_s v_t w) P t k = (Σ_s P j s v_s)(Σ_t P k t v_t) w`. -/
-theorem sum_sum_mul_mul_mul_mul_eq_of_symm {n : ℕ} (P : Fin n → Fin n → ℝ) (hP : ∀ r s, P r s = P s r)
-    (v : Fin n → ℝ) (w : ℝ) (j k : Fin n) :
+/--
+Entry algebra of a symmetric sandwich: `Σ_s Σ_t P j s (v_s v_t w) P t k = (Σ_s P j s v_s)(Σ_t P k t
+v_t) w`. -/
+theorem sum_sum_mul_mul_mul_mul_eq_of_symm {n : ℕ} (P : Fin n → Fin n → ℝ)
+    (hP : ∀ r s, P r s = P s r) (v : Fin n → ℝ) (w : ℝ) (j k : Fin n) :
     ∑ s : Fin n, ∑ t : Fin n, P j s * (v s * v t * w) * P t k =
       (∑ s : Fin n, P j s * v s) * (∑ t : Fin n, P k t * v t) * w := by
-    symm
-    calc
-      (∑ s : Fin n, P j s * v s) * (∑ t : Fin n, P k t * v t) * w =
-          ((∑ s : Fin n, P j s * v s) * (∑ t : Fin n, P k t * v t)) * w := rfl
-      _ = (∑ s : Fin n, P j s * v s * (∑ t : Fin n, P k t * v t)) * w := by
-        rw [Finset.sum_mul]
-      _ = ∑ s : Fin n, (P j s * v s * (∑ t : Fin n, P k t * v t)) * w := by
-        rw [Finset.sum_mul]
-      _ = ∑ s : Fin n, ∑ t : Fin n,
-          (P j s * v s * (P k t * v t)) * w := by
-        apply Finset.sum_congr rfl
-        intro s hs
-        rw [Finset.mul_sum, Finset.sum_mul]
-      _ = ∑ s : Fin n, ∑ t : Fin n,
-          P j s * (v s * v t * w) * P t k := by
-        apply Finset.sum_congr rfl
-        intro s hs
-        apply Finset.sum_congr rfl
-        intro t ht
-        rw [hP t k]
-        ring
+  symm
+  calc
+    (∑ s : Fin n, P j s * v s) * (∑ t : Fin n, P k t * v t) * w =
+        ((∑ s : Fin n, P j s * v s) * (∑ t : Fin n, P k t * v t)) * w :=
+      rfl
+    _ = (∑ s : Fin n, P j s * v s * (∑ t : Fin n, P k t * v t)) * w := by rw [Finset.sum_mul]
+    _ = ∑ s : Fin n, (P j s * v s * (∑ t : Fin n, P k t * v t)) * w := by rw [Finset.sum_mul]
+    _ = ∑ s : Fin n, ∑ t : Fin n, (P j s * v s * (P k t * v t)) * w := by
+      apply Finset.sum_congr rfl
+      intro s hs
+      rw [Finset.mul_sum, Finset.sum_mul]
+    _ = ∑ s : Fin n, ∑ t : Fin n, P j s * (v s * v t * w) * P t k := by
+      apply Finset.sum_congr rfl
+      intro s hs
+      apply Finset.sum_congr rfl
+      intro t ht
+      rw [hP t k]
+      ring
 
 end EuclideanCoordinates
 

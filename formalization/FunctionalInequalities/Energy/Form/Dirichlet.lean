@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Form.ClosedQuadratic
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
+module
+
+public import FunctionalInequalities.Energy.Form.ClosedQuadratic
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
 /-!
 # Markovian and Dirichlet energies on real `L²`
@@ -9,6 +11,8 @@ This module formulates the Markov property through all normal contractions of th
 Mathlib's `LipschitzWith.compLp` makes those contractions well defined on `L²` equivalence
 classes, so no pointwise representative is chosen by the public API.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.ConditionalFiber
-import FunctionalInequalities.Probability.LogConcave
+module
+
+public import FunctionalInequalities.KLS.LogConcave.ConditionalFiber
+public import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `cor:conditional-fiber-twelve-bound`
@@ -19,6 +21,8 @@ with respect to a Haar measure, as in the comparison lemma; the finite second mo
 the admissible frame. No frame bound, no Poincaré inequality for `μ` and no KLS statement is
 claimed: `q:conditional-fiber-frame` remains open.
 -/
+
+@[expose] public section
 
 noncomputable section
 

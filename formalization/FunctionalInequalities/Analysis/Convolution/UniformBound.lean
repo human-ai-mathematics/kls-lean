@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Convolution
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import Mathlib.Analysis.Convolution
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Uniform bound for convolution with an integrable kernel
@@ -17,6 +19,8 @@ the harmonic source enters the constant. This is the elementary `L¹ × L∞` bo
 measurability or integrability of `g` is needed, since a non-integrable integrand has Bochner
 integral `0`.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter
 open scoped Convolution

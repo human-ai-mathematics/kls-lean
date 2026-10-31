@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
-import FunctionalInequalities.Analysis.Hausdorff.Slicing
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+public import FunctionalInequalities.Analysis.Hausdorff.Slicing
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the codimension-`m` Eilenberg slicing inequality
@@ -23,6 +25,8 @@ completed** here: it also needs compact-slice measurability in codimension `m`, 
 and is not generalized here.  The critical set is not treated, and the **general** codimension-`m`
 coarea formula is not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

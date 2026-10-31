@@ -186,7 +186,11 @@ per milestone. Confirm the run's actual `head_sha` and conclusion before recordi
 evidence; an unrun or failed snapshot is not remotely verified. Manual dispatch becomes
 available once the workflow is present on the default branch.
 
-Lean certification is the only remote workflow. Build Blueprint PDF/web artifacts locally
+Lean certification is the only remote certification workflow. The manually dispatched
+[Palomar full preflight](../.github/workflows/palomar-preflight.yml) runs Palomar's pinned official
+verifier on `integrations/palomar`; it is advisory submission preparation, separate from
+certification and release receipts, and is dispatched only for a chosen public commit.
+Build Blueprint PDF/web artifacts locally
 when needed, following the [formalization guide](../formalization/README.md#lean-blueprint).
 There is no periodic CI schedule, and `[skip ci]` is not part of this policy. Local receipts,
 remote certification and Blueprint artifacts remain separate evidence.

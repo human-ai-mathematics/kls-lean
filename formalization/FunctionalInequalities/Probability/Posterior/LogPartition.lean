@@ -1,15 +1,21 @@
-import FunctionalInequalities.Probability.Posterior.JointRegularity
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+module
+
+public import FunctionalInequalities.Probability.Posterior.JointRegularity
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 
 /-!
 # The log-partition function of the BKL posterior
 
 `ψ(c, Q) = log ∫ e^{⟪c,x⟫ − ½⟪Qx,x⟫} dμ` for a compactly supported prior (Bizeul–Klartag–Lehec
 arXiv:2610.05474v1, Section 4): `ψ` is jointly `C^∞`, the log-Laplace transform of the posterior is
-`Λ_{μ_{c,Q}}(z) = ψ(c + z, Q) − ψ(c, Q)`, posterior cumulants are `c`-derivatives `κ_m = D_c^m ψ` (`m ≥ 1`),
-and `D_c ψ[h] = ⟪h, a(c, Q)⟫`. This is the deterministic bridge that turns the Itô computations (71) and
+`Λ_{μ_{c,Q}}(z) = ψ(c + z, Q) − ψ(c, Q)`, posterior cumulants are `c`-derivatives `κ_m = D_c^m ψ`
+(`m ≥ 1`),
+and `D_c ψ[h] = ⟪h, a(c, Q)⟫`. This is the deterministic bridge that turns the Itô computations (71)
+and
 (73) into generator identities.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -89,7 +95,10 @@ end ParameterFeatures
 
 private def partitionLaw (μ : ProbabilityMeasure E) :
     ProbabilityMeasure (partitionParameterSpace (E := E)) :=
-  μ.map (partitionParameterFeature_continuous (E := E)).measurable.aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := (partitionParameterFeature_continuous (E := E)).measurable
+  μ.map (partitionParameterFeature (E := E))
 
 section PosteriorSupport
 
@@ -123,7 +132,8 @@ private theorem partitionLaw_compact (μ : ProbabilityMeasure E)
 
 end PosteriorSupport
 
-/-- The log-partition function `ψ(c, Q) = log ∫ e^{⟪c,x⟫ − ½⟪Qx,x⟫} dμ(x)` of the BKL posterior (67). -/
+/--
+The log-partition function `ψ(c, Q) = log ∫ e^{⟪c,x⟫ − ½⟪Qx,x⟫} dμ(x)` of the BKL posterior (67). -/
 def logPartition (μ : ProbabilityMeasure E) (c : E) (Q : E →L[ℝ] E) : ℝ :=
   Real.log (∫ x, Real.exp (quadraticExponent c Q x) ∂(μ : Measure E))
 
@@ -236,70 +246,60 @@ theorem logLaplace_compactPosterior
         unfold quadraticExponent
         fun_prop))).ne']
 
-/-- **Posterior cumulants are `c`-derivatives of `ψ`**: `κ_m(μ_{c,Q}) = D_c^m ψ(c, Q)` for `m ≥ 1`. -/
+/--
+**Posterior cumulants are `c`-derivatives of `ψ`**: `κ_m(μ_{c,Q}) = D_c^m ψ(c, Q)` for `m ≥ 1`. -/
 theorem cumulant_compactPosterior (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) (c : E) (Q : E →L[ℝ] E) {m : ℕ} (hm : 1 ≤ m) :
     Analysis.BakryEmery.cumulant (compactPosterior μ hc c Q : Measure E) m =
       iteratedFDeriv ℝ m (fun y => logPartition μ y Q) c := by
   have hjoint := contDiff_logPartition_joint μ hc
   have hψ : ContDiff ℝ ∞ (fun y : E => logPartition μ y Q) := by
-    have hmap : ContDiff ℝ ∞ (fun y : E => (y, Q)) :=
-      contDiff_id.prodMk contDiff_const
+    have hmap : ContDiff ℝ ∞ (fun y : E => (y, Q)) := contDiff_id.prodMk contDiff_const
     have h := hjoint.comp hmap
     convert h using 1
     rfl
-  have htrans : ContDiff ℝ ∞
-      (fun z : E => logPartition μ (c + z) Q) := by
-    have hmap : ContDiff ℝ ∞ (fun z : E => c + z) :=
-      contDiff_const.add contDiff_id
+  have htrans : ContDiff ℝ ∞ (fun z : E => logPartition μ (c + z) Q) := by
+    have hmap : ContDiff ℝ ∞ (fun z : E => c + z) := contDiff_const.add contDiff_id
     have h := hψ.comp hmap
     convert h using 1
     rfl
   have hsub :
-      iteratedFDeriv ℝ m
-          (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) =
-        iteratedFDeriv ℝ m (fun z : E => logPartition μ (c + z) Q) -
-          iteratedFDeriv ℝ m (fun _ : E => logPartition μ c Q) := by
+    iteratedFDeriv ℝ m (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) =
+      iteratedFDeriv ℝ m (fun z : E => logPartition μ (c + z) Q) -
+        iteratedFDeriv ℝ m (fun _ : E => logPartition μ c Q) := by
     have hfun :
-        (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) =
-          (fun z : E => logPartition μ (c + z) Q) -
-            (fun _ : E => logPartition μ c Q) := by
+      (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) =
+        (fun z : E => logPartition μ (c + z) Q) - (fun _ : E => logPartition μ c Q) := by
       funext z
       rfl
     rw [hfun]
-    exact iteratedFDeriv_sub
-      (htrans.of_le (WithTop.coe_le_coe.mpr le_top))
-      ((contDiff_const : ContDiff ℝ ∞
-        (fun _ : E => logPartition μ c Q)).of_le
-        (WithTop.coe_le_coe.mpr le_top))
-  have hm0 : m ≠ 0 :=
-    Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hm)
-  have hconst :
-      iteratedFDeriv ℝ m (fun _ : E => logPartition μ c Q) = 0 :=
+    exact
+      iteratedFDeriv_sub (htrans.of_le (WithTop.coe_le_coe.mpr le_top))
+        ((contDiff_const : ContDiff ℝ ∞ (fun _ : E => logPartition μ c Q)).of_le
+          (WithTop.coe_le_coe.mpr le_top))
+  have hm0 : m ≠ 0 := Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hm)
+  have hconst : iteratedFDeriv ℝ m (fun _ : E => logPartition μ c Q) = 0 :=
     iteratedFDeriv_const_of_ne hm0 _
   have hLL :
-      Analysis.BakryEmery.logLaplace
-          (compactPosterior μ hc c Q : Measure E) =
-        (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) := by
+    Analysis.BakryEmery.logLaplace (compactPosterior μ hc c Q : Measure E) =
+      (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) := by
     funext z
     exact logLaplace_compactPosterior μ hc c Q z
   unfold Analysis.BakryEmery.cumulant
   rw [hLL]
   calc
-    iteratedFDeriv ℝ m
-        (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) 0 =
+    iteratedFDeriv ℝ m (fun z : E => logPartition μ (c + z) Q - logPartition μ c Q) 0 =
         (iteratedFDeriv ℝ m (fun z : E => logPartition μ (c + z) Q) -
-          iteratedFDeriv ℝ m (fun _ : E => logPartition μ c Q)) 0 :=
+            iteratedFDeriv ℝ m (fun _ : E => logPartition μ c Q))
+          0 :=
       congrFun hsub 0
     _ = iteratedFDeriv ℝ m (fun z : E => logPartition μ (c + z) Q) 0 := by
       rw [hconst]
       simp
     _ = iteratedFDeriv ℝ m (fun y : E => logPartition μ y Q) (c + 0) := by
       simpa only using
-        (iteratedFDeriv_comp_add_left (𝕜 := ℝ) m c 0
-          (f := fun y : E => logPartition μ y Q))
-    _ = iteratedFDeriv ℝ m (fun y : E => logPartition μ y Q) c := by
-      simp
+        (iteratedFDeriv_comp_add_left (𝕜 := ℝ) m c 0 (f := fun y : E => logPartition μ y Q))
+    _ = iteratedFDeriv ℝ m (fun y : E => logPartition μ y Q) c := by simp
 
 /-- The `c`-gradient of `ψ` is the posterior mean: `D_c ψ(c, Q)[h] = ⟪h, a(c, Q)⟫`. -/
 theorem fderiv_logPartition_c_apply (μ : ProbabilityMeasure E)

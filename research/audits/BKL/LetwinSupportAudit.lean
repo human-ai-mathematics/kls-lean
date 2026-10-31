@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Tensor.Coordinate
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Tensor.Coordinate
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: Letwin supporting identities with source-style consumers
 
@@ -8,11 +10,14 @@ Source: Letwin, arXiv:2607.24164v1, proof of Theorem 2.5 (equation (2.12), p. 10
 (pp. 16–17); these are dependencies of BKL Lemma 4.2 through the Letwin bound. They are supporting
 identities only: neither Letwin Theorem 1.2 nor BKL Theorem 4.1 is asserted.
 
-* `mixedContraction_le`: the source inequality `Σ b_i b_j T_{ijk}² ≤ Σ b_i² T_{ijk}²` from the finite
+* `mixedContraction_le`: the source inequality `Σ b_i b_j T_{ijk}² ≤ Σ b_i² T_{ijk}²` from the
+  finite
   identity (2.12); `signed_nonzero_client`, `positive_nonzero_client`: nonzero `Fin 2` instances.
 * `directional_test_against_one`: Lemma A.3 with `g = 1`, the directional Stein pairing
   `∫ ∂_v f dν = ∫ f ∂_v φ dν`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -33,14 +38,16 @@ theorem mixedContraction_le {ι : Type*} [Fintype ι] (b : ι → ℝ)
 
 theorem signed_nonzero_client :
     let b : Fin 2 → ℝ := ![-1, 1]
-    (∑ i : Fin 2, ∑ _j : Fin 2, ∑ _k : Fin 2, b i ^ 2 * (1 : ℝ)^2) -
-      (∑ i : Fin 2, ∑ j : Fin 2, ∑ _k : Fin 2, b i * b j * (1 : ℝ)^2) = 8 := by
+    (∑ i : Fin 2, ∑ _j : Fin 2, ∑ _k : Fin 2, b i ^ 2 * (1 : ℝ) ^ 2) -
+        (∑ i : Fin 2, ∑ j : Fin 2, ∑ _k : Fin 2, b i * b j * (1 : ℝ) ^ 2) =
+      8 := by
   norm_num [Fin.sum_univ_two]
 
 theorem positive_nonzero_client :
     let b : Fin 2 → ℝ := ![0, 1]
-    (∑ i : Fin 2, ∑ _j : Fin 2, ∑ _k : Fin 2, b i ^ 2 * (1 : ℝ)^2) -
-      (∑ i : Fin 2, ∑ j : Fin 2, ∑ _k : Fin 2, b i * b j * (1 : ℝ)^2) = 2 := by
+    (∑ i : Fin 2, ∑ _j : Fin 2, ∑ _k : Fin 2, b i ^ 2 * (1 : ℝ) ^ 2) -
+        (∑ i : Fin 2, ∑ j : Fin 2, ∑ _k : Fin 2, b i * b j * (1 : ℝ) ^ 2) =
+      2 := by
   norm_num [Fin.sum_univ_two]
 
 theorem directional_test_against_one {E : Type*} [NormedAddCommGroup E]
@@ -67,5 +74,6 @@ end LetwinSupportAudit
 #print axioms LetwinSupportAudit.signed_nonzero_client
 #print axioms LetwinSupportAudit.positive_nonzero_client
 #print axioms LetwinSupportAudit.directional_test_against_one
-#print axioms FunctionalInequalities.Analysis.Tensor.sum_weight_sq_mul_sq_sub_eq_half_sum_sq_sub_mul_sq
+#print axioms
+  FunctionalInequalities.Analysis.Tensor.sum_weight_sq_mul_sq_sub_eq_half_sum_sq_sub_mul_sq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_tilted_eq

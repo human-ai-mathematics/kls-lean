@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoFourthMoment
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoFourthMoment
 
 /-!
 # Restriction of a simple predictable integrand to `(a, b]`
@@ -22,6 +27,8 @@ coefficients of `G`, and the variance budget of that per-tile bound is at most `
 * `SimplePredictable.exists_restrict_Ioc` — an adapted simple integrand multiplied by
   `1_{(a, b]}` on their common refinement, with coefficients vanishing off `(a, b]`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -52,9 +59,9 @@ theorem SimplePredictable.eval_of_mem_Ioc {T : ℝ} (H : SimplePredictable Ω T)
   classical
   unfold SimplePredictable.eval
   rw [Finset.sum_eq_single j
-    (fun i _ hij => if_neg fun hc => hij (partition_cell_unique H.partition_strictMono hc hs))
+    (fun i _ hij => ite_eq_right fun hc => hij (partition_cell_unique H.partition_strictMono hc hs))
     (fun hnm => absurd (Finset.mem_univ _) hnm)]
-  exact if_pos hs
+  exact ite_eq_left hs
 
 /-- A simple integrand with coefficients bounded by `C ≥ 0` has evaluations bounded by `C`. -/
 theorem SimplePredictable.abs_eval_le {T : ℝ} (H : SimplePredictable Ω T) {C : ℝ} (hC0 : 0 ≤ C)
@@ -68,7 +75,7 @@ theorem SimplePredictable.abs_eval_le {T : ℝ} (H : SimplePredictable Ω T) {C 
     have hz : H.eval s ω = 0 := by
       unfold SimplePredictable.eval
       exact Finset.sum_eq_zero fun j _ =>
-        if_neg fun hc => absurd hc.2 (not_le.mpr (h j hc.1))
+        ite_eq_right fun hc => absurd hc.2 (not_le.mpr (h j hc.1))
     rw [hz, abs_zero]
     exact hC0
 
@@ -113,15 +120,15 @@ theorem SimplePredictable.varClock_le_Ioc {T : ℝ} (H : SimplePredictable Ω T)
         else 0) ≤ C ^ 2 * (F (j + 1) - F j) := by
     intro j hj
     rw [Finset.mem_range] at hj
-    rw [dif_pos hj]
+    rw [dite_eq_left hj]
     obtain ⟨hFj, hFj1⟩ := hFval j hj
     have hmono := H.partition_strictMono (Fin.castSucc_lt_succ (i := (⟨j, hj⟩ : Fin H.N)))
     by_cases hin : a ≤ H.partition (⟨j, hj⟩ : Fin H.N).castSucc
         ∧ H.partition (⟨j, hj⟩ : Fin H.N).succ ≤ b
-    · rw [if_pos hin, hFj, hFj1,
+    · rw [ite_eq_left hin, hFj, hFj1,
         max_eq_right hin.1, max_eq_right (le_trans hin.1 hmono.le),
         min_eq_right (le_trans hmono.le hin.2), min_eq_right hin.2]
-    · rw [if_neg hin]
+    · rw [ite_eq_right hin]
       have : F j ≤ F (j + 1) := hFmono j
       nlinarith [sq_nonneg C]
   calc H.varClock
@@ -143,8 +150,8 @@ noncomputable def stepIocGen (Ω) [MeasurableSpace Ω] {a b : ℝ} (ha : 0 ≤ a
     (stepIocGen Ω ha hab).eval s ω = (Set.Ioc a b).indicator (fun _ => (1 : ℝ)) s := by
   unfold stepIocGen
   by_cases h : 0 < a
-  · rw [dif_pos h, stepIoc_eval]
-  · rw [dif_neg h]
+  · rw [dite_eq_left h, stepIoc_eval]
+  · rw [dite_eq_right h]
     have ha0 : a = 0 := le_antisymm (not_lt.mp h) ha
     subst ha0
     exact stepIoc₀_eval _ s ω
@@ -155,8 +162,8 @@ theorem stepIocGen_adapt (ℱ : Filtration ℝ ‹MeasurableSpace Ω›) {a b : 
       (ℱ ((stepIocGen Ω ha hab).partition i.castSucc)) ((stepIocGen Ω ha hab).ξ i) := by
   unfold stepIocGen
   by_cases h : 0 < a
-  · rw [dif_pos h]; exact stepIoc_adapt ℱ h hab
-  · rw [dif_neg h]; exact stepIoc₀_adapt ℱ _
+  · rw [dite_eq_left h]; exact stepIoc_adapt ℱ h hab
+  · rw [dite_eq_right h]; exact stepIoc₀_adapt ℱ _
 
 /-- A simple integrand whose coefficients vanish on every tile not contained in `(a, b]` has the
 same elementary integral at every time past `b`. -/
@@ -207,7 +214,7 @@ theorem SimplePredictable.exists_restrict_Ioc
   have hlt : Q.partition j.castSucc < Q.partition j.succ :=
     Q.partition_strictMono Fin.castSucc_lt_succ
   by_cases hin : a ≤ Q.partition j.castSucc ∧ Q.partition j.succ ≤ b
-  · rw [if_pos hin]
+  · rw [ite_eq_left hin]
     have hs : Q.partition j.castSucc < Q.partition j.succ
         ∧ Q.partition j.succ ≤ Q.partition j.succ := ⟨hlt, le_rfl⟩
     rw [← Q.eval_of_mem_Ioc j hs ω, hQeval' _ ω, abs_mul]
@@ -220,7 +227,7 @@ theorem SimplePredictable.exists_restrict_Ioc
         ≤ 1 * C := by
           exact mul_le_mul h1 (G.abs_eval_le hC0 hC _ ω) (abs_nonneg _) zero_le_one
       _ = C := one_mul C
-  · rw [if_neg hin]
+  · rw [ite_eq_right hin]
     -- pick a time in the tile that lies outside `(a, b]`
     obtain ⟨s, hs, hsout⟩ : ∃ s : ℝ, (Q.partition j.castSucc < s ∧ s ≤ Q.partition j.succ)
         ∧ s ∉ Set.Ioc a b := by

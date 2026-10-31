@@ -1,13 +1,18 @@
-import FunctionalInequalities.Probability.QuadraticTilt
+module
+
+public import FunctionalInequalities.Probability.QuadraticTilt
 
 /-!
 # Audit: covariance of the quadratic tilt converges (BKL Section 2)
 
-Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5 (quadratic tilt step). Clients: the
+Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5 (quadratic tilt step). Clients:
+the
 two-point law `(δ₀ + δ₂)/2` on `ℝ` (mean `1`, raw second moment `2`, covariance `1`) has tilted
 covariances converging to `1` as `δ → 0⁺`, and the tilts keep a finite second moment; the
 zero-dimensional law converges to the zero operator.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities Filter
 open scoped Topology RealInnerProductSpace
@@ -48,7 +53,8 @@ theorem atomic_raw_second : (∫ x : ℝ, x ^ 2 ∂(atomic : Measure ℝ)) = 2 :
   norm_num
 
 /-- Nonzero mean1 and raw second2 yield actual centered covariance1, not raw moment2. -/
-theorem atomic_covariance : Covariance.operator (atomic : Measure ℝ) = ContinuousLinearMap.id ℝ ℝ := by
+theorem atomic_covariance :
+    Covariance.operator (atomic : Measure ℝ) = ContinuousLinearMap.id ℝ ℝ := by
   apply ContinuousLinearMap.ext
   intro u
   apply ext_inner_right ℝ
@@ -57,7 +63,8 @@ theorem atomic_covariance : Covariance.operator (atomic : Measure ℝ) = Continu
     simpa only [id_eq] using atomic_memLp_two.const_inner (𝕜 := ℝ) u
   have hY : MemLp (fun x : ℝ => ⟪v, x⟫) 2 (atomic : Measure ℝ) := by
     simpa only [id_eq] using atomic_memLp_two.const_inner (𝕜 := ℝ) v
-  rw [Covariance.operator_inner, covarianceBilin_apply_eq_cov atomic_memLp_two, covariance_eq_sub hX hY]
+  rw [Covariance.operator_inner, covarianceBilin_apply_eq_cov atomic_memLp_two,
+    covariance_eq_sub hX hY]
   rw [atomic_integral, atomic_integral, atomic_integral]
   simp only [Pi.mul_apply, Real.inner_apply, ContinuousLinearMap.id_apply]
   ring

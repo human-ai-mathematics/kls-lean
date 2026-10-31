@@ -1,5 +1,7 @@
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
+module
+
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # Multiplication of an `L²` class by an almost everywhere bounded multiplier
@@ -20,6 +22,8 @@ a.e. strongly measurable and a.e. bounded by a constant `M`, and the operator no
 family of multipliers that converges in `L²` and is uniformly a.e. bounded tests every
 integrable function, not only square-integrable ones.
 -/
+
+@[expose] public section
 
 noncomputable section
 

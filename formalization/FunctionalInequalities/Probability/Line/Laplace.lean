@@ -1,9 +1,11 @@
-import Mathlib.MeasureTheory.Measure.WithDensity
-import Mathlib.Analysis.SpecialFunctions.Exp
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Integral.IntegralEqImproper
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-import Mathlib.Probability.Moments.MGFAnalytic
+module
+
+public import Mathlib.MeasureTheory.Measure.WithDensity
+public import Mathlib.Analysis.SpecialFunctions.Exp
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Integral.IntegralEqImproper
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+public import Mathlib.Probability.Moments.MGFAnalytic
 
 /-!
 # The Laplace law
@@ -16,6 +18,8 @@ moment generating function is `β²/(β² - w²)` on `|w| < β`, its mean is `0`
 `2/β²` (`laplaceMeasure_moments`).
 It is a probability measure (`isProbabilityMeasure_laplaceMeasure`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -370,34 +374,33 @@ theorem laplaceMeasure_moments {β : ℝ} (hβ : 0 < β) :
     integral_sq_laplaceMeasure hβ⟩
   simpa only [pow_one] using integrable_pow_laplaceMeasure hβ 1
 
-/-- **The noise factor of BKL (111) has zero derivative at the origin**: `w ↦ log ∫ e^{(w/σ)s} dη_β(s)`
+/--
+**The noise factor of BKL (111) has zero derivative at the origin**: `w ↦ log ∫ e^{(w/σ)s} dη_β(s)`
 is differentiable at `0` with derivative `0`, since `η_β` is centered. -/
 theorem hasDerivAt_log_integral_exp_laplaceMeasure_zero {β σ : ℝ} (hβ : 0 < β) (hσ : σ ≠ 0) :
     HasDerivAt (fun w : ℝ => Real.log (∫ s : ℝ, Real.exp (w / σ * s) ∂laplaceMeasure β)) 0 0 := by
-    have hi (w : ℝ) (hw : |w / σ| < β) :
-        (∫ s : ℝ, Real.exp (w / σ * s) ∂laplaceMeasure β) =
-          β ^ 2 / (β ^ 2 - (w / σ) ^ 2) := by
-      have h := (laplaceMeasure_mgf hβ hw).2
-      simpa only [ProbabilityTheory.mgf, id] using h
-    have hev : ∀ᶠ w in nhds (0 : ℝ), |w / σ| < β := by
-      have hc : ContinuousAt (fun w : ℝ => |w / σ|) 0 := by
-        fun_prop
-      exact hc.eventually (Iio_mem_nhds (by simpa using hβ))
-    have hsq : HasDerivAt (fun w : ℝ => (w / σ) ^ 2) 0 0 := by
-      have h := ((hasDerivAt_id (0 : ℝ)).div_const σ).pow 2
-      exact h.congr_deriv (by simp)
-    have hden : HasDerivAt (fun w : ℝ => β ^ 2 - (w / σ) ^ 2) 0 0 := by
-      have h := (hasDerivAt_const (0 : ℝ) (β ^ 2)).sub hsq
-      exact h.congr_deriv (by simp)
-    have hG : HasDerivAt (fun w : ℝ => β ^ 2 / (β ^ 2 - (w / σ) ^ 2)) 0 0 := by
-      have h := (hasDerivAt_const (0 : ℝ) (β ^ 2)).div hden (by simp [hβ.ne'])
-      exact h.congr_deriv (by simp)
-    have hlog : HasDerivAt (fun w : ℝ => Real.log (β ^ 2 / (β ^ 2 - (w / σ) ^ 2))) 0 0 := by
-      have h := hG.log (by simp [hβ.ne'])
-      exact h.congr_deriv (by simp)
-    refine hlog.congr_of_eventuallyEq ?_
-    filter_upwards [hev] with w hw
-    rw [hi w hw]
+  have hi (w : ℝ) (hw : |w / σ| < β) :
+    (∫ s : ℝ, Real.exp (w / σ * s) ∂laplaceMeasure β) = β ^ 2 / (β ^ 2 - (w / σ) ^ 2) := by
+    have h := (laplaceMeasure_mgf hβ hw).2
+    simpa only [ProbabilityTheory.mgf, id] using h
+  have hev : ∀ᶠ w in nhds (0 : ℝ), |w / σ| < β := by
+    have hc : ContinuousAt (fun w : ℝ => |w / σ|) 0 := by fun_prop
+    exact hc.eventually (Iio_mem_nhds (by simpa using hβ))
+  have hsq : HasDerivAt (fun w : ℝ => (w / σ) ^ 2) 0 0 := by
+    have h := ((hasDerivAt_id (0 : ℝ)).div_const σ).pow 2
+    exact h.congr_deriv (by simp)
+  have hden : HasDerivAt (fun w : ℝ => β ^ 2 - (w / σ) ^ 2) 0 0 := by
+    have h := (hasDerivAt_const (0 : ℝ) (β ^ 2)).sub hsq
+    exact h.congr_deriv (by simp)
+  have hG : HasDerivAt (fun w : ℝ => β ^ 2 / (β ^ 2 - (w / σ) ^ 2)) 0 0 := by
+    have h := (hasDerivAt_const (0 : ℝ) (β ^ 2)).div hden (by simp [hβ.ne'])
+    exact h.congr_deriv (by simp)
+  have hlog : HasDerivAt (fun w : ℝ => Real.log (β ^ 2 / (β ^ 2 - (w / σ) ^ 2))) 0 0 := by
+    have h := hG.log (by simp [hβ.ne'])
+    exact h.congr_deriv (by simp)
+  refine hlog.congr_of_eventuallyEq ?_
+  filter_upwards [hev] with w hw
+  rw [hi w hw]
 
 end Moments
 

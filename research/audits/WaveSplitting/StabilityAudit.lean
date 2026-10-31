@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Stability
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Stability
 
 /-! Independent clients: actual coefficient derivative bounds remain explicit.
 Neither localization of the original potential nor residual control is claimed. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

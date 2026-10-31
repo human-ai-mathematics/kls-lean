@@ -1,10 +1,14 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
 
 /-! Audit clients for `selected_mask_partition` (`Analysis/IteratedDerivative/Bilinear.lean`):
 the actual zero-slot model has no singleton selection, a one-slot selection of four identical
 vectors is an actual singleton indicator, and an indexed singleton indicator selects one vector
 despite the repeated data. The producer is not duplicated here. No cumulant, stochastic or energy
 statement is involved. -/
+
+@[expose] public section
 
 namespace Stage1SelectedClients
 open FunctionalInequalities.Analysis

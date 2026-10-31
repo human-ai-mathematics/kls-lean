@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.Poincare.CovarianceGradient.Transport
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import FunctionalInequalities.Poincare.CovarianceGradient.Transport
 
 /-!
 # Conditional Poincaré transfer from isotropic regular laws to regular laws
@@ -12,6 +14,8 @@ regular law (`RegularIsotropic`) and transporting the covariance energy; the env
 `K(1 + ‖Cov μ − Id‖)` tends to `K` along laws whose covariances tend to `Id`. No whitening-sequence
 limit and no unconditional bound is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter
 open scoped Topology
@@ -63,19 +67,26 @@ private theorem localSlope_le_covariance_norm_of_covariance_constant {V : E → 
   refine h.trans (le_of_eq ?_)
   rw [ENNReal.coe_mul, mul_comm, ← coe_nnnorm, ENNReal.ofReal_coe_nnreal]
 
-/-- **Conditional Poincaré transfer** (BKL Section 2, p. 5): if every isotropic regular law (with positive
-upper curvature) has literature constant `≤ K`, then every regular law has `C_P ≤ K·‖Cov‖` (center and
-whiten by `exists_regular_isotropic`, then transport the covariance energy). The universal bound is a
+/--
+**Conditional Poincaré transfer** (BKL Section 2, p. 5): if every isotropic regular law (with
+positive
+upper curvature) has literature constant `≤ K`, then every regular law has `C_P ≤ K·‖Cov‖` (center
+and
+whiten by `exists_regular_isotropic`, then transport the covariance energy). The universal bound is
+a
 hypothesis, not asserted. -/
 theorem localSlope_le_covariance_norm {K : NNReal}
-    (hBound : ∀ {U : E → ℝ} {α β : ℝ} (hU : KLS.RegularPotential U α β),
-      0 < β → KLS.Isotropic hU.law → Poincare.LocalSlope.Intrinsic.constant hU.law ≤ (K : ENNReal))
+    (hBound :
+      ∀ {U : E → ℝ} {α β : ℝ} (hU : KLS.RegularPotential U α β),
+        0 < β →
+          KLS.Isotropic hU.law → Poincare.LocalSlope.Intrinsic.constant hU.law ≤ (K : ENNReal))
     {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b) :
     Poincare.LocalSlope.Intrinsic.constant hV.law ≤
       (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (hV.law : Measure E)‖ := by
-  obtain ⟨W, c, U, α, β, hU, _, _, _, _, _, hβ, hiso, hlaw⟩ :=
-    exists_regular_isotropic hV
-  have hnew : Poincare.L2Energy.constant hU.law (Energy.CovarianceGradient.relaxation hU.law) ≤ (K : ENNReal) := by
+  obtain ⟨W, c, U, α, β, hU, _, _, _, _, _, hβ, hiso, hlaw⟩ := exists_regular_isotropic hV
+  have hnew :
+    Poincare.L2Energy.constant hU.law (Energy.CovarianceGradient.relaxation hU.law) ≤
+      (K : ENNReal) := by
     rw [covariance_constant_eq_localSlope hU hiso]
     exact hBound hU hβ hiso
   rw [hlaw, Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv,
@@ -87,17 +98,23 @@ omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace
 theorem covariance_norm_le_envelope (A : E →L[ℝ] E) :
     ‖A‖ ≤ 1 + ‖A - ContinuousLinearMap.id ℝ E‖ := by
   calc
-    ‖A‖ = ‖(A - ContinuousLinearMap.id ℝ E) + ContinuousLinearMap.id ℝ E‖ := by rw [sub_add_cancel]
+    ‖A‖ = ‖(A - ContinuousLinearMap.id ℝ E) + ContinuousLinearMap.id ℝ E‖ := by
+      rw [sub_add_cancel]
     _ ≤ ‖A - ContinuousLinearMap.id ℝ E‖ + ‖ContinuousLinearMap.id ℝ E‖ := norm_add_le _ _
-    _ ≤ 1 + ‖A - ContinuousLinearMap.id ℝ E‖ := by linarith [ContinuousLinearMap.norm_id_le (𝕜 := ℝ) (E := E)]
+    _ ≤ 1 + ‖A - ContinuousLinearMap.id ℝ E‖ := by
+      linarith [ContinuousLinearMap.norm_id_le (𝕜 := ℝ) (E := E)]
 
 /-- The transfer with the envelope coefficient `K (1 + ‖Cov − Id‖)`. -/
 theorem localSlope_le_covariance_envelope {K : NNReal}
-    (hBound : ∀ {U : E → ℝ} {α β : ℝ} (hU : KLS.RegularPotential U α β),
-      0 < β → KLS.Isotropic hU.law → Poincare.LocalSlope.Intrinsic.constant hU.law ≤ (K : ENNReal))
+    (hBound :
+      ∀ {U : E → ℝ} {α β : ℝ} (hU : KLS.RegularPotential U α β),
+        0 < β →
+          KLS.Isotropic hU.law → Poincare.LocalSlope.Intrinsic.constant hU.law ≤ (K : ENNReal))
     {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b) :
     Poincare.LocalSlope.Intrinsic.constant hV.law ≤
-      ENNReal.ofReal ((K : ℝ) * (1 + ‖Covariance.operator (hV.law : Measure E) - ContinuousLinearMap.id ℝ E‖)) := by
+      ENNReal.ofReal
+        ((K : ℝ) *
+          (1 + ‖Covariance.operator (hV.law : Measure E) - ContinuousLinearMap.id ℝ E‖)) := by
   have h := localSlope_le_covariance_norm hBound hV
   rw [ENNReal.ofReal_mul K.coe_nonneg, ENNReal.ofReal_coe_nnreal]
   apply h.trans

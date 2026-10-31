@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Lipschitz.ZeroDerivative
-import FunctionalInequalities.Analysis.Vector.Slice.Measurable
-import FunctionalInequalities.Analysis.Vector.Coarea.Regular
-import Mathlib.MeasureTheory.Function.Jacobian
+module
+
+public import FunctionalInequalities.Analysis.Lipschitz.ZeroDerivative
+public import FunctionalInequalities.Analysis.Vector.Slice.Measurable
+public import FunctionalInequalities.Analysis.Vector.Coarea.Regular
+public import Mathlib.MeasureTheory.Function.Jacobian
 
 /-! # The vanishing-derivative part of a `C¹` map has null level slices
 
-The codimension-`m` analogue of `Analysis/Hausdorff/Slice/Critical.lean`, for the part of the critical set
+The codimension-`m` analogue of `Analysis/Hausdorff/Slice/Critical.lean`, for the part of the
+critical set
 where the derivative **vanishes**.
 
 `KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero` proves that for a real-valued `C¹` function
@@ -31,6 +34,8 @@ here**.  For `m = 1` the two sets coincide, and the audit recovers the scalar st
 **No Sard theorem is claimed.**  Nothing is asserted about the measure of the set of critical
 *values*, which for a merely `C¹` map may well be positive.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -61,9 +66,12 @@ vanishes on that set, so the linear part drops out and the approximation becomes
 estimate.  **This is the step that fails for a merely rank-deficient derivative.** -/
 theorem exists_lipschitzOnWith_zeroDeriv_cover {u : V → W} (hu : ContDiff ℝ 1 u) {ε : ℝ≥0}
     (hε : ε ≠ 0) :
-    ∃ T : ℕ → Set V, Pairwise (Function.onFun Disjoint T) ∧ (∀ n, MeasurableSet (T n)) ∧
-      {x : V | fderiv ℝ u x = 0} ⊆ ⋃ n, T n ∧
-      ∀ n, LipschitzOnWith ε u ({x : V | fderiv ℝ u x = 0} ∩ T n) := exists_lipschitzOnWith_cover_of_fderiv_eq_zero hu hε
+    ∃ T : ℕ → Set V,
+      Pairwise (Function.onFun Disjoint T) ∧
+        (∀ n, MeasurableSet (T n)) ∧
+          {x : V | fderiv ℝ u x = 0} ⊆ ⋃ n, T n ∧
+            ∀ n, LipschitzOnWith ε u ({x : V | fderiv ℝ u x = 0} ∩ T n) :=
+  exists_lipschitzOnWith_cover_of_fderiv_eq_zero hu hε
 /-- The vanishing-derivative slices inside a fixed ball are null at almost every level. -/
 theorem ae_hausdorffMeasure_zeroDeriv_ball_eq_zero {u : V → W} (hu : ContDiff ℝ 1 u) {k : ℕ}
     (hk : k + finrank ℝ W = finrank ℝ V) (hm : 0 < finrank ℝ W) (R : ℕ) :

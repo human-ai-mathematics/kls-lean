@@ -1,17 +1,24 @@
-import Mathlib.Analysis.Matrix.Order
-import FunctionalInequalities.Analysis.Matrix.Trace.Energy
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+module
+
+public import Mathlib.Analysis.Matrix.Order
+public import FunctionalInequalities.Analysis.Matrix.Trace.Energy
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
 /-!
 # Absolute value and sign of a real symmetric matrix
 
-For a real symmetric matrix `M`: `M * M ≥ 0`; `|M| = CFC.sqrt (M * M)` and `S = CFC.sqrt |M|` agree with the real
-continuous functional calculus and are positive semidefinite (`symmetric_matrix_sqrt_real_cfc_bridge`); with
+For a real symmetric matrix `M`: `M * M ≥ 0`; `|M| = CFC.sqrt (M * M)` and `S = CFC.sqrt |M|` agree
+with the real
+continuous functional calculus and are positive semidefinite
+(`symmetric_matrix_sqrt_real_cfc_bridge`); with
 `sign M = cfc sign M`, `S * S = |M|`, `S * sign M * S = M`, and `sign M ^ 2 = 1` when `M` is a unit
-(`symmetric_matrix_sign_factorization`). Singular and indefinite `M` are included. Support for the covariance step
+(`symmetric_matrix_sign_factorization`). Singular and indefinite `M` are included. Support for the
+covariance step
 of the proof of Letwin, arXiv:2607.24164v1, Theorem 1.2 (p. 14, preceding (2.21)).
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped MatrixOrder
@@ -239,8 +246,10 @@ section Jordan
 
 For every real symmetric `B`, the continuous functional calculus parts `P = cfc (max · 0) B` and
 `N = cfc (max (−·) 0) B` are positive semidefinite with `B = P − N`, `P N = N P = 0` and
-`tr(B²) = tr(P²) + tr(N²)` (`symmetric_jordan_decomposition`; no decomposition is assumed, the empty index type
-included); with the trace domination of `Matrix/Trace/Energy.lean` this gives `symmetric_jordan_trace_support`. Support for
+`tr(B²) = tr(P²) + tr(N²)` (`symmetric_jordan_decomposition`; no decomposition is assumed, the empty
+index type
+included); with the trace domination of `Matrix/Trace/Energy.lean` this gives
+`symmetric_jordan_trace_support`. Support for
 Letwin, arXiv:2607.24164v1, Theorem 2.5; not the theorem itself.
 -/
 
@@ -339,7 +348,9 @@ end FunctionalInequalities.Analysis
 
 /-! ### Spectral geometry of a symmetric invertible matrix
 
-For symmetric invertible `M`, with `B = √(M²)`, `S = √B` and `Q = sign M`: `S Q S = M`, `Q² = 1`, `S` is invertible and gives a self-adjoint Euclidean equivalence. Also: every symmetric matrix is a limit of symmetric invertible matrices. -/
+For symmetric invertible `M`, with `B = √(M²)`, `S = √B` and `Q = sign M`: `S Q S = M`, `Q² = 1`,
+`S` is invertible and gives a self-adjoint Euclidean equivalence. Also: every symmetric matrix is a
+limit of symmetric invertible matrices. -/
 
 noncomputable section
 open scoped MatrixOrder
@@ -347,40 +358,47 @@ open scoped MatrixOrder
 namespace FunctionalInequalities.Analysis
 
 set_option maxHeartbeats 700000 in
-theorem symmetric_matrix_spectral_geometry {n : ℕ}
-    (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (hunit : IsUnit M) :
-    let B : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt (M*M)
+theorem symmetric_matrix_spectral_geometry {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ)
+    (hM : M.IsSymm) (hunit : IsUnit M) :
+    let B : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt (M * M)
     let S : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt B
     let Q : Matrix (Fin n) (Fin n) ℝ := cfc (fun x : ℝ => (SignType.sign x : ℝ)) M
-    B.PosSemidef ∧ S.PosSemidef ∧ Q.IsSymm ∧ B*B=M*M ∧ S*S=B ∧ S*Q*S=M ∧ Q*Q=1 ∧ IsUnit S ∧
-    IsSelfAdjoint (Matrix.toEuclideanLin Q).toContinuousLinearMap ∧
-    ∃ e : EuclideanSpace ℝ (Fin n) ≃L[ℝ] EuclideanSpace ℝ (Fin n),
-      e.toContinuousLinearMap = (Matrix.toEuclideanLin S).toContinuousLinearMap ∧
-      IsSelfAdjoint e.toContinuousLinearMap := by
+    B.PosSemidef ∧
+      S.PosSemidef ∧
+        Q.IsSymm ∧
+          B * B = M * M ∧
+            S * S = B ∧
+              S * Q * S = M ∧
+                Q * Q = 1 ∧
+                  IsUnit S ∧
+                    IsSelfAdjoint (Matrix.toEuclideanLin Q).toContinuousLinearMap ∧
+                      ∃ e : EuclideanSpace ℝ (Fin n) ≃L[ℝ] EuclideanSpace ℝ (Fin n),
+                        e.toContinuousLinearMap =
+                            (Matrix.toEuclideanLin S).toContinuousLinearMap ∧
+                          IsSelfAdjoint e.toContinuousLinearMap := by
   let E := EuclideanSpace ℝ (Fin n)
-  let B : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt (M*M)
+  let B : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt (M * M)
   let S : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt B
   let Q : Matrix (Fin n) (Fin n) ℝ := cfc (fun x : ℝ => (SignType.sign x : ℝ)) M
-  have hMM : 0 ≤ M*M := (symmetric_matrix_sqrt_real_cfc_bridge M hM).1
+  have hMM : 0 ≤ M * M := (symmetric_matrix_sqrt_real_cfc_bridge M hM).1
   have hBn : 0 ≤ B := CFC.sqrt_nonneg _
   have hSn : 0 ≤ S := CFC.sqrt_nonneg _
   have hB : B.PosSemidef := by
-    change (B-0).PosSemidef at hBn
+    change (B - 0).PosSemidef at hBn
     simpa only [sub_zero] using hBn
   have hS : S.PosSemidef := by
-    change (S-0).PosSemidef at hSn
+    change (S - 0).PosSemidef at hSn
     simpa only [sub_zero] using hSn
   have hQh : Q.IsHermitian := IsSelfAdjoint.cfc (R := ℝ)
   have hQ : Q.IsSymm := Matrix.isHermitian_iff_isSymm.mp hQh
-  have hBB : B*B=M*M := by
-    simpa only [pow_two] using CFC.sq_sqrt (M*M) hMM
-  obtain ⟨hSS,hSQS,hQQ⟩ := symmetric_matrix_sign_factorization M hM
+  have hBB : B * B = M * M := by simpa only [pow_two] using CFC.sq_sqrt (M * M) hMM
+  obtain ⟨hSS, hSQS, hQQ⟩ := symmetric_matrix_sign_factorization M hM
   have hQQ := hQQ hunit
   have hdetM : M.det ≠ 0 := isUnit_iff_ne_zero.mp ((Matrix.isUnit_iff_isUnit_det M).mp hunit)
   have hdetS : S.det ≠ 0 := by
     intro hz
     apply hdetM
-    rw [← hSQS,Matrix.det_mul,Matrix.det_mul]
+    rw [← hSQS, Matrix.det_mul, Matrix.det_mul]
     change S.det * Q.det * S.det = 0
     rw [hz]
     ring
@@ -388,20 +406,23 @@ theorem symmetric_matrix_spectral_geometry {n : ℕ}
   let f : E →ₗ[ℝ] E := Matrix.toEuclideanLin S
   have hfu : IsUnit f := by
     change IsUnit ((Matrix.toLinAlgEquiv (EuclideanSpace.basisFun (Fin n) ℝ).toBasis) S)
-    exact hSunit.map (Matrix.toLinAlgEquiv (EuclideanSpace.basisFun (Fin n) ℝ).toBasis).toMonoidHom
-  have hfi : Function.Injective f := LinearMap.ker_eq_bot.mp ((LinearMap.isUnit_iff_ker_eq_bot f).mp hfu)
+    exact
+      hSunit.map (Matrix.toLinAlgEquiv (EuclideanSpace.basisFun (Fin n) ℝ).toBasis).toMonoidHom
+  have hfi : Function.Injective f :=
+    LinearMap.ker_eq_bot.mp ((LinearMap.isUnit_iff_ker_eq_bot f).mp hfu)
   let e : E ≃L[ℝ] E := (LinearEquiv.ofInjectiveEndo f hfi).toContinuousLinearEquiv
   have he : e.toContinuousLinearMap = (Matrix.toEuclideanLin S).toContinuousLinearMap := by
     ext x
     rfl
   have hES : IsSelfAdjoint e.toContinuousLinearMap := by
     rw [he]
-    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-      (Matrix.isSymmetric_toEuclideanLin_iff.mpr hS.isHermitian)
+    exact
+      ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+        (Matrix.isSymmetric_toEuclideanLin_iff.mpr hS.isHermitian)
   have hEQ : IsSelfAdjoint (Matrix.toEuclideanLin Q).toContinuousLinearMap :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
       (Matrix.isSymmetric_toEuclideanLin_iff.mpr hQh)
-  exact ⟨hB,hS,hQ,hBB,hSS,hSQS,hQQ,hSunit,hEQ,e,he,hES⟩
+  exact ⟨hB, hS, hQ, hBB, hSS, hSQS, hQQ, hSunit, hEQ, e, he, hES⟩
 
 end FunctionalInequalities.Analysis
 

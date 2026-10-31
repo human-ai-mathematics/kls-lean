@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedDensityTruncation
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityTruncation
 
 /-!
 # Dyadic time-discretisation of a mark-dependent integrand
@@ -14,6 +19,8 @@ evaluation `dyadicEval` built from them. For a bounded jointly measurable `φ`, 
 density theorem gives almost-everywhere convergence of `dyadicEval` to `φ` in the time variable,
 and dominated convergence upgrades it to convergence in `L²(P ⊗ ds ⊗ ν)`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -263,9 +270,9 @@ lemma dyadicEval_eq_dyadicAvg_at_index
     rw [h_pcast, h_psucc]; exact hi_mem
   unfold dyadicEval
   rw [Finset.sum_eq_single i]
-  · rw [if_pos h_i_fires]
+  · rw [ite_eq_left h_i_fires]
   · intro j _ hji
-    refine if_neg (fun ⟨hj1, hj2⟩ => ?_)
+    refine ite_eq_right (fun ⟨hj1, hj2⟩ => ?_)
     rcases lt_trichotomy i j with hlt | heq | hgt
     · have := (dyadicPartition_strictMono hT n).monotone (Fin.succ_le_castSucc_iff.mpr hlt)
       linarith [h_i_fires.2]
@@ -371,11 +378,11 @@ lemma dyadicEval_bounded {T : ℝ} (hT : 0 < T) (φ : Ω → ℝ → E → ℝ)
       · exact hj heq.symm
       · have := (dyadicPartition_strictMono hT n).monotone (Fin.succ_le_castSucc_iff.mpr hgt)
         linarith [hi₀.1]
-    rw [Finset.sum_eq_single i₀ (fun j _ hj => if_neg (huniq j hj))
-        (fun h => absurd (Finset.mem_univ _) h), if_pos hi₀]
+    rw [Finset.sum_eq_single i₀ (fun j _ hj => ite_eq_right (huniq j hj))
+        (fun h => absurd (Finset.mem_univ _) h), ite_eq_left hi₀]
     exact dyadicAvg_bounded hT φ hM n i₀ ω e
   · rw [not_exists] at h
-    rw [Finset.sum_eq_zero (fun i _ => if_neg (h i)), abs_zero]; exact hM_nn
+    rw [Finset.sum_eq_zero (fun i _ => ite_eq_right (h i)), abs_zero]; exact hM_nn
 
 omit [MeasurableSpace Ω] [MeasurableSpace E] in
 /-- `s ↦ dyadicEval T φ n s ω e` is measurable (finite sum of interval-indicators

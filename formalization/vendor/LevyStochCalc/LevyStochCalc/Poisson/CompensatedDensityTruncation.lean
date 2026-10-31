@@ -3,14 +3,18 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedMartingale
-import LevyStochCalc.Probability.Progressive
-import Mathlib.MeasureTheory.Integral.Average
-import Mathlib.MeasureTheory.Covering.DensityTheorem
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import Mathlib.MeasureTheory.Function.ConditionalExpectation.CondJensen
-import Mathlib.Probability.Martingale.OptionalStopping
-import Mathlib.MeasureTheory.Integral.Layercake
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedMartingale
+public import LevyStochCalc.Probability.Progressive
+public import Mathlib.MeasureTheory.Integral.Average
+public import Mathlib.MeasureTheory.Covering.DensityTheorem
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.MeasureTheory.Function.ConditionalExpectation.CondJensen
+public import Mathlib.Probability.Martingale.OptionalStopping
+public import Mathlib.MeasureTheory.Integral.Layercake
 
 /-!
 # Truncation of a square-integrable Lévy integrand
@@ -22,6 +26,8 @@ values at level `M` and restricting the marks to an exhausting sequence of sets 
 `ν`-measure both converge to `φ` in `L²(P ⊗ ds ⊗ ν)`, by nested dominated convergence with
 `‖φ‖²` as dominating function.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

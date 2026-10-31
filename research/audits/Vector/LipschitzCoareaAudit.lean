@@ -1,15 +1,19 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.Lipschitz
-import FunctionalInequalities.Analysis.Lipschitz.Local
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import Mathlib.Analysis.Calculus.Deriv.Abs
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.Lipschitz
+public import FunctionalInequalities.Analysis.Lipschitz.Local
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import Mathlib.Analysis.Calculus.Deriv.Abs
 
 /-!
 # Strict audit client for the codimension-`m` coarea formula of Lipschitz maps
 
-Independent client of `Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces}.lean` and `Analysis/Vector/Coarea/Lipschitz.lean`.
+Independent client of `Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces}.lean` and
+`Analysis/Vector/Coarea/Lipschitz.lean`.
 Every obligation of the Lipschitz vector-coarea route — whose statements are recorded in
 `research/audits/Vector/LipschitzCoareaRouteStatements.lean` as `#check`s — is **restated here
-verbatim**, binder for binder and instance for instance, as a theorem, and discharged from the library
+verbatim**, binder for binder and instance for instance, as a theorem, and discharged from the
+library
 modules. `route_M2` also checks the locally Lipschitz follow-on using
 `Analysis/Lipschitz/Local.lean`; it remains a separate contract from `route_L0`.
 
@@ -20,11 +24,13 @@ refinement, `route_V4'`, `route_V4''` and `route_V4` the componentwise calculus,
 assembly stated as an implication, so that `route_L0` is `route_V5` applied to `route_V1`.
 
 **What is not proved.**  No Sard theorem: nothing is claimed about the measure of the set of
-critical values.  The locally Lipschitz follow-on is the separate `route_M2` theorem below. Nothing about the Cheeger–Buser line or the
+critical values.  The locally Lipschitz follow-on is the separate `route_M2` theorem below. Nothing
+about the Cheeger–Buser line or the
 sharp finite-regularity Sard.
 
 **Why the `C¹` formula is not recovered from `route_L0`.**  The two hypotheses are incomparable: a
-Lipschitz map need not be `C¹` — `route_M1` proves this, with a coordinate absolute value on a line, in an arbitrary universe — and a `C¹` map on
+Lipschitz map need not be `C¹` — `route_M1` proves this, with a coordinate absolute value on a line,
+in an arbitrary universe — and a `C¹` map on
 a non-compact domain need not be Lipschitz.  So there is no implication either way at the level of
 the hypotheses, and in place of a recovery this file checks the **boundary cases** the statement is
 supposed to survive: a zero-dimensional target (`zero_dimensional_target`), an equidimensional pair
@@ -35,6 +41,8 @@ therefore carries a null slice integral (`constant_map`), and the codimension-on
 (itself `Analysis.coareaJacobian_eq_norm_toDual_symm`), fibre measure `KLS.surfaceMeasure V` — from
 `route_L0` alone, without naming the scalar theorem in its proof.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -302,18 +310,24 @@ end LipschitzVectorCoareaAudit
 
 /-! #### The locally Lipschitz follow-on `M2` of `LipschitzCoareaRouteStatements.lean`, verbatim -/
 
-theorem LipschitzVectorCoareaAudit.route_M2 : ∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-    [MeasurableSpace V] [BorelSpace V]
-    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-    [MeasurableSpace W] [BorelSpace W]
-    {S : Set V} {u : V → W} {g : V → ℝ≥0∞} {k : ℕ},
-    k + finrank ℝ W = finrank ℝ V → LocallyLipschitz u →
-    MeasurableSet S → Measurable g →
-    AEMeasurable (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
-        (volume : Measure W) ∧
-      (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
-        = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k)
-            ∂(volume : Measure W)) :=
+theorem LipschitzVectorCoareaAudit.route_M2 :
+    ∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+      [MeasurableSpace V] [BorelSpace V] [NormedAddCommGroup W] [InnerProductSpace ℝ W]
+      [FiniteDimensional ℝ W] [MeasurableSpace W] [BorelSpace W] {S : Set V} {u : V → W}
+      {g : V → ℝ≥0∞} {k : ℕ},
+      k + finrank ℝ W = finrank ℝ V →
+        LocallyLipschitz u →
+          MeasurableSet S →
+            Measurable g →
+              AEMeasurable
+                  (fun t : W =>
+                    ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
+                  (volume : Measure W) ∧
+                (∫⁻ x in S,
+                    ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) =
+                  ∫⁻ t,
+                    ∫⁻ y in S ∩ {x : V | u x = t},
+                      g y ∂(KLS.hausdorffNormalized V k) ∂(volume : Measure W)) :=
   fun hk hu hS hg => FunctionalInequalities.Analysis.coarea_of_locallyLipschitz hk hu hS hg
 
 #print axioms FunctionalInequalities.Analysis.coarea_of_locallyLipschitz

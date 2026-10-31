@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.LinearEquation
-import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.LinearEquation
+public import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 
 /-!
 # Finite-regularity linearization of the moment Monge–Ampère equation
@@ -9,6 +11,8 @@ Letwin arXiv:2607.24164v1, (2.4), used in the smoothness argument of Lemma 2.2;
 Gilbarg–Trudinger, Classics 2001, Lemma 17.16, pp. 463–464.
 Only C³ regularity of the given potential and C¹ regularity of the target potential are needed.
 -/
+
+@[expose] public section
 
 noncomputable section
 namespace FunctionalInequalities.Analysis
@@ -22,12 +26,13 @@ open scoped NNReal ContDiff BigOperators Matrix.Norms.Elementwise
 variable {n : ℕ}
 local notation "E" => EuclideanSpace ℝ (Fin n)
 
-/-- Genuine local finite-order Hessian regularity, shared by the C3 differentiable-Hessian source and the local C4 classical source. -/
-theorem contDiffAt_hessianMatrix {n : ℕ} {k : ℕ∞ω}
-    {u : EuclideanSpace ℝ (Fin n) → ℝ} {x : EuclideanSpace ℝ (Fin n)}
-    (hu : ContDiffAt ℝ (k+2) u x) : ContDiffAt ℝ k (hessianMatrix u) x := by
-  have hD1 : ContDiffAt ℝ (k+1) (fderiv ℝ u) x :=
-    hu.fderiv_right (by norm_num [add_assoc])
+/--
+Genuine local finite-order Hessian regularity, shared by the C3 differentiable-Hessian source and
+the local C4 classical source. -/
+theorem contDiffAt_hessianMatrix {n : ℕ} {k : ℕ∞ω} {u : EuclideanSpace ℝ (Fin n) → ℝ}
+    {x : EuclideanSpace ℝ (Fin n)} (hu : ContDiffAt ℝ (k + 2) u x) :
+    ContDiffAt ℝ k (hessianMatrix u) x := by
+  have hD1 : ContDiffAt ℝ (k + 1) (fderiv ℝ u) x := hu.fderiv_right (by norm_num [add_assoc])
   have hD2 : ContDiffAt ℝ k (fderiv ℝ (fderiv ℝ u)) x := hD1.fderiv_right le_rfl
   apply contDiffAt_pi.mpr
   intro i
@@ -128,17 +133,15 @@ open FunctionalInequalities.Probability.Stein
 /-- Actual classical Hessian source for Savin Proposition4.1 proof(10)-(11).
 C4 and the local determinant equation concern this GIVEN classical function;
 no linearized identities are inputs and no C2 of the generated C1 UNIT U is claimed. -/
-theorem classical_hessian_trace_identities {n : ℕ}
-    {u : EuclideanSpace ℝ (Fin n) → ℝ} {x : EuclideanSpace ℝ (Fin n)} {c : ℝ}
-    (hu : ContDiffAt ℝ 4 u x) (hc : c≠0)
-    (heq : ∀ᶠ y in 𝓝 x, (hessianMatrix u y).det=c) :
+theorem classical_hessian_trace_identities {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
+    {x : EuclideanSpace ℝ (Fin n)} {c : ℝ} (hu : ContDiffAt ℝ 4 u x) (hc : c ≠ 0)
+    (heq : ∀ᶠ y in 𝓝 x, (hessianMatrix u y).det = c) :
     (∀ v : EuclideanSpace ℝ (Fin n),
-      ((hessianMatrix u x)⁻¹*fderiv ℝ (hessianMatrix u) x v).trace=0) ∧
-    ∀ v w : EuclideanSpace ℝ (Fin n),
-      ((hessianMatrix u x)⁻¹*fderiv ℝ (fun y => fderiv ℝ (hessianMatrix u) y w) x v).trace =
-      ((hessianMatrix u x)⁻¹*fderiv ℝ (hessianMatrix u) x v*
-        (hessianMatrix u x)⁻¹*fderiv ℝ (hessianMatrix u) x w).trace := by
-  exact trace_identities_of_eventually_det_const
-    (contDiffAt_hessianMatrix (k:=2) hu) hc heq
+        ((hessianMatrix u x)⁻¹ * fderiv ℝ (hessianMatrix u) x v).trace = 0) ∧
+      ∀ v w : EuclideanSpace ℝ (Fin n),
+        ((hessianMatrix u x)⁻¹ * fderiv ℝ (fun y => fderiv ℝ (hessianMatrix u) y w) x v).trace =
+          ((hessianMatrix u x)⁻¹ * fderiv ℝ (hessianMatrix u) x v * (hessianMatrix u x)⁻¹ *
+              fderiv ℝ (hessianMatrix u) x w).trace := by
+  exact trace_identities_of_eventually_det_const (contDiffAt_hessianMatrix (k := 2) hu) hc heq
 
 end FunctionalInequalities.Analysis

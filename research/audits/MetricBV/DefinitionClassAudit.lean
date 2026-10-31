@@ -1,11 +1,16 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
-import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+public import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
 
 /-! Strict proof client: ADMG Theorem 3.6 and Lemma 2.1 stated against the paper's own
 Definition 3.3 class, i.e. globally Lipschitz approximants with unrestricted values/supports and
 global `L¹(ν)` convergence (`lipschitzRelaxation`), rather than the bounded-support test
 perimeter, by composing the Minkowski identities with
-`lipschitzRelaxation_eq_perimeter_of_measure_lt_top`. Both sides are written as the unfolded infima. -/
+`lipschitzRelaxation_eq_perimeter_of_measure_lt_top`. Both sides are written as the unfolded infima.
+-/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

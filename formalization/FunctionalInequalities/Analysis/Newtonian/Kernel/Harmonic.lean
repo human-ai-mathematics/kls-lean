@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Newtonian.Kernel.Trace
-import FunctionalInequalities.Analysis.Newtonian.Kernel.First
-import Mathlib.Analysis.InnerProductSpace.Harmonic.Basic
+module
+
+public import FunctionalInequalities.Analysis.Newtonian.Kernel.Trace
+public import FunctionalInequalities.Analysis.Newtonian.Kernel.First
+public import Mathlib.Analysis.InnerProductSpace.Harmonic.Basic
 
 /-!
 # Harmonicity of the Newtonian kernel off the origin
@@ -10,6 +12,8 @@ In Mathlib's vocabulary, for `n ≥ 2`: `laplacian_newtonianKernel_eq_zero` (`Δ
 Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001
 (ISBN 3-540-41160-7), (2.12). Nothing is asserted at the singularity.
 -/
+
+@[expose] public section
 
 noncomputable section
 

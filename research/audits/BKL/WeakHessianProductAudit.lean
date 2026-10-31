@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff Topology
@@ -101,8 +105,7 @@ theorem produced_normalized_hessian_product {n : ℕ} (hn : 0 < n)
     (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
       (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ)
- :
+    (hiso : KLS.Isotropic μ) :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
@@ -136,28 +139,28 @@ theorem produced_normalized_hessian_product {n : ℕ} (hn : 0 < n)
 /-- The real source-law square consumer retains normalization and the actual
 pushforward, and identifies the derivative 2*H_ij*T_kij with compact-local L2. -/
 theorem produced_normalized_hessian_square {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ)
+    (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
     (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ)
- :
-    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
-        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
+    (hμ :
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (T :
+      EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
-      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      ∀ k i j : Fin n,
-        HasWeakDerivAlong (fun x => (hessianMatrix u x i j) ^ 2)
-          (fun x => 2 * hessianMatrix u x i j * T x k i j)
-          (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-        ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-          MemLp (fun x => 2 * hessianMatrix u x i j * T x k i j) 2
-            ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+            (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+          ∀ k i j : Fin n,
+            HasWeakDerivAlong (fun x => (hessianMatrix u x i j) ^ 2)
+                (fun x => 2 * hessianMatrix u x i j * T x k i j)
+                (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+              ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+                IsCompact S →
+                  MemLp (fun x => 2 * hessianMatrix u x i j * T x k i j) 2
+                    ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
   obtain ⟨u, T, hnorm, hmap, _hG, hprod⟩ :=
     produced_normalized_hessian_product hn hκ hK hKc hKint hW hstrong μ hμ hiso
   refine ⟨u, T, hnorm, hmap, ?_⟩

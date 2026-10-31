@@ -6,7 +6,11 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedDensityBoxIsometry
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityBoxIsometry
 
 /-!
 # The mark-sum process and its `L²` isometry
@@ -17,6 +21,8 @@ difference of two such processes. The energy is computed from the product form o
 intensity on time-mark boxes; completeness of `L²(P)` then turns a Cauchy sequence of such
 processes into a limit.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

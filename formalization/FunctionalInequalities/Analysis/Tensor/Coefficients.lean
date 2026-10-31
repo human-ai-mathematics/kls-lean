@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Tensor.Coordinate
-import FunctionalInequalities.Analysis.Tensor.Multilinear
+module
+
+public import FunctionalInequalities.Analysis.Tensor.Coordinate
+public import FunctionalInequalities.Analysis.Tensor.Multilinear
 
 /-!
 # Coefficient arrays of multilinear maps
@@ -13,6 +15,8 @@ places the original index after the Taylor indices, and the operator norm is at 
 Hilbert–Schmidt norm.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Finset
@@ -21,8 +25,7 @@ open scoped RealInnerProductSpace
 namespace FunctionalInequalities.Analysis.Tensor
 
 /-- Sum a function of two chosen coordinates as an iterated sum over those coordinates. -/
-theorem sum_finTwo_arrow {ι E : Type*} [Fintype ι] (b : ι → E)
-    (f : (Fin 2 → E) → ℝ) :
+theorem sum_finTwo_arrow {ι E : Type*} [Fintype ι] (b : ι → E) (f : (Fin 2 → E) → ℝ) :
     ∑ J : Fin 2 → ι, f (fun k => b (J k)) = ∑ i, ∑ j, f ![b i, b j] := by
   calc
     ∑ J : Fin 2 → ι, f (fun k => b (J k)) =
@@ -40,8 +43,7 @@ theorem sum_finTwo_arrow {ι E : Type*} [Fintype ι] (b : ι → E)
 /-- Sum over two coordinates after adjoining a fixed first coordinate. -/
 theorem sum_finTwo_arrow_cons {ι E : Type*} [Fintype ι] (b : ι → E) (u : E)
     (f : (Fin 3 → E) → ℝ) :
-    ∑ J : Fin 2 → ι, f (Fin.cons u fun k => b (J k)) =
-      ∑ i, ∑ j, f ![u, b i, b j] := by
+    ∑ J : Fin 2 → ι, f (Fin.cons u fun k => b (J k)) = ∑ i, ∑ j, f ![u, b i, b j] := by
   rw [sum_finTwo_arrow b (fun v => f (Fin.cons u v))]
   apply Finset.sum_congr rfl
   intro i _
@@ -107,24 +109,24 @@ theorem coordTensor_symmetrizeML {n k : ℕ} (b : OrthonormalBasis (Fin n) ℝ E
     simp only [Finset.card_univ, Fintype.card_perm, Fintype.card_fin]
     congr 1
 
-/-- In coordinates, `appendInner Ψ` is the array whose last index is the coordinate of the vector
+/--
+In coordinates, `appendInner Ψ` is the array whose last index is the coordinate of the vector
 `Ψ (b i₁, …, b i_d)`: the original index comes after the `d` Taylor indices. -/
 theorem coordTensor_appendInner {n d : ℕ} (b : OrthonormalBasis (Fin n) ℝ E)
     (Ψ : ContinuousMultilinearMap ℝ (fun _ : Fin d => E) E) (i : Fin (d + 1) → Fin n) :
-    coordTensor b (appendInner Ψ) i = ⟪Ψ (fun j => b (i (Fin.castSucc j))), b (i (Fin.last d))⟫ := by
-    rw [coordTensor_apply]
-    simp only [appendInner, ContinuousMultilinearMap.uncurryRight_apply,
-      ContinuousLinearMap.compContinuousMultilinearMap_coe]
-    have h :
-        Fin.init (fun j : Fin (d + 1) => b (i j)) =
-          (fun j : Fin d => b (i (Fin.castSucc j))) := by
-      funext j
-      rfl
-    rw [h]
-    exact
-      innerSL_apply_apply (𝕜 := ℝ)
-        (Ψ (fun j : Fin d => b (i (Fin.castSucc j))))
-        (b (i (Fin.last d)))
+    coordTensor b (appendInner Ψ) i =
+      ⟪Ψ (fun j => b (i (Fin.castSucc j))), b (i (Fin.last d))⟫ := by
+  rw [coordTensor_apply]
+  simp only [appendInner, ContinuousMultilinearMap.uncurryRight_apply,
+    ContinuousLinearMap.compContinuousMultilinearMap_coe]
+  have h :
+    Fin.init (fun j : Fin (d + 1) => b (i j)) = (fun j : Fin d => b (i (Fin.castSucc j))) := by
+    funext j
+    rfl
+  rw [h]
+  exact
+    innerSL_apply_apply (𝕜 := ℝ) (Ψ (fun j : Fin d => b (i (Fin.castSucc j))))
+      (b (i (Fin.last d)))
 
 private lemma multilinear_basis_expand {n k : ℕ}
     (b : OrthonormalBasis (Fin n) ℝ E)

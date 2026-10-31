@@ -1,13 +1,15 @@
-import FunctionalInequalities.Probability.Gaussian.Kernel
-import FunctionalInequalities.Probability.BrunnMinkowski
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
-import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
-import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
-import Mathlib.MeasureTheory.Measure.Tilted
-import Mathlib.Analysis.Calculus.ParametricIntegral
-import Mathlib.Analysis.SpecialFunctions.MulExpNegMulSq
-import Mathlib.Analysis.Distribution.TemperateGrowth
-import Mathlib.Analysis.SpecialFunctions.Gaussian.PoissonSummation
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Kernel
+public import FunctionalInequalities.Probability.BrunnMinkowski
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
+public import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import Mathlib.Analysis.Calculus.ParametricIntegral
+public import Mathlib.Analysis.SpecialFunctions.MulExpNegMulSq
+public import Mathlib.Analysis.Distribution.TemperateGrowth
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.PoissonSummation
 
 /-!
 # Log-concavity of Gaussian-smoothed Borell densities
@@ -20,6 +22,8 @@ passage are proved in the later `GaussianSmoothing/Poincare` and
 `GaussianSmoothing/Buser` modules; this module does not assert
 individual-domain perimeter convergence.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -468,40 +472,39 @@ private theorem kernelDerivative_continuous (s : ℝ) :
   unfold kernelDerivative normalizedKernel kernel
   fun_prop
 
-private theorem density_hasFDerivAt {ν : Measure V} [IsProbabilityMeasure ν]
-    {ρ : V → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity ν volume ρ)
-    {s : ℝ} (hs : 0 < s) (x : V) :
-    HasFDerivAt (normalizedDensity ρ s)
-      (∫ y, kernelDerivative s (x - y) ∂ν) x := by
+private theorem density_hasFDerivAt {ν : Measure V} [IsProbabilityMeasure ν] {ρ : V → ℝ}
+    (hρ : FunctionalInequalities.KLS.IsBorellDensity ν volume ρ) {s : ℝ} (hs : 0 < s) (x : V) :
+    HasFDerivAt (normalizedDensity ρ s) (∫ y, kernelDerivative s (x - y) ∂ν) x := by
   have hInt (x : V) : Integrable (fun y : V => normalizedKernel s (x - y)) ν := by
-    apply Integrable.mono' (integrable_const ((mass (V := V) s)⁻¹))
-      ((normalizedKernel_measurable s).comp (measurable_const.sub measurable_id)).aestronglyMeasurable
-    exact Filter.Eventually.of_forall fun y => by
-      change ‖normalizedKernel s (x-y)‖ ≤ _
-      rw [Real.norm_eq_abs, abs_of_pos (normalizedKernel_pos hs (x-y))]
-      exact normalizedKernel_le_inv_mass hs (x-y)
-  have hDeriv (x y : V) : HasFDerivAt
-      (fun x : V => normalizedKernel s (x-y)) (kernelDerivative s (x-y)) x := by
-    have h := (kernel_hasFDerivAt s (x-y)).comp x (hasFDerivAt_sub_const y)
+    apply
+      Integrable.mono' (integrable_const ((mass (V := V) s)⁻¹))
+        ((normalizedKernel_measurable s).comp
+            (measurable_const.sub measurable_id)).aestronglyMeasurable
+    exact
+      Filter.Eventually.of_forall fun y => by
+        change ‖normalizedKernel s (x - y)‖ ≤ _
+        rw [Real.norm_eq_abs, abs_of_pos (normalizedKernel_pos hs (x - y))]
+        exact normalizedKernel_le_inv_mass hs (x - y)
+  have hDeriv (x y : V) :
+    HasFDerivAt (fun x : V => normalizedKernel s (x - y)) (kernelDerivative s (x - y)) x := by
+    have h := (kernel_hasFDerivAt s (x - y)).comp x (hasFDerivAt_sub_const y)
     simpa only [Function.comp_def, ContinuousLinearMap.comp_id, kernelDerivative] using h
-  have h := hasFDerivAt_integral_of_dominated_of_fderiv_le
-    (F := fun x y : V => normalizedKernel s (x-y))
-    (F' := fun x y => kernelDerivative s (x-y))
-    (s := Set.univ) (bound := fun _ : V =>
-      2 * s / mass (V := V) s * (Real.sqrt s)⁻¹)
-    (μ := ν) (x₀ := x)
-    Filter.univ_mem
-    (Filter.Eventually.of_forall fun x =>
-      ((normalizedKernel_measurable s).comp (measurable_const.sub measurable_id)).aestronglyMeasurable)
-    (hInt x)
-    ((kernelDerivative_continuous s).comp (continuous_const.sub continuous_id)).aestronglyMeasurable
-    (Filter.Eventually.of_forall fun y x _ => by
-      simpa only [kernelDerivative, ← (kernel_hasFDerivAt s (x-y)).fderiv] using
-        kernel_fderiv_norm_le s hs (x-y))
-    (integrable_const _)
-    (Filter.Eventually.of_forall fun y x _ => hDeriv x y)
-  have heq : normalizedDensity ρ s =
-      (fun x => ∫ y, normalizedKernel s (x-y) ∂ν) := by
+  have h :=
+    hasFDerivAt_integral_of_dominated_of_fderiv_le (F := fun x y : V =>
+      normalizedKernel s (x - y)) (F' := fun x y => kernelDerivative s (x - y)) (s := Set.univ)
+      (bound := fun _ : V => 2 * s / mass (V := V) s * (Real.sqrt s)⁻¹) (μ := ν) (x₀ := x)
+      Filter.univ_mem
+      (Filter.Eventually.of_forall fun x =>
+        ((normalizedKernel_measurable s).comp
+            (measurable_const.sub measurable_id)).aestronglyMeasurable)
+      (hInt x)
+      ((kernelDerivative_continuous s).comp
+          (continuous_const.sub continuous_id)).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun y x _ => by
+        simpa only [kernelDerivative, ← (kernel_hasFDerivAt s (x - y)).fderiv] using
+          kernel_fderiv_norm_le s hs (x - y))
+      (integrable_const _) (Filter.Eventually.of_forall fun y x _ => hDeriv x y)
+  have heq : normalizedDensity ρ s = (fun x => ∫ y, normalizedKernel s (x - y) ∂ν) := by
     funext x
     exact normalizedDensity_eq_integral hρ hs x
   rw [heq]
@@ -546,11 +549,13 @@ theorem normalizedDensity_contDiff_one {ν : Measure V} [IsProbabilityMeasure ν
     exact hc
 
 /-- The logarithmic potential of the actual convolution is continuously differentiable. -/
-theorem potential_contDiff_one {ν : Measure V} [IsProbabilityMeasure ν]
-    {ρ : V → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity ν volume ρ)
-    {s : ℝ} (hs : 0 < s) : ContDiff ℝ 1 (potential ρ s) := by
+theorem potential_contDiff_one {ν : Measure V} [IsProbabilityMeasure ν] {ρ : V → ℝ}
+    (hρ : FunctionalInequalities.KLS.IsBorellDensity ν volume ρ) {s : ℝ} (hs : 0 < s) :
+    ContDiff ℝ 1 (potential ρ s) := by
   unfold potential
-  exact ((normalizedDensity_contDiff_one hρ hs).log (fun x => (normalizedDensity_pos hρ hs x).ne')).neg
+  exact
+    ((normalizedDensity_contDiff_one hρ hs).log
+        (fun x => (normalizedDensity_pos hρ hs x).ne')).neg
 
 
 /-! ### Second-order regularity of the actual Gaussian convolution -/
@@ -715,7 +720,6 @@ open Filter Topology
 open scoped ContDiff
 
 set_option backward.isDefEq.respectTransparency false
-set_option linter.style.haveILetI false
 
 private theorem pow_mul_exp_neg_sq_bounded (b : ℝ) (hb : 0 < b) (n : ℕ) :
     ∃ C : ℝ, ∀ r : ℝ, 0 ≤ r → r ^ n * Real.exp (-b * r ^ 2) ≤ C := by
@@ -816,110 +820,93 @@ private theorem gaussian_deriv_bound (s : ℝ) (hs : 0 < s) (n : ℕ) :
 
 end InnerProduct
 
-private theorem smooth_integral_of_uniform_derivatives [NormedSpace ℝ V]
-    [FiniteDimensional ℝ V]
-    [MeasurableSpace V] [BorelSpace V]
-    (ν : Measure V) [IsProbabilityMeasure ν] (g : V → ℝ)
-    (hg : ContDiff ℝ ∞ g)
-    (hB : ∀ n : ℕ, ∃ B : ℝ, ∀ z : V,
-      ‖iteratedFDeriv ℝ n g z‖ ≤ B) :
-    ContDiff ℝ ∞ (fun x : V => ∫ y, g (x-y) ∂ν) := by
-  let J (n : ℕ) (x : V) := ∫ y, iteratedFDeriv ℝ n g (x-y) ∂ν
+private theorem smooth_integral_of_uniform_derivatives [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+    [MeasurableSpace V] [BorelSpace V] (ν : Measure V) [IsProbabilityMeasure ν] (g : V → ℝ)
+    (hg : ContDiff ℝ ∞ g) (hB : ∀ n : ℕ, ∃ B : ℝ, ∀ z : V, ‖iteratedFDeriv ℝ n g z‖ ≤ B) :
+    ContDiff ℝ ∞ (fun x : V => ∫ y, g (x - y) ∂ν) := by
+  let J (n : ℕ) (x : V) := ∫ y, iteratedFDeriv ℝ n g (x - y) ∂ν
   have hcont (n : ℕ) : Continuous (iteratedFDeriv ℝ n g) :=
     hg.continuous_iteratedFDeriv (by exact_mod_cast (show (n : ℕ∞) ≤ ⊤ from le_top))
-  have hint (n : ℕ) (x : V) :
-      Integrable (fun y : V => iteratedFDeriv ℝ n g (x-y)) ν := by
+  have hint (n : ℕ) (x : V) : Integrable (fun y : V => iteratedFDeriv ℝ n g (x - y)) ν := by
     obtain ⟨B, hbound⟩ := hB n
-    apply Integrable.mono' (integrable_const B)
-      ((hcont n).comp (continuous_const.sub continuous_id)).aestronglyMeasurable
-    exact Filter.Eventually.of_forall fun y => hbound (x-y)
+    apply
+      Integrable.mono' (integrable_const B)
+        ((hcont n).comp (continuous_const.sub continuous_id)).aestronglyMeasurable
+    exact Filter.Eventually.of_forall fun y => hbound (x - y)
   have hJn : ∀ m : ℕ, ∀ n : ℕ, ContDiff ℝ m (J n) := by
     intro m
     induction m with
     | zero =>
-        intro n
-        apply contDiff_zero.mpr
-        dsimp [J]
-        obtain ⟨B, hbound⟩ := hB n
-        apply continuous_of_dominated (bound := fun _ : V => B)
-        · intro x
-          exact ((hcont n).comp (continuous_const.sub continuous_id)).aestronglyMeasurable
-        · intro x
-          exact Filter.Eventually.of_forall fun y => hbound (x-y)
-        · exact integrable_const _
-        · exact Filter.Eventually.of_forall fun y =>
+      intro n
+      apply contDiff_zero.mpr
+      dsimp [J]
+      obtain ⟨B, hbound⟩ := hB n
+      apply continuous_of_dominated (bound := fun _ : V => B)
+      · intro x
+        exact ((hcont n).comp (continuous_const.sub continuous_id)).aestronglyMeasurable
+      · intro x
+        exact Filter.Eventually.of_forall fun y => hbound (x - y)
+      · exact integrable_const _
+      · exact
+          Filter.Eventually.of_forall fun y =>
             (hcont n).comp (continuous_id.sub continuous_const)
     | succ m ih =>
-        intro n
-        letI : NormedAddCommGroup (V [×(n+1)]→L[ℝ] ℝ) :=
-          ContinuousMultilinearMap.normedAddCommGroup'
-        letI : NormedSpace ℝ (V [×(n+1)]→L[ℝ] ℝ) :=
-          ContinuousMultilinearMap.normedSpace'
-        letI : NormedAddCommGroup (V [×n]→L[ℝ] ℝ) :=
-          ContinuousMultilinearMap.normedAddCommGroup'
-        letI : NormedSpace ℝ (V [×n]→L[ℝ] ℝ) :=
-          ContinuousMultilinearMap.normedSpace'
-        let L : (V [×(n+1)]→L[ℝ] ℝ) →L[ℝ]
-            (V →L[ℝ] (V [×n]→L[ℝ] ℝ)) :=
-          { toFun := ContinuousMultilinearMap.curryLeft
-            map_add' := by intros; rfl
-            map_smul' := by intros; rfl
-            cont := (continuousMultilinearCurryLeftEquiv ℝ
-              (fun _ : Fin (n+1) => V) ℝ).continuous }
-        have hderiv_cont : ContDiff ℝ m (fun x => L (J (n+1) x)) := by
-          simpa only [Function.comp_def] using L.contDiff.comp (ih (n+1))
-        have hAt (x : V) : HasFDerivAt (J n)
-            (L (J (n+1) x)) x := by
-          have hfcont : Continuous (fun z : V => fderiv ℝ (iteratedFDeriv ℝ n g) z) := by
-            rw [fderiv_iteratedFDeriv]
-            exact L.continuous.comp (hcont (n+1))
-          have hfbound (z : V) :
-              ‖fderiv ℝ (iteratedFDeriv ℝ n g) z‖ ≤ (hB (n+1)).choose := by
-            rw [norm_fderiv_iteratedFDeriv]
-            exact (hB (n+1)).choose_spec z
-          have hdiff (x y : V) : HasFDerivAt
-              (fun x : V => iteratedFDeriv ℝ n g (x-y))
-              (fderiv ℝ (iteratedFDeriv ℝ n g) (x-y)) x := by
-            have hreg : Differentiable ℝ (iteratedFDeriv ℝ n g) :=
-              hg.differentiable_iteratedFDeriv (by exact_mod_cast (ENat.natCast_lt_top n))
-            have h := (hreg (x-y)).hasFDerivAt.comp x (hasFDerivAt_sub_const y)
-            simpa only [Function.comp_def, ContinuousLinearMap.comp_id] using h
-          have h := hasFDerivAt_integral_of_dominated_of_fderiv_le
-            (F := fun x y : V => iteratedFDeriv ℝ n g (x-y))
-            (F' := fun x y => fderiv ℝ (iteratedFDeriv ℝ n g) (x-y))
-            (s := Set.univ) (bound := fun _ : V => (hB (n+1)).choose)
-            (μ := ν) (x₀ := x)
-            Filter.univ_mem
+      intro n
+      let : NormedAddCommGroup (V [×(n + 1)]→L[ℝ] ℝ) :=
+        ContinuousMultilinearMap.normedAddCommGroup'
+      let : NormedSpace ℝ (V [×(n + 1)]→L[ℝ] ℝ) := ContinuousMultilinearMap.normedSpace'
+      let : NormedAddCommGroup (V [×n]→L[ℝ] ℝ) := ContinuousMultilinearMap.normedAddCommGroup'
+      let : NormedSpace ℝ (V [×n]→L[ℝ] ℝ) := ContinuousMultilinearMap.normedSpace'
+      let L : (V [×(n + 1)]→L[ℝ] ℝ) →L[ℝ] (V →L[ℝ] (V [×n]→L[ℝ] ℝ)) :=
+        { toFun := ContinuousMultilinearMap.curryLeft
+          map_add' := by intros; rfl
+          map_smul' := by intros; rfl
+          cont :=
+            (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (n + 1) => V) ℝ).continuous }
+      have hderiv_cont : ContDiff ℝ m (fun x => L (J (n + 1) x)) := by
+        simpa only [Function.comp_def] using L.contDiff.comp (ih (n + 1))
+      have hAt (x : V) : HasFDerivAt (J n) (L (J (n + 1) x)) x := by
+        have hfcont : Continuous (fun z : V => fderiv ℝ (iteratedFDeriv ℝ n g) z) := by
+          rw [fderiv_iteratedFDeriv]
+          exact L.continuous.comp (hcont (n + 1))
+        have hfbound (z : V) : ‖fderiv ℝ (iteratedFDeriv ℝ n g) z‖ ≤ (hB (n + 1)).choose := by
+          rw [norm_fderiv_iteratedFDeriv]
+          exact (hB (n + 1)).choose_spec z
+        have hdiff (x y : V) :
+          HasFDerivAt (fun x : V => iteratedFDeriv ℝ n g (x - y))
+            (fderiv ℝ (iteratedFDeriv ℝ n g) (x - y)) x := by
+          have hreg : Differentiable ℝ (iteratedFDeriv ℝ n g) :=
+            hg.differentiable_iteratedFDeriv (by exact_mod_cast (ENat.natCast_lt_top n))
+          have h := (hreg (x - y)).hasFDerivAt.comp x (hasFDerivAt_sub_const y)
+          simpa only [Function.comp_def, ContinuousLinearMap.comp_id] using h
+        have h :=
+          hasFDerivAt_integral_of_dominated_of_fderiv_le (F := fun x y : V =>
+            iteratedFDeriv ℝ n g (x - y)) (F' := fun x y =>
+            fderiv ℝ (iteratedFDeriv ℝ n g) (x - y)) (s := Set.univ) (bound := fun _ : V =>
+            (hB (n + 1)).choose) (μ := ν) (x₀ := x) Filter.univ_mem
             (Filter.Eventually.of_forall fun x =>
               ((hcont n).comp (continuous_const.sub continuous_id)).aestronglyMeasurable)
-            (hint n x)
-            ((hfcont.comp (continuous_const.sub continuous_id)).aestronglyMeasurable)
-            (Filter.Eventually.of_forall fun y x _ => hfbound (x-y))
-            (integrable_const _)
+            (hint n x) ((hfcont.comp (continuous_const.sub continuous_id)).aestronglyMeasurable)
+            (Filter.Eventually.of_forall fun y x _ => hfbound (x - y)) (integrable_const _)
             (Filter.Eventually.of_forall fun y x _ => hdiff x y)
-          have heq : (∫ y, fderiv ℝ (iteratedFDeriv ℝ n g) (x-y) ∂ν) =
-              L (J (n+1) x) := by
-            calc
-              _ = ∫ y, L (iteratedFDeriv ℝ (n+1) g (x-y)) ∂ν := by
-                congr 1
-              _ = L (J (n+1) x) := by
-                exact L.integral_comp_comm (hint (n+1) x)
-          rw [heq] at h
-          exact h
-        exact contDiff_succ_iff_hasFDerivAt.mpr ⟨_, hderiv_cont, hAt⟩
+        have heq : (∫ y, fderiv ℝ (iteratedFDeriv ℝ n g) (x - y) ∂ν) = L (J (n + 1) x) := by
+          calc
+            _ = ∫ y, L (iteratedFDeriv ℝ (n + 1) g (x - y)) ∂ν := by congr 1
+            _ = L (J (n + 1) x) := by exact L.integral_comp_comm (hint (n + 1) x)
+        rw [heq] at h
+        exact h
+      exact contDiff_succ_iff_hasFDerivAt.mpr ⟨_, hderiv_cont, hAt⟩
   apply contDiff_infty.mpr
   intro m
-  letI : NormedAddCommGroup (V [×0]→L[ℝ] ℝ) :=
-    ContinuousMultilinearMap.normedAddCommGroup'
-  letI : NormedSpace ℝ (V [×0]→L[ℝ] ℝ) :=
-    ContinuousMultilinearMap.normedSpace'
+  let : NormedAddCommGroup (V [×0]→L[ℝ] ℝ) := ContinuousMultilinearMap.normedAddCommGroup'
+  let : NormedSpace ℝ (V [×0]→L[ℝ] ℝ) := ContinuousMultilinearMap.normedSpace'
   let e := continuousMultilinearCurryFin0 ℝ V ℝ
   have hc : ContDiff ℝ m (fun x => e (J 0 x)) := by
     simpa only [Function.comp_def] using e.contDiff.comp (hJn m 0)
-  have heq : (fun x => e (J 0 x)) = (fun x : V => ∫ y, g (x-y) ∂ν) := by
+  have heq : (fun x => e (J 0 x)) = (fun x : V => ∫ y, g (x - y) ∂ν) := by
     funext x
     dsimp [J]
-    change (∫ y, iteratedFDeriv ℝ 0 g (x-y) ∂ν) (0 : Fin 0 → V) = _
+    change (∫ y, iteratedFDeriv ℝ 0 g (x - y) ∂ν) (0 : Fin 0 → V) = _
     rw [ContinuousMultilinearMap.integral_apply (hint 0 x)]
     simp only [iteratedFDeriv_zero_apply]
   rw [← heq]

@@ -1,23 +1,30 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import Mathlib.Probability.ConditionalProbability
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import FunctionalInequalities.KLS.Isotropic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import Mathlib.Probability.ConditionalProbability
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import FunctionalInequalities.KLS.Isotropic
 
 /-! Audit clients for the singleton allocation of (74) (`Analysis/BakryEmery/Cumulant/Local.lean`
 section SingletonAllocation), in the sections UniformWitness, UniformClients, SkewClients and
 ZeroClients. -/
+
+@[expose] public section
 
 -- ===== UniformWitness =====
 /-!
 # Audit: a law satisfying every premise of the conditional BKL Lemma 4.2
 
 The uniform law on `[-√3, √3]` is a centered isotropic probability law on `ℝ` with all exponential
-moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so the
+moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so
+the
 conditional BKL Lemma 4.2 (`sum_sq_cumulant_three_le_of_letwin` in
-`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client also
+`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client
+also
 connects the cumulant and Taylor formulations (`taylorTensor_two_inner_eq_of_centered`,
-`cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed witness
+`cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed
+witness
 is included: the two-point law `(1/5) δ₂ + (4/5) δ_{-1/2}` is centered and isotropic with
 `Var(m X²) = 9 m² / 4 ≤ 8 m²` and `κ₃(1, 1, 1) = 3/2 ≠ 0`. The uniform law is log-concave, the
 two-point law is not; the conditional statement does not assume log-concavity. The client does not
@@ -230,11 +237,14 @@ theorem sum_sq_cumulant_three_le_unifSym (u : ℝ) :
         integrable_exp_mul_norm_unifSym centered_unifSym isotropic_unifSym
         letwinQuadraticBound_unifSym u
 
-/-- The cumulant and Taylor formulations agree for the witness: `T_2⟪u, ·⟫(v, w) = ½ κ_3(u, v, w)`. -/
+/--
+The cumulant and Taylor formulations agree for the witness: `T_2⟪u, ·⟫(v, w) = ½ κ_3(u, v, w)`. -/
 theorem taylorTensor_two_eq_half_cumulant_unifSym (u v w : ℝ) :
-    taylorTensor unifSym (fun x => ⟪u, x⟫) 2 ![v, w] = (1 / 2 : ℝ) * cumulant unifSym 3 ![u, v, w] := by
+    taylorTensor unifSym (fun x => ⟪u, x⟫) 2 ![v, w] =
+      (1 / 2 : ℝ) * cumulant unifSym 3 ![u, v, w] := by
   have := isProbabilityMeasure_unifSym
-  rw [taylorTensor_two_inner_eq_of_centered unifSym integrable_exp_mul_norm_unifSym centered_unifSym,
+  rw [taylorTensor_two_inner_eq_of_centered unifSym integrable_exp_mul_norm_unifSym
+      centered_unifSym,
     cumulant_three_eq_integral unifSym integrable_exp_mul_norm_unifSym centered_unifSym]
 
 end BKLThirdCumulantWitness
@@ -305,7 +315,8 @@ theorem letwinQuadraticBound_twoPt : LetwinQuadraticBound twoPt := by
         intro i
         apply Fin.ext
         omega }
-  have hsum : ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ ℝ i), (stdOrthonormalBasis ℝ ℝ j)⟫ ^ 2 = c ^ 2 := by
+  have hsum :
+    ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ ℝ i), (stdOrthonormalBasis ℝ ℝ j)⟫ ^ 2 = c ^ 2 := by
     simp only [Fintype.sum_unique]
     let b : ℝ := stdOrthonormalBasis ℝ ℝ default
     have hb : b ^ 2 = 1 := by
@@ -315,8 +326,8 @@ theorem letwinQuadraticBound_twoPt : LetwinQuadraticBound twoPt := by
       rw [Real.norm_eq_abs] at hn
       nlinarith [sq_abs b]
     rw [show ⟪M b, b⟫ = c * b ^ 2 by
-      dsimp [b]
-      exact hquad _]
+        dsimp [b]
+        exact hquad _]
     rw [hb]
     ring
   rw [hvar, hsum]
@@ -360,25 +371,28 @@ lemma law_compact : IsCompact (law : Measure ℝ).support := by
   have hs := Measure.support_restrict_subset (μ := (volume:Measure ℝ)) (s := Icc (0:ℝ) 1) hx
   simpa only [IsClosed.closure_eq isClosed_Icc] using hs.1
 lemma law_memLp : MemLp (id : ℝ → ℝ) 2 (law : Measure ℝ) :=
-  MemLp.of_bound continuous_id.aestronglyMeasurable 1 (by
-    change ∀ᵐ x ∂(volume.restrict (Icc (0:ℝ) 1)), ‖id x‖ ≤ 1
-    rw [ae_restrict_iff' measurableSet_Icc]
-    exact ae_of_all _ fun u hu => by
-      change ‖u‖ ≤ 1
-      rw [Real.norm_eq_abs, abs_le]
-      constructor <;> linarith [hu.1,hu.2])
-lemma law_mean : (∫ x, x ∂(law : Measure ℝ)) = 1/2 := by
-  change (∫ x in Icc (0:ℝ) 1, x) = 1/2
+  MemLp.of_bound continuous_id.aestronglyMeasurable 1
+    (by
+      change ∀ᵐ x ∂(volume.restrict (Icc (0 : ℝ) 1)), ‖id x‖ ≤ 1
+      rw [ae_restrict_iff' measurableSet_Icc]
+      exact
+        ae_of_all _ fun u hu => by
+          change ‖u‖ ≤ 1
+          rw [Real.norm_eq_abs, abs_le]
+          constructor <;> linarith [hu.1, hu.2])
+lemma law_mean : (∫ x, x ∂(law : Measure ℝ)) = 1 / 2 := by
+  change (∫ x in Icc (0 : ℝ) 1, x) = 1 / 2
   rw [integral_Icc_eq_integral_Ioc, ← integral_of_le zero_le_one, integral_id]
   norm_num
 /-- The existing AffineProfile variance proof, specialized to its actual uniform measure. -/
-lemma law_variance : variance (id : ℝ → ℝ) (law : Measure ℝ) = 1/12 := by
+lemma law_variance : variance (id : ℝ → ℝ) (law : Measure ℝ) = 1 / 12 := by
   rw [variance_eq_sub law_memLp]
-  change (∫ x in Icc (0:ℝ) 1, x^2) - (∫ x in Icc (0:ℝ) 1, x)^2 = 1/12
+  change (∫ x in Icc (0 : ℝ) 1, x ^ 2) - (∫ x in Icc (0 : ℝ) 1, x) ^ 2 = 1 / 12
   rw [integral_Icc_eq_integral_Ioc, ← integral_of_le zero_le_one, integral_pow,
     integral_Icc_eq_integral_Ioc, ← integral_of_le zero_le_one, integral_id]
   norm_num
-lemma law_covariance : Covariance.operator (law : Measure ℝ) = (1/12:ℝ) • ContinuousLinearMap.id ℝ ℝ := by
+lemma law_covariance :
+    Covariance.operator (law : Measure ℝ) = (1 / 12 : ℝ) • ContinuousLinearMap.id ℝ ℝ := by
   apply ContinuousLinearMap.ext
   intro x
   apply ext_inner_right ℝ
@@ -388,48 +402,59 @@ lemma law_covariance : Covariance.operator (law : Measure ℝ) = (1/12:ℝ) • 
   ring
 lemma law_covariance_unit : IsUnit (Covariance.operator (law : Measure ℝ)) := by
   rw [law_covariance]
-  refine ⟨⟨(1/12:ℝ) • ContinuousLinearMap.id ℝ ℝ, (12:ℝ) • ContinuousLinearMap.id ℝ ℝ, ?_, ?_⟩, rfl⟩
+  refine
+    ⟨⟨(1 / 12 : ℝ) • ContinuousLinearMap.id ℝ ℝ, (12 : ℝ) • ContinuousLinearMap.id ℝ ℝ, ?_, ?_⟩,
+      rfl⟩
   · apply ContinuousLinearMap.ext
     intro x
-    change (1/12:ℝ) * (12*x) = x
+    change (1 / 12 : ℝ) * (12 * x) = x
     ring
   · apply ContinuousLinearMap.ext
     intro x
-    change (12:ℝ) * ((1/12)*x) = x
+    change (12 : ℝ) * ((1 / 12) * x) = x
     ring
 lemma actual_all_lists (hs : List ℝ) (w : ℝ) :
     ⟪cumulantVector (law : Measure ℝ) [w],
-      Ring.inverse (Covariance.operator (law : Measure ℝ)) (cumulantVector (law : Measure ℝ) hs)⟫ =
-      cumulant (law : Measure ℝ) (hs.length+1) (Fin.snoc (fun i => hs.get i) w) :=
-  inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs w
+        Ring.inverse (Covariance.operator (law : Measure ℝ))
+          (cumulantVector (law : Measure ℝ) hs)⟫ =
+      cumulant (law : Measure ℝ) (hs.length + 1) (Fin.snoc (fun i => hs.get i) w) :=
+  inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs
+    w
 lemma actual_empty (w : ℝ) :
     ⟪cumulantVector (law : Measure ℝ) [w],
-      Ring.inverse (Covariance.operator (law : Measure ℝ)) (cumulantVector (law : Measure ℝ) [])⟫ = w/2 := by
+        Ring.inverse (Covariance.operator (law : Measure ℝ))
+          (cumulantVector (law : Measure ℝ) [])⟫ =
+      w / 2 := by
   rw [actual_all_lists]
-  change iteratedFDeriv ℝ 1 (logLaplace (law : Measure ℝ)) 0 (Fin.snoc (fun i => [].get i) w) = _
+  change
+    iteratedFDeriv ℝ 1 (logLaplace (law : Measure ℝ)) 0 (Fin.snoc (fun i => [].get i) w) = _
   rw [iteratedFDeriv_one_apply]
-  change fderiv ℝ (logLaplace (law : Measure ℝ)) 0 w = w/2
+  change fderiv ℝ (logLaplace (law : Measure ℝ)) 0 w = w / 2
   rw [fderiv_logLaplace_zero_apply (hexp := compact_support_integrable_exp _ law_compact)]
   simp only [Real.inner_apply]
   rw [MeasureTheory.integral_const_mul, law_mean]
   ring
 lemma actual_signed_two :
     ⟪cumulantVector (law : Measure ℝ) [3],
-      Ring.inverse (Covariance.operator (law : Measure ℝ)) (cumulantVector (law : Measure ℝ) [-2])⟫ = -1/2 := by
+        Ring.inverse (Covariance.operator (law : Measure ℝ))
+          (cumulantVector (law : Measure ℝ) [-2])⟫ =
+      -1 / 2 := by
   rw [actual_all_lists]
-  have he : Fin.snoc (fun i => [(-2:ℝ)].get i) (3:ℝ) = ![-2,3] := by
+  have he : Fin.snoc (fun i => [(-2 : ℝ)].get i) (3 : ℝ) = ![-2, 3] := by
     funext i
     fin_cases i <;> rfl
   rw [he]
-  change cumulant (law : Measure ℝ) 2 ![-2,3] = _
+  change cumulant (law : Measure ℝ) 2 ![-2, 3] = _
   rw [cumulant_two_eq_covariance_of_integrable_exp (μ := (law : Measure ℝ)) one_pos
-    (compact_support_integrable_exp _ law_compact 1), law_covariance]
+      (compact_support_integrable_exp _ law_compact 1),
+    law_covariance]
   norm_num [Real.inner_apply]
 lemma actual_higher_signed :
     ⟪cumulantVector (law : Measure ℝ) [-4],
-      Ring.inverse (Covariance.operator (law : Measure ℝ)) (cumulantVector (law : Measure ℝ) [1,-2,3])⟫ =
-      cumulant (law : Measure ℝ) 4 (Fin.snoc (fun i => ([1,-2,3]:List ℝ).get i) (-4)) :=
-  actual_all_lists [1,-2,3] (-4)
+        Ring.inverse (Covariance.operator (law : Measure ℝ))
+          (cumulantVector (law : Measure ℝ) [1, -2, 3])⟫ =
+      cumulant (law : Measure ℝ) 4 (Fin.snoc (fun i => ([1, -2, 3] : List ℝ).get i) (-4)) :=
+  actual_all_lists [1, -2, 3] (-4)
 end D74sUniformClients
 
 -- ===== SkewClients =====
@@ -442,12 +467,13 @@ namespace D74sSkewClients
 open BKLSkewWitness
 def law : ProbabilityMeasure ℝ := ⟨twoPt, isProbabilityMeasure_twoPt⟩
 lemma law_compact : IsCompact (law : Measure ℝ).support := by
-  have hsub : (law : Measure ℝ).support ⊆ ({(2:ℝ), -1/2} : Set ℝ) := by
+  have hsub : (law : Measure ℝ).support ⊆ ({(2 : ℝ), -1 / 2} : Set ℝ) := by
     apply Measure.support_subset_of_isClosed (isClosed_singleton.union isClosed_singleton)
     rw [mem_ae_iff]
-    simp [law,twoPt]
-  exact (Set.toFinite ({(2:ℝ),-1/2}:Set ℝ)).isCompact.of_isClosed_subset
-    (law : Measure ℝ).isClosed_support hsub
+    simp [law, twoPt]
+  exact
+    (Set.toFinite ({(2 : ℝ), -1 / 2} : Set ℝ)).isCompact.of_isClosed_subset
+      (law : Measure ℝ).isClosed_support hsub
 lemma law_iso : KLS.Isotropic law := by
   have h2 : MemLp id 2 (law : Measure ℝ) :=
     (memLp_two_iff_integrable_sq continuous_id.aestronglyMeasurable).2 (integrable_twoPt _)
@@ -461,18 +487,23 @@ lemma law_covariance_unit : IsUnit (Covariance.operator (law : Measure ℝ)) := 
   exact isUnit_one
 lemma actual_nonzero_three :
     ⟪cumulantVector (law : Measure ℝ) [1],
-      Ring.inverse (Covariance.operator (law : Measure ℝ)) (cumulantVector (law : Measure ℝ) [1,1])⟫ = 3/2 := by
-  rw [inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit]
-  have he : Fin.snoc (fun i => ([1,1]:List ℝ).get i) (1:ℝ) = ![1,1,1] := by
+        Ring.inverse (Covariance.operator (law : Measure ℝ))
+          (cumulantVector (law : Measure ℝ) [1, 1])⟫ =
+      3 / 2 := by
+  rw [inner_cumulantVector_single_ringInverse_cumulantVector law law_compact
+      law_covariance_unit]
+  have he : Fin.snoc (fun i => ([1, 1] : List ℝ).get i) (1 : ℝ) = ![1, 1, 1] := by
     funext i
     fin_cases i <;> rfl
   rw [he]
   exact cumulant_three_twoPt
 lemma actual_all_lists (hs : List ℝ) (w : ℝ) :
     ⟪cumulantVector (law : Measure ℝ) [w],
-      Ring.inverse (Covariance.operator (law : Measure ℝ)) (cumulantVector (law : Measure ℝ) hs)⟫ =
-      cumulant (law : Measure ℝ) (hs.length+1) (Fin.snoc (fun i => hs.get i) w) :=
-  inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs w
+        Ring.inverse (Covariance.operator (law : Measure ℝ))
+          (cumulantVector (law : Measure ℝ) hs)⟫ =
+      cumulant (law : Measure ℝ) (hs.length + 1) (Fin.snoc (fun i => hs.get i) w) :=
+  inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs
+    w
 end D74sSkewClients
 
 -- ===== ZeroClients =====
@@ -483,7 +514,8 @@ open FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace
 namespace D74sZeroClients
 abbrev E0 := EuclideanSpace ℝ (Fin 0)
-def law : ProbabilityMeasure E0 := ⟨Measure.dirac 0,inferInstance⟩
+def law : ProbabilityMeasure E0 :=
+  ⟨Measure.dirac 0, inferInstance⟩
 lemma law_compact : IsCompact (law : Measure E0).support :=
   isCompact_univ.of_isClosed_subset (law : Measure E0).isClosed_support (subset_univ _)
 lemma law_covariance_unit : IsUnit (Covariance.operator (law : Measure E0)) := by
@@ -492,13 +524,15 @@ lemma law_covariance_unit : IsUnit (Covariance.operator (law : Measure E0)) := b
   exact isUnit_one
 lemma actual_all_lists (hs : List E0) (w : E0) :
     ⟪cumulantVector (law : Measure E0) [w],
-      Ring.inverse (Covariance.operator (law : Measure E0)) (cumulantVector (law : Measure E0) hs)⟫ =
-      cumulant (law : Measure E0) (hs.length+1) (Fin.snoc (fun i => hs.get i) w) :=
-  inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs w
+        Ring.inverse (Covariance.operator (law : Measure E0))
+          (cumulantVector (law : Measure E0) hs)⟫ =
+      cumulant (law : Measure E0) (hs.length + 1) (Fin.snoc (fun i => hs.get i) w) :=
+  inner_cumulantVector_single_ringInverse_cumulantVector law law_compact law_covariance_unit hs
+    w
 lemma actual_cumulant_zero (hs : List E0) (w : E0) :
-    cumulant (law : Measure E0) (hs.length+1) (Fin.snoc (fun i => hs.get i) w) = 0 := by
+    cumulant (law : Measure E0) (hs.length + 1) (Fin.snoc (fun i => hs.get i) w) = 0 := by
   have he := actual_all_lists hs w
-  have hzero : ∀ x : E0, x=0 := fun _ => Subsingleton.elim _ _
+  have hzero : ∀ x : E0, x = 0 := fun _ => Subsingleton.elim _ _
   simpa [hzero] using he.symm
 end D74sZeroClients
 
@@ -538,4 +572,5 @@ end D74sZeroClients
 #print axioms D74sZeroClients.law_covariance_unit
 #print axioms D74sZeroClients.actual_all_lists
 #print axioms D74sZeroClients.actual_cumulant_zero
-#print axioms FunctionalInequalities.Analysis.BakryEmery.inner_cumulantVector_single_ringInverse_cumulantVector
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.inner_cumulantVector_single_ringInverse_cumulantVector

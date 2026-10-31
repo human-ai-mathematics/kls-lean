@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.RandomMeasure
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.RandomMeasure
 
 /-!
 # Compensated Poisson integral: simple predictable integrands
@@ -14,6 +19,8 @@ their integral `simpleIntegral` against the compensated Poisson measure
 lemmas. The moment identities are in `Poisson/CompensatedMoments.lean`; the
 L²-isometry in `Poisson/CompensatedIsometry.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -79,12 +86,12 @@ lemma SimplePredictable.eval_eq_sum_indicator
   unfold SimplePredictable.eval
   refine Finset.sum_congr rfl (fun i _ => ?_)
   by_cases h : φ.partition i.castSucc < s ∧ s ≤ φ.partition i.succ ∧ e ∈ φ.A i
-  · rw [if_pos h]
+  · rw [ite_eq_left h]
     have h_mem : (s, e) ∈ φ.fullRect i := by
       unfold SimplePredictable.fullRect
       exact Set.mem_prod.mpr ⟨Set.mem_Ioc.mpr ⟨h.1, h.2.1⟩, h.2.2⟩
     exact (Set.indicator_of_mem h_mem (fun _ : ℝ × E => φ.ξ i ω)).symm
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     have h_not_mem : (s, e) ∉ φ.fullRect i := by
       unfold SimplePredictable.fullRect
       intro hmem

@@ -1,5 +1,7 @@
-import Mathlib.Geometry.Manifold.PartitionOfUnity
-import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
+module
+
+public import Mathlib.Geometry.Manifold.PartitionOfUnity
+public import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
 
 /-!
 # Finite smooth decomposition of a compactly supported field
@@ -34,6 +36,8 @@ finitely many members of a locally finite family of supports meet it, and a memb
 meet it contributes the zero function *everywhere*, not just on the support.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Set Function
@@ -53,22 +57,27 @@ theorem exists_finset_sum_eq_of_isOpen_cover {V : Type u} [NormedAddCommGroup V]
     (hFc : HasCompactSupport F) {W : γ → Set V} (hWo : ∀ i, IsOpen (W i))
     (hcover : tsupport F ⊆ ⋃ i, W i) :
     ∃ (s : Finset γ) (G : γ → V → E),
-      (∀ i, ContDiff ℝ n (G i)) ∧ (∀ i, HasCompactSupport (G i)) ∧
-        (∀ i, tsupport (G i) ⊆ W i) ∧ ∀ x, ∑ i ∈ s, G i x = F x := by
+      (∀ i, ContDiff ℝ n (G i)) ∧
+        (∀ i, HasCompactSupport (G i)) ∧
+          (∀ i, tsupport (G i) ⊆ W i) ∧ ∀ x, ∑ i ∈ s, G i x = F x := by
   classical
-  obtain ⟨χ, hχ⟩ := SmoothPartitionOfUnity.exists_isSubordinate (I := 𝓘(ℝ, V))
-    (isClosed_tsupport F) W hWo hcover
-  refine ⟨(χ.locallyFinite.finite_nonempty_inter_compact hFc).toFinset,
-    fun i x => χ i x • F x, fun i => ?_, fun i => ?_, fun i => ?_, fun x => ?_⟩
+  obtain ⟨χ, hχ⟩ :=
+    SmoothPartitionOfUnity.exists_isSubordinate (I := 𝓘(ℝ, V)) (isClosed_tsupport F) W hWo
+      hcover
+  refine
+    ⟨(χ.locallyFinite.finite_nonempty_inter_compact hFc).toFinset, fun i x => χ i x • F x,
+      fun i => ?_, fun i => ?_, fun i => ?_, fun x => ?_⟩
   · exact ((contMDiff_iff_contDiff.mp (χ i).contMDiff).of_le (by exact_mod_cast le_top)).smul hF
   · exact HasCompactSupport.smul_left (f := fun x => χ i x) hFc
   · exact (tsupport_smul_subset_left _ _).trans (hχ i)
   · by_cases hx : x ∈ tsupport F
-    · have hsub : support (fun i => χ i x)
-          ⊆ ((χ.locallyFinite.finite_nonempty_inter_compact hFc).toFinset : Set γ) := by
+    · have hsub :
+        support (fun i => χ i x) ⊆
+          ((χ.locallyFinite.finite_nonempty_inter_compact hFc).toFinset : Set γ) := by
         intro i hi
         simpa using ⟨x, hi, hx⟩
-      have hone : ∑ i ∈ (χ.locallyFinite.finite_nonempty_inter_compact hFc).toFinset, χ i x = 1 := by
+      have hone :
+        ∑ i ∈ (χ.locallyFinite.finite_nonempty_inter_compact hFc).toFinset, χ i x = 1 := by
         rw [← finsum_eq_finsetSum_of_support_subset _ hsub]
         exact χ.sum_eq_one hx
       rw [← Finset.sum_smul, hone, one_smul]

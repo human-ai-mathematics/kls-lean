@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Whitney.Bump
-import Mathlib.Analysis.Calculus.Deriv.Inv
-import Mathlib.Algebra.BigOperators.Finprod
+module
+
+public import FunctionalInequalities.Analysis.Whitney.Bump
+public import Mathlib.Analysis.Calculus.Deriv.Inv
+public import Mathlib.Algebra.BigOperators.Finprod
 
 /-!
 # The smooth partition carried by a Whitney ball cover
@@ -10,6 +12,8 @@ complement, since the radius-five balls cover it. Dividing by it gives smooth no
 weights with sum one, supported in the radius-eight balls. Local finiteness is asserted on
 the complement only, where derivatives will be taken.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -38,12 +42,10 @@ theorem contDiff_bumpFamily (S C : Set V) (z : V) : ContDiff ℝ ∞ (bumpFamily
   · exact contDiff_const
 
 theorem bumpFamily_nonneg (S C : Set V) (z y : V) : 0 ≤ bumpFamily S C z y := by
-  classical
-  by_cases hz : z ∈ C <;> simp [bumpFamily, hz, bump_nonneg]
+  classical by_cases hz : z ∈ C <;> simp [bumpFamily, hz, bump_nonneg]
 
 theorem bumpFamily_le_one (S C : Set V) (z y : V) : bumpFamily S C z y ≤ 1 := by
-  classical
-  by_cases hz : z ∈ C <;> simp [bumpFamily, hz, bump_le_one]
+  classical by_cases hz : z ∈ C <;> simp [bumpFamily, hz, bump_le_one]
 
 theorem bumpSum_eq_sum {S C : Set V} {t : Finset V} {y : V}
     (h : ∀ z ∉ t, bumpFamily S C z y = 0) :
@@ -105,7 +107,7 @@ theorem exists_local_finset (hS : IsClosed S) (hne : S.Nonempty) (hC : C ⊆ S�
     exact radius_comparable_of_inter S (hfin.mem_toFinset.1 hz).2
   · intro w hw z hz
     by_cases hzC : z ∈ C
-    · simp only [bumpFamily, if_pos hzC]
+    · simp only [bumpFamily, ite_eq_left hzC]
       apply bump_eq_zero (hpos z hzC)
       by_contra h
       apply hz
@@ -116,7 +118,9 @@ theorem contDiffAt_bumpSum (hS : IsClosed S) (hne : S.Nonempty) (hC : C ⊆ Sᶜ
     (hdisj : C.PairwiseDisjoint (fun z => ball z (radius S z))) {y : V} (hy : y ∉ S) :
     ContDiffAt ℝ ∞ (bumpSum S C) y := by
   obtain ⟨t, -, -, -, ht⟩ := exists_local_finset hS hne hC hdisj hy
-  apply (ContDiff.sum (fun z (_ : z ∈ t) => contDiff_bumpFamily S C z)).contDiffAt.congr_of_eventuallyEq
+  apply
+    (ContDiff.sum
+        (fun z (_ : z ∈ t) => contDiff_bumpFamily S C z)).contDiffAt.congr_of_eventuallyEq
   filter_upwards [ball_mem_nhds y (radius_pos S hS hne hy)] with w hw
   exact bumpSum_eq_sum (ht w hw)
 
@@ -132,7 +136,7 @@ theorem one_le_bumpSum (hS : IsClosed S) (hne : S.Nonempty) (hC : C ⊆ Sᶜ)
   rw [hcover] at hz
   obtain ⟨z, hzC, hyz⟩ := mem_iUnion₂.1 hz
   have hb : bumpFamily S C z y = 1 := by
-    simp only [bumpFamily, if_pos hzC]
+    simp only [bumpFamily, ite_eq_left hzC]
     exact bump_eq_one (radius_pos S hS hne (hC hzC)) (le_of_lt hyz)
   have hzt : z ∈ t := by
     by_contra h
@@ -146,9 +150,11 @@ theorem contDiffOn_weight (hS : IsClosed S) (hne : S.Nonempty) (hC : C ⊆ Sᶜ)
     (hcover : Sᶜ = ⋃ z ∈ C, ball z (5 * radius S z)) (z : V) :
     ContDiffOn ℝ ∞ (weight S C z) Sᶜ := by
   intro y hy
-  exact ((contDiff_bumpFamily S C z).contDiffAt.div
-    (contDiffAt_bumpSum hS hne hC hdisj hy)
-    (ne_of_gt (lt_of_lt_of_le zero_lt_one (one_le_bumpSum hS hne hC hdisj hcover hy)))).contDiffWithinAt
+  exact
+    ((contDiff_bumpFamily S C z).contDiffAt.div (contDiffAt_bumpSum hS hne hC hdisj hy)
+        (ne_of_gt
+          (lt_of_lt_of_le zero_lt_one
+            (one_le_bumpSum hS hne hC hdisj hcover hy)))).contDiffWithinAt
 
 theorem weight_nonneg (hS : IsClosed S) (hne : S.Nonempty) (hC : C ⊆ Sᶜ)
     (hdisj : C.PairwiseDisjoint (fun z => ball z (radius S z)))

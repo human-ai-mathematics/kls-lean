@@ -1,10 +1,14 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.Basic
 
 /-! Independent clients of the time interpolation and the integrated square gradient estimate
 `∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) Γ(T̄f) dν`. The law is `ν = m.tilted (-U)` for a smooth convex
 potential, with unit weight. The clients instantiate arbitrary `L²` data at positive times,
 arbitrary form-domain data, heat data `f = P_ε g`, the time `t = 0`, the zero test, and the
 difference-quotient bound for smooth tests. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology
@@ -21,24 +25,34 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 
 /-- **Arbitrary `L²` data, positive times**: the interpolation between `a` and `t`. -/
 theorem arbitrary_data (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
-    (hconv : ConvexOn ℝ Set.univ U) (g : Lp ℝ 2 (ν : Measure V))
-    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x)
-    {a t : ℝ} (ha : 0 < a) (hat : a ≤ t) :
-    ∫ x, φ x * WeakGamma.apply
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
-            (ha.trans_le hat)⟩)
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
-            (ha.trans_le hat)⟩) x ∂(ν : Measure V) ≤
-      ∫ x, operator m (ContinuousLinearMap.id ℝ V) hν hi (sub_nonneg.mpr hat)
-          ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ) x *
-        WeakGamma.apply
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-            ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ha⟩)
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-            ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g ha⟩) x
-          ∂(ν : Measure V) :=
+    (hconv : ConvexOn ℝ Set.univ U) (g : Lp ℝ 2 (ν : Measure V)) {φ : V → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x) {a t : ℝ}
+    (ha : 0 < a) (hat : a ≤ t) :
+    ∫ x,
+        φ x *
+          WeakGamma.apply
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  (ha.trans_le hat)⟩)
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  (ha.trans_le hat)⟩)
+            x ∂(ν : Measure V) ≤
+      ∫ x,
+        operator m (ContinuousLinearMap.id ℝ V) hν hi (sub_nonneg.mpr hat)
+            ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ) x *
+          WeakGamma.apply
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  ha⟩)
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  ha⟩)
+            x ∂(ν : Measure V) :=
   integral_mul_weakGamma_le_of_pos m hν hi hνU hU hconv g hφ hφc hφ0 ha hat
 
 /-- **Form-domain data**: `∫ φ Γ(T̄P_t f) ≤ ∫ (P_t φ) Γ(T̄f)` for every `f ∈ D(T̄)`, `t ≥ 0`. -/
@@ -63,25 +77,39 @@ theorem form_domain (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ
 estimate holds for it at every `t ≥ 0`. -/
 theorem heat_data (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
     (hconv : ConvexOn ℝ Set.univ U) (g : Lp ℝ 2 (ν : Measure V)) {ε : ℝ} (hε : 0 < ε)
-    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x)
-    {t : ℝ} (ht : 0 ≤ t) :
-    ∫ x, φ x * WeakGamma.apply
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, preserves_form_domain m (ContinuousLinearMap.id ℝ V) hν hi
-            ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hε⟩
-            ht⟩)
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, preserves_form_domain m (ContinuousLinearMap.id ℝ V) hν hi
-            ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hε⟩
-            ht⟩) x ∂(ν : Measure V) ≤
-      ∫ x, operator m (ContinuousLinearMap.id ℝ V) hν hi ht
-          ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ) x *
-        WeakGamma.apply
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-            ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hε⟩)
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-            ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hε⟩) x
-          ∂(ν : Measure V) :=
+    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) (hφ0 : ∀ x, 0 ≤ φ x) {t : ℝ}
+    (ht : 0 ≤ t) :
+    ∫ x,
+        φ x *
+          WeakGamma.apply
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                preserves_form_domain m (ContinuousLinearMap.id ℝ V) hν hi
+                  ⟨_,
+                    mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν
+                      hi g hε⟩
+                  ht⟩)
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                preserves_form_domain m (ContinuousLinearMap.id ℝ V) hν hi
+                  ⟨_,
+                    mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν
+                      hi g hε⟩
+                  ht⟩)
+            x ∂(ν : Measure V) ≤
+      ∫ x,
+        operator m (ContinuousLinearMap.id ℝ V) hν hi ht
+            ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ) x *
+          WeakGamma.apply
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  hε⟩)
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  hε⟩)
+            x ∂(ν : Measure V) :=
   integral_mul_weakGamma_le m hν hi hνU hU hconv _ hφ hφc hφ0 ht
 
 /-- **Time zero**: at `t = 0` both sides are `∫ φ Γ(T̄f, T̄f) dν`. -/
@@ -165,14 +193,17 @@ theorem difference_bound (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDif
 #print axioms difference_bound
 #print axioms FunctionalInequalities.L2.exists_clamp_integral_lt
 #print axioms FunctionalInequalities.L2.tendsto_integral_mul_of_tendsto
-#print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.tendsto_integral_mul_of_tendsto_multiplier
-#print axioms FunctionalInequalities.Analysis.BakryEmery.WeakGamma.hasDerivWithinAt_integral_mul_apply_self
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.WeakGamma.tendsto_integral_mul_of_tendsto_multiplier
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.WeakGamma.hasDerivWithinAt_integral_mul_apply_self
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.norm_map_sq_le_mul
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.hasDerivWithinAt_apply_Ici
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.hasDerivWithinAt_apply_Iic
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.hasDerivAt_apply
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.adjointComp_apply_mem_adjointComp_domain_of_pos
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.adjointComp_apply_mem_adjointComp_domain_of_pos
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.hasDerivWithinAt_map_apply_Ici
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn_map_apply
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_map_apply_zero

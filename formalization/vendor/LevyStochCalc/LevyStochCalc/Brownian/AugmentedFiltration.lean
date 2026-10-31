@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Filtered
-import LevyStochCalc.Probability.Augmentation
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Filtered
+public import LevyStochCalc.Probability.Augmentation
 
 /-!
 # The augmented Brownian filtration
@@ -21,6 +25,8 @@ Itô process needs.
 * `LevyStochCalc.Brownian.augFiltration` — the `0`-clamped augmented filtration.
 * `LevyStochCalc.Brownian.isBrownianFiltration_augFiltration` — it is a Brownian filtration.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

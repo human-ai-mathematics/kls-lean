@@ -1,10 +1,13 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Dissipation
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Dissipation
 
 /-!
 # Positive-time smoothing for `P_t = exp (-t T†T)`
 
-`Generated/Domain.lean` (operator-domain invariance) and `Generated/FormDomain.lean` (the operator-domain energy bound) both start from a
+`Generated/Domain.lean` (operator-domain invariance) and `Generated/FormDomain.lean` (the
+operator-domain energy bound) both start from a
 datum that already lies in `D(T†T)` or `D(T)`. This module removes that assumption: for `T` closed
 and densely defined and **every** `g : H₀`,
 
@@ -19,7 +22,7 @@ and densely defined and **every** `g : H₀`,
 The constants are the ones the proof
 produces: `‖T (P_t g)‖ ≤ ‖g‖ / √(2t)` and `‖T†T (P_t g)‖ ≤ ‖g‖ / t`. The sharp scalar maxima
 `sup_{λ ≥ 0} λ exp (-2tλ) = 1/(2et)` and `sup_{λ ≥ 0} λ ² exp (-2tλ) = 1/(et) ²` are **not**
-claimed, so the sharp constants `1/√(2et)` and `1/(et)` remain unproved.
+claimed here; `1/√(2et)` and `1/(et)` are outside the estimates proved in this module.
 
 ## Proofs
 
@@ -33,7 +36,8 @@ using `L_s (exp (-t • L_s) f) = exp (-t • L_s) (L_s f)`, the strong converge
 `2 t ‖T (P_t f)‖ ² ≤ ‖f‖ ² - ‖P_t f‖ ²` and `2 t ‖T†T (P_t f)‖ ² ≤ ‖T f‖ ² - ‖T (P_t f)‖ ²`
 
 for `f ∈ D(T†T)` (`two_mul_norm_map_apply_sq_le_sub`, `two_mul_norm_adjointComp_apply_sq_le_sub`),
-after rewriting `⟪T†T (P_t f), P_t f⟫ = ‖T (P_t f)‖ ²` with the form identity and `T†T (P_t f) = P_t (T†T f)`
+after rewriting `⟪T†T (P_t f), P_t f⟫ = ‖T (P_t f)‖ ²` with the form identity and `T†T (P_t f) = P_t
+(T†T f)`
 with operator-domain invariance.
 
 **Off the domain the estimates are transported by density.** Each estimate is applied to
@@ -54,6 +58,8 @@ is in `D(T)` with the bound above, but no smooth operator-core statement is prov
 general real Hilbert space material: no measure, no log-concavity and no KLS quantity.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open InnerProductSpace
@@ -73,10 +79,12 @@ section YosidaLimits
 variable (s : ℕ → ℝ) (hs : ∀ n, 0 < s n) (hs0 : Filter.Tendsto s Filter.atTop (nhds 0))
 
 include hT hd hs hs0 in
-/-- the adjoint-product identification along a sequence: `exp (-t • L_{s n}) g → P_t g` for any positive null sequence `s`. -/
+/--
+the adjoint-product identification along a sequence: `exp (-t • L_{s n}) g → P_t g` for any positive
+null sequence `s`. -/
 theorem tendsto_exp_neg_smul_yosida (g : H₀) {t : ℝ} (ht : 0 ≤ t) :
-    Filter.Tendsto (fun n : ℕ => NormedSpace.exp (-t • yosida T hT (hs n)) g)
-      Filter.atTop (nhds (apply T hT hd t g)) := by
+    Filter.Tendsto (fun n : ℕ => NormedSpace.exp (-t • yosida T hT (hs n)) g) Filter.atTop
+      (nhds (apply T hT hd t g)) := by
   refine Metric.tendsto_atTop.mpr fun ε hε => ?_
   obtain ⟨δ, hδ, hlt⟩ := yosida_limit T hT hd ht g hε
   obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp hs0 δ hδ
@@ -104,37 +112,43 @@ include hT hd hs hs0 in
 /-- The mixed limit `L_{s n} (exp (-t • L_{s n}) f) → P_t (T†T f)` for `f ∈ D(T†T)`.
 
 `L_s` commutes with its own exponential (`exp_neg_smul_apply_comm`), so the sequence equals
-`exp (-t • L_{s n}) (L_{s n} f)`; the contraction property absorbs `L_{s n} f - T†T f` and the adjoint-product identification
+`exp (-t • L_{s n}) (L_{s n} f)`; the contraction property absorbs `L_{s n} f - T†T f` and the
+adjoint-product identification
 handles the remaining `exp (-t • L_{s n}) (T†T f) - P_t (T†T f)`. -/
 theorem tendsto_yosida_exp_neg_smul_apply (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t) :
-    Filter.Tendsto (fun n : ℕ => yosida T hT (hs n)
-        (NormedSpace.exp (-t • yosida T hT (hs n)) (f : H₀)))
+    Filter.Tendsto
+      (fun n : ℕ => yosida T hT (hs n) (NormedSpace.exp (-t • yosida T hT (hs n)) (f : H₀)))
       Filter.atTop (nhds (apply T hT hd t (adjointComp T f))) := by
   refine Metric.tendsto_atTop.mpr fun ε hε => ?_
-  obtain ⟨N₁, hN₁⟩ := Metric.tendsto_atTop.mp
-    (tendsto_yosida_apply T hT hd s hs hs0 f) (ε / 2) (by positivity)
-  obtain ⟨N₂, hN₂⟩ := Metric.tendsto_atTop.mp
-    (tendsto_exp_neg_smul_yosida T hT hd s hs hs0 (adjointComp T f) ht) (ε / 2) (by positivity)
+  obtain ⟨N₁, hN₁⟩ :=
+    Metric.tendsto_atTop.mp (tendsto_yosida_apply T hT hd s hs hs0 f) (ε / 2) (by positivity)
+  obtain ⟨N₂, hN₂⟩ :=
+    Metric.tendsto_atTop.mp (tendsto_exp_neg_smul_yosida T hT hd s hs hs0 (adjointComp T f) ht)
+      (ε / 2) (by positivity)
   refine ⟨max N₁ N₂, fun n hn => ?_⟩
   have h₁ : ‖yosida T hT (hs n) (f : H₀) - adjointComp T f‖ < ε / 2 := by
     have h := hN₁ n (le_trans (le_max_left _ _) hn)
     rwa [dist_eq_norm] at h
-  have h₂ : ‖NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f)
-      - apply T hT hd t (adjointComp T f)‖ < ε / 2 := by
+  have h₂ :
+    ‖NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f) -
+          apply T hT hd t (adjointComp T f)‖ <
+      ε / 2 := by
     have h := hN₂ n (le_trans (le_max_right _ _) hn)
     rwa [dist_eq_norm] at h
   rw [dist_eq_norm, exp_neg_smul_apply_comm]
-  have hcontr : ‖NormedSpace.exp (-t • yosida T hT (hs n)) (yosida T hT (hs n) (f : H₀))
-      - NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f)‖
-      ≤ ‖yosida T hT (hs n) (f : H₀) - adjointComp T f‖ := by
+  have hcontr :
+    ‖NormedSpace.exp (-t • yosida T hT (hs n)) (yosida T hT (hs n) (f : H₀)) -
+          NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f)‖ ≤
+      ‖yosida T hT (hs n) (f : H₀) - adjointComp T f‖ := by
     rw [← _root_.map_sub]
     exact norm_exp_neg_smul_apply_le _ (yosida_nonneg T hT (hs n)) ht _
-  have htri : ‖NormedSpace.exp (-t • yosida T hT (hs n)) (yosida T hT (hs n) (f : H₀))
-        - apply T hT hd t (adjointComp T f)‖
-      ≤ ‖NormedSpace.exp (-t • yosida T hT (hs n)) (yosida T hT (hs n) (f : H₀))
-          - NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f)‖
-        + ‖NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f)
-          - apply T hT hd t (adjointComp T f)‖ :=
+  have htri :
+    ‖NormedSpace.exp (-t • yosida T hT (hs n)) (yosida T hT (hs n) (f : H₀)) -
+          apply T hT hd t (adjointComp T f)‖ ≤
+      ‖NormedSpace.exp (-t • yosida T hT (hs n)) (yosida T hT (hs n) (f : H₀)) -
+            NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f)‖ +
+        ‖NormedSpace.exp (-t • yosida T hT (hs n)) (adjointComp T f) -
+            apply T hT hd t (adjointComp T f)‖ :=
     norm_sub_le_add_norm_sub _ _ _
   linarith
 
@@ -147,29 +161,39 @@ end YosidaLimits
 `2 t ‖T (P_t f)‖ ² ≤ ‖f‖ ² - ‖P_t f‖ ²`.
 
 `two_mul_inner_exp_neg_smul_le` for the Yosida approximation, passed to the limit along
-`s n = 1 / (n + 1)`; the left-hand side is `2 t ⟪T†T (P_t f), P_t f⟫` by the form identity and operator-domain invariance. -/
+`s n = 1 / (n + 1)`; the left-hand side is `2 t ⟪T†T (P_t f), P_t f⟫` by the form identity and
+operator-domain invariance. -/
 theorem two_mul_norm_map_apply_sq_le_sub (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t)
     (hft : apply T hT hd t (f : H₀) ∈ T.domain) :
-    2 * t * ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2
-      ≤ ‖(f : H₀)‖ ^ 2 - ‖apply T hT hd t (f : H₀)‖ ^ 2 := by
+    2 * t * ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2 ≤
+      ‖(f : H₀)‖ ^ 2 - ‖apply T hT hd t (f : H₀)‖ ^ 2 := by
   have hspos : ∀ n : ℕ, (0 : ℝ) < 1 / ((n : ℝ) + 1) := fun n => by positivity
   have hs0 : Filter.Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) Filter.atTop (nhds 0) :=
     tendsto_one_div_add_atTop_nhds_zero_nat
   have hx := tendsto_exp_neg_smul_yosida T hT hd _ hspos hs0 (f : H₀) ht
   have hy := tendsto_yosida_exp_neg_smul_apply T hT hd _ hspos hs0 f ht
-  have hlhs : Filter.Tendsto (fun n : ℕ => 2 * t * ⟪yosida T hT (hspos n)
-        (NormedSpace.exp (-t • yosida T hT (hspos n)) (f : H₀)),
-        NormedSpace.exp (-t • yosida T hT (hspos n)) (f : H₀)⟫)
-      Filter.atTop (nhds (2 * t * ⟪apply T hT hd t (adjointComp T f),
-        apply T hT hd t (f : H₀)⟫)) := (hy.inner hx).const_mul _
-  have hrhs : Filter.Tendsto (fun n : ℕ => ‖(f : H₀)‖ ^ 2
-        - ‖NormedSpace.exp (-t • yosida T hT (hspos n)) (f : H₀)‖ ^ 2)
+  have hlhs :
+    Filter.Tendsto
+      (fun n : ℕ =>
+        2 * t *
+          ⟪yosida T hT (hspos n) (NormedSpace.exp (-t • yosida T hT (hspos n)) (f : H₀)),
+            NormedSpace.exp (-t • yosida T hT (hspos n)) (f : H₀)⟫)
+      Filter.atTop
+      (nhds (2 * t * ⟪apply T hT hd t (adjointComp T f), apply T hT hd t (f : H₀)⟫)) :=
+    (hy.inner hx).const_mul _
+  have hrhs :
+    Filter.Tendsto
+      (fun n : ℕ =>
+        ‖(f : H₀)‖ ^ 2 - ‖NormedSpace.exp (-t • yosida T hT (hspos n)) (f : H₀)‖ ^ 2)
       Filter.atTop (nhds (‖(f : H₀)‖ ^ 2 - ‖apply T hT hd t (f : H₀)‖ ^ 2)) :=
     tendsto_const_nhds.sub (hx.norm.pow 2)
-  have hlim := le_of_tendsto_of_tendsto' hlhs hrhs fun n =>
-    two_mul_inner_exp_neg_smul_le (yosida T hT (hspos n)) (yosida_symm T hT (hspos n)) (f : H₀) ht
-  have hform : ⟪apply T hT hd t (adjointComp T f), apply T hT hd t (f : H₀)⟫
-      = ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2 := by
+  have hlim :=
+    le_of_tendsto_of_tendsto' hlhs hrhs fun n =>
+      two_mul_inner_exp_neg_smul_le (yosida T hT (hspos n)) (yosida_symm T hT (hspos n))
+        (f : H₀) ht
+  have hform :
+    ⟪apply T hT hd t (adjointComp T f), apply T hT hd t (f : H₀)⟫ =
+      ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2 := by
     rw [← generator_comm T hT hd f ht,
       inner_adjointComp_self hd ⟨apply T hT hd t (f : H₀), preserves_domain T hT hd f ht⟩]
   rw [hform] at hlim
@@ -314,7 +338,8 @@ theorem two_mul_norm_map_apply_sq_le (g : H₀) {t : ℝ} (ht : 0 < t)
 /-- **Form-domain data enter the generator domain at positive times**, with the estimate
 `2 t ‖T†T (P_t f)‖ ² ≤ ‖T f‖ ²`.
 
-Same transport one level up: graph-norm density supplies `u n ∈ D(T†T)` with `u n → f` **and** `T (u n) → T f`,
+Same transport one level up: graph-norm density supplies `u n ∈ D(T†T)` with `u n → f` **and** `T (u
+n) → T f`,
 `two_mul_norm_adjointComp_apply_sq_le_sub` applied to differences makes `T†T (P_t (u n))` Cauchy,
 and `T†T` is self-adjoint, hence closed, so it absorbs the limit. -/
 theorem exists_mem_adjointComp_domain_apply_of_mem_domain (f : T.domain) {t : ℝ} (ht : 0 < t) :
@@ -324,42 +349,50 @@ theorem exists_mem_adjointComp_domain_apply_of_mem_domain (f : T.domain) {t : �
   have hAclosed : (adjointComp T).IsClosed := (isSelfAdjoint_adjointComp T hT hd).isClosed
   have hPA : ∀ n, apply T hT hd t (u n) ∈ (adjointComp T).domain := fun n =>
     preserves_domain T hT hd ⟨u n, hu n⟩ ht.le
-  have hbound : ∀ n, 2 * t * ‖adjointComp T ⟨apply T hT hd t (u n), hPA n⟩‖ ^ 2
-      ≤ ‖T ⟨u n, (hu n).2⟩‖ ^ 2 := by
+  have hbound :
+    ∀ n, 2 * t * ‖adjointComp T ⟨apply T hT hd t (u n), hPA n⟩‖ ^ 2 ≤ ‖T ⟨u n, (hu n).2⟩‖ ^ 2 := by
     intro n
     have h := two_mul_norm_adjointComp_apply_sq_le_sub T hT hd ⟨u n, hu n⟩ ht.le (hPA n).2
     have h0 : (0 : ℝ) ≤ ‖T ⟨apply T hT hd t (u n), (hPA n).2⟩‖ ^ 2 := sq_nonneg _
     linarith
-  have hdiff : ∀ n m : ℕ, 2 * t * ‖adjointComp T ⟨apply T hT hd t (u n), hPA n⟩
-        - adjointComp T ⟨apply T hT hd t (u m), hPA m⟩‖ ^ 2
-      ≤ ‖T ⟨u n, (hu n).2⟩ - T ⟨u m, (hu m).2⟩‖ ^ 2 := by
+  have hdiff :
+    ∀ n m : ℕ,
+      2 * t *
+          ‖adjointComp T ⟨apply T hT hd t (u n), hPA n⟩ -
+                adjointComp T ⟨apply T hT hd t (u m), hPA m⟩‖ ^
+            2 ≤
+        ‖T ⟨u n, (hu n).2⟩ - T ⟨u m, (hu m).2⟩‖ ^ 2 := by
     intro n m
     set w : (adjointComp T).domain := ⟨u n, hu n⟩ - ⟨u m, hu m⟩ with hw
     have hwval : (w : H₀) = u n - u m := rfl
-    have hA : adjointComp T ⟨apply T hT hd t (w : H₀), preserves_domain T hT hd w ht.le⟩
-        = adjointComp T ⟨apply T hT hd t (u n), hPA n⟩
-          - adjointComp T ⟨apply T hT hd t (u m), hPA m⟩ := by
+    have hA :
+      adjointComp T ⟨apply T hT hd t (w : H₀), preserves_domain T hT hd w ht.le⟩ =
+        adjointComp T ⟨apply T hT hd t (u n), hPA n⟩ -
+          adjointComp T ⟨apply T hT hd t (u m), hPA m⟩ := by
       refine apply_sub_of_eq_sub _ _ _ ?_
       rw [hwval, map_sub T hT hd ht.le]
     have hTw : T ⟨(w : H₀), w.2.2⟩ = T ⟨u n, (hu n).2⟩ - T ⟨u m, (hu m).2⟩ :=
       apply_sub_of_eq_sub _ _ _ hwval
-    have h := two_mul_norm_adjointComp_apply_sq_le_sub T hT hd w ht.le
-      (preserves_domain T hT hd w ht.le).2
+    have h :=
+      two_mul_norm_adjointComp_apply_sq_le_sub T hT hd w ht.le
+        (preserves_domain T hT hd w ht.le).2
     rw [hA, hTw] at h
-    have h0 : (0 : ℝ)
-        ≤ ‖T ⟨apply T hT hd t (w : H₀), (preserves_domain T hT hd w ht.le).2⟩‖ ^ 2 := sq_nonneg _
+    have h0 :
+      (0 : ℝ) ≤ ‖T ⟨apply T hT hd t (w : H₀), (preserves_domain T hT hd w ht.le).2⟩‖ ^ 2 :=
+      sq_nonneg _
     linarith
   have hcauchy : CauchySeq fun n => adjointComp T ⟨apply T hT hd t (u n), hPA n⟩ := by
     rw [Metric.cauchySeq_iff']
     intro ε hε
-    obtain ⟨N, hN⟩ := Metric.cauchySeq_iff'.mp hu₁.cauchySeq (ε * Real.sqrt (2 * t))
-      (by positivity)
+    obtain ⟨N, hN⟩ :=
+      Metric.cauchySeq_iff'.mp hu₁.cauchySeq (ε * Real.sqrt (2 * t)) (by positivity)
     refine ⟨N, fun n hn => ?_⟩
     have h1 := hN n hn
     rw [dist_eq_norm] at h1 ⊢
     exact lt_of_two_mul_sq_le ht (norm_nonneg _) (norm_nonneg _) hε (hdiff n N) h1
   obtain ⟨ζ, hζ⟩ := cauchySeq_tendsto_of_complete hcauchy
-  have hPconv : Filter.Tendsto (fun n => apply T hT hd t (u n)) Filter.atTop
+  have hPconv :
+    Filter.Tendsto (fun n => apply T hT hd t (u n)) Filter.atTop
       (nhds (apply T hT hd t (f : H₀))) := by
     have h := ((operator T hT hd ht.le).continuous.tendsto ((f : H₀))).comp hu₀
     simpa [Function.comp_def] using h
@@ -389,8 +422,8 @@ theorem exists_mem_adjointComp_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 
     norm_num
   have hmem : apply T hT hd t g ∈ (adjointComp T).domain := heq ▸ hmem2
   refine ⟨hmem, ?_⟩
-  have hsub : (⟨apply T hT hd (t / 2) (apply T hT hd (t / 2) g), hmem2⟩
-      : (adjointComp T).domain) = ⟨apply T hT hd t g, hmem⟩ := Subtype.ext heq
+  have hsub : (⟨apply T hT hd (t / 2) (apply T hT hd (t / 2) g), hmem2⟩ :
+      (adjointComp T).domain) = ⟨apply T hT hd t g, hmem⟩ := Subtype.ext heq
   rw [hsub] at hb
   nlinarith [hb, hgrad, norm_nonneg (adjointComp T ⟨apply T hT hd t g, hmem⟩), norm_nonneg g,
     sq_nonneg (t * ‖adjointComp T ⟨apply T hT hd t g, hmem⟩‖ - ‖g‖)]

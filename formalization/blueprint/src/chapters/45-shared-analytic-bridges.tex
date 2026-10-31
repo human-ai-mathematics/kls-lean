@@ -6699,16 +6699,6 @@ form taken by the variance estimate for isotropic $\mu$), then
   remaining conclusions are given-potential consequences of them.
 \end{proof}
 
-\paragraph{Superseded auxiliary variational development.}
-The remaining statements of this section record supports of an earlier variational route
-(Alexandrov sections, Caffarelli $W^{2,p}$ perturbation, Dirichlet and Pogorelov references,
-Caffarelli--Nirenberg--Spruck barriers) toward Letwin's Lemma~2.2. The completed moment-map
-route of Theorem~\ref{thm:letwin-every-moment-potential} does not use them. In the release
-snapshot, the Lean development of 52 of these statements lies in auxiliary files that are not
-part of the snapshot (\texttt{research/progress/completed-letwin-delivery-map.json}). Those statements carry no Lean
-completion marker and name only retained declarations; their hypotheses and remaining
-mathematical gaps are recorded unchanged, and they are not current formalization targets.
-
 \begin{lemma}[DOMAIN Alexandrov maximum and boundary controls]
   \label{lem:domain-alexandrov-maximum}
   \lean{FunctionalInequalities.Analysis.subgradient_le_on_of_isOpen,
@@ -6765,6 +6755,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Quantitative section estimates and growth-to-gradient regularity]
   \label{lem:convex-section-growth}
+  \lean{FunctionalInequalities.Analysis.norm_gradient_sub_le_of_growth,
+        FunctionalInequalities.Analysis.exists_holder_gradient_of_growth,
+        FunctionalInequalities.Analysis.growth_of_closedBall_subset_section,
+        FunctionalInequalities.Analysis.exists_section_estimate_of_continuous_density}
+  \leanok
   \uses{lem:convex-source-moment-equation, lem:domain-alexandrov-maximum}
   For a convex continuous function with continuous Alexandrov density, every compact $Q$
   has $b>0$ such that every section $S=\{u<u(x)+\langle p,\cdot-x\rangle+h\}\subset Q$,
@@ -6784,10 +6779,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   inputs to the closed power-rate gain of Lemma~\ref{lem:convex-gradient-holder}.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Apply the Alexandrov maximum principle to the affine-shifted section function. A compact
   upper bound for the continuous density controls the subgradient-image volume. Invert the
   section radius-height relation for the growth implication. For the gradient implication,
@@ -6798,6 +6790,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Upper section volume from a lower Alexandrov density]
   \label{lem:convex-section-volume}
+  \lean{FunctionalInequalities.Analysis.exists_section_volume_upper_bound,
+        FunctionalInequalities.Analysis.subgradient_volume_lower_bound_of_compact,
+        FunctionalInequalities.Analysis.exists_section_volume_bound_of_continuous_density}
+  \leanok
   \uses{lem:convex-source-moment-equation}
   For every $n>0$ there is $C(n)>0$ such that a bounded convex section
   $S_h(x)=\{u<u(x)+\langle p,\cdot-x\rangle+h\}$, with $p$ a supporting slope,
@@ -6811,10 +6807,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   $W^{2,p}$ remains pending.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Apply affine normalization to the closed section and dilate by two so the normalized
   open section contains the closed unit ball. The lower MA density transforms by the
   inverse square of the affine determinant. The normalized quadratic comparison bounds
@@ -6825,6 +6818,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Literal convex-body source: Holder gradient and section power radii]
   \label{lem:convex-gradient-holder}
+  \lean{FunctionalInequalities.Analysis.exists_holder_gradient_of_alexandrov_density,
+        FunctionalInequalities.Analysis.exists_section_power_inclusion_of_alexandrov_density,
+        FunctionalInequalities.Analysis.exists_moment_potential_holder_gradient_of_bounded_open_convex}
+  \leanok
   \uses{lem:convex-source-moment-equation, lem:convex-section-growth}
   For every $n>0$, bounded open convex nonempty $K$, continuous $W$ on $\overline K$
   and isotropic probability law $1_K e^{-W}dx$, one normalized Lipschitz strictly convex
@@ -6838,10 +6835,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   The $W^{2,p}$ and second-order gains, and full Letwin Lemma~2.2, remain separate.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Strict convexity on spheres gives a common small-section height on compact sets;
   positivity and continuity of the actual density give common two-sided bounds.
   John normalization and the Alexandrov maximum/minimum estimates yield a uniform
@@ -6856,17 +6850,32 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Domain-relative Alexandrov comparison and Dirichlet perturbation]
   \label{lem:alexandrov-density-comparison}
-  \lean{FunctionalInequalities.Analysis.subgradientImageOn,
+  \lean{FunctionalInequalities.Analysis.le_of_strict_alexandrov_bounds,
+        FunctionalInequalities.Analysis.subgradientImage_mul_pos,
+        FunctionalInequalities.Analysis.volume_subgradientImage_mul_pos,
+        FunctionalInequalities.Analysis.bounds_of_alexandrov_density_bounds,
+        FunctionalInequalities.Analysis.abs_sub_le_of_alexandrov_density_close,
+        FunctionalInequalities.Analysis.subgradientImageOn,
         FunctionalInequalities.Analysis.subgradientImageOn_univ,
         FunctionalInequalities.Analysis.subgradientImageOn_closure,
         FunctionalInequalities.Analysis.subgradientImageOn_eq_subgradientImage,
         FunctionalInequalities.Analysis.subgradientImageOn_mul_pos,
         FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos,
+        FunctionalInequalities.Analysis.le_of_strict_domain_alexandrov_bounds,
+        FunctionalInequalities.Analysis.bounds_of_domain_alexandrov_density_bounds,
+        FunctionalInequalities.Analysis.abs_sub_le_of_domain_alexandrov_density_close,
         FunctionalInequalities.Analysis.subgradientImageOn_comp_affineEquiv_symm,
         FunctionalInequalities.Analysis.volume_image_affineEquiv,
         FunctionalInequalities.Analysis.abs_det_linear_symm,
         FunctionalInequalities.Analysis.volume_subgradientImageOn_comp_affineEquiv_symm,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_mul_pos_comp_affineEquiv_symm,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_affine_scalar_covariance,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_const,
+        FunctionalInequalities.Analysis.nonpos_of_pos_domain_alexandrov_lower,
+        FunctionalInequalities.Analysis.exists_common_boundary_modulus_domain,
         FunctionalInequalities.Analysis.volume_subgradientImageOn_quadraticAt}
+  \leanok
   \uses{lem:domain-alexandrov-maximum}
   For bounded open convex $\Omega$, functions convex and continuous ONLY on
   $\overline\Omega$ satisfy strict comparison from actual DOMAIN-relative MA
@@ -6908,12 +6917,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   reused, not copied or assigned to the higher test-source node.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   One real compact maximum and local-minimum-to-convex-domain support proof
   gives supporting-image monotonicity. Two genuine source callers share one
   private bad-open-set/density contradiction, cancelling only positive finite
@@ -7023,7 +7027,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Closure equicontinuity of actual Dirichlet MA families]
   \label{lem:domain-dirichlet-equicontinuity}
-  \lean{FunctionalInequalities.Analysis.volume_subgradientImageOn_le_of_density_le}
+  \lean{FunctionalInequalities.Analysis.equicontinuousOn_of_domain_alexandrov_bounds,
+        FunctionalInequalities.Analysis.exists_uniform_bound_equicontinuousOn_of_domain_mass,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_le_of_density_le}
+  \leanok
   \uses{lem:domain-alexandrov-maximum, lem:alexandrov-density-comparison,
         lem:domain-ma-total-boundary}
   Let $\Omega$ be bounded, open and convex in a nontrivial finite-dimensional
@@ -7037,12 +7044,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   differentiability, reference existence or Hessian/Sobolev estimate is input.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   A single private substantial value/interior-Lipschitz/boundary/neighborhood
   implementation uses actual maximum and total boundary controls. The genuine
   TOTAL source derives nonpositivity from the pure convex frontier maximum.
@@ -7060,6 +7062,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Uniform subsequences of actual finite-total MA families]
   \label{lem:domain-dirichlet-subsequence}
+  \lean{FunctionalInequalities.Analysis.exists_subseq_uniform_on_closure_of_domain_mass,
+        FunctionalInequalities.Analysis.exists_convex_subseq_uniform_of_domain_mass}
+  \leanok
   \uses{lem:domain-dirichlet-equicontinuity}
   Let $\Omega$ be bounded, open and convex in a nontrivial finite-dimensional
   real inner-product space. A sequence convex/continuous ONLY on its closure,
@@ -7071,10 +7076,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   is supplied as input.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Actual finite-total estimates generate a common value cap and equicontinuity.
   Bounded continuous functions on the genuinely compact closure have their
   actual values in $[-B,B]$. Range equicontinuity, Mathlib Arzela--Ascoli and
@@ -7090,6 +7092,12 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Small-section engulfing and disjoint enlargement covering]
   \label{lem:convex-section-covering}
+  \lean{FunctionalInequalities.Analysis.SoftEngulfing.exists_section_engulfing,
+        FunctionalInequalities.Analysis.exists_section_engulfing_of_alexandrov_density,
+        FunctionalInequalities.Analysis.SoftEngulfing.section_subset_of_intersection,
+        FunctionalInequalities.Analysis.SoftEngulfing.exists_disjoint_section_cover,
+        FunctionalInequalities.Analysis.exists_disjoint_section_cover_of_alexandrov_density}
+  \leanok
   \uses{lem:convex-source-moment-equation, lem:convex-section-growth}
   For every $n>0$, a strictly convex $C^1$ Alexandrov solution with continuous positive
   density has compact-uniform constants $C>1$, $H>0$ with
@@ -7102,10 +7110,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   This is not a bounded-overlap, contact-density or $W^{2,p}$ theorem.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   The normalized dual-slope estimate applies to every point of the outer section.
   Strict sublevel membership gives strict full engulfing at twice the original height.
   Three engulfing applications show that intersecting comparable-height sections are
@@ -7118,6 +7123,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Height-dilation volume and quantitative weak-type section covering]
   \label{lem:convex-section-weak-type}
+  \lean{FunctionalInequalities.Analysis.section_volume_mul_le,
+        FunctionalInequalities.Analysis.exists_quantitative_weak_type_section_cover}
+  \leanok
   \uses{lem:convex-section-covering}
   A globally finite convex function satisfies $|S_{Ah}(x,p)|\le A^n|S_h(x,p)|$
   for $A\ge1$, arbitrary slopes $p$, all real heights $h$, including $n=0$ and
@@ -7130,10 +7138,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   or $W^{2,p}$ conclusion is asserted.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Convexity sends every point of $S_{Ah}$ into $S_h$ by the homothety of ratio
   $A^{-1}$ about the centre. Haar scaling bounds volume by $A^n$ times the original.
   Apply the countable disjoint enlargement cover and sum the density inequalities
@@ -7144,7 +7149,13 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Domain-local uniform perturbation contacts]
   \label{lem:convex-contact-perturbation}
-  \lean{FunctionalInequalities.Analysis.gradient_tangent_gap_pos_of_strictConvexOn}
+  \lean{FunctionalInequalities.Analysis.gradient_tangent_gap_pos_of_strictConvexOn,
+        FunctionalInequalities.Analysis.gradient_tangent_gap_pos,
+        FunctionalInequalities.Analysis.exists_contact_of_uniform_close_on_open,
+        FunctionalInequalities.Analysis.exists_contact_of_uniform_close,
+        FunctionalInequalities.Analysis.exists_residual_contact_of_alexandrov_density_close,
+        FunctionalInequalities.Analysis.exists_residual_contact_of_domain_alexandrov_density_close}
+  \leanok
   \uses{lem:alexandrov-density-comparison, lem:convex-section-growth}
   On bounded open $\Omega$, let $v$ be convex and continuous on
   $\overline\Omega$, strictly convex ONLY on $\Omega$ and $C^1$ there.
@@ -7170,12 +7181,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   Reference existence, DOMAIN compact volume gain and $W^{2,p}$ remain open.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   A single strict affine-line slope proof on $[0,1]$ gives the generic tangent
   lemma, shared with the exact-type old SectionGrowth theorem. For a boundary
   point, an actual interior midpoint gives strictness and closure convexity
@@ -7194,6 +7200,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Matrix determinant AM--GM, Minkowski and the residual bound]
   \label{lem:matrix-determinant-minkowski}
+  \lean{FunctionalInequalities.Analysis.det_root_le_trace_div,
+        FunctionalInequalities.Analysis.det_root_add_le,
+        FunctionalInequalities.Analysis.det_le_pow_of_det_add_smul_le}
+  \leanok
   In every dimension $n>0$, a real positive semidefinite matrix satisfies
   $\det(A)^{1/n}\le\operatorname{tr}(A)/n$, including singular $A$.
   If $A,B$ are positive semidefinite and $A+B$ is positive definite, then
@@ -7206,10 +7216,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   Monge--Ampere measure estimate, Dirichlet existence or $W^{2,p}$ is asserted.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Equal-weight scalar AM--GM applies to the actual nonnegative eigenvalues.
   With $S=A+B$, set $Q=\sqrt S$ using the continuous functional calculus and
   $R=Q^{-1}$. Congruence gives positive semidefinite $X=RAR$, $Y=RBR$ with
@@ -7222,6 +7229,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual contact quadratic matrices and a.e. residual determinant control]
   \label{lem:convex-contact-determinant}
+  \lean{FunctionalInequalities.Analysis.posSemidef_of_contact_expansion,
+        FunctionalInequalities.Analysis.det_residual_le_of_contact_expansions,
+        FunctionalInequalities.Analysis.ae_det_residual_le_on_contact_of_alexandrov_density}
+  \leanok
   \uses{lem:matrix-determinant-minkowski, lem:convex-gradient-holder}
   An actual supporting affine contact of a function with a genuine quadratic
   expansion forces its quadratic matrix to be positive semidefinite; the function
@@ -7237,10 +7248,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   existence or $W^{2,p}$ theorem is claimed.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Every positive identity shift of the quadratic expansion is an upper touching
   test for the supporting affine function, which is convex. The existing viscosity
   Hessian inequality and positive-shift closure give PSD. Combine the two actual
@@ -7253,6 +7261,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Null residual-gradient images of quadratic contacts]
   \label{lem:convex-contact-null-image}
+  \lean{FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_quadratic_contacts}
+  \leanok
   \uses{lem:convex-gradient-holder}
   Let $u$ be globally convex and $C^1$ on a finite-dimensional real inner-product
   space, including dimension zero. Suppose every open $G\subset\Omega$ satisfies
@@ -7266,10 +7276,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   null images, the full contact-image determinant bound and $W^{2,p}$ remain open.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Outer regularity and the actual open-set MA bound give $|\nabla u(N)|=0$.
   The two contact inequalities imply monotonicity of $p=\nabla u-t\mathrm{Id}$
   on $\Gamma$, hence $\|p(x)-p(y)\|\le\|\nabla u(x)-\nabla u(y)\|$.
@@ -7299,7 +7306,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   witness. Generic and coordinate primitives include dimension zero. No global
   differentiability or smooth extension, $C^{1,1}$, Hessian, $W^{2,p}$ or desired
   derivative/expansion is supplied. Global convexity remains explicit; weak
-  derivatives, domain-only Dirichlet production and full Lemma2.2 remain open.
+  derivatives and domain-only Dirichlet production remain separate steps in this earlier
+  variational route. The paper-source conclusion of Lemma~2.2 is proved independently by
+  Lemma~\ref{lem:convex-source-smooth-moment-potential}.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -7320,6 +7329,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual quadratic contact image-measure upper bound]
   \label{lem:convex-quadratic-contact-measure}
+  \lean{FunctionalInequalities.Analysis.measurableSet_quadratic_contacts,
+        FunctionalInequalities.Analysis.volume_image_residual_le_of_quadratic_contacts,
+        FunctionalInequalities.Analysis.full_quadratic_contact_image_bound}
+  \leanok
   \uses{lem:convex-contact-null-image, lem:convex-contact-determinant,
         lem:convex-gradient-derivative}
   Let $u$ be globally convex and $C^1$, with actual continuous positive local
@@ -7338,10 +7351,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   or a $W^{2,p}$ conclusion.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   The genuine a.e. gradient derivative and its value expansion share one MA
   matrix. Actual contacts force residual PSD and the exact determinant bound.
   A measurable null cover of the failure predicate separates measurable good
@@ -7355,8 +7365,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Unit-ball quadratic contact volume gain]
   \label{lem:convex-unit-ball-contact-gain}
-  \lean{FunctionalInequalities.Analysis.strictConvexOn_quadraticAt,
+  \lean{FunctionalInequalities.Analysis.exists_contact_volume_gain_unitBall,
+        FunctionalInequalities.Analysis.strictConvexOn_quadraticAt,
         FunctionalInequalities.Analysis.gradient_quadraticAt}
+  \leanok
   \uses{lem:convex-reference-contact-gain}
   Fix $n>0$, $0<r<1$, $0<\delta,\eta<1$. There exists $0<\epsilon<1$
   before the unknown globally convex $C^1$ potential $u$ and density $f$.
@@ -7369,12 +7381,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   reference-existence theorem or $W^{2,p}$ conclusion.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Construct the unit-density reference $v=(\|x\|^2-1)/2$ using the shared
   positive-definite quadratic strictness and symmetric gradient formulas, with
   genuine C2, positive Hessian, zero frontier and actual unit MA. Specialize the
@@ -7389,16 +7396,15 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Finite Alexandrov upper bounds give gradient null images]
   \label{lem:convex-gradient-null-image}
+  \lean{FunctionalInequalities.Analysis.volume_gradient_image_eq_zero_of_alexandrov_upper}
+  \leanok
   A globally convex $C^1$ potential with genuine finite open-set Alexandrov
   upper bound on an open $\Omega$ maps every arbitrary null subset of $\Omega$
   to a null gradient image. Measurability and the N property are not inputs;
   finite-dimensional real inner-product spaces include dimension zero.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Convex gradient tangents place the actual gradient image in subgradient images
   of arbitrarily small open supersets. Outer regularity and the finite MA bound
   imply nullity. The original quadratic-contact proof is shared once with the
@@ -7408,7 +7414,12 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 \begin{lemma}[Local C2 compact positive-Hessian reference gradient bounds]
   \label{lem:compact-posDef-gradient-bounds}
   \lean{FunctionalInequalities.Analysis.BakryEmery.contDiffOn_gradient,
-        FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_inner_hessianOperator_at}
+        FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_inner_hessianOperator_at,
+        FunctionalInequalities.Analysis.BakryEmery.exists_uniform_gradient_bounds_of_posDef_hessianOn,
+        FunctionalInequalities.Analysis.exists_residual_gradient_bound_of_posDef_referenceOn,
+        FunctionalInequalities.Analysis.BakryEmery.exists_uniform_gradient_bounds_of_posDef_hessian,
+        FunctionalInequalities.Analysis.exists_residual_gradient_bound_of_posDef_reference}
+  \leanok
   Let $v$ be $C^2$ only on open $U$, with actual positive Hessian on compact
   convex $K\subset U$. Uniform positive strong-monotonicity and finite gradient
   Lipschitz constants follow. Actual supports of $u-tv$, $t>0$, give
@@ -7417,12 +7428,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   or desired bound is supplied. Generic dimension zero is included.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Pointwise $C^2$ differentiates the actual gradient and identifies its derivative
   with the bilinear second derivative. This bridge is shared once with the old
   global bridge. Compact positivity on the unit sphere and a compact derivative
@@ -7437,6 +7443,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Null contact images for a given local C2 positive-Hessian reference]
   \label{lem:convex-reference-contact-null-image}
+  \lean{FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_posDef_referenceOn,
+        FunctionalInequalities.Analysis.volume_image_residual_eq_zero_of_posDef_reference}
+  \leanok
   \uses{lem:convex-gradient-null-image, lem:compact-posDef-gradient-bounds}
   Let $u$ be globally convex $C^1$ with finite actual open-set MA upper bound,
   and let $v$ be $C^2$ only on open $\Omega$ with positive Hessian there.
@@ -7447,10 +7456,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   need not be convex; dimension zero is included.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   On actual contained compact balls, the local relative bound makes the residual
   gradient constant on gradient-$u$ fibres and constructs a true Lipschitz factor.
   The actual MA gradient null-image theorem kills the local image. Choose actual
@@ -7467,7 +7473,17 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Given domain-relative unit-MA reference residual contact image bound]
   \label{lem:convex-reference-contact-measure}
-  \lean{FunctionalInequalities.Analysis.subgradientImageOn_subset_gradient_image}
+  \lean{FunctionalInequalities.Analysis.measurableSet_support_contactsOn,
+        FunctionalInequalities.Analysis.measurableSet_support_contacts,
+        FunctionalInequalities.Analysis.volume_image_residual_le_of_posDef_reference_on_open,
+        FunctionalInequalities.Analysis.volume_image_residual_le_of_posDef_reference,
+        FunctionalInequalities.Analysis.full_reference_contact_image_bound_on_open,
+        FunctionalInequalities.Analysis.full_reference_contact_image_bound,
+        FunctionalInequalities.Analysis.volume_image_residual_le_of_strict_reference_on_domain,
+        FunctionalInequalities.Analysis.full_strict_reference_contact_image_bound,
+        FunctionalInequalities.Analysis.subgradientImageOn_subset_gradient_image,
+        FunctionalInequalities.Analysis.volume_le_gradient_image_closure_of_domain_alexandrov}
+  \leanok
   \uses{lem:convex-reference-contact-null-image, lem:convex-gradient-derivative,
         lem:compact-posDef-gradient-bounds, lem:convex-domain-gradient-derivative, lem:ae-jacobian-image-upper}
   Let $n>0$, $0<\delta<1$, $\varepsilon\ge0$. The unknown $u$ is globally
@@ -7487,12 +7503,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   volume, image measurability or desired mass is an input to this mass theorem.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Two public genuine MA producers supply the SAME derivative/value-expansion
   matrices: the old globally convex reference on arbitrary possibly NONCONVEX
   open $\Omega$, and the new domain-strict reference using actual DOMAIN MA.
@@ -7514,7 +7525,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Given domain-relative unit-MA reference compact-interior contact gain]
   \label{lem:convex-reference-contact-gain}
-  \lean{FunctionalInequalities.Analysis.subgradient_eq_gradient}
+  \lean{FunctionalInequalities.Analysis.subgradient_eq_gradient,
+        FunctionalInequalities.Analysis.exists_contact_volume_gain_of_posDef_reference,
+        FunctionalInequalities.Analysis.exists_contact_volume_gain_of_strict_reference_on_domain}
+  \leanok
   \uses{lem:convex-reference-contact-measure, lem:convex-contact-perturbation}
   Let $n>0$, $\delta,\eta\in(0,1)$ and bounded open $\Omega$. A GIVEN reference
   $v$ is convex/continuous on $\overline\Omega$, strictly convex and $C^2$ ONLY
@@ -7530,12 +7544,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   existence, normalized-domain iteration and full $W^{2,p}$ remain unproved.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Actual DOMAIN unit MA and local supporting-slope uniqueness give the real
   reference-image mass bound. Actual DOMAIN density comparison and compact
   perturbation contacts give $\delta\nabla v(\overline G)\subset p(\Gamma)$.
@@ -7591,6 +7600,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Null overlaps of actual C0 domain supporting images]
   \label{lem:domain-ma-overlap}
+  \lean{FunctionalInequalities.Analysis.volume_domain_subgradient_two_points_eq_zero,
+        FunctionalInequalities.Analysis.volume_inter_subgradientImageOn_eq_zero_of_disjoint}
+  \leanok
   \uses{lem:convex-compact-extension}
   For a function convex and continuous only on open $\Omega$ in a
   finite-dimensional real inner-product space, supporting slopes at TWO
@@ -7601,10 +7613,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   cover, patch, image agreement, nullity or regularity is supplied as input.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Actual countable buffered balls are paired. Their full closed-ball union is
   nonempty compact and contained in $\Omega$, without needing convexity of
   this compact set. Positive half-balls lie in its interior, by one shared
@@ -7624,8 +7633,12 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   \label{lem:domain-support-images}
   \lean{FunctionalInequalities.Analysis.isClosed_subgradient_graphOn,
         FunctionalInequalities.Analysis.isCompact_subgradientImageOn_of_isCompact,
+        FunctionalInequalities.Analysis.analyticSet_subgradientImageOn,
+        FunctionalInequalities.Analysis.measurableSet_subgradientImageOn_of_isOpen,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_iUnion_of_pairwise_disjoint_open,
         FunctionalInequalities.Analysis.exists_eventual_support_slope_bound_of_locally_uniform,
         FunctionalInequalities.Analysis.eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn}
+  \leanok
   \uses{lem:domain-c0-subgradients, lem:domain-ma-overlap}
   The actual supporting graph on a base-subset subtype is closed from reference
   continuity there alone, with no dimension, completeness, measure, convexity,
@@ -7640,12 +7653,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   desired additivity or regularity is supplied as input.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   One genuine closedgraph producer has TWO actual consumers. The compact-image
   proof generates the all-slope bound, uses a compact subtype product, the shared
   graph and the correct SECOND projection. It replaces the candidate's copied
@@ -7680,7 +7688,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual domain Monge--Ampere measure from a C0 convex source]
   \label{lem:domain-monge-ampere-measure}
-  \lean{FunctionalInequalities.Analysis.subgradientImageOn_iUnion}
+  \lean{FunctionalInequalities.Analysis.subgradientImageOn_iUnion,
+        FunctionalInequalities.Analysis.nullMeasurableSet_subgradientImageOn_of_measurableSet,
+        FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measure}
+  \leanok
   \uses{lem:domain-support-images, lem:domain-ma-overlap}
   Let $v$ be convex and continuous ONLY on open $\Omega$ in a finite-dimensional
   real inner-product space with Borel Haar volume. Its actual supporting image
@@ -7693,12 +7704,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   not claimed.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   The actual images of $G$ and $\Omega\setminus G$ overlap only in a proved
   null set. A genuine Borel null hull is removed; actual analytic images and
   Lusin separation identify each residual with a Borel separator intersected
@@ -7718,7 +7724,13 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual domain MA image volume stability]
   \label{lem:domain-ma-stability}
-  \lean{FunctionalInequalities.Analysis.eventually_mem_subgradientImageOn_of_unique_contact}
+  \lean{FunctionalInequalities.Analysis.eventually_mem_subgradientImageOn_of_unique_contact,
+        FunctionalInequalities.Analysis.limsup_volume_subgradientImageOn_le_of_locally_uniform,
+        FunctionalInequalities.Analysis.ae_eventually_mem_subgradientImageOn_of_locally_uniform,
+        FunctionalInequalities.Analysis.volume_subgradientImageOn_le_liminf_of_locally_uniform,
+        FunctionalInequalities.Analysis.exists_domain_mongeAmpere_measures_local_limits,
+        FunctionalInequalities.Analysis.domain_constant_density_of_locally_uniform}
+  \leanok
   \uses{lem:domain-support-images, lem:domain-ma-overlap, lem:domain-monge-ampere-measure}
   C0 convex potentials converging locally uniformly on open $\Omega$ satisfy
   the compact-interior upper and open-interior lower volume inequalities for
@@ -7731,12 +7743,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   genuinely produces that uniqueness almost everywhere.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Real compact-image Haar outer regularity and actual upper-image stability
   prove compact upper. A unique supporting contact gives a true positive
   sphere gap, including the empty-sphere case in dimension zero. Actual
@@ -7786,6 +7793,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual support-preserving local convex gluing]
   \label{lem:convex-local-max-gluing}
+  \lean{FunctionalInequalities.Analysis.subgradient_le_piecewise_max_ball,
+        FunctionalInequalities.Analysis.continuousOn_piecewise_max_ball,
+        FunctionalInequalities.Analysis.convexOn_closure_piecewise_max_ball}
+  \leanok
   \uses{lem:domain-c0-subgradients}
   The actual function $w=\max(u,q)$ ONLY inside a contained ball, and $w=u$
   outside, has genuine ALL-domain supporting-slope transfer, closure convexity
@@ -7798,10 +7809,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   gives closure C0 of the patch. No outside extension or interior strictness.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   For the SAME active interior point and each outside point, actual continuous
   line-map distance and IVT produce the SAME sphere point at positive parameter.
   Actual sphere order, q-support and convex u inequality imply that slope
@@ -7819,6 +7827,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual DOMAIN lower MA on Borel subsets]
   \label{lem:domain-ma-lower-borel}
+  \lean{FunctionalInequalities.Analysis.volume_le_subgradientImageOn_of_open_lower}
+  \leanok
   \uses{lem:domain-monge-ampere-measure}
   A finite-dimensional real inner-product local convex continuous potential on
   an open domain, with actual OPEN-set DOMAIN supporting-image mass at least
@@ -7827,10 +7837,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   are included. No global total mass or desired Borel lower bound is assumed.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Construct the actual MA measure ONCE, retaining its all-Borel formula and
   finiteness on contained compacts. An actual positive compact thickening and
   open buffer generate a finite restriction, hence Mathlib finite-Borel-metric
@@ -7845,8 +7852,19 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   \label{lem:dirichlet-envelope}
   \lean{FunctionalInequalities.Analysis.convexOn_sSup_image_of_bddAbove,
         FunctionalInequalities.Analysis.subgradientImageOn_eq_subgradientImage_of_isOpen,
+        FunctionalInequalities.Analysis.Dirichlet.subsolutions,
+        FunctionalInequalities.Analysis.Dirichlet.exists_quadratic_subsolution,
+        FunctionalInequalities.Analysis.Dirichlet.exists_finite_convex_envelope,
+        FunctionalInequalities.Analysis.Dirichlet.exists_boundary_barrier,
+        FunctionalInequalities.Analysis.Dirichlet.exists_continuous_envelope,
         FunctionalInequalities.Analysis.subgradientImageOn_subset_max_of_le,
-        FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le_of_eqOn}
+        FunctionalInequalities.Analysis.Dirichlet.max_mem_subsolutions,
+        FunctionalInequalities.Analysis.Dirichlet.finite_sup_mem_subsolutions,
+        FunctionalInequalities.Analysis.Dirichlet.exists_uniform_class_approximation,
+        FunctionalInequalities.Analysis.subgradientImageOn_subset_of_le_of_eqOn,
+        FunctionalInequalities.Analysis.Dirichlet.piecewise_max_ball_mem_subsolutions,
+        FunctionalInequalities.Analysis.Dirichlet.exists_envelope_local_comparison}
+  \leanok
   \uses{lem:convex-boundary-maximum, lem:domain-support-images, lem:domain-ma-lower-borel, lem:convex-local-max-gluing, lem:domain-support-localization}
   On a bounded open convex domain, the ACTUAL closure-convex, closure-continuous
   functions with nonpositive frontier values and open-set DOMAIN MA mass at
@@ -7857,12 +7875,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   continuous on the WHOLE closure, zero on the frontier, and dominates every actual member. Genuine quadratic lower-MA barriers are constructed at every frontier point without strict boundary convexity. On an open CONVEX domain, the actual class is also closed under binary maxima and every NONEMPTY finite supremum; boundedness and positive dimension are not needed for this closure property. No class nonemptiness/cap, desired envelope regularity/boundary field, envelope MA equation, finite total MA upper bound or reference existence is supplied.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Boundedness produces a genuine quadratic shift with nonpositive frontier.
   Canonical quadratic MA and the real nondifferentiable open-support lift
   give its actual domain supporting image and unit equation, so class
@@ -7877,7 +7890,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   NONCONVEX working domains. Real unit-ball, true zero-dimensional family,
   generic pure vector-space Sup and formally nondifferentiable absolute-value
   clients construct their data. For each frontier point, genuine Hahn--Banach separation and Riesz normalization produce a supporting unit normal. Actual boundedness generates a radius. A small positive isotropic coefficient and a large normal rank-one coefficient have actual determinant $a^n+1\ge1$ by Mathlib's matrix determinant lemma. A normal tilt and real Cauchy bounds keep the quadratic nonpositive on ALL closure, and the actual quadratic supporting-image formula proves lower-unit-MA membership. The real Mathlib rank-one operator/matrix representation is reused. Source barriers and actual class domination force zero frontier; their continuity and upper zero supply closure continuity by a genuine metric argument. The old finite-envelope production is called ONCE, not copied or assumed. Actual interval and planar-boundary half-ball clients construct their geometry. A genuine closed comparison set from closure C0 gives Borel max-contact regions. One pure support inclusion at Subgradient serves both real contact-image inclusions, without regularity/measure/convexity premises. Actual Borel lower comparison, the SAME constructed max measure/all-Borel callback selected before the test-set loop, and true disjoint additivity give binary closure. Mathlib finite-sup induction gives nonempty finite closure, not assumed max stability. Oppositely tilted actual quadratic clients have both contact regions nonempty; true Fin0 constants have image G and whole mass ONE. No set proof or MA construction is cloned, and old NONCONVEX legacy scopes stay intact. In positive dimension the SAME continuous-envelope producer is called ONCE. Actual nonempty conditional Sup gives epsilon-close members, actual relative C0 neighborhoods and compact closure give a finite cover, and inserting the actual baseline makes every maximum NONEMPTY even for the empty domain. Genuine finite class closure and cumulative prefix maxima GENERATE a globally pointwise increasing sequence, with true closure error less than 1/(j+1) and uniform convergence on WHOLE closure. The SAME envelope is in the lower-MA class: actual Borel compact lower bounds for each approximant, ENNReal limsup, canonical compact-image UPPER stability and Haar inner regularity close the limit inequality. Sup formula, zero frontier and domination are retained. No approximation, cover, cap, desired lower membership or unit equation is supplied; the old constant-density buffer proof is not copied. Approximate frontiers are only NONPOSITIVE. Actual positive-dimensional unit-ball and empty EuclideanFin1 clients construct every field. Actual local patches max(u,q) ONLY inside a contained positive-radius ball, u outside, preserve the actual lower-MA class. q needs only local convexity/closure C0/actual OPEN lower MA and sphere order, not frontier order or global class. Canonical pure gluing generates closure convexity/C0; frontier equality with u is actual. The old global-max calculation is REPLACED by ONE private SAME-measure/Borel equality-contact partition/source-Borel-lower/additivity implementation, with TWO true sources generating the contact transfers. The measure/all-Borel callback is selected before the test-set loop. Pure same-point support monotonicity serves the exact old max-support specialization and the real u-contact consumer; q supports use actual ALL-domain sphere crossing. Alln includes0, no Nontrivial/boundedness/regularity/N/finite mass/cancellation premise. The actual positive-dimensional envelope source is called ONCE retaining SAME U/f and EVERY old field, adding actual local comparison against each displayed lower-MA q with sphere order. Real alln PD quadratic models construct both source MA laws and genuinely raise the center; actual unit-ball data generate the source comparison. No parallel production clone, alias, copied capacity or supplied comparison. This remains NOT a lower-test determinant bound, UNIT MA equation, solved unit-density sequence or Dirichlet reference. No uniform total mass is inferred from lower-MA-only data. Actual source construction, Pogorelov,
-  arbitrary-p Sobolev regularity and full literal Lemma2.2 remain open locally.
+  arbitrary-p Sobolev regularity remains outside the conclusions of this earlier variational
+  route. This node does not assert the full paper-source theorem, which is proved separately by
+  Lemma~\ref{lem:convex-source-smooth-moment-potential}.
 \end{proof}
 
 
@@ -7922,6 +7937,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual Perron quadratic and C2 lower-test determinant bounds]
   \label{lem:perron-quadratic-lower-test}
+  \lean{FunctionalInequalities.Analysis.Dirichlet.exists_envelope_quadratic_lower_test_bound,
+        FunctionalInequalities.Analysis.Dirichlet.exists_envelope_c2_lower_test_bound,
+        FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau}
+  \leanok
   \uses{lem:dirichlet-envelope, lem:alexandrov-density-comparison, lem:moreau-regularization, lem:quadratic-all-orders}
   Positive dimension and bounded open convex domain data generate the SAME
   actual envelope and increasing uniform class sequence, retaining EVERY old
@@ -7936,10 +7955,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   working domains and infinite outer volumes, with no measurability premise.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Call the real local-comparison source ONCE and retain SAME U/f and ALL fields.
   Polynomial continuity generates a scalar shrink with determinant still above
   ONE. Existing Matrix positivity generates a quadratic floor for THIS GIVEN
@@ -7988,6 +8004,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual SAME regularizer a.e. derivative/value matrix]
   \label{lem:regularized-ae-det}
+  \lean{FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau_ae_matrix}
+  \leanok
   \uses{lem:perron-quadratic-lower-test, lem:convex-gradient-derivative}
   ONLY a positive dimension and bounded open convex domain generate SAME U/f
   and every old envelope/class/zero-frontier/sequence/local-comparison/test
@@ -7998,10 +8016,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   derivative/PSD/determinant/regularity/MA upper is a source assumption.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Actual C1 and the simultaneous convex gradient/value producer generate A.
   ONE private positive-upper-quadratic preparation serves old actual-MA
   determinant lower bounds and the PSD assembly. ONE private value-expansion
@@ -8021,6 +8036,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual a.e. Haar Jacobian image upper bound]
   \label{lem:ae-jacobian-image-upper}
+  \lean{FunctionalInequalities.Analysis.addHaar_image_le_mul_of_ae_derivative}
+  \leanok
   In a finite-dimensional REAL NORMED space with a genuine Borel Haar measure,
   actual a.e. Fr\'echet derivatives with absolute determinant at most K and a
   genuine null-image property give image measure at most ofReal(K) times
@@ -8028,10 +8045,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   image measurability premise, including dimension zero and infinite volumes.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   A real measurable null hull gives the Borel good set and an actual derivative
   at EVERY good point. Mathlib's genuine Jacobian bound and the actual null
   property control the good and bad images. ONE substantial implementation
@@ -8046,6 +8060,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual SAME buffered regularizer image upper]
   \label{lem:regularized-image-upper}
+  \lean{FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_moreau_image_upper}
+  \leanok
   \uses{lem:regularized-ae-det, lem:ae-jacobian-image-upper}
   ONLY n>0 and a bounded open convex domain generate SAME U/f and every old
   envelope/class/zero-frontier/sequence/local-comparison/test field. Each
@@ -8055,10 +8071,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   subset. No source N/derivative/AE/A/PSD/det/MA upper/unknown-U regularity.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   SAME actual A gives the derivative; det\_toLpLin and PSD determinant
   nonnegativity give absolute determinant at most one. The GENERATED global
   Lipschitz gradient sends arbitrary null sets to null sets by the canonical
@@ -8093,6 +8106,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual C0 zero-boundary UNIT DOMAIN Dirichlet source]
   \label{lem:dirichlet-unit-solution}
+  \lean{FunctionalInequalities.Analysis.Dirichlet.exists_envelope_buffered_local_ma_upper,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution_neg,
+        FunctionalInequalities.Analysis.Dirichlet.exists_strict_unit_solution}
+  \leanok
   \uses{lem:domain-support-localization, lem:regularized-image-upper, lem:dirichlet-envelope, lem:convex-boundary-maximum, lem:domain-unit-interior-strictness}
   ONLY n>0 and a bounded open convex domain generate an actual solution U,
   convex and continuous on closure and zero on frontier. SAME mu retains
@@ -8110,10 +8128,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   allowed. C1/C2PD/Pogorelov/W2p/fullL22 are still separate missing conclusions.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   ONE actual regularizer source retains SAME U/f/all old fields and SAME
   V/L/family per buffer. Positive all-small epsilon\_j=R/(4(L+1))/(j+1), real
   uniform pullback and canonical OPEN-image lower semicontinuity yield the
@@ -8153,6 +8168,20 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual gauge-cone prescribed one-atom source]
   \label{lem:gauge-cone-atomic}
+  \lean{FunctionalInequalities.Analysis.GaugeCone.potential,
+        FunctionalInequalities.Analysis.GaugeCone.polar,
+        FunctionalInequalities.Analysis.GaugeCone.isClosed_polar,
+        FunctionalInequalities.Analysis.GaugeCone.convex_polar,
+        FunctionalInequalities.Analysis.GaugeCone.geometry,
+        FunctionalInequalities.Analysis.GaugeCone.image_nonvertex_subset_frontier,
+        FunctionalInequalities.Analysis.GaugeCone.isCompact_polar,
+        FunctionalInequalities.Analysis.GaugeCone.volume_polar_lt_top,
+        FunctionalInequalities.Analysis.GaugeCone.volume_image,
+        FunctionalInequalities.Analysis.GaugeCone.volume_polar_pos,
+        FunctionalInequalities.Analysis.GaugeCone.exists_height_of_mass,
+        FunctionalInequalities.Analysis.GaugeCone.exists_mongeAmpere_measure_of_mass,
+        FunctionalInequalities.Analysis.GaugeCone.exists_one_atom}
+  \leanok
   \uses{lem:domain-support-images, lem:domain-monge-ampere-measure, lem:alexandrov-density-comparison}
   For open convex $D$ containing0 and $h>0$, the ACTUAL potential
   $u=h(\operatorname{gauge}_D-1)$ is globally convex/continuous,
@@ -8167,10 +8196,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   and0 otherwise, with no measurability premise. Zero dimension is included. For bounded $D$ the coefficient is genuinely positive. In positive dimension, every prescribed positive weight $m$ is realized by a generated height. The SAME constructed DOMAIN MA measure retains its all-Borel image formula and finiteness on compact subsets inside $D$, and equals $\operatorname{ofReal}(m)\delta_0$. More generally, every bounded open convex domain, actual interior vertex $x_0$ and target $m\ge0$ admit a generated global convex continuous zero-boundary potential with its SAME constructed measure $\operatorname{ofReal}(m)\delta_{x_0}$, in positive dimension.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Actual gauge homogeneity, subadditivity and continuity produce the cone.
   The real conditional infimum and genuine absorbency produce both directions
   of the vertex image. Evaluate an actual nonvertex contact at0 and2x to
@@ -8249,9 +8275,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[DOMAIN UNIT contacts and local C0 strict convexity]
   \label{lem:domain-unit-interior-strictness}
-  \lean{FunctionalInequalities.Analysis.strictConvexOn_of_domain_contact_eq,
+  \lean{FunctionalInequalities.Analysis.eq_of_domain_unit_contact,
+        FunctionalInequalities.Analysis.strictConvexOn_of_domain_contact_eq,
         FunctionalInequalities.Analysis.strictConvexOn_of_contact_eq,
         FunctionalInequalities.Analysis.eq_of_contact_of_sublevel_bounds}
+  \leanok
   \uses{lem:negative-sublevel-extension, lem:domain-c0-subgradients}
   A nontrivial finite-dimensional closure-convex/C0 zero-frontier negative
   actual DOMAIN UNIT solution has unique interior contact POINT for every
@@ -8261,12 +8289,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   No unknown derivative/Hessian/C1/C2 or desired closure record is supplied.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   The real proper patch at r=max(u(x),u(y))/2 transfers SAME p at SAME x and
   actual UNIT bounds a=b=1 on every compact strict sublevel. The EXISTING
   exact global compact-sublevel contact theorem is called, not copied. ONE
@@ -8281,7 +8304,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual continuous compact affine-tilt optimizers]
   \label{lem:compact-tilt-optimizer}
-  \lean{FunctionalInequalities.Analysis.exists_continuous_tilt_optimizer}
+  \lean{FunctionalInequalities.Analysis.exists_continuous_tilt_optimizer,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_tilt_optimizers}
+  \leanok
   \uses{lem:domain-support-images, lem:negative-sublevel-extension, lem:dirichlet-unit-solution}
   ONLY real inner structure/compact nonempty K/StrictConvexOnK/C0K generate
   a unique optimizer P(p) for EVERY affine tilt and ContinuousP. There is no
@@ -8292,12 +8317,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   contain the displayed vertex; old UNIT existence still allows empty domains.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Actual compact minima and strict convexity give unique optimizers. The
   ALREADY canonical closed supporting graph on K-subtype times E, real
   unique-optimizer identity and actual compact projection give continuity.
@@ -8315,7 +8335,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 \begin{lemma}[Actual compact conjugate value and SAME optimizer derivative]
   \label{lem:compact-conjugate-value}
   \lean{FunctionalInequalities.Analysis.exists_value_of_optimizer,
-        FunctionalInequalities.Analysis.exists_compact_conjugate}
+        FunctionalInequalities.Analysis.exists_compact_conjugate,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_conjugate}
+  \leanok
   \uses{lem:compact-tilt-optimizer, lem:dirichlet-unit-solution}
   Actual compact continuous optimizer data generate the finite real conjugate
   value, convexity, global Lipschitz, C1 and HasFDerivAt with SAME P. The closed
@@ -8325,12 +8347,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   C1 concerns conjugate psi, NOT primal U or a dual MA/transport equation.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   The actual attaining optimizer term bounds the whole affine family. The
   ALREADY canonical pure Supremum convexity producer is reused. Actual two
   variational inequalities bound the remainder by inner(q-p,Pq-Pp); actual P
@@ -8349,7 +8366,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual compact-dual capacity and local restricted transport]
   \label{lem:compact-dual-capacity}
-  \lean{FunctionalInequalities.Analysis.subgradientImageOn_eq_optimizer_preimage}
+  \lean{FunctionalInequalities.Analysis.subgradientImageOn_eq_optimizer_preimage,
+        FunctionalInequalities.Analysis.optimizer_transport_of_domain_measure,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_conjugate_capacity}
+  \leanok
   \uses{lem:compact-conjugate-value, lem:dirichlet-unit-solution}
   Pure real-inner convex D/K subset D and actual optimizer
   inequalities/uniqueness give image(u,D,G)=P preimage G on EVERY subset of
@@ -8359,12 +8379,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   transport. No source transport/nullity/injectivity/dual MA/primal regularity.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Actual optimizer uniqueness and canonical nondifferentiable open-support
   lifting preserve SAME basepoint/slope, with no copied local proof. The old
   actual UNIT conjugate source is called ONCE. Its generated derivative gives
@@ -8386,7 +8401,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual compact dual Monge--Ampere mass]
   \label{lem:compact-dual-ma}
-  \lean{FunctionalInequalities.Analysis.lintegral_subgradientImage_eq_of_map_gradient}
+  \lean{FunctionalInequalities.Analysis.lintegral_subgradientImage_eq_of_map_gradient,
+        FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_compact_dual_mass}
+  \leanok
   \uses{lem:compact-dual-capacity}
   Actual ordinary restricted gradient transport/global convex Lipschitz C1 psi
   give exact compact dual MA mass on EVERY compact subset of P preimage T,
@@ -8395,12 +8413,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   SAME U/mu/r/P/psi/L/EVERY field and GENERATES every intermediate input.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   The existing actual pushforward integral identity supplies its real bad-null/
   preimage/AE argument ONCE. Actual C1 support uniqueness puts the image in T;
   genuine restriction identities close compact mass. One old global C0/compact-S
@@ -8420,7 +8433,10 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual OPEN dual Monge--Ampere equation]
   \label{lem:open-dual-ma}
-  \lean{FunctionalInequalities.Analysis.volume_subgradientImage_eq_lintegral_of_isOpen}
+  \lean{FunctionalInequalities.Analysis.volume_subgradientImage_eq_lintegral_of_isOpen,
+        FunctionalInequalities.Analysis.volume_subgradientImage_eq_of_local_map_on_open,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_open_dual_mass}
+  \leanok
   \uses{lem:compact-dual-ma}
   SAME actual U/mu/r/P/psi/L/EVERY old field now have the TRUE OPEN dual MA
   equation on a generated OPEN NONEMPTY slope region. No source transport,
@@ -8430,12 +8446,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   whole-carrier client has massONE.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   ONE PRIVATE actual compact-to-open producer replaces the old moment-open
   substantial compactCovering/image-union proof. Arbitrary u/source Measure mu
   and ordinary source-generated compact equalities need no C0/convex/Lip/C1/
@@ -8458,7 +8469,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 \begin{lemma}[Actual compact-conjugate coercivity and full sections]
   \label{lem:coercive-dual-sections}
   \lean{FunctionalInequalities.Analysis.exists_tilt_lower_bound_of_compact_sup,
-        FunctionalInequalities.Analysis.exists_compact_tilt_sublevels}
+        FunctionalInequalities.Analysis.exists_compact_tilt_sublevels,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_coercive_dual}
+  \leanok
   \uses{lem:open-dual-ma}
   Actual compact C0 data and the literal Sup formula generate positive tilt
   growth constants before every ambient slope, without FD/Complete/measure/
@@ -8468,12 +8481,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   C1 is psi, not U; section containment and primal C1 are not concluded.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   A real ball in K and compact u maximum generate a directional affine test
   point for each nonzero slope. Mathlib compact continuous-image boundedness
   and conditional-Sup inequalities give a uniform linear lower bound; slope
@@ -8490,7 +8498,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual contained dual sections and primal support slopes]
   \label{lem:contained-dual-sections}
-  \lean{FunctionalInequalities.Analysis.exists_contained_dual_section}
+  \lean{FunctionalInequalities.Analysis.exists_contained_dual_section,
+        FunctionalInequalities.Analysis.eq_of_primal_supports_of_open_dual_mass,
+        FunctionalInequalities.Analysis.exists_contained_section_unique_supports,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_contained_dual_sections}
+  \leanok
   \uses{lem:coercive-dual-sections, lem:domain-unit-interior-strictness}
   Actual compact-conjugate data generate a minimum/contact, positive gap and
   FULL ambient compact section contained in the SAME open slope region.
@@ -8499,12 +8511,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   It does not claim one common U regular on ALL Omega or primal C1.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   Actual C0 support/optimizer uniqueness/attained value generate the minimum;
   equality at that value forces Pp=x. Existing full compact sublevels and
   Mathlib compact positive gap confine a smaller full section to the slope
@@ -8525,6 +8532,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[One actual UNIT potential with unique support at every point]
   \label{lem:unit-all-point-supports}
+  \lean{FunctionalInequalities.Analysis.Dirichlet.exists_unique_support_of_unit_data,
+        FunctionalInequalities.Analysis.Dirichlet.exists_unit_unique_supports}
+  \leanok
   \uses{lem:contained-dual-sections, lem:domain-unit-interior-strictness,
         lem:compact-dual-capacity}
   Only positive dimension/bounded open convex Omega, EMPTY allowed, generate
@@ -8534,10 +8544,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   Frechet derivatives/local C1/C2PD/Pogorelov/W2p/fullL22 are not concluded.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Strict UNIT production is called once. The fixed-U constructor uses actual
   negative-sublevel/optimizer/value/capacity/map/OPEN dual/coupled section
   producers at every point for that SAME U/mu. Shared private r/K/optimizer
@@ -8586,6 +8593,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual SAME UNIT Dirichlet reference is interior C1]
   \label{lem:unit-primal-c1}
+  \lean{FunctionalInequalities.Analysis.Dirichlet.exists_unit_c1_solution}
+  \leanok
   \uses{lem:unit-all-point-supports, lem:local-convex-c1}
   ONLY positive dimension/bounded open convex Omega, EMPTY allowed, generate
   ONE SAME U/mu with EVERY base UNIT/class/closure convex-C0/whole-frontier0/
@@ -8595,10 +8604,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   continuous derivative/C1 is assumed. No C1-closure/C2PD/Pogorelov/W2p/fullL22.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   The actual ONE-U-before-ALL-x source is called once. Generic local convex
   regularity is applied once to THIS SAME U, retaining EVERY base field and
   SAME measure. True unit-ball, Fin0 negative-constant actual zero-derivative,
@@ -8719,6 +8725,12 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Classical Pogorelov height and compact-interior estimates]
   \label{lem:classical-pogorelov}
+  \lean{FunctionalInequalities.Analysis.Pogorelov.logarithmic_maximum_conditions,
+        FunctionalInequalities.Analysis.Pogorelov.bound_of_diagonal_local_max,
+        FunctionalInequalities.Analysis.Pogorelov.bound_of_local_max,
+        FunctionalInequalities.Analysis.Pogorelov.exists_directional_height_bound,
+        FunctionalInequalities.Analysis.Pogorelov.exists_hessian_height_and_interior_bound}
+  \leanok
   \uses{lem:matrix-axis-frame, lem:local-hessian-calculus,
         lem:classical-ma-differentials}
   Savin, Proposition4.1 proof(10)-(15), pp13-14,
@@ -8737,10 +8749,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   reference, and it is not full Proposition4.1, W2p or full Letwin Lemma2.2.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Actual local C4 derivatives generate the SAME Hessian jets and the two
   constant-determinant trace identities. Actual logarithmic-test calculus
   and the canonical upper-touch Hessian theorem generate the first/second
@@ -8803,6 +8812,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Strict drift maximum, weak maximum and quadratic barrier]
   \label{lem:elliptic-maximum}
+  \lean{FunctionalInequalities.Analysis.strict_drift_maximum_principle,
+        FunctionalInequalities.Analysis.linearized_maximum_principle,
+        FunctionalInequalities.Analysis.abs_le_linearized_c0_barrier,
+        FunctionalInequalities.Analysis.strict_drift_maximum_principle_of_quadratic_nonneg}
+  \leanok
   \uses{lem:pointwise-hessian-linearity, lem:symmetric-quadratic-coefficient}
   CNS1984 section2 pp374-376 and the Lemma5.1 comparison pp385-387 use these
   ordinary tools on bounded OPEN domains, without convexity, in all n=0 and
@@ -8816,10 +8830,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   These do not prove full Lemma5.1, an inverse, classical existence or U-C2.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   ONE compact-maximum proof generates an interior local maximum; its actual
   first derivative vanishes and the canonical upper-touch PSD/trace theorem
   controls the Hessian. The weak theorem calls that strict core with the
@@ -8852,6 +8863,12 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Half-ball closure and one-sided normal derivative]
   \label{lem:halfball-within-normal}
+  \lean{FunctionalInequalities.Analysis.interior_closedHalfBall,
+        FunctionalInequalities.Analysis.convex_closedHalfBall,
+        FunctionalInequalities.Analysis.closure_halfBall,
+        FunctionalInequalities.Analysis.uniqueDiffOn_closure_halfBall,
+        FunctionalInequalities.Analysis.normal_derivative_halfBall}
+  \leanok
   In ambient dimension m+1, for every m=0 or higher and positive radius,
   the open half-ball has the actual convex closed half-ball as its closure.
   A function C1 WITHIN that FULL closure has the actual inward one-sided
@@ -8860,10 +8877,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   This supports CNS1984 Lemma5.1 p385, not its full modulus or solvability.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Convexity, the open last-coordinate projection and an actual interior point
   generate the closure and unique-differentiability facts. The same inward
   ray stays in that closure on the generated interval [0,R-normz]. ONE within
@@ -8875,6 +8889,8 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Generated normalized support of the convex flat trace]
   \label{lem:normalized-flat-support}
+  \lean{FunctionalInequalities.Analysis.normalized_flat_support}
+  \leanok
   \uses{lem:convex-within-support}
   C1 WITHIN the full closed half-ball, convex flat trace, zero value and
   tangential derivative at0, and the ordinary tangential derivative boundC
@@ -8885,10 +8901,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   or PDE data are inputs. This is CNS1984 (5.3)/(5.3)prime support only.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Call the generic within-support source at0 and zbar. Actual basis
   coordinates identify the tangential functional, its norm bound normalizes
   g, and support/nonnegativity generate beta. A genuine quartic in Fin2 at
@@ -8900,6 +8913,16 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Radial/logarithmic profile calculus and values]
   \label{lem:log-radial-calculus}
+  \lean{FunctionalInequalities.Analysis.hasFDerivAt_log_radial_profile_of_pos,
+        FunctionalInequalities.Analysis.contDiffAt_fderiv_fderiv_log_radial_profile,
+        FunctionalInequalities.Analysis.fderiv_log_radial_profile_norm_le,
+        FunctionalInequalities.Analysis.continuous_log_radial_barrier,
+        FunctionalInequalities.Analysis.tendsto_log_radial_positive_normal_slope,
+        FunctionalInequalities.Analysis.log_radial_profile_flat_value,
+        FunctionalInequalities.Analysis.flat_log_radial_profile_normal,
+        FunctionalInequalities.Analysis.log_radial_profile_value_bounds,
+        FunctionalInequalities.Analysis.log_radial_profile_value_le_radius_add}
+  \leanok
   CNS1984 Lemma5.1 p386 supports: actual positive-radius Frechet calculus
   in any real normed space, derivative norm control, singular global C0,
   divergent positive-ray slope and exact flat value/normal derivative.
@@ -8909,10 +8932,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   is assumed by the generic results. These are not boundary comparison.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Shared positive-quadratic and first-derivative production replaces both
   original inline calculus bodies. Mathlib calculus, continuous-mul-log
   and its logarithmic limit handle the real singular set. One scalar value
@@ -8923,6 +8943,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Generated plane and ambient profile operator margins]
   \label{lem:log-radial-operator}
+  \lean{FunctionalInequalities.Analysis.plane_log_radial_barrier_trace_lower,
+        FunctionalInequalities.Analysis.tangent_normal_log_radial_barrier_trace_lower,
+        FunctionalInequalities.Analysis.exists_log_radial_drift_margin_radius,
+        FunctionalInequalities.Analysis.exists_log_radial_zeroth_margin_radius}
+  \leanok
   \uses{lem:log-radial-calculus}
   Raw quadratic ellipticity, without symmetry, gives the SAME profile's
   actual plane and ambient Hessian contraction. Numerical data generate
@@ -8932,10 +8957,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   Ambient m+2 starts at dimension2. No comparison or existence is concluded.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Canonical symmetric-part elementwise control replaces the old two-point
   polarization proof. Actual frame isometry, compression and Hessian
   coordinates generate the same-operator coupling before the plane call.
@@ -8946,6 +8968,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Polynomial half-ball barrier and curved boundary]
   \label{lem:halfball-polynomial}
+  \lean{FunctionalInequalities.Analysis.halfball_polynomial_differential_data,
+        FunctionalInequalities.Analysis.exists_halfball_polynomial_negative_operator,
+        FunctionalInequalities.Analysis.halfball_polynomial_norm_floor,
+        FunctionalInequalities.Analysis.halfball_polynomial_curved_lower}
+  \leanok
   The actual polynomial xn+norm(x) squared-(E+1)xn squared is smooth.
   Numerical ellipticity/drift data generate E/delta before all raw
   quadratic coefficients, drifts and nonpositive zeroth terms. In the
@@ -8954,10 +8981,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   Ambient m+1 includes the line; this constructs no classical solution.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   One canonical quadratic supplies all differential data. A single norm-floor
   proof replaces the old inline nonnegativity and serves curved-boundary
   control through the actual coordinate norm bound. Actual positive-normal
@@ -8967,8 +8991,11 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Actual orthogonal frame and finite coordinates]
   \label{lem:orthogonal-frame-coordinates}
-  \lean{FunctionalInequalities.Analysis.clm_apply_eq_sum_single,
+  \lean{FunctionalInequalities.Analysis.orthogonal_pair_norm_sq,
+        FunctionalInequalities.Analysis.orthogonal_pair_inner_sq_le,
+        FunctionalInequalities.Analysis.clm_apply_eq_sum_single,
         FunctionalInequalities.Analysis.norm_le_card_mul_of_coord_bound}
+  \leanok
   An orthogonal unit pair in any real inner-product space gives the actual
   norm identity and Bessel bound, without finite dimension/completeness.
   Finite coordinates evaluate a continuous linear map into any real normed
@@ -8976,12 +9003,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   are included. These support CNS1984 Lemma5.1 p386, not existence.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The declarations listed with the statement are retained
-  supports; they do not establish the whole statement. The statement, its hypotheses and the
-  argument below are retained as the mathematical record; this is not a current formalization
-  target.
+  \leanok
   One actual pair preparation calls Mathlib's inner sum and Bessel.
   Its norm source replaces the old ambient-frame body. One basis evaluation
   replaces both the old Holder and tangential expansions, with exact old
@@ -8990,6 +9012,9 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Generated radius and actual half-ball frontier]
   \label{lem:halfball-radius-frontier}
+  \lean{FunctionalInequalities.Analysis.tangent_normal_radius_le,
+        FunctionalInequalities.Analysis.frontier_halfBall}
+  \leanok
   \uses{lem:orthogonal-frame-coordinates, lem:halfball-within-normal}
   The actual unit tangent and last normal generate the shifted planar radius
   bound by ambient norm plus absolute shift, in ambient dimension m+2.
@@ -8997,10 +9022,7 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
   for R positive and ambient dimension m+1. No radius/coupling is assumed.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Actual orthogonality feeds Bessel, followed by the actual two-coordinate
   triangle inequality. Canonical closure and interior give the frontier.
   A genuine shifted Fin2 point and the two nonempty ambientFin1 boundary
@@ -9009,16 +9031,15 @@ For an actual domain MA upper bound $\operatorname{MA}_\Omega u\le\Lambda\,dx$,
 
 \begin{lemma}[Pointwise elliptic Hessian-gradient-value linearity]
   \label{lem:elliptic-operator-linearity}
+  \lean{FunctionalInequalities.Analysis.elliptic_operator_linear_combination}
+  \leanok
   Local C2 of the actual functions gives the same scalar combination for
   trace(A Hess u)+Du(b)+a*u. Coefficients are arbitrary; dimension0 is included.
   No equation, symmetry, ellipticity, coefficient continuity or supplied
   derivative identity occurs. This is CNS1984 comparison preparation only.
 \end{lemma}
 \begin{proof}
-  \emph{Release scope.} The Lean development of this statement belongs to the superseded
-  auxiliary variational route and is not part of the release snapshot (see
-  \texttt{research/progress/completed-letwin-delivery-map.json}). The statement, its hypotheses and the argument below are
-  retained as the mathematical record; this is not a current formalization target.
+  \leanok
   Call canonical pointwise Hessian and Mathlib Frechet linearity. The old
   C0-barrier difference consumer uses the real zero-drift/zeroth specialization.
   A nonzero-drift quadratic/affine client generates actual value24; the empty

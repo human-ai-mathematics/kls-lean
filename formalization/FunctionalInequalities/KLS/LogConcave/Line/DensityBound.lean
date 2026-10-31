@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Buser
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Buser
 
 /-!
 # The density at a point of balanced mass
@@ -13,6 +15,8 @@ paper's: the hazard-rate monotonicity `ρ x · G 0 ≤ ρ 0 · G x` for `x ≤ 0
 `ρ x · F 0 ≤ ρ 0 · F x` for `x ≥ 0` bounds `ρ x` by `ρ 0 / ε` on the interior of the support,
 and `ρ` vanishes almost everywhere off it.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -144,7 +148,7 @@ theorem ofReal_mul_eLpNorm_top_le {ε : ℝ} (hε : 0 < ε) (h0 : ε ≤ ∫ x i
 
   have hep :
       eLpNorm d.ρ ⊤ volume ≤ ENNReal.ofReal (d.ρ 0 / ε) := by
-    rw [MeasureTheory.eLpNorm_exponent_top]
+    rw [MeasureTheory.eLpNorm_exponent_top d.measurable.aestronglyMeasurable]
     exact hess
 
   calc

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Markov
-import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Markov
+public import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-!
 # Markov property of the log-concave heat semigroup
@@ -8,7 +10,8 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 This module proves the Markov property used by the semigroup proof of
 `thm:logconcave-cheeger-poincare-comparison`. The closed weighted-gradient energy of a
 full-dimensional log-concave probability law is Markovian under every normal contraction. The
-abstract Beurling--Deny resolvent theorem from `Analysis/Semigroup/Generated/Markov.lean` then shows that
+abstract Beurling--Deny resolvent theorem from `Analysis/Semigroup/Generated/Markov.lean` then shows
+that
 the heat semigroup preserves positivity and constants, is sub-Markov, preserves integrals,
 satisfies `|P_t f| ≤ P_t |f|`, and contracts finite essential bounds.
 
@@ -22,6 +25,8 @@ the sequential relaxation. No almost-everywhere chain rule for the nonsmooth con
 This file provides no Bakry--Émery `Γ`-calculus, no small-time heat estimate, and
 no step of Buser's inequality.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -78,33 +83,36 @@ theorem norm_weightedGradient_comp_smoothed_le (φ : NormalContraction) (j : ℕ
   simpa only [one_mul] using mul_le_mul_of_nonneg_right hvalue (norm_nonneg _)
 
 /-- The mollified composition of a weighted-gradient test is again a test. -/
-theorem compSmoothed (hac : (ν : Measure V) ≪ m) {g : V → ℝ}
-    (h : WeightedGradient.IsTest ν B g) (φ : NormalContraction) (j : ℕ) :
+theorem compSmoothed (hac : (ν : Measure V) ≪ m) {g : V → ℝ} (h : WeightedGradient.IsTest ν B g)
+    (φ : NormalContraction) (j : ℕ) :
     WeightedGradient.IsTest ν B (fun x ↦ φ.smoothed j (g x)) := by
   refine ⟨?_, ?_, ?_⟩
   · obtain ⟨K, hK⟩ := h.1
     refine ⟨K, ?_⟩
     change LipschitzWith K (φ.smoothed j ∘ g)
     simpa only [one_mul] using (φ.lipschitzWith_smoothed j).comp hK
-  · refine MemLp.of_le ((memLp_const ‖φ.smoothed j 0‖).add h.memLp.norm)
-      ((φ.contDiff_smoothed j).continuous.comp h.continuous).aestronglyMeasurable
-      (ae_of_all _ fun x ↦ ?_)
+  · refine
+      MemLp.of_le ((memLp_const ‖φ.smoothed j 0‖).add h.memLp.norm)
+        ((φ.contDiff_smoothed j).continuous.comp h.continuous).aestronglyMeasurable
+        (ae_of_all _ fun x ↦ ?_)
     change ‖φ.smoothed j (g x)‖ ≤ ‖‖φ.smoothed j 0‖ + ‖g x‖‖
     rw [Real.norm_eq_abs (‖φ.smoothed j 0‖ + ‖g x‖),
       abs_of_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _))]
     have hlip := (φ.lipschitzWith_smoothed j).dist_le_mul (g x) 0
     rw [dist_eq_norm, dist_eq_norm, NNReal.coe_one, one_mul, sub_zero] at hlip
     calc
-      ‖φ.smoothed j (g x)‖ = ‖(φ.smoothed j (g x) - φ.smoothed j 0) +
-          φ.smoothed j 0‖ := by rw [sub_add_cancel]
+      ‖φ.smoothed j (g x)‖ = ‖(φ.smoothed j (g x) - φ.smoothed j 0) + φ.smoothed j 0‖ := by
+        rw [sub_add_cancel]
       _ ≤ ‖φ.smoothed j (g x) - φ.smoothed j 0‖ + ‖φ.smoothed j 0‖ := norm_add_le _ _
       _ ≤ ‖g x‖ + ‖φ.smoothed j 0‖ := by gcongr
       _ = ‖φ.smoothed j 0‖ + ‖g x‖ := add_comm _ _
-  · refine MemLp.of_le h.memLp_apply.norm
-      (WeightedGradient.measurable_apply B _).aestronglyMeasurable ?_
+  · refine
+      MemLp.of_le h.memLp_apply.norm
+        (WeightedGradient.measurable_apply B _).aestronglyMeasurable ?_
     filter_upwards [hac.ae_le
-      (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz h.1.choose_spec.locallyLipschitz m)]
-      with x hx
+        (LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz
+          h.1.choose_spec.locallyLipschitz m)] with
+      x hx
     simpa using norm_weightedGradient_comp_smoothed_le B φ j hx
 
 /-- The class of a mollified composition is uniformly close in `L²(ν)` to composition by the

@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Letwin.HminusOne
+module
+
+public import FunctionalInequalities.KLS.Letwin.HminusOne
 
 /-!
 # Client of Letwin Proposition 2.8 for general log-concave laws
@@ -7,6 +9,8 @@ The unconditional `H⁻¹` variance inequality is used in real form: finite real
 dual norms of the partial derivatives bound the variance by `Σ N_i²`. The audit prints the axioms of
 every new public declaration of the approximation route.
 -/
+
+@[expose] public section
 
 noncomputable section
 

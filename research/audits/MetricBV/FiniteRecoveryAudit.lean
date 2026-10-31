@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Scaling
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Scaling
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Independent full-signature clients for the lower and upper Minkowski recoveries with actual
 indicator `L¹(ν)` convergence and both relaxed identities, for a finite Borel measure on an
@@ -11,6 +13,8 @@ carrier; a non-unit atom on the non-vector metric space `ℕ`; empty and full se
 recovery consistency; and the probability instances.  Source: Ambrosio--Di Marino--Gigli,
 Theorem 3.6 in the finite-total-mass, global-`L¹` form; the locally finite scope of the article is
 not claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -94,14 +98,17 @@ theorem emptyCarrier (ν : Measure Empty) (B : Set Empty) :
 
 /-- Empty and full sets at a finite measure. -/
 theorem emptyAndFull (ν : Measure X) [IsFiniteMeasure ν] :
-    perimeter ν (∅ : Set X) = 0 ∧ perimeter ν (univ : Set X) = 0 ∧
-      relaxedUpperMinkowskiContent ν (∅ : Set X) = 0 ∧
-      relaxedUpperMinkowskiContent ν (univ : Set X) = 0 := by
+    perimeter ν (∅ : Set X) = 0 ∧
+      perimeter ν (univ : Set X) = 0 ∧
+        relaxedUpperMinkowskiContent ν (∅ : Set X) = 0 ∧
+          relaxedUpperMinkowskiContent ν (univ : Set X) = 0 := by
   have huniv : perimeter ν (univ : Set X) = 0 := by
     have := perimeter_compl_of_isFiniteMeasure ν (∅ : Set X)
     rwa [compl_empty, perimeter_empty] at this
-  exact ⟨perimeter_empty ν, huniv, by rw [relaxedUpperMinkowskiContent_eq_perimeter, perimeter_empty],
-    by rw [relaxedUpperMinkowskiContent_eq_perimeter, huniv]⟩
+  exact
+    ⟨perimeter_empty ν, huniv, by
+      rw [relaxedUpperMinkowskiContent_eq_perimeter, perimeter_empty], by
+      rw [relaxedUpperMinkowskiContent_eq_perimeter, huniv]⟩
 
 /-- Scaled recovery consistency: the upper recovery for `c • ν` recovers `c * perimeter ν B`, with
 indicator convergence in `L¹(c • ν)`. -/

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Whitney.Extension
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+module
+
+public import FunctionalInequalities.Analysis.Whitney.Extension
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 /-!
 Strict clients of the boundary-gluing step of the compact `C¹` Whitney extension, obligation `L6`
@@ -11,6 +13,8 @@ The singleton client prescribes an arbitrary ambient derivative although its val
 on the set. The sparse-set client shows why a within-derivative cannot be identified with the
 ambient derivative of the original function. Empty-set and zero-dimensional cases are included.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -124,7 +128,7 @@ theorem discard_wrong_value_on_set :
       ((hasFDerivAt_const (1 : ℝ) y).congr_of_eventuallyEq (hwlocal y hy)).fderiv
     have hy0 : y ≠ 0 := hy
     simp only [WhitneyJet.affine, zero_apply, add_zero, hd, sub_zero]
-    simp only [w, if_neg hy0, sub_self, norm_zero]
+    simp only [w, ite_eq_right hy0, sub_self, norm_zero]
     exact ⟨mul_nonneg hε.le infDist_nonneg, hε.le⟩
 
 /-! ### The precise remaining construction, type-checked only

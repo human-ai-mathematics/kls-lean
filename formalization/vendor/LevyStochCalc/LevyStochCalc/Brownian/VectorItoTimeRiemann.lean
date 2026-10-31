@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoProcessWindow
-import LevyStochCalc.Brownian.ItoTimeRiemann
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoProcessWindow
+public import LevyStochCalc.Brownian.ItoTimeRiemann
 
 /-!
 # Frozen-weight Riemann sums for a vector Itô process
@@ -19,6 +23,8 @@ coordinates and the entries of the diffusion matrix are admissible densities.
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.integral_abs_frozenRiemann_sub_le` — the `L¹`
   error of a frozen-weight Riemann sum along a vector Itô process.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

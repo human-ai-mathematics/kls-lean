@@ -6,9 +6,14 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Probability.Progressive
-import Mathlib.MeasureTheory.Function.Floor
-import Mathlib.MeasureTheory.Integral.Prod
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Probability.Progressive
+public import Mathlib.MeasureTheory.Function.Floor
+public import Mathlib.MeasureTheory.Integral.Prod
 
 /-!
 # Right-continuous adapted processes are progressively measurable
@@ -29,6 +34,8 @@ takes countably many values, all at times bounded by `i`.
 * `LevyStochCalc.Probability.ProgressivelyMeasurable.measurable_setIntegral_Icc` — the integral
   of a progressively measurable process over `[0, t]` is measurable for `ℱ t`.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 
@@ -184,13 +191,13 @@ theorem exists_everywhere_cadlag_modification
     simp [Set.notMem_of_mem_compl hω]
   · intro ω t
     by_cases hω : ω ∈ N
-    · simp only [hω, if_pos]
+    · simp only [hω, ite_eq_left]
       exact tendsto_const_nhds
     · simpa [hω] using (hNout ω hω t).1
   · intro ω t
     by_cases hω : ω ∈ N
     · refine ⟨0, ?_⟩
-      simp only [hω, if_pos]
+      simp only [hω, ite_eq_left]
       exact tendsto_const_nhds
     · obtain ⟨L, hL⟩ := (hNout ω hω t).2
       exact ⟨L, by simpa [hω] using hL⟩

@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.Whitney.Extension
-import FunctionalInequalities.Analysis.Whitney.Partition
+module
+
+public import FunctionalInequalities.Analysis.Whitney.Extension
+public import FunctionalInequalities.Analysis.Whitney.Partition
 
 /-! # Construction from a compact first-order Whitney jet -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -102,15 +106,24 @@ theorem derivative_sum_sub (t : Finset V) (φ : V → ℝ) (D : V → V →L[ℝ
 
 /-- Construct a smooth candidate on the complement with the two uniform jet estimates
 required by the previously proved boundary gluing theorem. -/
-theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
-    {f : V → ℝ} {F : V → V →L[ℝ] ℝ} (hF : ContinuousOn F S)
-    (hR : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ x ∈ S, ∀ y ∈ S, ‖y - x‖ < δ →
-        ‖f y - f x - F x (y - x)‖ ≤ ε * ‖y - x‖) :
-    ∃ w : V → ℝ, ContDiffOn ℝ 1 w Sᶜ ∧
-      ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-        ∀ y ∉ S, ∀ a ∈ S, infDist y S = dist y a → infDist y S < δ →
-          ‖w y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖fderiv ℝ w y - F a‖ ≤ ε := by
+theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty) {f : V → ℝ}
+    {F : V → V →L[ℝ] ℝ} (hF : ContinuousOn F S)
+    (hR :
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧ ∀ x ∈ S, ∀ y ∈ S, ‖y - x‖ < δ → ‖f y - f x - F x (y - x)‖ ≤ ε * ‖y - x‖) :
+    ∃ w : V → ℝ,
+      ContDiffOn ℝ 1 w Sᶜ ∧
+        ∀ ε : ℝ,
+          0 < ε →
+            ∃ δ : ℝ,
+              0 < δ ∧
+                ∀ y ∉ S,
+                  ∀ a ∈ S,
+                    infDist y S = dist y a →
+                      infDist y S < δ →
+                        ‖w y - affine f F a y‖ ≤ ε * infDist y S ∧ ‖fderiv ℝ w y - F a‖ ≤ ε := by
   classical
   obtain ⟨C, hC, -, hdisj, hcover, -, -, -⟩ := exists_cover hS.isClosed hne
   choose p hpS hpdist using fun z : V => hS.exists_infDist_eq_dist hne z
@@ -123,10 +136,11 @@ theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
   let η := ε / (8 + 140 * N * K)
   have hη : 0 < η := by dsimp [η]; positivity
   obtain ⟨δR, hδR, hrem⟩ := hR η hη
-  obtain ⟨δF, hδF, hder⟩ := Metric.uniformContinuousOn_iff.1
-    (hS.uniformContinuousOn_of_continuous hF) η hη
-  refine ⟨min (1 / 2) (min (δR / 4) (δF / 4)),
-    lt_min (by norm_num) (lt_min (by positivity) (by positivity)), ?_⟩
+  obtain ⟨δF, hδF, hder⟩ :=
+    Metric.uniformContinuousOn_iff.1 (hS.uniformContinuousOn_of_continuous hF) η hη
+  refine
+    ⟨min (1 / 2) (min (δR / 4) (δF / 4)),
+      lt_min (by norm_num) (lt_min (by positivity) (by positivity)), ?_⟩
   intro y hy a ha hnear hyd
   have hry := radius_pos S hS.isClosed hne hy
   have hdy := (hS.isClosed.notMem_iff_infDist_pos hne).1 hy
@@ -136,16 +150,19 @@ theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
   have hydF : 4 * infDist y S < δF := by
     have := hyd.trans_le ((min_le_right _ _).trans (min_le_right _ _)); linarith
   have hscale : 20 * radius S y = infDist y S := by
-    dsimp [radius]; rw [min_eq_right (by linarith : infDist y S ≤ 1)]; ring
+    dsimp [radius];
+    rw [min_eq_right (by linarith : infDist y S ≤ 1)]; ring
   obtain ⟨t, htC, htN, htrad, ht⟩ := exists_local_finset hS.isClosed hne hC hdisj hy
   have htN' : (t.card : ℝ) ≤ N := by dsimp [N]; exact_mod_cast htN
   have hym : y ∈ ball y (radius S y) := mem_ball_self hry
   have hφzero : ∀ q ∈ ball y (radius S y), ∀ z ∉ t, weight S C z q = 0 := by
-    intro q hq z hz; simp [weight, ht q hq z hz]
+    intro q hq z hz;
+    simp [weight, ht q hq z hz]
   have hsum1 : ∀ q ∈ ball y (radius S y), ∑ z ∈ t, weight S C z q = 1 := by
     intro q hq
-    have hqS : q ∉ S := closedBall_subset_compl S hry (show dist q y ≤ 8 * radius S y by
-      have : dist q y < radius S y := hq; linarith)
+    have hqS : q ∉ S :=
+      closedBall_subset_compl S hry
+        (show dist q y ≤ 8 * radius S y by have : dist q y < radius S y := hq; linarith)
     rw [← sum_weight_eq_one hS.isClosed hne hC hdisj hcover hqS]
     symm
     apply finsum_eq_finsetSum_of_support_subset
@@ -154,19 +171,25 @@ theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
     exact hz (hφzero q hq z hzt)
   have hφder : ∀ z, HasFDerivAt (weight S C z) (fderiv ℝ (weight S C z) y) y := by
     intro z
-    exact ((contDiffOn_weight hS.isClosed hne hC hdisj hcover z).differentiableOn
-      (by simp) y hy).differentiableAt (hS.isClosed.isOpen_compl.mem_nhds hy) |>.hasFDerivAt
+    exact
+      ((contDiffOn_weight hS.isClosed hne hC hdisj hcover z).differentiableOn (by simp) y
+              hy).differentiableAt
+          (hS.isClosed.isOpen_compl.mem_nhds hy) |>.hasFDerivAt
   have hsumD : ∑ z ∈ t, fderiv ℝ (weight S C z) y = 0 := by
-    have h := (HasFDerivAt.fun_sum (fun z (_ : z ∈ t) => hφder z)).congr_of_eventuallyEq
-      (show (fun _ : V => (1 : ℝ)) =ᶠ[𝓝 y] (fun q => ∑ z ∈ t, weight S C z q) by
-        filter_upwards [ball_mem_nhds y hry] with q hq
-        exact (hsum1 q hq).symm)
+    have h :=
+      (HasFDerivAt.fun_sum (fun z (_ : z ∈ t) => hφder z)).congr_of_eventuallyEq
+        (show (fun _ : V => (1 : ℝ)) =ᶠ[𝓝 y] (fun q => ∑ z ∈ t, weight S C z q) by
+          filter_upwards [ball_mem_nhds y hry] with q hq
+          exact (hsum1 q hq).symm)
     simpa using h.fderiv.symm
   have hlocal : w =ᶠ[𝓝 y] fun q => ∑ z ∈ t, weight S C z q * affine f F (p z) q := by
     filter_upwards [ball_mem_nhds y hry] with q hq
     exact candidate_eq_sum p f F (ht q hq)
-  have hDw := (HasFDerivAt.fun_sum (fun z (_ : z ∈ t) =>
-    (hφder z).fun_mul (hasFDerivAt_affine f F (p z) y))).congr_of_eventuallyEq hlocal
+  have hDw :=
+    (HasFDerivAt.fun_sum
+          (fun z (_ : z ∈ t) =>
+            (hφder z).fun_mul (hasFDerivAt_affine f F (p z) y))).congr_of_eventuallyEq
+      hlocal
   have hpnear : ∀ z ∈ t, dist (p z) y ≤ 3 * infDist y S ∧ dist (p z) a ≤ 4 * infDist y S := by
     intro z hz
     have h1 := dist_anchor_le hyd1 (htrad z hz).2 (hpdist z)
@@ -180,8 +203,8 @@ theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
     simpa only [dist_eq_norm] using this.le
   have hA : ∀ z ∈ t, ‖affine f F (p z) y - affine f F a y‖ ≤ 7 * η * infDist y S := by
     intro z hz
-    have h1 := hrem a ha (p z) (hpS z) (by
-      rw [← dist_eq_norm]; exact (hpnear z hz).2.trans_lt hydR)
+    have h1 :=
+      hrem a ha (p z) (hpS z) (by rw [← dist_eq_norm]; exact (hpnear z hz).2.trans_lt hydR)
     have h2 := norm_affine_sub_le f F (p z) a y
     have h3 := mul_le_mul_of_nonneg_right (hG z hz) (norm_nonneg (y - p z))
     have h4 := mul_le_mul_of_nonneg_left (hpnear z hz).2 hη.le
@@ -190,8 +213,8 @@ theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
     rw [norm_sub_rev y (p z)] at h2 h3
     linarith
   have hvalue : ‖w y - affine f F a y‖ ≤ 7 * η * infDist y S := by
-    have heq : w y - affine f F a y =
-        ∑ z ∈ t, weight S C z y * (affine f F (p z) y - affine f F a y) := by
+    have heq :
+      w y - affine f F a y = ∑ z ∈ t, weight S C z y * (affine f F (p z) y - affine f F a y) := by
       rw [hlocal.self_of_nhds]
       simp only [mul_sub, Finset.sum_sub_distrib, ← Finset.sum_mul, hsum1 y hym, one_mul]
     rw [heq]
@@ -200,26 +223,35 @@ theorem exists_compl_approx (hS : IsCompact S) (hne : S.Nonempty)
       _ ≤ ∑ z ∈ t, weight S C z y * (7 * η * infDist y S) := by
         apply Finset.sum_le_sum
         intro z hz
-        rw [norm_mul, Real.norm_eq_abs, abs_of_nonneg (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)]
-        exact mul_le_mul_of_nonneg_left (hA z hz) (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)
+        rw [norm_mul, Real.norm_eq_abs,
+          abs_of_nonneg (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)]
+        exact
+          mul_le_mul_of_nonneg_left (hA z hz)
+            (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)
       _ = _ := by rw [← Finset.sum_mul, hsum1 y hym, one_mul]
   have hgradient : ‖fderiv ℝ w y - F a‖ ≤ η + 140 * N * K * η := by
-    rw [hDw.fderiv, derivative_sum_sub t (fun z => weight S C z y)
-      (fun z => fderiv ℝ (weight S C z) y) (fun z => affine f F (p z) y)
-      (fun z => F (p z)) (affine f F a y) (F a) (hsum1 y hym) hsumD]
+    rw [hDw.fderiv,
+      derivative_sum_sub t (fun z => weight S C z y) (fun z => fderiv ℝ (weight S C z) y)
+        (fun z => affine f F (p z) y) (fun z => F (p z)) (affine f F a y) (F a) (hsum1 y hym)
+        hsumD]
     have hfirst : ‖∑ z ∈ t, weight S C z y • (F (p z) - F a)‖ ≤ η := by
       calc
         _ ≤ ∑ z ∈ t, ‖weight S C z y • (F (p z) - F a)‖ := norm_sum_le _ _
         _ ≤ ∑ z ∈ t, weight S C z y * η := by
           apply Finset.sum_le_sum
           intro z hz
-          rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)]
-          exact mul_le_mul_of_nonneg_left (hG z hz) (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)
+          rw [norm_smul, Real.norm_eq_abs,
+            abs_of_nonneg (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)]
+          exact
+            mul_le_mul_of_nonneg_left (hG z hz)
+              (weight_nonneg hS.isClosed hne hC hdisj hcover z hy)
         _ = _ := by rw [← Finset.sum_mul, hsum1 y hym, one_mul]
-    have hsecond : ‖∑ z ∈ t, (affine f F (p z) y - affine f F a y) •
-        fderiv ℝ (weight S C z) y‖ ≤ 140 * N * K * η := by
+    have hsecond :
+      ‖∑ z ∈ t, (affine f F (p z) y - affine f F a y) • fderiv ℝ (weight S C z) y‖ ≤
+        140 * N * K * η := by
       calc
-        _ ≤ ∑ z ∈ t, ‖(affine f F (p z) y - affine f F a y) • fderiv ℝ (weight S C z) y‖ := norm_sum_le _ _
+        _ ≤ ∑ z ∈ t, ‖(affine f F (p z) y - affine f F a y) • fderiv ℝ (weight S C z) y‖ :=
+          norm_sum_le _ _
         _ ≤ ∑ _z ∈ t, (7 * η * infDist y S) * (K / radius S y) := by
           apply Finset.sum_le_sum
           intro z hz

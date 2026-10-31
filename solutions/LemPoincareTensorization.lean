@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.Product.Tensorization
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Poincare.Product.Tensorization
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Lean certificate for `lem:poincare-tensorization`
@@ -9,13 +11,17 @@ Source: Bakry, Gentil and Ledoux, *Analysis and Geometry of Markov Diffusion Ope
 https://www.hse.ru/data/2016/11/24/1113029204/bok%253A978-3-319-00227-9.pdf#page=201
 The proposition gives the fixed-constant upper bound `max C C'` for a product of Markov triples.
 
-This certificate combines `Poincare.SmoothTest.Holds.prod`, a local realization of that upper bound for
-the repository's smooth L² finite-gradient-energy tests, with `Poincare.SmoothTest.constant_prod_le`, its
+This certificate combines `Poincare.SmoothTest.Holds.prod`, a local realization of that upper bound
+for
+the repository's smooth L² finite-gradient-energy tests, with
+`Poincare.SmoothTest.constant_prod_le`, its
 local infimum consequence in `ENNReal`. Each factor is explicitly a probability measure on a
 complete, second-countable real Hilbert space with its Borel structure, and the product uses
 `WithLp 2`. Equivalence with the book's Dirichlet-form domain is not asserted. Zero-dimensional
 Euclidean factors and infinite optimal constants are included by the local definitions.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -25,18 +31,19 @@ open FunctionalInequalities
 namespace Solutions.LemPoincareTensorization
 
 /-- Source: BGL Proposition 4.3.1 for the fixed-constant upper bound; the optimal-constant upper
-bound is the local infimum consequence `Poincare.SmoothTest.constant_prod_le`. This certificate combines
+bound is the local infimum consequence `Poincare.SmoothTest.constant_prod_le`. This certificate
+combines
 both results for the repository's test domain, with separate probability assumptions on the
 two factors. See the module comment for the source's Markov-triple scope. -/
-theorem certificate {E F : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
-    (μ : Measure E) (ν : Measure F)
+theorem certificate {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F] [MeasurableSpace F]
+    [BorelSpace F] [SecondCountableTopology F] (μ : Measure E) (ν : Measure F)
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
-    (∀ ⦃C C' : ℝ⦄, Poincare.SmoothTest.Holds μ C → Poincare.SmoothTest.Holds ν C' →
-      Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) (max C C')) ∧
+    (∀ ⦃C C' : ℝ⦄,
+        Poincare.SmoothTest.Holds μ C →
+          Poincare.SmoothTest.Holds ν C' →
+            Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) (max C C')) ∧
       Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) ≤
         max (Poincare.SmoothTest.constant μ) (Poincare.SmoothTest.constant ν) := by
   constructor
@@ -63,7 +70,8 @@ end EuclideanChecks
 end Solutions.LemPoincareTensorization
 
 /--
-info: 'Solutions.LemPoincareTensorization.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.LemPoincareTensorization.certificate' depends on axioms: [propext,
+Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.LemPoincareTensorization.certificate
+  #print axioms Solutions.LemPoincareTensorization.certificate

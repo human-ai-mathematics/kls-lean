@@ -5,8 +5,12 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.ItoSimpleIntegrand
-import LevyStochCalc.Brownian.Filtered
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoSimpleIntegrand
+public import LevyStochCalc.Brownian.Filtered
 
 /-!
 # Second moments of the terms of the elementary Brownian integral
@@ -18,6 +22,8 @@ with variance `t_{i+1} - t_i`, while for `i < j` the off-diagonal term vanishes,
 `E[(ξ_i · ΔW_i) · (ξ_j · ΔW_j)] = 0`. Both rest on the integrability of the squared increments
 and of the cross products.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

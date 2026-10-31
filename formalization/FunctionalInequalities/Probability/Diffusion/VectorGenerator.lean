@@ -1,13 +1,18 @@
-import FunctionalInequalities.Probability.Diffusion.Generator
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Operations
+module
+
+public import FunctionalInequalities.Probability.Diffusion.Generator
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
 
 /-!
 # The vector-valued generator
 
-`vectorGenerator b σ G x = DG(x)[b x] + ½ Σ_k D²G(x)[σ_k x, σ_k x]` (the drift of `G(X_t)`), equal to `diffusionGenerator`
+`vectorGenerator b σ G x = DG(x)[b x] + ½ Σ_k D²G(x)[σ_k x, σ_k x]` (the drift of `G(X_t)`), equal
+to `diffusionGenerator`
 for scalar `G`, and its behaviour under continuous linear maps, products and finite families.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -17,10 +22,12 @@ namespace FunctionalInequalities.Probability.Diffusion
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {d : ℕ}
 
-/-- The vector-valued generator `𝓛G(x) = DG(x)[b x] + ½ Σ_k D²G(x)[σ_k x, σ_k x]` of a `W`-valued function
+/--
+The vector-valued generator `𝓛G(x) = DG(x)[b x] + ½ Σ_k D²G(x)[σ_k x, σ_k x]` of a `W`-valued
+function
 (the drift of `G(X_t)` in Itô's formula; BKL arXiv:2610.05474v1, (81)–(82)). -/
-def vectorGenerator {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
-    (b : V → V) (σ : V → Fin d → V) (G : V → W) (x : V) : W :=
+def vectorGenerator {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W] (b : V → V)
+    (σ : V → Fin d → V) (G : V → W) (x : V) : W :=
   fderiv ℝ G x (b x) + (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)
 
 /-- For scalar functions the vector generator is the generator. -/
@@ -117,15 +124,13 @@ theorem vectorGenerator_prodMk (b : V → V) (σ : V → Fin d → V)
         (ContinuousLinearMap.snd ℝ W₁ W₂) (h₁.prodMk h₂)).symm
 
 /-- The vector generator of a finite family is computed componentwise. -/
-theorem vectorGenerator_pi {ι : Type*} [Fintype ι] {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
-    (b : V → V) (σ : V → Fin d → V) {G : V → ι → W} {x : V}
+theorem vectorGenerator_pi {ι : Type*} [Fintype ι] {W : Type*} [NormedAddCommGroup W]
+    [NormedSpace ℝ W] (b : V → V) (σ : V → Fin d → V) {G : V → ι → W} {x : V}
     (hG : ∀ i, ContDiffAt ℝ 2 (fun y => G y i) x) :
     vectorGenerator b σ G x = fun i => vectorGenerator b σ (fun y => G y i) x := by
   have h : ContDiffAt ℝ 2 G x := contDiffAt_pi.mpr hG
   funext i
-  exact
-    (vectorGenerator_clm_comp b σ
-      (ContinuousLinearMap.proj i : (ι → W) →L[ℝ] W) h).symm
+  exact (vectorGenerator_clm_comp b σ (ContinuousLinearMap.proj i : (ι → W) →L[ℝ] W) h).symm
 
 /-- The derivative of a pair, applied to a vector. -/
 theorem fderiv_prodMk_apply_vec {G₁ : V → W₁} {G₂ : V → W₂} {x : V}
@@ -144,12 +149,3 @@ theorem fderiv_pi_apply_vec {ι : Type*} {W : Type*} [NormedAddCommGroup W] [Nor
   exact ContinuousLinearMap.pi_apply _ _ _
 
 end FunctionalInequalities.Probability.Diffusion
-
-#print axioms FunctionalInequalities.Probability.Diffusion.vectorGenerator
-#print axioms FunctionalInequalities.Probability.Diffusion.diffusionGenerator_eq_vectorGenerator
-#print axioms FunctionalInequalities.Probability.Diffusion.fderiv_clm_comp_apply_vec
-#print axioms FunctionalInequalities.Probability.Diffusion.vectorGenerator_clm_comp
-#print axioms FunctionalInequalities.Probability.Diffusion.vectorGenerator_prodMk
-#print axioms FunctionalInequalities.Probability.Diffusion.vectorGenerator_pi
-#print axioms FunctionalInequalities.Probability.Diffusion.fderiv_prodMk_apply_vec
-#print axioms FunctionalInequalities.Probability.Diffusion.fderiv_pi_apply_vec

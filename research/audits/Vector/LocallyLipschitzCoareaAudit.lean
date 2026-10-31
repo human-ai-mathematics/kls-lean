@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Lipschitz.Local
-import Mathlib.Analysis.Calculus.ContDiff.RCLike
-import Mathlib.Analysis.Calculus.FDeriv.Norm
-import Mathlib.Analysis.InnerProductSpace.Calculus
+module
+
+public import FunctionalInequalities.Analysis.Lipschitz.Local
+public import Mathlib.Analysis.Calculus.ContDiff.RCLike
+public import Mathlib.Analysis.Calculus.FDeriv.Norm
+public import Mathlib.Analysis.InnerProductSpace.Calculus
 
 /-!
 # Discharge audit for the locally Lipschitz vector coarea route
@@ -224,18 +226,24 @@ end LocallyLipschitzVectorCoareaAudit
 
 /-! #### The locally Lipschitz target, verbatim, from `Analysis.coarea_of_locallyLipschitz` -/
 
-theorem LocallyLipschitzVectorCoareaAudit.route_N0 : ∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-    [MeasurableSpace V] [BorelSpace V]
-    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-    [MeasurableSpace W] [BorelSpace W]
-    {S : Set V} {u : V → W} {g : V → ℝ≥0∞} {k : ℕ},
-    k + finrank ℝ W = finrank ℝ V → LocallyLipschitz u →
-    MeasurableSet S → Measurable g →
-    AEMeasurable (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
-        (volume : Measure W) ∧
-      (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
-        = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k)
-            ∂(volume : Measure W)) :=
+theorem LocallyLipschitzVectorCoareaAudit.route_N0 :
+    ∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+      [MeasurableSpace V] [BorelSpace V] [NormedAddCommGroup W] [InnerProductSpace ℝ W]
+      [FiniteDimensional ℝ W] [MeasurableSpace W] [BorelSpace W] {S : Set V} {u : V → W}
+      {g : V → ℝ≥0∞} {k : ℕ},
+      k + finrank ℝ W = finrank ℝ V →
+        LocallyLipschitz u →
+          MeasurableSet S →
+            Measurable g →
+              AEMeasurable
+                  (fun t : W =>
+                    ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
+                  (volume : Measure W) ∧
+                (∫⁻ x in S,
+                    ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) =
+                  ∫⁻ t,
+                    ∫⁻ y in S ∩ {x : V | u x = t},
+                      g y ∂(KLS.hausdorffNormalized V k) ∂(volume : Measure W)) :=
   fun hk hu hS hg => FunctionalInequalities.Analysis.coarea_of_locallyLipschitz hk hu hS hg
 
 #print axioms FunctionalInequalities.Analysis.coarea_of_locallyLipschitz

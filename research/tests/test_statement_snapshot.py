@@ -14,11 +14,53 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import statement_snapshot as snapshot
 
 
+class DriverClientTests(unittest.TestCase):
+    """The generated snapshot client stays a NON-module root, whatever the driver header is."""
+
+    def client(self, driver, imports=("FunctionalInequalities.KLS.Statement",)):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / snapshot.DRIVER).parent.mkdir(parents=True)
+            (root / snapshot.DRIVER).write_text(driver)
+            return snapshot.driver_client(root, list(imports))
+
+    def test_module_driver_header_is_replaced(self):
+        body = "\n\n/-! doc -/\n\n@[expose] public section\n\nopen Lean\n"
+        for header in ("module\n\npublic import Lean\npublic meta import Lean",
+                       "/- Copyright -/\nmodule\n\npublic import Lean\nmeta import Lean",
+                       "module\n\nimport Lean", "import Lean"):
+            with self.subTest(header=header):
+                client = self.client(header + body)
+                self.assertEqual(client, "import FunctionalInequalities.KLS.Statement\nimport Lean" + body)
+                parsed = snapshot.lean_header.parse_header(client)
+                self.assertFalse(parsed.is_module)
+                self.assertEqual(parsed.modules, ["FunctionalInequalities.KLS.Statement", "Lean"])
+
+    def test_legacy_driver_output_is_unchanged(self):
+        driver = "import Lean\n\n/-!\nDoc.\n-/\n\nopen Lean\n"
+        self.assertEqual(self.client(driver), "import FunctionalInequalities.KLS.Statement\n" + driver)
+
+    def test_driver_may_not_import_library_modules_or_hide_imports(self):
+        for driver in ("module\n\npublic import Lean\npublic import FunctionalInequalities.X\n",
+                       "module\n\nimport all Lean.Elab\n", "import Lean\nmodule\n",
+                       "module\n\npublic\n"):
+            with self.subTest(driver=driver), self.assertRaises(ValueError):
+                self.client(driver)
+
+    def test_snapshot_code_uses_the_committed_driver_as_a_non_module_root(self):
+        code = snapshot.snapshot_code(snapshot.ROOT)
+        parsed = snapshot.lean_header.parse_header(code)
+        self.assertFalse(parsed.is_module)
+        self.assertEqual(parsed.modules[0], "FunctionalInequalities.KLS.Statement")
+        self.assertTrue(code.rstrip().endswith(" ".join(snapshot.ROOTS)))
+
+
 class ElaboratedSnapshotTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.outputs = []
-        helper = (snapshot.ROOT / "research/StatementSnapshot.lean").read_text()
+        # The production non-module client form: the driver header is replaced by plain imports.
+        helper = snapshot.driver_client(snapshot.ROOT, [])
         env = dict(os.environ)
         env.pop("LEAN_PATH", None)
         for value in ("1", "2", "newDependency"):

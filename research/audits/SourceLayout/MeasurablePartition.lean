@@ -1,6 +1,11 @@
-import FunctionalInequalities.Analysis.MeasurableCover
-import Mathlib.Topology.MetricSpace.ProperSpace.Real
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.MeasurableCover
+public import Mathlib.Topology.MetricSpace.ProperSpace.Real
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis Set
 

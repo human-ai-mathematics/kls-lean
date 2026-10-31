@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
 
 /-!
 # Audit: the one-step Schauder bootstrap and the `C³` regular moment potential
@@ -8,7 +10,8 @@ Classics 2001, Lemma 17.16 method with Theorem 6.2) and of
 `exists_regular_moment_potential_contDiff_three` (Letwin, arXiv:2607.24164v1, Lemma 2.2 support,
 strong class).
 
-* Namespace `LetwinBootstrapThreeAudit`, planar quadratic `u(x) = ‖x‖²` (`n = 2`): its Hessian is the constant
+* Namespace `LetwinBootstrapThreeAudit`, planar quadratic `u(x) = ‖x‖²` (`n = 2`): its Hessian is
+  the constant
   `2 ⟪·,·⟫`, so the Hölder cap of the Hessian is `Hu = 0`; for every unit `e` and `0 < q ≤ 1` the
   finite difference is `v(x) = 2 ⟪x, e⟫ + q` with `D²v = 0`, and it satisfies the equation
   `Σ δⁱʲ D_{ij} v + Σ 0 · D_i v + v = v` with `λ = Λ = 1`, `K = Kb = 0`, `|v| ≤ 3`, `|g| ≤ 3` and
@@ -24,6 +27,8 @@ strong class).
 
 `#print axioms` for the clients and for the library producers they invoke.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -237,7 +242,8 @@ end LetwinBootstrapThreeAudit
 #print axioms LetwinBootstrapThreeAudit.normSq_uniformQuotientEquations
 #print axioms LetwinBootstrapThreeAudit.normSq_bootstrap_client
 #print axioms LetwinBootstrapThreeAudit.regular_moment_potential_contDiff_three_client
-#print axioms FunctionalInequalities.Analysis.directional_derivative_contDiffOn_two_of_quotient_equations
+#print axioms
+  FunctionalInequalities.Analysis.directional_derivative_contDiffOn_two_of_quotient_equations
 #print axioms FunctionalInequalities.Analysis.contDiffOn_three_of_quotient_equations
 #print axioms FunctionalInequalities.Analysis.contDiffOn_three_balls_of_regular_fields
 #print axioms FunctionalInequalities.Analysis.exists_regular_moment_potential_contDiff_three

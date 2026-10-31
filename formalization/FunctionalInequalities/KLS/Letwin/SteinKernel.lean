@@ -1,18 +1,22 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.KLS.CEK.MomentRegularity.SmoothTrace
-import FunctionalInequalities.KLS.LogConcave.HessianStein
-import FunctionalInequalities.KLS.Letwin.MomentMap
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.SmoothTrace
+public import FunctionalInequalities.KLS.LogConcave.HessianStein
+public import FunctionalInequalities.KLS.Letwin.MomentMap
 
 /-!
 # The smooth moment-map Stein kernel
 
 Letwin, arXiv:2607.24164v1, Lemma 2.7 (Fathi's moment-map construction), first in the strong
-regular class: smooth globally κ-uniformly convex W, compact convex K with nonempty interior, normalized
+regular class: smooth globally κ-uniformly convex W, compact convex K with nonempty interior,
+normalized
 isotropic law 1_K e^{-W}, every n > 0. The same smooth moment potential gives the kernel
 τ = Hess u ∘ Ψ, where Ψ is a measurable everywhere left inverse, smooth on int K and a right
 inverse there. The kernel is a symmetric Stein kernel, positive definite on int K (indeed at
 every point of the chosen extension), with smooth entries there and the exact pointwise coupling
-τ(∇u y) = Hess u y. The strengthened producer also gives the exact Theorem 2.5 source trace bounds and
+τ(∇u y) = Hess u y. The strengthened producer also gives the exact Theorem 2.5 source trace bounds
+and
 Hilbert–Schmidt L² bound at this same smooth potential.
 
 `exists_smooth_moment_stein_kernel_of_bounded_open_convex` gives the same conclusions for the
@@ -25,6 +29,8 @@ convex `φ` with `∫ e^{-φ} = 1` and `(∇φ)_* e^{-φ} dx = μ`) and
 `exists_stein_kernel_of_ofPotential_of_bounded_open_convex` (any convex essentially continuous
 `ψ : ℝⁿ → ℝ ∪ {+∞}` with moment measure `μ`, the moment map of Letwin Lemma 2.1).
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis
 
@@ -203,14 +209,20 @@ theorem exists_regular_smooth_moment_stein_kernel_L2 :
       (∫ x, hsNorm (hessianKernel u Ψ x) ^ 2 ∂(μ : Measure E)) ≤ 2 * n ∧
       ∀ i j, (∫ x, hessianKernel u Ψ x i j ∂(μ : Measure E)) =
         (1 : Matrix (Fin n) (Fin n) ℝ) i j := by
-  obtain ⟨u, _L, _LF, _T, hconv, hl, hnorm, hmap, _hC1, hG, _hF, _hd, _hT, _hC2, _hHc,
-      hEvery, _hLocal, he, _hΨ, hsm, _hall, _hΨsm, _hmean, htrace⟩ :=
-    exists_regular_moment_potential_smooth_trace hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  obtain ⟨Ψ, hΨ, hleft, hright, hΨsm, hstein, hsym, hPD, hentries, hcoupling, hHS, hHSbound, hmean⟩ :=
-    sharp_smooth_stein_of_trace_bound hn hsm hconv hl hG hnorm μ hmap hiso
-      hK hKc hKint hW.continuous hμ (fun x => (hEvery x).1) htrace
-  exact ⟨u, Ψ, hsm, hconv, hG, hnorm, hmap, fun x => ⟨(hEvery x).1, (hEvery x).2.1⟩,
-    he, hΨ, hleft, hright, hΨsm, hstein, hsym, hPD, hentries, hcoupling, htrace, hHS, hHSbound, hmean⟩
+    obtain
+      ⟨u, _L, _LF, _T, hconv, hl, hnorm, hmap, _hC1, hG, _hF, _hd, _hT, _hC2, _hHc,
+        hEvery, _hLocal, he, _hΨ, hsm, _hall, _hΨsm, _hmean, htrace⟩ :=
+      exists_regular_moment_potential_smooth_trace hn hκ hK hKc hKint hW hstrong μ hμ
+        hiso
+    obtain
+      ⟨Ψ, hΨ, hleft, hright, hΨsm, hstein, hsym, hPD, hentries, hcoupling, hHS,
+        hHSbound, hmean⟩ :=
+      sharp_smooth_stein_of_trace_bound hn hsm hconv hl hG hnorm μ hmap hiso hK hKc
+        hKint hW.continuous hμ (fun x => (hEvery x).1) htrace
+    exact
+      ⟨u, Ψ, hsm, hconv, hG, hnorm, hmap, fun x => ⟨(hEvery x).1, (hEvery x).2.1⟩, he,
+        hΨ, hleft, hright, hΨsm, hstein, hsym, hPD, hentries, hcoupling, htrace, hHS,
+        hHSbound, hmean⟩
 
 end RegularClass
 end FunctionalInequalities.Analysis
@@ -273,32 +285,44 @@ private theorem stein_kernel_of_smooth_potential
         Energy.Dual.dualNorm μ (linearLp μ hiso.memLp_two v) ≠ ⊤ ∧
         (Energy.Dual.dualNorm μ (linearLp μ hiso.memLp_two v)).toReal ^ 2 ≤
           ∫ x, ‖action (hessianKernel φ Ψ x) v‖ ^ 2 ∂(μ : Measure E) := by
-  have htrace := fun B hB =>
-    integral_trace_hessian_quadratic_le hKb hKo hU hKU hV hVc μ hiso hφ hnorm hmap hrange hPD hMA
-      ⟨C, hC⟩ B hB
-  -- Replace `1_K e^{-V}` by `1_{closure K} e^{-W}` with `W` globally smooth.
-  obtain ⟨W, hW, hWV⟩ := Analysis.exists_contDiff_eqOn_closure hKb hU hKU hV
-  have hμW : (μ : Measure E) = (volume : Measure E).withDensity
-      ((closure K).indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
-    have hKW : (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))) =
-        K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)) :=
-      indicator_congr fun x hx => by rw [hWV (subset_closure hx)]
-    rw [hμ, hKW]
-    exact withDensity_congr_ae
-      (indicator_ae_eq_of_ae_eq_set (closure_ae_eq_of_null_frontier (hKc.addHaar_frontier volume)).symm)
-  have hi : interior (closure K) = K := by
-    simpa only [hKo.interior_eq] using
-      hKc.interior_closure_eq_interior_of_nonempty_interior (by simpa only [hKo.interior_eq] using hKne)
-  obtain ⟨Ψ, hΨ, hleft, hright, hΨsm, hstein, hsym, hPDk, hentries, hcoupling, hHS, hHSbound, hmean⟩ :=
-    Analysis.sharp_smooth_stein_of_trace_bound hn hφ hc hL hG hnorm μ hmap hiso
-      hKb.isCompact_closure hKc.closure (by rw [hi]; exact hKne) hW.continuous hμW hPD htrace
-  rw [hi] at hright hΨsm hentries
-  have hac : (μ : Measure E) ≪ volume := hμ ▸ withDensity_absolutelyContinuous _ _
-  refine ⟨Ψ, hΨ, hleft, hright, hΨsm,
-    hstein, hsym, hPDk, hentries, hcoupling, htrace, hHS, hHSbound, hmean, fun v => ?_⟩
-  obtain ⟨h0, hfin, -, hbound⟩ :=
-    linear_dual_bound_of_ac μ (hessianKernel φ Ψ) hstein hac hiso.memLp_two hsym hHS v
-  exact ⟨h0, hfin, hbound⟩
+    have htrace := fun B hB =>
+      integral_trace_hessian_quadratic_le hKb hKo hU hKU hV hVc μ hiso hφ hnorm hmap
+        hrange hPD hMA ⟨C, hC⟩ B
+        hB
+    -- Replace `1_K e^{-V}` by `1_{closure K} e^{-W}` with `W` globally smooth.
+
+    obtain ⟨W, hW, hWV⟩ := Analysis.exists_contDiff_eqOn_closure hKb hU hKU hV
+    have hμW :
+      (μ : Measure E) =
+        (volume : Measure E).withDensity
+          ((closure K).indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
+      have hKW :
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))) =
+          K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)) :=
+        indicator_congr fun x hx => by rw [hWV (subset_closure hx)]
+      rw [hμ, hKW]
+      exact
+        withDensity_congr_ae
+          (indicator_ae_eq_of_ae_eq_set
+            (closure_ae_eq_of_null_frontier (hKc.addHaar_frontier volume)).symm)
+    have hi : interior (closure K) = K := by
+      simpa only [hKo.interior_eq] using
+        hKc.interior_closure_eq_interior_of_nonempty_interior
+          (by simpa only [hKo.interior_eq] using hKne)
+    obtain
+      ⟨Ψ, hΨ, hleft, hright, hΨsm, hstein, hsym, hPDk, hentries, hcoupling, hHS,
+        hHSbound, hmean⟩ :=
+      Analysis.sharp_smooth_stein_of_trace_bound hn hφ hc hL hG hnorm μ hmap hiso
+        hKb.isCompact_closure hKc.closure (by rw [hi]; exact hKne) hW.continuous hμW hPD
+        htrace
+    rw [hi] at hright hΨsm hentries
+    have hac : (μ : Measure E) ≪ volume := hμ ▸ withDensity_absolutelyContinuous _ _
+    refine
+      ⟨Ψ, hΨ, hleft, hright, hΨsm, hstein, hsym, hPDk, hentries, hcoupling, htrace, hHS,
+        hHSbound, hmean, fun v => ?_⟩
+    obtain ⟨h0, hfin, -, hbound⟩ :=
+      linear_dual_bound_of_ac μ (hessianKernel φ Ψ) hstein hac hiso.memLp_two hsym hHS v
+    exact ⟨h0, hfin, hbound⟩
 
 include hn hKb hKo hKc hKne hU hKU hV hVc hμ hiso in
 /-- **Letwin arXiv:2607.24164v1, Lemmas 2.7 and 2.9 with Theorem 2.5 at the produced potential.**

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Slice.Critical
-import FunctionalInequalities.Analysis.Coarea.Smooth
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Slice.Critical
+public import FunctionalInequalities.Analysis.Coarea.Smooth
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the codimension-`m` vanishing-derivative slices
@@ -27,6 +29,8 @@ is empty while the critical set is everything, and the hypothesis of
 rank-deficient part, so the **general codimension-`m` coarea formula is not proved here**.  No
 Sard theorem is claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -189,7 +193,8 @@ end VectorCriticalSliceAudit
 #print axioms FunctionalInequalities.Analysis.exists_lipschitzOnWith_zeroDeriv_cover
 #print axioms FunctionalInequalities.Analysis.ae_hausdorffMeasure_zeroDeriv_ball_eq_zero
 #print axioms FunctionalInequalities.Analysis.ae_hausdorffMeasure_zeroDeriv_inter_levelSet_eq_zero
-#print axioms FunctionalInequalities.Analysis.ae_hausdorffNormalized_zeroDeriv_inter_levelSet_eq_zero
+#print axioms
+  FunctionalInequalities.Analysis.ae_hausdorffNormalized_zeroDeriv_inter_levelSet_eq_zero
 #print axioms FunctionalInequalities.Analysis.isOpen_coareaJacobian_ne_zero
 #print axioms FunctionalInequalities.Analysis.coarea_of_contDiff_of_critical_eq_zeroDeriv
 #print axioms VectorCriticalSliceAudit.zeroDeriv_slices

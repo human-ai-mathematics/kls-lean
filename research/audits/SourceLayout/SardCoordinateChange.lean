@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Sard.CoordinateChange
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Sard.CoordinateChange
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis
 open scoped ContDiff

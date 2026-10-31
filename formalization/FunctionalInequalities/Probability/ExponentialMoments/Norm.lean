@@ -1,10 +1,12 @@
-import FunctionalInequalities.Analysis.Tensor.Multilinear
-import Mathlib.Probability.Moments.IntegrableExpMul
-import Mathlib.Analysis.SpecialFunctions.Exponential
-import Mathlib.Analysis.SpecificLimits.Normed
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Constructions.HaarToSphere
-import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+module
+
+public import FunctionalInequalities.Analysis.Tensor.Multilinear
+public import Mathlib.Probability.Moments.IntegrableExpMul
+public import Mathlib.Analysis.SpecialFunctions.Exponential
+public import Mathlib.Analysis.SpecificLimits.Normed
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Constructions.HaarToSphere
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 
 /-! # Norm moments and polynomial integrability from exponential moments
 
@@ -16,6 +18,8 @@ measure on a finite-dimensional real normed space, `‖x‖^k e^{-a‖x‖}` is
 integrable for every `a > 0` (`integrable_norm_pow_mul_exp_neg_mul_norm`), by polar
 coordinates and the one-dimensional integral `∫_{(0, ∞)} r^s e^{-a r}`.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter
@@ -35,14 +39,16 @@ theorem integrable_exp_mul_norm_of_le {μ : Measure E} {r s : ℝ}
   exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right hs (norm_nonneg x))
 
 /-- Norm moments of every order from one positive exponential moment of a finite measure. -/
-theorem integrable_norm_pow_of_exp (μ : Measure E) [IsFiniteMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (d : ℕ) :
+theorem integrable_norm_pow_of_exp (μ : Measure E) [IsFiniteMeasure μ] {r : ℝ} (hr : 0 < r)
+    (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (d : ℕ) :
     Integrable (fun x : E => ‖x‖ ^ d) μ := by
   have hneg : Integrable (fun x : E => Real.exp (-r * ‖x‖)) μ := by
     refine (integrable_const (1 : ℝ)).mono' (by fun_prop) ?_
     filter_upwards [] with x
     rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-    exact Real.exp_le_one_iff.2 (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.2 hr.le) (norm_nonneg x))
+    exact
+      Real.exp_le_one_iff.2
+        (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.2 hr.le) (norm_nonneg x))
   simpa only [abs_norm] using
     ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul hr.ne' hexp hneg d
 

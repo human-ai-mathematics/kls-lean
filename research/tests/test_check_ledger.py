@@ -202,6 +202,35 @@ class LedgerCheckerTests(LedgerFixture):
         self.assertIn("formalization/Pending.lean", errors)
         self.assertIn("forbidden Lean escape token", errors)
 
+    def test_proved_guard_follows_module_system_import_forms(self) -> None:
+        # Every directive kind is a proof-closure edge: plain, public, meta, public meta, all.
+        forms = ["import", "public import", "meta import", "public meta import", "import all"]
+        for form in forms:
+            with self.subTest(form=form):
+                self.certificate.write_text(
+                    "/- Copyright -/\nmodule\n\n" + form + " Support\n\n"
+                    "/-! certificate for `lem:linear-test-lower` -/\n",
+                    encoding="utf-8",
+                )
+                (self.root / "formalization/Support.lean").write_text(
+                    "module\n\npublic theorem pending : True := sorry\n", encoding="utf-8"
+                )
+                errors = "\n".join(self.errors())
+                self.assertIn("forbidden Lean escape token", errors)
+                self.assertIn("formalization/Support.lean", errors)
+
+    def test_module_certificate_without_escapes_passes(self) -> None:
+        self.certificate.write_text(
+            "module\n\npublic import Support\n\n"
+            "/-! certificate for `lem:linear-test-lower` -/\n\n@[expose] public section\n"
+            "theorem certificate : True := by trivial\n",
+            encoding="utf-8",
+        )
+        (self.root / "formalization/Support.lean").write_text(
+            "module\n\npublic theorem support : True := trivial\n", encoding="utf-8"
+        )
+        self.assertEqual(self.errors(), [])
+
     def test_unproved_nodes_still_require_structure(self) -> None:
         for status in ("drafted", "frozen"):
             with self.subTest(status=status):

@@ -1,15 +1,17 @@
-import FunctionalInequalities.Probability.Gaussian.Moments
-import FunctionalInequalities.KLS.BKL.Posterior.Response
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.Probability.Posterior.Generator
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Line.Poincare
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
-import FunctionalInequalities.KLS.BKL.Posterior.Noise
-import FunctionalInequalities.KLS.BKL.Posterior.Regularity
-import FunctionalInequalities.KLS.BKL.Posterior.Standardization
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Moments
+public import FunctionalInequalities.KLS.BKL.Posterior.Response
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.Probability.Posterior.Generator
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Line.Poincare
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+public import FunctionalInequalities.KLS.BKL.Posterior.Noise
+public import FunctionalInequalities.KLS.BKL.Posterior.Regularity
+public import FunctionalInequalities.KLS.BKL.Posterior.Standardization
 
 open FunctionalInequalities.Probability.Gaussian
 /-!
@@ -35,17 +37,21 @@ stochastic equation, Itô formula or martingale statement is involved.
 
 noncomputable section
 open MeasureTheory ProbabilityTheory Set FunctionalInequalities
-open FunctionalInequalities.KLS.LogConcave.GaussianSmoothing FunctionalInequalities.Probability.Posterior
+open FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+  FunctionalInequalities.Probability.Posterior
 open FunctionalInequalities.Analysis
 open scoped RealInnerProductSpace ContDiff
 
 namespace ActualPosteriorParameterClients
 
 private def μG : ProbabilityMeasure ℝ :=
-  ⟨FunctionalInequalities.Probability.Gaussian.law (1 / 2), FunctionalInequalities.Probability.Gaussian.law_probability (by norm_num)⟩
+  ⟨FunctionalInequalities.Probability.Gaussian.law (1 / 2),
+    FunctionalInequalities.Probability.Gaussian.law_probability (by norm_num)⟩
 
 private theorem prior_variance_one : variance id (μG : Measure ℝ) = 1 := by
-  have h := FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ) (by norm_num : (0 : ℝ) < 1 / 2) (1 : ℝ)
+  have h :=
+    FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ)
+      (by norm_num : (0 : ℝ) < 1 / 2) (1 : ℝ)
   norm_num [μG, Real.inner_apply] at h ⊢
   exact h
 
@@ -53,14 +59,18 @@ theorem actual_gaussian_source : KLS.LogConcave μG ∧ KLS.Isotropic μG := by
   have hG := KLS.regularPotential_half_norm_sq (E := ℝ)
   have hLaw : μG = hG.law := by
     apply ProbabilityMeasure.toMeasure_injective
-    change FunctionalInequalities.Probability.Gaussian.law (V := ℝ) (1 / 2) = (volume : Measure ℝ).tilted (-fun x => ‖x‖ ^ 2 / 2)
+    change
+      FunctionalInequalities.Probability.Gaussian.law (V := ℝ) (1 / 2) =
+        (volume : Measure ℝ).tilted (-fun x => ‖x‖ ^ 2 / 2)
     rw [FunctionalInequalities.Probability.Gaussian.law_eq_tilted (by norm_num)]
     congr 1
     funext x
     simp only [Pi.neg_apply]
     ring
   refine ⟨by rw [hLaw]; exact hG.logConcave_law, ?_⟩
-  refine ⟨FunctionalInequalities.Probability.Gaussian.memLp_two (by norm_num), FunctionalInequalities.Probability.Gaussian.mean_zero (by norm_num), ?_⟩
+  refine
+    ⟨FunctionalInequalities.Probability.Gaussian.memLp_two (by norm_num),
+      FunctionalInequalities.Probability.Gaussian.mean_zero (by norm_num), ?_⟩
   apply ContinuousLinearMap.ext
   intro u
   apply ext_inner_right ℝ
@@ -69,10 +79,15 @@ theorem actual_gaussian_source : KLS.LogConcave μG ∧ KLS.Isotropic μG := by
     ContinuousLinearMap.id_apply, Real.inner_apply, mul_one]
 
 private theorem posterior_gaussian :
-    (μG : Measure ℝ).tilted (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ)) = FunctionalInequalities.Probability.Gaussian.law 1 := by
-  have he : Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ) = fun x => -(1 / 2 : ℝ) * ‖x‖ ^ 2 := by
+    (μG : Measure ℝ).tilted
+        (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ)) =
+      FunctionalInequalities.Probability.Gaussian.law 1 := by
+  have he :
+    Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ) = fun x =>
+      -(1 / 2 : ℝ) * ‖x‖ ^ 2 := by
     funext x
-    simp only [Probability.Posterior.quadraticExponent, inner_zero_left, ContinuousLinearMap.id_apply, real_inner_self_eq_norm_sq]
+    simp only [Probability.Posterior.quadraticExponent, inner_zero_left,
+      ContinuousLinearMap.id_apply, real_inner_self_eq_norm_sq]
     ring
   change (FunctionalInequalities.Probability.Gaussian.law (V := ℝ) (1 / 2)).tilted _ = _
   rw [he, FunctionalInequalities.Probability.Gaussian.law_eq_tilted (by norm_num),
@@ -86,23 +101,36 @@ private theorem posterior_gaussian :
 /-- The actual coercive posterior c-response is nonzero 1/2. Its prior is genuinely
 isotropic log-concave and unbounded; this does not invoke the compact-prior endpoint. -/
 theorem gaussian_coercive_response_half :
-    HasDerivAt (fun t : ℝ => ∫ x : ℝ, x
-      ∂((μG : Measure ℝ).tilted (Probability.Posterior.quadraticExponent t (ContinuousLinearMap.id ℝ ℝ)))) (1 / 2) 0 := by
+    HasDerivAt
+      (fun t : ℝ =>
+        ∫ x : ℝ,
+          x ∂((μG : Measure ℝ).tilted
+            (Probability.Posterior.quadraticExponent t (ContinuousLinearMap.id ℝ ℝ))))
+      (1 / 2) 0 := by
   have hQ : ∀ x : ℝ, (1 : ℝ) * ‖x‖ ^ 2 ≤ ⟪(ContinuousLinearMap.id ℝ ℝ) x, x⟫ := by
     intro x
     rw [ContinuousLinearMap.id_apply, real_inner_self_eq_norm_sq, one_mul]
-  have hd := Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_coercive μG (0 : ℝ) 1 (ContinuousLinearMap.id ℝ ℝ) 0
-    (a := 1) (by norm_num) hQ (f := id) measurable_id (C := 1) (by norm_num) 1
-    (by intro x; simp only [id_eq, pow_one, one_mul]; linarith)
+  have hd :=
+    Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_coercive μG (0 : ℝ) 1
+      (ContinuousLinearMap.id ℝ ℝ) 0 (a := 1) (by norm_num) hQ (f := id) measurable_id (C := 1)
+      (by norm_num) 1 (by intro x; simp only [id_eq, pow_one, one_mul]; linarith)
   have hg : Probability.Posterior.quadraticExponent (1 : ℝ) (0 : ℝ →L[ℝ] ℝ) = id := by
     funext x
     simp [Probability.Posterior.quadraticExponent]
-  have hcov : covariance id (Probability.Posterior.quadraticExponent (1 : ℝ) (0 : ℝ →L[ℝ] ℝ))
-      ((μG : Measure ℝ).tilted (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ))) = 1 / 2 := by
+  have hcov :
+    covariance id (Probability.Posterior.quadraticExponent (1 : ℝ) (0 : ℝ →L[ℝ] ℝ))
+        ((μG : Measure ℝ).tilted
+          (Probability.Posterior.quadraticExponent (0 : ℝ) (ContinuousLinearMap.id ℝ ℝ))) =
+      1 / 2 := by
     rw [hg, posterior_gaussian]
-    change covariance (fun x : ℝ => x) (fun x : ℝ => x) (FunctionalInequalities.Probability.Gaussian.law 1) = 1 / 2
+    change
+      covariance (fun x : ℝ => x) (fun x : ℝ => x)
+          (FunctionalInequalities.Probability.Gaussian.law 1) =
+        1 / 2
     rw [covariance_self aemeasurable_id']
-    have hv := FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ) (by norm_num : (0 : ℝ) < 1) (1 : ℝ)
+    have hv :=
+      FunctionalInequalities.Probability.Gaussian.variance_inner (E := ℝ)
+        (by norm_num : (0 : ℝ) < 1) (1 : ℝ)
     norm_num [Real.inner_apply] at hv ⊢
     exact hv
   simpa only [smul_zero, add_zero, smul_eq_mul, mul_one, zero_add, hcov, id_eq] using hd
@@ -111,7 +139,8 @@ abbrev E0 := EuclideanSpace ℝ (Fin 0)
 private def μ0 : ProbabilityMeasure E0 := ⟨Measure.dirac 0, inferInstance⟩
 
 private theorem zero_compact : IsCompact (μ0 : Measure E0).support :=
-  isCompact_univ.of_isClosed_subset (Measure.isClosed_support (μ := (μ0 : Measure E0))) (Set.subset_univ _)
+  isCompact_univ.of_isClosed_subset (Measure.isClosed_support (μ := (μ0 : Measure E0)))
+    (Set.subset_univ _)
 
 private theorem zero_isotropic : KLS.Isotropic μ0 := by
   refine ⟨?_, ?_, ?_⟩
@@ -138,17 +167,25 @@ private def μ0 : ProbabilityMeasure E0 := ⟨Measure.dirac 0, inferInstance⟩
 /-- The actual empty-dimensional source consumes the complete generator endpoint. -/
 theorem actual_zero_dim_generator :
     fderiv ℝ (fun y : E0 => posteriorExpectation μ0 y 0 (fun _ => (1 : ℝ))) 0
-        ((0 : E0 →L[ℝ] E0) (posteriorMean μ0 0 0)) +
-      deriv (fun t : ℝ => posteriorExpectation μ0 0 (0 + t • (0 : E0 →L[ℝ] E0)) (fun _ => (1 : ℝ))) 0 +
-      (1 / 2 : ℝ) * (∑ i : Fin 0, bilinearIteratedFDerivTwo ℝ
-        (fun y : E0 => posteriorExpectation μ0 y 0 (fun _ => (1 : ℝ))) 0
-        ((0 : E0 →L[ℝ] E0) (EuclideanSpace.basisFun (Fin 0) ℝ i))
-        (EuclideanSpace.basisFun (Fin 0) ℝ i)) = 0 := by
+            ((0 : E0 →L[ℝ] E0) (posteriorMean μ0 0 0)) +
+          deriv
+            (fun t : ℝ =>
+              posteriorExpectation μ0 0 (0 + t • (0 : E0 →L[ℝ] E0)) (fun _ => (1 : ℝ)))
+            0 +
+        (1 / 2 : ℝ) *
+          (∑ i : Fin 0,
+            bilinearIteratedFDerivTwo ℝ
+              (fun y : E0 => posteriorExpectation μ0 y 0 (fun _ => (1 : ℝ))) 0
+              ((0 : E0 →L[ℝ] E0) (EuclideanSpace.basisFun (Fin 0) ℝ i))
+              (EuclideanSpace.basisFun (Fin 0) ℝ i)) =
+      0 := by
   have hc : IsCompact (μ0 : Measure E0).support :=
-    isCompact_univ.of_isClosed_subset (Measure.isClosed_support (μ := (μ0 : Measure E0))) (Set.subset_univ _)
-  exact posteriorExpectation_generator_cancellation μ0 hc (f := fun _ => (1 : ℝ)) measurable_const
-    (C := 1) (by norm_num) (by intro x hx; simp) 0 0 0 (EuclideanSpace.basisFun (Fin 0) ℝ)
-    (by intro u v; simp)
+    isCompact_univ.of_isClosed_subset (Measure.isClosed_support (μ := (μ0 : Measure E0)))
+      (Set.subset_univ _)
+  exact
+    posteriorExpectation_generator_cancellation μ0 hc (f := fun _ => (1 : ℝ)) measurable_const
+      (C := 1) (by norm_num) (by intro x hx; simp) 0 0 0 (EuclideanSpace.basisFun (Fin 0) ℝ)
+      (by intro u v; simp)
 end ActualGeneratorBoundary
 
 namespace ActualGeneratorClients
@@ -166,7 +203,12 @@ private theorem integral_μ (f : ℝ → ℝ) :
     (integrable_dirac (by simp)).smul_measure (by simp)
   have h2 : Integrable f (ENNReal.ofReal (1 / 4) • Measure.dirac (2 : ℝ)) :=
     (integrable_dirac (by simp)).smul_measure (by simp)
-  change (∫ x, f x ∂(ENNReal.ofReal (3 / 4) • Measure.dirac 0 + ENNReal.ofReal (1 / 4) • Measure.dirac 2)) = _
+  change
+    (∫ x,
+        f
+          x ∂(ENNReal.ofReal (3 / 4) • Measure.dirac 0 +
+          ENNReal.ofReal (1 / 4) • Measure.dirac 2)) =
+      _
   rw [integral_add_measure h0 h2, integral_smul_measure, integral_smul_measure]
   norm_num
 
@@ -190,7 +232,9 @@ private theorem hb : ∀ x ∈ (μ : Measure ℝ).support, ‖id x‖ ≤ (2 : �
     subst x
     norm_num
 
-private theorem hzero : quadraticExponent (0 : ℝ) (0 : ℝ →L[ℝ] ℝ) = 0 := by funext x; simp [quadraticExponent]
+private theorem hzero : quadraticExponent (0 : ℝ) (0 : ℝ →L[ℝ] ℝ) = 0 := by
+  funext x;
+  simp [quadraticExponent]
 private theorem h2 (f : ℝ → ℝ) (hf : Continuous f) : MemLp f 2 (μ : Measure ℝ) := by
   have h := memLp_two_tilted_quadraticExponent_of_compact μ hc 0 0 hf
   simpa only [hzero, tilted_zero] using h
@@ -243,16 +287,21 @@ theorem actual_inverse :
 
 /-- All three generator terms are nonzero (`1/2`, `−1`, `1/2`) and cancel. -/
 theorem actual_three_terms :
-    fderiv ℝ (fun y => posteriorExpectation μ y 0 id) 0 (M (posteriorMean μ 0 0)) = (1 / 2 : ℝ) ∧
+    fderiv ℝ (fun y => posteriorExpectation μ y 0 id) 0 (M (posteriorMean μ 0 0)) =
+        (1 / 2 : ℝ) ∧
       deriv (fun t : ℝ => posteriorExpectation μ 0 (t • M) id) 0 = -1 ∧
-      (1 / 2 : ℝ) * (∑ i : Fin 1, bilinearIteratedFDerivTwo ℝ
-        (fun y => posteriorExpectation μ y 0 id) 0 (M (b i)) (b i)) = (1 / 2 : ℝ) := by
+        (1 / 2 : ℝ) *
+            (∑ i : Fin 1,
+              bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y 0 id) 0 (M (b i))
+                (b i)) =
+          (1 / 2 : ℝ) := by
   have hM : ∀ u v : ℝ, ⟪M u, v⟫ = ⟪u, M v⟫ := by
     intro u v
     simp only [M, smul_apply, ContinuousLinearMap.id_apply, Real.inner_apply]
     ring
-  have hlin := fderiv_posteriorExpectation_c_apply μ hc measurable_id (by norm_num : (0 : ℝ) ≤ 2) hb 0 0
-    (M (posteriorMean μ 0 0))
+  have hlin :=
+    fderiv_posteriorExpectation_c_apply μ hc measurable_id (by norm_num : (0 : ℝ) ≤ 2) hb 0 0
+      (M (posteriorMean μ 0 0))
   rw [hzero, tilted_zero, mean_half] at hlin
   have hlfun : (fun x : ℝ => ⟪M (1 / 2), x⟫) = fun x => (2 / 3 : ℝ) * id x := by
     funext x
@@ -261,7 +310,9 @@ theorem actual_three_terms :
   rw [hlfun, covariance_const_mul_right, cov_id] at hlin
   have hcoef : (2 / 3 : ℝ) * (3 / 4) = 1 / 2 := by norm_num
   rw [hcoef] at hlin
-  have hq := (posteriorExpectation_hasDerivAt_Q μ hc measurable_id (by norm_num : (0 : ℝ) ≤ 2) hb 0 0 M).deriv
+  have hq :=
+    (posteriorExpectation_hasDerivAt_Q μ hc measurable_id (by norm_num : (0 : ℝ) ≤ 2) hb 0 0
+        M).deriv
   rw [hzero, tilted_zero] at hq
   have hqfun : (fun x : ℝ => ⟪M x, x⟫) = fun x => (4 / 3 : ℝ) * x ^ 2 := by
     funext x
@@ -269,12 +320,19 @@ theorem actual_three_terms :
     ring
   rw [hqfun, covariance_const_mul_right, cov_square] at hq
   norm_num at hq
-  have hgen := posteriorExpectation_generator_cancellation μ hc measurable_id (by norm_num : (0 : ℝ) ≤ 2) hb 0 0 M b hM
+  have hgen :=
+    posteriorExpectation_generator_cancellation μ hc measurable_id (by norm_num : (0 : ℝ) ≤ 2)
+      hb 0 0 M b hM
   simp only [zero_add] at hq hgen
   refine ⟨by simpa only [mean_half] using hlin, hq, ?_⟩
   rw [mean_half, hlin, hq] at hgen
-  have hgen' : (1 / 2 : ℝ) + -1 + (1 / 2 : ℝ) *
-      (∑ i : Fin 1, bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y 0 id) 0 (M (b i)) (b i)) = 0 := by
+  have hgen' :
+    (1 / 2 : ℝ) + -1 +
+        (1 / 2 : ℝ) *
+          (∑ i : Fin 1,
+            bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y 0 id) 0 (M (b i))
+              (b i)) =
+      0 := by
     convert! hgen using 1
   linarith only [hgen']
 end ActualGeneratorClients
@@ -285,14 +343,15 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   {ι κ : Type*} [Fintype ι] [Fintype κ]
 
 /-- The Hessian trace is independent of the orthonormal basis. -/
-theorem trace_independent (μ : ProbabilityMeasure E)
-    (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} (hf : Measurable f)
-    {C : ℝ} (hC : 0 ≤ C) (hfb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C)
-    (c : E) (Q M : E →L[ℝ] E) (b : OrthonormalBasis ι ℝ E)
-    (d : OrthonormalBasis κ ℝ E)
+theorem trace_independent (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
+    {f : E → ℝ} (hf : Measurable f) {C : ℝ} (hC : 0 ≤ C)
+    (hfb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C) (c : E) (Q M : E →L[ℝ] E)
+    (b : OrthonormalBasis ι ℝ E) (d : OrthonormalBasis κ ℝ E)
     (hM : ∀ u v : E, ⟪M u, v⟫ = ⟪u, M v⟫) :
-    (∑ i, bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y Q f) c (M (b i)) (b i)) =
-      ∑ j, bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y Q f) c (M (d j)) (d j) := by
+    (∑ i,
+        bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y Q f) c (M (b i)) (b i)) =
+      ∑ j,
+        bilinearIteratedFDerivTwo ℝ (fun y => posteriorExpectation μ y Q f) c (M (d j)) (d j) := by
   rw [sum_bilinearIteratedFDerivTwo_posteriorExpectation_c μ hc hf hC hfb c Q M b hM,
     sum_bilinearIteratedFDerivTwo_posteriorExpectation_c μ hc hf hC hfb c Q M d hM]
 
@@ -321,8 +380,9 @@ def uniform : ProbabilityMeasure ℝ := ⟨volume.restrict (Icc (0 : ℝ) 1), by
 private def ρ : ℝ → ℝ := (Icc (0 : ℝ) 1).indicator (fun _ => 1)
 
 theorem uniform_density : KLS.IsBorellDensity (uniform : Measure ℝ) volume ρ := by
-  refine ⟨measurable_const.indicator measurableSet_Icc, ?_,
-    isClosed_Icc.upperSemicontinuous_indicator (by norm_num : (0 : ℝ) ≤ 1), ?_, ?_⟩
+  refine
+    ⟨measurable_const.indicator measurableSet_Icc, ?_,
+      isClosed_Icc.upperSemicontinuous_indicator (by norm_num : (0 : ℝ) ≤ 1), ?_, ?_⟩
   · intro x
     exact indicator_nonneg (by intro x hx; norm_num) x
   · intro x y t ht0 ht1
@@ -330,9 +390,10 @@ theorem uniform_density : KLS.IsBorellDensity (uniform : Measure ℝ) volume ρ 
     · by_cases hy : y ∈ Icc (0 : ℝ) 1
       · have hm : t • x + (1 - t) • y ∈ Icc (0 : ℝ) 1 :=
           (convex_Icc (0 : ℝ) 1) hx hy ht0.le (by linarith) (by ring)
-        simp only [ρ, indicator_of_mem hx, indicator_of_mem hy, indicator_of_mem hm, Real.one_rpow,
-          mul_one, le_refl]
-      · simp only [ρ, indicator_of_notMem hy, Real.zero_rpow (by linarith : (1 - t) ≠ 0), mul_zero]
+        simp only [ρ, indicator_of_mem hx, indicator_of_mem hy, indicator_of_mem hm,
+          Real.one_rpow, mul_one, le_refl]
+      · simp only [ρ, indicator_of_notMem hy, Real.zero_rpow (by linarith : (1 - t) ≠ 0),
+          mul_zero]
         exact indicator_nonneg (by intro z hz; norm_num) _
     · simp only [ρ, indicator_of_notMem hx, Real.zero_rpow ht0.ne', zero_mul]
       exact indicator_nonneg (by intro z hz; norm_num) _
@@ -385,7 +446,8 @@ def μ0 : ProbabilityMeasure E0 := ⟨Measure.dirac 0, inferInstance⟩
 private theorem μ0_compact : IsCompact (μ0 : Measure E0).support :=
   isCompact_univ.of_isClosed_subset (μ0 : Measure E0).isClosed_support (subset_univ _)
 
-/-- Actual rank0 compact/LC input; nonnegative Q condition and posterior LC are genuinely derived. -/
+/--
+Actual rank0 compact/LC input; nonnegative Q condition and posterior LC are genuinely derived. -/
 theorem rank0_posterior (c : E0) (Q0 : E0 →L[ℝ] E0) :
     KLS.LogConcave (compactPosterior μ0 μ0_compact c Q0) := by
   have hLC : KLS.LogConcave μ0 := by
@@ -411,7 +473,11 @@ private def v : E := EuclideanSpace.single 0 1
 private theorem hv : ‖v‖ = 1 := by
   simp [v, EuclideanSpace.single]
 private def e : ℝ →ᵃⁱ[ℝ] E := (LinearIsometry.toSpanSingleton ℝ E hv).toAffineIsometry
-def μ : ProbabilityMeasure E := uniform.map e.continuous.measurable.aemeasurable
+def μ : ProbabilityMeasure E :=
+  -- The measurability witness that `ProbabilityMeasure.map` took before Mathlib v4.35 (which takes
+  -- the function itself) stays referenced, as in `Probability.intrinsicMeasure`.
+  have _hmeas := e.continuous.measurable
+  uniform.map e
 
 theorem genuine_singular_prior_logConcave : KLS.LogConcave μ :=
   KLS.LogConcave.map_affineIsometry uniform uniform_logConcave μ e rfl
@@ -449,11 +515,16 @@ theorem singular_nonzero_posterior :
 end ActualPosteriorSingularLogConcavity
 
 #print axioms FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_of_compact
-#print axioms FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_coercive
-#print axioms FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_compact
-#print axioms FunctionalInequalities.Probability.Posterior.isProbabilityMeasure_tilted_quadraticExponent_of_coercive
-#print axioms FunctionalInequalities.Probability.Posterior.memLp_two_tilted_quadraticExponent_of_polynomial
-#print axioms FunctionalInequalities.Probability.Posterior.exists_uniform_norm_moments_tilted_quadraticExponent_of_compact
+#print axioms
+  FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_coercive
+#print axioms
+  FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_compact
+#print axioms
+  FunctionalInequalities.Probability.Posterior.isProbabilityMeasure_tilted_quadraticExponent_of_coercive
+#print axioms
+  FunctionalInequalities.Probability.Posterior.memLp_two_tilted_quadraticExponent_of_polynomial
+#print axioms
+  FunctionalInequalities.Probability.Posterior.exists_uniform_norm_moments_tilted_quadraticExponent_of_compact
 #print axioms FunctionalInequalities.Probability.Posterior.norm_integral_tilted_le_of_compact
 #print axioms FunctionalInequalities.KLS.Isotropic.posterior_linear_response
 #print axioms FunctionalInequalities.KLS.Isotropic.posterior_response_real
@@ -465,10 +536,13 @@ end ActualPosteriorSingularLogConcavity
 #print axioms FunctionalInequalities.Probability.Posterior.covariance_hasDerivAt_of_compact
 #print axioms FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_c
 #print axioms FunctionalInequalities.Probability.Posterior.fderiv_posteriorExpectation_c_apply
-#print axioms FunctionalInequalities.Probability.Posterior.bilinearIteratedFDerivTwo_posteriorExpectation_c_mean
-#print axioms FunctionalInequalities.Probability.Posterior.sum_bilinearIteratedFDerivTwo_posteriorExpectation_c
+#print axioms
+  FunctionalInequalities.Probability.Posterior.bilinearIteratedFDerivTwo_posteriorExpectation_c_mean
+#print axioms
+  FunctionalInequalities.Probability.Posterior.sum_bilinearIteratedFDerivTwo_posteriorExpectation_c
 #print axioms FunctionalInequalities.Probability.Posterior.posteriorExpectation_hasDerivAt_Q
-#print axioms FunctionalInequalities.Probability.Posterior.posteriorExpectation_generator_cancellation
+#print axioms
+  FunctionalInequalities.Probability.Posterior.posteriorExpectation_generator_cancellation
 #print axioms ActualGeneratorBoundary.actual_zero_dim_generator
 #print axioms ActualGeneratorClients.actual_inverse
 #print axioms ActualGeneratorClients.actual_three_terms
@@ -514,12 +588,17 @@ theorem compact_μ : IsCompact (μ : Measure ℝ).support :=
   (Set.toFinite ({(0 : ℝ), 2} : Set ℝ)).isCompact.of_isClosed_subset
     (μ : Measure ℝ).isClosed_support support_subset
 
-/-- Values `0`, `2` on the atoms, cubic elsewhere: discontinuous at `2` and unbounded off the support. -/
-def wild (x : ℝ) : ℝ := if x = 0 then 0 else if x = 2 then 2 else x ^ 3
+/--
+Values `0`, `2` on the atoms, cubic elsewhere: discontinuous at `2` and unbounded off the support.
+-/
+def wild (x : ℝ) : ℝ :=
+  if x = 0 then 0 else if x = 2 then 2 else x ^ 3
 private theorem measurable_wild : Measurable wild := by
   unfold wild
   apply Measurable.ite (measurableSet_singleton (0 : ℝ)) measurable_const
-  exact Measurable.ite (measurableSet_singleton (2 : ℝ)) measurable_const (measurable_id.pow_const 3)
+  exact
+    Measurable.ite (measurableSet_singleton (2 : ℝ)) measurable_const
+      (measurable_id.pow_const 3)
 private theorem wild_bound : ∀ x ∈ (μ : Measure ℝ).support, ‖wild x‖ ≤ (2 : ℝ) := by
   intro x hx
   rcases support_subset hx with h | h
@@ -558,10 +637,12 @@ private theorem wild_memLp : MemLp wild 2 (μ : Measure ℝ) := by
     measurable_wild wild_bound
   simpa only [tilted_zero] using h
 
-/-- The combined score `2x − ½x²` has covariance `1` with the statistic: dropping the `Q` response or
+/--
+The combined score `2x − ½x²` has covariance `1` with the statistic: dropping the `Q` response or
 changing the half coefficient changes this value. -/
-theorem actual_mixed_derivative : HasDerivAt (fun t : ℝ => posteriorExpectation μ (2 * t)
-    (t • ContinuousLinearMap.id ℝ ℝ) wild) 1 0 := by
+theorem actual_mixed_derivative :
+    HasDerivAt
+      (fun t : ℝ => posteriorExpectation μ (2 * t) (t • ContinuousLinearMap.id ℝ ℝ) wild) 1 0 := by
   let score : ℝ → ℝ := quadraticExponent 2 (ContinuousLinearMap.id ℝ ℝ)
   have hs : Continuous score := by unfold score quadraticExponent; fun_prop
   have hs2 := memLp_two_tilted_quadraticExponent_of_compact μ compact_μ 0 0 hs
@@ -570,8 +651,9 @@ theorem actual_mixed_derivative : HasDerivAt (fun t : ℝ => posteriorExpectatio
     rw [covariance_eq_sub wild_memLp hs2]
     simp only [integral_μ]
     norm_num [wild, score, quadraticExponent, Real.inner_apply]
-  have hd := expectation_hasDerivAt_quadraticExponent_of_compact μ compact_μ
-    (0 : ℝ) 2 0 (ContinuousLinearMap.id ℝ ℝ) measurable_wild (by norm_num : (0 : ℝ) ≤ 2) wild_bound
+  have hd :=
+    expectation_hasDerivAt_quadraticExponent_of_compact μ compact_μ (0 : ℝ) 2 0
+      (ContinuousLinearMap.id ℝ ℝ) measurable_wild (by norm_num : (0 : ℝ) ≤ 2) wild_bound
   rw [zero_exponent, tilted_zero, hcov] at hd
   simpa only [posteriorExpectation, zero_add, smul_eq_mul, mul_comm] using hd
 
@@ -599,22 +681,31 @@ private theorem μ0_isotropic : KLS.Isotropic μ0 := by
     intro v
     exact Subsingleton.elim _ _
 
-/-- Rank zero: expectation, mean, covariance, inverse and drift, with no positive-dimension premise. -/
+/--
+Rank zero: expectation, mean, covariance, inverse and drift, with no positive-dimension premise. -/
 theorem actual_rank0_joint :
-    ContDiff ℝ ∞ (fun p : E0 × (E0 →L[ℝ] E0) =>
-      posteriorExpectation μ0 p.1 p.2 (fun _ => (1 : ℝ))) ∧
-    ContDiff ℝ ∞ (fun p : E0 × (E0 →L[ℝ] E0) => posteriorMean μ0 p.1 p.2) ∧
-    ContDiff ℝ ∞ (fun p : E0 × (E0 →L[ℝ] E0) =>
-      Covariance.operator (compactPosterior μ0 compact_μ0 p.1 p.2 : Measure E0)) ∧
-    ContDiff ℝ ∞ (fun p : E0 × (E0 →L[ℝ] E0) => Ring.inverse (Covariance.operator
-      (compactPosterior μ0 compact_μ0 p.1 p.2 : Measure E0))) ∧
-    ContDiff ℝ ∞ (fun p : E0 × (E0 →L[ℝ] E0) => Ring.inverse (Covariance.operator
-      (compactPosterior μ0 compact_μ0 p.1 p.2 : Measure E0)) (posteriorMean μ0 p.1 p.2)) := by
-  exact ⟨contDiff_posteriorExpectation_joint μ0 compact_μ0 measurable_const (C := 1)
-      (by intro x hx; simp),
-    contDiff_posteriorMean_joint μ0 compact_μ0, contDiff_posteriorCovariance_joint μ0 compact_μ0,
-    KLS.Isotropic.contDiff_ringInverse_covariance_joint μ0 compact_μ0 μ0_isotropic,
-    KLS.Isotropic.contDiff_covarianceDrift_joint μ0 compact_μ0 μ0_isotropic⟩
+    ContDiff ℝ ∞
+        (fun p : E0 × (E0 →L[ℝ] E0) => posteriorExpectation μ0 p.1 p.2 (fun _ => (1 : ℝ))) ∧
+      ContDiff ℝ ∞ (fun p : E0 × (E0 →L[ℝ] E0) => posteriorMean μ0 p.1 p.2) ∧
+        ContDiff ℝ ∞
+            (fun p : E0 × (E0 →L[ℝ] E0) =>
+              Covariance.operator (compactPosterior μ0 compact_μ0 p.1 p.2 : Measure E0)) ∧
+          ContDiff ℝ ∞
+              (fun p : E0 × (E0 →L[ℝ] E0) =>
+                Ring.inverse
+                  (Covariance.operator (compactPosterior μ0 compact_μ0 p.1 p.2 : Measure E0))) ∧
+            ContDiff ℝ ∞
+              (fun p : E0 × (E0 →L[ℝ] E0) =>
+                Ring.inverse
+                  (Covariance.operator (compactPosterior μ0 compact_μ0 p.1 p.2 : Measure E0))
+                  (posteriorMean μ0 p.1 p.2)) := by
+  exact
+    ⟨contDiff_posteriorExpectation_joint μ0 compact_μ0 measurable_const (C := 1)
+        (by intro x hx; simp),
+      contDiff_posteriorMean_joint μ0 compact_μ0,
+      contDiff_posteriorCovariance_joint μ0 compact_μ0,
+      KLS.Isotropic.contDiff_ringInverse_covariance_joint μ0 compact_μ0 μ0_isotropic,
+      KLS.Isotropic.contDiff_covarianceDrift_joint μ0 compact_μ0 μ0_isotropic⟩
 
 end ActualJointPosteriorClients
 
@@ -659,13 +750,19 @@ theorem isotropic_μ : KLS.Isotropic μ := by
     simp only [Real.inner_apply]
     ring
 
-/-- Signed `Q`: the rate and the drift are smooth at `(1, −Id)`; isotropy and compactness are derived. -/
+/--
+Signed `Q`: the rate and the drift are smooth at `(1, −Id)`; isotropy and compactness are derived.
+-/
 theorem actual_signed_inverse_drift :
-    ContDiffAt ℝ ∞ (fun p : ℝ × (ℝ →L[ℝ] ℝ) => Ring.inverse (Covariance.operator
-      (compactPosterior μ compact_μ p.1 p.2 : Measure ℝ))) (1, -ContinuousLinearMap.id ℝ ℝ) ∧
-    ContDiffAt ℝ ∞ (fun p : ℝ × (ℝ →L[ℝ] ℝ) => Ring.inverse (Covariance.operator
-      (compactPosterior μ compact_μ p.1 p.2 : Measure ℝ)) (posteriorMean μ p.1 p.2))
-      (1, -ContinuousLinearMap.id ℝ ℝ) :=
+    ContDiffAt ℝ ∞
+        (fun p : ℝ × (ℝ →L[ℝ] ℝ) =>
+          Ring.inverse (Covariance.operator (compactPosterior μ compact_μ p.1 p.2 : Measure ℝ)))
+        (1, -ContinuousLinearMap.id ℝ ℝ) ∧
+      ContDiffAt ℝ ∞
+        (fun p : ℝ × (ℝ →L[ℝ] ℝ) =>
+          Ring.inverse (Covariance.operator (compactPosterior μ compact_μ p.1 p.2 : Measure ℝ))
+            (posteriorMean μ p.1 p.2))
+        (1, -ContinuousLinearMap.id ℝ ℝ) :=
   ⟨(KLS.Isotropic.contDiff_ringInverse_covariance_joint μ compact_μ isotropic_μ).contDiffAt,
     (KLS.Isotropic.contDiff_covarianceDrift_joint μ compact_μ isotropic_μ).contDiffAt⟩
 
@@ -676,11 +773,13 @@ theorem actual_initial_inverse :
   rw [compactPosterior_zero, isotropic_μ.covariance_identity]
   exact Ring.inverse_one (ℝ →L[ℝ] ℝ)
 
-/-- The principal diffusion coefficient of (67) is locally Lipschitz for this source prior, including at
+/--
+The principal diffusion coefficient of (67) is locally Lipschitz for this source prior, including at
 negative `Q`; no root or regularity premise. -/
 theorem actual_source_locallyLipschitz :
-    LocallyLipschitz (fun p : ℝ × (ℝ →L[ℝ] ℝ) => inverseSqrt (Covariance.operator
-      (compactPosterior μ compact_μ p.1 p.2 : Measure ℝ))) :=
+    LocallyLipschitz
+      (fun p : ℝ × (ℝ →L[ℝ] ℝ) =>
+        inverseSqrt (Covariance.operator (compactPosterior μ compact_μ p.1 p.2 : Measure ℝ))) :=
   KLS.Isotropic.locallyLipschitz_inverseSqrt_covariance_joint μ compact_μ isotropic_μ
 
 /-- The whole coefficient triple of (67) for this source prior. -/
@@ -729,7 +828,8 @@ theorem actual_rank0_source :
 end ActualJointInverseClients
 
 #print axioms FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_joint
-#print axioms FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_joint_of_continuous
+#print axioms
+  FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_joint_of_continuous
 #print axioms FunctionalInequalities.Probability.Posterior.contDiff_posteriorMean_joint
 #print axioms FunctionalInequalities.Probability.Posterior.contDiff_covariance_pair_joint
 #print axioms FunctionalInequalities.Probability.Posterior.contDiff_posteriorCovariance_joint
@@ -819,32 +919,53 @@ private theorem μ0_isotropic : KLS.Isotropic μ0 := by
     exact Subsingleton.elim _ _
 
 
-/-- Actual compact isotropic prior at a nonzero tilt and negative Q; three image fields are conclusions. -/
+/--
+Actual compact isotropic prior at a nonzero tilt and negative Q; three image fields are conclusions.
+-/
 theorem actual_signed (c : ℝ) :
     ∃ W : ℝ ≃L[ℝ] ℝ,
-      (W : ℝ →L[ℝ] ℝ) = inverseSqrt
-        (Covariance.operator (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ) : Measure ℝ)) ∧
-      MemLp id 2 (Probability.mapContinuousLinearEquiv
-        (Probability.translateLaw (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ))
-          (-posteriorMean μ c (-ContinuousLinearMap.id ℝ ℝ))) W : Measure ℝ) ∧
-      (∫ x, x ∂(Probability.mapContinuousLinearEquiv
-        (Probability.translateLaw (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ))
-          (-posteriorMean μ c (-ContinuousLinearMap.id ℝ ℝ))) W : Measure ℝ)) = 0 ∧
-      Covariance.operator (Probability.mapContinuousLinearEquiv
-        (Probability.translateLaw (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ))
-          (-posteriorMean μ c (-ContinuousLinearMap.id ℝ ℝ))) W : Measure ℝ) =
-        ContinuousLinearMap.id ℝ ℝ := by
-  obtain ⟨W, hW, hη⟩ := KLS.Isotropic.exists_inverseSqrt_equiv_isotropic_standardized
-    μ compact_μ isotropic_μ c (-ContinuousLinearMap.id ℝ ℝ)
+      (W : ℝ →L[ℝ] ℝ) =
+          inverseSqrt
+            (Covariance.operator
+              (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ) : Measure ℝ)) ∧
+        MemLp id 2
+            (Probability.mapContinuousLinearEquiv
+                (Probability.translateLaw
+                  (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ))
+                  (-posteriorMean μ c (-ContinuousLinearMap.id ℝ ℝ)))
+                W :
+              Measure ℝ) ∧
+          (∫ x,
+                x ∂(Probability.mapContinuousLinearEquiv
+                    (Probability.translateLaw
+                      (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ))
+                      (-posteriorMean μ c (-ContinuousLinearMap.id ℝ ℝ)))
+                    W :
+                  Measure ℝ)) =
+              0 ∧
+            Covariance.operator
+                (Probability.mapContinuousLinearEquiv
+                    (Probability.translateLaw
+                      (compactPosterior μ compact_μ c (-ContinuousLinearMap.id ℝ ℝ))
+                      (-posteriorMean μ c (-ContinuousLinearMap.id ℝ ℝ)))
+                    W :
+                  Measure ℝ) =
+              ContinuousLinearMap.id ℝ ℝ := by
+  obtain ⟨W, hW, hη⟩ :=
+    KLS.Isotropic.exists_inverseSqrt_equiv_isotropic_standardized μ compact_μ isotropic_μ c
+      (-ContinuousLinearMap.id ℝ ℝ)
   exact ⟨W, hW, hη.memLp_two, hη.mean_zero, hη.covariance_identity⟩
 
 /-- The same genuine endpoint applies at rank zero without a dimension restriction. -/
 theorem actual_empty :
     ∃ W : E0 ≃L[ℝ] E0,
-      (W : E0 →L[ℝ] E0) = inverseSqrt
-        (Covariance.operator (compactPosterior μ0 compact_μ0 0 0 : Measure E0)) ∧
-      KLS.Isotropic (Probability.mapContinuousLinearEquiv
-        (Probability.translateLaw (compactPosterior μ0 compact_μ0 0 0) (-posteriorMean μ0 0 0)) W) :=
+      (W : E0 →L[ℝ] E0) =
+          inverseSqrt (Covariance.operator (compactPosterior μ0 compact_μ0 0 0 : Measure E0)) ∧
+        KLS.Isotropic
+          (Probability.mapContinuousLinearEquiv
+            (Probability.translateLaw (compactPosterior μ0 compact_μ0 0 0)
+              (-posteriorMean μ0 0 0))
+            W) :=
   KLS.Isotropic.exists_inverseSqrt_equiv_isotropic_standardized μ0 compact_μ0 μ0_isotropic 0 0
 
 #print axioms original_contract
@@ -883,7 +1004,9 @@ private theorem delta_support :
   simp [deltaZero]
 
 theorem compact_delta : IsCompact (deltaZero (E := E) : Measure E).support := by
-  exact isCompact_singleton.of_isClosed_subset (deltaZero (E := E) : Measure E).isClosed_support delta_support
+  exact
+    isCompact_singleton.of_isClosed_subset (deltaZero (E := E) : Measure E).isClosed_support
+      delta_support
 
 theorem radius_zero_delta :
     (deltaZero (E := E) : Measure E).support ⊆ Metric.closedBall (0 : E) 0 := by
@@ -893,14 +1016,21 @@ theorem radius_zero_delta :
 
 /-- A genuine Dirac prior has zero posterior covariance for every finite parameter. -/
 theorem delta_actual_norm_zero (c : E) (Q : E →L[ℝ] E) :
-    ‖Covariance.operator (compactPosterior (deltaZero (E := E)) (compact_delta (E := E)) c Q : Measure E)‖ = 0 := by
+    ‖Covariance.operator
+          (compactPosterior (deltaZero (E := E)) (compact_delta (E := E)) c Q : Measure E)‖ =
+      0 := by
   apply le_antisymm
-  · exact le_trans (KLS.opNorm_covariance_compactPosterior_le_sq_radius
-      (deltaZero (E := E)) compact_delta (le_refl (0 : ℝ)) radius_zero_delta c Q) (by norm_num)
+  · exact
+      le_trans
+        (KLS.opNorm_covariance_compactPosterior_le_sq_radius (deltaZero (E := E)) compact_delta
+          (le_refl (0 : ℝ)) radius_zero_delta c Q)
+        (by norm_num)
   · exact norm_nonneg _
 
 theorem delta_actual_covariance_zero (c : E) (Q : E →L[ℝ] E) :
-    Covariance.operator (compactPosterior (deltaZero (E := E)) (compact_delta (E := E)) c Q : Measure E) = 0 := by
+    Covariance.operator
+        (compactPosterior (deltaZero (E := E)) (compact_delta (E := E)) c Q : Measure E) =
+      0 := by
   exact norm_eq_zero.mp (delta_actual_norm_zero c Q)
 end Generic
 
@@ -975,10 +1105,9 @@ def e0 : E2 := WithLp.toLp 2 ![(1 : ℝ), (0 : ℝ)]
 def e1 : E2 := WithLp.toLp 2 ![(0 : ℝ), (1 : ℝ)]
 def nonsymmetricQ : E2 →L[ℝ] E2 := (InnerProductSpace.toDual ℝ E2 e1).smulRight e0
 
-theorem nonsymmetric_witness :
-    ⟪nonsymmetricQ e1, e0⟫ = 1 ∧ ⟪e1, nonsymmetricQ e0⟫ = 0 := by
-  simp only [nonsymmetricQ, ContinuousLinearMap.smulRight_apply, InnerProductSpace.toDual_apply_apply,
-    PiLp.inner_apply, Fin.sum_univ_two, Real.inner_apply]
+theorem nonsymmetric_witness : ⟪nonsymmetricQ e1, e0⟫ = 1 ∧ ⟪e1, nonsymmetricQ e0⟫ = 0 := by
+  simp only [nonsymmetricQ, ContinuousLinearMap.smulRight_apply,
+    InnerProductSpace.toDual_apply_apply, PiLp.inner_apply, Fin.sum_univ_two, Real.inner_apply]
   norm_num [e0, e1]
 
 theorem actually_not_selfAdjoint : ¬ IsSelfAdjoint nonsymmetricQ := by
@@ -991,8 +1120,11 @@ theorem actually_not_selfAdjoint : ¬ IsSelfAdjoint nonsymmetricQ := by
 
 /-- This posterior is defined at an explicitly nonsymmetric parameter and nonzero c. -/
 theorem actual_nonsymmetric_covariance_zero :
-    Covariance.operator (compactPosterior (deltaZero (E := E2) : ProbabilityMeasure E2) compact_delta
-      e1 nonsymmetricQ : Measure E2) = 0 := by
+    Covariance.operator
+        (compactPosterior (deltaZero (E := E2) : ProbabilityMeasure E2) compact_delta e1
+            nonsymmetricQ :
+          Measure E2) =
+      0 := by
   exact delta_actual_covariance_zero e1 nonsymmetricQ
 
 theorem actual_c_nonzero : (e1 : E2) ≠ 0 := by
@@ -1133,23 +1265,35 @@ theorem isotropic0 : KLS.Isotropic μ0 := by
 
 theorem actual_rank0_bounds (c : E0) (Q : E0 →L[ℝ] E0) :
     ‖(fderiv ℝ (fun y => posteriorExpectation μ0 y Q (fun _ => (5 : ℝ))) c).comp
-        (inverseSqrt (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)))‖ ^ 2 ≤
-      variance (fun _ : E0 => (5 : ℝ)) (compactPosterior μ0 compact0 c Q : Measure E0) ∧
-    ‖(fderiv ℝ (fun y => posteriorExpectation μ0 y Q (fun _ => (5 : ℝ))) c).comp
-        (inverseSqrt (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)))‖ ^ 2 ≤ 25 := by
+              (inverseSqrt
+                (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)))‖ ^
+          2 ≤
+        variance (fun _ : E0 => (5 : ℝ)) (compactPosterior μ0 compact0 c Q : Measure E0) ∧
+      ‖(fderiv ℝ (fun y => posteriorExpectation μ0 y Q (fun _ => (5 : ℝ))) c).comp
+              (inverseSqrt
+                (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)))‖ ^
+          2 ≤
+        25 := by
   constructor
-  · exact KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance
-      μ0 compact0 isotropic0 measurable_const (by norm_num : (0 : ℝ) ≤ 5)
-      (by intro x hx; norm_num) c Q
-  · exact (KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_sq
-      μ0 compact0 isotropic0 measurable_const (by norm_num : (0 : ℝ) ≤ 5)
-      (by intro x hx; norm_num) c Q).trans (by norm_num : (5 : ℝ) ^ 2 ≤ 25)
+  · exact
+      KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance μ0
+        compact0 isotropic0 measurable_const (by norm_num : (0 : ℝ) ≤ 5)
+        (by intro x hx; norm_num) c Q
+  · exact
+      (KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_sq μ0 compact0
+            isotropic0 measurable_const (by norm_num : (0 : ℝ) ≤ 5) (by intro x hx; norm_num) c
+            Q).trans
+        (by norm_num : (5 : ℝ) ^ 2 ≤ 25)
 
 theorem actual_rank0_zero (c : E0) (Q : E0 →L[ℝ] E0) :
     ‖(fderiv ℝ (fun y => posteriorExpectation μ0 y Q (fun _ => (5 : ℝ))) c).comp
-        (inverseSqrt (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)))‖ ^ 2 = 0 := by
-  have hs : inverseSqrt (Covariance.operator
-      (compactPosterior μ0 compact0 c Q : Measure E0)) = 0 := Subsingleton.elim _ _
+            (inverseSqrt
+              (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)))‖ ^
+        2 =
+      0 := by
+  have hs :
+    inverseSqrt (Covariance.operator (compactPosterior μ0 compact0 c Q : Measure E0)) = 0 :=
+    Subsingleton.elim _ _
   rw [hs]
   simp
 
@@ -1186,28 +1330,38 @@ theorem integral_μ {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] [Comp
     (g : E → F) :
     (∫ x, g x ∂(μ : Measure E)) =
       (1 / 4 : ℝ) • g (point 1 1) + (1 / 4 : ℝ) • g (point 1 (-1)) +
-      (1 / 4 : ℝ) • g (point (-1) 1) + (1 / 4 : ℝ) • g (point (-1) (-1)) := by
+          (1 / 4 : ℝ) • g (point (-1) 1) +
+        (1 / 4 : ℝ) • g (point (-1) (-1)) := by
   have hi (x : E) : Integrable g (ENNReal.ofReal (1 / 4) • Measure.dirac x) :=
     (integrable_dirac (by simp)).smul_measure (by norm_num)
-  change (∫ x, g x ∂(ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1)))) = _
+  change
+    (∫ x,
+        g
+          x ∂(ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
+              ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
+            ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
+          ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1)))) =
+      _
   rw [integral_add_measure ((hi _).add_measure (hi _) |>.add_measure (hi _)) (hi _),
-    integral_add_measure ((hi _).add_measure (hi _)) (hi _),
-    integral_add_measure (hi _) (hi _)]
-  simp only [integral_smul_measure, integral_dirac, ENNReal.toReal_ofReal (by norm_num : (0 : ℝ) ≤ 1 / 4)]
+    integral_add_measure ((hi _).add_measure (hi _)) (hi _), integral_add_measure (hi _) (hi _)]
+  simp only [integral_smul_measure, integral_dirac,
+    ENNReal.toReal_ofReal (by norm_num : (0 : ℝ) ≤ 1 / 4)]
 
 def K : Set E := {point 1 1, point 1 (-1), point (-1) 1, point (-1) (-1)}
 
 theorem support_subset : (μ : Measure E).support ⊆ K := by
-  apply Measure.support_subset_of_isClosed
-    (isClosed_singleton.union (isClosed_singleton.union (isClosed_singleton.union isClosed_singleton)))
+  apply
+    Measure.support_subset_of_isClosed
+      (isClosed_singleton.union
+        (isClosed_singleton.union (isClosed_singleton.union isClosed_singleton)))
   rw [mem_ae_iff]
-  change ((ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1))) Kᶜ) = 0
+  change
+    ((ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
+              ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
+            ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
+          ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1)))
+        Kᶜ) =
+      0
   simp [K]
 
 theorem compact_μ : IsCompact (μ : Measure E).support := by
@@ -1266,16 +1420,22 @@ theorem Q_not_selfAdjoint : ¬ IsSelfAdjoint Q := by
 The coefficient is the literal principal inverse square root of the actual posterior covariance. -/
 theorem actual_nonsymmetric_noise :
     ‖(fderiv ℝ (fun y => posteriorExpectation μ y Q f) e0).comp
-        (inverseSqrt (Covariance.operator (compactPosterior μ compact_μ e0 Q : Measure E)))‖ ^ 2 ≤
-      variance f (compactPosterior μ compact_μ e0 Q : Measure E) ∧
-    ‖(fderiv ℝ (fun y => posteriorExpectation μ y Q f) e0).comp
-        (inverseSqrt (Covariance.operator (compactPosterior μ compact_μ e0 Q : Measure E)))‖ ^ 2 ≤ 1 := by
+              (inverseSqrt
+                (Covariance.operator (compactPosterior μ compact_μ e0 Q : Measure E)))‖ ^
+          2 ≤
+        variance f (compactPosterior μ compact_μ e0 Q : Measure E) ∧
+      ‖(fderiv ℝ (fun y => posteriorExpectation μ y Q f) e0).comp
+              (inverseSqrt
+                (Covariance.operator (compactPosterior μ compact_μ e0 Q : Measure E)))‖ ^
+          2 ≤
+        1 := by
   constructor
-  · exact KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance
-      μ compact_μ isotropic_μ f_measurable (by norm_num : (0 : ℝ) ≤ 1) f_bound e0 Q
+  · exact
+      KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance μ
+        compact_μ isotropic_μ f_measurable (by norm_num : (0 : ℝ) ≤ 1) f_bound e0 Q
   · simpa only [one_pow] using
-      KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_sq
-        μ compact_μ isotropic_μ f_measurable (by norm_num : (0 : ℝ) ≤ 1) f_bound e0 Q
+      KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_sq μ compact_μ
+        isotropic_μ f_measurable (by norm_num : (0 : ℝ) ≤ 1) f_bound e0 Q
 
 #print axioms μ
 #print axioms integral_μ

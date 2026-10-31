@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
 
 /-!
 # Audit: Markov property of the log-concave heat semigroup
@@ -6,6 +8,8 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
 This file contains declaration checks, anonymous examples reproducing and discharging the seven
 route statements, and axiom checks. It is not imported by the library and adds no named theorem.
 -/
+
+@[expose] public section
 
 open MeasureTheory FunctionalInequalities.Analysis.Semigroup
 open scoped RealInnerProductSpace
@@ -88,39 +92,51 @@ example : (∀ {α H : Type*} [MeasurableSpace α]
   exact ⟨fun _ hf ↦ LpMarkov.isPositive_exp_neg_smul_yosida hT hM hs ht hf,
     fun _ hf ↦ LpMarkov.exp_neg_smul_yosida_le_one hT hM hs ht hone hTone hf⟩
 
-example : (∀ {α H : Type*} [MeasurableSpace α]
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
-    (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2 (μ : Measure α))))
-    (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
-    {t : ℝ} (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain)
-    (_hTone : T ⟨L2.const μ 1, hone⟩ = 0),
+example :
+    (∀ {α H : Type*} [MeasurableSpace α] [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+      [CompleteSpace H] (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2 (μ : Measure α))))
+      (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T)) {t : ℝ}
+      (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain) (_hTone : T ⟨L2.const μ 1, hone⟩ = 0),
       (∀ f, 0 ≤ f → 0 ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) ∧
-      (∀ f, f ≤ L2.const μ 1 → FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f ≤ L2.const μ 1) ∧
-      FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (L2.const μ 1) = L2.const μ 1) := by
+        (∀ f,
+            f ≤ L2.const μ 1 →
+              FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f ≤
+                L2.const μ 1) ∧
+          FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (L2.const μ 1) =
+            L2.const μ 1) := by
   intro α H _ _ _ _ μ T hT hd hM t ht hone hTone
-  exact ⟨fun _ hf ↦ FunctionalInequalities.Analysis.Semigroup.Generated.positive hT hd hM ht hf,
-    fun _ hf ↦ FunctionalInequalities.Analysis.Semigroup.Generated.le_one hT hd hM ht hone hTone hf,
-    FunctionalInequalities.Analysis.Semigroup.Generated.one hT hd ht hone hTone⟩
+  exact
+    ⟨fun _ hf ↦ FunctionalInequalities.Analysis.Semigroup.Generated.positive hT hd hM ht hf,
+      fun _ hf ↦
+      FunctionalInequalities.Analysis.Semigroup.Generated.le_one hT hd hM ht hone hTone hf,
+      FunctionalInequalities.Analysis.Semigroup.Generated.one hT hd ht hone hTone⟩
 
-example : (∀ {α H : Type*} [MeasurableSpace α]
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
-    (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2 (μ : Measure α))))
-    (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
-    {t : ℝ} (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain)
-    (_hTone : T ⟨L2.const μ 1, hone⟩ = 0) (f : Lp ℝ 2 (μ : Measure α)),
-      L2.mean μ (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) = L2.mean μ f ∧
-      |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t |f| ∧
-      ∀ {C : ℝ}, 0 ≤ C → |f| ≤ C • L2.const μ 1 →
-        |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤ C • L2.const μ 1) := by
+example :
+    (∀ {α H : Type*} [MeasurableSpace α] [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+      [CompleteSpace H] (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2 (μ : Measure α))))
+      (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T)) {t : ℝ}
+      (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain) (_hTone : T ⟨L2.const μ 1, hone⟩ = 0)
+      (f : Lp ℝ 2 (μ : Measure α)),
+      L2.mean μ (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) =
+          L2.mean μ f ∧
+        |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤
+            FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t |f| ∧
+          ∀ {C : ℝ},
+            0 ≤ C →
+              |f| ≤ C • L2.const μ 1 →
+                |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤
+                  C • L2.const μ 1) := by
   intro α H _ _ _ _ μ T hT hd hM t ht hone hTone f
-  exact ⟨FunctionalInequalities.Analysis.Semigroup.Generated.mean hT hd ht hone hTone f,
-    FunctionalInequalities.Analysis.Semigroup.Generated.abs_le hT hd hM ht f,
-    by
+  exact
+    ⟨FunctionalInequalities.Analysis.Semigroup.Generated.mean hT hd ht hone hTone f,
+      FunctionalInequalities.Analysis.Semigroup.Generated.abs_le hT hd hM ht f,
+      by
       intro C hC hf
-      exact FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const hT hd hM ht hone hTone f
-        (C := C) hC hf⟩
+      exact
+        FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const hT hd hM ht hone hTone
+          f (C := C) hC hf⟩
 
 end FunctionalInequalities
 

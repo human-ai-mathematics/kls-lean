@@ -1,22 +1,29 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import Mathlib.Probability.ConditionalProbability
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import Mathlib.Probability.ConditionalProbability
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 
 /-!
 # Audit: a law satisfying every premise of the conditional BKL Lemma 4.2
 
 The uniform law on `[-√3, √3]` is a centered isotropic probability law on `ℝ` with all exponential
-moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so the
+moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so
+the
 conditional BKL Lemma 4.2 (`sum_sq_cumulant_three_le_of_letwin` in
-`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client also
+`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client
+also
 connects the cumulant and Taylor formulations (`taylorTensor_two_inner_eq_of_centered`,
-`cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed witness
+`cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed
+witness
 is included: the two-point law `(1/5) δ₂ + (4/5) δ_{-1/2}` is centered and isotropic with
 `Var(m X²) = 9 m² / 4 ≤ 8 m²` and `κ₃(1, 1, 1) = 3/2 ≠ 0`. The uniform law is log-concave, the
 two-point law is not; the conditional statement does not assume log-concavity. The client does not
 prove the Letwin theorem,
 which remains an explicit premise of the library statement.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -223,11 +230,14 @@ theorem sum_sq_cumulant_three_le_unifSym (u : ℝ) :
         integrable_exp_mul_norm_unifSym centered_unifSym isotropic_unifSym
         letwinQuadraticBound_unifSym u
 
-/-- The cumulant and Taylor formulations agree for the witness: `T_2⟪u, ·⟫(v, w) = ½ κ_3(u, v, w)`. -/
+/--
+The cumulant and Taylor formulations agree for the witness: `T_2⟪u, ·⟫(v, w) = ½ κ_3(u, v, w)`. -/
 theorem taylorTensor_two_eq_half_cumulant_unifSym (u v w : ℝ) :
-    taylorTensor unifSym (fun x => ⟪u, x⟫) 2 ![v, w] = (1 / 2 : ℝ) * cumulant unifSym 3 ![u, v, w] := by
+    taylorTensor unifSym (fun x => ⟪u, x⟫) 2 ![v, w] =
+      (1 / 2 : ℝ) * cumulant unifSym 3 ![u, v, w] := by
   have := isProbabilityMeasure_unifSym
-  rw [taylorTensor_two_inner_eq_of_centered unifSym integrable_exp_mul_norm_unifSym centered_unifSym,
+  rw [taylorTensor_two_inner_eq_of_centered unifSym integrable_exp_mul_norm_unifSym
+      centered_unifSym,
     cumulant_three_eq_integral unifSym integrable_exp_mul_norm_unifSym centered_unifSym]
 
 end BKLThirdCumulantWitness
@@ -298,7 +308,8 @@ theorem letwinQuadraticBound_twoPt : LetwinQuadraticBound twoPt := by
         intro i
         apply Fin.ext
         omega }
-  have hsum : ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ ℝ i), (stdOrthonormalBasis ℝ ℝ j)⟫ ^ 2 = c ^ 2 := by
+  have hsum :
+    ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ ℝ i), (stdOrthonormalBasis ℝ ℝ j)⟫ ^ 2 = c ^ 2 := by
     simp only [Fintype.sum_unique]
     let b : ℝ := stdOrthonormalBasis ℝ ℝ default
     have hb : b ^ 2 = 1 := by
@@ -308,8 +319,8 @@ theorem letwinQuadraticBound_twoPt : LetwinQuadraticBound twoPt := by
       rw [Real.norm_eq_abs] at hn
       nlinarith [sq_abs b]
     rw [show ⟪M b, b⟫ = c * b ^ 2 by
-      dsimp [b]
-      exact hquad _]
+        dsimp [b]
+        exact hquad _]
     rw [hb]
     ring
   rw [hvar, hsum]

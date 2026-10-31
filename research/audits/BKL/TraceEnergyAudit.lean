@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
+module
+
+public import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!
 # Audit: trace–energy inequality (support of the BKL (67) log-determinant non-explosion route)
@@ -10,6 +12,8 @@ two-dimensional family (`64 ≤ 94`), saturation of the dimension-two identity, 
 instance. Deterministic support only: no covariance dynamics, stochastic integral, Itô formula,
 strong solution or non-explosion theorem is involved.
 -/
+
+@[expose] public section
 
 noncomputable section
 open FunctionalInequalities.Analysis

@@ -1,5 +1,10 @@
-import FunctionalInequalities.Poincare.Gaussian.Multivariate
-import Lean
+module
+
+public import FunctionalInequalities.Poincare.Gaussian.Multivariate
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities MeasureTheory
 

@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.MetricBV.Approximation
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
 
 /-! Arbitrary-function pointwise truncation needs only a metric space. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

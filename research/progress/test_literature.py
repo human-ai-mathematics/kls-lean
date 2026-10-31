@@ -106,6 +106,18 @@ class LemmaMapTests(unittest.TestCase):
         self.assertEqual(state(['object_one'], relation='stronger'), 'improved')
         self.assertIsNone(literature.declaration_body(self.SOURCE, 'NS.proved'))
 
+    def test_module_system_modifiers_and_sections(self):
+        source = ('module\n\npublic import Mathlib.Order.Basic\n\n@[expose] public section\n\n'
+                  'public theorem visible : True := by\n  sorry\n'
+                  'public section\n'
+                  'public noncomputable def object_two : Nat := 0\n'
+                  'meta def tool : Nat := 1\n')
+        self.assertEqual(literature.declaration_body(source, 'NS.visible'),
+                         'public theorem visible : True := by\n  sorry')
+        self.assertEqual(literature.declaration_body(source, 'NS.object_two'),
+                         'public noncomputable def object_two : Nat := 0')
+        self.assertEqual(literature.declaration_body(source, 'NS.tool'), 'meta def tool : Nat := 1')
+
     def test_lemma_map_validation(self):
         def paper(items):
             return {'id': 'P', 'lemma_map': {'source_version': 'v1', 'source_url': 'https://x',

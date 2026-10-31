@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.TangentialLipschitz
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.TangentialLipschitz
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the tangential small-Lipschitz estimate
 
 **What is proved.**  Exactly route obligation `R4` of
-`research/audits/Vector/RankDeficientRouteStatements.lean`, whose proposition is restated **verbatim**
+`research/audits/Vector/RankDeficientRouteStatements.lean`, whose proposition is restated
+**verbatim**
 below as `route_R4` and discharged.  **No coarea formula, no slicing statement and no Sard theorem
 is proved here.**
 
@@ -37,6 +40,8 @@ projection target `W₂` (where `Q = 0` and everything is `0`-Lipschitz), and th
 `A = 0` are covered.  No inner product, measure, completeness or finite-dimensionality is used by
 the estimate itself.
 -/
+
+@[expose] public section
 
 noncomputable section
 

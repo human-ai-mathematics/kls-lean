@@ -1,22 +1,29 @@
-import LevyStochCalc.Ito.PicardGlobal
-import LevyStochCalc.Ito.VectorItoVersionLimit
-import LevyStochCalc.Ito.ItoFormulaUnbounded
-import LevyStochCalc.Brownian.AugmentedFiltration
-import LevyStochCalc.Brownian.MultidimFiltered
-import LevyStochCalc.Brownian.ItoL2CompletionMaster
-import LevyStochCalc.Brownian.ItoFinsetSum
-import LevyStochCalc.Probability.DoobContinuous
-import LevyStochCalc.Poisson.Filtered
+module
+
+public import LevyStochCalc.Ito.PicardGlobal
+public import LevyStochCalc.Ito.VectorItoVersionLimit
+public import LevyStochCalc.Ito.ItoFormulaUnbounded
+public import LevyStochCalc.Brownian.AugmentedFiltration
+public import LevyStochCalc.Brownian.MultidimFiltered
+public import LevyStochCalc.Brownian.ItoL2CompletionMaster
+public import LevyStochCalc.Brownian.ItoFinsetSum
+public import LevyStochCalc.Probability.DoobContinuous
+public import LevyStochCalc.Poisson.Filtered
 
 /-!
 # Brownian setup and diffusions with Itô representation
 
-The usual augmentation of the right-continuous natural filtration of a multidimensional Brownian motion
+The usual augmentation of the right-continuous natural filtration of a multidimensional Brownian
+motion
 (vendored LevyStochCalc API) and `IsDiffusion`: an everywhere continuous adapted version `Y` of
-`x₀ + ∫₀ᵗ b(Y_s) ds + Σ_k ∫₀ᵗ σ_k(Y_s) dW^k_s` with coefficients evaluated along `Y`. This is the first
-project module importing the vendored stochastic calculus (formalization/vendor/README.md); only vendored
+`x₀ + ∫₀ᵗ b(Y_s) ds + Σ_k ∫₀ᵗ σ_k(Y_s) dW^k_s` with coefficients evaluated along `Y`. This is the
+first
+project module importing the vendored stochastic calculus (formalization/vendor/README.md); only
+vendored
 declarations with standard logical axioms are used.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal

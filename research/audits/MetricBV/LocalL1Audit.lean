@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Independent full-signature clients for the bounded-ball `L¹` bridge: locally Lipschitz
 sequences converging to `1_B` in `L¹(ν)` on every closed ball, on a proper space with a finite
 measure, yield an actual approximating test sequence and the perimeter bound. The premise is
@@ -8,6 +10,8 @@ genuinely local: a perturbation `u n + (1/(n+1)) · h` by an arbitrary locally L
 bounded on each compact closed ball. The finite-measure clamp lemma is exercised without
 properness, the compact-set corollary through the proved implication, and the empty carrier, the
 zero measure and the empty set. No global `L¹` convergence is assumed anywhere. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

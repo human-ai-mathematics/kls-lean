@@ -1,7 +1,9 @@
-import Mathlib.MeasureTheory.Measure.Haar.Disintegration
-import Mathlib.MeasureTheory.Measure.Prod
-import Mathlib.Analysis.InnerProductSpace.Orthogonal
-import Mathlib.Analysis.InnerProductSpace.Basic
+module
+
+public import Mathlib.MeasureTheory.Measure.Haar.Disintegration
+public import Mathlib.MeasureTheory.Measure.Prod
+public import Mathlib.Analysis.InnerProductSpace.Orthogonal
+public import Mathlib.Analysis.InnerProductSpace.Basic
 
 /-!
 # Fubini splitting of a Haar measure along a line
@@ -17,6 +19,8 @@ disintegration; the constant `c` depends on `θ` and is never computed.
 
 No ledger, certificate, or Blueprint claim is made by this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -51,7 +55,7 @@ def lineEquiv {θ : E} (hθ : ‖θ‖ = 1) : ((ℝ ∙ θ)ᗮ × ℝ) ≃ₗ[�
         intro h
         rw [h, norm_zero] at hθ
         norm_num at hθ
-      have := by
+      have : s = 0 ∨ θ = 0 := by
         simpa [inner_add_right, real_inner_smul_right, hzθ, hθθ] using hcong
       exact this.resolve_right hθ0
     subst hs

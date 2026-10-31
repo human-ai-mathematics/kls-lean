@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
-import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+module
+
+public import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
+public import FunctionalInequalities.Analysis.Matrix.WeakDerivative
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Matrix
@@ -20,9 +24,9 @@ theorem produced_normalized_weak_determinant_jacobi {n : ℕ} (hn : 0 < n)
     (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
       (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ)
+    (hiso : KLS.Isotropic μ) :
 
-    : ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
       ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =

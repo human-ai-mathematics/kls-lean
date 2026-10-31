@@ -1,4 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+
+@[expose] public section
 
 open FunctionalInequalities.Probability.Gaussian
 

@@ -1,9 +1,11 @@
-import Mathlib.LinearAlgebra.Trace
-import Mathlib.LinearAlgebra.Contraction
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Analysis.Calculus.ContDiff.FiniteDimension
+module
+
+public import Mathlib.LinearAlgebra.Trace
+public import Mathlib.LinearAlgebra.Contraction
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Analysis.Calculus.ContDiff.FiniteDimension
 
 /-!
 # The divergence of a vector field
@@ -24,6 +26,8 @@ in both integrals gives the scalar-test identity `∫_U ∇η = ∫_{∂U} η ν
 the three facts a partition-of-unity argument needs in order to split a divergence integral into
 finitely many local pieces.
 -/
+
+@[expose] public section
 
 noncomputable section
 

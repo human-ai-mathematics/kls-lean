@@ -1,16 +1,21 @@
-import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
-import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
-import FunctionalInequalities.Analysis.Gronwall
-import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.Coefficients
+public import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
+public import FunctionalInequalities.Analysis.Gronwall
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
+public import FunctionalInequalities.Probability.Diffusion.Generator
 /-!
 # Lyapunov moment bound for the cutoff Eldan process
 
-Gronwall bound `E 𝒱(p_t) ≤ 𝒱(p_0) e^{Kt}` along a ball-cutoff Eldan process, from a generator bound `L𝒱 ≤ K𝒱`
+Gronwall bound `E 𝒱(p_t) ≤ 𝒱(p_0) e^{Kt}` along a ball-cutoff Eldan process, from a generator bound
+`L𝒱 ≤ K𝒱`
 taken as a hypothesis, and the resulting Markov tail bound (BKL Section 5).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -39,6 +44,8 @@ theorem IsEldanCutoff.integral_lyapunov_le (hiso : KLS.Isotropic μ) (hγ : IsCu
     Integrable (fun ω => lyapunov μ hc (p t ω)) P ∧
       ∫ ω, lyapunov μ hc (p t ω) ∂P ≤ lyapunov μ hc 0 * Real.exp (K * t) := by
   classical
+
+  -- Define the Lyapunov observable along the actual cutoff process.
   let F : Param n → ℝ := lyapunov μ hc
   let g : Param n → ℝ := fun q => γ q ^ 2 * generator μ hc F q
   let φ : ℝ → ℝ := fun s => ∫ ω, F (p s ω) ∂P
@@ -69,6 +76,8 @@ theorem IsEldanCutoff.integral_lyapunov_le (hiso : KLS.Isotropic μ) (hγ : IsCu
   have hgb : ∀ᵐ ω ∂P, ∀ s : ℝ, 0 ≤ s → |g (p s ω)| ≤ B := by
     filter_upwards [] with ω s hs
     simpa only [Real.norm_eq_abs] using hB (p s ω)
+
+  -- Apply the cutoff Dynkin identity.
   have hdyn (s : ℝ) (hs : 0 ≤ s) :
       Integrable (fun ω => F (p s ω)) P ∧
         φ s - F 0 =
@@ -184,6 +193,7 @@ theorem IsEldanCutoff.integral_lyapunov_le (hiso : KLS.Isotropic μ) (hγ : IsCu
   have hmono (u : ℝ) (hu : 0 ≤ u) :
       ∫ ω, ∫ s in Set.Ioc (0 : ℝ) u, g (p s ω) ∂volume ∂P ≤
         K * ∫ ω, ∫ s in Set.Ioc (0 : ℝ) u, F (p s ω) ∂volume ∂P := by
+    -- Use positivity and the generator bound in the scalar integral inequality.
     have hQ := h.ae_Q_posSemidef hiso hγ
     have hle :
         ∀ᵐ ω ∂P, ∫ s in Set.Ioc (0 : ℝ) u, g (p s ω) ≤

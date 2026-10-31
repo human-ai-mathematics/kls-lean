@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Buser
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Buser
 
 /-!
 # The Cheeger constant of a log-concave law on the line
@@ -13,8 +15,11 @@ This file proves the identity `Is(μ) = 2 f(m)` and the lower bound in the form
 log-concave law on the line, Dirac laws included. The lower bound composes `Is(μ) ≥ 2 f(m)`
 with `Var μ ≥ 1 / (12 f(m)²)`; the identity adds the half-line test set `(-∞, m]`, whose outer
 Minkowski content is the derivative `f(m)` of the distribution function.
-The upper bound `Is(μ)² ≤ 2 / Var μ` and the equality cases are not formalized.
+The upper bound `Is(μ)² ≤ 2 / Var μ` and equality cases are outside this module's proved
+statements.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Calculus.ContDiff.Comp
-import FunctionalInequalities.Analysis.IteratedDerivative.HolderTransport
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
+public import FunctionalInequalities.Analysis.IteratedDerivative.HolderTransport
 
 /-!
 # Second derivatives under a linear change of variables
@@ -18,6 +20,8 @@ constant-coefficient elliptic operator to the Laplacian. For a continuous linear
 
 These are exact identities and norm bounds; no Schauder estimate is asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 

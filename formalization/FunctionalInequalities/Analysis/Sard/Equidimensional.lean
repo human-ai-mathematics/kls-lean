@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! # The equidimensional degenerate case: almost no level is a critical value
 
@@ -15,18 +17,27 @@ of that set is Lebesgue-null — transported across the linear isometry
 `isometryEquivOfFinrankEq` between two inner product spaces of the same dimension, plus the
 linear algebra that in equal dimensions "not surjective" and "determinant zero" agree.
 
-**Scope.** No general finite-regularity Sard theorem such as `Analysis.sard` is proved here. Sard's theorem is a statement about the
+**Scope.** No general finite-regularity Sard theorem such as `Analysis.sard` is proved here. Sard's
+theorem is a statement about the
 measure of the set of critical **values** of a map `ℝⁿ → ℝᵐ`; what is proved here is only the
 `n = m` case, and only that case, where the critical set maps into a null set purely because a
 singular linear map contracts volume.  For `n > m` the critical values of a `C¹` map can have
-positive measure (Whitney), and nothing below says otherwise.  The rank-deficient coarea conclusion is a statement about `ℋ^k` **inside** a level and was proved independently in
-`Analysis/Vector/RankDeficient/Coarea.lean`; this equidimensional theorem is a consistency check on it, not an ingredient of its proof.
+positive measure (Whitney), and nothing below says otherwise.  The rank-deficient coarea conclusion
+is a statement about `ℋ^k` **inside** a level and was proved independently in
+`Analysis/Vector/RankDeficient/Coarea.lean`; this equidimensional theorem is a consistency check on
+it, not an ingredient of its proof.
 
-**Relation to rank-deficient coarea.**  In the equidimensional case the coarea conclusion reads `μH[0] (C ∩ {u = t}) = 0` for almost
-every `t`, and a nonempty set has `μH[0] ≥ 1`, so the two conclusions are then *equivalent* statements.
-Nothing of that equivalence is used here: this module imports neither the rank-deficient coarea module nor any part of that route, so the two proofs are independent and the agreement is a real cross-check.
+**Relation to rank-deficient coarea.**  In the equidimensional case the coarea conclusion reads
+`μH[0] (C ∩ {u = t}) = 0` for almost
+every `t`, and a nonempty set has `μH[0] ≥ 1`, so the two conclusions are then *equivalent*
+statements.
+Nothing of that equivalence is used here: this module imports neither the rank-deficient coarea
+module nor any part of that route, so the two proofs are independent and the agreement is a real
+cross-check.
 It is recorded in `research/audits/Sard/EquidimensionalAudit.lean`, in both directions.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -99,16 +110,17 @@ theorem measure_image_critical_eq_zero {u : V → W} (hu : ContDiff ℝ 1 u)
     (μ := (volume : Measure W)) hderiv hdet
 
 /-- **In equal dimensions, almost every level avoids the critical set entirely.**  The
-fibre dimension is `k = 0`, so the `ℋ^0`-null conclusion of rank-deficient coarea degenerates to emptiness of the
+fibre dimension is `k = 0`, so the `ℋ^0`-null conclusion of rank-deficient coarea degenerates to
+emptiness of the
 slice.  See the module docstring: this is the `n = m` case only, and is not a general Sard
 theorem. -/
 theorem ae_critical_inter_levelSet_eq_empty {u : V → W} (hu : ContDiff ℝ 1 u)
     (h : finrank ℝ V = finrank ℝ W) :
     ∀ᵐ t ∂(volume : Measure W),
-      {x : V | ¬ Function.Surjective (fderiv ℝ u x)} ∩ {x : V | u x = t} = ∅ := by
+      {x : V | ¬Function.Surjective (fderiv ℝ u x)} ∩ {x : V | u x = t} = ∅ := by
   have hnull := measure_image_critical_eq_zero hu h
-  have hae : ∀ᵐ t ∂(volume : Measure W),
-      t ∉ u '' {x : V | ¬ Function.Surjective (fderiv ℝ u x)} :=
+  have hae :
+    ∀ᵐ t ∂(volume : Measure W), t ∉ u '' {x : V | ¬Function.Surjective (fderiv ℝ u x)} :=
     measure_eq_zero_iff_ae_notMem.mp hnull
   filter_upwards [hae] with t ht
   refine Set.eq_empty_iff_forall_notMem.2 ?_
@@ -131,22 +143,23 @@ namespace FunctionalInequalities.Analysis
 
 /-- **Lipschitz maps send null sets to null sets** (Alexandrov's second-order
 differentiability theorem): for a map of a finite-dimensional real inner product space into
-itself that is Lipschitz on `s`, a Lebesgue-null `s` has a Lebesgue-null image. No measurability of `s`
+itself that is Lipschitz on `s`, a Lebesgue-null `s` has a Lebesgue-null image. No measurability of
+`s`
 is assumed. -/
 theorem volume_image_eq_zero_of_lipschitzOnWith {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {f : E → E} {K : NNReal} {s : Set E} (hf : LipschitzOnWith K f s)
     (hs : (volume : Measure E) s = 0) : (volume : Measure E) (f '' s) = 0 := by
   have hsH : (μH[(Module.finrank ℝ E : ℝ)] : Measure E) s = 0 := by
-    rw [Measure.isAddLeftInvariant_eq_smul
-      (μH[(Module.finrank ℝ E : ℝ)] : Measure E) (volume : Measure E),
+    rw [Measure.isAddLeftInvariant_eq_smul (μH[(Module.finrank ℝ E : ℝ)] : Measure E)
+        (volume : Measure E),
       Measure.smul_apply, hs, smul_zero]
   have himageH : (μH[(Module.finrank ℝ E : ℝ)] : Measure E) (f '' s) = 0 := by
     have h := hf.hausdorffMeasure_image_le (Nat.cast_nonneg (Module.finrank ℝ E))
     rw [hsH, mul_zero] at h
     exact le_antisymm h bot_le
-  rw [Measure.isAddLeftInvariant_eq_smul
-    (volume : Measure E) (μH[(Module.finrank ℝ E : ℝ)] : Measure E),
+  rw [Measure.isAddLeftInvariant_eq_smul (volume : Measure E)
+      (μH[(Module.finrank ℝ E : ℝ)] : Measure E),
     Measure.smul_apply, himageH, smul_zero]
 
 end FunctionalInequalities.Analysis

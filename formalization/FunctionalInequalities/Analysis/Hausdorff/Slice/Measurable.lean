@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-! # Measurability of weighted level-set integrals
 
@@ -12,6 +14,8 @@ surface measure, which is not SFinite in positive ambient dimension.
 This module supplies measurability. The coarea equality is in
 `Analysis/Coarea/Lipschitz.lean`; `Analysis/Coarea/LocallyLipschitz.lean` extends
 both conclusions to locally Lipschitz functions. Sharp Sard is in `Analysis/Sard/Sharp.lean`. -/
+
+@[expose] public section
 
 noncomputable section
 

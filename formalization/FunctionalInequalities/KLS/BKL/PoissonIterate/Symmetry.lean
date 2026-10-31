@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
 
 /-!
 # Approximate symmetry of the BKL iterates: Lemma 3.3
@@ -48,6 +50,8 @@ centering of `f` are not used. These are statements about `L²` classes in the o
 not about the source's class `𝒜`; Corollary 3.7, Lemmas 3.8–3.9 and Theorem 3.1 are not
 proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

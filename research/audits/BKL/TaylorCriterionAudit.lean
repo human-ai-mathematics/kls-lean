@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 
 /-!
 # Audit: BKL Theorem 3.1 for regular laws
@@ -21,6 +23,8 @@ Lemma 3.8 enters through `norm_taylorField_grad0_iter_sq_le`, Lemma 3.9 through
 `KLS/BKL/PoissonIterate/Defect.lean`. This is Theorem 3.1 for regular laws; it is not the KLS bound
 (Theorem 1.1).
 -/
+
+@[expose] public section
 
 noncomputable section
 

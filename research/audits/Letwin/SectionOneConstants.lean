@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Comparison
-import FunctionalInequalities.KLS.Letwin.IsoperimetricBound
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Comparison
+public import FunctionalInequalities.KLS.Letwin.IsoperimetricBound
 
 /-!
 # Audit client for Letwin arXiv:2607.24164v1, Section 1 constants
@@ -10,6 +12,8 @@ smooth-boundary isoperimetric constant `ψ_μ`, the comparison display `1/4 ≤ 
 under the KLS proposition and unconditionally (the KLS proposition discharged by the proved
 dimension-free bound), and both forms of the KLS conjecture.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory
@@ -23,20 +27,38 @@ theorem comparison_client (hKLS : Conjecture) {n : ℕ} (hn : n ≠ 0)
     {μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hμ : LogConcave μ)
     {ρ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hρ : IsBorellDensity (μ : Measure (EuclideanSpace ℝ (Fin n))) volume ρ) :
-    4⁻¹ ≤ (Isoperimetry.smoothConstant ρ Set.univ μ)⁻¹ ^ 2 /
-        (⨅ C : {C : NNReal // ∀ g : EuclideanSpace ℝ (Fin n) → ℝ, LocallyLipschitz g →
-            ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) ≤ 1 →
-            evariance g (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
-              (C : ENNReal) *
-                ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))},
-          (C.1 : ENNReal)) ∧
+    4⁻¹ ≤
+        (Isoperimetry.smoothConstant ρ Set.univ μ)⁻¹ ^ 2 /
+          (⨅ C :
+            { C : NNReal //
+              ∀ g : EuclideanSpace ℝ (Fin n) → ℝ,
+                LocallyLipschitz g →
+                  ∫⁻ x,
+                        (ENNReal.ofReal ‖gradient g x‖) ^
+                          2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+                      1 →
+                    evariance g (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+                      (C : ENNReal) *
+                        ∫⁻ x,
+                          (ENNReal.ofReal ‖gradient g x‖) ^
+                            2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) },
+            (C.1 : ENNReal)) ∧
       (Isoperimetry.smoothConstant ρ Set.univ μ)⁻¹ ^ 2 /
-        (⨅ C : {C : NNReal // ∀ g : EuclideanSpace ℝ (Fin n) → ℝ, LocallyLipschitz g →
-            ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) ≤ 1 →
-            evariance g (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
-              (C : ENNReal) *
-                ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))},
-          (C.1 : ENNReal)) ≤ ENNReal.ofReal Real.pi := by
+          (⨅ C :
+            { C : NNReal //
+              ∀ g : EuclideanSpace ℝ (Fin n) → ℝ,
+                LocallyLipschitz g →
+                  ∫⁻ x,
+                        (ENNReal.ofReal ‖gradient g x‖) ^
+                          2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+                      1 →
+                    evariance g (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+                      (C : ENNReal) *
+                        ∫⁻ x,
+                          (ENNReal.ofReal ‖gradient g x‖) ^
+                            2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) },
+            (C.1 : ENNReal)) ≤
+        ENNReal.ofReal Real.pi := by
   have hac : (μ : Measure (EuclideanSpace ℝ (Fin n))) ≪ volume := by
     rw [← hρ.withDensity_eq]
     exact withDensity_absolutelyContinuous _ _
@@ -105,9 +127,11 @@ end LetwinSectionOneConstantsAudit
 #print axioms FunctionalInequalities.KLS.Isoperimetry.inverseScale_eq_inv_smoothConstant_univ
 #print axioms FunctionalInequalities.KLS.LogConcave.localSlope_constant_pos_of_affineSupport_eq_top
 #print axioms FunctionalInequalities.KLS.LogConcave.localSlope_constant_lt_top_of_conjecture
-#print axioms FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inv_smoothConstant_univ_sq
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inv_smoothConstant_univ_sq
 #print axioms FunctionalInequalities.KLS.LogConcave.inv_smoothConstant_univ_sq_le_pi_literature
-#print axioms FunctionalInequalities.KLS.LogConcave.inv_smoothConstant_univ_sq_div_literatureConstant_mem_Icc
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.inv_smoothConstant_univ_sq_div_literatureConstant_mem_Icc
 #print axioms FunctionalInequalities.KLS.LogConcave.inverseScale_sq_div_literatureConstant_mem_Icc
 #print axioms FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_four_of_isotropic_fin_one
 #print axioms FunctionalInequalities.KLS.conjecture_iff_inverseScale

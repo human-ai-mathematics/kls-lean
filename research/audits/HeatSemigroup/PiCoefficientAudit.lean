@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
 
 /-! Independent full-signature clients for pi-coefficient gradient, L1 and perimeter bounds. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 set_option maxHeartbeats 800000
@@ -35,35 +39,43 @@ theorem bounded_gradient (hνU : (ν : Measure V) = m.tilted (-U))
           Lp V 2 (ν : Measure V)) x‖ ≤ M / Real.sqrt (Real.pi * t) :=
   ae_norm_gradient_le_of_bounded_pi m hν hi hνU hU hconv f hf ht
 
-theorem dual (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ univ U)
+theorem dual (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ univ U)
     (f : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
-    (g : Lp ℝ 2 (ν : Measure V)) (hg : ∀ᵐ x ∂(ν : Measure V), |g x| ≤ 1)
-    {t : ℝ} (ht : 0 ≤ t) :
+    (g : Lp ℝ 2 (ν : Measure V)) (hg : ∀ᵐ x ∂(ν : Measure V), |g x| ≤ 1) {t : ℝ} (ht : 0 ≤ t) :
     ⟪(f : Lp ℝ 2 (ν : Measure V)) - operator m (ContinuousLinearMap.id ℝ V) hν hi ht f, g⟫ ≤
-      (2 * Real.sqrt (t / Real.pi)) * ∫ x, ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi f :
-        Lp V 2 (ν : Measure V)) x‖ ∂(ν : Measure V) :=
+      (2 * Real.sqrt (t / Real.pi)) *
+        ∫ x,
+          ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi f :
+                Lp V 2 (ν : Measure V))
+              x‖ ∂(ν : Measure V) :=
   inner_sub_operator_le_pi m hν hi hνU hU hconv f g hg ht
 
-theorem form (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ univ U)
-    (f : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
-    {t : ℝ} (ht : 0 ≤ t) :
-    (∫ x, |(f : Lp ℝ 2 (ν : Measure V)) x -
-      operator m (ContinuousLinearMap.id ℝ V) hν hi ht f x| ∂(ν : Measure V)) ≤
-      (2 * Real.sqrt (t / Real.pi)) * ∫ x, ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi f :
-        Lp V 2 (ν : Measure V)) x‖ ∂(ν : Measure V) :=
+theorem form (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ univ U)
+    (f : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain) {t : ℝ}
+    (ht : 0 ≤ t) :
+    (∫ x,
+        |(f : Lp ℝ 2 (ν : Measure V)) x -
+            operator m (ContinuousLinearMap.id ℝ V) hν hi ht f x| ∂(ν : Measure V)) ≤
+      (2 * Real.sqrt (t / Real.pi)) *
+        ∫ x,
+          ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi f :
+                Lp V 2 (ν : Measure V))
+              x‖ ∂(ν : Measure V) :=
   integral_abs_sub_operator_le_pi m hν hi hνU hU hconv f ht
 
-theorem approximation
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+theorem approximation (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
     (hconv : ConvexOn ℝ univ U) (f : Lp ℝ 2 (ν : Measure V))
-    (u : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
-    {t : ℝ} (ht : 0 ≤ t) :
+    (u : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain) {t : ℝ}
+    (ht : 0 ≤ t) :
     (∫ x, |f x - operator m (ContinuousLinearMap.id ℝ V) hν hi ht f x| ∂(ν : Measure V)) ≤
       2 * (∫ x, |f x - (u : Lp ℝ 2 (ν : Measure V)) x| ∂(ν : Measure V)) +
-      (2 * Real.sqrt (t / Real.pi)) * ∫ x, ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi u :
-        Lp V 2 (ν : Measure V)) x‖ ∂(ν : Measure V) :=
+        (2 * Real.sqrt (t / Real.pi)) *
+          ∫ x,
+            ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi u :
+                  Lp V 2 (ν : Measure V))
+                x‖ ∂(ν : Measure V) :=
   integral_abs_sub_operator_le_of_form_approximation_pi m hν hi hνU hU hconv f u ht
 
 theorem recovery
@@ -79,29 +91,29 @@ theorem recovery
       (2 * Real.sqrt (t / Real.pi)) * C :=
   integral_abs_sub_operator_le_of_recovery_pi m hν hi hνU hU hconv f hrec ht
 
-theorem finite_perimeter
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
-    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ}
-    (hρ : IsBorellDensity (ν : Measure V) volume ρ) (D : SmoothDomain V)
-    (hP : relativePerimeter ρ (interior (ν : Measure V).support) D ≠ ⊤)
+theorem finite_perimeter (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ} (hρ : IsBorellDensity (ν : Measure V) volume ρ)
+    (D : SmoothDomain V) (hP : relativePerimeter ρ (interior (ν : Measure V).support) D ≠ ⊤)
     {t : ℝ} (ht : 0 ≤ t) :
-    (∫ x, |D.carrier.indicator (1 : V → ℝ) x -
-      operator m (ContinuousLinearMap.id ℝ V) hν hi ht
-        (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ)) x|
-      ∂(ν : Measure V)) ≤
-      (2 * Real.sqrt (t / Real.pi)) * (relativePerimeter ρ (interior (ν : Measure V).support) D).toReal :=
+    (∫ x,
+        |D.carrier.indicator (1 : V → ℝ) x -
+            operator m (ContinuousLinearMap.id ℝ V) hν hi ht
+              (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ))
+              x| ∂(ν : Measure V)) ≤
+      (2 * Real.sqrt (t / Real.pi)) *
+        (relativePerimeter ρ (interior (ν : Measure V).support) D).toReal :=
   integral_abs_indicator_sub_operator_le_pi m hν hi hνU hU hconv hρ D hP ht
 
-theorem extended_perimeter
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
-    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ}
-    (hρ : IsBorellDensity (ν : Measure V) volume ρ) (D : SmoothDomain V)
-    {t : ℝ} (ht : 0 ≤ t) :
-    (∫⁻ x, ‖D.carrier.indicator (1 : V → ℝ) x -
-      operator m (ContinuousLinearMap.id ℝ V) hν hi ht
-        (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ)) x‖ₑ
-      ∂(ν : Measure V)) ≤
-      ENNReal.ofReal ((2 * Real.sqrt (t / Real.pi))) * relativePerimeter ρ (interior (ν : Measure V).support) D :=
+theorem extended_perimeter (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ} (hρ : IsBorellDensity (ν : Measure V) volume ρ)
+    (D : SmoothDomain V) {t : ℝ} (ht : 0 ≤ t) :
+    (∫⁻ x,
+        ‖D.carrier.indicator (1 : V → ℝ) x -
+            operator m (ContinuousLinearMap.id ℝ V) hν hi ht
+              (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ))
+              x‖ₑ ∂(ν : Measure V)) ≤
+      ENNReal.ofReal ((2 * Real.sqrt (t / Real.pi))) *
+        relativePerimeter ρ (interior (ν : Measure V).support) D :=
   lintegral_enorm_indicator_sub_operator_le_pi m hν hi hνU hU hconv hρ D ht
 
 end HeatPiCoefficientAudit

@@ -13,6 +13,7 @@ from pathlib import Path
 import subprocess
 import sys
 
+import lean_header
 import module_inventory
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +30,7 @@ def source_inputs(root: Path) -> dict[str, str]:
     names = [str(p.relative_to(root)) for p in sorted((root / module_inventory.LIBRARY).rglob('*.lean'))]
     names += ['formalization/FunctionalInequalities.lean', 'formalization/lakefile.toml',
               'formalization/lake-manifest.json', 'formalization/lean-toolchain', DRIVER,
-              'research/api_index.py', 'research/module_inventory.py']
+              'research/api_index.py', 'research/module_inventory.py', 'research/lean_header.py']
     return {p: sha(root / p) for p in sorted(names)}
 
 
@@ -74,8 +75,22 @@ def validate_payload(payload: dict, root: Path, inventory: dict) -> list[dict]:
 
 
 def observation_source(root: Path, inventory: dict) -> str:
+    """The generated observation client: a NON-module root with plain imports.
+
+    The committed driver may be a `module` with `public import Lean`; its header is replaced,
+    not concatenated, because `module`/imports must precede every command. Keeping the client
+    a non-module root preserves the pre-migration environment (every imported module at the
+    private level); public-API filtering stays in the driver and `validate_payload`.
+    """
+    driver = (root / DRIVER).read_text()
+    try:
+        header = lean_header.parse_header(driver)
+    except lean_header.HeaderError as exc:
+        raise ValueError(f'{DRIVER}: {exc}') from exc
+    if header.prelude or set(header.modules) - {'Lean'}:
+        raise ValueError(f'{DRIVER} may import only Lean; the producer supplies library imports')
     imports = sorted({'Lean', 'FunctionalInequalities'} | {r['module'] for r in inventory['modules']})
-    body = (root / DRIVER).read_text().removeprefix('import Lean\n').lstrip('\n')
+    body = driver[header.end:].lstrip('\n')
     return '\n'.join('import ' + m for m in imports) + '\n\n' + body
 
 def render_entry(rows: list[dict], inventory: dict, input_digest: str, output_dir: str = 'build/api-index') -> str:

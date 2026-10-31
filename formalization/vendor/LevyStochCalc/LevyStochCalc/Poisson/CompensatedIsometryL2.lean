@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedIsometryOrthogonality
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedIsometryOrthogonality
 
 /-!
 # L²-isometry of the simple compensated-Poisson integral
@@ -13,6 +17,8 @@ isometry `∫⁻ ‖simpleIntegral N φ T‖² ∂P = ∫⁻ ∫⁻ ∫⁻ ‖φ
 its Bochner sum form `∑_i ν̂(fullRect i).toReal · ∫ ξ_i² ∂P`, the finiteness of the
 `L²`-norm and the membership `MemLp (simpleIntegral N φ T) 2 P`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -522,8 +528,7 @@ lemma simpleIntegral_memLp_compensated
     (h_adapt : ∀ i : Fin φ.N, @MeasureTheory.StronglyMeasurable Ω ℝ _
       (ℱ (φ.partition i.castSucc)) (φ.ξ i)) :
     MeasureTheory.MemLp (fun ω => simpleIntegral N φ T ω) 2 P := by
-  refine ⟨?_, ?_⟩
-  · -- AEStronglyMeasurable.
+  have hmeas : MeasureTheory.AEStronglyMeasurable (fun ω => simpleIntegral N φ T ω) P := by
     refine Measurable.aestronglyMeasurable ?_
     unfold simpleIntegral
     refine Finset.measurable_sum _ (fun i _ => ?_)
@@ -537,9 +542,8 @@ lemma simpleIntegral_memLp_compensated
       unfold SimplePredictable.timeRect
       exact MeasurableSet.prod measurableSet_Ioc (φ.A_measurable i)
     exact ENNReal.measurable_toReal.comp h_meas_NB
-  · -- eLpNorm < ⊤.
-    rw [MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
-        (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤)]
+  · rw [MeasureTheory.memLp_iff, MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
+        (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤) hmeas]
     have h_two_toReal : (2 : ℝ≥0∞).toReal = 2 := by simp
     rw [h_two_toReal]
     have h_pre := simpleIntegral_lintegral_sq_finite_compensated N ℱ hℱ hT φ h_adapt

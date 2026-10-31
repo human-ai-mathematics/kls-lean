@@ -3,8 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedProcess
-import LevyStochCalc.Martingale.SquareCompensator
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.CompensatedProcess
+public import LevyStochCalc.Martingale.SquareCompensator
 
 /-!
 # The quadratic-variation martingale of the compensated integral
@@ -15,6 +20,8 @@ filtration: the increment isometries of `MarkStep` give the set-level identity r
 `LevyStochCalc.Martingale.martingale_sq_sub_of_setIntegral`. The compensated square of the
 `L²` integral process is then the `L¹`-limit of the stage compensated squares.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal
@@ -189,10 +196,10 @@ lemma compensator_stronglyMeasurable (hG : G.Adapted ℱ) (t : ℝ) :
             exact abs_nonneg M)
         (fun i k => by
           by_cases hi : i < (g.clamp t ht).N₀
-          · simp only [hi, if_true]
+          · simp only [hi, ite_true]
             exact ((hG i (g.lt_of_lt_clampIndex hi).1 k).mono
               (ℱ.mono (g.lt_of_lt_clampIndex hi).2.le)).measurable
-          · simp only [hi, if_false]
+          · simp only [hi, ite_false]
             exact measurable_const)
     have hev : ∀ u e ω, @eval Ω (ℱ t) E _ ν _ (g.clamp t ht) G' u e ω
         = (G.clamp t ht).eval u e ω := by
@@ -203,7 +210,7 @@ lemma compensator_stronglyMeasurable (hG : G.Adapted ℱ) (t : ℝ) :
       change _ * ∑ k : Fin G.K, (if i < (g.clamp t ht).N₀ then G.ξ i k ω else 0)
           * (G.B k).indicator (fun _ => (1 : ℝ)) e
         = _ * ∑ k : Fin G.K, G.ξ i k ω * (G.B k).indicator (fun _ => (1 : ℝ)) e
-      simp only [hi, if_true]
+      simp only [hi, ite_true]
     have hcomp : G.compensator t
         = @compensator Ω (ℱ t) E _ ν _ (g.clamp t ht) G' t := by
       funext ω
@@ -211,7 +218,7 @@ lemma compensator_stronglyMeasurable (hG : G.Adapted ℱ) (t : ℝ) :
       refine setIntegral_congr_fun measurableSet_Icc fun u hu => ?_
       refine integral_congr_ae (Filter.Eventually.of_forall fun e => ?_)
       beta_reduce
-      rw [hev, G.eval_clamp t ht, if_pos hu.2]
+      rw [hev, G.eval_clamp t ht, ite_eq_left hu.2]
     rw [hcomp]
     exact (@measurable_compensator Ω (ℱ t) E _ ν _ (g.clamp t ht) G'
       t).stronglyMeasurable

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.LogConcave.Line.Hazard
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.KLS.LogConcave.Line.Hazard
 
 /-!
 # One-dimensional isoperimetry for log-concave laws: `h_M(ν) ≥ 2 ρ(m)`
@@ -24,7 +26,8 @@ the second the single boundary point `m` already carries `ρ(m) ≥ 2 ρ(m) · m
 The certified equality `h_M = h_S` then turns the smooth-domain bound into the bound on the
 Minkowski Cheeger infimum.
 
-For the median density bound the supporting exponential at the median with slope `k` has `|k| ≤ 2 ρ(m)`, because the
+For the median density bound the supporting exponential at the median with slope `k` has `|k| ≤ 2
+ρ(m)`, because the
 half mass on the side where it decays is `ρ(m) / |k|`; the supporting-line bound
 `ρ ≤ ρ(m) + k (F - 1/2)` of the hazard module then gives `ρ ≤ 2 ρ(m)` on the interior of the
 support, and log-concavity together with the vanishing of `ρ` off that interior extends the bound
@@ -32,6 +35,8 @@ to every point of the line.
 
 No Poincaré inequality and no Buser-type comparison is asserted here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -199,10 +204,10 @@ theorem le_two_mul (x : ℝ) : d.ρ x ≤ 2 * d.ρ m := by
     have hF0 := Probability.Line.cdf_nonneg μ y
     have hF1 := Probability.Line.cdf_le_one μ y
     have hkb : k * (cdf μ y - 1 / 2) ≤ |k| * |cdf μ y - 1 / 2| := by
-      calc k * (cdf μ y - 1 / 2) ≤ |k * (cdf μ y - 1 / 2)| := le_abs_self _
+      calc
+        k * (cdf μ y - 1 / 2) ≤ |k * (cdf μ y - 1 / 2)| := le_abs_self _
         _ = |k| * |cdf μ y - 1 / 2| := abs_mul _ _
-    have habs2 : |cdf μ y - 1 / 2| ≤ 1 / 2 := by
-      rw [abs_le]; constructor <;> linarith
+    have habs2 : |cdf μ y - 1 / 2| ≤ 1 / 2 := by rw [abs_le]; constructor <;> linarith
     nlinarith [abs_nonneg k, abs_nonneg (cdf μ y - 1 / 2)]
   by_cases hx : x ∈ interior (μ : Measure ℝ).support
   · exact hΩ x hx
@@ -223,18 +228,22 @@ theorem le_two_mul (x : ℝ) : d.ρ x ≤ 2 * d.ρ m := by
     have hz : t • x + (1 - t) • y ∈ interior (μ : Measure ℝ).support := by
       have hyi : y ∈ interior (interior (μ : Measure ℝ).support) := by
         rwa [isOpen_interior.interior_eq]
-      have := hμ.convex_interior_support.combo_closure_interior_mem_interior
-        (a := t) (b := 1 - t) hcl hyi ht.1.le (by linarith [ht.2]) (by ring)
+      have :=
+        hμ.convex_interior_support.combo_closure_interior_mem_interior (a := t) (b := 1 - t) hcl
+          hyi ht.1.le (by linarith [ht.2]) (by ring)
       rwa [isOpen_interior.interior_eq] at this
     exact (d.isBorell.logConcave x y t ht.1 ht.2).trans (hΩ _ hz)
-  have hgeq : ∀ t : ℝ, d.ρ x ^ t * d.ρ y ^ (1 - t) =
-      Real.exp (Real.log (d.ρ x) * t + Real.log (d.ρ y) * (1 - t)) := by
+  have hgeq :
+    ∀ t : ℝ,
+      d.ρ x ^ t * d.ρ y ^ (1 - t) =
+        Real.exp (Real.log (d.ρ x) * t + Real.log (d.ρ y) * (1 - t)) := by
     intro t
     rw [Real.exp_add, Real.rpow_def_of_pos h0, Real.rpow_def_of_pos hb]
   have hgc : Continuous fun t : ℝ ↦ d.ρ x ^ t * d.ρ y ^ (1 - t) := by
     simp only [hgeq]
     fun_prop
-  have htend : Tendsto (fun t : ℝ ↦ d.ρ x ^ t * d.ρ y ^ (1 - t)) (𝓝[<] (1 : ℝ))
+  have htend :
+    Tendsto (fun t : ℝ ↦ d.ρ x ^ t * d.ρ y ^ (1 - t)) (𝓝[<] (1 : ℝ))
       (𝓝 (d.ρ x ^ (1 : ℝ) * d.ρ y ^ (1 - (1 : ℝ)))) :=
     (hgc.tendsto 1).mono_left nhdsWithin_le_nhds
   have hlim : d.ρ x ^ (1 : ℝ) * d.ρ y ^ (1 - (1 : ℝ)) ≤ 2 * d.ρ m := by
@@ -361,28 +370,34 @@ theorem mul_measure_compl_le {W : Set ℝ} (hW : IsOpen W) (hmW : m ∈ W) :
     have h1 : z < m := hz.2
     have h2 : m < z := hz'.2
     exact absurd h1 (not_lt.mpr h2.le)
-  have hunion : ∫⁻ x in (D ∩ Iio m) ∪ (D ∩ Ioi m), ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) =
+  have hunion :
+    ∫⁻ x in (D ∩ Iio m) ∪ (D ∩ Ioi m), ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) =
       (∫⁻ x in D ∩ Iio m, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ)) +
-      ∫⁻ x in D ∩ Ioi m, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) :=
-    lintegral_union (hDmeas.inter measurableSet_Ioi) hdisj
-  calc ENNReal.ofReal (2 * d.ρ m) * (μ : Measure ℝ) Wᶜ
-      ≤ ENNReal.ofReal (2 * d.ρ m) *
-          ((μ : Measure ℝ) (Iio m \ W) + (μ : Measure ℝ) (Ioi m \ W)) := by
-        gcongr
-        exact (measure_mono hsplit).trans (measure_union_le _ _)
-    _ = ENNReal.ofReal (2 * d.ρ m) * (μ : Measure ℝ) (Iio m \ W) +
-        ENNReal.ofReal (2 * d.ρ m) * (μ : Measure ℝ) (Ioi m \ W) := by rw [mul_add]
-    _ ≤ (∫⁻ x in D ∩ Iio m, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ)) +
         ∫⁻ x in D ∩ Ioi m, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) :=
-        add_le_add (d.mul_measure_Iio_diff_le hμ hi hm hW hmW)
-          (d.mul_measure_Ioi_diff_le hμ hi hm hW hmW)
+    lintegral_union (hDmeas.inter measurableSet_Ioi) hdisj
+  calc
+    ENNReal.ofReal (2 * d.ρ m) * (μ : Measure ℝ) Wᶜ ≤
+        ENNReal.ofReal (2 * d.ρ m) *
+          ((μ : Measure ℝ) (Iio m \ W) + (μ : Measure ℝ) (Ioi m \ W)) := by
+      gcongr
+      exact (measure_mono hsplit).trans (measure_union_le _ _)
+    _ =
+        ENNReal.ofReal (2 * d.ρ m) * (μ : Measure ℝ) (Iio m \ W) +
+          ENNReal.ofReal (2 * d.ρ m) * (μ : Measure ℝ) (Ioi m \ W) := by
+      rw [mul_add]
+    _ ≤
+        (∫⁻ x in D ∩ Iio m, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ)) +
+          ∫⁻ x in D ∩ Ioi m, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) :=
+      add_le_add (d.mul_measure_Iio_diff_le hμ hi hm hW hmW)
+        (d.mul_measure_Ioi_diff_le hμ hi hm hW hmW)
     _ = ∫⁻ x in (D ∩ Iio m) ∪ (D ∩ Ioi m), ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) :=
-        hunion.symm
+      hunion.symm
     _ ≤ ∫⁻ x in D, ENNReal.ofReal (d.ρ x) ∂(surfaceMeasure ℝ) :=
-        lintegral_mono' (Measure.restrict_mono (by
-          rintro z (hz | hz) <;> exact hz.1) le_rfl) le_rfl
+      lintegral_mono' (Measure.restrict_mono (by rintro z (hz | hz) <;> exact hz.1) le_rfl)
+        le_rfl
 
-/-- the smooth-domain perimeter bound: every smooth domain of the line has relative perimeter at least
+/--
+the smooth-domain perimeter bound: every smooth domain of the line has relative perimeter at least
 `2 ρ(m)` times the balance of its mass. -/
 theorem mul_min_le_relativePerimeter (U : SmoothDomain ℝ) :
     ENNReal.ofReal (2 * d.ρ m) *
@@ -398,17 +413,21 @@ theorem mul_min_le_relativePerimeter (U : SmoothDomain ℝ) :
   · have hcompl : (μ : Measure ℝ) (U.carrier)ᶜ = 1 - p := prob_compl_eq_one_sub U.measurableSet
     refine le_trans ?_ (d.mul_measure_compl_le hμ hi hm U.isOpen hmU)
     have hle : min p (1 - p) ≤ (μ : Measure ℝ) (U.carrier)ᶜ := by
-      rw [hcompl]; exact hmin_le_right
+      rw [hcompl];
+      exact hmin_le_right
     exact mul_le_mul_right hle _
   by_cases hmfr : m ∈ frontier U.carrier
   · have htwo : 2 * min p (1 - p) ≤ 1 := by
-      calc 2 * min p (1 - p) = min p (1 - p) + min p (1 - p) := two_mul _
+      calc
+        2 * min p (1 - p) = min p (1 - p) + min p (1 - p) := two_mul _
         _ ≤ p + (1 - p) := add_le_add hmin_le_left hmin_le_right
         _ = 1 := add_tsub_cancel_of_le hp1
     have hofReal : ENNReal.ofReal (2 * d.ρ m) = 2 * ENNReal.ofReal (d.ρ m) := by
       rw [ENNReal.ofReal_mul (by norm_num), ENNReal.ofReal_ofNat]
-    calc ENNReal.ofReal (2 * d.ρ m) * min p (1 - p)
-        = ENNReal.ofReal (d.ρ m) * (2 * min p (1 - p)) := by rw [hofReal]; ring
+    calc
+      ENNReal.ofReal (2 * d.ρ m) * min p (1 - p) =
+          ENNReal.ofReal (d.ρ m) * (2 * min p (1 - p)) := by
+        rw [hofReal]; ring
       _ ≤ ENNReal.ofReal (d.ρ m) * 1 := mul_le_mul_right htwo _
       _ = ENNReal.ofReal (d.ρ m) := mul_one _
       _ ≤ _ := d.ofReal_le_setLIntegral (Set.mem_inter hmfr hmΩ)
@@ -426,10 +445,12 @@ theorem mul_min_le_relativePerimeter (U : SmoothDomain ℝ) :
     · refine mul_le_mul_right ?_ _
       rw [hWc]
       exact hmin_le_left.trans (measure_mono subset_closure)
-    · exact lintegral_mono' (Measure.restrict_mono
-        (Set.inter_subset_inter_left _ hfrW) le_rfl) le_rfl
+    · exact
+        lintegral_mono' (Measure.restrict_mono (Set.inter_subset_inter_left _ hfrW) le_rfl)
+          le_rfl
 
-/-- the Minkowski Cheeger bound: the Minkowski Cheeger infimum of a log-concave law on the line is at
+/--
+the Minkowski Cheeger bound: the Minkowski Cheeger infimum of a log-concave law on the line is at
 least twice the density at a median. -/
 theorem two_mul_le_minkowskiConstant :
     ENNReal.ofReal (2 * d.ρ m) ≤ Isoperimetry.minkowskiConstant μ := by
@@ -439,8 +460,9 @@ theorem two_mul_le_minkowskiConstant :
   have hmin0 : min p (1 - p) ≠ 0 := ne_of_gt (lt_min hpos (tsub_pos_of_lt hlt))
   have hmintop : min p (1 - p) ≠ ⊤ :=
     ne_top_of_le_ne_top ENNReal.one_ne_top ((min_le_left _ _).trans prob_le_one)
-  exact (ENNReal.le_div_iff_mul_le (Or.inl hmin0) (Or.inl hmintop)).mpr
-    (d.mul_min_le_relativePerimeter hμ hi hm U)
+  exact
+    (ENNReal.le_div_iff_mul_le (Or.inl hmin0) (Or.inl hmintop)).mpr
+      (d.mul_min_le_relativePerimeter hμ hi hm U)
 
 end Median
 

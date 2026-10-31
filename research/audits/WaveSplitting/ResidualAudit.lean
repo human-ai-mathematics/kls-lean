@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Residual
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Residual
 
 /-! Independent clients of the tame estimate for the actual split residual. The residual is
 the defined `residual` of the explicit step; no residual smallness, second temporal derivative
 bound or operator bound is assumed. The cell clients use the original smooth coefficient
 without global derivative bounds. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

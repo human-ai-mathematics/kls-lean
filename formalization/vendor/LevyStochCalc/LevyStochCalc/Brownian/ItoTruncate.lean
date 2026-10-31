@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoVersionExists
-import LevyStochCalc.Brownian.ItoLinear
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoVersionExists
+public import LevyStochCalc.Brownian.ItoLinear
 
 /-!
 # Truncating an integrand to a bounded one
@@ -19,6 +23,8 @@ identity pointwise, so dominated convergence gives energy convergence on every w
 * `LevyStochCalc.Brownian.Ito.tendsto_energy_clampAt_sub` — the clamped integrand converges to
   the integrand in energy.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

@@ -1,0 +1,72 @@
+import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
+import Lean
+
+open Lean Elab Command Meta
+
+/-- Reconstruct names emitted by the old observer (no quoted/numeric name components occur). -/
+def readName (s : String) : Name :=
+  (s.splitOn ".").foldl Name.mkStr Name.anonymous
+
+/-- Decode exactly the old full types, ignoring only binder alpha names and mdata. -/
+partial def decode (j : Json) : Except String Expr := do
+  if let .ok n := j.getObjValAs? Nat "bvar" then return .bvar n
+  if let .ok n := j.getObjValAs? Nat "sort" then return .sort (Level.ofNat n)
+  if let .ok n := j.getObjValAs? Nat "nat" then return .lit (.natVal n)
+  if let .ok n := j.getObjValAs? String "const" then
+    let us ← j.getObjValAs? (List Nat) "levels"
+    return .const (readName n) (us.map Level.ofNat)
+  if let .ok xs := (j.getObjVal? "app").bind Json.getArr? then
+    unless xs.size == 2 do throw "Invalid app arity"
+    return .app (← decode xs[0]!) (← decode xs[1]!)
+  if let .ok xs := (j.getObjVal? "forall").bind Json.getArr? then
+    unless xs.size == 3 do throw "Invalid forall arity"
+    let bi ← xs[0]!.getStr?
+    let bi ← match bi with
+      | "Lean.BinderInfo.default" => pure BinderInfo.default
+      | "Lean.BinderInfo.implicit" => pure BinderInfo.implicit
+      | "Lean.BinderInfo.strictImplicit" => pure BinderInfo.strictImplicit
+      | "Lean.BinderInfo.instImplicit" => pure BinderInfo.instImplicit
+      | _ => throw "Unexpected binder info"
+    return .forallE Name.anonymous (← decode xs[1]!) (← decode xs[2]!) bi
+  if let .ok xs := (j.getObjVal? "lam").bind Json.getArr? then
+    unless xs.size == 3 do throw "Invalid lam arity"
+    let bi ← xs[0]!.getStr?
+    let bi ← match bi with
+      | "Lean.BinderInfo.default" => pure BinderInfo.default
+      | "Lean.BinderInfo.implicit" => pure BinderInfo.implicit
+      | "Lean.BinderInfo.strictImplicit" => pure BinderInfo.strictImplicit
+      | "Lean.BinderInfo.instImplicit" => pure BinderInfo.instImplicit
+      | _ => throw "Unexpected lambda binder info"
+    return .lam Name.anonymous (← decode xs[1]!) (← decode xs[2]!) bi
+  if let .ok xs := (j.getObjVal? "proj").bind Json.getArr? then
+    unless xs.size == 3 do throw "Invalid proj arity"
+    return .proj (readName (← xs[0]!.getStr?)) (← xs[1]!.getNat?) (← decode xs[2]!)
+  throw "Unexpected old expression node"
+
+set_option maxRecDepth 100000 in
+set_option maxHeartbeats 0 in
+run_cmd do
+  let some inp ← liftIO (IO.getEnv "KLS_OLD_EXPRESSIONS") | throwError "KLS_OLD_EXPRESSIONS required"
+  let bytes ← liftIO (IO.FS.readFile inp)
+  let j ← match Json.parse bytes with | .ok j => pure j | .error s => throwError s
+  let rows ← match j.getArr? with | .ok a => pure a | .error s => throwError s
+  let expected : Array String := #["FunctionalInequalities.Analysis.centeredDifference_contDiff_lipschitz_gradient", "FunctionalInequalities.Analysis.centeredDifference_nonneg_le", "FunctionalInequalities.Probability.Stein.measurable_hessianMatrix_entry", "FunctionalInequalities.Probability.Stein.norm_hessianMatrix_entry_le_of_lipschitz_gradient", "FunctionalInequalities.Analysis.integrable_hessian_increment_energy", "FunctionalInequalities.Analysis.integrable_weak_generator_densities", "FunctionalInequalities.Analysis.integral_mul_hessian_increment_le"]
+  unless rows.size == expected.size do throwError "Expected exactly seven old types"
+  for i in [:rows.size] do
+    let row := rows[i]!
+    let name ← match row.getObjValAs? String "name" with | .ok s => pure s | .error s => throwError s
+    unless name == expected[i]! do throwError "Unexpected old type name/order"
+    liftTermElabM do
+      let raw ← match row.getObjVal? "shape" with | .ok a => pure a | .error s => throwError s
+      let legacy ← match decode raw with | .ok a => pure a | .error s => throwError s
+      checkWithKernel legacy
+      let ci ← getConstInfo (readName name)
+      unless ci.levelParams.isEmpty do throwError "Unexpected universe parameter"
+      unless (← isDefEq legacy ci.type) do throwError "Reconstructed old type not definitionally equal"
+      let p := mkSort Level.zero
+      let ty := mkApp3 (mkConst ``Eq [Level.one]) p legacy ci.type
+      let value := mkApp2 (mkConst ``Eq.refl [Level.one]) p legacy
+      let auditName := Name.mkStr (Name.mkSimple "HessianLegacyTypeAudit") ("typeEq_" ++ toString i)
+      addDecl (.thmDecl { name := auditName, levelParams := [], type := ty, value := value })
+      logInfo m!"KERNEL_TYPE_EQUAL: {name}"
+  logInfo "SEVEN_LEGACY_TYPES_CHECKED"

@@ -1,7 +1,9 @@
-import FunctionalInequalities.Poincare.Product.Geometry
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Constructions.Pi
+module
+
+public import FunctionalInequalities.Poincare.Product.Geometry
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.MeasureTheory.Constructions.Pi
 
 /-!
 # Dependent finite Hilbert products
@@ -18,6 +20,8 @@ They use Mathlib's pinned v4.33.0
 [dependent product measures](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Constructions/Pi.lean),
 and [transported measurable structures](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Analysis/Normed/Lp/MeasurableSpace.lean).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -38,7 +42,7 @@ instance piMeasure_isProbabilityMeasure {ι : Type*} [Fintype ι] {E : ι → Ty
     [∀ i, MeasurableSpace (E i)] (μ : ∀ i, Measure (E i))
     [∀ i, IsProbabilityMeasure (μ i)] : IsProbabilityMeasure (piMeasure μ) := by
   rw [piMeasure]
-  exact Measure.isProbabilityMeasure_map (WithLp.measurable_toLp 2 (∀ i, E i)).aemeasurable
+  exact (Measure.isProbabilityMeasure_map_iff (WithLp.measurable_toLp 2 (∀ i, E i)).aemeasurable).2 inferInstance
 
 section Coordinates
 

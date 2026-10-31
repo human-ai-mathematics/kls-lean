@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent full-signature clients for nonlinear L2 differentiation and heat interpolation. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 set_option maxHeartbeats 800000
@@ -50,20 +54,22 @@ theorem interpolation (hνU : (ν : Measure V) = m.tilted (-U))
         WeakGamma.apply (T ⟨_, F.2.2⟩) (T ⟨_, F.2.2⟩) x ∂(ν : Measure V)) s :=
   hasDerivAt_integral_operator_comp m hν hi hνU hU hΦ hΦ0 hM hC hbound ψ hψb f hs hst
 
-theorem gaussian_l2 {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
-    (f : Lp ℝ 2 (ν : Measure V))
-    (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) (1 - 2 * ε))
-    {t : ℝ} (ht : 0 < t) :
+theorem gaussian_l2 {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2) (f : Lp ℝ 2 (ν : Measure V))
+    (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) (1 - 2 * ε)) {t : ℝ} (ht : 0 < t) :
     let T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-    let P := Generated.apply T (hν.closedWeightedOperator_isClosed m _ hi)
-      (hν.dense_domain_closedWeightedOperator m _ hi)
+    let P :=
+      Generated.apply T (hν.closedWeightedOperator_isClosed m _ hi)
+        (hν.dense_domain_closedWeightedOperator m _ hi)
     let F : (adjointComp T).domain :=
-      ⟨P t f, Generated.mem_adjointComp_domain_apply_of_pos T
-        (hν.closedWeightedOperator_isClosed m _ hi) (hν.dense_domain_closedWeightedOperator m _ hi) f ht⟩
-    ∃ G : ℝ → Lp ℝ 2 (ν : Measure V), ∃ w : Lp ℝ 2 (ν : Measure V),
-      (∀ r : ℝ, 0 < r → ∀ᵐ x ∂(ν : Measure V), G r x = shifted ε (P r f x)) ∧
-      (∀ᵐ x ∂(ν : Measure V), w x = quantile (P t f x + ε) * (adjointComp T F) x) ∧
-      HasDerivAt G w t :=
+      ⟨P t f,
+        Generated.mem_adjointComp_domain_apply_of_pos T
+          (hν.closedWeightedOperator_isClosed m _ hi)
+          (hν.dense_domain_closedWeightedOperator m _ hi) f ht⟩
+    ∃ G : ℝ → Lp ℝ 2 (ν : Measure V),
+      ∃ w : Lp ℝ 2 (ν : Measure V),
+        (∀ r : ℝ, 0 < r → ∀ᵐ x ∂(ν : Measure V), G r x = shifted ε (P r f x)) ∧
+          (∀ᵐ x ∂(ν : Measure V), w x = quantile (P t f x + ε) * (adjointComp T F) x) ∧
+            HasDerivAt G w t :=
   exists_hasDerivAt_shifted_operator m hν hi hε hε' f hf ht
 
 theorem gaussian_interpolation (hνU : (ν : Measure V) = m.tilted (-U))

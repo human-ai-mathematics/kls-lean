@@ -1,16 +1,23 @@
-import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.Probability.Posterior.LogPartition
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.Coefficients
+public import FunctionalInequalities.Probability.Posterior.LogPartition
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.Probability.Diffusion.Generator
 /-!
 # BKL (71) in generator form
 
-For every `z`, the generator of the localization equations (67) applied to the posterior log-Laplace transform
+For every `z`, the generator of the localization equations (67) applied to the posterior log-Laplace
+transform
 `Λ_p(z) = ψ(c + z, Q) − ψ(c, Q)` equals `−½ ⟪v, A⁻¹ v⟫` with `v = a(c + z, Q) − a(c, Q)`
-(`generator_logLaplace_posterior`): `∫ e^{⟪z,x⟫} dμ_p = e^{Λ_p(z)}` has zero generator by the generator cancellation
-of the posterior, and the chain rule for `exp` gives the formula. Includes partial-derivative helpers on the parameter
+(`generator_logLaplace_posterior`): `∫ e^{⟪z,x⟫} dμ_p = e^{Λ_p(z)}` has zero generator by the
+generator cancellation
+of the posterior, and the chain rule for `exp` gives the formula. Includes partial-derivative
+helpers on the parameter
 space.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -28,12 +35,14 @@ section Bridges
 variable {E L : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup L]
   [NormedSpace ℝ L]
 
-/-- The joint derivative in a first-factor direction is the partial derivative in the first factor. -/
+/--
+The joint derivative in a first-factor direction is the partial derivative in the first factor. -/
 theorem fderiv_fst_dir (H : E × L → ℝ) (p : E × L) (hH : DifferentiableAt ℝ H p) (u : E) :
     fderiv ℝ H p (u, 0) = fderiv ℝ (fun y => H (y, p.2)) p.1 u := by
   have h := hH.hasFDerivAt.comp p.1 (hasFDerivAt_prodMk_left (𝕜 := ℝ) p.1 p.2)
-  have h' : fderiv ℝ (fun y => H (y, p.2)) p.1 =
-      (fderiv ℝ H p).comp (ContinuousLinearMap.inl ℝ E L) := h.fderiv
+  have h' :
+    fderiv ℝ (fun y => H (y, p.2)) p.1 = (fderiv ℝ H p).comp (ContinuousLinearMap.inl ℝ E L) :=
+    h.fderiv
   rw [h']
   simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.inl_apply]
 
@@ -97,7 +106,8 @@ section Trace
 variable {n : ℕ}
 
 /-- Trace rearrangement `Σ_k B(σ e_k, σ e_k) = Σ_i B(σ σ e_i, e_i)` for a self-adjoint `σ`. -/
-theorem sum_bilin_inverseSqrt_eq (B : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n) →ₗ[ℝ] ℝ)
+theorem sum_bilin_inverseSqrt_eq
+    (B : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n) →ₗ[ℝ] ℝ)
     (σ : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
     (hσ : ∀ u v, ⟪σ u, v⟫ = ⟪u, σ v⟫) :
     ∑ k, B (σ (EuclideanSpace.single k 1)) (σ (EuclideanSpace.single k 1)) =
@@ -239,13 +249,19 @@ include hc in
 theorem posteriorExpectation_exp_inner_eq_exp (z : EuclideanSpace ℝ (Fin n)) (q : Param n) :
     posteriorExpectation μ q.1 q.2 (fun x => Real.exp ⟪z, x⟫) =
       Real.exp (logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2) := by
-  have hpos : ∀ (c : EuclideanSpace ℝ (Fin n)) (Q : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)),
+  have hpos :
+    ∀ (c : EuclideanSpace ℝ (Fin n))
+      (Q : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)),
       0 < ∫ x, Real.exp (quadraticExponent c Q x) ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) :=
-    fun c Q => integral_exp_pos (integrable_exp_of_compact μ hc (by
-      unfold quadraticExponent
-      fun_prop))
-  have heq : (fun x : EuclideanSpace ℝ (Fin n) =>
-      Real.exp (quadraticExponent q.1 q.2 x) * Real.exp ⟪z, x⟫) =
+    fun c Q =>
+    integral_exp_pos
+      (integrable_exp_of_compact μ hc
+        (by
+          unfold quadraticExponent
+          fun_prop))
+  have heq :
+    (fun x : EuclideanSpace ℝ (Fin n) =>
+        Real.exp (quadraticExponent q.1 q.2 x) * Real.exp ⟪z, x⟫) =
       fun x => Real.exp (quadraticExponent (q.1 + z) q.2 x) := by
     funext x
     rw [← Real.exp_add]
@@ -253,7 +269,8 @@ theorem posteriorExpectation_exp_inner_eq_exp (z : EuclideanSpace ℝ (Fin n)) (
     simp only [quadraticExponent, inner_add_left]
     ring
   unfold posteriorExpectation logPartition
-  rw [integral_tilted_eq_div, heq, Real.exp_sub, Real.exp_log (hpos _ _), Real.exp_log (hpos _ _)]
+  rw [integral_tilted_eq_div, heq, Real.exp_sub, Real.exp_log (hpos _ _),
+    Real.exp_log (hpos _ _)]
 
 include hc in
 /-- Joint smoothness of the log-Laplace transform `Λ(q) = ψ(q.1 + z, q.2) − ψ(q.1, q.2)`. -/
@@ -270,10 +287,13 @@ theorem contDiff_logLaplace_joint (z : EuclideanSpace ℝ (Fin n)) :
   exact h1'.sub hjoint
 
 include hc in
-/-- `D_c Λ[u] = ⟪u, a(c + z, Q) − a(c, Q)⟫` for the log-Laplace transform `Λ(q) = ψ(q.1 + z, q.2) − ψ(q.1, q.2)`. -/
+/--
+`D_c Λ[u] = ⟪u, a(c + z, Q) − a(c, Q)⟫` for the log-Laplace transform `Λ(q) = ψ(q.1 + z, q.2) −
+ψ(q.1, q.2)`. -/
 theorem fderiv_logLaplace_fst_dir (z : EuclideanSpace ℝ (Fin n)) (p : Param n)
     (u : EuclideanSpace ℝ (Fin n)) :
-    fderiv ℝ (fun q : Param n => logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2) p (u, 0) =
+    fderiv ℝ (fun q : Param n => logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2) p
+        (u, 0) =
       ⟪u, posteriorMean μ (p.1 + z) p.2 - posteriorMean μ p.1 p.2⟫ := by
   have hjoint := contDiff_logPartition_joint μ hc
   have hψ : ContDiff ℝ ∞ (fun y : EuclideanSpace ℝ (Fin n) => logPartition μ y p.2) := by
@@ -290,27 +310,38 @@ theorem fderiv_logLaplace_fst_dir (z : EuclideanSpace ℝ (Fin n)) (p : Param n)
     rfl
   have hΛ := contDiff_logLaplace_joint μ hc z
   rw [fderiv_fst_dir _ p (hΛ.differentiable (by norm_num) p) u]
-  change fderiv ℝ (fun y : EuclideanSpace ℝ (Fin n) =>
-    logPartition μ (y + z) p.2 - logPartition μ y p.2) p.1 u = _
-  rw [fderiv_fun_sub (hψz.differentiable (by norm_num) p.1) (hψ.differentiable (by norm_num) p.1),
+  change
+    fderiv ℝ
+        (fun y : EuclideanSpace ℝ (Fin n) => logPartition μ (y + z) p.2 - logPartition μ y p.2)
+        p.1 u =
+      _
+  rw [fderiv_fun_sub (hψz.differentiable (by norm_num) p.1)
+      (hψ.differentiable (by norm_num) p.1),
     sub_apply,
     fderiv_comp_add_right (f := fun y : EuclideanSpace ℝ (Fin n) => logPartition μ y p.2) z,
     fderiv_logPartition_c_apply μ hc, fderiv_logPartition_c_apply μ hc, inner_sub_right]
 
-/-- **BKL (71) in generator form**: for every `z`, the generator of (67) applied to the log-Laplace
+/--
+**BKL (71) in generator form**: for every `z`, the generator of (67) applied to the log-Laplace
 transform of the posterior, `Λ_p(z) = ψ(c + z, Q) − ψ(c, Q)`, is `−½ ⟪v, A⁻¹ v⟫` with
-`v = a(c + z, Q) − a(c, Q)` (the drift of `dΛ_t(z)` in (71)); every parameter `p`, isotropic compact prior. -/
+`v = a(c + z, Q) − a(c, Q)` (the drift of `dΛ_t(z)` in (71)); every parameter `p`, isotropic compact
+prior. -/
 theorem generator_logLaplace_posterior (hiso : KLS.Isotropic μ) (z : EuclideanSpace ℝ (Fin n))
     (p : Param n) :
-    generator μ hc (fun q : Param n => logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2) p =
-      -(1 / 2 : ℝ) * ⟪posteriorMean μ (p.1 + z) p.2 - posteriorMean μ p.1 p.2,
-        Ring.inverse (cov μ hc p) (posteriorMean μ (p.1 + z) p.2 - posteriorMean μ p.1 p.2)⟫ := by
+    generator μ hc (fun q : Param n => logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2)
+        p =
+      -(1 / 2 : ℝ) *
+        ⟪posteriorMean μ (p.1 + z) p.2 - posteriorMean μ p.1 p.2,
+          Ring.inverse (cov μ hc p)
+            (posteriorMean μ (p.1 + z) p.2 - posteriorMean μ p.1 p.2)⟫ := by
   obtain ⟨hσ, hM⟩ := inverseSqrt_cov_props μ hc hiso p
-  set Λ : Param n → ℝ := fun q => logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2 with hΛdef
+  set Λ : Param n → ℝ := fun q => logPartition μ (q.1 + z) q.2 - logPartition μ q.1 q.2 with
+    hΛdef
   set v := posteriorMean μ (p.1 + z) p.2 - posteriorMean μ p.1 p.2 with hvdef
   have hΛ : ContDiff ℝ ∞ Λ := contDiff_logLaplace_joint μ hc z
   have hΛ2 : ContDiff ℝ 2 Λ := hΛ.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hF : (fun q : Param n => posteriorExpectation μ q.1 q.2 (fun x => Real.exp ⟪z, x⟫)) =
+  have hF :
+    (fun q : Param n => posteriorExpectation μ q.1 q.2 (fun x => Real.exp ⟪z, x⟫)) =
       Real.exp ∘ Λ := by
     funext q
     exact posteriorExpectation_exp_inner_eq_exp μ hc z q
@@ -319,15 +350,19 @@ theorem generator_logLaplace_posterior (hiso : KLS.Isotropic μ) (z : EuclideanS
   unfold generator at hzero
   rw [diffusionGenerator_comp _ _ Real.exp Λ p Real.contDiff_exp hΛ2] at hzero
   simp only [fderiv_exp_apply', fderiv_fderiv_exp_apply, smul_eq_mul] at hzero
-  have hd : ∀ k, fderiv ℝ Λ p (noise μ hc p k) =
-      ⟪inverseSqrt (cov μ hc p) (EuclideanSpace.single k 1), v⟫ := by
+  have hd :
+    ∀ k,
+      fderiv ℝ Λ p (noise μ hc p k) =
+        ⟪inverseSqrt (cov μ hc p) (EuclideanSpace.single k 1), v⟫ := by
     intro k
     exact fderiv_logLaplace_fst_dir μ hc z p _
-  have hsum : ∑ k, fderiv ℝ Λ p (noise μ hc p k) * fderiv ℝ Λ p (noise μ hc p k) =
+  have hsum :
+    ∑ k, fderiv ℝ Λ p (noise μ hc p k) * fderiv ℝ Λ p (noise μ hc p k) =
       ⟪v, Ring.inverse (cov μ hc p) v⟫ := by
     simp only [hd]
     rw [sum_inner_inverseSqrt_sq _ hσ v, hM]
-  have hS : ∑ k, Real.exp (Λ p) * fderiv ℝ Λ p (noise μ hc p k) * fderiv ℝ Λ p (noise μ hc p k) =
+  have hS :
+    ∑ k, Real.exp (Λ p) * fderiv ℝ Λ p (noise μ hc p k) * fderiv ℝ Λ p (noise μ hc p k) =
       Real.exp (Λ p) * ⟪v, Ring.inverse (cov μ hc p) v⟫ := by
     rw [← hsum, Finset.mul_sum]
     simp only [mul_assoc]

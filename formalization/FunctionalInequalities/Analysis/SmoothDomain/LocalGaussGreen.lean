@@ -1,14 +1,17 @@
-import FunctionalInequalities.Analysis.SmoothDomain.BoundaryChart
-import FunctionalInequalities.Analysis.Graph.Divergence
-import FunctionalInequalities.Analysis.Graph.Integral
-import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
+module
+
+public import FunctionalInequalities.Analysis.SmoothDomain.BoundaryChart
+public import FunctionalInequalities.Analysis.Graph.Divergence
+public import FunctionalInequalities.Analysis.Graph.Integral
+public import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
 
 /-!
 # Gauss–Green for a vector field supported in one boundary chart
 
 Application layer: the subgraph divergence formula of `Analysis/Graph/Divergence.lean` and the
 weighted boundary change of variables of `Analysis/Graph/Integral.lean`, connected to the local
-`C^∞` boundary chart of `Analysis/SmoothDomain/BoundaryChart.lean`.  Every statement here is proved and
+`C^∞` boundary chart of `Analysis/SmoothDomain/BoundaryChart.lean`.  Every statement here is proved
+and
 uses only the standard axioms; the module contains **no** hole.
 
 ## What is proved, and what is not
@@ -22,7 +25,8 @@ frontier point `x₀`, a boundary chart `C` at `x₀` and a compactly supported 
 This is the *local* identity.  It is **not** the Gauss–Green theorem for an arbitrary compactly
 supported field: that needs in addition a finite smooth partition of unity subordinate to a cover
 of the support, which this module does not provide.  The gluing is done one level up, in
-`Analysis/SmoothDomain/GaussGreen.lean`, where this identity supplies the boundary blocks of the cover and
+`Analysis/SmoothDomain/GaussGreen.lean`, where this identity supplies the boundary blocks of the
+cover and
 the interior and exterior blocks are handled separately; the global theorem there is proved.
 
 ## The two localizations
@@ -48,6 +52,8 @@ Boundary-side integrability is never assumed: the change of variables of
 indicator functions, so nothing here supposes that `∂U` has finite total surface measure.  The
 domain is not assumed bounded and `V` is not assumed nontrivial.
 -/
+
+@[expose] public section
 
 noncomputable section
 

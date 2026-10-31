@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Line.SharpHardy
-import FunctionalInequalities.KLS.LogConcave.Line.Poincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.SharpHardy
+public import FunctionalInequalities.KLS.LogConcave.Line.Poincare
 
 /-!
 # The sharp one-dimensional log-concave Poincaré bound `C_P^lit(ν) ≤ 4 Var_ν`
@@ -18,6 +20,8 @@ since `∫ f'² dν` is absolutely continuous with respect to `ν`. A `(1 + δ)`
 then yields `Var f ≤ 4 · Var_ν · ∫ f'² dν`. The zero-dimensional (Dirac) case is handled as in the
 constant-`12` module; the historical constant `12` becomes a corollary.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -276,11 +280,13 @@ theorem smoothTest_holds_four_variance (hν : LogConcave ν)
 /-- Blueprint `thm:one-dimensional-logconcave-poincare`: every log-concave law on the line has
 literature Poincaré constant at most `4 · Var_ν(id)`, the zero-variance (Dirac) case included. -/
 theorem localSlope_constant_le_four_variance (hν : LogConcave ν) :
-    Poincare.LocalSlope.Intrinsic.constant ν ≤ ENNReal.ofReal (4 * variance id (ν : Measure ℝ)) := by
+    Poincare.LocalSlope.Intrinsic.constant ν ≤
+      ENNReal.ofReal (4 * variance id (ν : Measure ℝ)) := by
   rcases hν.direction_eq_bot_or_interior_support_nonempty with hbot | hi
   · rw [Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_direction_eq_bot ν hbot]
     exact bot_le
-  · have h4 : 0 ≤ 4 * variance id (ν : Measure ℝ) := mul_nonneg (by norm_num) (variance_nonneg _ _)
+  · have h4 : 0 ≤ 4 * variance id (ν : Measure ℝ) :=
+      mul_nonneg (by norm_num) (variance_nonneg _ _)
     rw [← hν.smoothTest_constant_eq_localSlope, ENNReal.ofReal_eq_coe_nnreal h4]
     exact Poincare.SmoothTest.constant_le (hν.smoothTest_holds_four_variance hi)
 

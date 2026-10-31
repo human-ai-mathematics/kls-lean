@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientFreezing
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientFreezing
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Coordinate form of the coefficient-freezing error
@@ -19,6 +21,8 @@ Theorem 6.2, pp. 90–92, equations (6.17)–(6.19):
 Only the principal part is treated; lower-order terms, ellipticity and the Schauder estimate
 itself are not part of this module.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric
 namespace FunctionalInequalities.Analysis

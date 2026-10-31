@@ -1,26 +1,28 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Boundary
-import Mathlib.Algebra.Order.Archimedean.Real.Hom
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
-import Mathlib.Analysis.Calculus.Deriv.AffineMap
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Convex.Contractible
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.Dual
-import Mathlib.Analysis.LocallyConvex.Separation
-import Mathlib.Analysis.Normed.MulAction
-import Mathlib.Analysis.Normed.Order.Lattice
-import Mathlib.LinearAlgebra.AffineSpace.Slope
-import Mathlib.LinearAlgebra.Dimension.Finite
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import Mathlib.MeasureTheory.Measure.Tilted
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.RingTheory.Flat.TorsionFree
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Topology.MetricSpace.HausdorffDistance
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Boundary
+public import Mathlib.Algebra.Order.Archimedean.Real.Hom
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
+public import Mathlib.Analysis.Calculus.Deriv.AffineMap
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Convex.Contractible
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.InnerProductSpace.Dual
+public import Mathlib.Analysis.LocallyConvex.Separation
+public import Mathlib.Analysis.Normed.MulAction
+public import Mathlib.Analysis.Normed.Order.Lattice
+public import Mathlib.LinearAlgebra.AffineSpace.Slope
+public import Mathlib.LinearAlgebra.Dimension.Finite
+public import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import Mathlib.Order.CompletePartialOrder
+public import Mathlib.RingTheory.Flat.TorsionFree
+public import Mathlib.RingTheory.SimpleRing.Principal
+public import Mathlib.Topology.MetricSpace.HausdorffDistance
 
 
 /-! # Alexandrov maximum principles and convex cone-volume geometry
@@ -29,6 +31,8 @@ Supporting convex geometry for Letwin arXiv:2607.24164v1 Lemma 2.2
 via Berman--Berndtsson arXiv:1207.6128v1 Theorem 2.24(ii).
 Each statement retains its actual hypotheses and dimensional scope.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -101,17 +105,18 @@ open scoped RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
 /-- **Sliding lemma for the Alexandrov maximum principle** (Caffarelli's argument):
-if `u` is convex, `u ≥ 0` on the frontier of a bounded open `Ω`, `u x₀ < 0` at some `x₀ ∈ Ω`, and the
-affine function `x ↦ u x₀ + ⟪p, x − x₀⟫` is `≤ 0` on `closure Ω`, then `p` is a subgradient of `u` at
-some point of `Ω`. In particular, `closedBall 0 (-u x₀ / diam Ω) ⊆ ∂u(Ω)`, and the cone over the ball
+if `u` is convex, `u ≥ 0` on the frontier of a bounded open `Ω`, `u x₀ < 0` at some `x₀ ∈ Ω`, and
+the
+affine function `x ↦ u x₀ + ⟪p, x − x₀⟫` is `≤ 0` on `closure Ω`, then `p` is a subgradient of `u`
+at
+some point of `Ω`. In particular, `closedBall 0 (-u x₀ / diam Ω) ⊆ ∂u(Ω)`, and the cone over the
+ball
 with apex in the direction of a nearest boundary point is contained in `∂u(Ω)`. -/
-private lemma exists_interior_support_of_affine_le_on_frontier
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    {u : E → ℝ} {Ω : Set E} (huc : ContinuousOn u (closure Ω))
-    (hb : Bornology.IsBounded Ω) (hfr : ∀ x ∈ frontier Ω, 0≤u x)
-    {x₀ : E} (hx₀ : x₀∈Ω) {p : E}
-    (hp : ∀ x∈closure Ω,u x₀+⟪p,x-x₀⟫≤0) :
-    ∃ x∈Ω,∀ y∈Ω,u x+⟪p,y-x⟫≤u y := by
+private lemma exists_interior_support_of_affine_le_on_frontier {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+    {Ω : Set E} (huc : ContinuousOn u (closure Ω)) (hb : Bornology.IsBounded Ω)
+    (hfr : ∀ x ∈ frontier Ω, 0 ≤ u x) {x₀ : E} (hx₀ : x₀ ∈ Ω) {p : E}
+    (hp : ∀ x ∈ closure Ω, u x₀ + ⟪p, x - x₀⟫ ≤ 0) : ∃ x ∈ Ω, ∀ y ∈ Ω, u x + ⟪p, y - x⟫ ≤ u y := by
   let ell : E → ℝ := fun x => u x₀ + ⟪p, x - x₀⟫
   let w : E → ℝ := fun x => u x - ell x
   have hellc : ContinuousOn ell (closure Ω) := by
@@ -121,12 +126,9 @@ private lemma exists_interior_support_of_affine_le_on_frontier
     dsimp [w]
     exact huc.sub hellc
   have hcompact : IsCompact (closure Ω) := hb.isCompact_closure
-  have hne : (closure Ω).Nonempty :=
-    ⟨x₀, subset_closure hx₀⟩
-  obtain ⟨x₁, hx₁, hmin₁⟩ :=
-    hcompact.exists_isMinOn hne hwc
-  have hw₀ : w x₀ = 0 := by
-    simp [w, ell]
+  have hne : (closure Ω).Nonempty := ⟨x₀, subset_closure hx₀⟩
+  obtain ⟨x₁, hx₁, hmin₁⟩ := hcompact.exists_isMinOn hne hwc
+  have hw₀ : w x₀ = 0 := by simp [w, ell]
   have hle₁ : w x₁ ≤ 0 := by
     calc
       w x₁ ≤ w x₀ := hmin₁ (subset_closure hx₀)
@@ -136,8 +138,7 @@ private lemma exists_interior_support_of_affine_le_on_frontier
     change 0 ≤ u x - ell x
     apply sub_nonneg.mpr
     calc
-      ell x ≤ 0 := by
-        simpa [ell] using hp x (frontier_subset_closure hx)
+      ell x ≤ 0 := by simpa [ell] using hp x (frontier_subset_closure hx)
       _ ≤ u x := hfr x hx
   have hex : ∃ x₂ ∈ Ω, IsMinOn w (closure Ω) x₂ := by
     by_cases h₁fr : x₁ ∈ frontier Ω
@@ -163,14 +164,15 @@ private lemma exists_interior_support_of_affine_le_on_frontier
 
 theorem mem_subgradientImage_of_affine_le_of_nonneg_frontier {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω)
-    (hfr : ∀ x ∈ frontier Ω, 0 ≤ u x) {x₀ : E} (hx₀ : x₀ ∈ Ω) (hneg : u x₀ < 0)
-    {p : E} (hp : ∀ x ∈ closure Ω, u x₀ + ⟪p, x - x₀⟫ ≤ 0) : p ∈ subgradientImage u Ω := by
-  have _hneg : u x₀<0 := hneg
+    {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω) (hfr : ∀ x ∈ frontier Ω, 0 ≤ u x)
+    {x₀ : E} (hx₀ : x₀ ∈ Ω) (hneg : u x₀ < 0) {p : E}
+    (hp : ∀ x ∈ closure Ω, u x₀ + ⟪p, x - x₀⟫ ≤ 0) : p ∈ subgradientImage u Ω := by
+  have _hneg : u x₀ < 0 := hneg
   have hu : Continuous u := continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
-  obtain ⟨x,hx,hp⟩ := exists_interior_support_of_affine_le_on_frontier
-    hu.continuousOn hb hfr hx₀ hp
-  exact ⟨x,hx,fun y => subgradient_le_on_of_isOpen hconv hΩ (subset_univ _) hx hp y (mem_univ y)⟩
+  obtain ⟨x, hx, hp⟩ :=
+    exists_interior_support_of_affine_le_on_frontier hu.continuousOn hb hfr hx₀ hp
+  exact
+    ⟨x, hx, fun y => subgradient_le_on_of_isOpen hconv hΩ (subset_univ _) hx hp y (mem_univ y)⟩
 
 end FunctionalInequalities.Analysis
 
@@ -342,6 +344,8 @@ theorem exists_pos_volume_convexHull_closedBall_union_singleton_ge {E : Type*}
     refine ⟨c, hc, ?_⟩
     intro r hr q hq
     have hqpos : 0 < ‖q‖ := lt_of_lt_of_le hr hq
+
+    -- Normalize the direction of the added point.
     let e : E := ‖q‖⁻¹ • q
     have he : ‖e‖ = 1 := by
       dsimp [e]
@@ -359,6 +363,8 @@ theorem exists_pos_volume_convexHull_closedBall_union_singleton_ge {E : Type*}
     have hN : (N : ℝ) ≤ ‖q‖ / (4 * r) := by
       dsimp [N]
       exact Nat.floor_le (by positivity)
+
+    -- Place a family of balls inside the convex hull.
     have hball :
         ∀ k ∈ Finset.range (N + 1),
           closedBall (C k) (r / 2) ⊆
@@ -497,6 +503,8 @@ theorem exists_pos_volume_convexHull_closedBall_union_singleton_ge {E : Type*}
           MeasurableSet (closedBall (C k) (r / 2)) := by
       intro k hk
       exact isClosed_closedBall.measurableSet
+
+    -- Estimate the volume of the packed balls and restore the dimensional constant.
     have hunion :
         volume (⋃ k ∈ Finset.range (N + 1), closedBall (C k) (r / 2)) =
           ∑ k ∈ Finset.range (N + 1), volume (closedBall (C k) (r / 2)) :=
@@ -909,50 +917,57 @@ private lemma alexandrov_maximum_principle_core
 
 /-- **Alexandrov maximum principle on a domain** with only closure convexity and
 closure continuity. -/
-theorem exists_pos_alexandrov_maximum_principle_domain
-    [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E] :
-    ∃ c : ℝ, 0 < c ∧
-      ∀ (u : E → ℝ) (Ω : Set E), ConvexOn ℝ (closure Ω) u →
-        ContinuousOn u (closure Ω) →
-        IsOpen Ω → Convex ℝ Ω →
-          Bornology.IsBounded Ω →
-          (∀ x ∈ frontier Ω, 0 ≤ u x) →
-          ∀ x₀ ∈ Ω, u x₀ < 0 →
-            ENNReal.ofReal
-                (c * (-u x₀) ^ Module.finrank ℝ E) ≤
-              (volume : Measure E)
-                  (subgradientImageOn u Ω Ω) *
-                ENNReal.ofReal
-                  (diam Ω ^ (Module.finrank ℝ E - 1) *
-                    infDist x₀ (frontier Ω)) := by
-  obtain ⟨c, hc, hcone⟩ :=
-    exists_pos_volume_convexHull_closedBall_union_singleton_ge (E := E)
+theorem exists_pos_alexandrov_maximum_principle_domain [FiniteDimensional ℝ E] [Nontrivial E]
+    [MeasurableSpace E] [BorelSpace E] :
+    ∃ c : ℝ,
+      0 < c ∧
+        ∀ (u : E → ℝ) (Ω : Set E),
+          ConvexOn ℝ (closure Ω) u →
+            ContinuousOn u (closure Ω) →
+              IsOpen Ω →
+                Convex ℝ Ω →
+                  Bornology.IsBounded Ω →
+                    (∀ x ∈ frontier Ω, 0 ≤ u x) →
+                      ∀ x₀ ∈ Ω,
+                        u x₀ < 0 →
+                          ENNReal.ofReal (c * (-u x₀) ^ Module.finrank ℝ E) ≤
+                            (volume : Measure E) (subgradientImageOn u Ω Ω) *
+                              ENNReal.ofReal
+                                (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x₀ (frontier Ω)) := by
+  obtain ⟨c, hc, hcone⟩ := exists_pos_volume_convexHull_closedBall_union_singleton_ge (E := E)
   refine ⟨c, hc, ?_⟩
   intro u Ω hconv huc hΩ hΩconv hb hfr x₀ hx₀ hneg
   have hmem :
-      ∀ p : E, (∀ x ∈ closure Ω,
-        u x₀ + ⟪p, x - x₀⟫ ≤ 0) →
-        p ∈ subgradientImageOn u Ω Ω := by
+    ∀ p : E, (∀ x ∈ closure Ω, u x₀ + ⟪p, x - x₀⟫ ≤ 0) → p ∈ subgradientImageOn u Ω Ω := by
     intro p hp
-    obtain ⟨x,hx,hp⟩ := exists_interior_support_of_affine_le_on_frontier huc hb hfr hx₀ hp
+    obtain ⟨x, hx, hp⟩ := exists_interior_support_of_affine_le_on_frontier huc hb hfr hx₀ hp
     have hclosure := subgradient_le_on_of_isOpen hconv hΩ subset_closure hx hp
-    exact ⟨x,hx,fun y hy => hclosure y (subset_closure hy)⟩
-  exact alexandrov_maximum_principle_core
-    hΩ hΩconv hb hx₀ hneg hmem hc hcone
+    exact ⟨x, hx, fun y hy => hclosure y (subset_closure hy)⟩
+  exact alexandrov_maximum_principle_core hΩ hΩconv hb hx₀ hneg hmem hc hcone
 
 /-- **Alexandrov maximum principle** (Gutiérrez2001, Theorem1.4.2),
 with the original globally convex source and exact public interface. -/
-theorem exists_pos_alexandrov_maximum_principle [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
-    [BorelSpace E] :
-    ∃ c : ℝ, 0 < c ∧ ∀ (u : E → ℝ), ConvexOn ℝ univ u → ∀ (Ω : Set E), IsOpen Ω → Convex ℝ Ω →
-      Bornology.IsBounded Ω → (∀ x ∈ frontier Ω, 0 ≤ u x) → ∀ x₀ ∈ Ω, u x₀ < 0 →
-      ENNReal.ofReal (c * (-u x₀) ^ Module.finrank ℝ E) ≤
-        (volume : Measure E) (subgradientImage u Ω) *
-          ENNReal.ofReal (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x₀ (frontier Ω)) := by
-  obtain ⟨c,hc,hcone⟩ := exists_pos_volume_convexHull_closedBall_union_singleton_ge (E := E)
-  refine ⟨c,hc,?_⟩
+theorem exists_pos_alexandrov_maximum_principle [FiniteDimensional ℝ E] [Nontrivial E]
+    [MeasurableSpace E] [BorelSpace E] :
+    ∃ c : ℝ,
+      0 < c ∧
+        ∀ (u : E → ℝ),
+          ConvexOn ℝ univ u →
+            ∀ (Ω : Set E),
+              IsOpen Ω →
+                Convex ℝ Ω →
+                  Bornology.IsBounded Ω →
+                    (∀ x ∈ frontier Ω, 0 ≤ u x) →
+                      ∀ x₀ ∈ Ω,
+                        u x₀ < 0 →
+                          ENNReal.ofReal (c * (-u x₀) ^ Module.finrank ℝ E) ≤
+                            (volume : Measure E) (subgradientImage u Ω) *
+                              ENNReal.ofReal
+                                (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x₀ (frontier Ω)) := by
+  obtain ⟨c, hc, hcone⟩ := exists_pos_volume_convexHull_closedBall_union_singleton_ge (E := E)
+  refine ⟨c, hc, ?_⟩
   intro u hconv Ω hΩ hΩconv hb hfr x₀ hx₀ hneg
-  have hmem : ∀ p : E,(∀ x∈closure Ω,u x₀+⟪p,x-x₀⟫≤0) → p∈subgradientImage u Ω := by
+  have hmem : ∀ p : E, (∀ x ∈ closure Ω, u x₀ + ⟪p, x - x₀⟫ ≤ 0) → p ∈ subgradientImage u Ω := by
     intro p hp
     exact mem_subgradientImage_of_affine_le_of_nonneg_frontier hconv hΩ hb hfr hx₀ hneg hp
   exact alexandrov_maximum_principle_core hΩ hΩconv hb hx₀ hneg hmem hc hcone
@@ -962,4 +977,3 @@ end InnerProduct
 end FunctionalInequalities.Analysis
 
 end AlexandrovMaximumPrinciple
-

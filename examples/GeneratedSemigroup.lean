@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
 
 /-! Bounded-operator calls for a closed densely defined operator on real Hilbert spaces. -/
+
+@[expose] public section
 noncomputable section
 namespace Examples.GeneratedSemigroup
 open FunctionalInequalities.Analysis.Semigroup
@@ -33,7 +37,8 @@ private theorem zero_closed : (0 : H →ₗ.[ℝ] H).IsClosed := by
   exact isClosed_eq continuous_snd continuous_const
 
 private theorem zero_dense : Dense ((0 : H →ₗ.[ℝ] H).domain : Set H) := by
-  simpa only [LinearPMap.zero_domain, Submodule.top_coe] using (dense_univ : Dense (Set.univ : Set H))
+  simpa only [LinearPMap.zero_domain, Submodule.top_coe] using
+    (dense_univ : Dense (Set.univ : Set H))
 
 example [CompleteSpace H] (f : H) :
     Generated.operator (0 : H →ₗ.[ℝ] H) zero_closed zero_dense (t := 0) le_rfl f = f := by

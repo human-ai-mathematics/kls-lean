@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Consistency
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Consistency
 
 /-! Independent clients of consistency and the actual residual. No quantitative residual
 bound, derivative-loss estimate or mesh-uniform convergence is asserted. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open FunctionalInequalities.Analysis.WaveSplitting

@@ -1,6 +1,8 @@
-import Mathlib.MeasureTheory.Integral.Layercake
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import Mathlib.Analysis.MeanInequalities
+module
+
+public import Mathlib.MeasureTheory.Integral.Layercake
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.Analysis.MeanInequalities
 
 /-!
 # Brunn--Minkowski and Prekopa--Leindler on the line
@@ -18,6 +20,8 @@ truncation.
 
 No ledger, certificate, or Blueprint claim is made by this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -314,37 +318,44 @@ private theorem prekopaLeindler_bddAbove {f g h : ℝ → ℝ} (hf : Measurable 
         mul_le_mul_left hchain _
     _ = ∫⁻ z, ENNReal.ofReal (h z) := hcancel _
 
-/-- **Prekopa-Leindler inequality** on the line: if `f x ^ t * g y ^ (1 - t)` is dominated by `h`
+/--
+**Prekopa-Leindler inequality** on the line: if `f x ^ t * g y ^ (1 - t)` is dominated by `h`
 at the corresponding convex combination of `x` and `y`, then the same holds for the integrals. -/
 theorem prekopaLeindler {f g h : ℝ → ℝ} (hf : Measurable f) (hg : Measurable g)
-    (hh : Measurable h) (hf0 : ∀ x, 0 ≤ f x) (hg0 : ∀ x, 0 ≤ g x)
-    {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
-    (hfgh : ∀ x y, f x ^ t * g y ^ (1 - t) ≤ h (t * x + (1 - t) * y)) :
+    (hh : Measurable h) (hf0 : ∀ x, 0 ≤ f x) (hg0 : ∀ x, 0 ≤ g x) {t : ℝ} (ht0 : 0 < t)
+    (ht1 : t < 1) (hfgh : ∀ x y, f x ^ t * g y ^ (1 - t) ≤ h (t * x + (1 - t) * y)) :
     (∫⁻ x, ENNReal.ofReal (f x)) ^ t * (∫⁻ y, ENNReal.ofReal (g y)) ^ (1 - t) ≤
       ∫⁻ z, ENNReal.ofReal (h z) := by
   have ht1' : (0 : ℝ) < 1 - t := by linarith
   have hNpos : ∀ n : ℕ, (0 : ℝ) < (n : ℝ) + 1 := fun n ↦ by positivity
-  have hstep : ∀ n : ℕ,
+  have hstep :
+    ∀ n : ℕ,
       (∫⁻ x, ENNReal.ofReal (min (f x) ((n : ℝ) + 1))) ^ t *
-        (∫⁻ y, ENNReal.ofReal (min (g y) ((n : ℝ) + 1))) ^ (1 - t) ≤
-      ∫⁻ z, ENNReal.ofReal (h z) := by
+          (∫⁻ y, ENNReal.ofReal (min (g y) ((n : ℝ) + 1))) ^ (1 - t) ≤
+        ∫⁻ z, ENNReal.ofReal (h z) := by
     intro n
     set N : ℝ := (n : ℝ) + 1 with hN
     have hNp : 0 < N := hNpos n
-    refine le_trans (prekopaLeindler_bddAbove (f := fun x ↦ min (f x) N)
-      (g := fun y ↦ min (g y) N) (h := fun z ↦ min (h z) N)
-      (hf.min measurable_const) (hg.min measurable_const) (hh.min measurable_const)
-      (fun x ↦ le_min (hf0 x) hNp.le) (fun y ↦ le_min (hg0 y) hNp.le)
-      ⟨N, by rintro _ ⟨x, rfl⟩; exact min_le_right _ _⟩
-      ⟨N, by rintro _ ⟨y, rfl⟩; exact min_le_right _ _⟩ ht0 ht1 ?_) ?_
+    refine
+      le_trans
+        (prekopaLeindler_bddAbove (f := fun x ↦ min (f x) N) (g := fun y ↦ min (g y) N) (h :=
+          fun z ↦ min (h z) N) (hf.min measurable_const) (hg.min measurable_const)
+          (hh.min measurable_const) (fun x ↦ le_min (hf0 x) hNp.le)
+          (fun y ↦ le_min (hg0 y) hNp.le) ⟨N, by rintro _ ⟨x, rfl⟩; exact min_le_right _ _⟩
+          ⟨N, by rintro _ ⟨y, rfl⟩; exact min_le_right _ _⟩ ht0 ht1 ?_)
+        ?_
     · intro x y
-      refine le_min (le_trans (mul_le_mul
-          (Real.rpow_le_rpow (le_min (hf0 x) hNp.le) (min_le_left _ _) ht0.le)
-          (Real.rpow_le_rpow (le_min (hg0 y) hNp.le) (min_le_left _ _) ht1'.le)
-          (Real.rpow_nonneg (le_min (hg0 y) hNp.le) _) (Real.rpow_nonneg (hf0 x) _)) (hfgh x y)) ?_
-      calc min (f x) N ^ t * min (g y) N ^ (1 - t)
-          ≤ N ^ t * N ^ (1 - t) := mul_le_mul
-            (Real.rpow_le_rpow (le_min (hf0 x) hNp.le) (min_le_right _ _) ht0.le)
+      refine
+        le_min
+          (le_trans
+            (mul_le_mul (Real.rpow_le_rpow (le_min (hf0 x) hNp.le) (min_le_left _ _) ht0.le)
+              (Real.rpow_le_rpow (le_min (hg0 y) hNp.le) (min_le_left _ _) ht1'.le)
+              (Real.rpow_nonneg (le_min (hg0 y) hNp.le) _) (Real.rpow_nonneg (hf0 x) _))
+            (hfgh x y))
+          ?_
+      calc
+        min (f x) N ^ t * min (g y) N ^ (1 - t) ≤ N ^ t * N ^ (1 - t) :=
+          mul_le_mul (Real.rpow_le_rpow (le_min (hf0 x) hNp.le) (min_le_right _ _) ht0.le)
             (Real.rpow_le_rpow (le_min (hg0 y) hNp.le) (min_le_right _ _) ht1'.le)
             (Real.rpow_nonneg (le_min (hg0 y) hNp.le) _) (Real.rpow_nonneg hNp.le _)
         _ = N := by rw [← Real.rpow_add hNp]; norm_num
@@ -353,29 +364,39 @@ theorem prekopaLeindler {f g h : ℝ → ℝ} (hf : Measurable f) (hg : Measurab
     intro a b hab
     have : (a : ℝ) ≤ (b : ℝ) := Nat.cast_le.2 hab
     linarith
-  have hsup : ∀ u : ℝ → ℝ, Measurable u →
-      (⨆ n : ℕ, ∫⁻ x, ENNReal.ofReal (min (u x) ((n : ℝ) + 1))) = ∫⁻ x, ENNReal.ofReal (u x) := by
+  have hsup :
+    ∀ u : ℝ → ℝ,
+      Measurable u →
+        (⨆ n : ℕ, ∫⁻ x, ENNReal.ofReal (min (u x) ((n : ℝ) + 1))) =
+          ∫⁻ x, ENNReal.ofReal (u x) := by
     intro u hu
-    have hlim := lintegral_iSup (μ := (volume : Measure ℝ))
-      (f := fun (n : ℕ) (x : ℝ) ↦ ENNReal.ofReal (min (u x) ((n : ℝ) + 1)))
-      (fun n ↦ (hu.min measurable_const).ennreal_ofReal)
-      (fun a b hab x ↦ ENNReal.ofReal_le_ofReal (min_le_min le_rfl (hcast a b hab)))
+    have hlim :=
+      lintegral_iSup (μ := (volume : Measure ℝ)) (f := fun (n : ℕ) (x : ℝ) ↦
+        ENNReal.ofReal (min (u x) ((n : ℝ) + 1)))
+        (fun n ↦ (hu.min measurable_const).ennreal_ofReal)
+        (fun a b hab x ↦ ENNReal.ofReal_le_ofReal (min_le_min le_rfl (hcast a b hab)))
     rw [← hlim]
     refine lintegral_congr fun x ↦ ?_
     refine le_antisymm (iSup_le fun n ↦ ENNReal.ofReal_le_ofReal (min_le_left _ _)) ?_
     obtain ⟨n, hn⟩ := exists_nat_ge (u x)
     exact le_iSup_of_le n (ENNReal.ofReal_le_ofReal (le_min le_rfl (by linarith)))
-  have hmono : ∀ u : ℝ → ℝ, Monotone fun n : ℕ ↦ ∫⁻ x, ENNReal.ofReal (min (u x) ((n : ℝ) + 1)) :=
-    fun u a b hab ↦ lintegral_mono fun x ↦ ENNReal.ofReal_le_ofReal
-      (min_le_min le_rfl (hcast a b hab))
+  have hmono :
+    ∀ u : ℝ → ℝ, Monotone fun n : ℕ ↦ ∫⁻ x, ENNReal.ofReal (min (u x) ((n : ℝ) + 1)) :=
+    fun u a b hab ↦
+    lintegral_mono fun x ↦ ENNReal.ofReal_le_ofReal (min_le_min le_rfl (hcast a b hab))
   rw [← hsup f hf, ← hsup g hg]
-  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
-  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ←
+    ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _,
+    ENNReal.iSup_mul]
   refine iSup_le fun n ↦ ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun m ↦ ?_
-  refine le_trans (mul_le_mul' (ENNReal.rpow_le_rpow (hmono f (le_max_left n m)) ht0.le)
-    (ENNReal.rpow_le_rpow (hmono g (le_max_right n m)) ht1'.le)) (hstep (max n m))
+  refine
+    le_trans
+      (mul_le_mul' (ENNReal.rpow_le_rpow (hmono f (le_max_left n m)) ht0.le)
+        (ENNReal.rpow_le_rpow (hmono g (le_max_right n m)) ht1'.le))
+      (hstep (max n m))
 
 end PrekopaLeindler
 

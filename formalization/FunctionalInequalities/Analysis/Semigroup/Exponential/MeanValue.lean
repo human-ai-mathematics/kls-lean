@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.SpecialFunctions.Exponential
+module
+
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.SpecialFunctions.Exponential
 
 /-!
 # Mean-value estimates for operator exponentials
@@ -11,6 +13,8 @@ For a bounded operator on a complete real normed space, the error
 The exponential path derivative and the mean-value estimate require no inner product.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 namespace FunctionalInequalities.Analysis.Semigroup
@@ -19,7 +23,9 @@ section MeanValue
 
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [NormedSpace ℝ H₀] [CompleteSpace H₀]
 
-/-- The path `σ ↦ exp (-σ • A) f - f + σ • A f` used in the exponential mean-value bound is differentiable, with derivative
+/--
+The path `σ ↦ exp (-σ • A) f - f + σ • A f` used in the exponential mean-value bound is
+differentiable, with derivative
 `-(exp (-τ • A) (A f)) + A f`.
 
 This is `hasDerivAt_exp_smul_const` for the operator `-A`, evaluated at the fixed vector `f`,
@@ -30,14 +36,18 @@ theorem hasDerivAt_exp_neg_smul_path (A : H₀ →L[ℝ] H₀) (f : H₀) (τ : 
   have hswap : ∀ σ : ℝ, NormedSpace.exp (-σ • A) = NormedSpace.exp (σ • (-A)) := by
     intro σ
     rw [neg_smul, ← smul_neg]
-  have hfun : (fun σ : ℝ => NormedSpace.exp (-σ • A) f - f + σ • A f) =
-      fun σ : ℝ => NormedSpace.exp (σ • (-A)) f - f + σ • A f := by
+  have hfun :
+    (fun σ : ℝ => NormedSpace.exp (-σ • A) f - f + σ • A f) = fun σ : ℝ =>
+      NormedSpace.exp (σ • (-A)) f - f + σ • A f := by
     funext σ
     rw [hswap]
-  have hc : HasDerivAt (fun σ : ℝ => NormedSpace.exp (σ • (-A)))
-      (NormedSpace.exp (τ • (-A)) * (-A)) τ := hasDerivAt_exp_smul_const (𝕂 := ℝ) (-A) τ
-  have hu : HasDerivAt (fun σ : ℝ => NormedSpace.exp (σ • (-A)) f)
-      (-(NormedSpace.exp (τ • (-A)) (A f))) τ := by
+  have hc :
+    HasDerivAt (fun σ : ℝ => NormedSpace.exp (σ • (-A))) (NormedSpace.exp (τ • (-A)) * (-A))
+      τ :=
+    hasDerivAt_exp_smul_const (𝕂 := ℝ) (-A) τ
+  have hu :
+    HasDerivAt (fun σ : ℝ => NormedSpace.exp (σ • (-A)) f) (-(NormedSpace.exp (τ • (-A)) (A f)))
+      τ := by
     have h := hc.clm_apply (hasDerivAt_const τ f)
     simpa using h
   have hs : HasDerivAt (fun σ : ℝ => σ • A f) (A f) τ := by
@@ -47,7 +57,9 @@ theorem hasDerivAt_exp_neg_smul_path (A : H₀ →L[ℝ] H₀) (f : H₀) (τ : 
   refine ((hu.sub_const f).add hs).congr_deriv ?_
   rw [hswap]
 
-/-- **the exponential mean-value bound, for an arbitrary complete normed space.** Let `A` be a bounded operator, `f` a vector,
+/--
+**the exponential mean-value bound, for an arbitrary complete normed space.** Let `A` be a bounded
+operator, `f` a vector,
 `0 ≤ t` and `C : ℝ`. If `‖exp (-τ • A) (A f) - A f‖ ≤ C` for every `τ ∈ [0, t]`, then
 
 `‖exp (-t • A) f - f + t • A f‖ ≤ C * t`.
@@ -59,15 +71,17 @@ theorem norm_exp_neg_smul_sub_add_smul_le (A : H₀ →L[ℝ] H₀) (f : H₀) {
     ‖NormedSpace.exp (-t • A) f - f + t • A f‖ ≤ C * t := by
   have hbd : ∀ τ ∈ Set.Ico (0 : ℝ) t, ‖-(NormedSpace.exp (-τ • A) (A f)) + A f‖ ≤ C := by
     intro τ hτ
-    have hrw : -(NormedSpace.exp (-τ • A) (A f)) + A f =
-        -(NormedSpace.exp (-τ • A) (A f) - A f) := by abel
+    have hrw :
+      -(NormedSpace.exp (-τ • A) (A f)) + A f = -(NormedSpace.exp (-τ • A) (A f) - A f) := by
+      abel
     rw [hrw, norm_neg]
     exact hC τ ⟨hτ.1, hτ.2.le⟩
-  have hmvt := norm_image_sub_le_of_norm_deriv_le_segment'
-    (f := fun σ : ℝ => NormedSpace.exp (-σ • A) f - f + σ • A f)
-    (f' := fun τ : ℝ => -(NormedSpace.exp (-τ • A) (A f)) + A f)
-    (C := C) (fun x _ => (hasDerivAt_exp_neg_smul_path A f x).hasDerivWithinAt) hbd t
-    (Set.right_mem_Icc.mpr ht)
+  have hmvt :=
+    norm_image_sub_le_of_norm_deriv_le_segment' (f := fun σ : ℝ =>
+      NormedSpace.exp (-σ • A) f - f + σ • A f) (f' := fun τ : ℝ =>
+      -(NormedSpace.exp (-τ • A) (A f)) + A f) (C := C)
+      (fun x _ => (hasDerivAt_exp_neg_smul_path A f x).hasDerivWithinAt) hbd t
+      (Set.right_mem_Icc.mpr ht)
   simp only [neg_zero, zero_smul, NormedSpace.exp_zero, one_apply_eq_self, sub_self, add_zero,
     sub_zero] at hmvt
   exact hmvt

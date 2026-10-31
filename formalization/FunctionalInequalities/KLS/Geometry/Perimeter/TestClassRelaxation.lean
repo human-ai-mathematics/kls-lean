@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Transport
-import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Transport
+public import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
 
 /-!
 # Relaxation infima over globally and locally Lipschitz approximants
@@ -28,6 +30,8 @@ targets for every Borel measure for the locally Lipschitz class with global `L¹
 compact set (`compactLocallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top`), the alternative
 classes of ADMG Remark 3.5. Non-proper spaces for the locally Lipschitz classes are not addressed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -258,7 +262,8 @@ theorem perimeter_le_compactLocallyLipschitzRelaxation_of_measure_lt_top [Proper
     (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (hνB : ν B < ⊤) :
     perimeter ν B ≤ compactLocallyLipschitzRelaxation ν B :=
   le_iInf fun f =>
-    perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top ν hB hνB f.2.1 f.2.2
+    perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top ν hB hνB f.2.1
+      f.2.2
 
 /-- The compact-local locally Lipschitz relaxation equals the bounded-support perimeter at every
 measurable finite-mass target, for every Borel measure on a proper metric space. -/

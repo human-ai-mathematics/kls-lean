@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.InnerProductSpace.Harmonic.Basic
-import Mathlib.Tactic.FieldSimp
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.InnerProductSpace.Harmonic.Basic
+public import Mathlib.Tactic.FieldSimp
 
 /-!
 # Affine changes of variables for actual derivatives
@@ -8,7 +10,8 @@ import Mathlib.Tactic.FieldSimp
 Supporting the unit-ball reduction in Gilbarg–Trudinger, *Elliptic Partial Differential Equations of
 Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60. For `z ↦ f (c + a • z)`:
 
-* `iteratedFDeriv_comp_smul`, `iteratedFDeriv_affine`: every total iterated Fréchet derivative scales
+* `iteratedFDeriv_comp_smul`, `iteratedFDeriv_affine`: every total iterated Fréchet derivative
+  scales
   by `a ^ k`, with no global smoothness assumption (unlike Mathlib's smooth version);
 * `norm_iteratedFDeriv_affine`, `norm_iteratedFDeriv_inverse_scale`: the exact operator-norm scale;
 * `laplacian_affine`: the actual Laplacian scales by `a ^ 2`;
@@ -20,6 +23,8 @@ Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60. For `z �
 These are identities and cap transport only; no harmonic reproducing formula or Schauder estimate
 is proved here.
 -/
+
+@[expose] public section
 noncomputable section
 open scoped Topology
 open Function

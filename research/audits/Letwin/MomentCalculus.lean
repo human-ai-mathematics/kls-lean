@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.Letwin.MomentCalculus
+module
+
+public import FunctionalInequalities.KLS.Letwin.MomentCalculus
 
 /-! Actual original-input client of the smooth A.4/A.5 producer. -/
+
+@[expose] public section
 noncomputable section
 namespace LetwinSmoothCalculusAudit
 open Set MeasureTheory FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery

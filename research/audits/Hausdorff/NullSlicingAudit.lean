@@ -1,9 +1,12 @@
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-!
 # Strict audit client for null slicing
 
-Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and `Analysis/Hausdorff/Slicing.lean`.
+Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and
+`Analysis/Hausdorff/Slicing.lean`.
 `target` states obligation `L2` of `research/audits/Coarea/WeightedRouteStatements.lean`
 quantifier for quantifier, with no added hypothesis: `N` is
 not measurable, `V` may be zero-dimensional, `u` is Lipschitz on `N` only, `K` is an arbitrary
@@ -17,6 +20,8 @@ the plane's `ℋ¹` of a nondegenerate segment is nonzero.  The last three show 
 obtained by replacing `surfaceMeasure` with the zero measure, and that the exceptional level set
 is real: at `t = 0` the slices of `dim_one` and `constant_on_null` are not null.
 -/
+
+@[expose] public section
 
 noncomputable section
 

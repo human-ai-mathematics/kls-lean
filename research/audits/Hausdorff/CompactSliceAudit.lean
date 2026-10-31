@@ -1,9 +1,12 @@
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Strict audit client for compact-slice measurability
 
-Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and `Analysis/Hausdorff/Content.lean`.
+Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and
+`Analysis/Hausdorff/Content.lean`.
 `target` states obligation `L3` of `research/audits/Coarea/WeightedRouteStatements.lean` quantifier
 for quantifier and proves it; `target_of_not_finiteDimensional` proves the same conclusion with
 both `[CompleteSpace V]` and `[FiniteDimensional ℝ V]` dropped, so the library statement is
@@ -18,6 +21,8 @@ uses it as a measurability statement.  The final group computes both sides of `e
 on the unit interval of the line, where the fibre measure is `ℋ⁰`: the integral of the slice
 function is exactly `1`, the Eilenberg bound is `2`, and neither side is vacuous.
 -/
+
+@[expose] public section
 
 noncomputable section
 

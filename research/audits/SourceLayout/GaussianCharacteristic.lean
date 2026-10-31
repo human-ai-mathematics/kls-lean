@@ -1,5 +1,10 @@
-import FunctionalInequalities.Probability.Gaussian.CharacteristicFunction
-import Lean
+module
+
+public import FunctionalInequalities.Probability.Gaussian.CharacteristicFunction
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities.Probability
 

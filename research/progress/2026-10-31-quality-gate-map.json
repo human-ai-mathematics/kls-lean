@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "review_date": "2026-10-31",
+  "placement_plan": {
+    "scope": "Close the three 2026-10-31 quality findings, then delegate one Linux CI round to Claude on the exact finalized source.",
+    "owners": [
+      "research/check_documentation.py",
+      "research/tests/test_check_documentation.py",
+      "Nine existing production module comments"
+    ],
+    "mathematics": "No proof, declaration, name, module path, import or certificate status changes.",
+    "decision": "Extend existing documentation validator and its tests; reflow five comments and qualify four source references; no new production modules.",
+    "validation": "Full Python tests, documentation/module/API/progress checks, exact noncomment code preservation and canonical hash-only evidence rebindings. Linux CI must bind the full dirty source snapshot; an origin/main-only run does not certify it.",
+    "preservation": "Keep existing dirty files, real index, old maps and receipts; no commit or push authorized merely to transport CI."
+  },
+  "findings": [
+    {
+      "id": "GATE-1",
+      "status": "fixed",
+      "source": "research/check_documentation.py",
+      "detail": "The first module-doc comment must contain non-whitespace content; a later nonempty section comment cannot conceal an empty module synopsis. Full-gate mutations retain original source lines and link positions."
+    },
+    {
+      "id": "DOC-1",
+      "status": "fixed",
+      "detail": "All four ambiguous references now use their actual owning family paths. Explicit repository/library/owner-relative paths resolve directly; a global suffix fallback must name exactly one file. Ambiguous failures list their candidates."
+    },
+    {
+      "id": "STYLE-1",
+      "status": "fixed",
+      "detail": "The five path-expanded prose lines are individually reflowed; none is a URL or required unbroken mathematical token."
+    }
+  ],
+  "comment_edits": [
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before": "The closed literal-source C¹,α and section-power gain is in `Analysis/Convex/Section/Engulfing.lean`;",
+      "after": "The closed literal-source C¹,α and section-power gain is in\n`Analysis/Convex/Section/Engulfing.lean`;"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean",
+      "before": "`Resolvent/Basic.lean` (resolvent contraction drops self-adjointness), hypotheses that turn out to be",
+      "after": "`Resolvent/Basic.lean` (resolvent contraction drops self-adjointness), hypotheses that turn out\nto be"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Integral.lean",
+      "before": "This is the codimension-`m` analogue of `setLIntegral_image_graphMap` in `Analysis/Graph/OpenIntegral.lean`,",
+      "after": "This is the codimension-`m` analogue of `setLIntegral_image_graphMap` in\n`Analysis/Graph/OpenIntegral.lean`,"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Step.lean",
+      "before": "cutoff form (`KLS/BKL/Localization/Energy/Integral.lean`), the Section 6 bound (104), the Lyapunov moment and tail bounds,",
+      "after": "cutoff form (`KLS/BKL/Localization/Energy/Integral.lean`), the Section 6 bound (104),\nthe Lyapunov moment and tail bounds,"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactDomain.lean",
+      "before": "`KLS/BKL/Posterior/Covariance.lean`. No square root, transported-law whitening, stochastic equation or",
+      "after": "`KLS/BKL/Posterior/Covariance.lean`. No square root, transported-law whitening, stochastic\nequation or"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+      "before": "`Gamma.lean`",
+      "after": "`Analysis/BakryEmery/Gamma.lean`"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/RegularChart.lean",
+      "before": "`hausdorffNormalized_image_vectorGraphMap` of `Graph/Area.lean`, this is everything the local",
+      "after": "`hausdorffNormalized_image_vectorGraphMap` of\n`Analysis/Vector/Graph/Area.lean`, this is everything the local"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+      "before": "Together with `CovarianceGradient/Translation.lean` this covers every affine isometric change of",
+      "after": "Together with `Energy/CovarianceGradient/Translation.lean` this covers every affine isometric\nchange of"
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+      "before": "of `WeakDerivative.lean` gives `‖∫ φ • ∇g_j dm‖ ≤ ∫ ‖g_j‖ ‖Dφ‖ dm → 0`. Hence `∫ φ • y dm = 0`",
+      "after": "of `Energy/Euclidean/WeakDerivative.lean` gives\n`‖∫ φ • ∇g_j dm‖ ≤ ∫ ‖g_j‖ ‖Dφ‖ dm → 0`. Hence `∫ φ • y dm = 0`"
+    }
+  ],
+  "source_preservation": {
+    "status": "passed",
+    "sources": [
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+        "before_sha256": "7018ffa864993ef8f6d92ddb12ca8a782eb65275b0f91503ca949f7ec1f499a5",
+        "after_sha256": "1909337cf7e59982890831cfd624c4fd85bc934239fe49c9404029a8f0742669",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+        "before_sha256": "e1f77bb845b515620704026530c1ebe32b105775a2d1778d299720b4327d2636",
+        "after_sha256": "f9c48d55e0c30454e7a7620a6e6790b7f83044bf006e900536382e63fc9671d1",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean",
+        "before_sha256": "5fd29a19ee53d0c63c84f6ea7965a047f182043b85e97c71c7ab4ae3fad6a6c5",
+        "after_sha256": "93a730417c8cb0002b0c775226a7a5fa260f42210e8732de018e2e1ea4f00ba0",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/RegularChart.lean",
+        "before_sha256": "3cacac74ce709b056b544593513fa2ae174cacde6661b34b67ac731551510e0a",
+        "after_sha256": "deee1000c32d78832d0fc73192bdeb8a12680e4506ac7245fbb65ab9c62887b8",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Integral.lean",
+        "before_sha256": "cb9a3c48dfa4d50ded44bc2bb9887b8c961ba25392645c215ccc0b83e7123ac5",
+        "after_sha256": "49cd3aa78293a681465a625531e16756b19e90ed7f1c36405cdac196a4a366ba",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+        "before_sha256": "75cb3ee91b8061d387914b06b5780c94b52e6bcc28b31a2a70d5dac124d24fec",
+        "after_sha256": "74f20f38486ca1ef352088245b129dfa2ea8ed643686872bca56b2340f9b8205",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+        "before_sha256": "3a5f7e0c97e94ad5a98ed5bd319e0dbf5acba75bbf7be75fa2b468a864eeee6d",
+        "after_sha256": "7cbade582fcf9e3d3056a4bdf25012ea89c879b33e0fb3d925540c28ce4aff2a",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Step.lean",
+        "before_sha256": "55381caf65a1508b836e8eaa8ec2cdd1be0603b93939579e1cad2c3a76c67eda",
+        "after_sha256": "e8d3a57e69447f3d9cdcbd2bc919a5e5ad684accbd0e1586cbd7a436d68a193f",
+        "noncomment_tokens_identical": true
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactDomain.lean",
+        "before_sha256": "28f55a765847379fc8c2e33a46fda2e4131821041fa14085b2552de1934339ee",
+        "after_sha256": "7036e218fbd026250af242779fc2fa2b872998b15ec929c250f87ad0bf6834ab",
+        "noncomment_tokens_identical": true
+      }
+    ],
+    "evidence_rebindings": 7
+  },
+  "source_evidence_rebindings": [
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/thm:logconcave-cheeger-poincare-comparison/infrastructure/evidence/17",
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean",
+      "before_sha256": "5fd29a19ee53d0c63c84f6ea7965a047f182043b85e97c71c7ab4ae3fad6a6c5",
+      "after_sha256": "93a730417c8cb0002b0c775226a7a5fa260f42210e8732de018e2e1ea4f00ba0"
+    },
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/thm:logconcave-cheeger-poincare-comparison/infrastructure/evidence/54",
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+      "before_sha256": "7018ffa864993ef8f6d92ddb12ca8a782eb65275b0f91503ca949f7ec1f499a5",
+      "after_sha256": "1909337cf7e59982890831cfd624c4fd85bc934239fe49c9404029a8f0742669"
+    },
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/thm:smooth-gradient-raw-core-agreement-density/infrastructure/evidence/1",
+      "source": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+      "before_sha256": "3a5f7e0c97e94ad5a98ed5bd319e0dbf5acba75bbf7be75fa2b468a864eeee6d",
+      "after_sha256": "7cbade582fcf9e3d3056a4bdf25012ea89c879b33e0fb3d925540c28ce4aff2a"
+    },
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/lem:affine-poincare-translation-invariance/infrastructure/evidence/0",
+      "source": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+      "before_sha256": "75cb3ee91b8061d387914b06b5780c94b52e6bcc28b31a2a70d5dac124d24fec",
+      "after_sha256": "74f20f38486ca1ef352088245b129dfa2ea8ed643686872bca56b2340f9b8205"
+    },
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/lem:covariance-core-closure/infrastructure/evidence/4",
+      "source": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+      "before_sha256": "3a5f7e0c97e94ad5a98ed5bd319e0dbf5acba75bbf7be75fa2b468a864eeee6d",
+      "after_sha256": "7cbade582fcf9e3d3056a4bdf25012ea89c879b33e0fb3d925540c28ce4aff2a"
+    },
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/lem:relative-perimeter-smoothing/infrastructure/evidence/97",
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/RegularChart.lean",
+      "before_sha256": "3cacac74ce709b056b544593513fa2ae174cacde6661b34b67ac731551510e0a",
+      "after_sha256": "deee1000c32d78832d0fc73192bdeb8a12680e4506ac7245fbb65ab9c62887b8"
+    },
+    {
+      "record": "research/tasks.json",
+      "pointer": "/nodes/lem:relative-perimeter-smoothing/infrastructure/evidence/101",
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Integral.lean",
+      "before_sha256": "cb9a3c48dfa4d50ded44bc2bb9887b8c961ba25392645c215ccc0b83e7123ac5",
+      "after_sha256": "49cd3aa78293a681465a625531e16756b19e90ed7f1c36405cdac196a4a366ba"
+    }
+  ],
+  "new_regression_tests": [
+    "An empty or whitespace-only module synopsis is rejected by the full gate, including when a later section has documentation.",
+    "An ambiguous suffix reference is rejected; an explicit owner or a unique suffix succeeds.",
+    "An exact local owner succeeds despite another global file with the same basename."
+  ],
+  "expected_documentation_tests": 21,
+  "expected_python_tests": 281,
+  "expected_python_skips": 3,
+  "api_impact": "No declaration, binder, proof, value, import, namespace or module-path changes. All nine Lean edits are comment-only. Public API source positions are regenerated.",
+  "mathematical_status": "All paper, node and certificate states remain unchanged; only seven verified infrastructure source hashes are rebound.",
+  "reproduce_local_checks": [
+    "python3 -m unittest discover -s research/tests -p test_*.py",
+    "python3 research/check_documentation.py",
+    "python3 research/module_inventory.py --check",
+    "python3 research/api_index.py --check",
+    "python3 research/atlas.py check",
+    "python3 research/progress/update.py --check (against the intended canonical index)"
+  ],
+  "linux_validation": {
+    "requested_executor": "Existing Claude session: Linux 沙箱 kls-lean Comparator 验证",
+    "command": "python3 research/verify.py --lean-only --no-kernel-replay",
+    "scope": "One Linux CI-equivalent Lean-only build and axiom/audit run on an isolated exact working-tree source snapshot. Its frozen manifest, environment, raw logs and receipt are retained under build/history/2026-10-31-quality-closure/claude-linux/.",
+    "source_binding": "The frozen full file manifest must match before execution, and the Linux lean-only receipt must match the host-derived lean-only source digest. HEAD alone is insufficient for this dirty tree.",
+    "publication": "No commit, push, tag, release, public message or remote workflow edit is authorized by this handoff. This is not a GitHub Actions certification of a new commit."
+  },
+  "verification": "Current local outcomes are bound by build/history/2026-10-31-quality-closure/quality-checks.json. Linux outcomes have their separate manifest-bound raw receipt; a pending handoff is not a pass. Prior full verification receipts keep their original snapshots."
+}

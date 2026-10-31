@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Complement
-import FunctionalInequalities.Analysis.MetricBV.Approximation
-import Mathlib.Topology.Algebra.MetricSpace.Lipschitz
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Complement
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
+public import Mathlib.Topology.Algebra.MetricSpace.Lipschitz
 
 /-!
 # Locally Lipschitz approximating sequences on proper spaces
@@ -33,6 +35,8 @@ every compact set bound the perimeter
 (`perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top`), by a diagonal
 choice of radii; global `L¹` convergence is a special case.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -212,10 +216,10 @@ theorem enorm_truncateFun_sub_le_target_tail (x₀ : X) (R : ℝ)
 is Lipschitz on the compact closed ball carrying the truncation, the product secant bound holds
 inside it, and a pair crossing it is controlled by `cutoff_le_dist_of_le`. -/
 theorem lipschitzWith_truncateFun_of_locallyLipschitz [ProperSpace X] (x₀ : X) (R : ℝ)
-    {f : X → ℝ} (hf : LocallyLipschitz f) :
-    ∃ K : ℝ≥0, LipschitzWith K (truncateFun x₀ R f) := by
-  obtain ⟨L, hL⟩ := LocallyLipschitzOn.exists_lipschitzOnWith_of_compact
-    (isCompact_closedBall x₀ (R + 1)) hf.locallyLipschitzOn
+    {f : X → ℝ} (hf : LocallyLipschitz f) : ∃ K : ℝ≥0, LipschitzWith K (truncateFun x₀ R f) := by
+  obtain ⟨L, hL⟩ :=
+    LocallyLipschitzOn.exists_lipschitzOnWith_of_compact (isCompact_closedBall x₀ (R + 1))
+      hf.locallyLipschitzOn
   refine ⟨L + 1, LipschitzWith.of_dist_le_mul fun x y => ?_⟩
   have hK : (0 : ℝ) ≤ L := L.2
   have hcast : ((L + 1 : ℝ≥0) : ℝ) = (L : ℝ) + 1 := by push_cast; ring
@@ -224,29 +228,33 @@ theorem lipschitzWith_truncateFun_of_locallyLipschitz [ProperSpace X] (x₀ : X)
   · have hfd : |f x - f y| ≤ L * dist x y := by
       rw [← Real.dist_eq]
       exact hL.dist_le_mul x (Metric.mem_closedBall.2 hx) y (Metric.mem_closedBall.2 hy)
-    calc |truncateFun x₀ R f x - truncateFun x₀ R f y|
-        = |cutoff x₀ R x * clampUnit (f x) - cutoff x₀ R y * clampUnit (f y)| := rfl
+    calc
+      |truncateFun x₀ R f x - truncateFun x₀ R f y| =
+          |cutoff x₀ R x * clampUnit (f x) - cutoff x₀ R y * clampUnit (f y)| :=
+        rfl
       _ ≤ |clampUnit (f x) - clampUnit (f y)| + |cutoff x₀ R x - cutoff x₀ R y| :=
-          abs_mul_sub_mul_le (cutoff_nonneg x₀ R x) (cutoff_le_one x₀ R x)
-            (clampUnit_nonneg _) (clampUnit_le_one _)
+        abs_mul_sub_mul_le (cutoff_nonneg x₀ R x) (cutoff_le_one x₀ R x) (clampUnit_nonneg _)
+          (clampUnit_le_one _)
       _ ≤ L * dist x y + dist x y :=
-          add_le_add ((abs_clampUnit_sub_le _ _).trans hfd) (abs_cutoff_sub_le x₀ R x y)
+        add_le_add ((abs_clampUnit_sub_le _ _).trans hfd) (abs_cutoff_sub_le x₀ R x y)
       _ = ((L : ℝ) + 1) * dist x y := by ring
   · rw [truncateFun_eq_zero x₀ R f (not_le.1 hy).le, sub_zero,
       abs_of_nonneg (truncateFun_nonneg x₀ R f x)]
-    calc truncateFun x₀ R f x ≤ cutoff x₀ R x :=
-          mul_le_of_le_one_right (cutoff_nonneg x₀ R x) (clampUnit_le_one _)
+    calc
+      truncateFun x₀ R f x ≤ cutoff x₀ R x :=
+        mul_le_of_le_one_right (cutoff_nonneg x₀ R x) (clampUnit_le_one _)
       _ ≤ dist x y := cutoff_le_dist_of_le (not_le.1 hy).le
       _ ≤ ((L : ℝ) + 1) * dist x y := by nlinarith [dist_nonneg (x := x) (y := y)]
   · rw [truncateFun_eq_zero x₀ R f (not_le.1 hx).le, zero_sub, abs_neg,
       abs_of_nonneg (truncateFun_nonneg x₀ R f y)]
-    calc truncateFun x₀ R f y ≤ cutoff x₀ R y :=
-          mul_le_of_le_one_right (cutoff_nonneg x₀ R y) (clampUnit_le_one _)
+    calc
+      truncateFun x₀ R f y ≤ cutoff x₀ R y :=
+        mul_le_of_le_one_right (cutoff_nonneg x₀ R y) (clampUnit_le_one _)
       _ ≤ dist y x := cutoff_le_dist_of_le (not_le.1 hx).le
       _ = dist x y := dist_comm y x
       _ ≤ ((L : ℝ) + 1) * dist x y := by nlinarith [dist_nonneg (x := x) (y := y)]
-  · rw [truncateFun_eq_zero x₀ R f (not_le.1 hx).le, truncateFun_eq_zero x₀ R f (not_le.1 hy).le,
-      sub_zero, abs_zero]
+  · rw [truncateFun_eq_zero x₀ R f (not_le.1 hx).le,
+      truncateFun_eq_zero x₀ R f (not_le.1 hy).le, sub_zero, abs_zero]
     positivity
 
 /-- The truncated test of a locally Lipschitz function on a proper space. -/
@@ -465,20 +473,19 @@ omit [MetricSpace X]
 theorem enorm_clampUnit_sub_indicator_le (f : X → ℝ) (B : Set X) (x : X) :
     ‖clampUnit (f x) - B.indicator (1 : X → ℝ) x‖ₑ ≤ ‖f x - B.indicator (1 : X → ℝ) x‖ₑ := by
   set i := B.indicator (1 : X → ℝ) x
-  have hi01 : 0 ≤ i ∧ i ≤ 1 := by
-    by_cases hx : x ∈ B <;> simp [i, hx]
+  have hi01 : 0 ≤ i ∧ i ≤ 1 := by by_cases hx : x ∈ B <;> simp [i, hx]
   rw [Real.enorm_eq_ofReal_abs, Real.enorm_eq_ofReal_abs]
   refine ENNReal.ofReal_le_ofReal ?_
-  calc |clampUnit (f x) - i| = |clampUnit (f x) - clampUnit i| := by
-        rw [clampUnit_of_mem hi01.1 hi01.2]
+  calc
+    |clampUnit (f x) - i| = |clampUnit (f x) - clampUnit i| := by
+      rw [clampUnit_of_mem hi01.1 hi01.2]
     _ ≤ |f x - i| := abs_clampUnit_sub_le _ _
 
 /-- The clamped error to an indicator is at most one. -/
 theorem enorm_clampUnit_sub_indicator_le_one (f : X → ℝ) (B : Set X) (x : X) :
     ‖clampUnit (f x) - B.indicator (1 : X → ℝ) x‖ₑ ≤ 1 := by
   set i := B.indicator (1 : X → ℝ) x
-  have hi01 : 0 ≤ i ∧ i ≤ 1 := by
-    by_cases hx : x ∈ B <;> simp [i, hx]
+  have hi01 : 0 ≤ i ∧ i ≤ 1 := by by_cases hx : x ∈ B <;> simp [i, hx]
   have hc0 := clampUnit_nonneg (f x)
   have hc1 := clampUnit_le_one (f x)
   rw [Real.enorm_eq_ofReal_abs]

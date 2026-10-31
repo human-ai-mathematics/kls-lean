@@ -1,19 +1,25 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Affine
-import FunctionalInequalities.Probability.MomentMeasure.Integrability
-import FunctionalInequalities.Probability.MomentMeasure.Basic
-import Mathlib.MeasureTheory.Group.LIntegral
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Affine
+public import FunctionalInequalities.Probability.MomentMeasure.Integrability
+public import FunctionalInequalities.Probability.MomentMeasure.Basic
+public import Mathlib.MeasureTheory.Group.LIntegral
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
 # Exponential mass, integrals and the CEK functional under affine subtraction
 
-Exact formulas for the conjugate mass, the integral and the extended-logarithm functional after subtracting an affine
-function: a finite-measure correction in general, and invariance for a centered probability measure with finite first
+Exact formulas for the conjugate mass, the integral and the extended-logarithm functional after
+subtracting an affine
+function: a finite-measure correction in general, and invariance for a centered probability measure
+with finite first
 moment; the normalization producing a nonnegative potential vanishing at the origin.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 

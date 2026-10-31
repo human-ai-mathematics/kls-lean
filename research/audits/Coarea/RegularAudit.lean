@@ -1,4 +1,8 @@
-import FunctionalInequalities.Analysis.Coarea.Regular
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Regular
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Topology Set FunctionalInequalities
@@ -9,7 +13,7 @@ namespace RegularCoareaAudit
 /-- Verbatim full target `L9` of `Coarea/WeightedRouteStatements.lean` (regular open-domain `C¹`
 coarea), including the CompleteSpace binder. -/
 theorem target :
-  ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+    ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {O S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞},
     IsOpen O → ContDiffOn ℝ 1 u O → (∀ x ∈ O, fderiv ℝ u x ≠ 0) →

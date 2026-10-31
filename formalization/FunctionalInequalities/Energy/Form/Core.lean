@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Relaxation.Basic
-import Mathlib.Topology.Instances.ENNReal.Lemmas
+module
+
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
 
 /-!
 # Sequential cores and recovery sequences
@@ -14,6 +16,8 @@ energy. The definitions deliberately separate four claims that are often conflat
 
 No density or Sobolev-core theorem is inferred merely from smoothness of the tests.
 -/
+
+@[expose] public section
 
 noncomputable section
 

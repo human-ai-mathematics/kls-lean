@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Hazard
-import FunctionalInequalities.KLS.LogConcave.Translation
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Hazard
+public import FunctionalInequalities.KLS.LogConcave.Translation
 
 /-!
 # The variance of a log-concave law on the line dominates `1 / (12 ρ(m)²)`
@@ -17,6 +19,8 @@ With `F` the distribution function, `c = ρ m > 0` at a median `m`, and `k` a su
 
 The bound is sharp for uniform laws. No Poincaré inequality is asserted here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -147,36 +151,52 @@ theorem one_div_le_integral_mul :
   have hint : ∀ p : ℝ → ℝ, Continuous p → Integrable (fun x ↦ p (cdf μ x)) (μ : Measure ℝ) :=
     fun p hp ↦ Probability.Line.integrable_comp_cdf μ d.withDensity_eq d.measurable d.nonneg hp
   have hsq := Probability.Line.integral_cdf_sub_half_sq μ d.withDensity_eq d.measurable d.nonneg
-  have hcube := Probability.Line.integral_cdf_sub_half_cube μ d.withDensity_eq d.measurable d.nonneg
-  have hlhs : ∫ x, ((cdf μ x - 1 / 2) / d.ρ m -
-      k / (2 * d.ρ m ^ 2) * ((cdf μ x - 1 / 2) * (cdf μ x - 1 / 2))) * (cdf μ x - 1 / 2)
-        ∂(μ : Measure ℝ) = 1 / (12 * d.ρ m) := by
-    have heq : ∀ x, ((cdf μ x - 1 / 2) / d.ρ m -
-        k / (2 * d.ρ m ^ 2) * ((cdf μ x - 1 / 2) * (cdf μ x - 1 / 2))) * (cdf μ x - 1 / 2) =
-        (1 / d.ρ m) * (cdf μ x - 1 / 2) ^ 2 - (k / (2 * d.ρ m ^ 2)) * (cdf μ x - 1 / 2) ^ 3 := by
+  have hcube :=
+    Probability.Line.integral_cdf_sub_half_cube μ d.withDensity_eq d.measurable d.nonneg
+  have hlhs :
+    ∫ x,
+        ((cdf μ x - 1 / 2) / d.ρ m -
+            k / (2 * d.ρ m ^ 2) * ((cdf μ x - 1 / 2) * (cdf μ x - 1 / 2))) *
+          (cdf μ x - 1 / 2) ∂(μ : Measure ℝ) =
+      1 / (12 * d.ρ m) := by
+    have heq :
+      ∀ x,
+        ((cdf μ x - 1 / 2) / d.ρ m -
+              k / (2 * d.ρ m ^ 2) * ((cdf μ x - 1 / 2) * (cdf μ x - 1 / 2))) *
+            (cdf μ x - 1 / 2) =
+          (1 / d.ρ m) * (cdf μ x - 1 / 2) ^ 2 - (k / (2 * d.ρ m ^ 2)) * (cdf μ x - 1 / 2) ^ 3 := by
       intro x
       ring
     simp_rw [heq]
     rw [integral_sub ((hint (fun u ↦ (1 / d.ρ m) * (u - 1 / 2) ^ 2) (by fun_prop)))
-      ((hint (fun u ↦ (k / (2 * d.ρ m ^ 2)) * (u - 1 / 2) ^ 3) (by fun_prop))),
+        ((hint (fun u ↦ (k / (2 * d.ρ m ^ 2)) * (u - 1 / 2) ^ 3) (by fun_prop))),
       integral_const_mul, integral_const_mul, hsq, hcube]
     rw [mul_zero, sub_zero, one_div_mul_one_div, mul_comm]
   rw [← hlhs]
-  refine integral_mono_ae (hint (fun u ↦ ((u - 1 / 2) / d.ρ m -
-      k / (2 * d.ρ m ^ 2) * ((u - 1 / 2) * (u - 1 / 2))) * (u - 1 / 2)) (by fun_prop)) ?_ ?_
+  refine
+    integral_mono_ae
+      (hint
+        (fun u ↦
+          ((u - 1 / 2) / d.ρ m - k / (2 * d.ρ m ^ 2) * ((u - 1 / 2) * (u - 1 / 2))) *
+            (u - 1 / 2))
+        (by fun_prop))
+      ?_ ?_
   · have hid : Integrable (fun x : ℝ ↦ x - m) (μ : Measure ℝ) :=
       hμ.integrable_id.sub (integrable_const m)
     have hFb : ∀ x, ‖cdf μ x - 1 / 2‖ ≤ 1 / 2 := fun x ↦ by
       rw [Real.norm_eq_abs, abs_le]
-      constructor <;> linarith [Probability.Line.cdf_nonneg μ x, Probability.Line.cdf_le_one μ x]
-    have hb := hid.bdd_mul (c := 1 / 2)
-      (d.continuous_cdf.sub continuous_const).aestronglyMeasurable (ae_of_all _ hFb)
+      constructor <;>
+        linarith [Probability.Line.cdf_nonneg μ x, Probability.Line.cdf_le_one μ x]
+    have hb :=
+      hid.bdd_mul (c := 1 / 2) (d.continuous_cdf.sub continuous_const).aestronglyMeasurable
+        (ae_of_all _ hFb)
     exact hb.congr (ae_of_all _ fun x ↦ mul_comm _ _)
   · have h0 : (μ : Measure ℝ) (interior (μ : Measure ℝ).support)ᶜ = 0 :=
       hμ.measure_compl_interior_support hi
     rw [EventuallyLE]
-    filter_upwards [(ae_iff.mpr h0 : ∀ᵐ x ∂(μ : Measure ℝ), x ∈ interior (μ : Measure ℝ).support)]
-      with x hx
+    filter_upwards [(ae_iff.mpr h0 :
+        ∀ᵐ x ∂(μ : Measure ℝ), x ∈ interior (μ : Measure ℝ).support)] with
+      x hx
     exact d.quadratic_bound_le_sub hμ hi hm hk hx
 
 /-- Bobkov's variance bound: `1 / (12 ρ(m)²) ≤ Var μ` at a median `m`. -/
@@ -202,37 +222,49 @@ theorem one_div_le_variance : 1 / (12 * d.ρ m ^ 2) ≤ variance id (μ : Measur
   have hprodm : Integrable (fun x ↦ (x - m) * (cdf μ x - 1 / 2)) (μ : Measure ℝ) :=
     (hidm.bdd_mul hFmeas (ae_of_all _ hFb)).congr (ae_of_all _ fun x ↦ mul_comm _ _)
   have hFint : Integrable (fun x ↦ cdf μ x - 1 / 2) (μ : Measure ℝ) :=
-    hint (fun u ↦ u - 1 / 2) (by fun_prop)
+    hint (fun u ↦ u - 1 / 2)
+      (by fun_prop)
   -- centering does not change the covariance
+
   have hFint' : Integrable (cdf μ) (μ : Measure ℝ) := hint (fun u ↦ u) continuous_id
   have hFzero : ∫ x, (cdf μ x - 1 / 2) ∂(μ : Measure ℝ) = 0 := by
     rw [integral_sub hFint' (integrable_const _), integral_const]
     simp [hF]
-  have hcenter : ∫ x, (x - E) * (cdf μ x - 1 / 2) ∂(μ : Measure ℝ) =
+  have hcenter :
+    ∫ x, (x - E) * (cdf μ x - 1 / 2) ∂(μ : Measure ℝ) =
       ∫ x, (x - m) * (cdf μ x - 1 / 2) ∂(μ : Measure ℝ) := by
-    have heq : ∀ x, (x - E) * (cdf μ x - 1 / 2) =
-        (x - m) * (cdf μ x - 1 / 2) + (m - E) * (cdf μ x - 1 / 2) := fun x ↦ by ring
+    have heq :
+      ∀ x,
+        (x - E) * (cdf μ x - 1 / 2) =
+          (x - m) * (cdf μ x - 1 / 2) + (m - E) * (cdf μ x - 1 / 2) :=
+      fun x ↦ by ring
     simp_rw [heq]
     rw [integral_add hprodm (hFint.const_mul _), integral_const_mul, hFzero, mul_zero, add_zero]
   -- the elementary inequality `a b ≤ c a² / 2 + b² / (2 c)`
+
   have hsq2 : Integrable (fun x ↦ (x - E) ^ 2) (μ : Measure ℝ) :=
     (hμ.memLp_id_two.sub (memLp_const E)).integrable_sq
   have hF2 : Integrable (fun x ↦ (cdf μ x - 1 / 2) ^ 2) (μ : Measure ℝ) :=
     hint (fun u ↦ (u - 1 / 2) ^ 2) (by fun_prop)
-  have hpt : ∀ x, (x - E) * (cdf μ x - 1 / 2) ≤
-      d.ρ m / 2 * (x - E) ^ 2 + 1 / (2 * d.ρ m) * (cdf μ x - 1 / 2) ^ 2 := by
+  have hpt :
+    ∀ x,
+      (x - E) * (cdf μ x - 1 / 2) ≤
+        d.ρ m / 2 * (x - E) ^ 2 + 1 / (2 * d.ρ m) * (cdf μ x - 1 / 2) ^ 2 := by
     intro x
     have h1 : 0 ≤ (d.ρ m * (x - E) - (cdf μ x - 1 / 2)) ^ 2 := sq_nonneg _
-    have h2 : d.ρ m / 2 * (x - E) ^ 2 + 1 / (2 * d.ρ m) * (cdf μ x - 1 / 2) ^ 2 -
-        (x - E) * (cdf μ x - 1 / 2) =
+    have h2 :
+      d.ρ m / 2 * (x - E) ^ 2 + 1 / (2 * d.ρ m) * (cdf μ x - 1 / 2) ^ 2 -
+          (x - E) * (cdf μ x - 1 / 2) =
         (d.ρ m * (x - E) - (cdf μ x - 1 / 2)) ^ 2 / (2 * d.ρ m) := by
       field_simp
       ring
     have h3 : 0 ≤ (d.ρ m * (x - E) - (cdf μ x - 1 / 2)) ^ 2 / (2 * d.ρ m) :=
       div_nonneg h1 (by positivity)
     linarith
-  have hsum : Integrable (fun x ↦ d.ρ m / 2 * (x - E) ^ 2 + 1 / (2 * d.ρ m) * (cdf μ x - 1 / 2) ^ 2)
-      (μ : Measure ℝ) := (hsq2.const_mul _).add (hF2.const_mul _)
+  have hsum :
+    Integrable (fun x ↦ d.ρ m / 2 * (x - E) ^ 2 + 1 / (2 * d.ρ m) * (cdf μ x - 1 / 2) ^ 2)
+      (μ : Measure ℝ) :=
+    (hsq2.const_mul _).add (hF2.const_mul _)
   have hmono := integral_mono hprodE hsum hpt
   rw [integral_add (hsq2.const_mul _) (hF2.const_mul _), integral_const_mul, integral_const_mul,
     hsq, hcenter] at hmono
@@ -242,13 +274,14 @@ theorem one_div_le_variance : 1 / (12 * d.ρ m ^ 2) ≤ variance id (μ : Measur
   rw [hvar]
   set V := ∫ x, (x - E) ^ 2 ∂(μ : Measure ℝ) with hV
   have hV0 : 0 ≤ V := integral_nonneg fun x ↦ sq_nonneg _
-  have hchain : 1 / (12 * d.ρ m) ≤ d.ρ m / 2 * V + 1 / (2 * d.ρ m) * (1 / 12) := hcov.trans hmono
+  have hchain : 1 / (12 * d.ρ m) ≤ d.ρ m / 2 * V + 1 / (2 * d.ρ m) * (1 / 12) :=
+    hcov.trans hmono
   rw [div_le_iff₀ (by positivity)]
   have e1 : 24 * d.ρ m * (1 / (12 * d.ρ m)) = 2 := by
     field_simp
     ring
-  have e2 : 24 * d.ρ m * (d.ρ m / 2 * V + 1 / (2 * d.ρ m) * (1 / 12)) =
-      12 * d.ρ m ^ 2 * V + 1 := by
+  have e2 :
+    24 * d.ρ m * (d.ρ m / 2 * V + 1 / (2 * d.ρ m) * (1 / 12)) = 12 * d.ρ m ^ 2 * V + 1 := by
     field_simp
     ring
   have := mul_le_mul_of_nonneg_left hchain (by positivity : (0 : ℝ) ≤ 24 * d.ρ m)

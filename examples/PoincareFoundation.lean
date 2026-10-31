@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.Foundation
-import FunctionalInequalities.Poincare.Gaussian.Real
+module
+
+public import FunctionalInequalities.Poincare.Foundation
+public import FunctionalInequalities.Poincare.Gaussian.Real
 
 /-!
 # Using the Poincaré foundation
@@ -13,6 +15,8 @@ smooth-test frontend. They do not identify its constant with the selected relaxe
 For the definitions, normalization and sources, see
 `formalization/FunctionalInequalities/Poincare/README.md` from the repository root.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -43,7 +47,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   (μ : ProbabilityMeasure E)
 
 /-- Closedness applies without a density, log-concavity, or a nondegenerate covariance. -/
-example : Energy.ClosedQuadratic (FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy μ) :=
+example :
+    Energy.ClosedQuadratic (FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy μ) :=
   FunctionalInequalities.Energy.SmoothGradient.Intrinsic.closedQuadratic μ
 
 /-- Turn a finite bound for the selected optimum into the inequality on its finite domain. -/
@@ -67,7 +72,8 @@ example : (fun _ : ℝ ↦ (0 : ℝ)) =ᵐ[Measure.dirac 0] id := by
   simp
 
 /-- The raw energy of the zero function is zero. -/
-example : FunctionalInequalities.Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) (fun _ ↦ 0) = 0 := by
+example :
+    FunctionalInequalities.Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) (fun _ ↦ 0) = 0 := by
   rw [FunctionalInequalities.Poincare.SmoothTest.energy_eq_fderiv]
   simp
 
@@ -96,11 +102,15 @@ example (x : ℝ) :
 /-! ## Certified Gaussian values in the smooth-test frontend -/
 
 /-- The second parameter is variance, so mean `3` and variance `4` give constant `4`. -/
-example : FunctionalInequalities.Poincare.SmoothTest.constant (ProbabilityTheory.gaussianReal 3 4) = (4 : ENNReal) :=
+example :
+    FunctionalInequalities.Poincare.SmoothTest.constant (ProbabilityTheory.gaussianReal 3 4) =
+      (4 : ENNReal) :=
   FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 3 4
 
 /-- Zero variance gives a Dirac law and constant zero, with no positive-variance assumption. -/
-example (m : ℝ) : FunctionalInequalities.Poincare.SmoothTest.constant (ProbabilityTheory.gaussianReal m 0) = 0 :=
+example (m : ℝ) :
+    FunctionalInequalities.Poincare.SmoothTest.constant (ProbabilityTheory.gaussianReal m 0) =
+      0 :=
   FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m 0
 
 end Examples.PoincareFoundation

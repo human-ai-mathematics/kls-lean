@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Strict audit client for Borel slices and measurable weights
 
@@ -20,6 +22,8 @@ almost-everywhere measurable integrand.  `weighted_one` checks that the weighted
 weight `1` returns the unweighted one.  `infinite_volume` applies both statements to an unbounded
 measurable set of infinite volume, and `top_weight` to a weight that is identically `∞`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

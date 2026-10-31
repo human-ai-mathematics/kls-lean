@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HminusOneApproximation
-import FunctionalInequalities.KLS.BKL.Poincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HminusOneApproximation
+public import FunctionalInequalities.KLS.BKL.Poincare
 
 /-!
 # Letwin Proposition 2.8 for general log-concave laws
@@ -10,6 +12,8 @@ Letwin, arXiv:2607.24164v1, Proposition 2.8 (quoting Barthe–Klartag, Propositi
 bound Poincaré constants uniformly along its approximation; here that hypothesis is discharged by
 the proved dimension-free bound `KLS.BKL.Localization.conjecture`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

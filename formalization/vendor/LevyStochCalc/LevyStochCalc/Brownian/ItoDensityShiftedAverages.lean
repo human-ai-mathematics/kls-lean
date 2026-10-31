@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoDensityDyadicAverages
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoDensityDyadicAverages
 
 /-!
 # Left-shifted dyadic averages and cell-average identities
@@ -13,6 +18,8 @@ average over the previous cell and are therefore adapted, the simple predictable
 they define, and the identification of a cell average with an average of the integrand
 over a closed ball, through the dyadic index of a time `s ∈ (0, T]`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -48,10 +55,10 @@ lemma dyadicAvg_shifted_brownian_bounded
     |dyadicAvg_shifted_brownian T g n i ω| ≤ max M 0 := by
   unfold dyadicAvg_shifted_brownian
   by_cases h : i.val = 0
-  · rw [dif_pos h]
+  · rw [dite_eq_left h]
     rw [abs_zero]
     exact le_max_right _ _
-  · rw [dif_neg h]
+  · rw [dite_eq_right h]
     have h_lt : i.val - 1 < 2 ^ n := by omega
     exact (dyadicAvg_brownian_bounded T hT g M h_bound n
       ⟨i.val - 1, h_lt⟩ ω).trans (le_max_left _ _)
@@ -284,9 +291,9 @@ lemma dyadicSimplePredictable_brownian_eval_bounded
         if φ.partition j.castSucc < s ∧ s ≤ φ.partition j.succ
         then φ.ξ j ω else 0) = φ.ξ i ω := by
       rw [Finset.sum_eq_single i]
-      · exact if_pos hi
+      · exact ite_eq_left hi
       · intro j _ hji
-        refine if_neg ?_
+        refine ite_eq_right ?_
         intro hj
         exact h_at_most_one i j (Ne.symm hji) ⟨hi, hj⟩
       · intro h_not_mem
@@ -297,7 +304,7 @@ lemma dyadicSimplePredictable_brownian_eval_bounded
         if φ.partition j.castSucc < s ∧ s ≤ φ.partition j.succ
         then φ.ξ j ω else 0) = 0 := by
       refine Finset.sum_eq_zero (fun j _ => ?_)
-      refine if_neg ?_
+      refine ite_eq_right ?_
       intro hj
       exact h_exists ⟨j, hj⟩
     rw [h_sum_eq, abs_zero]
@@ -475,11 +482,11 @@ lemma dyadicSimplePredictable_brownian_eval_eq_dyadicAvg
   change (∑ j : Fin (2 ^ n), if φ.partition j.castSucc < s ∧ s ≤ φ.partition j.succ
                             then φ.ξ j ω else 0) = dyadicAvg_brownian g n i ω
   rw [Finset.sum_eq_single i]
-  · rw [if_pos h_i_fires]
+  · rw [ite_eq_left h_i_fires]
     change dyadicAvg_brownian (T := T) g n i ω = dyadicAvg_brownian g n i ω
     rfl
   · intro j _ hji
-    refine if_neg ?_
+    refine ite_eq_right ?_
     intro hj
     exact h_j_not_fires j hji hj
   · intro h_not_mem
@@ -534,11 +541,11 @@ lemma predictableDyadicSimple_brownian_eval_eq_shifted
   change (∑ j : Fin (2 ^ n), if φ.partition j.castSucc < s ∧ s ≤ φ.partition j.succ
                             then φ.ξ j ω else 0) = dyadicAvg_shifted_brownian T g n i ω
   rw [Finset.sum_eq_single i]
-  · rw [if_pos h_i_fires]
+  · rw [ite_eq_left h_i_fires]
     change dyadicAvg_shifted_brownian T g n i ω = dyadicAvg_shifted_brownian T g n i ω
     rfl
   · intro j _ hji
-    refine if_neg ?_
+    refine ite_eq_right ?_
     intro hj
     exact h_j_not_fires j hji hj
   · intro h_not_mem

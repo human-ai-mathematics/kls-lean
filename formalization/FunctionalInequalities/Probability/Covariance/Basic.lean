@@ -1,5 +1,7 @@
-import Mathlib.Probability.Moments.CovarianceBilin
-import Mathlib.Analysis.InnerProductSpace.Dual
+module
+
+public import Mathlib.Probability.Moments.CovarianceBilin
+public import Mathlib.Analysis.InnerProductSpace.Dual
 
 /-!
 # Centered covariance operator
@@ -8,6 +10,8 @@ The Riesz operator of Mathlib's centered covariance bilinear form provides the c
 normalization used by KLS. This foundational definition is shared with the linear-test results,
 which are kept out of the statement's import closure.
 -/
+
+@[expose] public section
 
 noncomputable section
 

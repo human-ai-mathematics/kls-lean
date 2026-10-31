@@ -1,8 +1,10 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.MeasureTheory.Integral.Prod
 
 /-!
 # Geometry and admissible sections of a Hilbert product
@@ -23,6 +25,8 @@ test domain with its Dirichlet domain. Mathlib's pinned v4.33.0 sources are
 and [gradient calculus](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Analysis/Calculus/Gradient/Basic.lean).
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
@@ -42,7 +46,7 @@ instance prodMeasure_isProbabilityMeasure {E F : Type*} [MeasurableSpace E] [Mea
     (μ : Measure E) (ν : Measure F) [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
     IsProbabilityMeasure (prodMeasure μ ν) := by
   rw [prodMeasure]
-  exact Measure.isProbabilityMeasure_map (WithLp.measurable_toLp 2 (E × F)).aemeasurable
+  exact (Measure.isProbabilityMeasure_map_iff (WithLp.measurable_toLp 2 (E × F)).aemeasurable).2 inferInstance
 
 section Geometry
 

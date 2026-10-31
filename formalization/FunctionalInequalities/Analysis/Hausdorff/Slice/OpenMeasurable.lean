@@ -1,13 +1,18 @@
-import FunctionalInequalities.Analysis.MeasurableCover
-import FunctionalInequalities.Analysis.Graph.OpenIntegral
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+module
+
+public import FunctionalInequalities.Analysis.MeasurableCover
+public import FunctionalInequalities.Analysis.Graph.OpenIntegral
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-! # Measurability of weighted slices on an open C¹ domain
 
-The measurability component of regular-domain coarea. No regular-point hypothesis is needed for this component.
+The measurability component of regular-domain coarea. No regular-point hypothesis is needed for this
+component.
 Local C¹ representatives and disjoint Borel pieces reduce it to the Lipschitz-on-set result.
 This module does not assert the coarea equality.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -21,17 +26,15 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 /-- Weighted slices of a Borel subset of an open C¹ domain are a.e. measurable.
 The weight may take the value `∞`, and no regularity outside the domain is assumed. -/
-theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn
-    {O S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
-    (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) (hS : MeasurableSet S)
+theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn {O S : Set V} {u : V → ℝ}
+    {g : V → ℝ≥0∞} (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) (hS : MeasurableSet S)
     (hSO : S ⊆ O) (hg : Measurable g) :
     AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V))
       (volume : Measure ℝ) := by
   classical
   rcases S.eq_empty_or_nonempty with hSe | ⟨z₀, hz₀⟩
   · simp [hSe]
-  choose ρ w hρ hballO hwC hwEq using fun z : O =>
-    Analysis.exists_contDiff_eqOn_ball hO hu z.2
+  choose ρ w hρ hballO hwC hwEq using fun z : O => Analysis.exists_contDiff_eqOn_ball hO hu z.2
   obtain ⟨σ, P, hPmeas, hPdisj, hPunion, hPsub⟩ :=
     Analysis.exists_measurable_partition_subordinate hS hSO ⟨z₀, hz₀⟩
       (fun z : O => Metric.ball (z : V) (ρ z)) (fun _ => Metric.isOpen_ball)
@@ -39,19 +42,23 @@ theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn
   have hslice : ∀ n t, P n ∩ {x | u x = t} = P n ∩ {x | w (σ n) x = t} := by
     intro n t
     ext x
-    constructor <;> rintro ⟨hx, ht⟩ <;>
-      exact ⟨hx, by simpa [hwEq (σ n) (hPsub n hx)] using ht⟩
-  have hm : ∀ n, AEMeasurable
-      (fun t : ℝ => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) volume := by
+    constructor <;> rintro ⟨hx, ht⟩ <;> exact ⟨hx, by simpa [hwEq (σ n) (hPsub n hx)] using ht⟩
+  have hm :
+    ∀ n,
+      AEMeasurable (fun t : ℝ => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) volume := by
     intro n
-    obtain ⟨K, hK⟩ := (hwC (σ n)).contDiffOn.exists_lipschitzOnWith
-      (by simp) (convex_closedBall ((σ n : O) : V) (ρ (σ n)))
-      (isCompact_closedBall ((σ n : O) : V) (ρ (σ n)))
+    obtain ⟨K, hK⟩ :=
+      (hwC (σ n)).contDiffOn.exists_lipschitzOnWith (by simp)
+        (convex_closedBall ((σ n : O) : V) (ρ (σ n)))
+        (isCompact_closedBall ((σ n : O) : V) (ρ (σ n)))
     simp_rw [hslice]
-    exact aemeasurable_setLIntegral_inter_levelSet (hwC (σ n)).continuous
-      (hK.mono fun x hx => Metric.ball_subset_closedBall (hPsub n hx)) (hPmeas n) hg
-  have heq : ∀ t, (∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) =
-      ∑' n, ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V) := by
+    exact
+      aemeasurable_setLIntegral_inter_levelSet (hwC (σ n)).continuous
+        (hK.mono fun x hx => Metric.ball_subset_closedBall (hPsub n hx)) (hPmeas n) hg
+  have heq :
+    ∀ t,
+      (∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) =
+        ∑' n, ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V) := by
     intro t
     rw [← hPunion, Set.iUnion_inter]
     apply lintegral_iUnion

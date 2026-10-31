@@ -1,8 +1,12 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.ReversePoincare
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.SelfImprovement
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.ReversePoincare
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.SelfImprovement
 
 /-! Independent clients of a.e. heat estimates. No test-positivity, approximation sequence,
 operator-core or regularity assumptions are supplied by these clients. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology
@@ -56,8 +60,7 @@ theorem gradient_mass
 theorem time_zero
     (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
     (hconv : ConvexOn ℝ Set.univ U)
-    (f : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
-    :
+    (f : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain) :
     ∀ᵐ x ∂(ν : Measure V),
       ‖(hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
           ⟨_, preserves_form_domain m (ContinuousLinearMap.id ℝ V) hν hi f (t := 0) le_rfl⟩ :

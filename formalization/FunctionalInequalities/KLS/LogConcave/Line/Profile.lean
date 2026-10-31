@@ -1,12 +1,15 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Hazard
-import FunctionalInequalities.KLS.LogConcave.Translation
-import FunctionalInequalities.Probability.Line.AffineProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Hazard
+public import FunctionalInequalities.KLS.LogConcave.Translation
+public import FunctionalInequalities.Probability.Line.AffineProfile
 
 /-!
 # The quantile-density profile of a log-concave law dominates `F (1 - F) / σ`
 
 Source: Blueprint `thm:one-dimensional-logconcave-poincare` (sharp form with constant `4`); the
-argument follows Section 5 of the collaborator's constant-4 source audit (a locally kept record). Read
+argument follows Section 5 of the collaborator's constant-4 source audit (a locally kept record).
+Read
 `LogConcave.mean_mem_interior_support`, `LineDensity.variance_ge_of_affine_bound` and
 `LineDensity.cdf_mul_one_sub_cdf_le_sd_mul`.
 
@@ -19,6 +22,8 @@ standard deviation `σ`, every point `x` of the interior `Ω` of the support sat
 
 Nothing here is a Poincaré inequality; the bound feeds the sharp Hardy module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -162,14 +167,16 @@ open unit interval. -/
 theorem affine_pos_of_bound {A B : ℝ}
     (hbound : ∀ y ∈ interior (μ : Measure ℝ).support, d.ρ y ≤ A * (1 - cdf μ y) + B * cdf μ y)
     {t : ℝ} (ht : t ∈ Ioo (0 : ℝ) 1) : 0 < A * (1 - t) + B * t := by
-  obtain ⟨y, hy⟩ := Probability.Line.exists_cdf_eq μ d.withDensity_eq d.measurable d.nonneg ht.1 ht.2
+  obtain ⟨y, hy⟩ :=
+    Probability.Line.exists_cdf_eq μ d.withDensity_eq d.measurable d.nonneg ht.1 ht.2
   have hyΩ : y ∈ interior (μ : Measure ℝ).support :=
     hμ.mem_interior_support_of_cdf hi (hy ▸ ht.1) (hy ▸ ht.2)
   have := hbound y hyΩ
   rw [hy] at this
   exact (d.pos hyΩ).trans_le this
 
-/-- Variance lower bound from an affine majorant: if `ρ ≤ A (1 - F) + B F` on the interior of the
+/--
+Variance lower bound from an affine majorant: if `ρ ≤ A (1 - F) + B F` on the interior of the
 support with `A, B ≥ 0`, then `Var μ ≥ 1 / (√A + √B)⁴`. -/
 theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
     (hbound : ∀ y ∈ interior (μ : Measure ℝ).support, d.ρ y ≤ A * (1 - cdf μ y) + B * cdf μ y) :
@@ -183,10 +190,14 @@ theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
   have hmap := Probability.Line.map_cdf_eq_uniform μ d.withDensity_eq d.measurable d.nonneg
   have hidsq : Integrable (fun x : ℝ ↦ (id x - E) ^ 2) (μ : Measure ℝ) := by
     have := (hμ.memLp_id_two.sub (memLp_const E)).integrable_sq
-    exact this.congr (ae_of_all _ fun x ↦ rfl)
+    exact
+      this.congr
+        (ae_of_all _ fun x ↦ rfl)
   -- the estimate for each perturbation `ε > 0`
-  have hε : ∀ ε : ℝ, 0 < ε →
-      1 / (Real.sqrt (A + ε) + Real.sqrt (B + ε)) ^ 4 ≤ variance id (μ : Measure ℝ) := by
+
+  have hε :
+    ∀ ε : ℝ,
+      0 < ε → 1 / (Real.sqrt (A + ε) + Real.sqrt (B + ε)) ^ 4 ≤ variance id (μ : Measure ℝ) := by
     intro ε hε
     set a := Real.sqrt (A + ε) with ha_def
     set b := Real.sqrt (B + ε) with hb_def
@@ -195,10 +206,12 @@ theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
     have ha2 : a ^ 2 = A + ε := Real.sq_sqrt (by linarith)
     have hb2 : b ^ 2 = B + ε := Real.sq_sqrt (by linarith)
     set p : ℝ := cdf μ E with hp_def
-    have hp : p ∈ Icc (0 : ℝ) 1 := ⟨Probability.Line.cdf_nonneg μ E, Probability.Line.cdf_le_one μ E⟩
+    have hp : p ∈ Icc (0 : ℝ) 1 :=
+      ⟨Probability.Line.cdf_nonneg μ E, Probability.Line.cdf_le_one μ E⟩
     set q : ℝ → ℝ := affineQuantile a b p with hq
     set Ψ : ℝ → ℝ := fun y ↦ q (cdf μ y) with hΨ
     -- the weight dominates the density on `Ω`
+
     have hw : ∀ y ∈ Ω, d.ρ y < affineWeight a b (cdf μ y) := by
       intro y hy
       have h1 := hbound y hy
@@ -207,16 +220,22 @@ theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
       unfold affineWeight
       rw [ha2, hb2]
       nlinarith
-    have hwpos : ∀ y ∈ Ω, 0 < affineWeight a b (cdf μ y) := fun y hy ↦ (d.pos hy).trans (hw y hy)
+    have hwpos : ∀ y ∈ Ω, 0 < affineWeight a b (cdf μ y) := fun y hy ↦
+      (d.pos hy).trans (hw y hy)
     have hFΩ : ∀ y ∈ Ω, cdf μ y ∈ Ioo (0 : ℝ) 1 := fun y hy ↦
       ⟨Probability.Line.cdf_pos_of_mem_interior_support μ hy,
         Probability.Line.cdf_lt_one_of_mem_interior_support μ hy⟩
     -- derivative of `Ψ` on `Ω`
+
     have hΨderiv : ∀ y ∈ Ω, HasDerivAt Ψ ((affineWeight a b (cdf μ y))⁻¹ * d.ρ y) y := by
       intro y hy
-      exact (Probability.Line.hasDerivAt_affineQuantile ha hb hp (hFΩ y hy)).comp y (d.hasDerivAt_cdf hy)
-    have hderiv_bounds : ∀ y ∈ Ω, 0 ≤ (affineWeight a b (cdf μ y))⁻¹ * d.ρ y ∧
-        (affineWeight a b (cdf μ y))⁻¹ * d.ρ y ≤ 1 := by
+      exact
+        (Probability.Line.hasDerivAt_affineQuantile ha hb hp (hFΩ y hy)).comp y
+          (d.hasDerivAt_cdf hy)
+    have hderiv_bounds :
+      ∀ y ∈ Ω,
+        0 ≤ (affineWeight a b (cdf μ y))⁻¹ * d.ρ y ∧
+          (affineWeight a b (cdf μ y))⁻¹ * d.ρ y ≤ 1 := by
       intro y hy
       have hwy := hwpos y hy
       constructor
@@ -226,37 +245,48 @@ theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
     have hderiv_cont : ContinuousOn (fun y ↦ (affineWeight a b (cdf μ y))⁻¹ * d.ρ y) Ω := by
       refine ContinuousOn.mul ?_ d.continuousOn
       refine ContinuousOn.inv₀ ?_ fun y hy ↦ (hwpos y hy).ne'
-      exact (Probability.Line.continuous_affineWeight.comp d.continuous_cdf).continuousOn
+      exact
+        (Probability.Line.continuous_affineWeight.comp d.continuous_cdf).continuousOn
     -- `Ψ` is `1`-Lipschitz on `Ω`
+
     have hlip : ∀ y ∈ Ω, ∀ z ∈ Ω, y ≤ z → 0 ≤ Ψ z - Ψ y ∧ Ψ z - Ψ y ≤ z - y := by
       intro y hy z hz hyz
       have hIcc : Icc y z ⊆ Ω := hμ.convex_interior_support.ordConnected.out hy hz
       have huIcc : uIcc y z = Icc y z := uIcc_of_le hyz
       have hftc : ∫ t in y..z, (affineWeight a b (cdf μ t))⁻¹ * d.ρ t = Ψ z - Ψ y := by
-        refine intervalIntegral.integral_eq_sub_of_hasDerivAt (fun t ht ↦ hΨderiv t (hIcc (huIcc ▸ ht))) ?_
+        refine
+          intervalIntegral.integral_eq_sub_of_hasDerivAt
+            (fun t ht ↦ hΨderiv t (hIcc (huIcc ▸ ht))) ?_
         apply ContinuousOn.intervalIntegrable
         rw [huIcc]
         exact hderiv_cont.mono hIcc
-      have hint : IntervalIntegrable (fun t ↦ (affineWeight a b (cdf μ t))⁻¹ * d.ρ t) volume y z := by
+      have hint :
+        IntervalIntegrable (fun t ↦ (affineWeight a b (cdf μ t))⁻¹ * d.ρ t) volume y z := by
         apply ContinuousOn.intervalIntegrable
         rw [huIcc]
         exact hderiv_cont.mono hIcc
       rw [← hftc]
       constructor
       · exact intervalIntegral.integral_nonneg hyz fun t ht ↦ (hderiv_bounds t (hIcc ht)).1
-      · have := intervalIntegral.integral_mono_on hyz hint (intervalIntegrable_const (c := (1 : ℝ)))
-          fun t ht ↦ (hderiv_bounds t (hIcc ht)).2
-        rwa [intervalIntegral.integral_const, smul_eq_mul, mul_one] at this
+      · have :=
+          intervalIntegral.integral_mono_on hyz hint (intervalIntegrable_const (c := (1 : ℝ)))
+            fun t ht ↦ (hderiv_bounds t (hIcc ht)).2
+        rwa [intervalIntegral.integral_const, smul_eq_mul,
+          mul_one] at this
     -- `Ψ` is continuous
+
     have hqcont : ContinuousOn q (Icc 0 1) := by
-      have := intervalIntegral.continuousOn_primitive_interval'
-        (Probability.Line.intervalIntegrable_inv_affineWeight ha hb (left_mem_Icc.mpr zero_le_one)
-          (right_mem_Icc.mpr zero_le_one)) (a := p) (by rw [uIcc_of_le zero_le_one]; exact hp)
+      have :=
+        intervalIntegral.continuousOn_primitive_interval'
+          (Probability.Line.intervalIntegrable_inv_affineWeight ha hb
+            (left_mem_Icc.mpr zero_le_one) (right_mem_Icc.mpr zero_le_one))
+          (a := p) (by rw [uIcc_of_le zero_le_one]; exact hp)
       rwa [uIcc_of_le zero_le_one] at this
     have hΨcont : Continuous Ψ :=
       hqcont.comp_continuous d.continuous_cdf fun y ↦
         ⟨Probability.Line.cdf_nonneg μ y, Probability.Line.cdf_le_one μ y⟩
     -- variance comparison
+
     have hvarΨ : variance Ψ (μ : Measure ℝ) ≤ variance id (μ : Measure ℝ) := by
       have hΨmeas : AEStronglyMeasurable Ψ (μ : Measure ℝ) := hΨcont.aestronglyMeasurable
       have hpt : ∀ x ∈ Ω, (Ψ x - Ψ E) ^ 2 ≤ (id x - E) ^ 2 := by
@@ -274,31 +304,39 @@ theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
         filter_upwards [hae] with x hx
         rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)]
         exact hpt x hx
-      calc variance Ψ (μ : Measure ℝ) = variance (fun x ↦ Ψ x - Ψ E) (μ : Measure ℝ) :=
-            (variance_sub_const hΨmeas (Ψ E)).symm
+      calc
+        variance Ψ (μ : Measure ℝ) = variance (fun x ↦ Ψ x - Ψ E) (μ : Measure ℝ) :=
+          (variance_sub_const hΨmeas (Ψ E)).symm
         _ ≤ ∫ x, (Ψ x - Ψ E) ^ 2 ∂(μ : Measure ℝ) := by
-            have := variance_le_expectation_sq (μ := (μ : Measure ℝ)) (X := fun x ↦ Ψ x - Ψ E)
+          have :=
+            variance_le_expectation_sq (μ := (μ : Measure ℝ)) (X := fun x ↦ Ψ x - Ψ E)
               (hΨmeas.sub aestronglyMeasurable_const)
-            simpa [Pi.pow_apply] using this
+          simpa [Pi.pow_apply] using this
         _ ≤ ∫ x, (id x - E) ^ 2 ∂(μ : Measure ℝ) := by
-            refine integral_mono_ae hint1 hidsq ?_
-            filter_upwards [hae] with x hx
-            exact hpt x hx
-        _ = variance id (μ : Measure ℝ) := (variance_eq_integral aemeasurable_id).symm
+          refine integral_mono_ae hint1 hidsq ?_
+          filter_upwards [hae] with x hx
+          exact hpt x hx
+        _ = variance id (μ : Measure ℝ) :=
+          (variance_eq_integral aemeasurable_id).symm
     -- the law of `Ψ` is the uniform law pushed through `q`
+
     have hvar_eq : variance Ψ (μ : Measure ℝ) = variance q unitUniform := by
       have hqmeas : AEMeasurable q ((μ : Measure ℝ).map (cdf μ)) := by
         rw [hmap]
         exact (hqcont.aestronglyMeasurable measurableSet_Icc).aemeasurable
-      have := variance_map (X := q) (Y := cdf μ) (μ := (μ : Measure ℝ)) hqmeas hFmeas.aemeasurable
+      have :=
+        variance_map (X := q) (Y := cdf μ) (μ := (μ : Measure ℝ)) hqmeas hFmeas.aemeasurable
       rw [hmap] at this
       rw [this]
       rfl
-    calc 1 / (a + b) ^ 4 ≤ variance q unitUniform :=
-          Probability.Line.one_div_le_variance_affineQuantile ha hb hp
+    calc
+      1 / (a + b) ^ 4 ≤ variance q unitUniform :=
+        Probability.Line.one_div_le_variance_affineQuantile ha hb hp
       _ = variance Ψ (μ : Measure ℝ) := hvar_eq.symm
-      _ ≤ variance id (μ : Measure ℝ) := hvarΨ
+      _ ≤ variance id (μ : Measure ℝ) :=
+        hvarΨ
   -- pass to the limit `ε → 0`
+
   by_cases hS : Real.sqrt A + Real.sqrt B = 0
   · rw [hS]
     simp only [zero_pow (by norm_num : (4 : ℕ) ≠ 0), div_zero]
@@ -306,10 +344,12 @@ theorem variance_ge_of_affine_bound {A B : ℝ} (hA : 0 ≤ A) (hB : 0 ≤ B)
   · have hcont : ContinuousAt (fun ε : ℝ ↦ 1 / (Real.sqrt (A + ε) + Real.sqrt (B + ε)) ^ 4) 0 := by
       have h1 : Continuous fun ε : ℝ ↦ (Real.sqrt (A + ε) + Real.sqrt (B + ε)) ^ 4 :=
         ((Real.continuous_sqrt.comp (continuous_const.add continuous_id)).add
-          (Real.continuous_sqrt.comp (continuous_const.add continuous_id))).pow 4
+              (Real.continuous_sqrt.comp (continuous_const.add continuous_id))).pow
+          4
       refine continuousAt_const.div h1.continuousAt ?_
       simpa using pow_ne_zero 4 hS
-    have htend : Tendsto (fun ε : ℝ ↦ 1 / (Real.sqrt (A + ε) + Real.sqrt (B + ε)) ^ 4) (𝓝[>] 0)
+    have htend :
+      Tendsto (fun ε : ℝ ↦ 1 / (Real.sqrt (A + ε) + Real.sqrt (B + ε)) ^ 4) (𝓝[>] 0)
         (𝓝 (1 / (Real.sqrt A + Real.sqrt B) ^ 4)) := by
       have := hcont.tendsto
       simp only [add_zero] at this

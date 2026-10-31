@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Law
-import FunctionalInequalities.Probability.Product
-import FunctionalInequalities.KLS.Isotropic
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Law
+public import FunctionalInequalities.Probability.Product
+public import FunctionalInequalities.KLS.Isotropic
 
 /-!
 # Second moments of the BKL suspension
@@ -12,6 +14,8 @@ statistic `F_N`, the suspension coordinate `S = (F_N + η)/σ_β`, and their cro
 copies, and assembles them into the second moments and the isotropy of the joint law
 (`isotropic_jointLaw`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -152,7 +156,7 @@ theorem integral_scalar_mul_inner {n N : ℕ} (hN : 0 < N)
   have hprod : MemLp (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ =>
       ((copyStat f N q.1 + q.2) / sigma β) * ⟪u, q.1 i⟫) 1
       ((Measure.pi (fun _ : Fin N => μ)).prod (laplaceMeasure β)) :=
-    hZprod2.mul' hS.1
+    hS.1.fun_mul hZprod2
   have hηL2 : MemLp (fun s : ℝ => s) 2 (laplaceMeasure β) :=
     (memLp_two_iff_integrable_sq_norm hη1.aestronglyMeasurable).mpr
       (by simpa only [Real.norm_eq_abs, sq_abs] using hη2)
@@ -175,13 +179,12 @@ private theorem innerCoordinates {I : Type*} [Fintype I]
     (u p : EuclideanSpace ℝ I) : ⟪u, p⟫ = ∑ i, u i * p i := by
   simpa using ((EuclideanSpace.basisFun I ℝ).sum_inner_mul_inner u p).symm
 
-private theorem euclideanMomentsFromCoordinates {A I : Type*} [MeasurableSpace A]
-    [Fintype I] [DecidableEq I] (ν : Measure A) [IsProbabilityMeasure ν] (Y : A → EuclideanSpace ℝ I)
-    (hY : Measurable Y) (h2 : ∀ i, MemLp (fun x => Y x i) 2 ν)
-    (h0 : ∀ i, (∫ x, Y x i ∂ν) = 0)
+private theorem euclideanMomentsFromCoordinates {A I : Type*} [MeasurableSpace A] [Fintype I]
+    [DecidableEq I] (ν : Measure A) [IsProbabilityMeasure ν] (Y : A → EuclideanSpace ℝ I)
+    (hY : Measurable Y) (h2 : ∀ i, MemLp (fun x => Y x i) 2 ν) (h0 : ∀ i, (∫ x, Y x i ∂ν) = 0)
     (hcov : ∀ i j, (∫ x, Y x i * Y x j ∂ν) = if i = j then 1 else 0) :
-    MemLp Y 2 ν ∧ (∫ x, Y x ∂ν) = 0 ∧
-      ∀ u v : EuclideanSpace ℝ I, (∫ x, ⟪u, Y x⟫ * ⟪v, Y x⟫ ∂ν) = ⟪u, v⟫ := by
+    MemLp Y 2 ν ∧
+      (∫ x, Y x ∂ν) = 0 ∧ ∀ u v : EuclideanSpace ℝ I, (∫ x, ⟪u, Y x⟫ * ⟪v, Y x⟫ ∂ν) = ⟪u, v⟫ := by
   classical
   have hsq (i : I) : Integrable (fun x => (Y x i) ^ 2) ν := by
     simpa only [Real.norm_eq_abs, sq_abs] using
@@ -192,20 +195,21 @@ private theorem euclideanMomentsFromCoordinates {A I : Type*} [MeasurableSpace A
       integrable_finsetSum Finset.univ (fun i _ => hsq i)
   have hY0 : (∫ x, Y x ∂ν) = 0 := by
     ext i
-    have hi := (EuclideanSpace.proj i : EuclideanSpace ℝ I →L[ℝ] ℝ).integral_comp_comm
-      (hY2.integrable one_le_two)
+    have hi :=
+      (EuclideanSpace.proj i : EuclideanSpace ℝ I →L[ℝ] ℝ).integral_comp_comm
+        (hY2.integrable one_le_two)
     change (∫ x, Y x i ∂ν) = (∫ x, Y x ∂ν) i at hi
     rw [← hi, h0 i]
     rfl
   refine ⟨hY2, hY0, ?_⟩
   intro u v
   have hprod (i j : I) : Integrable (fun x => Y x i * Y x j) ν := by
-    have h : MemLp (fun x => Y x i * Y x j) 1 ν := (h2 j).mul' (h2 i)
+    have h : MemLp (fun x => Y x i * Y x j) 1 ν := (h2 i).fun_mul (h2 j)
     exact h.integrable le_rfl
   have hterm (i j : I) : Integrable (fun x => (u i * v j) * (Y x i * Y x j)) ν :=
     (hprod i j).const_mul _
-  have hexpand (x : A) : ⟪u, Y x⟫ * ⟪v, Y x⟫ =
-      ∑ i : I, ∑ j : I, (u i * v j) * (Y x i * Y x j) := by
+  have hexpand (x : A) :
+    ⟪u, Y x⟫ * ⟪v, Y x⟫ = ∑ i : I, ∑ j : I, (u i * v j) * (Y x i * Y x j) := by
     rw [innerCoordinates, innerCoordinates, Finset.sum_mul_sum]
     apply Finset.sum_congr rfl
     intro i hi
@@ -213,9 +217,8 @@ private theorem euclideanMomentsFromCoordinates {A I : Type*} [MeasurableSpace A
     intro j hj
     ring
   calc
-    (∫ x, ⟪u, Y x⟫ * ⟪v, Y x⟫ ∂ν) =
-        ∫ x, ∑ i : I, ∑ j : I, (u i * v j) * (Y x i * Y x j) ∂ν :=
-          integral_congr_ae (Filter.Eventually.of_forall hexpand)
+    (∫ x, ⟪u, Y x⟫ * ⟪v, Y x⟫ ∂ν) = ∫ x, ∑ i : I, ∑ j : I, (u i * v j) * (Y x i * Y x j) ∂ν :=
+      integral_congr_ae (Filter.Eventually.of_forall hexpand)
     _ = ∑ i : I, ∑ j : I, ∫ x, (u i * v j) * (Y x i * Y x j) ∂ν := by
       rw [integral_finsetSum _ (fun i _ => integrable_finsetSum _ (fun j _ => hterm i j))]
       apply Finset.sum_congr rfl
@@ -236,13 +239,14 @@ private theorem euclideanMomentsFromCoordinates {A I : Type*} [MeasurableSpace A
 
 
 
-/-- **Second moments of the joint law** (BKL p. 28, isotropy from (108)): under the explicit Laplace
+/--
+**Second moments of the joint law** (BKL p. 28, isotropy from (108)): under the explicit Laplace
 moment data, the joint law of `(S, X₁, …, X_N)` has finite second moment, mean `0` and identity
 covariance.
 -/
 theorem jointLaw_moments_of_laplace {n N : ℕ} (hN : 0 < N)
-    (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ]
-    (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)
+    (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ)
+    (hμ0 : ∫ x, x ∂μ = 0)
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) (hf2 : MemLp f 2 μ)
     (hf0 : ∫ x, f x ∂μ = 0) (hf1 : ∫ x, f x ^ 2 ∂μ = 1) (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂μ = 0)
@@ -250,99 +254,114 @@ theorem jointLaw_moments_of_laplace {n N : ℕ} (hN : 0 < N)
     (hη1 : Integrable (fun s : ℝ => s) (laplaceMeasure β))
     (hη2 : Integrable (fun s : ℝ => s ^ 2) (laplaceMeasure β))
     (hη0 : ∫ s, s ∂laplaceMeasure β = 0) (hηv : ∫ s, s ^ 2 ∂laplaceMeasure β = 2 / β ^ 2) :
-    MemLp id 2 (jointLaw μ f β (sigma β) N) ∧ ∫ p, p ∂(jointLaw μ f β (sigma β) N) = 0 ∧
-      ∀ u v : JointSpace N n, ∫ p, ⟪u, p⟫ * ⟪v, p⟫ ∂(jointLaw μ f β (sigma β) N) = ⟪u, v⟫ := by
+    MemLp id 2 (jointLaw μ f β (sigma β) N) ∧
+      ∫ p, p ∂(jointLaw μ f β (sigma β) N) = 0 ∧
+        ∀ u v : JointSpace N n, ∫ p, ⟪u, p⟫ * ⟪v, p⟫ ∂(jointLaw μ f β (sigma β) N) = ⟪u, v⟫ := by
   classical
   let ν := Measure.pi (fun _ : Fin N => μ)
   let P := ν.prod (laplaceMeasure β)
-  let Y : ((Fin N → EuclideanSpace ℝ (Fin n)) × ℝ) → JointSpace N n :=
-    embed f (sigma β) N
+  let Y : ((Fin N → EuclideanSpace ℝ (Fin n)) × ℝ) → JointSpace N n := embed f (sigma β) N
   have hYmeas : Measurable Y := by
-    have hg : Measurable
-        (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ =>
-          fun o : Option (Fin N × Fin n) =>
-            o.elim ((copyStat f N q.1 + q.2) / sigma β)
-              (fun ij => (q.1 ij.1).ofLp ij.2)) := by
+    have hg :
+      Measurable
+        (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ => fun o : Option (Fin N × Fin n) =>
+          o.elim ((copyStat f N q.1 + q.2) / sigma β) (fun ij => (q.1 ij.1).ofLp ij.2)) := by
       rw [measurable_pi_iff]
       intro o
       cases o with
       | none => unfold copyStat; measurability
       | some ij => measurability
     exact (WithLp.measurable_toLp 2 _).comp hg
-  have hS := scalar_moments hN μ f hf2 hf0 hf1
-    hβ hη1 hη2 hη0 hηv
+  have hS := scalar_moments hN μ f hf2 hf0 hf1 hβ hη1 hη2 hη0 hηv
   have hcoord2 (o : Option (Fin N × Fin n)) : MemLp (fun q => Y q o) 2 P := by
     cases o with
     | none => exact hS.1
-    | some ij =>
-        have hB2 : MemLp (fun x : EuclideanSpace ℝ (Fin n) => x ij.2) 2 μ := by
-          exact (EuclideanSpace.proj ij.2 : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ).comp_memLp' hμ2
-        have hXi2 : MemLp (fun x : Fin N → EuclideanSpace ℝ (Fin n) => x ij.1 ij.2) 2 ν :=
-          hB2.comp_measurePreserving (measurePreserving_eval (fun _ : Fin N => μ) ij.1)
-        exact hXi2.comp_fst (laplaceMeasure β)
+    | some
+      ij =>
+      have hB2 : MemLp (fun x : EuclideanSpace ℝ (Fin n) => x ij.2) 2 μ := by
+        exact (EuclideanSpace.proj ij.2 : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ).comp_memLp' hμ2
+      have hXi2 : MemLp (fun x : Fin N → EuclideanSpace ℝ (Fin n) => x ij.1 ij.2) 2 ν :=
+        hB2.comp_measurePreserving (measurePreserving_eval (fun _ : Fin N => μ) ij.1)
+      exact hXi2.comp_fst (laplaceMeasure β)
   have hcoord0 (o : Option (Fin N × Fin n)) : (∫ q, Y q o ∂P) = 0 := by
     cases o with
     | none => exact hS.2.1
-    | some ij =>
-        have hB2 : MemLp (fun x : EuclideanSpace ℝ (Fin n) => x ij.2) 2 μ :=
-          (EuclideanSpace.proj ij.2 : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ).comp_memLp' hμ2
-        have hB0 : (∫ x : EuclideanSpace ℝ (Fin n), x ij.2 ∂μ) = 0 := by
-          have h := (EuclideanSpace.proj ij.2 : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ).integral_comp_comm
+    | some
+      ij =>
+      have hB2 : MemLp (fun x : EuclideanSpace ℝ (Fin n) => x ij.2) 2 μ :=
+        (EuclideanSpace.proj ij.2 : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ).comp_memLp' hμ2
+      have hB0 : (∫ x : EuclideanSpace ℝ (Fin n), x ij.2 ∂μ) = 0 := by
+        have h :=
+          (EuclideanSpace.proj ij.2 : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ).integral_comp_comm
             (hμ2.integrable one_le_two)
-          simpa [hμ0] using h
-        have hXi0 : (∫ x : Fin N → EuclideanSpace ℝ (Fin n), x ij.1 ij.2 ∂ν) = 0 := by
-          rw [Probability.integral_comp_eval_pi μ (fun x => x ij.2) hB2.aestronglyMeasurable N ij.1]
-          exact hB0
-        change (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ, q.1 ij.1 ij.2 ∂P) = 0
-        rw [integral_fun_fst (fun x : Fin N → EuclideanSpace ℝ (Fin n) => x ij.1 ij.2), hXi0]
-        simp
+        simpa [hμ0] using h
+      have hXi0 : (∫ x : Fin N → EuclideanSpace ℝ (Fin n), x ij.1 ij.2 ∂ν) = 0 := by
+        rw [Probability.integral_comp_eval_pi μ (fun x => x ij.2) hB2.aestronglyMeasurable N
+            ij.1]
+        exact hB0
+      change (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ, q.1 ij.1 ij.2 ∂P) = 0
+      rw [integral_fun_fst (fun x : Fin N → EuclideanSpace ℝ (Fin n) => x ij.1 ij.2), hXi0]
+      simp
   have hcoordcov (o r : Option (Fin N × Fin n)) :
-      (∫ q, Y q o * Y q r ∂P) = if o = r then 1 else 0 := by
+    (∫ q, Y q o * Y q r ∂P) = if o = r then 1 else 0 := by
     cases o with
     | none =>
-        cases r with
-        | none =>
-            change (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
-              ((copyStat f N q.1 + q.2) / sigma β) *
-                ((copyStat f N q.1 + q.2) / sigma β) ∂P) = 1
-            simpa only [pow_two] using hS.2.2
-        | some ij =>
-            have h := integral_scalar_mul_inner hN μ hμ2 hμ0 f hf2 hf0 hf1
-              hfx hβ hη1 hη2 hη0 hηv ij.1 (EuclideanSpace.basisFun (Fin n) ℝ ij.2)
-            change (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
-              ((copyStat f N q.1 + q.2) / sigma β) * q.1 ij.1 ij.2 ∂P) = 0
-            simpa only [EuclideanSpace.basisFun_inner] using h.2
+      cases r with
+      |
+        none =>
+        change
+          (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
+              ((copyStat f N q.1 + q.2) / sigma β) * ((copyStat f N q.1 + q.2) / sigma β) ∂P) =
+            1
+        simpa only [pow_two] using hS.2.2
+      | some
+        ij =>
+        have h :=
+          integral_scalar_mul_inner hN μ hμ2 hμ0 f hf2 hf0 hf1 hfx hβ hη1 hη2 hη0 hηv ij.1
+            (EuclideanSpace.basisFun (Fin n) ℝ ij.2)
+        change
+          (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
+              ((copyStat f N q.1 + q.2) / sigma β) * q.1 ij.1 ij.2 ∂P) =
+            0
+        simpa only [EuclideanSpace.basisFun_inner] using h.2
     | some ij =>
-        cases r with
-        | none =>
-            have h := integral_scalar_mul_inner hN μ hμ2 hμ0 f hf2 hf0 hf1
-              hfx hβ hη1 hη2 hη0 hηv ij.1 (EuclideanSpace.basisFun (Fin n) ℝ ij.2)
-            change (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
-              q.1 ij.1 ij.2 * ((copyStat f N q.1 + q.2) / sigma β) ∂P) = 0
-            calc
-              _ = ∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
-                  ((copyStat f N q.1 + q.2) / sigma β) * q.1 ij.1 ij.2 ∂P :=
-                    integral_congr_ae (Filter.Eventually.of_forall fun _ => mul_comm _ _)
-              _ = 0 := by simpa only [EuclideanSpace.basisFun_inner] using h.2
-        | some kl =>
-            let b := EuclideanSpace.basisFun (Fin n) ℝ
-            have h := integral_inner_mul_inner_pi μ hμ2 hμ0 hμcov ij.1 kl.1 (b ij.2) (b kl.2)
-            have hraw : (∫ x : Fin N → EuclideanSpace ℝ (Fin n), x ij.1 ij.2 * x kl.1 kl.2 ∂ν) =
-                if ij.1 = kl.1 then ⟪b ij.2, b kl.2⟫ else 0 := by
-              simpa only [b, EuclideanSpace.basisFun_inner] using h.2
-            change (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
-              q.1 ij.1 ij.2 * q.1 kl.1 kl.2 ∂P) = if some ij = some kl then 1 else 0
-            rw [integral_fun_fst (fun x : Fin N → EuclideanSpace ℝ (Fin n) =>
-              x ij.1 ij.2 * x kl.1 kl.2), hraw]
-            have hmass : (laplaceMeasure β).real Set.univ = 1 := by simp
-            rw [hmass, one_smul]
-            rw [b.inner_eq_ite]
-            by_cases hik : ij.1 = kl.1 <;> by_cases hjl : ij.2 = kl.2 <;>
-              simp [Prod.ext_iff, hik, hjl]
+      cases r with
+      |
+        none =>
+        have h :=
+          integral_scalar_mul_inner hN μ hμ2 hμ0 f hf2 hf0 hf1 hfx hβ hη1 hη2 hη0 hηv ij.1
+            (EuclideanSpace.basisFun (Fin n) ℝ ij.2)
+        change
+          (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
+              q.1 ij.1 ij.2 * ((copyStat f N q.1 + q.2) / sigma β) ∂P) =
+            0
+        calc
+          _ =
+              ∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ,
+                ((copyStat f N q.1 + q.2) / sigma β) * q.1 ij.1 ij.2 ∂P :=
+            integral_congr_ae (Filter.Eventually.of_forall fun _ => mul_comm _ _)
+          _ = 0 := by simpa only [EuclideanSpace.basisFun_inner] using h.2
+      | some kl =>
+        let b := EuclideanSpace.basisFun (Fin n) ℝ
+        have h := integral_inner_mul_inner_pi μ hμ2 hμ0 hμcov ij.1 kl.1 (b ij.2) (b kl.2)
+        have hraw :
+          (∫ x : Fin N → EuclideanSpace ℝ (Fin n), x ij.1 ij.2 * x kl.1 kl.2 ∂ν) =
+            if ij.1 = kl.1 then ⟪b ij.2, b kl.2⟫ else 0 := by
+          simpa only [b, EuclideanSpace.basisFun_inner] using h.2
+        change
+          (∫ q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ, q.1 ij.1 ij.2 * q.1 kl.1 kl.2 ∂P) =
+            if some ij = some kl then 1 else 0
+        rw [integral_fun_fst
+            (fun x : Fin N → EuclideanSpace ℝ (Fin n) => x ij.1 ij.2 * x kl.1 kl.2),
+          hraw]
+        have hmass : (laplaceMeasure β).real Set.univ = 1 := by simp
+        rw [hmass, one_smul]
+        rw [b.inner_eq_ite]
+        by_cases hik : ij.1 = kl.1 <;> by_cases hjl : ij.2 = kl.2 <;>
+          simp [Prod.ext_iff, hik, hjl]
   have hbase := euclideanMomentsFromCoordinates P Y hYmeas hcoord2 hcoord0 hcoordcov
   have hmap2 : MemLp id 2 (P.map Y) := by
-    apply (memLp_map_measure_iff (continuous_id.aestronglyMeasurable)
-      hYmeas.aemeasurable).mpr
+    apply (memLp_map_measure_iff (continuous_id.aestronglyMeasurable) hYmeas.aemeasurable).mpr
     exact hbase.1
   refine ⟨hmap2, ?_, ?_⟩
   · change (∫ p : JointSpace N n, p ∂P.map Y) = 0
@@ -352,7 +371,9 @@ theorem jointLaw_moments_of_laplace {n N : ℕ} (hN : 0 < N)
   · intro u v
     change (∫ p : JointSpace N n, ⟪u, p⟫ * ⟪v, p⟫ ∂P.map Y) = ⟪u, v⟫
     have hm : AEStronglyMeasurable (fun p : JointSpace N n => ⟪u, p⟫ * ⟪v, p⟫) (P.map Y) := by
-      exact (show Continuous (fun p : JointSpace N n => ⟪u, p⟫ * ⟪v, p⟫) by fun_prop).aestronglyMeasurable
+      exact
+        (show Continuous (fun p : JointSpace N n => ⟪u, p⟫ * ⟪v, p⟫) by
+            fun_prop).aestronglyMeasurable
     rw [integral_map hYmeas.aemeasurable hm]
     exact hbase.2.2 u v
 

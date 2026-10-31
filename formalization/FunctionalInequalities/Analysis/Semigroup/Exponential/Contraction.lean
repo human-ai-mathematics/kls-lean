@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.SpecialFunctions.Exponential
+module
+
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.SpecialFunctions.Exponential
 
 /-!
 # Contraction of negative operator exponentials
@@ -10,6 +12,8 @@ A bounded nonnegative operator on a complete real Hilbert space satisfies
 The proof differentiates the squared orbit norm. This is a bounded-operator
 estimate; unbounded semigroup generation and the Markov property are separate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -55,7 +59,9 @@ theorem antitone_normSq_exp_smul_neg (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 �
   have := hL (NormedSpace.exp (t • (-L)) f)
   linarith
 
-/-- **Contraction of negative exponentials.** If `L` is a bounded nonnegative operator on a real Hilbert space, then
+/--
+**Contraction of negative exponentials.** If `L` is a bounded nonnegative operator on a real Hilbert
+space, then
 `exp (-t • L)` is a contraction for every `t ≥ 0`, pointwise: `‖exp (-t • L) f‖ ≤ ‖f‖`.
 
 No self-adjointness hypothesis is needed. -/

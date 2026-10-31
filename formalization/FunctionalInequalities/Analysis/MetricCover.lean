@@ -1,5 +1,7 @@
-import Mathlib.Topology.MetricSpace.Pseudo.Lemmas
-import Mathlib.Topology.Compactness.Lindelof
+module
+
+public import Mathlib.Topology.MetricSpace.Pseudo.Lemmas
+public import Mathlib.Topology.Compactness.Lindelof
 
 /-!
 # Buffered countable ball covers of open sets
@@ -11,6 +13,8 @@ or nonemptiness hypothesis. The two consumers are local contact null images
 and compact-patch localization of domain Monge–Ampere equations for Letwin
 arXiv:2607.24164v1 Lemma 2.2 / BB arXiv:1207.6128v1 Theorem 2.24(ii).
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric

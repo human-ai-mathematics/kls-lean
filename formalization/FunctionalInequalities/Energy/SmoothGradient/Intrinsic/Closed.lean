@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
-import FunctionalInequalities.Energy.SmoothGradient.Closed
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
+public import FunctionalInequalities.Energy.SmoothGradient.Closed
 
 /-!
 # Closed quadratic energy in intrinsic affine coordinates
@@ -12,6 +14,8 @@ closed-quadratic structure.
 This is an intrinsic-affine smooth-relaxation theorem. It is not an identification with Cheeger
 energy, a Markov theorem, or an agreement statement for raw ambient gradients.
 -/
+
+@[expose] public section
 
 noncomputable section
 

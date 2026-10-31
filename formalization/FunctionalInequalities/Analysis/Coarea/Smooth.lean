@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Coarea.Regular
-import FunctionalInequalities.Analysis.Hausdorff.Slice.Critical
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Regular
+public import FunctionalInequalities.Analysis.Hausdorff.Slice.Critical
 
 /-! # Weighted coarea for an arbitrary `C¹` function
 
@@ -11,17 +13,24 @@ No Lipschitz bound on `u`, no boundedness or finiteness of `S`, no integrability
 nondegeneracy assumption on the derivative: the critical set is allowed to be arbitrarily large.
 
 The two halves meet exactly, and neither alone suffices.  The critical set
-`C = {x | fderiv ℝ u x = 0}` is closed, so its complement `R` is open and regular-domain coarea applies to `R`,
+`C = {x | fderiv ℝ u x = 0}` is closed, so its complement `R` is open and regular-domain coarea
+applies to `R`,
 which gives the identity for `S ∩ R`.  On the left the critical part contributes nothing because
 `gradient u` vanishes there, so the ambient integral over `S` equals the one over `S ∩ R`.  On the
-right critical-slice nullity makes the critical slice null at almost every level, so the slice integral over
+right critical-slice nullity makes the critical slice null at almost every level, so the slice
+integral over
 `S ∩ {u = t}` agrees with the one over `(S ∩ R) ∩ {u = t}` for almost every `t`; that same almost
-everywhere equality transports regular-domain coarea's `AEMeasurable` component to the full slice function.
+everywhere equality transports regular-domain coarea's `AEMeasurable` component to the full slice
+function.
 
 This module assumes `u` is `C¹`. `LipschitzCoarea` uses this theorem and the proved exact C¹
-decomposition exact C¹ decomposition, built from the compact Whitney extension compact Whitney extension, to prove globally Lipschitz coarea for globally
+decomposition exact C¹ decomposition, built from the compact Whitney extension compact Whitney
+extension, to prove globally Lipschitz coarea for globally
 Lipschitz functions and the original `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
-entry point. `LocallyLipschitzCoarea` further proves locally Lipschitz coarea for locally Lipschitz functions. -/
+entry point. `LocallyLipschitzCoarea` further proves locally Lipschitz coarea for locally Lipschitz
+functions. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -47,32 +56,37 @@ theorem isOpen_regular {u : V → ℝ} (hu : ContDiff ℝ 1 u) :
 
 /-- **Weighted coarea for an arbitrary `C¹` function**, including almost
 everywhere measurability of the weighted slices. -/
-theorem coarea_of_contDiff {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
-    (hu : ContDiff ℝ 1 u) (hS : MeasurableSet S) (hg : Measurable g) :
+theorem coarea_of_contDiff {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞} (hu : ContDiff ℝ 1 u)
+    (hS : MeasurableSet S) (hg : Measurable g) :
     AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V))
-      (volume : Measure ℝ) ∧
-    (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
-      ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
-  have hCmeas : MeasurableSet {x : V | fderiv ℝ u x = 0} :=
-    (isClosed_critical hu).measurableSet
-  have hRmeas : MeasurableSet {x : V | fderiv ℝ u x ≠ 0} := (isOpen_regular hu).measurableSet
+        (volume : Measure ℝ) ∧
+      (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+        ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
+  have hCmeas : MeasurableSet {x : V | fderiv ℝ u x = 0} := (isClosed_critical hu).measurableSet
+  have hRmeas : MeasurableSet {x : V | fderiv ℝ u x ≠ 0} :=
+    (isOpen_regular hu).measurableSet
   -- regular-domain coarea on the open regular part.
-  obtain ⟨hmeasR, heqR⟩ := coarea_of_contDiffOn_of_fderiv_ne_zero
-    (O := {x : V | fderiv ℝ u x ≠ 0}) (S := S ∩ {x : V | fderiv ℝ u x ≠ 0})
-    (isOpen_regular hu) hu.contDiffOn (fun _ hx => hx) (hS.inter hRmeas)
-    Set.inter_subset_right hg
+
+  obtain ⟨hmeasR, heqR⟩ :=
+    coarea_of_contDiffOn_of_fderiv_ne_zero (O := {x : V | fderiv ℝ u x ≠ 0}) (S :=
+      S ∩ {x : V | fderiv ℝ u x ≠ 0}) (isOpen_regular hu) hu.contDiffOn (fun _ hx => hx)
+      (hS.inter hRmeas) Set.inter_subset_right
+      hg
   -- critical-slice nullity: the two slice integrands agree at almost every level.
-  have hslice : (fun t : ℝ =>
-        ∫⁻ y in (S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∩ ({x | u x = t} : Set V), g y
-          ∂(surfaceMeasure V))
-      =ᵐ[(volume : Measure ℝ)] fun t : ℝ =>
-        ∫⁻ y in S ∩ ({x | u x = t} : Set V), g y ∂(surfaceMeasure V) := by
+
+  have hslice :
+    (fun t : ℝ =>
+        ∫⁻ y in (S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∩ ({x | u x = t} : Set V),
+          g y ∂(surfaceMeasure V)) =ᵐ[(volume : Measure ℝ)]
+      fun t : ℝ => ∫⁻ y in S ∩ ({x | u x = t} : Set V), g y ∂(surfaceMeasure V) := by
     filter_upwards [ae_surfaceMeasure_critical_inter_levelSet_eq_zero (V := V) hu] with t ht
-    have hsub : (S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∩ ({x | u x = t} : Set V)
-        ⊆ S ∩ ({x | u x = t} : Set V) :=
+    have hsub :
+      (S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∩ ({x | u x = t} : Set V) ⊆
+        S ∩ ({x | u x = t} : Set V) :=
       Set.inter_subset_inter_left _ Set.inter_subset_left
-    have haee : (((S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∩ {x | u x = t} : Set V))
-        =ᵐ[surfaceMeasure V] ((S ∩ {x | u x = t} : Set V)) := by
+    have haee :
+      (((S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∩ {x | u x = t} : Set V)) =ᵐ[surfaceMeasure V]
+        ((S ∩ {x | u x = t} : Set V)) := by
       refine ae_eq_set.2 ⟨?_, measure_mono_null ?_ ht⟩
       · rw [Set.sdiff_eq_empty.2 hsub]
         exact measure_empty
@@ -81,21 +95,23 @@ theorem coarea_of_contDiff {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
         by_contra hne
         exact hx.2 ⟨⟨hx.1.1, hne⟩, hx.1.2⟩
     rw [Measure.restrict_congr_set haee]
-  refine ⟨hmeasR.congr hslice, ?_⟩
+  refine
+    ⟨hmeasR.congr hslice, ?_⟩
   -- On the left the critical part contributes nothing: the gradient vanishes there.
-  have hsplit : (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V))
-      = ∫⁻ x in S ∩ {x : V | fderiv ℝ u x ≠ 0}, ‖gradient u x‖ₑ * g x
-          ∂(volume : Measure V) := by
+
+  have hsplit :
+    (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+      ∫⁻ x in S ∩ {x : V | fderiv ℝ u x ≠ 0}, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) := by
     have hSU : S = (S ∩ {x : V | fderiv ℝ u x ≠ 0}) ∪ (S ∩ {x : V | fderiv ℝ u x = 0}) := by
       ext x
       by_cases h : fderiv ℝ u x = 0 <;> simp [h]
-    have hdisj : Disjoint (S ∩ {x : V | fderiv ℝ u x ≠ 0})
-        (S ∩ {x : V | fderiv ℝ u x = 0}) :=
+    have hdisj : Disjoint (S ∩ {x : V | fderiv ℝ u x ≠ 0}) (S ∩ {x : V | fderiv ℝ u x = 0}) :=
       Set.disjoint_left.2 fun x hx hx' => hx.2 hx'.2
-    have hzero : (∫⁻ x in S ∩ {x : V | fderiv ℝ u x = 0}, ‖gradient u x‖ₑ * g x
-        ∂(volume : Measure V)) = 0 := by
-      have hfun : Set.EqOn (fun x : V => ‖gradient u x‖ₑ * g x) 0
-          (S ∩ {x : V | fderiv ℝ u x = 0}) := by
+    have hzero :
+      (∫⁻ x in S ∩ {x : V | fderiv ℝ u x = 0}, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+        0 := by
+      have hfun :
+        Set.EqOn (fun x : V => ‖gradient u x‖ₑ * g x) 0 (S ∩ {x : V | fderiv ℝ u x = 0}) := by
         intro x hx
         have hfd : fderiv ℝ u x = 0 := hx.2
         have hgr : gradient u x = 0 := by rw [gradient, hfd]; simp

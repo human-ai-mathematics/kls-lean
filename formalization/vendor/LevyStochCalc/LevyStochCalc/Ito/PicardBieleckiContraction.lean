@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardSelfMap
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardSelfMap
 
 /-!
 # The Bielecki-norm contraction estimate for the Picard map
@@ -13,6 +17,8 @@ At each time of the window the `L²` mass of the difference of two Picard steps 
 the Bielecki weight `e^{-2βt}` the map contracts at rate `9 n L² T / (2β)`; together with the
 threshold `9 n L² T < 2β` under which that rate is `< 1`.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.GammaTwo
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.GammaTwo
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
 
 /-!
 # The heat-flow test class `ψ = P_s φ` for the weak `Γ₂` inequality
@@ -9,15 +11,18 @@ Both resulting weak-Gamma pairings are integrable for arbitrary `L²` vector fie
 Generator symmetry extends pointwise Bochner to every nonnegative test in `D(A)` when the
 **data** remain smooth and compactly supported. In particular the test can be `P_s φ`.
 
-The extension to arbitrary data `F = P_r g` is **not proved**. A separate transfer theorem
-retains explicit convergence of both fields `∇fₙ` and `-∇ℒfₙ`; the existing operator core for
-`A` does not provide the second convergence. No time interpolation or gradient estimate is
-claimed. All statements retain the current full-dimensional log-concave model.
+This module's transfer theorem for arbitrary data `F = P_r g` retains explicit convergence of
+both fields `∇fₙ` and `-∇ℒfₙ`; the operator core for `A` alone does not supply the second
+convergence. `BakryEmery/TestClassExtension.lean` provides the arbitrary-positive-time-data
+extension using the separate two-field form-range construction. No time interpolation or
+gradient estimate is claimed here. All statements retain the full-dimensional log-concave model.
 
-`exists_seq_smooth_tendsto_regularized_fields` constructs two-field approximants of the form
-`P_{r/2}[fₙ]` with `fₙ ∈ C_c^∞`. It does not remove the heat evolution from the approximants;
-the smooth-data Bochner theorem therefore does not yet apply to them.
+`exists_seq_smooth_tendsto_regularized_fields` constructs approximants `P_{r/2}[fₙ]` with
+`fₙ ∈ C_c^∞`. Their heat evolution is retained, so using them requires the separate extension
+step rather than the compact-data Bochner statement alone.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -152,30 +157,37 @@ variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
 set_option maxHeartbeats 800000 in
 /-- Smooth compactly supported data and their generator images give uniformly bounded heat
 orbit tests, including time zero. The constants do not depend on time. -/
-theorem exists_bounds_operator_toLp
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 1 U)
-    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) :
-    ∃ C D : ℝ, 0 ≤ C ∧ 0 ≤ D ∧ ∀ (t : ℝ) (ht : 0 ≤ t),
-      (∀ᵐ x ∂(ν : Measure V),
-        |operator m (ContinuousLinearMap.id ℝ V) hν hi ht
-          ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ) x| ≤ C) ∧
-      (∀ᵐ x ∂(ν : Measure V),
-        |(adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-          ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi ht
-            ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ),
-            preserves_domain m (ContinuousLinearMap.id ℝ V) hν hi
-              ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hφ hφc⟩ ht⟩) x| ≤ D) := by
+theorem exists_bounds_operator_toLp (hνU : (ν : Measure V) = m.tilted (-U))
+    (hU : ContDiff ℝ 1 U) {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφc : HasCompactSupport φ) :
+    ∃ C D : ℝ,
+      0 ≤ C ∧
+        0 ≤ D ∧
+          ∀ (t : ℝ) (ht : 0 ≤ t),
+            (∀ᵐ x ∂(ν : Measure V),
+                |operator m (ContinuousLinearMap.id ℝ V) hν hi ht
+                      ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ) x| ≤
+                  C) ∧
+              (∀ᵐ x ∂(ν : Measure V),
+                |(adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
+                        ⟨operator m (ContinuousLinearMap.id ℝ V) hν hi ht
+                            ((memLp_of_contDiff_hasCompactSupport ν hφ hφc).toLp φ),
+                          preserves_domain m (ContinuousLinearMap.id ℝ V) hν hi
+                            ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hφ hφc⟩ ht⟩)
+                      x| ≤
+                  D) := by
   obtain ⟨C, hC⟩ := hφ.continuous.bounded_above_of_compact_support hφc
-  obtain ⟨D, hD⟩ := (continuous_weightedLaplacian hU (hφ.of_le (by decide))).bounded_above_of_compact_support
-    (hasCompactSupport_weightedLaplacian U hφc)
+  obtain ⟨D, hD⟩ :=
+    (continuous_weightedLaplacian hU (hφ.of_le (by decide))).bounded_above_of_compact_support
+      (hasCompactSupport_weightedLaplacian U hφc)
   have hC0 : 0 ≤ C := (norm_nonneg _).trans (hC 0)
   have hD0 : 0 ≤ D := (norm_nonneg _).trans (hD 0)
   refine ⟨C, D, hC0, hD0, fun t ht => ⟨?_, ?_⟩⟩
   · apply ae_abs_operator_le m _ hν hi ht _ hC0
     filter_upwards [(memLp_of_contDiff_hasCompactSupport ν hφ hφc).coeFn_toLp] with x hx
     simpa [hx, Real.norm_eq_abs] using hC x
-  · refine ae_abs_adjointComp_operator_le m (ContinuousLinearMap.id ℝ V) hν hi
-      ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hφ hφc⟩ ht hD0 ?_
+  · refine
+      ae_abs_adjointComp_operator_le m (ContinuousLinearMap.id ℝ V) hν hi
+        ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hφ hφc⟩ ht hD0 ?_
     rw [hν.adjointComp_toLp_eq m hi hνU hU hφ hφc]
     filter_upwards [(memLp_neg_weightedLaplacian (ν := ν) hU hφ hφc).coeFn_toLp] with x hx
     simpa [hx, Real.norm_eq_abs] using hD x
@@ -281,25 +293,31 @@ theorem integral_gammaTwo_nonneg_of_mem_domain
 
 /-- The same domain-test inequality expressed using any representatives of the two smooth
 fields. It can be transferred only when both fields converge in `L²`. -/
-theorem integral_weakGamma_nonneg_of_mem_domain
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
-    (hconv : ConvexOn ℝ Set.univ U)
+theorem integral_weakGamma_nonneg_of_mem_domain (hνU : (ν : Measure V) = m.tilted (-U))
+    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U)
     (ψ : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
-    (hψ : ∀ᵐ x ∂(ν : Measure V), 0 ≤ (ψ : Lp ℝ 2 (ν : Measure V)) x)
-    {f : V → ℝ} (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f)
-    {u w : Lp V 2 (ν : Measure V)}
+    (hψ : ∀ᵐ x ∂(ν : Measure V), 0 ≤ (ψ : Lp ℝ 2 (ν : Measure V)) x) {f : V → ℝ}
+    (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) {u w : Lp V 2 (ν : Measure V)}
     (hu : (u : V → V) =ᵐ[(ν : Measure V)] gradient f)
     (hw : (w : V → V) =ᵐ[(ν : Measure V)] fun x => -gradient (weightedLaplacian U f) x) :
-    0 ≤ -(∫ x, (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
-      WeakGamma.apply u u x ∂(ν : Measure V)) / 2 +
-      ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * WeakGamma.apply u w x ∂(ν : Measure V) := by
-  have e1 : (fun x => (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
-      WeakGamma.apply u u x) =ᵐ[(ν : Measure V)] fun x =>
-      (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x * gamma f f x := by
+    0 ≤
+      -(∫ x,
+              (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
+                WeakGamma.apply u u x ∂(ν : Measure V)) /
+          2 +
+        ∫ x, (ψ : Lp ℝ 2 (ν : Measure V)) x * WeakGamma.apply u w x ∂(ν : Measure V) := by
+  have e1 :
+    (fun x =>
+        (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
+          WeakGamma.apply u u x) =ᵐ[(ν : Measure V)]
+      fun x =>
+      (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) ψ) x *
+        gamma f f x := by
     filter_upwards [hu] with x hx
     simp only [WeakGamma.apply_def, hx, gamma_apply]
-  have e2 : (fun x => (ψ : Lp ℝ 2 (ν : Measure V)) x * WeakGamma.apply u w x)
-      =ᵐ[(ν : Measure V)] fun x => -((ψ : Lp ℝ 2 (ν : Measure V)) x * gamma f (weightedLaplacian U f) x) := by
+  have e2 :
+    (fun x => (ψ : Lp ℝ 2 (ν : Measure V)) x * WeakGamma.apply u w x) =ᵐ[(ν : Measure V)]
+      fun x => -((ψ : Lp ℝ 2 (ν : Measure V)) x * gamma f (weightedLaplacian U f) x) := by
     filter_upwards [hu, hw] with x hx hy
     simp only [WeakGamma.apply_def, hx, hy, gamma_apply, inner_neg_right, mul_neg]
   rw [integral_congr_ae e1, integral_congr_ae e2, integral_neg, ← sub_eq_add_neg]

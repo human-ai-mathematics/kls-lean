@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Sard.Sharp
-import FunctionalInequalities.KLS.BKL.Poincare
+module
+
+public import FunctionalInequalities.Analysis.Sard.Sharp
+public import FunctionalInequalities.KLS.BKL.Poincare
 /-!
 # Scope audit for the sharp finite-regularity Sard theorem
 
@@ -45,6 +47,8 @@ proofs.  `dimension_zero` and `constant_function` are the two boundary cases.
 The Cheeger comparisons, energy identifications and dimension-free KLS bound are outside this
 client's scope. Its theorems concern finite-regularity Sard and the listed diagnostics.
 -/
+
+@[expose] public section
 
 noncomputable section
 

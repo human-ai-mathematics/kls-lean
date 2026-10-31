@@ -11,6 +11,8 @@ from pathlib import Path
 import subprocess
 import sys
 
+import lean_header
+
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = Path("research/a-series/statement-snapshot")
 ROOTS = ['FunctionalInequalities.KLS.Conjecture', 'FunctionalInequalities.KLS.LogConcave', 'FunctionalInequalities.Energy.LocalSlope.apply', 'FunctionalInequalities.Energy.LocalSlope.energy', 'FunctionalInequalities.Energy.LocalSlope.Admissible', 'FunctionalInequalities.Poincare.LocalSlope.Holds', 'FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant']
@@ -20,9 +22,24 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+DRIVER = Path("research/StatementSnapshot.lean")
+
+
+def driver_client(root: Path, imports: list[str]) -> str:
+    """`imports` followed by the snapshot driver, as one generated NON-module client.
+
+    The committed driver may be a `module`; its header is replaced by plain imports rather
+    than concatenated after them. A non-module root imports every module at the private
+    level, as before the module migration, so the traversal sees the same declarations.
+    """
+    try:
+        return lean_header.nonmodule_client((root / DRIVER).read_text(), imports, allowed={"Lean"})
+    except lean_header.HeaderError as exc:
+        raise ValueError(f"{DRIVER}: {exc}") from exc
+
+
 def snapshot_code(root: Path) -> str:
-    return ("import FunctionalInequalities.KLS.Statement\n" +
-            (root / "research/StatementSnapshot.lean").read_text() +
+    return (driver_client(root, ["FunctionalInequalities.KLS.Statement"]) +
             "\n#statement_snapshot " + " ".join(ROOTS) + "\n")
 
 

@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Graph.Jacobian
-import FunctionalInequalities.Analysis.Vector.LinearAreaFormula
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Graph.Jacobian
+public import FunctionalInequalities.Analysis.Vector.LinearAreaFormula
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the nonlinear area formula
 
@@ -9,6 +11,8 @@ It preserves the nonlinear Federer area-formula contracts without introducing an
 definition or placeholder proof. `Analysis/Vector/LinearAreaFormula.lean` concerns linear maps;
 the propositions below specify the separate nonlinear contracts used by the coarea route.
 -/
+
+@[expose] public section
 
 noncomputable section
 

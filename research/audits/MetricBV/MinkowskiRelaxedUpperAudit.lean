@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Independent full-signature clients for the identity: the relaxed upper Minkowski content over
 the existing measurable approximating class equals the metric BV perimeter.  Checks: both
@@ -9,6 +11,8 @@ measurable set; the bound by a convergent sequence of the class; the empty set, 
 a measurable null set (perimeter `0`, hence relaxed upper content `0`); the exact infinite
 boundary; and the uniform law on `[0, 1]` with the null target `{0}`.  Not claimed: pointwise
 equality of the upper content and the perimeter, Cheeger-quotient identifications. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -29,7 +33,8 @@ theorem identity (ν : ProbabilityMeasure V) (B : Set V) :
 theorem bothInequalities (ν : ProbabilityMeasure V) (B : Set V) :
     perimeter (ν : Measure V) B ≤ relaxedUpperMinkowskiContent (ν : Measure V) B ∧
       relaxedUpperMinkowskiContent (ν : Measure V) B ≤ perimeter (ν : Measure V) B :=
-  ⟨perimeter_le_relaxedUpperMinkowskiContent (ν : Measure V) B, relaxedUpperMinkowskiContent_le_perimeter (ν : Measure V) B⟩
+  ⟨perimeter_le_relaxedUpperMinkowskiContent (ν : Measure V) B,
+    relaxedUpperMinkowskiContent_le_perimeter (ν : Measure V) B⟩
 
 theorem lowerAndUpperRelaxations (ν : ProbabilityMeasure V) (B : Set V) :
     relaxedMinkowskiContent (ν : Measure V) B ≤ relaxedUpperMinkowskiContent (ν : Measure V) B ∧
@@ -39,7 +44,8 @@ theorem lowerAndUpperRelaxations (ν : ProbabilityMeasure V) (B : Set V) :
 
 omit [BorelSpace V] in
 /-- The definition is over the same class: any member bounds the relaxed upper content. -/
-theorem memberBound (ν : ProbabilityMeasure V) (B : Set V) (A : MinkowskiApproximatingSequence (ν : Measure V) B) :
+theorem memberBound (ν : ProbabilityMeasure V) (B : Set V)
+    (A : MinkowskiApproximatingSequence (ν : Measure V) B) :
     relaxedUpperMinkowskiContent (ν : Measure V) B ≤
       liminf (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (A.1 n)) atTop :=
   relaxedUpperMinkowskiContent_le_liminf (ν : Measure V) B A
@@ -47,19 +53,23 @@ theorem memberBound (ν : ProbabilityMeasure V) (B : Set V) (A : MinkowskiApprox
 theorem topAndZero (ν : ProbabilityMeasure V) (B : Set V) :
     (relaxedUpperMinkowskiContent (ν : Measure V) B = ⊤ ↔ perimeter (ν : Measure V) B = ⊤) ∧
       (relaxedUpperMinkowskiContent (ν : Measure V) B = 0 ↔ perimeter (ν : Measure V) B = 0) :=
-  ⟨relaxedUpperMinkowskiContent_eq_top_iff (ν : Measure V) B, relaxedUpperMinkowskiContent_eq_zero_iff (ν : Measure V) B⟩
+  ⟨relaxedUpperMinkowskiContent_eq_top_iff (ν : Measure V) B,
+    relaxedUpperMinkowskiContent_eq_zero_iff (ν : Measure V) B⟩
 
 /-- Empty class: relaxed upper content `⊤` and infinite perimeter (conditional on emptiness; no
 empty class is constructed). -/
 theorem emptyClass (ν : ProbabilityMeasure V) (B : Set V)
     [IsEmpty (MinkowskiApproximatingSequence (ν : Measure V) B)] :
     relaxedUpperMinkowskiContent (ν : Measure V) B = ⊤ ∧ perimeter (ν : Measure V) B = ⊤ :=
-  ⟨relaxedUpperMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) B, perimeter_eq_top_of_isEmpty (ν : Measure V) B⟩
+  ⟨relaxedUpperMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) B,
+    perimeter_eq_top_of_isEmpty (ν : Measure V) B⟩
 
-/-- Constant sequence: the relaxed upper content of a measurable set is at most its upper content,
+/--
+Constant sequence: the relaxed upper content of a measurable set is at most its upper content,
 hence so is the perimeter. -/
 theorem constantSequence (ν : ProbabilityMeasure V) {B : Set V} (hB : MeasurableSet B) :
-    relaxedUpperMinkowskiContent (ν : Measure V) B ≤ Isoperimetry.upperMinkowskiContent (ν : Measure V) B ∧
+    relaxedUpperMinkowskiContent (ν : Measure V) B ≤
+        Isoperimetry.upperMinkowskiContent (ν : Measure V) B ∧
       perimeter (ν : Measure V) B ≤ Isoperimetry.upperMinkowskiContent (ν : Measure V) B :=
   ⟨relaxedUpperMinkowskiContent_le_upperMinkowskiContent (ν : Measure V) hB,
     (relaxedUpperMinkowskiContent_eq_perimeter (ν : Measure V) B) ▸
@@ -67,9 +77,13 @@ theorem constantSequence (ν : ProbabilityMeasure V) {B : Set V} (hB : Measurabl
 
 theorem convergentSequence (ν : ProbabilityMeasure V) {B : Set V} {A : ℕ → Set V}
     (hA : ∀ n, MeasurableSet (A n))
-    (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
-      ∂(ν : Measure V)) atTop (𝓝 0)) {c : ENNReal}
-    (hlim : Tendsto (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (A n)) atTop (𝓝 c)) :
+    (hconv :
+      Tendsto
+        (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V))
+        atTop (𝓝 0))
+    {c : ENNReal}
+    (hlim :
+      Tendsto (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (A n)) atTop (𝓝 c)) :
     relaxedUpperMinkowskiContent (ν : Measure V) B ≤ c ∧ perimeter (ν : Measure V) B ≤ c :=
   ⟨relaxedUpperMinkowskiContent_le_of_tendsto (ν : Measure V) hA hconv hlim,
     (relaxedUpperMinkowskiContent_eq_perimeter (ν : Measure V) B) ▸
@@ -78,7 +92,11 @@ theorem convergentSequence (ν : ProbabilityMeasure V) {B : Set V} {A : ℕ → 
 /-- The upper recovery sets realize the infimum at finite perimeter. -/
 theorem realizedByRecovery (ν : ProbabilityMeasure V) {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
-    liminf (fun n => Isoperimetry.upperMinkowskiContent (ν : Measure V) (upperRecoverySet (ν : Measure V) hB n)) atTop =
+    liminf
+        (fun n =>
+          Isoperimetry.upperMinkowskiContent (ν : Measure V)
+            (upperRecoverySet (ν : Measure V) hB n))
+        atTop =
       relaxedUpperMinkowskiContent (ν : Measure V) B := by
   rw [relaxedUpperMinkowskiContent_eq_perimeter]
   exact (tendsto_upperMinkowskiContent_upperRecoverySet (ν : Measure V) hB).liminf_eq
@@ -132,7 +150,8 @@ theorem uniform_singleton : (uniformInterval : Measure ℝ) {0} = 0 := by
 
 theorem uniformNullTarget :
     relaxedUpperMinkowskiContent (uniformInterval : Measure ℝ) {0} = 0 ∧
-      relaxedUpperMinkowskiContent (uniformInterval : Measure ℝ) {0} = relaxedMinkowskiContent (uniformInterval : Measure ℝ) {0} :=
+      relaxedUpperMinkowskiContent (uniformInterval : Measure ℝ) {0} =
+        relaxedMinkowskiContent (uniformInterval : Measure ℝ) {0} :=
   ⟨nullSet uniformInterval (measurableSet_singleton 0) uniform_singleton,
     relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent (uniformInterval : Measure ℝ) {0}⟩
 

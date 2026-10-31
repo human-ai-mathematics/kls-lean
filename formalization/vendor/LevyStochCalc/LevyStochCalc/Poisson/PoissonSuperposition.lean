@@ -6,9 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.PoissonSplitting
-import LevyStochCalc.Probability.IndepGrouping
-import Mathlib.Probability.Independence.CharacteristicFunction
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.PoissonSplitting
+public import LevyStochCalc.Probability.IndepGrouping
+public import Mathlib.Probability.Independence.CharacteristicFunction
 
 /-!
 # Superposition of independent Poisson pieces
@@ -21,6 +25,8 @@ countable type, the *superposition* is the random measure `N = ∑ₚ Nₚ` wher
 The sample space is the product `ι → ULift ℕ × (ℕ → 𝓧)` with the product law, and the
 distributional facts about a single piece reduce to Poisson splitting.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Complex Filter Function Topology
 open scoped NNReal ENNReal
@@ -43,7 +49,7 @@ noncomputable def pieceLaw (r : ℝ≥0) (ρ : Measure 𝓧) : Measure (PieceSpa
 instance (r : ℝ≥0) (ρ : Measure 𝓧) [IsProbabilityMeasure ρ] :
     IsProbabilityMeasure (pieceLaw r ρ) := by
   have : IsProbabilityMeasure (Po(r).map ULift.up) :=
-    Measure.isProbabilityMeasure_map measurable_up.aemeasurable
+    (Measure.isProbabilityMeasure_map_iff measurable_up.aemeasurable).2 inferInstance
   unfold pieceLaw
   infer_instance
 
@@ -145,7 +151,7 @@ lemma map_pieceMarks (p : ι) :
 lemma map_pieceMark (p : ι) (j : ℕ) : (superLaw r ρ).map (pieceMark p j) = ρ p := by
   change (superLaw r ρ).map (Function.eval j ∘ fun ω k => pieceMark p k ω) = _
   rw [← Measure.map_map (measurable_pi_apply j)
-    (measurable_pi_lambda _ fun k => measurable_pieceMark p k), map_pieceMarks,
+    (Measurable.of_eval fun k => measurable_pieceMark p k), map_pieceMarks,
     (measurePreserving_eval_infinitePi _ j).map_eq]
 
 lemma hasLaw_pieceMark (p : ι) (j : ℕ) : HasLaw (pieceMark p j) (ρ p) (superLaw r ρ) :=
@@ -160,7 +166,7 @@ lemma iIndepFun_pieceMark (p : ι) : iIndepFun (pieceMark p) (superLaw r ρ) := 
 lemma indepFun_pieceCount_pieceMark (p : ι) :
     IndepFun (pieceCount p) (fun ω j => pieceMark p j ω) (superLaw r ρ) := by
   rw [indepFun_iff_map_prod_eq_prod_map_map (measurable_pieceCount p).aemeasurable
-    (measurable_pi_lambda _ fun j => measurable_pieceMark p j).aemeasurable, map_pieceCount,
+    (Measurable.of_eval fun j => measurable_pieceMark p j).aemeasurable, map_pieceCount,
     map_pieceMarks]
   change (superLaw r ρ).map (Prod.map ULift.down id ∘ Function.eval p) = _
   rw [← Measure.map_map (measurable_down.prodMap measurable_id) (measurable_pi_apply p),
@@ -524,7 +530,7 @@ theorem iIndepFun_superposition {ι' : Type*} {B : ι' → Set 𝓧} (hB : ∀ i
   have hm : ∀ p i, Measurable (Y p i) := fun p i => measurable_pieceCountOn_eval p (hB i)
   have h1 : iIndepFun (fun p ω i => Y p i ω) (superLaw r ρ) :=
     (iIndepFun_eval r ρ).comp (fun _ θ i => (pieceCountOn (B i) θ : ℝ≥0∞)) fun _ =>
-      measurable_pi_lambda _ fun i => (Measurable.of_discrete (f := (Nat.cast : ℕ → ℝ≥0∞))).comp
+      Measurable.of_eval fun i => (Measurable.of_discrete (f := (Nat.cast : ℕ → ℝ≥0∞))).comp
         (measurable_pieceCountOn (hB i))
   have h2 : ∀ p, iIndepFun (fun i => Y p i) (superLaw r ρ) := fun p =>
     iIndepFun_pieceCountOn_ennreal r ρ p hB hdisj

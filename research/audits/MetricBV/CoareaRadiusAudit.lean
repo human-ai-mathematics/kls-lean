@@ -1,8 +1,12 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Strict clients for the full right-radius-liminf chain of ADMG Lemma 3.2.
 The middle quantity uses the genuine open-ball supremum and original measure;
 no fixed sequence of radii or finite-total-mass hypothesis replaces it. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -44,22 +48,33 @@ theorem finiteRegression (ν : Measure X) [IsFiniteMeasure ν] {u : X → ℝ} {
 theorem realVolumeTest (f : Test ℝ) (hf : ∀ x, 0 ≤ f x) :
     (volume : Measure ℝ) univ = ⊤ ∧
       (∫⁻ t in Ioi (0 : ℝ), minkowskiContent volume {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
-        liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup f r x - f x) / r) ∂volume) (𝓝[>] 0)) ∧
-      (liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup f r x - f x) / r) ∂volume) (𝓝[>] 0) ≤
-        cost volume f) ∧ cost volume f < ⊤ := by
+          liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup f r x - f x) / r) ∂volume)
+            (𝓝[>] 0)) ∧
+        (liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup f r x - f x) / r) ∂volume)
+              (𝓝[>] 0) ≤
+            cost volume f) ∧
+          cost volume f < ⊤ := by
   obtain ⟨K, hK⟩ := f.lipschitz
   have hb : Bornology.IsBounded {x : ℝ | 0 < f x} :=
     f.boundedSupport.subset fun _ hx => ne_of_gt hx
   have h := fullChain volume hK hf zero_lt_one hb.thickening.measure_lt_top
-  exact ⟨by simp, h.1, h.2,
-    (cost_ne_top_of_support_measure volume f f.boundedSupport.closure.measure_lt_top.ne).lt_top⟩
+  exact
+    ⟨by simp, h.1, h.2,
+      (cost_ne_top_of_support_measure volume f
+          f.boundedSupport.closure.measure_lt_top.ne).lt_top⟩
 
 theorem zeroFunction (ν : Measure X) :
-    liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup (fun _ : X => (0 : ℝ)) r x - 0) / r) ∂ν)
-      (𝓝[>] 0) = 0 := by
-  have h := fullChain ν (LipschitzWith.const 0) (fun _ => le_rfl) zero_lt_one
-    (show ν (thickening 1 {_x : X | 0 < (0 : ℝ)}) < ⊤ by simp)
-  exact le_antisymm (by simpa only [Energy.LocalSlope.apply_const, lintegral_zero] using h.2) zero_le
+    liminf
+        (fun r : ℝ =>
+          ∫⁻ x, ENNReal.ofReal ((openBallSup (fun _ : X => (0 : ℝ)) r x - 0) / r) ∂ν)
+        (𝓝[>] 0) =
+      0 := by
+  have h :=
+    fullChain ν (LipschitzWith.const 0) (fun _ => le_rfl) zero_lt_one
+      (show ν (thickening 1 {_x : X | 0 < (0 : ℝ)}) < ⊤ by simp)
+  exact
+    le_antisymm (by simpa only [Energy.LocalSlope.apply_const, lintegral_zero] using h.2)
+      zero_le
 
 theorem constantFinite (ν : Measure X) [IsFiniteMeasure ν] (c : ℝ) :
     liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup (fun _ : X => c) r x - c) / r) ∂ν)

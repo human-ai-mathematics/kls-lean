@@ -1,17 +1,21 @@
-import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
-import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
-import FunctionalInequalities.KLS.BKL.Localization.Energy.Regularity
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
-import FunctionalInequalities.KLS.BKL.Localization.Energy.Bound
-import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
-import FunctionalInequalities.Analysis.Tensor.EnergyForm
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.Coefficients
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
+public import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.Energy.Regularity
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
+public import FunctionalInequalities.KLS.BKL.Localization.Energy.Bound
+public import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
+public import FunctionalInequalities.Analysis.Tensor.EnergyForm
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 
 /-!
 # Integrated energy bound along the cutoff Eldan process
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -139,65 +143,101 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
     (hsupp : (μ : Measure (EuclideanSpace ℝ (Fin n))).support ⊆ Metric.closedBall 0 ρ)
     (hγ : IsCutoff γ) (hℱ0 : ∀ t : ℝ, t ≤ 0 → ℱ 0 ≤ ℱ t)
     (hnull : ∀ s : Set Ω, MeasurableSet s → P s = 0 → MeasurableSet[ℱ 0] s)
-    (h : IsEldanCutoff μ hc W ℱ hW γ p) {r : ℕ} (hr : 2 ≤ r)
-    (u : EuclideanSpace ℝ (Fin n)) (b : ℕ → ℝ) (hb : ∀ j, 0 ≤ b j)
-    (h51 : ∀ q : Param n, IsSelfAdjoint q.2 → (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
-      (1 / 2 : ℝ) * cumulantEnergy (compactPosterior μ hc q.1 q.2 :
-        Measure (EuclideanSpace ℝ (Fin n))) (r + 1) u -
-        17 * ((r : ℝ) + 1) ^ 2 * cumulantEnergy
-          (compactPosterior μ hc q.1 q.2 :
-            Measure (EuclideanSpace ℝ (Fin n))) r u -
-        2 * ∑ K : Fin r → Fin n,
-          cumulant (compactPosterior μ hc q.1 q.2 :
-            Measure (EuclideanSpace ℝ (Fin n))) (r + 1)
-            (Fin.cons u fun s => inverseSqrt (cov μ hc q)
-              (EuclideanSpace.basisFun (Fin n) ℝ (K s))) *
-          lowerDrift (compactPosterior μ hc q.1 q.2 :
-            Measure (EuclideanSpace ℝ (Fin n)))
-            (Fin.cons u fun s => inverseSqrt (cov μ hc q)
-              (EuclideanSpace.basisFun (Fin n) ℝ (K s))) 0 ≤
-      generator μ hc
-        (fun q' : Param n => cumulantEnergy
-          (compactPosterior μ hc q'.1 q'.2 :
-            Measure (EuclideanSpace ℝ (Fin n))) r u) q)
-    (hL : ∀ q : Param n, IsSelfAdjoint q.2 → (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
-      Real.sqrt (∑ K : Fin r → Fin n,
-        lowerDrift (compactPosterior μ hc q.1 q.2 :
-          Measure (EuclideanSpace ℝ (Fin n)))
-          (Fin.cons u fun s => inverseSqrt (cov μ hc q)
-            (EuclideanSpace.basisFun (Fin n) ℝ (K s))) 0 ^ 2) ≤
-        ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1) * cumulantEnergy
-            (compactPosterior μ hc q.1 q.2 :
-              Measure (EuclideanSpace ℝ (Fin n))) a u))
+    (h : IsEldanCutoff μ hc W ℱ hW γ p) {r : ℕ} (hr : 2 ≤ r) (u : EuclideanSpace ℝ (Fin n))
+    (b : ℕ → ℝ) (hb : ∀ j, 0 ≤ b j)
+    (h51 :
+      ∀ q : Param n,
+        IsSelfAdjoint q.2 →
+          (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
+            (1 / 2 : ℝ) *
+                    cumulantEnergy
+                      (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n)))
+                      (r + 1) u -
+                  17 * ((r : ℝ) + 1) ^ 2 *
+                    cumulantEnergy
+                      (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) r u -
+                2 *
+                  ∑ K : Fin r → Fin n,
+                    cumulant
+                        (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n)))
+                        (r + 1)
+                        (Fin.cons u fun s =>
+                          inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s))) *
+                      lowerDrift
+                        (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n)))
+                        (Fin.cons u fun s =>
+                          inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s)))
+                        0 ≤
+              generator μ hc
+                (fun q' : Param n =>
+                  cumulantEnergy
+                    (compactPosterior μ hc q'.1 q'.2 : Measure (EuclideanSpace ℝ (Fin n))) r u)
+                q)
+    (hL :
+      ∀ q : Param n,
+        IsSelfAdjoint q.2 →
+          (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
+            Real.sqrt
+                (∑ K : Fin r → Fin n,
+                  lowerDrift
+                      (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n)))
+                      (Fin.cons u fun s =>
+                        inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s)))
+                      0 ^
+                    2) ≤
+              ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+                ((r + 1 - 1).choose (a - 1) : ℝ) *
+                  Real.sqrt
+                    (b (r + 1 - a + 1) *
+                      cumulantEnergy
+                        (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) a
+                        u))
     {T : ℝ} (hT : 0 ≤ T) :
     cumulantEnergy (μ : Measure (EuclideanSpace ℝ (Fin n))) r u +
         (1 / 2 : ℝ) * weightedEnergyIntegral μ hc P γ p (r + 1) u T ≤
-      (∫ w, cumulantEnergy (compactPosterior μ hc (p T w).1 (p T w).2 :
-        Measure (EuclideanSpace ℝ (Fin n))) r u ∂P) +
-        17 * ((r : ℝ) + 1) ^ 2 *
-          weightedEnergyIntegral μ hc P γ p r u T +
-        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
-          ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1)) *
-          (Real.sqrt (weightedEnergyIntegral μ hc P γ p r u T) *
-            Real.sqrt (weightedEnergyIntegral μ hc P γ p a u T)) := by
+      (∫ w,
+            cumulantEnergy
+              (compactPosterior μ hc (p T w).1 (p T w).2 : Measure (EuclideanSpace ℝ (Fin n))) r
+              u ∂P) +
+          17 * ((r : ℝ) + 1) ^ 2 * weightedEnergyIntegral μ hc P γ p r u T +
+        2 *
+          ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+            ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+              (Real.sqrt (weightedEnergyIntegral μ hc P γ p r u T) *
+                Real.sqrt (weightedEnergyIntegral μ hc P γ p a u T)) := by
   classical
-  have _hr := hr
+  have _hr :=
+    hr
   -- Opaque names for the energies and the two tensor fields.
-  obtain ⟨E, hE⟩ : ∃ E : ℕ → Param n → ℝ, E = fun d q =>
-      cumulantEnergy (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) d u :=
+
+
+  -- Introduce the tensor energy fields and their smoothness.
+  obtain ⟨E, hE⟩ :
+    ∃ E : ℕ → Param n → ℝ,
+      E = fun d q =>
+        cumulantEnergy (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) d
+          u :=
     ⟨_, rfl⟩
-  obtain ⟨Tt, hTt⟩ : ∃ Tt : Param n → (Fin r → Fin n) → ℝ, Tt = fun q K =>
-      cumulant (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) (r + 1)
-        (Fin.cons u fun s => inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s))) :=
+  obtain ⟨Tt, hTt⟩ :
+    ∃ Tt : Param n → (Fin r → Fin n) → ℝ,
+      Tt = fun q K =>
+        cumulant (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) (r + 1)
+          (Fin.cons u fun s =>
+            inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s))) :=
     ⟨_, rfl⟩
-  obtain ⟨Lt, hLt⟩ : ∃ Lt : Param n → (Fin r → Fin n) → ℝ, Lt = fun q K =>
-      lowerDrift (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n)))
-        (Fin.cons u fun s => inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s))) 0 :=
+  obtain ⟨Lt, hLt⟩ :
+    ∃ Lt : Param n → (Fin r → Fin n) → ℝ,
+      Lt = fun q K =>
+        lowerDrift (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n)))
+          (Fin.cons u fun s =>
+            inverseSqrt (cov μ hc q) (EuclideanSpace.basisFun (Fin n) ℝ (K s)))
+          0 :=
     ⟨_, rfl⟩
-  have hEapp : ∀ d (q : Param n), E d q =
-      cumulantEnergy (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) d u := by
+  have hEapp :
+    ∀ d (q : Param n),
+      E d q =
+        cumulantEnergy (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) d
+          u := by
     intro d q
     rw [hE]
   have hEnn : ∀ d (q : Param n), 0 ≤ E d q := by
@@ -213,16 +253,23 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
   have hE0 : cumulantEnergy (μ : Measure (EuclideanSpace ℝ (Fin n))) r u = E r 0 := by
     rw [hEapp]
     simp only [Prod.fst_zero, Prod.snd_zero, compactPosterior_zero]
-  have h51' : ∀ q : Param n, IsSelfAdjoint q.2 → (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
-      (1 / 2 : ℝ) * E (r + 1) q - 17 * ((r : ℝ) + 1) ^ 2 * E r q -
-        2 * ∑ K : Fin r → Fin n, Tt q K * Lt q K ≤ generator μ hc (E r) q := by
+  have h51' :
+    ∀ q : Param n,
+      IsSelfAdjoint q.2 →
+        (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
+          (1 / 2 : ℝ) * E (r + 1) q - 17 * ((r : ℝ) + 1) ^ 2 * E r q -
+              2 * ∑ K : Fin r → Fin n, Tt q K * Lt q K ≤
+            generator μ hc (E r) q := by
     intro q h1 h2
     rw [hE, hTt, hLt]
     exact h51 q h1 h2
-  have hL' : ∀ q : Param n, IsSelfAdjoint q.2 → (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
-      Real.sqrt (∑ K : Fin r → Fin n, Lt q K ^ 2) ≤
-        ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1) * E a q) := by
+  have hL' :
+    ∀ q : Param n,
+      IsSelfAdjoint q.2 →
+        (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
+          Real.sqrt (∑ K : Fin r → Fin n, Lt q K ^ 2) ≤
+            ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+              ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1) * E a q) := by
     intro q h1 h2
     rw [hE, hLt]
     exact hL q h1 h2
@@ -231,17 +278,26 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
     rw [hEapp, hTt]
     rfl
   -- Pointwise bound on symmetric PSD parameters.
-  have hpt : ∀ q : Param n, IsSelfAdjoint q.2 → (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
-      (1 / 2 : ℝ) * (γ q ^ 2 * E (r + 1) q) - 17 * ((r : ℝ) + 1) ^ 2 * (γ q ^ 2 * E r q) -
-        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1)) *
-          ((γ q * Real.sqrt (E r q)) * (γ q * Real.sqrt (E a q))) ≤
-      γ q ^ 2 * generator μ hc (E r) q := by
+
+
+  -- Apply the pointwise generator lower bound.
+  have hpt :
+    ∀ q : Param n,
+      IsSelfAdjoint q.2 →
+        (∀ x, 0 ≤ ⟪q.2 x, x⟫) →
+          (1 / 2 : ℝ) * (γ q ^ 2 * E (r + 1) q) - 17 * ((r : ℝ) + 1) ^ 2 * (γ q ^ 2 * E r q) -
+              2 *
+                ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+                  ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+                    ((γ q * Real.sqrt (E r q)) * (γ q * Real.sqrt (E a q))) ≤
+            γ q ^ 2 * generator μ hc (E r) q := by
     intro q h1 h2
-    exact cutoff_tensor_energy_lower_bound r (γ q) (fun d => E d q) b
-      (Tt q) (Lt q) (generator μ hc (E r) q) hb (hTsq q)
-      (h51' q h1 h2) (hL' q h1 h2)
+    exact
+      cutoff_tensor_energy_lower_bound r (γ q) (fun d => E d q) b (Tt q) (Lt q)
+        (generator μ hc (E r) q) hb (hTsq q) (h51' q h1 h2)
+        (hL' q h1 h2)
   -- Bounds along the path.
+
   have hQ := IsEldanCutoff.ae_Q_posSemidef hiso hγ h
   have hγc : Continuous γ := by
     obtain ⟨K, hK⟩ := hγ.lipschitz
@@ -255,46 +311,56 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
     intro s hs
     rw [hEapp]
     exact hC (p s w) (hw s hs).1 (hw s hs).2 u
-  have hGcont : ∀ d, Continuous (fun q => γ q ^ 2 * E d q) :=
-    fun d => (hγc.pow 2).mul (hEcont d)
-  obtain ⟨hGbd, hfbd, hffbd⟩ := cutoff_weighted_path_bounds hγ01 hEnn hEbd
+  have hGcont : ∀ d, Continuous (fun q => γ q ^ 2 * E d q) := fun d =>
+    (hγc.pow 2).mul (hEcont d)
+  obtain ⟨hGbd, hfbd, hffbd⟩ :=
+    cutoff_weighted_path_bounds hγ01 hEnn
+      hEbd
   -- The generator term is bounded (compact support of the cutoff).
+
   have hF3 : ContDiff ℝ 3 (E r) := (hEsmooth r).of_le (WithTop.coe_le_coe.mpr le_top)
   have hgen_cont : Continuous (generator μ hc (E r)) :=
     continuous_generator_of_contDiff_three μ hc hiso hF3
-  have hgc : Continuous (fun q => γ q ^ 2 * generator μ hc (E r) q) :=
-    (hγc.pow 2).mul hgen_cont
+  have hgc : Continuous (fun q => γ q ^ 2 * generator μ hc (E r) q) := (hγc.pow 2).mul hgen_cont
+
+  -- Check compactly supported integrability for the stochastic estimate.
   have hgsupp : HasCompactSupport (fun q => γ q ^ 2 * generator μ hc (E r) q) := by
     have h2 : HasCompactSupport (fun q => γ q ^ 2) :=
       hγ.compactSupport.comp_left (g := fun x : ℝ => x ^ 2) (by simp)
     exact h2.mul_right
   obtain ⟨Bg, hBg⟩ := hgc.bounded_above_of_compact_support hgsupp
-  have hgB : ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s →
-      |γ (p s w) ^ 2 * generator μ hc (E r) (p s w)| ≤ Bg :=
+  have hgB : ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → |γ (p s w) ^ 2 * generator μ hc (E r) (p s w)| ≤ Bg :=
     Filter.Eventually.of_forall fun w s _ => by
-      simpa only [Real.norm_eq_abs] using hBg (p s w)
+      simpa only [Real.norm_eq_abs] using
+        hBg
+          (p s w)
   -- Product measure.
-  obtain ⟨Pr, hPr⟩ : ∃ Pr : Measure (Ω × ℝ),
-      Pr = P.prod (volume.restrict (Set.Ioc (0 : ℝ) T)) := ⟨_, rfl⟩
+
+  obtain ⟨Pr, hPr⟩ :
+    ∃ Pr : Measure (Ω × ℝ), Pr = P.prod (volume.restrict (Set.Ioc (0 : ℝ) T)) := ⟨_, rfl⟩
   have : IsFiniteMeasure Pr := by
     rw [hPr]
     infer_instance
-  have hprod : ∀ {φ : Param n → ℝ}, Continuous φ → ∀ {B : ℝ},
-      (∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → |φ (p s w)| ≤ B) →
-      Integrable (fun z : Ω × ℝ => φ (p z.2 z.1)) Pr ∧
-        ∫ w, ∫ s in Set.Ioc (0 : ℝ) T, φ (p s w) ∂volume ∂P = ∫ z, φ (p z.2 z.1) ∂Pr := by
+  have hprod :
+    ∀ {φ : Param n → ℝ},
+      Continuous φ →
+        ∀ {B : ℝ},
+          (∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → |φ (p s w)| ≤ B) →
+            Integrable (fun z : Ω × ℝ => φ (p z.2 z.1)) Pr ∧
+              ∫ w, ∫ s in Set.Ioc (0 : ℝ) T, φ (p s w) ∂volume ∂P = ∫ z, φ (p z.2 z.1) ∂Pr := by
     intro φ hφ B hB
     rw [hPr]
     exact ⟨h.integrable_prod_of_ae_bound hφ hB T, h.integral_integral_eq_prod hφ hB T⟩
-  have hprodae : ∀ {Q : Ω → ℝ → Prop}, (∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → Q w s) →
-      ∀ᵐ z ∂Pr, Q z.1 z.2 := by
+  have hprodae :
+    ∀ {Q : Ω → ℝ → Prop}, (∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → Q w s) → ∀ᵐ z ∂Pr, Q z.1 z.2 := by
     intro Q hQ'
     rw [hPr]
     exact ae_prod_restrict_Ioc_of_ae hQ' T
-  have hae : ∀ᵐ z ∂Pr, IsSelfAdjoint (p z.2 z.1).2 ∧ ∀ x, 0 ≤ ⟪(p z.2 z.1).2 x, x⟫ :=
-    hprodae hQ
-  have hI : ∀ d, ∫ w, ∫ s in Set.Ioc (0 : ℝ) T, γ (p s w) ^ 2 * E d (p s w) ∂volume ∂P =
-      ∫ z, γ (p z.2 z.1) ^ 2 * E d (p z.2 z.1) ∂Pr := by
+  have hae : ∀ᵐ z ∂Pr, IsSelfAdjoint (p z.2 z.1).2 ∧ ∀ x, 0 ≤ ⟪(p z.2 z.1).2 x, x⟫ := hprodae hQ
+  have hI :
+    ∀ d,
+      ∫ w, ∫ s in Set.Ioc (0 : ℝ) T, γ (p s w) ^ 2 * E d (p s w) ∂volume ∂P =
+        ∫ z, γ (p z.2 z.1) ^ 2 * E d (p z.2 z.1) ∂Pr := by
     intro d
     obtain ⟨C, hC⟩ := hGbd d
     exact (hprod (hGcont d) hC).2
@@ -302,114 +368,155 @@ theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.
     intro d
     obtain ⟨C, hC⟩ := hGbd d
     exact (hprod (hGcont d) hC).1
-  have hfint : ∀ d, Integrable (fun z : Ω × ℝ => γ (p z.2 z.1) * Real.sqrt (E d (p z.2 z.1))) Pr := by
+  have hfint :
+    ∀ d, Integrable (fun z : Ω × ℝ => γ (p z.2 z.1) * Real.sqrt (E d (p z.2 z.1))) Pr := by
     intro d
     obtain ⟨C, hC⟩ := hfbd d
     exact (hprod (hγc.mul (hEcont d).sqrt) hC).1
-  have hfmem : ∀ d, MemLp (fun z : Ω × ℝ => γ (p z.2 z.1) * Real.sqrt (E d (p z.2 z.1)))
-      (ENNReal.ofReal 2) Pr := by
+  have hfmem :
+    ∀ d,
+      MemLp (fun z : Ω × ℝ => γ (p z.2 z.1) * Real.sqrt (E d (p z.2 z.1))) (ENNReal.ofReal 2)
+        Pr := by
     intro d
     obtain ⟨C, hC⟩ := hfbd d
     refine MemLp.of_bound (hfint d).aestronglyMeasurable C ?_
     filter_upwards [hprodae hC] with z hz
     simpa only [Real.norm_eq_abs] using hz
-  have hterm : ∀ a ∈ Finset.Icc 2 (r + 1 - 2), Integrable (fun z : Ω × ℝ =>
-      ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
-        ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-          (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) Pr := by
+  have hterm :
+    ∀ a ∈ Finset.Icc 2 (r + 1 - 2),
+      Integrable
+        (fun z : Ω × ℝ =>
+          ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+            ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+              (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1)))))
+        Pr := by
     intro a _
     obtain ⟨C, hC⟩ := hffbd r a
     exact ((hprod ((hγc.mul (hEcont r).sqrt).mul (hγc.mul (hEcont a).sqrt)) hC).1).const_mul _
-  have hsumint : Integrable (fun z : Ω × ℝ => 2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
-      ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
-        ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-          (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) Pr :=
+  have hsumint :
+    Integrable
+      (fun z : Ω × ℝ =>
+        2 *
+          ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+            ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+              ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+                (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1)))))
+      Pr :=
     (integrable_finsetSum _ hterm).const_mul _
-  have hGint : Integrable
-      (fun z : Ω × ℝ => γ (p z.2 z.1) ^ 2 * generator μ hc (E r) (p z.2 z.1)) Pr :=
+  have hGint :
+    Integrable (fun z : Ω × ℝ => γ (p z.2 z.1) ^ 2 * generator μ hc (E r) (p z.2 z.1)) Pr :=
     (hprod hgc hgB).1
-  have hGeq : ∫ w, ∫ s in Set.Ioc (0 : ℝ) T,
-      γ (p s w) ^ 2 * generator μ hc (E r) (p s w) ∂volume ∂P =
+  have hGeq :
+    ∫ w, ∫ s in Set.Ioc (0 : ℝ) T, γ (p s w) ^ 2 * generator μ hc (E r) (p s w) ∂volume ∂P =
       ∫ z, γ (p z.2 z.1) ^ 2 * generator μ hc (E r) (p z.2 z.1) ∂Pr :=
     (hprod hgc hgB).2
   -- Dynkin.
+
   have hF2 : ContDiff ℝ 2 (E r) := (hEsmooth r).of_le (WithTop.coe_le_coe.mpr le_top)
   obtain ⟨-, hDynkin⟩ := IsEldanCutoff.dynkin hiso hγ hℱ0 hnull h hF2 hT
   rw [hGeq] at hDynkin
   -- Integrate the pointwise bound.
-  have hLHSint : Integrable (fun z : Ω × ℝ =>
-      (1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
-        17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)) -
-        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1)) *
-          ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-            (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) Pr :=
+
+  have hLHSint :
+    Integrable
+      (fun z : Ω × ℝ =>
+        (1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
+            17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)) -
+          2 *
+            ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+              ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+                ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+                  (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1)))))
+      Pr :=
     (((hIint (r + 1)).const_mul (1 / 2 : ℝ)).sub
-      ((hIint r).const_mul (17 * ((r : ℝ) + 1) ^ 2))).sub hsumint
-  have hmono : ∫ z, ((1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
-        17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)) -
-        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1)) *
-          ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-            (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) ∂Pr ≤
+          ((hIint r).const_mul (17 * ((r : ℝ) + 1) ^ 2))).sub
+      hsumint
+  have hmono :
+    ∫ z,
+        ((1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
+            17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)) -
+          2 *
+            ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+              ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+                ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+                  (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) ∂Pr ≤
       ∫ z, γ (p z.2 z.1) ^ 2 * generator μ hc (E r) (p z.2 z.1) ∂Pr := by
     apply integral_mono_ae hLHSint hGint
     filter_upwards [hae] with z hz
     exact hpt (p z.2 z.1) hz.1 hz.2
-  have hsplit : ∫ z, ((1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
-        17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)) -
-        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1)) *
-          ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-            (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) ∂Pr =
+  have hsplit :
+    ∫ z,
+        ((1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
+            17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)) -
+          2 *
+            ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+              ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+                ((γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+                  (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))))) ∂Pr =
       (1 / 2 : ℝ) * (∫ z, γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1) ∂Pr) -
-        17 * ((r : ℝ) + 1) ^ 2 * (∫ z, γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1) ∂Pr) -
-        2 * ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-          Real.sqrt (b (r + 1 - a + 1)) *
-          ∫ z, (γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-            (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))) ∂Pr := by
-    have hA : Integrable (fun z : Ω × ℝ =>
-        (1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
-          17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1))) Pr :=
-      ((hIint (r + 1)).const_mul (1 / 2 : ℝ)).sub
-        ((hIint r).const_mul (17 * ((r : ℝ) + 1) ^ 2))
+          17 * ((r : ℝ) + 1) ^ 2 * (∫ z, γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1) ∂Pr) -
+        2 *
+          ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+            ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+              ∫ z,
+                (γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+                  (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))) ∂Pr := by
+    have hA :
+      Integrable
+        (fun z : Ω × ℝ =>
+          (1 / 2 : ℝ) * (γ (p z.2 z.1) ^ 2 * E (r + 1) (p z.2 z.1)) -
+            17 * ((r : ℝ) + 1) ^ 2 * (γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1)))
+        Pr :=
+      ((hIint (r + 1)).const_mul (1 / 2 : ℝ)).sub ((hIint r).const_mul (17 * ((r : ℝ) + 1) ^ 2))
     rw [integral_sub hA hsumint,
       integral_sub ((hIint (r + 1)).const_mul (1 / 2 : ℝ))
         ((hIint r).const_mul (17 * ((r : ℝ) + 1) ^ 2)),
-      integral_const_mul, integral_const_mul, integral_const_mul,
-      integral_finsetSum _ hterm]
+      integral_const_mul, integral_const_mul, integral_const_mul, integral_finsetSum _ hterm]
     simp only [integral_const_mul]
   -- Cauchy–Schwarz on the product measure.
-  have hCSint : ∀ a ∈ Finset.Icc 2 (r + 1 - 2),
-      ∫ z, (γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-          (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))) ∂Pr ≤
+
+  have hCSint :
+    ∀ a ∈ Finset.Icc 2 (r + 1 - 2),
+      ∫ z,
+          (γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+            (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))) ∂Pr ≤
         Real.sqrt (∫ z, γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1) ∂Pr) *
           Real.sqrt (∫ z, γ (p z.2 z.1) ^ 2 * E a (p z.2 z.1) ∂Pr) := by
     intro a _
-    have hcs := integral_mul_le_Lp_mul_Lq_of_nonneg Real.HolderConjugate.two_two
-      (f := fun z : Ω × ℝ => γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1)))
-      (g := fun z : Ω × ℝ => γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1)))
-      (Filter.Eventually.of_forall fun z => mul_nonneg (hγ01 _).1 (Real.sqrt_nonneg _))
-      (Filter.Eventually.of_forall fun z => mul_nonneg (hγ01 _).1 (Real.sqrt_nonneg _))
-      (hfmem r) (hfmem a)
-    have hsq : ∀ d (z : Ω × ℝ), (γ (p z.2 z.1) * Real.sqrt (E d (p z.2 z.1))) ^ (2 : ℝ) =
-        γ (p z.2 z.1) ^ 2 * E d (p z.2 z.1) := by
+    have hcs :=
+      integral_mul_le_Lp_mul_Lq_of_nonneg Real.HolderConjugate.two_two (f := fun z : Ω × ℝ =>
+        γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) (g := fun z : Ω × ℝ =>
+        γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1)))
+        (Filter.Eventually.of_forall fun z => mul_nonneg (hγ01 _).1 (Real.sqrt_nonneg _))
+        (Filter.Eventually.of_forall fun z => mul_nonneg (hγ01 _).1 (Real.sqrt_nonneg _))
+        (hfmem r) (hfmem a)
+    have hsq :
+      ∀ d (z : Ω × ℝ),
+        (γ (p z.2 z.1) * Real.sqrt (E d (p z.2 z.1))) ^ (2 : ℝ) =
+          γ (p z.2 z.1) ^ 2 * E d (p z.2 z.1) := by
       intro d z
       rw [Real.rpow_two, mul_pow, Real.sq_sqrt (hEnn d _)]
     simp only [hsq, ← Real.sqrt_eq_rpow] at hcs
     exact hcs
-  have hsum_le : ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-        Real.sqrt (b (r + 1 - a + 1)) *
-        ∫ z, (γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
-          (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))) ∂Pr ≤
-      ∑ a ∈ Finset.Icc 2 (r + 1 - 2), ((r + 1 - 1).choose (a - 1) : ℝ) *
-        Real.sqrt (b (r + 1 - a + 1)) *
-        (Real.sqrt (∫ z, γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1) ∂Pr) *
-          Real.sqrt (∫ z, γ (p z.2 z.1) ^ 2 * E a (p z.2 z.1) ∂Pr)) := by
+
+  -- Collect the lower-order integrals into the claimed recurrence.
+  have hsum_le :
+    ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+        ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+          ∫ z,
+            (γ (p z.2 z.1) * Real.sqrt (E r (p z.2 z.1))) *
+              (γ (p z.2 z.1) * Real.sqrt (E a (p z.2 z.1))) ∂Pr ≤
+      ∑ a ∈ Finset.Icc 2 (r + 1 - 2),
+        ((r + 1 - 1).choose (a - 1) : ℝ) * Real.sqrt (b (r + 1 - a + 1)) *
+          (Real.sqrt (∫ z, γ (p z.2 z.1) ^ 2 * E r (p z.2 z.1) ∂Pr) *
+            Real.sqrt (∫ z, γ (p z.2 z.1) ^ 2 * E a (p z.2 z.1) ∂Pr)) := by
     apply Finset.sum_le_sum
     intro a ha
-    exact mul_le_mul_of_nonneg_left (hCSint a ha) (by positivity)
+    exact
+      mul_le_mul_of_nonneg_left (hCSint a ha)
+        (by positivity)
   -- Assemble.
+
   simp only [weightedEnergyIntegral, ← hEapp, hE0, hI]
   linarith [hmono, hsplit, hDynkin, hsum_le]
 

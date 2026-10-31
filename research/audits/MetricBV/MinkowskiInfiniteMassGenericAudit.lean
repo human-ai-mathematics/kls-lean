@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Strict proof client: the finite-measure instance carried by several elementary public lemmas
 is superfluous. The following hold for every Borel measure (including infinite total mass),
@@ -7,6 +9,8 @@ versions `minkowskiContent_le_upperMinkowskiContent`, `minkowskiContent_empty`,
 `upperMinkowskiContent_empty`, `relaxedMinkowskiContent_le_liminf`,
 `relaxedMinkowskiContent_le_relaxedUpperMinkowskiContent` require it. This is an API-scope
 observation only; it does not affect any proved endpoint. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Multidim
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.Multidim
 
 /-!
 # Simple predictable integrands and the elementary Brownian integral
@@ -14,6 +19,8 @@ integral `simpleIntegral` against a scalar Brownian motion `W`, and the energy
 `∫⁻ ‖H.eval s ω‖₊ ^ 2` of the integrand, which the disjointness of the partition intervals
 `(t_i, t_{i+1}]` turns into the sum `∑_i (t_{i+1} - t_i) · ∫⁻ ‖ξ_i‖₊ ^ 2 ∂P`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -89,9 +96,9 @@ lemma eval_eq_sum_indicator {T : ℝ} (H : SimplePredictable Ω T) (s : ℝ) (ω
   unfold SimplePredictable.eval
   refine Finset.sum_congr rfl (fun i _ => ?_)
   by_cases h : H.partition i.castSucc < s ∧ s ≤ H.partition i.succ
-  · rw [if_pos h]
+  · rw [ite_eq_left h]
     rw [Set.indicator_of_mem (Set.mem_Ioc.mpr h)]
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     rw [Set.indicator_of_notMem (fun hmem => h (Set.mem_Ioc.mp hmem))]
 
 /-- **Disjoint intervals.** The intervals `(t_i, t_{i+1}]` for

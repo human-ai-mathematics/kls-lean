@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
-import FunctionalInequalities.Energy.Form.Dirichlet
-import FunctionalInequalities.Energy.Relaxation.LinearPMap
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
+public import FunctionalInequalities.Energy.Form.Dirichlet
+public import FunctionalInequalities.Energy.Relaxation.LinearPMap
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-!
 # Route statements: Markov property of the log-concave heat semigroup
@@ -26,6 +28,8 @@ This route proves only the Markov property. It contains no `Gamma` calculus, no 
 estimate, and no step of Buser's inequality; completing it does not give the comparison node a
 progress marker.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -94,29 +98,37 @@ membership and the energy bound; the lattice inequality
 
 /-! ### `M6` -- the generated semigroup is Markov -/
 
-#check (∀ {α H : Type*} [MeasurableSpace α]
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
+#check
+  (∀ {α H : Type*} [MeasurableSpace α] [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
     (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2 (μ : Measure α))))
-    (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
-    {t : ℝ} (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain)
-    (_hTone : T ⟨L2.const μ 1, hone⟩ = 0),
-      (∀ f, 0 ≤ f → 0 ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) ∧
-      (∀ f, f ≤ L2.const μ 1 → FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f ≤ L2.const μ 1) ∧
-      FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (L2.const μ 1) = L2.const μ 1)
+    (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T)) {t : ℝ}
+    (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain) (_hTone : T ⟨L2.const μ 1, hone⟩ = 0),
+    (∀ f, 0 ≤ f → 0 ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) ∧
+      (∀ f,
+          f ≤ L2.const μ 1 →
+            FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f ≤
+              L2.const μ 1) ∧
+        FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (L2.const μ 1) =
+          L2.const μ 1)
 
 /-! ### `M7` -- mean preservation, absolute-value domination and the `L^infinity` bound -/
 
-#check (∀ {α H : Type*} [MeasurableSpace α]
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
+#check
+  (∀ {α H : Type*} [MeasurableSpace α] [NormedAddCommGroup H] [InnerProductSpace ℝ H]
+    [CompleteSpace H] (μ : ProbabilityMeasure α) (T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H)
     (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2 (μ : Measure α))))
-    (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
-    {t : ℝ} (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain)
-    (_hTone : T ⟨L2.const μ 1, hone⟩ = 0) (f : Lp ℝ 2 (μ : Measure α)),
-      L2.mean μ (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) = L2.mean μ f ∧
-      |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t |f| ∧
-      ∀ {C : ℝ}, 0 ≤ C → |f| ≤ C • L2.const μ 1 →
-        |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤ C • L2.const μ 1)
+    (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T)) {t : ℝ}
+    (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain) (_hTone : T ⟨L2.const μ 1, hone⟩ = 0)
+    (f : Lp ℝ 2 (μ : Measure α)),
+    L2.mean μ (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) =
+        L2.mean μ f ∧
+      |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤
+          FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t |f| ∧
+        ∀ {C : ℝ},
+          0 ≤ C →
+            |f| ≤ C • L2.const μ 1 →
+              |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤
+                C • L2.const μ 1)
 
 end FunctionalInequalities

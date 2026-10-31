@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Borel
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Borel
 
 /-!
 # Borell's lemma for log-concave laws
@@ -12,6 +14,8 @@ The Lean statement adds measurability of `B`: a convex set need not be Borel, wh
 `μ(B)` presupposes it. Log-concavity is the compact-set predicate `KLS.LogConcave`, equivalent
 to Bobkov's Borel formulation (`LogConcave.borel_iff`).
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped Pointwise
@@ -68,78 +72,45 @@ theorem combination_compl_smul_subset_compl {B : Set E} (hconv : Convex ℝ B)
 /-- The log-concavity step of Borell's lemma in real form:
 `(1 - μ(tB))^(2/(t+1)) · μ(B)^(1 - 2/(t+1)) ≤ 1 - μ(B)` for `t > 1`. -/
 theorem one_sub_measure_smul_rpow_mul_le {μ : ProbabilityMeasure E} (hμ : KLS.LogConcave μ)
-    {B : Set E} (hB : MeasurableSet B) (hconv : Convex ℝ B) (hsymm : ∀ x ∈ B, -x ∈ B)
-    {t : ℝ} (ht : 1 < t) :
+    {B : Set E} (hB : MeasurableSet B) (hconv : Convex ℝ B) (hsymm : ∀ x ∈ B, -x ∈ B) {t : ℝ}
+    (ht : 1 < t) :
     (1 - ((μ : Measure E) (t • B)).toReal) ^ (2 / (t + 1)) *
         ((μ : Measure E) B).toReal ^ (1 - 2 / (t + 1)) ≤
       1 - ((μ : Measure E) B).toReal := by
   have htpos : 0 < t := lt_trans zero_lt_one ht
   have ht0 : t ≠ 0 := ne_of_gt htpos
-
-  have hts : MeasurableSet (t • B) := by
-    exact hB.const_smul_of_ne_zero ht0
-
+  have hts : MeasurableSet (t • B) := by exact hB.const_smul_of_ne_zero ht0
   have htsc : MeasurableSet (t • B)ᶜ := hts.compl
-
-  have hpow0 : 0 < (2 / (t + 1) : ℝ) := by
-    positivity
-
+  have hpow0 : 0 < (2 / (t + 1) : ℝ) := by positivity
   have hpow1 : (2 / (t + 1) : ℝ) < 1 := by
     have hden : 0 < t + 1 := by linarith
     apply (div_lt_one hden).2
     linarith
-
-  let C : Set E :=
-    {z | ∃ x ∈ (t • B)ᶜ, ∃ y ∈ B,
-      z = (2 / (t + 1)) • x + (1 - 2 / (t + 1)) • y}
-
-  have hsub : C ⊆ Bᶜ := by
-    exact combination_compl_smul_subset_compl hconv hsymm ht
-
+  let C : Set E := {z | ∃ x ∈ (t • B)ᶜ, ∃ y ∈ B, z = (2 / (t + 1)) • x + (1 - 2 / (t + 1)) • y}
+  have hsub : C ⊆ Bᶜ := by exact combination_compl_smul_subset_compl hconv hsymm ht
   have hlog :
-      ((μ : Measure E) (t • B)ᶜ) ^ (2 / (t + 1)) *
-          ((μ : Measure E) B) ^ (1 - 2 / (t + 1))
-        ≤ KLS.innerMeasure (μ : Measure E) C := by
+    ((μ : Measure E) (t • B)ᶜ) ^ (2 / (t + 1)) * ((μ : Measure E) B) ^ (1 - 2 / (t + 1)) ≤
+      KLS.innerMeasure (μ : Measure E) C := by
     simpa [C] using
-      ((KLS.LogConcave.borel_iff μ).1 hμ
-        (t • B)ᶜ B htsc hB (2 / (t + 1)) hpow0 hpow1)
-
-  have hinner :
-      KLS.innerMeasure (μ : Measure E) C ≤ (μ : Measure E) Bᶜ :=
+      ((KLS.LogConcave.borel_iff μ).1 hμ (t • B)ᶜ B htsc hB (2 / (t + 1)) hpow0 hpow1)
+  have hinner : KLS.innerMeasure (μ : Measure E) C ≤ (μ : Measure E) Bᶜ :=
     le_trans (KLS.innerMeasure_le (μ : Measure E) C) (measure_mono hsub)
-
   have henne :
-      ((μ : Measure E) (t • B)ᶜ) ^ (2 / (t + 1)) *
-          ((μ : Measure E) B) ^ (1 - 2 / (t + 1))
-        ≤ (μ : Measure E) Bᶜ :=
+    ((μ : Measure E) (t • B)ᶜ) ^ (2 / (t + 1)) * ((μ : Measure E) B) ^ (1 - 2 / (t + 1)) ≤
+      (μ : Measure E) Bᶜ :=
     hlog.trans hinner
-
   have hreal := ENNReal.toReal_mono (by finiteness) henne
   rw [ENNReal.toReal_mul, ← ENNReal.toReal_rpow, ← ENNReal.toReal_rpow] at hreal
-
-  have hcomp_t :
-      (μ : Measure E) (t • B)ᶜ = 1 - (μ : Measure E) (t • B) :=
+  have hcomp_t : (μ : Measure E) (t • B)ᶜ = 1 - (μ : Measure E) (t • B) :=
     prob_compl_eq_one_sub hts
-
-  have hcomp_B :
-      (μ : Measure E) Bᶜ = 1 - (μ : Measure E) B :=
-    prob_compl_eq_one_sub hB
-
+  have hcomp_B : (μ : Measure E) Bᶜ = 1 - (μ : Measure E) B := prob_compl_eq_one_sub hB
   rw [hcomp_t, hcomp_B] at hreal
-
   have hle_t : (μ : Measure E) (t • B) ≤ 1 := prob_le_one
   have hle_B : (μ : Measure E) B ≤ 1 := prob_le_one
-
-  have htr_t :
-      (1 - (μ : Measure E) (t • B)).toReal =
-        1 - ((μ : Measure E) (t • B)).toReal := by
+  have htr_t : (1 - (μ : Measure E) (t • B)).toReal = 1 - ((μ : Measure E) (t • B)).toReal := by
     rw [ENNReal.toReal_sub_of_le hle_t] <;> simp
-
-  have htr_B :
-      (1 - (μ : Measure E) B).toReal =
-        1 - ((μ : Measure E) B).toReal := by
+  have htr_B : (1 - (μ : Measure E) B).toReal = 1 - ((μ : Measure E) B).toReal := by
     rw [ENNReal.toReal_sub_of_le hle_B] <;> simp
-
   rw [htr_t, htr_B] at hreal
   exact hreal
 

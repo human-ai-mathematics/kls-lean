@@ -1,7 +1,9 @@
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+module
+
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
 # A majorization Gronwall comparison
@@ -18,6 +20,8 @@ hypothesis into a bound on `∑_{i < k} μᵢ (λᵢ - λₖ)`, and the function
 `exp(-2 Λₖ) ∑_{i ≤ k} νᵢ - ∑_{i < k} exp(2 (Λᵢ - Λₖ))`, with `Λᵢ = ∫₀ᵗ λᵢ` and
 `νᵢ = 1 + 2 ∫₀ᵗ μᵢ λᵢ`, is nonincreasing and equals `1` at `t = 0`.
 -/
+
+@[expose] public section
 
 open Finset Set intervalIntegral
 open MeasureTheory

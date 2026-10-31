@@ -1,5 +1,16 @@
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+public import Mathlib.Analysis.Calculus.MeanValue
+
+/-!
+# Lipschitz continuity of the exponential on a half-line
+
+The exponential has Lipschitz constant `exp C` on `(-∞, C]`. No lower bound or positivity
+assumption on `C` is needed; the nonnegative constant is written with `Real.toNNReal`.
+-/
+
+@[expose] public section
 
 noncomputable section
 namespace FunctionalInequalities.Analysis

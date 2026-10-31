@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Strict clients for finite-neighborhood radius transfer, actual bounded open upper
 recovery, and the global-indicator-L1 infimum, over the class without termwise finiteness, at
 finite-mass Borel targets.
 The measure may have infinite total mass and the space need not be proper. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -92,22 +96,31 @@ theorem unboundedNullTarget :
 /-- The class imposes no termwise finiteness: its first set may have infinite mass. -/
 theorem infinitePrefix :
     let A : ℕ → Set ℝ := fun n => if n = 0 then univ else Set.Icc 0 1
-    (volume : Measure ℝ) (A 0) = ⊤ ∧ perimeter volume (Set.Icc (0 : ℝ) 1) ≤
-      liminf (fun n => upperMinkowskiContent volume (A n)) atTop := by
+    (volume : Measure ℝ) (A 0) = ⊤ ∧
+      perimeter volume (Set.Icc (0 : ℝ) 1) ≤
+        liminf (fun n => upperMinkowskiContent volume (A n)) atTop := by
   dsimp
   have hA : ∀ n : ℕ, MeasurableSet (if n = 0 then (univ : Set ℝ) else Set.Icc 0 1) := by
     intro n
     split_ifs <;> simp
-  have hconv : Tendsto (fun n : ℕ => ∫⁻ x, ‖(if n = 0 then (univ : Set ℝ) else Set.Icc 0 1).indicator
-      (1 : ℝ → ℝ) x - (Set.Icc (0 : ℝ) 1).indicator 1 x‖ₑ ∂volume) atTop (𝓝 0) := by
+  have hconv :
+    Tendsto
+      (fun n : ℕ =>
+        ∫⁻ x,
+          ‖(if n = 0 then (univ : Set ℝ) else Set.Icc 0 1).indicator (1 : ℝ → ℝ) x -
+              (Set.Icc (0 : ℝ) 1).indicator 1 x‖ₑ ∂volume)
+      atTop (𝓝 0) := by
     apply tendsto_const_nhds.congr'
     filter_upwards [eventually_gt_atTop (0 : ℕ)] with n hn
     simp [hn.ne']
-  exact ⟨by simp, perimeter_le_liminf_upperMinkowskiContent_of_measure_lt_top volume
-    measurableSet_Icc (by simp) hA hconv⟩
+  exact
+    ⟨by simp,
+      perimeter_le_liminf_upperMinkowskiContent_of_measure_lt_top volume measurableSet_Icc
+        (by simp) hA hconv⟩
 
 theorem finiteRegression (ν : Measure X) [IsFiniteMeasure ν] (B : Set X) :
-    relaxedUpperMinkowskiContent ν B = perimeter ν B := relaxedUpperMinkowskiContent_eq_perimeter ν B
+    relaxedUpperMinkowskiContent ν B = perimeter ν B :=
+  relaxedUpperMinkowskiContent_eq_perimeter ν B
 
 theorem probabilityRegression (ν : Measure X) [IsProbabilityMeasure ν] (B : Set X) :
     relaxedUpperMinkowskiContent ν B = relaxedMinkowskiContent ν B :=
@@ -117,7 +130,8 @@ omit [BorelSpace X] in
 theorem zeroMeasure (B : Set X) : relaxedUpperMinkowskiContent (0 : Measure X) B = 0 :=
   relaxedUpperMinkowskiContent_zero_measure B
 
-theorem emptyCarrier (ν : Measure Empty) (B : Set Empty) : relaxedUpperMinkowskiContent ν B = 0 := by
+theorem emptyCarrier (ν : Measure Empty) (B : Set Empty) :
+    relaxedUpperMinkowskiContent ν B = 0 := by
   rw [Measure.eq_zero_of_isEmpty ν]
   exact relaxedUpperMinkowskiContent_zero_measure B
 

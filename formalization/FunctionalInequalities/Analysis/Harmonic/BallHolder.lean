@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Harmonic.LocalHolder
-import Mathlib.Tactic.Abel
+module
+
+public import FunctionalInequalities.Analysis.Harmonic.LocalHolder
+public import Mathlib.Tactic.Abel
 
 /-!
 # Scaled Hessian Hölder bounds for harmonic functions on balls
@@ -19,6 +21,8 @@ The proof rescales `z ↦ h (c + R • z)` to the unit statement `local_harmonic
 to GT Theorem 4.6 is proved here; the Newtonian-potential estimate is GT Theorem 4.5
 (`Newtonian/CompactPoisson`). The constant is not GT's explicit one.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric
 open scoped ContDiff Topology

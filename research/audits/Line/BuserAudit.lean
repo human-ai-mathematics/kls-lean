@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Buser
-import Mathlib.Probability.Moments.Variance
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Buser
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Scope audit for the one-dimensional Buser route on the line
@@ -37,6 +39,8 @@ The axiom reports at the end cover every public declaration of the two modules a
 theorem of this client; each of them must list only `propext`, `Classical.choice` and
 `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -125,7 +129,7 @@ theorem boundary_inverseScale_eq_zero_of_finrank_zero
     Isoperimetry.inverseScale μ = 0 := by
   have htop : Isoperimetry.constant μ = ⊤ := by
     unfold Isoperimetry.constant
-    rw [if_pos hdim]
+    rw [ite_eq_left hdim]
   rw [Isoperimetry.inverseScale, htop, ENNReal.inv_top]
 
 /-- The Dirac law on the line: its support is a single point, no Borel set has intermediate mass,

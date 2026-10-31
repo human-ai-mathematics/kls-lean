@@ -1,6 +1,8 @@
-import FunctionalInequalities.Poincare.FiniteProduct.Geometry
-import FunctionalInequalities.Poincare.Product.Tensorization
-import FunctionalInequalities.Poincare.SmoothTest.Transport
+module
+
+public import FunctionalInequalities.Poincare.FiniteProduct.Geometry
+public import FunctionalInequalities.Poincare.Product.Tensorization
+public import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # Finite Poincaré tensorization and optimal-constant equality
@@ -23,6 +25,8 @@ specifications. They are not additional hypotheses or separate assertions quoted
 manuscript. No identification with its spectral-gap interpretation is made here.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory
@@ -43,14 +47,13 @@ private def PiStatement (ι : Type uι) [Fintype ι] : Prop :=
     (∀ i, Holds (μ i) (C i : ℝ)) →
     Holds (piMeasure μ) ((Finset.univ.sup C : NNReal) : ℝ)
 
-/- `letI` keeps the transported `Fintype` instance definitionally transparent. -/
-set_option linter.style.haveILetI false in
+/- Transport the local `Fintype` instance along the index equivalence. -/
 private theorem piStatement (ι : Type uι) [Fintype ι] : PiStatement.{uι, uE} ι := by
   refine Fintype.induction_empty_option
     (P := fun α inst ↦ @PiStatement.{uι, uE} α inst) ?_ ?_ ?_ ι
   · -- transport along an index equivalence via dependent reindexing
     intro α β hβ e ih
-    letI : Fintype α := Fintype.ofEquiv β e.symm
+    let : Fintype α := Fintype.ofEquiv β e.symm
     intro E _ _ _ _ _ _ μ _ C h
     have h' := ih (fun j ↦ E (e j)) (fun j ↦ μ (e j)) (fun j ↦ C (e j)) (fun j ↦ h (e j))
     have h2 := (holds_map_linearIsometryEquiv_iff (piCongrLeft E e)

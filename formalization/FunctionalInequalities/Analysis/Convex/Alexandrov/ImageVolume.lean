@@ -1,10 +1,12 @@
-import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.Analysis.Convex.Subgradient.Image
-import FunctionalInequalities.Analysis.MetricCover
-import FunctionalInequalities.Analysis.Convex.Extension
-import FunctionalInequalities.Analysis.Convex.Quadratic
-import FunctionalInequalities.Analysis.Convex.Alexandrov.Transport
-import FunctionalInequalities.Analysis.Convex.Alexandrov.MaximumPrinciple
+module
+
+public import FunctionalInequalities.Probability.Transport
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Image
+public import FunctionalInequalities.Analysis.MetricCover
+public import FunctionalInequalities.Analysis.Convex.Extension
+public import FunctionalInequalities.Analysis.Convex.Quadratic
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.Transport
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.MaximumPrinciple
 
 /-! # Affine subgradient-image volumes, Alexandrov identities and domain boundary bounds
 
@@ -12,6 +14,8 @@ Supports the domain Monge--Ampere infrastructure for Letwin
 arXiv:2607.24164v1 Lemma 2.2 through BB arXiv:1207.6128v1
 Theorem 2.24(ii).
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set
@@ -307,15 +311,14 @@ theorem volume_subgradientImage_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n
 /-- The actual DOMAIN support image of a positive definite quadratic has its
 exact determinant mass on EVERY subset of an open domain. No measurability,
 finite-volume, domain-convexity or source image-agreement premise is needed. -/
-theorem volume_subgradientImageOn_quadraticAt {n : ℕ}
-    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
-    (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
-    {Ω G : Set (EuclideanSpace ℝ (Fin n))} (hΩ : IsOpen Ω) (hGΩ : G⊆Ω) :
+theorem volume_subgradientImageOn_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.PosDef) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
+    {Ω G : Set (EuclideanSpace ℝ (Fin n))} (hΩ : IsOpen Ω) (hGΩ : G ⊆ Ω) :
     (volume : Measure (EuclideanSpace ℝ (Fin n)))
         (subgradientImageOn (quadraticAt A x₀ b c) Ω G) =
-      ENNReal.ofReal A.det*(volume : Measure (EuclideanSpace ℝ (Fin n))) G := by
+      ENNReal.ofReal A.det * (volume : Measure (EuclideanSpace ℝ (Fin n))) G := by
   rw [subgradientImageOn_eq_subgradientImage_of_isOpen
-    (convexOn_quadraticAt hA.posSemidef _ _ _) hΩ hGΩ]
+      (convexOn_quadraticAt hA.posSemidef _ _ _) hΩ hGΩ]
   exact volume_subgradientImage_quadraticAt_aux hA x₀ b c
 
 end FunctionalInequalities.Analysis
@@ -498,15 +501,19 @@ namespace FunctionalInequalities.Analysis
 
 /-- **Minimum estimate on a normalised section by quadratic comparison** (Caffarelli's argument;
 Gutiérrez Lemma via the comparison with `½κ(‖x‖² − 1)`): if `v` is convex, `≤ 0` on
-the frontier of a bounded open `S ⊇ closedBall 0 1`, and `a · vol G ≤ vol ∂v(G)` for open `G ⊆ S`, then
+the frontier of a bounded open `S ⊇ closedBall 0 1`, and `a · vol G ≤ vol ∂v(G)` for open `G ⊆ S`,
+then
 `v 0 ≤ −½ (a/2)^{1/n}`. -/
 theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ v) {S : Set (EuclideanSpace ℝ (Fin n))} (hS : IsOpen S)
     (hb : Bornology.IsBounded S) (hball : closedBall (0 : EuclideanSpace ℝ (Fin n)) 1 ⊆ S)
     (hfr : ∀ x ∈ frontier S, v x ≤ 0) {a : ℝ} (ha : 0 < a)
-    (hA : ∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G → G ⊆ S →
-      ENNReal.ofReal a * (volume : Measure (EuclideanSpace ℝ (Fin n))) G ≤
-        (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage v G)) :
+    (hA :
+      ∀ G : Set (EuclideanSpace ℝ (Fin n)),
+        IsOpen G →
+          G ⊆ S →
+            ENNReal.ofReal a * (volume : Measure (EuclideanSpace ℝ (Fin n))) G ≤
+              (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage v G)) :
     v 0 ≤ -(1 / 2) * (a / 2) ^ (1 / (n : ℝ)) := by
   let E := EuclideanSpace ℝ (Fin n)
   let κ : ℝ := (a / 2) ^ (1 / (n : ℝ))
@@ -525,17 +532,14 @@ theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSp
   have hMdet : M.det = κ ^ n := by
     dsimp [M]
     rw [Matrix.det_smul, Matrix.det_one, Fintype.card_fin, mul_one]
-  have hMaction (x : E) :
-      Matrix.toEuclideanLin M x = κ • x := by
+  have hMaction (x : E) : Matrix.toEuclideanLin M x = κ • x := by
     change Matrix.toLpLin 2 2 (κ • (1 : Matrix (Fin n) (Fin n) ℝ)) x = κ • x
     rw [map_smul, Matrix.toLpLin_one]
     simp
-  have hwformula (x : E) :
-      w x = (κ / 2) * (‖x‖ ^ 2 - 1) := by
+  have hwformula (x : E) : w x = (κ / 2) * (‖x‖ ^ 2 - 1) := by
     dsimp [w, quadraticAt]
     rw [hMaction]
-    simp only [sub_zero, inner_zero_left, real_inner_smul_right,
-      real_inner_self_eq_norm_sq]
+    simp only [sub_zero, inner_zero_left, real_inner_smul_right, real_inner_self_eq_norm_sq]
     ring
   have hvc : Continuous v := by
     apply continuousOn_univ.mp
@@ -557,8 +561,7 @@ theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSp
       apply hxnotS
       apply hball
       simpa [mem_closedBall, dist_zero_right] using hle
-    have hsq : 0 < ‖x‖ ^ 2 - 1 := by
-      nlinarith [norm_nonneg x]
+    have hsq : 0 < ‖x‖ ^ 2 - 1 := by nlinarith [norm_nonneg x]
     rw [hwformula]
     exact mul_pos (half_pos hκ) hsq
   let G : Set E := S ∩ {x | w x < v x}
@@ -574,8 +577,7 @@ theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSp
     have hxclG : x ∈ closure G := frontier_subset_closure hx
     have hxclS : x ∈ closure S := closure_mono hGsub hxclG
     have hle : w x ≤ v x := by
-      apply closure_minimal
-        (s := G) (t := {y | w y ≤ v y}) ?_ (isClosed_le hwc hvc) hxclG
+      apply closure_minimal (s := G) (t := {y | w y ≤ v y}) ?_ (isClosed_le hwc hvc) hxclG
       intro y hy
       change w y ≤ v y
       exact le_of_lt (show w y < v y from hy.2)
@@ -594,30 +596,26 @@ theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSp
   have hGempty : G = ∅ := by
     by_contra hGne
     have hGnonempty : G.Nonempty := nonempty_iff_ne_empty.mpr hGne
-    have hGpos : 0 < (volume : Measure E) G :=
-      IsOpen.measure_pos volume hGopen hGnonempty
+    have hGpos : 0 < (volume : Measure E) G := IsOpen.measure_pos volume hGopen hGnonempty
     have hGtop : (volume : Measure E) G < ∞ := hGb.measure_lt_top
     have hcomp : subgradientImage v G ⊆ subgradientImage w G :=
-      subgradientImage_subset_of_le hwconv hconv hGopen hGb
-        (fun x hx => le_of_lt hx.2) hGeq
+      subgradientImage_subset_of_le hwconv hconv hGopen hGb (fun x hx => le_of_lt hx.2) hGeq
     have hmul :
-        ENNReal.ofReal a * (volume : Measure E) G ≤
-          ENNReal.ofReal M.det * (volume : Measure E) G := by
+      ENNReal.ofReal a * (volume : Measure E) G ≤
+        ENNReal.ofReal M.det * (volume : Measure E) G := by
       calc
         ENNReal.ofReal a * (volume : Measure E) G ≤
             (volume : Measure E) (subgradientImage v G) :=
           hA G hGopen hGsub
-        _ ≤ (volume : Measure E) (subgradientImage w G) :=
-          measure_mono hcomp
+        _ ≤ (volume : Measure E) (subgradientImage w G) := measure_mono hcomp
         _ = ENNReal.ofReal M.det * (volume : Measure E) G :=
           volume_subgradientImage_quadraticAt hMpos 0 0 (-κ / 2) hGopen.measurableSet
     have hcoef : ENNReal.ofReal a ≤ ENNReal.ofReal M.det := by
       exact
-        (ENNReal.mul_le_mul_iff_right
-          (a := (volume : Measure E) G) (ne_of_gt hGpos) (ne_of_lt hGtop)).mp
+        (ENNReal.mul_le_mul_iff_right (a := (volume : Measure E) G) (ne_of_gt hGpos)
+              (ne_of_lt hGtop)).mp
           (by simpa [mul_comm] using hmul)
-    have hreal : a ≤ M.det :=
-      (ENNReal.ofReal_le_ofReal_iff hMpos.det_pos.le).mp hcoef
+    have hreal : a ≤ M.det := (ENNReal.ofReal_le_ofReal_iff hMpos.det_pos.le).mp hcoef
     rw [hMdet, hκpow] at hreal
     linarith
   have hvw : ∀ x ∈ S, v x ≤ w x := by
@@ -659,7 +657,8 @@ variable {E : Type*}
 /-- **Subtracting an affine function translates subgradient images** (Caffarelli's argument,
 bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
 theorem subgradientImage_sub_inner_add_const (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
-    subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G = (fun q => q - p) '' subgradientImage u G := by
+    subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G =
+      (fun q => q - p) '' subgradientImage u G := by
   ext q
   constructor
   · rintro ⟨x, hx, hq⟩
@@ -678,8 +677,8 @@ theorem subgradientImage_sub_inner_add_const (u : E → ℝ) (p : E) (c : ℝ) (
     simp only [inner_sub_left, inner_sub_right]
     linarith
 
-theorem volume_subgradientImage_sub_inner_add_const [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
+theorem volume_subgradientImage_sub_inner_add_const [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
     (volume : Measure E) (subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G) =
       (volume : Measure E) (subgradientImage u G) := by
   rw [subgradientImage_sub_inner_add_const]
@@ -697,7 +696,8 @@ section AlexandrovIdentityOpen
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal
 
-/-! The Alexandrov identity on open sets: the volume of the subgradient image equals the integral of the Monge–Ampère density. -/
+/-! The Alexandrov identity on open sets: the volume of the subgradient image equals the integral of
+the Monge–Ampère density. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -708,11 +708,11 @@ variable {E : Type*}
 
 /-- One actual compact-to-open producer shared by the moment-open identity
 and actual local-map-to-open source. The compact exhaustion, canonical pure
-image union and monotone measure continuity are implemented only here. No C0/convex/Lip/image measurability or
+image union and monotone measure continuity are implemented only here. No C0/convex/Lip/image
+measurability or
 finite measure premise. Compact equality is intermediate generated data. -/
-theorem subgradientImage_open_measure_of_compact_eq
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem subgradientImage_open_measure_of_compact_eq {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {μ : Measure E} {D G : Set E} (hG : IsOpen G) (hGD : G ⊆ D)
     (hc : ∀ S : Set E, IsCompact S → S ⊆ D → volume (subgradientImage u S) = μ S) :
     volume (subgradientImage u G) = μ G := by
@@ -723,18 +723,19 @@ theorem subgradientImage_open_measure_of_compact_eq
   have hSmono : Monotone S := fun _ _ hij => Set.image_mono (compactCovering_subset G hij)
   have hSunion : (⋃ n, S n) = G := by
     change (⋃ n, Subtype.val '' compactCovering G n) = G
-    rw [←image_iUnion,iUnion_compactCovering,image_univ,Subtype.range_coe]
+    rw [← image_iUnion, iUnion_compactCovering, image_univ, Subtype.range_coe]
   have hSsub (n : ℕ) : S n ⊆ D := by
-    rintro _ ⟨y,_hy,rfl⟩
+    rintro _ ⟨y, _hy, rfl⟩
     exact hGD y.property
   have hTmono : Monotone (fun n => subgradientImage u (S n)) := by
     intro i j hij
     simpa only [subgradientImageOn_univ] using subgradientImageOn_mono u univ (hSmono hij)
   have hTunion : subgradientImage u G = ⋃ n, subgradientImage u (S n) := by
-    rw [←hSunion]
+    rw [← hSunion]
     simpa only [subgradientImageOn_univ] using subgradientImageOn_iUnion u univ S
   calc
-    volume (subgradientImage u G) = volume (⋃ n, subgradientImage u (S n)) := congrArg volume hTunion
+    volume (subgradientImage u G) = volume (⋃ n, subgradientImage u (S n)) :=
+      congrArg volume hTunion
     _ = ⨆ n, volume (subgradientImage u (S n)) := hTmono.measure_iUnion
     _ = ⨆ n, μ (S n) := iSup_congr fun n => hc (S n) (hScompact n) (hSsub n)
     _ = μ (⋃ n, S n) := hSmono.measure_iUnion.symm
@@ -742,14 +743,18 @@ theorem subgradientImage_open_measure_of_compact_eq
 
 
 /-- **Alexandrov identity on open sets for the moment potential**:
-if `u` is convex, Lipschitz, `ν = e^{-u} dx` is normalised and `ν.map ∇u = μ = 1_K e^{-V} dx` for a closed convex
-`K` and a measurable `V`, then the subgradient image of every open `G` has volume `∫_G e^{-u + V(∇u)}`. -/
-theorem volume_subgradientImage_eq_lintegral_of_isOpen [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
-    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
+if `u` is convex, Lipschitz, `ν = e^{-u} dx` is normalised and `ν.map ∇u = μ = 1_K e^{-V} dx` for a
+closed convex
+`K` and a measurable `V`, then the subgradient image of every open `G` has volume `∫_G e^{-u +
+V(∇u)}`. -/
+theorem volume_subgradientImage_eq_lintegral_of_isOpen [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u)
+    (hconv : ConvexOn ℝ univ u) (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
     {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K) {V : E → ℝ} (hV : Measurable V)
-    (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) =
-      (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
+    (hmap :
+      ((volume : Measure E).tilted (-u)).map (gradient u) =
+        (volume : Measure E).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
     {G : Set E} (hG : IsOpen G) :
     (volume : Measure E) (subgradientImage u G) =
       ∫⁻ x in G, ENNReal.ofReal (Real.exp (-u x + V (gradient u x))) ∂(volume : Measure E) := by
@@ -757,59 +762,52 @@ theorem volume_subgradientImage_eq_lintegral_of_isOpen [FiniteDimensional ℝ E]
   let ρ : E → ℝ≥0∞ := fun x => ENNReal.ofReal (Real.exp (-u x))
   let f : E → ℝ≥0∞ := K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))
   let g : E → ℝ≥0∞ := K.indicator fun p => ENNReal.ofReal (Real.exp (V p))
-  let F : E → ℝ≥0∞ := fun x =>
-    ENNReal.ofReal (Real.exp (-u x + V (gradient u x)))
+  let F : E → ℝ≥0∞ := fun x => ENNReal.ofReal (Real.exp (-u x + V (gradient u x)))
   have hρ : Measurable ρ := hu.continuous.measurable.neg.exp.ennreal_ofReal
-  have hf : Measurable f :=
-    hV.neg.exp.ennreal_ofReal.indicator hK.measurableSet
-  have hg : Measurable g :=
-    hV.exp.ennreal_ofReal.indicator hK.measurableSet
+  have hf : Measurable f := hV.neg.exp.ennreal_ofReal.indicator hK.measurableSet
+  have hg : Measurable g := hV.exp.ennreal_ofReal.indicator hK.measurableSet
   have hgrad : Measurable (gradient u) :=
-    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
-      (measurable_fderiv ℝ u)
+    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp (measurable_fderiv ℝ u)
   have htilt : (volume : Measure E).tilted (-u) = volume.withDensity ρ := by
-    change (volume : Measure E).withDensity
-      (fun x => ENNReal.ofReal
-        (Real.exp (-u x) / ∫ y, Real.exp (-u y) ∂(volume : Measure E))) =
-      volume.withDensity ρ
+    change
+      (volume : Measure E).withDensity
+          (fun x =>
+            ENNReal.ofReal (Real.exp (-u x) / ∫ y, Real.exp (-u y) ∂(volume : Measure E))) =
+        volume.withDensity ρ
     simp only [hnorm, div_one, ρ]
-  have hmap' :
-      ((volume : Measure E).withDensity ρ).map (gradient u) =
-        volume.withDensity f := by
+  have hmap' : ((volume : Measure E).withDensity ρ).map (gradient u) = volume.withDensity f := by
     rw [← htilt]
     exact hmap
   have hint : Integrable (fun x => Real.exp (-u x)) (volume : Measure E) :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; exact one_ne_zero)
   have hae : ∀ᵐ x ∂(volume : Measure E), gradient u x ∈ K :=
     Probability.ae_mem_of_map_tilted_eq_withDensity_indicator volume volume hint
-      hgrad.aemeasurable hK.measurableSet
-      (by fun_prop) hmap
+      hgrad.aemeasurable hK.measurableSet (by fun_prop) hmap
   have hsub (S : Set E) : subgradientImage u S ⊆ K := by
     rintro p ⟨x, _, hp⟩
     exact subgradient_mem_of_ae_gradient_mem hu hconv hK hKc hae hp
   have hcancel (p : E) (hp : p ∈ K) : (f * g) p = 1 := by
     change
       (K.indicator (fun q => ENNReal.ofReal (Real.exp (-V q))) p) *
-        (K.indicator (fun q => ENNReal.ofReal (Real.exp (V q))) p) = 1
-    rw [Set.indicator_of_mem hp, Set.indicator_of_mem hp,
-      ← ENNReal.ofReal_mul (Real.exp_nonneg _), ← Real.exp_add,
-      neg_add_cancel, Real.exp_zero, ENNReal.ofReal_one]
-  have hprod :
-      (fun x => (ρ * (g ∘ gradient u)) x) =ᵐ[volume] F := by
+          (K.indicator (fun q => ENNReal.ofReal (Real.exp (V q))) p) =
+        1
+    rw [Set.indicator_of_mem hp, Set.indicator_of_mem hp, ←
+      ENNReal.ofReal_mul (Real.exp_nonneg _), ← Real.exp_add, neg_add_cancel, Real.exp_zero,
+      ENNReal.ofReal_one]
+  have hprod : (fun x => (ρ * (g ∘ gradient u)) x) =ᵐ[volume] F := by
     filter_upwards [hae] with x hx
-    change ENNReal.ofReal (Real.exp (-u x)) *
-      (K.indicator (fun p => ENNReal.ofReal (Real.exp (V p))) (gradient u x)) =
+    change
+      ENNReal.ofReal (Real.exp (-u x)) *
+          (K.indicator (fun p => ENNReal.ofReal (Real.exp (V p))) (gradient u x)) =
         ENNReal.ofReal (Real.exp (-u x + V (gradient u x)))
-    rw [Set.indicator_of_mem hx,
-      ← ENNReal.ofReal_mul (Real.exp_nonneg _), ← Real.exp_add]
+    rw [Set.indicator_of_mem hx, ← ENNReal.ofReal_mul (Real.exp_nonneg _), ← Real.exp_add]
   have hcompact {S : Set E} (hS : IsCompact S) :
-      (volume : Measure E) (subgradientImage u S) =
-        ((volume : Measure E).withDensity F) S := by
+    (volume : Measure E) (subgradientImage u S) = ((volume : Measure E).withDensity F) S := by
     have hT : MeasurableSet (subgradientImage u S) :=
       (isClosed_subgradientImage_of_isCompact hu.continuous hS).measurableSet
     have hleft :
-        ∫⁻ p in subgradientImage u S, g p ∂(volume : Measure E).withDensity f =
-          (volume : Measure E) (subgradientImage u S) := by
+      ∫⁻ p in subgradientImage u S, g p ∂(volume : Measure E).withDensity f =
+        (volume : Measure E) (subgradientImage u S) := by
       calc
         ∫⁻ p in subgradientImage u S, g p ∂(volume : Measure E).withDensity f =
             ∫⁻ p in subgradientImage u S, (f * g) p ∂(volume : Measure E) :=
@@ -827,14 +825,11 @@ theorem volume_subgradientImage_eq_lintegral_of_isOpen [FiniteDimensional ℝ E]
           (withDensity_absolutelyContinuous volume ρ) hmap'
           (withDensity_absolutelyContinuous volume f) hS g hg
       _ = ∫⁻ x in S, (ρ * (g ∘ gradient u)) x ∂(volume : Measure E) :=
-        setLIntegral_withDensity_eq_setLIntegral_mul volume hρ
-          (hg.comp hgrad) hS.measurableSet
-      _ = ∫⁻ x in S, F x ∂(volume : Measure E) :=
-        lintegral_congr_ae (ae_restrict_of_ae hprod)
-      _ = ((volume : Measure E).withDensity F) S :=
-        (withDensity_apply F hS.measurableSet).symm
-  have hmass : (volume : Measure E) (subgradientImage u G) =
-      ((volume : Measure E).withDensity F) G :=
+        setLIntegral_withDensity_eq_setLIntegral_mul volume hρ (hg.comp hgrad) hS.measurableSet
+      _ = ∫⁻ x in S, F x ∂(volume : Measure E) := lintegral_congr_ae (ae_restrict_of_ae hprod)
+      _ = ((volume : Measure E).withDensity F) S := (withDensity_apply F hS.measurableSet).symm
+  have hmass :
+    (volume : Measure E) (subgradientImage u G) = ((volume : Measure E).withDensity F) G :=
     subgradientImage_open_measure_of_compact_eq hG (subset_univ _) (fun _ hS _ => hcompact hS)
   exact hmass.trans (withDensity_apply F hG.measurableSet)
 
@@ -915,23 +910,28 @@ private lemma inverse_subgradient_measurableSet
     (inverse_subgradient_isClosed hu (hScompact n)).measurableSet
 
 /-- **Reciprocal Alexandrov bounds**: for the moment potential `u` (convex, Lipschitz,
-`ν = e^{-u} dx` normalised, `ν.map ∇u = μ = ρ dx` with `c ≤ ρ ≤ C` on a closed convex `K`) and a radius `M`,
-the set `(∂u)⁻¹(G) = {x | ∃ p ∈ G, p ∈ ∂u(x)}` of an open `G ⊆ K` that lies in `closedBall 0 M` has volume
+`ν = e^{-u} dx` normalised, `ν.map ∇u = μ = ρ dx` with `c ≤ ρ ≤ C` on a closed convex `K`) and a
+radius `M`,
+the set `(∂u)⁻¹(G) = {x | ∃ p ∈ G, p ∈ ∂u(x)}` of an open `G ⊆ K` that lies in `closedBall 0 M` has
+volume
 comparable to `vol G`. -/
-theorem exists_inverse_subgradient_volume_bounds
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
-    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
-    {μ : Measure E} (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) = μ)
-    {ρ : E → ℝ≥0∞} (hρ : Measurable ρ) (hμ : μ = (volume : Measure E).withDensity ρ)
-    {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
-    {c C : ℝ} (hc : 0 < c) (hρK : ∀ p ∈ K, ENNReal.ofReal c ≤ ρ p ∧ ρ p ≤ ENNReal.ofReal C)
-    (M : ℝ) :
-    ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E, IsOpen G → G ⊆ K →
-      {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ⊆ closedBall (0 : E) M →
-      ENNReal.ofReal a * (volume : Measure E) G ≤
-          (volume : Measure E) {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ∧
-        (volume : Measure E) {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ≤
-          ENNReal.ofReal b * (volume : Measure E) G := by
+theorem exists_inverse_subgradient_volume_bounds {u : E → ℝ} {L : NNReal}
+    (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
+    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1) {μ : Measure E}
+    (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) = μ) {ρ : E → ℝ≥0∞}
+    (hρ : Measurable ρ) (hμ : μ = (volume : Measure E).withDensity ρ) {K : Set E}
+    (hK : IsClosed K) (hKc : Convex ℝ K) {c C : ℝ} (hc : 0 < c)
+    (hρK : ∀ p ∈ K, ENNReal.ofReal c ≤ ρ p ∧ ρ p ≤ ENNReal.ofReal C) (M : ℝ) :
+    ∃ a b : ℝ,
+      0 < a ∧
+        ∀ G : Set E,
+          IsOpen G →
+            G ⊆ K →
+              {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ⊆ closedBall (0 : E) M →
+                ENNReal.ofReal a * (volume : Measure E) G ≤
+                    (volume : Measure E) {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ∧
+                  (volume : Measure E) {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ≤
+                    ENNReal.ofReal b * (volume : Measure E) G := by
   have _hρ : Measurable ρ := hρ
   have _hK : IsClosed K := hK
   have _hKc : Convex ℝ K := hKc
@@ -940,21 +940,17 @@ theorem exists_inverse_subgradient_volume_bounds
     dsimp [ν, Measure.tilted]
     exact withDensity_absolutelyContinuous _ _
   have hν_eq :
-      ν = (volume : Measure E).withDensity
-        (fun x => ENNReal.ofReal (Real.exp (-u x))) := by
+    ν = (volume : Measure E).withDensity (fun x => ENNReal.ofReal (Real.exp (-u x))) := by
     dsimp [ν, Measure.tilted]
     rw [hnorm]
     simp
   have hgrad : Measurable (gradient u) :=
-    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
-      (measurable_fderiv ℝ u)
+    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp (measurable_fderiv ℝ u)
   have hdiff : ∀ᵐ x ∂ν, DifferentiableAt ℝ u x :=
-    ae_iff.mpr
-      (hν (ae_iff.mp (hu.ae_differentiableAt (μ := (volume : Measure E)))))
+    ae_iff.mpr (hν (ae_iff.mp (hu.ae_differentiableAt (μ := (volume : Measure E)))))
   let Q : Set E := closedBall (0 : E) (max M 0)
   have hQ : IsCompact Q := isCompact_closedBall _ _
-  have hQne : Q.Nonempty :=
-    nonempty_closedBall.mpr (le_max_right M 0)
+  have hQne : Q.Nonempty := nonempty_closedBall.mpr (le_max_right M 0)
   obtain ⟨xm, _, hxm⟩ := hQ.exists_isMaxOn hQne hu.continuous.continuousOn
   obtain ⟨xn, _, hxn⟩ := hQ.exists_isMinOn hQne hu.continuous.continuousOn
   let m : ℝ := u xm
@@ -965,14 +961,11 @@ theorem exists_inverse_subgradient_volume_bounds
   refine ⟨a, b, ha, ?_⟩
   intro G hG hGK hTG
   let T : Set E := {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y}
-  have hT : MeasurableSet T :=
-    inverse_subgradient_measurableSet hu.continuous hG
-  have hTQ : T ⊆ Q :=
-    hTG.trans (closedBall_subset_closedBall (le_max_left M 0))
+  have hT : MeasurableSet T := inverse_subgradient_measurableSet hu.continuous hG
+  have hTQ : T ⊆ Q := hTG.trans (closedBall_subset_closedBall (le_max_left M 0))
   have hsets : T =ᵐ[ν] (gradient u ⁻¹' G) := by
     filter_upwards [hdiff] with x hx
-    change (∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y) =
-      (gradient u x ∈ G)
+    change (∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y) = (gradient u x ∈ G)
     apply propext
     constructor
     · rintro ⟨p, hpG, hp⟩
@@ -988,12 +981,10 @@ theorem exists_inverse_subgradient_volume_bounds
       ν T = ν (gradient u ⁻¹' G) := measure_congr hsets
       _ = (ν.map (gradient u)) G := (Measure.map_apply hgrad hG.measurableSet).symm
       _ = μ G := congrArg (fun η : Measure E => η G) hmap
-  have hνT :
-      ν T = ∫⁻ x in T, ENNReal.ofReal (Real.exp (-u x)) := by
+  have hνT : ν T = ∫⁻ x in T, ENNReal.ofReal (Real.exp (-u x)) := by
     rw [hν_eq]
     exact withDensity_apply _ hT
-  have hlowerν :
-      ENNReal.ofReal (Real.exp (-m)) * (volume : Measure E) T ≤ ν T := by
+  have hlowerν : ENNReal.ofReal (Real.exp (-m)) * (volume : Measure E) T ≤ ν T := by
     rw [hνT]
     calc
       ENNReal.ofReal (Real.exp (-m)) * (volume : Measure E) T =
@@ -1004,28 +995,22 @@ theorem exists_inverse_subgradient_volume_bounds
         intro x hx
         have hxu : u x ≤ m := hxm (hTQ hx)
         exact ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr (neg_le_neg hxu))
-  have hupperν :
-      ν T ≤ ENNReal.ofReal (Real.exp (-n)) * (volume : Measure E) T := by
+  have hupperν : ν T ≤ ENNReal.ofReal (Real.exp (-n)) * (volume : Measure E) T := by
     rw [hνT]
     calc
-      ∫⁻ x in T, ENNReal.ofReal (Real.exp (-u x)) ≤
-          ∫⁻ x in T, ENNReal.ofReal (Real.exp (-n)) := by
+      ∫⁻ x in T, ENNReal.ofReal (Real.exp (-u x)) ≤ ∫⁻ x in T, ENNReal.ofReal (Real.exp (-n)) := by
         apply setLIntegral_mono' hT
         intro x hx
         have hxu : n ≤ u x := hxn (hTQ hx)
         exact ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr (neg_le_neg hxu))
-      _ = ENNReal.ofReal (Real.exp (-n)) * (volume : Measure E) T :=
-        setLIntegral_const T _
-  have hμlower :
-      ENNReal.ofReal c * (volume : Measure E) G ≤ μ G := by
+      _ = ENNReal.ofReal (Real.exp (-n)) * (volume : Measure E) T := setLIntegral_const T _
+  have hμlower : ENNReal.ofReal c * (volume : Measure E) G ≤ μ G := by
     rw [hμ, withDensity_apply ρ hG.measurableSet]
     calc
-      ENNReal.ofReal c * (volume : Measure E) G =
-          ∫⁻ p in G, ENNReal.ofReal c := (setLIntegral_const G _).symm
-      _ ≤ ∫⁻ p in G, ρ p :=
-        setLIntegral_mono' hG.measurableSet fun p hp => (hρK p (hGK hp)).1
-  have hμupper :
-      μ G ≤ ENNReal.ofReal C * (volume : Measure E) G := by
+      ENNReal.ofReal c * (volume : Measure E) G = ∫⁻ p in G, ENNReal.ofReal c :=
+        (setLIntegral_const G _).symm
+      _ ≤ ∫⁻ p in G, ρ p := setLIntegral_mono' hG.measurableSet fun p hp => (hρK p (hGK hp)).1
+  have hμupper : μ G ≤ ENNReal.ofReal C * (volume : Measure E) G := by
     rw [hμ, withDensity_apply ρ hG.measurableSet]
     calc
       ∫⁻ p in G, ρ p ≤ ∫⁻ p in G, ENNReal.ofReal C :=
@@ -1033,8 +1018,8 @@ theorem exists_inverse_subgradient_volume_bounds
       _ = ENNReal.ofReal C * (volume : Measure E) G := setLIntegral_const G _
   constructor
   · have hmul :
-        ENNReal.ofReal c * (volume : Measure E) G ≤
-          ENNReal.ofReal (Real.exp (-n)) * (volume : Measure E) T := by
+      ENNReal.ofReal c * (volume : Measure E) G ≤
+        ENNReal.ofReal (Real.exp (-n)) * (volume : Measure E) T := by
       calc
         ENNReal.ofReal c * (volume : Measure E) G ≤ μ G := hμlower
         _ = ν T := hident.symm
@@ -1042,17 +1027,16 @@ theorem exists_inverse_subgradient_volume_bounds
     have hn0 : ENNReal.ofReal (Real.exp (-n)) ≠ 0 :=
       ne_of_gt (ENNReal.ofReal_pos.mpr (Real.exp_pos (-n)))
     have hdiv :
-        (ENNReal.ofReal c * (volume : Measure E) G) /
-            ENNReal.ofReal (Real.exp (-n)) ≤ (volume : Measure E) T := by
+      (ENNReal.ofReal c * (volume : Measure E) G) / ENNReal.ofReal (Real.exp (-n)) ≤
+        (volume : Measure E) T := by
       apply (ENNReal.div_le_iff hn0 ENNReal.ofReal_ne_top).mpr
       simpa only [mul_comm] using hmul
-    change ENNReal.ofReal (c / Real.exp (-n)) * (volume : Measure E) G ≤
-      (volume : Measure E) T
+    change ENNReal.ofReal (c / Real.exp (-n)) * (volume : Measure E) G ≤ (volume : Measure E) T
     rw [ENNReal.ofReal_div_of_pos (Real.exp_pos (-n))]
     exact (ENNReal.mul_div_right_comm ▸ hdiv)
   · have hmul :
-        ENNReal.ofReal (Real.exp (-m)) * (volume : Measure E) T ≤
-          ENNReal.ofReal C * (volume : Measure E) G := by
+      ENNReal.ofReal (Real.exp (-m)) * (volume : Measure E) T ≤
+        ENNReal.ofReal C * (volume : Measure E) G := by
       calc
         ENNReal.ofReal (Real.exp (-m)) * (volume : Measure E) T ≤ ν T := hlowerν
         _ = μ G := hident
@@ -1060,14 +1044,11 @@ theorem exists_inverse_subgradient_volume_bounds
     have hm0 : ENNReal.ofReal (Real.exp (-m)) ≠ 0 :=
       ne_of_gt (ENNReal.ofReal_pos.mpr (Real.exp_pos (-m)))
     have hdiv :
-        (volume : Measure E) T ≤
-          (ENNReal.ofReal C * (volume : Measure E) G) /
-            ENNReal.ofReal (Real.exp (-m)) := by
-      apply (ENNReal.le_div_iff_mul_le
-        (Or.inl hm0) (Or.inl ENNReal.ofReal_ne_top)).mpr
+      (volume : Measure E) T ≤
+        (ENNReal.ofReal C * (volume : Measure E) G) / ENNReal.ofReal (Real.exp (-m)) := by
+      apply (ENNReal.le_div_iff_mul_le (Or.inl hm0) (Or.inl ENNReal.ofReal_ne_top)).mpr
       simpa only [mul_comm] using hmul
-    change (volume : Measure E) T ≤
-      ENNReal.ofReal (C / Real.exp (-m)) * (volume : Measure E) G
+    change (volume : Measure E) T ≤ ENNReal.ofReal (C / Real.exp (-m)) * (volume : Measure E) G
     rw [ENNReal.ofReal_div_of_pos (Real.exp_pos (-m))]
     exact (ENNReal.mul_div_right_comm ▸ hdiv)
 
@@ -1094,36 +1075,49 @@ variable {E : Type*}
 /-- Finite TOTAL domain MA mass, with no density upper bound, controls the
 negative-part boundary power. The positive constant precedes every source. -/
 theorem exists_pos_boundary_power_bound_of_domain_mass :
-    ∃ C : ℝ, 0<C ∧ ∀ (Ω : Set E) (u : E → ℝ) (M : ℝ),
-      IsOpen Ω → Convex ℝ Ω → Bornology.IsBounded Ω →
-      ConvexOn ℝ (closure Ω) u → ContinuousOn u (closure Ω) →
-      (∀ x∈frontier Ω, 0≤u x) → 0≤M →
-      (volume : Measure E) (subgradientImageOn u Ω Ω) ≤ ENNReal.ofReal M →
-      ∀ x∈Ω, (max 0 (-u x))^Module.finrank ℝ E ≤
-        C*M*diam Ω^(Module.finrank ℝ E-1)*infDist x (frontier Ω) := by
-  obtain ⟨c,hc,hmaximum⟩ := exists_pos_alexandrov_maximum_principle_domain (E := E)
-  refine ⟨c⁻¹,inv_pos.mpr hc,?_⟩
+    ∃ C : ℝ,
+      0 < C ∧
+        ∀ (Ω : Set E) (u : E → ℝ) (M : ℝ),
+          IsOpen Ω →
+            Convex ℝ Ω →
+              Bornology.IsBounded Ω →
+                ConvexOn ℝ (closure Ω) u →
+                  ContinuousOn u (closure Ω) →
+                    (∀ x ∈ frontier Ω, 0 ≤ u x) →
+                      0 ≤ M →
+                        (volume : Measure E) (subgradientImageOn u Ω Ω) ≤ ENNReal.ofReal M →
+                          ∀ x ∈ Ω,
+                            (max 0 (-u x)) ^ Module.finrank ℝ E ≤
+                              C * M * diam Ω ^ (Module.finrank ℝ E - 1) *
+                                infDist x (frontier Ω) := by
+  obtain ⟨c, hc, hmaximum⟩ := exists_pos_alexandrov_maximum_principle_domain (E := E)
+  refine ⟨c⁻¹, inv_pos.mpr hc, ?_⟩
   intro Ω u M hΩ hΩconv hb hu huc hfr hM hmass x hx
   have hD : 0 ≤ diam Ω := Metric.diam_nonneg
   have hd : 0 ≤ infDist x (frontier Ω) := Metric.infDist_nonneg
-  by_cases hneg : u x<0
+  by_cases hneg : u x < 0
   · have hmax := hmaximum u Ω hu huc hΩ hΩconv hb hfr x hx hneg
-    have hcoef : 0≤diam Ω^(Module.finrank ℝ E-1)*infDist x (frontier Ω) := by positivity
-    have hENN : ENNReal.ofReal (c*(-u x)^Module.finrank ℝ E) ≤
-        ENNReal.ofReal (M*(diam Ω^(Module.finrank ℝ E-1)*infDist x (frontier Ω))) := by
+    have hcoef : 0 ≤ diam Ω ^ (Module.finrank ℝ E - 1) * infDist x (frontier Ω) := by positivity
+    have hENN :
+      ENNReal.ofReal (c * (-u x) ^ Module.finrank ℝ E) ≤
+        ENNReal.ofReal (M * (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x (frontier Ω))) := by
       calc
-        _ ≤ volume (subgradientImageOn u Ω Ω)*
-            ENNReal.ofReal (diam Ω^(Module.finrank ℝ E-1)*infDist x (frontier Ω)) := hmax
-        _ ≤ ENNReal.ofReal M*
-            ENNReal.ofReal (diam Ω^(Module.finrank ℝ E-1)*infDist x (frontier Ω)) :=
+        _ ≤
+            volume (subgradientImageOn u Ω Ω) *
+              ENNReal.ofReal (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x (frontier Ω)) :=
+          hmax
+        _ ≤
+            ENNReal.ofReal M *
+              ENNReal.ofReal (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x (frontier Ω)) :=
           mul_le_mul' hmass (le_refl _)
         _ = _ := (ENNReal.ofReal_mul hM).symm
     have hreal := (ENNReal.ofReal_le_ofReal_iff (mul_nonneg hM hcoef)).mp hENN
     have hscaled := mul_le_mul_of_nonneg_left hreal (inv_pos.mpr hc).le
-    rw [← mul_assoc, inv_mul_cancel₀ hc.ne',one_mul] at hscaled
-    rw [max_eq_right (by linarith : 0≤-u x)]
+    rw [← mul_assoc, inv_mul_cancel₀ hc.ne', one_mul] at hscaled
+    rw [max_eq_right (by linarith : 0 ≤ -u x)]
     nlinarith only [hscaled]
-  · rw [max_eq_left (by linarith : -u x≤0),zero_pow (Module.finrank_pos (R:=ℝ) (M:=E)).ne']
+  · rw [max_eq_left (by linarith : -u x ≤ 0),
+      zero_pow (Module.finrank_pos (R := ℝ) (M := E)).ne']
     positivity
 
 omit [Nontrivial E] in
@@ -1198,21 +1192,26 @@ private lemma lower_bound_of_boundary_power
 
 /-- The radius precedes every closure-convex/C0 source with a fixed finite
 TOTAL domain MA mass bound. Atomic measures are not excluded by a density premise. -/
-theorem exists_common_lower_boundary_modulus_of_domain_mass
-    {Ω : Set E} (hΩ : IsOpen Ω) (hΩconv : Convex ℝ Ω) (hb : Bornology.IsBounded Ω)
-    {M : ℝ} (hM : 0≤M) {ε : ℝ} (hε : 0<ε) :
-    ∃ ρ : ℝ, 0<ρ ∧ ∀ u : E → ℝ,
-      ConvexOn ℝ (closure Ω) u → ContinuousOn u (closure Ω) →
-      (∀ x∈frontier Ω,0≤u x) →
-      (volume : Measure E) (subgradientImageOn u Ω Ω) ≤ ENNReal.ofReal M →
-      ∀ x∈Ω, infDist x (frontier Ω)<ρ → -ε≤u x := by
-  obtain ⟨C,hC,hbound⟩ := exists_pos_boundary_power_bound_of_domain_mass (E:=E)
-  let K : ℝ := C*M*diam Ω^(Module.finrank ℝ E-1)
-  have hK : 0≤K := by dsimp [K]; positivity
-  refine ⟨ε^Module.finrank ℝ E/(K+1),div_pos (pow_pos hε _) (by linarith),?_⟩
+theorem exists_common_lower_boundary_modulus_of_domain_mass {Ω : Set E} (hΩ : IsOpen Ω)
+    (hΩconv : Convex ℝ Ω) (hb : Bornology.IsBounded Ω) {M : ℝ} (hM : 0 ≤ M) {ε : ℝ}
+    (hε : 0 < ε) :
+    ∃ ρ : ℝ,
+      0 < ρ ∧
+        ∀ u : E → ℝ,
+          ConvexOn ℝ (closure Ω) u →
+            ContinuousOn u (closure Ω) →
+              (∀ x ∈ frontier Ω, 0 ≤ u x) →
+                (volume : Measure E) (subgradientImageOn u Ω Ω) ≤ ENNReal.ofReal M →
+                  ∀ x ∈ Ω, infDist x (frontier Ω) < ρ → -ε ≤ u x := by
+  obtain ⟨C, hC, hbound⟩ := exists_pos_boundary_power_bound_of_domain_mass (E := E)
+  let K : ℝ := C * M * diam Ω ^ (Module.finrank ℝ E - 1)
+  have hK : 0 ≤ K := by dsimp [K]; positivity
+  refine ⟨ε ^ Module.finrank ℝ E / (K + 1), div_pos (pow_pos hε _) (by linarith), ?_⟩
   intro u hu huc hfr hmass x hx hdist
-  exact lower_bound_of_boundary_power (Module.finrank_pos (R:=ℝ) (M:=E)) hK Metric.infDist_nonneg hε
-    (by simpa only [K] using hbound Ω u M hΩ hΩconv hb hu huc hfr hM hmass x hx) hdist
+  exact
+    lower_bound_of_boundary_power (Module.finrank_pos (R := ℝ) (M := E)) hK
+      Metric.infDist_nonneg hε
+      (by simpa only [K] using hbound Ω u M hΩ hΩconv hb hu huc hfr hM hmass x hx) hdist
 /-- A genuine common lower boundary modulus for the entire source class.
 
 For a fixed bounded open convex domain, nonnegative density upper bound, and
@@ -1244,19 +1243,24 @@ theorem exists_common_lower_boundary_modulus_domain
 
 /-- A true common absolute modulus from finite TOTAL domain MA mass and zero
 frontier, with no positive density lower bound and no differentiability input. -/
-theorem exists_common_boundary_modulus_of_domain_mass
-    {Ω : Set E} (hΩ : IsOpen Ω) (hΩconv : Convex ℝ Ω) (hb : Bornology.IsBounded Ω)
-    {M : ℝ} (hM : 0≤M) {ε : ℝ} (hε : 0<ε) :
-    ∃ ρ : ℝ, 0<ρ ∧ ∀ u : E → ℝ,
-      ConvexOn ℝ (closure Ω) u → ContinuousOn u (closure Ω) →
-      (∀ x∈frontier Ω,u x=0) →
-      (volume : Measure E) (subgradientImageOn u Ω Ω)≤ENNReal.ofReal M →
-      ∀ x∈Ω, infDist x (frontier Ω)<ρ → |u x|≤ε := by
-  obtain ⟨ρ,hρ,hlower⟩ := exists_common_lower_boundary_modulus_of_domain_mass hΩ hΩconv hb hM hε
-  refine ⟨ρ,hρ,?_⟩
+theorem exists_common_boundary_modulus_of_domain_mass {Ω : Set E} (hΩ : IsOpen Ω)
+    (hΩconv : Convex ℝ Ω) (hb : Bornology.IsBounded Ω) {M : ℝ} (hM : 0 ≤ M) {ε : ℝ}
+    (hε : 0 < ε) :
+    ∃ ρ : ℝ,
+      0 < ρ ∧
+        ∀ u : E → ℝ,
+          ConvexOn ℝ (closure Ω) u →
+            ContinuousOn u (closure Ω) →
+              (∀ x ∈ frontier Ω, u x = 0) →
+                (volume : Measure E) (subgradientImageOn u Ω Ω) ≤ ENNReal.ofReal M →
+                  ∀ x ∈ Ω, infDist x (frontier Ω) < ρ → |u x| ≤ ε := by
+  obtain ⟨ρ, hρ, hlower⟩ :=
+    exists_common_lower_boundary_modulus_of_domain_mass hΩ hΩconv hb hM hε
+  refine ⟨ρ, hρ, ?_⟩
   intro u hu huc hfr hmass x hx hdist
-  have hupp := le_on_closure_of_le_frontier_of_convexOn hΩ hΩconv hb hu huc
-    (fun y hy => (hfr y hy).le) x (subset_closure hx)
+  have hupp :=
+    le_on_closure_of_le_frontier_of_convexOn hΩ hΩconv hb hu huc (fun y hy => (hfr y hy).le) x
+      (subset_closure hx)
   have hlow := hlower u hu huc (fun y hy => (hfr y hy).ge) hmass x hx hdist
   rw [abs_of_nonpos hupp]
   linarith

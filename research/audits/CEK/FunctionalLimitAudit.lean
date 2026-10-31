@@ -1,9 +1,13 @@
-import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
-import Mathlib.Tactic.NormNum
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+public import Mathlib.Tactic.NormNum
 
 /-! Audit clients for the extended-logarithm limit comparison of CEK Proposition 12
 (`log_sub_ge_of_integral_limits`, `Probability/MomentMeasure/ConjugateMass.lean`):
 zero and infinite masses at a finite prefix. -/
+
+@[expose] public section
 
 
 set_option autoImplicit false
@@ -29,7 +33,7 @@ theorem prefix_limit_comparison :
     filter_upwards [eventually_ge_atTop 2] with j hj
     have h0 : j ≠ 0 := by omega
     have h1 : j ≠ 1 := by omega
-    simp only [prefixMass, if_neg h0, if_neg h1]
+    simp only [prefixMass, ite_eq_right h0, ite_eq_right h1]
   have hF : Tendsto (fun j => ENNReal.log (prefixMass j) - (2 : EReal))
       atTop (𝓝 (0 : EReal)) := by
     apply (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : EReal)) atTop (𝓝 0)).congr'

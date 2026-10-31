@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.EuclideanCoordinates
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
-import FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic
-import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
+module
+
+public import FunctionalInequalities.Analysis.EuclideanCoordinates
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
+public import FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Step
 
 /-!
 # The regular moment potential is `C³` with locally Hölder third derivative
@@ -30,6 +32,8 @@ operator-norm Hölder Hessian), `hessianMatrix_isSymm`, `averagedInverse_symm`,
 This is the `k = 2 ⇒ 3` step only: no `C^k` for `k ≥ 4`, no `C^∞`, no smooth diffeomorphism
 statement, and not the merely convex Lemma 2.2.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -317,11 +321,12 @@ theorem exists_regular_moment_potential_contDiff_three :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       ContDiff ℝ 2 u ∧ Continuous (hessianMatrix u) ∧
       (∀ x, (hessianMatrix u x).PosDef ∧
         Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
-        ((16/κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ)-hessianMatrix u x).PosSemidef) ∧
       (∀ s : ℝ, 0 < s → ∃ η C : ℝ≥0, 0 < η ∧ η < 1 ∧ 0 < C ∧
         ∀ i j : Fin n, HolderWith C η
           (fun x : ball (0 : EuclideanSpace ℝ (Fin n)) s => hessianMatrix u x.val i j)) ∧

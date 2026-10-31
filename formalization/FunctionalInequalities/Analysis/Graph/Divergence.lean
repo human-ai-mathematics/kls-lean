@@ -1,9 +1,11 @@
-import FunctionalInequalities.Analysis.Graph.Implicit
-import FunctionalInequalities.Analysis.Divergence
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.MeasureTheory.Integral.Prod
-import Mathlib.MeasureTheory.Integral.IntegralEqImproper
-import Mathlib.Analysis.InnerProductSpace.ProdL2
+module
+
+public import FunctionalInequalities.Analysis.Graph.Implicit
+public import FunctionalInequalities.Analysis.Divergence
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+public import Mathlib.MeasureTheory.Integral.Prod
+public import Mathlib.MeasureTheory.Integral.IntegralEqImproper
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-!
 # The divergence formula on a smooth subgraph
@@ -58,6 +60,8 @@ direction at a time with `Analysis.isGraphSplitting_orthogonal` and using the sa
 fundamental-theorem-of-calculus steps.  Mathlib's divergence theorem covers boxes in
 `Fin (n+1) → ℝ` only.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -595,8 +599,8 @@ variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ
 /-- **Divergence formula on a smooth subgraph.** -/
 theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g : H → ℝ}
     (hg : ContDiff ℝ 1 g) {F : V → V} (hF : ContDiff ℝ 1 F) (hFc : HasCompactSupport F) :
-    ∫ x in {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)}, divergence F x
-      = ∫ y : H, (⟪F (graphChartMap ι e x₀ g y), ι (-(gradient g y)) + e⟫ : ℝ) := by
+    ∫ x in {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)}, divergence F x =
+      ∫ y : H, (⟪F (graphChartMap ι e x₀ g y), ι (-(gradient g y)) + e⟫ : ℝ) := by
   classical
   have hgc : Continuous g := hg.continuous
   have hgd : Differentiable ℝ g := hg.differentiable one_ne_zero
@@ -612,25 +616,33 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
   have hΞheight : ∀ p : H × ℝ, graphHeight e x₀ (Ξ p) = p.2 + g p.1 :=
     graphHeight_graphChartHomeomorph hsp x₀ hgc
   have hΞzero : ∀ y : H, Ξ (y, 0) = graphChartMap ι e x₀ g y :=
-    graphChartHomeomorph_zero hsp x₀ hgc
+    graphChartHomeomorph_zero hsp x₀
+      hgc
   -- the two pieces of the integrand, as functions on `V`
-  set Aamb : V → ℝ := fun x => tangentDiv ι (fderiv ℝ F x)
-      + (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ) with hAamb
+
+
+  -- Split the ambient divergence into tangential and normal contributions.
+  set Aamb : V → ℝ := fun x =>
+    tangentDiv ι (fderiv ℝ F x) +
+      (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ) with
+    hAamb
   set Qamb : V → ℝ := fun x => (⟪e - ι (gradient g (graphCoord ι x₀ x)), F x⟫ : ℝ) with hQamb
-  set Bamb : V → ℝ :=
-    fun x => (⟪e - ι (gradient g (graphCoord ι x₀ x)), fderiv ℝ F x e⟫ : ℝ) with hBamb
+  set Bamb : V → ℝ := fun x =>
+    (⟪e - ι (gradient g (graphCoord ι x₀ x)), fderiv ℝ F x e⟫ : ℝ) with hBamb
   have hAcont : Continuous Aamb := by
     refine Continuous.add ((continuous_tangentDiv ι).comp hfdcont) ?_
     refine Continuous.inner (hgradcont.comp hcoordcont) ?_
-    exact (graphProj ι).continuous.comp
-      ((ContinuousLinearMap.apply ℝ V e).continuous.comp hfdcont)
+    exact
+      (graphProj ι).continuous.comp ((ContinuousLinearMap.apply ℝ V e).continuous.comp hfdcont)
   have hQcont : Continuous Qamb :=
     Continuous.inner (continuous_const.sub (ι.continuous.comp (hgradcont.comp hcoordcont)))
       hF.continuous
   have hAcs : HasCompactSupport Aamb := by
     refine HasCompactSupport.intro hFc.isCompact fun x hx => ?_
-    show tangentDiv ι (fderiv ℝ F x)
-        + (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ) = 0
+    show
+      tangentDiv ι (fderiv ℝ F x) +
+          (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ) =
+        0
     simp [fderiv_of_notMem_tsupport ℝ hx]
   have hQcs : HasCompactSupport Qamb := by
     refine HasCompactSupport.intro hFc.isCompact fun x hx => ?_
@@ -645,18 +657,22 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
     rw [fderiv_of_notMem_tsupport ℝ hx]
     simp
   -- the pointwise splitting of the divergence
+
   have hsplit : ∀ x : V, divergence F x = Aamb x + Bamb x := by
     intro x
     rw [divergence_eq_tangentDiv_add hsp F x]
-    show _ = (tangentDiv ι (fderiv ℝ F x)
-        + (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ))
-      + (⟪e - ι (gradient g (graphCoord ι x₀ x)), fderiv ℝ F x e⟫ : ℝ)
+    show
+      _ =
+        (tangentDiv ι (fderiv ℝ F x) +
+            (⟪gradient g (graphCoord ι x₀ x), graphProj ι (fderiv ℝ F x e)⟫ : ℝ)) +
+          (⟪e - ι (gradient g (graphCoord ι x₀ x)), fderiv ℝ F x e⟫ : ℝ)
     rw [inner_sub_left,
       inner_graphProj_right ι (gradient g (graphCoord ι x₀ x)) (fderiv ℝ F x e)]
     ring
   -- the tangential piece is the divergence of a compactly supported field on `H`
-  have hAslice : ∀ (s : ℝ) (y : H),
-      Aamb (Ξ (y, s)) = divergence (fun z => graphProj ι (F (Ξ (z, s)))) y := by
+
+  have hAslice :
+    ∀ (s : ℝ) (y : H), Aamb (Ξ (y, s)) = divergence (fun z => graphProj ι (F (Ξ (z, s)))) y := by
     intro s y
     have hpath : (fun z : H => Ξ (z, s)) = fun z => x₀ + graphMap ι e (fun z => s + g z) z := by
       funext z; rw [hΞapply, graphMap, add_assoc]
@@ -666,31 +682,41 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
       rw [gradient, gradient, hf]
     have hd : HasFDerivAt (fun z : H => Ξ (z, s)) (graphLinear ι e (gradient g y)) y := by
       rw [hpath, ← hgrad]
-      exact (hasFDerivAt_graphMap ι e (((contDiff_const.add hg).differentiable
-        one_ne_zero) y)).const_add x₀
+      exact
+        (hasFDerivAt_graphMap ι e
+              (((contDiff_const.add hg).differentiable one_ne_zero) y)).const_add
+          x₀
     rw [divergence_graphProj_comp ι (hFd _) hd.differentiableAt, hd.fderiv,
       graphTrace_comp_graphLinear, hAamb]
     simp only [hΞcoord (y, s)]
   -- the slice fields are `C¹` with compact support
+
   have hslicecd : ∀ s : ℝ, ContDiff ℝ 1 (fun z : H => graphProj ι (F (Ξ (z, s)))) := by
     intro s
     have hpath : ContDiff ℝ 1 (fun z : H => Ξ (z, s)) := by
       have h : (fun z : H => Ξ (z, s)) = fun z => x₀ + (ι z + (s + g z) • e) := by
-        funext z; rw [hΞapply, add_assoc]
+        funext z;
+        rw [hΞapply, add_assoc]
       rw [h]
-      exact contDiff_const.add (ι.toContinuousLinearMap.contDiff.add
-        ((contDiff_const.add hg).smul contDiff_const))
+      exact
+        contDiff_const.add
+          (ι.toContinuousLinearMap.contDiff.add ((contDiff_const.add hg).smul contDiff_const))
     exact (graphProj ι).contDiff.comp (hF.comp hpath)
   have hslicecs : ∀ s : ℝ, HasCompactSupport (fun z : H => graphProj ι (F (Ξ (z, s)))) := by
     intro s
-    refine hasCompactSupport_comp_of_norm_le
-      (hFc.comp_left (g := fun w : V => graphProj ι w) (map_zero _)) ‖x₀‖ ?_
+    refine
+      hasCompactSupport_comp_of_norm_le
+        (hFc.comp_left (g := fun w : V => graphProj ι w) (map_zero _)) ‖x₀‖ ?_
     intro z
     have h1 : ‖z‖ = ‖graphCoord ι x₀ (Ξ (z, s))‖ := by rw [hΞcoord (z, s)]
     have h2 : ‖graphCoord ι x₀ (Ξ (z, s))‖ ≤ ‖Ξ (z, s) - x₀‖ := norm_graphProj_le ι _
     have h3 : ‖Ξ (z, s) - x₀‖ ≤ ‖Ξ (z, s)‖ + ‖x₀‖ := norm_sub_le _ _
-    rw [h1]; linarith
+    rw [h1];
+    linarith
   -- the fibre derivative of the normal piece
+
+
+  -- Compute the normal derivative along the chart fibers.
   have hqpath : ∀ y : H, (fun σ : ℝ => Ξ (y, σ)) = fun σ => (x₀ + ι y + g y • e) + σ • e := by
     intro y
     funext σ
@@ -698,8 +724,8 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
     show x₀ + ι y + (σ + g y) • e = x₀ + ι y + g y • e + σ • e
     rw [add_smul, add_assoc]
     abel
-  have hqderiv : ∀ (y : H) (s : ℝ),
-      HasDerivAt (fun σ : ℝ => Qamb (Ξ (y, σ))) (Bamb (Ξ (y, s))) s := by
+  have hqderiv :
+    ∀ (y : H) (s : ℝ), HasDerivAt (fun σ : ℝ => Qamb (Ξ (y, σ))) (Bamb (Ξ (y, s))) s := by
     intro y s
     have hpathd : HasDerivAt (fun σ' : ℝ => Ξ (y, σ')) e s := by
       rw [hqpath y]
@@ -707,8 +733,9 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
     have h1 : HasDerivAt (fun σ : ℝ => F (Ξ (y, σ))) (fderiv ℝ F (Ξ (y, s)) e) s :=
       (hFd _).hasFDerivAt.comp_hasDerivAt s hpathd
     have h2 := (innerSL ℝ (e - ι (gradient g y))).hasFDerivAt.comp_hasDerivAt s h1
-    have h3 : (fun σ : ℝ => Qamb (Ξ (y, σ)))
-        = fun σ : ℝ => (⟪e - ι (gradient g y), F (Ξ (y, σ))⟫ : ℝ) := by
+    have h3 :
+      (fun σ : ℝ => Qamb (Ξ (y, σ))) = fun σ : ℝ =>
+        (⟪e - ι (gradient g y), F (Ξ (y, σ))⟫ : ℝ) := by
       funext σ
       show (⟪e - ι (gradient g (graphCoord ι x₀ (Ξ (y, σ)))), F (Ξ (y, σ))⟫ : ℝ) = _
       rw [hΞcoord (y, σ)]
@@ -722,8 +749,9 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
     have hpath : ContDiff ℝ 1 (fun σ : ℝ => Ξ (y, σ)) := by
       rw [hqpath y]
       exact contDiff_const.add (contDiff_id.smul contDiff_const)
-    have h3 : (fun σ : ℝ => Qamb (Ξ (y, σ)))
-        = fun σ : ℝ => (⟪e - ι (gradient g y), F (Ξ (y, σ))⟫ : ℝ) := by
+    have h3 :
+      (fun σ : ℝ => Qamb (Ξ (y, σ))) = fun σ : ℝ =>
+        (⟪e - ι (gradient g y), F (Ξ (y, σ))⟫ : ℝ) := by
       funext σ
       show (⟪e - ι (gradient g (graphCoord ι x₀ (Ξ (y, σ)))), F (Ξ (y, σ))⟫ : ℝ) = _
       rw [hΞcoord (y, σ)]
@@ -732,8 +760,7 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
   have hfibrenorm : ∀ (y : H) (σ : ℝ), ‖σ‖ ≤ ‖x₀ + ι y + g y • e‖ + ‖Ξ (y, σ)‖ := by
     intro y σ
     have h1 : ‖σ‖ = ‖σ • e‖ := by rw [norm_smul, hsp.norm_e, mul_one]
-    have h2 : σ • e = Ξ (y, σ) - (x₀ + ι y + g y • e) := by
-      rw [congrFun (hqpath y) σ]; abel
+    have h2 : σ • e = Ξ (y, σ) - (x₀ + ι y + g y • e) := by rw [congrFun (hqpath y) σ]; abel
     rw [h1, h2]
     have := norm_sub_le (Ξ (y, σ)) (x₀ + ι y + g y • e)
     linarith
@@ -742,27 +769,40 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
       ‖x₀ + ι y + g y • e‖ (hfibrenorm y)
   have hBcsfibre : ∀ y : H, HasCompactSupport (fun σ : ℝ => Bamb (Ξ (y, σ))) := fun y =>
     hasCompactSupport_comp_of_norm_le (hBcs.comp_homeomorph (Homeomorph.refl V))
-      ‖x₀ + ι y + g y • e‖ (hfibrenorm y)
+      ‖x₀ + ι y + g y • e‖
+      (hfibrenorm y)
   -- the fundamental theorem of calculus along each fibre
+
   have hFTC : ∀ y : H, ∫ s in Iic (0 : ℝ), Bamb (Ξ (y, s)) = Qamb (Ξ (y, 0)) := by
     intro y
     rw [← HasCompactSupport.integral_Iic_deriv_eq (hqcd y) (hqcs y) 0]
-    exact setIntegral_congr_fun measurableSet_Iic fun s _ => ((hqderiv y s).deriv).symm
+    exact
+      setIntegral_congr_fun measurableSet_Iic fun s _ =>
+        ((hqderiv y s).deriv).symm
   -- integrability of the two pieces along the chart
+
+
+  -- Check integrability before changing variables and applying Fubini.
   have hAΞint : Integrable (fun p : H × ℝ => Aamb (Ξ p)) (volume : Measure (H × ℝ)) :=
     (hAcont.comp Ξ.continuous).integrable_of_hasCompactSupport (hAcs.comp_homeomorph Ξ)
   have hBΞint : Integrable (fun p : H × ℝ => Bamb (Ξ p)) (volume : Measure (H × ℝ)) :=
     (hBcont.comp Ξ.continuous).integrable_of_hasCompactSupport (hBcs.comp_homeomorph Ξ)
-  have hmeaseq : (volume : Measure (H × ℝ)).restrict (Set.univ ×ˢ Iio (0 : ℝ))
-      = (volume : Measure H).prod ((volume : Measure ℝ).restrict (Iio 0)) := by
+  have hmeaseq :
+    (volume : Measure (H × ℝ)).restrict (Set.univ ×ˢ Iio (0 : ℝ)) =
+      (volume : Measure H).prod ((volume : Measure ℝ).restrict (Iio 0)) := by
     rw [Measure.volume_eq_prod, ← Measure.prod_restrict, Measure.restrict_univ]
-  have hAprod : Integrable (Function.uncurry fun y s => Aamb (Ξ (y, s)))
+  have hAprod :
+    Integrable (Function.uncurry fun y s => Aamb (Ξ (y, s)))
       ((volume : Measure H).prod ((volume : Measure ℝ).restrict (Iio 0))) := by
     rw [← hmeaseq]; exact hAΞint.restrict
-  have hBprod : Integrable (Function.uncurry fun y s => Bamb (Ξ (y, s)))
+  have hBprod :
+    Integrable (Function.uncurry fun y s => Bamb (Ξ (y, s)))
       ((volume : Measure H).prod ((volume : Measure ℝ).restrict (Iio 0))) := by
-    rw [← hmeaseq]; exact hBΞint.restrict
+    rw [← hmeaseq];
+    exact
+      hBΞint.restrict
   -- the divergence itself
+
   have hDcont : Continuous (divergence F) := by
     have h : (divergence F) = fun x => Aamb x + Bamb x := funext hsplit
     rw [h]; exact hAcont.add hBcont
@@ -771,77 +811,101 @@ theorem integral_divergence_subgraph (hsp : IsGraphSplitting ι e) (x₀ : V) {g
     rw [h]; exact hAcs.add hBcs
   have hDΞint : Integrable (fun p : H × ℝ => divergence F (Ξ p)) (volume : Measure (H × ℝ)) :=
     (hDcont.comp Ξ.continuous).integrable_of_hasCompactSupport (hDcs.comp_homeomorph Ξ)
-  have hDprod : Integrable (Function.uncurry fun y s => divergence F (Ξ (y, s)))
+  have hDprod :
+    Integrable (Function.uncurry fun y s => divergence F (Ξ (y, s)))
       ((volume : Measure H).prod ((volume : Measure ℝ).restrict (Iio 0))) := by
-    rw [← hmeaseq]; exact hDΞint.restrict
+    rw [← hmeaseq];
+    exact
+      hDΞint.restrict
   -- step 1: change of variables and Fubini
+
   have hSopen : IsOpen {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)} := by
     have h1 : Continuous fun x : V => graphHeight e x₀ x :=
       (innerSL ℝ e).continuous.comp (continuous_id.sub continuous_const)
     exact isOpen_lt h1 (hgc.comp hcoordcont)
-  have hΞS : ∀ p : H × ℝ,
-      Ξ p ∈ {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)} ↔ p ∈ Set.univ ×ˢ Iio (0 : ℝ) := by
+  have hΞS :
+    ∀ p : H × ℝ,
+      Ξ p ∈ {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)} ↔
+        p ∈ Set.univ ×ˢ Iio (0 : ℝ) := by
     intro p
-    simp only [Set.mem_ofPred_eq, hΞcoord p, hΞheight p, Set.mem_prod, Set.mem_univ, Set.mem_Iio,
-      true_and]
+    simp only [Set.mem_ofPred_eq, hΞcoord p, hΞheight p, Set.mem_prod, Set.mem_univ,
+      Set.mem_Iio, true_and]
     constructor <;> intro h <;> linarith
-  have hstep1 : ∫ x in {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)}, divergence F x
-      = ∫ y, ∫ s in Iio (0 : ℝ), divergence F (Ξ (y, s)) ∂(volume : Measure ℝ)
-          ∂(volume : Measure H) := by
-    rw [← integral_indicator hSopen.measurableSet,
-      ← integral_comp_graphChartHomeomorph hsp x₀ hgc
+  have hstep1 :
+    ∫ x in {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)}, divergence F x =
+      ∫ y,
+        ∫ s in Iio (0 : ℝ),
+          divergence F (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H) := by
+    rw [← integral_indicator hSopen.measurableSet, ←
+      integral_comp_graphChartHomeomorph hsp x₀ hgc
         (Set.indicator {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)} (divergence F))]
-    have hind : ∀ p : H × ℝ,
-        Set.indicator {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)} (divergence F) (Ξ p)
-          = (Set.univ ×ˢ Iio (0 : ℝ)).indicator (fun p : H × ℝ => divergence F (Ξ p)) p := by
+    have hind :
+      ∀ p : H × ℝ,
+        Set.indicator {x : V | graphHeight e x₀ x < g (graphCoord ι x₀ x)} (divergence F)
+            (Ξ p) =
+          (Set.univ ×ˢ Iio (0 : ℝ)).indicator (fun p : H × ℝ => divergence F (Ξ p)) p := by
       intro p
       by_cases hp : p ∈ Set.univ ×ˢ Iio (0 : ℝ)
       · rw [Set.indicator_of_mem ((hΞS p).mpr hp), Set.indicator_of_mem hp]
       · rw [Set.indicator_of_notMem (fun h => hp ((hΞS p).mp h)), Set.indicator_of_notMem hp]
     rw [integral_congr_ae (Eventually.of_forall hind),
       integral_indicator (MeasurableSet.univ.prod measurableSet_Iio), hmeaseq]
-    exact (integral_integral hDprod).symm
+    exact
+      (integral_integral hDprod).symm
   -- step 2: split the integrand fibre by fibre
-  have hfibrecont : ∀ y : H, Continuous fun σ : ℝ => Ξ (y, σ) :=
-    fun y => Ξ.continuous.comp (continuous_const.prodMk continuous_id)
+
+  have hfibrecont : ∀ y : H, Continuous fun σ : ℝ => Ξ (y, σ) := fun y =>
+    Ξ.continuous.comp (continuous_const.prodMk continuous_id)
   have hAinner : ∀ y : H, IntegrableOn (fun s : ℝ => Aamb (Ξ (y, s))) (Iio 0) volume := by
     intro y
-    exact ((hAcont.comp (hfibrecont y)).integrable_of_hasCompactSupport
-      (hasCompactSupport_comp_of_norm_le (hAcs.comp_homeomorph (Homeomorph.refl V))
-        ‖x₀ + ι y + g y • e‖ (hfibrenorm y))).integrableOn
+    exact
+      ((hAcont.comp (hfibrecont y)).integrable_of_hasCompactSupport
+          (hasCompactSupport_comp_of_norm_le (hAcs.comp_homeomorph (Homeomorph.refl V))
+            ‖x₀ + ι y + g y • e‖ (hfibrenorm y))).integrableOn
   have hBinner : ∀ y : H, IntegrableOn (fun s : ℝ => Bamb (Ξ (y, s))) (Iio 0) volume := by
     intro y
-    exact ((hBcont.comp (hfibrecont y)).integrable_of_hasCompactSupport
-      (hBcsfibre y)).integrableOn
-  have hinner : ∀ y : H, ∫ s in Iio (0 : ℝ), divergence F (Ξ (y, s))
-      = (∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s))) + ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) := by
+    exact
+      ((hBcont.comp (hfibrecont y)).integrable_of_hasCompactSupport (hBcsfibre y)).integrableOn
+  have hinner :
+    ∀ y : H,
+      ∫ s in Iio (0 : ℝ), divergence F (Ξ (y, s)) =
+        (∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s))) + ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) := by
     intro y
     rw [← integral_add (hAinner y) (hBinner y)]
     exact setIntegral_congr_fun measurableSet_Iio fun s _ => hsplit (Ξ (y, s))
-  have hAouter : Integrable (fun y : H => ∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s)))
-      (volume : Measure H) := hAprod.integral_prod_left
-  have hBouter : Integrable (fun y : H => ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)))
-      (volume : Measure H) := hBprod.integral_prod_left
-  have hstep2 : ∫ y, ∫ s in Iio (0 : ℝ), divergence F (Ξ (y, s)) ∂(volume : Measure ℝ)
-        ∂(volume : Measure H)
-      = (∫ y, ∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H))
-        + ∫ y, ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) ∂(volume : Measure ℝ)
-            ∂(volume : Measure H) := by
+  have hAouter :
+    Integrable (fun y : H => ∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s))) (volume : Measure H) :=
+    hAprod.integral_prod_left
+  have hBouter :
+    Integrable (fun y : H => ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s))) (volume : Measure H) :=
+    hBprod.integral_prod_left
+
+  -- Evaluate the tangential integral and the normal boundary term separately.
+  have hstep2 :
+    ∫ y,
+        ∫ s in Iio (0 : ℝ),
+          divergence F (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H) =
+      (∫ y, ∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H)) +
+        ∫ y, ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H) := by
     rw [integral_congr_ae (Eventually.of_forall hinner), integral_add hAouter hBouter]
   -- step 3: the tangential contribution vanishes
-  have hstep3 : ∫ y, ∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s)) ∂(volume : Measure ℝ)
-      ∂(volume : Measure H) = 0 := by
+
+  have hstep3 :
+    ∫ y, ∫ s in Iio (0 : ℝ), Aamb (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H) = 0 := by
     rw [integral_integral_swap hAprod]
     have hzero : ∀ s : ℝ, ∫ y, Aamb (Ξ (y, s)) ∂(volume : Measure H) = 0 := by
       intro s
-      rw [show (fun y : H => Aamb (Ξ (y, s)))
-          = fun y : H => divergence (fun z : H => graphProj ι (F (Ξ (z, s)))) y from
-        funext (hAslice s)]
+      rw [show
+          (fun y : H => Aamb (Ξ (y, s))) = fun y : H =>
+            divergence (fun z : H => graphProj ι (F (Ξ (z, s)))) y
+          from funext (hAslice s)]
       exact integral_divergence_eq_zero (hslicecd s) (hslicecs s)
     simp [hzero]
   -- step 4: the normal contribution is the boundary flux
-  have hstep4 : ∫ y, ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) ∂(volume : Measure ℝ)
-      ∂(volume : Measure H) = ∫ y, Qamb (Ξ (y, 0)) ∂(volume : Measure H) := by
+
+  have hstep4 :
+    ∫ y, ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) ∂(volume : Measure ℝ) ∂(volume : Measure H) =
+      ∫ y, Qamb (Ξ (y, 0)) ∂(volume : Measure H) := by
     refine integral_congr_ae (Eventually.of_forall fun y => ?_)
     show ∫ s in Iio (0 : ℝ), Bamb (Ξ (y, s)) = Qamb (Ξ (y, 0))
     rw [setIntegral_congr_set (Iio_ae_eq_Iic (a := (0 : ℝ)))]

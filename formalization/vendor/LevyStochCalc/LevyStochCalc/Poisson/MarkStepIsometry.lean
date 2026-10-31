@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedDensity
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensity
 
 /-!
 # Mark-step integrands, their compensated integrals and the `L²` isometry
@@ -15,6 +20,8 @@ time grid `0 = p₀ < ⋯ < p_{N₀}` (`TimeGrid`) and finitely many mark sets `
 expresses that integral as the integral over the whole clamped horizon, which carries the
 `L²` isometry from the horizon to every time, in both real and `ℝ≥0∞` form.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -326,7 +333,7 @@ noncomputable def incr (s t : ℝ) (hs : 0 < s) (hst : s < t) : TimeGrid where
       have hlt := g.lt_of_lt_clampIndex hi'
       have haN : g.startIndex s < g.N₀ := lt_of_le_of_lt (Nat.le_add_right _ _) hlt.1
       have hsa1 : s < g.p (g.startIndex s + 1) := g.lt_p_succ_startIndex haN
-      rw [if_neg hpos.ne', if_neg (Nat.succ_ne_zero i)]
+      rw [ite_eq_right hpos.ne', ite_eq_right (Nat.succ_ne_zero i)]
       rw [show i + 1 - 1 = i - 1 + 1 by omega, ← add_assoc]
       have hmono : g.p (g.startIndex s + (i - 1)) < g.p (g.startIndex s + (i - 1) + 1) :=
         g.p_lt _ hlt.1
@@ -342,7 +349,7 @@ noncomputable def incr (s t : ℝ) (hs : 0 < s) (hst : s < t) : TimeGrid where
 lemma incr_p_succ (s t : ℝ) (hs : 0 < s) (hst : s < t) (j : ℕ) :
     (g.incr s t hs hst).p (j + 1) = min (max (g.p (g.startIndex s + j)) s) t := by
   change (if j + 1 = 0 then (0 : ℝ) else min (max (g.p (g.startIndex s + (j + 1 - 1))) s) t) = _
-  rw [if_neg (Nat.succ_ne_zero j), Nat.add_sub_cancel]
+  rw [ite_eq_right (Nat.succ_ne_zero j), Nat.add_sub_cancel]
 
 lemma incr_horizon_le (s t : ℝ) (hs : 0 < s) (hst : s < t) :
     (g.incr s t hs hst).horizon ≤ t := by
@@ -447,7 +454,7 @@ theorem integral_sq_at (N : PoissonRandomMeasure P ν)
   refine integral_congr_ae (Filter.Eventually.of_forall fun ω => ?_)
   refine integral_congr_ae (Filter.Eventually.of_forall fun e => ?_)
   refine setIntegral_congr_fun measurableSet_Icc fun s hs => ?_
-  rw [G.eval_clamp t ht, if_pos hs.2]
+  rw [G.eval_clamp t ht, ite_eq_left hs.2]
 
 section Eval
 
@@ -518,7 +525,7 @@ theorem lintegral_integral_sq_at (hG : G.Adapted ℱ) {t : ℝ} (ht : 0 ≤ t) :
   rw [(G.clamp t ht).lintegral_full_sq N hℱ (hG.clamp t ht) (g.clamp_horizon_le t ht)]
   refine lintegral_congr fun ω => lintegral_congr fun e => ?_
   refine setLIntegral_congr_fun measurableSet_Icc fun s hs => ?_
-  rw [G.eval_clamp t ht, if_pos hs.2]
+  rw [G.eval_clamp t ht, ite_eq_left hs.2]
 
 end Eval
 

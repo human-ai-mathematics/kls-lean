@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.AdjointComp
-import Mathlib.Topology.Algebra.Module.LinearPMap
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.AdjointComp
+public import Mathlib.Topology.Algebra.Module.LinearPMap
 
 /-!
 # Weak identities pass to the closure, and into the adjoint
@@ -24,6 +26,8 @@ is how an identity or bound proved on a smaller domain is transported to the clo
 
 Pure Hilbert-space material: no measure, no differential operator, no semigroup.
 -/
+
+@[expose] public section
 
 noncomputable section
 

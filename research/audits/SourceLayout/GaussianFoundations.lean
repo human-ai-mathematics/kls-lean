@@ -1,7 +1,12 @@
-import FunctionalInequalities.Probability.Gaussian.Moments
-import Lean
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Moments
+public import Lean
+meta import Lean
 
 /-! Generic Gaussian clients: no KLS, no positive-dimension premise, exact variance. -/
+
+@[expose] public section
 open MeasureTheory FunctionalInequalities.Probability
 open scoped RealInnerProductSpace
 namespace GaussianFoundationsAudit

@@ -1,15 +1,22 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import FunctionalInequalities.Analysis.Convex.Legendre.SupportingPlane
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import FunctionalInequalities.Analysis.Convex.Legendre.SupportingPlane
 
 /-!
 # Affine subtraction from extended-real potentials
 
-`affineSubtract a b φ x = φ x - (⟪a, x⟫ + b)`: finite shifts commute with suprema, the Legendre transform is translated
-accordingly (`legendre_affineSubtract`), convex real epigraphs are preserved, finite shifts cancel in `EReal`, and a
-touching plane at `0` normalizes a potential to be nonnegative and zero at the origin. Pointwise; no measure.
+`affineSubtract a b φ x = φ x - (⟪a, x⟫ + b)`: finite shifts commute with suprema, the Legendre
+transform is translated
+accordingly (`legendre_affineSubtract`), convex real epigraphs are preserved, finite shifts cancel
+in `EReal`, and a
+touching plane at `0` normalizes a potential to be nonnegative and zero at the origin. Pointwise; no
+measure.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 

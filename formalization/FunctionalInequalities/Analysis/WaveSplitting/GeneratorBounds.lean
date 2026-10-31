@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Consistency
-import FunctionalInequalities.Analysis.WaveSplitting.Stability
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Consistency
+public import FunctionalInequalities.Analysis.WaveSplitting.Stability
 
 /-! # Derivative losses for the actual splitting generators -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory
 open scoped ContDiff
@@ -90,8 +94,9 @@ theorem State.Smooth.addState {X Y : State E ι} (hX : X.Smooth) (hY : Y.Smooth)
     (addState X Y).Smooth := ⟨hX.1.add hY.1, hX.2.1.add hY.2.1, fun j => (hX.2.2 j).add (hY.2.2 j)⟩
 
 omit [NormedSpace ℝ E] in
-theorem State.CompactSupport.addState {X Y : State E ι} (hX : X.CompactSupport) (hY : Y.CompactSupport) :
-    (addState X Y).CompactSupport := ⟨hX.1.add hY.1, hX.2.1.add hY.2.1, fun j => (hX.2.2 j).add (hY.2.2 j)⟩
+theorem State.CompactSupport.addState {X Y : State E ι} (hX : X.CompactSupport)
+    (hY : Y.CompactSupport) : (addState X Y).CompactSupport :=
+  ⟨hX.1.add hY.1, hX.2.1.add hY.2.1, fun j => (hX.2.2 j).add (hY.2.2 j)⟩
 
 section FiniteIndex
 
@@ -147,13 +152,14 @@ section FiniteIndex
 variable [DecidableEq ι]
 
 /-- The actual coordinate generator has an explicit one-order energy bound. -/
-theorem derivativeEnergy_coordinateGenerator_le
-    (a : ι → E) (k : ℕ) (j : ι) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
+theorem derivativeEnergy_coordinateGenerator_le (a : ι → E) (k : ℕ) (j : ι) {Y : State E ι}
+    (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m a k (coordinateGenerator (a j) j Y) ≤
       (jetCount (ι := ι) k : ℝ) * derivativeEnergy m a (k + 1) Y := by
   rw [derivativeEnergy_eq_scalarEnergy m a k (hY.coordinateGenerator (a j) j)
-    (hc.coordinateGenerator (a j) j)]
-  have he : (∑ i, scalarEnergy m a k ((coordinateGenerator (a j) j Y).p i)) =
+      (hc.coordinateGenerator (a j) j)]
+  have he :
+    (∑ i, scalarEnergy m a k ((coordinateGenerator (a j) j Y).p i)) =
       scalarEnergy m a k (fun x => fderiv ℝ Y.v x (a j)) := by
     rw [Finset.sum_eq_single j]
     · simp only [coordinateGenerator, ↓reduceIte]
@@ -166,54 +172,68 @@ theorem derivativeEnergy_coordinateGenerator_le
   have hv := scalarEnergy_coordinate_le m a k j hY.2.1 hc.2.1
   have hp := scalarEnergy_coordinate_le m a k j (hY.2.2 j) (hc.2.2 j)
   have hj : scalarEnergy m a (k + 1) (Y.p j) ≤ ∑ i, scalarEnergy m a (k + 1) (Y.p i) :=
-    Finset.single_le_sum (fun i _ => scalarEnergy_nonneg m a (k + 1) (Y.p i)) (Finset.mem_univ j)
+    Finset.single_le_sum (fun i _ => scalarEnergy_nonneg m a (k + 1) (Y.p i))
+      (Finset.mem_univ j)
   rw [derivativeEnergy_eq_scalarEnergy m a (k + 1) hY hc]
   have hmul := mul_le_mul_of_nonneg_left hj (Nat.cast_nonneg (jetCount (ι := ι) k))
-  have hu := mul_nonneg (Nat.cast_nonneg (jetCount (ι := ι) k)) (scalarEnergy_nonneg m a (k + 1) Y.u)
+  have hu :=
+    mul_nonneg (Nat.cast_nonneg (jetCount (ι := ι) k)) (scalarEnergy_nonneg m a (k + 1) Y.u)
   dsimp only [coordinateGenerator] at *
   nlinarith
 
 /-- Two actual coordinate generators cost at most two spatial derivative orders. -/
-theorem derivativeEnergy_two_coordinates_le
-    (a : ι → E) (k : ℕ) (i j : ι) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
+theorem derivativeEnergy_two_coordinates_le (a : ι → E) (k : ℕ) (i j : ι) {Y : State E ι}
+    (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m a k (coordinateGenerator (a i) i (coordinateGenerator (a j) j Y)) ≤
       (jetCount (ι := ι) k : ℝ) * (jetCount (ι := ι) (k + 1) : ℝ) *
         derivativeEnergy m a (k + 2) Y := by
-  have h₁ := derivativeEnergy_coordinateGenerator_le m a k i
-    (hY.coordinateGenerator (a j) j) (hc.coordinateGenerator (a j) j)
+  have h₁ :=
+    derivativeEnergy_coordinateGenerator_le m a k i (hY.coordinateGenerator (a j) j)
+      (hc.coordinateGenerator (a j) j)
   have h₂ := derivativeEnergy_coordinateGenerator_le m a (k + 1) j hY hc
   calc
-    _ ≤ (jetCount (ι := ι) k : ℝ) * derivativeEnergy m a (k + 1) (coordinateGenerator (a j) j Y) := h₁
-    _ ≤ (jetCount (ι := ι) k : ℝ) * ((jetCount (ι := ι) (k + 1) : ℝ) *
-        derivativeEnergy m a (k + 2) Y) := mul_le_mul_of_nonneg_left h₂ (Nat.cast_nonneg _)
+    _ ≤
+        (jetCount (ι := ι) k : ℝ) *
+          derivativeEnergy m a (k + 1) (coordinateGenerator (a j) j Y) :=
+      h₁
+    _ ≤
+        (jetCount (ι := ι) k : ℝ) *
+          ((jetCount (ι := ι) (k + 1) : ℝ) * derivativeEnergy m a (k + 2) Y) :=
+      mul_le_mul_of_nonneg_left h₂ (Nat.cast_nonneg _)
     _ = _ := by ring
 
 end FiniteIndex
 
 /-- Scalar subtraction in the finite derivative energy. -/
-theorem scalarEnergy_sub_le (a : ι → E) (k : ℕ) {f g : E → ℝ}
-    (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)
-    (hfc : HasCompactSupport f) (hgc : HasCompactSupport g) :
+theorem scalarEnergy_sub_le (a : ι → E) (k : ℕ) {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
+    (hg : ContDiff ℝ ∞ g) (hfc : HasCompactSupport f) (hgc : HasCompactSupport g) :
     scalarEnergy m a k (fun x => f x - g x) ≤
       2 * (scalarEnergy m a k f + scalarEnergy m a k g) := by
-  have hp (x : E) : jetSquare a k (fun y => f y - g y) x ≤
-      2 * (jetSquare a k f x + jetSquare a k g x) := by
+  have hp (x : E) :
+    jetSquare a k (fun y => f y - g y) x ≤ 2 * (jetSquare a k f x + jetSquare a k g x) := by
     unfold jetSquare
     simp only [derivative_sub _ hf hg]
     calc
-      _ ≤ ∑ n ∈ Finset.range (k + 1), ∑ w : Fin n → ι,
-          2 * (derivative (fun i => a (w i)) f x ^ 2 + derivative (fun i => a (w i)) g x ^ 2) := by
+      _ ≤
+          ∑ n ∈ Finset.range (k + 1),
+            ∑ w : Fin n → ι,
+              2 *
+                (derivative (fun i => a (w i)) f x ^ 2 +
+                  derivative (fun i => a (w i)) g x ^ 2) := by
         apply Finset.sum_le_sum
         intro n hn
         apply Finset.sum_le_sum
         intro w hw
-        nlinarith [sq_nonneg (derivative (fun i => a (w i)) f x + derivative (fun i => a (w i)) g x)]
+        nlinarith [sq_nonneg
+            (derivative (fun i => a (w i)) f x + derivative (fun i => a (w i)) g x)]
       _ = _ := by simp only [Finset.sum_add_distrib, ← Finset.mul_sum]
   have hi : Integrable (fun x => jetSquare a k f x + jetSquare a k g x) m :=
     (integrable_jetSquare m a k hf hfc).add (integrable_jetSquare m a k hg hgc)
-  have h := integral_mono (integrable_jetSquare m a k (hf.sub hg) (hfc.sub hgc)) (hi.const_mul 2) hp
+  have h :=
+    integral_mono (integrable_jetSquare m a k (hf.sub hg) (hfc.sub hgc)) (hi.const_mul 2) hp
   simpa only [scalarEnergy, integral_const_mul,
-    integral_add (integrable_jetSquare m a k hf hfc) (integrable_jetSquare m a k hg hgc)] using h
+    integral_add (integrable_jetSquare m a k hf hfc) (integrable_jetSquare m a k hg hgc)] using
+    h
 
 /-- Sign reversal preserves the scalar squared energy. -/
 theorem scalarEnergy_neg (a : ι → E) (k : ℕ) {f : E → ℝ}
@@ -225,27 +245,32 @@ theorem scalarEnergy_neg (a : ι → E) (k : ℕ) {f : E → ℝ}
   simp only [derivative_const_mul _ _ hf, squareIntegral_const_mul, neg_one_sq, one_mul]
 
 /-- The integrated actual coefficient pairing is controlled at the same derivative order. -/
-theorem scalarEnergy_coupling_le (a : ι → E) (k : ℕ)
-    {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
-    {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B : ℝ} (hB : 0 ≤ B)
-    (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
+theorem scalarEnergy_coupling_le (a : ι → E) (k : ℕ) {b : ι → E → ℝ}
+    (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
+    {B : ℝ} (hB : 0 ≤ B) (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
     scalarEnergy m a k (coupling b Y) ≤
       couplingConstant (ι := ι) k B * ∑ j, scalarEnergy m a k (Y.p j) := by
   have hp : Integrable (fun x => ∑ j, jetSquare a k (Y.p j) x) m :=
     integrable_finsetSum Finset.univ fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j)
-  have h := integral_mono (integrable_jetSquare m a k (State.Smooth.coupling hb hY) (hasCompactSupport_coupling b Y hc.2.2))
-    (hp.const_mul (couplingConstant (ι := ι) k B)) (jetSquare_coupling_le a k hb hY hB hbB)
-  simpa only [scalarEnergy, integral_const_mul, integral_finsetSum Finset.univ
-    (fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))] using h
+  have h :=
+    integral_mono
+      (integrable_jetSquare m a k (State.Smooth.coupling hb hY)
+        (hasCompactSupport_coupling b Y hc.2.2))
+      (hp.const_mul (couplingConstant (ι := ι) k B)) (jetSquare_coupling_le a k hb hY hB hbB)
+  simpa only [scalarEnergy, integral_const_mul,
+    integral_finsetSum Finset.univ
+        (fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))] using
+    h
 
 /-- The actual reaction generator costs no spatial derivative order. -/
-theorem derivativeEnergy_reactionGenerator_le (a : ι → E) (k : ℕ)
-    {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
-    {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B : ℝ} (hB : 0 ≤ B)
-    (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
+theorem derivativeEnergy_reactionGenerator_le (a : ι → E) (k : ℕ) {b : ι → E → ℝ}
+    (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
+    {B : ℝ} (hB : 0 ≤ B) (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
     derivativeEnergy m a k (reactionGenerator b Y) ≤
       (2 + 2 * couplingConstant (ι := ι) k B) * derivativeEnergy m a k Y := by
-  have hs := scalarEnergy_sub_le m a k hY.1.neg (State.Smooth.coupling hb hY) hc.1.neg (hasCompactSupport_coupling b Y hc.2.2)
+  have hs :=
+    scalarEnergy_sub_le m a k hY.1.neg (State.Smooth.coupling hb hY) hc.1.neg
+      (hasCompactSupport_coupling b Y hc.2.2)
   rw [scalarEnergy_neg m a k hY.1 hc.1] at hs
   have hcouple := scalarEnergy_coupling_le m a k hb hY hc hB hbB
   rw [derivativeEnergy_eq_scalarEnergy m a k (hY.reactionGenerator hb) (hc.reactionGenerator b),
@@ -269,15 +294,18 @@ theorem scalarEnergy_add_le (a : ι → E) (k : ℕ) {f g : E → ℝ}
   simpa only [sub_neg_eq_add, scalarEnergy_neg m a k hg hgc] using
     scalarEnergy_sub_le m a k hf hg.neg hfc hgc.neg
 
-theorem derivativeEnergy_addState_le (a : ι → E) (k : ℕ)
-    {X Y : State E ι} (hX : X.Smooth) (hY : Y.Smooth) (hcX : X.CompactSupport) (hcY : Y.CompactSupport) :
-    derivativeEnergy m a k (addState X Y) ≤ 2 * (derivativeEnergy m a k X + derivativeEnergy m a k Y) := by
+theorem derivativeEnergy_addState_le (a : ι → E) (k : ℕ) {X Y : State E ι} (hX : X.Smooth)
+    (hY : Y.Smooth) (hcX : X.CompactSupport) (hcY : Y.CompactSupport) :
+    derivativeEnergy m a k (addState X Y) ≤
+      2 * (derivativeEnergy m a k X + derivativeEnergy m a k Y) := by
   rw [derivativeEnergy_eq_scalarEnergy m a k (hX.addState hY) (hcX.addState hcY),
-    derivativeEnergy_eq_scalarEnergy m a k hX hcX, derivativeEnergy_eq_scalarEnergy m a k hY hcY]
+    derivativeEnergy_eq_scalarEnergy m a k hX hcX,
+    derivativeEnergy_eq_scalarEnergy m a k hY hcY]
   have hu := scalarEnergy_add_le m a k hX.1 hY.1 hcX.1 hcY.1
   have hv := scalarEnergy_add_le m a k hX.2.1 hY.2.1 hcX.2.1 hcY.2.1
-  have hp := Finset.sum_le_sum (s := (Finset.univ : Finset ι))
-    (fun j _ => scalarEnergy_add_le m a k (hX.2.2 j) (hY.2.2 j) (hcX.2.2 j) (hcY.2.2 j))
+  have hp :=
+    Finset.sum_le_sum (s := (Finset.univ : Finset ι))
+      (fun j _ => scalarEnergy_add_le m a k (hX.2.2 j) (hY.2.2 j) (hcX.2.2 j) (hcY.2.2 j))
   simp only [← Finset.mul_sum, Finset.sum_add_distrib] at hp
   dsimp only [addState]
   nlinarith
@@ -323,37 +351,38 @@ section FiniteIndex
 variable [Fintype ι] [DecidableEq ι]
 
 /-- The actual split generator costs one spatial derivative order. -/
-theorem derivativeEnergy_splitGenerator_le
-    (a : ι → E) (js : List ι) (k : ℕ) {b : ι → E → ℝ}
+theorem derivativeEnergy_splitGenerator_le (a : ι → E) (js : List ι) (k : ℕ) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
+    {B : ℝ} (hB : 0 ≤ B) (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
     derivativeEnergy m a k (splitGenerator a b js Y) ≤
       generatorConstant (ι := ι) js k B * derivativeEnergy m a (k + 1) Y := by
   have hs := derivativeEnergy_sweepGenerator_le m a k js hY hc
   have hr := derivativeEnergy_reactionGenerator_le m a k hb hY hc hB hbB
-  have hadd := derivativeEnergy_addState_le m a k (hY.sweepGenerator a js) (hY.reactionGenerator hb)
-    (hc.sweepGenerator a js) (hc.reactionGenerator b)
+  have hadd :=
+    derivativeEnergy_addState_le m a k (hY.sweepGenerator a js) (hY.reactionGenerator hb)
+      (hc.sweepGenerator a js) (hc.reactionGenerator b)
   have hm := derivativeEnergy_mono m a (Nat.le_succ k) Y
   have hC : 0 ≤ couplingConstant (ι := ι) k B := by unfold couplingConstant; positivity
-  have hm' := mul_le_mul_of_nonneg_left hm (show 0 ≤ 2 + 2 * couplingConstant (ι := ι) k B by positivity)
+  have hm' :=
+    mul_le_mul_of_nonneg_left hm (show 0 ≤ 2 + 2 * couplingConstant (ι := ι) k B by positivity)
   change derivativeEnergy m a k (addState _ _) ≤ _
   unfold generatorConstant
   nlinarith
 
 /-- Applying the actual split generator twice costs two spatial derivative orders. -/
-theorem derivativeEnergy_splitGenerator_sq_le
-    (a : ι → E) (js : List ι) (k : ℕ) {b : ι → E → ℝ}
+theorem derivativeEnergy_splitGenerator_sq_le (a : ι → E) (js : List ι) (k : ℕ) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
     {B : ℝ} (hB : 0 ≤ B)
     (hbB : ∀ j r, r.length ≤ k + 1 → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
     derivativeEnergy m a k (splitGenerator a b js (splitGenerator a b js Y)) ≤
       generatorConstant (ι := ι) js k B * generatorConstant (ι := ι) js (k + 1) B *
         derivativeEnergy m a (k + 2) Y := by
-  have hs : (splitGenerator a b js Y).Smooth := (hY.sweepGenerator a js).addState (hY.reactionGenerator hb)
-  have hcs : (splitGenerator a b js Y).CompactSupport := (hc.sweepGenerator a js).addState (hc.reactionGenerator b)
-  have h₁ := derivativeEnergy_splitGenerator_le m a js k hb hs hcs hB
-    (fun j r hr => hbB j r (by omega))
+  have hs : (splitGenerator a b js Y).Smooth :=
+    (hY.sweepGenerator a js).addState (hY.reactionGenerator hb)
+  have hcs : (splitGenerator a b js Y).CompactSupport :=
+    (hc.sweepGenerator a js).addState (hc.reactionGenerator b)
+  have h₁ :=
+    derivativeEnergy_splitGenerator_le m a js k hb hs hcs hB (fun j r hr => hbB j r (by omega))
   have h₂ := derivativeEnergy_splitGenerator_le m a js (k + 1) hb hY hc hB hbB
   have hC : 0 ≤ generatorConstant (ι := ι) js k B := by
     unfold generatorConstant couplingConstant
@@ -405,8 +434,7 @@ theorem derivativeEnergy_elementaryGenerator_le
 
 /-- Every ordered pair of actual elementary generators, including mixed reaction/transport
 pairs, obeys a two-order bound. No commutation of the two generators is assumed. -/
-theorem derivativeEnergy_two_elementary_le
-    (a : ι → E) (k : ℕ) (i j : Option ι) {b : ι → E → ℝ}
+theorem derivativeEnergy_two_elementary_le (a : ι → E) (k : ℕ) (i j : Option ι) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
     {B : ℝ} (hB : 0 ≤ B)
     (hbB : ∀ j r, r.length ≤ k + 1 → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
@@ -421,10 +449,12 @@ theorem derivativeEnergy_two_elementary_le
     cases j with
     | none => exact hc.reactionGenerator b
     | some j => exact hc.coordinateGenerator (a j) j
-  have h₁ := derivativeEnergy_elementaryGenerator_le m a k i hb hs hcs hB
-    (fun j r hr => hbB j r (by omega))
+  have h₁ :=
+    derivativeEnergy_elementaryGenerator_le m a k i hb hs hcs hB
+      (fun j r hr => hbB j r (by omega))
   have h₂ := derivativeEnergy_elementaryGenerator_le m a (k + 1) j hb hY hc hB hbB
-  have hC : 0 ≤ elementaryConstant (ι := ι) k B := by unfold elementaryConstant couplingConstant; positivity
+  have hC : 0 ≤ elementaryConstant (ι := ι) k B := by
+    unfold elementaryConstant couplingConstant; positivity
   exact h₁.trans (by simpa only [mul_assoc] using mul_le_mul_of_nonneg_left h₂ hC)
 
 end FiniteIndex

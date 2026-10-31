@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.LocalExtension
+module
+
+public import FunctionalInequalities.Analysis.LocalExtension
 
 /-! Finite-order and smooth extension through the shared local core. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities Filter Topology
 open scoped ContDiff

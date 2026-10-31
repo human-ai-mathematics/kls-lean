@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Vector.Slice.Measurable
-import FunctionalInequalities.Analysis.Hausdorff.Slice.OpenMeasurable
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Vector.Slice.Measurable
+public import FunctionalInequalities.Analysis.Hausdorff.Slice.OpenMeasurable
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for codimension-`m` compact slices and weighted slice measurability
 
@@ -27,6 +29,8 @@ the **measurability** half of the codimension-`m` coarea layer, not from the coa
 which still holds only where the differential is surjective.  The critical part of the coarea
 formula needs a codimension-`m` Sard or critical-slice argument, which is not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -143,7 +147,8 @@ end VectorSliceMeasurableAudit
 #print axioms FunctionalInequalities.Analysis.hausdorffNormalized_finrank_eq_zero_of_volume_eq_zero
 #print axioms FunctionalInequalities.Analysis.aemeasurable_hausdorffNormalized_inter_levelSet_vector
 #print axioms FunctionalInequalities.Analysis.aemeasurable_setLIntegral_inter_levelSet_vector
-#print axioms FunctionalInequalities.Analysis.aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector
+#print axioms
+  FunctionalInequalities.Analysis.aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector
 #print axioms VectorSliceMeasurableAudit.compact_slices
 #print axioms VectorSliceMeasurableAudit.weighted_slices
 #print axioms VectorSliceMeasurableAudit.constant_map

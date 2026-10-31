@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Law
-import FunctionalInequalities.Probability.Product
-import FunctionalInequalities.Probability.Transport
-import Mathlib.MeasureTheory.Measure.Tilted
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Law
+public import FunctionalInequalities.Probability.Product
+public import FunctionalInequalities.Probability.Transport
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
 
 /-!
 # The density of the suspension law (BKL (109))
@@ -20,6 +22,8 @@ normalization of a positive density. The helpers are private to this boundary.
 The finite-product integral identity is `Probability.lintegral_pi_prod_fin`.
 -/
 
+@[expose] public section
+
 open MeasureTheory FunctionalInequalities.Probability.Line
 
 namespace FunctionalInequalities.KLS.LogConcave.Suspension
@@ -27,54 +31,59 @@ namespace FunctionalInequalities.KLS.LogConcave.Suspension
 /-- **Push-forward under the fibrewise shear** `(a, η) ↦ (a, (F a + η)/σ)`: a density `w` on
 `μ ⊗ ds` becomes `|σ| · w(a, σ s - F a)`, the inverse Jacobian of the shear. -/
 private theorem map_density_shift_scale {A : Type*} [MeasurableSpace A] (μ : Measure A)
-    [SFinite μ] (F : A → ℝ) (hF : Measurable F) (σ : ℝ) (hσ : σ ≠ 0)
-    (w : A × ℝ → ENNReal) (hw : Measurable w) :
+    [SFinite μ] (F : A → ℝ) (hF : Measurable F) (σ : ℝ) (hσ : σ ≠ 0) (w : A × ℝ → ENNReal)
+    (hw : Measurable w) :
     ((μ.prod volume).withDensity w).map (fun p => (p.1, (F p.1 + p.2) / σ)) =
-      (μ.prod volume).withDensity
-        (fun p => ENNReal.ofReal |σ| * w (p.1, σ * p.2 - F p.1)) := by
+      (μ.prod volume).withDensity (fun p => ENNReal.ofReal |σ| * w (p.1, σ * p.2 - F p.1)) := by
   let e : A × ℝ ≃ᵐ A × ℝ :=
     { toFun p := (p.1, (F p.1 + p.2) / σ)
       invFun p := (p.1, σ * p.2 - F p.1)
-      left_inv p := by
+      left_inv
+        p := by
         apply Prod.ext
         · rfl
         · dsimp
           field_simp
           ring
-      right_inv p := by
+      right_inv
+        p := by
         apply Prod.ext
         · rfl
         · dsimp
           field_simp
           ring
-      measurable_toFun := measurable_fst.prodMk
-        (((hF.comp measurable_fst).add measurable_snd).div_const σ)
-      measurable_invFun := measurable_fst.prodMk
-        ((measurable_const.mul measurable_snd).sub (hF.comp measurable_fst)) }
-  have hshift : MeasurePreserving (fun p : A × ℝ => (p.1, F p.1 + p.2))
-      (μ.prod volume) (μ.prod volume) :=
-    (MeasurePreserving.id μ).skew_product
-      ((hF.comp measurable_fst).add measurable_snd)
+      measurable_toFun :=
+        measurable_fst.prodMk (((hF.comp measurable_fst).add measurable_snd).div_const σ)
+      measurable_invFun :=
+        measurable_fst.prodMk
+          ((measurable_const.mul measurable_snd).sub (hF.comp measurable_fst)) }
+  have hshift :
+    MeasurePreserving (fun p : A × ℝ => (p.1, F p.1 + p.2)) (μ.prod volume) (μ.prod volume) :=
+    (MeasurePreserving.id μ).skew_product ((hF.comp measurable_fst).add measurable_snd)
       (Filter.Eventually.of_forall fun x => map_add_left_eq_self volume (F x))
-  have hreal : (volume : Measure ℝ).map (fun x => x / σ) =
-      ENNReal.ofReal |σ| • volume := by
+  have hreal : (volume : Measure ℝ).map (fun x => x / σ) = ENNReal.ofReal |σ| • volume := by
     simpa only [inv_inv, mul_comm, div_eq_mul_inv] using
       (Real.map_volume_mul_left (inv_ne_zero hσ))
-  have hscale : (μ.prod volume).map (fun p : A × ℝ => (p.1, p.2 / σ)) =
+  have hscale :
+    (μ.prod volume).map (fun p : A × ℝ => (p.1, p.2 / σ)) =
       ENNReal.ofReal |σ| • μ.prod volume := by
     change (μ.prod volume).map (Prod.map id (fun x => x / σ)) = _
-    rw [← Measure.map_prod_map μ volume measurable_id
-      (show Measurable (fun x : ℝ => x / σ) from measurable_id.div_const σ),
+    rw [←
+      Measure.map_prod_map μ volume measurable_id
+        (show Measurable (fun x : ℝ => x / σ) from measurable_id.div_const σ),
       Measure.map_id, hreal, Measure.prod_smul_right]
   have hbase : (μ.prod volume).map e = ENNReal.ofReal |σ| • μ.prod volume := by
-    change (μ.prod volume).map
-      ((fun p : A × ℝ => (p.1, p.2 / σ)) ∘ (fun p : A × ℝ => (p.1, F p.1 + p.2))) = _
-    rw [← Measure.map_map
-      (measurable_fst.prodMk (measurable_snd.div_const σ)) hshift.measurable,
+    change
+      (μ.prod volume).map
+          ((fun p : A × ℝ => (p.1, p.2 / σ)) ∘ (fun p : A × ℝ => (p.1, F p.1 + p.2))) =
+        _
+    rw [←
+      Measure.map_map (measurable_fst.prodMk (measurable_snd.div_const σ)) hshift.measurable,
       hshift.map_eq, hscale]
   change ((μ.prod volume).withDensity w).map e = _
-  rw [Probability.map_withDensity_measurableEquiv e (μ.prod volume) w hw, hbase, withDensity_smul_measure,
-    ← withDensity_smul (ENNReal.ofReal |σ|)
+  rw [Probability.map_withDensity_measurableEquiv e (μ.prod volume) w hw, hbase,
+    withDensity_smul_measure, ←
+    withDensity_smul (ENNReal.ofReal |σ|)
       (show Measurable (fun y => w (e.symm y)) from hw.comp e.symm.measurable)]
   rfl
 
@@ -187,18 +196,18 @@ private theorem raw_assembly_volume_preserving (N n : ℕ) :
       (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ =>
         (WithLp.toLp 2 fun o => Option.elim o q.2 fun ij => q.1 ij.1 ij.2 : JointSpace N n))
       volume volume := by
-  let blockOfLp : (Fin N → EuclideanSpace ℝ (Fin n)) → (Fin N → Fin n → ℝ) :=
-    fun x i => (x i).ofLp
+  let blockOfLp : (Fin N → EuclideanSpace ℝ (Fin n)) → (Fin N → Fin n → ℝ) := fun x i =>
+    (x i).ofLp
   have hblock : MeasurePreserving blockOfLp volume volume :=
     volume_preserving_pi (fun _ : Fin N => PiLp.volume_preserving_ofLp (Fin n))
   have hflat : MeasurePreserving (Function.uncurry ∘ blockOfLp) volume volume :=
     (raw_uncurry_volume_preserving (Fin N) (Fin n)).comp hblock
-  have hprod : MeasurePreserving
-      (Prod.map (Function.uncurry ∘ blockOfLp) (id : ℝ → ℝ)) volume volume := by
+  have hprod :
+    MeasurePreserving (Prod.map (Function.uncurry ∘ blockOfLp) (id : ℝ → ℝ)) volume volume := by
     simpa only [← Measure.volume_eq_prod] using
       hflat.prod (MeasurePreserving.id (volume : Measure ℝ))
   have heq :
-      (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ =>
+    (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ =>
         (WithLp.toLp 2 fun o => Option.elim o q.2 fun ij => q.1 ij.1 ij.2 : JointSpace N n)) =
       WithLp.toLp 2 ∘
         (MeasurableEquiv.piOptionEquivProd (fun _ : Option (Fin N × Fin n) => ℝ)).symm ∘
@@ -207,8 +216,9 @@ private theorem raw_assembly_volume_preserving (N n : ℕ) :
     ext o
     cases o <;> rfl
   rw [heq]
-  exact (PiLp.volume_preserving_toLp (Option (Fin N × Fin n))).comp
-    ((raw_option_volume_preserving (Fin N × Fin n)).comp hprod)
+  exact
+    (PiLp.volume_preserving_toLp (Option (Fin N × Fin n))).comp
+      ((raw_option_volume_preserving (Fin N × Fin n)).comp hprod)
 
 private theorem raw_assembly_left_inverse (N n : ℕ)
     (q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ) :
@@ -224,8 +234,9 @@ private theorem raw_assembly_left_inverse (N n : ℕ)
 
 private theorem raw_assembly_right_inverse (N n : ℕ) (p : JointSpace N n) :
     (fun q : (Fin N → EuclideanSpace ℝ (Fin n)) × ℝ =>
-      (WithLp.toLp 2 fun o => Option.elim o q.2 fun ij => q.1 ij.1 ij.2 : JointSpace N n))
-      (fun i : Fin N => WithLp.toLp 2 fun j : Fin n => p (some (i, j)), p none) = p := by
+          (WithLp.toLp 2 fun o => Option.elim o q.2 fun ij => q.1 ij.1 ij.2 : JointSpace N n))
+        (fun i : Fin N => WithLp.toLp 2 fun j : Fin n => p (some (i, j)), p none) =
+      p := by
   ext o
   cases o <;> rfl
 
@@ -382,7 +393,8 @@ theorem logConcave_jointLaw {n N : ℕ} (V f : EuclideanSpace ℝ (Fin n) → �
     (jointLaw_eq_tilted V f hβ hV.continuous.measurable hf.continuous.measurable hint) h
 
 open scoped ContDiff in
-/-- **Local exponential moments and smoothness of `Λ_ν` under (110)** (BKL p. 29, "the logarithmic
+/--
+**Local exponential moments and smoothness of `Λ_ν` under (110)** (BKL p. 29, "the logarithmic
 Laplace transform is finite and smooth in a neighborhood of the origin"): for `μ = e^{-V}dx/Z` with
 `∇²V ≥ a`, `f ∈ C²` with `‖∇²f‖ ≤ M` and `β M/√N ≤ a`, the joint law has an exponential moment
 `e^{r‖p‖}` for some `r > 0` and `Λ_ν` is `C^∞` on the ball of radius `r`. The density (109) is
@@ -392,14 +404,20 @@ theorem exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw {n N : ℕ}
     (hf : ContDiff ℝ 2 f) (hVa : ∀ x v, a * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ V x v v)
     (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (hN : β / Real.sqrt N * M ≤ a)
     (hint : Integrable (fun x => Real.exp (-V x))) :
-    ∃ r : ℝ, 0 < r ∧
-      Integrable (fun p => Real.exp (r * ‖p‖))
-        (jointLaw (volume.tilted fun x => -V x) f β (sigma β) N) ∧
-      ContDiffOn ℝ ∞ (Analysis.BakryEmery.logLaplace
-        (jointLaw (volume.tilted fun x => -V x) f β (sigma β) N)) (Metric.ball 0 r) := by
+    ∃ r : ℝ,
+      0 < r ∧
+        Integrable (fun p => Real.exp (r * ‖p‖))
+            (jointLaw (volume.tilted fun x => -V x) f β (sigma β) N) ∧
+          ContDiffOn ℝ ∞
+            (Analysis.BakryEmery.logLaplace
+              (jointLaw (volume.tilted fun x => -V x) f β (sigma β) N))
+            (Metric.ball 0 r) := by
   have : IsProbabilityMeasure (volume.tilted fun x => -V x) := isProbabilityMeasure_tilted hint
-  have hp := isProbabilityMeasure_jointLaw_of_pos (volume.tilted fun x => -V x)
-    hf.continuous.measurable hβ (sigma β) N
-  exact (logConcave_jointLaw V f hβ hV hf hVa hfM hN hint hp).exists_integrable_exp_norm_contDiffOn_logLaplace
+  have hp :=
+    isProbabilityMeasure_jointLaw_of_pos (volume.tilted fun x => -V x) hf.continuous.measurable
+      hβ (sigma β) N
+  exact
+    (logConcave_jointLaw V f hβ hV hf hVa hfM hN hint
+        hp).exists_integrable_exp_norm_contDiffOn_logLaplace
 
 end FunctionalInequalities.KLS.LogConcave.Suspension

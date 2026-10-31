@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoAlgebraSimpleIntegrand
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoAlgebraSimpleIntegrand
 
 /-!
 # Products of simple integrands and elementary integrals against a process
@@ -14,6 +19,8 @@ whose adaptedness is inherited; summing the increments of the elementary integra
 the coefficients of the other is the elementary integral of that product, and the difference
 between an elementary integral and an `L²` Itô integral obeys the Itô isometry.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -46,14 +53,14 @@ theorem sum_ite_mul_sum_ite {M : ℕ} {π : Fin (M + 1) → ℝ} (hπ : StrictMo
     have hsum : ∀ h : Fin M → ℝ,
         (∑ j : Fin M, if π j.castSucc < s ∧ s ≤ π j.succ then h j else 0) = h j₀ := by
       intro h
-      rw [Finset.sum_eq_single j₀ (fun j _ hjne => if_neg fun hc => hjne (huniq j hc))
+      rw [Finset.sum_eq_single j₀ (fun j _ hjne => ite_eq_right fun hc => hjne (huniq j hc))
         (fun hnm => absurd (Finset.mem_univ _) hnm)]
-      exact if_pos hj₀
+      exact ite_eq_left hj₀
     rw [hsum f, hsum g, hsum fun j => f j * g j]
   · push Not at h
     have hz : ∀ h' : Fin M → ℝ,
         (∑ j : Fin M, if π j.castSucc < s ∧ s ≤ π j.succ then h' j else 0) = 0 :=
-      fun h' => Finset.sum_eq_zero fun j _ => if_neg fun hc => absurd hc.2 (not_le.mpr (h j hc.1))
+      fun h' => Finset.sum_eq_zero fun j _ => ite_eq_right fun hc => absurd hc.2 (not_le.mpr (h j hc.1))
     rw [hz f, hz g, hz fun j => f j * g j, mul_zero]
 
 

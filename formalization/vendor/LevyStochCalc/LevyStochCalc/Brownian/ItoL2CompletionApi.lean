@@ -6,7 +6,15 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoL2CompletionQuadVar
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_sq_eq_lintegral_nnnorm_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoL2CompletionQuadVar
 
 /-!
 # Brownian Itô integral: the `stochasticIntegral` API
@@ -17,6 +25,8 @@ quadratic-variation and isometry conclusions, the isometry for differences of
 integrands, and the `stochasticIntegral` interface with `itoIsometry`,
 `quadVar_stochasticIntegral` and `martingale_stochasticIntegral`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -58,9 +68,11 @@ lemma martingale_rightCont_quadVar_stochasticIntegralBrownian :
       (fun ω => (F r ω) ^ 2 - (F s ω) ^ 2) 1 P) (nhdsWithin s (Set.Ioi s)) (nhds 0) :=
     tendsto_eLpNorm_one_sq_sub (l := nhdsWithin s (Set.Ioi s)) (a := fun r => F r) (b := F s)
       (fun r => (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
-        h_sq_int_global r).1.aemeasurable)
-      (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global s).1.aemeasurable
-      (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global s).2.ne
+        h_sq_int_global r).aestronglyMeasurable.aemeasurable)
+      (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
+        h_sq_int_global s).aestronglyMeasurable.aemeasurable
+      (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
+        h_sq_int_global s).eLpNorm_lt_top.ne
       (stochasticIntegralBrownian_eLpNorm_two_right_tendsto W ℱ hℱ H h_meas h_progMeas
         h_sq_int_global s)
   -- compensator part: right-`L¹`-continuity of `A_t = ∫₀ᵗ H²`.
@@ -79,7 +91,11 @@ lemma martingale_rightCont_quadVar_stochasticIntegralBrownian :
       have hHr : ∀ᵐ ω ∂P, MeasureTheory.Integrable
           (fun u => (H ω u) ^ 2) (volume.restrict (Set.Icc (0 : ℝ) r)) :=
         (compensatorH_memLp_prod H h_meas h_sq_int_global hrpos).integrable_sq.prod_right_ae
-      rw [MeasureTheory.eLpNorm_one_eq_lintegral_enorm]
+      rw [MeasureTheory.eLpNorm_one_eq_lintegral_enorm
+        (f := fun ω => (∫ u in Set.Icc (0 : ℝ) r, (H ω u) ^ 2 ∂volume)
+          - ∫ u in Set.Icc (0 : ℝ) s, (H ω u) ^ 2 ∂volume)
+        (((compensatorH_adapted ℱ H h_progMeas r).mono (ℱ.le r)).aestronglyMeasurable.sub
+          ((compensatorH_adapted ℱ H h_progMeas s).mono (ℱ.le s)).aestronglyMeasurable)]
       refine (lintegral_congr_ae ?_).symm
       filter_upwards [hHr] with ω hHrω
       have hHsω : MeasureTheory.Integrable (fun u => (H ω u) ^ 2)
@@ -119,20 +135,6 @@ lemma martingale_rightCont_quadVar_stochasticIntegralBrownian :
   -- combine the two parts.
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (by simpa using hF2.add hA)
     (Filter.Eventually.of_forall (fun r => bot_le)) (Filter.Eventually.of_forall (fun r => ?_))
-  have hF2aesm : MeasureTheory.AEStronglyMeasurable (fun ω => (F r ω) ^ 2 - (F s ω) ^ 2) P :=
-    (((stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
-      h_sq_int_global r).1.aemeasurable.pow_const
-        2).aestronglyMeasurable).sub
-      (((stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
-        h_sq_int_global s).1.aemeasurable.pow_const
-        2).aestronglyMeasurable)
-  have hAaesm : MeasureTheory.AEStronglyMeasurable
-      (fun ω => (∫ u in Set.Icc (0 : ℝ) r, (H ω u) ^ 2 ∂volume)
-        - ∫ u in Set.Icc (0 : ℝ) s, (H ω u) ^ 2 ∂volume) P :=
-    ((compensatorH_adapted ℱ H h_progMeas r).mono
-      (ℱ.le r)).aestronglyMeasurable.sub
-      (((compensatorH_adapted ℱ H h_progMeas s).mono
-        (ℱ.le s)).aestronglyMeasurable)
   calc MeasureTheory.eLpNorm
         ((fun t ω => (F t ω) ^ 2 - ∫ u in Set.Icc (0 : ℝ) t, (H ω u) ^ 2 ∂volume) r
           - fun ω => (F s ω) ^ 2 - ∫ u in Set.Icc (0 : ℝ) s, (H ω u) ^ 2 ∂volume) 1 P
@@ -142,7 +144,7 @@ lemma martingale_rightCont_quadVar_stochasticIntegralBrownian :
               - ∫ u in Set.Icc (0 : ℝ) s, (H ω u) ^ 2 ∂volume) 1 P := by
         refine MeasureTheory.eLpNorm_congr_ae (Filter.Eventually.of_forall (fun ω => ?_))
         simp only [Pi.sub_apply]; ring
-    _ ≤ _ := MeasureTheory.eLpNorm_sub_le hF2aesm hAaesm le_rfl
+    _ ≤ _ := MeasureTheory.eLpNorm_sub_le le_rfl
 
 end MasterSequence
 
@@ -238,23 +240,23 @@ lemma tendsto_lintegral_nnnorm_sq_of_eLpNorm
             refine MeasureTheory.eLpNorm_congr_ae (Filter.Eventually.of_forall (fun x => ?_))
             simp only [Pi.sub_apply]; ring
         _ ≤ MeasureTheory.eLpNorm (gₙ n - g) 2 μ + MeasureTheory.eLpNorm (gₙ n) 2 μ := by
-            refine le_trans (MeasureTheory.eLpNorm_sub_le (hgₙ n)
-              ((hgₙ n).sub hg) (by norm_num)) ?_
+            refine le_trans (MeasureTheory.eLpNorm_sub_le (by norm_num)) ?_
             rw [add_comm]
     · calc MeasureTheory.eLpNorm (gₙ n) 2 μ
           = MeasureTheory.eLpNorm ((gₙ n - g) + g) 2 μ := by
             refine MeasureTheory.eLpNorm_congr_ae (Filter.Eventually.of_forall (fun x => ?_))
             simp only [Pi.add_apply, Pi.sub_apply]; ring
         _ ≤ MeasureTheory.eLpNorm (gₙ n - g) 2 μ + MeasureTheory.eLpNorm g 2 μ :=
-            MeasureTheory.eLpNorm_add_le ((hgₙ n).sub hg) hg (by norm_num)
-  have hconv : ∀ x : β → ℝ,
+            MeasureTheory.eLpNorm_add_le (by norm_num)
+  have hconv : ∀ x : β → ℝ, MeasureTheory.AEStronglyMeasurable x μ →
       MeasureTheory.eLpNorm x 2 μ * MeasureTheory.eLpNorm x 2 μ
         = ∫⁻ y, (‖x y‖₊ : ℝ≥0∞) ^ 2 ∂μ := by
-    intro x
-    rw [← eLpNorm_sq_eq_lintegral_nnnorm_sq,
+    intro x hx
+    rw [← eLpNorm_sq_eq_lintegral_nnnorm_sq x hx,
       show (2 : ℝ) = ((2 : ℕ) : ℝ) from by norm_num, ENNReal.rpow_natCast, pow_two]
-  simp_rw [← hconv]
-  exact ENNReal.Tendsto.mul hnorm (Or.inr hgfin) hnorm (Or.inr hgfin)
+  rw [← hconv g hg]
+  exact (ENNReal.Tendsto.mul hnorm (Or.inr hgfin) hnorm (Or.inr hgfin)).congr
+    fun n => hconv (gₙ n) (hgₙ n)
 
 /-- **Cross-integrand simple difference isometry.** For two integrands `H₁, H₂`, their
 `masterApprox n` simple integrals satisfy `∫⁻‖Iₙ(H₁) − Iₙ(H₂)‖² = ∫⁻∫⁻‖evalₙ(H₁) −
@@ -367,7 +369,9 @@ theorem isometry_diff_stochasticIntegralBrownian
         ^ (2 : ℝ)) Filter.atTop (nhds 0) := by
       have he := masterApprox_eval_tendsto (t := T) ℱ H hm hp hs
       refine he.congr (fun n => ?_)
-      rw [eLpNorm_sq_eq_lintegral_nnnorm_sq,
+      rw [eLpNorm_sq_eq_lintegral_nnnorm_sq
+          (fun p : Ω × ℝ => (masterApprox ℱ H hm hp hs n).eval p.2 p.1 - H p.1 p.2)
+          (((masterApprox ℱ H hm hp hs n).eval_jointly_measurable).sub hm).aestronglyMeasurable,
         hbridge (fun p : Ω × ℝ => (masterApprox ℱ H hm hp hs n).eval p.2 p.1 - H p.1 p.2)
           (((masterApprox ℱ H hm hp hs n).eval_jointly_measurable).sub hm)]
       refine lintegral_congr (fun ω => ?_)
@@ -395,38 +399,28 @@ theorem isometry_diff_stochasticIntegralBrownian
         (stochasticIntegralBrownian_memLp W ℱ hℱ H₂ h_meas₂ h_progMeas₂
           h_sq₂ T).aestronglyMeasurable)
       (by
-        refine (lt_of_le_of_lt (MeasureTheory.eLpNorm_sub_le
-          (stochasticIntegralBrownian_memLp W ℱ hℱ H₁ h_meas₁ h_progMeas₁
-            h_sq₁ T).aestronglyMeasurable
-          (stochasticIntegralBrownian_memLp W ℱ hℱ H₂ h_meas₂ h_progMeas₂
-            h_sq₂ T).aestronglyMeasurable
-          (by norm_num)) (ENNReal.add_lt_top.mpr
-            ⟨(stochasticIntegralBrownian_memLp W ℱ hℱ H₁ h_meas₁ h_progMeas₁ h_sq₁ T).2,
-              (stochasticIntegralBrownian_memLp W ℱ hℱ H₂ h_meas₂ h_progMeas₂ h_sq₂ T).2⟩)).ne)
+        refine (lt_of_le_of_lt (MeasureTheory.eLpNorm_sub_le (by norm_num))
+          (ENNReal.add_lt_top.mpr
+            ⟨(stochasticIntegralBrownian_memLp W ℱ hℱ H₁ h_meas₁ h_progMeas₁ h_sq₁
+                T).eLpNorm_lt_top,
+              (stochasticIntegralBrownian_memLp W ℱ hℱ H₂ h_meas₂ h_progMeas₂ h_sq₂
+                T).eLpNorm_lt_top⟩)).ne)
       ?_
     have hsum := (masterApprox_tendsto_L2 W ℱ hℱ H₁ h_meas₁ h_progMeas₁ h_sq₁ ht_nn).add
       (masterApprox_tendsto_L2 W ℱ hℱ H₂ h_meas₂ h_progMeas₂ h_sq₂ ht_nn)
     refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (by simpa using hsum)
       (Filter.Eventually.of_forall (fun n => bot_le))
       (Filter.Eventually.of_forall (fun n => ?_))
-    refine le_trans ?_ (MeasureTheory.eLpNorm_sub_le
-      ((hImeas H₁ h_meas₁ h_progMeas₁ h_sq₁ n).aestronglyMeasurable.sub
-        (stochasticIntegralBrownian_memLp W ℱ hℱ H₁ h_meas₁ h_progMeas₁
-          h_sq₁ T).aestronglyMeasurable)
-      ((hImeas H₂ h_meas₂ h_progMeas₂ h_sq₂ n).aestronglyMeasurable.sub
-        (stochasticIntegralBrownian_memLp W ℱ hℱ H₂ h_meas₂ h_progMeas₂
-          h_sq₂ T).aestronglyMeasurable)
-      (by norm_num))
+    refine le_trans ?_ (MeasureTheory.eLpNorm_sub_le (by norm_num))
     exact le_of_eq (MeasureTheory.eLpNorm_congr_ae
       (Filter.Eventually.of_forall (fun ω => by simp only [Pi.sub_apply]; ring)))
   -- RHS: `∫⁻∫⁻‖evalₙ(H₁)−evalₙ(H₂)‖² → ∫⁻∫⁻‖H₁−H₂‖²`
   have hHdfin : MeasureTheory.eLpNorm (fun p : Ω × ℝ => H₁ p.1 p.2 - H₂ p.1 p.2) 2 (P.prod ν)
       ≠ ⊤ :=
-    (lt_of_le_of_lt (MeasureTheory.eLpNorm_sub_le
-      (compensatorH_memLp_prod H₁ h_meas₁ h_sq₁ hT).1
-      (compensatorH_memLp_prod H₂ h_meas₂ h_sq₂ hT).1 (by norm_num))
-      (ENNReal.add_lt_top.mpr ⟨(compensatorH_memLp_prod H₁ h_meas₁ h_sq₁ hT).2,
-        (compensatorH_memLp_prod H₂ h_meas₂ h_sq₂ hT).2⟩)).ne
+    (lt_of_le_of_lt (MeasureTheory.eLpNorm_sub_le (by norm_num))
+      (ENNReal.add_lt_top.mpr
+        ⟨(compensatorH_memLp_prod H₁ h_meas₁ h_sq₁ hT).eLpNorm_lt_top,
+          (compensatorH_memLp_prod H₂ h_meas₂ h_sq₂ hT).eLpNorm_lt_top⟩)).ne
   have hRHS' := tendsto_lintegral_nnnorm_sq_of_eLpNorm
     (μ := P.prod ν)
     (gₙ := fun n p => (masterApprox ℱ H₁ h_meas₁ h_progMeas₁ h_sq₁ n).eval p.2 p.1
@@ -442,13 +436,7 @@ theorem isometry_diff_stochasticIntegralBrownian
       refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (by simpa using hsum)
         (Filter.Eventually.of_forall (fun n => bot_le))
         (Filter.Eventually.of_forall (fun n => ?_))
-      refine le_trans ?_ (MeasureTheory.eLpNorm_sub_le
-        (((masterApprox ℱ H₁ h_meas₁ h_progMeas₁
-          h_sq₁ n).eval_jointly_measurable).aestronglyMeasurable.sub
-          h_meas₁.aestronglyMeasurable)
-        (((masterApprox ℱ H₂ h_meas₂ h_progMeas₂
-          h_sq₂ n).eval_jointly_measurable).aestronglyMeasurable.sub
-          h_meas₂.aestronglyMeasurable) (by norm_num))
+      refine le_trans ?_ (MeasureTheory.eLpNorm_sub_le (by norm_num))
       exact le_of_eq (MeasureTheory.eLpNorm_congr_ae
         (Filter.Eventually.of_forall (fun p => by simp only [Pi.sub_apply]; ring))))
   rw [hbridge (fun p : Ω × ℝ => H₁ p.1 p.2 - H₂ p.1 p.2) (h_meas₁.sub h_meas₂)] at hRHS'

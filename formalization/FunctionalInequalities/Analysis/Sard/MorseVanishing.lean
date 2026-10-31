@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Sard.Chart
-import FunctionalInequalities.Analysis.Sard.Disk
+module
+
+public import FunctionalInequalities.Analysis.Sard.Chart
+public import FunctionalInequalities.Analysis.Sard.Disk
 
 /-! # The Morse vanishing lemma
 
@@ -25,6 +27,8 @@ formulation of A. Norton.  Nothing is ever restricted to a hypersurface, so no r
   (`Analysis.MorseSard.norm_sub_le_insertNth`), so no constant changes.  Second countability makes
   countably many of these neighbourhoods suffice.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -108,13 +112,18 @@ theorem hasDecompRel_dim_zero (k : ℕ) (A : Set (Fin 0 → ℝ)) : HasDecompRel
   · simp
   · simp
 
-/-- Order zero, any dimension: uniform continuity on the compact body of a translated closed unit
+/--
+Order zero, any dimension: uniform continuity on the compact body of a translated closed unit
 ball.  The disks are the translations `a ↦ c + a` with integer centres, which are isometries. -/
 theorem hasDecompRel_order_zero (A : Set (Fin n → ℝ)) : HasDecompRel 0 A A := by
   classical
-  set P : Set (Piece n) := Set.range (fun c : Fin n → ℤ =>
-    ((A ∩ closedBall (fun j => (c j : ℝ)) 1,
-      ⟨n, fun a : Fin n → ℝ => (fun j => (c j : ℝ)) + a⟩) : Piece n)) with hPdef
+  set P : Set (Piece n) :=
+    Set.range
+      (fun c : Fin n → ℤ =>
+        ((A ∩ closedBall (fun j => (c j : ℝ)) 1,
+            ⟨n, fun a : Fin n → ℝ => (fun j => (c j : ℝ)) + a⟩) :
+          Piece n)) with
+    hPdef
   refine ⟨∅, P, countable_empty, countable_range _, ?_, ?_, ?_⟩
   · intro x hx
     refine Or.inr (mem_iUnion₂.mpr ⟨_, ⟨fun j => ⌊x j⌋, rfl⟩, hx, ?_⟩)
@@ -136,9 +145,11 @@ theorem hasDecompRel_order_zero (A : Set (Fin n → ℝ)) : HasDecompRel 0 A A :
       simp
   · rintro f hf hf0 q ⟨c, rfl⟩ ε hε
     have hfc : Continuous f := contDiff_zero.mp hf
-    obtain ⟨δ, hδ, hδspec⟩ := Metric.uniformContinuousOn_iff_le.mp
-      ((isCompact_closedBall (fun j => (c j : ℝ)) 1).uniformContinuousOn_of_continuous
-        hfc.continuousOn) ε hε
+    obtain ⟨δ, hδ, hδspec⟩ :=
+      Metric.uniformContinuousOn_iff_le.mp
+        ((isCompact_closedBall (fun j => (c j : ℝ)) 1).uniformContinuousOn_of_continuous
+          hfc.continuousOn)
+        ε hε
     refine ⟨δ, hδ, ?_⟩
     intro a ha b hb haS _ hab s hs
     set cc : Fin n → ℝ := fun j => (c j : ℝ) with hccdef
@@ -159,8 +170,8 @@ theorem hasDecompRel_order_zero (A : Set (Fin n → ℝ)) : HasDecompRel 0 A A :
       rw [dist_eq_norm, heq, norm_smul, Real.norm_eq_abs, abs_of_nonneg hs.1]
       have h1 : ‖b - a‖ = ‖cc + a - (cc + b)‖ := by
         rw [show cc + a - (cc + b) = -(b - a) by module, norm_neg]
-      calc s * ‖b - a‖ ≤ 1 * ‖b - a‖ :=
-            mul_le_mul_of_nonneg_right hs.2 (norm_nonneg _)
+      calc
+        s * ‖b - a‖ ≤ 1 * ‖b - a‖ := mul_le_mul_of_nonneg_right hs.2 (norm_nonneg _)
         _ = ‖cc + a - (cc + b)‖ := by rw [one_mul, h1]
         _ ≤ δ := hab.le
     have hzero : f (cc + a) = 0 := hf0 _ haS.1

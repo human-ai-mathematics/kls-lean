@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Matrix.Sign
+module
+
+public import FunctionalInequalities.Analysis.Matrix.Sign
 
 /-!
 # Audit: Jordan decomposition and trace energy of real symmetric matrices
@@ -10,6 +12,8 @@ semidefinite to all symmetric `B`). A real indefinite, noncommuting client on `F
 A real algebraic example, not a moment-map or source-law certificate.
 -/
 
+@[expose] public section
+
 open Matrix
 open FunctionalInequalities.Analysis
 
@@ -19,23 +23,27 @@ namespace LetwinSymmetricJordanAudit
 theorem fin2_client :
     let B : Matrix (Fin 2) (Fin 2) ℝ := !![1, 0; 0, -2]
     let H : Matrix (Fin 2) (Fin 2) ℝ := !![2, 1; 1, 2]
-    B.IsSymm ∧ ¬ B.PosSemidef ∧ ¬ (-B).PosSemidef ∧ H.PosSemidef ∧
-      B * H ≠ H * B ∧ (B * H * B * H).trace = 16 ∧
-      0 ≤ (B * H * B * H).trace := by
+    B.IsSymm ∧
+      ¬B.PosSemidef ∧
+        ¬(-B).PosSemidef ∧
+          H.PosSemidef ∧
+            B * H ≠ H * B ∧ (B * H * B * H).trace = 16 ∧ 0 ≤ (B * H * B * H).trace := by
   let B : Matrix (Fin 2) (Fin 2) ℝ := !![1, 0; 0, -2]
   let H : Matrix (Fin 2) (Fin 2) ℝ := !![2, 1; 1, 2]
-  change B.IsSymm ∧ ¬ B.PosSemidef ∧ ¬ (-B).PosSemidef ∧ H.PosSemidef ∧
-    B * H ≠ H * B ∧ (B * H * B * H).trace = 16 ∧
-    0 ≤ (B * H * B * H).trace
+  change
+    B.IsSymm ∧
+      ¬B.PosSemidef ∧
+        ¬(-B).PosSemidef ∧
+          H.PosSemidef ∧ B * H ≠ H * B ∧ (B * H * B * H).trace = 16 ∧ 0 ≤ (B * H * B * H).trace
   have hB : B.IsSymm := by
     change B.transpose = B
     ext i j
     fin_cases i <;> fin_cases j <;> rfl
-  have hnotP : ¬ B.PosSemidef := by
+  have hnotP : ¬B.PosSemidef := by
     intro h
     have hd := h.diag_nonneg (i := (1 : Fin 2))
     norm_num [B] at hd
-  have hnotN : ¬ (-B).PosSemidef := by
+  have hnotN : ¬(-B).PosSemidef := by
     intro h
     have hd := h.diag_nonneg (i := (0 : Fin 2))
     norm_num [B] at hd
@@ -48,12 +56,10 @@ theorem fin2_client :
       fin_cases i <;> fin_cases j <;> rfl
     · intro x
       simp [H, Matrix.mulVec, dotProduct, Fin.sum_univ_succ]
-      nlinarith [sq_nonneg (x 0), sq_nonneg (x 1),
-        sq_nonneg (x 0 + x 1)]
+      nlinarith [sq_nonneg (x 0), sq_nonneg (x 1), sq_nonneg (x 0 + x 1)]
   have hcomm : B * H ≠ H * B := by
     intro h
-    have he := congrArg
-      (fun M : Matrix (Fin 2) (Fin 2) ℝ => M 0 1) h
+    have he := congrArg (fun M : Matrix (Fin 2) (Fin 2) ℝ => M 0 1) h
     norm_num [B, H, Matrix.mul_apply, Fin.sum_univ_succ] at he
   have htrace : (B * H * B * H).trace = 16 := by
     norm_num [B, H, Matrix.trace, Matrix.mul_apply, Fin.sum_univ_succ]

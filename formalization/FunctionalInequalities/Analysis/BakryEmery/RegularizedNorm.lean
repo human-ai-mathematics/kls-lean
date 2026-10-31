@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.WeakGamma
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.WeakGamma
 
 /-!
 # The regularized norm `√(ε + ‖a‖²) - √ε` of a square-integrable field
@@ -16,6 +18,8 @@ and their tested `L²` consequences needed for Bakry's `L¹` self-improvement:
 
 Nothing here refers to a gradient or semigroup.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -301,52 +305,60 @@ theorem tendsto_integral_mul_regularizedNorm (hε : 0 < ε) {ι : Type*} {l : Fi
 /-- **Convergence of the tested unit pairing.** For a fixed a.e. bounded `ψ`, if `uᵢ → u` and
 `wᵢ → w` in `L²(H)`, then `∫ ψ ⟪U_ε(uᵢ), wᵢ⟫ → ∫ ψ ⟪U_ε(u), w⟫`, `U_ε = regularizedUnit ε`. -/
 theorem tendsto_integral_mul_inner_regularizedUnit (hε : 0 < ε) {ψ : α → ℝ}
-    (hψ : AEStronglyMeasurable ψ μ) {C : ℝ} (hC0 : 0 ≤ C) (hC : ∀ᵐ x ∂μ, |ψ x| ≤ C)
-    {ι : Type*} {l : Filter ι} {u w : ι → Lp H 2 μ} {u₀ w₀ : Lp H 2 μ}
-    (hu : Tendsto u l (𝓝 u₀)) (hw : Tendsto w l (𝓝 w₀)) :
+    (hψ : AEStronglyMeasurable ψ μ) {C : ℝ} (hC0 : 0 ≤ C) (hC : ∀ᵐ x ∂μ, |ψ x| ≤ C) {ι : Type*}
+    {l : Filter ι} {u w : ι → Lp H 2 μ} {u₀ w₀ : Lp H 2 μ} (hu : Tendsto u l (𝓝 u₀))
+    (hw : Tendsto w l (𝓝 w₀)) :
     Tendsto (fun i => ∫ x, ψ x * ⟪regularizedUnit ε (u i x), w i x⟫ ∂μ) l
       (𝓝 (∫ x, ψ x * ⟪regularizedUnit ε (u₀ x), w₀ x⟫ ∂μ)) := by
   rw [tendsto_iff_norm_sub_tendsto_zero]
   have hu' := tendsto_iff_norm_sub_tendsto_zero.mp hu
   have hw' := tendsto_iff_norm_sub_tendsto_zero.mp hw
   have hse : 0 < √ε := Real.sqrt_pos.mpr hε
-  have hA : Tendsto (fun i => C * (2 / √ε * (‖u i - u₀‖ * ‖w₀‖) + ‖w i - w₀‖ * ‖oneL2 μ‖)) l
-      (𝓝 0) := by
-    simpa using (((hu'.mul_const ‖w₀‖).const_mul (2 / √ε)).add
-      (hw'.mul_const ‖oneL2 μ‖)).const_mul C
+  have hA :
+    Tendsto (fun i => C * (2 / √ε * (‖u i - u₀‖ * ‖w₀‖) + ‖w i - w₀‖ * ‖oneL2 μ‖)) l (𝓝 0) := by
+    simpa using
+      (((hu'.mul_const ‖w₀‖).const_mul (2 / √ε)).add (hw'.mul_const ‖oneL2 μ‖)).const_mul C
   refine squeeze_zero (fun _ => norm_nonneg _) (fun i => ?_) hA
-  rw [Real.norm_eq_abs, ← integral_sub (integrable_mul_inner_regularizedUnit hε hψ hC _ _)
-    (integrable_mul_inner_regularizedUnit hε hψ hC _ _)]
+  rw [Real.norm_eq_abs, ←
+    integral_sub (integrable_mul_inner_regularizedUnit hε hψ hC _ _)
+      (integrable_mul_inner_regularizedUnit hε hψ hC _ _)]
   refine (abs_integral_le_integral_abs).trans ?_
-  have hint : Integrable (fun x => C * (2 / √ε * (‖(u i - u₀) x‖ * ‖w₀ x‖) + ‖(w i - w₀) x‖))
-      μ :=
+  have hint :
+    Integrable (fun x => C * (2 / √ε * (‖(u i - u₀) x‖ * ‖w₀ x‖) + ‖(w i - w₀) x‖)) μ :=
     (((WeakGamma.integrable_norm_mul_norm (u i - u₀) w₀).const_mul (2 / √ε)).add
-      ((Lp.memLp (w i - w₀)).integrable one_le_two).norm).const_mul C
-  calc ∫ x, |ψ x * ⟪regularizedUnit ε (u i x), w i x⟫ - ψ x * ⟪regularizedUnit ε (u₀ x), w₀ x⟫|
-        ∂μ ≤ ∫ x, C * (2 / √ε * (‖(u i - u₀) x‖ * ‖w₀ x‖) + ‖(w i - w₀) x‖) ∂μ := by
-        refine integral_mono_of_nonneg (Eventually.of_forall fun _ => abs_nonneg _) hint ?_
-        filter_upwards [hC, Lp.coeFn_sub (u i) u₀, Lp.coeFn_sub (w i) w₀] with x hx h1 h2
-        rw [← mul_sub, abs_mul, h1, h2, Pi.sub_apply, Pi.sub_apply]
-        refine mul_le_mul hx ?_ (abs_nonneg _) hC0
-        have hsplit : ⟪regularizedUnit ε (u i x), w i x⟫ - ⟪regularizedUnit ε (u₀ x), w₀ x⟫ =
-            ⟪regularizedUnit ε (u i x) - regularizedUnit ε (u₀ x), w₀ x⟫ +
-              ⟪regularizedUnit ε (u i x), w i x - w₀ x⟫ := by
-          rw [inner_sub_left, inner_sub_right]; ring
-        rw [hsplit]
-        refine (abs_add_le _ _).trans (add_le_add ?_ ?_)
-        · refine (abs_real_inner_le_norm _ _).trans ?_
-          have := norm_regularizedUnit_sub_le hε (u i x) (u₀ x)
-          nlinarith [norm_nonneg (w₀ x), norm_nonneg (u i x - u₀ x)]
-        · refine (abs_real_inner_le_norm _ _).trans ?_
-          have := norm_regularizedUnit_le_one hε (u i x)
-          nlinarith [norm_nonneg (w i x - w₀ x)]
+          ((Lp.memLp (w i - w₀)).integrable one_le_two).norm).const_mul
+      C
+  calc
+    ∫ x,
+          |ψ x * ⟪regularizedUnit ε (u i x), w i x⟫ -
+              ψ x * ⟪regularizedUnit ε (u₀ x), w₀ x⟫| ∂μ ≤
+        ∫ x, C * (2 / √ε * (‖(u i - u₀) x‖ * ‖w₀ x‖) + ‖(w i - w₀) x‖) ∂μ := by
+      refine integral_mono_of_nonneg (Eventually.of_forall fun _ => abs_nonneg _) hint ?_
+      filter_upwards [hC, Lp.coeFn_sub (u i) u₀, Lp.coeFn_sub (w i) w₀] with x hx h1 h2
+      rw [← mul_sub, abs_mul, h1, h2, Pi.sub_apply, Pi.sub_apply]
+      refine mul_le_mul hx ?_ (abs_nonneg _) hC0
+      have hsplit :
+        ⟪regularizedUnit ε (u i x), w i x⟫ - ⟪regularizedUnit ε (u₀ x), w₀ x⟫ =
+          ⟪regularizedUnit ε (u i x) - regularizedUnit ε (u₀ x), w₀ x⟫ +
+            ⟪regularizedUnit ε (u i x), w i x - w₀ x⟫ := by
+        rw [inner_sub_left, inner_sub_right]; ring
+      rw [hsplit]
+      refine (abs_add_le _ _).trans (add_le_add ?_ ?_)
+      · refine (abs_real_inner_le_norm _ _).trans ?_
+        have := norm_regularizedUnit_sub_le hε (u i x) (u₀ x)
+        nlinarith [norm_nonneg (w₀ x), norm_nonneg (u i x - u₀ x)]
+      · refine (abs_real_inner_le_norm _ _).trans ?_
+        have := norm_regularizedUnit_le_one hε (u i x)
+        nlinarith [norm_nonneg (w i x - w₀ x)]
     _ = C * (2 / √ε * ∫ x, ‖(u i - u₀) x‖ * ‖w₀ x‖ ∂μ + ∫ x, ‖(w i - w₀) x‖ ∂μ) := by
-        rw [integral_const_mul, integral_add ((WeakGamma.integrable_norm_mul_norm (u i - u₀) w₀).const_mul
-          (2 / √ε)) ((Lp.memLp (w i - w₀)).integrable one_le_two).norm, integral_const_mul]
+      rw [integral_const_mul,
+        integral_add ((WeakGamma.integrable_norm_mul_norm (u i - u₀) w₀).const_mul (2 / √ε))
+          ((Lp.memLp (w i - w₀)).integrable one_le_two).norm,
+        integral_const_mul]
     _ ≤ C * (2 / √ε * (‖u i - u₀‖ * ‖w₀‖) + ‖w i - w₀‖ * ‖oneL2 μ‖) := by
-        gcongr
-        · exact WeakGamma.integral_norm_mul_norm_le _ _
-        · exact integral_norm_le _
+      gcongr
+      · exact WeakGamma.integral_norm_mul_norm_le _ _
+      · exact integral_norm_le _
 
 /-- **Product rule for the tested regularized norm.** On a finite measure, let `s ↦ q s ∈ L²`
 and `s ↦ u s ∈ L²(H)` have derivatives `q'`, `u'` at `r` within `S`, with `q r`, `q'` and the

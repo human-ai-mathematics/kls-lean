@@ -1,12 +1,15 @@
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.LinearAlgebra.Matrix.SchurComplement
-import Mathlib.Order.CompletePartialOrder
+module
+
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.LinearAlgebra.Matrix.SchurComplement
+public import Mathlib.Order.CompletePartialOrder
 
 /-!
 # Affine normalisation of convex bodies
 
-Maximal-volume simplices in a convex body and the elementary geometry of the standard simplex, used for the
+Maximal-volume simplices in a convex body and the elementary geometry of the standard simplex, used
+for the
 affine normalisation step of Caffarelli's strict convexity argument.
 
 * `simplexEdgeMatrix`, `exists_max_simplexEdgeMatrix_det`;
@@ -14,13 +17,16 @@ affine normalisation step of Caffarelli's strict convexity argument.
 * `closedBall_subset_stdSimplex_and_box_subset_closedBall`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Set Matrix
 
 namespace FunctionalInequalities.Analysis
 
-/-- The edge matrix of a simplex with vertices `v 0, …, v n` in `ℝⁿ`: column `j` is `v (j+1) − v 0`. -/
+/--
+The edge matrix of a simplex with vertices `v 0, …, v n` in `ℝⁿ`: column `j` is `v (j+1) − v 0`. -/
 def simplexEdgeMatrix {n : ℕ} (v : Fin (n + 1) → EuclideanSpace ℝ (Fin n)) :
     Matrix (Fin n) (Fin n) ℝ :=
   Matrix.of fun i j => (v j.succ - v 0) i
@@ -511,7 +517,8 @@ section AffineNormalizationAssembly
 
 open Set Metric
 
-/-! Affine normalisation of a convex body: an affine image sandwiched between two balls with dimensional radii. -/
+/-! Affine normalisation of a convex body: an affine image sandwiched between two balls with
+dimensional radii. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -525,6 +532,8 @@ theorem exists_affine_normalization {E : Type*} [NormedAddCommGroup E] [InnerPro
     ∃ C : ℝ, 0 < C ∧ ∀ K : Set E, IsCompact K → Convex ℝ K → (interior K).Nonempty →
       ∃ e : E ≃ᵃ[ℝ] E, closedBall (0 : E) 1 ⊆ e '' K ∧ e '' K ⊆ closedBall (0 : E) C := by
   classical
+
+  -- Pass to Euclidean coordinates and separate the zero-dimensional case.
   let n : ℕ := Module.finrank ℝ E
   let L : E ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n) :=
     (stdOrthonormalBasis ℝ E).repr
@@ -571,6 +580,8 @@ theorem exists_affine_normalization {E : Type*} [NormedAddCommGroup E] [InnerPro
         L.toHomeomorph.image_interior K
       rw [← hInt]
       exact Set.Nonempty.image L hint
+
+    -- Choose a simplex of maximal determinant in the compact convex set.
     obtain ⟨v, hv, hdet, hmax⟩ :=
       exists_max_simplexEdgeMatrix_det hKF hintF
     let M : Matrix (Fin n) (Fin n) ℝ := simplexEdgeMatrix v
@@ -687,6 +698,8 @@ theorem exists_affine_normalization {E : Type*} [NormedAddCommGroup E] [InnerPro
     let H : F ≃ᵃ[ℝ] F :=
       (LinearEquiv.smulOfNeZero ℝ F ρ⁻¹ (inv_ne_zero hρ.ne')).toAffineEquiv
     let B : F ≃ᵃ[ℝ] F := (A.trans V).trans H
+
+    -- Rescale the simplex coordinates to obtain the two ball inclusions.
     have hBapply (z : F) : B z = ρ⁻¹ • (A z - c) := by
       change ρ⁻¹ • (-c + A z) = ρ⁻¹ • (A z - c)
       congr 1

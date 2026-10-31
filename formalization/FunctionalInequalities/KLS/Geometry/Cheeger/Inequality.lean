@@ -1,20 +1,23 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
-import FunctionalInequalities.KLS.Geometry.Cheeger.Median
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import Mathlib.MeasureTheory.Integral.Layercake
-import Mathlib.Analysis.MeanInequalitiesPow
-import Mathlib.Analysis.Calculus.ContDiff.Deriv
-import Mathlib.Analysis.Calculus.Deriv.Slope
-import Mathlib.Analysis.Calculus.MeanValue
-import FunctionalInequalities.Analysis.Cutoff.SmoothBall
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Median
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import Mathlib.MeasureTheory.Integral.Layercake
+public import Mathlib.Analysis.MeanInequalitiesPow
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
+public import Mathlib.Analysis.Calculus.Deriv.Slope
+public import Mathlib.Analysis.Calculus.MeanValue
+public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
 
 /-!
 # Cheeger's inequality for the Minkowski Cheeger infimum
 
-Hole-free layer on top of `KLS/Geometry/Cheeger/MinkowskiConstant.lean` and `KLS/Geometry/Cheeger/Median.lean`:
+Hole-free layer on top of `KLS/Geometry/Cheeger/MinkowskiConstant.lean` and
+`KLS/Geometry/Cheeger/Median.lean`:
 for an arbitrary Borel probability law `ν` on a finite-dimensional real Hilbert space, the
 smooth-test Poincaré constant of `Poincare/SmoothTest/Basic.lean` is bounded by `4 / h_M(ν)²`,
 where `h_M = minkowskiConstant ν` is the Minkowski Cheeger infimum.  No density, no absolute
@@ -45,9 +48,12 @@ Read the module in this order.
   resulting bound on the smooth-test constant and its degenerate case.
 
 The Buser half `Ψ_KLS(μ)² ≤ π C_P(μ)` is not part of this module; it is
-`LogConcave.inverseScale_sq_le_pi_literature` in `KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`.  Nothing here depends on the weighted
+`LogConcave.inverseScale_sq_le_pi_literature` in
+`KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`.  Nothing here depends on the weighted
 coarea formula, on Sard's theorem or on the relative perimeter.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -499,6 +505,8 @@ theorem minkowskiConstant_sq_mul_evariance_le_of_admissible (ν : ProbabilityMea
   have hfdiff : Differentiable ℝ f := hfC1.differentiable (by simp)
   -- the cutoff sequence
   set R : ℕ → ℝ := fun n => (n : ℝ) + 1 with hRdef
+
+  -- Approximate the admissible test by smooth compact cutoffs.
   have hRpos : ∀ n, 0 < R n := fun n => by rw [hRdef]; positivity
   have hRone : ∀ n, 1 ≤ R n := fun n => by
     rw [hRdef]
@@ -552,6 +560,8 @@ theorem minkowskiConstant_sq_mul_evariance_le_of_admissible (ν : ProbabilityMea
           rw [← ofReal_norm, Real.norm_eq_abs]
   set bnd : V → ℝ≥0∞ := fun x => (‖gradient f x‖ₑ + ‖f x‖ₑ * ENNReal.ofReal M) ^ 2 with hbnd
   -- finiteness of the two square integrals
+
+  -- Build the integrable majorant for the cutoff gradient energies.
   have hEfin : ∫⁻ x, ‖gradient f x‖ₑ ^ 2 ∂μ ≠ ⊤ := by
     have h := hf.energy_integrable.hasFiniteIntegral
     have hcongr : ∫⁻ x, ‖gradient f x‖ₑ ^ 2 ∂μ
@@ -617,6 +627,8 @@ theorem minkowskiConstant_sq_mul_evariance_le_of_admissible (ν : ProbabilityMea
     intro n
     refine ne_top_of_le_ne_top hbndfin (lintegral_mono fun x => ?_)
     exact pow_le_pow_left' (hgradbd n x) 2
+
+  -- Pass to the energy and variance limits.
   have hAtend : Tendsto (fun n => ∫⁻ x, ‖gradient (g n) x‖ₑ ^ 2 ∂μ) atTop
       (𝓝 (∫⁻ x, ‖gradient f x‖ₑ ^ 2 ∂μ)) := by
     refine tendsto_lintegral_of_dominated_convergence bnd
@@ -697,6 +709,8 @@ theorem minkowskiConstant_sq_mul_evariance_le_of_admissible (ν : ProbabilityMea
         ENNReal.Tendsto.const_mul hAtend (Or.inr (by norm_num))
       simpa only [div_eq_mul_inv] using
         ENNReal.Tendsto.mul_const h1 (Or.inr (ENNReal.inv_ne_top.mpr hh0))
+
+    -- Combine the finite-constant estimate after the zero and infinite cases.
     have hfinal : evariance f μ ≤
         4 * (∫⁻ x, ‖gradient f x‖ₑ ^ 2 ∂μ) / minkowskiConstant ν ^ 2 := by
       refine le_trans hFatou ?_
@@ -804,9 +818,10 @@ theorem literatureConstant_le_four_mul_inverseScale_sq {μ : ProbabilityMeasure 
     (hμ : LogConcave μ) :
     Poincare.LocalSlope.Intrinsic.constant μ ≤ 4 * Isoperimetry.inverseScale μ ^ 2 := by
   have hac := hμ.intrinsic_absolutelyContinuous Measure.addHaar
-  have h := (Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope μ Measure.addHaar hac).2
-  rw [← h, Isoperimetry.inverseScale, Isoperimetry.constant_eq_minkowskiConstant_intrinsic μ,
-    ← ENNReal.inv_pow, ← div_eq_mul_inv]
+  have h :=
+    (Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope μ Measure.addHaar hac).2
+  rw [← h, Isoperimetry.inverseScale, Isoperimetry.constant_eq_minkowskiConstant_intrinsic μ, ←
+    ENNReal.inv_pow, ← div_eq_mul_inv]
   exact Isoperimetry.smoothTest_constant_le _
 
 end FunctionalInequalities.KLS.LogConcave

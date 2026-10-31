@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Probability.Martingale.Basic
-import Mathlib.MeasureTheory.Function.ConditionalExpectation.Real
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Martingale.Basic
+public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Real
 
 /-!
 # Martingales on the right-continuous augmentation of a filtration
@@ -14,6 +18,8 @@ the right-continuous augmentation `ℱ₊`: an `ℱ₊ s`-measurable set lies in
 `r > s`, so the martingale identity holds on it from every later time, and
 right-`L¹`-continuity carries it down to `s`.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 
@@ -40,7 +46,7 @@ lemma martingale_rightCont_of_tendsto_eLpNorm_one (hmart : Martingale F ℱ P)
   -- `r ↦ ∫_A F r → ∫_A F s` from right-`L¹`-continuity.
   have htend_s : Tendsto (fun r => ∫ x in A, F r x ∂P)
       (nhdsWithin s (Set.Ioi s)) (nhds (∫ x in A, F s x ∂P)) :=
-    tendsto_setIntegral_of_L1' (F s) (hmart.integrable s).aestronglyMeasurable
+    tendsto_setIntegral_of_L1' (F s)
       (Eventually.of_forall (fun r => hmart.integrable r)) (hrc s) A
   -- `r ↦ ∫_A F r` is constantly `∫_A F t` on `(s, t)`.
   have heq_ev : ∀ᶠ r in nhdsWithin s (Set.Ioi s),

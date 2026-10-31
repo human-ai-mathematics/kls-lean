@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
-import Mathlib.Analysis.Calculus.Monotone
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
+public import Mathlib.Analysis.Calculus.Monotone
 
 /-!
 # Upper Minkowski content of thickenings at differentiability radii
@@ -24,10 +26,12 @@ lossless for a finite measure (`ofReal_thickeningMass`, `measure_thickening_sub_
 
 Scope: finite measures on a metric space with a measurable structure (2026-09-30: generic metric
 scope and finite-measure scope, as for the lower content; only the bound `thickeningMass ≤ 1` is
-probability-specific; scaling by nonnegative real scalars and the zero measure are explicit), and every set `B` (the empty set and sets whose thickenings carry no extra mass are
+probability-specific; scaling by nonnegative real scalars and the zero measure are explicit), and
+every set `B` (the empty set and sets whose thickenings carry no extra mass are
 covered explicitly).  Nothing is assumed or claimed about absolute continuity of the radius mass:
 jumps and singular variation remain possible, and almost-everywhere differentiability is exactly
-what the monotone differentiation theorem gives.  The section `Integrated` integrates the bound over the
+what the monotone differentiation theorem gives.  The section `Integrated` integrates the bound over
+the
 radii (`setLIntegral_upperMinkowskiContent_thickening_le`): for every set `B` and radius `r`,
 `∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (thickening s B) ≤ ν (thickening r B) - ν B`, by
 inequalities only (Radon–Nikodym form of the monotone differentiation theorem and one-sided
@@ -38,6 +42,8 @@ lower-to-upper recovery of every measurable set of finite lower content (`exists
 The upper-content recovery of the metric BV perimeter and the relaxed upper content live above
 this layer, in `Perimeter/UpperMinkowskiRecovery.lean` and `Perimeter/RelaxedMinkowski.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -59,18 +65,19 @@ def upperMinkowskiContent (ν : Measure V) (B : Set V) : ℝ≥0∞ :=
 
 /-- A positive neighborhood inside a measurable restriction region preserves the upper
 content by eventual equality of the genuine small-radius quotients. -/
-theorem upperMinkowskiContent_restrict_of_thickening_subset (ν : Measure V) {B U : Set V} (hU : MeasurableSet U)
-    {δ : ℝ} (hδ : 0 < δ) (hsub : Metric.thickening δ B ⊆ U) :
+theorem upperMinkowskiContent_restrict_of_thickening_subset (ν : Measure V) {B U : Set V}
+    (hU : MeasurableSet U) {δ : ℝ} (hδ : 0 < δ) (hsub : Metric.thickening δ B ⊆ U) :
     upperMinkowskiContent (ν.restrict U) B = upperMinkowskiContent ν B := by
   have hB : B ⊆ U := (Metric.self_subset_thickening hδ B).trans hsub
   unfold upperMinkowskiContent
   apply limsup_congr
   filter_upwards [Ioo_mem_nhdsGT hδ] with r hr
   have ht : Metric.thickening r B ⊆ U := (Metric.thickening_mono hr.2.le B).trans hsub
-  rw [Measure.restrict_apply' hU, Measure.restrict_apply' hU,
-    Set.inter_eq_left.2 ht, Set.inter_eq_left.2 hB]
+  rw [Measure.restrict_apply' hU, Measure.restrict_apply' hU, Set.inter_eq_left.2 ht,
+    Set.inter_eq_left.2 hB]
 omit [MetricSpace V] in
-private theorem lintegral_enorm_indicator_sub_restrict_eq (ν : Measure V) {A B U : Set V} (hA : A ⊆ U) (hB : B ⊆ U) :
+private theorem lintegral_enorm_indicator_sub_restrict_eq (ν : Measure V) {A B U : Set V}
+    (hA : A ⊆ U) (hB : B ⊆ U) :
     (∫⁻ x, ‖A.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν.restrict U)) =
       ∫⁻ x, ‖A.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν := by
   apply setLIntegral_eq_of_support_subset
@@ -86,10 +93,12 @@ theorem minkowskiContent_le_upperMinkowskiContent (ν : Measure V) [IsFiniteMeas
     minkowskiContent ν B ≤ upperMinkowskiContent ν B :=
   liminf_le_limsup
 
-/-- Zero mass increments: if no positive thickening carries more mass than `B`, the upper content
+/--
+Zero mass increments: if no positive thickening carries more mass than `B`, the upper content
 vanishes (every quotient is `0 / ENNReal.ofReal r = 0`). -/
-theorem upperMinkowskiContent_eq_zero_of_forall_measure_thickening_le (ν : Measure V) [IsFiniteMeasure ν]
-    {B : Set V} (h : ∀ r : ℝ, 0 < r → (ν : Measure V) (Metric.thickening r B) ≤ (ν : Measure V) B) :
+theorem upperMinkowskiContent_eq_zero_of_forall_measure_thickening_le (ν : Measure V)
+    [IsFiniteMeasure ν] {B : Set V}
+    (h : ∀ r : ℝ, 0 < r → (ν : Measure V) (Metric.thickening r B) ≤ (ν : Measure V) B) :
     upperMinkowskiContent ν B = 0 := by
   refine le_antisymm ?_ bot_le
   unfold upperMinkowskiContent
@@ -150,8 +159,8 @@ theorem monotone_thickeningMass (ν : Measure V) [IsFiniteMeasure ν] (B : Set V
   ENNReal.toReal_mono (measure_ne_top _ _) (measure_mono (Metric.thickening_mono hst B))
 
 /-- Nonpositive radii give the empty thickening, hence zero mass. -/
-theorem thickeningMass_of_nonpos (ν : Measure V) [IsFiniteMeasure ν] (B : Set V) {s : ℝ} (hs : s ≤ 0) :
-    thickeningMass ν B s = 0 := by
+theorem thickeningMass_of_nonpos (ν : Measure V) [IsFiniteMeasure ν] (B : Set V) {s : ℝ}
+    (hs : s ≤ 0) : thickeningMass ν B s = 0 := by
   simp [thickeningMass, Metric.thickening_of_nonpos hs]
 
 /-- The radius mass scales with the measure. -/
@@ -171,8 +180,8 @@ theorem thickeningMass_empty (ν : Measure V) [IsFiniteMeasure ν] (s : ℝ) :
 
 /-- For a positive radius increment `t`, the `ℝ≥0∞` increment quotient of the thickening masses
 equals `ENNReal.ofReal` of the real right difference quotient of the radius mass. -/
-theorem measure_thickening_sub_div_eq_ofReal (ν : Measure V) [IsFiniteMeasure ν] (B : Set V) {s t : ℝ}
-    (ht : 0 < t) :
+theorem measure_thickening_sub_div_eq_ofReal (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
+    {s t : ℝ} (ht : 0 < t) :
     ((ν : Measure V) (Metric.thickening (s + t) B) - (ν : Measure V) (Metric.thickening s B)) /
         ENNReal.ofReal t =
       ENNReal.ofReal ((thickeningMass ν B (s + t) - thickeningMass ν B s) / t) := by
@@ -196,10 +205,11 @@ private theorem tendsto_right_slope_of_hasDerivAt {F : ℝ → ℝ} {d s : ℝ}
 `thickening (s + t) B`, so each content quotient is at most the right difference quotient
 `(F (s + t) - F s) / t` of the radius mass, whose limit is `d`.  Nothing is assumed about the
 content of `B` itself; for `s ≤ 0` the thickening is empty and the bound is trivial. -/
-theorem upperMinkowskiContent_thickening_le_of_hasDerivAt (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
-    {s d : ℝ} (hd : HasDerivAt (thickeningMass ν B) d s) :
+theorem upperMinkowskiContent_thickening_le_of_hasDerivAt (ν : Measure V) [IsFiniteMeasure ν]
+    (B : Set V) {s d : ℝ} (hd : HasDerivAt (thickeningMass ν B) d s) :
     upperMinkowskiContent ν (Metric.thickening s B) ≤ ENNReal.ofReal d := by
-  have hlim : Tendsto
+  have hlim :
+    Tendsto
       (fun t : ℝ => ENNReal.ofReal ((thickeningMass ν B (s + t) - thickeningMass ν B s) / t))
       (𝓝[>] 0) (𝓝 (ENNReal.ofReal d)) :=
     ENNReal.tendsto_ofReal (tendsto_right_slope_of_hasDerivAt hd)
@@ -212,8 +222,8 @@ theorem upperMinkowskiContent_thickening_le_of_hasDerivAt (ν : Measure V) [IsFi
   exact (Metric.thickening_thickening_subset t s B).trans (by rw [add_comm])
 
 /-- The `deriv` form of the bound at a differentiability radius. -/
-theorem upperMinkowskiContent_thickening_le_deriv_of_differentiableAt (ν : Measure V) [IsFiniteMeasure ν]
-    (B : Set V) {s : ℝ} (hs : DifferentiableAt ℝ (thickeningMass ν B) s) :
+theorem upperMinkowskiContent_thickening_le_deriv_of_differentiableAt (ν : Measure V)
+    [IsFiniteMeasure ν] (B : Set V) {s : ℝ} (hs : DifferentiableAt ℝ (thickeningMass ν B) s) :
     upperMinkowskiContent ν (Metric.thickening s B) ≤
       ENNReal.ofReal (deriv (thickeningMass ν B) s) :=
   upperMinkowskiContent_thickening_le_of_hasDerivAt ν B hs.hasDerivAt
@@ -224,8 +234,8 @@ theorem deriv_thickeningMass_nonneg (ν : Measure V) [IsFiniteMeasure ν] (B : S
     0 ≤ deriv (thickeningMass ν B) s :=
   (monotone_thickeningMass ν B).deriv_nonneg
 
-theorem nonneg_of_hasDerivAt_thickeningMass (ν : Measure V) [IsFiniteMeasure ν] (B : Set V) {s d : ℝ}
-    (hd : HasDerivAt (thickeningMass ν B) d s) : 0 ≤ d := by
+theorem nonneg_of_hasDerivAt_thickeningMass (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
+    {s d : ℝ} (hd : HasDerivAt (thickeningMass ν B) d s) : 0 ≤ d := by
   rw [← hd.deriv]
   exact deriv_thickeningMass_nonneg ν B s
 
@@ -238,22 +248,26 @@ theorem ae_differentiableAt_thickeningMass (ν : Measure V) [IsFiniteMeasure ν]
     ∀ᵐ s ∂(volume : Measure ℝ), DifferentiableAt ℝ (thickeningMass ν B) s :=
   (monotone_thickeningMass ν B).ae_differentiableAt
 
-/-- At Lebesgue-almost every radius the upper content of the thickening is at most the derivative
+/--
+At Lebesgue-almost every radius the upper content of the thickening is at most the derivative
 of the radius mass (for `s ≤ 0` the thickening is empty). -/
-theorem ae_upperMinkowskiContent_thickening_le_deriv (ν : Measure V) [IsFiniteMeasure ν] (B : Set V) :
-    ∀ᵐ s ∂(volume : Measure ℝ), upperMinkowskiContent ν (Metric.thickening s B) ≤
-      ENNReal.ofReal (deriv (thickeningMass ν B) s) := by
+theorem ae_upperMinkowskiContent_thickening_le_deriv (ν : Measure V) [IsFiniteMeasure ν]
+    (B : Set V) :
+    ∀ᵐ s ∂(volume : Measure ℝ),
+      upperMinkowskiContent ν (Metric.thickening s B) ≤
+        ENNReal.ofReal (deriv (thickeningMass ν B) s) := by
   filter_upwards [ae_differentiableAt_thickeningMass ν B] with s hs
   exact upperMinkowskiContent_thickening_le_deriv_of_differentiableAt ν B hs
 
 /-- The same at Lebesgue-almost every positive radius, with the positivity and the
 differentiability witness recorded. -/
-theorem ae_restrict_Ioi_upperMinkowskiContent_thickening_le_deriv (ν : Measure V) [IsFiniteMeasure ν]
-    (B : Set V) :
+theorem ae_restrict_Ioi_upperMinkowskiContent_thickening_le_deriv (ν : Measure V)
+    [IsFiniteMeasure ν] (B : Set V) :
     ∀ᵐ s ∂((volume : Measure ℝ).restrict (Ioi 0)),
-      0 < s ∧ DifferentiableAt ℝ (thickeningMass ν B) s ∧
-        upperMinkowskiContent ν (Metric.thickening s B) ≤
-          ENNReal.ofReal (deriv (thickeningMass ν B) s) := by
+      0 < s ∧
+        DifferentiableAt ℝ (thickeningMass ν B) s ∧
+          upperMinkowskiContent ν (Metric.thickening s B) ≤
+            ENNReal.ofReal (deriv (thickeningMass ν B) s) := by
   filter_upwards [ae_restrict_mem (measurableSet_Ioi : MeasurableSet (Ioi (0 : ℝ))),
     ae_restrict_of_ae (ae_differentiableAt_thickeningMass ν B)] with s hs hd
   exact ⟨hs, hd, upperMinkowskiContent_thickening_le_deriv_of_differentiableAt ν B hd⟩
@@ -573,15 +587,21 @@ finite lower content, under an arbitrary measure on a metric space. Finite neigh
 mass is proved from the two finiteness premises; original global indicator L1 and upper
 contents transfer only at radii whose positive neighborhoods lie in that region. Every
 selected thickening has finite mass. No properness or finiteness on bounded sets is needed. -/
-theorem exists_upperRecovery_of_measure_lt_top (ν : Measure V) {B : Set V} (hB : MeasurableSet B) (hνB : ν B < ⊤)
-    (hcontent : minkowskiContent ν B < ⊤) :
-    ∃ s : ℕ → ℝ, (∀ n, 0 < s n) ∧ Tendsto s atTop (𝓝 0) ∧
-      (∀ n, MeasurableSet (Metric.thickening (s n) B)) ∧
-      (∀ n, ν (Metric.thickening (s n) B) < ⊤) ∧
-      Tendsto (fun n => ∫⁻ x, ‖(Metric.thickening (s n) B).indicator (1 : V → ℝ) x -
-        B.indicator 1 x‖ₑ ∂ν) atTop (𝓝 0) ∧
-      limsup (fun n => upperMinkowskiContent ν (Metric.thickening (s n) B)) atTop ≤
-        minkowskiContent ν B := by
+theorem exists_upperRecovery_of_measure_lt_top (ν : Measure V) {B : Set V}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) (hcontent : minkowskiContent ν B < ⊤) :
+    ∃ s : ℕ → ℝ,
+      (∀ n, 0 < s n) ∧
+        Tendsto s atTop (𝓝 0) ∧
+          (∀ n, MeasurableSet (Metric.thickening (s n) B)) ∧
+            (∀ n, ν (Metric.thickening (s n) B) < ⊤) ∧
+              Tendsto
+                  (fun n =>
+                    ∫⁻ x,
+                      ‖(Metric.thickening (s n) B).indicator (1 : V → ℝ) x -
+                          B.indicator 1 x‖ₑ ∂ν)
+                  atTop (𝓝 0) ∧
+                limsup (fun n => upperMinkowskiContent ν (Metric.thickening (s n) B)) atTop ≤
+                  minkowskiContent ν B := by
   obtain ⟨R, hR, hmass⟩ := exists_measure_thickening_lt_top ν hνB hcontent
   let U := Metric.thickening R B
   have hU : MeasurableSet U := Metric.isOpen_thickening.measurableSet
@@ -589,38 +609,55 @@ theorem exists_upperRecovery_of_measure_lt_top (ν : Measure V) {B : Set V} (hB 
   have hBsub : B ⊆ U := Metric.self_subset_thickening hR B
   have hlower : minkowskiContent (ν.restrict U) B = minkowskiContent ν B :=
     minkowskiContent_restrict_of_thickening_subset ν hU hR Set.Subset.rfl
-  obtain ⟨s, hs, hst, hsm, hL1, hc⟩ := exists_upperRecovery (ν.restrict U) B hB
-    (hlower.trans_lt hcontent).ne
+  obtain ⟨s, hs, hst, hsm, hL1, hc⟩ :=
+    exists_upperRecovery (ν.restrict U) B hB (hlower.trans_lt hcontent).ne
   obtain ⟨N, hN⟩ := eventually_atTop.1 (hst.eventually_lt_const (half_pos hR))
-  have hsmall : ∀ n : ℕ, s (n + N) < R/2 := fun n => hN _ (by omega)
+  have hsmall : ∀ n : ℕ, s (n + N) < R / 2 := fun n => hN _ (by omega)
   have hsub : ∀ n, Metric.thickening (s (n + N)) B ⊆ U := fun n =>
     Metric.thickening_mono (by linarith [hsmall n]) B
-  have hupper : ∀ n, upperMinkowskiContent (ν.restrict U) (Metric.thickening (s (n + N)) B) =
-      upperMinkowskiContent ν (Metric.thickening (s (n + N)) B) := by
+  have hupper :
+    ∀ n,
+      upperMinkowskiContent (ν.restrict U) (Metric.thickening (s (n + N)) B) =
+        upperMinkowskiContent ν (Metric.thickening (s (n + N)) B) := by
     intro n
     apply upperMinkowskiContent_restrict_of_thickening_subset ν hU (half_pos hR)
-    exact (Metric.thickening_thickening_subset (R/2) (s (n + N)) B).trans
-      (Metric.thickening_mono (by linarith [hsmall n]) B)
-  refine ⟨fun n => s (n + N), fun n => hs (n + N),
-    hst.comp (tendsto_add_atTop_nat N), fun n => hsm (n + N),
-    fun n => (measure_mono (hsub n)).trans_lt hmass, ?_, ?_⟩
+    exact
+      (Metric.thickening_thickening_subset (R / 2) (s (n + N)) B).trans
+        (Metric.thickening_mono (by linarith [hsmall n]) B)
+  refine
+    ⟨fun n => s (n + N), fun n => hs (n + N), hst.comp (tendsto_add_atTop_nat N), fun n =>
+      hsm (n + N), fun n => (measure_mono (hsub n)).trans_lt hmass, ?_, ?_⟩
   · have h := hL1.comp (tendsto_add_atTop_nat N)
-    have he : (fun n : ℕ => ∫⁻ x, ‖(Metric.thickening (s (n + N)) B).indicator
-        (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν.restrict U)) =
-        (fun n : ℕ => ∫⁻ x, ‖(Metric.thickening (s (n + N)) B).indicator
-          (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) :=
+    have he :
+      (fun n : ℕ =>
+          ∫⁻ x,
+            ‖(Metric.thickening (s (n + N)) B).indicator (1 : V → ℝ) x -
+                B.indicator 1 x‖ₑ ∂(ν.restrict U)) =
+        (fun n : ℕ =>
+          ∫⁻ x,
+            ‖(Metric.thickening (s (n + N)) B).indicator (1 : V → ℝ) x -
+                B.indicator 1 x‖ₑ ∂ν) :=
       funext fun n => lintegral_enorm_indicator_sub_restrict_eq ν (hsub n) hBsub
-    change Tendsto (fun n : ℕ => ∫⁻ x, ‖(Metric.thickening (s (n + N)) B).indicator
-      (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν.restrict U)) atTop (𝓝 0) at h
+    change
+      Tendsto
+        (fun n : ℕ =>
+          ∫⁻ x,
+            ‖(Metric.thickening (s (n + N)) B).indicator (1 : V → ℝ) x -
+                B.indicator 1 x‖ₑ ∂(ν.restrict U))
+        atTop (𝓝 0) at h
     rw [he] at h
     exact h
-  · calc limsup (fun n => upperMinkowskiContent ν (Metric.thickening (s (n + N)) B)) atTop
-        = limsup (fun n => upperMinkowskiContent (ν.restrict U)
-            (Metric.thickening (s (n + N)) B)) atTop :=
-          congrArg (fun g : ℕ → ℝ≥0∞ => limsup g atTop) (funext fun n => (hupper n).symm)
-      _ = limsup (fun n => upperMinkowskiContent (ν.restrict U) (Metric.thickening (s n) B))
-          atTop := limsup_nat_add (fun n : ℕ => upperMinkowskiContent (ν.restrict U)
-            (Metric.thickening (s n) B)) N
+  · calc
+      limsup (fun n => upperMinkowskiContent ν (Metric.thickening (s (n + N)) B)) atTop =
+          limsup
+            (fun n => upperMinkowskiContent (ν.restrict U) (Metric.thickening (s (n + N)) B))
+            atTop :=
+        congrArg (fun g : ℕ → ℝ≥0∞ => limsup g atTop) (funext fun n => (hupper n).symm)
+      _ =
+          limsup (fun n => upperMinkowskiContent (ν.restrict U) (Metric.thickening (s n) B))
+            atTop :=
+        limsup_nat_add
+          (fun n : ℕ => upperMinkowskiContent (ν.restrict U) (Metric.thickening (s n) B)) N
       _ ≤ minkowskiContent (ν.restrict U) B := hc
       _ = _ := hlower
 

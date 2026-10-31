@@ -3,6 +3,8 @@ Copyright (c) 2025 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne
 -/
+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 replacements
+-- of deprecated names (identifier-only); see vendor/port.patch.
 module
 
 public import BrownianMotion.Auxiliary.Topology
@@ -336,7 +338,8 @@ lemma holderOnWith_of_mem_holderSet (hT : HasBoundedCoveringNumber U c d)
     HolderOnWith (C ω ^ p⁻¹).toNNReal β (fun (t : T') ↦ X t ω) {t' | (t' : T) ∈ U} := by
   intro s hs t ht
   have h_edist_lt_top : edist s t < ∞ := by
-    calc edist s t ≤ Metric.ediam U := Metric.edist_le_ediam_of_mem hs ht
+    calc edist s t ≤ Metric.ediam U := by
+          rw [Subtype.edist_eq]; exact Metric.edist_le_ediam_of_mem hs ht
     _ < ∞ := hT.ediam_lt_top
   have h_dist_top : edist s t ^ (β : ℝ) ≠ ∞ := by
     simp only [ne_eq, ENNReal.rpow_eq_top_iff, NNReal.coe_pos, not_or, not_and, not_lt,
@@ -972,7 +975,7 @@ lemma exists_modification_holder''' {C : ℕ → Set T} {c : ℕ → ℝ≥0∞}
     by_cases hω : ω ∈ A ∩ ⋂ n, A' n
     swap
     · unfold Y
-      simp_rw [if_neg hω]
+      simp_rw [ite_eq_right hω]
       simp [HolderOnWith]
     obtain ⟨C', hC'⟩ := hZ_holder (nt t) β₀ hβ₀_pos hβ₀_lt ω
     refine ⟨C', ?_⟩
@@ -1002,7 +1005,7 @@ lemma exists_modification_holder''' {C : ℕ → Set T} {c : ℕ → ℝ≥0∞}
       simp only [Set.mem_inter_iff, Set.mem_iInter] at hω
       simp only [indicatorProcess_apply] at hZC_eq
       convert hZC_eq ω
-      rw [if_pos]
+      rw [ite_eq_left]
       exact hω.2 _
     · simp
 

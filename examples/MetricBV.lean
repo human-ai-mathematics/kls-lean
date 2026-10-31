@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Complement
-import FunctionalInequalities.Analysis.MetricBV.Scaling
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Complement
+public import FunctionalInequalities.Analysis.MetricBV.Scaling
 
 /-!
 # Metric perimeter under finite-mass rescaling
@@ -8,6 +10,8 @@ A client of the generic metric BV owners on an arbitrary metric space. The measu
 without a probability, properness, finite-dimensional or log-concavity assumption. Nonzero
 rescaling and finite-measure complement symmetry compose without importing a KLS application.
 -/
+
+@[expose] public section
 
 noncomputable section
 

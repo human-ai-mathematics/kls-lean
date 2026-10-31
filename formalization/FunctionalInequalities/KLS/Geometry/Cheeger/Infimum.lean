@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
-import FunctionalInequalities.KLS.Geometry.Perimeter.Recovery
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
+public import FunctionalInequalities.KLS.Geometry.Perimeter.Recovery
 
 /-!
 # The smooth Cheeger infimum and the bound `h_M ≤ h_S`
@@ -28,6 +30,8 @@ and no assumption that an admissible smooth domain exists or that relative perim
 A domain of infinite relative perimeter is handled by `le_top` alone, so the finiteness hypothesis
 of `RelativePerimeter.exists_smooth_recovery_sequence` never becomes a hypothesis of the theorem.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -88,18 +92,19 @@ theorem lintegral_measure_symmDiff_superlevel (ν : ProbabilityMeasure V) {u : V
       ∫⁻ x, ‖u x - B.indicator 1 x‖ₑ ∂(ν : Measure V) := by
   have hSmeas : ∀ t : ℝ, MeasurableSet ({x : V | t < u x} ∆ B) := fun t ↦
     (measurableSet_lt measurable_const hu).symmDiff hB
-  set F : ℝ × V → ℝ≥0∞ := fun p ↦ ({y : V | p.1 < u y} ∆ B).indicator (1 : V → ℝ≥0∞) p.2
-    with hFdef
+  set F : ℝ × V → ℝ≥0∞ := fun p ↦ ({y : V | p.1 < u y} ∆ B).indicator (1 : V → ℝ≥0∞) p.2 with
+    hFdef
   have hFmeas : Measurable F := by
     have hfst : Measurable (Prod.fst : ℝ × V → ℝ) := measurable_fst
     have hsnd : Measurable (Prod.snd : ℝ × V → V) := measurable_snd
-    have hS : MeasurableSet {p : ℝ × V | p.1 < u p.2} :=
-      measurableSet_lt hfst (hu.comp hsnd)
+    have hS : MeasurableSet {p : ℝ × V | p.1 < u p.2} := measurableSet_lt hfst (hu.comp hsnd)
     have hBp : MeasurableSet (Prod.snd ⁻¹' B) := hB.preimage hsnd
-    have hFeq : F
-        = ({q : ℝ × V | q.1 < u q.2} ∆ (Prod.snd ⁻¹' B)).indicator (1 : ℝ × V → ℝ≥0∞) := by
-      have hmem : ∀ p : ℝ × V, (p.2 ∈ {y : V | p.1 < u y} ∆ B) ↔
-          (p ∈ {q : ℝ × V | q.1 < u q.2} ∆ (Prod.snd ⁻¹' B)) := by
+    have hFeq :
+      F = ({q : ℝ × V | q.1 < u q.2} ∆ (Prod.snd ⁻¹' B)).indicator (1 : ℝ × V → ℝ≥0∞) := by
+      have hmem :
+        ∀ p : ℝ × V,
+          (p.2 ∈ {y : V | p.1 < u y} ∆ B) ↔
+            (p ∈ {q : ℝ × V | q.1 < u q.2} ∆ (Prod.snd ⁻¹' B)) := by
         intro p; simp [Set.mem_symmDiff]
       funext p
       simp only [hFdef]
@@ -108,13 +113,14 @@ theorem lintegral_measure_symmDiff_superlevel (ν : ProbabilityMeasure V) {u : V
       · simp [Set.indicator_of_notMem h, Set.indicator_of_notMem (fun hc ↦ h ((hmem p).mpr hc))]
     rw [hFeq]
     exact measurable_one.indicator (hS.symmDiff hBp)
-  have hstep1 : ∫⁻ t in Set.Ioo (0 : ℝ) 1, (ν : Measure V) ({x | t < u x} ∆ B)
-      = ∫⁻ t in Set.Ioo (0 : ℝ) 1, ∫⁻ x, F (t, x) ∂(ν : Measure V) := by
+  have hstep1 :
+    ∫⁻ t in Set.Ioo (0 : ℝ) 1, (ν : Measure V) ({x | t < u x} ∆ B) =
+      ∫⁻ t in Set.Ioo (0 : ℝ) 1, ∫⁻ x, F (t, x) ∂(ν : Measure V) := by
     refine setLIntegral_congr_fun measurableSet_Ioo fun t _ ↦ ?_
     exact (lintegral_indicator_one (hSmeas t)).symm
   rw [hstep1,
-    lintegral_lintegral_swap (μ := (volume : Measure ℝ).restrict (Set.Ioo (0 : ℝ) 1))
-      (ν := (ν : Measure V)) (f := fun t x ↦ F (t, x)) hFmeas.aemeasurable]
+    lintegral_lintegral_swap (μ := (volume : Measure ℝ).restrict (Set.Ioo (0 : ℝ) 1)) (ν :=
+      (ν : Measure V)) (f := fun t x ↦ F (t, x)) hFmeas.aemeasurable]
   refine lintegral_congr fun x ↦ ?_
   have hux0 : 0 ≤ u x := (hu01 x).1
   have hux1 : u x ≤ 1 := (hu01 x).2
@@ -125,16 +131,19 @@ theorem lintegral_measure_symmDiff_superlevel (ν : ProbabilityMeasure V) {u : V
     by_cases ht : x ∈ {y : V | t < u y} ∆ B
     · simp [Set.indicator_of_mem ht, Set.indicator_of_mem (show t ∈ Tx from ht)]
     · simp [Set.indicator_of_notMem ht, Set.indicator_of_notMem (show t ∉ Tx from ht)]
-  have hlint : ∀ S : Set ℝ, MeasurableSet S →
-      ∫⁻ t in Set.Ioo (0 : ℝ) 1, S.indicator (1 : ℝ → ℝ≥0∞) t ∂volume = volume (S ∩ Set.Ioo (0 : ℝ) 1) := by
+  have hlint :
+    ∀ S : Set ℝ,
+      MeasurableSet S →
+        ∫⁻ t in Set.Ioo (0 : ℝ) 1, S.indicator (1 : ℝ → ℝ≥0∞) t ∂volume =
+          volume (S ∩ Set.Ioo (0 : ℝ) 1) := by
     intro S hSm
     rw [lintegral_indicator_one hSm, MeasureTheory.Measure.restrict_apply' measurableSet_Ioo]
   by_cases hxB : x ∈ B
   · have hTxeq : Tx = Set.Ici (u x) := by
       ext t
       simp [hTxdef, Set.mem_symmDiff, hxB]
-    have hIntersect : Set.Ici (u x) ∩ Set.Ioo (0 : ℝ) 1 =
-        Set.Ioo (0 : ℝ) 1 \ Set.Ioo (0 : ℝ) (u x) := by
+    have hIntersect :
+      Set.Ici (u x) ∩ Set.Ioo (0 : ℝ) 1 = Set.Ioo (0 : ℝ) 1 \ Set.Ioo (0 : ℝ) (u x) := by
       ext t
       simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Ioo, Set.mem_sdiff, not_and, not_lt]
       constructor
@@ -142,8 +151,8 @@ theorem lintegral_measure_symmDiff_superlevel (ν : ProbabilityMeasure V) {u : V
         exact ⟨⟨h2, h3⟩, fun _ ↦ h1⟩
       · rintro ⟨⟨h2, h3⟩, h4⟩
         exact ⟨h4 h2, h2, h3⟩
-    rw [setLIntegral_congr_fun measurableSet_Ioo (fun t _ ↦ hFTx t),
-      hTxeq, hlint _ measurableSet_Ici, hIntersect,
+    rw [setLIntegral_congr_fun measurableSet_Ioo (fun t _ ↦ hFTx t), hTxeq,
+      hlint _ measurableSet_Ici, hIntersect,
       measure_sdiff (Set.Ioo_subset_Ioo le_rfl hux1) measurableSet_Ioo.nullMeasurableSet
         (by rw [Real.volume_Ioo]; exact ENNReal.ofReal_ne_top),
       Real.volume_Ioo, Real.volume_Ioo, sub_zero, sub_zero, ← ENNReal.ofReal_sub 1 hux0]
@@ -156,33 +165,35 @@ theorem lintegral_measure_symmDiff_superlevel (ν : ProbabilityMeasure V) {u : V
       simp [hTxdef, Set.mem_symmDiff, hxB]
     have hIoo1 : Set.Ioo (0 : ℝ) 1 ∩ Set.Iio (u x) = Set.Ioo (0 : ℝ) (u x) := by
       rw [Set.Ioo_inter_Iio, min_eq_right hux1]
-    rw [setLIntegral_congr_fun measurableSet_Ioo (fun t _ ↦ hFTx t),
-      hTxeq, hlint _ measurableSet_Iio,
+    rw [setLIntegral_congr_fun measurableSet_Ioo (fun t _ ↦ hFTx t), hTxeq,
+      hlint _ measurableSet_Iio,
       show Set.Iio (u x) ∩ Set.Ioo (0 : ℝ) 1 = Set.Ioo (0 : ℝ) 1 ∩ Set.Iio (u x) from
         Set.inter_comm _ _,
       hIoo1, Real.volume_Ioo, sub_zero]
-    rw [Real.enorm_eq_ofReal_abs, Set.indicator_of_notMem hxB, sub_zero,
-      abs_of_nonneg hux0]
+    rw [Real.enorm_eq_ofReal_abs, Set.indicator_of_notMem hxB, sub_zero, abs_of_nonneg hux0]
 
 omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V]
-  [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+    [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The balance `min {t, 1 - t}` is `1`-Lipschitz in the set: `m(ν A) ≤ m(ν B) + ν(A ∆ B)`. -/
 theorem min_measure_le_add_measure_symmDiff (ν : ProbabilityMeasure V) {A B : Set V}
     (hA : MeasurableSet A) (hB : MeasurableSet B) :
     min ((ν : Measure V) A) (1 - (ν : Measure V) A) ≤
       min ((ν : Measure V) B) (1 - (ν : Measure V) B) + (ν : Measure V) (A ∆ B) := by
-  have hbasic : ∀ C D : Set V, (ν : Measure V) C ≤ (ν : Measure V) D + (ν : Measure V) (C ∆ D) := by
+  have hbasic :
+    ∀ C D : Set V, (ν : Measure V) C ≤ (ν : Measure V) D + (ν : Measure V) (C ∆ D) := by
     intro C D
     have hsub : C ⊆ D ∪ (C ∆ D) := by
       intro a ha
       by_cases h : a ∈ D
       · exact Set.mem_union_left _ h
       · exact Set.mem_union_right _ (Set.mem_symmDiff.mpr (Or.inl ⟨ha, h⟩))
-    calc (ν : Measure V) C ≤ (ν : Measure V) (D ∪ (C ∆ D)) := measure_mono hsub
+    calc
+      (ν : Measure V) C ≤ (ν : Measure V) (D ∪ (C ∆ D)) := measure_mono hsub
       _ ≤ (ν : Measure V) D + (ν : Measure V) (C ∆ D) := measure_union_le _ _
   have hA_le : (ν : Measure V) A ≤ (ν : Measure V) B + (ν : Measure V) (A ∆ B) := hbasic A B
   have h1mA_le : 1 - (ν : Measure V) A ≤ (1 - (ν : Measure V) B) + (ν : Measure V) (A ∆ B) := by
-    have hcompl : (ν : Measure V) Aᶜ ≤ (ν : Measure V) Bᶜ + (ν : Measure V) (Aᶜ ∆ Bᶜ) := hbasic Aᶜ Bᶜ
+    have hcompl : (ν : Measure V) Aᶜ ≤ (ν : Measure V) Bᶜ + (ν : Measure V) (Aᶜ ∆ Bᶜ) :=
+      hbasic Aᶜ Bᶜ
     rwa [compl_symmDiff_compl, measure_compl hA (measure_ne_top _ _),
       measure_compl hB (measure_ne_top _ _), measure_univ] at hcompl
   rcases le_total ((ν : Measure V) B) (1 - (ν : Measure V) B) with h | h

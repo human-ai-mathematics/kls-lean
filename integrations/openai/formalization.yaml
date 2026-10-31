@@ -24,7 +24,10 @@ sources:
     location: OAI.LeanBlast.KLS.KLSStatement
     relationship: formalizes
     license: Apache-2.0
-    note: The statement file is copied byte for byte; UPSTREAM.json records its hash.
+    note: >-
+      The statement file is the upstream file with only the Lean module header,
+      public import and exposed public section added; UPSTREAM.json records the
+      upstream hash, the exact transformation and the local hash.
 related_formalizations:
   - id: https://github.com/human-ai-mathematics/kls-lean
     relationship: builds-on

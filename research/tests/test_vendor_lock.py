@@ -189,6 +189,30 @@ class TestVendorLock(unittest.TestCase):
         self.assertEqual(self._check(), [])
         self.assertEqual(vendor_lock.check_upstream(self.root, self.clones), [])
 
+    def test_vendor_module_import_names(self) -> None:
+        lock = self._generate_and_write()
+        expected = {
+            "LevyStochCalc": ("LevyStochCalc/LevyStochCalc/Basic.lean", "LevyStochCalc.Basic"),
+            "BrownianMotion": ("BrownianMotion/BrownianMotion/Basic.lean", "BrownianMotion.Basic"),
+            "KolmogorovExtension4": (
+                "KolmogorovExtension4/KolmogorovExtension4/Basic.lean",
+                "KolmogorovExtension4.Basic",
+            ),
+            "MathFin": ("MathFin/MathFin/Foundations/Basic.lean", "MathFin.Foundations.Basic"),
+        }
+        for library, (path, module) in expected.items():
+            with self.subTest(library=library):
+                self.assertEqual(lock["libraries"][library]["files"][path]["module"], module)
+
+    def test_vendor_module_doubled_prefix_is_rejected(self) -> None:
+        lock = self._generate_and_write()
+        key = "BrownianMotion/BrownianMotion/Basic.lean"
+        lock["libraries"]["BrownianMotion"]["files"][key]["module"] = (
+            "BrownianMotion.BrownianMotion.Basic"
+        )
+        vendor_lock._write_lock(self.root, lock)
+        self._assert_error("module name is incorrect: " + key)
+
     def test_modified_vendored_file(self) -> None:
         self._generate_and_write()
         path = self.root / vendor_lock.VENDOR_DIR / "BrownianMotion/LICENSE"

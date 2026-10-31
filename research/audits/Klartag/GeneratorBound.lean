@@ -1,8 +1,12 @@
-import FunctionalInequalities.KLS.Klartag.GeneratorBound
+module
+
+public import FunctionalInequalities.KLS.Klartag.GeneratorBound
 
 /-! Klartag arXiv:1309.2767v1, Lemma 4.4, for the operator (56): restated with its exact
 hypotheses (`C²` potential with positive definite Hessian, gradient values in `K`, condition (51))
 and the explicit constant `A = max {0, n - inf_{y ∈ K} ∇ρ(y)·y}`. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace

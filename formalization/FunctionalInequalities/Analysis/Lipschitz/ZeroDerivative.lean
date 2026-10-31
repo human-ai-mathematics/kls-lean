@@ -1,5 +1,7 @@
-import Mathlib.MeasureTheory.Function.Jacobian
-import Mathlib.Analysis.Calculus.ContDiff.Basic
+module
+
+public import Mathlib.MeasureTheory.Function.Jacobian
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
 
 /-! # Small Lipschitz pieces on a vanishing-derivative set
 
@@ -7,6 +9,8 @@ The derivative-zero set of a C1 map admits disjoint measurable pieces on which
 the map has any prescribed positive Lipschitz bound. This is a zero-derivative
 property, not a rank-deficient or critical-value theorem.
 -/
+
+@[expose] public section
 noncomputable section
 open Set MeasureTheory
 open scoped NNReal ContDiff

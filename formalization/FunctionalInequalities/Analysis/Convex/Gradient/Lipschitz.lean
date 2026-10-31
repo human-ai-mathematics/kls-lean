@@ -1,20 +1,26 @@
-import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
-import FunctionalInequalities.Analysis.Convex.Viscosity.Mollification
-import FunctionalInequalities.Analysis.Convex.MaximumComparison
-import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
-import FunctionalInequalities.Analysis.Convex.Coercivity
-import FunctionalInequalities.Analysis.Convex.SecondOrder.Difference
+module
+
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Mollification
+public import FunctionalInequalities.Analysis.Convex.MaximumComparison
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.Difference
 
 /-!
 # The C^{1,1} estimate for moment-map potentials
 
-If the gradient of a convex Lipschitz potential `u` with `∫ e^{-u} = 1` pushes `e^{-u} dx` forward to a law with density
+If the gradient of a convex Lipschitz potential `u` with `∫ e^{-u} = 1` pushes `e^{-u} dx` forward
+to a law with density
 `e^{-V}` on a compact convex body, with `V` κ-strongly convex, then `∇u` is `16/κ`-Lipschitz
 (maximum principle for penalized second differences). The exact centered-difference
-coefficient `4/κ` is exported for the actual weak Hessian regularity consumer. The gradient interface uses `16/κ` with the stated source hypotheses.
+coefficient `4/κ` is exported for the actual weak Hessian regularity consumer. The gradient
+interface uses `16/κ` with the stated source hypotheses.
 The `_on_range` variants assume `V − (κ/2)‖·‖²` convex only on a set containing every gradient value
 (for instance the interior of the body); the maximum-principle argument evaluates it nowhere else.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -181,19 +187,20 @@ theorem secondDifference_le_of_map_gradient_on_range {n : ℕ}
         hκ hstrong hΩ hC hm n h hmax x
   exact hsd
 
-/-- Export the existing moment-map centered-difference estimate with its exact 4/kappa coefficient. -/
+/--
+Export the existing moment-map centered-difference estimate with its exact 4/kappa coefficient. -/
 theorem secondDifference_le_of_map_gradient {n : ℕ} {u V : EuclideanSpace ℝ (Fin n) → ℝ}
     {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
     {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K) (hKc : Convex ℝ K)
     (hV : ContDiff ℝ 1 V) {κ : ℝ} (hκ : 0 < κ)
     (hstrong : ConvexOn ℝ univ (fun y => V y - (κ / 2) * ‖y‖ ^ 2))
-    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
+    (hmap :
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
     (hC1 : ContDiff ℝ 1 u) :
-    ∀ x h : EuclideanSpace ℝ (Fin n),
-      u (x + h) + u (x - h) - 2 * u x ≤ (4 / κ) * ‖h‖ ^ 2 :=
+    ∀ x h : EuclideanSpace ℝ (Fin n), u (x + h) + u (x - h) - 2 * u x ≤ (4 / κ) * ‖h‖ ^ 2 :=
   secondDifference_le_of_map_gradient_on_range hu hconv hnorm hK hKc hV hκ hstrong
     (fun x => mem_univ (gradient u x)) hmap hC1
 
@@ -223,7 +230,8 @@ theorem lipschitzWith_gradient_of_map_gradient_on_range {n : ℕ}
   exact hLip
 
 /-- **`C^{1,1}` regularity of the moment potential**: if the `C¹` convex Lipschitz `u` with
-`∫ e^{-u} = 1` pushes `e^{-u} dx` forward by `∇u` to `1_K e^{-V} dx` with `K` compact convex and `V ∈ C¹` such
+`∫ e^{-u} = 1` pushes `e^{-u} dx` forward by `∇u` to `1_K e^{-V} dx` with `K` compact convex and `V
+∈ C¹` such
 that `V − (κ/2)‖·‖²` is convex, then `∇u` is `16/κ`-Lipschitz. -/
 theorem lipschitzWith_gradient_of_map_gradient {n : ℕ} {u V : EuclideanSpace ℝ (Fin n) → ℝ}
     {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
@@ -231,11 +239,11 @@ theorem lipschitzWith_gradient_of_map_gradient {n : ℕ} {u V : EuclideanSpace �
     {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K) (hKc : Convex ℝ K)
     (hV : ContDiff ℝ 1 V) {κ : ℝ} (hκ : 0 < κ)
     (hstrong : ConvexOn ℝ univ (fun y => V y - (κ / 2) * ‖y‖ ^ 2))
-    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
-    (hC1 : ContDiff ℝ 1 u) :
-    LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) :=
+    (hmap :
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))))
+    (hC1 : ContDiff ℝ 1 u) : LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) :=
   lipschitzWith_gradient_of_map_gradient_on_range hu hconv hnorm hK hKc hV hκ hstrong
     (fun x => mem_univ (gradient u x)) hmap hC1
 

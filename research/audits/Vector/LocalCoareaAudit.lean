@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.Local
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.Local
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the weighted codimension-`m` graph area formula and the local coarea equality
@@ -19,7 +21,8 @@ the countable cover of a regular open set by such neighbourhoods with the disjoi
 codimension-`m` **weighted slice measurability** — the `AEMeasurable` statement for
 `t ↦ ∫⁻ over S ∩ {u = t}` — which the patching needs in order to exchange a sum with the outer
 integral.  The scalar analogues are the assembly in `Analysis/Coarea/Regular.lean` and
-`Analysis/Hausdorff/Slice/OpenMeasurable.lean`.  Nothing about the critical set, sharp Sard or the Cheeger
+`Analysis/Hausdorff/Slice/OpenMeasurable.lean`.  Nothing about the critical set, sharp Sard or the
+Cheeger
 comparisons is touched.
 
 **`m = 1` returns the proved scalar statements.**  `codimension_one_graphArea` derives the
@@ -27,6 +30,8 @@ repository's already proved `Analysis.setLIntegral_image_graphMap`, and
 `codimension_one_coarea_density` checks that the ambient density of the local coarea equality is
 the gradient norm of the proved scalar theory.
 -/
+
+@[expose] public section
 
 noncomputable section
 

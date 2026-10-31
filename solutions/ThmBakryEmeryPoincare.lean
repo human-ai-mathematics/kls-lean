@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
-import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Lean certificate: `thm:bakry-emery-poincare`
@@ -23,6 +25,8 @@ from Mathlib's Gaussian integrability, and `gaussian` applies the certificate to
 hypothesis discharged, so the hypotheses are jointly satisfiable in every dimension. Sharpness of
 `1/ρ`, the general Markov-triple framework and Proposition 4.8.1 are not claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -110,8 +114,10 @@ theorem gaussian {ρ : ℝ} (hρ : 0 < ρ) :
     Poincare.LocalSlope.Intrinsic.constant (gaussianLaw (V := V) hρ) ≤ ENNReal.ofReal ρ⁻¹ ∧
       Poincare.SmoothTest.Holds ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V)
         ρ⁻¹ :=
-  ⟨certificate rfl (contDiff_potential ρ) hρ fun x v => (bilinearIteratedFDerivTwo_potential ρ x v).ge,
-    smoothTest rfl (contDiff_potential ρ) hρ fun x v => (bilinearIteratedFDerivTwo_potential ρ x v).ge⟩
+  ⟨certificate rfl (contDiff_potential ρ) hρ fun x v =>
+      (bilinearIteratedFDerivTwo_potential ρ x v).ge,
+    smoothTest rfl (contDiff_potential ρ) hρ fun x v =>
+      (bilinearIteratedFDerivTwo_potential ρ x v).ge⟩
 
 end Gaussian
 
@@ -136,22 +142,25 @@ example : Poincare.LocalSlope.Intrinsic.constant
   (gaussian one_pos).1
 
 /--
-info: 'Solutions.ThmBakryEmeryPoincare.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBakryEmeryPoincare.certificate' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBakryEmeryPoincare.certificate
+  #print axioms Solutions.ThmBakryEmeryPoincare.certificate
 
 /--
-info: 'Solutions.ThmBakryEmeryPoincare.smoothTest' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBakryEmeryPoincare.smoothTest' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBakryEmeryPoincare.smoothTest
+  #print axioms Solutions.ThmBakryEmeryPoincare.smoothTest
 
 /--
-info: 'Solutions.ThmBakryEmeryPoincare.gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBakryEmeryPoincare.gaussian' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBakryEmeryPoincare.gaussian
+  #print axioms Solutions.ThmBakryEmeryPoincare.gaussian
 
 end Law
 

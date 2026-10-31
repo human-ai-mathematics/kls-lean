@@ -3,11 +3,16 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.SimplePredictableRefine
-import LevyStochCalc.Brownian.ItoSimple
-import LevyStochCalc.Brownian.ItoDensity
-import LevyStochCalc.Brownian.ItoMartingale
-import LevyStochCalc.Martingale.RightCont
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs pass the
+-- measurability witnesses that Mathlib v4.35.0 `MemLp` and `eLpNorm` norm formulas now require.
+module
+
+public import LevyStochCalc.Brownian.SimplePredictableRefine
+public import LevyStochCalc.Brownian.ItoSimple
+public import LevyStochCalc.Brownian.ItoDensity
+public import LevyStochCalc.Brownian.ItoMartingale
+public import LevyStochCalc.Martingale.RightCont
 
 /-!
 # Brownian Itô integral: `L²` lift of the simple-integrand integral
@@ -18,6 +23,8 @@ sequence of simple predictable integrands, and identifies the squared `L²`-norm
 the resulting limit `itoIntegralLp_brownian` with the time-space integral
 `∫⁻ ω, ∫⁻ s in [0, T], ‖H ω s‖₊² ∂volume ∂P`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -82,8 +89,8 @@ lemma simpleIntegral_memLp_brownian
     (h_adapt : ∀ i : Fin H.N, @MeasureTheory.StronglyMeasurable Ω ℝ _
       (ℱ (H.partition i.castSucc)) (H.ξ i)) :
     MeasureTheory.MemLp (fun ω => simpleIntegral W H T ω) 2 P := by
-  refine ⟨?_, ?_⟩
-  · -- AEStronglyMeasurable: simpleIntegral W H T = ∑_i ξ_i · ΔW_i
+  have hmeas : MeasureTheory.AEStronglyMeasurable (fun ω => simpleIntegral W H T ω) P := by
+    -- AEStronglyMeasurable: simpleIntegral W H T = ∑_i ξ_i · ΔW_i
     -- is a finite sum of products of measurable functions.
     refine Measurable.aestronglyMeasurable ?_
     unfold simpleIntegral
@@ -92,8 +99,8 @@ lemma simpleIntegral_memLp_brownian
     exact (W.measurable_eval _).sub (W.measurable_eval _)
   · -- eLpNorm < ⊤: from C0b.10-pre1 (∫⁻ ‖simpleIntegral‖² < ⊤) via
     -- eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top.
-    rw [MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
-        (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤)]
+    rw [MeasureTheory.memLp_iff, MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
+        (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤) hmeas]
     have h_two_toReal : (2 : ℝ≥0∞).toReal = 2 := by simp
     rw [h_two_toReal]
     have h_pre := simpleIntegral_lintegral_sq_finite_brownian W ℱ hℱ hT H h_adapt
@@ -162,6 +169,8 @@ lemma eLpNorm_simpleIntegral_sub_rpow_brownian
     (μ := P) (p := (2 : NNReal))
     (f := fun ω => simpleIntegral W H₁ T ω - simpleIntegral W H₂ T ω)
     (by norm_num : (2 : NNReal) ≠ 0)
+    ((simpleIntegral_memLp_brownian W ℱ hℱ hT H₁ h_adapt₁).sub
+      (simpleIntegral_memLp_brownian W ℱ hℱ hT H₂ h_adapt₂)).aestronglyMeasurable
   -- h_pow_lemma : eLpNorm f (↑(2:NNReal)) P ^ ↑(2:NNReal)
   --              = ∫⁻ ω, ‖f ω‖ₑ ^ ↑(2:NNReal) ∂P
   -- The ↑(2:NNReal) on the LHS-base is (2:ℝ≥0∞); on exponents it's (2:ℝ).
@@ -338,6 +347,7 @@ lemma eLpNorm_simpleIntegralLp_brownian_rpow_eq
     (μ := P) (p := (2 : NNReal))
     (f := fun ω => simpleIntegral W H T ω)
     (by norm_num : (2 : NNReal) ≠ 0)
+    (simpleIntegral_memLp_brownian W ℱ hℱ hT H h_adapt).aestronglyMeasurable
   have h_two_R : ((2 : NNReal) : ℝ) = (2 : ℝ) := by norm_num
   have h_two_ENNReal : ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) := by simp
   rw [h_two_ENNReal, h_two_R] at h_pow_lemma

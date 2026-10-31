@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.IndependentScattering
-import LevyStochCalc.Poisson.NaturalFiltration
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.IndependentScattering
+public import LevyStochCalc.Poisson.NaturalFiltration
 
 /-!
 # Past/future independence of a Poisson random measure, joint form
@@ -23,6 +27,8 @@ of the count on a single strip `(s, t] × A`.
 * `PoissonRandomMeasure.indep_naturalFiltration_future` — past and future of the natural
   filtration.
 -/
+
+@[expose] public section
 
 universe u v w
 

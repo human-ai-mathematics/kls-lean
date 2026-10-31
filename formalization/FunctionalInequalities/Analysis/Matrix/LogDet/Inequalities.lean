@@ -1,12 +1,14 @@
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Analysis.Calculus.Deriv.Inv
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.LinearAlgebra.Matrix.Trace
+module
+
+public import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.Analysis.Calculus.Deriv.Inv
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Analysis.Matrix.Spectrum
+public import Mathlib.LinearAlgebra.Matrix.Trace
 
 /-!
 # Inequalities for the log-determinant
@@ -18,10 +20,13 @@ Two matrix facts used on the weak moment-map route to Letwin's quadratic-form bo
   `(∀ J ≻ 0, b + log det J + n ≤ tr(J A)) ↔ (A ≻ 0 ∧ e^b ≤ det A)` for positive semidefinite `A`
   (the distributional form of the Monge–Ampère equation);
 - `log_det_add_frobenius_sq_le`: quantitative concavity, for positive definite `A, B ≤ K·Id`,
-  `log det B + ‖B − A‖²_F/(2K²) ≤ log det A + tr(A⁻¹(B − A))` (the difference-quotient estimate of the
+  `log det B + ‖B − A‖²_F/(2K²) ≤ log det A + tr(A⁻¹(B − A))` (the difference-quotient estimate of
+  the
   Hessian of the moment map).
 
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -62,29 +67,25 @@ private lemma exists_posDef_square {n : ℕ}
   simpa only [Function.comp_def, RCLike.ofReal_real_eq_id, id_eq] using
     hA.isHermitian.spectral_theorem.symm
 
-private lemma posDef_of_forall_log_det_le_trace {n : ℕ}
-    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosSemidef) (b : ℝ)
-    (H : ∀ J : Matrix (Fin n) (Fin n) ℝ,
-      J.PosDef → b + Real.log J.det + n ≤ (J * A).trace) :
+private lemma posDef_of_forall_log_det_le_trace {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.PosSemidef) (b : ℝ)
+    (H : ∀ J : Matrix (Fin n) (Fin n) ℝ, J.PosDef → b + Real.log J.det + n ≤ (J * A).trace) :
     A.PosDef := by
-  let e := Unitary.conjStarAlgAut ℝ (Matrix (Fin n) (Fin n) ℝ)
-    hA.isHermitian.eigenvectorUnitary
+  let e := Unitary.conjStarAlgAut ℝ (Matrix (Fin n) (Fin n) ℝ) hA.isHermitian.eigenvectorUnitary
   have hs : A = e (diagonal hA.isHermitian.eigenvalues) := by
     simpa only [Function.comp_def, RCLike.ofReal_real_eq_id, id_eq] using
       hA.isHermitian.spectral_theorem
   have hd (d : Fin n → ℝ) (hp : ∀ i, 0 < d i) :
-      b + Real.log (∏ i, d i) + n ≤
-        ∑ i, d i * hA.isHermitian.eigenvalues i := by
+    b + Real.log (∏ i, d i) + n ≤ ∑ i, d i * hA.isHermitian.eigenvalues i := by
     have hj : (e (diagonal d)).PosDef := by
       dsimp only [e]
       rw [Unitary.conjStarAlgAut_apply]
-      exact (Matrix.IsUnit.posDef_star_right_conjugate_iff Unitary.isUnit_coe).mpr
-        (Matrix.posDef_diagonal_iff.mpr hp)
-    have ht : (e (diagonal d) * A).trace =
-        ∑ i, d i * hA.isHermitian.eigenvalues i := by
+      exact
+        (Matrix.IsUnit.posDef_star_right_conjugate_iff Unitary.isUnit_coe).mpr
+          (Matrix.posDef_diagonal_iff.mpr hp)
+    have ht : (e (diagonal d) * A).trace = ∑ i, d i * hA.isHermitian.eigenvalues i := by
       conv_lhs => rw [hs]
-      rw [← map_mul, Matrix.trace_map, Matrix.diagonal_mul_diagonal,
-        Matrix.trace_diagonal]
+      rw [← map_mul, Matrix.trace_map, Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal]
     simpa only [Matrix.det_map, Matrix.det_diagonal, ht] using H _ hj
   apply hA.isHermitian.posDef_iff_eigenvalues_pos.mpr
   intro i
@@ -98,12 +99,11 @@ private lemma posDef_of_forall_log_det_le_trace {n : ℕ}
     · norm_num
   have h := hd (fun j => if i = j then t else 1) hp
   have he (j : Fin n) :
-      (if i = j then t else 1) * hA.isHermitian.eigenvalues j =
-        hA.isHermitian.eigenvalues j := by
+    (if i = j then t else 1) * hA.isHermitian.eigenvalues j = hA.isHermitian.eigenvalues j := by
     by_cases hij : i = j <;> simp only [hij, ite_true, ite_false, one_mul]
     subst j
     simp only [hz, mul_zero]
-  simp only [he, Finset.prod_ite_eq, Finset.mem_univ, if_true, t, Real.log_exp] at h
+  simp only [he, Finset.prod_ite_eq, Finset.mem_univ, ite_true, t, Real.log_exp] at h
   have hn : (0 : ℝ) ≤ n := Nat.cast_nonneg n
   linarith
 
@@ -495,39 +495,43 @@ open Matrix Finset
 
 namespace FunctionalInequalities.Analysis
 
-/-- A finite weighted comparison `∑ b_j d_j ≤ ∑ b_j c_j + E` with coefficients `lc ≤ b_j ≤ uc` (`0 ≤ lc`) and nonnegative
+/--
+A finite weighted comparison `∑ b_j d_j ≤ ∑ b_j c_j + E` with coefficients `lc ≤ b_j ≤ uc` (`0 ≤
+lc`) and nonnegative
 deficits bounds every single deficit: `lc · d_k ≤ uc · ∑ c_j + E`. -/
-theorem deficit_le_sum_of_weighted_comparison {N : ℕ} (b dx dy : Fin N → ℝ)
-    {lc uc E : ℝ} (hlc : 0 ≤ lc) (hb : ∀ j, lc ≤ b j ∧ b j ≤ uc)
-    (hdx : ∀ j, 0 ≤ dx j) (hdy : ∀ j, 0 ≤ dy j)
+theorem deficit_le_sum_of_weighted_comparison {N : ℕ} (b dx dy : Fin N → ℝ) {lc uc E : ℝ}
+    (hlc : 0 ≤ lc) (hb : ∀ j, lc ≤ b j ∧ b j ≤ uc) (hdx : ∀ j, 0 ≤ dx j) (hdy : ∀ j, 0 ≤ dy j)
     (hcomp : ∑ j, b j * dy j ≤ (∑ j, b j * dx j) + E) (k : Fin N) :
     lc * dy k ≤ uc * (∑ j, dx j) + E := by
   calc
     _ ≤ b k * dy k := mul_le_mul_of_nonneg_right (hb k).1 (hdy k)
-    _ ≤ ∑ j, b j * dy j := Finset.single_le_sum
-      (fun j _ => mul_nonneg (hlc.trans (hb j).1) (hdy j)) (mem_univ k)
+    _ ≤ ∑ j, b j * dy j :=
+      Finset.single_le_sum (fun j _ => mul_nonneg (hlc.trans (hb j).1) (hdy j)) (mem_univ k)
     _ ≤ (∑ j, b j * dx j) + E := hcomp
-    _ ≤ (∑ j, uc * dx j) + E := add_le_add
-      (Finset.sum_le_sum fun j _ => mul_le_mul_of_nonneg_right (hb j).2 (hdx j)) le_rfl
+    _ ≤ (∑ j, uc * dx j) + E :=
+      add_le_add (Finset.sum_le_sum fun j _ => mul_le_mul_of_nonneg_right (hb j).2 (hdx j))
+        le_rfl
     _ = _ := by rw [Finset.mul_sum]
 
 private theorem trace_rank_one_mul {n : ℕ} (v : Fin n → ℝ) (H : Matrix (Fin n) (Fin n) ℝ) :
     (vecMulVec v v * H).trace = ∑ i, ∑ j, v i * v j * H i j := by
-  simp only [Matrix.trace,Matrix.diag,Matrix.mul_apply,Matrix.vecMulVec_apply]
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.vecMulVec_apply]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
 
-/-- Directional deficits of two positive definite matrices `X, Y ≤ K·I` in a fixed rank-one frame. If
-`ρ X⁻¹ = ∑ b_j γ_j γ_jᵀ` with `lc ≤ b_j ≤ uc` (`ρ, lc ≥ 0`), the directional quadratic forms are capped by `M_j`, and
-`ρ (log det X − log det Y) ≤ E`, then `lc (M_k − γ_kᵀ Y γ_k) ≤ uc ∑_j (M_j − γ_jᵀ X γ_j) + E`. The proof is the
-log-determinant supporting plane `log_det_add_frobenius_sq_le` (the comparison step of Gilbarg–Trudinger (2001), §17.4). -/
-theorem directional_deficit_le_sum_of_logdet {n N : ℕ}
-    (X Y : Matrix (Fin n) (Fin n) ℝ) (γ : Fin N → Fin n → ℝ) (b M : Fin N → ℝ)
-    {K ρ lc uc E : ℝ} (hX : X.PosDef) (hY : Y.PosDef)
+/--
+Directional deficits of two positive definite matrices `X, Y ≤ K·I` in a fixed rank-one frame. If
+`ρ X⁻¹ = ∑ b_j γ_j γ_jᵀ` with `lc ≤ b_j ≤ uc` (`ρ, lc ≥ 0`), the directional quadratic forms are
+capped by `M_j`, and
+`ρ (log det X − log det Y) ≤ E`, then `lc (M_k − γ_kᵀ Y γ_k) ≤ uc ∑_j (M_j − γ_jᵀ X γ_j) + E`. The
+proof is the
+log-determinant supporting plane `log_det_add_frobenius_sq_le` (the comparison step of
+Gilbarg–Trudinger (2001), §17.4). -/
+theorem directional_deficit_le_sum_of_logdet {n N : ℕ} (X Y : Matrix (Fin n) (Fin n) ℝ)
+    (γ : Fin N → Fin n → ℝ) (b M : Fin N → ℝ) {K ρ lc uc E : ℝ} (hX : X.PosDef) (hY : Y.PosDef)
     (hXK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - X).PosSemidef)
-    (hYK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Y).PosSemidef)
-    (hρ : 0 ≤ ρ) (hlc : 0 ≤ lc) (hb : ∀ j, lc ≤ b j ∧ b j ≤ uc)
-    (hframe : ρ • X⁻¹ = ∑ j, b j • vecMulVec (γ j) (γ j))
+    (hYK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Y).PosSemidef) (hρ : 0 ≤ ρ) (hlc : 0 ≤ lc)
+    (hb : ∀ j, lc ≤ b j ∧ b j ≤ uc) (hframe : ρ • X⁻¹ = ∑ j, b j • vecMulVec (γ j) (γ j))
     (hMX : ∀ j, (∑ i, ∑ a, γ j i * γ j a * X i a) ≤ M j)
     (hMY : ∀ j, (∑ i, ∑ a, γ j i * γ j a * Y i a) ≤ M j)
     (hE : ρ * (Real.log X.det - Real.log Y.det) ≤ E) (k : Fin N) :
@@ -535,23 +539,24 @@ theorem directional_deficit_le_sum_of_logdet {n N : ℕ}
       uc * (∑ j, (M j - ∑ i, ∑ a, γ j i * γ j a * X i a)) + E := by
   let dx := fun j => M j - ∑ i, ∑ a, γ j i * γ j a * X i a
   let dy := fun j => M j - ∑ i, ∑ a, γ j i * γ j a * Y i a
-  have hq : 0 ≤ (∑ i, ∑ j, (Y-X) i j ^ 2) / (2*K^2) := by positivity
+  have hq : 0 ≤ (∑ i, ∑ j, (Y - X) i j ^ 2) / (2 * K ^ 2) := by positivity
   have hconc := log_det_add_frobenius_sq_le hX hY hXK hYK
-  have hplane : ρ * (Real.log Y.det - Real.log X.det) ≤ ((ρ • X⁻¹) * (Y-X)).trace := by
-    rw [Matrix.smul_mul, Matrix.trace_smul,smul_eq_mul]
+  have hplane : ρ * (Real.log Y.det - Real.log X.det) ≤ ((ρ • X⁻¹) * (Y - X)).trace := by
+    rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
     exact mul_le_mul_of_nonneg_left (by linarith [hconc]) hρ
-  have htr : ((ρ • X⁻¹) * (Y-X)).trace = (∑ j, b j * dx j) - ∑ j, b j * dy j := by
+  have htr : ((ρ • X⁻¹) * (Y - X)).trace = (∑ j, b j * dx j) - ∑ j, b j * dy j := by
     rw [hframe, Finset.sum_mul, Matrix.trace_sum]
     rw [← Finset.sum_sub_distrib]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Matrix.smul_mul,Matrix.trace_smul,smul_eq_mul,trace_rank_one_mul]
-    dsimp only [dx,dy]
-    simp only [Matrix.sub_apply,mul_sub,Finset.sum_sub_distrib]
+    rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul, trace_rank_one_mul]
+    dsimp only [dx, dy]
+    simp only [Matrix.sub_apply, mul_sub, Finset.sum_sub_distrib]
     ring
   rw [htr] at hplane
   have hcomp : (∑ j, b j * dy j) ≤ (∑ j, b j * dx j) + E := by nlinarith
-  exact deficit_le_sum_of_weighted_comparison b dx dy hlc hb
-    (fun j => sub_nonneg.mpr (hMX j)) (fun j => sub_nonneg.mpr (hMY j)) hcomp k
+  exact
+    deficit_le_sum_of_weighted_comparison b dx dy hlc hb (fun j => sub_nonneg.mpr (hMX j))
+      (fun j => sub_nonneg.mpr (hMY j)) hcomp k
 
 end FunctionalInequalities.Analysis
 
@@ -560,14 +565,16 @@ end FrameDeficit
 namespace FunctionalInequalities.Analysis
 
 /-- **Three-point log-det concavity**: for positive definite `A, B₊, B₋ ≤ K·Id`,
-`(‖B₊ − A‖²_F + ‖B₋ − A‖²_F)/(2K²) ≤ tr(A⁻¹(B₊ + B₋ − 2A)) − log det B₊ − log det B₋ + 2 log det A`. -/
+`(‖B₊ − A‖²_F + ‖B₋ − A‖²_F)/(2K²) ≤ tr(A⁻¹(B₊ + B₋ − 2A)) − log det B₊ − log det B₋ + 2 log det A`.
+-/
 theorem frobenius_add_frobenius_le_trace_sub_log_det {n : ℕ}
-    {A Bp Bm : Matrix (Fin n) (Fin n) ℝ} {K : ℝ} (hA : A.PosDef) (hBp : Bp.PosDef) (hBm : Bm.PosDef)
-    (hAK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - A).PosSemidef)
+    {A Bp Bm : Matrix (Fin n) (Fin n) ℝ} {K : ℝ} (hA : A.PosDef) (hBp : Bp.PosDef)
+    (hBm : Bm.PosDef) (hAK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - A).PosSemidef)
     (hBpK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Bp).PosSemidef)
     (hBmK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Bm).PosSemidef) :
     ((∑ i, ∑ j, (Bp - A) i j ^ 2) + ∑ i, ∑ j, (Bm - A) i j ^ 2) / (2 * K ^ 2) ≤
-      (A⁻¹ * (Bp + Bm - 2 • A)).trace - Real.log Bp.det - Real.log Bm.det + 2 * Real.log A.det := by
+      (A⁻¹ * (Bp + Bm - 2 • A)).trace - Real.log Bp.det - Real.log Bm.det +
+        2 * Real.log A.det := by
   have hp := log_det_add_frobenius_sq_le hA hBp hAK hBpK
   have hm := log_det_add_frobenius_sq_le hA hBm hAK hBmK
   have he : Bp + Bm - 2 • A = (Bp - A) + (Bm - A) := by

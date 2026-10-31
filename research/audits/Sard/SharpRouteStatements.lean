@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Sard.QuadraticCover
-import FunctionalInequalities.Analysis.Sard.Smooth
+module
+
+public import FunctionalInequalities.Analysis.Sard.QuadraticCover
+public import FunctionalInequalities.Analysis.Sard.Smooth
 
 /-!
 # Route statements for the sharp finite-regularity Sard theorem
@@ -10,7 +12,8 @@ structures, definitions or placeholder proofs. See `Analysis/Sard/Sharp.lean` an
 `research/audits/Sard/SharpAudit.lean` for the source and client; the latter distinguishes the
 original `M2` contract from its repaired antilipschitz version.
 
-Same convention as `research/audits/Vector/RankDeficientRouteStatements.lean`, `research/audits/Graph/AreaFormulaRouteStatements.lean` and
+Same convention as `research/audits/Vector/RankDeficientRouteStatements.lean`,
+`research/audits/Graph/AreaFormulaRouteStatements.lean` and
 `research/audits/Coarea/WeightedRouteStatements.lean`.
 
 ## The target and why the smooth descent does not reach it
@@ -39,11 +42,14 @@ decomposition of a preimage forward along a `C^k` graph chart (`M1`) which is `1
 `f ∈ C^{k+1}`, whose derivative coordinates are `C^k` and vanish on `A`, it gives the Morse
 criticality lemma `M4`: the critical set is covered by a countable set and countably many bounded
 pieces with a uniform `o(‖y - x‖^{k+1})` modulus.  With `k + 1 = n` the proved covering count
-`volume_image_eq_zero_of_oscillation_pow` (`M0`) finishes on `Fin n → ℝ` (`M5`), and the transport of
+`volume_image_eq_zero_of_oscillation_pow` (`M0`) finishes on `Fin n → ℝ` (`M5`), and the transport
+of
 `sard_smooth` gives the target (`M6`).
 
 The disks and the flatness predicate are internal to `M2`/`M3` and are spelled out inline below.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -116,7 +122,8 @@ of `φ` on the compact unit ball; the antilipschitz constant of `φ` is not need
 Every set `A ⊆ Fin n → ℝ` and every order `k` admit a Morse decomposition: a countable set `A₀`
 and countably many pieces `q.1 ⊆ A`, each carried by a `C¹` parametrized disk `q.2.2` of some
 parameter dimension `q.2.1`, antilipschitz on the closed unit ball with `q.1` inside its body,
-such that **every** `C^k` function vanishing on `A` is flat of order `k` along the disk on the piece.
+such that **every** `C^k` function vanishing on `A` is flat of order `k` along the disk on the
+piece.
 The central step of the route: a double induction on `(n, k)` in which the critical step
 uses `M2` and the regular step pushes the decomposition of a preimage forward along the graph chart
 of `M1`, using `M1'` to keep the antilipschitz constants. -/
@@ -139,7 +146,8 @@ of `M1`, using `M1'` to keep the antilipschitz constants. -/
 
 The set `A` on which a `C^(k+1)` function `f` is critical is covered by a countable set and
 countably many bounded pieces, on each of which `f` has a uniform `o(‖y - x‖ ^ (k + 1))` modulus.
-`M3` applied to `A` at order `k`: the coordinates of `fderiv ℝ f` are `C^k` and vanish on `A`, so they
+`M3` applied to `A` at order `k`: the coordinates of `fderiv ℝ f` are `C^k` and vanish on `A`, so
+they
 are flat of order `k` along each disk, and `M2` raises the order for `f` itself; the disks are then
 forgotten.  Nothing but Mathlib notions survives in the statement. -/
 

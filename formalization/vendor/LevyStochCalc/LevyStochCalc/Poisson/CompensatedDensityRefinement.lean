@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedDensityMarkSum
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityMarkSum
 
 /-!
 # Doob `L²` bricks and dyadic cross-resolution refinement
@@ -14,6 +19,8 @@ integrand at level `n` on a finer dyadic level `m ≥ n`. The refinement keeps t
 adapted and its compensated integral unchanged, so integrands of different resolutions can be
 compared on a common grid.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -98,24 +105,24 @@ lemma exists_sharedMark_blockDiag
     obtain ⟨M, hM⟩ := hcib (e.symm k).1 (e.symm k).2
     refine ⟨M, fun ω => ?_⟩
     by_cases h : (e.symm k).1 = i
-    · simp only [h, if_true]; exact hM ω
-    · simp only [h, if_false, abs_zero]; exact le_trans (abs_nonneg _) (hM ω)
+    · simp only [h, ite_true]; exact hM ω
+    · simp only [h, ite_false, abs_zero]; exact le_trans (abs_nonneg _) (hM ω)
   · intro i k
     by_cases h : (e.symm k).1 = i
-    · simp only [h, if_true]; exact hcim _ _
-    · simp only [h, if_false]; exact measurable_const
+    · simp only [h, ite_true]; exact hcim _ _
+    · simp only [h, ite_false]; exact measurable_const
   · intro i k
     by_cases h : (e.symm k).1 = i
-    · simp only [h, if_true]
+    · simp only [h, ite_true]
       rw [← h]; exact hcia (e.symm k).1 (e.symm k).2
-    · simp only [h, if_false]; exact MeasureTheory.stronglyMeasurable_const
+    · simp only [h, ite_false]; exact MeasureTheory.stronglyMeasurable_const
   · intro i ω F
     rw [← Equiv.sum_comp e (fun k => (if (e.symm k).1 = i then ci (e.symm k).1 (e.symm k).2 ω
       else 0) * F (Bi (e.symm k).1 (e.symm k).2))]
     simp only [Equiv.symm_apply_apply]
     rw [← Finset.univ_sigma_univ, Finset.sum_sigma]
     rw [Finset.sum_eq_single i
-      (fun i₀ _ hne => Finset.sum_eq_zero (fun k₀ _ => by rw [if_neg hne, zero_mul]))
+      (fun i₀ _ hne => Finset.sum_eq_zero (fun k₀ _ => by rw [ite_eq_right hne, zero_mul]))
       (fun h => absurd (Finset.mem_univ i) h)]
     refine Finset.sum_congr rfl (fun k₀ _ => ?_)
     rw [Equiv.symm_apply_apply]; simp

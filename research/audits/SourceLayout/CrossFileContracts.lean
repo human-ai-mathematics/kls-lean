@@ -1,12 +1,17 @@
-import Lean
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.L2.Pairing
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Probability.Transport
+public import FunctionalInequalities.L2.Pairing
+meta import Lean
 
 /-! Original supporting-plane, translated-moment and L² energy contracts.
 The translation uses only a normed additive group; the energy identity uses
 an arbitrary measurable source and real inner-product target, without completeness.
 -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities MeasureTheory Set
 open scoped RealInnerProductSpace

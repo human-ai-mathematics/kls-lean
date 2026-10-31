@@ -1,9 +1,11 @@
-import FunctionalInequalities.Probability.Basic
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.Subspace
-import Mathlib.Analysis.Normed.Affine.Isometry
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.MeasureTheory.Measure.Support
+module
+
+public import FunctionalInequalities.Probability.Basic
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.InnerProductSpace.Subspace
+public import Mathlib.Analysis.Normed.Affine.Isometry
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.MeasureTheory.Measure.Support
 
 /-!
 # Intrinsic affine coordinates of a finite-dimensional probability measure
@@ -16,6 +18,8 @@ The construction removes directions normal to the affine support. It does not cl
 ambient gradient pre-energy is closable for every singular law inside that support; atomic and
 lower-dimensional non-affine singularities still require relaxation or a separate core theorem.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -118,8 +122,7 @@ def coordinateEquiv (μ : ProbabilityMeasure E) :
 
 /-- A measurable retraction onto the affine support. Outside the full-measure carrier it uses the
 chosen origin; this arbitrary branch has no effect on the induced probability law. -/
-def retraction (μ : ProbabilityMeasure E) (x : E) : affineSupport μ :=
-  by
+def retraction (μ : ProbabilityMeasure E) (x : E) : affineSupport μ := by
     classical
     exact if hx : x ∈ affineSupport μ then ⟨x, hx⟩ else origin μ
 
@@ -162,7 +165,10 @@ The origin is the chosen support point `origin μ`; this construction does not c
 normalize the covariance. -/
 def intrinsicMeasure (μ : ProbabilityMeasure E) :
     ProbabilityMeasure (affineSupport μ).direction :=
-  μ.map (measurable_intrinsicMap μ).aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := measurable_intrinsicMap μ
+  μ.map (intrinsicMap μ)
 
 /-- Reconstruction from intrinsic vector coordinates back into the ambient space, bundled as an
 affine isometry. -/

@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
-import FunctionalInequalities.Energy.Euclidean.WeakDerivative
-import FunctionalInequalities.L2.MeanVariance
-import FunctionalInequalities.KLS.LogConcave.Density.Tilted
-import FunctionalInequalities.Energy.Euclidean.ZeroGradient
-import Mathlib.MeasureTheory.Measure.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
+public import FunctionalInequalities.Energy.Euclidean.WeakDerivative
+public import FunctionalInequalities.L2.MeanVariance
+public import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+public import FunctionalInequalities.Energy.Euclidean.ZeroGradient
+public import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
 # The kernel of the closed unit gradient of a tilted law
@@ -20,6 +22,8 @@ this shows that `T̄ h = 0` forces `h` to be the constant `∫ h dν`
 (`eq_const_mean_of_closedWeightedOperator_eq_zero`); the converse and the resulting identification
 of `ker T̄` with the constants are in `HeatSemigroup/SpectralGap/Curvature.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

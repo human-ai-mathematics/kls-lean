@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Iteration.DyadicSummation
+module
+
+public import FunctionalInequalities.Analysis.Iteration.DyadicSummation
 
 /-!
 # Audit: the dyadic summation in the proof of BKL Theorem 3.1
@@ -6,7 +8,8 @@ import FunctionalInequalities.Analysis.Iteration.DyadicSummation
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), proof of Theorem 3.1, p. 17: the recursion (63),
 multiplied by `(cλ)^(d-1)`, is summed along the dyadic degrees `d = 2^j`. The library theorem
 `FunctionalInequalities.Analysis.le_of_dyadic_recursion`
-(`formalization/FunctionalInequalities/Analysis/Iteration/DyadicSummation.lean`) is restated here and
+(`formalization/FunctionalInequalities/Analysis/Iteration/DyadicSummation.lean`) is restated here
+and
 instantiated with the source's parameters `x = cλ`, `y = c²λR²`:
 
 * `dyadic_recursion`: the library statement, restated;
@@ -14,6 +17,8 @@ instantiated with the source's parameters `x = cλ`, `y = c²λR²`:
 
 This is a supporting result of the BKL route; it does not prove (63) or Theorem 3.1.
 -/
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis
 

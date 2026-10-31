@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 
 /-! # Quantitative bounds for Borell density representatives -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal

@@ -1,12 +1,15 @@
-import Mathlib.LinearAlgebra.Basis.SMul
-import Mathlib.LinearAlgebra.Matrix.Basis
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.LinearAlgebra.Matrix.Kronecker
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.CStarAlgebra.Matrix
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+module
+
+public import Mathlib.LinearAlgebra.Basis.SMul
+public import Mathlib.LinearAlgebra.Matrix.Basis
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.LinearAlgebra.Matrix.Kronecker
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.CStarAlgebra.Matrix
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 /-!
 # Positive semidefinite Gram matrices with a Kronecker weight
@@ -14,28 +17,46 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 `F (A ⊗ A) Fᵀ` is positive semidefinite for positive semidefinite `A`; written out, this is the
 four-index Gram matrix used for the third-derivative term of Letwin's Lemma 2.4.
 
-Quadratic floors and the Sylvester estimate: `matrixEntries A` is the Euclidean (Frobenius) view of the
-entries; `QuadraticFloor S a` is `a‖v‖² ≤ ⟪v, S v⟫`; a positive definite matrix has a positive floor, a floor
-is stable under Frobenius-small perturbations, and for floors `a`, `b` and symmetric `T` the identity
-`S(S−T) + (S−T)T = S² − T²` (no commutation) gives `‖S − T‖_F ≤ ‖S² − T²‖_F / (a + b)`. Used for the local
-Lipschitz property of the principal inverse square root (`Analysis/PrincipalInverseSqrt.lean`).
+Quadratic floors and the Sylvester estimate: `matrixEntries A` is the Euclidean (Frobenius) view of
+the
+entries; `QuadraticFloor S a` is `a‖v‖² ≤ ⟪v, S v⟫`; a positive definite matrix has a positive
+floor, a floor
+is stable under Frobenius-small perturbations, and for floors `a`, `b` and symmetric `T` the
+identity
+`S(S−T) + (S−T)T = S² − T²` (no commutation) gives `‖S − T‖_F ≤ ‖S² − T²‖_F / (a + b)`. Used for the
+local
+Lipschitz property of the principal inverse square root (`Analysis/Operator/InverseSqrt.lean`).
 
-Inverse-quadratic Young inequality (`inverse_quadratic_young`): for a positive definite real matrix `H` over any finite
-index type (the empty one included), `2 (v ⬝ᵥ w) ≤ v ⬝ᵥ H⁻¹ v + w ⬝ᵥ H w`, from the nonnegative quadratic form of
-`w − H⁻¹ v`; no commutation or identity restriction. Support for Letwin, arXiv:2607.24164v1, Lemma A.6.
+Inverse-quadratic Young inequality (`inverse_quadratic_young`): for a positive definite real matrix
+`H` over any finite
+index type (the empty one included), `2 (v ⬝ᵥ w) ≤ v ⬝ᵥ H⁻¹ v + w ⬝ᵥ H w`, from the nonnegative
+quadratic form of
+`w − H⁻¹ v`; no commutation or identity restriction. Support for Letwin, arXiv:2607.24164v1, Lemma
+A.6.
 
-Trace pairings of positive semidefinite matrices (`sum_entry_mul_nonneg`, `trace_mul_nonneg`): for real positive
-semidefinite `A`, `C` over any finite index type (the empty one included), `Σ_ij A_ij C_ij ≥ 0` (through the Kronecker
-product) and `tr(AC) ≥ 0`; the product itself is not claimed positive semidefinite. Trace-weighted Gram matrices
-(`traceGram_posSemidef`): for positive semidefinite `B` and symmetric `T a`, the matrix `(tr(B T_a B T_b))_{ab}` is positive
+Trace pairings of positive semidefinite matrices (`sum_entry_mul_nonneg`, `trace_mul_nonneg`): for
+real positive
+semidefinite `A`, `C` over any finite index type (the empty one included), `Σ_ij A_ij C_ij ≥ 0`
+(through the Kronecker
+product) and `tr(AC) ≥ 0`; the product itself is not claimed positive semidefinite. Trace-weighted
+Gram matrices
+(`traceGram_posSemidef`): for positive semidefinite `B` and symmetric `T a`, the matrix `(tr(B T_a B
+T_b))_{ab}` is positive
 semidefinite. Supports for Letwin, arXiv:2607.24164v1, (2.10).
 
-Determinant floor (`posSemidef_sub_scalar_of_det_lower`): in positive dimension `n`, a positive semidefinite `A` with
-`A ≤ K·Id` and `δ ≤ det A` (`K, δ > 0`) satisfies `A ≥ (δ / K^(n-1))·Id`, since every eigenvalue lies in `[0, K]` and their
-product is at least `δ`. Finite matrix step for compact-local ellipticity of the regular-class moment potential.
-Reciprocal bounds (`inverse_posSemidef_bounds`): `α·Id ≤ A ≤ β·Id` for positive definite `A` gives `β⁻¹·Id ≤ A⁻¹ ≤ α⁻¹·Id`.
-Quadratic Young (`posSemidef_quadratic_young`): `2 xᵀAy ≤ ε xᵀAx + ε⁻¹ yᵀAy` for positive semidefinite `A`, `ε > 0`.
+Determinant floor (`posSemidef_sub_scalar_of_det_lower`): in positive dimension `n`, a positive
+semidefinite `A` with
+`A ≤ K·Id` and `δ ≤ det A` (`K, δ > 0`) satisfies `A ≥ (δ / K^(n-1))·Id`, since every eigenvalue
+lies in `[0, K]` and their
+product is at least `δ`. Finite matrix step for compact-local ellipticity of the regular-class
+moment potential.
+Reciprocal bounds (`inverse_posSemidef_bounds`): `α·Id ≤ A ≤ β·Id` for positive definite `A` gives
+`β⁻¹·Id ≤ A⁻¹ ≤ α⁻¹·Id`.
+Quadratic Young (`posSemidef_quadratic_young`): `2 xᵀAy ≤ ε xᵀAx + ε⁻¹ yᵀAy` for positive
+semidefinite `A`, `ε > 0`.
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped MatrixOrder Kronecker
@@ -44,20 +65,24 @@ namespace FunctionalInequalities.Analysis
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
-/-- **Weighted Gram matrix**: for a positive semidefinite `A` and any family of matrices `T_i`, the matrix
-`G_{ij} = Σ_{a,b,c,d} A_{ac} A_{bd} (T_i)_{ab} (T_j)_{cd} = (F (A ⊗ A) Fᵀ)_{ij}` is positive semidefinite. -/
-theorem posSemidef_weightedGram (A : Matrix ι ι ℝ) (hA : A.PosSemidef)
-    (T : κ → Matrix ι ι ℝ) :
-    (Matrix.of fun i j => ∑ a, ∑ b, ∑ c, ∑ d,
-      A a c * A b d * T i a b * T j c d).PosSemidef := by
+/--
+**Weighted Gram matrix**: for a positive semidefinite `A` and any family of matrices `T_i`, the
+matrix
+`G_{ij} = Σ_{a,b,c,d} A_{ac} A_{bd} (T_i)_{ab} (T_j)_{cd} = (F (A ⊗ A) Fᵀ)_{ij}` is positive
+semidefinite. -/
+theorem posSemidef_weightedGram (A : Matrix ι ι ℝ) (hA : A.PosSemidef) (T : κ → Matrix ι ι ℝ) :
+    (Matrix.of fun i j => ∑ a, ∑ b, ∑ c, ∑ d, A a c * A b d * T i a b * T j c d).PosSemidef := by
   let F : Matrix κ (ι × ι) ℝ := fun i ab => T i ab.1 ab.2
   have h := (hA.kronecker hA).mul_mul_conjTranspose_same F
-  have heq : F * (A ⊗ₖ A) * F.conjTranspose = Matrix.of (fun i j => ∑ a, ∑ b, ∑ c, ∑ d,
-      A a c * A b d * T i a b * T j c d) := by
+  have heq :
+    F * (A ⊗ₖ A) * F.conjTranspose =
+      Matrix.of (fun i j => ∑ a, ∑ b, ∑ c, ∑ d, A a c * A b d * T i a b * T j c d) := by
     rw [Matrix.mul_assoc]
     ext i j
-    change (∑ ab : ι × ι, T i ab.1 ab.2 *
-      (∑ cd : ι × ι, (A ab.1 cd.1 * A ab.2 cd.2) * T j cd.1 cd.2)) = _
+    change
+      (∑ ab : ι × ι,
+          T i ab.1 ab.2 * (∑ cd : ι × ι, (A ab.1 cd.1 * A ab.2 cd.2) * T j cd.1 cd.2)) =
+        _
     simp only [Fintype.sum_prod_type]
     simp_rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
@@ -141,7 +166,7 @@ theorem exists_quadraticFloor_of_posDef {S : Matrix ι ι ℝ} (hS : S.PosDef) :
   by_cases h : Nonempty ι
   · let : Nonempty ι := h
     obtain ⟨a, ha, hle⟩ :=
-      (CFC.exists_pos_algebraMap_le_iff hS.isStrictlyPositive.isSelfAdjoint).mpr
+      (CFC.exists_pos_algebraMap_le_iff S hS.isStrictlyPositive.isSelfAdjoint).mpr
         (fun x hx => hS.isStrictlyPositive.spectrum_pos hx)
     exact ⟨a, ha, quadraticFloor_of_algebraMap_le hle⟩
   · have : IsEmpty ι := not_nonempty_iff.mp h
@@ -233,17 +258,19 @@ private theorem right_floor (T D : Matrix ι ι ℝ) {b : ℝ} (hT : QuadraticFl
   simp_rw [he]
   exact hT (fun j => D i j)
 
-/-- **Sylvester coercivity**: `(a + b)‖D‖_F² ≤ ⟪D, SD + DT⟫_F` for floors `a`, `b` and symmetric `T`; no
+/--
+**Sylvester coercivity**: `(a + b)‖D‖_F² ≤ ⟪D, SD + DT⟫_F` for floors `a`, `b` and symmetric `T`; no
 commutation assumption. -/
-theorem sylvester_coercivity (S T D : Matrix ι ι ℝ) {a b : ℝ}
-    (hS : QuadraticFloor S a) (hT : QuadraticFloor T b) (hSym : ∀ i j, T i j = T j i) :
+theorem sylvester_coercivity (S T D : Matrix ι ι ℝ) {a b : ℝ} (hS : QuadraticFloor S a)
+    (hT : QuadraticFloor T b) (hSym : ∀ i j, T i j = T j i) :
     (a + b) * ‖matrixEntries D‖ ^ 2 ≤ ⟪matrixEntries D, matrixEntries (S * D + D * T)⟫ := by
   rw [matrixEntries_norm_sq, matrixEntries_inner]
   have hl := left_floor S D hS
   have hr := right_floor T D hT hSym
   calc
     (a + b) * (∑ i, ∑ j, (D i j) ^ 2) =
-        a * (∑ i, ∑ j, (D i j) ^ 2) + b * (∑ i, ∑ j, (D i j) ^ 2) := by ring
+        a * (∑ i, ∑ j, (D i j) ^ 2) + b * (∑ i, ∑ j, (D i j) ^ 2) := by
+      ring
     _ ≤ (∑ i, ∑ j, D i j * (S * D) i j) + (∑ i, ∑ j, D i j * (D * T) i j) := add_le_add hl hr
     _ = ∑ i, ∑ j, D i j * (S * D + D * T) i j := by
       simp only [Matrix.add_apply, mul_add, Finset.sum_add_distrib]
@@ -509,18 +536,16 @@ open Matrix
 /-- A determinant lower bound and a common scalar upper bound give an explicit
 positive lower bound for a real positive-semidefinite matrix. This is the finite
 matrix step for local uniform ellipticity of moment-map Monge-Ampere equations. -/
-theorem posSemidef_sub_scalar_of_det_lower {n : ℕ} (hn : 0 < n)
-    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosSemidef)
-    {K δ : ℝ} (hK : 0 < K) (hδ : 0 < δ)
-    (hupper : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - A).PosSemidef)
-    (hdet : δ ≤ A.det) :
+theorem posSemidef_sub_scalar_of_det_lower {n : ℕ} (hn : 0 < n) {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.PosSemidef) {K δ : ℝ} (hK : 0 < K) (hδ : 0 < δ)
+    (hupper : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - A).PosSemidef) (hdet : δ ≤ A.det) :
     (A - (δ / K ^ (n - 1)) • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef := by
   classical
-  cases n with
+    cases n with
   | zero => exact False.elim ((Nat.lt_irrefl 0) hn)
-  | succ m =>
-    have hApos : A.PosDef := hA.posDef_iff_det_ne_zero.mpr
-      (ne_of_gt (lt_of_lt_of_le hδ hdet))
+  | succ
+    m =>
+    have hApos : A.PosDef := hA.posDef_iff_det_ne_zero.mpr (ne_of_gt (lt_of_lt_of_le hδ hdet))
     let U := hA.isHermitian.eigenvectorUnitary
     let e := Unitary.conjStarAlgAut ℝ (Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ) U
     let a := hA.isHermitian.eigenvalues
@@ -531,7 +556,8 @@ theorem posSemidef_sub_scalar_of_det_lower {n : ℕ} (hn : 0 < n)
       dsimp only [e]
       rw [Unitary.conjStarAlgAut_apply]
       exact Matrix.IsUnit.posSemidef_star_right_conjugate_iff Unitary.isUnit_coe
-    have hupper_diag : (K • (1 : Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ) - diagonal a).PosSemidef := by
+    have hupper_diag :
+      (K • (1 : Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ) - diagonal a).PosSemidef := by
       apply (hpres _).mp
       rw [map_sub, map_smul, map_one, ← hspec]
       exact hupper
@@ -547,7 +573,7 @@ theorem posSemidef_sub_scalar_of_det_lower {n : ℕ} (hn : 0 < n)
       have hrest : (∏ j ∈ Finset.univ.erase i, a j) ≤ K ^ ((m + 1) - 1) := by
         calc
           (∏ j ∈ Finset.univ.erase i, a j) ≤ ∏ _j ∈ Finset.univ.erase i, K :=
-            Finset.prod_le_prod (fun j _ => ha_nonneg j) (fun j _ => ha_le j)
+            Finset.prod_le_prod₀ (fun j _ => ha_nonneg j) (fun j _ => ha_le j)
           _ = K ^ ((m + 1) - 1) := by simp
       apply (div_le_iff₀ (pow_pos hK ((m + 1) - 1))).mpr
       calc
@@ -555,8 +581,11 @@ theorem posSemidef_sub_scalar_of_det_lower {n : ℕ} (hn : 0 < n)
         _ = a i * ∏ j ∈ Finset.univ.erase i, a j :=
           (Finset.mul_prod_erase Finset.univ a (Finset.mem_univ i)).symm
         _ ≤ a i * K ^ ((m + 1) - 1) := mul_le_mul_of_nonneg_left hrest (ha_nonneg i)
-    have hdiag : (diagonal a - (δ / K ^ ((m + 1) - 1)) • (1 : Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ)).PosSemidef := by
-      have heq : diagonal a - (δ / K ^ ((m + 1) - 1)) • (1 : Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ) =
+    have hdiag :
+      (diagonal a -
+          (δ / K ^ ((m + 1) - 1)) • (1 : Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ)).PosSemidef := by
+      have heq :
+        diagonal a - (δ / K ^ ((m + 1) - 1)) • (1 : Matrix (Fin (m + 1)) (Fin (m + 1)) ℝ) =
           diagonal (fun i => a i - δ / K ^ ((m + 1) - 1)) := by
         ext i j
         by_cases hij : i = j
@@ -578,15 +607,16 @@ section InverseBounds
 
 open Matrix
 
-/-- **Reciprocal matrix bounds**: a real positive definite `A` with `α·Id ≤ A ≤ β·Id` (`α, β > 0`) satisfies
+/--
+**Reciprocal matrix bounds**: a real positive definite `A` with `α·Id ≤ A ≤ β·Id` (`α, β > 0`)
+satisfies
 `β⁻¹·Id ≤ A⁻¹ ≤ α⁻¹·Id`; every dimension, zero included. -/
-theorem inverse_posSemidef_bounds {n : ℕ}
-    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
+theorem inverse_posSemidef_bounds {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
     {α β : ℝ} (hα : 0 < α) (hβ : 0 < β)
     (hlower : (A - α • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef)
     (hupper : (β • (1 : Matrix (Fin n) (Fin n) ℝ) - A).PosSemidef) :
     (A⁻¹ - β⁻¹ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef ∧
-    (α⁻¹ • (1 : Matrix (Fin n) (Fin n) ℝ) - A⁻¹).PosSemidef := by
+      (α⁻¹ • (1 : Matrix (Fin n) (Fin n) ℝ) - A⁻¹).PosSemidef := by
   classical
   let R := A⁻¹
   have hR : R.PosDef := hA.inv
@@ -605,7 +635,8 @@ theorem inverse_posSemidef_bounds {n : ℕ}
   let e := Unitary.conjStarAlgAut ℝ (Matrix (Fin n) (Fin n) ℝ) U
   let a := hR.isHermitian.eigenvalues
   have hspec : R = e (diagonal a) := by
-    simpa only [e,U,a,Function.comp_def,RCLike.ofReal_real_eq_id,id_eq] using hR.isHermitian.spectral_theorem
+    simpa only [e, U, a, Function.comp_def, RCLike.ofReal_real_eq_id, id_eq] using
+      hR.isHermitian.spectral_theorem
   have hpres (B : Matrix (Fin n) (Fin n) ℝ) : (e B).PosSemidef ↔ B.PosSemidef := by
     dsimp only [e]
     rw [Unitary.conjStarAlgAut_apply]
@@ -620,10 +651,8 @@ theorem inverse_posSemidef_bounds {n : ℕ}
     exact hUp
   have ha (i : Fin n) : β⁻¹ ≤ a i ∧ a i ≤ α⁻¹ := by
     have hpos : 0 < a i := hR.eigenvalues_pos i
-    have hlo : 0 ≤ a i - α * (a i * a i) := by
-      simpa using hDLo.diag_nonneg (i := i)
-    have hup : 0 ≤ β * (a i * a i) - a i := by
-      simpa using hDUp.diag_nonneg (i := i)
+    have hlo : 0 ≤ a i - α * (a i * a i) := by simpa using hDLo.diag_nonneg (i := i)
+    have hup : 0 ≤ β * (a i * a i) - a i := by simpa using hDUp.diag_nonneg (i := i)
     constructor
     · apply (inv_le_iff_one_le_mul₀ hβ).2
       nlinarith
@@ -633,19 +662,19 @@ theorem inverse_posSemidef_bounds {n : ℕ}
   · have hd : (diagonal a - β⁻¹ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef := by
       convert Matrix.posSemidef_diagonal_iff.mpr (fun i => sub_nonneg.mpr (ha i).1) using 1
       ext i j
-      by_cases hij : i=j
+      by_cases hij : i = j
       · subst j; simp
       · simp [hij]
     have h := (hpres _).mpr hd
-    simpa only [map_sub,map_smul,map_one,←hspec,R] using h
+    simpa only [map_sub, map_smul, map_one, ← hspec, R] using h
   · have hd : (α⁻¹ • (1 : Matrix (Fin n) (Fin n) ℝ) - diagonal a).PosSemidef := by
       convert Matrix.posSemidef_diagonal_iff.mpr (fun i => sub_nonneg.mpr (ha i).2) using 1
       ext i j
-      by_cases hij : i=j
+      by_cases hij : i = j
       · subst j; simp
       · simp [hij]
     have h := (hpres _).mpr hd
-    simpa only [map_sub,map_smul,map_one,←hspec,R] using h
+    simpa only [map_sub, map_smul, map_one, ← hspec, R] using h
 
 end InverseBounds
 
@@ -657,11 +686,13 @@ section QuadraticYoung
 
 open Matrix
 
-/-- **Young inequality for a positive semidefinite quadratic form**: `2 xᵀAy ≤ ε xᵀAx + ε⁻¹ yᵀAy` for real positive
-semidefinite `A` over any finite index type (the empty one included), any vectors and `ε > 0`; `A` may be singular. -/
-theorem posSemidef_quadratic_young {ι : Type*} [Fintype ι]
-    (A : Matrix ι ι ℝ) (hA : A.PosSemidef) (x y : ι → ℝ)
-    {ε : ℝ} (hε : 0 < ε) :
+/--
+**Young inequality for a positive semidefinite quadratic form**: `2 xᵀAy ≤ ε xᵀAx + ε⁻¹ yᵀAy` for
+real positive
+semidefinite `A` over any finite index type (the empty one included), any vectors and `ε > 0`; `A`
+may be singular. -/
+theorem posSemidef_quadratic_young {ι : Type*} [Fintype ι] (A : Matrix ι ι ℝ)
+    (hA : A.PosSemidef) (x y : ι → ℝ) {ε : ℝ} (hε : 0 < ε) :
     2 * dotProduct x (A.mulVec y) ≤
       ε * dotProduct x (A.mulVec x) + ε⁻¹ * dotProduct y (A.mulVec y) := by
   classical
@@ -672,9 +703,10 @@ theorem posSemidef_quadratic_young {ι : Type*} [Fintype ι]
       _ = dotProduct x (A.mulVec y) := Matrix.dotProduct_transpose_mulVec A y x
   have hpos := hA.dotProduct_mulVec_nonneg (ε • x - y)
   simp only [star_trivial] at hpos
-  have hquad : dotProduct (ε • x - y) (A.mulVec (ε • x - y)) =
-      ε ^ 2 * dotProduct x (A.mulVec x) -
-        2 * ε * dotProduct x (A.mulVec y) + dotProduct y (A.mulVec y) := by
+  have hquad :
+    dotProduct (ε • x - y) (A.mulVec (ε • x - y)) =
+      ε ^ 2 * dotProduct x (A.mulVec x) - 2 * ε * dotProduct x (A.mulVec y) +
+        dotProduct y (A.mulVec y) := by
     simp only [Matrix.mulVec_sub, Matrix.mulVec_smul, sub_dotProduct, dotProduct_sub,
       smul_dotProduct, dotProduct_smul, smul_eq_mul, hsym]
     ring
@@ -682,19 +714,22 @@ theorem posSemidef_quadratic_young {ι : Type*} [Fintype ι]
   apply (mul_le_mul_iff_right₀ hε).mp
   calc
     ε * (2 * dotProduct x (A.mulVec y)) ≤
-        ε ^ 2 * dotProduct x (A.mulVec x) + dotProduct y (A.mulVec y) := by linarith
+        ε ^ 2 * dotProduct x (A.mulVec x) + dotProduct y (A.mulVec y) := by
+      linarith
     _ = ε * (ε * dotProduct x (A.mulVec x) + ε⁻¹ * dotProduct y (A.mulVec y)) := by
       field_simp [hε.ne']
 
-/-- **Pointwise weighted Young inequality for real-power energy tests**: for real positive semidefinite `A`, `s > 0`,
-`p > 0` and real `χ`, `2 χ s^(-p) aᵀAb ≤ (p/2) χ² s^(-p-1) aᵀAa + (2/p) s^(1-p) bᵀAb`. Local algebra for a Caccioppoli
+/--
+**Pointwise weighted Young inequality for real-power energy tests**: for real positive semidefinite
+`A`, `s > 0`,
+`p > 0` and real `χ`, `2 χ s^(-p) aᵀAb ≤ (p/2) χ² s^(-p-1) aᵀAa + (2/p) s^(1-p) bᵀAb`. Local algebra
+for a Caccioppoli
 estimate; not itself a PDE energy inequality. -/
-theorem rpow_cutoff_quadratic_young {ι : Type*} [Fintype ι]
-    (A : Matrix ι ι ℝ) (hA : A.PosSemidef) (a b : ι → ℝ)
-    {s p : ℝ} (hs : 0 < s) (hp : 0 < p) (χ : ℝ) :
+theorem rpow_cutoff_quadratic_young {ι : Type*} [Fintype ι] (A : Matrix ι ι ℝ)
+    (hA : A.PosSemidef) (a b : ι → ℝ) {s p : ℝ} (hs : 0 < s) (hp : 0 < p) (χ : ℝ) :
     2 * χ * s ^ (-p) * dotProduct a (A.mulVec b) ≤
       (p / 2) * χ ^ 2 * s ^ (-p - 1) * dotProduct a (A.mulVec a) +
-      (2 / p) * s ^ (1 - p) * dotProduct b (A.mulVec b) := by
+        (2 / p) * s ^ (1 - p) * dotProduct b (A.mulVec b) := by
   have h := posSemidef_quadratic_young A hA (χ • a) (s • b) (by positivity : 0 < p / 2)
   simp only [Matrix.mulVec_smul, smul_dotProduct, dotProduct_smul, smul_eq_mul] at h
   have hs1 : s ^ (-p - 1) * s = s ^ (-p) := by
@@ -711,11 +746,17 @@ theorem rpow_cutoff_quadratic_young {ι : Type*} [Fintype ι]
   have h' := mul_le_mul_of_nonneg_left h (Real.rpow_nonneg hs.le (-p - 1))
   calc
     2 * χ * s ^ (-p) * dotProduct a (A.mulVec b) =
-        s ^ (-p - 1) * (2 * (s * (χ * dotProduct a (A.mulVec b)))) := by rw [← hs1]; ring
-    _ ≤ s ^ (-p - 1) * ((p / 2) * (χ * (χ * dotProduct a (A.mulVec a))) +
-        (p / 2)⁻¹ * (s * (s * dotProduct b (A.mulVec b)))) := h'
-    _ = (p / 2) * χ ^ 2 * s ^ (-p - 1) * dotProduct a (A.mulVec a) +
-        (2 / p) * s ^ (1 - p) * dotProduct b (A.mulVec b) := by rw [hi, ← hs2]; ring
+        s ^ (-p - 1) * (2 * (s * (χ * dotProduct a (A.mulVec b)))) := by
+      rw [← hs1]; ring
+    _ ≤
+        s ^ (-p - 1) *
+          ((p / 2) * (χ * (χ * dotProduct a (A.mulVec a))) +
+            (p / 2)⁻¹ * (s * (s * dotProduct b (A.mulVec b)))) :=
+      h'
+    _ =
+        (p / 2) * χ ^ 2 * s ^ (-p - 1) * dotProduct a (A.mulVec a) +
+          (2 / p) * s ^ (1 - p) * dotProduct b (A.mulVec b) := by
+      rw [hi, ← hs2]; ring
 
 end QuadraticYoung
 
@@ -726,35 +767,38 @@ namespace FunctionalInequalities.Analysis
 section PositiveCongruence
 open Matrix
 open scoped MatrixOrder
-/-- **Positive definite matrices are congruent.** Two positive definite real matrices of the same nonzero size
-satisfy `A = S B Sᵀ` for an invertible real `S` (`S = A^{1/2} B^{-1/2}` by the continuous functional calculus).
-This is congruence, not similarity: the change of variables of Gilbarg–Trudinger (2001), proof of Lemma 17.13,
+/--
+**Positive definite matrices are congruent.** Two positive definite real matrices of the same
+nonzero size
+satisfy `A = S B Sᵀ` for an invertible real `S` (`S = A^{1/2} B^{-1/2}` by the continuous functional
+calculus).
+This is congruence, not similarity: the change of variables of Gilbarg–Trudinger (2001), proof of
+Lemma 17.13,
 Eq. (17.55). -/
-theorem exists_invertible_congruence_of_posDef
-    {n : ℕ} (hn : 0 < n) (A B : Matrix (Fin n) (Fin n) ℝ)
-    (hA : A.PosDef) (hB : B.PosDef) :
+theorem exists_invertible_congruence_of_posDef {n : ℕ} (hn : 0 < n)
+    (A B : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef) (hB : B.PosDef) :
     ∃ S : Matrix (Fin n) (Fin n) ℝ, IsUnit S ∧ A = S * B * Matrix.transpose S := by
   classical
-  cases n with
+    cases n with
   | zero => omega
   | succ m =>
     let X := CFC.sqrt A
     let Y := CFC.sqrt B
-    have hXX : X*X=A := CFC.sqrt_mul_sqrt_self A hA.posSemidef.nonneg
-    have hYY : Y*Y=B := CFC.sqrt_mul_sqrt_self B hB.posSemidef.nonneg
+    have hXX : X * X = A := CFC.sqrt_mul_sqrt_self A hA.posSemidef.nonneg
+    have hYY : Y * Y = B := CFC.sqrt_mul_sqrt_self B hB.posSemidef.nonneg
     have hUX : IsUnit X := (CFC.isUnit_sqrt_iff A hA.posSemidef.nonneg).2 hA.isUnit
     have hUY : IsUnit Y := (CFC.isUnit_sqrt_iff B hB.posSemidef.nonneg).2 hB.isUnit
-    have hXt : Xᵀ=X := (Matrix.isHermitian_iff_isSymm.mp (CFC.sqrt_nonneg A).posSemidef.1).eq
-    have hYt : Yᵀ=Y := (Matrix.isHermitian_iff_isSymm.mp (CFC.sqrt_nonneg B).posSemidef.1).eq
-    have hYit : Y⁻¹ᵀ=Y⁻¹ := by rw [Matrix.transpose_nonsing_inv,hYt]
-    have hYL : Y⁻¹*Y=1 := Matrix.nonsing_inv_mul Y ((Matrix.isUnit_iff_isUnit_det Y).mp hUY)
-    have hYR : Y*Y⁻¹=1 := Matrix.mul_nonsing_inv Y ((Matrix.isUnit_iff_isUnit_det Y).mp hUY)
-    refine ⟨X*Y⁻¹,hUX.mul (Matrix.isUnit_nonsing_inv_iff.mpr hUY),?_⟩
+    have hXt : Xᵀ = X := (Matrix.isHermitian_iff_isSymm.mp (CFC.sqrt_nonneg A).posSemidef.1).eq
+    have hYt : Yᵀ = Y := (Matrix.isHermitian_iff_isSymm.mp (CFC.sqrt_nonneg B).posSemidef.1).eq
+    have hYit : Y⁻¹ᵀ = Y⁻¹ := by rw [Matrix.transpose_nonsing_inv, hYt]
+    have hYL : Y⁻¹ * Y = 1 := Matrix.nonsing_inv_mul Y ((Matrix.isUnit_iff_isUnit_det Y).mp hUY)
+    have hYR : Y * Y⁻¹ = 1 := Matrix.mul_nonsing_inv Y ((Matrix.isUnit_iff_isUnit_det Y).mp hUY)
+    refine ⟨X * Y⁻¹, hUX.mul (Matrix.isUnit_nonsing_inv_iff.mpr hUY), ?_⟩
     symm
-    rw [Matrix.transpose_mul,hYit,hXt,← hYY]
+    rw [Matrix.transpose_mul, hYit, hXt, ← hYY]
     calc
-      _ = X*(Y⁻¹*Y)*(Y*Y⁻¹)*X := by simp only [Matrix.mul_assoc]
-      _ = X*X := by rw [hYL,hYR]; simp only [mul_one]
+      _ = X * (Y⁻¹ * Y) * (Y * Y⁻¹) * X := by simp only [Matrix.mul_assoc]
+      _ = X * X := by rw [hYL, hYR]; simp only [mul_one]
       _ = A := hXX
 end PositiveCongruence
 
@@ -787,12 +831,12 @@ section AxisFrames
 open Matrix Module
 open scoped RealInnerProductSpace
 
-/-- Positive definiteness generates an orthogonal coordinate basis while fixing a chosen axis. -/
-theorem exists_orthogonal_basis_fixing_axis {n : ℕ}
-    (H : Matrix (Fin n) (Fin n) ℝ) (hH : H.PosDef) (k : Fin n) :
+/--
+Positive definiteness generates an orthogonal coordinate basis while fixing a chosen axis. -/
+theorem exists_orthogonal_basis_fixing_axis {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ)
+    (hH : H.PosDef) (k : Fin n) :
     ∃ b : Basis (Fin n) ℝ (Fin n → ℝ),
-      b k=Pi.single k 1 ∧
-      ∀ i j, i≠j → (H *ᵥ b j) ⬝ᵥ b i=0 := by
+      b k = Pi.single k 1 ∧ ∀ i j, i ≠ j → (H *ᵥ b j) ⬝ᵥ b i = 0 := by
   classical
   let ng := H.toNormedAddCommGroup hH
   let _ : SeminormedAddCommGroup (Fin n → ℝ) := ng.toSeminormedAddCommGroup
@@ -800,82 +844,84 @@ theorem exists_orthogonal_basis_fixing_axis {n : ℕ}
   let _ : InnerProductSpace ℝ (Fin n → ℝ) := H.toInnerProductSpace hH.posSemidef
   let v : Fin n → ℝ := Pi.single k 1
   let a := Real.sqrt (H k k)
-  have ha : 0<a := Real.sqrt_pos.mpr hH.diag_pos
-  have hasq : a^2=H k k := Real.sq_sqrt hH.diag_pos.le
+  have ha : 0 < a := Real.sqrt_pos.mpr hH.diag_pos
+  have hasq : a ^ 2 = H k k := Real.sq_sqrt hH.diag_pos.le
   let w := a⁻¹ • v
-  have hw : inner ℝ w w=1 := by
-    change (H *ᵥ w) ⬝ᵥ star w=1
-    simp only [w,v,star_trivial,smul_dotProduct,dotProduct_smul,mulVec_smul]
-    simp only [mulVec_single,mul_one,dotProduct_single]
-    simp only [Pi.smul_apply,op_smul_eq_smul,smul_eq_mul,Matrix.col]
+  have hw : inner ℝ w w = 1 := by
+    change (H *ᵥ w) ⬝ᵥ star w = 1
+    simp only [w, v, star_trivial, smul_dotProduct, dotProduct_smul, mulVec_smul]
+    simp only [mulVec_single, mul_one, dotProduct_single]
+    simp only [Pi.smul_apply, op_smul_eq_smul, smul_eq_mul, Matrix.col]
     field_simp [ha.ne']
     exact hasq.symm
-  have ho : Orthonormal ℝ (({k} : Set (Fin n)).domRestrict (fun _ => w)) := by
+  have ho : Orthonormal ℝ (({ k } : Set (Fin n)).domRestrict (fun _ => w)) := by
     rw [orthonormal_iff_ite]
     intro i j
-    have hij : i=j := Subtype.ext ((Set.mem_singleton_iff.mp i.property).trans
-      (Set.mem_singleton_iff.mp j.property).symm)
-    simpa only [Set.domRestrict_apply,if_pos hij] using hw
-  obtain ⟨B,hB⟩ := ho.exists_orthonormalBasis_extension_of_card_eq
-    (by simp : Module.finrank ℝ (Fin n → ℝ)=Fintype.card (Fin n))
-  let s : Fin n → ℝˣ := fun i => Units.mk0 (if i=k then a else 1)
-    (by split_ifs; exact ha.ne'; exact one_ne_zero)
+    have hij : i = j :=
+      Subtype.ext
+        ((Set.mem_singleton_iff.mp i.property).trans (Set.mem_singleton_iff.mp j.property).symm)
+    simpa only [Set.domRestrict_apply, ite_eq_left hij] using hw
+  obtain ⟨B, hB⟩ :=
+    ho.exists_orthonormalBasis_extension_of_card_eq
+      (by simp : Module.finrank ℝ (Fin n → ℝ) = Fintype.card (Fin n))
+  let s : Fin n → ℝˣ := fun i =>
+    Units.mk0 (if i = k then a else 1) (by split_ifs; exact ha.ne'; exact one_ne_zero)
   let b := B.toBasis.unitsSMul s
-  refine ⟨b,?_,?_⟩
+  refine ⟨b, ?_, ?_⟩
   · dsimp [b]
     rw [Basis.unitsSMul_apply]
-    change (s k : ℝ) • B k=v
+    change (s k : ℝ) • B k = v
     rw [hB k (by simp)]
-    simp only [s,Units.val_mk0]
-    change a • (a⁻¹ • v)=v
-    rw [smul_smul,mul_inv_cancel₀ ha.ne',one_smul]
+    simp only [s, Units.val_mk0]
+    change a • (a⁻¹ • v) = v
+    rw [smul_smul, mul_inv_cancel₀ ha.ne', one_smul]
   · intro i j hij
-    have hb : inner ℝ (b i) (b j)=0 := by
+    have hb : inner ℝ (b i) (b j) = 0 := by
       dsimp only [b]
-      rw [Basis.unitsSMul_apply,Basis.unitsSMul_apply]
-      simp only [Units.smul_def,inner_smul_left,inner_smul_right]
-      change (s j : ℝ) * ((starRingEnd ℝ) (s i : ℝ) * inner ℝ (B i) (B j))=0
+      rw [Basis.unitsSMul_apply, Basis.unitsSMul_apply]
+      simp only [Units.smul_def, inner_smul_left, inner_smul_right]
+      change (s j : ℝ) * ((starRingEnd ℝ) (s i : ℝ) * inner ℝ (B i) (B j)) = 0
       rw [B.orthonormal.inner_eq_zero hij]
       simp
-    change (H *ᵥ b j) ⬝ᵥ star (b i)=0 at hb
+    change (H *ᵥ b j) ⬝ᵥ star (b i) = 0 at hb
     simpa using hb
 
 /-- The generated basis gives an invertible diagonalizing matrix fixing the chosen axis. -/
-theorem exists_diagonal_frame_fixing_axis {n : ℕ}
-    (H : Matrix (Fin n) (Fin n) ℝ) (hH : H.PosDef) (k : Fin n) :
+theorem exists_diagonal_frame_fixing_axis {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (hH : H.PosDef)
+    (k : Fin n) :
     ∃ (A : Matrix (Fin n) (Fin n) ℝ) (d : Fin n → ℝ),
-      IsUnit A ∧ (A *ᵥ Pi.single k 1)=Pi.single k 1 ∧
-      (∀ i,0<d i) ∧ Aᵀ*H*A=Matrix.diagonal d := by
+      IsUnit A ∧
+        (A *ᵥ Pi.single k 1) = Pi.single k 1 ∧
+          (∀ i, 0 < d i) ∧ Aᵀ * H * A = Matrix.diagonal d := by
   classical
-  obtain ⟨b,hbk,horth⟩ := exists_orthogonal_basis_fixing_axis H hH k
+  obtain ⟨b, hbk, horth⟩ := exists_orthogonal_basis_fixing_axis H hH k
   let e := Pi.basisFun ℝ (Fin n)
   let A := e.toMatrix b
-  have hA (i j) : A i j=b j i := rfl
+  have hA (i j) : A i j = b j i := rfl
   have hu : IsUnit A := by
     let _ : Invertible A := e.invertibleToMatrix b
     exact isUnit_of_invertible A
-  have hentry (i j) : (Aᵀ*H*A) i j=(H *ᵥ b j) ⬝ᵥ b i := by
+  have hentry (i j) : (Aᵀ * H * A) i j = (H *ᵥ b j) ⬝ᵥ b i := by
     rw [Matrix.mul_assoc]
-    change (∑ l, A l i * (∑ m,H l m*A m j)) =
-      ∑ l,(∑ m,H l m*b j m)*b i l
+    change (∑ l, A l i * (∑ m, H l m * A m j)) = ∑ l, (∑ m, H l m * b j m) * b i l
     simp_rw [hA]
     apply Finset.sum_congr rfl
     intro l _
     exact mul_comm _ _
-  refine ⟨A,fun i => (H *ᵥ b i) ⬝ᵥ b i,hu,?_,?_,?_⟩
+  refine ⟨A, fun i => (H *ᵥ b i) ⬝ᵥ b i, hu, ?_, ?_, ?_⟩
   · ext i
     rw [Matrix.mulVec_single_one]
-    change A i k=(Pi.single k (1 : ℝ) : Fin n → ℝ) i
-    rw [hA,hbk]
+    change A i k = (Pi.single k (1 : ℝ) : Fin n → ℝ) i
+    rw [hA, hbk]
   · intro i
     have hi := hH.dotProduct_mulVec_pos (b.ne_zero i)
-    simpa only [star_trivial,dotProduct_comm] using hi
+    simpa only [star_trivial, dotProduct_comm] using hi
   · ext i j
     rw [hentry]
-    by_cases hij : i=j
+    by_cases hij : i = j
     · subst j; simp
     · rw [horth i j hij]
-      simp [Matrix.diagonal,hij]
+      simp [Matrix.diagonal, hij]
 
 end AxisFrames
 
@@ -888,7 +934,8 @@ ELEMENTWISE norm ceiling. Empty finite indices are included.
 section SymmetricCoefficients
 open scoped Matrix.Norms.Elementwise
 
-/-- Reindexing a double sum against the transpose; shared by the quadratic-form and trace identities. -/
+/--
+Reindexing a double sum against the transpose; shared by the quadratic-form and trace identities. -/
 private lemma sum_transpose_mul {ι : Type*} [Fintype ι] (A : Matrix ι ι ℝ) (g : ι → ι → ℝ) :
     ∑ i, ∑ j, A.transpose i j * g i j = ∑ i, ∑ j, A i j * g j i := by
   rw [Finset.sum_comm]
@@ -904,17 +951,22 @@ theorem posSemidef_symmetricPart_of_quadratic_nonneg {ι : Type*} [Fintype ι] [
     (A : Matrix ι ι ℝ) (hA : ∀ v : ι → ℝ, 0 ≤ ∑ i, ∑ j, A i j * v i * v j) :
     ((1 / 2 : ℝ) • (A + A.transpose)).PosSemidef ∧
       (∀ v : ι → ℝ,
-        (∑ i, ∑ j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j) =
-          ∑ i, ∑ j, A i j * v i * v j) ∧
-      (∀ (H : Matrix ι ι ℝ), H.IsHermitian →
-        Matrix.trace (((1 / 2 : ℝ) • (A + A.transpose)) * H) = Matrix.trace (A * H)) := by
-  have hquad : ∀ v : ι → ℝ,
-      (∑ i, ∑ j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j) = ∑ i, ∑ j, A i j * v i * v j := by
+          (∑ i, ∑ j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j) =
+            ∑ i, ∑ j, A i j * v i * v j) ∧
+        (∀ (H : Matrix ι ι ℝ),
+          H.IsHermitian →
+            Matrix.trace (((1 / 2 : ℝ) • (A + A.transpose)) * H) = Matrix.trace (A * H)) := by
+  have hquad :
+    ∀ v : ι → ℝ,
+      (∑ i, ∑ j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j) =
+        ∑ i, ∑ j, A i j * v i * v j := by
     intro v
     have h : ∑ i, ∑ j, A.transpose i j * (v i * v j) = ∑ i, ∑ j, A i j * (v j * v i) :=
       sum_transpose_mul A fun i j => v i * v j
-    have e : ∀ i j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j =
-        (1 / 2) * (A i j * v i * v j) + (1 / 2) * (A.transpose i j * (v i * v j)) := by
+    have e :
+      ∀ i j,
+        ((1 / 2 : ℝ) • (A + A.transpose)) i j * v i * v j =
+          (1 / 2) * (A i j * v i * v j) + (1 / 2) * (A.transpose i j * (v i * v j)) := by
       intro i j
       simp only [Matrix.smul_apply, Matrix.add_apply, smul_eq_mul]
       ring
@@ -935,8 +987,10 @@ theorem posSemidef_symmetricPart_of_quadratic_nonneg {ι : Type*} [Fintype ι] [
       simp [Matrix.trace, Matrix.mul_apply]
     have h : ∑ i, ∑ j, A.transpose i j * H j i = ∑ i, ∑ j, A i j * H i j :=
       sum_transpose_mul A fun i j => H j i
-    have e : ∀ i j, ((1 / 2 : ℝ) • (A + A.transpose)) i j * H j i =
-        (1 / 2) * (A i j * H j i) + (1 / 2) * (A.transpose i j * H j i) := by
+    have e :
+      ∀ i j,
+        ((1 / 2 : ℝ) • (A + A.transpose)) i j * H j i =
+          (1 / 2) * (A i j * H j i) + (1 / 2) * (A.transpose i j * H j i) := by
       intro i j
       simp only [Matrix.smul_apply, Matrix.add_apply, smul_eq_mul]
       ring
@@ -948,22 +1002,26 @@ theorem posSemidef_symmetricPart_of_quadratic_nonneg {ι : Type*} [Fintype ι] [
     ring
 
 theorem norm_symmetricPart_le_of_quadratic_le {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (A : Matrix ι ι ℝ) {M : ℝ} (hM : 0 ≤ M)
-    (hA : ∀ v : ι → ℝ, 0 ≤ ∑ i, ∑ j, A i j * v i * v j)
+    (A : Matrix ι ι ℝ) {M : ℝ} (hM : 0 ≤ M) (hA : ∀ v : ι → ℝ, 0 ≤ ∑ i, ∑ j, A i j * v i * v j)
     (hcap : ∀ v : ι → ℝ, (∑ i, ∑ j, A i j * v i * v j) ≤ M * ∑ i, (v i) ^ 2) :
     ‖((1 / 2 : ℝ) • (A + A.transpose))‖ ≤ M := by
   obtain ⟨hS, hquad, -⟩ := posSemidef_symmetricPart_of_quadratic_nonneg A hA
   set S : Matrix ι ι ℝ := (1 / 2 : ℝ) • (A + A.transpose) with hSdef
-  have hent : ∀ a b : ι, dotProduct (Pi.single a 1) (S.mulVec (Pi.single b 1)) = S a b := fun a b => by
+  have hent : ∀ a b : ι, dotProduct (Pi.single a 1) (S.mulVec (Pi.single b 1)) = S a b :=
+    fun a b => by
     simp [Matrix.mulVec, dotProduct, Pi.single_apply]
   -- diagonal ceiling from the quadratic ceiling at `eᵢ`
+
   have hdiag : ∀ i : ι, S i i ≤ M := fun i => by
     rw [← hent, ← quadratic_eq_dotProduct, hquad]
-    calc _ ≤ M * ∑ k, (Pi.single i (1 : ℝ) k) ^ 2 := hcap _
+    calc
+      _ ≤ M * ∑ k, (Pi.single i (1 : ℝ) k) ^ 2 := hcap _
       _ = M := by simp [Pi.single_apply]
   rw [Matrix.norm_le_iff hM]
-  intro i j
+  intro i
+    j
   -- canonical PSD Young inequality at `ε = 1` on `eᵢ` and `±eⱼ`
+
   have hp := posSemidef_quadratic_young S hS (Pi.single i 1) (Pi.single j 1) one_pos
   have hm := posSemidef_quadratic_young S hS (Pi.single i 1) (-Pi.single j 1) one_pos
   simp only [Matrix.mulVec_neg, dotProduct_neg, neg_dotProduct, neg_neg] at hm

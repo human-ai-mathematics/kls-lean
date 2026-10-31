@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Leibniz
-import FunctionalInequalities.KLS.Isotropic
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Leibniz
+public import FunctionalInequalities.KLS.Isotropic
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! Audit clients for the grouped expansion of Bizeul–Klartag–Lehec, arXiv:2610.05474v1, (72)–(74)
 (`Analysis/BakryEmery/Cumulant/Leibniz.lean`,
@@ -13,6 +15,8 @@ covariance unit is derived from its actual isotropy (never assumed), with
 `D³⟪v, Cov⁻¹ v⟫(0)[1,1,1] = 6 κ₃ = 9 ≠ 0` on repeated data. Section `SkewLaw` and
 `law`/`law_compact` repeat the fixture of `RawCumulantExpansionAudit.lean`, in the namespace
 `BKLGroupedSkewLaw` so that no fixture name is shared with the other BKL audits. -/
+
+@[expose] public section
 
 
 -- ===== SkewLaw =====
@@ -75,7 +79,8 @@ section GroupedClients
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace ENNReal
-open FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
+open FunctionalInequalities FunctionalInequalities.Analysis
+  FunctionalInequalities.Analysis.BakryEmery
 
 namespace BKLGroupedClients
 
@@ -110,10 +115,13 @@ theorem middle_four_card (h : Fin 4 → E) (i0 : Fin 4) :
   revert i0
   decide
 
-/-- At `m = 4` and `i0 = 0` the three middle masks are the pairings `{0,1}`, `{0,2}`, `{0,3}` (repeated data allowed). -/
+/--
+At `m = 4` and `i0 = 0` the three middle masks are the pairings `{0,1}`, `{0,2}`, `{0,3}` (repeated
+data allowed). -/
 theorem middle_four_masks (h : Fin 4 → E) :
-    Finset.univ.filter (fun q : Fin 4 → Bool => q 0 = true ∧ 2 ≤ (selected h q).length ∧
-      2 ≤ (selected h (fun i => !(q i))).length) =
+    Finset.univ.filter
+        (fun q : Fin 4 → Bool =>
+          q 0 = true ∧ 2 ≤ (selected h q).length ∧ 2 ≤ (selected h (fun i => !(q i))).length) =
       {![true, true, false, false], ![true, false, true, false], ![true, false, false, true]} := by
   simp_rw [length_selected_congr h (fun _ : Fin 4 => (0 : ℝ))]
   decide
@@ -123,83 +131,119 @@ end NormedSpace
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-/-- BKL (74) at `m = 3`: the grouped expansion is `6 κ₃`, for a compactly supported law with invertible covariance. -/
+/--
+BKL (74) at `m = 3`: the grouped expansion is `6 κ₃`, for a compactly supported law with invertible
+covariance. -/
 theorem grouped_three (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
     (hA : IsUnit (Covariance.operator (μ : Measure E))) (h : Fin 3 → E) :
-    iteratedFDeriv ℝ 3 (fun z : E =>
-        ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
-          Ring.inverse (Covariance.operator (μ : Measure E))
-            (gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0)⟫) 0 h =
+    iteratedFDeriv ℝ 3
+        (fun z : E =>
+          ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
+            Ring.inverse (Covariance.operator (μ : Measure E))
+              (gradient (logLaplace (μ : Measure E)) z -
+                gradient (logLaplace (μ : Measure E)) 0)⟫)
+        0 h =
       6 * cumulant (μ : Measure E) 3 h := by
-  rw [iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact μ hc hA le_rfl h 0, middle_three_empty]
+  rw [iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact μ hc hA le_rfl h 0,
+    middle_three_empty]
   norm_num
 
-/-- BKL (74) at `m = 4`: `8 κ₄` plus twice the three representative middle terms containing `i0`. -/
+/--
+BKL (74) at `m = 4`: `8 κ₄` plus twice the three representative middle terms containing `i0`. -/
 theorem grouped_four (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
     (hA : IsUnit (Covariance.operator (μ : Measure E))) (h : Fin 4 → E) (i0 : Fin 4) :
-    iteratedFDeriv ℝ 4 (fun z : E =>
-        ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
-          Ring.inverse (Covariance.operator (μ : Measure E))
-            (gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0)⟫) 0 h =
-      8 * cumulant (μ : Measure E) 4 h +
-        2 * ∑ q ∈ Finset.univ.filter (fun q : Fin 4 → Bool =>
-          q i0 = true ∧ 2 ≤ (selected h q).length ∧ 2 ≤ (selected h (fun i => !(q i))).length),
-          ⟪cumulantVector (μ : Measure E) (selected h q),
+    iteratedFDeriv ℝ 4
+        (fun z : E =>
+          ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
             Ring.inverse (Covariance.operator (μ : Measure E))
-              (cumulantVector (μ : Measure E) (selected h (fun i => !(q i))))⟫ := by
+              (gradient (logLaplace (μ : Measure E)) z -
+                gradient (logLaplace (μ : Measure E)) 0)⟫)
+        0 h =
+      8 * cumulant (μ : Measure E) 4 h +
+        2 *
+          ∑
+            q ∈
+              Finset.univ.filter
+                (fun q : Fin 4 → Bool =>
+                  q i0 = true ∧
+                    2 ≤ (selected h q).length ∧ 2 ≤ (selected h (fun i => !(q i))).length),
+            ⟪cumulantVector (μ : Measure E) (selected h q),
+              Ring.inverse (Covariance.operator (μ : Measure E))
+                (cumulantVector (μ : Measure E) (selected h (fun i => !(q i))))⟫ := by
   rw [iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact μ hc hA (by norm_num) h i0]
   norm_num
 
-/-- BKL (74) at `m = 4` written out: `8 κ₄` plus twice the three pairings of the slots containing `h 0`. -/
+/--
+BKL (74) at `m = 4` written out: `8 κ₄` plus twice the three pairings of the slots containing `h 0`.
+-/
 theorem grouped_four_pairs (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
     (hA : IsUnit (Covariance.operator (μ : Measure E))) (h : Fin 4 → E) :
-    iteratedFDeriv ℝ 4 (fun z : E =>
-        ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
-          Ring.inverse (Covariance.operator (μ : Measure E))
-            (gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0)⟫) 0 h =
+    iteratedFDeriv ℝ 4
+        (fun z : E =>
+          ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
+            Ring.inverse (Covariance.operator (μ : Measure E))
+              (gradient (logLaplace (μ : Measure E)) z -
+                gradient (logLaplace (μ : Measure E)) 0)⟫)
+        0 h =
       8 * cumulant (μ : Measure E) 4 h +
-        2 * (⟪cumulantVector (μ : Measure E) [h 0, h 1],
-              Ring.inverse (Covariance.operator (μ : Measure E)) (cumulantVector (μ : Measure E) [h 2, h 3])⟫ +
+        2 *
+          (⟪cumulantVector (μ : Measure E) [h 0, h 1],
+              Ring.inverse (Covariance.operator (μ : Measure E))
+                (cumulantVector (μ : Measure E) [h 2, h 3])⟫ +
             (⟪cumulantVector (μ : Measure E) [h 0, h 2],
-              Ring.inverse (Covariance.operator (μ : Measure E)) (cumulantVector (μ : Measure E) [h 1, h 3])⟫ +
-             ⟪cumulantVector (μ : Measure E) [h 0, h 3],
-              Ring.inverse (Covariance.operator (μ : Measure E)) (cumulantVector (μ : Measure E) [h 1, h 2])⟫)) := by
-  rw [grouped_four μ hc hA h 0, middle_four_masks h, Finset.sum_insert (by decide), Finset.sum_insert (by decide),
-    Finset.sum_singleton]
+                Ring.inverse (Covariance.operator (μ : Measure E))
+                  (cumulantVector (μ : Measure E) [h 1, h 3])⟫ +
+              ⟪cumulantVector (μ : Measure E) [h 0, h 3],
+                Ring.inverse (Covariance.operator (μ : Measure E))
+                  (cumulantVector (μ : Measure E) [h 1, h 2])⟫)) := by
+  rw [grouped_four μ hc hA h 0, middle_four_masks h, Finset.sum_insert (by decide),
+    Finset.sum_insert (by decide), Finset.sum_singleton]
   rfl
 
 /-- The interface through its binder names as named arguments (`mu`, `hc`, `hA`, `hm`, `h`,
 `i0`). -/
 theorem grouped_named (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
-    (hA : IsUnit (Covariance.operator (μ : Measure E))) {m : ℕ} (hm : 3 ≤ m) (h : Fin m → E) (i0 : Fin m) :
-    iteratedFDeriv ℝ m (fun z : E =>
-        ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
-          Ring.inverse (Covariance.operator (μ : Measure E))
-            (gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0)⟫) 0 h =
-      (2 * (m : ℝ)) * cumulant (μ : Measure E) m h +
-        2 * ∑ q ∈ Finset.univ.filter (fun q : Fin m → Bool =>
-          q i0 = true ∧ 2 ≤ (selected h q).length ∧ 2 ≤ (selected h (fun i => !(q i))).length),
-          ⟪cumulantVector (μ : Measure E) (selected h q),
+    (hA : IsUnit (Covariance.operator (μ : Measure E))) {m : ℕ} (hm : 3 ≤ m) (h : Fin m → E)
+    (i0 : Fin m) :
+    iteratedFDeriv ℝ m
+        (fun z : E =>
+          ⟪gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0,
             Ring.inverse (Covariance.operator (μ : Measure E))
-              (cumulantVector (μ : Measure E) (selected h (fun i => !(q i))))⟫ :=
-  iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact (mu := μ) (hc := hc) (hA := hA) (hm := hm)
-    (h := h) (i0 := i0)
+              (gradient (logLaplace (μ : Measure E)) z -
+                gradient (logLaplace (μ : Measure E)) 0)⟫)
+        0 h =
+      (2 * (m : ℝ)) * cumulant (μ : Measure E) m h +
+        2 *
+          ∑
+            q ∈
+              Finset.univ.filter
+                (fun q : Fin m → Bool =>
+                  q i0 = true ∧
+                    2 ≤ (selected h q).length ∧ 2 ≤ (selected h (fun i => !(q i))).length),
+            ⟪cumulantVector (μ : Measure E) (selected h q),
+              Ring.inverse (Covariance.operator (μ : Measure E))
+                (cumulantVector (μ : Measure E) (selected h (fun i => !(q i))))⟫ :=
+  iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact (mu := μ) (hc := hc) (hA := hA)
+    (hm := hm) (h := h) (i0 := i0)
 
 end BKLGroupedClients
 
 namespace BKLGroupedSkew
 open BKLGroupedSkewLaw
 
-def law : ProbabilityMeasure ℝ := ⟨twoPt,isProbabilityMeasure_twoPt⟩
+def law : ProbabilityMeasure ℝ :=
+  ⟨twoPt, isProbabilityMeasure_twoPt⟩
 lemma law_compact : IsCompact (law : Measure ℝ).support := by
-  have hsub : (law : Measure ℝ).support ⊆ ({(2:ℝ),-1/2}:Set ℝ) := by
+  have hsub : (law : Measure ℝ).support ⊆ ({(2 : ℝ), -1 / 2} : Set ℝ) := by
     apply Measure.support_subset_of_isClosed (isClosed_singleton.union isClosed_singleton)
     rw [mem_ae_iff]
-    simp [law,twoPt]
-  exact (Set.toFinite ({(2:ℝ),-1/2}:Set ℝ)).isCompact.of_isClosed_subset
-    (law : Measure ℝ).isClosed_support hsub
+    simp [law, twoPt]
+  exact
+    (Set.toFinite ({(2 : ℝ), -1 / 2} : Set ℝ)).isCompact.of_isClosed_subset
+      (law : Measure ℝ).isClosed_support hsub
 
-/-- The skew two-point law is isotropic (actual moments), so its covariance is the identity, a unit. -/
+/--
+The skew two-point law is isotropic (actual moments), so its covariance is the identity, a unit. -/
 theorem law_isotropic : FunctionalInequalities.KLS.Isotropic law :=
   FunctionalInequalities.KLS.isotropic_of_moments law
     ((memLp_two_iff_integrable_sq aestronglyMeasurable_id).2 (integrable_twoPt _))
@@ -211,10 +255,14 @@ theorem law_covariance_unit : IsUnit (Covariance.operator (law : Measure ℝ)) :
 
 /-- BKL (74) at `m = 3` on the actual skew law: `D³⟪v, Cov⁻¹ v⟫(0)[1,1,1] = 6 κ₃ = 9`. -/
 theorem grouped_three_value :
-    iteratedFDeriv ℝ 3 (fun z : ℝ =>
-        ⟪gradient (logLaplace (law : Measure ℝ)) z - gradient (logLaplace (law : Measure ℝ)) 0,
-          Ring.inverse (Covariance.operator (law : Measure ℝ))
-            (gradient (logLaplace (law : Measure ℝ)) z - gradient (logLaplace (law : Measure ℝ)) 0)⟫) 0 ![1, 1, 1] =
+    iteratedFDeriv ℝ 3
+        (fun z : ℝ =>
+          ⟪gradient (logLaplace (law : Measure ℝ)) z -
+              gradient (logLaplace (law : Measure ℝ)) 0,
+            Ring.inverse (Covariance.operator (law : Measure ℝ))
+              (gradient (logLaplace (law : Measure ℝ)) z -
+                gradient (logLaplace (law : Measure ℝ)) 0)⟫)
+        0 ![1, 1, 1] =
       9 := by
   rw [BKLGroupedClients.grouped_three law law_compact law_covariance_unit]
   change 6 * cumulant twoPt 3 ![1, 1, 1] = 9
@@ -236,4 +284,5 @@ end GroupedClients
 #print axioms BKLGroupedSkew.law_isotropic
 #print axioms BKLGroupedSkew.law_covariance_unit
 #print axioms BKLGroupedSkew.grouped_three_value
-#print axioms FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact

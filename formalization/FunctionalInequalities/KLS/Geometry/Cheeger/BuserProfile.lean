@@ -1,9 +1,12 @@
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.Analysis.SpecialFunctions.Arcosh
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+public import Mathlib.Analysis.SpecialFunctions.Log.Basic
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
+public import Mathlib.Analysis.SpecialFunctions.Arcosh
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
 
 /-!
 # Explicit Buser profiles of De Ponti–Mondino
@@ -17,6 +20,8 @@ De Ponti–Mondino, *Sharp Cheeger–Buser type inequalities in RCD(K, ∞) spac
 The paper states "increasing" and "decreasing"; the strict forms imply them. These functions
 enter the explicit Buser bounds for `K > 0` and `K < 0` (Corollary 1.2 and Remark 3.4).
 -/
+
+@[expose] public section
 
 open Real Set
 

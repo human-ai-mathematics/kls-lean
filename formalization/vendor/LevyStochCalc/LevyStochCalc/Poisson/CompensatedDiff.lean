@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedProcessQuadVar
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+module
+
+public import LevyStochCalc.Poisson.CompensatedProcessQuadVar
 
 /-!
 # The difference isometry of the compensated integral process
@@ -13,6 +18,8 @@ For two integrands `φ₁, φ₂`, the `L²` integral processes satisfy
 integrands are refined to a common dyadic grid, where the difference isometry of mark-step
 integrands holds at every time, and both sides pass to the limit in `L²`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal
@@ -115,12 +122,7 @@ theorem process_sub_lintegral_sq {t : ℝ} (ht : 0 < t) :
           refine eLpNorm_congr_ae (Eventually.of_forall fun ω => ?_)
           simp only [Pi.sub_apply]
           ring
-      _ ≤ _ := eLpNorm_sub_le
-          ((memLp_stageIntegral N ℱ φ₁ h_meas₁ h_progMeas₁ h_sq₁ n t).sub
-            (process_memLp N ℱ hℱ φ₁ h_meas₁ h_progMeas₁ h_sq₁ t)).aestronglyMeasurable
-          ((memLp_stageIntegral N ℱ φ₂ h_meas₂ h_progMeas₂ h_sq₂ n t).sub
-            (process_memLp N ℱ hℱ φ₂ h_meas₂ h_progMeas₂ h_sq₂ t)).aestronglyMeasurable (by
-              norm_num)
+      _ ≤ _ := eLpNorm_sub_le (by norm_num)
   have hL := LevyStochCalc.Brownian.Ito.tendsto_lintegral_nnnorm_sq_of_eLpNorm
     (gₙ := fun n ω => stageIntegral N ℱ φ₁ h_meas₁ h_progMeas₁ h_sq₁ n t ω
       - stageIntegral N ℱ φ₂ h_meas₂ h_progMeas₂ h_sq₂ n t ω)
@@ -153,11 +155,7 @@ theorem process_sub_lintegral_sq {t : ℝ} (ht : 0 < t) :
           refine eLpNorm_congr_ae (Eventually.of_forall fun p => ?_)
           simp only [Pi.sub_apply]
           ring
-      _ ≤ _ := eLpNorm_sub_le
-          ((measurable_stageEval N ℱ φ₁ h_meas₁ h_progMeas₁ h_sq₁ n).sub
-            h_meas₁).aestronglyMeasurable
-          ((measurable_stageEval N ℱ φ₂ h_meas₂ h_progMeas₂ h_sq₂ n).sub
-            h_meas₂).aestronglyMeasurable (by norm_num)
+      _ ≤ _ := eLpNorm_sub_le (by norm_num)
   have hR := LevyStochCalc.Brownian.Ito.tendsto_lintegral_nnnorm_sq_of_eLpNorm
     (gₙ := fun n p => stageEval N ℱ φ₁ h_meas₁ h_progMeas₁ h_sq₁ n p
       - stageEval N ℱ φ₂ h_meas₂ h_progMeas₂ h_sq₂ n p)

@@ -1,15 +1,21 @@
-import FunctionalInequalities.Probability.MomentMeasure.Integrability
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Integrability
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # Truncation convergence and the convexified competitor
 
-Dominated convergence for lower truncations, the lower-tail control of the truncation error, and the epsilon
+Dominated convergence for lower truncations, the lower-tail control of the truncation error, and the
+epsilon
 reduction of every admissible competitor to a convex lower semicontinuous admissible one
-(`exists_convexified_lowerTruncate_variational_le_add`), with zero and infinite exponential mass retained.
+(`exists_convexified_lowerTruncate_variational_le_add`), with zero and infinite exponential mass
+retained.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -107,10 +113,10 @@ theorem max_neg_error_le_tail (r M : ℝ) (hM : 0 ≤ M) :
       max r (-M) - r ≤ if r ≤ -M then ‖r‖ else 0 := by
   refine ⟨sub_nonneg.mpr (le_max_left _ _), ?_⟩
   by_cases h : r ≤ -M
-  · rw [if_pos h, max_eq_right h]
+  · rw [ite_eq_left h, max_eq_right h]
     have hn : -r ≤ ‖r‖ := by simpa only [Real.norm_eq_abs] using neg_le_abs r
     linarith
-  · rw [if_neg h, max_eq_left (le_of_not_ge h), sub_self]
+  · rw [ite_eq_right h, max_eq_left (le_of_not_ge h), sub_self]
 variable {E : Type*} [MeasurableSpace E] {μ : Measure E}
 /-- The exact lower-tail norm of the real restriction; a.e. finiteness ensures
 this is the source lower-tail function on the measure's relevant points. -/
@@ -124,9 +130,10 @@ theorem lowerTailNorm_integrable (f : E → EReal) (hf : PotentialIntegrable f �
   have hae : AEStronglyMeasurable (lowerTailNorm f n) μ :=
     (hm.comp_aemeasurable hf.2.2.aestronglyMeasurable.aemeasurable).aestronglyMeasurable
   apply hf.2.2.norm.mono' hae
-  exact Filter.Eventually.of_forall fun x => by
-    unfold lowerTailNorm
-    split_ifs <;> simp
+  exact
+    Filter.Eventually.of_forall fun x => by
+      unfold lowerTailNorm
+      split_ifs <;> simp
 /-- The actual tail integral tends to zero, by dominated convergence and the
 Archimedean cutoff property, without an assumed tail estimate. -/
 theorem tendsto_integral_lowerTailNorm (f : E → EReal) (hf : PotentialIntegrable f μ) :
@@ -140,13 +147,14 @@ theorem tendsto_integral_lowerTailNorm (f : E → EReal) (hf : PotentialIntegrab
       intro n hn
       have hcast : (N : ℝ) + 1 ≤ (n : ℝ) := by exact_mod_cast hn
       have hlt : -(n : ℝ) < (f x).toReal := by linarith
-      exact if_neg (not_le_of_gt hlt)
+      exact ite_eq_right (not_le_of_gt hlt)
     exact tendsto_const_nhds.congr' (Filter.EventuallyEq.symm hev)
-  have ht := tendsto_integral_of_dominated_convergence
-    (fun x => ‖(f x).toReal‖)
-    (fun n => (lowerTailNorm_integrable f hf n).aestronglyMeasurable) hf.2.2.norm
-    (fun n => Filter.Eventually.of_forall fun x => by unfold lowerTailNorm; split_ifs <;> simp)
-    (Filter.Eventually.of_forall hlim)
+  have ht :=
+    tendsto_integral_of_dominated_convergence (fun x => ‖(f x).toReal‖)
+      (fun n => (lowerTailNorm_integrable f hf n).aestronglyMeasurable) hf.2.2.norm
+      (fun n =>
+        Filter.Eventually.of_forall fun x => by unfold lowerTailNorm; split_ifs <;> simp)
+      (Filter.Eventually.of_forall hlim)
   simpa only [integral_zero] using ht
 /-- The exact integral error in (61) is nonnegative and bounded by the actual
 tail integral; all integral subtraction and monotonicity are justified. -/

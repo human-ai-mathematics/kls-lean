@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardLocality
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardLocality
 
 /-!
 # Solutions of the SDE on a window
@@ -14,6 +18,8 @@ integrals well-typed are bundled existentially, as in `JumpDiffusion.is_solution
 solution can be re-read with any proof of them. Two solutions on a common window and a common
 filtration agree, by the Bielecki contraction.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory LevyStochCalc.Probability
 open scoped NNReal ENNReal

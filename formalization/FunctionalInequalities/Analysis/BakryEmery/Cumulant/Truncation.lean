@@ -1,16 +1,24 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
-import Mathlib.Probability.ConditionalProbability
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
+public import Mathlib.Probability.ConditionalProbability
 
 /-!
 # Cumulants of ball truncations converge
 
-For a probability measure with one exponential moment `∫ e^{r‖x‖} < ∞`, the cumulants of the conditional laws on
-the balls `B(0, R)` converge to its cumulants as `R → ∞` (`tendsto_cumulant_cond_closedBall`): cumulants are a fixed
-continuous function (Faà di Bruno, `FormalMultilinearSeries.taylorComp`) of the moment jets at `0`, and the
-truncated moment tensors converge. Used to reduce BKL arXiv:2610.05474v1, Theorem 4.1, to compactly supported laws
+For a probability measure with one exponential moment `∫ e^{r‖x‖} < ∞`, the cumulants of the
+conditional laws on
+the balls `B(0, R)` converge to its cumulants as `R → ∞` (`tendsto_cumulant_cond_closedBall`):
+cumulants are a fixed
+continuous function (Faà di Bruno, `FormalMultilinearSeries.taylorComp`) of the moment jets at `0`,
+and the
+truncated moment tensors converge. Used to reduce BKL arXiv:2610.05474v1, Theorem 4.1, to compactly
+supported laws
 (p. 19, end of Section 6).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -86,9 +94,10 @@ theorem eventually_measure_closedBall_ne_zero (ν : Measure E) [IsProbabilityMea
 /-- Moment tensors of the ball truncations converge in operator norm. -/
 theorem tendsto_iteratedFDeriv_laplace_cond_closedBall (ν : Measure E) [IsProbabilityMeasure ν]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) ν) (d : ℕ) :
-    Tendsto (fun R : ℕ => iteratedFDeriv ℝ d
-        (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂(ν[|Metric.closedBall (0 : E) R])) 0) atTop
-      (𝓝 (iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂ν) 0)) := by
+    Tendsto
+      (fun R : ℕ =>
+        iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂(ν[|Metric.closedBall (0 : E) R])) 0)
+      atTop (𝓝 (iteratedFDeriv ℝ d (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂ν) 0)) := by
   have hpow := FunctionalInequalities.Probability.integrable_norm_pow_of_exp ν hr hexp d
   have hmono : Monotone fun R : ℕ => Metric.closedBall (0 : E) (R : ℝ) := fun m n hmn =>
     Metric.closedBall_subset_closedBall (by exact_mod_cast hmn)
@@ -103,24 +112,29 @@ theorem tendsto_iteratedFDeriv_laplace_cond_closedBall (ν : Measure E) [IsProba
       simpa [Function.comp_def] using this
     have := h1.inv₀ one_ne_zero
     simpa [ENNReal.toReal_inv] using this
-  have hm : Tendsto (fun R : ℕ => ∫ x in Metric.closedBall (0 : E) R, ‖x‖ ^ d ∂ν) atTop
+  have hm :
+    Tendsto (fun R : ℕ => ∫ x in Metric.closedBall (0 : E) R, ‖x‖ ^ d ∂ν) atTop
       (𝓝 (∫ x, ‖x‖ ^ d ∂ν)) := by
     have := tendsto_setIntegral_of_monotone hmeas hmono hpow.integrableOn
     rwa [Metric.iUnion_closedBall_nat, Measure.restrict_univ] at this
   rw [tendsto_iff_norm_sub_tendsto_zero]
-  refine squeeze_zero' (g := fun R : ℕ =>
+  refine
+    squeeze_zero' (g := fun R : ℕ =>
       |((ν (Metric.closedBall (0 : E) R))⁻¹).toReal - 1| * ∫ x, ‖x‖ ^ d ∂ν +
         ((∫ x, ‖x‖ ^ d ∂ν) - ∫ x in Metric.closedBall (0 : E) R, ‖x‖ ^ d ∂ν))
-    (Eventually.of_forall fun R => norm_nonneg _) ?_ ?_
+      (Eventually.of_forall fun R => norm_nonneg _) ?_ ?_
   · filter_upwards [eventually_measure_closedBall_ne_zero ν] with R hR
     have h1 := norm_iteratedFDeriv_laplace_cond_sub_le ν hr hexp d (hmeas R) hR
     have h2 := integral_add_compl (hmeas R) hpow
     calc
       _ ≤ _ := h1
-      _ = |((ν (Metric.closedBall (0 : E) R))⁻¹).toReal - 1| * ∫ x, ‖x‖ ^ d ∂ν +
-          ((∫ x, ‖x‖ ^ d ∂ν) - ∫ x in Metric.closedBall (0 : E) R, ‖x‖ ^ d ∂ν) := by
+      _ =
+          |((ν (Metric.closedBall (0 : E) R))⁻¹).toReal - 1| * ∫ x, ‖x‖ ^ d ∂ν +
+            ((∫ x, ‖x‖ ^ d ∂ν) - ∫ x in Metric.closedBall (0 : E) R, ‖x‖ ^ d ∂ν) := by
         rw [← h2]; ring
-  · have := ((hc.sub_const 1).abs.mul_const (∫ x, ‖x‖ ^ d ∂ν)).add ((tendsto_const_nhds (x := ∫ x, ‖x‖ ^ d ∂ν)).sub hm)
+  · have :=
+      ((hc.sub_const 1).abs.mul_const (∫ x, ‖x‖ ^ d ∂ν)).add
+        ((tendsto_const_nhds (x := ∫ x, ‖x‖ ^ d ∂ν)).sub hm)
     simpa using this
 
 /-- The cumulant tensor as the Faà di Bruno composition of the Taylor jets of `log` at `1` and of
@@ -168,13 +182,14 @@ theorem cumulant_eq_taylorComp (μ : Measure E) [IsProbabilityMeasure μ] {r : �
 
 end CondHelpers
 
-/-- **Cumulants of ball truncations converge** (BKL arXiv:2610.05474v1, p. 19, reduction to compactly
+/--
+**Cumulants of ball truncations converge** (BKL arXiv:2610.05474v1, p. 19, reduction to compactly
 supported laws): for a probability measure with one exponential moment `∫ e^{r‖x‖} < ∞` (`r > 0`, as
 given by Borell's lemma for log-concave laws), the cumulants of the conditional laws on the balls
 `B(0, R)` converge to those of the measure as `R → ∞`. -/
-theorem tendsto_cumulant_cond_closedBall {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    (ν : Measure E) [IsProbabilityMeasure ν] {r : ℝ} (hr : 0 < r)
+theorem tendsto_cumulant_cond_closedBall {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] (ν : Measure E) [IsProbabilityMeasure ν] {r : ℝ} (hr : 0 < r)
     (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) ν) (k : ℕ) :
     Tendsto (fun R : ℕ => cumulant (ν[|Metric.closedBall (0 : E) R]) k) atTop
       (𝓝 (cumulant ν k)) := by
@@ -182,13 +197,15 @@ theorem tendsto_cumulant_cond_closedBall {E : Type*} [NormedAddCommGroup E] [Inn
   set q : FormalMultilinearSeries ℝ ℝ ℝ := ftaylorSeriesWithin ℝ Real.log {0}ᶜ 1 with hq
   set p : ℕ → FormalMultilinearSeries ℝ E ℝ := fun R =>
     ftaylorSeriesWithin ℝ (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂(ν[|Metric.closedBall (0 : E) R]))
-      (Metric.ball 0 r) 0 with hp
+      (Metric.ball 0 r) 0 with
+    hp
   set p' : FormalMultilinearSeries ℝ E ℝ :=
     ftaylorSeriesWithin ℝ (fun z => ∫ x, Real.exp ⟪z, x⟫ ∂ν) (Metric.ball 0 r) 0 with hp'
-  have hcum : ∀ᶠ R : ℕ in atTop,
-      cumulant (ν[|Metric.closedBall (0 : E) R]) k = q.taylorComp (p R) k := by
+  have hcum :
+    ∀ᶠ R : ℕ in atTop, cumulant (ν[|Metric.closedBall (0 : E) R]) k = q.taylorComp (p R) k := by
     filter_upwards [eventually_measure_closedBall_ne_zero ν] with R hR
-    have : IsProbabilityMeasure (ν[|Metric.closedBall (0 : E) R]) := cond_isProbabilityMeasure hR
+    have : IsProbabilityMeasure (ν[|Metric.closedBall (0 : E) R]) :=
+      cond_isProbabilityMeasure hR
     have hexp' : Integrable (fun x => Real.exp (r * ‖x‖)) (ν[|Metric.closedBall (0 : E) R]) :=
       (hexp.restrict (s := Metric.closedBall (0 : E) R)).smul_measure (ENNReal.inv_ne_top.2 hR)
     exact cumulant_eq_taylorComp (ν[|Metric.closedBall (0 : E) R]) hr hexp' k
@@ -199,14 +216,12 @@ theorem tendsto_cumulant_cond_closedBall {E : Type*} [NormedAddCommGroup E] [Inn
     simp only [iteratedFDerivWithin_of_isOpen j Metric.isOpen_ball h0]
     exact this
   rw [cumulant_eq_taylorComp ν hr hexp k]
-  have hlittle := FormalMultilinearSeries.taylorComp_sub_taylorComp_isLittleO (l := atTop)
-    (p₁ := fun _ : ℕ => q) (p₂ := fun _ : ℕ => q) (q₁ := p) (q₂ := fun _ : ℕ => p')
-    (f := fun _ : ℕ => (1 : ℝ)) (n := k)
-    (fun j _ => isBoundedUnder_const)
-    (fun j _ => by simp)
-    (fun j _ => (hlim j).norm.isBoundedUnder_le)
-    (fun j _ => isBoundedUnder_const)
-    (fun j _ => (Asymptotics.isLittleO_one_iff ℝ).2 (tendsto_sub_nhds_zero_iff.2 (hlim j)))
+  have hlittle :=
+    FormalMultilinearSeries.taylorComp_sub_taylorComp_isLittleO (l := atTop) (p₁ := fun _ : ℕ =>
+      q) (p₂ := fun _ : ℕ => q) (q₁ := p) (q₂ := fun _ : ℕ => p') (f := fun _ : ℕ => (1 : ℝ))
+      (n := k) (fun j _ => isBoundedUnder_const) (fun j _ => by simp)
+      (fun j _ => (hlim j).norm.isBoundedUnder_le) (fun j _ => isBoundedUnder_const)
+      (fun j _ => (Asymptotics.isLittleO_one_iff ℝ).2 (tendsto_sub_nhds_zero_iff.2 (hlim j)))
   rw [Asymptotics.isLittleO_one_iff] at hlittle
   exact (tendsto_sub_nhds_zero_iff.1 hlittle).congr' (hcum.mono fun R h => h.symm)
 

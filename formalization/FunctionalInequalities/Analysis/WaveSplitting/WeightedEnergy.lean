@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Residual
-import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
-import Mathlib.Analysis.Calculus.ParametricIntegral
-import Mathlib.Algebra.QuadraticDiscriminant
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Residual
+public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+public import Mathlib.Analysis.Calculus.ParametricIntegral
+public import Mathlib.Algebra.QuadraticDiscriminant
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
 # Weighted forced energy of the actual splitting cells
@@ -13,6 +15,8 @@ actual residual. This gives a growth law whose leading term is the initial weigh
 with no exponential factor. Square energies are also shown to be Hilbert seminorms
 (Cauchy--Schwarz and Minkowski), including the ordered-coordinate derivative energies.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff
@@ -62,10 +66,10 @@ theorem sum_le_sq_sqrt_add {α : Type*} (s : Finset α) {c a b : α → ℝ}
 private theorem add_le_sq_sqrt_add {c₁ c₂ a₁ a₂ b₁ b₂ : ℝ} (ha₁ : 0 ≤ a₁) (ha₂ : 0 ≤ a₂)
     (hb₁ : 0 ≤ b₁) (hb₂ : 0 ≤ b₂) (h₁ : c₁ ≤ (√a₁ + √b₁) ^ 2) (h₂ : c₂ ≤ (√a₂ + √b₂) ^ 2) :
     c₁ + c₂ ≤ (√(a₁ + a₂) + √(b₁ + b₂)) ^ 2 := by
-  have h := sum_le_sq_sqrt_add (Finset.univ : Finset (Fin 2)) (c := ![c₁, c₂])
-    (a := ![a₁, a₂]) (b := ![b₁, b₂])
-    (fun i _ => by fin_cases i <;> simpa) (fun i _ => by fin_cases i <;> simpa)
-    (fun i _ => by fin_cases i <;> simpa)
+  have h :=
+    sum_le_sq_sqrt_add (Finset.univ : Finset (Fin 2)) (c := ![c₁, c₂]) (a := ![a₁, a₂]) (b :=
+      ![b₁, b₂]) (fun i _ => by fin_cases i <;> simpa) (fun i _ => by fin_cases i <;> simpa)
+      (fun i _ => by fin_cases i <;> simpa)
   simpa [Fin.sum_univ_two] using h
 
 /-- A nonnegative function whose derivative is at most `2 η sqrt f` grows at most linearly

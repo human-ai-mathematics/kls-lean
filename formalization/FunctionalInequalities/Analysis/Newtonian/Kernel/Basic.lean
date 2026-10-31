@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Newtonian.Kernel.EntryBound
-import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
+module
+
+public import FunctionalInequalities.Analysis.Newtonian.Kernel.EntryBound
+public import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 
 /-!
 # The Newtonian kernel
@@ -25,11 +27,14 @@ This module defines:
   `euclideanUnitBallVolume_two : euclideanUnitBallVolume 2 = π`. It is not identified here with
   the Gamma-function formula `Analysis.unitBallVolume` of `Analysis/Hausdorff/Measure.lean`;
 * `newtonianKernel n x`, equal to `(2π)⁻¹ log ‖x‖` for `n = 2` and to
-  `(n (2 - n) ω_n)⁻¹ ‖x‖^(2-n)` otherwise. Its value at `x = 0` is the Lean junk value of the formula
+  `(n (2 - n) ω_n)⁻¹ ‖x‖^(2-n)` otherwise. Its value at `x = 0` is the Lean junk value of the
+  formula
   and carries no meaning; no distributional identity is asserted;
 * `bilinear_newtonianKernel` ((2.13)) and `abs_bilinear_newtonianKernel_basis_le` ((2.14)): the
   actual Hessian and the entrywise bound `|D_ij Γ(x)| ≤ ω_n⁻¹ ‖x‖^(-n)` at `x ≠ 0`, `n ≥ 2`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -55,42 +60,46 @@ theorem euclideanUnitBallVolume_two : euclideanUnitBallVolume 2 = Real.pi := by
 Its arbitrary value at zero is not a distributional identity or a potential
 representation theorem. Only dimensions n>=2 are used in the statements. -/
 def newtonianKernel (n : ℕ) (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
-  if n=2 then (1/(2*Real.pi))*Real.log ‖x‖ else powerKernel n (euclideanUnitBallVolume n) x
+  if n = 2 then (1 / (2 * Real.pi)) * Real.log ‖x‖
+  else powerKernel n (euclideanUnitBallVolume n) x
 
 /-- Exact GT2001 (2.14) Hessian-entry bound, now in every source dimension n>=2
 and with the actual Euclidean unit-ball volume. -/
 theorem abs_bilinear_newtonianKernel_basis_le {n : ℕ} (hn : 2 ≤ n)
     (x : EuclideanSpace ℝ (Fin n)) (hx : x ≠ 0) (i j : Fin n) :
-    |bilinearIteratedFDerivTwo ℝ (newtonianKernel n) x
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
-      (1/euclideanUnitBallVolume n)*‖x‖^(-(n:ℝ)) := by
-  by_cases hn2 : n=2
+    |bilinearIteratedFDerivTwo ℝ (newtonianKernel n) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+          (EuclideanSpace.basisFun (Fin n) ℝ j)| ≤
+      (1 / euclideanUnitBallVolume n) * ‖x‖ ^ (-(n : ℝ)) := by
+  by_cases hn2 : n = 2
   · subst n
-    have he : newtonianKernel 2 = logKernel := by funext y;simp [newtonianKernel,logKernel]
-    rw [he,euclideanUnitBallVolume_two]
+    have he : newtonianKernel 2 = logKernel := by funext y; simp [newtonianKernel, logKernel]
+    rw [he, euclideanUnitBallVolume_two]
     exact abs_bilinear_logKernel_basis_le x hx i j
   · have hn3 : 3 ≤ n := by omega
     have he : newtonianKernel n = powerKernel n (euclideanUnitBallVolume n) := by
-      funext y;simp only [newtonianKernel,if_neg hn2]
+      funext y;
+      simp only [newtonianKernel, ite_eq_right hn2]
     rw [he]
     exact abs_bilinear_powerKernel_basis_le hn3 (euclideanUnitBallVolume_pos n) x hx i j
 
 
 /-- Unified actual Hessian formula (2.13) at every nonzero point, with the
 actual unit-ball volume and the logarithmic case included. -/
-theorem bilinear_newtonianKernel {n : ℕ} (hn : 2 ≤ n)
-    (x u v : EuclideanSpace ℝ (Fin n)) (hx : x ≠ 0) :
+theorem bilinear_newtonianKernel {n : ℕ} (hn : 2 ≤ n) (x u v : EuclideanSpace ℝ (Fin n))
+    (hx : x ≠ 0) :
     bilinearIteratedFDerivTwo ℝ (newtonianKernel n) x u v =
-      (1/((n:ℝ)*euclideanUnitBallVolume n))*(‖x‖^(-(n:ℝ))*⟪u,v⟫ -
-        (n:ℝ)*‖x‖^(-(n:ℝ)-2)*⟪x,u⟫*⟪x,v⟫) := by
-  by_cases hn2 : n=2
+      (1 / ((n : ℝ) * euclideanUnitBallVolume n)) *
+        (‖x‖ ^ (-(n : ℝ)) * ⟪u, v⟫ - (n : ℝ) * ‖x‖ ^ (-(n : ℝ) - 2) * ⟪x, u⟫ * ⟪x, v⟫) := by
+  by_cases hn2 : n = 2
   · subst n
-    have he : newtonianKernel 2 = logKernel := by funext y;simp [newtonianKernel,logKernel]
-    rw [he,euclideanUnitBallVolume_two]
-    simpa only [Nat.cast_ofNat,show (-2:ℝ)-2 = -4 by norm_num] using bilinear_logKernel x u v hx
+    have he : newtonianKernel 2 = logKernel := by funext y; simp [newtonianKernel, logKernel]
+    rw [he, euclideanUnitBallVolume_two]
+    simpa only [Nat.cast_ofNat, show (-2 : ℝ) - 2 = -4 by norm_num] using
+      bilinear_logKernel x u v hx
   · have hn3 : 3 ≤ n := by omega
     have he : newtonianKernel n = powerKernel n (euclideanUnitBallVolume n) := by
-      funext y;simp only [newtonianKernel,if_neg hn2]
+      funext y;
+      simp only [newtonianKernel, ite_eq_right hn2]
     rw [he]
     exact bilinear_powerKernel hn3 (euclideanUnitBallVolume_pos n) x u v hx
 

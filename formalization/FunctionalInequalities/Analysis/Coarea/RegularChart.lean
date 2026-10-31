@@ -1,11 +1,15 @@
-import FunctionalInequalities.Analysis.LocalInverse
-import FunctionalInequalities.Analysis.Graph.Implicit
+module
+
+public import FunctionalInequalities.Analysis.LocalInverse
+public import FunctionalInequalities.Analysis.Graph.Implicit
 
 /-! # C¹ charts for a family of regular levels
 
 Unlike a representation of one fixed level, these charts retain the level as a parameter.
 The local inverse and the height are C¹ on open domains, with no global regularity assumption.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Filter Topology

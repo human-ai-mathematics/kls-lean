@@ -1,6 +1,10 @@
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-! Continuous coefficients and C2 data suffice without finite dimension or completeness. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

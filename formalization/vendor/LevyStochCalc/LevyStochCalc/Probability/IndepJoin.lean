@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Probability.Independence.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Independence.Basic
 
 /-!
 # Independence of a join of σ-algebras
@@ -16,6 +20,8 @@ Iterating that step along a monotone family `𝒢` gives `indep_iSup_lt_of_indep
 are measurable one step ahead and independent of the σ-algebra one step behind are *jointly*
 independent of the initial σ-algebra.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

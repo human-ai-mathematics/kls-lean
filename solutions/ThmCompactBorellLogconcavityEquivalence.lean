@@ -1,6 +1,8 @@
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.LogConcave.Borel
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.KLS.LogConcave.Borel
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `thm:compact-borell-logconcavity-equivalence`
@@ -11,6 +13,8 @@ affine supports and the zero space are included. No density, full-dimensional su
 positive-dimension or second-moment hypothesis is added. This is the bridge to the cited
 literature formulation, not a Borell density representative and not a KLS bound.
 -/
+
+@[expose] public section
 
 noncomputable section
 

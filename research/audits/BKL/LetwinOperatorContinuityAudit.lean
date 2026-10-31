@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
-import FunctionalInequalities.Analysis.Cutoff.Profile
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
+public import FunctionalInequalities.Analysis.Cutoff.Profile
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: Letwin Lemma A.4 operator continuity
 
@@ -16,6 +18,8 @@ once dominated. Actual clients of `continuous_hessianInverseOperator`, every pre
 These are not the Lemma A.4 producer or a source-law client.
 -/
 
+@[expose] public section
+
 open MeasureTheory
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff
@@ -26,23 +30,27 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDim
 
 /-- The generator of the actual rescaled profile `η((φ − c)/R)` is continuous. -/
 theorem continuous_profile_generator {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
-    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ 1 V U) (hRange : Set.range (gradient φ) ⊆ U) (c R : ℝ) :
-    Continuous (hessianInverseOperator φ V (fun y => Real.smoothTransition (2 - (φ y - c) / R))) := by
+    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) {U : Set E}
+    (hU : IsOpen U) (hV : ContDiffOn ℝ 1 V U) (hRange : Set.range (gradient φ) ⊆ U) (c R : ℝ) :
+    Continuous
+      (hessianInverseOperator φ V (fun y => Real.smoothTransition (2 - (φ y - c) / R))) := by
   have hη := smoothTransition_two_sub_cutoff.1
   have hf : ContDiff ℝ 2 (fun y => Real.smoothTransition (2 - (φ y - c) / R)) :=
     (hη.of_le (WithTop.coe_le_coe.mpr le_top)).comp
       (((hφ.of_le (WithTop.coe_le_coe.mpr le_top)).sub contDiff_const).div_const R)
   exact continuous_hessianInverseOperator hφ hPD hU hV hRange hf
 
-/-- `L f · g` is integrable for continuous compactly supported `g` (any measure finite on compacts). -/
-theorem integrable_generator_mul_of_hasCompactSupport [MeasurableSpace E] [BorelSpace E] (μ : Measure E)
-    [IsFiniteMeasureOnCompacts μ] {φ V f g : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
-    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ 1 V U) (hRange : Set.range (gradient φ) ⊆ U)
+/--
+`L f · g` is integrable for continuous compactly supported `g` (any measure finite on compacts). -/
+theorem integrable_generator_mul_of_hasCompactSupport [MeasurableSpace E] [BorelSpace E]
+    (μ : Measure E) [IsFiniteMeasureOnCompacts μ] {φ V f g : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
+    (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) {U : Set E}
+    (hU : IsOpen U) (hV : ContDiffOn ℝ 1 V U) (hRange : Set.range (gradient φ) ⊆ U)
     (hf : ContDiff ℝ 2 f) (hg : Continuous g) (hgc : HasCompactSupport g) :
     Integrable (fun x => hessianInverseOperator φ V f x * g x) μ :=
-  ((continuous_hessianInverseOperator hφ hPD hU hV hRange hf).mul hg).integrable_of_hasCompactSupport hgc.mul_left
+  ((continuous_hessianInverseOperator hφ hPD hU hV hRange hf).mul
+        hg).integrable_of_hasCompactSupport
+    hgc.mul_left
 
 /-- `L φ` itself is continuous. -/
 theorem continuous_generator_self {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)

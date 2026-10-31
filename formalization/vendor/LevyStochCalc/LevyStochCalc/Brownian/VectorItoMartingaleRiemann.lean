@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoProcessWindow
-import LevyStochCalc.Brownian.ItoMartingaleRiemann
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoProcessWindow
+public import LevyStochCalc.Brownian.ItoMartingaleRiemann
 
 /-!
 # The martingale Riemann sum along a vector Itô process
@@ -21,6 +25,8 @@ coordinate gives a Riemann sum for `∫_0^T φ(X_s)·G_s dWᵏ_s`, with an `L²`
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.lintegral_sq_martingaleRiemann_sub_le` — the
   `L²` error of the martingale Riemann sum.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

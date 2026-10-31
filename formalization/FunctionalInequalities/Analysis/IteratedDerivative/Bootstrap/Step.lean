@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.EuclideanCoordinates
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.VariableCoefficient
-import FunctionalInequalities.Analysis.IteratedDerivative.QuotientLimit
-import FunctionalInequalities.Analysis.BakryEmery.DifferenceQuotient
+module
+
+public import FunctionalInequalities.Analysis.EuclideanCoordinates
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.VariableCoefficient
+public import FunctionalInequalities.Analysis.IteratedDerivative.QuotientLimit
+public import FunctionalInequalities.Analysis.BakryEmery.DifferenceQuotient
 
 /-!
 # One Schauder bootstrap step: `C^{2,α}` difference-quotient equations give `C^{3,α}`
@@ -35,9 +37,12 @@ symmetric `(λ, Λ)`-elliptic `α`-Hölder coefficients, bounded Hölder `bⁱ`,
   derivative bounded and `α`-Hölder there by the same constant.
 
 The equations are hypotheses here (they are derived for the regular moment potential in
-`KLS/CEK/MomentRegularity/BootstrapThree`); no higher-order bootstrap, no `C^∞` conclusion, and no boundary
+`KLS/CEK/MomentRegularity/BootstrapThree`); no higher-order bootstrap, no `C^∞` conclusion, and no
+boundary
 regularity is claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -338,12 +343,17 @@ theorem directional_derivative_contDiffOn_two_of_quotient_equations (hn : 2 ≤ 
 `C^k` on an open set, so is the gradient `D u`, and hence `u` is `C^{k+1}` there. -/
 theorem contDiffOn_succ_of_coordinate_directional {k : ℕ} {U : Set E} (hU : IsOpen U)
     {u : E → ℝ} (hd : DifferentiableOn ℝ u U)
-    (h : ∀ i : Fin n, ContDiffOn ℝ k (fun x => fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i)) U) :
+    (h :
+      ∀ i : Fin n,
+        ContDiffOn ℝ k (fun x => fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i)) U) :
     ContDiffOn ℝ (k + 1) u U := by
   rw [contDiffOn_succ_iff_fderiv_of_isOpen hU]
   refine ⟨hd, by simp, ?_⟩
-  have e : fderiv ℝ u = fun x => ∑ i, fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i) •
-      EuclideanSpace.proj (𝕜 := ℝ) i := funext fun x => eq_sum_apply_basisFun_smul_proj _
+  have e :
+    fderiv ℝ u = fun x =>
+      ∑ i,
+        fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i) • EuclideanSpace.proj (𝕜 := ℝ) i :=
+    funext fun x => eq_sum_apply_basisFun_smul_proj _
   rw [e]
   exact ContDiffOn.sum fun i _ => (h i).smul contDiffOn_const
 

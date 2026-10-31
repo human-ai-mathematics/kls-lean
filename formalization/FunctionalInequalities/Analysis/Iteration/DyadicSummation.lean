@@ -1,5 +1,7 @@
-import Mathlib.Analysis.SpecificLimits.Normed
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
+module
+
+public import Mathlib.Analysis.SpecificLimits.Normed
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # The dyadic summation in the proof of BKL Theorem 3.1
@@ -32,6 +34,8 @@ This is only the elementary summation. It does not prove the recursion (63), the
 iterates feeding it, or Theorem 3.1 itself. The hypotheses `0 ≤ S d` and `x ≤ 1` of the main
 theorem are not used by the argument; they are kept to match the source's setting.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.Analysis
 
@@ -87,10 +91,14 @@ theorem le_of_dyadic_recursion {S : ℕ → ℝ} {x y A : ℝ} {N : ℕ}
 
 /-! ## Geometric recurrences of Moser iterations
 
-The real-sequence recurrences that drive the Moser iterations of Gilbarg–Trudinger (2001), proof of Theorem 8.18:
-`geometric_exponential_recurrence_bound` sums the weighted geometric series of an exponential recurrence
-`x_{k+1} ≤ exp((a^k/p)(A + B k)) x_k`, `0 ≤ a < 1`; `geometric_root_recurrence_bound` and its finite-horizon form
-`finite_geometric_root_recurrence_bound` bound the normalized root recurrence `y_{m+1} ≤ (C 4^m)^{1/(p0 κ^m)} y_m`. -/
+The real-sequence recurrences that drive the Moser iterations of Gilbarg–Trudinger (2001), proof of
+Theorem 8.18:
+`geometric_exponential_recurrence_bound` sums the weighted geometric series of an exponential
+recurrence
+`x_{k+1} ≤ exp((a^k/p)(A + B k)) x_k`, `0 ≤ a < 1`; `geometric_root_recurrence_bound` and its
+finite-horizon form
+`finite_geometric_root_recurrence_bound` bound the normalized root recurrence `y_{m+1} ≤ (C
+4^m)^{1/(p0 κ^m)} y_m`. -/
 
 section GeometricRecurrence
 
@@ -238,49 +246,53 @@ theorem geometric_exponential_recurrence_bound
       mul_le_mul_of_nonneg_right
         (Real.exp_le_exp.mpr (hc_bound k)) (hx 0)
 
-/-- The normalized root recurrence `y_{m+1} ≤ (C 4^m)^{1/(p0 κ^m)} y_m` has a uniform finite bound: it is the case
+/--
+The normalized root recurrence `y_{m+1} ≤ (C 4^m)^{1/(p0 κ^m)} y_m` has a uniform finite bound: it
+is the case
 `a = κ⁻¹`, `A = log C`, `B = log 4` of `geometric_exponential_recurrence_bound`. -/
-theorem geometric_root_recurrence_bound {κ p0 C : ℝ}
-    (hκ : 1 < κ) (hp : 0 < p0) (hC : 1 ≤ C) (y : ℕ → ℝ) (hy : ∀ m, 0 ≤ y m)
-    (hstep : ∀ m, y (m+1) ≤ (C*(4 : ℝ)^m)^(1/(p0*κ^m)) * y m) :
-    ∀ m, y m ≤ Real.exp ((Real.log C / (1-κ⁻¹) + Real.log 4 * κ⁻¹/(1-κ⁻¹)^2) / p0) * y 0 := by
+theorem geometric_root_recurrence_bound {κ p0 C : ℝ} (hκ : 1 < κ) (hp : 0 < p0) (hC : 1 ≤ C)
+    (y : ℕ → ℝ) (hy : ∀ m, 0 ≤ y m)
+    (hstep : ∀ m, y (m + 1) ≤ (C * (4 : ℝ) ^ m) ^ (1 / (p0 * κ ^ m)) * y m) :
+    ∀ m,
+      y m ≤ Real.exp ((Real.log C / (1 - κ⁻¹) + Real.log 4 * κ⁻¹ / (1 - κ⁻¹) ^ 2) / p0) * y 0 := by
   have hκ0 : 0 < κ := lt_trans zero_lt_one hκ
   have hC0 : 0 < C := lt_of_lt_of_le zero_lt_one hC
-  have heq (m : ℕ) : (C*(4 : ℝ)^m)^(1/(p0*κ^m)) =
-      Real.exp (((κ⁻¹)^m/p0) * (Real.log C + Real.log 4 * (m : ℝ))) := by
+  have heq (m : ℕ) :
+    (C * (4 : ℝ) ^ m) ^ (1 / (p0 * κ ^ m)) =
+      Real.exp (((κ⁻¹) ^ m / p0) * (Real.log C + Real.log 4 * (m : ℝ))) := by
     rw [Real.rpow_def_of_pos (mul_pos hC0 (pow_pos (by norm_num) m)),
-      Real.log_mul hC0.ne' (pow_pos (by norm_num : (0 : ℝ) < 4) m).ne',Real.log_pow]
+      Real.log_mul hC0.ne' (pow_pos (by norm_num : (0 : ℝ) < 4) m).ne', Real.log_pow]
     congr 1
-    simp only [div_eq_mul_inv,mul_inv_rev,inv_pow,one_mul]
+    simp only [div_eq_mul_inv, mul_inv_rev, inv_pow, one_mul]
     ring
-  apply geometric_exponential_recurrence_bound
-    (inv_nonneg.mpr hκ0.le) (inv_lt_one_of_one_lt₀ hκ) hp (Real.log_nonneg hC)
-    (Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 4)) y hy
+  apply
+    geometric_exponential_recurrence_bound (inv_nonneg.mpr hκ0.le) (inv_lt_one_of_one_lt₀ hκ) hp
+      (Real.log_nonneg hC) (Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 4)) y hy
   intro m
   rw [← heq m]
   exact hstep m
 
 /-- A finite horizon of the normalized Moser root recurrence suffices; after the horizon the
 sequence may be kept constant because every multiplier is at least one. -/
-theorem finite_geometric_root_recurrence_bound {κ p0 C : ℝ}
-    (hκ : 1 < κ) (hp : 0 < p0) (hC : 1 ≤ C) (y : ℕ → ℝ) (hy : ∀ m, 0 ≤ y m)
-    (K : ℕ)
-    (hstep : ∀ m < K, y (m+1) ≤ (C*(4 : ℝ)^m)^(1/(p0*κ^m)) * y m) :
-    y K ≤ Real.exp ((Real.log C/(1-κ⁻¹)+Real.log 4*κ⁻¹/(1-κ⁻¹)^2)/p0) * y 0 := by
+theorem finite_geometric_root_recurrence_bound {κ p0 C : ℝ} (hκ : 1 < κ) (hp : 0 < p0)
+    (hC : 1 ≤ C) (y : ℕ → ℝ) (hy : ∀ m, 0 ≤ y m) (K : ℕ)
+    (hstep : ∀ m < K, y (m + 1) ≤ (C * (4 : ℝ) ^ m) ^ (1 / (p0 * κ ^ m)) * y m) :
+    y K ≤ Real.exp ((Real.log C / (1 - κ⁻¹) + Real.log 4 * κ⁻¹ / (1 - κ⁻¹) ^ 2) / p0) * y 0 := by
   let z := fun m : ℕ => y (min m K)
-  have hfactor (m : ℕ) : 1 ≤ (C*(4 : ℝ)^m)^(1/(p0*κ^m)) := by
+  have hfactor (m : ℕ) : 1 ≤ (C * (4 : ℝ) ^ m) ^ (1 / (p0 * κ ^ m)) := by
     apply Real.one_le_rpow
     · exact one_le_mul_of_one_le_of_one_le hC (one_le_pow₀ (by norm_num : (1 : ℝ) ≤ 4))
     · positivity
-  have hz (m : ℕ) : z (m+1) ≤ (C*(4 : ℝ)^m)^(1/(p0*κ^m)) * z m := by
+  have hz (m : ℕ) : z (m + 1) ≤ (C * (4 : ℝ) ^ m) ^ (1 / (p0 * κ ^ m)) * z m := by
     by_cases hm : m < K
-    · simpa only [z,Nat.min_eq_left (Nat.succ_le_of_lt hm),Nat.min_eq_left hm.le] using hstep m hm
+    · simpa only [z, Nat.min_eq_left (Nat.succ_le_of_lt hm), Nat.min_eq_left hm.le] using
+        hstep m hm
     · have hKm : K ≤ m := Nat.le_of_not_gt hm
-      have hKm1 : K ≤ m+1 := hKm.trans (Nat.le_succ m)
-      simp only [z,Nat.min_eq_right hKm1,Nat.min_eq_right hKm]
+      have hKm1 : K ≤ m + 1 := hKm.trans (Nat.le_succ m)
+      simp only [z, Nat.min_eq_right hKm1, Nat.min_eq_right hKm]
       simpa only [one_mul] using mul_le_mul_of_nonneg_right (hfactor m) (hy K)
   have H := geometric_root_recurrence_bound hκ hp hC z (fun m => hy _) hz K
-  simpa only [z,Nat.min_self,Nat.zero_min] using H
+  simpa only [z, Nat.min_self, Nat.zero_min] using H
 
 end GeometricRecurrence
 

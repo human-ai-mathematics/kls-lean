@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Sard.TaylorRemainder
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.Analysis.Normed.Group.Bounded
+module
+
+public import FunctionalInequalities.Analysis.Sard.TaylorRemainder
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.Analysis.Normed.Group.Bounded
 
 /-! # Planar quadratic covering and null images
 
@@ -14,6 +16,8 @@ flat points of a `C²` function on a planar compact set have null image. This is
 of Sard's theorem only: nonflat points, higher dimensions and the general statement are
 untouched here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

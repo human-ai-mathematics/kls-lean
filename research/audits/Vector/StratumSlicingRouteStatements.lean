@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
 
 /-!
 # Route statements for the per-stratum local slicing
@@ -34,6 +36,8 @@ scale.  `R7c` is the limit `ε → 0`, which is the pattern already used twice i
 Together they give the per-stratum local slicing.  The null slicing on the whole critical set
 further needs localization and the finite union over `r < m`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

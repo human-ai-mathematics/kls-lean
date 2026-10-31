@@ -1,16 +1,25 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
 
 /-!
 # Bounded perturbations of the Legendre transform
 
-For a proper extended-real `φ`, a real perturbation `b` with `|b| ≤ M` and `t ∈ ℝ`, the actual extended-real Legendre
-supremum moves by at most `|t| M` in both directions, `φ* q − |t|M ≤ (φ + t b)* q ≤ φ* q + |t|M`, with the whole `EReal`
-supremum kept, infinite values included (`legendre_bounded_perturbation`); consequently, at a point where `φ*` is finite, the
-perturbed conjugates form a finite real curve within `|t| M` of `φ* y` (`legendre_bounded_perturbation_finite_curve`), and
+For a proper extended-real `φ`, a real perturbation `b` with `|b| ≤ M` and `t ∈ ℝ`, the actual
+extended-real Legendre
+supremum moves by at most `|t| M` in both directions, `φ* q − |t|M ≤ (φ + t b)* q ≤ φ* q + |t|M`,
+with the whole `EReal`
+supremum kept, infinite values included (`legendre_bounded_perturbation`); consequently, at a point
+where `φ*` is finite, the
+perturbed conjugates form a finite real curve within `|t| M` of `φ* y`
+(`legendre_bounded_perturbation_finite_curve`), and
 the effective domain of the conjugate is unchanged (`legendre_add_smul_ne_top_iff`). No
-convexity or global finiteness of `φ` is assumed. Pointwise prerequisites of Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
+convexity or global finiteness of `φ` is assumed. Pointwise prerequisites of
+Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
 (42).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -125,65 +134,50 @@ open Set
 
 /-- A bounded real perturbation produces a finite real Legendre curve and its
 real values remain within the actual uniform shift bound. -/
-theorem legendre_bounded_perturbation_finite_curve
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    (φ : E → EReal) (hφ : ProperPotential φ) (y : E)
-    (hy : legendre φ y ≠ ⊤)
-    (b : E → ℝ) (M : ℝ) (hM : 0 ≤ M)
-    (hb : ∀ z : E, |b z| ≤ M) :
+theorem legendre_bounded_perturbation_finite_curve {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] (φ : E → EReal) (hφ : ProperPotential φ) (y : E)
+    (hy : legendre φ y ≠ ⊤) (b : E → ℝ) (M : ℝ) (hM : 0 ≤ M) (hb : ∀ z : E, |b z| ≤ M) :
     ∀ t : ℝ,
       let ψ := legendre (fun z : E => φ z + ((t * b z : ℝ) : EReal)) y
-      ψ ≠ ⊤ ∧ ψ ≠ ⊥ ∧
-        |ψ.toReal - (legendre φ y).toReal| ≤ |t| * M := by
-    intro t
-    let c : ℝ := |t| * M
-    let A : EReal := legendre φ y
-    let P : EReal :=
-      legendre (fun z : E => φ z + ((t * b z : ℝ) : EReal)) y
-    change P ≠ ⊤ ∧ P ≠ ⊥ ∧ |P.toReal - A.toReal| ≤ c
-    have hAbot : A ≠ ⊥ := legendre_ne_bot φ hφ y
-    have hAcoe : (A.toReal : EReal) = A :=
-      EReal.coe_toReal hy hAbot
-    have hsandwich :=
-      legendre_bounded_perturbation φ hφ b M hM hb t y
-    have hlower : A - (c : EReal) ≤ P := by
-      simpa [A, P, c] using hsandwich.1
-    have hupper : P ≤ A + (c : EReal) := by
-      simpa [A, P, c] using hsandwich.2
-    have hlower' : ((A.toReal - c : ℝ) : EReal) ≤ P := by
-      calc
-        ((A.toReal - c : ℝ) : EReal) = A - (c : EReal) := by
-          rw [EReal.coe_sub, hAcoe]
-        _ ≤ P := hlower
-    have hupper' : P ≤ ((A.toReal + c : ℝ) : EReal) := by
-      calc
-        P ≤ A + (c : EReal) := hupper
-        _ = ((A.toReal + c : ℝ) : EReal) := by
-          exact (congrArg (fun q : EReal => q + (c : EReal)) hAcoe).symm.trans
+      ψ ≠ ⊤ ∧ ψ ≠ ⊥ ∧ |ψ.toReal - (legendre φ y).toReal| ≤ |t| * M := by
+  intro t
+  let c : ℝ := |t| * M
+  let A : EReal := legendre φ y
+  let P : EReal := legendre (fun z : E => φ z + ((t * b z : ℝ) : EReal)) y
+  change P ≠ ⊤ ∧ P ≠ ⊥ ∧ |P.toReal - A.toReal| ≤ c
+  have hAbot : A ≠ ⊥ := legendre_ne_bot φ hφ y
+  have hAcoe : (A.toReal : EReal) = A := EReal.coe_toReal hy hAbot
+  have hsandwich := legendre_bounded_perturbation φ hφ b M hM hb t y
+  have hlower : A - (c : EReal) ≤ P := by simpa [A, P, c] using hsandwich.1
+  have hupper : P ≤ A + (c : EReal) := by simpa [A, P, c] using hsandwich.2
+  have hlower' : ((A.toReal - c : ℝ) : EReal) ≤ P := by
+    calc
+      ((A.toReal - c : ℝ) : EReal) = A - (c : EReal) := by rw [EReal.coe_sub, hAcoe]
+      _ ≤ P := hlower
+  have hupper' : P ≤ ((A.toReal + c : ℝ) : EReal) := by
+    calc
+      P ≤ A + (c : EReal) := hupper
+      _ = ((A.toReal + c : ℝ) : EReal) := by
+        exact
+          (congrArg (fun q : EReal => q + (c : EReal)) hAcoe).symm.trans
             (EReal.coe_add _ _).symm
-    have hPtop : P ≠ ⊤ := by
-      intro hP
-      rw [hP] at hupper'
-      exact (not_le_of_gt (EReal.coe_lt_top _)) hupper'
-    have hPbot : P ≠ ⊥ := by
-      intro hP
-      rw [hP] at hlower'
-      exact (not_le_of_gt (EReal.bot_lt_coe _)) hlower'
-    have hlowerReal :
-        A.toReal - c ≤ P.toReal := by
-      have h :=
-        EReal.toReal_le_toReal hlower'
-          (EReal.coe_ne_bot _) hPtop
-      simpa only [EReal.toReal_coe] using h
-    have hupperReal :
-        P.toReal ≤ A.toReal + c := by
-      have h :=
-        EReal.toReal_le_toReal hupper'
-          hPbot (EReal.coe_ne_top _)
-      simpa only [EReal.toReal_coe] using h
-    refine ⟨hPtop, hPbot, ?_⟩
-    rw [abs_le]
-    constructor <;> linarith
+  have hPtop : P ≠ ⊤ := by
+    intro hP
+    rw [hP] at hupper'
+    exact (not_le_of_gt (EReal.coe_lt_top _)) hupper'
+  have hPbot : P ≠ ⊥ := by
+    intro hP
+    rw [hP] at hlower'
+    exact (not_le_of_gt (EReal.bot_lt_coe _)) hlower'
+  have hlowerReal : A.toReal - c ≤ P.toReal := by
+    have h := EReal.toReal_le_toReal hlower' (EReal.coe_ne_bot _) hPtop
+    simpa only [EReal.toReal_coe] using h
+  have hupperReal : P.toReal ≤ A.toReal + c := by
+    have h := EReal.toReal_le_toReal hupper' hPbot (EReal.coe_ne_top _)
+    simpa only [EReal.toReal_coe] using h
+  refine ⟨hPtop, hPbot, ?_⟩
+  rw [abs_le]
+  constructor <;> linarith
 
 end FiniteCurve
 

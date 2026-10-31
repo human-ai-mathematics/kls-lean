@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.GeneratorBounds
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.GeneratorBounds
 
 /-! Independent energy clients. These are actual generator estimates, not a claim that the
 second temporal derivative of a split product equals the square of its summed generator. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

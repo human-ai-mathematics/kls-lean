@@ -1,21 +1,26 @@
-import Mathlib.MeasureTheory.Measure.Tilted
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.Analysis.SpecialFunctions.Exp
-import FunctionalInequalities.Probability.Covariance.Basic
-import Mathlib.Probability.Moments.Covariance
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Topology.Algebra.Module.FiniteDimension
+module
+
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+public import Mathlib.Analysis.SpecialFunctions.Exp
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import Mathlib.Probability.Moments.Covariance
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Topology.Algebra.Module.FiniteDimension
 
 /-!
 # Small quadratic tilts of a probability measure
 
-For a probability measure `μ` on a normed additive group, the normalized tilts `e^{-δ‖x‖²/2} μ / Z_δ`
+For a probability measure `μ` on a normed additive group, the normalized tilts `e^{-δ‖x‖²/2} μ /
+Z_δ`
 converge to `μ` as `δ → 0⁺`, weakly and against integrable Banach-valued observables.
 Moment and covariance corollaries retain their stated additional structure. This is the second
 regular approximation step in Bizeul–Klartag–Lehec (arXiv:2610.05474v1, Section 2, p. 5); the
 Gaussian smoothing step and the joint limit are separate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -184,29 +189,42 @@ theorem memLp_id_two_quadraticTilt (μ : ProbabilityMeasure E)
   apply (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).mpr
   apply (integrable_tilted_iff (weight_integrable μ hδ) (fun x : E => ‖x‖ ^ 2)).mpr
   refine hi.mono' ?_ (Filter.Eventually.of_forall fun x => ?_)
-  · exact (by fun_prop : Continuous (fun x : E => Real.exp (-(δ / 2) * ‖x‖ ^ 2) * ‖x‖ ^ 2)).aestronglyMeasurable
+  · exact
+      (by fun_prop :
+          Continuous
+            (fun x : E => Real.exp (-(δ / 2) * ‖x‖ ^ 2) * ‖x‖ ^ 2)).aestronglyMeasurable
   · change ‖Real.exp (-(δ / 2) * ‖x‖ ^ 2) * ‖x‖ ^ 2‖ ≤ ‖x‖ ^ 2
     rw [Real.norm_eq_abs, abs_of_nonneg (mul_nonneg (Real.exp_pos _).le (sq_nonneg _))]
     exact (mul_le_mul_of_nonneg_right (weight_le_one hδ x) (sq_nonneg _)).trans_eq (one_mul _)
 
 end QuadraticTiltMoments
 
-/-- `⟪Cov(μ_δ) u, v⟫ → ⟪Cov(μ) u, v⟫` as `δ → 0⁺` for the quadratic tilts `μ_δ = μ.tilted (−δ‖·‖²/2)`. -/
+/--
+`⟪Cov(μ_δ) u, v⟫ → ⟪Cov(μ) u, v⟫` as `δ → 0⁺` for the quadratic tilts `μ_δ = μ.tilted (−δ‖·‖²/2)`.
+-/
 theorem inner_covariance_quadraticTilt_tendsto (μ : ProbabilityMeasure E)
     (hμ2 : MemLp (id : E → E) 2 (μ : Measure E)) (u v : E) :
-    Tendsto (fun δ : ℝ => ⟪Covariance.operator
-      ((μ : Measure E).tilted (fun x => -(δ / 2) * ‖x‖ ^ 2)) u, v⟫)
+    Tendsto
+      (fun δ : ℝ =>
+        ⟪Covariance.operator ((μ : Measure E).tilted (fun x => -(δ / 2) * ‖x‖ ^ 2)) u, v⟫)
       (𝓝[>] (0 : ℝ)) (𝓝 ⟪Covariance.operator (μ : Measure E) u, v⟫) := by
   let X : E → ℝ := fun x => ⟪u, x⟫
   let Y : E → ℝ := fun x => ⟪v, x⟫
-  have hX : MemLp X 2 (μ : Measure E) := by simpa only [X, id_eq] using hμ2.const_inner (𝕜 := ℝ) u
-  have hY : MemLp Y 2 (μ : Measure E) := by simpa only [Y, id_eq] using hμ2.const_inner (𝕜 := ℝ) v
-  have hp := Probability.integral_quadraticTilt_tendsto (μ : Measure E) (X * Y) (hX.integrable_mul hY)
-  have hx := Probability.integral_quadraticTilt_tendsto (μ : Measure E) X (hX.integrable one_le_two)
-  have hy := Probability.integral_quadraticTilt_tendsto (μ : Measure E) Y (hY.integrable one_le_two)
+  have hX : MemLp X 2 (μ : Measure E) := by
+    simpa only [X, id_eq] using hμ2.const_inner (𝕜 := ℝ) u
+  have hY : MemLp Y 2 (μ : Measure E) := by
+    simpa only [Y, id_eq] using hμ2.const_inner (𝕜 := ℝ) v
+  have hp :=
+    Probability.integral_quadraticTilt_tendsto (μ : Measure E) (X * Y) (hX.integrable_mul hY)
+  have hx :=
+    Probability.integral_quadraticTilt_tendsto (μ : Measure E) X (hX.integrable one_le_two)
+  have hy :=
+    Probability.integral_quadraticTilt_tendsto (μ : Measure E) Y (hY.integrable one_le_two)
   have hlim := hp.sub (hx.mul hy)
-  have hmean : ⟪Covariance.operator (μ : Measure E) u, v⟫ =
-      (∫ x, (X * Y) x ∂(μ : Measure E)) - (∫ x, X x ∂(μ : Measure E)) * ∫ x, Y x ∂(μ : Measure E) := by
+  have hmean :
+    ⟪Covariance.operator (μ : Measure E) u, v⟫ =
+      (∫ x, (X * Y) x ∂(μ : Measure E)) -
+        (∫ x, X x ∂(μ : Measure E)) * ∫ x, Y x ∂(μ : Measure E) := by
     rw [Covariance.operator_inner, covarianceBilin_apply_eq_cov hμ2, covariance_eq_sub hX hY]
   rw [hmean]
   apply hlim.congr'
@@ -220,14 +238,16 @@ theorem inner_covariance_quadraticTilt_tendsto (μ : ProbabilityMeasure E)
     simpa only [Y, id_eq] using hδ2.const_inner (𝕜 := ℝ) v
   rw [Covariance.operator_inner, covarianceBilin_apply_eq_cov hδ2, covariance_eq_sub hδX hδY]
 
-/-- **Covariance of the quadratic tilt converges** in operator norm as `δ → 0⁺` (BKL Section 2, p. 5). -/
+/--
+**Covariance of the quadratic tilt converges** in operator norm as `δ → 0⁺` (BKL Section 2, p. 5).
+-/
 theorem covariance_quadraticTilt_tendsto (μ : ProbabilityMeasure E)
     (hμ2 : MemLp (id : E → E) 2 (μ : Measure E)) :
-    Tendsto (fun δ : ℝ => Covariance.operator
-      ((μ : Measure E).tilted (fun x => -(δ / 2) * ‖x‖ ^ 2)))
+    Tendsto
+      (fun δ : ℝ => Covariance.operator ((μ : Measure E).tilted (fun x => -(δ / 2) * ‖x‖ ^ 2)))
       (𝓝[>] (0 : ℝ)) (𝓝 (Covariance.operator (μ : Measure E))) := by
-  let A : ℝ → E →L[ℝ] E := fun δ => Covariance.operator
-    ((μ : Measure E).tilted (fun x => -(δ / 2) * ‖x‖ ^ 2))
+  let A : ℝ → E →L[ℝ] E := fun δ =>
+    Covariance.operator ((μ : Measure E).tilted (fun x => -(δ / 2) * ‖x‖ ^ 2))
   have h0 : A 0 = Covariance.operator (μ : Measure E) := by
     dsimp only [A]
     have hw : (fun x : E => -((0 : ℝ) / 2) * ‖x‖ ^ 2) = 0 := by funext x; simp

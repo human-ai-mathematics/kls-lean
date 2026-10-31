@@ -1,10 +1,14 @@
-import FunctionalInequalities.Analysis.Whitney.Construction
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+module
+
+public import FunctionalInequalities.Analysis.Whitney.Construction
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 /-! Obligation `L6` of `research/audits/Coarea/WeightedRouteStatements.lean`, the compact `C¹`
 Whitney extension of a compatible first-order jet, with all its original assumptions, proved by
 the quantitative construction. -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric FunctionalInequalities.Analysis

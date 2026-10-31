@@ -1,10 +1,13 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
 
 /-!
 # Energy dissipation along the orbit of a bounded symmetric operator
 
 `Exponential/Contraction.lean` differentiates `u ↦ ‖exp (-u • L) y‖ ^ 2` once and concludes that
-it is antitone (resolvent contraction).  This module differentiates the same orbit **twice** and records the two
+it is antitone (resolvent contraction).  This module differentiates the same orbit **twice** and
+records the two
 resulting quantitative estimates: for `L` bounded and symmetric, `u ≥ 0` and `v = exp (-u • L) y`,
 
 * `two_mul_inner_exp_neg_smul_le`: `2 u ⟪L v, v⟫ ≤ ‖y‖ ² - ‖v‖ ²`;
@@ -32,6 +35,8 @@ generated semigroup, the Markov property, Bakry–Émery calculus or Buser's ine
 bounded-operator material on a real Hilbert space: no measure, no log-concavity, no KLS quantity.
 The sharp constants of the scalar maxima (`sup x exp (-x) = 1/e`) are **not** used or claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 

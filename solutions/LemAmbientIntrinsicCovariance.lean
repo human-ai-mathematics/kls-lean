@@ -1,5 +1,7 @@
-import FunctionalInequalities.Probability.Covariance.Intrinsic
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.Probability.Covariance.Intrinsic
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `lem:ambient-intrinsic-covariance`
@@ -11,6 +13,8 @@ the same operator norm, and the intrinsic covariance is positive definite; a zer
 direction gives zero operators. No log-concavity, density, Poincaré or whitening statement is
 packaged here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

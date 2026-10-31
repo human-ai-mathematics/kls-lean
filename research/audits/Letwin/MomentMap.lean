@@ -1,4 +1,8 @@
-import FunctionalInequalities.KLS.Letwin.MomentMap
+module
+
+public import FunctionalInequalities.KLS.Letwin.MomentMap
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set
@@ -69,8 +73,11 @@ end LetwinMomentMapAudit
 #print axioms FunctionalInequalities.Analysis.smooth_moment_potential_of_lipschitzWith_gradient
 #print axioms FunctionalInequalities.Analysis.exists_regular_moment_potential_smooth_on_range
 #print axioms FunctionalInequalities.Probability.MomentMeasure.exists_centered_regular_potential
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_of_bounded_open_convex
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_trace_le_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_potential_trace_le_of_bounded_open_convex
 #print axioms LetwinMomentMapAudit.identity_client
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_calculus_of_bounded_open_convex
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_smooth_moment_calculus_of_bounded_open_convex
 #print axioms LetwinMomentMapAudit.calculus_client

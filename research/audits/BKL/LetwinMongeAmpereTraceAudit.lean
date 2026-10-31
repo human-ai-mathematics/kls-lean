@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
-import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
+public import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
 
 /-!
 # Audit: (2.10) and the pointwise generator condition for a nonconstant interval potential
@@ -13,6 +15,8 @@ generator condition `traceGeneratorCondition_on_range` are invoked with `B = 1`.
 is an audit-local helper. A given-potential client: not a push-forward to the uniform law, not a
 moment-map or A.5 consumption client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

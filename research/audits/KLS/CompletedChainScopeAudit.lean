@@ -1,5 +1,10 @@
-import FunctionalInequalities.KLS.Target
-import Lean
+module
+
+public import FunctionalInequalities.KLS.Target
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 namespace CompletedChainScope
 

@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.TaylorTwo
-import Mathlib.Analysis.Calculus.FDeriv.Comp
-import Mathlib.Analysis.Calculus.Deriv.Comp
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.TaylorTwo
+public import Mathlib.Analysis.Calculus.FDeriv.Comp
+public import Mathlib.Analysis.Calculus.Deriv.Comp
 
 /-!
 # The second-order Taylor bound on a normed space
@@ -19,6 +23,8 @@ along the segment joining the two points.
 * `LevyStochCalc.abs_sub_taylor_two_le_normed` — the pointwise cubic bound.
 * `LevyStochCalc.taylorRemainderNormed` — the remainder along a sequence.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

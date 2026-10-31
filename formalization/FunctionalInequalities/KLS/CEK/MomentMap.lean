@@ -1,12 +1,18 @@
-import FunctionalInequalities.KLS.CEK.PartitionVariation
+module
+
+public import FunctionalInequalities.KLS.CEK.PartitionVariation
 
 /-!
 # The weak moment map of a bounded isotropic law
 
-Euler–Lagrange identification for the Cordero-Erausquin–Klartag variational problem: the gradient of the bounded-source
-primal pushes `e^{−ψ} dx` forward to the source law (weak moment map), the existence step of the weak moment-map route to
+Euler–Lagrange identification for the Cordero-Erausquin–Klartag variational problem: the gradient of
+the bounded-source
+primal pushes `e^{−ψ} dx` forward to the source law (weak moment map), the existence step of the
+weak moment-map route to
 Letwin arXiv:2607.24164v1.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -35,6 +41,8 @@ private theorem exists_momentMap_aux (μ : ProbabilityMeasure E)
       (∫ x, Real.exp (-ψ x) ∂(volume : Measure E)) = 1 ∧
       ((volume : Measure E).tilted (fun x => -ψ x)).map (gradient ψ) = (μ : Measure E) := by
   classical
+
+  -- Obtain the variational moment potential and normalize its law.
   obtain ⟨q, a, m, ψ, hq, hlsc, hqint, hqball, ha, hqa, hfloor, hleg, hupper,
     hψdef, hψ, hmass, hconv, hlip, hcont, hint, hnorm, hprob, hmax⟩ :=
     bounded_source_lipschitz_primal μ hμ L hL
@@ -66,6 +74,8 @@ private theorem exists_momentMap_aux (μ : ProbabilityMeasure E)
     have hM : ∀ z, |b z| ≤ (‖b‖ : ℝ) := by
       intro z
       simpa only [Real.norm_eq_abs] using b.norm_coe_le_norm z
+
+    -- Perturb the dual potential by a bounded continuous test function.
     let Z : ℝ → ℝ := fun t =>
       ∫ x, Real.exp
         (-(legendre (fun z => q z + ((t * b z : ℝ) : EReal)) x).toReal)
@@ -248,7 +258,7 @@ private theorem exists_momentMap_aux (μ : ProbabilityMeasure E)
       intro t
       have hz := hZdata t
       rw [variationalFunctional, hz.2, ENNReal.log_ofReal]
-      simp only [if_neg (not_le.mpr hz.1)]
+      simp only [ite_eq_right (not_le.mpr hz.1)]
       rw [hIntq t]
       let A : ℝ := ∫ z, (q z).toReal ∂(μ : Measure E)
       let B : ℝ := ∫ z, b z ∂(μ : Measure E)
@@ -293,6 +303,8 @@ private theorem exists_momentMap_aux (μ : ProbabilityMeasure E)
           linarith
         simpa [hZ0] using hi''
       · exact Filter.univ_mem
+
+    -- Differentiate the partition function and use the Euler-Lagrange identity.
     have hderiv :=
       hasDerivAt_integral_exp_neg_legendre_add_smul q hqproper hlsc ψ hψ hlip hint
         (b : E → ℝ) hb hM

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.AdjointComp
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.AdjointComp
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 
 /-!
 # von Neumann's theorem for `T†T`
@@ -7,7 +9,7 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 For a closed densely defined operator
 `T : H₀ →ₗ.[ℝ] H₁` between real Hilbert spaces.  `T†T` is `Analysis.Semigroup.adjointComp T`
 (`AdjointComp.lean`) and `J_s = (1 + s T†T)⁻¹` is `Analysis.Semigroup.resolventCLM`
-(`Resolvent.lean`, built from the weak equation `WeakResolvent` of `Form.lean`).
+(`Resolvent/Basic.lean`, built from the weak equation `WeakResolvent` of `Form.lean`).
 
 What is proved here:
 
@@ -18,17 +20,22 @@ What is proved here:
   `J_s f ∈ D(T†T)` and `(1 + s T†T) J_s f = f`;
 * self-adjointness of T†T = `isSelfAdjoint_adjointComp`: `T†T` is self-adjoint;
 * density of D(T†T) = `dense_adjointComp_domain`: `D(T†T)` is dense;
-* the resolvent defect identity = `sub_resolvent_eq_smul`: `f - J_s f = s • J_s (T†T f)` for `f ∈ D(T†T)`.
+* the resolvent defect identity = `sub_resolvent_eq_smul`: `f - J_s f = s • J_s (T†T f)` for `f ∈
+  D(T†T)`.
 
-Two further consequences of the form identity concern `J = I + T†T` on `{e ∈ D(T†T) : T†T e ∈ D(T)}`:
+Two further consequences of the form identity concern `J = I + T†T` on `{e ∈ D(T†T) : T†T e ∈
+D(T)}`:
 the expansion `norm_add_adjointComp_sq_add_norm_sq` of its graph norm,
 `‖Je‖² + ‖T(Je)‖² = ‖e‖² + 3‖Te‖² + 3‖T†Te‖² + ‖T(T†Te)‖²`, and the resulting four-field
 convergence `tendsto_of_tendsto_add_adjointComp`.
 
 ## Scope of the individual statements
 
-Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, resolvent solvability drops `Dense`) and
-`Resolvent.lean` (resolvent contraction drops self-adjointness), hypotheses that turn out to be unnecessary are
+Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, resolvent solvability
+drops `Dense`) and
+`Resolvent/Basic.lean` (resolvent contraction drops self-adjointness), hypotheses that turn out
+to be
+unnecessary are
 **not** assumed:
 
 * the form identity is proved without `T.IsClosed` and
@@ -36,7 +43,8 @@ Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, res
   `inner_adjointComp_apply` live in the section before `CompleteSpace H₁` is introduced.  Only
   density of `D(T)` is used, and it is genuinely needed because Mathlib's `LinearPMap.adjoint`
   carries a junk value on a non-dense domain.
-* The domain half of the resolvent domain identity, `mem_adjointComp_domain_resolventDomain`, needs **no density**: that
+* The domain half of the resolvent domain identity, `mem_adjointComp_domain_resolventDomain`, needs
+  **no density**: that
   `T (J_s f) ∈ D(T†)` follows from `mem_adjoint_domain_of_exists` applied to the weak equation,
   and only the identification of the value `T† (T (J_s f)) = s⁻¹ (f - J_s f)`
   (`adjointComp_resolventDomain`) uses `adjoint_apply_eq`, hence density.
@@ -44,8 +52,10 @@ Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, res
 ## Order of the arguments
 
 Deriving density of D(T†T) from self-adjointness of T†T via
-`IsSelfAdjoint.dense_domain` would be circular here: `LinearPMap.IsFormalAdjoint.le_adjoint`, which turns symmetry of `T†T` into
-`T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So density of D(T†T) is proved first, by the direct
+`IsSelfAdjoint.dense_domain` would be circular here: `LinearPMap.IsFormalAdjoint.le_adjoint`, which
+turns symmetry of `T†T` into
+`T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So density of D(T†T) is proved first, by the
+direct
 argument (if `g ⊥ D(T†T)` then `g = u + T†T u` with `u = J_1 g`, and
 `0 = ⟪u, g⟫ = ‖u‖² + ‖T u‖²`), and self-adjointness of T†T is then derived from it.
 
@@ -57,6 +67,8 @@ resolvent commutation or the resolvent limits, and
 nothing here concerns Buser's inequality, the Markov property, Bakry–Émery calculus or any KLS
 quantity.  This module is general real Hilbert space material: no measure, no log-concavity.
 -/
+
+@[expose] public section
 noncomputable section
 
 open InnerProductSpace
@@ -90,18 +102,19 @@ theorem inner_adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (hd : Dense (T.doma
 
 /-- The Dirichlet form of `T†T`: for `x ∈ D(T†T)`, `⟪T†T x, x⟫ = ‖T x‖ ^ 2`.
 
-the form identity with `y = x`, which is legitimate because `D(T†T) ⊆ D(T)`.  This is the form that the
+the form identity with `y = x`, which is legitimate because `D(T†T) ⊆ D(T)`.  This is the form that
+the
 semigroup contracts; `FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq` is its
 specialization to the closed weighted gradient.  Neither `T.IsClosed` nor completeness of `H₁`
 is used. -/
 theorem inner_adjointComp_self {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
-    (x : (adjointComp T).domain) :
-    ⟪adjointComp T x, (x : H₀)⟫ = ‖T ⟨(x : H₀), x.2.2⟩‖ ^ 2 := by
+    (x : (adjointComp T).domain) : ⟪adjointComp T x, (x : H₀)⟫ = ‖T ⟨(x : H₀), x.2.2⟩‖ ^ 2 := by
   rw [inner_adjointComp hd x x.2.2, real_inner_self_eq_norm_sq]
 
 /-- `T†T` is symmetric: it is a formal adjoint of itself.
 
-Both sides of `⟪T†T x, y⟫ = ⟪x, T†T y⟫` equal `⟪T x, T y⟫` by the form identity, the right-hand one after a
+Both sides of `⟪T†T x, y⟫ = ⟪x, T†T y⟫` equal `⟪T x, T y⟫` by the form identity, the right-hand one
+after a
 real inner-product flip.  This is the input that `LinearPMap.IsFormalAdjoint.le_adjoint` turns
 into `T†T ≤ (T†T)†` once `D(T†T)` is known to be dense. -/
 theorem adjointComp_isFormalAdjoint {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀)) :
@@ -114,7 +127,8 @@ theorem adjointComp_isFormalAdjoint {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.
 /-- **The graph norm of `(I + T†T) e`.** For `e ∈ D(T†T)` with `T†T e ∈ D(T)`,
 `‖e + T†T e‖² + ‖T e + T (T†T e)‖² = ‖e‖² + 3 ‖T e‖² + 3 ‖T†T e‖² + ‖T (T†T e)‖²`.
 
-Both cross terms are the form identity: `⟪e, T†T e⟫ = ‖T e‖²` and `⟪T e, T (T†T e)⟫ = ‖T†T e‖²`. Only
+Both cross terms are the form identity: `⟪e, T†T e⟫ = ‖T e‖²` and `⟪T e, T (T†T e)⟫ = ‖T†T e‖²`.
+Only
 density of `D(T)` is used. -/
 theorem norm_add_adjointComp_sq_add_norm_sq {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
     (e : (adjointComp T).domain) (he : (adjointComp T e : H₀) ∈ T.domain) :
@@ -287,23 +301,26 @@ theorem resolvent_add_smul_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsCl
 
 /-- `1 + T†T` is surjective: every `z : H₀` is `x + T†T x` for some `x ∈ D(T†T)`.
 
-This is the resolvent domain identity at `s = 1`, and it is the only consequence of the resolvent domain identity used in the proofs of self-adjointness of T†T and
+This is the resolvent domain identity at `s = 1`, and it is the only consequence of the resolvent
+domain identity used in the proofs of self-adjointness of T†T and
 density of D(T†T). -/
 theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (z : H₀) :
     ∃ x : (adjointComp T).domain, (x : H₀) + adjointComp T x = z := by
   have h1 : (0 : ℝ) < 1 := zero_lt_one
-  refine ⟨⟨(resolventDomain T hT h1 z : H₀),
-    mem_adjointComp_domain_resolventDomain T hT h1 z⟩, ?_⟩
+  refine
+    ⟨⟨(resolventDomain T hT h1 z : H₀), mem_adjointComp_domain_resolventDomain T hT h1 z⟩, ?_⟩
   rw [adjointComp_resolventDomain T hT hd h1 z]
   rw [inv_one, one_smul]
   abel
 
 /-- density of D(T†T): `D(T†T)` is dense.
 
-Proved directly, not from self-adjointness of T†T (see the module docstring for why the other order is not
+Proved directly, not from self-adjointness of T†T (see the module docstring for why the other order
+is not
 available).  If `g` is orthogonal to `D(T†T)`, write `g = x + T†T x` with `x ∈ D(T†T)` by
-surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by the form identity, so `x = 0` and `g = 0`.
+surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by the form identity, so `x = 0` and `g
+= 0`.
 A submodule of a complete inner product space with trivial orthogonal complement is dense. -/
 theorem dense_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) :
@@ -314,9 +331,11 @@ theorem dense_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   obtain ⟨x, hx⟩ := exists_add_adjointComp T hT hd g
   have hzero : ⟪(x : H₀), g⟫ = 0 := hg (x : H₀) x.2
   rw [← hx, inner_add_right, ← real_inner_comm ((x : H₀)) (adjointComp T x),
-    inner_adjointComp hd x x.2.2, real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq] at hzero
+    inner_adjointComp hd x x.2.2, real_inner_self_eq_norm_sq,
+    real_inner_self_eq_norm_sq] at hzero
   have hxz : (x : H₀) = 0 := by
-    have : ‖(x : H₀)‖ = 0 := by nlinarith [norm_nonneg (x : H₀), sq_nonneg ‖T ⟨(x : H₀), x.2.2⟩‖]
+    have : ‖(x : H₀)‖ = 0 := by
+      nlinarith [norm_nonneg (x : H₀), sq_nonneg ‖T ⟨(x : H₀), x.2.2⟩‖]
     simpa using this
   have hx0 : x = 0 := Subtype.ext hxz
   rw [← hx, hx0]
@@ -376,7 +395,8 @@ theorem isSelfAdjoint_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
 /-- the resolvent defect identity: the Yosida approximation on `D(T†T)`.
 
 For `f ∈ D(T†T)`, `f - J_s f = s • J_s (T†T f)`; equivalently `L_s f = s⁻¹ (f - J_s f)` equals
-`J_s (T†T f)`.  By the form identity, `f` itself solves the weak equation with datum `f + s • T†T f`, so
+`J_s (T†T f)`.  By the form identity, `f` itself solves the weak equation with datum `f + s • T†T
+f`, so
 uniqueness (`eq_resolventDomain`) gives `J_s (f + s • T†T f) = f`, and linearity of `J_s`
 separates the two terms. -/
 theorem sub_resolvent_eq_smul (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)

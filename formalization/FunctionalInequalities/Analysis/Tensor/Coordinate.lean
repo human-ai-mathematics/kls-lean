@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Tensor.Symmetrization
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Tensor.Symmetrization
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Partial symmetrization of coordinate tensors
@@ -12,6 +14,8 @@ Hilbert–Schmidt norm of the source. Permuting index positions is an orthogonal
 trailing positions fixed. If `3d ≤ k` and a tensor is symmetric in its first `d` indices and in its
 next `2d` indices, then `|A| ≤ 4^d |S_{2d} A|`. The dimension `n` is arbitrary, including `0`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -147,38 +151,40 @@ section FiniteIndex
 variable {ι κ : Type*}
   [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
 
-/-- **Disjoint copy blocks** (BKL Proposition 7.1, the Hilbert–Schmidt estimate after (112)). For `d > 0` the map `(i, j) ↦ (fun k => some (i, j k))` is injective,
+/--
+**Disjoint copy blocks** (BKL Proposition 7.1, the Hilbert–Schmidt estimate after (112)). For `d >
+0` the map `(i, j) ↦ (fun k => some (i, j k))` is injective,
 so the block entries of `A` are a subfamily of all entries. -/
-theorem sum_sq_blocks_le
-    {d : ℕ} (hd : 0 < d) (A : (Fin d → Option (κ × ι)) → ℝ) :
+theorem sum_sq_blocks_le {d : ℕ} (hd : 0 < d) (A : (Fin d → Option (κ × ι)) → ℝ) :
     ∑ i : κ, ∑ j : Fin d → ι, A (fun k => some (i, j k)) ^ 2 ≤ ∑ J, A J ^ 2 := by
-    let f : κ × (Fin d → ι) → (Fin d → Option (κ × ι)) :=
-      fun p k => some (p.1, p.2 k)
-    have hf : Function.Injective f := by
-      dsimp [f]
-      exact blocks_injective hd
-    have hsum :
-        (Finset.univ : Finset (κ × (Fin d → ι))).sum (fun p => A (f p) ^ 2) =
-          (Finset.univ.image f).sum (fun J => A J ^ 2) := by
-      rw [Finset.sum_image]
-      intro a ha b hb hab
-      exact hf hab
-    calc
-      ∑ i : κ, ∑ j : Fin d → ι, A (fun k => some (i, j k)) ^ 2 =
-          ∑ p : κ × (Fin d → ι), A (f p) ^ 2 := by
-        simp only [f, Fintype.sum_prod_type]
-      _ = (Finset.univ.image f).sum (fun J => A J ^ 2) := hsum
-      _ ≤ (Finset.univ : Finset (Fin d → Option (κ × ι))).sum (fun J => A J ^ 2) := by
-        apply Finset.sum_le_sum_of_subset_of_nonneg
-        · intro J hJ
-          simp
-        · intro J hJ hJ'
-          positivity
+  let f : κ × (Fin d → ι) → (Fin d → Option (κ × ι)) := fun p k => some (p.1, p.2 k)
+  have hf : Function.Injective f := by
+    dsimp [f]
+    exact blocks_injective hd
+  have hsum :
+    (Finset.univ : Finset (κ × (Fin d → ι))).sum (fun p => A (f p) ^ 2) =
+      (Finset.univ.image f).sum (fun J => A J ^ 2) := by
+    rw [Finset.sum_image]
+    intro a ha b hb hab
+    exact hf hab
+  calc
+    ∑ i : κ, ∑ j : Fin d → ι, A (fun k => some (i, j k)) ^ 2 =
+        ∑ p : κ × (Fin d → ι), A (f p) ^ 2 := by
+      simp only [f, Fintype.sum_prod_type]
+    _ = (Finset.univ.image f).sum (fun J => A J ^ 2) := hsum
+    _ ≤ (Finset.univ : Finset (Fin d → Option (κ × ι))).sum (fun J => A J ^ 2) := by
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+      · intro J hJ
+        simp
+      · intro J hJ hJ'
+        positivity
 
-/-- If every block entry is `c` times a common array `T`, the block energy `|κ| c² |T|²` is at most
+/--
+If every block entry is `c` times a common array `T`, the block energy `|κ| c² |T|²` is at most
 the whole Hilbert–Schmidt energy (the source's use, with `|κ| = N` and `c = d!/(σ√N)`). -/
-theorem card_mul_sq_mul_sum_sq_le_of_blocks {d : ℕ} (hd : 0 < d) (A : (Fin d → Option (κ × ι)) → ℝ) (c : ℝ)
-    (T : (Fin d → ι) → ℝ) (hA : ∀ i j, A (fun k => some (i, j k)) = c * T j) :
+theorem card_mul_sq_mul_sum_sq_le_of_blocks {d : ℕ} (hd : 0 < d)
+    (A : (Fin d → Option (κ × ι)) → ℝ) (c : ℝ) (T : (Fin d → ι) → ℝ)
+    (hA : ∀ i j, A (fun k => some (i, j k)) = c * T j) :
     (Fintype.card κ : ℝ) * c ^ 2 * ∑ j, T j ^ 2 ≤ ∑ J, A J ^ 2 := by
   have h := sum_sq_blocks_le hd A
   simp only [hA, mul_pow, ← Finset.mul_sum, Finset.sum_const, Finset.card_univ,

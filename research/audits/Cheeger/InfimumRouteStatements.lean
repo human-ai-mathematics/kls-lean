@@ -1,10 +1,12 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
-import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
-import FunctionalInequalities.Analysis.SmoothDomain.RegularSuperlevel
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
+public import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
+public import FunctionalInequalities.Analysis.SmoothDomain.RegularSuperlevel
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import FunctionalInequalities.KLS.Isoperimetry
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for Cheeger-infimum identification
 
@@ -56,6 +58,8 @@ that no finiteness of `h_S` is needed; let the mollification index tend to infin
 `tendsto_distanceCutoff_indicator`, `lintegral_enorm_gradient_mul_eq_lintegral_levelSet`,
 `Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

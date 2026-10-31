@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
 
 /-! Independent full-signature client for pointwise Gaussian approximation. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

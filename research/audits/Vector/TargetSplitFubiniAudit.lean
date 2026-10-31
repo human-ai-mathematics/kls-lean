@@ -1,10 +1,13 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.TargetSplitFubini
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.TargetSplitFubini
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for Fubini across an orthogonal splitting of the target
 
 **What is proved.**  Exactly route obligation `R6` of
-`research/audits/Vector/RankDeficientRouteStatements.lean`, whose proposition is restated **verbatim**
+`research/audits/Vector/RankDeficientRouteStatements.lean`, whose proposition is restated
+**verbatim**
 below as `route_R6` and discharged.  **No coarea formula, no slicing statement and no Sard theorem
 is proved here.**
 
@@ -24,6 +27,8 @@ slice to be *empty* rather than merely null — are covered.
 No differentiability, Hausdorff measure or regularity appears anywhere: this is a statement about
 one measurable set.
 -/
+
+@[expose] public section
 
 noncomputable section
 

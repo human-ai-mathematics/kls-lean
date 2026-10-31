@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.Sard.Equidimensional
-import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.Sard.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.BKL.Poincare
+module
+
+public import FunctionalInequalities.Analysis.Sard.Equidimensional
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+public import FunctionalInequalities.Analysis.Sard.Basic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.KLS.BKL.Poincare
 /-!
 # Scope audit for the equidimensional degenerate case
 
@@ -47,6 +49,8 @@ checked.
 **Scope.**  The Cheeger comparisons, the energy identifications and the dimension-free KLS bound
 are not referred to here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,7 +1,21 @@
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.ContDiff.RCLike
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.RCLike
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Calculus.MeanValue
+
+/-!
+# Lipschitz bounds for total gradients and composed exponents
+
+A finite-dimensional Lipschitz potential with a Lipschitz total gradient gives a globally
+Lipschitz exponent `-u + V ∘ gradient u` when `V` is continuously differentiable. The separate
+gradient/derivative identification retains its complete-inner-product-space assumptions.
+Directional Fréchet-derivative bounds require only a real normed space.
+-/
+
+@[expose] public section
+
 noncomputable section
 open Set Metric
 open scoped RealInnerProductSpace

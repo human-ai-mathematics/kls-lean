@@ -1,11 +1,14 @@
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
 /-! # The rank stratification of the differential, and the kernel lemma
 
-The critical set is stratified into measurable exact-rank layers. Linear algebra identifies the kernel of the differential with that of its regular component.
+The critical set is stratified into measurable exact-rank layers. Linear algebra identifies the
+kernel of the differential with that of its regular component.
 
 The coarea critical set of a map into an `m`-dimensional target is
 `{x | fderiv ℝ u x` is not surjective`}`, where the rank of the differential drops below `m`.
@@ -17,18 +20,22 @@ for the remaining layers stratifies the critical set by the exact rank.
 open sets, pulled back along the continuous derivative — and the critical set is the union of the
 finitely many strata of rank `r < m`.
 
-**the kernel identity** is the structural heart of the route, and is pure linear algebra.  If `P ∘ L` is already
+**the kernel identity** is the structural heart of the route, and is pure linear algebra.  If `P ∘
+L` is already
 surjective onto a space of the same dimension as the range of `L`, then `P` is injective on that
 range, so `P ∘ L` and `L` have the *same* kernel.  In the route `L` is the differential at a point
 of the stratum and `P` the orthogonal projection onto its range, so the conclusion is that the
 differential vanishes along the fibre of the regular part `P ∘ u` — which is what lets the
 Eilenberg bound be applied inside a fibre, at the exponent that finally matches.
 
-No inner product, no measure and no completeness is used for the kernel identity; rank stratification needs only continuity of
+No inner product, no measure and no completeness is used for the kernel identity; rank
+stratification needs only continuity of
 the derivative and the Borel structure of the domain.  The target is never assumed
 positive-dimensional: with `finrank ℝ W = 0` every map is surjective, the critical set is empty and
 the union over `r < 0` is empty too.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -55,36 +62,44 @@ section FiniteDimensional
 
 variable [FiniteDimensional ℝ V] [FiniteDimensional ℝ W₁]
 
-/-- **the kernel identity, kernel form.**  If `P ∘ L` is surjective onto a space whose dimension equals the rank of
+/--
+**the kernel identity, kernel form.**  If `P ∘ L` is surjective onto a space whose dimension equals
+the rank of
 `L`, then `P` is injective on the range of `L` and the two kernels coincide.
 
 The dimension hypothesis is exactly what rules out the degenerate reading: without it `P` may
 collapse part of the range of `L` while `P ∘ L` stays surjective, and then `ker (P ∘ L)` is
 strictly larger. -/
-theorem ker_comp_eq_ker_of_finrank_range_eq
-    {L : V →L[ℝ] W} {P : W →L[ℝ] W₁} (hsurj : Function.Surjective (P.comp L))
+theorem ker_comp_eq_ker_of_finrank_range_eq {L : V →L[ℝ] W} {P : W →L[ℝ] W₁}
+    (hsurj : Function.Surjective (P.comp L))
     (hrank : finrank ℝ W₁ = finrank ℝ (LinearMap.range (L : V →ₗ[ℝ] W))) :
     LinearMap.ker ((P.comp L : V →L[ℝ] W₁) : V →ₗ[ℝ] W₁) = LinearMap.ker (L : V →ₗ[ℝ] W) := by
   have hfin : FiniteDimensional ℝ (LinearMap.range (L : V →ₗ[ℝ] W)) :=
     FiniteDimensional.of_surjective (LinearMap.rangeRestrict (L : V →ₗ[ℝ] W))
       (LinearMap.surjective_rangeRestrict _)
-  have hinj : Function.Injective ((P : W →ₗ[ℝ] W₁).domRestrict (LinearMap.range (L : V →ₗ[ℝ] W))) :=
+  have hinj :
+    Function.Injective ((P : W →ₗ[ℝ] W₁).domRestrict (LinearMap.range (L : V →ₗ[ℝ] W))) :=
     (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hrank.symm).2
       (surjective_domRestrict_range_of_comp hsurj)
   refine le_antisymm (fun z hz => ?_) (fun z hz => ?_)
-  · have hz' : ((P : W →ₗ[ℝ] W₁).domRestrict (LinearMap.range (L : V →ₗ[ℝ] W)))
-        ⟨L z, LinearMap.mem_range_self _ z⟩ = 0 := hz
+  · have hz' :
+      ((P : W →ₗ[ℝ] W₁).domRestrict (LinearMap.range (L : V →ₗ[ℝ] W)))
+          ⟨L z, LinearMap.mem_range_self _ z⟩ =
+        0 :=
+      hz
     have := hinj (hz'.trans (map_zero _).symm)
     simpa using congrArg Subtype.val this
   · have hz' : L z = 0 := hz
     simp [LinearMap.mem_ker, hz']
 
-/-- **the kernel identity, the form the route consumes**: on the stratum the differential vanishes wherever the
+/--
+**the kernel identity, the form the route consumes**: on the stratum the differential vanishes
+wherever the
 regular component does, that is, along the fibre directions of `P ∘ u`. -/
-theorem apply_eq_zero_of_comp_apply_eq_zero
-    (L : V →L[ℝ] W) (P : W →L[ℝ] W₁) (hsurj : Function.Surjective (P.comp L))
-    (hrank : finrank ℝ W₁ = finrank ℝ (LinearMap.range (L : V →ₗ[ℝ] W)))
-    (z : V) (hz : P (L z) = 0) : L z = 0 := by
+theorem apply_eq_zero_of_comp_apply_eq_zero (L : V →L[ℝ] W) (P : W →L[ℝ] W₁)
+    (hsurj : Function.Surjective (P.comp L))
+    (hrank : finrank ℝ W₁ = finrank ℝ (LinearMap.range (L : V →ₗ[ℝ] W))) (z : V)
+    (hz : P (L z) = 0) : L z = 0 := by
   have hker := ker_comp_eq_ker_of_finrank_range_eq hsurj hrank
   have hmem : z ∈ LinearMap.ker ((P.comp L : V →L[ℝ] W₁) : V →ₗ[ℝ] W₁) := hz
   rw [hker] at hmem
@@ -131,13 +146,15 @@ theorem surjective_iff_rank_eq (f : V →L[ℝ] W) :
   · intro h
     exact LinearMap.range_eq_top.1 (Submodule.eq_top_of_finrank_eq h)
 
-/-- **rank stratification, second half: the critical set is the union of the strata of rank below the dimension of
+/--
+**rank stratification, second half: the critical set is the union of the strata of rank below the
+dimension of
 the target.**  A finite union, and no regularity of `u` is used: this is pointwise linear algebra.
 With a zero-dimensional target both sides are empty. -/
 theorem setOf_not_surjective_fderiv_eq_iUnion (u : V → W) :
-    {x : V | ¬ Function.Surjective (fderiv ℝ u x)}
-      = ⋃ r ∈ Finset.range (finrank ℝ W),
-          {x : V | (fderiv ℝ u x : V →ₗ[ℝ] W).rank = (r : Cardinal)} := by
+    {x : V | ¬Function.Surjective (fderiv ℝ u x)} =
+      ⋃ r ∈ Finset.range (finrank ℝ W),
+        {x : V | (fderiv ℝ u x : V →ₗ[ℝ] W).rank = (r : Cardinal)} := by
   ext x
   simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Finset.mem_range, exists_prop,
     surjective_iff_rank_eq, rank_toLinearMap_eq, Nat.cast_inj]
@@ -151,7 +168,9 @@ theorem setOf_not_surjective_fderiv_eq_iUnion (u : V → W) :
 variable [MeasurableSpace V] [BorelSpace V]
 
 omit [FiniteDimensional ℝ W] in
-/-- **rank stratification, first half: the rank strata of the differential of a `C¹` map are measurable.**
+/--
+**rank stratification, first half: the rank strata of the differential of a `C¹` map are
+measurable.**
 
 Mathlib's `isOpen_setOfPred_nat_le_rank` gives the lower semicontinuity of the rank; a stratum is
 the difference of two of those open sets, pulled back along the continuous derivative.  No
@@ -159,12 +178,14 @@ measurable structure on the space of operators is needed. -/
 theorem measurableSet_rank_fderiv_eq {u : V → W} (hu : ContDiff ℝ 1 u) (r : ℕ) :
     MeasurableSet {x : V | (fderiv ℝ u x : V →ₗ[ℝ] W).rank = (r : Cardinal)} := by
   have hcont : Continuous fun x : V => fderiv ℝ u x := hu.continuous_fderiv one_ne_zero
-  have hpre : {x : V | (fderiv ℝ u x : V →ₗ[ℝ] W).rank = (r : Cardinal)}
-      = (fun x : V => fderiv ℝ u x) ⁻¹'
-          {f : V →L[ℝ] W | (f : V →ₗ[ℝ] W).rank = (r : Cardinal)} := rfl
+  have hpre :
+    {x : V | (fderiv ℝ u x : V →ₗ[ℝ] W).rank = (r : Cardinal)} =
+      (fun x : V => fderiv ℝ u x) ⁻¹' {f : V →L[ℝ] W | (f : V →ₗ[ℝ] W).rank = (r : Cardinal)} :=
+    rfl
   rw [hpre, setOf_rank_eq, Set.preimage_sdiff]
-  exact ((isOpen_setOfPred_nat_le_rank r).preimage hcont).measurableSet.diff
-    ((isOpen_setOfPred_nat_le_rank (r + 1)).preimage hcont).measurableSet
+  exact
+    ((isOpen_setOfPred_nat_le_rank r).preimage hcont).measurableSet.diff
+      ((isOpen_setOfPred_nat_le_rank (r + 1)).preimage hcont).measurableSet
 
 end Stratification
 

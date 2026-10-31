@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities
-import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
-import Mathlib.Analysis.Calculus.BumpFunction.Convolution
+module
+
+public import FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
+public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
 /-!
 # Penalized maxima with quadratic comparison
@@ -9,6 +11,8 @@ Supporting interfaces for Letwin arXiv:2607.24164v1 Lemma 2.2 through
 Berman–Berndtsson arXiv:1207.6128v1 Theorem 2.24(ii). Each declaration retains
 its own hypotheses and scope; this layout does not assert further regularity.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -242,27 +246,33 @@ private lemma exists_quadratic_comparison_at_maximum {n : ℕ}
       (hlog (x + h)) (hlog (x - h))) hdet
 
 set_option maxHeartbeats 800000 in
-/-- **A penalised maximum with the log-density comparison**: let the convex, Lipschitz, coercive `u`
+/--
+**A penalised maximum with the log-density comparison**: let the convex, Lipschitz, coercive `u`
 be an Alexandrov
-solution `vol ∂u(G) = ∫_G e^F` with continuous `F`, and let `uₖ` be `C²` approximations, uniformly close to `u`,
-with positive definite Hessians satisfying `Fₖ ≤ log det ∇²uₖ` for `Fₖ → F` locally uniformly. Then for
+solution `vol ∂u(G) = ∫_G e^F` with continuous `F`, and let `uₖ` be `C²` approximations, uniformly
+close to `u`,
+with positive definite Hessians satisfying `Fₖ ≤ log det ∇²uₖ` for `Fₖ → F` locally uniformly. Then
+for
 every `η > 0`, `Δ²ₕu − η u` has a maximiser `x₀` with `F(x₀ + h) + F(x₀ − h) − 2 F(x₀) ≤ η n`. -/
 theorem exists_penalized_maximum_with_comparison {n : ℕ} {u F : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ u) {L : NNReal} (hLip : LipschitzWith L u)
     (hcoer : ∀ R : ℝ, IsCompact {x | u x ≤ R}) (hF : Continuous F)
-    (hMA : ∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G →
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage u G) =
-        ∫⁻ x in G, ENNReal.ofReal (Real.exp (F x)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))
-    {uk Fk : ℕ → EuclideanSpace ℝ (Fin n) → ℝ} (huk : ∀ k, ContDiff ℝ 2 (uk k))
-    {δ : ℕ → ℝ} (hδ : Tendsto δ atTop (𝓝 0)) (hclose : ∀ k x, |uk k x - u x| ≤ δ k)
-    (hFk : TendstoLocallyUniformly Fk F atTop)
-    (hpos : ∀ k x, (hessianMatrix (uk k) x).PosDef)
+    (hMA :
+      ∀ G : Set (EuclideanSpace ℝ (Fin n)),
+        IsOpen G →
+          (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage u G) =
+            ∫⁻ x in G,
+              ENNReal.ofReal (Real.exp (F x)) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))
+    {uk Fk : ℕ → EuclideanSpace ℝ (Fin n) → ℝ} (huk : ∀ k, ContDiff ℝ 2 (uk k)) {δ : ℕ → ℝ}
+    (hδ : Tendsto δ atTop (𝓝 0)) (hclose : ∀ k x, |uk k x - u x| ≤ δ k)
+    (hFk : TendstoLocallyUniformly Fk F atTop) (hpos : ∀ k x, (hessianMatrix (uk k) x).PosDef)
     (hlog : ∀ k x, Fk k x ≤ Real.log (hessianMatrix (uk k) x).det)
     (h : EuclideanSpace ℝ (Fin n)) {η : ℝ} (hη : 0 < η) :
     ∃ x₀ : EuclideanSpace ℝ (Fin n),
-      (∀ y, u (y + h) + u (y - h) - 2 * u y - η * u y ≤
-        u (x₀ + h) + u (x₀ - h) - 2 * u x₀ - η * u x₀) ∧
-      F (x₀ + h) + F (x₀ - h) - 2 * F x₀ ≤ η * n := by
+      (∀ y,
+          u (y + h) + u (y - h) - 2 * u y - η * u y ≤
+            u (x₀ + h) + u (x₀ - h) - 2 * u x₀ - η * u x₀) ∧
+        F (x₀ + h) + F (x₀ - h) - 2 * F x₀ ≤ η * n := by
   classical
   let α : ℝ := 1 + η / 2
   have hα : 1 < α := by dsimp [α]; linarith
@@ -283,47 +293,39 @@ theorem exists_penalized_maximum_with_comparison {n : ℕ} {u F : EuclideanSpace
     intro y
     have hp := lipschitzWith_symmetricAverage hLip y h
     have hm : u (y - h) ≤ u y + (L : ℝ) * ‖h‖ := by
-      simpa only [sub_eq_add_neg, norm_neg] using
-        lipschitzWith_symmetricAverage hLip y (-h)
+      simpa only [sub_eq_add_neg, norm_neg] using lipschitzWith_symmetricAverage hLip y (-h)
     dsimp [A, symmetricAverage]
     linarith
   obtain ⟨R, x, hx, hmax⟩ :=
     exists_maximizers_on_closedBall hu hcoer (fun k => (hV k).continuous) hδ hc hbound hα
   obtain ⟨x₀, _, s, hs, hxs⟩ := (hcoer R).tendsto_subseq hx
   have hsTop : Tendsto s atTop atTop := hs.tendsto_atTop
-  have hux : Tendsto (fun j => u (x (s j))) atTop (𝓝 (u x₀)) :=
-    hu.continuousAt.tendsto.comp hxs
+  have hux : Tendsto (fun j => u (x (s j))) atTop (𝓝 (u x₀)) := hu.continuousAt.tendsto.comp hxs
   have hAx : Tendsto (fun j => V (s j) (x (s j))) atTop (𝓝 (A x₀)) :=
     tendsto_maximizers_of_unique_maximum hδ hc hA hsTop hxs
   have hmax₀ : ∀ y, A y - α * u y ≤ A x₀ - α * u x₀ := by
     intro y
     have hAy : Tendsto (fun j => V (s j) y) atTop (𝓝 (A y)) :=
       tendsto_maximizers_of_unique_maximum hδ hc hA hsTop tendsto_const_nhds
-    exact le_of_tendsto_of_tendsto (hAy.sub_const (α * u y))
-      (hAx.sub (hux.const_mul α))
-      (Filter.Eventually.of_forall (fun j => hmax (s j) y))
-  have hcomp : ∀ k,
-      (Fk k (x k + h) + Fk k (x k - h)) / 2 -
-        n * Real.log α ≤ F (x k) := by
+    exact
+      le_of_tendsto_of_tendsto (hAy.sub_const (α * u y)) (hAx.sub (hux.const_mul α))
+        (Filter.Eventually.of_forall (fun j => hmax (s j) y))
+  have hcomp : ∀ k, (Fk k (x k + h) + Fk k (x k - h)) / 2 - n * Real.log α ≤ F (x k) := by
     intro k
-    exact exists_quadratic_comparison_at_maximum hconv hF hMA (huk k) (hpos k) (hlog k)
-      h (x k) hα0 (hmax k)
+    exact
+      exists_quadratic_comparison_at_maximum hconv hF hMA (huk k) (hpos k) (hlog k) h (x k) hα0
+        (hmax k)
   have hFks : TendstoLocallyUniformly (fun j => Fk (s j)) F atTop := by
     intro U hU z
     obtain ⟨t, ht, he⟩ := hFk U hU z
     exact ⟨t, ht, hsTop.eventually he⟩
-  have hp : Tendsto (fun j => Fk (s j) (x (s j) + h))
-      atTop (𝓝 (F (x₀ + h))) :=
+  have hp : Tendsto (fun j => Fk (s j) (x (s j) + h)) atTop (𝓝 (F (x₀ + h))) :=
     hFks.tendsto_comp hF.continuousAt (hxs.add_const h)
-  have hm : Tendsto (fun j => Fk (s j) (x (s j) - h))
-      atTop (𝓝 (F (x₀ - h))) :=
+  have hm : Tendsto (fun j => Fk (s j) (x (s j) - h)) atTop (𝓝 (F (x₀ - h))) :=
     hFks.tendsto_comp hF.continuousAt (hxs.sub_const h)
-  have hFx : Tendsto (fun j => F (x (s j))) atTop (𝓝 (F x₀)) :=
-    hF.continuousAt.tendsto.comp hxs
-  have hlim : (F (x₀ + h) + F (x₀ - h)) / 2 -
-      n * Real.log α ≤ F x₀ :=
-    le_of_tendsto_of_tendsto (((hp.add hm).div_const 2).sub_const
-      (n * Real.log α)) hFx
+  have hFx : Tendsto (fun j => F (x (s j))) atTop (𝓝 (F x₀)) := hF.continuousAt.tendsto.comp hxs
+  have hlim : (F (x₀ + h) + F (x₀ - h)) / 2 - n * Real.log α ≤ F x₀ :=
+    le_of_tendsto_of_tendsto (((hp.add hm).div_const 2).sub_const (n * Real.log α)) hFx
       (Filter.Eventually.of_forall (fun j => hcomp (s j)))
   refine ⟨x₀, ?_, ?_⟩
   · intro y

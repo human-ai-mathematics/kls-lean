@@ -152,7 +152,27 @@ was not relaxed. Five evidence hashes for the edited Blueprint chapters and docs
 after confirming their associated pre-existing statements and proofs were unchanged. A generated paper badge is
 navigation, not an additional semantic review or whole-paper proof claim.
 
-## Letwin, Lemma 2.2 and smooth Lemma 2.7 (strong regular class only)
+<!-- BEGIN CURRENT LETWIN SOURCE SCOPE -->
+## Current Letwin paper-source scope
+
+The current paper-source results use `n > 0`, bounded open convex nonempty `K`,
+a potential smooth on an open neighborhood of its closure and convex on `K`,
+and the normalized isotropic law. They apply to every admissible moment potential.
+The source declarations retain the complete hypotheses and quantifier order.
+
+| Source item | Reviewed relation | Current declarations |
+| --- | --- | --- |
+| Lemma 2.2 (Klartag [41]) | same | [`FunctionalInequalities.Probability.MomentMeasure.smooth_of_moment_potential_of_bounded_open_convex`](../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean)<br>[`FunctionalInequalities.Probability.MomentMeasure.smooth_of_ofPotential_of_bounded_open_convex`](../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean) |
+| Theorem 2.5 | same | [`FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_moment_potential_of_bounded_open_convex`](../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean)<br>[`FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_ofPotential_of_bounded_open_convex`](../../formalization/FunctionalInequalities/KLS/Letwin/MomentMap.lean) |
+| Lemma 2.7 (Fathi [29, Theorem 2.3]) | same | [`FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_moment_potential_of_bounded_open_convex`](../../formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean)<br>[`FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_ofPotential_of_bounded_open_convex`](../../formalization/FunctionalInequalities/KLS/Letwin/SteinKernel.lean) |
+
+The earlier strong-class and variational constructions below retain their own
+assumptions and intermediate gaps. Those gaps do not downgrade these paper-source
+conclusions, and the paper-source conclusions do not supply every intermediate
+construction of the earlier variational route.
+<!-- END CURRENT LETWIN SOURCE SCOPE -->
+
+## Earlier strong regular-class producers for Letwin Lemmas 2.2 and 2.7
 
 The pinned source is again arXiv:2607.24164v1. For every n > 0, the new smooth producer
 retains one actual potential and all fields of the earlier C² producer: normalization,
@@ -163,12 +183,15 @@ n ≥ 2; the scalar smooth ODE closes n = 1. The same potential and a smooth inv
 int K give the smooth positive definite symmetric Stein kernel and exact pointwise coupling.
 
 These results assume globally smooth κ-uniformly convex W, compact convex K with nonempty
-interior and normalized isotropic law 1_K e^{-W}. The literal merely convex source class is
-not supplied. The later sharp smooth producer starts from the actual weak sharp-trace witness and proves
+interior and normalized isotropic law 1_K e^{-W}. This strong-class producer does not by itself
+supply the merely convex source class. That class is covered by the current paper-source
+producers summarized above. The later sharp smooth producer starts from the actual weak sharp-trace witness and proves
 this same u smooth through given-data regularity bridges. It retains the all-symmetric bound
 with exact constant 2. Its Stein kernel has mean Id and ∫|τ|²_HS dμ ≤ 2n, with the smooth
 inverse and exact coupling at that u. No uniqueness theorem or identification of independent
-existential witnesses is used. The literal merely convex boundary keeps Lemmas 2.2/2.7 partial.
+existential witnesses is used in this strong-class construction. The current paper-source
+results also identify every admissible moment potential using CEK uniqueness; these separate
+results prove Lemmas 2.2 and 2.7 for the literal source class.
 
 The strong-class consumer `Analysis.exists_regular_smooth_moment_calculus` chooses one
 such smooth u and derives the pointwise Hessian generator identity, smooth compact A.4
@@ -179,14 +202,11 @@ coordinate and standard-basis log-determinant conventions agree by basis invaria
 of the determinant. The same-potential smooth sharp trace/HS-L² interface is supplied by
 `exists_regular_moment_potential_smooth_trace` and `exists_regular_smooth_moment_stein_kernel_L2`.
 
-## Letwin Lemma 2.2: literal convex-body source through C¹,α
+## Earlier variational route: convex-body source through C¹,α
 
-**Release scope (2026-10-29).** This section and its dated subsections review the superseded auxiliary
-variational route to Lemma 2.2. The completed moment-map route does not use it. Its library files and
-audit clients cited below are not part of the release snapshot, except retained generic supports such
-as `exists_moment_potential_of_bounded_open_convex`. The
-[delivery map](completed-letwin-delivery-map.json) lists the excluded paths. The records below are kept
-verbatim as dated reviews. Their open gaps remain open mathematically and are not current targets.
+This section records the independent variational route and its retained supports. Statements
+of missing steps concern this route or its weaker source inputs, not the current paper-source
+moment-map theorem above. The dated continuation records retain their historical scopes.
 
 The pinned Lemma A.1 inputs are bounded open convex K and W smooth convex on an open
 neighbourhood of closure K, with isotropic probability density 1_K e^{-W}. The new
@@ -230,10 +250,11 @@ bridge remain independently proved supports, with the dimensional constant befor
 source laws and the compact floor before all sections there. Their actual-source client
 is `research/audits/Letwin/SectionVolume.lean`.
 
-BB arXiv:1207.6128v1 Theorem 2.24(ii), the nonlinear arbitrary-p W²,p gain, interior
-second-order regularity and full literal Letwin Lemma 2.2 remain unproved. The strong-class
-all-order bridge uses gradient-Lipschitz and weak-Hessian inputs unavailable at the literal
-witness. C¹,α alone cannot supply uniform ellipticity or Hessian integrability. In particular,
+This variational route has not independently supplied BB arXiv:1207.6128v1 Theorem 2.24(ii),
+the nonlinear arbitrary-p W²,p gain or the subsequent second-order regularity step for its
+weaker inputs. Its C¹,α producer alone is not the full moment-map theorem. The separate smooth
+moment-map route proves the paper-source conclusion. The strong-class all-order bridge uses
+gradient-Lipschitz and weak-Hessian inputs not supplied by this variational producer. C¹,α alone cannot supply uniform ellipticity or Hessian integrability. In particular,
 the small-p result for the *linearized* equation in Gutiérrez–Tournier (2005) cannot replace
 the nonlinear arbitrary-p theorem.
 
@@ -284,8 +305,9 @@ references quadratic inside and zero outside and retains the same actual literal
 normalized transporting Holder u, deriving MA upper from continuous density.
 The contact image upper and compact volume gain are separately proved for GIVEN
 globally convex GLOBAL C2 unit-MA references. Their genuinely local-C2/domain
-localization and actual Dirichlet/Pogorelov reference existence remain open,
-together with arbitrary-p tails, weak derivatives and full literal Lemma2.2.
+localization and actual Dirichlet/Pogorelov reference existence remain open within this
+variational route, together with its arbitrary-p tails and weak-derivative steps. The separate
+paper-source moment-map theorem does not assert these intermediate constructions.
 
 
 The actual same-matrix gradient derivative/coordinate/MA supports now require
@@ -298,9 +320,10 @@ proofs. `research/audits/Letwin/LocalGradient.lean` constructs abs on Ioi0 and
 formally its nonglobal differentiability obstruction, true unit-MA quadratic on
 an open ball/n0, and the same actual literal normalized transporting Holder u.
 No desired derivative, global differentiability/extension, Hessian/C11/W2p input.
-Weak derivatives, domain-only Dirichlet reference existence/localization and
-full literal Lemma2.2 remain open; current general image/gain is still given
-GLOBAL convex/GLOBAL C2 reference. Local-C2 image/Borel candidates are separate.
+Within this earlier variational route, weak derivatives and domain-only Dirichlet reference
+existence/localization remain open; its general image/gain support still takes a given
+GLOBAL convex/GLOBAL C2 reference. These restrictions do not limit the separate paper-source
+smooth moment-map theorem. Local-C2 image/Borel candidates are separate.
 
 ### Letwin Lemma 2.2: local-C2 given-reference contact image (2026-10-24)
 

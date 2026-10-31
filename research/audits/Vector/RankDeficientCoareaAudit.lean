@@ -1,13 +1,16 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.Vector.Slice.Critical
-import FunctionalInequalities.Analysis.Coarea.Smooth
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+public import FunctionalInequalities.Analysis.Vector.Slice.Critical
+public import FunctionalInequalities.Analysis.Coarea.Smooth
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the rank-deficient critical set and the codimension-`m` coarea formula
 
 **What is proved.**  Route obligations `R8`, **`R0`** and **`R9`** of
-`research/audits/Vector/RankDeficientRouteStatements.lean`, restated **verbatim** below as `route_R8`,
+`research/audits/Vector/RankDeficientRouteStatements.lean`, restated **verbatim** below as
+`route_R8`,
 `route_R0` and `route_R9` and discharged.  Together with the per-stratum steps audited in the
 other clients this closes the rank-deficient part of the codimension-`m` coarea critical set:
 **the general codimension-`m` coarea formula for `C¹` maps is proved.**
@@ -39,6 +42,8 @@ empty and no positivity of the codimension is needed — and a constant map are 
 The current coarea source is `Analysis/Vector/RankDeficient/Coarea.lean`. Cheeger comparisons and
 energy identifications are outside this client's scope.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -185,9 +190,10 @@ from the codimension-`m` version with no hypothesis on the critical set. -/
 theorem scalar_L11 {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞} (hn : 1 ≤ finrank ℝ V)
     (hu : ContDiff ℝ 1 u) (hS : MeasurableSet S) (hg : Measurable g) :
     AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.surfaceMeasure V))
-      (volume : Measure ℝ) ∧
-    (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)
-      = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.surfaceMeasure V) ∂(volume : Measure ℝ)) := by
+        (volume : Measure ℝ) ∧
+      (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) =
+        ∫⁻ t,
+          ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.surfaceMeasure V) ∂(volume : Measure ℝ)) := by
   have hk : (finrank ℝ V - 1) + finrank ℝ ℝ = finrank ℝ V := by rw [finrank_self]; omega
   obtain ⟨hmeas, heq⟩ := coarea_of_contDiff (V := V) (W := ℝ) (S := S) (g := g) hk hu hS hg
   have hdens : ∀ x : V, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) = ‖gradient u x‖ₑ := by

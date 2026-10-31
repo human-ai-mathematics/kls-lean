@@ -1,13 +1,16 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.Harmonic.LocalCaps
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.Harmonic.LocalCaps
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # Hessian Lipschitz and Hölder bounds for harmonic functions on the unit ball
 
 The unit-scale harmonic part of the interior Hölder estimate of Gilbarg–Trudinger, *Elliptic Partial
-Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60, from
+Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60,
+from
 the derivative estimates of Theorem 2.10 / (2.31). For `n ≥ 2`, `h ∈ C²(B₂)` with `Δh = 0` and
 `|h| ≤ M` on `B₂`:
 
@@ -21,6 +24,8 @@ the derivative estimates of Theorem 2.10 / (2.31). For `n ≥ 2`, `h ∈ C²(B�
 Only the harmonic contribution to GT Theorem 4.6 is proved here; the Newtonian-potential estimate
 (GT Theorem 4.5) is `Newtonian/CompactPoisson`, and the two are not combined in this module.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric
 open scoped ContDiff Topology

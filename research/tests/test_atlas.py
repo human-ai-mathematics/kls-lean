@@ -218,14 +218,19 @@ class EvidenceTests(unittest.TestCase):
             root = Path(directory)
             compiled = root / "formalization/.lake/build/lib/lean/FunctionalInequalities"
             compiled.mkdir(parents=True)
-            for name in ["Current.olean", "Current.olean.server", "Current.olean.private", "Current 2.olean", "Old.olean"]:
+            for name in ["Current.olean", "Current.olean.server", "Current.olean.private", "Current.ir.sig",
+                         "Current.ir", "Current 2.olean", "Old.olean"]:
                 (compiled / name).write_bytes(name.encode())
+            source = root / "formalization/FunctionalInequalities/Current.lean"
+            source.parent.mkdir(parents=True, exist_ok=True)
+            source.write_text("module\n\npublic import Mathlib\n")
             snapshot = {"files": {"formalization/FunctionalInequalities/Current.lean": "source-hash",
                                   "formalization/FunctionalInequalities/Old.lean": None}}
             view = root / "view"
             result = prepare_replay(root, snapshot, view)
             self.assertEqual(result["modules"], ["FunctionalInequalities.Current"])
-            self.assertEqual(len(result["compiled_sha256"]), 3)
+            # A module source needs all five Lean v4.35 artifacts; the duplicate and orphan are skipped.
+            self.assertEqual(len(result["compiled_sha256"]), 5)
             self.assertFalse((view / "FunctionalInequalities/Old.olean").exists())
             self.assertTrue((compiled / "Old.olean").exists())
 

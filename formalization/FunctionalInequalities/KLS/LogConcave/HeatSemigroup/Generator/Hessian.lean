@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
-import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
+public import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 
 /-!
 # The weak Hessian on the generator domain and the curvature form of (16)
@@ -41,8 +43,10 @@ the two agree everywhere and `U` is convex (`convexOn_of_eq_tilted`, `Density/Ti
 No regularity of `F` beyond `D(A)` is claimed: the weak Hessian is the `L²` object
 `T̄ ⟪eᵢ, T̄ F⟫`, not a classical second derivative, and nothing is said about the class `𝒜` or
 Lemma 2.1 on `𝒜`. The Hessian square is taken in the fixed standard orthonormal basis; basis
-independence is not proved. The identity form of (16) on `D(A)` is not stated.
+independence and the identity form of (16) on `D(A)` are outside this module's statements.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -183,7 +187,7 @@ private theorem sum_norm_sq_add_le_of_smooth (hνU : (ν : Measure V) = m.tilted
       _ = ∫ x, ∑ i, ‖gradient (fun y => fderiv ℝ f y (stdOrthonormalBasis ℝ V i)) x‖ ^ 2
           ∂(ν : Measure V) :=
           (integral_finsetSum _ fun i _ =>
-            (memLp_two_iff_integrable_sq_norm (hmem i).1).1 (hmem i)).symm
+            (memLp_two_iff_integrable_sq_norm (hmem i).aestronglyMeasurable).1 (hmem i)).symm
       _ = _ := integral_congr_ae (Eventually.of_forall fun x =>
           sum_norm_gradient_fderiv_apply_sq hf2 x)
   rw [hsum, hν.closedWeightedOperator_toLp_eq m hi hf hfc,
@@ -258,7 +262,8 @@ private theorem norm_sub_sq_le_of_smooth (hνU : (ν : Measure V) = m.tilted (-U
     (fun j _ => sq_nonneg _) (Finset.mem_univ i)
   linarith
 
-/-- **The approximation behind the weak Hessian estimate.** For `F ∈ D(A)` there are `fₙ ∈ C_c^∞` with
+/--
+**The approximation behind the weak Hessian estimate.** For `F ∈ D(A)` there are `fₙ ∈ C_c^∞` with
 `T̄ [fₙ] → T̄ F`, `A [fₙ] → A F`, and, for every `i`, `⟪eᵢ, T̄ F⟫ ∈ D(T̄)` with
 `T̄ [∂ᵢ fₙ] → T̄ ⟪eᵢ, T̄ F⟫`. -/
 private theorem exists_seq_smooth_tendsto_weakHessian (hνU : (ν : Measure V) = m.tilted (-U))
@@ -266,69 +271,100 @@ private theorem exists_seq_smooth_tendsto_weakHessian (hνU : (ν : Measure V) =
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V)) {ρ : ℝ}
     (hH : ∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ U x v v)
     (F : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain) :
-    ∃ (fn : ℕ → V → ℝ) (hfn : ∀ n, ContDiff ℝ ∞ (fn n))
-      (hfnc : ∀ n, HasCompactSupport (fn n)),
-      Tendsto (fun n => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi (hfn n) (hfnc n)⟩) atTop
-        (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)) ∧
-      Tendsto (fun n => adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩) atTop
-        (𝓝 (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F)) ∧
-      ∀ i, ∃ h : (innerSL ℝ (stdOrthonormalBasis ℝ V i)).compLp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-            ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩) ∈
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain,
-        Tendsto (fun n => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-            ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi
-              (contDiff_fderiv_apply_infty (hfn n) (stdOrthonormalBasis ℝ V i))
-              ((hfnc n).fderiv_apply ℝ (stdOrthonormalBasis ℝ V i))⟩) atTop
-          (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, h⟩)) := by
+    ∃ (fn : ℕ → V → ℝ) (hfn : ∀ n, ContDiff ℝ ∞ (fn n)) (hfnc : ∀ n, HasCompactSupport (fn n)),
+      Tendsto
+          (fun n =>
+            hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi (hfn n) (hfnc n)⟩)
+          atTop
+          (𝓝
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)) ∧
+        Tendsto
+            (fun n =>
+              adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
+                ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩)
+            atTop
+            (𝓝 (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F)) ∧
+          ∀ i,
+            ∃ h :
+              (innerSL ℝ (stdOrthonormalBasis ℝ V i)).compLp
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩) ∈
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain,
+              Tendsto
+                (fun n =>
+                  hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨_,
+                      hν.toLp_mem_closedWeightedOperator_domain m hi
+                        (contDiff_fderiv_apply_infty (hfn n) (stdOrthonormalBasis ℝ V i))
+                        ((hfnc n).fderiv_apply ℝ (stdOrthonormalBasis ℝ V i))⟩)
+                atTop
+                (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, h⟩)) := by
   obtain ⟨fn, hfn, hfnc, h1, h2⟩ := hν.exists_seq_smooth_tendsto_adjointComp m hi hνU hU F
-  have hTF : Tendsto (fun n => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-        ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi (hfn n) (hfnc n)⟩) atTop
-      (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-        ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)) :=
+  have hTF :
+    Tendsto
+      (fun n =>
+        hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+          ⟨_, hν.toLp_mem_closedWeightedOperator_domain m hi (hfn n) (hfnc n)⟩)
+      atTop
+      (𝓝
+        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+          ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩)) :=
     tendsto_apply_of_tendsto_adjointComp
-      (hν.dense_domain_closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-      (x := fun n => ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩)
+      (hν.dense_domain_closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (x := fun n =>
+      ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩)
       (tendsto_iff_norm_sub_tendsto_zero.2 h1) (tendsto_iff_norm_sub_tendsto_zero.2 h2)
-  have hAF : Tendsto (fun n => adjointComp
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-        ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩) atTop
-      (𝓝 (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F)) :=
+  have hAF :
+    Tendsto
+      (fun n =>
+        adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
+          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩)
+      atTop (𝓝 (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F)) :=
     tendsto_iff_norm_sub_tendsto_zero.2 h2
   refine ⟨fn, hfn, hfnc, hTF, hAF, fun i => ?_⟩
   have hdf : ∀ n, ContDiff ℝ ∞ (fun y => fderiv ℝ (fn n) y (stdOrthonormalBasis ℝ V i)) :=
     fun n => contDiff_fderiv_apply_infty (hfn n) _
   have hdfc : ∀ n, HasCompactSupport (fun y => fderiv ℝ (fn n) y (stdOrthonormalBasis ℝ V i)) :=
     fun n => (hfnc n).fderiv_apply ℝ _
-  have hx : ∀ n, (memLp_of_contDiff_hasCompactSupport ν (hdf n) (hdfc n)).toLp _ ∈
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain :=
+  have hx :
+    ∀ n,
+      (memLp_of_contDiff_hasCompactSupport ν (hdf n) (hdfc n)).toLp _ ∈
+        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain :=
     fun n => hν.toLp_mem_closedWeightedOperator_domain m hi (hdf n) (hdfc n)
-  have hxa : Tendsto (fun n => (memLp_of_contDiff_hasCompactSupport ν (hdf n) (hdfc n)).toLp _)
-      atTop (𝓝 ((innerSL ℝ (stdOrthonormalBasis ℝ V i)).compLp
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩))) := by
-    have hc := ((((innerSL ℝ (stdOrthonormalBasis ℝ V i)).compLpL 2
-      (ν : Measure V))).continuous.tendsto _).comp hTF
+  have hxa :
+    Tendsto (fun n => (memLp_of_contDiff_hasCompactSupport ν (hdf n) (hdfc n)).toLp _) atTop
+      (𝓝
+        ((innerSL ℝ (stdOrthonormalBasis ℝ V i)).compLp
+          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+            ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩))) := by
+    have hc :=
+      ((((innerSL ℝ (stdOrthonormalBasis ℝ V i)).compLpL 2 (ν : Measure V))).continuous.tendsto
+            _).comp
+        hTF
     refine hc.congr fun n => ?_
     exact compLp_innerSL_closedWeightedOperator_toLp m hν hi (hfn n) (hfnc n) _
-  have hcau : CauchySeq (fun n =>
-      hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hx n⟩) := by
+  have hcau :
+    CauchySeq
+      (fun n => hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hx n⟩) := by
     rw [cauchySeq_iff_tendsto_dist_atTop_0]
     have hA2 := cauchySeq_iff_tendsto_dist_atTop_0.mp hAF.cauchySeq
     have hT2 := cauchySeq_iff_tendsto_dist_atTop_0.mp hTF.cauchySeq
     have hR := (hA2.pow 2).add ((hT2.pow 2).const_mul |ρ|)
     rw [zero_pow two_ne_zero, mul_zero, add_zero] at hR
-    refine tendsto_zero_of_sq (fun _ => dist_nonneg)
-      (squeeze_zero (fun _ => sq_nonneg _) (fun p => ?_) hR)
+    refine
+      tendsto_zero_of_sq (fun _ => dist_nonneg)
+        (squeeze_zero (fun _ => sq_nonneg _) (fun p => ?_) hR)
     simp only [dist_eq_norm]
-    exact le_add_abs_mul_of_le_sub (norm_sub_sq_le_of_smooth m hν hi hνU hUt hU hexp hH
-      (hfn p.1) (hfnc p.1) (hfn p.2) (hfnc p.2) i) (sq_nonneg _)
+    exact
+      le_add_abs_mul_of_le_sub
+        (norm_sub_sq_le_of_smooth m hν hi hνU hUt hU hexp hH (hfn p.1) (hfnc p.1) (hfn p.2)
+          (hfnc p.2) i)
+        (sq_nonneg _)
   obtain ⟨G, hG⟩ := cauchySeq_tendsto_of_complete hcau
-  obtain ⟨hmem, hTG⟩ := exists_mem_domain_apply_eq_of_tendsto
-    (hν.closedWeightedOperator_isClosed m (ContinuousLinearMap.id ℝ V) hi) hx hxa hG
+  obtain ⟨hmem, hTG⟩ :=
+    exists_mem_domain_apply_eq_of_tendsto
+      (hν.closedWeightedOperator_isClosed m (ContinuousLinearMap.id ℝ V) hi) hx hxa hG
   exact ⟨hmem, hTG ▸ hG⟩
 
 omit [CompleteSpace V] in
@@ -341,12 +377,14 @@ private theorem zero_mul_le_bilinearIteratedFDerivTwo (hνU : (ν : Measure V) =
   exact bilinearIteratedFDerivTwo_nonneg_of_convexOn hU
     (convexOn_of_eq_tilted m hν hνU hU.continuous) x v
 
-/-- **the weak Hessian estimate, weak first derivatives in the form domain.** For `ν = m.tilted (-U)` log-concave,
+/--
+**the weak Hessian estimate, weak first derivatives in the form domain.** For `ν = m.tilted (-U)`
+log-concave,
 with `U` of temperate growth and all exponential moments, and `F ∈ D(A)`, every weak first
 derivative `∂ᵢ F = ⟪eᵢ, T̄ F⟫` (standard orthonormal basis) lies in `D(T̄)`. No curvature bound
 beyond the convexity of `U` implied by log-concavity is assumed. -/
-theorem compLp_innerSL_mem_closedWeightedOperator_domain
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hUt : U.HasTemperateGrowth)
+theorem compLp_innerSL_mem_closedWeightedOperator_domain (hνU : (ν : Measure V) = m.tilted (-U))
+    (hUt : U.HasTemperateGrowth)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V))
     (F : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
     (i : Fin (Module.finrank ℝ V)) :
@@ -355,8 +393,9 @@ theorem compLp_innerSL_mem_closedWeightedOperator_domain
           ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩) ∈
       (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain := by
   have hU2 : ContDiff ℝ 2 U := hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)
-  obtain ⟨_, _, _, -, -, hD⟩ := exists_seq_smooth_tendsto_weakHessian m hν hi hνU hUt
-    (hU2.of_le (by norm_num)) hexp (zero_mul_le_bilinearIteratedFDerivTwo m hν hνU hU2) F
+  obtain ⟨_, _, _, -, -, hD⟩ :=
+    exists_seq_smooth_tendsto_weakHessian m hν hi hνU hUt (hU2.of_le (by norm_num)) hexp
+      (zero_mul_le_bilinearIteratedFDerivTwo m hν hνU hU2) F
   exact (hD i).1
 
 /-- **the weak Hessian estimate, symmetry of the weak Hessian.** Under the hypotheses of

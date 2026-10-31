@@ -1,10 +1,12 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.Convolution.UniformBound
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import Mathlib.Analysis.Calculus.ContDiff.Comp
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Measure.Haar.Unique
-import Mathlib.Tactic.NormNum
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.Convolution.UniformBound
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.MeasureTheory.Measure.Haar.Unique
+public import Mathlib.Tactic.NormNum
 
 /-!
 # Derivative caps for convolution with a compact C⁴ kernel
@@ -24,6 +26,8 @@ enters only through local integrability and its value bound, never through its d
 The convolution is Mathlib's bilinear convolution with `ContinuousLinearMap.lsmul ℝ ℝ`, so
 `(K ⋆ g) x = ∫ K t * g (x - t) dt`.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory
 open scoped Convolution

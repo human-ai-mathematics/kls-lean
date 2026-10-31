@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
 
 /-! # The codimension-`m` area formula for `C¹` graphs
 
@@ -14,6 +16,8 @@ codimension `m` the Jacobian `√det (1 + AᵀA)` is **not** uniformly Lipschitz
 **directly**, which continuity supplies.  Everything after that mirrors the codimension-one file,
 and the limit lemmas `tendsto_aux`, `tendsto_aux'` are graph-independent and reused unchanged.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -270,17 +274,21 @@ private theorem hausdorffMeasure_image_vectorGraphMap_of_finite (ι : H →ₗ�
       exact (hest ε hε).2
     exact le_antisymm hAle hIle
 
-/-- **vector-valued graph area: the codimension-`m` area formula for `C¹` graphs.**  The `k`-dimensional Hausdorff
+/--
+**vector-valued graph area: the codimension-`m` area formula for `C¹` graphs.**  The `k`-dimensional
+Hausdorff
 measure of the graph of a `C¹` `K`-valued map over a measurable set is the integral of the graph
 volume factor `√det (1 + Dγᵀ Dγ)`.  No finiteness, boundedness or injectivity hypothesis: a graph
 map is injective by construction. -/
 theorem hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
-    (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ))
-    {γ : H → K} (hγ : ContDiff ℝ 1 γ) {s : Set H} (hs : MeasurableSet s) :
-    μH[(Module.finrank ℝ H : ℝ)] (vectorGraphMap ι κ γ '' s)
-      = ∫⁻ y in s, ENNReal.ofReal
-          (LinearMap.normDet ((graphMapLinear ι κ (fderiv ℝ γ y) : H →ₗ[ℝ] V)))
-          ∂(μH[(Module.finrank ℝ H : ℝ)] : Measure H) := by
+    (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ)) {γ : H → K} (hγ : ContDiff ℝ 1 γ)
+    {s : Set H} (hs : MeasurableSet s) :
+    μH[(Module.finrank ℝ H : ℝ)] (vectorGraphMap ι κ γ '' s) =
+      ∫⁻ y in s,
+        ENNReal.ofReal
+          (LinearMap.normDet
+            ((graphMapLinear ι κ (fderiv ℝ γ y) :
+              H →ₗ[ℝ] V))) ∂(μH[(Module.finrank ℝ H : ℝ)] : Measure H) := by
   set n : ℕ := Module.finrank ℝ H with hn
   set μ : Measure H := (μH[(n : ℝ)] : Measure H) with hμ
   set J : H → ℝ≥0∞ := fun y =>
@@ -298,9 +306,11 @@ theorem hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K 
     simp only [sm, ← Set.inter_iUnion, Metric.iUnion_ball_nat_succ, Set.inter_univ]
   have hsmfin : ∀ m, μ (sm m) ≠ ⊤ := by
     intro m
-    exact ((Metric.isBounded_ball (x := (0 : H)) (r := (m : ℝ) + 1)).subset
-      Set.inter_subset_right).measure_lt_top.ne
-  have hLim : Tendsto (fun m => μH[(n : ℝ)] (vectorGraphMap ι κ γ '' sm m)) atTop
+    exact
+      ((Metric.isBounded_ball (x := (0 : H)) (r := (m : ℝ) + 1)).subset
+          Set.inter_subset_right).measure_lt_top.ne
+  have hLim :
+    Tendsto (fun m => μH[(n : ℝ)] (vectorGraphMap ι κ γ '' sm m)) atTop
       (𝓝 (μH[(n : ℝ)] (vectorGraphMap ι κ γ '' s))) := by
     have himg : (⋃ m, vectorGraphMap ι κ γ '' sm m) = vectorGraphMap ι κ γ '' s := by
       rw [← Set.image_iUnion, hsmunion]
@@ -312,8 +322,8 @@ theorem hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K 
     rw [← hsmunion, setLIntegral_iUnion_of_directed J hd]
     exact tendsto_atTop_iSup fun i j hij => lintegral_mono_set (hsmmono hij)
   refine tendsto_nhds_unique hLim ?_
-  have heq : ∀ m, μH[(n : ℝ)] (vectorGraphMap ι κ γ '' sm m) = ∫⁻ y in sm m, J y ∂μ :=
-    fun m => hausdorffMeasure_image_vectorGraphMap_of_finite ι κ hperp hγ (hsmmeas m) (hsmfin m)
+  have heq : ∀ m, μH[(n : ℝ)] (vectorGraphMap ι κ γ '' sm m) = ∫⁻ y in sm m, J y ∂μ := fun m =>
+    hausdorffMeasure_image_vectorGraphMap_of_finite ι κ hperp hγ (hsmmeas m) (hsmfin m)
   simpa only [heq] using hRlim
 
 /-- **The codimension-`m` area formula in the normalized convention**, integrated against

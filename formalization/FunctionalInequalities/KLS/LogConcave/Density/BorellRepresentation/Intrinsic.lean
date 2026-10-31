@@ -1,5 +1,7 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
 
 /-!
 # Borell representation on the affine support
@@ -52,6 +54,8 @@ The implementation is organized by responsibility: Basic, Moments, Construction,
 Import the earliest layer containing the required interface.
 -/
 
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Set Topology Filter
 
@@ -69,11 +73,13 @@ section IntrinsicDensity
 omit [CompleteSpace F]
 /-- The support of the intrinsic law is already its own closed convex hull. Hence the interior
 of the closed convex hull of the support, as written in the Blueprint, is `interior ν.support`. -/
-theorem closure_convexHull_intrinsic_support {μ : ProbabilityMeasure F}
-    (hμ : LogConcave μ) :
-    closure (convexHull ℝ (Probability.intrinsicMeasure μ :
-        Measure (Probability.affineSupport μ).direction).support) =
-      (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction).support := by
+theorem closure_convexHull_intrinsic_support {μ : ProbabilityMeasure F} (hμ : LogConcave μ) :
+    closure
+        (convexHull ℝ
+          (Probability.intrinsicMeasure μ :
+              Measure (Probability.affineSupport μ).direction).support) =
+      (Probability.intrinsicMeasure μ :
+          Measure (Probability.affineSupport μ).direction).support := by
   rw [hμ.intrinsicMeasure.convex_support.convexHull_eq, Measure.isClosed_support.closure_eq]
 
 /-- The intrinsic law gives zero mass to the complement of the interior of its support. This is

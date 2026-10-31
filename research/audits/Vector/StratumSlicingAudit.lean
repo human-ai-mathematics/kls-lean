@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
 
 /-!
 # Scope audit for the local package and the target split
@@ -12,7 +14,8 @@ per-stratum statement and the finite union over `r < m`; those are audited in
 
 **What the local package delivers, and why the uniformity is the point.**  Around a point of the
 rank-`r` stratum there is an open neighbourhood with compact closure on which the regular component
-`P ∘ u` is a submersion, together with **one** constant `c` that works for **every** point `y` of the
+`P ∘ u` is a submersion, together with **one** constant `c` that works for **every** point `y` of
+the
 stratum in that neighbourhood.  That uniformity is the whole difficulty: the approximating partition
 produces a different linear model `fderiv ℝ u y` on every piece, and the constant of the tangential
 small-Lipschitz estimate depends on that model through `‖fderiv ℝ u y‖` and the right-inverse
@@ -26,6 +29,8 @@ every rank `r < m` and needs localization to be assembled; and it is not a coare
 case, nor a Sard theorem — no claim whatever is made about the measure of the set of critical
 *values*.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -61,20 +66,28 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteD
   [MeasurableSpace W] [BorelSpace W]
 
 omit [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ W] [MeasurableSpace W]
-  [BorelSpace W] in
-/-- **The local package, restated independently.**  `u` is only `C¹`, the point is only required to
-lie on the stratum, and the constant `c` does **not** depend on the point `y`, on `ε`, on the set `S`
+    [BorelSpace W] in
+/--
+**The local package, restated independently.**  `u` is only `C¹`, the point is only required to
+lie on the stratum, and the constant `c` does **not** depend on the point `y`, on `ε`, on the set
+`S`
 or on the fibre `s`. -/
 theorem local_package {u : V → W} (hu : ContDiff ℝ 1 u) {r : ℕ} {x₀ : V}
     (hx₀ : x₀ ∈ stratum u r) :
-    ∃ (U : Set V) (c : ℝ≥0), IsOpen U ∧ x₀ ∈ U ∧ IsCompact (closure U) ∧
-      (∀ x ∈ closure U, coareaJacobian
-        (fderiv ℝ (fun y => (tangentRange u x₀).orthogonalProjectionOnto (u y)) x) ≠ 0) ∧
-      (∀ y ∈ stratum u r ∩ U, ∀ (ε : ℝ≥0) (S : Set V) (s : tangentRange u x₀),
-        ApproximatesLinearOn u (fderiv ℝ u y) S ε →
-          LipschitzOnWith (c * ε)
-            (fun x => (tangentRange u x₀)ᗮ.orthogonalProjectionOnto (u x))
-            (S ∩ {x : V | (tangentRange u x₀).orthogonalProjectionOnto (u x) = s})) :=
+    ∃ (U : Set V) (c : ℝ≥0),
+      IsOpen U ∧
+        x₀ ∈ U ∧
+          IsCompact (closure U) ∧
+            (∀ x ∈ closure U,
+                coareaJacobian
+                    (fderiv ℝ (fun y => (tangentRange u x₀).orthogonalProjectionOnto (u y)) x) ≠
+                  0) ∧
+              (∀ y ∈ stratum u r ∩ U,
+                ∀ (ε : ℝ≥0) (S : Set V) (s : tangentRange u x₀),
+                  ApproximatesLinearOn u (fderiv ℝ u y) S ε →
+                    LipschitzOnWith (c * ε)
+                      (fun x => (tangentRange u x₀)ᗮ.orthogonalProjectionOnto (u x))
+                      (S ∩ {x : V | (tangentRange u x₀).orthogonalProjectionOnto (u x) = s})) :=
   exists_stratum_local_data hu hx₀
 
 omit [FiniteDimensional ℝ W] [MeasurableSpace W] [BorelSpace W] in
@@ -144,7 +157,8 @@ end StratumSlicingAudit
 #print axioms FunctionalInequalities.Analysis.hausdorffMeasure_eq_inv_mul_normalized
 #print axioms FunctionalInequalities.Analysis.finrank_tangentRange_eq_of_mem
 #print axioms FunctionalInequalities.Analysis.lintegral_hausdorffMeasure_stratum_le
-#print axioms FunctionalInequalities.Analysis.exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero
+#print axioms
+  FunctionalInequalities.Analysis.exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero
 #print axioms StratumSlicingAudit.route_R7
 #print axioms StratumSlicingAudit.local_package
 #print axioms StratumSlicingAudit.stratum_measurable

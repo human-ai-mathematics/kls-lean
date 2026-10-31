@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Regular
-import FunctionalInequalities.Probability.QuadraticTilt
-import FunctionalInequalities.Analysis.DiagonalSelector
-import Mathlib.MeasureTheory.Measure.LevyProkhorovMetric
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Regular
+public import FunctionalInequalities.Probability.QuadraticTilt
+public import FunctionalInequalities.Analysis.DiagonalSelector
+public import Mathlib.MeasureTheory.Measure.LevyProkhorovMetric
 
 /-!
 # The regular approximation: joint Gaussian-then-quadratic diagonal
@@ -17,6 +19,8 @@ weakly and their means, raw second moments and covariance operators converge to 
 law. Convergence of whitened laws and the limit of the Poincaré constants are separate (the
 conditional transfer is in `KLS/LogConcave/Regular/Poincare.lean`).
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 open FunctionalInequalities.Analysis
@@ -39,7 +43,8 @@ theorem tiltRate_tendsto_zero : Tendsto tiltRate atTop (𝓝 (0 : ℝ)) :=
   tendsto_one_div_add_atTop_nhds_zero_nat
 
 /-- `δ_{k n} ≤ δ_n` when `k n ≥ n`. -/
-theorem selected_tiltRate_le {k : ℕ → ℕ} (hk : ∀ n, n ≤ k n) (n : ℕ) : tiltRate (k n) ≤ tiltRate n := by
+theorem selected_tiltRate_le {k : ℕ → ℕ} (hk : ∀ n, n ≤ k n) (n : ℕ) :
+    tiltRate (k n) ≤ tiltRate n := by
   unfold tiltRate
   apply one_div_le_one_div_of_le (by positivity : (0 : ℝ) < (n : ℝ) + 1)
   have hcast : (n : ℝ) ≤ (k n : ℝ) := by exact_mod_cast hk n

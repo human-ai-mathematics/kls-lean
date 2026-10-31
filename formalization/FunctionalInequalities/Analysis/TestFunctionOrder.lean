@@ -2,8 +2,10 @@
 The compact-indicator approximation below adapts Mathlib's
 Analysis/Distribution/AEEqOfIntegralContDiff.lean, by Sébastien Gouëzel (Apache 2.0).
 -/
-import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
-import Mathlib.MeasureTheory.Measure.Regular
+module
+
+public import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
+public import Mathlib.MeasureTheory.Measure.Regular
 
 /-!
 # Order detected by nonnegative smooth tests
@@ -12,6 +14,8 @@ On a finite-dimensional real space with a finite Borel measure, nonnegative inte
 all nonnegative smooth compactly supported tests detect a.e. nonnegativity of integrable
 functions. The proof approximates compact indicators and uses inner regularity.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -108,8 +112,7 @@ theorem ae_nonneg_of_integral_mul_nonneg [IsFiniteMeasure μ] (hf : Integrable f
       (ae_restrict_mem hK.measurableSet).mono fun x hx => (hKsub hx).le
     have hInt : ∫ x in K, F x ∂μ = 0 :=
       le_antisymm (integral_nonpos_of_ae hneg) (hcompact K hK)
-    have hz : ∀ᵐ x ∂μ.restrict K, F x = 0 :=
-      by
+    have hz : ∀ᵐ x ∂μ.restrict K, F x = 0 := by
         have hz := (integral_eq_zero_iff_of_nonneg_ae
           (hneg.mono fun x hx => neg_nonneg.mpr hx) hFi.integrableOn.neg).mp
           (by rw [integral_neg, hInt, neg_zero])

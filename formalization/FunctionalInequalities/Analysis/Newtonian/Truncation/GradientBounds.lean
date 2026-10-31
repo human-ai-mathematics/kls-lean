@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Newtonian.Truncation.Gradient
-import FunctionalInequalities.Analysis.Newtonian.Kernel.L1
-import FunctionalInequalities.Analysis.Cutoff.RadialLipschitz
+module
+
+public import FunctionalInequalities.Analysis.Newtonian.Truncation.Gradient
+public import FunctionalInequalities.Analysis.Newtonian.Kernel.L1
+public import FunctionalInequalities.Analysis.Cutoff.RadialLipschitz
 
 /-!
 # Bounds for the truncated Newtonian gradient
@@ -23,6 +25,8 @@ The unit radial mass is imported (`integral_sum_fderiv_newtonianTruncatedGradien
 re-proved.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Set Metric MeasureTheory Filter
@@ -33,7 +37,8 @@ namespace FunctionalInequalities.Analysis
 /-- The derived dimension-free profile cap: `s ↦ ρ(2 − s)` is `newtonianCutoffCap`-Lipschitz. -/
 def newtonianCutoffCap : ℝ := Classical.choose exists_lipschitz_radial_cutoff_cap
 
-theorem newtonianCutoffCap_pos : 0 < newtonianCutoffCap := (Classical.choose_spec exists_lipschitz_radial_cutoff_cap).1
+theorem newtonianCutoffCap_pos : 0 < newtonianCutoffCap :=
+  (Classical.choose_spec exists_lipschitz_radial_cutoff_cap).1
 
 section Profile
 
@@ -45,46 +50,62 @@ theorem newtonianCutoffProfile_nonneg (r : ℝ) : 0 ≤ newtonianCutoffProfile e
 theorem newtonianCutoffProfile_le_one (r : ℝ) : newtonianCutoffProfile eps r ≤ 1 :=
   sub_le_self _ (Real.smoothTransition.nonneg _)
 
-theorem monotone_newtonianCutoffProfile (heps : 0 < eps) : Monotone (newtonianCutoffProfile eps) := by
+theorem monotone_newtonianCutoffProfile (heps : 0 < eps) :
+    Monotone (newtonianCutoffProfile eps) := by
   intro r s hrs
-  have h := FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff.2.1 (div_le_div_of_nonneg_right hrs heps.le)
+  have h :=
+    FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff.2.1
+      (div_le_div_of_nonneg_right hrs heps.le)
   simp only [newtonianCutoffProfile]
   linarith
 
-theorem deriv_newtonianCutoffProfile_nonneg (heps : 0 < eps) (r : ℝ) : 0 ≤ deriv (newtonianCutoffProfile eps) r :=
+theorem deriv_newtonianCutoffProfile_nonneg (heps : 0 < eps) (r : ℝ) :
+    0 ≤ deriv (newtonianCutoffProfile eps) r :=
   (monotone_newtonianCutoffProfile heps).deriv_nonneg
 
 theorem hasDerivAt_newtonianCutoffProfile (r : ℝ) :
     HasDerivAt (newtonianCutoffProfile eps) (deriv (newtonianCutoffProfile eps) r) r :=
   ((contDiff_newtonianCutoffProfile eps).differentiable (by simp) r).hasDerivAt
 
-/-- The profile derivative vanishes on `r ≤ ε` and on `r ≥ 2ε`, endpoints included (one-sided uniqueness). -/
-theorem deriv_newtonianCutoffProfile_eq_zero (heps : 0 < eps) {r : ℝ} (hr : r ≤ eps ∨ 2 * eps ≤ r) :
-    deriv (newtonianCutoffProfile eps) r = 0 := by
+/--
+The profile derivative vanishes on `r ≤ ε` and on `r ≥ 2ε`, endpoints included (one-sided
+uniqueness). -/
+theorem deriv_newtonianCutoffProfile_eq_zero (heps : 0 < eps) {r : ℝ}
+    (hr : r ≤ eps ∨ 2 * eps ≤ r) : deriv (newtonianCutoffProfile eps) r = 0 := by
   have hd := hasDerivAt_newtonianCutoffProfile (eps := eps) r
   rcases hr with hr | hr
   · have hc : HasDerivWithinAt (newtonianCutoffProfile eps) 0 (Iic r) r :=
-      (hasDerivWithinAt_const r (Iic r) (0:ℝ)).congr (fun s hs => newtonianCutoffProfile_zero heps (le_trans hs hr))
+      (hasDerivWithinAt_const r (Iic r) (0 : ℝ)).congr
+        (fun s hs => newtonianCutoffProfile_zero heps (le_trans hs hr))
         (newtonianCutoffProfile_zero heps hr)
     exact (uniqueDiffWithinAt_Iic r).eq_deriv _ hd.hasDerivWithinAt hc
   · have hc : HasDerivWithinAt (newtonianCutoffProfile eps) 0 (Ici r) r :=
-      (hasDerivWithinAt_const r (Ici r) (1:ℝ)).congr (fun s hs => newtonianCutoffProfile_one heps (le_trans hr hs))
+      (hasDerivWithinAt_const r (Ici r) (1 : ℝ)).congr
+        (fun s hs => newtonianCutoffProfile_one heps (le_trans hr hs))
         (newtonianCutoffProfile_one heps hr)
     exact (uniqueDiffWithinAt_Ici r).eq_deriv _ hd.hasDerivWithinAt hc
 
 theorem abs_deriv_newtonianCutoffProfile_le (heps : 0 < eps) (r : ℝ) :
     |deriv (newtonianCutoffProfile eps) r| ≤ newtonianCutoffCap / eps := by
-  have hP : HasDerivAt (fun s : ℝ => Real.smoothTransition (2 - s))
+  have hP :
+    HasDerivAt (fun s : ℝ => Real.smoothTransition (2 - s))
       (deriv (fun s : ℝ => Real.smoothTransition (2 - s)) (r / eps)) (r / eps) :=
-    ((FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff.1.differentiable (by simp)) _).hasDerivAt
+    ((FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff.1.differentiable
+          (by simp))
+        _).hasDerivAt
   have hq : HasDerivAt (fun s : ℝ => s / eps) (1 / eps) r := (hasDerivAt_id r).div_const eps
   have hc := (hP.comp r hq).const_sub 1
-  have he : deriv (newtonianCutoffProfile eps) r =
-      -(deriv (fun s : ℝ => Real.smoothTransition (2 - s)) (r / eps) * (1 / eps)) := hc.deriv
-  have hL : ‖deriv (fun s : ℝ => Real.smoothTransition (2 - s)) (r / eps)‖ ≤ Real.toNNReal newtonianCutoffCap :=
+  have he :
+    deriv (newtonianCutoffProfile eps) r =
+      -(deriv (fun s : ℝ => Real.smoothTransition (2 - s)) (r / eps) * (1 / eps)) :=
+    hc.deriv
+  have hL :
+    ‖deriv (fun s : ℝ => Real.smoothTransition (2 - s)) (r / eps)‖ ≤
+      Real.toNNReal newtonianCutoffCap :=
     norm_deriv_le_of_lipschitz (Classical.choose_spec exists_lipschitz_radial_cutoff_cap).2.1
   rw [Real.norm_eq_abs, Real.coe_toNNReal _ newtonianCutoffCap_pos.le] at hL
-  rw [he, abs_neg, abs_mul, abs_of_pos (one_div_pos.mpr heps), div_eq_mul_one_div newtonianCutoffCap eps]
+  rw [he, abs_neg, abs_mul, abs_of_pos (one_div_pos.mpr heps),
+    div_eq_mul_one_div newtonianCutoffCap eps]
   exact mul_le_mul_of_nonneg_right hL (one_div_pos.mpr heps).le
 
 end Profile
@@ -93,12 +114,13 @@ section Component
 
 variable {n : ℕ} {eps : ℝ}
 
-theorem newtonianTruncatedGradientComponent_eq_zero (heps : 0 < eps) (i : Fin n) {z : EuclideanSpace ℝ (Fin n)}
-    (hz : ‖z‖ ≤ eps) : newtonianTruncatedGradientComponent n eps i z = 0 := by
+theorem newtonianTruncatedGradientComponent_eq_zero (heps : 0 < eps) (i : Fin n)
+    {z : EuclideanSpace ℝ (Fin n)} (hz : ‖z‖ ≤ eps) :
+    newtonianTruncatedGradientComponent n eps i z = 0 := by
   simp only [newtonianTruncatedGradientComponent, newtonianCutoffProfile_zero heps hz, zero_mul]
 
-theorem newtonianTruncatedGradientComponent_eq_of_far (heps : 0 < eps) (i : Fin n) {z : EuclideanSpace ℝ (Fin n)}
-    (hz : 2 * eps ≤ ‖z‖) :
+theorem newtonianTruncatedGradientComponent_eq_of_far (heps : 0 < eps) (i : Fin n)
+    {z : EuclideanSpace ℝ (Fin n)} (hz : 2 * eps ≤ ‖z‖) :
     newtonianTruncatedGradientComponent n eps i z =
       fderiv ℝ (newtonianKernel n) z (EuclideanSpace.basisFun (Fin n) ℝ i) := by
   simp only [newtonianTruncatedGradientComponent, newtonianCutoffProfile_one heps hz, one_mul]
@@ -127,52 +149,74 @@ theorem newtonianTruncatedGradientComponent_eventuallyEq_of_far (heps : 0 < eps)
   filter_upwards [(isOpen_lt continuous_const continuous_norm).mem_nhds hz] with y hy
   exact newtonianTruncatedGradientComponent_eq_of_far heps i (le_of_lt hy)
 
-/-- The derivative of the cut-off first derivative off `0`: `D_v G = χ′(|z|) |z|⁻¹⟨z,v⟩ D_iΓ + χ(|z|) D²Γ(z)(v, e_i)`. -/
-theorem fderiv_newtonianTruncatedGradientComponent_apply (hn : 2 ≤ n) (i : Fin n) {z : EuclideanSpace ℝ (Fin n)}
-    (hz : z ≠ 0) (v : EuclideanSpace ℝ (Fin n)) :
+/--
+The derivative of the cut-off first derivative off `0`: `D_v G = χ′(|z|) |z|⁻¹⟨z,v⟩ D_iΓ + χ(|z|)
+D²Γ(z)(v, e_i)`. -/
+theorem fderiv_newtonianTruncatedGradientComponent_apply (hn : 2 ≤ n) (i : Fin n)
+    {z : EuclideanSpace ℝ (Fin n)} (hz : z ≠ 0) (v : EuclideanSpace ℝ (Fin n)) :
     fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z v =
-      deriv (newtonianCutoffProfile eps) ‖z‖ * (‖z‖ ^ (-1:ℝ) * ⟪z, v⟫) *
+      deriv (newtonianCutoffProfile eps) ‖z‖ * (‖z‖ ^ (-1 : ℝ) * ⟪z, v⟫) *
           fderiv ℝ (newtonianKernel n) z (EuclideanSpace.basisFun (Fin n) ℝ i) +
         newtonianCutoffProfile eps ‖z‖ *
-          bilinearIteratedFDerivTwo ℝ (newtonianKernel n) z v (EuclideanSpace.basisFun (Fin n) ℝ i) := by
+          bilinearIteratedFDerivTwo ℝ (newtonianKernel n) z v
+            (EuclideanSpace.basisFun (Fin n) ℝ i) := by
   have hD : ContDiffAt ℝ 1 (fderiv ℝ (newtonianKernel n)) z :=
     (contDiffAt_newtonianKernel hn z hz 2).fderiv_right (by norm_num)
-  have hg : DifferentiableAt ℝ (fun y => fderiv ℝ (newtonianKernel n) y (EuclideanSpace.basisFun (Fin n) ℝ i)) z :=
+  have hg :
+    DifferentiableAt ℝ
+      (fun y => fderiv ℝ (newtonianKernel n) y (EuclideanSpace.basisFun (Fin n) ℝ i)) z :=
     (hD.clm_apply contDiffAt_const).differentiableAt one_ne_zero
   have hp := (hasFDerivAt_newtonianCutoffProfile_norm eps z hz).mul hg.hasFDerivAt
   change HasFDerivAt (newtonianTruncatedGradientComponent n eps i) _ z at hp
-  have hsecond : fderiv ℝ (fun y => fderiv ℝ (newtonianKernel n) y (EuclideanSpace.basisFun (Fin n) ℝ i)) z v =
-      bilinearIteratedFDerivTwo ℝ (newtonianKernel n) z v (EuclideanSpace.basisFun (Fin n) ℝ i) := by
+  have hsecond :
+    fderiv ℝ (fun y => fderiv ℝ (newtonianKernel n) y (EuclideanSpace.basisFun (Fin n) ℝ i)) z
+        v =
+      bilinearIteratedFDerivTwo ℝ (newtonianKernel n) z v
+        (EuclideanSpace.basisFun (Fin n) ℝ i) := by
     rw [fderiv_clm_apply (hD.differentiableAt one_ne_zero) (differentiableAt_const _)]
     simp [bilinearIteratedFDerivTwo]
   rw [hp.fderiv]
   simp only [add_apply, smul_apply, smul_eq_mul, innerSL_apply_apply, hsecond]
   ring
 
-/-- The trace density `Σ_i D_i G_{ε,i}` equals the radial expression at EVERY point, including `0`. -/
-theorem sum_fderiv_newtonianTruncatedGradientComponent_eq (hn : 2 ≤ n) (heps : 0 < eps) (z : EuclideanSpace ℝ (Fin n)) :
-    (∑ i : Fin n, fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z (EuclideanSpace.basisFun (Fin n) ℝ i)) =
-      (1/((n:ℝ)*euclideanUnitBallVolume n))*‖z‖^(1-(n:ℝ))*deriv (newtonianCutoffProfile eps) ‖z‖ := by
+/--
+The trace density `Σ_i D_i G_{ε,i}` equals the radial expression at EVERY point, including `0`. -/
+theorem sum_fderiv_newtonianTruncatedGradientComponent_eq (hn : 2 ≤ n) (heps : 0 < eps)
+    (z : EuclideanSpace ℝ (Fin n)) :
+    (∑ i : Fin n,
+        fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z
+          (EuclideanSpace.basisFun (Fin n) ℝ i)) =
+      (1 / ((n : ℝ) * euclideanUnitBallVolume n)) * ‖z‖ ^ (1 - (n : ℝ)) *
+        deriv (newtonianCutoffProfile eps) ‖z‖ := by
   by_cases hz : z = 0
   · subst z
-    have h0 : deriv (newtonianCutoffProfile eps) ‖(0:EuclideanSpace ℝ (Fin n))‖ = 0 :=
+    have h0 : deriv (newtonianCutoffProfile eps) ‖(0 : EuclideanSpace ℝ (Fin n))‖ = 0 :=
       deriv_newtonianCutoffProfile_eq_zero heps (Or.inl (by simpa using heps.le))
-    simp only [fderiv_newtonianTruncatedGradientComponent_zero heps, zero_apply, Finset.sum_const_zero, h0, mul_zero]
+    simp only [fderiv_newtonianTruncatedGradientComponent_zero heps, zero_apply,
+      Finset.sum_const_zero, h0, mul_zero]
   · exact sum_fderiv_newtonianTruncatedGradientComponent hn eps z hz
 
 theorem sum_fderiv_newtonianTruncatedGradientComponent_nonneg (hn : 2 ≤ n) (heps : 0 < eps)
     (z : EuclideanSpace ℝ (Fin n)) :
-    0 ≤ ∑ i : Fin n, fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z (EuclideanSpace.basisFun (Fin n) ℝ i) := by
+    0 ≤
+      ∑ i : Fin n,
+        fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z
+          (EuclideanSpace.basisFun (Fin n) ℝ i) := by
   rw [sum_fderiv_newtonianTruncatedGradientComponent_eq hn heps]
   have hw := euclideanUnitBallVolume_pos n
-  have h1 : 0 ≤ 1 / ((n:ℝ) * euclideanUnitBallVolume n) := by positivity
-  exact mul_nonneg (mul_nonneg h1 (Real.rpow_nonneg (norm_nonneg _) _)) (deriv_newtonianCutoffProfile_nonneg heps _)
+  have h1 : 0 ≤ 1 / ((n : ℝ) * euclideanUnitBallVolume n) := by positivity
+  exact
+    mul_nonneg (mul_nonneg h1 (Real.rpow_nonneg (norm_nonneg _) _))
+      (deriv_newtonianCutoffProfile_nonneg heps _)
 
 theorem sum_fderiv_newtonianTruncatedGradientComponent_eq_zero (hn : 2 ≤ n) (heps : 0 < eps)
     {z : EuclideanSpace ℝ (Fin n)} (hz : 2 * eps ≤ ‖z‖) :
-    (∑ i : Fin n, fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z (EuclideanSpace.basisFun (Fin n) ℝ i)) = 0 := by
-  rw [sum_fderiv_newtonianTruncatedGradientComponent_eq hn heps, deriv_newtonianCutoffProfile_eq_zero heps (Or.inr hz),
-    mul_zero]
+    (∑ i : Fin n,
+        fderiv ℝ (newtonianTruncatedGradientComponent n eps i) z
+          (EuclideanSpace.basisFun (Fin n) ℝ i)) =
+      0 := by
+  rw [sum_fderiv_newtonianTruncatedGradientComponent_eq hn heps,
+    deriv_newtonianCutoffProfile_eq_zero heps (Or.inr hz), mul_zero]
 
 end Component
 

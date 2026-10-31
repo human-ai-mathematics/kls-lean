@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoL2Completion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoL2Completion
 
 /-!
 # The Itô integral of the zero integrand
@@ -18,6 +22,8 @@ every time. This is what lets a coordinate of a vector Itô process carry no dif
 * `LevyStochCalc.Brownian.Ito.stochasticIntegralBrownian_ae_zero` — the Itô integral of the zero
   integrand vanishes almost surely.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

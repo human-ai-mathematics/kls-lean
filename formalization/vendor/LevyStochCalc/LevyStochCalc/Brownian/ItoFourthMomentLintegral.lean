@@ -3,7 +3,16 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoFourthMomentPartialSums
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with source adaptations
+-- (deprecated names, proof-context visibility, the v4.35.0 `eLpNorm`/`MemLp` API) listed in
+-- vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_two_rpow_eq_lintegral_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoFourthMomentPartialSums
 
 /-!
 # Fourth moment of the `L²` Itô integral
@@ -14,6 +23,8 @@ target already in `[-C, C]`, so a truncated approximant is still an approximant;
 the simple integrands then passes to the `L²` Itô integral of any integrand bounded by `C` by
 Fatou along an almost-everywhere convergent subsequence.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -44,14 +55,14 @@ theorem comp_sum_ite {M : ℕ} {π : Fin (M + 1) → ℝ} (hπ : StrictMono π)
     have hsum : ∀ h : Fin M → ℝ,
         (∑ j : Fin M, if π j.castSucc < s ∧ s ≤ π j.succ then h j else 0) = h j₀ := by
       intro h
-      rw [Finset.sum_eq_single j₀ (fun j _ hjne => if_neg fun hc => hjne (huniq j hc))
+      rw [Finset.sum_eq_single j₀ (fun j _ hjne => ite_eq_right fun hc => hjne (huniq j hc))
         (fun hnm => absurd (Finset.mem_univ _) hnm)]
-      exact if_pos hj₀
+      exact ite_eq_left hj₀
     rw [hsum f, hsum fun j => g (f j)]
   · push Not at h
     have hz : ∀ h' : Fin M → ℝ,
         (∑ j : Fin M, if π j.castSucc < s ∧ s ≤ π j.succ then h' j else 0) = 0 :=
-      fun h' => Finset.sum_eq_zero fun j _ => if_neg fun hc => absurd hc.2 (not_le.mpr (h j hc.1))
+      fun h' => Finset.sum_eq_zero fun j _ => ite_eq_right fun hc => absurd hc.2 (not_le.mpr (h j hc.1))
     rw [hz f, hz fun j => g (f j), hg0]
 
 /-- The coefficients of a simple integrand clamped to `[-C, C]`. -/
@@ -125,7 +136,7 @@ theorem SimplePredictable.lintegral_pow_four_eq {T : ℝ} (G : SimplePredictable
     simpa using hmem
   have hint : Integrable (fun ω => (simpleIntegral W G T ω) ^ 4) P := by
     refine (hmem'.integrable_norm_pow (by norm_num)).mono
-      ((continuous_pow 4).comp_aestronglyMeasurable hmem.1)
+      ((continuous_pow 4).comp_aestronglyMeasurable hmem.aestronglyMeasurable)
       (Filter.Eventually.of_forall fun ω => by simp)
   have hpt : ∀ ω, (‖simpleIntegral W G T ω‖₊ : ℝ≥0∞) ^ 4
       = ENNReal.ofReal ((simpleIntegral W G T ω) ^ 4) := by
@@ -227,7 +238,14 @@ theorem lintegral_stochasticIntegralBrownian_pow_four_le
               ^ ((2 : ℝ))⁻¹ := by
       intro n
       rw [← eLpNorm_two_rpow_eq_lintegral_sq]
-      exact (ENNReal.rpow_rpow_inv (by norm_num) _).symm
+      · exact (ENNReal.rpow_rpow_inv (by norm_num) _).symm
+      · have hGm : Measurable (simpleIntegral W ((G0 n).truncate C) T) := by
+          unfold simpleIntegral
+          exact Finset.measurable_sum _ fun i _ =>
+            (((G0 n).truncate C).ξ_measurable i).mul
+              ((W.measurable_eval _).sub (W.measurable_eval _))
+        exact (hGm.sub ((stochasticIntegralBrownian_stronglyAdapted W ℱ hℱ H hm hp hq T).mono
+          (ℱ.le T)).measurable).aestronglyMeasurable
     simp_rw [hrw]
     have h := (ENNReal.continuous_rpow_const (y := ((2 : ℝ))⁻¹)).tendsto 0 |>.comp hsq
     simpa [Function.comp_def,
@@ -238,13 +256,10 @@ theorem lintegral_stochasticIntegralBrownian_pow_four_le
     exact Finset.measurable_sum _ fun i _ =>
       (((G0 n).truncate C).ξ_measurable i).mul
         ((W.measurable_eval _).sub (W.measurable_eval _))
-  have hmeasSI : Measurable (stochasticIntegralBrownian W ℱ hℱ H hm hp hq T) :=
-    ((stochasticIntegralBrownian_stronglyAdapted W ℱ hℱ H hm hp hq T).mono (ℱ.le T)).measurable
   have hTIM : MeasureTheory.TendstoInMeasure P
       (fun n => simpleIntegral W ((G0 n).truncate C) T) Filter.atTop
       (stochasticIntegralBrownian W ℱ hℱ H hm hp hq T) :=
-    MeasureTheory.tendstoInMeasure_of_tendsto_eLpNorm (by norm_num)
-      (fun n => (hmeasG n).aestronglyMeasurable) hmeasSI.aestronglyMeasurable heL
+    MeasureTheory.tendstoInMeasure_of_tendsto_eLpNorm (by norm_num) heL
   obtain ⟨ns, -, hns_ae⟩ := hTIM.exists_seq_tendsto_ae
   have hcont : Continuous fun x : ℝ => (‖x‖₊ : ℝ≥0∞) ^ 4 := by
     have hfun : (fun x : ℝ => (‖x‖₊ : ℝ≥0∞) ^ 4)

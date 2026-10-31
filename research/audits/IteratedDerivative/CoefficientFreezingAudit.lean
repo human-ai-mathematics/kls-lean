@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientCoordinates
-import Mathlib.Analysis.Normed.Operator.NormedSpace
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientCoordinates
+public import Mathlib.Analysis.Calculus.Deriv.Pow
+public import Mathlib.Analysis.Normed.Operator.NormedSpace
 
 /-! # Audit: coefficient freezing
 
-Real client of `FunctionalInequalities/Analysis/IteratedDerivative/Schauder/CoefficientFreezing.lean`
+Real client of
+`FunctionalInequalities/Analysis/IteratedDerivative/Schauder/CoefficientFreezing.lean`
 (support for Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*,
 Classics 2001, Theorem 6.2, pp. 90–92, (6.17)–(6.19)).
 
@@ -18,6 +22,8 @@ an audit client and cannot be imported). The Hölder exponent is `α = 1/2`.
 * `quartic_freezing_error_nonzero`: the freezing error at `r / 2` equals `-r - (3/2) r³ ≠ 0`, so the
   client is not a vanishing-error case.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric

@@ -1,11 +1,13 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import FunctionalInequalities.Analysis.Convex.Subgradient.Measure
-import Mathlib.Analysis.Convex.Measure
-import Mathlib.Analysis.LocallyConvex.Separation
-import Mathlib.Analysis.Normed.Affine.Convex
-import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLogExp
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.Topology.Algebra.Module.FiniteDimension
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Measure
+public import Mathlib.Analysis.Convex.Measure
+public import Mathlib.Analysis.LocallyConvex.Separation
+public import Mathlib.Analysis.Normed.Affine.Convex
+public import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLogExp
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.Topology.Algebra.Module.FiniteDimension
 
 /-!
 # Essentially continuous convex potentials
@@ -37,6 +39,8 @@ continuity is `ContinuousAt` for the order topology of `EReal`.
 The moment-measure hypothesis is written as the explicit push-forward
 `((volume).withDensity fun x => EReal.exp (-ψ x)).map (gradient fun x => (ψ x).toReal)`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -209,7 +213,7 @@ theorem hausdorffMeasure_frontier_pos {C : Set E} (hC : Convex ℝ C) (hCc : IsC
   have hd : ((Module.finrank ℝ E : ℝ) - 1) = ((Fintype.card (Fin (n - 1)) : ℕ) : ℝ) := by
     rw [Fintype.card_fin, Nat.cast_sub hn, Nat.cast_one]
   rw [← hausdorffMeasure_pi_real] at hvol
-  have hle := Lc.lipschitz.hausdorffMeasure_image_le (d := ((Fintype.card (Fin (n - 1)) : ℕ) : ℝ))
+  have hle := Lc.lipschitzWith.hausdorffMeasure_image_le (d := ((Fintype.card (Fin (n - 1)) : ℕ) : ℝ))
     (Nat.cast_nonneg _) (frontier C)
   rw [hd, pos_iff_ne_zero]
   intro h0
@@ -286,8 +290,8 @@ set**: if `g` is convex on the open convex set `U` and `‖∇g‖ ≤ R` at `μ
 additive Haar measure `μ`, then `g` is `R`-Lipschitz on `U`. For `x, y ∈ U` with `v = y − x`, the
 continuous function `z ↦ g z − g (z + v)` is at most `R‖v‖` at every differentiability point of a
 set of full measure (tangent-plane inequality), hence on the open set where it is defined. -/
-theorem lipschitzOnWith_of_ae_norm_gradient_le (μ : Measure E) [μ.IsAddHaarMeasure]
-    {U : Set E} (hU : IsOpen U) {g : E → ℝ} (hg : ConvexOn ℝ U g) {R : ℝ≥0}
+theorem lipschitzOnWith_of_ae_norm_gradient_le (μ : Measure E) [μ.IsAddHaarMeasure] {U : Set E}
+    (hU : IsOpen U) {g : E → ℝ} (hg : ConvexOn ℝ U g) {R : ℝ≥0}
     (hae : ∀ᵐ x ∂μ, x ∈ U → ‖gradient g x‖ ≤ R) : LipschitzOnWith R g U := by
   have hcont : ContinuousOn g U := by
     have h := hg.continuousOn_interior
@@ -304,8 +308,7 @@ theorem lipschitzOnWith_of_ae_norm_gradient_le (μ : Measure E) [μ.IsAddHaarMea
     have hW : IsOpen W := hU.inter (hU.preimage (continuous_id.add continuous_const))
     have hcW : ContinuousOn (fun z => g z - g (z + v)) W :=
       (hcont.mono inter_subset_left).sub
-        (hcont.comp (continuous_id.add continuous_const).continuousOn
-          (fun z hz => hz.2))
+        (hcont.comp (continuous_id.add continuous_const).continuousOn (fun z hz => hz.2))
     have hV : IsOpen (W ∩ (fun z => g z - g (z + v)) ⁻¹' Ioi (R * ‖v‖)) :=
       hcW.isOpen_inter_preimage hW isOpen_Ioi
     have hxV : x ∈ W ∩ (fun z => g z - g (z + v)) ⁻¹' Ioi (R * ‖v‖) := by
@@ -316,13 +319,15 @@ theorem lipschitzOnWith_of_ae_norm_gradient_le (μ : Measure E) [μ.IsAddHaarMea
       · change R * ‖v‖ < g x - g (x + v)
         rw [hv, add_sub_cancel]
         exact hlt
-    obtain ⟨z, hzV, hz⟩ := Measure.exists_mem_of_measure_ne_zero_of_ae
-      (ne_of_gt (hV.measure_pos μ ⟨x, hxV⟩)) (ae_restrict_of_ae hgood)
+    obtain ⟨z, hzV, hz⟩ :=
+      Measure.exists_mem_of_measure_ne_zero_of_ae (ne_of_gt (hV.measure_pos μ ⟨x, hxV⟩))
+        (ae_restrict_of_ae hgood)
     obtain ⟨⟨hzU, hzvU⟩, hzgt⟩ := hzV
     change R * ‖v‖ < g z - g (z + v) at hzgt
     obtain ⟨hdiff, hnorm⟩ := hz hzU
-    have hsupp := convex_support_of_hasFDerivWithinAt hg
-      hdiff.hasGradientAt.hasFDerivAt.hasFDerivWithinAt hzU hzvU
+    have hsupp :=
+      convex_support_of_hasFDerivWithinAt hg hdiff.hasGradientAt.hasFDerivAt.hasFDerivWithinAt
+        hzU hzvU
     simp only [add_sub_cancel_left, InnerProductSpace.toDual_apply_apply] at hsupp
     have hinner : -(‖gradient g z‖ * ‖v‖) ≤ ⟪gradient g z, v⟫ :=
       neg_le_of_abs_le (abs_real_inner_le_norm _ _)
@@ -386,9 +391,10 @@ theorem ne_top_of_map_gradient {ψ : E → EReal} (hψ : ConvexPotential ψ)
     exact hcl
   -- the gradient is bounded a.e. on the domain
   have hmeas : AEMeasurable (gradient fun x => (ψ x).toReal) ν := by
-    by_contra hnot
-    apply hμ0
-    rw [← hμ, Measure.map_of_not_aemeasurable hnot]
+    change AEMeasurable
+      (fun x => (InnerProductSpace.toDual ℝ E).symm (fderiv ℝ (fun x => (ψ x).toReal) x)) ν
+    exact ((InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
+      (measurable_fderiv ℝ _)).aemeasurable
   have hball : ∀ᵐ q ∂μ, q ∈ closedBall (0 : E) R := by
     rw [ae_iff]
     exact hsupp

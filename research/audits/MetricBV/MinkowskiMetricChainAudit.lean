@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Metric-only full-signature clients for the Minkowski content chain on an arbitrary
 metric space with a Borel probability measure (no normed-group, vector-space or dimension
@@ -10,6 +12,8 @@ of finite perimeter; both relaxed identities; the empty, full, zero, atomic and 
 boundaries; and a non-vector-space example, the natural numbers with their discrete metric and a
 Dirac law.  The probability scope is narrower than the locally finite scope of
 Ambrosio--Di Marino--Gigli; nothing is claimed for finite or locally finite measures. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -46,7 +50,8 @@ theorem coarea (ν : ProbabilityMeasure V) {u : V → ℝ} {K : ℝ≥0} (hK : L
 theorem bridge (ν : ProbabilityMeasure V) {B : Set V} (hB : MeasurableSet B) :
     perimeter (ν : Measure V) B ≤ minkowskiContent (ν : Measure V) B ∧
       minkowskiContent (ν : Measure V) B ≤ upperMinkowskiContent (ν : Measure V) B :=
-  ⟨perimeter_le_minkowskiContent (ν : Measure V) hB, minkowskiContent_le_upperMinkowskiContent (ν : Measure V) B⟩
+  ⟨perimeter_le_minkowskiContent (ν : Measure V) hB,
+    minkowskiContent_le_upperMinkowskiContent (ν : Measure V) B⟩
 
 omit [BorelSpace V] in
 /-- Integrated upper-content bound and small-radius selection on a metric space. -/
@@ -72,28 +77,41 @@ theorem finiteContentRecovery (ν : ProbabilityMeasure V) {B : Set V} (hB : Meas
   exists_upperRecovery (ν : Measure V) B hB hfin
 
 /-- Lower and upper recoveries of every set of finite perimeter on a metric space. -/
-theorem recoveries (ν : ProbabilityMeasure V) {B : Set V} (hB : perimeter (ν : Measure V) B < ⊤) :
-    (∃ A : ℕ → Set V, (∀ n, MeasurableSet (A n)) ∧
-      Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
-        ∂(ν : Measure V)) atTop (𝓝 0) ∧
-      Tendsto (fun n => minkowskiContent (ν : Measure V) (A n)) atTop (𝓝 (perimeter (ν : Measure V) B))) ∧
-    ∃ U : ℕ → Set V, (∀ n, MeasurableSet (U n)) ∧
-      Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
-        ∂(ν : Measure V)) atTop (𝓝 0) ∧
-      Tendsto (fun n => upperMinkowskiContent (ν : Measure V) (U n)) atTop (𝓝 (perimeter (ν : Measure V) B)) :=
-  ⟨exists_minkowskiRecovery (ν : Measure V) hB, exists_upperMinkowskiRecovery (ν : Measure V) hB⟩
+theorem recoveries (ν : ProbabilityMeasure V) {B : Set V}
+    (hB : perimeter (ν : Measure V) B < ⊤) :
+    (∃ A : ℕ → Set V,
+        (∀ n, MeasurableSet (A n)) ∧
+          Tendsto
+              (fun n =>
+                ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V))
+              atTop (𝓝 0) ∧
+            Tendsto (fun n => minkowskiContent (ν : Measure V) (A n)) atTop
+              (𝓝 (perimeter (ν : Measure V) B))) ∧
+      ∃ U : ℕ → Set V,
+        (∀ n, MeasurableSet (U n)) ∧
+          Tendsto
+              (fun n =>
+                ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V))
+              atTop (𝓝 0) ∧
+            Tendsto (fun n => upperMinkowskiContent (ν : Measure V) (U n)) atTop
+              (𝓝 (perimeter (ν : Measure V) B)) :=
+  ⟨exists_minkowskiRecovery (ν : Measure V) hB,
+    exists_upperMinkowskiRecovery (ν : Measure V) hB⟩
 
 /-- Both relaxed identities for every set on a metric space. -/
 theorem relaxedIdentities (ν : ProbabilityMeasure V) (B : Set V) :
     relaxedMinkowskiContent (ν : Measure V) B = perimeter (ν : Measure V) B ∧
       relaxedUpperMinkowskiContent (ν : Measure V) B = perimeter (ν : Measure V) B ∧
-      relaxedUpperMinkowskiContent (ν : Measure V) B = relaxedMinkowskiContent (ν : Measure V) B :=
-  ⟨relaxedMinkowskiContent_eq_perimeter (ν : Measure V) B, relaxedUpperMinkowskiContent_eq_perimeter (ν : Measure V) B,
+        relaxedUpperMinkowskiContent (ν : Measure V) B =
+          relaxedMinkowskiContent (ν : Measure V) B :=
+  ⟨relaxedMinkowskiContent_eq_perimeter (ν : Measure V) B,
+    relaxedUpperMinkowskiContent_eq_perimeter (ν : Measure V) B,
     relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent (ν : Measure V) B⟩
 
 theorem emptyAndFull (ν : ProbabilityMeasure V) :
     relaxedUpperMinkowskiContent (ν : Measure V) (∅ : Set V) = 0 ∧
-      relaxedUpperMinkowskiContent (ν : Measure V) (univ : Set V) = 0 ∧ minkowskiContent (ν : Measure V) (∅ : Set V) = 0 := by
+      relaxedUpperMinkowskiContent (ν : Measure V) (univ : Set V) = 0 ∧
+        minkowskiContent (ν : Measure V) (∅ : Set V) = 0 := by
   refine ⟨?_, ?_, minkowskiContent_empty (ν : Measure V)⟩
   · rw [relaxedUpperMinkowskiContent_eq_perimeter, perimeter_empty]
   · rw [relaxedUpperMinkowskiContent_eq_perimeter]
@@ -104,28 +122,35 @@ theorem emptyAndFull (ν : ProbabilityMeasure V) :
 theorem zeroAndInfinite (ν : ProbabilityMeasure V) (B : Set V) :
     (relaxedUpperMinkowskiContent (ν : Measure V) B = 0 ↔ perimeter (ν : Measure V) B = 0) ∧
       (relaxedUpperMinkowskiContent (ν : Measure V) B = ⊤ ↔ perimeter (ν : Measure V) B = ⊤) ∧
-      (perimeter (ν : Measure V) B = ⊤ → ∀ A : MinkowskiApproximatingSequence (ν : Measure V) B,
-        liminf (fun n => upperMinkowskiContent (ν : Measure V) (A.1 n)) atTop = ⊤) :=
-  ⟨relaxedUpperMinkowskiContent_eq_zero_iff (ν : Measure V) B, relaxedUpperMinkowskiContent_eq_top_iff (ν : Measure V) B,
-    fun hB A => top_le_iff.mp (hB ▸ (perimeter_le_relaxedUpperMinkowskiContent (ν : Measure V) B).trans
-      (relaxedUpperMinkowskiContent_le_liminf (ν : Measure V) B A))⟩
+        (perimeter (ν : Measure V) B = ⊤ →
+          ∀ A : MinkowskiApproximatingSequence (ν : Measure V) B,
+            liminf (fun n => upperMinkowskiContent (ν : Measure V) (A.1 n)) atTop = ⊤) :=
+  ⟨relaxedUpperMinkowskiContent_eq_zero_iff (ν : Measure V) B,
+    relaxedUpperMinkowskiContent_eq_top_iff (ν : Measure V) B, fun hB A =>
+    top_le_iff.mp
+      (hB ▸
+        (perimeter_le_relaxedUpperMinkowskiContent (ν : Measure V) B).trans
+          (relaxedUpperMinkowskiContent_le_liminf (ν : Measure V) B A))⟩
 
 /-- An atom: the Dirac law at a point of an arbitrary metric space. Every positive thickening of
 the point carries no extra mass, so both contents and the perimeter vanish. -/
 theorem atom (x₀ : V) :
     let ν : ProbabilityMeasure V := ⟨Measure.dirac x₀, inferInstance⟩
-    minkowskiContent (ν : Measure V) {x₀} = 0 ∧ upperMinkowskiContent (ν : Measure V) {x₀} = 0 ∧
-      perimeter (ν : Measure V) {x₀} = 0 := by
+    minkowskiContent (ν : Measure V) { x₀ } = 0 ∧
+      upperMinkowskiContent (ν : Measure V) { x₀ } = 0 ∧ perimeter (ν : Measure V) { x₀ } = 0 := by
   intro ν
-  have h1 : (ν : Measure V) {x₀} = 1 := by
+  have h1 : (ν : Measure V) { x₀ } = 1 := by
     simp [ν, Measure.dirac_apply_of_mem (mem_singleton x₀)]
-  have hup : upperMinkowskiContent (ν : Measure V) {x₀} = 0 :=
+  have hup : upperMinkowskiContent (ν : Measure V) { x₀ } = 0 :=
     upperMinkowskiContent_eq_zero_of_forall_measure_thickening_le (ν : Measure V) fun r _ => by
       rw [h1]; exact prob_le_one
-  have hlow : minkowskiContent (ν : Measure V) {x₀} = 0 :=
-    le_antisymm ((minkowskiContent_le_upperMinkowskiContent (ν : Measure V) _).trans_eq hup) bot_le
+  have hlow : minkowskiContent (ν : Measure V) { x₀ } = 0 :=
+    le_antisymm ((minkowskiContent_le_upperMinkowskiContent (ν : Measure V) _).trans_eq hup)
+      bot_le
   refine ⟨hlow, hup, le_antisymm ?_ bot_le⟩
-  exact (perimeter_le_minkowskiContent (ν : Measure V) isClosed_singleton.measurableSet).trans_eq hlow
+  exact
+    (perimeter_le_minkowskiContent (ν : Measure V) isClosed_singleton.measurableSet).trans_eq
+      hlow
 
 end Generic
 
@@ -135,16 +160,25 @@ end Generic
 def natDirac : ProbabilityMeasure ℕ := ⟨Measure.dirac 0, inferInstance⟩
 
 theorem natExample :
-    minkowskiContent (natDirac : Measure ℕ) {0} = 0 ∧ upperMinkowskiContent (natDirac : Measure ℕ) {0} = 0 ∧
-      perimeter (natDirac : Measure ℕ) {0} = 0 ∧
-      relaxedUpperMinkowskiContent (natDirac : Measure ℕ) {0} = relaxedMinkowskiContent (natDirac : Measure ℕ) {0} ∧
-      ∃ U : ℕ → Set ℕ, (∀ n, MeasurableSet (U n)) ∧
-        Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : ℕ → ℝ) x - ({0} : Set ℕ).indicator 1 x‖ₑ
-          ∂(natDirac : Measure ℕ)) atTop (𝓝 0) ∧
-        Tendsto (fun n => upperMinkowskiContent (natDirac : Measure ℕ) (U n)) atTop (𝓝 0) := by
+    minkowskiContent (natDirac : Measure ℕ) {0} = 0 ∧
+      upperMinkowskiContent (natDirac : Measure ℕ) {0} = 0 ∧
+        perimeter (natDirac : Measure ℕ) {0} = 0 ∧
+          relaxedUpperMinkowskiContent (natDirac : Measure ℕ) {0} =
+              relaxedMinkowskiContent (natDirac : Measure ℕ) {0} ∧
+            ∃ U : ℕ → Set ℕ,
+              (∀ n, MeasurableSet (U n)) ∧
+                Tendsto
+                    (fun n =>
+                      ∫⁻ x,
+                        ‖(U n).indicator (1 : ℕ → ℝ) x -
+                            ({0} : Set ℕ).indicator 1 x‖ₑ ∂(natDirac : Measure ℕ))
+                    atTop (𝓝 0) ∧
+                  Tendsto (fun n => upperMinkowskiContent (natDirac : Measure ℕ) (U n)) atTop
+                    (𝓝 0) := by
   obtain ⟨hlow, hup, hper⟩ := atom (V := ℕ) 0
   refine ⟨hlow, hup, hper, relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent _ _, ?_⟩
-  obtain ⟨U, hU, hL1, hc⟩ := exists_upperMinkowskiRecovery (natDirac : Measure ℕ) (hper ▸ ENNReal.zero_lt_top)
+  obtain ⟨U, hU, hL1, hc⟩ :=
+    exists_upperMinkowskiRecovery (natDirac : Measure ℕ) (hper ▸ ENNReal.zero_lt_top)
   exact ⟨U, hU, hL1, hper ▸ hc⟩
 
 /-- On `ℕ` the unit thickening of `{0}` is `{0}` itself: a genuinely non-vector-space feature

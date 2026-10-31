@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
-import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
-import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
+module
+
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+public import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
+public import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+public import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
 
 /-!
 # Route statements for the codimension-`m` coarea formula of Lipschitz maps
@@ -11,11 +13,13 @@ It preserves the Lipschitz vector-coarea contracts `L0`, `V1`–`V5` and the bou
 Current sources are `Analysis/Lipschitz/VectorPieces.lean` and
 `Analysis/Vector/Coarea/Lipschitz.lean`; the independent client is
 `research/audits/Vector/LipschitzCoareaAudit.lean`.
-Same convention as `research/audits/Sard/SharpRouteStatements.lean` and `RankDeficientRouteStatements.lean`.
+Same convention as `research/audits/Sard/SharpRouteStatements.lean` and
+`RankDeficientRouteStatements.lean`.
 
 ## The regularity distinction
 
-`Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula `coarea_of_contDiff`
+`Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula
+`coarea_of_contDiff`
 for **`C¹`** maps with no hypothesis on the critical set.  Federer's coarea formula holds for merely
 **Lipschitz** maps, and the scalar side already went the whole way `C¹ → Lipschitz → locally
 Lipschitz` (`Analysis/Coarea/Smooth.lean`, `Analysis/Coarea/Lipschitz.lean`,
@@ -53,6 +57,8 @@ The route uses Rademacher's theorem, `exists_contDiff_pieces` for real-valued
 functions, the `C¹` codimension-`m` coarea formula, codimension-`m` null slicing in the shape
 `V2` needs, and unconditional slice measurability.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -154,7 +160,8 @@ Through a linear isometry equivalence onto `EuclideanSpace ℝ (Fin m)`, each co
 
 If `u` and `v` are differentiable at `x` and every coordinate of `v` matches the corresponding
 coordinate of `u` in value and in derivative at `x`, then `v x = u x` and
-`fderiv ℝ v x = fderiv ℝ u x`.  Pure calculus against the fixed isometry; the `C¹` vector map of `V1`
+`fderiv ℝ v x = fderiv ℝ u x`.  Pure calculus against the fixed isometry; the `C¹` vector map of
+`V1`
 is `e.symm` of the `C¹` scalar representatives, so its differentiability is free. -/
 
 #check (∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
@@ -213,7 +220,8 @@ line is the witness.  This is the whole reason `V1` is needed. -/
 /-! ### M2 — the follow-on, stated but outside this route
 
 The scalar theory continues to **locally** Lipschitz maps (`KLS.coarea_of_locallyLipschitz`, by
-McShane representatives on closed balls).  Recorded so the boundary is explicit: `L0` is the globally
+McShane representatives on closed balls).  Recorded so the boundary is explicit: `L0` is the
+globally
 Lipschitz statement, and this one is **not** an obligation of this route. -/
 
 #check (∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]

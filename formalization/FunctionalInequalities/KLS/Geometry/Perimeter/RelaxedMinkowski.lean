@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
-import FunctionalInequalities.KLS.Geometry.Perimeter.UpperMinkowskiRecovery
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+public import FunctionalInequalities.KLS.Geometry.Perimeter.UpperMinkowskiRecovery
 
 /-!
 # The relaxed lower Minkowski content as a set infimum
@@ -39,11 +41,14 @@ contents converge to the perimeter.  Hence both relaxed contents coincide
 upper content of a set is not identified with its perimeter.
 
 ADMG Lemma 2.1's equality of the two relaxations also holds for every Borel measure at
-measurable finite-mass targets (`relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent_of_measure_lt_top`),
+measurable finite-mass targets
+(`relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent_of_measure_lt_top`),
 through near-minimum selection (`exists_upperApproximation_lt`) and global-`L¹` lower
 semicontinuity of the relaxed upper content (`relaxedUpperMinkowskiContent_le_liminf_of_tendsto`).
 This equality of infima carries no perimeter identification beyond the scopes above.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -184,8 +189,9 @@ theorem relaxedUpperMinkowskiContent_le_liminf (ν : Measure V) [IsFiniteMeasure
   iInf_le _ A
 
 /-- An empty class gives `⊤`. -/
-theorem relaxedUpperMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
-    [IsEmpty (MinkowskiApproximatingSequence ν B)] : relaxedUpperMinkowskiContent ν B = ⊤ :=
+theorem relaxedUpperMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) [IsFiniteMeasure ν]
+    (B : Set V) [IsEmpty (MinkowskiApproximatingSequence ν B)] :
+    relaxedUpperMinkowskiContent ν B = ⊤ :=
   iInf_of_empty _
 
 /-- Termwise, the lower content is at most the upper content, so the relaxed lower content is at

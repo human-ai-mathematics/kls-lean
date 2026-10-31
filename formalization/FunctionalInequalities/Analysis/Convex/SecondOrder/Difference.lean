@@ -1,29 +1,35 @@
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Algebra.Ring.IsFormallyReal
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Calculus.Deriv.Basic
-import Mathlib.Analysis.Calculus.Deriv.Pow
-import Mathlib.Analysis.Calculus.FDeriv.Add
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.Convex.Mul
-import Mathlib.Analysis.Convex.Strong
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.Laplacian
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Real.Sqrt
-import Mathlib.LinearAlgebra.AffineSpace.Slope
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+module
+
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.Algebra.Ring.IsFormallyReal
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Calculus.Deriv.Basic
+public import Mathlib.Analysis.Calculus.Deriv.Pow
+public import Mathlib.Analysis.Calculus.FDeriv.Add
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Convex.Mul
+public import Mathlib.Analysis.Convex.Strong
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.InnerProductSpace.Laplacian
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Real.Sqrt
+public import Mathlib.LinearAlgebra.AffineSpace.Slope
+public import Mathlib.LinearAlgebra.FiniteDimensional.Defs
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
 
 /-!
 # Second differences and Lipschitz gradients
 
-A convex differentiable function with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` has a quadratic upper bound, a co-coercive
-gradient and a `4C`-Lipschitz gradient (final step of the `C^{1,1}` estimate of the weak moment-map route to Letwin
+A convex differentiable function with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` has a quadratic upper bound,
+a co-coercive
+gradient and a `4C`-Lipschitz gradient (final step of the `C^{1,1}` estimate of the weak moment-map
+route to Letwin
 arXiv:2607.24164v1). A function with a subgradient at every point and such a bound is differentiable
 (`differentiableAt_of_second_difference_le`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -211,14 +217,11 @@ point (`f x + ⟪p, y − x⟫ ≤ f y` for all `y`) and `f(x + h) + f(x − h) 
 subgradient `p` at `x`. -/
 theorem differentiableAt_of_second_difference_le {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] {f : E → ℝ} {C : ℝ}
-    (hsupp : ∀ x, ∃ p : E, ∀ y, f x + ⟪p, y - x⟫ ≤ f y)
-    (hC : 0 ≤ C)
-    (hs : ∀ x h, f (x + h) + f (x - h) - 2 * f x ≤ C * ‖h‖ ^ 2)
-    (x : E) : DifferentiableAt ℝ f x := by
+    (hsupp : ∀ x, ∃ p : E, ∀ y, f x + ⟪p, y - x⟫ ≤ f y) (hC : 0 ≤ C)
+    (hs : ∀ x h, f (x + h) + f (x - h) - 2 * f x ≤ C * ‖h‖ ^ 2) (x : E) :
+    DifferentiableAt ℝ f x := by
   obtain ⟨p, hp⟩ := hsupp x
-  have he (h : E) :
-      0 ≤ f (x + h) - f x - ⟪p, h⟫ ∧
-        f (x + h) - f x - ⟪p, h⟫ ≤ C * ‖h‖ ^ 2 := by
+  have he (h : E) : 0 ≤ f (x + h) - f x - ⟪p, h⟫ ∧ f (x + h) - f x - ⟪p, h⟫ ≤ C * ‖h‖ ^ 2 := by
     have hp₁ := hp (x + h)
     have hp₂ := hp (x - h)
     have e₁ : x + h - x = h := by abel
@@ -233,8 +236,9 @@ theorem differentiableAt_of_second_difference_le {E : Type*} [NormedAddCommGroup
     intro ε hε
     have hε' : 0 < ε / (C + 1) := div_pos hε (by linarith)
     have hsmall : ∀ᶠ h : E in 𝓝 0, ‖h‖ < ε / (C + 1) := by
-      exact (continuous_norm.tendsto (0 : E)).eventually
-        (eventually_lt_nhds (by simpa only [norm_zero] using hε'))
+      exact
+        (continuous_norm.tendsto (0 : E)).eventually
+          (eventually_lt_nhds (by simpa only [norm_zero] using hε'))
     filter_upwards [hsmall] with h hh
     change ‖f (x + h) - f x - ⟪p, h⟫‖ ≤ ε * ‖h‖
     rw [Real.norm_eq_abs, abs_of_nonneg (he h).1]
@@ -255,6 +259,7 @@ theorem lipschitzWith_gradient_of_second_difference_le {E : Type*} [NormedAddCom
     (hconv : ConvexOn ℝ Set.univ u) (hdiff : Differentiable ℝ u) (hC : 0 ≤ C)
     (hsd : ∀ x h : E, u (x + h) + u (x - h) - 2 * u x ≤ C * ‖h‖ ^ 2) :
     LipschitzWith (Real.toNNReal (4 * C)) (gradient u) := by
+  -- Restrict to lines and turn the second-difference estimate into a first-order bound.
   have hlineconv (x h : E) :
       ConvexOn ℝ Set.univ (u ∘ fun t : ℝ => x + t • h) := by
     refine ⟨convex_univ, ?_⟩
@@ -302,6 +307,8 @@ theorem lipschitzWith_gradient_of_second_difference_le {E : Type*} [NormedAddCom
         -inner ℝ (gradient u x) h ≤ u (x - h) - u x := by
       simpa [sub_eq_add_neg] using hh
     linarith [hsd x h, hh']
+
+  -- Separate zero curvature from the positive-curvature estimate.
   by_cases hCzero : C = 0
   · have heq0 (x h : E) :
         u (x + h) = u x + inner ℝ (gradient u x) h := by
@@ -404,6 +411,8 @@ theorem lipschitzWith_gradient_of_second_difference_le {E : Type*} [NormedAddCom
     rw [hgrad_eq x y]
     simp [hCzero]
   · have hCpos : 0 < C := lt_of_le_of_ne hC (Ne.symm hCzero)
+
+    -- Use the coercive quadratic estimate to compare gradients at two points.
     have hcoercive (x y : E) :
         ‖gradient u x - gradient u y‖ ^ 2 ≤
           4 * C * inner ℝ (gradient u x - gradient u y) (x - y) := by
@@ -760,7 +769,8 @@ theorem secondDifference_le_of_penalized_maxima_on_range {u V : E → ℝ}
   exact Filter.Eventually.mono self_mem_nhdsWithin (fun η hη => hb η hη)
 
 /-- **Second-difference bound from penalised maxima** (algebraic part): let `u` be convex and
-differentiable, bounded below, and `V` differentiable with `V − (κ/2)‖·‖²` convex. Suppose that for every
+differentiable, bounded below, and `V` differentiable with `V − (κ/2)‖·‖²` convex. Suppose that for
+every
 `η > 0` the penalised second difference `Δ²ₕu − η u` has a maximiser `x₀` at which the log-density
 `F := V ∘ ∇u − u` satisfies the comparison `F(x₀ + h) + F(x₀ − h) − 2 F(x₀) ≤ η n`. Then
 `u(x + h) + u(x − h) − 2 u(x) ≤ 4 ‖h‖² / κ` everywhere. -/
@@ -769,11 +779,15 @@ theorem secondDifference_le_of_penalized_maxima {u V : E → ℝ} (hconv : Conve
     (hstrong : ConvexOn ℝ univ (fun y => V y - (κ / 2) * ‖y‖ ^ 2)) {C : ℝ}
     (hC : ∀ x, |fderiv ℝ V (gradient u x) (gradient u x)| ≤ C) {m : ℝ} (hm : ∀ x, m ≤ u x)
     (n : ℕ) (h : E)
-    (hmax : ∀ η > 0, ∃ x₀ : E,
-      (∀ y, u (y + h) + u (y - h) - 2 * u y - η * u y ≤
-        u (x₀ + h) + u (x₀ - h) - 2 * u x₀ - η * u x₀) ∧
-      (V (gradient u (x₀ + h)) - u (x₀ + h)) + (V (gradient u (x₀ - h)) - u (x₀ - h)) -
-        2 * (V (gradient u x₀) - u x₀) ≤ η * n) :
+    (hmax :
+      ∀ η > 0,
+        ∃ x₀ : E,
+          (∀ y,
+              u (y + h) + u (y - h) - 2 * u y - η * u y ≤
+                u (x₀ + h) + u (x₀ - h) - 2 * u x₀ - η * u x₀) ∧
+            (V (gradient u (x₀ + h)) - u (x₀ + h)) + (V (gradient u (x₀ - h)) - u (x₀ - h)) -
+                2 * (V (gradient u x₀) - u x₀) ≤
+              η * n) :
     ∀ x, u (x + h) + u (x - h) - 2 * u x ≤ 4 * ‖h‖ ^ 2 / κ :=
   secondDifference_le_of_penalized_maxima_on_range hconv hu hV hκ hstrong
     (fun x => mem_univ (gradient u x)) hC hm n h hmax

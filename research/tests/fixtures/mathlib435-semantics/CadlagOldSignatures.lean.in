@@ -1,0 +1,193 @@
+import Mathlib.Topology.Order.Cadlag
+import BrownianMotion.StochasticIntegral.Cadlag
+
+/-!
+# E11: old v4.33 vendored Cadlag signatures, recovered from the Mathlib v4.35 owners
+
+Each `example` restates one of the 31 old public declarations of the vendored module
+`BrownianMotion.StochasticIntegral.Cadlag` that Mathlib v4.35 (`Mathlib.Topology.Order.Cadlag`)
+now owns (29 shared names) or that were removed with the vendored structure (the two old
+projections `IsCadlag.right_continuous` and `IsCadlag.left_limit`). Binders, binder names,
+binder order, scalar type (`ℝ`), the `ContinuousSMul ℝ E` hypothesis and argument order are the
+old ones; no hypothesis is added. Each proof uses only the Mathlib constant of the same name (or
+the new field name), with Mathlib's argument order. No declaration is added. The recursor
+clients are `noncomputable` only because the code generator does not compile structure
+recursors.
+-/
+
+open Filter Topology Bornology
+
+universe u
+
+variable {ι E : Type*} [TopologicalSpace ι]
+
+-- row: IsRightContinuous (old `abbrev`, now a Mathlib `def`; same body, unfolds by `Iff.rfl`)
+example [TopologicalSpace E] [Preorder ι] (f : ι → E) :
+    IsRightContinuous f ↔ ∀ a, ContinuousWithinAt f (Set.Ioi a) a :=
+  Iff.rfl
+
+-- row: Continuous.isRightContinuous
+example [TopologicalSpace E] [Preorder ι] {f : ι → E} (hf : Continuous f) :
+    IsRightContinuous f :=
+  Continuous.isRightContinuous hf
+
+-- row: IsRightContinuous.continuous_comp (old order: `hg` before `hf`)
+example {F : Type*} [TopologicalSpace E] [TopologicalSpace F] [Preorder ι] {g : E → F}
+    {f : ι → E} (hg : Continuous g) (hf : IsRightContinuous f) : IsRightContinuous (g ∘ f) :=
+  IsRightContinuous.continuous_comp hf hg
+
+-- row: IsRightContinuous.mul
+example [TopologicalSpace E] [Preorder ι] [Mul E] [ContinuousMul E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) : IsRightContinuous (f * g) :=
+  IsRightContinuous.mul hf hg
+
+-- row: IsRightContinuous.add
+example [TopologicalSpace E] [Preorder ι] [Add E] [ContinuousAdd E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) : IsRightContinuous (f + g) :=
+  IsRightContinuous.add hf hg
+
+-- row: IsRightContinuous.fun_mul
+example [TopologicalSpace E] [Preorder ι] [Mul E] [ContinuousMul E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) :
+    IsRightContinuous fun i ↦ f i * g i :=
+  IsRightContinuous.fun_mul hf hg
+
+-- row: IsRightContinuous.fun_add
+example [TopologicalSpace E] [Preorder ι] [Add E] [ContinuousAdd E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) :
+    IsRightContinuous fun i ↦ f i + g i :=
+  IsRightContinuous.fun_add hf hg
+
+-- row: IsRightContinuous.div'
+example [TopologicalSpace E] [Preorder ι] [Div E] [ContinuousDiv E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) : IsRightContinuous (f / g) :=
+  IsRightContinuous.div' hf hg
+
+-- row: IsRightContinuous.sub
+example [TopologicalSpace E] [Preorder ι] [Sub E] [ContinuousSub E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) : IsRightContinuous (f - g) :=
+  IsRightContinuous.sub hf hg
+
+-- row: IsRightContinuous.fun_div'
+example [TopologicalSpace E] [Preorder ι] [Div E] [ContinuousDiv E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) :
+    IsRightContinuous fun i ↦ f i / g i :=
+  IsRightContinuous.fun_div' hf hg
+
+-- row: IsRightContinuous.fun_sub
+example [TopologicalSpace E] [Preorder ι] [Sub E] [ContinuousSub E] {f g : ι → E}
+    (hf : IsRightContinuous f) (hg : IsRightContinuous g) :
+    IsRightContinuous fun i ↦ f i - g i :=
+  IsRightContinuous.fun_sub hf hg
+
+-- row: IsRightContinuous.div
+example [Preorder ι] [GroupWithZero E] [TopologicalSpace E] [ContinuousInv₀ E] [ContinuousMul E]
+    {f g : ι → E} (hf : IsRightContinuous f) (hg : IsRightContinuous g) (h : ∀ x, g x ≠ 0) :
+    IsRightContinuous (f / g) :=
+  IsRightContinuous.div hf hg h
+
+-- row: IsRightContinuous.fun_div
+example [Preorder ι] [GroupWithZero E] [TopologicalSpace E] [ContinuousInv₀ E] [ContinuousMul E]
+    {f g : ι → E} (hf : IsRightContinuous f) (hg : IsRightContinuous g) (h : ∀ x, g x ≠ 0) :
+    IsRightContinuous fun i ↦ f i / g i :=
+  IsRightContinuous.fun_div hf hg h
+
+-- row: IsCadlag (old structure with fields `right_continuous`, `left_limit`; same two statements)
+example [TopologicalSpace E] [Preorder ι] (f : ι → E) :
+    IsCadlag f ↔ IsRightContinuous f ∧ ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l) :=
+  ⟨fun h ↦ ⟨h.isRightContinuous, h.tendsto_nhdsLT⟩, fun h ↦ IsCadlag.mk h.1 h.2⟩
+
+-- row: IsCadlag.mk (old binder order: instances `[TopologicalSpace E] [Preorder ι]`)
+example [TopologicalSpace E] [Preorder ι] {f : ι → E} (right_continuous : IsRightContinuous f)
+    (left_limit : ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l)) : IsCadlag f :=
+  IsCadlag.mk right_continuous left_limit
+
+-- row: IsCadlag.right_continuous (old projection; Mathlib field `isRightContinuous`)
+example [TopologicalSpace E] [Preorder ι] {f : ι → E} (self : IsCadlag f) :
+    IsRightContinuous f :=
+  self.isRightContinuous
+
+-- row: IsCadlag.left_limit (old projection; Mathlib field `tendsto_nhdsLT`)
+example [TopologicalSpace E] [Preorder ι] {f : ι → E} (self : IsCadlag f) :
+    ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l) :=
+  self.tendsto_nhdsLT
+
+-- row: IsCadlag.rec
+noncomputable example [TopologicalSpace E] [Preorder ι] {f : ι → E} {motive : IsCadlag f → Sort u}
+    (mk : (right_continuous : IsRightContinuous f) →
+      (left_limit : ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l)) →
+        motive (IsCadlag.mk right_continuous left_limit))
+    (t : IsCadlag f) : motive t :=
+  IsCadlag.rec mk t
+
+-- row: IsCadlag.casesOn
+example [TopologicalSpace E] [Preorder ι] {f : ι → E} {motive : IsCadlag f → Sort u}
+    (t : IsCadlag f)
+    (mk : (right_continuous : IsRightContinuous f) →
+      (left_limit : ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l)) →
+        motive (IsCadlag.mk right_continuous left_limit)) : motive t :=
+  IsCadlag.casesOn t mk
+
+-- row: IsCadlag.recOn
+noncomputable example [TopologicalSpace E] [Preorder ι] {f : ι → E} {motive : IsCadlag f → Sort u}
+    (t : IsCadlag f)
+    (mk : (right_continuous : IsRightContinuous f) →
+      (left_limit : ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l)) →
+        motive (IsCadlag.mk right_continuous left_limit)) : motive t :=
+  IsCadlag.recOn t mk
+
+-- row: Continuous.isCadlag
+example [TopologicalSpace E] [Preorder ι] {f : ι → E} (hf : Continuous f) : IsCadlag f :=
+  Continuous.isCadlag hf
+
+-- row: IsCadlag.mul
+example {E : Type*} [Mul E] [TopologicalSpace E] [ContinuousMul E] [Preorder ι]
+    {f g : ι → E} (hf : IsCadlag f) (hg : IsCadlag g) : IsCadlag (f * g) :=
+  IsCadlag.mul hf hg
+
+-- row: IsCadlag.add
+example {E : Type*} [Add E] [TopologicalSpace E] [ContinuousAdd E] [Preorder ι]
+    {f g : ι → E} (hf : IsCadlag f) (hg : IsCadlag g) : IsCadlag (f + g) :=
+  IsCadlag.add hf hg
+
+-- row: IsCadlag.fun_mul
+example {E : Type*} [Mul E] [TopologicalSpace E] [ContinuousMul E] [Preorder ι]
+    {f g : ι → E} (hf : IsCadlag f) (hg : IsCadlag g) : IsCadlag fun i ↦ f i * g i :=
+  IsCadlag.fun_mul hf hg
+
+-- row: IsCadlag.fun_add
+example {E : Type*} [Add E] [TopologicalSpace E] [ContinuousAdd E] [Preorder ι]
+    {f g : ι → E} (hf : IsCadlag f) (hg : IsCadlag g) : IsCadlag fun i ↦ f i + g i :=
+  IsCadlag.fun_add hf hg
+
+-- row: IsCadlag.const_smul (old: real scalar `r` after `hf`, `ContinuousSMul ℝ E`)
+example {E : Type*} [SMul ℝ E] [TopologicalSpace E] [ContinuousSMul ℝ E]
+    [Preorder ι] {f : ι → E} (hf : IsCadlag f) (r : ℝ) : IsCadlag (r • f) :=
+  IsCadlag.const_smul r hf
+
+-- row: IsCadlag.fun_const_smul (old: real scalar `r` after `hf`, `ContinuousSMul ℝ E`)
+example {E : Type*} [SMul ℝ E] [TopologicalSpace E] [ContinuousSMul ℝ E]
+    [Preorder ι] {f : ι → E} (hf : IsCadlag f) (r : ℝ) : IsCadlag fun i ↦ r • f i :=
+  IsCadlag.fun_const_smul r hf
+
+-- row: IsCadlag.sub
+example {E : Type*} [Sub E] [TopologicalSpace E] [ContinuousSub E]
+    [Preorder ι] {f g : ι → E} (hf : IsCadlag f) (hg : IsCadlag g) : IsCadlag (f - g) :=
+  IsCadlag.sub hf hg
+
+-- row: IsCadlag.fun_sub
+example {E : Type*} [Sub E] [TopologicalSpace E] [ContinuousSub E]
+    [Preorder ι] {f g : ι → E} (hf : IsCadlag f) (hg : IsCadlag g) : IsCadlag fun i ↦ f i - g i :=
+  IsCadlag.fun_sub hf hg
+
+-- row: IsCadlag.continuous_comp (old order: `hg` before `hf`)
+example {κ E F : Type*} [TopologicalSpace κ] [TopologicalSpace E]
+    [TopologicalSpace F] [Preorder κ] {g : E → F} {f : κ → E}
+    (hg : Continuous g) (hf : IsCadlag f) : IsCadlag (g ∘ f) :=
+  IsCadlag.continuous_comp hf hg
+
+-- row: isBounded_image_of_isCadlag_of_isCompact
+example {E : Type*} [LinearOrder ι] [PseudoMetricSpace E]
+    {f : ι → E} (hf : IsCadlag f) {s : Set ι} (hs : IsCompact s) :
+    IsBounded (f '' s) :=
+  isBounded_image_of_isCadlag_of_isCompact hf hs

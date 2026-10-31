@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Lipschitz.VectorPieces
-import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.Vector.Slice.Measurable
+module
+
+public import FunctionalInequalities.Analysis.Lipschitz.VectorPieces
+public import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+public import FunctionalInequalities.Analysis.Vector.Slice.Measurable
 
 /-! # The codimension-`m` coarea formula for Lipschitz maps
 
@@ -28,6 +30,8 @@ Borel set, `g` an arbitrary measurable `ℝ≥0∞` weight, and no positivity of
 required.  **It is not a Sard theorem**: nothing is claimed about the measure of the set of
 critical values.  The **locally** Lipschitz statement is not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -60,18 +64,24 @@ the codimension-`m` coarea formula for `u` follows from the `C¹` one by countab
 The hypothesis is literally the conclusion of `exists_contDiff_pieces_vector`, so that the Lipschitz
 formula is that theorem composed with this one. -/
 theorem coarea_of_lipschitz_of_pieces {S : Set V} {u : V → W} {K : ℝ≥0} {g : V → ℝ≥0∞} {k : ℕ}
-    (hk : k + finrank ℝ W = finrank ℝ V) (hu : LipschitzWith K u)
-    (hS : MeasurableSet S) (hg : Measurable g)
-    (hpieces : ∃ (P : ℕ → Set V) (v : ℕ → V → W),
-      (∀ j, MeasurableSet (P j)) ∧ Pairwise (fun i j => Disjoint (P i) (P j)) ∧
-      (volume : Measure V) (⋃ j, P j)ᶜ = 0 ∧ (∀ j, ContDiff ℝ 1 (v j)) ∧
-      ∀ j, ∀ x ∈ P j, DifferentiableAt ℝ u x ∧
-        v j x = u x ∧ fderiv ℝ (v j) x = fderiv ℝ u x) :
-    AEMeasurable (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
-      (volume : Measure W) ∧
-    (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
-      = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k)
-          ∂(volume : Measure W)) := by
+    (hk : k + finrank ℝ W = finrank ℝ V) (hu : LipschitzWith K u) (hS : MeasurableSet S)
+    (hg : Measurable g)
+    (hpieces :
+      ∃ (P : ℕ → Set V) (v : ℕ → V → W),
+        (∀ j, MeasurableSet (P j)) ∧
+          Pairwise (fun i j => Disjoint (P i) (P j)) ∧
+            (volume : Measure V) (⋃ j, P j)ᶜ = 0 ∧
+              (∀ j, ContDiff ℝ 1 (v j)) ∧
+                ∀ j,
+                  ∀ x ∈ P j,
+                    DifferentiableAt ℝ u x ∧ v j x = u x ∧ fderiv ℝ (v j) x = fderiv ℝ u x) :
+    AEMeasurable
+        (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
+        (volume : Measure W) ∧
+      (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) =
+        ∫⁻ t,
+          ∫⁻ y in S ∩ {x : V | u x = t},
+            g y ∂(KLS.hausdorffNormalized V k) ∂(volume : Measure W)) := by
   obtain ⟨C, v, hCm, hCd, hCnull, hv, hjet⟩ := hpieces
   set ν : Measure V := KLS.hausdorffNormalized V k
   set P : ℕ → Set V := fun n => S ∩ C n with hP
@@ -84,12 +94,12 @@ theorem coarea_of_lipschitz_of_pieces {S : Set V} {u : V → W} {K : ℝ≥0} {g
     constructor <;> rintro ⟨hx, ht⟩
     · exact ⟨hx, (hjet n x hx.2).2.1.symm.trans ht⟩
     · exact ⟨hx, (hjet n x hx.2).2.1.trans ht⟩
-  have hformula : ∀ n,
-      AEMeasurable (fun t : W => ∫⁻ y in P n ∩ {x : V | u x = t}, g y ∂ν)
-        (volume : Measure W) ∧
-      (∫⁻ x in P n, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V))
-        = ∫⁻ t, ∫⁻ y in P n ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := by
+  have hformula :
+    ∀ n,
+      AEMeasurable (fun t : W => ∫⁻ y in P n ∩ {x : V | u x = t}, g y ∂ν) (volume : Measure W) ∧
+        (∫⁻ x in P n,
+            ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)) =
+          ∫⁻ t, ∫⁻ y in P n ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := by
     intro n
     have h := coarea_of_contDiff hk (hv n) (hPm n) hg
     simp_rw [hslices n] at h
@@ -105,37 +115,47 @@ theorem coarea_of_lipschitz_of_pieces {S : Set V} {u : V → W} {K : ℝ≥0} {g
     · have hempty : (⋃ n, P n) \ S = ∅ :=
         sdiff_eq_empty.2 (iUnion_subset fun _ => inter_subset_left)
       rw [hempty, measure_empty]
-  have hslice : (fun t : W => ∫⁻ y in (⋃ n, P n) ∩ {x : V | u x = t}, g y ∂ν)
-      =ᵐ[(volume : Measure W)] fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν := by
-    filter_upwards [ae_hausdorffNormalized_inter_levelSet_eq_zero_of_volume_eq_zero hk hu hCnull]
-      with t ht
-    have heq : (((⋃ n, P n) ∩ {x : V | u x = t} : Set V))
-        =ᵐ[ν] ((S ∩ {x : V | u x = t} : Set V)) := by
+  have hslice :
+    (fun t : W => ∫⁻ y in (⋃ n, P n) ∩ {x : V | u x = t}, g y ∂ν) =ᵐ[(volume : Measure W)]
+      fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν := by
+    filter_upwards [ae_hausdorffNormalized_inter_levelSet_eq_zero_of_volume_eq_zero hk hu
+        hCnull] with
+      t ht
+    have heq :
+      (((⋃ n, P n) ∩ {x : V | u x = t} : Set V)) =ᵐ[ν] ((S ∩ {x : V | u x = t} : Set V)) := by
       refine ae_eq_set.2 ⟨?_, measure_mono_null (fun x hx => ?_) ht⟩
-      · rw [sdiff_eq_empty.2 (inter_subset_inter_left _
-          (iUnion_subset fun _ => inter_subset_left)), measure_empty]
+      · rw [sdiff_eq_empty.2
+            (inter_subset_inter_left _ (iUnion_subset fun _ => inter_subset_left)),
+          measure_empty]
       · refine ⟨?_, hx.1.2⟩
         intro hxC
         obtain ⟨n, hn⟩ := mem_iUnion.1 hxC
         exact hx.2 ⟨mem_iUnion.2 ⟨n, hx.1.1, hn⟩, hx.1.2⟩
     rw [Measure.restrict_congr_set heq]
-  refine ⟨aemeasurable_setLIntegral_inter_levelSet_vector hk hu.continuous hu.lipschitzOnWith
-    hS hg, ?_⟩
+  refine
+    ⟨aemeasurable_setLIntegral_inter_levelSet_vector hk hu.continuous hu.lipschitzOnWith hS hg,
+      ?_⟩
   calc
-    _ = ∫⁻ x in ⋃ n, P n, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V) := by rw [Measure.restrict_congr_set hset]
-    _ = ∑' n, ∫⁻ x in P n, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-        ∂(volume : Measure V) := lintegral_iUnion hPm hPd _
+    _ =
+        ∫⁻ x in ⋃ n, P n,
+          ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) := by
+      rw [Measure.restrict_congr_set hset]
+    _ =
+        ∑' n,
+          ∫⁻ x in P n,
+            ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) :=
+      lintegral_iUnion hPm hPd _
     _ = ∑' n, ∫⁻ t, ∫⁻ y in P n ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) :=
-        tsum_congr fun n => (hformula n).2
+      tsum_congr fun n => (hformula n).2
     _ = ∫⁻ t, ∑' n, ∫⁻ y in P n ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) :=
-        (lintegral_tsum fun n => (hformula n).1).symm
+      (lintegral_tsum fun n => (hformula n).1).symm
     _ = ∫⁻ t, ∫⁻ y in (⋃ n, P n) ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := by
-        refine lintegral_congr fun t => ?_
-        rw [iUnion_inter]
-        exact (lintegral_iUnion (fun n => (hPm n).inter
-          (hu.continuous.measurable (measurableSet_singleton t)))
-          (fun i j hij => (hPd hij).mono inter_subset_left inter_subset_left) g).symm
+      refine lintegral_congr fun t => ?_
+      rw [iUnion_inter]
+      exact
+        (lintegral_iUnion
+            (fun n => (hPm n).inter (hu.continuous.measurable (measurableSet_singleton t)))
+            (fun i j hij => (hPd hij).mono inter_subset_left inter_subset_left) g).symm
     _ = _ := lintegral_congr_ae hslice
 
 /-- **globally Lipschitz coarea: the codimension-`m` coarea formula for Lipschitz maps.**  Exactly

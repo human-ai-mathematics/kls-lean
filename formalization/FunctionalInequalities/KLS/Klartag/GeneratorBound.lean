@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
 
 /-!
 # The potential is a Lyapunov function for the moment-coordinate generator
@@ -15,6 +17,8 @@ Laplacian of `(ℝⁿ, ∇²ψ, e^{-V} dx)` under the transport equation (50) is
 growth condition (49) are not used here: positive definiteness of `∇²ψ` and `∇ψ(ℝⁿ) ⊆ K` are the
 consequences of the paper's hypotheses that the proof needs.
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped RealInnerProductSpace

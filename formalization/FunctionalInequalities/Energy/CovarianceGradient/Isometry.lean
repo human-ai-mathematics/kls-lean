@@ -1,29 +1,39 @@
-import FunctionalInequalities.L2.Transport
-import FunctionalInequalities.Energy.CovarianceGradient.Translation
-import Mathlib.Analysis.InnerProductSpace.Adjoint
+module
+
+public import FunctionalInequalities.L2.Transport
+public import FunctionalInequalities.Energy.CovarianceGradient.Translation
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Isometric transport of the covariance relaxation
 
 Source: Blueprint `lem:affine-poincare-translation-invariance`, the sentence "translation preserves
-covariance and identifies the two intrinsic laws by an `L²` isometry". Read `Probability.mapLinearIsometryEquiv`,
-`Covariance.operator_mapLinearIsometryEquiv`, `gradient_comp_linearIsometryEquiv`, `mapL2`, `L2.LinearIsometry.variance_pullbackEquiv`,
-`Energy.CovarianceGradient.relaxation_mapLinearIsometryEquiv` and `Poincare.CovarianceGradient.constant_mapLinearIsometryEquiv`.
+covariance and identifies the two intrinsic laws by an `L²` isometry". Read
+`Probability.mapLinearIsometryEquiv`,
+`Covariance.operator_mapLinearIsometryEquiv`, `gradient_comp_linearIsometryEquiv`, `mapL2`,
+`L2.LinearIsometry.variance_pullbackEquiv`,
+`Energy.CovarianceGradient.relaxation_mapLinearIsometryEquiv` and
+`Poincare.CovarianceGradient.constant_mapLinearIsometryEquiv`.
 
 For a probability law `ν` on a finite-dimensional Euclidean space `V₁` and a linear isometric
-equivalence `L : V₁ ≃ₗᵢ[ℝ] V₂`, the image law `Probability.mapLinearIsometryEquiv ν L` lives on `V₂`. Its covariance operator
+equivalence `L : V₁ ≃ₗᵢ[ℝ] V₂`, the image law `Probability.mapLinearIsometryEquiv ν L` lives on
+`V₂`. Its covariance operator
 is the conjugate `L ∘ Σ ∘ L⁻¹` of the covariance operator `Σ` of `ν`; the gradient of `g ∘ L` is
-`L⁻¹ ∇g ∘ L`; composition with `L` is a linear isometric equivalence `L²(Probability.mapLinearIsometryEquiv ν L) ≃ L²(ν)`
+`L⁻¹ ∇g ∘ L`; composition with `L` is a linear isometric equivalence
+`L²(Probability.mapLinearIsometryEquiv ν L) ≃ L²(ν)`
 preserving variance; globally Lipschitz covariance tests correspond by composition with equal
 covariance energies; hence the covariance relaxations correspond under the isometry and the optimal
 `L²` Poincaré constants of the two relaxations coincide.
 
-Together with `CovarianceGradient/Translation.lean` this covers every affine isometric change of
+Together with `Energy/CovarianceGradient/Translation.lean` this covers every affine isometric
+change of
 intrinsic coordinates, in two steps: a linear isometric equivalence of the direction spaces followed
 by a translation. Everything holds for every Borel probability law; no log-concavity, density or
 closability is used, and no Poincaré inequality is asserted. The zero-dimensional spaces are
 included.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -67,9 +77,10 @@ end Gradient
 
 section Tests
 
-variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
-
-  {ν₁ : ProbabilityMeasure V₁} {ν₂ : ProbabilityMeasure V₂} {L : V₁ ≃ₗᵢ[ℝ] V₂}
+variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁]
+  [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂]
+  [FiniteDimensional ℝ V₂] {ν₁ : ProbabilityMeasure V₁} {ν₂ : ProbabilityMeasure V₂}
+  {L : V₁ ≃ₗᵢ[ℝ] V₂}
 
 namespace CovarianceGradient.Test
 
@@ -83,11 +94,12 @@ def compLinearIsometryEquiv
   toFun := fun x ↦ g (L x)
   lipschitz := by
     obtain ⟨K, hK⟩ := g.lipschitz
-    exact ⟨K * 1, hK.comp L.lipschitz⟩
+    exact ⟨K * 1, hK.comp L.lipschitzWith⟩
   memLp_two := by
     have := g.memLp_two
     rw [← hmp.map_eq] at this
-    exact (memLp_map_measure_iff (hmp.map_eq ▸ g.memLp_two.1) hmp.aemeasurable).mp this
+    exact (memLp_map_measure_iff (hmp.map_eq ▸ g.memLp_two.aestronglyMeasurable)
+      hmp.aemeasurable).mp this
   integrable := by
     have hdens : density ν₁ (fun x ↦ g (L x)) =
         density ν₂ g.toFun ∘ L := by
@@ -101,7 +113,8 @@ def compLinearIsometryEquiv
 
 section IsometricTests
 
-omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
+omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂]
+  [FiniteDimensional ℝ V₂]
 /-- The composed test has the same covariance energy. -/
 theorem energy_compLinearIsometryEquiv
     (hmp : MeasurePreserving L (ν₁ : Measure V₁) (ν₂ : Measure V₂))
@@ -139,9 +152,9 @@ end Tests
 
 section Relaxation
 
-variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
-
-  (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
+variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁]
+  [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂]
+  [FiniteDimensional ℝ V₂] (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
 
 namespace CovarianceGradient
 
@@ -149,31 +162,50 @@ omit [FiniteDimensional ℝ V₁] [FiniteDimensional ℝ V₂] in
 omit [SecondCountableTopology V₁] in
 /-- The covariance relaxation of the image law is the covariance relaxation of `ν` pulled back
 along `L`. -/
-theorem relaxation_mapLinearIsometryEquiv (f : Lp ℝ 2 (Probability.mapLinearIsometryEquiv ν L : Measure V₂)) :
-    relaxation (Probability.mapLinearIsometryEquiv ν L) f = relaxation ν (L2.LinearIsometry.pullbackEquiv ν L f) := by
-  have hcov : ∀ w, inner ℝ (Covariance.operator (Probability.mapLinearIsometryEquiv ν L : Measure V₂) w) w =
-      inner ℝ (Covariance.operator (ν : Measure V₁) (L.symm w)) (L.symm w) :=
+theorem relaxation_mapLinearIsometryEquiv
+    (f : Lp ℝ 2 (Probability.mapLinearIsometryEquiv ν L : Measure V₂)) :
+    relaxation (Probability.mapLinearIsometryEquiv ν L) f =
+      relaxation ν (L2.LinearIsometry.pullbackEquiv ν L f) := by
+  have hcov :
+    ∀ w,
+      inner ℝ (Covariance.operator (Probability.mapLinearIsometryEquiv ν L : Measure V₂) w) w =
+        inner ℝ (Covariance.operator (ν : Measure V₁) (L.symm w)) (L.symm w) :=
     Covariance.inner_operator_mapLinearIsometryEquiv ν L
-  have hcov' : ∀ w, inner ℝ (Covariance.operator (ν : Measure V₁) w) w =
-      inner ℝ (Covariance.operator (Probability.mapLinearIsometryEquiv ν L : Measure V₂) (L.symm.symm w)) (L.symm.symm w) := by
+  have hcov' :
+    ∀ w,
+      inner ℝ (Covariance.operator (ν : Measure V₁) w) w =
+        inner ℝ
+          (Covariance.operator (Probability.mapLinearIsometryEquiv ν L : Measure V₂)
+            (L.symm.symm w))
+          (L.symm.symm w) := by
     intro w
     rw [LinearIsometryEquiv.symm_symm]
     exact Covariance.inner_operator_mapLinearIsometryEquiv_apply ν L w
   apply le_antisymm
-  · have h := (preEnergy ν).sequentialRelaxation_comp_le
-      (preEnergy (Probability.mapLinearIsometryEquiv ν L)) (L2.LinearIsometry.pullbackInv ν L)
-      (L2.LinearIsometry.pullbackInv ν L).continuous ?_ (L2.LinearIsometry.pullbackEquiv ν L f)
+  · have h :=
+      (preEnergy ν).sequentialRelaxation_comp_le
+        (preEnergy (Probability.mapLinearIsometryEquiv ν L)) (L2.LinearIsometry.pullbackInv ν L)
+        (L2.LinearIsometry.pullbackInv ν L).continuous ?_
+        (L2.LinearIsometry.pullbackEquiv ν L f)
     · rw [L2.LinearIsometry.pullbackEquiv_apply, L2.LinearIsometry.pullbackInv_pullback] at h
       exact h
     · intro g
-      refine ⟨g.compLinearIsometryEquiv (Probability.measurePreserving_mapLinearIsometryEquiv_symm ν L) hcov', ?_, le_of_eq ?_⟩
+      refine
+        ⟨g.compLinearIsometryEquiv
+            (Probability.measurePreserving_mapLinearIsometryEquiv_symm ν L) hcov',
+          ?_, le_of_eq ?_⟩
       · exact g.toL2_compLinearIsometryEquiv _ _
       · exact g.energy_compLinearIsometryEquiv _ _
-  · have h := (preEnergy (Probability.mapLinearIsometryEquiv ν L)).sequentialRelaxation_comp_le
-      (preEnergy ν) (L2.LinearIsometry.pullback ν L) (L2.LinearIsometry.pullback ν L).continuous ?_ f
+  · have h :=
+      (preEnergy (Probability.mapLinearIsometryEquiv ν L)).sequentialRelaxation_comp_le
+        (preEnergy ν) (L2.LinearIsometry.pullback ν L)
+        (L2.LinearIsometry.pullback ν L).continuous ?_ f
     · exact h
     · intro g
-      refine ⟨g.compLinearIsometryEquiv (Probability.measurePreserving_mapLinearIsometryEquiv ν L) hcov, ?_, le_of_eq ?_⟩
+      refine
+        ⟨g.compLinearIsometryEquiv (Probability.measurePreserving_mapLinearIsometryEquiv ν L)
+            hcov,
+          ?_, le_of_eq ?_⟩
       · exact g.toL2_compLinearIsometryEquiv _ _
       · exact g.energy_compLinearIsometryEquiv _ _
 

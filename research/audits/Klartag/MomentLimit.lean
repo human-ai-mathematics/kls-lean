@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Klartag.MomentLimit
+module
+
+public import FunctionalInequalities.KLS.Klartag.MomentLimit
 
 /-! Klartag arXiv:1309.2767v1, Proposition 2.1, for convex `L`-Lipschitz `C¹` potentials and an
 additive Haar measure: direction (i) ⇒ (ii) with the uniform linear lower bound as an input, and
@@ -6,6 +8,8 @@ the compactness step of (ii) ⇒ (i) without the uniqueness step (a limit potent
 measure `ν` is produced, not identified with a given potential). Translation, centering and the
 nondegeneracy (13) with `ε = 1/R` for isotropic laws in the ball of radius `R` are audited
 separately. -/
+
+@[expose] public section
 set_option autoImplicit false
 open MeasureTheory Filter Topology
 
@@ -50,8 +54,10 @@ end KlartagAudit
 #print axioms FunctionalInequalities.Analysis.tendsto_gradient_of_tendsto_of_convexOn
 #print axioms FunctionalInequalities.Analysis.exists_subseq_tendsto_of_linear_bounds
 #print axioms FunctionalInequalities.Analysis.differentiableAt_of_second_difference_le
-#print axioms FunctionalInequalities.Probability.MomentMeasure.tendsto_integral_comp_gradient_mul_exp_neg
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.tendsto_integral_comp_gradient_mul_exp_neg
 #print axioms FunctionalInequalities.Probability.MomentMeasure.exists_limit_potential
 #print axioms FunctionalInequalities.Probability.MomentMeasure.translate_moment_potential
 #print axioms FunctionalInequalities.Probability.MomentMeasure.exists_translate_centered
-#print axioms FunctionalInequalities.Probability.MomentMeasure.inv_le_integral_abs_inner_gradient_of_isotropic
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.inv_le_integral_abs_inner_gradient_of_isotropic

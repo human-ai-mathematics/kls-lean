@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.VariableCoefficient
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.VariableCoefficient
 
 /-!
 # Audit: GT Theorem 6.2 (interior a priori form) for `(1 + x₀²/8) Δ + 1` on a planar quadratic
@@ -26,6 +28,8 @@ quadratic `v(x) = x₀²`, whose Hessian is the constant `2 e₀ ⊗ e₀`, so t
 Every hypothesis of the theorem is proved, not assumed; the constant `C` is the theorem's constant,
 chosen before the centre, the radius, the coefficients and the data.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -72,15 +76,17 @@ theorem coefficient_symm : ∀ x ∈ closedBall (0 : E) (2 * 1), ∀ i j,
   · subst h; rfl
   · simp [coefficient, h, Ne.symm h]
 
-theorem coefficient_elliptic : ∀ x ∈ closedBall (0 : E) (2 * 1), ∀ ξ : E,
-    1 * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, coefficient i j x * ξ i * ξ j ∧
-      ∑ i, ∑ j, coefficient i j x * ξ i * ξ j ≤ 2 * ‖ξ‖ ^ 2 := by
+theorem coefficient_elliptic :
+    ∀ x ∈ closedBall (0 : E) (2 * 1),
+      ∀ ξ : E,
+        1 * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, coefficient i j x * ξ i * ξ j ∧
+          ∑ i, ∑ j, coefficient i j x * ξ i * ξ j ≤ 2 * ‖ξ‖ ^ 2 := by
   intro x hx ξ
   have h4 := coordinate_sq_le hx
   have h0 : 0 ≤ coordinate 0 x ^ 2 := sq_nonneg _
   rw [EuclideanSpace.real_norm_sq_eq]
-  simp only [Fin.sum_univ_two, coefficient, Fin.isValue, if_true, Fin.zero_eq_one_iff,
-    Fin.one_eq_zero_iff, OfNat.ofNat_ne_one, if_false]
+  simp only [Fin.sum_univ_two, coefficient, Fin.isValue, ite_true, Fin.zero_eq_one_iff,
+    Fin.one_eq_zero_iff, OfNat.ofNat_ne_one, ite_false]
   constructor <;> nlinarith [sq_nonneg (ξ 0), sq_nonneg (ξ 1)]
 
 /-- Distances in `closedBall 0 2` are at most twice their square root. -/
@@ -123,7 +129,7 @@ theorem coefficient_holder : ∀ i j, ∀ x ∈ closedBall (0 : E) (2 * 1),
   intro i j x hx y hy
   by_cases h : i = j
   · subst h
-    simp only [coefficient, if_true, one_mul]
+    simp only [coefficient, ite_true, one_mul]
     have h1 := sq_sub_sq_abs_le hx hy
     have h2 := norm_sub_le_two_mul_sqrt hx hy
     calc |1 + coordinate 0 x ^ 2 / 8 - (1 + coordinate 0 y ^ 2 / 8)|
@@ -177,16 +183,19 @@ theorem source_bound : ∀ x ∈ closedBall (0 : E) (2 * 1), |source x| ≤ 7 :=
   rw [source, abs_of_nonneg (by positivity)]
   linarith
 
-theorem source_holder : HolderOnWith (Real.toNNReal 10) (1 / 2) source (closedBall (0 : E) (2 * 1)) := by
+theorem source_holder :
+    HolderOnWith (Real.toNNReal 10) (1 / 2) source (closedBall (0 : E) (2 * 1)) := by
   apply holderOnWith_of_dist_le (by norm_num)
   intro x hx y hy
   rw [Real.dist_eq, dist_eq_norm]
   have h1 := sq_sub_sq_abs_le hx hy
   have h2 := norm_sub_le_two_mul_sqrt hx hy
-  calc |source x - source y| = 5 / 4 * |coordinate 0 x ^ 2 - coordinate 0 y ^ 2| := by
-        rw [show source x - source y = 5 / 4 * (coordinate 0 x ^ 2 - coordinate 0 y ^ 2) by
-          simp only [source]; ring, abs_mul]
-        norm_num
+  calc
+    |source x - source y| = 5 / 4 * |coordinate 0 x ^ 2 - coordinate 0 y ^ 2| := by
+      rw [show source x - source y = 5 / 4 * (coordinate 0 x ^ 2 - coordinate 0 y ^ 2) by
+          simp only [source]; ring,
+        abs_mul]
+      norm_num
     _ ≤ 10 * ‖x - y‖ ^ (((1 / 2 : ℝ≥0)) : ℝ) := by linarith
 
 theorem half_pos' : (0 : ℝ≥0) < 1 / 2 := by rw [← NNReal.coe_lt_coe]; norm_num

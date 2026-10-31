@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import Mathlib.Analysis.Calculus.ContDiff.RCLike
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import Mathlib.Analysis.Calculus.ContDiff.RCLike
 
 /-! Independent full-signature clients for the locally Lipschitz test-class bridge on proper
 spaces: the global Lipschitz bound of the truncation, the explicit approximating sequence, and
@@ -10,6 +12,8 @@ but has no global Lipschitz constant, and for the two-atom law `(δ₀ + δ₁)/
 at most its slope integral, which equals `1`. Degenerate cases: the empty carrier, the zero
 measure, and the empty set with the zero sequence. Proper-space scope only; no `L¹_loc`
 convergence and no relaxation-infimum identification is claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

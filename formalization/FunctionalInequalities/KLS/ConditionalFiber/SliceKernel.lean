@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.ConditionalFiber.Basic
-import FunctionalInequalities.Probability.Line.Haar
-import Mathlib.Probability.Kernel.WithDensity
+module
+
+public import FunctionalInequalities.KLS.ConditionalFiber.Basic
+public import FunctionalInequalities.Probability.Line.Haar
+public import Mathlib.Probability.Kernel.WithDensity
 
 /-!
 # The explicit slice kernel of a law with a Haar density
@@ -16,6 +18,8 @@ kernels that it agrees base-law almost everywhere with the chosen kernel of
 
 No ledger, certificate, or Blueprint claim is made by this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -65,20 +69,20 @@ theorem sliceKernel_apply_of_good {p : E → ℝ} (hp : Measurable p) {b : Direc
     (hb : b ∈ SliceGood p) (A : Set ℝ) :
     sliceKernel p hp b A = ∫⁻ t in A, sliceDensity p b t := by
   classical
-  rw [sliceKernel, Kernel.piecewise_apply, if_pos hb,
+  rw [sliceKernel, Kernel.piecewise_apply, ite_eq_left hb,
     Kernel.withDensity_apply' _ (measurable_sliceDensity hp), Kernel.const_apply]
 
 theorem sliceKernel_eq_withDensity_of_good {p : E → ℝ} (hp : Measurable p)
     {b : Direction E × E} (hb : b ∈ SliceGood p) :
     sliceKernel p hp b = (volume : Measure ℝ).withDensity (sliceDensity p b) := by
   classical
-  rw [sliceKernel, Kernel.piecewise_apply, if_pos hb,
+  rw [sliceKernel, Kernel.piecewise_apply, ite_eq_left hb,
     Kernel.withDensity_apply _ (measurable_sliceDensity hp), Kernel.const_apply]
 
 theorem sliceKernel_apply_of_not_good {p : E → ℝ} (hp : Measurable p) {b : Direction E × E}
     (hb : b ∉ SliceGood p) : sliceKernel p hp b = Measure.dirac 0 := by
   classical
-  rw [sliceKernel, Kernel.piecewise_apply, if_neg hb, Kernel.const_apply]
+  rw [sliceKernel, Kernel.piecewise_apply, ite_eq_right hb, Kernel.const_apply]
 
 instance instIsMarkovKernelSliceKernel (p : E → ℝ) (hp : Measurable p) :
     IsMarkovKernel (sliceKernel p hp) := by

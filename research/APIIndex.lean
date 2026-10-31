@@ -1,12 +1,18 @@
-import Lean
+module
 
-/-! Compiler observation for the generated public API directory. The Python producer supplies every library import; this is repository tooling. -/
+public import Lean
+meta import Lean
+
+/-! Compiler observation for the generated public API directory. The Python producer supplies every
+library import; this is repository tooling. -/
+
+@[expose] public section
 
 open Lean Elab Command Meta
 
 namespace RepositoryAPIIndex
 
-private def declarationKind : ConstantInfo → String
+private meta def declarationKind : ConstantInfo → String
   | .axiomInfo _ => "axiom"
   | .defnInfo _ => "definition"
   | .thmInfo _ => "theorem"

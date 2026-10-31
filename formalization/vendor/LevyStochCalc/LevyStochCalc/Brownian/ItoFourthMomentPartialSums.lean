@@ -3,7 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoFourthMomentIncrements
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with source adaptations
+-- (deprecated names, proof-context visibility, the v4.35.0 `eLpNorm`/`MemLp` API) listed in
+-- vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoFourthMomentIncrements
 
 /-!
 # Second and fourth moments of the elementary Brownian integral
@@ -16,6 +22,8 @@ the fourth moment of the standard Gaussian, and the sharper form
 `𝔼|∫_0^T H dW|⁴ ≤ (6 + c)·(∑_j c_j² Δ_j)²` against a per-tile coefficient bound `c`, which for a
 coefficient vanishing off a subinterval sees only that subinterval's length.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -35,7 +43,8 @@ omit [IsProbabilityMeasure P] in
 private theorem integrable_pow_of_memLp {f : Ω → ℝ} {m : ℕ} (hm : m ≠ 0)
     {p : ℝ≥0∞} (hp : p = (m : ℝ≥0∞)) (h : MemLp f p P) : Integrable (fun ω => f ω ^ m) P := by
   subst hp
-  refine (h.integrable_norm_pow hm).mono ((continuous_pow m).comp_aestronglyMeasurable h.1)
+  refine (h.integrable_norm_pow hm).mono
+    ((continuous_pow m).comp_aestronglyMeasurable h.aestronglyMeasurable)
     (Filter.Eventually.of_forall fun ω => ?_)
   simp
 
@@ -241,7 +250,7 @@ theorem integral_partialSum_sq_succ {k : ℕ} (hk : k < G.N) :
       = G.partialSum W k ω + G.ξ ⟨k, hk⟩ ω
         * (W.W (G.partition (⟨k, hk⟩ : Fin G.N).succ) ω
           - W.W (G.partition (⟨k, hk⟩ : Fin G.N).castSucc) ω) := fun ω => by
-    rw [G.partialSum_succ W k ω, term, dif_pos hk]
+    rw [G.partialSum_succ W k ω, term, dite_eq_left hk]
   simp_rw [hrw]
   exact integral_add_mul_increment_sq W ℱ hℱ (G.partition_nonneg _)
     (G.partition_strictMono Fin.castSucc_lt_succ)
@@ -264,7 +273,7 @@ theorem integral_partialSum_pow_four_succ {k : ℕ} (hk : k < G.N) :
       = G.partialSum W k ω + G.ξ ⟨k, hk⟩ ω
         * (W.W (G.partition (⟨k, hk⟩ : Fin G.N).succ) ω
           - W.W (G.partition (⟨k, hk⟩ : Fin G.N).castSucc) ω) := fun ω => by
-    rw [G.partialSum_succ W k ω, term, dif_pos hk]
+    rw [G.partialSum_succ W k ω, term, dite_eq_left hk]
   simp_rw [hrw]
   exact integral_add_mul_increment_pow_four W ℱ hℱ (G.partition_nonneg _)
     (G.partition_strictMono Fin.castSucc_lt_succ)

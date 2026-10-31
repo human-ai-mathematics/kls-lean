@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.LocalSlope.Basic
-import FunctionalInequalities.Probability.Support.Affine
+module
+
+public import FunctionalInequalities.Energy.LocalSlope.Basic
+public import FunctionalInequalities.Probability.Support.Affine
 
 /-! # Local-slope Poincaré bounds
 
@@ -8,6 +10,8 @@ import FunctionalInequalities.Probability.Support.Affine
 finite constant: truncation at levels `±k` and Fatou's lemma give `f ∈ L²` for every locally
 Lipschitz `f` of finite local-slope energy.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -50,8 +54,10 @@ omit [CompleteSpace E]
 theorem Intrinsic.constant_eq_zero_of_subsingleton [Subsingleton E] (μ : ProbabilityMeasure E) :
     Poincare.LocalSlope.Intrinsic.constant μ = 0 := by
   apply le_antisymm ?_ bot_le
-  exact iInf_le_of_le ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
-    (by simp)
+  exact
+    iInf_le_of_le
+      ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
+      (by simp)
 
 /-- A zero-dimensional direction space gives literature optimum zero: every intrinsic test is
 constant there. -/
@@ -59,8 +65,10 @@ theorem Intrinsic.constant_eq_zero_of_direction_subsingleton (μ : ProbabilityMe
     [Subsingleton (Probability.affineSupport μ).direction] :
     Poincare.LocalSlope.Intrinsic.constant μ = 0 := by
   apply le_antisymm ?_ bot_le
-  exact iInf_le_of_le ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
-    (by simp)
+  exact
+    iInf_le_of_le
+      ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
+      (by simp)
 
 /-- The zero-dimensional case stated through the direction submodule. -/
 theorem Intrinsic.constant_eq_zero_of_direction_eq_bot (μ : ProbabilityMeasure E)
@@ -81,12 +89,12 @@ open Filter
 /-- Truncation at `±k`, `k ≥ 0`, does not increase the absolute value. -/
 private theorem abs_clamp_le {k : ℝ} (hk : 0 ≤ k) (t : ℝ) : |max (-k) (min k t)| ≤ |t| := by
   rw [abs_le]
-  rcases abs_cases t with ⟨h, _⟩ | ⟨h, _⟩ <;> constructor <;>
-    simp only [max_def, min_def] <;> split_ifs <;> linarith
+  rcases abs_cases t with ⟨h, _⟩ | ⟨h, _⟩ <;> constructor <;> simp only [max_def, min_def] <;>
+      split_ifs <;>
+    linarith
 
 /-- Truncation at `±k`, `k ≥ 0`, is bounded by `k`. -/
-private theorem abs_clamp_le_self {k : ℝ} (hk : 0 ≤ k) (t : ℝ) :
-    |max (-k) (min k t)| ≤ k := by
+private theorem abs_clamp_le_self {k : ℝ} (hk : 0 ≤ k) (t : ℝ) : |max (-k) (min k t)| ≤ k := by
   rw [abs_le]
   constructor <;> simp only [max_def, min_def] <;> split_ifs <;> linarith
 

@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Construction
-import BrownianMotion.Gaussian.BrownianMotion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Construction
+public import BrownianMotion.Gaussian.BrownianMotion
 
 /-!
 # Brownian motion from a pre-Brownian process
@@ -22,6 +26,8 @@ increment.
 * `BrownianMotion.exists` — existence, from the canonical Brownian motion `brownian` on
   `gaussianLimit`, lifted to an arbitrary universe.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian
 
@@ -109,7 +115,7 @@ theorem BrownianMotion.exists :
   let e : ULift.{u} (ℝ≥0 → ℝ) ≃ᵐ (ℝ≥0 → ℝ) := MeasurableEquiv.ulift
   let P : Measure (ULift.{u} (ℝ≥0 → ℝ)) := gaussianLimit.map e.symm
   have hP : IsProbabilityMeasure P :=
-    Measure.isProbabilityMeasure_map e.symm.measurable.aemeasurable
+    (Measure.isProbabilityMeasure_map_iff e.symm.measurable.aemeasurable).2 inferInstance
   have hdown : HasLaw e gaussianLimit P :=
     ⟨e.measurable.aemeasurable, by simp [P, Measure.map_map e.measurable e.symm.measurable]⟩
   refine ⟨ULift.{u} (ℝ≥0 → ℝ), inferInstance, P, hP, ⟨?_⟩⟩

@@ -1,0 +1,36 @@
+import Mathlib.Topology.Order.Cadlag
+
+open Filter
+open scoped Topology
+
+namespace CadlagMeaningAudit
+
+universe u v
+variable {X : Type u} {Y : Type v}
+variable [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]
+
+/-- The literal predicate body of the original vendored `IsRightContinuous`. -/
+def LegacyIsRightContinuous (f : X → Y) : Prop :=
+  ∀ a, ContinuousWithinAt f (Set.Ioi a) a
+
+/-- The two fields of the original vendored `IsCadlag`, under fresh audit-only names. -/
+structure LegacyIsCadlag (f : X → Y) : Prop where
+  right_continuous : LegacyIsRightContinuous f
+  left_limit : ∀ x, ∃ l, Tendsto f (𝓝[<] x) (𝓝 l)
+
+/-- No order, separation, countability or codomain assumptions have been added. -/
+theorem isRightContinuous_iff_legacy (f : X → Y) :
+    IsRightContinuous f ↔ LegacyIsRightContinuous f := Iff.rfl
+
+/-- The new upstream field names carry precisely the original predicate. -/
+theorem isCadlag_iff_legacy (f : X → Y) : IsCadlag f ↔ LegacyIsCadlag f := by
+  constructor
+  · intro h
+    exact ⟨h.isRightContinuous, h.tendsto_nhdsLT⟩
+  · intro h
+    exact ⟨h.right_continuous, h.left_limit⟩
+
+#print axioms isRightContinuous_iff_legacy
+#print axioms isCadlag_iff_legacy
+
+end CadlagMeaningAudit

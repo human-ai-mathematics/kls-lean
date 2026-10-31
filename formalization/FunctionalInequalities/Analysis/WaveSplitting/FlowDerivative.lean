@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Consistency
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Consistency
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 
 /-!
 # Temporal derivatives of the actual splitting flows at every time
@@ -9,6 +11,8 @@ time-dependent input state. The derivative of a finite sweep keeps every flow fa
 a differentiated generator and the output; no commutation of the generators is used.
 The actual residual is identified exactly with the resulting ordered expression.
 -/
+
+@[expose] public section
 noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
@@ -20,7 +24,8 @@ def subState (X Y : State E ι) : State E ι :=
   ⟨fun x => X.u x - Y.u x, fun x => X.v x - Y.v x, fun j x => X.p j x - Y.p j x⟩
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-@[simp] theorem subState_self (Y : State E ι) : subState Y Y = zeroState := by
+@[simp]
+theorem subState_self (Y : State E ι) : subState Y Y = zeroState := by
   apply State.ext <;> funext <;> simp [subState, zeroState]
 
 /-- The actual residual is the difference of its two defining states. -/
@@ -159,15 +164,17 @@ theorem HasTimeDerivative.shift {Y : ℝ → State E ι} {D : State E ι} {t : �
 
 theorem HasTimeDerivative.addState {X Y : ℝ → State E ι} {D F : State E ι} {t : ℝ}
     (hX : HasTimeDerivative X D t) (hY : HasTimeDerivative Y F t) :
-    HasTimeDerivative (fun s => WaveSplitting.addState (X s) (Y s)) (WaveSplitting.addState D F) t :=
-  ⟨fun x => (hX.1 x).add (hY.1 x), fun x => (hX.2.1 x).add (hY.2.1 x),
-    fun j x => (hX.2.2 j x).add (hY.2.2 j x)⟩
+    HasTimeDerivative (fun s => WaveSplitting.addState (X s) (Y s)) (WaveSplitting.addState D F)
+      t :=
+  ⟨fun x => (hX.1 x).add (hY.1 x), fun x => (hX.2.1 x).add (hY.2.1 x), fun j x =>
+    (hX.2.2 j x).add (hY.2.2 j x)⟩
 
 theorem HasTimeDerivative.subState {X Y : ℝ → State E ι} {D F : State E ι} {t : ℝ}
     (hX : HasTimeDerivative X D t) (hY : HasTimeDerivative Y F t) :
-    HasTimeDerivative (fun s => WaveSplitting.subState (X s) (Y s)) (WaveSplitting.subState D F) t :=
-  ⟨fun x => (hX.1 x).sub (hY.1 x), fun x => (hX.2.1 x).sub (hY.2.1 x),
-    fun j x => (hX.2.2 j x).sub (hY.2.2 j x)⟩
+    HasTimeDerivative (fun s => WaveSplitting.subState (X s) (Y s)) (WaveSplitting.subState D F)
+      t :=
+  ⟨fun x => (hX.1 x).sub (hY.1 x), fun x => (hX.2.1 x).sub (hY.2.1 x), fun j x =>
+    (hX.2.2 j x).sub (hY.2.2 j x)⟩
 
 theorem hasTimeDerivative_const (Y : State E ι) (t : ℝ) :
     HasTimeDerivative (fun _ : ℝ => Y) zeroState t :=
@@ -177,30 +184,38 @@ theorem hasTimeDerivative_const (Y : State E ι) (t : ℝ) :
 end TimeDerivativeAlgebra
 
 /-- A flow with a frozen parameter acts linearly on the temporal derivative. -/
-theorem HasTimeDerivative.transport_fixed [DecidableEq ι] {Z : ℝ → State E ι}
-    {D : State E ι} {t : ℝ} (h : HasTimeDerivative Z D t) (a : E) (j : ι) (τ : ℝ) :
-    HasTimeDerivative (fun s => WaveSplitting.transport a j τ (Z s)) (WaveSplitting.transport a j τ D) t := by
+theorem HasTimeDerivative.transport_fixed [DecidableEq ι] {Z : ℝ → State E ι} {D : State E ι}
+    {t : ℝ} (h : HasTimeDerivative Z D t) (a : E) (j : ι) (τ : ℝ) :
+    HasTimeDerivative (fun s => WaveSplitting.transport a j τ (Z s))
+      (WaveSplitting.transport a j τ D) t := by
   refine ⟨fun x => h.1 x, fun x => ?_, fun i x => ?_⟩
-  · exact ((((h.2.1 (x + τ • a)).add (h.2.2 j (x + τ • a))).add
-      ((h.2.1 (x - τ • a)).sub (h.2.2 j (x - τ • a)))).div_const 2)
+  · exact
+      ((((h.2.1 (x + τ • a)).add (h.2.2 j (x + τ • a))).add
+            ((h.2.1 (x - τ • a)).sub (h.2.2 j (x - τ • a)))).div_const
+        2)
   · by_cases hi : i = j
     · subst hi
       simp only [WaveSplitting.transport, ↓reduceIte]
-      exact ((((h.2.1 (x + τ • a)).add (h.2.2 i (x + τ • a))).sub
-          ((h.2.1 (x - τ • a)).sub (h.2.2 i (x - τ • a)))).div_const 2)
+      exact
+        ((((h.2.1 (x + τ • a)).add (h.2.2 i (x + τ • a))).sub
+              ((h.2.1 (x - τ • a)).sub (h.2.2 i (x - τ • a)))).div_const
+          2)
     · simpa only [WaveSplitting.transport, hi, ↓reduceIte] using h.2.2 i x
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-theorem HasTimeDerivative.reaction_fixed [Fintype ι] {Z : ℝ → State E ι}
-    {D : State E ι} {t : ℝ} (h : HasTimeDerivative Z D t) (b : ι → E → ℝ) (τ : ℝ) :
-    HasTimeDerivative (fun s => WaveSplitting.reaction b τ (Z s)) (WaveSplitting.reaction b τ D) t := by
+theorem HasTimeDerivative.reaction_fixed [Fintype ι] {Z : ℝ → State E ι} {D : State E ι} {t : ℝ}
+    (h : HasTimeDerivative Z D t) (b : ι → E → ℝ) (τ : ℝ) :
+    HasTimeDerivative (fun s => WaveSplitting.reaction b τ (Z s)) (WaveSplitting.reaction b τ D)
+      t := by
   have hc (x : E) : HasDerivAt (fun s => coupling b (Z s) x) (coupling b D x) t :=
     HasDerivAt.fun_sum (u := Finset.univ) (fun j _ => (h.2.2 j x).const_mul (b j x))
   refine ⟨fun x => ?_, fun x => ?_, fun j x => h.2.2 j x⟩
-  · exact (((h.1 x).const_mul (Real.cos τ)).add ((h.2.1 x).const_mul (Real.sin τ))).add
-      ((hc x).const_mul (Real.cos τ - 1))
-  · exact (((h.1 x).const_mul (-Real.sin τ)).add ((h.2.1 x).const_mul (Real.cos τ))).sub
-      ((hc x).const_mul (Real.sin τ))
+  · exact
+      (((h.1 x).const_mul (Real.cos τ)).add ((h.2.1 x).const_mul (Real.sin τ))).add
+        ((hc x).const_mul (Real.cos τ - 1))
+  · exact
+      (((h.1 x).const_mul (-Real.sin τ)).add ((h.2.1 x).const_mul (Real.cos τ))).sub
+        ((hc x).const_mul (Real.sin τ))
 
 theorem JointSmooth.shift {Z : ℝ → State E ι} (hZ : JointSmooth Z) (t : ℝ) :
     JointSmooth (fun r => Z (t + r)) := by
@@ -232,12 +247,14 @@ theorem JointSmooth.transport_fixed {Z : ℝ → State E ι}
 /-! ## All-time chain rules -/
 
 /-- Coordinate transport with a time-dependent input, differentiated at an arbitrary time. -/
-theorem HasTimeDerivative.transport {Z : ℝ → State E ι} {D : State E ι}
-    {t : ℝ} (hD : HasTimeDerivative Z D t) (hZ : JointSmooth Z) (a : E) (j : ι) :
+theorem HasTimeDerivative.transport {Z : ℝ → State E ι} {D : State E ι} {t : ℝ}
+    (hD : HasTimeDerivative Z D t) (hZ : JointSmooth Z) (a : E) (j : ι) :
     HasTimeDerivative (fun s => WaveSplitting.transport a j s (Z s))
-      (WaveSplitting.addState (WaveSplitting.transport a j t D) (WaveSplitting.coordinateGenerator a j (WaveSplitting.transport a j t (Z t)))) t := by
-  have hV := (hD.shift.transport_fixed a j t).transport_zero
-    ((hZ.shift t).transport_fixed a j t) a j
+      (WaveSplitting.addState (WaveSplitting.transport a j t D)
+        (WaveSplitting.coordinateGenerator a j (WaveSplitting.transport a j t (Z t))))
+      t := by
+  have hV :=
+    (hD.shift.transport_fixed a j t).transport_zero ((hZ.shift t).transport_fixed a j t) a j
   apply HasTimeDerivative.of_shift
   simpa only [transport_transport, add_zero] using hV
 
@@ -245,10 +262,12 @@ end FiniteIndex
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 /-- The zero-order flow with a time-dependent input, differentiated at an arbitrary time. -/
-theorem HasTimeDerivative.reaction [Fintype ι] {Z : ℝ → State E ι} {D : State E ι}
-    {t : ℝ} (hD : HasTimeDerivative Z D t) (b : ι → E → ℝ) :
+theorem HasTimeDerivative.reaction [Fintype ι] {Z : ℝ → State E ι} {D : State E ι} {t : ℝ}
+    (hD : HasTimeDerivative Z D t) (b : ι → E → ℝ) :
     HasTimeDerivative (fun s => WaveSplitting.reaction b s (Z s))
-      (WaveSplitting.addState (WaveSplitting.reaction b t D) (reactionGenerator b (WaveSplitting.reaction b t (Z t)))) t := by
+      (WaveSplitting.addState (WaveSplitting.reaction b t D)
+        (reactionGenerator b (WaveSplitting.reaction b t (Z t))))
+      t := by
   have hV := (hD.shift.reaction_fixed b t).reaction_zero b
   apply HasTimeDerivative.of_shift
   simpa only [reaction_reaction, add_zero] using hV
@@ -262,10 +281,12 @@ def sweepDerivative [DecidableEq ι] (a : ι → E) (t : ℝ) : List ι → Stat
 
 /-- Chain rule for the complete finite sweep with a time-dependent input at an arbitrary
 time. The order of the flows and generators is the actual list order. -/
-theorem HasTimeDerivative.sweep [DecidableEq ι] {Z : ℝ → State E ι} {D : State E ι}
-    {t : ℝ} (hD : HasTimeDerivative Z D t) (hZ : JointSmooth Z) (a : ι → E) (js : List ι) :
+theorem HasTimeDerivative.sweep [DecidableEq ι] {Z : ℝ → State E ι} {D : State E ι} {t : ℝ}
+    (hD : HasTimeDerivative Z D t) (hZ : JointSmooth Z) (a : ι → E) (js : List ι) :
     HasTimeDerivative (fun s => WaveSplitting.sweep a s js (Z s))
-      (WaveSplitting.addState (WaveSplitting.sweep a t js D) (WaveSplitting.sweepDerivative a t js (Z t))) t := by
+      (WaveSplitting.addState (WaveSplitting.sweep a t js D)
+        (WaveSplitting.sweepDerivative a t js (Z t)))
+      t := by
   induction js generalizing Z D with
   | nil => simpa [WaveSplitting.sweep, sweepDerivative] using hD
   | cons j js ih =>

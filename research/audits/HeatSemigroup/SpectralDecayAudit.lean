@@ -1,7 +1,11 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Decay
 
 /-! Independent full-signature clients for the actual heat orbit, the explicit form-domain gap,
 and the half-time indicator correlation. -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set

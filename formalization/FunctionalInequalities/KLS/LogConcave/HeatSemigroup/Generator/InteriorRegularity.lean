@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Core
-import FunctionalInequalities.Analysis.Mollification.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Core
+public import FunctionalInequalities.Analysis.Mollification.Basic
 
 /-!
 # Interior regularity of deficiency elements, and the operator core
@@ -47,6 +49,8 @@ comparison and the BKL proof of KLS are formalized downstream; `KLS/Target.lean`
 proved target. None of those conclusions is asserted by the operator-core theorem alone.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter Topology Metric InnerProductSpace
@@ -64,11 +68,17 @@ variable {α : Type*} [MeasurableSpace α] (μ : Measure α)
 
 /-- A pointwise bound `‖f x‖ ≤ C ‖g x‖` gives `eLpNorm f ≤ C eLpNorm g`. -/
 private theorem eLpNorm_le_of_norm_le {E F : Type*} [NormedAddCommGroup E] [NormedAddCommGroup F]
-    {f : α → E} {g : α → F} {C : ℝ} (hC : 0 ≤ C) (h : ∀ x, ‖f x‖ ≤ C * ‖g x‖) :
+    {f : α → E} {g : α → F} {C : ℝ} (hC : 0 ≤ C) (hf : AEStronglyMeasurable f μ)
+    (h : ∀ x, ‖f x‖ ≤ C * ‖g x‖) :
     eLpNorm f 2 μ ≤ ENNReal.ofReal C * eLpNorm g 2 μ := by
-  refine (eLpNorm_mono_real h).trans (le_of_eq ?_)
+  refine (eLpNorm_mono_real hf h).trans ?_
   have : (fun x => C * ‖g x‖) = C • fun x => ‖g x‖ := rfl
-  rw [this, eLpNorm_const_smul, eLpNorm_norm, Real.enorm_of_nonneg hC]
+  rw [this, eLpNorm_const_smul, Real.enorm_of_nonneg hC]
+  gcongr
+  by_cases hg : AEStronglyMeasurable g μ
+  · rw [eLpNorm_norm g hg]
+  · rw [eLpNorm_of_not_aestronglyMeasurable hg]
+    exact le_top
 
 end Generic
 
@@ -131,17 +141,24 @@ supported in `tsupport χ`, then `‖χ ∇v‖ ≤ 3 ‖v ∇χ‖ + 2 ‖χ H�
 `g = χ² v` is used. -/
 private theorem norm_toLp_smul_gradient_le {χ v : V → ℝ} (hχ : ContDiff ℝ ∞ χ)
     (hχc : HasCompactSupport χ) (hv : ContDiff ℝ ∞ v) {H : V → V}
-    (heq : ∀ g : V → ℝ, ContDiff ℝ ∞ g → HasCompactSupport g → tsupport g ⊆ tsupport χ →
-      ∫ x, Laplacian.laplacian g x * v x ∂m =
-        ∫ x, ⟪gradient g x, H x⟫ ∂m + ∫ x, g x * v x ∂m)
-    (hA : MemLp (fun x => χ x • gradient v x) 2 m) (hB : MemLp (fun x => v x • gradient χ x) 2 m)
-    (hC : MemLp (fun x => χ x • H x) 2 m) :
+    (heq :
+      ∀ g : V → ℝ,
+        ContDiff ℝ ∞ g →
+          HasCompactSupport g →
+            tsupport g ⊆ tsupport χ →
+              ∫ x, Laplacian.laplacian g x * v x ∂m =
+                ∫ x, ⟪gradient g x, H x⟫ ∂m + ∫ x, g x * v x ∂m)
+    (hA : MemLp (fun x => χ x • gradient v x) 2 m)
+    (hB : MemLp (fun x => v x • gradient χ x) 2 m) (hC : MemLp (fun x => χ x • H x) 2 m) :
     ‖hA.toLp _‖ ≤ 3 * ‖hB.toLp _‖ + 2 * ‖hC.toLp _‖ := by
   have hχ1 : ContDiff ℝ 1 χ := hχ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hv1 : ContDiff ℝ 1 v := hv.of_le (WithTop.coe_le_coe.mpr le_top)
   have hχd : Differentiable ℝ χ := hχ1.differentiable one_ne_zero
-  have hvd : Differentiable ℝ v := hv1.differentiable one_ne_zero
+  have hvd : Differentiable ℝ v :=
+    hv1.differentiable
+      one_ne_zero
   -- the test function `g = χ² v`
+
   set g : V → ℝ := fun x => χ x * χ x * v x with hg_def
   have hg : ContDiff ℝ ∞ g := (hχ.mul hχ).mul hv
   have hgc : HasCompactSupport g := (hχc.mul_right).mul_right
@@ -150,27 +167,35 @@ private theorem norm_toLp_smul_gradient_le {χ v : V → ℝ} (hχ : ContDiff �
     simp only [Function.mem_support, hg_def] at hx ⊢
     intro h0
     exact hx (by rw [h0]; ring)
-  have hgrad : ∀ x, gradient g x = (χ x * χ x) • gradient v x + (2 * (χ x * v x)) • gradient χ x := by
+  have hgrad :
+    ∀ x, gradient g x = (χ x * χ x) • gradient v x + (2 * (χ x * v x)) • gradient χ x := by
     intro x
     have h1 : gradient (fun y => χ y * χ y) x = χ x • gradient χ x + χ x • gradient χ x :=
       gradient_mul (hχd x) (hχd x)
-    have h2 := gradient_mul (f := fun y => χ y * χ y) (g := v) (x := x) ((hχd x).mul (hχd x))
-      (hvd x)
+    have h2 :=
+      gradient_mul (f := fun y => χ y * χ y) (g := v) (x := x) ((hχd x).mul (hχd x)) (hvd x)
     rw [hg_def]
     refine h2.trans ?_
     rw [h1]
     module
   -- integration by parts with the constant weight
-  have hibp := integral_mul_inner_gradient_eq_neg m (w := fun _ => (1 : ℝ)) contDiff_const
-    (hg.of_le (WithTop.coe_le_coe.mpr le_top)) hgc hv1
+
+  have hibp :=
+    integral_mul_inner_gradient_eq_neg m (w := fun _ => (1 : ℝ)) contDiff_const
+      (hg.of_le (WithTop.coe_le_coe.mpr le_top)) hgc hv1
   simp only [one_mul, gradient_fun_const, inner_zero_left, add_zero] at hibp
-  have heqg := heq g hg hgc hgs
+  have heqg :=
+    heq g hg hgc
+      hgs
   -- the three `L²` classes and their pairings
+
   have hAae := hA.coeFn_toLp
   have hBae := hB.coeFn_toLp
   have hCae := hC.coeFn_toLp
-  have hint : ∀ (F G : Lp V 2 m) (f g : V → V), (F : V → V) =ᵐ[m] f → (G : V → V) =ᵐ[m] g →
-      Integrable (fun x => ⟪f x, g x⟫) m := fun F G f g hF hG =>
+  have hint :
+    ∀ (F G : Lp V 2 m) (f g : V → V),
+      (F : V → V) =ᵐ[m] f → (G : V → V) =ᵐ[m] g → Integrable (fun x => ⟪f x, g x⟫) m :=
+    fun F G f g hF hG =>
     (L2.integrable_inner F G).congr (by filter_upwards [hF, hG] with x e1 e2; rw [e1, e2])
   have hAA : ⟪hA.toLp _, hA.toLp _⟫ = ∫ x, ⟪χ x • gradient v x, χ x • gradient v x⟫ ∂m := by
     rw [L2.inner_def]
@@ -183,31 +208,38 @@ private theorem norm_toLp_smul_gradient_le {χ v : V → ℝ} (hχ : ContDiff �
     exact integral_congr_ae (by filter_upwards [hAae, hCae] with x e1 e2; rw [e1, e2])
   have hBC : ⟪hB.toLp _, hC.toLp _⟫ = ∫ x, ⟪v x • gradient χ x, χ x • H x⟫ ∂m := by
     rw [L2.inner_def]
-    exact integral_congr_ae (by filter_upwards [hBae, hCae] with x e1 e2; rw [e1, e2])
+    exact
+      integral_congr_ae
+        (by filter_upwards [hBae, hCae] with x e1 e2; rw [e1, e2])
   -- `∫ ⟪∇g, ∇v⟫ = ‖A‖² + 2 ⟪B, A⟫`
-  have e1 : ∫ x, ⟪gradient g x, gradient v x⟫ ∂m =
-      ‖hA.toLp _‖ ^ 2 + 2 * ⟪hB.toLp _, hA.toLp _⟫ := by
-    rw [← real_inner_self_eq_norm_sq, hAA, hBA, ← integral_const_mul,
-      ← integral_add (hint _ _ _ _ hAae hAae) ((hint _ _ _ _ hBae hAae).const_mul _)]
+
+  have e1 :
+    ∫ x, ⟪gradient g x, gradient v x⟫ ∂m = ‖hA.toLp _‖ ^ 2 + 2 * ⟪hB.toLp _, hA.toLp _⟫ := by
+    rw [← real_inner_self_eq_norm_sq, hAA, hBA, ← integral_const_mul, ←
+      integral_add (hint _ _ _ _ hAae hAae) ((hint _ _ _ _ hBae hAae).const_mul _)]
     refine integral_congr_ae (Filter.Eventually.of_forall fun x => ?_)
     simp only [hgrad, inner_add_left, real_inner_smul_left, real_inner_smul_right]
     ring
   -- `∫ ⟪∇g, H⟫ = ⟪A, C⟫ + 2 ⟪B, C⟫`
-  have e2 : ∫ x, ⟪gradient g x, H x⟫ ∂m =
-      ⟪hA.toLp _, hC.toLp _⟫ + 2 * ⟪hB.toLp _, hC.toLp _⟫ := by
-    rw [hAC, hBC, ← integral_const_mul,
-      ← integral_add (hint _ _ _ _ hAae hCae) ((hint _ _ _ _ hBae hCae).const_mul _)]
+
+  have e2 : ∫ x, ⟪gradient g x, H x⟫ ∂m = ⟪hA.toLp _, hC.toLp _⟫ + 2 * ⟪hB.toLp _, hC.toLp _⟫ := by
+    rw [hAC, hBC, ← integral_const_mul, ←
+      integral_add (hint _ _ _ _ hAae hCae) ((hint _ _ _ _ hBae hCae).const_mul _)]
     refine integral_congr_ae (Filter.Eventually.of_forall fun x => ?_)
     simp only [hgrad, inner_add_left, real_inner_smul_left, real_inner_smul_right]
     ring
   -- `∫ g v ≥ 0`
+
   have e3 : 0 ≤ ∫ x, g x * v x ∂m := by
     refine integral_nonneg fun x => ?_
     simp only [hg_def, Pi.zero_apply]
     nlinarith [sq_nonneg (χ x * v x)]
   -- the quadratic inequality
-  have hkey : ‖hA.toLp _‖ ^ 2 + 2 * ⟪hB.toLp _, hA.toLp _⟫ +
-      (⟪hA.toLp _, hC.toLp _⟫ + 2 * ⟪hB.toLp _, hC.toLp _⟫) ≤ 0 := by
+
+  have hkey :
+    ‖hA.toLp _‖ ^ 2 + 2 * ⟪hB.toLp _, hA.toLp _⟫ +
+        (⟪hA.toLp _, hC.toLp _⟫ + 2 * ⟪hB.toLp _, hC.toLp _⟫) ≤
+      0 := by
     rw [← e1, ← e2, hibp]
     linarith [heqg, e3]
   have cs1 := abs_real_inner_le_norm (hB.toLp _) (hA.toLp _)
@@ -216,8 +248,10 @@ private theorem norm_toLp_smul_gradient_le {χ v : V → ℝ} (hχ : ContDiff �
   have hA0 := norm_nonneg (hA.toLp _)
   have hB0 := norm_nonneg (hB.toLp _)
   have hC0 := norm_nonneg (hC.toLp _)
-  have hsq : ‖hA.toLp _‖ ^ 2 ≤ 2 * ‖hB.toLp _‖ * ‖hA.toLp _‖ + ‖hA.toLp _‖ * ‖hC.toLp _‖ +
-      2 * ‖hB.toLp _‖ * ‖hC.toLp _‖ := by
+  have hsq :
+    ‖hA.toLp _‖ ^ 2 ≤
+      2 * ‖hB.toLp _‖ * ‖hA.toLp _‖ + ‖hA.toLp _‖ * ‖hC.toLp _‖ +
+        2 * ‖hB.toLp _‖ * ‖hC.toLp _‖ := by
     have := neg_abs_le (⟪hB.toLp _, hA.toLp _⟫ : ℝ)
     have := neg_abs_le (⟪hA.toLp _, hC.toLp _⟫ : ℝ)
     have := neg_abs_le (⟪hB.toLp _, hC.toLp _⟫ : ℝ)
@@ -377,26 +411,47 @@ private theorem eLpNorm_tilted_le (hνU : (ν : Measure V) = m.tilted (-U)) {E :
     [NormedAddCommGroup E] {f : V → E} {C : ℝ}
     (h : ∀ x, f x ≠ 0 → tiltedDensity m U x ≤ C) :
     eLpNorm f 2 (ν : Measure V) ≤ ENNReal.ofReal C ^ (1 / 2 : ℝ) * eLpNorm f 2 m := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top,
-    eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
-  simp only [ENNReal.toReal_ofNat]
-  rw [lintegral_eq_tiltedDensity m hνU, ← ENNReal.mul_rpow_of_nonneg _ _ (by norm_num),
-    ← lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
-  refine ENNReal.rpow_le_rpow (lintegral_mono fun x => ?_) (by norm_num)
-  by_cases hx : f x = 0
-  · simp [hx]
-  · gcongr
-    exact h x hx
+  by_cases hfm : AEStronglyMeasurable f m
+  · have hfν : AEStronglyMeasurable f (ν : Measure V) :=
+      hfm.mono_ac (hνU ▸ tilted_absolutelyContinuous m (-U))
+    rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top hfν,
+      eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top hfm]
+    simp only [ENNReal.toReal_ofNat]
+    rw [lintegral_eq_tiltedDensity m hνU, ← ENNReal.mul_rpow_of_nonneg _ _ (by norm_num),
+      ← lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+    refine ENNReal.rpow_le_rpow (lintegral_mono fun x => ?_) (by norm_num)
+    by_cases hx : f x = 0
+    · simp [hx]
+    · gcongr
+      exact h x hx
+  -- a function that is not `m`-measurable has infinite `L²(m)` seminorm; it is not identically
+  -- zero, so `C` dominates a positive density value
+  have hm : NeZero m := ⟨fun h0 => by
+    have h1 := measure_univ (μ := (ν : Measure V))
+    rw [hνU, h0, tilted_zero_measure] at h1
+    simp at h1⟩
+  have hC : 0 < C := by
+    by_contra hC
+    refine hfm ?_
+    have hf0 : f = 0 := funext fun x => by
+      by_contra hx
+      exact hC ((tiltedDensity_pos m hνU x).trans_le (h x hx))
+    rw [hf0]
+    exact aestronglyMeasurable_const
+  rw [eLpNorm_of_not_aestronglyMeasurable hfm,
+    ENNReal.mul_top (ENNReal.rpow_pos (ENNReal.ofReal_pos.mpr hC) ENNReal.ofReal_ne_top).ne']
+  exact le_top
 
 /-- **From `L²(ν)` to `L²(m)`**: a function dominated by `√(C ρ) |u|` with `u ∈ L²(ν)` is in
 `L²(m)`, with the norm bound `√C ‖u‖_{L²(ν)}`. -/
 private theorem eLpNorm_le_tilted_of_sq_le [NeZero m] (hνU : (ν : Measure V) = m.tilted (-U))
     {E : Type*} [NormedAddCommGroup E] {F : V → E} {C : ℝ} (hC : 0 ≤ C)
-    (u : Lp ℝ 2 (ν : Measure V))
+    (u : Lp ℝ 2 (ν : Measure V)) (hF : AEStronglyMeasurable F m)
     (h : ∀ x, ‖F x‖ ^ 2 ≤ C * tiltedDensity m U x * ‖u x‖ ^ 2) :
     eLpNorm F 2 m ≤ ENNReal.ofReal C ^ (1 / 2 : ℝ) * eLpNorm u 2 (ν : Measure V) := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top,
-    eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top hF,
+    eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top
+      (Lp.aestronglyMeasurable u)]
   simp only [ENNReal.toReal_ofNat]
   rw [lintegral_eq_tiltedDensity m hνU, ← ENNReal.mul_rpow_of_nonneg _ _ (by norm_num),
     ← lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
@@ -589,33 +644,39 @@ private theorem mollified_difference_caccioppoli {χ : V → ℝ}
             ENNReal.ofReal_mul (by norm_num), ENNReal.ofReal_ofNat, ENNReal.ofReal_ofNat]
   exact hcacc
 
-omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] [m.IsAddHaarMeasure] in
-/-- A bounded compactly supported error multiplier transfers Haar L2 convergence to the tilted law. -/
-private theorem localized_toLp_tendsto
-    (hνU : (ν : Measure V) = m.tilted (-U))
-    {χ : V → ℝ} (hχ : ContDiff ℝ ∞ χ) (hχc : HasCompactSupport χ)
-    (u : Lp ℝ 2 (ν : Measure V)) {g v : ℕ → V → ℝ} {w A : V → ℝ}
-    (hgL : ∀ n, MemLp (g n) 2 (ν : Measure V))
-    (hgu : ∀ n x, g n x - χ x * u x = A x * (v n - w) x)
-    (hA_zero : ∀ x ∉ tsupport χ, A x = 0)
+omit [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+    [m.IsAddHaarMeasure] in
+/--
+A bounded compactly supported error multiplier transfers Haar L2 convergence to the tilted law. -/
+private theorem localized_toLp_tendsto (hνU : (ν : Measure V) = m.tilted (-U)) {χ : V → ℝ}
+    (hχ : ContDiff ℝ ∞ χ) (hχc : HasCompactSupport χ) (u : Lp ℝ 2 (ν : Measure V))
+    {g v : ℕ → V → ℝ} {w A : V → ℝ} (hgL : ∀ n, MemLp (g n) 2 (ν : Measure V))
+    (hgu : ∀ n x, g n x - χ x * u x = A x * (v n - w) x) (hA_zero : ∀ x ∉ tsupport χ, A x = 0)
     {M Cρ : ℝ} (hM0 : 0 ≤ M) (hM : ∀ x, ‖A x‖ ≤ M)
     (hρle : ∀ x ∈ tsupport χ, tiltedDensity m U x ≤ Cρ)
     (hvconv : Tendsto (fun n => eLpNorm (v n - w) 2 m) atTop (𝓝 0)) :
     Tendsto (fun n => (hgL n).toLp (g n)) atTop
       (𝓝 ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _)) := by
   rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm']
-  have heq : ∀ n, eLpNorm (((hgL n).toLp (g n) : Lp ℝ 2 (ν : Measure V)) -
-      ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _ :
-        Lp ℝ 2 (ν : Measure V)) : V → ℝ) 2 (ν : Measure V) =
-      eLpNorm (fun x => g n x - χ x * u x) 2 (ν : Measure V) := by
+  have heq :
+    ∀ n,
+      eLpNorm
+          (((hgL n).toLp (g n) : Lp ℝ 2 (ν : Measure V)) -
+              ((memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _ :
+                Lp ℝ 2 (ν : Measure V)) :
+            V → ℝ)
+          2 (ν : Measure V) =
+        eLpNorm (fun x => g n x - χ x * u x) 2 (ν : Measure V) := by
     intro n
     refine eLpNorm_congr_ae ?_
     filter_upwards [(hgL n).coeFn_toLp,
       (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).coeFn_toLp] with x e1 e2
     rw [Pi.sub_apply, e1, e2]
   simp only [heq]
-  have hle : ∀ n, eLpNorm (fun x => g n x - χ x * u x) 2 (ν : Measure V) ≤
-      (ENNReal.ofReal Cρ ^ (1 / 2 : ℝ)) * (ENNReal.ofReal M * eLpNorm (v n - w) 2 m) := by
+  have hle :
+    ∀ n,
+      eLpNorm (fun x => g n x - χ x * u x) 2 (ν : Measure V) ≤
+        (ENNReal.ofReal Cρ ^ (1 / 2 : ℝ)) * (ENNReal.ofReal M * eLpNorm (v n - w) 2 m) := by
     intro n
     have hzero : ∀ x ∉ tsupport χ, g n x - χ x * u x = 0 := fun x hx => by
       rw [hgu, hA_zero x hx, zero_mul]
@@ -623,13 +684,18 @@ private theorem localized_toLp_tendsto
     · by_contra hx'
       exact hx (hzero x hx')
     · gcongr
-      refine eLpNorm_le_of_norm_le m hM0 fun x => ?_
+      have hmν : m ≪ (ν : Measure V) := by
+        rw [hνU]; exact absolutelyContinuous_tilted (integrable_exp_neg m hνU)
+      refine eLpNorm_le_of_norm_le m hM0 (((hgL n).aestronglyMeasurable.sub
+        (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).aestronglyMeasurable).mono_ac
+          hmν) fun x => ?_
       rw [hgu, norm_mul]
       exact mul_le_mul_of_nonneg_right (hM x) (norm_nonneg _)
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_
-    (fun n => bot_le) hle
-  have h := ENNReal.Tendsto.const_mul (a := (ENNReal.ofReal Cρ ^ (1 / 2 : ℝ))) (ENNReal.Tendsto.const_mul
-    (a := ENNReal.ofReal M) hvconv (Or.inr ENNReal.ofReal_ne_top)) (Or.inr (ENNReal.rpow_ne_top_of_nonneg (by norm_num) ENNReal.ofReal_ne_top))
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_ (fun n => bot_le) hle
+  have h :=
+    ENNReal.Tendsto.const_mul (a := (ENNReal.ofReal Cρ ^ (1 / 2 : ℝ)))
+      (ENNReal.Tendsto.const_mul (a := ENNReal.ofReal M) hvconv (Or.inr ENNReal.ofReal_ne_top))
+      (Or.inr (ENNReal.rpow_ne_top_of_nonneg (by norm_num) ENNReal.ofReal_ne_top))
   rwa [mul_zero, mul_zero] at h
 
 /-- **Interior regularity of deficiency elements.** For `ν = m.tilted (-U)` with a `C¹` potential
@@ -663,6 +729,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
       (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain := by
   classical
   -- the density, its inverse and their regularity
+
+  -- Localize the weighted equation and its inverse density.
   have hρpos : ∀ x, 0 < tiltedDensity m U x := tiltedDensity_pos m hνU
   have hρc : ContDiff ℝ 1 (tiltedDensity m U) := contDiff_tiltedDensity m hU
   set ρinv : V → ℝ := fun x => (∫ y, Real.exp ((-U) y) ∂m) * Real.exp (U x) with hρinv_def
@@ -692,14 +760,14 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
   have hwm : AEStronglyMeasurable w m := η.continuous.aestronglyMeasurable.mul hWm
   have hGm : AEStronglyMeasurable G m :=
     (η.continuous.aestronglyMeasurable.mul hWm).smul hUc.aestronglyMeasurable
-  have hufin : eLpNorm (u : V → ℝ) 2 (ν : Measure V) < ⊤ := (Lp.memLp u).2
+  have hufin : eLpNorm (u : V → ℝ) 2 (ν : Measure V) < ⊤ := (Lp.memLp u).eLpNorm_lt_top
   have hnorm_u : ∀ x, ‖(u : V → ℝ) x‖ ^ 2 = (u x) ^ 2 := fun x => by
     rw [Real.norm_eq_abs, sq_abs]
   obtain ⟨C₁, hC₁⟩ := (η.continuous.mul (η.continuous.mul
     hρc.continuous)).bounded_above_of_compact_support η.hasCompactSupport.mul_right
   have hwL : MemLp w 2 m := by
-    refine ⟨hwm, lt_of_le_of_lt (eLpNorm_le_tilted_of_sq_le m hνU (C := max C₁ 0)
-      (le_max_right _ _) u fun x => ?_) ?_⟩
+    refine lt_of_le_of_lt (eLpNorm_le_tilted_of_sq_le m hνU (C := max C₁ 0)
+      (le_max_right _ _) u hwm fun x => ?_) ?_
     · have h1 : η x * (η x * tiltedDensity m U x) ≤ max C₁ 0 :=
         (le_abs_self _).trans ((hC₁ x).trans (le_max_left _ _))
       have h2 : 0 ≤ tiltedDensity m U x * ‖(u : V → ℝ) x‖ ^ 2 :=
@@ -715,8 +783,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
   obtain ⟨C₂, hC₂⟩ := ((η.continuous.mul (η.continuous.mul hρc.continuous)).mul
     (hUc.norm.pow 2)).bounded_above_of_compact_support (η.hasCompactSupport.mul_right.mul_right)
   have hGL : MemLp G 2 m := by
-    refine ⟨hGm, lt_of_le_of_lt (eLpNorm_le_tilted_of_sq_le m hνU (C := max C₂ 0)
-      (le_max_right _ _) u fun x => ?_) ?_⟩
+    refine lt_of_le_of_lt (eLpNorm_le_tilted_of_sq_le m hνU (C := max C₂ 0)
+      (le_max_right _ _) u hGm fun x => ?_) ?_
     · have h1 : η x * (η x * tiltedDensity m U x) * ‖gradient U x‖ ^ 2 ≤ max C₂ 0 :=
         (le_abs_self _).trans ((hC₂ x).trans (le_max_left _ _))
       have h2 : 0 ≤ tiltedDensity m U x * ‖(u : V → ℝ) x‖ ^ 2 :=
@@ -743,6 +811,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
         ∫ x, ⟪gradient f x, W x • gradient U x⟫ ∂m + ∫ x, f x * W x ∂m :=
     fun f hf hfc => hν.integral_laplacian_mul_tiltedDensity_mul m hi hνU hU u horth hf hfc
   -- the mollified sequence
+
+  -- Mollify the localized weak equation.
   set v : ℕ → V → ℝ := fun n =>
     (mollifier (V := V) n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] w with hv_def
   set H : ℕ → V → V := fun n =>
@@ -791,6 +861,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
   have hgradχ : ∀ x ∉ tsupport χ, gradient χ x = 0 := fun x hx =>
     Analysis.BakryEmery.gradient_eq_zero_of_notMem_tsupport hx
   -- the tests `gₙ = χ vₙ / ρ`
+
+  -- Construct compactly supported tests in the operator domain.
   set gfun : ℕ → V → ℝ := fun n x => χ x * v n x * ρinv x with hgfun_def
   have hgc1 : ∀ n, ContDiff ℝ 1 (gfun n) := fun n => (hχ1.mul (hv1 n)).mul hρinvc
   have hgcs : ∀ n, HasCompactSupport (gfun n) := fun n => hχc.mul_right.mul_right
@@ -842,6 +914,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
         ENNReal.ofReal_ne_top)⟩, ENNReal.ofReal_ne_top⟩
   have hK₂ : K₂ ≠ ⊤ := ENNReal.mul_ne_top ENNReal.ofReal_ne_top
     (ENNReal.mul_ne_top ENNReal.ofNat_ne_top ENNReal.ofReal_ne_top)
+
+  -- Bound the gradient differences and prove the operator images are Cauchy.
   have hbound : ∀ n k, eLpNorm (fun x => gradient (gfun n) x - gradient (gfun k) x) 2
       (ν : Measure V) ≤ K₀ * (K₁ * eLpNorm (v n - v k) 2 m + K₂ * eLpNorm (H n - H k) 2 m) := by
     intro n k
@@ -877,19 +951,19 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
       exact hx (hzero x hx')
     -- the three pieces in `L²(m)`
     have h₁ : eLpNorm P₁ 2 m ≤ ENNReal.ofReal M₆ * eLpNorm d 2 m := by
-      refine eLpNorm_le_of_norm_le m hM₆0 fun x => ?_
+      refine eLpNorm_le_of_norm_le m hM₆0 hP₁m fun x => ?_
       show ‖(χ x * d x) • gradient ρinv x‖ ≤ M₆ * ‖d x‖
       rw [mul_comm (χ x), mul_smul, norm_smul, mul_comm]
       exact mul_le_mul_of_nonneg_right (hM₆ x) (norm_nonneg _)
     have h₂ : eLpNorm P₂ 2 m ≤ ENNReal.ofReal C₄ * eLpNorm (fun x => χ x • gradient d x) 2 m := by
-      refine eLpNorm_le_of_norm_le m hC₄0 fun x => ?_
+      refine eLpNorm_le_of_norm_le m hC₄0 hP₂m fun x => ?_
       simp only [hP₂_def]
       rw [norm_smul]
       by_cases hx : x ∈ tsupport χ
       · exact mul_le_mul_of_nonneg_right (hρinvle x hx) (norm_nonneg _)
       · rw [image_eq_zero_of_notMem_tsupport hx, zero_smul, norm_zero, mul_zero, mul_zero]
     have h₃ : eLpNorm P₃ 2 m ≤ ENNReal.ofReal (C₄ * M₁) * eLpNorm d 2 m := by
-      refine eLpNorm_le_of_norm_le m (mul_nonneg hC₄0 hM₁0) fun x => ?_
+      refine eLpNorm_le_of_norm_le m (mul_nonneg hC₄0 hM₁0) hP₃m fun x => ?_
       simp only [hP₃_def]
       rw [norm_smul, norm_smul]
       by_cases hx : x ∈ tsupport χ
@@ -901,11 +975,13 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
       · rw [hgradχ x hx, norm_zero, mul_zero, mul_zero]
         positivity
     have hBd : eLpNorm (fun x => d x • gradient χ x) 2 m ≤ ENNReal.ofReal M₁ * eLpNorm d 2 m := by
-      refine eLpNorm_le_of_norm_le m hM₁0 fun x => ?_
+      refine eLpNorm_le_of_norm_le m hM₁0
+        (hdc.smul (continuous_gradient hχ1)).aestronglyMeasurable fun x => ?_
       rw [norm_smul, mul_comm]
       exact mul_le_mul_of_nonneg_right (hM₁ x) (norm_nonneg _)
     have hCd : eLpNorm (fun x => χ x • Hd x) 2 m ≤ ENNReal.ofReal M₂ * eLpNorm Hd 2 m := by
-      refine eLpNorm_le_of_norm_le m hM₂0 fun x => ?_
+      refine eLpNorm_le_of_norm_le m hM₂0 (hχ.continuous.smul hHdc).aestronglyMeasurable
+        fun x => ?_
       rw [norm_smul]
       exact mul_le_mul_of_nonneg_right (hM₂ x) (norm_nonneg _)
     have hcac := hcacc n k
@@ -914,8 +990,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
       _ ≤ K₀ * (eLpNorm P₁ 2 m + eLpNorm P₂ 2 m + eLpNorm P₃ 2 m) := by
           gcongr
           rw [hsum]
-          exact (eLpNorm_add_le (hP₁m.add hP₂m) hP₃m one_le_two).trans
-            (add_le_add_left (eLpNorm_add_le hP₁m hP₂m one_le_two) _)
+          exact (eLpNorm_add_le one_le_two).trans
+            (add_le_add_left (eLpNorm_add_le one_le_two) _)
       _ ≤ K₀ * (ENNReal.ofReal M₆ * eLpNorm d 2 m +
             ENNReal.ofReal C₄ * (3 * (ENNReal.ofReal M₁ * eLpNorm d 2 m) +
               2 * (ENNReal.ofReal M₂ * eLpNorm Hd 2 m)) +
@@ -962,10 +1038,10 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
     gcongr
     · have : v p.1 - v p.2 = (v p.1 - w) - (v p.2 - w) := by abel
       rw [this]
-      exact eLpNorm_sub_le ((hvL p.1).sub hwL).1 ((hvL p.2).sub hwL).1 one_le_two
+      exact eLpNorm_sub_le one_le_two
     · have : H p.1 - H p.2 = (H p.1 - G) - (H p.2 - G) := by abel
       rw [this]
-      exact eLpNorm_sub_le ((hHL p.1).sub hGL).1 ((hHL p.2).sub hGL).1 one_le_two
+      exact eLpNorm_sub_le one_le_two
   have hcauchy : CauchySeq fun n =>
       hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hmem n⟩ := by
     rw [cauchySeq_iff_tendsto_dist_atTop_0]
@@ -973,6 +1049,8 @@ theorem toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal
     have := (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp hBlim
     rw [ENNReal.toReal_zero] at this
     exact this
+
+  -- Use closedness to recover the original localized function in the domain.
   obtain ⟨b, hb⟩ := cauchySeq_tendsto_of_complete hcauchy
   -- convergence `[gₙ] → [χ u]` in `L²(ν)`
   have hgu : ∀ n x, gfun n x - χ x * u x = (χ x * ρinv x) * (v n - w) x := by

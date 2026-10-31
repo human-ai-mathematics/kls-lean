@@ -1,8 +1,13 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-!
 # Infinite-volume counterexample to metric BV complement symmetry
 -/
+
+@[expose] public section
 
 noncomputable section
 

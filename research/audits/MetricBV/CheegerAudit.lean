@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
+public import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for the equality of the half-mass and symmetric metric
 BV Cheeger constants, with its boundary regimes: mass exactly one half, mass in `(1/2, 1)`
@@ -8,6 +10,8 @@ dimension), conditional infinite-perimeter quotient checks for individual admiss
 for an all-infinite admissible family, an unbounded non-finite carrier and the closed intrinsic
 support. No infinite-perimeter set is constructed and no BV--Minkowski identification is
 stated. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

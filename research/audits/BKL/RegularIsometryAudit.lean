@@ -1,11 +1,14 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Isometry
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Translation
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isometry
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Translation
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: regular potentials under linear isometries (BKL Section 2)
 
-Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5. Clients: the Gaussian potential on
+Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2, p. 5. Clients: the Gaussian potential
+on
 `ℝ` transported to `ℝ¹` keeps the constants `1, 1`, its law, isotropy, normalizer and literature
 constant, and round-trips; a positive-dimensional Euclidean bound (hypothetical, not asserted) would
 transfer to the real law; a zero-dimensional potential moves between carriers in different universes
@@ -26,9 +29,10 @@ theorem gaussianRegular : KLS.RegularPotential (fun x : ℝ => ‖x‖ ^ 2 / 2) 
 
 /-- A real Gaussian potential is genuinely regular on the different Fin1 carrier with
 exactly the same lower and upper Hessian coefficients. -/
-theorem fin1_regular : KLS.RegularPotential
-    (fun y : EuclideanSpace ℝ (Fin 1) => ‖y‖ ^ 2 / 2) 1 1 := by
-  simpa only [LinearIsometryEquiv.norm_map] using KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates
+theorem fin1_regular :
+    KLS.RegularPotential (fun y : EuclideanSpace ℝ (Fin 1) => ‖y‖ ^ 2 / 2) 1 1 := by
+  simpa only [LinearIsometryEquiv.norm_map] using
+    KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates
 
 /-- A nonzero input point tests the actual transported potential. -/
 theorem fin1_nonzero_potential :
@@ -77,24 +81,31 @@ private theorem gaussian_isotropic : KLS.Isotropic gaussianRegular.law := by
 
 /-- Isotropy on Fin1 is actually derived from canonical Gaussian moments and the true
 law identity; it is not a supplied isotropic image-law hypothesis. -/
-theorem fin1_actual_isotropic : KLS.Isotropic (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates).law :=
-  KLS.RegularPotential.isotropic_comp_isometry gaussianRegular gaussian_isotropic realCoordinates
+theorem fin1_actual_isotropic :
+    KLS.Isotropic (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates).law :=
+  KLS.RegularPotential.isotropic_comp_isometry gaussianRegular gaussian_isotropic
+    realCoordinates
 
 /-- Moving back through the inverse gives the original probability law exactly. -/
 theorem fin1_law_roundtrip :
-    (KLS.RegularPotential.comp_isometry (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates) realCoordinates.symm).law =
+    (KLS.RegularPotential.comp_isometry
+          (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates)
+          realCoordinates.symm).law =
       gaussianRegular.law := by
   apply ProbabilityMeasure.toMeasure_injective
-  rw [KLS.RegularPotential.law_comp_isometry (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates) realCoordinates.symm,
+  rw [KLS.RegularPotential.law_comp_isometry
+      (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates) realCoordinates.symm,
     KLS.RegularPotential.law_comp_isometry gaussianRegular realCoordinates,
-    Measure.map_map realCoordinates.symm.continuous.measurable realCoordinates.continuous.measurable]
+    Measure.map_map realCoordinates.symm.continuous.measurable
+      realCoordinates.continuous.measurable]
   have heq : (⇑realCoordinates.symm ∘ ⇑realCoordinates) = id :=
     funext realCoordinates.symm_apply_apply
   rw [heq, Measure.map_id]
 
 /-- The actual intrinsic literature constant is unchanged between real and Fin1 carriers. -/
 theorem fin1_literature_constant :
-    Poincare.LocalSlope.Intrinsic.constant (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates).law =
+    Poincare.LocalSlope.Intrinsic.constant
+        (KLS.RegularPotential.comp_isometry gaussianRegular realCoordinates).law =
       Poincare.LocalSlope.Intrinsic.constant gaussianRegular.law :=
   KLS.RegularPotential.localSlope_constant_comp_isometry gaussianRegular realCoordinates
 
@@ -137,7 +148,9 @@ theorem zero_actual_law : (KLS.RegularPotential.comp_isometry zero_regular zeroC
 Euclidean bound premise. -/
 theorem zero_actual_constants :
     Poincare.LocalSlope.Intrinsic.constant zero_regular.law = 0 ∧
-      Poincare.LocalSlope.Intrinsic.constant (KLS.RegularPotential.comp_isometry zero_regular zeroCoordinates).law = 0 :=
+      Poincare.LocalSlope.Intrinsic.constant
+          (KLS.RegularPotential.comp_isometry zero_regular zeroCoordinates).law =
+        0 :=
   ⟨Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton _,
     Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton _⟩
 

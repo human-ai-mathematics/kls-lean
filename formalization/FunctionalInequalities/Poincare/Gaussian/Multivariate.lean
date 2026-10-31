@@ -1,7 +1,9 @@
-import FunctionalInequalities.Probability.Gaussian.CharacteristicFunction
-import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
-import FunctionalInequalities.Poincare.Gaussian.Real
-import Mathlib.Probability.Distributions.Gaussian.Multivariate
+module
+
+public import FunctionalInequalities.Probability.Gaussian.CharacteristicFunction
+public import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
+public import FunctionalInequalities.Poincare.Gaussian.Real
+public import Mathlib.Probability.Distributions.Gaussian.Multivariate
 
 /-!
 # Smooth-test Poincaré inequality for the standard multivariate Gaussian
@@ -9,6 +11,8 @@ import Mathlib.Probability.Distributions.Gaussian.Multivariate
 The standard Gaussian is the orthonormal image of the finite product of
 one-dimensional standard Gaussians. The empty product covers dimension zero.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

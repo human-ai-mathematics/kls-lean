@@ -1,0 +1,30 @@
+name = "kls-palomar"
+version = "0.1.0"
+defaultTargets = ["Challenge", "Solution"]
+
+# Contained Palomar submission project. The proof library and the OpenAI statement bridge are
+# path dependencies inside this repository, so one commit fixes the whole source closure.
+# Mathlib is required directly at the same tag pinned by ../../formalization.
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.35.0"
+
+[[require]]
+name = "functional-inequalities"
+path = "../../formalization"
+
+[[require]]
+name = "kls-openai-bridge"
+path = "../openai"
+
+# The Challenge carries the one deliberate `sorry`, so it is not built with warnings as errors.
+[[lean_lib]]
+name = "Challenge"
+roots = ["Challenge"]
+
+[[lean_lib]]
+name = "Solution"
+roots = ["Solution"]
+leanOptions = {warningAsError = true}

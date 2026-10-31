@@ -1,20 +1,27 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Affine
-import Mathlib.Probability.ConditionalProbability
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Analysis.Operator.InverseSqrt
-import Mathlib.Topology.UniformSpace.HeineCantor
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Affine
+public import Mathlib.Probability.ConditionalProbability
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Analysis.Operator.InverseSqrt
+public import Mathlib.Topology.UniformSpace.HeineCantor
 
 /-!
 # Log-concave laws conditioned on balls
 
-Conditioning a log-concave law on a closed ball and pushing it forward by an affine map stays in the regular
+Conditioning a log-concave law on a closed ball and pushing it forward by an affine map stays in the
+regular
 class used by the approximation step of Letwin's Lemma A.1.
 
 * `exists_regularClass_eq_image_of_cond_closedBall_map` (with `K` the affine image of the ball) and
   `exists_regularClass_of_cond_closedBall_map`.
-* `exists_whitening_tendsto_one_tendsto_moments`: whitening maps `x ↦ L k (x − c k)` with `L k → 1`, `c k → 0`
-  preserving moment convergence; `tendsto_integral_comp_affine_sub` controls such near-identity perturbations.
+* `exists_whitening_tendsto_one_tendsto_moments`: whitening maps `x ↦ L k (x − c k)` with `L k → 1`,
+  `c k → 0`
+  preserving moment convergence; `tendsto_integral_comp_affine_sub` controls such near-identity
+  perturbations.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -32,8 +39,8 @@ private theorem letwin_cond_map_equiv
     Set.preimage_image_eq S e.injective
   have hm : (μ.map e) (e '' S) = μ S := by
     rw [Measure.map_apply e.measurable (e.measurableSet_image.mpr hS), hpre]
-  rw [ProbabilityTheory.cond, Measure.map_smul, ProbabilityTheory.cond, hm,
-    e.measurableEmbedding.restrict_map, hpre]
+  rw [ProbabilityTheory.cond, Measure.map_smul _ e.measurable.aemeasurable,
+    ProbabilityTheory.cond, hm, e.measurableEmbedding.restrict_map, hpre]
 
 section InnerProduct
 
@@ -95,18 +102,27 @@ private theorem letwin_convex_sub_quadratic
     nlinarith
   simpa only [neg_div, neg_mul, ← sub_eq_add_neg] using hc
 
-/-- **Ball-conditioned, affinely transported regular laws lie in Letwin's class** (Letwin Lemma A.1):
+/--
+**Ball-conditioned, affinely transported regular laws lie in Letwin's class** (Letwin Lemma A.1):
 conditioning the law of a regular potential `V` on `closedBall 0 R` (`R > 0`) and pushing forward by
-`x ↦ L (x − c)` gives `1_K e^{−W} dx` with `K = L (closedBall 0 R − c)` compact convex with nonempty interior and `W`
+`x ↦ L (x − c)` gives `1_K e^{−W} dx` with `K = L (closedBall 0 R − c)` compact convex with nonempty
+interior and `W`
 smooth and uniformly convex. -/
-theorem exists_regularClass_eq_image_of_cond_closedBall_map [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] {V : E → ℝ} {a b : ℝ} (hV : RegularPotential V a b) {R : ℝ} (hR : 0 < R)
-    (L : E ≃L[ℝ] E) (c : E) :
-    ∃ (K : Set E) (W : E → ℝ) (κ : ℝ), K = (fun x => L (x - c)) '' closedBall (0 : E) R ∧
-      0 < κ ∧ IsCompact K ∧ Convex ℝ K ∧ (interior K).Nonempty ∧
-      ContDiff ℝ ∞ W ∧ ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) ∧
-      (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map (fun x => L (x - c)) =
-        (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
+theorem exists_regularClass_eq_image_of_cond_closedBall_map [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] {V : E → ℝ} {a b : ℝ} (hV : RegularPotential V a b)
+    {R : ℝ} (hR : 0 < R) (L : E ≃L[ℝ] E) (c : E) :
+    ∃ (K : Set E) (W : E → ℝ) (κ : ℝ),
+      K = (fun x => L (x - c)) '' closedBall (0 : E) R ∧
+        0 < κ ∧
+          IsCompact K ∧
+            Convex ℝ K ∧
+              (interior K).Nonempty ∧
+                ContDiff ℝ ∞ W ∧
+                  ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) ∧
+                    (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map
+                        (fun x => L (x - c)) =
+                      (volume : Measure E).withDensity
+                        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
   let H : E ≃ₜ E := (Homeomorph.addRight (-c)).trans L.toHomeomorph
   let e : E ≃ᵐ E := H.toMeasurableEquiv
   let K : Set E := e '' closedBall (0 : E) R
@@ -118,10 +134,8 @@ theorem exists_regularClass_eq_image_of_cond_closedBall_map [FiniteDimensional �
     change IsCompact (H '' closedBall (0 : E) R)
     exact (isCompact_closedBall (0 : E) R).image H.continuous
   have hKconvex : Convex ℝ K := by
-    have heq :
-        K = L '' ((fun x => -c + x) '' closedBall (0 : E) R) := by
-      change e '' closedBall (0 : E) R =
-        L '' ((fun x => -c + x) '' closedBall (0 : E) R)
+    have heq : K = L '' ((fun x => -c + x) '' closedBall (0 : E) R) := by
+      change e '' closedBall (0 : E) R = L '' ((fun x => -c + x) '' closedBall (0 : E) R)
       rw [Set.image_image]
       congr 1
       funext x
@@ -129,23 +143,21 @@ theorem exists_regularClass_eq_image_of_cond_closedBall_map [FiniteDimensional �
       change L (x - c) = L (-c + x)
       rw [sub_eq_add_neg, add_comm]
     rw [heq]
-    exact ((convex_closedBall (0 : E) R).translate (-c)).linear_image
-      (L : E →ₗ[ℝ] E)
+    exact ((convex_closedBall (0 : E) R).translate (-c)).linear_image (L : E →ₗ[ℝ] E)
   have hKinterior : (interior K).Nonempty := by
     change (interior (H '' closedBall (0 : E) R)).Nonempty
     rw [← H.image_interior]
-    exact ⟨H 0, Set.mem_image_of_mem H
-      (mem_interior_iff_mem_nhds.mpr (closedBall_mem_nhds (0 : E) hR))⟩
+    exact
+      ⟨H 0,
+        Set.mem_image_of_mem H (mem_interior_iff_mem_nhds.mpr (closedBall_mem_nhds (0 : E) hR))⟩
   have hKmeas : MeasurableSet K := hKcompact.isClosed.measurableSet
   let U : E → ℝ := fun y => V (L.symm y + c)
   let κ : ℝ := RegularPotential.affineLowerConstant a L.symm
-  have hU : RegularPotential U κ
-      (RegularPotential.affineUpperConstant b L.symm) :=
+  have hU : RegularPotential U κ (RegularPotential.affineUpperConstant b L.symm) :=
     hV.comp_affine L.symm c
   have hmap : (hV.law : Measure E).map e = (hU.law : Measure E) := by
     rw [he]
-    simpa only [ContinuousLinearEquiv.symm_symm] using
-      (hV.law_comp_affine L.symm c).symm
+    simpa only [ContinuousLinearEquiv.symm_symm] using (hV.law_comp_affine L.symm c).symm
   have hK0 : (hU.law : Measure E) K ≠ 0 := by
     obtain ⟨y, hy⟩ := hKinterior
     have hpos : 0 < (volume : Measure E) K :=
@@ -153,20 +165,15 @@ theorem exists_regularClass_eq_image_of_cond_closedBall_map [FiniteDimensional �
     intro hz
     exact (ne_of_gt hpos) (absolutelyContinuous_tilted hU.integrable_exp_neg hz)
   let d : ℝ :=
-    Real.log
-      ((∫ y, Real.exp (-U y) ∂(volume : Measure E)) *
-        ((hU.law : Measure E) K).toReal)
+    Real.log ((∫ y, Real.exp (-U y) ∂(volume : Measure E)) * ((hU.law : Measure E) K).toReal)
   let W : E → ℝ := fun y => U y + d
   have hW : ContDiff ℝ ∞ W := hU.temperate.1.add contDiff_const
   have hconv : ConvexOn ℝ univ (fun y => U y - (κ / 2) * ‖y‖ ^ 2) :=
-    letwin_convex_sub_quadratic
-      (hU.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hU.lower
+    letwin_convex_sub_quadratic (hU.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hU.lower
   have hWconv : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) := by
     have hh := hconv.add_const d
     change ConvexOn ℝ univ (fun y => (U y - (κ / 2) * ‖y‖ ^ 2) + d) at hh
-    have heq :
-        (fun y => W y - (κ / 2) * ‖y‖ ^ 2) =
-          (fun y => (U y - (κ / 2) * ‖y‖ ^ 2) + d) := by
+    have heq : (fun y => W y - (κ / 2) * ‖y‖ ^ 2) = (fun y => (U y - (κ / 2) * ‖y‖ ^ 2) + d) := by
       funext y
       dsimp only [W]
       ring
@@ -175,28 +182,38 @@ theorem exists_regularClass_eq_image_of_cond_closedBall_map [FiniteDimensional �
   refine ⟨K, W, κ, by rw [← he], hU.pos, hKcompact, hKconvex, hKinterior, hW, hWconv, ?_⟩
   calc
     (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map
-        (fun x => L (x - c)) =
-      (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map e := by
-        rw [he]
+          (fun x => L (x - c)) =
+        (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map e := by
+      rw [he]
     _ = ProbabilityTheory.cond ((hV.law : Measure E).map e) K :=
-      letwin_cond_map_equiv (hV.law : Measure E) e
-        (closedBall (0 : E) R) measurableSet_closedBall
+      letwin_cond_map_equiv (hV.law : Measure E) e (closedBall (0 : E) R)
+        measurableSet_closedBall
     _ = ProbabilityTheory.cond (hU.law : Measure E) K := by rw [hmap]
-    _ = (volume : Measure E).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) :=
+    _ =
+        (volume : Measure E).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) :=
       letwin_cond_density hU K hKmeas hK0
 
-/-- **Ball-conditioned, affinely transported regular laws lie in Letwin's class** (Letwin Lemma A.1):
+/--
+**Ball-conditioned, affinely transported regular laws lie in Letwin's class** (Letwin Lemma A.1):
 conditioning the law of a regular potential `V` on `closedBall 0 R` (`R > 0`) and pushing forward by
-`x ↦ L (x − c)` gives `1_K e^{−W} dx` with `K` compact convex with nonempty interior and `W` smooth and uniformly
+`x ↦ L (x − c)` gives `1_K e^{−W} dx` with `K` compact convex with nonempty interior and `W` smooth
+and uniformly
 convex. -/
-theorem exists_regularClass_of_cond_closedBall_map [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {V : E → ℝ} {a b : ℝ} (hV : RegularPotential V a b) {R : ℝ} (hR : 0 < R) (L : E ≃L[ℝ] E)
-    (c : E) :
-    ∃ (K : Set E) (W : E → ℝ) (κ : ℝ), 0 < κ ∧ IsCompact K ∧ Convex ℝ K ∧ (interior K).Nonempty ∧
-      ContDiff ℝ ∞ W ∧ ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) ∧
-      (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map (fun x => L (x - c)) =
-        (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
+theorem exists_regularClass_of_cond_closedBall_map [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] {V : E → ℝ} {a b : ℝ} (hV : RegularPotential V a b) {R : ℝ} (hR : 0 < R)
+    (L : E ≃L[ℝ] E) (c : E) :
+    ∃ (K : Set E) (W : E → ℝ) (κ : ℝ),
+      0 < κ ∧
+        IsCompact K ∧
+          Convex ℝ K ∧
+            (interior K).Nonempty ∧
+              ContDiff ℝ ∞ W ∧
+                ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2) ∧
+                  (ProbabilityTheory.cond (hV.law : Measure E) (closedBall (0 : E) R)).map
+                      (fun x => L (x - c)) =
+                    (volume : Measure E).withDensity
+                      (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) := by
   obtain ⟨K, W, κ, -, h⟩ := exists_regularClass_eq_image_of_cond_closedBall_map hV hR L c
   exact ⟨K, W, κ, h⟩
 
@@ -209,7 +226,8 @@ section WhiteningMoments
 open MeasureTheory Set Metric Filter
 open scoped Topology RealInnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
-/-! Whitening maps of laws with converging second moments converge to the identity and preserve moment convergence (Letwin Lemma A.1 approximation). -/
+/-! Whitening maps of laws with converging second moments converge to the identity and preserve
+moment convergence (Letwin Lemma A.1 approximation). -/
 
 namespace FunctionalInequalities.KLS
 
@@ -243,23 +261,22 @@ private lemma memLp_two_of_ball_support
     continuous_id.aestronglyMeasurable).2
   exact integrable_of_ball_support ν hs (by fun_prop)
 
-/-- **Near-identity affine perturbations of laws on a fixed ball.** If the laws `λ k` are all carried by
-`closedBall 0 R`, `A k → 1` and `c k → 0`, then for continuous `f` the integrals of `f ∘ (x ↦ A k (x − c k))` and of `f`
-against `λ k` differ by `o(1)`: uniform convergence on the compact ball gives a bound independent of the law. -/
-theorem tendsto_integral_comp_affine_sub
-    {lam : ℕ → ProbabilityMeasure E} {R : ℝ}
-    (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
-    {A : ℕ → E →L[ℝ] E} {c : ℕ → E}
-    (hA : Tendsto A atTop (𝓝 1)) (hc : Tendsto c atTop (𝓝 0))
-    {f : E → ℝ} (hf : Continuous f) :
+/--
+**Near-identity affine perturbations of laws on a fixed ball.** If the laws `λ k` are all carried by
+`closedBall 0 R`, `A k → 1` and `c k → 0`, then for continuous `f` the integrals of `f ∘ (x ↦ A k (x
+− c k))` and of `f`
+against `λ k` differ by `o(1)`: uniform convergence on the compact ball gives a bound independent of
+the law. -/
+theorem tendsto_integral_comp_affine_sub {lam : ℕ → ProbabilityMeasure E} {R : ℝ}
+    (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0) {A : ℕ → E →L[ℝ] E}
+    {c : ℕ → E} (hA : Tendsto A atTop (𝓝 1)) (hc : Tendsto c atTop (𝓝 0)) {f : E → ℝ}
+    (hf : Continuous f) :
     Tendsto
-      (fun k => (∫ x, f (A k (x - c k)) ∂(lam k : Measure E)) -
-        ∫ x, f x ∂(lam k : Measure E))
+      (fun k => (∫ x, f (A k (x - c k)) ∂(lam k : Measure E)) - ∫ x, f x ∂(lam k : Measure E))
       atTop (𝓝 0) := by
   let : CompactSpace (closedBall (0 : E) R) :=
     isCompact_iff_compactSpace.mp (isCompact_closedBall (0 : E) R)
-  let F : ((E →L[ℝ] E) × E) → closedBall (0 : E) R → ℝ :=
-    fun p x => f (p.1 ((x : E) - p.2))
+  let F : ((E →L[ℝ] E) × E) → closedBall (0 : E) R → ℝ := fun p x => f (p.1 ((x : E) - p.2))
   have hF : Continuous ↿F := by
     dsimp only [F]
     exact hf.comp (by fun_prop)
@@ -267,13 +284,12 @@ theorem tendsto_integral_comp_affine_sub
   have hp := hA.prodMk_nhds hc
   apply Metric.tendsto_nhds.mpr
   intro ε hε
-  have he := hp.eventually
-    ((Metric.tendstoUniformly_iff.mp hu) (ε / 2) (half_pos hε))
+  have he := hp.eventually ((Metric.tendstoUniformly_iff.mp hu) (ε / 2) (half_pos hε))
   filter_upwards [he] with k hk
-  have hb : ∀ᵐ x ∂(lam k : Measure E),
-      ‖f (A k (x - c k)) - f x‖ ≤ ε / 2 := by
-    filter_upwards [show ∀ᵐ x ∂(lam k : Measure E),
-        x ∈ closedBall (0 : E) R from ae_iff.mpr (hsupp k)] with x hx
+  have hb : ∀ᵐ x ∂(lam k : Measure E), ‖f (A k (x - c k)) - f x‖ ≤ ε / 2 := by
+    filter_upwards [show ∀ᵐ x ∂(lam k : Measure E), x ∈ closedBall (0 : E) R from
+        ae_iff.mpr (hsupp k)] with
+      x hx
     have hh := hk ⟨x, hx⟩
     have hh' : dist (f x) (f (A k (x - c k))) < ε / 2 := by
       simpa only [F, sub_zero, one_apply_eq_self] using hh
@@ -281,8 +297,7 @@ theorem tendsto_integral_comp_affine_sub
     exact hh'.le
   have hi : Integrable (fun x => f (A k (x - c k))) (lam k : Measure E) :=
     integrable_of_ball_support (lam k) (hsupp k) (hf.comp (by fun_prop))
-  have hj : Integrable f (lam k : Measure E) :=
-    integrable_of_ball_support (lam k) (hsupp k) hf
+  have hj : Integrable f (lam k : Measure E) := integrable_of_ball_support (lam k) (hsupp k) hf
   have hb' := norm_integral_le_of_norm_le_const hb
   rw [integral_sub hi hj, probReal_univ, mul_one] at hb'
   rw [dist_zero_right]
@@ -463,7 +478,7 @@ private lemma whitening_sequence (C : ℕ → E →L[ℝ] E)
         (fun k => Analysis.inverseSqrt (C k)) := by
     filter_upwards [hu] with k hk
     dsimp only [L]
-    rw [dif_pos hk]
+    rw [dite_eq_left hk]
     change
       (↑(Analysis.inverseSqrtIn_isUnit b (C k) (hpos k) hk).unit :
         E →L[ℝ] E) = Analysis.inverseSqrt (C k)
@@ -474,35 +489,43 @@ private lemma whitening_sequence (C : ℕ → E →L[ℝ] E)
   exact ⟨Analysis.inverseSqrtIn_isSelfAdjoint b (C k),
     Analysis.inverseSqrt_mul_mul_inverseSqrt (C k) (hpos k) hk⟩
 
-/-- **Whitening preserves convergence of low moments** (Letwin Lemma A.1 approximation): if the laws
-`λ k`, all carried by a fixed ball, have mixed moments of degree `≤ 4` converging to those of an isotropic `μ`, then
-there are affine maps `x ↦ L k (x − c k)` with `L k → 1` and `c k → 0` that make `λ k` isotropic for large `k` (mean
+/--
+**Whitening preserves convergence of low moments** (Letwin Lemma A.1 approximation): if the laws
+`λ k`, all carried by a fixed ball, have mixed moments of degree `≤ 4` converging to those of an
+isotropic `μ`, then
+there are affine maps `x ↦ L k (x − c k)` with `L k → 1` and `c k → 0` that make `λ k` isotropic for
+large `k` (mean
 zero, identity second moments) and keep the convergence of the moments of degree `≤ 4`. -/
 theorem exists_whitening_tendsto_one_tendsto_moments [MeasurableSpace E] [BorelSpace E]
     {lam : ℕ → ProbabilityMeasure E} {μ : ProbabilityMeasure E} (hiso : Isotropic μ) {R : ℝ}
     (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
     (hμsupp : (μ : Measure E) (closedBall (0 : E) R)ᶜ = 0)
-    (hmom : ∀ d : ℕ, d ≤ 4 → ∀ v : Fin d → E,
-      Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(lam k : Measure E)) atTop
-        (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E)))) :
+    (hmom :
+      ∀ d : ℕ,
+        d ≤ 4 →
+          ∀ v : Fin d → E,
+            Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(lam k : Measure E)) atTop
+              (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E)))) :
     ∃ (L : ℕ → E ≃L[ℝ] E) (c : ℕ → E),
-      Tendsto (fun k => (L k : E →L[ℝ] E)) atTop (𝓝 1) ∧ Tendsto c atTop (𝓝 0) ∧
-      (∀ᶠ k in atTop, ∫ x, L k (x - c k) ∂(lam k : Measure E) = 0 ∧
-        ∀ u v : E, ∫ x, ⟪u, L k (x - c k)⟫ * ⟪v, L k (x - c k)⟫ ∂(lam k : Measure E) = ⟪u, v⟫) ∧
-      ∀ d : ℕ, d ≤ 4 → ∀ v : Fin d → E,
-        Tendsto (fun k => ∫ x, ∏ i, ⟪v i, L k (x - c k)⟫ ∂(lam k : Measure E)) atTop
-          (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E))) := by
+      Tendsto (fun k => (L k : E →L[ℝ] E)) atTop (𝓝 1) ∧
+        Tendsto c atTop (𝓝 0) ∧
+          (∀ᶠ k in atTop,
+              ∫ x, L k (x - c k) ∂(lam k : Measure E) = 0 ∧
+                ∀ u v : E,
+                  ∫ x, ⟪u, L k (x - c k)⟫ * ⟪v, L k (x - c k)⟫ ∂(lam k : Measure E) = ⟪u, v⟫) ∧
+            ∀ d : ℕ,
+              d ≤ 4 →
+                ∀ v : Fin d → E,
+                  Tendsto (fun k => ∫ x, ∏ i, ⟪v i, L k (x - c k)⟫ ∂(lam k : Measure E)) atTop
+                    (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E))) := by
   classical
   have hiso : Isotropic μ :=
     ⟨memLp_two_of_ball_support μ hμsupp, hiso.mean_zero, hiso.covariance_identity⟩
   let m : ℕ → E := fun k => ∫ x, x ∂(lam k : Measure E)
   let C : ℕ → E →L[ℝ] E := fun k => Covariance.operator (lam k : Measure E)
-  have hm : Tendsto m atTop (𝓝 0) :=
-    mean_tendsto_zero hiso hsupp hmom
-  have hC : Tendsto C atTop (𝓝 1) :=
-    covariance_tendsto_one hiso hsupp hmom
-  obtain ⟨L, hL, hwhite⟩ :=
-    whitening_sequence C (fun k => covariance_positive (lam k)) hC
+  have hm : Tendsto m atTop (𝓝 0) := mean_tendsto_zero hiso hsupp hmom
+  have hC : Tendsto C atTop (𝓝 1) := covariance_tendsto_one hiso hsupp hmom
+  obtain ⟨L, hL, hwhite⟩ := whitening_sequence C (fun k => covariance_positive (lam k)) hC
   refine ⟨L, m, hL, hm, ?_, ?_⟩
   · filter_upwards [hwhite] with k hk
     let W := (L k).toContinuousLinearMap
@@ -516,51 +539,57 @@ theorem exists_whitening_tendsto_one_tendsto_moments [MeasurableSpace E] [BorelS
       have hsub : Integrable (fun x : E => x - m k) (lam k : Measure E) :=
         integrable_of_ball_support (lam k) (hsupp k) (by fun_prop)
       have hcomm :
-          (∫ x, W (x - m k) ∂(lam k : Measure E)) =
-            W (∫ x, x - m k ∂(lam k : Measure E)) :=
+        (∫ x, W (x - m k) ∂(lam k : Measure E)) = W (∫ x, x - m k ∂(lam k : Measure E)) :=
         W.integral_comp_comm hsub
       rw [hcomm, integral_sub hi (integrable_const (m k))]
       simp only [integral_const, probReal_univ, one_smul]
       change W (m k - m k) = 0
       rw [sub_self, map_zero]
     · intro u v
-      change (∫ x, ⟪u, W (x - m k)⟫ * ⟪v, W (x - m k)⟫
-        ∂(lam k : Measure E)) = ⟪u, v⟫
+      change (∫ x, ⟪u, W (x - m k)⟫ * ⟪v, W (x - m k)⟫ ∂(lam k : Measure E)) = ⟪u, v⟫
       calc
         _ = ProbabilityTheory.covarianceBilin (lam k : Measure E) (W u) (W v) := by
           simp_rw [← W.adjoint_inner_left, hsa.adjoint_eq]
           exact (ProbabilityTheory.covarianceBilin_apply htwo (W u) (W v)).symm
-        _ = ⟪C k (W u), W v⟫ :=
-          (Covariance.operator_inner (lam k : Measure E) (W u) (W v)).symm
-        _ = ⟪W (C k (W u)), v⟫ := by
-          rw [← W.adjoint_inner_right, hsa.adjoint_eq]
+        _ = ⟪C k (W u), W v⟫ := (Covariance.operator_inner (lam k : Measure E) (W u) (W v)).symm
+        _ = ⟪W (C k (W u)), v⟫ := by rw [← W.adjoint_inner_right, hsa.adjoint_eq]
         _ = ⟪u, v⟫ := by
           have hh := congrArg (fun T : E →L[ℝ] E => T u) hsand
           change W (C k (W u)) = u at hh
           rw [hh]
   · intro d hd v
-    have hp := tendsto_integral_comp_affine_sub hsupp hL hm
-      (f := fun x => ∏ i, ⟪v i, x⟫) (by fun_prop)
+    have hp :=
+      tendsto_integral_comp_affine_sub hsupp hL hm (f := fun x => ∏ i, ⟪v i, x⟫) (by fun_prop)
     have hr := hmom d hd v
     simpa only [sub_add_cancel, zero_add, ContinuousLinearEquiv.coe_coe] using hp.add hr
 
-/-- **Whitening preserves convergence of low moments** (Letwin Lemma A.1 approximation): if the laws
-`λ k`, all carried by a fixed ball, have mixed moments of degree `≤ 4` converging to those of an isotropic `μ`, then
-there are affine maps `x ↦ L k (x − c k)` that make `λ k` isotropic for large `k` (mean zero, identity second
+/--
+**Whitening preserves convergence of low moments** (Letwin Lemma A.1 approximation): if the laws
+`λ k`, all carried by a fixed ball, have mixed moments of degree `≤ 4` converging to those of an
+isotropic `μ`, then
+there are affine maps `x ↦ L k (x − c k)` that make `λ k` isotropic for large `k` (mean zero,
+identity second
 moments) and keep the convergence of the moments of degree `≤ 4`. -/
-theorem exists_whitening_tendsto_moments [MeasurableSpace E] [BorelSpace E] {lam : ℕ → ProbabilityMeasure E}
-    {μ : ProbabilityMeasure E} (hiso : Isotropic μ) {R : ℝ}
+theorem exists_whitening_tendsto_moments [MeasurableSpace E] [BorelSpace E]
+    {lam : ℕ → ProbabilityMeasure E} {μ : ProbabilityMeasure E} (hiso : Isotropic μ) {R : ℝ}
     (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
     (hμsupp : (μ : Measure E) (closedBall (0 : E) R)ᶜ = 0)
-    (hmom : ∀ d : ℕ, d ≤ 4 → ∀ v : Fin d → E,
-      Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(lam k : Measure E)) atTop
-        (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E)))) :
+    (hmom :
+      ∀ d : ℕ,
+        d ≤ 4 →
+          ∀ v : Fin d → E,
+            Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(lam k : Measure E)) atTop
+              (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E)))) :
     ∃ (L : ℕ → E ≃L[ℝ] E) (c : ℕ → E),
-      (∀ᶠ k in atTop, ∫ x, L k (x - c k) ∂(lam k : Measure E) = 0 ∧
-        ∀ u v : E, ∫ x, ⟪u, L k (x - c k)⟫ * ⟪v, L k (x - c k)⟫ ∂(lam k : Measure E) = ⟪u, v⟫) ∧
-      ∀ d : ℕ, d ≤ 4 → ∀ v : Fin d → E,
-        Tendsto (fun k => ∫ x, ∏ i, ⟪v i, L k (x - c k)⟫ ∂(lam k : Measure E)) atTop
-          (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E))) := by
+      (∀ᶠ k in atTop,
+          ∫ x, L k (x - c k) ∂(lam k : Measure E) = 0 ∧
+            ∀ u v : E,
+              ∫ x, ⟪u, L k (x - c k)⟫ * ⟪v, L k (x - c k)⟫ ∂(lam k : Measure E) = ⟪u, v⟫) ∧
+        ∀ d : ℕ,
+          d ≤ 4 →
+            ∀ v : Fin d → E,
+              Tendsto (fun k => ∫ x, ∏ i, ⟪v i, L k (x - c k)⟫ ∂(lam k : Measure E)) atTop
+                (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(μ : Measure E))) := by
   obtain ⟨L, c, -, -, h⟩ := exists_whitening_tendsto_one_tendsto_moments hiso hsupp hμsupp hmom
   exact ⟨L, c, h⟩
 

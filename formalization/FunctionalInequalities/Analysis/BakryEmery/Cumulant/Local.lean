@@ -1,29 +1,35 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
-import FunctionalInequalities.Analysis.Tensor.BasisChange
-import FunctionalInequalities.Probability.Covariance.Basic
-import FunctionalInequalities.Probability.Covariance.Positivity
-import Mathlib.Probability.Moments.IntegrableExpMul
-import Mathlib.MeasureTheory.Measure.Support
-import Mathlib.Analysis.InnerProductSpace.Dual
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import FunctionalInequalities.Analysis.IteratedDerivative.GradientJet
-import FunctionalInequalities.Analysis.IteratedDerivative.Symmetry
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
+public import FunctionalInequalities.Analysis.Tensor.BasisChange
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import FunctionalInequalities.Probability.Covariance.Positivity
+public import Mathlib.Probability.Moments.IntegrableExpMul
+public import Mathlib.MeasureTheory.Measure.Support
+public import Mathlib.Analysis.InnerProductSpace.Dual
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import FunctionalInequalities.Analysis.IteratedDerivative.GradientJet
+public import FunctionalInequalities.Analysis.IteratedDerivative.Symmetry
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Third cumulants from one exponential moment
 
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, Lemma 4.2, in its source scope: log-concavity guarantees
-some positive exponential radius (Borell) but not, in general, every exponential moment, so the third-cumulant
+some positive exponential radius (Borell) but not, in general, every exponential moment, so the
+third-cumulant
 identity and the Hilbert–Schmidt contraction bound are derived here from a single radius `r > 0`
 with `∫ e^{r‖x‖} dμ < ∞`: `κ₃(u,v,w) = ∫⟪u,x⟫⟪v,x⟫⟪w,x⟫` for centered `μ`, polynomial `L²`
 membership, and `∑_{jk} κ₃(u,e_j,e_k)² ≤ 8‖u‖²` under isotropy and the Letwin quadratic bound
-(contraction argument as in `Cumulant`, whose all-radii version keeps its own provenance); the second
+(contraction argument as in `Cumulant`, whose all-radii version keeps its own provenance); the
+second
 cumulant of any such law is the centered second moment, i.e. the covariance pairing. A law with
 compact support has every exponential moment. The log-concave adapter and the Eldan base case are
 in `KLS/BKL/LocalThirdCumulant.lean`.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 open scoped RealInnerProductSpace ContDiff
@@ -41,7 +47,8 @@ private theorem second_apply {f : E → ℝ} {x : E} (hf : ContDiffAt ℝ ∞ f 
   rw [(hf.differentiableAt_iteratedFDeriv (m := 1) (by norm_num)).iteratedFDeriv_succ_apply_left']
   simp only [iteratedFDeriv_one_apply, Fin.tail, Matrix.cons_val_zero, Matrix.cons_val_succ]
 
-/- Second derivative of a product at a point where one factor vanishes and the other has value one and
+/- Second derivative of a product at a point where one factor vanishes and the other has value one
+and
 zero derivative (localized version of the argument in `Cumulant`). -/
 private theorem second_mul {f g : E → ℝ} {x : E} (hf : ContDiffAt ℝ ∞ f x)
     (hg : ContDiffAt ℝ ∞ g x) (v w : E) (hf0 : f x = 0) (hg0 : g x = 1)
@@ -99,8 +106,10 @@ theorem inner_exp_weights {μ : Measure E} {r : ℝ}
       exact norm_inner_le_norm u x
     _ = ‖u‖ * (Real.exp (t * ‖x‖) * ‖x‖) := by ring
 
-/-- **Third cumulant of a centered law with one exponential moment**: if `∫ e^{r‖x‖} dμ < ∞` for some
-`r > 0` and `μ` is centered, then `κ₃(u, v, w) = ∫ ⟪u,x⟫⟪v,x⟫⟪w,x⟫ dμ` (no global exponential moments). -/
+/--
+**Third cumulant of a centered law with one exponential moment**: if `∫ e^{r‖x‖} dμ < ∞` for some
+`r > 0` and `μ` is centered, then `κ₃(u, v, w) = ∫ ⟪u,x⟫⟪v,x⟫⟪w,x⟫ dμ` (no global exponential
+moments). -/
 theorem cumulant_three_eq_integral_of_integrable_exp (μ : Measure E) [IsProbabilityMeasure μ]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0) (u v w : E) :
@@ -116,7 +125,8 @@ theorem cumulant_three_eq_integral_of_integrable_exp (μ : Measure E) [IsProbabi
       (hL.fderiv_right (m := ∞) (by simp))
   have hZ : ContDiffAt ℝ ∞ Z 0 :=
     (weighted_integral_contDiffOn μ measurable_const.aestronglyMeasurable
-      (norm_exp_weights hexp)).contDiffAt (Metric.ball_mem_nhds 0 hr)
+          (norm_exp_weights hexp)).contDiffAt
+      (Metric.ball_mem_nhds 0 hr)
   have hZ0 : Z 0 = 1 := by simp [Z]
   have hF0 : F 0 = 0 := by
     dsimp [F]
@@ -124,44 +134,46 @@ theorem cumulant_three_eq_integral_of_integrable_exp (μ : Measure E) [IsProbabi
     simpa [tiltAverage, expTilt] using hc w
   have hZ1 : fderiv ℝ Z 0 = 0 := by
     ext a
-    have h := iteratedFDeriv_weightedExp_integral_of_lt μ
-      (g := fun _ : E => (1 : ℝ)) measurable_const.aestronglyMeasurable
-      (norm_exp_weights hexp) 1 (0 : E) hz ![a]
+    have h :=
+      iteratedFDeriv_weightedExp_integral_of_lt μ (g := fun _ : E => (1 : ℝ))
+        measurable_const.aestronglyMeasurable (norm_exp_weights hexp) 1 (0 : E) hz ![a]
     have h' : fderiv ℝ Z 0 a = ∫ x, ⟪a, x⟫ ∂μ := by
       simpa [Z, iteratedFDeriv_one_apply, real_inner_comm] using h
     exact h'.trans (hc a)
   have hNZ : N =ᶠ[𝓝 0] (fun z => F z * Z z) := by
     filter_upwards [Metric.ball_mem_nhds (0 : E) hr] with z hzmem
     have hz' : ‖z‖ < r := by simpa using hzmem
-    have hi := integrable_exp_inner_smul_of_lt μ (g := fun _ : E => (1 : ℝ))
-      measurable_const.aestronglyMeasurable (norm_exp_weights hexp) hz'
+    have hi :=
+      integrable_exp_inner_smul_of_lt μ (g := fun _ : E => (1 : ℝ))
+        measurable_const.aestronglyMeasurable (norm_exp_weights hexp) hz'
     have hp : (∫ x, Real.exp ⟪z, x⟫ ∂μ) ≠ 0 :=
       (integral_exp_pos (by simpa only [smul_eq_mul, mul_one] using hi)).ne'
     dsimp [N, F, Z]
     rw [← tiltAverage_inner_eq_fderiv_logLaplace_of_lt μ hexp hz' w]
     rw [tiltAverage, expTilt, integral_tilted]
     simp only [smul_eq_mul, mul_one, div_eq_mul_inv]
-    rw [show (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * ⟪w, x⟫) =
-      (fun x => (Real.exp ⟪z, x⟫ * ⟪w, x⟫) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹) by
-        funext x; ring]
+    rw [show
+        (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * ⟪w, x⟫) =
+          (fun x => (Real.exp ⟪z, x⟫ * ⟪w, x⟫) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹)
+        by funext x; ring]
     rw [integral_mul_const]
     field_simp
   have hsecond := second_mul hF hZ u v hF0 hZ0 hZ1
-  have hm := iteratedFDeriv_weightedExp_integral_of_lt μ
-    (g := fun x => ⟪w, x⟫)
-    (by fun_prop : Continuous (fun x : E => ⟪w, x⟫)).aestronglyMeasurable
-    (inner_exp_weights hexp w) 2 (0 : E) hz ![u, v]
-  have hm' : iteratedFDeriv ℝ 2 N 0 ![u, v] =
-      ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
-    simpa [N, Fin.prod_univ_two, smul_eq_mul, real_inner_comm,
-      mul_comm, mul_left_comm, mul_assoc] using hm
+  have hm :=
+    iteratedFDeriv_weightedExp_integral_of_lt μ (g := fun x => ⟪w, x⟫)
+      (by fun_prop : Continuous (fun x : E => ⟪w, x⟫)).aestronglyMeasurable
+      (inner_exp_weights hexp w) 2 (0 : E) hz ![u, v]
+  have hm' : iteratedFDeriv ℝ 2 N 0 ![u, v] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ := by
+    simpa [N, Fin.prod_univ_two, smul_eq_mul, real_inner_comm, mul_comm, mul_left_comm,
+      mul_assoc] using hm
   have hNF : iteratedFDeriv ℝ 2 N 0 ![u, v] = iteratedFDeriv ℝ 2 F 0 ![u, v] := by
     rw [(hNZ.iteratedFDeriv ℝ 2).self_of_nhds]
     exact hsecond
-  have hcomm : iteratedFDeriv ℝ 2 F 0 ![u, v] =
-      iteratedFDeriv ℝ 2 (fderiv ℝ (logLaplace μ)) 0 ![u, v] w := by
-    have H := (ContinuousLinearMap.apply ℝ ℝ w).iteratedFDeriv_comp_left
-      (hL.fderiv_right (m := ∞) (by simp)) (i := 2) (by norm_cast)
+  have hcomm :
+    iteratedFDeriv ℝ 2 F 0 ![u, v] = iteratedFDeriv ℝ 2 (fderiv ℝ (logLaplace μ)) 0 ![u, v] w := by
+    have H :=
+      (ContinuousLinearMap.apply ℝ ℝ w).iteratedFDeriv_comp_left
+        (hL.fderiv_right (m := ∞) (by simp)) (i := 2) (by norm_cast)
     exact congrArg (fun T => T ![u, v]) H
   unfold cumulant
   rw [iteratedFDeriv_succ_apply_right]
@@ -175,25 +187,28 @@ theorem cumulant_three_eq_integral_of_integrable_exp (μ : Measure E) [IsProbabi
 section PolynomialMoments
 
 omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-private theorem norm_pow_integrable (μ : Measure E) [IsProbabilityMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (k : ℕ) :
+private theorem norm_pow_integrable (μ : Measure E) [IsProbabilityMeasure μ] {r : ℝ}
+    (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (k : ℕ) :
     Integrable (fun x => ‖x‖ ^ k) μ := by
   have hneg : Integrable (fun x => Real.exp (-r * ‖x‖)) μ := by
     refine (integrable_const (1 : ℝ)).mono' (by fun_prop) ?_
     filter_upwards [] with x
     rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-    exact Real.exp_le_one_iff.mpr (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr hr.le) (norm_nonneg _))
+    exact
+      Real.exp_le_one_iff.mpr
+        (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr hr.le) (norm_nonneg _))
   have h := ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul hr.ne' hexp hneg k
   simpa only [abs_norm] using h
 
-/-- A continuous function with a polynomial bound is in `L²(μ)` when `μ` has one exponential moment. -/
+/--
+A continuous function with a polynomial bound is in `L²(μ)` when `μ` has one exponential moment. -/
 theorem memLp_of_polynomial_bound_of_integrable_exp (μ : Measure E) [IsProbabilityMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ)
-    {g : E → ℝ} (hg : Continuous g) {C : ℝ} {k : ℕ}
-    (hb : ∀ x, ‖g x‖ ≤ C * (1 + ‖x‖) ^ k) : MemLp g 2 μ := by
+    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) {g : E → ℝ}
+    (hg : Continuous g) {C : ℝ} {k : ℕ} (hb : ∀ x, ‖g x‖ ≤ C * (1 + ‖x‖) ^ k) : MemLp g 2 μ := by
   apply (memLp_two_iff_integrable_sq hg.aestronglyMeasurable).2
-  have hi := ((integrable_const (1 : ℝ)).add (norm_pow_integrable μ hr hexp (k * 2))).const_mul
-    (C ^ 2 * 2 ^ (k * 2 - 1))
+  have hi :=
+    ((integrable_const (1 : ℝ)).add (norm_pow_integrable μ hr hexp (k * 2))).const_mul
+      (C ^ 2 * 2 ^ (k * 2 - 1))
   refine hi.mono' (hg.pow 2).aestronglyMeasurable ?_
   filter_upwards [] with x
   calc
@@ -235,33 +250,35 @@ private theorem memLp_inner_mul_of_local (μ : Measure E) [IsProbabilityMeasure 
 
 end ProjectionMoments
 
-/-- **BKL Lemma 4.2, local-moment form**: for a centered isotropic law with one exponential moment and
-the Letwin quadratic bound, `∑_{jk} κ₃(u, e_j, e_k)² ≤ 8‖u‖²` (the contraction argument of `Cumulant`,
+/--
+**BKL Lemma 4.2, local-moment form**: for a centered isotropic law with one exponential moment and
+the Letwin quadratic bound, `∑_{jk} κ₃(u, e_j, e_k)² ≤ 8‖u‖²` (the contraction argument of
+`Cumulant`,
 with all `L²` facts from the single radius). -/
-theorem sum_sq_cumulant_three_le_of_letwin_of_integrable_exp (μ : Measure E) [IsProbabilityMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
+theorem sum_sq_cumulant_three_le_of_letwin_of_integrable_exp (μ : Measure E)
+    [IsProbabilityMeasure μ] {r : ℝ} (hr : 0 < r)
+    (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
     (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫) (hL : LetwinQuadraticBound μ) (u : E) :
     ∑ j, ∑ k, cumulant μ 3 ![u, stdOrthonormalBasis ℝ E j, stdOrthonormalBasis ℝ E k] ^ 2 ≤
       8 * ‖u‖ ^ 2 := by
-  have hκ (v w : E) :
-      cumulant μ 3 ![u, v, w] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ :=
+  have hκ (v w : E) : cumulant μ 3 ![u, v, w] = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ * ⟪w, x⟫ ∂μ :=
     cumulant_three_eq_integral_of_integrable_exp μ hr hexp hc u v w
   simp_rw [hκ]
-  exact sum_sq_thirdMoment_le_of_letwin μ (memLp_inner_of_local μ hr hexp)
-    (memLp_inner_mul_of_local μ hr hexp) hc hiso hL u
+  exact
+    sum_sq_thirdMoment_le_of_letwin μ (memLp_inner_of_local μ hr hexp)
+      (memLp_inner_mul_of_local μ hr hexp) hc hiso hL u
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem sum_pair_eq_sum_tensor {m : ℕ}
-    (b : OrthonormalBasis (Fin m) ℝ E)
+private theorem sum_pair_eq_sum_tensor {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
     (T : ContinuousMultilinearMap ℝ (fun _ : Fin 2 => E) ℝ) :
     (∑ j, ∑ k, T ![b j, b k] ^ 2) =
       ∑ J : Fin 2 → Fin m, Analysis.Tensor.coordTensor b T J ^ 2 := by
   classical
-  calc
-    (∑ j, ∑ k, T ![b j, b k] ^ 2) =
-        ∑ q : Fin m × Fin m, T ![b q.1, b q.2] ^ 2 :=
+    calc
+    (∑ j, ∑ k, T ![b j, b k] ^ 2) = ∑ q : Fin m × Fin m, T ![b q.1, b q.2] ^ 2 :=
       (Fintype.sum_prod_type (fun q : Fin m × Fin m => T ![b q.1, b q.2] ^ 2)).symm
-    _ = ∑ q : Fin m × Fin m,
-        Analysis.Tensor.coordTensor b T ((finTwoArrowEquiv (Fin m)).symm q) ^ 2 := by
+    _ =
+        ∑ q : Fin m × Fin m,
+          Analysis.Tensor.coordTensor b T ((finTwoArrowEquiv (Fin m)).symm q) ^ 2 := by
       apply Finset.sum_congr rfl
       intro q _hq
       rw [Analysis.Tensor.coordTensor_apply, finTwoArrowEquiv_symm_apply]
@@ -269,26 +286,27 @@ private theorem sum_pair_eq_sum_tensor {m : ℕ}
         ext i
         fin_cases i <;> rfl
       rw [heq]
-    _ = _ := (finTwoArrowEquiv (Fin m)).symm.sum_comp
-      (fun J => Analysis.Tensor.coordTensor b T J ^ 2)
+    _ = _ :=
+      (finTwoArrowEquiv (Fin m)).symm.sum_comp (fun J => Analysis.Tensor.coordTensor b T J ^ 2)
 
 /-- The same bound in any orthonormal basis (Hilbert–Schmidt norm is basis independent). -/
-theorem sum_sq_cumulant_three_le_of_letwin_of_integrable_exp_basis (μ : Measure E) [IsProbabilityMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ)
-    (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
-    (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫)
-    (hL : LetwinQuadraticBound μ) {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (u : E) :
+theorem sum_sq_cumulant_three_le_of_letwin_of_integrable_exp_basis (μ : Measure E)
+    [IsProbabilityMeasure μ] {r : ℝ} (hr : 0 < r)
+    (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
+    (hiso : ∀ v w : E, ∫ x, ⟪v, x⟫ * ⟪w, x⟫ ∂μ = ⟪v, w⟫) (hL : LetwinQuadraticBound μ) {m : ℕ}
+    (b : OrthonormalBasis (Fin m) ℝ E) (u : E) :
     ∑ j, ∑ k, cumulant μ 3 ![u, b j, b k] ^ 2 ≤ 8 * ‖u‖ ^ 2 := by
   have hcons (a b : E) : Fin.cons u ![a, b] = ![u, a, b] := by
     ext i
     fin_cases i <;> rfl
-  let T : ContinuousMultilinearMap ℝ (fun _ : Fin 2 => E) ℝ :=
-    (cumulant μ 3).curryLeft u
-  have hb : (∑ j, ∑ k, cumulant μ 3 ![u, b j, b k] ^ 2) =
+  let T : ContinuousMultilinearMap ℝ (fun _ : Fin 2 => E) ℝ := (cumulant μ 3).curryLeft u
+  have hb :
+    (∑ j, ∑ k, cumulant μ 3 ![u, b j, b k] ^ 2) =
       ∑ J : Fin 2 → Fin m, Analysis.Tensor.coordTensor b T J ^ 2 := by
-    simpa only [T, ContinuousMultilinearMap.curryLeft_apply, hcons] using sum_pair_eq_sum_tensor b T
-  have hs : (∑ j, ∑ k, cumulant μ 3
-      ![u, stdOrthonormalBasis ℝ E j, stdOrthonormalBasis ℝ E k] ^ 2) =
+    simpa only [T, ContinuousMultilinearMap.curryLeft_apply, hcons] using
+      sum_pair_eq_sum_tensor b T
+  have hs :
+    (∑ j, ∑ k, cumulant μ 3 ![u, stdOrthonormalBasis ℝ E j, stdOrthonormalBasis ℝ E k] ^ 2) =
       ∑ J : Fin 2 → Fin (Module.finrank ℝ E),
         Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E) T J ^ 2 := by
     simpa only [T, ContinuousMultilinearMap.curryLeft_apply, hcons] using
@@ -298,12 +316,14 @@ theorem sum_sq_cumulant_three_le_of_letwin_of_integrable_exp_basis (μ : Measure
 
 section SecondCumulant
 
-/-- **Second cumulant from one exponential moment**: for any probability law with `∫ e^{r‖x‖} dμ < ∞` for
+/--
+**Second cumulant from one exponential moment**: for any probability law with `∫ e^{r‖x‖} dμ < ∞`
+for
 some `r > 0` (no centering), `κ₂(u, v) = ∫⟪u,x⟫⟪v,x⟫ dμ − (∫⟪u,x⟫ dμ)(∫⟪v,x⟫ dμ)`. -/
-theorem cumulant_two_eq_centered_moment_of_integrable_exp (μ : Measure E) [IsProbabilityMeasure μ]
-    {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (u v : E) :
-    cumulant μ 2 ![u, v] =
-      (∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ) - (∫ x, ⟪u, x⟫ ∂μ) * (∫ x, ⟪v, x⟫ ∂μ) := by
+theorem cumulant_two_eq_centered_moment_of_integrable_exp (μ : Measure E)
+    [IsProbabilityMeasure μ] {r : ℝ} (hr : 0 < r)
+    (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (u v : E) :
+    cumulant μ 2 ![u, v] = (∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ) - (∫ x, ⟪u, x⟫ ∂μ) * (∫ x, ⟪v, x⟫ ∂μ) := by
   let Z : E → ℝ := fun z => ∫ x, Real.exp ⟪z, x⟫ • (1 : ℝ) ∂μ
   let N : E → ℝ := fun z => ∫ x, Real.exp ⟪z, x⟫ • ⟪v, x⟫ ∂μ
   let F : E → ℝ := fun z => fderiv ℝ (logLaplace μ) z v
@@ -315,37 +335,40 @@ theorem cumulant_two_eq_centered_moment_of_integrable_exp (μ : Measure E) [IsPr
       (hL.fderiv_right (m := ∞) (by simp))
   have hZ : ContDiffAt ℝ ∞ Z 0 :=
     (weighted_integral_contDiffOn μ measurable_const.aestronglyMeasurable
-      (norm_exp_weights hexp)).contDiffAt (Metric.ball_mem_nhds 0 hr)
+          (norm_exp_weights hexp)).contDiffAt
+      (Metric.ball_mem_nhds 0 hr)
   have hZ0 : Z 0 = 1 := by simp [Z]
   have hF0 : F 0 = ∫ x, ⟪v, x⟫ ∂μ := by
     dsimp [F]
     rw [← tiltAverage_inner_eq_fderiv_logLaplace_of_lt μ hexp hz v]
     simp [tiltAverage, expTilt]
   have hZ1 : fderiv ℝ Z 0 u = ∫ x, ⟪u, x⟫ ∂μ := by
-    have h := iteratedFDeriv_weightedExp_integral_of_lt μ
-      (g := fun _ : E => (1 : ℝ)) measurable_const.aestronglyMeasurable
-      (norm_exp_weights hexp) 1 (0 : E) hz ![u]
+    have h :=
+      iteratedFDeriv_weightedExp_integral_of_lt μ (g := fun _ : E => (1 : ℝ))
+        measurable_const.aestronglyMeasurable (norm_exp_weights hexp) 1 (0 : E) hz ![u]
     simpa [Z, iteratedFDeriv_one_apply, real_inner_comm] using h
   have hN1 : fderiv ℝ N 0 u = ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ := by
-    have h := iteratedFDeriv_weightedExp_integral_of_lt μ
-      (g := fun x => ⟪v, x⟫)
-      (by fun_prop : Continuous (fun x : E => ⟪v, x⟫)).aestronglyMeasurable
-      (inner_exp_weights hexp v) 1 (0 : E) hz ![u]
+    have h :=
+      iteratedFDeriv_weightedExp_integral_of_lt μ (g := fun x => ⟪v, x⟫)
+        (by fun_prop : Continuous (fun x : E => ⟪v, x⟫)).aestronglyMeasurable
+        (inner_exp_weights hexp v) 1 (0 : E) hz ![u]
     simpa [N, iteratedFDeriv_one_apply, smul_eq_mul, real_inner_comm] using h
   have hNZ : N =ᶠ[𝓝 0] (fun z => F z * Z z) := by
     filter_upwards [Metric.ball_mem_nhds (0 : E) hr] with z hzmem
     have hz' : ‖z‖ < r := by simpa using hzmem
-    have hi := integrable_exp_inner_smul_of_lt μ (g := fun _ : E => (1 : ℝ))
-      measurable_const.aestronglyMeasurable (norm_exp_weights hexp) hz'
+    have hi :=
+      integrable_exp_inner_smul_of_lt μ (g := fun _ : E => (1 : ℝ))
+        measurable_const.aestronglyMeasurable (norm_exp_weights hexp) hz'
     have hp : (∫ x, Real.exp ⟪z, x⟫ ∂μ) ≠ 0 :=
       (integral_exp_pos (by simpa only [smul_eq_mul, mul_one] using hi)).ne'
     dsimp [N, F, Z]
     rw [← tiltAverage_inner_eq_fderiv_logLaplace_of_lt μ hexp hz' v]
     rw [tiltAverage, expTilt, integral_tilted]
     simp only [smul_eq_mul, mul_one, div_eq_mul_inv]
-    rw [show (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * ⟪v, x⟫) =
-      (fun x => (Real.exp ⟪z, x⟫ * ⟪v, x⟫) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹) by
-        funext x; ring]
+    rw [show
+        (fun x => Real.exp ⟪z, x⟫ * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ * ⟪v, x⟫) =
+          (fun x => (Real.exp ⟪z, x⟫ * ⟪v, x⟫) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹)
+        by funext x; ring]
     rw [integral_mul_const]
     field_simp
   have hD := congrArg (fun L : E →L[ℝ] ℝ => L u) hNZ.fderiv_eq
@@ -425,13 +448,17 @@ end CompactSupport
 
 section GradientJets
 
-/-! BKL arXiv:2610.05474v1, p. 20, the sentence before (74): for `Λ = logLaplace μ` of a compactly supported law
+/-! BKL arXiv:2610.05474v1, p. 20, the sentence before (74): for `Λ = logLaplace μ` of a compactly
+supported law
 and `v(z) = ∇Λ(z) − ∇Λ(0)`, `v(0) = 0`, `Dv(0) = A` (the covariance) and, for every `r ≥ 1`,
-`Dʳv(0)[h] = cumulantVector μ (List.ofFn h)`, i.e. `⟪Dʳv(0)[h], w⟫ = κ_{r+1}(h, w)` (generic supports in
+`Dʳv(0)[h] = cumulantVector μ (List.ofFn h)`, i.e. `⟪Dʳv(0)[h], w⟫ = κ_{r+1}(h, w)` (generic
+supports in
 `Analysis/IteratedDerivative/GradientJet.lean`).
 -/
 
-/-- The Riesz vector of the last slot of the scalar cumulant of order `hs.length + 1`, the first slots being the
+/--
+The Riesz vector of the last slot of the scalar cumulant of order `hs.length + 1`, the first slots
+being the
 list `hs` (inherited order): `⟪cumulantVector μ hs, w⟫ = κ_{|hs|+1}(hs, w)`. -/
 noncomputable def cumulantVector (μ : Measure E) (hs : List E) : E :=
   (InnerProductSpace.toDual ℝ E).symm
@@ -445,80 +472,72 @@ theorem cumulantVector_inner (μ : Measure E) (hs : List E) (w : E) :
   rw [cumulantVector, InnerProductSpace.toDual_symm_apply,
     ContinuousMultilinearMap.curryRight_apply]
 
-/-- **CGF gradient at zero is the mean**: for a compactly supported probability law, `∇Λ(0) = ∫ x dμ`. -/
+/--
+**CGF gradient at zero is the mean**: for a compactly supported probability law, `∇Λ(0) = ∫ x dμ`.
+-/
 theorem gradient_logLaplace_zero_of_compact (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
     gradient (logLaplace (μ : Measure E)) 0 = ∫ x, x ∂(μ : Measure E) := by
-    have hexp :
-        ∀ r : ℝ, Integrable (fun x : E => Real.exp (r * ‖x‖)) (μ : Measure E) :=
-      compact_support_integrable_exp _ hc
-    have hid : Integrable (id : E → E) (μ : Measure E) := by
-      refine (hexp 1).mono' measurable_id.aestronglyMeasurable ?_
-      filter_upwards [] with x
-      have h :
-          ‖x‖ ≤ Real.exp ‖x‖ := by
-        calc
-          ‖x‖ ≤ ‖x‖ + 1 := by linarith [norm_nonneg x]
-          _ ≤ Real.exp ‖x‖ := Real.add_one_le_exp ‖x‖
-      simpa using h
-    apply ext_inner_right ℝ
-    intro v
-    rw [inner_gradient_left]
-    rw [fderiv_logLaplace_zero_apply (μ := (μ : Measure E)) (hexp := hexp) v]
-    rw [real_inner_comm v (∫ x, x ∂(μ : Measure E))]
-    simpa using integral_inner hid v
+  have hexp : ∀ r : ℝ, Integrable (fun x : E => Real.exp (r * ‖x‖)) (μ : Measure E) :=
+    compact_support_integrable_exp _ hc
+  have hid : Integrable (id : E → E) (μ : Measure E) := by
+    refine (hexp 1).mono' measurable_id.aestronglyMeasurable ?_
+    filter_upwards [] with x
+    have h : ‖x‖ ≤ Real.exp ‖x‖ := by
+      calc
+        ‖x‖ ≤ ‖x‖ + 1 := by linarith [norm_nonneg x]
+        _ ≤ Real.exp ‖x‖ := Real.add_one_le_exp ‖x‖
+    simpa using h
+  apply ext_inner_right ℝ
+  intro v
+  rw [inner_gradient_left]
+  rw [fderiv_logLaplace_zero_apply (μ := (μ : Measure E)) (hexp := hexp) v]
+  rw [real_inner_comm v (∫ x, x ∂(μ : Measure E))]
+  simpa using integral_inner hid v
 
-/-- **`Dv(0) = A`**: the derivative at zero of the centred CGF gradient is the covariance operator. -/
+/--
+**`Dv(0) = A`**: the derivative at zero of the centred CGF gradient is the covariance operator. -/
 theorem fderiv_centeredGradient_logLaplace_zero_of_compact (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
-    fderiv ℝ (fun z : E => gradient (logLaplace (μ : Measure E)) z -
-      gradient (logLaplace (μ : Measure E)) 0) 0 = Covariance.operator (μ : Measure E) := by
-    let Λ : E → ℝ := logLaplace (μ : Measure E)
-    have hΛ : ContDiff ℝ ∞ Λ := by
-      dsimp [Λ]
-      exact contDiff_logLaplace _ (compact_support_integrable_exp _ hc)
-    have hΛ' : ContDiff ℝ 1 (fderiv ℝ Λ) := by
-      apply hΛ.fderiv_right
-      exact WithTop.coe_le_coe.mpr le_top
-    have hfd : DifferentiableAt ℝ (fderiv ℝ Λ) 0 :=
-      (hΛ'.differentiable (by norm_num)).differentiableAt
-    let L : (E →L[ℝ] ℝ) →L[ℝ] E :=
-      (InnerProductSpace.toDual ℝ E).symm.toContinuousLinearMap
-    have hgrad : gradient Λ = fun x => L (fderiv ℝ Λ x) := by
-      funext x
-      rfl
-    have hg :
-        HasFDerivAt (fun x => L (fderiv ℝ Λ x))
-          (L.comp (fderiv ℝ (fderiv ℝ Λ) 0)) 0 := by
-      convert L.hasFDerivAt.comp 0 hfd.hasFDerivAt using 1
-      simp [Function.comp_def]
-    change
-      fderiv ℝ (fun z : E => gradient Λ z - gradient Λ 0) 0 =
-        Covariance.operator (μ : Measure E)
-    rw [fderiv_sub_const, hgrad, hg.fderiv]
-    apply ContinuousLinearMap.ext
-    intro u
-    apply ext_inner_right ℝ
-    intro w
-    change
-      ⟪(InnerProductSpace.toDual ℝ E).symm
-          ((fderiv ℝ (fderiv ℝ Λ) 0) u), w⟫ =
-        ⟪Covariance.operator (μ : Measure E) u, w⟫
-    rw [InnerProductSpace.toDual_symm_apply]
-    have hiter :
-        ((fderiv ℝ (fderiv ℝ Λ) 0) u) w =
-          iteratedFDeriv ℝ 2 Λ 0 ![u, w] := by
-      simpa using
-        (iteratedFDeriv_two_apply (𝕜 := ℝ) (f := Λ) (z := 0)
-          (m := ![u, w])).symm
-    rw [hiter]
-    change
-      cumulant (μ : Measure E) 2 ![u, w] =
-        ⟪Covariance.operator (μ : Measure E) u, w⟫
-    exact
-      cumulant_two_eq_covariance_of_integrable_exp
-        (μ := (μ : Measure E)) (hr := one_pos)
-        (compact_support_integrable_exp _ hc 1) u w
+    fderiv ℝ
+        (fun z : E =>
+          gradient (logLaplace (μ : Measure E)) z - gradient (logLaplace (μ : Measure E)) 0)
+        0 =
+      Covariance.operator (μ : Measure E) := by
+  let Λ : E → ℝ := logLaplace (μ : Measure E)
+  have hΛ : ContDiff ℝ ∞ Λ := by
+    dsimp [Λ]
+    exact contDiff_logLaplace _ (compact_support_integrable_exp _ hc)
+  have hΛ' : ContDiff ℝ 1 (fderiv ℝ Λ) := by
+    apply hΛ.fderiv_right
+    exact WithTop.coe_le_coe.mpr le_top
+  have hfd : DifferentiableAt ℝ (fderiv ℝ Λ) 0 :=
+    (hΛ'.differentiable (by norm_num)).differentiableAt
+  let L : (E →L[ℝ] ℝ) →L[ℝ] E := (InnerProductSpace.toDual ℝ E).symm.toContinuousLinearMap
+  have hgrad : gradient Λ = fun x => L (fderiv ℝ Λ x) := by
+    funext x
+    rfl
+  have hg : HasFDerivAt (fun x => L (fderiv ℝ Λ x)) (L.comp (fderiv ℝ (fderiv ℝ Λ) 0)) 0 := by
+    convert L.hasFDerivAt.comp 0 hfd.hasFDerivAt using 1
+    simp [Function.comp_def]
+  change
+    fderiv ℝ (fun z : E => gradient Λ z - gradient Λ 0) 0 = Covariance.operator (μ : Measure E)
+  rw [fderiv_sub_const, hgrad, hg.fderiv]
+  apply ContinuousLinearMap.ext
+  intro u
+  apply ext_inner_right ℝ
+  intro w
+  change
+    ⟪(InnerProductSpace.toDual ℝ E).symm ((fderiv ℝ (fderiv ℝ Λ) 0) u), w⟫ =
+      ⟪Covariance.operator (μ : Measure E) u, w⟫
+  rw [InnerProductSpace.toDual_symm_apply]
+  have hiter : ((fderiv ℝ (fderiv ℝ Λ) 0) u) w = iteratedFDeriv ℝ 2 Λ 0 ![u, w] := by
+    simpa using (iteratedFDeriv_two_apply (𝕜 := ℝ) (f := Λ) (z := 0) (m := ![u, w])).symm
+  rw [hiter]
+  change cumulant (μ : Measure E) 2 ![u, w] = ⟪Covariance.operator (μ : Measure E) u, w⟫
+  exact
+    cumulant_two_eq_covariance_of_integrable_exp (μ := (μ : Measure E)) (hr := one_pos)
+      (compact_support_integrable_exp _ hc 1) u w
 
 /-- **Jets of the centred CGF gradient are the cumulant Riesz vectors**: for `r ≥ 1`,
 `Dʳ(∇Λ − ∇Λ(0))(0)[h] = cumulantVector μ (List.ofFn h)`, i.e. `⟪Dʳv(0)[h], w⟫ = κ_{r+1}(h, w)`. -/
@@ -571,84 +590,78 @@ end GradientJets
 
 section SingletonAllocation
 
-/-- **Singleton allocation of (74)** (BKL arXiv:2610.05474v1, p. 21): for a compactly supported law whose covariance
-`A` is a unit, `⟪κ₂(w,·), A⁻¹ κ_{|hs|+1}(hs,·)⟫ = κ_{|hs|+1}(hs, w)`, the order-`(|hs|+1)` cumulant with `w` in the
+/--
+**Singleton allocation of (74)** (BKL arXiv:2610.05474v1, p. 21): for a compactly supported law
+whose covariance
+`A` is a unit, `⟪κ₂(w,·), A⁻¹ κ_{|hs|+1}(hs,·)⟫ = κ_{|hs|+1}(hs, w)`, the order-`(|hs|+1)` cumulant
+with `w` in the
 last slot. -/
 theorem inner_cumulantVector_single_ringInverse_cumulantVector (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) (hA : IsUnit (Covariance.operator (μ : Measure E)))
     (hs : List E) (w : E) :
     ⟪cumulantVector (μ : Measure E) [w],
-        Ring.inverse (Covariance.operator (μ : Measure E)) (cumulantVector (μ : Measure E) hs)⟫ =
+        Ring.inverse (Covariance.operator (μ : Measure E))
+          (cumulantVector (μ : Measure E) hs)⟫ =
       cumulant (μ : Measure E) (hs.length + 1) (Fin.snoc (fun i => hs.get i) w) := by
-    have hA2 :
-        cumulantVector (μ : Measure E) [w] =
-          Covariance.operator (μ : Measure E) w := by
-      apply ext_inner_right ℝ
-      intro u
-      rw [cumulantVector_inner]
-      have hv :
-          Fin.snoc (fun i => [w].get i) u = ![w, u] := by
-        funext i
-        fin_cases i <;> rfl
-      rw [hv]
-      change cumulant (μ : Measure E) 2 (![w, u]) =
-        ⟪Covariance.operator (μ : Measure E) w, u⟫
-      rw [cumulant_two_eq_covariance_of_integrable_exp
-        (μ := μ) (hr := one_pos)
+  have hA2 : cumulantVector (μ : Measure E) [w] = Covariance.operator (μ : Measure E) w := by
+    apply ext_inner_right ℝ
+    intro u
+    rw [cumulantVector_inner]
+    have hv : Fin.snoc (fun i => [w].get i) u = ![w, u] := by
+      funext i
+      fin_cases i <;> rfl
+    rw [hv]
+    change cumulant (μ : Measure E) 2 (![w, u]) = ⟪Covariance.operator (μ : Measure E) w, u⟫
+    rw [cumulant_two_eq_covariance_of_integrable_exp (μ := μ) (hr := one_pos)
         (compact_support_integrable_exp _ hc 1) w u]
-
-    have hsa : IsSelfAdjoint (Covariance.operator (μ : Measure E)) :=
-      Covariance.operator_isSelfAdjoint (μ : Measure E)
-
-    have hsymm (x y : E) :
-        ⟪Covariance.operator (μ : Measure E) x, y⟫ =
-          ⟪x, Covariance.operator (μ : Measure E) y⟫ := by
-      exact
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa) x y
-
-    have hunit (u : E) :
-        Covariance.operator (μ : Measure E)
-            (Ring.inverse (Covariance.operator (μ : Measure E)) u) = u := by
-      have h :=
-        congrArg (fun T : E →L[ℝ] E => T u)
-          (Ring.mul_inverse_cancel (Covariance.operator (μ : Measure E)) hA)
-      simpa using h
-
-    calc
-      ⟪cumulantVector (μ : Measure E) [w],
+  have hsa : IsSelfAdjoint (Covariance.operator (μ : Measure E)) :=
+    Covariance.operator_isSelfAdjoint (μ : Measure E)
+  have hsymm (x y : E) :
+    ⟪Covariance.operator (μ : Measure E) x, y⟫ = ⟪x, Covariance.operator (μ : Measure E) y⟫ := by
+    exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa) x y
+  have hunit (u : E) :
+    Covariance.operator (μ : Measure E) (Ring.inverse (Covariance.operator (μ : Measure E)) u) =
+      u := by
+    have h :=
+      congrArg (fun T : E →L[ℝ] E => T u)
+        (Ring.mul_inverse_cancel (Covariance.operator (μ : Measure E)) hA)
+    simpa using h
+  calc
+    ⟪cumulantVector (μ : Measure E) [w],
           Ring.inverse (Covariance.operator (μ : Measure E))
             (cumulantVector (μ : Measure E) hs)⟫ =
-          ⟪Covariance.operator (μ : Measure E) w,
-            Ring.inverse (Covariance.operator (μ : Measure E))
-              (cumulantVector (μ : Measure E) hs)⟫ := by
-            rw [hA2]
-      _ =
-          ⟪w, Covariance.operator (μ : Measure E)
+        ⟪Covariance.operator (μ : Measure E) w,
+          Ring.inverse (Covariance.operator (μ : Measure E))
+            (cumulantVector (μ : Measure E) hs)⟫ := by
+      rw [hA2]
+    _ =
+        ⟪w,
+          Covariance.operator (μ : Measure E)
             (Ring.inverse (Covariance.operator (μ : Measure E))
               (cumulantVector (μ : Measure E) hs))⟫ := by
-            exact hsymm w
-              (Ring.inverse (Covariance.operator (μ : Measure E))
-                (cumulantVector (μ : Measure E) hs))
-      _ = ⟪w, cumulantVector (μ : Measure E) hs⟫ := by
-        rw [hunit]
-      _ = ⟪cumulantVector (μ : Measure E) hs, w⟫ := by
-        rw [real_inner_comm]
-      _ = cumulant (μ : Measure E) (hs.length + 1)
-          (Fin.snoc (fun i => hs.get i) w) := by
-        rw [cumulantVector_inner]
+      exact
+        hsymm w
+          (Ring.inverse (Covariance.operator (μ : Measure E))
+            (cumulantVector (μ : Measure E) hs))
+    _ = ⟪w, cumulantVector (μ : Measure E) hs⟫ := by rw [hunit]
+    _ = ⟪cumulantVector (μ : Measure E) hs, w⟫ := by rw [real_inner_comm]
+    _ = cumulant (μ : Measure E) (hs.length + 1) (Fin.snoc (fun i => hs.get i) w) := by
+      rw [cumulantVector_inner]
 
 end SingletonAllocation
 
 section CumulantSymmetry
 
-/-- The cumulant tensors of a compactly supported law are symmetric: `κ_m(h ∘ σ) = κ_m(h)` for every permutation `σ`. -/
-theorem cumulant_comp_perm_of_compact (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
-    {m : ℕ} (σ : Equiv.Perm (Fin m)) (h : Fin m → E) :
+/--
+The cumulant tensors of a compactly supported law are symmetric: `κ_m(h ∘ σ) = κ_m(h)` for every
+permutation `σ`. -/
+theorem cumulant_comp_perm_of_compact (μ : ProbabilityMeasure E)
+    (hc : IsCompact (μ : Measure E).support) {m : ℕ} (σ : Equiv.Perm (Fin m)) (h : Fin m → E) :
     cumulant (μ : Measure E) m (h ∘ σ) = cumulant (μ : Measure E) m h := by
-    have hΛ : ContDiff ℝ ∞ (logLaplace (μ : Measure E)) :=
-      contDiff_logLaplace _ (compact_support_integrable_exp _ hc)
-    simp only [cumulant]
-    exact iteratedFDeriv_perm hΛ m h σ 0
+  have hΛ : ContDiff ℝ ∞ (logLaplace (μ : Measure E)) :=
+    contDiff_logLaplace _ (compact_support_integrable_exp _ hc)
+  simp only [cumulant]
+  exact iteratedFDeriv_perm hΛ m h σ 0
 
 end CumulantSymmetry
 

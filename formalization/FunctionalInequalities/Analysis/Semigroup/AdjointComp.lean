@@ -1,4 +1,6 @@
-import Mathlib.Analysis.InnerProductSpace.LinearPMap
+module
+
+public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 
 /-!
 # The operator `T†T` with its maximal domain
@@ -11,8 +13,11 @@ of the outer one, so `T` is first restricted to that domain with `LinearPMap.dom
 
 This is the object of von Neumann's theorem (`T` closed and densely defined ⟹ `T†T` self-adjoint
 with dense domain), which is **not** proved here; see `Analysis/Semigroup/VonNeumann.lean`.
-Everything here is definitional or `rfl`-level glue. No measure, no log-concavity and no KLS content.
+Everything here is definitional or `rfl`-level glue. No measure, no log-concavity and no KLS
+content.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -69,8 +74,11 @@ theorem mem_domain_of_mem_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (x : (
 
 /-- `adjointComp T x = T† (T x)`. -/
 theorem adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (x : (adjointComp T).domain) :
-    adjointComp T x = T† ⟨T ⟨x, x.2.2⟩,
-      by simpa [T.domRestrict_apply (y := ⟨x, x.2.2⟩) rfl] using domRestrict_mem_adjoint_domain T x⟩ := by
+    adjointComp T x =
+      T†
+        ⟨T ⟨x, x.2.2⟩, by
+          simpa [T.domRestrict_apply (y := ⟨x, x.2.2⟩) rfl] using
+            domRestrict_mem_adjoint_domain T x⟩ := by
   change T† ⟨T.domRestrict (adjointCompDomain T) x, _⟩ = _
   congr 1
 

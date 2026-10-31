@@ -1,8 +1,10 @@
-import FunctionalInequalities.Probability.Covariance.CauchySchwarz
-import FunctionalInequalities.Probability.Covariance.Whitening
-import Mathlib.MeasureTheory.Measure.Support
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.Probability.Covariance.CauchySchwarz
+public import FunctionalInequalities.Probability.Covariance.Whitening
+public import Mathlib.MeasureTheory.Measure.Support
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Audit: covariance Cauchy–Schwarz and whitened-statistic variance (supports of the BKL (68)
@@ -17,6 +19,8 @@ actual covariance operator `4·Id` with the self-adjoint `S = Id/2` and its deri
 the rank-zero Dirac model where the operator ring has `0 = 1`. No posterior, root construction or
 stochastic statement is involved; the sandwich is derived, not assumed.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace
@@ -95,7 +99,9 @@ theorem actual_NB1_zero_variance :
       covariance (fun _ : ℝ => (7 : ℝ)) Y (μ : Measure ℝ) ^ 2 ≤
         variance (fun _ : ℝ => (7 : ℝ)) (μ : Measure ℝ) * variance Y (μ : Measure ℝ) := by
   constructor
-  · rw [← covariance_self (memLp_const (7 : ℝ) (p := 2) (μ := (μ : Measure ℝ))).aestronglyMeasurable.aemeasurable]
+  · rw [←
+      covariance_self
+        (memLp_const (7 : ℝ) (p := 2) (μ := (μ : Measure ℝ))).aestronglyMeasurable.aemeasurable]
     rw [covariance_eq_sub (memLp_const 7) (memLp_const 7)]
     simp only [integral_μ]
     norm_num

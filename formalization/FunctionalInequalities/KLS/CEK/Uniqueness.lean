@@ -1,9 +1,11 @@
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport
-import FunctionalInequalities.Probability.MomentMeasure.Maximality.EssentiallyContinuous
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer
-import FunctionalInequalities.KLS.CEK.GeneralExistence
-import FunctionalInequalities.Analysis.Convex.Legendre.Affine
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.BoundedSupport
+public import FunctionalInequalities.Probability.MomentMeasure.Maximality.EssentiallyContinuous
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Maximizer
+public import FunctionalInequalities.KLS.CEK.GeneralExistence
+public import FunctionalInequalities.Analysis.Convex.Legendre.Affine
 
 /-!
 # CEK Theorem 2: uniqueness of moment potentials
@@ -46,6 +48,8 @@ maximizes `I_μ` (Theorem 8, `variationalFunctional_le_legendre`) and is `μ`-in
 translates of each other (`exists_eq_translate_legendre_of_maximizer`, the equality case of
 Prékopa–Leindler), and `ψᵢ** = ψᵢ` (Fenchel–Moreau).
 -/
+
+@[expose] public section
 
 noncomputable section
 

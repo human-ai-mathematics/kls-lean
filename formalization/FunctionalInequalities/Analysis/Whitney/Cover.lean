@@ -1,7 +1,9 @@
-import Mathlib.MeasureTheory.Covering.Vitali
-import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
-import Mathlib.Topology.LocallyFinite
-import Mathlib.Algebra.Order.Group.MinMax
+module
+
+public import Mathlib.MeasureTheory.Covering.Vitali
+public import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
+public import Mathlib.Topology.LocallyFinite
+public import Mathlib.Algebra.Order.Group.MinMax
 
 /-!
 # A quantitative Whitney ball cover
@@ -11,8 +13,11 @@ disjoint small balls whose fivefold enlargements cover the complement. Eightfold
 stay in the complement, are locally finite there, and have uniformly bounded overlap.
 
 This is the geometric input to the compact-jet extension construction. It does not construct
-a partition of unity or prove compact Whitney extension. All constants are explicit; no sharpness is asserted.
+a partition of unity or prove compact Whitney extension. All constants are explicit; no sharpness is
+asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -43,13 +48,13 @@ theorem radius_pos (hS : IsClosed S) (hne : S.Nonempty) {x : V} (hx : x ∉ S) :
     0 < radius S x := by
   exact div_pos (lt_min zero_lt_one ((hS.notMem_iff_infDist_pos hne).1 hx)) (by norm_num)
 
-theorem twenty_mul_radius_le_add (x y : V) :
-    20 * radius S x ≤ 20 * radius S y + dist x y := by
+theorem twenty_mul_radius_le_add (x y : V) : 20 * radius S x ≤ 20 * radius S y + dist x y := by
   have h := abs_min_sub_min_le_max (1 : ℝ) (infDist x S) 1 (infDist y S)
   simp only [sub_self, abs_zero] at h
   rw [max_eq_right (abs_nonneg (infDist x S - infDist y S))] at h
   have hdist : |infDist x S - infDist y S| ≤ dist x y := by
-    simpa only [Real.dist_eq, one_mul, NNReal.coe_one] using (lipschitz_infDist_pt S).dist_le_mul x y
+    simpa only [Real.dist_eq, one_mul, NNReal.coe_one] using
+      (lipschitz_infDist_pt S).dist_le_mul x y
   have hsub := (le_abs_self (min 1 (infDist x S) - min 1 (infDist y S))).trans (h.trans hdist)
   dsimp [radius]
   linarith
@@ -67,8 +72,7 @@ theorem closedBall_subset_compl {x : V} (hx : 0 < radius S x) :
 This neighborhood version will prove local finiteness, not just pointwise finite overlap. -/
 theorem radius_comparable_of_inter {y z : V}
     (h : (closedBall z (8 * radius S z) ∩ ball y (radius S y)).Nonempty) :
-    radius S y / 2 ≤ radius S z ∧ radius S z ≤ 2 * radius S y ∧
-      dist z y ≤ 20 * radius S y := by
+    radius S y / 2 ≤ radius S z ∧ radius S z ≤ 2 * radius S y ∧ dist z y ≤ 20 * radius S y := by
   obtain ⟨w, hwz, hwy⟩ := h
   have hzy : dist z y ≤ 8 * radius S z + radius S y := by
     have hz : dist z w ≤ 8 * radius S z := by simpa only [mem_closedBall, dist_comm] using hwz

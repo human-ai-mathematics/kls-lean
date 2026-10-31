@@ -1,17 +1,19 @@
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Gamma
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
-import FunctionalInequalities.Energy.Cheeger.Identification
-import FunctionalInequalities.Poincare.LocalSlope.Gradient
-import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
-import Mathlib.Analysis.InnerProductSpace.Laplacian
-import Mathlib.MeasureTheory.Measure.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Gamma
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
+public import FunctionalInequalities.Energy.Cheeger.Identification
+public import FunctionalInequalities.Poincare.LocalSlope.Gradient
+public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+public import Mathlib.Analysis.InnerProductSpace.Laplacian
+public import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
 # Route statements: generator identification and the Bakry--Émery interface
@@ -25,6 +27,8 @@ independent semigroup on all of `L¹`, and a classical gradient is used only for
 functions.  The fixed `stdOrthonormalBasis` in `B3` makes the Hilbert--Schmidt square typeable with
 the current API; basis independence is a separate obligation.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -113,7 +117,8 @@ This exact proposition is discharged by
 `Analysis.BakryEmery.integral_inner_gradient_tilted` (Haar form
 `Analysis.BakryEmery.integral_mul_inner_gradient_eq_neg`; probability form
 `KLS.LogConcave.integral_inner_gradient_eq`), with `C¹` potential, `C²` test `f` and `C¹` test
-`g` without compact support; see `research/audits/BakryEmery/GeneratorIdentificationAudit.lean` (`route_G0`).
+`g` without compact support; see `research/audits/BakryEmery/GeneratorIdentificationAudit.lean`
+(`route_G0`).
 The anonymous form is retained as a signature audit.
 -/
 
@@ -138,7 +143,8 @@ This exact proposition is discharged by `KLS.LogConcave.memLp_neg_weightedLaplac
 (`KLS/LogConcave/HeatSemigroup/Generator/Basic.lean`), through the weak identity
 `KLS.LogConcave.inner_toLp_neg_weightedLaplacian_eq` on all of `D(T̄)` and the closure lemma
 `Analysis.Semigroup.inner_eq_inner_closure_apply`; see
-`research/audits/BakryEmery/GeneratorIdentificationAudit.lean` (`route_G1`).  The four layers above are still
+`research/audits/BakryEmery/GeneratorIdentificationAudit.lean` (`route_G1`).  The four layers above
+are still
 distinct: only the first is proved.
 -/
 
@@ -182,7 +188,8 @@ signature audit.
 /-! ## B1 -- convexity gives a positive-semidefinite Hessian
 
 This exact proposition is discharged by
-`Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn` (`Analysis/BakryEmery/Bochner/Basic.lean`),
+`Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn`
+(`Analysis/BakryEmery/Bochner/Basic.lean`),
 through the line restriction `t ↦ U (x + t v)`, `ConvexOn.monotoneOn_deriv` and
 `Monotone.deriv_nonneg`; see `research/audits/BakryEmery/BochnerAudit.lean` (`route_B1`).
 -/
@@ -212,7 +219,8 @@ The first double sum is the Hilbert--Schmidt square in the fixed standard orthon
 This contract uses the coordinate expression and does not assert basis independence.
 
 This exact proposition is discharged by `Analysis.BakryEmery.bochner_stdBasis`
-(`Analysis/BakryEmery/Bochner/Basic.lean`; `Γ₂` form `Analysis.BakryEmery.gammaTwo_eq_hessianSqStdBasis_add`,
+(`Analysis/BakryEmery/Bochner/Basic.lean`; `Γ₂` form
+`Analysis.BakryEmery.gammaTwo_eq_hessianSqStdBasis_add`,
 which needs only `C²` for `U`), with the double sum named `Analysis.BakryEmery.hessianSqStdBasis`
 and **expressed in the standard basis**; see `research/audits/BakryEmery/BochnerAudit.lean`
 (`route_B3`).  The third-order terms cancel through
@@ -257,18 +265,22 @@ of the `L²` class `P_t[f]`.  The existence and regularity of that representativ
 part of the conclusion instead of silently taking `gradient` of an arbitrary `L²` representative.
 -/
 
-#check (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+#check
+  (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
     {μ : ProbabilityMeasure E} (m : Measure E) [m.IsAddHaarMeasure] (U : E → ℝ)
     (hμ : KLS.LogConcave μ) (hi : (interior (μ : Measure E).support).Nonempty),
-    (μ : Measure E) = m.tilted (-U) → ContDiff ℝ ∞ U → ConvexOn ℝ Set.univ U →
-    ∀ (f : E → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f)
-      (t : ℝ) (ht : 0 < t),
-      ∃ (u : E → ℝ) (hu : MemLp u 2 (μ : Measure E)),
-        FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator m (ContinuousLinearMap.id ℝ E) hμ hi ht.le
-            ((Energy.WeightedGradient.memLp_of_contDiff_hasCompactSupport μ
-              hf hfc).toLp f) = hu.toLp u ∧
-          ContDiff ℝ ∞ u)
+    (μ : Measure E) = m.tilted (-U) →
+      ContDiff ℝ ∞ U →
+        ConvexOn ℝ Set.univ U →
+          ∀ (f : E → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) (t : ℝ) (ht : 0 < t),
+            ∃ (u : E → ℝ) (hu : MemLp u 2 (μ : Measure E)),
+              FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator m
+                    (ContinuousLinearMap.id ℝ E) hμ hi ht.le
+                    ((Energy.WeightedGradient.memLp_of_contDiff_hasCompactSupport μ hf hfc).toLp
+                      f) =
+                  hu.toLp u ∧
+                ContDiff ℝ ∞ u)
 
 /-! The actual semigroup gradient estimates are recorded only after explicitly binding a
 representative and every `L²` proof needed to feed the current `L²` semigroup. -/

@@ -1,20 +1,29 @@
-import FunctionalInequalities.KLS.BKL.LetwinApproximation
-import FunctionalInequalities.KLS.Letwin.RegularClass
-import FunctionalInequalities.KLS.BKL.CompactReduction
-import FunctionalInequalities.KLS.Isotropic
+module
+
+public import FunctionalInequalities.KLS.BKL.LetwinApproximation
+public import FunctionalInequalities.KLS.Letwin.RegularClass
+public import FunctionalInequalities.KLS.BKL.CompactReduction
+public import FunctionalInequalities.KLS.Isotropic
 
 /-!
 # The compact Letwin constant-eight bound
 
-`KLS.LogConcave.Suspension.letwinCompactBound : LetwinCompactBound`: for every `n > 0`, every compactly supported isotropic
-log-concave probability law on `EuclideanSpace ℝ (Fin n)` and every self-adjoint real operator (singular and indefinite included), the
-variance of the quadratic form is at most `8` times its squared Hilbert–Schmidt norm. It follows from the regular-class bound through the
+`KLS.LogConcave.Suspension.letwinCompactBound : LetwinCompactBound`: for every `n > 0`, every
+compactly supported isotropic
+log-concave probability law on `EuclideanSpace ℝ (Fin n)` and every self-adjoint real operator
+(singular and indefinite included), the
+variance of the quadratic form is at most `8` times its squared Hilbert–Schmidt norm. It follows
+from the regular-class bound through the
 existing compact reduction `letwinCompactBound_of_regularClass`.
 
-This is the exact compact counterpart of Letwin (arXiv:2607.24164v1), Theorem 1.2, as used by Bizeul–Klartag–Lehec
-(arXiv:2610.05474v1), Lemma 4.2. It does not state the noncompact theorem; this module provides only that compact
+This is the exact compact counterpart of Letwin (arXiv:2607.24164v1), Theorem 1.2, as used by
+Bizeul–Klartag–Lehec
+(arXiv:2610.05474v1), Lemma 4.2. It does not state the noncompact theorem; this module provides only
+that compact
 bound.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set

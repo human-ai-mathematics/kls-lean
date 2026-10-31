@@ -1,0 +1,1538 @@
+{
+  "version": 1,
+  "review_date": "2026-10-30",
+  "placement_plan": {
+    "scope": "Finish all remaining maintenance findings and conclude every exact/normalized reuse candidate from the 2026-10-30 full review; one unified full verification after all source work.",
+    "literature_targets": "Existing CEK arXiv:1304.0630v1 Proposition 12 and Theorem 8 supports; Letwin arXiv:2607.24164v1 Lemma 2.2 through BB arXiv:1207.6128v1 2.24(i); current diffusion/KLS interfaces. No mathematical-progress status changes.",
+    "owners": [
+      "Existing Analysis/Convex/Boundary for open-convex interior-ball geometry, consumed by existing Section/Growth and Section/Engulfing",
+      "Existing production module documentation, existing SourceLayout/CEK audit families and research/check_documentation.py gates"
+    ],
+    "decision": "Extend existing owners and audit clients; no production file moves/splits, namespace migrations, public renames, aliases or conclusion-bearing structures.",
+    "interfaces": "All existing public types, binder names/order/implicitness, universes, values and owners remain exact. One additive generic interior-ball support declaration only. Retain source-faithful hypotheses and valid declaration-local linter exceptions.",
+    "work": [
+      "Three module summaries and three obsolete process labels",
+      "Move all nine production axiom reports to narrow audit owners with the same coverage",
+      "Replace avoidable haveI/letI tactics in reviewed proposition proofs and remove broad/avoidable suppressions; retain verified local exceptions",
+      "Correct five prose set-builder semicolons without changing math",
+      "Extract one open-convex interior-ball property after Mathlib search; settle all remaining exact/normalized candidates individually",
+      "Extend persistent local documentation/maintenance gates and meaningful regression mutations",
+      "Rebind source evidence only after before-hash checks; regenerate current module/API/progress navigation with a private index"
+    ],
+    "validation": [
+      "Saved dirty baseline, actual index/staging, prior receipt and compiled baseline",
+      "Strict affected-module/client elaboration before final freeze",
+      "Full compiled interface comparison, including private/generated proof-support accounting",
+      "Whole owned-code/text rescan and closed per-finding/candidate review map",
+      "Final full research/verify.py, axiom audits and local-module kernel replay on frozen source; no commit/push/remote CI"
+    ]
+  },
+  "prior_scope_reviews": [
+    "2026-10-30-text-navigation-map.json",
+    "2026-10-30-convex-boundedness-map.json"
+  ],
+  "verification": "Final outcome is governed by build/history/2026-10-30-remaining-maintenance/verification.json; only status passed confirms full local acceptance.",
+  "findings": [
+    {
+      "id": "DOC-1",
+      "status": "fixed",
+      "detail": "Three dated candidate headings replaced by mathematical topic headings retaining CEK attribution."
+    },
+    {
+      "id": "DOC-2",
+      "status": "fixed",
+      "detail": "All three missing source module summaries added with actual scope; module directory regenerated."
+    },
+    {
+      "id": "LOCAL-1",
+      "status": "fixed",
+      "detail": "All six haveILetI suppressions removed. Eleven reviewed local-instance tactic binders use ordinary let/have; all nine remaining unused-parameter exceptions are declaration-local and preserve exact existing interfaces."
+    },
+    {
+      "id": "LOCAL-2",
+      "status": "fixed",
+      "detail": "Eight vector-generator reports moved to a narrow SourceLayout client; the scalar CEK log-limit report is retained by its existing FunctionalLimitAudit owner. Production has zero axiom-printing commands."
+    },
+    {
+      "id": "TEXT-STYLE",
+      "status": "fixed_or_reviewed_exception",
+      "detail": "Five set-builder semicolons and one accidental Canadian-syllabics fraction separator fixed. Combining marks, derivative double primes, PSD and double-integral notation retain their mathematical meaning and named identifiers."
+    },
+    {
+      "id": "REUSE-REMAINING",
+      "status": "closed",
+      "detail": "Every original exact/name-normalized candidate and every fresh fragment has an explicit fix, prior resolution or reviewed retain decision; no further-review disposition remains."
+    },
+    {
+      "id": "SOURCE-REFERENCES",
+      "status": "fixed",
+      "detail": "Fourteen stale source-file occurrences corrected; repository-root and brace references verified, and a persistent resolver plus regression test added."
+    },
+    {
+      "id": "MODULE-SCOPE",
+      "status": "fixed_or_reviewed_local_boundary",
+      "detail": "Sixteen outdated/ambiguous module-scope passages corrected after actual owner/declaration review. The other scoped limitations are retained; no mathematical status is promoted."
+    }
+  ],
+  "reuse_candidates": [
+    {
+      "nonblank_lines": 32,
+      "left": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "declaration": "integral_mul_weakGamma_le",
+        "declaration_line": 496,
+        "first_line": 512,
+        "last_line": 543
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+        "declaration": "integral_mul_regularizedNorm_le",
+        "declaration_line": 412,
+        "first_line": 426,
+        "last_line": 457
+      },
+      "body_sha256": "629d9c8eea0f7749ec7f9a8ac5e134926b1790b5b8cddcee9df5bcbf2a075646",
+      "first_line": "revert f",
+      "candidate": 1,
+      "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+      "reason": "Different WeakGamma/regularized-norm frontends; shared derivative/orbit properties already exist, and this block is setup/time-zero control."
+    },
+    {
+      "nonblank_lines": 28,
+      "left": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "declaration": "integral_mul_weakGamma_le_of_pos",
+        "declaration_line": 221,
+        "first_line": 250,
+        "last_line": 277
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+        "declaration": "integral_mul_regularizedNorm_le_of_pos",
+        "declaration_line": 221,
+        "first_line": 244,
+        "last_line": 271
+      },
+      "body_sha256": "206f123b4a526e5fe98b8e006f85e95b38ce9678f1e30823bc78b365b99a2707",
+      "first_line": "set T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi with hTdef",
+      "candidate": 2,
+      "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+      "reason": "Different integrands and derivative conclusions; the common semigroup operator/test setup does not warrant a theorem-carrying abstraction."
+    },
+    {
+      "nonblank_lines": 21,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+        "declaration": "exists_bregman_comparison_core",
+        "declaration_line": 173,
+        "first_line": 300,
+        "last_line": 322
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+        "declaration": "exists_section_volume_upper_bound",
+        "declaration_line": 395,
+        "first_line": 503,
+        "last_line": 525
+      },
+      "body_sha256": "81d0ed8e22863c1aa278314fd3cc208dff9820e944a99198c7ad8357973f7ad7",
+      "first_line": "have hTc : Convex ℝ (f '' S) := by",
+      "candidate": 3,
+      "disposition": "shared_substantive_property_extracted",
+      "reason": "The open-convex interior-ball inclusion is now one generic normed-space theorem in the existing Boundary owner. Both section consumers retain their distinct density/frontier arguments and call this producer.",
+      "replacement": "FunctionalInequalities.Analysis.closedBall_subset_of_ball_subset_closure",
+      "audit": "research/audits/SourceLayout/SectionInterior.lean"
+    },
+    {
+      "nonblank_lines": 19,
+      "left": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "declaration": "integral_mul_weakGamma_le_of_pos",
+        "declaration_line": 221,
+        "first_line": 311,
+        "last_line": 329
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+        "declaration": "integral_mul_regularizedNorm_le_of_pos",
+        "declaration_line": 221,
+        "first_line": 302,
+        "last_line": 320
+      },
+      "body_sha256": "a1ef627daf40873b691a4afb71d99347473c05afc0d02450edfd2b5fb17e91c4",
+      "first_line": "have hr0 : 0 < r := ha.trans_le hr.1",
+      "candidate": 4,
+      "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+      "reason": "Local boundedness setup for two distinct integrands; canonical substantive orbit properties remain shared."
+    },
+    {
+      "nonblank_lines": 15,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+        "declaration": "exists_approximating_partition",
+        "declaration_line": 464,
+        "first_line": 475,
+        "last_line": 489
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+        "declaration": "exists_approximating_partition_vectorGraph",
+        "declaration_line": 191,
+        "first_line": 202,
+        "last_line": 216
+      },
+      "body_sha256": "3d1a1710f56a6c971da57b32729b2216bedbed8b246032405e640d169a2ffc80",
+      "first_line": "intro y₀",
+      "candidate": 5,
+      "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+      "reason": "Scalar gradient and vector derivative graph contracts have different Jacobians and images; measurable cover construction is already shared."
+    },
+    {
+      "nonblank_lines": 14,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/OpenMeasurable.lean",
+        "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn",
+        "declaration_line": 25,
+        "first_line": 30,
+        "last_line": 43
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Measurable.lean",
+        "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector",
+        "declaration_line": 238,
+        "first_line": 243,
+        "last_line": 256
+      },
+      "body_sha256": "5bdeb987d449cc990e1532d20e4f4b6b7617528e6b6226e1ddf7fdca889fa878",
+      "first_line": "classical",
+      "candidate": 6,
+      "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+      "reason": "Scalar surface-measure and normalized vector-slice scopes differ, including dimension hypotheses; common partition support is already shared."
+    },
+    {
+      "nonblank_lines": 13,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Coercivity.lean",
+        "declaration": "exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg",
+        "declaration_line": 33,
+        "first_line": 119,
+        "last_line": 131
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+        "declaration": "isBounded_of_convex_of_measure_lt_top",
+        "declaration_line": 228,
+        "first_line": 282,
+        "last_line": 294
+      },
+      "body_sha256": "2cacc48d0af8cca2509dda8564cf9565b49aeea941cbfa6321cd7e1cec190eec",
+      "first_line": "have htupper : 2 * t ≤ 1 := by",
+      "candidate": 7,
+      "disposition": "resolved_in_prior_shared_boundedness_batch",
+      "reason": "One complete duplicated boundedness proof was already unified; the prior scoped map and receipt are retained.",
+      "evidence": "2026-10-30-convex-boundedness-map.json"
+    },
+    {
+      "nonblank_lines": 13,
+      "left": {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/DualLaplacian.lean",
+        "declaration": "dualTransport_local",
+        "declaration_line": 197,
+        "first_line": 212,
+        "last_line": 224
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/PowerSupersolution.lean",
+        "declaration": "inverseHessian_rpow_supersolution",
+        "declaration_line": 1006,
+        "first_line": 1015,
+        "last_line": 1027
+      },
+      "body_sha256": "5a03de1a0e6ceeb6c17c7246672f4656ffe422cbe51bbba4f14dc0204d0f1bbc",
+      "first_line": "obtain ⟨ψ, hψ, hloc⟩ := exists_contDiff_eventuallyEq_germ hK hφ hx",
+      "candidate": 8,
+      "disposition": "reviewed_retain_distinct_contracts",
+      "reason": "Both consumers already call the same exists_contDiff_eventuallyEq_germ producer in KLS/Klartag/PowerSupersolution. The shared lines only transfer local PD/log-det inputs to that germ. The dual-transport consumer needs a smooth density and a flux identity for arbitrary smooth u; the supersolution has only C2 convex density, a direction theta and a positive real power. No second standalone producer is duplicated.",
+      "existing_shared_producer": "FunctionalInequalities.Analysis.BakryEmery.exists_contDiff_eventuallyEq_germ"
+    },
+    {
+      "nonblank_lines": 12,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Basic.lean",
+        "declaration": "integral_hessianInverseOperator_mul_eq_neg",
+        "declaration_line": 65,
+        "first_line": 124,
+        "last_line": 135
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/TransportLaplacian.lean",
+        "declaration": "integral_hessianInverseOperator_mul_eq_neg_weighted",
+        "declaration_line": 269,
+        "first_line": 311,
+        "last_line": 322
+      },
+      "body_sha256": "6dae96d798dd10eb5050b8340f5c50a50366f479be817574e08e4a020d28d2f1",
+      "first_line": "rw [integral_finsetSum _ (fun i _ => hRow2 i)]",
+      "candidate": 9,
+      "disposition": "reviewed_retain_distinct_contracts",
+      "reason": "The repeated endpoint is finite-sum integral algebra after the same generic Haar integration-by-parts lemmas. The Letwin frontend uses normalized tilted measure exp(-phi), while the transport frontend uses independent W and unnormalized weighted Haar integrals. Their differentiability, weight and source equations differ; a new conclusion-carrying abstraction for this endpoint would duplicate Mathlib sum/integral operations.",
+      "existing_shared_producers": [
+        "FunctionalInequalities.Analysis.BakryEmery.integrable_fderiv_mul_of_hasCompactSupport",
+        "FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_eq_neg_of_hasCompactSupport"
+      ]
+    },
+    {
+      "nonblank_lines": 12,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+        "declaration": "inverseHessian_divergence",
+        "declaration_line": 756,
+        "first_line": 821,
+        "last_line": 832
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/TransportLaplacian.lean",
+        "declaration": "transport_inverseHessian_divergence",
+        "declaration_line": 74,
+        "first_line": 148,
+        "last_line": 159
+      },
+      "body_sha256": "62202a4a93e42dbe4f489d1f03a89dfbe655b85cc2a20dc8d8e0df36067962ec",
+      "first_line": "simp_rw [add_mul, Finset.sum_add_distrib, neg_mul, Finset.sum_neg_distrib, Finset.sum_mul,",
+      "candidate": 10,
+      "disposition": "reviewed_retain_distinct_contracts",
+      "reason": "The matched fragment only distributes and reorders finite sums in the inverse-Hessian identity. The actual first-derivative producers differ: -phi + V(gradient phi) versus -W + rho(gradient psi), with independent W. Shared inverse-Hessian calculus, third-derivative commutation and Mathlib finite-sum operations already supply the common mathematics. No source equation or weight is strengthened to force a merger.",
+      "existing_shared_producers": [
+        "FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply",
+        "FunctionalInequalities.Analysis.BakryEmery.fderiv_bilinearIteratedFDerivTwo_comm"
+      ]
+    },
+    {
+      "nonblank_lines": 12,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Coercivity.lean",
+        "declaration": "exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg",
+        "declaration_line": 33,
+        "first_line": 147,
+        "last_line": 158
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Maximality/BallTruncation.lean",
+        "declaration": "isBounded_of_convex_of_measure_lt_top",
+        "declaration_line": 228,
+        "first_line": 314,
+        "last_line": 325
+      },
+      "body_sha256": "867f4490acd33a1aa6e45858f1b80b03d9cd2234f267be8b3a8a1cc9607d8bb6",
+      "first_line": "dsimp [f]",
+      "candidate": 11,
+      "disposition": "resolved_in_prior_shared_boundedness_batch",
+      "reason": "One complete duplicated boundedness proof was already unified; the prior scoped map and receipt are retained.",
+      "evidence": "2026-10-30-convex-boundedness-map.json"
+    }
+  ],
+  "name_normalized_candidates": [
+    {
+      "nonblank_lines": 32,
+      "left": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "declaration": "integral_mul_weakGamma_le",
+        "declaration_line": 496,
+        "first_line": 512,
+        "last_line": 543
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+        "declaration": "integral_mul_regularizedNorm_le",
+        "declaration_line": 412,
+        "first_line": 426,
+        "last_line": 457
+      },
+      "body_sha256": "e93dacc9d8dd3e41000926613c7eb28c2d194870e6986a4dd7f10a1cf856c5c3",
+      "first_line": "revert f",
+      "candidate": 1,
+      "disposition": "reviewed_retain_distinct_heat_frontends",
+      "reason": "Matches the corresponding individually reviewed exact candidate; local-name normalization supplies no additional semantic duplication evidence."
+    },
+    {
+      "nonblank_lines": 28,
+      "left": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "declaration": "integral_mul_weakGamma_le_of_pos",
+        "declaration_line": 221,
+        "first_line": 250,
+        "last_line": 277
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+        "declaration": "integral_mul_regularizedNorm_le_of_pos",
+        "declaration_line": 221,
+        "first_line": 244,
+        "last_line": 271
+      },
+      "body_sha256": "850a7894ff6fdaddb121d50fa8ffe357fac4b3054d9300607ab3a249a9df9e4e",
+      "first_line": "set T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) h with h",
+      "candidate": 2,
+      "disposition": "reviewed_retain_distinct_heat_frontends",
+      "reason": "Matches the corresponding individually reviewed exact candidate; local-name normalization supplies no additional semantic duplication evidence."
+    },
+    {
+      "nonblank_lines": 21,
+      "left": {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+        "declaration": "exists_bregman_comparison_core",
+        "declaration_line": 173,
+        "first_line": 300,
+        "last_line": 322
+      },
+      "right": {
+        "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+        "declaration": "exists_section_volume_upper_bound",
+        "declaration_line": 395,
+        "first_line": 503,
+        "last_line": 525
+      },
+      "body_sha256": "11f96d18eb5b9ab7342cdd86e958f587fa2194c6202e5d5ea0829b5c7f8e35f8",
+      "first_line": "h h : Convex ℝ (f '' S) := by",
+      "candidate": 3,
+      "disposition": "shared_substantive_property_extracted",
+      "reason": "Matches the corresponding individually reviewed exact candidate; local-name normalization supplies no additional semantic duplication evidence."
+    }
+  ],
+  "fresh_exact_fragment_review": {
+    "scope": "Exact comment-free contiguous proof fragments with at least twelve nonblank lines across distinct production files; candidate review only, not semantic-duplication completeness.",
+    "candidate_count": 9,
+    "candidates": [
+      {
+        "nonblank_lines": 32,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+          "declaration": "integral_mul_weakGamma_le",
+          "declaration_line": 496,
+          "first_line": 512,
+          "last_line": 543
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le",
+          "declaration_line": 412,
+          "first_line": 426,
+          "last_line": 457
+        },
+        "body_sha256": "629d9c8eea0f7749ec7f9a8ac5e134926b1790b5b8cddcee9df5bcbf2a075646",
+        "first_line": "revert f",
+        "prior_candidate": 1,
+        "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+        "reason": "Different WeakGamma/regularized-norm frontends; shared derivative/orbit properties already exist, and this block is setup/time-zero control."
+      },
+      {
+        "nonblank_lines": 28,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 221,
+          "first_line": 250,
+          "last_line": 277
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 221,
+          "first_line": 244,
+          "last_line": 271
+        },
+        "body_sha256": "206f123b4a526e5fe98b8e006f85e95b38ce9678f1e30823bc78b365b99a2707",
+        "first_line": "set T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi with hTdef",
+        "prior_candidate": 4,
+        "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+        "reason": "Local boundedness setup for two distinct integrands; canonical substantive orbit properties remain shared."
+      },
+      {
+        "nonblank_lines": 19,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+          "declaration": "integral_mul_weakGamma_le_of_pos",
+          "declaration_line": 221,
+          "first_line": 311,
+          "last_line": 329
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
+          "declaration": "integral_mul_regularizedNorm_le_of_pos",
+          "declaration_line": 221,
+          "first_line": 302,
+          "last_line": 320
+        },
+        "body_sha256": "a1ef627daf40873b691a4afb71d99347473c05afc0d02450edfd2b5fb17e91c4",
+        "first_line": "have hr0 : 0 < r := ha.trans_le hr.1",
+        "prior_candidate": 4,
+        "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+        "reason": "Local boundedness setup for two distinct integrands; canonical substantive orbit properties remain shared."
+      },
+      {
+        "nonblank_lines": 15,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Graph/Area.lean",
+          "declaration": "exists_approximating_partition",
+          "declaration_line": 464,
+          "first_line": 475,
+          "last_line": 489
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+          "declaration": "exists_approximating_partition_vectorGraph",
+          "declaration_line": 191,
+          "first_line": 202,
+          "last_line": 216
+        },
+        "body_sha256": "3d1a1710f56a6c971da57b32729b2216bedbed8b246032405e640d169a2ffc80",
+        "first_line": "intro y₀",
+        "prior_candidate": 5,
+        "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+        "reason": "Scalar gradient and vector derivative graph contracts have different Jacobians and images; measurable cover construction is already shared."
+      },
+      {
+        "nonblank_lines": 14,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/OpenMeasurable.lean",
+          "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn",
+          "declaration_line": 25,
+          "first_line": 30,
+          "last_line": 43
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Measurable.lean",
+          "declaration": "aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector",
+          "declaration_line": 238,
+          "first_line": 243,
+          "last_line": 256
+        },
+        "body_sha256": "5bdeb987d449cc990e1532d20e4f4b6b7617528e6b6226e1ddf7fdca889fa878",
+        "first_line": "classical",
+        "prior_candidate": 6,
+        "disposition": "reviewed_retain_distinct_frontend_or_dimension_scope",
+        "reason": "Scalar surface-measure and normalized vector-slice scopes differ, including dimension hypotheses; common partition support is already shared."
+      },
+      {
+        "nonblank_lines": 13,
+        "left": {
+          "source": "formalization/FunctionalInequalities/KLS/Klartag/DualLaplacian.lean",
+          "declaration": "dualTransport_local",
+          "declaration_line": 197,
+          "first_line": 212,
+          "last_line": 224
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Klartag/PowerSupersolution.lean",
+          "declaration": "inverseHessian_rpow_supersolution",
+          "declaration_line": 1006,
+          "first_line": 1015,
+          "last_line": 1027
+        },
+        "body_sha256": "5a03de1a0e6ceeb6c17c7246672f4656ffe422cbe51bbba4f14dc0204d0f1bbc",
+        "first_line": "obtain ⟨ψ, hψ, hloc⟩ := exists_contDiff_eventuallyEq_germ hK hφ hx",
+        "prior_candidate": 8,
+        "disposition": "reviewed_retain_distinct_contracts",
+        "reason": "Both consumers already call the same exists_contDiff_eventuallyEq_germ producer in KLS/Klartag/PowerSupersolution. The shared lines only transfer local PD/log-det inputs to that germ. The dual-transport consumer needs a smooth density and a flux identity for arbitrary smooth u; the supersolution has only C2 convex density, a direction theta and a positive real power. No second standalone producer is duplicated."
+      },
+      {
+        "nonblank_lines": 12,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Basic.lean",
+          "declaration": "integral_hessianInverseOperator_mul_eq_neg",
+          "declaration_line": 65,
+          "first_line": 124,
+          "last_line": 135
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Klartag/TransportLaplacian.lean",
+          "declaration": "integral_hessianInverseOperator_mul_eq_neg_weighted",
+          "declaration_line": 269,
+          "first_line": 311,
+          "last_line": 322
+        },
+        "body_sha256": "6dae96d798dd10eb5050b8340f5c50a50366f479be817574e08e4a020d28d2f1",
+        "first_line": "rw [integral_finsetSum _ (fun i _ => hRow2 i)]",
+        "prior_candidate": 9,
+        "disposition": "reviewed_retain_distinct_contracts",
+        "reason": "The repeated endpoint is finite-sum integral algebra after the same generic Haar integration-by-parts lemmas. The Letwin frontend uses normalized tilted measure exp(-phi), while the transport frontend uses independent W and unnormalized weighted Haar integrals. Their differentiability, weight and source equations differ; a new conclusion-carrying abstraction for this endpoint would duplicate Mathlib sum/integral operations."
+      },
+      {
+        "nonblank_lines": 12,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean",
+          "declaration": "inverseHessian_divergence",
+          "declaration_line": 756,
+          "first_line": 821,
+          "last_line": 832
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/KLS/Klartag/TransportLaplacian.lean",
+          "declaration": "transport_inverseHessian_divergence",
+          "declaration_line": 74,
+          "first_line": 148,
+          "last_line": 159
+        },
+        "body_sha256": "62202a4a93e42dbe4f489d1f03a89dfbe655b85cc2a20dc8d8e0df36067962ec",
+        "first_line": "simp_rw [add_mul, Finset.sum_add_distrib, neg_mul, Finset.sum_neg_distrib, Finset.sum_mul,",
+        "prior_candidate": 10,
+        "disposition": "reviewed_retain_distinct_contracts",
+        "reason": "The matched fragment only distributes and reorders finite sums in the inverse-Hessian identity. The actual first-derivative producers differ: -phi + V(gradient phi) versus -W + rho(gradient psi), with independent W. Shared inverse-Hessian calculus, third-derivative commutation and Mathlib finite-sum operations already supply the common mathematics. No source equation or weight is strengthened to force a merger."
+      },
+      {
+        "nonblank_lines": 12,
+        "left": {
+          "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+          "declaration": "exists_bregman_comparison_core",
+          "declaration_line": 173,
+          "first_line": 300,
+          "last_line": 313
+        },
+        "right": {
+          "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+          "declaration": "exists_section_volume_upper_bound",
+          "declaration_line": 396,
+          "first_line": 504,
+          "last_line": 517
+        },
+        "body_sha256": "2b1029254fca75b17faa865b8041085f60b625a1d68e58eb61d783ea7e361ce8",
+        "first_line": "have hTc : Convex ℝ (f '' S) := by",
+        "prior_candidate": 3,
+        "disposition": "shared_substantive_property_extracted",
+        "reason": "The remaining twelve lines are normalized-set setup plus a direct call of the common interior-ball producer; the substantive repeated proof has been removed."
+      }
+    ]
+  },
+  "fresh_name_normalized_fragment_count": 2,
+  "preserved_prior_findings": [
+    "TEXT-1",
+    "TEXT-2",
+    "NAV-1",
+    "STATE-1",
+    "REUSE-1",
+    "CHECK-1"
+  ],
+  "new_shared_producer": {
+    "name": "FunctionalInequalities.Analysis.closedBall_subset_of_ball_subset_closure",
+    "source": "formalization/FunctionalInequalities/Analysis/Convex/Boundary.lean",
+    "scope": "Real normed space; open nonempty convex set, two radii r<R and ball x R contained in its closure. No finite dimension, inner product, completeness, nontriviality, boundedness or positive-radius premise.",
+    "consumers": [
+      "SoftEngulfing.exists_bregman_comparison_core",
+      "Analysis.exists_section_volume_upper_bound"
+    ]
+  },
+  "module_paths_and_existing_public_names_unchanged": true,
+  "audit_report_ownership": [
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.diffusionGenerator_eq_vectorGenerator",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.fderiv_clm_comp_apply_vec",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator_clm_comp",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator_prodMk",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator_pi",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.fderiv_prodMk_apply_vec",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.Diffusion.fderiv_pi_apply_vec",
+      "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+    },
+    {
+      "declaration": "FunctionalInequalities.Probability.MomentMeasure.log_sub_ge_of_integral_limits",
+      "audit": "research/audits/CEK/FunctionalLimitAudit.lean"
+    }
+  ],
+  "linter_exceptions": [
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
+      "option": "linter.unusedVariables",
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.contDiffOn_logLaplace_ball",
+      "reason": "Retain the named positive-radius premise hr and the exact established log-Laplace contract."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Coarea/Isoperimetry.lean",
+      "option": "linter.unusedVariables",
+      "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet",
+      "reason": "Retain the named Lipschitz bound hK and the ambient structure of the original coarea interface."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
+      "option": "linter.unusedSectionVars",
+      "declaration": "FunctionalInequalities.KLS.integral_inner_sq_tilted_half_norm_sq",
+      "reason": "Retain the existing CompleteSpace binder and exact public telescope; this particular scalar proof does not consume that instance."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
+      "option": "linter.unusedVariables",
+      "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_distanceCutoff_le",
+      "reason": "Retain the reference Haar measure, named absolute-continuity premise hac and ambient structure from the established public contract."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+      "option": "linter.unusedVariables",
+      "declaration": "FunctionalInequalities.KLS.Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le",
+      "reason": "Retain the named hu01 range premise of the published [0,1]-valued test class, even though this proof route does not use the full range bound."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiConstant.lean",
+      "option": "linter.unusedVariables",
+      "declaration": "FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_mul_lintegral_min_superlevel_le",
+      "reason": "Retain the named hu01 range premise of the published [0,1]-valued test class, even though this proof route does not use the full range bound."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+      "option": "linter.unusedSectionVars",
+      "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_minkowskiContent_superlevel_le",
+      "reason": "Retain the explicit finite-dimensional and ambient SecondCountableTopology scope of the Minkowski coarea interface."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+      "option": "linter.unusedVariables",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.ae_conditionalFiber_logConcave",
+      "reason": "Retain the named Admissible premise hρ and the established fiber interface; the current proof derives log-concavity from the absolute-continuity route."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+      "option": "linter.unusedSectionVars",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_variance",
+      "reason": "Retain the existing CompleteSpace binder and exact public telescope; this particular scalar proof does not consume that instance."
+    }
+  ],
+  "unicode_review": {
+    "before_diagnostic_count": 1521,
+    "fixed_glyph": "ᐟ",
+    "retained_glyphs": [
+      {
+        "character": "̄",
+        "reason": "Combining macron in existing mathematical identifiers and matching source notation."
+      },
+      {
+        "character": "̃",
+        "reason": "Combining tilde in mathematical source notation."
+      },
+      {
+        "character": "″",
+        "reason": "Mathematical double-prime derivative notation in prose."
+      },
+      {
+        "character": "⪰",
+        "reason": "Positive-semidefinite ordering notation in prose."
+      },
+      {
+        "character": "∬",
+        "reason": "Double-integral notation in a variance identity."
+      }
+    ],
+    "scope": "Reviewed project typography; no claim that the default Mathlib Unicode allowlist has zero diagnostics.",
+    "final_pinned_linter": {
+      "status": "passed_with_reviewed_mathematical_unicode",
+      "owned_lean_files": 1342,
+      "diagnostics": {
+        "unicode": 1520
+      },
+      "reviewed_mathematical_glyphs": {
+        "″": 19,
+        "̄": 1472,
+        "⪰": 2,
+        "̃": 26,
+        "∬": 1
+      },
+      "whitespace_semicolon_and_other_diagnostics": 0,
+      "accidental_lookalike_fixed": 1
+    }
+  },
+  "source_reference_edits": [
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/ConcaveTilt.lean",
+      "before": "`KLS/BKL/PosteriorDomain.lean`",
+      "after": "`KLS/BKL/Posterior/Covariance.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactDomain.lean",
+      "before": "`KLS/BKL/PosteriorDomain.lean`",
+      "after": "`KLS/BKL/Posterior/Covariance.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Posterior/JointRegularity.lean",
+      "before": "`KLS/BKL/PosteriorDomain.lean`",
+      "after": "`KLS/BKL/Posterior/Regularity.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Operator/InverseSqrt.lean",
+      "before": "`KLS/BKL/PosteriorDomain.lean`",
+      "after": "`KLS/BKL/Posterior/Covariance.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Step.lean",
+      "before": "`EnergyIntegral.lean`",
+      "after": "`KLS/BKL/Localization/Energy/Integral.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/InverseHessianEnergy.lean",
+      "before": "`HessianOperator.lean`",
+      "after": "`Analysis/BakryEmery/Hessian/Operator.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean",
+      "before": "`Resolvent.lean`",
+      "after": "`Resolvent/Basic.lean`",
+      "occurrences": 2
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Conservativity.lean",
+      "before": "`Analysis/CutoffIntegrability.lean`",
+      "after": "`Analysis/Cutoff/Integrability.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean",
+      "before": "`Analysis/PrincipalInverseSqrt.lean`",
+      "after": "`Analysis/Operator/InverseSqrt.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Integral.lean",
+      "before": "`OpenGraphIntegral.lean`",
+      "after": "`Analysis/Graph/OpenIntegral.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Integral.lean",
+      "before": "`GraphIntegral.lean`",
+      "after": "`Analysis/Graph/Integral.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean",
+      "before": "`CoareaGraphJacobian.lean`",
+      "after": "`Analysis/Vector/Graph/CoareaJacobian.lean`",
+      "occurrences": 1
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before": "`SectionEngulfing.lean`",
+      "after": "`Analysis/Convex/Section/Engulfing.lean`",
+      "occurrences": 1
+    }
+  ],
+  "module_scope_edits": [
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+      "before": "bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`, and the main\nbound remains open.",
+      "after": "bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`. These\nanalytic identities are separate from the quantitative moment-potential bounds, whose producers\nretain their own source hypotheses.",
+      "reason": "Keep this weak-identity module local rather than deny separately proved quantitative bounds."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Graph/Jacobian.lean",
+      "before": "**No area formula is proved here**: everything below is about linear maps.  The nonlinear\nstatement — the `k`-dimensional measure of a `C¹` parametrized image as the integral of\n`normDet (fderiv)` — remains open, and is type-checked but *not* proved in the audit client.",
+      "after": "Everything below concerns linear maps. Nonlinear vector-graph area and weighted parametrization\nare supplied separately by `Analysis/Vector/Graph/{Area,Integral}.lean`. A general\nparametrized-image area formula is outside the statements of this linear module.",
+      "reason": "Identify the existing nonlinear graph consumers without asserting a general parametrized-image theorem."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/FormDomain.lean",
+      "before": "`Γ`/`Γ₂` estimates, their `L¹` self-improvement, BGL, small-time BV bounds, general-law passage\nand Buser's inequality all remain open.  This is general real Hilbert space material: no measure,\nno log-concavity and no KLS quantity.",
+      "after": "`Γ`/`Γ₂` estimates, their `L¹` self-improvement, BGL, small-time BV bounds, general-law passage\nand Buser's inequality are outside this module's statements. Positive-time domain regularization\nis supplied separately by `Generated/Smoothing.lean`; measure-specific estimates belong to their\nanalytic and log-concave consumers. This is general real Hilbert space material: no measure,\nno log-concavity and no KLS quantity.",
+      "reason": "Scope the form-domain result instead of globally understating later analytic consumers."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Smoothing.lean",
+      "before": "claimed, so the sharp constants `1/√(2et)` and `1/(et)` remain unproved.",
+      "after": "claimed here; `1/√(2et)` and `1/(et)` are outside the estimates proved in this module.",
+      "reason": "Preserve the exact coarse constants and the sharper-estimate non-claim as module scope."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+      "before": "The limit `g` is not yet named as an operator: the exponential approximation (the limit defines a\nstrongly continuous\nsemigroup of self-adjoint contractions) and the semigroup limit (its generator is `T†T`) are not\nproved here. Nothing\nhere is the Markov property, Bakry–Émery calculus, a heat estimate or any step of Buser's\ninequality.",
+      "after": "This module proves convergence to `g`. The named operator and semigroup laws are constructed in\n`Generated/{Basic,Laws}.lean`, and `Generated/Generator.lean` identifies the generator on its\nstated domain. Markov properties, Bakry–Émery calculus and heat/Buser estimates belong to\nseparate consumers.",
+      "reason": "Point to current semigroup owners while retaining this convergence-only contract."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean",
+      "before": "**No coarea formula is proved here.**  The fibre half — the **weighted** codimension-`m` area\nformula, the analogue of `setLIntegral_image_graphMap` — and the Tonelli assembly and patching are\nstill missing.",
+      "after": "This module supplies the ambient half of the local coarea argument. The weighted fibre area\nformula is in `Analysis/Vector/Graph/Integral.lean`; the Tonelli assembly and regular-open-set\npatching are in `Analysis/Vector/Coarea/{Local,Regular}.lean`.",
+      "reason": "Distinguish this ambient-side contract from the separately supplied fibre and assembly owners."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+      "before": "**This is a local statement on one chart, not the codimension-`m` regular coarea formula.**  Two\nthings are still missing for that: the countable cover of a regular open set by such charts with the\ndisjoint patching, and the codimension-`m` weighted slice measurability that makes the outer\nintegral well posed as an a.e. statement (the scalar analogues are the assembly in\n`Analysis/Coarea/Regular.lean` and `Analysis/Hausdorff/Slice/OpenMeasurable.lean`).",
+      "after": "This module proves the equality on one chart. `Analysis/Vector/Coarea/Regular.lean` supplies the\ncountable regular-open-set assembly and weighted slice measurability. The scalar counterparts\nare `Analysis/Coarea/Regular.lean` and `Analysis/Hausdorff/Slice/OpenMeasurable.lean`.",
+      "reason": "Retain the one-chart scope and identify the current regular coarea assembly."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+      "before": "The extension to arbitrary data `F = P_r g` is **not proved**. A separate transfer theorem\nretains explicit convergence of both fields `∇fₙ` and `-∇ℒfₙ`; the existing operator core for\n`A` does not provide the second convergence. No time interpolation or gradient estimate is\nclaimed. All statements retain the current full-dimensional log-concave model.\n\n`exists_seq_smooth_tendsto_regularized_fields` constructs two-field approximants of the form\n`P_{r/2}[fₙ]` with `fₙ ∈ C_c^∞`. It does not remove the heat evolution from the approximants;\nthe smooth-data Bochner theorem therefore does not yet apply to them.",
+      "after": "This module's transfer theorem for arbitrary data `F = P_r g` retains explicit convergence of\nboth fields `∇fₙ` and `-∇ℒfₙ`; the operator core for `A` alone does not supply the second\nconvergence. `BakryEmery/TestClassExtension.lean` provides the arbitrary-positive-time-data\nextension using the separate two-field form-range construction. No time interpolation or\ngradient estimate is claimed here. All statements retain the full-dimensional log-concave model.\n\n`exists_seq_smooth_tendsto_regularized_fields` constructs approximants `P_{r/2}[fₙ]` with\n`fₙ ∈ C_c^∞`. Their heat evolution is retained, so using them requires the separate extension\nstep rather than the compact-data Bochner statement alone.",
+      "reason": "Separate the conditional transfer and regularized approximants from their actual extension consumer."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+      "before": "## The two halves, and which one is still missing",
+      "after": "## The two ingredients and their separate owners",
+      "reason": "The following paragraph already records the proved InteriorRegularity owner; align its heading."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+      "before": "Nothing here constructs the resolvent, the Yosida approximation or the semigroup; those are\nresolvent solvability,\nthe Yosida approximation and the semigroup limit, and are not proved. This module is general real\nHilbert space material: it\nmentions no measure, no log-concavity and no KLS quantity.",
+      "after": "This module supplies weak-form estimates. The resolvent construction is in\n`Resolvent/Basic.lean`; Yosida limits and the generated semigroup have their separate owners.\nThe statements here are general real Hilbert space material, with no measure, log-concavity or\nKLS quantity.",
+      "reason": "Keep the weak-form responsibility without globally denying later resolvent and semigroup constructions."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Basic.lean",
+      "before": "**The area formula itself is not proved here**: the two-sided estimates and the limit, the fourth\nand fifth phases of the codimension-one file, are the remaining part of vector-valued graph area.",
+      "after": "This module supplies the graph-map infrastructure. The two-sided estimates and area formula\nare in `Analysis/Vector/Graph/{Sandwich,Area}.lean`, and the weighted change of variables is in\n`Analysis/Vector/Graph/Integral.lean`.",
+      "reason": "Replace the obsolete remaining-phase note by the actual vector-graph owners."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+      "before": "**The area formula itself is still not proved**: the limit `ε → 0` and the countable patching are\nthe fifth and last phase.",
+      "after": "This module supplies the two-sided estimates. `Analysis/Vector/Graph/Area.lean` takes the\n`ε → 0` limit and performs the countable patching for the area formula.",
+      "reason": "Identify the existing area-formula consumer while retaining the sandwich-only scope."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "before": "Scope / not proved: the uniqueness step of (ii) ⇒ (i) (uniqueness of moment-measure potentials,\nCordero-Erausquin–Klartag) is not formalized, so the limit potential is produced, not identified\nwith a given potential, and convergence of the whole sequence is not asserted. The paper's",
+      "after": "Scope of this limit producer: it constructs a limit potential without identifying it with a\ngiven potential, and it does not assert convergence of the whole sequence. Moment-potential\nuniqueness has its separate current owner in `KLS/CEK/Uniqueness.lean`; applying that theorem\nrequires matching its source and translation hypotheses. The paper's",
+      "reason": "Separate the limit producer from the already formalized CEK uniqueness theorem without promoting the whole-sequence conclusion."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+      "before": "Not proved: the `L¹`-type estimate",
+      "after": "Outside this module's statements: the `L¹`-type estimate",
+      "reason": "Keep this frontend limitation local instead of denying separate self-improvement and heat consumers."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean",
+      "before": "The upper bound `Is(μ)² ≤ 2 / Var μ` and the equality cases are not formalized.",
+      "after": "The upper bound `Is(μ)² ≤ 2 / Var μ` and equality cases are outside this module's proved\nstatements.",
+      "reason": "Retain the precise one-sided result and leave global paper coverage to the literature register."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean",
+      "before": "independence is not proved. The identity form of (16) on `D(A)` is not stated.",
+      "after": "independence and the identity form of (16) on `D(A)` are outside this module's statements.",
+      "reason": "Keep the fixed-basis weak-Hessian scope explicit."
+    }
+  ],
+  "source_reference_scan": {
+    "reviewed_original_references": 332,
+    "initial_candidates": 18,
+    "corrected_occurrences": 14,
+    "valid_root_or_brace_group_candidates": 4,
+    "current_gate": "Every live backticked production source-file reference must resolve."
+  },
+  "module_scope_review": {
+    "initial_candidates": [
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "line": 47,
+        "context": "bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`, and the main bound remains open. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean",
+        "line": 29,
+        "context": "Generic real-variable tools; the cutoffs `η(W/R)` and the quantitative generator defect of Lemma A.4 are not provided here.  Smooth bounded-range profiles (`exists_smooth_compact_extension_on_nonnegative_interval` and its"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Graph/Jacobian.lean",
+        "line": 24,
+        "context": "statement — the `k`-dimensional measure of a `C¹` parametrized image as the integral of `normDet (fderiv)` — remains open, and is type-checked but *not* proved in the audit client. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/FormDomain.lean",
+        "line": 64,
+        "context": "`Γ`/`Γ₂` estimates, their `L¹` self-improvement, BGL, small-time BV bounds, general-law passage and Buser's inequality all remain open.  This is general real Hilbert space material: no measure, no log-concavity and no KLS quantity. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Smoothing.lean",
+        "line": 23,
+        "context": "`sup_{λ ≥ 0} λ exp (-2tλ) = 1/(2et)` and `sup_{λ ≥ 0} λ ² exp (-2tλ) = 1/(et) ²` are **not** claimed, so the sharp constants `1/√(2et)` and `1/(et)` remain unproved.  ## Proofs"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+        "line": 19,
+        "context": " The limit `g` is not yet named as an operator: the exponential approximation (the limit defines a strongly continuous semigroup of self-adjoint contractions) and the semigroup limit (its generator is `T†T`) are not"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean",
+        "line": 28,
+        "context": "formula, the analogue of `setLIntegral_image_graphMap` — and the Tonelli assembly and patching are still missing. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+        "line": 26,
+        "context": "**This is a local statement on one chart, not the codimension-`m` regular coarea formula.**  Two things are still missing for that: the countable cover of a regular open set by such charts with the disjoint patching, and the codimension-`m` weighted slice measurability that makes the outer integral well posed as an a.e. statement (the scalar analogues are the assembly in"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/JacobianContinuity.lean",
+        "line": 8,
+        "context": "`LinearMap.normDet` but **not** its continuity in the operator, so the right-hand side of the area formula is not yet known to be an integral of a measurable function.  This module supplies that.  `normDet A` is the square root of the determinant of the Gram operator `Aᵀ A`, and each step of"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/CEK/GeneralExistence.lean",
+        "line": 25,
+        "context": "μ(E)`. Uniqueness up to translation is not provided here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+        "line": 19,
+        "context": "`P_{r/2}[fₙ]` with `fₙ ∈ C_c^∞`. It does not remove the heat evolution from the approximants; the smooth-data Bochner theorem therefore does not yet apply to them. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+        "line": 31,
+        "context": " ## The two halves, and which one is still missing  The classical proof that a weighted Laplacian on a complete space is essentially self-adjoint on"
+      }
+    ],
+    "followup_boundaries": [
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+        "line": 26,
+        "context": "is the square of the Hessian in that basis (`hessianSqStdBasis`); its independence of the basis is not proved here, so no invariant Hilbert–Schmidt notation is introduced. The third-order derivatives `∑ⱼ ∂ⱼf ∑ᵢ ∂ᵢ∂ᵢ∂ⱼf` produced by `Δ‖∇f‖²/2` and by `⟪∇f, ∇Δf⟫` cancel exactly, after the commutation `∂ⱼ∂ᵢ∂ᵢ f = ∂ᵢ∂ᵢ∂ⱼ f` (`fderiv_fderiv_fderiv_apply_comm`); the drift"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
+        "line": 19,
+        "context": "centered isotropic probability law with all exponential moments satisfies `R^μ_3 ≤ 8 Id` (BKL Lemma 4.2 in that conditional, restricted form; the Letwin estimate is not proved here).  Cumulants of order `k ≥ 2` transform along affine maps `x ↦ T(x − a)` through the adjoint of `T`"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "line": 40,
+        "context": "`w` is used. These are supporting identities; Letwin Theorems 2.5 and 1.2 are not proved here. The inverse-calculus assembly additionally proves weak (2.5) from a Lipschitz log-det representative, a Lipschitz gradient and a given weak local-L2 Hessian tensor. No C2 regularity or"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
+        "line": 21,
+        "context": "commutation is assumed. The positive semidefinite bound is a named hypothesis: it is not constructed here, nor is the moment map, Brascamp–Lieb or Theorem 2.5 itself."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Basic.lean",
+        "line": 23,
+        "context": " The Yosida approximation and the semigroup limit are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+        "line": 26,
+        "context": "resolvent solvability, the Yosida approximation and the semigroup limit, and are not proved. This module is general real Hilbert space material: it mentions no measure, no log-concavity and no KLS quantity."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean",
+        "line": 16,
+        "context": "spaces of the same dimension, so that determinant does not typecheck. `lintegral_image_eq_lintegral_normDet_fderiv_mul` supplies the missing statement: the volume factor is `LinearMap.normDet`, which is defined between different spaces, and the proof conjugates by a linear isometry — measure preserving, and of unit norm determinant, so nothing is added."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Lipschitz.lean",
+        "line": 29,
+        "context": "required.  **It is not a Sard theorem**: nothing is claimed about the measure of the set of critical values.  The **locally** Lipschitz statement is not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Basic.lean",
+        "line": 18,
+        "context": " **The area formula itself is not proved here**: the two-sided estimates and the limit, the fourth and fifth phases of the codimension-one file, are the remaining part of vector-valued graph area. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+        "line": 17,
+        "context": " **The area formula itself is still not proved**: the limit `ε → 0` and the countable patching are the fifth and last phase. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Whitney/FirstOrderJet.lean",
+        "line": 10,
+        "context": "compatible first-order jet `(f, F)` on a compact set extends to a globally `C¹` function with exactly those values and derivatives.  **compact Whitney extension itself is not proved in this module**, and the pinned Mathlib contains no Whitney extension theorem — only the unrelated `WhitneyEmbedding` for manifolds"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Energy/Euclidean/Slope/Recovery.lean",
+        "line": 33,
+        "context": " ## What is not proved here  No density statement: the mollification radius is uniform in `x`, which is genuinely insufficient"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Energy/Form/ClosedQuadratic.lean",
+        "line": 15,
+        "context": " Homogeneity is stored only for nonzero scalars. The separate zero field supplies the missing branch without interpreting the indeterminate expression `0 * ⊤`. The derived theorem `ClosedQuadratic.smul` exposes both branches in one total statement."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Energy/Relaxation/Recovery.lean",
+        "line": 10,
+        "context": "sequence. At a point where the relaxation is `⊤`, such a sequence need not exist: for example, the concrete test type may be empty. A dense realization supplies the missing approximating sequence and therefore gives recovery sequences at every point, including points of infinite relaxed energy."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean",
+        "line": 53,
+        "context": "`𝒜`; the weak Hessian is taken in the fixed standard orthonormal basis. Lemma 3.3, Lemmas 3.8–3.9 and Theorem 3.1 are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Taylor.lean",
+        "line": 51,
+        "context": "not needed. Lemma 3.8, the bound of Lemma 3.9 by `R` and Theorem 3.1 are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean",
+        "line": 47,
+        "context": "universal constant; the bound (29) is used only for `d` itself, and `R ≥ 1` and the centering of `f` are not needed. Lemma 3.9's bound by `R` and Theorem 3.1 are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/Posterior/Response.lean",
+        "line": 11,
+        "context": "only; the stochastic equations (67)–(71) are not constructed. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Cumulant.lean",
+        "line": 19,
+        "context": " (111) and (112) themselves are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+        "line": 36,
+        "context": " Scope / not proved: the uniqueness step of (ii) ⇒ (i) (uniqueness of moment-measure potentials, Cordero-Erausquin–Klartag) is not formalized, so the limit potential is produced, not identified with a given potential, and convergence of the whole sequence is not asserted. The paper's"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+        "line": 37,
+        "context": "Scope / not proved: the uniqueness step of (ii) ⇒ (i) (uniqueness of moment-measure potentials, Cordero-Erausquin–Klartag) is not formalized, so the limit potential is produced, not identified with a given potential, and convergence of the whole sequence is not asserted. The paper's `Ω`-supported moment measures and continuous test functions on `Ω` are replaced by weak"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Letwin/HessianTrace.lean",
+        "line": 27,
+        "context": "`KLS.LogConcave.integral_trace_quadratic_le_two_mul_trace_sq`. The Jordan decomposition extends the bound to every symmetric `B`. Lemma 2.2 for the source class and Klartag's bound are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean",
+        "line": 44,
+        "context": "Lemma 2.1 on `𝒜`. The Hessian square is taken in the fixed standard orthonormal basis; basis independence is not proved. The identity form of (16) on `D(A)` is not stated. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+        "line": 31,
+        "context": " Not proved: the `L¹`-type estimate `|T̄P_t f| ≤ P_t |T̄f|`, the reverse (Bakry–Gentil–Ledoux) estimate, small-time bounds, or any Buser or KLS statement. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Inverse.lean",
+        "line": 19,
+        "context": "counterpart of the source lemma: the polynomial-growth class `𝒜`, smooth representatives and the pointwise equation are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Temperate.lean",
+        "line": 25,
+        "context": "source's iterates are not proved here. -/"
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean",
+        "line": 16,
+        "context": "Minkowski content is the derivative `f(m)` of the distribution function. The upper bound `Is(μ)² ≤ 2 / Var μ` and the equality cases are not formalized. -/"
+      }
+    ],
+    "targeted_corrections": 16,
+    "decision": "Corrected stale global noncompletion prose to the actual per-module scope and current owners; preserved conditional, dimension-specific, source-class and genuinely stronger-target boundaries."
+  },
+  "validation_inputs": {
+    "documentation_regression_tests": 18,
+    "narrow_clients": [
+      "research/audits/SourceLayout/ConvexInterior.lean",
+      "research/audits/SourceLayout/SectionInterior.lean",
+      "research/audits/SourceLayout/VectorGenerator.lean"
+    ],
+    "source_evidence_rebindings": 59,
+    "production_code_change_files": 11,
+    "comment_only_lean_files": 35,
+    "section_call_reference_mutation_control": "Expected failure when the required shared-producer name is replaced by an unrelated theorem in a disposable audit copy."
+  },
+  "source_changes": [
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+      "before_sha256": "b26541ab1a440f57679dbb9c255bde57ddab159ad8eed4a543548f041d2c841b",
+      "after_sha256": "2ab35e2e7c04fdb48f39c89d6d72211b79741914f5b65b2e531d79c0e744ab24",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/InverseHessianEnergy.lean",
+      "before_sha256": "6e32a6fb5cdb1813807a8d78bccfb66ed5555feac44b20afe1635216ff8175ad",
+      "after_sha256": "06812307e4030b4aee03f871dad55fc5fe48e0bc612696d3538cb33a6dab42a7",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Boundary.lean",
+      "before_sha256": "0d46950eab2787529e017bdc36f28574b9caefd3e1eed61f535653a1e5dc739b",
+      "after_sha256": "e1b59cb4b426469d622b77659a3a16b5e39a51d565dc0966563f5fbd6b2093bd",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Legendre/Basic.lean",
+      "before_sha256": "2b5d08b823d0584827ec83c6787f8ae9c2b68daa653a287ede35a6defb6ae24f",
+      "after_sha256": "493c2ae11c1c1090294a31a8bfe9259236f8df5dba0ff1435f75f5e57a67cd75",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Engulfing.lean",
+      "before_sha256": "f54ff56915c551b00547f618c888d14369b8fb2def802d1e3d8b284590bc29f4",
+      "after_sha256": "25a9a85a63be1a637f436bc3234a41a5350f2de0748c92f197719f86223ec603",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Convex/Section/Growth.lean",
+      "before_sha256": "6752f520bc6d7e5018e32560216f975f1b64bda4b65f3404eb5fabff32383feb",
+      "after_sha256": "e1f77bb845b515620704026530c1ebe32b105775a2d1778d299720b4327d2636",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Conservativity.lean",
+      "before_sha256": "a1379f204640dd8a62314ec7d94162d7995229629ac2dfab5b331834111e850f",
+      "after_sha256": "e3b3381097be65d1e1816d9e161b68fcb23e908c7449f84ca0f2bf16499f3642",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean",
+      "before_sha256": "17311fe40404f9c6f7d1b58691196bdcf5001113ceb0aeb93536d38f40fd2ea5",
+      "after_sha256": "2a2fc7a833c096b7589cb3e454afd3fbb9e5dbe2bbc89f3bdba9ef0f4380dd15",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Graph/Jacobian.lean",
+      "before_sha256": "8f24fc07a5fb391b1ab976834028ae49106a11c3fa79c222b674763b478d6d02",
+      "after_sha256": "45fe6fbcd1921827b434b8f1874c64da935f3fefd896eb91ef9f675d16df7f59",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean",
+      "before_sha256": "725a0da43a1049591aff3695b36877cd055b3fde65c4c5ea476bf6afb024e01a",
+      "after_sha256": "ae673b1a5ea776e1a198d5643c1cb4cfae5150743aec5c8bbacfda2bf1a27af1",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "before_sha256": "70752596015f912a57ff7b546f20b1d516f863065138b84134197015fb75415c",
+      "after_sha256": "aeeb8d8fcfe03555305dff97bcd53e3ba6d954fe228a66c78b547607f43d1939",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean",
+      "before_sha256": "745a8c4b04d21e159e445ac10e252737809ecb1db5f23225f5a60e9386b2489b",
+      "after_sha256": "5cf7e47061f6a4305ae9c2025d6cac59195494701748f6e036f6c976649a9833",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Operator/InverseSqrt.lean",
+      "before_sha256": "5ab2c6e3ea3990324d63e6048e41bb55007f9bdbc3ba17fcaa6e3956ea1809ba",
+      "after_sha256": "832113c9731975208b018ba0d2bfe7abbc61fd46dd2848c78b0ea8b3298b1d84",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/FormDomain.lean",
+      "before_sha256": "04347d514ecd6fe14b661f63a026f2501fc0bbdc717039d70b2a56ef148a38d2",
+      "after_sha256": "b5d06387c9952742d93541cd60e2e3614578d267f2908d7dae3c8b6530fe1bd5",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Smoothing.lean",
+      "before_sha256": "0faa7cb2bb6a2f9db571b11c2a7b52299e533232abd3945b5de16edc3fa0990d",
+      "after_sha256": "093745825ea80c0a6b3bc30a3cd1c6f5c22f78b25936e8e826de42f4e6a1abf6",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+      "before_sha256": "426a9f81d326fce950e5912f2d75ce0645fd52557631209ecd8c669336cb271a",
+      "after_sha256": "bf709564ddbb14e70a1befa02ee8eff91e0133be2c688c15c30bdad40e2f238b",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean",
+      "before_sha256": "aaf84f72a8099d02afaf0091f23ba02253ae61ecce7f21ee901fd8dca6711b7d",
+      "after_sha256": "5fd29a19ee53d0c63c84f6ea7965a047f182043b85e97c71c7ab4ae3fad6a6c5",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+      "before_sha256": "d0fac129975b5a59b4c4fa14178b193641c16c0cf5d16ad5c444614c8aa2e77b",
+      "after_sha256": "1e980b85425d8a623f316a4155c4067b558cbe5f6456bdfa43ff8fa3b8c8f75f",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean",
+      "before_sha256": "d3ff13336a39c6298c090f07f36d0b08f2e5940c3721093fb7e5d43b7030ab66",
+      "after_sha256": "f95904f6c5f958daf2fc86a3a215a207975323ddc41af71c213264492046fb6d",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+      "before_sha256": "62cc36e0ef5b40d370ae68e8c73b5732a202aaf476a2d5e93a9f0fee296e543f",
+      "after_sha256": "854d809a028565f2ea82fc7a5a3839d854770f3df56f052bae7d1af83a01ffed",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Basic.lean",
+      "before_sha256": "c0445e732e98405d6fe16e4abbdac91941e740438e533d97268dde86785d3a73",
+      "after_sha256": "c656dbf95d5f797ef47e55dca0d61982facc31938f60c01c8887c52d41aa1372",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Integral.lean",
+      "before_sha256": "4524b522339ecccb04c7f3612a55249bc50c5600550a24f54bd54986be934566",
+      "after_sha256": "cb9a3c48dfa4d50ded44bc2bb9887b8c961ba25392645c215ccc0b83e7123ac5",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+      "before_sha256": "8f9e3c6c139fe6279a0e0d247763628ee44eaa4af0d9d5d48f185f58f5dfc028",
+      "after_sha256": "6e8a3e24eb7d16337305591780fbfa9c4708f743b0a5eed639876011520cb629",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Step.lean",
+      "before_sha256": "cb297bb1f7ad869be7d517b909724c52570ac2ab41fa33ee74b3f6fc922210b1",
+      "after_sha256": "55381caf65a1508b836e8eaa8ec2cdd1be0603b93939579e1cad2c3a76c67eda",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/ToCumulant.lean",
+      "before_sha256": "36aac50781017e8f70a76164cedf05c3d5656219afd8f7c675e9815e6bb8a789",
+      "after_sha256": "7297f2c9c473cac884bae8f3abd4f365b6288ade0d07d52ac4a9e968bec53c6b",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Cumulant.lean",
+      "before_sha256": "21ea4ad842bc6aca7c856f674eed146ad56a22a105bfcf38e8905c6cd7b836d4",
+      "after_sha256": "39bc076955a2cc106c9f8d6b2b343409ced212f6ea010c875e3d59602572ec07",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/CEK/MaximizerContinuity.lean",
+      "before_sha256": "9fa1702224ba7f517d0969d410402cd6375435618d24d741a9cbb7d5abfe804e",
+      "after_sha256": "726b0eca8682115179e7c813ab9a0deae61b15efb3eb324828b9f71611e1e9ec",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVConstant.lean",
+      "before_sha256": "208e8dbca53e4f21791ca848990c7f83972674d8fe02e455d30ef200d688e596",
+      "after_sha256": "eecd5447daf35c1a8cdf0763d12a1f56350cb7f846e307980da8fa110c0154a2",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Klartag/LinearGrowth.lean",
+      "before_sha256": "6210a858d1ca9605ebaefa25efb595f592d1bce87118f94eff20d34433dd0ca9",
+      "after_sha256": "a1ea901560547d461e39c8dac6f74ebd87e4696c13f171b7c69bd3cad7dd2e81",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "before_sha256": "c9230472e5a9806590bf180939935490759c51c7bec386d214f5b2e06ec58f4a",
+      "after_sha256": "7df594518465d3433aac1bfb556ddee2ab37e606334160166b869a335764ee19",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/ConcaveTilt.lean",
+      "before_sha256": "39df2979dd87125e7983ea30518b65740cc8d3a3371ef75c1434350bca01973f",
+      "after_sha256": "b320ebfd2e1b462eac7c3310f6b68145fbe2720cd5163d065ec081746c2277b4",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
+      "before_sha256": "5d4002a8d418511117f457b2793b51c03bbe1f48b5c571a5d39a82aedc9c07ce",
+      "after_sha256": "9d8337a9d8552c785d4313e3407363fdd8b8363b326d17c65c5be655de00f12c",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+      "before_sha256": "8d2dcc0017076992800a00f0e81e94ff237a82a73f9b1dfb2f9c7c173af78487",
+      "after_sha256": "fcd3ef751c6ec17498109ea30295d4fff2923ff325bcee9982521191e5cb7055",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+      "before_sha256": "0bed5d1ec015bf536ea44f64276fe7a6f2e89096ef73dc6a04b699fa87d41f78",
+      "after_sha256": "5a36c29f114e7f081adafda8821cea586d86885238fd97052565100b16842d3a",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+      "before_sha256": "8b455ae3f9002392be897d57099f2b4b557b0a0f8fe5fb00f23337a797d111eb",
+      "after_sha256": "5f5f171433678123d6c17a5bbf1ef8f5ec38ed3c180b964e687733cf9115e68d",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean",
+      "before_sha256": "9cda279f9d15a93e13f7993781e1322eb182b56763be0277808e88dccf64056a",
+      "after_sha256": "17ead0ebf8329b5338ff14ed7ae0075e8498d76cf64011b60a662b0dee6188ab",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+      "before_sha256": "44e16c19bc6bb3a4f38b334073724a45f52bcb4ef0c8d5f8ebf4816d78796818",
+      "after_sha256": "e9227250dbd4aab7e9019c98ff1ad46ea2b4444fc2d436911b87212f6059b26f",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean",
+      "before_sha256": "15e7430ef84183ca16e4f0b1094130cab308c4123621aa75c898ec4f47f9cc75",
+      "after_sha256": "a6aa436d77fd01d9e5eecbf12cd316911fb0476af5fd73d25f9cce40c3b6894c",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean",
+      "before_sha256": "0cca19d973f66813ece54ffec63664f5693031c362038706d65644c013909e82",
+      "after_sha256": "c6f02dc06fb81c163d5b34098952767489abf049f0fbfc3dc693b59af1379b2a",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Diffusion/VectorGenerator.lean",
+      "before_sha256": "55ae5565108b3b46c3f55b5502ef461a1facb4cf20626478d46c47803f5526de",
+      "after_sha256": "b27e2f5ba5a4ab1610a17cb9ee169d255218a31fd97a34bfac7c56759b36e8a6",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Gaussian/CharacteristicFunction.lean",
+      "before_sha256": "9ebe76ca4eb9a29426dc15b316621f2f28af600f667811976734589caf927ee8",
+      "after_sha256": "702f561f82bf3e4a3ece8747ce6b23d2fb4135ef533465aa8770642ad485599b",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/ConjugateMass.lean",
+      "before_sha256": "94dc72c8a3c13a3b5f8f8587ab7e3cb982ba95dc16f6ffe3d175b4c51e4075d9",
+      "after_sha256": "6f1785a54e3738bebc8fb28879dedc360f035851c4eff54ca2e705305836c1b4",
+      "code_change": true,
+      "masked_noncomment_code_equal": false
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactDomain.lean",
+      "before_sha256": "54675c51168f0dc0ccc64867401b0492df9206a256029d4a239bba758b09333c",
+      "after_sha256": "28f55a765847379fc8c2e33a46fda2e4131821041fa14085b2552de1934339ee",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Posterior/JointRegularity.lean",
+      "before_sha256": "1a1afab66446cf6178ccc23d5ba53eeb5c5ce8ccf2eaaba64d2f23e5a681e6ec",
+      "after_sha256": "d0322a34dd0d0baf5ac03acaa82bfbcfb7713530a01f5f91c8db397793d8b890",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Probability/Support/Convex.lean",
+      "before_sha256": "8f1dcb4393d4a1428f0b9bc6d1d6613f3e3a9e41ec5493d24c7ea0769df598ce",
+      "after_sha256": "0c9ce65329ec2b6ade684d98d57d9e8718994d342b436243f6e5cbb058011992",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    },
+    {
+      "source": "research/audits/Klartag/LinearGrowth.lean",
+      "before_sha256": "d64c697735e8dba660eac4022a8de2c28b71756ba7811fbf992526414680f5e0",
+      "after_sha256": "f0a60cae056e05b2a207eca8f9d18cfd2e29bb1236d7a05c945db9e632bd6f19",
+      "code_change": false,
+      "masked_noncomment_code_equal": true
+    }
+  ],
+  "preservation": {
+    "baseline_archive": "build/history/2026-10-30-remaining-maintenance/baseline",
+    "prior_maintenance_maps_unchanged": true,
+    "existing_module_paths_and_existing_names": "retained",
+    "mathematical_records": "Only 59 checked source-evidence SHA256 pins are rebound; exact JSON restored to baseline by reverting those fields.",
+    "real_index": "Original staging entries and original index bytes are retained; final preservation record governs acceptance.",
+    "historical_records": "Prior maps, receipts and exact superseded handoff are preserved."
+  },
+  "public_api_review": {
+    "existing_entries_retained": 6994,
+    "additions": [
+      "FunctionalInequalities.Analysis.closedBall_subset_of_ball_subset_closure"
+    ],
+    "removed": [],
+    "unexpected_nonposition_changes": [],
+    "reviewed_docstring_edits": [
+      {
+        "name": "FunctionalInequalities.Probability.MomentMeasure.linear_growth_of_le_finrank_add_iInf",
+        "field": "docstring",
+        "before": "**Klartag arXiv:1309.2767v1, Lemma 2.2**, given (10): if `ψ` is convex and bounded below with\n`ψ(0) ≤ n + inf ψ`, then `ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x`, where `‖·‖_ψ` is the gauge of\n`K(ψ) = {x ; ψ(x) ≤ 2n + inf ψ}`. ",
+        "after": "**Klartag arXiv:1309.2767v1, Lemma 2.2**, given (10): if `ψ` is convex and bounded below with\n`ψ(0) ≤ n + inf ψ`, then `ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x`, where `‖·‖_ψ` is the gauge of\n`K(ψ) = {x | ψ(x) ≤ 2n + inf ψ}`. "
+      },
+      {
+        "name": "FunctionalInequalities.KLS.BKL.Localization.cumulantEnergy_eq_sum_sq_of_isotropic",
+        "field": "docstring",
+        "before": "For an isotropic law the energy at the initial parameter is the standard-basis sum\n`Σ_J κ_{d+1}(u, e_J)²` (`σ = Cov⁻¹ᐟ² = Id`). ",
+        "after": "For an isotropic law the energy at the initial parameter is the standard-basis sum\n`Σ_J κ_{d+1}(u, e_J)²` (`σ = Cov^(-1/2) = Id`). "
+      },
+      {
+        "name": "FunctionalInequalities.Probability.MomentMeasure.linear_growth_of_centered",
+        "field": "docstring",
+        "before": "**Klartag arXiv:1309.2767v1, Lemma 2.2**: a centered convex `ψ` satisfies\n`ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x`, with `‖·‖_ψ` the gauge of\n`K(ψ) = {x ; ψ(x) ≤ 2n + inf ψ}`. ",
+        "after": "**Klartag arXiv:1309.2767v1, Lemma 2.2**: a centered convex `ψ` satisfies\n`ψ(x) ≥ n ‖x‖_ψ + ψ(0) - 2n` for every `x`, with `‖·‖_ψ` the gauge of\n`K(ψ) = {x | ψ(x) ≤ 2n + inf ψ}`. "
+      }
+    ],
+    "record": "build/history/2026-10-30-remaining-maintenance/public-api-comparison.json"
+  },
+  "exact_compiler_interface_review": {
+    "status": "passed",
+    "existing_local_declarations_compared": 12556,
+    "exact_type_binder_universe_nonproof_value_and_owner_differences": 0,
+    "additions": [
+      {
+        "theorem": true,
+        "name": "FunctionalInequalities.Analysis.closedBall_subset_of_ball_subset_closure",
+        "change": "added"
+      }
+    ],
+    "strict_expression_mutation_controls": "passed",
+    "proof_values": "Intentionally differ for refactored theorem proofs; nonproof definition values are compared exactly.",
+    "record": "exact-interfaces.json"
+  }
+}

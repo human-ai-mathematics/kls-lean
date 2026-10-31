@@ -1,10 +1,13 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
 
 /-!
 # Audit: (47), Lemma 3.4, Corollary 3.5 and Lemma 3.2 for the BKL iterates
 
 The propositions `I4`, `I5`, `I6` and `I8` of `research/audits/BKL/IterateRouteStatements.lean`
-(operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
+(operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with
+the same `variable`
 block and notation, and discharged by the library theorems of
 `KLS/BKL/PoissonIterate/Defect.lean`:
 
@@ -19,6 +22,8 @@ block and notation, and discharged by the library theorems of
 The centering of `f` and the bound `0 < C` are not used for `i4`–`i6`. These are supporting
 results of the operator route: Lemma 3.3 and Theorem 3.1 are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

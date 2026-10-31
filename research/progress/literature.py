@@ -84,8 +84,10 @@ LEMMA_STYLES = {'formalized': 'fill:#dbeafe,stroke:#2563eb,color:#1e3a8a',
                 'pending': 'fill:#fee2e2,stroke:#dc2626,color:#991b1b',
                 'improved': 'fill:#dcfce7,stroke:#15803d,color:#14532d'}
 RELATIONS = ('same', 'partial', 'stronger', 'alternative')
+# Lean module-system headers add `public`/`meta` modifiers and `public section`.
 _DECLARATION_END = re.compile(r'^(?:@\[|/--|/-!|theorem |lemma |def |noncomputable |instance |'
-                              r'structure |abbrev |private |protected |omit |variable |section|end |namespace )')
+                              r'structure |abbrev |private |protected |public |meta |omit |variable |'
+                              r'section|end |namespace )')
 
 
 def declaration_body(source, name):
@@ -94,7 +96,8 @@ def declaration_body(source, name):
     parts = name.split('.')
     for k in range(len(parts)):  # longest written suffix first, e.g. `def Intrinsic.constant`
         written = re.escape('.'.join(parts[k:]))
-        head = re.compile(rf'^(?:noncomputable |private |protected )*(?:theorem|lemma|def|abbrev|structure) {written}(?:\s|$)')
+        head = re.compile(rf'^(?:noncomputable |private |protected |public |meta )*'
+                          rf'(?:theorem|lemma|def|abbrev|structure) {written}(?:\s|$)')
         for i, line in enumerate(lines):
             if head.match(line):
                 end = next((j for j in range(i + 1, len(lines)) if _DECLARATION_END.match(lines[j])), len(lines))

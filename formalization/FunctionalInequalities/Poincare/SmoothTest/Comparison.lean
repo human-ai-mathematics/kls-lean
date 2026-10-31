@@ -1,6 +1,8 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import FunctionalInequalities.Poincare.SmoothGradient.Comparison
-import FunctionalInequalities.Poincare.Relaxation
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import FunctionalInequalities.Poincare.SmoothGradient.Comparison
+public import FunctionalInequalities.Poincare.Relaxation
 
 /-!
 # Connecting smooth tests to the selected relaxed constant
@@ -15,11 +17,14 @@ there is no factor of two. `SmoothTest.Holds` takes a real constant, so its argu
 
 Source: Blueprint `thm:legacy-relaxed-holds-equivalence` and
 `thm:legacy-canonical-constant-comparison`. The historical manuscript's Definition 2.1 supplies
-the variance/gradient normalization, as documented in `Poincare.SmoothTest.Basic`; the exact test domain,
+the variance/gradient normalization, as documented in `Poincare.SmoothTest.Basic`; the exact test
+domain,
 relaxation and coordinate comparisons are local specifications. They apply to every Borel
 probability in finite dimension, without second moments, density, log-concavity, or a positive
 dimension assumption. They do not identify the locally Lipschitz literature constant.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -89,11 +94,12 @@ theorem holds_iff_intrinsic (C : NNReal) :
   exact (holds_iff_ambient μ C).trans
     (Poincare.SmoothGradient.Ambient.holds_iff_intrinsic μ C)
 
-/-- The smooth-test and intrinsic smooth-gradient extended optima agree for every finite-dimensional law.
+/--
+The smooth-test and intrinsic smooth-gradient extended optima agree for every finite-dimensional
+law.
 Source: Blueprint `thm:legacy-canonical-constant-comparison`; literature equivalence is separate. -/
 theorem constant_eq_intrinsic :
     constant (μ : Measure E) = Poincare.SmoothGradient.Intrinsic.constant μ := by
-  exact (constant_eq_ambient μ).trans
-    (Poincare.SmoothGradient.Ambient.constant_eq_intrinsic μ)
+  exact (constant_eq_ambient μ).trans (Poincare.SmoothGradient.Ambient.constant_eq_intrinsic μ)
 
 end FunctionalInequalities.Poincare.SmoothTest

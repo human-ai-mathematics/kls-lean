@@ -1,21 +1,27 @@
-import FunctionalInequalities.Analysis.Mollification.Basic
-import Mathlib.Analysis.Calculus.BumpFunction.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import Mathlib.Analysis.Calculus.FDeriv.Measurable
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
-import Mathlib.Analysis.Normed.Module.Basic
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Analysis.Mollification.Basic
+public import Mathlib.Analysis.Calculus.BumpFunction.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import Mathlib.Analysis.Calculus.FDeriv.Measurable
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+public import Mathlib.Analysis.Normed.Module.Basic
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # Mollifying functions with Lipschitz gradient
 
-Smooth approximation of a `C¹` function with Lipschitz gradient by normalized bump convolutions, with gradients
-converging locally uniformly and Hessians converging almost everywhere (support for the weak Piola identity and the
+Smooth approximation of a `C¹` function with Lipschitz gradient by normalized bump convolutions,
+with gradients
+converging locally uniformly and Hessians converging almost everywhere (support for the weak Piola
+identity and the
 weak Bochner formula on the moment-map route to Letwin arXiv:2607.24164v1).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -91,140 +97,102 @@ private lemma locallyIntegrable_fderiv_gradient
   filter_upwards [] with x
   simpa using norm_fderiv_le_of_lipschitz ℝ hG
 
-private lemma gradient_convolution_normed
-    {U : E → ℝ} (hU : ContDiff ℝ 1 U)
-    {G : NNReal} (hG : LipschitzWith G (gradient U))
-    (φ : ContDiffBump (0 : E)) :
+private lemma gradient_convolution_normed {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
+    (hG : LipschitzWith G (gradient U)) (φ : ContDiffBump (0 : E)) :
     gradient
-        (convolution
-          (φ.normed (volume : Measure E)) U
-          (ContinuousLinearMap.lsmul ℝ ℝ) (volume : Measure E)) =
-      convolution
-        (φ.normed (volume : Measure E)) (gradient U)
-        (ContinuousLinearMap.lsmul ℝ ℝ) (volume : Measure E) := by
+        (convolution (φ.normed (volume : Measure E)) U (ContinuousLinearMap.lsmul ℝ ℝ)
+          (volume : Measure E)) =
+      convolution (φ.normed (volume : Measure E)) (gradient U) (ContinuousLinearMap.lsmul ℝ ℝ)
+        (volume : Measure E) := by
   classical
   let f : E → ℝ := φ.normed (volume : Measure E)
-  have hf1 : ContDiff ℝ 1 f := by
-    simpa [f] using (φ.contDiff_normed (n := 1))
-  have hcf : HasCompactSupport f := by
-    simpa [f] using φ.hasCompactSupport_normed
-  have hUloc : LocallyIntegrable U (volume : Measure E) :=
-    hU.continuous.locallyIntegrable
-  have hfd : Continuous (fderiv ℝ f) :=
-    hf1.continuous_fderiv (by norm_num)
-  have hcfderiv : HasCompactSupport (fderiv ℝ f) :=
-    hcf.fderiv ℝ
+  have hf1 : ContDiff ℝ 1 f := by simpa [f] using (φ.contDiff_normed (n := 1))
+  have hcf : HasCompactSupport f := by simpa [f] using φ.hasCompactSupport_normed
+  have hUloc : LocallyIntegrable U (volume : Measure E) := hU.continuous.locallyIntegrable
+  have hfd : Continuous (fderiv ℝ f) := hf1.continuous_fderiv (by norm_num)
+  have hcfderiv : HasCompactSupport (fderiv ℝ f) := hcf.fderiv ℝ
   funext x
   apply ext_inner_right ℝ
   intro v
   rw [inner_gradient_left]
   have hd :=
-    HasCompactSupport.hasFDerivAt_convolution_left
-      (ContinuousLinearMap.lsmul ℝ ℝ)
-      hcf hf1 hUloc x
+    HasCompactSupport.hasFDerivAt_convolution_left (ContinuousLinearMap.lsmul ℝ ℝ) hcf hf1 hUloc
+      x
   rw [hd.fderiv]
-  let q : E → E →L[ℝ] ℝ := fun t =>
-    U (x - t) • fderiv ℝ f t
-  have hqcont : Continuous q := by
-    fun_prop
+  let q : E → E →L[ℝ] ℝ := fun t => U (x - t) • fderiv ℝ f t
+  have hqcont : Continuous q := by fun_prop
   have hqcf : HasCompactSupport q := by
     refine hcfderiv.mono ?_
     intro t ht
     by_contra hft
-    have hft' : fderiv ℝ f t = 0 := by
-      simpa [Function.mem_support] using hft
-    have hzero : q t = 0 := by
-      simp only [q, hft', smul_zero]
+    have hft' : fderiv ℝ f t = 0 := by simpa [Function.mem_support] using hft
+    have hzero : q t = 0 := by simp only [q, hft', smul_zero]
     exact ht hzero
-  have hqint : Integrable q (volume : Measure E) :=
-    hqcont.integrable_of_hasCompactSupport hqcf
-  have hgradint :
-      Integrable
-        (fun t : E => f t • gradient U (x - t))
-        (volume : Measure E) := by
+  have hqint : Integrable q (volume : Measure E) := hqcont.integrable_of_hasCompactSupport hqcf
+  have hgradint : Integrable (fun t : E => f t • gradient U (x - t)) (volume : Measure E) := by
     apply integrable_smul_of_compact_support
     · exact φ.continuous_normed
-    · exact (LipschitzWith.continuous hG).comp
-        (continuous_const.sub continuous_id)
+    · exact (LipschitzWith.continuous hG).comp (continuous_const.sub continuous_id)
     · exact hcf
   simp only [convolution_def]
   have hleft :
-      (∫ t : E,
-        ((ContinuousLinearMap.precompL E (ContinuousLinearMap.lsmul ℝ ℝ))
-          (fderiv ℝ f t)) (U (x - t)) ∂(volume : Measure E)) =
-        ∫ t : E, q t ∂(volume : Measure E) := by
+    (∫ t : E,
+        ((ContinuousLinearMap.precompL E (ContinuousLinearMap.lsmul ℝ ℝ)) (fderiv ℝ f t))
+          (U (x - t)) ∂(volume : Measure E)) =
+      ∫ t : E, q t ∂(volume : Measure E) := by
     apply integral_congr_ae
     filter_upwards [] with t
     ext w
-    change
-      (fderiv ℝ f t) w * U (x - t) =
-        U (x - t) * (fderiv ℝ f t) w
+    change (fderiv ℝ f t) w * U (x - t) = U (x - t) * (fderiv ℝ f t) w
     ring
   rw [hleft]
   rw [ContinuousLinearMap.integral_apply hqint v]
   have hconvint :
-      Integrable
-        (fun t : E =>
-          ((ContinuousLinearMap.lsmul ℝ ℝ)
-            (φ.normed (volume : Measure E) t)) (gradient U (x - t)))
-        (volume : Measure E) := by
+    Integrable
+      (fun t : E =>
+        ((ContinuousLinearMap.lsmul ℝ ℝ) (φ.normed (volume : Measure E) t))
+          (gradient U (x - t)))
+      (volume : Measure E) := by
     simpa [f, ContinuousLinearMap.lsmul_apply] using hgradint
   rw [real_inner_comm]
   rw [← integral_inner hconvint v]
   let g : E → ℝ := fun s => U (x - s)
   have htrans : ∀ s : E, (fderiv ℝ g s) v = -((fderiv ℝ U (x - s)) v) := by
     intro s
-    have ht :
-        HasFDerivAt (fun z : E => x - z)
-          (-ContinuousLinearMap.id ℝ E) s := by
-      convert
-        (hasFDerivAt_const (x := s) x).sub (hasFDerivAt_id s) using 1 <;>
-        ext z <;> simp
-    have hcomp :=
-      (hU.differentiable (by norm_num) (x - s)).hasFDerivAt.comp s ht
+    have ht : HasFDerivAt (fun z : E => x - z) (-ContinuousLinearMap.id ℝ E) s := by
+      convert (hasFDerivAt_const (x := s) x).sub (hasFDerivAt_id s) using 1 <;> ext z <;> simp
+    have hcomp := (hU.differentiable (by norm_num) (x - s)).hasFDerivAt.comp s ht
     have hg : g = U ∘ HSub.hSub x := by
       funext z
       rfl
     rw [hg]
     simpa using congrArg (fun L => L v) hcomp.fderiv
-  have h₁ :
-      Integrable
-        (fun s : E => (fderiv ℝ f s) v * g s)
-        (volume : Measure E) := by
+  have h₁ : Integrable (fun s : E => (fderiv ℝ f s) v * g s) (volume : Measure E) := by
     apply integrable_mul_of_compact_support
     · exact continuous_clm_apply hfd v
     · exact hU.continuous.comp (continuous_const.sub continuous_id)
     · refine hcfderiv.mono ?_
       intro s hs
       by_contra hnot
-      have hz : fderiv ℝ f s = 0 := by
-        simpa [Function.mem_support] using hnot
+      have hz : fderiv ℝ f s = 0 := by simpa [Function.mem_support] using hnot
       exact hs (by simp [hz])
-  have h₂ :
-      Integrable
-        (fun s : E => f s * (fderiv ℝ g s) v)
-        (volume : Measure E) := by
+  have h₂ : Integrable (fun s : E => f s * (fderiv ℝ g s) v) (volume : Measure E) := by
     apply integrable_mul_of_compact_support
     · exact hf1.continuous
-    · have hUg : Continuous (fderiv ℝ U) :=
-        hU.continuous_fderiv (by norm_num)
-      have hscalar :
-          Continuous (fun s : E => (fderiv ℝ U (x - s)) v) :=
-        continuous_clm_apply
-          (hUg.comp (continuous_const.sub continuous_id)) v
+    · have hUg : Continuous (fderiv ℝ U) := hU.continuous_fderiv (by norm_num)
+      have hscalar : Continuous (fun s : E => (fderiv ℝ U (x - s)) v) :=
+        continuous_clm_apply (hUg.comp (continuous_const.sub continuous_id)) v
       have hneg : Continuous (fun s : E => -((fderiv ℝ U (x - s)) v)) :=
         continuous_neg.comp hscalar
       simpa only [htrans] using hneg
     · exact hcf
-  have h₃ :
-      Integrable (fun s : E => f s * g s) (volume : Measure E) := by
+  have h₃ : Integrable (fun s : E => f s * g s) (volume : Measure E) := by
     apply integrable_mul_of_compact_support
     · exact hf1.continuous
     · exact hU.continuous.comp (continuous_const.sub continuous_id)
     · exact hcf
   have hi :=
-    integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
-      h₁ h₂ h₃
+    integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable h₁ h₂ h₃
       (by
         intro s hs
         exact hf1.differentiable (by norm_num) s)
@@ -234,44 +202,38 @@ private lemma gradient_convolution_normed
           (hU.differentiable (by norm_num) (x - s)).comp s
             ((differentiableAt_const (c := x)).sub differentiableAt_id))
   have hi' :
-      ∫ s : E, (fderiv ℝ f s) v * g s ∂volume =
-        ∫ s : E, f s * (fderiv ℝ U (x - s)) v ∂volume := by
+    ∫ s : E, (fderiv ℝ f s) v * g s ∂volume = ∫ s : E, f s * (fderiv ℝ U (x - s)) v ∂volume := by
     calc
-      ∫ s : E, (fderiv ℝ f s) v * g s ∂volume =
-          -∫ s : E, f s * (fderiv ℝ g s) v ∂volume := by
-            linarith
+      ∫ s : E, (fderiv ℝ f s) v * g s ∂volume = -∫ s : E, f s * (fderiv ℝ g s) v ∂volume := by
+        linarith
       _ = ∫ s : E, f s * (fderiv ℝ U (x - s)) v ∂volume := by
         rw [← integral_neg]
         apply integral_congr_ae
         filter_upwards [] with s
         rw [htrans]
         ring
-  have hleft' :
-      ∫ t : E, q t v ∂volume =
-        ∫ t : E, (fderiv ℝ f t) v * g t ∂volume := by
+  have hleft' : ∫ t : E, q t v ∂volume = ∫ t : E, (fderiv ℝ f t) v * g t ∂volume := by
     apply integral_congr_ae
     filter_upwards [] with t
-    change
-      U (x - t) * (fderiv ℝ f t) v =
-        (fderiv ℝ f t) v * U (x - t)
+    change U (x - t) * (fderiv ℝ f t) v = (fderiv ℝ f t) v * U (x - t)
     ring
   have hright :
-      ∫ t : E, inner ℝ v (f t • gradient U (x - t)) ∂volume =
-        ∫ t : E, f t * (fderiv ℝ U (x - t)) v ∂volume := by
+    ∫ t : E, inner ℝ v (f t • gradient U (x - t)) ∂volume =
+      ∫ t : E, f t * (fderiv ℝ U (x - t)) v ∂volume := by
     apply integral_congr_ae
     filter_upwards [] with t
     rw [real_inner_smul_right]
     rw [real_inner_comm]
     rw [inner_gradient_left]
   calc
-    ∫ t : E, q t v ∂volume =
-        ∫ t : E, (fderiv ℝ f t) v * g t ∂volume := hleft'
+    ∫ t : E, q t v ∂volume = ∫ t : E, (fderiv ℝ f t) v * g t ∂volume := hleft'
     _ = ∫ t : E, f t * (fderiv ℝ U (x - t)) v ∂volume := hi'
     _ = ∫ t : E, inner ℝ v (f t • gradient U (x - t)) ∂volume := hright.symm
-    _ = ∫ t : E,
-        inner ℝ v
-          (((ContinuousLinearMap.lsmul ℝ ℝ)
-            (φ.normed (volume : Measure E) t)) (gradient U (x - t))) ∂volume := by
+    _ =
+        ∫ t : E,
+          inner ℝ v
+            (((ContinuousLinearMap.lsmul ℝ ℝ) (φ.normed (volume : Measure E) t))
+              (gradient U (x - t))) ∂volume := by
       simp [f, ContinuousLinearMap.lsmul_apply]
 
 theorem exists_contDiff_approx_of_lipschitz_gradient
@@ -283,6 +245,8 @@ theorem exists_contDiff_approx_of_lipschitz_gradient
       (∀ᵐ x ∂(volume : Measure E), Tendsto (fun k => fderiv ℝ (gradient (Uk k)) x) atTop
         (𝓝 (fderiv ℝ (gradient U) x))) := by
   classical
+
+  -- Choose shrinking mollifiers and define the smooth approximants.
   let φ : ℕ → ContDiffBump (0 : E) := fun k =>
     ContDiffBump.mk
       (1 / (2 * ((k : ℝ) + 1)))
@@ -322,6 +286,8 @@ theorem exists_contDiff_approx_of_lipschitz_gradient
     locallyIntegrable_fderiv_gradient hG
   have hmeas : AEStronglyMeasurable (gradient U) (volume : Measure E) :=
     (LipschitzWith.continuous hG).aestronglyMeasurable
+
+  -- Identify the mollified gradient and retain its uniform Lipschitz bound.
   have hgrad : ∀ k,
       gradient (Uk k) =
         convolution
@@ -395,6 +361,8 @@ theorem exists_contDiff_approx_of_lipschitz_gradient
               ((φ k).normed (volume : Measure E) t • gradient U (y - t)) ∂volume :=
       (integral_sub h₁ h₂).symm
     rw [hsub]
+
+    -- Control the Hessians and assemble the approximation properties.
     have hbound :
         Integrable
           (fun t : E =>

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the Cheeger-equality module
 
@@ -31,6 +33,8 @@ The axiom reports at the end cover every public declaration of the Cheeger-equal
 every theorem of this client; each of them must list only `propext`, `Classical.choice` and
 `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -75,9 +79,12 @@ theorem route_K1 :
 theorem route_K2 :
     ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
       [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-      (ρ : V → ℝ) (Ω : Set V) {u : V → ℝ}, Continuous u → ∀ {t : ℝ} (U : SmoothDomain V),
-      U.carrier = {x | t < u x} →
-      relativePerimeter ρ Ω U ≤ ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) := by
+      (ρ : V → ℝ) (Ω : Set V) {u : V → ℝ},
+      Continuous u →
+        ∀ {t : ℝ} (U : SmoothDomain V),
+          U.carrier = {x | t < u x} →
+            relativePerimeter ρ Ω U ≤
+              ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) := by
   intro V _ _ _ _ _ _ _ ρ Ω u hu t U hU
   exact relativePerimeter_le_lintegral_levelSet (u := u) (t := t) ρ Ω hu U hU
 
@@ -305,7 +312,7 @@ theorem boundary_degenerate_affine_support :
   intro E _ _ _ _ _ _ _ μ hdim
   have htop : Isoperimetry.constant μ = ⊤ := by
     unfold Isoperimetry.constant
-    rw [if_pos hdim]
+    rw [ite_eq_left hdim]
   refine ⟨htop, by rw [Isoperimetry.inverseScale, htop, ENNReal.inv_top], ?_⟩
   intro hμ ρ hρ
   rw [← constant_eq_smoothConstant_intrinsic hμ hρ, htop]

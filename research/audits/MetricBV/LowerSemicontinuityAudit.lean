@@ -1,4 +1,7 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-! Independent full-signature clients for the sequential lower semicontinuity of the metric BV
 perimeter under global `L¹` convergence of set indicators, for every Borel measure: the library
@@ -7,6 +10,8 @@ triangle bound, constant sequences, an empty carrier, zero perimeter of null set
 infinite boundary (the whole line under Lebesgue measure on `ℝ`: infinite target and infinite
 liminf, and no convergent measurable sets of finite liminf perimeter). This is a relaxation
 property, not a BV--Minkowski comparison. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -49,13 +54,14 @@ theorem constantSequence (ν : Measure X) {B : Set X} (hB : MeasurableSet B) :
 theorem nullSet (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (h0 : ν B = 0) :
     perimeter ν B = 0 := by
   have hdist : ∫⁻ x, ‖(∅ : Set X).indicator (1 : X → ℝ) x - B.indicator 1 x‖ₑ ∂ν = 0 := by
-    have hfun : (fun x => ‖(∅ : Set X).indicator (1 : X → ℝ) x - B.indicator 1 x‖ₑ) =
-        B.indicator 1 := by
+    have hfun :
+      (fun x => ‖(∅ : Set X).indicator (1 : X → ℝ) x - B.indicator 1 x‖ₑ) = B.indicator 1 := by
       funext x
       by_cases hx : x ∈ B <;> simp [hx]
     rw [hfun, lintegral_indicator_one hB, h0]
-  have h := perimeter_le_liminf_of_tendsto ν (Bn := fun _ => (∅ : Set X)) (B := B)
-    (fun _ => MeasurableSet.empty) (by simp only [hdist]; exact tendsto_const_nhds)
+  have h :=
+    perimeter_le_liminf_of_tendsto ν (Bn := fun _ => (∅ : Set X)) (B := B)
+      (fun _ => MeasurableSet.empty) (by simp only [hdist]; exact tendsto_const_nhds)
   simp only [perimeter_empty, liminf_const] at h
   exact le_antisymm h bot_le
 

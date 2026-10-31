@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
-import FunctionalInequalities.Energy.LocalSlope.Relaxation
+module
+
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+public import FunctionalInequalities.Energy.LocalSlope.Relaxation
 
 /-!
 # The metric Cheeger energy and its identification with the smooth-gradient relaxation
@@ -39,9 +41,12 @@ reverse inequality, hence `𝓔^can_μ = 2 Ch_μ`, **under absolute continuity**
 with respect to a Haar measure; and therefore for every compact-set log-concave law, whose
 intrinsic law is absolutely continuous (`lem:logconcave-intrinsic-absolute-continuity`).
 
-Beyond this module: `Energy/Cheeger/Identification.lean` proves the identity for all Borel probability
-laws, including singular laws. Neither module claims any Poincaré inequality, finiteness of any constant,
-a Cheeger--Buser comparison, agreement of raw slope energy with the relaxation on individual tests, or a
+Beyond this module: `Energy/Cheeger/Identification.lean` proves the identity for all Borel
+probability
+laws, including singular laws. Neither module claims any Poincaré inequality, finiteness of any
+constant,
+a Cheeger--Buser comparison, agreement of raw slope energy with the relaxation on individual tests,
+or a
 Cheeger definition via asymptotic Lipschitz constants. The isoperimetric number
 `h_μ` of `def:isoperimetric-cheeger-scale` is a different object.
 
@@ -49,6 +54,8 @@ Dimension zero: on a subsingleton coordinate space every slope is zero and both 
 vanish identically (`Cheeger.energy_eq_zero_of_subsingleton`); a one-point affine support gives
 `0 = 2 * 0`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -199,7 +206,7 @@ theorem relaxation_le_localSlope_of_absolutelyContinuous (ν : ProbabilityMeasur
   have hgsL2 : ∀ j, MemLp (gradient (gSeq j)) 2 (ν : Measure V) := fun j ↦ by
     simpa using (hgSeq j).2.2.2
   have hgs_int : ∀ j, Integrable (fun x ↦ ‖gradient (gSeq j) x‖ ^ 2) (ν : Measure V) :=
-    fun j ↦ (memLp_two_iff_integrable_sq_norm (hgsL2 j).1).mp (hgsL2 j)
+    fun j ↦ (memLp_two_iff_integrable_sq_norm (hgsL2 j).aestronglyMeasurable).mp (hgsL2 j)
   set s : ℕ → Test ν := fun j ↦
     { toFun := gSeq j
       contDiff := (hgSeq j).1

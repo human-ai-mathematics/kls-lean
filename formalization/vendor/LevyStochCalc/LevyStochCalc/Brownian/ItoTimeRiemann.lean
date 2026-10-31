@@ -3,8 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoProcessWindow
-import LevyStochCalc.Brownian.ItoFormulaGrid
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.ItoProcessWindow
+public import LevyStochCalc.Brownian.ItoFormulaGrid
 
 /-!
 # Frozen-weight Riemann sums of the Itô formula
@@ -21,6 +26,8 @@ the squared diffusion coefficient are admissible densities.
 * `LevyStochCalc.Brownian.Ito.IsItoVersion.integral_abs_frozenRiemann_sub_le` — the `L¹` error
   of a frozen-weight Riemann sum.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -243,7 +250,8 @@ theorem IsItoVersion.integral_abs_frozenRiemann_sub_le
   have hjointd : ∀ i : ℕ, Measurable (Function.uncurry fun ω s =>
       ENNReal.ofReal |X (unifGrid T m i) ω - X s ω|) := fun i =>
     ENNReal.measurable_ofReal.comp
-      (((h.measurable (unifGrid T m i)).comp measurable_fst).sub h.measurable_uncurry).abs
+      (continuous_abs.measurable.comp
+        (((h.measurable (unifGrid T m i)).comp measurable_fst).sub h.measurable_uncurry))
   have hwin : ∀ i : ℕ, ∫⁻ ω, ∫⁻ s in Set.Ioc (unifGrid T m i) (unifGrid T m (i + 1)),
         ENNReal.ofReal |X (unifGrid T m i) ω - X s ω| ∂volume ∂P
       ≤ ENNReal.ofReal ((T / (m : ℝ)) * (B * (T / (m : ℝ))
@@ -261,7 +269,8 @@ theorem IsItoVersion.integral_abs_frozenRiemann_sub_le
     intro i
     refine ENNReal.measurable_ofReal.comp (measurable_setIntegral ?_ _)
     exact (measurable_const.mul
-      ((((h.measurable (unifGrid T m i)).comp measurable_fst).sub h.measurable_uncurry).abs))
+      ((continuous_abs.measurable.comp
+        (((h.measurable (unifGrid T m i)).comp measurable_fst).sub h.measurable_uncurry))))
   calc ∫⁻ ω, ENNReal.ofReal
         |(∑ i ∈ Finset.range m, φ (X (unifGrid T m i) ω)
               * ∫ s in Set.Ioc (unifGrid T m i) (unifGrid T m (i + 1)), wgt ω s ∂volume)

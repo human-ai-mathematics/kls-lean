@@ -3,10 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoFormulaDecomp
-import LevyStochCalc.Brownian.VectorItoQuadVarRiemann
-import LevyStochCalc.Brownian.VectorItoMartingaleRiemann
-import LevyStochCalc.Brownian.ItoFormulaScalar
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoFormulaDecomp
+public import LevyStochCalc.Brownian.VectorItoQuadVarRiemann
+public import LevyStochCalc.Brownian.VectorItoMartingaleRiemann
+public import LevyStochCalc.Brownian.ItoFormulaScalar
 
 /-!
 # Itô's formula for a vector Itô process on a uniform grid
@@ -26,6 +30,8 @@ proportional to `A`; a uniformly continuous second derivative supplies such a bo
   defect of Itô's formula on every uniform grid.
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.itoFormula` — Itô's formula in the vector case.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

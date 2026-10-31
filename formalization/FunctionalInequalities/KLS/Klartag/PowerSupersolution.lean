@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
-import FunctionalInequalities.Analysis.LocalExtension
-import FunctionalInequalities.Analysis.Matrix.Positivity
-import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
+public import FunctionalInequalities.Analysis.LocalExtension
+public import FunctionalInequalities.Analysis.Matrix.Positivity
+public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 
 
 /-!
@@ -32,6 +34,8 @@ Theorem 1.1 are not provided. No boundedness of `K` or of `ρ` is used.
 The pointwise chain and power rules for `nondivergenceOperator`, the
 matrix inequality `(Wx)ᵀA(Wx) ≤ tr(AWAWᵀ)·xᵀA⁻¹x` and the germ-transfer lemmas are generic.
 -/
+
+@[expose] public section
 
 noncomputable section
 section MatrixPart
@@ -453,35 +457,50 @@ private theorem fderiv_invHessQuad {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) 
   have hd (i j : Fin dimE) : DifferentiableAt ℝ (fun z => inverseHessianEntry φ e z i j) y :=
     (contDiffAt_inverseHessianEntry e hφ y hPD i j).differentiableAt (by simp)
   have hdij (i j : Fin dimE) :
-      fderiv ℝ (fun z => c i * c j * inverseHessianEntry φ e z i j) y (e k) =
-        c i * c j * -(∑ a, ∑ b, inverseHessianEntry φ e y i a * stdHessianMatrixDeriv φ y k a b *
-          inverseHessianEntry φ e y b j) := by
+    fderiv ℝ (fun z => c i * c j * inverseHessianEntry φ e z i j) y (e k) =
+      c i * c j *
+        -(∑ a,
+            ∑ b,
+              inverseHessianEntry φ e y i a * stdHessianMatrixDeriv φ y k a b *
+                inverseHessianEntry φ e y b j) := by
     rw [fderiv_const_mul (hd i j), smul_apply, smul_eq_mul,
       fderiv_inverseHessianEntry_apply e hφ y hPD]
     rfl
   have hdi (i : Fin dimE) :
-      fderiv ℝ (fun z => ∑ j, c i * c j * inverseHessianEntry φ e z i j) y (e k) =
-        ∑ j, c i * c j * -(∑ a, ∑ b, inverseHessianEntry φ e y i a * stdHessianMatrixDeriv φ y k a b *
-          inverseHessianEntry φ e y b j) := by
+    fderiv ℝ (fun z => ∑ j, c i * c j * inverseHessianEntry φ e z i j) y (e k) =
+      ∑ j,
+        c i * c j *
+          -(∑ a,
+              ∑ b,
+                inverseHessianEntry φ e y i a * stdHessianMatrixDeriv φ y k a b *
+                  inverseHessianEntry φ e y b j) := by
     rw [fderiv_sum_apply Finset.univ (fun j _ => (hd i j).const_mul _)]
     exact Finset.sum_congr rfl fun j _ => hdij i j
-  have hq : invHessQuad φ c = fun z => ∑ i, ∑ j, c i * c j * inverseHessianEntry φ e z i j := rfl
-  rw [hq, fderiv_sum_apply Finset.univ (fun i _ => DifferentiableAt.fun_sum fun j _ => (hd i j).const_mul _)]
+  have hq : invHessQuad φ c = fun z => ∑ i, ∑ j, c i * c j * inverseHessianEntry φ e z i j :=
+    rfl
+  rw [hq,
+    fderiv_sum_apply Finset.univ
+      (fun i _ => DifferentiableAt.fun_sum fun j _ => (hd i j).const_mul _)]
   simp_rw [hdi]
   unfold invHessVec
   have hsymm (i a : Fin dimE) : inverseHessianEntry φ e y i a = inverseHessianEntry φ e y a i :=
     inverseHessianEntry_symm e h2 y i a
   simp only [Finset.mul_sum, Finset.sum_mul, mul_neg, Finset.sum_neg_distrib, neg_inj]
   rw [sum4_perm]
-  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
-    Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun i _ => ?_
+  refine
+    Finset.sum_congr rfl fun a _ =>
+      Finset.sum_congr rfl fun b _ =>
+        Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun i _ => ?_
   rw [hsymm i a]
   ring
 
 private theorem fderiv_invHessVec {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (c : Fin dimE → ℝ) {y : E}
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v) (a k : Fin dimE) :
     fderiv ℝ (fun z => invHessVec φ c z a) y (e k) =
-      -∑ p, ∑ q, inverseHessianEntry φ e y a p * stdHessianMatrixDeriv φ y k p q * invHessVec φ c y q := by
+      -∑ p,
+          ∑ q,
+            inverseHessianEntry φ e y a p * stdHessianMatrixDeriv φ y k p q *
+              invHessVec φ c y q := by
   have hd (i j : Fin dimE) : DifferentiableAt ℝ (fun z => inverseHessianEntry φ e z i j) y :=
     (contDiffAt_inverseHessianEntry e hφ y hPD i j).differentiableAt (by simp)
   unfold invHessVec
@@ -519,23 +538,34 @@ private theorem contDiffAt_invHessQuad {φ : E → ℝ} (hφ : ContDiff ℝ ∞ 
     (contDiffAt_inverseHessianEntry e hφ y hPD i j)
 
 /-- Second derivative of `θᵀ(∇²φ)⁻¹θ` at a point near which the Hessian is positive definite. -/
-private theorem bilinear_invHessQuad {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (c : Fin dimE → ℝ) {x : E}
-    (hPD : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
+private theorem bilinear_invHessQuad {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (c : Fin dimE → ℝ)
+    {x : E} (hPD : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
     (k l : Fin dimE) :
     bilinearIteratedFDerivTwo ℝ (invHessQuad φ c) x (e k) (e l) =
-      -∑ a, ∑ b, ((-∑ p, ∑ q, inverseHessianEntry φ e x a p * stdHessianMatrixDeriv φ x k p q *
-          invHessVec φ c x q) * stdHessianMatrixDeriv φ x l a b * invHessVec φ c x b +
-        invHessVec φ c x a * bilinearIteratedFDerivTwo ℝ
-          (fun y => bilinearIteratedFDerivTwo ℝ φ y (e a) (e b)) x (e k) (e l) *
-          invHessVec φ c x b +
-        invHessVec φ c x a * stdHessianMatrixDeriv φ x l a b *
-          (-∑ p, ∑ q, inverseHessianEntry φ e x b p * stdHessianMatrixDeriv φ x k p q *
-            invHessVec φ c x q)) := by
+      -∑ a,
+          ∑ b,
+            ((-∑ p,
+                        ∑ q,
+                          inverseHessianEntry φ e x a p * stdHessianMatrixDeriv φ x k p q *
+                            invHessVec φ c x q) *
+                    stdHessianMatrixDeriv φ x l a b *
+                  invHessVec φ c x b +
+                invHessVec φ c x a *
+                    bilinearIteratedFDerivTwo ℝ
+                      (fun y => bilinearIteratedFDerivTwo ℝ φ y (e a) (e b)) x (e k) (e l) *
+                  invHessVec φ c x b +
+              invHessVec φ c x a * stdHessianMatrixDeriv φ x l a b *
+                (-∑ p,
+                    ∑ q,
+                      inverseHessianEntry φ e x b p * stdHessianMatrixDeriv φ x k p q *
+                        invHessVec φ c x q)) := by
   have hx := hPD.self_of_nhds
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply_at
-    ((contDiffAt_invHessQuad hφ c hx).of_le (WithTop.coe_le_coe.mpr le_top))]
-  have hev : (fun y => fderiv ℝ (invHessQuad φ c) y (e l)) =ᶠ[𝓝 x]
-      (fun y => -∑ a, ∑ b, invHessVec φ c y a * stdHessianMatrixDeriv φ y l a b * invHessVec φ c y b) := by
+      ((contDiffAt_invHessQuad hφ c hx).of_le (WithTop.coe_le_coe.mpr le_top))]
+  have hev :
+    (fun y => fderiv ℝ (invHessQuad φ c) y (e l)) =ᶠ[𝓝 x]
+      (fun y =>
+        -∑ a, ∑ b, invHessVec φ c y a * stdHessianMatrixDeriv φ y l a b * invHessVec φ c y b) := by
     filter_upwards [hPD] with y hy
     exact fderiv_invHessQuad hφ c hy l
   rw [hev.fderiv_eq]
@@ -543,7 +573,8 @@ private theorem bilinear_invHessQuad {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ
     (contDiffAt_invHessVec hφ c hx a).differentiableAt (by simp)
   have hT (a b : Fin dimE) : DifferentiableAt ℝ (fun z => stdHessianMatrixDeriv φ z l a b) x :=
     (contDiff_third_apply hφ a b l).contDiffAt.differentiableAt (by simp)
-  have hprod (a b : Fin dimE) : DifferentiableAt ℝ
+  have hprod (a b : Fin dimE) :
+    DifferentiableAt ℝ
       (fun z => invHessVec φ c z a * stdHessianMatrixDeriv φ z l a b * invHessVec φ c z b) x :=
     ((hw a).mul (hT a b)).mul (hw b)
   rw [fderiv_fun_neg, neg_apply,
@@ -552,19 +583,26 @@ private theorem bilinear_invHessQuad {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ
   refine Finset.sum_congr rfl fun a _ => ?_
   rw [fderiv_sum_apply Finset.univ (fun b _ => hprod a b)]
   refine Finset.sum_congr rfl fun b _ => ?_
-  have hH : HasFDerivAt (fun z => invHessVec φ c z a * stdHessianMatrixDeriv φ z l a b * invHessVec φ c z b)
-      ((invHessVec φ c x a * stdHessianMatrixDeriv φ x l a b) • fderiv ℝ (fun z => invHessVec φ c z b) x +
-        invHessVec φ c x b • (invHessVec φ c x a • fderiv ℝ (fun z => stdHessianMatrixDeriv φ z l a b) x +
-          stdHessianMatrixDeriv φ x l a b • fderiv ℝ (fun z => invHessVec φ c z a) x)) x :=
+  have hH :
+    HasFDerivAt
+      (fun z => invHessVec φ c z a * stdHessianMatrixDeriv φ z l a b * invHessVec φ c z b)
+      ((invHessVec φ c x a * stdHessianMatrixDeriv φ x l a b) •
+          fderiv ℝ (fun z => invHessVec φ c z b) x +
+        invHessVec φ c x b •
+          (invHessVec φ c x a • fderiv ℝ (fun z => stdHessianMatrixDeriv φ z l a b) x +
+            stdHessianMatrixDeriv φ x l a b • fderiv ℝ (fun z => invHessVec φ c z a) x))
+      x :=
     (((hw a).hasFDerivAt.mul (hT a b).hasFDerivAt).mul (hw b).hasFDerivAt)
   rw [hH.fderiv]
   simp only [add_apply, smul_apply, smul_eq_mul]
   rw [fderiv_invHessVec hφ c hx a k, fderiv_invHessVec hφ c hx b k]
-  have h4 : fderiv ℝ (fun z => stdHessianMatrixDeriv φ z l a b) x (e k) =
-      bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e a) (e b)) x
-        (e k) (e l) := by
+  have h4 :
+    fderiv ℝ (fun z => stdHessianMatrixDeriv φ z l a b) x (e k) =
+      bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e a) (e b)) x (e k)
+        (e l) := by
     rw [bilinearIteratedFDerivTwo_eq_fderiv_apply
-      ((contDiff_bilinearIteratedFDerivTwo_apply hφ (e a) (e b)).of_le (WithTop.coe_le_coe.mpr le_top))]
+        ((contDiff_bilinearIteratedFDerivTwo_apply hφ (e a) (e b)).of_le
+          (WithTop.coe_le_coe.mpr le_top))]
     rfl
   rw [h4]
   ring
@@ -592,7 +630,8 @@ theorem fderiv_dualTransport_rhs {φ ρ : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
   ring
 
 /-- `⟪y, ∇²φ(y) eᵢ⟫` in standard coordinates. -/
-private theorem inner_hessianOperator_eq_sum {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (y : E) (i : Fin dimE) :
+private theorem inner_hessianOperator_eq_sum {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (y : E)
+    (i : Fin dimE) :
     ⟪y, hessianOperator φ y (e i)⟫ =
       ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
@@ -622,49 +661,68 @@ theorem dualTransport_second_derivative {φ ρ : E → ℝ} (hφ : ContDiff ℝ 
     (hPD : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
     (hρ : ContDiffAt ℝ 2 ρ x)
     (hEq : ∀ᶠ y in 𝓝 x, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y) (i j : Fin dimE) :
-    (∑ a, ∑ c, inverseHessianEntry φ e x a c *
-        bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e i) (e j)) x
-          (e a) (e c)) -
-      ∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry φ e x a p * inverseHessianEntry φ e x c q *
-        stdHessianMatrixDeriv φ x i a c * stdHessianMatrixDeriv φ x j p q =
-      ∑ k, (⟪e j, e k⟫ * bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) +
-        ⟪x, e k⟫ * stdHessianMatrixDeriv φ x j k i) - bilinearIteratedFDerivTwo ℝ ρ x (e j) (e i) := by
+    (∑ a,
+          ∑ c,
+            inverseHessianEntry φ e x a c *
+              bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e i) (e j))
+                x (e a) (e c)) -
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry φ e x a p * inverseHessianEntry φ e x c q *
+                    stdHessianMatrixDeriv φ x i a c *
+                  stdHessianMatrixDeriv φ x j p q =
+      ∑ k,
+          (⟪e j, e k⟫ * bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) +
+            ⟪x, e k⟫ * stdHessianMatrixDeriv φ x j k i) -
+        bilinearIteratedFDerivTwo ℝ ρ x (e j) (e i) := by
   have hx := hPD.self_of_nhds
   have hρd : ∀ᶠ y in 𝓝 x, DifferentiableAt ℝ ρ y := by
     filter_upwards [hρ.eventually (by simp)] with y hy
     exact hy.differentiableAt (by norm_num)
   have hlhs := fderiv_mongeAmpere_first_lhs e hφ x hx i j
-  have hev : (fun y => ∑ a, ∑ c, inverseHessianEntry φ e y a c * stdHessianMatrixDeriv φ y i a c) =ᶠ[𝓝 x]
-      (fun y => ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i) -
-        fderiv ℝ ρ y (e i)) := dualTransport_first_derivative hφ hPD hρd hEq i
+  have hev :
+    (fun y => ∑ a, ∑ c, inverseHessianEntry φ e y a c * stdHessianMatrixDeriv φ y i a c) =ᶠ[𝓝 x]
+      (fun y =>
+        ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i) - fderiv ℝ ρ y (e i)) :=
+    dualTransport_first_derivative hφ hPD hρd hEq i
   have hd := congrArg (fun L : E →L[ℝ] ℝ => L (e j)) (hev.fderiv_eq (𝕜 := ℝ))
   unfold stdHessianMatrixDeriv hessianMatrixIn at hd
   rw [hlhs] at hd
   unfold stdHessianMatrixDeriv hessianMatrixIn
   rw [hd]
-  have hH (k : Fin dimE) : DifferentiableAt ℝ
-      (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x :=
+  have hH (k : Fin dimE) :
+    DifferentiableAt ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x :=
     ((contDiff_bilinearIteratedFDerivTwo_apply hφ (e k) (e i)).differentiable (by simp)) x
-  have hprod (k : Fin dimE) : HasFDerivAt
-      (fun y => ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i))
+  have hprod (k : Fin dimE) :
+    HasFDerivAt (fun y => ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i))
       (⟪x, e k⟫ • fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x +
         bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) •
-          (fderivInnerCLM ℝ (x, e k)).comp ((ContinuousLinearMap.id ℝ E).prod 0)) x :=
+          (fderivInnerCLM ℝ (x, e k)).comp ((ContinuousLinearMap.id ℝ E).prod 0))
+      x :=
     ((hasFDerivAt_id x).inner ℝ (hasFDerivAt_const (e k) x)).mul (hH k).hasFDerivAt
   have hρ1 : DifferentiableAt ℝ (fun y => fderiv ℝ ρ y (e i)) x :=
     ((hρ.fderiv_right (m := 1) (by norm_num)).differentiableAt one_ne_zero).clm_apply
       (differentiableAt_const _)
-  have hsum : HasFDerivAt (fun y => ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i))
-      (∑ k, (⟪x, e k⟫ • fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x +
-        bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) •
-          (fderivInnerCLM ℝ (x, e k)).comp ((ContinuousLinearMap.id ℝ E).prod 0))) x :=
+  have hsum :
+    HasFDerivAt (fun y => ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i))
+      (∑ k,
+        (⟪x, e k⟫ • fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x +
+          bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) •
+            (fderivInnerCLM ℝ (x, e k)).comp ((ContinuousLinearMap.id ℝ E).prod 0)))
+      x :=
     HasFDerivAt.fun_sum fun k _ => hprod k
-  have hall : HasFDerivAt (fun y => ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i) -
-      fderiv ℝ ρ y (e i))
-      ((∑ k, (⟪x, e k⟫ • fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x +
-        bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) •
-          (fderivInnerCLM ℝ (x, e k)).comp ((ContinuousLinearMap.id ℝ E).prod 0))) -
-        fderiv ℝ (fun y => fderiv ℝ ρ y (e i)) x) x :=
+  have hall :
+    HasFDerivAt
+      (fun y =>
+        ∑ k, ⟪y, e k⟫ * bilinearIteratedFDerivTwo ℝ φ y (e k) (e i) - fderiv ℝ ρ y (e i))
+      ((∑ k,
+          (⟪x, e k⟫ • fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e k) (e i)) x +
+            bilinearIteratedFDerivTwo ℝ φ x (e k) (e i) •
+              (fderivInnerCLM ℝ (x, e k)).comp ((ContinuousLinearMap.id ℝ E).prod 0))) -
+        fderiv ℝ (fun y => fderiv ℝ ρ y (e i)) x)
+      x :=
     hsum.sub hρ1.hasFDerivAt
   rw [hall.fderiv, bilinearIteratedFDerivTwo_eq_fderiv_apply_at hρ (e j) (e i)]
   simp only [sub_apply, sum_apply, add_apply, smul_apply, smul_eq_mul,
@@ -751,58 +809,79 @@ near `x` the Hessian is positive definite and the dual transport equation
 `log det ∇²φ(y) = ⟪y, ∇φ y⟫ - φ y - ρ y` holds, `ρ` is `C²` at `x` with positive semidefinite
 Hessian there. Then for `f = θᵀ(∇²φ)⁻¹θ` and every `ε > 0`, `L(f^ε) + ε f^ε ≥ 0` at `x`, where
 `L u = Σ φ^{ij} u_ij - Σ x^i u_i`. -/
-private theorem invHessQuad_rpow_generator_nonneg_core {φ ρ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {x : E}
-    (hPD : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
+private theorem invHessQuad_rpow_generator_nonneg_core {φ ρ : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
+    {x : E} (hPD : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
     (hρ : ContDiffAt ℝ 2 ρ x) (hρpsd : ∀ v, 0 ≤ bilinearIteratedFDerivTwo ℝ ρ x v v)
-    (hEq : ∀ᶠ y in 𝓝 x, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y)
-    (c : Fin dimE → ℝ) {ε : ℝ} (hε : 0 < ε) :
-    0 ≤ nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫)
-        (fun y => invHessQuad φ c y ^ ε) x + ε * invHessQuad φ c x ^ ε := by
+    (hEq : ∀ᶠ y in 𝓝 x, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y) (c : Fin dimE → ℝ)
+    {ε : ℝ} (hε : 0 < ε) :
+    0 ≤
+      nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫)
+          (fun y => invHessQuad φ c y ^ ε) x +
+        ε * invHessQuad φ c x ^ ε := by
   classical
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hx := hPD.self_of_nhds
   by_cases hc : c = 0
   · subst hc
     have h0 : (fun y => invHessQuad φ 0 y ^ ε) = fun _ => (0 : ℝ) := by
-      funext y; simp [invHessQuad, Real.zero_rpow hε.ne']
+      funext y;
+      simp [invHessQuad, Real.zero_rpow hε.ne']
     rw [h0]
     simp [nondivergenceOperator, invHessQuad, Real.zero_rpow hε.ne', bilinearIteratedFDerivTwo]
   -- the inverse Hessian as a positive definite matrix
-  set Amat : Matrix (Fin dimE) (Fin dimE) ℝ := Matrix.of fun i j => inverseHessianEntry φ e x i j
-    with hAmat
+
+  set Amat : Matrix (Fin dimE) (Fin dimE) ℝ :=
+    Matrix.of fun i j => inverseHessianEntry φ e x i j with hAmat
   have hHpd := posDef_hessianMatrixIn h2 hx
   have hAinv : (hessianMatrixIn φ e x)⁻¹ = Amat := inv_hessianMatrixIn e h2 x hx
   have hApd : Amat.PosDef := hAinv ▸ hHpd.inv
   have hAinv' : Amat⁻¹ = hessianMatrixIn φ e x := by
-    rw [← hAinv, Matrix.nonsing_inv_nonsing_inv _ ((Matrix.isUnit_iff_isUnit_det _).mp (Matrix.PosDef.isUnit hHpd))]
+    rw [← hAinv,
+      Matrix.nonsing_inv_nonsing_inv _
+        ((Matrix.isUnit_iff_isUnit_det _).mp (Matrix.PosDef.isUnit hHpd))]
   -- positivity of f
+
   have hfx : 0 < invHessQuad φ c x := by
     have := hApd.dotProduct_mulVec_pos hc
-    simpa [invHessQuad, dotProduct, Matrix.mulVec, hAmat, Finset.mul_sum, mul_comm, mul_left_comm,
-      mul_assoc] using this
+    simpa [invHessQuad, dotProduct, Matrix.mulVec, hAmat, Finset.mul_sum, mul_comm,
+      mul_left_comm, mul_assoc] using this
   rw [nondivergenceOperator_rpow_at _ _
-    ((contDiffAt_invHessQuad hφ c hx).of_le (WithTop.coe_le_coe.mpr le_top)) hfx ε]
+      ((contDiffAt_invHessQuad hφ c hx).of_le (WithTop.coe_le_coe.mpr le_top)) hfx ε]
   set f := invHessQuad φ c x with hf
   set w := invHessVec φ c x with hw
-  set M : Fin dimE → Fin dimE → ℝ := fun a b => ∑ i, w i * stdHessianMatrixDeriv φ x i a b with hM
-  set S := ∑ a, ∑ p, ∑ b, ∑ q, inverseHessianEntry φ e x a p * inverseHessianEntry φ e x b q *
-    (∑ i, w i * stdHessianMatrixDeriv φ x i a b) * (∑ i, w i * stdHessianMatrixDeriv φ x i p q) with hS
+  set M : Fin dimE → Fin dimE → ℝ := fun a b => ∑ i, w i * stdHessianMatrixDeriv φ x i a b with
+    hM
+  set S :=
+    ∑ a,
+      ∑ p,
+        ∑ b,
+          ∑ q,
+            inverseHessianEntry φ e x a p * inverseHessianEntry φ e x b q *
+                (∑ i, w i * stdHessianMatrixDeriv φ x i a b) *
+              (∑ i, w i * stdHessianMatrixDeriv φ x i p q) with
+    hS
   -- the generator of f
-  have hLf := dual_generator_algebra (fun i j => inverseHessianEntry φ e x i j) (fun a b k => stdHessianMatrixDeriv φ x k a b)
-    (fun a b k l => bilinearIteratedFDerivTwo ℝ
-      (fun y => bilinearIteratedFDerivTwo ℝ φ y (e a) (e b)) x (e k) (e l))
-    (fun i j => bilinearIteratedFDerivTwo ℝ φ x (e i) (e j))
-    (fun i j => bilinearIteratedFDerivTwo ℝ ρ x (e i) (e j)) w (fun k => ⟪x, e k⟫) f
-    (fun j k => ⟪e j, e k⟫) (fun k => fderiv ℝ (invHessQuad φ c) x (e k))
-    (fun k l => bilinearIteratedFDerivTwo ℝ (invHessQuad φ c) x (e k) (e l))
-    (fun a b => inverseHessianEntry_symm e h2 x a b) (third_symm₁ hφ x) (third_symm₂ hφ x)
-    sum_inner_stdBasis_mul (fun k => fderiv_invHessQuad hφ c hx k)
-    (fun k l => bilinear_invHessQuad hφ c hPD k l)
-    (fun i j => dualTransport_second_derivative hφ hPD hρ hEq i j)
-    (sum_invHessVec_hessian h2 hx c)
-  have hLf' : nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫)
-      (invHessQuad φ c) x = S - f +
-        ∑ i, ∑ j, w i * w j * bilinearIteratedFDerivTwo ℝ ρ x (e j) (e i) := hLf
+
+  have hLf :=
+    dual_generator_algebra (fun i j => inverseHessianEntry φ e x i j)
+      (fun a b k => stdHessianMatrixDeriv φ x k a b)
+      (fun a b k l =>
+        bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (e a) (e b)) x
+          (e k) (e l))
+      (fun i j => bilinearIteratedFDerivTwo ℝ φ x (e i) (e j))
+      (fun i j => bilinearIteratedFDerivTwo ℝ ρ x (e i) (e j)) w (fun k => ⟪x, e k⟫) f
+      (fun j k => ⟪e j, e k⟫) (fun k => fderiv ℝ (invHessQuad φ c) x (e k))
+      (fun k l => bilinearIteratedFDerivTwo ℝ (invHessQuad φ c) x (e k) (e l))
+      (fun a b => inverseHessianEntry_symm e h2 x a b) (third_symm₁ hφ x) (third_symm₂ hφ x)
+      sum_inner_stdBasis_mul (fun k => fderiv_invHessQuad hφ c hx k)
+      (fun k l => bilinear_invHessQuad hφ c hPD k l)
+      (fun i j => dualTransport_second_derivative hφ hPD hρ hEq i j)
+      (sum_invHessVec_hessian h2 hx c)
+  have hLf' :
+    nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫)
+        (invHessQuad φ c) x =
+      S - f + ∑ i, ∑ j, w i * w j * bilinearIteratedFDerivTwo ℝ ρ x (e j) (e i) :=
+    hLf
   have hR : 0 ≤ ∑ i, ∑ j, w i * w j * bilinearIteratedFDerivTwo ℝ ρ x (e j) (e i) := by
     have h := hρpsd (∑ i, w i • e i)
     rw [bilinear_sum_smul_sum_smul] at h
@@ -815,15 +894,24 @@ private theorem invHessQuad_rpow_generator_nonneg_core {φ ρ : E → ℝ} (hφ 
     simp only [hM, Finset.sum_mul]
     refine Finset.sum_congr rfl fun a _ => ?_
     rw [third_symm₂ hφ x a b k]
-  have hΓ0 : 0 ≤ ∑ i, ∑ j, inverseHessianEntry φ e x i j *
-      fderiv ℝ (invHessQuad φ c) x (e i) * fderiv ℝ (invHessQuad φ c) x (e j) := by
-    have := hApd.posSemidef.dotProduct_mulVec_nonneg (fun k => fderiv ℝ (invHessQuad φ c) x (e k))
-    simpa [dotProduct, Matrix.mulVec, hAmat, Finset.mul_sum, mul_comm, mul_left_comm, mul_assoc]
-      using this
-  have hΓ : ∑ i, ∑ j, inverseHessianEntry φ e x i j *
-      fderiv ℝ (invHessQuad φ c) x (e i) * fderiv ℝ (invHessQuad φ c) x (e j) ≤ S * f := by
-    have h := FunctionalInequalities.Analysis.sum_mul_mulVec_le_quartic_mul_inv hApd
-      (Matrix.of M) w
+  have hΓ0 :
+    0 ≤
+      ∑ i,
+        ∑ j,
+          inverseHessianEntry φ e x i j * fderiv ℝ (invHessQuad φ c) x (e i) *
+            fderiv ℝ (invHessQuad φ c) x (e j) := by
+    have :=
+      hApd.posSemidef.dotProduct_mulVec_nonneg (fun k => fderiv ℝ (invHessQuad φ c) x (e k))
+    simpa [dotProduct, Matrix.mulVec, hAmat, Finset.mul_sum, mul_comm, mul_left_comm,
+      mul_assoc] using this
+  have hΓ :
+    ∑ i,
+        ∑ j,
+          inverseHessianEntry φ e x i j * fderiv ℝ (invHessQuad φ c) x (e i) *
+            fderiv ℝ (invHessQuad φ c) x (e j) ≤
+      S * f := by
+    have h :=
+      FunctionalInequalities.Analysis.sum_mul_mulVec_le_quartic_mul_inv hApd (Matrix.of M) w
     rw [hAinv'] at h
     have hquad : ∑ i, ∑ j, hessianMatrixIn φ e x i j * w i * w j = f := by
       rw [hf, ← sum_invHessVec_hessian h2 hx c, hw]
@@ -919,14 +1007,15 @@ and `C²` on `K`, and `det ∇²φ(x) = exp(x·∇φ(x) - φ(x) - ρ(x))` on `K`
 `log det ∇²φ = ⟪x, ∇φ x⟫ - φ x - ρ x`. For every `θ` (Klartag: `θ = e₁`), with
 `f = ⟪(∇²φ)⁻¹θ, θ⟫ = φ^{θθ}` and the operator `L u = φ^{ij} u_ij - x^i u_i` of (67),
 `L(f^ε) + ε f^ε ≥ 0` on `K` for every `ε > 0`. -/
-theorem inverseHessian_rpow_supersolution {K : Set E} (hK : IsOpen K)
-    {φ ρ : E → ℝ} (hφ : ContDiffOn ℝ ∞ φ K) (hρ : ContDiffOn ℝ 2 ρ K) (hρc : ConvexOn ℝ K ρ)
+theorem inverseHessian_rpow_supersolution {K : Set E} (hK : IsOpen K) {φ ρ : E → ℝ}
+    (hφ : ContDiffOn ℝ ∞ φ K) (hρ : ContDiffOn ℝ 2 ρ K) (hρc : ConvexOn ℝ K ρ)
     (hPD : ∀ y ∈ K, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
-    (hEq : ∀ y ∈ K, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y)
-    (θ : E) {ε : ℝ} (hε : 0 < ε) {x : E} (hx : x ∈ K) :
-    0 ≤ nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫)
-        (fun y => ⟪Ring.inverse (hessianOperator φ y) θ, θ⟫ ^ ε) x +
-      ε * ⟪Ring.inverse (hessianOperator φ x) θ, θ⟫ ^ ε := by
+    (hEq : ∀ y ∈ K, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y) (θ : E) {ε : ℝ}
+    (hε : 0 < ε) {x : E} (hx : x ∈ K) :
+    0 ≤
+      nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫)
+          (fun y => ⟪Ring.inverse (hessianOperator φ y) θ, θ⟫ ^ ε) x +
+        ε * ⟪Ring.inverse (hessianOperator φ x) θ, θ⟫ ^ ε := by
   obtain ⟨ψ, hψ, hloc⟩ := exists_contDiff_eventuallyEq_germ hK hφ hx
   have hKx : ∀ᶠ y in 𝓝 x, y ∈ K := hK.mem_nhds hx
   have hPD' : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ ψ y v v := by
@@ -943,17 +1032,20 @@ theorem inverseHessian_rpow_supersolution {K : Set E} (hK : IsOpen K)
   have hρx : ContDiffAt ℝ 2 ρ x := hρ.contDiffAt (hK.mem_nhds hx)
   have hρpsd : ∀ v, 0 ≤ bilinearIteratedFDerivTwo ℝ ρ x v v :=
     bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open hK hρ hρc hx
-  have hcore := invHessQuad_rpow_generator_nonneg_core hψ hPD' hρx hρpsd hEq'
-    (fun j => ⟪e j, θ⟫) hε
-  have hfun : (fun y => invHessQuad ψ (fun j => ⟪e j, θ⟫) y ^ ε) =ᶠ[𝓝 x]
+  have hcore :=
+    invHessQuad_rpow_generator_nonneg_core hψ hPD' hρx hρpsd hEq' (fun j => ⟪e j, θ⟫) hε
+  have hfun :
+    (fun y => invHessQuad ψ (fun j => ⟪e j, θ⟫) y ^ ε) =ᶠ[𝓝 x]
       (fun y => ⟪Ring.inverse (hessianOperator φ y) θ, θ⟫ ^ ε) := by
     filter_upwards [hloc] with y hy
-    rw [← inner_ringInverse_hessianOperator_eq_invHessQuad, hessianOperator_congr_of_eventuallyEq hy]
+    rw [← inner_ringInverse_hessianOperator_eq_invHessQuad,
+      hessianOperator_congr_of_eventuallyEq hy]
   have hAx : (fun y => inverseHessianEntry ψ e y) x = (fun y => inverseHessianEntry φ e y) x := by
     exact inverseHessianEntry_congr_of_eventuallyEq _ hloc.self_of_nhds
   have e1 := nondivergenceOperator_congr (b := fun y i => ⟪y, e i⟫) hAx hfun
-  have e2 : invHessQuad ψ (fun j => ⟪e j, θ⟫) x ^ ε =
-      ⟪Ring.inverse (hessianOperator φ x) θ, θ⟫ ^ ε := hfun.self_of_nhds
+  have e2 :
+    invHessQuad ψ (fun j => ⟪e j, θ⟫) x ^ ε = ⟪Ring.inverse (hessianOperator φ x) θ, θ⟫ ^ ε :=
+    hfun.self_of_nhds
   rw [e1, e2] at hcore
   exact hcore
 

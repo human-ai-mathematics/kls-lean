@@ -3,9 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoFormulaGrid
-import LevyStochCalc.Brownian.ItoRiemannIntegrand
-import LevyStochCalc.Brownian.TaylorTwo
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.ItoFormulaGrid
+public import LevyStochCalc.Brownian.ItoRiemannIntegrand
+public import LevyStochCalc.Brownian.TaylorTwo
 
 /-!
 # Grid Riemann sums of the Itô integral
@@ -23,6 +28,8 @@ by a general one costs the `L²` distance between them times the bound on the in
 * `LevyStochCalc.Brownian.Ito.integral_abs_taylorRemainder_le` — the second-order Taylor
   remainder along a uniform grid is `O(m^{-1/2})` in `L¹`.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -210,7 +217,8 @@ theorem integral_abs_taylorRemainder_le
     (MeasureTheory.integrable_finsetSum _ hterm).const_mul K
   have hRint : MeasureTheory.Integrable (fun ω : Ω => |taylorRemainder f f' f''
       (fun i => itoProcess W ℱ hℱ H hm hp hq X₀ bdrift (unifGrid T m i) ω) m|) P := by
-    refine hsumint.mono hR.abs.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
+    refine hsumint.mono (continuous_abs.measurable.comp hR).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_abs]
     exact (hptw ω).trans (le_abs_self _)
   have hRint0 : MeasureTheory.Integrable (fun ω : Ω => taylorRemainder f f' f''

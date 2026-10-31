@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.IteratedDerivative.LocalHolder
-import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.LinearEquation
-import FunctionalInequalities.Analysis.Matrix.CompactEllipticity
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.IteratedDerivative.LocalHolder
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.LinearEquation
+public import FunctionalInequalities.Analysis.Matrix.CompactEllipticity
 
 /-!
 # Higher-order interior regularity for linear elliptic equations
@@ -16,6 +18,8 @@ is locally C^{m+3,α}. Exponents and bounds may depend on the ball. The proof fi
 obtains uniform local third-derivative estimates, patches them on each ball, and
 then differentiates the equation and inducts on the order. The given solution is retained.
 -/
+
+@[expose] public section
 
 local macro "nat_cast_le" : tactic => `(tactic| first | (norm_cast; done) | (norm_cast; omega))
 
@@ -134,14 +138,14 @@ private lemma local_linear_schauder_data (hn : 2 ≤ n)
   have hH : LocHolderMap (fun x => fderiv ℝ (fderiv ℝ w) x) :=
     hw.2.of_le_norm zero_le_one fun x y => by
       rw [one_mul, norm_iteratedFDeriv_two_sub]
-  have hAfam : ∀ p : Fin n × Fin n, LocHolderMap (fun x => fderiv ℝ (a p.1 p.2) x) :=
-    by intro p; exact hA p.1 p.2
-  have hBfam : ∀ i : Fin n, LocHolderMap (fun x => b i x) :=
-    by intro i; exact hB i
-  have hBdfam : ∀ i : Fin n, LocHolderMap (fun x => fderiv ℝ (b i) x) :=
-    by intro i; exact hBd i
-  have hHfam : ∀ _ : Unit, LocHolderMap (fun x => fderiv ℝ (fderiv ℝ w) x) :=
-    by intro u; exact hH
+  have hAfam : ∀ p : Fin n × Fin n, LocHolderMap (fun x => fderiv ℝ (a p.1 p.2) x) := by
+    intro p; exact hA p.1 p.2
+  have hBfam : ∀ i : Fin n, LocHolderMap (fun x => b i x) := by
+    intro i; exact hB i
+  have hBdfam : ∀ i : Fin n, LocHolderMap (fun x => fderiv ℝ (b i) x) := by
+    intro i; exact hBd i
+  have hHfam : ∀ _ : Unit, LocHolderMap (fun x => fderiv ℝ (fderiv ℝ w) x) := by
+    intro u; exact hH
   have hbig : 0 < s + 2 := by linarith
   obtain ⟨ηA, hηA0, hηA1, hηAcap⟩ := local_caps_family hAfam hbig
   obtain ⟨ηB, hηB0, hηB1, hηBcap⟩ := local_caps_family hBfam hbig

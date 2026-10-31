@@ -1,10 +1,14 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClassExtension
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClassExtension
 
 /-! Independent clients of the two-field smooth core and the arbitrary-data heat-test frontend.
 The law is `ν = m.tilted (-U)` for a smooth convex potential and the closed gradient has unit
 weight. The clients instantiate arbitrary `g ∈ L²(ν)`, `r > 0`, `s ≥ 0` and nonnegative
 `φ ∈ C_c^∞`, check the time-zero test `ψ = [φ]` with `Aψ = [-ℒφ]`, evaluate the zero test, and
 use the graph-norm identity and the two-field core at actual heat data `F = P_r g`. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology
@@ -150,47 +154,78 @@ theorem zero_test (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ �
 `‖JF‖² + ‖T̄JF‖² = ‖F‖² + 3‖T̄F‖² + 3‖AF‖² + ‖T̄AF‖²`. -/
 theorem graph_norm_identity (g : Lp ℝ 2 (ν : Measure V)) {r : ℝ} (hr : 0 < r) :
     ‖operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g +
-        adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-          ⟨_, mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩‖ ^ 2 +
-      ‖hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩ +
-        hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V)
-            hν hi g hr (mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr)⟩‖ ^ 2 =
-    ‖operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g‖ ^ 2 +
-      3 * ‖hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩‖ ^ 2 +
-      3 * ‖adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
-          ⟨_, mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩‖ ^ 2 +
-      ‖hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V)
-            hν hi g hr (mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr)⟩‖ ^ 2 :=
+              adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
+                ⟨_, mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩‖ ^
+          2 +
+        ‖hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                ⟨_,
+                  mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi
+                    g hr⟩ +
+              hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                ⟨_,
+                  mem_closedWeightedOperator_domain_adjointComp_of_pos m
+                    (ContinuousLinearMap.id ℝ V) hν hi g hr
+                    (mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                      hr)⟩‖ ^
+          2 =
+      ‖operator m (ContinuousLinearMap.id ℝ V) hν hi hr.le g‖ ^ 2 +
+            3 *
+              ‖hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+                    ⟨_,
+                      mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν
+                        hi g hr⟩‖ ^
+                2 +
+          3 *
+            ‖adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
+                  ⟨_,
+                    mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩‖ ^
+              2 +
+        ‖hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_adjointComp_of_pos m
+                  (ContinuousLinearMap.id ℝ V) hν hi g hr
+                  (mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr)⟩‖ ^
+          2 :=
   norm_add_adjointComp_sq_add_norm_sq
     (hν.dense_domain_closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
     ⟨_, mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩
-    (mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V)
-      hν hi g hr _)
+    (mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+      hr _)
 
 /-- **Two-field core at heat data.** `F = P_r g` is approximated by `qₙ ∈ C_c^∞` with
 `[∇qₙ] → T̄F` and `[∇(-ℒqₙ)] → T̄(AF)`, the two fields required by the transfer. -/
 theorem two_field_core (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
     (g : Lp ℝ 2 (ν : Measure V)) {r : ℝ} (hr : 0 < r) :
     ∃ (q : ℕ → V → ℝ) (hq : ∀ n, ContDiff ℝ ∞ (q n)) (hqc : ∀ n, HasCompactSupport (q n)),
-      Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν) (hq n)
-          (hqc n)).toLp (gradient (q n))) atTop
-        (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩)) ∧
-      Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν)
-          (contDiff_weightedLaplacian hU (hq n) (by decide) (by decide)).neg
-          (hasCompactSupport_weightedLaplacian U (hqc n)).neg).toLp
-            (gradient (fun x => -weightedLaplacian U (q n) x))) atTop
-        (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-          ⟨_, mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V)
-            hν hi g hr (mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr)⟩)) := by
-  obtain ⟨q, hq, hqc, -, c₂, -, c₄⟩ := hν.exists_seq_smooth_tendsto_two_fields hνU hU
-    ⟨_, mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩
-    (mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V)
-      hν hi g hr _)
+      Tendsto
+          (fun n =>
+            (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν) (hq n) (hqc n)).toLp
+              (gradient (q n)))
+          atTop
+          (𝓝
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                  hr⟩)) ∧
+        Tendsto
+          (fun n =>
+            (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν)
+                  (contDiff_weightedLaplacian hU (hq n) (by decide) (by decide)).neg
+                  (hasCompactSupport_weightedLaplacian U (hqc n)).neg).toLp
+              (gradient (fun x => -weightedLaplacian U (q n) x)))
+          atTop
+          (𝓝
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
+              ⟨_,
+                mem_closedWeightedOperator_domain_adjointComp_of_pos m
+                  (ContinuousLinearMap.id ℝ V) hν hi g hr
+                  (mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g
+                    hr)⟩)) := by
+  obtain ⟨q, hq, hqc, -, c₂, -, c₄⟩ :=
+    hν.exists_seq_smooth_tendsto_two_fields hνU hU
+      ⟨_, mem_adjointComp_domain_of_pos m (ContinuousLinearMap.id ℝ V) hν hi g hr⟩
+      (mem_closedWeightedOperator_domain_adjointComp_of_pos m (ContinuousLinearMap.id ℝ V) hν hi
+        g hr _)
   exact ⟨q, hq, hqc, c₂, c₄⟩
 
 #print axioms arbitrary_data

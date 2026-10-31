@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
 
 /-! Independent full-signature clients for Cheeger stability and general π-Buser. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -29,7 +33,9 @@ theorem actualBorellLaw (ν : ProbabilityMeasure V) {ρ : V → ℝ}
     (FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant ν)⁻¹ ^ 2 ≤
       ENNReal.ofReal Real.pi *
         FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant ν := by
-  exact FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.inv_minkowskiConstant_sq_le_pi_literature_of_borell ν hρ
+  exact
+    FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.inv_minkowskiConstant_sq_le_pi_literature_of_borell
+      ν hρ
 
 theorem generalAffineLaw (μ : ProbabilityMeasure V)
     (hμ : FunctionalInequalities.KLS.LogConcave μ) :

@@ -1,10 +1,13 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample
+public import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
 # Scope audit for `Y0`–`Y5` of `YosidaLimitRouteStatements.lean`
 
-The six obligations of Part A of `research/audits/Semigroup/YosidaLimitRouteStatements.lean` are restated
+The six obligations of Part A of `research/audits/Semigroup/YosidaLimitRouteStatements.lean` are
+restated
 here **verbatim** — each proposition is copied character for character from that route contract —
 and discharged from `Analysis/Semigroup/Yosida/Laws.lean` and
 `Analysis/Semigroup/Exponential/Counterexample.lean`. A renamed
@@ -31,9 +34,12 @@ property, Bakry–Émery `Γ`-calculus, small-time heat estimates and localizati
 is Buser's inequality or any step of it**, and nothing here mentions a measure, log-concavity or
 any KLS quantity.
 
-The axiom reports at the end cover every public declaration of the source modules and every theorem of
+The axiom reports at the end cover every public declaration of the source modules and every theorem
+of
 this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

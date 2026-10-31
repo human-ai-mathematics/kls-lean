@@ -1,8 +1,12 @@
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Measure.Support
+module
+
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.MeasureTheory.Measure.Support
 
 /-! # Local domination of a law on an open set, in particular on the interior of its support -/
+
+@[expose] public section
 
 noncomputable section
 

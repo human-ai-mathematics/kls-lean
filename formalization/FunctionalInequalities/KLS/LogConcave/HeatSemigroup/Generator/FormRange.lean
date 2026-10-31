@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Potential
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Potential
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 
 /-!
 # Density of the form range `(I + T̄†T̄) C_c^∞` in the form domain
@@ -40,6 +42,8 @@ operator core, surjectivity of `J`, or a Poincaré inequality. Zero dimension is
 The heat-test frontend that consumes the two-field core is in
 `HeatSemigroup/BakryEmery/TestClassExtension.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -104,7 +108,7 @@ theorem norm_sq_add_norm_closedWeightedOperator_sq_eq {ι : Type*} [Fintype ι]
   have hf2 := (memLp_of_contDiff_hasCompactSupport ν hf hfc).integrable_sq
   have hg := memLp_gradient_of_contDiff_hasCompactSupport (ν := ν) hf hfc
   have hg2 : Integrable (fun y => ‖gradient f y‖ ^ 2) (ν : Measure V) :=
-    (memLp_two_iff_integrable_sq_norm hg.1).mp hg
+    (memLp_two_iff_integrable_sq_norm hg.aestronglyMeasurable).mp hg
   rw [hxe, hν.closedWeightedOperator_toLp_eq m hi hf hfc, norm_toLp_sq_eq_integral,
     norm_toLp_sq_eq_integral, weightedFormEnergy_eq_mul_integral m hνU e f,
     integral_add hf2 hg2]
@@ -290,22 +294,33 @@ into convergence of all four fields. No classical differentiation of `F` is used
 theorem exists_seq_smooth_tendsto_two_fields (hνU : (ν : Measure V) = m.tilted (-U))
     (hU : ContDiff ℝ ∞ U)
     (F : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain)
-    (hF : (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F :
-      Lp ℝ 2 (ν : Measure V)) ∈ (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain) :
+    (hF :
+      (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F :
+          Lp ℝ 2 (ν : Measure V)) ∈
+        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain) :
     ∃ (q : ℕ → V → ℝ) (hq : ∀ n, ContDiff ℝ ∞ (q n)) (hqc : ∀ n, HasCompactSupport (q n)),
       Tendsto (fun n => (memLp_of_contDiff_hasCompactSupport ν (hq n) (hqc n)).toLp (q n)) atTop
-        (𝓝 (F : Lp ℝ 2 (ν : Measure V))) ∧
-      Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν) (hq n)
-          (hqc n)).toLp (gradient (q n))) atTop
-        (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, F.2.2⟩)) ∧
-      Tendsto (fun n => (memLp_neg_weightedLaplacian (ν := ν) (hU.of_le (by decide)) (hq n)
-          (hqc n)).toLp (fun x => -weightedLaplacian U (q n) x)) atTop
-        (𝓝 (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F)) ∧
-      Tendsto (fun n => (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν)
-          (contDiff_weightedLaplacian hU (hq n) (by decide) (by decide)).neg
-          (hasCompactSupport_weightedLaplacian U (hqc n)).neg).toLp
-            (gradient (fun x => -weightedLaplacian U (q n) x))) atTop
-        (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hF⟩)) := by
+          (𝓝 (F : Lp ℝ 2 (ν : Measure V))) ∧
+        Tendsto
+            (fun n =>
+              (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν) (hq n) (hqc n)).toLp
+                (gradient (q n)))
+            atTop (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, F.2.2⟩)) ∧
+          Tendsto
+              (fun n =>
+                (memLp_neg_weightedLaplacian (ν := ν) (hU.of_le (by decide)) (hq n)
+                      (hqc n)).toLp
+                  (fun x => -weightedLaplacian U (q n) x))
+              atTop
+              (𝓝
+                (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) F)) ∧
+            Tendsto
+              (fun n =>
+                (memLp_gradient_of_contDiff_hasCompactSupport (ν := ν)
+                      (contDiff_weightedLaplacian hU (hq n) (by decide) (by decide)).neg
+                      (hasCompactSupport_weightedLaplacian U (hqc n)).neg).toLp
+                  (gradient (fun x => -weightedLaplacian U (q n) x)))
+              atTop (𝓝 (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi ⟨_, hF⟩)) := by
   revert F
   set T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
   intro F hF
@@ -313,8 +328,8 @@ theorem exists_seq_smooth_tendsto_two_fields (hνU : (ν : Measure V) = m.tilted
   have hzmem : (F : Lp ℝ 2 (ν : Measure V)) + adjointComp T F ∈ T.domain :=
     T.domain.add_mem F.2.2 hF
   set z : T.domain := ⟨_, hzmem⟩
-  have hex (n : ℕ) := exists_toLp_add_adjointComp_graph_lt hνU hU z
-    (ε := 1 / ((n : ℝ) + 1)) (by positivity)
+  have hex (n : ℕ) :=
+    exists_toLp_add_adjointComp_graph_lt hνU hU z (ε := 1 / ((n : ℝ) + 1)) (by positivity)
   choose q hq hqc hA hJ hlt using hex
   refine ⟨q, hq, hqc, ?_⟩
   set x : ℕ → (adjointComp T).domain := fun n => ⟨_, hA n⟩
@@ -326,29 +341,35 @@ theorem exists_seq_smooth_tendsto_two_fields (hνU : (ν : Measure V) = m.tilted
   have hsq₁ (a b : ℝ) : a ≤ √(a ^ 2 + b ^ 2) := by
     rcases le_or_gt a 0 with ha | ha
     · exact ha.trans (Real.sqrt_nonneg _)
-    · calc a = √(a ^ 2) := (Real.sqrt_sq ha.le).symm
+    · calc
+        a = √(a ^ 2) := (Real.sqrt_sq ha.le).symm
         _ ≤ _ := Real.sqrt_le_sqrt (by nlinarith)
-  have hsq₂ (a b : ℝ) : b ≤ √(a ^ 2 + b ^ 2) := by
-    rw [add_comm]; exact hsq₁ b a
-  have h₁ : Tendsto (fun n => (x n : Lp ℝ 2 (ν : Measure V)) + adjointComp T (x n)) atTop
+  have hsq₂ (a b : ℝ) : b ≤ √(a ^ 2 + b ^ 2) := by rw [add_comm]; exact hsq₁ b a
+  have h₁ :
+    Tendsto (fun n => (x n : Lp ℝ 2 (ν : Measure V)) + adjointComp T (x n)) atTop
       (𝓝 ((F : Lp ℝ 2 (ν : Measure V)) + adjointComp T F)) := by
-    refine tendsto_iff_norm_sub_tendsto_zero.mpr
-      (squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hε)
+    refine
+      tendsto_iff_norm_sub_tendsto_zero.mpr
+        (squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hε)
     exact ((hsq₁ _ _).trans_lt (hlt n)).le
-  have hTJ (n : ℕ) : T ⟨(x n : Lp ℝ 2 (ν : Measure V)), (x n).2.2⟩ + T ⟨_, hx n⟩ =
-      T ⟨_, hJ n⟩ := by
+  have hTJ (n : ℕ) :
+    T ⟨(x n : Lp ℝ 2 (ν : Measure V)), (x n).2.2⟩ + T ⟨_, hx n⟩ = T ⟨_, hJ n⟩ := by
     rw [← LinearPMap.map_add]; rfl
   have hTz : T ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩ + T ⟨_, hF⟩ = T z := by
     rw [← LinearPMap.map_add]; rfl
-  have h₂ : Tendsto (fun n => T ⟨(x n : Lp ℝ 2 (ν : Measure V)), (x n).2.2⟩ + T ⟨_, hx n⟩)
-      atTop (𝓝 (T ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩ + T ⟨_, hF⟩)) := by
-    refine tendsto_iff_norm_sub_tendsto_zero.mpr
-      (squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hε)
+  have h₂ :
+    Tendsto (fun n => T ⟨(x n : Lp ℝ 2 (ν : Measure V)), (x n).2.2⟩ + T ⟨_, hx n⟩) atTop
+      (𝓝 (T ⟨(F : Lp ℝ 2 (ν : Measure V)), F.2.2⟩ + T ⟨_, hF⟩)) := by
+    refine
+      tendsto_iff_norm_sub_tendsto_zero.mpr
+        (squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hε)
     rw [hTJ, hTz]
     exact ((hsq₂ _ _).trans_lt (hlt n)).le
-  obtain ⟨c₁, c₂, c₃, c₄⟩ := tendsto_of_tendsto_add_adjointComp
-    (hν.dense_domain_closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) hx F hF h₁ h₂
-  have hAx (n : ℕ) : adjointComp T (x n) =
+  obtain ⟨c₁, c₂, c₃, c₄⟩ :=
+    tendsto_of_tendsto_add_adjointComp
+      (hν.dense_domain_closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) hx F hF h₁ h₂
+  have hAx (n : ℕ) :
+    adjointComp T (x n) =
       (memLp_neg_weightedLaplacian (ν := ν) hU1 (hq n) (hqc n)).toLp
         (fun y => -weightedLaplacian U (q n) y) :=
     hν.adjointComp_toLp_eq m hi hνU hU1 (hq n) (hqc n)
@@ -361,8 +382,10 @@ theorem exists_seq_smooth_tendsto_two_fields (hνU : (ν : Measure V) = m.tilted
     exact hν.closedWeightedOperator_toLp_eq m hi (hq n) (hqc n)
   · exact c₃.congr hAx
   · refine c₄.congr fun n => ?_
-    have hmem : (memLp_of_contDiff_hasCompactSupport ν (hL n) (hLc n)).toLp
-        (fun y => -weightedLaplacian U (q n) y) ∈ T.domain :=
+    have hmem :
+      (memLp_of_contDiff_hasCompactSupport ν (hL n) (hLc n)).toLp
+          (fun y => -weightedLaplacian U (q n) y) ∈
+        T.domain :=
       hν.toLp_mem_closedWeightedOperator_domain m hi (hL n) (hLc n)
     have hc : (⟨_, hx n⟩ : T.domain) = ⟨_, hmem⟩ := by
       apply Subtype.ext

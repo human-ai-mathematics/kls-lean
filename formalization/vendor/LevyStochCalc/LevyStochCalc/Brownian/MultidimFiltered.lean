@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Filtered
-import LevyStochCalc.Brownian.Multidim
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Filtered
+public import LevyStochCalc.Brownian.Multidim
 
 /-!
 # The joint natural filtration of a multidimensional Brownian motion
@@ -15,6 +19,8 @@ coordinate `Wʲ` is a Brownian motion for the joint natural filtration `⨆ i, �
 (`MultidimBrownianMotion.isBrownianFiltration_natural`): the increments of `Wʲ` after time `s`
 are independent of `ℱ^{Wʲ} s`, and the other coordinates are independent of `σ(Wʲ)` altogether.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

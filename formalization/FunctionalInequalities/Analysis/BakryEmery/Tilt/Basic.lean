@@ -1,9 +1,11 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
-import Mathlib.MeasureTheory.Measure.Tilted
-import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
-import FunctionalInequalities.Analysis.Tensor.Coefficients
-import Mathlib.Analysis.Calculus.ParametricIntegral
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
+public import FunctionalInequalities.Analysis.Tensor.Coefficients
+public import Mathlib.Analysis.Calculus.ParametricIntegral
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # Exponential tilts, tilt averages and the generator identity
@@ -24,6 +26,8 @@ exponential-moment premise true). The objects are the source's probability tilts
 source's Hilbert–Schmidt norm of the coefficient array; a coordinate bridge to
 `Analysis/Tensor/Coordinate.lean` is needed before tensor estimates of the source are transferred.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -78,26 +82,22 @@ theorem gradient_sub_inner {V : E → ℝ} (z x : E) (hV : DifferentiableAt ℝ 
     exact hsubgrad.gradient
 
 omit [MeasurableSpace E] [BorelSpace E] in
-/-- Tilting the potential by a linear function adds a drift: `ℒ_{V - ⟪z,·⟫} f = ℒ_V f + ⟪z, ∇f⟫`. -/
+/--
+Tilting the potential by a linear function adds a drift: `ℒ_{V - ⟪z,·⟫} f = ℒ_V f + ⟪z, ∇f⟫`. -/
 theorem weightedLaplacian_sub_inner {V f : E → ℝ} (z x : E) (hV : DifferentiableAt ℝ V x) :
-    weightedLaplacian (fun y => V y - ⟪z, y⟫) f x = weightedLaplacian V f x + ⟪z, gradient f x⟫ := by
-    rw [weightedLaplacian_apply, weightedLaplacian_apply]
-    rw [gradient_sub_inner z x hV]
-    rw [inner_sub_left]
-    ring
+    weightedLaplacian (fun y => V y - ⟪z, y⟫) f x =
+      weightedLaplacian V f x + ⟪z, gradient f x⟫ := by
+  rw [weightedLaplacian_apply, weightedLaplacian_apply]
+  rw [gradient_sub_inner z x hV]
+  rw [inner_sub_left]
+  ring
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] [m.IsAddHaarMeasure] in
 /-- The exponential tilt of `m.tilted (-V)` is the tilted law of the potential `V - ⟪z, ·⟫`. -/
 theorem expTilt_tilted {V : E → ℝ} (hV : Integrable (fun x => Real.exp ((-V) x)) m) (z : E) :
     expTilt (m.tilted (-V)) z = m.tilted (-fun y => V y - ⟪z, y⟫) := by
     unfold expTilt
-    first
-    | rw [Measure.tilted_tilted hV]
-    | rw [Measure.tilted_tilted' hV]
-    | rw [Measure.tilted_tilted_of_integrable hV]
-    | rw [Measure.tilted_tilted_eq_tilted_add hV]
-    | rw [Measure.tilted_add hV]
-    | rw [MeasureTheory.tilted_tilted hV]
+    rw [MeasureTheory.tilted_tilted hV]
     congr 1
     funext x
     change -V x + ⟪z, x⟫ = -(V x - ⟪z, x⟫)
@@ -636,17 +636,15 @@ theorem taylorTensor_one_neg_weightedLaplacian {V f : E → ℝ} (hV : ContDiff 
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Taylor tensors of a function with smooth tilt average are symmetric multilinear maps. -/
-theorem taylorTensor_domDomCongr (μ : Measure E) (f : E → F) (hF : ContDiff ℝ ∞ (tiltAverage μ f)) (d : ℕ)
-    (σ : Equiv.Perm (Fin d)) : (taylorTensor μ f d).domDomCongr σ = taylorTensor μ f d := by
-    ext v
-    simp only [taylorTensor, ContinuousMultilinearMap.domDomCongr_apply,
-      smul_apply]
-    change
-      (d.factorial : ℝ)⁻¹ •
-          (iteratedFDeriv ℝ d (tiltAverage μ f) 0) (v ∘ σ) =
-        (d.factorial : ℝ)⁻¹ •
-          (iteratedFDeriv ℝ d (tiltAverage μ f) 0) v
-    rw [iteratedFDeriv_comp_perm_of_contDiff hF d 0 v σ]
+theorem taylorTensor_domDomCongr (μ : Measure E) (f : E → F)
+    (hF : ContDiff ℝ ∞ (tiltAverage μ f)) (d : ℕ) (σ : Equiv.Perm (Fin d)) :
+    (taylorTensor μ f d).domDomCongr σ = taylorTensor μ f d := by
+  ext v
+  simp only [taylorTensor, ContinuousMultilinearMap.domDomCongr_apply, smul_apply]
+  change
+    (d.factorial : ℝ)⁻¹ • (iteratedFDeriv ℝ d (tiltAverage μ f) 0) (v ∘ σ) =
+      (d.factorial : ℝ)⁻¹ • (iteratedFDeriv ℝ d (tiltAverage μ f) 0) v
+  rw [iteratedFDeriv_comp_perm_of_contDiff hF d 0 v σ]
 
 end CompleteSpace
 

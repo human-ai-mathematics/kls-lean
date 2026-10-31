@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
-import FunctionalInequalities.Analysis.Hausdorff.Content
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Integral.Lebesgue.Add
+module
+
+public import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+public import FunctionalInequalities.Analysis.Hausdorff.Content
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 
 /-!
 # Eilenberg slicing bound for Hausdorff measures along a Lipschitz real function
@@ -19,7 +21,8 @@ The proof is a covering argument, not an application of Rademacher's theorem: di
 almost everywhere says nothing about individual level sets.  For each scale `k` the infimum formula
 `Measure.hausdorffMeasure_apply` supplies a countable cover `T k` of `S` with diameters at most
 `(k + 1)⁻¹` and total `(d + 1)`-dimensional cover cost at most `μH[d + 1] S + (k + 1)⁻¹`
-(`exists_cover_familyCost_lt`).  Each cover piece meeting `S` has its `u`-image inside an explicit closed
+(`exists_cover_familyCost_lt`).  Each cover piece meeting `S` has its `u`-image inside an explicit
+closed
 interval of length `2 K (diameter of the piece)`, because `u` is Lipschitz on `S`; only points of
 `S` are ever compared (`exists_levelSlab`).  Summing the pieces whose interval contains `t` gives
 the majorant at scale `k`, measurable by construction, with Lebesgue integral at most
@@ -38,6 +41,8 @@ whose interval contains `t` instead of all pieces: an empty piece would otherwis
 assumed measurable, bounded, or nonempty, and `u` is not assumed globally Lipschitz,
 differentiable, or measurable.
 -/
+
+@[expose] public section
 
 noncomputable section
 

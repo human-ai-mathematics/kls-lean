@@ -1,7 +1,9 @@
-import FunctionalInequalities.Probability.LogConcave
-import FunctionalInequalities.Poincare.LocalSlope.Basic
-import FunctionalInequalities.Probability.Covariance.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Probability.LogConcave
+public import FunctionalInequalities.Poincare.LocalSlope.Basic
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # The KLS conjecture as a Lean proposition
@@ -17,6 +19,8 @@ with the isotropic formulation. The affine/isotropic equivalence is proved separ
 `KLS/LogConcave/Poincare.lean`; neither supplies a dimension-free bound. This declaration is
 versioned with its definitions, not API-frozen.
 -/
+
+@[expose] public section
 
 noncomputable section
 

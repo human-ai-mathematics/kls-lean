@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Mollification
-import FunctionalInequalities.Analysis.Cutoff.SmoothBall
-import FunctionalInequalities.L2.Pairing
+module
+
+public import FunctionalInequalities.Analysis.WeakDerivative.Mollification
+public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
+public import FunctionalInequalities.L2.Pairing
 
 /-! # Weak products and compact local L2 data
 
@@ -15,6 +17,8 @@ Supporting weak calculus for Letwin arXiv:2607.24164v1 and the
 local elliptic estimates of Gilbarg--Trudinger (2001). Each declaration
 retains its own support, integrability and dimensional hypotheses.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory
@@ -31,17 +35,12 @@ namespace FunctionalInequalities.Analysis
 set_option maxHeartbeats 800000 in
 /-- Scalar weak product rule: global L2 factors and directional derivatives
 produce a locally integrable product and its actual weak derivative. -/
-theorem HasWeakDerivAlong.mul_of_memLp_two {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {f df g dg : E → ℝ}
-    {v : E}
-    (hf : HasWeakDerivAlong f df v) (hg : HasWeakDerivAlong g dg v)
-    (hf2 : MemLp f 2 (volume : Measure E))
-    (hdf2 : MemLp df 2 (volume : Measure E))
-    (hg2 : MemLp g 2 (volume : Measure E))
-    (hdg2 : MemLp dg 2 (volume : Measure E)) :
-    HasWeakDerivAlong (fun x => f x * g x)
-      (fun x => df x * g x + f x * dg x) v := by
+theorem HasWeakDerivAlong.mul_of_memLp_two {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {f df g dg : E → ℝ} {v : E} (hf : HasWeakDerivAlong f df v) (hg : HasWeakDerivAlong g dg v)
+    (hf2 : MemLp f 2 (volume : Measure E)) (hdf2 : MemLp df 2 (volume : Measure E))
+    (hg2 : MemLp g 2 (volume : Measure E)) (hdg2 : MemLp dg 2 (volume : Measure E)) :
+    HasWeakDerivAlong (fun x => f x * g x) (fun x => df x * g x + f x * dg x) v := by
   let φ : ℕ → ContDiffBump (0 : E) := fun m =>
     { rIn := (1 / ((m : ℝ) + 1)) / 2
       rOut := 1 / ((m : ℝ) + 1)
@@ -52,109 +51,88 @@ theorem HasWeakDerivAlong.mul_of_memLp_two {E : Type*} [NormedAddCommGroup E] [I
   have hφ : Tendsto (fun m => (φ m).rOut) atTop (𝓝 0) := by
     change Tendsto (fun m : ℕ => 1 / ((m : ℝ) + 1)) atTop (𝓝 0)
     exact tendsto_one_div_add_atTop_nhds_zero_nat
-  let gm : ℕ → E → ℝ := fun m =>
-    (φ m).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] g
+  let gm : ℕ → E → ℝ := fun m => (φ m).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] g
   let dgm : ℕ → E → ℝ := fun m =>
     (φ m).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] dg
-  have hgm2 (m : ℕ) :
-      MemLp (gm m) 2 (volume : Measure E) :=
+  have hgm2 (m : ℕ) : MemLp (gm m) 2 (volume : Measure E) :=
     Mollification.memLp_convolution (φ m) hg2
-  have hdgm2 (m : ℕ) :
-      MemLp (dgm m) 2 (volume : Measure E) :=
+  have hdgm2 (m : ℕ) : MemLp (dgm m) 2 (volume : Measure E) :=
     Mollification.memLp_convolution (φ m) hdg2
-  have hgmconv :
-      Tendsto (fun m => eLpNorm (gm m - g) 2 volume) atTop (𝓝 0) :=
+  have hgmconv : Tendsto (fun m => eLpNorm (gm m - g) 2 volume) atTop (𝓝 0) :=
     Mollification.tendsto_eLpNorm_convolution_sub hφ hg2
-  have hdgmconv :
-      Tendsto (fun m => eLpNorm (dgm m - dg) 2 volume) atTop (𝓝 0) :=
+  have hdgmconv : Tendsto (fun m => eLpNorm (dgm m - dg) 2 volume) atTop (𝓝 0) :=
     Mollification.tendsto_eLpNorm_convolution_sub hφ hdg2
   have hgmC (m : ℕ) : ContDiff ℝ 1 (gm m) :=
     ((φ m).hasCompactSupport_normed (μ := volume)).contDiff_convolution_left
       (ContinuousLinearMap.lsmul ℝ ℝ) ((φ m).contDiff_normed (n := 1)) hg.1
-  have hgmder (m : ℕ) (x : E) :
-      fderiv ℝ (gm m) x v = dgm m x :=
+  have hgmder (m : ℕ) (x : E) : fderiv ℝ (gm m) x v = dgm m x :=
     fderiv_convolution_eq_of_hasWeakDerivAlong hg (φ m) x
-  refine ⟨(hf2.integrable_mul hg2).locallyIntegrable,
-    ((hdf2.integrable_mul hg2).add (hf2.integrable_mul hdg2)).locallyIntegrable, ?_⟩
+  refine
+    ⟨(hf2.integrable_mul hg2).locallyIntegrable,
+      ((hdf2.integrable_mul hg2).add (hf2.integrable_mul hdg2)).locallyIntegrable, ?_⟩
   intro ψ hψ hψc
   have hψd : Continuous (fun x => fderiv ℝ ψ x v) :=
     (hψ.continuous_fderiv one_ne_zero).clm_apply continuous_const
   have hψdc : HasCompactSupport (fun x => fderiv ℝ ψ x v) := by
-    change HasCompactSupport ((fun L : E →L[ℝ] ℝ => L v) ∘
-      fderiv ℝ ψ)
+    change HasCompactSupport ((fun L : E →L[ℝ] ℝ => L v) ∘ fderiv ℝ ψ)
     exact (hψc.fderiv ℝ).comp_left (by simp)
-  have hψtop : MemLp ψ (⊤ : ℝ≥0∞)
-      (volume : Measure E) :=
+  have hψtop : MemLp ψ (⊤ : ℝ≥0∞) (volume : Measure E) :=
     hψ.continuous.memLp_of_hasCompactSupport hψc
-  have hψdtop : MemLp (fun x => fderiv ℝ ψ x v) (⊤ : ℝ≥0∞)
-      (volume : Measure E) :=
+  have hψdtop : MemLp (fun x => fderiv ℝ ψ x v) (⊤ : ℝ≥0∞) (volume : Measure E) :=
     hψd.memLp_of_hasCompactSupport hψdc
   let a : E → ℝ := fun x => f x * fderiv ℝ ψ x v
   let b : E → ℝ := fun x => df x * ψ x
   let c : E → ℝ := fun x => f x * ψ x
-  have ha : MemLp a 2 (volume : Measure E) :=
-    hψdtop.mul' hf2
-  have hb : MemLp b 2 (volume : Measure E) :=
-    hψtop.mul' hdf2
-  have hc : MemLp c 2 (volume : Measure E) :=
-    hψtop.mul' hf2
-  have hid (m : ℕ) :
-      (∫ x, a x * gm m x) + (∫ x, c x * dgm m x) =
-        -(∫ x, b x * gm m x) := by
+  have ha : MemLp a 2 (volume : Measure E) := hf2.fun_mul hψdtop
+  have hb : MemLp b 2 (volume : Measure E) := hdf2.fun_mul hψtop
+  have hc : MemLp c 2 (volume : Measure E) := hf2.fun_mul hψtop
+  have hid (m : ℕ) : (∫ x, a x * gm m x) + (∫ x, c x * dgm m x) = -(∫ x, b x * gm m x) := by
     have hder (x : E) :
-        fderiv ℝ (fun y => ψ y * gm m y) x v =
-          ψ x * dgm m x + gm m x * fderiv ℝ ψ x v := by
+      fderiv ℝ (fun y => ψ y * gm m y) x v = ψ x * dgm m x + gm m x * fderiv ℝ ψ x v := by
       change (fderiv ℝ (ψ * gm m) x) v = _
-      rw [fderiv_mul
-        ((hψ.differentiable one_ne_zero).differentiableAt)
-        (((hgmC m).differentiable one_ne_zero).differentiableAt)]
+      rw [fderiv_mul ((hψ.differentiable one_ne_zero).differentiableAt)
+          (((hgmC m).differentiable one_ne_zero).differentiableAt)]
       simp only [add_apply, smul_apply, smul_eq_mul, hgmder]
-    have hw := hf.2.2 (fun x => ψ x * gm m x)
-      (hψ.mul (hgmC m)) hψc.mul_right
+    have hw := hf.2.2 (fun x => ψ x * gm m x) (hψ.mul (hgmC m)) hψc.mul_right
     calc
-      (∫ x, a x * gm m x) + (∫ x, c x * dgm m x) =
-          ∫ x, a x * gm m x + c x * dgm m x :=
-        (integral_add (ha.integrable_mul (hgm2 m))
-          (hc.integrable_mul (hdgm2 m))).symm
+      (∫ x, a x * gm m x) + (∫ x, c x * dgm m x) = ∫ x, a x * gm m x + c x * dgm m x :=
+        (integral_add (ha.integrable_mul (hgm2 m)) (hc.integrable_mul (hdgm2 m))).symm
       _ = ∫ x, f x * fderiv ℝ (fun y => ψ y * gm m y) x v := by
         apply integral_congr_ae
-        exact Filter.Eventually.of_forall fun x => by
-          change a x * gm m x + c x * dgm m x =
-            f x * fderiv ℝ (fun y => ψ y * gm m y) x v
-          rw [hder]
-          dsimp only [a, c]
-          ring
+        exact
+          Filter.Eventually.of_forall fun x => by
+            change a x * gm m x + c x * dgm m x = f x * fderiv ℝ (fun y => ψ y * gm m y) x v
+            rw [hder]
+            dsimp only [a, c]
+            ring
       _ = -(∫ x, df x * (ψ x * gm m x)) := hw
       _ = -(∫ x, b x * gm m x) := by
         apply congrArg Neg.neg
         apply integral_congr_ae
-        exact Filter.Eventually.of_forall fun x => by
-          dsimp only [b]
-          ring
+        exact
+          Filter.Eventually.of_forall fun x => by
+            dsimp only [b]
+            ring
   have hA := FunctionalInequalities.L2.tendsto_integral_mul_of_eLpNorm_sub ha hg2 hgm2 hgmconv
   have hB := FunctionalInequalities.L2.tendsto_integral_mul_of_eLpNorm_sub hb hg2 hgm2 hgmconv
-  have hC := FunctionalInequalities.L2.tendsto_integral_mul_of_eLpNorm_sub hc hdg2 hdgm2 hdgmconv
-  have hlim :
-      (∫ x, a x * g x) + (∫ x, c x * dg x) =
-        -(∫ x, b x * g x) :=
-    tendsto_nhds_unique (hA.add hC)
-      (Filter.Tendsto.congr (fun m => (hid m).symm) hB.neg)
-  have hleft :
-      (∫ x, (f x * g x) * fderiv ℝ ψ x v) = ∫ x, a x * g x := by
+  have hC :=
+    FunctionalInequalities.L2.tendsto_integral_mul_of_eLpNorm_sub hc hdg2 hdgm2 hdgmconv
+  have hlim : (∫ x, a x * g x) + (∫ x, c x * dg x) = -(∫ x, b x * g x) :=
+    tendsto_nhds_unique (hA.add hC) (Filter.Tendsto.congr (fun m => (hid m).symm) hB.neg)
+  have hleft : (∫ x, (f x * g x) * fderiv ℝ ψ x v) = ∫ x, a x * g x := by
     apply integral_congr_ae
-    exact Filter.Eventually.of_forall fun x => by
-      dsimp only [a]
-      ring
-  have hright :
-      (∫ x, (df x * g x + f x * dg x) * ψ x) =
-        (∫ x, b x * g x) + (∫ x, c x * dg x) := by
+    exact
+      Filter.Eventually.of_forall fun x => by
+        dsimp only [a]
+        ring
+  have hright : (∫ x, (df x * g x + f x * dg x) * ψ x) = (∫ x, b x * g x) + (∫ x, c x * dg x) := by
     calc
-      (∫ x, (df x * g x + f x * dg x) * ψ x) =
-          ∫ x, b x * g x + c x * dg x := by
+      (∫ x, (df x * g x + f x * dg x) * ψ x) = ∫ x, b x * g x + c x * dg x := by
         apply integral_congr_ae
-        exact Filter.Eventually.of_forall fun x => by
-          dsimp only [b, c]
-          ring
+        exact
+          Filter.Eventually.of_forall fun x => by
+            dsimp only [b, c]
+            ring
       _ = (∫ x, b x * g x) + (∫ x, c x * dg x) :=
         integral_add (hb.integrable_mul hg2) (hc.integrable_mul hdg2)
   rw [hleft, hright]
@@ -162,29 +140,31 @@ theorem HasWeakDerivAlong.mul_of_memLp_two {E : Type*} [NormedAddCommGroup E] [I
 
 
 
-/-- A continuous compactly supported cutoff times a function that is L2 on every compact set is globally L2. -/
-theorem memLp_mul_of_hasCompactSupport {n : ℕ}
-    {f χ : EuclideanSpace ℝ (Fin n) → ℝ}
+/--
+A continuous compactly supported cutoff times a function that is L2 on every compact set is globally
+L2. -/
+theorem memLp_mul_of_hasCompactSupport {n : ℕ} {f χ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hχ : Continuous χ) (hχc : HasCompactSupport χ)
-    (hf : ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp f 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
-    MemLp (fun x => χ x * f x) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    (hf :
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+        IsCompact S → MemLp f 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
+    MemLp (fun x => χ x * f x) 2 (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
   classical
   have hKm : MeasurableSet (tsupport χ) := (isClosed_tsupport χ).measurableSet
-  have hind : MemLp ((tsupport χ).indicator f) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_indicator_iff_restrict hKm).mpr (hf (tsupport χ) hχc)
+  have hind :
+    MemLp ((tsupport χ).indicator f) 2 (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+    (memLp_indicator_iff_restrict hKm.nullMeasurableSet).mpr (hf (tsupport χ) hχc)
   have hχlp : MemLp χ (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     hχ.memLp_of_hasCompactSupport hχc
-  have hm : MemLp (fun x => χ x * ((tsupport χ).indicator f) x) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := hind.mul' hχlp
+  have hm :
+    MemLp (fun x => χ x * ((tsupport χ).indicator f) x) 2
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+    hχlp.fun_mul hind
   convert hm using 1
   funext x
   by_cases hx : x ∈ tsupport χ
   · rw [Set.indicator_of_mem hx]
-  · rw [Set.indicator_of_notMem hx, image_eq_zero_of_notMem_tsupport hx,
-      zero_mul, zero_mul]
+  · rw [Set.indicator_of_notMem hx, image_eq_zero_of_notMem_tsupport hx, zero_mul, zero_mul]
 
 /-- Bounded weak factors with compact-local L2 derivatives have the actual
 weak product derivative, which is itself L2 on every compact set. -/
@@ -210,11 +190,11 @@ theorem HasWeakDerivAlong.mul_of_locally_memLp_two {n : ℕ}
     intro S hS
     have hfirst : MemLp (fun x => df x * g x) 2
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
-      simpa only [mul_comm] using (hdf2 S hS).mul' (hg_top.restrict S)
-    exact hfirst.add ((hdg2 S hS).mul' (hf_top.restrict S))
+      simpa only [mul_comm] using (hg_top.restrict S).fun_mul (hdf2 S hS)
+    exact hfirst.add ((hf_top.restrict S).fun_mul (hdg2 S hS))
   have hproduct : MemLp (fun x => f x * g x) (⊤ : ENNReal)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    hg_top.mul' hf_top
+    hf_top.fun_mul hg_top
   have hdensity : LocallyIntegrable (fun x => df x * g x + f x * dg x)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     apply locallyIntegrable_iff.mpr
@@ -262,20 +242,20 @@ theorem HasWeakDerivAlong.mul_of_locally_memLp_two {n : ℕ}
     hχd.memLp_of_hasCompactSupport hχdc
   have hχf2 : MemLp (fun x => χ x * f x) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    hf_top.mul' hχ2
+    hχ2.fun_mul hf_top
   have hχg2 : MemLp (fun x => χ x * g x) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    hg_top.mul' hχ2
+    hχ2.fun_mul hg_top
   have hχdf2 : MemLp
       (fun x => χ x * df x +
         fderiv ℝ (χ : EuclideanSpace ℝ (Fin n) → ℝ) x v * f x) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_mul_of_hasCompactSupport hχ.continuous hχc hdf2).add (hf_top.mul' hχd2)
+    (memLp_mul_of_hasCompactSupport hχ.continuous hχc hdf2).add (hχd2.fun_mul hf_top)
   have hχdg2 : MemLp
       (fun x => χ x * dg x +
         fderiv ℝ (χ : EuclideanSpace ℝ (Fin n) → ℝ) x v * g x) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_mul_of_hasCompactSupport hχ.continuous hχc hdg2).add (hg_top.mul' hχd2)
+    (memLp_mul_of_hasCompactSupport hχ.continuous hχc hdg2).add (hχd2.fun_mul hg_top)
   have hw := (hf.mul_contDiff hχ hχc).mul_of_memLp_two
     (hg.mul_contDiff hχ hχc) hχf2 hχdf2 hχg2 hχdg2
   have hleft :
@@ -444,7 +424,7 @@ theorem hasWeakDerivAlong_finsetProd_of_locally_memLp_two {n : ℕ} {ι : Type*}
           MemLp (fun x => ∏ j ∈ t, f j x) (⊤ : ENNReal)
             (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
         simpa only [ENNReal.inv_top, Finset.sum_const_zero, ENNReal.inv_zero] using
-          (MemLp.prod' (p := fun _ : ι => (⊤ : ENNReal))
+          (MemLp.fun_prod (p := fun _ : ι => (⊤ : ENNReal))
             (fun j hj => hbound j (Finset.mem_insert_of_mem hj)))
       have hbinary :=
         (hf i (Finset.mem_insert_self i t)).mul_of_locally_memLp_two
@@ -531,8 +511,8 @@ theorem HasWeakDerivAlong.mul_of_locally_bounded {n : ℕ}
     intro S hS
     have hfirst : MemLp (fun x => df x * g x) 2
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
-      simpa only [mul_comm] using (hdf2 S hS).mul' (hg_top S hS)
-    exact hfirst.add ((hdg2 S hS).mul' (hf_top S hS))
+      simpa only [mul_comm] using (hg_top S hS).fun_mul (hdf2 S hS)
+    exact hfirst.add ((hf_top S hS).fun_mul (hdg2 S hS))
   have hproduct : LocallyIntegrable (fun x => f x * g x)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     apply locallyIntegrable_iff.mpr
@@ -542,7 +522,7 @@ theorem HasWeakDerivAlong.mul_of_locally_bounded {n : ℕ}
       isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
     have hp : MemLp (fun x => f x * g x) (⊤ : ENNReal)
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
-      (hg_top S hS).mul' (hf_top S hS)
+      (hf_top S hS).fun_mul (hg_top S hS)
     exact hp.integrable le_top
   have hdensity : LocallyIntegrable (fun x => df x * g x + f x * dg x)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
@@ -573,13 +553,13 @@ theorem HasWeakDerivAlong.mul_of_locally_bounded {n : ℕ}
       (isClosed_tsupport χ).measurableSet
     have hind : MemLp ((tsupport χ).indicator a) (⊤ : ENNReal)
         (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-      (memLp_indicator_iff_restrict hKm).mpr (ha (tsupport χ) hχc)
+      (memLp_indicator_iff_restrict hKm.nullMeasurableSet).mpr (ha (tsupport χ) hχc)
     have hχlp : MemLp χ (⊤ : ENNReal)
         (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
       hχ.continuous.memLp_of_hasCompactSupport hχc
     have hm : MemLp (fun x => χ x * ((tsupport χ).indicator a) x)
         (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-      hind.mul' hχlp
+      hχlp.fun_mul hind
     convert hm using 1
     funext x
     by_cases hx : x ∈ tsupport χ
@@ -685,36 +665,41 @@ theorem locallyIntegrable_of_compact_local_memLp_two {n : ℕ}
     isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
   exact (hf S hS).integrable (by norm_num)
 
-/-- Multiplying a weak derivative pair `(f, df)` along `v` by a compactly supported C1 function `ψ`, with `df` L2 and
-`f` essentially bounded on compact sets, gives the weak derivative of `ψ f`, compact supports and a globally L2 derivative. -/
-theorem HasWeakDerivAlong.compact_mul_data {n : ℕ}
-    {f df : EuclideanSpace ℝ (Fin n) → ℝ} {v : EuclideanSpace ℝ (Fin n)}
-    (h : HasWeakDerivAlong f df v)
-    (hdf : ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp df 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
-    (hf : ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp f (⊤ : ENNReal) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
-    {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hψ : ContDiff ℝ 1 ψ) (hψc : HasCompactSupport ψ) :
-    HasWeakDerivAlong (fun x => ψ x * f x)
-      (fun x => ψ x * df x + fderiv ℝ ψ x v * f x) v ∧
-    HasCompactSupport (fun x => ψ x * f x) ∧
-    HasCompactSupport (fun x => ψ x * df x + fderiv ℝ ψ x v * f x) ∧
-    MemLp (fun x => ψ x * df x + fderiv ℝ ψ x v * f x) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+/--
+Multiplying a weak derivative pair `(f, df)` along `v` by a compactly supported C1 function `ψ`,
+with `df` L2 and
+`f` essentially bounded on compact sets, gives the weak derivative of `ψ f`, compact supports and a
+globally L2 derivative. -/
+theorem HasWeakDerivAlong.compact_mul_data {n : ℕ} {f df : EuclideanSpace ℝ (Fin n) → ℝ}
+    {v : EuclideanSpace ℝ (Fin n)} (h : HasWeakDerivAlong f df v)
+    (hdf :
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+        IsCompact S → MemLp df 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (hf :
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+        IsCompact S →
+          MemLp f (⊤ : ENNReal) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    {ψ : EuclideanSpace ℝ (Fin n) → ℝ} (hψ : ContDiff ℝ 1 ψ) (hψc : HasCompactSupport ψ) :
+    HasWeakDerivAlong (fun x => ψ x * f x) (fun x => ψ x * df x + fderiv ℝ ψ x v * f x) v ∧
+      HasCompactSupport (fun x => ψ x * f x) ∧
+        HasCompactSupport (fun x => ψ x * df x + fderiv ℝ ψ x v * f x) ∧
+          MemLp (fun x => ψ x * df x + fderiv ℝ ψ x v * f x) 2
+            (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
   have hdψ : Continuous (fun x => fderiv ℝ ψ x v) :=
     (hψ.continuous_fderiv one_ne_zero).clm_apply continuous_const
-  have hdψc : HasCompactSupport (fun x => fderiv ℝ ψ x v) :=
-    hψc.fderiv_apply ℝ v
-  have hf2 : ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp f 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+  have hdψc : HasCompactSupport (fun x => fderiv ℝ ψ x v) := hψc.fderiv_apply ℝ v
+  have hf2 :
+    ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+      IsCompact S → MemLp f 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
     intro S hS
     let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
       isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
     exact (hf S hS).mono_exponent le_top
   refine ⟨h.mul_contDiff hψ hψc, hψc.mul_right, ?_, ?_⟩
   · exact hψc.mul_right.add hdψc.mul_right
-  · exact (memLp_mul_of_hasCompactSupport hψ.continuous hψc hdf).add (memLp_mul_of_hasCompactSupport hdψ hdψc hf2)
+  · exact
+      (memLp_mul_of_hasCompactSupport hψ.continuous hψc hdf).add
+        (memLp_mul_of_hasCompactSupport hdψ hdψc hf2)
 
 end FunctionalInequalities.Analysis
 

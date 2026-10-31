@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
 
 /-! Independent clients for the proved metric BV interface. The general
 BV--Minkowski identification is intentionally absent. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

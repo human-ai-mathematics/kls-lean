@@ -1,13 +1,17 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.Analysis.MetricBV.Approximation
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
+public import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for the epsilon recovery test of the metric BV perimeter:
 the general statement for every Borel measure, a finite threshold and the top threshold. The
 concrete instances use the empty set for an arbitrary measure, including Lebesgue measure on
 `ℝ`, and the whole line for the standard Gaussian law. This is a prerequisite for diagonal
 recovery, not a Minkowski recovery statement. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

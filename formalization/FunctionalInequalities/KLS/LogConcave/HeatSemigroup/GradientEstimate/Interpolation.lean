@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.ChainRule
-import FunctionalInequalities.L2.Composition
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.ChainRule
+public import FunctionalInequalities.L2.Composition
 
 /-!
 # Interior time differentiation of tested nonlinear heat interpolation
@@ -10,6 +12,8 @@ Nonlinear differentiation is in L2 and the generator terms cancel by the tested
 chain rule. No pointwise differentiable representative is assumed. This is not
 the squared BGL estimate or its endpoint passage.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Topology Set
 open FunctionalInequalities.Analysis.Semigroup FunctionalInequalities.Analysis.BakryEmery

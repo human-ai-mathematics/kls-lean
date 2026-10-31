@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Compatibility
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Compatibility
 
 /-! Independent clients of the weighted forced energy and the gradient-compatibility defect of
 the actual splitting cells. The weight is `exp (-U)` for an arbitrary smooth potential and the
 coefficient is `b_j = D_(a_j) U`; no convexity, sign or global derivative bound is assumed, and
 `p = grad u` is not imposed. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting
@@ -39,8 +43,10 @@ variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 theorem potential_skew (d : ℕ) (a : Fin d → E) {U : E → ℝ} (hU : ContDiff ℝ ∞ U)
     (Y : State E (Fin d)) (hY : Y.Smooth) {R : ℝ} (hR : Y.Supported R) :
     weightedPairing m (fun x => Real.exp (-U x)) Y
-      (waveGenerator a (fun j x => fderiv ℝ U x (a j)) Y) = 0 :=
-  weightedPairing_waveGenerator m a _ (potential_weight d a hU).1 (potential_weight d a hU).2.2 hY hR
+        (waveGenerator a (fun j x => fderiv ℝ U x (a j)) Y) =
+      0 :=
+  weightedPairing_waveGenerator m a _ (potential_weight d a hU).1 (potential_weight d a hU).2.2
+    hY hR
 
 /-- Forced weighted energy for the potential cells: the leading term is the initial weighted
 norm `sqrt(∫ exp(-U) h^2)` with coefficient one, uniformly over the meshes of the horizon. -/

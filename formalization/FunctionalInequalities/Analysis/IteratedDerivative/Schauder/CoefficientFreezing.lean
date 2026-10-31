@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Interpolation
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Interpolation
 
 /-!
 # Freezing the principal coefficients of a second-order operator
@@ -21,7 +23,8 @@ when the interpolation theorem is invoked):
 * `exists_uniform_hessian_constant`: the Hessian interpolation constant of
   `exists_hessian_interpolation_constant` applies at every point of `closedBall c r` with data on
   `closedBall c (2r)`;
-* `exists_small_freezing_radius`: a radius `ρ ∈ (0, 1]` with `card ι · K r^α ≤ η` for `r ≤ ρ`, chosen
+* `exists_small_freezing_radius`: a radius `ρ ∈ (0, 1]` with `card ι · K r^α ≤ η` for `r ≤ ρ`,
+  chosen
   before any function data;
 * `exists_freezing_absorption_constants`: for `0 < r ≤ ρ`, `r² |error| ≤ C M + η H r^{2+α}` and the
   scaled `α`-Hölder difference bound with the same right-hand side, where `M` bounds `|f|` and `H`
@@ -31,6 +34,8 @@ when the interpolation theorem is invoked):
 The Hölder cap `H` of the Hessian is an input. This module proves no Schauder estimate for
 solutions of an elliptic equation, no lower-order terms and no ellipticity statement.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric
@@ -132,22 +137,28 @@ theorem freezing_bounds
 /-- The Hessian interpolation constant is uniform at every center of the smaller ball, with data
 on the doubled ball. -/
 theorem exists_uniform_hessian_constant (α : ℝ) (hα : 0 < α) (ε : ℝ) (hε : 0 < ε) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (r : ℝ), 0 < r →
-      ∀ (f : E → ℝ) (f' : E → E →L[ℝ] ℝ) (B : E → E →L[ℝ] E →L[ℝ] ℝ),
-      (∀ z, HasFDerivAt f (f' z) z) → (∀ z, HasFDerivAt f' (B z) z) →
-      ∀ (c : E) (M H : ℝ), 0 ≤ H →
-      (∀ z ∈ closedBall c (2 * r), |f z| ≤ M) →
-      (∀ x ∈ closedBall c (2 * r), ∀ y ∈ closedBall c (2 * r),
-        ‖B x - B y‖ ≤ H * ‖x - y‖ ^ α) →
-      ∀ x ∈ closedBall c r, r ^ 2 * ‖B x‖ ≤ C * M + ε * H * r ^ (2 + α) := by
-  obtain ⟨C, hC, hI⟩ := FunctionalInequalities.Analysis.exists_hessian_interpolation_constant (E := E) α hα ε hε
+    ∃ C : ℝ,
+      0 < C ∧
+        ∀ (r : ℝ),
+          0 < r →
+            ∀ (f : E → ℝ) (f' : E → E →L[ℝ] ℝ) (B : E → E →L[ℝ] E →L[ℝ] ℝ),
+              (∀ z, HasFDerivAt f (f' z) z) →
+                (∀ z, HasFDerivAt f' (B z) z) →
+                  ∀ (c : E) (M H : ℝ),
+                    0 ≤ H →
+                      (∀ z ∈ closedBall c (2 * r), |f z| ≤ M) →
+                        (∀ x ∈ closedBall c (2 * r),
+                            ∀ y ∈ closedBall c (2 * r), ‖B x - B y‖ ≤ H * ‖x - y‖ ^ α) →
+                          ∀ x ∈ closedBall c r, r ^ 2 * ‖B x‖ ≤ C * M + ε * H * r ^ (2 + α) := by
+  obtain ⟨C, hC, hI⟩ :=
+    FunctionalInequalities.Analysis.exists_hessian_interpolation_constant (E := E) α hα ε hε
   refine ⟨C, hC, ?_⟩
   intro r hr f f' B hf hf' c M H hH hM hBH x hx
   have hs : closedBall x r ⊆ closedBall c (2 * r) :=
     closedBall_subset_closedBall' (by rw [mem_closedBall] at hx; linarith)
   have hx2 : x ∈ closedBall c (2 * r) := hs (mem_closedBall_self hr.le)
-  exact hI r hr f f' B hf hf' x M H hH (fun z hz => hM z (hs hz))
-    (fun z hz => hBH z (hs hz) x hx2)
+  exact
+    hI r hr f f' B hf hf' x M H hH (fun z hz => hM z (hs hz)) (fun z hz => hBH z (hs hz) x hx2)
 
 /-- A positive radius making the coefficient-oscillation factor `card ι · K r^α` at most `η` can be
 chosen before any function or seminorm data. -/
@@ -191,67 +202,80 @@ theorem exists_freezing_absorption_constants
       (∀ x ∈ closedBall c r, ∀ y ∈ closedBall c r,
         r ^ (2 + α) * |freezingError a v w B c x - freezingError a v w B c y| ≤
           (C * M + η * H * r ^ (2 + α)) * ‖x - y‖ ^ α) := by
-  obtain ⟨D, hD, hI⟩ := exists_uniform_hessian_constant (E := E) α hα 1 zero_lt_one
-  obtain ⟨ρ, hρ, hρ1, hsmall⟩ := exists_small_freezing_radius (ι := ι) α hα (η / 2) (by positivity) K hK
-  let m : ℝ := Fintype.card ι * K
-  have hm : 0 ≤ m := by dsimp [m]; positivity
-  refine ⟨m * D + 1, ρ, by positivity, hρ, hρ1, ?_⟩
-  intro r hr hrρ a v w f f' B hf hf' hv hw c M H hH hM hBH ha
-  have hr1 : r ≤ 1 := hrρ.trans hρ1
-  have hM0 : 0 ≤ M := (abs_nonneg (f c)).trans (hM c (mem_closedBall_self (by linarith)))
-  have hra : r ^ α ≤ 1 := by
-    simpa only [Real.one_rpow] using Real.rpow_le_rpow hr.le hr1 hα.le
-  have hmr : m * r ^ α ≤ η / 2 := hsmall r hr hrρ
-  have hpow : r ^ (2 + α) = r ^ 2 * r ^ α := by rw [Real.rpow_add hr, Real.rpow_two]
-  let N : ℝ := D * M / r ^ 2 + H * r ^ α
-  have hcap : ∀ x ∈ closedBall c r, ‖B x‖ ≤ N := by
-    intro x hx
-    have h := hI r hr f f' B hf hf' c M H hH hM hBH x hx
-    simp only [one_mul] at h
-    have he : N * r ^ 2 = D * M + H * r ^ (2 + α) := by
-      dsimp [N]
-      rw [hpow]
-      field_simp
-    apply (mul_le_mul_iff_left₀ (sq_pos_of_pos hr)).mp
-    nlinarith [h, he]
-  have hball : closedBall c r ⊆ closedBall c (2 * r) := closedBall_subset_closedBall (by linarith)
-  obtain ⟨hb, hh⟩ := freezing_bounds hr.le hα.le hK hv hw ha hcap
-    (fun x hx y hy => hBH x (hball hx) y (hball hy))
-  have hmain : r ^ 2 * (m * r ^ α * N) ≤ (m * D + 1) * M + η * H * r ^ (2 + α) := by
-    have he : r ^ 2 * (m * r ^ α * N) = m * r ^ α * D * M + (m * r ^ α) * H * r ^ (2 + α) := by
-      dsimp [N]
-      rw [hpow]
-      field_simp
-    rw [he]
-    have h1 : m * r ^ α * D * M ≤ m * D * M :=
-      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right
-        (by simpa using mul_le_mul_of_nonneg_left hra hm) hD.le) hM0
-    have h2 : (m * r ^ α) * H * r ^ (2 + α) ≤ η * H * r ^ (2 + α) :=
-      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right (by linarith : m * r ^ α ≤ η) hH) (by positivity)
-    nlinarith
-  have hmainH : r ^ (2 + α) * (m * (N + r ^ α * H)) ≤
-      (m * D + 1) * M + η * H * r ^ (2 + α) := by
-    have he : r ^ (2 + α) * (m * (N + r ^ α * H)) =
-        m * r ^ α * D * M + (2 * (m * r ^ α)) * H * r ^ (2 + α) := by
-      dsimp [N]
-      rw [hpow]
-      field_simp
-      ring
-    rw [he]
-    have h1 : m * r ^ α * D * M ≤ m * D * M :=
-      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right
-        (by simpa using mul_le_mul_of_nonneg_left hra hm) hD.le) hM0
-    have h2 : (2 * (m * r ^ α)) * H * r ^ (2 + α) ≤ η * H * r ^ (2 + α) :=
-      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right (by linarith : 2 * (m * r ^ α) ≤ η) hH) (by positivity)
-    nlinarith
-  constructor
-  · intro x hx
-    exact (mul_le_mul_of_nonneg_left (hb x hx) (sq_nonneg r)).trans hmain
-  · intro x hx y hy
-    calc
-      _ ≤ r ^ (2 + α) * (m * (N + r ^ α * H) * ‖x - y‖ ^ α) :=
-        mul_le_mul_of_nonneg_left (hh x hx y hy) (by positivity)
-      _ = (r ^ (2 + α) * (m * (N + r ^ α * H))) * ‖x - y‖ ^ α := by ring
-      _ ≤ _ := mul_le_mul_of_nonneg_right hmainH (by positivity)
+    obtain ⟨D, hD, hI⟩ := exists_uniform_hessian_constant (E := E) α hα 1 zero_lt_one
+    obtain ⟨ρ, hρ, hρ1, hsmall⟩ :=
+      exists_small_freezing_radius (ι := ι) α hα (η / 2) (by positivity) K hK
+    let m : ℝ := Fintype.card ι * K
+    have hm : 0 ≤ m := by dsimp [m]; positivity
+    refine ⟨m * D + 1, ρ, by positivity, hρ, hρ1, ?_⟩
+    intro r hr hrρ a v w f f' B hf hf' hv hw c M H hH hM hBH ha
+    have hr1 : r ≤ 1 := hrρ.trans hρ1
+    have hM0 : 0 ≤ M :=
+      (abs_nonneg (f c)).trans (hM c (mem_closedBall_self (by linarith)))
+    have hra : r ^ α ≤ 1 := by
+      simpa only [Real.one_rpow] using Real.rpow_le_rpow hr.le hr1 hα.le
+    have hmr : m * r ^ α ≤ η / 2 := hsmall r hr hrρ
+    have hpow : r ^ (2 + α) = r ^ 2 * r ^ α := by rw [Real.rpow_add hr, Real.rpow_two]
+    let N : ℝ := D * M / r ^ 2 + H * r ^ α
+    have hcap : ∀ x ∈ closedBall c r, ‖B x‖ ≤ N := by
+      intro x hx
+      have h := hI r hr f f' B hf hf' c M H hH hM hBH x hx
+      simp only [one_mul] at h
+      have he : N * r ^ 2 = D * M + H * r ^ (2 + α) := by
+        dsimp [N]
+        rw [hpow]
+        field_simp
+      apply (mul_le_mul_iff_left₀ (sq_pos_of_pos hr)).mp
+      nlinarith [h, he]
+    have hball : closedBall c r ⊆ closedBall c (2 * r) :=
+      closedBall_subset_closedBall (by linarith)
+    obtain ⟨hb, hh⟩ :=
+      freezing_bounds hr.le hα.le hK hv hw ha hcap
+        (fun x hx y hy => hBH x (hball hx) y (hball hy))
+    have hmain : r ^ 2 * (m * r ^ α * N) ≤ (m * D + 1) * M + η * H * r ^ (2 + α) := by
+      have he :
+        r ^ 2 * (m * r ^ α * N) = m * r ^ α * D * M + (m * r ^ α) * H * r ^ (2 + α) := by
+        dsimp [N]
+        rw [hpow]
+        field_simp
+      rw [he]
+      have h1 : m * r ^ α * D * M ≤ m * D * M :=
+        mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right (by simpa using mul_le_mul_of_nonneg_left hra hm)
+            hD.le)
+          hM0
+      have h2 : (m * r ^ α) * H * r ^ (2 + α) ≤ η * H * r ^ (2 + α) :=
+        mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right (by linarith : m * r ^ α ≤ η) hH) (by positivity)
+      nlinarith
+    have hmainH :
+      r ^ (2 + α) * (m * (N + r ^ α * H)) ≤ (m * D + 1) * M + η * H * r ^ (2 + α) := by
+      have he :
+        r ^ (2 + α) * (m * (N + r ^ α * H)) =
+          m * r ^ α * D * M + (2 * (m * r ^ α)) * H * r ^ (2 + α) := by
+        dsimp [N]
+        rw [hpow]
+        field_simp
+        ring
+      rw [he]
+      have h1 : m * r ^ α * D * M ≤ m * D * M :=
+        mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right (by simpa using mul_le_mul_of_nonneg_left hra hm)
+            hD.le)
+          hM0
+      have h2 : (2 * (m * r ^ α)) * H * r ^ (2 + α) ≤ η * H * r ^ (2 + α) :=
+        mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right (by linarith : 2 * (m * r ^ α) ≤ η) hH)
+          (by positivity)
+      nlinarith
+    constructor
+    · intro x hx
+      exact (mul_le_mul_of_nonneg_left (hb x hx) (sq_nonneg r)).trans hmain
+    · intro x hx y hy
+      calc
+        _ ≤ r ^ (2 + α) * (m * (N + r ^ α * H) * ‖x - y‖ ^ α) :=
+          mul_le_mul_of_nonneg_left (hh x hx y hy) (by positivity)
+        _ = (r ^ (2 + α) * (m * (N + r ^ α * H))) * ‖x - y‖ ^ α := by ring
+        _ ≤ _ := mul_le_mul_of_nonneg_right hmainH (by positivity)
 
 end FunctionalInequalities.Analysis

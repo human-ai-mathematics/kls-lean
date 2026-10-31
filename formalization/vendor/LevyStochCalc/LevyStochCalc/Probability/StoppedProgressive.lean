@@ -6,8 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Probability.Progressive
-import Mathlib.Probability.Process.Stopping
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Probability.Progressive
+public import Mathlib.Probability.Process.Stopping
 
 /-!
 # Stopping a progressively measurable process
@@ -16,6 +21,8 @@ Cutting a process off at a stopping time keeps it progressively measurable: befo
 region `{(ω, s) : s ≤ t, s ≤ τ ω}` is the complement, inside `Ω × (-∞, t]`, of a countable union
 of rectangles `{τ ≤ q} × (q, t]` over the rationals, each measurable for the σ-algebra at `t`.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 
@@ -103,11 +110,11 @@ theorem ProgressivelyMeasurable.stopped {ℱ : Filtration ℝ mΩ} {τ : Ω → 
       rw [Set.indicator_of_mem (show p ∈ stoppedRegion τ t from ⟨h1a, h1b⟩),
         Set.indicator_of_mem (show p.2 ∈ Set.Iic t from h1a),
         Set.indicator_of_mem (show p.2 ∈ Set.Iic t from h1a),
-        LevyStochCalc.Probability.stopped, if_pos h1b]
+        LevyStochCalc.Probability.stopped, ite_eq_left h1b]
     · rw [Set.indicator_of_notMem h1]
       by_cases h2 : p.2 ∈ Set.Iic t
       · have h3 : ¬ ((p.2 : ℝ) : WithTop ℝ) ≤ τ p.1 := fun hc => h1 ⟨h2, hc⟩
-        rw [Set.indicator_of_mem h2, LevyStochCalc.Probability.stopped, if_neg h3]
+        rw [Set.indicator_of_mem h2, LevyStochCalc.Probability.stopped, ite_eq_right h3]
       · rw [Set.indicator_of_notMem h2]
   rw [key]
   exact (hH t).indicator (measurableSet_stoppedRegion hτ t)
@@ -155,9 +162,9 @@ theorem measurable_uncurry_stopped {ℱ : Filtration ℝ mΩ} {τ : Ω → WithT
     funext p
     by_cases hp : p ∈ stoppedSet τ
     · rw [Set.indicator_of_mem hp]
-      exact if_pos hp
+      exact ite_eq_left hp
     · rw [Set.indicator_of_notMem hp]
-      exact if_neg hp
+      exact ite_eq_right hp
   rw [hfun]
   exact hH.indicator (measurableSet_stoppedSet hτ)
 

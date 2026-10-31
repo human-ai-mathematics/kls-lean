@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.Moments
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.Probability.Moments
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Audit: eighth-moment tail bounds (ball-conditioning stage of the moment-potential producer)
@@ -14,6 +16,8 @@ with `R = 2` (sharp), the half law `(δ₀ + δ₁)/2` (sharp, mass `1/2`), rank
 and both integrability outputs consumed, and the radius-zero guard (the bound is false at `R = 0`,
 so `R > 0` is substantive). No conditional law, optimizer or potential is involved.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory
@@ -140,27 +144,36 @@ theorem half_law :
 
 theorem zero_model :
     ((atom (0 : ℝ) : Measure ℝ) (Metric.ball (0 : ℝ) 1)ᶜ).toReal ≤
-      (∫ x, ‖x‖ ^ 8 ∂(atom (0 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 8 ∧
-    Integrable (fun x : ℝ => ‖x‖ ^ 4) (atom (0 : ℝ) : Measure ℝ) ∧
-    Integrable ((Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun x : ℝ => ‖x‖ ^ 4)) (atom (0 : ℝ) : Measure ℝ) ∧
-    (∫ x, (Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun y : ℝ => ‖y‖ ^ 4) x ∂(atom (0 : ℝ) : Measure ℝ)) ≤
-      (∫ x, ‖x‖ ^ 8 ∂(atom (0 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 4 := by
+        (∫ x, ‖x‖ ^ 8 ∂(atom (0 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 8 ∧
+      Integrable (fun x : ℝ => ‖x‖ ^ 4) (atom (0 : ℝ) : Measure ℝ) ∧
+        Integrable ((Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun x : ℝ => ‖x‖ ^ 4))
+            (atom (0 : ℝ) : Measure ℝ) ∧
+          (∫ x,
+              (Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun y : ℝ => ‖y‖ ^ 4)
+                x ∂(atom (0 : ℝ) : Measure ℝ)) ≤
+            (∫ x, ‖x‖ ^ 8 ∂(atom (0 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 4 := by
   exact real_atoms 0 1 (by norm_num)
 theorem boundary_model :
     ((atom (1 : ℝ) : Measure ℝ) (Metric.ball (0 : ℝ) 1)ᶜ).toReal ≤
-      (∫ x, ‖x‖ ^ 8 ∂(atom (1 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 8 ∧
-    Integrable (fun x : ℝ => ‖x‖ ^ 4) (atom (1 : ℝ) : Measure ℝ) ∧
-    Integrable ((Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun x : ℝ => ‖x‖ ^ 4)) (atom (1 : ℝ) : Measure ℝ) ∧
-    (∫ x, (Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun y : ℝ => ‖y‖ ^ 4) x ∂(atom (1 : ℝ) : Measure ℝ)) ≤
-      (∫ x, ‖x‖ ^ 8 ∂(atom (1 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 4 := by
+        (∫ x, ‖x‖ ^ 8 ∂(atom (1 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 8 ∧
+      Integrable (fun x : ℝ => ‖x‖ ^ 4) (atom (1 : ℝ) : Measure ℝ) ∧
+        Integrable ((Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun x : ℝ => ‖x‖ ^ 4))
+            (atom (1 : ℝ) : Measure ℝ) ∧
+          (∫ x,
+              (Metric.ball (0 : ℝ) 1)ᶜ.indicator (fun y : ℝ => ‖y‖ ^ 4)
+                x ∂(atom (1 : ℝ) : Measure ℝ)) ≤
+            (∫ x, ‖x‖ ^ 8 ∂(atom (1 : ℝ) : Measure ℝ)) / (1 : ℝ) ^ 4 := by
   exact real_atoms 1 1 (by norm_num)
 theorem signed_model :
     ((atom ((-2) : ℝ) : Measure ℝ) (Metric.ball (0 : ℝ) 2)ᶜ).toReal ≤
-      (∫ x, ‖x‖ ^ 8 ∂(atom ((-2) : ℝ) : Measure ℝ)) / (2 : ℝ) ^ 8 ∧
-    Integrable (fun x : ℝ => ‖x‖ ^ 4) (atom ((-2) : ℝ) : Measure ℝ) ∧
-    Integrable ((Metric.ball (0 : ℝ) 2)ᶜ.indicator (fun x : ℝ => ‖x‖ ^ 4)) (atom ((-2) : ℝ) : Measure ℝ) ∧
-    (∫ x, (Metric.ball (0 : ℝ) 2)ᶜ.indicator (fun y : ℝ => ‖y‖ ^ 4) x ∂(atom ((-2) : ℝ) : Measure ℝ)) ≤
-      (∫ x, ‖x‖ ^ 8 ∂(atom ((-2) : ℝ) : Measure ℝ)) / (2 : ℝ) ^ 4 := by
+        (∫ x, ‖x‖ ^ 8 ∂(atom ((-2) : ℝ) : Measure ℝ)) / (2 : ℝ) ^ 8 ∧
+      Integrable (fun x : ℝ => ‖x‖ ^ 4) (atom ((-2) : ℝ) : Measure ℝ) ∧
+        Integrable ((Metric.ball (0 : ℝ) 2)ᶜ.indicator (fun x : ℝ => ‖x‖ ^ 4))
+            (atom ((-2) : ℝ) : Measure ℝ) ∧
+          (∫ x,
+              (Metric.ball (0 : ℝ) 2)ᶜ.indicator (fun y : ℝ => ‖y‖ ^ 4)
+                x ∂(atom ((-2) : ℝ) : Measure ℝ)) ≤
+            (∫ x, ‖x‖ ^ 8 ∂(atom ((-2) : ℝ) : Measure ℝ)) / (2 : ℝ) ^ 4 := by
   exact real_atoms (-2) 2 (by norm_num)
 
 /-- Sharp values are derived from the actual fixture laws, not supplied as theorem premises. -/
@@ -240,5 +253,7 @@ end IndependentMomentTailEdge
 #print axioms IndependentMomentTailClients.rank_zero
 #print axioms IndependentMomentTailEdge.rank_zero_actual_values
 #print axioms IndependentMomentTailEdge.zero_radius_guard
-#print axioms FunctionalInequalities.Probability.measure_ball_compl_toReal_le_integral_norm_pow_eight_div
-#print axioms FunctionalInequalities.Probability.integrable_norm_pow_four_and_tail_le_of_integrable_pow_eight
+#print axioms
+  FunctionalInequalities.Probability.measure_ball_compl_toReal_le_integral_norm_pow_eight_div
+#print axioms
+  FunctionalInequalities.Probability.integrable_norm_pow_four_and_tail_le_of_integrable_pow_eight

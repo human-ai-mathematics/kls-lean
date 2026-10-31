@@ -1,4 +1,6 @@
-import Mathlib.Data.ENNReal.Inv
+module
+
+public import Mathlib.Basic.ENNReal.Inv
 
 /-!
 # Optimal Poincaré constants for finite-valued test data
@@ -10,6 +12,8 @@ choose a measure, a gradient, or a closed energy domain.
 The optimal constant is the supremum of the extended Rayleigh quotients. Thus zero variance
 over zero energy is zero, while positive variance over zero energy is infinity.
 -/
+
+@[expose] public section
 
 noncomputable section
 

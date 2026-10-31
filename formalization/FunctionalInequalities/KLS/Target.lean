@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.BKL.Poincare
+module
+
+public import FunctionalInequalities.KLS.BKL.Poincare
 /-!
 # The KLS conjecture
 
-`KLS.Conjecture` (`KLS/Statement.lean`) is a `def … : Prop` that names the sentence: there is a universal
-`C < ∞` such that every log-concave probability law with finite second moment on every finite-dimensional
+`KLS.Conjecture` (`KLS/Statement.lean`) is a `def … : Prop` that names the sentence: there is a
+universal
+`C < ∞` such that every log-concave probability law with finite second moment on every
+finite-dimensional
 Euclidean space satisfies `C_P^lit(μ) ≤ C ‖Cov_μ‖_op`. This module proves it.
 
 The proof is the Bizeul–Klartag–Lehec route (arXiv:2610.05474v1):
@@ -13,14 +17,19 @@ The proof is the Bizeul–Klartag–Lehec route (arXiv:2610.05474v1):
 - the regular approximation and the affine/isotropic reduction.
 
 These are assembled in `KLS.BKL.Localization.conjecture` (`KLS/BKL/Poincare.lean`). The statement of
-`KLS.Conjecture` is unchanged. Proof modules do not import this endpoint; the aggregate root exports it.
+`KLS.Conjecture` is unchanged. Proof modules do not import this endpoint; the aggregate root exports
+it.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.KLS
 
-/-- **The KLS conjecture**, covariance-normalized literature form (Blueprint `conj:kls`): there is a
+/--
+**The KLS conjecture**, covariance-normalized literature form (Blueprint `conj:kls`): there is a
 universal `C < ∞` such that every log-concave probability law with finite second moment on every
-finite-dimensional Euclidean space satisfies `C_P^lit(μ) ≤ C ‖Cov_μ‖_op`. Proved through the BKL route. -/
+finite-dimensional Euclidean space satisfies `C_P^lit(μ) ≤ C ‖Cov_μ‖_op`. Proved through the BKL
+route. -/
 theorem kls : Conjecture :=
   FunctionalInequalities.KLS.BKL.Localization.conjecture
 

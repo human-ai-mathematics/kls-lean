@@ -3,12 +3,16 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.RandomMeasure
-import LevyStochCalc.Poisson.NaturalFiltration
-import LevyStochCalc.Poisson.CompensatedProcessQuadVar
-import LevyStochCalc.Poisson.CompensatedDiff
-import LevyStochCalc.Martingale.CadlagModification
-import Mathlib.Probability.Martingale.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.RandomMeasure
+public import LevyStochCalc.Poisson.NaturalFiltration
+public import LevyStochCalc.Poisson.CompensatedProcessQuadVar
+public import LevyStochCalc.Poisson.CompensatedDiff
+public import LevyStochCalc.Martingale.CadlagModification
+public import Mathlib.Probability.Martingale.Basic
 
 /-!
 # Compensated Poisson L²-Itô–Lévy integral
@@ -39,6 +43,8 @@ integrands on a common dyadic refinement. It is consumed by
 * Applebaum, *Lévy Processes and Stochastic Calculus*, 2009, §4.2 (Thm 4.2.3/4.2.4).
 * Ikeda–Watanabe, *SDEs and Diffusion Processes*, 1989, §II.3.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

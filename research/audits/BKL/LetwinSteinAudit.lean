@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Stein
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Stein
 
 /-!
 # Audit: Letwin Stein kernels, A.7 and Lemma 2.9 with source-style consumers
@@ -12,6 +14,8 @@ needed. No Stein kernel is constructed; Letwin Theorems 1.1–1.2 and the moment
 asserted.
 -/
 
+@[expose] public section
+
 open MeasureTheory FunctionalInequalities
 open FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 open scoped RealInnerProductSpace Matrix.Norms.Frobenius
@@ -22,7 +26,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [MeasurableSpace E]
 
 /-- The HS normalization of the two-dimensional identity is sqrt2, not operator norm1. -/
-theorem identity_two_hs_sq : Probability.Stein.hsNorm (1 : Probability.Stein.KernelMatrix 2) ^ 2 = 2 := by
+theorem identity_two_hs_sq :
+    Probability.Stein.hsNorm (1 : Probability.Stein.KernelMatrix 2) ^ 2 = 2 := by
   rw [Probability.Stein.hsNorm_eq_sqrt]
   norm_num [Matrix.one_apply, Fin.sum_univ_two]
 
@@ -30,49 +35,94 @@ theorem identity_two_hs_sq : Probability.Stein.hsNorm (1 : Probability.Stein.Ker
 Log-concavity derives its value-`L²` data; the actual global Lipschitz gradient bound derives
 gradient-`L²`. -/
 theorem norm_test_source_A7 {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (τ : EuclideanSpace ℝ (Fin n) → Probability.Stein.KernelMatrix n) (hK : Probability.Stein.IsSteinKernel μ τ)
-    (hLC : KLS.LogConcave μ) (hfull : Probability.affineSupport μ = ⊤)
-    (hSym : Probability.Stein.SymmetricAE μ τ) (hHS : MemLp (fun x => Probability.Stein.hsNorm (τ x)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
+    (τ : EuclideanSpace ℝ (Fin n) → Probability.Stein.KernelMatrix n)
+    (hK : Probability.Stein.IsSteinKernel μ τ) (hLC : KLS.LogConcave μ)
+    (hfull : Probability.affineSupport μ = ⊤) (hSym : Probability.Stein.SymmetricAE μ τ)
+    (hHS :
+      MemLp (fun x => Probability.Stein.hsNorm (τ x)) 2
+        (μ : Measure (EuclideanSpace ℝ (Fin n))))
     (v : EuclideanSpace ℝ (Fin n)) :
     (∫ x, ⟪x, v⟫ * ‖x‖ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) =
-        (∫ x, ⟪Probability.Stein.action (τ x) v, gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) ∧
+        (∫ x,
+          ⟪Probability.Stein.action (τ x) v,
+            gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)
+              x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       |∫ x, ⟪x, v⟫ * ‖x‖ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))| ≤
-        Real.sqrt (∫ x, ‖Probability.Stein.action (τ x) v‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) *
-          Real.sqrt (∫ x, ‖gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) := by
-  have hμ2 := (KLS.LogConcave.absolutelyContinuous_and_memLp_two_of_affineSupport_eq_top μ hLC hfull).2
-  have hnorm2 : MemLp (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
+        Real.sqrt
+            (∫ x,
+              ‖Probability.Stein.action (τ x) v‖ ^
+                2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) *
+          Real.sqrt
+            (∫ x,
+              ‖gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x‖ ^
+                2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) := by
+  have hμ2 :=
+    (KLS.LogConcave.absolutelyContinuous_and_memLp_two_of_affineSupport_eq_top μ hLC hfull).2
+  have hnorm2 :
+    MemLp (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) 2
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
     simpa only [id_eq] using hμ2.norm
-  have hlip : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) := lipschitzWith_one_norm
-  have hgrad2 : MemLp (gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) :=
+  have hlip : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) :=
+    lipschitzWith_one_norm
+  have hgrad2 :
+    MemLp (gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)) 2
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) :=
     MemLp.of_bound (aestronglyMeasurable_gradient _ _) 1
       (Filter.Eventually.of_forall fun x => norm_gradient_le_of_lipschitz hlip x)
-  exact KLS.LogConcave.stein_identity_of_affineSupport_eq_top μ τ hK hLC hfull hSym hHS (fun x => ‖x‖) hlip.locallyLipschitz hnorm2 hgrad2 v
+  exact
+    KLS.LogConcave.stein_identity_of_affineSupport_eq_top μ τ hK hLC hfull hSym hHS
+      (fun x => ‖x‖) hlip.locallyLipschitz hnorm2 hgrad2 v
 
 /-- Energy-normalized norm test really lies in the full source H^-1 test class. -/
-noncomputable def normUnitTest {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hLC : KLS.LogConcave μ)
-    (hfull : Probability.affineSupport μ = ⊤) : Energy.Dual.UnitEnergyTest μ where
+noncomputable def normUnitTest {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hLC : KLS.LogConcave μ) (hfull : Probability.affineSupport μ = ⊤) :
+    Energy.Dual.UnitEnergyTest μ where
   fn := fun x => ‖x‖
-  locallyLipschitz := (lipschitzWith_one_norm : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)).locallyLipschitz
-  memLp := by simpa only [id_eq] using (KLS.LogConcave.absolutelyContinuous_and_memLp_two_of_affineSupport_eq_top μ hLC hfull).2.norm
-  gradLp := MemLp.of_bound (aestronglyMeasurable_gradient _ _) 1
-    (Filter.Eventually.of_forall fun x => norm_gradient_le_of_lipschitz ((lipschitzWith_one_norm : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖))) x)
+  locallyLipschitz :=
+    (lipschitzWith_one_norm :
+        LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)).locallyLipschitz
+  memLp := by
+    simpa only [id_eq] using
+      (KLS.LogConcave.absolutelyContinuous_and_memLp_two_of_affineSupport_eq_top μ hLC
+            hfull).2.norm
+  gradLp :=
+    MemLp.of_bound (aestronglyMeasurable_gradient _ _) 1
+      (Filter.Eventually.of_forall fun x =>
+        norm_gradient_le_of_lipschitz
+          ((lipschitzWith_one_norm : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)))
+          x)
   energy := by
     apply (Energy.Dual.unit_gradient_norm_iff μ _).mpr
-    have hpoint : ∀ x : EuclideanSpace ℝ (Fin n), ‖gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x‖ ^ 2 ≤ 1 := by
+    have hpoint :
+      ∀ x : EuclideanSpace ℝ (Fin n),
+        ‖gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x‖ ^ 2 ≤ 1 := by
       intro x
-      have h := norm_gradient_le_of_lipschitz ((lipschitzWith_one_norm : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖))) x
+      have h :=
+        norm_gradient_le_of_lipschitz
+          ((lipschitzWith_one_norm : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)))
+          x
       change ‖gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x‖ ≤ (1 : ℝ) at h
       nlinarith [norm_nonneg (gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) x)]
-    have hg := (aestronglyMeasurable_gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖) (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    have hgrad2 : MemLp (gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) :=
-      MemLp.of_bound hg 1 (Filter.Eventually.of_forall fun x => norm_gradient_le_of_lipschitz
-        ((lipschitzWith_one_norm : LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖))) x)
+    have hg :=
+      (aestronglyMeasurable_gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)
+        (μ : Measure (EuclideanSpace ℝ (Fin n))))
+    have hgrad2 :
+      MemLp (gradient (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)) 2
+        (μ : Measure (EuclideanSpace ℝ (Fin n))) :=
+      MemLp.of_bound hg 1
+        (Filter.Eventually.of_forall fun x =>
+          norm_gradient_le_of_lipschitz
+            ((lipschitzWith_one_norm :
+              LipschitzWith 1 (fun x : EuclideanSpace ℝ (Fin n) => ‖x‖)))
+            x)
     have hi := (memLp_two_iff_integrable_sq_norm hgrad2.aestronglyMeasurable).mp hgrad2
     have hle := integral_mono hi (integrable_const (1 : ℝ)) hpoint
-    simpa only [integral_const, measureReal_def, measure_univ, ENNReal.toReal_one, one_smul] using hle
+    simpa only [integral_const, measureReal_def, measure_univ, ENNReal.toReal_one,
+      one_smul] using hle
 
 
-noncomputable def constantTest (μ : ProbabilityMeasure E) (c : ℝ) : Energy.Dual.UnitEnergyTest μ where
+noncomputable def constantTest (μ : ProbabilityMeasure E) (c : ℝ) : Energy.Dual.UnitEnergyTest μ
+    where
   fn := fun _ => c
   locallyLipschitz := LocallyLipschitz.const c
   memLp := memLp_const c

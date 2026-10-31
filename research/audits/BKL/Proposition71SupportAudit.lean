@@ -1,13 +1,15 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Law
-import FunctionalInequalities.KLS.BKL.Suspension.Density
-import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
-import FunctionalInequalities.KLS.BKL.Suspension.Moments
-import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
-import FunctionalInequalities.KLS.BKL.TaylorBound
-import FunctionalInequalities.L2.AffineDecomposition
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.Analysis.Tensor.Coordinate
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Law
+public import FunctionalInequalities.KLS.BKL.Suspension.Density
+public import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
+public import FunctionalInequalities.KLS.BKL.Suspension.Moments
+public import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
+public import FunctionalInequalities.KLS.BKL.TaylorBound
+public import FunctionalInequalities.L2.AffineDecomposition
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import FunctionalInequalities.Analysis.Tensor.Coordinate
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: supporting endpoints of BKL Proposition 7.1 with source-style consumers
 
@@ -35,13 +37,17 @@ results; none of them is Proposition 7.1.
   (108) is isotropic (`isotropic_jointLaw`, with `Isotropic.integral_inner_mul_inner`).
 * `fderiv_logLaplace_jointLaw_none_regular`: (111) for a regular law (re-export of the exact
   statement, to pin its type).
-* `taylor_bound_smooth_two`: (113) at `d = 2` for a smooth normalized `f` (re-export pinning the type of
+* `taylor_bound_smooth_two`: (113) at `d = 2` for a smooth normalized `f` (re-export pinning the
+  type of
   `norm_coordTensor_taylorTensor_sq_le_of_cumulantBound`, conditional on `CumulantBound 2 b`).
-* `taylor_bound_orthogonal_two`: (113) at `d = 2` for every `f ∈ L²` orthogonal to the affine functions
+* `taylor_bound_orthogonal_two`: (113) at `d = 2` for every `f ∈ L²` orthogonal to the affine
+  functions
   (`norm_coordTensor_taylorTensor_sq_le_of_orthogonal`, conditional on `CumulantBound 2 b`).
 * `cumulant_jointLaw_none_entries_two`: (112) at `d = 2` with two copy indices, pinning the exact
   entry `2/(σ√N) · T_2 f(e_{j_1}, e_{j_2})` when the copies agree and `0` otherwise.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -128,13 +134,13 @@ theorem jointLaw_eq_tilted_dim_zero {N : ℕ} (V f : EuclideanSpace ℝ (Fin 0) 
 
 /-- (109)–(110) for a regular law: the joint law is log-concave once `β M/√N ≤ a`. -/
 theorem logConcave_jointLaw_regular {n N : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
-    (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ}
-    (hβ : 0 < β) (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
+    (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ} (hβ : 0 < β)
+    (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
     (hN : β / Real.sqrt N * M ≤ a)
     (h : IsProbabilityMeasure (jointLaw (volume.tilted fun x => -V x) f β (sigma β) N)) :
     KLS.LogConcave (⟨_, h⟩ : ProbabilityMeasure (JointSpace N n)) :=
-  logConcave_jointLaw V f hβ (hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hf hV.lower hfM hN
-    hV.integrable_exp_neg h
+  logConcave_jointLaw V f hβ (hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hf hV.lower
+    hfM hN hV.integrable_exp_neg h
 
 /-- The graph law of a regular law has an exponential moment when the joint law has one. -/
 theorem graph_moment_regular {n N : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
@@ -151,15 +157,18 @@ theorem graph_moment_regular {n N : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ
     (hV.integrable_exp_mul_norm 1)
 
 open scoped ContDiff in
-/-- Under (110), the joint law of a regular law has an exponential moment and `Λ_ν ∈ C^∞` near `0`. -/
+/--
+Under (110), the joint law of a regular law has an exponential moment and `Λ_ν ∈ C^∞` near `0`. -/
 theorem jointLaw_radius_regular {n N : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
-    (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ}
-    (hβ : 0 < β) (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
+    (hV : KLS.RegularPotential V a b') {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ} (hβ : 0 < β)
+    (hf : ContDiff ℝ 2 f) (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
     (hN : β / Real.sqrt N * M ≤ a) :
-    ∃ r : ℝ, 0 < r ∧
-      Integrable (fun p => Real.exp (r * ‖p‖)) (jointLaw (hV.law : Measure _) f β (sigma β) N) ∧
-      ContDiffOn ℝ ∞ (logLaplace (jointLaw (hV.law : Measure _) f β (sigma β) N))
-        (Metric.ball 0 r) :=
+    ∃ r : ℝ,
+      0 < r ∧
+        Integrable (fun p => Real.exp (r * ‖p‖))
+            (jointLaw (hV.law : Measure _) f β (sigma β) N) ∧
+          ContDiffOn ℝ ∞ (logLaplace (jointLaw (hV.law : Measure _) f β (sigma β) N))
+            (Metric.ball 0 r) :=
   exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw V f hβ
     (hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hf hV.lower hfM hN
     hV.integrable_exp_neg
@@ -167,13 +176,16 @@ theorem jointLaw_radius_regular {n N : ℕ} (V : EuclideanSpace ℝ (Fin n) → 
 /-- The joint law of an isotropic regular law is isotropic (BKL p. 28). -/
 theorem isotropic_jointLaw_regular {n N : ℕ} (hN : 0 < N) (V : EuclideanSpace ℝ (Fin n) → ℝ)
     {a b' : ℝ} (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
-    {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) (hf2 : MemLp f 2 (hV.law : Measure _))
-    (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0) (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
+    {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f)
+    (hf2 : MemLp f 2 (hV.law : Measure _)) (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0)
+    (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) {β : ℝ} (hβ : 0 < β) :
-    KLS.Isotropic (⟨jointLaw (hV.law : Measure _) f β (sigma β) N,
-      isProbabilityMeasure_jointLaw_of_pos _ hf hβ (sigma β) N⟩ : ProbabilityMeasure (JointSpace N n)) :=
-  isotropic_jointLaw hN _ hiso.memLp_two hiso.mean_zero (fun u v => hiso.integral_inner_mul_inner u v)
-    hf hf2 hf0 hf1 hfx hβ
+    KLS.Isotropic
+      (⟨jointLaw (hV.law : Measure _) f β (sigma β) N,
+          isProbabilityMeasure_jointLaw_of_pos _ hf hβ (sigma β) N⟩ :
+        ProbabilityMeasure (JointSpace N n)) :=
+  isotropic_jointLaw hN _ hiso.memLp_two hiso.mean_zero
+    (fun u v => hiso.integral_inner_mul_inner u v) hf hf2 hf0 hf1 hfx hβ
 
 /-- (111) for a regular law and `f ∈ C²` with bounded Hessian, `N` chosen by (110). -/
 theorem fderiv_logLaplace_jointLaw_none_regular {n N : ℕ} (hN : 0 < N)
@@ -191,17 +203,19 @@ theorem fderiv_logLaplace_jointLaw_none_regular {n N : ℕ} (hN : 0 < N)
 theorem cumulant_jointLaw_none_entries_two {n N : ℕ} (hN : 0 < N)
     (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ} (hV : KLS.RegularPotential V a b')
     {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ} (hβ : 0 < β) (hf : ContDiff ℝ 2 f)
-    (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (h110 : β / Real.sqrt N * M ≤ a)
-    (i₁ i₂ : Fin N) (j₁ j₂ : Fin n) :
+    (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (h110 : β / Real.sqrt N * M ≤ a) (i₁ i₂ : Fin N)
+    (j₁ j₂ : Fin n) :
     cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) 3
         (Fin.cons (EuclideanSpace.single none 1) fun k =>
           EuclideanSpace.single (some (![i₁, i₂] k, ![j₁, j₂] k)) 1) =
       if ∀ k k', ![i₁, i₂] k = ![i₁, i₂] k' then
         (2 : ℝ) / (sigma β * Real.sqrt N) *
-          taylorTensor (hV.law : Measure _) f 2 fun k => EuclideanSpace.basisFun (Fin n) ℝ (![j₁, j₂] k)
+          taylorTensor (hV.law : Measure _) f 2 fun k =>
+            EuclideanSpace.basisFun (Fin n) ℝ (![j₁, j₂] k)
       else 0 := by
-  have h := cumulant_jointLaw_none_entries hN V hV hβ hf hfM h110 (d := 2) (by norm_num)
-    ![i₁, i₂] ![j₁, j₂]
+  have h :=
+    cumulant_jointLaw_none_entries hN V hV hβ hf hfM h110 (d := 2) (by norm_num) ![i₁, i₂]
+      ![j₁, j₂]
   simpa [Nat.factorial] using h
 
 /-- (113) at `d = 2` for a smooth normalized `f`, conditional on `CumulantBound 2 b`. -/
@@ -219,13 +233,16 @@ theorem taylor_bound_smooth_two {b : ℝ} (hb : 0 < b) (hcb : CumulantBound 2 b)
   rw [h4] at h
   exact h
 
-/-- (113) at `d = 2` for `f ∈ L²` orthogonal to the affine functions, conditional on `CumulantBound 2 b`. -/
+/--
+(113) at `d = 2` for `f ∈ L²` orthogonal to the affine functions, conditional on `CumulantBound 2
+b`. -/
 theorem taylor_bound_orthogonal_two {b : ℝ} (hb : 0 < b) (hcb : CumulantBound 2 b) {n : ℕ}
     (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ} (hV : KLS.RegularPotential V a b')
     (hiso : KLS.Isotropic hV.law) {f : EuclideanSpace ℝ (Fin n) → ℝ}
     (hf : MemLp f 2 (hV.law : Measure _)) (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0)
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) :
-    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f 2)‖ ^ 2 ≤
+    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f 2)‖ ^
+        2 ≤
       b / 4 * (eLpNorm f 2 (hV.law : Measure _)).toReal ^ 2 := by
   have h := norm_coordTensor_taylorTensor_sq_le_of_orthogonal le_rfl hb hcb V hV hiso hf hf0 hfx
   have h4 : ((Nat.factorial 2 : ℕ) : ℝ) ^ 2 = 4 := by norm_num [Nat.factorial]
@@ -256,11 +273,16 @@ end BKLProposition71SupportAudit
 #print axioms BKLProposition71SupportAudit.cumulant_jointLaw_none_entries_two
 #print axioms BKLProposition71SupportAudit.taylor_bound_smooth_two
 #print axioms BKLProposition71SupportAudit.taylor_bound_orthogonal_two
-#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_smooth
-#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_orthogonal
-#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_cumulantBound
-#print axioms FunctionalInequalities.Analysis.BakryEmery.norm_coordTensor_taylorTensor_inner_sq_le_of_basis
-#print axioms FunctionalInequalities.Analysis.BakryEmery.exists_bound_fderiv_fderiv_of_hasCompactSupport
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_smooth
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_orthogonal
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_cumulantBound
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.norm_coordTensor_taylorTensor_inner_sq_le_of_basis
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.exists_bound_fderiv_fderiv_of_hasCompactSupport
 #print axioms FunctionalInequalities.L2.integral_sq_eq_affine_decomposition
 #print axioms FunctionalInequalities.L2.integral_affineOrthPart_sq_le
 #print axioms FunctionalInequalities.L2.integral_affine_sq
@@ -283,7 +305,8 @@ end BKLProposition71SupportAudit
 #print axioms FunctionalInequalities.L2.eLpNorm_le_eLpNorm_of_integral_sq_le
 #print axioms FunctionalInequalities.L2.contDiff_affineOrthPart
 #print axioms FunctionalInequalities.KLS.LogConcave.exists_integrable_exp_norm_contDiffOn_logLaplace
-#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.Suspension.exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw
 #print axioms FunctionalInequalities.Probability.Line.laplaceMeasure_moments
 #print axioms FunctionalInequalities.Probability.lintegral_pi_prod_fin
 #print axioms FunctionalInequalities.Probability.pi_normalizedSum_moments
@@ -297,7 +320,8 @@ end BKLProposition71SupportAudit
 #print axioms FunctionalInequalities.KLS.LogConcave.Suspension.joint_integrability_factorization
 #print axioms FunctionalInequalities.KLS.LogConcave.Suspension.logLaplace_jointLaw_factorization
 #print axioms FunctionalInequalities.KLS.LogConcave.Suspension.exists_f_abs_exponential_moment
-#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.exists_graph_norm_moment_of_local_moments
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.Suspension.exists_graph_norm_moment_of_local_moments
 #print axioms FunctionalInequalities.KLS.LogConcave.Suspension.exists_graph_norm_moment_from_joint
 #print axioms FunctionalInequalities.KLS.LogConcave.Suspension.graph_map_measurable
 #print axioms FunctionalInequalities.KLS.LogConcave.Suspension.graph_map_probability

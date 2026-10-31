@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedMartingaleIncrement
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedMartingaleIncrement
 
 /-!
 # Quadratic-variation martingale of the compensated simple integral
@@ -15,6 +19,8 @@ martingale property of the compensated square
 `t ↦ (simpleIntegral N φ t)² − ∫₀ᵗ ∫_E |φ(s,e)|² ν(de) ds` with respect to a Poisson
 filtration; also the joint measurability of the simple integrand `eval` in `(s, e, ω)`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -215,9 +221,9 @@ private lemma condExp_sq_increment_of_martingale
       =ᵐ[P] fun ω => (P[(fun ω => (M t ω) ^ 2) | ℱ s]) ω - (M s ω) ^ 2 := by
   have hm : ℱ s ≤ ‹MeasurableSpace Ω› := ℱ.le s
   have hMt2 : MeasureTheory.Integrable (fun ω => (M t ω) ^ 2) P :=
-    (MeasureTheory.memLp_two_iff_integrable_sq hMt.1).mp hMt
+    (MeasureTheory.memLp_two_iff_integrable_sq hMt.aestronglyMeasurable).mp hMt
   have hMs2 : MeasureTheory.Integrable (fun ω => (M s ω) ^ 2) P :=
-    (MeasureTheory.memLp_two_iff_integrable_sq hMs.1).mp hMs
+    (MeasureTheory.memLp_two_iff_integrable_sq hMs.aestronglyMeasurable).mp hMs
   have hcr : MeasureTheory.Integrable (fun ω => M s ω * M t ω) P := hMs.integrable_mul hMt
   have hMsm : StronglyMeasurable[ℱ s] (M s) := hmart.stronglyAdapted s
   have hMs2m : StronglyMeasurable[ℱ s] (fun ω => (M s ω) ^ 2) := by
@@ -372,9 +378,9 @@ lemma martingale_simpleIntegral_sq_sub_compensator
     intro s t hs hst
     have hm : ℱ.seq s ≤ ‹MeasurableSpace Ω› := ℱ.le s
     have hIt2 : MeasureTheory.Integrable (fun ω => (simpleIntegral N φ t ω) ^ 2) P :=
-      (MeasureTheory.memLp_two_iff_integrable_sq (hIL2 t).1).mp (hIL2 t)
+      (MeasureTheory.memLp_two_iff_integrable_sq (hIL2 t).aestronglyMeasurable).mp (hIL2 t)
     have hIs2 : MeasureTheory.Integrable (fun ω => (simpleIntegral N φ s ω) ^ 2) P :=
-      (MeasureTheory.memLp_two_iff_integrable_sq (hIL2 s).1).mp (hIL2 s)
+      (MeasureTheory.memLp_two_iff_integrable_sq (hIL2 s).aestronglyMeasurable).mp (hIL2 s)
     have hIinc_int : MeasureTheory.Integrable
         (fun ω => (simpleIntegral N φ t ω - simpleIntegral N φ s ω) ^ 2) P := by
       have heq : (fun ω => (simpleIntegral N φ t ω - simpleIntegral N φ s ω) ^ 2)

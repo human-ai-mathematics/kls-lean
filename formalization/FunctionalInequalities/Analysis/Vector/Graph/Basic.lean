@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Graph.Jacobian
-import FunctionalInequalities.Analysis.Vector.JacobianContinuity
+module
+
+public import FunctionalInequalities.Analysis.Graph.Jacobian
+public import FunctionalInequalities.Analysis.Vector.JacobianContinuity
 
 /-! # Graphs of vector-valued maps
 
@@ -15,9 +17,12 @@ area-formula route lacks.  And the linear area formula for the graph model is im
 Mathlib's `LinearMap.hausdorffMeasure_image` together with `normDet_graphMapLinear`, so the shear
 argument the codimension-one file needed is not repeated.
 
-**The area formula itself is not proved here**: the two-sided estimates and the limit, the fourth
-and fifth phases of the codimension-one file, are the remaining part of vector-valued graph area.
+This module supplies the graph-map infrastructure. The two-sided estimates and area formula
+are in `Analysis/Vector/Graph/{Sandwich,Area}.lean`, and the weighted change of variables is in
+`Analysis/Vector/Graph/Integral.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -167,14 +172,18 @@ theorem measurableSet_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K →
   exact (isClosed_eq
     ((continuous_vectorGraphMap ι κ hγ).comp (graphProj ι).continuous) continuous_id).measurableSet
 
-/-- **The linear case of vector-valued graph area.**  No shear argument is needed: this is Mathlib's linear area formula
+/--
+**The linear case of vector-valued graph area.**  No shear argument is needed: this is Mathlib's
+linear area formula
 combined with the volume factor computed in `Analysis/Graph/Jacobian.lean`. -/
 theorem hausdorffMeasure_image_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ)) (A : H →L[ℝ] K) (s : Set H) :
-    μH[(Module.finrank ℝ H : ℝ)] (graphMapLinear ι κ A '' s)
-      = ENNReal.ofReal (Real.sqrt (LinearMap.det (LinearMap.id +
-          LinearMap.adjoint (A : H →ₗ[ℝ] K) ∘ₗ (A : H →ₗ[ℝ] K))))
-        * μH[(Module.finrank ℝ H : ℝ)] s := by
+    μH[(Module.finrank ℝ H : ℝ)] (graphMapLinear ι κ A '' s) =
+      ENNReal.ofReal
+          (Real.sqrt
+            (LinearMap.det
+              (LinearMap.id + LinearMap.adjoint (A : H →ₗ[ℝ] K) ∘ₗ (A : H →ₗ[ℝ] K)))) *
+        μH[(Module.finrank ℝ H : ℝ)] s := by
   rw [← normDet_graphMapLinear ι κ hperp A]
   exact LinearMap.hausdorffMeasure_image ((graphMapLinear ι κ A : H →ₗ[ℝ] V)) s
 

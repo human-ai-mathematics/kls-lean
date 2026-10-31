@@ -1,13 +1,15 @@
-import FunctionalInequalities.Probability.Line.Cdf
-import Mathlib.Probability.Distributions.Gaussian.Real
-import Mathlib.Analysis.Calculus.Deriv.Inverse
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.Calculus.ContDiff.Deriv
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Topology.OpenPartialHomeomorph.Basic
-import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
-import Mathlib.Analysis.Calculus.Deriv.Support
+module
+
+public import FunctionalInequalities.Probability.Line.Cdf
+public import Mathlib.Probability.Distributions.Gaussian.Real
+public import Mathlib.Analysis.Calculus.Deriv.Inverse
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Topology.OpenPartialHomeomorph.Basic
+public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
+public import Mathlib.Analysis.Calculus.Deriv.Support
 
 /-!
 # The standard Gaussian density in quantile coordinates
@@ -17,6 +19,8 @@ Gaussian profile, not an abstract function satisfying an assumed differential eq
 The profile is extended by zero outside `(0,1)`; differential statements are interior
 statements. These scalar facts are inputs to, not a proof of, the BGL heat estimate.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory Set Filter Topology
@@ -43,12 +47,16 @@ theorem continuous_density : Continuous density := by
 
 theorem hasDerivAt_density (x : ℝ) : HasDerivAt density (-x * density x) x := by
   have harg : HasDerivAt (fun y : ℝ ↦ -y ^ 2 / 2) (-x) x := by
-    convert (((hasDerivAt_id x).pow 2).neg.div_const 2) using 1 <;> first | rfl | (simp; ring)
+    convert (((hasDerivAt_id x).pow 2).neg.div_const 2) using 1 <;>
+      first
+      | rfl
+      | (simp; ring)
   have h := harg.exp.const_mul (Real.sqrt (2 * Real.pi))⁻¹
-  change HasDerivAt (fun y : ℝ ↦ (Real.sqrt (2 * Real.pi))⁻¹ * Real.exp (-y ^ 2 / 2))
-    ((Real.sqrt (2 * Real.pi))⁻¹ * (Real.exp (-x ^ 2 / 2) * -x)) x at h
-  simpa only [density, gaussianPDFReal_def, NNReal.coe_one, mul_one, one_mul, sub_zero,
-    mul_neg, neg_mul, mul_comm, mul_left_comm, mul_assoc] using h
+  change
+    HasDerivAt (fun y : ℝ ↦ (Real.sqrt (2 * Real.pi))⁻¹ * Real.exp (-y ^ 2 / 2))
+      ((Real.sqrt (2 * Real.pi))⁻¹ * (Real.exp (-x ^ 2 / 2) * -x)) x at h
+  simpa only [density, gaussianPDFReal_def, NNReal.coe_one, mul_one, one_mul, sub_zero, mul_neg,
+    neg_mul, mul_comm, mul_left_comm, mul_assoc] using h
 
 theorem hasDerivAt_distribution (x : ℝ) : HasDerivAt distribution (density x) x :=
   hasDerivAt_cdf (ofMeasure (gaussianReal 0 1)) law_density continuous_density.measurable
@@ -82,8 +90,11 @@ private theorem distribution_openEmbedding : IsOpenEmbedding distribution := by
   · rw [range_distribution]
     exact isOpen_Ioo
 
-private def distributionHomeomorph : OpenPartialHomeomorph ℝ ℝ :=
-  distribution_openEmbedding.toOpenPartialHomeomorph distribution
+/-- The Gaussian CDF as an open partial homeomorphism onto `(0,1)`, whose inverse defines
+`quantile`. -/
+def distributionHomeomorph : OpenPartialHomeomorph ℝ ℝ :=
+  (show IsOpenEmbedding distribution by exact distribution_openEmbedding).toOpenPartialHomeomorph
+    distribution
 
 /-- Inverse of the Gaussian CDF on `(0,1)`. Values outside its range are unspecified. -/
 def quantile : ℝ → ℝ := distributionHomeomorph.symm
@@ -108,7 +119,7 @@ theorem hasDerivAt_quantile {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1) :
 def profile (p : ℝ) : ℝ := if p ∈ Ioo (0 : ℝ) 1 then density (quantile p) else 0
 
 theorem profile_eq {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1) :
-    profile p = density (quantile p) := if_pos hp
+    profile p = density (quantile p) := ite_eq_left hp
 
 @[simp] theorem profile_zero : profile 0 = 0 := by simp [profile]
 @[simp] theorem profile_one : profile 1 = 0 := by simp [profile]
@@ -133,7 +144,9 @@ theorem profile_le (p : ℝ) : profile p ≤ (Real.sqrt (2 * Real.pi))⁻¹ := b
   split_ifs
   · unfold density gaussianPDFReal
     simp only [NNReal.coe_one, mul_one, sub_zero]
-    exact mul_le_of_le_one_right hc (Real.exp_le_one_iff.mpr (by nlinarith [sq_nonneg (quantile p)]))
+    exact
+      mul_le_of_le_one_right hc
+        (Real.exp_le_one_iff.mpr (by nlinarith [sq_nonneg (quantile p)]))
   · exact hc
 
 theorem hasDerivAt_profile {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1) :
@@ -294,11 +307,15 @@ theorem distribution_neg (x : ℝ) : distribution (-x) = 1 - distribution x := b
   let f : ℝ → ℝ := fun y ↦ distribution y + distribution (-y)
   have hd : ∀ y, HasDerivAt f 0 y := by
     intro y
-    have h := (hasDerivAt_distribution y).add
-      ((hasDerivAt_distribution (-y)).comp y (hasDerivAt_id y).neg)
-    convert h using 1 <;> first | rfl | simp [density_neg]
-  have hc : ∀ y, f y = f x := fun y ↦ is_const_of_deriv_eq_zero
-    (fun y ↦ (hd y).differentiableAt) (fun y ↦ (hd y).deriv) y x
+    have h :=
+      (hasDerivAt_distribution y).add
+        ((hasDerivAt_distribution (-y)).comp y (hasDerivAt_id y).neg)
+    convert h using 1 <;>
+      first
+      | rfl
+      | simp [density_neg]
+  have hc : ∀ y, f y = f x := fun y ↦
+    is_const_of_deriv_eq_zero (fun y ↦ (hd y).differentiableAt) (fun y ↦ (hd y).deriv) y x
   have ht : Tendsto f atTop (𝓝 (1 + 0)) :=
     (tendsto_cdf_atTop (ofMeasure (gaussianReal 0 1))).add
       ((tendsto_cdf_atBot (ofMeasure (gaussianReal 0 1))).comp tendsto_neg_atTop_atBot)
@@ -313,14 +330,13 @@ theorem distribution_neg (x : ℝ) : distribution (-x) = 1 - distribution x := b
   simp only [neg_zero] at h
   linarith
 
-theorem quantile_one_sub {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1) :
-    quantile (1 - p) = -quantile p := by
+theorem quantile_one_sub {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1) : quantile (1 - p) = -quantile p := by
   apply strictMono_distribution.injective
-  rw [distribution_quantile (show 1 - p ∈ Ioo (0 : ℝ) 1 by constructor <;> linarith [hp.1, hp.2]),
+  rw [distribution_quantile
+      (show 1 - p ∈ Ioo (0 : ℝ) 1 by constructor <;> linarith [hp.1, hp.2]),
     distribution_neg, distribution_quantile hp]
 
-theorem profile_one_sub {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) :
-    profile (1 - p) = profile p := by
+theorem profile_one_sub {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) : profile (1 - p) = profile p := by
   rcases eq_endpoints_or_mem_Ioo_of_mem_Icc hp with rfl | rfl | hp'
   · simp
   · simp
@@ -342,8 +358,12 @@ theorem contDiffAt_shifted {ε x : ℝ} (hx : x + ε ∈ Ioo (0 : ℝ) 1) :
 
 theorem hasDerivAt_shifted {ε x : ℝ} (hx : x + ε ∈ Ioo (0 : ℝ) 1) :
     HasDerivAt (shifted ε) (-quantile (x + ε)) x := by
-  have h := ((hasDerivAt_profile hx).comp x ((hasDerivAt_id x).add_const ε)).sub_const (profile ε)
-  convert h using 1 <;> first | rfl | simp
+  have h :=
+    ((hasDerivAt_profile hx).comp x ((hasDerivAt_id x).add_const ε)).sub_const (profile ε)
+  convert h using 1 <;>
+    first
+    | rfl
+    | simp
 
 theorem hasDerivAt_deriv_shifted {ε x : ℝ} (hx : x + ε ∈ Ioo (0 : ℝ) 1) :
     HasDerivAt (deriv (shifted ε)) (-(profile (x + ε))⁻¹) x := by
@@ -356,9 +376,8 @@ theorem hasDerivAt_deriv_shifted {ε x : ℝ} (hx : x + ε ∈ Ioo (0 : ℝ) 1) 
   exact (hasDerivAt_shifted hy).deriv
 
 /-- On this range the shift remains inside `(0,1)` with a positive margin. -/
-theorem shifted_argument_mem {ε x : ℝ} (hε : 0 < ε)
-    (hx : x ∈ Icc (0 : ℝ) (1 - 2 * ε)) : x + ε ∈ Ioo (0 : ℝ) 1 := by
-  constructor <;> linarith [hx.1, hx.2]
+theorem shifted_argument_mem {ε x : ℝ} (hε : 0 < ε) (hx : x ∈ Icc (0 : ℝ) (1 - 2 * ε)) :
+    x + ε ∈ Ioo (0 : ℝ) 1 := by constructor <;> linarith [hx.1, hx.2]
 
 theorem shifted_nonneg {ε x : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
     (hx : x ∈ Icc (0 : ℝ) (1 - 2 * ε)) : 0 ≤ shifted ε x := by
@@ -383,25 +402,33 @@ theorem shifted_mul_neg_second_deriv {ε x : ℝ} (hx : x + ε ∈ Ioo (0 : ℝ)
   field_simp [(profile_pos hx).ne']
 
 theorem exists_shifted_derivative_bound {ε : ℝ} (hε : 0 < ε) :
-    ∃ C : ℝ, 0 < C ∧ ∀ x ∈ Icc (0 : ℝ) (1 - 2 * ε),
-      |deriv (shifted ε) x| ≤ C ∧ |deriv (deriv (shifted ε)) x| ≤ C := by
+    ∃ C : ℝ,
+      0 < C ∧
+        ∀ x ∈ Icc (0 : ℝ) (1 - 2 * ε),
+          |deriv (shifted ε) x| ≤ C ∧ |deriv (deriv (shifted ε)) x| ≤ C := by
   have hq : ContinuousOn (fun x ↦ quantile (x + ε)) (Icc (0 : ℝ) (1 - 2 * ε)) := by
     intro x hx
-    exact ((hasDerivAt_quantile (shifted_argument_mem hε hx)).continuousAt.comp (f := fun y : ℝ ↦ y + ε)
-      (show ContinuousAt (fun y : ℝ ↦ y + ε) x from continuousAt_id.add_const ε)).continuousWithinAt
+    exact
+      ((hasDerivAt_quantile (shifted_argument_mem hε hx)).continuousAt.comp (f := fun y : ℝ ↦
+          y + ε)
+          (show ContinuousAt (fun y : ℝ ↦ y + ε) x from
+            continuousAt_id.add_const ε)).continuousWithinAt
   have hr : ContinuousOn (fun x ↦ (profile (x + ε))⁻¹) (Icc (0 : ℝ) (1 - 2 * ε)) := by
     intro x hx
     have hi := shifted_argument_mem hε hx
-    exact (((hasDerivAt_profile hi).continuousAt.comp (f := fun y : ℝ ↦ y + ε)
-      (show ContinuousAt (fun y : ℝ ↦ y + ε) x from continuousAt_id.add_const ε)).inv₀ (profile_pos hi).ne').continuousWithinAt
+    exact
+      (((hasDerivAt_profile hi).continuousAt.comp (f := fun y : ℝ ↦ y + ε)
+              (show ContinuousAt (fun y : ℝ ↦ y + ε) x from continuousAt_id.add_const ε)).inv₀
+          (profile_pos hi).ne').continuousWithinAt
   obtain ⟨C, hC⟩ := isCompact_Icc.exists_bound_of_continuousOn hq
   obtain ⟨D, hD⟩ := isCompact_Icc.exists_bound_of_continuousOn hr
   refine ⟨max (max C D) 1, lt_of_lt_of_le zero_lt_one (le_max_right _ _), ?_⟩
   intro x hx
   rw [(hasDerivAt_shifted (shifted_argument_mem hε hx)).deriv,
     (hasDerivAt_deriv_shifted (shifted_argument_mem hε hx)).deriv, abs_neg, abs_neg]
-  exact ⟨(hC x hx).trans ((le_max_left _ _).trans (le_max_left _ _)),
-    (hD x hx).trans ((le_max_right _ _).trans (le_max_left _ _))⟩
+  exact
+    ⟨(hC x hx).trans ((le_max_left _ _).trans (le_max_left _ _)),
+      (hD x hx).trans ((le_max_right _ _).trans (le_max_left _ _))⟩
 
 theorem exists_lipschitzOnWith_shifted {ε : ℝ} (hε : 0 < ε) :
     ∃ K : NNReal, LipschitzOnWith K (shifted ε) (Icc (0 : ℝ) (1 - 2 * ε)) := by
@@ -433,8 +460,8 @@ theorem tendsto_shifted_of_mem_Ico {x : ℝ} (hx : x ∈ Ico (0 : ℝ) 1) :
 /-- A uniform bound, including values outside the interval where derivatives are used. -/
 theorem abs_shifted_le (ε x : ℝ) : |shifted ε x| ≤ (Real.sqrt (2 * Real.pi))⁻¹ := by
   rw [shifted, abs_sub_le_iff]
-  constructor <;> linarith [profile_nonneg (x + ε), profile_nonneg ε,
-    profile_le (x + ε), profile_le ε]
+  constructor <;>
+    linarith [profile_nonneg (x + ε), profile_nonneg ε, profile_le (x + ε), profile_le ε]
 
 /-- Interior smooth data stay smooth under the shifted profile, without a global extension. -/
 theorem contDiff_shifted_comp {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -454,12 +481,12 @@ theorem hasCompactSupport_shifted_comp {E : Type*} [TopologicalSpace E]
 `shifted ε` on a neighborhood of the entire admissible interval. This supplies scalar
 inputs for a closed-generator chain rule; that operator theorem is a separate obligation. -/
 theorem exists_smooth_shifted_extension {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2) :
-    ∃ Φ : ℝ → ℝ, ContDiff ℝ ∞ Φ ∧ Φ 0 = 0 ∧
-      (∀ x ∈ Icc (0 : ℝ) (1 - 2 * ε), Φ =ᶠ[𝓝 x] shifted ε) ∧
-      ∃ C : ℝ, 0 < C ∧ ∀ x, |Φ x| ≤ C ∧ |deriv Φ x| ≤ C ∧
-        |deriv (deriv Φ) x| ≤ C := by
-  let b : ContDiffBump (1 / 2 : ℝ) :=
-    ⟨1 / 2 - ε / 2, 1 / 2 - ε / 4, by linarith, by linarith⟩
+    ∃ Φ : ℝ → ℝ,
+      ContDiff ℝ ∞ Φ ∧
+        Φ 0 = 0 ∧
+          (∀ x ∈ Icc (0 : ℝ) (1 - 2 * ε), Φ =ᶠ[𝓝 x] shifted ε) ∧
+            ∃ C : ℝ, 0 < C ∧ ∀ x, |Φ x| ≤ C ∧ |deriv Φ x| ≤ C ∧ |deriv (deriv Φ) x| ≤ C := by
+  let b : ContDiffBump (1 / 2 : ℝ) := ⟨1 / 2 - ε / 2, 1 / 2 - ε / 4, by linarith, by linarith⟩
   have hb : tsupport b ⊆ Ioo (0 : ℝ) 1 := by
     intro x hx
     rw [b.tsupport_eq, Metric.mem_closedBall, Real.dist_eq, abs_le] at hx
@@ -476,8 +503,7 @@ theorem exists_smooth_shifted_extension {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1
       filter_upwards [hz] with y hy
       simp [g, hy]
   have hgc : HasCompactSupport g := b.hasCompactSupport.mul_right
-  have hge : ∀ x ∈ Icc (0 : ℝ) (1 - 2 * ε),
-      (fun y ↦ g (y + ε) - profile ε) =ᶠ[𝓝 x] shifted ε := by
+  have hge : ∀ x ∈ Icc (0 : ℝ) (1 - 2 * ε), (fun y ↦ g (y + ε) - profile ε) =ᶠ[𝓝 x] shifted ε := by
     intro x hx
     have hball : x + ε ∈ Metric.ball (1 / 2 : ℝ) b.rIn := by
       rw [Metric.mem_ball, Real.dist_eq, abs_lt]
@@ -494,20 +520,29 @@ theorem exists_smooth_shifted_extension {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1
   have hg₂ : ContDiff ℝ ∞ (deriv (deriv g)) := (contDiff_infty_iff_deriv.mp hg₁).2
   obtain ⟨C₀, hC₀⟩ := hgc.exists_bound_of_continuous hg.continuous
   obtain ⟨C₁, hC₁⟩ := hgc.deriv.exists_bound_of_continuous hg₁.continuous
-  obtain ⟨C₂, hC₂⟩ := hgc.deriv.deriv.exists_bound_of_continuous
-    hg₂.continuous
+  obtain ⟨C₂, hC₂⟩ := hgc.deriv.deriv.exists_bound_of_continuous hg₂.continuous
   have hd : deriv (fun y ↦ g (y + ε) - profile ε) = fun y ↦ deriv g (y + ε) := by
     funext y
-    exact (by simpa using (((hg.differentiable (by simp) (y + ε)).hasDerivAt.comp y
-      ((hasDerivAt_id y).add_const ε)).sub_const (profile ε)).deriv)
+    exact
+      (by
+        simpa using
+          (((hg.differentiable (by simp) (y + ε)).hasDerivAt.comp y
+                  ((hasDerivAt_id y).add_const ε)).sub_const
+              (profile ε)).deriv)
   have hdd : deriv (fun y ↦ deriv g (y + ε)) = fun y ↦ deriv (deriv g) (y + ε) := by
     funext y
     have hy : HasDerivAt (fun z : ℝ ↦ deriv g (z + ε)) (deriv (deriv g) (y + ε)) y := by
-      convert ((hg₁.differentiable (by simp) (y + ε)).hasDerivAt.comp y
-        ((hasDerivAt_id y).add_const ε)) using 1 <;> first | rfl | simp
+      convert
+          ((hg₁.differentiable (by simp) (y + ε)).hasDerivAt.comp y
+            ((hasDerivAt_id y).add_const ε)) using
+          1 <;>
+        first
+        | rfl
+        | simp
     exact hy.deriv
-  refine ⟨_, hΦ, ?_, hge, max (max (C₀ + |profile ε|) C₁) (max C₂ 1),
-    lt_of_lt_of_le zero_lt_one ((le_max_right _ _).trans (le_max_right _ _)), ?_⟩
+  refine
+    ⟨_, hΦ, ?_, hge, max (max (C₀ + |profile ε|) C₁) (max C₂ 1),
+      lt_of_lt_of_le zero_lt_one ((le_max_right _ _).trans (le_max_right _ _)), ?_⟩
   · rw [(hge 0 ⟨le_rfl, by linarith⟩).eq_of_nhds, shifted_zero]
   · intro x
     rw [hd, hdd]

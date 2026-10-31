@@ -1,15 +1,19 @@
-import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
-import FunctionalInequalities.Probability.Posterior.LogPartition
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.Coefficients
+public import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
+public import FunctionalInequalities.Probability.Posterior.LogPartition
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.Probability.Diffusion.Generator
 /-!
 # The generator of the posterior covariance
 
 The carré-du-champ product rule for the generator, `𝓛 ∫ f dμ_p = 0` for posterior expectations, and
 `𝓛⟪A x, y⟫ = −⟪A x, y⟫` (BKL arXiv:2610.05474v1, (69)).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -56,16 +60,16 @@ namespace FunctionalInequalities.KLS.BKL.Localization
 variable {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
   (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
 
-/-- **Posterior expectations have zero drift** (BKL (68), deterministic generator form): for `f` bounded on the
+/--
+**Posterior expectations have zero drift** (BKL (68), deterministic generator form): for `f` bounded
+on the
 prior support, `𝓛(p ↦ ∫ f dμ_p) = 0` with the uncut generator of (67). -/
 theorem generator_posteriorExpectation (hiso : KLS.Isotropic μ)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) {C : ℝ} (hC : 0 ≤ C)
     (hfb : ∀ x ∈ (μ : Measure (EuclideanSpace ℝ (Fin n))).support, ‖f x‖ ≤ C) (p : Param n) :
     generator μ hc (fun q : Param n => posteriorExpectation μ q.1 q.2 f) p = 0 := by
-  have hF : ContDiff ℝ 2
-      (fun q : Param n => posteriorExpectation μ q.1 q.2 f) :=
-    (contDiff_posteriorExpectation_joint μ hc hf hfb).of_le
-      (WithTop.coe_le_coe.mpr le_top)
+  have hF : ContDiff ℝ 2 (fun q : Param n => posteriorExpectation μ q.1 q.2 f) :=
+    (contDiff_posteriorExpectation_joint μ hc hf hfb).of_le (WithTop.coe_le_coe.mpr le_top)
   rw [generator_eq_partial μ hc hiso _ hF p]
   have hcancel :=
     Isotropic.compactPosterior_generator_cancellation μ hc hiso hf hC hfb p.1 p.2
@@ -74,92 +78,92 @@ theorem generator_posteriorExpectation (hiso : KLS.Isotropic μ)
   simp only [EuclideanSpace.basisFun_apply] at hcancel
   exact hcancel
 
-/-- **BKL (69) in generator form**: `𝓛A = −A`, i.e. `𝓛(p ↦ ⟪A(p) x, y⟫) = −⟪A(p) x, y⟫` for all `x, y`. -/
-theorem generator_inner_cov (hiso : KLS.Isotropic μ) (p : Param n) (x y : EuclideanSpace ℝ (Fin n)) :
+/--
+**BKL (69) in generator form**: `𝓛A = −A`, i.e. `𝓛(p ↦ ⟪A(p) x, y⟫) = −⟪A(p) x, y⟫` for all `x, y`.
+-/
+theorem generator_inner_cov (hiso : KLS.Isotropic μ) (p : Param n)
+    (x y : EuclideanSpace ℝ (Fin n)) :
     generator μ hc (fun q : Param n => ⟪cov μ hc q x, y⟫) p = -⟪cov μ hc p x, y⟫ := by
   let gx : EuclideanSpace ℝ (Fin n) → ℝ := fun z => ⟪x, z⟫
   let gy : EuclideanSpace ℝ (Fin n) → ℝ := fun z => ⟪y, z⟫
   let gxy : EuclideanSpace ℝ (Fin n) → ℝ := fun z => ⟪x, z⟫ * ⟪y, z⟫
-  obtain ⟨Cx, hCx, hbx⟩ := exists_bound_on_support_of_compact μ hc
-    (by fun_prop : Continuous gx)
-  obtain ⟨Cy, hCy, hby⟩ := exists_bound_on_support_of_compact μ hc
-    (by fun_prop : Continuous gy)
-  obtain ⟨Cxy, hCxy, hbxy⟩ := exists_bound_on_support_of_compact μ hc
-    (by fun_prop : Continuous gxy)
+  obtain ⟨Cx, hCx, hbx⟩ := exists_bound_on_support_of_compact μ hc (by fun_prop : Continuous gx)
+  obtain ⟨Cy, hCy, hby⟩ := exists_bound_on_support_of_compact μ hc (by fun_prop : Continuous gy)
+  obtain ⟨Cxy, hCxy, hbxy⟩ :=
+    exists_bound_on_support_of_compact μ hc (by fun_prop : Continuous gxy)
   have hcovfun :
-      (fun q : Param n => ⟪cov μ hc q x, y⟫) =
-        (fun q => posteriorExpectation μ q.1 q.2 gxy -
+    (fun q : Param n => ⟪cov μ hc q x, y⟫) =
+      (fun q =>
+        posteriorExpectation μ q.1 q.2 gxy -
           posteriorExpectation μ q.1 q.2 gx * posteriorExpectation μ q.1 q.2 gy) := by
     funext q
-    let : IsProbabilityMeasure
-        ((μ : Measure (EuclideanSpace ℝ (Fin n))).tilted
-          (quadraticExponent q.1 q.2)) :=
+    let :
+      IsProbabilityMeasure
+        ((μ : Measure (EuclideanSpace ℝ (Fin n))).tilted (quadraticExponent q.1 q.2)) :=
       isProbabilityMeasure_tilted_quadraticExponent_of_compact μ hc q.1 q.2
-    have hmx := memLp_two_tilted_quadraticExponent_of_compact μ hc q.1 q.2
-      (by fun_prop : Continuous gx)
-    have hmy := memLp_two_tilted_quadraticExponent_of_compact μ hc q.1 q.2
-      (by fun_prop : Continuous gy)
+    have hmx :=
+      memLp_two_tilted_quadraticExponent_of_compact μ hc q.1 q.2 (by fun_prop : Continuous gx)
+    have hmy :=
+      memLp_two_tilted_quadraticExponent_of_compact μ hc q.1 q.2 (by fun_prop : Continuous gy)
     rw [cov, Covariance.operator_inner,
       covarianceBilin_apply_eq_cov (compactPosterior_memLp_id_two μ hc q.1 q.2)]
-    change covariance gx gy
-      ((μ : Measure (EuclideanSpace ℝ (Fin n))).tilted
-        (quadraticExponent q.1 q.2)) = _
+    change
+      covariance gx gy
+          ((μ : Measure (EuclideanSpace ℝ (Fin n))).tilted (quadraticExponent q.1 q.2)) =
+        _
     rw [covariance_eq_sub hmx hmy]
     rfl
-  have hGx : ContDiff ℝ 2
-      (fun q : Param n => posteriorExpectation μ q.1 q.2 gx) :=
+  have hGx : ContDiff ℝ 2 (fun q : Param n => posteriorExpectation μ q.1 q.2 gx) :=
     (contDiff_posteriorExpectation_joint μ hc (by fun_prop) hbx).of_le
       (WithTop.coe_le_coe.mpr le_top)
-  have hGy : ContDiff ℝ 2
-      (fun q : Param n => posteriorExpectation μ q.1 q.2 gy) :=
+  have hGy : ContDiff ℝ 2 (fun q : Param n => posteriorExpectation μ q.1 q.2 gy) :=
     (contDiff_posteriorExpectation_joint μ hc (by fun_prop) hby).of_le
       (WithTop.coe_le_coe.mpr le_top)
-  have hGxy : ContDiff ℝ 2
-      (fun q : Param n => posteriorExpectation μ q.1 q.2 gxy) :=
+  have hGxy : ContDiff ℝ 2 (fun q : Param n => posteriorExpectation μ q.1 q.2 gxy) :=
     (contDiff_posteriorExpectation_joint μ hc (by fun_prop) hbxy).of_le
       (WithTop.coe_le_coe.mpr le_top)
-  have hprod : ContDiffAt ℝ 2
-      (fun q : Param n =>
-        posteriorExpectation μ q.1 q.2 gx *
-          posteriorExpectation μ q.1 q.2 gy) p :=
+  have hprod :
+    ContDiffAt ℝ 2
+      (fun q : Param n => posteriorExpectation μ q.1 q.2 gx * posteriorExpectation μ q.1 q.2 gy)
+      p :=
     hGx.contDiffAt.mul hGy.contDiffAt
   have hzeroX :
-      diffusionGenerator (drift μ hc) (noise μ hc)
-        (fun q : Param n => posteriorExpectation μ q.1 q.2 gx) p = 0 :=
+    diffusionGenerator (drift μ hc) (noise μ hc)
+        (fun q : Param n => posteriorExpectation μ q.1 q.2 gx) p =
+      0 :=
     generator_posteriorExpectation μ hc hiso (by fun_prop) hCx hbx p
   have hzeroY :
-      diffusionGenerator (drift μ hc) (noise μ hc)
-        (fun q : Param n => posteriorExpectation μ q.1 q.2 gy) p = 0 :=
+    diffusionGenerator (drift μ hc) (noise μ hc)
+        (fun q : Param n => posteriorExpectation μ q.1 q.2 gy) p =
+      0 :=
     generator_posteriorExpectation μ hc hiso (by fun_prop) hCy hby p
   have hzeroXY :
-      diffusionGenerator (drift μ hc) (noise μ hc)
-        (fun q : Param n => posteriorExpectation μ q.1 q.2 gxy) p = 0 :=
+    diffusionGenerator (drift μ hc) (noise μ hc)
+        (fun q : Param n => posteriorExpectation μ q.1 q.2 gxy) p =
+      0 :=
     generator_posteriorExpectation μ hc hiso (by fun_prop) hCxy hbxy p
   set A : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) := cov μ hc p
   set σ : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) := inverseSqrt A
-  have hnoise (k : Fin n) :
-      noise μ hc p k = (σ (EuclideanSpace.single k 1), 0) := rfl
+  have hnoise (k : Fin n) : noise μ hc p k = (σ (EuclideanSpace.single k 1), 0) := rfl
   have hself := (inverseSqrt_cov_props μ hc hiso p).1
   have hss := (inverseSqrt_cov_props μ hc hiso p).2
   change ∀ u v, ⟪σ u, v⟫ = ⟪u, σ v⟫ at hself
   change ∀ v, σ (σ v) = Ring.inverse A v at hss
   have hMA (z : EuclideanSpace ℝ (Fin n)) : Ring.inverse A (A z) = z := by
-    have h := congrArg
-      (fun T : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) => T z)
-      (Isotropic.compactPosterior_ringInverse_covariance μ hc hiso p.1 p.2).2.1
+    have h :=
+      congrArg (fun T : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) => T z)
+        (Isotropic.compactPosterior_ringInverse_covariance μ hc hiso p.1 p.2).2.1
     simpa only [A, cov, ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply] using h
   have hsum :
-      ∑ k, ⟪A x, σ (EuclideanSpace.single k 1)⟫ *
-        ⟪A y, σ (EuclideanSpace.single k 1)⟫ = ⟪A x, y⟫ := by
+    ∑ k, ⟪A x, σ (EuclideanSpace.single k 1)⟫ * ⟪A y, σ (EuclideanSpace.single k 1)⟫ =
+      ⟪A x, y⟫ := by
     calc
-      ∑ k, ⟪A x, σ (EuclideanSpace.single k 1)⟫ *
-          ⟪A y, σ (EuclideanSpace.single k 1)⟫ =
-          ∑ k, ⟪σ (A x), EuclideanSpace.single k 1⟫ *
-            ⟪EuclideanSpace.single k 1, σ (A y)⟫ := by
+      ∑ k, ⟪A x, σ (EuclideanSpace.single k 1)⟫ * ⟪A y, σ (EuclideanSpace.single k 1)⟫ =
+          ∑ k, ⟪σ (A x), EuclideanSpace.single k 1⟫ * ⟪EuclideanSpace.single k 1, σ (A y)⟫ := by
         apply Finset.sum_congr rfl
         intro k _
-        rw [← hself (A x) (EuclideanSpace.single k 1),
-          ← hself (A y) (EuclideanSpace.single k 1)]
+        rw [← hself (A x) (EuclideanSpace.single k 1), ←
+          hself (A y) (EuclideanSpace.single k 1)]
         rw [real_inner_comm (σ (A y)) (EuclideanSpace.single k 1)]
       _ = ⟪σ (A x), σ (A y)⟫ := by
         simpa only [EuclideanSpace.basisFun_apply] using
@@ -167,30 +171,30 @@ theorem generator_inner_cov (hiso : KLS.Isotropic μ) (p : Param n) (x y : Eucli
       _ = ⟪A x, σ (σ (A y))⟫ := hself (A x) (σ (A y))
       _ = ⟪A x, y⟫ := by rw [hss, hMA]
   have hdx (k : Fin n) :
-      fderiv ℝ (fun q : Param n => posteriorExpectation μ q.1 q.2 gx) p
-          (noise μ hc p k) =
-        ⟪A x, σ (EuclideanSpace.single k 1)⟫ := by
-    rw [hnoise k, fderiv_fst_dir _ p (hGx.differentiable (by norm_num) p)
-      (σ (EuclideanSpace.single k 1))]
+    fderiv ℝ (fun q : Param n => posteriorExpectation μ q.1 q.2 gx) p (noise μ hc p k) =
+      ⟪A x, σ (EuclideanSpace.single k 1)⟫ := by
+    rw [hnoise k,
+      fderiv_fst_dir _ p (hGx.differentiable (by norm_num) p) (σ (EuclideanSpace.single k 1))]
     rw [fderiv_posteriorExpectation_c_apply μ hc (by fun_prop) hCx hbx p.1 p.2]
-    change _ =
-      ⟪Covariance.operator
-        (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) x,
-        σ (EuclideanSpace.single k 1)⟫
+    change
+      _ =
+        ⟪Covariance.operator
+            (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) x,
+          σ (EuclideanSpace.single k 1)⟫
     rw [Covariance.operator_inner,
       covarianceBilin_apply_eq_cov (compactPosterior_memLp_id_two μ hc p.1 p.2)]
     rfl
   have hdy (k : Fin n) :
-      fderiv ℝ (fun q : Param n => posteriorExpectation μ q.1 q.2 gy) p
-          (noise μ hc p k) =
-        ⟪A y, σ (EuclideanSpace.single k 1)⟫ := by
-    rw [hnoise k, fderiv_fst_dir _ p (hGy.differentiable (by norm_num) p)
-      (σ (EuclideanSpace.single k 1))]
+    fderiv ℝ (fun q : Param n => posteriorExpectation μ q.1 q.2 gy) p (noise μ hc p k) =
+      ⟪A y, σ (EuclideanSpace.single k 1)⟫ := by
+    rw [hnoise k,
+      fderiv_fst_dir _ p (hGy.differentiable (by norm_num) p) (σ (EuclideanSpace.single k 1))]
     rw [fderiv_posteriorExpectation_c_apply μ hc (by fun_prop) hCy hby p.1 p.2]
-    change _ =
-      ⟪Covariance.operator
-        (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) y,
-        σ (EuclideanSpace.single k 1)⟫
+    change
+      _ =
+        ⟪Covariance.operator
+            (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) y,
+          σ (EuclideanSpace.single k 1)⟫
     rw [Covariance.operator_inner,
       covarianceBilin_apply_eq_cov (compactPosterior_memLp_id_two μ hc p.1 p.2)]
     rfl

@@ -1,16 +1,21 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.ConvexHessian
-import FunctionalInequalities.Analysis.Cutoff.SmoothBall
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.Analysis.WeakDerivative.Testing
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.ConvexHessian
+public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.Analysis.WeakDerivative.Testing
 
 /-!
 # Mean of the Hessian at `C^{1,1}`
 
-`∫⟪D(∇φ)u, v⟫ dν = ∫ ∂_uφ ∂_vφ dν` for `ν = e^{−φ}dx` with `φ` convex `C¹` with Lipschitz gradient (Letwin
+`∫⟪D(∇φ)u, v⟫ dν = ∫ ∂_uφ ∂_vφ dν` for `ν = e^{−φ}dx` with `φ` convex `C¹` with Lipschitz gradient
+(Letwin
 arXiv:2607.24164v1, Lemma 2.3, analytic part, weak route).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -235,28 +240,32 @@ open scoped ContDiff Topology
 namespace FunctionalInequalities.Analysis
 
 set_option maxHeartbeats 800000 in
-/-- Weighted integration by parts for a bounded globally Lipschitz test `η` against the normalized exponential tilt of a
-globally Lipschitz potential `U`: both pairings are integrable and `∫ D_v η dν = ∫ η D_v U dν`; all finite dimensions. -/
+/--
+Weighted integration by parts for a bounded globally Lipschitz test `η` against the normalized
+exponential tilt of a
+globally Lipschitz potential `U`: both pairings are integrable and `∫ D_v η dν = ∫ η D_v U dν`; all
+finite dimensions. -/
 theorem integral_fderiv_tilted_eq_integral_mul_fderiv_of_bounded_lipschitz {n : ℕ}
-    {U eta : EuclideanSpace ℝ (Fin n) → ℝ} {L Leta : NNReal}
-    (hU : LipschitzWith L U) (heta : LipschitzWith Leta eta)
-    (C : ℝ) (hbound : ∀ x, ‖eta x‖ ≤ C)
-    (hnorm : (∫ x, Real.exp (-U x) ∂volume) = 1)
-    (v : EuclideanSpace ℝ (Fin n)) :
-    Integrable (fun x => fderiv ℝ eta x v) ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U)) ∧
-    Integrable (fun x => eta x * fderiv ℝ U x v) ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U)) ∧
-    (∫ x, fderiv ℝ eta x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U))) =
-      ∫ x, eta x * fderiv ℝ U x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U)) := by
+    {U eta : EuclideanSpace ℝ (Fin n) → ℝ} {L Leta : NNReal} (hU : LipschitzWith L U)
+    (heta : LipschitzWith Leta eta) (C : ℝ) (hbound : ∀ x, ‖eta x‖ ≤ C)
+    (hnorm : (∫ x, Real.exp (-U x) ∂volume) = 1) (v : EuclideanSpace ℝ (Fin n)) :
+    Integrable (fun x => fderiv ℝ eta x v)
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U)) ∧
+      Integrable (fun x => eta x * fderiv ℝ U x v)
+          ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U)) ∧
+        (∫ x, fderiv ℝ eta x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U))) =
+          ∫ x,
+            eta x *
+              fderiv ℝ U x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U)) := by
   let mu : Measure (EuclideanSpace ℝ (Fin n)) := volume.tilted (-U)
   have hexp : Integrable (fun x => Real.exp (-U x)) volume :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
   let : IsProbabilityMeasure mu := isProbabilityMeasure_tilted hexp
   have hdf (F : EuclideanSpace ℝ (Fin n) → ℝ) {K : NNReal} (hF : LipschitzWith K F) (x) :
-      ‖fderiv ℝ F x v‖ ≤ (K : ℝ) * ‖v‖ :=
+    ‖fderiv ℝ F x v‖ ≤ (K : ℝ) * ‖v‖ :=
     ((fderiv ℝ F x).le_opNorm v).trans
       (mul_le_mul_of_nonneg_right (norm_fderiv_le_of_lipschitz ℝ hF) (norm_nonneg v))
-  have hdmeas (F : EuclideanSpace ℝ (Fin n) → ℝ) :
-      Measurable (fun x => fderiv ℝ F x v) :=
+  have hdmeas (F : EuclideanSpace ℝ (Fin n) → ℝ) : Measurable (fun x => fderiv ℝ F x v) :=
     (continuous_id.clm_apply continuous_const).measurable.comp (measurable_fderiv ℝ F)
   have hdet : Integrable (fun x => fderiv ℝ eta x v) mu :=
     (integrable_const ((Leta : ℝ) * ‖v‖)).mono' (hdmeas eta).aestronglyMeasurable
@@ -265,8 +274,9 @@ theorem integral_fderiv_tilted_eq_integral_mul_fderiv_of_bounded_lipschitz {n : 
     (integrable_const C).mono' heta.continuous.measurable.aestronglyMeasurable
       (ae_of_all _ hbound)
   have hedu : Integrable (fun x => eta x * fderiv ℝ U x v) mu := by
-    apply (het.norm.const_mul ((L : ℝ) * ‖v‖)).mono'
-      (heta.continuous.measurable.mul (hdmeas U)).aestronglyMeasurable
+    apply
+      (het.norm.const_mul ((L : ℝ) * ‖v‖)).mono'
+        (heta.continuous.measurable.mul (hdmeas U)).aestronglyMeasurable
     filter_upwards [] with x
     change ‖eta x * fderiv ℝ U x v‖ ≤ _
     rw [norm_mul]
@@ -274,14 +284,16 @@ theorem integral_fderiv_tilted_eq_integral_mul_fderiv_of_bounded_lipschitz {n : 
   obtain ⟨hwexp, hdexp⟩ := hasWeakDerivAlong_exp_neg_of_lipschitz hU v
   have hweta := hasWeakDerivAlong_of_lipschitz heta v
   have hetderiv (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
-      MemLp (fun x => fderiv ℝ eta x v) 2 (volume.restrict S) := by
+    MemLp (fun x => fderiv ℝ eta x v) 2 (volume.restrict S) := by
     let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
       isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
     apply MemLp.of_bound (hdmeas eta).aestronglyMeasurable ((Leta : ℝ) * ‖v‖)
     exact ae_of_all _ (hdf eta heta)
-  have hw := (hwexp.mul_of_locally_bounded hweta
-    (fun S hS => memLp_top_restrict_of_continuous (Real.continuous_exp.comp hU.continuous.neg) S hS)
-    (memLp_top_restrict_of_continuous heta.continuous) hdexp hetderiv).1
+  have hw :=
+    (hwexp.mul_of_locally_bounded hweta
+        (fun S hS =>
+          memLp_top_restrict_of_continuous (Real.continuous_exp.comp hU.continuous.neg) S hS)
+        (memLp_top_restrict_of_continuous heta.continuous) hdexp hetderiv).1
   have hleft : Integrable (fun x => Real.exp (-U x) * eta x) volume := by
     simpa only [Pi.neg_apply, smul_eq_mul] using (integrable_tilted_iff hexp eta).mp het
   have hright1 : Integrable (fun x => Real.exp (-U x) * (eta x * fderiv ℝ U x v)) volume := by
@@ -290,30 +302,38 @@ theorem integral_fderiv_tilted_eq_integral_mul_fderiv_of_bounded_lipschitz {n : 
   have hright2 : Integrable (fun x => Real.exp (-U x) * fderiv ℝ eta x v) volume := by
     simpa only [Pi.neg_apply, smul_eq_mul] using
       (integrable_tilted_iff hexp (fun x => fderiv ℝ eta x v)).mp hdet
-  have hprod : Integrable (fun x => (-Real.exp (-U x) * fderiv ℝ U x v) * eta x +
-      Real.exp (-U x) * fderiv ℝ eta x v) volume := by
+  have hprod :
+    Integrable
+      (fun x =>
+        (-Real.exp (-U x) * fderiv ℝ U x v) * eta x + Real.exp (-U x) * fderiv ℝ eta x v)
+      volume := by
     apply (hright1.neg.add hright2).congr
     filter_upwards [] with x
-    change -(Real.exp (-U x) * (eta x * fderiv ℝ U x v)) +
-      Real.exp (-U x) * fderiv ℝ eta x v = _
+    change
+      -(Real.exp (-U x) * (eta x * fderiv ℝ U x v)) + Real.exp (-U x) * fderiv ℝ eta x v = _
     ring
   have hz := integral_eq_zero_of_integrable_weak_derivative hw hleft hprod
-  have heq : (∫ x, (-Real.exp (-U x) * fderiv ℝ U x v) * eta x +
-      Real.exp (-U x) * fderiv ℝ eta x v ∂volume) =
+  have heq :
+    (∫ x,
+        (-Real.exp (-U x) * fderiv ℝ U x v) * eta x +
+          Real.exp (-U x) * fderiv ℝ eta x v ∂volume) =
       -(∫ x, Real.exp (-U x) * (eta x * fderiv ℝ U x v) ∂volume) +
         ∫ x, Real.exp (-U x) * fderiv ℝ eta x v ∂volume := by
     calc
-      _ = ∫ x, -(Real.exp (-U x) * (eta x * fderiv ℝ U x v)) +
-          Real.exp (-U x) * fderiv ℝ eta x v ∂volume := by
+      _ =
+          ∫ x,
+            -(Real.exp (-U x) * (eta x * fderiv ℝ U x v)) +
+              Real.exp (-U x) * fderiv ℝ eta x v ∂volume := by
         apply integral_congr_ae
         filter_upwards [] with x
         ring
-      _ = (∫ x, -(Real.exp (-U x) * (eta x * fderiv ℝ U x v)) ∂volume) +
-          ∫ x, Real.exp (-U x) * fderiv ℝ eta x v ∂volume :=
+      _ =
+          (∫ x, -(Real.exp (-U x) * (eta x * fderiv ℝ U x v)) ∂volume) +
+            ∫ x, Real.exp (-U x) * fderiv ℝ eta x v ∂volume :=
         integral_add hright1.neg hright2
       _ = _ := by rw [integral_neg]
   have htilt (k : EuclideanSpace ℝ (Fin n) → ℝ) :
-      (∫ x, k x ∂mu) = ∫ x, Real.exp (-U x) * k x ∂volume := by
+    (∫ x, k x ∂mu) = ∫ x, Real.exp (-U x) * k x ∂volume := by
     change (∫ x, k x ∂volume.tilted (-U)) = _
     rw [integral_tilted]
     simp only [Pi.neg_apply, hnorm, div_one, smul_eq_mul]

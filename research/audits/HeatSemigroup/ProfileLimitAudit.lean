@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent full-signature clients for Gaussian endpoint continuity and epsilon removal. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 set_option maxHeartbeats 800000
@@ -28,26 +32,25 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
   {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
-theorem integrated {β : V → ℝ} {C : ℝ}
-    (hβ : AEStronglyMeasurable β (ν : Measure V))
-    (hC : ∀ᵐ x ∂(ν : Measure V), |β x| ≤ C)
-    (hβ0 : ∀ᵐ x ∂(ν : Measure V), 0 ≤ β x)
-    (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U)
-    (f : Lp ℝ 2 (ν : Measure V))
-    (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) 1)
-    {t : ℝ} (ht : 0 < t) :
+theorem integrated {β : V → ℝ} {C : ℝ} (hβ : AEStronglyMeasurable β (ν : Measure V))
+    (hC : ∀ᵐ x ∂(ν : Measure V), |β x| ≤ C) (hβ0 : ∀ᵐ x ∂(ν : Measure V), 0 ≤ β x)
+    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ Set.univ U) (f : Lp ℝ 2 (ν : Measure V))
+    (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) 1) {t : ℝ} (ht : 0 < t) :
     let T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-    let P := Generated.apply T (hν.closedWeightedOperator_isClosed m _ hi)
-      (hν.dense_domain_closedWeightedOperator m _ hi)
+    let P :=
+      Generated.apply T (hν.closedWeightedOperator_isClosed m _ hi)
+        (hν.dense_domain_closedWeightedOperator m _ hi)
     let H : (adjointComp T).domain :=
-      ⟨P t f, Generated.mem_adjointComp_domain_apply_of_pos T
-        (hν.closedWeightedOperator_isClosed m _ hi) (hν.dense_domain_closedWeightedOperator m _ hi) f ht⟩
+      ⟨P t f,
+        Generated.mem_adjointComp_domain_apply_of_pos T
+          (hν.closedWeightedOperator_isClosed m _ hi)
+          (hν.dense_domain_closedWeightedOperator m _ hi) f ht⟩
     ∃ g : Lp ℝ 2 (ν : Measure V),
       (∀ᵐ x ∂(ν : Measure V), g x = profile (f x)) ∧
-      2 * t * (∫ x, β x * WeakGamma.apply (T ⟨_, H.2.2⟩) (T ⟨_, H.2.2⟩) x ∂(ν : Measure V)) ≤
-        (∫ x, β x * (profile (P t f x)) ^ 2 ∂(ν : Measure V)) -
-          ∫ x, β x * (P t g x) ^ 2 ∂(ν : Measure V) :=
+        2 * t * (∫ x, β x * WeakGamma.apply (T ⟨_, H.2.2⟩) (T ⟨_, H.2.2⟩) x ∂(ν : Measure V)) ≤
+          (∫ x, β x * (profile (P t f x)) ^ 2 ∂(ν : Measure V)) -
+            ∫ x, β x * (P t g x) ^ 2 ∂(ν : Measure V) :=
   exists_integral_gradient_sq_le_profile m hν hi hβ hC hβ0 hνU hU hconv f hf ht
 
 theorem pointwise     (hνU : (ν : Measure V) = m.tilted (-U))

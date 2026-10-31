@@ -1,14 +1,18 @@
-import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Algebra.Order.Chebyshev
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Tactic.NoncommRing
-import FunctionalInequalities.Analysis.Matrix.Trace.Power
+module
+
+public import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+public import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Algebra.Order.Chebyshev
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Tactic.NoncommRing
+public import FunctionalInequalities.Analysis.Matrix.Trace.Power
 
 /-!
 # Spectral trace positivity, Jordan domination and tensor comparison
 -/
+
+@[expose] public section
 
 open Matrix
 namespace FunctionalInequalities.Analysis
@@ -17,13 +21,19 @@ section JordanTrace
 
 /-! ### Positive spectral functions and trace energy of symmetric matrices
 
-Support for Letwin, arXiv:2607.24164v1, Theorem 2.5 (the extension from positive semidefinite to all symmetric `B`):
-a nonnegative real function of a symmetric matrix is positive semidefinite (`cfc_posSemidef_of_nonneg`, through the
-orthonormal spectral representation `cfc_eq_mul_diagonal_mul`); for positive semidefinite `P`, `N` and symmetric `H`
-the mixed trace `tr(P H N H)` is nonnegative (`trace_cross_nonneg`); a positive semidefinite weight makes the trace
+Support for Letwin, arXiv:2607.24164v1, Theorem 2.5 (the extension from positive semidefinite to all
+symmetric `B`):
+a nonnegative real function of a symmetric matrix is positive semidefinite
+(`cfc_posSemidef_of_nonneg`, through the
+orthonormal spectral representation `cfc_eq_mul_diagonal_mul`); for positive semidefinite `P`, `N`
+and symmetric `H`
+the mixed trace `tr(P H N H)` is nonnegative (`trace_cross_nonneg`); a positive semidefinite weight
+makes the trace
 energy `tr(B H B H)` of a symmetric `B` nonnegative (`trace_energy_nonneg`); and
-`tr((P − N) H (P − N) H) ≤ tr(P H P H) + tr(N H N H)` without commutation (`jordan_trace_domination`). Arbitrary
-finite index types, including the empty one. Not provided here: the measure extension, the moment map, Brascamp–Lieb
+`tr((P − N) H (P − N) H) ≤ tr(P H P H) + tr(N H N H)` without commutation
+(`jordan_trace_domination`). Arbitrary
+finite index types, including the empty one. Not provided here: the measure extension, the moment
+map, Brascamp–Lieb
 or Theorem 2.5 itself.
 -/
 
@@ -393,14 +403,16 @@ private lemma letwin_tensor_trace_identity {n : ℕ}
 /-- **Letwin's tensor comparison** (Letwin arXiv:2607.24164v1, (2.12), p. 10), in arbitrary
 coordinates: for a positive definite `H` (the Hessian `∇²φ(y)`), a symmetric `B` and a fully
 symmetric 3-tensor `T` (the third derivatives `∂_{abi}φ(y)`), with slices `(T_a)_{ij} = T a i j`,
-`∑_{a,b} (H⁻¹)_{ab} tr(B T_a B T_b) ≤ ∑_{i,j} (B H B)_{ij} ∑_{a,b,c,d} (H⁻¹)_{ac} (H⁻¹)_{bd} T_{abi} T_{cdj}`. -/
+`∑_{a,b} (H⁻¹)_{ab} tr(B T_a B T_b) ≤ ∑_{i,j} (B H B)_{ij} ∑_{a,b,c,d} (H⁻¹)_{ac} (H⁻¹)_{bd} T_{abi}
+T_{cdj}`. -/
 theorem letwin_tensor_comparison {n : ℕ} (H B : Matrix (Fin n) (Fin n) ℝ) (hH : H.PosDef)
-    (hB : B.IsHermitian) (T : Fin n → Fin n → Fin n → ℝ)
-    (hT₁ : ∀ a b c, T a b c = T b a c) (hT₂ : ∀ a b c, T a b c = T a c b) :
-    ∑ a, ∑ b, H⁻¹ a b * (B * Matrix.of (fun i j => T a i j) * B *
-        Matrix.of (fun i j => T b i j)).trace ≤
-      ∑ i, ∑ j, (B * H * B) i j *
-        ∑ a, ∑ b, ∑ c, ∑ d, H⁻¹ a c * H⁻¹ b d * T a b i * T c d j := by
+    (hB : B.IsHermitian) (T : Fin n → Fin n → Fin n → ℝ) (hT₁ : ∀ a b c, T a b c = T b a c)
+    (hT₂ : ∀ a b c, T a b c = T a c b) :
+    ∑ a,
+        ∑ b,
+          H⁻¹ a b *
+            (B * Matrix.of (fun i j => T a i j) * B * Matrix.of (fun i j => T b i j)).trace ≤
+      ∑ i, ∑ j, (B * H * B) i j * ∑ a, ∑ b, ∑ c, ∑ d, H⁻¹ a c * H⁻¹ b d * T a b i * T c d j := by
   classical
   have hHt : Hᵀ = H := letwin_real_transpose H hH.isHermitian
   have hBt : Bᵀ = B := letwin_real_transpose B hB
@@ -408,12 +420,9 @@ theorem letwin_tensor_comparison {n : ℕ} (H B : Matrix (Fin n) (Fin n) ℝ) (h
   obtain ⟨P, hP⟩ := letwin_psd_factor (H⁻¹) hInv
   have hcancel : H * (Pᵀ * P) = 1 := by
     rw [← hP]
-    exact Matrix.mul_nonsing_inv H
-      (isUnit_iff_ne_zero.mpr (ne_of_gt hH.det_pos))
-  let V : Fin n → Matrix (Fin n) (Fin n) ℝ :=
-    fun a => Matrix.of (fun i j => T a i j)
-  let S : Fin n → Matrix (Fin n) (Fin n) ℝ :=
-    fun k => ∑ a, (P k a) • V a
+    exact Matrix.mul_nonsing_inv H (isUnit_iff_ne_zero.mpr (ne_of_gt hH.det_pos))
+  let V : Fin n → Matrix (Fin n) (Fin n) ℝ := fun a => Matrix.of (fun i j => T a i j)
+  let S : Fin n → Matrix (Fin n) (Fin n) ℝ := fun k => ∑ a, (P k a) • V a
   have hSt (k : Fin n) : (S k)ᵀ = S k := by
     ext i j
     change (∑ a, (P k a) • V a) j i = (∑ a, (P k a) • V a) i j
@@ -432,21 +441,17 @@ theorem letwin_tensor_comparison {n : ℕ} (H B : Matrix (Fin n) (Fin n) ℝ) (h
     simp only [Matrix.transpose_mul, hBt, hHt, Matrix.mul_assoc]
   change (∑ a, ∑ b, H⁻¹ a b * (B * V a * B * V b).trace) ≤ _
   calc
-    (∑ a, ∑ b, H⁻¹ a b * (B * V a * B * V b).trace) =
-        ∑ k, (B * S k * B * S k).trace := by
+    (∑ a, ∑ b, H⁻¹ a b * (B * V a * B * V b).trace) = ∑ k, (B * S k * B * S k).trace := by
       symm
       simpa only [S, hP] using letwin_trace_weighted_slices P B B V
     _ ≤ ∑ k, ((B * H * B) * S k * (Pᵀ * P) * S k).trace := by
       apply Finset.sum_le_sum
       intro k _
       exact letwin_slice_comparison H B (S k) P hHt hBt (hSt k) hcancel
-    _ = ∑ a, ∑ c, (Pᵀ * P) a c *
-        ((B * H * B) * V a * (Pᵀ * P) * V c).trace :=
+    _ = ∑ a, ∑ c, (Pᵀ * P) a c * ((B * H * B) * V a * (Pᵀ * P) * V c).trace :=
       letwin_trace_weighted_slices P (B * H * B) (Pᵀ * P) V
-    _ = ∑ i, ∑ j, (B * H * B) i j *
-        ∑ a, ∑ b, ∑ c, ∑ d, H⁻¹ a c * H⁻¹ b d * T a b i * T c d j := by
-      simpa only [V, hP] using
-        (letwin_tensor_trace_identity (Pᵀ * P) (B * H * B) hMt T hT₂)
+    _ = ∑ i, ∑ j, (B * H * B) i j * ∑ a, ∑ b, ∑ c, ∑ d, H⁻¹ a c * H⁻¹ b d * T a b i * T c d j := by
+      simpa only [V, hP] using (letwin_tensor_trace_identity (Pᵀ * P) (B * H * B) hMt T hT₂)
 
 end TensorComparison
 

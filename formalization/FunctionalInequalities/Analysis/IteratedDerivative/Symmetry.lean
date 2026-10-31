@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Data.List.FinRange
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+public import Mathlib.Data.List.FinRange
 
 /-!
 # Permutation symmetry of raw iterated derivatives of real `C^∞` maps
@@ -11,6 +13,8 @@ real `C²` symmetry, hence under every permutation, and the list convention is e
 iterated Fréchet derivative, so `iteratedFDeriv ℝ m f x (h ∘ σ) = iteratedFDeriv ℝ m f x h`. No
 analytic, finite-dimensional, complete, Hilbert or measure premise; no tensor symmetry is assumed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -45,10 +49,13 @@ theorem directional_swap {f : E → F} (hf : ContDiff ℝ ∞ f) (hs : List E) (
     directional (v :: w :: hs) f = directional (w :: v :: hs) f := by
   funext x
   have hg := directional_contDiff hf hs
-  have he (u t : E) : directional (u :: t :: hs) f x = directional [u,t] (directional hs f) x := rfl
+  have he (u t : E) :
+    directional (u :: t :: hs) f x = directional [u, t] (directional hs f) x := rfl
   rw [he, he, directional_two hg, directional_two hg]
-  exact hg.contDiffAt.isSymmSndFDerivAt
-    (by simp only [minSmoothness_of_isRCLikeNormedField]; exact WithTop.coe_le_coe.mpr le_top) v w
+  exact
+    hg.contDiffAt.isSymmSndFDerivAt
+      (by simp only [minSmoothness_of_isRCLikeNormedField]; exact WithTop.coe_le_coe.mpr le_top)
+      v w
 
 /-- Full permutation symmetry follows from adjacent swaps; no tensor symmetry is a premise. -/
 theorem directional_perm {f : E → F} (hf : ContDiff ℝ ∞ f) {hs ks : List E}
@@ -69,11 +76,14 @@ theorem directional_ofFn {f : E → F} (hf : ContDiff ℝ ∞ f) (m : ℕ) (h : 
   | succ m IH =>
     rw [List.ofFn_succ]
     change fderiv ℝ (directional (List.ofFn (Fin.tail h)) f) x (h 0) = _
-    have he : directional (List.ofFn (Fin.tail h)) f =
-        fun y => iteratedFDeriv ℝ m f y (Fin.tail h) := funext (fun y => IH (Fin.tail h) y)
+    have he :
+      directional (List.ofFn (Fin.tail h)) f = fun y => iteratedFDeriv ℝ m f y (Fin.tail h) :=
+      funext (fun y => IH (Fin.tail h) y)
     rw [he]
-    exact ((hf.differentiable_iteratedFDeriv (m := m)
-      (by exact WithTop.coe_lt_coe.mpr (ENat.natCast_lt_top m)) x).iteratedFDeriv_succ_apply_left').symm
+    exact
+      ((hf.differentiable_iteratedFDeriv (m := m)
+            (by exact WithTop.coe_lt_coe.mpr (ENat.natCast_lt_top m))
+            x).iteratedFDeriv_succ_apply_left').symm
 
 /-- Raw real C∞ iterated derivatives are symmetric under every slot permutation. -/
 theorem iteratedFDeriv_perm {f : E → F} (hf : ContDiff ℝ ∞ f) (m : ℕ)

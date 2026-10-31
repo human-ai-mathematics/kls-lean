@@ -1,9 +1,11 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import Mathlib.Probability.ConditionalProbability
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.CEK.BoundedPrimal
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import Mathlib.Probability.ConditionalProbability
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.KLS.CEK.BoundedPrimal
 
 /-!
 # Audit: the bounded-source normalized primal for the uniform law on `[-√3, √3]`
@@ -21,6 +23,8 @@ and `isotropic_unifSym` repeat those of `SingletonAllocationAudit.lean` (namespa
 `BKLThirdCumulantWitness` there, `LetwinBoundedPrimalWitness` here); no other block of that audit is
 copied.
 -/
+
+@[expose] public section
 
 noncomputable section
 

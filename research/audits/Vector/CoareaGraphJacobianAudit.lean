@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Graph.CoareaJacobian
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Real.Pi.Bounds
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.CoareaJacobian
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Real.Pi.Bounds
 
 /-!
 # Scope audit for the codimension-`m` fibre Jacobian
@@ -36,6 +38,8 @@ the intended meaning of the target.  The measurability, additivity, comparison a
 obligations and the normalized graph obligation pair their measures consistently and are not
 affected.  The route statements file is left **byte-unchanged**.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -142,8 +146,8 @@ theorem necessity :
       finrank ℝ (Zᗮ : Submodule ℝ E) ≠ finrank ℝ ℝ ∧
       coareaJacobian L
         ≠ LinearMap.normDet
-            ((L ∘L (Zᗮ).subtypeₗᵢ.toContinuousLinearMap : (Zᗮ : Submodule ℝ E) →L[ℝ] ℝ)
-              : (Zᗮ : Submodule ℝ E) →ₗ[ℝ] ℝ)
+            ((L ∘L (Zᗮ).subtypeₗᵢ.toContinuousLinearMap : (Zᗮ : Submodule ℝ E) →L[ℝ] ℝ) :
+              (Zᗮ : Submodule ℝ E) →ₗ[ℝ] ℝ)
           * LinearMap.normDet
             ((graphMapLinear Z.subtypeₗᵢ (Zᗮ).subtypeₗᵢ A : Z →ₗ[ℝ] E)) := by
   classical

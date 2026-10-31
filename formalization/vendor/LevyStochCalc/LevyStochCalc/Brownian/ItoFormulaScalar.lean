@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoQuadVarRiemann
-import LevyStochCalc.Brownian.ItoMartingaleRiemann
-import LevyStochCalc.Brownian.ItoFormula
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoQuadVarRiemann
+public import LevyStochCalc.Brownian.ItoMartingaleRiemann
+public import LevyStochCalc.Brownian.ItoFormula
 
 /-!
 # Itô's formula for a scalar Itô process
@@ -27,6 +31,8 @@ bounds the four resulting errors, all of which vanish as the mesh does.
   `L¹` defect of Itô's formula on every uniform grid.
 * `LevyStochCalc.Brownian.Ito.IsItoVersion.itoFormula` — Itô's formula.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

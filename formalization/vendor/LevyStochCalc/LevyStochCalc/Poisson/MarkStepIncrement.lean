@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.MarkStepWeight
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.MarkStepWeight
 
 /-!
 # Dyadic mark-step integrands and their weighted increments
@@ -16,6 +21,8 @@ integral and the integrand unchanged. The increment of a mark-step integrand ove
 weighted by a bounded measurable `w`, is itself a mark-step integrand on the increment grid
 `TimeGrid.incr` (`MarkStep.incr`), which gives the `L²` isometry for such increments.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -222,9 +229,9 @@ noncomputable def incr (G : MarkStep Ω E ν g) (w : Ω → ℝ) (hw : ∃ C : �
         (abs_nonneg _) (abs_nonneg _)
   ξ_measurable := fun i k => by
     by_cases h : i = 0
-    · simp only [h, if_true]
+    · simp only [h, ite_true]
       exact measurable_const
-    · simp only [h, if_false]
+    · simp only [h, ite_false]
       exact hwm.mul (G.ξ_measurable _ k)
 
 variable (N : PoissonRandomMeasure P ν) {ℱ : Filtration ℝ ‹MeasurableSpace Ω›} (hℱ :
@@ -240,7 +247,7 @@ lemma Adapted.incr {G : MarkStep Ω E ν g} (hG : G.Adapted ℱ)
   · subst h0
     change @StronglyMeasurable Ω ℝ _ (ℱ ((g.incr s t hs hst).p 0))
       (fun ω => if (0 : ℕ) = 0 then (0 : ℝ) else w ω * G.ξ (g.startIndex s + (0 - 1)) k ω)
-    simp only [if_true]
+    simp only [ite_true]
     exact stronglyMeasurable_const
   · obtain ⟨j, rfl⟩ : ∃ j, i = j + 1 := ⟨i - 1, by omega⟩
     have hi' : j + 1 < g.clampIndex t - g.startIndex s + 1 := hi
@@ -248,7 +255,7 @@ lemma Adapted.incr {G : MarkStep Ω E ν g} (hG : G.Adapted ℱ)
     have hlt := g.lt_of_lt_clampIndex hj
     change @StronglyMeasurable Ω ℝ _ (ℱ ((g.incr s t hs hst).p (j + 1)))
       (fun ω => if j + 1 = 0 then (0 : ℝ) else w ω * G.ξ (g.startIndex s + (j + 1 - 1)) k ω)
-    simp only [Nat.succ_ne_zero, if_false, Nat.add_sub_cancel]
+    simp only [Nat.succ_ne_zero, ite_false, Nat.add_sub_cancel]
     rw [g.incr_p_succ]
     have hξ := hG (g.startIndex s + j) hlt.1 k
     rcases Nat.eq_zero_or_pos j with hz | hz
@@ -276,10 +283,10 @@ lemma eval_incr_eq (σ : ℝ) (e : E) (ω : Ω) :
       * ∑ k, (if i = 0 then (0 : ℝ) else w ω * G.ξ (g.startIndex s + (i - 1)) k ω)
         * (G.B k).indicator (fun _ => (1 : ℝ)) e = _
   rw [Finset.sum_range_succ']
-  simp only [if_true, zero_mul, Finset.sum_const_zero, mul_zero, add_zero]
+  simp only [ite_true, zero_mul, Finset.sum_const_zero, mul_zero, add_zero]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [g.incr_p_succ, g.incr_p_succ]
-  simp only [Nat.succ_ne_zero, if_false, Nat.add_sub_cancel]
+  simp only [Nat.succ_ne_zero, ite_false, Nat.add_sub_cancel]
 
 /-- The integrand of the weighted increment. -/
 lemma eval_incr (σ : ℝ) (e : E) (ω : Ω) :
@@ -356,10 +363,10 @@ lemma full_incr_eq (ω : Ω) :
         * N.compensated (Set.Ioc ((g.incr s t hs hst).p i) ((g.incr s t hs hst).p (i + 1))
           ×ˢ G.B k) ω = _
   rw [Finset.sum_range_succ']
-  simp only [if_true, zero_mul, Finset.sum_const_zero, add_zero]
+  simp only [ite_true, zero_mul, Finset.sum_const_zero, add_zero]
   refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
   rw [g.incr_p_succ, g.incr_p_succ]
-  simp only [Nat.succ_ne_zero, if_false, Nat.add_sub_cancel]
+  simp only [Nat.succ_ne_zero, ite_false, Nat.add_sub_cancel]
 
 /-- The integral of the weighted increment over its horizon is the weighted increment of the
 integral (almost surely: the piece containing `s` is split at `s`). -/
@@ -462,9 +469,9 @@ theorem integral_weight_incr_sq (hG : G.Adapted ℱ)
   rw [← Set.inter_eq_self_of_subset_right hsub, ← setIntegral_indicator measurableSet_Ioc]
   refine setIntegral_congr_fun measurableSet_Icc fun σ _ => ?_
   by_cases hσ : σ ∈ Set.Ioc s t
-  · rw [Set.indicator_of_mem hσ, if_pos (Set.mem_Ioc.1 hσ)]
+  · rw [Set.indicator_of_mem hσ, ite_eq_left (Set.mem_Ioc.1 hσ)]
     ring
-  · rw [Set.indicator_of_notMem hσ, if_neg (fun h => hσ (Set.mem_Ioc.2 h))]
+  · rw [Set.indicator_of_notMem hσ, ite_eq_right (fun h => hσ (Set.mem_Ioc.2 h))]
     ring
 
 end Increment

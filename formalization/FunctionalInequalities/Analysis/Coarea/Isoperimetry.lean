@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Coarea.Smooth
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Smooth
 
 /-! # Weighted coarea for a `C¹` Lipschitz function
 
@@ -11,6 +13,8 @@ The globally Lipschitz formula is proved in `Analysis/Coarea/Lipschitz.lean` fro
 C¹ pieces and Whitney extension; `Analysis/Coarea/LocallyLipschitz.lean` gives its local
 extension. The sharp finite-regularity Sard theorem is in `Analysis/Sard/Sharp.lean`.
 These coarea formulas concern almost-everywhere slice measures, not critical-value nullity. -/
+
+@[expose] public section
 
 noncomputable section
 

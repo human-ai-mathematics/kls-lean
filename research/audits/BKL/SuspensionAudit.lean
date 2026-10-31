@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Basic
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Basic
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit of the convexity step of BKL Proposition 7.1
 
@@ -7,6 +9,8 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, equations (109)–(110), p
 The client retains the finite-copy potential and the Hessian condition. It also exercises a
 non-affine quadratic perturbation at equality in (110). No claim of Proposition 7.1 is made.
 -/
+
+@[expose] public section
 
 noncomputable section
 

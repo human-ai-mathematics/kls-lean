@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Integral
-import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Integral
+public import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
 
 /-! # The local codimension-`m` coarea equality on a level chart
 
@@ -22,12 +24,12 @@ Tonelli in the level variable joins them.  The result,
 
 with an arbitrary measurable `ℝ≥0∞` weight and no finiteness hypothesis anywhere.
 
-**This is a local statement on one chart, not the codimension-`m` regular coarea formula.**  Two
-things are still missing for that: the countable cover of a regular open set by such charts with the
-disjoint patching, and the codimension-`m` weighted slice measurability that makes the outer
-integral well posed as an a.e. statement (the scalar analogues are the assembly in
-`Analysis/Coarea/Regular.lean` and `Analysis/Hausdorff/Slice/OpenMeasurable.lean`).
+This module proves the equality on one chart. `Analysis/Vector/Coarea/Regular.lean` supplies the
+countable regular-open-set assembly and weighted slice measurability. The scalar counterparts
+are `Analysis/Coarea/Regular.lean` and `Analysis/Hausdorff/Slice/OpenMeasurable.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -200,23 +202,36 @@ theorem exists_vector_coarea_neighborhood_measurable {u : V → W} {O : Set V} (
     exact h
 
 
-/-- **Local regular coarea in codimension `m`.**  Every point where the differential is surjective
+/--
+**Local regular coarea in codimension `m`.**  Every point where the differential is surjective
 has an open neighbourhood on **every** Borel subset of which the coarea equality holds, for
 **every** measurable `ℝ≥0∞` weight; the neighbourhood is independent of the weight.  The surface
 measure is the normalized Hausdorff measure of the codimension, `finrank V - finrank W`.
 
-This is the codimension-`m` analogue of `KLS.exists_regular_coarea_neighborhood`.  The stronger local theorem above also supplies weighted slice measurability.
+This is the codimension-`m` analogue of `KLS.exists_regular_coarea_neighborhood`.  The stronger
+local theorem above also supplies weighted slice measurability.
 The countable disjoint patching into the regular-domain coarea theorem is in
 `Analysis/Vector/Coarea/Regular.lean`. -/
 theorem exists_vector_coarea_neighborhood {u : V → W} {O : Set V} (hO : IsOpen O)
     (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O)
     (hreg : coareaJacobian (fderiv ℝ u x₀) ≠ 0) :
-    ∃ N : Set V, IsOpen N ∧ x₀ ∈ N ∧ N ⊆ O ∧
-      ∀ S : Set V, MeasurableSet S → S ⊆ N → ∀ g : V → ℝ≥0∞, Measurable g →
-        ∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
-          = ∫⁻ t, ∫⁻ x in S ∩ {x : V | u x = t}, g x
-              ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))
-              ∂(volume : Measure W) := by
+    ∃ N : Set V,
+      IsOpen N ∧
+        x₀ ∈ N ∧
+          N ⊆ O ∧
+            ∀ S : Set V,
+              MeasurableSet S →
+                S ⊆ N →
+                  ∀ g : V → ℝ≥0∞,
+                    Measurable g →
+                      ∫⁻ x in S,
+                          ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) *
+                            g x ∂(volume : Measure V) =
+                        ∫⁻ t,
+                          ∫⁻ x in S ∩ {x : V | u x = t},
+                            g
+                              x ∂(KLS.hausdorffNormalized V
+                              (finrank ℝ V - finrank ℝ W)) ∂(volume : Measure W) := by
   obtain ⟨N, hN, hxN, hNO, h⟩ := exists_vector_coarea_neighborhood_measurable hO hu hx₀ hreg
   exact ⟨N, hN, hxN, hNO, fun S hS hSN g hg => (h S hS hSN g hg).2⟩
 end FunctionalInequalities.Analysis

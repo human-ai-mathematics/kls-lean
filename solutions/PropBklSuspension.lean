@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.TaylorBound
+module
+
+public import FunctionalInequalities.KLS.BKL.TaylorBound
 
 /-!
 # Lean certificate: `prop:bkl-suspension`
@@ -10,7 +12,8 @@ every isotropic regular log-concave `μ` on `ℝⁿ` satisfies `|T_d f|² ≤ 2b
 `f ∈ L²(μ)`.
 
 The certificate states it in the source form: the universal cumulant hypothesis is
-`Suspension.CumulantBound d b` (`Σ_J κ^ν_{d+1}(u, e_{J 1}, …, e_{J d})² ≤ b |u|²` for every isotropic
+`Suspension.CumulantBound d b` (`Σ_J κ^ν_{d+1}(u, e_{J 1}, …, e_{J d})² ≤ b |u|²` for every
+isotropic
 log-concave `ν` on every `EuclideanSpace ℝ (Fin m)` and every `u`), regularity is
 `KLS.RegularPotential V a b'` (BKL (12)) with the law `hV.law`, isotropy is `KLS.Isotropic`, and
 `T_d f` is measured in the Hilbert–Schmidt norm of its coefficient array in the standard basis.
@@ -21,6 +24,8 @@ The proof follows the source: the suspension `(S, X₁, …, X_N)` with `N` chos
 isotropy and log-concavity, the mixed cumulants (111)–(112), the Hilbert–Schmidt step and `β → ∞`
 give (113) for smooth normalized `f`; density and the affine decomposition give (107).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -59,10 +64,11 @@ theorem two {b : ℝ} (hb : 0 < b) (hcb : CumulantBound 2 b) {n : ℕ}
   exact h
 
 /--
-info: 'Solutions.PropBklSuspension.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.PropBklSuspension.certificate' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.PropBklSuspension.certificate
+  #print axioms Solutions.PropBklSuspension.certificate
 
 /--
 info: 'Solutions.PropBklSuspension.two' depends on axioms: [propext, Classical.choice, Quot.sound]

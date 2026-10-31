@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.Analysis.Convex.Caffarelli.Sublevel
-import FunctionalInequalities.Analysis.Convex.TruncatedConjugate
+module
+
+public import FunctionalInequalities.Probability.Transport
+public import FunctionalInequalities.Analysis.Convex.Caffarelli.Sublevel
+public import FunctionalInequalities.Analysis.Convex.TruncatedConjugate
 
 /-! # MomentRegularity in convex Monge--Ampere analysis
 
@@ -10,6 +12,8 @@ The declarations retain their given-source hypotheses; domain contact
 rigidity and moment-source regularity have separate consumers.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 section MomentStrictConvexity
@@ -17,7 +21,9 @@ section MomentStrictConvexity
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! **Caffarelli's strict convexity** for moment-map potentials: a convex potential whose gradient pushes a measure with bounded density forward to one with density bounded above and below on a convex body is strictly convex. -/
+/-! **Caffarelli's strict convexity** for moment-map potentials: a convex potential whose gradient
+pushes a measure with bounded density forward to one with density bounded above and below on a
+convex body is strictly convex. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -109,7 +115,8 @@ section MomentC1
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! **The moment-map potential is C¹**: strict convexity of the conjugate gives differentiability of the potential. -/
+/-! **The moment-map potential is C¹**: strict convexity of the conjugate gives differentiability of
+the potential. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -147,49 +154,44 @@ variable {E : Type*}
 set_option maxHeartbeats 800000 in
 /-- **The moment potential is `C¹`**: a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient
 pushes
-`e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous) has exactly
+`e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous)
+has exactly
 one subgradient at every point, hence is continuously differentiable. -/
-theorem contDiff_one_of_map_gradient
-    [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
-    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
-    {K : Set E} (hK : IsCompact K) (hKc : Convex ℝ K) (hKint : (interior K).Nonempty)
-    {V : E → ℝ} (hV : Continuous V)
-    (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) =
-      (volume : Measure E).withDensity (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p)))) :
+theorem contDiff_one_of_map_gradient [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
+    [BorelSpace E] {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
+    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1) {K : Set E} (hK : IsCompact K)
+    (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) {V : E → ℝ} (hV : Continuous V)
+    (hmap :
+      ((volume : Measure E).tilted (-u)).map (gradient u) =
+        (volume : Measure E).withDensity
+          (K.indicator fun p => ENNReal.ofReal (Real.exp (-V p)))) :
     ContDiff ℝ 1 u := by
   classical
   have hstrict : StrictConvexOn ℝ univ u :=
-    strictConvexOn_of_map_gradient hu hconv hnorm hK hKc
-      (hKint.mono interior_subset) hV hmap
-  let ρ : E → ℝ≥0∞ :=
-    K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))
+    strictConvexOn_of_map_gradient hu hconv hnorm hK hKc (hKint.mono interior_subset) hV hmap
+  let ρ : E → ℝ≥0∞ := K.indicator fun p => ENNReal.ofReal (Real.exp (-V p))
   let w : E → ℝ≥0∞ := fun x => ENNReal.ofReal (Real.exp (-u x))
-  have hρ : Measurable ρ :=
-    hV.measurable.neg.exp.ennreal_ofReal.indicator hK.measurableSet
-  have hw : Measurable w :=
-    hu.continuous.measurable.neg.exp.ennreal_ofReal
+  have hρ : Measurable ρ := hV.measurable.neg.exp.ennreal_ofReal.indicator hK.measurableSet
+  have hw : Measurable w := hu.continuous.measurable.neg.exp.ennreal_ofReal
   have hgrad : Measurable (gradient u) :=
-    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp
-      (measurable_fderiv ℝ u)
+    (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp (measurable_fderiv ℝ u)
   have htilt : (volume : Measure E).tilted (-u) = volume.withDensity w := by
-    change (volume : Measure E).withDensity
-      (fun x => ENNReal.ofReal
-        (Real.exp (-u x) / ∫ y, Real.exp (-u y) ∂(volume : Measure E))) =
-      volume.withDensity w
+    change
+      (volume : Measure E).withDensity
+          (fun x =>
+            ENNReal.ofReal (Real.exp (-u x) / ∫ y, Real.exp (-u y) ∂(volume : Measure E))) =
+        volume.withDensity w
     simp only [hnorm, div_one, w]
-  have hmap' :
-      ((volume : Measure E).withDensity w).map (gradient u) =
-        volume.withDensity ρ := by
+  have hmap' : ((volume : Measure E).withDensity w).map (gradient u) = volume.withDensity ρ := by
     rw [← htilt]
     exact hmap
   have hμK : ∀ᵐ p ∂(volume : Measure E).withDensity ρ, p ∈ K := by
     apply (ae_withDensity_iff hρ).2
-    exact Filter.Eventually.of_forall fun p hp => by
-      by_contra h
-      exact hp (Set.indicator_of_notMem h _)
-  have hνK :
-      ∀ᵐ x ∂(volume : Measure E).withDensity w, gradient u x ∈ K := by
+    exact
+      Filter.Eventually.of_forall fun p hp => by
+        by_contra h
+        exact hp (Set.indicator_of_notMem h _)
+  have hνK : ∀ᵐ x ∂(volume : Measure E).withDensity w, gradient u x ∈ K := by
     apply ae_of_ae_map hgrad.aemeasurable
     rw [hmap']
     exact hμK
@@ -200,14 +202,12 @@ theorem contDiff_one_of_map_gradient
   have hsubK : ∀ x p, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) → p ∈ K := by
     intro x p hp
     exact subgradient_mem_of_ae_gradient_mem hu hconv hK.isClosed hKc hae hp
-  have hsubint : ∀ x p, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) →
-      p ∈ interior K := by
+  have hsubint : ∀ x p, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) → p ∈ interior K := by
     intro x p hp
     exact subgradient_mem_interior_of_strictConvexOn hstrict hKc hKint hsubK hp
   obtain ⟨D, hD⟩ := hK.exists_bound_of_continuousOn hV.continuousOn
-  have hρK : ∀ p ∈ K,
-      ENNReal.ofReal (Real.exp (-D)) ≤ ρ p ∧
-        ρ p ≤ ENNReal.ofReal (Real.exp D) := by
+  have hρK :
+    ∀ p ∈ K, ENNReal.ofReal (Real.exp (-D)) ≤ ρ p ∧ ρ p ≤ ENNReal.ofReal (Real.exp D) := by
     intro p hp
     have hbound : -D ≤ V p ∧ V p ≤ D :=
       abs_le.mp (by simpa only [Real.norm_eq_abs] using hD p hp)
@@ -225,47 +225,48 @@ theorem contDiff_one_of_map_gradient
   let f : E → ℝ := fun p => truncatedConjugate u M p - ⟪p, xc⟫ + u xc
   have hspec := truncatedConjugate_centered_spec hconv hxc
   have hfnonneg : ∀ p, 0 ≤ f p := hspec.1
-  have hfzero : ∀ p, f p = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y :=
-    hspec.2.1
+  have hfzero : ∀ p, f p = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y := hspec.2.1
   have hfcompact : ∀ R : ℝ, IsCompact {p | f p ≤ R} := hspec.2.2
-  have hfeq :
-      f = fun p => truncatedConjugate u M p - (⟪xc, p⟫ + (-u xc)) := by
+  have hfeq : f = fun p => truncatedConjugate u M p - (⟪xc, p⟫ + (-u xc)) := by
     funext p
     dsimp only [f]
     rw [real_inner_comm p xc]
     ring
   have hfconv : ConvexOn ℝ univ f := by
     rw [hfeq]
-    exact (convexOn_truncatedConjugate hu.continuous hM).sub
-      (((innerₗ E xc).concaveOn convex_univ).add_const (-u xc))
-  have hfcont : Continuous f :=
-    continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hfconv)
-  let A : Set E := interior K ∩
-    {p | ∀ x ∈ closedBall (0 : E) M,
-      truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M}
+    exact
+      (convexOn_truncatedConjugate hu.continuous hM).sub
+        (((innerₗ E xc).concaveOn convex_univ).add_const (-u xc))
+  have hfcont : Continuous f := continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hfconv)
+  let A : Set E :=
+    interior K ∩
+      {p | ∀ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M}
   have hAopen : IsOpen A :=
-    isOpen_interior.inter
-      (isOpen_setOf_truncatedConjugate_maximizer_lt hu.continuous hM)
+    isOpen_interior.inter (isOpen_setOf_truncatedConjugate_maximizer_lt hu.continuous hM)
   have hzeroA : ∀ p, f p = 0 → p ∈ A := by
     intro p hp
     have hpsub := (hfzero p).mp hp
     refine ⟨hsubint xc p hpsub, ?_⟩
     intro x hx heq
-    have hxxc :=
-      eq_of_truncatedConjugate_eq_of_subgradient hstrict hxc hpsub hx heq
+    have hxxc := eq_of_truncatedConjugate_eq_of_subgradient hstrict hxc hpsub hx heq
     rw [hxxc]
     exact hxc
   obtain ⟨R, hR, hRA⟩ :=
     exists_pos_sublevel_subset_of_zero_locus_subset hfcont hfnonneg (hfcompact 1) hAopen hzeroA
   obtain ⟨a, b, ha, hab⟩ :=
-    exists_inverse_subgradient_volume_bounds hu hconv hnorm hmap hρ rfl
-      hK.isClosed hKc (Real.exp_pos (-D)) hρK M
+    exists_inverse_subgradient_volume_bounds hu hconv hnorm hmap hρ rfl hK.isClosed hKc
+      (Real.exp_pos (-D)) hρK M
   have hB :
-      ∀ Q : Set E, IsCompact Q → Q ⊆ {p | f p < R} →
-        ∃ a b, 0 < a ∧
-          ∀ G : Set E, IsOpen G → closure G ⊆ Q →
-            ENNReal.ofReal a * volume G ≤ volume (subgradientImage f G) ∧
-              volume (subgradientImage f G) ≤ ENNReal.ofReal b * volume G := by
+    ∀ Q : Set E,
+      IsCompact Q →
+        Q ⊆ {p | f p < R} →
+          ∃ a b,
+            0 < a ∧
+              ∀ G : Set E,
+                IsOpen G →
+                  closure G ⊆ Q →
+                    ENNReal.ofReal a * volume G ≤ volume (subgradientImage f G) ∧
+                      volume (subgradientImage f G) ≤ ENNReal.ofReal b * volume G := by
     intro Q _ hQR
     refine ⟨a, b, ha, ?_⟩
     intro G hG hGQ
@@ -275,13 +276,10 @@ theorem contDiff_one_of_map_gradient
       exact hRA (show f p ≤ R from hpR.le)
     have hGK : G ⊆ K := fun p hp => interior_subset (hGA hp).1
     have hmax :
-        ∀ p ∈ G, ∀ x ∈ closedBall (0 : E) M,
-          truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M := by
+      ∀ p ∈ G, ∀ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M := by
       intro p hp
       exact (hGA hp).2
-    have hinv :
-        {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ⊆
-          closedBall (0 : E) M := by
+    have hinv : {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} ⊆ closedBall (0 : E) M := by
       rintro x ⟨p, hpG, hpx⟩
       obtain ⟨z, hz, heq⟩ := (exists_truncatedConjugate_eq hu.continuous hM p).1
       have hzlt : ‖z‖ < M := hmax p hpG z hz heq
@@ -291,8 +289,7 @@ theorem contDiff_one_of_map_gradient
       have hxz : x = z := eq_of_strictConvexOn_of_support hstrict hpx hpz
       exact hxz.symm ▸ hz
     have hvol :
-        volume (subgradientImage f G) =
-          volume {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
+      volume (subgradientImage f G) = volume {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
       rw [hfeq, volume_subgradientImage_sub_inner_add_const]
       rw [subgradientImage_truncatedConjugate_eq hu.continuous hstrict hM hmax]
     rw [hvol]
@@ -313,4 +310,3 @@ end InnerProduct
 end FunctionalInequalities.Analysis
 
 end MomentC1
-

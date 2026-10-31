@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein
 
 /-!
 # Weak trace energy retention audit
@@ -9,6 +11,8 @@ conservativity, weak trace contraction and trace-quadratic cutoff testing, whose
 private in `KLS/CEK/MomentRegularity/TraceStein.lean`. Each step calls the immediately higher one;
 each statement restates the corresponding property in full.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -53,7 +57,8 @@ theorem weak_stein_coupling_retains_weighted_pairing_contract {n : ℕ} (hn : 0 
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -167,11 +172,13 @@ theorem weak_stein_coupling_retains_weighted_pairing_contract {n : ℕ} (hn : 0 
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -199,10 +206,12 @@ theorem weak_stein_coupling_retains_weighted_pairing_contract {n : ℕ} (hn : 0 
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *
@@ -263,10 +272,13 @@ theorem weak_stein_coupling_retains_weighted_pairing_contract {n : ℕ} (hn : 0 
       ∀ (eta : EuclideanSpace ℝ (Fin n) → ℝ) (Leta : NNReal) (C : ℝ),
         LipschitzWith Leta eta → (∀ x, ‖eta x‖ ≤ C) →
         ∀ v : EuclideanSpace ℝ (Fin n),
-        Integrable (fun x => fderiv ℝ eta x v) ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
-        Integrable (fun x => eta x * fderiv ℝ u x v) ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+        Integrable (fun x => fderiv ℝ eta x v) ((volume : Measure (EuclideanSpace ℝ (Fin
+          n))).tilted (-u)) ∧
+        Integrable (fun x => eta x * fderiv ℝ u x v) ((volume : Measure (EuclideanSpace ℝ (Fin
+          n))).tilted (-u)) ∧
         (∫ x, fderiv ℝ eta x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) =
-          ∫ x, eta x * fderiv ℝ u x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) := by
+          ∫ x, eta x * fderiv ℝ u x v ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted
+            (-u)) := by
   obtain ⟨u, L, LF, T, hOld, _hStein⟩ := exists_regular_moment_weak_stein_coupling
     hn hκ hK hKc hKint hW hstrong μ hμ hiso
   exact ⟨u, L, LF, T, hOld⟩
@@ -300,7 +312,8 @@ theorem weighted_pairing_retains_symmetric_trace_contract {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -414,11 +427,13 @@ theorem weighted_pairing_retains_symmetric_trace_contract {n : ℕ} (hn : 0 < n)
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -446,10 +461,12 @@ theorem weighted_pairing_retains_symmetric_trace_contract {n : ℕ} (hn : 0 < n)
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *
@@ -540,7 +557,8 @@ theorem weak_symmetric_trace_retains_psd_theorem25_contract {n : ℕ} (hn : 0 < 
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -654,11 +672,13 @@ theorem weak_symmetric_trace_retains_psd_theorem25_contract {n : ℕ} (hn : 0 < 
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -686,10 +706,12 @@ theorem weak_symmetric_trace_retains_psd_theorem25_contract {n : ℕ} (hn : 0 < 
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *
@@ -782,7 +804,8 @@ theorem weak_theorem25_retains_trace_energy_contract {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -896,11 +919,13 @@ theorem weak_theorem25_retains_trace_energy_contract {n : ℕ} (hn : 0 < n)
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -928,10 +953,12 @@ theorem weak_theorem25_retains_trace_energy_contract {n : ℕ} (hn : 0 < n)
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *
@@ -1019,7 +1046,8 @@ theorem weak_trace_energy_retains_conservativity_contract {n : ℕ} (hn : 0 < n)
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -1133,11 +1161,13 @@ theorem weak_trace_energy_retains_conservativity_contract {n : ℕ} (hn : 0 < n)
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -1165,10 +1195,12 @@ theorem weak_trace_energy_retains_conservativity_contract {n : ℕ} (hn : 0 < n)
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *
@@ -1246,7 +1278,8 @@ theorem weak_trace_conservativity_retains_contraction_contract {n : ℕ} (hn : 0
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -1360,11 +1393,13 @@ theorem weak_trace_conservativity_retains_contraction_contract {n : ℕ} (hn : 0
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -1392,10 +1427,12 @@ theorem weak_trace_conservativity_retains_contraction_contract {n : ℕ} (hn : 0
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *
@@ -1462,7 +1499,8 @@ theorem weak_trace_contraction_retains_trace_cutoff_contract {n : ℕ} (hn : 0 <
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -1576,11 +1614,13 @@ theorem weak_trace_contraction_retains_trace_cutoff_contract {n : ℕ} (hn : 0 <
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) ∧
@@ -1608,10 +1648,12 @@ theorem weak_trace_contraction_retains_trace_cutoff_contract {n : ℕ} (hn : 0 <
             (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i j)).trace)
+            MemLp (fun x => 2 * (B * hessianMatrix u x * B * (Matrix.of fun i j => T x k i
+              j)).trace)
               2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
         ∀ r : ℝ, 1 ≤ r →
-        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x * Real.exp (-u x))
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace * Lχ r x *
+          Real.exp (-u x))
           (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
         Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
           (2 * (B * hessianMatrix u x * B * (Matrix.of fun a b => T x i a b)).trace) *

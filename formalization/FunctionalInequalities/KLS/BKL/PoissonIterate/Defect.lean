@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
-import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
+public import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 
 /-!
 # The defects of the BKL iterates: (47), Lemma 3.4, Corollary 3.5 and Lemma 3.2
@@ -52,6 +54,8 @@ These are statements about `L²` classes in the operator domain, not about the s
 `𝒜`; the weak Hessian is taken in the fixed standard orthonormal basis. Lemma 3.3,
 Lemmas 3.8–3.9 and Theorem 3.1 are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

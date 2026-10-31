@@ -1,17 +1,19 @@
-import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
-import FunctionalInequalities.Analysis.Operator.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
-import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
-import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Analysis.Calculus.Deriv.Inv
-import Mathlib.Analysis.Convex.Mul
-import Mathlib.LinearAlgebra.Determinant
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
+public import FunctionalInequalities.Analysis.Operator.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Diffusion
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.Analysis.Calculus.Deriv.Inv
+public import Mathlib.Analysis.Convex.Mul
+public import Mathlib.LinearAlgebra.Determinant
 
 /-!
 # Audit: inverse Hessian (2.5), Jacobi, and the Monge–Ampère derivatives (2.4), (2.6)
@@ -39,7 +41,8 @@ theorem gradient_exp (x : ℝ) : gradient Real.exp x = Real.exp x := by
   rw [(Real.hasDerivAt_exp x).hasFDerivAt.fderiv] at h
   simpa [Real.inner_apply] using h
 
-theorem hessianOperator_exp (x : ℝ) : hessianOperator Real.exp x = Real.exp x • (1 : ℝ →L[ℝ] ℝ) := by
+theorem hessianOperator_exp (x : ℝ) :
+    hessianOperator Real.exp x = Real.exp x • (1 : ℝ →L[ℝ] ℝ) := by
   have hg : gradient Real.exp = Real.exp := funext gradient_exp
   apply ContinuousLinearMap.ext
   intro v
@@ -82,7 +85,7 @@ def localV (z : ℝ) : ℝ := if z < 3 then z ^ 2 else z
 theorem localV_smooth_on : ContDiffOn ℝ ∞ localV (Set.Ioo 0 3) := by
   apply (contDiff_id.pow 2).contDiffOn.congr
   intro z hz
-  simp only [localV, if_pos hz.2, id_eq]
+  simp only [localV, ite_eq_left hz.2, id_eq]
 
 theorem actual_local_potential_chain :
     ContDiffAt ℝ ∞ (fun y : ℝ => localV (gradient Real.exp y)) 0 := by
@@ -103,9 +106,11 @@ theorem actual_rank0_inverse_hessian_derivative :
   have hg : ContDiff ℝ ∞ (gradient (fun _ : ZeroSpace => (0 : ℝ))) :=
     FunctionalInequalities.Analysis.BakryEmery.contDiff_gradient
       (contDiff_const : ContDiff ℝ ∞ (fun _ : ZeroSpace => (0 : ℝ))) (by simp)
-  have hH : ContDiff ℝ ∞ (hessianOperator (fun _ : ZeroSpace => (0 : ℝ))) := hg.fderiv_right (m := ∞) (by simp)
-  have h := hasFDerivAt_ringInverse_comp
-    (hH.differentiable (by simp) 0).hasFDerivAt actual_rank0_hessian_unit
+  have hH : ContDiff ℝ ∞ (hessianOperator (fun _ : ZeroSpace => (0 : ℝ))) :=
+    hg.fderiv_right (m := ∞) (by simp)
+  have h :=
+    hasFDerivAt_ringInverse_comp (hH.differentiable (by simp) 0).hasFDerivAt
+      actual_rank0_hessian_unit
   exact h.congr_fderiv (Subsingleton.elim _ _)
 end ActualMAInverse
 
@@ -161,7 +166,7 @@ theorem actual_operator_square_at_zero :
     simp only [inverseHessianEntry, operatorEntry, hH, Ring.inverse_one, one_apply_eq_self,
       fderiv_id, ContinuousLinearMap.id_apply]
     simp only [b.inner_eq_ite, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
-      if_true]
+      ite_true]
     exact hsum
   simp only [id_eq, zero_mul, zero_add] at h
   change hessianInverseOperator Real.exp (fun _ : ℝ => 0) (fun x : ℝ => x * x) 0 =
@@ -217,7 +222,8 @@ theorem V_smooth_on : ContDiffOn ℝ ∞ V (Set.Ioi 0) := by
   intro z hz
   exact ne_of_gt hz
 
-theorem actual_MA_logdet : ∀ y : ℝ, logDetHessian Real.exp b y = -Real.exp y + V (gradient Real.exp y) := by
+theorem actual_MA_logdet :
+    ∀ y : ℝ, logDetHessian Real.exp b y = -Real.exp y + V (gradient Real.exp y) := by
   intro y
   rw [logDetHessian, hessian_exp_matrix, Matrix.det_fin_one, gradient_exp]
   simp [V]
@@ -225,12 +231,20 @@ theorem actual_MA_logdet : ∀ y : ℝ, logDetHessian Real.exp b y = -Real.exp y
 /-- Consumes the actual derived first MA equation, with local V and all analytic/MA
 inputs discharged. Convex V/bounded K/normalization are not asserted for this client. -/
 theorem actual_first_MA :
-    (∑ a, ∑ c, inverseHessianEntry Real.exp b 0 a c *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b a) (b c)) 0 (b 0)) =
-      -fderiv ℝ Real.exp 0 (b 0) + ∑ a, fderiv ℝ V (gradient Real.exp 0) (b a) *
-        bilinearIteratedFDerivTwo ℝ Real.exp 0 (b a) (b 0) := by
-  exact mongeAmpere_first_derivative b Real.contDiff_exp isOpen_Ioi V_smooth_on actual_MA_logdet
-    (by rw [gradient_exp]; simpa only [Set.mem_Ioi, Real.exp_zero] using (zero_lt_one : (0 : ℝ) < 1)) (exp_hessian_positive 0) 0
+    (∑ a,
+        ∑ c,
+          inverseHessianEntry Real.exp b 0 a c *
+            fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b a) (b c)) 0 (b 0)) =
+      -fderiv ℝ Real.exp 0 (b 0) +
+        ∑ a,
+          fderiv ℝ V (gradient Real.exp 0) (b a) *
+            bilinearIteratedFDerivTwo ℝ Real.exp 0 (b a) (b 0) := by
+  exact
+    mongeAmpere_first_derivative b Real.contDiff_exp isOpen_Ioi V_smooth_on actual_MA_logdet
+      (by
+        rw [gradient_exp];
+        simpa only [Set.mem_Ioi, Real.exp_zero] using (zero_lt_one : (0 : ℝ) < 1))
+      (exp_hessian_positive 0) 0
 
 theorem first_MA_nonzero_left :
     (∑ a, ∑ c, inverseHessianEntry Real.exp b 0 a c *
@@ -292,10 +306,10 @@ lemma exp_third_entry (a c i : Fin 1) :
 lemma actual_V_first {z : ℝ} (hz : z ≠ 0) :
     HasDerivAt V (1 + z⁻¹) z := (hasDerivAt_id z).add (Real.hasDerivAt_log hz)
 
-lemma V_hessian_negative (a c : Fin 1) :
-    bilinearIteratedFDerivTwo ℝ V 1 (b a) (b c) = -1 := by
+lemma V_hessian_negative (a c : Fin 1) : bilinearIteratedFDerivTwo ℝ V 1 (b a) (b c) = -1 := by
   have hv : ContDiffAt ℝ 2 V 1 :=
-    (V_smooth_on.contDiffAt (isOpen_Ioi.mem_nhds (by norm_num))).of_le (WithTop.coe_le_coe.mpr le_top)
+    (V_smooth_on.contDiffAt (isOpen_Ioi.mem_nhds (by norm_num))).of_le
+      (WithTop.coe_le_coe.mpr le_top)
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply_at hv, b_apply, b_apply]
   have heq : (fun z => fderiv ℝ V z (1 : ℝ)) =ᶠ[𝓝 (1 : ℝ)] (fun z => 1 + z⁻¹) := by
     filter_upwards [isOpen_ne.mem_nhds (show (1 : ℝ) ≠ 0 by norm_num)] with z hz
@@ -309,19 +323,32 @@ lemma V_hessian_negative (a c : Fin 1) :
 
 /-- Actual first-to-second MA consumer with zero-order MA and all derivative inputs derived. -/
 theorem actual_exp_second_MA :
-    (∑ a, ∑ c, inverseHessianEntry Real.exp b 0 a c *
-      bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b 0) (b 0)) 0 (b a) (b c)) -
-      (∑ a, fderiv ℝ V (gradient Real.exp 0) (b a) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b 0) (b 0)) 0 (b a)) +
-      bilinearIteratedFDerivTwo ℝ Real.exp 0 (b 0) (b 0) =
-      (∑ a, ∑ c, bilinearIteratedFDerivTwo ℝ Real.exp 0 (b 0) (b a) *
-        bilinearIteratedFDerivTwo ℝ V (gradient Real.exp 0) (b a) (b c) *
-        bilinearIteratedFDerivTwo ℝ Real.exp 0 (b c) (b 0)) +
-      ∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry Real.exp b 0 a p * inverseHessianEntry Real.exp b 0 c q *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b a) (b c)) 0 (b 0) *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b p) (b q)) 0 (b 0) := by
-  exact mongeAmpere_second_derivative_coordinate b Real.contDiff_exp isOpen_Ioi V_smooth_on actual_MA_logdet
-    exp_hessian_positive (by rw [gradient_exp]; norm_num) 0 0
+    (∑ a,
+            ∑ c,
+              inverseHessianEntry Real.exp b 0 a c *
+                bilinearIteratedFDerivTwo ℝ
+                  (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b 0) (b 0)) 0 (b a) (b c)) -
+          (∑ a,
+            fderiv ℝ V (gradient Real.exp 0) (b a) *
+              fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b 0) (b 0)) 0 (b a)) +
+        bilinearIteratedFDerivTwo ℝ Real.exp 0 (b 0) (b 0) =
+      (∑ a,
+          ∑ c,
+            bilinearIteratedFDerivTwo ℝ Real.exp 0 (b 0) (b a) *
+                bilinearIteratedFDerivTwo ℝ V (gradient Real.exp 0) (b a) (b c) *
+              bilinearIteratedFDerivTwo ℝ Real.exp 0 (b c) (b 0)) +
+        ∑ a,
+          ∑ c,
+            ∑ p,
+              ∑ q,
+                inverseHessianEntry Real.exp b 0 a p * inverseHessianEntry Real.exp b 0 c q *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b a) (b c)) 0
+                      (b 0) *
+                  fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b p) (b q)) 0
+                    (b 0) := by
+  exact
+    mongeAmpere_second_derivative_coordinate b Real.contDiff_exp isOpen_Ioi V_smooth_on
+      actual_MA_logdet exp_hessian_positive (by rw [gradient_exp]; norm_num) 0 0
 
 theorem actual_exp_V_term_negative :
     (∑ a, ∑ c, bilinearIteratedFDerivTwo ℝ Real.exp 0 (b 0) (b a) *
@@ -332,9 +359,16 @@ theorem actual_exp_V_term_negative :
   norm_num
 
 theorem actual_exp_third_Gram_nonzero :
-    (∑ a, ∑ c, ∑ p, ∑ q, inverseHessianEntry Real.exp b 0 a p * inverseHessianEntry Real.exp b 0 c q *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b a) (b c)) 0 (b 0) *
-      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b p) (b q)) 0 (b 0)) = 1 := by
+    (∑ a,
+        ∑ c,
+          ∑ p,
+            ∑ q,
+              inverseHessianEntry Real.exp b 0 a p * inverseHessianEntry Real.exp b 0 c q *
+                  fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b a) (b c)) 0
+                    (b 0) *
+                fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ Real.exp y (b p) (b q)) 0
+                  (b 0)) =
+      1 := by
   simp only [exp_inverse_entry, exp_third_entry]
   norm_num
 
@@ -415,11 +449,15 @@ def A : Matrix (Fin 2) (Fin 2) ℝ := !![1, 1; 1, 2]
 def T (i : Fin 2) : Matrix (Fin 2) (Fin 2) ℝ := if i = 0 then !![1, 0; 0, 0] else !![0, 0; 0, 1]
 
 theorem actual_A_PSD : A.PosSemidef := by
-  have h := (Matrix.PosSemidef.one : (1 : Matrix (Fin 2) (Fin 2) ℝ).PosSemidef).mul_mul_conjTranspose_same B
+  have h :=
+    (Matrix.PosSemidef.one :
+          (1 : Matrix (Fin 2) (Fin 2) ℝ).PosSemidef).mul_mul_conjTranspose_same
+      B
   have heq : B * (1 : Matrix (Fin 2) (Fin 2) ℝ) * B.conjTranspose = A := by
     rw [Matrix.mul_one]
     ext i j
-    fin_cases i <;> fin_cases j <;> norm_num [B, A, Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.sum_univ_two]
+    fin_cases i <;> fin_cases j <;>
+      norm_num [B, A, Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.sum_univ_two]
   exact heq ▸ h
 
 theorem actual_Gram_matrix :
@@ -460,7 +498,8 @@ end IndependentMASecond
 #print axioms FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_mul
 #print axioms FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_of_mongeAmpere
-#print axioms FunctionalInequalities.Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator
+#print axioms
+  FunctionalInequalities.Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator
 #print axioms ActualMAInverse.exp_inverse_hessian_derivative_nonzero
 #print axioms ActualMAInverse.actual_local_potential_chain
 #print axioms ActualMAInverse.actual_rank0_inverse_hessian_derivative
@@ -469,8 +508,10 @@ end IndependentMASecond
 #print axioms FunctionalInequalities.Analysis.fderiv_det_eq_det_mul_trace
 #print axioms FunctionalInequalities.Analysis.fderiv_logDet_comp_apply
 #print axioms FunctionalInequalities.Analysis.posSemidef_weightedGram
-#print axioms FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_bilinearIteratedFDerivTwo_comm
-#print axioms FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_bilinearIteratedFDerivTwo_comm
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open
 #print axioms FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_eq_trace
 #print axioms FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative
 #print axioms FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative_on_range
@@ -605,7 +646,8 @@ theorem exp_divergence_nonzero :
 end ActualMetricIBP
 
 namespace ActualMetricZero
-/-! Rank zero: the normalised Haar law on `EuclideanSpace ℝ (Fin 0)` with the constant potential, the
+/-! Rank zero: the normalised Haar law on `EuclideanSpace ℝ (Fin 0)` with the constant potential,
+the
 MA equation with an empty determinant, invariance and the closure-`K` adapter. -/
 open MeasureTheory FunctionalInequalities.Analysis.BakryEmery
 abbrev E := EuclideanSpace ℝ (Fin 0)
@@ -647,9 +689,11 @@ end ActualMetricZero
 #print axioms FunctionalInequalities.Analysis.BakryEmery.inverseHessian_divergence
 #print axioms FunctionalInequalities.Analysis.BakryEmery.density_inverseHessian_divergence
 #print axioms FunctionalInequalities.Analysis.BakryEmery.density_hessianInverseOperator_flux
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_eq_neg_of_hasCompactSupport
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_eq_neg_of_hasCompactSupport
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_eq_neg
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_eq_neg_on_range
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_eq_neg_on_range
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_eq_zero
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_comm
 #print axioms ActualMetricIBP.Phi_normalized

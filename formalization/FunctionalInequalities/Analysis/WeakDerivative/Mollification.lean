@@ -1,10 +1,14 @@
-import Mathlib.Analysis.Normed.Module.WeakDual
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import Mathlib.Analysis.Calculus.BumpFunction.Convolution
+module
+
+public import Mathlib.Analysis.Normed.Module.WeakDual
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
 /-!
 # Mollification and weak derivatives from difference bounds
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory

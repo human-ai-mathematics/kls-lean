@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.WeightedGradient.Core
-import FunctionalInequalities.Energy.WeightedGradient.Closable
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.Energy.Form.Core
-import FunctionalInequalities.L2.MeanVariance
+module
+
+public import FunctionalInequalities.Energy.WeightedGradient.Core
+public import FunctionalInequalities.Energy.WeightedGradient.Closable
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
+public import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+public import FunctionalInequalities.Energy.Form.Core
+public import FunctionalInequalities.L2.MeanVariance
 
 /-!
 # Raw/sequential-core agreement of the smooth-gradient pre-energy under density hypotheses
@@ -12,7 +14,8 @@ Source: Blueprint `thm:smooth-gradient-raw-core-agreement-density`. Read `LocalD
 consequences `LocalDensity.absolutelyContinuous`, `LocalDensity.frontier_support_null` and
 `LocalDensity.locallyDominatesOn`, then `Test.toL2_mem_closure_domain`,
 `lipschitzRelaxation_le_relaxation`, `preEnergy_agreesOnTests`, `preEnergy_isSequentialCoreFor`
-and the intrinsic forms `Intrinsic.preEnergy_agreesOnTests`, `Intrinsic.preEnergy_isSequentialCoreFor`.
+and the intrinsic forms `Intrinsic.preEnergy_agreesOnTests`,
+`Intrinsic.preEnergy_isSequentialCoreFor`.
 
 Let `ν` be a probability law on a finite-dimensional real inner-product space `V` and `m` a Haar
 measure. A *local density* for `ν` is an open set `Ω` carrying `ν`, on which `ν` has an `m`-density
@@ -28,6 +31,8 @@ definitionally sequentially generated.
 The Blueprint also assumes `ρ ∈ L^∞_loc(Ω)`; that upper bound is not used here. Nothing is
 asserted about laws without a local density, and no Cheeger-energy identification is claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -64,7 +69,8 @@ namespace LocalDensity
 
 variable {ν : ProbabilityMeasure V} {m : Measure V} (D : LocalDensity ν m)
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V]
+    [FiniteDimensional ℝ V] in
 /-- The law of a measurable subset of `Ω` is the integral of the density. -/
 theorem measure_eq {s : Set V} (hs : MeasurableSet s) (hsΩ : s ⊆ D.Ω) :
     (ν : Measure V) s = ∫⁻ x in s, ENNReal.ofReal (D.ρ x) ∂m := by
@@ -73,7 +79,8 @@ theorem measure_eq {s : Set V} (hs : MeasurableSet s) (hsΩ : s ⊆ D.Ω) :
   rw [h1, D.restrict_eq, withDensity_apply _ hs, Measure.restrict_restrict hs,
     Set.inter_eq_self_of_subset_left hsΩ]
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V]
+    [FiniteDimensional ℝ V] in
 include D in
 /-- The law is absolutely continuous with respect to `m`. -/
 theorem absolutelyContinuous : (ν : Measure V) ≪ m := by
@@ -82,8 +89,7 @@ theorem absolutelyContinuous : (ν : Measure V) ≪ m := by
   have h1 : (ν : Measure V) (s ∩ D.Ω) = 0 := by
     rw [D.measure_eq (hs.inter D.isOpen.measurableSet) Set.inter_subset_right]
     exact setLIntegral_measure_zero _ _ (measure_mono_null Set.inter_subset_left hs0)
-  have h2 : (ν : Measure V) (s \ D.Ω) = 0 :=
-    measure_mono_null (fun x hx ↦ hx.2) D.compl_null
+  have h2 : (ν : Measure V) (s \ D.Ω) = 0 := measure_mono_null (fun x hx ↦ hx.2) D.compl_null
   rw [← hsplit, h1, h2, add_zero]
 
 variable [m.IsAddHaarMeasure]
@@ -117,7 +123,8 @@ theorem subset_interior_support : D.Ω ⊆ interior (ν : Measure V).support :=
 
 end TestSupport
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V]
+    [FiniteDimensional ℝ V] in
 include D in
 /-- The frontier of the support is `ν`-null. -/
 theorem frontier_support_null : (ν : Measure V) (frontier (ν : Measure V).support) = 0 := by
@@ -126,8 +133,8 @@ theorem frontier_support_null : (ν : Measure V) (frontier (ν : Measure V).supp
   rw [Measure.isClosed_support.frontier_eq] at hx
   exact hx.2 (D.subset_interior_support hxΩ)
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-  [m.IsAddHaarMeasure] in
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V]
+    [FiniteDimensional ℝ V] [m.IsAddHaarMeasure] in
 /-- On compact subsets of `Ω`, `m` is dominated by a constant multiple of `ν`. -/
 theorem locallyDominatesOn : Probability.LocallyDominatesOn ν m D.Ω := by
   intro K hK hKΩ
@@ -137,9 +144,10 @@ theorem locallyDominatesOn : Probability.LocallyDominatesOn ν m D.Ω := by
   refine ⟨C'.toNNReal, Measure.le_iff.mpr fun s hs ↦ ?_⟩
   have hsK : MeasurableSet (s ∩ K) := hs.inter hK.measurableSet
   rw [Measure.restrict_apply hs, Measure.smul_apply, Measure.restrict_apply hs,
-    D.measure_eq hsK (Set.inter_subset_right.trans hKΩ), smul_eq_mul, ← lintegral_const_mul' _ _
-      ENNReal.coe_ne_top]
-  have hbound : ∀ᵐ x ∂(m.restrict (s ∩ K)), (1 : ℝ≥0∞) ≤ (C'.toNNReal : ℝ≥0∞) * ENNReal.ofReal (D.ρ x) := by
+    D.measure_eq hsK (Set.inter_subset_right.trans hKΩ), smul_eq_mul, ←
+    lintegral_const_mul' _ _ ENNReal.coe_ne_top]
+  have hbound :
+    ∀ᵐ x ∂(m.restrict (s ∩ K)), (1 : ℝ≥0∞) ≤ (C'.toNNReal : ℝ≥0∞) * ENNReal.ofReal (D.ρ x) := by
     rw [ae_restrict_iff' hsK]
     filter_upwards [hC, D.pos] with x hx hxpos hxsK
     have hρ : 0 < D.ρ x := hxpos (hKΩ hxsK.2)
@@ -152,8 +160,10 @@ theorem locallyDominatesOn : Probability.LocallyDominatesOn ν m D.Ω := by
       rfl
     rw [this]
     exact ENNReal.one_le_ofReal.mpr hmul
-  calc m (s ∩ K) = ∫⁻ x in s ∩ K, (1 : ℝ≥0∞) ∂m := by simp
-    _ ≤ ∫⁻ x in s ∩ K, (C'.toNNReal : ℝ≥0∞) * ENNReal.ofReal (D.ρ x) ∂m := lintegral_mono_ae hbound
+  calc
+    m (s ∩ K) = ∫⁻ x in s ∩ K, (1 : ℝ≥0∞) ∂m := by simp
+    _ ≤ ∫⁻ x in s ∩ K, (C'.toNNReal : ℝ≥0∞) * ENNReal.ofReal (D.ρ x) ∂m :=
+      lintegral_mono_ae hbound
 
 end LocalDensity
 
@@ -183,28 +193,41 @@ theorem Test.memLp_gradient (f : Test ν) : MemLp (gradient f.toFun) 2 (ν : Mea
 supported tests, as elements of the operator domain. -/
 theorem Test.exists_domain_sequence_tendsto (f : Test ν) :
     ∃ p : ℕ → (lipschitzOperator ν m D).domain,
-      Tendsto (fun j ↦ (((p j : (lipschitzOperator ν m D).domain) : Lp ℝ 2 (ν : Measure V)),
-        lipschitzOperator ν m D (p j))) atTop
-        (𝓝 (f.toL2, (Test.memLp_gradient ν f).toLp (gradient f.toFun))) := by
+      Tendsto
+        (fun j ↦
+          (((p j : (lipschitzOperator ν m D).domain) : Lp ℝ 2 (ν : Measure V)),
+            lipschitzOperator ν m D (p j)))
+        atTop (𝓝 (f.toL2, (Test.memLp_gradient ν f).toLp (gradient f.toFun))) := by
   have hac := D.absolutelyContinuous
   have hfr := D.frontier_support_null
-  have hlip : LocallyLipschitz f.toFun := (f.contDiff.of_le (by exact_mod_cast le_top)).locallyLipschitz
-  have hgrad : MemLp (fun x ↦ (ContinuousLinearMap.id ℝ V) (gradient f.toFun x)) 2 (ν : Measure V) := by
+  have hlip : LocallyLipschitz f.toFun :=
+    (f.contDiff.of_le (by exact_mod_cast le_top)).locallyLipschitz
+  have hgrad :
+    MemLp (fun x ↦ (ContinuousLinearMap.id ℝ V) (gradient f.toFun x)) 2 (ν : Measure V) := by
     simpa using Test.memLp_gradient ν f
-  obtain ⟨g, hg, hconv1, hconv2⟩ := LipschitzApproximation.exists_compactSupport_weighted_L2 ν m hac
-    (ContinuousLinearMap.id ℝ V) f.toFun hlip f.memLp_two hgrad
+  obtain ⟨g, hg, hconv1, hconv2⟩ :=
+    LipschitzApproximation.exists_compactSupport_weighted_L2 ν m hac
+      (ContinuousLinearMap.id ℝ V) f.toFun hlip f.memLp_two hgrad
   have hIsTest : ∀ j, IsTest ν (ContinuousLinearMap.id ℝ V) (g j) := fun j ↦
     ⟨(hg j).2.1, (hg j).2.2.1, (hg j).2.2.2⟩
-  refine ⟨fun j ↦ ⟨(hIsTest j).memLp.toLp (g j),
-    toLp_mem_domain_operator ν (ContinuousLinearMap.id ℝ V) hac (hIsTest j)⟩, ?_⟩
-  have hT : ∀ j, lipschitzOperator ν m D ⟨(hIsTest j).memLp.toLp (g j),
-      toLp_mem_domain_operator ν (ContinuousLinearMap.id ℝ V) hac (hIsTest j)⟩ =
-      (hIsTest j).memLp_apply.toLp (apply (ContinuousLinearMap.id ℝ V) (g j)) := fun j ↦
-    operator_apply ν (ContinuousLinearMap.id ℝ V) hac hfr (hIsTest j) _ rfl
+  refine
+    ⟨fun j ↦
+      ⟨(hIsTest j).memLp.toLp (g j),
+        toLp_mem_domain_operator ν (ContinuousLinearMap.id ℝ V) hac (hIsTest j)⟩,
+      ?_⟩
+  have hT :
+    ∀ j,
+      lipschitzOperator ν m D
+          ⟨(hIsTest j).memLp.toLp (g j),
+            toLp_mem_domain_operator ν (ContinuousLinearMap.id ℝ V) hac (hIsTest j)⟩ =
+        (hIsTest j).memLp_apply.toLp (apply (ContinuousLinearMap.id ℝ V) (g j)) :=
+    fun j ↦ operator_apply ν (ContinuousLinearMap.id ℝ V) hac hfr (hIsTest j) _ rfl
   refine Filter.Tendsto.prodMk_nhds ?_ ?_
   · rw [tendsto_iff_dist_tendsto_zero]
-    have h : ∀ j, dist ((hIsTest j).memLp.toLp (g j)) f.toL2 =
-        (eLpNorm (fun x ↦ g j x - f.toFun x) 2 (ν : Measure V)).toReal := by
+    have h :
+      ∀ j,
+        dist ((hIsTest j).memLp.toLp (g j)) f.toL2 =
+          (eLpNorm (fun x ↦ g j x - f.toFun x) 2 (ν : Measure V)).toReal := by
       intro j
       rw [dist_edist, Test.toL2, Lp.edist_toLp_toLp]
       rfl
@@ -213,10 +236,15 @@ theorem Test.exists_domain_sequence_tendsto (f : Test ν) :
     simpa [Function.comp_def] using this
   · simp_rw [hT]
     rw [tendsto_iff_dist_tendsto_zero]
-    have h : ∀ j, dist ((hIsTest j).memLp_apply.toLp (apply (ContinuousLinearMap.id ℝ V) (g j)))
-        ((Test.memLp_gradient ν f).toLp (gradient f.toFun)) =
-        (eLpNorm (fun x ↦ (ContinuousLinearMap.id ℝ V) (gradient (g j) x) -
-          (ContinuousLinearMap.id ℝ V) (gradient f.toFun x)) 2 (ν : Measure V)).toReal := by
+    have h :
+      ∀ j,
+        dist ((hIsTest j).memLp_apply.toLp (apply (ContinuousLinearMap.id ℝ V) (g j)))
+            ((Test.memLp_gradient ν f).toLp (gradient f.toFun)) =
+          (eLpNorm
+              (fun x ↦
+                (ContinuousLinearMap.id ℝ V) (gradient (g j) x) -
+                  (ContinuousLinearMap.id ℝ V) (gradient f.toFun x))
+              2 (ν : Measure V)).toReal := by
       intro j
       rw [dist_edist, Lp.edist_toLp_toLp]
       rfl
@@ -288,17 +316,20 @@ theorem lipschitzRelaxation_le_relaxation (x : Lp ℝ 2 (ν : Measure V)) :
   exact (Test.energy_eq_nnnorm_sq ν f).symm
 
 include D in
-/-- Blueprint `thm:smooth-gradient-raw-core-agreement-density`, agreement part: under the density
+/--
+Blueprint `thm:smooth-gradient-raw-core-agreement-density`, agreement part: under the density
 hypotheses the smooth-gradient relaxation of the class of a smooth test is its raw energy. -/
 theorem preEnergy_agreesOnTests : (preEnergy ν).AgreesOnTests (relaxation ν) := by
   intro f
   refine le_antisymm ((preEnergy ν).sequentialRelaxation_toAmbient_le f) ?_
   obtain ⟨hdom, hval⟩ := Test.toL2_mem_closure_domain ν m D f
-  calc ((preEnergy ν).energy f : ENNReal) = (f.energy : ENNReal) := rfl
+  calc
+    ((preEnergy ν).energy f : ENNReal) = (f.energy : ENNReal) := rfl
     _ = (PreEnergy.ofLinearPMap (lipschitzOperator ν m D)).sequentialRelaxation f.toL2 := by
-        rw [PreEnergy.sequentialRelaxation_ofLinearPMap_of_mem _ (lipschitzOperator_isClosable ν m D)
-          ⟨f.toL2, hdom⟩, hval]
-        exact Test.energy_eq_nnnorm_sq ν f
+      rw [PreEnergy.sequentialRelaxation_ofLinearPMap_of_mem _
+          (lipschitzOperator_isClosable ν m D) ⟨f.toL2, hdom⟩,
+        hval]
+      exact Test.energy_eq_nnnorm_sq ν f
     _ ≤ relaxation ν ((preEnergy ν).toAmbient f) := lipschitzRelaxation_le_relaxation ν m D _
 
 include D in

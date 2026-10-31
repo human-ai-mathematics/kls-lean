@@ -1,4 +1,6 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+module
+
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
 /-!
 # Lean certificate: `lem:covariance-test-core-density`
@@ -8,6 +10,8 @@ Source: Blueprint Appendix A.
 The reusable declarations retain their original hypotheses, including arbitrary singular B,
 absolute continuity with respect to any Haar reference measure, and dimension zero.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -83,18 +87,20 @@ end Solutions.LemCovarianceTestCoreDensity
 #check @exists_smooth_bounded_L1
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2'
+info:
+'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_compactSupport_weighted_L2
+  #print axioms exists_compactSupport_weighted_L2
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2'
+info:
+'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_smooth_compactSupport_L2
+  #print axioms exists_smooth_compactSupport_L2
 
 /--
 info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_weighted_L2'

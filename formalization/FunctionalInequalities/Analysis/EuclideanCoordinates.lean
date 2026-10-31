@@ -1,4 +1,6 @@
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Evaluation, functional expansions and norm bounds in Euclidean coordinates
@@ -7,6 +9,8 @@ Ordinary finite coordinate producers used by derivative/flat-support and
 elliptic-drift consumers. Empty finite indices are included. The target of
 a continuous linear map can be any real normed space, without completeness.
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis
 

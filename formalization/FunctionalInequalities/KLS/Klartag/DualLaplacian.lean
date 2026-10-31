@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.Klartag.PowerSupersolution
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
-import Mathlib.Geometry.Manifold.PartitionOfUnity
+module
+
+public import FunctionalInequalities.KLS.Klartag.PowerSupersolution
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+public import Mathlib.Geometry.Manifold.PartitionOfUnity
 
 /-!
 # The Laplacian of the dual moment-measure manifold
@@ -25,6 +27,8 @@ Scope: a conditional statement for a GIVEN `φ` satisfying (66) on `K`; no bound
 convexity of `K` or `ρ` is used. Existence of the potential, Theorem 1.1 and the diffusion of
 Section 5 are not provided.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -82,7 +86,7 @@ private theorem divergence_algebra {ι : Type*} [Fintype ι] [DecidableEq ι]
     simp_rw [mul_assoc]
   rw [h2]
   simp_rw [hinv]
-  simp only [mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   rw [neg_sub, sub_eq_neg_add]
   congr 1
   exact Finset.sum_congr rfl fun a _ => by rw [hsym]; ring
@@ -192,18 +196,23 @@ private theorem dualTransport_flux {φ ρ u : E → ℝ} (hφ : ContDiff ℝ ∞
     (fun j => fderiv ℝ u x (e j)) (fun i => fderiv ℝ ρ x (e i)) (fun i => ⟪x, e i⟫)
     (dualTransport_inverseHessian_divergence hφ hPD hρ hEq) (inverseHessianEntry_symm e h2 x)
 
-/-- Germ transfer of the inverse-Hessian regularity, symmetry and flux identity to a point of `K`. -/
+/--
+Germ transfer of the inverse-Hessian regularity, symmetry and flux identity to a point of `K`. -/
 private theorem dualTransport_local {K : Set E} (hK : IsOpen K) {φ ρ u : E → ℝ}
     (hφ : ContDiffOn ℝ ∞ φ K) (hρ : ContDiffOn ℝ ∞ ρ K)
     (hPD : ∀ y ∈ K, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y v v)
-    (hEq : ∀ y ∈ K, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y)
-    (hu : ContDiff ℝ ∞ u) {x : E} (hx : x ∈ K) :
+    (hEq : ∀ y ∈ K, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y) (hu : ContDiff ℝ ∞ u)
+    {x : E} (hx : x ∈ K) :
     (∀ i j, ContDiffAt ℝ ∞ (fun y => inverseHessianEntry φ e y i j) x) ∧
       (∀ i j, inverseHessianEntry φ e x i j = inverseHessianEntry φ e x j i) ∧
-      ∑ i, ∑ j, fderiv ℝ (fun y => Real.exp (-ρ y) * inverseHessianEntry φ e y i j *
-        fderiv ℝ u y (e j)) x (e i) =
-        Real.exp (-ρ x) * nondivergenceOperator (fun y => inverseHessianEntry φ e y)
-          (fun y i => ⟪y, e i⟫) u x := by
+        ∑ i,
+            ∑ j,
+              fderiv ℝ
+                (fun y => Real.exp (-ρ y) * inverseHessianEntry φ e y i j * fderiv ℝ u y (e j))
+                x (e i) =
+          Real.exp (-ρ x) *
+            nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫) u
+              x := by
   obtain ⟨ψ, hψ, hloc⟩ := exists_contDiff_eventuallyEq_germ hK hφ hx
   have hKx : ∀ᶠ y in 𝓝 x, y ∈ K := hK.mem_nhds hx
   have hPD' : ∀ᶠ y in 𝓝 x, ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ ψ y v v := by
@@ -225,15 +234,17 @@ private theorem dualTransport_local {K : Set E} (hK : IsOpen K) {φ ρ u : E →
     exact inverseHessianEntry_congr_of_eventuallyEq _ hy
   have hψ2 : ContDiff ℝ 2 ψ := hψ.of_le (WithTop.coe_le_coe.mpr le_top)
   refine ⟨fun i j => ?_, fun i j => ?_, ?_⟩
-  · refine (contDiffAt_inverseHessianEntry e hψ x hPD'.self_of_nhds i j).congr_of_eventuallyEq ?_
+  · refine
+      (contDiffAt_inverseHessianEntry e hψ x hPD'.self_of_nhds i j).congr_of_eventuallyEq ?_
     filter_upwards [hAeq] with y hy
     rw [hy]
   · rw [← hAeq.self_of_nhds]
     exact inverseHessianEntry_symm e hψ2 x i j
   · have hflux := dualTransport_flux hψ hPD' hρd hEq' hu
-    have hL := nondivergenceOperator_congr (b := fun y i => ⟪y, e i⟫) (u := u) (u' := u)
-      (A := fun y => inverseHessianEntry ψ e y) (A' := fun y => inverseHessianEntry φ e y)
-      hAeq.self_of_nhds EventuallyEq.rfl
+    have hL :=
+      nondivergenceOperator_congr (b := fun y i => ⟪y, e i⟫) (u := u) (u' := u) (A := fun y =>
+        inverseHessianEntry ψ e y) (A' := fun y => inverseHessianEntry φ e y) hAeq.self_of_nhds
+        EventuallyEq.rfl
     rw [← hL, ← hflux]
     refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
     refine congrArg (fun L : E →L[ℝ] ℝ => L (e i)) (EventuallyEq.fderiv_eq ?_)
@@ -260,23 +271,26 @@ is the Laplacian of `(K, ∇²φ, e^{-ρ} dx)`:
 `∫_K φ^{ij} u_i v_j e^{-ρ} = -∫_K v (L u) e^{-ρ}` for smooth `u`, `v`, one of them compactly
 supported in `K`, against any additive Haar measure. -/
 theorem integral_inverseHessian_gradient_mul_eq_neg_laplacian (m : Measure E)
-    [m.IsAddHaarMeasure] {K : Set E} (hK : IsOpen K) {φ ρ u v : E → ℝ}
-    (hφ : ContDiffOn ℝ ∞ φ K) (hρ : ContDiffOn ℝ ∞ ρ K)
+    [m.IsAddHaarMeasure] {K : Set E} (hK : IsOpen K) {φ ρ u v : E → ℝ} (hφ : ContDiffOn ℝ ∞ φ K)
+    (hρ : ContDiffOn ℝ ∞ ρ K)
     (hPD : ∀ y ∈ K, ∀ w : E, w ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ y w w)
-    (hEq : ∀ y ∈ K, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y)
-    (hu : ContDiff ℝ ∞ u) (hv : ContDiff ℝ ∞ v)
+    (hEq : ∀ y ∈ K, logDetHessian φ e y = ⟪y, gradient φ y⟫ - φ y - ρ y) (hu : ContDiff ℝ ∞ u)
+    (hv : ContDiff ℝ ∞ v)
     (hc : (HasCompactSupport u ∧ tsupport u ⊆ K) ∨ (HasCompactSupport v ∧ tsupport v ⊆ K)) :
-    (∫ x in K, (∑ i, ∑ j, inverseHessianEntry φ e x i j * fderiv ℝ u x (e i) *
-        fderiv ℝ v x (e j)) * Real.exp (-ρ x) ∂m) =
-      -∫ x in K, v x * nondivergenceOperator (fun y => inverseHessianEntry φ e y)
-        (fun y i => ⟪y, e i⟫) u x * Real.exp (-ρ x) ∂m := by
-  obtain ⟨S, hS, hSK, hvan⟩ : ∃ S : Set E, IsCompact S ∧ S ⊆ K ∧
-      ((∀ x ∉ S, u =ᶠ[𝓝 x] 0) ∨ (∀ x ∉ S, v =ᶠ[𝓝 x] 0)) := by
+    (∫ x in K,
+        (∑ i, ∑ j, inverseHessianEntry φ e x i j * fderiv ℝ u x (e i) * fderiv ℝ v x (e j)) *
+          Real.exp (-ρ x) ∂m) =
+      -∫ x in K,
+          v x *
+              nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫) u
+                x *
+            Real.exp (-ρ x) ∂m := by
+  obtain ⟨S, hS, hSK, hvan⟩ :
+    ∃ S : Set E, IsCompact S ∧ S ⊆ K ∧ ((∀ x ∉ S, u =ᶠ[𝓝 x] 0) ∨ (∀ x ∉ S, v =ᶠ[𝓝 x] 0)) := by
     rcases hc with ⟨hcu, hsu⟩ | ⟨hcv, hsv⟩
     · exact ⟨tsupport u, hcu, hsu, Or.inl fun x hx => notMem_tsupport_iff_eventuallyEq.mp hx⟩
     · exact ⟨tsupport v, hcv, hsv, Or.inr fun x hx => notMem_tsupport_iff_eventuallyEq.mp hx⟩
-  obtain ⟨χ, hχ, hχc, hχK, hχ1⟩ :=
-    exists_contDiff_cutoff_of_isCompact_subset_isOpen hS hK hSK
+  obtain ⟨χ, hχ, hχc, hχK, hχ1⟩ := exists_contDiff_cutoff_of_isCompact_subset_isOpen hS hK hSK
   have hloc (x : E) (hx : x ∈ K) := dualTransport_local hK hφ hρ hPD hEq hu hx
   let G : Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → E → ℝ := fun i j y =>
     Real.exp (-ρ y) * inverseHessianEntry φ e y i j * fderiv ℝ u y (e j)
@@ -290,37 +304,49 @@ theorem integral_inverseHessian_gradient_mul_eq_neg_laplacian (m : Measure E)
   have hF (i j : Fin (Module.finrank ℝ E)) : ContDiff ℝ ∞ (F i j) := by
     refine contDiff_iff_contDiffAt.mpr fun y => ?_
     by_cases hy : y ∈ K
-    · exact hχ.contDiffAt.mul ((((hρ.contDiffAt (hK.mem_nhds hy)).neg.exp).mul
-        ((hloc y hy).1 i j)).mul (contDiff_fderiv_apply (m := ∞) hu (by simp) (e j)).contDiffAt)
+    · exact
+        hχ.contDiffAt.mul
+          ((((hρ.contDiffAt (hK.mem_nhds hy)).neg.exp).mul ((hloc y hy).1 i j)).mul
+            (contDiff_fderiv_apply (m := ∞) hu (by simp) (e j)).contDiffAt)
     · exact contDiffAt_const.congr_of_eventuallyEq (hF0 i j y hy)
   have hFc (i j : Fin (Module.finrank ℝ E)) : HasCompactSupport (F i j) := hχc.mul_right
   have hint (i j : Fin (Module.finrank ℝ E)) :=
-    integrable_fderiv_mul_of_hasCompactSupport m (hF i j) hv (Or.inl (hFc i j)) (e i)
+    integrable_fderiv_mul_of_hasCompactSupport m (hF i j) hv (Or.inl (hFc i j))
+      (e i)
   -- the integration by parts identity on all of `E`
-  have hIBP : (∫ x, ∑ i, ∑ j, fderiv ℝ (F i j) x (e i) * v x ∂m) =
+
+  have hIBP :
+    (∫ x, ∑ i, ∑ j, fderiv ℝ (F i j) x (e i) * v x ∂m) =
       -∫ x, ∑ i, ∑ j, F i j x * fderiv ℝ v x (e i) ∂m := by
     rw [integral_finsetSum _ fun i _ => integrable_finsetSum _ fun j _ => (hint i j).1,
-      integral_finsetSum _ fun i _ => integrable_finsetSum _ fun j _ => (hint i j).2.1,
-      ← Finset.sum_neg_distrib]
+      integral_finsetSum _ fun i _ => integrable_finsetSum _ fun j _ => (hint i j).2.1, ←
+      Finset.sum_neg_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [integral_finsetSum _ fun j _ => (hint i j).1,
       integral_finsetSum _ fun j _ => (hint i j).2.1, ← Finset.sum_neg_distrib]
-    exact Finset.sum_congr rfl fun j _ =>
-      integral_fderiv_mul_eq_neg_of_hasCompactSupport m (hF i j) hv (Or.inl (hFc i j)) (e i)
+    exact
+      Finset.sum_congr rfl fun j _ =>
+        integral_fderiv_mul_eq_neg_of_hasCompactSupport m (hF i j) hv (Or.inl (hFc i j))
+          (e i)
   -- pointwise identification
+
   have hzero_fderiv {f : E → ℝ} {x : E} (h : f =ᶠ[𝓝 x] 0) : fderiv ℝ f x = 0 := by
     rw [h.fderiv_eq]
     exact fderiv_const_apply 0
   have hS1 (x : E) (hx : x ∈ S) (i j : Fin (Module.finrank ℝ E)) : F i j =ᶠ[𝓝 x] G i j := by
     filter_upwards [hχ1 x hx] with y hy
     simp [F, hy]
-  have h1 (x : E) (hx : x ∈ K) : v x * nondivergenceOperator (fun y => inverseHessianEntry φ e y)
-      (fun y i => ⟪y, e i⟫) u x * Real.exp (-ρ x) =
+  have h1 (x : E) (hx : x ∈ K) :
+    v x * nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫) u x *
+        Real.exp (-ρ x) =
       ∑ i, ∑ j, fderiv ℝ (F i j) x (e i) * v x := by
     by_cases hxS : x ∈ S
     · simp_rw [(hS1 x hxS _ _).fderiv_eq]
-      have hfl : ∑ i, ∑ j, fderiv ℝ (G i j) x (e i) = Real.exp (-ρ x) *
-          nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫) u x :=
+      have hfl :
+        ∑ i, ∑ j, fderiv ℝ (G i j) x (e i) =
+          Real.exp (-ρ x) *
+            nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫) u
+              x :=
         (hloc x hx).2.2
       simp_rw [← Finset.sum_mul]
       rw [hfl]
@@ -329,15 +355,18 @@ theorem integral_inverseHessian_gradient_mul_eq_neg_laplacian (m : Measure E)
       · have hG0 (i j : Fin (Module.finrank ℝ E)) : F i j =ᶠ[𝓝 x] 0 := by
           filter_upwards [(hu0 x hxS).fderiv (𝕜 := ℝ)] with y hy
           simp [F, G, hy]
-        have hL : nondivergenceOperator (fun y => inverseHessianEntry φ e y)
-            (fun y i => ⟪y, e i⟫) u x = 0 := by
+        have hL :
+          nondivergenceOperator (fun y => inverseHessianEntry φ e y) (fun y i => ⟪y, e i⟫) u x =
+            0 := by
           rw [nondivergenceOperator_congr rfl (hu0 x hxS)]
           unfold nondivergenceOperator bilinearIteratedFDerivTwo
           simp
         simp [hL, hzero_fderiv (hG0 _ _)]
       · simp [(hv0 x hxS).eq_of_nhds]
-  have h2 (x : E) (hx : x ∈ K) : (∑ i, ∑ j, inverseHessianEntry φ e x i j * fderiv ℝ u x (e i) *
-      fderiv ℝ v x (e j)) * Real.exp (-ρ x) = ∑ i, ∑ j, F i j x * fderiv ℝ v x (e i) := by
+  have h2 (x : E) (hx : x ∈ K) :
+    (∑ i, ∑ j, inverseHessianEntry φ e x i j * fderiv ℝ u x (e i) * fderiv ℝ v x (e j)) *
+        Real.exp (-ρ x) =
+      ∑ i, ∑ j, F i j x * fderiv ℝ v x (e i) := by
     by_cases hxS : x ∈ S
     · simp_rw [(hS1 x hxS _ _).eq_of_nhds]
       rw [Finset.sum_comm, Finset.sum_mul]
@@ -354,8 +383,8 @@ theorem integral_inverseHessian_gradient_mul_eq_neg_laplacian (m : Measure E)
         simp [hdv]
   have hK' : MeasurableSet K := hK.measurableSet
   rw [setIntegral_congr_fun hK' h1, setIntegral_congr_fun hK' h2,
-    setIntegral_eq_integral_of_forall_compl_eq_zero, setIntegral_eq_integral_of_forall_compl_eq_zero,
-    hIBP, neg_neg]
+    setIntegral_eq_integral_of_forall_compl_eq_zero,
+    setIntegral_eq_integral_of_forall_compl_eq_zero, hIBP, neg_neg]
   · intro x hx
     refine Finset.sum_eq_zero fun i _ => Finset.sum_eq_zero fun j _ => ?_
     rw [hzero_fderiv (hF0 i j x hx)]

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Operator.InverseSqrt
-import Mathlib.LinearAlgebra.Matrix.Notation
+module
+
+public import FunctionalInequalities.Analysis.Operator.InverseSqrt
+public import Mathlib.LinearAlgebra.Matrix.Notation
 
 /-!
 # Audit: the principal inverse square root
@@ -14,6 +16,8 @@ difference squared is `3`, the squared-root difference has norm `7`, and the Syl
 gives `2‖B − T‖_F ≤ 7`; the empty-coordinate canonical coefficient is locally Lipschitz and zero.
 No claim that these operators are covariances of a source law.
 -/
+
+@[expose] public section
 
 noncomputable section
 open FunctionalInequalities.Analysis
@@ -103,7 +107,8 @@ theorem B_positive : B.PosSemidef := by
   · ext i j
     fin_cases i <;> fin_cases j <;> norm_num [B, Matrix.conjTranspose_apply]
   · intro v
-    simp only [dotProduct, Matrix.mulVec, Fin.sum_univ_two, Pi.star_apply, star_trivial, B, Matrix.of_apply]
+    simp only [dotProduct, Matrix.mulVec, Fin.sum_univ_two, Pi.star_apply, star_trivial, B,
+      Matrix.of_apply]
     norm_num
     nlinarith [sq_nonneg (v 0 + v 1), sq_nonneg (v 0), sq_nonneg (v 1)]
 
@@ -139,7 +144,8 @@ theorem A_positive : A.PosSemidef := by
   · ext i j
     fin_cases i <;> fin_cases j <;> norm_num [A, Matrix.conjTranspose_apply]
   · intro v
-    simp only [dotProduct, Matrix.mulVec, Fin.sum_univ_two, Pi.star_apply, star_trivial, A, Matrix.of_apply]
+    simp only [dotProduct, Matrix.mulVec, Fin.sum_univ_two, Pi.star_apply, star_trivial, A,
+      Matrix.of_apply]
     norm_num
     nlinarith [sq_nonneg (v 0 + v 1), sq_nonneg (v 0 - v 1)]
 
@@ -260,7 +266,8 @@ private theorem C_inverse : C⁻¹ = T * T := by
 
 private theorem canonical_B : inverseSqrt (operatorOfMatrix b A) = operatorOfMatrix b B := by
   have hu : IsUnit (operatorOfMatrix b A) :=
-    (operatorMatrix_isUnit_iff b _).mp (by simpa only [operatorMatrix_operatorOfMatrix] using A_unit)
+    (operatorMatrix_isUnit_iff b _).mp
+      (by simpa only [operatorMatrix_operatorOfMatrix] using A_unit)
   apply inverseSqrt_unique _ _ hu (operatorOfMatrix_isPositive b B B_positive)
   apply operatorMatrix_injective b
   rw [operatorMatrix_mul, ← operatorMatrix_ringInverse b _ hu]
@@ -268,7 +275,8 @@ private theorem canonical_B : inverseSqrt (operatorOfMatrix b A) = operatorOfMat
 
 private theorem canonical_T : inverseSqrt (operatorOfMatrix b C) = operatorOfMatrix b T := by
   have hu : IsUnit (operatorOfMatrix b C) :=
-    (operatorMatrix_isUnit_iff b _).mp (by simpa only [operatorMatrix_operatorOfMatrix] using C_unit)
+    (operatorMatrix_isUnit_iff b _).mp
+      (by simpa only [operatorMatrix_operatorOfMatrix] using C_unit)
   apply inverseSqrt_unique _ _ hu (operatorOfMatrix_isPositive b T T_positive)
   apply operatorMatrix_injective b
   rw [operatorMatrix_mul, ← operatorMatrix_ringInverse b _ hu]
@@ -286,9 +294,13 @@ theorem actual_canonical_noncommute :
 
 /-- The Sylvester estimate on the canonical roots: `2‖B − T‖_F ≤ ‖B² − T²‖_F = 7`. -/
 theorem actual_canonical_bound :
-    2 * ‖matrixEntries (operatorMatrix b (inverseSqrt (operatorOfMatrix b A)) -
-      operatorMatrix b (inverseSqrt (operatorOfMatrix b C)))‖ ≤ 7 := by
-  rw [canonical_B, canonical_T, operatorMatrix_operatorOfMatrix, operatorMatrix_operatorOfMatrix]
+    2 *
+        ‖matrixEntries
+            (operatorMatrix b (inverseSqrt (operatorOfMatrix b A)) -
+              operatorMatrix b (inverseSqrt (operatorOfMatrix b C)))‖ ≤
+      7 := by
+  rw [canonical_B, canonical_T, operatorMatrix_operatorOfMatrix,
+    operatorMatrix_operatorOfMatrix]
   have hs : ∀ i j, T i j = T j i := by
     intro i j
     fin_cases i <;> fin_cases j <;> norm_num [T]

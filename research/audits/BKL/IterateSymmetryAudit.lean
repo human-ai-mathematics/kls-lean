@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
 
 /-!
 # Audit: BKL Lemma 3.3 for the iterates
@@ -14,6 +16,8 @@ block and notation, and discharged by the library theorem `normSq_grad0_iter_sub
 The centering of `f` and the positivity of the `α_j` are not used. This is a supporting result of
 the operator route: Corollary 3.7, Lemmas 3.8–3.9 and Theorem 3.1 are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

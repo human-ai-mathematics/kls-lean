@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
 
 /-!
 # Lemma 3.6 for tensor-valued functions, and Corollary 3.7
@@ -12,6 +14,8 @@ arguments while the trailing indices carried by `F` are not permuted. The proof 
 scalar case through continuous linear functionals on `F`. Corollary 3.7 follows for every pair of
 tensor fields satisfying the relation (30) `-ℒh_{i+1} = α_{i+1} ∇₀h_i` defining the iterates.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -82,10 +86,10 @@ theorem clm_apply_weightedLaplacianVec (V : E → ℝ) {f : E → F} (hf : ContD
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ F] in
 /-- The gradient of `ℓ ∘ f` is the Riesz representative of `ℓ ∘ Df`. -/
 theorem gradient_clm_comp {f : E → F} {x : E} (hf : DifferentiableAt ℝ f x) (ℓ : F →L[ℝ] ℝ) :
-    gradient (fun y => ℓ (f y)) x = (InnerProductSpace.toDual ℝ E).symm (ℓ.comp (fderiv ℝ f x)) := by
-    apply congrArg (InnerProductSpace.toDual ℝ E).symm
-    simpa [Function.comp_def] using
-      (ℓ.hasFDerivAt.comp x hf.hasFDerivAt).fderiv
+    gradient (fun y => ℓ (f y)) x =
+      (InnerProductSpace.toDual ℝ E).symm (ℓ.comp (fderiv ℝ f x)) := by
+  apply congrArg (InnerProductSpace.toDual ℝ E).symm
+  simpa [Function.comp_def] using (ℓ.hasFDerivAt.comp x hf.hasFDerivAt).fderiv
 
 variable (m : Measure E) [m.IsAddHaarMeasure]
 
@@ -145,34 +149,40 @@ end NormedSpace
 
 omit [CompleteSpace E] [FiniteDimensional ℝ F] [m.IsAddHaarMeasure] in
 private theorem tensorTilt_integrable_laplacian {V : E → ℝ}
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {f : E → F} (hf : f.HasTemperateGrowth) (z : E) :
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {f : E → F}
+    (hf : f.HasTemperateGrowth) (z : E) :
     Integrable (Laplacian.laplacian f) (expTilt (m.tilted (-V)) z) := by
   classical
   obtain ⟨k, C, hb⟩ := hf.2 2
   have h₂ : Integrable (iteratedFDeriv ℝ 2 f) (expTilt (m.tilted (-V)) z) :=
-    FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
+    FunctionalInequalities.Probability.integrable_of_norm_le_pow _
+      (integrable_exp_mul_norm_expTilt m hexp z)
       (hf.1.continuous_iteratedFDeriv (WithTop.coe_le_coe.mpr le_top)).aestronglyMeasurable hb
-  have heq : Laplacian.laplacian f = fun x =>
-      ∑ i, iteratedFDeriv ℝ 2 f x
-        ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E i] := by
+  have heq :
+    Laplacian.laplacian f = fun x =>
+      ∑ i, iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E i] := by
     exact InnerProductSpace.laplacian_eq_iteratedFDeriv_stdOrthonormalBasis f
   rw [heq]
   apply integrable_finsetSum
   intro i hi
-  exact (ContinuousMultilinearMap.apply ℝ (fun _ : Fin 2 => E) F
-    ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E i]).integrable_comp h₂
+  exact
+    (ContinuousMultilinearMap.apply ℝ (fun _ : Fin 2 => E) F
+          ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E i]).integrable_comp
+      h₂
 
 omit [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] in
-private theorem tensorTilt_integrable_drift {V : E → ℝ} (hV : ContDiff ℝ 1 V)
-    {CV : ℝ} {kV : ℕ} (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {f : E → F} (hf : f.HasTemperateGrowth) (z : E) :
+private theorem tensorTilt_integrable_drift {V : E → ℝ} (hV : ContDiff ℝ 1 V) {CV : ℝ} {kV : ℕ}
+    (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {f : E → F}
+    (hf : f.HasTemperateGrowth) (z : E) :
     Integrable (fun x => fderiv ℝ f x (gradient V x)) (expTilt (m.tilted (-V)) z) := by
   obtain ⟨k, C, hC, hb⟩ := hf.norm_iteratedFDeriv_le_uniform 1
-  apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
-    ((hf.1.continuous_fderiv (by simp)).clm_apply
-      (continuous_gradient hV)).aestronglyMeasurable (C := C * CV) (k := k + kV)
+  apply
+    FunctionalInequalities.Probability.integrable_of_norm_le_pow _
+      (integrable_exp_mul_norm_expTilt m hexp z)
+      ((hf.1.continuous_fderiv (by simp)).clm_apply
+          (continuous_gradient hV)).aestronglyMeasurable
+      (C := C * CV) (k := k + kV)
   intro x
   have hdf : ‖fderiv ℝ f x‖ ≤ C * (1 + ‖x‖) ^ k := by
     simpa only [norm_iteratedFDeriv_one] using hb 1 le_rfl x

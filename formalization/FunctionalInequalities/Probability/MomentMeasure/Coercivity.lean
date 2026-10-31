@@ -1,19 +1,25 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
-import FunctionalInequalities.Probability.Support.Convex
-import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
-import FunctionalInequalities.Probability.MomentMeasure.Affine
-import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
-import Mathlib.MeasureTheory.Integral.Lebesgue.Map
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
+public import FunctionalInequalities.Probability.Support.Convex
+public import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+public import FunctionalInequalities.Probability.MomentMeasure.Affine
+public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Map
 
 /-!
 # Coercivity of the CEK functional
 
-Haar scaling of exponential mass, a polynomial bound on conjugate mass with the constant chosen before the potential,
-and the resulting functional and integral bounds for centered probability measures with full-dimensional support.
+Haar scaling of exponential mass, a polynomial bound on conjugate mass with the constant chosen
+before the potential,
+and the resulting functional and integral bounds for centered probability measures with
+full-dimensional support.
 This route does not establish the particular constant of CEK Lemma 15.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -185,23 +191,33 @@ theorem functional_le_of_mass_bound (dx μ : Measure E) (φ : E → EReal)
 /-- The source probability, first moment, centering and full-dimensional support
 produce the needed geometry. The constant is quantified before every phi;
 this is new P12 coercivity support, not source Lemma15's particular constant. -/
-theorem exists_coercivity_of_centered_probability (dx μ : Measure E)
-    [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
-    (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
+theorem exists_coercivity_of_centered_probability (dx μ : Measure E) [dx.IsAddHaarMeasure]
+    [IsProbabilityMeasure μ] (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
     (hint : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0) :
-    ∃ A : ℝ, 0 < A ∧ ∀ φ : E → EReal,
-      (∀ x, 0 ≤ φ x) → φ 0 = 0 → ConvexPotential φ → PotentialIntegrable φ μ →
-      (mass dx (legendre φ) ≤ ENNReal.ofReal
-        (A * (max (∫ x, (φ x).toReal ∂μ) 1) ^ Module.finrank ℝ E)) ∧
-      variationalFunctional dx μ φ ≤
-        ((Real.log A + (Module.finrank ℝ E : ℝ) * Real.log (max (∫ x, (φ x).toReal ∂μ) 1) -
-          (∫ x, (φ x).toReal ∂μ) : ℝ) : EReal) := by
+    ∃ A : ℝ,
+      0 < A ∧
+        ∀ φ : E → EReal,
+          (∀ x, 0 ≤ φ x) →
+            φ 0 = 0 →
+              ConvexPotential φ →
+                PotentialIntegrable φ μ →
+                  (mass dx (legendre φ) ≤
+                      ENNReal.ofReal
+                        (A * (max (∫ x, (φ x).toReal ∂μ) 1) ^ Module.finrank ℝ E)) ∧
+                    variationalFunctional dx μ φ ≤
+                      ((Real.log A +
+                              (Module.finrank ℝ E : ℝ) *
+                                Real.log (max (∫ x, (φ x).toReal ∂μ) 1) -
+                            (∫ x, (φ x).toReal ∂μ) :
+                          ℝ) :
+                        EReal) := by
   have hμ : μ ≠ 0 := by
     intro hz
     have hu : μ Set.univ = 1 := measure_univ
     simp only [hz, Measure.coe_zero, Pi.zero_apply, zero_ne_one] at hu
-  have h0 := FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero
-    μ hμ hsub hint hbar
+  have h0 :=
+    FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero
+      μ hμ hsub hint hbar
   obtain ⟨A, hA, hmass⟩ := exists_uniform_mass_bound dx μ h0
   refine ⟨A, hA, ?_⟩
   intro φ hnn hφ0 hconv hφ
@@ -243,22 +259,23 @@ variable {E : Type*}
 /-- Actual normalized-sequence integral control from a finite eventual
 functional lower bound, as in CEK (62). The finite prefix is handled by the
 proved bounded-range theorem; no desired sequence bound is supplied. -/
-theorem exists_integral_bound_of_eventual_functional_lower
-    (dx μ : Measure E) [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
+theorem exists_integral_bound_of_eventual_functional_lower (dx μ : Measure E)
+    [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
     (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
-    (hint : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0)
-    (φ : ℕ → E → EReal) (hnn : ∀ j x, 0 ≤ φ j x) (hφ0 : ∀ j, φ j 0 = 0)
-    (hconv : ∀ j, ConvexPotential (φ j)) (hφ : ∀ j, PotentialIntegrable (φ j) μ)
-    (b : ℝ) (hlower : ∀ᶠ j in atTop, (b : EReal) ≤ variationalFunctional dx μ (φ j)) :
-    ∃ B : ℝ, 0 ≤ B ∧ (∀ j, (∫ x, (φ j x).toReal ∂μ) ≤ B) ∧
-      (⨆ j, ∫⁻ x, (φ j x).toENNReal ∂μ) ≠ ⊤ := by
+    (hint : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0) (φ : ℕ → E → EReal)
+    (hnn : ∀ j x, 0 ≤ φ j x) (hφ0 : ∀ j, φ j 0 = 0) (hconv : ∀ j, ConvexPotential (φ j))
+    (hφ : ∀ j, PotentialIntegrable (φ j) μ) (b : ℝ)
+    (hlower : ∀ᶠ j in atTop, (b : EReal) ≤ variationalFunctional dx μ (φ j)) :
+    ∃ B : ℝ,
+      0 ≤ B ∧ (∀ j, (∫ x, (φ j x).toReal ∂μ) ≤ B) ∧ (⨆ j, ∫⁻ x, (φ j x).toENNReal ∂μ) ≠ ⊤ := by
   obtain ⟨A, _hA, hc⟩ := exists_coercivity_of_centered_probability dx μ hsub hint hbar
   obtain ⟨B, _hB, hlogbound⟩ := exists_bound_of_log_lower A (Module.finrank ℝ E) b
   have hev : ∀ᶠ j in atTop, (∫ x, (φ j x).toReal ∂μ) ≤ B := by
     filter_upwards [hlower] with j hj
     apply hlogbound _ (lintegral_nonneg_potential (φ j) (hφ j) (hnn j)).2.2
     exact EReal.coe_le_coe_iff.mp (hj.trans (hc (φ j) (hnn j) (hφ0 j) (hconv j) (hφ j)).2)
-  have hbu : IsBoundedUnder (fun a b : ℝ => a ≤ b) atTop (fun j => ∫ x, (φ j x).toReal ∂μ) := ⟨B, hev⟩
+  have hbu : IsBoundedUnder (fun a b : ℝ => a ≤ b) atTop (fun j => ∫ x, (φ j x).toReal ∂μ) :=
+    ⟨B, hev⟩
   obtain ⟨B', hB'⟩ := hbu.bddAbove_range
   refine ⟨max B' 0, le_max_right _ _, ?_, ?_⟩
   · intro j

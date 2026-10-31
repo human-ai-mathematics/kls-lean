@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Covariance
-import FunctionalInequalities.Poincare.CovarianceGradient.Translation
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Covariance
+public import FunctionalInequalities.Poincare.CovarianceGradient.Translation
 
 /-!
 # Log-concave laws under ambient translation
@@ -15,12 +17,15 @@ affine isometry carrying the translated law back to `μ`, and images of compact 
 test sets. The ambient law has a finite second moment, because the intrinsic law has one and
 reconstruction is an affine isometry; hence its barycenter exists and translating by the negative
 barycenter gives a law with zero mean. The affine covariance Poincaré constant itself is
-translation invariant for every Borel law, see `Poincare.CovarianceGradient.Intrinsic.constant_translateLaw`;
+translation invariant for every Borel law, see
+`Poincare.CovarianceGradient.Intrinsic.constant_translateLaw`;
 log-concavity is not needed for that identity.
 
 What this module does not claim: any Poincaré inequality, finiteness of the constant, the
 isotropic reduction, or KLS. The zero-dimensional direction space is included.
 -/
+
+@[expose] public section
 
 noncomputable section
 

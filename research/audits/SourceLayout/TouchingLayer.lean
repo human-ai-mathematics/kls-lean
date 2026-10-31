@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 noncomputable section
 open Set Filter

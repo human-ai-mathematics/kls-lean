@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
-import FunctionalInequalities.Probability.LogConcave
+module
+
+public import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
+public import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `lem:conditional-fiber-energy-comparison`
@@ -18,6 +20,8 @@ Lean theorem uses a general Haar reference measure, and the second moment is par
 frame. No value of `κ`, no log-concavity, no fiber Poincaré input and no KLS statement is claimed:
 the corollary `cor:conditional-fiber-twelve-bound` is a separate node.
 -/
+
+@[expose] public section
 
 noncomputable section
 

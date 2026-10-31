@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
 
 /-!
 # Scope audit for `P1`–`P8` of `GeneratedRouteStatements.lean`
@@ -22,6 +24,8 @@ Buser's inequality.
 
 The `#print axioms` reports at the end must all read `[propext, Classical.choice, Quot.sound]`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -47,11 +51,13 @@ theorem route_P1 :
 discharged from `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P2 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}, 0 ≤ t →
-      ∀ (a : ℝ) (f g : H₀),
-        FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (a • f + g) =
-          a • FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f + FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t g := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ},
+      0 ≤ t →
+        ∀ (a : ℝ) (f g : H₀),
+          FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (a • f + g) =
+            a • FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f +
+              FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t g := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t ht a f g
   exact FunctionalInequalities.Analysis.Semigroup.Generated.map_smul_add T hT hd ht a f g
 
@@ -69,9 +75,12 @@ theorem route_P3 :
 discharged from `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P4 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}, 0 ≤ t →
-      ∀ f g : H₀, ⟪FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f, g⟫ = ⟪f, FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t g⟫ := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ},
+      0 ≤ t →
+        ∀ f g : H₀,
+          ⟪FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f, g⟫ =
+            ⟪f, FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t g⟫ := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t ht f g
   exact FunctionalInequalities.Analysis.Semigroup.Generated.symmetric T hT hd ht f g
 
@@ -89,10 +98,14 @@ theorem route_P5 :
 `P_{t+u} = P_t P_u`), discharged from `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P6 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t u : ℝ}, 0 ≤ t → 0 ≤ u →
-      ∀ f : H₀, FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd (t + u) f =
-        FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd u f) := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t u : ℝ},
+      0 ≤ t →
+        0 ≤ u →
+          ∀ f : H₀,
+            FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd (t + u) f =
+              FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t
+                (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd u f) := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t u ht hu f
   exact FunctionalInequalities.Analysis.Semigroup.Generated.add_time T hT hd ht hu f
 
@@ -100,9 +113,16 @@ theorem route_P6 :
 discharged from `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P7 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀) {ε : ℝ}, 0 < ε →
-      ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 ≤ t → t < δ → ‖FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f - f‖ < ε := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀) {ε : ℝ},
+      0 < ε →
+        ∃ δ : ℝ,
+          0 < δ ∧
+            ∀ t : ℝ,
+              0 ≤ t →
+                t < δ →
+                  ‖FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f - f‖ <
+                    ε := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd f ε hε
   exact FunctionalInequalities.Analysis.Semigroup.Generated.continuous_at_zero T hT hd f hε
 
@@ -110,9 +130,11 @@ theorem route_P7 :
 discharged from `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P8 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
-    (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀),
-      ContinuousOn (fun t : ℝ => FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) (Set.Ici 0) := by
+      [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁] (T : H₀ →ₗ.[ℝ] H₁)
+      (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀),
+      ContinuousOn
+        (fun t : ℝ => FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f)
+        (Set.Ici 0) := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd f
   exact FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn T hT hd f
 

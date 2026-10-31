@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "review_date": "2026-10-31",
+  "old_lean": "v4.33.0",
+  "old_mathlib": "db584cd6d46c92f209a44c0f1c829460d327499d",
+  "new_lean": "v4.35.0",
+  "new_mathlib": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+  "old_input_sha256": "4220bf7b92f8626ca4f7a9bd430e673bdb41b9d6a61f5dd6ecc292d61df6cc3f",
+  "names": [
+    "FunctionalInequalities.Analysis.centeredDifference_contDiff_lipschitz_gradient",
+    "FunctionalInequalities.Analysis.centeredDifference_nonneg_le",
+    "FunctionalInequalities.Probability.Stein.measurable_hessianMatrix_entry",
+    "FunctionalInequalities.Probability.Stein.norm_hessianMatrix_entry_le_of_lipschitz_gradient",
+    "FunctionalInequalities.Analysis.integrable_hessian_increment_energy",
+    "FunctionalInequalities.Analysis.integrable_weak_generator_densities",
+    "FunctionalInequalities.Analysis.integral_mul_hessian_increment_le"
+  ],
+  "old_instance_lineage": [
+    {
+      "unsafe": false,
+      "partial": false,
+      "name": "SeminormedAddGroup.toContinuousENorm",
+      "module": "Mathlib.Analysis.Normed.Group.Continuity",
+      "levels": [
+        "u_4"
+      ],
+      "kind": "definition",
+      "body_expr_hash": "1720280204"
+    },
+    {
+      "unsafe": false,
+      "partial": false,
+      "name": "SeminormedAddGroup.toContinuousENorm._proof_1",
+      "module": "Mathlib.Analysis.Normed.Group.Continuity",
+      "levels": [
+        "u_1"
+      ],
+      "kind": "theorem",
+      "body_expr_hash": "3142926316"
+    },
+    {
+      "unsafe": false,
+      "partial": false,
+      "name": "SeminormedAddGroup.toContinuousENorm.eq_1",
+      "module": "Mathlib.Analysis.Normed.Group.Continuity",
+      "levels": [
+        "u_4"
+      ],
+      "kind": "theorem",
+      "body_expr_hash": "867503610"
+    }
+  ],
+  "scope": "Extracted actual old cached type ASTs, expanding only the removed old SeminormedAddGroup.toContinuousENorm instance and its actual old-owned generated helper bodies with universe instantiation. All seven types have empty universe-parameter lists. The supported AST subset preserves constants, universe numerals, application order, de Bruijn indices and binder information; only alpha binder names/mdata are ignored. Outer original names and printed types were compared separately. This is kernel convertibility under the pinned NEW environment, not fresh old-source certification or global Mathlib semantic equivalence.",
+  "reproduction": "Copy HessianOldTypesEquality.lean.in to an ignored .lean file; set KLS_OLD_EXPRESSIONS to this HessianOldTypes.json and run lake env lean -DwarningAsError=true from formalization. Require exit0 and exactly seven KERNEL_TYPE_EQUAL lines plus SEVEN_LEGACY_TYPES_CHECKED.",
+  "frozen_hash_guard_scope": "Exactly four of seven numeric literals changed in HessianIncrementAudit; all seven rows, universe, alias and axiom checks retained."
+}

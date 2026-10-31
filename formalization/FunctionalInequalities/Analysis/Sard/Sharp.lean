@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Sard.Basic
-import FunctionalInequalities.Analysis.Sard.QuadraticCover
-import FunctionalInequalities.Analysis.Sard.MorseVanishing
+module
+
+public import FunctionalInequalities.Analysis.Sard.Basic
+public import FunctionalInequalities.Analysis.Sard.QuadraticCover
+public import FunctionalInequalities.Analysis.Sard.MorseVanishing
 
 /-! # Sard's theorem at the sharp finite regularity `C^n`
 
@@ -16,6 +18,8 @@ restricted here.  Instead the Morse vanishing lemma
 uniform `o(‖y - x‖ ^ (k + 1))` modulus for the function (`exists_cover_of_critical`), and the
 covering count `Analysis.volume_image_eq_zero_of_oscillation_pow` finishes with `k + 1 = n`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

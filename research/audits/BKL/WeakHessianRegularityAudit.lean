@@ -1,12 +1,16 @@
-import FunctionalInequalities.Analysis.Cutoff.Translation
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
-import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
-import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianRegularity
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Mollification
-import FunctionalInequalities.Analysis.WeakDerivative.Approximation
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Cutoff.Translation
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianRegularity
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.Mollification
+public import FunctionalInequalities.Analysis.WeakDerivative.Approximation
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Set Filter
 open scoped Topology ContDiff RealInnerProductSpace
@@ -40,31 +44,47 @@ integrated increment-energy estimate at every shift; the energy is not a premise
 theorem exists_uniform_original_energy_tests {n : ℕ} {u V χ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) (hconv : ConvexOn ℝ univ u) {G : NNReal}
     (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V) (hVc : ConvexOn ℝ univ V)
-    {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x))) {K : ℝ} (hK : 0 < K)
-    (hdata : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).PosDef ∧ Real.log (hessianMatrix u x).det = -u x + V (gradient u x) ∧
-      (K • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef)
-    {D : ℝ} (hw : ∀ (x h : EuclideanSpace ℝ (Fin n)),
-      u (x + h) + u (x - h) - 2 * u x ≤ D * ‖h‖ ^ 2)
+    {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x))) {K : ℝ}
+    (hK : 0 < K)
+    (hdata :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).PosDef ∧
+          Real.log (hessianMatrix u x).det = -u x + V (gradient u x) ∧
+            (K • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef)
+    {D : ℝ}
+    (hw : ∀ (x h : EuclideanSpace ℝ (Fin n)), u (x + h) + u (x - h) - 2 * u x ≤ D * ‖h‖ ^ 2)
     (hχ : ContDiff ℝ 1 χ) (hχc : HasCompactSupport χ) (v : EuclideanSpace ℝ (Fin n)) :
     ∃ η : EuclideanSpace ℝ (Fin n) → ℝ,
-      ContDiff ℝ 2 η ∧ HasCompactSupport η ∧ (∀ x, 0 ≤ η x) ∧
-      (∀ t : ℝ, |t| ≤ 1 → ∀ x, (χ (x + t • v)) ^ 2 ≤ η x * Real.exp (-u x)) ∧
-      ∀ h : EuclideanSpace ℝ (Fin n),
-        Integrable (fun x => η x * ((∑ i, ∑ j, (hessianMatrix u (x + h) - hessianMatrix u x) i j ^ 2) +
-          ∑ i, ∑ j, (hessianMatrix u (x - h) - hessianMatrix u x) i j ^ 2) * Real.exp (-u x)) ∧
-        (∫ x, η x * ((∑ i, ∑ j, (hessianMatrix u (x + h) - hessianMatrix u x) i j ^ 2) +
-          ∑ i, ∑ j, (hessianMatrix u (x - h) - hessianMatrix u x) i j ^ 2) * Real.exp (-u x)) ≤
-        2 * K ^ 2 * (D * ‖h‖ ^ 2) * ∫ x,
-          |η x + (((hessianMatrix u x)⁻¹ * hessianMatrix η x).trace -
-            fderiv ℝ V (gradient u x) (gradient η x))| * Real.exp (-u x) := by
+      ContDiff ℝ 2 η ∧
+        HasCompactSupport η ∧
+          (∀ x, 0 ≤ η x) ∧
+            (∀ t : ℝ, |t| ≤ 1 → ∀ x, (χ (x + t • v)) ^ 2 ≤ η x * Real.exp (-u x)) ∧
+              ∀ h : EuclideanSpace ℝ (Fin n),
+                Integrable
+                    (fun x =>
+                      η x *
+                          ((∑ i, ∑ j, (hessianMatrix u (x + h) - hessianMatrix u x) i j ^ 2) +
+                            ∑ i, ∑ j, (hessianMatrix u (x - h) - hessianMatrix u x) i j ^ 2) *
+                        Real.exp (-u x)) ∧
+                  (∫ x,
+                      η x *
+                          ((∑ i, ∑ j, (hessianMatrix u (x + h) - hessianMatrix u x) i j ^ 2) +
+                            ∑ i, ∑ j, (hessianMatrix u (x - h) - hessianMatrix u x) i j ^ 2) *
+                        Real.exp (-u x)) ≤
+                    2 * K ^ 2 * (D * ‖h‖ ^ 2) *
+                      ∫ x,
+                        |η x +
+                              (((hessianMatrix u x)⁻¹ * hessianMatrix η x).trace -
+                                fderiv ℝ V (gradient u x) (gradient η x))| *
+                          Real.exp (-u x) := by
   obtain ⟨η, hη, hηc, hη0, _, hdom⟩ :=
     exists_integrable_weighted_majorant hu.continuous hχ.continuous hχc v
   refine ⟨η, hη, hηc, hη0, hdom, ?_⟩
   intro h
-  exact ⟨integrable_hessian_increment_energy hu.continuous hG hη.continuous hηc h,
-    integral_mul_hessian_increment_le hu hconv hG hV hVc hF hK hdata hη hηc hη0 h
-      (fun x => hw x h)⟩
+  exact
+    ⟨integrable_hessian_increment_energy hu.continuous hG hη.continuous hηc h,
+      integral_mul_hessian_increment_le hu hconv hG hV hVc hF hK hdata hη hηc hη0 h
+        (fun x => hw x h)⟩
 
 end WeakHessianRegularityAudit.Geometry
 

@@ -1,22 +1,27 @@
-import FunctionalInequalities.Analysis.RingInverseDerivative
-import Mathlib.Analysis.SpecificLimits.Normed
-import Mathlib.Analysis.Calculus.FDeriv.Bilinear
-import Mathlib.Analysis.Calculus.FDeriv.Analytic
-import Mathlib.Topology.Algebra.Group.Matrix
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Analysis.Matrix.Normed
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Analysis.Calculus.TaylorIntegral
-import Mathlib.Analysis.Matrix.PosDef
+module
+
+public import FunctionalInequalities.Analysis.RingInverseDerivative
+public import Mathlib.Analysis.SpecificLimits.Normed
+public import Mathlib.Analysis.Calculus.FDeriv.Bilinear
+public import Mathlib.Analysis.Calculus.FDeriv.Analytic
+public import Mathlib.Topology.Algebra.Group.Matrix
+public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+public import Mathlib.LinearAlgebra.Matrix.Trace
+public import Mathlib.Analysis.Matrix.Normed
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.Analysis.Calculus.TaylorIntegral
+public import Mathlib.Analysis.Matrix.PosDef
 
 /-!
 # Derivative of the determinant and of the log-determinant (Jacobi's formula)
 
 The determinant of a real square matrix is a continuous multilinear map of its rows; its derivative
-in a direction `N` is the sum of row replacements and, for invertible `M`, equals `det M · tr(M⁻¹ N)`.
+in a direction `N` is the sum of row replacements and, for invertible `M`, equals `det M · tr(M⁻¹
+N)`.
 Hence `D(log det)(M)[N] = tr(M⁻¹ N)`, also along a differentiable matrix-valued map.
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped Matrix.Norms.Elementwise
@@ -45,7 +50,9 @@ theorem fderiv_det_eq_sum_updateRow (M N : Matrix ι ι ℝ) :
   intro i _hi
   rfl
 
-/-- **Jacobi's formula**: `D(det)(M)[N] = det M · tr(M⁻¹ N)` for invertible `M` and any direction `N`. -/
+/--
+**Jacobi's formula**: `D(det)(M)[N] = det M · tr(M⁻¹ N)` for invertible `M` and any direction `N`.
+-/
 theorem fderiv_det_eq_det_mul_trace (M N : Matrix ι ι ℝ) (hM : IsUnit M.det) :
     fderiv ℝ Matrix.det M N = M.det * Matrix.trace (M⁻¹ * N) := by
   have hNM : (N * M⁻¹) * M = N := by
@@ -187,7 +194,9 @@ private theorem contDiff_det {k : ℕ∞ω} :
   simp only [Matrix.det_apply]
   fun_prop
 
-/-- `M ↦ log det M` is `C^k` (every `k`, including `ω`) at each matrix with nonzero determinant. This is smoothness of the
+/--
+`M ↦ log det M` is `C^k` (every `k`, including `ω`) at each matrix with nonzero determinant. This is
+smoothness of the
 matrix function only; nothing is claimed about a matrix field. -/
 theorem contDiffAt_log_det {k : ℕ∞ω} {A : Matrix ι ι ℝ} (hA : A.det ≠ 0) :
     ContDiffAt ℝ k (fun M : Matrix ι ι ℝ => Real.log M.det) A :=
@@ -227,21 +236,19 @@ private def endEquiv (ι : Type*) [Fintype ι] [DecidableEq ι] :
     (by ext v i; simp)
     (by intro A B; ext v i; simp [Matrix.toLinAlgEquiv'_apply, Matrix.mulVec_mulVec])
 
-private lemma end_inverse {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (A : Matrix ι ι ℝ) (hA : IsUnit A.det) :
-    Ring.inverse (endEquiv ι A)=endEquiv ι A⁻¹ := by
+private lemma end_inverse {ι : Type*} [Fintype ι] [DecidableEq ι] (A : Matrix ι ι ℝ)
+    (hA : IsUnit A.det) : Ring.inverse (endEquiv ι A) = endEquiv ι A⁻¹ := by
   apply left_inv_eq_right_inv
-  · exact Ring.inverse_mul_cancel _ (((Matrix.isUnit_iff_isUnit_det A).mpr hA).map
-      (endEquiv ι).toRingHom)
-  · rw [←map_mul,Matrix.mul_nonsing_inv A hA,map_one]
+  · exact
+      Ring.inverse_mul_cancel _
+        (((Matrix.isUnit_iff_isUnit_det A).mpr hA).map (endEquiv ι).toRingHom)
+  · rw [← map_mul, Matrix.mul_nonsing_inv A hA, map_one]
 
-private lemma inverse_comp_derivative
-    {ι G : Type*} [Fintype ι] [DecidableEq ι]
-    [NormedAddCommGroup G] [NormedSpace ℝ G]
-    {M : G → Matrix ι ι ℝ} {x : G}
+private lemma inverse_comp_derivative {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] {M : G → Matrix ι ι ℝ} {x : G}
     (hM : DifferentiableAt ℝ M x) (hdet : (M x).det ≠ 0) :
-    ∃ L : G →L[ℝ] Matrix ι ι ℝ, HasFDerivAt (fun y => (M y)⁻¹) L x ∧
-      ∀ v, L v = -((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹) := by
+    ∃ L : G →L[ℝ] Matrix ι ι ℝ,
+      HasFDerivAt (fun y => (M y)⁻¹) L x ∧ ∀ v, L v = -((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹) := by
   let e := endEquiv ι
   let ec := e.toLinearEquiv.toContinuousLinearEquiv
   have hu : IsUnit (e (M x)) :=
@@ -249,117 +256,109 @@ private lemma inverse_comp_derivative
   have hE := ec.hasFDerivAt.comp x hM.hasFDerivAt
   have hI := hasFDerivAt_ringInverse_comp hE hu
   have hD := ec.symm.hasFDerivAt.comp x hI
-  have hev : (fun y => ec.symm (Ring.inverse (ec (M y)))) =ᶠ[𝓝 x]
-      (fun y => (M y)⁻¹) := by
-    have hopen : IsOpen {A : Matrix ι ι ℝ | IsUnit A.det} :=
-      Units.isOpen.preimage (by fun_prop)
+  have hev : (fun y => ec.symm (Ring.inverse (ec (M y)))) =ᶠ[𝓝 x] (fun y => (M y)⁻¹) := by
+    have hopen : IsOpen {A : Matrix ι ι ℝ | IsUnit A.det} := Units.isOpen.preimage (by fun_prop)
     filter_upwards [hM.continuousAt.preimage_mem_nhds
-      (hopen.mem_nhds (isUnit_iff_ne_zero.mpr hdet))] with y hy
+        (hopen.mem_nhds (isUnit_iff_ne_zero.mpr hdet))] with
+      y hy
     apply e.injective
-    change e (e.symm (Ring.inverse (e (M y))))=e (M y)⁻¹
-    rw [e.apply_symm_apply,end_inverse (M y) hy]
+    change e (e.symm (Ring.inverse (e (M y)))) = e (M y)⁻¹
+    rw [e.apply_symm_apply, end_inverse (M y) hy]
   have hd := hD.congr_of_eventuallyEq hev.symm
-  refine ⟨_,hd,?_⟩
+  refine ⟨_, hd, ?_⟩
   intro v
-  change e.symm (-(Ring.inverse (e (M x)) * e (fderiv ℝ M x v) * Ring.inverse (e (M x))))=_
+  change e.symm (-(Ring.inverse (e (M x)) * e (fderiv ℝ M x v) * Ring.inverse (e (M x)))) = _
   rw [end_inverse (M x) (isUnit_iff_ne_zero.mpr hdet)]
   apply e.injective
-  simp only [map_neg,map_mul,AlgEquiv.apply_symm_apply]
+  simp only [map_neg, map_mul, AlgEquiv.apply_symm_apply]
   rfl
 
 /-- Actual inverse-field derivative under the original elementwise matrix API.
 The existing generic RingInverseDerivative is reused through the genuine
 finite-dimensional matrix/endomorphism equivalence, without a norm change
 in the statement, nonempty index, adjugate expansion or second inverse proof. -/
-theorem fderiv_inverse_comp_apply
-    {ι G : Type*} [Fintype ι] [DecidableEq ι]
-    [NormedAddCommGroup G] [NormedSpace ℝ G]
-    {M : G → Matrix ι ι ℝ} {x : G}
+theorem fderiv_inverse_comp_apply {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] {M : G → Matrix ι ι ℝ} {x : G}
     (hM : DifferentiableAt ℝ M x) (hdet : (M x).det ≠ 0) (v : G) :
-    fderiv ℝ (fun y => (M y)⁻¹) x v =
-      -((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹) := by
-  obtain ⟨L,hd,he⟩ := inverse_comp_derivative hM hdet
+    fderiv ℝ (fun y => (M y)⁻¹) x v = -((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹) := by
+  obtain ⟨L, hd, he⟩ := inverse_comp_derivative hM hdet
   have hv := congrArg (fun D : G →L[ℝ] Matrix ι ι ℝ => D v) hd.fderiv
   exact hv.trans (he v)
 
-private lemma fderiv_trace_mul_apply
-    {ι G : Type*} [Fintype ι] [DecidableEq ι]
-    [NormedAddCommGroup G] [NormedSpace ℝ G]
-    {A B : G → Matrix ι ι ℝ} {x : G}
+private lemma fderiv_trace_mul_apply {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] {A B : G → Matrix ι ι ℝ} {x : G}
     (hA : DifferentiableAt ℝ A x) (hB : DifferentiableAt ℝ B x) (v : G) :
     fderiv ℝ (fun y => (A y * B y).trace) x v =
       (fderiv ℝ A x v * B x + A x * fderiv ℝ B x v).trace := by
   let T : Matrix ι ι ℝ →ₗ[ℝ] Matrix ι ι ℝ →ₗ[ℝ] ℝ :=
     { toFun := fun a =>
-        { toFun := fun b => (a*b).trace
-          map_add' := by intros; simp [Matrix.mul_add,Matrix.trace_add]
+        { toFun := fun b => (a * b).trace
+          map_add' := by intros; simp [Matrix.mul_add, Matrix.trace_add]
           map_smul' := by intros; simp [Matrix.trace_smul] }
-      map_add' := by intros; ext; simp [Matrix.add_mul,Matrix.trace_add]
+      map_add' := by intros; ext; simp [Matrix.add_mul, Matrix.trace_add]
       map_smul' := by intros; ext; simp [Matrix.trace_smul] }
   let Tc := (LinearMap.toContinuousLinearMap.toLinearMap.comp T).toContinuousLinearMap
   have hd := Tc.hasFDerivAt_of_bilinear hA.hasFDerivAt hB.hasFDerivAt
   have hv := congrArg (fun L : G →L[ℝ] ℝ => L v) hd.fderiv
-  change fderiv ℝ (fun y => (A y*B y).trace) x v =
-    (A x*fderiv ℝ B x v).trace + (fderiv ℝ A x v*B x).trace at hv
+  change
+    fderiv ℝ (fun y => (A y * B y).trace) x v =
+      (A x * fderiv ℝ B x v).trace + (fderiv ℝ A x v * B x).trace at hv
   rw [Matrix.trace_add]
   linarith
 
 /-- Actual mixed second variation of logdet along a C2 matrix field. Local
 nonzero determinant suffices; no positive-definite, finite-dimensional source
 space, complete source, nonempty index or linearized-equation premise. -/
-theorem fderiv_logDet_comp_second_apply
-    {ι G : Type*} [Fintype ι] [DecidableEq ι]
-    [NormedAddCommGroup G] [NormedSpace ℝ G]
-    {M : G → Matrix ι ι ℝ} {x : G}
+theorem fderiv_logDet_comp_second_apply {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] {M : G → Matrix ι ι ℝ} {x : G}
     (hM : ContDiffAt ℝ 2 M x) (hdet : (M x).det ≠ 0) (v w : G) :
     fderiv ℝ (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) x v =
       ((M x)⁻¹ * fderiv ℝ (fun y => fderiv ℝ M y w) x v).trace -
-      ((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹ * fderiv ℝ M x w).trace := by
+        ((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹ * fderiv ℝ M x w).trace := by
   have hM0 : DifferentiableAt ℝ M x := hM.differentiableAt (by norm_num)
   have hDM : DifferentiableAt ℝ (fun y => fderiv ℝ M y w) x :=
     ((hM.fderiv_right (m := 1) (by norm_num)).differentiableAt (by norm_num)).clm_apply
       (differentiableAt_const w)
-  obtain ⟨L,hInv,hInvApply⟩ := inverse_comp_derivative hM0 hdet
-  have hnear : (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) =ᶠ[𝓝 x]
+  obtain ⟨L, hInv, hInvApply⟩ := inverse_comp_derivative hM0 hdet
+  have hnear :
+    (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) =ᶠ[𝓝 x]
       (fun y => ((M y)⁻¹ * fderiv ℝ M y w).trace) := by
     have hn := hM.eventually (by norm_num)
     have hnz : ∀ᶠ y in 𝓝 x, (M y).det ≠ 0 :=
       (((differentiableAt_det (M x)).continuousAt.comp hM0.continuousAt).eventually_ne hdet)
-    filter_upwards [hn,hnz] with y hy hyz
+    filter_upwards [hn, hnz] with y hy hyz
     exact fderiv_logDet_comp_apply (hy.differentiableAt (by norm_num)) hyz w
-  rw [hnear.fderiv_eq,fderiv_trace_mul_apply hInv.differentiableAt hDM v,
-    hInv.fderiv,hInvApply v,Matrix.neg_mul,Matrix.trace_add,Matrix.trace_neg]
+  rw [hnear.fderiv_eq, fderiv_trace_mul_apply hInv.differentiableAt hDM v, hInv.fderiv,
+    hInvApply v, Matrix.neg_mul, Matrix.trace_add, Matrix.trace_neg]
   ring
 
 /-- Savin Proposition4.1 proof (10)-(11): actual local constant determinant
 generates BOTH differential identities. No linearized equation is assumed. -/
-theorem trace_identities_of_eventually_det_const
-    {ι G : Type*} [Fintype ι] [DecidableEq ι]
-    [NormedAddCommGroup G] [NormedSpace ℝ G]
-    {M : G → Matrix ι ι ℝ} {x : G} {c : ℝ}
-    (hM : ContDiffAt ℝ 2 M x) (hc : c ≠ 0)
-    (heq : ∀ᶠ y in 𝓝 x, (M y).det=c) :
-    (∀ v : G, ((M x)⁻¹ * fderiv ℝ M x v).trace=0) ∧
-    ∀ v w : G, ((M x)⁻¹ * fderiv ℝ (fun y => fderiv ℝ M y w) x v).trace =
-      ((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹ * fderiv ℝ M x w).trace := by
+theorem trace_identities_of_eventually_det_const {ι G : Type*} [Fintype ι] [DecidableEq ι]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] {M : G → Matrix ι ι ℝ} {x : G} {c : ℝ}
+    (hM : ContDiffAt ℝ 2 M x) (hc : c ≠ 0) (heq : ∀ᶠ y in 𝓝 x, (M y).det = c) :
+    (∀ v : G, ((M x)⁻¹ * fderiv ℝ M x v).trace = 0) ∧
+      ∀ v w : G,
+        ((M x)⁻¹ * fderiv ℝ (fun y => fderiv ℝ M y w) x v).trace =
+          ((M x)⁻¹ * fderiv ℝ M x v * (M x)⁻¹ * fderiv ℝ M x w).trace := by
   have hd : (M x).det ≠ 0 := by rw [mem_of_mem_nhds heq]; exact hc
   have hg : (fun y => Real.log (M y).det) =ᶠ[𝓝 x] (fun _ => Real.log c) := by
     filter_upwards [heq] with y hy
     rw [hy]
   constructor
   · intro v
-    rw [←fderiv_logDet_comp_apply (hM.differentiableAt (by norm_num)) hd v,hg.fderiv_eq]
+    rw [← fderiv_logDet_comp_apply (hM.differentiableAt (by norm_num)) hd v, hg.fderiv_eq]
     simp
   · intro v w
-    have hz : (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) =ᶠ[𝓝 x]
-        (fun _ => (0 : ℝ)) := by
+    have hz :
+      (fun y => fderiv ℝ (fun z => Real.log (M z).det) y w) =ᶠ[𝓝 x] (fun _ => (0 : ℝ)) := by
       filter_upwards [hg.eventually_nhds] with y hy
       have hyy : (fun z => Real.log (M z).det) =ᶠ[𝓝 y] (fun _ => Real.log c) := hy
       rw [hyy.fderiv_eq]
       simp
     have hs := fderiv_logDet_comp_second_apply hM hd v w
     rw [hz.fderiv_eq] at hs
-    have hz0 : fderiv ℝ (fun _ : G => (0 : ℝ)) x v=0 := by simp
+    have hz0 : fderiv ℝ (fun _ : G => (0 : ℝ)) x v = 0 := by simp
     rw [hz0] at hs
     exact sub_eq_zero.mp hs.symm
 

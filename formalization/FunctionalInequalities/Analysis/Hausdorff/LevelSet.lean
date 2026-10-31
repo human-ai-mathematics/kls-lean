@@ -1,6 +1,9 @@
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.Analysis.Calculus.Implicit
-import Mathlib.Analysis.Calculus.ContDiff.RCLike
+module
+
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.Analysis.Calculus.Implicit
+public import Mathlib.Analysis.Calculus.ContDiff.RCLike
+public import Mathlib.LinearAlgebra.Dual.Lemmas
 
 /-!
 # Regular level sets as local Lipschitz graphs
@@ -10,6 +13,8 @@ subset of the derivative kernel. In finite dimensions this gives locally finite 
 measure. The graph statement retains its Banach-space scope; regularity is pointwise.
 No assertion of local finiteness at excluded boundary points is made.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -32,10 +37,9 @@ hyperplane `ker (Dφ x)` under a Lipschitz map.  No finite-dimensionality is nee
 is what the implicit function theorem uses. -/
 theorem exists_lipschitzOnWith_levelSet_subset_image {φ : V → ℝ} (hφ : ContDiff ℝ 1 φ) {x : V}
     (hx : fderiv ℝ φ x ≠ 0) :
-    ∃ (N : Set V) (K : ℝ≥0) (s : Set (LinearMap.ker (fderiv ℝ φ x).toLinearMap))
-      (g : LinearMap.ker (fderiv ℝ φ x).toLinearMap → V),
-      N ∈ 𝓝 x ∧ Bornology.IsBounded s ∧ LipschitzOnWith K g s ∧
-        N ∩ {y | φ y = φ x} ⊆ g '' s := by
+    ∃ (N : Set V) (K : ℝ≥0) (s : Set (LinearMap.ker (fderiv ℝ φ x).toLinearMap)) (g :
+      LinearMap.ker (fderiv ℝ φ x).toLinearMap → V),
+      N ∈ 𝓝 x ∧ Bornology.IsBounded s ∧ LipschitzOnWith K g s ∧ N ∩ {y | φ y = φ x} ⊆ g '' s := by
   classical
   have hne : (fderiv ℝ φ x).toLinearMap ≠ 0 := fun h =>
     hx (ContinuousLinearMap.coe_injective (h.trans ContinuousLinearMap.toLinearMap_zero.symm))
@@ -48,17 +52,22 @@ theorem exists_lipschitzOnWith_levelSet_subset_image {φ : V → ℝ} (hφ : Con
   have hgd : HasStrictFDerivAt g (fderiv ℝ φ x).ker.subtypeL 0 :=
     hstrict.to_implicitFunctionOfComplemented hrange hker
   obtain ⟨K, t, ht, hlip⟩ := hgd.exists_lipschitzOnWith
-  have hPcont : Continuous fun y : V => P (y - x) := P.continuous.comp (continuous_id.sub continuous_const)
+  have hPcont : Continuous fun y : V => P (y - x) :=
+    P.continuous.comp (continuous_id.sub continuous_const)
   have hpre : (fun y : V => P (y - x)) ⁻¹' t ∈ 𝓝 x := by
     exact hPcont.continuousAt.preimage_mem_nhds (by simpa using ht)
-  obtain ⟨A, hA, hAsub⟩ := Filter.eventually_iff_exists_mem.mp
-    (hstrict.eq_implicitFunctionOfComplemented hrange hker)
-  refine ⟨A ∩ ((fun y : V => P (y - x)) ⁻¹' t) ∩ Metric.ball x 1, K,
-    (fun y : V => P (y - x)) '' ((A ∩ ((fun y : V => P (y - x)) ⁻¹' t) ∩ Metric.ball x 1)
-      ∩ {y | φ y = φ x}), g, ?_, ?_, ?_, ?_⟩
+  obtain ⟨A, hA, hAsub⟩ :=
+    Filter.eventually_iff_exists_mem.mp (hstrict.eq_implicitFunctionOfComplemented hrange hker)
+  refine
+    ⟨A ∩ ((fun y : V => P (y - x)) ⁻¹' t) ∩ Metric.ball x 1, K,
+      (fun y : V => P (y - x)) ''
+        ((A ∩ ((fun y : V => P (y - x)) ⁻¹' t) ∩ Metric.ball x 1) ∩ {y | φ y = φ x}),
+      g, ?_, ?_, ?_, ?_⟩
   · exact Filter.inter_mem (Filter.inter_mem hA hpre) (Metric.ball_mem_nhds x one_pos)
-  · refine (Metric.isBounded_closedBall (x := (0 : LinearMap.ker (fderiv ℝ φ x).toLinearMap))
-      (r := ‖P‖)).subset ?_
+  · refine
+      (Metric.isBounded_closedBall (x := (0 : LinearMap.ker (fderiv ℝ φ x).toLinearMap)) (r :=
+            ‖P‖)).subset
+        ?_
     rintro _ ⟨y, ⟨⟨⟨-, -⟩, hy1⟩, -⟩, rfl⟩
     simp only [Metric.mem_closedBall, dist_zero_right]
     refine (P.le_opNorm _).trans ?_
@@ -72,6 +81,7 @@ theorem exists_lipschitzOnWith_levelSet_subset_image {φ : V → ℝ} (hφ : Con
   · rintro y ⟨hyN, hylev⟩
     refine ⟨(fun y : V => P (y - x)) y, ⟨y, ⟨hyN, hylev⟩, rfl⟩, ?_⟩
     have h1 := hAsub y hyN.1.1
+    rw [hstrict.implicitToOpenPartialHomeomorphOfComplemented_apply] at h1
     rw [hgdef, ← hylev]
     exact h1
 

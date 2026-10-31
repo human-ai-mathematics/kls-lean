@@ -1,6 +1,8 @@
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.Topology.MetricSpace.Thickening
-import Mathlib.Topology.Semicontinuity.Basic
+module
+
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.Topology.MetricSpace.Thickening
+public import Mathlib.Topology.Semicontinuity.Basic
 
 /-!
 # Scalewise Hausdorff cover costs and measurability of compact slices
@@ -33,6 +35,8 @@ assumed Lipschitz, `d = 0` is allowed (the cover cost keeps Mathlib's `Nonempty`
 pieces cost `0` rather than `0 ^ (0 : ℝ) = 1`), and nothing here is a statement about the
 measurability of slices of a noncompact set.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -143,7 +147,8 @@ theorem exists_thickening_radius {d : ℝ} (hd : 0 ≤ d) {δ : ℝ≥0∞} (hδ
   obtain ⟨b, ⟨hb₁, hb₂⟩, hbpos⟩ := ((h1.and h2).and self_mem_nhdsWithin).exists
   exact ⟨b, hbpos, hb₂, hb₁⟩
 
-/-- Every open-cover cost at a positive scale is at most `μH[d]`: thicken a near-optimal cover by
+/--
+Every open-cover cost at a positive scale is at most `μH[d]`: thicken a near-optimal cover by
 summably small radii.  The room left by the scale absorbs the diameter increase, and
 `ENNReal.exists_pos_sum_of_countable` absorbs the cost increase. -/
 theorem openCoverCost_le_hausdorffMeasure {d : ℝ} (hd : 0 ≤ d) {r : ℝ≥0∞} (hr : 0 < r)
@@ -154,22 +159,23 @@ theorem openCoverCost_le_hausdorffMeasure {d : ℝ} (hd : 0 ≤ d) {r : ℝ≥0�
   have hr₀pos : 0 < r₀ := lt_min (ENNReal.half_pos hr.ne') one_pos
   have hr₀top : r₀ ≠ ∞ := ne_top_of_le_ne_top ENNReal.one_ne_top (min_le_right _ _)
   have hr₀add : r₀ + r₀ ≤ r := by
-    calc r₀ + r₀ ≤ r / 2 + r / 2 := by gcongr <;> exact min_le_left _ _
+    calc
+      r₀ + r₀ ≤ r / 2 + r / 2 := by gcongr <;> exact min_le_left _ _
       _ = r := ENNReal.add_halves r
-  obtain ⟨C, hCcov, hCdiam, hCcost⟩ := exists_cover_familyCost_lt (d := d) (A := A) hr₀pos
-    (ENNReal.lt_add_right htop.ne (ENNReal.half_pos hε0).ne')
-  obtain ⟨σ, hσpos, hσsum⟩ := ENNReal.exists_pos_sum_of_countable
-    (ε := (ε : ℝ≥0∞) / 2) (ENNReal.half_pos hε0).ne' ℕ
-  choose b hbpos hbR hbcost using fun i => exists_thickening_radius hd
-    (ne_top_of_le_ne_top hr₀top (hCdiam i)) (σ := (σ i : ℝ≥0∞)) (R := r₀)
-    (ENNReal.coe_ne_zero.2 (hσpos i).ne') hr₀pos.ne'
+  obtain ⟨C, hCcov, hCdiam, hCcost⟩ :=
+    exists_cover_familyCost_lt (d := d) (A := A) hr₀pos
+      (ENNReal.lt_add_right htop.ne (ENNReal.half_pos hε0).ne')
+  obtain ⟨σ, hσpos, hσsum⟩ :=
+    ENNReal.exists_pos_sum_of_countable (ε := (ε : ℝ≥0∞) / 2) (ENNReal.half_pos hε0).ne' ℕ
+  choose b hbpos hbR hbcost using fun i =>
+    exists_thickening_radius hd (ne_top_of_le_ne_top hr₀top (hCdiam i)) (σ := (σ i : ℝ≥0∞))
+      (R := r₀) (ENNReal.coe_ne_zero.2 (hσpos i).ne') hr₀pos.ne'
   set U : ℕ → Set X := fun i => Metric.thickening (b i : ℝ) (C i) with hU
   have hUopen : ∀ i, IsOpen (U i) := fun i => Metric.isOpen_thickening
   have hUsub : ∀ i, C i ⊆ U i := fun i =>
     Metric.self_subset_thickening (by exact_mod_cast hbpos i) (C i)
   have hUdiam : ∀ i, Metric.ediam (U i) ≤ r := fun i =>
-    (Metric.ediam_thickening_le (b i)).trans
-      (le_trans (add_le_add (hCdiam i) (hbR i)) hr₀add)
+    (Metric.ediam_thickening_le (b i)).trans (le_trans (add_le_add (hCdiam i) (hbR i)) hr₀add)
   have hUcost : familyCost d U ≤ familyCost d C + ∑' i, (σ i : ℝ≥0∞) := by
     simp only [familyCost]
     rw [← ENNReal.tsum_add]
@@ -179,9 +185,9 @@ theorem openCoverCost_le_hausdorffMeasure {d : ℝ} (hd : 0 ≤ d) {r : ℝ≥0�
     · have hUi : (U i).Nonempty := hCi.mono (hUsub i)
       rw [iSup_pos hUi, iSup_pos hCi]
       exact (ENNReal.rpow_le_rpow (Metric.ediam_thickening_le (b i)) hd).trans (hbcost i)
-  calc openCoverCost d r A
-      ≤ familyCost d U :=
-        openCoverCost_le hUopen (hCcov.trans (Set.iUnion_mono hUsub)) hUdiam
+  calc
+    openCoverCost d r A ≤ familyCost d U :=
+      openCoverCost_le hUopen (hCcov.trans (Set.iUnion_mono hUsub)) hUdiam
     _ ≤ familyCost d C + ∑' i, (σ i : ℝ≥0∞) := hUcost
     _ ≤ (μH[d] A + (ε : ℝ≥0∞) / 2) + (ε : ℝ≥0∞) / 2 := add_le_add hCcost.le hσsum.le
     _ = μH[d] A + (ε : ℝ≥0∞) := by rw [add_assoc, ENNReal.add_halves]

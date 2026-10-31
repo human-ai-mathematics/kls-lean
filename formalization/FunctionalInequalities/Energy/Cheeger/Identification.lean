@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
-import FunctionalInequalities.Energy.Euclidean.Slope.Density
+module
+
+public import FunctionalInequalities.Energy.Cheeger.Basic
+public import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
+public import FunctionalInequalities.Energy.Euclidean.Slope.Density
 
 /-!
 # The Cheeger identification for every Borel probability law
@@ -18,7 +20,8 @@ inner-product space, including singular laws and zero-dimensional affine support
   Cheeger conventions agree, by collapsing the unconditional sandwich of
   `Energy/Euclidean/Slope/Comparison.lean`; this is a consequence of the identification, not a
   independent density assumption. The proof uses the local-slope comparison directly.
-* `SmoothGradient.relaxation_eq_two_mul_cheeger`, `SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger`:
+* `SmoothGradient.relaxation_eq_two_mul_cheeger`,
+  `SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger`:
   the coordinate and the affine-support forms of `𝓔^can = 2 Ch`, the latter being the Blueprint
   statement, with the value `⊤` allowed on both sides and a one-point affine support giving
   `0 = 2 · 0`.
@@ -28,6 +31,8 @@ Closest literature: S. Eriksson-Bique, *Density of Lipschitz functions in energy
 Iberoam. 29 (2013), §8.3 (the same conclusion via Hopf–Lax).  Nothing here is a Poincaré
 inequality, a finiteness statement or a Cheeger–Buser comparison.
 -/
+
+@[expose] public section
 
 noncomputable section
 

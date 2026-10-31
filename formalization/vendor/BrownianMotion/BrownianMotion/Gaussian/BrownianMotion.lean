@@ -3,6 +3,8 @@ Copyright (c) 2025 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne
 -/
+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 replacements
+-- of deprecated names (identifier-only); see vendor/port.patch.
 module
 
 public import BrownianMotion.Auxiliary.HasLaw
@@ -86,7 +88,7 @@ noncomputable def ofFin' (i : Fin (#I + 1)) : T :=
 lemma ofFin'_zero : I.ofFin' 0 = ⊥ := rfl
 
 lemma ofFin'_of_ne_zero (i : Fin (#I + 1)) (hi : i ≠ 0) :
-    I.ofFin' i = I.ofFin (i.pred hi) := by rw [ofFin', dif_neg hi]
+    I.ofFin' i = I.ofFin (i.pred hi) := by rw [ofFin', dite_eq_right hi]
 
 @[simp]
 lemma ofFin'_succ (i : Fin #I) :
@@ -151,13 +153,11 @@ theorem HasIndepIncrements.isGaussianProcess [LinearOrder T] [OrderBot T]
     have := (law ⊥).isProbabilityMeasure
     obtain rfl | hI := I.eq_empty_or_nonempty
     · constructor
+      · exact (measurable_of_subsingleton_codomain _).aemeasurable
       have : P.map (fun ω ↦ Finset.restrict ∅ fun x ↦ X x ω) = .dirac Classical.ofNonempty := by
         ext s -
         apply Subsingleton.set_cases (p := fun s ↦ Measure.map _ _ s = _)
-        · simp
-        simp only [measure_univ]
-        exact @measure_univ _ _ _
-          (Measure.isProbabilityMeasure_map (aemeasurable_pi_lambda _ fun _ ↦ (law _).aemeasurable))
+        all_goals simp
       rw [this]
       infer_instance
     have := incrementsToRestrict_increments_ofFin'_ae_eq_restrict ℝ h_bot I
@@ -406,7 +406,7 @@ theorem IsBrownianReal.indep_zero (h : IsBrownianReal X P) (hX : ∀ t, Measurab
 -- We easily have that `m3 ≤ m1 ≤ mΩ`.
   have hm1 : m1 ≤ mΩ := by
     apply Measurable.comap_le
-    apply @measurable_pi_lambda _ _ _ mΩ
+    apply @Measurable.of_eval _ _ _ mΩ
     exact hX
   have hm3 : m3 ≤ m1 := by
     apply iInf₂_le_of_le 1 (by simp)
@@ -486,7 +486,7 @@ theorem IsBrownianReal.indep_zero (h : IsBrownianReal X P) (hX : ∀ t, Measurab
   -- as `ε → 0⁺`, and we can conclude by uniqueness of the limit.
   refine tendsto_nhds_unique h1 ?_
   refine Tendsto.congr' (f₁ := fun ε ↦ P.real A * ∫ ω, f (fun t ↦ X t ω - X ε ω) ∂P) ?_ ?_
-  · apply eventually_nhdsGT (I.min' hI |>.2)
+  · apply eventually_nhdsGT (Set.mem_Ioi.mp (I.min' hI).2)
     rintro ε ⟨h1, h2⟩
     exact (key ε h1 h2).symm
   refine Filter.Tendsto.const_mul (b := P.real A) ?_
@@ -505,7 +505,7 @@ lemma measurable_preBrownian (t : ℝ≥0) : Measurable (preBrownian t) := by
   fun_prop
 
 lemma hasLaw_preBrownian : HasLaw (fun ω ↦ (preBrownian · ω)) gaussianLimit gaussianLimit where
-  aemeasurable := (measurable_pi_lambda _ measurable_preBrownian).aemeasurable
+  aemeasurable := (Measurable.of_eval measurable_preBrownian).aemeasurable
   map_eq := Measure.map_id
 
 lemma isPreBrownianReal_preBrownian : IsPreBrownianReal preBrownian gaussianLimit :=
@@ -590,7 +590,7 @@ lemma hasLaw_restrict_brownian {I : Finset ℝ≥0} :
 
 lemma hasLaw_brownian : HasLaw (fun ω ↦ (brownian · ω)) gaussianLimit gaussianLimit :=
   isBrownianReal_brownian.hasLaw_gaussianLimit
-    (measurable_pi_lambda _ fun t ↦ measurable_brownian t).aemeasurable
+    (Measurable.of_eval fun t ↦ measurable_brownian t).aemeasurable
 
 lemma hasLaw_brownian_eval {t : ℝ≥0} :
     HasLaw (brownian t) (gaussianReal 0 t) gaussianLimit :=

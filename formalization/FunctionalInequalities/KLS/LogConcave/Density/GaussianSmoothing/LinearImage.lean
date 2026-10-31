@@ -1,23 +1,30 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.Probability.LogConcave
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
-import FunctionalInequalities.Probability.Support.Affine
-import FunctionalInequalities.Probability.Transport
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import FunctionalInequalities.Probability.LogConcave
+public import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
+public import FunctionalInequalities.Probability.Support.Affine
+public import FunctionalInequalities.Probability.Transport
 
 /-!
 # Gaussian smoothing of linear images
 
 Two identifications for the Gaussian-smoothed image `smoothedLaw (μ.map S) s`:
-- `gaussian_product_latent_map`: if `ρ.map g = μ`, the product `ρ ⊗ Probability.Gaussian.law s` pushed by `(y, z) ↦ S (g y) + z` is
+- `gaussian_product_latent_map`: if `ρ.map g = μ`, the product `ρ ⊗ Probability.Gaussian.law s`
+  pushed by `(y, z) ↦ S (g y) + z` is
   `smoothedLaw (μ.map S) s`;
-- `exists_convex_smooth_potential_smoothed_linearEquiv`: for a log-concave `μ` with full affine support and an invertible continuous
-  linear `S`, the smoothed image is `e^{-W} dx` with `W` smooth and convex, and the smoothed probability law is log-concave.
+- `exists_convex_smooth_potential_smoothed_linearEquiv`: for a log-concave `μ` with full affine
+  support and an invertible continuous
+  linear `S`, the smoothed image is `e^{-W} dx` with `W` smooth and convex, and the smoothed
+  probability law is log-concave.
 
 No variance, `H⁻¹`, moment-map or kernel hypothesis is used.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set
@@ -50,23 +57,26 @@ theorem gaussian_product_latent_map (ρ μ : Measure E) [IsProbabilityMeasure ρ
 
 variable [SecondCountableTopology E]
 
-theorem exists_convex_smooth_potential_smoothed_linearEquiv
-    (μ : ProbabilityMeasure E) (hLC : FunctionalInequalities.KLS.LogConcave μ)
-    (htop : Probability.affineSupport μ = ⊤) (S : E ≃L[ℝ] E)
-    {s : ℝ} (hs : 0 < s) :
-    ∃ W : E → ℝ, ContDiff ℝ ∞ W ∧ ConvexOn ℝ univ W ∧
-      smoothedLaw ((μ : Measure E).map S) s = (volume : Measure E).tilted (-W) ∧
-      FunctionalInequalities.KLS.LogConcave
-        (smoothedProbabilityLaw (Probability.mapContinuousLinearEquiv μ S) s hs) := by
+theorem exists_convex_smooth_potential_smoothed_linearEquiv (μ : ProbabilityMeasure E)
+    (hLC : FunctionalInequalities.KLS.LogConcave μ) (htop : Probability.affineSupport μ = ⊤)
+    (S : E ≃L[ℝ] E) {s : ℝ} (hs : 0 < s) :
+    ∃ W : E → ℝ,
+      ContDiff ℝ ∞ W ∧
+        ConvexOn ℝ univ W ∧
+          smoothedLaw ((μ : Measure E).map S) s = (volume : Measure E).tilted (-W) ∧
+            FunctionalInequalities.KLS.LogConcave
+              (smoothedProbabilityLaw (Probability.mapContinuousLinearEquiv μ S) s hs) := by
   let η := Probability.mapContinuousLinearEquiv μ S
   have hη : FunctionalInequalities.KLS.LogConcave η := hLC.mapContinuousLinearEquiv S
   have hηtop : Probability.affineSupport η = ⊤ :=
     Probability.affineSupport_mapContinuousLinearEquiv_eq_top μ S htop
   have hi := hη.interior_support_nonempty_of_affineSupport_eq_top hηtop
-  obtain ⟨ρ,hρ⟩ := hη.exists_isBorellDensity_of_interior_support_nonempty volume hi
-    (hη.absolutelyContinuous_of_interior_support_nonempty volume hi)
-  exact ⟨potential ρ s, potential_contDiff_infty hρ hs, potential_convex hρ hs,
-    smoothedLaw_eq_tilted_potential hρ hs, smoothedProbabilityLaw_logConcave hρ hs⟩
+  obtain ⟨ρ, hρ⟩ :=
+    hη.exists_isBorellDensity_of_interior_support_nonempty volume hi
+      (hη.absolutelyContinuous_of_interior_support_nonempty volume hi)
+  exact
+    ⟨potential ρ s, potential_contDiff_infty hρ hs, potential_convex hρ hs,
+      smoothedLaw_eq_tilted_potential hρ hs, smoothedProbabilityLaw_logConcave hρ hs⟩
 
 end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 

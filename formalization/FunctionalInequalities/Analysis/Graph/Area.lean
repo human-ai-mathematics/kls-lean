@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.MeasurableCover
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.Hausdorff.Volume
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.Calculus.Gradient.Basic
+module
+
+public import FunctionalInequalities.Analysis.MeasurableCover
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Analysis.Hausdorff.Volume
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.Calculus.Gradient.Basic
 
 /-!
 # The codimension-one area formula for `C¹` graphs
@@ -32,6 +34,8 @@ The linear statement is the exact codimension-one analogue of `Measure.addHaar_i
 and is the input for the `C¹` case.  Dimension zero is included: then `H` is trivial, `a = 0` and
 both sides are the unit mass at the single point.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -199,7 +203,8 @@ private theorem det_dilate {u : H} (hu : ‖u‖ = 1) (c : ℝ) :
     rw [hk, Module.finrank_pos_iff (R := ℝ) (M := H)]
     exact ⟨⟨u, 0, hune⟩⟩
   have hcard : Module.finrank ℝ H = Fintype.card (Fin k) := by simp [hk]
-  have horth : Orthonormal ℝ (Set.domRestrict ({⟨0, hpos⟩} : Set (Fin k)) (fun _ : Fin k => u)) := by
+  have horth :
+    Orthonormal ℝ (Set.domRestrict ({⟨0, hpos⟩} : Set (Fin k)) (fun _ : Fin k => u)) := by
     constructor
     · rintro ⟨i, hi⟩; simpa using hu
     · rintro ⟨i, hi⟩ ⟨j, hj⟩ hij
@@ -207,26 +212,31 @@ private theorem det_dilate {u : H} (hu : ‖u‖ = 1) (c : ℝ) :
       exact absurd (Subtype.ext (hi.trans hj.symm)) hij
   obtain ⟨b, hb⟩ := horth.exists_orthonormalBasis_extension_of_card_eq hcard
   have hb0 : b ⟨0, hpos⟩ = u := hb _ rfl
-  have hmat : LinearMap.toMatrix b.toBasis b.toBasis (dilate u c : H →ₗ[ℝ] H)
-      = Matrix.diagonal (fun j => if j = (⟨0, hpos⟩ : Fin k) then c else 1) := by
+  have hmat :
+    LinearMap.toMatrix b.toBasis b.toBasis (dilate u c : H →ₗ[ℝ] H) =
+      Matrix.diagonal (fun j => if j = (⟨0, hpos⟩ : Fin k) then c else 1) := by
     ext i j
-    have hbj : (dilate u c : H →ₗ[ℝ] H) (b.toBasis j)
-        = (if j = (⟨0, hpos⟩ : Fin k) then c else 1) • b.toBasis j := by
+    have hbj :
+      (dilate u c : H →ₗ[ℝ] H) (b.toBasis j) =
+        (if j = (⟨0, hpos⟩ : Fin k) then c else 1) • b.toBasis j := by
       by_cases hj : j = (⟨0, hpos⟩ : Fin k)
-      · rw [if_pos hj]
-        simp only [OrthonormalBasis.coe_toBasis, ContinuousLinearMap.coe_coe, dilate_apply, hj, hb0]
+      · rw [ite_eq_left hj]
+        simp only [OrthonormalBasis.coe_toBasis, ContinuousLinearMap.coe_coe, dilate_apply, hj,
+          hb0]
         rw [real_inner_self_eq_norm_sq, hu]
         module
-      · rw [if_neg hj]
+      · rw [ite_eq_right hj]
         have hinner : ⟪u, b j⟫ = (0 : ℝ) := by
-          rw [← hb0]; exact b.orthonormal.2 (fun h => hj h.symm)
-        simp only [OrthonormalBasis.coe_toBasis, ContinuousLinearMap.coe_coe, dilate_apply, hinner]
+          rw [← hb0];
+          exact b.orthonormal.2 (fun h => hj h.symm)
+        simp only [OrthonormalBasis.coe_toBasis, ContinuousLinearMap.coe_coe, dilate_apply,
+          hinner]
         simp
     rw [LinearMap.toMatrix_apply, hbj, map_smul, Matrix.diagonal_apply]
     simp only [Finsupp.smul_apply, Module.Basis.repr_self_apply, smul_eq_mul]
     by_cases hij : i = j
     · subst hij; simp
-    · have hji : ¬ (j = i) := fun h => hij h.symm
+    · have hji : ¬(j = i) := fun h => hij h.symm
       simp [hij, hji]
   rw [← LinearMap.det_toMatrix b.toBasis, hmat, Matrix.det_diagonal]
   rw [Finset.prod_ite_eq' Finset.univ (⟨0, hpos⟩ : Fin k) (fun _ => c)]
@@ -512,13 +522,15 @@ omit [FiniteDimensional ℝ V] in
 theorem hausdorffMeasure_image_graphMap_le (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1)
     (hperp : ∀ v : H, ⟪ι v, e⟫ = (0 : ℝ)) (g : H → ℝ) (a : H) {t : Set H} {ε : ℝ≥0}
     (happ : ApproximatesLinearOn (graphMap ι e g) (graphLinear ι e a) t ε) :
-    μH[(Module.finrank ℝ H : ℝ)] (graphMap ι e g '' t)
-      ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ (Module.finrank ℝ H : ℝ)
-        * ENNReal.ofReal (graphJacobian a) * μH[(Module.finrank ℝ H : ℝ)] t := by
+    μH[(Module.finrank ℝ H : ℝ)] (graphMap ι e g '' t) ≤
+      ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ (Module.finrank ℝ H : ℝ) * ENNReal.ofReal (graphJacobian a) *
+        μH[(Module.finrank ℝ H : ℝ)] t := by
   have hd : (0 : ℝ) ≤ (Module.finrank ℝ H : ℝ) := by positivity
   have hAnorm : ∀ v : H, ‖v‖ ≤ ‖graphLinear ι e a v‖ := by
     intro v
-    have hsub : graphLinear ι e a v = graphMap ι e (fun y => ⟪a, y⟫) v - graphMap ι e (fun _ => (0:ℝ)) 0 := by
+    have hsub :
+      graphLinear ι e a v =
+        graphMap ι e (fun y => ⟪a, y⟫) v - graphMap ι e (fun _ => (0 : ℝ)) 0 := by
       simp [graphMap, graphLinear_apply]
     have := norm_sub_le_norm_sub_graphMap ι he hperp (fun y => ⟪a, y⟫) v 0
     simpa [graphMap, graphLinear_apply] using this
@@ -527,31 +539,38 @@ theorem hausdorffMeasure_image_graphMap_le (ι : H →ₗᵢ[ℝ] V) {e : V} (he
     have := hAnorm (y - y')
     rw [map_sub, hh, sub_self, norm_zero] at this
     simpa [sub_eq_zero] using le_antisymm this (norm_nonneg _)
-  have hcmp : ∀ y ∈ t, ∀ y' ∈ t,
-      ‖graphMap ι e g y - graphMap ι e g y'‖ ≤ ((1 + ε : ℝ≥0) : ℝ) * ‖graphLinear ι e a y - graphLinear ι e a y'‖ := by
+  have hcmp :
+    ∀ y ∈ t,
+      ∀ y' ∈ t,
+        ‖graphMap ι e g y - graphMap ι e g y'‖ ≤
+          ((1 + ε : ℝ≥0) : ℝ) * ‖graphLinear ι e a y - graphLinear ι e a y'‖ := by
     intro y hy y' hy'
     have h1 := happ y hy y' hy'
     have h2 : ‖y - y'‖ ≤ ‖graphLinear ι e a (y - y')‖ := hAnorm _
-    have h3 : graphLinear ι e a (y - y') = graphLinear ι e a y - graphLinear ι e a y' := map_sub _ _ _
-    have h4 : ‖graphMap ι e g y - graphMap ι e g y'‖
-        ≤ ‖graphMap ι e g y - graphMap ι e g y' - graphLinear ι e a (y - y')‖
-          + ‖graphLinear ι e a (y - y')‖ := by
-      have := norm_add_le (graphMap ι e g y - graphMap ι e g y' - graphLinear ι e a (y - y'))
-        (graphLinear ι e a (y - y'))
+    have h3 : graphLinear ι e a (y - y') = graphLinear ι e a y - graphLinear ι e a y' :=
+      map_sub _ _ _
+    have h4 :
+      ‖graphMap ι e g y - graphMap ι e g y'‖ ≤
+        ‖graphMap ι e g y - graphMap ι e g y' - graphLinear ι e a (y - y')‖ +
+          ‖graphLinear ι e a (y - y')‖ := by
+      have :=
+        norm_add_le (graphMap ι e g y - graphMap ι e g y' - graphLinear ι e a (y - y'))
+          (graphLinear ι e a (y - y'))
       simpa using this
     rw [h3] at h1 h2 h4
-    have h5 : (ε : ℝ) * ‖y - y'‖
-        ≤ (ε : ℝ) * ‖graphLinear ι e a y - graphLinear ι e a y'‖ :=
+    have h5 : (ε : ℝ) * ‖y - y'‖ ≤ (ε : ℝ) * ‖graphLinear ι e a y - graphLinear ι e a y'‖ :=
       mul_le_mul_of_nonneg_left h2 ε.coe_nonneg
     push_cast
     linarith
-  calc μH[(Module.finrank ℝ H : ℝ)] (graphMap ι e g '' t)
-      ≤ ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ (Module.finrank ℝ H : ℝ)
-          * μH[(Module.finrank ℝ H : ℝ)] (graphLinear ι e a '' t) :=
-        hausdorffMeasure_image_le_of_norm_le hAinj hcmp hd
-    _ = ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ (Module.finrank ℝ H : ℝ)
-          * ENNReal.ofReal (graphJacobian a) * μH[(Module.finrank ℝ H : ℝ)] t := by
-        rw [hausdorffMeasure_image_graphLinear ι he hperp a t, mul_assoc]
+  calc
+    μH[(Module.finrank ℝ H : ℝ)] (graphMap ι e g '' t) ≤
+        ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ (Module.finrank ℝ H : ℝ) *
+          μH[(Module.finrank ℝ H : ℝ)] (graphLinear ι e a '' t) :=
+      hausdorffMeasure_image_le_of_norm_le hAinj hcmp hd
+    _ =
+        ((1 + ε : ℝ≥0) : ℝ≥0∞) ^ (Module.finrank ℝ H : ℝ) * ENNReal.ofReal (graphJacobian a) *
+          μH[(Module.finrank ℝ H : ℝ)] t := by
+      rw [hausdorffMeasure_image_graphLinear ι he hperp a t, mul_assoc]
 
 /-- Reverse sandwich estimate. -/
 theorem le_hausdorffMeasure_image_graphMap (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ = 1)

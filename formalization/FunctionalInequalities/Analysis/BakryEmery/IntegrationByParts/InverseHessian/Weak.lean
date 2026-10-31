@@ -1,40 +1,56 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Composition
-import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.Analysis.Matrix.Piola
-import FunctionalInequalities.Analysis.Cutoff.LipschitzBall
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.LinearAlgebra.Matrix.Hermitian
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Data.Real.Star
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Composition
+public import FunctionalInequalities.Analysis.Matrix.WeakDerivative
+public import FunctionalInequalities.Analysis.Matrix.Piola
+public import FunctionalInequalities.Analysis.Cutoff.LipschitzBall
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.ChainRule
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.LinearAlgebra.Matrix.Hermitian
+public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+public import Mathlib.LinearAlgebra.Matrix.Trace
+public import Mathlib.Basic.Real.Star
 
 /-!
 # Weak inverse-Hessian generator identities
 
 The two weak integration-by-parts identities for the inverse-Hessian generator
 `L f = tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f)` of a `C^{1,1}` Monge–Ampère solution `u`
-(`det ∇²u = e^{−u + V(∇u)}` almost everywhere, the exponent Lipschitz), tested against `C²` compactly supported
-functions with the weight `e^{−u}` (Letwin arXiv:2607.24164v1, equation (2.2), weak `C^{1,1}` counterpart):
+(`det ∇²u = e^{−u + V(∇u)}` almost everywhere, the exponent Lipschitz), tested against `C²`
+compactly supported
+functions with the weight `e^{−u}` (Letwin arXiv:2607.24164v1, equation (2.2), weak `C^{1,1}`
+counterpart):
 
 * `integral_mul_generator_eq_neg_energy`, `integral_mul_generator_eq_neg_energy'`.
 
-The proof applies the weak inverse-Hessian divergence identity and the inverse-Hessian integrability interface of
-`Analysis/Matrix/Piola.lean` to weighted gradient tests. Its one-use supports are private: the Lipschitz constant and
-compact support of the test `η e^{−u} ∂ᵢw`, its almost-everywhere derivative (with two coordinate lemmas reproduced
-privately from `Analysis/BakryEmery/Hessian/Weak.lean`, which requires only differentiability of the gradient at the
+The proof applies the weak inverse-Hessian divergence identity and the inverse-Hessian integrability
+interface of
+`Analysis/Matrix/Piola.lean` to weighted gradient tests. Its one-use supports are private: the
+Lipschitz constant and
+compact support of the test `η e^{−u} ∂ᵢw`, its almost-everywhere derivative (with two coordinate
+lemmas reproduced
+privately from `Analysis/BakryEmery/Hessian/Weak.lean`, which requires only differentiability of the
+gradient at the
 point), and a finite inverse-matrix cancellation. The almost-everywhere chain derivative of the
 Monge–Ampère exponent `−u + V(∇u)` is also public as `ae_fderiv_mongeAmpere_exponent`,
-for use by the actual-source weak Monge–Ampère identification bridge. No `C²` regularity of `u` or `w` is used. These are supporting identities; Letwin Theorems 2.5 and 1.2
+for use by the actual-source weak Monge–Ampère identification bridge. No `C²` regularity of `u` or
+`w` is used. These are supporting identities; Letwin Theorems 2.5 and 1.2
 are not proved here.
-The inverse-calculus assembly additionally proves weak (2.5) from a Lipschitz log-det representative, a Lipschitz gradient and a given weak local-L2 Hessian tensor. No C2 regularity or desired inverse formula is assumed. The fixed-object weak Piola row divergence
-`ae_inverse_hessian_row_divergence_of_weak_derivative` is also proved here; the second evolution (2.6) and
-bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`, and the main bound remains open.
+The inverse-calculus assembly additionally proves weak (2.5) from a Lipschitz log-det
+representative, a Lipschitz gradient and a given weak local-L2 Hessian tensor. No C2 regularity or
+desired inverse formula is assumed. The fixed-object weak Piola row divergence
+`ae_inverse_hessian_row_divergence_of_weak_derivative` is also proved here; the second evolution
+(2.6) and
+bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`. These
+analytic identities are separate from the quantitative moment-potential bounds, whose producers
+retain their own source hypotheses.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -67,7 +83,7 @@ private theorem exists_lipschitz_compact_exp_gradient_test {n : ℕ}
       LipschitzWith (‖(innerSL ℝ) e‖₊ * Gw)
         (fun x => fderiv ℝ w x e) := by
     simpa [Function.comp_def, inner_gradient_left] using
-      (((innerSL ℝ) e).lipschitz.comp hGw)
+      (((innerSL ℝ) e).lipschitzWith.comp hGw)
   obtain ⟨⟨L, hL⟩, _⟩ :=
     FunctionalInequalities.Probability.Diffusion.exists_lipschitzWith_smul_of_locallyLipschitz
       hKγ hγc hcoord.locallyLipschitz
@@ -303,7 +319,7 @@ private lemma continuous_coord_of_lipschitz_gradient {n : ℕ}
   change Continuous
     (fun x => fderiv ℝ f x (EuclideanSpace.basisFun (Fin n) ℝ i))
   simpa [Function.comp_def, inner_gradient_left] using
-    ((((innerSL ℝ) (EuclideanSpace.basisFun (Fin n) ℝ i)).lipschitz.comp
+    ((((innerSL ℝ) (EuclideanSpace.basisFun (Fin n) ℝ i)).lipschitzWith.comp
       hf).continuous)
 
 private lemma integrable_inv_test_derivative {n : ℕ}
@@ -611,54 +627,67 @@ private lemma energy_swap {n : ℕ}
 
 /-- C1 compact multiplier version of the closed weak generator identity.
 Weak-source support for Letwin A.4; no new regularity hypothesis on u. -/
-theorem integral_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
-    {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
-    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
+theorem integral_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ}
+    {u V w η : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u) {G : NNReal}
+    (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V) {LF : NNReal}
+    (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
+    (hdet :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
     (hw : ContDiff ℝ 1 w) {Gw : NNReal} (hGw : LipschitzWith Gw (gradient w))
     (hη : ContDiff ℝ 1 η) (hηc : HasCompactSupport η) :
-    ∫ x, η x * (((hessianMatrix u x)⁻¹ * hessianMatrix w x).trace -
-        fderiv ℝ V (gradient u x) (gradient w x)) * Real.exp (-u x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) =
-      -∫ x, (∑ i, ∑ j, (hessianMatrix u x)⁻¹ i j *
-          fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
-          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    ∫ x,
+        η x *
+            (((hessianMatrix u x)⁻¹ * hessianMatrix w x).trace -
+              fderiv ℝ V (gradient u x) (gradient w x)) *
+          Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) =
+      -∫ x,
+          (∑ i,
+              ∑ j,
+                (hessianMatrix u x)⁻¹ i j * fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
+                  fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) *
+            Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
   have hη1 : ContDiff ℝ 1 η := hη
-  have hE : Integrable (energyDensity u η w)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    apply integrable_energy hu hG hF.continuous hdet
-      (continuous_coord hη1) (continuous_coord hw)
+  have hE : Integrable (energyDensity u η w) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    apply
+      integrable_energy hu hG hF.continuous hdet (continuous_coord hη1) (continuous_coord hw)
     intro i j
     exact
       ((hηc.fderiv_apply ℝ (EuclideanSpace.basisFun (Fin n) ℝ i)).mul_right :
-        HasCompactSupport (fun x => coord η i x * coord w j x)).mul_right
-  exact assemble_generator hu hG hV hF hdet
-    (fun i => exists_lipschitz_compact_exp_gradient_test hu hη1 hηc hGw i)
-    (fun i => ae_fderiv_exp_gradient_test hu hη1 hGw i) hE
+          HasCompactSupport (fun x => coord η i x * coord w j x)).mul_right
+  exact
+    assemble_generator hu hG hV hF hdet
+      (fun i => exists_lipschitz_compact_exp_gradient_test hu hη1 hηc hGw i)
+      (fun i => ae_fderiv_exp_gradient_test hu hη1 hGw i) hE
 
 /-- **The Hessian-metric generator at `C^{1,1}` is symmetric** (Letwin arXiv:2607.24164v1 (2.2),
 weak form): for the `C^{1,1}` Monge–Ampère solution `u` (`det ∇²u = e^{−u + V(∇u)}` a.e., the right
 side
-Lipschitz), with `L f := tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f)`, every `w ∈ C¹` with Lipschitz gradient and every `η ∈ C²` with compact
+Lipschitz), with `L f := tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f)`, every `w ∈ C¹` with Lipschitz gradient and
+every `η ∈ C²` with compact
 support satisfy `∫ η (L w) e^{−u} = −∫ ⟨(∇²u)⁻¹ ∇η, ∇w⟩ e^{−u}`. -/
 theorem integral_mul_generator_eq_neg_energy {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
     {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
-    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
+    (hdet :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
     (hw : ContDiff ℝ 1 w) {Gw : NNReal} (hGw : LipschitzWith Gw (gradient w))
     (hη : ContDiff ℝ 2 η) (hηc : HasCompactSupport η) :
-    ∫ x, η x * (((hessianMatrix u x)⁻¹ * hessianMatrix w x).trace -
-        fderiv ℝ V (gradient u x) (gradient w x)) * Real.exp (-u x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) =
-      -∫ x, (∑ i, ∑ j, (hessianMatrix u x)⁻¹ i j *
-          fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
-          fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-  exact integral_mul_generator_eq_neg_energy_of_contDiff_one hu hG hV hF hdet hw hGw
-    (hη.of_le (by norm_num)) hηc
+    ∫ x,
+        η x *
+            (((hessianMatrix u x)⁻¹ * hessianMatrix w x).trace -
+              fderiv ℝ V (gradient u x) (gradient w x)) *
+          Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) =
+      -∫ x,
+          (∑ i,
+              ∑ j,
+                (hessianMatrix u x)⁻¹ i j * fderiv ℝ η x (EuclideanSpace.basisFun (Fin n) ℝ i) *
+                  fderiv ℝ w x (EuclideanSpace.basisFun (Fin n) ℝ j)) *
+            Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  exact
+    integral_mul_generator_eq_neg_energy_of_contDiff_one hu hG hV hF hdet hw hGw
+      (hη.of_le (by norm_num)) hηc
 
 /-- The same identity with the roles exchanged (`η` inside the generator, `w` outside). -/
 theorem integral_mul_generator_eq_neg_energy' {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -969,7 +998,7 @@ theorem hasWeakDerivAlong_inverse_hessian_of_logdet {n : ℕ}
       MemLp (fun x => R x i j) (⊤ : ENNReal)
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
     MemLp.ae_eq (ae_restrict_of_ae (hInv i j).symm)
-      (((memLp_hessian_adjugate_top hG i j).restrict S).mul' (hExpTop S hS))
+      ((hExpTop S hS).fun_mul ((memLp_hessian_adjugate_top hG i j).restrict S))
   let DR : Fin n → EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ :=
     fun k x => Matrix.of fun a b =>
       (-Real.exp (-F x) * fderiv ℝ F x (EuclideanSpace.basisFun (Fin n) ℝ k)) *
@@ -1012,101 +1041,114 @@ open FunctionalInequalities.Probability.Stein
 open scoped ContDiff RealInnerProductSpace Topology
 namespace FunctionalInequalities.Analysis
 
-/-- Weak Piola row divergence of the inverse Hessian at a fixed weak inverse-derivative object: for a C1
-potential with Lipschitz gradient whose Hessian determinant is `exp F` a.e. with `F` Lipschitz, each row of
-given inverse-Hessian weak derivatives sums to `-(H⁻¹ ∇F)` a.e., and `H⁻¹ ∇F` is L2 on compact sets. -/
+/--
+Weak Piola row divergence of the inverse Hessian at a fixed weak inverse-derivative object: for a C1
+potential with Lipschitz gradient whose Hessian determinant is `exp F` a.e. with `F` Lipschitz, each
+row of
+given inverse-Hessian weak derivatives sums to `-(H⁻¹ ∇F)` a.e., and `H⁻¹ ∇F` is L2 on compact sets.
+-/
 theorem ae_inverse_hessian_row_divergence_of_weak_derivative {n : ℕ}
-    {u F : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hC1 : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u))
-    {LF : NNReal} (hF : LipschitzWith LF F)
-    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (F x))
-    (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ)
-    (hInv : ∀ k i j : Fin n,
-      HasWeakDerivAlong (fun x => (hessianMatrix u x)⁻¹ i j)
-        (fun x => -(((hessianMatrix u x)⁻¹ *
-          (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j))
-        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-      (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-        MemLp (fun x => -(((hessianMatrix u x)⁻¹ *
-          (Matrix.of fun a b => T x k a b) * (hessianMatrix u x)⁻¹) i j)) 2
-          ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
-      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-        MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
-          ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
-    ∀ b : Fin n,
-      (∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-        MemLp
-          (fun x => ∑ a : Fin n, (hessianMatrix u x)⁻¹ b a *
-            fderiv ℝ F x (EuclideanSpace.basisFun (Fin n) ℝ a))
-          2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+    {u F : EuclideanSpace ℝ (Fin n) → ℝ} (hC1 : ContDiff ℝ 1 u) {G : NNReal}
+    (hG : LipschitzWith G (gradient u)) {LF : NNReal} (hF : LipschitzWith LF F)
+    (hdet :
       ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (∑ a : Fin n, -(((hessianMatrix u x)⁻¹ *
-          (Matrix.of fun c d => T x a c d) * (hessianMatrix u x)⁻¹) b a)) =
-        -(∑ a : Fin n, (hessianMatrix u x)⁻¹ b a *
-          fderiv ℝ F x (EuclideanSpace.basisFun (Fin n) ℝ a)) := by
+        (hessianMatrix u x).det = Real.exp (F x))
+    (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ)
+    (hInv :
+      ∀ k i j : Fin n,
+        HasWeakDerivAlong (fun x => (hessianMatrix u x)⁻¹ i j)
+            (fun x =>
+              -(((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x k a b) *
+                    (hessianMatrix u x)⁻¹)
+                  i j))
+            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+          (∀ S : Set (EuclideanSpace ℝ (Fin n)),
+              IsCompact S →
+                MemLp
+                  (fun x =>
+                    -(((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x k a b) *
+                          (hessianMatrix u x)⁻¹)
+                        i j))
+                  2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+              IsCompact S →
+                MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
+                  ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
+    ∀ b : Fin n,
+      (∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp
+              (fun x =>
+                ∑ a : Fin n,
+                  (hessianMatrix u x)⁻¹ b a *
+                    fderiv ℝ F x (EuclideanSpace.basisFun (Fin n) ℝ a))
+              2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+        ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+          (∑ a : Fin n,
+              -(((hessianMatrix u x)⁻¹ * (Matrix.of fun c d => T x a c d) *
+                    (hessianMatrix u x)⁻¹)
+                  b a)) =
+            -(∑ a : Fin n,
+                (hessianMatrix u x)⁻¹ b a *
+                  fderiv ℝ F x (EuclideanSpace.basisFun (Fin n) ℝ a)) := by
   intro b
-  let R : EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ :=
-    fun x => (hessianMatrix u x)⁻¹
+  let R : EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ := fun x => (hessianMatrix u x)⁻¹
   let e := EuclideanSpace.basisFun (Fin n) ℝ
-  let D : Fin n → EuclideanSpace ℝ (Fin n) → ℝ :=
-    fun a x => -((R x * (Matrix.of fun c d => T x a c d) * R x) b a)
-  let z : Fin n → EuclideanSpace ℝ (Fin n) → ℝ :=
-    fun a x => R x b a * fderiv ℝ F x (e a)
+  let D : Fin n → EuclideanSpace ℝ (Fin n) → ℝ := fun a x =>
+    -((R x * (Matrix.of fun c d => T x a c d) * R x) b a)
+  let z : Fin n → EuclideanSpace ℝ (Fin n) → ℝ := fun a x => R x b a * fderiv ℝ F x (e a)
   let g : EuclideanSpace ℝ (Fin n) → ℝ := fun x => ∑ a, z a x
   have hFLip : LipschitzWith LF F := hF
   have hDfMeas (a : Fin n) : Measurable (fun x => fderiv ℝ F x (e a)) :=
     (show Continuous (fun A : EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ => A (e a)) from
-      continuous_id.clm_apply continuous_const).measurable.comp (measurable_fderiv ℝ F)
-  have hDfBound (a : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
-      ‖fderiv ℝ F x (e a)‖ ≤ (LF : ℝ) := by
+          continuous_id.clm_apply continuous_const).measurable.comp
+      (measurable_fderiv ℝ F)
+  have hDfBound (a : Fin n) (x : EuclideanSpace ℝ (Fin n)) : ‖fderiv ℝ F x (e a)‖ ≤ (LF : ℝ) := by
     have hh := (fderiv ℝ F x).le_opNorm (e a)
     rw [e.norm_eq_one a, mul_one] at hh
     exact hh.trans (norm_fderiv_le_of_lipschitz ℝ hFLip)
   have hz2 (a : Fin n) (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
-      MemLp (z a) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+    MemLp (z a) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
     let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
       isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
-    have hdf2 : MemLp (fun x => fderiv ℝ F x (e a)) 2
+    have hdf2 :
+      MemLp (fun x => fderiv ℝ F x (e a)) 2
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
       MemLp.of_bound (hDfMeas a).aestronglyMeasurable (LF : ℝ)
         (Filter.Eventually.of_forall (hDfBound a))
-    exact hdf2.mul' ((hInv a b a).2.2 S hS)
+    exact ((hInv a b a).2.2 S hS).fun_mul hdf2
   have hg2 (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
-      MemLp g 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+    MemLp g 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
     exact memLp_finsetSum Finset.univ (fun a _ => hz2 a S hS)
-  have hzLocal (a : Fin n) : LocallyIntegrable (z a)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hzLocal (a : Fin n) :
+    LocallyIntegrable (z a) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     apply locallyIntegrable_iff.mpr
     intro S hS
     let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
       isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
     exact (hz2 a S hS).integrable (by norm_num)
-  have hgLocal : LocallyIntegrable g
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+  have hgLocal : LocallyIntegrable g (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     locallyIntegrable_finsetSum Finset.univ (fun a _ => hzLocal a)
-  have hDLocal (a : Fin n) : LocallyIntegrable (D a)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := (hInv a b a).1.2.1
-  have hsumLocal : LocallyIntegrable (fun x => ∑ a, D a x)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+  have hDLocal (a : Fin n) :
+    LocallyIntegrable (D a) (volume : Measure (EuclideanSpace ℝ (Fin n))) := (hInv a b a).1.2.1
+  have hsumLocal :
+    LocallyIntegrable (fun x => ∑ a, D a x) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     locallyIntegrable_finsetSum Finset.univ (fun a _ => hDLocal a)
   refine ⟨hg2, ?_⟩
   apply ae_eq_of_integral_contDiff_smul_eq hsumLocal hgLocal.neg
   intro ψ hψ hψc
   have hψ1 : ContDiff ℝ 1 ψ := hψ.of_le (WithTop.coe_le_coe.mpr le_top)
   obtain ⟨Lψ, hψLip⟩ := ContDiff.lipschitzWith_of_hasCompactSupport hψc hψ1 one_ne_zero
-  have hPiola := sum_integral_inv_hessianMatrix_mul_fderiv_eq
-    hC1 hG hFLip hdet hψLip hψc b
-  have hDi (a : Fin n) : Integrable (fun x => D a x * ψ x)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hPiola := sum_integral_inv_hessianMatrix_mul_fderiv_eq hC1 hG hFLip hdet hψLip hψc b
+  have hDi (a : Fin n) :
+    Integrable (fun x => D a x * ψ x) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     simpa only [smul_eq_mul, mul_comm] using
       (hDLocal a).integrable_smul_left_of_hasCompactSupport hψ.continuous hψc
-  have hzi (a : Fin n) : Integrable (fun x => z a x * ψ x)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hzi (a : Fin n) :
+    Integrable (fun x => z a x * ψ x) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     simpa only [smul_eq_mul, mul_comm] using
       (hzLocal a).integrable_smul_left_of_hasCompactSupport hψ.continuous hψc
-  have hweak : (∑ a, ∫ x, R x b a * fderiv ℝ ψ x (e a)) =
-      -(∑ a, ∫ x, D a x * ψ x) := by
+  have hweak : (∑ a, ∫ x, R x b a * fderiv ℝ ψ x (e a)) = -(∑ a, ∫ x, D a x * ψ x) := by
     calc
       _ = ∑ a, -(∫ x, D a x * ψ x) := by
         apply Finset.sum_congr rfl
@@ -1122,8 +1164,7 @@ theorem ae_inverse_hessian_row_divergence_of_weak_derivative {n : ℕ}
     exact integral_finsetSum Finset.univ (fun a _ => hzi a)
   have hEq : (∫ x, (∑ a, D a x) * ψ x) = -(∫ x, g x * ψ x) := by
     rw [hID, hIz]
-    change (∑ a, ∫ x, R x b a * fderiv ℝ ψ x (e a)) =
-      (∑ a, ∫ x, z a x * ψ x) at hPiola
+    change (∑ a, ∫ x, R x b a * fderiv ℝ ψ x (e a)) = (∑ a, ∫ x, z a x * ψ x) at hPiola
     linarith only [hweak, hPiola]
   simpa only [smul_eq_mul, Pi.neg_apply, mul_neg, integral_neg, mul_comm] using hEq
 

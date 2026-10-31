@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.RegularChart
-import FunctionalInequalities.Analysis.Coarea.FiberIntegral
-import Mathlib.MeasureTheory.Function.Jacobian
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.RegularChart
+public import FunctionalInequalities.Analysis.Coarea.FiberIntegral
+public import Mathlib.MeasureTheory.Function.Jacobian
 
 /-! # Change of variables along `m`-dimensional fibres
 
@@ -19,14 +21,16 @@ linear isometry — measure preserving, and of unit norm determinant, so nothing
 
 With that, `setLIntegral_image_vectorVerticalMap` is the codimension-`m` vertical substitution, and
 `setLIntegral_image_levelGraphMap` transports it to the ambient space along the measure-preserving
-splitting proved in `CoareaGraphJacobian.lean`.  Finally
+splitting proved in `Analysis/Vector/Graph/CoareaJacobian.lean`.  Finally
 `setLIntegral_coareaJacobian_levelGraphFamily` replaces the ambient density by the graph area
 density, using the fibre Jacobian identity; this is the ambient half of the local coarea equality.
 
-**No coarea formula is proved here.**  The fibre half — the **weighted** codimension-`m` area
-formula, the analogue of `setLIntegral_image_graphMap` — and the Tonelli assembly and patching are
-still missing.
+This module supplies the ambient half of the local coarea argument. The weighted fibre area
+formula is in `Analysis/Vector/Graph/Integral.lean`; the Tonelli assembly and regular-open-set
+patching are in `Analysis/Vector/Coarea/{Local,Regular}.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

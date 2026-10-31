@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
 
 /-!
 # A maximum-principle bound for the Hessian of a moment potential
@@ -26,6 +28,8 @@ constant is `Δφ ≤ 3R²` rather than Klartag's `2R²`. It is not Theorem 1.1 
 positive definiteness, the equation, the upper bound on `Δφ` and the coercivity of `φ` are
 hypotheses, and no moment measure or transport map is constructed here.
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped ContDiff RealInnerProductSpace Topology

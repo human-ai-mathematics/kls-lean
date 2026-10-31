@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.SmoothDomain.Basic
-import Mathlib.Analysis.Calculus.BumpFunction.Normed
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
+module
+
+public import FunctionalInequalities.Analysis.SmoothDomain.Basic
+public import Mathlib.Analysis.Calculus.BumpFunction.Normed
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
 
 /-! # Smooth mollification of domain indicators -/
+
+@[expose] public section
 
 noncomputable section
 

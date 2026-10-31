@@ -6,8 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedLinear
-import LevyStochCalc.Brownian.ItoRange
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API and pass the measurability witness `eLpNorm_sq_eq_lintegral` now takes.
+module
+
+public import LevyStochCalc.Poisson.CompensatedLinear
+public import LevyStochCalc.Brownian.ItoRange
 
 /-!
 # The range of the compensated Poisson integral on a horizon
@@ -18,6 +23,8 @@ sums and scalar multiples, and the integral is additive and homogeneous on them,
 integrals form a submodule of `L²`. The isometry of differences carries an energy-Cauchy sequence
 of integrands to an `L²`-Cauchy sequence of integrals, so that submodule is closed.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Poisson.Compensated
 
@@ -243,7 +250,8 @@ theorem markedEnergy_eq_edist_sq (hT : 0 < T) {u v : Lp ℝ 2 P}
     {G₁ G₂ : MarkedHorizonIntegrand P ν ℱ T}
     (h₁ : (u : Ω → ℝ) =ᵐ[P] G₁.integral N hℱ) (h₂ : (v : Ω → ℝ) =ᵐ[P] G₂.integral N hℱ) :
     markedEnergy P ν T (fun ω s e => G₁.toFun ω s e - G₂.toFun ω s e) = edist u v ^ 2 := by
-  rw [Lp.edist_def, LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral,
+  rw [Lp.edist_def, LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral _ _
+      ((Lp.aestronglyMeasurable u).sub (Lp.aestronglyMeasurable v)),
     ← MarkedHorizonIntegrand.lintegral_sq_integral_sub N hℱ hT G₁ G₂]
   refine lintegral_congr_ae ?_
   filter_upwards [h₁, h₂] with ω e1 e2

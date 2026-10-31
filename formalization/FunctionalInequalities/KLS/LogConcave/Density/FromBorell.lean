@@ -1,5 +1,7 @@
-import FunctionalInequalities.Probability.BrunnMinkowski
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
+module
+
+public import FunctionalInequalities.Probability.BrunnMinkowski
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 
 /-!
 # Compact-set log-concavity from a Borell density
@@ -9,6 +11,8 @@ log-concavity of an actual Haar density to compact-set log-concavity of
 its probability law. This is the general-dimensional counterpart of
 `KLS.LineDensity.logConcave`.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -27,22 +31,21 @@ theorem compactLogConcave {ν : ProbabilityMeasure V} {ρ : V → ℝ}
   have ht1' : (0 : ℝ) < 1 - t := by linarith
   set C := {z : V | ∃ x ∈ K₀, ∃ y ∈ K₁, z = t • x + (1 - t) • y} with hC
   have hCc : IsCompact C := isCompact_combination hK₀ hK₁ t
-  have hmass : ∀ S : Set V, MeasurableSet S →
-      (ν : Measure V) S = ∫⁻ x, ENNReal.ofReal (S.indicator ρ x) := by
+  have hmass :
+    ∀ S : Set V, MeasurableSet S → (ν : Measure V) S = ∫⁻ x, ENNReal.ofReal (S.indicator ρ x) := by
     intro S hS
-    have hind : ∀ x, ENNReal.ofReal (S.indicator ρ x) =
-        S.indicator (fun y => ENNReal.ofReal (ρ y)) x := by
+    have hind :
+      ∀ x, ENNReal.ofReal (S.indicator ρ x) = S.indicator (fun y => ENNReal.ofReal (ρ y)) x := by
       intro x
       by_cases hx : x ∈ S <;> simp [hx]
     simp_rw [hind]
     rw [lintegral_indicator hS, ← hρ.withDensity_eq, withDensity_apply _ hS]
-  rw [hmass K₀ hK₀.measurableSet, hmass K₁ hK₁.measurableSet,
-    hmass C hCc.measurableSet]
-  refine Analysis.prekopaLeindler (hρ.measurable.indicator hK₀.measurableSet)
-    (hρ.measurable.indicator hK₁.measurableSet)
-    (hρ.measurable.indicator hCc.measurableSet)
-    (fun x => Set.indicator_nonneg (fun y _ => hρ.nonneg y) x)
-    (fun y => Set.indicator_nonneg (fun z _ => hρ.nonneg z) y) ht0 ht1 ?_
+  rw [hmass K₀ hK₀.measurableSet, hmass K₁ hK₁.measurableSet, hmass C hCc.measurableSet]
+  refine
+    Analysis.prekopaLeindler (hρ.measurable.indicator hK₀.measurableSet)
+      (hρ.measurable.indicator hK₁.measurableSet) (hρ.measurable.indicator hCc.measurableSet)
+      (fun x => Set.indicator_nonneg (fun y _ => hρ.nonneg y) x)
+      (fun y => Set.indicator_nonneg (fun z _ => hρ.nonneg z) y) ht0 ht1 ?_
   intro x y
   have hh0 : ∀ z, 0 ≤ C.indicator ρ z := fun z =>
     Set.indicator_nonneg (fun w _ => hρ.nonneg w) z

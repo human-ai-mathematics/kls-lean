@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
 
 /-!
 # Corollary 3.7 and Lemma 3.9 of BKL for the iterates in `D(A)`
@@ -50,6 +52,8 @@ The covariance hypothesis is used only as `∫ ⟪v, x⟫² dν ≤ ‖v‖²`; 
 not needed. Lemma 3.8, the bound of Lemma 3.9 by `R` and Theorem 3.1 are
 not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

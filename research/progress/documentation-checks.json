@@ -1,0 +1,477 @@
+{
+  "version": 1,
+  "compact_headings": [
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Lipschitz/C1Pieces.lean",
+      "heading": "# Exact C¹ pieces of a Lipschitz function",
+      "reason": "Reviewed compact module synopsis: the heading is complete and the following sentence gives an independent synopsis."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Lipschitz/Jet.lean",
+      "heading": "# Compact jets of a Lipschitz function",
+      "reason": "Reviewed compact module synopsis: the heading is complete and the following sentence gives an independent synopsis."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Exponential/Counterexample.lean",
+      "heading": "# A nonconvergent family of commuting nonnegative exponentials",
+      "reason": "Reviewed compact module synopsis: the heading is complete and the following sentence gives an independent synopsis."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "heading": "# Generator domain invariance",
+      "reason": "Reviewed compact module synopsis: the heading is complete and the following sentence gives an independent synopsis."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Laws.lean",
+      "heading": "# Laws of the Yosida approximation",
+      "reason": "Reviewed compact module synopsis: the heading is complete and the following sentence gives an independent synopsis."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "heading": "# Heat semigroup domain interfaces",
+      "reason": "Reviewed compact module synopsis: the heading is complete and the following sentence gives an independent synopsis."
+    }
+  ],
+  "declaration_links": [
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`KLS.Conjecture`",
+      "source": "formalization/FunctionalInequalities/KLS/Statement.lean",
+      "declaration": "FunctionalInequalities.KLS.Conjecture"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`KLS.kls`",
+      "source": "formalization/FunctionalInequalities/KLS/Target.lean",
+      "declaration": "FunctionalInequalities.KLS.kls"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`LogConcave`",
+      "source": "formalization/FunctionalInequalities/Probability/LogConcave.lean",
+      "declaration": "FunctionalInequalities.KLS.LogConcave"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`Isotropic`",
+      "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean",
+      "declaration": "FunctionalInequalities.KLS.Isotropic"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "local-slope tests",
+      "source": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
+      "declaration": "FunctionalInequalities.Energy.LocalSlope.Admissible"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "intrinsic optimum",
+      "source": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "declaration": "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "Closed BKL producer",
+      "source": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean",
+      "declaration": "FunctionalInequalities.KLS.BKL.Localization.conjecture"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "Noncompact Letwin",
+      "source": "formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.letwinQuadraticBound"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "matrix form",
+      "source": "formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.matrix_variance_le_eight",
+      "occurrences": 2
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "smooth-test variance consumer",
+      "source": "formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean",
+      "declaration": "FunctionalInequalities.Poincare.SmoothTest.Holds",
+      "field": "variance_le"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "OpenAI model",
+      "source": "integrations/openai/OAI/Analysis/KLS/Model.lean",
+      "declaration": "OAI.LeanBlast.KLS.densityMeasure"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`logConcave`",
+      "source": "integrations/openai/KLSOpenAI/Bridge.lean",
+      "declaration": "KLSOpenAI.logConcave"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`isotropic`",
+      "source": "integrations/openai/KLSOpenAI/Bridge.lean",
+      "declaration": "KLSOpenAI.isotropic"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "`of_conjecture`",
+      "source": "integrations/openai/KLSOpenAI/Bridge.lean",
+      "declaration": "KLSOpenAI.of_conjecture"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "target",
+      "source": "integrations/openai/KLSOpenAI/Target.lean",
+      "declaration": "KLSOpenAI.kls"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "Levy consumer",
+      "source": "formalization/vendor/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean",
+      "declaration": "LevyStochCalc.Martingale.exists_adapted_ae_isCadlag_nnreal"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "KLS calling example",
+      "source": "examples/KlsApplications.lean",
+      "declaration": "Examples.KlsApplications.covariance_bound"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
+      "label": "Noncompact theorem",
+      "source": "formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.letwinQuadraticBound"
+    }
+  ],
+  "current_letwin_scope": {
+    "document": "research/progress/target-reviews.md",
+    "paper": "Letwin2026",
+    "items": [
+      {
+        "id": "L22",
+        "relation": "same",
+        "declarations": [
+          "FunctionalInequalities.Probability.MomentMeasure.smooth_of_moment_potential_of_bounded_open_convex",
+          "FunctionalInequalities.Probability.MomentMeasure.smooth_of_ofPotential_of_bounded_open_convex"
+        ]
+      },
+      {
+        "id": "T25",
+        "relation": "same",
+        "declarations": [
+          "FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_moment_potential_of_bounded_open_convex",
+          "FunctionalInequalities.Probability.MomentMeasure.integral_trace_le_of_ofPotential_of_bounded_open_convex"
+        ]
+      },
+      {
+        "id": "L27",
+        "relation": "same",
+        "declarations": [
+          "FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_moment_potential_of_bounded_open_convex",
+          "FunctionalInequalities.Probability.MomentMeasure.exists_stein_kernel_of_ofPotential_of_bounded_open_convex"
+        ]
+      }
+    ]
+  },
+  "handoff": {
+    "document": "HANDOFF.md",
+    "review_map": "research/progress/2026-10-31-palomar-publication-review.json",
+    "scope_lines": [
+      "This checkout is the publication candidate for the closed `KLSOpenAI.kls` Palomar entry,",
+      "using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.",
+      "The publication retains mathematical targets and certificate states; evidence must match its final commit."
+    ],
+    "preservation": "The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.",
+    "next_step": "Run full local and independent-consumer checks, then exact-commit Linux sandbox Comparator, remote Lean certification and official Palomar preflight before registration.",
+    "activity_scope": "Publication and final-commit verification are approved for this candidate; registration and the FC proof link must use the actual verified public revision and real registry ID."
+  },
+  "route_scope_notes": [
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:convex-gradient-holder/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:alexandrov-density-comparison/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:convex-contact-perturbation/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:convex-unit-ball-contact-gain/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:convex-reference-contact-gain/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:domain-alexandrov-maximum/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:convex-boundary-maximum/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:domain-ma-total-boundary/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:domain-ma-stability/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/nodes.json",
+      "pointer": "/nodes/lem:dirichlet-unit-solution/description",
+      "prefix": "Remaining-gap statements in this description concern only the earlier variational route."
+    },
+    {
+      "source": "research/progress/letwin-smooth-route.json",
+      "pointer": "/stages/@R7L/note",
+      "prefix": "Historical continuation of the earlier variational route:"
+    },
+    {
+      "source": "research/tasks.json",
+      "pointer": "/nodes/lem:letwin-weak-regular-moment-potential/note",
+      "contains": "both paper-source conclusions are proved by their separate current producers."
+    }
+  ],
+  "reviewed_scope_passages": [
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "## Earlier strong regular-class producers for Letwin Lemmas 2.2 and 2.7",
+      "reason": "The retained strong-class producer is not the full current paper-source summary."
+    },
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "interior and normalized isotropic law 1_K e^{-W}. This strong-class producer does not by itself\nsupply the merely convex source class. That class is covered by the current paper-source\nproducers summarized above. The later sharp smooth producer starts",
+      "reason": "Scope the producer restriction without understating the separately proved theorem."
+    },
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "existential witnesses is used in this strong-class construction. The current paper-source\nresults also identify every admissible moment potential using CEK uniqueness; these separate\nresults prove Lemmas 2.2 and 2.7 for the literal source class.",
+      "reason": "Retain the old same-witness proof method and distinguish the current every-potential route."
+    },
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "## Earlier variational route: convex-body source through C¹,α\n\nThis section records the independent variational route and its retained supports. Statements\nof missing steps concern this route or its weaker source inputs, not the current paper-source\nmoment-map theorem above. The dated continuation records retain their historical scopes.",
+      "reason": "Make the route boundary explicit for every subsequent dated record."
+    },
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "This variational route has not independently supplied BB arXiv:1207.6128v1 Theorem 2.24(ii),\nthe nonlinear arbitrary-p W²,p gain or the subsequent second-order regularity step for its\nweaker inputs. Its C¹,α producer alone is not the full moment-map theorem. The separate smooth\nmoment-map route proves the paper-source conclusion. The strong-class all-order bridge uses\ngradient-Lipschitz and weak-Hessian inputs not supplied by this variational producer.",
+      "reason": "Preserve the genuine route-specific analytic gaps and remove the obsolete global noncompletion claim."
+    },
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "localization and actual Dirichlet/Pogorelov reference existence remain open within this\nvariational route, together with its arbitrary-p tails and weak-derivative steps. The separate\npaper-source moment-map theorem does not assert these intermediate constructions.",
+      "reason": "Distinguish missing intermediate constructions from the independently proved paper conclusion."
+    },
+    {
+      "source": "research/progress/target-reviews.md",
+      "required": "Within this earlier variational route, weak derivatives and domain-only Dirichlet reference\nexistence/localization remain open; its general image/gain support still takes a given\nGLOBAL convex/GLOBAL C2 reference. These restrictions do not limit the separate paper-source\nsmooth moment-map theorem.",
+      "reason": "Retain the given-reference restriction and remove an obsolete global claim."
+    },
+    {
+      "source": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+      "required": "derivatives and domain-only Dirichlet production remain separate steps in this earlier\n  variational route. The paper-source conclusion of Lemma~2.2 is proved independently by\n  Lemma~\\ref{lem:convex-source-smooth-moment-potential}.",
+      "reason": "Keep this derivative-identification node local without contradicting the current full source theorem."
+    },
+    {
+      "source": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+      "required": "arbitrary-p Sobolev regularity remains outside the conclusions of this earlier variational\n  route. This node does not assert the full paper-source theorem, which is proved separately by\n  Lemma~\\ref{lem:convex-source-smooth-moment-potential}.",
+      "reason": "Keep the Perron/regularization scope and the independently proved moment-map conclusion distinct."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+      "required": "bounded testing are in `IntegrationByParts/WeakHessian/{Weighted,Testing,Directional}`. These\nanalytic identities are separate from the quantitative moment-potential bounds, whose producers\nretain their own source hypotheses.",
+      "reason": "Keep this weak-identity module local rather than deny separately proved quantitative bounds."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Graph/Jacobian.lean",
+      "required": "Everything below concerns linear maps. Nonlinear vector-graph area and weighted parametrization\nare supplied separately by `Analysis/Vector/Graph/{Area,Integral}.lean`. A general\nparametrized-image area formula is outside the statements of this linear module.",
+      "reason": "Identify the existing nonlinear graph consumers without asserting a general parametrized-image theorem."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/FormDomain.lean",
+      "required": "`Γ`/`Γ₂` estimates, their `L¹` self-improvement, BGL, small-time BV bounds, general-law passage\nand Buser's inequality are outside this module's statements. Positive-time domain regularization\nis supplied separately by `Generated/Smoothing.lean`; measure-specific estimates belong to their\nanalytic and log-concave consumers. This is general real Hilbert space material: no measure,\nno log-concavity and no KLS quantity.",
+      "reason": "Scope the form-domain result instead of globally understating later analytic consumers."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Smoothing.lean",
+      "required": "claimed here; `1/√(2et)` and `1/(et)` are outside the estimates proved in this module.",
+      "reason": "Preserve the exact coarse constants and the sharper-estimate non-claim as module scope."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Limit.lean",
+      "required": "This module proves convergence to `g`. The named operator and semigroup laws are constructed in\n`Generated/{Basic,Laws}.lean`, and `Generated/Generator.lean` identifies the generator on its\nstated domain. Markov properties, Bakry–Émery calculus and heat/Buser estimates belong to\nseparate consumers.",
+      "reason": "Point to current semigroup owners while retaining this convergence-only contract."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean",
+      "required": "This module supplies the ambient half of the local coarea argument. The weighted fibre area\nformula is in `Analysis/Vector/Graph/Integral.lean`; the Tonelli assembly and regular-open-set\npatching are in `Analysis/Vector/Coarea/{Local,Regular}.lean`.",
+      "reason": "Distinguish this ambient-side contract from the separately supplied fibre and assembly owners."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Coarea/Local.lean",
+      "required": "This module proves the equality on one chart. `Analysis/Vector/Coarea/Regular.lean` supplies the\ncountable regular-open-set assembly and weighted slice measurability. The scalar counterparts\nare `Analysis/Coarea/Regular.lean` and `Analysis/Hausdorff/Slice/OpenMeasurable.lean`.",
+      "reason": "Retain the one-chart scope and identify the current regular coarea assembly."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
+      "required": "This module's transfer theorem for arbitrary data `F = P_r g` retains explicit convergence of\nboth fields `∇fₙ` and `-∇ℒfₙ`; the operator core for `A` alone does not supply the second\nconvergence. `BakryEmery/TestClassExtension.lean` provides the arbitrary-positive-time-data\nextension using the separate two-field form-range construction. No time interpolation or\ngradient estimate is claimed here. All statements retain the full-dimensional log-concave model.\n\n`exists_seq_smooth_tendsto_regularized_fields` constructs approximants `P_{r/2}[fₙ]` with\n`fₙ ∈ C_c^∞`. Their heat evolution is retained, so using them requires the separate extension\nstep rather than the compact-data Bochner statement alone.",
+      "reason": "Separate the conditional transfer and regularized approximants from their actual extension consumer."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Core.lean",
+      "required": "## The two ingredients and their separate owners",
+      "reason": "The following paragraph already records the proved InteriorRegularity owner; align its heading."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Form.lean",
+      "required": "This module supplies weak-form estimates. The resolvent construction is in\n`Resolvent/Basic.lean`; Yosida limits and the generated semigroup have their separate owners.\nThe statements here are general real Hilbert space material, with no measure, log-concavity or\nKLS quantity.",
+      "reason": "Keep the weak-form responsibility without globally denying later resolvent and semigroup constructions."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Basic.lean",
+      "required": "This module supplies the graph-map infrastructure. The two-sided estimates and area formula\nare in `Analysis/Vector/Graph/{Sandwich,Area}.lean`, and the weighted change of variables is in\n`Analysis/Vector/Graph/Integral.lean`.",
+      "reason": "Replace the obsolete remaining-phase note by the actual vector-graph owners."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Sandwich.lean",
+      "required": "This module supplies the two-sided estimates. `Analysis/Vector/Graph/Area.lean` takes the\n`ε → 0` limit and performs the countable patching for the area formula.",
+      "reason": "Identify the existing area-formula consumer while retaining the sandwich-only scope."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/Klartag/MomentLimit.lean",
+      "required": "Scope of this limit producer: it constructs a limit potential without identifying it with a\ngiven potential, and it does not assert convergence of the whole sequence. Moment-potential\nuniqueness has its separate current owner in `KLS/CEK/Uniqueness.lean`; applying that theorem\nrequires matching its source and translation hypotheses. The paper's",
+      "reason": "Separate the limit producer from the already formalized CEK uniqueness theorem without promoting the whole-sequence conclusion."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
+      "required": "Outside this module's statements: the `L¹`-type estimate",
+      "reason": "Keep this frontend limitation local instead of denying separate self-improvement and heat consumers."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean",
+      "required": "The upper bound `Is(μ)² ≤ 2 / Var μ` and equality cases are outside this module's proved\nstatements.",
+      "reason": "Retain the precise one-sided result and leave global paper coverage to the literature register."
+    },
+    {
+      "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean",
+      "required": "independence and the identity form of (16) on `D(A)` are outside this module's statements.",
+      "reason": "Keep the fixed-basis weak-Hessian scope explicit."
+    }
+  ],
+  "maintenance": {
+    "linter_exceptions": [
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
+        "option": "linter.unusedVariables",
+        "declaration": "FunctionalInequalities.Analysis.BakryEmery.contDiffOn_logLaplace_ball",
+        "reason": "Retain the named positive-radius premise hr and the exact established log-Laplace contract."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/Analysis/Coarea/Isoperimetry.lean",
+        "option": "linter.unusedVariables",
+        "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet",
+        "reason": "Retain the named Lipschitz bound hK and the ambient structure of the original coarea interface."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
+        "option": "linter.unusedSectionVars",
+        "declaration": "FunctionalInequalities.KLS.integral_inner_sq_tilted_half_norm_sq",
+        "reason": "Retain the existing CompleteSpace binder and exact public telescope; this particular scalar proof does not consume that instance."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
+        "option": "linter.unusedVariables",
+        "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_distanceCutoff_le",
+        "reason": "Retain the reference Haar measure, named absolute-continuity premise hac and ambient structure from the established public contract."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+        "option": "linter.unusedVariables",
+        "declaration": "FunctionalInequalities.KLS.Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le",
+        "reason": "Retain the named hu01 range premise of the published [0,1]-valued test class, even though this proof route does not use the full range bound."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiConstant.lean",
+        "option": "linter.unusedVariables",
+        "declaration": "FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_mul_lintegral_min_superlevel_le",
+        "reason": "Retain the named hu01 range premise of the published [0,1]-valued test class, even though this proof route does not use the full range bound."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+        "option": "linter.unusedSectionVars",
+        "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_minkowskiContent_superlevel_le",
+        "reason": "Retain the explicit finite-dimensional and ambient SecondCountableTopology scope of the Minkowski coarea interface."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+        "option": "linter.unusedVariables",
+        "declaration": "FunctionalInequalities.KLS.LogConcave.ae_conditionalFiber_logConcave",
+        "reason": "Retain the named Admissible premise hρ and the established fiber interface; the current proof derives log-concavity from the absolute-continuity route."
+      },
+      {
+        "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+        "option": "linter.unusedSectionVars",
+        "declaration": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_variance",
+        "reason": "Retain the existing CompleteSpace binder and exact public telescope; this particular scalar proof does not consume that instance."
+      }
+    ],
+    "audit_reports": [
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.diffusionGenerator_eq_vectorGenerator",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.fderiv_clm_comp_apply_vec",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator_clm_comp",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator_prodMk",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator_pi",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.fderiv_prodMk_apply_vec",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.Diffusion.fderiv_pi_apply_vec",
+        "audit": "research/audits/SourceLayout/VectorGenerator.lean"
+      },
+      {
+        "declaration": "FunctionalInequalities.Probability.MomentMeasure.log_sub_ge_of_integral_limits",
+        "audit": "research/audits/CEK/FunctionalLimitAudit.lean"
+      }
+    ],
+    "forbidden_lookalikes": [
+      "ᐟ"
+    ]
+  }
+}

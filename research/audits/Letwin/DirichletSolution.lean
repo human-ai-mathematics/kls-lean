@@ -1,0 +1,637 @@
+module
+
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.DomainTransport
+public import FunctionalInequalities.Analysis.Convex.Dirichlet.Solution
+public import FunctionalInequalities.Analysis.Convex.Dirichlet.Regularity
+public import FunctionalInequalities.Analysis.Convex.Dirichlet.Duality
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Mollification
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
+
+@[expose] public section
+
+noncomputable section
+open Set Metric Filter MeasureTheory
+open scoped RealInnerProductSpace ENNReal Topology
+
+namespace LetwinDirichletSolutionAudit
+open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.Dirichlet
+
+theorem actual_unit_ball_solution {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin n))),
+      ConvexOn ℝ (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1)) U ∧
+        ContinuousOn U (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1)) ∧
+          (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+            (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                MeasurableSet G →
+                  μ G = volume (subgradientImageOn U (ball 0 1) (G ∩ ball 0 1))) ∧
+              μ univ = volume (ball (0 : EuclideanSpace ℝ (Fin n)) 1) ∧
+                (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                  IsOpen G →
+                    G ⊆ ball 0 1 → volume (subgradientImageOn U (ball 0 1) G) = volume G) := by
+  obtain ⟨U, μ, _, hcv, hC, hz, hμ, _, hm, hMA⟩ :=
+    exists_unit_solution hn isOpen_ball (convex_ball _ _) isBounded_ball
+  refine ⟨U, μ, hcv, hC, hz, hμ, ?_, hMA⟩
+  rw [hm, Measure.restrict_apply MeasurableSet.univ, univ_inter]
+
+theorem actual_empty_domain_solution :
+    ∃ (U : EuclideanSpace ℝ (Fin 1) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin 1))),
+      U ∈ subsolutions ∅ ∧
+        μ = 0 ∧
+          (∀ G : Set (EuclideanSpace ℝ (Fin 1)),
+            MeasurableSet G → μ G = volume (subgradientImageOn U ∅ (G ∩ ∅))) := by
+  obtain ⟨U, μ, hU, _, _, _, hμ, _, hm, _⟩ :=
+    exists_unit_solution (by norm_num : 0 < 1) isOpen_empty convex_empty
+      Bornology.isBounded_empty
+  refine ⟨U, μ, hU, ?_, hμ⟩
+  simpa using hm
+
+/-- Real generated UNIT solution with interior sign, including its center. -/
+theorem actual_unit_ball_negative {n : ℕ} (hn : 0 < n) :
+    ∃ U : EuclideanSpace ℝ (Fin n) → ℝ,
+      ConvexOn ℝ (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1)) U ∧
+        ContinuousOn U (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1)) ∧
+          (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+            U 0 < 0 ∧
+              (∀ x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U x < 0) ∧
+                (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                  IsOpen G →
+                    G ⊆ ball 0 1 → volume (subgradientImageOn U (ball 0 1) G) = volume G) := by
+  obtain ⟨U, μ, _, hcv, hC, hz, _, _, _, hMA, hneg⟩ :=
+    exists_unit_solution_neg hn isOpen_ball (convex_ball _ _) isBounded_ball
+  exact ⟨U, hcv, hC, hz, hneg 0 (mem_ball_self zero_lt_one), hneg, hMA⟩
+/-- A genuine generated UNIT source is patched at a genuinely negative level;
+no regularity, proper level, support or MA datum of U is supplied. -/
+theorem actual_unit_ball_negative_patch {n : ℕ} (hn : 0 < n) :
+    ∃ (U V : EuclideanSpace ℝ (Fin n) → ℝ) (r : ℝ) (L : NNReal),
+      ContinuousOn U (closure (ball 0 1)) ∧ ConvexOn ℝ (closure (ball 0 1)) U ∧
+      (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+      (∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G → G ⊆ ball 0 1 →
+        volume (subgradientImageOn U (ball 0 1) G) = volume G) ∧
+      U 0 < r ∧ r < 0 ∧ ConvexOn ℝ univ V ∧ LipschitzWith L V ∧
+      IsCompact {x | V x ≤ r} ∧ {x | V x ≤ r} ⊆ ball 0 1 ∧
+      (∀ x ∈ {y | V y ≤ r}, V x = U x) ∧
+      {x | V x < r} = {x ∈ ball 0 1 | U x < r} ∧
+      (∀ G ⊆ {x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1 | U x < r},
+        subgradientImage V G = subgradientImageOn U (ball 0 1) G) := by
+  obtain ⟨U, μ, _hU, hcv, hC, hz, _hμ, _hfin, _hm, hMA, hneg⟩ :=
+    Dirichlet.exists_unit_solution_neg hn isOpen_ball (convex_ball _ _) isBounded_ball
+  have hU0 := hneg 0 (mem_ball_self zero_lt_one)
+  let r : ℝ := U 0 / 2
+  have hr : r < 0 := by dsimp [r]; linarith
+  have h0r : U 0 < r := by dsimp [r]; linarith
+  obtain ⟨hK, _hKn, hKΩ, V, L, hV, hL, heq, hweak, hstrict, himage⟩ :=
+    exists_negative_sublevel_patch isOpen_ball (convex_ball _ _) isBounded_ball
+      hcv hC hz hr (mem_ball_self zero_lt_one) h0r
+  refine ⟨U, V, r, L, hC, hcv, hz, hMA, h0r, hr, hV, hL, ?_, ?_, ?_, hstrict, himage⟩
+  · rw [hweak]
+    exact hK
+  · rw [hweak]
+    exact hKΩ
+  · rw [hweak]
+    exact heq
+
+/-- The contact source is actually applied at a support slope generated by
+canonical C0 data for the SAME generated solution at the origin. -/
+theorem actual_unit_ball_contact_unique {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (p : EuclideanSpace ℝ (Fin n)),
+      ConvexOn ℝ (closure (ball 0 1)) U ∧
+        ContinuousOn U (closure (ball 0 1)) ∧
+          (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+            U 0 < 0 ∧
+              (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U 0 + ⟪p, y⟫ ≤ U y) ∧
+                (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U y = U 0 + ⟪p, y⟫ → y = 0) := by
+  obtain ⟨U, μ, _hU, hcv, hC, hz, _hμ, _hfin, _hm, _hMA, hneg, hcontact, _hstrict⟩ :=
+    exists_strict_unit_solution hn isOpen_ball (convex_ball _ _) isBounded_ball
+  have hx : (0 : EuclideanSpace ℝ (Fin n)) ∈ ball 0 1 := mem_ball_self zero_lt_one
+  obtain ⟨R, _hR, hs, _hcap⟩ :=
+    exists_uniform_subgradient_bound_on_compact isOpen_ball
+      (hcv.subset subset_closure (convex_ball _ _)) (hC.mono subset_closure)
+      (isCompact_singleton (x := (0 : EuclideanSpace ℝ (Fin n)))) (singleton_subset_iff.mpr hx)
+  obtain ⟨p, hp⟩ := hs 0 (mem_singleton 0)
+  refine ⟨U, p, hcv, hC, hz, hneg 0 hx, ?_, ?_⟩
+  · simpa only [sub_zero] using hp
+  · simpa only [sub_zero] using hcontact 0 hx p hp
+
+private lemma fin0_univ_compact : IsCompact (univ : Set (EuclideanSpace ℝ (Fin 0))) := by
+  have he : (univ : Set (EuclideanSpace ℝ (Fin 0))) = {0} := by
+    ext x
+    simp only [mem_univ, mem_singleton_iff, true_iff]
+    exact Subsingleton.elim _ _
+  rw [he]
+  exact isCompact_singleton
+
+/-- The generic patch really includes the zero-dimensional carrier. No
+positive-dimensional source or arbitrary mass is claimed here. -/
+theorem actual_fin0_constant_patch :
+    ∃ V : EuclideanSpace ℝ (Fin 0) → ℝ, ConvexOn ℝ univ V ∧ V 0 = -2 ∧ {x | V x ≤ -1} = univ := by
+  have hb : Bornology.IsBounded (univ : Set (EuclideanSpace ℝ (Fin 0))) :=
+    fin0_univ_compact.isBounded
+  have hz : ∀ z ∈ frontier (univ : Set (EuclideanSpace ℝ (Fin 0))), (-2 : ℝ) = 0 := by simp
+  obtain ⟨_hK, _hKn, _hKΩ, V, _L, hV, _hL, heq, hweak, _hstrict, _himage⟩ :=
+    exists_negative_sublevel_patch isOpen_univ convex_univ hb
+      (convexOn_const (-2) convex_univ.closure) continuousOn_const hz
+      (by norm_num : (-1 : ℝ) < 0) (mem_univ (0 : EuclideanSpace ℝ (Fin 0)))
+      (by norm_num : (-2 : ℝ) < -1)
+  refine ⟨V, hV, heq 0 (by simp), ?_⟩
+  rw [hweak]
+  ext x
+  norm_num
+
+
+
+/-- Actual generated strictness is applied to two distinct points of the
+unit ball; the SAME measure retains every Borel formula and UNIT equation. -/
+theorem actual_unit_ball_strict {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin n))) (e :
+      EuclideanSpace ℝ (Fin n)),
+      StrictConvexOn ℝ (ball 0 1) U ∧
+        e ≠ 0 ∧
+          e ∈ ball 0 1 ∧
+            U ((1 / 2 : ℝ) • e) < (U 0 + U e) / 2 ∧
+              (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+                (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                    MeasurableSet G →
+                      μ G = volume (subgradientImageOn U (ball 0 1) (G ∩ ball 0 1))) ∧
+                  (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                    IsOpen G →
+                      G ⊆ ball 0 1 → volume (subgradientImageOn U (ball 0 1) G) = volume G) := by
+  obtain ⟨U, μ, _hU, _hcv, _hC, hz, hμ, _hfin, _hm, hMA, _hneg, _hcontact, hs⟩ :=
+    exists_strict_unit_solution hn isOpen_ball (convex_ball _ _) isBounded_ball
+  let e : EuclideanSpace ℝ (Fin n) := EuclideanSpace.single ⟨0, hn⟩ (1 / 2)
+  have heNorm : ‖e‖ = (1 / 2 : ℝ) := by
+    change ‖PiLp.single 2 (β := fun _ : Fin n => ℝ) (⟨0, hn⟩ : Fin n) (1 / 2 : ℝ)‖ = (1 / 2 : ℝ)
+    rw [PiLp.norm_single]
+    norm_num
+  have he0 : e ≠ 0 := by intro he; rw [he, norm_zero] at heNorm; norm_num at heNorm
+  have heB : e ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1 := by
+    rw [mem_ball_zero_iff, heNorm]
+    norm_num
+  have h :=
+    hs.2 (mem_ball_self zero_lt_one) heB (Ne.symm he0) (by norm_num : (0 : ℝ) < 1 / 2)
+      (by norm_num : (0 : ℝ) < 1 / 2) (by norm_num : (1 / 2 : ℝ) + 1 / 2 = 1)
+  refine ⟨U, μ, e, hs, he0, heB, ?_, hz, hμ, hMA⟩
+  have hh : U ((1 / 2 : ℝ) • e) < (1 / 2 : ℝ) * U 0 + (1 / 2 : ℝ) * U e := by
+    simpa only [smul_zero, zero_add, smul_eq_mul] using h
+  linarith only [hh]
+
+/-- Real all-positive-dimensional unit-ball source, not a supplied optimizer. -/
+theorem actual_unit_ball_optimizer {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (P :
+      EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)),
+      StrictConvexOn ℝ (ball 0 1) U ∧
+        Continuous P ∧ (∀ p, P p ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1) := by
+  obtain
+    ⟨U, μ, r, P, _hU, _hcv, _hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, hs, _hxr, _hr,
+      _hK, _hKn, _hcK, hKΩ, hP, hopt⟩ :=
+    exists_unit_compact_tilt_optimizers hn isOpen_ball (convex_ball _ _) isBounded_ball
+      (mem_ball_self zero_lt_one)
+  exact ⟨U, P, hs, hP, fun p => hKΩ (hopt p).1⟩
+
+/-- Real source-only UNIT data generate a compact conjugate C1 VALUE at the
+SAME generated optimizer. C1 is about ψ, not the unknown primal U. -/
+theorem actual_unit_ball_conjugate {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin n))) (r : ℝ) (P :
+      EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (ψ : EuclideanSpace ℝ (Fin n) → ℝ) (L :
+      NNReal),
+      StrictConvexOn ℝ (ball 0 1) U ∧
+        (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+          (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+              MeasurableSet G → μ G = volume (subgradientImageOn U (ball 0 1) (G ∩ ball 0 1))) ∧
+            U 0 < r ∧
+              r < 0 ∧
+                Continuous P ∧
+                  ContDiff ℝ 1 ψ ∧
+                    ConvexOn ℝ univ ψ ∧
+                      LipschitzWith L ψ ∧
+                        (∀ p,
+                            ψ p =
+                              sSup
+                                ((fun y => ⟪p, y⟫ - U y) ''
+                                  {x ∈ closure (ball 0 1) | U x ≤ r})) ∧
+                          (∀ p, ψ p = ⟪p, P p⟫ - U (P p)) ∧
+                            (∀ p, HasFDerivAt ψ (innerSL ℝ (P p)) p) := by
+  obtain
+    ⟨U, μ, r, P, _hU, _hcv, _hC, hz, hμ, _hfin, _hm, _hMA, _hneg, _hcontact, hs, hxr, hr, _hK,
+      _hKn, _hcK, _hKΩ, hPC, _hopt, ψ, L, hsup, hvalue, hcv, hL, hC1, hd⟩ :=
+    exists_unit_compact_conjugate hn isOpen_ball (convex_ball _ _) isBounded_ball
+      (mem_ball_self zero_lt_one)
+  exact ⟨U, μ, r, P, ψ, L, hs, hz, hμ, hxr, hr, hPC, hC1, hcv, hL, hsup, hvalue, hd⟩
+
+private lemma unit_ball_strict_level_interior {n : ℕ} {U : EuclideanSpace ℝ (Fin n) → ℝ} {r : ℝ}
+    (hC : ContinuousOn U (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1))) (hxr : U 0 < r) :
+    (0 : EuclideanSpace ℝ (Fin n)) ∈
+      interior {x ∈ closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1) | U x ≤ r} := by
+  have hop : IsOpen (ball (0 : EuclideanSpace ℝ (Fin n)) 1 ∩ U ⁻¹' Iio r) :=
+    (hC.mono subset_closure).isOpen_inter_preimage isOpen_ball isOpen_Iio
+  have hsub :
+    (ball (0 : EuclideanSpace ℝ (Fin n)) 1 ∩ U ⁻¹' Iio r) ⊆
+      {x ∈ closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1) | U x ≤ r} := by
+    rintro y ⟨hy, huy⟩
+    exact ⟨subset_closure hy, huy.le⟩
+  exact interior_maximal hsub hop ⟨mem_ball_self zero_lt_one, hxr⟩
+
+/-- Genuine generated UNIT data on the unit ball give an actual nonempty
+interior target and all its Borel inverse-image capacities; no transport or
+primal regularity is supplied. -/
+theorem actual_unit_ball_capacity {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (r : ℝ) (P :
+      EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (ψ : EuclideanSpace ℝ (Fin n) → ℝ),
+      StrictConvexOn ℝ (ball 0 1) U ∧
+        ContDiff ℝ 1 ψ ∧
+          Continuous P ∧
+            (∀ p, gradient ψ p = P p) ∧
+              let K := {x ∈ closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1) | U x ≤ r}
+              (0 : EuclideanSpace ℝ (Fin n)) ∈ interior K ∧
+                (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                    MeasurableSet G → G ⊆ interior K → volume (P ⁻¹' G) = volume G) ∧
+                  (volume.restrict (P ⁻¹' interior K)).map P = volume.restrict (interior K) := by
+  obtain
+    ⟨U, μ, r, P, _hU, _hcv, hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, hstrict, hxr, _hr,
+      _hK, _hKn, _hcK, _hKΩ, hPC, _hopt, ψ, L, _hs, _hv, _hcvψ, _hL, hC1, _hd, hg, _hi, hmass,
+      hmap⟩ :=
+    exists_unit_conjugate_capacity hn isOpen_ball (convex_ball _ _) isBounded_ball
+      (mem_ball_self zero_lt_one)
+  have hk0 := unit_ball_strict_level_interior hC hxr
+  exact ⟨U, r, P, ψ, hstrict, hC1, hPC, hg, hk0, hmass, hmap⟩
+
+/-- Actual positive-dimensional unit-ball source generates a NONEMPTY OPEN
+slope region and real compact dual MA equation there; no transport/dual MA or
+primal regularity is supplied. -/
+theorem actual_unit_ball_dual_mass {n : ℕ} (hn : 0 < n) :
+    ∃ (ψ : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal) (D : Set (EuclideanSpace ℝ (Fin n))),
+      ConvexOn ℝ univ ψ ∧
+        ContDiff ℝ 1 ψ ∧
+          LipschitzWith L ψ ∧
+            IsOpen D ∧
+              D.Nonempty ∧
+                ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+                  IsCompact S → S ⊆ D → volume (subgradientImage ψ S) = volume S := by
+  obtain
+    ⟨U, μ, r, P, _hU, hcv, hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, _hstrict, hxr, _hr,
+      _hK, _hKn, _hcK, _hKΩ, hPC, _hopt, ψ, L, _hs, _hv, hcvψ, hL, hC1, _hd, _hg, hi, _hmass,
+      _hmap, hdual⟩ :=
+    exists_unit_compact_dual_mass hn isOpen_ball (convex_ball _ _) isBounded_ball
+      (mem_ball_self zero_lt_one)
+  let K := {x ∈ closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1) | U x ≤ r}
+  have h0 : (0 : EuclideanSpace ℝ (Fin n)) ∈ ball 0 1 := mem_ball_self zero_lt_one
+  have hk0 : (0 : EuclideanSpace ℝ (Fin n)) ∈ interior K :=
+    unit_ball_strict_level_interior hC hxr
+  obtain ⟨R, _hR, hs, _⟩ :=
+    exists_uniform_subgradient_bound_on_compact isOpen_ball
+      (hcv.subset subset_closure (convex_ball _ _)) (hC.mono subset_closure)
+      (isCompact_singleton (x := (0 : EuclideanSpace ℝ (Fin n)))) (singleton_subset_iff.mpr h0)
+  obtain ⟨p, hp⟩ := hs 0 (mem_singleton 0)
+  have hpI : p ∈ subgradientImageOn U (ball 0 1) {0} := ⟨0, mem_singleton 0, hp⟩
+  have hp0 : P p = 0 := by
+    have h := (hi {0} (singleton_subset_iff.mpr hk0)).subset hpI
+    simpa only [mem_preimage, mem_singleton_iff] using h
+  refine ⟨ψ, L, P ⁻¹' interior K, hcvψ, hC1, hL, isOpen_interior.preimage hPC, ⟨p, ?_⟩, hdual⟩
+  change P p ∈ interior K
+  simpa only [hp0] using hk0
+
+private lemma fin0_constant_gradient_map_haar :
+    (∀ p : EuclideanSpace ℝ (Fin 0),
+        gradient (fun _ : EuclideanSpace ℝ (Fin 0) => (7 : ℝ)) p = id p) ∧
+      (((volume : Measure (EuclideanSpace ℝ (Fin 0))).restrict (id ⁻¹' univ)).map id =
+          volume.restrict univ) ∧
+        ((volume : Measure (EuclideanSpace ℝ (Fin 0))) = Measure.dirac 0) := by
+  refine ⟨fun _ => Subsingleton.elim _ _, ?_, volume_euclideanSpace_eq_dirac (Fin 0)⟩
+  simp
+
+/-- True Fin0 constant source with actual normalized Haar mass ONE, obtained
+by applying the same generic compact dual transfer, not an empty-carrier claim. -/
+theorem actual_fin0_dual_mass :
+    (volume : Measure (EuclideanSpace ℝ (Fin 0)))
+        (subgradientImage (fun _ : EuclideanSpace ℝ (Fin 0) => (7 : ℝ)) {0}) =
+      1 := by
+  obtain ⟨hg, hmap, hvol⟩ := fin0_constant_gradient_map_haar
+  have h :=
+    volume_subgradientImage_eq_of_local_map (LipschitzWith.const (7 : ℝ))
+      (convexOn_const 7 convex_univ) contDiff_const hg hmap
+      (isCompact_singleton (x := (0 : EuclideanSpace ℝ (Fin 0)))) (subset_univ _)
+  have hm : (volume : Measure (EuclideanSpace ℝ (Fin 0))) {0} = 1 := by
+    rw [hvol]
+    simp
+  exact h.trans hm
+
+/-- Actual unit-ball geometry GENERATES a nonempty open slope region and
+SAME psi with both compact and OPEN equations, no transport/equation input. -/
+theorem actual_unit_ball_open_dual {n : ℕ} (hn : 0 < n) :
+    ∃ (ψ : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal) (D : Set (EuclideanSpace ℝ (Fin n))),
+      ConvexOn ℝ univ ψ ∧
+        ContDiff ℝ 1 ψ ∧
+          LipschitzWith L ψ ∧
+            IsOpen D ∧
+              D.Nonempty ∧
+                (∀ S : Set (EuclideanSpace ℝ (Fin n)),
+                    IsCompact S → S ⊆ D → volume (subgradientImage ψ S) = volume S) ∧
+                  (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+                    IsOpen G → G ⊆ D → volume (subgradientImage ψ G) = volume G) := by
+  obtain
+    ⟨U, μ, r, P, _hU, _hcv, _hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, _hstrict, _hxr,
+      _hr, _hK, _hKn, _hcK, _hKΩ, _hPC, _hopt, ψ, L, _hs, _hv, hcvψ, hL, hC1, _hd, _hg, _hi,
+      _hmass, _hmap, hdual, hDo, hDn, hopen⟩ :=
+    exists_unit_open_dual_mass hn isOpen_ball (convex_ball _ _) isBounded_ball
+      (mem_ball_self zero_lt_one)
+  exact
+    ⟨ψ, L, P ⁻¹' interior {x ∈ closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1) | U x ≤ r}, hcvψ,
+      hC1, hL, hDo, hDn, hdual, hopen⟩
+
+/-- True Fin0 point carrier/open univ has actual normalized MA massONE. -/
+theorem actual_fin0_open_dual :
+    (volume : Measure (EuclideanSpace ℝ (Fin 0)))
+        (subgradientImage (fun _ : EuclideanSpace ℝ (Fin 0) => (7 : ℝ)) univ) =
+      1 := by
+  obtain ⟨hg, hmap, hvol⟩ := fin0_constant_gradient_map_haar
+  have h :=
+    volume_subgradientImage_eq_of_local_map_on_open (LipschitzWith.const (7 : ℝ))
+      (convexOn_const 7 convex_univ) contDiff_const hg hmap isOpen_univ (subset_univ _)
+  have hm : (volume : Measure (EuclideanSpace ℝ (Fin 0))) univ = 1 := by
+    rw [hvol]
+    simp
+  exact h.trans hm
+
+/-- Actual unit-ball source generates a real interior target/psi and global
+quantitative coercivity/FULL compact tilt sublevels, no regularity/cap input. -/
+theorem actual_unit_ball_coercive_dual {n : ℕ} (hn : 0 < n) :
+    ∃ (ψ : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) (δ C : ℝ),
+      ContDiff ℝ 1 ψ ∧
+        x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1 ∧
+          0 < δ ∧
+            0 < C ∧
+              (∀ p, δ * ‖p‖ - C ≤ ψ p - ⟪p, x⟫) ∧ ∀ R : ℝ, IsCompact {p | ψ p - ⟪p, x⟫ ≤ R} := by
+  obtain
+    ⟨U, μ, r, P, _hU, _hcv, _hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, _hstrict, _hxr,
+      _hr, _hK, _hKn, _hcK, hKΩ, _hPC, _hopt, ψ, L, _hs, _hv, _hcvψ, _hL, hC1, _hd, _hg, _hi,
+      _hmass, _hmap, _hdual, _hDo, hDn, _hopen, hproper⟩ :=
+    Dirichlet.exists_unit_coercive_dual hn isOpen_ball (convex_ball _ _) isBounded_ball
+      (mem_ball_self zero_lt_one)
+  obtain ⟨p, hp⟩ := hDn
+  obtain ⟨δ, C, hδ, hCp, hl, hcomp⟩ := hproper (P p) hp
+  exact ⟨ψ, P p, δ, C, hC1, hKΩ (interior_subset hp), hδ, hCp, hl, hcomp⟩
+
+
+/-- Actual unit-ball source GENERATES a SAME minimum contact/positive gap and
+FULL compact section inside the actual OPEN slope region. No supplied section. -/
+theorem actual_unit_ball_contained_section {n : ℕ} (hn : 0 < n) :
+    ∃ (U ψ : EuclideanSpace ℝ (Fin n) → ℝ) (P :
+      EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (K : Set (EuclideanSpace ℝ (Fin n)))
+      (x p₀ : EuclideanSpace ℝ (Fin n)) (R : ℝ),
+      ContDiff ℝ 1 ψ ∧
+        x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1 ∧
+          P p₀ = x ∧
+            ψ p₀ - ⟪p₀, x⟫ = -U x ∧
+              -U x < R ∧
+                IsOpen (P ⁻¹' interior K) ∧
+                  IsCompact {p | ψ p - ⟪p, x⟫ ≤ R} ∧
+                    {p | ψ p - ⟪p, x⟫ ≤ R} ⊆ P ⁻¹' interior K ∧
+                      {p | ψ p - ⟪p, x⟫ ≤ R}.Nonempty := by
+  obtain
+    ⟨U, μ, r, P, _hU, _hcv, _hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, _hstrict, _hxr,
+      _hr, _hK, _hKn, _hcK, hKΩ, _hPC, _hopt, ψ, L, _hs, _hv, _hcvψ, _hL, hC1, _hd, _hg, _hi,
+      _hmass, _hmap, _hdual, hDo, hDn, _hopen, _hproper, hcontained, _hslopes⟩ :=
+    Dirichlet.exists_unit_contained_dual_sections hn isOpen_ball (convex_ball _ _)
+      isBounded_ball (mem_ball_self zero_lt_one)
+  obtain ⟨p, hp⟩ := hDn
+  obtain ⟨p₀, R, hPx, hvalue, hR, hcomp, hsub⟩ := hcontained (P p) hp
+  refine
+    ⟨U, ψ, P, _, P p, p₀, R, hC1, hKΩ (interior_subset hp), hPx, hvalue, hR, hDo, hcomp, hsub,
+      ?_⟩
+  exact ⟨p₀, by change ψ p₀ - ⟪p₀, P p⟫ ≤ R; rw [hvalue]; exact hR.le⟩
+
+/-- Actual UNIT source GENERATES a true support and uniqueness of all support
+slopes at a real interior target; no unknown derivative/contact input. -/
+theorem actual_unit_ball_unique_support_slope {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (x p : EuclideanSpace ℝ (Fin n)),
+      x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1 ∧
+        (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U x + ⟪p, y - x⟫ ≤ U y) ∧
+          ∀ q : EuclideanSpace ℝ (Fin n),
+            (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U x + ⟪q, y - x⟫ ≤ U y) → q = p := by
+  obtain
+    ⟨U, μ, r, P, _hU, hcv, hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, _hstrict, _hxr,
+      _hr, _hK, _hKn, _hcK, hKΩ, _hPC, _hopt, ψ, L, _hs, _hv, _hcvψ, _hL, _hC1, _hd, _hg, _hi,
+      _hmass, _hmap, _hdual, _hDo, hDn, _hopen, _hproper, _hcontained, hslopes⟩ :=
+    Dirichlet.exists_unit_contained_dual_sections hn isOpen_ball (convex_ball _ _)
+      isBounded_ball (mem_ball_self zero_lt_one)
+  obtain ⟨z, hz⟩ := hDn
+  have hx : P z ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1 := hKΩ (interior_subset hz)
+  obtain ⟨B, _hB, hsex, _hcap⟩ :=
+    exists_uniform_subgradient_bound_on_compact isOpen_ball
+      (hcv.subset subset_closure (convex_ball _ _)) (hC.mono subset_closure) isCompact_singleton
+      (singleton_subset_iff.mpr hx)
+  obtain ⟨p, hp⟩ := hsex (P z) (mem_singleton _)
+  exact ⟨U, P z, p, hx, hp, fun q hq => hslopes (P z) hz q p hq hp⟩
+
+
+/-- True unit-ball source constructs ONE potential/measure/all-point supports,
+then displays generated actual support at zero and uniqueness. -/
+theorem actual_unit_ball_same_U {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (p : EuclideanSpace ℝ (Fin n)),
+      ContinuousOn U (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1)) ∧
+        (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U 0 + ⟪p, y⟫ ≤ U y) ∧
+          (∀ q : EuclideanSpace ℝ (Fin n),
+              (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U 0 + ⟪q, y⟫ ≤ U y) → q = p) ∧
+            ∀ x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1,
+              ∃ s : EuclideanSpace ℝ (Fin n),
+                (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U x + ⟪s, y - x⟫ ≤ U y) ∧
+                  ∀ q : EuclideanSpace ℝ (Fin n),
+                    (∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, U x + ⟪q, y - x⟫ ≤ U y) →
+                      q = s := by
+  obtain ⟨U, μ, _hU, _hcv, hC, _hz, _hμ, _hfin, _hm, _hMA, _hneg, _hcontact, _hstrict, hs⟩ :=
+    Dirichlet.exists_unit_unique_supports hn isOpen_ball (convex_ball _ _) isBounded_ball
+  obtain ⟨p, hp, huniq⟩ := hs 0 (mem_ball_self zero_lt_one)
+  refine ⟨U, p, hC, ?_, ?_, hs⟩
+  · simpa only [sub_zero] using hp
+  · intro q hq
+    apply huniq q
+    simpa only [sub_zero] using hq
+
+/-- Genuine zero-dimensional negative constant UNIT data satisfy the ordinary
+GIVEN-u construction, producing the actual singleton slope zero, no mass claim. -/
+theorem actual_fin0_given_unit :
+    ∃ p : EuclideanSpace ℝ (Fin 0),
+      p = 0 ∧
+        (∀ y : EuclideanSpace ℝ (Fin 0), (-2 : ℝ) + ⟪p, y⟫ ≤ -2) ∧
+          ∀ q : EuclideanSpace ℝ (Fin 0),
+            (∀ y : EuclideanSpace ℝ (Fin 0), (-2 : ℝ) + ⟪q, y⟫ ≤ -2) → q = p := by
+  let E := EuclideanSpace ℝ (Fin 0)
+  let u : E → ℝ := fun _ => -2
+  have hK : IsCompact (univ : Set E) := fin0_univ_compact
+  have hstrict : StrictConvexOn ℝ (univ : Set E) u := by
+    refine ⟨convex_univ, ?_⟩
+    intro x _hx y _hy hxy a b _ha _hb _hab
+    exact (hxy (Subsingleton.elim _ _)).elim
+  have him (G : Set E) : subgradientImageOn u univ G = G := by
+    ext p
+    constructor
+    · rintro ⟨x, hx, _hp⟩
+      simpa only [show p = x from Subsingleton.elim _ _] using hx
+    · intro hp
+      refine ⟨p, hp, ?_⟩
+      intro y _hy
+      have he : y = p := Subsingleton.elim _ _
+      simp only [he, sub_self, inner_zero_right, add_zero, le_refl]
+  have hμ (G : Set E) (_hG : MeasurableSet G) :
+    volume G = volume (subgradientImageOn u univ (G ∩ univ)) := by rw [inter_univ, him]
+  obtain ⟨p, hp, huniq⟩ :=
+    Dirichlet.exists_unique_support_of_unit_data isOpen_univ convex_univ hK.isBounded
+      (by simpa only [closure_univ] using convexOn_const (-2 : ℝ) convex_univ)
+      continuousOn_const (by simp) (by intro x _hx; norm_num [u]) hstrict hμ
+      (by simp : (volume : Measure E) = volume.restrict univ) (mem_univ (0 : E))
+  refine ⟨p, Subsingleton.elim _ _, ?_, ?_⟩
+  · intro y
+    simpa only [sub_zero, u] using hp y (mem_univ _)
+  · intro q hq
+    apply huniq q
+    intro y _hy
+    simpa only [sub_zero, u] using hq y
+
+
+/-- The new exists-U-forall-x source actually includes an empty positive-dimensional
+domain, retaining its SAME zero measure and EVERY Borel formula. -/
+theorem actual_empty_same_U :
+    ∃ (U : EuclideanSpace ℝ (Fin 1) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin 1))),
+      ContinuousOn U (closure (∅ : Set (EuclideanSpace ℝ (Fin 1)))) ∧
+        μ = 0 ∧
+          (∀ G : Set (EuclideanSpace ℝ (Fin 1)),
+              MeasurableSet G → μ G = volume (subgradientImageOn U ∅ (G ∩ ∅))) ∧
+            ∀ x ∈ (∅ : Set (EuclideanSpace ℝ (Fin 1))),
+              ∃ p : EuclideanSpace ℝ (Fin 1),
+                (∀ y ∈ (∅ : Set (EuclideanSpace ℝ (Fin 1))), U x + ⟪p, y - x⟫ ≤ U y) ∧
+                  ∀ q : EuclideanSpace ℝ (Fin 1),
+                    (∀ y ∈ (∅ : Set (EuclideanSpace ℝ (Fin 1))), U x + ⟪q, y - x⟫ ≤ U y) →
+                      q = p := by
+  obtain ⟨U, μ, _hU, _hcv, hC, _hz, hμ, _hfin, hm, _hMA, _hneg, _hcontact, _hstrict, hs⟩ :=
+    Dirichlet.exists_unit_unique_supports (by decide : 0 < 1) isOpen_empty convex_empty
+      Bornology.isBounded_empty
+  exact ⟨U, μ, hC, by simpa only [Measure.restrict_empty] using hm, hμ, hs⟩
+
+
+/-- Actual unit-ball geometry GENERATES SAME U/mu and primal C1/actual
+derivative/gradient, while retaining genuine zero boundary and UNIT data. -/
+theorem actual_unit_ball_primal_c1 {n : ℕ} (hn : 0 < n) :
+    ∃ (U : EuclideanSpace ℝ (Fin n) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin n))) (g :
+      EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)),
+      ContinuousOn U (closure (ball (0 : EuclideanSpace ℝ (Fin n)) 1)) ∧
+        (∀ z ∈ frontier (ball (0 : EuclideanSpace ℝ (Fin n)) 1), U z = 0) ∧
+          (∀ G : Set (EuclideanSpace ℝ (Fin n)),
+              MeasurableSet G →
+                μ G =
+                  volume
+                    (subgradientImageOn U (ball (0 : EuclideanSpace ℝ (Fin n)) 1)
+                      (G ∩ ball (0 : EuclideanSpace ℝ (Fin n)) 1))) ∧
+            μ = volume.restrict (ball (0 : EuclideanSpace ℝ (Fin n)) 1) ∧
+              ContDiffOn ℝ 1 U (ball (0 : EuclideanSpace ℝ (Fin n)) 1) ∧
+                ContinuousOn g (ball (0 : EuclideanSpace ℝ (Fin n)) 1) ∧
+                  (∀ x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1,
+                      HasFDerivAt U (innerSL ℝ (g x)) x) ∧
+                    ∀ x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1, gradient U x = g x := by
+  obtain
+    ⟨U, μ, _hU, _hcv, hC, hz, hμ, _hfin, hm, _hMA, _hneg, _hcontact, _hstrict, _hs, g, hg, hd,
+      hC1, hgrad, _hsp⟩ :=
+    exists_unit_c1_solution hn isOpen_ball (convex_ball _ _) isBounded_ball
+  exact ⟨U, μ, g, hC, hz, hμ, hm, hC1, hg, hd, hgrad⟩
+
+/-- True Fin0 local convex constant/actual unique supports give actual
+zero Frechet derivative by the generic construction, not a default-gradient claim. -/
+theorem actual_fin0_local_c1 :
+    ContDiff ℝ 1 (fun _ : EuclideanSpace ℝ (Fin 0) => (-2 : ℝ)) ∧
+      ∀ x : EuclideanSpace ℝ (Fin 0),
+        HasFDerivAt (fun _ : EuclideanSpace ℝ (Fin 0) => (-2 : ℝ))
+          (0 : EuclideanSpace ℝ (Fin 0) →L[ℝ] ℝ) x := by
+  let E := EuclideanSpace ℝ (Fin 0)
+  have hs :
+    ∀ x ∈ (univ : Set E),
+      ∃ p : E,
+        (∀ y ∈ (univ : Set E), (-2 : ℝ) + ⟪p, y - x⟫ ≤ -2) ∧
+          ∀ q : E, (∀ y ∈ (univ : Set E), (-2 : ℝ) + ⟪q, y - x⟫ ≤ -2) → q = p := by
+    intro x _hx
+    refine ⟨0, ?_, fun q _hq => Subsingleton.elim _ _⟩
+    intro y _hy
+    simp
+  obtain ⟨g, _hg, hd, hC1, _hgrad, _hsp⟩ :=
+    exists_c1_of_unique_supports isOpen_univ (convexOn_const (-2 : ℝ) convex_univ)
+      continuousOn_const hs
+  refine ⟨contDiffOn_univ.mp hC1, ?_⟩
+  intro x
+  have he : g x = 0 := Subsingleton.elim _ _
+  simpa only [he, map_zero] using hd x (mem_univ _)
+
+/-- Empty positive-dimensional domains remain allowed by the SAME actual
+C1 source, retaining zero measure and EVERY Borel formula. -/
+theorem actual_empty_primal_c1 :
+    ∃ (U : EuclideanSpace ℝ (Fin 1) → ℝ) (μ : Measure (EuclideanSpace ℝ (Fin 1))),
+      ContDiffOn ℝ 1 U ∅ ∧
+        μ = 0 ∧
+          ∀ G : Set (EuclideanSpace ℝ (Fin 1)),
+            MeasurableSet G → μ G = volume (subgradientImageOn U ∅ (G ∩ ∅)) := by
+  obtain
+    ⟨U, μ, _hU, _hcv, _hC, _hz, hμ, _hfin, hm, _hMA, _hneg, _hcontact, _hstrict, _hs, _g, _hg,
+      _hd, hC1, _hgrad, _hsp⟩ :=
+    exists_unit_c1_solution (by decide : 0 < 1) isOpen_empty convex_empty
+      Bornology.isBounded_empty
+  exact ⟨U, μ, hC1, by simpa only [Measure.restrict_empty] using hm, hμ⟩
+
+
+end LetwinDirichletSolutionAudit
+set_option pp.fullNames true in
+#print axioms FunctionalInequalities.Analysis.Dirichlet.exists_unit_solution
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_solution
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_empty_domain_solution
+
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_negative
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_negative_patch
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_contact_unique
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_fin0_constant_patch
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_strict
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_optimizer
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_conjugate
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_capacity
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_dual_mass
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_fin0_dual_mass
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_open_dual
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_fin0_open_dual
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_coercive_dual
+
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_contained_section
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_unique_support_slope
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_same_U
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_fin0_given_unit
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_empty_same_U
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_unit_ball_primal_c1
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_fin0_local_c1
+set_option pp.fullNames true in
+#print axioms LetwinDirichletSolutionAudit.actual_empty_primal_c1

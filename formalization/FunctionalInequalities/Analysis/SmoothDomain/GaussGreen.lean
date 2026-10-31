@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.SmoothDomain.LocalGaussGreen
-import FunctionalInequalities.Analysis.PartitionOfUnity
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Analysis.SmoothDomain.LocalGaussGreen
+public import FunctionalInequalities.Analysis.PartitionOfUnity
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # The Gauss–Green theorem for a smooth domain
@@ -65,6 +67,8 @@ together with the theorem they support. The scalar test-function consequence als
 the mollified gradient formula and its norm bound live above this module in
 `KLS/Geometry/Perimeter/MollifiedBoundary.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -142,7 +146,7 @@ theorem integrableOn_smul_outwardNormal (U : SmoothDomain V) {η : V → ℝ}
     rw [norm_smul]
     by_cases hx : x ∈ frontier U.carrier
     · rw [U.norm_outwardNormal hx, mul_one]
-    · rw [outwardNormal, dif_neg hx]
+    · rw [outwardNormal, dite_eq_right hx]
       simp
   exact hint.mono hmeas (Eventually.of_forall hnorm)
 
@@ -152,7 +156,7 @@ it. -/
 theorem norm_outwardNormal_le_one (U : SmoothDomain V) (x : V) : ‖U.outwardNormal x‖ ≤ 1 := by
   by_cases hx : x ∈ frontier U.carrier
   · rw [U.norm_outwardNormal hx]
-  · rw [outwardNormal, dif_neg hx]
+  · rw [outwardNormal, dite_eq_right hx]
     simp
 
 /-- The flux integrand of a continuous compactly supported vector field is integrable on the
@@ -295,7 +299,8 @@ measure: `∫_U ∇η = ∫_{∂U} η ν dℋ^{n-1}` for every compactly support
 Equivalently `D𝟙_U = -ν ℋ^{n-1}⌊∂U`.
 
 **Reduction, not a proof from scratch:** this is derived from the vector-field form
-`integral_divergence_eq_integral_inner_outwardNormal` of `Analysis/SmoothDomain/GaussGreen.lean` by taking
+`integral_divergence_eq_integral_inner_outwardNormal` of `Analysis/SmoothDomain/GaussGreen.lean` by
+taking
 `F x = η x • v` for each fixed `v` (`Analysis.divergence_smul_const` turns `div F` into
 `⟪∇η, v⟫`) and commuting both integrals with the inner product (`integral_inner`, whose
 boundary-side hypothesis is `integrableOn_smul_outwardNormal`).  It is *not* an independent
@@ -310,18 +315,22 @@ theorem setIntegral_gradient_eq_integral_smul_outwardNormal (U : SmoothDomain V)
     funext x; rw [gradient]
   have hgradcont : Continuous (gradient η) := by
     rw [hgradeq]
-    exact (InnerProductSpace.toDual ℝ V).symm.continuous.comp
-      (hη.continuous_fderiv one_ne_zero)
+    exact (InnerProductSpace.toDual ℝ V).symm.continuous.comp (hη.continuous_fderiv one_ne_zero)
   have hgradcs : HasCompactSupport (gradient η) := by
     rw [hgradeq]
-    exact (hηc.fderiv ℝ).comp_left
-      (g := fun L : V →L[ℝ] ℝ => (InnerProductSpace.toDual ℝ V).symm L) (by simp)
+    exact
+      (hηc.fderiv ℝ).comp_left (g := fun L : V →L[ℝ] ℝ => (InnerProductSpace.toDual ℝ V).symm L)
+        (by simp)
   have hgradint : IntegrableOn (gradient η) U.carrier volume :=
     (hgradcont.integrable_of_hasCompactSupport hgradcs).integrableOn
-  have hbdint : IntegrableOn (fun x => η x • U.outwardNormal x) (frontier U.carrier)
-      (surfaceMeasure V) := U.integrableOn_smul_outwardNormal hcont hηc
-  refine ext_inner_left ℝ fun v => ?_
+  have hbdint :
+    IntegrableOn (fun x => η x • U.outwardNormal x) (frontier U.carrier) (surfaceMeasure V) :=
+    U.integrableOn_smul_outwardNormal hcont hηc
+  refine
+    ext_inner_left ℝ fun v =>
+      ?_
   -- the vector field `x ↦ η x • v`
+
   have hFcd : ContDiff ℝ 1 (fun x : V => η x • v) := hη.smul contDiff_const
   have hFcs : HasCompactSupport (fun x : V => η x • v) := by
     refine HasCompactSupport.intro hηc fun x hx => ?_
@@ -329,21 +338,22 @@ theorem setIntegral_gradient_eq_integral_smul_outwardNormal (U : SmoothDomain V)
   have hGG := U.integral_divergence_eq_integral_inner_outwardNormal hFcd hFcs
   have hdiv : ∀ x : V, ⟪v, gradient η x⟫ = Analysis.divergence (fun y : V => η y • v) x := by
     intro x
-    rw [Analysis.divergence_smul_const (hη.differentiable one_ne_zero x) v,
-      ← toDual_gradient (𝕜 := ℝ) (f := η) (x := x), InnerProductSpace.toDual_apply_apply,
+    rw [Analysis.divergence_smul_const (hη.differentiable one_ne_zero x) v, ←
+      toDual_gradient (𝕜 := ℝ) (f := η) (x := x), InnerProductSpace.toDual_apply_apply,
       real_inner_comm]
   have hinner : ∀ x : V, ⟪η x • v, U.outwardNormal x⟫ = ⟪v, η x • U.outwardNormal x⟫ := by
     intro x
     rw [real_inner_smul_left, real_inner_smul_right]
-  calc ⟪v, ∫ x in U.carrier, gradient η x⟫
-      = ∫ x in U.carrier, ⟪v, gradient η x⟫ := (integral_inner hgradint v).symm
+  calc
+    ⟪v, ∫ x in U.carrier, gradient η x⟫ = ∫ x in U.carrier, ⟪v, gradient η x⟫ :=
+      (integral_inner hgradint v).symm
     _ = ∫ x in U.carrier, Analysis.divergence (fun y : V => η y • v) x :=
-        setIntegral_congr_fun U.measurableSet fun x _ => hdiv x
+      setIntegral_congr_fun U.measurableSet fun x _ => hdiv x
     _ = ∫ x in frontier U.carrier, ⟪η x • v, U.outwardNormal x⟫ ∂(surfaceMeasure V) := hGG
     _ = ∫ x in frontier U.carrier, ⟪v, η x • U.outwardNormal x⟫ ∂(surfaceMeasure V) :=
-        setIntegral_congr_fun isClosed_frontier.measurableSet fun x _ => hinner x
+      setIntegral_congr_fun isClosed_frontier.measurableSet fun x _ => hinner x
     _ = ⟪v, ∫ x in frontier U.carrier, η x • U.outwardNormal x ∂(surfaceMeasure V)⟫ :=
-        integral_inner hbdint v
+      integral_inner hbdint v
 
 end GaussGreen
 

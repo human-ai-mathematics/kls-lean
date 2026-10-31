@@ -1,51 +1,53 @@
-import FunctionalInequalities.Energy.Form.ClosedQuadratic
-import FunctionalInequalities.Energy.Form.Comparison
-import FunctionalInequalities.Energy.Form.Dirichlet
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison
-import FunctionalInequalities.Energy.CovarianceGradient.Basic
-import FunctionalInequalities.Energy.WeightedGradient.Closable
-import FunctionalInequalities.Energy.WeightedGradient.Core
-import FunctionalInequalities.Energy.CovarianceGradient.Isometry
-import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
-import FunctionalInequalities.Energy.WeightedGradient.Basic
-import FunctionalInequalities.Energy.CovarianceGradient.Translation
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
-import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Energy.SmoothGradient.Closed
-import FunctionalInequalities.Energy.SmoothGradient.Core
-import FunctionalInequalities.Energy.SmoothGradient.Density
-import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
-import FunctionalInequalities.Energy.SmoothGradient.NormalDirection
-import FunctionalInequalities.Energy.SmoothGradient.Quadratic
-import FunctionalInequalities.Energy.Euclidean.WeakDerivative
-import FunctionalInequalities.Energy.Form.Core
-import FunctionalInequalities.Energy.Form.Functional
-import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
-import FunctionalInequalities.Energy.Relaxation.Approximation
-import FunctionalInequalities.Energy.Relaxation.Basic
-import FunctionalInequalities.Energy.Relaxation.Contraction
-import FunctionalInequalities.Energy.Relaxation.LinearPMap
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.Energy.Relaxation.Quadratic
-import FunctionalInequalities.Energy.Relaxation.Recovery
-import FunctionalInequalities.L2.MeanVariance
-import FunctionalInequalities.Poincare.Comparison
-import FunctionalInequalities.Poincare.SmoothGradient.Comparison
-import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
-import FunctionalInequalities.Poincare.CovarianceGradient.Translation
-import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
-import FunctionalInequalities.Poincare.SmoothGradient.Intrinsic
-import FunctionalInequalities.Poincare.SmoothTest.Comparison
-import FunctionalInequalities.Poincare.SmoothGradient.Ambient
-import FunctionalInequalities.Poincare.L2.Comparison
-import FunctionalInequalities.Poincare.L2.Energy
-import FunctionalInequalities.Poincare.SmoothTest.Optimal
-import FunctionalInequalities.Poincare.Relaxation
-import FunctionalInequalities.Probability.Support.Affine
-import FunctionalInequalities.Probability.Basic
-import FunctionalInequalities.Probability.Covariance.Factorization
-import FunctionalInequalities.Probability.Covariance.Whitening
+module
+
+public import FunctionalInequalities.Energy.Form.ClosedQuadratic
+public import FunctionalInequalities.Energy.Form.Comparison
+public import FunctionalInequalities.Energy.Form.Dirichlet
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison
+public import FunctionalInequalities.Energy.CovarianceGradient.Basic
+public import FunctionalInequalities.Energy.WeightedGradient.Closable
+public import FunctionalInequalities.Energy.WeightedGradient.Core
+public import FunctionalInequalities.Energy.CovarianceGradient.Isometry
+public import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
+public import FunctionalInequalities.Energy.WeightedGradient.Basic
+public import FunctionalInequalities.Energy.CovarianceGradient.Translation
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
+public import FunctionalInequalities.Energy.SmoothGradient.Basic
+public import FunctionalInequalities.Energy.SmoothGradient.Closed
+public import FunctionalInequalities.Energy.SmoothGradient.Core
+public import FunctionalInequalities.Energy.SmoothGradient.Density
+public import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
+public import FunctionalInequalities.Energy.SmoothGradient.NormalDirection
+public import FunctionalInequalities.Energy.SmoothGradient.Quadratic
+public import FunctionalInequalities.Energy.Euclidean.WeakDerivative
+public import FunctionalInequalities.Energy.Form.Core
+public import FunctionalInequalities.Energy.Form.Functional
+public import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
+public import FunctionalInequalities.Energy.Relaxation.Approximation
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import FunctionalInequalities.Energy.Relaxation.Contraction
+public import FunctionalInequalities.Energy.Relaxation.LinearPMap
+public import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+public import FunctionalInequalities.Energy.Relaxation.Quadratic
+public import FunctionalInequalities.Energy.Relaxation.Recovery
+public import FunctionalInequalities.L2.MeanVariance
+public import FunctionalInequalities.Poincare.Comparison
+public import FunctionalInequalities.Poincare.SmoothGradient.Comparison
+public import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
+public import FunctionalInequalities.Poincare.CovarianceGradient.Translation
+public import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
+public import FunctionalInequalities.Poincare.SmoothGradient.Intrinsic
+public import FunctionalInequalities.Poincare.SmoothTest.Comparison
+public import FunctionalInequalities.Poincare.SmoothGradient.Ambient
+public import FunctionalInequalities.Poincare.L2.Comparison
+public import FunctionalInequalities.Poincare.L2.Energy
+public import FunctionalInequalities.Poincare.SmoothTest.Optimal
+public import FunctionalInequalities.Poincare.Relaxation
+public import FunctionalInequalities.Probability.Support.Affine
+public import FunctionalInequalities.Probability.Basic
+public import FunctionalInequalities.Probability.Covariance.Factorization
+public import FunctionalInequalities.Probability.Covariance.Whitening
 
 /-!
 # The foundation for Poincaré inequalities on real `L²`
@@ -70,7 +72,8 @@ This is the aggregate entry point for the new layered API:
 * equality of ambient and intrinsic relaxations, preservation of arbitrary pre-energy Poincaré
   constants by relaxation, and equality with the finite-dimensional smooth-test optimum.
 * the globally Lipschitz covariance-weighted gradient pre-energy, its sequential relaxation on
-  the intrinsic law, and the affine covariance Poincaré constant `Poincare.CovarianceGradient.Intrinsic.constant`, with
+  the intrinsic law, and the affine covariance Poincaré constant
+  `Poincare.CovarianceGradient.Intrinsic.constant`, with
   transport of the covariance relaxation and its optimal constant along translations and linear
   isometric equivalences and general continuous linear equivalences, the whitening of a positive
   definite covariance, the ambient translation invariance of the affine constant, and the
@@ -92,7 +95,8 @@ Start with `Poincare.L2Energy` for the inequality and optimal constant, then rea
 `Poincare.SmoothGradient.Intrinsic` for the selected concrete energy. Read
 `Energy.Relaxation.Basic` and `Energy.Relaxation.Quadratic` when the proof needs approximation or
 closedness. `examples/PoincareFoundation.lean` at the repository root contains compiled applications
-and boundary examples; the adjacent `README.md` explains their mathematical meaning and the source hierarchy.
+and boundary examples; the adjacent `README.md` explains their mathematical meaning and the source
+hierarchy.
 
 This aggregate intentionally lists its exports explicitly. Applications can use this one import;
 reusable library modules should import the subject modules they actually use.

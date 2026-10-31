@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Convex.SecondOrder.Expansion
-import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
-import FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities
-import Mathlib.Analysis.Calculus.BumpFunction.Convolution
+module
+
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.Expansion
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Touching
+public import FunctionalInequalities.Analysis.Matrix.LogDet.Inequalities
+public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
 /-!
 # Mollified log-determinant inequality
@@ -10,6 +12,8 @@ Supporting the convex Monge–Ampère infrastructure for Letwin
 arXiv:2607.24164v1 Lemma 2.2. The declarations retain their original
 source hypotheses, dimensional scope and mathematical conclusions.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric Filter
@@ -22,7 +26,8 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! The log-determinant of the Hessian bounds the mollified Monge–Ampère density from above at points with positive definite Hessian. -/
+/-! The log-determinant of the Hessian bounds the mollified Monge–Ampère density from above at
+points with positive definite Hessian. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -356,22 +361,31 @@ private lemma trace_integral_bound {n : ℕ}
         rw [hH]
   exact he ▸ hi
 
-/-- **Mollified log-det lower bound** (via Fatou instead of the viscosity–distribution lemma): if
+/--
+**Mollified log-det lower bound** (via Fatou instead of the viscosity–distribution lemma): if
 the
-convex `u` has at almost every point a second-order expansion with a positive definite symmetric matrix
-`B` with `F x ≤ log det B`, `F` continuous, then every mollification `uφ := φ.normed ⋆ u` has a positive
+convex `u` has at almost every point a second-order expansion with a positive definite symmetric
+matrix
+`B` with `F x ≤ log det B`, `F` continuous, then every mollification `uφ := φ.normed ⋆ u` has a
+positive
 definite Hessian with `(φ.normed ⋆ F)(x) ≤ log det ∇²uφ(x)`. -/
 theorem posDef_and_convolution_le_log_det_hessianMatrix {n : ℕ}
     {u F : EuclideanSpace ℝ (Fin n) → ℝ} (hconv : ConvexOn ℝ univ u) (hF : Continuous F)
-    (hae : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      ∃ B : Matrix (Fin n) (Fin n) ℝ, B.IsHermitian ∧ B.PosDef ∧ F x ≤ Real.log B.det ∧
-        ∃ g : EuclideanSpace ℝ (Fin n),
-          ∀ ε > 0, ∀ᶠ y in 𝓝 x, |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2)
+    (hae :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        ∃ B : Matrix (Fin n) (Fin n) ℝ,
+          B.IsHermitian ∧
+            B.PosDef ∧
+              F x ≤ Real.log B.det ∧
+                ∃ g : EuclideanSpace ℝ (Fin n),
+                  ∀ ε > 0, ∀ᶠ y in 𝓝 x, |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2)
     (φ : ContDiffBump (0 : EuclideanSpace ℝ (Fin n))) (x : EuclideanSpace ℝ (Fin n)) :
-    (hessianMatrix (convolution (φ.normed volume) u (ContinuousLinearMap.lsmul ℝ ℝ) volume) x).PosDef ∧
+    (hessianMatrix (convolution (φ.normed volume) u (ContinuousLinearMap.lsmul ℝ ℝ) volume)
+          x).PosDef ∧
       convolution (φ.normed volume) F (ContinuousLinearMap.lsmul ℝ ℝ) volume x ≤
-        Real.log (hessianMatrix
-          (convolution (φ.normed volume) u (ContinuousLinearMap.lsmul ℝ ℝ) volume) x).det := by
+        Real.log
+          (hessianMatrix
+              (convolution (φ.normed volume) u (ContinuousLinearMap.lsmul ℝ ℝ) volume) x).det := by
   classical
   let ρ := φ.normed volume
   let w := convolution ρ u (ContinuousLinearMap.lsmul ℝ ℝ) volume
@@ -382,18 +396,15 @@ theorem posDef_and_convolution_le_log_det_hessianMatrix {n : ℕ}
   have hρc : HasCompactSupport ρ := φ.hasCompactSupport_normed
   have hρ0 : ∀ y, 0 ≤ ρ y := φ.nonneg_normed
   have hu : Continuous u := continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
-  have hw : ContDiff ℝ 2 w :=
-    hρc.contDiff_convolution_left _ hρ hu.locallyIntegrable
-  have hwconv : ConvexOn ℝ univ w :=
-    convolution_convex hρ.continuous hρc hρ0 hconv
+  have hw : ContDiff ℝ 2 w := hρc.contDiff_convolution_left _ hρ hu.locallyIntegrable
+  have hwconv : ConvexOn ℝ univ w := convolution_convex hρ.continuous hρc hρ0 hconv
   have hH : H.PosSemidef :=
     posSemidef_hessianMatrix_of_upper_touch hwconv hw.contDiffAt rfl
       (Filter.Eventually.of_forall fun _ => le_rfl)
   have hχ : ContDiff ℝ 2 χ := hρ.comp (contDiff_const.sub contDiff_id)
   have hχc : HasCompactSupport χ := hρc.comp_homeomorph (Homeomorph.subLeft x)
   have hχ0 : ∀ y, 0 ≤ χ y := fun y => hρ0 (x - y)
-  have hχi : Integrable χ volume :=
-    hχ.continuous.integrable_of_hasCompactSupport hχc
+  have hχi : Integrable χ volume := hχ.continuous.integrable_of_hasCompactSupport hχc
   have hχone : (∫ y, χ y) = 1 := by
     dsimp only [χ]
     rw [integral_sub_left_eq_self]
@@ -402,28 +413,23 @@ theorem posDef_and_convolution_le_log_det_hessianMatrix {n : ℕ}
     simpa only [χ, b, add_zero] using convolution_shift ρ F x 0
   have hFi : Integrable (fun y => F y * χ y) volume :=
     (hF.mul hχ.continuous).integrable_of_hasCompactSupport hχc.mul_left
-  have htrace : ∀ J : Matrix (Fin n) (Fin n) ℝ, J.PosDef →
-      b + Real.log J.det + n ≤ (J * H).trace := by
+  have htrace :
+    ∀ J : Matrix (Fin n) (Fin n) ℝ, J.PosDef → b + Real.log J.det + n ≤ (J * H).trace := by
     intro J hJ
-    have ht := trace_integral_bound hconv hF hae hχ hχc hχ0 H
-      (fun v => convolution_hessian_integral hρ hρc hu x v) J hJ
-    have he :
-        (∫ y, (F y + Real.log J.det + n) * χ y) =
-          b + Real.log J.det + n := by
+    have ht :=
+      trace_integral_bound hconv hF hae hχ hχc hχ0 H
+        (fun v => convolution_hessian_integral hρ hρc hu x v) J hJ
+    have he : (∫ y, (F y + Real.log J.det + n) * χ y) = b + Real.log J.det + n := by
       calc
         _ = ∫ y, (F y * χ y + Real.log J.det * χ y) + (n : ℝ) * χ y := by
           apply integral_congr_ae
           filter_upwards [] with y
           ring
         _ = _ := by
-          rw [integral_add
-              (f := fun y => F y * χ y + Real.log J.det * χ y)
-              (g := fun y => (n : ℝ) * χ y)
-              (hFi.add (hχi.const_mul (Real.log J.det))) (hχi.const_mul (n : ℝ)),
-            integral_add
-              (f := fun y => F y * χ y)
-              (g := fun y => Real.log J.det * χ y)
-              hFi (hχi.const_mul (Real.log J.det)),
+          rw [integral_add (f := fun y => F y * χ y + Real.log J.det * χ y) (g := fun y =>
+              (n : ℝ) * χ y) (hFi.add (hχi.const_mul (Real.log J.det))) (hχi.const_mul (n : ℝ)),
+            integral_add (f := fun y => F y * χ y) (g := fun y => Real.log J.det * χ y) hFi
+              (hχi.const_mul (Real.log J.det)),
             integral_const_mul, integral_const_mul, hχone, hb, mul_one, mul_one]
     exact he ▸ ht
   obtain ⟨hpos, hdet⟩ := (forall_posDef_add_log_det_le_trace_iff hH b).mp htrace
@@ -432,4 +438,3 @@ theorem posDef_and_convolution_le_log_det_hessianMatrix {n : ℕ}
 end FunctionalInequalities.Analysis
 
 end MollifiedLogdetBound
-

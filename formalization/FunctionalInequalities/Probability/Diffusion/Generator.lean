@@ -1,20 +1,27 @@
-import Mathlib.Analysis.Calculus.FDeriv.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Comp
-import Mathlib.Analysis.Calculus.FDeriv.Linear
-import Mathlib.Analysis.Calculus.FDeriv.Equiv
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.LinearAlgebra.Basis.Fin
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Analysis.Calculus.ContDiff.Operations
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Comp
+public import Mathlib.Analysis.Calculus.FDeriv.Linear
+public import Mathlib.Analysis.Calculus.FDeriv.Equiv
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.LinearAlgebra.Basis.Fin
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
 /-!
 # The generator of a diffusion
 
-`diffusionGenerator b σ F x = DF(x)[b x] + ½ Σ_k D²F(x)[σ_k x, σ_k x]` for drift `b` and noise columns
-`σ_k`, coordinate-free on a normed space; it is invariant under continuous linear changes of coordinates
-(`diffusionGenerator_transport`), which moves a diffusion on a finite-dimensional state space (for BKL
+`diffusionGenerator b σ F x = DF(x)[b x] + ½ Σ_k D²F(x)[σ_k x, σ_k x]` for drift `b` and noise
+columns
+`σ_k`, coordinate-free on a normed space; it is invariant under continuous linear changes of
+coordinates
+(`diffusionGenerator_transport`), which moves a diffusion on a finite-dimensional state space (for
+BKL
 arXiv:2610.05474v1 (67), the parameter space `E × (E →L[ℝ] E)`) to coordinates `Fin N → ℝ`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -25,15 +32,16 @@ noncomputable def diffusionGenerator {V : Type*} [NormedAddCommGroup V] [NormedS
     {d : ℕ} (b : V → V) (σ : V → Fin d → V) (F : V → ℝ) (x : V) : ℝ :=
   fderiv ℝ F x (b x) + (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ F) x (σ x k) (σ x k)
 
-/-- A diffusion generator with continuous drift and noise maps `C²` functions to continuous functions. -/
+/--
+A diffusion generator with continuous drift and noise maps `C²` functions to continuous functions.
+-/
 theorem continuous_diffusionGenerator {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    {d : ℕ} {b : V → V} {σ : V → Fin d → V} {F : V → ℝ}
-    (hb : Continuous b) (hσ : ∀ k, Continuous (fun x => σ x k))
-    (hF : ContDiff ℝ 2 F) : Continuous (diffusionGenerator b σ F) := by
+    {d : ℕ} {b : V → V} {σ : V → Fin d → V} {F : V → ℝ} (hb : Continuous b)
+    (hσ : ∀ k, Continuous (fun x => σ x k)) (hF : ContDiff ℝ 2 F) :
+    Continuous (diffusionGenerator b σ F) := by
   have hfirst : Continuous (fun x => fderiv ℝ F x (b x)) :=
     (hF.continuous_fderiv (by norm_num)).clm_apply hb
-  have hsecond (k : Fin d) :
-      Continuous (fun x => fderiv ℝ (fderiv ℝ F) x (σ x k) (σ x k)) := by
+  have hsecond (k : Fin d) : Continuous (fun x => fderiv ℝ (fderiv ℝ F) x (σ x k) (σ x k)) := by
     have hfd : ContDiff ℝ 1 (fderiv ℝ F) := hF.fderiv_right (by norm_num)
     exact ((hfd.continuous_fderiv one_ne_zero).clm_apply (hσ k)).clm_apply (hσ k)
   exact hfirst.add (continuous_const.mul (continuous_finsetSum _ (fun k _ => hsecond k)))
@@ -96,79 +104,71 @@ section GeneratorChainRule
 
 /-! Chain rule for the generator, the step (82) of BKL. -/
 
-/-- **Chain rule for the generator** (Itô's formula for a composite, the step (82) of BKL arXiv:2610.05474v1):
+/--
+**Chain rule for the generator** (Itô's formula for a composite, the step (82) of BKL
+arXiv:2610.05474v1):
 `𝓛(Φ ∘ G) = DΦ[DG·b + ½ Σ_k D²G[σ_k, σ_k]] + ½ Σ_k D²Φ[DG·σ_k, DG·σ_k]`. -/
 theorem diffusionGenerator_comp {V W : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [NormedAddCommGroup W] [NormedSpace ℝ W] {d : ℕ} (b : V → V) (σ : V → Fin d → V)
-    (Φ : W → ℝ) (G : V → W) (x : V) (hΦ : ContDiff ℝ 2 Φ) (hG : ContDiff ℝ 2 G) :
+    [NormedAddCommGroup W] [NormedSpace ℝ W] {d : ℕ} (b : V → V) (σ : V → Fin d → V) (Φ : W → ℝ)
+    (G : V → W) (x : V) (hΦ : ContDiff ℝ 2 Φ) (hG : ContDiff ℝ 2 G) :
     diffusionGenerator b σ (Φ ∘ G) x =
-      fderiv ℝ Φ (G x) (fderiv ℝ G x (b x) +
-          (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-        (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k)) := by
+      fderiv ℝ Φ (G x)
+          (fderiv ℝ G x (b x) + (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+        (1 / 2 : ℝ) *
+          ∑ k, fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k)) := by
   have hΦd : Differentiable ℝ Φ := hΦ.differentiable (by norm_num)
   have hGd : Differentiable ℝ G := hG.differentiable (by norm_num)
-  have hΦ₂ : ContDiff ℝ (1 + 1) Φ := by
-    convert hΦ using 1; norm_num
-  have hG₂ : ContDiff ℝ (1 + 1) G := by
-    convert hG using 1; norm_num
+  have hΦ₂ : ContDiff ℝ (1 + 1) Φ := by convert hΦ using 1; norm_num
+  have hG₂ : ContDiff ℝ (1 + 1) G := by convert hG using 1; norm_num
   have hΦf : ContDiff ℝ 1 (fderiv ℝ Φ) :=
     (contDiff_succ_iff_fderiv (𝕜 := ℝ) (f := Φ) (n := 1)).mp hΦ₂ |>.2.2
   have hGf : ContDiff ℝ 1 (fderiv ℝ G) :=
     (contDiff_succ_iff_fderiv (𝕜 := ℝ) (f := G) (n := 1)).mp hG₂ |>.2.2
   have hΦfd : Differentiable ℝ (fderiv ℝ Φ) := hΦf.differentiable_one
   have hGfd : Differentiable ℝ (fderiv ℝ G) := hGf.differentiable_one
-  have hfirst :
-      fderiv ℝ (Φ ∘ G) =
-        fun y => fderiv ℝ Φ (G y) ∘SL fderiv ℝ G y := by
+  have hfirst : fderiv ℝ (Φ ∘ G) = fun y => fderiv ℝ Φ (G y) ∘SL fderiv ℝ G y := by
     funext y
     simpa only [Function.comp_apply] using
       (fderiv_comp y hΦd.differentiableAt hGd.differentiableAt)
-  have hfirst_apply (u : V) :
-      fderiv ℝ (Φ ∘ G) x u =
-        fderiv ℝ Φ (G x) (fderiv ℝ G x u) := by
+  have hfirst_apply (u : V) : fderiv ℝ (Φ ∘ G) x u = fderiv ℝ Φ (G x) (fderiv ℝ G x u) := by
     rw [hfirst]
     simp only [ContinuousLinearMap.comp_apply]
-  have hc :
-      DifferentiableAt ℝ (fun y : V => fderiv ℝ Φ (G y)) x := by
+  have hc : DifferentiableAt ℝ (fun y : V => fderiv ℝ Φ (G y)) x := by
     change DifferentiableAt ℝ ((fderiv ℝ Φ) ∘ G) x
     exact (hΦfd.comp hGd).differentiableAt
-  have hd : DifferentiableAt ℝ (fderiv ℝ G) x :=
-    hGfd.differentiableAt
+  have hd : DifferentiableAt ℝ (fderiv ℝ G) x := hGfd.differentiableAt
   have hcderiv :
-      fderiv ℝ (fun y : V => fderiv ℝ Φ (G y)) x =
-        fderiv ℝ (fderiv ℝ Φ) (G x) ∘SL fderiv ℝ G x := by
+    fderiv ℝ (fun y : V => fderiv ℝ Φ (G y)) x = fderiv ℝ (fderiv ℝ Φ) (G x) ∘SL fderiv ℝ G x := by
     change fderiv ℝ ((fderiv ℝ Φ) ∘ G) x = _
     exact fderiv_comp x hΦfd.differentiableAt hGd.differentiableAt
   have hdiag (u : V) :
-      fderiv ℝ (fderiv ℝ (Φ ∘ G)) x u u =
-        fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x u u) +
-          fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x u) (fderiv ℝ G x u) := by
+    fderiv ℝ (fderiv ℝ (Φ ∘ G)) x u u =
+      fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x u u) +
+        fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x u) (fderiv ℝ G x u) := by
     rw [hfirst, fderiv_clm_comp hc hd, hcderiv]
-    simp only [add_apply, ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.compL_apply, ContinuousLinearMap.flip_apply]
+    simp only [add_apply, ContinuousLinearMap.comp_apply, ContinuousLinearMap.compL_apply,
+      ContinuousLinearMap.flip_apply]
   calc
     diffusionGenerator b σ (Φ ∘ G) x =
         fderiv ℝ (Φ ∘ G) x (b x) +
-          (1 / 2 : ℝ) * ∑ k,
-            fderiv ℝ (fderiv ℝ (Φ ∘ G)) x (σ x k) (σ x k) := rfl
+          (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ (Φ ∘ G)) x (σ x k) (σ x k) :=
+      rfl
     _ =
         fderiv ℝ Φ (G x) (fderiv ℝ G x (b x)) +
-          (1 / 2 : ℝ) * ∑ k,
-            (fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-              fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k))
-                (fderiv ℝ G x (σ x k))) := by
+          (1 / 2 : ℝ) *
+            ∑ k,
+              (fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+                fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k))) := by
       rw [hfirst_apply]
-      exact congrArg
-        (fun z : ℝ => fderiv ℝ Φ (G x) (fderiv ℝ G x (b x)) + z)
-        (congrArg (fun z : ℝ => (1 / 2 : ℝ) * z)
-          (Finset.sum_congr rfl (fun k hk => hdiag (σ x k))))
+      exact
+        congrArg (fun z : ℝ => fderiv ℝ Φ (G x) (fderiv ℝ G x (b x)) + z)
+          (congrArg (fun z : ℝ => (1 / 2 : ℝ) * z)
+            (Finset.sum_congr rfl (fun k hk => hdiag (σ x k))))
     _ =
-        fderiv ℝ Φ (G x) (fderiv ℝ G x (b x) +
-            (1 / 2 : ℝ) • ∑ k,
-              fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-          (1 / 2 : ℝ) * ∑ k,
-            fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k))
-              (fderiv ℝ G x (σ x k)) := by
+        fderiv ℝ Φ (G x)
+            (fderiv ℝ G x (b x) + (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+          (1 / 2 : ℝ) *
+            ∑ k, fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k)) := by
       rw [map_add, map_smul, map_sum, Finset.sum_add_distrib]
       simp only [smul_eq_mul]
       ring
@@ -250,62 +250,53 @@ private theorem diffusionGenerator_comp_local_second_derivative
   simp only [add_apply, ContinuousLinearMap.comp_apply,
     ContinuousLinearMap.compL_apply, ContinuousLinearMap.flip_apply]
 
-/-- **Chain rule for the generator, local form** (Itô's formula for a composite, step (82) of BKL
+/--
+**Chain rule for the generator, local form** (Itô's formula for a composite, step (82) of BKL
 arXiv:2610.05474v1, at one point): if `Φ` is `C²` near `G x` and `G` is `C²` near `x`, then
 `𝓛(Φ ∘ G)(x) = DΦ(G x)[DG·b + ½ Σ_k D²G[σ_k, σ_k]] + ½ Σ_k D²Φ(G x)[DG·σ_k, DG·σ_k]`. -/
 theorem diffusionGenerator_comp_of_contDiffAt {d : ℕ} (b : V → V) (σ : V → Fin d → V)
     (Φ : W → ℝ) (G : V → W) (x : V) (hΦ : ContDiffAt ℝ 2 Φ (G x)) (hG : ContDiffAt ℝ 2 G x) :
     diffusionGenerator b σ (Φ ∘ G) x =
-      fderiv ℝ Φ (G x) (fderiv ℝ G x (b x) +
-          (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-        (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k)) := by
-  have hΦd : DifferentiableAt ℝ Φ (G x) :=
-    hΦ.differentiableAt (by norm_num)
-  have hGd : DifferentiableAt ℝ G x :=
-    hG.differentiableAt (by norm_num)
-  have hfirst :
-      fderiv ℝ (Φ ∘ G) x =
-        fderiv ℝ Φ (G x) ∘SL fderiv ℝ G x := by
-    simpa only [Function.comp_apply] using
-      (fderiv_comp x hΦd hGd)
+      fderiv ℝ Φ (G x)
+          (fderiv ℝ G x (b x) + (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+        (1 / 2 : ℝ) *
+          ∑ k, fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k)) := by
+  have hΦd : DifferentiableAt ℝ Φ (G x) := hΦ.differentiableAt (by norm_num)
+  have hGd : DifferentiableAt ℝ G x := hG.differentiableAt (by norm_num)
+  have hfirst : fderiv ℝ (Φ ∘ G) x = fderiv ℝ Φ (G x) ∘SL fderiv ℝ G x := by
+    simpa only [Function.comp_apply] using (fderiv_comp x hΦd hGd)
   have hdiag (u : V) :
-      fderiv ℝ (fderiv ℝ (Φ ∘ G)) x u u =
-        fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x u u) +
-          fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x u) (fderiv ℝ G x u) :=
+    fderiv ℝ (fderiv ℝ (Φ ∘ G)) x u u =
+      fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x u u) +
+        fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x u) (fderiv ℝ G x u) :=
     diffusionGenerator_comp_local_second_derivative Φ G x hΦ hG u
   calc
     diffusionGenerator b σ (Φ ∘ G) x =
         fderiv ℝ (Φ ∘ G) x (b x) +
-          (1 / 2 : ℝ) * ∑ k,
-            fderiv ℝ (fderiv ℝ (Φ ∘ G)) x (σ x k) (σ x k) := rfl
+          (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ (Φ ∘ G)) x (σ x k) (σ x k) :=
+      rfl
     _ =
         fderiv ℝ Φ (G x) (fderiv ℝ G x (b x)) +
-          (1 / 2 : ℝ) * ∑ k,
-            (fderiv ℝ Φ (G x)
-                (fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-              fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k))
-                (fderiv ℝ G x (σ x k))) := by
+          (1 / 2 : ℝ) *
+            ∑ k,
+              (fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+                fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k))) := by
       have hsum :
-          (1 / 2 : ℝ) * ∑ k,
-              fderiv ℝ (fderiv ℝ (Φ ∘ G)) x (σ x k) (σ x k) =
-            (1 / 2 : ℝ) * ∑ k,
-              (fderiv ℝ Φ (G x)
-                  (fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-                fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k))
-                  (fderiv ℝ G x (σ x k))) := by
+        (1 / 2 : ℝ) * ∑ k, fderiv ℝ (fderiv ℝ (Φ ∘ G)) x (σ x k) (σ x k) =
+          (1 / 2 : ℝ) *
+            ∑ k,
+              (fderiv ℝ Φ (G x) (fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+                fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k))) := by
         apply congrArg (fun z : ℝ => (1 / 2 : ℝ) * z)
         exact Finset.sum_congr rfl (fun k _hk => hdiag (σ x k))
       rw [hfirst]
       simp only [ContinuousLinearMap.comp_apply]
-      exact congrArg
-        (fun z : ℝ => fderiv ℝ Φ (G x) (fderiv ℝ G x (b x)) + z) hsum
+      exact congrArg (fun z : ℝ => fderiv ℝ Φ (G x) (fderiv ℝ G x (b x)) + z) hsum
     _ =
-        fderiv ℝ Φ (G x) (fderiv ℝ G x (b x) +
-            (1 / 2 : ℝ) • ∑ k,
-              fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
-          (1 / 2 : ℝ) * ∑ k,
-            fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k))
-              (fderiv ℝ G x (σ x k)) := by
+        fderiv ℝ Φ (G x)
+            (fderiv ℝ G x (b x) + (1 / 2 : ℝ) • ∑ k, fderiv ℝ (fderiv ℝ G) x (σ x k) (σ x k)) +
+          (1 / 2 : ℝ) *
+            ∑ k, fderiv ℝ (fderiv ℝ Φ) (G x) (fderiv ℝ G x (σ x k)) (fderiv ℝ G x (σ x k)) := by
       rw [map_add, map_smul, map_sum, Finset.sum_add_distrib]
       simp only [smul_eq_mul]
       ring

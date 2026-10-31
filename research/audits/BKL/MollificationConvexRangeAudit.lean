@@ -1,4 +1,8 @@
-import FunctionalInequalities.Analysis.Mollification.Basic
+module
+
+public import FunctionalInequalities.Analysis.Mollification.Basic
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Set Filter Metric
 open scoped Topology Convolution
@@ -12,12 +16,13 @@ variable {E : Type*}
   [BorelSpace E]
   {ι : Type*}
   [Fintype ι]
-theorem exact_frozen_statement
-    {f : ι → E → ℝ} (hf : ∀ k, LocallyIntegrable (f k) (volume : Measure E))
-    {C : Set (ι → ℝ)} (hCc : Convex ℝ C) (hCcl : IsClosed C) {S : Set E} {r : ℝ}
+theorem exact_frozen_statement {f : ι → E → ℝ}
+    (hf : ∀ k, LocallyIntegrable (f k) (volume : Measure E)) {C : Set (ι → ℝ)}
+    (hCc : Convex ℝ C) (hCcl : IsClosed C) {S : Set E} {r : ℝ}
     (hfC : ∀ᵐ x ∂((volume : Measure E).restrict (cthickening r S)), (fun k => f k x) ∈ C)
     (φ : ContDiffBump (0 : E)) (hφ : φ.rOut ≤ r) {x : E} (hx : x ∈ S) :
-    (fun k => convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x) ∈ C := by
+    (fun k => convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x) ∈
+      C := by
   exact convolution_mem_of_ae_mem hf hCc hCcl hfC φ hφ hx
 
 theorem nonnegative_coordinates

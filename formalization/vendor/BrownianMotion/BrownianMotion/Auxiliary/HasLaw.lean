@@ -1,3 +1,5 @@
+-- Modified 2026-10-31 by the KLS formalization project: removed `hasLaw_map`, now provided by
+-- Mathlib v4.35.0 (Probability/HasLaw.lean) with the same statement; see vendor/port.patch.
 module
 
 public import Mathlib.Probability.Distributions.Gaussian.Real
@@ -13,10 +15,6 @@ variable {Ω : Type*} {mΩ : MeasurableSpace Ω}
 section HasLaw
 
 variable {𝓧} {m𝓧 : MeasurableSpace 𝓧} {X : Ω → 𝓧} {μ : Measure 𝓧} {P : Measure Ω}
-
-lemma hasLaw_map (hX : AEMeasurable X P) : HasLaw X (P.map X) P where
-  aemeasurable := hX
-  map_eq := rfl
 
 section dirac
 

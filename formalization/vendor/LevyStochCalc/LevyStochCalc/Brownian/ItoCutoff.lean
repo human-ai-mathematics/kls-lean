@@ -3,10 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoFormula
-import LevyStochCalc.Brownian.SmoothCutoff
-import LevyStochCalc.Brownian.ItoLocality
-import LevyStochCalc.Probability.ExitTime
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoFormula
+public import LevyStochCalc.Brownian.SmoothCutoff
+public import LevyStochCalc.Brownian.ItoLocality
+public import LevyStochCalc.Probability.ExitTime
 
 /-!
 # Itô's formula for a twice continuously differentiable function
@@ -23,6 +27,8 @@ of the Itô integral transfers the stochastic terms.
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.itoFormula_of_contDiff` — Itô's formula for a
   twice continuously differentiable function, with no bound on its derivatives.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

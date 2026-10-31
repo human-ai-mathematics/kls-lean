@@ -1,15 +1,21 @@
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.Normed.Operator.Banach
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-!
 # Strictly positive operators and their inverses
 
 Generic facts about a continuous linear operator `T` on a real inner product space with
-`⟪T v, v⟫ > 0` for `v ≠ 0`: it is a unit in finite dimension, has a two-sided inverse, any right inverse
-of a self-adjoint positive `T` is self-adjoint and strictly positive, and any right inverse of a unit is
+`⟪T v, v⟫ > 0` for `v ≠ 0`: it is a unit in finite dimension, has a two-sided inverse, any right
+inverse
+of a self-adjoint positive `T` is self-adjoint and strictly positive, and any right inverse of a
+unit is
 the canonical `Ring.inverse`. Used for the covariance of the BKL localization posterior.
 -/
+
+@[expose] public section
 
 open scoped RealInnerProductSpace
 
@@ -18,9 +24,11 @@ namespace FunctionalInequalities.Analysis
 section FiniteDimensional
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 
-/-- A strictly positive operator (`⟪T v, v⟫ > 0` for `v ≠ 0`) on a finite-dimensional space is a unit. -/
-theorem isUnit_of_inner_self_pos (T : E →L[ℝ] E)
-    (hpos : ∀ v : E, v ≠ 0 → 0 < ⟪T v, v⟫) : IsUnit T := by
+/--
+A strictly positive operator (`⟪T v, v⟫ > 0` for `v ≠ 0`) on a finite-dimensional space is a unit.
+-/
+theorem isUnit_of_inner_self_pos (T : E →L[ℝ] E) (hpos : ∀ v : E, v ≠ 0 → 0 < ⟪T v, v⟫) :
+    IsUnit T := by
   apply ContinuousLinearMap.isUnit_iff_isUnit_toLinearMap.mpr
   apply (LinearMap.isUnit_iff_ker_eq_bot T.toLinearMap).mpr
   apply bot_unique
@@ -35,7 +43,8 @@ theorem isUnit_of_inner_self_pos (T : E →L[ℝ] E)
 /-- A strictly positive operator has a two-sided inverse. -/
 theorem exists_inverse_of_inner_self_pos (T : E →L[ℝ] E)
     (hpos : ∀ v : E, v ≠ 0 → 0 < ⟪T v, v⟫) :
-    ∃ B : E →L[ℝ] E, T.comp B = ContinuousLinearMap.id ℝ E ∧ B.comp T = ContinuousLinearMap.id ℝ E := by
+    ∃ B : E →L[ℝ] E,
+      T.comp B = ContinuousLinearMap.id ℝ E ∧ B.comp T = ContinuousLinearMap.id ℝ E := by
   obtain ⟨u, hu⟩ := isUnit_of_inner_self_pos T hpos
   change ∃ B : E →L[ℝ] E, T * B = 1 ∧ B * T = 1
   refine ⟨↑u⁻¹, ?_, ?_⟩ <;> rw [← hu] <;> simp

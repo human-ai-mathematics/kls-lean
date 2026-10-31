@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Hardy
-import FunctionalInequalities.KLS.LogConcave.Line.Variance
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.KLS.LogConcave.Isotropic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Hardy
+public import FunctionalInequalities.KLS.LogConcave.Line.Variance
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
 
 /-!
 # The one-dimensional log-concave Poincaré bound `C_P^lit(ν) ≤ 12 Var_ν`
@@ -24,6 +26,8 @@ Hardy inequality with the hazard-rate median bounds and the supporting-line vari
 displayed numerical value `12` is exactly the Blueprint normalization; no smaller constant is
 claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -90,11 +94,13 @@ theorem direction_eq_bot_or_interior_support_nonempty (hν : LogConcave ν) :
 /-- Blueprint `thm:one-dimensional-logconcave-poincare`: every log-concave law on the line has
 literature Poincaré constant at most `12 · Var_ν(id)`, the zero-variance (Dirac) case included. -/
 theorem localSlope_constant_le_twelve_variance (hν : LogConcave ν) :
-    Poincare.LocalSlope.Intrinsic.constant ν ≤ ENNReal.ofReal (12 * variance id (ν : Measure ℝ)) := by
+    Poincare.LocalSlope.Intrinsic.constant ν ≤
+      ENNReal.ofReal (12 * variance id (ν : Measure ℝ)) := by
   rcases hν.direction_eq_bot_or_interior_support_nonempty with hbot | hi
   · rw [Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_direction_eq_bot ν hbot]
     exact bot_le
-  · have h12 : 0 ≤ 12 * variance id (ν : Measure ℝ) := mul_nonneg (by norm_num) (variance_nonneg _ _)
+  · have h12 : 0 ≤ 12 * variance id (ν : Measure ℝ) :=
+      mul_nonneg (by norm_num) (variance_nonneg _ _)
     rw [← hν.smoothTest_constant_eq_localSlope, ENNReal.ofReal_eq_coe_nnreal h12]
     exact Poincare.SmoothTest.constant_le (hν.smoothTest_holds_twelve_variance hi)
 

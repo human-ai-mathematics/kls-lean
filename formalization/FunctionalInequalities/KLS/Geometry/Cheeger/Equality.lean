@@ -1,9 +1,11 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
-import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
-import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.Analysis.SmoothDomain.RegularSuperlevel
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
+public import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
+public import FunctionalInequalities.KLS.Isoperimetry
+public import FunctionalInequalities.Analysis.SmoothDomain.RegularSuperlevel
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
 /-!
 # The two Cheeger infima agree
@@ -90,6 +92,8 @@ uses the density in the coarea formula.  `lintegral_enorm_distanceCutoff_sub_ind
 constant `1` while `Metric.thickening r ∅ = ∅`, so the bound fails for the empty set.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter Topology
@@ -130,14 +134,17 @@ theorem exists_smooth_approximation_lipschitz (ν : ProbabilityMeasure V) (m : M
       fun x ↦ ⟨(hw01 x).1, (hw01 x).2⟩
   refine ⟨g, fun j ↦ ⟨(hg j).1, ⟨K, (hg j).2.1⟩, fun x ↦ ⟨((hg j).2.2.1 x).1, ((hg j).2.2.1 x).2⟩⟩,
     ?_, ?_⟩
-  · simpa only [eLpNorm_one_eq_lintegral_enorm, Pi.sub_apply] using hgL1
+  · refine hgL1.congr fun j ↦ ?_
+    exact eLpNorm_one_eq_lintegral_enorm
+      (((hg j).2.1.continuous.sub hw.continuous).aestronglyMeasurable)
   · -- `L¹` convergence of the gradients is convergence in `L¹(ν; V)`, and the norm of that space
     -- is `f ↦ ∫⁻ ‖f‖ₑ`, which is continuous.
     have hLp : Tendsto (fun j ↦ ((hg j).2.2.2.2).toLp (gradient (g j))) atTop
         (𝓝 (hwgrad.toLp (gradient w))) :=
       (Lp.tendsto_Lp_iff_tendsto_eLpNorm'' (fun j ↦ gradient (g j)) (fun j ↦ (hg j).2.2.2.2)
         (gradient w) hwgrad).2 hggrad
-    simpa only [Lp.enorm_toLp, eLpNorm_one_eq_lintegral_enorm] using hLp.enorm
+    simpa only [Lp.enorm_toLp, eLpNorm_one_eq_lintegral_enorm (hg _).2.2.2.2.aestronglyMeasurable,
+      eLpNorm_one_eq_lintegral_enorm hwgrad.aestronglyMeasurable] using hLp.enorm
 
 /-! ### The defining infimum in multiplied form -/
 
@@ -543,32 +550,37 @@ private theorem measurePreserving_coordinateEquiv (μ : ProbabilityMeasure E) :
   simp [Function.comp, Probability.intrinsicMap]
 
 -- Completeness and the remaining ambient premises are retained explicitly in this interface.
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
-  [SecondCountableTopology E] [FiniteDimensional ℝ E] in
+omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+    [FiniteDimensional ℝ E] in
 /-- The affine-support isoperimetric constant of `def:isoperimetric-cheeger-scale` is the
 coordinate-space Minkowski constant of the intrinsic law: the map `x ↦ x - a` from the affine
 carrier to its direction space is an isometry carrying `carrierMeasure μ` to
 `Probability.intrinsicMeasure μ`; the zero-dimensional convention `⊤` agrees on both sides. -/
-theorem constant_eq_minkowskiConstant_intrinsic
-    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
-    [SecondCountableTopology E] [FiniteDimensional ℝ E]
+theorem constant_eq_minkowskiConstant_intrinsic [CompleteSpace E] [MeasurableSpace E]
+    [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
     (μ : ProbabilityMeasure E) :
     constant μ = minkowskiConstant (Probability.intrinsicMeasure μ) := by
   classical
   have hmp := measurePreserving_coordinateEquiv μ
-  have hiso : Isometry (Probability.coordinateEquiv μ) := (Probability.coordinateEquiv μ).isometry
+  have hiso : Isometry (Probability.coordinateEquiv μ) :=
+    (Probability.coordinateEquiv μ).isometry
   have hsurj : Function.Surjective (Probability.coordinateEquiv μ) :=
     (Probability.coordinateEquiv μ).surjective
   have hsymm : Measurable (Probability.coordinateEquiv μ).symm :=
     (Probability.coordinateEquiv μ).symm.continuous.measurable
-  have hmass : ∀ B : Set (Probability.affineSupport μ), MeasurableSet B →
-      (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
-          ((Probability.coordinateEquiv μ) ⁻¹' B) =
-        (carrierMeasure μ : Measure (Probability.affineSupport μ)) B :=
+  have hmass :
+    ∀ B : Set (Probability.affineSupport μ),
+      MeasurableSet B →
+        (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
+            ((Probability.coordinateEquiv μ) ⁻¹' B) =
+          (carrierMeasure μ : Measure (Probability.affineSupport μ)) B :=
     fun B hB ↦ hmp.measure_preimage hB.nullMeasurableSet
-  have hcontent : ∀ B : Set (Probability.affineSupport μ), MeasurableSet B →
-      minkowskiContent (Probability.intrinsicMeasure μ) ((Probability.coordinateEquiv μ) ⁻¹' B) =
-        boundaryContent μ B := by
+  have hcontent :
+    ∀ B : Set (Probability.affineSupport μ),
+      MeasurableSet B →
+        minkowskiContent (Probability.intrinsicMeasure μ)
+            ((Probability.coordinateEquiv μ) ⁻¹' B) =
+          boundaryContent μ B := by
     intro B hB
     unfold minkowskiContent boundaryContent
     congr 1
@@ -579,24 +591,28 @@ theorem constant_eq_minkowskiConstant_intrinsic
   · have hsub : Subsingleton (Probability.affineSupport μ).direction :=
       Module.finrank_zero_iff.mp hdim
     unfold constant
-    rw [if_pos hdim]
+    rw [ite_eq_left hdim]
     exact (minkowskiConstant_eq_top_of_subsingleton _).symm
   · unfold constant
-    rw [if_neg hdim]
+    rw [ite_eq_right hdim]
     refine le_antisymm ?_ ?_
     · -- every admissible coordinate set comes from an admissible carrier set
+
       refine le_iInf fun B' ↦ le_iInf fun hB' ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
-      have hBeq : (Probability.coordinateEquiv μ) ⁻¹'
-          ((Probability.coordinateEquiv μ).symm ⁻¹' B') = B' := by
+      have hBeq :
+        (Probability.coordinateEquiv μ) ⁻¹' ((Probability.coordinateEquiv μ).symm ⁻¹' B') =
+          B' := by
         ext x
         simp
       have hBmeas : MeasurableSet ((Probability.coordinateEquiv μ).symm ⁻¹' B') := hsymm hB'
-      have hmass' : (carrierMeasure μ : Measure (Probability.affineSupport μ))
-          ((Probability.coordinateEquiv μ).symm ⁻¹' B') =
-          (Probability.intrinsicMeasure μ :
-            Measure (Probability.affineSupport μ).direction) B' := by
+      have hmass' :
+        (carrierMeasure μ : Measure (Probability.affineSupport μ))
+            ((Probability.coordinateEquiv μ).symm ⁻¹' B') =
+          (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
+            B' := by
         rw [← hmass _ hBmeas, hBeq]
-      have hcont' : boundaryContent μ ((Probability.coordinateEquiv μ).symm ⁻¹' B') =
+      have hcont' :
+        boundaryContent μ ((Probability.coordinateEquiv μ).symm ⁻¹' B') =
           minkowskiContent (Probability.intrinsicMeasure μ) B' := by
         rw [← hcontent _ hBmeas, hBeq]
       refine iInf_le_of_le ((Probability.coordinateEquiv μ).symm ⁻¹' B') ?_
@@ -605,8 +621,10 @@ theorem constant_eq_minkowskiConstant_intrinsic
       refine iInf_le_of_le (by rwa [hmass']) ?_
       rw [hmass', hcont']
     · -- and conversely
+
       refine le_iInf fun B ↦ le_iInf fun hB ↦ le_iInf fun hpos ↦ le_iInf fun hlt ↦ ?_
-      have hBmeas : MeasurableSet ((Probability.coordinateEquiv μ) ⁻¹' B) := hiso.continuous.measurable hB
+      have hBmeas : MeasurableSet ((Probability.coordinateEquiv μ) ⁻¹' B) :=
+        hiso.continuous.measurable hB
       refine iInf_le_of_le ((Probability.coordinateEquiv μ) ⁻¹' B) ?_
       refine iInf_le_of_le hBmeas ?_
       refine iInf_le_of_le (by rwa [hmass _ hB]) ?_

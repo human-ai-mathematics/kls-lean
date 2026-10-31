@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Cheeger.Identification
-import FunctionalInequalities.Probability.LogConcave
+module
+
+public import FunctionalInequalities.Energy.Cheeger.Identification
+public import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `thm:smooth-gradient-relaxation-two-cheeger`
@@ -19,6 +21,8 @@ identification by definition. The certified absolutely continuous scope
 `cor:absolutely-continuous-relaxation-two-cheeger` is a special case. No Poincaré inequality, no
 finiteness of any constant and no Cheeger–Buser comparison follows from this certificate.
 -/
+
+@[expose] public section
 
 noncomputable section
 

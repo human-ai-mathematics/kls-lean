@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 
 /-!
 # The Laplacian of `(ℝⁿ, ∇²ψ, e^{-W} dx)` in moment coordinates
@@ -21,6 +23,8 @@ The case `W = ψ` is Letwin's chain
 `density_hessianInverseOperator_flux` in `Analysis/BakryEmery/MongeAmpere.lean` and
 `integral_hessianInverseOperator_mul_eq_neg` in `IntegrationByParts/InverseHessian/Basic.lean`).
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory
@@ -71,60 +75,82 @@ private theorem transport_first_derivative {ψ W ρ : E → ℝ} (hψ : ContDiff
 
 /-- Divergence of the inverse Hessian under (50), Klartag (58): with `A = (∇²ψ)⁻¹`,
 `Σ_i ∂_i A_{ij} = Σ_i A_{ij} ∂_i W - ∂_j ρ(∇ψ)`. -/
-private theorem transport_inverseHessian_divergence {ψ W ρ : E → ℝ} (hψ : ContDiff ℝ ∞ ψ) (hW : ContDiff ℝ ∞ W) {K : Set E} (hK : IsOpen K)
-    (hρ : ContDiffOn ℝ ∞ ρ K)
-    (hEq : ∀ y, logDetHessian ψ e y = -W y + ρ (gradient ψ y))
-    {x : E} (hx : gradient ψ x ∈ K)
+private theorem transport_inverseHessian_divergence {ψ W ρ : E → ℝ} (hψ : ContDiff ℝ ∞ ψ)
+    (hW : ContDiff ℝ ∞ W) {K : Set E} (hK : IsOpen K) (hρ : ContDiffOn ℝ ∞ ρ K)
+    (hEq : ∀ y, logDetHessian ψ e y = -W y + ρ (gradient ψ y)) {x : E} (hx : gradient ψ x ∈ K)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ ψ x v v) (j : Fin dimE) :
     (∑ i, fderiv ℝ (fun y => inverseHessianEntry ψ e y i j) x (e i)) =
       (∑ i, inverseHessianEntry ψ e x i j * fderiv ℝ W x (e i)) -
         fderiv ℝ ρ (gradient ψ x) (e j) := by
   have h2 : ContDiff ℝ 2 ψ := hψ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hHA (d : Fin dimE) :
-      (∑ c, bilinearIteratedFDerivTwo ℝ ψ x (e d) (e c) * inverseHessianEntry ψ e x c j) =
-        if d = j then 1 else 0 := by
+    (∑ c, bilinearIteratedFDerivTwo ℝ ψ x (e d) (e c) * inverseHessianEntry ψ e x c j) =
+      if d = j then 1 else 0 := by
     calc
       _ = ∑ c, inverseHessianEntry ψ e x j c * bilinearIteratedFDerivTwo ℝ ψ x (e c) (e d) := by
         apply Finset.sum_congr rfl
         intro c _hc
-        rw [inverseHessianEntry_symm e h2 x c j, bilinearIteratedFDerivTwo_symm h2 x (e d) (e c)]
+        rw [inverseHessianEntry_symm e h2 x c j,
+          bilinearIteratedFDerivTwo_symm h2 x (e d) (e c)]
         ring
       _ = if j = d then 1 else 0 := sum_inverseHessianEntry_mul_hessian e h2 x hPD j d
       _ = _ := by simp only [eq_comm]
   calc
-    _ = -(∑ i, ∑ a, ∑ c, inverseHessianEntry ψ e x i a *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y (e i) (e a)) x (e c) *
-        inverseHessianEntry ψ e x c j) := by
-      have hcyc (u v w : E) : fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y u v) x w =
+    _ =
+        -(∑ i,
+            ∑ a,
+              ∑ c,
+                inverseHessianEntry ψ e x i a *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y (e i) (e a)) x (e c) *
+                  inverseHessianEntry ψ e x c j) := by
+      have hcyc (u v w : E) :
+        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y u v) x w =
           fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y w u) x v := by
-        have he : (fun y => bilinearIteratedFDerivTwo ℝ ψ y u v) =
+        have he :
+          (fun y => bilinearIteratedFDerivTwo ℝ ψ y u v) =
             (fun y => bilinearIteratedFDerivTwo ℝ ψ y v u) :=
           funext fun y => bilinearIteratedFDerivTwo_symm h2 y u v
         rw [he]
         exact fderiv_bilinearIteratedFDerivTwo_comm hψ x v u w
       simp_rw [fderiv_inverseHessianEntry_apply e hψ x hPD, hcyc]
       rw [Finset.sum_neg_distrib]
-    _ = -(∑ c, (∑ i, ∑ a, inverseHessianEntry ψ e x i a *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y (e i) (e a)) x (e c)) *
-        inverseHessianEntry ψ e x c j) := by
+    _ =
+        -(∑ c,
+            (∑ i,
+                ∑ a,
+                  inverseHessianEntry ψ e x i a *
+                    fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y (e i) (e a)) x (e c)) *
+              inverseHessianEntry ψ e x c j) := by
       congr 1
       calc
-        _ = ∑ i, ∑ c, ∑ a, inverseHessianEntry ψ e x i a *
-            fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y (e i) (e a)) x (e c) *
-            inverseHessianEntry ψ e x c j :=
+        _ =
+            ∑ i,
+              ∑ c,
+                ∑ a,
+                  inverseHessianEntry ψ e x i a *
+                      fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ ψ y (e i) (e a)) x (e c) *
+                    inverseHessianEntry ψ e x c j :=
           Finset.sum_congr rfl fun _ _ => Finset.sum_comm
         _ = _ := by rw [Finset.sum_comm]; simp_rw [Finset.sum_mul]
-    _ = -(∑ c, (-fderiv ℝ W x (e c) + ∑ d, fderiv ℝ ρ (gradient ψ x) (e d) *
-        bilinearIteratedFDerivTwo ℝ ψ x (e d) (e c)) * inverseHessianEntry ψ e x c j) := by
+    _ =
+        -(∑ c,
+            (-fderiv ℝ W x (e c) +
+                ∑ d,
+                  fderiv ℝ ρ (gradient ψ x) (e d) *
+                    bilinearIteratedFDerivTwo ℝ ψ x (e d) (e c)) *
+              inverseHessianEntry ψ e x c j) := by
       congr 1
       apply Finset.sum_congr rfl
       intro c _hc
       rw [transport_first_derivative hψ hW hK hρ hEq hx hPD c]
-    _ = (∑ c, inverseHessianEntry ψ e x c j * fderiv ℝ W x (e c)) -
-        ∑ d, fderiv ℝ ρ (gradient ψ x) (e d) *
-          (∑ c, bilinearIteratedFDerivTwo ℝ ψ x (e d) (e c) * inverseHessianEntry ψ e x c j) := by
-      simp_rw [add_mul, Finset.sum_add_distrib, neg_mul, Finset.sum_neg_distrib,
-        Finset.sum_mul, Finset.mul_sum]
+    _ =
+        (∑ c, inverseHessianEntry ψ e x c j * fderiv ℝ W x (e c)) -
+          ∑ d,
+            fderiv ℝ ρ (gradient ψ x) (e d) *
+              (∑ c,
+                bilinearIteratedFDerivTwo ℝ ψ x (e d) (e c) * inverseHessianEntry ψ e x c j) := by
+      simp_rw [add_mul, Finset.sum_add_distrib, neg_mul, Finset.sum_neg_distrib, Finset.sum_mul,
+        Finset.mul_sum]
       rw [Finset.sum_comm (f := fun c d => _)]
       simp only [neg_add, neg_neg, sub_eq_add_neg]
       congr 1
@@ -137,17 +163,18 @@ private theorem transport_inverseHessian_divergence {ψ W ρ : E → ℝ} (hψ :
       simp
 
 /-- Flux form: `Σ_i ∂_i (e^{-W} A_{ij}) = -e^{-W} ∂_j ρ(∇ψ)`. -/
-private theorem transport_density_inverseHessian_divergence {ψ W ρ : E → ℝ} (hψ : ContDiff ℝ ∞ ψ) (hW : ContDiff ℝ ∞ W) {K : Set E} (hK : IsOpen K)
-    (hρ : ContDiffOn ℝ ∞ ρ K)
-    (hEq : ∀ y, logDetHessian ψ e y = -W y + ρ (gradient ψ y))
-    {x : E} (hx : gradient ψ x ∈ K)
-    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ ψ x v v) (j : Fin dimE) :
+private theorem transport_density_inverseHessian_divergence {ψ W ρ : E → ℝ}
+    (hψ : ContDiff ℝ ∞ ψ) (hW : ContDiff ℝ ∞ W) {K : Set E} (hK : IsOpen K)
+    (hρ : ContDiffOn ℝ ∞ ρ K) (hEq : ∀ y, logDetHessian ψ e y = -W y + ρ (gradient ψ y)) {x : E}
+    (hx : gradient ψ x ∈ K) (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ ψ x v v)
+    (j : Fin dimE) :
     (∑ i, fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i)) =
       -Real.exp (-W x) * fderiv ℝ ρ (gradient ψ x) (e j) := by
   have hw := (hW.neg.exp).differentiable (by simp) x
-  have hA (i : Fin dimE) := (contDiffAt_inverseHessianEntry e hψ x hPD i j).differentiableAt (by simp)
-  have hexp (v : E) : fderiv ℝ (fun y => Real.exp (-W y)) x v =
-      -Real.exp (-W x) * fderiv ℝ W x v := by
+  have hA (i : Fin dimE) :=
+    (contDiffAt_inverseHessianEntry e hψ x hPD i j).differentiableAt (by simp)
+  have hexp (v : E) :
+    fderiv ℝ (fun y => Real.exp (-W y)) x v = -Real.exp (-W x) * fderiv ℝ W x v := by
     have hd : HasFDerivAt (fun y => Real.exp (-W y)) (Real.exp (-W x) • -fderiv ℝ W x) x := by
       simpa only [Pi.neg_apply] using (hW.differentiable (by simp) x).hasFDerivAt.neg.exp
     rw [hd.fderiv]
@@ -155,8 +182,8 @@ private theorem transport_density_inverseHessian_divergence {ψ W ρ : E → ℝ
     ring
   simp_rw [fderiv_mul_apply hw (hA _), hexp]
   rw [Finset.sum_add_distrib]
-  have he : (∑ i, inverseHessianEntry ψ e x i j *
-      (-Real.exp (-W x) * fderiv ℝ W x (e i))) =
+  have he :
+    (∑ i, inverseHessianEntry ψ e x i j * (-Real.exp (-W x) * fderiv ℝ W x (e i))) =
       -Real.exp (-W x) * ∑ i, inverseHessianEntry ψ e x i j * fderiv ℝ W x (e i) := by
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl; intro i _hi; ring
@@ -165,62 +192,75 @@ private theorem transport_density_inverseHessian_divergence {ψ W ρ : E → ℝ
 
 /-- Divergence form of (56): `Σ_{ij} ∂_i (e^{-W} A_{ij} ∂_j f) = e^{-W} L f`, with
 `L f = Σ_{ij} A_{ij} ∂_{ij} f - Σ_i ∂_i ρ(∇ψ) ∂_i f`. -/
-private theorem transport_density_hessianInverseOperator_flux {ψ W ρ f : E → ℝ} (hψ : ContDiff ℝ ∞ ψ) (hW : ContDiff ℝ ∞ W)
-    (hf : ContDiff ℝ ∞ f) {K : Set E} (hK : IsOpen K) (hρ : ContDiffOn ℝ ∞ ρ K)
-    (hEq : ∀ y, logDetHessian ψ e y = -W y + ρ (gradient ψ y))
-    {x : E} (hx : gradient ψ x ∈ K)
+private theorem transport_density_hessianInverseOperator_flux {ψ W ρ f : E → ℝ}
+    (hψ : ContDiff ℝ ∞ ψ) (hW : ContDiff ℝ ∞ W) (hf : ContDiff ℝ ∞ f) {K : Set E}
+    (hK : IsOpen K) (hρ : ContDiffOn ℝ ∞ ρ K)
+    (hEq : ∀ y, logDetHessian ψ e y = -W y + ρ (gradient ψ y)) {x : E} (hx : gradient ψ x ∈ K)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ ψ x v v) :
-    (∑ i, ∑ j, fderiv ℝ (fun y => Real.exp (-W y) *
-      inverseHessianEntry ψ e y i j *
-      fderiv ℝ f y (e j)) x (e i)) =
+    (∑ i,
+        ∑ j,
+          fderiv ℝ
+            (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j * fderiv ℝ f y (e j)) x
+            (e i)) =
       Real.exp (-W x) * hessianInverseOperator ψ ρ f x := by
   have hf2 : ContDiff ℝ 2 f := hf.of_le (WithTop.coe_le_coe.mpr le_top)
   have hw := (hW.neg.exp).differentiable (by simp) x
   have hA (i j : Fin (Module.finrank ℝ E)) :=
     (contDiffAt_inverseHessianEntry e hψ x hPD i j).differentiableAt (by simp)
-  have hwa (i j : Fin (Module.finrank ℝ E)) : DifferentiableAt ℝ
-      (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x := by
+  have hwa (i j : Fin (Module.finrank ℝ E)) :
+    DifferentiableAt ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x := by
     exact hw.fun_mul (hA i j)
   have hdf (j : Fin (Module.finrank ℝ E)) :=
     (contDiff_fderiv_apply hf (m := ∞) (by simp) (e j)).differentiable (by simp) x
   have hFirst :
-      (∑ i, ∑ j, (Real.exp (-W x) * inverseHessianEntry ψ e x i j) *
-        bilinearIteratedFDerivTwo ℝ f x (e i) (e j)) =
-        Real.exp (-W x) * ∑ i, ∑ j, inverseHessianEntry ψ e x i j *
-          bilinearIteratedFDerivTwo ℝ f x (e i) (e j) := by
+    (∑ i,
+        ∑ j,
+          (Real.exp (-W x) * inverseHessianEntry ψ e x i j) *
+            bilinearIteratedFDerivTwo ℝ f x (e i) (e j)) =
+      Real.exp (-W x) *
+        ∑ i, ∑ j, inverseHessianEntry ψ e x i j * bilinearIteratedFDerivTwo ℝ f x (e i) (e j) := by
     simp_rw [Finset.mul_sum]
     apply Finset.sum_congr rfl; intro i _hi
     apply Finset.sum_congr rfl; intro j _hj; ring
   have hSecond :
-      (∑ i, ∑ j, fderiv ℝ f x (e j) *
-        fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i)) =
-        -Real.exp (-W x) * ∑ j, fderiv ℝ ρ (gradient ψ x) (e j) * fderiv ℝ f x (e j) := by
+    (∑ i,
+        ∑ j,
+          fderiv ℝ f x (e j) *
+            fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i)) =
+      -Real.exp (-W x) * ∑ j, fderiv ℝ ρ (gradient ψ x) (e j) * fderiv ℝ f x (e j) := by
     rw [Finset.sum_comm]
     calc
-      _ = ∑ j, fderiv ℝ f x (e j) * ∑ i,
-          fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i) := by
+      _ =
+          ∑ j,
+            fderiv ℝ f x (e j) *
+              ∑ i,
+                fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i) := by
         simp_rw [Finset.mul_sum]
       _ = _ := by
         simp_rw [transport_density_inverseHessian_divergence hψ hW hK hρ hEq hx hPD]
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl; intro j _hj; ring
   calc
-    _ = ∑ i, ∑ j,
-        ((Real.exp (-W x) * inverseHessianEntry ψ e x i j) *
-          bilinearIteratedFDerivTwo ℝ f x (e i) (e j) +
-          fderiv ℝ f x (e j) *
-          fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i)) := by
+    _ =
+        ∑ i,
+          ∑ j,
+            ((Real.exp (-W x) * inverseHessianEntry ψ e x i j) *
+                bilinearIteratedFDerivTwo ℝ f x (e i) (e j) +
+              fderiv ℝ f x (e j) *
+                fderiv ℝ (fun y => Real.exp (-W y) * inverseHessianEntry ψ e y i j) x (e i)) := by
       apply Finset.sum_congr rfl; intro i _hi
       apply Finset.sum_congr rfl; intro j _hj
-      rw [fderiv_mul_apply (hwa i j) (hdf j),
-        ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
+      rw [fderiv_mul_apply (hwa i j) (hdf j), ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
     _ = _ := by
       simp_rw [Finset.sum_add_distrib]
       rw [hFirst, hSecond]
-      change _ = Real.exp (-W x) *
-        ((∑ i, ∑ j, inverseHessianEntry ψ e x i j *
-          bilinearIteratedFDerivTwo ℝ f x (e i) (e j)) -
-          ∑ i, fderiv ℝ ρ (gradient ψ x) (e i) * fderiv ℝ f x (e i))
+      change
+        _ =
+          Real.exp (-W x) *
+            ((∑ i,
+                ∑ j,
+                  inverseHessianEntry ψ e x i j * bilinearIteratedFDerivTwo ℝ f x (e i) (e j)) -
+              ∑ i, fderiv ℝ ρ (gradient ψ x) (e i) * fderiv ℝ f x (e i))
       ring
 
 

@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.WaveSplitting.FlowDerivative
-import FunctionalInequalities.Analysis.WaveSplitting.GeneratorBounds
-import FunctionalInequalities.Analysis.WaveSplitting.Localization
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.FlowDerivative
+public import FunctionalInequalities.Analysis.WaveSplitting.GeneratorBounds
+public import FunctionalInequalities.Analysis.WaveSplitting.Localization
+public import Mathlib.MeasureTheory.Integral.Prod
 
 /-!
 # Tame bound for the actual split residual
@@ -13,6 +15,8 @@ time integral. The quantitative time-integral lemma uses the fundamental theorem
 Cauchy--Schwarz in time and Fubini on the product of a finite time interval and a compact
 spatial ball.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff
@@ -93,18 +97,21 @@ private theorem sq_intervalIntegral_le {f : ℝ → ℝ} (hf : Continuous f) {t 
   have hint (c : ℝ) : ∫ s in (0 : ℝ)..t, (f s - c) ^ 2 = Q - 2 * c * A + c ^ 2 * t := by
     have he : (fun s => (f s - c) ^ 2) = fun s => (f s ^ 2 - (2 * c) * f s) + c ^ 2 := by
       funext s; ring
-    have h₁ := intervalIntegral.integral_add (μ := volume) (a := 0) (b := t)
-      (f := fun s => f s ^ 2 - (2 * c) * f s) (g := fun _ => c ^ 2)
-      (((hf.pow 2).sub (continuous_const.mul hf)).intervalIntegrable _ _)
-      intervalIntegrable_const
-    have h₂ := intervalIntegral.integral_sub (μ := volume) (a := 0) (b := t)
-      (f := fun s => f s ^ 2) (g := fun s => (2 * c) * f s)
-      ((hf.pow 2).intervalIntegrable _ _) ((continuous_const.mul hf).intervalIntegrable _ _)
+    have h₁ :=
+      intervalIntegral.integral_add (μ := volume) (a := 0) (b := t) (f := fun s =>
+        f s ^ 2 - (2 * c) * f s) (g := fun _ => c ^ 2)
+        (((hf.pow 2).sub (continuous_const.mul hf)).intervalIntegrable _ _)
+        intervalIntegrable_const
+    have h₂ :=
+      intervalIntegral.integral_sub (μ := volume) (a := 0) (b := t) (f := fun s => f s ^ 2)
+        (g := fun s => (2 * c) * f s) ((hf.pow 2).intervalIntegrable _ _)
+        ((continuous_const.mul hf).intervalIntegrable _ _)
     have h₃ := intervalIntegral.integral_const_mul (μ := volume) (a := 0) (b := t) (2 * c) f
     rw [he, h₁, h₂, h₃, intervalIntegral.integral_const]
     simp only [smul_eq_mul, sub_zero, A, Q]
     ring
-  have h0 := intervalIntegral.integral_nonneg (μ := volume) ht.le (fun s _ => sq_nonneg (f s - A / t))
+  have h0 :=
+    intervalIntegral.integral_nonneg (μ := volume) ht.le (fun s _ => sq_nonneg (f s - A / t))
   rw [hint] at h0
   have h1 : 0 ≤ t * (Q - 2 * (A / t) * A + (A / t) ^ 2 * t) := mul_nonneg ht.le h0
   have e : t * (Q - 2 * (A / t) * A + (A / t) ^ 2 * t) = t * Q - A ^ 2 := by
@@ -576,49 +583,61 @@ theorem derivativeEnergy_sweepDerivative_le
 /-- Ordered commutator of a finite coordinate sweep with one coordinate generator. The
 sweep flow factors are kept; the estimate costs two derivative orders and is quadratic in
 time. -/
-theorem derivativeEnergy_sweep_commutator_le (a : ι → E) (k : ℕ) (js : List ι) (j : ι) {X : State E ι}
-    (hX : X.Smooth) (hc : X.CompactSupport) {t : ℝ} (ht : 0 ≤ t) :
-    derivativeEnergy m a k (subState (sweep a t js (coordinateGenerator (a j) j X))
-        (coordinateGenerator (a j) j (sweep a t js X))) ≤
-      t ^ 2 * (4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) *
-        (jetCount (ι := ι) (k + 1) : ℝ) * derivativeEnergy m a (k + 2) X) := by
+theorem derivativeEnergy_sweep_commutator_le (a : ι → E) (k : ℕ) (js : List ι) (j : ι)
+    {X : State E ι} (hX : X.Smooth) (hc : X.CompactSupport) {t : ℝ} (ht : 0 ≤ t) :
+    derivativeEnergy m a k
+        (subState (sweep a t js (coordinateGenerator (a j) j X))
+          (coordinateGenerator (a j) j (sweep a t js X))) ≤
+      t ^ 2 *
+        (4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) * (jetCount (ι := ι) (k + 1) : ℝ) *
+          derivativeEnergy m a (k + 2) X) := by
   obtain ⟨R, hR⟩ := hc.exists_supported
   have hQ := hX.coordinateGenerator (a j) j
   have hQc := hc.coordinateGenerator (a j) j
-  have hg : JointSmooth (fun s => subState (sweep a s js (coordinateGenerator (a j) j X))
-      (coordinateGenerator (a j) j (sweep a s js X))) :=
-    (hQ.joint_const.sweep a js).subState ((hX.joint_const.sweep a js).coordinateGenerator (a j) j)
-  have hderiv (s : ℝ) : HasTimeDerivative
-      (fun s => subState (sweep a s js (coordinateGenerator (a j) j X))
-        (coordinateGenerator (a j) j (sweep a s js X)))
+  have hg :
+    JointSmooth
+      (fun s =>
+        subState (sweep a s js (coordinateGenerator (a j) j X))
+          (coordinateGenerator (a j) j (sweep a s js X))) :=
+    (hQ.joint_const.sweep a js).subState
+      ((hX.joint_const.sweep a js).coordinateGenerator (a j) j)
+  have hderiv (s : ℝ) :
+    HasTimeDerivative
+      (fun s =>
+        subState (sweep a s js (coordinateGenerator (a j) j X))
+          (coordinateGenerator (a j) j (sweep a s js X)))
       (subState (sweepDerivative a s js (coordinateGenerator (a j) j X))
-        (coordinateGenerator (a j) j (sweepDerivative a s js X))) s := by
-    have h₁ := (hasTimeDerivative_const (coordinateGenerator (a j) j X) s).sweep
-      hQ.joint_const a js
+        (coordinateGenerator (a j) j (sweepDerivative a s js X)))
+      s := by
+    have h₁ :=
+      (hasTimeDerivative_const (coordinateGenerator (a j) j X) s).sweep hQ.joint_const a js
     rw [sweep_zeroState, zero_addState] at h₁
     have h₃ := (hasTimeDerivative_const X s).sweep hX.joint_const a js
     rw [sweep_zeroState, zero_addState] at h₃
     have h₂ := (hX.joint_const.sweep a js).hasTimeDerivative_coordinateGenerator (a j) j s
     rw [h₃.timeDerivative_eq] at h₂
     exact h₁.subState h₂
-  refine derivativeEnergy_le_of_timeDerivative m a k hg (by simp) (R := R + t * travel a js)
-    ht ?_ ?_
+  refine
+    derivativeEnergy_le_of_timeDerivative m a k hg (by simp) (R := R + t * travel a js) ht ?_ ?_
   · intro s hs
     have hs' : R + |s| * travel a js ≤ R + t * travel a js := by
       rw [abs_of_nonneg hs.1]
       nlinarith [mul_le_mul_of_nonneg_right hs.2 (travel_nonneg a js)]
-    exact (((hR.coordinateGenerator (a j) j).sweep a s js).mono hs').subState
-      (((hR.sweep a s js).coordinateGenerator (a j) j).mono hs')
+    exact
+      (((hR.coordinateGenerator (a j) j).sweep a s js).mono hs').subState
+        (((hR.sweep a s js).coordinateGenerator (a j) j).mono hs')
   · intro s _
     rw [(hderiv s).timeDerivative_eq]
     have hSD := derivativeEnergy_sweepDerivative_le m a k s js hQ hQc
     have hQ₁ := derivativeEnergy_coordinateGenerator_le m a (k + 1) j hX hc
     have hSD₂ := derivativeEnergy_sweepDerivative_le m a (k + 1) s js hX hc
-    have hQ₂ := derivativeEnergy_coordinateGenerator_le m a k j (hX.sweepDerivative a s js)
-      (hc.sweepDerivative a s js)
-    have hsub := derivativeEnergy_subState_le m a k (hQ.sweepDerivative a s js)
-      ((hX.sweepDerivative a s js).coordinateGenerator (a j) j) (hQc.sweepDerivative a s js)
-      ((hc.sweepDerivative a s js).coordinateGenerator (a j) j)
+    have hQ₂ :=
+      derivativeEnergy_coordinateGenerator_le m a k j (hX.sweepDerivative a s js)
+        (hc.sweepDerivative a s js)
+    have hsub :=
+      derivativeEnergy_subState_le m a k (hQ.sweepDerivative a s js)
+        ((hX.sweepDerivative a s js).coordinateGenerator (a j) j) (hQc.sweepDerivative a s js)
+        ((hc.sweepDerivative a s js).coordinateGenerator (a j) j)
     have hq : 0 ≤ (jetCount (ι := ι) k : ℝ) := Nat.cast_nonneg _
     have h4 : (0 : ℝ) ≤ 4 ^ js.length := by positivity
     have e₁ := mul_le_mul_of_nonneg_left hQ₁ (mul_nonneg h4 hq)
@@ -628,24 +647,30 @@ theorem derivativeEnergy_sweep_commutator_le (a : ι → E) (k : ℕ) (js : List
 
 /-- Residual of a coordinate sweep against its own list generator: every coordinate is
 commuted through the later flow factors, with an explicit two-order quadratic bound. -/
-theorem derivativeEnergy_sweepResidual_le (a : ι → E) (k : ℕ) (js : List ι) {Y : State E ι} (hY : Y.Smooth)
-    (hc : Y.CompactSupport) {t : ℝ} (ht : 0 ≤ t) :
-    derivativeEnergy m a k (subState (sweepDerivative a t js Y)
-        (sweepGenerator a js (sweep a t js Y))) ≤
-      t ^ 2 * (js.length * 4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) *
-        (jetCount (ι := ι) (k + 1) : ℝ) * derivativeEnergy m a (k + 2) Y) := by
+theorem derivativeEnergy_sweepResidual_le (a : ι → E) (k : ℕ) (js : List ι) {Y : State E ι}
+    (hY : Y.Smooth) (hc : Y.CompactSupport) {t : ℝ} (ht : 0 ≤ t) :
+    derivativeEnergy m a k
+        (subState (sweepDerivative a t js Y) (sweepGenerator a js (sweep a t js Y))) ≤
+      t ^ 2 *
+        (js.length * 4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) *
+            (jetCount (ι := ι) (k + 1) : ℝ) *
+          derivativeEnergy m a (k + 2) Y) := by
   induction js generalizing Y with
-  | nil =>
-    have hz : subState (sweepDerivative a t [] Y) (sweepGenerator a [] (sweep a t [] Y)) =
-        zeroState := subState_self _
+  |
+    nil =>
+    have hz :
+      subState (sweepDerivative a t [] Y) (sweepGenerator a [] (sweep a t [] Y)) = zeroState :=
+      subState_self _
     rw [hz, derivativeEnergy_zeroState]
     simp
   | cons j js ih =>
     have hXs := hY.transport (a j) j t
     have hXc := hc.transport (a j) j t
-    have hid : subState (sweepDerivative a t (j :: js) Y)
-        (sweepGenerator a (j :: js) (sweep a t (j :: js) Y)) =
-        addState (subState (sweep a t js (coordinateGenerator (a j) j (transport (a j) j t Y)))
+    have hid :
+      subState (sweepDerivative a t (j :: js) Y)
+          (sweepGenerator a (j :: js) (sweep a t (j :: js) Y)) =
+        addState
+          (subState (sweep a t js (coordinateGenerator (a j) j (transport (a j) j t Y)))
             (coordinateGenerator (a j) j (sweep a t js (transport (a j) j t Y))))
           (subState (sweepDerivative a t js (transport (a j) j t Y))
             (sweepGenerator a js (sweep a t js (transport (a j) j t Y)))) := by
@@ -663,25 +688,35 @@ theorem derivativeEnergy_sweepResidual_le (a : ι → E) (k : ℕ) (js : List ι
     have hcomm := derivativeEnergy_sweep_commutator_le m a k js j hXs hXc ht
     have hres := ih hXs hXc
     rw [hE] at hcomm hres
-    have hadd := derivativeEnergy_addState_le m a k
-      (((hXs.coordinateGenerator (a j) j).sweep a t js).subState
-        ((hXs.sweep a t js).coordinateGenerator (a j) j))
-      ((hXs.sweepDerivative a t js).subState ((hXs.sweep a t js).sweepGenerator a js))
-      (((hXc.coordinateGenerator (a j) j).sweep a t js).subState
-        ((hXc.sweep a t js).coordinateGenerator (a j) j))
-      ((hXc.sweepDerivative a t js).subState ((hXc.sweep a t js).sweepGenerator a js))
+    have hadd :=
+      derivativeEnergy_addState_le m a k
+        (((hXs.coordinateGenerator (a j) j).sweep a t js).subState
+          ((hXs.sweep a t js).coordinateGenerator (a j) j))
+        ((hXs.sweepDerivative a t js).subState ((hXs.sweep a t js).sweepGenerator a js))
+        (((hXc.coordinateGenerator (a j) j).sweep a t js).subState
+          ((hXc.sweep a t js).coordinateGenerator (a j) j))
+        ((hXc.sweepDerivative a t js).subState ((hXc.sweep a t js).sweepGenerator a js))
     rw [hid]
-    set P := t ^ 2 * (4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) *
-      (jetCount (ι := ι) (k + 1) : ℝ) * derivativeEnergy m a (k + 2) Y) with hP
+    set P :=
+      t ^ 2 *
+        (4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) * (jetCount (ι := ι) (k + 1) : ℝ) *
+          derivativeEnergy m a (k + 2) Y) with
+      hP
     have hP0 : 0 ≤ P := by
       have := derivativeEnergy_nonneg m a (k + 2) Y
       positivity
-    have hres' : derivativeEnergy m a k (subState (sweepDerivative a t js (transport (a j) j t Y))
-        (sweepGenerator a js (sweep a t js (transport (a j) j t Y)))) ≤ js.length * P := by
+    have hres' :
+      derivativeEnergy m a k
+          (subState (sweepDerivative a t js (transport (a j) j t Y))
+            (sweepGenerator a js (sweep a t js (transport (a j) j t Y)))) ≤
+        js.length * P := by
       rw [hP]; linarith [hres]
-    have hgoal : t ^ 2 * (((j :: js).length : ℝ) * 4 ^ ((j :: js).length + 1) *
-        (jetCount (ι := ι) k : ℝ) * (jetCount (ι := ι) (k + 1) : ℝ) *
-          derivativeEnergy m a (k + 2) Y) = 4 * (js.length + 1) * P := by
+    have hgoal :
+      t ^ 2 *
+          (((j :: js).length : ℝ) * 4 ^ ((j :: js).length + 1) * (jetCount (ι := ι) k : ℝ) *
+              (jetCount (ι := ι) (k + 1) : ℝ) *
+            derivativeEnergy m a (k + 2) Y) =
+        4 * (js.length + 1) * P := by
       rw [hP]; push_cast [List.length_cons]; ring
     rw [hgoal]
     have hn : (0 : ℝ) ≤ js.length := Nat.cast_nonneg _

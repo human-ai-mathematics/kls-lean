@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Existence
-import LevyStochCalc.Brownian.Martingale
-import LevyStochCalc.Probability.Transport
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Existence
+public import LevyStochCalc.Brownian.Martingale
+public import LevyStochCalc.Probability.Transport
 
 /-!
 # d-dimensional Brownian motion
@@ -33,6 +37,8 @@ Brownian motions on the same probability space. Constructed via
   coordinate increment is Gaussian and the coordinate increments are
   independent.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

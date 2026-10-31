@@ -1,16 +1,20 @@
-import FunctionalInequalities.Energy.LocalSlope.Basic
-import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.Support
-import Mathlib.MeasureTheory.Measure.Restrict
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Measure.FiniteMeasure
-import Mathlib.Topology.Bornology.Basic
-import Mathlib.Order.LiminfLimsup
-import Mathlib.Data.Fintype.EquivFin
+module
+
+public import FunctionalInequalities.Energy.LocalSlope.Basic
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
+public import Mathlib.MeasureTheory.Measure.Support
+public import Mathlib.MeasureTheory.Measure.Restrict
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.MeasureTheory.Measure.FiniteMeasure
+public import Mathlib.Topology.Bornology.Basic
+public import Mathlib.Order.LiminfLimsup
+public import Mathlib.Data.Fintype.EquivFin
 
 /-!
 # Metric BV tests, relaxation, recovery and elementary bounds
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -79,7 +83,8 @@ theorem exists_test_lt_of_perimeter_lt (ν : Measure X) (B : Set X) {a : ENNReal
     (ha : perimeter ν B < a) {ε : ENNReal} (hε : 0 < ε) :
     ∃ g : Test X, indicatorDistance ν g B < ε ∧ cost ν g < a := by
   obtain ⟨s, hs⟩ := iInf_lt_iff.mp ha
-  have hfreq : ∃ᶠ n in atTop, cost ν (s.1 n) < a := frequently_lt_of_liminf_lt (by isBoundedDefault) hs
+  have hfreq : ∃ᶠ n in atTop, cost ν (s.1 n) < a :=
+    frequently_lt_of_liminf_lt (by isBoundedDefault) hs
   have hev : ∀ᶠ n in atTop, indicatorDistance ν (s.1 n) B < ε := s.2.eventually (gt_mem_nhds hε)
   obtain ⟨n, hn⟩ := (hfreq.and_eventually hev).exists
   exact ⟨s.1 n, hn.2, hn.1⟩
@@ -310,15 +315,16 @@ theorem perimeter_empty (ν : Measure X) : perimeter ν (∅ : Set X) = 0 := by
 /-- If every bounded set has co-infinite mass, no bounded-support test approximates the constant
 one, so the whole space has infinite perimeter. -/
 theorem perimeter_univ_eq_top_of_forall_isBounded (ν : Measure X)
-    (h : ∀ S : Set X, Bornology.IsBounded S → ν Sᶜ = ⊤) :
-    perimeter ν Set.univ = ⊤ := by
+    (h : ∀ S : Set X, Bornology.IsBounded S → ν Sᶜ = ⊤) : perimeter ν Set.univ = ⊤ := by
   refine iInf_eq_top.mpr fun s => ?_
   exfalso
   have hlarge (f : Test X) : indicatorDistance ν f Set.univ = ⊤ := by
     set K := closure (Function.support f.toFun)
     have hK : Bornology.IsBounded K := f.boundedSupport.closure
-    have hbound : ∀ x, Kᶜ.indicator (1 : X → ENNReal) x ≤
-        ‖f x - (Set.univ : Set X).indicator (1 : X → ℝ) x‖ₑ := by
+    have hbound :
+      ∀ x,
+        Kᶜ.indicator (1 : X → ENNReal) x ≤
+          ‖f x - (Set.univ : Set X).indicator (1 : X → ℝ) x‖ₑ := by
       intro x
       by_cases hx : x ∈ K
       · simp [hx]
@@ -327,8 +333,10 @@ theorem perimeter_univ_eq_top_of_forall_isBounded (ν : Measure X)
           exact hx (subset_closure hne)
         simp [hx, hfx]
     refine top_le_iff.mp ?_
-    calc (⊤ : ENNReal) = ν Kᶜ := (h K hK).symm
-      _ = ∫⁻ x, Kᶜ.indicator 1 x ∂ν := (lintegral_indicator_one isClosed_closure.measurableSet.compl).symm
+    calc
+      (⊤ : ENNReal) = ν Kᶜ := (h K hK).symm
+      _ = ∫⁻ x, Kᶜ.indicator 1 x ∂ν :=
+        (lintegral_indicator_one isClosed_closure.measurableSet.compl).symm
       _ ≤ indicatorDistance ν f Set.univ := lintegral_mono hbound
   have := s.2
   simp only [hlarge] at this

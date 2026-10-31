@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Complement
-import FunctionalInequalities.Analysis.MetricBV.Approximation
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
-import FunctionalInequalities.KLS.Geometry.Cheeger.LocalSlopeCoarea
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Complement
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
+public import FunctionalInequalities.KLS.Geometry.Cheeger.LocalSlopeCoarea
 
 /-!
 # Metric BV perimeter below the outer Minkowski content
@@ -46,6 +48,8 @@ eventually lie in `(0, 1)` and the symmetric Cheeger quotients `content / min (m
 and `perimeter / min (mass, 1 - mass)` of the recovery sets converge to that of `B`
 (`tendsto_minkowskiContent_div_min_minkowskiRecoverySet`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -187,8 +191,10 @@ section Bridge
 
 variable {V : Type*} [MetricSpace V] [MeasurableSpace V] [BorelSpace V]
 
-/-- The metric BV perimeter of a measurable set is at most its outer Minkowski content, for every
-Borel measure and measurable finite-mass target. Below any level `a` above the content, radii `r_k → 0` with content quotient
+/--
+The metric BV perimeter of a measurable set is at most its outer Minkowski content, for every
+Borel measure and measurable finite-mass target. Below any level `a` above the content, radii `r_k →
+0` with content quotient
 below `a` carry plateau ramps with `L¹` error at most `a r_k` and slope integral at most
 `a (1 + 1/(k+1))`; the finite-target Lipschitz bridge then bounds the perimeter by `a`. Top
 content is a trivial bound and the empty set has perimeter zero. -/
@@ -201,16 +207,21 @@ theorem perimeter_le_minkowskiContent_of_measure_lt_top (ν : Measure V) {B : Se
   refine le_of_forall_gt_imp_ge_of_dense fun a ha => ?_
   rcases eq_or_ne a ⊤ with rfl | ha_top
   · exact le_top
-  have hfreq : ∃ᶠ r in 𝓝[>] (0 : ℝ),
+  have hfreq :
+    ∃ᶠ r in 𝓝[>] (0 : ℝ),
       ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r < a :=
     frequently_lt_of_liminf_lt (by isBoundedDefault) ha
-  have hidx : ∀ k : ℕ, ∃ r : ℝ,
-      ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r < a ∧
-        r ∈ Set.Ioo (0 : ℝ) (1 / ((k : ℝ) + 1)) := fun k =>
-    (hfreq.and_eventually (Ioo_mem_nhdsGT (by positivity))).exists
+  have hidx :
+    ∀ k : ℕ,
+      ∃ r : ℝ,
+        ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r < a ∧
+          r ∈ Set.Ioo (0 : ℝ) (1 / ((k : ℝ) + 1)) :=
+    fun k => (hfreq.and_eventually (Ioo_mem_nhdsGT (by positivity))).exists
   choose r hrQ hr using hidx
-  have hr0 : ∀ k, 0 < r k := fun k => (hr k).1
+  have hr0 : ∀ k, 0 < r k := fun k =>
+    (hr k).1
   -- plateau radii `s k < t k < r k` with `r k / (t k - s k) = 1 + 1 / (k + 1)`
+
   set s : ℕ → ℝ := fun k => r k / (2 * ((k : ℝ) + 2)) with hs_def
   set t : ℕ → ℝ := fun k => r k - s k with ht_def
   have hs0 : ∀ k, 0 < s k := fun k => by
@@ -241,55 +252,71 @@ theorem perimeter_le_minkowskiContent_of_measure_lt_top (ν : Measure V) {B : Se
     field_simp
     ring
   -- the annulus mass is `Q (r k) * r k < a * r k`
-  have hmass : ∀ k, (ν : Measure V) (Metric.thickening (r k) B \ B) ≤
-      a * ENNReal.ofReal (r k) := fun k => by
-    rw [measure_sdiff (Metric.self_subset_thickening (hr0 k) B) hBm.nullMeasurableSet
-      hνB.ne]
-    calc (ν : Measure V) (Metric.thickening (r k) B) - (ν : Measure V) B
-        = ((ν : Measure V) (Metric.thickening (r k) B) - (ν : Measure V) B) /
-            ENNReal.ofReal (r k) * ENNReal.ofReal (r k) :=
-          (ENNReal.div_mul_cancel (ENNReal.ofReal_pos.2 (hr0 k)).ne' ENNReal.ofReal_ne_top).symm
+
+  have hmass :
+    ∀ k, (ν : Measure V) (Metric.thickening (r k) B \ B) ≤ a * ENNReal.ofReal (r k) := fun k => by
+    rw [measure_sdiff (Metric.self_subset_thickening (hr0 k) B) hBm.nullMeasurableSet hνB.ne]
+    calc
+      (ν : Measure V) (Metric.thickening (r k) B) - (ν : Measure V) B =
+          ((ν : Measure V) (Metric.thickening (r k) B) - (ν : Measure V) B) /
+              ENNReal.ofReal (r k) *
+            ENNReal.ofReal (r k) :=
+        (ENNReal.div_mul_cancel (ENNReal.ofReal_pos.2 (hr0 k)).ne' ENNReal.ofReal_ne_top).symm
       _ ≤ a * ENNReal.ofReal (r k) := by
-          gcongr
-          exact (hrQ k).le
+        gcongr
+        exact (hrQ k).le
   have hlip : ∀ k, ∃ K : ℝ≥0, LipschitzWith K (plateauRamp B (s k) (t k)) := fun k =>
     ⟨_, lipschitzWith_plateauRamp B (hst k)⟩
-  have hconv : Tendsto (fun k => ∫⁻ x, ‖plateauRamp B (s k) (t k) x -
-      B.indicator (1 : V → ℝ) x‖ₑ ∂(ν : Measure V)) atTop (𝓝 0) := by
+  have hconv :
+    Tendsto
+      (fun k =>
+        ∫⁻ x, ‖plateauRamp B (s k) (t k) x - B.indicator (1 : V → ℝ) x‖ₑ ∂(ν : Measure V))
+      atTop (𝓝 0) := by
     have hup : Tendsto (fun k : ℕ => a * ENNReal.ofReal (1 / ((k : ℝ) + 1))) atTop (𝓝 0) := by
-      simpa using ENNReal.Tendsto.const_mul
-        (ENNReal.tendsto_ofReal tendsto_one_div_add_atTop_nhds_zero_nat) (Or.inr ha_top)
-    refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hup (fun _ => zero_le)
-      fun k => ?_
-    calc ∫⁻ x, ‖plateauRamp B (s k) (t k) x - B.indicator (1 : V → ℝ) x‖ₑ ∂(ν : Measure V)
-        ≤ (ν : Measure V) (Metric.thickening (r k) B \ B) :=
-          lintegral_enorm_plateauRamp_sub_le _ hB hBm (hs0 k).le (hst k) (htr k).le
+      simpa using
+        ENNReal.Tendsto.const_mul
+          (ENNReal.tendsto_ofReal tendsto_one_div_add_atTop_nhds_zero_nat) (Or.inr ha_top)
+    refine
+      tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hup (fun _ => zero_le)
+        fun k => ?_
+    calc
+      ∫⁻ x, ‖plateauRamp B (s k) (t k) x - B.indicator (1 : V → ℝ) x‖ₑ ∂(ν : Measure V) ≤
+          (ν : Measure V) (Metric.thickening (r k) B \ B) :=
+        lintegral_enorm_plateauRamp_sub_le _ hB hBm (hs0 k).le (hst k) (htr k).le
       _ ≤ a * ENNReal.ofReal (r k) := hmass k
       _ ≤ a * ENNReal.ofReal (1 / ((k : ℝ) + 1)) := by
-          gcongr
-          exact (hr k).2.le
-  have hcost : ∀ k, ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x ∂(ν : Measure V) ≤
-      a * ENNReal.ofReal (1 + 1 / ((k : ℝ) + 1)) := fun k => by
-    calc ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x ∂(ν : Measure V)
-        ≤ ENNReal.ofReal (t k - s k)⁻¹ * (ν : Measure V) (Metric.thickening (r k) B \ B) :=
-          lintegral_apply_plateauRamp_le _ hB (hs0 k) (hst k) (htr k)
+        gcongr
+        exact (hr k).2.le
+  have hcost :
+    ∀ k,
+      ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x ∂(ν : Measure V) ≤
+        a * ENNReal.ofReal (1 + 1 / ((k : ℝ) + 1)) :=
+    fun k => by
+    calc
+      ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x ∂(ν : Measure V) ≤
+          ENNReal.ofReal (t k - s k)⁻¹ * (ν : Measure V) (Metric.thickening (r k) B \ B) :=
+        lintegral_apply_plateauRamp_le _ hB (hs0 k) (hst k) (htr k)
       _ ≤ ENNReal.ofReal (t k - s k)⁻¹ * (a * ENNReal.ofReal (r k)) := by
-          gcongr
-          exact hmass k
+        gcongr
+        exact hmass k
       _ = a * ENNReal.ofReal (r k * (t k - s k)⁻¹) := by
-          rw [ENNReal.ofReal_mul (hr0 k).le]
-          ring
+        rw [ENNReal.ofReal_mul (hr0 k).le]
+        ring
       _ = a * ENNReal.ofReal (1 + 1 / ((k : ℝ) + 1)) := by rw [hratio k]
   have hlim : Tendsto (fun k : ℕ => a * ENNReal.ofReal (1 + 1 / ((k : ℝ) + 1))) atTop (𝓝 a) := by
     have h1 : Tendsto (fun k : ℕ => 1 + 1 / ((k : ℝ) + 1)) atTop (𝓝 1) := by
-      simpa using (tendsto_const_nhds (x := (1 : ℝ))).add tendsto_one_div_add_atTop_nhds_zero_nat
+      simpa using
+        (tendsto_const_nhds (x := (1 : ℝ))).add tendsto_one_div_add_atTop_nhds_zero_nat
     simpa using ENNReal.Tendsto.const_mul (ENNReal.tendsto_ofReal h1) (Or.inr ha_top)
-  calc perimeter (ν : Measure V) B
-      ≤ liminf (fun k => ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x
-          ∂(ν : Measure V)) atTop :=
-        perimeter_le_liminf_of_lipschitz_of_measure_lt_top ν hBm hνB hlip hconv
+  calc
+    perimeter (ν : Measure V) B ≤
+        liminf
+          (fun k =>
+            ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x ∂(ν : Measure V))
+          atTop :=
+      perimeter_le_liminf_of_lipschitz_of_measure_lt_top ν hBm hνB hlip hconv
     _ ≤ liminf (fun k : ℕ => a * ENNReal.ofReal (1 + 1 / ((k : ℝ) + 1))) atTop :=
-        liminf_le_liminf (Eventually.of_forall hcost)
+      liminf_le_liminf (Eventually.of_forall hcost)
     _ = a := hlim.liminf_eq
 
 /-- The metric BV perimeter is at most lower Minkowski content for a finite Borel measure
@@ -312,7 +339,8 @@ theorem lintegral_perimeter_superlevel_le_localSlope (ν : Measure V) [IsFiniteM
 
 /-- The local-slope Minkowski coarea inequality for a metric BV test: the right side is its
 cost. -/
-theorem lintegral_minkowskiContent_superlevel_le_cost (ν : Measure V) [IsFiniteMeasure ν] (f : Test V) :
+theorem lintegral_minkowskiContent_superlevel_le_cost (ν : Measure V) [IsFiniteMeasure ν]
+    (f : Test V) :
     ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
       cost (ν : Measure V) f := by
   obtain ⟨K, hK⟩ := f.lipschitz
@@ -528,33 +556,45 @@ theorem tendsto_indicator_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure
     (lintegral_enorm_minkowskiRecoverySet_sub_le ν hB)
 
 /-- Minkowski recovery: the contents of the recovery sets converge to the perimeter of `B`. -/
-theorem tendsto_minkowskiContent_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
-    (hB : perimeter (ν : Measure V) B < ⊤) :
+theorem tendsto_minkowskiContent_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν]
+    {B : Set V} (hB : perimeter (ν : Measure V) B < ⊤) :
     Tendsto (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n)) atTop
       (𝓝 (perimeter (ν : Measure V) B)) := by
   have hη : Tendsto (fun n : ℕ => ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop (𝓝 0) := by
     simpa using ENNReal.tendsto_ofReal tendsto_one_div_add_atTop_nhds_zero_nat
-  have hnum : Tendsto (fun n : ℕ => perimeter (ν : Measure V) B +
-      ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop (𝓝 (perimeter (ν : Measure V) B)) := by
+  have hnum :
+    Tendsto (fun n : ℕ => perimeter (ν : Measure V) B + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+      atTop (𝓝 (perimeter (ν : Measure V) B)) := by
     simpa using (tendsto_const_nhds (x := perimeter (ν : Measure V) B)).add hη
   have hden : Tendsto (fun n : ℕ => ENNReal.ofReal (1 - 2 * recoveryWidth n)) atTop (𝓝 1) := by
-    have h := ENNReal.tendsto_ofReal
-      ((tendsto_const_nhds (x := (1 : ℝ))).sub (tendsto_recoveryWidth.const_mul 2))
+    have h :=
+      ENNReal.tendsto_ofReal
+        ((tendsto_const_nhds (x := (1 : ℝ))).sub (tendsto_recoveryWidth.const_mul 2))
     simpa using h
-  have hup : Tendsto (fun n : ℕ => (perimeter (ν : Measure V) B +
-      ENNReal.ofReal (1 / ((n : ℝ) + 1))) / ENNReal.ofReal (1 - 2 * recoveryWidth n) +
-      ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop (𝓝 (perimeter (ν : Measure V) B)) := by
-    have h := (ENNReal.Tendsto.div hnum (Or.inr one_ne_zero) hden
-      (Or.inl ENNReal.one_ne_top)).add hη
+  have hup :
+    Tendsto
+      (fun n : ℕ =>
+        (perimeter (ν : Measure V) B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
+            ENNReal.ofReal (1 - 2 * recoveryWidth n) +
+          ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+      atTop (𝓝 (perimeter (ν : Measure V) B)) := by
+    have h :=
+      (ENNReal.Tendsto.div hnum (Or.inr one_ne_zero) hden (Or.inl ENNReal.one_ne_top)).add hη
     simpa using h
-  refine tendsto_of_le_liminf_of_limsup_le
-    (perimeter_le_liminf_minkowskiContent ν (measurableSet_minkowskiRecoverySet ν hB)
-      (tendsto_indicator_minkowskiRecoverySet ν hB)) ?_
-  calc limsup (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n)) atTop
-      ≤ limsup (fun n : ℕ => (perimeter (ν : Measure V) B +
-          ENNReal.ofReal (1 / ((n : ℝ) + 1))) / ENNReal.ofReal (1 - 2 * recoveryWidth n) +
-          ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop :=
-        limsup_le_limsup (Eventually.of_forall (minkowskiContent_minkowskiRecoverySet_le ν hB))
+  refine
+    tendsto_of_le_liminf_of_limsup_le
+      (perimeter_le_liminf_minkowskiContent ν (measurableSet_minkowskiRecoverySet ν hB)
+        (tendsto_indicator_minkowskiRecoverySet ν hB))
+      ?_
+  calc
+    limsup (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n)) atTop ≤
+        limsup
+          (fun n : ℕ =>
+            (perimeter (ν : Measure V) B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
+                ENNReal.ofReal (1 - 2 * recoveryWidth n) +
+              ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+          atTop :=
+      limsup_le_limsup (Eventually.of_forall (minkowskiContent_minkowskiRecoverySet_le ν hB))
     _ = perimeter (ν : Measure V) B := hup.limsup_eq
 
 /-- The perimeters of the recovery sets also converge to the perimeter of `B`. -/
@@ -587,61 +627,76 @@ theorem exists_minkowskiRecovery (ν : Measure V) [IsFiniteMeasure ν] {B : Set 
 /-- At a measurable finite-mass target, global indicator L1 convergence gives eventual
 finite mass of the approximating sets; therefore their lower contents bound the perimeter
 in liminf for every Borel measure. A finite initial segment may have infinite mass. -/
-theorem perimeter_le_liminf_minkowskiContent_of_measure_lt_top (ν : Measure V) {B : Set V} (hB : MeasurableSet B) (hνB : ν B < ⊤)
-    {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
-    (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
-      atTop (𝓝 0)) :
+theorem perimeter_le_liminf_minkowskiContent_of_measure_lt_top (ν : Measure V) {B : Set V}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
+    (hconv :
+      Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop
+        (𝓝 0)) :
     perimeter ν B ≤ liminf (fun n => Isoperimetry.minkowskiContent ν (A n)) atTop := by
   have hfin : ∀ᶠ n in atTop, ν (A n) < ⊤ := by
     filter_upwards [hconv.eventually_lt_const (by norm_num : (0 : ℝ≥0∞) < 1)] with n hn
-    exact (measure_le_add_lintegral_indicator_sub ν (hA n) hB).trans_lt
-      (ENNReal.add_lt_top.2 ⟨hνB, hn.trans (by norm_num)⟩)
-  exact (perimeter_le_liminf_of_tendsto ν hA hconv).trans
-    (liminf_le_liminf (hfin.mono fun n hn => perimeter_le_minkowskiContent_of_measure_lt_top ν (hA n) hn))
+    exact
+      (measure_le_add_lintegral_indicator_sub ν (hA n) hB).trans_lt
+        (ENNReal.add_lt_top.2 ⟨hνB, hn.trans (by norm_num)⟩)
+  exact
+    (perimeter_le_liminf_of_tendsto ν hA hconv).trans
+      (liminf_le_liminf
+        (hfin.mono fun n hn => perimeter_le_minkowskiContent_of_measure_lt_top ν (hA n) hn))
 
 /-- Quantitative positive-superlevel selection for tests under finiteness on bounded
 Borel sets; the carrier need not be proper and the target need not be measurable. -/
 theorem exists_superlevel_selection_of_finite_on_bounded (ν : Measure V)
-    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
-    (f : Test V) (B : Set V) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1/2) (hε : 0 < ε) :
-    ∃ t ∈ Set.Ioo δ (1 - δ), MeasurableSet {x | t ≤ f x} ∧
-      Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ cost ν f / ENNReal.ofReal (1 - 2*δ) + ENNReal.ofReal ε ∧
-      ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
-        indicatorDistance ν f B / ENNReal.ofReal δ := by
+    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤) (f : Test V)
+    (B : Set V) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
+    ∃ t ∈ Set.Ioo δ (1 - δ),
+      MeasurableSet {x | t ≤ f x} ∧
+        Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤
+            cost ν f / ENNReal.ofReal (1 - 2 * δ) + ENNReal.ofReal ε ∧
+          ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+            indicatorDistance ν f B / ENNReal.ofReal δ := by
   have hab : δ < 1 - δ := by linarith
   obtain ⟨K, hK⟩ := f.lipschitz
   have hpos : Bornology.IsBounded {x | 0 < f x} :=
     f.boundedSupport.subset fun x hx => (show f x ≠ 0 from ne_of_gt hx)
-  have hcoarea : ∫⁻ t in Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ cost ν f :=
-    (lintegral_mono' (Measure.restrict_mono (by
-      intro t ht; exact hδ.trans ht.1) le_rfl) le_rfl).trans
-      (Isoperimetry.setLIntegral_minkowskiContent_superlevel_le_localSlope_of_bounded_positive ν hν hK hpos)
-  have hcfin : cost ν f ≠ ⊤ := cost_ne_top_of_support_measure ν f
-    (hν _ f.boundedSupport.closure isClosed_closure.measurableSet).ne
+  have hcoarea :
+    ∫⁻ t in Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ cost ν f :=
+    (lintegral_mono' (Measure.restrict_mono (by intro t ht; exact hδ.trans ht.1) le_rfl)
+          le_rfl).trans
+      (Isoperimetry.setLIntegral_minkowskiContent_superlevel_le_localSlope_of_bounded_positive ν
+        hν hK hpos)
+  have hcfin : cost ν f ≠ ⊤ :=
+    cost_ne_top_of_support_measure ν f
+      (hν _ f.boundedSupport.closure isClosed_closure.measurableSet).ne
   obtain ⟨t, ht, hc⟩ := exists_mem_Ioo_le_div_add_of_setLIntegral_le hab hcfin hcoarea hε
-  have hL : 1 - δ - δ = 1 - 2*δ := by ring
+  have hL : 1 - δ - δ = 1 - 2 * δ := by ring
   rw [hL] at hc
-  exact ⟨t, ht, measurableSet_le measurable_const hK.continuous.measurable, hc,
-    lintegral_enorm_indicator_superlevel_sub_le ν f B hδ ht.1.le ht.2.le⟩
+  exact
+    ⟨t, ht, measurableSet_le measurable_const hK.continuous.measurable, hc,
+      lintegral_enorm_indicator_superlevel_sub_le ν f B hδ ht.1.le ht.2.le⟩
 /-- Actual lower-content recovery at a measurable finite-mass, finite-perimeter target
 under finiteness on bounded Borel sets. Recovery sets are bounded measurable superlevels
 with finite mass and finite lower content term by term; indicators converge in global L1
 and their lower contents converge to the target perimeter. -/
 theorem exists_minkowskiRecovery_of_finite_on_bounded (ν : Measure V)
-    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
-    {B : Set V} (hBm : MeasurableSet B) (hνB : ν B < ⊤) (hB : perimeter ν B < ⊤) :
-    ∃ A : ℕ → Set V, (∀ n, MeasurableSet (A n)) ∧
-      (∀ n, Bornology.IsBounded (A n)) ∧ (∀ n, ν (A n) < ⊤) ∧
-      (∀ n, Isoperimetry.minkowskiContent ν (A n) < ⊤) ∧ Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
-        atTop (𝓝 0) ∧
-      Tendsto (fun n => Isoperimetry.minkowskiContent ν (A n)) atTop (𝓝 (perimeter ν B)) := by
-  let f : ℕ → Test V := fun n => recoveryTest hB
-    (ε := ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1)))
-    (η := ENNReal.ofReal (1 / ((n : ℝ) + 1)))
-    (ENNReal.ofReal_pos.2 (div_pos (recoveryWidth_pos n) (by positivity)))
-    (ENNReal.ofReal_pos.2 (by positivity))
-  have hs := fun n => exists_superlevel_selection_of_finite_on_bounded ν hν (f n) B (recoveryWidth_pos n)
-    (recoveryWidth_lt_half n) (show 0 < 1 / ((n : ℝ) + 1) by positivity)
+    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤) {B : Set V}
+    (hBm : MeasurableSet B) (hνB : ν B < ⊤) (hB : perimeter ν B < ⊤) :
+    ∃ A : ℕ → Set V,
+      (∀ n, MeasurableSet (A n)) ∧
+        (∀ n, Bornology.IsBounded (A n)) ∧
+          (∀ n, ν (A n) < ⊤) ∧
+            (∀ n, Isoperimetry.minkowskiContent ν (A n) < ⊤) ∧
+              Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
+                  atTop (𝓝 0) ∧
+                Tendsto (fun n => Isoperimetry.minkowskiContent ν (A n)) atTop
+                  (𝓝 (perimeter ν B)) := by
+  let f : ℕ → Test V := fun n =>
+    recoveryTest hB (ε := ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1))) (η :=
+      ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+      (ENNReal.ofReal_pos.2 (div_pos (recoveryWidth_pos n) (by positivity)))
+      (ENNReal.ofReal_pos.2 (by positivity))
+  have hs := fun n =>
+    exists_superlevel_selection_of_finite_on_bounded ν hν (f n) B (recoveryWidth_pos n)
+      (recoveryWidth_lt_half n) (show 0 < 1 / ((n : ℝ) + 1) by positivity)
   choose t ht hAm hc he using hs
   let A : ℕ → Set V := fun n => {x | t n ≤ f n x}
   have hA : ∀ n, MeasurableSet (A n) := hAm
@@ -649,26 +704,32 @@ theorem exists_minkowskiRecovery_of_finite_on_bounded (ν : Measure V)
     (f n).boundedSupport.subset fun x hx =>
       ne_of_gt ((recoveryWidth_pos n).trans_le ((ht n).1.le.trans hx))
   have hmass : ∀ n, ν (A n) < ⊤ := fun n => hν _ (hbnd n) (hA n)
-  have herr : ∀ n, ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
-      ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
+  have herr :
+    ∀ n,
+      ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+        ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
     intro n
     refine (he n).trans ?_
-    calc indicatorDistance ν (f n) B / ENNReal.ofReal (recoveryWidth n)
-        ≤ ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1)) /
-            ENNReal.ofReal (recoveryWidth n) :=
-          ENNReal.div_le_div_right (indicatorDistance_recoveryTest_lt hB _ _).le _
+    calc
+      indicatorDistance ν (f n) B / ENNReal.ofReal (recoveryWidth n) ≤
+          ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1)) / ENNReal.ofReal (recoveryWidth n) :=
+        ENNReal.div_le_div_right (indicatorDistance_recoveryTest_lt hB _ _).le _
       _ = ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
         rw [← ENNReal.ofReal_div_of_pos (recoveryWidth_pos n)]
         congr 1
         field_simp [(recoveryWidth_pos n).ne']
   have hη : Tendsto (fun n : ℕ => ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop (𝓝 0) := by
     simpa using ENNReal.tendsto_ofReal tendsto_one_div_add_atTop_nhds_zero_nat
-  have hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
-      atTop (𝓝 0) :=
+  have hconv :
+    Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop
+      (𝓝 0) :=
     tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hη (fun _ => zero_le) herr
-  have hbound : ∀ n, Isoperimetry.minkowskiContent ν (A n) ≤
-      (perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
-        ENNReal.ofReal (1 - 2 * recoveryWidth n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
+  have hbound :
+    ∀ n,
+      Isoperimetry.minkowskiContent ν (A n) ≤
+        (perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
+            ENNReal.ofReal (1 - 2 * recoveryWidth n) +
+          ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
     intro n
     refine (hc n).trans ?_
     gcongr
@@ -676,23 +737,34 @@ theorem exists_minkowskiRecovery_of_finite_on_bounded (ν : Measure V)
   have hcontentFin : ∀ n, Isoperimetry.minkowskiContent ν (A n) < ⊤ := by
     intro n
     have hdenpos : 0 < 1 - 2 * recoveryWidth n := by linarith [recoveryWidth_lt_half n]
-    exact (hbound n).trans_lt (ENNReal.add_lt_top.2
-      ⟨ENNReal.div_lt_top (ENNReal.add_lt_top.2 ⟨hB, ENNReal.ofReal_lt_top⟩).ne
-        (ENNReal.ofReal_pos.2 hdenpos).ne', ENNReal.ofReal_lt_top⟩)
-  have hnum : Tendsto (fun n : ℕ => perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
-      atTop (𝓝 (perimeter ν B)) := by
+    exact
+      (hbound n).trans_lt
+        (ENNReal.add_lt_top.2
+          ⟨ENNReal.div_lt_top (ENNReal.add_lt_top.2 ⟨hB, ENNReal.ofReal_lt_top⟩).ne
+              (ENNReal.ofReal_pos.2 hdenpos).ne',
+            ENNReal.ofReal_lt_top⟩)
+  have hnum :
+    Tendsto (fun n : ℕ => perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop
+      (𝓝 (perimeter ν B)) := by
     simpa using (tendsto_const_nhds (x := perimeter ν B)).add hη
   have hden : Tendsto (fun n : ℕ => ENNReal.ofReal (1 - 2 * recoveryWidth n)) atTop (𝓝 1) := by
-    simpa using ENNReal.tendsto_ofReal
-      ((tendsto_const_nhds (x := (1 : ℝ))).sub (tendsto_recoveryWidth.const_mul 2))
-  have hup : Tendsto (fun n : ℕ => (perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
-      ENNReal.ofReal (1 - 2 * recoveryWidth n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+    simpa using
+      ENNReal.tendsto_ofReal
+        ((tendsto_const_nhds (x := (1 : ℝ))).sub (tendsto_recoveryWidth.const_mul 2))
+  have hup :
+    Tendsto
+      (fun n : ℕ =>
+        (perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
+            ENNReal.ofReal (1 - 2 * recoveryWidth n) +
+          ENNReal.ofReal (1 / ((n : ℝ) + 1)))
       atTop (𝓝 (perimeter ν B)) := by
-    simpa using (ENNReal.Tendsto.div hnum (Or.inr one_ne_zero) hden
-      (Or.inl ENNReal.one_ne_top)).add hη
+    simpa using
+      (ENNReal.Tendsto.div hnum (Or.inr one_ne_zero) hden (Or.inl ENNReal.one_ne_top)).add hη
   refine ⟨A, hA, hbnd, hmass, hcontentFin, hconv, ?_⟩
-  exact tendsto_of_le_liminf_of_limsup_le (perimeter_le_liminf_minkowskiContent_of_measure_lt_top ν hBm hνB hA hconv)
-    ((limsup_le_limsup (Eventually.of_forall hbound)).trans_eq hup.limsup_eq)
+  exact
+    tendsto_of_le_liminf_of_limsup_le
+      (perimeter_le_liminf_minkowskiContent_of_measure_lt_top ν hBm hνB hA hconv)
+      ((limsup_le_limsup (Eventually.of_forall hbound)).trans_eq hup.limsup_eq)
 
 
 end MinkowskiRecovery
@@ -734,9 +806,13 @@ theorem eventually_measure_minkowskiRecoverySet_mem_Ioo (ν : ProbabilityMeasure
 theorem tendsto_minkowskiContent_div_min_minkowskiRecoverySet (ν : ProbabilityMeasure V)
     {B : Set V} (hBm : MeasurableSet B) (hB : perimeter (ν : Measure V) B < ⊤)
     (h0 : 0 < (ν : Measure V) B) (h1 : (ν : Measure V) B < 1) :
-    Tendsto (fun n => Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) /
-        min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
-          (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))) atTop
+    Tendsto
+      (fun n =>
+        Isoperimetry.minkowskiContent (ν : Measure V)
+            (minkowskiRecoverySet (ν : Measure V) hB n) /
+          min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
+            (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n)))
+      atTop
       (𝓝 (perimeter (ν : Measure V) B / min ((ν : Measure V) B) (1 - (ν : Measure V) B))) :=
   tendsto_div_min_one_sub (tendsto_minkowskiContent_minkowskiRecoverySet (ν : Measure V) hB)
     (tendsto_measure_minkowskiRecoverySet ν hBm hB) h0 h1

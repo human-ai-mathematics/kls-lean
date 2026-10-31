@@ -1,11 +1,13 @@
-import Mathlib.Analysis.Convex.Topology
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
-import Mathlib.MeasureTheory.Integral.Lebesgue.Markov
-import Mathlib.MeasureTheory.Measure.Haar.Unique
-import Mathlib.MeasureTheory.Measure.Hausdorff
-import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
-import Mathlib.Topology.Algebra.Module.FiniteDimension
+module
+
+public import Mathlib.Analysis.Convex.Topology
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Markov
+public import Mathlib.MeasureTheory.Measure.Haar.Unique
+public import Mathlib.MeasureTheory.Measure.Hausdorff
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.Topology.Algebra.Module.FiniteDimension
 
 /-!
 # The frontier of a convex set as a local Lipschitz graph
@@ -25,6 +27,8 @@ then `H^{n−1}(B) · ε ≤ M · dx(T)` for a Haar measure `dx` and a constant 
 `exists_convex_frontier_chart` packages both facts around a point of `K \ interior K`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 namespace FunctionalInequalities.Analysis
@@ -37,9 +41,9 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 /-- **Points beyond a non-interior point leave a convex set** (CEK arXiv:1304.0630v1, (23)):
 if `x ∉ interior K` and `x − τθ ∈ interior K` with `τ > 0`, then `x + tθ ∉ K` for every `t > 0`,
 since otherwise `x` lies on the open segment from an interior point to a point of `K`. -/
-theorem add_smul_notMem_of_sub_smul_mem_interior {K : Set E} (hK : Convex ℝ K)
-    {x θ : E} {τ t : ℝ} (hx : x ∉ interior K) (hτ : 0 < τ) (hin : x - τ • θ ∈ interior K)
-    (ht : 0 < t) : x + t • θ ∉ K := by
+theorem add_smul_notMem_of_sub_smul_mem_interior {K : Set E} (hK : Convex ℝ K) {x θ : E}
+    {τ t : ℝ} (hx : x ∉ interior K) (hτ : 0 < τ) (hin : x - τ • θ ∈ interior K) (ht : 0 < t) :
+    x + t • θ ∉ K := by
   intro hmem
   apply hx
   apply hK.openSegment_interior_self_subset_interior hin hmem
@@ -50,9 +54,9 @@ theorem add_smul_notMem_of_sub_smul_mem_interior {K : Set E} (hK : Convex ℝ K)
 /-- One-sided slope bound behind (24) in CEK arXiv:1304.0630v1: if `y ∈ K` lies above
 `x ∉ interior K` in direction `θ` (`a = ⟪y − x, θ⟫ > 0`) near `x₀`, the transversal part of
 `y − x` is at least `r a / (2τ)`. -/
-private theorem slope_bound {K : Set E} (hK : Convex ℝ K) {θ x₀ x y : E} {τ r : ℝ}
-    (hτ : 0 < τ) (hr : 0 < r) (hball : ball (x₀ - τ • θ) r ⊆ interior K)
-    (hx : x ∉ interior K) (hy : y ∈ K) (hxb : ‖x - x₀‖ < r / 2) (ha : 0 < ⟪y - x, θ⟫) :
+private theorem slope_bound {K : Set E} (hK : Convex ℝ K) {θ x₀ x y : E} {τ r : ℝ} (hτ : 0 < τ)
+    (hr : 0 < r) (hball : ball (x₀ - τ • θ) r ⊆ interior K) (hx : x ∉ interior K) (hy : y ∈ K)
+    (hxb : ‖x - x₀‖ < r / 2) (ha : 0 < ⟪y - x, θ⟫) :
     r / (2 * τ) * ⟪y - x, θ⟫ ≤ ‖(y - x) - ⟪y - x, θ⟫ • θ‖ := by
   set a := ⟪y - x, θ⟫ with hadef
   set w := (y - x) - a • θ with hwdef
@@ -67,11 +71,11 @@ private theorem slope_bound {K : Set E} (hK : Convex ℝ K) {θ x₀ x y : E} {�
       rw [hqdef, hwdef]
       match_scalars <;> field_simp
     rw [hqe]
-    calc ‖(x - x₀) - (τ / a) • w‖ ≤ ‖x - x₀‖ + ‖(τ / a) • w‖ := norm_sub_le _ _
+    calc
+      ‖(x - x₀) - (τ / a) • w‖ ≤ ‖x - x₀‖ + ‖(τ / a) • w‖ := norm_sub_le _ _
       _ = ‖x - x₀‖ + τ / a * ‖w‖ := by
-          rw [norm_smul, Real.norm_of_nonneg (div_nonneg hτ.le ha.le)]
-      _ < r / 2 + τ / a * (r / (2 * τ) * a) := by
-          gcongr
+        rw [norm_smul, Real.norm_of_nonneg (div_nonneg hτ.le ha.le)]
+      _ < r / 2 + τ / a * (r / (2 * τ) * a) := by gcongr
       _ = r := by field_simp; ring
   apply hK.openSegment_interior_self_subset_interior hq hy
   have hτa : τ + a ≠ 0 := by positivity
@@ -272,8 +276,8 @@ theorem hausdorffMeasure_mul_le_of_graph (dx : Measure E) [dx.IsAddHaarMeasure] 
     rw [hdxT, ← mul_assoc, ENNReal.inv_mul_cancel (ENNReal.coe_ne_zero.mpr hs0.ne')
       ENNReal.coe_ne_top, one_mul]
   calc μH[d] B * ENNReal.ofReal ε
-      ≤ (K' : ℝ≥0∞) ^ d * (volume : Measure (Fin m → ℝ)) (Φ '' B) * ENNReal.ofReal ε :=
-        by gcongr
+      ≤ (K' : ℝ≥0∞) ^ d * (volume : Measure (Fin m → ℝ)) (Φ '' B) * ENNReal.ofReal ε := by
+        gcongr
     _ = (K' : ℝ≥0∞) ^ d * (ENNReal.ofReal ε * (volume : Measure (Fin m → ℝ)) (Φ '' B)) := by
         ring
     _ ≤ (K' : ℝ≥0∞) ^ d * ((s : ℝ≥0∞)⁻¹ * dx T) := by
@@ -284,24 +288,32 @@ theorem hausdorffMeasure_mul_le_of_graph (dx : Measure E) [dx.IsAddHaarMeasure] 
 /-- **A local chart of the frontier of a convex set** (CEK arXiv:1304.0630v1, (23), (24), (32)):
 let `K` be convex with nonempty interior, `dx` an additive Haar measure and `x₀ ∉ interior K`.
 There are a unit vector `θ`, a neighbourhood `U` of `x₀` and `M < ∞` such that every
-`x ∈ U \ interior K` satisfies `x + tθ ∉ K` for all `t > 0`, and for every `B ⊆ U ∩ (K \ interior K)`,
+`x ∈ U \ interior K` satisfies `x + tθ ∉ K` for all `t > 0`, and for every `B ⊆ U ∩ (K \ interior
+K)`,
 `ε > 0` and measurable `T` containing the segments `{x + tθ : 0 < t ≤ ε}`, `x ∈ B`,
 `H^{n−1}(B) · ε ≤ M · dx(T)`. -/
 theorem exists_convex_frontier_chart (dx : Measure E) [dx.IsAddHaarMeasure] {K : Set E}
     (hK : Convex ℝ K) (hint : (interior K).Nonempty) {x₀ : E} (hx₀ : x₀ ∉ interior K) :
-    ∃ θ : E, ‖θ‖ = 1 ∧ ∃ U ∈ 𝓝 x₀, ∃ M : ℝ≥0∞, M ≠ ⊤ ∧
-      (∀ x ∈ U, x ∉ interior K → ∀ t : ℝ, 0 < t → x + t • θ ∉ K) ∧
-      ∀ B ⊆ U ∩ (K \ interior K), ∀ ε : ℝ, 0 < ε → ∀ T : Set E, MeasurableSet T →
-        (∀ x ∈ B, ∀ t ∈ Ioc (0 : ℝ) ε, x + t • θ ∈ T) →
-        μH[(finrank ℝ E : ℝ) - 1] B * ENNReal.ofReal ε ≤ M * dx T := by
+    ∃ θ : E,
+      ‖θ‖ = 1 ∧
+        ∃ U ∈ 𝓝 x₀,
+          ∃ M : ℝ≥0∞,
+            M ≠ ⊤ ∧
+              (∀ x ∈ U, x ∉ interior K → ∀ t : ℝ, 0 < t → x + t • θ ∉ K) ∧
+                ∀ B ⊆ U ∩ (K \ interior K),
+                  ∀ ε : ℝ,
+                    0 < ε →
+                      ∀ T : Set E,
+                        MeasurableSet T →
+                          (∀ x ∈ B, ∀ t ∈ Ioc (0 : ℝ) ε, x + t • θ ∈ T) →
+                            μH[(finrank ℝ E : ℝ) - 1] B * ENNReal.ofReal ε ≤ M * dx T := by
   obtain ⟨c, hc⟩ := hint
   obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp isOpen_interior c hc
   have hne : x₀ ≠ c := fun h => hx₀ (h ▸ hc)
   set τ := ‖x₀ - c‖ with hτdef
   have hτ : 0 < τ := norm_pos_iff.mpr (sub_ne_zero.mpr hne)
   set θ := τ⁻¹ • (x₀ - c) with hθdef
-  have hθ : ‖θ‖ = 1 := by
-    rw [hθdef, norm_smul, norm_inv, norm_norm, inv_mul_cancel₀ hτ.ne']
+  have hθ : ‖θ‖ = 1 := by rw [hθdef, norm_smul, norm_inv, norm_norm, inv_mul_cancel₀ hτ.ne']
   have hc' : x₀ - τ • θ = c := by
     rw [hθdef, smul_smul, mul_inv_cancel₀ hτ.ne', one_smul, sub_sub_cancel]
   have hball' : ball (x₀ - τ • θ) r ⊆ interior K := by rw [hc']; exact hball

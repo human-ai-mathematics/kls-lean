@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.SmoothGradient.Core
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Core
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `thm:smooth-gradient-raw-core-agreement-density`
@@ -12,6 +14,8 @@ relaxation (`AgreesOnTests`) and is therefore a sequential form core (`IsSequent
 intrinsic law of a law `μ` on the affine support direction is the case named by the Blueprint. No
 statement is made without a local density, and no Cheeger-energy identification is asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -36,7 +40,8 @@ affine support. -/
 example {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
     (μ : ProbabilityMeasure E) (m : Measure (Probability.affineSupport μ).direction)
-    [m.IsAddHaarMeasure] (D : Energy.SmoothGradient.LocalDensity (Probability.intrinsicMeasure μ) m) :
+    [m.IsAddHaarMeasure]
+    (D : Energy.SmoothGradient.LocalDensity (Probability.intrinsicMeasure μ) m) :
     (Energy.SmoothGradient.preEnergy (Probability.intrinsicMeasure μ)).IsSequentialCoreFor
       (Energy.SmoothGradient.relaxation (Probability.intrinsicMeasure μ)) :=
   (certificate _ m D).2

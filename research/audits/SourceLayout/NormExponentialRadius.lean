@@ -1,5 +1,9 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import FunctionalInequalities.L2.MeanVariance
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import FunctionalInequalities.L2.MeanVariance
+
+@[expose] public section
 
 open MeasureTheory FunctionalInequalities
 

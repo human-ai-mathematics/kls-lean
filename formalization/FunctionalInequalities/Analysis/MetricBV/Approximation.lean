@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Complement
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Complement
 
 /-!
 # Bounded-support reductions for globally Lipschitz approximations
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -61,7 +65,7 @@ def Test.truncate (x₀ : X) (R : ℝ) (f : X → ℝ) (hf : ∃ K : ℝ≥0, Li
     have hu1 := cutoff_le_one x₀ R x
     have hc0 := clampUnit_nonneg (f x)
     have hc1 := clampUnit_le_one (f x)
-    exact ⟨mul_nonneg hu0 hc0, mul_le_one₀ hu1 hc0 hc1⟩
+    exact ⟨mul_nonneg hu0 hc0, (mul_le_of_le_one_left hc0 hu1).trans hc1⟩
   boundedSupport := by
     refine (Metric.isBounded_ball (x := x₀) (r := R + 1)).subset fun x hx => ?_
     by_contra hnot
@@ -85,7 +89,7 @@ theorem truncateFun_nonneg (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) : 0 ≤ 
   mul_nonneg (cutoff_nonneg x₀ R x) (clampUnit_nonneg _)
 
 theorem truncateFun_le_one (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) : truncateFun x₀ R f x ≤ 1 :=
-  mul_le_one₀ (cutoff_le_one x₀ R x) (clampUnit_nonneg _) (clampUnit_le_one _)
+  (mul_le_of_le_one_left (clampUnit_nonneg _) (cutoff_le_one x₀ R x)).trans (clampUnit_le_one _)
 
 /-- The cutoff at `x` is at most the distance from `x` to any point outside the ball of radius
 `R + 1`. -/
@@ -102,14 +106,18 @@ complement of the inner ball. -/
 theorem apply_truncateFun_le (x₀ : X) (R : ℝ) (f : X → ℝ) (x : X) :
     Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
       Energy.LocalSlope.apply f x + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
-  have hsec : Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
+  have hsec :
+    Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
       Energy.LocalSlope.apply f x + Energy.LocalSlope.apply (cutoff x₀ R) x := by
     refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
-    change |cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x)| ≤
-      dist (f y) (f x) + dist (cutoff x₀ R y) (cutoff x₀ R x)
+    change
+      |cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x)| ≤
+        dist (f y) (f x) + dist (cutoff x₀ R y) (cutoff x₀ R x)
     rw [Real.dist_eq, Real.dist_eq]
-    exact (abs_mul_sub_mul_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y)
-      (clampUnit_nonneg _) (clampUnit_le_one _)).trans (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
+    exact
+      (abs_mul_sub_mul_le (cutoff_nonneg x₀ R y) (cutoff_le_one x₀ R y) (clampUnit_nonneg _)
+            (clampUnit_le_one _)).trans
+        (add_le_add (abs_clampUnit_sub_le _ _) le_rfl)
   exact hsec.trans (add_le_add le_rfl (apply_cutoff_le x₀ R x))
 /-- The truncation's pointwise distance to an indicator exceeds that of the original by at most
 the indicator of the complement of the inner ball. -/
@@ -117,19 +125,21 @@ theorem enorm_truncateFun_sub_le (x₀ : X) (R : ℝ) (f : X → ℝ) (B : Set X
     ‖truncateFun x₀ R f x - B.indicator (1 : X → ℝ) x‖ₑ ≤
       ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (Metric.ball x₀ R)ᶜ.indicator 1 x := by
   set i := B.indicator (1 : X → ℝ) x
-  have hi01 : 0 ≤ i ∧ i ≤ 1 := by
-    by_cases hx : x ∈ B <;> simp [i, hx]
+  have hi01 : 0 ≤ i ∧ i ≤ 1 := by by_cases hx : x ∈ B <;> simp [i, hx]
   have hci : clampUnit i = i := clampUnit_of_mem hi01.1 hi01.2
   have hc0 : 0 ≤ clampUnit (f x) := clampUnit_nonneg _
   have hc1 : clampUnit (f x) ≤ 1 := clampUnit_le_one _
   have hu0 : 0 ≤ cutoff x₀ R x := cutoff_nonneg x₀ R x
   have hu1 : cutoff x₀ R x ≤ 1 := cutoff_le_one x₀ R x
   have hcf : |clampUnit (f x) - i| ≤ |f x - i| := by
-    calc |clampUnit (f x) - i| = |clampUnit (f x) - clampUnit i| := by rw [hci]
+    calc
+      |clampUnit (f x) - i| = |clampUnit (f x) - clampUnit i| := by rw [hci]
       _ ≤ |f x - i| := abs_clampUnit_sub_le _ _
   have hreal : |cutoff x₀ R x * clampUnit (f x) - i| ≤ |f x - i| + (1 - cutoff x₀ R x) := by
-    have key : cutoff x₀ R x * clampUnit (f x) - i =
-        (clampUnit (f x) - i) - (1 - cutoff x₀ R x) * clampUnit (f x) := by ring
+    have key :
+      cutoff x₀ R x * clampUnit (f x) - i =
+        (clampUnit (f x) - i) - (1 - cutoff x₀ R x) * clampUnit (f x) := by
+      ring
     rw [key]
     refine (abs_sub _ _).trans (add_le_add hcf ?_)
     rw [abs_mul, abs_of_nonneg (by linarith : (0 : ℝ) ≤ 1 - cutoff x₀ R x), abs_of_nonneg hc0]
@@ -395,15 +405,16 @@ theorem tendsto_measure_diff_ball (ν : Measure X) (x₀ : X) {B : Set X} (hB : 
 
 /-- Fixed radii n suffice for the truncated sequence to converge in global L1 to a
 measurable finite-mass target. No finite-total-mass hypothesis is needed. -/
-theorem tendsto_indicatorDistance_truncate_of_measure_lt_top (ν : Measure X) (x₀ : X) {B : Set X}
-    (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
+theorem tendsto_indicatorDistance_truncate_of_measure_lt_top (ν : Measure X) (x₀ : X)
+    {B : Set X} (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
     (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))
-    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν)
-      atTop (𝓝 0)) :
-    Tendsto (fun n : ℕ => indicatorDistance ν (Test.truncate x₀ n (f n) (hf n)) B)
-      atTop (𝓝 0) := by
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
-    (by simpa using hconv.add (tendsto_measure_diff_ball ν x₀ hB hνB.ne)) (fun _ => zero_le) fun n => ?_
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) atTop (𝓝 0)) :
+    Tendsto (fun n : ℕ => indicatorDistance ν (Test.truncate x₀ n (f n) (hf n)) B) atTop
+      (𝓝 0) := by
+  refine
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+      (by simpa using hconv.add (tendsto_measure_diff_ball ν x₀ hB hνB.ne)) (fun _ => zero_le)
+      fun n => ?_
   exact indicatorDistance_truncate_le_target_tail ν x₀ n (hf n) hB
 
 /-- For a measurable finite-mass target and an actual global L1-convergent Lipschitz
@@ -411,16 +422,21 @@ sequence, fixed-radius truncation does not increase the liminf slope integral. -
 theorem liminf_cost_truncate_le_of_measure_lt_top (ν : Measure X) (x₀ : X) {B : Set X}
     (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
     (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))
-    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν)
-      atTop (𝓝 0)) :
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) atTop (𝓝 0)) :
     liminf (fun n : ℕ => cost ν (Test.truncate x₀ n (f n) (hf n))) atTop ≤
       liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) atTop := by
-  calc liminf (fun n : ℕ => cost ν (Test.truncate x₀ n (f n) (hf n))) atTop
-      ≤ liminf (fun n : ℕ => (∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) +
-          ((∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
-            ν (B \ Metric.ball x₀ (n : ℝ)))) atTop :=
-        liminf_le_liminf (Eventually.of_forall fun n => cost_truncate_le_target_tail ν x₀ n (hf n) hB)
-    _ = _ := ENNReal.liminf_add_of_right_tendsto_zero
+  calc
+    liminf (fun n : ℕ => cost ν (Test.truncate x₀ n (f n) (hf n))) atTop ≤
+        liminf
+          (fun n : ℕ =>
+            (∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) +
+              ((∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
+                ν (B \ Metric.ball x₀ (n : ℝ))))
+          atTop :=
+      liminf_le_liminf
+        (Eventually.of_forall fun n => cost_truncate_le_target_tail ν x₀ n (hf n) hB)
+    _ = _ :=
+      ENNReal.liminf_add_of_right_tendsto_zero
         (by simpa using hconv.add (tendsto_measure_diff_ball ν x₀ hB hνB.ne)) _
 
 /-- The bounded-support reduction of ADMG Remark 3.4 at a measurable finite-mass target,

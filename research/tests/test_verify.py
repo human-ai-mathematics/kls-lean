@@ -11,10 +11,11 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from verify import (axiom_audit_code, build_replay_inputs, check_research_audits,
-                    library_axiom_audit_code, parse_axioms, prepare_replay, replay_sources,
-                    reported_names, run_verification,
+from verify import (MODULE_ARTIFACTS, axiom_audit_code, axiom_reports, build_replay_inputs,
+                    check_research_audits, library_axiom_audit_code, parse_axioms, prepare_replay,
+                    replay_sources, reported_names, run_verification,
                     undiscovered_lean_sources, vendor_axiom_audit_code, verification_snapshot)
+import lean_header
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -352,6 +353,7 @@ class KernelReplayFlagTests(unittest.TestCase):
         self.assertIn("covered by the full local receipt", report["trust_scope"])
         gates = {gate["name"]: gate for gate in report["gates"]}
         self.assertNotIn("leanchecker", gates)
+        self.assertNotIn("documentation", gates)
         for name in ["lake-build", "lake-build-replay-scope", "research-audit-000",
                      "local-declaration-audit", "vendor-axiom-audit", "classical-kls"]:
             self.assertIn(name, gates)
@@ -524,6 +526,156 @@ class VendorTests(unittest.TestCase):
                                 text=True, capture_output=True, timeout=300, env=env)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertNotIn("sorryAx", result.stdout + result.stderr)
+
+
+
+class ReplayArtifactTests(unittest.TestCase):
+    """Module-compiled sources need every Lean v4.35 artifact in the checked view."""
+
+    def view(self, sources, artifacts):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        compiled = root / "formalization/.lake/build/lib/lean"
+        snapshot = {"files": {}}
+        for module, code in sources.items():
+            name = "formalization/" + module.replace(".", "/") + ".lean"
+            (root / name).parent.mkdir(parents=True, exist_ok=True)
+            (root / name).write_text(code)
+            snapshot["files"][name] = "live"
+            for suffix in artifacts[module]:
+                path = compiled / Path(*module.split(".")).with_suffix(suffix)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(module.encode() + suffix.encode())
+        return root, snapshot
+
+    def test_missing_private_companion_of_a_module_fails(self):
+        module = "FunctionalInequalities.Analysis.Fixture"
+        source = "/- Copyright -/\nmodule\n\npublic import Mathlib.Order.Basic\n\n@[expose] public section\n"
+        for missing in (".olean.private", ".olean.server", ".ir.sig", ".ir"):
+            with self.subTest(missing=missing):
+                root, snapshot = self.view({module: source},
+                                           {module: [s for s in MODULE_ARTIFACTS if s != missing]})
+                with self.assertRaisesRegex(RuntimeError, "lacks its " + missing.replace(".", r"\.")):
+                    prepare_replay(root, snapshot, root / "view")
+
+    def test_complete_module_copies_every_artifact_and_legacy_copies_only_olean(self):
+        module, legacy = "FunctionalInequalities.Analysis.Fixture", "FunctionalInequalities.Legacy"
+        root, snapshot = self.view(
+            {module: "module\n\npublic import Mathlib.Order.Basic\n", legacy: "import Mathlib\n"},
+            {module: list(MODULE_ARTIFACTS), legacy: [".olean", ".olean.private"]})
+        result = prepare_replay(root, snapshot, root / "view")
+        self.assertEqual(set(result["compiled_sha256"]),
+                         {"FunctionalInequalities/Analysis/Fixture" + s for s in MODULE_ARTIFACTS}
+                         | {"FunctionalInequalities/Legacy.olean"})
+        # A stale companion beside a non-module source is not part of the replay view.
+        self.assertFalse((root / "view/FunctionalInequalities/Legacy.olean.private").exists())
+
+    def test_unparsable_source_header_fails(self):
+        module = "FunctionalInequalities.Analysis.Fixture"
+        root, snapshot = self.view({module: "import Mathlib\nmodule\n"}, {module: [".olean"]})
+        with self.assertRaisesRegex(RuntimeError, "Cannot classify"):
+            prepare_replay(root, snapshot, root / "view")
+
+
+FIXTURE = Path(__file__).resolve().parent / "fixtures/module_audit"
+FIXTURE_MODULES = ["ModuleAuditFixture.Clean", "ModuleAuditFixture.PrivateAxiom",
+                   "ModuleAuditFixture.PublicUser", "ModuleAuditFixture.UnusedPrivateAxiom"]
+
+
+class GeneratedAuditHeaderTests(unittest.TestCase):
+    def test_generated_audit_clients_stay_non_module(self):
+        # A non-module root imports every module at the private level; a `module` root would see
+        # only the public scope and silently audit fewer declarations.
+        for code in (library_axiom_audit_code(["A.B"]), vendor_axiom_audit_code(["A.B"], set())):
+            header = lean_header.parse_header(code)
+            self.assertFalse(header.is_module)
+            self.assertEqual(header.modules, ["A.B", "Lean"])
+            self.assertTrue(all(not (i.public or i.meta or i.all) for i in header.imports))
+
+
+class ModuleVisibilityAuditTests(unittest.TestCase):
+    """Real Lean: generated audits must reach private constants of module-compiled `.olean`s.
+
+    Runs the pinned toolchain on the test-data modules in `fixtures/module_audit`.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.directory = tempfile.TemporaryDirectory()
+        cls.view = Path(cls.directory.name)
+        prefix = subprocess.check_output(["lake", "env", "lean", "--print-prefix"],
+                                         cwd=ROOT / "formalization", text=True).strip()
+        cls.lean = str(Path(prefix) / "bin/lean")
+        cls.env = {k: v for k, v in os.environ.items() if not k.startswith(("LEAN", "LAKE"))}
+        cls.env.update(LEAN_NUM_THREADS="2", LEAN_PATH=str(cls.view))
+        for module in FIXTURE_MODULES:  # dependency order
+            relative = Path(*module.split(".")).with_suffix(".lean")
+            source = cls.view / relative
+            source.parent.mkdir(parents=True, exist_ok=True)
+            source.write_bytes((FIXTURE / relative).read_bytes())
+            result = subprocess.run([cls.lean, "-R", str(cls.view), "-o", str(source.with_suffix(".olean")),
+                                     str(source)], cwd=cls.view, env=cls.env, capture_output=True,
+                                    text=True, timeout=120)
+            if result.returncode:
+                cls.directory.cleanup()
+                raise RuntimeError(f"fixture {module} failed to compile:\n{result.stdout}{result.stderr}")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.directory.cleanup()
+
+    def audit(self, code, view=None):
+        env = {**self.env, "LEAN_PATH": str(view or self.view)}
+        return subprocess.run([self.lean, "--stdin"], cwd=self.view, input=code, env=env,
+                              text=True, capture_output=True, timeout=120)
+
+    def test_fixture_modules_have_private_companions(self):
+        for module in FIXTURE_MODULES:
+            base = self.view / Path(*module.split("."))
+            self.assertTrue(base.with_suffix(".olean.private").is_file(), module)
+            self.assertTrue(base.with_suffix(".olean.server").is_file(), module)
+
+    def test_unused_private_declaration_is_enumerated(self):
+        result = self.audit(library_axiom_audit_code(["ModuleAuditFixture.Clean"]))
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        names = {name for name, _ in axiom_reports(result.stdout + result.stderr, structured=True)[0]}
+        self.assertIn("ModuleAuditFixture.visible", names)
+        self.assertTrue(any(n.startswith("_private.") and n.endswith("ModuleAuditFixture.unusedPrivate")
+                            for n in names), names)
+
+    def test_private_axiom_behind_public_theorem_is_rejected(self):
+        for code in (library_axiom_audit_code(["ModuleAuditFixture.PrivateAxiom"]),
+                     vendor_axiom_audit_code(["ModuleAuditFixture.PrivateAxiom"], set())):
+            result = self.audit(code)
+            self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("unexpected axioms", result.stdout + result.stderr)
+            self.assertIn("fixtureAxiom", result.stdout + result.stderr)
+
+    def test_imported_public_summary_carries_the_private_axiom(self):
+        result = self.audit(library_axiom_audit_code(["ModuleAuditFixture.PublicUser"]))
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("ModuleAuditFixture.downstream: unexpected axioms [", result.stdout + result.stderr)
+        self.assertIn("fixtureAxiom", result.stdout + result.stderr)
+
+    def test_private_only_unused_axiom_is_rejected(self):
+        result = self.audit(library_axiom_audit_code(["ModuleAuditFixture.UnusedPrivateAxiom"]))
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("unexpected axioms", result.stdout + result.stderr)
+        self.assertIn("unusedAxiom", result.stdout + result.stderr)
+
+    def test_missing_private_companion_fails_instead_of_auditing_less(self):
+        with tempfile.TemporaryDirectory() as directory:
+            partial = Path(directory)
+            for path in self.view.rglob("*"):
+                if path.is_file():
+                    target = partial / path.relative_to(self.view)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(path.read_bytes())
+            (partial / "ModuleAuditFixture/Clean.olean.private").unlink()
+            result = self.audit(library_axiom_audit_code(["ModuleAuditFixture.Clean"]), partial)
+            self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertNotIn("Audited", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

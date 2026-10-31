@@ -1,14 +1,21 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
-import Mathlib.Analysis.InnerProductSpace.LinearMap
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
+public import Mathlib.Analysis.InnerProductSpace.LinearMap
 
 /-!
 # Leibniz rule for an inner product with an operator
 
-`iteratedFDeriv_inner_clm`: for globally `C^∞` maps `f g : D → E` into a real inner product space and a continuous
-linear `M : E →L[ℝ] E`, the `m`-th derivative of `y ↦ ⟪f y, M (g y)⟫` is the sum over all Boolean subset allocations of
-`⟪∂_{h_q} f, M ∂_{h_{¬q}} g⟫`, each with coefficient `1` (the raw bilinear Leibniz rule `iteratedFDeriv_bilinear` for
+`iteratedFDeriv_inner_clm`: for globally `C^∞` maps `f g : D → E` into a real inner product space
+and a continuous
+linear `M : E →L[ℝ] E`, the `m`-th derivative of `y ↦ ⟪f y, M (g y)⟫` is the sum over all Boolean
+subset allocations of
+`⟪∂_{h_q} f, M ∂_{h_{¬q}} g⟫`, each with coefficient `1` (the raw bilinear Leibniz rule
+`iteratedFDeriv_bilinear` for
 the bundled form `(x, y) ↦ ⟪x, M y⟫`).
 -/
+
+@[expose] public section
 
 noncomputable section
 open scoped RealInnerProductSpace ContDiff

@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
+meta import Lean
 
 /-!
 # Scope audit for `Y6`–`Y7` of `YosidaLimitRouteStatements.lean`
 
-The obligations `Y6` and `Y7` of `research/audits/Semigroup/YosidaLimitRouteStatements.lean` are restated
+The obligations `Y6` and `Y7` of `research/audits/Semigroup/YosidaLimitRouteStatements.lean` are
+restated
 here **verbatim** — each proposition is copied character for character from that route file,
 including the implicit `{ε}` and `{s r}` binders of `Y7` — and discharged from the hole-free
 module `Analysis/Semigroup/Exponential/Limit.lean`. A renamed binder, a reordered hypothesis or a
@@ -32,6 +36,8 @@ exponentials are the identity and the bound reads `0 ≤ 0`, and `A = B`, where 
 The axiom reports at the end cover every public declaration of the new module and every theorem
 of this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

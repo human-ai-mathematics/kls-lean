@@ -4,7 +4,13 @@
   "source": "lean/OAI/Analysis/KLS/Model.lean",
   "local": "OAI/Analysis/KLS/Model.lean",
   "sha256": "28cddbf3c493afd43b3f7aba78f670952ea0c38909665c86bff883849e7f8dbc",
-  "changes": "none; byte-for-byte copy",
+  "local_sha256": "ed3d7485e43f968bf5e6c5946158877e21ff3b0a52a1c241b28950c81fe0b1c5",
+  "changes": "Lean module-system header only: the upstream bytes are unchanged apart from the three edits listed in `transformation`; no namespace, definition, hypothesis, test function or proof text changes. `sha256` is the SHA-256 of the original upstream file; research/comparator.py reverses `transformation` exactly from the local file, checks that hash, and checks `local_sha256` for the local file.",
+  "transformation": [
+    "insert the line `module` followed by one blank line at the very top",
+    "replace the line `import Mathlib` with `public import Mathlib`",
+    "insert the line `@[expose] public section` followed by one blank line immediately before the line `namespace OAI`"
+  ],
   "license": "Apache-2.0",
   "kls_dependency": {
     "kind": "same-repository path",

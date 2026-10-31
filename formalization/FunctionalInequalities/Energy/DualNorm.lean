@@ -1,8 +1,11 @@
-import FunctionalInequalities.L2.Pairing
-import FunctionalInequalities.L2.MeanVariance
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Topology.MetricSpace.Lipschitz
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import FunctionalInequalities.L2.Pairing
+public import FunctionalInequalities.L2.MeanVariance
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Add
+public import Mathlib.Topology.MetricSpace.Lipschitz
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # The `H^{-1}` dual energy norm
@@ -20,6 +23,8 @@ and forces `∫ q dμ = 0` (`integral_eq_zero_of_dualNorm_ne_top`); the dual nor
 `‖q‖_{H⁻¹} ≤ √C ‖q‖_{L²}` for centered `q` (`dualNorm_le_of_variance_le`). No log-concavity or
 smoothness is used.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter
 open scoped RealInnerProductSpace Topology
@@ -44,7 +49,8 @@ structure UnitEnergyTest (μ : ProbabilityMeasure E) where
 def pairing (μ : ProbabilityMeasure E) (q : Lp ℝ 2 (μ : Measure E)) (t : UnitEnergyTest μ) : ℝ :=
   ⟪q, t.memLp.toLp t.fn⟫
 
-/-- The `H^{-1}(μ)` dual norm `‖q‖_{H^{-1}} = sup_f ⟪q, f⟫` over unit-energy tests, as an extended real
+/--
+The `H^{-1}(μ)` dual norm `‖q‖_{H^{-1}} = sup_f ⟪q, f⟫` over unit-energy tests, as an extended real
 (the positive part of each signed pairing). -/
 def dualNorm (μ : ProbabilityMeasure E) (q : Lp ℝ 2 (μ : Measure E)) : ENNReal :=
   ⨆ t : UnitEnergyTest μ, ENNReal.ofReal (pairing μ q t)
@@ -106,7 +112,9 @@ theorem dualNorm_eq_iSup_abs (μ : ProbabilityMeasure E) (q : Lp ℝ 2 (μ : Mea
   apply le_antisymm
   · apply iSup_le
     intro t
-    exact (ENNReal.ofReal_le_ofReal (le_abs_self _)).trans (le_iSup (fun s : UnitEnergyTest μ => ENNReal.ofReal |pairing μ q s|) t)
+    exact
+      (ENNReal.ofReal_le_ofReal (le_abs_self _)).trans
+        (le_iSup (fun s : UnitEnergyTest μ => ENNReal.ofReal |pairing μ q s|) t)
   · apply iSup_le
     intro t
     by_cases hp : 0 ≤ pairing μ q t
@@ -284,9 +292,13 @@ theorem dualNorm_add_le (μ : ProbabilityMeasure E) (q r : Lp ℝ 2 (μ : Measur
 `q ∈ L²(μ)` with `∫ q dμ = 0` has `‖q‖_{H⁻¹(μ)} ≤ √C ‖q‖_{L²(μ)}`. -/
 theorem dualNorm_le_of_variance_le (μ : ProbabilityMeasure E) (q : Lp ℝ 2 (μ : Measure E))
     (hq : ∫ x, q x ∂(μ : Measure E) = 0) {C : ℝ} (hC : 0 ≤ C)
-    (hP : ∀ g : E → ℝ, LocallyLipschitz g → MemLp g 2 (μ : Measure E) →
-      MemLp (gradient g) 2 (μ : Measure E) →
-      ProbabilityTheory.variance g (μ : Measure E) ≤ C * ∫ x, ‖gradient g x‖ ^ 2 ∂(μ : Measure E)) :
+    (hP :
+      ∀ g : E → ℝ,
+        LocallyLipschitz g →
+          MemLp g 2 (μ : Measure E) →
+            MemLp (gradient g) 2 (μ : Measure E) →
+              ProbabilityTheory.variance g (μ : Measure E) ≤
+                C * ∫ x, ‖gradient g x‖ ^ 2 ∂(μ : Measure E)) :
     dualNorm μ q ≤ ENNReal.ofReal (Real.sqrt C * ‖q‖) := by
   apply iSup_le
   intro t
@@ -299,15 +311,16 @@ theorem dualNorm_le_of_variance_le (μ : ProbabilityMeasure E) (q : Lp ℝ 2 (μ
     rw [hcq, hmq, zero_mul, sub_zero] at h
     exact h.symm
   have hvar : ‖L2.center μ T‖ ^ 2 ≤ C := by
-    rw [← L2.coe_variance, L2.variance_toLp, Real.coe_toNNReal _ (ProbabilityTheory.variance_nonneg _ _)]
+    rw [← L2.coe_variance, L2.variance_toLp,
+      Real.coe_toNNReal _ (ProbabilityTheory.variance_nonneg _ _)]
     have hE := (unit_gradient_norm_iff μ t.gradLp).mp t.energy
     have hV := hP t.fn t.locallyLipschitz t.memLp t.gradLp
     nlinarith [(integral_nonneg fun x => sq_nonneg ‖gradient t.fn x‖ :
-          0 ≤ ∫ x, ‖gradient t.fn x‖ ^ 2 ∂(μ : Measure E))]
-  have hT : ‖L2.center μ T‖ ≤ Real.sqrt C :=
-    Real.le_sqrt_of_sq_le hvar
+        0 ≤ ∫ x, ‖gradient t.fn x‖ ^ 2 ∂(μ : Measure E))]
+  have hT : ‖L2.center μ T‖ ≤ Real.sqrt C := Real.le_sqrt_of_sq_le hvar
   rw [hinner]
-  calc ⟪q, L2.center μ T⟫ ≤ ‖q‖ * ‖L2.center μ T‖ := real_inner_le_norm _ _
+  calc
+    ⟪q, L2.center μ T⟫ ≤ ‖q‖ * ‖L2.center μ T‖ := real_inner_le_norm _ _
     _ ≤ ‖q‖ * Real.sqrt C := mul_le_mul_of_nonneg_left hT (norm_nonneg _)
     _ = Real.sqrt C * ‖q‖ := mul_comm _ _
 

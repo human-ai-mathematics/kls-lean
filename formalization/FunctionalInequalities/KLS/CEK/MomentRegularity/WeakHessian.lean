@@ -1,24 +1,29 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Directional
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Flux
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Testing
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Weighted
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
-import FunctionalInequalities.Analysis.Graph.Area
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Probability.Stein.HessianKernel
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Directional
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Flux
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Testing
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessian.Weighted
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+public import FunctionalInequalities.Analysis.Graph.Area
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Probability.Stein.HessianKernel
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 
 /-!
 # Regular-source weak inverse, Hessian mean, evolution and testing
 
-The last producer, `exists_regular_moment_directional_hessian_subsolution`, adds at the same witness the directional weak
+The last producer, `exists_regular_moment_directional_hessian_subsolution`, adds at the same witness
+the directional weak
 subsolution inequality and compact-local bounds for the coefficient `e^{-u} (∇²u)⁻¹`.
 -/
+
+@[expose] public section
 
 section RegularSource
 
@@ -70,7 +75,8 @@ theorem exists_regular_moment_weak_inverse :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -146,7 +152,8 @@ theorem exists_regular_moment_weak_inverse_mean_hessian :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -200,10 +207,10 @@ theorem exists_regular_moment_weak_inverse_mean_hessian :
   have hgm : Measurable (gradient u) := (BakryEmery.continuous_gradient hC1).measurable
   have hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient u) =
       (μ : Measure (EuclideanSpace ℝ (Fin n))) := hm
-  have hmapProb : ν.map hgm.aemeasurable = μ := by
+  have hmapProb : ν.map (gradient u) = μ := by
     apply Subtype.ext
     exact hmap
-  have hIso : KLS.Isotropic (ν.map hgm.aemeasurable) := by
+  have hIso : KLS.Isotropic (ν.map (gradient u)) := by
     rw [hmapProb]
     exact hiso
   have hgrad : MemLp (gradient u) 2
@@ -314,8 +321,10 @@ private theorem bounded_compact_hessian_test_data {n : ℕ}
     exact ⟨hdata.1, hdata.2.2.1, hdata.2.2.2⟩
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-/-- The regular-class moment potential with its weak weighted Hessian evolution: the same `u, L, LF, T`
-as `exists_regular_moment_weak_inverse_mean_hessian`, with every earlier field, plus the weak derivative of
+/-- The regular-class moment potential with its weak weighted Hessian evolution: the same `u, L, LF,
+T`
+as `exists_regular_moment_weak_inverse_mean_hessian`, with every earlier field, plus the weak
+derivative of
 the first Monge–Ampère trace, the unweighted flux identity and the weighted evolution identity with
 curvature and Gram forcing (weak Letwin (2.6)). No analytic premise is added. -/
 theorem exists_regular_moment_weak_hessian_evolution :
@@ -336,7 +345,8 @@ theorem exists_regular_moment_weak_hessian_evolution :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -442,46 +452,60 @@ theorem exists_regular_moment_weak_hessian_evolution :
           ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
         -(∫ x, Real.exp (-u x) * E x i j * ψ x
           ∂(volume : Measure (EuclideanSpace ℝ (Fin n))))) := by
-  obtain ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean⟩ :=
-    exists_regular_moment_weak_inverse_mean_hessian hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  let Q := fun x i j => -hessianMatrix u x j i +
-          ∑ a : Fin n,
-            (T x j i a * fderiv ℝ W (gradient u x)
-              (EuclideanSpace.basisFun (Fin n) ℝ a) +
+    obtain
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv,
+        hmean⟩ :=
+      exists_regular_moment_weak_inverse_mean_hessian hn hκ hK hKc hKint hW hstrong μ hμ
+        hiso
+    let Q := fun x i j =>
+      -hessianMatrix u x j i +
+        ∑ a : Fin n,
+          (T x j i a * fderiv ℝ W (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ a) +
             hessianMatrix u x i a *
               ∑ b : Fin n, hessianMatrix u x j b * hessianMatrix W (gradient u x) b a)
-  have hq : ∀ i j : Fin n,
-      HasWeakDerivAlong
-        (fun x => ((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x i a b)).trace)
-        (fun x => Q x i j) (EuclideanSpace.basisFun (Fin n) ℝ j) ∧
-      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-        MemLp (fun x => Q x i j) 2
-          ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
-    intro i j
-    obtain ⟨hweak, hlocal⟩ :=
-      hasWeakDerivAlong_mongeAmpere_first_rhs hC1 hl hG (hW.of_le (WithTop.coe_le_coe.mpr le_top)) T hT i j
-    have htrace :
-        (fun x => -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i) +
-          ∑ a : Fin n, hessianMatrix u x i a *
-            fderiv ℝ W (gradient u x) (EuclideanSpace.basisFun (Fin n) ℝ a)) =ᵐ[
-          (volume : Measure (EuclideanSpace ℝ (Fin n)))]
-        (fun x => ((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x i a b)).trace) := by
-      filter_upwards [(hfirst i).2.2.2.2] with x hx
-      exact hx.symm
-    exact ⟨hweak.congr_ae htrace (Filter.Eventually.of_forall fun _ => rfl), hlocal⟩
-  have hflux := integral_weak_hessian_flux_eq_trace_derivative hC1 hG T hT hInv Q hq
-  refine ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, ?_⟩
-  have hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
-    filter_upwards [hd] with x hx
-    rw [← hx.2.1, Real.exp_log hx.1.det_pos]
-  exact integral_exp_neg_hessian_flux_eq_curvature_gram hC1 hl hG
-    (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT hInv
-    (fun i => (hfirst i).2.2.2.2)
+    have hq :
+      ∀ i j : Fin n,
+        HasWeakDerivAlong
+            (fun x => ((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x i a b)).trace)
+            (fun x => Q x i j) (EuclideanSpace.basisFun (Fin n) ℝ j) ∧
+          ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+            IsCompact S →
+              MemLp (fun x => Q x i j) 2
+                ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+      intro i j
+      obtain ⟨hweak, hlocal⟩ :=
+        hasWeakDerivAlong_mongeAmpere_first_rhs hC1 hl hG
+          (hW.of_le (WithTop.coe_le_coe.mpr le_top)) T hT i j
+      have htrace :
+        (fun x =>
+            -fderiv ℝ u x (EuclideanSpace.basisFun (Fin n) ℝ i) +
+              ∑ a : Fin n,
+                hessianMatrix u x i a *
+                  fderiv ℝ W (gradient u x)
+                    (EuclideanSpace.basisFun (Fin n) ℝ
+                      a)) =ᵐ[(volume : Measure (EuclideanSpace ℝ (Fin n)))]
+          (fun x => ((hessianMatrix u x)⁻¹ * (Matrix.of fun a b => T x i a b)).trace) := by
+        filter_upwards [(hfirst i).2.2.2.2] with x hx
+        exact hx.symm
+      exact ⟨hweak.congr_ae htrace (Filter.Eventually.of_forall fun _ => rfl), hlocal⟩
+    have hflux := integral_weak_hessian_flux_eq_trace_derivative hC1 hG T hT hInv Q hq
+    refine
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux, ?_⟩
+    have hdet :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
+      filter_upwards [hd] with x hx
+      rw [← hx.2.1, Real.exp_log hx.1.det_pos]
+    exact
+      integral_exp_neg_hessian_flux_eq_curvature_gram hC1 hl hG
+        (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT hInv
+        (fun i => (hfirst i).2.2.2.2)
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The regular-class weighted Hessian evolution at the same witness, together with its bounded test
-extension to `ψ * H_lk` for every compactly supported C1 `ψ`: both sides are integrable and the weighted
+extension to `ψ * H_lk` for every compactly supported C1 `ψ`: both sides are integrable and the
+weighted
 identity holds. No global L2 bound of `T` and no new source premise is used. -/
 theorem exists_regular_moment_bounded_weak_hessian_testing :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
@@ -501,7 +525,8 @@ theorem exists_regular_moment_bounded_weak_hessian_testing :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -615,35 +640,48 @@ theorem exists_regular_moment_bounded_weak_hessian_testing :
         (Matrix.of fun a b => T x j a b)).trace
     ∀ ψ : EuclideanSpace ℝ (Fin n) → ℝ,
       ContDiff ℝ 1 ψ → HasCompactSupport ψ → ∀ l k i j : Fin n,
-      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∀ b : Fin n, Integrable (fun x => Real.exp (-u x) * J x i j b * (ψ x * T x b l k + fderiv ℝ
+        ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
       Integrable (fun x => Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k))
         (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
+      (∫ x, Real.exp (-u x) * (∑ b : Fin n, J x i j b * (ψ x * T x b l k + fderiv ℝ ψ x
+        (EuclideanSpace.basisFun (Fin n) ℝ b) * hessianMatrix u x l k))
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, Real.exp (-u x) * E x i j * (ψ x * hessianMatrix u x l k)
         ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
-  obtain ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, hweighted⟩ :=
-    exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  have hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
-    filter_upwards [hd] with x hx
-    rw [← hx.2.1, Real.exp_log hx.1.det_pos]
-  refine ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean, hq, hflux, hweighted, ?_⟩
-  dsimp only
-  intro ψ hψ hψc l k i j
-  obtain ⟨C, _hC, hηc, hbound, _hη2, hη, hweak⟩ :=
-    bounded_compact_hessian_test_data hG T hT hψ hψc l k
-  exact integral_exp_neg_hessian_flux_eq_curvature_gram_of_bounded_weak_test hC1 hl hG
-    (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT hInv
-    (fun b => (hfirst b).2.2.2.2) hη hbound hηc
-    (fun b => (hweak b).1) (fun b => (hweak b).2.1) (fun b => (hweak b).2.2) i j
+    obtain
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux, hweighted⟩ :=
+      exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ
+        hiso
+    have hdet :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
+      filter_upwards [hd] with x hx
+      rw [← hx.2.1, Real.exp_log hx.1.det_pos]
+    refine
+      ⟨u, L, LF, T, hc, hl, hnrm, hm, hC1, hG, hF, hw, hd, hT, he, hfirst, hInv, hmean,
+        hq, hflux, hweighted, ?_⟩
+    dsimp only
+    intro ψ hψ hψc l k i j
+    obtain ⟨C, _hC, hηc, hbound, _hη2, hη, hweak⟩ :=
+      bounded_compact_hessian_test_data hG T hT hψ hψc l k
+    exact
+      integral_exp_neg_hessian_flux_eq_curvature_gram_of_bounded_weak_test hC1 hl hG
+        (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT hInv
+        (fun b => (hfirst b).2.2.2.2) hη hbound hηc (fun b => (hweak b).1)
+        (fun b => (hweak b).2.1) (fun b => (hweak b).2.2) i j
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-/-- The regular-class weak Hessian evolution witness with its directional weak subsolution and local coefficient bounds:
-the same `u, L, LF, T` as `exists_regular_moment_weak_hessian_evolution` with every one of its fields, plus, for every
-direction `v` and every nonnegative compactly supported C1 `ψ`, the directional weak subsolution inequality of
-`h_v = vᵀ ∇²u v`, and, on every compact `S`, constants `c₀, c₁ > 0` with `c₀·Id ≤ e^{-u} (∇²u)⁻¹ ≤ c₁·Id` a.e. on `S`.
+/-- The regular-class weak Hessian evolution witness with its directional weak subsolution and local
+coefficient bounds:
+the same `u, L, LF, T` as `exists_regular_moment_weak_hessian_evolution` with every one of its
+fields, plus, for every
+direction `v` and every nonnegative compactly supported C1 `ψ`, the directional weak subsolution
+inequality of
+`h_v = vᵀ ∇²u v`, and, on every compact `S`, constants `c₀, c₁ > 0` with `c₀·Id ≤ e^{-u} (∇²u)⁻¹ ≤
+c₁·Id` a.e. on `S`.
 No `C²`, smoothness, Harnack or regularity premise is added. -/
 theorem exists_regular_moment_directional_hessian_subsolution :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
@@ -663,7 +701,8 @@ theorem exists_regular_moment_directional_hessian_subsolution :
         HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
             (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
           ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) ∧
+            MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict
+              S)) ∧
       (∃ LE : NNReal,
         LipschitzWith LE (fun x => Real.exp (-u x + W (gradient u x)))) ∧
       (∀ k : Fin n,
@@ -785,24 +824,31 @@ theorem exists_regular_moment_directional_hessian_subsolution :
               c₀ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef ∧
             (c₁ • (1 : Matrix (Fin n) (Fin n) ℝ) -
               Real.exp (-u x) • (hessianMatrix u x)⁻¹).PosSemidef := by
-  obtain ⟨u, L, LF, T, h⟩ :=
-    exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  refine ⟨u, L, LF, T, h, ?_, ?_⟩
-  · obtain ⟨-, hl, -, -, hC1, hG, hF, -, hd, hT, -, hfirst, hInv, -⟩ := h
-    have hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-        (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
-      filter_upwards [hd] with x hx
-      rw [← hx.2.1, Real.exp_log hx.1.det_pos]
-    have hVc : ConvexOn ℝ univ W :=
-      UniformConvexOn.convexOn (strongConvexOn_iff_convex.mpr hstrong) fun r => by positivity
-    intro v ψ hψ hψc hψn
-    exact integral_directional_hessian_flux_le hC1 hl hG (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT
-      hInv (fun i => (hfirst i).2.2.2.2) hVc (hd.mono fun x hx => hx.1) v ψ hψ hψc hψn
-  · obtain ⟨-, -, -, -, hC1, -, -, -, hd, -⟩ := h
-    intro S hS
-    exact exists_compact_inverse_hessian_coefficient_bounds hn hC1.continuous
-      (hC1.continuous.neg.add (hW.continuous.comp (BakryEmery.continuous_gradient hC1)))
-      (div_pos (by norm_num : (0 : ℝ) < 16) hκ) hd hS
+    obtain ⟨u, L, LF, T, h⟩ :=
+      exists_regular_moment_weak_hessian_evolution hn hκ hK hKc hKint hW hstrong μ hμ
+        hiso
+    refine ⟨u, L, LF, T, h, ?_, ?_⟩
+    · obtain ⟨-, hl, -, -, hC1, hG, hF, -, hd, hT, -, hfirst, hInv, -⟩ := h
+      have hdet :
+        ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+          (hessianMatrix u x).det = Real.exp (-u x + W (gradient u x)) := by
+        filter_upwards [hd] with x hx
+        rw [← hx.2.1, Real.exp_log hx.1.det_pos]
+      have hVc : ConvexOn ℝ univ W :=
+        UniformConvexOn.convexOn (strongConvexOn_iff_convex.mpr hstrong) fun r => by
+          positivity
+      intro v ψ hψ hψc hψn
+      exact
+        integral_directional_hessian_flux_le hC1 hl hG
+          (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT hInv
+          (fun i => (hfirst i).2.2.2.2) hVc (hd.mono fun x hx => hx.1) v ψ hψ hψc hψn
+    · obtain ⟨-, -, -, -, hC1, -, -, -, hd, -⟩ := h
+      intro S hS
+      exact
+        exists_compact_inverse_hessian_coefficient_bounds hn hC1.continuous
+          (hC1.continuous.neg.add
+            (hW.continuous.comp (BakryEmery.continuous_gradient hC1)))
+          (div_pos (by norm_num : (0 : ℝ) < 16) hκ) hd hS
 
 end FunctionalInequalities.Analysis
 end RegularMomentWeakHessianEvolution

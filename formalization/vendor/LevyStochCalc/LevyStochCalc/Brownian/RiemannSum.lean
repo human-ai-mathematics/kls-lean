@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 
 /-!
 # Riemann sums of a continuous weight against a bounded density
@@ -16,6 +20,8 @@ at the mesh, times the density bound, times the length of the interval.
 
 * `LevyStochCalc.abs_riemann_weighted_sub_integral_le` — the Riemann-sum error bound.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

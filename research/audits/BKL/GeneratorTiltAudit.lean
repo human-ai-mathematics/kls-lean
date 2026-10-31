@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
 
 /-!
 # Audit: the tilt identity (48) and Lemma 3.6 on the generator domain (BKL)
@@ -16,6 +18,8 @@ unit-weight gradient, `A = T̄†T̄` and `F ∈ D(A)`, with the representatives
 Not audited here: the weak Hessian (`O3` of `OperatorRouteStatements.lean`), the iterates and
 Theorem 3.1 itself.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardSpaceBieleckiEDist
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardSpaceBieleckiEDist
 
 /-!
 # The Bielecki pseudo-emetric space and its separation quotient
@@ -18,6 +22,8 @@ identifying processes that agree P-a.s. at each fixed `t`; the constant-zero pro
 both the synonym and the quotient. A closing note contrasts this weighted sup-of-`L²` norm
 with the `S²` norm and records the role of the `IsRegular` hypothesis in well-posedness.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

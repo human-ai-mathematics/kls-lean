@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.Convex.Quadratic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Quadratic
 
 /-! A classical all-order client of the quadratic module, without the viscosity or Dirichlet
 chain. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

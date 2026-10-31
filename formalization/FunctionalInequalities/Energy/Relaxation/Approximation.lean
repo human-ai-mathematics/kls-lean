@@ -1,13 +1,16 @@
-import FunctionalInequalities.Energy.Relaxation.Basic
-import Mathlib.Topology.MetricSpace.Pseudo.Defs
-import Mathlib.Topology.Sequences
+module
+
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import Mathlib.Topology.MetricSpace.Pseudo.Defs
+public import Mathlib.Topology.Sequences
 
 /-!
 # Choosing concrete tests for sequential relaxation
 
 Two elementary approximation steps are shared by the lower-semicontinuity and recovery proofs.
 `exists_test_near_of_relaxation_lt` selects one test close to a prescribed point, with energy
-below any strict upper bound for the relaxed energy. `DenseRealization.nonempty_approximatingSequence`
+below any strict upper bound for the relaxed energy.
+`DenseRealization.nonempty_approximatingSequence`
 supplies a convergent test sequence without imposing an energy bound.
 
 The first step uses the definition of relaxation and the metric description of convergence.
@@ -15,6 +18,8 @@ The second uses Mathlib's `mem_closure_iff_seq_limit`. Neither step assumes quad
 agreement of raw and relaxed energy. Keeping these choices here lets the consuming proofs focus
 on their different conclusions: lower semicontinuity and convergence of recovery energies.
 -/
+
+@[expose] public section
 
 noncomputable section
 

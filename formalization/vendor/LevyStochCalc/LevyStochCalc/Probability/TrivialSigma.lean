@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Probability.IndepJoin
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Probability.IndepJoin
 
 /-!
 # σ-algebras whose sets are null or conull
@@ -21,6 +25,8 @@ kind. Together they let such a factor be dropped from an independence statement.
 * `trivialSigma` — the σ-algebra of measurable null-or-conull sets, which absorbs a whole family
   of trivial factors at once.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 
@@ -56,13 +62,11 @@ theorem isTrivialSigma_comap_of_ae_const [IsProbabilityMeasure P] {𝓨 : Type*}
   · right
     have hae : f ⁻¹' S =ᵐ[P] (Set.univ : Set Ω) := by
       filter_upwards [h] with ω hω
-      change (ω ∈ f ⁻¹' S) = (ω ∈ (Set.univ : Set Ω))
       simp [Set.mem_preimage, hω, hy]
     rw [measure_congr hae, measure_univ]
   · left
     have hae : f ⁻¹' S =ᵐ[P] (∅ : Set Ω) := by
       filter_upwards [h] with ω hω
-      change (ω ∈ f ⁻¹' S) = (ω ∈ (∅ : Set Ω))
       simp [Set.mem_preimage, hω, hy]
     rw [measure_congr hae, measure_empty]
 

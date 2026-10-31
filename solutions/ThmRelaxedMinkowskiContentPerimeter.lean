@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
-import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+public import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Lean certificate: `thm:relaxed-minkowski-content-perimeter`
@@ -11,7 +13,8 @@ a metric space with its Borel σ-algebra and `ν` a Borel measure that is finite
 sets (the paper's standing assumption). For every Borel set `B` with `ν B < ∞`, the relaxed
 lower Minkowski content equals the perimeter of Definition 3.3:
 
-`inf { liminf_h M₋(A_h) : A_h → B in ν-measure } = inf { liminf_h ∫ |∇f_h| dν : f_h ∈ Lip(V), f_h → 1_B in L¹(ν) }`,
+`inf { liminf_h M₋(A_h) : A_h → B in ν-measure } = inf { liminf_h ∫ |∇f_h| dν : f_h ∈ Lip(V), f_h →
+1_B in L¹(ν) }`,
 
 where `M₋(A) = liminf_{r ↓ 0} (ν(A^r) − ν(A)) / r` with open `r`-enlargements, `|∇f|` is the
 local slope (zero at isolated points), the approximating sets are measurable and both infima are
@@ -23,6 +26,8 @@ the same perimeter.
 is the second clause of the paper's Lemma 2.1. These are equalities of relaxation infima; no
 pointwise identity between Minkowski content and perimeter of an individual set is claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -92,11 +97,13 @@ info: 'Solutions.ThmRelaxedMinkowskiContentPerimeter.upper'
 #print axioms Solutions.ThmRelaxedMinkowskiContentPerimeter.upper
 
 /--
-info: 'FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded'
+info:
+'FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded
+  #print axioms
+    FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded
 
 /--
 info: 'FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation_eq_perimeter_of_measure_lt_top'

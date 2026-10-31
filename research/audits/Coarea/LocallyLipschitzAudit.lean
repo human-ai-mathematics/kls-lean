@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
-import Mathlib.Analysis.Calculus.FDeriv.Norm
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
+public import Mathlib.Analysis.Calculus.FDeriv.Norm
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the locally Lipschitz weighted coarea formula
@@ -78,13 +80,13 @@ theorem witness_locallyLipschitz : LocallyLipschitz witness :=
 
 /-- The witness is **not** globally Lipschitz, for any constant: `coarea_of_lipschitz` does not
 apply to it. -/
-theorem witness_not_lipschitz : ¬ ∃ K : ℝ≥0, LipschitzWith K witness := by
+theorem witness_not_lipschitz : ¬∃ K : ℝ≥0, LipschitzWith K witness := by
   rintro ⟨K, hK⟩
-  have hpos : (0:ℝ) < (K : ℝ) + 1 := by positivity
+  have hpos : (0 : ℝ) < (K : ℝ) + 1 := by positivity
   have h := hK.dist_le_mul ((K : ℝ) + 1) 0
   simp only [witness, Real.dist_eq, Real.norm_eq_abs, sub_zero, abs_of_nonneg hpos.le, abs_zero,
     ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, add_zero] at h
-  rw [abs_of_nonneg (by positivity : (0:ℝ) ≤ ((K:ℝ)+1)^2 + ((K:ℝ)+1))] at h
+  rw [abs_of_nonneg (by positivity : (0 : ℝ) ≤ ((K : ℝ) + 1) ^ 2 + ((K : ℝ) + 1))] at h
   nlinarith [K.coe_nonneg]
 
 /-- The witness is **not** differentiable at `0`, so it is not `C¹`: `coarea_of_contDiff` does not

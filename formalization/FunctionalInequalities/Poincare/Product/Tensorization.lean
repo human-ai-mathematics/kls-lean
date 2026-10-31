@@ -1,10 +1,13 @@
-import FunctionalInequalities.Poincare.Product.Admissible
+module
+
+public import FunctionalInequalities.Poincare.Product.Admissible
 
 /-!
 # Poincaré tensorization on Hilbert products
 
 Node: `lem:poincare-tensorization`. The product law lives on `WithLp 2 (E × F)` and uses the
-manuscript normalization `Var(f) ≤ C ∫ ‖gradient f‖²` for `Poincare.SmoothTest.Admissible` tests. The fixed
+manuscript normalization `Var(f) ≤ C ∫ ‖gradient f‖²` for `Poincare.SmoothTest.Admissible` tests.
+The fixed
 and extended optimal-constant bounds below are packaged by the node-specific certificate.
 
 Source: Bakry--Gentil--Ledoux (2014),
@@ -14,6 +17,8 @@ proves the corresponding bound for the local smooth finite-energy test class on 
 probabilities; it does not identify that class with BGL's Dirichlet domain. The passage to an
 `ENNReal` infimum is a local consequence, beyond the proposition's fixed-constant statement.
 -/
+
+@[expose] public section
 
 noncomputable section
 

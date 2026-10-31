@@ -1,28 +1,37 @@
-import FunctionalInequalities.Probability.Posterior.Exponent
-import FunctionalInequalities.Probability.Posterior.CompactPrior
-import FunctionalInequalities.Probability.Posterior.Generator
-import FunctionalInequalities.Probability.Posterior.CompactDomain
-import Mathlib.Analysis.InnerProductSpace.Dual
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.InnerProductSpace.LinearMap
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Analysis.Normed.Operator.Banach
+module
+
+public import FunctionalInequalities.Probability.Posterior.Exponent
+public import FunctionalInequalities.Probability.Posterior.CompactPrior
+public import FunctionalInequalities.Probability.Posterior.Generator
+public import FunctionalInequalities.Probability.Posterior.CompactDomain
+public import Mathlib.Analysis.InnerProductSpace.Dual
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.InnerProductSpace.LinearMap
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-!
 # Joint regularity of the compact posterior in `(c, Q)`
 
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19, (67), compact-prior stage. The posterior expectation
-`(c, Q) ↦ ∫ f dμ_{c,Q}` of a measurable `f` bounded on the prior support is `C^∞` jointly in the parameter
-pair `p = (c, Q) ∈ E × (E →L[ℝ] E)` (product norm, operator norm on the second factor), for every finite
-pair including `Q = 0`, non-symmetric `Q` and dimension zero; hence so are the posterior mean and the
+`(c, Q) ↦ ∫ f dμ_{c,Q}` of a measurable `f` bounded on the prior support is `C^∞` jointly in the
+parameter
+pair `p = (c, Q) ∈ E × (E →L[ℝ] E)` (product norm, operator norm on the second factor), for every
+finite
+pair including `Q = 0`, non-symmetric `Q` and dimension zero; hence so are the posterior mean and
+the
 posterior covariance operator. The proof linearises the exponent: the score `p ↦ ⟪c,x⟫ − ½⟪Qx,x⟫` is
 continuous linear in `p`, so after a finite-dimensional chart it is the pairing with a Riesz feature
-`ψ(x)`, and the joint expectation is the `c`-only expectation (`Generator.lean`) of the pushed-forward
-prior `ψ_*μ` at `Q' = 0`, composed with the chart; the chart is an implementation device and is private.
+`ψ(x)`, and the joint expectation is the `c`-only expectation (`Generator.lean`) of the
+pushed-forward
+prior `ψ_*μ` at `Q' = 0`, composed with the chart; the chart is an implementation device and is
+private.
 Prior isotropy is not used here; the inverse covariance and the drift of (67) are in
-`KLS/BKL/PosteriorDomain.lean`. No stochastic process, SDE or Itô statement.
+`KLS/BKL/Posterior/Regularity.lean`. No stochastic process, SDE or Itô statement.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory FunctionalInequalities
@@ -116,7 +125,10 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDim
 /-- The prior pushed forward by the feature map (an internal device, not a new posterior object). -/
 private def featureLaw (μ : ProbabilityMeasure E) :
     ProbabilityMeasure (parameterSpace E) :=
-  μ.map (continuous_parameterFeature E).measurable.aemeasurable
+  -- The measurability witness stays referenced so that the definition keeps the section instances
+  -- it used before `ProbabilityMeasure.map` began taking the function itself (Mathlib v4.35).
+  have _hmeas := (continuous_parameterFeature E).measurable
+  μ.map (parameterFeature E)
 
 private theorem featureLaw_support_subset (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
@@ -124,12 +136,16 @@ private theorem featureLaw_support_subset (μ : ProbabilityMeasure E)
       parameterFeature E '' (μ : Measure E).support := by
   have hk : IsCompact (parameterFeature E '' (μ : Measure E).support) :=
     hc.image (continuous_parameterFeature E)
-  have ha : parameterFeature E '' (μ : Measure E).support ∈ ae (featureLaw μ : Measure (parameterSpace E)) := by
+  have ha :
+    parameterFeature E '' (μ : Measure E).support ∈
+      ae (featureLaw μ : Measure (parameterSpace E)) := by
     rw [mem_ae_iff]
-    change ((μ : Measure E).map (parameterFeature E))
-      (parameterFeature E '' (μ : Measure E).support)ᶜ = 0
+    change
+      ((μ : Measure E).map (parameterFeature E))
+          (parameterFeature E '' (μ : Measure E).support)ᶜ =
+        0
     rw [Measure.map_apply (continuous_parameterFeature E).measurable
-      hk.isClosed.measurableSet.compl]
+        hk.isClosed.measurableSet.compl]
     apply measure_mono_null ?_ (μ : Measure E).measure_compl_support
     intro x hx hxS
     exact hx ⟨x, hxS, rfl⟩
@@ -142,64 +158,78 @@ private theorem featureLaw_compact (μ : ProbabilityMeasure E)
     (featureLaw μ : Measure (parameterSpace E)).isClosed_support (featureLaw_support_subset μ hc)
 
 private theorem feature_statistic_bound (μ : ProbabilityMeasure E)
-    (hc : IsCompact (μ : Measure E).support)
-    {f : E → ℝ} {C : ℝ} (hb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C) :
-    ∀ y ∈ (featureLaw μ : Measure (parameterSpace E)).support, ‖(f ∘ parameterRetract E) y‖ ≤ C := by
+    (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} {C : ℝ}
+    (hb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C) :
+    ∀ y ∈ (featureLaw μ : Measure (parameterSpace E)).support,
+      ‖(f ∘ parameterRetract E) y‖ ≤ C := by
   intro y hy
   obtain ⟨x, hx, rfl⟩ := featureLaw_support_subset μ hc hy
   simpa only [Function.comp_apply, parameterRetract_feature] using hb x hx
 
-/-- The joint posterior expectation is the `c`-only expectation of the feature law at `Q' = 0`, with
+/--
+The joint posterior expectation is the `c`-only expectation of the feature law at `Q' = 0`, with
 both the numerator and the normalising integral transported. -/
 private theorem posteriorExpectation_feature (μ : ProbabilityMeasure E) {f : E → ℝ}
     (hf : Measurable f) (p : E × (E →L[ℝ] E)) :
     posteriorExpectation μ p.1 p.2 f =
       posteriorExpectation (featureLaw μ) (parameterChart E p) 0 (f ∘ parameterRetract E) := by
-  have hphase (x : E) : quadraticExponent (parameterChart E p) (0 : _ →L[ℝ] _)
-      (parameterFeature E x) = quadraticExponent p.1 p.2 x := by
-    simpa only [quadraticExponent, zero_apply, inner_zero_left, mul_zero,
-      sub_zero] using parameterFeature_pairing E p x
+  have hphase (x : E) :
+    quadraticExponent (parameterChart E p) (0 : _ →L[ℝ] _) (parameterFeature E x) =
+      quadraticExponent p.1 p.2 x := by
+    simpa only [quadraticExponent, zero_apply, inner_zero_left, mul_zero, sub_zero] using
+      parameterFeature_pairing E p x
   have hp : Continuous (quadraticExponent (parameterChart E p) (0 : _ →L[ℝ] _)) := by
     unfold quadraticExponent
     fun_prop
   have hf' : Measurable (f ∘ parameterRetract E) :=
     hf.comp (parameterRetract E).continuous.measurable
   have hN :
-      (∫ y, Real.exp (quadraticExponent (parameterChart E p) 0 y) * (f ∘ parameterRetract E) y
-        ∂(featureLaw μ : Measure (parameterSpace E))) =
-        ∫ x, Real.exp (quadraticExponent p.1 p.2 x) * f x ∂(μ : Measure E) := by
-    have h := integral_map (μ := (μ : Measure E))
-      (continuous_parameterFeature E).measurable.aemeasurable
-      (hp.measurable.exp.mul hf').aestronglyMeasurable
-    simpa only [featureLaw, ProbabilityMeasure.toMeasure_map, Function.comp_apply,
-      Pi.mul_apply, hphase, parameterRetract_feature] using h
+    (∫ y,
+        Real.exp (quadraticExponent (parameterChart E p) 0 y) *
+          (f ∘ parameterRetract E) y ∂(featureLaw μ : Measure (parameterSpace E))) =
+      ∫ x, Real.exp (quadraticExponent p.1 p.2 x) * f x ∂(μ : Measure E) := by
+    have h :=
+      integral_map (μ := (μ : Measure E))
+        (continuous_parameterFeature E).measurable.aemeasurable
+        (hp.measurable.exp.mul hf').aestronglyMeasurable
+    simpa only [featureLaw, ProbabilityMeasure.toMeasure_map, Function.comp_apply, Pi.mul_apply,
+      hphase, parameterRetract_feature] using h
   have hZ :
-      (∫ y, Real.exp (quadraticExponent (parameterChart E p) 0 y) ∂(featureLaw μ : Measure (parameterSpace E))) =
-        ∫ x, Real.exp (quadraticExponent p.1 p.2 x) ∂(μ : Measure E) := by
-    have h := integral_map (μ := (μ : Measure E))
-      (continuous_parameterFeature E).measurable.aemeasurable
-      hp.measurable.exp.aestronglyMeasurable
+    (∫ y,
+        Real.exp
+          (quadraticExponent (parameterChart E p) 0
+            y) ∂(featureLaw μ : Measure (parameterSpace E))) =
+      ∫ x, Real.exp (quadraticExponent p.1 p.2 x) ∂(μ : Measure E) := by
+    have h :=
+      integral_map (μ := (μ : Measure E))
+        (continuous_parameterFeature E).measurable.aemeasurable
+        hp.measurable.exp.aestronglyMeasurable
     simpa only [featureLaw, ProbabilityMeasure.toMeasure_map, hphase] using h
   unfold posteriorExpectation
   rw [integral_tilted_eq_div μ, integral_tilted_eq_div (featureLaw μ), hN, hZ]
 
 /-- **Joint smoothness of the posterior expectation** (BKL (67), compact stage): for a compactly
-supported prior and a measurable `f` bounded on the prior support, `(c, Q) ↦ ∫ f dμ_{c,Q}` is `C^∞` on
-`E × (E →L[ℝ] E)`; every finite pair, including `Q = 0`, non-symmetric `Q` and dimension zero. `f` may be
+supported prior and a measurable `f` bounded on the prior support, `(c, Q) ↦ ∫ f dμ_{c,Q}` is `C^∞`
+on
+`E × (E →L[ℝ] E)`; every finite pair, including `Q = 0`, non-symmetric `Q` and dimension zero. `f`
+may be
 discontinuous or unbounded off the support. -/
 theorem contDiff_posteriorExpectation_joint (μ : ProbabilityMeasure E)
-    (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} (hf : Measurable f)
-    {C : ℝ} (hb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C) :
+    (hc : IsCompact (μ : Measure E).support) {f : E → ℝ} (hf : Measurable f) {C : ℝ}
+    (hb : ∀ x ∈ (μ : Measure E).support, ‖f x‖ ≤ C) :
     ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) => posteriorExpectation μ p.1 p.2 f) := by
-  have hbound : ∀ y ∈ (featureLaw μ : Measure (parameterSpace E)).support,
+  have hbound :
+    ∀ y ∈ (featureLaw μ : Measure (parameterSpace E)).support,
       ‖(f ∘ parameterRetract E) y‖ ≤ max C 0 := by
     intro y hy
     exact (feature_statistic_bound μ hc hb y hy).trans (le_max_left C 0)
-  have hsm := contDiff_posteriorExpectation_c (featureLaw μ) (featureLaw_compact μ hc)
-    (hf.comp (parameterRetract E).continuous.measurable) (le_max_right C 0) hbound
-    (0 : _ →L[ℝ] _)
+  have hsm :=
+    contDiff_posteriorExpectation_c (featureLaw μ) (featureLaw_compact μ hc)
+      (hf.comp (parameterRetract E).continuous.measurable) (le_max_right C 0) hbound
+      (0 : _ →L[ℝ] _)
   have hcom := hsm.comp (parameterChart E).contDiff
-  have he : (fun p : E × (E →L[ℝ] E) => posteriorExpectation μ p.1 p.2 f) =
+  have he :
+    (fun p : E × (E →L[ℝ] E) => posteriorExpectation μ p.1 p.2 f) =
       (fun c => posteriorExpectation (featureLaw μ) c 0 (f ∘ parameterRetract E)) ∘
         parameterChart E := by
     funext p
@@ -207,7 +237,8 @@ theorem contDiff_posteriorExpectation_joint (μ : ProbabilityMeasure E)
   rw [he]
   exact hcom
 
-/-- A continuous statistic is bounded on the compact support, so its posterior expectation is jointly
+/--
+A continuous statistic is bounded on the compact support, so its posterior expectation is jointly
 `C^∞`. -/
 theorem contDiff_posteriorExpectation_joint_of_continuous (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) {g : E → ℝ} (hg : Continuous g) :
@@ -222,21 +253,26 @@ section Moments
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
   [MeasurableSpace E] [BorelSpace E]
 
-/-- The posterior mean `a(c,Q) = ∫ x dμ_{c,Q}` is jointly `C^∞` (reconstructed from its coordinates in an
+/--
+The posterior mean `a(c,Q) = ∫ x dμ_{c,Q}` is jointly `C^∞` (reconstructed from its coordinates in
+an
 orthonormal basis). -/
 theorem contDiff_posteriorMean_joint (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
     ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) => posteriorMean μ p.1 p.2) := by
   let b := stdOrthonormalBasis ℝ E
   have hs (i : Fin (Module.finrank ℝ E)) :
-      ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) =>
-        posteriorExpectation μ p.1 p.2 (fun x => ⟪b i, x⟫)) :=
+    ContDiff ℝ ∞
+      (fun p : E × (E →L[ℝ] E) => posteriorExpectation μ p.1 p.2 (fun x => ⟪b i, x⟫)) :=
     contDiff_posteriorExpectation_joint_of_continuous μ hc (by fun_prop)
-  have hm : ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) =>
-      ∑ i, posteriorExpectation μ p.1 p.2 (fun x => ⟪b i, x⟫) • b i) :=
+  have hm :
+    ContDiff ℝ ∞
+      (fun p : E × (E →L[ℝ] E) =>
+        ∑ i, posteriorExpectation μ p.1 p.2 (fun x => ⟪b i, x⟫) • b i) :=
     ContDiff.sum (fun i _hi => (hs i).smul contDiff_const)
-  have he : (fun p : E × (E →L[ℝ] E) => posteriorMean μ p.1 p.2) =
-      fun p => ∑ i, posteriorExpectation μ p.1 p.2 (fun x => ⟪b i, x⟫) • b i := by
+  have he :
+    (fun p : E × (E →L[ℝ] E) => posteriorMean μ p.1 p.2) = fun p =>
+      ∑ i, posteriorExpectation μ p.1 p.2 (fun x => ⟪b i, x⟫) • b i := by
     funext p
     rw [← b.sum_repr' (posteriorMean μ p.1 p.2)]
     apply Finset.sum_congr rfl
@@ -246,31 +282,37 @@ theorem contDiff_posteriorMean_joint (μ : ProbabilityMeasure E)
   rw [he]
   exact hm
 
-/-- Covariances of two linear statistics under the posterior are jointly `C^∞` (polynomial moments of
+/--
+Covariances of two linear statistics under the posterior are jointly `C^∞` (polynomial moments of
 the compact posterior). -/
 theorem contDiff_covariance_pair_joint (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) (u v : E) :
-    ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) =>
-      covariance (fun x => ⟪u, x⟫) (fun x => ⟪v, x⟫)
-        ((μ : Measure E).tilted (quadraticExponent p.1 p.2))) := by
-  have hs := contDiff_posteriorExpectation_joint_of_continuous μ hc
-    (g := fun x => ⟪u, x⟫ * ⟪v, x⟫) (by fun_prop)
-  have hu := contDiff_posteriorExpectation_joint_of_continuous μ hc (g := fun x => ⟪u, x⟫) (by fun_prop)
-  have hv := contDiff_posteriorExpectation_joint_of_continuous μ hc (g := fun x => ⟪v, x⟫) (by fun_prop)
-  have he : (fun p : E × (E →L[ℝ] E) =>
-      covariance (fun x => ⟪u, x⟫) (fun x => ⟪v, x⟫)
-        ((μ : Measure E).tilted (quadraticExponent p.1 p.2))) =
+    ContDiff ℝ ∞
+      (fun p : E × (E →L[ℝ] E) =>
+        covariance (fun x => ⟪u, x⟫) (fun x => ⟪v, x⟫)
+          ((μ : Measure E).tilted (quadraticExponent p.1 p.2))) := by
+  have hs :=
+    contDiff_posteriorExpectation_joint_of_continuous μ hc (g := fun x => ⟪u, x⟫ * ⟪v, x⟫)
+      (by fun_prop)
+  have hu :=
+    contDiff_posteriorExpectation_joint_of_continuous μ hc (g := fun x => ⟪u, x⟫) (by fun_prop)
+  have hv :=
+    contDiff_posteriorExpectation_joint_of_continuous μ hc (g := fun x => ⟪v, x⟫) (by fun_prop)
+  have he :
+    (fun p : E × (E →L[ℝ] E) =>
+        covariance (fun x => ⟪u, x⟫) (fun x => ⟪v, x⟫)
+          ((μ : Measure E).tilted (quadraticExponent p.1 p.2))) =
       (fun p => posteriorExpectation μ p.1 p.2 (fun x => ⟪u, x⟫ * ⟪v, x⟫)) -
         (fun p => posteriorExpectation μ p.1 p.2 (fun x => ⟪u, x⟫)) *
-        (fun p => posteriorExpectation μ p.1 p.2 (fun x => ⟪v, x⟫)) := by
+          (fun p => posteriorExpectation μ p.1 p.2 (fun x => ⟪v, x⟫)) := by
     funext p
     let : IsProbabilityMeasure ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) :=
       isProbabilityMeasure_tilted_quadraticExponent_of_compact μ hc p.1 p.2
     rw [covariance_eq_sub
-      (memLp_two_tilted_quadraticExponent_of_compact μ hc p.1 p.2
-        (by fun_prop : Continuous (fun x => ⟪u, x⟫)))
-      (memLp_two_tilted_quadraticExponent_of_compact μ hc p.1 p.2
-        (by fun_prop : Continuous (fun x => ⟪v, x⟫)))]
+        (memLp_two_tilted_quadraticExponent_of_compact μ hc p.1 p.2
+          (by fun_prop : Continuous (fun x => ⟪u, x⟫)))
+        (memLp_two_tilted_quadraticExponent_of_compact μ hc p.1 p.2
+          (by fun_prop : Continuous (fun x => ⟪v, x⟫)))]
     rfl
   rw [he]
   exact hs.sub (hu.mul hv)
@@ -295,33 +337,47 @@ private theorem operator_eq_sum_rankOne {ι : Type*} [Fintype ι] (b : Orthonorm
   congr 1
   ring
 
-/-- **Joint smoothness of the posterior covariance** `A(c,Q) = Cov(μ_{c,Q})` on `E × (E →L[ℝ] E)`, in the
+/--
+**Joint smoothness of the posterior covariance** `A(c,Q) = Cov(μ_{c,Q})` on `E × (E →L[ℝ] E)`, in
+the
 operator norm; no isotropy or symmetry of `Q` is needed. -/
 theorem contDiff_posteriorCovariance_joint (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
-    ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) =>
-      Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E)) := by
+    ContDiff ℝ ∞
+      (fun p : E × (E →L[ℝ] E) =>
+        Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E)) := by
   let b := stdOrthonormalBasis ℝ E
   have he (p : E × (E →L[ℝ] E)) (i j : Fin (Module.finrank ℝ E)) :
-      ⟪b i, Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E) (b j)⟫ =
-        covariance (fun x => ⟪b j, x⟫) (fun x => ⟪b i, x⟫)
-          ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) := by
+    ⟪b i, Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E) (b j)⟫ =
+      covariance (fun x => ⟪b j, x⟫) (fun x => ⟪b i, x⟫)
+        ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) := by
     rw [real_inner_comm, Covariance.operator_inner,
       covarianceBilin_apply_eq_cov (compactPosterior_memLp_id_two μ hc p.1 p.2)]
     rfl
-  have hs : ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) => ∑ j, ∑ i,
-      covariance (fun x => ⟪b j, x⟫) (fun x => ⟪b i, x⟫)
-        ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) •
-          InnerProductSpace.rankOne ℝ (b i) (b j)) :=
-    ContDiff.sum (fun j _hj => ContDiff.sum (fun i _hi =>
-      (contDiff_covariance_pair_joint μ hc (b j) (b i)).smul contDiff_const))
-  have hfun : (fun p : E × (E →L[ℝ] E) =>
-      Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E)) =
-      fun p => ∑ j, ∑ i, covariance (fun x => ⟪b j, x⟫) (fun x => ⟪b i, x⟫)
-        ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) •
-          InnerProductSpace.rankOne ℝ (b i) (b j) := by
+  have hs :
+    ContDiff ℝ ∞
+      (fun p : E × (E →L[ℝ] E) =>
+        ∑ j,
+          ∑ i,
+            covariance (fun x => ⟪b j, x⟫) (fun x => ⟪b i, x⟫)
+                ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) •
+              InnerProductSpace.rankOne ℝ (b i) (b j)) :=
+    ContDiff.sum
+      (fun j _hj =>
+        ContDiff.sum
+          (fun i _hi => (contDiff_covariance_pair_joint μ hc (b j) (b i)).smul contDiff_const))
+  have hfun :
+    (fun p : E × (E →L[ℝ] E) =>
+        Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E)) =
+      fun p =>
+      ∑ j,
+        ∑ i,
+          covariance (fun x => ⟪b j, x⟫) (fun x => ⟪b i, x⟫)
+              ((μ : Measure E).tilted (quadraticExponent p.1 p.2)) •
+            InnerProductSpace.rankOne ℝ (b i) (b j) := by
     funext p
-    rw [operator_eq_sum_rankOne b (Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E))]
+    rw [operator_eq_sum_rankOne b
+        (Covariance.operator (compactPosterior μ hc p.1 p.2 : Measure E))]
     simp only [he]
   rw [hfun]
   exact hs

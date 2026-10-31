@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Coarea.Smooth
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Smooth
 
 /-!
 # Strict audit client for the `C¹` weighted coarea formula
@@ -17,6 +19,8 @@ constant function
 every slice at the attained level is the whole space, of infinite surface measure, yet both sides
 are `0` because the exceptional level set is Lebesgue-null.
 -/
+
+@[expose] public section
 
 noncomputable section
 

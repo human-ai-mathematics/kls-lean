@@ -1,7 +1,12 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import Lean
+meta import Lean
 
 /-! The product rule on arbitrary finite real Hilbert spaces, without testing imports. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities MeasureTheory
 namespace SourceLayout

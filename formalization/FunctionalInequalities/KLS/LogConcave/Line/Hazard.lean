@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Density
-import FunctionalInequalities.Probability.Line.ExpIntegral
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Density
+public import FunctionalInequalities.Probability.Line.ExpIntegral
 
 /-!
 # Hazard-rate monotonicity and median bounds for log-concave laws on the line
@@ -14,12 +16,15 @@ For a Borell density `ρ` of a log-concave law with distribution function `F` an
 `c = ρ m`, the four-point inequality `ρ a · ρ e ≤ ρ b · ρ c` for `a ≤ b ≤ c ≤ e`, `a + e = b + c`
 gives monotone hazard rates: `ρ x · (1 - F y) ≤ ρ y · (1 - F x)` and `ρ y · F x ≤ ρ x · F y` for
 `x ≤ y` (with the outer point in the interior of the support). At the median these read
-`2 c (1 - F x) ≤ ρ x` for every `x ≥ m` and `2 c F x ≤ ρ x` for every `x ≤ m`. A supporting exponential `ρ s ≤ c · exp (k (s - m))` at the median, integrated against
+`2 c (1 - F x) ≤ ρ x` for every `x ≥ m` and `2 c F x ≤ ρ x` for every `x ≤ m`. A supporting
+exponential `ρ s ≤ c · exp (k (s - m))` at the median, integrated against
 the chord bounds, gives the supporting-line bound `ρ x ≤ c + k (F x - 1/2)` on the interior of
 the support.
 
 Nothing here is a Poincaré inequality; these bounds feed the Hardy and variance modules.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -122,26 +127,32 @@ theorem mul_measureReal_Ioi_le {x y : ℝ} (hx : x ∈ interior (μ : Measure �
     d.ρ x * (μ : Measure ℝ).real (Ioi y) ≤ d.ρ y * (μ : Measure ℝ).real (Ioi x) := by
   set δ := y - x with hδ
   have hδ0 : 0 ≤ δ := sub_nonneg.mpr hxy
-  rw [d.measureReal_eq_setIntegral measurableSet_Ioi, d.measureReal_eq_setIntegral measurableSet_Ioi]
+  rw [d.measureReal_eq_setIntegral measurableSet_Ioi,
+    d.measureReal_eq_setIntegral measurableSet_Ioi]
   have htrans : ∫ s in Ioi y, d.ρ s = ∫ s in Ioi x, d.ρ (s + δ) := by
     have hpre : (fun s : ℝ ↦ s + δ) ⁻¹' Ioi y = Ioi x := by
       ext s
       simp only [mem_preimage, mem_Ioi, hδ]
       constructor <;> intro h <;> linarith
-    rw [← (measurePreserving_add_right volume δ).setIntegral_preimage_emb
-      (measurableEmbedding_addRight δ) d.ρ (Ioi y), hpre]
+    rw [←
+      (measurePreserving_add_right volume δ).setIntegral_preimage_emb
+        (measurableEmbedding_addRight δ) d.ρ (Ioi y),
+      hpre]
   rw [htrans, ← integral_const_mul, ← integral_const_mul]
-  have hae := (measurePreserving_add_right volume δ).quasiMeasurePreserving.ae
-    (d.ae_eq_zero_of_not_mem_interior_support hμ hi)
-  refine integral_mono_ae ((d.integrable.comp_add_right δ).const_mul _).integrableOn
-    (d.integrable.const_mul _).integrableOn ?_
+  have hae :=
+    (measurePreserving_add_right volume δ).quasiMeasurePreserving.ae
+      (d.ae_eq_zero_of_not_mem_interior_support hμ hi)
+  refine
+    integral_mono_ae ((d.integrable.comp_add_right δ).const_mul _).integrableOn
+      (d.integrable.const_mul _).integrableOn ?_
   rw [EventuallyLE, ae_restrict_iff' measurableSet_Ioi]
   filter_upwards [hae] with s hs hsx
   have hsx' : x < s := hsx
   by_cases hsΩ : s + δ ∈ interior (μ : Measure ℝ).support
   · rcases le_total y s with hys | hsy
     · exact d.mul_le_mul_of_add_eq hμ hx hsΩ hxy hys (by linarith) (by rw [hδ]; ring)
-    · have := d.mul_le_mul_of_add_eq hμ hx hsΩ (le_of_lt hsx) hsy (by linarith) (by rw [hδ]; ring)
+    · have :=
+        d.mul_le_mul_of_add_eq hμ hx hsΩ (le_of_lt hsx) hsy (by linarith) (by rw [hδ]; ring)
       linarith
   · rw [hs hsΩ, mul_zero]
     exact mul_nonneg (d.nonneg _) (d.nonneg _)
@@ -153,19 +164,24 @@ theorem mul_cdf_le {x y : ℝ} (hy : y ∈ interior (μ : Measure ℝ).support) 
   set δ := y - x with hδ
   have hδ0 : 0 ≤ δ := sub_nonneg.mpr hxy
   unfold cdf
-  rw [d.measureReal_eq_setIntegral measurableSet_Iic, d.measureReal_eq_setIntegral measurableSet_Iic]
+  rw [d.measureReal_eq_setIntegral measurableSet_Iic,
+    d.measureReal_eq_setIntegral measurableSet_Iic]
   have htrans : ∫ s in Iic x, d.ρ s = ∫ s in Iic y, d.ρ (s + -δ) := by
     have hpre : (fun s : ℝ ↦ s + -δ) ⁻¹' Iic x = Iic y := by
       ext s
       simp only [mem_preimage, mem_Iic, hδ]
       constructor <;> intro h <;> linarith
-    rw [← (measurePreserving_add_right volume (-δ)).setIntegral_preimage_emb
-      (measurableEmbedding_addRight (-δ)) d.ρ (Iic x), hpre]
+    rw [←
+      (measurePreserving_add_right volume (-δ)).setIntegral_preimage_emb
+        (measurableEmbedding_addRight (-δ)) d.ρ (Iic x),
+      hpre]
   rw [htrans, ← integral_const_mul, ← integral_const_mul]
-  have hae := (measurePreserving_add_right volume (-δ)).quasiMeasurePreserving.ae
-    (d.ae_eq_zero_of_not_mem_interior_support hμ hi)
-  refine integral_mono_ae ((d.integrable.comp_add_right (-δ)).const_mul _).integrableOn
-    (d.integrable.const_mul _).integrableOn ?_
+  have hae :=
+    (measurePreserving_add_right volume (-δ)).quasiMeasurePreserving.ae
+      (d.ae_eq_zero_of_not_mem_interior_support hμ hi)
+  refine
+    integral_mono_ae ((d.integrable.comp_add_right (-δ)).const_mul _).integrableOn
+      (d.integrable.const_mul _).integrableOn ?_
   rw [EventuallyLE, ae_restrict_iff' measurableSet_Iic]
   filter_upwards [hae] with s hs hsy
   have hsy' : s ≤ y := hsy

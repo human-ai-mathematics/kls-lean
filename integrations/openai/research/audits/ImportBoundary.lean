@@ -1,5 +1,10 @@
-import KLSOpenAI.Bridge
-import Lean
+module
+
+public import KLSOpenAI.Bridge
+public import Lean
+meta import Lean
+@[expose] public section
+
 run_cmd do
   let env ← Lean.getEnv
   for name in env.header.moduleNames do

@@ -1,13 +1,17 @@
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Normed.Module.ContinuousInverse
-import Mathlib.Analysis.Normed.Ring.Units
-import Mathlib.Analysis.Normed.Operator.Bilinear
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Normed.Module.ContinuousInverse
+public import Mathlib.Analysis.Normed.Ring.Units
+public import Mathlib.Analysis.Normed.Operator.Bilinear
 
 /-! # Approximate right inverses of a surjection, pointwise and locally uniformly
 
-Surjective continuous linear maps admit norm-controlled approximate inverses, with locally uniform bounds obtained by perturbing a fixed right inverse.
+Surjective continuous linear maps admit norm-controlled approximate inverses, with locally uniform
+bounds obtained by perturbing a fixed right inverse.
 
-**What the uniform right-inverse bound is for.**  In the route a fibre of the regular component `v = P ∘ u` is sliced, and the
+**What the uniform right-inverse bound is for.**  In the route a fibre of the regular component `v =
+P ∘ u` is sliced, and the
 chord `b - a` of a fibre is *not* a tangent vector: two points of one fibre only give
 `‖Dv (b - a)‖ ≤ ε ‖b - a‖`, not `Dv (b - a) = 0`.  Turning that into smallness of `‖Du (b - a)‖`
 needs a quantitative statement that a vector almost annihilated by a surjection is close to its
@@ -23,6 +27,8 @@ of `A`, and its norm is controlled because inversion is continuous at a unit.
 Neither statement needs an inner product, a measure or completeness of the domain; only the target
 is finite-dimensional, and the domain is an arbitrary real normed space.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -49,19 +55,21 @@ theorem exists_mem_ker_norm_sub_le {L : V →L[ℝ] W₁} {R : W₁ →L[ℝ] V}
     refine (R.le_opNorm _).trans ?_
     gcongr
 
-/-- **the uniform right-inverse bound, pointwise.**  A surjection onto a finite-dimensional space admits a single constant `C`
+/--
+**the uniform right-inverse bound, pointwise.**  A surjection onto a finite-dimensional space admits
+a single constant `C`
 such that every vector is within `C ‖L z‖` of the kernel.
 
 The domain is an arbitrary real normed space: only the target has to be finite-dimensional, which
 is what makes the linear right inverse of `L` automatically continuous. -/
 theorem exists_rightInverse_bound [FiniteDimensional ℝ W₁] {L : V →L[ℝ] W₁}
-    (hL : Function.Surjective L) :
-    ∃ C : ℝ≥0, ∀ z : V, ∃ w : V, L w = 0 ∧ ‖z - w‖ ≤ C * ‖L z‖ := by
+    (hL : Function.Surjective L) : ∃ C : ℝ≥0, ∀ z : V, ∃ w : V, L w = 0 ∧ ‖z - w‖ ≤ C * ‖L z‖ := by
   have hRI : L.HasRightInverse :=
     ContinuousLinearMap.HasRightInverse.of_surjective_of_finiteDimensional hL
   refine ⟨‖hRI.rightInverse‖₊, fun z => ?_⟩
-  exact exists_mem_ker_norm_sub_le hRI.rightInverse_rightInverse
-    (le_of_eq (coe_nnnorm hRI.rightInverse).symm) z
+  exact
+    exists_mem_ker_norm_sub_le hRI.rightInverse_rightInverse
+      (le_of_eq (coe_nnnorm hRI.rightInverse).symm) z
 
 end RightInverse
 
@@ -80,40 +88,55 @@ theorem rightInverse_comp_inverse {A : V →L[ℝ] W₁} {R₀ : W₁ →L[ℝ] 
   have := congrArg (fun T : W₁ →L[ℝ] W₁ => T y) hmul
   simpa using this
 
-/-- **the uniform right-inverse bound, locally uniform.**  Around a point where the differential of a `C¹` map is surjective
+/--
+**the uniform right-inverse bound, locally uniform.**  Around a point where the differential of a
+`C¹` map is surjective
 there is a neighbourhood carrying **one** bound `M` on the differential and **one** constant `C`
 for the kernel estimate.
 
 This is the form the route needs: the `ε → 0` limit runs through a different approximating
 partition at each scale, so a constant depending on the piece would be useless. -/
-theorem exists_nhds_uniform_rightInverse_bound {v : V → W₁} {O : Set V} {x₀ : V}
-    (hO : IsOpen O) (hx₀ : x₀ ∈ O) (hv : ContDiffOn ℝ 1 v O)
-    (hsurj : Function.Surjective (fderiv ℝ v x₀)) :
-    ∃ U ∈ 𝓝 x₀, ∃ C M : ℝ≥0, U ⊆ O ∧ ∀ x ∈ U,
-      ‖fderiv ℝ v x‖₊ ≤ M ∧
-        ∀ z : V, ∃ w : V, fderiv ℝ v x w = 0 ∧ ‖z - w‖ ≤ C * ‖fderiv ℝ v x z‖ := by
+theorem exists_nhds_uniform_rightInverse_bound {v : V → W₁} {O : Set V} {x₀ : V} (hO : IsOpen O)
+    (hx₀ : x₀ ∈ O) (hv : ContDiffOn ℝ 1 v O) (hsurj : Function.Surjective (fderiv ℝ v x₀)) :
+    ∃ U ∈ 𝓝 x₀,
+      ∃ C M : ℝ≥0,
+        U ⊆ O ∧
+          ∀ x ∈ U,
+            ‖fderiv ℝ v x‖₊ ≤ M ∧
+              ∀ z : V, ∃ w : V, fderiv ℝ v x w = 0 ∧ ‖z - w‖ ≤ C * ‖fderiv ℝ v x z‖ := by
   have : CompleteSpace W₁ := FiniteDimensional.complete ℝ W₁
   have hRI : (fderiv ℝ v x₀).HasRightInverse :=
     ContinuousLinearMap.HasRightInverse.of_surjective_of_finiteDimensional hsurj
   set R₀ : W₁ →L[ℝ] V := hRI.rightInverse with hR₀def
-  have hR₀ : ∀ y : W₁, (fderiv ℝ v x₀) (R₀ y) = y := hRI.rightInverse_rightInverse
+  have hR₀ : ∀ y : W₁, (fderiv ℝ v x₀) (R₀ y) = y :=
+    hRI.rightInverse_rightInverse
   -- the perturbation `A ↦ A ∘ R₀` is a continuous linear map of the operator spaces
-  set Φ : (V →L[ℝ] W₁) →L[ℝ] (W₁ →L[ℝ] W₁) :=
-    (ContinuousLinearMap.compL ℝ W₁ V W₁).flip R₀ with hΦdef
+
+  set Φ : (V →L[ℝ] W₁) →L[ℝ] (W₁ →L[ℝ] W₁) := (ContinuousLinearMap.compL ℝ W₁ V W₁).flip R₀ with
+    hΦdef
   have hΦ : ∀ A : V →L[ℝ] W₁, Φ A = A.comp R₀ := fun _ => rfl
   have hΦ₀ : Φ (fderiv ℝ v x₀) = 1 := by
     ext y
-    simpa [hΦ] using hR₀ y
+    simpa [hΦ] using
+      hR₀
+        y
   -- the differential is continuous at the base point
+
   have hfd : ContinuousAt (fun x => fderiv ℝ v x) x₀ :=
     (hv.continuousOn_fderiv_of_isOpen hO le_rfl).continuousAt (hO.mem_nhds hx₀)
-  have hΦcont : ContinuousAt (fun x => Φ (fderiv ℝ v x)) x₀ := Φ.continuous.continuousAt.comp hfd
+  have hΦcont : ContinuousAt (fun x => Φ (fderiv ℝ v x)) x₀ :=
+    Φ.continuous.continuousAt.comp
+      hfd
   -- units are open, so the perturbed operator stays invertible nearby
+
   have hunit : ∀ᶠ x in 𝓝 x₀, IsUnit (Φ (fderiv ℝ v x)) := by
     refine hΦcont (?_ : {B : W₁ →L[ℝ] W₁ | IsUnit B} ∈ 𝓝 (Φ (fderiv ℝ v x₀)))
     rw [hΦ₀]
-    exact Units.isOpen.mem_nhds isUnit_one
+    exact
+      Units.isOpen.mem_nhds
+        isUnit_one
   -- inversion is continuous at a unit, so the inverse stays bounded nearby
+
   have hinv1 : ContinuousAt Ring.inverse (Φ (fderiv ℝ v x₀)) := by
     rw [hΦ₀]
     simpa using NormedRing.inverse_continuousAt (1 : (W₁ →L[ℝ] W₁)ˣ)
@@ -125,37 +148,45 @@ theorem exists_nhds_uniform_rightInverse_bound {v : V → W₁} {O : Set V} {x�
     rw [hΦ₀, Ring.inverse_one]
     exact lt_of_le_of_lt ContinuousLinearMap.norm_id_le one_lt_two
   have hinv : ∀ᶠ x in 𝓝 x₀, ‖Ring.inverse (Φ (fderiv ℝ v x))‖ < 2 :=
-    hinvcont.tendsto.eventually_lt_const hinvval
+    hinvcont.tendsto.eventually_lt_const
+      hinvval
   -- the differential itself stays bounded nearby
+
   have hnorm : ∀ᶠ x in 𝓝 x₀, ‖fderiv ℝ v x‖ < ‖fderiv ℝ v x₀‖ + 1 :=
-    (continuous_norm.continuousAt.comp hfd).tendsto.eventually_lt_const (lt_add_one _)
+    (continuous_norm.continuousAt.comp hfd).tendsto.eventually_lt_const
+      (lt_add_one _)
   -- assemble the neighbourhood
+
   obtain ⟨U, hUmem, hUsub⟩ :
-      ∃ U ∈ 𝓝 x₀, U ⊆ O ∩ {x | IsUnit (Φ (fderiv ℝ v x))}
-        ∩ {x | ‖Ring.inverse (Φ (fderiv ℝ v x))‖ < 2}
-        ∩ {x | ‖fderiv ℝ v x‖ < ‖fderiv ℝ v x₀‖ + 1} := by
-    refine ⟨O ∩ {x | IsUnit (Φ (fderiv ℝ v x))}
-        ∩ {x | ‖Ring.inverse (Φ (fderiv ℝ v x))‖ < 2}
-        ∩ {x | ‖fderiv ℝ v x‖ < ‖fderiv ℝ v x₀‖ + 1}, ?_, subset_rfl⟩
+    ∃ U ∈ 𝓝 x₀,
+      U ⊆
+        O ∩ {x | IsUnit (Φ (fderiv ℝ v x))} ∩ {x | ‖Ring.inverse (Φ (fderiv ℝ v x))‖ < 2} ∩
+          {x | ‖fderiv ℝ v x‖ < ‖fderiv ℝ v x₀‖ + 1} := by
+    refine
+      ⟨O ∩ {x | IsUnit (Φ (fderiv ℝ v x))} ∩ {x | ‖Ring.inverse (Φ (fderiv ℝ v x))‖ < 2} ∩
+          {x | ‖fderiv ℝ v x‖ < ‖fderiv ℝ v x₀‖ + 1},
+        ?_, subset_rfl⟩
     exact inter_mem (inter_mem (inter_mem (hO.mem_nhds hx₀) hunit) hinv) hnorm
-  refine ⟨U, hUmem, ‖R₀‖₊ * 2, ‖fderiv ℝ v x₀‖₊ + 1,
-    fun x hx => ((hUsub hx).1.1.1), fun x hx => ⟨?_, fun z => ?_⟩⟩
+  refine
+    ⟨U, hUmem, ‖R₀‖₊ * 2, ‖fderiv ℝ v x₀‖₊ + 1, fun x hx => ((hUsub hx).1.1.1), fun x hx =>
+      ⟨?_, fun z => ?_⟩⟩
   · have h := (hUsub hx).2
     rw [← NNReal.coe_le_coe]
     push_cast
     exact h.le
   · have hu : IsUnit (Φ (fderiv ℝ v x)) := (hUsub hx).1.1.2
     have hb : ‖Ring.inverse (Φ (fderiv ℝ v x))‖ < 2 := (hUsub hx).1.2
-    have hcomp : ∀ y : W₁,
-        (fderiv ℝ v x) ((R₀.comp (Ring.inverse ((fderiv ℝ v x).comp R₀))) y) = y := by
+    have hcomp :
+      ∀ y : W₁, (fderiv ℝ v x) ((R₀.comp (Ring.inverse ((fderiv ℝ v x).comp R₀))) y) = y := by
       intro y
       exact rightInverse_comp_inverse (by rwa [hΦ] at hu) y
     refine exists_mem_ker_norm_sub_le hcomp ?_ z
     rw [hΦ] at hb
     have hcoe : ((‖R₀‖₊ * 2 : ℝ≥0) : ℝ) = ‖R₀‖ * 2 := by push_cast; ring
     rw [hcoe]
-    exact (ContinuousLinearMap.opNorm_comp_le _ _).trans
-      (mul_le_mul_of_nonneg_left hb.le (norm_nonneg R₀))
+    exact
+      (ContinuousLinearMap.opNorm_comp_le _ _).trans
+        (mul_le_mul_of_nonneg_left hb.le (norm_nonneg R₀))
 
 end Uniform
 

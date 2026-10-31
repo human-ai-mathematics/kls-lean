@@ -1,5 +1,7 @@
-import Mathlib.Topology.Semicontinuity.Basic
-import Mathlib.Topology.Algebra.Order.Field
+module
+
+public import Mathlib.Topology.Semicontinuity.Basic
+public import Mathlib.Topology.Algebra.Order.Field
 
 /-!
 # Upper semicontinuity under positive continuous weights
@@ -9,6 +11,8 @@ upper semicontinuous on an arbitrary topological source. This shared topological
 tool supports concave density tilts and Gaussian posterior densities in the BKL
 arXiv:2610.05474v1 regular approximation and localization construction.
 -/
+
+@[expose] public section
 open Filter Topology
 namespace FunctionalInequalities.Analysis
 

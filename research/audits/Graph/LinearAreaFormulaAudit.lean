@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.LinearAreaFormula
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.LinearAreaFormula
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the normalized linear area formula and affine fibres
@@ -16,6 +18,8 @@ records that dimension count too.
 
 **No coarea formula and no `C¹` area formula are proved**, here or in the audited module.
 -/
+
+@[expose] public section
 
 noncomputable section
 

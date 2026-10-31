@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
-import Mathlib.Analysis.Calculus.ContDiff.Operations
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Energy.SmoothGradient.Basic
+public import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
 
 /-!
 # Quadratic laws for the smooth-gradient pre-energy
@@ -14,6 +16,8 @@ Addition and subtraction use the Borel structure on the ambient Hilbert space. T
 is needed to turn continuity of the gradient into the measurability required by the integrability
 argument. No closedness or density statement is made here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -115,7 +119,7 @@ def add [BorelSpace E] (f g : Test mu) : Test mu where
   toFun := f.toFun + g.toFun
   contDiff := f.contDiff.add g.contDiff
   memLp_two := f.memLp_two.add g.memLp_two
-  gradient_sq_integrable := gradientSq_add_integrable f g
+  gradient_sq_integrable := by exact gradientSq_add_integrable f g
 
 /-- The additive inverse of a smooth-gradient test. -/
 def neg (f : Test mu) : Test mu where
@@ -130,7 +134,7 @@ def sub [BorelSpace E] (f g : Test mu) : Test mu where
   toFun := f.toFun - g.toFun
   contDiff := f.contDiff.sub g.contDiff
   memLp_two := f.memLp_two.sub g.memLp_two
-  gradient_sq_integrable := gradientSq_sub_integrable f g
+  gradient_sq_integrable := by exact gradientSq_sub_integrable f g
 
 /-- Real scalar multiplication of a smooth-gradient test. -/
 def smul (c : ℝ) (f : Test mu) : Test mu where
@@ -273,13 +277,13 @@ theorem energy_parallelogram [BorelSpace E] (f g : Test mu) :
 
 end Test
 
-private instance smoothGradientPreEnergyTestAddCommGroup
+instance smoothGradientPreEnergyTestAddCommGroup
     (mu : ProbabilityMeasure E) [FiniteDimensional ℝ E] [BorelSpace E]
     [SecondCountableTopology E] : AddCommGroup (preEnergy mu).Test := by
   change AddCommGroup (Test mu)
   infer_instance
 
-private instance smoothGradientPreEnergyTestModule
+instance smoothGradientPreEnergyTestModule
     (mu : ProbabilityMeasure E) [FiniteDimensional ℝ E] [BorelSpace E]
     [SecondCountableTopology E] : Module ℝ (preEnergy mu).Test := by
   change Module ℝ (Test mu)

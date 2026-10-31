@@ -1,6 +1,19 @@
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+
+/-!
+# A smooth majorant for small translates of a compact cutoff
+
+Continuity and compact support bound the translated cutoff and the exponential weight by one
+smooth compact nonnegative function. The translation parameter satisfies `|t| ≤ 1`; every finite
+dimension, including zero, and every direction are allowed. This supports the Hessian-increment
+energy estimates without assuming a majorant or an energy bound.
+-/
+
+@[expose] public section
 
 noncomputable section
 open Set

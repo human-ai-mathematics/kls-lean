@@ -1,13 +1,19 @@
-import FunctionalInequalities.Probability.Diffusion.Setup
-import FunctionalInequalities.Probability.Diffusion.Existence
-import FunctionalInequalities.Probability.Diffusion.Dynkin
-import FunctionalInequalities.Probability.Diffusion.Generator
+module
+
+public import FunctionalInequalities.Probability.Diffusion.Setup
+public import FunctionalInequalities.Probability.Diffusion.Existence
+public import FunctionalInequalities.Probability.Diffusion.Dynkin
+public import FunctionalInequalities.Probability.Diffusion.Generator
 /-!
 # Diffusions under a change of coordinates
 
-Continuity of diffusion paths, Dynkin's identity and the noise-free linear identity for a diffusion transported by a
-continuous linear equivalence of the state space (used for the Eldan process on `E × (E →L[ℝ] E)` in coordinates).
+Continuity of diffusion paths, Dynkin's identity and the noise-free linear identity for a diffusion
+transported by a
+continuous linear equivalence of the state space (used for the Eldan process on `E × (E →L[ℝ] E)` in
+coordinates).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -26,9 +32,9 @@ variable {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} [IsProbabilityMeasur
   {hW : ∀ k, IsBrownianFiltration (W.W k) ℱ}
 
 /-- Every path of a diffusion is continuous. -/
-theorem IsDiffusion.continuous_path {b : (Fin N → ℝ) → Fin N → ℝ} {σ : (Fin N → ℝ) → Fin d → Fin N → ℝ}
-    {x₀ : Fin N → ℝ} {Y : ℝ → Ω → Fin N → ℝ} (h : IsDiffusion W ℱ hW b σ x₀ Y) (ω : Ω) :
-    Continuous fun t => Y t ω := by
+theorem IsDiffusion.continuous_path {b : (Fin N → ℝ) → Fin N → ℝ}
+    {σ : (Fin N → ℝ) → Fin d → Fin N → ℝ} {x₀ : Fin N → ℝ} {Y : ℝ → Ω → Fin N → ℝ}
+    (h : IsDiffusion W ℱ hW b σ x₀ Y) (ω : Ω) : Continuous fun t => Y t ω := by
   obtain ⟨_, _, _, hv⟩ := h
   exact hv.continuous_path ω
 
@@ -36,18 +42,22 @@ section DynkinTransport
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 
-/-- **Dynkin's identity in a finite-dimensional state space**: if the coordinates `Φ ∘ Y` of a `V`-valued process
-form a diffusion with the transported coefficients, the coefficients on `V` being continuous with compact support,
-then for every `C²` `F : V → ℝ`, `F(Y_T)` is integrable and `E F(Y_T) − F(x₀) = E ∫₀ᵀ 𝓛F(Y_s) ds` with the
+/--
+**Dynkin's identity in a finite-dimensional state space**: if the coordinates `Φ ∘ Y` of a
+`V`-valued process
+form a diffusion with the transported coefficients, the coefficients on `V` being continuous with
+compact support,
+then for every `C²` `F : V → ℝ`, `F(Y_T)` is integrable and `E F(Y_T) − F(x₀) = E ∫₀ᵀ 𝓛F(Y_s) ds`
+with the
 coordinate-free generator on `V`. -/
 theorem IsDiffusion.dynkin_transport (Φ : V ≃L[ℝ] (Fin N → ℝ))
     (hℱ0 : ∀ t : ℝ, t ≤ 0 → ℱ 0 ≤ ℱ t)
-    (hnull : ∀ s : Set Ω, MeasurableSet s → P s = 0 → MeasurableSet[ℱ 0] s)
-    {b : V → V} {σ : V → Fin d → V} {x₀ : V}
-    (hbc : Continuous b) (hσc : ∀ k, Continuous fun x => σ x k)
-    (hbs : HasCompactSupport b) (hσs : ∀ k, HasCompactSupport fun x => σ x k)
-    {Y : ℝ → Ω → V}
-    (h : IsDiffusion W ℱ hW (transportDrift Φ b) (transportNoise Φ σ) (Φ x₀) (fun t ω => Φ (Y t ω)))
+    (hnull : ∀ s : Set Ω, MeasurableSet s → P s = 0 → MeasurableSet[ℱ 0] s) {b : V → V}
+    {σ : V → Fin d → V} {x₀ : V} (hbc : Continuous b) (hσc : ∀ k, Continuous fun x => σ x k)
+    (hbs : HasCompactSupport b) (hσs : ∀ k, HasCompactSupport fun x => σ x k) {Y : ℝ → Ω → V}
+    (h :
+      IsDiffusion W ℱ hW (transportDrift Φ b) (transportNoise Φ σ) (Φ x₀)
+        (fun t ω => Φ (Y t ω)))
     {F : V → ℝ} (hF : ContDiff ℝ 2 F) {T : ℝ} (hT : 0 ≤ T) :
     Integrable (fun ω => F (Y T ω)) P ∧
       ∫ ω, F (Y T ω) ∂P - F x₀ =
@@ -62,12 +72,9 @@ theorem IsDiffusion.dynkin_transport (Φ : V ≃L[ℝ] (Fin N → ℝ))
     exact Φ.continuous.comp ((hσc k).comp Φ.symm.continuous)
   have hbs' : HasCompactSupport (transportDrift Φ b) := by
     change HasCompactSupport (fun y => Φ (b (Φ.symm y)))
-    have h₁ : HasCompactSupport (Φ ∘ b) :=
-      hbs.comp_left (g := Φ) Φ.map_zero
+    have h₁ : HasCompactSupport (Φ ∘ b) := hbs.comp_left (g := Φ) Φ.map_zero
     have h₂ := h₁.comp_homeomorph Φ.symm.toHomeomorph
-    have he :
-        ((Φ ∘ b) ∘ ⇑Φ.symm.toHomeomorph) =
-          (fun y => Φ (b (Φ.symm y))) := by
+    have he : ((Φ ∘ b) ∘ ⇑Φ.symm.toHomeomorph) = (fun y => Φ (b (Φ.symm y))) := by
       funext y
       rfl
     rw [he] at h₂
@@ -75,38 +82,33 @@ theorem IsDiffusion.dynkin_transport (Φ : V ≃L[ℝ] (Fin N → ℝ))
   have hσs' : ∀ k, HasCompactSupport fun y => transportNoise Φ σ y k := by
     intro k
     change HasCompactSupport (fun y => Φ (σ (Φ.symm y) k))
-    have h₁ : HasCompactSupport (Φ ∘ fun x => σ x k) :=
-      (hσs k).comp_left (g := Φ) Φ.map_zero
+    have h₁ : HasCompactSupport (Φ ∘ fun x => σ x k) := (hσs k).comp_left (g := Φ) Φ.map_zero
     have h₂ := h₁.comp_homeomorph Φ.symm.toHomeomorph
-    have he :
-        ((Φ ∘ fun x => σ x k) ∘ ⇑Φ.symm.toHomeomorph) =
-          (fun y => Φ (σ (Φ.symm y) k)) := by
+    have he : ((Φ ∘ fun x => σ x k) ∘ ⇑Φ.symm.toHomeomorph) = (fun y => Φ (σ (Φ.symm y) k)) := by
       funext y
       rfl
     rw [he] at h₂
     exact h₂
-  have hF' : ContDiff ℝ 2 (F ∘ Φ.symm) :=
-    hF.comp (ContinuousLinearEquiv.contDiff Φ.symm)
-  obtain ⟨hInt, hEq⟩ :=
-    IsDiffusion.dynkin hℱ0 hnull hbc' hσc' hbs' hσs' h hF' hT
+  have hF' : ContDiff ℝ 2 (F ∘ Φ.symm) := hF.comp (ContinuousLinearEquiv.contDiff Φ.symm)
+  obtain ⟨hInt, hEq⟩ := IsDiffusion.dynkin hℱ0 hnull hbc' hσc' hbs' hσs' h hF' hT
   refine ⟨?_, ?_⟩
   · simpa only [Function.comp_apply, ContinuousLinearEquiv.symm_apply_apply] using hInt
   · calc
       ∫ ω, F (Y T ω) ∂P - F x₀ =
-          ∫ ω, (F ∘ Φ.symm) ((fun t ω => Φ (Y t ω)) T ω) ∂P -
-            (F ∘ Φ.symm) (Φ x₀) := by
-              simp only [Function.comp_apply, ContinuousLinearEquiv.symm_apply_apply]
-      _ = ∫ ω, ∫ s in Set.Ioc (0 : ℝ) T,
-          diffusionGenerator (transportDrift Φ b) (transportNoise Φ σ)
-            (F ∘ Φ.symm) ((fun t ω => Φ (Y t ω)) s ω) ∂volume ∂P := hEq
-      _ = ∫ ω, ∫ s in Set.Ioc (0 : ℝ) T,
-          diffusionGenerator b σ F (Y s ω) ∂volume ∂P := by
-            apply integral_congr_ae
-            filter_upwards [] with ω
-            apply integral_congr_ae
-            filter_upwards [] with s
-            simpa only [Function.comp_apply] using
-              (diffusionGenerator_transport Φ b σ F (Y s ω))
+          ∫ ω, (F ∘ Φ.symm) ((fun t ω => Φ (Y t ω)) T ω) ∂P - (F ∘ Φ.symm) (Φ x₀) := by
+        simp only [Function.comp_apply, ContinuousLinearEquiv.symm_apply_apply]
+      _ =
+          ∫ ω,
+            ∫ s in Set.Ioc (0 : ℝ) T,
+              diffusionGenerator (transportDrift Φ b) (transportNoise Φ σ) (F ∘ Φ.symm)
+                ((fun t ω => Φ (Y t ω)) s ω) ∂volume ∂P :=
+        hEq
+      _ = ∫ ω, ∫ s in Set.Ioc (0 : ℝ) T, diffusionGenerator b σ F (Y s ω) ∂volume ∂P := by
+        apply integral_congr_ae
+        filter_upwards [] with ω
+        apply integral_congr_ae
+        filter_upwards [] with s
+        simpa only [Function.comp_apply] using (diffusionGenerator_transport Φ b σ F (Y s ω))
 
 end DynkinTransport
 

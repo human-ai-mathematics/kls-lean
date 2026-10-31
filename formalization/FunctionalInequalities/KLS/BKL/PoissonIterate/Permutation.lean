@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
 
 /-!
 # Permutations of index positions and the bound (44) of BKL Lemma 3.3
@@ -42,6 +44,8 @@ Only the combinatorial bound (44) is proved here; the rest of Lemma 3.3 (the com
 with the gradient and the Poisson iterates) is not part of this module. The statement is about
 an arbitrary family of `L²` classes and uses nothing of the measure.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -3,7 +3,15 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedQuadVar
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_sq_eq_lintegral_nnnorm_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Poisson.CompensatedQuadVar
 
 /-!
 # The quadratic-variation martingale of the compensated integral process
@@ -15,6 +23,8 @@ converge in `L¹` to the compensated square of the process: the stage integrands
 `φ` in `L²` of the product measure on `Ω × [0, t] × E`, so their squares converge in `L¹`, and
 the `L¹(P)`-distance of the compensators is dominated by the joint `L¹`-distance.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal
@@ -92,9 +102,8 @@ include h_meas h_sq_int_global in
 /-- The integrand is square-integrable for the horizon measure. -/
 lemma memLp_phi_horizon {t : ℝ} (ht : 0 < t) :
     MemLp (fun p : Ω × ℝ × E => φ p.1 p.2.1 p.2.2) 2 (horizonMeasure ν P t) := by
-  refine ⟨h_meas.aestronglyMeasurable, ?_⟩
   refine (ENNReal.rpow_lt_top_iff_of_pos (by norm_num : (0 : ℝ) < 2)).1 ?_
-  rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq,
+  rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _ h_meas.aestronglyMeasurable,
     lintegral_horizonMeasure t (fun ω s e => (‖φ ω s e‖₊ : ℝ≥0∞) ^ 2)
       ((ENNReal.continuous_coe.measurable.comp h_meas.nnnorm).pow_const 2)]
   exact h_sq_int_global t ht
@@ -142,6 +151,8 @@ lemma stageEval_tendsto (t : ℝ) :
               - fun p : Ω × ℝ × E => φ p.1 p.2.1 p.2.2) p‖₊ : ℝ≥0∞) ^ 2
               ∂(horizonMeasure ν P t) :=
             LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _
+              ((measurable_stageEval N ℱ φ h_meas h_progMeas h_sq_int_global n).sub
+                h_meas).aestronglyMeasurable
         _ = ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) t, ∫⁻ e,
               (‖φ ω s e - G.eval s e ω‖₊ : ℝ≥0∞) ^ 2 ∂ν ∂volume ∂P := by
             rw [← lintegral_horizonMeasure t
@@ -170,10 +181,9 @@ include hℱ in
 /-- The stage integrands are square-integrable for the horizon measure. -/
 lemma memLp_stageEval (n : ℕ) {t : ℝ} (ht : 0 ≤ t) :
     MemLp (stageEval N ℱ φ h_meas h_progMeas h_sq_int_global n) 2 (horizonMeasure ν P t) := by
-  refine ⟨(measurable_stageEval N ℱ φ h_meas h_progMeas h_sq_int_global n).aestronglyMeasurable,
-    ?_⟩
   refine (ENNReal.rpow_lt_top_iff_of_pos (by norm_num : (0 : ℝ) < 2)).1 ?_
-  rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq]
+  rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq _
+    (measurable_stageEval N ℱ φ h_meas h_progMeas h_sq_int_global n).aestronglyMeasurable]
   unfold stageEval
   set G := (master N ℱ φ h_meas h_progMeas h_sq_int_global n).2 with hG
   have hm : Measurable (fun p : Ω × ℝ × E => (‖G.eval p.2.1 p.2.2 p.1‖₊ : ℝ≥0∞) ^ 2) :=
@@ -187,7 +197,8 @@ lemma memLp_stageEval (n : ℕ) {t : ℝ} (ht : 0 ≤ t) :
     lintegral_congr fun ω =>
       (lintegral_swap_es (fun ω s e => (‖G.eval s e ω‖₊ : ℝ≥0∞) ^ 2) hm ω).symm
   rw [h2, ← h1, ← LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq]
-  exact ENNReal.rpow_lt_top_of_nonneg (by norm_num) (G.memLp_integral N t).eLpNorm_ne_top
+  · exact ENNReal.rpow_lt_top_of_nonneg (by norm_num) (G.memLp_integral N t).eLpNorm_ne_top
+  · exact (G.memLp_integral N t).aestronglyMeasurable
 
 include hℱ in
 /-- The stage compensators converge in `L¹` to the compensator of the integrand. -/
@@ -211,7 +222,7 @@ lemma stage_compensator_tendsto_L1 (t : ℝ) :
         (horizonMeasure ν P t)) atTop (𝓝 0) :=
       LevyStochCalc.Brownian.Ito.tendsto_eLpNorm_one_sq_sub
         (fun n => (measurable_stageEval N ℱ φ h_meas h_progMeas h_sq_int_global n).aemeasurable)
-        h_meas.aemeasurable hgmem.2.ne (stageEval_tendsto N ℱ φ h_meas h_progMeas
+        h_meas.aemeasurable hgmem.eLpNorm_ne_top (stageEval_tendsto N ℱ φ h_meas h_progMeas
           h_sq_int_global t)
     have hmarg : ∀ n, eLpNorm (fun ω =>
         (master N ℱ φ h_meas h_progMeas h_sq_int_global n).2.compensator t ω
@@ -229,7 +240,13 @@ lemma stage_compensator_tendsto_L1 (t : ℝ) :
       have hd : Integrable (fun p : Ω × ℝ × E =>
           (stageEval N ℱ φ h_meas h_progMeas h_sq_int_global n p) ^ 2 - (φ p.1 p.2.1 p.2.2) ^ 2)
           (horizonMeasure ν P t) := hGsq.sub hgsq
-      rw [eLpNorm_one_eq_lintegral_enorm, eLpNorm_one_eq_lintegral_enorm,
+      rw [eLpNorm_one_eq_lintegral_enorm
+          (f := fun ω => (master N ℱ φ h_meas h_progMeas h_sq_int_global n).2.compensator t ω
+            - compensator ν φ t ω)
+          (((master N ℱ φ h_meas h_progMeas h_sq_int_global n).2.integrable_compensator
+            t).aestronglyMeasurable.sub
+            (integrable_compensator φ h_meas h_sq_int_global t).aestronglyMeasurable),
+        eLpNorm_one_eq_lintegral_enorm hd.aestronglyMeasurable,
         lintegral_prod _ hd.aestronglyMeasurable.enorm]
       refine lintegral_mono_ae ?_
       filter_upwards [hGsq.prod_right_ae, hgsq.prod_right_ae] with ω hGω hgω
@@ -275,19 +292,6 @@ theorem martingale_quadVar_process :
   have hY := stage_compensator_tendsto_L1 N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (by simpa using hX.add hY)
     (Eventually.of_forall fun n => bot_le) (Eventually.of_forall fun n => ?_)
-  have hXaesm : AEStronglyMeasurable (fun ω =>
-      (stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n t ω) ^ 2
-        - (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t ω) ^ 2) P :=
-    (memLp_stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n
-      t).integrable_sq.aestronglyMeasurable.sub
-      (process_memLp N ℱ hℱ φ h_meas h_progMeas h_sq_int_global
-        t).integrable_sq.aestronglyMeasurable
-  have hYaesm : AEStronglyMeasurable (fun ω =>
-      (master N ℱ φ h_meas h_progMeas h_sq_int_global n).2.compensator t ω
-        - compensator ν φ t ω) P :=
-    ((master N ℱ φ h_meas h_progMeas h_sq_int_global n).2.integrable_compensator
-      t).aestronglyMeasurable.sub
-      (integrable_compensator φ h_meas h_sq_int_global t).aestronglyMeasurable
   calc eLpNorm ((fun ω => (stageIntegral N ℱ φ h_meas h_progMeas h_sq_int_global n t ω) ^ 2
           - (master N ℱ φ h_meas h_progMeas h_sq_int_global n).2.compensator t ω)
         - fun ω => (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global t ω) ^ 2
@@ -299,7 +303,7 @@ theorem martingale_quadVar_process :
         refine eLpNorm_congr_ae (Eventually.of_forall fun ω => ?_)
         simp only [Pi.sub_apply]
         ring
-    _ ≤ _ := eLpNorm_sub_le hXaesm hYaesm le_rfl
+    _ ≤ _ := eLpNorm_sub_le le_rfl
 
 include h_meas h_sq_int_global in
 /-- Right-`L¹`-continuity of the compensator. -/
@@ -314,7 +318,10 @@ lemma compensator_right_tendsto_L1 (s : ℝ) :
     filter_upwards [self_mem_nhdsWithin] with r hr
     have hsr : s ≤ r := hr.le
     have hint := (memLp_phi_horizon φ h_meas h_sq_int_global (hs.trans_lt hr)).integrable_sq
-    rw [eLpNorm_one_eq_lintegral_enorm]
+    rw [eLpNorm_one_eq_lintegral_enorm
+      (f := fun ω => compensator ν φ r ω - compensator ν φ s ω)
+      ((integrable_compensator φ h_meas h_sq_int_global r).aestronglyMeasurable.sub
+        (integrable_compensator φ h_meas h_sq_int_global s).aestronglyMeasurable)]
     refine (lintegral_congr_ae ?_).symm
     filter_upwards [hint.prod_right_ae] with ω hω
     have hu : Integrable (fun u => ∫ e, (φ ω u e) ^ 2 ∂ν) (volume.restrict (Set.Icc (0 : ℝ) r)) :=
@@ -372,17 +379,6 @@ theorem martingale_rightCont_quadVar_process :
   have hA := compensator_right_tendsto_L1 φ h_meas h_sq_int_global s
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (by simpa using hF2.add hA)
     (Eventually.of_forall fun r => bot_le) (Eventually.of_forall fun r => ?_)
-  have hF2aesm : AEStronglyMeasurable (fun ω =>
-      (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global r ω) ^ 2
-        - (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global s ω) ^ 2) P :=
-    (process_memLp N ℱ hℱ φ h_meas h_progMeas h_sq_int_global
-      r).integrable_sq.aestronglyMeasurable.sub
-      (process_memLp N ℱ hℱ φ h_meas h_progMeas h_sq_int_global
-        s).integrable_sq.aestronglyMeasurable
-  have hAaesm : AEStronglyMeasurable
-      (fun ω => compensator ν φ r ω - compensator ν φ s ω) P :=
-    (integrable_compensator φ h_meas h_sq_int_global r).aestronglyMeasurable.sub
-      (integrable_compensator φ h_meas h_sq_int_global s).aestronglyMeasurable
   calc eLpNorm ((fun ω => (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global r ω) ^ 2
           - compensator ν φ r ω)
         - fun ω => (process N ℱ hℱ φ h_meas h_progMeas h_sq_int_global s ω) ^ 2
@@ -393,6 +389,6 @@ theorem martingale_rightCont_quadVar_process :
         refine eLpNorm_congr_ae (Eventually.of_forall fun ω => ?_)
         simp only [Pi.sub_apply]
         ring
-    _ ≤ _ := eLpNorm_sub_le hF2aesm hAaesm le_rfl
+    _ ≤ _ := eLpNorm_sub_le le_rfl
 
 end LevyStochCalc.Poisson.Compensated

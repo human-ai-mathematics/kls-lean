@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
-import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
-import FunctionalInequalities.Analysis.Convex.EssentialContinuity
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.Finite
+public import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
+public import FunctionalInequalities.Analysis.Convex.EssentialContinuity
 
 /-!
 # Uniqueness of essentially continuous moment potentials with bounded-support moment measure
@@ -26,6 +28,8 @@ essentially continuous (CEK Definition 2, `Analysis.EssentiallyContinuous`) with
 Proof: finiteness and the Lipschitz bound are `Analysis.ConvexPotential.ne_top_of_map_gradient`;
 the finite potentials are then compared by `exists_eq_translate_of_map_gradient_eq`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -124,7 +128,7 @@ theorem exists_eq_translate_of_ofPotential_eq_of_map_gradient_eq {φ : E → ℝ
     isProbabilityMeasure_tilted hint
   have : IsProbabilityMeasure μ := by
     rw [← hmap]
-    exact Measure.isProbabilityMeasure_map (measurable_gradient φ).aemeasurable
+    exact (Measure.isProbabilityMeasure_map_iff (measurable_gradient φ).aemeasurable).2 inferInstance
   obtain ⟨φ₁, hc₁, hφ₁, -, hn₁, hmap₁⟩ := exists_eq_coe_of_ofPotential_eq hψ hess hψμ hR
   obtain ⟨y₀, hy₀⟩ := exists_eq_translate_of_map_gradient_eq hφ hφ₁ hnorm hn₁ hmap hmap₁ hR
   exact ⟨y₀, fun y => by rw [hc₁, hy₀]⟩

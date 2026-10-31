@@ -1,9 +1,11 @@
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Normed.Module.Normalize
-import Mathlib.Topology.Order.Compact
-import Mathlib.Tactic.FunProp
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Normed.Module.Normalize
+public import Mathlib.Topology.Order.Compact
+public import Mathlib.Tactic.FunProp
+public import Mathlib.Tactic.Ring
 
 /-!
 # Uniform quadratic ellipticity of compact matrix families
@@ -21,6 +23,8 @@ bound.
 The zero vector is handled separately, and the compact minimum argument also covers an empty unit
 sphere, so the statement holds for an empty index type as well.
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis
 open Set Metric Matrix
@@ -34,7 +38,7 @@ private def quadratic (M : Matrix ι ι ℝ) (ξ : EuclideanSpace ℝ ι) : ℝ 
 
 /-- Quadratic scaling, including scalar zero. -/
 private theorem quadratic_smul (M : Matrix ι ι ℝ) (a : ℝ) (ξ : EuclideanSpace ℝ ι) :
-    quadratic M (a • ξ) = a^2 * quadratic M ξ := by
+    quadratic M (a • ξ) = a ^ 2 * quadratic M ξ := by
   unfold quadratic
   simp only [PiLp.smul_apply, smul_eq_mul]
   simp_rw [Finset.mul_sum]
@@ -60,9 +64,12 @@ private theorem quadratic_pos {M : Matrix ι ι ℝ} (hM : M.PosDef)
 The constants precede both the family parameter and the vector. -/
 theorem exists_uniform_quadratic_bounds [TopologicalSpace X] [CompactSpace X]
     (A : X → Matrix ι ι ℝ) (hA : Continuous A) (hpos : ∀ x, (A x).PosDef) :
-    ∃ a b : ℝ, 0 < a ∧ 0 < b ∧ ∀ x (ξ : EuclideanSpace ℝ ι),
-      a * ‖ξ‖^2 ≤ (∑ i, ∑ j, A x i j * ξ i * ξ j) ∧
-        (∑ i, ∑ j, A x i j * ξ i * ξ j) ≤ b * ‖ξ‖^2 := by
+    ∃ a b : ℝ,
+      0 < a ∧
+        0 < b ∧
+          ∀ x (ξ : EuclideanSpace ℝ ι),
+            a * ‖ξ‖ ^ 2 ≤ (∑ i, ∑ j, A x i j * ξ i * ξ j) ∧
+              (∑ i, ∑ j, A x i j * ξ i * ξ j) ≤ b * ‖ξ‖ ^ 2 := by
   let S : Set (X × EuclideanSpace ℝ ι) := univ ×ˢ sphere 0 1
   let F : X × EuclideanSpace ℝ ι → ℝ := fun z => quadratic (A z.1) z.2
   have hS : IsCompact S := isCompact_univ.prod (isCompact_sphere 0 1)
@@ -75,37 +82,36 @@ theorem exists_uniform_quadratic_bounds [TopologicalSpace X] [CompactSpace X]
     intro hzero
     simp only [hzero, norm_zero] at hn
     exact zero_ne_one hn
-  obtain ⟨a,ha,hlo⟩ := hS.exists_forall_le' hc.continuousOn hp
-  obtain ⟨U,hU⟩ := (hS.image hc).isBounded.exists_norm_le
-  let b : ℝ := |U|+1
+  obtain ⟨a, ha, hlo⟩ := hS.exists_forall_le' hc.continuousOn hp
+  obtain ⟨U, hU⟩ := (hS.image hc).isBounded.exists_norm_le
+  let b : ℝ := |U| + 1
   have hb : 0 < b := add_pos_of_nonneg_of_pos (abs_nonneg U) zero_lt_one
-  refine ⟨a,b,ha,hb,?_⟩
+  refine ⟨a, b, ha, hb, ?_⟩
   intro x ξ
   by_cases hz : ξ = 0
-  · simp only [hz, PiLp.zero_apply, mul_zero, Finset.sum_const_zero,
-      norm_zero, zero_pow (by decide : 2 ≠ 0), mul_zero, le_refl, and_self]
+  · simp only [hz, PiLp.zero_apply, mul_zero, Finset.sum_const_zero, norm_zero,
+      zero_pow (by decide : 2 ≠ 0), mul_zero, le_refl, and_self]
   have hw : ‖NormedSpace.normalize ξ‖ = 1 := NormedSpace.norm_normalize hz
-  have hm : (x,NormedSpace.normalize ξ) ∈ S := by
-    exact ⟨mem_univ _,by simpa only [mem_sphere_iff_norm, sub_zero] using hw⟩
-  have hlo' := hlo (x,NormedSpace.normalize ξ) hm
-  have hup' : F (x,NormedSpace.normalize ξ) ≤ b := by
-    have hu := hU (F (x,NormedSpace.normalize ξ))
-      ⟨(x,NormedSpace.normalize ξ),hm,rfl⟩
-    have hu' : |F (x,NormedSpace.normalize ξ)| ≤ U := by
-      simpa only [Real.norm_eq_abs] using hu
-    exact (le_abs_self _).trans (hu'.trans
-      ((le_abs_self U).trans (le_add_of_nonneg_right zero_le_one)))
+  have hm : (x, NormedSpace.normalize ξ) ∈ S := by
+    exact ⟨mem_univ _, by simpa only [mem_sphere_iff_norm, sub_zero] using hw⟩
+  have hlo' := hlo (x, NormedSpace.normalize ξ) hm
+  have hup' : F (x, NormedSpace.normalize ξ) ≤ b := by
+    have hu := hU (F (x, NormedSpace.normalize ξ)) ⟨(x, NormedSpace.normalize ξ), hm, rfl⟩
+    have hu' : |F (x, NormedSpace.normalize ξ)| ≤ U := by simpa only [Real.norm_eq_abs] using hu
+    exact
+      (le_abs_self _).trans
+        (hu'.trans ((le_abs_self U).trans (le_add_of_nonneg_right zero_le_one)))
   have hscale := quadratic_smul (A x) ‖ξ‖ (NormedSpace.normalize ξ)
   rw [NormedSpace.norm_smul_normalize] at hscale
   constructor
   · calc
-      a * ‖ξ‖^2 = ‖ξ‖^2*a := mul_comm _ _
-      _ ≤ ‖ξ‖^2 * F (x,NormedSpace.normalize ξ) :=
+      a * ‖ξ‖ ^ 2 = ‖ξ‖ ^ 2 * a := mul_comm _ _
+      _ ≤ ‖ξ‖ ^ 2 * F (x, NormedSpace.normalize ξ) :=
         mul_le_mul_of_nonneg_left hlo' (sq_nonneg _)
       _ = quadratic (A x) ξ := hscale.symm
   · calc
-      quadratic (A x) ξ = ‖ξ‖^2 * F (x,NormedSpace.normalize ξ) := hscale
-      _ ≤ ‖ξ‖^2*b := mul_le_mul_of_nonneg_left hup' (sq_nonneg _)
-      _ = b*‖ξ‖^2 := mul_comm _ _
+      quadratic (A x) ξ = ‖ξ‖ ^ 2 * F (x, NormedSpace.normalize ξ) := hscale
+      _ ≤ ‖ξ‖ ^ 2 * b := mul_le_mul_of_nonneg_left hup' (sq_nonneg _)
+      _ = b * ‖ξ‖ ^ 2 := mul_comm _ _
 
 end FunctionalInequalities.Analysis

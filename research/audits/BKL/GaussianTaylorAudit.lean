@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
+module
+
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
 
 /-!
 # Audit: nonvacuity of BKL Theorem 3.1 in dimension one
@@ -19,6 +21,8 @@ Together with the dimension-zero witness of `solutions/ThmBklTaylorCriterion.lea
 the hypotheses of Theorem 3.1 are jointly satisfiable in positive dimension. It says nothing new
 about the Gaussian and is not a step towards the KLS bound (Theorem 1.1).
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,8 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Line.Profile
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Borel
-import Mathlib.MeasureTheory.Integral.Layercake
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.Profile
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Borel
+public import Mathlib.MeasureTheory.Integral.Layercake
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 
 /-!
 # Grünbaum's lemma on the line
@@ -17,6 +19,8 @@ tail `G(t) = μ(t, ∞)` is log-concave, so it lies below its tangent exponentia
 `∫₀^∞ G = ∫_{-∞}^0 (1 - G)`, and comparing both sides with the exponential gives
 `G(0) ≥ -log G(0) - 1 + G(0)`, i.e. `G(0) ≥ 1/e`. The reflected law gives `μ(-∞, 0) ≥ 1/e`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -1049,51 +1053,38 @@ theorem measureReal_Ioi_pos_and_Iio_pos (hμ : LogConcave μ)
 
 theorem reflect_logConcave (hμ : LogConcave μ) (hmean : ∫ x, x ∂(μ : Measure ℝ) = 0) :
     LogConcave (Probability.mapContinuousLinearEquiv μ (ContinuousLinearEquiv.neg ℝ)) ∧
-      ∫ x, x ∂(Probability.mapContinuousLinearEquiv μ (ContinuousLinearEquiv.neg ℝ) :
-        Measure ℝ) = 0 ∧
-      (Probability.mapContinuousLinearEquiv μ (ContinuousLinearEquiv.neg ℝ) : Measure ℝ).real
-        (Ioi 0) = (μ : Measure ℝ).real (Iio 0) := by
+      ∫ x,
+            x ∂(Probability.mapContinuousLinearEquiv μ (ContinuousLinearEquiv.neg ℝ) :
+              Measure ℝ) =
+          0 ∧
+        (Probability.mapContinuousLinearEquiv μ (ContinuousLinearEquiv.neg ℝ) : Measure ℝ).real
+            (Ioi 0) =
+          (μ : Measure ℝ).real (Iio 0) := by
   let T : ℝ ≃L[ℝ] ℝ := ContinuousLinearEquiv.neg ℝ
   let ν : ProbabilityMeasure ℝ := Probability.mapContinuousLinearEquiv μ T
-
-  have hν : LogConcave ν := by
-    exact hμ.mapContinuousLinearEquiv T
-
-  have hcoe : (ν : Measure ℝ) = (μ : Measure ℝ).map T := by
-    rfl
-
-  have hν_integrable : Integrable id (ν : Measure ℝ) :=
-    hν.integrable_id
-
+  have hν : LogConcave ν := by exact hμ.mapContinuousLinearEquiv T
+  have hcoe : (ν : Measure ℝ) = (μ : Measure ℝ).map T := by rfl
+  have hν_integrable : Integrable id (ν : Measure ℝ) := hν.integrable_id
   have hν_integrable' : Integrable id ((μ : Measure ℝ).map T) := by
     rw [← hcoe]
     exact hν_integrable
-
-  have hmap :
-      ∫ x, id x ∂((μ : Measure ℝ).map T) =
-        ∫ x, id (T x) ∂(μ : Measure ℝ) := by
+  have hmap : ∫ x, id x ∂((μ : Measure ℝ).map T) = ∫ x, id (T x) ∂(μ : Measure ℝ) := by
     rw [integral_map T.continuous.aemeasurable]
     exact hν_integrable'.aestronglyMeasurable
-
   have hνmean : ∫ x, x ∂(ν : Measure ℝ) = 0 := by
     calc
-      ∫ x, x ∂(ν : Measure ℝ) =
-          ∫ x, id x ∂((μ : Measure ℝ).map T) := by
-            rw [hcoe]
-            rfl
+      ∫ x, x ∂(ν : Measure ℝ) = ∫ x, id x ∂((μ : Measure ℝ).map T) := by
+        rw [hcoe]
+        rfl
       _ = ∫ x, id (T x) ∂(μ : Measure ℝ) := hmap
       _ = ∫ x, -x ∂(μ : Measure ℝ) := by
         apply integral_congr_ae
         filter_upwards [] with x
         change T x = -x
         rfl
-      _ = -(∫ x, x ∂(μ : Measure ℝ)) := by
-        rw [integral_neg]
-      _ = 0 := by
-        rw [hmean, neg_zero]
-
-  have hmass :
-      (ν : Measure ℝ) (Ioi 0) = (μ : Measure ℝ) (Iio 0) := by
+      _ = -(∫ x, x ∂(μ : Measure ℝ)) := by rw [integral_neg]
+      _ = 0 := by rw [hmean, neg_zero]
+  have hmass : (ν : Measure ℝ) (Ioi 0) = (μ : Measure ℝ) (Iio 0) := by
     rw [hcoe, Measure.map_apply T.continuous.measurable measurableSet_Ioi]
     have hpre : T ⁻¹' Ioi 0 = Iio 0 := by
       ext x
@@ -1101,13 +1092,9 @@ theorem reflect_logConcave (hμ : LogConcave μ) (hmean : ∫ x, x ∂(μ : Meas
       change 0 < -x ↔ x < 0
       constructor <;> intro hx <;> linarith
     rw [hpre]
-
-  have hreal :
-      (ν : Measure ℝ).real (Ioi 0) = (μ : Measure ℝ).real (Iio 0) := by
-    change ((ν : Measure ℝ) (Ioi 0)).toReal =
-      ((μ : Measure ℝ) (Iio 0)).toReal
+  have hreal : (ν : Measure ℝ).real (Ioi 0) = (μ : Measure ℝ).real (Iio 0) := by
+    change ((ν : Measure ℝ) (Ioi 0)).toReal = ((μ : Measure ℝ) (Iio 0)).toReal
     exact congrArg ENNReal.toReal hmass
-
   refine ⟨?_, ?_, ?_⟩
   · simpa [ν, T] using hν
   · simpa [ν, T] using hνmean

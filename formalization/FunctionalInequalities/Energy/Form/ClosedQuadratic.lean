@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.Form.Functional
-import Mathlib.Analysis.Normed.Module.Basic
-import Mathlib.Analysis.Normed.Operator.LinearIsometry
-import Mathlib.Data.ENNReal.Operations
-import Mathlib.Topology.Maps.Basic
-import Mathlib.Topology.Semicontinuity.Basic
+module
+
+public import FunctionalInequalities.Energy.Form.Functional
+public import Mathlib.Analysis.Normed.Module.Basic
+public import Mathlib.Analysis.Normed.Operator.LinearIsometry
+public import Mathlib.Basic.ENNReal.Operations
+public import Mathlib.Topology.Maps.Basic
+public import Mathlib.Topology.Semicontinuity.Basic
 
 /-!
 # Closed extended quadratic energies
@@ -16,6 +18,8 @@ Homogeneity is stored only for nonzero scalars. The separate zero field supplies
 branch without interpreting the indeterminate expression `0 * ⊤`. The derived theorem
 `ClosedQuadratic.smul` exposes both branches in one total statement.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.Energy
 

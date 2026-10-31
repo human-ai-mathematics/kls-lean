@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
 
 /-!
 # Convex potentials for finite-copy suspension
@@ -11,6 +13,8 @@ For `D²V ≥ a Id` and `‖D²f‖ ≤ M`, the potential
 This is the convexity part of the suspension construction. The joint-law identification,
 isotropy, mixed cumulant identity and Taylor estimate of Proposition 7.1 are separate targets.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -85,17 +89,19 @@ The auxiliary-coordinate scale is unrestricted, and no probability assumptions a
 theorem convexOn_potential {V f : E → ℝ} (hV : ContDiff ℝ 2 V) (hf : ContDiff ℝ 2 f)
     {a M beta sigma : ℝ} (hbeta : 0 ≤ beta)
     (hVlower : ∀ x v, a * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ V x v v)
-    (hfbound : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M)
-    (N : ℕ) (hN : beta / Real.sqrt N * M ≤ a) :
+    (hfbound : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (N : ℕ) (hN : beta / Real.sqrt N * M ≤ a) :
     ConvexOn ℝ Set.univ (potential V f beta sigma N) := by
   classical
   have hc : 0 ≤ beta / Real.sqrt N := div_nonneg hbeta (Real.sqrt_nonneg _)
-  have hp := convexOn_perturbation hV hf hVlower hfbound
-    (c := beta / Real.sqrt N) (by simpa only [abs_of_nonneg hc] using hN)
-  have hm := convexOn_perturbation hV hf hVlower hfbound
-    (c := -(beta / Real.sqrt N)) (by simpa only [abs_neg, abs_of_nonneg hc] using hN)
-  have hmax := (convexOn_sum_add_linear hm N (beta * sigma)).sup
-    (convexOn_sum_add_linear hp N (-(beta * sigma)))
+  have hp :=
+    convexOn_perturbation hV hf hVlower hfbound (c := beta / Real.sqrt N)
+      (by simpa only [abs_of_nonneg hc] using hN)
+  have hm :=
+    convexOn_perturbation hV hf hVlower hfbound (c := -(beta / Real.sqrt N))
+      (by simpa only [abs_neg, abs_of_nonneg hc] using hN)
+  have hmax :=
+    (convexOn_sum_add_linear hm N (beta * sigma)).sup
+      (convexOn_sum_add_linear hp N (-(beta * sigma)))
   apply hmax.congr
   intro p _
   simp only [Pi.sup_apply]

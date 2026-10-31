@@ -6,8 +6,12 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoVersionExists
-import LevyStochCalc.Brownian.VectorItoProcessVersion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoVersionExists
+public import LevyStochCalc.Brownian.VectorItoProcessVersion
 
 /-!
 # Existence of a continuous adapted version of a vector Itô process
@@ -23,6 +27,8 @@ adapted version of the vector Itô process.
 * `LevyStochCalc.Brownian.Ito.exists_isVectorItoVersion_aug` — the same over the augmented
   filtration, with no side conditions.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -84,7 +90,7 @@ theorem exists_isVectorItoVersion
         Set.Icc_subset_Iic_self volume).mono le_rfl).measurable
     refine Measurable.stronglyMeasurable ?_
     let : MeasurableSpace Ω := ℱ t
-    exact measurable_pi_lambda _ hcoordm
+    exact Measurable.of_eval hcoordm
   · intro t ht
     have hall : ∀ᵐ ω ∂P, ∀ (p : Fin n) (k : Fin d),
         Y p k t ω = coordItoIntegral W ℱ hcoord H hHm hHp hHs p k t ω :=

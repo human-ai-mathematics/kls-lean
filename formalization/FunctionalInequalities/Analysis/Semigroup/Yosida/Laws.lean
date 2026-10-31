@@ -1,11 +1,15 @@
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Approximation
-import Mathlib.Analysis.SpecialFunctions.Exponential
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+public import FunctionalInequalities.Analysis.Semigroup.Yosida.Approximation
+public import Mathlib.Analysis.SpecialFunctions.Exponential
 
 /-! # Laws of the Yosida approximation
 Nonnegativity, symmetry, commutation and convergence on the generator domain.
 The counterexample for unrestricted operator families lives in Exponential/Counterexample.lean. -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,6 +1,8 @@
-import Mathlib.MeasureTheory.Function.LpOrder
-import Mathlib.Algebra.QuadraticDiscriminant
-import Mathlib.Topology.Instances.Rat
+module
+
+public import Mathlib.MeasureTheory.Function.LpOrder
+public import Mathlib.Algebra.QuadraticDiscriminant
+public import Mathlib.Topology.Instances.Rat
 
 /-!
 # Quadratic inequalities under positive maps on L2
@@ -10,6 +12,8 @@ matrices. Rational quadratic tests provide one common full-measure set; continui
 then supplies all real tests. Neither continuity nor preservation of constants is
 required of the linear map.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Filter Topology
 namespace FunctionalInequalities.L2

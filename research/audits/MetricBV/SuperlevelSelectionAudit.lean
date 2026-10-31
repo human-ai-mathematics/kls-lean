@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for the quantitative superlevel selection of metric BV
 tests: the pointwise and integrated indicator errors, the positive-slack selection lemma (no
@@ -7,6 +9,8 @@ measurable superlevel set. Boundary checks: the measurable-`B` form, the endpoin
 `t = 1 - δ` of the error bound, zero cost, zero error, the zero test, the zero-dimensional space,
 and the BV-perimeter form via `perimeter_le_minkowskiContent`. No regular boundary or
 differentiability is used; this is not a sequence-level recovery or a Cheeger identification. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -73,7 +77,8 @@ theorem selectionMeasurable (ν : ProbabilityMeasure V) (f : Test V) {B : Set V}
 /-- Zero cost: the selected superlevel set has content at most `ε`. -/
 theorem zeroCost (ν : ProbabilityMeasure V) (f : Test V) (hf : cost (ν : Measure V) f = 0)
     (B : Set V) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
-    ∃ t ∈ Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
+    ∃ t ∈ Set.Ioo δ (1 - δ),
+      Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
   obtain ⟨t, ht, -, hc, -⟩ := exists_superlevel_selection (ν : Measure V) f B hδ hδ2 hε
   rw [hf, ENNReal.zero_div, zero_add] at hc
   exact ⟨t, ht, hc⟩
@@ -89,10 +94,12 @@ theorem zeroError (ν : ProbabilityMeasure V) (f : Test V) (B : Set V)
   exact ⟨t, ht, le_antisymm he bot_le⟩
 
 /-- The zero test: every admissible level is positive, so the selected set is empty. -/
-theorem zeroTest (ν : ProbabilityMeasure V) (B : Set V) {δ ε : ℝ} (hδ : 0 < δ)
-    (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
-    ∃ t ∈ Set.Ioo δ (1 - δ), {x | t ≤ (Test.zero : Test V) x} = ∅ ∧
-      Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ (Test.zero : Test V) x} ≤ ENNReal.ofReal ε := by
+theorem zeroTest (ν : ProbabilityMeasure V) (B : Set V) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2)
+    (hε : 0 < ε) :
+    ∃ t ∈ Set.Ioo δ (1 - δ),
+      {x | t ≤ (Test.zero : Test V) x} = ∅ ∧
+        Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ (Test.zero : Test V) x} ≤
+          ENNReal.ofReal ε := by
   obtain ⟨t, ht, hc⟩ := zeroCost ν Test.zero (cost_zero _) B hδ hδ2 hε
   refine ⟨t, ht, ?_, hc⟩
   refine Set.eq_empty_of_forall_notMem fun x hx => ?_
@@ -102,7 +109,9 @@ theorem zeroTest (ν : ProbabilityMeasure V) (B : Set V) {δ ε : ℝ} (hδ : 0 
 /-- The zero-dimensional space: every test has zero cost. -/
 theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ)) (f : Test (Fin 0 → ℝ))
     (B : Set (Fin 0 → ℝ)) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
-    ∃ t ∈ Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
+    ∃ t ∈ Set.Ioo δ (1 - δ),
+      Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) {x | t ≤ f x} ≤
+        ENNReal.ofReal ε := by
   refine zeroCost ν f ?_ B hδ hδ2 hε
   simp [cost, FunctionalInequalities.Energy.LocalSlope.apply_eq_zero_of_subsingleton]
 

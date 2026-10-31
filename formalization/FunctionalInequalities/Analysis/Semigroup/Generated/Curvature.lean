@@ -1,8 +1,10 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
-import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
+public import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 
 /-!
 # Exponential energy decay under a curvature bound for `P_t = exp (-t T†T)`
@@ -17,6 +19,8 @@ Under that condition the energy decays exponentially, `‖T (P_t f)‖² ≤ e^{
 `‖f‖² - ‖P_t f‖² ≤ (1 - e^{-2ρt}) / ρ · ‖T f‖²` for `ρ > 0`. The limit `t → ∞` (ergodicity) is
 not part of this file.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -541,7 +545,7 @@ theorem norm_sq_sub_norm_apply_sq_le {ρ : ℝ} (hρ : 0 < ρ)
     have hs' : 0 < s := by
       simpa [interior_Ici] using hs
     dsimp [D]
-    rw [dif_pos hs']
+    rw [dite_eq_left hs']
     have hdec :=
       norm_map_apply_sq_le_exp T hT hd hcurv f hs'.le
     have hdec' :

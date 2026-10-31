@@ -1,6 +1,8 @@
-import Mathlib.Analysis.InnerProductSpace.Laplacian
-import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
-import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Laplacian
+public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
 # Green's first identity against compactly supported tests
@@ -11,6 +13,8 @@ the whole-space, compact-support case of Green's first identity (Gilbarg–Trudi
 Partial Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), §2.4), used for
 the representation (4.15) of compactly supported functions.
 -/
+
+@[expose] public section
 
 noncomputable section
 

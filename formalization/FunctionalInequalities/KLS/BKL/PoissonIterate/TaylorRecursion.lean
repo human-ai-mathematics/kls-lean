@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
 
 /-!
 # Lemma 3.8 of BKL for the iterates in `D(A)`
@@ -46,6 +48,8 @@ The constant `c` is explicit, not the source's unspecified
 universal constant; the bound (29) is used only for `d` itself, and `R ≥ 1` and the centering of
 `f` are not needed. Lemma 3.9's bound by `R` and Theorem 3.1 are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -418,10 +422,15 @@ include hνU hUt hexp hC in
 /-- **BKL (56)–(57)**: iterating Corollary 3.7. If `α_{j+2}² ≤ β/C` for `j < k`, `e ≤ k` and
 `d ≥ 1`, then `|S_{d+e} T_d(∇₀h_{k+1})|² ≤ (β/C)^e |T_{d+e}(∇₀h_{k+1-e})|²`. -/
 theorem norm_symmetrize_taylorField_grad0_iter_sq_le (f : Lp ℝ 2 (ν : Measure V)) {β : ℝ}
-    (e : ℕ) : ∀ (d k : ℕ), 1 ≤ d → e ≤ k → (∀ j < k, scale T̄ (iter T̄ f j) ^ 2 ≤ β / C) →
-      ‖symmetrize (Module.finrank ℝ V) (d + (k + 1)) (d + e)
-          (taylorField d (grad0 T̄ (iter T̄ f k)))‖ ^ 2 ≤
-        (β / C) ^ e * ‖taylorField (d + e) (grad0 T̄ (iter T̄ f (k - e)))‖ ^ 2 := by
+    (e : ℕ) :
+    ∀ (d k : ℕ),
+      1 ≤ d →
+        e ≤ k →
+          (∀ j < k, scale T̄ (iter T̄ f j) ^ 2 ≤ β / C) →
+            ‖symmetrize (Module.finrank ℝ V) (d + (k + 1)) (d + e)
+                    (taylorField d (grad0 T̄ (iter T̄ f k)))‖ ^
+                2 ≤
+              (β / C) ^ e * ‖taylorField (d + e) (grad0 T̄ (iter T̄ f (k - e)))‖ ^ 2 := by
   induction e with
   | zero =>
     intro d k _ _ _
@@ -432,28 +441,36 @@ theorem norm_symmetrize_taylorField_grad0_iter_sq_le (f : Lp ℝ 2 (ν : Measure
     obtain ⟨k, rfl⟩ : ∃ k', k = k' + 1 := ⟨k - 1, by omega⟩
     rw [show d + (e + 1) = d + 1 + e by omega, show k + 1 - (e + 1) = k - e by omega]
     have hN : d + (k + 1 + 1) = d + 1 + (k + 1) := by omega
-    have hS2 : recast hN (symmetrize (Module.finrank ℝ V) (d + (k + 1 + 1)) (d + 1)
-        (taylorField d (grad0 T̄ (iter T̄ f (k + 1))))) =
+    have hS2 :
+      recast hN
+          (symmetrize (Module.finrank ℝ V) (d + (k + 1 + 1)) (d + 1)
+            (taylorField d (grad0 T̄ (iter T̄ f (k + 1))))) =
         scale T̄ (iter T̄ f k) • taylorField (d + 1) (grad0 T̄ (iter T̄ f k)) := by
       ext J
       simp only [recast, PiLp.toLp_apply, PiLp.smul_apply, smul_eq_mul]
-      exact symmetrize_taylorField_grad0_iter_succ m hν hi hνU (hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)) hexp hC f k
-        hd J
-    have hnorm : ‖symmetrize (Module.finrank ℝ V) (d + (k + 1 + 1)) (d + 1 + e)
-        (taylorField d (grad0 T̄ (iter T̄ f (k + 1))))‖ =
-        |scale T̄ (iter T̄ f k)| * ‖symmetrize (Module.finrank ℝ V) (d + 1 + (k + 1)) (d + 1 + e)
-          (taylorField (d + 1) (grad0 T̄ (iter T̄ f k)))‖ := by
-      rw [← symmetrize_symmetrize (q := d + 1) (by omega), ← norm_recast hN,
-        ← symmetrize_recast, hS2, symmetrize_smul, norm_smul, Real.norm_eq_abs]
+      exact
+        symmetrize_taylorField_grad0_iter_succ m hν hi hνU
+          (hUt.1.of_le (WithTop.coe_le_coe.mpr le_top)) hexp hC f k hd J
+    have hnorm :
+      ‖symmetrize (Module.finrank ℝ V) (d + (k + 1 + 1)) (d + 1 + e)
+            (taylorField d (grad0 T̄ (iter T̄ f (k + 1))))‖ =
+        |scale T̄ (iter T̄ f k)| *
+          ‖symmetrize (Module.finrank ℝ V) (d + 1 + (k + 1)) (d + 1 + e)
+              (taylorField (d + 1) (grad0 T̄ (iter T̄ f k)))‖ := by
+      rw [← symmetrize_symmetrize (q := d + 1) (by omega), ← norm_recast hN, ←
+        symmetrize_recast, hS2, symmetrize_smul, norm_smul, Real.norm_eq_abs]
     have hα := hβ k (by omega)
     have hβC : 0 ≤ β / C := (sq_nonneg _).trans hα
     have ih' := ih (d + 1) k (by omega) (by omega) fun j hj => hβ j (by omega)
     rw [hnorm, mul_pow, sq_abs, pow_succ]
-    calc scale T̄ (iter T̄ f k) ^ 2 * ‖symmetrize (Module.finrank ℝ V) (d + 1 + (k + 1))
-          (d + 1 + e) (taylorField (d + 1) (grad0 T̄ (iter T̄ f k)))‖ ^ 2
-        ≤ β / C * ((β / C) ^ e *
-            ‖taylorField (d + 1 + e) (grad0 T̄ (iter T̄ f (k - e)))‖ ^ 2) :=
-          mul_le_mul hα ih' (sq_nonneg _) hβC
+    calc
+      scale T̄ (iter T̄ f k) ^ 2 *
+            ‖symmetrize (Module.finrank ℝ V) (d + 1 + (k + 1)) (d + 1 + e)
+                  (taylorField (d + 1) (grad0 T̄ (iter T̄ f k)))‖ ^
+              2 ≤
+          β / C *
+            ((β / C) ^ e * ‖taylorField (d + 1 + e) (grad0 T̄ (iter T̄ f (k - e)))‖ ^ 2) :=
+        mul_le_mul hα ih' (sq_nonneg _) hβC
       _ = _ := by ring
 
 include hνU hUt hexp hC in

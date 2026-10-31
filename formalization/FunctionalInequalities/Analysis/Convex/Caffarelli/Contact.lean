@@ -1,13 +1,15 @@
-import FunctionalInequalities.Analysis.Convex.CompactTilt
-import FunctionalInequalities.Analysis.Convex.Extension
-import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
-import FunctionalInequalities.Analysis.Convex.Normalization
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
-import Mathlib.Analysis.LocallyConvex.Separation
-import Mathlib.Analysis.Convex.Extrema
-import Mathlib.Analysis.Convex.Continuous
-import FunctionalInequalities.Analysis.Convex.Coercivity
+module
+
+public import FunctionalInequalities.Analysis.Convex.CompactTilt
+public import FunctionalInequalities.Analysis.Convex.Extension
+public import FunctionalInequalities.Analysis.Convex.Alexandrov.ImageVolume
+public import FunctionalInequalities.Analysis.Convex.Normalization
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+public import Mathlib.Analysis.LocallyConvex.Separation
+public import Mathlib.Analysis.Convex.Extrema
+public import Mathlib.Analysis.Convex.Continuous
+public import FunctionalInequalities.Analysis.Convex.Coercivity
 
 /-! # Contact in convex Monge--Ampere analysis
 
@@ -16,6 +18,8 @@ Lemma 2.2 through BB arXiv:1207.6128v1 Theorem 2.24(ii).
 The declarations retain their given-source hypotheses; domain contact
 rigidity and moment-source regularity have separate consumers.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -42,7 +46,7 @@ theorem infDist_frontier_image_le_of_width {E : Type*} [NormedAddCommGroup E]
   have hinner (y : E) : ⟪e y - e x, η⟫ = ⟪y - x, θ⟫ := by
     dsimp only [η]
     have hmap : e y - e x = e.linear (y - x) := by
-      have hm := e.toAffineMap.linearMap_vsub y x
+      have hm := e.toAffineMap.linear_apply_vsub y x
       change e.linear (y - x) = e y - e x at hm
       exact hm.symm
     calc
@@ -174,35 +178,41 @@ private lemma caffarelli_gap_segment {u : E → ℝ} (hc : ConvexOn ℝ univ u)
   rw [hi]
   nlinarith [ha]
 
-/-- **Sections at an exposed point of a compact contact set are bounded and shrink to the slab piece
+/--
+**Sections at an exposed point of a compact contact set are bounded and shrink to the slab piece
 of the contact set** (Caffarelli's argument): with `w := u − ℓ ≥ 0`
 (`ℓ` the supporting affine function at `x₀`), compact contact set `C = {w = 0}`, an exposed point
 `xe ∈ C` in the unit direction `θ`, and `h > 0`, the sections
-`S ε := {x | w x < ε (⟪x − xe, θ⟫ + h)}` lie in a fixed compact set for small `ε`, and for every `δ > 0`
+`S ε := {x | w x < ε (⟪x − xe, θ⟫ + h)}` lie in a fixed compact set for small `ε`, and for every `δ
+> 0`
 they lie in the `δ`-thickening of `C ∩ {⟪· − xe, θ⟫ ≥ −h}` for `ε` small enough. -/
-theorem exists_compact_sections_subset_and_shrink [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    {x₀ p : E} (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y)
+theorem exists_compact_sections_subset_and_shrink [FiniteDimensional ℝ E] {u : E → ℝ}
+    (hconv : ConvexOn ℝ univ u) {x₀ p : E} (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y)
     (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫}) {xe θ : E}
     (hxe : u xe = u x₀ + ⟪p, xe - x₀⟫) (hθ : ‖θ‖ = 1)
     (hexp : ∀ x, u x = u x₀ + ⟪p, x - x₀⟫ → x ≠ xe → ⟪x - xe, θ⟫ < 0) {h : ℝ} (hh : 0 < h) :
-    (∃ Q : Set E, IsCompact Q ∧ ∃ ε₀ > 0, ∀ ε, 0 < ε → ε < ε₀ →
-      {x | u x - (u x₀ + ⟪p, x - x₀⟫) < ε * (⟪x - xe, θ⟫ + h)} ⊆ Q) ∧
-    ∀ δ > 0, ∃ ε₁ > 0, ∀ ε, 0 < ε → ε < ε₁ →
-      {x | u x - (u x₀ + ⟪p, x - x₀⟫) < ε * (⟪x - xe, θ⟫ + h)} ⊆
-        cthickening δ ({x | u x = u x₀ + ⟪p, x - x₀⟫} ∩ {x | -h ≤ ⟪x - xe, θ⟫}) := by
+    (∃ Q : Set E,
+        IsCompact Q ∧
+          ∃ ε₀ > 0,
+            ∀ ε,
+              0 < ε → ε < ε₀ → {x | u x - (u x₀ + ⟪p, x - x₀⟫) < ε * (⟪x - xe, θ⟫ + h)} ⊆ Q) ∧
+      ∀ δ > 0,
+        ∃ ε₁ > 0,
+          ∀ ε,
+            0 < ε →
+              ε < ε₁ →
+                {x | u x - (u x₀ + ⟪p, x - x₀⟫) < ε * (⟪x - xe, θ⟫ + h)} ⊆
+                  cthickening δ ({x | u x = u x₀ + ⟪p, x - x₀⟫} ∩ {x | -h ≤ ⟪x - xe, θ⟫}) := by
   classical
   have _ := hexp
   let w : E → ℝ := fun x => u x - (u x₀ + ⟪p, x - x₀⟫)
-  have hu : Continuous u :=
-    continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hconv)
+  have hu : Continuous u := continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hconv)
   have hw : Continuous w := by
     dsimp [w]
     fun_prop
   have hwn (x : E) : 0 ≤ w x := sub_nonneg.mpr (hp x)
   have hinner (x : E) : ⟪x - xe, θ⟫ ≤ dist x xe := by
-    simpa only [hθ, mul_one, dist_eq_norm] using
-      real_inner_le_norm (x - xe) θ
-
+    simpa only [hθ, mul_one, dist_eq_norm] using real_inner_le_norm (x - xe) θ
   obtain ⟨r, hrbound⟩ := hC.isBounded.subset_closedBall xe
   have hr : 0 ≤ r := by
     have hmem := hrbound hxe
@@ -215,31 +225,25 @@ theorem exists_compact_sections_subset_and_shrink [FiniteDimensional ℝ E] {u :
   have hRh : 0 < R + h := add_pos hR hh
   let Q : Set E := closedBall xe R
   have hQ : IsCompact Q := isCompact_closedBall xe R
-
   have hsphere_ne : (sphere xe R).Nonempty := by
     refine ⟨xe + R • θ, ?_⟩
     change dist (xe + R • θ) xe = R
-    rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
-      abs_of_pos hR, hθ, mul_one]
+    rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_of_pos hR, hθ,
+      mul_one]
   have hsphere_pos : ∀ x ∈ sphere xe R, 0 < w x := by
     intro x hx
     by_contra hnot
-    have hwzero : w x = 0 :=
-      le_antisymm (le_of_not_gt hnot) (hwn x)
-    have hxC : u x = u x₀ + ⟪p, x - x₀⟫ :=
-      sub_eq_zero.mp hwzero
+    have hwzero : w x = 0 := le_antisymm (le_of_not_gt hnot) (hwn x)
+    have hxC : u x = u x₀ + ⟪p, x - x₀⟫ := sub_eq_zero.mp hwzero
     have hdist_le : dist x xe ≤ r := hrbound hxC
     have hdist_eq : dist x xe = R := hx
     dsimp [R] at hdist_eq
     linarith
-  obtain ⟨z, hz, hzmin⟩ :=
-    (isCompact_sphere xe R).exists_isMinOn hsphere_ne hw.continuousOn
+  obtain ⟨z, hz, hzmin⟩ := (isCompact_sphere xe R).exists_isMinOn hsphere_ne hw.continuousOn
   have hzpos : 0 < w z := hsphere_pos z hz
   let ε₀ : ℝ := w z / (R + h)
   have hε₀ : 0 < ε₀ := div_pos hzpos hRh
-
-  have hbound : ∀ ε, 0 < ε → ε < ε₀ →
-      {x | w x < ε * (⟪x - xe, θ⟫ + h)} ⊆ Q := by
+  have hbound : ∀ ε, 0 < ε → ε < ε₀ → {x | w x < ε * (⟪x - xe, θ⟫ + h)} ⊆ Q := by
     intro ε hε hεlt x hx
     change w x < ε * (⟪x - xe, θ⟫ + h) at hx
     change dist x xe ≤ R
@@ -249,81 +253,60 @@ theorem exists_compact_sections_subset_and_shrink [FiniteDimensional ℝ E] {u :
     let t : ℝ := R / dist x xe
     have ht : 0 < t := div_pos hR hdpos
     have ht₁ : t ≤ 1 := (div_le_one hdpos).mpr hd.le
-    have htd : t * dist x xe = R :=
-      div_mul_cancel₀ R (ne_of_gt hdpos)
+    have htd : t * dist x xe = R := div_mul_cancel₀ R (ne_of_gt hdpos)
     let y : E := xe + t • (x - xe)
     have hy : y ∈ sphere xe R := by
       change dist (xe + t • (x - xe)) xe = R
-      rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs,
-        abs_of_pos ht]
+      rw [dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_eq_abs, abs_of_pos ht]
       simpa only [dist_eq_norm] using htd
-    have hwy : w y ≤ t * w x :=
-      caffarelli_gap_segment hconv p xe x x₀ hxe t ht.le ht₁
+    have hwy : w y ≤ t * w x := caffarelli_gap_segment hconv p xe x x₀ hxe t ht.le ht₁
     have hxupper : w x < ε * (dist x xe + h) :=
-      hx.trans_le
-        (mul_le_mul_of_nonneg_left (by linarith [hinner x]) hε.le)
-    have hth : t * h ≤ h := by
-      simpa only [one_mul] using
-        mul_le_mul_of_nonneg_right ht₁ hh.le
+      hx.trans_le (mul_le_mul_of_nonneg_left (by linarith [hinner x]) hε.le)
+    have hth : t * h ≤ h := by simpa only [one_mul] using mul_le_mul_of_nonneg_right ht₁ hh.le
     have hyupper : w y < ε * (R + h) := by
       calc
         w y ≤ t * w x := hwy
-        _ < t * (ε * (dist x xe + h)) :=
-          mul_lt_mul_of_pos_left hxupper ht
+        _ < t * (ε * (dist x xe + h)) := mul_lt_mul_of_pos_left hxupper ht
         _ = ε * (t * dist x xe + t * h) := by ring
         _ = ε * (R + t * h) := by rw [htd]
-        _ ≤ ε * (R + h) :=
-          mul_le_mul_of_nonneg_left (by linarith [hth]) hε.le
-    have hεupper : ε * (R + h) < w z :=
-      (lt_div_iff₀ hRh).mp hεlt
+        _ ≤ ε * (R + h) := mul_le_mul_of_nonneg_left (by linarith [hth]) hε.le
+    have hεupper : ε * (R + h) < w z := (lt_div_iff₀ hRh).mp hεlt
     have hmin : w z ≤ w y := hzmin hy
     exact (not_lt_of_ge hmin) (hyupper.trans hεupper)
-
   have hfactor : ∀ x ∈ Q, ⟪x - xe, θ⟫ + h ≤ R + h := by
     intro x hx
     have hd : dist x xe ≤ R := hx
     exact by linarith [(hinner x).trans hd]
-
   refine ⟨⟨Q, hQ, ε₀, hε₀, ?_⟩, ?_⟩
   · intro ε hε hεlt
     exact hbound ε hε hεlt
   · intro δ hδ
-    let K : Set E :=
-      {x | u x = u x₀ + ⟪p, x - x₀⟫} ∩
-        {x | -h ≤ ⟪x - xe, θ⟫}
-    let B : Set E :=
-      (Q ∩ {x | -h ≤ ⟪x - xe, θ⟫}) \ thickening δ K
+    let K : Set E := {x | u x = u x₀ + ⟪p, x - x₀⟫} ∩ {x | -h ≤ ⟪x - xe, θ⟫}
+    let B : Set E := (Q ∩ {x | -h ≤ ⟪x - xe, θ⟫}) \ thickening δ K
     have hslabclosed : IsClosed {x : E | -h ≤ ⟪x - xe, θ⟫} :=
-      isClosed_le continuous_const
-        ((continuous_id.sub continuous_const).inner continuous_const)
-    have hBcompact : IsCompact B :=
-      (hQ.inter_right hslabclosed).diff isOpen_thickening
+      isClosed_le continuous_const ((continuous_id.sub continuous_const).inner continuous_const)
+    have hBcompact : IsCompact B := (hQ.inter_right hslabclosed).diff isOpen_thickening
     have hBpos : ∀ x ∈ B, 0 < w x := by
       intro x hx
       by_contra hnot
-      have hwzero : w x = 0 :=
-        le_antisymm (le_of_not_gt hnot) (hwn x)
+      have hwzero : w x = 0 := le_antisymm (le_of_not_gt hnot) (hwn x)
       have hxK : x ∈ K := ⟨sub_eq_zero.mp hwzero, hx.1.2⟩
       have hxthick : x ∈ thickening δ K :=
-        mem_thickening_iff.mpr
-          ⟨x, hxK, by simpa only [dist_self] using hδ⟩
+        mem_thickening_iff.mpr ⟨x, hxK, by simpa only [dist_self] using hδ⟩
       exact hx.2 hxthick
     have hgap : ∃ η > 0, ∀ x ∈ B, η ≤ w x := by
       by_cases hBne : B.Nonempty
-      · obtain ⟨b, hb, hbmin⟩ :=
-          hBcompact.exists_isMinOn hBne hw.continuousOn
+      · obtain ⟨b, hb, hbmin⟩ := hBcompact.exists_isMinOn hBne hw.continuousOn
         exact ⟨w b, hBpos b hb, fun x hx => hbmin hx⟩
       · refine ⟨1, zero_lt_one, ?_⟩
         intro x hx
         exact (hBne ⟨x, hx⟩).elim
     obtain ⟨η, hηpos, hη⟩ := hgap
-    refine ⟨min ε₀ (η / (R + h)),
-      lt_min hε₀ (div_pos hηpos hRh), ?_⟩
+    refine ⟨min ε₀ (η / (R + h)), lt_min hε₀ (div_pos hηpos hRh), ?_⟩
     intro ε hε hεlt x hx
     change w x < ε * (⟪x - xe, θ⟫ + h) at hx
     change x ∈ cthickening δ K
-    have hεlt₀ : ε < ε₀ :=
-      lt_of_lt_of_le hεlt (min_le_left _ _)
+    have hεlt₀ : ε < ε₀ := lt_of_lt_of_le hεlt (min_le_left _ _)
     have hxQ : x ∈ Q := hbound ε hε hεlt₀ hx
     have hslab : -h ≤ ⟪x - xe, θ⟫ := by
       have hfac : 0 < ⟪x - xe, θ⟫ + h := by
@@ -339,10 +322,8 @@ theorem exists_compact_sections_subset_and_shrink [FiniteDimensional ℝ E] {u :
     have hxlower : η ≤ w x := hη x hxB
     have hxupper : w x < ε * (R + h) :=
       hx.trans_le (mul_le_mul_of_nonneg_left (hfactor x hxQ) hε.le)
-    have hεltη : ε < η / (R + h) :=
-      lt_of_lt_of_le hεlt (min_le_right _ _)
-    have hεupper : ε * (R + h) < η :=
-      (lt_div_iff₀ hRh).mp hεltη
+    have hεltη : ε < η / (R + h) := lt_of_lt_of_le hεlt (min_le_right _ _)
+    have hεupper : ε * (R + h) < η := (lt_div_iff₀ hRh).mp hεltη
     exact (not_lt_of_ge hxlower) (hxupper.trans hεupper)
 
 end InnerProduct
@@ -356,7 +337,8 @@ section LocalizedContactLemma
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! Caffarelli's contact-set lemma: under local two-sided Alexandrov bounds a compact contact set is a single point, also in the localized form at exposed points. -/
+/-! Caffarelli's contact-set lemma: under local two-sided Alexandrov bounds a compact contact set is
+a single point, also in the localized form at exposed points. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -657,20 +639,31 @@ variable [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
 
 set_option maxHeartbeats 4000000 in
 /-- **Caffarelli's contact-set lemma, localised form**: let `C` be the
-compact contact set of a supporting affine function of the convex `u`, `z ∈ C` strictly exposed in the unit
-direction `θ`, `h > 0`, and suppose the two-sided Alexandrov bounds hold only on compact subsets of an open `U`
+compact contact set of a supporting affine function of the convex `u`, `z ∈ C` strictly exposed in
+the unit
+direction `θ`, `h > 0`, and suppose the two-sided Alexandrov bounds hold only on compact subsets of
+an open `U`
 containing the slab piece `C ∩ {⟪· − z, θ⟫ ≥ −h}`. Then `C = {z}`. -/
-theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
-    (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y) (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫})
-    {z θ : E} (hz : u z = u x₀ + ⟪p, z - x₀⟫) (hθ : ‖θ‖ = 1)
-    (hexp : ∀ x, u x = u x₀ + ⟪p, x - x₀⟫ → x ≠ z → ⟪x - z, θ⟫ < 0) {h : ℝ} (hh : 0 < h)
-    {U : Set E} (hU : IsOpen U)
+theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ}
+    (hconv : ConvexOn ℝ univ u) {x₀ p : E} (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y)
+    (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫}) {z θ : E} (hz : u z = u x₀ + ⟪p, z - x₀⟫)
+    (hθ : ‖θ‖ = 1) (hexp : ∀ x, u x = u x₀ + ⟪p, x - x₀⟫ → x ≠ z → ⟪x - z, θ⟫ < 0) {h : ℝ}
+    (hh : 0 < h) {U : Set E} (hU : IsOpen U)
     (hCU : {x | u x = u x₀ + ⟪p, x - x₀⟫} ∩ {x | -h ≤ ⟪x - z, θ⟫} ⊆ U)
-    (hB : ∀ Q : Set E, IsCompact Q → Q ⊆ U → ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E, IsOpen G →
-      closure G ⊆ Q →
-      ENNReal.ofReal a * (volume : Measure E) G ≤ (volume : Measure E) (subgradientImage u G) ∧
-      (volume : Measure E) (subgradientImage u G) ≤ ENNReal.ofReal b * (volume : Measure E) G) :
-    {x | u x = u x₀ + ⟪p, x - x₀⟫} = {z} := by
+    (hB :
+      ∀ Q : Set E,
+        IsCompact Q →
+          Q ⊆ U →
+            ∃ a b : ℝ,
+              0 < a ∧
+                ∀ G : Set E,
+                  IsOpen G →
+                    closure G ⊆ Q →
+                      ENNReal.ofReal a * (volume : Measure E) G ≤
+                          (volume : Measure E) (subgradientImage u G) ∧
+                        (volume : Measure E) (subgradientImage u G) ≤
+                          ENNReal.ofReal b * (volume : Measure E) G) :
+    {x | u x = u x₀ + ⟪p, x - x₀⟫} = { z } := by
   classical
   by_contra hnot
   let C : Set E := {x | u x = u x₀ + ⟪p, x - x₀⟫}
@@ -689,10 +682,11 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     by_cases he : x = xe
     · simp only [he, sub_self, inner_zero_left, le_refl]
     · exact (hexp x hx he).le
+
+  -- Subtract the supporting affine function and locate a second contact point.
   let c₀ : ℝ := u x₀ - ⟪p, x₀⟫
   let w : E → ℝ := fun x => u x - (c₀ + ⟪p, x⟫)
-  have hw_eq (x : E) :
-      w x = u x - (u x₀ + ⟪p, x - x₀⟫) := by
+  have hw_eq (x : E) : w x = u x - (u x₀ + ⟪p, x - x₀⟫) := by
     dsimp only [w, c₀]
     rw [inner_sub_right]
     ring
@@ -720,8 +714,9 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     have hyform : (1 - s) • xe + s • x₁ = y := by
       dsimp only [y]
       module
-    have hc := hwconv.2 (mem_univ xe) (mem_univ x₁)
-      (sub_nonneg.mpr hsone) hs.le (by ring : (1 - s) + s = 1)
+    have hc :=
+      hwconv.2 (mem_univ xe) (mem_univ x₁) (sub_nonneg.mpr hsone) hs.le
+        (by ring : (1 - s) + s = 1)
     rw [hyform, hwxe, hwx₁] at hc
     simp only [smul_zero, add_zero] at hc
     exact (hw_zero_iff y).mp (le_antisymm hc (hw_nonneg y))
@@ -742,16 +737,16 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
   have hypair : ⟪y - xe, θ⟫ = -β := by
     dsimp only [β]
     ring
+
+  -- Choose compact neighborhoods and a small affine perturbation.
   let P : Set E := C ∩ {x | -h ≤ ⟪x - xe, θ⟫}
-  have hPcompact : IsCompact P :=
-    hC.inter_right (isClosed_le continuous_const (by fun_prop))
+  have hPcompact : IsCompact P := hC.inter_right (isClosed_le continuous_const (by fun_prop))
   have hPne : P.Nonempty := by
     refine ⟨xe, hxe, ?_⟩
     change -h ≤ ⟪xe - xe, θ⟫
     simp only [sub_self, inner_zero_left]
     linarith
-  obtain ⟨δ', hδ', hQU⟩ :=
-    hPcompact.exists_cthickening_subset_open hU hCU
+  obtain ⟨δ', hδ', hQU⟩ := hPcompact.exists_cthickening_subset_open hU hCU
   let Q : Set E := cthickening δ' P
   have hQ : IsCompact Q := hPcompact.cthickening
   obtain ⟨⟨Q₀, hQ₀, ε₀, hε₀, hQ₀sub⟩, hshrink⟩ :=
@@ -765,13 +760,11 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
   let R : ℝ := b / a
   have hR : 0 ≤ R := (div_pos hb ha).le
   let K : ℝ :=
-    R * 8 ^ n * ((volume : Measure E) (closedBall (0 : E) C₀)).toReal *
-      (2 * C₀) ^ (n - 1)
+    R * 8 ^ n * ((volume : Measure E) (closedBall (0 : E) C₀)).toReal * (2 * C₀) ^ (n - 1)
   have hK : 0 ≤ K := by
     dsimp only [K]
     positivity
-  obtain ⟨δ, hδ, hδβ, hδsmall⟩ :=
-    contact_stepC_choose hc hC₀ (show 0 < 2 * β by positivity) hK
+  obtain ⟨δ, hδ, hδβ, hδsmall⟩ := contact_stepC_choose hc hC₀ (show 0 < 2 * β by positivity) hK
   have hδh : δ ≤ h := by linarith
   have htwoβ : 2 * β / 2 = β := by ring
   rw [htwoβ] at hδsmall
@@ -789,8 +782,7 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
   let q : E := ε • θ
   let c₁ : ℝ := ε * (h - ⟪θ, xe⟫)
   let v : E → ℝ := fun x => w x - (c₁ + ⟪q, x⟫)
-  have hv_eq (x : E) :
-      v x = w x - ε * (⟪x - xe, θ⟫ + h) := by
+  have hv_eq (x : E) : v x = w x - ε * (⟪x - xe, θ⟫ + h) := by
     have hqx : ⟪q, x⟫ = ε * ⟪θ, x⟫ := by
       change ⟪ε • θ, x⟫ = ε * ⟪θ, x⟫
       rw [real_inner_smul_left]
@@ -801,17 +793,14 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     dsimp only [c₁]
     ring
   have hvconv : ConvexOn ℝ univ v := contact_sub_affine_convex hwconv c₁ q
-  have hvc : Continuous v :=
-    continuousOn_univ.mp (hvconv.continuousOn isOpen_univ)
+  have hvc : Continuous v := continuousOn_univ.mp (hvconv.continuousOn isOpen_univ)
   let S : Set E := {x | v x < 0}
   have hSo : IsOpen S := isOpen_lt hvc continuous_const
-  have hSc : Convex ℝ S := by
-    simpa only [mem_univ, true_and] using hvconv.convex_lt 0
+  have hSc : Convex ℝ S := by simpa only [mem_univ, true_and] using hvconv.convex_lt 0
   have hSQ₀ : S ⊆ Q₀ := by
     intro x hx
     apply hQ₀sub ε hε hεsmall₀
-    change u x - (u x₀ + ⟪p, x - x₀⟫) <
-      ε * (⟪x - xe, θ⟫ + h)
+    change u x - (u x₀ + ⟪p, x - x₀⟫) < ε * (⟪x - xe, θ⟫ + h)
     rw [← hw_eq]
     have hx' : v x < 0 := hx
     rw [hv_eq] at hx'
@@ -820,17 +809,14 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
   have hSthickMin : S ⊆ cthickening (min δ δ') P := by
     intro x hx
     apply hε₁sub ε hε hεsmall₁
-    change u x - (u x₀ + ⟪p, x - x₀⟫) <
-      ε * (⟪x - xe, θ⟫ + h)
+    change u x - (u x₀ + ⟪p, x - x₀⟫) < ε * (⟪x - xe, θ⟫ + h)
     rw [← hw_eq]
     have hx' : v x < 0 := hx
     rw [hv_eq] at hx'
     linarith
-  have hSQ : S ⊆ Q :=
-    hSthickMin.trans (cthickening_mono (min_le_right δ δ') P)
+  have hSQ : S ⊆ Q := hSthickMin.trans (cthickening_mono (min_le_right δ δ') P)
   have hSclQ : closure S ⊆ Q := closure_minimal hSQ hQ.isClosed
-  have hSthick : S ⊆ cthickening δ P :=
-    hSthickMin.trans (cthickening_mono (min_le_left δ δ') P)
+  have hSthick : S ⊆ cthickening δ P := hSthickMin.trans (cthickening_mono (min_le_left δ δ') P)
   have hvxe : v xe = -(ε * h) := by
     rw [hv_eq, hwxe]
     simp only [sub_self, inner_zero_left, zero_add, zero_sub]
@@ -844,8 +830,7 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     have hgap : 0 < -β + h := by linarith
     exact sub_neg.mpr (mul_pos hε hgap)
   have hup (x : E) (hx : x ∈ S) : ⟪x - xe, θ⟫ ≤ δ := by
-    have ht := ENNReal.toReal_mono ENNReal.ofReal_ne_top
-      (mem_cthickening_iff.mp (hSthick hx))
+    have ht := ENNReal.toReal_mono ENNReal.ofReal_ne_top (mem_cthickening_iff.mp (hSthick hx))
     have hdist : infDist x P ≤ δ := by
       simpa only [Metric.infDist, ENNReal.toReal_ofReal hδ.le] using ht
     obtain ⟨r, hr, heq⟩ := hPcompact.exists_infDist_eq_dist hPne x
@@ -874,11 +859,13 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
   have hSne : S.Nonempty := ⟨xe, hxeS⟩
   have hreg : interior (closure S) = S := by
     rw [hSc.interior_closure_eq_interior_of_nonempty_interior
-      (by rw [hSo.interior_eq]; exact hSne), hSo.interior_eq]
-  have hclosureCompact : IsCompact (closure S) :=
-    hQ.of_isClosed_subset isClosed_closure hSclQ
-  obtain ⟨e, heball, heouter⟩ := hnormalize (closure S) hclosureCompact hSc.closure
-    (by rw [hreg]; exact hSne)
+        (by rw [hSo.interior_eq]; exact hSne),
+      hSo.interior_eq]
+  have hclosureCompact : IsCompact (closure S) := hQ.of_isClosed_subset isClosed_closure hSclQ
+
+  -- Normalize the perturbed section and transport the local measure bounds.
+  obtain ⟨e, heball, heouter⟩ :=
+    hnormalize (closure S) hclosureCompact hSc.closure (by rw [hreg]; exact hSne)
   let eh := (AffineEquiv.toContinuousAffineEquiv e).toHomeomorph
   let S' : Set E := e '' S
   let v' : E → ℝ := v ∘ e.symm
@@ -886,10 +873,8 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
   have hD : 0 < D := contact_det_pos e
   have hS'o : IsOpen S' := eh.isOpenMap S hSo
   have hS'c : Convex ℝ S' := hSc.affine_image e.toAffineMap
-  have hS'outer : S' ⊆ closedBall (0 : E) C₀ :=
-    (Set.image_mono subset_closure).trans heouter
-  have hS'b : Bornology.IsBounded S' :=
-    Metric.isBounded_closedBall.subset hS'outer
+  have hS'outer : S' ⊆ closedBall (0 : E) C₀ := (Set.image_mono subset_closure).trans heouter
+  have hS'b : Bornology.IsBounded S' := Metric.isBounded_closedBall.subset hS'outer
   have hS'ball : ball (0 : E) 1 ⊆ S' := by
     intro x hx
     have hi : x ∈ interior (e '' closure S) :=
@@ -909,12 +894,12 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     rw [e.symm_apply_apply]
     exact hvfront z hz
   have hloc :
-      ∀ G' : Set E, IsOpen G' → G' ⊆ S' →
-        (volume : Measure E) (subgradientImage v' G') ≠ ∞ ∧
-          (a / D ^ 2) * (volume G').toReal ≤
-            (volume (subgradientImage v' G')).toReal ∧
-          (volume (subgradientImage v' G')).toReal ≤
-            (b / D ^ 2) * (volume G').toReal := by
+    ∀ G' : Set E,
+      IsOpen G' →
+        G' ⊆ S' →
+          (volume : Measure E) (subgradientImage v' G') ≠ ∞ ∧
+            (a / D ^ 2) * (volume G').toReal ≤ (volume (subgradientImage v' G')).toReal ∧
+              (volume (subgradientImage v' G')).toReal ≤ (b / D ^ 2) * (volume G').toReal := by
     intro G' hG'o hG'S
     let G : Set E := e.symm '' G'
     have hGo : IsOpen G := eh.symm.isOpenMap G' hG'o
@@ -925,24 +910,20 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
       exact hy
     have hGcl : closure G ⊆ Q := (closure_mono hGS).trans hSclQ
     obtain ⟨hlo, hhi⟩ := hbounds G hGo hGcl
-    have hhi' :
-        (volume : Measure E) (subgradientImage u G) ≤
-          ENNReal.ofReal b * volume G :=
-      hhi.trans (mul_le_mul_left
-        (ENNReal.ofReal_le_ofReal (le_max_left b₀ 1)) _)
+    have hhi' : (volume : Measure E) (subgradientImage u G) ≤ ENNReal.ofReal b * volume G :=
+      hhi.trans (mul_le_mul_left (ENNReal.ofReal_le_ofReal (le_max_left b₀ 1)) _)
     have hvvolume :
-        (volume : Measure E) (subgradientImage v G) =
-          volume (subgradientImage u G) := by
-      rw [contact_volume_sub_affine w c₁ q G,
-        contact_volume_sub_affine u c₀ p G]
-    have hGfin : (volume : Measure E) G ≠ ∞ :=
-      (hSb.subset hGS).measure_lt_top.ne
+      (volume : Measure E) (subgradientImage v G) = volume (subgradientImage u G) := by
+      rw [contact_volume_sub_affine w c₁ q G, contact_volume_sub_affine u c₀ p G]
+    have hGfin : (volume : Measure E) G ≠ ∞ := (hSb.subset hGS).measure_lt_top.ne
     obtain ⟨hfin, hrealLo, hrealHi⟩ :=
       contact_real_bounds (volume : Measure E) ha.le hb.le hGfin hlo hhi'
     rw [← hvvolume] at hfin hrealLo hrealHi
     have himage : e '' G = G' := e.toEquiv.image_symm_image G'
     have ht := contact_transport_real_bounds v e G a b hfin hrealLo hrealHi
     simpa only [himage] using ht
+
+  -- Compare the maximum-principle lower bound with the shrinking-section upper bound.
   let t : ℝ := ε * h
   have ht : 0 < t := mul_pos hε hh
   have hv'lo : ∀ x ∈ S', -2 * t ≤ v' x := by
@@ -962,27 +943,26 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     exact le_of_lt hz
   have hhalfS : ball (0 : E) (1 / 2) ⊆ S' :=
     (ball_subset_ball (by norm_num : (1 / 2 : ℝ) ≤ 1)).trans hS'ball
-  have hA :
-      a / D ^ 2 ≤ (8 * t) ^ n :=
-    contact_stepA ht hS'ball hv'lo hv'hi
-      (hloc (ball (0 : E) (1 / 2)) isOpen_ball hhalfS).2.1
+  have hA : a / D ^ 2 ≤ (8 * t) ^ n :=
+    contact_stepA ht hS'ball hv'lo hv'hi (hloc (ball (0 : E) (1 / 2)) isOpen_ball hhalfS).2.1
   obtain ⟨hfinite, _, hupper⟩ := hloc S' hS'o (Subset.refl S')
   have hupper' :
-      ((volume : Measure E) (subgradientImage v' S')).toReal ≤
-        (b / D ^ 2) * (volume (closedBall (0 : E) C₀)).toReal := by
+    ((volume : Measure E) (subgradientImage v' S')).toReal ≤
+      (b / D ^ 2) * (volume (closedBall (0 : E) C₀)).toReal := by
     apply hupper.trans
     apply mul_le_mul_of_nonneg_left
-    · exact ENNReal.toReal_mono Metric.isBounded_closedBall.measure_lt_top.ne
-        (measure_mono hS'outer)
+    · exact
+        ENNReal.toReal_mono Metric.isBounded_closedBall.measure_lt_top.ne
+          (measure_mono hS'outer)
     · positivity
   have hxeS' : e xe ∈ S' := ⟨xe, hxeS, rfl⟩
   have hv'xe : v' (e xe) = -t := by
     change v (e.symm (e xe)) = -(ε * h)
     rw [e.symm_apply_apply]
     exact hvxe
-  have hAMP := hmaximum v' hv'conv S' hS'o hS'c hS'b
-    (fun x hx => (hv'front x hx).symm.le)
-    (e xe) hxeS' (by rw [hv'xe]; exact neg_neg_of_pos ht)
+  have hAMP :=
+    hmaximum v' hv'conv S' hS'o hS'c hS'b (fun x hx => (hv'front x hx).symm.le) (e xe) hxeS'
+      (by rw [hv'xe]; exact neg_neg_of_pos ht)
   rw [hv'xe, neg_neg] at hAMP
   have hBA : b / D ^ 2 ≤ R * (a / D ^ 2) := by
     apply le_of_eq
@@ -990,28 +970,36 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hcon
     field_simp [ha.ne', hD.ne']
   have haway : c ≤ K * infDist (e xe) (frontier S') :=
     contact_stepB hc ht hC₀ hR hS'outer hfinite hAMP hupper' hA hBA
-  have hnear :
-      infDist (e xe) (frontier S') ≤ 2 * C₀ * δ / β :=
-    infDist_frontier_image_le_of_width hSo hSb hxeS hθ hδ.le hβ
-      hup ⟨y, hyS, hypair.le⟩ e hC₀ hS'outer
+  have hnear : infDist (e xe) (frontier S') ≤ 2 * C₀ * δ / β :=
+    infDist_frontier_image_le_of_width hSo hSb hxeS hθ hδ.le hβ hup ⟨y, hyS, hypair.le⟩ e hC₀
+      hS'outer
   have hstrict : K * infDist (e xe) (frontier S') < c :=
     (mul_le_mul_of_nonneg_left hnear hK).trans_lt hδsmall
   exact (not_lt_of_ge haway) hstrict
 
-/-- **Caffarelli's contact-set lemma** (global bounds, compact contact set), derived from the localised form. -/
+/--
+**Caffarelli's contact-set lemma** (global bounds, compact contact set), derived from the localised
+form. -/
 theorem contactSet_eq_singleton_of_local_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    (hB : ∀ Q : Set E, IsCompact Q → ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E, IsOpen G → closure G ⊆ Q →
-      ENNReal.ofReal a * (volume : Measure E) G ≤ (volume : Measure E) (subgradientImage u G) ∧
-      (volume : Measure E) (subgradientImage u G) ≤ ENNReal.ofReal b * (volume : Measure E) G)
+    (hB :
+      ∀ Q : Set E,
+        IsCompact Q →
+          ∃ a b : ℝ,
+            0 < a ∧
+              ∀ G : Set E,
+                IsOpen G →
+                  closure G ⊆ Q →
+                    ENNReal.ofReal a * (volume : Measure E) G ≤
+                        (volume : Measure E) (subgradientImage u G) ∧
+                      (volume : Measure E) (subgradientImage u G) ≤
+                        ENNReal.ofReal b * (volume : Measure E) G)
     {x₀ p : E} (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y)
-    (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫}) :
-    {x | u x = u x₀ + ⟪p, x - x₀⟫} = {x₀} := by
+    (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫}) : {x | u x = u x₀ + ⟪p, x - x₀⟫} = { x₀ } := by
   classical
   by_contra hnot
   let C : Set E := {x | u x = u x₀ + ⟪p, x - x₀⟫}
   have hx₀ : x₀ ∈ C := by simp [C]
-  obtain ⟨xe, hxe, hmax, hexposed⟩ :=
-    exists_farthest_point_exposed hC ⟨x₀, hx₀⟩ x₀
+  obtain ⟨xe, hxe, hmax, hexposed⟩ := exists_farthest_point_exposed hC ⟨x₀, hx₀⟩ x₀
   have hxe_ne : xe ≠ x₀ := by
     intro he
     apply hnot
@@ -1020,8 +1008,7 @@ theorem contactSet_eq_singleton_of_local_bounds {u : E → ℝ} (hconv : ConvexO
     · intro hx
       have hh := hmax x hx
       rw [he, sub_self, norm_zero] at hh
-      have hzero : x - x₀ = 0 :=
-        norm_eq_zero.mp (le_antisymm hh (norm_nonneg _))
+      have hzero : x - x₀ = 0 := norm_eq_zero.mp (le_antisymm hh (norm_nonneg _))
       exact Set.mem_singleton_iff.mpr (sub_eq_zero.mp hzero)
     · intro hx
       have hx' := Set.mem_singleton_iff.mp hx
@@ -1035,16 +1022,14 @@ theorem contactSet_eq_singleton_of_local_bounds {u : E → ℝ} (hconv : ConvexO
     rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hd)]
     change d⁻¹ * d = 1
     exact inv_mul_cancel₀ hd.ne'
-  have hexp :
-      ∀ x, u x = u x₀ + ⟪p, x - x₀⟫ → x ≠ xe → ⟪x - xe, θ⟫ < 0 := by
+  have hexp : ∀ x, u x = u x₀ + ⟪p, x - x₀⟫ → x ≠ xe → ⟪x - xe, θ⟫ < 0 := by
     intro x hx hne
     dsimp only [θ]
     rw [real_inner_smul_right]
     exact mul_neg_of_pos_of_neg (inv_pos.mpr hd) (hexposed x hx hne)
-  have hsing : C = {xe} :=
-    contactSet_eq_singleton_of_exposed_of_local_bounds hconv hp hC hxe hθ hexp
-      (h := 1) (by norm_num) (U := univ) isOpen_univ (subset_univ _)
-      (fun Q hQ _ => hB Q hQ)
+  have hsing : C = { xe } :=
+    contactSet_eq_singleton_of_exposed_of_local_bounds hconv hp hC hxe hθ hexp (h := 1)
+      (by norm_num) (U := univ) isOpen_univ (subset_univ _) (fun Q hQ _ => hB Q hQ)
   have he : x₀ = xe := Set.mem_singleton_iff.mp (hsing ▸ hx₀)
   exact hxe_ne he.symm
 
@@ -1090,12 +1075,11 @@ private theorem strict_supporting_inequality {u : E → ℝ} (hstrict : StrictCo
 
 /-- The common weighted-gap proof from actual supports and contact uniqueness.
 Both public callers generate their support family from their source data. -/
-private theorem strictConvexOn_of_supports_contact
-    {u : E → ℝ} {Ω : Set E} (hconv : ConvexOn ℝ Ω u)
-    (hsupports : ∀ x ∈ Ω, ∃ p : E, ∀ y ∈ Ω, u x + ⟪p,y-x⟫ ≤ u y)
-    (hcontact : ∀ x ∈ Ω, ∀ p : E,
-      (∀ y ∈ Ω, u x + ⟪p,y-x⟫ ≤ u y) →
-      ∀ y ∈ Ω, u y = u x + ⟪p,y-x⟫ → y = x) :
+private theorem strictConvexOn_of_supports_contact {u : E → ℝ} {Ω : Set E}
+    (hconv : ConvexOn ℝ Ω u) (hsupports : ∀ x ∈ Ω, ∃ p : E, ∀ y ∈ Ω, u x + ⟪p, y - x⟫ ≤ u y)
+    (hcontact :
+      ∀ x ∈ Ω,
+        ∀ p : E, (∀ y ∈ Ω, u x + ⟪p, y - x⟫ ≤ u y) → ∀ y ∈ Ω, u y = u x + ⟪p, y - x⟫ → y = x) :
     StrictConvexOn ℝ Ω u := by
   refine ⟨hconv.1, ?_⟩
   intro x hx y hy hxy a b ha hb hab
@@ -1103,8 +1087,7 @@ private theorem strictConvexOn_of_supports_contact
   simp only [smul_eq_mul] at hle ⊢
   by_contra hn
   let z := a • x + b • y
-  have heq : u z = a * u x + b * u y :=
-    le_antisymm hle (le_of_not_gt hn)
+  have heq : u z = a * u x + b * u y := le_antisymm hle (le_of_not_gt hn)
   have hz : z ∈ Ω := hconv.1 hx hy ha.le hb.le hab
   obtain ⟨p, hp⟩ := hsupports z hz
   have hzinner : ⟪p, z⟫ = a * ⟪p, x⟫ + b * ⟪p, y⟫ := by
@@ -1113,7 +1096,8 @@ private theorem strictConvexOn_of_supports_contact
     simp only [inner_sub_right]
     calc
       a * (⟪p, x⟫ - ⟪p, z⟫) + b * (⟪p, y⟫ - ⟪p, z⟫) =
-          (a * ⟪p, x⟫ + b * ⟪p, y⟫) - (a + b) * ⟪p, z⟫ := by ring
+          (a * ⟪p, x⟫ + b * ⟪p, y⟫) - (a + b) * ⟪p, z⟫ := by
+        ring
       _ = 0 := by rw [← hzinner, hab, one_mul, sub_self]
   let A := u x - u z - ⟪p, x - z⟫
   let B := u y - u z - ⟪p, y - z⟫
@@ -1126,10 +1110,9 @@ private theorem strictConvexOn_of_supports_contact
   have hsum : a * A + b * B = 0 := by
     dsimp [A, B]
     calc
-      a * (u x - u z - ⟪p, x - z⟫) +
-          b * (u y - u z - ⟪p, y - z⟫) =
-          (a * u x + b * u y) - (a + b) * u z -
-            (a * ⟪p, x - z⟫ + b * ⟪p, y - z⟫) := by ring
+      a * (u x - u z - ⟪p, x - z⟫) + b * (u y - u z - ⟪p, y - z⟫) =
+          (a * u x + b * u y) - (a + b) * u z - (a * ⟪p, x - z⟫ + b * ⟪p, y - z⟫) := by
+        ring
       _ = 0 := by rw [← heq, hab, hlinear, one_mul, sub_self, sub_zero]
   have haA : 0 ≤ a * A := mul_nonneg ha.le hA
   have hbB : 0 ≤ b * B := mul_nonneg hb.le hB
@@ -1152,29 +1135,30 @@ variable [FiniteDimensional ℝ E]
 supporting affine function of the convex `u` touches its graph at exactly one point, `u` is strictly
 convex. -/
 theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    (hcontact : ∀ x p : E, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) →
-      ∀ y, u y = u x + ⟪p, y - x⟫ → y = x) :
+    (hcontact :
+      ∀ x p : E, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) → ∀ y, u y = u x + ⟪p, y - x⟫ → y = x) :
     StrictConvexOn ℝ univ u := by
   apply strictConvexOn_of_supports_contact hconv
   · intro x _hx
-    obtain ⟨p,hp,_hR⟩ := exists_subgradient_slope_le_inner_add hconv x (0 : E)
-    exact ⟨p,fun y _hy => hp y⟩
+    obtain ⟨p, hp, _hR⟩ := exists_subgradient_slope_le_inner_add hconv x (0 : E)
+    exact ⟨p, fun y _hy => hp y⟩
   · intro x _hx p hp y _hy hxy
     exact hcontact x p (fun z => hp z (mem_univ _)) y hxy
 
 
 /-- Actual local C0 supports generated on each singleton; no global source
 extension, differentiability or supplied support family. -/
-theorem strictConvexOn_of_domain_contact_eq
-    {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hconv : ConvexOn ℝ Ω u)
-    (hC : ContinuousOn u Ω)
-    (hcontact : ∀ x ∈ Ω, ∀ p : E,
-      (∀ y ∈ Ω, u x + ⟪p,y-x⟫ ≤ u y) →
-      ∀ y ∈ Ω, u y = u x + ⟪p,y-x⟫ → y = x) : StrictConvexOn ℝ Ω u := by
+theorem strictConvexOn_of_domain_contact_eq {u : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω)
+    (hconv : ConvexOn ℝ Ω u) (hC : ContinuousOn u Ω)
+    (hcontact :
+      ∀ x ∈ Ω,
+        ∀ p : E, (∀ y ∈ Ω, u x + ⟪p, y - x⟫ ≤ u y) → ∀ y ∈ Ω, u y = u x + ⟪p, y - x⟫ → y = x) :
+    StrictConvexOn ℝ Ω u := by
   apply strictConvexOn_of_supports_contact hconv ?_ hcontact
   intro x hx
-  obtain ⟨R,_hR,hs,_hcap⟩ := exists_uniform_subgradient_bound_on_compact
-    hΩ hconv hC (isCompact_singleton (x := x)) (singleton_subset_iff.mpr hx)
+  obtain ⟨R, _hR, hs, _hcap⟩ :=
+    exists_uniform_subgradient_bound_on_compact hΩ hconv hC (isCompact_singleton (x := x))
+      (singleton_subset_iff.mpr hx)
   exact hs x (mem_singleton x)
 
 /-- **Slopes of a strictly convex function lie in the interior of a convex slope range**: if all
@@ -1220,19 +1204,22 @@ theorem subgradient_mem_interior_of_strictConvexOn {u : E → ℝ}
   rw [hqv] at hback
   linarith
 
-/-- **A strictly exposed contact point below a level**: if `{u ≤ R}` is compact and `u x < R`, the
+/--
+**A strictly exposed contact point below a level**: if `{u ≤ R}` is compact and `u x < R`, the
 contact set of a
-supporting affine function at `x` has a point `z` with `u z < R` that is strictly exposed in the direction
+supporting affine function at `x` has a point `z` with `u z < R` that is strictly exposed in the
+direction
 `θ` among the contact points with `u ≤ R`. -/
 theorem exists_exposed_contact_of_lt {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x p : E}
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) {R : ℝ} (hR : u x < R) (hK : IsCompact {y | u y ≤ R}) :
-    ∃ z θ : E, u z = u x + ⟪p, z - x⟫ ∧ u z < R ∧
-      ∀ y, u y = u x + ⟪p, y - x⟫ → u y ≤ R → y ≠ z → ⟪y - z, θ⟫ < 0 := by
+    ∃ z θ : E,
+      u z = u x + ⟪p, z - x⟫ ∧
+        u z < R ∧ ∀ y, u y = u x + ⟪p, y - x⟫ → u y ≤ R → y ≠ z → ⟪y - z, θ⟫ < 0 := by
   have hu : Continuous u := continuousOn_univ.mp (ConvexOn.continuousOn isOpen_univ hconv)
   let C : Set E := {y | u y = u x + ⟪p, y - x⟫} ∩ {y | u y ≤ R}
   have hclosed : IsClosed {y | u y = u x + ⟪p, y - x⟫} :=
-    isClosed_eq hu (continuous_const.add
-      (continuous_const.inner (continuous_id.sub continuous_const)))
+    isClosed_eq hu
+      (continuous_const.add (continuous_const.inner (continuous_id.sub continuous_const)))
   have hC : IsCompact C := hK.inter_left hclosed
   have hxC : x ∈ C := by
     refine ⟨?_, hR.le⟩
@@ -1242,19 +1229,15 @@ theorem exists_exposed_contact_of_lt {u : E → ℝ} (hconv : ConvexOn ℝ univ 
   let ε : ℝ := (R - u x) / (2 * (M ^ 2 + 1))
   have hden : 0 < 2 * (M ^ 2 + 1) := by positivity
   have hε : 0 < ε := div_pos (sub_pos.mpr hR) hden
-  have hεeq : ε * (2 * (M ^ 2 + 1)) = R - u x :=
-    div_mul_cancel₀ _ (ne_of_gt hden)
-  have hεM : ε * M ^ 2 < R - u x := by
-    nlinarith [mul_nonneg hε.le (sq_nonneg M)]
+  have hεeq : ε * (2 * (M ^ 2 + 1)) = R - u x := div_mul_cancel₀ _ (ne_of_gt hden)
+  have hεM : ε * M ^ 2 < R - u x := by nlinarith [mul_nonneg hε.le (sq_nonneg M)]
   let F : E → ℝ := fun y => ε * ‖y‖ ^ 2 - ⟪p, y⟫
   have hF : Continuous F :=
-    (continuous_const.mul (continuous_norm.pow 2)).sub
-      (continuous_const.inner continuous_id)
+    (continuous_const.mul (continuous_norm.pow 2)).sub (continuous_const.inner continuous_id)
   obtain ⟨z, hzC, hzmax⟩ := hC.exists_isMaxOn ⟨x, hxC⟩ hF.continuousOn
   have hmax : ∀ y ∈ C, F y ≤ F z := isMaxOn_iff.mp hzmax
   have hzcontact : u z = u x + ⟪p, z - x⟫ := hzC.1
-  have hzsq : ‖z‖ ^ 2 ≤ M ^ 2 :=
-    (sq_le_sq₀ (norm_nonneg z) hM.le).mpr (hbound z hzC)
+  have hzsq : ‖z‖ ^ 2 ≤ M ^ 2 := (sq_le_sq₀ (norm_nonneg z) hM.le).mpr (hbound z hzC)
   have hzquad : ε * ‖z‖ ^ 2 ≤ ε * M ^ 2 := mul_le_mul_of_nonneg_left hzsq hε.le
   have hxquad : 0 ≤ ε * ‖x‖ ^ 2 := mul_nonneg hε.le (sq_nonneg ‖x‖)
   have hzR : u z < R := by
@@ -1267,8 +1250,7 @@ theorem exists_exposed_contact_of_lt {u : E → ℝ} (hconv : ConvexOn ℝ univ 
   refine ⟨z, θ, hzcontact, hzR, ?_⟩
   intro y hy hyR hyz
   have hymax := hmax y ⟨hy, hyR⟩
-  have hnorm : 0 < ‖y - z‖ ^ 2 :=
-    sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hyz))
+  have hnorm : 0 < ‖y - z‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hyz))
   have hpos : 0 < ε * ‖y - z‖ ^ 2 := mul_pos hε hnorm
   have hid : ⟪y - z, θ⟫ = F y - F z - ε * ‖y - z‖ ^ 2 := by
     rw [real_inner_comm θ (y - z)]
@@ -1287,4 +1269,3 @@ end InnerProduct
 end FunctionalInequalities.Analysis
 
 end StrictConvexityElementary
-

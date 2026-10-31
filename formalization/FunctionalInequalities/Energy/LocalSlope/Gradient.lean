@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.LocalSlope.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
+module
+
+public import FunctionalInequalities.Energy.LocalSlope.Basic
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
 
 /-!
 # Local metric slope and the canonical Hilbert gradient
@@ -17,6 +19,8 @@ from a Haar reference measure to the probability law. Energy equality allows inf
 only the admissibility characterization adds L2 membership. No factor of one half is used.
 These declarations do not redefine the target, slope, gradient or admissibility predicate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -120,9 +124,8 @@ theorem admissible_iff_memLp_gradient (hν : (ν : Measure E) ≪ m) (f : E → 
       LocallyLipschitz f ∧ MemLp f 2 (ν : Measure E) ∧ MemLp (gradient f) 2 (ν : Measure E) := by
   have hmem : MemLp (gradient f) 2 (ν : Measure E) ↔
       (∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂(ν : Measure E)) ≠ ⊤ := by
-    rw [MemLp, and_iff_right
+    rw [memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num)
       (Energy.Euclidean.LipschitzApproximation.aestronglyMeasurable_gradient f _)]
-    rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num)]
     simp [← ofReal_norm, lt_top_iff_ne_top]
   constructor
   · intro h
@@ -153,7 +156,8 @@ theorem energy_eq_integral_gradient
     (hg : MemLp (gradient f) 2 (ν : Measure V)) :
     energy ν f = ENNReal.ofReal (∫ x, ‖gradient f x‖ ^ 2 ∂(ν : Measure V)) := by
   rw [energy_eq_lintegral_gradient ν m hac f hf,
-    ofReal_integral_eq_lintegral_ofReal ((memLp_two_iff_integrable_sq_norm hg.1).mp hg)
+    ofReal_integral_eq_lintegral_ofReal
+      ((memLp_two_iff_integrable_sq_norm hg.aestronglyMeasurable).mp hg)
       (ae_of_all _ fun x ↦ sq_nonneg ‖gradient f x‖)]
   congr 1
   funext x

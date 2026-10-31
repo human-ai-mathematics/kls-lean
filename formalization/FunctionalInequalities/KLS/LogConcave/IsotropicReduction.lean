@@ -1,22 +1,27 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.RegularApproximation
-import FunctionalInequalities.KLS.LogConcave.Regular.Isometry
-import FunctionalInequalities.KLS.LogConcave.Regular.Poincare
-import FunctionalInequalities.KLS.LogConcave.WeakLimit
-import FunctionalInequalities.KLS.IsotropicSupport
-import FunctionalInequalities.Poincare.SmoothTest.Comparison
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.RegularApproximation
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isometry
+public import FunctionalInequalities.KLS.LogConcave.Regular.Poincare
+public import FunctionalInequalities.KLS.LogConcave.WeakLimit
+public import FunctionalInequalities.KLS.IsotropicSupport
+public import FunctionalInequalities.Poincare.SmoothTest.Comparison
 
 /-!
 # Reduction of the isotropic log-concave Poincaré bound to regular laws
 
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2 (p. 5): the regular approximation reduces
 Theorem 1.1 to isotropic regular laws. Formalized conditionally: if every isotropic regular law on
-`ℝⁿ` (`n > 0`) has literature Poincaré constant at most `K`, then so does every isotropic log-concave
+`ℝⁿ` (`n > 0`) has literature Poincaré constant at most `K`, then so does every isotropic
+log-concave
 law on every finite-dimensional inner product space (`KLS.IsotropicBound K`). The proof derives the
 Borell density of the law, approximates it by the laws of regular potentials with converging
 covariances, transfers the bound through centering/whitening with the envelope coefficient, and
 passes to the weak limit. The universal bound for regular laws is a hypothesis (it is what Theorems
 3.1, 4.1 and Proposition 7.1 would supply); nothing unconditional is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 
@@ -35,12 +40,14 @@ theorem affineSupport_eq_top_of_isotropic {μ : ProbabilityMeasure E} (hiso : KL
   hiso.affineSupport_eq_top
 
 /-- An isotropic log-concave law has a Borell density with respect to Lebesgue measure. -/
-theorem exists_isBorellDensity_of_isotropic {μ : ProbabilityMeasure E}
-    (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ) :
-    ∃ ρ : E → ℝ, KLS.IsBorellDensity (μ : Measure E) volume ρ := by
-  have hi := hLC.interior_support_nonempty_of_affineSupport_eq_top (affineSupport_eq_top_of_isotropic hiso)
-  exact hLC.exists_isBorellDensity_of_interior_support_nonempty volume hi
-    (hLC.absolutelyContinuous_of_interior_support_nonempty volume hi)
+theorem exists_isBorellDensity_of_isotropic {μ : ProbabilityMeasure E} (hLC : KLS.LogConcave μ)
+    (hiso : KLS.Isotropic μ) : ∃ ρ : E → ℝ, KLS.IsBorellDensity (μ : Measure E) volume ρ := by
+  have hi :=
+    hLC.interior_support_nonempty_of_affineSupport_eq_top
+      (affineSupport_eq_top_of_isotropic hiso)
+  exact
+    hLC.exists_isBorellDensity_of_interior_support_nonempty volume hi
+      (hLC.absolutelyContinuous_of_interior_support_nonempty volume hi)
 
 /-- A literature Poincaré bound for a regular law is a smooth-test bound. -/
 theorem RegularPotential.smoothTest_holds_of_localSlope_le {V : E → ℝ} {a b : ℝ}
@@ -53,14 +60,17 @@ theorem RegularPotential.smoothTest_holds_of_localSlope_le {V : E → ℝ} {a b 
     hV.logConcave_law.smoothTest_constant_eq_localSlope]
   exact hC
 
-/-- **Reduction of the Poincaré bound to isotropic regular laws** (BKL Section 2, p. 5): if every
+/--
+**Reduction of the Poincaré bound to isotropic regular laws** (BKL Section 2, p. 5): if every
 isotropic regular law on `E` (positive upper curvature) has literature constant `≤ K`, so does every
-isotropic log-concave law on `E`: approximate by regular laws (`GaussianSmoothing.exists_regularSeq_limits`),
+isotropic log-concave law on `E`: approximate by regular laws
+(`GaussianSmoothing.exists_regularSeq_limits`),
 transfer the bound with the envelope coefficient `K(1+‖Cov−Id‖) → K`, and pass to the weak limit. -/
 theorem localSlope_le_of_regular_isotropic_bound {K : NNReal}
-    (hBound : ∀ {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b),
-      0 < b → KLS.Isotropic hV.law →
-        Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal))
+    (hBound :
+      ∀ {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b),
+        0 < b →
+          KLS.Isotropic hV.law → Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal))
     (μ : ProbabilityMeasure E) (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ) :
     Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) := by
   by_cases hdim : Module.finrank ℝ E = 0
@@ -73,7 +83,8 @@ theorem localSlope_le_of_regular_isotropic_bound {K : NNReal}
   let ν : ℕ → ProbabilityMeasure E := fun n => GaussianSmoothing.regularSeq hρ n (k n)
   let Cseq : ℕ → NNReal := fun n =>
     K * (1 + ‖Covariance.operator (ν n : Measure E) - ContinuousLinearMap.id ℝ E‖₊)
-  have hcov' : Tendsto (fun n => Covariance.operator (ν n : Measure E)) atTop
+  have hcov' :
+    Tendsto (fun n => Covariance.operator (ν n : Measure E)) atTop
       (𝓝 (ContinuousLinearMap.id ℝ E)) := by
     simpa only [ν, hiso.covariance_identity] using hcov
   have hC : Tendsto Cseq atTop (𝓝 K) := by
@@ -82,12 +93,15 @@ theorem localSlope_le_of_regular_isotropic_bound {K : NNReal}
       RegularPotential.envelope_coefficient_tendsto K hcov'
   apply KLS.LogConcave.localSlope_constant_le_of_tendsto ν μ hLC Cseq K hweak hC
   intro n
-  have hV := FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.regularPotential_quadraticPotential
-    hρ (by positivity : (0 : ℝ) < (n : ℝ) + 1) (GaussianSmoothing.tiltRate_pos (k n))
+  have hV :=
+    FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.regularPotential_quadraticPotential
+      hρ (by positivity : (0 : ℝ) < (n : ℝ) + 1) (GaussianSmoothing.tiltRate_pos (k n))
   have hlit := RegularPotential.localSlope_le_covariance_envelope hBound hV
-  have hCeq : (Cseq n : ENNReal) =
-      ENNReal.ofReal ((K : ℝ) *
-        (1 + ‖Covariance.operator (hV.law : Measure E) - ContinuousLinearMap.id ℝ E‖)) := by
+  have hCeq :
+    (Cseq n : ENNReal) =
+      ENNReal.ofReal
+        ((K : ℝ) *
+          (1 + ‖Covariance.operator (hV.law : Measure E) - ContinuousLinearMap.id ℝ E‖)) := by
     rw [← ENNReal.ofReal_coe_nnreal]
     rfl
   apply RegularPotential.smoothTest_holds_of_localSlope_le hV (Cseq n)
@@ -107,12 +121,17 @@ private theorem regular_upper_pos {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularP
     mul_nonpos_of_nonpos_of_nonneg (le_of_not_gt hb) (sq_nonneg _)
   linarith
 
-/-- The same reduction from a bound for isotropic regular laws on `ℝⁿ`, `n > 0` (standard coordinates). -/
+/--
+The same reduction from a bound for isotropic regular laws on `ℝⁿ`, `n > 0` (standard coordinates).
+-/
 theorem localSlope_le_of_euclidean_regular_isotropic_bound {K : NNReal}
-    (hEuclidean : ∀ (n : ℕ), 0 < n →
-      ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ) (hV : KLS.RegularPotential V a b),
-        0 < b → KLS.Isotropic hV.law →
-          Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal))
+    (hEuclidean :
+      ∀ (n : ℕ),
+        0 < n →
+          ∀ (V : EuclideanSpace ℝ (Fin n) → ℝ) (a b : ℝ) (hV : KLS.RegularPotential V a b),
+            0 < b →
+              KLS.Isotropic hV.law →
+                Poincare.LocalSlope.Intrinsic.constant hV.law ≤ (K : ENNReal))
     (μ : ProbabilityMeasure E) (hLC : KLS.LogConcave μ) (hiso : KLS.Isotropic μ) :
     Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) := by
   apply localSlope_le_of_regular_isotropic_bound ?_ μ hLC hiso

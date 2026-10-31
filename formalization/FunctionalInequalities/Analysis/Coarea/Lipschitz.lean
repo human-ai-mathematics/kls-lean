@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
-import FunctionalInequalities.Analysis.Coarea.Smooth
+module
+
+public import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
+public import FunctionalInequalities.Analysis.Coarea.Smooth
 
 /-! # Weighted coarea for Lipschitz functions
 
@@ -12,6 +14,8 @@ assumption is imposed. The ENNReal weight may be identically infinity.
 The sharp finite-regularity Sard theorem and its nonzero-derivative consequence are proved
 separately in `Analysis/Sard/Sharp.lean`. -/
 
+@[expose] public section
+
 noncomputable section
 open MeasureTheory Set Filter
 open scoped ENNReal NNReal ContDiff
@@ -21,13 +25,15 @@ namespace FunctionalInequalities.KLS
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 
-/-- **globally Lipschitz coarea**: weighted Lipschitz coarea, including almost-everywhere slice measurability. -/
+/--
+**globally Lipschitz coarea**: weighted Lipschitz coarea, including almost-everywhere slice
+measurability. -/
 theorem coarea_of_lipschitz {S : Set V} {u : V → ℝ} {K : ℝ≥0} {g : V → ℝ≥0∞}
     (hu : LipschitzWith K u) (hS : MeasurableSet S) (hg : Measurable g) :
     AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V))
-      (volume : Measure ℝ) ∧
-    (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
-      ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
+        (volume : Measure ℝ) ∧
+      (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+        ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
   obtain ⟨C, v, hCm, hCd, hCnull, hv, hjet⟩ := Analysis.exists_contDiff_pieces hu
   let P : ℕ → Set V := fun n => S ∩ C n
   have hPm : ∀ n, MeasurableSet (P n) := fun n => hS.inter (hCm n)
@@ -39,10 +45,11 @@ theorem coarea_of_lipschitz {S : Set V} {u : V → ℝ} {K : ℝ≥0} {g : V →
     constructor <;> rintro ⟨hx, ht⟩
     · exact ⟨hx, (hjet n x hx.2).2.1.symm.trans ht⟩
     · exact ⟨hx, (hjet n x hx.2).2.1.trans ht⟩
-  have hformula : ∀ n,
+  have hformula :
+    ∀ n,
       AEMeasurable (fun t : ℝ => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) volume ∧
-      (∫⁻ x in P n, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
-        ∫⁻ t, ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V) := by
+        (∫⁻ x in P n, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
+          ∫⁻ t, ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(surfaceMeasure V) := by
     intro n
     have h := coarea_of_contDiff (hv n) (hPm n) hg
     simp_rw [hslices n] at h
@@ -62,16 +69,20 @@ theorem coarea_of_lipschitz {S : Set V} {u : V → ℝ} {K : ℝ≥0} {g : V →
         apply sdiff_eq_empty.2
         exact iUnion_subset fun _ => inter_subset_left
       rw [hempty, measure_empty]
-  have hslice : (fun t : ℝ => ∫⁻ y in (⋃ n, P n) ∩ {x | u x = t}, g y ∂(surfaceMeasure V))
-      =ᵐ[(volume : Measure ℝ)] fun t : ℝ =>
-        ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) := by
+  have hslice :
+    (fun t : ℝ =>
+        ∫⁻ y in (⋃ n, P n) ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) =ᵐ[(volume : Measure ℝ)]
+      fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) := by
     filter_upwards [ae_surfaceMeasure_inter_levelSet_eq_zero
-      (hu.lipschitzOnWith (s := (⋃ n, C n)ᶜ)) hCnull] with t ht
-    have heq : (((⋃ n, P n) ∩ {x | u x = t} : Set V))
-        =ᵐ[surfaceMeasure V] ((S ∩ {x | u x = t} : Set V)) := by
+        (hu.lipschitzOnWith (s := (⋃ n, C n)ᶜ)) hCnull] with
+      t ht
+    have heq :
+      (((⋃ n, P n) ∩ {x | u x = t} : Set V)) =ᵐ[surfaceMeasure V]
+        ((S ∩ {x | u x = t} : Set V)) := by
       apply ae_eq_set.2
       constructor
-      · rw [sdiff_eq_empty.2 (inter_subset_inter_left _ (iUnion_subset fun _ => inter_subset_left)),
+      · rw [sdiff_eq_empty.2
+            (inter_subset_inter_left _ (iUnion_subset fun _ => inter_subset_left)),
           measure_empty]
       · apply measure_mono_null _ ht
         intro x hx
@@ -94,8 +105,10 @@ theorem coarea_of_lipschitz {S : Set V} {u : V → ℝ} {K : ℝ≥0} {g : V →
       apply lintegral_congr
       intro t
       rw [iUnion_inter]
-      exact (lintegral_iUnion (fun n => (hPm n).inter (hu.continuous.measurable (measurableSet_singleton t)))
-        (fun i j hij => (hPd hij).mono inter_subset_left inter_subset_left) g).symm
+      exact
+        (lintegral_iUnion
+            (fun n => (hPm n).inter (hu.continuous.measurable (measurableSet_singleton t)))
+            (fun i j hij => (hPd hij).mono inter_subset_left inter_subset_left) g).symm
     _ = _ := lintegral_congr_ae hslice
 
 end FunctionalInequalities.KLS

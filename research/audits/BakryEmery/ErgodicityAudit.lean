@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Curvature
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-!
 # Audit: Bakry–Gentil–Ledoux (2014), Corollary 4.8.2 in the heat model, without ergodicity
@@ -21,6 +23,8 @@ This client checks the window-2 interfaces of the BGL Corollary 4.8.2 route:
 
 Nothing here certifies the paper: the corollary's coverage needs a reviewed certificate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -182,7 +186,8 @@ end BakryEmeryErgodicityAudit
 #print axioms BakryEmeryErgodicityAudit.endpoint_euclidean
 #print axioms BakryEmeryErgodicityAudit.gaussian
 #print axioms FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_eq_zero_iff
-#print axioms FunctionalInequalities.KLS.LogConcave.inner_center_eq_zero_of_closedWeightedOperator_eq_zero
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.inner_center_eq_zero_of_closedWeightedOperator_eq_zero
 #print axioms FunctionalInequalities.KLS.LogConcave.tendsto_norm_center_apply
 #print axioms FunctionalInequalities.KLS.LogConcave.norm_center_sq_le_inv_mul
 #print axioms FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv
@@ -193,5 +198,6 @@ end BakryEmeryErgodicityAudit
 #print axioms FunctionalInequalities.KLS.LogConcave.integral_mul_fderiv_eq_neg_integral_mul_inner
 #print axioms FunctionalInequalities.KLS.LogConcave.logConcave_of_eq_tilted
 #print axioms FunctionalInequalities.KLS.LogConcave.interior_support_nonempty_of_eq_tilted
-#print axioms FunctionalInequalities.Energy.Euclidean.exists_ae_eq_const_of_integral_mul_fderiv_eq_zero
+#print axioms
+  FunctionalInequalities.Energy.Euclidean.exists_ae_eq_const_of_integral_mul_fderiv_eq_zero
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.tendsto_apply_of_inner_eq_zero

@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
-import FunctionalInequalities.Analysis.Newtonian.Potential.Basic
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
-import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
-import FunctionalInequalities.Analysis.Tensor.Coefficients
-import FunctionalInequalities.Analysis.Lipschitz.ZeroDerivative
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
+public import FunctionalInequalities.Analysis.Newtonian.Potential.Basic
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
+public import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
+public import FunctionalInequalities.Analysis.Tensor.Coefficients
+public import FunctionalInequalities.Analysis.Lipschitz.ZeroDerivative
+
+@[expose] public section
 
 open FunctionalInequalities FunctionalInequalities.Analysis MeasureTheory
 open scoped ENNReal

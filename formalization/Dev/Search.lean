@@ -1,5 +1,7 @@
-import LeanSearchClient
-import FunctionalInequalities
+module
+
+public import LeanSearchClient
+public import FunctionalInequalities
 
 /-!
 # Development-only Mathlib search scratchpad
@@ -8,7 +10,7 @@ This module exists so that the `LeanSearchClient` query commands can be used whi
 this repository's proofs, without ever entering the certified build.
 
 `LeanSearchClient` is already available: Mathlib requires it (`lake-manifest.json` pins
-`LeanSearchClient` at `5f4d51b81cbd`, inherited) and re-exports it from
+`LeanSearchClient` at `d6b4c7be5be7`, inherited) and re-exports it from
 `Mathlib/Tactic/Common.lean`. No `require` was added to `lakefile.toml`; adding one would risk
 a pin conflict with Mathlib's own `@ main` requirement.
 
@@ -52,6 +54,8 @@ Target the currently open blueprint nodes, e.g. the asymptotic-Lipschitz relaxat
 `thm:smooth-gradient-relaxation-two-cheeger`, or the mollification step in
 `lem:relative-perimeter-smoothing`.
 -/
+
+@[expose] public section
 
 namespace FunctionalInequalities.Dev
 

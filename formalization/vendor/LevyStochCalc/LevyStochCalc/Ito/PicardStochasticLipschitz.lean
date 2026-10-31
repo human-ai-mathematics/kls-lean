@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardStepMap
-import Mathlib.Algebra.Order.Chebyshev
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardStepMap
+public import Mathlib.Algebra.Order.Chebyshev
 
 /-!
 # Lipschitz estimates for the stochastic components of the Picard map
@@ -15,6 +19,8 @@ identities it is combined with, and the resulting per-component `L²` Lipschitz 
 diffusion and the jump component of the Picard map in terms of the Lipschitz constants of `σ` and
 `γ`.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

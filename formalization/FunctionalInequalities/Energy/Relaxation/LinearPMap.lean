@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
-import FunctionalInequalities.Energy.Relaxation.Basic
-import Mathlib.Analysis.Convex.Combination
-import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
-import Mathlib.Analysis.Normed.Module.Convex
-import Mathlib.Topology.Algebra.Module.LinearPMap
+module
+
+public import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import Mathlib.Analysis.Convex.Combination
+public import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
+public import Mathlib.Analysis.Normed.Module.Convex
+public import Mathlib.Topology.Algebra.Module.LinearPMap
 
 /-!
 # Sequential relaxation of the squared norm of a partially defined operator
@@ -32,6 +34,8 @@ using the parallelogram law, without weak topologies.
 Nothing here decides whether a concrete operator is closable; that is the analytic content of the
 concrete modules. No Markov, Poincaré or spectral statement is made.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -409,14 +413,14 @@ theorem normSqEnergy_of_mem
     (S : X →ₗ.[ℝ] H') (x : S.domain) :
     normSqEnergy S x = ((‖S x‖₊ ^ 2 : NNReal) : ENNReal) := by
   change (if h : (x : X) ∈ S.domain then ((‖S ⟨x, h⟩‖₊ ^ 2 : NNReal) : ENNReal) else ⊤) = _
-  rw [dif_pos x.2]
+  rw [dite_eq_left x.2]
 
 open Classical in
 omit [CompleteSpace H] in
 theorem normSqEnergy_of_notMem
     (S : X →ₗ.[ℝ] H') {x : X} (hx : x ∉ S.domain) : normSqEnergy S x = ⊤ := by
   change (if h : x ∈ S.domain then ((‖S ⟨x, h⟩‖₊ ^ 2 : NNReal) : ENNReal) else ⊤) = _
-  rw [dif_neg hx]
+  rw [dite_eq_right hx]
 
 end NormedSpace
 

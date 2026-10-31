@@ -1,7 +1,11 @@
-import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
-import FunctionalInequalities.Poincare.L2.Energy
+module
+
+public import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
+public import FunctionalInequalities.Poincare.L2.Energy
 
 /-! # Poincaré constants under covariance-gradient transport -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory
@@ -17,11 +21,13 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
 
 /-- The optimal `L²` Poincaré constant of the covariance relaxation is translation invariant. -/
 theorem constant_translateLaw :
-    Poincare.L2Energy.constant (Probability.translateLaw ν c) (relaxation (Probability.translateLaw ν c)) =
+    Poincare.L2Energy.constant (Probability.translateLaw ν c)
+        (relaxation (Probability.translateLaw ν c)) =
       Poincare.L2Energy.constant ν (relaxation ν) :=
   Poincare.L2Energy.constant_eq_of_linearIsometryEquiv ν (Probability.translateLaw ν c)
-    (relaxation ν) (relaxation (Probability.translateLaw ν c)) (L2.Translation.pullbackEquiv ν c)
-    (L2.Translation.variance_pullbackEquiv ν c) (relaxation_translateLaw ν c)
+    (relaxation ν) (relaxation (Probability.translateLaw ν c))
+    (L2.Translation.pullbackEquiv ν c) (L2.Translation.variance_pullbackEquiv ν c)
+    (relaxation_translateLaw ν c)
 
 end Translation
 
@@ -37,10 +43,12 @@ omit [SecondCountableTopology V₁] in
 /-- The optimal `L²` Poincaré constant of the covariance relaxation is invariant under linear
 isometric equivalences. -/
 theorem constant_mapLinearIsometryEquiv :
-    Poincare.L2Energy.constant (Probability.mapLinearIsometryEquiv ν L) (relaxation (Probability.mapLinearIsometryEquiv ν L)) =
+    Poincare.L2Energy.constant (Probability.mapLinearIsometryEquiv ν L)
+        (relaxation (Probability.mapLinearIsometryEquiv ν L)) =
       Poincare.L2Energy.constant ν (relaxation ν) :=
-  Poincare.L2Energy.constant_eq_of_linearIsometryEquiv ν (Probability.mapLinearIsometryEquiv ν L)
-    (relaxation ν) (relaxation (Probability.mapLinearIsometryEquiv ν L)) (L2.LinearIsometry.pullbackEquiv ν L)
+  Poincare.L2Energy.constant_eq_of_linearIsometryEquiv ν
+    (Probability.mapLinearIsometryEquiv ν L) (relaxation ν)
+    (relaxation (Probability.mapLinearIsometryEquiv ν L)) (L2.LinearIsometry.pullbackEquiv ν L)
     (L2.LinearIsometry.variance_pullbackEquiv ν L) (relaxation_mapLinearIsometryEquiv ν L)
 
 end Isometry
@@ -54,14 +62,19 @@ variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁] 
   (ν : ProbabilityMeasure V₁) (T : V₁ ≃L[ℝ] V₂)
 
 omit [SecondCountableTopology V₁] in
-/-- The optimal `L²` Poincaré constant of the covariance relaxation is invariant under continuous
+/--
+The optimal `L²` Poincaré constant of the covariance relaxation is invariant under continuous
 linear equivalences. -/
 theorem constant_mapContinuousLinearEquiv :
-    Poincare.L2Energy.constant (Probability.mapContinuousLinearEquiv ν T) (relaxation (Probability.mapContinuousLinearEquiv ν T)) =
+    Poincare.L2Energy.constant (Probability.mapContinuousLinearEquiv ν T)
+        (relaxation (Probability.mapContinuousLinearEquiv ν T)) =
       Poincare.L2Energy.constant ν (relaxation ν) :=
-  Poincare.L2Energy.constant_eq_of_linearIsometryEquiv ν (Probability.mapContinuousLinearEquiv ν T)
-    (relaxation ν) (relaxation (Probability.mapContinuousLinearEquiv ν T)) (L2.ContinuousLinearEquiv.pullbackEquiv ν T)
-    (L2.ContinuousLinearEquiv.variance_pullbackEquiv ν T) (relaxation_mapContinuousLinearEquiv ν T)
+  Poincare.L2Energy.constant_eq_of_linearIsometryEquiv ν
+    (Probability.mapContinuousLinearEquiv ν T) (relaxation ν)
+    (relaxation (Probability.mapContinuousLinearEquiv ν T))
+    (L2.ContinuousLinearEquiv.pullbackEquiv ν T)
+    (L2.ContinuousLinearEquiv.variance_pullbackEquiv ν T)
+    (relaxation_mapContinuousLinearEquiv ν T)
 
 end LinearEquiv
 

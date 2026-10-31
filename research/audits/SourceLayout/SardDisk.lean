@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Sard.Disk
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Sard.Disk
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis.MorseSard Set Metric
 open scoped ContDiff

@@ -1,16 +1,21 @@
-import Mathlib.Probability.Moments.Variance
-import Mathlib.Probability.Independence.Integration
-import Mathlib.MeasureTheory.Constructions.Pi
+module
+
+public import Mathlib.Probability.Moments.Variance
+public import Mathlib.Probability.Independence.Integration
+public import Mathlib.MeasureTheory.Constructions.Pi
 
 /-!
 # Independent coordinates of product measures
 
-Factorization of lower integrals of products over `μ^N`, and second-moment calculus on finite products `μ^N = Measure.pi (fun _ => μ)` and on binary products
+Factorization of lower integrals of products over `μ^N`, and second-moment calculus on finite
+products `μ^N = Measure.pi (fun _ => μ)` and on binary products
 `μ ⊗ ν`: normalized sums of independent copies, products of coordinates, and sums of independent
 observables. Only `L²` hypotheses are used. These are the moment computations behind the isotropy
 of the suspension in Bizeul–Klartag–Lehec (arXiv:2610.05474v1), proof of Proposition 7.1, p. 28.
 The lower-integral factorization is `lintegral_pi_prod_fin`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -163,14 +168,14 @@ theorem integral_mul_comp_eval_pi
   have hG2 : MemLp (fun x : Fin N → E => g (x j)) 2 ν :=
     hg2.comp_measurePreserving (measurePreserving_eval (fun _ : Fin N => μ) j)
   have hprod : MemLp (fun x : Fin N → E => f (x i) * g (x j)) 1 ν :=
-    hG2.mul' hF2
+    hF2.fun_mul hG2
   refine ⟨hprod.integrable le_rfl, ?_⟩
   by_cases hij : i = j
   · subst j
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     exact integral_comp_eval_pi μ (fun x => f x * g x)
       (hf2.aestronglyMeasurable.mul hg2.aestronglyMeasurable) N i
-  · rw [if_neg hij]
+  · rw [ite_eq_right hij]
     let X : Fin N → E → ℝ := fun k => if k = i then f else g
     have hX : ∀ k : Fin N, AEMeasurable (X k) μ := by
       intro k
@@ -211,8 +216,8 @@ theorem integral_normalizedSum_mul_comp_eval_pi
   have hzero (k : Fin N) : (∫ x : Fin N → E, f (x k) * g (x i) ∂ν) = 0 := by
     rw [(integral_mul_comp_eval_pi μ f g hf2 hg2 N k i).2]
     by_cases hki : k = i
-    · rw [if_pos hki, hfg0]
-    · rw [if_neg hki, hf0, hg0]
+    · rw [ite_eq_left hki, hfg0]
+    · rw [ite_eq_right hki, hf0, hg0]
       simp
   have hR0 : (∫ x, R x ∂ν) = 0 := by
     calc
@@ -276,11 +281,11 @@ theorem integral_prod_add_mul_eq_zero
   have hZfirst : MemLp (fun p : A × B => Z p.1) 2 (μ.prod ν) := hZ2.comp_fst ν
   have hYsecond : MemLp (fun p : A × B => Y p.2) 2 (μ.prod ν) := hY2.comp_snd μ
   have hXZ : MemLp (fun p : A × B => X p.1 * Z p.1) 1 (μ.prod ν) :=
-    hZfirst.mul' hXfirst
+    hXfirst.fun_mul hZfirst
   have hZY : MemLp (fun p : A × B => Z p.1 * Y p.2) 1 (μ.prod ν) :=
-    hYsecond.mul' hZfirst
+    hZfirst.fun_mul hYsecond
   have hmixed : MemLp (fun p : A × B => (X p.1 + Y p.2) * Z p.1) 1 (μ.prod ν) :=
-    hZfirst.mul' (hXfirst.add hYsecond)
+    (hXfirst.add hYsecond).fun_mul hZfirst
   refine ⟨hmixed.integrable le_rfl, ?_⟩
   have heq : (fun p : A × B => (X p.1 + Y p.2) * Z p.1) =
       (fun p => X p.1 * Z p.1 + Z p.1 * Y p.2) := by

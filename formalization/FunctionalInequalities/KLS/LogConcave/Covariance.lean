@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.CovarianceGradient.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+module
+
+public import FunctionalInequalities.Energy.CovarianceGradient.Basic
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
 
 /-!
 # Log-concave discharge of the affine covariance pre-energy contracts
@@ -23,6 +25,8 @@ These are the well-definedness contracts of the definition node. Nothing here as
 closability, density of the realization, a Poincaré inequality, translation invariance or any
 KLS conclusion. The zero-dimensional direction space is included in every statement.
 -/
+
+@[expose] public section
 
 noncomputable section
 

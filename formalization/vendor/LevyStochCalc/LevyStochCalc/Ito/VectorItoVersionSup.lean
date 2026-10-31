@@ -3,8 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.VectorItoProcessDiff
-import LevyStochCalc.Probability.DoobContinuous
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with source adaptations
+-- (deprecated names, proof-context visibility, `continuous_abs.measurable.comp` for the no longer
+-- reachable `Measurable.abs`) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Ito.VectorItoProcessDiff
+public import LevyStochCalc.Probability.DoobContinuous
 
 /-!
 # The window supremum of the difference of two vector Itô versions
@@ -19,6 +25,8 @@ maximal inequality needs.
 * `LevyStochCalc.Brownian.Ito.lintegral_iSup_sq_norm_version_sub_le` — the second moment of the
   window supremum of the difference, in terms of the coefficients' energies.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -277,7 +285,7 @@ theorem lintegral_iSup_sq_norm_version_sub_le
       have hmono : ∫ s in Set.Icc (0 : ℝ) t, |b₂ p ω s - b₁ p ω s| ∂volume
           ≤ ∫ s in Set.Icc (0 : ℝ) T, |b₂ p ω s - b₁ p ω s| ∂volume :=
         MeasureTheory.setIntegral_mono_set (h2.sub h1).abs
-          (Filter.Eventually.of_forall fun s => abs_nonneg _) hsub.eventuallyLE
+          (Filter.Eventually.of_forall fun s => abs_nonneg _) hsub.eventuallySubset
       have hnn : ‖D t ω‖₊ ≤ ‖∫ s in Set.Icc (0 : ℝ) T, |b₂ p ω s - b₁ p ω s| ∂volume‖₊ := by
         rw [← NNReal.coe_le_coe]
         simp only [coe_nnnorm, Real.norm_eq_abs]
@@ -294,7 +302,8 @@ theorem lintegral_iSup_sq_norm_version_sub_le
       _ ≤ ENNReal.ofReal T * ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T,
             (‖|b₂ p ω s - b₁ p ω s|‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P :=
           LevyStochCalc.Ito.Picard.lintegral_sq_setIntegral_le
-            ((hbm₂ p).sub (hbm₁ p)).abs hT.le hΔbfin
+            (f := fun ω s => |b₂ p ω s - b₁ p ω s|)
+            (continuous_abs.measurable.comp ((hbm₂ p).sub (hbm₁ p))) hT.le hΔbfin
       _ = ENNReal.ofReal T * ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T,
             (‖b₂ p ω s - b₁ p ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
           simp

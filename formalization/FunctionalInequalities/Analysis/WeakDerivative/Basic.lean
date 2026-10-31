@@ -1,17 +1,21 @@
-import FunctionalInequalities.Analysis.Mollification.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Defs
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
-import Mathlib.MeasureTheory.Function.LocallyIntegrable
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Measure.Haar.OfBasis
+module
+
+public import FunctionalInequalities.Analysis.Mollification.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Defs
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
+public import Mathlib.MeasureTheory.Function.LocallyIntegrable
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Measure.Haar.OfBasis
 
 /-!
 # Weak directional derivatives and classical identification
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -223,8 +227,8 @@ theorem HasWeakDerivAlong.mul_contDiff {f g : E → ℝ} {v : E} (h : HasWeakDer
       ring
 
 /-- Affine weak chain rule: `c + d f` has weak derivative `d g`. No `L²` hypothesis. -/
-theorem HasWeakDerivAlong.const_add_mul {f g : E → ℝ} {v : E} (h : HasWeakDerivAlong f g v) (c d : ℝ) :
-    HasWeakDerivAlong (fun x => c + d * f x) (fun x => d * g x) v := by
+theorem HasWeakDerivAlong.const_add_mul {f g : E → ℝ} {v : E} (h : HasWeakDerivAlong f g v)
+    (c d : ℝ) : HasWeakDerivAlong (fun x => c + d * f x) (fun x => d * g x) v := by
   have hc : HasWeakDerivAlong (fun _ : E => c) (fun _ => 0) v := by
     simpa using hasWeakDerivAlong_of_contDiff (contDiff_const (c := c)) v
   have hlocf : LocallyIntegrable (fun x => c + d * f x) (volume : Measure E) := by
@@ -239,7 +243,8 @@ theorem HasWeakDerivAlong.const_add_mul {f g : E → ℝ} {v : E} (h : HasWeakDe
   have hci : Integrable (fun x => c * fderiv ℝ ψ x v) (volume : Measure E) :=
     (hD.const_mul c).integrable_of_hasCompactSupport hDc.mul_left
   have hfi : Integrable (fun x => f x * fderiv ℝ ψ x v) (volume : Measure E) := by
-    simpa only [smul_eq_mul, mul_comm] using h.1.integrable_smul_left_of_hasCompactSupport hD hDc
+    simpa only [smul_eq_mul, mul_comm] using
+      h.1.integrable_smul_left_of_hasCompactSupport hD hDc
   calc
     (∫ x, (c + d * f x) * fderiv ℝ ψ x v) =
         (∫ x, c * fderiv ℝ ψ x v) + d * (∫ x, f x * fderiv ℝ ψ x v) := by
@@ -251,7 +256,8 @@ theorem HasWeakDerivAlong.const_add_mul {f g : E → ℝ} {v : E} (h : HasWeakDe
     _ = -(∫ x, 0 * ψ x) + d * (-(∫ x, g x * ψ x)) := by rw [hc.2.2 ψ hψ hψc, h.2.2 ψ hψ hψc]
     _ = -(∫ x, (d * g x) * ψ x) := by
       simp only [zero_mul, integral_zero, neg_zero, zero_add]
-      rw [show (fun x => (d * g x) * ψ x) = (fun x => d * (g x * ψ x)) from funext fun _ => by ring,
+      rw [show (fun x => (d * g x) * ψ x) = (fun x => d * (g x * ψ x)) from
+          funext fun _ => by ring,
         integral_const_mul]
       ring
 

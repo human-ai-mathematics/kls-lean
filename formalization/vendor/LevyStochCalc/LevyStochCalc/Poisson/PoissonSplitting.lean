@@ -3,10 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Probability.Distributions.Poisson.Basic
-import Mathlib.Probability.Independence.Integration
-import Mathlib.Probability.Independence.InfinitePi
-import Mathlib.MeasureTheory.Measure.CharacteristicFunction.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Distributions.Poisson.Basic
+public import Mathlib.Probability.Independence.Integration
+public import Mathlib.Probability.Independence.InfinitePi
+public import Mathlib.MeasureTheory.Measure.CharacteristicFunction.Basic
 
 /-!
 # Poisson splitting
@@ -21,6 +25,8 @@ marks are independent, so `𝔼 exp(i ∑ᵢ tᵢ Nᵢ) = ∑ₘ P(K = m) cₘ` 
 `exp(r (c − 1)) = ∏ᵢ exp(r ρ(Bᵢ) (e^{i tᵢ} − 1))`, the characteristic function of the product of
 the Poisson laws.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Complex Function
 open scoped NNReal ENNReal
@@ -218,7 +224,7 @@ lemma integral_prod_range_markPhase (hB : ∀ i, MeasurableSet (B i)) (mK : Meas
         (P.map (fun ω j => X j ω)) :=
       (Finset.measurable_prod _ fun j _ => hg.comp (measurable_pi_apply j)).aestronglyMeasurable
     have h1 := hKX.integral_fun_comp_mul_comp mK.aemeasurable
-      (measurable_pi_lambda _ mX).aemeasurable hf hgm
+      (Measurable.of_eval mX).aemeasurable hf hgm
     simp only [hG, hF]
     rw [h1, integral_prod_markPhase hB hX mX hXi m]
     congr 1
@@ -271,7 +277,7 @@ theorem charFun_map_markCount (hK : HasLaw K Po(r) P) (mK : Measurable K)
       = ∏ i, charFun Po(ℝ, r * (ρ (B i)).toNNReal) (t.ofLp i) := by
   have hV : Measurable (fun ω => WithLp.toLp 2 (fun i => (markCount K X (B i) ω : ℝ))) :=
     (MeasurableEquiv.toLp 2 _).measurable.comp
-      (measurable_pi_lambda _ fun i => markCount_measurable_real mK mX (hB i))
+      (Measurable.of_eval fun i => markCount_measurable_real mK mX (hB i))
   rw [charFun_apply, integral_map hV.aemeasurable (by fun_prop)]
   have hinner : ∀ ω, (inner ℝ (WithLp.toLp 2 (fun i => (markCount K X (B i) ω : ℝ))) t : ℝ)
       = ∑ i, (markCount K X (B i) ω : ℝ) * t.ofLp i := by
@@ -312,7 +318,7 @@ theorem map_markCount_toLp_eq (hK : HasLaw K Po(r) P) (mK : Measurable K)
       = (Measure.pi (fun i => Po(ℝ, r * (ρ (B i)).toNNReal))).map (WithLp.toLp 2) := by
   have hV : Measurable (fun ω => WithLp.toLp 2 (fun i => (markCount K X (B i) ω : ℝ))) :=
     (MeasurableEquiv.toLp 2 _).measurable.comp
-      (measurable_pi_lambda _ fun i => markCount_measurable_real mK mX (hB i))
+      (Measurable.of_eval fun i => markCount_measurable_real mK mX (hB i))
   refine Measure.ext_of_charFun (funext fun t => ?_)
   rw [charFun_map_markCount hK mK hX mX hXi hKX hB hdisj, charFun_pi]
 
@@ -328,7 +334,7 @@ theorem map_markCount_eq_pi (hK : HasLaw K Po(r) P) (mK : Measurable K)
   have hofLp : Measurable (WithLp.ofLp : PiLp 2 (fun _ : Fin n => ℝ) → Fin n → ℝ) :=
     (MeasurableEquiv.toLp 2 _).symm.measurable
   have hN : Measurable (fun ω i => (markCount K X (B i) ω : ℝ)) :=
-    measurable_pi_lambda _ fun i => markCount_measurable_real mK mX (hB i)
+    Measurable.of_eval fun i => markCount_measurable_real mK mX (hB i)
   have hT : Measurable (WithLp.toLp 2 : (Fin n → ℝ) → PiLp 2 (fun _ : Fin n => ℝ)) :=
     (MeasurableEquiv.toLp 2 _).measurable
   have hV : Measurable (fun ω => WithLp.toLp 2 (fun i => (markCount K X (B i) ω : ℝ))) :=
@@ -352,7 +358,7 @@ theorem hasLaw_markCount_real (hK : HasLaw K Po(r) P) (mK : Measurable K)
     HasLaw (fun ω => (markCount K X (B i) ω : ℝ)) Po(ℝ, r * (ρ (B i)).toNNReal) P := by
   refine ⟨(markCount_measurable_real mK mX (hB i)).aemeasurable, ?_⟩
   have hN : Measurable (fun ω i => (markCount K X (B i) ω : ℝ)) :=
-    measurable_pi_lambda _ fun i => markCount_measurable_real mK mX (hB i)
+    Measurable.of_eval fun i => markCount_measurable_real mK mX (hB i)
   calc P.map (fun ω => (markCount K X (B i) ω : ℝ))
       = (P.map (fun ω i => (markCount K X (B i) ω : ℝ))).map (fun v => v i) :=
         (Measure.map_map (measurable_pi_apply i) hN).symm

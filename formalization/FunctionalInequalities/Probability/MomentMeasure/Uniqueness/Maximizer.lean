@@ -1,4 +1,6 @@
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.ExtendedMidpointEquality
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.ExtendedMidpointEquality
 
 /-!
 # Uniqueness of the maximizers of the CEK functional up to translation
@@ -21,6 +23,8 @@ essentially continuous moment potential arises this way is CEK Theorem 8
 (`Probability.MomentMeasure.variationalFunctional_le_legendre`, module
 `Probability.MomentMeasure.Maximality.EssentiallyContinuous`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -62,8 +66,8 @@ private theorem density_legendre_midPotential {φ₀ φ₁ : E → EReal} (hφ�
       (((a + b) / 2 : ℝ) : EReal) := by
     refine iSup_le fun p => ?_
     by_cases hp : φ₀ p = ⊤ ∨ φ₁ p = ⊤
-    · simp only [midPotential, hp, if_true, EReal.sub_top, bot_le]
-    · simp only [midPotential, hp, if_false]
+    · simp only [midPotential, hp, ite_true, EReal.sub_top, bot_le]
+    · simp only [midPotential, hp, ite_false]
       push Not at hp
       have h₀ : ((⟪p, x⟫ - (φ₀ p).toReal : ℝ) : EReal) ≤ (a : EReal) := by
         rw [← hax, EReal.coe_sub, EReal.coe_toReal hp.1 (hφ₀.1 p)]
@@ -115,7 +119,7 @@ theorem exists_eq_translate_legendre_of_maximizer {μ : Measure E} [IsProbabilit
   have hae : ∀ᵐ p ∂μ, (φh p).toReal = ((φ₀ p).toReal + (φ₁ p).toReal) / 2 := by
     filter_upwards [hφ₀.2.1, hφ₁.2.1] with p h₀ h₁
     have hn : ¬(φ₀ p = ⊤ ∨ φ₁ p = ⊤) := by tauto
-    simp only [hφh, midPotential, hn, if_false, EReal.toReal_coe]
+    simp only [hφh, midPotential, hn, ite_false, EReal.toReal_coe]
   have hint : Integrable (fun p => (φh p).toReal) μ :=
     ((hφ₀.2.2.add hφ₁.2.2).div_const 2).congr (hae.mono fun p hp => hp.symm)
   have hφhI : PotentialIntegrable φh μ := by
@@ -126,7 +130,7 @@ theorem exists_eq_translate_legendre_of_maximizer {μ : Measure E} [IsProbabilit
       · exact EReal.coe_ne_bot _
     · filter_upwards [hφ₀.2.1, hφ₁.2.1] with p h₀ h₁
       have hn : ¬(φ₀ p = ⊤ ∨ φ₁ p = ⊤) := by tauto
-      simp only [hφh, midPotential, hn, if_false]
+      simp only [hφh, midPotential, hn, ite_false]
       exact EReal.coe_ne_top _
   have hav : ∫ p, (φh p).toReal ∂μ =
       ((∫ p, (φ₀ p).toReal ∂μ) + ∫ p, (φ₁ p).toReal ∂μ) / 2 := by

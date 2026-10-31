@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Composition
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Composition
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory

@@ -1,4 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
+meta import Lean
 
 /-!
 # Scope audit for `G2` of `GeneratedRouteStatements.lean`
@@ -6,7 +9,8 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
 The obligation `G2` of `research/audits/Semigroup/GeneratedRouteStatements.lean` is restated here
 **verbatim** — the proposition is copied character for character from that route file,
 including the implicit `{t}` and `{C}` binders — and discharged from the hole-free module
-`Analysis/Semigroup/Exponential/MeanValue.lean`. A renamed binder, a reordered hypothesis or a weakened
+`Analysis/Semigroup/Exponential/MeanValue.lean`. A renamed binder, a reordered hypothesis or a
+weakened
 conclusion would fail to elaborate here.
 
 The obligation is the mean value bound: for a bounded operator `A`, a vector `f`, `0 ≤ t` and a
@@ -36,6 +40,8 @@ right side is `C * 0 = 0`, and the bound holds for every `C`, including negative
 The axiom reports at the end cover every public declaration of the new module and every theorem
 of this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -5,7 +5,16 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.ItoAlgebraProduct
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with source adaptations
+-- (deprecated names, proof-context visibility, the v4.35.0 `eLpNorm`/`MemLp` API, a measurability
+-- premise of the private `eLpNorm_mul_le_of_bound`) listed in vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_two_rpow_eq_lintegral_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoAlgebraProduct
 
 /-!
 # Associativity and locality of the `L²` Brownian Itô integral
@@ -16,6 +25,8 @@ integrands `1_{(a, b]}` identifies the `L²` Itô integral of an integrand restr
 with the increment of the integral of the unrestricted integrand across `(a, b]`.
 -/
 
+@[expose] public section
+
 namespace LevyStochCalc.Brownian.Ito
 
 open MeasureTheory
@@ -25,11 +36,11 @@ universe u
 variable {Ω : Type u} [MeasurableSpace Ω]
 
 private lemma eLpNorm_mul_le_of_bound {P : Measure Ω} {c g : Ω → ℝ} {M : ℝ}
-    (hM : ∀ ω, |c ω| ≤ M) :
+    (hM : ∀ ω, |c ω| ≤ M) (hcg : MeasureTheory.AEStronglyMeasurable (fun ω => c ω * g ω) P) :
     MeasureTheory.eLpNorm (fun ω => c ω * g ω) 2 P
       ≤ (‖M‖₊ : ℝ≥0∞) * MeasureTheory.eLpNorm g 2 P := by
   have hsm : (fun ω => M * g ω) = (M • g : Ω → ℝ) := by funext ω; simp
-  refine le_trans (MeasureTheory.eLpNorm_mono (g := fun ω => M * g ω) fun ω => ?_) ?_
+  refine le_trans (MeasureTheory.eLpNorm_mono (g := fun ω => M * g ω) hcg fun ω => ?_) ?_
   · have hM0 : 0 ≤ M := (abs_nonneg (c ω)).trans (hM ω)
     rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_mul, abs_mul, abs_of_nonneg hM0]
     exact mul_le_mul_of_nonneg_right (hM ω) (abs_nonneg _)
@@ -86,10 +97,11 @@ theorem stochasticIntegralBrownian_integralAgainst {t : ℝ} (ht : 0 < t) :
     unfold SimplePredictable.integralAgainst
     exact Finset.measurable_sum _ fun i _ =>
       (G.ξ_measurable i).mul ((hMmeas _).sub (hMmeas _))
-  have hconv : ∀ g : Ω → ℝ, MeasureTheory.eLpNorm g 2 P * MeasureTheory.eLpNorm g 2 P
-      = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂P := by
-    intro g
-    rw [← eLpNorm_two_rpow_eq_lintegral_sq,
+  have hconv : ∀ g : Ω → ℝ, MeasureTheory.AEStronglyMeasurable g P →
+      MeasureTheory.eLpNorm g 2 P * MeasureTheory.eLpNorm g 2 P
+        = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂P := by
+    intro g hg
+    rw [← eLpNorm_two_rpow_eq_lintegral_sq g hg,
       show (2 : ℝ) = ((2 : ℕ) : ℝ) from by norm_num, ENNReal.rpow_natCast, pow_two]
   -- (d) the product elementary integrals converge to the `L²` integral of `G.eval · H`
   have hd : Filter.Tendsto (fun n => ∫⁻ ω, (‖simpleIntegral W (Q n) t ω
@@ -166,11 +178,11 @@ theorem stochasticIntegralBrownian_integralAgainst {t : ℝ} (ht : 0 < t) :
           - stochasticIntegralBrownian W ℱ hℱ H hm hp hq u ω)) P :=
       fun i u => ((G.ξ_measurable i).mul ((hInmeas n u).sub (hMmeas u))).aestronglyMeasurable
     rw [hstep n]
-    refine le_trans (MeasureTheory.eLpNorm_sum_le
-      (fun i _ => (haesm i _).sub (haesm i _)) (by norm_num)) ?_
+    refine le_trans (MeasureTheory.eLpNorm_sum_le (by norm_num)) ?_
     refine Finset.sum_le_sum fun i _ => ?_
-    refine le_trans (MeasureTheory.eLpNorm_sub_le (haesm i _) (haesm i _) (by norm_num)) ?_
-    exact add_le_add (eLpNorm_mul_le_of_bound (hMb i)) (eLpNorm_mul_le_of_bound (hMb i))
+    refine le_trans (MeasureTheory.eLpNorm_sub_le (by norm_num)) ?_
+    exact add_le_add (eLpNorm_mul_le_of_bound (hMb i) (haesm i _))
+      (eLpNorm_mul_le_of_bound (hMb i) (haesm i _))
   have hlim : Filter.Tendsto (fun n : ℕ =>
       ∑ i : Fin G.N, ((‖Mb i‖₊ : ℝ≥0∞) * MeasureTheory.eLpNorm (fun ω =>
           simpleIntegral W (masterApprox ℱ H hm hp hq n) (min (G.partition i.succ) t) ω
@@ -198,7 +210,7 @@ theorem stochasticIntegralBrownian_integralAgainst {t : ℝ} (ht : 0 < t) :
         : ℝ≥0∞) ^ 2 ∂P)
       Filter.atTop (nhds 0) := by
     have h2 := ENNReal.Tendsto.mul heL (Or.inr (by simp)) heL (Or.inr (by simp))
-    simpa [hconv] using h2
+    simpa using h2.congr fun n => hconv _ ((hQmeas n).sub hIAmeas).aestronglyMeasurable
   -- squeeze the two limits together
   have hle : ∫⁻ ω,
       (‖G.integralAgainst (stochasticIntegralBrownian W ℱ hℱ H hm hp hq) t ω
@@ -315,7 +327,7 @@ theorem stepIoc_eval {a b : ℝ} (ha : 0 < a) (hab : a < b) (s : ℝ) (ω : Ω) 
     show (if (0 : ℝ) < s ∧ s ≤ a then (0 : ℝ) else 0)
       + (if a < s ∧ s ≤ b then (1 : ℝ) else 0) = 0
     simp only [ite_self, zero_add]
-    exact if_neg h
+    exact ite_eq_right h
 
 theorem stepIoc₀_eval {b : ℝ} (hb : 0 < b) (s : ℝ) (ω : Ω) :
     (stepIoc₀ Ω hb).eval s ω = (Set.Ioc 0 b).indicator (fun _ => (1 : ℝ)) s := by
@@ -330,7 +342,7 @@ theorem stepIoc₀_eval {b : ℝ} (hb : 0 < b) (s : ℝ) (ω : Ω) :
   · rw [Set.indicator_of_notMem fun hm => h (Set.mem_Ioc.mp hm)]
     simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
       Fin.castSucc_zero, Fin.succ_zero_eq_one]
-    exact if_neg h
+    exact ite_eq_right h
 
 theorem stepIoc_adapt (ℱ : Filtration ℝ ‹MeasurableSpace Ω›) {a b : ℝ} (ha : 0 < a)
     (hab : a < b) :

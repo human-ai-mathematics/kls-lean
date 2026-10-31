@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.ConstantCoefficient
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.ConstantCoefficient
 
 /-!
 # Audit: GT Lemma 6.1 (interior form) for `2 D₀₀ + D₀₁ + D₁₀ + 2 D₁₁` on a planar solution
@@ -23,6 +25,8 @@ off-diagonal entries of `A`:
 Every hypothesis of the theorem is proved, not assumed; the constant `C` is the theorem's constant,
 chosen before `A`, `c`, `R` and the data.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -54,11 +58,14 @@ theorem matrixA_isSymm : matrixA.IsSymm := by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
 
-theorem matrixA_quadratic_bounds : ∀ ξ : E, 1 * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, matrixA i j * ξ i * ξ j ∧
-    ∑ i, ∑ j, matrixA i j * ξ i * ξ j ≤ 3 * ‖ξ‖ ^ 2 := by
+theorem matrixA_quadratic_bounds :
+    ∀ ξ : E,
+      1 * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, matrixA i j * ξ i * ξ j ∧
+        ∑ i, ∑ j, matrixA i j * ξ i * ξ j ≤ 3 * ‖ξ‖ ^ 2 := by
   intro ξ
   rw [EuclideanSpace.real_norm_sq_eq]
-  simp only [Fin.sum_univ_two, matrixA, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one]
+  simp only [Fin.sum_univ_two, matrixA, Matrix.of_apply, Matrix.cons_val_zero,
+    Matrix.cons_val_one]
   constructor <;> nlinarith [sq_nonneg (ξ 0 + ξ 1), sq_nonneg (ξ 0 - ξ 1)]
 
 theorem product_smooth : ContDiff ℝ ∞ product :=
@@ -68,7 +75,8 @@ theorem product_fderiv : fderiv ℝ product = fun x => productHessian x := by
   funext x
   have hh := ((coordinate 0).hasFDerivAt (x := x)).mul ((coordinate 1).hasFDerivAt)
   change fderiv ℝ (fun i : E => coordinate 0 i * coordinate 1 i) x = _
-  simpa only [Pi.mul_def, productHessian, add_apply, ContinuousLinearMap.smulRight_apply] using hh.fderiv
+  simpa only [Pi.mul_def, productHessian, add_apply, ContinuousLinearMap.smulRight_apply] using
+    hh.fderiv
 
 theorem product_hessian (x : E) : fderiv ℝ (fderiv ℝ product) x = productHessian := by
   rw [product_fderiv]
@@ -99,25 +107,32 @@ theorem half_pos' : (0 : ℝ≥0) < 1 / 2 := by rw [← NNReal.coe_lt_coe]; norm
 
 theorem half_lt_one : (1 / 2 : ℝ≥0) < 1 := by rw [← NNReal.coe_lt_coe]; norm_num
 
-/-- GT 2001 Lemma 6.1 (interior form) for `u = x₀ x₁`, `A = !![2, 1; 1, 2]`, `Σ A_{ij} D_{ij} u = 2`, on
+/--
+GT 2001 Lemma 6.1 (interior form) for `u = x₀ x₁`, `A = !![2, 1; 1, 2]`, `Σ A_{ij} D_{ij} u = 2`, on
 `B₁(0) ⊂ B₂(0)` with `α = 1/2`. -/
-theorem product_constant_coefficient_client : ∃ C : ℝ, 0 < C ∧
-    (∀ x ∈ ball (0 : E) 1, ‖fderiv ℝ (fderiv ℝ product) x‖ ≤ C * 6) ∧
-    ∀ x ∈ ball (0 : E) 1, ∀ y ∈ ball (0 : E) 1,
-      ‖fderiv ℝ (fderiv ℝ product) x - fderiv ℝ (fderiv ℝ product) y‖ ≤
-        C * 6 * ‖x - y‖ ^ (((1 / 2 : ℝ≥0)) : ℝ) := by
-  obtain ⟨C, hC, hest⟩ := constant_coefficient_interior_hessian_holder (by norm_num : 2 ≤ 2) half_pos'
-    half_lt_one (by norm_num : (0:ℝ) < 1) (by norm_num : (1:ℝ) ≤ 3)
+theorem product_constant_coefficient_client :
+    ∃ C : ℝ,
+      0 < C ∧
+        (∀ x ∈ ball (0 : E) 1, ‖fderiv ℝ (fderiv ℝ product) x‖ ≤ C * 6) ∧
+          ∀ x ∈ ball (0 : E) 1,
+            ∀ y ∈ ball (0 : E) 1,
+              ‖fderiv ℝ (fderiv ℝ product) x - fderiv ℝ (fderiv ℝ product) y‖ ≤
+                C * 6 * ‖x - y‖ ^ (((1 / 2 : ℝ≥0)) : ℝ) := by
+  obtain ⟨C, hC, hest⟩ :=
+    constant_coefficient_interior_hessian_holder (by norm_num : 2 ≤ 2) half_pos' half_lt_one
+      (by norm_num : (0 : ℝ) < 1) (by norm_num : (1 : ℝ) ≤ 3)
   refine ⟨C, hC, ?_⟩
   have hc2 : ContDiffOn ℝ 2 product (ball (0 : E) (2 * 1)) :=
-    (product_smooth.of_le (by
-      change (↑(2 : ℕ∞) : WithTop ℕ∞) ≤ ↑(⊤ : ℕ∞)
-      exact WithTop.coe_le_coe.mpr le_top)).contDiffOn
+    (product_smooth.of_le
+        (by
+          change (↑(2 : ℕ∞) : WithTop ℕ∞) ≤ ↑(⊤ : ℕ∞)
+          exact WithTop.coe_le_coe.mpr le_top)).contDiffOn
   have hf : ∀ y ∈ ball (0 : E) (2 * 1), |(fun _ : E => (2 : ℝ)) y| ≤ 2 := fun y _ => by norm_num
   have hH : HolderOnWith 0 (1 / 2) (fun _ : E => (2 : ℝ)) (ball (0 : E) (2 * 1)) :=
     (HolderWith.const (C := 0) (r := 1 / 2) (y := (2 : ℝ))).holderOnWith _
-  have h := hest matrixA matrixA_isSymm matrixA_quadratic_bounds 0 1 one_pos product (fun _ => 2) 4 2 0
-    hc2 (fun x _ => product_equation x) product_bound hf hH
+  have h :=
+    hest matrixA matrixA_isSymm matrixA_quadratic_bounds 0 1 one_pos product (fun _ => 2) 4 2 0
+      hc2 (fun x _ => product_equation x) product_bound hf hH
   refine ⟨fun x hx => ?_, fun x hx y hy => ?_⟩
   · have := h.1 x hx
     simp only [Real.one_rpow, NNReal.coe_zero, mul_zero, add_zero, mul_one] at this

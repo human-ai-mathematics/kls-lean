@@ -1,11 +1,20 @@
-import Lean
-import FunctionalInequalities.Analysis.Convex.Gradient.Image
-import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
-import FunctionalInequalities.L2.Components
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.Convex.Gradient.Image
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
+public import FunctionalInequalities.L2.Components
+meta import Lean
+import all FunctionalInequalities.Analysis.Convex.Gradient.Image
+import all FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
+import all FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
+import all FunctionalInequalities.L2.Components
 
 /-! All modules that held the private copies import the common producers; the four duplicate
 private names are absent and the existing application entry points remain. -/
+
+@[expose] public section
 set_option maxHeartbeats 0 in
 run_cmd do
   let removed : Array String := #[

@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoIncrementMoment
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoIncrementMoment
 
 /-!
 # Riemann sums of the Itô integral against a step weight
@@ -23,6 +27,8 @@ step weight with `H`; and replacing the step weight by a general integrand costs
 * `LevyStochCalc.Brownian.Ito.lintegral_sq_stochasticIntegral_mul_sub_le` — the `L²` distance
   between the two products is controlled by the `L²` distance between the weights.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

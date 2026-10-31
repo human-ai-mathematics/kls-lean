@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Law
-import FunctionalInequalities.Probability.Product
-import FunctionalInequalities.Analysis.Tensor.Coefficients
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Law
+public import FunctionalInequalities.Probability.Product
+public import FunctionalInequalities.Analysis.Tensor.Coefficients
 
 /-!
 # Cumulants of the suspension (BKL Proposition 7.1)
@@ -18,6 +20,8 @@ the joint law `ν` of `(S, X₁, …, X_N)` and the Hilbert–Schmidt lower boun
 
 (111) and (112) themselves are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -210,18 +214,25 @@ private theorem fin_prod_factor_ne_top {ι : Type*} [Fintype ι] [DecidableEq ι
 
 /-- Joint integrability forces every strictly positive Laplace product factor to be finite. -/
 theorem joint_integrability_factorization {n N : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
-    [IsProbabilityMeasure μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f)
-    {β : ℝ} (hβ : 0 < β) (_hN : 0 < N) (z : JointSpace N n)
+    [IsProbabilityMeasure μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) {β : ℝ}
+    (hβ : 0 < β) (_hN : 0 < N) (z : JointSpace N n)
     (hInt : Integrable (fun p => Real.exp ⟪z, p⟫) (jointLaw μ f β (sigma β) N)) :
     Integrable (fun s : ℝ => Real.exp (z none / sigma β * s)) (laplaceMeasure β) ∧
-      (∀ i : Fin N, Integrable (fun x => Real.exp
-        (z none / (sigma β * Real.sqrt N) * f x +
-          ⟪(WithLp.toLp 2 fun j => z (some (i, j)) : EuclideanSpace ℝ (Fin n)), x⟫)) μ) ∧
-      (∫ p, Real.exp ⟪z, p⟫ ∂jointLaw μ f β (sigma β) N) =
-        (∫ s : ℝ, Real.exp (z none / sigma β * s) ∂laplaceMeasure β) *
-          ∏ i : Fin N, ∫ x, Real.exp
-            (z none / (sigma β * Real.sqrt N) * f x +
-              ⟪(WithLp.toLp 2 fun j => z (some (i, j)) : EuclideanSpace ℝ (Fin n)), x⟫) ∂μ := by
+      (∀ i : Fin N,
+          Integrable
+            (fun x =>
+              Real.exp
+                (z none / (sigma β * Real.sqrt N) * f x +
+                  ⟪(WithLp.toLp 2 fun j => z (some (i, j)) : EuclideanSpace ℝ (Fin n)), x⟫))
+            μ) ∧
+        (∫ p, Real.exp ⟪z, p⟫ ∂jointLaw μ f β (sigma β) N) =
+          (∫ s : ℝ, Real.exp (z none / sigma β * s) ∂laplaceMeasure β) *
+            ∏ i : Fin N,
+              ∫ x,
+                Real.exp
+                  (z none / (sigma β * Real.sqrt N) * f x +
+                    ⟪(WithLp.toLp 2 fun j => z (some (i, j)) : EuclideanSpace ℝ (Fin n)),
+                      x⟫) ∂μ := by
   classical
   let _ : IsProbabilityMeasure (laplaceMeasure β) := isProbabilityMeasure_laplaceMeasure hβ
   let noise : ℝ → ℝ := fun s => z none / sigma β * s
@@ -237,32 +248,35 @@ theorem joint_integrability_factorization {n N : ℕ} (μ : Measure (EuclideanSp
   have hBpos (i : Fin N) : 0 < B i := lintegral_exp_pos_probability μ (copy i) (hmCopy i)
   have hJfinite : J ≠ ⊤ :=
     (lintegral_ofReal_ne_top_iff_integrable hInt.aestronglyMeasurable
-      (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)).mpr hInt
-  have hfactor : J = A * ∏ i, B i := by
-    exact lintegral_exp_inner_jointLaw μ hf β (sigma β) z
+          (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)).mpr
+      hInt
+  have hfactor : J = A * ∏ i, B i := by exact lintegral_exp_inner_jointLaw μ hf β (sigma β) z
   have htotal : A * ∏ i, B i ≠ ⊤ := hfactor.symm ▸ hJfinite
-  have hprodNonzero : (∏ i, B i) ≠ 0 :=
-    Finset.prod_ne_zero_iff.mpr (fun i _ => (hBpos i).ne')
+  have hprodNonzero : (∏ i, B i) ≠ 0 := Finset.prod_ne_zero_iff.mpr (fun i _ => (hBpos i).ne')
   have hAfinite : A ≠ ⊤ := (ENNReal.lt_top_of_mul_ne_top_left htotal hprodNonzero).ne
-  have hprodFinite : (∏ i, B i) ≠ ⊤ :=
-    (ENNReal.lt_top_of_mul_ne_top_right htotal hApos.ne').ne
+  have hprodFinite : (∏ i, B i) ≠ ⊤ := (ENNReal.lt_top_of_mul_ne_top_right htotal hApos.ne').ne
   have hBfinite (i : Fin N) : B i ≠ ⊤ :=
     fin_prod_factor_ne_top B (fun i => (hBpos i).ne') hprodFinite i
   have hNoise : Integrable (fun s => Real.exp (noise s)) (laplaceMeasure β) :=
     (lintegral_ofReal_ne_top_iff_integrable hmNoise.exp.aestronglyMeasurable
-      (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)).mp hAfinite
+          (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)).mp
+      hAfinite
   have hCopy (i : Fin N) : Integrable (fun x => Real.exp (copy i x)) μ :=
     (lintegral_ofReal_ne_top_iff_integrable (hmCopy i).exp.aestronglyMeasurable
-      (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)).mp (hBfinite i)
+          (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)).mp
+      (hBfinite i)
   have hJreal : J.toReal = ∫ p, Real.exp ⟪z, p⟫ ∂jointLaw μ f β (sigma β) N :=
     (integral_eq_lintegral_of_nonneg_ae
-      (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le) hInt.aestronglyMeasurable).symm
+        (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)
+        hInt.aestronglyMeasurable).symm
   have hAreal : A.toReal = ∫ s, Real.exp (noise s) ∂laplaceMeasure β :=
     (integral_eq_lintegral_of_nonneg_ae
-      (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le) hNoise.aestronglyMeasurable).symm
+        (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)
+        hNoise.aestronglyMeasurable).symm
   have hBreal (i : Fin N) : (B i).toReal = ∫ x, Real.exp (copy i x) ∂μ :=
     (integral_eq_lintegral_of_nonneg_ae
-      (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le) (hCopy i).aestronglyMeasurable).symm
+        (Filter.Eventually.of_forall fun _ => (Real.exp_pos _).le)
+        (hCopy i).aestronglyMeasurable).symm
   have hreal := congrArg ENNReal.toReal hfactor
   rw [ENNReal.toReal_mul, ENNReal.toReal_prod, hJreal, hAreal] at hreal
   simp_rw [hBreal] at hreal
@@ -295,7 +309,8 @@ theorem logLaplace_jointLaw_factorization {n N : ℕ} (μ : Measure (EuclideanSp
 
 /-! ### Exponential moments of `f` and of the graph law
 
-The factorization above supplies exponential-moment inputs for the local smoothness of `Λ` in (111). -/
+The factorization above supplies exponential-moment inputs for the local smoothness of `Λ` in (111).
+-/
 
 /-- **Exponential moment of `f` from the joint law.** If the joint law has an exponential moment
 `e^{r‖p‖}` and `N > 0`, then `f` has the exponential moment `e^{t|f|}` with
@@ -468,7 +483,7 @@ theorem graph_map_probability {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n
     IsProbabilityMeasure (μ.map (fun x : EuclideanSpace ℝ (Fin n) =>
       (WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j :
         EuclideanSpace ℝ (Option (Fin n))))) :=
-  Measure.isProbabilityMeasure_map (graph_map_measurable hf).aemeasurable
+  (Measure.isProbabilityMeasure_map_iff (graph_map_measurable hf).aemeasurable).2 inferInstance
 
 /-- **The copy factor is the Laplace transform of the graph law** `(f(x), x)_* μ` at `(c, z)`. -/
 theorem integral_exp_add_inner_eq_graph {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
@@ -540,99 +555,82 @@ theorem tiltAverage_graph_none {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin 
     filter_upwards [] with x
     rw [hp x, he x]
 
-/-- **Derivative of a copy term of (111) at `w = 0`**: `d/dw log ∫ e^{c w f + ⟪z, x⟫} dμ = c F_f(z)`,
+/--
+**Derivative of a copy term of (111) at `w = 0`**: `d/dw log ∫ e^{c w f + ⟪z, x⟫} dμ = c F_f(z)`,
 through the graph law. -/
 theorem hasDerivAt_log_integral_exp_copy {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) {t : ℝ}
     (ht : 0 < t)
-    (hγ : Integrable (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp (t * ‖y‖))
-      (μ.map (fun x : EuclideanSpace ℝ (Fin n) =>
-        (WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j :
-          EuclideanSpace ℝ (Option (Fin n))))))
+    (hγ :
+      Integrable (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp (t * ‖y‖))
+        (μ.map
+          (fun x : EuclideanSpace ℝ (Fin n) =>
+            (WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j :
+              EuclideanSpace ℝ (Option (Fin n))))))
     (c : ℝ) {z : EuclideanSpace ℝ (Fin n)} (hz : ‖z‖ < t) :
     HasDerivAt (fun w : ℝ => Real.log (∫ x, Real.exp (c * w * f x + ⟪z, x⟫) ∂μ))
       (c * tiltAverage μ f z) 0 := by
-    let γ : Measure (EuclideanSpace ℝ (Option (Fin n))) :=
-      μ.map (fun x : EuclideanSpace ℝ (Fin n) =>
+  let γ : Measure (EuclideanSpace ℝ (Option (Fin n))) :=
+    μ.map
+      (fun x : EuclideanSpace ℝ (Fin n) =>
         (WithLp.toLp 2 fun o => Option.elim o (f x) fun j => x j :
           EuclideanSpace ℝ (Option (Fin n))))
-    set_option linter.style.haveILetI false in
-      letI : IsProbabilityMeasure γ := by
-        simpa [γ] using (graph_map_probability μ hf)
-    let p : EuclideanSpace ℝ (Option (Fin n)) :=
-      WithLp.toLp 2 fun o => Option.elim o 0 fun j => z j
-    let e₀ : EuclideanSpace ℝ (Option (Fin n)) :=
-      EuclideanSpace.single none 1
-    have hγ' :
-        Integrable
-          (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp (t * ‖y‖)) γ := by
-      simpa [γ] using hγ
-    have hpnorm : ‖p‖ = ‖z‖ := by
-      rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-      congr 1
-      simp [p, Fintype.sum_option]
-    have hp : ‖p‖ < t := by
-      simpa [hpnorm] using hz
-    have hpball : p ∈ Metric.ball 0 t := by
-      rw [mem_ball_zero_iff]
-      exact hp
-    have hpoint (w : ℝ) :
-        (WithLp.toLp 2 fun o => Option.elim o (c * w) fun j => z j :
-          EuclideanSpace ℝ (Option (Fin n))) =
-          p + w • (c • e₀) := by
-      ext o
-      cases o with
-      | none =>
-          simp [p, e₀]
-          ring
-      | some j =>
-          simp [p, e₀]
-    have hfun :
-        (fun w : ℝ =>
-            Real.log (∫ x, Real.exp (c * w * f x + ⟪z, x⟫) ∂μ)) =
-          (fun w : ℝ => logLaplace γ (p + w • (c • e₀))) := by
-      funext w
-      rw [integral_exp_add_inner_eq_graph μ hf (c * w) z]
-      simp only [logLaplace]
-      rw [hpoint w]
-    have hcont :=
-      (contDiffOn_logLaplace_ball γ ht hγ').contDiffAt
-        (Metric.isOpen_ball.mem_nhds hpball)
-    have hd :
-        HasFDerivAt (logLaplace γ)
-          (fderiv ℝ (logLaplace γ) p) p :=
-      (hcont.differentiableAt (by simp)).hasFDerivAt
-    have hline :
-        HasDerivAt (fun w : ℝ => p + w • (c • e₀)) (c • e₀) 0 := by
-      simpa using
-        ((hasDerivAt_id (x := (0 : ℝ))).smul_const (c • e₀)).const_add p
-    have hd0 :
-        HasFDerivAt (logLaplace γ)
-          (fderiv ℝ (logLaplace γ) p)
-          (p + (0 : ℝ) • (c • e₀)) := by
-      convert hd using 1
-      simp
-    have hcomp :
-        HasDerivAt
-          (logLaplace γ ∘ (fun w : ℝ => p + w • (c • e₀)))
-          (fderiv ℝ (logLaplace γ) p (c • e₀)) 0 :=
-      hd0.comp_hasDerivAt 0 hline
-    have htilt :
-        tiltAverage γ (fun y => ⟪e₀, y⟫) p = tiltAverage μ f z := by
-      simpa [γ, p, e₀] using (tiltAverage_graph_none μ hf z)
-    have hder :
-        fderiv ℝ (logLaplace γ) p (c • e₀) = c * tiltAverage μ f z := by
-      calc
-        fderiv ℝ (logLaplace γ) p (c • e₀) =
-            c * fderiv ℝ (logLaplace γ) p e₀ := by
-          simp [map_smul, smul_eq_mul]
-        _ = c * tiltAverage γ (fun y => ⟪e₀, y⟫) p := by
-          rw [← tiltAverage_inner_eq_fderiv_logLaplace_of_lt γ hγ' hp e₀]
-        _ = c * tiltAverage μ f z := by
-          rw [htilt]
-    rw [hfun]
-    rw [Function.comp_def] at hcomp
-    rw [hder] at hcomp
-    exact hcomp
+  let _ : IsProbabilityMeasure γ := by simpa [γ] using (graph_map_probability μ hf)
+  let p : EuclideanSpace ℝ (Option (Fin n)) :=
+    WithLp.toLp 2 fun o => Option.elim o 0 fun j => z j
+  let e₀ : EuclideanSpace ℝ (Option (Fin n)) := EuclideanSpace.single none 1
+  have hγ' : Integrable (fun y : EuclideanSpace ℝ (Option (Fin n)) => Real.exp (t * ‖y‖)) γ := by
+    simpa [γ] using hγ
+  have hpnorm : ‖p‖ = ‖z‖ := by
+    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+    congr 1
+    simp [p, Fintype.sum_option]
+  have hp : ‖p‖ < t := by simpa [hpnorm] using hz
+  have hpball : p ∈ Metric.ball 0 t := by
+    rw [mem_ball_zero_iff]
+    exact hp
+  have hpoint (w : ℝ) :
+    (WithLp.toLp 2 fun o => Option.elim o (c * w) fun j => z j :
+        EuclideanSpace ℝ (Option (Fin n))) =
+      p + w • (c • e₀) := by
+    ext o
+    cases o with
+    | none =>
+      simp [p, e₀]
+      ring
+    | some j => simp [p, e₀]
+  have hfun :
+    (fun w : ℝ => Real.log (∫ x, Real.exp (c * w * f x + ⟪z, x⟫) ∂μ)) =
+      (fun w : ℝ => logLaplace γ (p + w • (c • e₀))) := by
+    funext w
+    rw [integral_exp_add_inner_eq_graph μ hf (c * w) z]
+    simp only [logLaplace]
+    rw [hpoint w]
+  have hcont :=
+    (contDiffOn_logLaplace_ball γ ht hγ').contDiffAt (Metric.isOpen_ball.mem_nhds hpball)
+  have hd : HasFDerivAt (logLaplace γ) (fderiv ℝ (logLaplace γ) p) p :=
+    (hcont.differentiableAt (by simp)).hasFDerivAt
+  have hline : HasDerivAt (fun w : ℝ => p + w • (c • e₀)) (c • e₀) 0 := by
+    simpa using ((hasDerivAt_id (x := (0 : ℝ))).smul_const (c • e₀)).const_add p
+  have hd0 : HasFDerivAt (logLaplace γ) (fderiv ℝ (logLaplace γ) p) (p + (0 : ℝ) • (c • e₀)) := by
+    convert hd using 1
+    simp
+  have hcomp :
+    HasDerivAt (logLaplace γ ∘ (fun w : ℝ => p + w • (c • e₀)))
+      (fderiv ℝ (logLaplace γ) p (c • e₀)) 0 :=
+    hd0.comp_hasDerivAt 0 hline
+  have htilt : tiltAverage γ (fun y => ⟪e₀, y⟫) p = tiltAverage μ f z := by
+    simpa [γ, p, e₀] using (tiltAverage_graph_none μ hf z)
+  have hder : fderiv ℝ (logLaplace γ) p (c • e₀) = c * tiltAverage μ f z := by
+    calc
+      fderiv ℝ (logLaplace γ) p (c • e₀) = c * fderiv ℝ (logLaplace γ) p e₀ := by
+        simp [map_smul, smul_eq_mul]
+      _ = c * tiltAverage γ (fun y => ⟪e₀, y⟫) p := by
+        rw [← tiltAverage_inner_eq_fderiv_logLaplace_of_lt γ hγ' hp e₀]
+      _ = c * tiltAverage μ f z := by rw [htilt]
+  rw [hfun]
+  rw [Function.comp_def] at hcomp
+  rw [hder] at hcomp
+  exact hcomp
 
 end FunctionalInequalities.KLS.LogConcave.Suspension

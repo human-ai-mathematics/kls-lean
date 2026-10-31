@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.Form.Functional
-import FunctionalInequalities.L2.MeanVariance
-import FunctionalInequalities.Poincare.SmoothTest.Optimal
+module
+
+public import FunctionalInequalities.Energy.Form.Functional
+public import FunctionalInequalities.L2.MeanVariance
+public import FunctionalInequalities.Poincare.SmoothTest.Optimal
 
 /-!
 # Poincaré constants for extended energies on real `L²`
@@ -11,6 +13,8 @@ energy is finite. Variance and finite energy then form a `Poincare.TestFamily`.
 
 No closedness, quadraticity, or Markov property is assumed here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

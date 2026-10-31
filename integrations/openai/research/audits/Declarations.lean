@@ -1,9 +1,19 @@
-import Check
-import KLSOpenAI
-import KLSOpenAI.Bridge
-import KLSOpenAI.Target
-import Lean
-import OAI.Analysis.KLS.Model
+module
+
+public import Check
+public import KLSOpenAI
+public import KLSOpenAI.Bridge
+public import KLSOpenAI.Target
+public import Lean
+public import OAI.Analysis.KLS.Model
+meta import Lean
+import all OAI.Analysis.KLS.Model
+import all KLSOpenAI.Bridge
+import all KLSOpenAI.Target
+import all KLSOpenAI
+import all Check
+@[expose] public section
+
 run_cmd do
   let env ← Lean.getEnv
   let modules : Array String := #["OAI.Analysis.KLS.Model", "KLSOpenAI.Bridge", "KLSOpenAI.Target", "KLSOpenAI", "Check"]

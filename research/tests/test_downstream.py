@@ -214,9 +214,33 @@ class HeaderParsingTests(unittest.TestCase):
         self.assertEqual(downstream.parse_imports(""), [])
         self.assertEqual(downstream.parse_imports("import A.B'\nprivate def x := 1\n"), ["A.B'"])
 
+    def test_newline_and_comment_trivia_before_the_first_module(self):
+        # Matches Lean v4.35's fast import parser (ParseImportsFast.lean:97-134) and lean_header.
+        cases = {"import\nFoo\n": ["Foo"],
+                 "module\nimport /-\n  header comment\n-/ Mathlib\n": ["Mathlib"],
+                 "module\nimport all\n  /- a /- nested -/ b -/\n  -- line\n  A.B\n": ["A.B"],
+                 "module\npublic\n  meta /- c -/\n import\n A.B\n": ["A.B"],
+                 "import\n  A B\nimport C\n": ["A", "B", "C"],
+                 "import A\n  B\n": ["A"]}
+        for source, expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(downstream.parse_imports(source), expected)
+
+    def test_each_module_system_import_form_is_an_edge(self):
+        forms = {"import A.Plain": "A.Plain", "public import A.Public": "A.Public",
+                 "meta import A.Meta": "A.Meta", "public meta import A.PublicMeta": "A.PublicMeta",
+                 "import all A.All": "A.All"}
+        for directive, module in forms.items():
+            with self.subTest(directive=directive):
+                self.assertEqual(downstream.parse_imports(
+                    "/- Copyright -/\nmodule\n\n" + directive + "\n\n@[expose] public section\n"), [module])
+        self.assertEqual(downstream.parse_imports("import Mathlib\nimport A.B\n"), ["Mathlib", "A.B"])
+        self.assertEqual(downstream.parse_imports("module\n\n/-! doc -/\n\npublic section\n"), [])
+
     def test_header_fails_closed(self):
-        for source in ("import\nFoo\n", "import «Weird Name»\n", "import Foo.\n", "import Foo, Bar\n",
-                       "/- never closed\nimport Foo\n", "import all\n"):
+        for source in ("import «Weird Name»\n", "import Foo.\n", "import Foo, Bar\n",
+                       "/- never closed\nimport Foo\n", "import all\n", "import\n/-! doc -/ Foo\n",
+                       "import\tFoo\n", "import /- open\nFoo\n", "module\nimport all\n\n"):
             with self.subTest(source=source), self.assertRaises(downstream.DownstreamFailure):
                 downstream.parse_imports(source)
 

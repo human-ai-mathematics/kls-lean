@@ -6,7 +6,12 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedRange
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API.
+module
+
+public import LevyStochCalc.Poisson.CompensatedRange
 
 /-!
 # Pulling a past weight inside a compensated integral
@@ -17,6 +22,8 @@ in `L²`: the squared distance between the two sides expands, through the Itô�
 the quadratic-variation martingale started at `a`, into a combination of weighted compensators
 that cancels.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal NNReal
@@ -35,7 +42,7 @@ theorem integrable_mul_of_memLp_two {f g : Ω → ℝ} (hf : MemLp f 2 P) (hg : 
     Integrable (fun ω => f ω * g ω) P := by
   have hdom : Integrable (fun ω => 1 / 2 * f ω ^ 2 + 1 / 2 * g ω ^ 2) P :=
     (hf.integrable_sq.const_mul (1 / 2 : ℝ)).add (hg.integrable_sq.const_mul (1 / 2 : ℝ))
-  refine Integrable.mono' hdom (hf.1.mul hg.1) ?_
+  refine Integrable.mono' hdom (hf.aestronglyMeasurable.mul hg.aestronglyMeasurable) ?_
   filter_upwards with ω
   rw [Real.norm_eq_abs, abs_mul]
   nlinarith [sq_abs (f ω), sq_abs (g ω), sq_nonneg (|f ω| - |g ω|)]

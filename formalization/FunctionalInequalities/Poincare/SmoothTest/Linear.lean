@@ -1,8 +1,10 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import FunctionalInequalities.Probability.Covariance.Basic
-import Mathlib.Analysis.InnerProductSpace.Rayleigh
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
-import Mathlib.Probability.Moments.CovarianceBilin
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import Mathlib.Analysis.InnerProductSpace.Rayleigh
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
+public import Mathlib.Probability.Moments.CovarianceBilin
 
 /-!
 # The linear-test lower bound: source and formalization scope
@@ -13,7 +15,8 @@ states the Rayleigh lower bound and its linear-test consequence
 explicitly assumes a Euclidean probability measure with finite covariance, allows an extended
 optimal constant, and gives the linear-test variance and energy calculation.
 
-This module uses the globally `C∞`, L², finite-gradient-energy domain from `Poincare.SmoothTest.Basic`.
+This module uses the globally `C∞`, L², finite-gradient-energy domain from
+`Poincare.SmoothTest.Basic`.
 The Hilbert formulation, explicit `MemLp id 2` hypotheses, and `ENNReal` zero-denominator
 conventions are local precisifications. Centered covariance is represented through a bounded
 Riesz operator; its Rayleigh supremum is an eigenvalue in nontrivial finite dimension and is
@@ -21,6 +24,8 @@ defined as zero in dimension zero. No infinite-dimensional eigenvalue attainment
 The source's mode-indicator discussion, Gaussian equality, and spectral-gap identification
 are outside this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -105,11 +110,11 @@ the source remark does not spell out these conventions. -/
 def rayleigh (μ : Measure E) (f : E → ℝ) : ENNReal :=
   ENNReal.ofReal (variance f μ) / ENNReal.ofReal (energy μ f)
 
-/-- Source: the Rayleigh bound in [Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
+/--
+Source: the Rayleigh bound in [Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
 This local `Admissible`/`ENNReal` version follows from `Holds.le` and `le_constant`,
 including the stated zero-energy conventions and the absence of finite valid constants. -/
-theorem rayleigh_le_constant {μ : Measure E} {f : E → ℝ}
-    (hf : Admissible μ f) :
+theorem rayleigh_le_constant {μ : Measure E} {f : E → ℝ} (hf : Admissible μ f) :
     rayleigh μ f ≤ constant μ := by
   apply le_constant
   intro C hC
@@ -283,12 +288,12 @@ theorem lambdaMax_le {μ : Measure E} {C : ℝ}
     rw [rayleighMax, Real.iSup_of_isEmpty]
     exact hP.constant_nonneg
 
-/-- Source: the covariance lower bound in [Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)
+/--
+Source: the covariance lower bound in [Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)
 and its [finite-covariance dossier](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68).
 This Hilbert/`ENNReal` version follows from `lambdaMax_le` and `Poincare.SmoothTest.le_constant`,
 with an explicit second moment and the local dimension-zero convention. -/
-theorem lambdaMax_le_constant {μ : Measure E}
-    (hμ : MemLp (id : E → E) 2 μ) :
+theorem lambdaMax_le_constant {μ : Measure E} (hμ : MemLp (id : E → E) 2 μ) :
     lambdaMax μ ≤ Poincare.SmoothTest.constant μ := by
   apply Poincare.SmoothTest.le_constant
   intro C hC

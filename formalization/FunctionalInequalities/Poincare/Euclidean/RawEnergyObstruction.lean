@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
 /-!
 # Raw ambient gradient energy depends on the representative
@@ -8,6 +10,8 @@ Source: Blueprint `obs:dirac-raw-energy` and the existing checks in
 `examples/PoincareFoundation.lean`. This obstruction concerns raw gradient energy;
 it does not concern the value of the intrinsic relaxed energy. It is not a ledger node.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -20,11 +24,12 @@ theorem zero_ae_eq_id_dirac : (fun _ : ℝ ↦ (0 : ℝ)) =ᵐ[Measure.dirac 0] 
   change ∀ᵐ x ∂(Measure.dirac (0 : ℝ)), (0 : ℝ) = id x
   simp
 
-/-- The named raw-energy obstruction: the same a.e. representative class has energies 0 and 1. -/
+/--
+The named raw-energy obstruction: the same a.e. representative class has energies 0 and 1. -/
 theorem dirac_raw_energy :
     (fun _ : ℝ ↦ (0 : ℝ)) =ᵐ[Measure.dirac 0] id ∧
       Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) (fun _ ↦ 0) = 0 ∧
-      Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) id = 1 := by
+        Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) id = 1 := by
   refine ⟨zero_ae_eq_id_dirac, ?_, ?_⟩ <;> rw [Poincare.SmoothTest.energy_eq_fderiv] <;> simp
 
 /-- Both representatives are in L² and their actual `toLp` classes are equal. -/

@@ -1,10 +1,12 @@
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.InnerProductSpace.Laplacian
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.Calculus.Deriv.Slope
-import Mathlib.Analysis.InnerProductSpace.Adjoint
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.InnerProductSpace.Laplacian
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Calculus.Deriv.Slope
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Local differential calculus
@@ -12,6 +14,8 @@ import Mathlib.Analysis.InnerProductSpace.Adjoint
 Hessians, directional derivatives, gradients and standard-basis trace identities.
 These are pointwise tools; there is no measure, semigroup or curvature estimate here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -123,9 +127,8 @@ open scoped Topology
 private abbrev D {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (f : E → ℝ) (v : E) : E → ℝ := fun y => fderiv ℝ f y v
 
-private theorem smooth_D_at {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    {f : E → ℝ} {x : E} {k : ℕ∞ω}
-    (hf : ContDiffAt ℝ (k+1) f x) (v : E) : ContDiffAt ℝ k (D f v) x :=
+private theorem smooth_D_at {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {f : E → ℝ}
+    {x : E} {k : ℕ∞ω} (hf : ContDiffAt ℝ (k + 1) f x) (v : E) : ContDiffAt ℝ k (D f v) x :=
   (hf.fderiv_right le_rfl).clm_apply contDiffAt_const
 
 private theorem D_congr {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -145,10 +148,10 @@ private theorem D_comm_at {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   rw [he, he]
   exact (hf.isSymmSndFDerivAt (by norm_num)) w v
 
-private theorem D_comm_near {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    {f : E → ℝ} {x : E} (hf : ContDiffAt ℝ 3 f x) (v w : E) :
-    D (D f v) w =ᶠ[𝓝 x] D (D f w) v := by
-  have hn : ∀ᶠ y in 𝓝 x, ContDiffAt ℝ 2 f y := (hf.of_le (show (2 : ℕ∞ω) ≤ 3 by norm_num)).eventually (by norm_num)
+private theorem D_comm_near {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {f : E → ℝ}
+    {x : E} (hf : ContDiffAt ℝ 3 f x) (v w : E) : D (D f v) w =ᶠ[𝓝 x] D (D f w) v := by
+  have hn : ∀ᶠ y in 𝓝 x, ContDiffAt ℝ 2 f y :=
+    (hf.of_le (show (2 : ℕ∞ω) ≤ 3 by norm_num)).eventually (by norm_num)
   exact hn.mono fun _ hy => D_comm_at hy v w
 
 /-- Fourth directional derivatives of a locally `C⁴` function permit exchange of their pairs.
@@ -223,7 +226,8 @@ theorem bilinearIteratedFDerivTwo_eq_fderiv_apply {f : E → ℝ} (hf : ContDiff
 /-- Mixed directional derivatives of a `C²` function commute (in directional form). -/
 theorem fderiv_apply_comm {f : E → ℝ} (hf : ContDiff ℝ 2 f) (x v w : E) :
     fderiv ℝ (fun y => fderiv ℝ f y w) x v = fderiv ℝ (fun y => fderiv ℝ f y v) x w := by
-  rw [← bilinearIteratedFDerivTwo_eq_fderiv_apply hf, ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf]
+  rw [← bilinearIteratedFDerivTwo_eq_fderiv_apply hf, ←
+    bilinearIteratedFDerivTwo_eq_fderiv_apply hf]
   exact bilinearIteratedFDerivTwo_symm hf x v w
 
 /-- Third-order commutation for a `C³` function: `∂_w ∂_v ∂_v f = ∂_v ∂_v ∂_w f`. The first
@@ -302,23 +306,27 @@ theorem fderiv_bilinearIteratedFDerivTwo_comm {f : E → ℝ} (hf : ContDiff ℝ
 
 /-- The actual second derivative of a Hessian operatorEntry equals the fourth derivative with
 its two pairs exchanged. This is proved by successive actual C² directional commutations. -/
-theorem bilinearIteratedFDerivTwo_bilinearIteratedFDerivTwo_comm {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (x u v w z : E) :
+theorem bilinearIteratedFDerivTwo_bilinearIteratedFDerivTwo_comm {f : E → ℝ}
+    (hf : ContDiff ℝ ∞ f) (x u v w z : E) :
     bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ f y u v) x w z =
       bilinearIteratedFDerivTwo ℝ (fun y => bilinearIteratedFDerivTwo ℝ f y w z) x u v := by
   have h2 : ContDiff ℝ 2 f := hf.of_le (WithTop.coe_le_coe.mpr le_top)
   have heq (a c : E) : (fun y => bilinearIteratedFDerivTwo ℝ f y a c) = D (D f c) a :=
     funext fun y => bilinearIteratedFDerivTwo_eq_fderiv_apply h2 y a c
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply
-    ((contDiff_bilinearIteratedFDerivTwo_apply hf u v).of_le (WithTop.coe_le_coe.mpr le_top)),
+      ((contDiff_bilinearIteratedFDerivTwo_apply hf u v).of_le (WithTop.coe_le_coe.mpr le_top)),
     bilinearIteratedFDerivTwo_eq_fderiv_apply
-    ((contDiff_bilinearIteratedFDerivTwo_apply hf w z).of_le (WithTop.coe_le_coe.mpr le_top)), heq, heq]
-  exact fderiv_fourth_pair_comm_at
-    (hf.contDiffAt.of_le (WithTop.coe_le_coe.mpr le_top)) u v w z
+      ((contDiff_bilinearIteratedFDerivTwo_apply hf w z).of_le (WithTop.coe_le_coe.mpr le_top)),
+    heq, heq]
+  exact fderiv_fourth_pair_comm_at (hf.contDiffAt.of_le (WithTop.coe_le_coe.mpr le_top)) u v w z
 
-/-- Pointwise version of `bilinearIteratedFDerivTwo_eq_fderiv_apply` (only `C²` at the point). -/
-theorem bilinearIteratedFDerivTwo_eq_fderiv_apply_at {f : E → ℝ} {x : E} (hf : ContDiffAt ℝ 2 f x) (u v : E) :
+/--
+Pointwise version of `bilinearIteratedFDerivTwo_eq_fderiv_apply` (only `C²` at the point). -/
+theorem bilinearIteratedFDerivTwo_eq_fderiv_apply_at {f : E → ℝ} {x : E}
+    (hf : ContDiffAt ℝ 2 f x) (u v : E) :
     bilinearIteratedFDerivTwo ℝ f x u v = fderiv ℝ (fun y => fderiv ℝ f y v) x u := by
-  rw [fderiv_fderiv_apply ((hf.fderiv_right (m := 1) (by norm_num)).differentiableAt one_ne_zero)]
+  rw [fderiv_fderiv_apply
+      ((hf.fderiv_right (m := 1) (by norm_num)).differentiableAt one_ne_zero)]
   rfl
 
 /-- Pointwise symmetry of the Hessian (only `C²` at the point). -/
@@ -382,19 +390,20 @@ section Quadratic
 theorem bilinearIteratedFDerivTwo_norm_sq (x v : E) :
     bilinearIteratedFDerivTwo ℝ (fun y : E => ‖y‖ ^ 2) x v v = 2 * ‖v‖ ^ 2 := by
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply (contDiff_norm_sq ℝ) x v v]
-  have hfun : (fun y : E => fderiv ℝ (fun z : E => ‖z‖ ^ 2) y v) =
-      fun y => 2 * ⟪y, v⟫ := by
+  have hfun : (fun y : E => fderiv ℝ (fun z : E => ‖z‖ ^ 2) y v) = fun y => 2 * ⟪y, v⟫ := by
     funext y
     rw [(hasStrictFDerivAt_norm_sq y).hasFDerivAt.fderiv]
     simp
   rw [hfun]
   have h : HasFDerivAt (fun y : E => 2 * ⟪y, v⟫) ((2 : ℝ) • innerSL ℝ v) x := by
-    simpa only [innerSL_apply_apply, real_inner_comm] using ((innerSL ℝ v).hasFDerivAt (x := x)).const_mul 2
+    simpa only [innerSL_apply_apply, real_inner_comm] using
+      ((innerSL ℝ v).hasFDerivAt (x := x)).const_mul 2
   rw [h.fderiv]
   simp
 
 /-- Adding `δ/2 ‖·‖²` adds `δ‖v‖²` to the Hessian quadratic form. -/
-theorem bilinearIteratedFDerivTwo_add_quadratic {f : E → ℝ} (hf : ContDiff ℝ 2 f) (δ : ℝ) (x v : E) :
+theorem bilinearIteratedFDerivTwo_add_quadratic {f : E → ℝ} (hf : ContDiff ℝ 2 f) (δ : ℝ)
+    (x v : E) :
     bilinearIteratedFDerivTwo ℝ (fun y => f y + δ / 2 * ‖y‖ ^ 2) x v v =
       bilinearIteratedFDerivTwo ℝ f x v v + δ * ‖v‖ ^ 2 := by
   let q : E → ℝ := fun y => δ / 2 * ‖y‖ ^ 2
@@ -405,17 +414,20 @@ theorem bilinearIteratedFDerivTwo_add_quadratic {f : E → ℝ} (hf : ContDiff �
   rw [hsum]
   simp only [add_apply]
   rw [← bilinearIteratedFDerivTwo_eq_iteratedFDeriv]
-  have heq : bilinearIteratedFDerivTwo ℝ q x v v = δ / 2 *
-      bilinearIteratedFDerivTwo ℝ (fun y : E => ‖y‖ ^ 2) x v v := by
+  have heq :
+    bilinearIteratedFDerivTwo ℝ q x v v =
+      δ / 2 * bilinearIteratedFDerivTwo ℝ (fun y : E => ‖y‖ ^ 2) x v v := by
     rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hq,
       bilinearIteratedFDerivTwo_eq_fderiv_apply (contDiff_norm_sq ℝ)]
-    have hfun : (fun y => fderiv ℝ q y v) =
-        fun y => δ / 2 * fderiv ℝ (fun z : E => ‖z‖ ^ 2) y v := by
+    have hfun :
+      (fun y => fderiv ℝ q y v) = fun y => δ / 2 * fderiv ℝ (fun z : E => ‖z‖ ^ 2) y v := by
       funext y
       dsimp only [q]
       rw [fderiv_const_mul]
       rfl
-      exact (show ContDiff ℝ 2 (fun z : E => ‖z‖ ^ 2) from contDiff_norm_sq ℝ).differentiable (by norm_num) y
+      exact
+        (show ContDiff ℝ 2 (fun z : E => ‖z‖ ^ 2) from contDiff_norm_sq ℝ).differentiable
+          (by norm_num) y
     rw [hfun, fderiv_const_mul]
     rfl
     exact differentiable_fderiv_apply (contDiff_norm_sq ℝ) v x
@@ -429,24 +441,25 @@ open scoped Topology
 /-- Local C2 chain rule for the Hessian form under an affine continuous linear equivalence.
 No finite-dimensionality or completeness hypothesis is required. -/
 theorem bilinearIteratedFDerivTwo_comp_affine_at {V : E → ℝ} (L : E ≃L[ℝ] E) (c x u v : E)
-    (hV : ContDiffAt ℝ 2 V (L x+c)) :
-    bilinearIteratedFDerivTwo ℝ (fun y => V (L y+c)) x u v =
-      bilinearIteratedFDerivTwo ℝ V (L x+c) (L u) (L v) := by
-  have hA (y : E) : HasFDerivAt (fun z => L z+c) (L : E →L[ℝ] E) y :=
+    (hV : ContDiffAt ℝ 2 V (L x + c)) :
+    bilinearIteratedFDerivTwo ℝ (fun y => V (L y + c)) x u v =
+      bilinearIteratedFDerivTwo ℝ V (L x + c) (L u) (L v) := by
+  have hA (y : E) : HasFDerivAt (fun z => L z + c) (L : E →L[ℝ] E) y :=
     L.hasFDerivAt.add_const c
-  have hW : ContDiffAt ℝ 2 (fun y => V (L y+c)) x :=
+  have hW : ContDiffAt ℝ 2 (fun y => V (L y + c)) x :=
     hV.comp x (L.contDiff.add contDiff_const).contDiffAt
-  have hn : ∀ᶠ z in 𝓝 (L x+c), DifferentiableAt ℝ V z :=
-    ((hV.of_le (show (1 : ℕ∞ω)≤2 by norm_num)).eventually (by norm_num)).mono
+  have hn : ∀ᶠ z in 𝓝 (L x + c), DifferentiableAt ℝ V z :=
+    ((hV.of_le (show (1 : ℕ∞ω) ≤ 2 by norm_num)).eventually (by norm_num)).mono
       (fun z hz => hz.differentiableAt one_ne_zero)
-  have hf : (fun y => fderiv ℝ (fun z => V (L z+c)) y v) =ᶠ[𝓝 x]
-      (fun y => fderiv ℝ V (L y+c) (L v)) := by
+  have hf :
+    (fun y => fderiv ℝ (fun z => V (L z + c)) y v) =ᶠ[𝓝 x]
+      (fun y => fderiv ℝ V (L y + c) (L v)) := by
     filter_upwards [(hA x).continuousAt.eventually hn] with y hy
     exact congrArg (fun T : E →L[ℝ] ℝ => T v) ((hy.hasFDerivAt.comp y (hA y)).fderiv)
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply_at hW,
-    bilinearIteratedFDerivTwo_eq_fderiv_apply_at hV,hf.fderiv.eq_of_nhds]
-  have hd : DifferentiableAt ℝ (fun y => fderiv ℝ V y (L v)) (L x+c) :=
-    ((hV.fderiv_right (m:=1) (by norm_num)).differentiableAt one_ne_zero).clm_apply
+    bilinearIteratedFDerivTwo_eq_fderiv_apply_at hV, hf.fderiv.eq_of_nhds]
+  have hd : DifferentiableAt ℝ (fun y => fderiv ℝ V y (L v)) (L x + c) :=
+    ((hV.fderiv_right (m := 1) (by norm_num)).differentiableAt one_ne_zero).clm_apply
       (differentiableAt_const _)
   exact congrArg (fun T : E →L[ℝ] ℝ => T u) ((hd.hasFDerivAt.comp x (hA x)).fderiv)
 
@@ -464,23 +477,22 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
 
 /-- Chain rule for the Hessian form under a continuous linear map `T : F → E` (possibly between
 different spaces). -/
-theorem bilinearIteratedFDerivTwo_comp_clm {V : E → ℝ} (hV : ContDiff ℝ 2 V)
-    (T : F →L[ℝ] E) (x u v : F) :
+theorem bilinearIteratedFDerivTwo_comp_clm {V : E → ℝ} (hV : ContDiff ℝ 2 V) (T : F →L[ℝ] E)
+    (x u v : F) :
     bilinearIteratedFDerivTwo ℝ (fun y => V (T y)) x u v =
       bilinearIteratedFDerivTwo ℝ V (T x) (T u) (T v) := by
   have hW : ContDiff ℝ 2 (fun y => V (T y)) := hV.comp T.contDiff
-  have hfirst (y : F) : fderiv ℝ (fun z => V (T z)) y =
-      (fderiv ℝ V (T y)).comp T :=
+  have hfirst (y : F) : fderiv ℝ (fun z => V (T z)) y = (fderiv ℝ V (T y)).comp T :=
     ((hV.differentiable (by norm_num) (T y)).hasFDerivAt.comp y T.hasFDerivAt).fderiv
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hW x u v,
     bilinearIteratedFDerivTwo_eq_fderiv_apply hV (T x) (T u) (T v)]
-  have hfun : (fun y => fderiv ℝ (fun z => V (T z)) y v) =
-      fun y => fderiv ℝ V (T y) (T v) := by
+  have hfun : (fun y => fderiv ℝ (fun z => V (T z)) y v) = fun y => fderiv ℝ V (T y) (T v) := by
     funext y
     rw [hfirst]
     rfl
   rw [hfun]
-  have hsecond := ((differentiable_fderiv_apply hV (T v) (T x)).hasFDerivAt.comp x T.hasFDerivAt).fderiv
+  have hsecond :=
+    ((differentiable_fderiv_apply hV (T v) (T x)).hasFDerivAt.comp x T.hasFDerivAt).fderiv
   exact congrArg (fun S : F →L[ℝ] ℝ => S u) hsecond
 
 end CrossType
@@ -522,9 +534,8 @@ variable [CompleteSpace E]
 
 /-- On an open domain the gradient of a genuine C^n function is C^m when
 m+1<=n. No global smooth extension or finite-dimensional hypothesis is needed. -/
-theorem contDiffOn_gradient {f : E → ℝ} {s : Set E} {n m : WithTop ℕ∞}
-    (hs : IsOpen s) (hf : ContDiffOn ℝ n f s) (hmn : m+1≤n) :
-    ContDiffOn ℝ m (gradient f) s := by
+theorem contDiffOn_gradient {f : E → ℝ} {s : Set E} {n m : WithTop ℕ∞} (hs : IsOpen s)
+    (hf : ContDiffOn ℝ n f s) (hmn : m + 1 ≤ n) : ContDiffOn ℝ m (gradient f) s := by
   change ContDiffOn ℝ m ((toDual ℝ E).symm ∘ fderiv ℝ f) s
   exact (toDual ℝ E).symm.contDiff.comp_contDiffOn (hf.fderiv_of_isOpen hs hmn)
 
@@ -620,8 +631,11 @@ theorem norm_gradient_sq_eq_sum (f : E → ℝ) (y : E) :
 /-- A bilinear Hessian evaluated twice on a gradient, expanded in the standard basis. -/
 theorem bilinearIteratedFDerivTwo_gradient_gradient (U f : E → ℝ) (x : E) :
     bilinearIteratedFDerivTwo ℝ U x (gradient f x) (gradient f x) =
-      ∑ i, ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E i) * fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-        bilinearIteratedFDerivTwo ℝ U x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j) := by
+      ∑ i,
+        ∑ j,
+          fderiv ℝ f x (stdOrthonormalBasis ℝ E i) * fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+            bilinearIteratedFDerivTwo ℝ U x (stdOrthonormalBasis ℝ E i)
+              (stdOrthonormalBasis ℝ E j) := by
   rw [gradient_eq_sum_fderiv_smul]
   exact bilinear_sum_smul_sum_smul _ _ _
 
@@ -720,14 +734,19 @@ theorem laplacian_mul {f g : E → ℝ} (hf : ContDiff ℝ 2 f) (hg : ContDiff �
     fderiv_mul_apply (hgd x) (differentiable_fderiv_apply hf _ x)]
   ring
 
-/-- The nondivergence operator `L_{A,b} f(x) = ∑_{ij} A(x)_{ij} D²f(x)(e_i, e_j) − ∑_i b(x)_i Df(x)(e_i)` in
+/--
+The nondivergence operator `L_{A,b} f(x) = ∑_{ij} A(x)_{ij} D²f(x)(e_i, e_j) − ∑_i b(x)_i
+Df(x)(e_i)` in
 the standard orthonormal basis `e`, for an arbitrary real coefficient field `A` and drift `b`
 (Letwin (2.3); there `A = (∇²φ)⁻¹`, `b_i = ∂_iV ∘ ∇φ`). -/
 noncomputable def nondivergenceOperator
     (A : E → Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → ℝ)
     (b : E → Fin (Module.finrank ℝ E) → ℝ) (f : E → ℝ) (x : E) : ℝ :=
-  (∑ i, ∑ j, A x i j * bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
-      (stdOrthonormalBasis ℝ E j)) -
+  (∑ i,
+      ∑ j,
+        A x i j *
+          bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+            (stdOrthonormalBasis ℝ E j)) -
     ∑ i, b x i * fderiv ℝ f x (stdOrthonormalBasis ℝ E i)
 
 section ProductFactors
@@ -936,7 +955,8 @@ end FunctionalInequalities.Analysis.BakryEmery
 
 /-! ### Gradient of an affine precomposition
 
-The gradient of `f (S x + z)` is `S† ∇f (S x + z)` for a continuous linear `S` between real inner product spaces. -/
+The gradient of `f (S x + z)` is `S† ∇f (S x + z)` for a continuous linear `S` between real inner
+product spaces. -/
 
 noncomputable section
 open scoped RealInnerProductSpace

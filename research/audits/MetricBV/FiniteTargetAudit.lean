@@ -1,4 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-! Finite-target-mass bounded-support reduction, without finite total mass or properness.
 The actual globally Lipschitz/global-L1 class is unfolded in the reduction client. Real
@@ -6,6 +9,8 @@ Lebesgue measure on an interval is a concrete infinite-total-mass instance. The 
 counterexample shows that finite target mass cannot be removed from the relaxation identity:
 unrestricted globally Lipschitz approximation has zero cost but bounded-support BV is infinite.
 No Minkowski relaxation or endpoint is asserted by this client. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -89,7 +94,8 @@ theorem emptyCarrier (ν : Measure Empty) :
 
 /-- The finite-target-mass premise is substantive: the whole real line separates the classes. -/
 theorem infiniteMassTargetCounterexample :
-    lipschitzRelaxation (volume : Measure ℝ) univ = 0 ∧ perimeter (volume : Measure ℝ) univ = ⊤ := by
+    lipschitzRelaxation (volume : Measure ℝ) univ = 0 ∧
+      perimeter (volume : Measure ℝ) univ = ⊤ := by
   constructor
   · let g : LipschitzApproximatingSequence (volume : Measure ℝ) univ :=
       ⟨fun _ _ => 1, fun _ => ⟨0, LipschitzWith.const 1⟩, by simp⟩
@@ -98,7 +104,8 @@ theorem infiniteMassTargetCounterexample :
   · apply perimeter_univ_eq_top_of_forall_isBounded
     intro S hS
     obtain ⟨b, hb⟩ := hS.bddAbove
-    refine top_le_iff.mp ((Real.volume_Ioi (a := b)).symm.le.trans (measure_mono fun x hx => ?_))
+    refine
+      top_le_iff.mp ((Real.volume_Ioi (a := b)).symm.le.trans (measure_mono fun x hx => ?_))
     exact fun hxS => not_le.mpr (Set.mem_Ioi.mp hx) (hb hxS)
 
 #print axioms cost_truncate_le_target_tail

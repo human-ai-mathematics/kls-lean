@@ -1,7 +1,9 @@
-import Mathlib.Analysis.Calculus.BumpFunction.Convolution
-import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import Mathlib.Analysis.Convex.Function
+module
+
+public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
+public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import Mathlib.Analysis.Convex.Function
 
 /-!
 # Mollification of convex Lipschitz functions
@@ -14,6 +16,8 @@ For a continuous `g : V → ℝ` the mollification `ρ ⋆ g` is `C^∞`
 (`abs_normed_convolution_sub_le`). Together these produce smooth convex approximations of a
 convex Lipschitz function with an explicit uniform error.
 -/
+
+@[expose] public section
 
 noncomputable section
 

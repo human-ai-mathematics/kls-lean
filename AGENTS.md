@@ -56,7 +56,9 @@
 - Run remote CI only at meaningful verification milestones: a new certificate, a faithfully
   formalized paper main theorem, or validation before sharing/release. Lean certification runs
   on explicit manual dispatch or a pushed `milestone/**` tag; ordinary branch pushes and PR
-  updates do not trigger it. Lean certification is the only remote workflow; build Blueprint
+  updates do not trigger it. Lean certification is the only remote certification workflow; the
+  manually dispatched Palomar full preflight (`.github/workflows/palomar-preflight.yml`) is
+  separate, advisory submission preparation, never dispatched routinely. Build Blueprint
   locally when its artifacts are needed.
   Remote CI uses `research/verify.py --lean-only --no-kernel-replay`; documentation/metadata
   and Python checks remain in the full local verifier. Remote CI preserves the strict Lean

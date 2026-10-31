@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.SmoothGradient.Density
-import FunctionalInequalities.Energy.SmoothGradient.Quadratic
-import FunctionalInequalities.Energy.Relaxation.Quadratic
+module
+
+public import FunctionalInequalities.Energy.SmoothGradient.Density
+public import FunctionalInequalities.Energy.SmoothGradient.Quadratic
+public import FunctionalInequalities.Energy.Relaxation.Quadratic
 
 /-!
 # Closed quadratic structure of the smooth-gradient relaxation
@@ -14,6 +16,8 @@ This conclusion does not say that relaxation agrees with the raw ambient-gradien
 every concrete test. It also does not provide the normal-contraction estimate required for a
 Dirichlet form, or identify the relaxation with `2 Ch`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

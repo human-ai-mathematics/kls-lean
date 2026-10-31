@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.MomentMeasure.Gradient
-import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality
-import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Gradient
+public import FunctionalInequalities.Probability.MomentMeasure.Uniqueness.MidpointEquality
+public import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite
 
 /-!
 # Uniqueness of finite moment potentials
@@ -39,6 +41,8 @@ Route (CEK, proof of Theorem 2, uniqueness): the conjugates `ψᵢ*` are `μ`-in
 `ψ₁` with `h = ±(ψ₁* − ψ₀*)/2`, bounds the mass of the midpoint density by `1`; the equality case
 of Prékopa–Leindler (`exists_eq_translate_of_lintegral_midpointDensity_le_one`) concludes.
 -/
+
+@[expose] public section
 
 noncomputable section
 

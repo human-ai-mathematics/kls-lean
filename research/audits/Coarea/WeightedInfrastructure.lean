@@ -1,10 +1,14 @@
-import FunctionalInequalities.Analysis.Graph.Area
-import FunctionalInequalities.Analysis.SmoothDomain.Basic
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Calculus.ImplicitContDiff
-import Mathlib.MeasureTheory.Function.Egorov
+module
+
+public import FunctionalInequalities.Analysis.Graph.Area
+public import FunctionalInequalities.Analysis.SmoothDomain.Basic
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Calculus.ImplicitContDiff
+public import Mathlib.MeasureTheory.Function.Egorov
 
 -- Existing infrastructure only; these are not new proofs.
+@[expose] public section
+
 #check LipschitzWith.ae_differentiableAt
 #check measurable_fderiv
 #check gradient_eq_zero_of_not_differentiableAt

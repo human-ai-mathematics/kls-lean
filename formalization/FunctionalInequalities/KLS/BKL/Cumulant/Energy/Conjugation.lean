@@ -1,11 +1,16 @@
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.Analysis.Tensor.EnergyForm
+module
+
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.Analysis.Tensor.EnergyForm
 /-!
 # Cumulant energies as energy forms
 
-`E_{r+1}(u) = F(PAP, P^{⊗r} κ_{r+1}(u, ·))` for the standard-coordinate cumulant tensor (BKL (83), (85)): the reduction of
+`E_{r+1}(u) = F(PAP, P^{⊗r} κ_{r+1}(u, ·))` for the standard-coordinate cumulant tensor (BKL (83),
+(85)): the reduction of
 Lemma 5.1 to `A = Id`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -99,16 +104,21 @@ private lemma energy_tensor_square (r : ℕ)
         (fun (s : Fin r) (j : Fin n) => c j (K s) * c j (L s)),
         Finset.mul_sum]
 
-/-- **The cumulant energy as the energy form in conjugated coordinates** (BKL (83) and (85)): for a law `ν` with
+/--
+**The cumulant energy as the energy form in conjugated coordinates** (BKL (83) and (85)): for a law
+`ν` with
 positive invertible covariance `A` and any self-adjoint invertible `P`,
-`E_{r+1}(u) = |κ_{r+1}(u)|²_A = F(P A P, P^{⊗r} κ_{r+1}(u))`, where `(P^{⊗r} κ_{r+1}(u))_K = κ_{r+1}(u, P e_{K_1}, …, P e_{K_r})`. -/
+`E_{r+1}(u) = |κ_{r+1}(u)|²_A = F(P A P, P^{⊗r} κ_{r+1}(u))`, where `(P^{⊗r} κ_{r+1}(u))_K =
+κ_{r+1}(u, P e_{K_1}, …, P e_{K_r})`. -/
 theorem cumulantEnergy_eq_energyForm (ν : Measure (EuclideanSpace ℝ (Fin n)))
     (hpos : (Covariance.operator ν).IsPositive) (hunit : IsUnit (Covariance.operator ν))
-    (P : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hP : IsSelfAdjoint P) (hPu : IsUnit P)
-    (r : ℕ) (u : EuclideanSpace ℝ (Fin n)) :
+    (P : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hP : IsSelfAdjoint P)
+    (hPu : IsUnit P) (r : ℕ) (u : EuclideanSpace ℝ (Fin n)) :
     cumulantEnergy ν r u =
       energyForm (P * Covariance.operator ν * P)
-        (fun K : Fin r → Fin n => cumulant ν (r + 1) (Fin.cons u fun s => P (EuclideanSpace.basisFun (Fin n) ℝ (K s)))) := by
+        (fun K : Fin r → Fin n =>
+          cumulant ν (r + 1)
+            (Fin.cons u fun s => P (EuclideanSpace.basisFun (Fin n) ℝ (K s)))) := by
   classical
   let A := Covariance.operator ν
   let S := inverseSqrt A
@@ -123,40 +133,35 @@ theorem cumulantEnergy_eq_energyForm (ν : Measure (EuclideanSpace ℝ (Fin n)))
   have hoperator : R * S * S * R = Ring.inverse (P * A * P) := by
     rw [mul_assoc R S S, hspec.2.2.1]
     exact hi.symm
-  have he (x : EuclideanSpace ℝ (Fin n)) :
-      (∑ k, ⟪b k, R x⟫ • P (b k)) = x := by
-    simpa only [map_sum, map_smul, ← mul_apply_eq_comp,
-      Ring.mul_inverse_cancel P hPu, one_apply_eq_self] using
-      congrArg P (b.sum_repr' (Ring.inverse P x))
+  have he (x : EuclideanSpace ℝ (Fin n)) : (∑ k, ⟪b k, R x⟫ • P (b k)) = x := by
+    simpa only [map_sum, map_smul, ← mul_apply_eq_comp, Ring.mul_inverse_cancel P hPu,
+      one_apply_eq_self] using congrArg P (b.sum_repr' (Ring.inverse P x))
   have hex (J : Fin r → Fin n) :
-      f (fun s => S (b (J s))) =
-        ∑ K : Fin r → Fin n, (∏ s, c (J s) (K s)) * T K := by
-    have hv :
-        (fun s : Fin r => S (b (J s))) =
-          (fun s => ∑ k, c (J s) k • P (b k)) := by
+    f (fun s => S (b (J s))) = ∑ K : Fin r → Fin n, (∏ s, c (J s) (K s)) * T K := by
+    have hv : (fun s : Fin r => S (b (J s))) = (fun s => ∑ k, c (J s) k • P (b k)) := by
       funext s
       exact (he _).symm
     rw [hv]
-    simp only [ContinuousMultilinearMap.map_sum,
-      ContinuousMultilinearMap.map_smul_univ, smul_eq_mul]
+    simp only [ContinuousMultilinearMap.map_sum, ContinuousMultilinearMap.map_smul_univ,
+      smul_eq_mul]
     rfl
   have hc (k l : Fin n) :
-      (∑ j : Fin n, c j k * c j l) =
-        ⟪b k, Ring.inverse (P * A * P) (b l)⟫ := by
+    (∑ j : Fin n, c j k * c j l) = ⟪b k, Ring.inverse (P * A * P) (b l)⟫ := by
     change (∑ j : Fin n, ⟪b k, R (S (b j))⟫ * ⟪b l, R (S (b j))⟫) = _
     rw [energy_coordinate_gram R S hP.ringInverse hspec.2.1, hoperator]
   calc
     cumulantEnergy ν r u =
-        ∑ J : Fin r → Fin n,
-          (∑ K : Fin r → Fin n, (∏ s, c (J s) (K s)) * T K) ^ 2 := by
+        ∑ J : Fin r → Fin n, (∑ K : Fin r → Fin n, (∏ s, c (J s) (K s)) * T K) ^ 2 := by
       unfold cumulantEnergy
       apply Finset.sum_congr rfl
       intro J _
       exact congrArg (fun t : ℝ => t ^ 2) (hex J)
-    _ = ∑ K : Fin r → Fin n, ∑ L : Fin r → Fin n,
-          T K * T L * ∏ s, (∑ j : Fin n, c j (K s) * c j (L s)) :=
+    _ =
+        ∑ K : Fin r → Fin n,
+          ∑ L : Fin r → Fin n, T K * T L * ∏ s, (∑ j : Fin n, c j (K s) * c j (L s)) :=
       energy_tensor_square r c T
-    _ = energyForm (P * Covariance.operator ν * P)
+    _ =
+        energyForm (P * Covariance.operator ν * P)
           (fun K : Fin r → Fin n =>
             cumulant ν (r + 1)
               (Fin.cons u fun s => P (EuclideanSpace.basisFun (Fin n) ℝ (K s)))) := by

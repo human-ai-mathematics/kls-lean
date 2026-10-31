@@ -1,19 +1,30 @@
-import FunctionalInequalities.Analysis.Cutoff.Profile
-import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
+module
+
+public import FunctionalInequalities.Analysis.Cutoff.Profile
+public import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
 
 /-!
 # Audit: affine rescaling and inverse-Hessian positivity for Letwin Lemma A.4
 
-Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients, every hypothesis derived here, never a target
+Source: Letwin, arXiv:2607.24164v1, Lemma A.4 (p. 17). Actual clients, every hypothesis derived
+here, never a target
 conclusion:
 
-* rescaling (`deriv_comp_sub_div_and_deriv_deriv`): the actual function `exp` with the nontrivial shift `c = 1` and scale
-  `R = 2` at `t = 3` (coefficients `2⁻¹ e` and `(2⁻¹)² e`); the total-derivative convention at `R = 0` for arbitrary `f`
-  (both derivatives `0`); and the Lemma A.4 use with the fixed profile bound: `|(η((· − c)/R))″| ≤ (R⁻¹)² B`;
-* positivity (`sum_inverseHessianEntry_mul_mul_nonneg`): the scaled Gaussian potential `δ/2 ‖y‖²` (`δ > 0`) on the genuine
-  two-dimensional `EuclideanSpace ℝ (Fin 2)`, positive definite by the existing Hessian lemma; the coordinate form of the
-  chain rule (`a_i = DW(x)(b_i)` for an arbitrary `W`); and the rank-zero boundary `EuclideanSpace ℝ (Fin 0)`.
+* rescaling (`deriv_comp_sub_div_and_deriv_deriv`): the actual function `exp` with the nontrivial
+  shift `c = 1` and scale
+  `R = 2` at `t = 3` (coefficients `2⁻¹ e` and `(2⁻¹)² e`); the total-derivative convention at `R =
+  0` for arbitrary `f`
+  (both derivatives `0`); and the Lemma A.4 use with the fixed profile bound: `|(η((· − c)/R))″| ≤
+  (R⁻¹)² B`;
+* positivity (`sum_inverseHessianEntry_mul_mul_nonneg`): the scaled Gaussian potential `δ/2 ‖y‖²`
+  (`δ > 0`) on the genuine
+  two-dimensional `EuclideanSpace ℝ (Fin 2)`, positive definite by the existing Hessian lemma; the
+  coordinate form of the
+  chain rule (`a_i = DW(x)(b_i)` for an arbitrary `W`); and the rank-zero boundary `EuclideanSpace ℝ
+  (Fin 0)`.
 -/
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff
@@ -39,14 +50,19 @@ theorem zero_scale (f : ℝ → ℝ) (c t : ℝ) :
   · rw [h1]; simp
   · rw [h2]; simp
 
-/-- The Lemma A.4 use: with the fixed profile bound `B`, `|(η((· − c)/R))″(t)| ≤ (R⁻¹)² B` for all `c`, `R`, `t`. -/
+/--
+The Lemma A.4 use: with the fixed profile bound `B`, `|(η((· − c)/R))″(t)| ≤ (R⁻¹)² B` for all `c`,
+`R`, `t`. -/
 theorem profile_second_derivative_bound :
-    ∃ B : ℝ, 0 ≤ B ∧ ∀ c R t : ℝ,
-      |deriv (deriv (fun s : ℝ => Real.smoothTransition (2 - (s - c) / R))) t| ≤ (R⁻¹) ^ 2 * B := by
+    ∃ B : ℝ,
+      0 ≤ B ∧
+        ∀ c R t : ℝ,
+          |deriv (deriv (fun s : ℝ => Real.smoothTransition (2 - (s - c) / R))) t| ≤
+            (R⁻¹) ^ 2 * B := by
   obtain ⟨B, hB, hbound⟩ := smoothTransition_two_sub_cutoff.2.2.2.2.2.2.2.2
   refine ⟨B, hB, fun c R t => ?_⟩
-  rw [(deriv_comp_sub_div_and_deriv_deriv (fun s : ℝ => Real.smoothTransition (2 - s)) c R t).2, abs_mul,
-    abs_of_nonneg (sq_nonneg _)]
+  rw [(deriv_comp_sub_div_and_deriv_deriv (fun s : ℝ => Real.smoothTransition (2 - s)) c R t).2,
+    abs_mul, abs_of_nonneg (sq_nonneg _)]
   exact mul_le_mul_of_nonneg_left (hbound _).2 (sq_nonneg _)
 
 end A4RescalingClient
@@ -66,9 +82,10 @@ theorem hessian_zero_fun (x v : E) :
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply contDiff_const x v v]
   simp
 
-/-- The scaled Gaussian potential `δ/2 ‖y‖²` has positive definite Hessian `δ ‖v‖²` for `δ > 0`. -/
-theorem gaussian_posDef {δ : ℝ} (hδ : 0 < δ) (x v : E)
-    (hv : v ≠ 0) : 0 < bilinearIteratedFDerivTwo ℝ (fun y : E => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2) x v v := by
+/--
+The scaled Gaussian potential `δ/2 ‖y‖²` has positive definite Hessian `δ ‖v‖²` for `δ > 0`. -/
+theorem gaussian_posDef {δ : ℝ} (hδ : 0 < δ) (x v : E) (hv : v ≠ 0) :
+    0 < bilinearIteratedFDerivTwo ℝ (fun y : E => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2) x v v := by
   rw [bilinearIteratedFDerivTwo_add_quadratic contDiff_const δ x v, hessian_zero_fun, zero_add]
   exact mul_pos hδ (pow_pos (norm_pos_iff.mpr hv) 2)
 
@@ -78,16 +95,30 @@ theorem gaussian_contDiff (δ : ℝ) :
 
 end InnerProduct
 
-/-- Genuine positive-dimensional case, any positive scale: on `ℝ²` with the standard basis (rank 2). -/
-theorem plane_quadratic_nonneg {δ : ℝ} (hδ : 0 < δ) (x : E2) (a : Fin (Module.finrank ℝ E2) → ℝ) :
-    0 ≤ ∑ i, ∑ j, inverseHessianEntry (fun y : E2 => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2) (stdOrthonormalBasis ℝ E2) x i j *
-      a i * a j :=
+/--
+Genuine positive-dimensional case, any positive scale: on `ℝ²` with the standard basis (rank 2). -/
+theorem plane_quadratic_nonneg {δ : ℝ} (hδ : 0 < δ) (x : E2)
+    (a : Fin (Module.finrank ℝ E2) → ℝ) :
+    0 ≤
+      ∑ i,
+        ∑ j,
+          inverseHessianEntry (fun y : E2 => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2)
+                (stdOrthonormalBasis ℝ E2) x i j *
+              a i *
+            a j :=
   sum_inverseHessianEntry_mul_mul_nonneg _ (gaussian_contDiff δ) x (gaussian_posDef hδ x) a
 
-/-- Coordinate form of the chain rule (`a_i = DW(x)(b_i)`), as consumed in `L(h ∘ W)`: the `Γ`-term is nonnegative. -/
+/--
+Coordinate form of the chain rule (`a_i = DW(x)(b_i)`), as consumed in `L(h ∘ W)`: the `Γ`-term is
+nonnegative. -/
 theorem chain_rule_gamma_nonneg {δ : ℝ} (hδ : 0 < δ) (W : E2 → ℝ) (x : E2) :
-    0 ≤ ∑ i, ∑ j, inverseHessianEntry (fun y : E2 => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2) (stdOrthonormalBasis ℝ E2) x i j *
-      fderiv ℝ W x (stdOrthonormalBasis ℝ E2 i) * fderiv ℝ W x (stdOrthonormalBasis ℝ E2 j) :=
+    0 ≤
+      ∑ i,
+        ∑ j,
+          inverseHessianEntry (fun y : E2 => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2)
+                (stdOrthonormalBasis ℝ E2) x i j *
+              fderiv ℝ W x (stdOrthonormalBasis ℝ E2 i) *
+            fderiv ℝ W x (stdOrthonormalBasis ℝ E2 j) :=
   sum_inverseHessianEntry_mul_mul_nonneg _ (gaussian_contDiff δ) x (gaussian_posDef hδ x)
     (fun i => fderiv ℝ W x (stdOrthonormalBasis ℝ E2 i))
 
@@ -97,9 +128,14 @@ theorem plane_rank : Module.finrank ℝ E2 = 2 := finrank_euclideanSpace_fin
 theorem subsingleton_E0 : Subsingleton E0 :=
   Module.finrank_zero_iff.mp (finrank_euclideanSpace_fin (𝕜 := ℝ) (n := 0))
 
-/-- Rank-zero boundary: the zero potential on the zero space; positive definiteness is vacuous. -/
+/--
+Rank-zero boundary: the zero potential on the zero space; positive definiteness is vacuous. -/
 theorem rank_zero_quadratic_nonneg (x : E0) (a : Fin (Module.finrank ℝ E0) → ℝ) :
-    0 ≤ ∑ i, ∑ j, inverseHessianEntry (fun _ : E0 => (0 : ℝ)) (stdOrthonormalBasis ℝ E0) x i j * a i * a j :=
+    0 ≤
+      ∑ i,
+        ∑ j,
+          inverseHessianEntry (fun _ : E0 => (0 : ℝ)) (stdOrthonormalBasis ℝ E0) x i j * a i *
+            a j :=
   sum_inverseHessianEntry_mul_mul_nonneg _ contDiff_const x
     (fun v hv => (hv (@Subsingleton.elim _ subsingleton_E0 v 0)).elim) a
 

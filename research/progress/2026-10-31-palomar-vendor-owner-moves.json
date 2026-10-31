@@ -1,0 +1,633 @@
+{
+  "version": 1,
+  "review_date": "2026-10-31",
+  "scope": "Vendored public declarations whose owner moved to Mathlib v4.35.0, or that were removed, in the Lean/Mathlib v4.35.0 port. Every other old public vendor declaration keeps its owner and exact elaborated type except the five norm-premise exceptions recorded in the migration map (E1, E7a-c, E9a) and 13 BrownianMotion SimpleProcess rows whose only change is commuted universe max operands. Operational observations and receipts are kept outside the repository.",
+  "baseline": "3227 old public declarations of 242 vendor modules, observed from the Lean v4.33.0 caches of the previous source revision",
+  "E10_indistinguishable": {
+    "module": "BrownianMotion.Auxiliary.Indistinguishable (now only `public import Mathlib.Probability.Process.Indistinguishable`)",
+    "reason": "the vendored module was identical to Mathlib v4.35.0 Probability/Process/Indistinguishable apart from Mathlib's module docstring; both were imported together (import clash)",
+    "new_owner": "Mathlib.Probability.Process.Indistinguishable",
+    "names_identical_type": [
+      "Filter.EventuallyEq.indist",
+      "ProbabilityTheory.Indistinguishable",
+      "ProbabilityTheory.Indistinguishable.add",
+      "ProbabilityTheory.Indistinguishable.ae_eq",
+      "ProbabilityTheory.Indistinguishable.ae_eq_eval",
+      "ProbabilityTheory.Indistinguishable.const_smul",
+      "ProbabilityTheory.Indistinguishable.const_vadd",
+      "ProbabilityTheory.Indistinguishable.div",
+      "ProbabilityTheory.Indistinguishable.fun_add",
+      "ProbabilityTheory.Indistinguishable.fun_comp",
+      "ProbabilityTheory.Indistinguishable.fun_comp₂",
+      "ProbabilityTheory.Indistinguishable.fun_const_smul",
+      "ProbabilityTheory.Indistinguishable.fun_const_vadd",
+      "ProbabilityTheory.Indistinguishable.fun_div",
+      "ProbabilityTheory.Indistinguishable.fun_inv",
+      "ProbabilityTheory.Indistinguishable.fun_mul",
+      "ProbabilityTheory.Indistinguishable.fun_neg",
+      "ProbabilityTheory.Indistinguishable.fun_smul",
+      "ProbabilityTheory.Indistinguishable.fun_sub",
+      "ProbabilityTheory.Indistinguishable.fun_vadd",
+      "ProbabilityTheory.Indistinguishable.instIsTransForallForall",
+      "ProbabilityTheory.Indistinguishable.inv",
+      "ProbabilityTheory.Indistinguishable.mul",
+      "ProbabilityTheory.Indistinguishable.neg",
+      "ProbabilityTheory.Indistinguishable.prodMk",
+      "ProbabilityTheory.Indistinguishable.refl",
+      "ProbabilityTheory.Indistinguishable.rfl",
+      "ProbabilityTheory.Indistinguishable.smul",
+      "ProbabilityTheory.Indistinguishable.sub",
+      "ProbabilityTheory.Indistinguishable.symm",
+      "ProbabilityTheory.Indistinguishable.trans",
+      "ProbabilityTheory.Indistinguishable.vadd",
+      "ProbabilityTheory.«term_≡ᵐ[_]_»"
+    ]
+  },
+  "E11_cadlag": {
+    "module": "BrownianMotion.StochasticIntegral.Cadlag",
+    "reason": "Mathlib v4.35.0 Topology/Order/Cadlag defines the same right-continuity and cadlag predicates under the same root names (clash with `import Mathlib` in the pinned OpenAI statement); predicate equivalence: research/tests/fixtures/mathlib435-semantics/CadlagMeaning.lean.in; old signatures recovered from Mathlib: CadlagOldSignatures.lean.in",
+    "new_owner": "Mathlib.Topology.Order.Cadlag",
+    "rows": [
+      {
+        "name": "Continuous.isCadlag",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] {f : ι → E}, Continuous.{u_1, u_2} f → IsCadlag.{u_1, u_2} f",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y], Continuous.{u_1, u_2} f → IsCadlag.{u_1, u_2} f",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "explicit argument unchanged (hf)"
+        ],
+        "old_signature_fixture_row": "Continuous.isCadlag",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "Continuous.isRightContinuous",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] {f : ι → E}, Continuous.{u_1, u_2} f → IsRightContinuous.{u_1, u_2} f",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y], Continuous.{u_1, u_2} f → IsRightContinuous.{u_1, u_2} f",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "explicit argument unchanged (hf)"
+        ],
+        "old_signature_fixture_row": "Continuous.isRightContinuous",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "{ι : Type u_1} →\n  {E : Type u_2} → [TopologicalSpace.{u_1} ι] → [TopologicalSpace.{u_2} E] → [Preorder.{u_1} ι] → (ι → E) → Prop",
+        "old_kind": "inductive",
+        "new_mathlib_type": "{X : Type u_1} →\n  {Y : Type u_2} → [TopologicalSpace.{u_1} X] → [Preorder.{u_1} X] → [TopologicalSpace.{u_2} Y] → (X → Y) → Prop",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "structure field names right_continuous/left_limit -> isRightContinuous/tendsto_nhdsLT (field statements identical)",
+          "Mathlib attribute @[to_dual existing] (dual IsCaglad)"
+        ],
+        "old_signature_fixture_row": "IsCadlag",
+        "fixture_statement_prints_as_old_type": false
+      },
+      {
+        "name": "IsCadlag.add",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : Add.{u_3} E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousAdd.{u_3} E] [inst_4 : Preorder.{u_1} ι] {f g : ι → E},\n  IsCadlag.{u_1, u_3} f →\n    IsCadlag.{u_1, u_3} g → IsCadlag.{u_1, u_3} (HAdd.hAdd.{max u_1 u_3, max u_1 u_3, max u_1 u_3} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Add.{u_2} Y] [ContinuousAdd.{u_2} Y],\n  IsCadlag.{u_1, u_2} f →\n    IsCadlag.{u_1, u_2} g → IsCadlag.{u_1, u_2} (HAdd.hAdd.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] {E} [Add E] [TopologicalSpace E] [ContinuousAdd E] [Preorder ι] -> {Y} [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Add Y] [ContinuousAdd Y] ({E} was bound after [TopologicalSpace ι], {Y} before it)",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.add",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.casesOn",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "{ι : Type u_1} →\n  {E : Type u_2} →\n    [inst : TopologicalSpace.{u_1} ι] →\n      [inst_1 : TopologicalSpace.{u_2} E] →\n        [inst_2 : Preorder.{u_1} ι] →\n          {f : ι → E} →\n            {motive : IsCadlag.{u_1, u_2} f → Sort u} →\n              (t : IsCadlag.{u_1, u_2} f) →\n                ((right_continuous : IsRightContinuous.{u_1, u_2} f) →\n                    (left_limit :\n                        ∀ (x : ι),\n                          ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n                      motive ⋯) →\n                  motive t",
+        "old_kind": "definition",
+        "new_mathlib_type": "{X : Type u_1} →\n  {Y : Type u_2} →\n    [inst : TopologicalSpace.{u_1} X] →\n      [inst_1 : Preorder.{u_1} X] →\n        [inst_2 : TopologicalSpace.{u_2} Y] →\n          {f : X → Y} →\n            {motive : IsCadlag.{u_1, u_2} f → Sort u} →\n              (t : IsCadlag.{u_1, u_2} f) →\n                ((isRightContinuous : IsRightContinuous.{u_1, u_2} f) →\n                    (tendsto_nhdsLT :\n                        ∀ (x : X),\n                          ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n                      motive ⋯) →\n                  motive t",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "constructor minor-premise binder names right_continuous/left_limit -> isRightContinuous/tendsto_nhdsLT (upstream structure field names)",
+          "IsCadlag constant now Mathlib-owned (structure tagged @[to_dual existing] with IsCaglad)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.casesOn",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.const_smul",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : SMul.{0, u_3} ℝ E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousSMul.{0, u_3} ℝ E] [inst_4 : Preorder.{u_1} ι] {f : ι → E},\n  IsCadlag.{u_1, u_3} f → ∀ (r : ℝ), IsCadlag.{u_1, u_3} (HSMul.hSMul.{0, max u_1 u_3, max u_1 u_3} r f)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {R : Type u_3} [inst_3 : SMul.{u_3, u_2} R Y] [ContinuousConstSMul.{u_3, u_2} R Y]\n  (c : R), IsCadlag.{u_1, u_2} f → IsCadlag.{u_1, u_2} (HSMul.hSMul.{u_3, max u_1 u_2, max u_1 u_2} c f)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "GENERALIZATION: scalar type ℝ -> arbitrary {R : Type u_3}; [SMul ℝ E] -> [SMul R Y]; [ContinuousSMul ℝ E] -> [ContinuousConstSMul R Y] (weaker hypothesis, implied by ContinuousSMul ℝ E)",
+          "scalar binder r -> c",
+          "ARGUMENT ORDER: old (hf : IsCadlag f) (r : ℝ) -> new (c : R) (hf : IsCadlag f)",
+          "HSMul universe 0 -> u_3",
+          "instance order old [TopologicalSpace ι] {E} [SMul ℝ E] [TopologicalSpace E] [ContinuousSMul ℝ E] [Preorder ι] -> new [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] {R} [SMul R Y] [ContinuousConstSMul R Y]"
+        ],
+        "old_signature_fixture_row": "IsCadlag.const_smul",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.continuous_comp",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {κ : Type u_3} {E : Type u_4} {F : Type u_5} [inst : TopologicalSpace.{u_3} κ] [inst_1 : TopologicalSpace.{u_4} E]\n  [inst_2 : TopologicalSpace.{u_5} F] [inst_3 : Preorder.{u_3} κ] {g : E → F} {f : κ → E},\n  Continuous.{u_4, u_5} g → IsCadlag.{u_3, u_4} f → IsCadlag.{u_3, u_5} (Function.comp.{u_3 + 1, u_4 + 1, u_5 + 1} g f)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {Z : Type u_3} [inst_3 : TopologicalSpace.{u_3} Z] {g : Y → Z},\n  IsCadlag.{u_1, u_2} f → Continuous.{u_2, u_3} g → IsCadlag.{u_1, u_3} (Function.comp.{u_1 + 1, u_2 + 1, u_3 + 1} g f)",
+        "differences": [
+          "type variables κ,E,F (Type u_3,u_4,u_5) -> X,Y,Z (Type u_1,u_2,u_3)",
+          "{f} moved before [Preorder X]; {Z} [TopologicalSpace Z] {g} now after the domain/codomain instances",
+          "instance order [TopologicalSpace κ] [TopologicalSpace E] [TopologicalSpace F] [Preorder κ] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [TopologicalSpace Z]",
+          "ARGUMENT ORDER SWAPPED: old (hg : Continuous g) (hf : IsCadlag f) -> new (hf : IsCadlag f) (hg : Continuous g)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.continuous_comp",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.fun_add",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : Add.{u_3} E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousAdd.{u_3} E] [inst_4 : Preorder.{u_1} ι] {f g : ι → E},\n  IsCadlag.{u_1, u_3} f → IsCadlag.{u_1, u_3} g → IsCadlag.{u_1, u_3} fun i => HAdd.hAdd.{u_3, u_3, u_3} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Add.{u_2} Y] [ContinuousAdd.{u_2} Y],\n  IsCadlag.{u_1, u_2} f → IsCadlag.{u_1, u_2} g → IsCadlag.{u_1, u_2} fun i => HAdd.hAdd.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] {E} [Add E] [TopologicalSpace E] [ContinuousAdd E] [Preorder ι] -> {Y} [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Add Y] [ContinuousAdd Y] ({E} was bound after [TopologicalSpace ι], {Y} before it)",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.fun_add",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.fun_const_smul",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : SMul.{0, u_3} ℝ E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousSMul.{0, u_3} ℝ E] [inst_4 : Preorder.{u_1} ι] {f : ι → E},\n  IsCadlag.{u_1, u_3} f → ∀ (r : ℝ), IsCadlag.{u_1, u_3} fun i => HSMul.hSMul.{0, u_3, u_3} r (f i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {R : Type u_3} [inst_3 : SMul.{u_3, u_2} R Y] [ContinuousConstSMul.{u_3, u_2} R Y]\n  (c : R), IsCadlag.{u_1, u_2} f → IsCadlag.{u_1, u_2} fun i => HSMul.hSMul.{u_3, u_2, u_2} c (f i)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "GENERALIZATION: scalar type ℝ -> arbitrary {R : Type u_3}; [SMul ℝ E] -> [SMul R Y]; [ContinuousSMul ℝ E] -> [ContinuousConstSMul R Y] (weaker hypothesis, implied by ContinuousSMul ℝ E)",
+          "scalar binder r -> c",
+          "ARGUMENT ORDER: old (hf : IsCadlag f) (r : ℝ) -> new (c : R) (hf : IsCadlag f)",
+          "HSMul universe 0 -> u_3",
+          "instance order old [TopologicalSpace ι] {E} [SMul ℝ E] [TopologicalSpace E] [ContinuousSMul ℝ E] [Preorder ι] -> new [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] {R} [SMul R Y] [ContinuousConstSMul R Y]"
+        ],
+        "old_signature_fixture_row": "IsCadlag.fun_const_smul",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.fun_mul",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : Mul.{u_3} E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousMul.{u_3} E] [inst_4 : Preorder.{u_1} ι] {f g : ι → E},\n  IsCadlag.{u_1, u_3} f → IsCadlag.{u_1, u_3} g → IsCadlag.{u_1, u_3} fun i => HMul.hMul.{u_3, u_3, u_3} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Mul.{u_2} Y] [ContinuousMul.{u_2} Y],\n  IsCadlag.{u_1, u_2} f → IsCadlag.{u_1, u_2} g → IsCadlag.{u_1, u_2} fun i => HMul.hMul.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] {E} [Mul E] [TopologicalSpace E] [ContinuousMul E] [Preorder ι] -> {Y} [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Mul Y] [ContinuousMul Y] ({E} was bound after [TopologicalSpace ι], {Y} before it)",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.fun_mul",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.fun_sub",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : Sub.{u_3} E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousSub.{u_3} E] [inst_4 : Preorder.{u_1} ι] {f g : ι → E},\n  IsCadlag.{u_1, u_3} f → IsCadlag.{u_1, u_3} g → IsCadlag.{u_1, u_3} fun i => HSub.hSub.{u_3, u_3, u_3} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Sub.{u_2} Y] [ContinuousSub.{u_2} Y],\n  IsCadlag.{u_1, u_2} f → IsCadlag.{u_1, u_2} g → IsCadlag.{u_1, u_2} fun i => HSub.hSub.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] {E} [Sub E] [TopologicalSpace E] [ContinuousSub E] [Preorder ι] -> {Y} [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Sub Y] [ContinuousSub Y] ({E} was bound after [TopologicalSpace ι], {Y} before it)",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.fun_sub",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.mk",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] {f : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    (∀ (x : ι), ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n      IsCadlag.{u_1, u_2} f",
+        "old_kind": "constructor",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {f : X → Y},\n  IsRightContinuous.{u_1, u_2} f →\n    (∀ (x : X), ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n      IsCadlag.{u_1, u_2} f",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "{f} position unchanged (after the three instances)",
+          "fields in the same order with identical statements"
+        ],
+        "old_signature_fixture_row": "IsCadlag.mk",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.mul",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : Mul.{u_3} E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousMul.{u_3} E] [inst_4 : Preorder.{u_1} ι] {f g : ι → E},\n  IsCadlag.{u_1, u_3} f →\n    IsCadlag.{u_1, u_3} g → IsCadlag.{u_1, u_3} (HMul.hMul.{max u_1 u_3, max u_1 u_3, max u_1 u_3} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Mul.{u_2} Y] [ContinuousMul.{u_2} Y],\n  IsCadlag.{u_1, u_2} f →\n    IsCadlag.{u_1, u_2} g → IsCadlag.{u_1, u_2} (HMul.hMul.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] {E} [Mul E] [TopologicalSpace E] [ContinuousMul E] [Preorder ι] -> {Y} [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Mul Y] [ContinuousMul Y] ({E} was bound after [TopologicalSpace ι], {Y} before it)",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.mul",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.rec",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "{ι : Type u_1} →\n  {E : Type u_2} →\n    [inst : TopologicalSpace.{u_1} ι] →\n      [inst_1 : TopologicalSpace.{u_2} E] →\n        [inst_2 : Preorder.{u_1} ι] →\n          {f : ι → E} →\n            {motive : IsCadlag.{u_1, u_2} f → Sort u} →\n              ((right_continuous : IsRightContinuous.{u_1, u_2} f) →\n                  (left_limit :\n                      ∀ (x : ι),\n                        ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n                    motive ⋯) →\n                (t : IsCadlag.{u_1, u_2} f) → motive t",
+        "old_kind": "recursor",
+        "new_mathlib_type": "{X : Type u_1} →\n  {Y : Type u_2} →\n    [inst : TopologicalSpace.{u_1} X] →\n      [inst_1 : Preorder.{u_1} X] →\n        [inst_2 : TopologicalSpace.{u_2} Y] →\n          {f : X → Y} →\n            {motive : IsCadlag.{u_1, u_2} f → Sort u} →\n              ((isRightContinuous : IsRightContinuous.{u_1, u_2} f) →\n                  (tendsto_nhdsLT :\n                      ∀ (x : X),\n                        ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n                    motive ⋯) →\n                (t : IsCadlag.{u_1, u_2} f) → motive t",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "constructor minor-premise binder names right_continuous/left_limit -> isRightContinuous/tendsto_nhdsLT (upstream structure field names)",
+          "IsCadlag constant now Mathlib-owned (structure tagged @[to_dual existing] with IsCaglad)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.rec",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.recOn",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "{ι : Type u_1} →\n  {E : Type u_2} →\n    [inst : TopologicalSpace.{u_1} ι] →\n      [inst_1 : TopologicalSpace.{u_2} E] →\n        [inst_2 : Preorder.{u_1} ι] →\n          {f : ι → E} →\n            {motive : IsCadlag.{u_1, u_2} f → Sort u} →\n              (t : IsCadlag.{u_1, u_2} f) →\n                ((right_continuous : IsRightContinuous.{u_1, u_2} f) →\n                    (left_limit :\n                        ∀ (x : ι),\n                          ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n                      motive ⋯) →\n                  motive t",
+        "old_kind": "definition",
+        "new_mathlib_type": "{X : Type u_1} →\n  {Y : Type u_2} →\n    [inst : TopologicalSpace.{u_1} X] →\n      [inst_1 : Preorder.{u_1} X] →\n        [inst_2 : TopologicalSpace.{u_2} Y] →\n          {f : X → Y} →\n            {motive : IsCadlag.{u_1, u_2} f → Sort u} →\n              (t : IsCadlag.{u_1, u_2} f) →\n                ((isRightContinuous : IsRightContinuous.{u_1, u_2} f) →\n                    (tendsto_nhdsLT :\n                        ∀ (x : X),\n                          ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)) →\n                      motive ⋯) →\n                  motive t",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "constructor minor-premise binder names right_continuous/left_limit -> isRightContinuous/tendsto_nhdsLT (upstream structure field names)",
+          "IsCadlag constant now Mathlib-owned (structure tagged @[to_dual existing] with IsCaglad)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.recOn",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.sub",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : Sub.{u_3} E]\n  [inst_2 : TopologicalSpace.{u_3} E] [ContinuousSub.{u_3} E] [inst_4 : Preorder.{u_1} ι] {f g : ι → E},\n  IsCadlag.{u_1, u_3} f →\n    IsCadlag.{u_1, u_3} g → IsCadlag.{u_1, u_3} (HSub.hSub.{max u_1 u_3, max u_1 u_3, max u_1 u_3} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Sub.{u_2} Y] [ContinuousSub.{u_2} Y],\n  IsCadlag.{u_1, u_2} f →\n    IsCadlag.{u_1, u_2} g → IsCadlag.{u_1, u_2} (HSub.hSub.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y (old E : Type u_3 -> Y : Type u_2)",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] {E} [Sub E] [TopologicalSpace E] [ContinuousSub E] [Preorder ι] -> {Y} [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Sub Y] [ContinuousSub Y] ({E} was bound after [TopologicalSpace ι], {Y} before it)",
+          "explicit arguments unchanged (hf hg)",
+          "upstream generates IsCadlag.sub from div' via to_additive (old: standalone @[to_fun] lemma)"
+        ],
+        "old_signature_fixture_row": "IsCadlag.sub",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "{ι : Type u_1} →\n  {E : Type u_2} → [TopologicalSpace.{u_1} ι] → [TopologicalSpace.{u_2} E] → [Preorder.{u_1} ι] → (ι → E) → Prop",
+        "old_kind": "definition",
+        "new_mathlib_type": "{X : Type u_1} →\n  {Y : Type u_2} → [TopologicalSpace.{u_1} X] → [Preorder.{u_1} X] → [TopologicalSpace.{u_2} Y] → (X → Y) → Prop",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "REDUCIBILITY: vendor abbrev (reducible) -> Mathlib def (default transparency); same body ∀ a, ContinuousWithinAt f (Set.Ioi a) a",
+          "Mathlib attribute @[to_dual] (dual IsLeftContinuous)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous",
+        "fixture_statement_prints_as_old_type": false
+      },
+      {
+        "name": "IsRightContinuous.add",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Add.{u_2} E] [ContinuousAdd.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HAdd.hAdd.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Add.{u_2} Y] [ContinuousAdd.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HAdd.hAdd.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Add E] [ContinuousAdd E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Add Y] [ContinuousAdd Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.add",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.continuous_comp",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] {F : Type u_3} [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : TopologicalSpace.{u_3} F] [inst_3 : Preorder.{u_1} ι] {g : E → F} {f : ι → E},\n  Continuous.{u_2, u_3} g →\n    IsRightContinuous.{u_1, u_2} f → IsRightContinuous.{u_1, u_3} (Function.comp.{u_1 + 1, u_2 + 1, u_3 + 1} g f)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {Z : Type u_3} [inst_3 : TopologicalSpace.{u_3} Z] {g : Y → Z},\n  IsRightContinuous.{u_1, u_2} f →\n    Continuous.{u_2, u_3} g → IsRightContinuous.{u_1, u_3} (Function.comp.{u_1 + 1, u_2 + 1, u_3 + 1} g f)",
+        "differences": [
+          "type variables ι,E,F -> X,Y,Z (universes unchanged u_1,u_2,u_3)",
+          "{F} was bound between [TopologicalSpace ι] and [TopologicalSpace E]; new {Z} [TopologicalSpace Z] {g} after [TopologicalSpace Y]; {f} moved before [Preorder X]",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [TopologicalSpace F] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [TopologicalSpace Z]",
+          "ARGUMENT ORDER SWAPPED: old (hg : Continuous g) (hf : IsRightContinuous f) -> new (hf) (hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.continuous_comp",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.div",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : Preorder.{u_1} ι]\n  [inst_2 : GroupWithZero.{u_2} E] [inst_3 : TopologicalSpace.{u_2} E] [ContinuousInv₀.{u_2} E] [ContinuousMul.{u_2} E]\n  {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      (∀ (x : ι), Ne.{u_2 + 1} (g x) 0) →\n        IsRightContinuous.{u_1, u_2} (HDiv.hDiv.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : GroupWithZero.{u_2} Y] [ContinuousInv₀.{u_2} Y] [ContinuousMul.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      (∀ (x : X), Ne.{u_2 + 1} (g x) 0) →\n        IsRightContinuous.{u_1, u_2} (HDiv.hDiv.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [Preorder ι] [GroupWithZero E] [TopologicalSpace E] [ContinuousInv₀ E] [ContinuousMul E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [GroupWithZero Y] [ContinuousInv₀ Y] [ContinuousMul Y] (codomain topology now before GroupWithZero)",
+          "explicit arguments unchanged (hf hg h)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.div",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.div'",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Div.{u_2} E] [ContinuousDiv.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HDiv.hDiv.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Div.{u_2} Y] [ContinuousDiv.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HDiv.hDiv.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Div E] [ContinuousDiv E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Div Y] [ContinuousDiv Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.div'",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.fun_add",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Add.{u_2} E] [ContinuousAdd.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HAdd.hAdd.{u_2, u_2, u_2} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Add.{u_2} Y] [ContinuousAdd.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HAdd.hAdd.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Add E] [ContinuousAdd E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Add Y] [ContinuousAdd Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.fun_add",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.fun_div",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : Preorder.{u_1} ι]\n  [inst_2 : GroupWithZero.{u_2} E] [inst_3 : TopologicalSpace.{u_2} E] [ContinuousInv₀.{u_2} E] [ContinuousMul.{u_2} E]\n  {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      (∀ (x : ι), Ne.{u_2 + 1} (g x) 0) → IsRightContinuous.{u_1, u_2} fun i => HDiv.hDiv.{u_2, u_2, u_2} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : GroupWithZero.{u_2} Y] [ContinuousInv₀.{u_2} Y] [ContinuousMul.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      (∀ (x : X), Ne.{u_2 + 1} (g x) 0) → IsRightContinuous.{u_1, u_2} fun i => HDiv.hDiv.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [Preorder ι] [GroupWithZero E] [TopologicalSpace E] [ContinuousInv₀ E] [ContinuousMul E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [GroupWithZero Y] [ContinuousInv₀ Y] [ContinuousMul Y] (codomain topology now before GroupWithZero)",
+          "explicit arguments unchanged (hf hg h)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.fun_div",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.fun_div'",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Div.{u_2} E] [ContinuousDiv.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HDiv.hDiv.{u_2, u_2, u_2} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Div.{u_2} Y] [ContinuousDiv.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HDiv.hDiv.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Div E] [ContinuousDiv E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Div Y] [ContinuousDiv Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.fun_div'",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.fun_mul",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Mul.{u_2} E] [ContinuousMul.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HMul.hMul.{u_2, u_2, u_2} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Mul.{u_2} Y] [ContinuousMul.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HMul.hMul.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Mul E] [ContinuousMul E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Mul Y] [ContinuousMul Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.fun_mul",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.fun_sub",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Sub.{u_2} E] [ContinuousSub.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HSub.hSub.{u_2, u_2, u_2} (f i) (g i)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Sub.{u_2} Y] [ContinuousSub.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g → IsRightContinuous.{u_1, u_2} fun i => HSub.hSub.{u_2, u_2, u_2} (f i) (g i)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Sub E] [ContinuousSub E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Sub Y] [ContinuousSub Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.fun_sub",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.mul",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Mul.{u_2} E] [ContinuousMul.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HMul.hMul.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Mul.{u_2} Y] [ContinuousMul.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HMul.hMul.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Mul E] [ContinuousMul E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Mul Y] [ContinuousMul Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.mul",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsRightContinuous.sub",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] [inst_3 : Sub.{u_2} E] [ContinuousSub.{u_2} E] {f g : ι → E},\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HSub.hSub.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f g : X → Y} [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] [inst_3 : Sub.{u_2} Y] [ContinuousSub.{u_2} Y],\n  IsRightContinuous.{u_1, u_2} f →\n    IsRightContinuous.{u_1, u_2} g →\n      IsRightContinuous.{u_1, u_2} (HSub.hSub.{max u_1 u_2, max u_1 u_2, max u_1 u_2} f g)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "implicit {f g} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] [Sub E] [ContinuousSub E] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y] [Sub Y] [ContinuousSub Y]",
+          "explicit arguments unchanged (hf hg)"
+        ],
+        "old_signature_fixture_row": "IsRightContinuous.sub",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "isBounded_image_of_isCadlag_of_isCompact",
+        "owner": "Mathlib.Topology.Order.Cadlag",
+        "old_v433_type": "∀ {ι : Type u_1} [inst : TopologicalSpace.{u_1} ι] {E : Type u_3} [inst_1 : LinearOrder.{u_1} ι]\n  [inst_2 : PseudoMetricSpace.{u_3} E] {f : ι → E},\n  IsCadlag.{u_1, u_3} f → ∀ {s : Set.{u_1} ι}, IsCompact.{u_1} s → Bornology.IsBounded.{u_3} (Set.image.{u_1, u_3} f s)",
+        "old_kind": "theorem",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] {f : X → Y} [inst_1 : LinearOrder.{u_1} X]\n  [inst_2 : PseudoMetricSpace.{u_2} Y],\n  IsCadlag.{u_1, u_2} f → ∀ {s : Set.{u_1} X}, IsCompact.{u_1} s → Bornology.IsBounded.{u_2} (Set.image.{u_1, u_2} f s)",
+        "differences": [
+          "type variables ι,E (E : Type u_3) -> X,Y (Y : Type u_2)",
+          "{Y} now bound before [TopologicalSpace X] (old {E} after it)",
+          "implicit {f} moved before the order/codomain instances (directly after [TopologicalSpace X])",
+          "instances [LinearOrder ι] [PseudoMetricSpace E] -> [LinearOrder X] [PseudoMetricSpace Y] (same relative order)",
+          "explicit arguments unchanged (hf, {s}, hs)"
+        ],
+        "old_signature_fixture_row": "isBounded_image_of_isCadlag_of_isCompact",
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.right_continuous",
+        "owner": "REMOVED (no alias); mapped to Mathlib field IsCadlag.isRightContinuous",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] {f : ι → E}, IsCadlag.{u_1, u_2} f → IsRightContinuous.{u_1, u_2} f",
+        "new_mathlib_name": "IsCadlag.isRightContinuous",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {f : X → Y}, IsCadlag.{u_1, u_2} f → IsRightContinuous.{u_1, u_2} f",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "projection name IsCadlag.right_continuous -> IsCadlag.isRightContinuous"
+        ],
+        "fixture_statement_prints_as_old_type": true
+      },
+      {
+        "name": "IsCadlag.left_limit",
+        "owner": "REMOVED (no alias); mapped to Mathlib field IsCadlag.tendsto_nhdsLT",
+        "old_v433_type": "∀ {ι : Type u_1} {E : Type u_2} [inst : TopologicalSpace.{u_1} ι] [inst_1 : TopologicalSpace.{u_2} E]\n  [inst_2 : Preorder.{u_1} ι] {f : ι → E},\n  IsCadlag.{u_1, u_2} f →\n    ∀ (x : ι), ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)",
+        "new_mathlib_name": "IsCadlag.tendsto_nhdsLT",
+        "new_mathlib_type": "∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace.{u_1} X] [inst_1 : Preorder.{u_1} X]\n  [inst_2 : TopologicalSpace.{u_2} Y] {f : X → Y},\n  IsCadlag.{u_1, u_2} f →\n    ∀ (x : X), ∃ l, Filter.Tendsto.{u_1, u_2} f (nhdsWithin.{u_1} x (Set.Iio.{u_1} x)) (nhds.{u_2} l)",
+        "differences": [
+          "type variables ι,E -> X,Y",
+          "instance order [TopologicalSpace ι] [TopologicalSpace E] [Preorder ι] -> [TopologicalSpace X] [Preorder X] [TopologicalSpace Y]",
+          "projection name IsCadlag.left_limit -> IsCadlag.tendsto_nhdsLT"
+        ],
+        "fixture_statement_prints_as_old_type": true
+      }
+    ],
+    "kept_vendor_declarations_unchanged": [
+      "IsCadlag.comp_of_monotone_of_continuous",
+      "IsCadlag.finite_largeLeftJumpSet",
+      "IsCadlag.fun_inv",
+      "IsCadlag.fun_neg",
+      "IsCadlag.inv",
+      "IsCadlag.leftJumpSet_eq_discontinuitySet",
+      "IsCadlag.neg",
+      "IsCadlag.norm",
+      "IsCadlag.norm_sq",
+      "IsCadlag.not_accPt_largeLeftJumpSet",
+      "IsRightContinuous.comp_of_monotone_of_continuous",
+      "isCadlag_const",
+      "isLocallyBounded_of_isCadlag",
+      "isRightContinuous_const",
+      "largeLeftJumpSet",
+      "leftJumpSet"
+    ],
+    "caller_map": [
+      {
+        "file": "formalization/vendor/BrownianMotion/BrownianMotion/StochasticIntegral/Cadlag.lean",
+        "decl": "IsCadlag.leftJumpSet_eq_discontinuitySet",
+        "old": "hf.right_continuous t",
+        "new": "hf.isRightContinuous t",
+        "class": "api-drift (upstream field name)"
+      },
+      {
+        "file": "same",
+        "decl": "IsCadlag.leftJumpSet_eq_discontinuitySet",
+        "old": "hf.left_limit t",
+        "new": "hf.tendsto_nhdsLT t",
+        "class": "api-drift (upstream field name)"
+      },
+      {
+        "file": "same",
+        "decl": "IsCadlag.not_accPt_largeLeftJumpSet",
+        "old": "hf.left_limit t / hf.left_limit x (x2) / hf.right_continuous t",
+        "new": "hf.tendsto_nhdsLT t / hf.tendsto_nhdsLT x (x2) / hf.isRightContinuous t",
+        "class": "api-drift (upstream field name), 4 sites"
+      },
+      {
+        "file": "same",
+        "decl": "IsCadlag.comp_of_monotone_of_continuous",
+        "old": "where right_continuous := hf.right_continuous.comp_of_monotone_of_continuous hψ hψc; left_limit x := ...; hf.left_limit (ψ x)",
+        "new": "where isRightContinuous := hf.isRightContinuous.comp_of_monotone_of_continuous hψ hψc; tendsto_nhdsLT x := ...; hf.tendsto_nhdsLT (ψ x)",
+        "class": "api-drift (upstream structure field names in where-structure instance + accessor), 4 tokens"
+      },
+      {
+        "file": "formalization/vendor/BrownianMotion/BrownianMotion/Auxiliary/StoppedProcess.lean",
+        "decl": "IsCadlag.stoppedProcess",
+        "old": "hX.right_continuous.stoppedProcess τ",
+        "new": "hX.isRightContinuous.stoppedProcess τ",
+        "class": "api-drift (upstream field name)"
+      },
+      {
+        "file": "same",
+        "decl": "IsCadlag.stoppedProcess",
+        "old": "hX.left_limit s",
+        "new": "hX.tendsto_nhdsLT s",
+        "class": "api-drift (upstream field name)"
+      },
+      {
+        "file": "formalization/vendor/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean",
+        "decl": "exists_adapted_ae_cadlag (proof body)",
+        "old": "hω.right_continuous (Real.toNNReal t)",
+        "new": "hω.isRightContinuous (Real.toNNReal t)",
+        "class": "api-drift (upstream field name)"
+      },
+      {
+        "file": "same",
+        "decl": "exists_adapted_ae_cadlag (proof body)",
+        "old": "hω.left_limit (Real.toNNReal t)",
+        "new": "hω.tendsto_nhdsLT (Real.toNNReal t)",
+        "class": "api-drift (upstream field name)"
+      }
+    ],
+    "no_change_needed": {
+      "continuous_comp_argument_order": "only uses are dot-notation hf.continuous_comp continuous_norm / hf.norm.continuous_comp (continuous_pow 2) in kept IsCadlag.norm/norm_sq; dot notation is order-independent, source unchanged",
+      "IsRightContinuous_abbrev_to_def": "no proof needed explicit unfolding (fun/intro/application of IsRightContinuous terms elaborate through the def); 0 unfold edits",
+      "const_smul": "no consumer in closure"
+    }
+  },
+  "A_duplicates": [
+    {
+      "name": "ProbabilityTheory.hasLaw_map",
+      "old_module": "BrownianMotion.Auxiliary.HasLaw",
+      "new_owner": "Mathlib.Probability.HasLaw",
+      "old_type": "∀ {Ω : Type u_1} {mΩ : MeasurableSpace.{u_1} Ω} {𝓧 : Type u_2} {m𝓧 : MeasurableSpace.{u_2} 𝓧} {X : Ω → 𝓧}\n  {P : MeasureTheory.Measure.{u_1} Ω},\n  AEMeasurable.{u_1, u_2} X P → ProbabilityTheory.HasLaw.{u_1, u_2} X (MeasureTheory.Measure.map.{u_1, u_2} X P) P",
+      "new_type": "∀ {Ω : Type u_1} {𝓧 : Type u_2} {mΩ : MeasurableSpace.{u_1} Ω} {m𝓧 : MeasurableSpace.{u_2} 𝓧} {X : Ω → 𝓧}\n  {P : MeasureTheory.Measure.{u_1} Ω},\n  AEMeasurable.{u_1, u_2} X P → ProbabilityTheory.HasLaw.{u_1, u_2} X (MeasureTheory.Measure.map.{u_1, u_2} X P) P",
+      "difference": "implicit binders {mΩ} and {𝓧} in swapped order; same statement"
+    },
+    {
+      "name": "tendsto_atBot_of_mapClusterPt",
+      "old_module": "BrownianMotion.Auxiliary.LeftLimWithin",
+      "new_owner": "Mathlib.Topology.Order.LeftRightLim (generated from its atTop counterpart)",
+      "note": "not in the observed 3227-name baseline; removed vendored copy had the same hypotheses"
+    }
+  ],
+  "comparison_counts": {
+    "identical": 3144,
+    "E11: owner move, recorded type differences (E11-type-map.json)": 29,
+    "E10: owner move, identical type": 33,
+    "E11 removed projection -> Mathlib IsCadlag.tendsto_nhdsLT": 1,
+    "E11 removed projection -> Mathlib IsCadlag.isRightContinuous": 1,
+    "E9a: authorized AEStronglyMeasurable premise addition": 1,
+    "E7c: authorized AEStronglyMeasurable premise addition": 1,
+    "E7b: authorized AEStronglyMeasurable premise addition": 1,
+    "E7a: authorized AEStronglyMeasurable premise addition": 1,
+    "E1: authorized AEStronglyMeasurable premise addition": 1,
+    "generated/elaborated universe max operands commuted only": 13,
+    "A-duplicate: owner move, implicit binders {mΩ} {𝓧} reordered only": 1
+  }
+}

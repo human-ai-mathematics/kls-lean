@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.ConditionalFiber.Closed
-import FunctionalInequalities.Probability.LogConcave
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.KLS.ConditionalFiber.Closed
+public import FunctionalInequalities.Probability.LogConcave
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `lem:conditional-fiber-form`
@@ -18,6 +20,8 @@ The Blueprint states the lemma for full-dimensional log-concave laws with a dens
 moment and an admissible frame; the Lean theorem needs none of these hypotheses. No comparison with
 a gradient energy, no fiber Poincaré input, no frame bound and no Poincaré inequality is claimed.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Graph.Area
-import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import FunctionalInequalities.Analysis.Graph.Area
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Local `C^∞` graph representation of a regular level set
@@ -58,6 +60,8 @@ the implicit function on the whole parameter neighbourhood, so no consumer ever 
 * `hausdorffNormalized_image_graphChartMap`: the area formula for a *translated* graph map,
   which is the form a boundary chart produces.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -657,7 +661,8 @@ theorem normalized_gradient_map (hsp : IsGraphSplitting ι e) (hφ : Differentia
 
 end GraphRepr
 
-/-- **Local `C^∞` graph representation of a regular level set.**  If `φ` is `C^∞` with `φ x₀ = 0`
+/--
+**Local `C^∞` graph representation of a regular level set.**  If `φ` is `C^∞` with `φ x₀ = 0`
 and `gradient φ x₀ = c • e`, `c > 0`, then inside a cylinder contained in any prescribed
 neighbourhood `N₀` of `x₀` the zero set of `φ` is exactly the graph of a globally `C^∞` height
 function over an open tangential neighbourhood of the origin, and `{φ < 0}` is exactly the part of
@@ -668,14 +673,16 @@ The height function is globally `C^∞`: the inverse function theorem
 `ContDiffBump` supported in a ball on which that smoothness holds turns it into a global one
 without changing the function on the parameter neighbourhood, which is shrunk to the ball where
 the bump equals `1`. -/
-theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitting ι e)
-    {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) {x₀ : V} (hφ0 : φ x₀ = 0) {c : ℝ} (hc : 0 < c)
+theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitting ι e) {φ : V → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) {x₀ : V} (hφ0 : φ x₀ = 0) {c : ℝ} (hc : 0 < c)
     (hgrad : gradient φ x₀ = c • e) {N₀ : Set V} (hN₀ : N₀ ∈ 𝓝 x₀) :
     ∃ G : GraphRepr ι e φ x₀, G.cylinder ⊆ N₀ := by
   classical
   obtain ⟨g₀, Ω₀, hΩopen, h0Ω, hg₀0, hg₀smooth, hg₀graph⟩ :=
-    exists_local_implicit ι hsp hφ hφ0 hc hgrad
+    exists_local_implicit ι hsp hφ hφ0 hc
+      hgrad
   -- a ball of tangential parameters on which `g₀` is smooth
+
   obtain ⟨r₀, hr₀, hball₀⟩ := Metric.isOpen_iff.mp hΩopen 0 h0Ω
   set ρ : ℝ := r₀ / 4 with hρdef
   have hρ : 0 < ρ := by positivity
@@ -686,6 +693,7 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
     rw [hρdef] at hy
     linarith
   -- the cutoff
+
   set χ : ContDiffBump (0 : H) := ⟨ρ, 2 * ρ, hρ, by linarith⟩ with hχdef
   set g : H → ℝ := fun y => χ y * g₀ y with hgdef
   have hχrIn : χ.rIn = ρ := rfl
@@ -711,6 +719,7 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
   have hg0 : g 0 = 0 := by
     rw [hgeq 0 (Metric.mem_closedBall_self hρ.le), hg₀0]
   -- the region in which `e` is a direction of strict increase of `φ`
+
   have hgradcont : Continuous fun x : V => gradient φ x := by
     have hfd : Continuous (fderiv ℝ φ) := hφ.continuous_fderiv (by simp)
     exact (InnerProductSpace.toDual ℝ V).symm.continuous.comp hfd
@@ -720,8 +729,7 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
     simp only [Set.mem_ofPred_eq, hgrad, real_inner_smul_left, hsp.inner_e_self, mul_one]
     exact hc
   obtain ⟨O, hON, hOopen, hx₀O⟩ := mem_nhds_iff.mp hN₀
-  obtain ⟨r, hr, hballr⟩ :=
-    Metric.isOpen_iff.mp (hOopen.inter hW₁open) x₀ ⟨hx₀O, hx₀W₁⟩
+  obtain ⟨r, hr, hballr⟩ := Metric.isOpen_iff.mp (hOopen.inter hW₁open) x₀ ⟨hx₀O, hx₀W₁⟩
   set δ : ℝ := r / 2 with hδdef
   have hδ : 0 < δ := by positivity
   set ρ₂ : ℝ := min ρ (r / 2) with hρ₂def
@@ -744,28 +752,36 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
   have hΩgraph : ∀ y ∈ Ω, φ (x₀ + ι y + g y • e) = 0 := by
     intro y hy
     rw [hgeq y (hΩsub hy)]
-    exact hg₀graph y (hΩsub₀ hy)
+    exact
+      hg₀graph y
+        (hΩsub₀ hy)
   -- points of the cylinder sit in the ball of radius `r`
+
   have hpt : ∀ y : H, ‖y‖ < r / 2 → ∀ u : ℝ, |u| ≤ δ → x₀ + ι y + u • e ∈ Metric.ball x₀ r := by
     intro y hy u hu
     have hsub : (x₀ + ι y + u • e) - x₀ = ι y + u • e := by abel
     simp only [Metric.mem_ball, dist_eq_norm, hsub]
     have hn := hsp.norm_add_smul_sq y u
-    have hu2 : u ^ 2 ≤ δ ^ 2 := by
-      rw [← sq_abs u]; nlinarith [abs_nonneg u]
+    have hu2 : u ^ 2 ≤ δ ^ 2 := by rw [← sq_abs u]; nlinarith [abs_nonneg u]
     nlinarith [norm_nonneg (ι y + u • e), norm_nonneg y]
   have hcylball : graphCylinder ι e x₀ Ω δ ⊆ Metric.ball x₀ r := by
     intro x hx
     have hx' := eq_graphChartMap_coord hsp x₀ x
     rw [hx']
-    exact hpt _ (hΩnorm _ hx.1) _ (le_of_lt hx.2)
+    exact
+      hpt _ (hΩnorm _ hx.1) _
+        (le_of_lt hx.2)
   -- strict monotonicity of `φ` in the direction `e` inside the cylinder
-  have hderiv : ∀ (y : H) (u : ℝ), HasDerivAt (fun u : ℝ => φ (x₀ + ι y + u • e))
-      (⟪gradient φ (x₀ + ι y + u • e), e⟫ : ℝ) u := by
+
+  have hderiv :
+    ∀ (y : H) (u : ℝ),
+      HasDerivAt (fun u : ℝ => φ (x₀ + ι y + u • e)) (⟪gradient φ (x₀ + ι y + u • e), e⟫ : ℝ)
+        u := by
     intro y u
     have hpath : HasDerivAt (fun u : ℝ => x₀ + ι y + u • e) e u := by
       simpa using ((hasDerivAt_id u).smul_const e).const_add (x₀ + ι y)
-    have h := ((hφ.differentiable (by simp) (x₀ + ι y + u • e)).hasFDerivAt).comp_hasDerivAt u hpath
+    have h :=
+      ((hφ.differentiable (by simp) (x₀ + ι y + u • e)).hasFDerivAt).comp_hasDerivAt u hpath
     have hg : fderiv ℝ φ (x₀ + ι y + u • e) e = (⟪gradient φ (x₀ + ι y + u • e), e⟫ : ℝ) := by
       rw [← fderiv_eq_innerSL_gradient φ (x₀ + ι y + u • e)]
       rw [innerSL_apply_apply]
@@ -778,18 +794,20 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
       have huI : u ∈ Set.Icc (-δ) δ := interior_subset hu
       have habs : |u| ≤ δ := abs_le.mpr ⟨huI.1, huI.2⟩
       rw [(hderiv y u).deriv]
-      exact (hballr (hpt y (hΩnorm y hy) u habs)).2
+      exact
+        (hballr (hpt y (hΩnorm y hy) u habs)).2
   -- the side condition
-  have hside : ∀ x ∈ graphCylinder ι e x₀ Ω δ,
+
+  have hside :
+    ∀ x ∈ graphCylinder ι e x₀ Ω δ,
       (φ x < 0 ↔ graphHeight e x₀ x < g (graphCoord ι x₀ x)) ∧
-      (φ x = 0 ↔ graphHeight e x₀ x = g (graphCoord ι x₀ x)) := by
+        (φ x = 0 ↔ graphHeight e x₀ x = g (graphCoord ι x₀ x)) := by
     intro x hx
     obtain ⟨hy, ht⟩ := hx
     set y : H := graphCoord ι x₀ x with hydef
     set t : ℝ := graphHeight e x₀ x with htdef
     have hxeq : x = x₀ + ι y + t • e := eq_graphChartMap_coord hsp x₀ x
-    have htI : t ∈ Set.Icc (-δ) δ := by
-      rw [Set.mem_Icc, ← abs_le]; exact ht.le
+    have htI : t ∈ Set.Icc (-δ) δ := by rw [Set.mem_Icc, ← abs_le]; exact ht.le
     have hsI : g y ∈ Set.Icc (-δ) δ := by
       rw [Set.mem_Icc, ← abs_le]
       exact (hy.2 : |g y| < δ).le
@@ -799,7 +817,8 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
     · rw [hxeq]
       constructor
       · intro hlt
-        have : (fun u : ℝ => φ (x₀ + ι y + u • e)) t < (fun u : ℝ => φ (x₀ + ι y + u • e)) (g y) := by
+        have :
+          (fun u : ℝ => φ (x₀ + ι y + u • e)) t < (fun u : ℝ => φ (x₀ + ι y + u • e)) (g y) := by
           simpa [hs0] using hlt
         exact (hM.lt_iff_lt htI hsI).mp this
       · intro hlt
@@ -808,23 +827,25 @@ theorem exists_graphRepr (ι : H →ₗᵢ[ℝ] V) {e : V} (hsp : IsGraphSplitti
     · rw [hxeq]
       constructor
       · intro heq
-        have : (fun u : ℝ => φ (x₀ + ι y + u • e)) t = (fun u : ℝ => φ (x₀ + ι y + u • e)) (g y) := by
+        have :
+          (fun u : ℝ => φ (x₀ + ι y + u • e)) t = (fun u : ℝ => φ (x₀ + ι y + u • e)) (g y) := by
           simpa [hs0] using heq
         exact hM.injOn htI hsI this
       · intro heq
         rw [heq]; exact hs0
-  refine ⟨{ height := g
-            param := Ω
-            depth := δ
-            contDiff_height := hgsmooth
-            isOpen_param := hΩopen'
-            zero_mem_param := h0Ω'
-            height_zero := hg0
-            depth_pos := hδ
-            abs_height_lt := fun y hy => hy.2
-            inner_gradient_pos := fun x hx => (hballr (hcylball hx)).2
-            lt_iff := fun x hx => (hside x hx).1
-            eq_iff := fun x hx => (hside x hx).2 }, ?_⟩
+  refine
+    ⟨{  height := g
+        param := Ω
+        depth := δ
+        contDiff_height := hgsmooth
+        isOpen_param := hΩopen'
+        zero_mem_param := h0Ω'
+        height_zero := hg0
+        depth_pos := hδ
+        abs_height_lt := fun y hy => hy.2
+        inner_gradient_pos := fun x hx => (hballr (hcylball hx)).2
+        lt_iff := fun x hx => (hside x hx).1
+        eq_iff := fun x hx => (hside x hx).2 }, ?_⟩
   exact fun x hx => hON (hballr (hcylball hx)).1
 
 end Repr

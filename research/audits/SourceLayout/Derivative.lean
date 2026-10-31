@@ -1,8 +1,13 @@
-import FunctionalInequalities.Analysis.Divergence
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Divergence
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import Lean
+meta import Lean
 
 /-! Clients for Mathlib derivative reuse and the shared gradient consequence. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

@@ -1,11 +1,13 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
-import Mathlib.MeasureTheory.Integral.PeakFunction
-import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
-import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.MeasureTheory.Integral.Bochner.Set
-import Mathlib.Topology.ContinuousMap.Bounded.Normed
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+public import Mathlib.MeasureTheory.Integral.PeakFunction
+public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+public import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+public import Mathlib.MeasureTheory.Integral.Bochner.Set
+public import Mathlib.Topology.ContinuousMap.Bounded.Normed
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Pointwise approximation by normalized Gaussian smoothing
@@ -15,6 +17,8 @@ point of an actual Borell density, the smoothed density converges to the
 source value as inverse variance tends to infinity. This is a pointwise
 statement; convergence of laws and geometric/Poincare stability are separate.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -27,20 +31,19 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 private theorem normalizedKernel_scale (c : ℝ) (hc : 0 < c) (z : V) :
-    normalizedKernel (c ^ 2) z =
-      c ^ Module.finrank ℝ V * normalizedKernel 1 (c • z) := by
+    normalizedKernel (c ^ 2) z = c ^ Module.finrank ℝ V * normalizedKernel 1 (c • z) := by
   unfold normalizedKernel kernel mass
-  have hpow : (Real.pi / c ^ 2) ^ ((Module.finrank ℝ V : ℝ) / 2) =
+  have hpow :
+    (Real.pi / c ^ 2) ^ ((Module.finrank ℝ V : ℝ) / 2) =
       Real.pi ^ ((Module.finrank ℝ V : ℝ) / 2) / c ^ Module.finrank ℝ V := by
     rw [Real.div_rpow Real.pi_nonneg (sq_nonneg _)]
-    have hd : (c ^ 2) ^ ((Module.finrank ℝ V : ℝ) / 2) =
-        c ^ Module.finrank ℝ V := by
+    have hd : (c ^ 2) ^ ((Module.finrank ℝ V : ℝ) / 2) = c ^ Module.finrank ℝ V := by
       calc
         (c ^ 2) ^ ((Module.finrank ℝ V : ℝ) / 2) =
-            (c ^ (2 : ℝ)) ^ ((Module.finrank ℝ V : ℝ) / 2) := congrArg (fun x : ℝ => x ^ ((Module.finrank ℝ V : ℝ) / 2))
-              (Real.rpow_natCast c 2).symm
-        _ = c ^ ((2 : ℝ) * ((Module.finrank ℝ V : ℝ) / 2)) :=
-          (Real.rpow_mul hc.le _ _).symm
+            (c ^ (2 : ℝ)) ^ ((Module.finrank ℝ V : ℝ) / 2) :=
+          congrArg (fun x : ℝ => x ^ ((Module.finrank ℝ V : ℝ) / 2))
+            (Real.rpow_natCast c 2).symm
+        _ = c ^ ((2 : ℝ) * ((Module.finrank ℝ V : ℝ) / 2)) := (Real.rpow_mul hc.le _ _).symm
         _ = c ^ (Module.finrank ℝ V : ℝ) := by congr 1; ring
         _ = c ^ Module.finrank ℝ V := Real.rpow_natCast c _
     rw [hd]
@@ -278,10 +281,10 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 private theorem density_integral (g : E → ℝ) (hg : Measurable g) (hg0 : ∀ y, 0 ≤ g y)
-    (f : BoundedContinuousFunction E ℝ) : (∫ y, f y ∂(volume.withDensity (fun y => ENNReal.ofReal (g y)))) =
-      ∫ y : E, g y * f y := by
+    (f : BoundedContinuousFunction E ℝ) :
+    (∫ y, f y ∂(volume.withDensity (fun y => ENNReal.ofReal (g y)))) = ∫ y : E, g y * f y := by
   rw [integral_withDensity_eq_integral_toReal_smul hg.ennreal_ofReal
-    (ae_of_all _ fun y => ENNReal.ofReal_lt_top)]
+      (ae_of_all _ fun y => ENNReal.ofReal_lt_top)]
   congr 1
   funext y
   rw [ENNReal.toReal_ofReal (hg0 y), smul_eq_mul]
@@ -294,14 +297,16 @@ private theorem bounded_density_integrable {g : E → ℝ} (hg : Integrable g vo
   rw [norm_mul]
   exact mul_le_mul_of_nonneg_left (f.norm_coe_le_norm y) (norm_nonneg _)
 
-/-- Integrals of bounded continuous functions against the smoothed laws converge to those against `μ`
+/--
+Integrals of bounded continuous functions against the smoothed laws converge to those against `μ`
 (`L¹` convergence of the normalized densities). -/
 theorem smoothedLaw_integral_bounded_tendsto {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) (f : BoundedContinuousFunction E ℝ) :
     Tendsto (fun s : ℝ => ∫ y, f y ∂(smoothedLaw μ s)) atTop (𝓝 (∫ y, f y ∂μ)) := by
   have hρi := source_integrable hρ
-  have hlim : Tendsto (fun s : ℝ => ‖f‖ * ∫ y : E, |normalizedDensity ρ s y - ρ y|)
-      atTop (𝓝 (0 : ℝ)) := by simpa only [mul_zero] using (normalizedDensity_tendsto_L1 hρ).const_mul ‖f‖
+  have hlim :
+    Tendsto (fun s : ℝ => ‖f‖ * ∫ y : E, |normalizedDensity ρ s y - ρ y|) atTop (𝓝 (0 : ℝ)) := by
+    simpa only [mul_zero] using (normalizedDensity_tendsto_L1 hρ).const_mul ‖f‖
   apply tendsto_iff_norm_sub_tendsto_zero.2
   refine squeeze_zero' (Eventually.of_forall fun s => norm_nonneg _) ?_ hlim
   filter_upwards [Ioi_mem_atTop (0 : ℝ)] with s hs
@@ -310,19 +315,21 @@ theorem smoothedLaw_integral_bounded_tendsto {μ : Measure E} [IsProbabilityMeas
   have hρd := bounded_density_integrable hρi f
   have hdiff := hFi.sub hρi
   have hD := bounded_density_integrable hdiff f
-  have hEq : (∫ y, f y ∂(smoothedLaw μ s)) - (∫ y, f y ∂μ) =
+  have hEq :
+    (∫ y, f y ∂(smoothedLaw μ s)) - (∫ y, f y ∂μ) =
       ∫ y : E, (normalizedDensity ρ s y - ρ y) * f y := by
     rw [smoothedLaw_eq_withDensity_normalizedDensity hρ hs, ← hρ.withDensity_eq,
       density_integral _ (normalizedDensity_measurable hρ.measurable hs)
-        (fun y => (normalizedDensity_pos hρ hs y).le), density_integral _ hρ.measurable hρ.nonneg,
-      ← integral_sub hFd hρd]
+        (fun y => (normalizedDensity_pos hρ hs y).le),
+      density_integral _ hρ.measurable hρ.nonneg, ← integral_sub hFd hρd]
     congr 1
     funext y
     ring
   rw [hEq]
   calc
     ‖∫ y : E, (normalizedDensity ρ s y - ρ y) * f y‖ ≤
-        ∫ y : E, ‖(normalizedDensity ρ s y - ρ y) * f y‖ := norm_integral_le_integral_norm _
+        ∫ y : E, ‖(normalizedDensity ρ s y - ρ y) * f y‖ :=
+      norm_integral_le_integral_norm _
     _ ≤ ∫ y : E, |normalizedDensity ρ s y - ρ y| * ‖f‖ := by
       apply integral_mono hD.norm (hdiff.abs.mul_const ‖f‖)
       intro y

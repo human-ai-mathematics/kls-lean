@@ -1,6 +1,9 @@
-import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
-import Lean
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.HessianIncrement
+public import Lean
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+meta import Lean
 /-! Audit client for the integrated Hessian-increment energy support of the weak Letwin route
 (Letwin arXiv:2607.24164v1, toward Theorem 2.5): centered second-difference regularity and bounds
 (`Analysis/Convex/SecondOrder/Difference.lean`), total coordinate Hessian-entry measurability and
@@ -10,6 +13,8 @@ increment integrability with the original integrated energy estimate
 (`Analysis/Convex/SecondOrder/HessianIncrement.lean`). Each section restates the exact library
 statement and consumes it in an actual client, including the integrable uniform
 difference-quotient bound. Canonical imports only. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -255,13 +260,13 @@ run_cmd do
 
 run_cmd do
   let env ← Lean.getEnv
-  for (n, h) in [(`FunctionalInequalities.Analysis.centeredDifference_contDiff_lipschitz_gradient, (265072094 : UInt64)),
+  for (n, h) in [(`FunctionalInequalities.Analysis.centeredDifference_contDiff_lipschitz_gradient, (2767886345 : UInt64)),
       (`FunctionalInequalities.Analysis.centeredDifference_nonneg_le, 3239914189),
       (`FunctionalInequalities.Probability.Stein.measurable_hessianMatrix_entry, 298734493),
       (`FunctionalInequalities.Probability.Stein.norm_hessianMatrix_entry_le_of_lipschitz_gradient, 1711842242),
-      (`FunctionalInequalities.Analysis.integrable_hessian_increment_energy, 615525409),
-      (`FunctionalInequalities.Analysis.integrable_weak_generator_densities, 1222551683),
-      (`FunctionalInequalities.Analysis.integral_mul_hessian_increment_le, 211311595)] do
+      (`FunctionalInequalities.Analysis.integrable_hessian_increment_energy, 1553319955),
+      (`FunctionalInequalities.Analysis.integrable_weak_generator_densities, 1274698679),
+      (`FunctionalInequalities.Analysis.integral_mul_hessian_increment_le, 1167846656)] do
     let some ci := env.find? n | throwError "Missing frozen declaration: {n}"
     unless ci.levelParams.isEmpty && hash ci.type == h do
       throwError "Complete type changed: {n}"

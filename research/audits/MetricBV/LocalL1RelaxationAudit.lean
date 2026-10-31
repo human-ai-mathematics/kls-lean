@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
 
 /-! Independent full-signature clients for the compact-local relaxation infimum: the class asks
 only for local Lipschitz continuity and bare indicator-`L¹` convergence on every compact set (no
@@ -8,6 +10,8 @@ sequence bounds the compact relaxation; a compact-convergent sequence bounds the
 the compact/closed-ball premise equivalence; empty class `⊤`, `⊤` transfer, the zero measure and
 the empty carrier; the closed-support law of a proper law and the actual closed intrinsic support
 of a finite-dimensional law, without convexity or log-concavity. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

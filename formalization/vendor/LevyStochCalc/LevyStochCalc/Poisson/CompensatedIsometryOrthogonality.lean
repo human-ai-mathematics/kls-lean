@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.CompensatedIsometry
-import LevyStochCalc.Poisson.Filtered
-import Mathlib.Probability.Independence.Integration
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.CompensatedIsometry
+public import LevyStochCalc.Poisson.Filtered
+public import Mathlib.Probability.Independence.Integration
 
 /-!
 # Orthogonality of compensated-Poisson increments along a simple integrand
@@ -16,6 +20,8 @@ measure `N`, with boxes `B_i = (t_i, t_{i+1}] × A_i`: the diagonal identity
 `∫ (ξ_i · Ñ(B_i)) · (ξ_j · Ñ(B_j)) ∂P = 0` for `i < j`, both coming from the independence
 of the past at `t_i` from the increment over `(t_i, t_{i+1}]`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

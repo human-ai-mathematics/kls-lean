@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Harmonic.BallHolder
-import Mathlib.Tactic.FinCases
+module
+
+public import FunctionalInequalities.Analysis.Harmonic.BallHolder
+public import Mathlib.Tactic.FinCases
 
 /-!
 # Audit: harmonic reproduction and Hessian bounds on a planar quadratic
@@ -10,17 +12,21 @@ of Theorem 2.10 / (2.31) (`FunctionalInequalities/Analysis/Harmonic/`), on the n
 planar quadratic `q(x) = x₀² - x₁²` on `ℝ²`:
 
 * `quadratic_smooth`, `quadratic_hessian`, `quadratic_hessian_nonzero`, `quadratic_laplacian`,
-  `quadratic_bound`: `q` is smooth, its Hessian is the constant `diag(2, -2)` (so `D²q(e₀, e₀) = 2`),
+  `quadratic_bound`: `q` is smooth, its Hessian is the constant `diag(2, -2)` (so `D²q(e₀, e₀) =
+  2`),
   `Δq = 0`, and `|q| ≤ 8` on `B₂(0)`;
 * `quadratic_reproduces`: `q = annularKernel 2 (1/8) ⋆ harmonicLocalization 2 q` on `B₁(0)`
   (`local_harmonic_reproduces`, planar logarithmic kernel);
 * `quadratic_derivative_caps`: the second and third derivative caps of
   `local_harmonic_derivative_caps` with `M = 8` (the third derivative of `q` is `0`);
-* `quadratic_holder_client`: `ball_harmonic_hessian_holder` with `c = 0`, `R = 1`, `α = 1/2`, `M = 8`.
+* `quadratic_holder_client`: `ball_harmonic_hessian_holder` with `c = 0`, `R = 1`, `α = 1/2`, `M =
+  8`.
 
 The harmonicity and the value bound are proved, not assumed; the constants are the theorems'
 constants, chosen before `q`.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric MeasureTheory
 open scoped ContDiff Topology Convolution
@@ -47,11 +53,14 @@ theorem quadratic_smooth : ContDiff ℝ ∞ quadratic :=
 
 theorem quadratic_fderiv : fderiv ℝ quadratic = fun x => quadraticHessian x := by
   funext x
-  have hh := (((coordinate 0).hasFDerivAt (x := x)).mul ((coordinate 0).hasFDerivAt)).sub
-    (((coordinate 1).hasFDerivAt).mul ((coordinate 1).hasFDerivAt))
-  change fderiv ℝ (fun i : E => coordinate 0 i * coordinate 0 i - coordinate 1 i * coordinate 1 i) x = _
-  simpa only [ Pi.mul_def, Pi.sub_def, quadraticHessian, map_sub, map_add,
-    sub_apply, add_apply,
+  have hh :=
+    (((coordinate 0).hasFDerivAt (x := x)).mul ((coordinate 0).hasFDerivAt)).sub
+      (((coordinate 1).hasFDerivAt).mul ((coordinate 1).hasFDerivAt))
+  change
+    fderiv ℝ (fun i : E => coordinate 0 i * coordinate 0 i - coordinate 1 i * coordinate 1 i)
+        x =
+      _
+  simpa only [Pi.mul_def, Pi.sub_def, quadraticHessian, map_sub, map_add, sub_apply, add_apply,
     ContinuousLinearMap.smulRight_apply] using hh.fderiv
 
 theorem quadratic_hessian (x : E) : fderiv ℝ (fderiv ℝ quadratic) x = quadraticHessian := by
@@ -59,7 +68,8 @@ theorem quadratic_hessian (x : E) : fderiv ℝ (fderiv ℝ quadratic) x = quadra
   exact quadraticHessian.fderiv
 
 theorem quadratic_hessian_nonzero :
-    fderiv ℝ (fderiv ℝ quadratic) 0 (EuclideanSpace.single 0 1) (EuclideanSpace.single 0 1) = 2 := by
+    fderiv ℝ (fderiv ℝ quadratic) 0 (EuclideanSpace.single 0 1) (EuclideanSpace.single 0 1) =
+      2 := by
   rw [quadratic_hessian]
   norm_num [quadraticHessian, coordinate]
 
@@ -94,14 +104,21 @@ theorem quadratic_reproduces : ∀ x ∈ ball (0 : E) 1,
   local_harmonic_reproduces (by norm_num) quadratic_c2 (fun x _ => quadratic_laplacian x)
 
 /-- An invocation of both the second and the third derivative bounds. The Hessian entry above is
-`2`; the third derivative bound is invoked on the quadratic itself, whose third derivative is `0`. -/
-theorem quadratic_derivative_caps : ∃ C2 C3 : ℝ, 0 < C2 ∧ 0 < C3 ∧
-    ∀ x ∈ ball (0 : E) 1, ‖fderiv ℝ (fderiv ℝ quadratic) x‖ ≤ C2 * 8 ∧
-      ‖iteratedFDeriv ℝ 3 quadratic x‖ ≤ C3 * 8 := by
-  obtain ⟨C1, C2, C3, _, hC2, hC3, hcaps⟩ := local_harmonic_derivative_caps (by norm_num : 2 ≤ 2)
+`2`; the third derivative bound is invoked on the quadratic itself, whose third derivative is `0`.
+-/
+theorem quadratic_derivative_caps :
+    ∃ C2 C3 : ℝ,
+      0 < C2 ∧
+        0 < C3 ∧
+          ∀ x ∈ ball (0 : E) 1,
+            ‖fderiv ℝ (fderiv ℝ quadratic) x‖ ≤ C2 * 8 ∧
+              ‖iteratedFDeriv ℝ 3 quadratic x‖ ≤ C3 * 8 := by
+  obtain ⟨C1, C2, C3, _, hC2, hC3, hcaps⟩ :=
+    local_harmonic_derivative_caps (by norm_num : 2 ≤ 2)
   refine ⟨C2, C3, hC2, hC3, ?_⟩
   intro x hx
-  have hh := (hcaps quadratic quadratic_c2 (fun y _ => quadratic_laplacian y) 8 quadratic_bound).2 x hx
+  have hh :=
+    (hcaps quadratic quadratic_c2 (fun y _ => quadratic_laplacian y) 8 quadratic_bound).2 x hx
   refine ⟨hh.2.1, ?_⟩
   rw [← norm_iteratedFDeriv_fderiv (n := 2), ← norm_iteratedFDeriv_fderiv (n := 1),
     norm_iteratedFDeriv_one]

@@ -1,10 +1,14 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.FormRange
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.FormRange
 
 /-! Independent clients of the class-level form-range density. The law is `ν = m.tilted (-U)`
 for a smooth potential, the closed gradient `T̄` has unit weight, `A = T̄†T̄`, `J = I + A`, and
 the form domain `D(T̄)` carries the graph norm. The clients instantiate an arbitrary target
 `z ∈ D(T̄)`, extract an approximating sequence, check the norm and operator bridges
 separately, and check zero dimension, where `J = I`. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology
@@ -144,14 +148,16 @@ theorem zero_dimension_energy (h0 : Module.finrank ℝ V = 0) (w f : V → ℝ) 
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.formOperator_eq_sub_weightedLaplacian
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.contDiff_formOperator
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.hasCompactSupport_formOperator
-#print axioms FunctionalInequalities.Analysis.WaveSplitting.weightedFormEnergy_eq_integral_norm_gradient
+#print axioms
+  FunctionalInequalities.Analysis.WaveSplitting.weightedFormEnergy_eq_integral_norm_gradient
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.integrable_exp_neg_of_tilted
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.integral_exp_neg_pos_of_tilted
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.integral_exp_neg_mul_eq_of_tilted
 #print axioms FunctionalInequalities.Analysis.WaveSplitting.weightedFormEnergy_eq_mul_integral
 #print axioms FunctionalInequalities.KLS.LogConcave.norm_sq_add_norm_closedWeightedOperator_sq_eq
 #print axioms FunctionalInequalities.KLS.LogConcave.toLp_add_adjointComp_eq_formOperator
-#print axioms FunctionalInequalities.KLS.LogConcave.toLp_add_adjointComp_mem_closedWeightedOperator_domain
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.toLp_add_adjointComp_mem_closedWeightedOperator_domain
 #print axioms FunctionalInequalities.KLS.LogConcave.exists_toLp_add_adjointComp_graph_lt
 #print axioms FunctionalInequalities.KLS.LogConcave.dense_formRange_graphL2
 end WaveSplittingFormRangeAudit

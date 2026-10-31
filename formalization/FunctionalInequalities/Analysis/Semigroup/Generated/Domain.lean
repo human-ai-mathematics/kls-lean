@@ -1,9 +1,13 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
 
 /-! # Generator domain invariance
 Right generator limits characterize `D(T†T)`. Invariance below requires domain inputs;
 it does not assert positive-time smoothing or classical representatives.
 -/
+
+@[expose] public section
 noncomputable section
 open InnerProductSpace
 open scoped RealInnerProductSpace LinearPMap

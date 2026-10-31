@@ -1,10 +1,12 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
-import FunctionalInequalities.KLS.LogConcave.Line.Hazard
-import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
-import FunctionalInequalities.Poincare.SmoothTest.Linear
-import Mathlib.Probability.Moments.Variance
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
+public import FunctionalInequalities.KLS.LogConcave.Line.Hazard
+public import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+public import FunctionalInequalities.Poincare.SmoothTest.Linear
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Route statements for the Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`
@@ -67,6 +69,8 @@ A localization argument uses Lovász–Simonovits bisection, a needle limit and 
 constants to needles. Neither description is a proof produced by a `#check` below.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory ProbabilityTheory Filter Topology Set FunctionalInequalities
@@ -86,7 +90,8 @@ open scoped ENNReal NNReal
 
 /-! ### B0 — the general Buser contract, every dimension, constant `π`
 
-Recorded verbatim as the Blueprint states it; separate from the one-dimensional contracts `Q0`–`Q5`. -/
+Recorded verbatim as the Blueprint states it; separate from the one-dimensional contracts `Q0`–`Q5`.
+-/
 
 #check (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
@@ -99,7 +104,8 @@ Recorded verbatim as the Blueprint states it; separate from the one-dimensional 
 #check (∀ (ν : ProbabilityMeasure ℝ), LogConcave ν →
     (minkowskiConstant ν)⁻¹ ^ 2 ≤ 12 * Poincare.SmoothTest.constant (ν : Measure ℝ))
 
-/-! ### Q0' — one-dimensional target in the Blueprint's variables: affine support of dimension at most one -/
+/-! ### Q0' — one-dimensional target in the Blueprint's variables: affine support of dimension at
+most one -/
 
 #check (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
@@ -143,7 +149,8 @@ Recorded verbatim as the Blueprint states it; separate from the one-dimensional 
 
 /-! ### D1 — comparison of the constants: `12` is not `π`
 
-This chain does not give `π`: the chain `h_M ≥ 2ρ(m)`, `ρ_max ≤ 2ρ(m)`, `Var ≥ 1/(12 ρ_max²)` loses a
+This chain does not give `π`: the chain `h_M ≥ 2ρ(m)`, `ρ_max ≤ 2ρ(m)`, `Var ≥ 1/(12 ρ_max²)` loses
+a
 factor at each step, and the exponential law shows `Q2` and the one-dimensional Cheeger bound are
 individually sharp.  Recorded as the (true, trivial) numerical statement that `π < 12`, so the
 one-dimensional bound with `12` is weaker than the Blueprint's bound with `π`. -/

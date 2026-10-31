@@ -1,29 +1,39 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Temperate
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Temperate
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 
 /-!
 # The energy recursion of BKL Lemma 3.4 and Corollary 3.5
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), (33)–(39), (45)–(47), Lemma 3.4 and Corollary 3.5. Tensor
 fields take values in finite-dimensional real inner product spaces, and the gradient of a tensor
-field adds a first index: `gradCoord u = (Du(e_i))_i ∈ PiLp 2 (Fin n → G)`, whose norm is the source's
+field adds a first index: `gradCoord u = (Du(e_i))_i ∈ PiLp 2 (Fin n → G)`, whose norm is the
+source's
 Hilbert–Schmidt norm over the derivative index and all trailing indices. For a pair `g = h_i`,
 `h = h_{i+1}` of temperate fields satisfying the defining Poisson relation (30)
 `-ℒh = α ∇₀g` (`∇₀g = ∇g - ∫ ∇g`) and the normalization (33) `‖∇h‖² = ‖∇₀g‖²`, the orthogonality
 `⟨∇²g, ∇h⟩ = α ‖∇h‖²`, the Pythagorean identity (39), the identities (46), (47) and the energy
-inequality (45) `‖ℒg‖² ≥ ‖ℒh‖² + χ + a ‖∇g‖²` are derived (the zero scale `α = 0` included). Corollary
-3.5 is the telescoping/summability consequence, both for abstract real sequences and for a sequence of
+inequality (45) `‖ℒg‖² ≥ ‖ℒh‖² + χ + a ‖∇g‖²` are derived (the zero scale `α = 0` included).
+Corollary
+3.5 is the telescoping/summability consequence, both for abstract real sequences and for a sequence
+of
 tensor iterates `h_k : E → G k`, where linear isometries `ι k : PiLp 2 (Fin n → G k) ≃ₗᵢ G (k+1)`
 identify the gradient space of level `k` with level `k+1` and every consecutive pair satisfies (30)
-and (33) with curvature `∇²V ≥ a > 0`. Also (35), (36) (the energy drop `v_i - v_{i+1} = ‖∫ ∇h_i‖²` under
+and (33) with curvature `∇²V ≥ a > 0`. Also (35), (36) (the energy drop `v_i - v_{i+1} = ‖∫ ∇h_i‖²`
+under
 (33) and its telescoped form), the symmetry of `∇²f` in its first two indices, and Lemma 3.2: under
-(30), `α² ≥ λ > 0` for `α ≠ 0`, `∇₀h` lies within squared distance `χ / λ` of a field symmetric in its
+(30), `α² ≥ λ > 0` for `α ≠ 0`, `∇₀h` lies within squared distance `χ / λ` of a field symmetric in
+its
 first two indices, with Lemma 3.3 in the case `q = 2` (`S₂` symmetrizes the first two indices); and
 (61): `∫ Dh = α T₁(∇₀g)`, so `‖∫ ∇h‖² = α² Σ_i ‖T₁(∇₀g)(e_i)‖²`, with the first energy drop
-`‖∫ ∇f‖² ≤ λ² K ‖f‖²` of Lemma 3.9 for a supplied centered eigenfunction `ℒf = -λ f` (covariance `≤ K`). The existence
+`‖∫ ∇f‖² ≤ λ² K ‖f‖²` of Lemma 3.9 for a supplied centered eigenfunction `ℒf = -λ f` (covariance `≤
+K`). The existence
 of such iterates (Lemma 2.1 on `𝒜` and the first eigenfunction) is not addressed: every theorem here
 takes the pairs as hypotheses.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -54,8 +64,9 @@ theorem norm_sq_gradCoord (f : E → G) (x : E) :
 
 theorem inner_gradCoord (f g : E → G) (x : E) :
     ⟪gradCoord f x, gradCoord g x⟫ =
-      ∑ i, ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫ := by
-    simp [gradCoord, PiLp.inner_apply]
+      ∑ i,
+        ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫ := by
+  simp [gradCoord, PiLp.inner_apply]
 
 theorem hasTemperateGrowth_gradCoord {f : E → G} (hf : f.HasTemperateGrowth) :
     (gradCoord f).HasTemperateGrowth := by
@@ -67,7 +78,10 @@ theorem hasTemperateGrowth_gradCoord {f : E → G} (hf : f.HasTemperateGrowth) :
 
 theorem norm_sq_gradCoord_gradCoord {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E) :
     ‖gradCoord (gradCoord f) x‖ ^ 2 =
-      ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2 := by
+      ∑ i,
+        ∑ j,
+          ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^
+            2 := by
   classical
   let L : (E →L[ℝ] G) →L[ℝ] PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G) :=
     (PiLp.continuousLinearEquiv 2 ℝ _).symm.toContinuousLinearMap.comp
@@ -79,12 +93,12 @@ theorem norm_sq_gradCoord_gradCoord {f : E → G} (hf : ContDiff ℝ ∞ f) (x :
   rw [norm_sq_gradCoord]
   apply Finset.sum_congr rfl
   intro i _
-  rw [heq, (L.hasFDerivAt.comp x hd.hasFDerivAt).fderiv,
-    ContinuousLinearMap.comp_apply, PiLp.norm_sq_eq_of_L2]
+  rw [heq, (L.hasFDerivAt.comp x hd.hasFDerivAt).fderiv, ContinuousLinearMap.comp_apply,
+    PiLp.norm_sq_eq_of_L2]
   apply Finset.sum_congr rfl
   intro j _
-  change ‖fderiv ℝ (fderiv ℝ f) x (stdOrthonormalBasis ℝ E i)
-    (stdOrthonormalBasis ℝ E j)‖ ^ 2 = _
+  change
+    ‖fderiv ℝ (fderiv ℝ f) x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)‖ ^ 2 = _
   rw [iteratedFDeriv_two_apply]
   rfl
 
@@ -220,13 +234,15 @@ theorem integral_inner_gradCoord_gradCoord_eq {V : E → ℝ} (hV : V.HasTempera
 
 /-- (39): `‖∇²g‖² = α² ‖∇h‖² + χ` with `χ = ‖∇²g - α ∇h‖²`. -/
 theorem integral_norm_sq_gradCoord_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {g : E → G} {h : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)} {α : ℝ}
-    (hg : g.HasTemperateGrowth) (hh : h.HasTemperateGrowth)
-    (h30 : ∀ x, -weightedLaplacianVec V h x =
-      α • (gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))))
-    (h33 : ∫ x, ‖gradCoord h x‖ ^ 2 ∂(m.tilted (-V)) =
-      ∫ x, ‖gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))‖ ^ 2 ∂(m.tilted (-V))) :
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {g : E → G}
+    {h : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)} {α : ℝ} (hg : g.HasTemperateGrowth)
+    (hh : h.HasTemperateGrowth)
+    (h30 :
+      ∀ x,
+        -weightedLaplacianVec V h x = α • (gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))))
+    (h33 :
+      ∫ x, ‖gradCoord h x‖ ^ 2 ∂(m.tilted (-V)) =
+        ∫ x, ‖gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))‖ ^ 2 ∂(m.tilted (-V))) :
     ∫ x, ‖gradCoord (gradCoord g) x‖ ^ 2 ∂(m.tilted (-V)) =
       α ^ 2 * ∫ x, ‖gradCoord h x‖ ^ 2 ∂(m.tilted (-V)) +
         ∫ x, ‖gradCoord (gradCoord g) x - α • gradCoord h x‖ ^ 2 ∂(m.tilted (-V)) := by
@@ -236,31 +252,31 @@ theorem integral_norm_sq_gradCoord_gradCoord_eq {V : E → ℝ} (hV : V.HasTempe
     hasTemperateGrowth_gradCoord (hasTemperateGrowth_gradCoord hg)
   have hY : Y.HasTemperateGrowth := hasTemperateGrowth_gradCoord hh
   have hXi : Integrable (fun x => ‖X x‖ ^ 2) (m.tilted (-V)) :=
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((Function.hasTemperateGrowth_norm_sq _).comp hX)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      ((Function.hasTemperateGrowth_norm_sq _).comp hX)
   have hYi : Integrable (fun x => ‖Y x‖ ^ 2) (m.tilted (-V)) :=
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((Function.hasTemperateGrowth_norm_sq _).comp hY)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      ((Function.hasTemperateGrowth_norm_sq _).comp hY)
   have hXYi : Integrable (fun x => ⟪X x, Y x⟫) (m.tilted (-V)) :=
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp ((innerSL ℝ).bilinear_hasTemperateGrowth hX hY)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      ((innerSL ℝ).bilinear_hasTemperateGrowth hX hY)
   have hp := integral_inner_gradCoord_gradCoord_eq m hV hexp hg hh h30 h33
-  have heq : (fun x => ‖X x - α • Y x‖ ^ 2) =
+  have heq :
+    (fun x => ‖X x - α • Y x‖ ^ 2) =
       (fun x => (‖X x‖ ^ 2 - (2 * α) * ⟪X x, Y x⟫) + α ^ 2 * ‖Y x‖ ^ 2) := by
     funext x
     rw [norm_sub_sq_real, real_inner_smul_right, norm_smul, Real.norm_eq_abs]
     rw [mul_pow, sq_abs]
     ring
-  change ∫ x, ‖X x‖ ^ 2 ∂(m.tilted (-V)) =
-    α ^ 2 * ∫ x, ‖Y x‖ ^ 2 ∂(m.tilted (-V)) +
-      ∫ x, ‖X x - α • Y x‖ ^ 2 ∂(m.tilted (-V))
-  have hsc : Integrable (fun x => (2 * α) * ⟪X x, Y x⟫) (m.tilted (-V)) :=
-    hXYi.const_mul _
-  have hsub : Integrable (fun x => ‖X x‖ ^ 2 - (2 * α) * ⟪X x, Y x⟫)
-      (m.tilted (-V)) := hXi.sub hsc
-  have hsy : Integrable (fun x => α ^ 2 * ‖Y x‖ ^ 2) (m.tilted (-V)) :=
-    hYi.const_mul _
-  rw [heq, integral_add hsub hsy, integral_sub hXi hsc,
-    integral_const_mul, integral_const_mul]
-  change ∫ x, ⟪X x, Y x⟫ ∂(m.tilted (-V)) =
-    α * ∫ x, ‖Y x‖ ^ 2 ∂(m.tilted (-V)) at hp
+  change
+    ∫ x, ‖X x‖ ^ 2 ∂(m.tilted (-V)) =
+      α ^ 2 * ∫ x, ‖Y x‖ ^ 2 ∂(m.tilted (-V)) + ∫ x, ‖X x - α • Y x‖ ^ 2 ∂(m.tilted (-V))
+  have hsc : Integrable (fun x => (2 * α) * ⟪X x, Y x⟫) (m.tilted (-V)) := hXYi.const_mul _
+  have hsub : Integrable (fun x => ‖X x‖ ^ 2 - (2 * α) * ⟪X x, Y x⟫) (m.tilted (-V)) :=
+    hXi.sub hsc
+  have hsy : Integrable (fun x => α ^ 2 * ‖Y x‖ ^ 2) (m.tilted (-V)) := hYi.const_mul _
+  rw [heq, integral_add hsub hsy, integral_sub hXi hsc, integral_const_mul, integral_const_mul]
+  change ∫ x, ⟪X x, Y x⟫ ∂(m.tilted (-V)) = α * ∫ x, ‖Y x‖ ^ 2 ∂(m.tilted (-V)) at hp
   rw [hp]
   ring
 
@@ -498,14 +514,15 @@ section Symmetry
 universe v
 
 omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
-  [BorelSpace E] in
+    [BorelSpace E] in
 /-- Centering in `L²(μ; H)`: `∫ ‖F - ∫ F‖² = ∫ ‖F‖² - ‖∫ F‖²` for a probability measure. -/
-private theorem integral_norm_sq_sub_integral {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
-    [CompleteSpace H] (μ : Measure E) [IsProbabilityMeasure μ] {F : E → H} (hF : Integrable F μ)
-    (hF2 : Integrable (fun x => ‖F x‖ ^ 2) μ) :
+private theorem integral_norm_sq_sub_integral {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℝ H] [CompleteSpace H] (μ : Measure E) [IsProbabilityMeasure μ]
+    {F : E → H} (hF : Integrable F μ) (hF2 : Integrable (fun x => ‖F x‖ ^ 2) μ) :
     ∫ x, ‖F x - ∫ y, F y ∂μ‖ ^ 2 ∂μ = ∫ x, ‖F x‖ ^ 2 ∂μ - ‖∫ y, F y ∂μ‖ ^ 2 := by
   set c := ∫ y, F y ∂μ
-  have h1 : ∀ x, ‖F x - c‖ ^ 2 = ‖F x‖ ^ 2 - 2 * ⟪F x, c⟫ + ‖c‖ ^ 2 := fun x => norm_sub_sq_real _ _
+  have h1 : ∀ x, ‖F x - c‖ ^ 2 = ‖F x‖ ^ 2 - 2 * ⟪F x, c⟫ + ‖c‖ ^ 2 := fun x =>
+    norm_sub_sq_real _ _
   have hi : Integrable (fun x => ⟪F x, c⟫) μ := hF.inner_const c
   simp_rw [h1]
   have hA : Integrable (fun x => ‖F x‖ ^ 2 - 2 * ⟪F x, c⟫) μ := hF2.sub (hi.const_mul 2)
@@ -521,20 +538,25 @@ private theorem integral_norm_sq_sub_integral {H : Type*} [NormedAddCommGroup H]
 omit [CompleteSpace E] in
 /-- Fields of temperate growth and their squared norms are integrable under all exponential
 moments. -/
-private theorem integrable_and_integrable_norm_sq_of_hasTemperateGrowth {H : Type*} [NormedAddCommGroup H]
-    [NormedSpace ℝ H] (μ : Measure E)
+private theorem integrable_and_integrable_norm_sq_of_hasTemperateGrowth {H : Type*}
+    [NormedAddCommGroup H] [NormedSpace ℝ H] (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → H}
     (hf : f.HasTemperateGrowth) : Integrable f μ ∧ Integrable (fun x => ‖f x‖ ^ 2) μ := by
   obtain ⟨k, C, hb⟩ := hf.2 0
   have hb' : ∀ x, ‖f x‖ ≤ C * (1 + ‖x‖) ^ k := fun x => by
     simpa only [norm_iteratedFDeriv_zero] using hb x
-  refine ⟨FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp hf.1.continuous.aestronglyMeasurable hb', ?_⟩
-  refine FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp
-    (hf.1.continuous.aestronglyMeasurable.norm.pow 2) (C := C ^ 2) (k := 2 * k) (fun x => ?_)
+  refine
+    ⟨FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp
+        hf.1.continuous.aestronglyMeasurable hb',
+      ?_⟩
+  refine
+    FunctionalInequalities.Probability.integrable_of_norm_le_pow μ hexp
+      (hf.1.continuous.aestronglyMeasurable.norm.pow 2) (C := C ^ 2) (k := 2 * k) (fun x => ?_)
   have h0 : 0 ≤ ‖f x‖ := norm_nonneg _
   have hsq : ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := pow_le_pow_left₀ h0 (hb' x) 2
   rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]
-  calc ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := hsq
+  calc
+    ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := hsq
     _ = C ^ 2 * (1 + ‖x‖) ^ (2 * k) := by ring
 
 section CoordinateSymmetry
@@ -563,8 +585,9 @@ theorem gradCoord_gradCoord_symm {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E)
     (i j : Fin (Module.finrank ℝ E)) :
     gradCoord (gradCoord f) x i j = gradCoord (gradCoord f) x j i := by
   rw [gradCoord_gradCoord_apply hf, gradCoord_gradCoord_apply hf]
-  have := iteratedFDeriv_comp_perm_of_contDiff hf 2 x
-    ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j] (Equiv.swap 0 1)
+  have :=
+    iteratedFDeriv_comp_perm_of_contDiff hf 2 x
+      ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j] (Equiv.swap 0 1)
   rw [← this]
   congr 1
   ext k
@@ -590,24 +613,29 @@ theorem integral_norm_sq_gradCoord_sub_eq_of_normalized {V : E → ℝ}
   rw [h33, integral_norm_sq_sub_integral (m.tilted (-V)) hi hi2]
   ring
 
-/-- **BKL (36)** along a sequence of iterates normalized by (33): `v_0 = v_N + Σ_{k<N} ‖∫ ∇h_k‖²`. -/
+/--
+**BKL (36)** along a sequence of iterates normalized by (33): `v_0 = v_N + Σ_{k<N} ‖∫ ∇h_k‖²`. -/
 theorem integral_norm_sq_gradCoord_eq_add_sum {V : E → ℝ}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    [IsProbabilityMeasure (m.tilted (-V))]
-    (G : ℕ → Type v) [∀ k, NormedAddCommGroup (G k)] [∀ k, InnerProductSpace ℝ (G k)]
-    [∀ k, FiniteDimensional ℝ (G k)]
-    (h : ∀ k, E → G k) (hh : ∀ k, (h k).HasTemperateGrowth)
-    (h33 : ∀ k, ∫ x, ‖gradCoord (h (k + 1)) x‖ ^ 2 ∂(m.tilted (-V)) =
-      ∫ x, ‖gradCoord (h k) x - ∫ y, gradCoord (h k) y ∂(m.tilted (-V))‖ ^ 2 ∂(m.tilted (-V)))
+    [IsProbabilityMeasure (m.tilted (-V))] (G : ℕ → Type v) [∀ k, NormedAddCommGroup (G k)]
+    [∀ k, InnerProductSpace ℝ (G k)] [∀ k, FiniteDimensional ℝ (G k)] (h : ∀ k, E → G k)
+    (hh : ∀ k, (h k).HasTemperateGrowth)
+    (h33 :
+      ∀ k,
+        ∫ x, ‖gradCoord (h (k + 1)) x‖ ^ 2 ∂(m.tilted (-V)) =
+          ∫ x,
+            ‖gradCoord (h k) x - ∫ y, gradCoord (h k) y ∂(m.tilted (-V))‖ ^ 2 ∂(m.tilted (-V)))
     (N : ℕ) :
     ∫ x, ‖gradCoord (h 0) x‖ ^ 2 ∂(m.tilted (-V)) =
       ∫ x, ‖gradCoord (h N) x‖ ^ 2 ∂(m.tilted (-V)) +
         ∑ k ∈ Finset.range N, ‖∫ x, gradCoord (h k) x ∂(m.tilted (-V))‖ ^ 2 := by
   induction N with
   | zero => simp
-  | succ N ih =>
-    obtain ⟨hi, hi2⟩ := integrable_and_integrable_norm_sq_of_hasTemperateGrowth (m.tilted (-V)) hexp
-      (hasTemperateGrowth_gradCoord (hh N))
+  | succ N
+    ih =>
+    obtain ⟨hi, hi2⟩ :=
+      integrable_and_integrable_norm_sq_of_hasTemperateGrowth (m.tilted (-V)) hexp
+        (hasTemperateGrowth_gradCoord (hh N))
     have h := integral_norm_sq_sub_integral (m.tilted (-V)) hi hi2
     rw [← h33 N] at h
     rw [ih, Finset.sum_range_succ]
@@ -615,24 +643,31 @@ theorem integral_norm_sq_gradCoord_eq_add_sum {V : E → ℝ}
 
 end GradientEnergyIdentities
 
-/-- **BKL Lemma 3.2** for a supplied pair satisfying (30) (the normalization (33) is not needed): if
-`λ > 0` and `λ ≤ α²` whenever `α ≠ 0`, then `∇₀h` lies within squared `L²` distance `χ / λ`, `χ = ‖∇²g - α ∇h‖²`, of a tensor field
+/--
+**BKL Lemma 3.2** for a supplied pair satisfying (30) (the normalization (33) is not needed): if
+`λ > 0` and `λ ≤ α²` whenever `α ≠ 0`, then `∇₀h` lies within squared `L²` distance `χ / λ`, `χ =
+‖∇²g - α ∇h‖²`, of a tensor field
 `T` symmetric in its first two indices (with `‖∇₀h - T‖²` integrable). -/
 theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperateGrowth)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    [IsProbabilityMeasure (m.tilted (-V))]
-    {g : E → G} {h : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)} {α : ℝ}
-    (hg : g.HasTemperateGrowth) (hh : h.HasTemperateGrowth)
-    (h30 : ∀ x, -weightedLaplacianVec V h x =
-      α • (gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))))
+    [IsProbabilityMeasure (m.tilted (-V))] {g : E → G}
+    {h : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)} {α : ℝ} (hg : g.HasTemperateGrowth)
+    (hh : h.HasTemperateGrowth)
+    (h30 :
+      ∀ x,
+        -weightedLaplacianVec V h x = α • (gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))))
     {lam : ℝ} (hlam : 0 < lam) (hαlam : α ≠ 0 → lam ≤ α ^ 2) :
-    ∃ T : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) =>
-        PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)),
+    ∃ T :
+      E →
+        PiLp 2
+          (fun _ : Fin (Module.finrank ℝ E) => PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)),
       (∀ x i j, T x i j = T x j i) ∧
         Integrable (fun x => ‖(gradCoord h x - ∫ y, gradCoord h y ∂(m.tilted (-V))) - T x‖ ^ 2)
-          (m.tilted (-V)) ∧
-        ∫ x, ‖(gradCoord h x - ∫ y, gradCoord h y ∂(m.tilted (-V))) - T x‖ ^ 2 ∂(m.tilted (-V)) ≤
-          (∫ x, ‖gradCoord (gradCoord g) x - α • gradCoord h x‖ ^ 2 ∂(m.tilted (-V))) / lam := by
+            (m.tilted (-V)) ∧
+          ∫ x,
+              ‖(gradCoord h x - ∫ y, gradCoord h y ∂(m.tilted (-V))) - T x‖ ^
+                2 ∂(m.tilted (-V)) ≤
+            (∫ x, ‖gradCoord (gradCoord g) x - α • gradCoord h x‖ ^ 2 ∂(m.tilted (-V))) / lam := by
   set μ := m.tilted (-V) with hμ
   set c1 := ∫ y, gradCoord h y ∂μ
   set c2 := ∫ y, gradCoord (gradCoord g) y ∂μ
@@ -644,8 +679,9 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
   by_cases hα : α = 0
   · subst hα
     refine ⟨fun _ => 0, fun _ _ _ => rfl, ?_, ?_⟩
-    · have := (integrable_and_integrable_norm_sq_of_hasTemperateGrowth μ hexp
-          (hgh.sub (Function.HasTemperateGrowth.const c1))).2
+    · have :=
+        (integrable_and_integrable_norm_sq_of_hasTemperateGrowth μ hexp
+            (hgh.sub (Function.HasTemperateGrowth.const c1))).2
       simpa only [sub_zero, Pi.sub_apply] using this
     · have hV1 : ContDiff ℝ 1 V := hV.1.of_le (by simp)
       obtain ⟨k, C, hC⟩ := hV.2 1
@@ -660,9 +696,12 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
         exact this
       simp only [hzero, inner_zero_left, integral_zero] at hIBP
       have hE : ∫ x, ‖gradCoord h x‖ ^ 2 ∂μ = 0 := by
-        have : ∫ x, ‖gradCoord h x‖ ^ 2 ∂μ =
-            ∫ x, ∑ i, ⟪fderiv ℝ h x (stdOrthonormalBasis ℝ E i),
-              fderiv ℝ h x (stdOrthonormalBasis ℝ E i)⟫ ∂μ := by
+        have :
+          ∫ x, ‖gradCoord h x‖ ^ 2 ∂μ =
+            ∫ x,
+              ∑ i,
+                ⟪fderiv ℝ h x (stdOrthonormalBasis ℝ E i),
+                  fderiv ℝ h x (stdOrthonormalBasis ℝ E i)⟫ ∂μ := by
           congr 1
           funext x
           rw [norm_sq_gradCoord]
@@ -672,18 +711,26 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
       have hc := integral_norm_sq_sub_integral μ hi hi2
       simp only [sub_zero]
       have : 0 ≤ ‖c1‖ ^ 2 := by positivity
-      have hdiv : 0 ≤ (∫ x, ‖gradCoord (gradCoord g) x - (0 : ℝ) • gradCoord h x‖ ^ 2 ∂μ) / lam :=
+      have hdiv :
+        0 ≤ (∫ x, ‖gradCoord (gradCoord g) x - (0 : ℝ) • gradCoord h x‖ ^ 2 ∂μ) / lam :=
         div_nonneg hχ0 hlam.le
       linarith
   · have hl : lam ≤ α ^ 2 := hαlam hα
-    let F : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) =>
-        PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) :=
+    let F :
+      E →
+        PiLp 2
+          (fun _ : Fin (Module.finrank ℝ E) =>
+            PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) :=
       fun x => gradCoord (gradCoord g) x - α • gradCoord h x
     have hsm : (fun x => α • gradCoord h x).HasTemperateGrowth := by
-      have := (α • ContinuousLinearMap.id ℝ (PiLp 2 (fun _ : Fin (Module.finrank ℝ E) =>
-        PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)))).hasTemperateGrowth.comp hgh
-      simpa only [Function.comp_def, smul_apply,
-        ContinuousLinearMap.id_apply] using this
+      have :=
+        (α •
+              ContinuousLinearMap.id ℝ
+                (PiLp 2
+                  (fun _ : Fin (Module.finrank ℝ E) =>
+                    PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)))).hasTemperateGrowth.comp
+          hgh
+      simpa only [Function.comp_def, smul_apply, ContinuousLinearMap.id_apply] using this
     have hF : F.HasTemperateGrowth := hgg.sub hsm
     obtain ⟨hFi, hFi2⟩ := integrable_and_integrable_norm_sq_of_hasTemperateGrowth μ hexp hF
     obtain ⟨hggi, -⟩ := integrable_and_integrable_norm_sq_of_hasTemperateGrowth μ hexp hgg
@@ -694,16 +741,24 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
         integral_smul]
     have hc2 : ∀ i j, c2 i j = c2 j i := by
       intro i j
-      let P : PiLp 2 (fun _ : Fin (Module.finrank ℝ E) =>
-          PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) →L[ℝ] G :=
+      let P :
+        PiLp 2
+            (fun _ : Fin (Module.finrank ℝ E) =>
+              PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) →L[ℝ]
+          G :=
         (PiLp.proj 2 (fun _ : Fin (Module.finrank ℝ E) => G) j).comp
-          (PiLp.proj 2 (fun _ : Fin (Module.finrank ℝ E) =>
-            PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) i)
-      let Q : PiLp 2 (fun _ : Fin (Module.finrank ℝ E) =>
-          PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) →L[ℝ] G :=
+          (PiLp.proj 2
+            (fun _ : Fin (Module.finrank ℝ E) => PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G))
+            i)
+      let Q :
+        PiLp 2
+            (fun _ : Fin (Module.finrank ℝ E) =>
+              PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) →L[ℝ]
+          G :=
         (PiLp.proj 2 (fun _ : Fin (Module.finrank ℝ E) => G) i).comp
-          (PiLp.proj 2 (fun _ : Fin (Module.finrank ℝ E) =>
-            PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) j)
+          (PiLp.proj 2
+            (fun _ : Fin (Module.finrank ℝ E) => PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G))
+            j)
       have hP : P c2 = ∫ y, P (gradCoord (gradCoord g) y) ∂μ := (P.integral_comp_comm hggi).symm
       have hQ : Q c2 = ∫ y, Q (gradCoord (gradCoord g) y) ∂μ := (Q.integral_comp_comm hggi).symm
       change P c2 = Q c2
@@ -711,19 +766,22 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
       congr 1
       funext y
       exact gradCoord_gradCoord_symm hg.1 y i j
-    have hpt : ∀ x, ‖(gradCoord h x - c1) - α⁻¹ • (gradCoord (gradCoord g) x - c2)‖ ^ 2 =
-        (α ^ 2)⁻¹ * ‖F x - ∫ y, F y ∂μ‖ ^ 2 := by
+    have hpt :
+      ∀ x,
+        ‖(gradCoord h x - c1) - α⁻¹ • (gradCoord (gradCoord g) x - c2)‖ ^ 2 =
+          (α ^ 2)⁻¹ * ‖F x - ∫ y, F y ∂μ‖ ^ 2 := by
       intro x
-      have hv : (gradCoord h x - c1) - α⁻¹ • (gradCoord (gradCoord g) x - c2) =
+      have hv :
+        (gradCoord h x - c1) - α⁻¹ • (gradCoord (gradCoord g) x - c2) =
           -(α⁻¹ • (F x - ∫ y, F y ∂μ)) := by
         rw [hintF]
         simp only [F, smul_sub, smul_smul, inv_mul_cancel₀ hα, one_smul]
         abel
       rw [hv, norm_neg, norm_smul, mul_pow, Real.norm_eq_abs, sq_abs, inv_pow]
-    obtain ⟨-, hFc2⟩ := integrable_and_integrable_norm_sq_of_hasTemperateGrowth μ hexp
-      (hF.sub (Function.HasTemperateGrowth.const (∫ y, F y ∂μ)))
-    have hint : Integrable (fun x => (α ^ 2)⁻¹ * ‖F x - ∫ y, F y ∂μ‖ ^ 2) μ :=
-      hFc2.const_mul _
+    obtain ⟨-, hFc2⟩ :=
+      integrable_and_integrable_norm_sq_of_hasTemperateGrowth μ hexp
+        (hF.sub (Function.HasTemperateGrowth.const (∫ y, F y ∂μ)))
+    have hint : Integrable (fun x => (α ^ 2)⁻¹ * ‖F x - ∫ y, F y ∂μ‖ ^ 2) μ := hFc2.const_mul _
     refine ⟨fun x => α⁻¹ • (gradCoord (gradCoord g) x - c2), fun x i j => ?_, ?_, ?_⟩
     · simp only [PiLp.smul_apply, PiLp.sub_apply]
       rw [gradCoord_gradCoord_symm hg.1 x i j, hc2 i j]
@@ -734,8 +792,9 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
       have hinv : (α ^ 2)⁻¹ ≤ lam⁻¹ := inv_anti₀ hlam hl
       have hsq : 0 ≤ ‖∫ y, F y ∂μ‖ ^ 2 := by positivity
       have hα2 : 0 ≤ (α ^ 2)⁻¹ := by positivity
-      calc (α ^ 2)⁻¹ * (∫ x, ‖F x‖ ^ 2 ∂μ - ‖∫ y, F y ∂μ‖ ^ 2)
-          ≤ (α ^ 2)⁻¹ * ∫ x, ‖F x‖ ^ 2 ∂μ := by nlinarith
+      calc
+        (α ^ 2)⁻¹ * (∫ x, ‖F x‖ ^ 2 ∂μ - ‖∫ y, F y ∂μ‖ ^ 2) ≤ (α ^ 2)⁻¹ * ∫ x, ‖F x‖ ^ 2 ∂μ := by
+          nlinarith
         _ ≤ lam⁻¹ * ∫ x, ‖F x‖ ^ 2 ∂μ := mul_le_mul_of_nonneg_right hinv hχ0
         _ = (∫ x, ‖gradCoord (gradCoord g) x - α • gradCoord h x‖ ^ 2 ∂μ) / lam := by
           rw [div_eq_inv_mul]
@@ -850,31 +909,42 @@ theorem integral_fderiv_apply_eq_smul_taylorTensor_one {V : E → ℝ} (hV : V.H
 /-- **BKL (61)** in Hilbert–Schmidt form, for a supplied pair satisfying (30):
 `‖∫ ∇h‖² = α² Σ_i ‖T₁(∇₀g)(e_i)‖²`. -/
 theorem norm_sq_integral_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth)
-    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
-    {g : E → G} {h : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)} {α : ℝ}
-    (hh : h.HasTemperateGrowth)
-    (h30 : ∀ x, -weightedLaplacianVec V h x =
-      α • (gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V)))) :
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V))) {g : E → G}
+    {h : E → PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)} {α : ℝ} (hh : h.HasTemperateGrowth)
+    (h30 :
+      ∀ x,
+        -weightedLaplacianVec V h x =
+          α • (gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V)))) :
     ‖∫ x, gradCoord h x ∂(m.tilted (-V))‖ ^ 2 =
-      α ^ 2 * ∑ i, ‖taylorTensor (m.tilted (-V))
-        (fun x => gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))) 1
-          ![stdOrthonormalBasis ℝ E i]‖ ^ 2 := by
+      α ^ 2 *
+        ∑ i,
+          ‖taylorTensor (m.tilted (-V))
+                (fun x => gradCoord g x - ∫ y, gradCoord g y ∂(m.tilted (-V))) 1
+                ![stdOrthonormalBasis ℝ E i]‖ ^
+            2 := by
   rw [PiLp.norm_sq_eq_of_L2, Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   have hint : Integrable (gradCoord h) (m.tilted (-V)) :=
-    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp (hasTemperateGrowth_gradCoord hh)
+    FunctionalInequalities.Probability.integrable_of_hasTemperateGrowth _ hexp
+      (hasTemperateGrowth_gradCoord hh)
   let _ : NormedAddCommGroup (E →L[ℝ] PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) :=
     inferInstance
   have hintD : Integrable (fun x => fderiv ℝ h x) (m.tilted (-V)) := by
     obtain ⟨k, C, hb⟩ := hh.2 1
-    refine FunctionalInequalities.Probability.integrable_of_norm_le_pow (m.tilted (-V)) hexp
-      (hh.1.continuous_fderiv (by simp)).aestronglyMeasurable (C := C) (k := k) (fun x => ?_)
+    refine
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow (m.tilted (-V)) hexp
+        (hh.1.continuous_fderiv (by simp)).aestronglyMeasurable (C := C) (k := k) (fun x => ?_)
     rw [← norm_iteratedFDeriv_one]
     exact hb x
-  let P : PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) →L[ℝ]
+  let P :
+    PiLp 2
+        (fun _ : Fin (Module.finrank ℝ E) =>
+          PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) →L[ℝ]
       PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G) :=
-    PiLp.proj 2 (fun _ : Fin (Module.finrank ℝ E) => PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) i
-  have h1 : (∫ x, gradCoord h x ∂(m.tilted (-V))) i =
+    PiLp.proj 2
+      (fun _ : Fin (Module.finrank ℝ E) => PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G)) i
+  have h1 :
+    (∫ x, gradCoord h x ∂(m.tilted (-V))) i =
       (∫ x, fderiv ℝ h x ∂(m.tilted (-V))) (stdOrthonormalBasis ℝ E i) := by
     change P (∫ x, gradCoord h x ∂(m.tilted (-V))) = _
     rw [← P.integral_comp_comm hint, ContinuousLinearMap.integral_apply hintD]
@@ -883,14 +953,15 @@ theorem norm_sq_integral_gradCoord_eq {V : E → ℝ} (hV : V.HasTemperateGrowth
     Real.norm_eq_abs, sq_abs]
 
 
-/-- **The first energy drop of BKL Lemma 3.9** for a supplied eigenfunction: if `ℒf = -λ f`, `∫ f = 0`
+/--
+**The first energy drop of BKL Lemma 3.9** for a supplied eigenfunction: if `ℒf = -λ f`, `∫ f = 0`
 and the covariance of `μ` is at most `K` (`∫ ⟪e, x - b⟫² ≤ K ‖e‖²` with `b` the barycenter), then
 `‖∫ ∇f‖² ≤ λ² K ∫ f²` (the source's `p₁ = λ₁² |∫ x f|² ≤ λ₁² ‖Cov μ‖`, with `‖f‖₂ = 1`, `K = 1`). -/
 theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTemperateGrowth)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
     [IsProbabilityMeasure (m.tilted (-V))] {f : E → ℝ} (hf : f.HasTemperateGrowth) {lam : ℝ}
-    (heig : ∀ x, weightedLaplacian V f x = -lam * f x)
-    (hf0 : ∫ x, f x ∂(m.tilted (-V)) = 0) {K : ℝ} (hK0 : 0 ≤ K)
+    (heig : ∀ x, weightedLaplacian V f x = -lam * f x) (hf0 : ∫ x, f x ∂(m.tilted (-V)) = 0)
+    {K : ℝ} (hK0 : 0 ≤ K)
     (hcov : ∀ e : E, ∫ x, ⟪e, x - ∫ y, y ∂(m.tilted (-V))⟫ ^ 2 ∂(m.tilted (-V)) ≤ K * ‖e‖ ^ 2) :
     ‖∫ x, gradient f x ∂(m.tilted (-V))‖ ^ 2 ≤ lam ^ 2 * K * ∫ x, f x ^ 2 ∂(m.tilted (-V)) := by
   set μ := m.tilted (-V) with hμ
@@ -900,8 +971,10 @@ theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTempera
   obtain ⟨k, Cb, hCb⟩ := hV.2 1
   have hVg : ∀ x : E, ‖gradient V x‖ ≤ Cb * (1 + ‖x‖) ^ k := fun x => by
     rw [norm_gradient_eq_norm_iteratedFDeriv_one]; exact hCb x
-  have hlin : (fun x : E => ⟪w, x⟫).HasTemperateGrowth := Function.hasTemperateGrowth_inner_right w
-  have hibp := integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth m hV1 hVg hexp hf hlin
+  have hlin : (fun x : E => ⟪w, x⟫).HasTemperateGrowth :=
+    Function.hasTemperateGrowth_inner_right w
+  have hibp :=
+    integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth m hV1 hVg hexp hf hlin
   have hgl : ∀ x, gradient (fun y : E => ⟪w, y⟫) x = w := by
     intro x
     have hd : fderiv ℝ (fun y : E => ⟪w, y⟫) x = InnerProductSpace.toDual ℝ E w := by
@@ -912,27 +985,33 @@ theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTempera
     simp only [gradient, hd, LinearIsometryEquiv.symm_apply_apply]
   simp only [heig, hgl] at hibp
   have hgi : Integrable (gradient f) μ :=
-    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp (hasTemperateGrowth_gradient hf)).integrable
+    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp
+          (hasTemperateGrowth_gradient hf)).integrable
       (by norm_num)
   have hf2 := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp hf
   have hg : (fun x : E => ⟪w, x - b⟫).HasTemperateGrowth := by
     have : (fun x : E => ⟪w, x - b⟫) = fun x => ⟪w, x⟫ - ⟪w, b⟫ := by
-      funext x; rw [inner_sub_right]
+      funext x;
+      rw [inner_sub_right]
     rw [this]
     exact hlin.sub (Function.HasTemperateGrowth.const _)
   have hg2 := FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp hg
   have hfi : Integrable f μ := hf2.integrable (by norm_num)
   have hfl : Integrable (fun x => f x * ⟪w, x⟫) μ :=
-    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp (hf.mul hlin)).integrable (by norm_num)
+    (FunctionalInequalities.Probability.memLp_two_of_hasTemperateGrowth μ hexp
+          (hf.mul hlin)).integrable
+      (by norm_num)
   have h1 : ‖w‖ ^ 2 = lam * ∫ x, f x * ⟪w, x - b⟫ ∂μ := by
     have hww : ‖w‖ ^ 2 = ∫ x, ⟪gradient f x, w⟫ ∂μ := by
       rw [← real_inner_self_eq_norm_sq]
       have : ∫ x, ⟪gradient f x, w⟫ ∂μ = ∫ x, ⟪w, gradient f x⟫ ∂μ := by
-        congr 1; funext x; exact real_inner_comm _ _
+        congr 1; funext x;
+        exact real_inner_comm _ _
       rw [this, integral_inner hgi w]
     have hsplit : ∫ x, f x * ⟪w, x - b⟫ ∂μ = ∫ x, f x * ⟪w, x⟫ ∂μ := by
       have : (fun x => f x * ⟪w, x - b⟫) = fun x => f x * ⟪w, x⟫ - ⟪w, b⟫ * f x := by
-        funext x; rw [inner_sub_right]; ring
+        funext x;
+        rw [inner_sub_right]; ring
       rw [this, integral_sub hfl (hfi.const_mul _), integral_const_mul, hf0, mul_zero, sub_zero]
     rw [hww, hsplit]
     have : ∫ x, -lam * f x * ⟪w, x⟫ ∂μ = -lam * ∫ x, f x * ⟪w, x⟫ ∂μ := by
@@ -940,8 +1019,8 @@ theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTempera
     rw [this] at hibp
     linarith
   -- Cauchy–Schwarz in L²
-  have hCS : (∫ x, f x * ⟪w, x - b⟫ ∂μ) ^ 2 ≤
-      (∫ x, f x ^ 2 ∂μ) * ∫ x, ⟪w, x - b⟫ ^ 2 ∂μ := by
+
+  have hCS : (∫ x, f x * ⟪w, x - b⟫ ∂μ) ^ 2 ≤ (∫ x, f x ^ 2 ∂μ) * ∫ x, ⟪w, x - b⟫ ^ 2 ∂μ := by
     have hsq : ∀ (u : Lp ℝ 2 μ), ‖u‖ ^ 2 = ∫ x, u x ^ 2 ∂μ := by
       intro u
       rw [← real_inner_self_eq_norm_sq, MeasureTheory.L2.inner_def]
@@ -950,7 +1029,8 @@ theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTempera
       rw [MeasureTheory.L2.inner_def]
       apply integral_congr_ae
       filter_upwards [hf2.coeFn_toLp, hg2.coeFn_toLp] with x hx hy
-      rw [hx, hy, real_inner_eq_re_inner, RCLike.inner_apply, conj_trivial, RCLike.re_to_real, mul_comm]
+      rw [hx, hy, real_inner_eq_re_inner, RCLike.inner_apply, conj_trivial, RCLike.re_to_real,
+        mul_comm]
     have h1' : ∫ x, f x ^ 2 ∂μ = ‖hf2.toLp f‖ ^ 2 := by
       rw [hsq]; apply integral_congr_ae
       filter_upwards [hf2.coeFn_toLp] with x hx; rw [hx]
@@ -959,17 +1039,19 @@ theorem norm_sq_integral_gradient_le_of_eigen {V : E → ℝ} (hV : V.HasTempera
       filter_upwards [hg2.coeFn_toLp] with x hx; rw [hx]
     rw [← hin, h1', h2', ← mul_pow]
     have := abs_real_inner_le_norm (hf2.toLp f) (hg2.toLp (fun x : E => ⟪w, x - b⟫))
-    nlinarith [abs_nonneg ⟪hf2.toLp f, hg2.toLp (fun x : E => ⟪w, x - b⟫)⟫, sq_abs ⟪hf2.toLp f, hg2.toLp (fun x : E => ⟪w, x - b⟫)⟫,
+    nlinarith [abs_nonneg ⟪hf2.toLp f, hg2.toLp (fun x : E => ⟪w, x - b⟫)⟫,
+      sq_abs ⟪hf2.toLp f, hg2.toLp (fun x : E => ⟪w, x - b⟫)⟫,
       mul_nonneg (norm_nonneg (hf2.toLp f)) (norm_nonneg (hg2.toLp (fun x : E => ⟪w, x - b⟫)))]
   have hK := hcov w
   have hF0 : 0 ≤ ∫ x, f x ^ 2 ∂μ := integral_nonneg fun x => by positivity
   have hW0 : 0 ≤ ‖w‖ ^ 2 := by positivity
   have hmain : (‖w‖ ^ 2) ^ 2 ≤ lam ^ 2 * K * (∫ x, f x ^ 2 ∂μ) * ‖w‖ ^ 2 := by
-    calc (‖w‖ ^ 2) ^ 2 = lam ^ 2 * (∫ x, f x * ⟪w, x - b⟫ ∂μ) ^ 2 := by rw [h1]; ring
+    calc
+      (‖w‖ ^ 2) ^ 2 = lam ^ 2 * (∫ x, f x * ⟪w, x - b⟫ ∂μ) ^ 2 := by rw [h1]; ring
       _ ≤ lam ^ 2 * ((∫ x, f x ^ 2 ∂μ) * ∫ x, ⟪w, x - b⟫ ^ 2 ∂μ) :=
-          mul_le_mul_of_nonneg_left hCS (sq_nonneg _)
+        mul_le_mul_of_nonneg_left hCS (sq_nonneg _)
       _ ≤ lam ^ 2 * ((∫ x, f x ^ 2 ∂μ) * (K * ‖w‖ ^ 2)) :=
-          mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hK hF0) (sq_nonneg _)
+        mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hK hF0) (sq_nonneg _)
       _ = lam ^ 2 * K * (∫ x, f x ^ 2 ∂μ) * ‖w‖ ^ 2 := by ring
   rcases hW0.lt_or_eq with hpos | hzero
   · nlinarith

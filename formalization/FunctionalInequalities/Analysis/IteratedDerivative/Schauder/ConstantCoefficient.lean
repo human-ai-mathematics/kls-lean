@@ -1,8 +1,10 @@
-import Mathlib.Analysis.CStarAlgebra.Matrix
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
-import FunctionalInequalities.Analysis.Newtonian.Schauder.Interior
-import FunctionalInequalities.Analysis.IteratedDerivative.LinearPullback
+module
+
+public import Mathlib.Analysis.CStarAlgebra.Matrix
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+public import FunctionalInequalities.Analysis.Newtonian.Schauder.Interior
+public import FunctionalInequalities.Analysis.IteratedDerivative.LinearPullback
 
 /-!
 # Interior Schauder estimate for constant-coefficient elliptic operators (GT Lemma 6.1)
@@ -38,6 +40,8 @@ norms of GT (6.1)–(6.3), lower-order terms and boundary estimates are not clai
 coarse.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open Set Metric Matrix Filter
@@ -59,20 +63,29 @@ private theorem bilinear_eq_sum_basisFun {n : ℕ}
   exact Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => by ring
 
 /-- The symmetric square root of a symmetric matrix with quadratic form bounds, as a continuous
-linear equivalence `T` of `ℝⁿ` with `‖T ξ‖² = ξᵀ A ξ` and `Σ_i B(T e_i, T e_i) = Σ_{ij} A_{ij} B(e_i, e_j)`
+linear equivalence `T` of `ℝⁿ` with `‖T ξ‖² = ξᵀ A ξ` and `Σ_i B(T e_i, T e_i) = Σ_{ij} A_{ij}
+B(e_i, e_j)`
 for every continuous bilinear `B`. -/
 private theorem exists_sqrt_equiv {n : ℕ} {lam Lam : ℝ} (hlam : 0 < lam)
     (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.IsSymm)
-    (hq : ∀ ξ : EuclideanSpace ℝ (Fin n), lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, A i j * ξ i * ξ j ∧
-        ∑ i, ∑ j, A i j * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2) :
+    (hq :
+      ∀ ξ : EuclideanSpace ℝ (Fin n),
+        lam * ‖ξ‖ ^ 2 ≤ ∑ i, ∑ j, A i j * ξ i * ξ j ∧
+          ∑ i, ∑ j, A i j * ξ i * ξ j ≤ Lam * ‖ξ‖ ^ 2) :
     ∃ T : EuclideanSpace ℝ (Fin n) ≃L[ℝ] EuclideanSpace ℝ (Fin n),
       (∀ ξ, ‖T ξ‖ ^ 2 = ∑ i, ∑ j, A i j * ξ i * ξ j) ∧
-      ∀ B : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ,
-        ∑ i, B (T (EuclideanSpace.basisFun (Fin n) ℝ i)) (T (EuclideanSpace.basisFun (Fin n) ℝ i)) =
-          ∑ i, ∑ j, A i j * B (EuclideanSpace.basisFun (Fin n) ℝ i)
-            (EuclideanSpace.basisFun (Fin n) ℝ j) := by
+        ∀ B : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) →L[ℝ] ℝ,
+          ∑ i,
+              B (T (EuclideanSpace.basisFun (Fin n) ℝ i))
+                (T (EuclideanSpace.basisFun (Fin n) ℝ i)) =
+            ∑ i,
+              ∑ j,
+                A i j *
+                  B (EuclideanSpace.basisFun (Fin n) ℝ i)
+                    (EuclideanSpace.basisFun (Fin n) ℝ j) := by
   classical
-  have hquad : ∀ ξ : EuclideanSpace ℝ (Fin n),
+  have hquad :
+    ∀ ξ : EuclideanSpace ℝ (Fin n),
       ⟪ξ, toEuclideanCLM (𝕜 := ℝ) A ξ⟫ = ∑ i, ∑ j, A i j * ξ i * ξ j := by
     intro ξ
     rw [inner_toEuclideanCLM]
@@ -102,8 +115,9 @@ private theorem exists_sqrt_equiv {n : ℕ} {lam Lam : ℝ} (hlam : 0 < lam)
   have hSop_sa : IsSelfAdjoint Sop := (CFC.sqrt_nonneg A).isSelfAdjoint.map _
   have hnorm : ∀ ξ, ‖Sop ξ‖ ^ 2 = ∑ i, ∑ j, A i j * ξ i * ξ j := by
     intro ξ
-    rw [← real_inner_self_eq_norm_sq, ← ContinuousLinearMap.adjoint_inner_right, hSop_sa.adjoint_eq,
-      show Sop (Sop ξ) = (Sop * Sop) ξ from rfl, hSop, ← map_mul, hSS, hquad]
+    rw [← real_inner_self_eq_norm_sq, ← ContinuousLinearMap.adjoint_inner_right,
+      hSop_sa.adjoint_eq, show Sop (Sop ξ) = (Sop * Sop) ξ from rfl, hSop, ← map_mul, hSS,
+      hquad]
   have hinj : Function.Injective Sop := by
     intro a b hab
     by_contra hne
@@ -121,25 +135,35 @@ private theorem exists_sqrt_equiv {n : ℕ} {lam Lam : ℝ} (hlam : 0 < lam)
     intro i j
     rw [hT, hSop]
     simp [EuclideanSpace.basisFun_apply]
-  calc ∑ i, B (T (EuclideanSpace.basisFun (Fin n) ℝ i)) (T (EuclideanSpace.basisFun (Fin n) ℝ i))
-      = ∑ i, ∑ j, ∑ k, S j i * S k i *
-          B (EuclideanSpace.basisFun (Fin n) ℝ j) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
-        refine Finset.sum_congr rfl fun i _ => ?_
-        rw [bilinear_eq_sum_basisFun]
-        simp only [hTe]
-    _ = ∑ j, ∑ k, (∑ i, S j i * S k i) *
-          B (EuclideanSpace.basisFun (Fin n) ℝ j) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun j _ => ?_
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun k _ => ?_
-        rw [Finset.sum_mul]
-    _ = ∑ i, ∑ j, A i j * B (EuclideanSpace.basisFun (Fin n) ℝ i)
-          (EuclideanSpace.basisFun (Fin n) ℝ j) := by
-        refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
-        congr 1
-        rw [← hSS, mul_apply]
-        exact Finset.sum_congr rfl fun i _ => by rw [hSsymm i k]
+  calc
+    ∑ i, B (T (EuclideanSpace.basisFun (Fin n) ℝ i)) (T (EuclideanSpace.basisFun (Fin n) ℝ i)) =
+        ∑ i,
+          ∑ j,
+            ∑ k,
+              S j i * S k i *
+                B (EuclideanSpace.basisFun (Fin n) ℝ j) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
+      refine Finset.sum_congr rfl fun i _ => ?_
+      rw [bilinear_eq_sum_basisFun]
+      simp only [hTe]
+    _ =
+        ∑ j,
+          ∑ k,
+            (∑ i, S j i * S k i) *
+              B (EuclideanSpace.basisFun (Fin n) ℝ j) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl fun j _ => ?_
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl fun k _ => ?_
+      rw [Finset.sum_mul]
+    _ =
+        ∑ i,
+          ∑ j,
+            A i j *
+              B (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j) := by
+      refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
+      congr 1
+      rw [← hSS, mul_apply]
+      exact Finset.sum_congr rfl fun i _ => by rw [hSsymm i k]
 
 /-- Local form of `hessian_comp_equiv`: `C²` of `f` at `T x` suffices. -/
 private theorem hessian_comp_equiv_of_contDiffAt {E F : Type*}
@@ -196,6 +220,7 @@ theorem constant_coefficient_interior_hessian_holder {n : ℕ} (hn : 2 ≤ n) {�
       ∀ x ∈ ball c R, ∀ y ∈ ball c R,
         ‖fderiv ℝ (fderiv ℝ u) x - fderiv ℝ (fderiv ℝ u) y‖ ≤
           C * (U * R ^ (-(2:ℝ) - α) + M * R ^ (-(α:ℝ)) + H) * ‖x - y‖ ^ (α:ℝ) := by
+  -- Choose the Poisson estimate and the linear normalization constants.
   obtain ⟨C₀, hC₀, hP⟩ := poisson_interior_hessian_holder hn hα0 hα1
   have hLam0 : 0 < Lam := hlam.trans_le hLam
   -- `σ = √Λ` bounds `T`, `τ = 1/√λ` bounds `T⁻¹`.
@@ -246,6 +271,8 @@ theorem constant_coefficient_interior_hessian_holder {n : ℕ} (hn : 2 ≤ n) {�
   set v : EuclideanSpace ℝ (Fin n) → ℝ := fun z => u (T z) with hv
   set g : EuclideanSpace ℝ (Fin n) → ℝ := fun z => f (T z) with hg
   have hB : IsOpen (ball c (2 * R)) := isOpen_ball
+
+  -- Transport the equation and the interior balls through the linear map.
   have hu_at : ∀ x ∈ ball c (2 * R), ContDiffAt ℝ 2 u x := fun x hx =>
     hu.contDiffAt (hB.mem_nhds hx)
   have hvH : ∀ z, T z ∈ ball c (2 * R) → fderiv ℝ (fderiv ℝ v) z =
@@ -474,6 +501,8 @@ theorem constant_coefficient_interior_hessian_holder {n : ℕ} (hn : 2 ≤ n) {�
           mul_le_mul_of_nonneg_right (by linarith) hX
   · have hX : 0 ≤ U * R ^ (-(2:ℝ) - α) + M * R ^ (-(α:ℝ)) + H := by positivity
     have ht : 0 ≤ ‖x - y‖ ^ (α:ℝ) := by positivity
+
+    -- Combine the near-point and separated-point Holder estimates.
     by_cases hcase : τ * ‖x - y‖ < ρ
     · calc ‖fderiv ℝ (fderiv ℝ u) x - fderiv ℝ (fderiv ℝ u) y‖
           ≤ C₂ * (U * R ^ (-(2:ℝ) - α) + M * R ^ (-(α:ℝ)) + H) * ‖x - y‖ ^ (α:ℝ) :=

@@ -6,8 +6,12 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Ito.VectorItoProcessDiff
-import LevyStochCalc.Brownian.ItoCutoff
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.VectorItoProcessDiff
+public import LevyStochCalc.Brownian.ItoCutoff
 
 /-!
 # Coefficients of a vector Itô process clamped at a finite level
@@ -23,6 +27,8 @@ surely.
 * `LevyStochCalc.Brownian.Ito.clampCoeff`, `clampDrift` — the clamped coefficients.
 * `LevyStochCalc.Brownian.Ito.tendsto_energy_window_clamp` — the mesh of the approximation.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

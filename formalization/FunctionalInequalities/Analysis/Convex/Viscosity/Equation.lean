@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
-import FunctionalInequalities.Analysis.Convex.SecondOrder.Expansion
+module
+
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Pointwise
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.Expansion
 
 /-!
 # Almost-everywhere Monge–Ampère identification
@@ -8,6 +10,8 @@ Supporting the convex Monge–Ampère infrastructure for Letwin
 arXiv:2607.24164v1 Lemma 2.2. The declarations retain their original
 source hypotheses, dimensional scope and mathematical conclusions.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -21,7 +25,8 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! **The Monge–Ampère equation almost everywhere**: an Alexandrov solution has, at almost every point, a quadratic expansion with positive definite Hessian whose determinant equals the density. -/
+/-! **The Monge–Ampère equation almost everywhere**: an Alexandrov solution has, at almost every
+point, a quadratic expansion with positive definite Hessian whose determinant equals the density. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -125,164 +130,113 @@ theorem ae_exists_gradient_posDef_det_eq_on_open {n : ℕ}
 /-- Domain-relative Monge–Ampère localization for a strictly convex `C¹` function.
 The matrix in the conclusion is simultaneously the positive definite determinant
 matrix, the derivative of the genuine gradient, and the quadratic expansion matrix. -/
-theorem ae_exists_gradient_posDef_det_eq_of_strictConvexOn
-    {n : ℕ}
-    {v f : EuclideanSpace ℝ (Fin n) → ℝ}
-    {Ω : Set (EuclideanSpace ℝ (Fin n))}
-    (hΩ : IsOpen Ω)
-    (hstrict : StrictConvexOn ℝ Ω v)
-    (hv : ContDiffOn ℝ 1 v Ω)
-    (hf : ContinuousOn f Ω)
+theorem ae_exists_gradient_posDef_det_eq_of_strictConvexOn {n : ℕ}
+    {v f : EuclideanSpace ℝ (Fin n) → ℝ} {Ω : Set (EuclideanSpace ℝ (Fin n))} (hΩ : IsOpen Ω)
+    (hstrict : StrictConvexOn ℝ Ω v) (hv : ContDiffOn ℝ 1 v Ω) (hf : ContinuousOn f Ω)
     (hfpos : ∀ x ∈ Ω, 0 < f x)
-    (hMA : ∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G → G ⊆ Ω →
-      volume {p | ∃ x ∈ G, ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y} =
-        ∫⁻ y in G, ENNReal.ofReal (f y)) :
+    (hMA :
+      ∀ G : Set (EuclideanSpace ℝ (Fin n)),
+        IsOpen G →
+          G ⊆ Ω →
+            volume {p | ∃ x ∈ G, ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y} =
+              ∫⁻ y in G, ENNReal.ofReal (f y)) :
     ∀ᵐ x ∂(volume.restrict Ω),
-      ∃ A : Matrix (Fin n) (Fin n) ℝ, A.IsHermitian ∧
-        A.PosDef ∧ A.det = f x ∧
-        HasFDerivAt (gradient v)
-          (Matrix.toEuclideanLin A).toContinuousLinearMap x ∧
-        ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-          |v y - quadraticAt A x (gradient v x) (v x) y| ≤
-            ε * ‖y - x‖ ^ 2 := by
+      ∃ A : Matrix (Fin n) (Fin n) ℝ,
+        A.IsHermitian ∧
+          A.PosDef ∧
+            A.det = f x ∧
+              HasFDerivAt (gradient v) (Matrix.toEuclideanLin A).toContinuousLinearMap x ∧
+                ∀ ε > 0,
+                  ∀ᶠ y in 𝓝 x,
+                    |v y - quadraticAt A x (gradient v x) (v x) y| ≤ ε * ‖y - x‖ ^ 2 := by
   let E := EuclideanSpace ℝ (Fin n)
-
   let P : E → Prop := fun x =>
-    ∃ A : Matrix (Fin n) (Fin n) ℝ, A.IsHermitian ∧
-      A.PosDef ∧ A.det = f x ∧
-      HasFDerivAt (gradient v)
-        (Matrix.toEuclideanLin A).toContinuousLinearMap x ∧
-      ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-        |v y - quadraticAt A x (gradient v x) (v x) y| ≤
-          ε * ‖y - x‖ ^ 2
-
-  obtain ⟨R, r, hRpos, hRsub, hrcountable, hcover⟩ :=
-    exists_countable_buffered_ball_cover hΩ
-
+    ∃ A : Matrix (Fin n) (Fin n) ℝ,
+      A.IsHermitian ∧
+        A.PosDef ∧
+          A.det = f x ∧
+            HasFDerivAt (gradient v) (Matrix.toEuclideanLin A).toContinuousLinearMap x ∧
+              ∀ ε > 0,
+                ∀ᶠ y in 𝓝 x, |v y - quadraticAt A x (gradient v x) (v x) y| ≤ ε * ‖y - x‖ ^ 2
+  obtain ⟨R, r, hRpos, hRsub, hrcountable, hcover⟩ := exists_countable_buffered_ball_cover hΩ
   have hlocal :
-      ∀ c : E, ∀ r : ℝ, 0 < r → closedBall c r ⊆ Ω →
-        ∀ᵐ x ∂(volume.restrict (ball c (r / 2))), P x := by
+    ∀ c : E,
+      ∀ r : ℝ, 0 < r → closedBall c r ⊆ Ω → ∀ᵐ x ∂(volume.restrict (ball c (r / 2))), P x := by
     intro c r hr hcr
     let K : Set E := closedBall c r
     let U : Set E := ball c (r / 2)
-
-    have hKcompact : IsCompact K :=
-      isCompact_closedBall c r
-
-    have hKnonempty : K.Nonempty :=
-      ⟨c, by simp [K, hr.le]⟩
-
-    have hKΩ : K ⊆ Ω := by
-      simpa [K] using hcr
-
+    have hKcompact : IsCompact K := isCompact_closedBall c r
+    have hKnonempty : K.Nonempty := ⟨c, by simp [K, hr.le]⟩
+    have hKΩ : K ⊆ Ω := by simpa [K] using hcr
     obtain ⟨V, hVconv, hVK, hVimage⟩ :=
-      exists_compact_convex_extension
-        hΩ hstrict hv hKcompact hKnonempty hKΩ
-
-    have hUopen : IsOpen U :=
-      isOpen_ball
-
+      exists_compact_convex_extension hΩ hstrict hv hKcompact hKnonempty hKΩ
+    have hUopen : IsOpen U := isOpen_ball
     have hUsub : U ⊆ interior K := by
       intro x hx
       rw [mem_interior_iff_mem_nhds, Metric.mem_nhds_iff]
       refine ⟨r / 2, by linarith, ?_⟩
       intro y hy
       change dist y c ≤ r
-      have hx' : dist x c < r / 2 := by
-        simpa [U] using hx
-      have hy' : dist y x < r / 2 := by
-        exact hy
+      have hx' : dist x c < r / 2 := by simpa [U] using hx
+      have hy' : dist y x < r / 2 := by exact hy
       linarith [dist_triangle y x c]
-
-    have hVeq :
-        ∀ x ∈ U, V =ᶠ[𝓝 x] v := by
+    have hVeq : ∀ x ∈ U, V =ᶠ[𝓝 x] v := by
       intro x hx
       filter_upwards [hUopen.mem_nhds hx] with y hy
       exact hVK y (interior_subset (hUsub hy))
-
-    have hUΩ : U ⊆ Ω :=
-      hUsub.trans (interior_subset.trans hKΩ)
-
+    have hUΩ : U ⊆ Ω := hUsub.trans (interior_subset.trans hKΩ)
     have hVdiff : DifferentiableOn ℝ V U := by
       intro x hx
-      have hdv := ((hv.differentiableOn one_ne_zero) x (hUΩ hx)).differentiableAt
-        (hΩ.mem_nhds (hUΩ hx))
-      exact (hdv.hasFDerivAt.congr_of_eventuallyEq (hVeq x hx)).differentiableAt.differentiableWithinAt
-
+      have hdv :=
+        ((hv.differentiableOn one_ne_zero) x (hUΩ hx)).differentiableAt (hΩ.mem_nhds (hUΩ hx))
+      exact
+        (hdv.hasFDerivAt.congr_of_eventuallyEq
+            (hVeq x hx)).differentiableAt.differentiableWithinAt
     have hgradEq : ∀ x ∈ U, gradient V x = gradient v x := by
       intro x hx
       exact (hVeq x hx).gradient_eq
-
     have hVMA :
-        ∀ G : Set E, IsOpen G → G ⊆ U →
-          volume (subgradientImage V G) =
-            ∫⁻ y in G, ENNReal.ofReal (f y) := by
+      ∀ G : Set E,
+        IsOpen G → G ⊆ U → volume (subgradientImage V G) = ∫⁻ y in G, ENNReal.ofReal (f y) := by
       intro G hGopen hGU
       rw [hVimage G (hGU.trans hUsub)]
       exact hMA G hGopen (hGU.trans hUΩ)
-
-    have hfU : ContinuousOn f U :=
-      hf.mono hUΩ
-
+    have hfU : ContinuousOn f U := hf.mono hUΩ
     have hfposU : ∀ x ∈ U, 0 < f x := by
       intro x hx
       exact hfpos x (hUΩ hx)
-
     have hglobal :=
-      ae_exists_gradient_posDef_det_eq_on_open
-        hVconv hUopen hVdiff hfU hfposU hVMA
-
-    have hlocal' :
-        ∀ᵐ x ∂(volume.restrict U), P x := by
-      filter_upwards [hglobal, ae_restrict_mem hUopen.measurableSet]
-        with x hx hxU
+      ae_exists_gradient_posDef_det_eq_on_open hVconv hUopen hVdiff hfU hfposU hVMA
+    have hlocal' : ∀ᵐ x ∂(volume.restrict U), P x := by
+      filter_upwards [hglobal, ae_restrict_mem hUopen.measurableSet] with x hx hxU
       obtain ⟨A, hA, hPD, hdet, hdV, hquadV⟩ := hx
-
-      have hgradEv :
-          gradient V =ᶠ[𝓝 x] gradient v := by
+      have hgradEv : gradient V =ᶠ[𝓝 x] gradient v := by
         filter_upwards [hUopen.mem_nhds hxU] with y hy
         exact hgradEq y hy
-
-      have hdv :
-          HasFDerivAt (gradient v)
-            (Matrix.toEuclideanLin A).toContinuousLinearMap x :=
+      have hdv : HasFDerivAt (gradient v) (Matrix.toEuclideanLin A).toContinuousLinearMap x :=
         hdV.congr_of_eventuallyEq hgradEv.symm
-
       have hquad :
-          ∀ ε > 0, ∀ᶠ y in 𝓝 x,
-            |v y - quadraticAt A x (gradient v x) (v x) y| ≤
-              ε * ‖y - x‖ ^ 2 := by
+        ∀ ε > 0,
+          ∀ᶠ y in 𝓝 x, |v y - quadraticAt A x (gradient v x) (v x) y| ≤ ε * ‖y - x‖ ^ 2 := by
         intro ε hε
         filter_upwards [hquadV ε hε, hVeq x hxU] with y hy hyeq
-        rw [hyeq, hgradEq x hxU,
-          hVK x (interior_subset (hUsub hxU))] at hy
+        rw [hyeq, hgradEq x hxU, hVK x (interior_subset (hUsub hxU))] at hy
         exact hy
-
       exact ⟨A, hA, hPD, hdet, hdv, hquad⟩
-
     exact hlocal'
-
-  let : Countable {x : Ω // x ∈ r} :=
-    hrcountable.to_subtype
-
+  let : Countable { x : Ω // x ∈ r } := hrcountable.to_subtype
   have hlocalall :
-      ∀ᵐ x ∂(volume : Measure E),
-        ∀ i : {x : Ω // x ∈ r},
-          x ∈ ball (i.val : E) (R i.val / 2) → P x := by
+    ∀ᵐ x ∂(volume : Measure E),
+      ∀ i : { x : Ω // x ∈ r }, x ∈ ball (i.val : E) (R i.val / 2) → P x := by
     rw [ae_all_iff]
     intro i
-    have hi :=
-      hlocal (i.val : E) (R i.val) (hRpos i.val) (hRsub i.val)
-    exact
-      (ae_restrict_iff' isOpen_ball.measurableSet).1 hi
-
-  have hΩP :
-      ∀ᵐ x ∂(volume : Measure E), x ∈ Ω → P x := by
+    have hi := hlocal (i.val : E) (R i.val) (hRpos i.val) (hRsub i.val)
+    exact (ae_restrict_iff' isOpen_ball.measurableSet).1 hi
+  have hΩP : ∀ᵐ x ∂(volume : Measure E), x ∈ Ω → P x := by
     filter_upwards [hlocalall] with x hxall hxΩ
     rcases mem_iUnion.mp (hcover hxΩ) with ⟨z, hz⟩
     rcases mem_iUnion.mp hz with ⟨hzr, hzx⟩
     exact hxall ⟨z, hzr⟩ hzx
-
   rw [ae_restrict_iff' hΩ.measurableSet]
   exact hΩP
 
@@ -304,27 +258,31 @@ theorem ae_exists_gradient_posDef_det_eq {n : ℕ}
   exact ae_exists_gradient_posDef_det_eq_on_open hconv hΩ hdiff.differentiableOn hf hfpos hMA
 
 /-- **The a.e. Monge–Ampère equation for an Alexandrov solution**:
-if the subgradient images of the convex `u` on open sets carry a continuous positive density `f`, then at
-almost every point `u` has a second-order expansion with a positive definite symmetric `B`, `det B = f x`. -/
+if the subgradient images of the convex `u` on open sets carry a continuous positive density `f`,
+then at
+almost every point `u` has a second-order expansion with a positive definite symmetric `B`, `det B =
+f x`. -/
 theorem ae_exists_posDef_det_eq {n : ℕ} {u f : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ u) (hf : Continuous f) (hfpos : ∀ x, 0 < f x)
-    (hMA : ∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G →
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage u G) =
-        ∫⁻ x in G, ENNReal.ofReal (f x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) :
+    (hMA :
+      ∀ G : Set (EuclideanSpace ℝ (Fin n)),
+        IsOpen G →
+          (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage u G) =
+            ∫⁻ x in G, ENNReal.ofReal (f x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) :
     ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      ∃ B : Matrix (Fin n) (Fin n) ℝ, B.IsHermitian ∧ B.PosDef ∧ B.det = f x ∧
-        ∃ g : EuclideanSpace ℝ (Fin n),
-          ∀ ε > 0, ∀ᶠ y in 𝓝 x, |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2 := by
+      ∃ B : Matrix (Fin n) (Fin n) ℝ,
+        B.IsHermitian ∧
+          B.PosDef ∧
+            B.det = f x ∧
+              ∃ g : EuclideanSpace ℝ (Fin n),
+                ∀ ε > 0, ∀ᶠ y in 𝓝 x, |u y - quadraticAt B x g (u x) y| ≤ ε * ‖y - x‖ ^ 2 := by
   filter_upwards [ae_exists_quadraticAt_expansion hconv] with x hx
   rcases hx with ⟨B, hB, g, hexp⟩
   have hresult : B.PosDef ∧ B.det = f x :=
-    posDef_and_det_eq_of_quadratic_expansion hconv
-      (Ω := univ) isOpen_univ
-      (fun G hG _ => hMA G hG)
-      (mem_univ x) hf.continuousAt (hfpos x) hB hexp
+    posDef_and_det_eq_of_quadratic_expansion hconv (Ω := univ) isOpen_univ
+      (fun G hG _ => hMA G hG) (mem_univ x) hf.continuousAt (hfpos x) hB hexp
   exact ⟨B, hB, hresult.1, hresult.2, g, hexp⟩
 
 end FunctionalInequalities.Analysis
 
 end AeMongeAmpere
-

@@ -1,24 +1,32 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Derivative
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import Mathlib.Tactic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.Deriv.Abs
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Derivative
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import Mathlib.Tactic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.Deriv.Abs
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: the first variation of the Legendre transform on real clients
 
-Source: Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (pointwise form), the moment-map prerequisite of Letwin,
+Source: Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (pointwise form), the moment-map
+prerequisite of Letwin,
 arXiv:2607.24164v1, Theorem 2.5. Real clients with every premise derived:
 
-* the interval potential `0` on `[−1, 1]` and `⊤` outside (infinite exterior, nondifferentiable at the boundary) has
-  conjugate `|y|` (`DirectVariationBoundaryClient.interval_conjugate`), and the bounded continuous, non-`C¹` perturbation
+* the interval potential `0` on `[−1, 1]` and `⊤` outside (infinite exterior, nondifferentiable at
+  the boundary) has
+  conjugate `|y|` (`DirectVariationBoundaryClient.interval_conjugate`), and the bounded continuous,
+  non-`C¹` perturbation
   `min |z| 1` gives the derivative `−1` at `y = 1`;
-* the constant potential `−3` on the zero-dimensional space with perturbation `−2` gives the derivative `2` (signed, `Fin 0`).
+* the constant potential `−3` on the zero-dimensional space with perturbation `−2` gives the
+  derivative `2` (signed, `Fin 0`).
 
 Both invoke `hasDerivAt_legendre_add_smul_of_dualDifferentiable`. Not a source-law Euler–Lagrange,
 push-forward or moment-map client.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -45,7 +53,7 @@ theorem interval_conjugate (y : ℝ) :
     · apply iSup_le
       intro x
       by_cases hx : x ∈ Icc (-1 : ℝ) 1
-      · simp only [intervalPotential, if_pos hx, sub_zero, Real.inner_apply]
+      · simp only [intervalPotential, ite_eq_left hx, sub_zero, Real.inner_apply]
         apply EReal.coe_le_coe_iff.mpr
         by_cases hy : 0 ≤ y
         · rw [abs_of_nonneg hy]
@@ -55,7 +63,7 @@ theorem interval_conjugate (y : ℝ) :
           rw [abs_of_nonpos hy']
           have h := mul_le_mul_of_nonpos_right hx.1 hy'
           simpa using h
-      · simp only [intervalPotential, if_neg hx, EReal.sub_top]
+      · simp only [intervalPotential, ite_eq_right hx, EReal.sub_top]
         exact bot_le
     · by_cases hy : 0 ≤ y
       · calc
@@ -149,7 +157,7 @@ theorem interval_lsc : LowerSemicontinuous intervalPotential := by
     filter_upwards [] with x'
     by_cases hx' : x' ∈ Icc (-1 : ℝ) 1
     · simpa [intervalPotential, hx'] using hy0
-    · rw [intervalPotential, if_neg hx']
+    · rw [intervalPotential, ite_eq_right hx']
       exact hy0.trans (EReal.coe_lt_top 0)
   · filter_upwards [isOpen_compl_iff.mpr isClosed_Icc |>.mem_nhds hx] with x' hx'
     have hx' : x' ∉ Icc (-1 : ℝ) 1 := by simpa using hx'
@@ -222,7 +230,8 @@ end DirectVariationClients
 
 end Clients
 
-#print axioms FunctionalInequalities.Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay
+#print axioms
+  FunctionalInequalities.Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay
 #print axioms FunctionalInequalities.Analysis.conjugate_maximizer_eq_gradient
 #print axioms FunctionalInequalities.Analysis.exists_coercive_tilt_of_mem_interior_legendre_domain
 #print axioms FunctionalInequalities.Analysis.tiltedObjective_data

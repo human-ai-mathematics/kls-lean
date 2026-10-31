@@ -1,18 +1,24 @@
-import Mathlib.Analysis.Calculus.Deriv.Add
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.Calculus.Deriv.Mul
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.Analysis.Tensor.SlotAction
+module
+
+public import Mathlib.Analysis.Calculus.Deriv.Add
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.Calculus.Deriv.Mul
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.Analysis.Tensor.SlotAction
 
 /-!
 # The energy form of a coordinate tensor
 
-`energyForm A T = ⟨T, (A⁻¹)^{⊗r} T⟩` for an operator `A` and an order-`r` coordinate tensor `T` (BKL arXiv:2610.05474v1, p. 22,
-`F(A, T)`), the standard matrix of an operator, `energyForm 1 T = |T|²`, and smoothness near invertible `A`.
+`energyForm A T = ⟨T, (A⁻¹)^{⊗r} T⟩` for an operator `A` and an order-`r` coordinate tensor `T` (BKL
+arXiv:2610.05474v1, p. 22,
+`F(A, T)`), the standard matrix of an operator, `energyForm 1 T = |T|²`, and smoothness near
+invertible `A`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -23,15 +29,26 @@ namespace FunctionalInequalities.Analysis.CoordinateTensor
 
 variable {n r : ℕ}
 
-/-- The matrix of an operator on `ℝⁿ` in the standard basis: `(stdMatrix H) i k = ⟪e_i, H e_k⟫`. -/
-def stdMatrix (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) : Matrix (Fin n) (Fin n) ℝ :=
-  Matrix.of fun i k => ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
+/--
+The matrix of an operator on `ℝⁿ` in the standard basis: `(stdMatrix H) i k = ⟪e_i, H e_k⟫`. -/
+def stdMatrix (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
+    Matrix (Fin n) (Fin n) ℝ :=
+  Matrix.of fun i k =>
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
 
-/-- The energy form `F(A, T) = ⟨T, (A⁻¹)^{⊗r} T⟩ = Σ_{J,J'} T_J T_{J'} Π_s ⟪e_{J_s}, A⁻¹ e_{J'_s}⟫` of BKL
-arXiv:2610.05474v1, p. 22 (`A⁻¹ = Ring.inverse A`, the canonical inverse of the operator algebra). -/
-def energyForm (A : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (T : (Fin r → Fin n) → ℝ) : ℝ :=
-  ∑ J : Fin r → Fin n, ∑ J' : Fin r → Fin n, T J * T J' *
-    ∏ s, ⟪EuclideanSpace.basisFun (Fin n) ℝ (J s), Ring.inverse A (EuclideanSpace.basisFun (Fin n) ℝ (J' s))⟫
+/--
+The energy form `F(A, T) = ⟨T, (A⁻¹)^{⊗r} T⟩ = Σ_{J,J'} T_J T_{J'} Π_s ⟪e_{J_s}, A⁻¹ e_{J'_s}⟫` of
+BKL
+arXiv:2610.05474v1, p. 22 (`A⁻¹ = Ring.inverse A`, the canonical inverse of the operator algebra).
+-/
+def energyForm (A : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (T : (Fin r → Fin n) → ℝ) : ℝ :=
+  ∑ J : Fin r → Fin n,
+    ∑ J' : Fin r → Fin n,
+      T J * T J' *
+        ∏ s,
+          ⟪EuclideanSpace.basisFun (Fin n) ℝ (J s),
+            Ring.inverse A (EuclideanSpace.basisFun (Fin n) ℝ (J' s))⟫
 
 private lemma delta_product (J K : Fin r → Fin n) :
     (∏ s, if J s = K s then (1 : ℝ) else 0) =
@@ -40,7 +57,7 @@ private lemma delta_product (J K : Fin r → Fin n) :
   by_cases h : J = K
   · subst K
     simp
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     have hex : ∃ s, J s ≠ K s := by
       by_contra hnone
       apply h
@@ -48,7 +65,7 @@ private lemma delta_product (J K : Fin r → Fin n) :
       by_contra hs
       exact hnone ⟨s, hs⟩
     obtain ⟨s, hs⟩ := hex
-    exact Finset.prod_eq_zero (Finset.mem_univ s) (if_neg hs)
+    exact Finset.prod_eq_zero (Finset.mem_univ s) (ite_eq_right hs)
 
 /-- At `A = Id` the energy form is the Euclidean norm squared. -/
 theorem energyForm_one (T : (Fin r → Fin n) → ℝ) : energyForm 1 T = inner T T := by
@@ -59,21 +76,24 @@ theorem energyForm_one (T : (Fin r → Fin n) → ℝ) : energyForm 1 T = inner 
   simp [inner, mul_ite]
 
 /-- The energy form is `C²` near every `(A, T)` with `A` a unit. -/
-theorem contDiffAt_energyForm (A : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hA : IsUnit A)
-    (T : (Fin r → Fin n) → ℝ) :
-    ContDiffAt ℝ 2 (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
-      energyForm q.1 q.2) (A, T) := by
+theorem contDiffAt_energyForm (A : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (hA : IsUnit A) (T : (Fin r → Fin n) → ℝ) :
+    ContDiffAt ℝ 2
+      (fun q :
+          (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
+        energyForm q.1 q.2)
+      (A, T) := by
   classical
   have hinv : ContDiffAt ℝ 2 Ring.inverse A := by
     simpa only [hA.unit_spec] using contDiffAt_ringInverse ℝ hA.unit
   have hcoord (J : Fin r → Fin n) :
-      ContDiffAt ℝ 2
-        (fun q :
-          (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) ×
-            ((Fin r → Fin n) → ℝ) => q.2 J) (A, T) :=
-    (ContinuousLinearMap.proj J :
-      ((Fin r → Fin n) → ℝ) →L[ℝ] ℝ).contDiff.contDiffAt.comp
-        (A, T) contDiffAt_snd
+    ContDiffAt ℝ 2
+      (fun q :
+          (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
+        q.2 J)
+      (A, T) :=
+    (ContinuousLinearMap.proj J : ((Fin r → Fin n) → ℝ) →L[ℝ] ℝ).contDiff.contDiffAt.comp (A, T)
+      contDiffAt_snd
   unfold energyForm
   apply ContDiffAt.sum
   intro J _
@@ -82,8 +102,9 @@ theorem contDiffAt_energyForm (A : EuclideanSpace ℝ (Fin n) →L[ℝ] Euclidea
   apply ContDiffAt.mul ((hcoord J).mul (hcoord K))
   apply contDiffAt_prod
   intro s _
-  exact ContDiffAt.inner ℝ contDiffAt_const
-    ((hinv.comp (A, T) contDiffAt_fst).clm_apply contDiffAt_const)
+  exact
+    ContDiffAt.inner ℝ contDiffAt_const
+      ((hinv.comp (A, T) contDiffAt_fst).clm_apply contDiffAt_const)
 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
@@ -98,31 +119,32 @@ namespace FunctionalInequalities.Analysis.CoordinateTensor
 
 variable {n r : ℕ}
 
-/-- **Delta collapse on all slots but one**: `Σ_{J'} f(J') Π_{s' ≠ s} δ_{J_{s'} J'_{s'}} = Σ_k f(J[s ↦ k])`. -/
+/--
+**Delta collapse on all slots but one**: `Σ_{J'} f(J') Π_{s' ≠ s} δ_{J_{s'} J'_{s'}} = Σ_k f(J[s ↦
+k])`. -/
 theorem sum_mul_prod_delta_erase (J : Fin r → Fin n) (s : Fin r) (f : (Fin r → Fin n) → ℝ) :
-    ∑ J' : Fin r → Fin n, f J' * ∏ s' ∈ Finset.univ.erase s, (if J s' = J' s' then (1 : ℝ) else 0) =
+    ∑ J' : Fin r → Fin n,
+        f J' * ∏ s' ∈ Finset.univ.erase s, (if J s' = J' s' then (1 : ℝ) else 0) =
       ∑ k, f (Function.update J s k) := by
   classical
-  let p : (Fin r → Fin n) → Prop :=
-    fun J' => ∀ s' ∈ Finset.univ.erase s, J s' = J' s'
+  let p : (Fin r → Fin n) → Prop := fun J' => ∀ s' ∈ Finset.univ.erase s, J s' = J' s'
   have hprod (J' : Fin r → Fin n) :
-      (∏ s' ∈ Finset.univ.erase s, (if J s' = J' s' then (1 : ℝ) else 0)) =
-        if p J' then 1 else 0 := by
+    (∏ s' ∈ Finset.univ.erase s, (if J s' = J' s' then (1 : ℝ) else 0)) =
+      if p J' then 1 else 0 := by
     by_cases hp : p J'
-    · simp only [p, if_pos hp]
+    · simp only [p, ite_eq_left hp]
       apply Finset.prod_eq_one
       intro s' hs'
-      exact if_pos (hp s' hs')
-    · rw [if_neg hp]
+      exact ite_eq_left (hp s' hs')
+    · rw [ite_eq_right hp]
       obtain ⟨s', hs', hne⟩ : ∃ s', s' ∈ Finset.univ.erase s ∧ J s' ≠ J' s' := by
         by_contra h
         apply hp
         intro s' hs'
         by_contra h'
         exact h ⟨s', hs', h'⟩
-      exact Finset.prod_eq_zero hs' (if_neg hne)
-  have hfilter :
-      Finset.univ.filter p = Finset.univ.image (Function.update J s) := by
+      exact Finset.prod_eq_zero hs' (ite_eq_right hne)
+  have hfilter : Finset.univ.filter p = Finset.univ.image (Function.update J s) := by
     ext J'
     constructor
     · intro hJ'
@@ -144,17 +166,15 @@ theorem sum_mul_prod_delta_erase (J : Fin r → Fin n) (s : Fin r) (f : (Fin r �
         have hne : s' ≠ s := by simpa using hs'
         simp [Function.update, hne]
   calc
-    ∑ J' : Fin r → Fin n, f J' *
-        ∏ s' ∈ Finset.univ.erase s, (if J s' = J' s' then (1 : ℝ) else 0) =
+    ∑ J' : Fin r → Fin n,
+          f J' * ∏ s' ∈ Finset.univ.erase s, (if J s' = J' s' then (1 : ℝ) else 0) =
         ∑ J', if p J' then f J' else 0 := by
       apply Finset.sum_congr rfl
       intro J' hJ'
       rw [hprod]
       by_cases hp : p J' <;> simp [hp]
-    _ = ∑ J' ∈ Finset.univ.filter p, f J' := by
-      rw [← Finset.sum_filter]
-    _ = ∑ J' ∈ Finset.univ.image (Function.update J s), f J' := by
-      rw [hfilter]
+    _ = ∑ J' ∈ Finset.univ.filter p, f J' := by rw [← Finset.sum_filter]
+    _ = ∑ J' ∈ Finset.univ.image (Function.update J s), f J' := by rw [hfilter]
     _ = ∑ k, f (Function.update J s k) := by
       rw [Finset.sum_image]
       intro k hk l hl hkl
@@ -180,38 +200,35 @@ private lemma inverse_line {R : Type*} [NormedRing R]
   simpa only [Function.comp_def] using hc.congr_deriv heq
 
 /-- The entries of `(1 + εH)⁻¹` have derivative `−⟪e_i, H e_k⟫` at `ε = 0`. -/
-theorem hasDerivAt_inner_ringInverse_one_add (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
-    (i k : Fin n) :
-    HasDerivAt (fun ε : ℝ => ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-        Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
+theorem hasDerivAt_inner_ringInverse_one_add
+    (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (i k : Fin n) :
+    HasDerivAt
+      (fun ε : ℝ =>
+        ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+          Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
       (-⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫) 0 := by
-  have hi :
-      HasDerivAt (fun t : ℝ => Ring.inverse (1 + t • H)) (-H) 0 := by
+  have hi : HasDerivAt (fun t : ℝ => Ring.inverse (1 + t • H)) (-H) 0 := by
     convert inverse_line H using 1
-  have hv := hi.clm_apply
-    (hasDerivAt_const (0 : ℝ) (EuclideanSpace.basisFun (Fin n) ℝ k))
-  have h := (hasDerivAt_const (0 : ℝ)
-    (EuclideanSpace.basisFun (Fin n) ℝ i)).inner ℝ hv
+  have hv := hi.clm_apply (hasDerivAt_const (0 : ℝ) (EuclideanSpace.basisFun (Fin n) ℝ k))
+  have h := (hasDerivAt_const (0 : ℝ) (EuclideanSpace.basisFun (Fin n) ℝ i)).inner ℝ hv
   simpa using h
 
 /-- The directional derivative is the derivative along the line. -/
-theorem fderiv_apply_eq_deriv_line {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W] {Φ : W → ℝ} {y : W}
-    (hΦ : DifferentiableAt ℝ Φ y) (v : W) :
+theorem fderiv_apply_eq_deriv_line {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
+    {Φ : W → ℝ} {y : W} (hΦ : DifferentiableAt ℝ Φ y) (v : W) :
     fderiv ℝ Φ y v = deriv (fun ε : ℝ => Φ (y + ε • v)) 0 := by
   let line : ℝ → W := fun ε => y + ε • v
   have hl : HasDerivAt line v 0 := by
     simpa only [line, id_eq, one_smul] using
       (((hasDerivAt_id (0 : ℝ)).smul_const v).const_add y)
-  have hp : HasFDerivAt Φ (fderiv ℝ Φ y) (line 0) := by
-    simpa [line] using hΦ.hasFDerivAt
+  have hp : HasFDerivAt Φ (fderiv ℝ Φ y) (line 0) := by simpa [line] using hΦ.hasFDerivAt
   have hd := (hp.comp_hasDerivAt 0 hl).deriv.symm
   change fderiv ℝ Φ y v = deriv (fun ε : ℝ => Φ (y + ε • v)) 0 at hd
   exact hd
 
-private lemma real_deriv_mul {f g : ℝ → ℝ} {df dg x : ℝ}
-    (hf : HasDerivAt f df x) (hg : HasDerivAt g dg x) :
-    HasDerivAt (fun t => f t * g t) (df * g x + f x * dg) x := by
-  convert hf.mul hg using 1 <;> rfl
+private lemma real_deriv_mul {f g : ℝ → ℝ} {df dg x : ℝ} (hf : HasDerivAt f df x)
+    (hg : HasDerivAt g dg x) : HasDerivAt (fun t => f t * g t) (df * g x + f x * dg) x := by
+  convert hf.mul hg using 1
 
 private lemma real_deriv_sum {ι : Type*} (s : Finset ι)
     (f : ι → ℝ → ℝ) (df : ι → ℝ) (x : ℝ)
@@ -298,7 +315,8 @@ private lemma slot_derivative_sum
       simp only [inner, Finset.sum_neg_distrib]
 
 set_option maxHeartbeats 800000 in
-/-- **BKL (88), first order, along the line**: `d/dε F(1 + εH, T + εX)|₀ = 2⟨T, X⟩ − ⟨T, Σ_H T⟩`. -/
+/--
+**BKL (88), first order, along the line**: `d/dε F(1 + εH, T + εX)|₀ = 2⟨T, X⟩ − ⟨T, Σ_H T⟩`. -/
 theorem hasDerivAt_energyForm_line (T : (Fin r → Fin n) → ℝ)
     (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (X : (Fin r → Fin n) → ℝ) :
     HasDerivAt (fun ε : ℝ => energyForm (1 + ε • H) (T + ε • X))
@@ -307,15 +325,12 @@ theorem hasDerivAt_energyForm_line (T : (Fin r → Fin n) → ℝ)
   let a (i k : Fin n) (t : ℝ) : ℝ :=
     ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
       Ring.inverse (1 + t • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
-  let P (J K : Fin r → Fin n) : ℝ :=
-    ∏ s, if J s = K s then (1 : ℝ) else 0
+  let P (J K : Fin r → Fin n) : ℝ := ∏ s, if J s = K s then (1 : ℝ) else 0
   let Q (J K : Fin r → Fin n) : ℝ :=
-    ∑ s, (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
-      (-stdMatrix H (J s) (K s))
+    ∑ s,
+      (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) * (-stdMatrix H (J s) (K s))
   have a0 (i k : Fin n) : a i k 0 = if i = k then 1 else 0 := by
-    have hz :
-        (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) +
-          (0 : ℝ) • H = 1 := by
+    have hz : (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) + (0 : ℝ) • H = 1 := by
       apply ContinuousLinearMap.ext
       intro v
       change v + (0 : ℝ) • H v = v
@@ -323,51 +338,37 @@ theorem hasDerivAt_energyForm_line (T : (Fin r → Fin n) → ℝ)
     unfold a
     rw [hz, Ring.inverse_one]
     exact (EuclideanSpace.basisFun (Fin n) ℝ).inner_eq_ite i k
-  have ha (i k : Fin n) :
-      HasDerivAt (a i k) (-stdMatrix H i k) 0 :=
+  have ha (i k : Fin n) : HasDerivAt (a i k) (-stdMatrix H i k) 0 :=
     hasDerivAt_inner_ringInverse_one_add H i k
-  have hp (J K : Fin r → Fin n) :
-      HasDerivAt (fun t => ∏ s, a (J s) (K s) t) (Q J K) 0 := by
-    have h := real_deriv_prod Finset.univ
-      (fun s t => a (J s) (K s) t)
-      (fun s => -stdMatrix H (J s) (K s)) 0
-      (fun s _ => ha (J s) (K s))
+  have hp (J K : Fin r → Fin n) : HasDerivAt (fun t => ∏ s, a (J s) (K s) t) (Q J K) 0 := by
+    have h :=
+      real_deriv_prod Finset.univ (fun s t => a (J s) (K s) t)
+        (fun s => -stdMatrix H (J s) (K s)) 0 (fun s _ => ha (J s) (K s))
     apply h.congr_deriv
     simp only [a0, Q]
-  have hp0 (J K : Fin r → Fin n) :
-      (∏ s, a (J s) (K s) 0) = P J K := by
-    simp only [a0, P]
-  have ht (J : Fin r → Fin n) :
-      HasDerivAt (fun t : ℝ => T J + t * X J) (X J) 0 := by
+  have hp0 (J K : Fin r → Fin n) : (∏ s, a (J s) (K s) 0) = P J K := by simp only [a0, P]
+  have ht (J : Fin r → Fin n) : HasDerivAt (fun t : ℝ => T J + t * X J) (X J) 0 := by
     simpa only [id_eq, one_mul] using
       (((hasDerivAt_id (0 : ℝ)).mul_const (X J)).const_add (T J))
-  let d (J K : Fin r → Fin n) : ℝ :=
-    (X J * T K + T J * X K) * P J K + T J * T K * Q J K
+  let d (J K : Fin r → Fin n) : ℝ := (X J * T K + T J * X K) * P J K + T J * T K * Q J K
   have hterm (J K : Fin r → Fin n) :
-      HasDerivAt
-        (fun t : ℝ => (T J + t * X J) * (T K + t * X K) *
-          (∏ s, a (J s) (K s) t))
-        (d J K) 0 := by
+    HasDerivAt (fun t : ℝ => (T J + t * X J) * (T K + t * X K) * (∏ s, a (J s) (K s) t)) (d J K)
+      0 := by
     have h := real_deriv_mul (real_deriv_mul (ht J) (ht K)) (hp J K)
     apply h.congr_deriv
     simp only [zero_mul, add_zero, hp0, d]
   have hraw :
-      HasDerivAt
-        (fun t : ℝ => ∑ J, ∑ K,
-          (T J + t * X J) * (T K + t * X K) *
-            (∏ s, a (J s) (K s) t))
-        (∑ J, ∑ K, d J K) 0 := by
+    HasDerivAt
+      (fun t : ℝ => ∑ J, ∑ K, (T J + t * X J) * (T K + t * X K) * (∏ s, a (J s) (K s) t))
+      (∑ J, ∑ K, d J K) 0 := by
     apply real_deriv_sum
     intro J _
     apply real_deriv_sum
     intro K _
     exact hterm J K
-  have hfirst :
-      (∑ J, ∑ K, (X J * T K + T J * X K) * P J K) =
-        2 * inner T X := by
+  have hfirst : (∑ J, ∑ K, (X J * T K + T J * X K) * P J K) = 2 * inner T X := by
     calc
-      (∑ J, ∑ K, (X J * T K + T J * X K) * P J K) =
-          ∑ J, (X J * T J + T J * X J) := by
+      (∑ J, ∑ K, (X J * T K + T J * X K) * P J K) = ∑ J, (X J * T J + T J * X J) := by
         apply Finset.sum_congr rfl
         intro J _
         simp [P, delta_product, mul_ite]
@@ -378,33 +379,34 @@ theorem hasDerivAt_energyForm_line (T : (Fin r → Fin n) → ℝ)
       _ = 2 * inner T X := by
         rw [← Finset.mul_sum]
         rfl
-  have hsecond :
-      (∑ J, ∑ K, T J * T K * Q J K) =
-        -inner T (actSum (stdMatrix H) T) :=
+  have hsecond : (∑ J, ∑ K, T J * T K * Q J K) = -inner T (actSum (stdMatrix H) T) :=
     slot_derivative_sum T (stdMatrix H)
-  have hd :
-      (∑ J, ∑ K, d J K) =
-        2 * inner T X - inner T (actSum (stdMatrix H) T) := by
+  have hd : (∑ J, ∑ K, d J K) = 2 * inner T X - inner T (actSum (stdMatrix H) T) := by
     simp only [d, Finset.sum_add_distrib]
     rw [hfirst, hsecond]
     rfl
   have h := hraw.congr_deriv hd
-  convert h using 1 <;> rfl
+  convert h using 1
+  rfl
 
 set_option maxHeartbeats 800000 in
 /-- **BKL (88), first order**: `DF(Id, T)[(H, X)] = 2⟨T, X⟩ − ⟨T, Σ_H T⟩`. -/
 theorem fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
     (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (X : (Fin r → Fin n) → ℝ) :
-    fderiv ℝ (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
-        energyForm q.1 q.2) (1, T) (H, X) =
+    fderiv ℝ
+        (fun q :
+            (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
+          energyForm q.1 q.2)
+        (1, T) (H, X) =
       2 * inner T X - inner T (actSum (stdMatrix H) T) := by
   have hdiff :=
-    (contDiffAt_energyForm
-      (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
-      isUnit_one T).differentiableAt (by norm_num)
+    (contDiffAt_energyForm (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+          isUnit_one T).differentiableAt
+      (by norm_num)
   rw [fderiv_apply_eq_deriv_line hdiff (H, X)]
-  change deriv (fun t : ℝ => energyForm (1 + t • H) (T + t • X)) 0 =
-    2 * inner T X - inner T (actSum (stdMatrix H) T)
+  change
+    deriv (fun t : ℝ => energyForm (1 + t • H) (T + t • X)) 0 =
+      2 * inner T X - inner T (actSum (stdMatrix H) T)
   exact (hasDerivAt_energyForm_line T H X).deriv
 
 end FunctionalInequalities.Analysis.CoordinateTensor
@@ -416,7 +418,8 @@ section EnergyFormSecondDerivativeCalculus
 open Matrix
 open scoped RealInnerProductSpace
 
-/-! Helpers for the second-order expansion of the energy form: a double-erasure product sum and line derivatives of `⟪(1 + tB)⁻¹ ·, ·⟫`. -/
+/-! Helpers for the second-order expansion of the energy form: a double-erasure product sum and line
+derivatives of `⟪(1 + tB)⁻¹ ·, ·⟫`. -/
 
 namespace FunctionalInequalities.Analysis.CoordinateTensor
 
@@ -495,32 +498,29 @@ end NormedSpace
 `Σ_{J'} f(J') Π_{s' ∉ {s,t}} δ_{J_{s'} J'_{s'}} = Σ_{k,l} f(J[s ↦ k][t ↦ l])`. -/
 theorem sum_mul_prod_delta_erase_erase (J : Fin r → Fin n) {s t : Fin r} (hst : s ≠ t)
     (f : (Fin r → Fin n) → ℝ) :
-    ∑ J' : Fin r → Fin n, f J' *
-        ∏ s' ∈ (Finset.univ.erase s).erase t, (if J s' = J' s' then (1 : ℝ) else 0) =
+    ∑ J' : Fin r → Fin n,
+        f J' * ∏ s' ∈ (Finset.univ.erase s).erase t, (if J s' = J' s' then (1 : ℝ) else 0) =
       ∑ k, ∑ l, f (Function.update (Function.update J s k) t l) := by
   classical
-  let p : (Fin r → Fin n) → Prop :=
-    fun J' => ∀ u ∈ (Finset.univ.erase s).erase t, J u = J' u
-  let q : (Fin n × Fin n) → (Fin r → Fin n) :=
-    fun kl => Function.update (Function.update J s kl.1) t kl.2
+  let p : (Fin r → Fin n) → Prop := fun J' => ∀ u ∈ (Finset.univ.erase s).erase t, J u = J' u
+  let q : (Fin n × Fin n) → (Fin r → Fin n) := fun kl =>
+    Function.update (Function.update J s kl.1) t kl.2
   have hprod (J' : Fin r → Fin n) :
-      (∏ u ∈ (Finset.univ.erase s).erase t,
-          (if J u = J' u then (1 : ℝ) else 0)) =
-        if p J' then 1 else 0 := by
+    (∏ u ∈ (Finset.univ.erase s).erase t, (if J u = J' u then (1 : ℝ) else 0)) =
+      if p J' then 1 else 0 := by
     by_cases hp : p J'
-    · simp only [p, if_pos hp]
+    · simp only [p, ite_eq_left hp]
       apply Finset.prod_eq_one
       intro u hu
-      exact if_pos (hp u hu)
-    · rw [if_neg hp]
-      obtain ⟨u, hu, hne⟩ :
-          ∃ u, u ∈ (Finset.univ.erase s).erase t ∧ J u ≠ J' u := by
+      exact ite_eq_left (hp u hu)
+    · rw [ite_eq_right hp]
+      obtain ⟨u, hu, hne⟩ : ∃ u, u ∈ (Finset.univ.erase s).erase t ∧ J u ≠ J' u := by
         by_contra h
         apply hp
         intro u hu
         by_contra h'
         exact h ⟨u, hu, h'⟩
-      exact Finset.prod_eq_zero hu (if_neg hne)
+      exact Finset.prod_eq_zero hu (ite_eq_right hne)
   have hfilter : Finset.univ.filter p = Finset.univ.image q := by
     ext J'
     constructor
@@ -536,8 +536,7 @@ theorem sum_mul_prod_delta_erase_erase (J : Fin r → Fin n) {s t : Fin r} (hst 
           · subst u
             change Function.update (Function.update J s (J' s)) t (J' t) t = J' t
             rw [Function.update_self]
-          · have hu : u ∈ (Finset.univ.erase s).erase t := by
-              simp [hus, hut]
+          · have hu : u ∈ (Finset.univ.erase s).erase t := by simp [hus, hut]
             change Function.update (Function.update J s (J' s)) t (J' t) u = J' u
             rw [Function.update_of_ne hut, Function.update_of_ne hus]
             exact hp u hu
@@ -549,8 +548,7 @@ theorem sum_mul_prod_delta_erase_erase (J : Fin r → Fin n) {s t : Fin r} (hst 
       · exact Finset.mem_univ _
       · intro u hu
         have hut : u ≠ t := (Finset.mem_erase.mp hu).1
-        have hus : u ≠ s :=
-          (Finset.mem_erase.mp (Finset.mem_erase.mp hu).2).1
+        have hus : u ≠ s := (Finset.mem_erase.mp (Finset.mem_erase.mp hu).2).1
         change J u = Function.update (Function.update J s kl.1) t kl.2 u
         rw [Function.update_of_ne hut, Function.update_of_ne hus]
   have hq : Function.Injective q := by
@@ -559,22 +557,18 @@ theorem sum_mul_prod_delta_erase_erase (J : Fin r → Fin n) {s t : Fin r} (hst 
     have ht' := congrFun hkl t
     have hk : kl.1 = kl'.1 := by
       simpa only [q, Function.update_of_ne hst, Function.update_self] using hs'
-    have hl : kl.2 = kl'.2 := by
-      simpa only [q, Function.update_self] using ht'
+    have hl : kl.2 = kl'.2 := by simpa only [q, Function.update_self] using ht'
     exact Prod.ext hk hl
   calc
-    ∑ J' : Fin r → Fin n, f J' *
-        ∏ u ∈ (Finset.univ.erase s).erase t,
-          (if J u = J' u then (1 : ℝ) else 0) =
+    ∑ J' : Fin r → Fin n,
+          f J' * ∏ u ∈ (Finset.univ.erase s).erase t, (if J u = J' u then (1 : ℝ) else 0) =
         ∑ J', if p J' then f J' else 0 := by
       apply Finset.sum_congr rfl
       intro J' _
       rw [hprod]
       by_cases hp : p J' <;> simp [hp]
-    _ = ∑ J' ∈ Finset.univ.filter p, f J' := by
-      rw [← Finset.sum_filter]
-    _ = ∑ J' ∈ Finset.univ.image q, f J' := by
-      rw [hfilter]
+    _ = ∑ J' ∈ Finset.univ.filter p, f J' := by rw [← Finset.sum_filter]
+    _ = ∑ J' ∈ Finset.univ.image q, f J' := by rw [hfilter]
     _ = ∑ kl : Fin n × Fin n, f (q kl) := by
       rw [Finset.sum_image]
       intro kl _ kl' _ hEq
@@ -582,31 +576,37 @@ theorem sum_mul_prod_delta_erase_erase (J : Fin r → Fin n) {s t : Fin r} (hst 
     _ = ∑ k, ∑ l, f (Function.update (Function.update J s k) t l) := by
       simpa only [q] using
         (Fintype.sum_prod_type
-          (fun kl : Fin n × Fin n =>
-            f (Function.update (Function.update J s kl.1) t kl.2)))
+          (fun kl : Fin n × Fin n => f (Function.update (Function.update J s kl.1) t kl.2)))
 
 /-- The entries of `(1 + εH)⁻¹` are differentiable near `ε = 0` with derivative
 `−⟪e_i, (1+εH)⁻¹ H (1+εH)⁻¹ e_k⟫`. -/
 theorem hasDerivAt_inner_ringInverse_one_add_of_isUnit
     (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (i k : Fin n) {ε : ℝ}
     (hε : IsUnit (1 + ε • H)) :
-    HasDerivAt (fun ε : ℝ => ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-        Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
+    HasDerivAt
+      (fun ε : ℝ =>
+        ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+          Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
       (-⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-        Ring.inverse (1 + ε • H) (H (Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)))⟫) ε := by
-  exact inverse_entry_at_unit H
-    (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
-    (EuclideanSpace.basisFun (Fin n) ℝ k) ε hε
+          Ring.inverse (1 + ε • H)
+            (H (Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)))⟫)
+      ε := by
+  exact
+    inverse_entry_at_unit H (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
+      (EuclideanSpace.basisFun (Fin n) ℝ k) ε hε
 
 /-- The second derivative of the entries of `(1 + εH)⁻¹` at `ε = 0` is `2⟪e_i, H² e_k⟫`. -/
 theorem hasDerivAt_deriv_inner_ringInverse_one_add
     (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (i k : Fin n) :
-    HasDerivAt (deriv fun ε : ℝ => ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
-        Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
-      (2 * ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (H (EuclideanSpace.basisFun (Fin n) ℝ k))⟫) 0 := by
-  exact inverse_entry_second H
-    (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
-    (EuclideanSpace.basisFun (Fin n) ℝ k)
+    HasDerivAt
+      (deriv fun ε : ℝ =>
+        ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+          Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
+      (2 * ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (H (EuclideanSpace.basisFun (Fin n) ℝ k))⟫)
+      0 := by
+  exact
+    inverse_entry_second H (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
+      (EuclideanSpace.basisFun (Fin n) ℝ k)
 
 set_option maxHeartbeats 800000 in
 /-- The second directional derivative is the second derivative along the line. -/
@@ -652,7 +652,8 @@ section EnergyFormSecondDerivative
 open Matrix
 open scoped RealInnerProductSpace
 
-/-! Second derivative of the energy form along lines and at the identity (BKL (88), second order). -/
+/-! Second derivative of the energy form along lines and at the identity (BKL (88), second order).
+-/
 
 namespace FunctionalInequalities.Analysis.CoordinateTensor
 
@@ -675,24 +676,25 @@ private lemma real_deriv_mul_const {f : ℝ → ℝ} {df x : ℝ} (c : ℝ)
     HasDerivAt (fun t => f t * c) (df * c) x :=
   hf.mul_const c
 
-/-- One-slot delta collapse with two tensors: `Σ_{J,K} S_J T_K Σ_s Π_{u≠s} δ (−M_{J_s K_s}) = −⟨S, Σ_M T⟩`. -/
-private lemma slot_sum_two
-    (S T : (Fin r → Fin n) → ℝ) (M : Matrix (Fin n) (Fin n) ℝ) :
-    (∑ J : Fin r → Fin n, ∑ K : Fin r → Fin n,
-      S J * T K * (∑ s : Fin r,
-        (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
-          (-M (J s) (K s)))) =
+/--
+One-slot delta collapse with two tensors: `Σ_{J,K} S_J T_K Σ_s Π_{u≠s} δ (−M_{J_s K_s}) = −⟨S, Σ_M
+T⟩`. -/
+private lemma slot_sum_two (S T : (Fin r → Fin n) → ℝ) (M : Matrix (Fin n) (Fin n) ℝ) :
+    (∑ J : Fin r → Fin n,
+        ∑ K : Fin r → Fin n,
+          S J * T K *
+            (∑ s : Fin r,
+              (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+                (-M (J s) (K s)))) =
       -inner S (actSum M T) := by
   let D (s : Fin r) (J K : Fin r → Fin n) : ℝ :=
     ∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0
   have hc (s : Fin r) (J : Fin r → Fin n) :
-      (∑ K, (T K * M (J s) (K s)) * D s J K) =
-        ∑ k, T (Function.update J s k) * M (J s) k := by
+    (∑ K, (T K * M (J s) (K s)) * D s J K) = ∑ k, T (Function.update J s k) * M (J s) k := by
     simpa only [D, Function.update_self] using
       sum_mul_prod_delta_erase J s (fun K => T K * M (J s) (K s))
   have hs (s : Fin r) (J : Fin r → Fin n) :
-      (∑ K, S J * T K * (D s J K * (-M (J s) (K s)))) =
-        -(S J * actOn M s T J) := by
+    (∑ K, S J * T K * (D s J K * (-M (J s) (K s)))) = -(S J * actOn M s T J) := by
     calc
       (∑ K, S J * T K * (D s J K * (-M (J s) (K s)))) =
           ∑ K, -(S J * ((T K * M (J s) (K s)) * D s J K)) := by
@@ -709,14 +711,12 @@ private lemma slot_sum_two
         intro k _
         exact mul_comm _ _
   have hJ (J : Fin r → Fin n) :
-      (∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
-        -(S J * actSum M T J) := by
+    (∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) = -(S J * actSum M T J) := by
     calc
       (∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
           ∑ K, ∑ s, S J * T K * (D s J K * (-M (J s) (K s))) := by
         simp only [Finset.mul_sum]
-      _ = ∑ s, ∑ K, S J * T K * (D s J K * (-M (J s) (K s))) := by
-        rw [Finset.sum_comm]
+      _ = ∑ s, ∑ K, S J * T K * (D s J K * (-M (J s) (K s))) := by rw [Finset.sum_comm]
       _ = ∑ s, -(S J * actOn M s T J) := by
         apply Finset.sum_congr rfl
         intro s _
@@ -724,16 +724,13 @@ private lemma slot_sum_two
       _ = -(S J * actSum M T J) := by
         unfold actSum
         rw [Finset.sum_neg_distrib, Finset.mul_sum]
-  change (∑ J, ∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
-    -inner S (actSum M T)
+  change (∑ J, ∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) = -inner S (actSum M T)
   calc
-    (∑ J, ∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
-        ∑ J, -(S J * actSum M T J) := by
+    (∑ J, ∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) = ∑ J, -(S J * actSum M T J) := by
       apply Finset.sum_congr rfl
       intro J _
       exact hJ J
-    _ = -inner S (actSum M T) := by
-      simp only [inner, Finset.sum_neg_distrib]
+    _ = -inner S (actSum M T) := by simp only [inner, Finset.sum_neg_distrib]
 
 private lemma inner_comm' (T S : (Fin r → Fin n) → ℝ) : inner T S = inner S T := by
   unfold inner
@@ -862,17 +859,19 @@ private lemma inner_H_H (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace
     (hH : IsSelfAdjoint H) (i k : Fin n) :
     ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (H (EuclideanSpace.basisFun (Fin n) ℝ k))⟫ =
       (stdMatrix H * stdMatrix H) i k := by
-  have hsym : ∀ x y : EuclideanSpace ℝ (Fin n), ⟪H x, y⟫ = ⟪x, H y⟫ :=
-    fun x y => (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH) x y
-  rw [Matrix.mul_apply, ← hsym (EuclideanSpace.basisFun (Fin n) ℝ i) (H (EuclideanSpace.basisFun (Fin n) ℝ k)),
-    ← (EuclideanSpace.basisFun (Fin n) ℝ).sum_inner_mul_inner
+  have hsym : ∀ x y : EuclideanSpace ℝ (Fin n), ⟪H x, y⟫ = ⟪x, H y⟫ := fun x y =>
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH) x y
+  rw [Matrix.mul_apply, ←
+    hsym (EuclideanSpace.basisFun (Fin n) ℝ i) (H (EuclideanSpace.basisFun (Fin n) ℝ k)), ←
+    (EuclideanSpace.basisFun (Fin n) ℝ).sum_inner_mul_inner
       (H (EuclideanSpace.basisFun (Fin n) ℝ i)) (H (EuclideanSpace.basisFun (Fin n) ℝ k))]
   apply Finset.sum_congr rfl
   intro j _
-  change ⟪H (EuclideanSpace.basisFun (Fin n) ℝ i), EuclideanSpace.basisFun (Fin n) ℝ j⟫ *
-      ⟪EuclideanSpace.basisFun (Fin n) ℝ j, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫ =
-    ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ *
-      ⟪EuclideanSpace.basisFun (Fin n) ℝ j, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
+  change
+    ⟪H (EuclideanSpace.basisFun (Fin n) ℝ i), EuclideanSpace.basisFun (Fin n) ℝ j⟫ *
+        ⟪EuclideanSpace.basisFun (Fin n) ℝ j, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫ =
+      ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ *
+        ⟪EuclideanSpace.basisFun (Fin n) ℝ j, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
   rw [hsym]
 
 /-! ### The second derivative along the line -/
@@ -888,6 +887,8 @@ theorem deriv_deriv_energyForm_line (T : (Fin r → Fin n) → ℝ)
         + (1 / 2 : ℝ) * inner (actSum (stdMatrix H) T) (actSum (stdMatrix H) T)
         + (1 / 2 : ℝ) * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T)) := by
   have hM : (stdMatrix H).IsSymm := stdMatrix_isSymm H hH
+
+  -- Differentiate the inverse-frame coefficients along the line.
   let a (i k : Fin n) (t : ℝ) : ℝ :=
     ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
       Ring.inverse (1 + t • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
@@ -958,6 +959,8 @@ theorem deriv_deriv_energyForm_line (T : (Fin r → Fin n) → ℝ)
   -- second derivative at `0`
   let P (J K : Fin r → Fin n) : ℝ :=
     ∏ s, if J s = K s then (1 : ℝ) else 0
+
+  -- Differentiate the products of tensor coefficients.
   let Q (J K : Fin r → Fin n) : ℝ :=
     ∑ s, (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
       (-stdMatrix H (J s) (K s))
@@ -1014,6 +1017,8 @@ theorem deriv_deriv_energyForm_line (T : (Fin r → Fin n) → ℝ)
     exact real_deriv_add (hA J K) (hB J K)
   rw [heq.deriv_eq, hD2.deriv]
   -- the algebra
+
+  -- Sum the contractions and identify the resulting energy terms.
   have h1 : (∑ J, ∑ K, (X J * X K + X J * X K) * P J K) = 2 * inner X X := by
     calc
       (∑ J, ∑ K, (X J * X K + X J * X K) * P J K) =
@@ -1133,14 +1138,20 @@ theorem deriv_deriv_energyForm_line (T : (Fin r → Fin n) → ℝ)
 theorem fderiv_fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
     (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hH : IsSelfAdjoint H)
     (X : (Fin r → Fin n) → ℝ) :
-    fderiv ℝ (fderiv ℝ (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
-        energyForm q.1 q.2)) (1, T) (H, X) (H, X) =
-      2 * (inner X X - 2 * inner X (actSum (stdMatrix H) T)
-        + (1 / 2 : ℝ) * inner (actSum (stdMatrix H) T) (actSum (stdMatrix H) T)
-        + (1 / 2 : ℝ) * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T)) := by
+    fderiv ℝ
+        (fderiv ℝ
+          (fun q :
+              (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) ×
+                ((Fin r → Fin n) → ℝ) =>
+            energyForm q.1 q.2))
+        (1, T) (H, X) (H, X) =
+      2 *
+        (inner X X - 2 * inner X (actSum (stdMatrix H) T) +
+            (1 / 2 : ℝ) * inner (actSum (stdMatrix H) T) (actSum (stdMatrix H) T) +
+          (1 / 2 : ℝ) * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T)) := by
   have hdiff :=
-    contDiffAt_energyForm
-      (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) isUnit_one T
+    contDiffAt_energyForm (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+      isUnit_one T
   rw [fderiv_fderiv_apply_eq_deriv_deriv_line hdiff (H, X)]
   change deriv (deriv fun ε : ℝ => energyForm (1 + ε • H) (T + ε • X)) 0 = _
   exact deriv_deriv_energyForm_line T H hH X

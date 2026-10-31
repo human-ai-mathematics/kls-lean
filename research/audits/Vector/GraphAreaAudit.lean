@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Area
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Area
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the codimension-`m` area formula
@@ -22,6 +24,8 @@ actually consumes and which the route stated correctly).  The route statements f
 What this is and is **not**: it is the area formula for a **graph** in arbitrary codimension.  It is
 **not** the Federer area formula for an arbitrary injective `C¹` parametrization.
 -/
+
+@[expose] public section
 
 noncomputable section
 

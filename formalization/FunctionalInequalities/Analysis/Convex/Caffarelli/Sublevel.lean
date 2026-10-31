@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Convex.Caffarelli.Contact
+module
+
+public import FunctionalInequalities.Analysis.Convex.Caffarelli.Contact
 
 /-! # Sublevel in convex Monge--Ampere analysis
 
@@ -7,6 +9,8 @@ Lemma 2.2 through BB arXiv:1207.6128v1 Theorem 2.24(ii).
 The declarations retain their given-source hypotheses; domain contact
 rigidity and moment-source regularity have separate consumers.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -34,13 +38,11 @@ private lemma supporting_affine_convex (c : ℝ) (p x : E) :
   ring
 
 private lemma subgradient_of_local_agreement {u v : E → ℝ} (hconv : ConvexOn ℝ univ u)
-    {U : Set E} (hU : IsOpen U) {x q : E} (hx : x ∈ U)
-    (heq : ∀ ⦃w⦄, w ∈ U → v w = u w)
-    (hq : ∀ w, v x + ⟪q, w - x⟫ ≤ v w) :
-    ∀ w, u x + ⟪q, w - x⟫ ≤ u w := by
-  have hlocal : ∀ w ∈ U,u x+⟪q,w-x⟫ ≤ u w := by
+    {U : Set E} (hU : IsOpen U) {x q : E} (hx : x ∈ U) (heq : ∀ ⦃w⦄, w ∈ U → v w = u w)
+    (hq : ∀ w, v x + ⟪q, w - x⟫ ≤ v w) : ∀ w, u x + ⟪q, w - x⟫ ≤ u w := by
+  have hlocal : ∀ w ∈ U, u x + ⟪q, w - x⟫ ≤ u w := by
     intro w hw
-    simpa only [heq hx,heq hw] using hq w
+    simpa only [heq hx, heq hw] using hq w
   exact fun w => subgradient_le_on_of_isOpen hconv hU (subset_univ _) hx hlocal w (mem_univ w)
 
 private lemma subgradientImage_of_local_agreement {u v : E → ℝ}
@@ -217,16 +219,28 @@ private lemma eq_of_two_contacts_below {u : E → ℝ}
   have hyz : y = z := mem_singleton_iff.mp (hsingle ▸ hyC)
   exact hne (hyz.trans hxz.symm)
 
-/-- **Caffarelli's contact-set lemma below a level**: if `{u ≤ R}` is compact and the convex `u` has
-two-sided Alexandrov bounds on compact subsets of `{u < R}`, then a supporting affine function at `x₀`
-(`u x₀ < R`) touches the graph of `u` at no other point of `{u < R}`. No compactness of the full contact set
+/--
+**Caffarelli's contact-set lemma below a level**: if `{u ≤ R}` is compact and the convex `u` has
+two-sided Alexandrov bounds on compact subsets of `{u < R}`, then a supporting affine function at
+`x₀`
+(`u x₀ < R`) touches the graph of `u` at no other point of `{u < R}`. No compactness of the full
+contact set
 is assumed. -/
 theorem eq_of_contact_of_sublevel_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
     (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y) {R : ℝ} (hK : IsCompact {y | u y ≤ R})
-    (hB : ∀ Q : Set E, IsCompact Q → Q ⊆ {y | u y < R} → ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E,
-      IsOpen G → closure G ⊆ Q →
-      ENNReal.ofReal a * (volume : Measure E) G ≤ (volume : Measure E) (subgradientImage u G) ∧
-      (volume : Measure E) (subgradientImage u G) ≤ ENNReal.ofReal b * (volume : Measure E) G)
+    (hB :
+      ∀ Q : Set E,
+        IsCompact Q →
+          Q ⊆ {y | u y < R} →
+            ∃ a b : ℝ,
+              0 < a ∧
+                ∀ G : Set E,
+                  IsOpen G →
+                    closure G ⊆ Q →
+                      ENNReal.ofReal a * (volume : Measure E) G ≤
+                          (volume : Measure E) (subgradientImage u G) ∧
+                        (volume : Measure E) (subgradientImage u G) ≤
+                          ENNReal.ofReal b * (volume : Measure E) G)
     {y : E} (hyR : u y < R) (hy : u y = u x₀ + ⟪p, y - x₀⟫) : y = x₀ := by
   classical
   by_contra hne
@@ -245,29 +259,24 @@ theorem eq_of_contact_of_sublevel_bounds {u : E → ℝ} (hconv : ConvexOn ℝ u
   have hf : Continuous f := AffineMap.lineMap_continuous
   have hf0 : f 0 = y := AffineMap.lineMap_apply_zero y x₀
   have htend : Tendsto (fun t => u (f t)) (𝓝 0) (𝓝 (u y)) := by
-    have hh : Tendsto (fun t => u (f t)) (𝓝 0) (𝓝 (u (f 0))) :=
-      (hu.comp hf).tendsto 0
+    have hh : Tendsto (fun t => u (f t)) (𝓝 0) (𝓝 (u (f 0))) := (hu.comp hf).tendsto 0
     rw [hf0] at hh
     exact hh
-  have hnear : ∀ᶠ t in 𝓝 (0 : ℝ), u (f t) < R :=
-    htend.eventually (eventually_lt_nhds hyR)
+  have hnear : ∀ᶠ t in 𝓝 (0 : ℝ), u (f t) < R := htend.eventually (eventually_lt_nhds hyR)
   obtain ⟨t, ht, htR, ht1⟩ :=
     (hnear.and (eventually_lt_nhds (show (0 : ℝ) < 1 from zero_lt_one))).exists_gt
   have htcontact : u (f t) = u y + ⟪p, f t - y⟫ := by
-    have hh := hconv.2 (mem_univ y) (mem_univ x₀)
-      (sub_nonneg.mpr ht1.le) ht.le (by ring : 1 - t + t = 1)
+    have hh :=
+      hconv.2 (mem_univ y) (mem_univ x₀) (sub_nonneg.mpr ht1.le) ht.le (by ring : 1 - t + t = 1)
     have hl := hpy (f t)
     have hx' := hxcontact
-    have hft : f t = (1 - t) • y + t • x₀ :=
-      AffineMap.lineMap_apply_module y x₀ t
+    have hft : f t = (1 - t) • y + t • x₀ := AffineMap.lineMap_apply_module y x₀ t
     rw [hft] at hl ⊢
     simp only [smul_eq_mul] at hh
     simp only [inner_sub_right, inner_add_right, inner_smul_right] at hl hx' ⊢
     nlinarith
-  have he : f t = y :=
-    eq_of_two_contacts_below hconv hpy hK hB hyR htR htcontact
-  have htzero : t = 0 :=
-    (AffineMap.lineMap_injective ℝ hne) (he.trans hf0.symm)
+  have he : f t = y := eq_of_two_contacts_below hconv hpy hK hB hyR htR htcontact
+  have htzero : t = 0 := (AffineMap.lineMap_injective ℝ hne) (he.trans hf0.symm)
   exact (ne_of_gt ht) htzero
 
 end FiniteDimensional
@@ -277,4 +286,3 @@ end InnerProduct
 end FunctionalInequalities.Analysis
 
 end SublevelContactLemma
-

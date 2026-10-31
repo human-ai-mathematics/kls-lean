@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.WaveSplitting.AverageError
-import FunctionalInequalities.Analysis.BakryEmery.Laplacian
-import Mathlib.MeasureTheory.Measure.Tilted
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.AverageError
+public import FunctionalInequalities.Analysis.BakryEmery.Laplacian
+public import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
 # Finite wave splitting for a potential: weight, classical density and orthonormal identification
@@ -21,6 +23,8 @@ Specialization of the coordinate objects of this family to a potential `U`: the 
 Everything here is classical and pointwise or integral; the closed gradient, its adjoint and
 the class-level statements are in `KLS/LogConcave/HeatSemigroup/Generator/FormRange.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

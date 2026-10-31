@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
 
 /-!
 # The tilt identity and Lemma 3.6 on the generator domain
@@ -43,6 +45,8 @@ No iterate of the source is constructed and Theorem 3.1 is neither stated nor pr
 identities are about `L²` classes; no pointwise regularity of `F` beyond membership in `D(A)` is
 asserted, and the norm of `taylorTensor` is the multilinear operator norm.
 -/
+
+@[expose] public section
 
 noncomputable section
 

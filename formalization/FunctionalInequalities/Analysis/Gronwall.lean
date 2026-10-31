@@ -1,13 +1,18 @@
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.Analysis.SpecialFunctions.Exp
-import Mathlib.Analysis.ODE.Gronwall
+module
+
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.Analysis.SpecialFunctions.Exp
+public import Mathlib.Analysis.ODE.Gronwall
 
 /-!
 # Integral Grönwall inequality
 
-`φ(t) ≤ a + K ∫₀ᵗ φ` on `[0, T]` for a measurable bounded `φ` and `K ≥ 0` gives `φ(t) ≤ a e^{Kt}`, any real
+`φ(t) ≤ a + K ∫₀ᵗ φ` on `[0, T]` for a measurable bounded `φ` and `K ≥ 0` gives `φ(t) ≤ a e^{Kt}`,
+any real
 `a` (Mathlib has the differential and discrete forms).
 -/
+
+@[expose] public section
 
 noncomputable section
 

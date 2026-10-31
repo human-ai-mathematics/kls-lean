@@ -1,10 +1,12 @@
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import FunctionalInequalities.Analysis.Hausdorff.Slice.Measurable
-import FunctionalInequalities.Analysis.Coarea.Isoperimetry
-import FunctionalInequalities.Analysis.Sard.Sharp
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import Mathlib.Analysis.Calculus.FDeriv.Norm
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import FunctionalInequalities.Analysis.Hausdorff.Slice.Measurable
+public import FunctionalInequalities.Analysis.Coarea.Isoperimetry
+public import FunctionalInequalities.Analysis.Sard.Sharp
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import Mathlib.Analysis.Calculus.FDeriv.Norm
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the Lipschitz weighted coarea formula
@@ -25,6 +27,8 @@ Also imported, so that every report below comes from a single consistent environ
 `Analysis.ae_forall_fderiv_ne_zero`, and the two Cheeger comparisons with the equality that
 follows from them (in `KLS/Geometry/Cheeger/Equality.lean`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -120,13 +124,13 @@ theorem zero_dimension {u : EuclideanSpace ℝ (Fin 0) → ℝ} {K : ℝ≥0} (h
 
 /-- The `C¹` specialization `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
 type-checks in the same environment. -/
-theorem client_contDiff_specialization [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-    [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ 1 u) {K : ℝ≥0} (hK : LipschitzWith K u)
-    {g : V → ℝ≥0∞} (hg : Measurable g) :
+theorem client_contDiff_specialization [MeasurableSpace V] [BorelSpace V]
+    [SecondCountableTopology V] [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ 1 u)
+    {K : ℝ≥0} (hK : LipschitzWith K u) {g : V → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ x, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) =
       ∫⁻ t, ∫⁻ y in {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) :=
-  Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet (u := u) (K := K) (g := g)
-    hu hK hg
+  Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet (u := u) (K := K) (g := g) hu
+    hK hg
 
 end InnerProduct
 
@@ -142,7 +146,8 @@ are recorded from the same environment. -/
 #print axioms FunctionalInequalities.Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
 #print axioms FunctionalInequalities.KLS.coarea_of_lipschitz
 #print axioms FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet
-#print axioms FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
+#print axioms
+  FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
 #print axioms LipschitzCoareaMigrationAudit.client_migrated_t2
 #print axioms LipschitzCoareaMigrationAudit.original_T2
 #print axioms LipschitzCoareaMigrationAudit.client_L12

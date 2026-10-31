@@ -5,7 +5,12 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.ItoIncrement
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoIncrement
 
 /-!
 # Pulling a past weight inside an Itô integral over a window
@@ -14,6 +19,8 @@ A bounded `ℱ_a`-measurable weight times the Itô integral of an integrand supp
 the Itô integral of the weighted integrand: the weight times the indicator is itself a simple
 integrand, so this is associativity against a simple integrand.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -81,7 +88,7 @@ theorem stepIocMul_eval {a b : ℝ} (ha : 0 < a) (hab : a < b) {V : Ω → ℝ}
     show (if (0 : ℝ) < s ∧ s ≤ a then (0 : ℝ) else 0)
       + (if a < s ∧ s ≤ b then V ω else 0) = V ω * 0
     simp only [ite_self, zero_add]
-    rw [if_neg h]
+    rw [ite_eq_right h]
     ring
 
 theorem stepIocMul₀_eval {b : ℝ} (hb : 0 < b) {V : Ω → ℝ}
@@ -98,7 +105,7 @@ theorem stepIocMul₀_eval {b : ℝ} (hb : 0 < b) {V : Ω → ℝ}
     simp [h]
   · rw [Set.indicator_of_notMem fun hmem => h (Set.mem_Ioc.mp hmem)]
     show (if (0 : ℝ) < s ∧ s ≤ b then V ω else 0) = V ω * 0
-    rw [if_neg h]
+    rw [ite_eq_right h]
     ring
 
 theorem stepIocMul_adapt (ℱ : Filtration ℝ ‹MeasurableSpace Ω›) {a b : ℝ} (ha : 0 < a)

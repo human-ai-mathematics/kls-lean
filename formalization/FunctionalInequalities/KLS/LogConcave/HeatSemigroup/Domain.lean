@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
-import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
-import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
+public import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-! # Heat semigroup domain interfaces
 Every result allows arbitrary weights `B`. Time zero is allowed for the generator-domain and
-form-domain interfaces; arbitrary-input smoothing requires strictly positive time. The generator-domain interfaces
+form-domain interfaces; arbitrary-input smoothing requires strictly positive time. The
+generator-domain interfaces
 (`preserves_domain`, `generator_comm`, `mem_closedWeightedOperator_domain`, `right_derivative`)
 require inputs in `D(T̄†T̄)`; the form-domain interfaces (`preserves_form_domain`,
 `norm_closedWeightedOperator_le`) require only `f ∈ D(T̄)`; the positive-time smoothing
@@ -15,6 +18,8 @@ The gradient supplied here is the closed weighted operator, not a classical repr
 no pointwise gradient, no smooth representative and no `Γ`-calculus is claimed, and the sharp
 constants `1/√(2et)` and `1/(et)` are not claimed either.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory FunctionalInequalities.Analysis.Semigroup
 namespace FunctionalInequalities.KLS.LogConcave.HeatSemigroup
@@ -24,9 +29,10 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty)
 
 /-- Generator-domain inputs remain in the generator domain, including at time zero. -/
-theorem preserves_domain
-    (f : (adjointComp (hν.closedWeightedOperator m B hi)).domain) {t : ℝ} (ht : 0 ≤ t) :
-    HeatSemigroup.operator m B hν hi ht f ∈ (adjointComp (hν.closedWeightedOperator m B hi)).domain :=
+theorem preserves_domain (f : (adjointComp (hν.closedWeightedOperator m B hi)).domain) {t : ℝ}
+    (ht : 0 ≤ t) :
+    HeatSemigroup.operator m B hν hi ht f ∈
+      (adjointComp (hν.closedWeightedOperator m B hi)).domain :=
   Generated.preserves_domain _ (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) f ht
 

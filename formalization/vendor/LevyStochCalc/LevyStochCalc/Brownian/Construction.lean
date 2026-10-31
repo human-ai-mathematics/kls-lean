@@ -3,10 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Basic
-import Mathlib.Probability.Distributions.Gaussian.Real
-import Mathlib.Probability.Independence.Basic
-import Mathlib.Probability.Kernel.Defs
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Basic
+public import Mathlib.Probability.Distributions.Gaussian.Real
+public import Mathlib.Probability.Independence.Basic
+public import Mathlib.Probability.Kernel.Defs
 
 /-!
 # Brownian motion construction
@@ -24,6 +28,8 @@ via the `RemyDegenne/brownian-motion` dependency's canonical Brownian motion.
 * Karatzas–Shreve, *Brownian Motion and Stochastic Calculus*, 1991, §2.2.
 * Le Gall, *Brownian Motion, Martingales, and Stochastic Calculus*, Springer 2016, Ch 2.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

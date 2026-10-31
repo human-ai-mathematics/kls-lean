@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Area
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Area
 
 /-! # The weighted codimension-`m` graph area formula
 
@@ -14,14 +16,17 @@ measurability of its image are what make the two restrictions match.  From it,
 `setLIntegral_image_vectorGraphMap` is the change of variables for an arbitrary measurable
 `ℝ≥0∞`-valued weight.
 
-This is the codimension-`m` analogue of `setLIntegral_image_graphMap` in `OpenGraphIntegral.lean`,
-proved through `GraphIntegral.lean`; the structure of the argument is the same, with the
+This is the codimension-`m` analogue of `setLIntegral_image_graphMap` in
+`Analysis/Graph/OpenIntegral.lean`,
+proved through `Analysis/Graph/Integral.lean`; the structure of the argument is the same, with the
 codimension-one Jacobian `√(1 + ‖∇g‖²)` replaced by `normDet (graphMapLinear ι κ (Dγ y))`.
 
 **No integrability, finiteness or boundedness hypothesis** is used: the weight may be unbounded or
 identically `∞`, and the parameter set need only be measurable.  **No coarea formula is proved
 here.**
 -/
+
+@[expose] public section
 
 noncomputable section
 

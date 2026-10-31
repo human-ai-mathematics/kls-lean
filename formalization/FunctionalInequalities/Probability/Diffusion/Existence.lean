@@ -1,21 +1,29 @@
-import FunctionalInequalities.Probability.Diffusion.Setup
-import LevyStochCalc.Ito.PicardGlobal
-import LevyStochCalc.Ito.VectorItoVersionLimit
-import LevyStochCalc.Ito.ItoFormulaUnbounded
-import LevyStochCalc.Brownian.AugmentedFiltration
-import LevyStochCalc.Brownian.MultidimFiltered
-import LevyStochCalc.Brownian.ItoL2CompletionMaster
-import LevyStochCalc.Probability.DoobContinuous
+module
+
+public import FunctionalInequalities.Probability.Diffusion.Setup
+public import LevyStochCalc.Ito.PicardGlobal
+public import LevyStochCalc.Ito.VectorItoVersionLimit
+public import LevyStochCalc.Ito.ItoFormulaUnbounded
+public import LevyStochCalc.Brownian.AugmentedFiltration
+public import LevyStochCalc.Brownian.MultidimFiltered
+public import LevyStochCalc.Brownian.ItoL2CompletionMaster
+public import LevyStochCalc.Probability.DoobContinuous
 
 /-!
 # Existence of diffusions with globally Lipschitz bounded coefficients
 
-On any filtered space carrying a multidimensional Brownian motion with a usual filtration, autonomous globally
-Lipschitz bounded coefficients on `Fin N → ℝ` have an everywhere continuous adapted solution with Itô
-representation along itself (`exists_isDiffusion`): the vendored Picard global solution with zero jumps (a
-zero-intensity Poisson random measure), its continuous Itô version, and their identification. Used for the cutoff
+On any filtered space carrying a multidimensional Brownian motion with a usual filtration,
+autonomous globally
+Lipschitz bounded coefficients on `Fin N → ℝ` have an everywhere continuous adapted solution with
+Itô
+representation along itself (`exists_isDiffusion`): the vendored Picard global solution with zero
+jumps (a
+zero-intensity Poisson random measure), its continuous Itô version, and their identification. Used
+for the cutoff
 Eldan localization equations (BKL arXiv:2610.05474v1, (67)).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped NNReal ENNReal
@@ -26,13 +34,12 @@ open LevyStochCalc LevyStochCalc.Brownian LevyStochCalc.Brownian.Multidim
   LevyStochCalc.Brownian.Ito
 
 
-private def zeroPoisson {Ω : Type u} [MeasurableSpace Ω]
-    (P : Measure Ω) [IsProbabilityMeasure P] :
-    Poisson.PoissonRandomMeasure.{u, 0, 0} P (0 : Measure Unit) where
+private def zeroPoisson {Ω : Type u} [MeasurableSpace Ω] (P : Measure Ω)
+    [IsProbabilityMeasure P] : Poisson.PoissonRandomMeasure.{u, 0, 0} P (0 : Measure Unit)
+    where
   N := fun _ => 0
   measurable_eval := fun _ => measurable_const
-  integer_valued := fun _ _ =>
-    Filter.Eventually.of_forall fun _ => ⟨0, by simp⟩
+  integer_valued := fun _ _ => Filter.Eventually.of_forall fun _ => ⟨0, by simp⟩
   infinite_at_infinite_intensity := by
     intro B _ h
     simp [Poisson.referenceIntensity] at h
@@ -53,8 +60,7 @@ private def zeroPoisson {Ω : Type u} [MeasurableSpace Ω]
     clear hs
     induction S using Finset.induction_on with
     | empty => simp
-    | @insert i S hi ih =>
-      by_cases hz : (0 : ℝ≥0∞) ∈ sets i <;> simp_all [Set.preimage_const]
+    | @insert i S hi ih => by_cases hz : (0 : ℝ≥0∞) ∈ sets i <;> simp_all [Set.preimage_const]
   joint_past_future_independent := by
     intro s t _ _ A _ _
     simp only [Measure.coe_zero, Pi.zero_apply, MeasurableSpace.comap_const]
@@ -87,8 +93,8 @@ private theorem diffusionCoeffs_regular {N d : ℕ}
     (hb : Measurable b) (hσ : ∀ k, Measurable fun x => σ x k) :
     (diffusionCoeffs b σ).IsRegular (0 : Measure Unit) := by
   refine ⟨hb.comp measurable_snd, ?_, measurable_const, ?_, ?_, ?_⟩
-  · exact measurable_pi_lambda _ fun i =>
-      measurable_pi_lambda _ fun k => ((hσ k).eval (a := i)).comp measurable_snd
+  · exact Measurable.of_eval fun i =>
+      Measurable.of_eval fun k => ((hσ k).eval (a := i)).comp measurable_snd
   · intro T _
     change (∫⁻ _s in Set.Icc (0 : ℝ) T, (‖b 0‖₊ : ℝ≥0∞) ^ 2 ∂volume) < ⊤
     rw [lintegral_const, Measure.restrict_apply_univ]
@@ -159,24 +165,24 @@ variable {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
   [IsProbabilityMeasure P] {N d : ℕ}
 
 open LevyStochCalc.Ito.Picard in
-/-- Globally Lipschitz bounded autonomous coefficients with zero jumps: an everywhere continuous adapted
-solution with Itô representation along itself exists on any Brownian setup with a usual filtration. -/
+/--
+Globally Lipschitz bounded autonomous coefficients with zero jumps: an everywhere continuous adapted
+solution with Itô representation along itself exists on any Brownian setup with a usual filtration.
+-/
 theorem exists_isDiffusion (W : MultidimBrownianMotion P d)
     (ℱ : Filtration ℝ ‹MeasurableSpace Ω›) [ℱ.IsRightContinuous]
-    (hW : ∀ k, IsBrownianFiltration (W.W k) ℱ)
-    (hℱ0 : ∀ t : ℝ, t ≤ 0 → ℱ 0 ≤ ℱ t)
+    (hW : ∀ k, IsBrownianFiltration (W.W k) ℱ) (hℱ0 : ∀ t : ℝ, t ≤ 0 → ℱ 0 ≤ ℱ t)
     (hnull : ∀ s : Set Ω, MeasurableSet s → P s = 0 → MeasurableSet[ℱ 0] s)
     {b : (Fin N → ℝ) → Fin N → ℝ} {σ : (Fin N → ℝ) → Fin d → Fin N → ℝ} {K : ℝ≥0}
-    (hb : LipschitzWith K b) (hσ : ∀ k, LipschitzWith K fun x => σ x k)
-    {B : ℝ} (hbB : ∀ x, ‖b x‖ ≤ B) (hσB : ∀ x k, ‖σ x k‖ ≤ B) (x₀ : Fin N → ℝ) :
+    (hb : LipschitzWith K b) (hσ : ∀ k, LipschitzWith K fun x => σ x k) {B : ℝ}
+    (hbB : ∀ x, ‖b x‖ ≤ B) (hσB : ∀ x k, ‖σ x k‖ ≤ B) (x₀ : Fin N → ℝ) :
     ∃ Y : ℝ → Ω → Fin N → ℝ, IsDiffusion W ℱ hW b σ x₀ Y := by
   classical
   let C := diffusionCoeffs b σ
   let Z := zeroPoisson P
   have hZ : Poisson.IsPoissonFiltration Z ℱ := zeroPoisson_filtration P ℱ
   have hReg : C.IsRegular (0 : Measure Unit) :=
-    diffusionCoeffs_regular hb.continuous.measurable
-      (fun k => (hσ k).continuous.measurable)
+    diffusionCoeffs_regular hb.continuous.measurable (fun k => (hσ k).continuous.measurable)
   obtain ⟨L, hLip⟩ := diffusionCoeffs_lipschitz hb hσ
   obtain ⟨X, hXm, hXp, _hX0, _hXcad, _hXS, hSol⟩ :=
     exists_globalSolution W Z ℱ hW hZ C hℱ0 hnull hReg hLip x₀
@@ -185,66 +191,73 @@ theorem exists_isDiffusion (W : MultidimBrownianMotion P d)
   let a : Fin N → Ω → ℝ → ℝ := fun i ω s => b (X s ω) i
   have hm : ∀ i k, Measurable (Function.uncurry (H i k)) := S.h_σ_meas
   have hp : ∀ i k, Probability.ProgressivelyMeasurable ℱ (H i k) := S.h_σ_progMeas
-  have hq : ∀ i k (T : ℝ), 0 < T →
-      ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T,
-        (‖H i k ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤ := S.h_σ_sq
-  have ham : ∀ i, Measurable (Function.uncurry (a i)) :=
-    measurable_mu_comp_state C hReg hXm
+  have hq :
+    ∀ i k (T : ℝ),
+      0 < T → ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖H i k ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤ :=
+    S.h_σ_sq
+  have ham : ∀ i, Measurable (Function.uncurry (a i)) := measurable_mu_comp_state C hReg hXm
   have hap : ∀ i, Probability.ProgressivelyMeasurable ℱ (a i) := by
     intro i
-    exact progressivelyMeasurable_comp_state (X := X)
-      (f := fun _ x => b x i) hXp
-      ((hb.continuous.measurable.eval (a := i)).comp measurable_snd)
-  have haq : ∀ i (T : ℝ), 0 < T →
-      ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T,
-        (‖a i ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤ := by
+    exact
+      progressivelyMeasurable_comp_state (X := X) (f := fun _ x => b x i) hXp
+        ((hb.continuous.measurable.eval (a := i)).comp measurable_snd)
+  have haq :
+    ∀ i (T : ℝ),
+      0 < T → ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖a i ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤ := by
     intro i
-    exact energy_lt_top_of_bounded
-      (fun ω s => (norm_le_pi_norm (b (X s ω)) i).trans (hbB (X s ω)))
-  obtain ⟨Y, hY⟩ := exists_isVectorItoVersion_of_unbounded W ℱ hW H hm hp hq
-    hℱ0 hnull (X₀ := fun _ => x₀) (fun _ => measurable_const) a ham hap haq
-  have hXrep : ∀ t : ℝ, 0 ≤ t →
-      X t =ᵐ[P] vectorItoProcess W ℱ hW H hm hp hq (fun _ => x₀) a t := by
+    exact
+      energy_lt_top_of_bounded (fun ω s => (norm_le_pi_norm (b (X s ω)) i).trans (hbB (X s ω)))
+  obtain ⟨Y, hY⟩ :=
+    exists_isVectorItoVersion_of_unbounded W ℱ hW H hm hp hq hℱ0 hnull (X₀ := fun _ => x₀)
+      (fun _ => measurable_const) a ham hap haq
+  have hXrep :
+    ∀ t : ℝ, 0 ≤ t → X t =ᵐ[P] vectorItoProcess W ℱ hW H hm hp hq (fun _ => x₀) a t := by
     intro t ht
     rcases eq_or_lt_of_le ht with he | ht
     · rw [← he]
-      filter_upwards
-        [ae_eq_initial_of_solvesOn W Z ℱ hW hZ C x₀ le_rfl (hSol 0),
-          vectorItoProcess_ae_eq_zero W ℱ hW hm hp hq (fun _ => x₀) a]
-        with ω hXω hVω
+      filter_upwards [ae_eq_initial_of_solvesOn W Z ℱ hW hZ C x₀ le_rfl (hSol 0),
+        vectorItoProcess_ae_eq_zero W ℱ hW hm hp hq (fun _ => x₀) a] with ω hXω hVω
       exact hXω.trans hVω.symm
-    · have hj : ∀ᵐ ω ∂P, ∀ i : Fin N,
-          picardStep_jump Z ℱ hZ C X S.h_γ_meas S.h_γ_progMeas S.h_γ_sq t ω i = 0 := by
+    · have hj :
+        ∀ᵐ ω ∂P,
+          ∀ i : Fin N,
+            picardStep_jump Z ℱ hZ C X S.h_γ_meas S.h_γ_progMeas S.h_γ_sq t ω i = 0 := by
         apply ae_all_iff.mpr
         intro i
-        have hiso := Poisson.Compensated.isometry_stochasticIntegral Z ℱ hZ
-          (fun ω s e => C.γ s (X s ω) e i)
-          (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t ht
-        have hjm := measurable_compensatedIntegral_slice Z ℱ hZ
-          (fun ω s e => C.γ s (X s ω) e i)
-          (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t
-        have hz : (∫⁻ ω,
-            (‖Poisson.Compensated.stochasticIntegral Z ℱ hZ
-              (fun ω s e => C.γ s (X s ω) e i)
-              (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t ω‖₊ : ℝ≥0∞) ^ 2 ∂P) = 0 := by
+        have hiso :=
+          Poisson.Compensated.isometry_stochasticIntegral Z ℱ hZ
+            (fun ω s e => C.γ s (X s ω) e i) (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t ht
+        have hjm :=
+          measurable_compensatedIntegral_slice Z ℱ hZ (fun ω s e => C.γ s (X s ω) e i)
+            (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t
+        have hz :
+          (∫⁻ ω,
+              (‖Poisson.Compensated.stochasticIntegral Z ℱ hZ (fun ω s e => C.γ s (X s ω) e i)
+                      (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t ω‖₊ :
+                  ℝ≥0∞) ^
+                2 ∂P) =
+            0 := by
           simpa using hiso
-        filter_upwards [(lintegral_eq_zero_iff
-          ((hjm.nnnorm.coe_nnreal_ennreal).pow_const 2)).mp hz] with ω hω
-        change Poisson.Compensated.stochasticIntegral Z ℱ hZ
-          (fun ω s e => C.γ s (X s ω) e i)
-          (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t ω = 0
+        filter_upwards [(lintegral_eq_zero_iff ((hjm.nnnorm.coe_nnreal_ennreal).pow_const 2)).mp
+            hz] with
+          ω hω
+        change
+          Poisson.Compensated.stochasticIntegral Z ℱ hZ (fun ω s e => C.γ s (X s ω) e i)
+              (S.h_γ_meas i) (S.h_γ_progMeas i) (S.h_γ_sq i) t ω =
+            0
         simpa using hω
       filter_upwards [(hSol t).eqn t ⟨ht.le, le_rfl⟩, hj] with ω heq hz
       funext i
       have hi := heq i
-      change X t ω i =
-        vectorItoProcess W ℱ hW H hm hp hq (fun _ => x₀) a t ω i +
-          picardStep_jump Z ℱ hZ C X S.h_γ_meas S.h_γ_progMeas S.h_γ_sq t ω i at hi
+      change
+        X t ω i =
+          vectorItoProcess W ℱ hW H hm hp hq (fun _ => x₀) a t ω i +
+            picardStep_jump Z ℱ hZ C X S.h_γ_meas S.h_γ_progMeas S.h_γ_sq t ω i at hi
       simpa only [hz i, add_zero] using hi
-  have hXY : ∀ t : ℝ, 0 ≤ t → X t =ᵐ[P] Y t :=
-    fun t ht => (hXrep t ht).trans (hY.ae_eq t ht).symm
-  have hXY_window : ∀ t : ℝ,
-      ∀ᵐ ω ∂P, ∀ᵐ s ∂volume.restrict (Set.Icc (0 : ℝ) t), X s ω = Y s ω := by
+  have hXY : ∀ t : ℝ, 0 ≤ t → X t =ᵐ[P] Y t := fun t ht =>
+    (hXrep t ht).trans (hY.ae_eq t ht).symm
+  have hXY_window :
+    ∀ t : ℝ, ∀ᵐ ω ∂P, ∀ᵐ s ∂volume.restrict (Set.Icc (0 : ℝ) t), X s ω = Y s ω := by
     intro t
     have he : MeasurableSet {p : Ω × ℝ | X p.2 p.1 = Y p.2 p.1} :=
       measurableSet_eq_fun (hXm.comp measurable_swap) hY.measurable_uncurry
@@ -259,46 +272,52 @@ theorem exists_isDiffusion (W : MultidimBrownianMotion P d)
   have gp : ∀ i k, Probability.ProgressivelyMeasurable ℱ (G i k) := by
     intro i k
     exact hY.progressivelyMeasurable_comp ((continuous_apply i).comp (hσ k).continuous)
-  have gq : ∀ i k (T : ℝ), 0 < T →
-      ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T,
-        (‖G i k ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤ := by
+  have gq :
+    ∀ i k (T : ℝ),
+      0 < T → ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) T, (‖G i k ω s‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P < ⊤ := by
     intro i k
-    exact energy_lt_top_of_bounded
-      (fun ω s => (norm_le_pi_norm (σ (Y s ω) k) i).trans (hσB (Y s ω) k))
+    exact
+      energy_lt_top_of_bounded
+        (fun ω s => (norm_le_pi_norm (σ (Y s ω) k) i).trans (hσB (Y s ω) k))
   refine ⟨Y, gm, gp, gq, hY.continuous_path, hY.adapted, ?_⟩
   intro t ht
   refine (hY.ae_eq t ht).trans ?_
   rcases eq_or_lt_of_le ht with he | ht
   · subst t
-    exact (vectorItoProcess_ae_eq_zero W ℱ hW hm hp hq (fun _ => x₀) a).trans
-      (vectorItoProcess_ae_eq_zero W ℱ hW gm gp gq (fun _ => x₀) c).symm
-  · have hI : ∀ᵐ ω ∂P, ∀ (i : Fin N) (k : Fin d),
-        coordItoIntegral W ℱ hW H hm hp hq i k t ω =
-          coordItoIntegral W ℱ hW G gm gp gq i k t ω := by
+    exact
+      (vectorItoProcess_ae_eq_zero W ℱ hW hm hp hq (fun _ => x₀) a).trans
+        (vectorItoProcess_ae_eq_zero W ℱ hW gm gp gq (fun _ => x₀) c).symm
+  · have hI :
+      ∀ᵐ ω ∂P,
+        ∀ (i : Fin N) (k : Fin d),
+          coordItoIntegral W ℱ hW H hm hp hq i k t ω =
+            coordItoIntegral W ℱ hW G gm gp gq i k t ω := by
       apply ae_all_iff.mpr
       intro i
       apply ae_all_iff.mpr
       intro k
-      apply itoIntegral_congr_ae (W.W k) ℱ (hW k)
-        (H i k) (G i k) (hm i k) (hp i k) (hq i k)
-        (gm i k) (gp i k) (gq i k) ht
+      apply
+        itoIntegral_congr_ae (W.W k) ℱ (hW k) (H i k) (G i k) (hm i k) (hp i k) (hq i k)
+          (gm i k) (gp i k) (gq i k) ht
       filter_upwards [hXY_window t] with ω hω
       filter_upwards [hω] with s hs
       exact congrArg (fun x => σ x k i) hs
     filter_upwards [hXY_window t, hI] with ω hω hIω
     funext i
-    have ha : (∫ s in Set.Icc (0 : ℝ) t, a i ω s ∂volume) =
-        ∫ s in Set.Icc (0 : ℝ) t, c i ω s ∂volume := by
+    have ha :
+      (∫ s in Set.Icc (0 : ℝ) t, a i ω s ∂volume) = ∫ s in Set.Icc (0 : ℝ) t, c i ω s ∂volume := by
       apply integral_congr_ae
       filter_upwards [hω] with s hs
       exact congrArg (fun x => b x i) hs
-    have hM : vectorItoMartingale W ℱ hW H hm hp hq i t ω =
+    have hM :
+      vectorItoMartingale W ℱ hW H hm hp hq i t ω =
         vectorItoMartingale W ℱ hW G gm gp gq i t ω :=
       Finset.sum_congr rfl fun k _ => hIω i k
-    change x₀ i + (∫ s in Set.Icc (0 : ℝ) t, a i ω s ∂volume) +
-        vectorItoMartingale W ℱ hW H hm hp hq i t ω =
-      x₀ i + (∫ s in Set.Icc (0 : ℝ) t, c i ω s ∂volume) +
-        vectorItoMartingale W ℱ hW G gm gp gq i t ω
+    change
+      x₀ i + (∫ s in Set.Icc (0 : ℝ) t, a i ω s ∂volume) +
+          vectorItoMartingale W ℱ hW H hm hp hq i t ω =
+        x₀ i + (∫ s in Set.Icc (0 : ℝ) t, c i ω s ∂volume) +
+          vectorItoMartingale W ℱ hW G gm gp gq i t ω
     rw [ha, hM]
 
 theorem IsDiffusion.ae_initial {W : MultidimBrownianMotion P d}

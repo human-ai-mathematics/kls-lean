@@ -1,28 +1,39 @@
-import FunctionalInequalities.Analysis.WeakDerivative.Testing
-import FunctionalInequalities.Analysis.Cutoff.Profile
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
-import FunctionalInequalities.Analysis.Convex.Coercivity
-import Mathlib.LinearAlgebra.Matrix.PosDef
-import Mathlib.Topology.Instances.Matrix
+module
+
+public import FunctionalInequalities.Analysis.WeakDerivative.Testing
+public import FunctionalInequalities.Analysis.Cutoff.Profile
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import Mathlib.LinearAlgebra.Matrix.PosDef
+public import Mathlib.Topology.Instances.Matrix
 
 /-!
 # Weak inverse-Hessian height cutoffs for C1 Monge–Ampère potentials
 
 Height cutoffs χ_R = smoothTransition(2 − (u − c)/R) for the inverse-Hessian diffusion
-L f = tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f) of a convex, normalized C1 potential u with Lipschitz gradient, Lipschitz
-Monge–Ampère exponent −u + V(∇u) and det ∇²u = exp(−u + V(∇u)), ∇²u positive definite almost everywhere
+L f = tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f) of a convex, normalized C1 potential u with Lipschitz gradient,
+Lipschitz
+Monge–Ampère exponent −u + V(∇u) and det ∇²u = exp(−u + V(∇u)), ∇²u positive definite almost
+everywhere
 (Letwin arXiv:2607.24164v1, the cutoffs of Lemma A.4 in C1/Lipschitz-gradient form):
 
-* `exists_scaled_weak_inverse_hessian_cutoffs`: one shift c and one constant C such that, for every real R ≥ 1,
-  χ_R is C1, compactly supported, has Lipschitz gradient and values in [0, 1], increases in R to 1 pointwise,
-  its literal generator L χ_R is integrable for ν = e^{−u} dx with ‖L χ_R‖_{L¹(ν)} ≤ C/R, and the defect vanishes;
+* `exists_scaled_weak_inverse_hessian_cutoffs`: one shift c and one constant C such that, for every
+  real R ≥ 1,
+  χ_R is C1, compactly supported, has Lipschitz gradient and values in [0, 1], increases in R to 1
+  pointwise,
+  its literal generator L χ_R is integrable for ν = e^{−u} dx with ‖L χ_R‖_{L¹(ν)} ≤ C/R, and the
+  defect vanishes;
 * `exists_weak_inverse_hessian_cutoffs`: the same family at R = m + 1.
 
-Every finite dimension is included. No C2 regularity of u, global inverse-Hessian bound or energy estimate is assumed.
-A.5 consumption, the weak trace identity, the energy comparison (2.14) and Theorem 2.5 are not proved here. One-use
+Every finite dimension is included. No C2 regularity of u, global inverse-Hessian bound or energy
+estimate is assumed.
+A.5 consumption, the weak trace identity, the energy comparison (2.14) and Theorem 2.5 are not
+proved here. One-use
 supports, including the generator-defect core, are private.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Set Metric Matrix
@@ -399,26 +410,26 @@ private theorem ae_inverse_hessian_generator_comp_profile {n : ℕ}
   simp only [Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
   ring
 
-private theorem exists_bound_moment_gradient_drift {n : ℕ}
-    {u V : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal}
-    (hL : LipschitzWith L u) (hV : ContDiff ℝ 1 V) :
-    ∃ D : ℝ, 0 ≤ D ∧ ∀ x,
-      |(n : ℝ) - fderiv ℝ V (gradient u x) (gradient u x)| ≤ D := by
+private theorem exists_bound_moment_gradient_drift {n : ℕ} {u V : EuclideanSpace ℝ (Fin n) → ℝ}
+    {L : NNReal} (hL : LipschitzWith L u) (hV : ContDiff ℝ 1 V) :
+    ∃ D : ℝ, 0 ≤ D ∧ ∀ x, |(n : ℝ) - fderiv ℝ V (gradient u x) (gradient u x)| ≤ D := by
   have hDV : Continuous (fderiv ℝ V) := hV.continuous_fderiv one_ne_zero
-  obtain ⟨M, hM⟩ := (isCompact_closedBall (0 : EuclideanSpace ℝ (Fin n)) (L : ℝ)).exists_bound_of_continuousOn
-    hDV.continuousOn
+  obtain ⟨M, hM⟩ :=
+    (isCompact_closedBall (0 : EuclideanSpace ℝ (Fin n)) (L : ℝ)).exists_bound_of_continuousOn
+      hDV.continuousOn
   have hgrad (x : EuclideanSpace ℝ (Fin n)) : ‖gradient u x‖ ≤ (L : ℝ) := by
     simpa only [gradient, LinearIsometryEquiv.norm_map] using
       (norm_fderiv_le_of_lipschitz (x₀ := x) ℝ hL)
-  refine ⟨(n : ℝ) + max M 0 * (L : ℝ),
-    add_nonneg (Nat.cast_nonneg n) (mul_nonneg (le_max_right _ _) L.coe_nonneg), ?_⟩
+  refine
+    ⟨(n : ℝ) + max M 0 * (L : ℝ),
+      add_nonneg (Nat.cast_nonneg n) (mul_nonneg (le_max_right _ _) L.coe_nonneg), ?_⟩
   intro x
   have hx : gradient u x ∈ closedBall (0 : EuclideanSpace ℝ (Fin n)) (L : ℝ) := by
     simpa only [mem_closedBall, dist_zero_right] using hgrad x
   have hnorm : ‖fderiv ℝ V (gradient u x) (gradient u x)‖ ≤ max M 0 * (L : ℝ) :=
     ((fderiv ℝ V (gradient u x)).le_opNorm (gradient u x)).trans
-      (mul_le_mul ((hM _ hx).trans (le_max_left _ _)) (hgrad x)
-        (norm_nonneg _) (le_max_right _ _))
+      (mul_le_mul ((hM _ hx).trans (le_max_left _ _)) (hgrad x) (norm_nonneg _)
+        (le_max_right _ _))
   calc
     _ ≤ ‖(n : ℝ)‖ + ‖fderiv ℝ V (gradient u x) (gradient u x)‖ := by
       simpa only [Real.norm_eq_abs] using
@@ -516,7 +527,7 @@ private theorem measurable_inverse_hessianMatrix_entry_total {n : ℕ}
   let : BorelSpace (Matrix (Fin n) (Fin n) ℝ) :=
     inferInstanceAs (BorelSpace (Fin n → Fin n → ℝ))
   have hH : Measurable (fun x => hessianMatrix u x) :=
-    measurable_pi_lambda _ fun a => measurable_pi_lambda _ fun b =>
+    Measurable.of_eval fun a => Measurable.of_eval fun b =>
       measurable_hessianMatrix_entry u a b
   have hdet : Measurable (fun x => (hessianMatrix u x).det) :=
     (show Continuous (fun A : Matrix (Fin n) (Fin n) ℝ => A.det) from
@@ -842,73 +853,100 @@ private theorem hasCompactSupport_inverse_hessian_cutoff_flux_generator {n : ℕ
     have hg : gradient χ x = 0 := by simp [gradient, hd x hx]
     simp [hH x hx, hg]
 
-/-- A globally bounded locally integrable weak function `η` with compact-local L2 coordinate weak derivatives `aᵢ`,
-paired with the inverse-Hessian generator of a compactly supported C1 cutoff `χ` with Lipschitz gradient at a C1
-Monge–Ampère potential `u`: both pairings are integrable and the generator pairing equals minus the weighted energy
+/--
+A globally bounded locally integrable weak function `η` with compact-local L2 coordinate weak
+derivatives `aᵢ`,
+paired with the inverse-Hessian generator of a compactly supported C1 cutoff `χ` with Lipschitz
+gradient at a C1
+Monge–Ampère potential `u`: both pairings are integrable and the generator pairing equals minus the
+weighted energy
 pairing `∫ ∑ (∇²u)⁻¹ᵢⱼ aᵢ ∂ⱼχ e^{-u}`. -/
 theorem integral_rough_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ}
-    {u V χ η : EuclideanSpace ℝ (Fin n) → ℝ}
-    {a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
-    (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u))
-    (hV : ContDiff ℝ 1 V) {LF : NNReal}
-    (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
-    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
+    {u V χ η : EuclideanSpace ℝ (Fin n) → ℝ} {a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ}
+    (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
+    {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))
+    (hdet :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).det = Real.exp (-u x + V (gradient u x)))
     (hχ : ContDiff ℝ 1 χ) {Gχ : NNReal} (hGχ : LipschitzWith Gχ (gradient χ))
     (hχc : HasCompactSupport χ)
-    (hInv : ∀ i j : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
-        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
-    (hForce : Integrable (fun x =>
-      (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
-        fderiv ℝ V (gradient u x) (gradient χ x)) * Real.exp (-u x))
-      (volume : Measure (EuclideanSpace ℝ (Fin n))))
-    (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n))))
-    {C : ℝ} (hbound : ∀ x, ‖η x‖ ≤ C)
+    (hInv :
+      ∀ i j : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (fun x => (hessianMatrix u x)⁻¹ i j) (⊤ : ENNReal)
+              ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (hForce :
+      Integrable
+        (fun x =>
+          (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
+              fderiv ℝ V (gradient u x) (gradient χ x)) *
+            Real.exp (-u x))
+        (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n)))) {C : ℝ}
+    (hbound : ∀ x, ‖η x‖ ≤ C)
     (hweak : ∀ i : Fin n, HasWeakDerivAlong η (a i) (EuclideanSpace.basisFun (Fin n) ℝ i))
-    (ha2 : ∀ i : Fin n, ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp (a i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
-    Integrable (fun x => η x *
-      (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
-        fderiv ℝ V (gradient u x) (gradient χ x)) * Real.exp (-u x))
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-    Integrable (fun x => (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
-      a i x * fderiv ℝ χ x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x))
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
-    (∫ x, η x * (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
-      fderiv ℝ V (gradient u x) (gradient χ x)) * Real.exp (-u x)
-      ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
-    -(∫ x, (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j *
-      a i x * fderiv ℝ χ x (EuclideanSpace.basisFun (Fin n) ℝ j)) * Real.exp (-u x)
-      ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
+    (ha2 :
+      ∀ i : Fin n,
+        ∀ S : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact S →
+            MemLp (a i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
+    Integrable
+        (fun x =>
+          η x *
+              (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
+                fderiv ℝ V (gradient u x) (gradient χ x)) *
+            Real.exp (-u x))
+        (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      Integrable
+          (fun x =>
+            (∑ i : Fin n,
+                ∑ j : Fin n,
+                  (hessianMatrix u x)⁻¹ i j * a i x *
+                    fderiv ℝ χ x (EuclideanSpace.basisFun (Fin n) ℝ j)) *
+              Real.exp (-u x))
+          (volume : Measure (EuclideanSpace ℝ (Fin n))) ∧
+        (∫ x,
+            η x *
+                (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
+                  fderiv ℝ V (gradient u x) (gradient χ x)) *
+              Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+          -(∫ x,
+              (∑ i : Fin n,
+                  ∑ j : Fin n,
+                    (hessianMatrix u x)⁻¹ i j * a i x *
+                      fderiv ℝ χ x (EuclideanSpace.basisFun (Fin n) ℝ j)) *
+                Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
   classical
   let e := EuclideanSpace.basisFun (Fin n) ℝ
-  let J := fun i x => Real.exp (-u x) *
-    ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j * fderiv ℝ χ x (e j)
-  let F := fun x => (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
-    fderiv ℝ V (gradient u x) (gradient χ x)) * Real.exp (-u x)
+  let J := fun i x =>
+    Real.exp (-u x) * ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j * fderiv ℝ χ x (e j)
+  let F := fun x =>
+    (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
+        fderiv ℝ V (gradient u x) (gradient χ x)) *
+      Real.exp (-u x)
   have he : Continuous (fun x => Real.exp (-u x)) := Real.continuous_exp.comp hu.continuous.neg
   have hcoord (j : Fin n) : Continuous (fun x => fderiv ℝ χ x (e j)) :=
     (hχ.continuous_fderiv one_ne_zero).clm_apply continuous_const
   have hJ (i : Fin n) (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
-      MemLp (J i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+    MemLp (J i) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
     let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
       isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
-    have hsum : MemLp (fun x => ∑ j : Fin n,
-        (hessianMatrix u x)⁻¹ i j * fderiv ℝ χ x (e j)) (⊤ : ENNReal)
+    have hsum :
+      MemLp (fun x => ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j * fderiv ℝ χ x (e j)) (⊤ : ENNReal)
         ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
       apply memLp_finsetSum Finset.univ
       intro j _
-      exact (memLp_top_restrict_of_continuous (hcoord j) S hS).mul' (hInv i j S hS)
-    have hp : MemLp (J i) (⊤ : ENNReal)
-        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
-      hsum.mul' (memLp_top_restrict_of_continuous he S hS)
+      exact (hInv i j S hS).fun_mul (memLp_top_restrict_of_continuous (hcoord j) S hS)
+    have hp :
+      MemLp (J i) (⊤ : ENNReal) ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
+      (memLp_top_restrict_of_continuous he S hS).fun_mul hsum
     exact hp.mono_exponent (by norm_num)
   have hsupport := hasCompactSupport_inverse_hessian_cutoff_flux_generator u V χ hχc
   have hJeq (b : Fin n → EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
-      (∑ i : Fin n, J i x * b i x) =
-        (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j * b i x *
-          fderiv ℝ χ x (e j)) * Real.exp (-u x) := by
+    (∑ i : Fin n, J i x * b i x) =
+      (∑ i : Fin n, ∑ j : Fin n, (hessianMatrix u x)⁻¹ i j * b i x * fderiv ℝ χ x (e j)) *
+        Real.exp (-u x) := by
     simp only [J, Finset.mul_sum, Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro i _
@@ -916,26 +954,36 @@ theorem integral_rough_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ}
     intro j _
     ring
   have hFeq (ψ : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
-      F x * ψ x = ψ x * (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
-        fderiv ℝ V (gradient u x) (gradient χ x)) * Real.exp (-u x) := by dsimp only [F]; ring
+    F x * ψ x =
+      ψ x *
+          (((hessianMatrix u x)⁻¹ * hessianMatrix χ x).trace -
+            fderiv ℝ V (gradient u x) (gradient χ x)) *
+        Real.exp (-u x) := by
+    dsimp only [F]; ring
   have hId (ψ : EuclideanSpace ℝ (Fin n) → ℝ) (hψ : ContDiff ℝ 1 ψ)
-      (hψc : HasCompactSupport ψ) :
-      (∫ x, ∑ i : Fin n, J i x * fderiv ℝ ψ x (e i)
-        ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
+    (hψc : HasCompactSupport ψ) :
+    (∫ x,
+        ∑ i : Fin n,
+          J i x * fderiv ℝ ψ x (e i) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) =
       -(∫ x, F x * ψ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) := by
-    have hp := integral_mul_generator_eq_neg_energy_of_contDiff_one hu hG hV hF hdet
-      hχ hGχ hψ hψc
-    have hj := integral_congr_ae (μ := volume) (Filter.Eventually.of_forall (hJeq (fun i x => fderiv ℝ ψ x (e i))))
+    have hp :=
+      integral_mul_generator_eq_neg_energy_of_contDiff_one hu hG hV hF hdet hχ hGχ hψ hψc
+    have hj :=
+      integral_congr_ae (μ := volume)
+        (Filter.Eventually.of_forall (hJeq (fun i x => fderiv ℝ ψ x (e i))))
     have hf := integral_congr_ae (μ := volume) (Filter.Eventually.of_forall (hFeq ψ))
     rw [hj, hf]
     simpa only [neg_neg] using (congrArg Neg.neg hp).symm
-  obtain ⟨hprod, hforce, hEq⟩ := integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test
-    hJ hForce.locallyIntegrable hsupport.2.1 hsupport.2.2 hId hη hbound hweak ha2
-  have hE : Integrable (fun x => ∑ i : Fin n, J i x * a i x)
+  obtain ⟨hprod, hforce, hEq⟩ :=
+    integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test hJ hForce.locallyIntegrable
+      hsupport.2.1 hsupport.2.2 hId hη hbound hweak ha2
+  have hE :
+    Integrable (fun x => ∑ i : Fin n, J i x * a i x)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     integrable_finsetSum Finset.univ fun i _ => hprod i
-  refine ⟨hforce.congr (Filter.Eventually.of_forall (hFeq η)),
-    hE.congr (Filter.Eventually.of_forall (hJeq a)), ?_⟩
+  refine
+    ⟨hforce.congr (Filter.Eventually.of_forall (hFeq η)),
+      hE.congr (Filter.Eventually.of_forall (hJeq a)), ?_⟩
   have hj := integral_congr_ae (μ := volume) (Filter.Eventually.of_forall (hJeq a))
   have hf := integral_congr_ae (μ := volume) (Filter.Eventually.of_forall (hFeq η))
   rw [hj, hf] at hEq

@@ -6,9 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import Mathlib.Probability.Process.Adapted
-import Mathlib.MeasureTheory.Integral.Prod
-import Mathlib.MeasureTheory.Integral.Bochner.Set
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Process.Adapted
+public import Mathlib.MeasureTheory.Integral.Prod
+public import Mathlib.MeasureTheory.Integral.Bochner.Set
 
 /-!
 # Progressively measurable real processes
@@ -20,6 +24,8 @@ truncating the time variable at `t`, which is the form in which the stochastic i
 this library consume it; `isStronglyProgressive` and `of_isStronglyProgressive` relate the
 two.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 

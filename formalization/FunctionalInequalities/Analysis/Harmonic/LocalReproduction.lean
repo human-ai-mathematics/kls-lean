@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Harmonic.CompactReproduction
-import FunctionalInequalities.Analysis.Cutoff.LocalRegularity
+module
+
+public import FunctionalInequalities.Analysis.Harmonic.CompactReproduction
+public import FunctionalInequalities.Analysis.Cutoff.LocalRegularity
 
 /-!
 # Local reproduction and smoothness of harmonic functions on the unit ball
 
 Supporting the harmonic part of the interior estimates of Gilbarg–Trudinger, *Elliptic Partial
-Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60, and the
+Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60, and
+the
 derivative estimates for harmonic functions, Theorem 2.10 / (2.31). For `n ≥ 2` (including `n = 2`)
 and `h ∈ C²(B₂)` with `Δh = 0` on `B₂ = ball 0 2`:
 
@@ -21,6 +24,8 @@ and `h ∈ C²(B₂)` with `Δh = 0` on `B₂ = ball 0 2`:
 The reproducing formula is derived from `compact_harmonic_reproduces`; it is not a premise. Only
 the unit-scale statement on `B₁ ⊂ B₂` is proved here; scaling is in `Harmonic/BallHolder`.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric MeasureTheory Filter
 open scoped ContDiff Topology Convolution
@@ -55,22 +60,24 @@ theorem harmonicLocalization_properties {n : ℕ} {h : EuclideanSpace ℝ (Fin n
   change harmonicBump n y * h y = h y
   simp only [hy, Pi.one_apply, one_mul]
 
-/-- The unit-scale harmonic representation on `B₁`, derived from `h ∈ C²(B₂)` and `Δh = 0` on `B₂`,
+/--
+The unit-scale harmonic representation on `B₁`, derived from `h ∈ C²(B₂)` and `Δh = 0` on `B₂`,
 with the fixed dimension-dependent kernel `Kₙ = Δ(truncated Γ at radius 1/8)`. -/
-theorem local_harmonic_reproduces {n : ℕ} (hn : 2 ≤ n)
-    {h : EuclideanSpace ℝ (Fin n) → ℝ}
+theorem local_harmonic_reproduces {n : ℕ} (hn : 2 ≤ n) {h : EuclideanSpace ℝ (Fin n) → ℝ}
     (hh : ContDiffOn ℝ 2 h (ball (0 : EuclideanSpace ℝ (Fin n)) 2))
     (hLap : ∀ y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 2, Laplacian.laplacian h y = 0) :
     ∀ x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 1,
-      h x = (annularKernel n (1 / 8) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume]
-        harmonicLocalization n h) x := by
+      h x =
+        (annularKernel n (1 / 8) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume]
+            harmonicLocalization n h)
+          x := by
   intro x hx
   have hp := harmonicLocalization_properties hh
   have hxnorm : ‖x‖ < 1 := by simpa only [mem_ball, dist_zero_right] using hx
   have hxinner : x ∈ ball (0 : EuclideanSpace ℝ (Fin n)) (3 / 2) := by
     simpa only [mem_ball, dist_zero_right] using (show ‖x‖ < (3 : ℝ) / 2 by linarith)
   have hzero (y : EuclideanSpace ℝ (Fin n)) (hxy : ‖x - y‖ < 2 * (1 / 8 : ℝ)) :
-      Laplacian.laplacian (harmonicLocalization n h) y = 0 := by
+    Laplacian.laplacian (harmonicLocalization n h) y = 0 := by
     have htri : ‖y‖ ≤ ‖x - y‖ + ‖x‖ := by
       calc
         ‖y‖ = ‖(y - x) + x‖ := by rw [sub_add_cancel]
@@ -81,16 +88,21 @@ theorem local_harmonic_reproduces {n : ℕ} (hn : 2 ≤ n)
       linarith
     have hyouter : y ∈ ball (0 : EuclideanSpace ℝ (Fin n)) 2 :=
       ball_subset_ball (by norm_num) hyinner
-    exact ((InnerProductSpace.laplacian_congr_nhds (hp.2.2 y hyinner)).self_of_nhds).trans
-      (hLap y hyouter)
-  have hrepro := (compact_harmonic_reproduces hn (by norm_num : (0 : ℝ) < 1 / 8)
-    hp.1 hp.2.1 x hzero).2
-  have hconv : (∫ y, annularKernel n (1 / 8) (x - y) * harmonicLocalization n h y) =
+    exact
+      ((InnerProductSpace.laplacian_congr_nhds (hp.2.2 y hyinner)).self_of_nhds).trans
+        (hLap y hyouter)
+  have hrepro :=
+    (compact_harmonic_reproduces hn (by norm_num : (0 : ℝ) < 1 / 8) hp.1 hp.2.1 x hzero).2
+  have hconv :
+    (∫ y, annularKernel n (1 / 8) (x - y) * harmonicLocalization n h y) =
       (annularKernel n (1 / 8) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume]
-        harmonicLocalization n h) x := by
-    have ht := integral_sub_left_eq_self
-      (fun t => annularKernel n (1 / 8) t * harmonicLocalization n h (x - t)) volume x
-    simpa only [sub_sub_cancel, convolution_def, ContinuousLinearMap.lsmul_apply, smul_eq_mul] using ht
+          harmonicLocalization n h)
+        x := by
+    have ht :=
+      integral_sub_left_eq_self
+        (fun t => annularKernel n (1 / 8) t * harmonicLocalization n h (x - t)) volume x
+    simpa only [sub_sub_cancel, convolution_def, ContinuousLinearMap.lsmul_apply,
+      smul_eq_mul] using ht
   exact ((hp.2.2 x hxinner).self_of_nhds.symm.trans hrepro).trans hconv
 
 /-- Local harmonic smoothing: if `h` is only `C²` on `B₂` and `Δh = 0` there, then `h` is `C^∞` on

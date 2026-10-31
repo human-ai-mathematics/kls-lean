@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
-import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+public import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
 
 /-! Strict proof client: a concrete instance of the published Theorem 3.6 scope exercising
 simultaneously:
@@ -13,6 +15,8 @@ simultaneously:
 Both relaxed contents are identified with the Definition 3.3 globally Lipschitz relaxation
 and with the bounded-support perimeter on this instance. -/
 
+@[expose] public section
+
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Set
@@ -22,11 +26,12 @@ open FunctionalInequalities.KLS.MetricBV
 
 abbrev P := Set.Ioi (0 : ℝ)
 
-theorem not_properSpace : ¬ ProperSpace P := by
+theorem not_properSpace : ¬ProperSpace P := by
   intro hP
   let c : P := ⟨1, by norm_num⟩
-  obtain ⟨x₀, hx₀, hmin⟩ := (isCompact_closedBall c 1).exists_isMinOn
-    ⟨c, Metric.mem_closedBall_self zero_le_one⟩ continuous_subtype_val.continuousOn
+  obtain ⟨x₀, hx₀, hmin⟩ :=
+    (isCompact_closedBall c 1).exists_isMinOn ⟨c, Metric.mem_closedBall_self zero_le_one⟩
+      continuous_subtype_val.continuousOn
   have hpos : (0 : ℝ) < x₀.1 := x₀.2
   have hle : |x₀.1 - 1| ≤ 1 := by
     have := Metric.mem_closedBall.1 hx₀
@@ -57,7 +62,7 @@ theorem volume_univ : ν univ = ⊤ := by
 theorem finite_on_bounded (s : Set P) (hs : Bornology.IsBounded s) (_ : MeasurableSet s) :
     ν s < ⊤ := by
   rw [volume_apply]
-  exact (isometry_subtype_coe.lipschitz.isBounded_image hs).measure_lt_top
+  exact (isometry_subtype_coe.lipschitzWith.isBounded_image hs).measure_lt_top
 
 /-- The unbounded target in `ℝ`. -/
 def T : Set ℝ := ⋃ n : ℕ, Set.Icc ((n : ℝ) + 1) ((n : ℝ) + 1 + (2⁻¹ : ℝ) ^ n)
@@ -101,7 +106,7 @@ theorem volume_B_pos : 0 < ν B := by
 
 theorem not_isBounded_B : ¬ Bornology.IsBounded B := by
   intro hb
-  obtain ⟨b, hbound⟩ := (isometry_subtype_coe.lipschitz.isBounded_image hb).bddAbove
+  obtain ⟨b, hbound⟩ := (isometry_subtype_coe.lipschitzWith.isBounded_image hb).bddAbove
   obtain ⟨n, hn⟩ := exists_nat_gt b
   have hmem : ((n : ℝ) + 1) ∈ ((↑) '' B : Set ℝ) := by
     rw [image_B]

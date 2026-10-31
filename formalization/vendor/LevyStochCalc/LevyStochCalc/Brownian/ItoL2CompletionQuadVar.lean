@@ -6,7 +6,16 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoL2CompletionMaster
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs follow
+-- the v4.35.0 `eLpNorm` and `MemLp` API (measurability arguments dropped or supplied, `MemLp` as
+-- `eLpNorm` finiteness).
+-- Modified 2026-10-31 by the KLS formalization project: pass the existing
+-- `AEStronglyMeasurable` witnesses now taken by `eLpNorm_sq_eq_lintegral_nnnorm_sq`
+-- (Mathlib v4.35.0 `eLpNorm` change); proof-only change.
+module
+
+public import LevyStochCalc.Brownian.ItoL2CompletionMaster
 
 /-!
 # Brownian Itô integral: isometry, right continuity and quadratic variation
@@ -17,6 +26,8 @@ the resulting martingale property with respect to `ℱ.rightCont`, and the compe
 `∫_{[0, t]} (H ω u)² du` with the `ℱ`-martingale property of the compensated
 square.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -58,7 +69,7 @@ lemma isometry_stochasticIntegralBrownian {T : ℝ} (hT : 0 < T) :
   have hlim : MeasureTheory.eLpNorm (↑↑Flp : Ω → ℝ) 2 P ^ (2 : ℝ)
       = ∫⁻ ω, (‖stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas
         h_sq_int_global T ω‖₊ : ℝ≥0∞) ^ 2 ∂P := by
-    rw [eLpNorm_sq_eq_lintegral_nnnorm_sq]
+    rw [eLpNorm_sq_eq_lintegral_nnnorm_sq _ (MeasureTheory.Lp.aestronglyMeasurable Flp)]
     refine lintegral_congr_ae ?_
     filter_upwards [stochasticIntegralBrownian_ae_eq W ℱ hℱ H h_meas h_progMeas h_sq_int_global T]
       with ω hF
@@ -81,6 +92,10 @@ lemma isometry_stochasticIntegralBrownian {T : ℝ} (hT : 0 < T) :
       simpleIntegral_intermediate_isometry W ℱ hℱ
         (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n)
         (masterApprox_adapt ℱ H h_meas h_progMeas h_sq_int_global n) (le_of_lt hT)]
+    exact (simpleIntegral_memLp_intermediate_brownian W ℱ hℱ (master_horizon_pos n)
+      (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n)
+      (masterApprox_adapt ℱ H h_meas h_progMeas h_sq_int_global n) (le_of_lt hT)
+      hcn).aestronglyMeasurable
   exact tendsto_nhds_unique h_a
     (masterApprox_evalNorm_tendsto ℱ H h_meas h_progMeas h_sq_int_global hT)
 
@@ -115,10 +130,7 @@ lemma stochasticIntegralBrownian_ae_zero_of_nonpos {t : ℝ} (ht : t ≤ 0) :
     have hz : MeasureTheory.eLpNorm
         (stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas h_sq_int_global 0) 2 P = 0 :=
       tendsto_nhds_unique tendsto_const_nhds h
-    rwa [MeasureTheory.eLpNorm_eq_zero_iff
-      (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global
-        0).aestronglyMeasurable
-      (by norm_num)] at hz
+    rwa [MeasureTheory.eLpNorm_eq_zero_iff (by norm_num)] at hz
 
 include hℱ in
 /-- `∫⁻‖F t‖² = ∫⁻∫⁻_{[0,t]}‖H‖²` for all `t ≥ 0` (isometry, incl. `t = 0`). -/
@@ -194,7 +206,11 @@ lemma stochasticIntegralBrownian_eLpNorm_two_right_tendsto (s : ℝ) :
     have h2 := hsq.ennrpow_const ((1 : ℝ) / 2)
     rw [ENNReal.zero_rpow_of_pos (by norm_num)] at h2
     refine h2.congr (fun r => ?_)
-    rw [← eLpNorm_sq_eq_lintegral_nnnorm_sq, ← ENNReal.rpow_mul,
+    rw [← eLpNorm_sq_eq_lintegral_nnnorm_sq _
+        ((stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global r).sub
+          (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global
+            s)).aestronglyMeasurable,
+      ← ENNReal.rpow_mul,
       show (2 : ℝ) * (1 / 2) = 1 from by norm_num, ENNReal.rpow_one]
   -- the squared increment
   rcases le_or_gt 0 s with hs | hs
@@ -268,16 +284,12 @@ lemma martingale_rightCont_stochasticIntegralBrownian :
       ℱ.rightCont P := by
   refine LevyStochCalc.Martingale.martingale_rightCont_of_tendsto_eLpNorm_one
     (martingale_stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas h_sq_int_global) (fun s => ?_)
-  have hF_aesm : ∀ t, MeasureTheory.AEStronglyMeasurable
-      (stochasticIntegralBrownian W ℱ hℱ H h_meas h_progMeas h_sq_int_global t) P :=
-    fun t => (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
-      h_sq_int_global t).aestronglyMeasurable
   exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
     (stochasticIntegralBrownian_eLpNorm_two_right_tendsto W ℱ hℱ H h_meas h_progMeas
       h_sq_int_global s)
     (Filter.Eventually.of_forall (fun r => bot_le))
     (Filter.Eventually.of_forall (fun r => MeasureTheory.eLpNorm_le_eLpNorm_of_exponent_le
-      (by norm_num) ((hF_aesm r).sub (hF_aesm s))))
+      (by norm_num)))
 
 include h_meas h_sq_int_global in
 omit [IsProbabilityMeasure P] in
@@ -286,9 +298,9 @@ i.e. `(ω, u) ↦ H ω u` is square-integrable over the product. -/
 lemma compensatorH_memLp_prod {t : ℝ} (ht : 0 < t) :
     MeasureTheory.MemLp (fun p : Ω × ℝ => H p.1 p.2) 2
       (P.prod (volume.restrict (Set.Icc (0 : ℝ) t))) := by
-  refine ⟨h_meas.aestronglyMeasurable, ?_⟩
-  rw [MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
-    (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by simp : (2 : ℝ≥0∞) ≠ ⊤),
+  rw [MeasureTheory.memLp_iff, MeasureTheory.eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
+    (f := fun p : Ω × ℝ => H p.1 p.2) (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+    (by simp : (2 : ℝ≥0∞) ≠ ⊤) h_meas.aestronglyMeasurable,
     show (2 : ℝ≥0∞).toReal = 2 from by simp]
   have hbridge : ∫⁻ p : Ω × ℝ, (‖H p.1 p.2‖ₑ) ^ (2 : ℝ)
         ∂(P.prod (volume.restrict (Set.Icc (0 : ℝ) t)))
@@ -351,7 +363,7 @@ lemma masterApprox_compensator_tendsto_L1 {t : ℝ} (ht : 0 ≤ t) :
         MeasureTheory.eLpNorm f 2 (P.prod ν) ^ (2 : ℝ)
           = ∫⁻ ω, ∫⁻ s in Set.Icc (0 : ℝ) t, (‖f (ω, s)‖₊ : ℝ≥0∞) ^ 2 ∂volume ∂P := by
       intro f hf
-      rw [eLpNorm_sq_eq_lintegral_nnnorm_sq,
+      rw [eLpNorm_sq_eq_lintegral_nnnorm_sq f hf.aestronglyMeasurable,
           MeasureTheory.lintegral_prod _
             (((hf.nnnorm.coe_nnreal_ennreal).pow_const 2).aemeasurable)]
     have hfin2 : ∀ (f : Ω × ℝ → ℝ), Measurable f →
@@ -387,7 +399,7 @@ lemma masterApprox_compensator_tendsto_L1 {t : ℝ} (ht : 0 ≤ t) :
         (fun n => MeasureTheory.eLpNorm (fun p => (Gp n p) ^ 2 - (Hp p) ^ 2) 1 (P.prod ν))
         Filter.atTop (nhds 0) :=
       tendsto_eLpNorm_one_sq_sub (fun n => (hGp_meas n).aemeasurable) hHp_meas.aemeasurable
-        hHmem.2.ne hL2
+        hHmem.eLpNorm_lt_top.ne hL2
     -- marginal `L¹(P)` ≤ joint `L¹(P ⊗ ν)`.
     have hmarg : ∀ n, MeasureTheory.eLpNorm
         (fun ω => (∫ u in Set.Icc (0 : ℝ) t,
@@ -399,14 +411,19 @@ lemma masterApprox_compensator_tendsto_L1 {t : ℝ} (ht : 0 ≤ t) :
       have hGsq_int : MeasureTheory.Integrable (fun p => (Gp n p) ^ 2) (P.prod ν) :=
         MeasureTheory.MemLp.integrable_sq
           (show MeasureTheory.MemLp (Gp n) 2 (P.prod ν) from
-            ⟨(hGp_meas n).aestronglyMeasurable, hfin2 (Gp n) (hGp_meas n)
+            MeasureTheory.memLp_iff.mpr (hfin2 (Gp n) (hGp_meas n)
               (eval_lintegral_sq_finite
-                (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n) t).ne⟩)
+                (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n) t).ne))
       have hHsq_int : MeasureTheory.Integrable (fun p => (Hp p) ^ 2) (P.prod ν) :=
         hHmem.integrable_sq
       have hdsq_int : MeasureTheory.Integrable dsq (P.prod ν) := hGsq_int.sub hHsq_int
-      rw [MeasureTheory.eLpNorm_one_eq_lintegral_enorm,
-        MeasureTheory.eLpNorm_one_eq_lintegral_enorm,
+      have hmarg_aesm : MeasureTheory.AEStronglyMeasurable
+          (fun ω => (∫ u in Set.Icc (0 : ℝ) t,
+            ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).eval u ω) ^ 2 ∂volume)
+            - ∫ u in Set.Icc (0 : ℝ) t, (H ω u) ^ 2 ∂volume) P :=
+        (hGsq_int.integral_prod_left.sub hHsq_int.integral_prod_left).aestronglyMeasurable
+      rw [MeasureTheory.eLpNorm_one_eq_lintegral_enorm hmarg_aesm,
+        MeasureTheory.eLpNorm_one_eq_lintegral_enorm hdsq_int.aestronglyMeasurable,
         MeasureTheory.lintegral_prod _ hdsq_int.aestronglyMeasurable.enorm]
       refine MeasureTheory.lintegral_mono_ae ?_
       filter_upwards [hGsq_int.prod_right_ae, hHsq_int.prod_right_ae] with ω hGω hHω
@@ -487,42 +504,15 @@ lemma martingale_quadVar_stochasticIntegralBrownian :
             ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).ξ_measurable i).mul
               ((W.measurable_eval _).sub (W.measurable_eval _)))).aemeasurable)
           (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
-            h_sq_int_global t).1.aemeasurable
-          (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas h_sq_int_global t).2.ne
+            h_sq_int_global t).aestronglyMeasurable.aemeasurable
+          (stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
+            h_sq_int_global t).eLpNorm_lt_top.ne
           (masterApprox_tendsto_L2 W ℱ hℱ H h_meas h_progMeas h_sq_int_global ht)
       have hY := masterApprox_compensator_tendsto_L1 ℱ H h_meas h_progMeas h_sq_int_global ht
       refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
         (by simpa using hX.add hY)
         (Filter.Eventually.of_forall (fun n => bot_le))
         (Filter.Eventually.of_forall (fun n => ?_))
-      have hXaesm : MeasureTheory.AEStronglyMeasurable
-          (fun ω => (simpleIntegral W (masterApprox ℱ H h_meas h_progMeas
-            h_sq_int_global n) t ω) ^ 2
-            - (F t ω) ^ 2) P :=
-        (((Finset.measurable_sum _ (fun i _ =>
-          ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).ξ_measurable i).mul
-            ((W.measurable_eval _).sub (W.measurable_eval _)))).pow_const
-              2).aestronglyMeasurable).sub
-          ((stochasticIntegralBrownian_memLp W ℱ hℱ H h_meas h_progMeas
-            h_sq_int_global t).1.aemeasurable.pow_const 2).aestronglyMeasurable
-      have hAn_meas : Measurable (fun ω => ∫ u in Set.Icc (0 : ℝ) t,
-          ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).eval u ω) ^ 2 ∂volume) := by
-        rw [show (fun ω => ∫ u in Set.Icc (0 : ℝ) t,
-              ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).eval u ω) ^ 2 ∂volume)
-            = fun ω => ∑ i : Fin (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).N,
-                (min ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).partition i.succ) t
-                  - min ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).partition
-                      i.castSucc) t)
-                  * ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).ξ i ω) ^ 2 from
-          funext (fun ω => setIntegral_eval_sq_Icc_clamped
-            (masterApprox ℱ H h_meas h_progMeas h_sq_int_global n) ω)]
-        exact Finset.measurable_sum _ (fun i _ => measurable_const.mul
-          (((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).ξ_measurable i).pow_const 2))
-      have hYaesm : MeasureTheory.AEStronglyMeasurable
-          (fun ω => (∫ u in Set.Icc (0 : ℝ) t,
-              ((masterApprox ℱ H h_meas h_progMeas h_sq_int_global n).eval u ω) ^ 2 ∂volume)
-            - ∫ u in Set.Icc (0 : ℝ) t, (H ω u) ^ 2 ∂volume) P :=
-        hAn_meas.aestronglyMeasurable.sub (hAHint t).aestronglyMeasurable
       calc MeasureTheory.eLpNorm
             ((fun t' ω => (simpleIntegral W (masterApprox ℱ H h_meas h_progMeas
               h_sq_int_global n) t' ω) ^ 2
@@ -538,7 +528,7 @@ lemma martingale_quadVar_stochasticIntegralBrownian :
                   - ∫ u in Set.Icc (0 : ℝ) t, (H ω u) ^ 2 ∂volume) 1 P := by
             refine MeasureTheory.eLpNorm_congr_ae (Filter.Eventually.of_forall (fun ω => ?_))
             simp only [Pi.sub_apply]; ring
-        _ ≤ _ := MeasureTheory.eLpNorm_sub_le hXaesm hYaesm le_rfl
+        _ ≤ _ := MeasureTheory.eLpNorm_sub_le le_rfl
     · have hzero : ∀ n, MeasureTheory.eLpNorm
           ((fun t' ω => (simpleIntegral W (masterApprox ℱ H h_meas h_progMeas
             h_sq_int_global n) t' ω) ^ 2

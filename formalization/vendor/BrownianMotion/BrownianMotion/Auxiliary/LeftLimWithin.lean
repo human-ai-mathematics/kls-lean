@@ -3,6 +3,9 @@ Copyright (c) 2026 Rémy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Rémy Degenne
 -/
+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 replacements
+-- of deprecated names (identifier-only), and removal of `tendsto_atBot_of_mapClusterPt`, now
+-- provided by Mathlib v4.35.0 (Topology/Order/LeftRightLim); see vendor/port.patch.
 module
 
 public import Mathlib.Topology.Order.LeftRight
@@ -91,7 +94,7 @@ lemma leftLimWithin_eq_of_tendsto [hα : TopologicalSpace α] [h'α : OrderTopol
     leftLimWithin f s a = y := by
   have h'' : ∃ y, Tendsto f (𝓝[Iio a ∩ s] a) (𝓝 y) := ⟨y, h'⟩
   rw [h'α.topology_eq_generate_intervals] at h h' h''
-  simp only [leftLimWithin, neBot_iff.mp h, h'', not_true, or_self_iff, if_false]
+  simp only [leftLimWithin, neBot_iff.mp h, h'', not_true, or_self_iff, ite_false]
   exact lim_eq h'
 
 lemma rightLimWithin_eq_of_tendsto [TopologicalSpace α] [OrderTopology α] [T2Space β]
@@ -370,12 +373,6 @@ lemma tendsto_atTop_of_mapClusterPt
   filter_upwards [Ioi_mem_atTop u] with a (ha : u < a)
   apply s_closed.mem_of_mapClusterPt (hu a ha.le).1
   filter_upwards [Ici_mem_nhds ha] with y hy using (hu y hy).2
-
-lemma tendsto_atBot_of_mapClusterPt
-    [TopologicalSpace α] [OrderTopology α] [T3Space β] [NoBotOrder α] {f g : α → β} {b : β}
-    (h : Tendsto f atBot (𝓝 b)) (h' : ∀ᶠ x in atBot, MapClusterPt (g x) (𝓝 x) f) :
-    Tendsto g atBot (𝓝 b) :=
-  tendsto_atTop_of_mapClusterPt (α := αᵒᵈ) h h'
 
 lemma tendsto_leftLimWithin_atTop_of_tendsto
     [TopologicalSpace α] [OrderTopology α] [DenselyOrdered α] [NoMinOrder α] [NoTopOrder α]

@@ -1,10 +1,12 @@
-import FunctionalInequalities.Probability.BrunnMinkowski
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import FunctionalInequalities.Analysis.Convex.Coercivity
-import FunctionalInequalities.Analysis.Convex.Subgradient.Measure
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import Mathlib.MeasureTheory.Measure.Tilted
+module
+
+public import FunctionalInequalities.Probability.BrunnMinkowski
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import FunctionalInequalities.Analysis.Convex.Coercivity
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Measure
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import Mathlib.MeasureTheory.Measure.Tilted
 
 /-!
 # Maximality of a finite moment potential
@@ -23,7 +25,8 @@ maximality inequality behind the uniqueness half of Cordero-Erausquin–Klartag,
   differentiates at `t = 0`.
 
 Supporting facts: linear growth `c ‖x‖ + b ≤ ψ x` of a convex `ψ` with integrable `e^{-ψ}`
-(`exists_linear_lower_bound_of_integrable_exp_neg`), the a.e. gradient bound `‖∇ψ‖ ≤ R` when `μ` is carried by the closed ball of radius `R`
+(`exists_linear_lower_bound_of_integrable_exp_neg`), the a.e. gradient bound `‖∇ψ‖ ≤ R` when `μ` is
+carried by the closed ball of radius `R`
 (`ae_norm_gradient_le`), the Fenchel equality `ψ*(∇ψ(w)) = ⟪w, ∇ψ(w)⟫ − ψ(w)` at differentiability
 points (`legendre_gradient`), `μ`-a.e. finiteness of `ψ*` (`ae_legendre_ne_top`) and the
 exponential integrability of `|ψ*|` under `μ` for a bounded-support `μ`
@@ -47,6 +50,8 @@ hypothesis from the maximality inequality `lintegral_le_exp_integral_of_map_grad
   finite potentials); it is bounded below by `−ψ(0)`, and the domination with `g(y) = e^{-ψ(2y)/2}`
   and `h = −ψ*/2` bounds it above.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -233,7 +238,7 @@ theorem lintegral_le_exp_integral_of_map_gradient {ψ : E → ℝ} (hψ : Convex
   have : IsProbabilityMeasure ((volume : Measure E).tilted (-ψ)) :=
     isProbabilityMeasure_tilted hint
   have : IsProbabilityMeasure μ := by
-    rw [← hmap]; exact Measure.isProbabilityMeasure_map hgrad.aemeasurable
+    rw [← hmap]; exact (Measure.isProbabilityMeasure_map_iff hgrad.aemeasurable).2 inferInstance
   have hD : ∀ᵐ w ∂(volume : Measure E), DifferentiableAt ℝ ψ w := by
     filter_upwards [hψ.ae_differentiableAt_of_isOpen volume isOpen_univ] with w hw
     exact hw (mem_univ w)
@@ -550,7 +555,7 @@ private theorem isProbabilityMeasure_of_map_gradient {ψ : E → ℝ}
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
   have : IsProbabilityMeasure ((volume : Measure E).tilted (-ψ)) := isProbabilityMeasure_tilted hint
   rw [← hmap]
-  exact Measure.isProbabilityMeasure_map (measurable_gradient ψ).aemeasurable
+  exact (Measure.isProbabilityMeasure_map_iff (measurable_gradient ψ).aemeasurable).2 inferInstance
 
 /-- **Integrability of a perturbation bounded above.** Let `ψ` be convex with `∫ e^{-ψ} = 1`
 whose gradient pushes `e^{-ψ(x)} dx` forward to `μ`. If `h ≤ M` is measurable and a measurable

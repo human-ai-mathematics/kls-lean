@@ -1,19 +1,24 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Gamma
-import Mathlib.Analysis.Distribution.TemperateGrowth
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Gamma
+public import Mathlib.Analysis.Distribution.TemperateGrowth
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 
 /-!
 # The tilt identities for tests of temperate growth
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 3.6 for scalar functions of the class `𝒜` (smooth,
 every derivative of polynomial growth; Mathlib's `Function.HasTemperateGrowth`). The measure is
-`μ = m.tilted (-V)` with `V ∈ C¹`, `∇V` of polynomial growth (true for the source's regular measures,
+`μ = m.tilted (-V)` with `V ∈ C¹`, `∇V` of polynomial growth (true for the source's regular
+measures,
 whose Hessian is bounded) and all exponential moments. The compactly supported case is
 `Analysis/BakryEmery/Tilt/Basic.lean`; here a scaled bump cutoff `χ_R(x) = φ(x / R)` and dominated
 convergence remove the support condition from the integrated generator identity `∫ ℒu dμ_z = 0`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -324,8 +329,11 @@ theorem integral_weightedLaplacian_eq_zero_of_growth {V f : E → ℝ} (hV : Con
     {CV : ℝ} {kV : ℕ} (hVg : ∀ x, ‖gradient V x‖ ≤ CV * (1 + ‖x‖) ^ kV)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
     (hf : ContDiff ℝ 2 f) {C : ℝ} {k : ℕ}
-    (hfg : ∀ x, |f x| ≤ C * (1 + ‖x‖) ^ k ∧ ‖iteratedFDeriv ℝ 1 f x‖ ≤ C * (1 + ‖x‖) ^ k ∧
-      ‖iteratedFDeriv ℝ 2 f x‖ ≤ C * (1 + ‖x‖) ^ k) :
+    (hfg :
+      ∀ x,
+        |f x| ≤ C * (1 + ‖x‖) ^ k ∧
+          ‖iteratedFDeriv ℝ 1 f x‖ ≤ C * (1 + ‖x‖) ^ k ∧
+            ‖iteratedFDeriv ℝ 2 f x‖ ≤ C * (1 + ‖x‖) ^ k) :
     ∫ x, weightedLaplacian V f x ∂(m.tilted (-V)) = 0 := by
   have hC : 0 ≤ C := by
     have h := (hfg 0).1
@@ -340,8 +348,7 @@ theorem integral_weightedLaplacian_eq_zero_of_growth {V f : E → ℝ} (hV : Con
   let K : ℝ := |C₁| + |C₂|
   have hK : 0 ≤ K := by dsimp [K]; positivity
   have hcut (R : ℝ) (hR : 1 ≤ R) (x : E) :
-      ‖iteratedFDeriv ℝ 1 (cutoff R) x‖ ≤ K ∧
-        ‖iteratedFDeriv ℝ 2 (cutoff R) x‖ ≤ K := by
+    ‖iteratedFDeriv ℝ 1 (cutoff R) x‖ ≤ K ∧ ‖iteratedFDeriv ℝ 2 (cutoff R) x‖ ≤ K := by
     constructor
     · exact (h₁ R hR x).trans ((le_abs_self _).trans (le_add_of_nonneg_right (abs_nonneg _)))
     · exact (h₂ R hR x).trans ((le_abs_self _).trans (le_add_of_nonneg_left (abs_nonneg _)))
@@ -351,18 +358,15 @@ theorem integral_weightedLaplacian_eq_zero_of_growth {V f : E → ℝ} (hV : Con
   have hA : 0 ≤ A := by dsimp [A]; positivity
   have hB : 0 ≤ B := by dsimp [B]; positivity
   have hH : 0 ≤ H := by dsimp [H]; positivity
-  have hLf (x : E) :
-      |weightedLaplacian V f x| ≤ A * (1 + ‖x‖) ^ (k + kV) :=
+  have hLf (x : E) : |weightedLaplacian V f x| ≤ A * (1 + ‖x‖) ^ (k + kV) :=
     growth_weightedLaplacian_bound hCV hC hVg (fun x => (hfg x).2) x
   have hLcut (R : ℝ) (hR : 1 ≤ R) (x : E) :
-      |weightedLaplacian V (cutoff R) x| ≤ B * (1 + ‖x‖) ^ kV := by
+    |weightedLaplacian V (cutoff R) x| ≤ B * (1 + ‖x‖) ^ kV := by
     simpa only [pow_zero, mul_one, zero_add] using
-      growth_weightedLaplacian_bound hCV hK hVg
-        (g := cutoff R) (k := 0) (fun y => by simpa using hcut R hR y) x
-  let F : ℕ → E → ℝ := fun n =>
-    weightedLaplacian V (fun x => cutoff ((n : ℝ) + 1) x * f x)
-  have hbound (n : ℕ) (x : E) :
-      ‖F n x‖ ≤ H * (1 + ‖x‖) ^ (k + kV) := by
+      growth_weightedLaplacian_bound hCV hK hVg (g := cutoff R) (k := 0)
+        (fun y => by simpa using hcut R hR y) x
+  let F : ℕ → E → ℝ := fun n => weightedLaplacian V (fun x => cutoff ((n : ℝ) + 1) x * f x)
+  have hbound (n : ℕ) (x : E) : ‖F n x‖ ≤ H * (1 + ‖x‖) ^ (k + kV) := by
     have hR : 1 ≤ (n : ℝ) + 1 := by linarith [Nat.cast_nonneg (α := ℝ) n]
     have hc : ContDiff ℝ 2 (cutoff ((n : ℝ) + 1) : E → ℝ) :=
       (contDiff_cutoff (E := E) ((n : ℝ) + 1)).of_le
@@ -382,44 +386,51 @@ theorem integral_weightedLaplacian_eq_zero_of_growth {V f : E → ℝ} (hV : Con
     rw [show ∀ a b c : ℝ, a + b + 2 * c = a + 2 * c + b from fun a b c => by ring]
     calc
       |cutoff ((n : ℝ) + 1) x * weightedLaplacian V f x +
-          2 * ⟪gradient (cutoff ((n : ℝ) + 1)) x, gradient f x⟫ +
-          f x * weightedLaplacian V (cutoff ((n : ℝ) + 1)) x| ≤
+                2 * ⟪gradient (cutoff ((n : ℝ) + 1)) x, gradient f x⟫ +
+              f x * weightedLaplacian V (cutoff ((n : ℝ) + 1)) x| ≤
           |cutoff ((n : ℝ) + 1) x| * |weightedLaplacian V f x| +
-            2 * (‖gradient (cutoff ((n : ℝ) + 1)) x‖ * ‖gradient f x‖) +
+              2 * (‖gradient (cutoff ((n : ℝ) + 1)) x‖ * ‖gradient f x‖) +
             |f x| * |weightedLaplacian V (cutoff ((n : ℝ) + 1)) x| := by
         calc
-          _ ≤ |cutoff ((n : ℝ) + 1) x * weightedLaplacian V f x| +
-              |2 * ⟪gradient (cutoff ((n : ℝ) + 1)) x, gradient f x⟫| +
-              |f x * weightedLaplacian V (cutoff ((n : ℝ) + 1)) x| :=
+          _ ≤
+              |cutoff ((n : ℝ) + 1) x * weightedLaplacian V f x| +
+                  |2 * ⟪gradient (cutoff ((n : ℝ) + 1)) x, gradient f x⟫| +
+                |f x * weightedLaplacian V (cutoff ((n : ℝ) + 1)) x| :=
             (abs_add_le _ _).trans (add_le_add_left (abs_add_le _ _) _)
           _ ≤ _ := by
             simp only [abs_mul, abs_of_nonneg (show (0 : ℝ) ≤ 2 by norm_num)]
             gcongr
             exact abs_real_inner_le_norm _ _
-      _ ≤ 1 * (A * (1 + ‖x‖) ^ (k + kV)) +
-            2 * (K * (C * (1 + ‖x‖) ^ k)) +
+      _ ≤
+          1 * (A * (1 + ‖x‖) ^ (k + kV)) + 2 * (K * (C * (1 + ‖x‖) ^ k)) +
             (C * (1 + ‖x‖) ^ k) * (B * (1 + ‖x‖) ^ kV) := by
         gcongr
         · exact abs_cutoff_le_one _ _
         · exact hLf x
         · exact (hfg x).1
         · exact hLcut _ hR x
-      _ ≤ 1 * (A * (1 + ‖x‖) ^ (k + kV)) +
-            2 * (K * (C * (1 + ‖x‖) ^ (k + kV))) +
+      _ ≤
+          1 * (A * (1 + ‖x‖) ^ (k + kV)) + 2 * (K * (C * (1 + ‖x‖) ^ (k + kV))) +
             (C * (1 + ‖x‖) ^ k) * (B * (1 + ‖x‖) ^ kV) := by
-        exact add_le_add_left (add_le_add_right (mul_le_mul_of_nonneg_left
-          (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hp' hC) hK)
-          (by norm_num)) _) _
+        exact
+          add_le_add_left
+            (add_le_add_right
+              (mul_le_mul_of_nonneg_left
+                (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hp' hC) hK) (by norm_num))
+              _)
+            _
       _ = H * (1 + ‖x‖) ^ (k + kV) := by dsimp [H]; rw [pow_add]; ring
-  have hbi : Integrable (fun x : E => H * (1 + ‖x‖) ^ (k + kV))
-      (m.tilted (-V)) := by
-    apply FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C := H) (k := k + kV)
+  have hbi : Integrable (fun x : E => H * (1 + ‖x‖) ^ (k + kV)) (m.tilted (-V)) := by
+    apply
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ hexp (by fun_prop) (C := H)
+        (k := k + kV)
     intro x
     rw [Real.norm_of_nonneg (by positivity)]
   have hmeas (n : ℕ) : AEStronglyMeasurable (F n) (m.tilted (-V)) :=
     (continuous_weightedLaplacian hV
-      (((contDiff_cutoff (E := E) ((n : ℝ) + 1)).of_le
-        (show (2 : ℕ∞ω) ≤ ∞ by exact WithTop.coe_le_coe.mpr le_top)).mul hf)).aestronglyMeasurable
+        (((contDiff_cutoff (E := E) ((n : ℝ) + 1)).of_le
+              (show (2 : ℕ∞ω) ≤ ∞ by exact WithTop.coe_le_coe.mpr le_top)).mul
+          hf)).aestronglyMeasurable
   have hlim (x : E) : Tendsto (fun n => F n x) atTop (𝓝 (weightedLaplacian V f x)) := by
     apply tendsto_const_nhds.congr'
     obtain ⟨N, hN⟩ := exists_nat_gt ‖x‖
@@ -430,13 +441,14 @@ theorem integral_weightedLaplacian_eq_zero_of_growth {V f : E → ℝ} (hV : Con
     apply weightedLaplacian_congr_of_eventuallyEq V
     filter_upwards [(isOpen_lt continuous_norm continuous_const).mem_nhds hx] with y hy
     rw [cutoff_eq_one (by positivity) hy.le, one_mul]
-  have ht := tendsto_integral_of_dominated_convergence
-    (fun x : E => H * (1 + ‖x‖) ^ (k + kV)) hmeas hbi
-    (fun n => ae_of_all _ (hbound n)) (ae_of_all _ hlim)
+  have ht :=
+    tendsto_integral_of_dominated_convergence (fun x : E => H * (1 + ‖x‖) ^ (k + kV)) hmeas hbi
+      (fun n => ae_of_all _ (hbound n)) (ae_of_all _ hlim)
   have hz (n : ℕ) : (∫ x, F n x ∂(m.tilted (-V))) = 0 :=
     integral_weightedLaplacian_eq_zero m hV
       (((contDiff_cutoff (E := E) ((n : ℝ) + 1)).of_le
-        (show (2 : ℕ∞ω) ≤ ∞ by exact WithTop.coe_le_coe.mpr le_top)).mul hf)
+            (show (2 : ℕ∞ω) ≤ ∞ by exact WithTop.coe_le_coe.mpr le_top)).mul
+        hf)
       ((hasCompactSupport_cutoff (by positivity)).mul_right)
   simp_rw [hz] at ht
   exact tendsto_nhds_unique ht tendsto_const_nhds
@@ -467,46 +479,39 @@ theorem tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ
   unfold tiltAverage
   by_cases h : Integrable (fun x => Real.exp ((-V) x)) m
   · let W : E → ℝ := fun y => V y - ⟪z, y⟫
-    have hlin : ContDiff ℝ 1 (fun y : E => ⟪z, y⟫) :=
-      (innerSL ℝ z).contDiff
-    have hW : ContDiff ℝ 1 W := by
-      simpa only [W] using hV.sub hlin
-    have hz :
-        expTilt (m.tilted (-V)) z = m.tilted (-W) := by
+    have hlin : ContDiff ℝ 1 (fun y : E => ⟪z, y⟫) := (innerSL ℝ z).contDiff
+    have hW : ContDiff ℝ 1 W := by simpa only [W] using hV.sub hlin
+    have hz : expTilt (m.tilted (-V)) z = m.tilted (-W) := by
       simpa only [W] using expTilt_tilted m h z
-    have hgrad :
-        Integrable (gradient f) (expTilt (m.tilted (-V)) z) :=
-      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
-        (continuous_gradient_of_contDiff hf2 (by norm_num)).aestronglyMeasurable (fun x => by
+    have hgrad : Integrable (gradient f) (expTilt (m.tilted (-V)) z) :=
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _
+        (integrable_exp_mul_norm_expTilt m hexp z)
+        (continuous_gradient_of_contDiff hf2 (by norm_num)).aestronglyMeasurable
+        (fun x => by
           rw [norm_gradient_eq_norm_iteratedFDeriv_one]
           exact (hfg x).2.1)
-    have hinner :
-        Integrable (fun x => ⟪z, gradient f x⟫)
-          (expTilt (m.tilted (-V)) z) :=
+    have hinner : Integrable (fun x => ⟪z, gradient f x⟫) (expTilt (m.tilted (-V)) z) :=
       (innerSL ℝ z).integrable_comp hgrad
-    have hL :
-        Integrable (fun x => weightedLaplacian V f x)
-          (expTilt (m.tilted (-V)) z) :=
-      FunctionalInequalities.Probability.integrable_of_norm_le_pow _ (integrable_exp_mul_norm_expTilt m hexp z)
-        (continuous_weightedLaplacian hV hf2).aestronglyMeasurable (fun x => by
+    have hL : Integrable (fun x => weightedLaplacian V f x) (expTilt (m.tilted (-V)) z) :=
+      FunctionalInequalities.Probability.integrable_of_norm_le_pow _
+        (integrable_exp_mul_norm_expTilt m hexp z)
+        (continuous_weightedLaplacian hV hf2).aestronglyMeasurable
+        (fun x => by
           rw [Real.norm_eq_abs]
           exact growth_weightedLaplacian_bound hCV hC hVg (fun y => (hfg y).2) x)
-    have hzero :
-        (∫ x, weightedLaplacian W f x
-          ∂(expTilt (m.tilted (-V)) z)) = 0 := by
+    have hzero : (∫ x, weightedLaplacian W f x ∂(expTilt (m.tilted (-V)) z)) = 0 := by
       calc
-        (∫ x, weightedLaplacian W f x
-            ∂(expTilt (m.tilted (-V)) z)) =
+        (∫ x, weightedLaplacian W f x ∂(expTilt (m.tilted (-V)) z)) =
             ∫ x, weightedLaplacian W f x ∂(m.tilted (-W)) := by
-              rw [hz]
+          rw [hz]
         _ = 0 := by
-          apply integral_weightedLaplacian_eq_zero_of_growth m hW
-            (CV := CV + ‖z‖) (kV := kV) (C := C) (k := k)
+          apply
+            integral_weightedLaplacian_eq_zero_of_growth m hW (CV := CV + ‖z‖) (kV := kV) (C :=
+              C) (k := k)
           · intro x
-            have hp : 1 ≤ (1 + ‖x‖) ^ kV :=
-              one_le_pow₀ (by linarith [norm_nonneg x])
+            have hp : 1 ≤ (1 + ‖x‖) ^ kV := one_le_pow₀ (by linarith [norm_nonneg x])
             rw [show gradient W x = gradient V x - z from
-              gradient_sub_inner z x (hV.differentiable (by norm_num) x)]
+                gradient_sub_inner z x (hV.differentiable (by norm_num) x)]
             calc
               ‖gradient V x - z‖ ≤ ‖gradient V x‖ + ‖z‖ := norm_sub_le _ _
               _ ≤ CV * (1 + ‖x‖) ^ kV + ‖z‖ * (1 + ‖x‖) ^ kV := by
@@ -518,8 +523,7 @@ theorem tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth {V f : E → ℝ
           · exact hf2
           · exact hfg
     exact integral_neg_weightedLaplacian_eq_inner hV z hgrad hL hzero
-  · have hzero : m.tilted (-V) = 0 :=
-      tilted_of_not_integrable h
+  · have hzero : m.tilted (-V) = 0 := tilted_of_not_integrable h
     have hz : expTilt (m.tilted (-V)) z = 0 := by
       unfold expTilt
       rw [hzero]

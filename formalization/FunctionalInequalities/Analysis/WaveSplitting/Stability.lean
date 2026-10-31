@@ -1,6 +1,10 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Product
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Product
 
 /-! # Finite-order stability of the actual reaction and splitting flows -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory
 open scoped ContDiff
@@ -137,44 +141,66 @@ section InvariantMeasure
 variable [m.IsAddRightInvariant] [DecidableEq ι]
 
 /-- A full split step has the same finite-order stability factor as its reaction. -/
-theorem derivativeEnergy_step_le
-    (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
-    {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B t : ℝ}
-    (hB0 : 0 ≤ B) (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (ht : 0 ≤ t) (ht1 : t ≤ 1) :
-    derivativeEnergy m a order (step a b js t Y) ≤ (1 + (1 + 4 * couplingConstant (ι := ι) order B) * t) * derivativeEnergy m a order Y := by
-  have h := derivativeEnergy_reaction_le m a order hb (hY.sweep a t js) (hc.sweep a t js) hB0 hB ht ht1
+theorem derivativeEnergy_step_le (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ}
+    (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
+    {B t : ℝ} (hB0 : 0 ≤ B)
+    (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (ht : 0 ≤ t)
+    (ht1 : t ≤ 1) :
+    derivativeEnergy m a order (step a b js t Y) ≤
+      (1 + (1 + 4 * couplingConstant (ι := ι) order B) * t) * derivativeEnergy m a order Y := by
+  have h :=
+    derivativeEnergy_reaction_le m a order hb (hY.sweep a t js) (hc.sweep a t js) hB0 hB ht ht1
   rwa [derivativeEnergy_sweep m a a order js t hY hc] at h
 
 /-- Iterating actual split steps gives a quantitative bound, without assuming stability. -/
-theorem derivativeEnergy_nodes_le
-    (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
-    {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B δ : ℝ}
-    (hB0 : 0 ≤ B) (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (k : ℕ) :
-    derivativeEnergy m a order (nodes a b js δ Y k) ≤ (1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) ^ k * derivativeEnergy m a order Y := by
+theorem derivativeEnergy_nodes_le (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ}
+    (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
+    {B δ : ℝ} (hB0 : 0 ≤ B)
+    (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (hδ : 0 ≤ δ)
+    (hδ1 : δ ≤ 1) (k : ℕ) :
+    derivativeEnergy m a order (nodes a b js δ Y k) ≤
+      (1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) ^ k *
+        derivativeEnergy m a order Y := by
   have hC : 0 ≤ couplingConstant (ι := ι) order B := by unfold couplingConstant; positivity
   induction k with
   | zero => simp [nodes]
   | succ k ih =>
     calc
       derivativeEnergy m a order (nodes a b js δ Y (k + 1)) ≤
-          (1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) * derivativeEnergy m a order (nodes a b js δ Y k) :=
-        derivativeEnergy_step_le m a order js hb (hY.nodes a hb js δ k) (hc.nodes a b js δ k) hB0 hB hδ hδ1
-      _ ≤ (1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) * ((1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) ^ k * derivativeEnergy m a order Y) :=
+          (1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) *
+            derivativeEnergy m a order (nodes a b js δ Y k) :=
+        derivativeEnergy_step_le m a order js hb (hY.nodes a hb js δ k) (hc.nodes a b js δ k)
+          hB0 hB hδ hδ1
+      _ ≤
+          (1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) *
+            ((1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ) ^ k *
+              derivativeEnergy m a order Y) :=
         mul_le_mul_of_nonneg_left ih (by positivity)
       _ = _ := by rw [pow_succ]; ring
 
-/-- The finite-order grid bound depends on elapsed time `k*δ`, not separately on the mesh size. -/
-theorem derivativeEnergy_nodes_le_exp
-    (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
-    {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B δ : ℝ}
-    (hB0 : 0 ≤ B) (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (k : ℕ) :
-    derivativeEnergy m a order (nodes a b js δ Y k) ≤ Real.exp ((1 + 4 * couplingConstant (ι := ι) order B) * (k * δ)) * derivativeEnergy m a order Y := by
+/--
+The finite-order grid bound depends on elapsed time `k*δ`, not separately on the mesh size. -/
+theorem derivativeEnergy_nodes_le_exp (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ}
+    (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
+    {B δ : ℝ} (hB0 : 0 ≤ B)
+    (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (hδ : 0 ≤ δ)
+    (hδ1 : δ ≤ 1) (k : ℕ) :
+    derivativeEnergy m a order (nodes a b js δ Y k) ≤
+      Real.exp ((1 + 4 * couplingConstant (ι := ι) order B) * (k * δ)) *
+        derivativeEnergy m a order Y := by
   have hC : 0 ≤ couplingConstant (ι := ι) order B := by unfold couplingConstant; positivity
   apply (derivativeEnergy_nodes_le m a order js hb hY hc hB0 hB hδ hδ1 k).trans
-  apply mul_le_mul_of_nonneg_right _ (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => energy_nonneg m _)
-  have hbase : 1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ ≤ Real.exp ((1 + 4 * couplingConstant (ι := ι) order B) * δ) := by
-    simpa only [add_comm] using Real.add_one_le_exp ((1 + 4 * couplingConstant (ι := ι) order B) * δ)
-  have hpow := pow_le_pow_left₀ (show 0 ≤ 1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ by positivity) hbase k
+  apply
+    mul_le_mul_of_nonneg_right _
+      (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => energy_nonneg m _)
+  have hbase :
+    1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ ≤
+      Real.exp ((1 + 4 * couplingConstant (ι := ι) order B) * δ) := by
+    simpa only [add_comm] using
+      Real.add_one_le_exp ((1 + 4 * couplingConstant (ι := ι) order B) * δ)
+  have hpow :=
+    pow_le_pow_left₀
+      (show 0 ≤ 1 + (1 + 4 * couplingConstant (ι := ι) order B) * δ by positivity) hbase k
   rw [← Real.exp_nat_mul] at hpow
   convert hpow using 1
   congr 1

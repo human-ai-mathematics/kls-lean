@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
-import FunctionalInequalities.Poincare.LocalSlope.Basic
-import FunctionalInequalities.Energy.LocalSlope.Gradient
-import FunctionalInequalities.Poincare.SmoothTest.Comparison
-import Mathlib.Analysis.Calculus.ContDiff.RCLike
-import Mathlib.MeasureTheory.Function.LpSpace.Complete
+module
+
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+public import FunctionalInequalities.Poincare.LocalSlope.Basic
+public import FunctionalInequalities.Energy.LocalSlope.Gradient
+public import FunctionalInequalities.Poincare.SmoothTest.Comparison
+public import Mathlib.Analysis.Calculus.ContDiff.RCLike
+public import Mathlib.MeasureTheory.Function.LpSpace.Complete
 
 /-!
 # Smooth and literature Poincare constants
@@ -15,13 +17,16 @@ Read finite-constant equivalence, equality of the coordinate infima, the ambient
 chain, then the selected/literature corollary. All four proofs are complete.
 
 
-`Poincare.LocalSlope.Holds ν` tests functions directly on ν. In contrast, `Poincare.LocalSlope.Intrinsic.constant μ` is
+`Poincare.LocalSlope.Holds ν` tests functions directly on ν. In contrast,
+`Poincare.LocalSlope.Intrinsic.constant μ` is
 already defined on `Probability.intrinsicMeasure μ`. The coordinate infimum below is printed
 explicitly to avoid taking intrinsic coordinates a second time. No alternative constant is defined.
 Finite constants include zero; optimal values remain in ENNReal, including infinity.
 Only the intrinsic law must be absolutely continuous: the ambient law may be singular.
 No log-concavity, second moment, Cheeger identification or raw/core agreement is assumed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -44,10 +49,9 @@ private theorem variance_eq_coe_L2 {α : Type*} [MeasurableSpace α]
     ProbabilityTheory.variance f (ν : Measure α) = (L2.variance ν (hf.toLp f) : ℝ) := by
   rw [L2.variance_toLp, Real.coe_toNNReal _ (ProbabilityTheory.variance_nonneg _ _)]
 
-private theorem integral_sq_norm_eq_norm_toLp_sq {α V : Type*} [MeasurableSpace α] [NormedAddCommGroup V]
-    [InnerProductSpace ℝ V] (ν : ProbabilityMeasure α) (f : α → V)
-    (hf : MemLp f 2 (ν : Measure α)) :
-    (∫ x, ‖f x‖ ^ 2 ∂(ν : Measure α)) = ‖hf.toLp f‖ ^ 2 := by
+private theorem integral_sq_norm_eq_norm_toLp_sq {α V : Type*} [MeasurableSpace α]
+    [NormedAddCommGroup V] [InnerProductSpace ℝ V] (ν : ProbabilityMeasure α) (f : α → V)
+    (hf : MemLp f 2 (ν : Measure α)) : (∫ x, ‖f x‖ ^ 2 ∂(ν : Measure α)) = ‖hf.toLp f‖ ^ 2 := by
   rw [← real_inner_self_eq_norm_sq (hf.toLp f), MeasureTheory.L2.inner_def]
   apply integral_congr_ae
   filter_upwards [hf.coeFn_toLp] with x hx
@@ -60,7 +64,7 @@ private theorem literatureEnergy_eq_ofReal_energy (ν : ProbabilityMeasure E) (m
     Energy.LocalSlope.energy ν f = ENNReal.ofReal (energy (ν : Measure E) f) := by
   rw [Energy.LocalSlope.energy_eq_lintegral_gradient ν m hν f hf, energy,
     ofReal_integral_eq_lintegral_ofReal
-      ((memLp_two_iff_integrable_sq_norm hg.1).mp hg)
+      ((memLp_two_iff_integrable_sq_norm hg.aestronglyMeasurable).mp hg)
       (ae_of_all _ fun x => sq_nonneg ‖gradient f x‖)]
   congr 1
   funext x
@@ -118,11 +122,12 @@ theorem holds_iff_localSlope (ν : ProbabilityMeasure E) (m : Measure E)
     exact (ENNReal.ofReal_le_ofReal_iff (mul_nonneg C.2 (energy_nonneg _ _))).mp hb
 
 /-- Step 6: equality of the infima of valid finite constants on this same coordinate space.
-The subtype infimum is the existing Poincare.LocalSlope.Holds definition, without a second intrinsic map. -/
+The subtype infimum is the existing Poincare.LocalSlope.Holds definition, without a second intrinsic
+map. -/
 theorem constant_eq_localSlope_infimum (ν : ProbabilityMeasure E) (m : Measure E)
     [Measure.IsAddHaarMeasure m] (hν : (ν : Measure E) ≪ m) :
     constant (ν : Measure E) =
-      ⨅ C : {C : NNReal // Poincare.LocalSlope.Holds ν C}, (C.1 : ENNReal) := by
+      ⨅ C : { C : NNReal // Poincare.LocalSlope.Holds ν C }, (C.1 : ENNReal) := by
   apply le_antisymm
   · refine le_iInf fun C => ?_
     exact constant_le ((holds_iff_localSlope ν m hν C.1).mpr C.2)
@@ -134,43 +139,43 @@ theorem constant_eq_localSlope_infimum (ν : ProbabilityMeasure E) (m : Measure 
 absolute continuity. Restriction decreases energy, while normal-constant extension preserves it. -/
 private theorem holds_iff_intrinsicMeasure (μ : ProbabilityMeasure E) (C : NNReal) :
     Holds (μ : Measure E) (C : ℝ) ↔
-      Holds (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) (C : ℝ) := by
+      Holds (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
+        (C : ℝ) := by
   let ν := Probability.intrinsicMeasure μ
-  have hvar (f : Energy.SmoothGradient.Test μ)
-      (g : Energy.SmoothGradient.Test ν)
-      (heq : ∀ v, g v = f (Probability.reconstruct μ v)) :
-      ProbabilityTheory.variance g.toFun (ν : Measure (Probability.affineSupport μ).direction) =
-        ProbabilityTheory.variance f.toFun (μ : Measure E) := by
+  have hvar (f : Energy.SmoothGradient.Test μ) (g : Energy.SmoothGradient.Test ν)
+    (heq : ∀ v, g v = f (Probability.reconstruct μ v)) :
+    ProbabilityTheory.variance g.toFun (ν : Measure (Probability.affineSupport μ).direction) =
+      ProbabilityTheory.variance f.toFun (μ : Measure E) := by
     calc
-      _ = ProbabilityTheory.variance (fun v => f (Probability.reconstruct μ v))
-          (ν : Measure (Probability.affineSupport μ).direction) :=
+      _ =
+          ProbabilityTheory.variance (fun v => f (Probability.reconstruct μ v))
+            (ν : Measure (Probability.affineSupport μ).direction) :=
         congrArg (fun k => ProbabilityTheory.variance k (ν : Measure _)) (funext heq)
-      _ = _ := (Probability.measurePreserving_reconstruct μ).variance_fun_comp
-        f.contDiff.continuous.aemeasurable
+      _ = _ :=
+        (Probability.measurePreserving_reconstruct μ).variance_fun_comp
+          f.contDiff.continuous.aemeasurable
   constructor
   · intro h
     refine ⟨inferInstance, C.2, ?_⟩
     intro g hg
-    let gt : Energy.SmoothGradient.Test ν :=
-      ⟨g, hg.smooth', hg.memLp_two, hg.energy_integrable⟩
-    obtain ⟨f, heq, _, henergy⟩ :=
-      Energy.SmoothGradient.Test.exists_ambient_extension μ gt
+    let gt : Energy.SmoothGradient.Test ν := ⟨g, hg.smooth', hg.memLp_two, hg.energy_integrable⟩
+    obtain ⟨f, heq, _, henergy⟩ := Energy.SmoothGradient.Test.exists_ambient_extension μ gt
     have he : energy (μ : Measure E) f.toFun = energy (ν : Measure _) gt.toFun :=
       congrArg (fun c : NNReal => (c : ℝ)) henergy
-    change ProbabilityTheory.variance gt.toFun (ν : Measure _) ≤ C * energy (ν : Measure _) gt.toFun
+    change
+      ProbabilityTheory.variance gt.toFun (ν : Measure _) ≤ C * energy (ν : Measure _) gt.toFun
     rw [hvar f gt (fun v => (heq v).symm), ← he]
     exact h.variance_le ⟨f.contDiff, f.memLp_two, f.gradient_sq_integrable⟩
   · intro h
     refine ⟨inferInstance, C.2, ?_⟩
     intro f hf
-    let ft : Energy.SmoothGradient.Test μ :=
-      ⟨f, hf.smooth', hf.memLp_two, hf.energy_integrable⟩
-    obtain ⟨g, heq, _, henergy⟩ :=
-      Energy.SmoothGradient.Test.exists_intrinsic_restriction μ ft
+    let ft : Energy.SmoothGradient.Test μ := ⟨f, hf.smooth', hf.memLp_two, hf.energy_integrable⟩
+    obtain ⟨g, heq, _, henergy⟩ := Energy.SmoothGradient.Test.exists_intrinsic_restriction μ ft
     have he : energy (ν : Measure _) g.toFun ≤ energy (μ : Measure E) ft.toFun :=
       NNReal.coe_le_coe.mpr henergy
     have hb := h.variance_le ⟨g.contDiff, g.memLp_two, g.gradient_sq_integrable⟩
-    change ProbabilityTheory.variance ft.toFun (μ : Measure E) ≤ C * energy (μ : Measure E) ft.toFun
+    change
+      ProbabilityTheory.variance ft.toFun (μ : Measure E) ≤ C * energy (μ : Measure E) ft.toFun
     rw [← hvar ft g heq]
     exact hb.trans (mul_le_mul_of_nonneg_left he C.2)
 
@@ -179,10 +184,13 @@ Use the proved smooth-test restriction and normal-constant extension for the fir
 The Haar reference lives on the direction of the affine support; zero dimension is included. -/
 theorem constant_eq_intrinsicMeasure_and_localSlope (μ : ProbabilityMeasure E)
     (m : Measure (Probability.affineSupport μ).direction) [Measure.IsAddHaarMeasure m]
-    (hμ : (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ≪ m) :
+    (hμ :
+      (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ≪ m) :
     constant (μ : Measure E) =
-        constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ∧
-      constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) =
+        constant
+          (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ∧
+      constant
+          (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) =
         Poincare.LocalSlope.Intrinsic.constant μ := by
   constructor
   · apply le_antisymm

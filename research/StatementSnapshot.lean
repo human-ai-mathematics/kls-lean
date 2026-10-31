@@ -1,4 +1,7 @@
-import Lean
+module
+
+public import Lean
+public meta import Lean
 
 /-!
 Elaborated statement snapshots. Traverse local declaration types and definition bodies,
@@ -7,19 +10,21 @@ Imported non-project declarations are explicit trust-boundary leaves. This comma
 inspection tooling, not a proof checker or a test of mathematical equivalence.
 -/
 
+@[expose] public section
+
 open Lean Elab Command Meta
 
 set_option pp.maxSteps 1000000
 
 namespace StatementSnapshot
 
-private def localDeclaration (env : Environment) (name : Name)
+private meta def localDeclaration (env : Environment) (name : Name)
     (owners : Array Name) : Bool :=
   match env.getModuleIdxFor? name with
   | some idx => owners.any (·.isPrefixOf env.header.moduleNames[idx.toNat]!)
   | none => owners.any (·.isPrefixOf name)
 
-private def kind : ConstantInfo → String
+private meta def kind : ConstantInfo → String
   | .defnInfo _ => "definition"
   | .thmInfo _ => "theorem_type"
   | .opaqueInfo _ => "opaque"
@@ -29,23 +34,23 @@ private def kind : ConstantInfo → String
   | .recInfo _ => "recursor"
   | .quotInfo _ => "quotient"
 
-private def body (info : ConstantInfo) : Option Expr :=
+private meta def body (info : ConstantInfo) : Option Expr :=
   if info.isTheorem then none else info.value? (allowOpaque := true)
 
-private def related (info : ConstantInfo) : Array Name :=
+private meta def related (info : ConstantInfo) : Array Name :=
   match info with
   | .inductInfo v => v.ctors.toArray ++ v.all.toArray
   | .ctorInfo v => #[v.induct]
   | .recInfo v => v.all.toArray
   | _ => #[]
 
-private def render (e : Expr) : MetaM String := do
+private meta def render (e : Expr) : MetaM String := do
   let text := (← ppExpr e).pretty 100
   if text.contains '⋯' then
     throwError "Statement snapshot printing was truncated"
   return text
 
-private def snapshot (roots : Array Name)
+private meta def snapshot (roots : Array Name)
     (owners : Array Name := #[`FunctionalInequalities]) : MetaM Json := do
   let env ← getEnv
   let mut pending := roots

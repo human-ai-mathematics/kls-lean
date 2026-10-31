@@ -5,9 +5,18 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import BrownianMotion.Auxiliary.Martingale
-import BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification
-import Mathlib.Probability.Martingale.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: drop the measurability arguments that
+-- `tendstoInMeasure_of_tendsto_eLpNorm` no longer takes in Mathlib v4.35.0 (proof-only change).
+-- Modified 2026-10-31 by the KLS formalization project: Mathlib v4.35.0 `IsCadlag` field names
+-- (`isRightContinuous`, `tendsto_nhdsLT`) in one proof (proof-only); see vendor/port.patch.
+module
+
+public import BrownianMotion.Auxiliary.Martingale
+public import BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification
+public import Mathlib.Probability.Martingale.Basic
 
 /-!
 # Càdlàg modifications of real martingales
@@ -22,6 +31,8 @@ zero mean.
 Two index sets are treated: `ℝ≥0`, where the quasimartingale theory lives (it needs a least
 time), and `ℝ`, by restricting to nonnegative times and extending by zero to negative times.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal NNReal
@@ -193,8 +204,8 @@ theorem exists_adapted_ae_cadlag [ℱ.IsRightContinuous] (hX : Martingale X ℱ 
   -- extend by zero to negative times
   let Y : ℝ → Ω → ℝ := fun t ω => if 0 ≤ t then Y' (Real.toNNReal t) ω else 0
   have hYnn : ∀ t, 0 ≤ t → Y t = Y' (Real.toNNReal t) := fun t ht =>
-    funext fun ω => if_pos ht
-  have hYneg : ∀ t, t < 0 → Y t = 0 := fun t ht => funext fun ω => if_neg (not_le.2 ht)
+    funext fun ω => ite_eq_left ht
+  have hYneg : ∀ t, t < 0 → Y t = 0 := fun t ht => funext fun ω => ite_eq_right (not_le.2 ht)
   refine ⟨Y, ?_, ?_, ?_⟩
   · intro t
     rcases le_or_gt 0 t with ht | ht
@@ -216,7 +227,7 @@ theorem exists_adapted_ae_cadlag [ℱ.IsRightContinuous] (hX : Martingale X ℱ 
     intro t
     constructor
     · rcases le_or_gt 0 t with ht | ht
-      · have h1 := (hω.right_continuous (Real.toNNReal t)).tendsto.comp
+      · have h1 := (hω.isRightContinuous (Real.toNNReal t)).tendsto.comp
           (tendsto_toNNReal_nhdsGT ht)
         rw [congrFun (hYnn t ht) ω]
         refine h1.congr' ?_
@@ -227,7 +238,7 @@ theorem exists_adapted_ae_cadlag [ℱ.IsRightContinuous] (hX : Martingale X ℱ 
         filter_upwards [Ioo_mem_nhdsGT ht] with s hs
         exact (congrFun (hYneg s hs.2) ω).symm
     · rcases lt_or_ge 0 t with ht | ht
-      · obtain ⟨L, hL⟩ := hω.left_limit (Real.toNNReal t)
+      · obtain ⟨L, hL⟩ := hω.tendsto_nhdsLT (Real.toNNReal t)
         refine ⟨L, (hL.comp (tendsto_toNNReal_nhdsLT ht)).congr' ?_⟩
         filter_upwards [Ioo_mem_nhdsLT ht] with s hs
         exact (congrFun (hYnn s hs.1.le) ω).symm
@@ -245,8 +256,7 @@ theorem exists_adapted_ae_cadlag_of_eLpNorm [ℱ.IsRightContinuous] (hX : Martin
       ∀ᵐ ω ∂μ, ∀ t : ℝ, Tendsto (fun s => Y s ω) (𝓝[>] t) (𝓝 (Y t ω)) ∧
         ∃ L : ℝ, Tendsto (fun s => Y s ω) (𝓝[<] t) (𝓝 L) :=
   exists_adapted_ae_cadlag hX (fun t => tendstoInMeasure_of_tendsto_eLpNorm
-    (by norm_num) (fun r => (hX.integrable r).aestronglyMeasurable)
-    (hX.integrable t).aestronglyMeasurable (hrc t)) hneg
+    (by norm_num) (hrc t)) hneg
 
 end Real
 

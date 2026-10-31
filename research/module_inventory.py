@@ -12,26 +12,48 @@ import json
 from pathlib import Path
 import re
 
+import lean_header
+
 ROOT = Path(__file__).resolve().parents[1]
 LIBRARY = Path("formalization/FunctionalInequalities")
 OUTPUT = Path("formalization/MODULES.md")
-IMPORT = re.compile(r"^import\s+(FunctionalInequalities(?:\.[A-Za-z0-9_]+)+)\s*$", re.M)
+LOCAL_ROOT = "FunctionalInequalities"
+
+
+def local_imports(source: str) -> tuple[bool, list[str]]:
+    """Whether the file is a `module`, and its local import edges.
+
+    Every directive kind is an edge: plain, `public`, `meta` and `import all` imports all
+    make the importing module depend on the imported one (`meta` changes only which IR is
+    loaded; `all` only widens visibility), so cycles and unresolved targets are checked
+    across all of them.
+    """
+    header = lean_header.parse_header(source)
+    return header.is_module, [m for m in header.modules
+                              if m == LOCAL_ROOT or m.startswith(LOCAL_ROOT + ".")]
 
 
 def inventory(root: Path) -> dict:
     paths = sorted((root / LIBRARY).rglob("*.lean"))
     rows = []
+    parse_errors: list[str] = []
     for path in paths:
         relative = path.relative_to(root / LIBRARY).as_posix()
         source = path.read_text()
         title = re.search(r"/\-!\s*\n#\s+([^\n]+)", source)
+        try:
+            is_module, imports = local_imports(source)
+        except lean_header.HeaderError as exc:
+            parse_errors.append(f"{relative}: unparsable import header: {exc}")
+            is_module, imports = False, []
         rows.append({"path": relative,
                      "module": "FunctionalInequalities." + relative[:-5].replace("/", "."),
                      "title": title[1].strip() if title else path.stem,
-                     "imports": IMPORT.findall(source)})
+                     "is_module": is_module,
+                     "imports": imports})
     known = {row["module"] for row in rows}
     graph = {row["module"]: row["imports"] for row in rows}
-    errors = []
+    errors = list(parse_errors)
     for row in rows:
         for module in row["imports"]:
             if module not in known:

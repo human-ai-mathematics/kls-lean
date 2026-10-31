@@ -4,13 +4,16 @@ This separate Lean project derives the exact OpenAI
 `OAI.LeanBlast.KLS.KLSStatement` from the existing covariance-normalized
 `FunctionalInequalities.KLS.Conjecture`. It is an independent Lake project within
 the same repository, using `../../formalization` as a relative path dependency
-with Lean 4.33.0. Checking out a Git revision fixes both the bridge and its KLS source.
+with Lean 4.35.0. Checking out a Git revision fixes both the bridge and its KLS source.
 
-- [OAI/Analysis/KLS/Model.lean](OAI/Analysis/KLS/Model.lean) is an unmodified copy of
-  [openai/math at adc7f124](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/Analysis/KLS/Model.lean).
-  The original namespace, definitions, hypotheses and test functions are retained.
-  This file comes from OpenAI's Apache-2.0 repository; see [LICENSE](LICENSE) and
-  the exact source pin/hash in [UPSTREAM.json](UPSTREAM.json).
+- [OAI/Analysis/KLS/Model.lean](OAI/Analysis/KLS/Model.lean) is the file from
+  [openai/math at adc7f124](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/Analysis/KLS/Model.lean)
+  with only the Lean module-system header adaptation: a leading `module` line,
+  `public import Mathlib` instead of `import Mathlib`, and `@[expose] public section`
+  before `namespace OAI`. The original namespace, definitions, hypotheses and test
+  functions are otherwise byte-for-byte unchanged. This file comes from OpenAI's
+  Apache-2.0 repository; see [LICENSE](LICENSE). [UPSTREAM.json](UPSTREAM.json) records
+  the source pin, the original file's SHA-256, the exact transformation and the local SHA-256.
 - [KLSOpenAI/Bridge.lean](KLSOpenAI/Bridge.lean) proves `KLSOpenAI.of_conjecture`
   without importing the KLS proof. Measurable log-concave densities are converted
   directly using Prékopa–Leindler; upper semicontinuity is not assumed. Coordinate
@@ -25,7 +28,7 @@ The closed endpoint uses the KLS library's Bizeul–Klartag–Lehec proof. This 
 adds no numerical constant and does not change the KLS library, its proof scope,
 or its certificate statuses. It is separate from the ongoing Mathlib contribution
 preparation. [formalization.yaml](formalization.yaml) separately credits the substantive
-proof and the unchanged upstream statement. [Comparator inputs](research/comparator/config.json)
+proof and the upstream statement. [Comparator inputs](research/comparator/config.json)
 compare the original `KLSOpenAI.kls` and conditional `KLSOpenAI.of_conjecture` against a
 challenge importing the upstream model and the KLS proposition, with no proof import.
 
@@ -58,20 +61,23 @@ The package is checked separately from the root library's default build and full
 verifier. The two audit clients check the conditional bridge's import boundary and
 all declarations in the model, bridge, target and ordinary-integral client. Raw
 attempts and receipts stay in ignored `build/` directories. The upstream model is
-independently checkable against the source pin and SHA-256 in `UPSTREAM.json`.
+independently checkable against the source pin and SHA-256 in `UPSTREAM.json`: reversing the
+recorded module-header transformation reproduces the original upstream bytes, and the
+Comparator runner checks both the original and the local hash.
 
-With the pinned Comparator tools prepared as described in
-[the runner guide](../../research/audits/KLS/Comparator/README.md), run from the repository root:
+After building as above (see [the runner guide](../../research/audits/KLS/Comparator/README.md)),
+run from the repository root:
 
 ```sh
-python3 research/comparator.py --target openai --mode development --tools build/comparator-tools
+python3 research/comparator.py --target openai --mode development
 ```
 
-This is the actual Comparator's unsandboxed development mode, including exported-statement
-comparison, standard-axiom checks and Lean kernel replay. Linux with real Landrun and an
-unprivileged systemd session is required for `--mode sandbox`. The modes and their receipt
-statuses are distinct; no external proof kernel is enabled. Logs and source-bound receipts
-stay under the repository's ignored `build/comparator/` directory.
+This runs the Lean v4.35.0 toolchain-bundled `lake comparator` without its sandbox
+(`--inadvisably-no-sandbox`), including exported-statement comparison, standard-axiom checks
+and Lean kernel replay. Linux with bubblewrap (`bwrap`) is required for `--mode sandbox`. The
+modes and their receipt statuses are distinct; this configuration enables no external proof
+kernel. Logs and source-bound receipts stay under the repository's ignored `build/comparator/`
+directory.
 
 The substantive library's initial roadmap was organized by Nicolas (nbrosse), and
 its early foundational work and proof development followed that roadmap. ChatGPT
@@ -82,5 +88,5 @@ The [current review checklist](../../research/progress/public-interface-review.m
 the maintainer's 2026-10-26 report of personally reviewing the OpenAI statement and
 bridge conversion proof. Upstream stochastic-analysis interfaces remain outside
 that reported personal review.
-The bridge imports the substantive proof; its unchanged OpenAI model retains its
+The bridge imports the substantive proof; its OpenAI model (header-adapted only) retains its
 original authorship and license.

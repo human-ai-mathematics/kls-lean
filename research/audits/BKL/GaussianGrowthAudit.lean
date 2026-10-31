@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Growth
-import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Growth
+public import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 
 /-!
 # Audit: polynomial growth of the derivatives of the Gaussian-smoothed potential (BKL Section 2)
@@ -14,7 +16,8 @@ asserted.
 -/
 
 open MeasureTheory Set FunctionalInequalities
-open FunctionalInequalities.KLS.LogConcave.GaussianSmoothing FunctionalInequalities.Analysis.BakryEmery
+open FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+  FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace ContDiff
 
 namespace GaussianGrowthAudit
@@ -22,7 +25,9 @@ namespace GaussianGrowthAudit
 private noncomputable def W (y : ℝ) : ℝ := (1 / 2 : ℝ) * ‖y‖ ^ 2
 
 private theorem W_integrable : Integrable (fun y : ℝ => Real.exp (-W y)) volume := by
-  have h := FunctionalInequalities.Probability.Gaussian.integrable_kernel (V := ℝ) (by norm_num : (0 : ℝ) < 1 / 2)
+  have h :=
+    FunctionalInequalities.Probability.Gaussian.integrable_kernel (V := ℝ)
+      (by norm_num : (0 : ℝ) < 1 / 2)
   change Integrable (fun y : ℝ => Real.exp (-(1 / 2 : ℝ) * ‖y‖ ^ 2)) volume at h
   convert h using 1
   funext y
@@ -68,16 +73,16 @@ theorem zero_dimension_dirac_temperate {s : ℝ} (hs : 0 < s) :
 /-- Actual weighted third derivative with repeated and mixed-sign directions. The raw answer
 is -16, so no accidental Taylor factorial is allowed. -/
 theorem weighted_mixed_third :
-    iteratedFDeriv ℝ 3
-      (fun z : ℝ => ∫ y, Real.exp ⟪z, y⟫ • y ∂(Measure.dirac (2 : ℝ)))
-      0 ![1, 1, -1] = -16 := by
+    iteratedFDeriv ℝ 3 (fun z : ℝ => ∫ y, Real.exp ⟪z, y⟫ • y ∂(Measure.dirac (2 : ℝ))) 0
+        ![1, 1, -1] =
+      -16 := by
   have hg : AEStronglyMeasurable (id : ℝ → ℝ) (Measure.dirac (2 : ℝ)) := by fun_prop
-  have hi : ∀ t < (1 : ℝ), Integrable (fun y : ℝ => Real.exp (t * ‖y‖) * ‖y‖)
-      (Measure.dirac (2 : ℝ)) := by
+  have hi :
+    ∀ t < (1 : ℝ), Integrable (fun y : ℝ => Real.exp (t * ‖y‖) * ‖y‖) (Measure.dirac (2 : ℝ)) := by
     intro t ht
     exact integrable_dirac enorm_lt_top
-  rw [iteratedFDeriv_weightedExp_integral_of_lt (g := fun y : ℝ => y) (Measure.dirac (2 : ℝ)) hg hi 3 0
-    (by norm_num : ‖(0 : ℝ)‖ < 1)]
+  rw [iteratedFDeriv_weightedExp_integral_of_lt (g := fun y : ℝ => y) (Measure.dirac (2 : ℝ)) hg
+      hi 3 0 (by norm_num : ‖(0 : ℝ)‖ < 1)]
   norm_num [Fin.prod_univ_succ, Fin.prod_univ_two]
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -95,26 +100,28 @@ theorem source_third_scale {μ : Measure E} [IsProbabilityMeasure μ]
 
 /-- The original source law supplies the third bound before the real descent to lower degrees.
 There is no assumed high-order or temperate-growth premise. -/
-theorem source_low_polynomial_degrees {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) :
-    (∃ B2 : ℝ, 0 ≤ B2 ∧ ∀ x : E,
-      ‖iteratedFDeriv ℝ 2 (potential ρ s) x‖ ≤ B2 * (1 + ‖x‖) ^ 1) ∧
-    (∃ B1 : ℝ, 0 ≤ B1 ∧ ∀ x : E,
-      ‖iteratedFDeriv ℝ 1 (potential ρ s) x‖ ≤ B1 * (1 + ‖x‖) ^ 2) ∧
-    (∃ B0 : ℝ, 0 ≤ B0 ∧ ∀ x : E,
-      ‖potential ρ s x‖ ≤ B0 * (1 + ‖x‖) ^ 3) := by
+theorem source_low_polynomial_degrees {μ : Measure E} [IsProbabilityMeasure μ] {ρ : E → ℝ}
+    (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) :
+    (∃ B2 : ℝ, 0 ≤ B2 ∧ ∀ x : E, ‖iteratedFDeriv ℝ 2 (potential ρ s) x‖ ≤ B2 * (1 + ‖x‖) ^ 1) ∧
+      (∃ B1 : ℝ,
+          0 ≤ B1 ∧ ∀ x : E, ‖iteratedFDeriv ℝ 1 (potential ρ s) x‖ ≤ B1 * (1 + ‖x‖) ^ 2) ∧
+        (∃ B0 : ℝ, 0 ≤ B0 ∧ ∀ x : E, ‖potential ρ s x‖ ≤ B0 * (1 + ‖x‖) ^ 3) := by
   obtain ⟨C3, hC3, h3⟩ := exists_uniform_potential_derivative_bound hρ hs (n := 3) le_rfl
   have hf := potential_contDiff_infty hρ hs
-  obtain ⟨B2, hB2, h2⟩ := FunctionalInequalities.Analysis.polynomial_growth_of_next_iteratedFDeriv
-    hf 2 0 hC3 (by intro x; simpa only [pow_zero, mul_one] using h3 x)
-  obtain ⟨B1, hB1, h1⟩ := FunctionalInequalities.Analysis.polynomial_growth_of_next_iteratedFDeriv hf 1 1 hB2 h2
-  obtain ⟨B0, hB0, h0⟩ := FunctionalInequalities.Analysis.polynomial_growth_of_next_iteratedFDeriv hf 0 2 hB1 h1
+  obtain ⟨B2, hB2, h2⟩ :=
+    FunctionalInequalities.Analysis.polynomial_growth_of_next_iteratedFDeriv hf 2 0 hC3
+      (by intro x; simpa only [pow_zero, mul_one] using h3 x)
+  obtain ⟨B1, hB1, h1⟩ :=
+    FunctionalInequalities.Analysis.polynomial_growth_of_next_iteratedFDeriv hf 1 1 hB2 h2
+  obtain ⟨B0, hB0, h0⟩ :=
+    FunctionalInequalities.Analysis.polynomial_growth_of_next_iteratedFDeriv hf 0 2 hB1 h1
   refine ⟨⟨B2, hB2, h2⟩, ⟨B1, hB1, h1⟩, B0, hB0, ?_⟩
   intro x
   simpa only [norm_iteratedFDeriv_zero] using h0 x
 
 
-private theorem dirac_exp : Integrable (fun y : ℝ => Real.exp ((1 : ℝ) * ‖y‖)) (Measure.dirac (1 : ℝ)) :=
+private theorem dirac_exp :
+    Integrable (fun y : ℝ => Real.exp ((1 : ℝ) * ‖y‖)) (Measure.dirac (1 : ℝ)) :=
   integrable_dirac (by simp)
 
 /-- The true second Laplace moment tensor is nonzero and evaluates to one in unit directions. -/
@@ -168,10 +175,14 @@ end GaussianGrowthAudit
 #print axioms FunctionalInequalities.Analysis.BakryEmery.norm_iteratedFDeriv_laplace_zero_le
 #print axioms FunctionalInequalities.Analysis.norm_iteratedFDeriv_log_comp_le_factorial_sq
 #print axioms FunctionalInequalities.Analysis.hasTemperateGrowth_of_bounded_high_derivatives
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integrable_exp_norm_centeredPosteriorLaw
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_centered_factorization
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_iteratedFDeriv_ge_three
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_uniform_potential_derivative_bound
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integrable_exp_norm_centeredPosteriorLaw
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_centered_factorization
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_iteratedFDeriv_ge_three
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_uniform_potential_derivative_bound
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_hasTemperateGrowth
 #print axioms GaussianGrowthAudit.concrete_gaussian_temperate
 #print axioms GaussianGrowthAudit.zero_dimension_dirac_temperate

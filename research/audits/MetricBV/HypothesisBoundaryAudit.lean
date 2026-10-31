@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Strict proof client: two hypothesis boundaries of the published-scope Minkowski identities.
 
@@ -10,6 +12,8 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
    `P = Ioi (0 : ℝ)`, the measure `∑ₙ δ_{1/(n+1)}` is finite on compacts
    (`IsFiniteMeasureOnCompacts`) but gives infinite mass to the bounded Borel set
    `{x | x ≤ 1}`. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -28,8 +32,11 @@ theorem perimeter_univ_real : perimeter (volume : Measure ℝ) univ = ⊤ := by
 
 theorem upperMinkowskiContent_univ_real : upperMinkowskiContent (volume : Measure ℝ) univ = 0 := by
   unfold upperMinkowskiContent
-  have he : (fun r : ℝ => ((volume : Measure ℝ) (Metric.thickening r (univ : Set ℝ)) - volume (univ : Set ℝ)) /
-      ENNReal.ofReal r) =ᶠ[𝓝[>] (0 : ℝ)] fun _ => 0 := by
+  have he :
+    (fun r : ℝ =>
+        ((volume : Measure ℝ) (Metric.thickening r (univ : Set ℝ)) - volume (univ : Set ℝ)) /
+          ENNReal.ofReal r) =ᶠ[𝓝[>] (0 : ℝ)]
+      fun _ => 0 := by
     filter_upwards [self_mem_nhdsWithin] with r hr
     rw [Set.eq_univ_of_univ_subset (Metric.self_subset_thickening hr (univ : Set ℝ))]
     simp
@@ -84,8 +91,7 @@ instance : IsFiniteMeasureOnCompacts μ := by
   have hpos : (0 : ℝ) < x₀.1 := x₀.2
   obtain ⟨N, hN⟩ := exists_nat_gt (1 / x₀.1)
   rw [μ_apply hK.isClosed.measurableSet, tsum_eq_sum (s := Finset.range N)]
-  · exact ENNReal.sum_lt_top.2 fun n _ => by
-      by_cases h : pt n ∈ K <;> simp [Set.indicator, h]
+  · exact ENNReal.sum_lt_top.2 fun n _ => by by_cases h : pt n ∈ K <;> simp [Set.indicator, h]
   · intro n hn
     simp only [Finset.mem_range, not_lt] at hn
     rw [Set.indicator_of_notMem]
@@ -101,10 +107,11 @@ instance : IsFiniteMeasureOnCompacts μ := by
 
 /-- The bounded Borel set `{x ≤ 1}` contains every point, so it has infinite mass. -/
 theorem not_finite_on_bounded :
-    ¬ ∀ s : Set P, Bornology.IsBounded s → MeasurableSet s → μ s < ⊤ := by
+    ¬∀ s : Set P, Bornology.IsBounded s → MeasurableSet s → μ s < ⊤ := by
   intro h
   let S : Set P := {x | x.1 ≤ 1}
-  have hS : MeasurableSet S := measurableSet_le continuous_subtype_val.measurable measurable_const
+  have hS : MeasurableSet S :=
+    measurableSet_le continuous_subtype_val.measurable measurable_const
   have hb : Bornology.IsBounded S := by
     refine (Metric.isBounded_closedBall (x := pt 0) (r := 1)).subset fun x hx => ?_
     rw [Metric.mem_closedBall, Subtype.dist_eq, Real.dist_eq]

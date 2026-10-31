@@ -1,32 +1,47 @@
-import Mathlib.Analysis.Convex.Topology
-import Mathlib.Analysis.InnerProductSpace.Continuous
-import Mathlib.Data.EReal.Operations
-import Mathlib.Topology.Semicontinuity.Basic
-import Mathlib.Topology.Instances.EReal.Lemmas
-import Mathlib.Analysis.Normed.Module.Convex
+module
+
+public import Mathlib.Analysis.Convex.Topology
+public import Mathlib.Analysis.InnerProductSpace.Continuous
+public import Mathlib.Data.EReal.Operations
+public import Mathlib.Topology.Semicontinuity.Basic
+public import Mathlib.Topology.Instances.EReal.Lemmas
+public import Mathlib.Analysis.Normed.Module.Convex
 
 /-!
 # Extended-real potentials and the Legendre transform
 
-For `φ : E → EReal` on a real inner product space, `legendre φ y = ⨆ x, ⟪x, y⟫ - φ x` is the actual extended-real
-Legendre transform, with no selected maximizers. `ConvexPotential φ` excludes `-∞` and asks for a convex real epigraph;
+For `φ : E → EReal` on a real inner product space, `legendre φ y = ⨆ x, ⟪x, y⟫ - φ x` is the actual
+extended-real
+Legendre transform, with no selected maximizers. `ConvexPotential φ` excludes `-∞` and asks for a
+convex real epigraph;
 `ProperPotential φ` excludes `-∞` and asks for one finite value.
 
-* Order reversal `legendre_antitone`; exclusion of `-∞` (`legendre_ne_bot`, and `legendre_ne_bot_iff`: exactly a nonempty
-  effective domain); the Fenchel inequality `fenchel_le`, `biconjugate_le` and `triconjugate_eq`. No convexity of the
+* Order reversal `legendre_antitone`; exclusion of `-∞` (`legendre_ne_bot`, and
+  `legendre_ne_bot_iff`: exactly a nonempty
+  effective domain); the Fenchel inequality `fenchel_le`, `biconjugate_le` and `triconjugate_eq`. No
+  convexity of the
   primal is assumed.
-* For every input, `lowerSemicontinuous_legendre` and `convex_epigraph_legendre`; `convexPotential_legendre` from a
+* For every input, `lowerSemicontinuous_legendre` and `convex_epigraph_legendre`;
+  `convexPotential_legendre` from a
   nonempty effective domain.
-* A convex potential has a convex effective domain `{φ ≠ ⊤}` (`ConvexPotential.convex_domain`) on which its real
+* A convex potential has a convex effective domain `{φ ≠ ⊤}` (`ConvexPotential.convex_domain`) on
+  which its real
   representative `(φ ·).toReal` is convex (`ConvexPotential.convexOn_toReal`).
-* The lower truncation `lowerTruncate φ M = max φ (-M)` of Cordero-Erausquin–Klartag, *Moment measures*
-  (arXiv:1304.0630v1), (61), and its convexification `lowerTruncate_convexification` (proof of Proposition 12): the
-  biconjugate is a convex, lower semicontinuous proper potential between `-M` and the truncation, with the same transform.
-* `legendre_eq_interior_sup`: if `K` is open and convex with `0 ∈ K`, and `ψ` is radially closed and `⊤` off `closure K`,
+* The lower truncation `lowerTruncate φ M = max φ (-M)` of Cordero-Erausquin–Klartag, *Moment
+  measures*
+  (arXiv:1304.0630v1), (61), and its convexification `lowerTruncate_convexification` (proof of
+  Proposition 12): the
+  biconjugate is a convex, lower semicontinuous proper potential between `-M` and the truncation,
+  with the same transform.
+* `legendre_eq_interior_sup`: if `K` is open and convex with `0 ∈ K`, and `ψ` is radially closed and
+  `⊤` off `closure K`,
   the transform is the supremum of its affine terms over `K` (proof of Lemma 17, (56b)).
 
-Measure-free; the exponential density, mass and the CEK functional are in `Probability/MomentMeasure/`.
+Measure-free; the exponential density, mass and the CEK functional are in
+`Probability/MomentMeasure/`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -295,9 +310,8 @@ open scoped Topology
 /-- The actual conjugate of the radially closed extension is the supremum of
 its genuine affine terms on the original open interior. Boundary terms are
 obtained by the actual radial limit; terms outside the closure are bottom. -/
-theorem legendre_eq_interior_sup
-    {K : Set E} (hK : IsOpen K) (hKconv : Convex ℝ K) (h0 : (0 : E) ∈ K)
-    (ψ : E → EReal)
+theorem legendre_eq_interior_sup {K : Set E} (hK : IsOpen K) (hKconv : Convex ℝ K)
+    (h0 : (0 : E) ∈ K) (ψ : E → EReal)
     (hrad : ∀ x, Tendsto (fun t : ℝ => ψ (t • x)) (𝓝[<] 1) (𝓝 (ψ x)))
     (hoff : ∀ x ∉ closure K, ψ x = ⊤) (y : E) :
     legendre ψ y = ⨆ x ∈ K, (inner ℝ x y : EReal) - ψ x := by
@@ -309,22 +323,25 @@ theorem legendre_eq_interior_sup
         have hpos : ∀ᶠ t : ℝ in 𝓝[<] 1, 0 < t :=
           nhdsWithin_le_nhds (Ioi_mem_nhds (by norm_num : (0 : ℝ) < 1))
         filter_upwards [hpos, self_mem_nhdsWithin] with t ht0 ht1
-        have hi := hKconv.combo_interior_closure_mem_interior
-          (by rwa [hK.interior_eq]) hx (sub_pos.mpr ht1) ht0.le (by ring : (1-t)+t=1)
+        have hi :=
+          hKconv.combo_interior_closure_mem_interior (by rwa [hK.interior_eq]) hx
+            (sub_pos.mpr ht1) ht0.le (by ring : (1 - t) + t = 1)
         simpa only [smul_zero, zero_add, hK.interior_eq] using hi
-      have hi : Tendsto (fun t : ℝ => (inner ℝ (t • x) y : EReal))
-          (𝓝[<] 1) (𝓝 (inner ℝ x y : EReal)) := by
+      have hi :
+        Tendsto (fun t : ℝ => (inner ℝ (t • x) y : EReal)) (𝓝[<] 1) (𝓝 (inner ℝ x y : EReal)) := by
         have hc : Continuous (fun t : ℝ => (inner ℝ (t • x) y : EReal)) := by
-          exact continuous_coe_real_ereal.comp
-            ((continuous_id.smul continuous_const).inner continuous_const)
+          exact
+            continuous_coe_real_ereal.comp
+              ((continuous_id.smul continuous_const).inner continuous_const)
         simpa only [one_smul] using (hc.tendsto 1).mono_left nhdsWithin_le_nhds
       have hn := (continuous_neg.tendsto (ψ x)).comp (hrad x)
-      have ht : Tendsto (fun t : ℝ => (inner ℝ (t • x) y : EReal) - ψ (t • x))
-          (𝓝[<] 1) (𝓝 ((inner ℝ x y : EReal) - ψ x)) := by
+      have ht :
+        Tendsto (fun t : ℝ => (inner ℝ (t • x) y : EReal) - ψ (t • x)) (𝓝[<] 1)
+          (𝓝 ((inner ℝ x y : EReal) - ψ x)) := by
         simpa only [sub_eq_add_neg, Function.comp_def] using
           (EReal.continuousAt_add (p := ((inner ℝ x y : EReal), -ψ x))
-            (.inl (EReal.coe_ne_top _)) (.inl (EReal.coe_ne_bot _))).tendsto.comp
-              (hi.prodMk_nhds hn)
+                (.inl (EReal.coe_ne_top _)) (.inl (EReal.coe_ne_bot _))).tendsto.comp
+            (hi.prodMk_nhds hn)
       apply le_of_tendsto ht
       filter_upwards [hinside] with t ht
       exact le_iSup_of_le (t • x) (le_iSup_of_le ht le_rfl)
@@ -339,7 +356,7 @@ end RadialClosure
 
 end FunctionalInequalities.Analysis
 
-/-! ### CEK Proposition 12 support (2026-10-10 candidate) -/
+/-! ### CEK Proposition 12: Legendre bounds and interior control -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -354,7 +371,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 theorem legendre_norm (y : E) :
     legendre (fun x : E => (‖x‖ : EReal)) y = if ‖y‖ ≤ 1 then 0 else ⊤ := by
   by_cases hy : ‖y‖ ≤ 1
-  · rw [if_pos hy]
+  · rw [ite_eq_left hy]
     apply le_antisymm
     · apply iSup_le
       intro x
@@ -364,7 +381,7 @@ theorem legendre_norm (y : E) :
       simpa only [mul_one] using sub_nonpos.mpr h
     · simpa only [legendre, inner_zero_left, norm_zero, EReal.coe_zero, sub_zero] using
         (le_iSup (fun x : E => (inner ℝ x y : EReal) - (‖x‖ : EReal)) 0)
-  · rw [if_neg hy]
+  · rw [ite_eq_right hy]
     by_contra ht
     have hb := (legendre_ne_bot_iff (fun x : E => (‖x‖ : EReal)) y).mpr ⟨0, by simp⟩
     lift legendre (fun x : E => (‖x‖ : EReal)) y to ℝ using ⟨ht, hb⟩ with r hr
@@ -373,13 +390,15 @@ theorem legendre_norm (y : E) :
     let k : ℝ := (|r| + 1) / d
     have hk : 0 < k := div_pos (by positivity) hd
     have hterm : inner ℝ (k • y) y - ‖k • y‖ = |r| + 1 := by
-      rw [real_inner_smul_left, real_inner_self_eq_norm_sq, norm_smul, Real.norm_eq_abs, abs_of_pos hk]
+      rw [real_inner_smul_left, real_inner_self_eq_norm_sq, norm_smul, Real.norm_eq_abs,
+        abs_of_pos hk]
       calc
         k * ‖y‖ ^ 2 - k * ‖y‖ = k * d := by dsimp [d]; ring
         _ = _ := div_mul_cancel₀ _ hd.ne'
     have h := le_iSup (fun x : E => (inner ℝ x y : EReal) - (‖x‖ : EReal)) (k • y)
-    change (inner ℝ (k • y) y : EReal) - (‖k • y‖ : EReal) ≤
-      legendre (fun x : E => (‖x‖ : EReal)) y at h
+    change
+      (inner ℝ (k • y) y : EReal) - (‖k • y‖ : EReal) ≤
+        legendre (fun x : E => (‖x‖ : EReal)) y at h
     rw [← EReal.coe_sub, hterm, ← hr] at h
     have hreal := EReal.coe_le_coe_iff.mp h
     linarith [le_abs_self r]

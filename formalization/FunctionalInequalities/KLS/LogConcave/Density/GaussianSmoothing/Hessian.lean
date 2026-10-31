@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import Mathlib.Probability.Moments.Tilted
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import Mathlib.Probability.Moments.Tilted
 
 /-!
 # Hessian of the Gaussian-smoothed potential
@@ -20,6 +22,8 @@ variance bound `Var_{P_x}⟪·,v⟫ ≤ ‖v‖²/(2s)` and finite second moment
 the higher derivatives and the covariance normalization of the regular approximation are not treated
 here.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open FunctionalInequalities.Analysis.BakryEmery
@@ -160,28 +164,31 @@ theorem potential_line_cgf {μ : Measure E} [IsProbabilityMeasure μ]
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem directional_second_eq_hessian {f : E → ℝ} (hf : ContDiff ℝ 2 f) (x v : E) :
-    iteratedDeriv 2 (fun t : ℝ => f (x + t • v)) 0 =
-      bilinearIteratedFDerivTwo ℝ f x v v := by
+    iteratedDeriv 2 (fun t : ℝ => f (x + t • v)) 0 = bilinearIteratedFDerivTwo ℝ f x v v := by
   have hline (t : ℝ) : HasDerivAt (fun u : ℝ => x + u • v) v t := by
     simpa only [one_smul, id_eq] using ((hasDerivAt_id t).smul_const v).const_add x
-  have hderiv : deriv (fun t : ℝ => f (x + t • v)) =
-      fun t => fderiv ℝ f (x + t • v) v := by
+  have hderiv : deriv (fun t : ℝ => f (x + t • v)) = fun t => fderiv ℝ f (x + t • v) v := by
     funext t
-    exact ((hf.differentiable (by norm_num) (x + t • v)).hasFDerivAt.comp_hasDerivAt t (hline t)).deriv
+    exact
+      ((hf.differentiable (by norm_num) (x + t • v)).hasFDerivAt.comp_hasDerivAt t
+          (hline t)).deriv
   have hd : DifferentiableAt ℝ (fun y : E => fderiv ℝ f y v) x :=
     ((hf.fderiv_right (m := 1) (by norm_num)).differentiable one_ne_zero x).clm_apply
       (differentiableAt_const v)
-  have hdline : HasDerivAt (fun t : ℝ => fderiv ℝ f (x + t • v) v)
+  have hdline :
+    HasDerivAt (fun t : ℝ => fderiv ℝ f (x + t • v) v)
       (fderiv ℝ (fun y : E => fderiv ℝ f y v) x v) 0 := by
     exact hd.hasFDerivAt.comp_hasDerivAt_of_eq 0 (hline 0) (by simp)
   rw [iteratedDeriv_succ, iteratedDeriv_one, hderiv, hdline.deriv]
   exact (bilinearIteratedFDerivTwo_eq_fderiv_apply hf x v v).symm
 
-theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_score {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
-    {s : ℝ} (hs : 0 < s) (x v : E) :
-    bilinearIteratedFDerivTwo ℝ (potential ρ s) x v v = 2 * s * ‖v‖ ^ 2 -
-      variance (fun y => 2 * s * ⟪y - x, v⟫) (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) := by
+theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_score {μ : Measure E}
+    [IsProbabilityMeasure μ] {ρ : E → ℝ}
+    (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s)
+    (x v : E) :
+    bilinearIteratedFDerivTwo ℝ (potential ρ s) x v v =
+      2 * s * ‖v‖ ^ 2 -
+        variance (fun y => 2 * s * ⟪y - x, v⟫) (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) := by
   let P := μ.tilted (fun y => -s * ‖x - y‖ ^ 2)
   let X : E → ℝ := fun y => 2 * s * ⟪y - x, v⟫
   let _ : IsProbabilityMeasure P := isProbabilityMeasure_posterior μ hs x
@@ -190,23 +197,27 @@ theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_score {μ : Measure 
   have hvar : iteratedDeriv 2 (cgf X P) 0 = variance X P := by
     have h := variance_tilted_mul h0
     simpa only [zero_mul, tilted_const] using h.symm
-  have hfun : (fun t : ℝ => potential ρ s (x + t • v)) =
-      fun t => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2 - cgf X P t := by
+  have hfun :
+    (fun t : ℝ => potential ρ s (x + t • v)) = fun t =>
+      potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2 - cgf X P t := by
     funext t
     exact potential_line_cgf hρ hs x v t
   have hcgf : ContDiff ℝ ∞ (cgf X P) := by
     apply contDiff_iff_contDiffAt.2
     intro t
     exact (analyticAt_cgf (by rw [hset]; simp)).contDiffAt
-  have hsecond : iteratedDeriv 2
-      (fun t : ℝ => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2 - cgf X P t) 0 =
-        2 * s * ‖v‖ ^ 2 - iteratedDeriv 2 (cgf X P) 0 := by
-    have hpoly : ContDiff ℝ ∞ (fun t : ℝ => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2) := by fun_prop
+  have hsecond :
+    iteratedDeriv 2 (fun t : ℝ => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2 - cgf X P t) 0 =
+      2 * s * ‖v‖ ^ 2 - iteratedDeriv 2 (cgf X P) 0 := by
+    have hpoly : ContDiff ℝ ∞ (fun t : ℝ => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2) := by
+      fun_prop
     rw [iteratedDeriv_fun_sub (hpoly.of_le (WithTop.coe_le_coe.mpr le_top)).contDiffAt
-      (hcgf.of_le (WithTop.coe_le_coe.mpr le_top)).contDiffAt]
+        (hcgf.of_le (WithTop.coe_le_coe.mpr le_top)).contDiffAt]
     congr 1
-    have heq : (fun t : ℝ => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2) =
-        fun t => potential ρ s x + (s * ‖v‖ ^ 2) * t ^ 2 := by funext t; ring
+    have heq :
+      (fun t : ℝ => potential ρ s x + s * t ^ 2 * ‖v‖ ^ 2) = fun t =>
+        potential ρ s x + (s * ‖v‖ ^ 2) * t ^ 2 := by
+      funext t; ring
     rw [heq, iteratedDeriv_const_add (by norm_num : 0 < (2 : ℕ))]
     rw [iteratedDeriv_const_mul_field]
     norm_num [iteratedDeriv_pow, Nat.descFactorial]
@@ -215,32 +226,38 @@ theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_score {μ : Measure 
 
 
 /-- Hessian of the smoothed potential as `2s‖v‖² − 4s² Var_P ⟪·,v⟫` for the posterior `P`. -/
-theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
-    {s : ℝ} (hs : 0 < s) (x v : E) :
-    bilinearIteratedFDerivTwo ℝ (potential ρ s) x v v = 2 * s * ‖v‖ ^ 2 -
-      4 * s ^ 2 * variance (fun y => ⟪y, v⟫) (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) := by
+theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner {μ : Measure E}
+    [IsProbabilityMeasure μ] {ρ : E → ℝ}
+    (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s)
+    (x v : E) :
+    bilinearIteratedFDerivTwo ℝ (potential ρ s) x v v =
+      2 * s * ‖v‖ ^ 2 -
+        4 * s ^ 2 * variance (fun y => ⟪y, v⟫) (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) := by
   let P := μ.tilted (fun y => -s * ‖x - y‖ ^ 2)
   let _ : IsProbabilityMeasure P := isProbabilityMeasure_posterior μ hs x
   have hshift : variance (fun y : E => ⟪y - x, v⟫) P = variance (fun y : E => ⟪y, v⟫) P := by
     have hY : AEStronglyMeasurable (fun y : E => ⟪y, v⟫) P :=
       ((by fun_prop : Continuous (fun y : E => ⟪y, v⟫))).aestronglyMeasurable
     simpa only [inner_sub_left, Pi.sub_apply] using variance_sub_const hY ⟪x, v⟫
-  rw [bilinearIteratedFDerivTwo_potential_eq_sub_variance_score hρ hs, variance_const_mul, hshift]
+  rw [bilinearIteratedFDerivTwo_potential_eq_sub_variance_score hρ hs, variance_const_mul,
+    hshift]
   ring
 
-/-- **Upper Hessian bound of the smoothed potential** (BKL Section 2, p. 5, regular approximation:
+/--
+**Upper Hessian bound of the smoothed potential** (BKL Section 2, p. 5, regular approximation:
 `∇²V_ε ≤ ε⁻¹ Id` for the Gaussian convolution of variance `ε`; here the kernel `e^{-s‖x-y‖²}` has
-variance `ε = 1/(2s)`, so the bound is `2s`). Proved from the covariance identity by nonnegativity of
+variance `ε = 1/(2s)`, so the bound is `2s`). Proved from the covariance identity by nonnegativity
+of
 the posterior variance; no moment hypothesis on `μ` beyond being a probability law. -/
 theorem bilinearIteratedFDerivTwo_potential_le {μ : Measure E} [IsProbabilityMeasure μ]
-    {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
-    {s : ℝ} (hs : 0 < s) (x v : E) :
+    {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ) {s : ℝ}
+    (hs : 0 < s) (x v : E) :
     bilinearIteratedFDerivTwo ℝ
-      (FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential ρ s) x v v ≤
+        (FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential ρ s) x v v ≤
       2 * s * ‖v‖ ^ 2 := by
   rw [bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner hρ hs]
-  exact sub_le_self _ (mul_nonneg (mul_nonneg (by norm_num) (sq_nonneg s)) (variance_nonneg _ _))
+  exact
+    sub_le_self _ (mul_nonneg (mul_nonneg (by norm_num) (sq_nonneg s)) (variance_nonneg _ _))
 
 /-- Posterior variance bound `Var_P ⟪·,v⟫ ≤ ‖v‖²/(2s)`, from convexity of the smoothed potential and
 the Hessian identity. -/

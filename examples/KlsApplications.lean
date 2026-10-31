@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.Target
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Poincare.Convolution
-import FunctionalInequalities.Poincare.Gaussian.Multivariate
+module
+
+public import FunctionalInequalities.KLS.Target
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.Poincare.Convolution
+public import FunctionalInequalities.Poincare.Gaussian.Multivariate
 
 /-!
 # Calling KLS: variance bounds and Gaussian smoothing
@@ -20,6 +22,8 @@ does not formalize the sampler, its divergence contraction, or the log-Sobolev p
 
 Source: https://papers.nips.cc/paper_files/paper/2024/file/c4006ff54a7bbda74c09bad6f7586f5b-Paper-Conference.pdf
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory ProbabilityTheory FunctionalInequalities

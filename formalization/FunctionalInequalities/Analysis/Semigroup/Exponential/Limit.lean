@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Strong limits of commuting nonnegative operator exponentials
@@ -10,6 +12,8 @@ For a pairwise commuting family, a Cauchy condition on a dense set yields a stro
 positive-parameter limit of the exponentials. The dense-set argument uses contraction.
 The auxiliary Cauchy-limit construction needs only a complete normed group.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -23,14 +27,18 @@ section Contraction
 
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
 
-/-- Restatement of resolvent contraction (`norm_exp_neg_smul_apply_le`) for a **nonpositive** scalar: if `L` is
+/--
+Restatement of resolvent contraction (`norm_exp_neg_smul_apply_le`) for a **nonpositive** scalar: if
+`L` is
 bounded and nonnegative and `c ≤ 0`, then `exp (c • L)` is a pointwise contraction. -/
 theorem norm_exp_smul_apply_le_of_nonpos (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 ≤ ⟪L f, f⟫) {c : ℝ}
     (hc : c ≤ 0) (f : H₀) : ‖NormedSpace.exp (c • L) f‖ ≤ ‖f‖ := by
   have h := norm_exp_neg_smul_apply_le L hL (neg_nonneg.mpr hc) f
   rwa [neg_neg] at h
 
-/-- Restatement of resolvent contraction (`norm_exp_neg_smul_apply_le`) with the sign on the **operator**: if `L`
+/--
+Restatement of resolvent contraction (`norm_exp_neg_smul_apply_le`) with the sign on the
+**operator**: if `L`
 is bounded and nonnegative and `0 ≤ c`, then `exp (c • (-L))` is a pointwise contraction. This is
 the normal form produced by `hasDerivAt_exp_smul_const` along the orbit of `-L`. -/
 theorem norm_exp_smul_neg_apply_le (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 ≤ ⟪L f, f⟫) {c : ℝ}
@@ -152,7 +160,8 @@ section Limit
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
 
 /-- **The corrected abstract adjoint-product identification.** Let `L s hs` be bounded,
-nonnegative and pairwise commuting for `s > 0`, and suppose the values `L s hs v` are Cauchy as `s ↓ 0` for every `v` in a
+nonnegative and pairwise commuting for `s > 0`, and suppose the values `L s hs v` are Cauchy as `s ↓
+0` for every `v` in a
 dense set `D`. Then for every `f : H₀` and every `t ≥ 0` the family `exp (-t • L s hs) f`
 converges as `s ↓ 0`.
 
@@ -161,36 +170,60 @@ contraction bound `norm_exp_neg_smul_apply_le` transports it to every `f` by an 
 `exists_limit_of_cauchy_along_pos` produces the limit. -/
 theorem exists_limit_exp_neg_smul (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H₀)
     (hL : ∀ (s : ℝ) (hs : 0 < s) (f : H₀), 0 ≤ ⟪L s hs f, f⟫)
-    (hcomm : ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r),
-      (L s hs).comp (L r hr) = (L r hr).comp (L s hs))
+    (hcomm :
+      ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), (L s hs).comp (L r hr) = (L r hr).comp (L s hs))
     (D : Set H₀) (hD : Dense D)
-    (hC : ∀ v ∈ D, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ → ‖L s hs v - L r hr v‖ < ε)
+    (hC :
+      ∀ v ∈ D,
+        ∀ ε : ℝ,
+          0 < ε →
+            ∃ δ : ℝ,
+              0 < δ ∧
+                ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r),
+                  s < δ → r < δ → ‖L s hs v - L r hr v‖ < ε)
     (f : H₀) {t : ℝ} (ht : 0 ≤ t) :
-    ∃ g : H₀, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ (s : ℝ) (hs : 0 < s), s < δ → ‖NormedSpace.exp (-t • L s hs) f - g‖ < ε := by
+    ∃ g : H₀,
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧ ∀ (s : ℝ) (hs : 0 < s), s < δ → ‖NormedSpace.exp (-t • L s hs) f - g‖ < ε := by
   -- Step 1: the Cauchy property on the dense set, from `norm_exp_neg_smul_sub_le`.
-  have key : ∀ v ∈ D, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ →
-        ‖NormedSpace.exp (-t • L s hs) v - NormedSpace.exp (-t • L r hr) v‖ < ε := by
+
+  have key :
+    ∀ v ∈ D,
+      ∀ ε : ℝ,
+        0 < ε →
+          ∃ δ : ℝ,
+            0 < δ ∧
+              ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r),
+                s < δ →
+                  r < δ →
+                    ‖NormedSpace.exp (-t • L s hs) v - NormedSpace.exp (-t • L r hr) v‖ < ε := by
     intro v hv ε hε
     have ht1 : (0 : ℝ) < t + 1 := by linarith
     have hε' : 0 < ε / (t + 1) := by positivity
     obtain ⟨δ, hδ, hδ'⟩ := hC v hv (ε / (t + 1)) hε'
     refine ⟨δ, hδ, fun s r hs hr hsδ hrδ => ?_⟩
-    have h6 := norm_exp_neg_smul_sub_le (L s hs) (L r hr) (hL s hs) (hL r hr)
-      (hcomm s r hs hr) ht v
+    have h6 :=
+      norm_exp_neg_smul_sub_le (L s hs) (L r hr) (hL s hs) (hL r hr) (hcomm s r hs hr) ht v
     have h2 : t * ‖L s hs v - L r hr v‖ ≤ t * (ε / (t + 1)) :=
       mul_le_mul_of_nonneg_left (hδ' s r hs hr hsδ hrδ).le ht
     have h3 : t * (ε / (t + 1)) < ε := by
-      calc t * (ε / (t + 1)) < (t + 1) * (ε / (t + 1)) :=
-            mul_lt_mul_of_pos_right (by linarith) hε'
+      calc
+        t * (ε / (t + 1)) < (t + 1) * (ε / (t + 1)) := mul_lt_mul_of_pos_right (by linarith) hε'
         _ = ε := by field_simp
     linarith
   -- Step 2: the Cauchy property for an arbitrary vector, by an `ε/3` argument.
-  have general : ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-      ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r), s < δ → r < δ →
-        ‖NormedSpace.exp (-t • L s hs) f - NormedSpace.exp (-t • L r hr) f‖ < ε := by
+
+  have general :
+    ∀ ε : ℝ,
+      0 < ε →
+        ∃ δ : ℝ,
+          0 < δ ∧
+            ∀ (s r : ℝ) (hs : 0 < s) (hr : 0 < r),
+              s < δ →
+                r < δ →
+                  ‖NormedSpace.exp (-t • L s hs) f - NormedSpace.exp (-t • L r hr) f‖ < ε := by
     intro ε hε
     obtain ⟨v, hvD, hvf⟩ := Metric.mem_closure_iff.mp (hD f) (ε / 3) (by linarith)
     obtain ⟨δ, hδ, hδ'⟩ := key v hvD (ε / 3) (by linarith)
@@ -204,9 +237,9 @@ theorem exists_limit_exp_neg_smul (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H�
       refine lt_of_le_of_lt (norm_exp_neg_smul_apply_le (L r hr) (hL r hr) ht _) ?_
       rwa [norm_sub_rev]
     have c3 := hδ' s r hs hr hsδ hrδ
-    have h4 := dist_triangle4 (NormedSpace.exp (-t • L s hs) f)
-      (NormedSpace.exp (-t • L s hs) v) (NormedSpace.exp (-t • L r hr) v)
-      (NormedSpace.exp (-t • L r hr) f)
+    have h4 :=
+      dist_triangle4 (NormedSpace.exp (-t • L s hs) f) (NormedSpace.exp (-t • L s hs) v)
+        (NormedSpace.exp (-t • L r hr) v) (NormedSpace.exp (-t • L r hr) f)
     simp only [dist_eq_norm] at h4
     linarith
   exact exists_limit_of_cauchy_along_pos (fun s hs => NormedSpace.exp (-t • L s hs) f) general

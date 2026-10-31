@@ -1,12 +1,14 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import Mathlib.Analysis.Calculus.BumpFunction.Convolution
-import Mathlib.Analysis.Calculus.ContDiff.Convolution
-import Mathlib.MeasureTheory.Function.ContinuousMapDense
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.Analysis.Calculus.LineDeriv.Basic
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.MeasureTheory.SpecificCodomains.Pi
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
+public import Mathlib.Analysis.Calculus.ContDiff.Convolution
+public import Mathlib.MeasureTheory.Function.ContinuousMapDense
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.Analysis.Calculus.LineDeriv.Basic
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.MeasureTheory.SpecificCodomains.Pi
 
 /-!
 # Mollification against a Haar measure
@@ -36,6 +38,8 @@ Nothing here involves a probability law, a weighted operator or a semigroup; the
 interior-regularity argument of `KLS/LogConcave/HeatSemigroup/Generator/InteriorRegularity.lean`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter Topology Metric InnerProductSpace
@@ -61,19 +65,23 @@ theorem enorm_convolution_sq_le {f : V → E} (hf : AEStronglyMeasurable f m) (x
   set b : V → ℝ≥0∞ := fun t => ‖f (x - t)‖ₑ with hb_def
   have ha : Measurable a := ENNReal.measurable_ofReal.comp φ.continuous_normed.measurable
   have hb : AEMeasurable b m :=
-    hf.enorm.comp_quasiMeasurePreserving (Measure.measurePreserving_sub_left m x).quasiMeasurePreserving
+    hf.enorm.comp_quasiMeasurePreserving
+      (Measure.measurePreserving_sub_left m x).quasiMeasurePreserving
   have h1 : ‖(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) x‖ₑ ≤ ∫⁻ t, a t * b t ∂m := by
     rw [convolution_def]
     refine (enorm_integral_le_lintegral_enorm _).trans (le_of_eq ?_)
     refine lintegral_congr fun t => ?_
-    simp only [ContinuousLinearMap.lsmul_apply, enorm_smul, Real.enorm_of_nonneg (φ.nonneg_normed t),
-      ha_def, hb_def]
+    simp only [ContinuousLinearMap.lsmul_apply, enorm_smul,
+      Real.enorm_of_nonneg (φ.nonneg_normed t), ha_def, hb_def]
   have hint : ∫⁻ t, a t ∂m = 1 := by
-    rw [ha_def, ← ofReal_integral_eq_lintegral_ofReal φ.integrable_normed
-      (Filter.Eventually.of_forall φ.nonneg_normed), φ.integral_normed, ENNReal.ofReal_one]
-  have hH := ENNReal.lintegral_mul_le_Lp_mul_Lq m Real.HolderConjugate.two_two
-    (f := fun t => a t ^ (1 / 2 : ℝ)) (g := fun t => a t ^ (1 / 2 : ℝ) * b t)
-    (ha.pow_const _).aemeasurable ((ha.pow_const _).aemeasurable.mul hb)
+    rw [ha_def, ←
+      ofReal_integral_eq_lintegral_ofReal φ.integrable_normed
+        (Filter.Eventually.of_forall φ.nonneg_normed),
+      φ.integral_normed, ENNReal.ofReal_one]
+  have hH :=
+    ENNReal.lintegral_mul_le_Lp_mul_Lq m Real.HolderConjugate.two_two (f := fun t =>
+      a t ^ (1 / 2 : ℝ)) (g := fun t => a t ^ (1 / 2 : ℝ) * b t) (ha.pow_const _).aemeasurable
+      ((ha.pow_const _).aemeasurable.mul hb)
   have e1 : ∀ t, (a t ^ (1 / 2 : ℝ)) * (a t ^ (1 / 2 : ℝ) * b t) = a t * b t := by
     intro t
     rw [← mul_assoc, ← ENNReal.rpow_add_of_nonneg _ _ (by norm_num) (by norm_num)]
@@ -86,12 +94,15 @@ theorem enorm_convolution_sq_le {f : V → E} (hf : AEStronglyMeasurable f m) (x
     rw [ENNReal.mul_rpow_of_nonneg _ _ (by norm_num), ← ENNReal.rpow_mul, ENNReal.rpow_two]
     norm_num
   simp only [Pi.mul_apply, e1, e2, e3, hint, ENNReal.one_rpow, one_mul] at hH
-  have h2 : ‖(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) x‖ₑ ≤
-      (∫⁻ t, a t * b t ^ 2 ∂m) ^ (1 / (2 : ℝ)) := h1.trans hH
-  calc ‖(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) x‖ₑ ^ 2
-      ≤ ((∫⁻ t, a t * b t ^ 2 ∂m) ^ (1 / (2 : ℝ))) ^ 2 := pow_le_pow_left' h2 2
-    _ = ∫⁻ t, a t * b t ^ 2 ∂m := by
-      rw [← ENNReal.rpow_natCast, ← ENNReal.rpow_mul]; norm_num
+  have h2 :
+    ‖(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) x‖ₑ ≤
+      (∫⁻ t, a t * b t ^ 2 ∂m) ^ (1 / (2 : ℝ)) :=
+    h1.trans hH
+  calc
+    ‖(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) x‖ₑ ^ 2 ≤
+        ((∫⁻ t, a t * b t ^ 2 ∂m) ^ (1 / (2 : ℝ))) ^ 2 :=
+      pow_le_pow_left' h2 2
+    _ = ∫⁻ t, a t * b t ^ 2 ∂m := by rw [← ENNReal.rpow_natCast, ← ENNReal.rpow_mul]; norm_num
 
 /-- The mollifier is an `L²` contraction: `∫ ‖ρ ⋆ f‖² ≤ ∫ ‖f‖²`. -/
 theorem lintegral_enorm_convolution_sq_le {f : V → E} (hf : AEStronglyMeasurable f m) :
@@ -123,8 +134,10 @@ theorem lintegral_enorm_convolution_sq_le {f : V → E} (hf : AEStronglyMeasurab
 /-- `L²` contraction of the mollifier in `eLpNorm` form. -/
 theorem eLpNorm_convolution_le {f : V → E} (hf : AEStronglyMeasurable f m) :
     eLpNorm (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) 2 m ≤ eLpNorm f 2 m := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top,
-    eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
+  have hconv : AEStronglyMeasurable (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) m :=
+    φ.continuous_normed.aestronglyMeasurable.convolution (L := ContinuousLinearMap.lsmul ℝ ℝ) hf
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top hconv,
+    eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top hf]
   simp only [ENNReal.toReal_ofNat, ENNReal.rpow_two]
   exact ENNReal.rpow_le_rpow (lintegral_enorm_convolution_sq_le φ hf) (by norm_num)
 
@@ -137,8 +150,7 @@ theorem continuous_convolution {f : V → E} (hf : LocallyIntegrable f m) :
 /-- The mollification of an `L²` function is again `L²`. -/
 theorem memLp_convolution {f : V → E} (hf : MemLp f 2 m) :
     MemLp (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) 2 m :=
-  ⟨(continuous_convolution φ (hf.locallyIntegrable one_le_two)).aestronglyMeasurable,
-    (eLpNorm_convolution_le φ hf.1).trans_lt hf.2⟩
+  (eLpNorm_convolution_le φ hf.aestronglyMeasurable).trans_lt hf.eLpNorm_lt_top
 
 /-- The mollifier is linear on locally integrable functions. -/
 theorem convolution_sub {f g : V → E} (hf : LocallyIntegrable f m) (hg : LocallyIntegrable g m) :
@@ -227,11 +239,15 @@ theorem tendsto_eLpNorm_convolution_sub_of_continuous {φ : ℕ → ContDiffBump
     refine (Function.support_sub _ _).trans (Set.union_subset ?_ ?_)
     · exact support_convolution_subset_cthickening (φ n) hn1 f
     · exact (subset_tsupport f).trans (self_subset_cthickening _)
+  have hmeas : AEStronglyMeasurable
+      ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f - f) m :=
+    ((φ n).continuous_normed.aestronglyMeasurable.convolution
+      (L := ContinuousLinearMap.lsmul ℝ ℝ) hf.aestronglyMeasurable).sub hf.aestronglyMeasurable
   calc eLpNorm ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f - f) 2 m
       = eLpNorm ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f - f) 2 (m.restrict K) :=
-        (eLpNorm_restrict_eq_of_support_subset hsupp).symm
+        (eLpNorm_restrict_eq_of_support_subset hmeas hsupp).symm
     _ ≤ (m.restrict K) Set.univ ^ (2 : ℝ≥0∞).toReal⁻¹ * ENNReal.ofReal δ :=
-        eLpNorm_le_of_ae_bound (Filter.Eventually.of_forall hbound)
+        eLpNorm_le_of_ae_bound hmeas.restrict (Filter.Eventually.of_forall hbound)
     _ = c * ENNReal.ofReal δ := by rw [Measure.restrict_apply_univ]
     _ ≤ ε := hδε
 
@@ -257,21 +273,16 @@ theorem tendsto_eLpNorm_convolution_sub {φ : ℕ → ContDiffBump (0 : V)}
         ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g - g)) + (g - f) := by
     rw [convolution_sub (φ n) hloc_f hloc_g]
     abel
-  have hm1 : AEStronglyMeasurable ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] (f - g)) m :=
-    (continuous_convolution (φ n) (hloc_f.sub hloc_g)).aestronglyMeasurable
-  have hm2 : AEStronglyMeasurable ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g - g) m :=
-    ((continuous_convolution (φ n) hloc_g).sub hg).aestronglyMeasurable
-  have hm3 : AEStronglyMeasurable (g - f) m := hg.aestronglyMeasurable.sub hf.1
   calc eLpNorm ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f - f) 2 m
       ≤ eLpNorm ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] (f - g)) 2 m +
           eLpNorm ((φ n).normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g - g) 2 m +
           eLpNorm (g - f) 2 m := by
         rw [hsplit]
-        exact (eLpNorm_add_le (hm1.add hm2) hm3 one_le_two).trans
-          (add_le_add_left (eLpNorm_add_le hm1 hm2 one_le_two) _)
+        exact (eLpNorm_add_le one_le_two).trans
+          (add_le_add_left (eLpNorm_add_le one_le_two) _)
     _ ≤ ε / 3 + ε / 3 + ε / 3 := by
         gcongr
-        · exact (eLpNorm_convolution_le (φ n) (hf.1.sub hg.aestronglyMeasurable)).trans hfg
+        · exact (eLpNorm_convolution_le (φ n) (hf.aestronglyMeasurable.sub hg.aestronglyMeasurable)).trans hfg
         · rw [eLpNorm_sub_comm]; exact hfg
     _ = ε := ENNReal.add_thirds ε
 
@@ -291,8 +302,10 @@ theorem integral_inner_convolution_eq {a b : V → E} (ha : Integrable a m) (hb 
       ∫ y, ⟪a y, (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] b) y⟫ ∂m := by
   obtain ⟨C, hC⟩ := hb.bounded_above_of_compact_support hbc
   have hρi : Integrable (φ.normed m) m := φ.integrable_normed
-  have hρm : Measurable (φ.normed m) := φ.continuous_normed.measurable
+  have hρm : Measurable (φ.normed m) :=
+    φ.continuous_normed.measurable
   -- the two product integrands
+
   have hI₁ : Integrable (fun p : V × V => φ.normed m p.2 * ⟪a (p.1 - p.2), b p.1⟫) (m.prod m) := by
     have h0 := hρi.convolution_integrand (ContinuousLinearMap.lsmul ℝ ℝ) ha
     refine (h0.norm.mul_const C).mono' ?_ ?_
@@ -304,7 +317,8 @@ theorem integral_inner_convolution_eq {a b : V → E} (ha : Integrable a m) (hb 
         abs_of_nonneg (φ.nonneg_normed _), norm_mul]
       rw [mul_assoc]
       refine mul_le_mul_of_nonneg_left ?_ (φ.nonneg_normed _)
-      exact (abs_real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left (hC _) (norm_nonneg _))
+      exact
+        (abs_real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left (hC _) (norm_nonneg _))
   have hI₂ : Integrable (fun p : V × V => φ.normed m p.1 * ⟪a p.2, b (p.2 + p.1)⟫) (m.prod m) := by
     have h0 := hρi.mul_prod ha.norm
     refine (h0.mul_const C).mono' ?_ ?_
@@ -316,33 +330,44 @@ theorem integral_inner_convolution_eq {a b : V → E} (ha : Integrable a m) (hb 
       simp only [norm_mul, Real.norm_eq_abs, abs_of_nonneg (φ.nonneg_normed _)]
       rw [mul_assoc]
       refine mul_le_mul_of_nonneg_left ?_ (φ.nonneg_normed _)
-      exact (abs_real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left (hC _) (norm_nonneg _))
+      exact
+        (abs_real_inner_le_norm _ _).trans
+          (mul_le_mul_of_nonneg_left (hC _) (norm_nonneg _))
   -- left side: pull the pairing inside, swap, translate
-  have hL : ∀ x, ⟪(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] a) x, b x⟫ =
-      ∫ t, φ.normed m t * ⟪a (x - t), b x⟫ ∂m := by
+
+  have hL :
+    ∀ x,
+      ⟪(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] a) x, b x⟫ =
+        ∫ t, φ.normed m t * ⟪a (x - t), b x⟫ ∂m := by
     intro x
-    have hint : Integrable (fun t => (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t)) (a (x - t))) m :=
+    have hint :
+      Integrable (fun t => (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t)) (a (x - t))) m :=
       HasCompactSupport.convolutionExists_left (ContinuousLinearMap.lsmul ℝ ℝ)
         (φ.hasCompactSupport_normed (μ := m)) φ.continuous_normed ha.locallyIntegrable x
     rw [convolution_def, real_inner_comm, ← integral_inner hint]
     refine integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
     simp only [ContinuousLinearMap.lsmul_apply, real_inner_smul_right, real_inner_comm]
-  have hR : ∀ y, ⟪a y, (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] b) y⟫ =
-      ∫ t, φ.normed m t * ⟪a y, b (y + t)⟫ ∂m := by
+  have hR :
+    ∀ y,
+      ⟪a y, (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] b) y⟫ =
+        ∫ t, φ.normed m t * ⟪a y, b (y + t)⟫ ∂m := by
     intro y
     have hint : Integrable (fun t => φ.normed m t • b (y + t)) m := by
-      refine hρi.smul_of_top_left (memLp_top_of_bound ?_ C (Filter.Eventually.of_forall fun t => hC _))
+      refine
+        hρi.smul_of_top_left
+          (memLp_top_of_bound ?_ C (Filter.Eventually.of_forall fun t => hC _))
       exact (hb.comp (continuous_const.add continuous_id)).aestronglyMeasurable
-    rw [convolution_def, ← integral_neg_eq_self (fun t => (ContinuousLinearMap.lsmul ℝ ℝ
-      (φ.normed m t)) (b (y - t))) m]
+    rw [convolution_def, ←
+      integral_neg_eq_self (fun t => (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t)) (b (y - t)))
+        m]
     simp only [ContinuousLinearMap.lsmul_apply, φ.normed_neg, sub_neg_eq_add]
     rw [← integral_inner hint]
     refine integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
     simp only [real_inner_smul_right]
   simp only [hL, hR]
   rw [integral_integral_swap hI₁]
-  have hmid : ∀ t, ∫ x, φ.normed m t * ⟪a (x - t), b x⟫ ∂m =
-      ∫ y, φ.normed m t * ⟪a y, b (y + t)⟫ ∂m := by
+  have hmid :
+    ∀ t, ∫ x, φ.normed m t * ⟪a (x - t), b x⟫ ∂m = ∫ y, φ.normed m t * ⟪a y, b (y + t)⟫ ∂m := by
     intro t
     rw [integral_const_mul, integral_const_mul]
     congr 1
@@ -365,21 +390,26 @@ theorem gradient_convolution {g : V → ℝ} (hg : ContDiff ℝ ∞ g) (hgc : Ha
     gradient (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g) x =
       (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] gradient g) x := by
   have hρ : LocallyIntegrable (φ.normed m) m := φ.integrable_normed.locallyIntegrable
-  have hd := HasCompactSupport.hasFDerivAt_convolution_right (ContinuousLinearMap.lsmul ℝ ℝ) hgc hρ
-    (hg.of_le (WithTop.coe_le_coe.mpr le_top)) x
-  have hg1 : Continuous (fderiv ℝ g) := (hg.of_le (WithTop.coe_le_coe.mpr le_top)).continuous_fderiv one_ne_zero
+  have hd :=
+    HasCompactSupport.hasFDerivAt_convolution_right (ContinuousLinearMap.lsmul ℝ ℝ) hgc hρ
+      (hg.of_le (WithTop.coe_le_coe.mpr le_top)) x
+  have hg1 : Continuous (fderiv ℝ g) :=
+    (hg.of_le (WithTop.coe_le_coe.mpr le_top)).continuous_fderiv one_ne_zero
   refine ext_inner_right ℝ fun v => ?_
-  have hint : Integrable (fun t => (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t))
-      (gradient g (x - t))) m :=
+  have hint :
+    Integrable (fun t => (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t)) (gradient g (x - t)))
+      m :=
     HasCompactSupport.convolutionExists_left (ContinuousLinearMap.lsmul ℝ ℝ)
       (φ.hasCompactSupport_normed (μ := m)) φ.continuous_normed
       ((continuous_gradient (hg.of_le (WithTop.coe_le_coe.mpr le_top))).locallyIntegrable) x
-  have hL : ⟪gradient (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g) x, v⟫ =
+  have hL :
+    ⟪gradient (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g) x, v⟫ =
       ∫ t, φ.normed m t * fderiv ℝ g (x - t) v ∂m := by
-    rw [gradient, toDual_symm_apply, hd.fderiv, convolution_precompR_apply _ hρ (hgc.fderiv ℝ) hg1,
-      convolution_def]
+    rw [gradient, toDual_symm_apply, hd.fderiv,
+      convolution_precompR_apply _ hρ (hgc.fderiv ℝ) hg1, convolution_def]
     simp only [ContinuousLinearMap.lsmul_apply, smul_eq_mul]
-  have hR : ⟪(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] gradient g) x, v⟫ =
+  have hR :
+    ⟪(φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] gradient g) x, v⟫ =
       ∫ t, φ.normed m t * fderiv ℝ g (x - t) v ∂m := by
     rw [convolution_def, real_inner_comm, ← integral_inner hint]
     refine integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
@@ -395,37 +425,55 @@ theorem laplacian_convolution {g : V → ℝ} (hg : ContDiff ℝ ∞ g) (hgc : H
       (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] Laplacian.laplacian g) x := by
   have hρ : LocallyIntegrable (φ.normed m) m := φ.integrable_normed.locallyIntegrable
   have hg1 : ContDiff ℝ 1 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hgD : ContDiff ℝ 1 (fderiv ℝ g) := hg.fderiv_right (m := 1) (WithTop.coe_le_coe.mpr le_top)
+  have hgD : ContDiff ℝ 1 (fderiv ℝ g) :=
+    hg.fderiv_right (m := 1) (WithTop.coe_le_coe.mpr le_top)
   have hgc1 : HasCompactSupport (fderiv ℝ g) := hgc.fderiv ℝ
   have hconv : ContDiff ℝ ∞ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g) :=
     HasCompactSupport.contDiff_convolution_left _ (φ.hasCompactSupport_normed (μ := m))
       φ.contDiff_normed (hg1.continuous.locallyIntegrable)
-  have hdiffx : DifferentiableAt ℝ (fderiv ℝ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g)) x :=
-    (hconv.fderiv_right (m := 1) (WithTop.coe_le_coe.mpr le_top)).differentiable one_ne_zero x
+  have hdiffx :
+    DifferentiableAt ℝ (fderiv ℝ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g)) x :=
+    (hconv.fderiv_right (m := 1) (WithTop.coe_le_coe.mpr le_top)).differentiable one_ne_zero
+      x
   -- the directional derivative of the mollification is the mollification of the directional
   -- derivative
-  have hdir : ∀ v, (fun y => fderiv ℝ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g) y v) =
-      φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] fun a => fderiv ℝ g a v := by
+
+  have hdir :
+    ∀ v,
+      (fun y => fderiv ℝ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g) y v) =
+        φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] fun a => fderiv ℝ g a v := by
     intro v
     funext y
-    rw [(HasCompactSupport.hasFDerivAt_convolution_right (ContinuousLinearMap.lsmul ℝ ℝ) hgc hρ hg1
-      y).fderiv, convolution_precompR_apply _ hρ hgc1 hgD.continuous]
+    rw [(HasCompactSupport.hasFDerivAt_convolution_right (ContinuousLinearMap.lsmul ℝ ℝ) hgc hρ
+          hg1 y).fderiv,
+      convolution_precompR_apply _ hρ hgc1 hgD.continuous]
   -- the second derivative
-  have hsecond : ∀ v w, fderiv ℝ (fderiv ℝ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g)) x v w
-      = (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] fun a => fderiv ℝ (fderiv ℝ g) a v w) x := by
+
+  have hsecond :
+    ∀ v w,
+      fderiv ℝ (fderiv ℝ (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] g)) x v w =
+        (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] fun a => fderiv ℝ (fderiv ℝ g) a v w)
+          x := by
     intro v w
     rw [← fderiv_fderiv_apply hdiffx v w, hdir w]
     have hw1 : ContDiff ℝ 1 fun a => fderiv ℝ g a w := hgD.clm_apply contDiff_const
     have hwc : HasCompactSupport fun a => fderiv ℝ g a w := hgc.fderiv_apply ℝ w
-    rw [(HasCompactSupport.hasFDerivAt_convolution_right (ContinuousLinearMap.lsmul ℝ ℝ) hwc hρ hw1
-      x).fderiv, convolution_precompR_apply _ hρ (hwc.fderiv ℝ) (hw1.continuous_fderiv one_ne_zero)]
+    rw [(HasCompactSupport.hasFDerivAt_convolution_right (ContinuousLinearMap.lsmul ℝ ℝ) hwc hρ
+          hw1 x).fderiv,
+      convolution_precompR_apply _ hρ (hwc.fderiv ℝ) (hw1.continuous_fderiv one_ne_zero)]
     simp only [convolution_def]
     refine integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
     simp only [ContinuousLinearMap.lsmul_apply, smul_eq_mul]
     rw [fderiv_fderiv_apply (hgD.differentiable one_ne_zero _) v w]
   have hg2c : Continuous (fderiv ℝ (fderiv ℝ g)) := hgD.continuous_fderiv one_ne_zero
-  have hint : ∀ i, Integrable (fun t => (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t))
-      (fderiv ℝ (fderiv ℝ g) (x - t) (stdOrthonormalBasis ℝ V i) (stdOrthonormalBasis ℝ V i))) m :=
+  have hint :
+    ∀ i,
+      Integrable
+        (fun t =>
+          (ContinuousLinearMap.lsmul ℝ ℝ (φ.normed m t))
+            (fderiv ℝ (fderiv ℝ g) (x - t) (stdOrthonormalBasis ℝ V i)
+              (stdOrthonormalBasis ℝ V i)))
+        m :=
     fun i =>
     HasCompactSupport.convolutionExists_left (ContinuousLinearMap.lsmul ℝ ℝ)
       (φ.hasCompactSupport_normed (μ := m)) φ.continuous_normed
@@ -482,7 +530,7 @@ private theorem integral_fderiv_kernel_eq
     filter_upwards [hF.ae_differentiableAt (μ := (volume : Measure E))] with y hy
     exact ((ℓ.hasFDerivAt.comp y hy.hasFDerivAt).hasLineDerivAt v).lineDeriv
   have hb :=
-    (ℓ.lipschitz.comp hF).integral_lineDeriv_mul_eq
+    (ℓ.lipschitzWith.comp hF).integral_lineDeriv_mul_eq
       (μ := (volume : Measure E)) hg hgc v
   have he :
       (∫ y, lineDeriv ℝ (ℓ ∘ F) y v * g y) =
@@ -516,48 +564,43 @@ private theorem integral_fderiv_kernel_eq
 mollification identities): for a Lipschitz map `F : E → E` and a bump `φ`, the convolution
 `φ.normed ⋆ F` is differentiable with derivative `φ.normed ⋆ DF`, where `DF = fderiv ℝ F` is the
 almost-everywhere (Rademacher) derivative of `F` (a bounded measurable map). -/
-theorem hasFDerivAt_convolution_normed_of_lipschitz
-    {F : E → E} {G : NNReal} (hF : LipschitzWith G F) (φ : ContDiffBump (0 : E)) (x : E) :
-    HasFDerivAt (φ.normed (volume : Measure E) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, (volume : Measure E)] F)
+theorem hasFDerivAt_convolution_normed_of_lipschitz {F : E → E} {G : NNReal}
+    (hF : LipschitzWith G F) (φ : ContDiffBump (0 : E)) (x : E) :
+    HasFDerivAt
+      (φ.normed (volume : Measure E) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, (volume : Measure E)] F)
       ((φ.normed (volume : Measure E) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, (volume : Measure E)]
-        fderiv ℝ F) x) x := by
+          fderiv ℝ F)
+        x)
+      x := by
   let k := φ.normed (volume : Measure E)
   let L : ℝ →L[ℝ] E →L[ℝ] E := ContinuousLinearMap.lsmul ℝ ℝ
   let P := ContinuousLinearMap.precompL E L
   have hk : ContDiff ℝ 1 k := φ.contDiff_normed
   have hc : HasCompactSupport k := φ.hasCompactSupport_normed
   have hDF : LocallyIntegrable (fderiv ℝ F) (volume : Measure E) :=
-    (memLp_top_of_bound (measurable_fderiv ℝ F).aestronglyMeasurable
-      (G : ℝ)
-      (Filter.Eventually.of_forall
-        (fun _ => norm_fderiv_le_of_lipschitz ℝ hF))).locallyIntegrable le_top
-  have hFloc : LocallyIntegrable F (volume : Measure E) :=
-    hF.continuous.locallyIntegrable
-  have hi :=
-    (hc.fderiv ℝ).convolutionExists_left P
-      (hk.continuous_fderiv (by decide)) hFloc x
+    (memLp_top_of_bound (measurable_fderiv ℝ F).aestronglyMeasurable (G : ℝ)
+          (Filter.Eventually.of_forall
+            (fun _ => norm_fderiv_le_of_lipschitz ℝ hF))).locallyIntegrable
+      le_top
+  have hFloc : LocallyIntegrable F (volume : Measure E) := hF.continuous.locallyIntegrable
+  have hi := (hc.fderiv ℝ).convolutionExists_left P (hk.continuous_fderiv (by decide)) hFloc x
   have hj :=
     hc.convolutionExists_left
-      (ContinuousLinearMap.lsmul ℝ ℝ :
-        ℝ →L[ℝ] (E →L[ℝ] E) →L[ℝ] (E →L[ℝ] E))
-      hk.continuous hDF x
-  change Integrable (fun t => k t • fderiv ℝ F (x - t))
-    (volume : Measure E) at hj
+      (ContinuousLinearMap.lsmul ℝ ℝ : ℝ →L[ℝ] (E →L[ℝ] E) →L[ℝ] (E →L[ℝ] E)) hk.continuous hDF
+      x
+  change Integrable (fun t => k t • fderiv ℝ F (x - t)) (volume : Measure E) at hj
   apply (hc.hasFDerivAt_convolution_left L hk hFloc x).congr_fderiv
   apply ContinuousLinearMap.ext
   intro v
   apply ext_inner_left ℝ
   intro w
   let ℓ : E →L[ℝ] ℝ := innerSL ℝ w
-  let Q : (E →L[ℝ] E) →L[ℝ] ℝ :=
-    ℓ.comp (ContinuousLinearMap.apply ℝ E v)
-  change Q (∫ t, P (fderiv ℝ k t) (F (x - t))) =
-    Q (∫ t, k t • fderiv ℝ F (x - t))
+  let Q : (E →L[ℝ] E) →L[ℝ] ℝ := ℓ.comp (ContinuousLinearMap.apply ℝ E v)
+  change Q (∫ t, P (fderiv ℝ k t) (F (x - t))) = Q (∫ t, k t • fderiv ℝ F (x - t))
   rw [← Q.integral_comp_comm hi, ← Q.integral_comp_comm hj]
-  simpa only [Q, P, L, ContinuousLinearMap.comp_apply,
-    ContinuousLinearMap.apply_apply, ContinuousLinearMap.precompL_apply,
-    ContinuousLinearMap.lsmul_apply, map_smul, smul_eq_mul] using
-    integral_fderiv_kernel_eq hF k hk hc x v ℓ
+  simpa only [Q, P, L, ContinuousLinearMap.comp_apply, ContinuousLinearMap.apply_apply,
+    ContinuousLinearMap.precompL_apply, ContinuousLinearMap.lsmul_apply, map_smul,
+    smul_eq_mul] using integral_fderiv_kernel_eq hF k hk hc x v ℓ
 
 end FiniteDimensional
 
@@ -576,15 +619,17 @@ open scoped Topology Convolution
 namespace FunctionalInequalities.Analysis
 
 /-- **Mollified values stay in a closed convex set**: if the vector of values
-`(f k x)ₖ` lies in a closed convex `C` for almost every `x` in `cthickening r S`, then for every bump `φ` with
+`(f k x)ₖ` lies in a closed convex `C` for almost every `x` in `cthickening r S`, then for every
+bump `φ` with
 `φ.rOut ≤ r` and every `x ∈ S`, the mollified vector `((φ.normed ⋆ f k) x)ₖ` lies in `C`. -/
 theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {ι : Type*} [Fintype ι]
-    {f : ι → E → ℝ} (hf : ∀ k, LocallyIntegrable (f k) (volume : Measure E))
-    {C : Set (ι → ℝ)} (hCc : Convex ℝ C) (hCcl : IsClosed C) {S : Set E} {r : ℝ}
+    {f : ι → E → ℝ} (hf : ∀ k, LocallyIntegrable (f k) (volume : Measure E)) {C : Set (ι → ℝ)}
+    (hCc : Convex ℝ C) (hCcl : IsClosed C) {S : Set E} {r : ℝ}
     (hfC : ∀ᵐ x ∂((volume : Measure E).restrict (cthickening r S)), (fun k => f k x) ∈ C)
     (φ : ContDiffBump (0 : E)) (hφ : φ.rOut ≤ r) {x : E} (hx : x ∈ S) :
-    (fun k => convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x) ∈ C := by
+    (fun k => convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x) ∈
+      C := by
   let ρ : E → ℝ := fun y => φ.normed volume (x - y)
   let P : Measure E := volume.withDensity (fun y => ENNReal.ofReal (ρ y))
   have hρ_cont : Continuous ρ := by
@@ -599,8 +644,8 @@ theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProdu
     hρ_cont.integrable_of_hasCompactSupport hρ_comp
   have hρ_int : ∫ y, ρ y ∂(volume : Measure E) = 1 := by
     have hsub :
-        ∫ y, φ.normed volume (x - y) ∂(volume : Measure E) =
-          ∫ y, φ.normed volume y ∂(volume : Measure E) := by
+      ∫ y, φ.normed volume (x - y) ∂(volume : Measure E) =
+        ∫ y, φ.normed volume y ∂(volume : Measure E) := by
       exact
         (Measure.measurePreserving_sub_left (volume : Measure E) x).integral_comp
           (Homeomorph.subLeft x).measurableEmbedding (φ.normed volume)
@@ -609,15 +654,12 @@ theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProdu
   have hP_prob : IsProbabilityMeasure P := by
     apply IsProbabilityMeasure.mk
     change (volume.withDensity (fun y => ENNReal.ofReal (ρ y))) univ = 1
-    rw [MeasureTheory.withDensity_apply
-      (fun y => ENNReal.ofReal (ρ y)) MeasurableSet.univ]
+    rw [MeasureTheory.withDensity_apply (fun y => ENNReal.ofReal (ρ y)) MeasurableSet.univ]
     simp only [Measure.restrict_univ]
-    rw [← ofReal_integral_eq_lintegral_ofReal hρ_integrable
-      (ae_of_all _ hρ_nn)]
+    rw [← ofReal_integral_eq_lintegral_ofReal hρ_integrable (ae_of_all _ hρ_nn)]
     simpa using congrArg ENNReal.ofReal hρ_int
   let _ : IsProbabilityMeasure P := hP_prob
-  have hρ_support :
-      Function.support ρ ⊆ closedBall x φ.rOut := by
+  have hρ_support : Function.support ρ ⊆ closedBall x φ.rOut := by
     intro y hy
     change φ.normed volume (x - y) ≠ 0 at hy
     have hyball : x - y ∈ Function.support (φ.normed volume) := hy
@@ -625,38 +667,33 @@ theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProdu
     rw [Metric.mem_ball] at hyball
     rw [Metric.mem_closedBall, dist_comm, dist_eq_norm]
     simpa [dist_eq_norm] using le_of_lt hyball
-  have hball_cthick :
-      closedBall x φ.rOut ⊆ cthickening r S := by
+  have hball_cthick : closedBall x φ.rOut ⊆ cthickening r S := by
     intro y hy
     change infEDist y S ≤ ENNReal.ofReal r
-    have hdist : dist y x ≤ φ.rOut := by
-      exact Metric.mem_closedBall.mp hy
+    have hdist : dist y x ≤ φ.rOut := by exact Metric.mem_closedBall.mp hy
     calc
       infEDist y S ≤ edist y x := Metric.infEDist_le_edist_of_mem hx
       _ = ENNReal.ofReal (dist y x) := by rw [edist_dist]
       _ ≤ ENNReal.ofReal r := ENNReal.ofReal_le_ofReal (hdist.trans hφ)
-  have hT : MeasurableSet (cthickening r S) :=
-    Metric.isClosed_cthickening.measurableSet
-  have hfC' :
-      ∀ᵐ y ∂(volume : Measure E), y ∈ cthickening r S →
-        (fun k => f k y) ∈ C := by
+  have hT : MeasurableSet (cthickening r S) := Metric.isClosed_cthickening.measurableSet
+  have hfC' : ∀ᵐ y ∂(volume : Measure E), y ∈ cthickening r S → (fun k => f k y) ∈ C := by
     exact (ae_restrict_iff' hT).mp hfC
-  have hae_mem :
-      ∀ᵐ y ∂P, (fun k => f k y) ∈ C := by
+  have hae_mem : ∀ᵐ y ∂P, (fun k => f k y) ∈ C := by
     rw [ae_withDensity_iff hρ_meas.ennreal_ofReal]
     filter_upwards [hfC'] with y hyT hyρ
-    exact hyT (hball_cthick (hρ_support (by
-      intro hzero
-      apply hyρ
-      simp [hzero])))
+    exact
+      hyT
+        (hball_cthick
+          (hρ_support
+            (by
+              intro hzero
+              apply hyρ
+              simp [hzero])))
   have hfi (k : ι) : Integrable (f k) P := by
     rw [integrable_withDensity_iff hρ_meas.ennreal_ofReal
-      (Eventually.of_forall fun y => ENNReal.ofReal_lt_top)]
-    have hi :=
-      (hf k).integrable_smul_left_of_hasCompactSupport hρ_cont hρ_comp
-    have hfun :
-        (fun y => f k y * (ENNReal.ofReal (ρ y)).toReal) =
-          (fun y => ρ y • f k y) := by
+        (Eventually.of_forall fun y => ENNReal.ofReal_lt_top)]
+    have hi := (hf k).integrable_smul_left_of_hasCompactSupport hρ_cont hρ_comp
+    have hfun : (fun y => f k y * (ENNReal.ofReal (ρ y)).toReal) = (fun y => ρ y • f k y) := by
       funext y
       rw [ENNReal.toReal_ofReal (hρ_nn y)]
       simp [smul_eq_mul, mul_comm]
@@ -666,40 +703,32 @@ theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProdu
     rw [integrable_pi_iff]
     intro k
     exact hfi k
-  have havg :
-      (∫ y, (fun k => f k y) ∂P) ∈ C :=
-    hCc.integral_mem hCcl hae_mem hvec_int
+  have havg : (∫ y, (fun k => f k y) ∂P) ∈ C := hCc.integral_mem hCcl hae_mem hvec_int
   have hcoord (k : ι) :
-      (∫ y, (fun j => f j y) ∂P) k =
-        convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x := by
-    have hproj :
-        (∫ y, (fun j => f j y) ∂P) k =
-          ∫ y, f k y ∂P := by
+    (∫ y, (fun j => f j y) ∂P) k =
+      convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x := by
+    have hproj : (∫ y, (fun j => f j y) ∂P) k = ∫ y, f k y ∂P := by
       let L : (ι → ℝ) →L[ℝ] ℝ := ContinuousLinearMap.proj k
       simpa [L] using (L.integral_comp_comm hvec_int).symm
     calc
       (∫ y, (fun j => f j y) ∂P) k = ∫ y, f k y ∂P := hproj
       _ = ∫ y, f k y * ρ y ∂(volume : Measure E) := by
         change
-          (∫ y, f k y ∂
-            (volume.withDensity (fun y => ENNReal.ofReal (ρ y)))) =
+          (∫ y, f k y ∂(volume.withDensity (fun y => ENNReal.ofReal (ρ y)))) =
             ∫ y, f k y * ρ y ∂(volume : Measure E)
-        rw [integral_withDensity_eq_integral_toReal_smul
-          hρ_meas.ennreal_ofReal
-          (Eventually.of_forall fun y => ENNReal.ofReal_lt_top)]
+        rw [integral_withDensity_eq_integral_toReal_smul hρ_meas.ennreal_ofReal
+            (Eventually.of_forall fun y => ENNReal.ofReal_lt_top)]
         apply integral_congr_ae
         filter_upwards [] with y
         rw [ENNReal.toReal_ofReal (hρ_nn y)]
         simp [smul_eq_mul, mul_comm]
-      _ = convolution (φ.normed volume) (f k)
-          (ContinuousLinearMap.lsmul ℝ ℝ) volume x := by
+      _ = convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x := by
         rw [convolution_eq_swap (ContinuousLinearMap.lsmul ℝ ℝ)]
         apply integral_congr_ae
         filter_upwards [] with y
         simp only [ρ, ContinuousLinearMap.lsmul_apply, smul_eq_mul]
         ring
-  have havg' :
-      (fun k => (∫ y, (fun j => f j y) ∂P) k) ∈ C := by
+  have havg' : (fun k => (∫ y, (fun j => f j y) ∂P) k) ∈ C := by
     change (∫ y, (fun k => f k y) ∂P) ∈ C
     exact havg
   simpa only [hcoord] using havg'

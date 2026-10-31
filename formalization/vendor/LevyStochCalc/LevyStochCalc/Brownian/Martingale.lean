@@ -5,10 +5,14 @@ Authors: Christian Garry
 -/
 -- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
 -- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
-import LevyStochCalc.Brownian.Continuity
-import LevyStochCalc.Martingale.RightCont
-import Mathlib.Probability.Martingale.Basic
-import Mathlib.Probability.ConditionalExpectation
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Continuity
+public import LevyStochCalc.Martingale.RightCont
+public import Mathlib.Probability.Martingale.Basic
+public import Mathlib.Probability.ConditionalExpectation
 
 /-!
 # Natural filtration, martingale property, quadratic variation
@@ -53,6 +57,8 @@ The conditional-expectation identities for Brownian increments live in
 right-continuous augmentation of the natural filtration in
 `LevyStochCalc.Brownian.MartingaleRightCont`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -127,8 +133,9 @@ lemma brownianMotion_memLp_2
     MeasureTheory.MemLp (W.W s) 2 P := by
   by_cases hs_neg : s < 0
   · -- s < 0: W_s = 0 a.s.
-    refine ⟨(W.measurable_eval s).aestronglyMeasurable, ?_⟩
-    rw [MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by simp)]
+    rw [MeasureTheory.memLp_iff,
+      MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by simp)
+        (W.measurable_eval s).aestronglyMeasurable]
     have h_zero : ∀ᵐ ω ∂P, ‖W.W s ω‖ₑ ^ ((2 : ℝ≥0∞).toReal) = 0 := by
       filter_upwards [W.negative_zero s hs_neg] with ω hω
       rw [hω]; simp
@@ -138,8 +145,9 @@ lemma brownianMotion_memLp_2
   have hs := hs_neg
   by_cases hs_zero : s = 0
   · subst hs_zero
-    refine ⟨(W.measurable_eval 0).aestronglyMeasurable, ?_⟩
-    rw [MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by simp)]
+    rw [MeasureTheory.memLp_iff,
+      MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by simp)
+        (W.measurable_eval 0).aestronglyMeasurable]
     have h_zero : ∀ᵐ ω ∂P, ‖W.W 0 ω‖ₑ ^ ((2 : ℝ≥0∞).toReal) = 0 := by
       filter_upwards [W.initial_zero] with ω hω
       rw [hω]; simp

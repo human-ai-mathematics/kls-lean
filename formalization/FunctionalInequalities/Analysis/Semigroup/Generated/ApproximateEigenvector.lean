@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Inverse
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Inverse
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 
 /-!
 # Approximate eigenvectors at the bottom of `T†T` on `(ker T)ᗮ`
@@ -21,6 +23,8 @@ This replaces a first eigenvector of `A` on `(ker T)ᗮ` in Bizeul–Klartag–L
 (arXiv:2610.05474v1), Section 3. No
 compactness and no spectral theorem are used, and no exact eigenvector is claimed to exist.
 -/
+
+@[expose] public section
 
 noncomputable section
 

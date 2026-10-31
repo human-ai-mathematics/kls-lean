@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Basic
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Basic
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
+public import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
 # Semigroup laws for the strong Yosida limit
@@ -15,6 +17,8 @@ Its norm bound and composition law are `norm_operator_le_one` and `operator_add_
 The generator and Markov properties are proved in `Generated/Generator.lean`
 and `Generated/Markov.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -105,18 +109,19 @@ theorem eq_apply_of_tendsto (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     linarith
   exact sub_eq_zero.mp (norm_eq_zero.mp (eq_zero_of_forall_pos_lt (norm_nonneg _) key))
 
-/-- **contraction**: `P_t` is a contraction, `‖P_t f‖ ≤ ‖f‖`.  The exponential bound (`norm_exp_neg_smul_apply_le` applied
+/--
+**contraction**: `P_t` is a contraction, `‖P_t f‖ ≤ ‖f‖`.  The exponential bound
+(`norm_exp_neg_smul_apply_le` applied
 to the nonnegative operator `L_s`) passes to the limit. -/
-theorem norm_apply_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
-    (hd : Dense (T.domain : Set H₀)) {t : ℝ} (ht : 0 ≤ t) (f : H₀) :
-    ‖Generated.apply T hT hd t f‖ ≤ ‖f‖ := by
+theorem norm_apply_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀))
+    {t : ℝ} (ht : 0 ≤ t) (f : H₀) : ‖Generated.apply T hT hd t f‖ ≤ ‖f‖ := by
   refine le_of_forall_pos_le_add fun ε hε => ?_
   obtain ⟨δ, hδ, h⟩ := Generated.yosida_limit T hT hd ht f hε
   have hs : 0 < δ / 2 := by linarith
   have e1 := h hs (by linarith : δ / 2 < δ)
   have e2 := norm_exp_neg_smul_apply_le (yosida T hT hs) (yosida_nonneg T hT hs) ht f
-  have e3 := norm_sub_norm_le (Generated.apply T hT hd t f)
-    (NormedSpace.exp (-t • yosida T hT hs) f)
+  have e3 :=
+    norm_sub_norm_le (Generated.apply T hT hd t f) (NormedSpace.exp (-t • yosida T hT hs) f)
   rw [norm_sub_rev] at e3
   linarith
 
@@ -229,13 +234,17 @@ theorem inner_exp_neg_smul_yosida (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
 
 namespace Generated
 
-/-- **symmetry**: `P_t` is symmetric, `⟪P_t f, g⟫ = ⟪f, P_t g⟫`.  Each `exp (-t • L_s)` is symmetric,
+/--
+**symmetry**: `P_t` is symmetric, `⟪P_t f, g⟫ = ⟪f, P_t g⟫`.  Each `exp (-t • L_s)` is symmetric,
 and the defect `⟪P_t f, g⟫ - ⟪f, P_t g⟫` is bounded by `ε * (‖g‖ + ‖f‖)` for every `ε > 0`. -/
-theorem symmetric (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
-    (hd : Dense (T.domain : Set H₀)) {t : ℝ} (ht : 0 ≤ t) (f g : H₀) :
+theorem symmetric (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}
+    (ht : 0 ≤ t) (f g : H₀) :
     ⟪Generated.apply T hT hd t f, g⟫ = ⟪f, Generated.apply T hT hd t g⟫ := by
-  have key : ∀ ε : ℝ, 0 < ε →
-      |⟪Generated.apply T hT hd t f, g⟫ - ⟪f, Generated.apply T hT hd t g⟫| ≤ ε * (‖g‖ + ‖f‖) := by
+  have key :
+    ∀ ε : ℝ,
+      0 < ε →
+        |⟪Generated.apply T hT hd t f, g⟫ - ⟪f, Generated.apply T hT hd t g⟫| ≤
+          ε * (‖g‖ + ‖f‖) := by
     intro ε hε
     obtain ⟨δ₁, hδ₁, h₁⟩ := Generated.yosida_limit T hT hd ht f hε
     obtain ⟨δ₂, hδ₂, h₂⟩ := Generated.yosida_limit T hT hd ht g hε
@@ -244,28 +253,33 @@ theorem symmetric (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     have hsm : min δ₁ δ₂ / 2 < min δ₁ δ₂ := by linarith
     have e1 := h₁ hs (lt_of_lt_of_le hsm (min_le_left _ _))
     have e2 := h₂ hs (lt_of_lt_of_le hsm (min_le_right _ _))
-    have hdec : ⟪Generated.apply T hT hd t f, g⟫ - ⟪f, Generated.apply T hT hd t g⟫
-        = ⟪Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f, g⟫
-          + ⟪f, NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g⟫ := by
+    have hdec :
+      ⟪Generated.apply T hT hd t f, g⟫ - ⟪f, Generated.apply T hT hd t g⟫ =
+        ⟪Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f, g⟫ +
+          ⟪f, NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g⟫ := by
       rw [inner_sub_left, inner_sub_right, inner_exp_neg_smul_yosida T hT hs t f g]
       ring
-    have b1 : |⟪Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f, g⟫|
-        ≤ ‖Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f‖ * ‖g‖ :=
+    have b1 :
+      |⟪Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f, g⟫| ≤
+        ‖Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f‖ * ‖g‖ :=
       abs_real_inner_le_norm _ _
-    have b2 : |⟪f, NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g⟫|
-        ≤ ‖f‖ * ‖NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g‖ :=
+    have b2 :
+      |⟪f, NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g⟫| ≤
+        ‖f‖ * ‖NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g‖ :=
       abs_real_inner_le_norm _ _
-    have hrev : ‖Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f‖
-        = ‖NormedSpace.exp (-t • yosida T hT hs) f - Generated.apply T hT hd t f‖ :=
+    have hrev :
+      ‖Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f‖ =
+        ‖NormedSpace.exp (-t • yosida T hT hs) f - Generated.apply T hT hd t f‖ :=
       norm_sub_rev _ _
-    have hm1 : ‖Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f‖ * ‖g‖
-        ≤ ε * ‖g‖ := by
+    have hm1 :
+      ‖Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f‖ * ‖g‖ ≤ ε * ‖g‖ := by
       rw [hrev]; exact mul_le_mul_of_nonneg_right e1.le (norm_nonneg g)
-    have hm2 : ‖f‖ * ‖NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g‖
-        ≤ ‖f‖ * ε := mul_le_mul_of_nonneg_left e2.le (norm_nonneg f)
-    have habs := abs_add_le
-      (⟪Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f, g⟫)
-      (⟪f, NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g⟫)
+    have hm2 :
+      ‖f‖ * ‖NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g‖ ≤ ‖f‖ * ε :=
+      mul_le_mul_of_nonneg_left e2.le (norm_nonneg f)
+    have habs :=
+      abs_add_le (⟪Generated.apply T hT hd t f - NormedSpace.exp (-t • yosida T hT hs) f, g⟫)
+        (⟪f, NormedSpace.exp (-t • yosida T hT hs) g - Generated.apply T hT hd t g⟫)
     rw [hdec]
     nlinarith
   exact sub_eq_zero.mp (abs_eq_zero.mp (eq_zero_of_forall_le_mul (abs_nonneg _) key))

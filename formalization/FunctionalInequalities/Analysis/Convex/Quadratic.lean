@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
 
 /-!
 # Quadratic functions and their differential calculus
@@ -7,6 +9,8 @@ Supporting interfaces for Letwin arXiv:2607.24164v1 Lemma 2.2 through
 Berman–Berndtsson arXiv:1207.6128v1 Theorem 2.24(ii). Each declaration retains
 its own hypotheses and scope; this layout does not assert further regularity.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -38,21 +42,23 @@ theorem quadraticAt_shift {n : ℕ}
   ring
 
 open scoped ContDiff in
-/-- One actual polynomial proof for ALL orders, shared by the C2 interface and classical C4 consumers. -/
-theorem contDiff_quadraticAt_all {n : ℕ} {k : ℕ∞ω}
-    (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) :
-    ContDiff ℝ k (quadraticAt A x₀ b c) := by
+/--
+One actual polynomial proof for ALL orders, shared by the C2 interface and classical C4 consumers.
+-/
+theorem contDiff_quadraticAt_all {n : ℕ} {k : ℕ∞ω} (A : Matrix (Fin n) (Fin n) ℝ)
+    (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) : ContDiff ℝ k (quadraticAt A x₀ b c) := by
   let T := (Matrix.toEuclideanLin A).toContinuousLinearMap
-  change ContDiff ℝ k
-    (fun x => c+inner ℝ b (x-x₀)+(1/2 : ℝ)*inner ℝ (x-x₀) (T (x-x₀)))
-  exact (contDiff_const.add
-    (contDiff_const.inner ℝ (contDiff_id.sub contDiff_const))).add
-    (contDiff_const.mul ((contDiff_id.sub contDiff_const).inner ℝ
-      (T.contDiff.comp (contDiff_id.sub contDiff_const))))
+  change
+    ContDiff ℝ k (fun x => c + inner ℝ b (x - x₀) + (1 / 2 : ℝ) * inner ℝ (x - x₀) (T (x - x₀)))
+  exact
+    (contDiff_const.add (contDiff_const.inner ℝ (contDiff_id.sub contDiff_const))).add
+      (contDiff_const.mul
+        ((contDiff_id.sub contDiff_const).inner ℝ
+          (T.contDiff.comp (contDiff_id.sub contDiff_const))))
 
 /-- `quadraticAt A x₀ b c` is smooth. -/
-theorem contDiff_quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n))
-    (c : ℝ) : ContDiff ℝ 2 (quadraticAt A x₀ b c) := by
+theorem contDiff_quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
+    (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) : ContDiff ℝ 2 (quadraticAt A x₀ b c) := by
   exact contDiff_quadraticAt_all A x₀ b c
 
 private lemma quadraticAt_fderiv_apply {n : ℕ}

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Jacobian
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Jacobian
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the coarea Jacobian
@@ -15,6 +17,8 @@ Reported below: the defining identity `J² = det (L ∘ Lᵀ)` on the target, th
 regular-set characterization `J ≠ 0 ↔ surjective differential`, and boundary cases (identity map,
 zero map, subsingleton target).
 -/
+
+@[expose] public section
 
 noncomputable section
 

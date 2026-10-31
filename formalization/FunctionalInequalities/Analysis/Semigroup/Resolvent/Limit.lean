@@ -1,12 +1,16 @@
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 
 /-!
 # Resolvent limits: `J_s → 1` as `s ↓ 0`, and commutation
 
 The module proves:
 
-* the quantitative resolvent bound, `norm_resolventCLM_sub_sq_le`: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s * ‖T f‖ ^ 2`;
-* strong resolvent convergence, `exists_delta_norm_resolventCLM_sub_lt`: `J_s → 1` strongly as `s ↓ 0`, in `ε`–`δ` form
+* the quantitative resolvent bound, `norm_resolventCLM_sub_sq_le`: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2
+  ≤ s * ‖T f‖ ^ 2`;
+* strong resolvent convergence, `exists_delta_norm_resolventCLM_sub_lt`: `J_s → 1` strongly as `s ↓
+  0`, in `ε`–`δ` form
   (`resolventCLM` carries the proof `0 < s` as an argument);
 * resolvent commutation, `resolventCLM_comp_comm`: the resolvents commute, `J_s J_r = J_r J_s`.
 
@@ -25,7 +29,8 @@ and the unique solvability of `Resolvent/Basic.lean`.  In particular:
 
 **The adjoint never appears.**  No declaration here refers to `LinearPMap.adjoint`, to
 `adjointComp` or to `adjointCompDomain`; the module does not import
-`FunctionalInequalities.Analysis.Semigroup.AdjointComp`, and it proves none of the identities from the
+`FunctionalInequalities.Analysis.Semigroup.AdjointComp`, and it proves none of the identities from
+the
 form identity to the resolvent defect identity.
 It also proves nothing about the adjoint-product identification or the semigroup limit (the Yosida
 exponentials, the semigroup laws, the generator), nothing about the Markov property or
@@ -34,16 +39,20 @@ material: no measure, no log-concavity, no KLS quantity.
 
 ## Sharper forms and hypotheses
 
-The quantitative resolvent bound is proved through the **sharper** `norm_resolventCLM_sub_sq_le_quarter`, with the constant
+The quantitative resolvent bound is proved through the **sharper**
+`norm_resolventCLM_sub_sq_le_quarter`, with the constant
 `s ‖T f‖ ^ 2 / 4` instead of `s ‖T f‖ ^ 2`.  The sharp form is the honest output of
 the computation `‖u - f‖ ^ 2 = -s ‖T u‖ ^ 2 + s ⟪T u, T f⟫ ≤ s ‖T f‖ ^ 2 / 4`; the weaker
 bound is kept as a wrapper.  The quantitative resolvent bound and resolvent commutation use
-closedness only through `resolventCLM`, strong resolvent convergence genuinely needs density, and completeness of `H₀`
+closedness only through `resolventCLM`, strong resolvent convergence genuinely needs density, and
+completeness of `H₀`
 and `H₁` is required for `resolventCLM` to exist at all.  Resolvent commutation could be routed
 through the resolvent identity `J_s - J_r = (r - s) J_s T†T J_r`; the proof here instead shows
 that `s • J_s f - r • J_r f + (r - s) • J_s (J_r f)` solves the weak equation with datum `0`,
 hence vanishes, which is the same identity with the adjoint removed.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -58,15 +67,18 @@ variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H�
 
 /-! ## the quantitative resolvent bound — quantitative convergence on the domain -/
 
-/-- The exact form of the quantitative resolvent bound's computation: testing the weak equation for `u = J_s f` against
+/--
+The exact form of the quantitative resolvent bound's computation: testing the weak equation for `u =
+J_s f` against
 `v = u - f ∈ D(T)` gives `‖u - f‖ ^ 2 = -s ‖T u‖ ^ 2 + s ⟪T u, T f⟫`.
 
-This is the only place where the weak equation is used in the proof of the quantitative resolvent bound. -/
+This is the only place where the weak equation is used in the proof of the quantitative resolvent
+bound. -/
 theorem norm_resolventCLM_sub_sq_eq (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs : 0 < s)
     (f : T.domain) :
-    ‖resolventCLM T hT hs f - f‖ ^ 2
-      = -(s * ‖T (resolventDomain T hT hs (f : H₀))‖ ^ 2)
-        + s * ⟪T (resolventDomain T hT hs (f : H₀)), T f⟫ := by
+    ‖resolventCLM T hT hs f - f‖ ^ 2 =
+      -(s * ‖T (resolventDomain T hT hs (f : H₀))‖ ^ 2) +
+        s * ⟪T (resolventDomain T hT hs (f : H₀)), T f⟫ := by
   set u := resolventDomain T hT hs (f : H₀) with hudef
   have h := resolventDomain_spec T hT hs (f : H₀) (u - f)
   have hcoe : ((u - f : T.domain) : H₀) = (u : H₀) - (f : H₀) := rfl
@@ -75,8 +87,9 @@ theorem norm_resolventCLM_sub_sq_eq (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClose
   simp only [inner_sub_right] at h
   have hsym : ⟪(f : H₀), (u : H₀)⟫ = ⟪(u : H₀), (f : H₀)⟫ := real_inner_comm _ _
   have hTself : ⟪T u, T u⟫ = ‖T u‖ ^ 2 := real_inner_self_eq_norm_sq _
-  have hself : ‖resolventCLM T hT hs f - (f : H₀)‖ ^ 2
-      = ⟪(u : H₀), (u : H₀)⟫ - 2 * ⟪(u : H₀), (f : H₀)⟫ + ⟪(f : H₀), (f : H₀)⟫ := by
+  have hself :
+    ‖resolventCLM T hT hs f - (f : H₀)‖ ^ 2 =
+      ⟪(u : H₀), (u : H₀)⟫ - 2 * ⟪(u : H₀), (f : H₀)⟫ + ⟪(f : H₀), (f : H₀)⟫ := by
     have hru : resolventCLM T hT hs (f : H₀) = (u : H₀) := rfl
     rw [hru, ← real_inner_self_eq_norm_sq]
     simp only [inner_sub_left, inner_sub_right, hsym]
@@ -85,20 +98,23 @@ theorem norm_resolventCLM_sub_sq_eq (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClose
   rw [hTself] at h
   linarith [hsym]
 
-/-- The quantitative resolvent bound, sharp form: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s ‖T f‖ ^ 2 / 4`.
+/--
+The quantitative resolvent bound, sharp form: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s ‖T f‖ ^ 2 / 4`.
 
 Sharper than `norm_resolventCLM_sub_sq_le` by the factor `4`: the computation
 `‖u - f‖ ^ 2 = -s ‖T u‖ ^ 2 + s ⟪T u, T f⟫` is closed by Cauchy–Schwarz and
 `s (‖T u‖ - ‖T f‖ / 2) ^ 2 ≥ 0`, so the bound `‖T u‖ ≤ ‖T f‖` is
 not needed. -/
 theorem norm_resolventCLM_sub_sq_le_quarter (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ}
-    (hs : 0 < s) (f : T.domain) :
-    ‖resolventCLM T hT hs f - f‖ ^ 2 ≤ s * ‖T f‖ ^ 2 / 4 := by
+    (hs : 0 < s) (f : T.domain) : ‖resolventCLM T hT hs f - f‖ ^ 2 ≤ s * ‖T f‖ ^ 2 / 4 := by
   have hkey := norm_resolventCLM_sub_sq_eq T hT hs f
-  have hcs : ⟪T (resolventDomain T hT hs (f : H₀)), T f⟫
-      ≤ ‖T (resolventDomain T hT hs (f : H₀))‖ * ‖T f‖ := real_inner_le_norm _ _
-  have h1 : s * ⟪T (resolventDomain T hT hs (f : H₀)), T f⟫
-      ≤ s * (‖T (resolventDomain T hT hs (f : H₀))‖ * ‖T f‖) :=
+  have hcs :
+    ⟪T (resolventDomain T hT hs (f : H₀)), T f⟫ ≤
+      ‖T (resolventDomain T hT hs (f : H₀))‖ * ‖T f‖ :=
+    real_inner_le_norm _ _
+  have h1 :
+    s * ⟪T (resolventDomain T hT hs (f : H₀)), T f⟫ ≤
+      s * (‖T (resolventDomain T hT hs (f : H₀))‖ * ‖T f‖) :=
     mul_le_mul_of_nonneg_left hcs hs.le
   have h2 : 0 ≤ s * (‖T (resolventDomain T hT hs (f : H₀))‖ - ‖T f‖ / 2) ^ 2 :=
     mul_nonneg hs.le (sq_nonneg _)
@@ -376,7 +392,8 @@ private theorem exists_tendsto_of_energy_cauchy {H : Type*} [NormedAddCommGroup 
   nlinarith [norm_nonneg (x n - x N), hη, le_abs_self (‖x n‖ ^ 2 - ‖x N‖ ^ 2)]
 
 /-- **Graph-norm convergence of the resolvent.** For `f ∈ D(T)` and every `ε > 0` there is
-`δ > 0` with `‖T (J_s f) - T f‖ < ε` for every `0 < s < δ`; together with the quantitative resolvent bound this says that
+`δ > 0` with `‖T (J_s f) - T f‖ < ε` for every `0 < s < δ`; together with the quantitative resolvent
+bound this says that
 `J_s f → f` in the graph norm of `T`, i.e. that `J_s f` approximates `f` in the form domain.
 
 Stated in `ε`–`δ` form because `resolventDomain` carries the proof `0 < s` as an argument.
@@ -384,14 +401,16 @@ Stated in `ε`–`δ` form because `resolventDomain` carries the proof `0 < s` a
 Proof.  Along `s_n = 1 / (n + 1)` the energies `‖T (J_{s_n} f)‖ ^ 2` are monotone
 (`norm_map_resolventDomain_sq_le_of_le`) and bounded by `‖T f‖ ^ 2`
 (`norm_map_resolventDomain_le`), and the increments control the distances
-(`norm_map_resolventDomain_sub_sq_le_sub`), so `T (J_{s_n} f)` converges in `H₁`; the quantitative resolvent bound makes
+(`norm_map_resolventDomain_sub_sq_le_sub`), so `T (J_{s_n} f)` converges in `H₁`; the quantitative
+resolvent bound makes
 `J_{s_n} f → f` in `H₀`, and **closedness of `T`** identifies the limit as `T f`.  Hence
 `‖T (J_{s_n} f)‖ → ‖T f‖`, and `norm_map_resolventDomain_sub_map_sq_le` with antitonicity of the
 energy transfers the resulting estimate from the sequence to every small `s`. -/
 theorem exists_delta_norm_map_resolventDomain_sub_map_lt (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (f : T.domain) {ε : ℝ} (hε : 0 < ε) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ →
-      ‖T (resolventDomain T hT hs (f : H₀)) - T f‖ < ε := by
+    ∃ δ : ℝ,
+      0 < δ ∧
+        ∀ {s : ℝ} (hs : 0 < s), s < δ → ‖T (resolventDomain T hT hs (f : H₀)) - T f‖ < ε := by
   have hpos : ∀ n : ℕ, (0 : ℝ) < 1 / ((n : ℝ) + 1) := fun n => by positivity
   have hanti : ∀ m n : ℕ, m ≤ n → 1 / ((n : ℝ) + 1) ≤ 1 / ((m : ℝ) + 1) := by
     intro m n hmn
@@ -399,33 +418,34 @@ theorem exists_delta_norm_map_resolventDomain_sub_map_lt (T : H₀ →ₗ.[ℝ] 
       have h := (Nat.cast_le (α := ℝ)).mpr hmn
       linarith
     exact one_div_le_one_div_of_le (by positivity) hmn'
-  obtain ⟨ξ, hξ⟩ := exists_tendsto_of_energy_cauchy
-    (fun n : ℕ => T (resolventDomain T hT (hpos n) (f : H₀))) (‖T f‖ ^ 2)
-    (monotone_nat_of_le_succ fun n =>
-      norm_map_resolventDomain_sq_le_of_le T hT (hpos (n + 1)) (hpos n)
-        (hanti n (n + 1) (Nat.le_succ n)) (f : H₀))
-    (fun n => by
-      have h := norm_map_resolventDomain_le T hT (hpos n) f
-      nlinarith [norm_nonneg (T (resolventDomain T hT (hpos n) (f : H₀))), norm_nonneg (T f)])
-    (fun m n hmn => norm_map_resolventDomain_sub_sq_le_sub T hT (hpos n) (hpos m)
-      (hanti m n hmn) (f : H₀))
-  have h₀ : Filter.Tendsto (fun n : ℕ => (resolventDomain T hT (hpos n) (f : H₀) : H₀))
-      Filter.atTop (nhds (f : H₀)) := by
+  obtain ⟨ξ, hξ⟩ :=
+    exists_tendsto_of_energy_cauchy (fun n : ℕ => T (resolventDomain T hT (hpos n) (f : H₀)))
+      (‖T f‖ ^ 2)
+      (monotone_nat_of_le_succ fun n =>
+        norm_map_resolventDomain_sq_le_of_le T hT (hpos (n + 1)) (hpos n)
+          (hanti n (n + 1) (Nat.le_succ n)) (f : H₀))
+      (fun n => by
+        have h := norm_map_resolventDomain_le T hT (hpos n) f
+        nlinarith [norm_nonneg (T (resolventDomain T hT (hpos n) (f : H₀))), norm_nonneg (T f)])
+      (fun m n hmn =>
+        norm_map_resolventDomain_sub_sq_le_sub T hT (hpos n) (hpos m) (hanti m n hmn) (f : H₀))
+  have h₀ :
+    Filter.Tendsto (fun n : ℕ => (resolventDomain T hT (hpos n) (f : H₀) : H₀)) Filter.atTop
+      (nhds (f : H₀)) := by
     refine Metric.tendsto_atTop.mpr fun η hη => ?_
-    obtain ⟨N, hN⟩ := exists_nat_one_div_lt
-      (show (0 : ℝ) < η ^ 2 / (‖T f‖ ^ 2 + 1) by positivity)
+    obtain ⟨N, hN⟩ :=
+      exists_nat_one_div_lt (show (0 : ℝ) < η ^ 2 / (‖T f‖ ^ 2 + 1) by positivity)
     refine ⟨N, fun n hn => ?_⟩
     have hCpos : (0 : ℝ) < ‖T f‖ ^ 2 + 1 := by positivity
     have h1 : (1 : ℝ) / ((n : ℝ) + 1) ≤ 1 / ((N : ℝ) + 1) := hanti N n hn
     have h2 := norm_resolventCLM_sub_sq_le_quarter T hT (hpos n) f
     rw [resolventCLM_apply] at h2
-    have h4 : (1 : ℝ) / ((N : ℝ) + 1) < η ^ 2 / (‖T f‖ ^ 2 + 1) := by
-      simpa using hN
+    have h4 : (1 : ℝ) / ((N : ℝ) + 1) < η ^ 2 / (‖T f‖ ^ 2 + 1) := by simpa using hN
     have h5 : (1 : ℝ) / ((n : ℝ) + 1) * (‖T f‖ ^ 2 + 1) < η ^ 2 :=
       (lt_div_iff₀ hCpos).mp (lt_of_le_of_lt h1 h4)
     rw [dist_eq_norm]
-    nlinarith [norm_nonneg ((resolventDomain T hT (hpos n) (f : H₀) : H₀) - (f : H₀)), hη, h2, h5,
-      hpos n, sq_nonneg ‖T f‖]
+    nlinarith [norm_nonneg ((resolventDomain T hT (hpos n) (f : H₀) : H₀) - (f : H₀)), hη, h2,
+      h5, hpos n, sq_nonneg ‖T f‖]
   have hgraph : ((f : H₀), ξ) ∈ T.graph := by
     refine hT.mem_of_tendsto (h₀.prodMk_nhds hξ) (Filter.Eventually.of_forall fun n => ?_)
     exact T.mem_graph _
@@ -435,18 +455,18 @@ theorem exists_delta_norm_map_resolventDomain_sub_map_lt (T : H₀ →ₗ.[ℝ] 
     have hy2' : T y = ξ := hy2
     rw [← Subtype.ext hy1' (α := H₀)]
     exact hy2'
-  have hnorm : Filter.Tendsto
-      (fun n : ℕ => ‖T f‖ ^ 2 - ‖T (resolventDomain T hT (hpos n) (f : H₀))‖ ^ 2)
+  have hnorm :
+    Filter.Tendsto (fun n : ℕ => ‖T f‖ ^ 2 - ‖T (resolventDomain T hT (hpos n) (f : H₀))‖ ^ 2)
       Filter.atTop (nhds 0) := by
-    have hn2 : Filter.Tendsto
-        (fun n : ℕ => ‖T (resolventDomain T hT (hpos n) (f : H₀))‖ ^ 2)
+    have hn2 :
+      Filter.Tendsto (fun n : ℕ => ‖T (resolventDomain T hT (hpos n) (f : H₀))‖ ^ 2)
         Filter.atTop (nhds (‖T f‖ ^ 2)) := by
       rw [hTf]
       exact hξ.norm.pow 2
     have h := (tendsto_const_nhds (x := ‖T f‖ ^ 2) (f := Filter.atTop (α := ℕ))).sub hn2
     rwa [sub_self] at h
-  obtain ⟨N, hN⟩ : ∃ N : ℕ,
-      ‖T f‖ ^ 2 - ‖T (resolventDomain T hT (hpos N) (f : H₀))‖ ^ 2 < ε ^ 2 := by
+  obtain ⟨N, hN⟩ :
+    ∃ N : ℕ, ‖T f‖ ^ 2 - ‖T (resolventDomain T hT (hpos N) (f : H₀))‖ ^ 2 < ε ^ 2 := by
     obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp hnorm (ε ^ 2) (by positivity)
     refine ⟨N, ?_⟩
     have h := hN N le_rfl

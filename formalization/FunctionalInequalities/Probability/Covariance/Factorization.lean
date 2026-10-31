@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.Covariance.Basic
-import FunctionalInequalities.Probability.Support.Affine
-import Mathlib.Analysis.InnerProductSpace.Spectrum
+module
+
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import FunctionalInequalities.Probability.Support.Affine
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!
 # Norm factorizations of positive semidefinite quadratic forms
@@ -20,6 +22,8 @@ no functional-calculus square root is introduced. The zero-dimensional space is 
 `B = 0`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open InnerProductSpace
@@ -28,10 +32,11 @@ namespace FunctionalInequalities
 
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
 
-/-- A symmetric operator with nonnegative quadratic form has a continuous linear norm factor satisfying `⟪T v, v⟫ = ‖B v‖²`. -/
-theorem exists_norm_sq_eq_inner_of_isSymmetric (T : V →L[ℝ] V)
-    (hT : T.toLinearMap.IsSymmetric) (hpos : ∀ v, 0 ≤ inner ℝ (T v) v) :
-    ∃ B : V →L[ℝ] V, ∀ v, inner ℝ (T v) v = ‖B v‖ ^ 2 := by
+/--
+A symmetric operator with nonnegative quadratic form has a continuous linear norm factor satisfying
+`⟪T v, v⟫ = ‖B v‖²`. -/
+theorem exists_norm_sq_eq_inner_of_isSymmetric (T : V →L[ℝ] V) (hT : T.toLinearMap.IsSymmetric)
+    (hpos : ∀ v, 0 ≤ inner ℝ (T v) v) : ∃ B : V →L[ℝ] V, ∀ v, inner ℝ (T v) v = ‖B v‖ ^ 2 := by
   set e := hT.eigenvectorBasis rfl with he
   set lam := hT.eigenvalues rfl with hlam
   have hTe : ∀ i, T (e i) = lam i • e i := fun i ↦ hT.apply_eigenvectorBasis rfl i
@@ -39,14 +44,17 @@ theorem exists_norm_sq_eq_inner_of_isSymmetric (T : V →L[ℝ] V)
     intro i
     have h2 := hpos (e i)
     rw [hTe i, real_inner_smul_left, real_inner_self_eq_norm_sq, e.orthonormal.1 i] at h2
-    simpa using h2
+    simpa using
+      h2
   -- `B v = ∑ i, √(lam i) * ⟪e i, v⟫ • e i`
+
   let B : V →L[ℝ] V := ∑ i, Real.sqrt (lam i) • (innerSL ℝ (e i)).smulRight (e i)
   refine ⟨B, fun v ↦ ?_⟩
   have hB : B v = ∑ i, (Real.sqrt (lam i) * inner ℝ (e i) v) • e i := by
     simp only [B, sum_apply, smul_apply, ContinuousLinearMap.smulRight_apply, smul_smul]
     rfl
   -- `T v = ∑ i, lam i * ⟪e i, v⟫ • e i`
+
   have hTv : T v = ∑ i, (lam i * inner ℝ (e i) v) • e i := by
     conv_lhs => rw [← e.sum_repr' v]
     rw [map_sum]
@@ -92,7 +100,9 @@ variable [SecondCountableTopology V]
 /-- The quadratic form of the intrinsic covariance admits a norm factorization. -/
 theorem exists_intrinsic_inner_eq_norm_sq (μ : MeasureTheory.ProbabilityMeasure V) :
     ∃ B : (Probability.affineSupport μ).direction →L[ℝ] (Probability.affineSupport μ).direction,
-      ∀ v, inner ℝ (operator (Probability.intrinsicMeasure μ : MeasureTheory.Measure _) v) v = ‖B v‖ ^ 2 :=
+      ∀ v,
+        inner ℝ (operator (Probability.intrinsicMeasure μ : MeasureTheory.Measure _) v) v =
+          ‖B v‖ ^ 2 :=
   exists_inner_eq_norm_sq _
 
 end Intrinsic

@@ -1,6 +1,8 @@
-import Mathlib.Analysis.Calculus.ContDiff.Comp
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Topology.UniformSpace.HeineCantor
+module
+
+public import Mathlib.Analysis.Calculus.ContDiff.Comp
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Topology.UniformSpace.HeineCantor
 
 /-! # Uniform remainders at flat points
 
@@ -8,6 +10,8 @@ Compactness makes the remainder estimate uniform in the base point.
 The nearby evaluation point need not belong to the compact set.
 The order-`n` statement is proved by induction on the derivative, so the quadratic case is a
 corollary rather than a separate argument. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -44,20 +48,19 @@ section NormedSpace
 variable [NormedSpace ℝ F]
 
 /-- One mean-value step: a power bound on the derivative over a ball raises the power. -/
-private lemma norm_sub_le_of_norm_fderiv_pow_le {f : V → F} (hf : Differentiable ℝ f) {x : V} {δ C : ℝ} (hC : 0 ≤ C)
-    {m : ℕ} (h : ∀ z ∈ ball x δ, ‖fderiv ℝ f z‖ ≤ C * ‖z - x‖ ^ m)
-    {y : V} (hy : ‖y - x‖ < δ) :
-    ‖f y - f x‖ ≤ C * ‖y - x‖ ^ (m + 1) := by
+private lemma norm_sub_le_of_norm_fderiv_pow_le {f : V → F} (hf : Differentiable ℝ f) {x : V}
+    {δ C : ℝ} (hC : 0 ≤ C) {m : ℕ} (h : ∀ z ∈ ball x δ, ‖fderiv ℝ f z‖ ≤ C * ‖z - x‖ ^ m)
+    {y : V} (hy : ‖y - x‖ < δ) : ‖f y - f x‖ ≤ C * ‖y - x‖ ^ (m + 1) := by
   have hbound : ∀ z ∈ segment ℝ x y, ‖fderiv ℝ f z‖ ≤ C * ‖y - x‖ ^ m := by
     intro z hz
     have hn := norm_sub_le_of_mem_segment hz
-    have hzb : z ∈ ball x δ := by
-      simpa [mem_ball, dist_eq_norm] using hn.trans_lt hy
-    exact (h z hzb).trans
-      (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (norm_nonneg _) hn m) hC)
-  have hmv := (convex_segment x y).norm_image_sub_le_of_norm_fderiv_le
-    (fun z _ ↦ hf z) hbound (left_mem_segment ℝ x y) (right_mem_segment ℝ x y)
-  calc ‖f y - f x‖ ≤ C * ‖y - x‖ ^ m * ‖y - x‖ := hmv
+    have hzb : z ∈ ball x δ := by simpa [mem_ball, dist_eq_norm] using hn.trans_lt hy
+    exact (h z hzb).trans (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (norm_nonneg _) hn m) hC)
+  have hmv :=
+    (convex_segment x y).norm_image_sub_le_of_norm_fderiv_le (fun z _ ↦ hf z) hbound
+      (left_mem_segment ℝ x y) (right_mem_segment ℝ x y)
+  calc
+    ‖f y - f x‖ ≤ C * ‖y - x‖ ^ m * ‖y - x‖ := hmv
     _ = C * ‖y - x‖ ^ (m + 1) := by ring
 
 /-- The inductive step: a uniform order-`m` bound for `fderiv f` gives the order-`m+1` bound

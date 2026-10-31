@@ -1,16 +1,29 @@
-import Lean
-import FunctionalInequalities.Analysis.WaveSplitting.AverageError
-import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
-import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
-import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
-import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import Lean
+public import FunctionalInequalities.Analysis.WaveSplitting.AverageError
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
+public import FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
+public import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+meta import Lean
+import all FunctionalInequalities.Analysis.WaveSplitting.Compatibility
+import all FunctionalInequalities.Analysis.WaveSplitting.AverageError
+import all FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+import all FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
+import all FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
+import all FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
+import all FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
+import all FunctionalInequalities.Analysis.Convex.Caffarelli.MomentRegularity
 
 /-! The lower private copies are public declarations of modules already in every
 consumer's import closure; the higher private copies and the two public Mathlib duplicates
 are absent. The contracts below restate the removed statements with their original
 hypotheses (no completeness, finite dimension or measure assumption added). -/
+
+@[expose] public section
 set_option maxHeartbeats 0 in
 run_cmd do
   let removed : Array String := #[

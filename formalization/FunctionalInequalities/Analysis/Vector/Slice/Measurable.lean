@@ -1,9 +1,11 @@
-import FunctionalInequalities.Analysis.MeasurableCover
-import FunctionalInequalities.Analysis.Hausdorff.Content
-import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
-import FunctionalInequalities.Analysis.Hausdorff.Volume
-import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
-import FunctionalInequalities.Analysis.Graph.OpenIntegral
+module
+
+public import FunctionalInequalities.Analysis.MeasurableCover
+public import FunctionalInequalities.Analysis.Hausdorff.Content
+public import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+public import FunctionalInequalities.Analysis.Hausdorff.Volume
+public import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
+public import FunctionalInequalities.Analysis.Graph.OpenIntegral
 
 /-!
 # Compact slices and weighted slice measurability in codimension `m`
@@ -21,7 +23,8 @@ else in the proof changes.  A countable supremum of upper semicontinuous functio
 which gives `measurable_hausdorffMeasure_inter_levelSet_vector`.
 
 With the Eilenberg inequality of `Analysis/Vector/Slice/Hausdorff.lean` this completes the chain the
-coarea route needs, exactly as `Analysis/Hausdorff/SurfaceSlicing.lean` does in codimension one: inner
+coarea route needs, exactly as `Analysis/Hausdorff/SurfaceSlicing.lean` does in codimension one:
+inner
 regularity exhausts a Borel set by compacts up to a Lebesgue-null remainder, the compact pieces are
 handled by upper semicontinuity and the remainder by null slicing, and increasing simple functions
 carry the result to an arbitrary measurable weight.  The conclusion,
@@ -31,6 +34,8 @@ regularity hypothesis on `u`** — only a Lipschitz bound on the set.
 **No coarea formula is proved here**, and nothing about the critical set: what this removes is the
 regularity hypothesis from the *measurability* half, not from the coarea equality.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -223,14 +228,16 @@ theorem aemeasurable_setLIntegral_inter_levelSet_vector {u : V → W} {K : ℝ�
   rw [hsup]
   exact AEMeasurable.iSup hstep
 
-/-- **Weighted slices on an open `C¹` domain are almost everywhere measurable, in codimension `m`,
+/--
+**Weighted slices on an open `C¹` domain are almost everywhere measurable, in codimension `m`,
 with no regularity hypothesis.**  The map is `C¹` on the open set only, and the Borel set is any
 measurable subset of it; local `C¹` representatives and disjoint Borel pieces reduce the statement
 to the Lipschitz-on-a-set form above.
 
 This is the codimension-`m` analogue of
 `KLS.aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn`.  **It asserts no coarea equality**,
-and unlike the chart route of `Analysis/Vector/Coarea/Regular.lean` it needs **no surjectivity of the
+and unlike the chart route of `Analysis/Vector/Coarea/Regular.lean` it needs **no surjectivity of
+the
 differential**: the critical part of `O` is covered by the statement. -/
 theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector {O S : Set V} {u : V → W}
     {g : V → ℝ≥0∞} {k : ℕ} (hk : k + finrank ℝ W = finrank ℝ V) (hO : IsOpen O)
@@ -240,8 +247,7 @@ theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector {O S : Set
   classical
   rcases S.eq_empty_or_nonempty with hSe | ⟨z₀, hz₀⟩
   · simp [hSe]
-  choose ρ w hρ hballO hwC hwEq using fun z : O =>
-    Analysis.exists_contDiff_eqOn_ball hO hu z.2
+  choose ρ w hρ hballO hwC hwEq using fun z : O => Analysis.exists_contDiff_eqOn_ball hO hu z.2
   obtain ⟨σ, P, hPmeas, hPdisj, hPunion, hPsub⟩ :=
     Analysis.exists_measurable_partition_subordinate hS hSO ⟨z₀, hz₀⟩
       (fun z : O => Metric.ball (z : V) (ρ z)) (fun _ => Metric.isOpen_ball)
@@ -249,20 +255,25 @@ theorem aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector {O S : Set
   have hslice : ∀ n t, P n ∩ {x | u x = t} = P n ∩ {x | w (σ n) x = t} := by
     intro n t
     ext x
-    constructor <;> rintro ⟨hx, ht⟩ <;>
-      exact ⟨hx, by simpa [hwEq (σ n) (hPsub n hx)] using ht⟩
-  have hm : ∀ n, AEMeasurable
-      (fun t : W => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
-      (volume : Measure W) := by
+    constructor <;> rintro ⟨hx, ht⟩ <;> exact ⟨hx, by simpa [hwEq (σ n) (hPsub n hx)] using ht⟩
+  have hm :
+    ∀ n,
+      AEMeasurable
+        (fun t : W => ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
+        (volume : Measure W) := by
     intro n
-    obtain ⟨L, hL⟩ := (hwC (σ n)).contDiffOn.exists_lipschitzOnWith
-      (by simp) (convex_closedBall ((σ n : O) : V) (ρ (σ n)))
-      (isCompact_closedBall ((σ n : O) : V) (ρ (σ n)))
+    obtain ⟨L, hL⟩ :=
+      (hwC (σ n)).contDiffOn.exists_lipschitzOnWith (by simp)
+        (convex_closedBall ((σ n : O) : V) (ρ (σ n)))
+        (isCompact_closedBall ((σ n : O) : V) (ρ (σ n)))
     simp_rw [hslice]
-    exact aemeasurable_setLIntegral_inter_levelSet_vector hk (hwC (σ n)).continuous
-      (hL.mono fun x hx => Metric.ball_subset_closedBall (hPsub n hx)) (hPmeas n) hg
-  have heq : ∀ t, (∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k))
-      = ∑' n, ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k) := by
+    exact
+      aemeasurable_setLIntegral_inter_levelSet_vector hk (hwC (σ n)).continuous
+        (hL.mono fun x hx => Metric.ball_subset_closedBall (hPsub n hx)) (hPmeas n) hg
+  have heq :
+    ∀ t,
+      (∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k)) =
+        ∑' n, ∫⁻ y in P n ∩ {x | u x = t}, g y ∂(KLS.hausdorffNormalized V k) := by
     intro t
     rw [← hPunion, Set.iUnion_inter]
     apply lintegral_iUnion

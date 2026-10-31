@@ -1,8 +1,10 @@
-import FunctionalInequalities.Energy.Relaxation.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Basic
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import FunctionalInequalities.Energy.Relaxation.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Smooth-gradient pre-energy on a finite-dimensional real Hilbert space
@@ -19,6 +21,8 @@ energy; the first two are proved in companion modules. For singular measures, ag
 relaxation with every raw ambient-gradient test remains a separate fiber-consistency or core
 question, even though the relaxed functional itself is closed quadratic.
 -/
+
+@[expose] public section
 
 noncomputable section
 

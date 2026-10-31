@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
+module
+
+public import FunctionalInequalities.Energy.Cheeger.Basic
+public import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 
 /-!
 # Cheeger energy identification for log-concave laws
@@ -8,6 +10,8 @@ The intrinsic absolute-continuity theorem supplies the input to the generic comp
 The public statement and namespace are preserved. For the stronger arbitrary-law identity,
 see `Energy/Cheeger/Identification.lean`; this module adds no finiteness or Poincaré estimate.
 -/
+
+@[expose] public section
 
 noncomputable section
 

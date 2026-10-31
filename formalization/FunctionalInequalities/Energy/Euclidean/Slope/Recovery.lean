@@ -1,18 +1,23 @@
-import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
+module
+
+public import FunctionalInequalities.Energy.Cheeger.Basic
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 
 /-!
 # Smooth recovery of a globally Lipschitz test, and the reduction tools
 
-Read `SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith` (smooth recovery) for the main
+Read `SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith` (smooth recovery) for the
+main
 contract, then the four reduction tools `locallyLipschitz_mul` (the local Lipschitz product rule),
-`exists_lipschitzWith_of_eq_zero_outside_ball` (the bounded-support Lipschitz bound), `AsymptoticLipschitz.apply_mul_le` (the asymptotic-Lipschitz product bound)
+`exists_lipschitzWith_of_eq_zero_outside_ball` (the bounded-support Lipschitz bound),
+`AsymptoticLipschitz.apply_mul_le` (the asymptotic-Lipschitz product bound)
 and `LocalSlope.apply_mul_le` (the local-slope product bound).
 
 ## What is proved
 
 smooth recovery.  For a globally `K`-Lipschitz `g` the mollifications `g ⋆ ρ_R` of
-`Energy/Euclidean/LipschitzApproximation/Kernel.lean` are `C^∞`, uniformly `K`-Lipschitz, converge to
+`Energy/Euclidean/LipschitzApproximation/Kernel.lean` are `C^∞`, uniformly `K`-Lipschitz, converge
+to
 `g` uniformly (hence in `L²(ν)` for every probability law `ν`), and satisfy the pointwise bound
 `limsup_{R → 0} ‖∇(g ⋆ ρ_R)(x)‖ ≤ Lip_a g (x)`: the mollification at `x` sees `g` only within
 `2R`, so on the ball of radius `δ` it inherits the Lipschitz constant of `g` on the ball of
@@ -33,6 +38,8 @@ No density statement: the mollification radius is uniform in `x`, which is genui
 for a general locally Lipschitz test.  The density
 argument is `Energy/Euclidean/Slope/Density.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -189,18 +196,23 @@ end Metric
 
 end AsymptoticLipschitz
 
-/-! ### the local Lipschitz product rule, the bounded-support Lipschitz bound — the two Lipschitz reduction tools -/
+/-!
+### Local Lipschitz products and bounded-support estimates
+
+The local Lipschitz product rule and the bounded-support Lipschitz bound are the two reduction tools.
+-/
 
 section Reduction
 
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [InnerProductSpace ℝ V] in
-/-- the local Lipschitz product rule.  A locally Lipschitz function times a bounded globally Lipschitz one is locally
+/--
+the local Lipschitz product rule.  A locally Lipschitz function times a bounded globally Lipschitz
+one is locally
 Lipschitz. -/
 theorem locallyLipschitz_mul {g h : V → ℝ} {N : ℝ≥0} (hg : LocallyLipschitz g)
-    (hh : LipschitzWith N h) (hh1 : ∀ x, |h x| ≤ 1) :
-    LocallyLipschitz (fun x ↦ g x * h x) := by
+    (hh : LipschitzWith N h) (hh1 : ∀ x, |h x| ≤ 1) : LocallyLipschitz (fun x ↦ g x * h x) := by
   intro x
   obtain ⟨K, t, ht, hK⟩ := hg x
   obtain ⟨r, hr, hrt⟩ := Metric.mem_nhds_iff.mp ht
@@ -211,15 +223,14 @@ theorem locallyLipschitz_mul {g h : V → ℝ} {N : ℝ≥0} (hg : LocallyLipsch
   have hbound : ∀ y ∈ s, |g y| ≤ |g x| + K := by
     intro y hy
     have : dist (g y) (g x) ≤ K * dist y x := hKs.dist_le_mul y hy x hxs
-    have hd : dist y x < 1 := lt_of_lt_of_le (by simpa [hs, Metric.mem_ball] using hy)
-      (min_le_right _ _)
+    have hd : dist y x < 1 :=
+      lt_of_lt_of_le (by simpa [hs, Metric.mem_ball] using hy) (min_le_right _ _)
     have : |g y - g x| ≤ K * dist y x := by simpa [Real.dist_eq] using this
     have h2 : |g y| ≤ |g x| + K * dist y x := by
       have := abs_sub_abs_le_abs_sub (g y) (g x)
       linarith [abs_nonneg (g x)]
     refine h2.trans ?_
-    have : K * dist y x ≤ K * 1 := by
-      exact mul_le_mul_of_nonneg_left hd.le K.coe_nonneg
+    have : K * dist y x ≤ K * 1 := by exact mul_le_mul_of_nonneg_left hd.le K.coe_nonneg
     linarith
   refine ⟨(K + (|g x| + K) * N).toNNReal, s, Metric.isOpen_ball.mem_nhds hxs, ?_⟩
   refine LipschitzOnWith.of_dist_le_mul fun y hy z hz ↦ ?_
@@ -227,30 +238,32 @@ theorem locallyLipschitz_mul {g h : V → ℝ} {N : ℝ≥0} (hg : LocallyLipsch
   rw [Real.coe_toNNReal _ hCnn]
   have hgyz : |g y - g z| ≤ K * dist y z := by
     simpa [Real.dist_eq] using hKs.dist_le_mul y hy z hz
-  have hhyz : |h y - h z| ≤ N * dist y z := by
-    simpa [Real.dist_eq] using hh.dist_le_mul y z
+  have hhyz : |h y - h z| ≤ N * dist y z := by simpa [Real.dist_eq] using hh.dist_le_mul y z
   have hkey : g y * h y - g z * h z = (g y - g z) * h y + g z * (h y - h z) := by ring
   have h1 : |(g y - g z) * h y| ≤ K * dist y z := by
     rw [abs_mul]
-    calc |g y - g z| * |h y| ≤ (K * dist y z) * 1 := by
-          apply mul_le_mul hgyz (hh1 y) (abs_nonneg _)
-          positivity
+    calc
+      |g y - g z| * |h y| ≤ (K * dist y z) * 1 := by
+        apply mul_le_mul hgyz (hh1 y) (abs_nonneg _)
+        positivity
       _ = K * dist y z := by ring
   have h2 : |g z * (h y - h z)| ≤ (|g x| + K) * (N * dist y z) := by
     rw [abs_mul]
     exact mul_le_mul (hbound z hz) hhyz (abs_nonneg _) (by positivity)
-  calc dist (g y * h y) (g z * h z) = |(g y - g z) * h y + g z * (h y - h z)| := by
-        rw [Real.dist_eq, hkey]
+  calc
+    dist (g y * h y) (g z * h z) = |(g y - g z) * h y + g z * (h y - h z)| := by
+      rw [Real.dist_eq, hkey]
     _ ≤ |(g y - g z) * h y| + |g z * (h y - h z)| := abs_add_le _ _
     _ ≤ K * dist y z + (|g x| + K) * (N * dist y z) := add_le_add h1 h2
     _ = (K + (|g x| + K) * N) * dist y z := by ring
 
 variable [FiniteDimensional ℝ V]
 
-/-- the bounded-support Lipschitz bound.  A locally Lipschitz function vanishing outside a ball is globally Lipschitz. -/
+/--
+the bounded-support Lipschitz bound.  A locally Lipschitz function vanishing outside a ball is
+globally Lipschitz. -/
 theorem exists_lipschitzWith_of_eq_zero_outside_ball {g : V → ℝ} {R : ℝ}
-    (hg : LocallyLipschitz g) (hR : ∀ x, R ≤ ‖x‖ → g x = 0) :
-    ∃ K : ℝ≥0, LipschitzWith K g := by
+    (hg : LocallyLipschitz g) (hR : ∀ x, R ≤ ‖x‖ → g x = 0) : ∃ K : ℝ≥0, LipschitzWith K g := by
   rcases le_or_gt R 0 with hR0 | hR0
   · refine ⟨0, LipschitzWith.of_dist_le_mul fun y z ↦ ?_⟩
     rw [hR y (hR0.trans (norm_nonneg y)), hR z (hR0.trans (norm_nonneg z))]
@@ -264,8 +277,12 @@ theorem exists_lipschitzWith_of_eq_zero_outside_ball {g : V → ℝ} {R : ℝ}
   have hMbound : ∀ x, |g x| ≤ M := by
     intro x
     rcases le_or_gt ‖x‖ (R + 1) with hx | hx
-    · exact le_trans (by simpa [Real.norm_eq_abs] using hM₀ x (by simpa [hS, Metric.mem_closedBall,
-        dist_zero_right] using hx)) (le_max_left _ _)
+    · exact
+        le_trans
+          (by
+            simpa [Real.norm_eq_abs] using
+              hM₀ x (by simpa [hS, Metric.mem_closedBall, dist_zero_right] using hx))
+          (le_max_left _ _)
     · rw [hR x (by linarith)]
       simpa using hM0
   refine ⟨(max (K : ℝ) (2 * M)).toNNReal, LipschitzWith.of_dist_le_mul fun y z ↦ ?_⟩
@@ -283,25 +300,31 @@ theorem exists_lipschitzWith_of_eq_zero_outside_ball {g : V → ℝ} {R : ℝ}
           rw [dist_comm, dist_eq_norm]
           exact le_trans (by linarith [norm_sub_norm_le z y]) le_rfl
         linarith
-      calc dist (g y) (g z) = |g y| := by rw [hgz]; simp
+      calc
+        dist (g y) (g z) = |g y| := by rw [hgz]; simp
         _ ≤ M := hMbound y
         _ ≤ 2 * M * dist y z := by nlinarith
         _ ≤ max (K : ℝ) (2 * M) * dist y z := by
-            apply mul_le_mul_of_nonneg_right (le_max_right _ _) dist_nonneg
+          apply mul_le_mul_of_nonneg_right (le_max_right _ _) dist_nonneg
   rcases le_or_gt ‖y‖ (R + 1) with hy | hy
   · rcases le_or_gt ‖z‖ (R + 1) with hz | hz
-    · calc dist (g y) (g z) ≤ K * dist y z :=
-            hK.dist_le_mul y (by simpa [hS, Metric.mem_closedBall, dist_zero_right] using hy)
-              z (by simpa [hS, Metric.mem_closedBall, dist_zero_right] using hz)
+    · calc
+        dist (g y) (g z) ≤ K * dist y z :=
+          hK.dist_le_mul y (by simpa [hS, Metric.mem_closedBall, dist_zero_right] using hy) z
+            (by simpa [hS, Metric.mem_closedBall, dist_zero_right] using hz)
         _ ≤ max (K : ℝ) (2 * M) * dist y z :=
-            mul_le_mul_of_nonneg_right (le_max_left _ _) dist_nonneg
+          mul_le_mul_of_nonneg_right (le_max_left _ _) dist_nonneg
     · exact key y z hz
   · rw [dist_comm (g y) (g z), dist_comm y z]
     exact key z y hy
 
 end Reduction
 
-/-! ### the asymptotic-Lipschitz product bound, the local-slope product bound — the one-moving-point Leibniz bounds -/
+/-!
+### Asymptotic-Lipschitz and local-slope product bounds
+
+These are the one-moving-point Leibniz bounds.
+-/
 
 namespace AsymptoticLipschitz
 
@@ -310,11 +333,12 @@ section Leibniz
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [InnerProductSpace ℝ V] in
-/-- the asymptotic-Lipschitz product bound.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| · N` in the
+/--
+the asymptotic-Lipschitz product bound.  Multiplying by a bounded `N`-Lipschitz factor costs at most
+`|g x| · N` in the
 asymptotic Lipschitz constant. -/
-theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
-    (hh1 : ∀ y, |h y| ≤ 1) (x : V) :
-    apply (fun y ↦ g y * h y) x ≤ apply g x + ENNReal.ofReal |g x| * N := by
+theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h) (hh1 : ∀ y, |h y| ≤ 1)
+    (x : V) : apply (fun y ↦ g y * h y) x ≤ apply g x + ENNReal.ofReal |g x| * N := by
   refine ENNReal.le_of_forall_pos_le_add fun ε hε hlt ↦ ?_
   have hA : apply g x ≠ ⊤ := by
     intro htop
@@ -332,8 +356,10 @@ theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
   set r : ℝ := min r₁ (η / ((a + η) * (N : ℝ) + 1)) with hr_def
   have hr0 : 0 < r := lt_min hr₁ (by positivity)
   have hrle : r ≤ r₁ := min_le_left _ _
-  have hkey : ∀ y z : V, dist y x < r → dist z x < r →
-      dist (g y * h y) (g z * h z) ≤ (a + |g x| * N + (ε : ℝ)) * dist y z := by
+  have hkey :
+    ∀ y z : V,
+      dist y x < r →
+        dist z x < r → dist (g y * h y) (g z * h z) ≤ (a + |g x| * N + (ε : ℝ)) * dist y z := by
     intro y z hy hz
     have hgyz : dist (g y) (g z) ≤ (a + η) * dist y z :=
       dist_le_of_secant_le (by positivity) hsec (hy.trans_le hrle) (hz.trans_le hrle)
@@ -351,9 +377,10 @@ theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
     have hexp : g y * h y - g z * h z = (g y - g z) * h y + g z * (h y - h z) := by ring
     have h1 : |(g y - g z) * h y| ≤ (a + η) * dist y z := by
       rw [abs_mul]
-      calc |g y - g z| * |h y| ≤ ((a + η) * dist y z) * 1 := by
-            refine mul_le_mul (by simpa [Real.dist_eq] using hgyz) (hh1 y) (abs_nonneg _) ?_
-            positivity
+      calc
+        |g y - g z| * |h y| ≤ ((a + η) * dist y z) * 1 := by
+          refine mul_le_mul (by simpa [Real.dist_eq] using hgyz) (hh1 y) (abs_nonneg _) ?_
+          positivity
         _ = (a + η) * dist y z := by ring
     have h2 : |g z * (h y - h z)| ≤ (|g x| + (a + η) * r) * ((N : ℝ) * dist y z) := by
       rw [abs_mul]
@@ -365,27 +392,28 @@ theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
       have hrb : r ≤ η / ((a + η) * (N : ℝ) + 1) := min_le_right _ _
       have : (a + η) * (N : ℝ) * r ≤ (a + η) * (N : ℝ) * (η / ((a + η) * (N : ℝ) + 1)) := by
         apply mul_le_mul_of_nonneg_left hrb (by positivity)
-      calc (a + η) * r * (N : ℝ) = (a + η) * (N : ℝ) * r := by ring
+      calc
+        (a + η) * r * (N : ℝ) = (a + η) * (N : ℝ) * r := by ring
         _ ≤ (a + η) * (N : ℝ) * (η / ((a + η) * (N : ℝ) + 1)) := this
         _ ≤ η := by
-            rw [mul_div_assoc'] at *
-            rw [div_le_iff₀ hden]
-            nlinarith [hη0.le]
-    calc dist (g y * h y) (g z * h z) = |(g y - g z) * h y + g z * (h y - h z)| := by
-          rw [Real.dist_eq, hexp]
+          rw [mul_div_assoc'] at *
+          rw [div_le_iff₀ hden]
+          nlinarith [hη0.le]
+    calc
+      dist (g y * h y) (g z * h z) = |(g y - g z) * h y + g z * (h y - h z)| := by
+        rw [Real.dist_eq, hexp]
       _ ≤ |(g y - g z) * h y| + |g z * (h y - h z)| := abs_add_le _ _
-      _ ≤ (a + η) * dist y z + (|g x| + (a + η) * r) * ((N : ℝ) * dist y z) :=
-          add_le_add h1 h2
+      _ ≤ (a + η) * dist y z + (|g x| + (a + η) * r) * ((N : ℝ) * dist y z) := add_le_add h1 h2
       _ = (a + η + |g x| * N + (a + η) * r * N) * dist y z := by ring
       _ ≤ (a + |g x| * N + (ε : ℝ)) * dist y z := by
-          apply mul_le_mul_of_nonneg_right _ dist_nonneg
-          have : (ε : ℝ) = η + η := by rw [hη]; ring
-          linarith
+        apply mul_le_mul_of_nonneg_right _ dist_nonneg
+        have : (ε : ℝ) = η + η := by rw [hη]; ring
+        linarith
   refine (apply_le_secant _ hr0 x).trans ?_
   refine (secant_le_ofReal (by positivity) hkey).trans ?_
   rw [ENNReal.ofReal_add (by positivity) (by positivity),
-    ENNReal.ofReal_add ha0 (by positivity), ← haA,
-    ENNReal.ofReal_mul (abs_nonneg (g x)), ENNReal.ofReal_coe_nnreal, ENNReal.ofReal_coe_nnreal]
+    ENNReal.ofReal_add ha0 (by positivity), ← haA, ENNReal.ofReal_mul (abs_nonneg (g x)),
+    ENNReal.ofReal_coe_nnreal, ENNReal.ofReal_coe_nnreal]
 
 end Leibniz
 
@@ -398,11 +426,12 @@ section Leibniz
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [InnerProductSpace ℝ V] in
-/-- the local-slope product bound.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| · N` in the local
+/--
+the local-slope product bound.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| ·
+N` in the local
 slope.  Here the moving point is only `y`, so no correction in the radius is needed. -/
-theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
-    (hh1 : ∀ y, |h y| ≤ 1) (x : V) :
-    apply (fun y ↦ g y * h y) x ≤ apply g x + ENNReal.ofReal |g x| * N := by
+theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h) (hh1 : ∀ y, |h y| ≤ 1)
+    (x : V) : apply (fun y ↦ g y * h y) x ≤ apply g x + ENNReal.ofReal |g x| * N := by
   refine ENNReal.le_of_forall_pos_le_add fun ε hε hlt ↦ ?_
   have hA : apply g x ≠ ⊤ := by
     intro htop
@@ -416,8 +445,9 @@ theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
     rw [haA, ENNReal.ofReal_lt_ofReal_iff (by positivity)]
     linarith
   obtain ⟨r, hr0, hsec⟩ := exists_secant_le hstep
-  have hkey : ∀ y : V, dist y x < r →
-      dist (g y * h y) (g x * h x) ≤ (a + (ε : ℝ) + |g x| * N) * dist y x := by
+  have hkey :
+    ∀ y : V,
+      dist y x < r → dist (g y * h y) (g x * h x) ≤ (a + (ε : ℝ) + |g x| * N) * dist y x := by
     intro y hy
     have hgyx : dist (g y) (g x) ≤ (a + (ε : ℝ)) * dist y x :=
       dist_le_of_secant_le (by positivity) hsec hy
@@ -426,23 +456,25 @@ theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
     have hexp : g y * h y - g x * h x = (g y - g x) * h y + g x * (h y - h x) := by ring
     have h1 : |(g y - g x) * h y| ≤ (a + (ε : ℝ)) * dist y x := by
       rw [abs_mul]
-      calc |g y - g x| * |h y| ≤ ((a + (ε : ℝ)) * dist y x) * 1 := by
-            refine mul_le_mul (by simpa [Real.dist_eq] using hgyx) (hh1 y) (abs_nonneg _) ?_
-            positivity
+      calc
+        |g y - g x| * |h y| ≤ ((a + (ε : ℝ)) * dist y x) * 1 := by
+          refine mul_le_mul (by simpa [Real.dist_eq] using hgyx) (hh1 y) (abs_nonneg _) ?_
+          positivity
         _ = (a + (ε : ℝ)) * dist y x := by ring
     have h2 : |g x * (h y - h x)| ≤ |g x| * ((N : ℝ) * dist y x) := by
       rw [abs_mul]
       exact mul_le_mul_of_nonneg_left hhyx (abs_nonneg _)
-    calc dist (g y * h y) (g x * h x) = |(g y - g x) * h y + g x * (h y - h x)| := by
-          rw [Real.dist_eq, hexp]
+    calc
+      dist (g y * h y) (g x * h x) = |(g y - g x) * h y + g x * (h y - h x)| := by
+        rw [Real.dist_eq, hexp]
       _ ≤ |(g y - g x) * h y| + |g x * (h y - h x)| := abs_add_le _ _
       _ ≤ (a + (ε : ℝ)) * dist y x + |g x| * ((N : ℝ) * dist y x) := add_le_add h1 h2
       _ = (a + (ε : ℝ) + |g x| * N) * dist y x := by ring
   refine (apply_le_secant _ hr0 x).trans ?_
   refine (secant_le_ofReal (by positivity) hkey).trans ?_
   rw [ENNReal.ofReal_add (by positivity) (by positivity),
-    ENNReal.ofReal_add ha0 (by positivity), ← haA,
-    ENNReal.ofReal_mul (abs_nonneg (g x)), ENNReal.ofReal_coe_nnreal, ENNReal.ofReal_coe_nnreal]
+    ENNReal.ofReal_add ha0 (by positivity), ← haA, ENNReal.ofReal_mul (abs_nonneg (g x)),
+    ENNReal.ofReal_coe_nnreal, ENNReal.ofReal_coe_nnreal]
   exact le_of_eq (by ring)
 
 end Leibniz

@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Calculus.FDeriv.Pi
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Pi
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Coordinates of a vector-valued map against a linear isometry
 
@@ -20,6 +22,8 @@ Nothing here is about measure theory, and no regularity beyond differentiability
 point `x` is used.  The isometry `e` is an explicit argument everywhere: the conclusions do not
 depend on the choice, but nothing below fixes one.
 -/
+
+@[expose] public section
 
 noncomputable section
 

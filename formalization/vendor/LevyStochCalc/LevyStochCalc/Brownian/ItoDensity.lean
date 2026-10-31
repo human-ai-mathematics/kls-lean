@@ -3,11 +3,15 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoDensityDyadicAverages
-import LevyStochCalc.Brownian.ItoDensityShiftedAverages
-import LevyStochCalc.Brownian.ItoDensityPointwise
-import LevyStochCalc.Brownian.ItoDensityPredictableL2
-import LevyStochCalc.Brownian.ItoDensityUnbounded
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoDensityDyadicAverages
+public import LevyStochCalc.Brownian.ItoDensityShiftedAverages
+public import LevyStochCalc.Brownian.ItoDensityPointwise
+public import LevyStochCalc.Brownian.ItoDensityPredictableL2
+public import LevyStochCalc.Brownian.ItoDensityUnbounded
 
 /-!
 # Density of simple predictable processes in L²

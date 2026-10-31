@@ -3,14 +3,18 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
-import Mathlib.MeasureTheory.Function.LpSeminorm.TriangleInequality
-import Mathlib.MeasureTheory.Function.LpSpace.Basic
-import Mathlib.MeasureTheory.Measure.Prod
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
-import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
-import Mathlib.Topology.Order.MonotoneContinuity
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
+public import Mathlib.MeasureTheory.Function.LpSeminorm.TriangleInequality
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
+public import Mathlib.MeasureTheory.Measure.Prod
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+public import Mathlib.Topology.Order.MonotoneContinuity
 
 /-!
 # LevyStochCalc.Basic
@@ -19,6 +23,8 @@ Common imports plus small L² helper lemmas shared across the library:
 `eLpNorm` reverse-triangle / difference bounds and L²-continuity (Bochner-L²
 limit) lemmas in the plain, Brownian, and compensated-Poisson integrand shapes.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped NNReal ENNReal
@@ -40,7 +46,7 @@ lemma eLpNorm_sub_eLpNorm_le_eLpNorm_sub
   have h_decomp : f = g + (f - g) := by ext x; simp
   have h_meas_diff : MeasureTheory.AEStronglyMeasurable (f - g) μ := hf.sub hg
   conv_lhs => rw [h_decomp]
-  exact MeasureTheory.eLpNorm_add_le hg h_meas_diff hp
+  exact MeasureTheory.eLpNorm_add_le hp
 
 /-- **L²-norm continuity from L²-difference vanishing.** If
 `eLpNorm (fn n - f) p μ → 0`, then `eLpNorm (fn n) p μ → eLpNorm f p μ`.
@@ -73,7 +79,7 @@ lemma eLpNorm_tendsto_of_eLpNorm_sub_tendsto_zero
     have h_meas_diff : MeasureTheory.AEStronglyMeasurable (fn n - f) μ :=
       (hfn n).sub hf
     conv_lhs => rw [h_decomp]
-    exact MeasureTheory.eLpNorm_add_le hf h_meas_diff hp
+    exact MeasureTheory.eLpNorm_add_le hp
   have h_lower : ∀ n,
       MeasureTheory.eLpNorm f p μ - MeasureTheory.eLpNorm (fn n - f) p μ
         ≤ MeasureTheory.eLpNorm (fn n) p μ := by
@@ -88,7 +94,7 @@ lemma eLpNorm_tendsto_of_eLpNorm_sub_tendsto_zero
         = MeasureTheory.eLpNorm (fn n + -(fn n - f)) p μ := by rw [← h_decomp]
       _ ≤ MeasureTheory.eLpNorm (fn n) p μ
             + MeasureTheory.eLpNorm (-(fn n - f)) p μ :=
-          MeasureTheory.eLpNorm_add_le (hfn n) h_meas_neg_diff hp
+          MeasureTheory.eLpNorm_add_le hp
       _ = MeasureTheory.eLpNorm (fn n) p μ
             + MeasureTheory.eLpNorm (fn n - f) p μ := by
           rw [MeasureTheory.eLpNorm_neg]
@@ -132,7 +138,7 @@ lemma lintegral_sq_eq_eLpNorm_sq_on_prod
   -- Bridge: ∫⁻ p, (‖h p‖₊ : ℝ≥0∞)^2 ∂μν = eLpNorm h 2 μν ^ (2:ℝ).
   have h_pow_lemma := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
     (μ := μν) (p := (2 : NNReal)) (f := h)
-    (by norm_num : (2 : NNReal) ≠ 0)
+    (by norm_num : (2 : NNReal) ≠ 0) hh.aestronglyMeasurable
   have h_two_R : ((2 : NNReal) : ℝ) = (2 : ℝ) := by norm_num
   have h_two_ENNReal : ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) := by simp
   rw [h_two_ENNReal, h_two_R] at h_pow_lemma
@@ -182,7 +188,7 @@ lemma lintegral_sq_eq_eLpNorm_sq_on_triple_prod
   -- Bridge eLpNorm² ↔ ∫⁻ p, (...)^2.
   have h_pow_lemma := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
     (μ := μνη) (p := (2 : NNReal)) (f := h)
-    (by norm_num : (2 : NNReal) ≠ 0)
+    (by norm_num : (2 : NNReal) ≠ 0) hh.aestronglyMeasurable
   have h_two_R : ((2 : NNReal) : ℝ) = (2 : ℝ) := by norm_num
   have h_two_ENNReal : ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) := by simp
   rw [h_two_ENNReal, h_two_R] at h_pow_lemma

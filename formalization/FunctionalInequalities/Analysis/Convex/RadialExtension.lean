@@ -1,24 +1,35 @@
-import Mathlib.Analysis.Convex.Continuous
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Analysis.Convex.Topology
-import Mathlib.Data.EReal.Operations
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Real
-import Mathlib.Topology.Instances.EReal.Lemmas
+module
+
+public import Mathlib.Analysis.Convex.Continuous
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Analysis.Convex.Topology
+public import Mathlib.Data.EReal.Operations
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Real
+public import Mathlib.Topology.Instances.EReal.Lemmas
 
 /-!
 # Radial extension of a convex function
 
-A nonnegative real convex function `g` on an open convex set `K ∋ 0` with `g 0 = 0` extends to `ψ : E → EReal` that is
-nonnegative, vanishes at `0`, has convex real epigraph and Borel `toENNReal`, equals `g` on `K`, is `⊤` off `closure K`, and
-equals at every point its radial limit `lim_{t → 1⁻} ψ (t • x)` (`exists_radial_extension_of_convexOn`). No boundedness,
-lower semicontinuity, closure or envelope hypothesis is used; boundary values are radial limits (no claim either way about
+A nonnegative real convex function `g` on an open convex set `K ∋ 0` with `g 0 = 0` extends to `ψ :
+E → EReal` that is
+nonnegative, vanishes at `0`, has convex real epigraph and Borel `toENNReal`, equals `g` on `K`, is
+`⊤` off `closure K`, and
+equals at every point its radial limit `lim_{t → 1⁻} ψ (t • x)`
+(`exists_radial_extension_of_convexOn`). No boundedness,
+lower semicontinuity, closure or envelope hypothesis is used; boundary values are radial limits (no
+claim either way about
 equality with a lower-semicontinuous closure).
 
-This is the extension step in the proof of Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), Lemma 17.
-Construction (private): `ψ x = ⨆ n, radialCut (radialScale n) x` with `radialScale n = 1 − 1/(n + 2)`, the value at
-`radialScale n • x` when that point lies in `K` and `⊤` otherwise; a countable supremum, hence Borel, and equal to the source's
+This is the extension step in the proof of Cordero-Erausquin–Klartag, *Moment measures*
+(arXiv:1304.0630v1), Lemma 17.
+Construction (private): `ψ x = ⨆ n, radialCut (radialScale n) x` with `radialScale n = 1 − 1/(n +
+2)`, the value at
+`radialScale n • x` when that point lies in `K` and `⊤` otherwise; a countable supremum, hence
+Borel, and equal to the source's
 monotone radial limit.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set Filter
@@ -145,7 +156,7 @@ private lemma radialExtension_nonneg
   classical
   apply le_iSup_of_le 0
   by_cases hx : radialScale 0 • x ∈ K
-  · simp only [radialCut, if_pos hx]
+  · simp only [radialCut, ite_eq_left hx]
     exact EReal.coe_nonneg.mpr (hnn _ hx)
   · simp [radialCut, hx]
 
@@ -182,12 +193,11 @@ private lemma radialExtension_eq_on
   have hlim : Tendsto (fun n => (g (radialScale n • x) : EReal)) atTop
       (nhds (g x : EReal)) := EReal.tendsto_coe.mpr (hcont.tendsto.comp htx)
   have he : radialExtension K g x = ⨆ n, (g (radialScale n • x) : EReal) := by
-    simp only [radialExtension, radialCut, if_pos (hmem _)]
+    simp only [radialExtension, radialCut, ite_eq_left (hmem _)]
   rw [he]
   exact iSup_eq_of_tendsto hmono hlim
 
-private lemma radialExtension_eq_top_off
-    {K : Set E} {g : E → ℝ} {x : E} (hx : x ∉ closure K) :
+private lemma radialExtension_eq_top_off {K : Set E} {g : E → ℝ} {x : E} (hx : x ∉ closure K) :
     radialExtension K g x = ⊤ := by
   classical
   have htx : Tendsto (fun n => radialScale n • x) atTop (nhds x) := by
@@ -197,7 +207,8 @@ private lemma radialExtension_eq_top_off
   obtain ⟨n, hn⟩ := hevent.exists
   have hnot : radialScale n • x ∉ K := fun h => hn (subset_closure h)
   apply top_unique
-  have h : radialCut K g (radialScale n) x ≤ radialExtension K g x := le_iSup (fun n => radialCut K g (radialScale n) x) n
+  have h : radialCut K g (radialScale n) x ≤ radialExtension K g x :=
+    le_iSup (fun n => radialCut K g (radialScale n) x) n
   simpa [radialCut, hnot] using h
 
 section FiniteDimensional
@@ -219,7 +230,7 @@ private lemma radialExtension_radial_limit {K : Set E} (hK : IsOpen K) (h0K : (0
       have ha' : a < ⨆ n, radialCut K g (radialScale n) x := ha
       obtain ⟨n, hn⟩ := lt_iSup_iff.mp ha'
       have hn' : a < (g (radialScale n • x) : EReal) := by
-        simpa only [radialCut, if_pos (hmem n)] using hn
+        simpa only [radialCut, ite_eq_left (hmem n)] using hn
       have hevent : ∀ᶠ t : ℝ in nhdsWithin 1 (Set.Iio 1), radialScale n < t :=
         nhdsWithin_le_nhds (eventually_gt_nhds (radialScale_lt_one n))
       filter_upwards [hevent, self_mem_nhdsWithin] with t ht ht1
@@ -245,7 +256,7 @@ private lemma radialExtension_radial_limit {K : Set E} (hK : IsOpen K) (h0K : (0
           (mul_nonneg (radialScale_pos n).le ht0.le) hprod (radialScale_pos n) (hmem n)
         have hcut : radialCut K g (radialScale n) (t • x) ≤
             radialCut K g (radialScale n) x := by
-          simp only [radialCut, if_pos hmtK, if_pos (hmem n)]
+          simp only [radialCut, ite_eq_left hmtK, ite_eq_left (hmem n)]
           rw [smul_smul]
           exact EReal.coe_le_coe_iff.mpr hg_le
         exact hcut.trans (le_iSup (fun n => radialCut K g (radialScale n) x) n)
@@ -262,20 +273,28 @@ private lemma radialExtension_radial_limit {K : Set E} (hK : IsOpen K) (h0K : (0
     exact (radialExtension_eq_top_off ht).symm
 
 
-/-- **Radial extension of a convex function.** A nonnegative real convex function on an open convex set `K ∋ 0` vanishing at
-`0` extends to a nonnegative extended-real function with convex real epigraph and Borel `toENNReal`, equal to it on `K`,
+/--
+**Radial extension of a convex function.** A nonnegative real convex function on an open convex set
+`K ∋ 0` vanishing at
+`0` extends to a nonnegative extended-real function with convex real epigraph and Borel `toENNReal`,
+equal to it on `K`,
 `⊤` off `closure K`, and equal at every point to its radial limit from below. -/
-theorem exists_radial_extension_of_convexOn [MeasurableSpace E] [BorelSpace E] {K : Set E} (hK : IsOpen K) (h0K : (0 : E) ∈ K)
-    {g : E → ℝ} (hg : ConvexOn ℝ K g) (hnn : ∀ x ∈ K, 0 ≤ g x) (hg0 : g 0 = 0) :
-    ∃ ψ : E → EReal, (∀ x, 0 ≤ ψ x) ∧ ψ 0 = 0 ∧
-      Convex ℝ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} ∧
-      Measurable (fun x => (ψ x).toENNReal) ∧
-      (∀ x ∈ K, ψ x = (g x : EReal)) ∧
-      (∀ x ∉ closure K, ψ x = ⊤) ∧
-      (∀ x, Filter.Tendsto (fun t : ℝ => ψ (t • x)) (nhdsWithin 1 (Set.Iio 1)) (nhds (ψ x))) := by
-  refine ⟨radialExtension K g, radialExtension_nonneg hnn, ?_,
-    radialExtension_convex_epigraph hg,
-    (measurable_radialExtension hK (hg.continuousOn hK)).ereal_toENNReal, ?_, ?_, ?_⟩
+theorem exists_radial_extension_of_convexOn [MeasurableSpace E] [BorelSpace E] {K : Set E}
+    (hK : IsOpen K) (h0K : (0 : E) ∈ K) {g : E → ℝ} (hg : ConvexOn ℝ K g)
+    (hnn : ∀ x ∈ K, 0 ≤ g x) (hg0 : g 0 = 0) :
+    ∃ ψ : E → EReal,
+      (∀ x, 0 ≤ ψ x) ∧
+        ψ 0 = 0 ∧
+          Convex ℝ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} ∧
+            Measurable (fun x => (ψ x).toENNReal) ∧
+              (∀ x ∈ K, ψ x = (g x : EReal)) ∧
+                (∀ x ∉ closure K, ψ x = ⊤) ∧
+                  (∀ x,
+                    Filter.Tendsto (fun t : ℝ => ψ (t • x)) (nhdsWithin 1 (Set.Iio 1))
+                      (nhds (ψ x))) := by
+  refine
+    ⟨radialExtension K g, radialExtension_nonneg hnn, ?_, radialExtension_convex_epigraph hg,
+      (measurable_radialExtension hK (hg.continuousOn hK)).ereal_toENNReal, ?_, ?_, ?_⟩
   · rw [radialExtension_eq_on hK h0K hg hnn hg0 h0K, hg0, EReal.coe_zero]
   · intro x hx
     exact radialExtension_eq_on hK h0K hg hnn hg0 hx

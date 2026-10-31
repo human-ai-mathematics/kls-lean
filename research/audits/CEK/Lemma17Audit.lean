@@ -1,12 +1,18 @@
-import FunctionalInequalities.Probability.MomentMeasure.Compactness
-import Mathlib.Analysis.Normed.Module.Convex
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Compactness
+public import Mathlib.Analysis.Normed.Module.Convex
+public import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! Audit clients for Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Lemma 17 (56)
 (`Probability/MomentMeasure/Compactness.lean`):
-a mass-two measure at the endpoints of `[-1, 1]` (not a probability measure, all mass outside the open
-support hull) and the zero-dimensional case with mass three. Both use the single joint producer, so one subsequence and
+a mass-two measure at the endpoints of `[-1, 1]` (not a probability measure, all mass outside the
+open
+support hull) and the zero-dimensional case with mass three. Both use the single joint producer, so
+one subsequence and
 one limit satisfy (56a) and (56b). -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -113,7 +119,9 @@ end CEKLemma17Clients
 
 #print axioms CEKLemma17Clients.boundary_norm_sequence_both
 #print axioms CEKLemma17Clients.zeroDim_mass_three_both
-#print axioms FunctionalInequalities.Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph
-#print axioms FunctionalInequalities.Probability.MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph
+#print axioms
+  FunctionalInequalities.Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph
+#print axioms
+  FunctionalInequalities.Probability.MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph
 #print axioms FunctionalInequalities.Analysis.exists_subseq_tendsto_of_convexOn_of_bddAbove
 #print axioms FunctionalInequalities.Analysis.exists_radial_extension_of_convexOn

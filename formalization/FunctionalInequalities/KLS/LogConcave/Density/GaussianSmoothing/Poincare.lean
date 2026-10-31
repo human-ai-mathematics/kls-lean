@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Poincare.Convolution
-import FunctionalInequalities.Poincare.Gaussian.Multivariate
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.Poincare.Convolution
+public import FunctionalInequalities.Poincare.Gaussian.Multivariate
 
 /-!
 # Poincaré upper stability under actual Gaussian convolution
@@ -10,6 +12,8 @@ The shared Gaussian characteristic-function identification and Gaussian
 Poincaré bound control the actual convolution through the product inequality,
 with a vanishing Gaussian variance term.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -20,7 +24,6 @@ namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 
-set_option linter.style.haveILetI false in
 /-- The actual normalized Gaussian convolution has a smooth-test optimum
 bounded by the source optimum plus its Gaussian variance. No source moment
 assumption or attainment of an optimal constant is used. -/
@@ -28,7 +31,7 @@ theorem smoothedLaw_smoothTest_constant_le (ν : Measure V)
     [IsProbabilityMeasure ν] {s : ℝ} (hs : 0 < s) :
     Poincare.SmoothTest.constant (smoothedLaw ν s) ≤
       Poincare.SmoothTest.constant ν + ENNReal.ofReal (1 / (2 * s)) := by
-  letI := Probability.Gaussian.law_probability (V := V) hs
+  let _ := Probability.Gaussian.law_probability (V := V) hs
   let C : NNReal := ⟨1 / (2 * s), by positivity⟩
   have hC : Poincare.SmoothTest.Holds (Probability.Gaussian.law (V := V) s) (C : ℝ) := by
     change Poincare.SmoothTest.Holds (Probability.Gaussian.law (V := V) s) (1 / (2 * s))

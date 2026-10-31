@@ -1,4 +1,8 @@
-import FunctionalInequalities.KLS.Letwin.HessianTrace
+module
+
+public import FunctionalInequalities.KLS.Letwin.HessianTrace
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory

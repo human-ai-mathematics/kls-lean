@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open Set
 open FunctionalInequalities.Analysis

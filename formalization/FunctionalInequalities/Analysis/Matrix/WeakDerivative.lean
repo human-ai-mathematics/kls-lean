@@ -1,7 +1,9 @@
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Products
-import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
+module
+
+public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.Products
+public import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!
 # Weak derivatives of finite matrix polynomials
@@ -10,13 +12,19 @@ Bounded weak matrix fields with compact-local L2 entry derivatives have exact
 first directional derivatives of their determinants and trace quadratics.
 Ambient and matrix dimensions may differ; zero dimensions and arbitrary real
 constant matrices are retained. No C1/C2 regularity, symmetry, positivity or
-invertibility of the rough field is assumed for these polynomial rules. The inverse-density identification additionally takes a locally essentially bounded inverse pair, its given local-L2 weak derivatives and the a.e. inverse identity; it proves the explicit inverse formula without classical differentiability. Supporting interfaces for Letwin
+invertibility of the rough field is assumed for these polynomial rules. The inverse-density
+identification additionally takes a locally essentially bounded inverse pair, its given local-L2
+weak derivatives and the a.e. inverse identity; it proves the explicit inverse formula without
+classical differentiability. Supporting interfaces for Letwin
 arXiv:2607.24164v1 Theorem 2.5 and compact Theorem 1.2, constant 8; these do not
 establish Hessian evolution, an integrated trace estimate or the main bound.
 The four-fold trace
-product identity `trace_mul_mul_mul_eq_sum` lives in `Matrix/Trace/Algebra.lean`. `bounded_trace_quadratic_weak_derivative_data`
+product identity `trace_mul_mul_mul_eq_sum` lives in `Matrix/Trace/Algebra.lean`.
+`bounded_trace_quadratic_weak_derivative_data`
 packages bounded trace data of `tr(B A B A)` for globally bounded rough fields.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Filter Matrix
@@ -206,34 +214,42 @@ open scoped ContDiff Topology
 
 namespace FunctionalInequalities.Analysis
 
-/-- For a globally bounded measurable matrix field `A` with compact-local L2 weak entry derivatives `DA`, the
-trace quadratic `tr(B A B A)` is globally bounded, locally integrable, and has the weak coordinate derivatives
+/--
+For a globally bounded measurable matrix field `A` with compact-local L2 weak entry derivatives
+`DA`, the
+trace quadratic `tr(B A B A)` is globally bounded, locally integrable, and has the weak coordinate
+derivatives
 `2 tr(B A B DAₖ)`, which are L2 on every compact set. All finite dimensions are allowed. -/
-theorem bounded_trace_quadratic_weak_derivative_data {d n : ℕ}
-    (B : Matrix (Fin n) (Fin n) ℝ)
+theorem bounded_trace_quadratic_weak_derivative_data {d n : ℕ} (B : Matrix (Fin n) (Fin n) ℝ)
     (A : EuclideanSpace ℝ (Fin d) → Matrix (Fin n) (Fin n) ℝ)
-    (DA : Fin d → EuclideanSpace ℝ (Fin d) → Matrix (Fin n) (Fin n) ℝ)
-    {M : NNReal}
-    (hmeas : ∀ i j, Measurable (fun x => A x i j))
-    (hbound : ∀ x i j, ‖A x i j‖ ≤ (M : ℝ))
-    (hweak : ∀ k i j, HasWeakDerivAlong (fun x => A x i j) (fun x => DA k x i j)
-      (EuclideanSpace.basisFun (Fin d) ℝ k))
-    (hDA2 : ∀ k i j, ∀ S : Set (EuclideanSpace ℝ (Fin d)), IsCompact S →
-      MemLp (fun x => DA k x i j) 2
-        ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict S)) :
-    ∃ C : ℝ, 0 ≤ C ∧ (∀ x, ‖(B * A x * B * A x).trace‖ ≤ C) ∧
-      LocallyIntegrable (fun x => (B * A x * B * A x).trace)
-        (volume : Measure (EuclideanSpace ℝ (Fin d))) ∧
-      ∀ k : Fin d,
-        HasWeakDerivAlong (fun x => (B * A x * B * A x).trace)
-          (fun x => 2 * (B * A x * B * DA k x).trace)
-          (EuclideanSpace.basisFun (Fin d) ℝ k) ∧
-        ∀ S : Set (EuclideanSpace ℝ (Fin d)), IsCompact S →
-          MemLp (fun x => 2 * (B * A x * B * DA k x).trace) 2
-            ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict S) := by
+    (DA : Fin d → EuclideanSpace ℝ (Fin d) → Matrix (Fin n) (Fin n) ℝ) {M : NNReal}
+    (hmeas : ∀ i j, Measurable (fun x => A x i j)) (hbound : ∀ x i j, ‖A x i j‖ ≤ (M : ℝ))
+    (hweak :
+      ∀ k i j,
+        HasWeakDerivAlong (fun x => A x i j) (fun x => DA k x i j)
+          (EuclideanSpace.basisFun (Fin d) ℝ k))
+    (hDA2 :
+      ∀ k i j,
+        ∀ S : Set (EuclideanSpace ℝ (Fin d)),
+          IsCompact S →
+            MemLp (fun x => DA k x i j) 2
+              ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict S)) :
+    ∃ C : ℝ,
+      0 ≤ C ∧
+        (∀ x, ‖(B * A x * B * A x).trace‖ ≤ C) ∧
+          LocallyIntegrable (fun x => (B * A x * B * A x).trace)
+              (volume : Measure (EuclideanSpace ℝ (Fin d))) ∧
+            ∀ k : Fin d,
+              HasWeakDerivAlong (fun x => (B * A x * B * A x).trace)
+                  (fun x => 2 * (B * A x * B * DA k x).trace)
+                  (EuclideanSpace.basisFun (Fin d) ℝ k) ∧
+                ∀ S : Set (EuclideanSpace ℝ (Fin d)),
+                  IsCompact S →
+                    MemLp (fun x => 2 * (B * A x * B * DA k x).trace) 2
+                      ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict S) := by
   classical
-  let C : ℝ := ∑ q : Fin n × Fin n × Fin n × Fin n,
-    ‖B q.1 q.2.1 * B q.2.2.1 q.2.2.2‖ * (M : ℝ) ^ 2
+  let C : ℝ :=
+    ∑ q : Fin n × Fin n × Fin n × Fin n, ‖B q.1 q.2.1 * B q.2.2.1 q.2.2.2‖ * (M : ℝ) ^ 2
   have hb (x : EuclideanSpace ℝ (Fin d)) : ‖(B * A x * B * A x).trace‖ ≤ C := by
     rw [trace_mul_mul_mul_eq_sum]
     apply (norm_sum_le _ _).trans
@@ -244,23 +260,26 @@ theorem bounded_trace_quadratic_weak_derivative_data {d n : ℕ}
     rw [norm_mul]
     have h1 := hbound x q.2.1 q.2.2.1
     have h2 := hbound x q.2.2.2 q.1
-    simpa only [pow_two] using mul_le_mul h1 h2
-      (norm_nonneg (A x q.2.2.2 q.1)) (NNReal.coe_nonneg M)
+    simpa only [pow_two] using
+      mul_le_mul h1 h2 (norm_nonneg (A x q.2.2.2 q.1)) (NNReal.coe_nonneg M)
   have hmeasf : Measurable (fun x => (B * A x * B * A x).trace) := by
     simp_rw [trace_mul_mul_mul_eq_sum]
     fun_prop
-  have htop : MemLp (fun x => (B * A x * B * A x).trace) (⊤ : ENNReal)
+  have htop :
+    MemLp (fun x => (B * A x * B * A x).trace) (⊤ : ENNReal)
       (volume : Measure (EuclideanSpace ℝ (Fin d))) :=
     memLp_top_of_bound hmeasf.aestronglyMeasurable C (Filter.Eventually.of_forall hb)
-  have htopA (i j : Fin n) : MemLp (fun x => A x i j) (⊤ : ENNReal)
-      (volume : Measure (EuclideanSpace ℝ (Fin d))) :=
+  have htopA (i j : Fin n) :
+    MemLp (fun x => A x i j) (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin d))) :=
     memLp_top_of_bound (hmeas i j).aestronglyMeasurable (M : ℝ)
       (Filter.Eventually.of_forall fun x => hbound x i j)
-  refine ⟨C, Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _) (sq_nonneg _)),
-    hb, htop.locallyIntegrable le_top, ?_⟩
+  refine
+    ⟨C, Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _) (sq_nonneg _)), hb,
+      htop.locallyIntegrable le_top, ?_⟩
   intro k
-  exact hasWeakDerivAlong_trace_quadratic_of_locally_memLp_two B
-    (fun i j => hweak k i j) htopA (fun i j => hDA2 k i j)
+  exact
+    hasWeakDerivAlong_trace_quadratic_of_locally_memLp_two B (fun i j => hweak k i j) htopA
+      (fun i j => hDA2 k i j)
 
 end FunctionalInequalities.Analysis
 
@@ -284,34 +303,40 @@ private theorem matrix_product_entry_eq_sum {n : ℕ} (S A : Matrix (Fin n) (Fin
   ring
 
 set_option maxHeartbeats 1000000 in
-/-- For a constant real matrix `S` and a matrix field `H` with globally bounded entries and compact-local L2 weak entry
-derivatives `DHₖ`, every entry of the two-sided product `S H S` is globally bounded with weak derivatives the entries of
+/--
+For a constant real matrix `S` and a matrix field `H` with globally bounded entries and
+compact-local L2 weak entry
+derivatives `DHₖ`, every entry of the two-sided product `S H S` is globally bounded with weak
+derivatives the entries of
 `S DHₖ S`, L2 on compact sets. Arbitrary finite ambient and matrix dimensions, including zero. -/
-theorem bounded_weak_matrix_product_entry {d n : ℕ}
-    (S : Matrix (Fin n) (Fin n) ℝ)
-    {H DH : EuclideanSpace ℝ (Fin d) → Matrix (Fin n) (Fin n) ℝ}
-    {v : EuclideanSpace ℝ (Fin d)} (M : ℝ)
-    (hH : ∀ a b, HasWeakDerivAlong (fun x => H x a b) (fun x => DH x a b) v)
+theorem bounded_weak_matrix_product_entry {d n : ℕ} (S : Matrix (Fin n) (Fin n) ℝ)
+    {H DH : EuclideanSpace ℝ (Fin d) → Matrix (Fin n) (Fin n) ℝ} {v : EuclideanSpace ℝ (Fin d)}
+    (M : ℝ) (hH : ∀ a b, HasWeakDerivAlong (fun x => H x a b) (fun x => DH x a b) v)
     (hbound : ∀ x a b, ‖H x a b‖ ≤ M)
-    (hD : ∀ a b, ∀ K : Set (EuclideanSpace ℝ (Fin d)), IsCompact K →
-      MemLp (fun x => DH x a b) 2 ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict K))
+    (hD :
+      ∀ a b,
+        ∀ K : Set (EuclideanSpace ℝ (Fin d)),
+          IsCompact K →
+            MemLp (fun x => DH x a b) 2
+              ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict K))
     (i j : Fin n) :
-    (∀ x, ‖(S * H x * S) i j‖ ≤
-      ∑ q : Fin n × Fin n, ‖S i q.1 * S q.2 j‖ * max M 0) ∧
-    HasWeakDerivAlong (fun x => (S * H x * S) i j) (fun x => (S * DH x * S) i j) v ∧
-    ∀ K : Set (EuclideanSpace ℝ (Fin d)), IsCompact K →
-      MemLp (fun x => (S * DH x * S) i j) 2
-        ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict K) := by
+    (∀ x, ‖(S * H x * S) i j‖ ≤ ∑ q : Fin n × Fin n, ‖S i q.1 * S q.2 j‖ * max M 0) ∧
+      HasWeakDerivAlong (fun x => (S * H x * S) i j) (fun x => (S * DH x * S) i j) v ∧
+        ∀ K : Set (EuclideanSpace ℝ (Fin d)),
+          IsCompact K →
+            MemLp (fun x => (S * DH x * S) i j) 2
+              ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict K) := by
   classical
-  have hsum := hasWeakDerivAlong_finsetSum_mul
-    (Finset.univ : Finset (Fin n × Fin n)) (fun q => S i q.1 * S q.2 j)
-    (f := fun q x => H x q.1 q.2) (df := fun q x => DH x q.1 q.2) (v := v)
-    (fun q _ => hH q.1 q.2) (fun q _ => hD q.1 q.2)
-  have hweak : HasWeakDerivAlong (fun x => (S * H x * S) i j)
-      (fun x => (S * DH x * S) i j) v ∧
-      ∀ K : Set (EuclideanSpace ℝ (Fin d)), IsCompact K →
-        MemLp (fun x => (S * DH x * S) i j) 2
-          ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict K) := by
+  have hsum :=
+    hasWeakDerivAlong_finsetSum_mul (Finset.univ : Finset (Fin n × Fin n))
+      (fun q => S i q.1 * S q.2 j) (f := fun q x => H x q.1 q.2) (df := fun q x => DH x q.1 q.2)
+      (v := v) (fun q _ => hH q.1 q.2) (fun q _ => hD q.1 q.2)
+  have hweak :
+    HasWeakDerivAlong (fun x => (S * H x * S) i j) (fun x => (S * DH x * S) i j) v ∧
+      ∀ K : Set (EuclideanSpace ℝ (Fin d)),
+        IsCompact K →
+          MemLp (fun x => (S * DH x * S) i j) 2
+            ((volume : Measure (EuclideanSpace ℝ (Fin d))).restrict K) := by
     simpa only [← matrix_product_entry_eq_sum] using hsum
   refine ⟨?_, hweak.1, hweak.2⟩
   intro x

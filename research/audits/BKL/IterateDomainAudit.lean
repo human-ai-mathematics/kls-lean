@@ -1,10 +1,13 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
 
 /-!
 # Audit: the BKL iterates in `D(A)`, (30), (33), (46), (35)–(36) and (32)
 
 The propositions `I1`, `I2`, `I3` and `I7` of `research/audits/BKL/IterateRouteStatements.lean`
-(operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
+(operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with
+the same `variable`
 block and notation, and discharged by the library theorems of
 `KLS/BKL/PoissonIterate/Domain.lean`:
 
@@ -19,6 +22,8 @@ The hypotheses on `f` are used only for `i1`; `i2`, `i3` and `i7` hold for every
 These are supporting results of the operator route: Lemmas 3.2–3.4, Corollary 3.5 and
 Theorem 3.1 are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

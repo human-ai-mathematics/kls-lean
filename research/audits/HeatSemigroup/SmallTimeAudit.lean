@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Perimeter
 
 /-! Independent small-time heat clients, retaining the potential, time and perimeter scope. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory Filter Topology Set
@@ -44,28 +48,28 @@ theorem finite_perimeter
       Real.sqrt (2 * t) * (relativePerimeter ρ (interior (ν : Measure V).support) D).toReal :=
   integral_abs_indicator_sub_operator_le m hν hi hνU hU hconv hρ D hP ht
 
-theorem extended_perimeter
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
-    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ}
-    (hρ : IsBorellDensity (ν : Measure V) volume ρ) (D : SmoothDomain V)
-    {t : ℝ} (ht : 0 ≤ t) :
-    (∫⁻ x, ‖D.carrier.indicator (1 : V → ℝ) x -
-      operator m (ContinuousLinearMap.id ℝ V) hν hi ht
-        (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ)) x‖ₑ
-      ∂(ν : Measure V)) ≤
-      ENNReal.ofReal (Real.sqrt (2 * t)) * relativePerimeter ρ (interior (ν : Measure V).support) D :=
+theorem extended_perimeter (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ} (hρ : IsBorellDensity (ν : Measure V) volume ρ)
+    (D : SmoothDomain V) {t : ℝ} (ht : 0 ≤ t) :
+    (∫⁻ x,
+        ‖D.carrier.indicator (1 : V → ℝ) x -
+            operator m (ContinuousLinearMap.id ℝ V) hν hi ht
+              (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ))
+              x‖ₑ ∂(ν : Measure V)) ≤
+      ENNReal.ofReal (Real.sqrt (2 * t)) *
+        relativePerimeter ρ (interior (ν : Measure V).support) D :=
   lintegral_enorm_indicator_sub_operator_le m hν hi hνU hU hconv hρ D ht
 
-theorem zero_time
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
-    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ}
-    (hρ : IsBorellDensity (ν : Measure V) volume ρ) (D : SmoothDomain V)
-    :
-    (∫⁻ x, ‖D.carrier.indicator (1 : V → ℝ) x -
-      operator m (ContinuousLinearMap.id ℝ V) hν hi (t := 0) le_rfl
-        (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ)) x‖ₑ
-      ∂(ν : Measure V)) ≤
-      ENNReal.ofReal (Real.sqrt (2 * 0)) * relativePerimeter ρ (interior (ν : Measure V).support) D :=
+theorem zero_time (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ univ U) {ρ : V → ℝ} (hρ : IsBorellDensity (ν : Measure V) volume ρ)
+    (D : SmoothDomain V) :
+    (∫⁻ x,
+        ‖D.carrier.indicator (1 : V → ℝ) x -
+            operator m (ContinuousLinearMap.id ℝ V) hν hi (t := 0) le_rfl
+              (indicatorConstLp 2 D.isOpen.measurableSet (measure_ne_top _ _) (1 : ℝ))
+              x‖ₑ ∂(ν : Measure V)) ≤
+      ENNReal.ofReal (Real.sqrt (2 * 0)) *
+        relativePerimeter ρ (interior (ν : Measure V).support) D :=
   lintegral_enorm_indicator_sub_operator_le m hν hi hνU hU hconv hρ D (t := 0) le_rfl
 
 /-- The form-domain estimate applies after any positive heat time to arbitrary L2 data. -/
@@ -85,7 +89,8 @@ end HeatSmallTimeAudit
 #print axioms FunctionalInequalities.L2.exists_bounded_inner_eq_integral_abs
 #print axioms FunctionalInequalities.L2.inner_le_mul_integral_abs
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.inner_sub_operator_le
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_abs_sub_operator_le_of_recovery
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_abs_sub_operator_le_of_recovery
 #print axioms HeatSmallTimeAudit.form_domain
 #print axioms HeatSmallTimeAudit.l1_contraction
 #print axioms HeatSmallTimeAudit.finite_perimeter

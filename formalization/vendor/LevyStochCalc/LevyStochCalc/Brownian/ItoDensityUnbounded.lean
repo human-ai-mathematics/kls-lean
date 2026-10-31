@@ -3,7 +3,15 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoDensityPredictableL2
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+-- Modified 2026-10-31 by the KLS formalization project: drop the measurability arguments that
+-- `eLpNorm_add_le` no longer takes and pass the one that `eLpNorm_nnreal_pow_eq_lintegral` now
+-- takes in Mathlib v4.35.0 (proof-only change); the two private `eLpNorm` helpers keep their
+-- measurability premises unchanged, with the now-unused binders renamed `_hf`/`_hg`/`_hfn`.
+module
+
+public import LevyStochCalc.Brownian.ItoDensityPredictableL2
 
 /-!
 # Density of the simple predictable processes in `L²`
@@ -12,6 +20,8 @@ Removal of the boundedness restriction by truncation: the `eLpNorm`/`lintegral`
 dictionary on the product measure, and the density results `simplePredictable_dense_L2`
 and `adaptedSimple_dense_L2_brownian` for an arbitrary square-integrable integrand.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -29,15 +39,14 @@ private lemma eLpNorm_sub_eLpNorm_le_eLpNorm_sub
     {α E : Type*} [MeasurableSpace α] [NormedAddCommGroup E]
     {p : ℝ≥0∞} (hp : 1 ≤ p) {μ : Measure α}
     {f g : α → E}
-    (hf : MeasureTheory.AEStronglyMeasurable f μ)
-    (hg : MeasureTheory.AEStronglyMeasurable g μ) :
+    (_hf : MeasureTheory.AEStronglyMeasurable f μ)
+    (_hg : MeasureTheory.AEStronglyMeasurable g μ) :
     MeasureTheory.eLpNorm f p μ - MeasureTheory.eLpNorm g p μ
       ≤ MeasureTheory.eLpNorm (f - g) p μ := by
   rw [tsub_le_iff_left]
   have h_decomp : f = g + (f - g) := by ext x; simp
-  have h_meas_diff : MeasureTheory.AEStronglyMeasurable (f - g) μ := hf.sub hg
   conv_lhs => rw [h_decomp]
-  exact MeasureTheory.eLpNorm_add_le hg h_meas_diff hp
+  exact MeasureTheory.eLpNorm_add_le hp
 
 /-- **L²-norm continuity from L²-difference vanishing.** If
 `eLpNorm (fn n - f) p μ → 0`, then `eLpNorm (fn n) p μ → eLpNorm f p μ`.
@@ -54,8 +63,8 @@ private lemma eLpNorm_tendsto_of_eLpNorm_sub_tendsto_zero
     {α E : Type*} [MeasurableSpace α] [NormedAddCommGroup E]
     {p : ℝ≥0∞} (hp : 1 ≤ p) {μ : Measure α}
     {f : α → E} {fn : ℕ → α → E}
-    (hf : MeasureTheory.AEStronglyMeasurable f μ)
-    (hfn : ∀ n, MeasureTheory.AEStronglyMeasurable (fn n) μ)
+    (_hf : MeasureTheory.AEStronglyMeasurable f μ)
+    (_hfn : ∀ n, MeasureTheory.AEStronglyMeasurable (fn n) μ)
     (h_tendsto : Filter.Tendsto
       (fun n => MeasureTheory.eLpNorm (fn n - f) p μ) Filter.atTop (nhds 0)) :
     Filter.Tendsto
@@ -65,25 +74,19 @@ private lemma eLpNorm_tendsto_of_eLpNorm_sub_tendsto_zero
       MeasureTheory.eLpNorm f p μ + MeasureTheory.eLpNorm (fn n - f) p μ := by
     intro n
     have h_decomp : fn n = f + (fn n - f) := by ext x; simp
-    have h_meas_diff : MeasureTheory.AEStronglyMeasurable (fn n - f) μ :=
-      (hfn n).sub hf
     conv_lhs => rw [h_decomp]
-    exact MeasureTheory.eLpNorm_add_le hf h_meas_diff hp
+    exact MeasureTheory.eLpNorm_add_le hp
   have h_lower : ∀ n,
       MeasureTheory.eLpNorm f p μ - MeasureTheory.eLpNorm (fn n - f) p μ
         ≤ MeasureTheory.eLpNorm (fn n) p μ := by
     intro n
     rw [tsub_le_iff_right]
     have h_decomp : f = fn n + -(fn n - f) := by ext x; simp
-    have h_meas_diff : MeasureTheory.AEStronglyMeasurable (fn n - f) μ :=
-      (hfn n).sub hf
-    have h_meas_neg_diff : MeasureTheory.AEStronglyMeasurable (-(fn n - f)) μ :=
-      h_meas_diff.neg
     calc MeasureTheory.eLpNorm f p μ
         = MeasureTheory.eLpNorm (fn n + -(fn n - f)) p μ := by rw [← h_decomp]
       _ ≤ MeasureTheory.eLpNorm (fn n) p μ
             + MeasureTheory.eLpNorm (-(fn n - f)) p μ :=
-          MeasureTheory.eLpNorm_add_le (hfn n) h_meas_neg_diff hp
+          MeasureTheory.eLpNorm_add_le hp
       _ = MeasureTheory.eLpNorm (fn n) p μ
             + MeasureTheory.eLpNorm (fn n - f) p μ := by
           rw [MeasureTheory.eLpNorm_neg]
@@ -128,7 +131,7 @@ lemma lintegral_sq_eq_eLpNorm_sq_on_prod_brownian
   -- Bridge: ∫⁻ p, (‖h p‖₊ : ℝ≥0∞)^2 ∂μν = eLpNorm h 2 μν ^ (2:ℝ).
   have h_pow_lemma := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
     (μ := μν) (p := (2 : NNReal)) (f := h)
-    (by norm_num : (2 : NNReal) ≠ 0)
+    (by norm_num : (2 : NNReal) ≠ 0) hh.aestronglyMeasurable
   have h_two_R : ((2 : NNReal) : ℝ) = (2 : ℝ) := by norm_num
   have h_two_ENNReal : ((2 : NNReal) : ℝ≥0∞) = (2 : ℝ≥0∞) := by simp
   rw [h_two_ENNReal, h_two_R] at h_pow_lemma

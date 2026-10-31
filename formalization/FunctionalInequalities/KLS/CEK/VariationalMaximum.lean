@@ -1,18 +1,25 @@
-import FunctionalInequalities.KLS.CEK.Competitors
-import FunctionalInequalities.Probability.MomentMeasure.Baseline
-import FunctionalInequalities.Probability.MomentMeasure.Compactness
-import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
-import Mathlib.Topology.Sequences
-import Mathlib.Topology.Order.IsLUB
+module
+
+public import FunctionalInequalities.KLS.CEK.Competitors
+public import FunctionalInequalities.Probability.MomentMeasure.Baseline
+public import FunctionalInequalities.Probability.MomentMeasure.Compactness
+public import FunctionalInequalities.Probability.MomentMeasure.ConjugateMass
+public import Mathlib.Topology.Sequences
+public import Mathlib.Topology.Order.IsLUB
 
 /-!
 # CEK Proposition 12: variational attainment
 
-Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Proposition 12 (38): for a probability measure with finite first
-moment, barycenter zero and full-dimensional support, a convex lower semicontinuous admissible potential with
+Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Proposition 12 (38): for a probability measure with
+finite first
+moment, barycenter zero and full-dimensional support, a convex lower semicontinuous admissible
+potential with
 Legendre exponential mass one maximizes the functional over every admissible competitor
-(`exists_variational_maximum`). Not provided: essential continuity, the Euler–Lagrange identification, Theorem 2.
+(`exists_variational_maximum`). Not provided: essential continuity, the Euler–Lagrange
+identification, Theorem 2.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -85,64 +92,82 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 /-- First extract an actual real-integral limit, then apply the actual full
 Lemma17 to that same subsequence. Both limit inequalities and the composed
 indices feed the independently rechecked actual extended-log limit helper. -/
-theorem exists_limit_ge_normalized_supremum (dx μ : Measure E)
-    [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
-    (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
+theorem exists_limit_ge_normalized_supremum (dx μ : Measure E) [dx.IsAddHaarMeasure]
+    [IsProbabilityMeasure μ] (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
     (hfirstMoment : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0) :
-    ∃ (S : ℝ) (ψ : E → EReal), ConvexPotential ψ ∧ PotentialIntegrable ψ μ ∧
-      (∀ x, 0 ≤ ψ x) ∧ ψ 0 = 0 ∧ 0 < mass dx (legendre ψ) ∧ mass dx (legendre ψ) ≠ ⊤ ∧
-      (S : EReal) ≤ variationalFunctional dx μ ψ ∧
-      ∀ η : E → EReal, ConvexPotential η → PotentialIntegrable η μ →
-        (∀ x, 0 ≤ η x) → η 0 = 0 → variationalFunctional dx μ η ≤ (S : EReal) := by
+    ∃ (S : ℝ) (ψ : E → EReal),
+      ConvexPotential ψ ∧
+        PotentialIntegrable ψ μ ∧
+          (∀ x, 0 ≤ ψ x) ∧
+            ψ 0 = 0 ∧
+              0 < mass dx (legendre ψ) ∧
+                mass dx (legendre ψ) ≠ ⊤ ∧
+                  (S : EReal) ≤ variationalFunctional dx μ ψ ∧
+                    ∀ η : E → EReal,
+                      ConvexPotential η →
+                        PotentialIntegrable η μ →
+                          (∀ x, 0 ≤ η x) →
+                            η 0 = 0 → variationalFunctional dx μ η ≤ (S : EReal) := by
   obtain ⟨S, φ, hconv, hpot, hnn, hzero, hF, hsup⟩ :=
     exists_normalized_maximizing_sequence dx μ hsub hfirstMoment hbar
-  obtain ⟨B, _hB, hBphi, hbounded⟩ := exists_integral_bound_of_tendsto_functional_above
-    dx μ hsub hfirstMoment hbar φ hnn hzero hconv hpot (S : EReal) (S - 1)
-    (EReal.coe_lt_coe_iff.mpr (by linarith)) hF
-  have hmnn : ∀ j, 0 ≤ ∫ x, (φ j x).toReal ∂μ :=
-    fun j => (lintegral_nonneg_potential (φ j) (hpot j) (hnn j)).2.2
-  obtain ⟨M, _hM, t, ht, hmT⟩ := isCompact_Icc.tendsto_subseq
-    (fun j => (show (∫ x, (φ j x).toReal ∂μ) ∈ Icc 0 B from ⟨hmnn j, hBphi j⟩))
+  obtain ⟨B, _hB, hBphi, hbounded⟩ :=
+    exists_integral_bound_of_tendsto_functional_above dx μ hsub hfirstMoment hbar φ hnn hzero
+      hconv hpot (S : EReal) (S - 1) (EReal.coe_lt_coe_iff.mpr (by linarith)) hF
+  have hmnn : ∀ j, 0 ≤ ∫ x, (φ j x).toReal ∂μ := fun j =>
+    (lintegral_nonneg_potential (φ j) (hpot j) (hnn j)).2.2
+  obtain ⟨M, _hM, t, ht, hmT⟩ :=
+    isCompact_Icc.tendsto_subseq
+      (fun j => (show (∫ x, (φ j x).toReal ∂μ) ∈ Icc 0 B from ⟨hmnn j, hBphi j⟩))
   have hμ : μ ≠ 0 := by
     intro hz
     have hu : μ univ = 1 := measure_univ
     simp only [hz, Measure.coe_zero, Pi.zero_apply, zero_ne_one] at hu
-  have h0 := FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero
-    μ hμ hsub hfirstMoment hbar
+  have h0 :=
+    FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero
+      μ hμ hsub hfirstMoment hbar
   have hboundedT : (⨆ j, ∫⁻ x, (φ (t j) x).toENNReal ∂μ) ≠ ⊤ :=
-    ne_top_of_le_ne_top hbounded (iSup_le fun j => le_iSup (fun k => ∫⁻ x, (φ k x).toENNReal ∂μ) (t j))
-  obtain ⟨s, ψ, hs, hψnn, hψ0, hψconv, _hψmeas, _hpoint, _hrad, _hoff, hpψ, hZfin, hfirst, hsecond⟩ :=
+    ne_top_of_le_ne_top hbounded
+      (iSup_le fun j => le_iSup (fun k => ∫⁻ x, (φ k x).toENNReal ∂μ) (t j))
+  obtain
+    ⟨s, ψ, hs, hψnn, hψ0, hψconv, _hψmeas, _hpoint, _hrad, _hoff, hpψ, hZfin, hfirst,
+      hsecond⟩ :=
     exists_subseq_integral_bounds_of_convex_epigraph dx μ h0 (fun j => φ (t j))
       (fun j => hnn (t j)) (fun j => hzero (t j)) (fun j => (hconv (t j)).2)
       (fun j => (lintegral_nonneg_potential (φ (t j)) (hpot (t j)) (hnn (t j))).1) hboundedT
-  have hFts : Tendsto (fun j => variationalFunctional dx μ (φ (t (s j)))) atTop (𝓝 (S : EReal)) :=
+  have hFts :
+    Tendsto (fun j => variationalFunctional dx μ (φ (t (s j)))) atTop (𝓝 (S : EReal)) :=
     hF.comp (ht.tendsto_atTop.comp hs.tendsto_atTop)
   have hmts : Tendsto (fun j => ∫ x, (φ (t (s j)) x).toReal ∂μ) atTop (𝓝 M) :=
     hmT.comp hs.tendsto_atTop
   have hψlin := (lintegral_nonneg_potential ψ hpψ hψnn).2.1
   have hseqlin (j : ℕ) :=
     (lintegral_nonneg_potential (φ (t (s j))) (hpot (t (s j))) (hnn (t (s j)))).2.1
-  have hfirstScalar : ENNReal.ofReal (∫ x, (ψ x).toReal ∂μ) ≤
+  have hfirstScalar :
+    ENNReal.ofReal (∫ x, (ψ x).toReal ∂μ) ≤
       liminf (fun j => ENNReal.ofReal (∫ x, (φ (t (s j)) x).toReal ∂μ)) atTop := by
     simpa only [hψlin, hseqlin] using hfirst
-  obtain ⟨hZpos, hvalue⟩ := log_sub_ge_of_integral_limits
-    (fun j => mass dx (legendre (φ (t (s j)))))
-    (fun j => ∫ x, (φ (t (s j)) x).toReal ∂μ) (mass dx (legendre ψ))
-    (∫ x, (ψ x).toReal ∂μ) S M (fun j => hmnn (t (s j))) hFts hmts hfirstScalar hsecond
-  exact ⟨S, ψ, ⟨fun x => ne_of_gt (EReal.bot_lt_zero.trans_le (hψnn x)), hψconv⟩,
-    hpψ, hψnn, hψ0, hZpos, hZfin, hvalue, hsup⟩
+  obtain ⟨hZpos, hvalue⟩ :=
+    log_sub_ge_of_integral_limits (fun j => mass dx (legendre (φ (t (s j)))))
+      (fun j => ∫ x, (φ (t (s j)) x).toReal ∂μ) (mass dx (legendre ψ)) (∫ x, (ψ x).toReal ∂μ) S
+      M (fun j => hmnn (t (s j))) hFts hmts hfirstScalar hsecond
+  exact
+    ⟨S, ψ, ⟨fun x => ne_of_gt (EReal.bot_lt_zero.trans_le (hψnn x)), hψconv⟩, hpψ, hψnn, hψ0,
+      hZpos, hZfin, hvalue, hsup⟩
 /-- **CEK Proposition12 (38).** Actual variational attainment for every
 admissible competitor, with an actual convex lsc admissible witness whose
 Legendre exponential mass is1. Original measure hypotheses only; neither a
 maximizing sequence, convergence, desired bound nor maximizer is supplied. -/
-theorem exists_variational_maximum (dx μ : Measure E)
-    [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
-    (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
+theorem exists_variational_maximum (dx μ : Measure E) [dx.IsAddHaarMeasure]
+    [IsProbabilityMeasure μ] (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
     (hfirstMoment : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0) :
-    ∃ φ : E → EReal, ConvexPotential φ ∧ LowerSemicontinuous φ ∧ PotentialIntegrable φ μ ∧
-      mass dx (legendre φ) = 1 ∧
-      ∀ f : E → EReal, PotentialIntegrable f μ →
-        variationalFunctional dx μ f ≤ variationalFunctional dx μ φ := by
+    ∃ φ : E → EReal,
+      ConvexPotential φ ∧
+        LowerSemicontinuous φ ∧
+          PotentialIntegrable φ μ ∧
+            mass dx (legendre φ) = 1 ∧
+              ∀ f : E → EReal,
+                PotentialIntegrable f μ →
+                  variationalFunctional dx μ f ≤ variationalFunctional dx μ φ := by
   obtain ⟨S, ψ, _hψconv, hpψ, hψnn, hψ0, hZpos, hZfin, hS, hnormSup⟩ :=
     exists_limit_ge_normalized_supremum dx μ hsub hfirstMoment hbar
   have hμ : μ ≠ 0 := by
@@ -170,8 +195,9 @@ theorem exists_variational_maximum (dx μ : Measure E)
   have hV : variationalFunctional dx μ c = (V : EReal) := by
     unfold variationalFunctional
     rw [ENNReal.log_pos_real hZcpos.ne' hZcfin, ← EReal.coe_sub]
-  have hmax : ∀ f : E → EReal, PotentialIntegrable f μ →
-      variationalFunctional dx μ f ≤ variationalFunctional dx μ c := by
+  have hmax :
+    ∀ f : E → EReal,
+      PotentialIntegrable f μ → variationalFunctional dx μ f ≤ variationalFunctional dx μ c := by
     intro f hf
     have heps : ∀ ε : ℝ, 0 < ε → variationalFunctional dx μ f ≤ ((V + ε : ℝ) : EReal) := by
       intro ε hε
@@ -190,13 +216,15 @@ theorem exists_variational_maximum (dx μ : Measure E)
     exact heps ε hε
   let b : ℝ := Real.log (mass dx (legendre c)).toReal
   let φ := affineSubtract c 0 b
-  have hpφ : PotentialIntegrable φ μ := affineSubtract_potentialIntegrable c 0 b hpc hfirstMoment
+  have hpφ : PotentialIntegrable φ μ :=
+    affineSubtract_potentialIntegrable c 0 b hpc hfirstMoment
   have hcφ : ConvexPotential φ := ⟨hpφ.1, convex_epigraph_affineSubtract c 0 b hc.2⟩
   have hlsφ : LowerSemicontinuous φ := by
     have heq : φ = legendre (affineSubtract (legendre ψ) 0 (-b)) := by
       funext x
       rw [legendre_affineSubtract]
-      simp only [φ, c, affineSubtract, inner_zero_left, zero_add, add_zero, EReal.coe_neg, sub_eq_add_neg]
+      simp only [φ, c, affineSubtract, inner_zero_left, zero_add, add_zero, EReal.coe_neg,
+        sub_eq_add_neg]
     rw [heq]
     exact lowerSemicontinuous_legendre _
   have hmassφ : mass dx (legendre φ) = 1 := by

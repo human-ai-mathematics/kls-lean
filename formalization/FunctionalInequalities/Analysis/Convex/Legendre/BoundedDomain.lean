@@ -1,23 +1,31 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import Mathlib.Analysis.Normed.Module.Convex
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.Topology.Semicontinuity.Basic
-import Mathlib.Topology.MetricSpace.Lipschitz
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import Mathlib.Analysis.Normed.Module.Convex
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Topology.Semicontinuity.Basic
+public import Mathlib.Topology.MetricSpace.Lipschitz
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 /-!
 # Extended-real potentials with bounded effective domain and their conjugates
 
-For an extended-real potential `φ` on a real inner-product space whose effective domain lies in `closedBall 0 L`:
+For an extended-real potential `φ` on a real inner-product space whose effective domain lies in
+`closedBall 0 L`:
 `closedBallCap φ L` is `φ` on the ball and `⊤` outside, lower semicontinuous with `φ`
-(`closedBallCap_lowerSemicontinuous`); in finite dimension a proper lower semicontinuous `φ` attains a real minimum
+(`closedBallCap_lowerSemicontinuous`); in finite dimension a proper lower semicontinuous `φ` attains
+a real minimum
 (`exists_real_global_minimum_of_bounded_domain`); a real floor `m` gives `φ* x ≤ L‖x‖ − m`
-(`legendre_le_of_real_lower_bound`), so the conjugate is finite everywhere (`legendre_finite_of_bounded_domain`); a real
+(`legendre_le_of_real_lower_bound`), so the conjugate is finite everywhere
+(`legendre_finite_of_bounded_domain`); a real
 representative `ψ` of a finite conjugate is convex (`real_convexOn_legendre`) and `L`-Lipschitz
-(`lipschitzWith_real_legendre`), and satisfies the real Fenchel inequality at finite points (`real_legendre_fenchel`).
+(`lipschitzWith_real_legendre`), and satisfies the real Fenchel inequality at finite points
+(`real_legendre_fenchel`).
 Infinite values are excluded before every real conversion. Used by the bounded-source producer of
 `KLS/CEK/BoundedPrimal.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -41,7 +49,7 @@ omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [Bo
 /-- The top sublevel is the whole ambient space; every other sublevel is an
 intersection with the closed ball. This helper honestly assumes input LSC. -/
 theorem closedBallCap_lowerSemicontinuous
- (φ : E → EReal) (L : NNReal)
+    (φ : E → EReal) (L : NNReal)
     (hφ : LowerSemicontinuous φ) : LowerSemicontinuous (closedBallCap φ L) := by
   classical
   apply lowerSemicontinuous_iff_isClosed_preimage.mpr

@@ -1,10 +1,12 @@
-import FunctionalInequalities.Probability.Line.Cdf
-import Mathlib.Analysis.Calculus.Deriv.Inverse
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.SpecialFunctions.Sqrt
-import Mathlib.MeasureTheory.Function.JacobianOneDim
-import Mathlib.MeasureTheory.Group.Integral
-import Mathlib.Topology.OpenPartialHomeomorph.Basic
+module
+
+public import FunctionalInequalities.Probability.Line.Cdf
+public import Mathlib.Analysis.Calculus.Deriv.Inverse
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
+public import Mathlib.MeasureTheory.Function.JacobianOneDim
+public import Mathlib.MeasureTheory.Group.Integral
+public import Mathlib.Topology.OpenPartialHomeomorph.Basic
 
 /-!
 # Equality in the midpoint Prekopa--Leindler inequality on the line
@@ -30,6 +32,8 @@ mean inequality to be an equality everywhere on `(0, 1)` (both sides are continu
 
 No ledger, certificate, or Blueprint claim is made by this module.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -107,10 +111,9 @@ private theorem sqrt_mul_mul_inv_add_inv {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
 /-- The normalized equality case: `f` and `g` have mass one and `∫ h ≤ 1`. -/
 private theorem exists_eq_comp_sub_of_midpoint_le_of_normalized {f g h : ℝ → ℝ}
     (hf : Continuous f) (hg : Continuous g) (hf0 : ∀ x, 0 < f x) (hg0 : ∀ y, 0 < g y)
-    (hfi : Integrable f) (hgi : Integrable g) (hhi : Integrable h)
-    (hf1 : ∫ x, f x = 1) (hg1 : ∫ y, g y = 1) (hh1 : ∫ z, h z ≤ 1)
-    (hfgh : ∀ x y, Real.sqrt (f x * g y) ≤ h ((x + y) / 2)) :
-    ∃ c : ℝ, ∀ y, g y = f (y - c) := by
+    (hfi : Integrable f) (hgi : Integrable g) (hhi : Integrable h) (hf1 : ∫ x, f x = 1)
+    (hg1 : ∫ y, g y = 1) (hh1 : ∫ z, h z ≤ 1)
+    (hfgh : ∀ x y, Real.sqrt (f x * g y) ≤ h ((x + y) / 2)) : ∃ c : ℝ, ∀ y, g y = f (y - c) := by
   obtain ⟨Qf, hQf, hQfs, hQfm⟩ := exists_quantile hf hf0 hfi hf1
   obtain ⟨Qg, hQg, -, hQgm⟩ := exists_quantile hg hg0 hgi hg1
   set S : Set ℝ := Ioo (0 : ℝ) 1 with hS
@@ -136,35 +139,47 @@ private theorem exists_eq_comp_sub_of_midpoint_le_of_normalized {f g h : ℝ →
   have hh0 : ∀ r, 0 ≤ h r := fun r ↦ by
     have := hfgh r r
     rw [add_self_div_two] at this
-    exact (Real.sqrt_nonneg _).trans this
+    exact
+      (Real.sqrt_nonneg _).trans
+        this
   -- the transported midpoint density
+
   set φ : ℝ → ℝ := fun p ↦ |z' p| • h (z p) with hφ
-  have hcov := integral_image_eq_integral_abs_deriv_smul measurableSet_Ioo
-    (fun p hp ↦ (hzderiv p hp).hasDerivWithinAt) hzinj h
-  have hφi : IntegrableOn φ S := (integrableOn_image_iff_integrableOn_abs_deriv_smul
-    measurableSet_Ioo (fun p hp ↦ (hzderiv p hp).hasDerivWithinAt) hzinj h).mp hhi.integrableOn
+  have hcov :=
+    integral_image_eq_integral_abs_deriv_smul measurableSet_Ioo
+      (fun p hp ↦ (hzderiv p hp).hasDerivWithinAt) hzinj h
+  have hφi : IntegrableOn φ S :=
+    (integrableOn_image_iff_integrableOn_abs_deriv_smul measurableSet_Ioo
+          (fun p hp ↦ (hzderiv p hp).hasDerivWithinAt) hzinj h).mp
+      hhi.integrableOn
   -- the arithmetic--geometric mean lower bound
+
   set ψ : ℝ → ℝ := fun p ↦ Real.sqrt (a p * b p) * z' p with hψ
-  have hψeq : ∀ p, ψ p = 1 + (Real.sqrt (a p) - Real.sqrt (b p)) ^ 2 /
-      (2 * (Real.sqrt (a p) * Real.sqrt (b p))) := fun p ↦
-    sqrt_mul_mul_inv_add_inv (hapos p) (hbpos p)
+  have hψeq :
+    ∀ p,
+      ψ p =
+        1 +
+          (Real.sqrt (a p) - Real.sqrt (b p)) ^ 2 / (2 * (Real.sqrt (a p) * Real.sqrt (b p))) :=
+    fun p ↦ sqrt_mul_mul_inv_add_inv (hapos p) (hbpos p)
   have hψ1 : ∀ p, 1 ≤ ψ p := fun p ↦ by
     rw [hψeq]
     have := Real.sqrt_pos.mpr (hapos p)
     have := Real.sqrt_pos.mpr (hbpos p)
-    have : 0 ≤ (Real.sqrt (a p) - Real.sqrt (b p)) ^ 2 /
-        (2 * (Real.sqrt (a p) * Real.sqrt (b p))) := by positivity
+    have :
+      0 ≤ (Real.sqrt (a p) - Real.sqrt (b p)) ^ 2 / (2 * (Real.sqrt (a p) * Real.sqrt (b p))) := by
+      positivity
     linarith
   have hψφ : ∀ p, ψ p ≤ φ p := fun p ↦ by
     simp only [hψ, hφ, smul_eq_mul, abs_of_pos (hz'pos p)]
     rw [mul_comm (z' p)]
-    exact mul_le_mul_of_nonneg_right (hfgh _ _) (hz'pos p).le
+    exact
+      mul_le_mul_of_nonneg_right (hfgh _ _)
+        (hz'pos p).le
   -- integrating: `∫_S (φ - 1) ≤ 0`
-  have hvol : (volume : Measure ℝ).real S = 1 := by
-    simp [hS, Real.volume_real_Ioo]
+
+  have hvol : (volume : Measure ℝ).real S = 1 := by simp [hS, Real.volume_real_Ioo]
   have hφint : ∫ p in S, φ p ≤ 1 := by
-    have : ∫ p in S, φ p = ∫ r in z '' S, h r := by
-      rw [hcov]
+    have : ∫ p in S, φ p = ∫ r in z '' S, h r := by rw [hcov]
     rw [this]
     exact (setIntegral_le_integral hhi (ae_of_all _ hh0)).trans hh1
   have hone_i : IntegrableOn (fun _ : ℝ ↦ (1 : ℝ)) S := by
@@ -188,6 +203,7 @@ private theorem exists_eq_comp_sub_of_midpoint_le_of_normalized {f g h : ℝ →
     simp only [Pi.zero_apply] at hp
     linarith
   -- continuity of `ψ` on `S`
+
   have hQfc : ContinuousOn Qf S := fun p hp ↦ (hQf p hp).continuousAt.continuousWithinAt
   have hQgc : ContinuousOn Qg S := fun p hp ↦ (hQg p hp).continuousAt.continuousWithinAt
   have hac : ContinuousOn a S := hf.comp_continuousOn hQfc
@@ -196,15 +212,18 @@ private theorem exists_eq_comp_sub_of_midpoint_le_of_normalized {f g h : ℝ →
     have hz'c : ContinuousOn z' S :=
       (((hac.inv₀ fun p _ ↦ (hapos p).ne').add (hbc.inv₀ fun p _ ↦ (hbpos p).ne')).div_const 2)
     exact ((hac.mul hbc).sqrt).mul hz'c
-  have hψS : EqOn ψ (fun _ ↦ 1) S := Measure.eqOn_open_of_ae_eq hψae hSo hψc continuousOn_const
+  have hψS : EqOn ψ (fun _ ↦ 1) S :=
+    Measure.eqOn_open_of_ae_eq hψae hSo hψc
+      continuousOn_const
   -- equality in the arithmetic--geometric mean inequality
+
   have hab : ∀ p ∈ S, a p = b p := fun p hp ↦ by
     have h1 := hψS hp
     rw [hψeq] at h1
     have hpa := Real.sqrt_pos.mpr (hapos p)
     have hpb := Real.sqrt_pos.mpr (hbpos p)
-    have hfrac : (Real.sqrt (a p) - Real.sqrt (b p)) ^ 2 /
-        (2 * (Real.sqrt (a p) * Real.sqrt (b p))) = 0 := by
+    have hfrac :
+      (Real.sqrt (a p) - Real.sqrt (b p)) ^ 2 / (2 * (Real.sqrt (a p) * Real.sqrt (b p))) = 0 := by
       simp only at h1
       linarith
     rw [div_eq_zero_iff] at hfrac
@@ -217,14 +236,16 @@ private theorem exists_eq_comp_sub_of_midpoint_le_of_normalized {f g h : ℝ →
       have : 0 < 2 * (Real.sqrt (a p) * Real.sqrt (b p)) := by positivity
       linarith
   -- `Qg - Qf` is constant on `S`
+
   have hD : ∀ p ∈ S, HasDerivAt (fun p ↦ Qg p - Qf p) 0 p := fun p hp ↦ by
     have := (hQg p hp).sub (hQf p hp)
     have hb' : b p = a p := (hab p hp).symm
     simp only [hb] at hb'
     rwa [hb', sub_self] at this
-  obtain ⟨c, hc⟩ := hSo.exists_is_const_of_deriv_eq_zero isPreconnected_Ioo
-    (fun p hp ↦ (hD p hp).differentiableAt.differentiableWithinAt)
-    (fun p hp ↦ (hD p hp).deriv)
+  obtain ⟨c, hc⟩ :=
+    hSo.exists_is_const_of_deriv_eq_zero isPreconnected_Ioo
+      (fun p hp ↦ (hD p hp).differentiableAt.differentiableWithinAt)
+      (fun p hp ↦ (hD p hp).deriv)
   refine ⟨c, fun y ↦ ?_⟩
   obtain ⟨p, hp, hpy⟩ := hQfs (y - c)
   have hQgp : Qg p = y := by

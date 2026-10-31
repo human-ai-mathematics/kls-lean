@@ -22,7 +22,9 @@ FORBIDDEN = re.compile(
     r"(?<![\w.])(?:sorry|admit|axiom|opaque|unsafe|partial|implemented_by|extern|native_decide|"
     r"run_cmd|run_tac|run_elab|elab|elab_rules|macro|macro_rules|syntax|initialize|builtin_initialize)(?![\w'])"
     r"|#eval|#exit|debug\.skipKernelTC")
-IMPORT = re.compile(r"^(?:public\s+)?import\s+(\S+)", re.M)
+# Every import directive of the module grammar `[public] [meta] import [all] M`; modifiers never
+# hide an edge from the allowlists below. Applied to comment- and string-stripped code.
+IMPORT = re.compile(r"^[ \t]*(?:(?:public|meta)\s+)*import\s+(?:all\s+)?(\S+)", re.M)
 IMPORT_FAILURE = re.compile(r"unknown module prefix|could not resolve import|object file .* does not exist|unknown package|"
                             r"failed to read file|No such file or directory")
 

@@ -1,21 +1,25 @@
-import FunctionalInequalities.Analysis.BakryEmery.Gamma
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.Calculus.Deriv.Inv
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Gamma
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.Calculus.Deriv.Inv
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
 # Convex Hessians and the local Bochner identity
 
 For
 the diffusion generator `ℒ f = Δ f - ⟪∇U, ∇f⟫` on a finite-dimensional real inner product space
-`E`, with `Γ` and `Γ₂` as defined in `Gamma.lean`.
+`E`, with `Γ` and `Γ₂` as defined in `Analysis/BakryEmery/Gamma.lean`.
 
-* convex Hessian positivity (`bilinearIteratedFDerivTwo_nonneg_of_convexOn`): a `C²` convex function has a positive
+* convex Hessian positivity (`bilinearIteratedFDerivTwo_nonneg_of_convexOn`): a `C²` convex function
+  has a positive
   semidefinite Hessian, `0 ≤ D²U(x)(v, v)`. The proof restricts `U` to the line `t ↦ U (x + t v)`,
   whose convexity makes its derivative monotone (`ConvexOn.monotoneOn_deriv`) and hence its second
   derivative at `0` nonnegative (`Monotone.deriv_nonneg`); that second derivative is `D²U(x)(v, v)`.
-* the Bochner identity (`gammaTwo_eq_hessianSqStdBasis_add`, `bochner_stdBasis`): for `C³` `f` and `C²` `U`,
+* the Bochner identity (`gammaTwo_eq_hessianSqStdBasis_add`, `bochner_stdBasis`): for `C³` `f` and
+  `C²` `U`,
 
   `Γ₂(f) = ℒ(‖∇f‖²)/2 - ⟪∇f, ∇(ℒf)⟫ = ∑ᵢ ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)`,
 
@@ -26,7 +30,8 @@ the diffusion generator `ℒ f = Δ f - ⟪∇U, ∇f⟫` on a finite-dimensiona
   the commutation `∂ⱼ∂ᵢ∂ᵢ f = ∂ᵢ∂ᵢ∂ⱼ f` (`fderiv_fderiv_fderiv_apply_comm`); the drift
   contributions `-⟪∇U, ∇‖∇f‖²⟫/2` and `+⟪∇f, ∇⟪∇U, ∇f⟫⟫` leave exactly `+D²U(∇f, ∇f)` after the
   symmetry `∂ᵢ∂ⱼf = ∂ⱼ∂ᵢf`.
-* Γ₂ nonnegativity (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`): for convex `U`, `0 ≤ Γ₂(f)`, as a sum of
+* Γ₂ nonnegativity (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`): for convex `U`, `0 ≤ Γ₂(f)`, as a
+  sum of
   squares plus a value of the positive semidefinite Hessian of `U`.
 
 * Improved Bochner (`norm_gradient_norm_gradient_sq_le`): for convex `U` and `C³` `f`,
@@ -44,6 +49,8 @@ Pointwise identities for classical smooth functions. Nothing is said about the h
 `P_t`, about `Γ(P_t f) ≤ P_t Γ(f)` or any gradient estimate, about non-smooth or lower-dimensional
 log-concave laws, or about Buser's inequality.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -127,8 +134,12 @@ def hessianSqStdBasis (f : E → ℝ) (x : E) : ℝ :=
     (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) ^ 2
 
 theorem hessianSqStdBasis_apply (f : E → ℝ) (x : E) :
-    hessianSqStdBasis f x = ∑ i, ∑ j,
-      (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) ^ 2 :=
+    hessianSqStdBasis f x =
+      ∑ i,
+        ∑ j,
+          (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+              (stdOrthonormalBasis ℝ E j)) ^
+            2 :=
   rfl
 
 theorem hessianSqStdBasis_nonneg (f : E → ℝ) (x : E) : 0 ≤ hessianSqStdBasis f x :=
@@ -190,9 +201,13 @@ theorem fderiv_norm_gradient_sq_apply {f : E → ℝ} (hf : ContDiff ℝ 2 f) (x
 /-- Drift term: `⟪∇U, ∇‖∇f‖²⟫ = 2 ∑ᵢ ∑ⱼ ∂ᵢU ∂ⱼf D²f(eᵢ, eⱼ)`. -/
 theorem inner_gradient_gradient_norm_sq (U : E → ℝ) {f : E → ℝ} (hf : ContDiff ℝ 2 f) (x : E) :
     ⟪gradient U x, gradient (fun y => ‖gradient f y‖ ^ 2) x⟫ =
-      2 * ∑ i, ∑ j, fderiv ℝ U x (stdOrthonormalBasis ℝ E i) *
-        fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-        bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j) := by
+      2 *
+        ∑ i,
+          ∑ j,
+            fderiv ℝ U x (stdOrthonormalBasis ℝ E i) *
+                fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+              bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                (stdOrthonormalBasis ℝ E j) := by
   rw [inner_gradient_eq_sum_fderiv_mul_fderiv, Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [fderiv_norm_gradient_sq_apply hf, Finset.mul_sum, Finset.mul_sum, Finset.mul_sum]
@@ -203,37 +218,65 @@ theorem inner_gradient_gradient_norm_sq (U : E → ℝ) {f : E → ℝ} (hf : Co
 /-- Laplacian of `‖∇f‖²`: `Δ‖∇f‖² = 2 ∑ᵢ ∑ⱼ (D²f(eᵢ, eⱼ))² + 2 ∑ⱼ ∂ⱼf ∑ᵢ ∂ᵢ∂ᵢ∂ⱼf`. -/
 theorem laplacian_norm_gradient_sq {f : E → ℝ} (hf : ContDiff ℝ 3 f) (x : E) :
     Laplacian.laplacian (fun y => ‖gradient f y‖ ^ 2) x =
-      2 * ∑ i, ∑ j,
-          (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
-            (stdOrthonormalBasis ℝ E j)) ^ 2 +
-        2 * ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-          ∑ i, fderiv ℝ (fun y => fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y
-            (stdOrthonormalBasis ℝ E i)) x (stdOrthonormalBasis ℝ E i) := by
+      2 *
+          ∑ i,
+            ∑ j,
+              (bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                  (stdOrthonormalBasis ℝ E j)) ^
+                2 +
+        2 *
+          ∑ j,
+            fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+              ∑ i,
+                fderiv ℝ
+                  (fun y =>
+                    fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y
+                      (stdOrthonormalBasis ℝ E i))
+                  x (stdOrthonormalBasis ℝ E i) := by
   have hf2 : ContDiff ℝ 2 f := hf.of_le (by norm_num)
   have hg2 : ContDiff ℝ 2 (gradient f) := contDiff_gradient hf (by norm_num)
   have hN : ContDiff ℝ 2 (fun y => ‖gradient f y‖ ^ 2) := hg2.norm_sq (𝕜 := ℝ)
   rw [laplacian_eq_sum_fderiv_apply_fderiv_apply
-    ((hN.fderiv_right (m := 1) (by norm_num)).differentiable one_ne_zero x), ← sum_two_mul_sum_add]
+      ((hN.fderiv_right (m := 1) (by norm_num)).differentiable one_ne_zero x),
+    ← sum_two_mul_sum_add]
   refine Finset.sum_congr rfl fun i _ => ?_
-  have h1 : (fun y => fderiv ℝ (fun z => ‖gradient f z‖ ^ 2) y (stdOrthonormalBasis ℝ E i)) =
-      fun y => 2 * ∑ j, fderiv ℝ f y (stdOrthonormalBasis ℝ E j) *
-        fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y (stdOrthonormalBasis ℝ E i) :=
+  have h1 :
+    (fun y => fderiv ℝ (fun z => ‖gradient f z‖ ^ 2) y (stdOrthonormalBasis ℝ E i)) = fun y =>
+      2 *
+        ∑ j,
+          fderiv ℝ f y (stdOrthonormalBasis ℝ E j) *
+            fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y
+              (stdOrthonormalBasis ℝ E i) :=
     funext fun y => fderiv_norm_gradient_sq_apply hf2 y _
-  have hd : ∀ j ∈ (Finset.univ : Finset (Fin (Module.finrank ℝ E))), DifferentiableAt ℝ
-      (fun y => fderiv ℝ f y (stdOrthonormalBasis ℝ E j) *
-        fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y (stdOrthonormalBasis ℝ E i))
-      x := fun j _ => (differentiable_fderiv_apply hf2 _ x).mul
-        ((contDiff_fderiv_apply (contDiff_fderiv_apply hf (m := 2) (by norm_num) _) (m := 1)
-          (by norm_num) _).differentiable one_ne_zero x)
-  have hs : DifferentiableAt ℝ (fun y => ∑ j, fderiv ℝ f y (stdOrthonormalBasis ℝ E j) *
-      fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y (stdOrthonormalBasis ℝ E i))
-      x := DifferentiableAt.fun_sum hd
+  have hd :
+    ∀ j ∈ (Finset.univ : Finset (Fin (Module.finrank ℝ E))),
+      DifferentiableAt ℝ
+        (fun y =>
+          fderiv ℝ f y (stdOrthonormalBasis ℝ E j) *
+            fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y
+              (stdOrthonormalBasis ℝ E i))
+        x :=
+    fun j _ =>
+    (differentiable_fderiv_apply hf2 _ x).mul
+      ((contDiff_fderiv_apply (contDiff_fderiv_apply hf (m := 2) (by norm_num) _) (m := 1)
+            (by norm_num) _).differentiable
+        one_ne_zero x)
+  have hs :
+    DifferentiableAt ℝ
+      (fun y =>
+        ∑ j,
+          fderiv ℝ f y (stdOrthonormalBasis ℝ E j) *
+            fderiv ℝ (fun z => fderiv ℝ f z (stdOrthonormalBasis ℝ E j)) y
+              (stdOrthonormalBasis ℝ E i))
+      x :=
+    DifferentiableAt.fun_sum hd
   rw [h1, fderiv_const_mul_apply hs, fderiv_sum_apply _ hd]
   congr 1
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [fderiv_mul_apply (differentiable_fderiv_apply hf2 _ x)
-    ((contDiff_fderiv_apply (contDiff_fderiv_apply hf (m := 2) (by norm_num) _) (m := 1)
-      (by norm_num) _).differentiable one_ne_zero x),
+      ((contDiff_fderiv_apply (contDiff_fderiv_apply hf (m := 2) (by norm_num) _) (m := 1)
+            (by norm_num) _).differentiable
+        one_ne_zero x),
     bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
   ring
 
@@ -289,13 +332,14 @@ section Bochner
 
 variable [CompleteSpace E] [FiniteDimensional ℝ E]
 
-/-- **the Bochner identity, the Bochner identity in the standard orthonormal basis**: for `C²` `U` and `C³`
+/--
+**the Bochner identity, the Bochner identity in the standard orthonormal basis**: for `C²` `U` and
+`C³`
 `f`, `Γ₂(f) = ∑ᵢ ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)`. -/
 theorem gammaTwo_eq_hessianSqStdBasis_add {U f : E → ℝ} (hU : ContDiff ℝ 2 U)
     (hf : ContDiff ℝ 3 f) (x : E) :
     gammaTwo U f x =
-      hessianSqStdBasis f x +
-        bilinearIteratedFDerivTwo ℝ U x (gradient f x) (gradient f x) := by
+      hessianSqStdBasis f x + bilinearIteratedFDerivTwo ℝ U x (gradient f x) (gradient f x) := by
   have hf2 : ContDiff ℝ 2 f := hf.of_le (by norm_num)
   have hΔ : DifferentiableAt ℝ (Laplacian.laplacian f) x :=
     (contDiff_laplacian hf (m := 1) (by norm_num)).differentiable one_ne_zero x
@@ -340,7 +384,8 @@ theorem bochner_nonneg_stdBasis {U f : E → ℝ} (hU : ContDiff ℝ 3 U)
   rw [← gammaTwo_eq_expanded]
   exact gammaTwo_nonneg (hU.of_le (by norm_num)) hconv hf x
 
-/-- **The improved Bochner inequality** `|∇Γ(f)|² ≤ 4 Γ(f) Γ₂(f)` for a `C²` convex potential and
+/--
+**The improved Bochner inequality** `|∇Γ(f)|² ≤ 4 Γ(f) Γ₂(f)` for a `C²` convex potential and
 a `C³` function, with `Γ(f) = ‖∇f‖²`. Since `∂ᵢ‖∇f‖² = 2 ∑ⱼ ∂ⱼf D²f(eᵢ, eⱼ)`, Cauchy–Schwarz in
 `j` gives `‖∇Γ(f)‖² ≤ 4 ‖∇f‖² ∑ᵢⱼ (D²f(eᵢ, eⱼ))²`, and the potential term of `Γ₂` is
 nonnegative by convexity. This is the Kato-type input of Bakry's `L¹` self-improvement. -/
@@ -348,35 +393,57 @@ theorem norm_gradient_norm_gradient_sq_le {U f : E → ℝ} (hU : ContDiff ℝ 2
     (hconv : ConvexOn ℝ Set.univ U) (hf : ContDiff ℝ 3 f) (x : E) :
     ‖gradient (fun y => ‖gradient f y‖ ^ 2) x‖ ^ 2 ≤ 4 * ‖gradient f x‖ ^ 2 * gammaTwo U f x := by
   have hf2 : ContDiff ℝ 2 f := hf.of_le (by norm_num)
-  have hpart : ∀ i, fderiv ℝ (fun y => ‖gradient f y‖ ^ 2) x (stdOrthonormalBasis ℝ E i) =
-      2 * ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-        bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
-          (stdOrthonormalBasis ℝ E j) := by
+  have hpart :
+    ∀ i,
+      fderiv ℝ (fun y => ‖gradient f y‖ ^ 2) x (stdOrthonormalBasis ℝ E i) =
+        2 *
+          ∑ j,
+            fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+              bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                (stdOrthonormalBasis ℝ E j) := by
     intro i
     rw [fderiv_norm_gradient_sq_apply hf2]
     congr 1
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
   have hU0 := bilinearIteratedFDerivTwo_nonneg_of_convexOn hU hconv x (gradient f x)
-  rw [norm_gradient_sq_eq_sum (fun y => ‖gradient f y‖ ^ 2), gammaTwo_eq_hessianSqStdBasis_add hU hf x,
-    norm_gradient_sq_eq_sum f x, hessianSqStdBasis_apply]
+  rw [norm_gradient_sq_eq_sum (fun y => ‖gradient f y‖ ^ 2),
+    gammaTwo_eq_hessianSqStdBasis_add hU hf x, norm_gradient_sq_eq_sum f x,
+    hessianSqStdBasis_apply]
   simp_rw [hpart]
-  have hcs : ∀ i, (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-      bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) ^ 2 ≤
-      (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) ^ 2) *
-        ∑ j, bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
-          (stdOrthonormalBasis ℝ E j) ^ 2 :=
+  have hcs :
+    ∀ i,
+      (∑ j,
+            fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+              bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                (stdOrthonormalBasis ℝ E j)) ^
+          2 ≤
+        (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) ^ 2) *
+          ∑ j,
+            bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                (stdOrthonormalBasis ℝ E j) ^
+              2 :=
     fun i => Finset.sum_mul_sq_le_sq_mul_sq _ _ _
-  have hsum := Finset.sum_le_sum fun i (_ : i ∈ (Finset.univ : Finset (Fin (Module.finrank ℝ E)))) =>
-    hcs i
+  have hsum :=
+    Finset.sum_le_sum fun i (_ : i ∈ (Finset.univ : Finset (Fin (Module.finrank ℝ E)))) => hcs i
   rw [← Finset.mul_sum] at hsum
   have hA : 0 ≤ ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) ^ 2 :=
     Finset.sum_nonneg fun _ _ => sq_nonneg _
-  have hlhs : ∑ i, (2 * ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-      bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) ^ 2 =
-      4 * ∑ i, (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
-        bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
-          (stdOrthonormalBasis ℝ E j)) ^ 2 := by
+  have hlhs :
+    ∑ i,
+        (2 *
+            ∑ j,
+              fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+                bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                  (stdOrthonormalBasis ℝ E j)) ^
+          2 =
+      4 *
+        ∑ i,
+          (∑ j,
+              fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+                bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+                  (stdOrthonormalBasis ℝ E j)) ^
+            2 := by
     rw [Finset.mul_sum]; refine Finset.sum_congr rfl fun i _ => by ring
   rw [hlhs]
   nlinarith [mul_nonneg hA hU0]
@@ -450,7 +517,8 @@ equals the Hessian square. -/
 theorem gammaTwo_zero_potential {f : E → ℝ} (hf : ContDiff ℝ 3 f) (x : E) :
     gammaTwo (fun _ => (0 : ℝ)) f x = hessianSqStdBasis f x := by
   rw [gammaTwo_eq_hessianSqStdBasis_add contDiff_const hf]
-  have : bilinearIteratedFDerivTwo ℝ (fun _ : E => (0 : ℝ)) x (gradient f x) (gradient f x) = 0 := by
+  have :
+    bilinearIteratedFDerivTwo ℝ (fun _ : E => (0 : ℝ)) x (gradient f x) (gradient f x) = 0 := by
     show fderiv ℝ (fderiv ℝ fun _ : E => (0 : ℝ)) x (gradient f x) (gradient f x) = 0
     simp [fderiv_fun_const]
   rw [this, add_zero]

@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.TaylorTwoVector
-import Mathlib.Analysis.Calculus.MeanValue
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.TaylorTwoVector
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Partial derivatives on `Fin n → ℝ`
@@ -23,6 +27,8 @@ operator norms of the Fréchet derivatives.
 * `LevyStochCalc.abs_coordDeriv_sub_le` — the Lipschitz bound of a partial derivative, from
   the bound on the second derivative.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 

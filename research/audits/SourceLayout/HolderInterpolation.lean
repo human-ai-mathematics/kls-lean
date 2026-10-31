@@ -1,7 +1,13 @@
-import Lean
-import FunctionalInequalities.Analysis.Holder.Cutoff
+module
 
-/-! The old interpolation telescope retains alpha <= 1, including zero distance and negative alpha. -/
+public import Lean
+public import FunctionalInequalities.Analysis.Holder.Cutoff
+meta import Lean
+
+/-! The old interpolation telescope retains alpha <= 1, including zero distance and negative alpha.
+-/
+
+@[expose] public section
 
 universe u u_1 u_2 u_3
 

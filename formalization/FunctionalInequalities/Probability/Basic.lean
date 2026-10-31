@@ -1,4 +1,6 @@
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+module
+
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 
 /-!
 # Probability-measure boundary
@@ -7,6 +9,8 @@ Public measure-dependent definitions in the new foundation take a bundled
 `ProbabilityMeasure`. Low-level lemmas that already carry a `Measure` together with an
 `IsProbabilityMeasure` instance can cross that boundary through the single constructor here.
 -/
+
+@[expose] public section
 
 noncomputable section
 

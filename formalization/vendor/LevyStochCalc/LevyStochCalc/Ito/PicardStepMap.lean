@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardBieleckiNorm
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardBieleckiNorm
 
 /-!
 # The Picard map for jump-diffusion SDEs
@@ -15,6 +19,8 @@ the coefficients `σ` and `γ` composed with a process; and the Picard map `pica
 sum of the initial value, the drift integral, the Brownian component `picardStep_diffusion` and
 the compensated-Poisson component `picardStep_jump`.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

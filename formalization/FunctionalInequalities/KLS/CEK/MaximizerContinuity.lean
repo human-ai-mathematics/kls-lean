@@ -1,15 +1,18 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Affine
-import FunctionalInequalities.Analysis.Convex.EssentialContinuity
-import FunctionalInequalities.Analysis.Convex.FrontierGraph
-import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Affine
+public import FunctionalInequalities.Analysis.Convex.EssentialContinuity
+public import FunctionalInequalities.Analysis.Convex.FrontierGraph
+public import FunctionalInequalities.Probability.MomentMeasure.FirstVariation
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # CEK Proposition 10: the conjugate of a maximizer is essentially continuous
 
 Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), Proposition 10, in the form used
 in the existence part of Theorem 2: let `μ` be a finite measure with finite first moment, `φ` a
-convex `μ`-integrable potential with `∫ exp(-φ*) dx = 1` maximizing `I_μ(f) = log ∫ e^{-f*} - ∫ f dμ`
+convex `μ`-integrable potential with `∫ exp(-φ*) dx = 1` maximizing `I_μ(f) = log ∫ e^{-f*} - ∫ f
+dμ`
 among convex `μ`-integrable competitors (CEK (22)/(39)). Then `ψ = φ*` is essentially continuous
 (`essentiallyContinuous_legendre_of_maximizer`).
 
@@ -17,7 +20,7 @@ The proof is the source's. Near a point `x₀` of `{ψ < ∞} \ int {ψ < ∞}` 
 graph with outer direction `θ` (`exists_convex_frontier_chart`, CEK (23)–(24)). The competitor
 `φ_ε = max {φ, φ + ε⟨·, θ⟩ − 1}` (CEK (25)) has `∫ (φ_ε − φ) dμ = o(ε)` (CEK (28)–(29)), while
 `ψ_ε = φ_ε* ≤ min {ψ, ψ(· − εθ) + 1}` (CEK (30)) is at most `k + 1` on the segments
-`x + (0, ε]θ` above `A_k = {x ∈ U ; ψ(x) ≤ k}`, which lie outside `{ψ < ∞}` (CEK (31), (33)); their
+`x + (0, ε]θ` above `A_k = {x ∈ U | ψ(x) ≤ k}`, which lie outside `{ψ < ∞}` (CEK (31), (33)); their
 volume is at least `c ε H^{n−1}(A_k)` (CEK (32)), so `log ∫ e^{-ψ_ε} ≥ c' ε H^{n−1}(A_k)`
 (CEK (34)) and the maximality forces `H^{n−1}(A_k) = 0`.
 
@@ -25,6 +28,8 @@ In the source, `μ` is the moment measure of `ψ`; that hypothesis enters the pr
 finite first moment `∫ |y| dμ < ∞` (CEK Lemma 4) and the `μ`-integrability of `φ` (CEK
 Proposition 7), and both are hypotheses here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -74,8 +79,7 @@ private theorem legendre_competitor_le_shift (φ : E → EReal) (θ : E) (ε : �
   rw [legendre_affineSubtract, sub_eq_add_neg]
 
 private theorem competitor_eq_coe {φ : E → EReal} (θ : E) (ε : ℝ) {y : E} (htop : φ y ≠ ⊤)
-    (hbot : φ y ≠ ⊥) :
-    competitor φ θ ε y = (((φ y).toReal + gain θ ε y : ℝ) : EReal) := by
+    (hbot : φ y ≠ ⊥) : competitor φ θ ε y = (((φ y).toReal + gain θ ε y : ℝ) : EReal) := by
   have hφy : φ y = ((φ y).toReal : EReal) := (EReal.coe_toReal htop hbot).symm
   unfold competitor affineSubtract gain
   rw [hφy, EReal.toReal_coe, ← EReal.coe_sub, ← EReal.coe_strictMono.monotone.map_max]
@@ -114,12 +118,13 @@ private theorem potentialIntegrable_competitor {μ : Measure E} [IsFiniteMeasure
   · rw [integral_congr_ae hae, integral_add hpot.2.2 (integrable_gain hfirst θ ε)]
 
 /-- CEK (28)–(29): `∫ max {⟪θ, y⟫ − R, 0} dμ → 0` as `R → ∞`, so `∫ (φ_ε − φ) dμ = o(ε)`. -/
-private theorem tendsto_integral_tail {μ : Measure E} [IsFiniteMeasure μ] (hfirst : Integrable (fun y : E => y) μ)
-    {θ : E} (hθ : ‖θ‖ = 1) :
+private theorem tendsto_integral_tail {μ : Measure E} [IsFiniteMeasure μ]
+    (hfirst : Integrable (fun y : E => y) μ) {θ : E} (hθ : ‖θ‖ = 1) :
     Tendsto (fun R : ℝ => ∫ y, max (⟪θ, y⟫ - R) 0 ∂μ) atTop (𝓝 0) := by
-  have h := tendsto_integral_filter_of_dominated_convergence (μ := μ) (l := atTop)
-    (F := fun (R : ℝ) (y : E) => max (⟪θ, y⟫ - R) 0) (f := fun _ => (0 : ℝ)) (fun y => ‖y‖) ?_ ?_
-    hfirst.norm ?_
+  have h :=
+    tendsto_integral_filter_of_dominated_convergence (μ := μ) (l := atTop) (F :=
+      fun (R : ℝ) (y : E) => max (⟪θ, y⟫ - R) 0) (f := fun _ => (0 : ℝ)) (fun y => ‖y‖) ?_ ?_
+      hfirst.norm ?_
   · simpa only [integral_zero] using h
   · refine Eventually.of_forall fun R => ?_
     exact (((hfirst.const_inner θ).sub (integrable_const R)).pos_part).aestronglyMeasurable
@@ -169,8 +174,9 @@ private theorem false_of_log_le {α : ℝ} (hα : 0 < α) (hα1 : α ≤ 1) {G :
 
 /-- The mass gain behind CEK (33)–(34): if `ψ' ≤ ψ` and a measurable `T` lies where `ψ = ⊤` and
 `ψ' ≤ c`, then `∫ e^{-ψ} + e^{-c} dx(T) ≤ ∫ e^{-ψ'}`. -/
-private theorem mass_add_le {F : Type*} [MeasurableSpace F] (dx : Measure F) {ψ ψ' : F → EReal} (hle : ∀ z, ψ' z ≤ ψ z)
-    {T : Set F} (hT : MeasurableSet T) {c : ℝ} (hTc : ∀ z ∈ T, ψ z = ⊤ ∧ ψ' z ≤ (c : EReal)) :
+private theorem mass_add_le {F : Type*} [MeasurableSpace F] (dx : Measure F) {ψ ψ' : F → EReal}
+    (hle : ∀ z, ψ' z ≤ ψ z) {T : Set F} (hT : MeasurableSet T) {c : ℝ}
+    (hTc : ∀ z ∈ T, ψ z = ⊤ ∧ ψ' z ≤ (c : EReal)) :
     mass dx ψ + ENNReal.ofReal (Real.exp (-c)) * dx T ≤ mass dx ψ' := by
   unfold mass
   rw [← lintegral_indicator_const hT, ← lintegral_add_right _ (measurable_const.indicator hT)]

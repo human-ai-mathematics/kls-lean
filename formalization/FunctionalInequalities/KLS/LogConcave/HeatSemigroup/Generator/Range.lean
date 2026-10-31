@@ -1,22 +1,34 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Kernel
-import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
-import FunctionalInequalities.L2.MeanVariance
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Kernel
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
+public import FunctionalInequalities.L2.MeanVariance
 
 /-!
 # Density of compact smooth diffusion images in centered `L²`
 
-For a log-concave probability law `ν = m.tilted (−U)` on a finite-dimensional real inner-product space, with `U` of class
-`C¹` and `m` an additive Haar measure, the literal images `−L f` of compactly supported smooth `f` under the ordinary
-weighted diffusion operator (`compactSmoothDiffusionImage`) are dense in the mean-zero real classes of `L²(ν)`: every
-`g ∈ L²(ν)` with mean `0` lies in their closure (`centered_mem_closure_compactSmoothDiffusionImage`), and so does the
-centering of every `g` (`center_mem_closure_compactSmoothDiffusionImage`). The class `g` is arbitrary (no operator-domain or
-compact-test restriction). Route: the kernel of the closed weighted operator consists of constants, so the range of
-`T†T` is dense in the centered classes, and every element of that range is approximated by the images of compactly
-supported smooth functions. Supporting infrastructure for the finite-energy Brascamp–Lieb inequality of Letwin,
+For a log-concave probability law `ν = m.tilted (−U)` on a finite-dimensional real inner-product
+space, with `U` of class
+`C¹` and `m` an additive Haar measure, the literal images `−L f` of compactly supported smooth `f`
+under the ordinary
+weighted diffusion operator (`compactSmoothDiffusionImage`) are dense in the mean-zero real classes
+of `L²(ν)`: every
+`g ∈ L²(ν)` with mean `0` lies in their closure
+(`centered_mem_closure_compactSmoothDiffusionImage`), and so does the
+centering of every `g` (`center_mem_closure_compactSmoothDiffusionImage`). The class `g` is
+arbitrary (no operator-domain or
+compact-test restriction). Route: the kernel of the closed weighted operator consists of constants,
+so the range of
+`T†T` is dense in the centered classes, and every element of that range is approximated by the
+images of compactly
+supported smooth functions. Supporting infrastructure for the finite-energy Brascamp–Lieb inequality
+of Letwin,
 arXiv:2607.24164v1, Lemma A.6; not Brascamp–Lieb, A.6, the moment map or Theorem 2.5.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -114,14 +126,15 @@ theorem centered_mem_closure_compactSmoothDiffusionImage
     · exact isClosed_closure
   exact hsubset hgRange
 
-/-- Every centered representative, including an arbitrary input after centering, has the same approximation property. -/
-theorem center_mem_closure_compactSmoothDiffusionImage
-    {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
-    (hν : FunctionalInequalities.KLS.LogConcave ν) {U : V → ℝ}
-    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 1 U)
-    (g : Lp ℝ 2 (ν : Measure V)) :
-    L2.center ν g ∈ closure (compactSmoothDiffusionImage hU) := by
-  exact centered_mem_closure_compactSmoothDiffusionImage m hν hνU hU
-    (L2.center ν g) (L2.mean_center ν g)
+/--
+Every centered representative, including an arbitrary input after centering, has the same
+approximation property. -/
+theorem center_mem_closure_compactSmoothDiffusionImage {ν : ProbabilityMeasure V}
+    (m : Measure V) [m.IsAddHaarMeasure] (hν : FunctionalInequalities.KLS.LogConcave ν)
+    {U : V → ℝ} (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 1 U)
+    (g : Lp ℝ 2 (ν : Measure V)) : L2.center ν g ∈ closure (compactSmoothDiffusionImage hU) := by
+  exact
+    centered_mem_closure_compactSmoothDiffusionImage m hν hνU hU (L2.center ν g)
+      (L2.mean_center ν g)
 
 end FunctionalInequalities.KLS.LogConcave.HeatSemigroup

@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Correlation
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SmallTime.Correlation
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
 
 /-!
 # Pi Buser comparison in the smooth convex tilted model
@@ -10,6 +12,8 @@ The actual heat correlation and pi-coefficient perimeter estimate imply a bound 
 inverse smooth relative-perimeter Cheeger constant. The law is explicitly represented by a
 smooth convex potential. No passage to an arbitrary nonsmooth log-concave law is asserted.
 -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -190,7 +194,7 @@ theorem inverseScale_sq_le_pi_literature_of_finrank_eq_zero
       ENNReal.ofReal Real.pi * Poincare.LocalSlope.Intrinsic.constant μ := by
   have htop : Isoperimetry.constant μ = ⊤ := by
     unfold Isoperimetry.constant
-    rw [if_pos hdim]
+    rw [ite_eq_left hdim]
   simp [Isoperimetry.inverseScale, htop]
 
 end FunctionalInequalities.KLS.LogConcave

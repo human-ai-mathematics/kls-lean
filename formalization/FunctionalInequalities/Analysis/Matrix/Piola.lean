@@ -1,18 +1,26 @@
-import FunctionalInequalities.Analysis.Cutoff.SmoothBall
-import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
-import FunctionalInequalities.Analysis.Mollification.Hessian
-import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
-import Mathlib.Analysis.Calculus.Rademacher
+module
+
+public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
+public import FunctionalInequalities.Analysis.Matrix.WeakDerivative
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
+public import FunctionalInequalities.Analysis.Mollification.Hessian
+public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
+public import Mathlib.Analysis.Calculus.Rademacher
 
 /-!
 # The Piola identity for Hessian adjugates
 
-`Σⱼ ∂ⱼ adj(∇²u)ᵢⱼ = 0` for `C³` functions `u` (`sum_fderiv_adjugate_hessianMatrix_eq_zero`), in terms of
-`Probability.Stein.hessianMatrix`; the smooth input of the weak Piola identity on the moment-map route to Letwin
-arXiv:2607.24164v1. The cofactor consumers also supply essential boundedness from a Lipschitz gradient and weak adjugate derivatives from a given local-L2 Hessian tensor; they do not assume smoothness of that tensor or prove the main bound.
+`Σⱼ ∂ⱼ adj(∇²u)ᵢⱼ = 0` for `C³` functions `u` (`sum_fderiv_adjugate_hessianMatrix_eq_zero`), in
+terms of
+`Probability.Stein.hessianMatrix`; the smooth input of the weak Piola identity on the moment-map
+route to Letwin
+arXiv:2607.24164v1. The cofactor consumers also supply essential boundedness from a Lipschitz
+gradient and weak adjugate derivatives from a given local-L2 Hessian tensor; they do not assume
+smoothness of that tensor or prove the main bound.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -115,17 +123,17 @@ private lemma fderiv_det_updateRow
       intro k _
       by_cases h : k = j
       · subst k
-        rw [if_pos rfl]
+        rw [ite_eq_left rfl]
         apply Matrix.det_eq_zero_of_row_eq_zero j
         intro l
         rw [Matrix.updateRow_self]
         simp [D]
-      · rw [if_neg h]
+      · rw [ite_eq_right h]
         have hr :
             (Matrix.of (D v)) k =
               fun l => fderiv ℝ (fun y => A y k l) x v := by
           funext l
-          simp only [Matrix.of_apply, D, ContinuousLinearMap.pi_apply, if_neg h]
+          simp only [Matrix.of_apply, D, ContinuousLinearMap.pi_apply, ite_eq_right h]
         rw [hr]
         rfl
 
@@ -233,13 +241,13 @@ theorem sum_fderiv_adjugate_hessianMatrix_eq_zero {n : ℕ} {u : EuclideanSpace 
     intro j k
     by_cases h : j = k
     · subst k
-      simp only [C, if_pos rfl, neg_zero]
+      simp only [C, ite_eq_left rfl, neg_zero]
     · have hw :
           (fun l => fderiv ℝ (fun y => hessianMatrix u y k l) x (e j)) =
             (fun l => fderiv ℝ (fun y => hessianMatrix u y j l) x (e k)) := by
         funext l
         exact hsym j k l
-      simp only [C, if_neg h, if_neg (Ne.symm h)]
+      simp only [C, ite_eq_right h, ite_eq_right (Ne.symm h)]
       rw [hw]
       exact det_swap_rows (Matrix.of (hessianMatrix u x)) j k (Pi.single i 1)
         (fun l => fderiv ℝ (fun y => hessianMatrix u y j l) x (e k)) h

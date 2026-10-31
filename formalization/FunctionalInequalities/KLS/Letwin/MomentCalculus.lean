@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.Smooth
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
-import Mathlib.LinearAlgebra.Determinant
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.Smooth
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
+public import Mathlib.LinearAlgebra.Determinant
 
 /-!
 # Smooth moment-map calculus and conservative height cutoffs
@@ -14,6 +16,8 @@ Only the strong regular class is treated here; smooth moment potentials for the 
 convex source class (Lemma 2.2 and Theorem 2.5) are produced in `KLS/Letwin/MomentMap.lean`
 through `KLS/CEK/MomentRegularity/GivenGradient.lean`.
 -/
+
+@[expose] public section
 noncomputable section
 namespace FunctionalInequalities.Analysis
 open Set Metric MeasureTheory Filter Topology
@@ -33,8 +37,10 @@ variable (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace
   (hiso : KLS.Isotropic μ)
 include hn hκ hK hKc hKint hW hstrong hμ hiso
 
-/-- Original strong-class inputs produce the smooth Hessian identity, A.4 cutoffs and A.5 conservativity
-at one normalized transporting potential. No cutoff or generator-integrability premise is supplied. -/
+/-- Original strong-class inputs produce the smooth Hessian identity, A.4 cutoffs and A.5
+conservativity
+at one normalized transporting potential. No cutoff or generator-integrability premise is supplied.
+-/
 theorem exists_regular_smooth_moment_calculus :
     ∃ (u : E → ℝ) (L : NNReal),
       ContDiff ℝ ∞ u ∧ ConvexOn ℝ univ u ∧ LipschitzWith L u ∧

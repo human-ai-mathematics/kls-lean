@@ -1,13 +1,17 @@
-import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
-import FunctionalInequalities.Analysis.Tensor.EnergyForm
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.KLS.BKL.Posterior.Regularity
+module
+
+public import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Conjugation
+public import FunctionalInequalities.Analysis.Tensor.EnergyForm
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.KLS.BKL.Posterior.Regularity
 
 /-!
 # Regularity of posterior cumulant energies
 -/
+
+@[expose] public section
 
 noncomputable section
 

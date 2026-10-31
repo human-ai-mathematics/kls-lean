@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.Compensated
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.Compensated
 
 /-!
 # Itô-Lévy L² isometry
@@ -27,6 +31,8 @@ Wrapper around `Compensated.itoLevyIsometry`, the isometry conjunct of the
 construction `itoIsometry_compensated_unified_existence`
 (`Poisson/Compensated.lean`; Applebaum 2009 Thm 4.2.3).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

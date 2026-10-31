@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
-import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 
 /-!
 # Strong convergence of `P_t = exp (-t T†T)` on the orthogonal complement of the kernel
@@ -15,6 +17,8 @@ The argument: `ker A = ker T` on the operator domain; a vector orthogonal to `ra
 `range A`; on `range A`, `P_t (A y) = A (P_t y)` has norm at most `‖y‖ / t`, and the
 contraction `‖P_t‖ ≤ 1` extends the convergence to the closure.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -3,7 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.SimplePredictableRefineInvariance
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.SimplePredictableRefineInvariance
 
 /-!
 # Common refinement of two simple predictables and the difference isometry
@@ -17,6 +22,8 @@ integrals (`SimplePredictable.diff_isometry_simple`) and the Cauchy property of
 the simple integrals of an `L²`-Cauchy sequence of simple predictables
 (`cauchy_of_L2_dense_simple`).
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -277,7 +284,10 @@ noncomputable def SimplePredictable.mergedIdxMap_left
     {T : ℝ} (H₁ H₂ : SimplePredictable Ω T)
     (h_eq : H₁.partition (Fin.last H₁.N) = H₂.partition (Fin.last H₂.N))
     (j : Fin (H₁.mergedM H₂)) : Fin H₁.N :=
-  (H₁.exists_mergedIdxMap_left H₂ h_eq j).choose
+  (show ∃ i : Fin H₁.N,
+      H₁.partition i.castSucc ≤ H₁.mergedπ H₂ j.castSucc ∧
+      H₁.mergedπ H₂ j.succ ≤ H₁.partition i.succ by
+    exact H₁.exists_mergedIdxMap_left H₂ h_eq j).choose
 
 /-- **C0b.4-pre18: left idxMap inclusion (left endpoint).** -/
 lemma SimplePredictable.mergedIdxMap_left_idx_le
@@ -302,7 +312,10 @@ noncomputable def SimplePredictable.mergedIdxMap_right
     {T : ℝ} (H₁ H₂ : SimplePredictable Ω T)
     (h_eq : H₁.partition (Fin.last H₁.N) = H₂.partition (Fin.last H₂.N))
     (j : Fin (H₁.mergedM H₂)) : Fin H₂.N :=
-  (H₁.exists_mergedIdxMap_right H₂ h_eq j).choose
+  (show ∃ i : Fin H₂.N,
+      H₂.partition i.castSucc ≤ H₁.mergedπ H₂ j.castSucc ∧
+      H₁.mergedπ H₂ j.succ ≤ H₂.partition i.succ by
+    exact H₁.exists_mergedIdxMap_right H₂ h_eq j).choose
 
 /-- **C0b.4-pre21: right idxMap inclusion (left endpoint).** -/
 lemma SimplePredictable.mergedIdxMap_right_idx_le

@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.ItoFormulaUnboundedClamp
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.ItoFormulaUnboundedClamp
 
 /-!
 # Integrands of the clamped approximation of a vector Itô process
@@ -13,6 +17,8 @@ variation terms and the diffusion integrands built from the coefficients clamped
 to infinity converge to the ones built from the original coefficients: the drift and quadratic
 variation terms pathwise, the diffusion integrands in energy on a bounded window.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

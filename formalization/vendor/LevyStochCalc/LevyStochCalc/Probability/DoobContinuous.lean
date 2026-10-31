@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Probability.Martingale.Basic
-import LevyStochCalc.Probability.ProgressiveCadlag
-import MathFin.Foundations.DoobLpMaximalInequality
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Martingale.Basic
+public import LevyStochCalc.Probability.ProgressiveCadlag
+public import MathFin.Foundations.DoobLpMaximalInequality
 
 /-!
 # Doob's `L²` maximal inequality in continuous time
@@ -23,6 +27,8 @@ the supremum of the sampled maxima.
 * `Filtration.compMono`, `martingale_compMono` — sampling along a monotone time map.
 * `dyadicTime` — the dyadic partition points of `[0, T]`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -253,10 +259,11 @@ theorem iSup_sq_of_monotone {a : ℕ → ℝ≥0∞} (ha : Monotone a) :
   rw [pow_two]
   exact mul_le_mul' (ha (le_max_left n m)) (ha (le_max_right n m))
 
-/-- The `L²` seminorm as a `lintegral`. -/
-theorem eLpNorm_two_eq {μ : Measure Ω} (f : Ω → ℝ) :
+/-- The `L²` seminorm as a `lintegral`. The measurability premise is required because
+Mathlib v4.35's `eLpNorm` is `∞` for functions that are not a.e. strongly measurable. -/
+theorem eLpNorm_two_eq {μ : Measure Ω} (f : Ω → ℝ) (hf : AEStronglyMeasurable f μ) :
     eLpNorm f 2 μ = (∫⁻ ω, (‖f ω‖₊ : ℝ≥0∞) ^ 2 ∂μ) ^ ((1 : ℝ) / 2) := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num)]
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by norm_num) (by norm_num) hf]
   simp only [ENNReal.toReal_ofNat]
   congr 1
   refine lintegral_congr fun ω => ?_
@@ -279,7 +286,12 @@ theorem lintegral_sq_dyadicRunMax_le {μ : Measure Ω} [IsFiniteMeasure μ]
   rw [hp, hc, dyadicTime_top n] at hdoob
   have hlhs : eLpNorm (fun ω => (Finset.range (2 ^ n + 1)).sup' Finset.nonempty_range_add_one
       fun k => ‖M (dyadicTime T n k) ω‖) 2 μ = eLpNorm (dyadicRunMax M T n) 2 μ := rfl
-  rw [hlhs, eLpNorm_two_eq, eLpNorm_two_eq] at hdoob
+  have hmeas_max : AEStronglyMeasurable (dyadicRunMax M T n) μ := by
+    unfold dyadicRunMax
+    exact (Finset.measurable_range_sup'' fun k _ =>
+      ((hM.stronglyMeasurable _).mono (ℱ.le _)).measurable.norm).aestronglyMeasurable
+  rw [hlhs, eLpNorm_two_eq _ hmeas_max, eLpNorm_two_eq _ (hM.integrable T).aestronglyMeasurable]
+    at hdoob
   have hsq := ENNReal.rpow_le_rpow hdoob (by norm_num : (0 : ℝ) ≤ 2)
   rw [← ENNReal.rpow_mul, ENNReal.mul_rpow_of_nonneg _ _ (by norm_num : (0 : ℝ) ≤ 2),
     ← ENNReal.rpow_mul] at hsq

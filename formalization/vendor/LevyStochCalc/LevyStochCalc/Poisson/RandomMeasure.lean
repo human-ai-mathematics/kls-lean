@@ -6,11 +6,15 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Basic
-import LevyStochCalc.Poisson.PoissonSuperposition
-import LevyStochCalc.Poisson.RegionIndependence
-import Mathlib.Probability.Distributions.Poisson.Basic
-import Mathlib.Probability.Independence.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Basic
+public import LevyStochCalc.Poisson.PoissonSuperposition
+public import LevyStochCalc.Poisson.RegionIndependence
+public import Mathlib.Probability.Distributions.Poisson.Basic
+public import Mathlib.Probability.Independence.Basic
 
 /-!
 # Poisson random measure on `[0, ∞) × E`
@@ -48,6 +52,8 @@ measure by the Poisson recipe: the time-space is cut into the cells `[n, n+1) ×
 independent marks distributed according to the normalised intensity, and the cells are
 superposed (`LevyStochCalc.Poisson.superposition`).
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

@@ -1,0 +1,527 @@
+{
+  "version": 1,
+  "review_date": "2026-10-31",
+  "status": "Lean v4.35.0 port of the source tree; see the validation protocol in research/verification.md for how acceptance is established (no acceptance result is recorded in this file)",
+  "placement_plan": {
+    "scope": "Port every repository Lean source to the Lean module system for Lean/Mathlib v4.35.0 and add the contained Palomar project integrations/palomar for the closed KLSOpenAI.kls statement.",
+    "owners": [
+      "all existing library, vendor, solution, example, integration and research Lean sources (header/visibility only)",
+      "integrations/palomar (new)",
+      ".github/workflows/palomar-preflight.yml (new, manual)",
+      "formalization/lean-toolchain, lakefile.toml, lake-manifest.json; integrations/openai pins"
+    ],
+    "mathematics": "KLS and literature targets retain hypotheses, constants, normalization, quantifier order and dimensional scope. No certificate entry or accepted/exploratory classification changes and no proof-status advancement. Exact helper/vendor API exceptions are listed below; they are not blanket statement preservation.",
+    "decision": "Module headers and public imports preserve existing dependencies and module layering. Existing private names stay private except fourteen exact promotions needed by public interfaces (six helpers and eight scoped instances), with identical data; audit-only visibility follows the private section convention. Proof-only private references remain in proof terms.",
+    "validation": "Deferred to the consolidated GO_VERIFY campaign: strict lake builds of formalization, openai and palomar; full verifier with whole-declaration and vendor audit scope; Comparator; official Palomar full preflight only on a public final SHA.",
+    "preservation": "Canonical dirty checkout and real index untouched; historical v4.33 receipts and maps unchanged and tied to their own snapshots."
+  },
+  "toolchain": {
+    "lean": "leanprover/lean4:v4.35.0",
+    "mathlib_tag": "v4.35.0",
+    "mathlib_rev": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+    "previous": {
+      "lean": "leanprover/lean4:v4.33.0",
+      "mathlib_rev": "db584cd6d46c92f209a44c0f1c829460d327499d"
+    }
+  },
+  "file_classes": [
+    {
+      "class": "library formalization/FunctionalInequalities{,.lean}",
+      "files": 838,
+      "action": "module + public imports + @[expose] public section"
+    },
+    {
+      "class": "vendor LevyStochCalc",
+      "files": 196,
+      "action": "module port (178 substantive + 18 imports-only) + dated modification notice"
+    },
+    {
+      "class": "vendor already module upstream (BrownianMotion 42, KolmogorovExtension4 3, MathFin 1)",
+      "files": 46,
+      "action": "Already uses the module system; individual API/proof repairs, upstream owner reuse and modification notices are recorded by vendor provenance and the complete owner map."
+    },
+    {
+      "class": "solutions/, examples/",
+      "files": 47,
+      "action": "module port"
+    },
+    {
+      "class": "integrations/openai Lean sources",
+      "files": 7,
+      "action": "module port; OAI model = recorded upstream transformation"
+    },
+    {
+      "class": "research audit/client Lean sources and formalization/Dev/Search.lean",
+      "files": 450,
+      "action": "module port + audit-specific import all/meta import"
+    },
+    {
+      "class": "research/upstream/mathlib paused v4.36-rc2 proposal",
+      "files": 14,
+      "action": "Excluded from the publication candidate; all14Lean files and the remaining proposal inputs are preserved in the original worktrees.",
+      "published": false
+    },
+    {
+      "class": "*.lean.in templates",
+      "files": 8,
+      "action": "unchanged, intentionally non-module (staged into ignored build directories)"
+    },
+    {
+      "class": "integrations/palomar Challenge/Solution",
+      "files": 2,
+      "action": "new modules"
+    }
+  ],
+  "counts": {
+    "ported_with_section": 1517,
+    "ported_imports_only": 21,
+    "already_module": 46,
+    "exempt_lakefile_restored": 0,
+    "max_lines": 5274,
+    "regression_fixture_modules": 4,
+    "lean_files_total": 1590,
+    "module_sources": 1590,
+    "exempt_lake_config": null
+  },
+  "renames": {
+    "modules": [],
+    "existing_public_declarations": []
+  },
+  "visibility_promotions": [
+    {
+      "name": "FunctionalInequalities.Analysis.matrixEntriesLinear",
+      "module": "FunctionalInequalities.Analysis.Operator.Coordinates",
+      "old": "private def",
+      "reason": "exposed body of public operatorMatrixL (rfl simp lemma)"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.matrixOfEntriesLinear",
+      "module": "FunctionalInequalities.Analysis.Operator.Coordinates",
+      "old": "private def",
+      "reason": "exposed body of public operatorOfMatrixL (rfl simp lemma)"
+    },
+    {
+      "name": "FunctionalInequalities.KLS.LogConcave.Suspension.jointSpatialSlice",
+      "module": "FunctionalInequalities.KLS.BKL.Suspension.Derivatives",
+      "old": "private noncomputable def",
+      "reason": "statements of public jointSpatialSlice_none/_some"
+    },
+    {
+      "name": "FunctionalInequalities.Probability.Line.GaussianProfile.distributionHomeomorph",
+      "module": "FunctionalInequalities.Probability.Line.GaussianProfile",
+      "old": "private def",
+      "reason": "exposed body of public quantile"
+    },
+    {
+      "name": "FunctionalInequalities.Energy.SmoothGradient.smoothGradientPreEnergyTestAddCommGroup",
+      "module": "FunctionalInequalities.Energy.SmoothGradient.Quadratic",
+      "old": "private instance",
+      "reason": "inferred into public statement preEnergy_quadratic"
+    },
+    {
+      "name": "FunctionalInequalities.Energy.SmoothGradient.smoothGradientPreEnergyTestModule",
+      "module": "FunctionalInequalities.Energy.SmoothGradient.Quadratic",
+      "old": "private instance",
+      "reason": "inferred into public statement preEnergy_quadratic"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.bilinearGroup",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedAddCommGroup (E →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedAddCommGroup (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.bilinearSpace",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedSpace ℝ (E →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedSpace (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.trilinearGroup",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedAddCommGroup (E →L[ℝ] E →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedAddCommGroup (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.trilinearSpace",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedSpace ℝ (E →L[ℝ] E →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedSpace (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.timeLinearGroup",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedAddCommGroup (ℝ →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedAddCommGroup (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.timeLinearSpace",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedSpace ℝ (ℝ →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedSpace (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.timeTrilinearGroup",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedAddCommGroup (ℝ →L[ℝ] E →L[ℝ] E →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedAddCommGroup (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    },
+    {
+      "name": "FunctionalInequalities.Analysis.DerivativeNorms.timeTrilinearSpace",
+      "module": "FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm",
+      "old": "private scoped instance",
+      "new": "scoped instance (active only under open scoped)",
+      "type": "NormedSpace ℝ (ℝ →L[ℝ] E →L[ℝ] E →L[ℝ] E →L[ℝ] ℝ)  (E = EuclideanSpace ℝ (Fin n))",
+      "value": "ContinuousLinearMap.toNormedSpace (unchanged)",
+      "reason": "E3 controller decision: modules do not export private declarations, so open scoped importers lost these instances; audit SourceLayout/OperatorNorm now requires exactly these eight names"
+    }
+  ],
+  "proof_context_edits": [
+    {
+      "module": "FunctionalInequalities.Probability.Line.GaussianProfile",
+      "declaration": "distributionHomeomorph",
+      "edit": "(show IsOpenEmbedding distribution by exact distribution_openEmbedding)"
+    },
+    {
+      "module": "FunctionalInequalities.Energy.SmoothGradient.Quadratic",
+      "declaration": "Test.add, Test.sub",
+      "edit": "gradient_sq_integrable := by exact ..."
+    },
+    {
+      "module": "LevyStochCalc.Brownian.SimplePredictableRefineCommon",
+      "declaration": "SimplePredictable.mergedIdxMap_left/_right",
+      "edit": "(show ∃ i, <lemma predicate> by exact <private lemma>).choose; lemmas stay private"
+    }
+  ],
+  "api_baseline": "6995 old public declarations compared against7010 current declarations:14 exact promotions,+2 generated congr_simp,-1 removed generated map.congr_simp. Existing handwritten names, owner modules and all public payloads are retained except E2/E4 and the explicitly reviewed generated universe/visibility differences. Final comparison binds exact reviewed types, universe lists, kind, unsafe and partial flags; no name-only allowances.",
+  "upstream_api_adaptations": {
+    "applied": "468 identifier-only drop-in replacements in 155 files, each confirmed against v4.35 sources: Lean core if_pos/if_neg/dif_pos/dif_neg/if_true/if_false -> ite_eq_left/ite_eq_right/dite_eq_left/dite_eq_right/ite_true/ite_false (deprecated 2026-07-21, same binders); Mathlib .lipschitz -> .lipschitzWith, .antilipschitz -> .antilipschitzWith, linearMap_vsub -> linear_apply_vsub, IsLocalMin.on -> isLocalMinOn, MemLp.prod' -> MemLp.fun_prod, Finset.prod_le_prod/prod_le_one -> prod_le_prod₀/prod_le_one₀, set .eventuallyLE -> .eventuallySubset",
+    "for_first_compile": "non-drop-in MemLp.mul'/MemLp.mul argument order, measurable_pi_lambda/aemeasurable_pi_lambda implicit function, mul_le_one₀, removed Measure.isProbabilityMeasure_map and map_of_not_aemeasurable, 137 same-name binder changes, Measure.map/eLpNorm/MemLp definition changes, possible BrownianMotion/Mathlib duplicate declarations, 8 deprecated Mathlib modules imported",
+    "module_exposure": "Current strict builds and independent clients check the actual module import/exposure requirements; no broad exemption or compatibility alias is introduced.",
+    "record": "research/progress/2026-10-31-palomar-api-435-edits.json"
+  },
+  "research_audits": {
+    "changed": 70,
+    "reviewed_unchanged": 382,
+    "summary": "meta import Lean for 49 run_cmd audits; import all for 9 audits whose private-name absence scans, proof-value or private-declaration checks would otherwise be vacuous; StatementSnapshot/APIIndex helpers private meta with public elab names unchanged; 18 leaf audits without exposed public section because they mention private names in public positions",
+    "v435_repairs": {
+      "private_in_public_section_removed_additionally": [
+        "BKL/RegularIsotropicAudit",
+        "BKL/AffineRegularAudit",
+        "BKL/RegularPoincareAudit"
+      ],
+      "explicit_mathlib_imports": {
+        "Mathlib.MeasureTheory.Measure.Lebesgue.Basic": [
+          "MetricBV/ConvexSupportAudit",
+          "MetricBV/FiniteTargetAudit",
+          "MetricBV/LowerSemicontinuityAudit",
+          "MetricBV/SupportCostAudit",
+          "MetricBV/SupportRetractionAudit"
+        ],
+        "Mathlib.Analysis.Calculus.Deriv.Pow": [
+          "IteratedDerivative/CoefficientFreezingAudit",
+          "IteratedDerivative/HessianInterpolationAudit"
+        ],
+        "Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace": [
+          "Letwin/C0Subgradient",
+          "Letwin/DomainTotalMass",
+          "Letwin/GaugeCone"
+        ],
+        "Mathlib.Analysis.Convex.SpecificFunctions.Deriv": [
+          "Letwin/DomainMaximum"
+        ],
+        "Mathlib.Analysis.Normed.Lp.MeasurableSpace": [
+          "Letwin/EssentialContinuity"
+        ]
+      },
+      "proof_or_lint": [
+        "BKL/WeakHessianInverseAudit (NullMeasurableSet argument)",
+        "BKL/LocalThirdCumulantAudit (redundant positivity)",
+        "Letwin/DomainBoundary, Letwin/DomainEquicontinuity, Letwin/LocalContactMeasure (no-op tactics)"
+      ],
+      "E13_hessian_type_hashes": {
+        "audit": "BKL/HessianIncrementAudit",
+        "refreshed": {
+          "FunctionalInequalities.Analysis.centeredDifference_contDiff_lipschitz_gradient": [
+            265072094,
+            2767886345
+          ],
+          "FunctionalInequalities.Analysis.integrable_hessian_increment_energy": [
+            615525409,
+            1553319955
+          ],
+          "FunctionalInequalities.Analysis.integrable_weak_generator_densities": [
+            1222551683,
+            1274698679
+          ],
+          "FunctionalInequalities.Analysis.integral_mul_hessian_increment_le": [
+            211311595,
+            1167846656
+          ]
+        },
+        "unchanged": [
+          "FunctionalInequalities.Analysis.centeredDifference_nonneg_le",
+          "FunctionalInequalities.Probability.Stein.measurable_hessianMatrix_entry",
+          "FunctionalInequalities.Probability.Stein.norm_hessianMatrix_entry_le_of_lipschitz_gradient"
+        ],
+        "review": "source statements unchanged; printed types identical; the v4.35 Expr differs only in instance-projection paths (algebra parent projections, ENat One, ContinuousENorm via ESeminormedAddMonoid) and hygienic module-path binder names; the seven full old types, rebuilt in v4.35 with the removed old instance expanded, are kernel-checked equal to the new types. Seven guard rows, universe check and alias check unchanged."
+      }
+    }
+  },
+  "tooling": {
+    "summary": "shared research/lean_header.py for the module import grammar; module_inventory/check_ledger/check_documentation/literature parsers extended without dropping edges; generators emit non-module drivers; generated stdin audits stay non-module (whole private/generated/vendor declaration scope); prepare_replay requires .olean/.olean.server/.olean.private/.ir.sig/.ir for module sources; comparator.py judged by toolchain-bundled lake comparator (bundled-judge.json), historical v4.33 tools.json and receipts untouched; palomar target; OpenAI provenance reverses the recorded transformation and checks sha256 and local_sha256; cache_mathlib palomar project",
+    "regression_sources": "research/tests (source only) incl. private nonstandard axiom behind public theorem and missing .olean.private fixtures under research/tests/fixtures/module_audit"
+  },
+  "palomar": {
+    "project": "integrations/palomar",
+    "comparator": "integrations/palomar/comparator.json",
+    "theorem": "KLSOpenAI.kls",
+    "challenge_imports": [
+      "Mathlib"
+    ],
+    "correspondence": "integrations/palomar/STATEMENT-CORRESPONDENCE.md",
+    "workflow": ".github/workflows/palomar-preflight.yml (workflow_dispatch only; PalomarSubmission 14aa8d6b3c2f14a8540605e37144560b9a00e7e7; mode full; palomar-standard-v1)"
+  },
+  "vendor_provenance": {
+    "patched_files": 219,
+    "by_library": {
+      "LevyStochCalc": 196,
+      "BrownianMotion": 20,
+      "KolmogorovExtension4": 2,
+      "MathFin": 1
+    },
+    "port_patch_sha256": "e572eb3664d6eda5dddc0ececba75bf8ca46453f2985371836a0995ef4a41f47",
+    "vendor_lock_sha256": "7b20eeed50c18be8fd01068eab2665e19f95b77083b1719313139ccf749619ba",
+    "port": {
+      "lean": "v4.35.0",
+      "mathlib": "56a0058"
+    },
+    "method": "unified diff of every vendored file against its pinned upstream Git blob; vendor_lock.generate_lock reverse-applies the patch and requires exact upstream bytes",
+    "owner_moves": "research/progress/2026-10-31-palomar-vendor-owner-moves.json"
+  },
+  "openai_upstream": {
+    "upstream_sha256": "28cddbf3c493afd43b3f7aba78f670952ea0c38909665c86bff883849e7f8dbc",
+    "local_sha256": "ed3d7485e43f968bf5e6c5946158877e21ff3b0a52a1c241b28950c81fe0b1c5"
+  },
+  "before_verification": [
+    "Reassess infrastructure at the current pin using the complete per-node/source map (2026-10-31-palomar-infrastructure-review.json); preserve proof evidence, assumptions, priorities and graph logic.",
+    "Use the new reviewed statement/BKL closure decisions and strict exact goldens; retain all previous decision records unchanged.",
+    "Generate and check all progress views with a scoped temporary index; freeze all source before final3 Comparator targets, then full verification including kernel replay."
+  ],
+  "interface_exceptions": [
+    {
+      "id": "E2",
+      "declaration": "FunctionalInequalities.Analysis.eLpNorm_inverse_eq_inv_essInf",
+      "module": "FunctionalInequalities.Analysis.LpExponent",
+      "old": "eLpNorm (fun x => s x ^ (-1 : ℝ)) ∞ μ = (essInf (fun x => ENNReal.ofReal (s x)) μ)⁻¹",
+      "new": "eLpNormEssSup (fun x => s x ^ (-1 : ℝ)) μ = (essInf (fun x => ENNReal.ofReal (s x)) μ)⁻¹",
+      "unchanged": "name, hypothesis hs : ∀ᵐ x ∂μ, 0 < s x, right-hand side, mathematical scope",
+      "reason": "Mathlib v4.35 eLpNorm is ∞ for non-a.e.-strongly-measurable functions; v4.33 eLpNorm f ∞ μ was eLpNormEssSup f μ unconditionally, so the explicit form keeps the old meaning without a new premise",
+      "evidence_input": "research/tests/fixtures/mathlib435-semantics/LegacyInfinityNorm.lean.in"
+    },
+    {
+      "id": "E1",
+      "declaration": "LevyStochCalc.Probability.eLpNorm_two_eq",
+      "module": "LevyStochCalc.Probability.DoobContinuous",
+      "owner": "vendored LevyStochCalc",
+      "description": "LevyStochCalc eLpNorm_two_eq (vendored LevyStochCalc.Probability.DoobContinuous)",
+      "change": "added premise (hf : AEStronglyMeasurable f μ)",
+      "reason": "the unconditional v4.33 statement is false for v4.35 raw eLpNorm; sole vendor caller supplies martingale measurability; vendor public API exception recorded in vendor/README.md and port.patch"
+    },
+    {
+      "id": "E7a",
+      "declaration": "LevyStochCalc.Poisson.Compensated.eLpNorm_two_rpow_eq_lintegral_sq",
+      "module": "LevyStochCalc.Poisson.CompensatedDensityLimit",
+      "old": "{P : Measure Ω} (g : Ω → ℝ) : eLpNorm g 2 P ^ (2 : ℝ) = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂P",
+      "new": "{P : Measure Ω} (g : Ω → ℝ) (hg : AEStronglyMeasurable g P) : (same conclusion)",
+      "change": "added premise (hg : AEStronglyMeasurable g …) right after g",
+      "reason": "same cause as E1: the unconditional statement is false for v4.35 raw eLpNorm (∞ off the a.e.-strongly-measurable branch); every vendor caller supplies an existing witness (23 call sites in 11 files); vendor public API exception (vendor norm-premise exceptions total 5 including E9a)"
+    },
+    {
+      "id": "E7b",
+      "declaration": "LevyStochCalc.Brownian.Ito.eLpNorm_two_rpow_eq_lintegral_sq",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionConvergence",
+      "old": "{μ : Measure Ω} (g : Ω → ℝ) : eLpNorm g 2 μ ^ (2 : ℝ) = ∫⁻ ω, (‖g ω‖₊ : ℝ≥0∞) ^ 2 ∂μ",
+      "new": "{μ : Measure Ω} (g : Ω → ℝ) (hg : AEStronglyMeasurable g μ) : (same conclusion)",
+      "change": "added premise (hg : AEStronglyMeasurable g …) right after g",
+      "reason": "same cause as E1: the unconditional statement is false for v4.35 raw eLpNorm (∞ off the a.e.-strongly-measurable branch); every vendor caller supplies an existing witness (23 call sites in 11 files); vendor public API exception (vendor norm-premise exceptions total 5 including E9a)"
+    },
+    {
+      "id": "E7c",
+      "declaration": "LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq",
+      "module": "LevyStochCalc.Brownian.ItoL2CompletionConvergence",
+      "old": "{β : Type*} [MeasurableSpace β] {μ : Measure β} (g : β → ℝ) : eLpNorm g 2 μ ^ (2 : ℝ) = ∫⁻ x, (‖g x‖₊ : ℝ≥0∞) ^ 2 ∂μ",
+      "new": "{β} [MeasurableSpace β] {μ} (g : β → ℝ) (hg : AEStronglyMeasurable g μ) : (same conclusion)",
+      "change": "added premise (hg : AEStronglyMeasurable g …) right after g",
+      "reason": "same cause as E1: the unconditional statement is false for v4.35 raw eLpNorm (∞ off the a.e.-strongly-measurable branch); every vendor caller supplies an existing witness (23 call sites in 11 files); vendor public API exception (vendor norm-premise exceptions total 5 including E9a)"
+    },
+    {
+      "id": "E4.1",
+      "declaration": "FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_map",
+      "old": "∀ {V : Type u_1} {W : Type u_2} [inst : NormedAddCommGroup.{u_1} V] [inst_1 : InnerProductSpace.{0, u_1} ℝ V]\n  [inst_2 : MeasurableSpace.{u_1} V] [inst_3 : BorelSpace.{u_1} V] [inst_4 : NormedAddCommGroup.{u_2} W]\n  [inst_5 : InnerProductSpace.{0, u_2} ℝ W] [inst_6 : MeasurableSpace.{u_2} W] [inst_7 : BorelSpace.{u_2} W]\n  (e : LinearIsometryEquiv.{0, 0, u_1, u_2} (RingHom.id.{0} ℝ) V W) (ν : MeasureTheory.ProbabilityMeasure.{u_1} V),\n  Eq.{1}\n    (FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant.{u_2}\n      (MeasureTheory.ProbabilityMeasure.map.{u_1, u_2} ν ⋯))\n    (FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant.{u_1} ν)",
+      "new": "∀ {V : Type u_1} {W : Type u_2} [inst : NormedAddCommGroup.{u_1} V] [inst_1 : InnerProductSpace.{0, u_1} ℝ V]\n  [inst_2 : MeasurableSpace.{u_1} V] [BorelSpace.{u_1} V] [inst_4 : NormedAddCommGroup.{u_2} W]\n  [inst_5 : InnerProductSpace.{0, u_2} ℝ W] [inst_6 : MeasurableSpace.{u_2} W] [BorelSpace.{u_2} W]\n  (e : LinearIsometryEquiv.{0, 0, u_1, u_2} (RingHom.id.{0} ℝ) V W) (ν : MeasureTheory.ProbabilityMeasure.{u_1} V),\n  Eq.{1}\n    (FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant.{u_2}\n      (MeasureTheory.ProbabilityMeasure.map.{u_1, u_2} ν ⇑e))\n    (FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant.{u_1} ν)",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E4.2",
+      "declaration": "FunctionalInequalities.KLS.Isotropic.map_linearIsometryEquiv",
+      "old": "∀ {E : Type u_2} {F : Type u_3} [inst : NormedAddCommGroup.{u_2} E] [inst_1 : InnerProductSpace.{0, u_2} ℝ E]\n  [inst_2 : CompleteSpace.{u_2} E] [FiniteDimensional.{0, u_2} ℝ E] [inst_4 : MeasurableSpace.{u_2} E]\n  [inst_5 : BorelSpace.{u_2} E] [inst_6 : NormedAddCommGroup.{u_3} F] [inst_7 : InnerProductSpace.{0, u_3} ℝ F]\n  [inst_8 : CompleteSpace.{u_3} F] [FiniteDimensional.{0, u_3} ℝ F] [inst_10 : MeasurableSpace.{u_3} F]\n  [inst_11 : BorelSpace.{u_3} F] {ν : MeasureTheory.ProbabilityMeasure.{u_2} E},\n  FunctionalInequalities.KLS.Isotropic.{u_2} ν →\n    ∀ (φ : LinearIsometryEquiv.{0, 0, u_2, u_3} (RingHom.id.{0} ℝ) E F),\n      FunctionalInequalities.KLS.Isotropic.{u_3} (MeasureTheory.ProbabilityMeasure.map.{u_2, u_3} ν ⋯)",
+      "new": "∀ {E : Type u_2} {F : Type u_3} [inst : NormedAddCommGroup.{u_2} E] [inst_1 : InnerProductSpace.{0, u_2} ℝ E]\n  [inst_2 : CompleteSpace.{u_2} E] [FiniteDimensional.{0, u_2} ℝ E] [inst_4 : MeasurableSpace.{u_2} E]\n  [inst_5 : BorelSpace.{u_2} E] [inst_6 : NormedAddCommGroup.{u_3} F] [inst_7 : InnerProductSpace.{0, u_3} ℝ F]\n  [inst_8 : CompleteSpace.{u_3} F] [FiniteDimensional.{0, u_3} ℝ F] [inst_10 : MeasurableSpace.{u_3} F]\n  [inst_11 : BorelSpace.{u_3} F] {ν : MeasureTheory.ProbabilityMeasure.{u_2} E},\n  FunctionalInequalities.KLS.Isotropic.{u_2} ν →\n    ∀ (φ : LinearIsometryEquiv.{0, 0, u_2, u_3} (RingHom.id.{0} ℝ) E F),\n      FunctionalInequalities.KLS.Isotropic.{u_3} (MeasureTheory.ProbabilityMeasure.map.{u_2, u_3} ν ⇑φ)",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E4.3",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.Suspension.isotropic_map_coordinateEquiv",
+      "old": "∀ {N n : ℕ}\n  {ν : MeasureTheory.ProbabilityMeasure.{0} (FunctionalInequalities.KLS.LogConcave.Suspension.JointSpace N n)},\n  FunctionalInequalities.KLS.Isotropic.{0} ν →\n    FunctionalInequalities.KLS.Isotropic.{0} (MeasureTheory.ProbabilityMeasure.map.{0, 0} ν ⋯)",
+      "new": "∀ {N n : ℕ}\n  {ν : MeasureTheory.ProbabilityMeasure.{0} (FunctionalInequalities.KLS.LogConcave.Suspension.JointSpace N n)},\n  FunctionalInequalities.KLS.Isotropic.{0} ν →\n    FunctionalInequalities.KLS.Isotropic.{0}\n      (MeasureTheory.ProbabilityMeasure.map.{0, 0} ν\n        ⇑(FunctionalInequalities.KLS.LogConcave.Suspension.coordinateEquiv N n))",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E4.4",
+      "declaration": "FunctionalInequalities.KLS.LogConcave.Suspension.logConcave_map_coordinateEquiv",
+      "old": "∀ {N n : ℕ}\n  {ν : MeasureTheory.ProbabilityMeasure.{0} (FunctionalInequalities.KLS.LogConcave.Suspension.JointSpace N n)},\n  FunctionalInequalities.KLS.LogConcave.{0} ν →\n    FunctionalInequalities.KLS.LogConcave.{0} (MeasureTheory.ProbabilityMeasure.map.{0, 0} ν ⋯)",
+      "new": "∀ {N n : ℕ}\n  {ν : MeasureTheory.ProbabilityMeasure.{0} (FunctionalInequalities.KLS.LogConcave.Suspension.JointSpace N n)},\n  FunctionalInequalities.KLS.LogConcave.{0} ν →\n    FunctionalInequalities.KLS.LogConcave.{0}\n      (MeasureTheory.ProbabilityMeasure.map.{0, 0} ν\n        ⇑(FunctionalInequalities.KLS.LogConcave.Suspension.coordinateEquiv N n))",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E4.5",
+      "declaration": "FunctionalInequalities.KLS.integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map",
+      "old": "∀ {E : Type u_2} [inst : NormedAddCommGroup.{u_2} E] [inst_1 : InnerProductSpace.{0, u_2} ℝ E]\n  [inst_2 : CompleteSpace.{u_2} E] [FiniteDimensional.{0, u_2} ℝ E] [inst_4 : MeasurableSpace.{u_2} E]\n  [inst_5 : BorelSpace.{u_2} E] (m : MeasureTheory.Measure.{u_2} E) [MeasureTheory.Measure.IsAddHaarMeasure.{u_2} m]\n  (φ : E → ℝ) (u v : E) (hφ : ContDiff.{0, u_2, 0} ℝ (↑Top.top.{0}) φ),\n  Eq.{1} (∫ (x : E), Real.exp (Neg.neg.{0} (φ x)) ∂m) 1 →\n    ∀ (ν : MeasureTheory.ProbabilityMeasure.{u_2} E),\n      Eq.{u_2 + 1} (↑ν) (MeasureTheory.Measure.tilted.{u_2} m (Neg.neg.{u_2} φ)) →\n        FunctionalInequalities.KLS.Isotropic.{u_2} (MeasureTheory.ProbabilityMeasure.map.{u_2, u_2} ν ⋯) →\n          MeasureTheory.Integrable.{0, u_2}\n              (fun x => (fderiv.{0, u_2, 0} ℝ (fun y => (fderiv.{0, u_2, 0} ℝ φ y) u) x) v)\n              (MeasureTheory.Measure.tilted.{u_2} m (Neg.neg.{u_2} φ)) →\n            Eq.{1}\n              (∫ (x : E),\n                (fderiv.{0, u_2, 0} ℝ (fun y => (fderiv.{0, u_2, 0} ℝ φ y) u) x)\n                  v ∂MeasureTheory.Measure.tilted.{u_2} m (Neg.neg.{u_2} φ))\n              (Inner.inner.{0, u_2} ℝ u v)",
+      "new": "∀ {E : Type u_2} [inst : NormedAddCommGroup.{u_2} E] [inst_1 : InnerProductSpace.{0, u_2} ℝ E]\n  [inst_2 : CompleteSpace.{u_2} E] [FiniteDimensional.{0, u_2} ℝ E] [inst_4 : MeasurableSpace.{u_2} E]\n  [inst_5 : BorelSpace.{u_2} E] (m : MeasureTheory.Measure.{u_2} E) [MeasureTheory.Measure.IsAddHaarMeasure.{u_2} m]\n  (φ : E → ℝ) (u v : E),\n  ContDiff.{0, u_2, 0} ℝ (↑Top.top.{0}) φ →\n    Eq.{1} (∫ (x : E), Real.exp (Neg.neg.{0} (φ x)) ∂m) 1 →\n      ∀ (ν : MeasureTheory.ProbabilityMeasure.{u_2} E),\n        Eq.{u_2 + 1} (↑ν) (MeasureTheory.Measure.tilted.{u_2} m (Neg.neg.{u_2} φ)) →\n          FunctionalInequalities.KLS.Isotropic.{u_2}\n              (MeasureTheory.ProbabilityMeasure.map.{u_2, u_2} ν (gradient.{0, u_2} φ)) →\n            MeasureTheory.Integrable.{0, u_2}\n                (fun x => (fderiv.{0, u_2, 0} ℝ (fun y => (fderiv.{0, u_2, 0} ℝ φ y) u) x) v)\n                (MeasureTheory.Measure.tilted.{u_2} m (Neg.neg.{u_2} φ)) →\n              Eq.{1}\n                (∫ (x : E),\n                  (fderiv.{0, u_2, 0} ℝ (fun y => (fderiv.{0, u_2, 0} ℝ φ y) u) x)\n                    v ∂MeasureTheory.Measure.tilted.{u_2} m (Neg.neg.{u_2} φ))\n                (Inner.inner.{0, u_2} ℝ u v)",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E4.6",
+      "declaration": "FunctionalInequalities.KLS.integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map",
+      "old": "∀ {E : Type u_1} [inst : NormedAddCommGroup.{u_1} E] [inst_1 : InnerProductSpace.{0, u_1} ℝ E]\n  [inst_2 : CompleteSpace.{u_1} E] [inst_3 : MeasurableSpace.{u_1} E] [inst_4 : BorelSpace.{u_1} E]\n  (ν : MeasureTheory.ProbabilityMeasure.{u_1} E) {φ : E → ℝ} (hφ : Measurable.{u_1, u_1} (gradient.{0, u_1} φ)),\n  FunctionalInequalities.KLS.Isotropic.{u_1} (MeasureTheory.ProbabilityMeasure.map.{u_1, u_1} ν ⋯) →\n    ∀ (u v : E),\n      Eq.{1} (∫ (x : E), HMul.hMul.{0, 0, 0} ((fderiv.{0, u_1, 0} ℝ φ x) u) ((fderiv.{0, u_1, 0} ℝ φ x) v) ∂↑ν)\n        (Inner.inner.{0, u_1} ℝ u v)",
+      "new": "∀ {E : Type u_1} [inst : NormedAddCommGroup.{u_1} E] [inst_1 : InnerProductSpace.{0, u_1} ℝ E]\n  [inst_2 : CompleteSpace.{u_1} E] [inst_3 : MeasurableSpace.{u_1} E] [inst_4 : BorelSpace.{u_1} E]\n  (ν : MeasureTheory.ProbabilityMeasure.{u_1} E) {φ : E → ℝ},\n  Measurable.{u_1, u_1} (gradient.{0, u_1} φ) →\n    FunctionalInequalities.KLS.Isotropic.{u_1}\n        (MeasureTheory.ProbabilityMeasure.map.{u_1, u_1} ν (gradient.{0, u_1} φ)) →\n      ∀ (u v : E),\n        Eq.{1} (∫ (x : E), HMul.hMul.{0, 0, 0} ((fderiv.{0, u_1, 0} ℝ φ x) u) ((fderiv.{0, u_1, 0} ℝ φ x) v) ∂↑ν)\n          (Inner.inner.{0, u_1} ℝ u v)",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E4.7",
+      "declaration": "FunctionalInequalities.KLS.integral_hessian_eq_inner_of_isotropic_map",
+      "old": "∀ {E : Type u_2} [inst : NormedAddCommGroup.{u_2} E] [inst_1 : InnerProductSpace.{0, u_2} ℝ E]\n  [inst_2 : CompleteSpace.{u_2} E] [inst_3 : FiniteDimensional.{0, u_2} ℝ E] [inst_4 : MeasurableSpace.{u_2} E]\n  [inst_5 : BorelSpace.{u_2} E] (φ : E → ℝ) (hφ : ContDiff.{0, u_2, 0} ℝ (↑Top.top.{0}) φ),\n  ConvexOn.{0, u_2, 0} ℝ Set.univ.{u_2} φ →\n    Eq.{1} (∫ (x : E), Real.exp (Neg.neg.{0} (φ x))) 1 →\n      ∀ (ν : MeasureTheory.ProbabilityMeasure.{u_2} E),\n        Eq.{u_2 + 1} (↑ν)\n            (MeasureTheory.Measure.tilted.{u_2} MeasureTheory.MeasureSpace.volume.{u_2} (Neg.neg.{u_2} φ)) →\n          FunctionalInequalities.KLS.Isotropic.{u_2} (MeasureTheory.ProbabilityMeasure.map.{u_2, u_2} ν ⋯) →\n            ∀ (u v : E),\n              Eq.{1} (∫ (x : E), ((bilinearIteratedFDerivTwo.{0, u_2, 0} ℝ φ x) u) v ∂↑ν) (Inner.inner.{0, u_2} ℝ u v)",
+      "new": "∀ {E : Type u_2} [inst : NormedAddCommGroup.{u_2} E] [inst_1 : InnerProductSpace.{0, u_2} ℝ E]\n  [inst_2 : CompleteSpace.{u_2} E] [inst_3 : FiniteDimensional.{0, u_2} ℝ E] [inst_4 : MeasurableSpace.{u_2} E]\n  [inst_5 : BorelSpace.{u_2} E] (φ : E → ℝ),\n  ContDiff.{0, u_2, 0} ℝ (↑Top.top.{0}) φ →\n    ConvexOn.{0, u_2, 0} ℝ Set.univ.{u_2} φ →\n      Eq.{1} (∫ (x : E), Real.exp (Neg.neg.{0} (φ x))) 1 →\n        ∀ (ν : MeasureTheory.ProbabilityMeasure.{u_2} E),\n          Eq.{u_2 + 1} (↑ν)\n              (MeasureTheory.Measure.tilted.{u_2} MeasureTheory.MeasureSpace.volume.{u_2} (Neg.neg.{u_2} φ)) →\n            FunctionalInequalities.KLS.Isotropic.{u_2}\n                (MeasureTheory.ProbabilityMeasure.map.{u_2, u_2} ν (gradient.{0, u_2} φ)) →\n              ∀ (u v : E),\n                Eq.{1} (∫ (x : E), ((bilinearIteratedFDerivTwo.{0, u_2, 0} ℝ φ x) u) v ∂↑ν) (Inner.inner.{0, u_2} ℝ u v)",
+      "change": "Mathlib v4.35.0 ProbabilityMeasure.map takes the function itself; the statement passes the same function instead of a measurability proof. Every existing parameter (including the measurability premise, still named hφ where present) is retained.",
+      "reason": "E4: same-function explicit map representation"
+    },
+    {
+      "id": "E9a",
+      "declaration": "LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral",
+      "module": "LevyStochCalc.Brownian.ItoIntegrandComplete",
+      "old": "{α : Type*} [MeasurableSpace α] (μ : Measure α) (f : α → ℝ) : eLpNorm f 2 μ ^ 2 = ∫⁻ x, (‖f x‖₊ : ℝ≥0∞) ^ 2 ∂μ",
+      "new": "same with (hf : AEStronglyMeasurable f μ) after f",
+      "change": "added premise (hf : AEStronglyMeasurable f μ)",
+      "reason": "same cause as E1/E7; callers energy_eq_eLpNorm_sq, markedEnergy_eq_eLpNorm_sq (hm.aestronglyMeasurable) and the two range isometries ((Lp.aestronglyMeasurable u).sub (Lp.aestronglyMeasurable v)); vendor norm-premise exceptions total 5"
+    }
+  ],
+  "module_scope_instances": "E3 applied: eight scoped DerivativeNorms instances exported (see visibility_promotions); audit requires the exact set",
+  "private_helper_adjustments": [
+    {
+      "id": "E6",
+      "module": "LevyStochCalc.Brownian.ItoDensityUnbounded (vendored)",
+      "declarations": [
+        "private eLpNorm_sub_eLpNorm_le_eLpNorm_sub",
+        "private eLpNorm_tendsto_of_eLpNorm_sub_tendsto_zero"
+      ],
+      "change": "unused private binders renamed hf/hg -> _hf/_hg and hf/hfn -> _hf/_hfn; premise types and order unchanged; positional internal caller unchanged",
+      "reason": "v4.35 eLpNorm_add_le no longer uses measurability; alpha-renaming only, not a statement change"
+    },
+    {
+      "id": "E8",
+      "module": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.InteriorRegularity",
+      "declarations": [
+        "private eLpNorm_le_of_norm_le",
+        "private eLpNorm_le_tilted_of_sq_le"
+      ],
+      "change": "eLpNorm_le_of_norm_le gains (hf : AEStronglyMeasurable f μ) after hC; eLpNorm_le_tilted_of_sq_le gains (hF : AEStronglyMeasurable F m) after u; other premises, order, constants and conclusions unchanged",
+      "reason": "both private statements are false for non-measurable functions under v4.35 raw eLpNorm (Vitali-indicator counterexample)",
+      "callers": [
+        "localized approximation-difference bound: (hgL n − χu) ν-measurability transferred to m via m ≪ ν (hνU, integrable_exp_neg)",
+        "h₁: hP₁m",
+        "h₂: hP₂m",
+        "h₃: hP₃m",
+        "hBd: continuity of d • ∇χ",
+        "hCd: continuity of χ • Hd",
+        "hwL: hwm",
+        "hGL: hGm"
+      ],
+      "public_interface": "unchanged (private helpers only; not a public or vendor exception)"
+    },
+    {
+      "id": "E9b",
+      "module": "LevyStochCalc.Brownian.ItoAlgebraAssociativity (vendored)",
+      "declarations": [
+        "private eLpNorm_mul_le_of_bound"
+      ],
+      "change": "gains (hcg : AEStronglyMeasurable (fun ω => c ω * g ω) P) after hM; callers pass haesm i _",
+      "public_interface": "unchanged"
+    }
+  ],
+  "E4_definitions_witness_retained": [
+    "Probability.intrinsicMeasure",
+    "Probability.translateLaw",
+    "Probability.mapLinearIsometryEquiv",
+    "Probability.mapContinuousLinearEquiv",
+    "KLS.Isoperimetry.carrierMeasure"
+  ],
+  "generated_interface_delta": {
+    "added": [
+      "ContinuousLinearEquiv.unitsEquivAut.congr_simp (generated in FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable; owned by Mathlib.Analysis.Calculus.InverseFunctionTheorem.Analytic in the v4.33 closure, which the v4.35 closure no longer imports)",
+      "LinearMap.mkContinuous₂.congr_simp (generated in FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate; owned by Mathlib.Analysis.Normed.Operator.CompleteCodomain under v4.33, not generated there by v4.35)"
+    ],
+    "removed": [
+      "MeasureTheory.ProbabilityMeasure.map.congr_simp (was generated in FunctionalInequalities.Probability.IntrinsicTranslation for the proof-taking map; absent from the whole v4.35 environment)"
+    ],
+    "other_generated_type_rows": "14 generated congr_simp/noConfusion rows whose only change is commuted universe max operands; Homeomorph.subLeft.congr_simp universe parameter w → u_1 (Mathlib)"
+  },
+  "current_review_inputs": {
+    "infrastructure": "research/progress/2026-10-31-palomar-infrastructure-review.json",
+    "vendor_owner_map": "research/progress/2026-10-31-palomar-vendor-owner-moves.json",
+    "statement_golden_review": "research/a-series/statement-snapshot/2026-10-31-mathlib435.md",
+    "BKL_golden_review": "research/audits/BKL/IndependentTargets/2026-10-31-mathlib435.md",
+    "independent_audit_clients": 447,
+    "definition_source_review": "research/progress/2026-10-31-palomar-definition-review.json",
+    "hessian_complete_types": "research/tests/fixtures/mathlib435-semantics/HessianOldTypesReview.json",
+    "vendor_module_names": "research/progress/2026-10-31-palomar-vendor-module-paths.json"
+  },
+  "preparation_inventory_before_publication_selection": {
+    "ported_with_section": 1517,
+    "ported_imports_only": 21,
+    "already_module": 59,
+    "exempt_lakefile_restored": 1,
+    "max_lines": 5274,
+    "regression_fixture_modules": 4,
+    "lean_files_total": 1604,
+    "module_sources": 1603,
+    "exempt_lake_config": "research/upstream/mathlib/lakefile.lean (no module header; line cap applies)"
+  },
+  "publication_review": "research/progress/2026-10-31-palomar-publication-review.json"
+}

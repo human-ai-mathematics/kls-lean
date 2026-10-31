@@ -1,17 +1,19 @@
-import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.LogConcave.Translation
-import FunctionalInequalities.KLS.LogConcave.Transport
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
-import FunctionalInequalities.KLS.Statement
-import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
-import FunctionalInequalities.Poincare.L2.Comparison
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Probability.Covariance.Whitening
-import FunctionalInequalities.Probability.Covariance.Intrinsic
-import FunctionalInequalities.Poincare.SmoothTest.Linear
-import FunctionalInequalities.Poincare.SmoothTest.Transport
+module
+
+public import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.KLS.LogConcave.Translation
+public import FunctionalInequalities.KLS.LogConcave.Transport
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
+public import FunctionalInequalities.KLS.Statement
+public import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
+public import FunctionalInequalities.Poincare.L2.Comparison
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.Probability.Covariance.Whitening
+public import FunctionalInequalities.Probability.Covariance.Intrinsic
+public import FunctionalInequalities.Poincare.SmoothTest.Linear
+public import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # Affine and isotropic KLS formulations
@@ -27,12 +29,15 @@ over every finite-dimensional Euclidean space of a fixed universe:
 2. every log-concave law `μ` satisfies `C_P^lit(μ) ≤ K ‖Cov_μ‖` (`CovarianceBound K`);
 3. every log-concave law `μ` satisfies `C_P^aff(μ) ≤ K` (`AffineBound K`).
 
-Proof route. (1) ⇒ (3): center the intrinsic law `ν` of `μ` by translating inside the direction space
-and whiten it by a self-adjoint whitening `W` of the intrinsic covariance (`Covariance.exists_whitening`,
+Proof route. (1) ⇒ (3): center the intrinsic law `ν` of `μ` by translating inside the direction
+space
+and whiten it by a self-adjoint whitening `W` of the intrinsic covariance
+(`Covariance.exists_whitening`,
 positive definite by `lem:ambient-intrinsic-covariance`); the result is an isotropic log-concave law
 `ν̃` with `C_P^aff(μ) = C_P(ν̃, covariance relaxation) = C_P(ν̃, Lipschitz gradient relaxation) =
 C_P^lit(ν̃)` by translation and linear transport of the covariance relaxation and by the Lipschitz
-bridge with the literature constant. (3) ⇒ (2): `C_P^lit(μ)` is the optimal constant of the Lipschitz
+bridge with the literature constant. (3) ⇒ (2): `C_P^lit(μ)` is the optimal constant of the
+Lipschitz
 gradient relaxation of `ν`, the covariance relaxation is at most `‖Σ‖` times it, and
 `‖Σ‖ = ‖Cov_μ‖`. (2) ⇒ (1): an isotropic law has covariance operator `1`, of norm at most one.
 The zero-dimensional law is included in all three statements; there every constant is zero.
@@ -46,6 +51,8 @@ log-concave laws on all `EuclideanSpace ℝ (Fin n)`. `one_le_localSlope_constan
 bound `C_P ≥ 1` for isotropic laws in positive dimension. Nothing here asserts that any of the
 three statements holds for some `K`; no proof of the conjecture is used.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -65,19 +72,24 @@ variable {V₁ V₂ : Type*} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V�
 namespace KLS.LogConcave
 
 open scoped RealInnerProductSpace in
-/-- **All moments of isotropic log-concave laws on `ℝⁿ`** are bounded by constants depending only on
+/--
+**All moments of isotropic log-concave laws on `ℝⁿ`** are bounded by constants depending only on
 `n` and the order, with radius `R = 2√(n+1)` (quantitative Borell; BKL Section 2, p. 5). -/
 theorem integral_norm_pow_le_of_isotropic {n : ℕ}
     {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hlc : KLS.LogConcave ν)
     (hiso : KLS.Isotropic ν) (p : ℕ) :
     let R : ℝ := 2 * Real.sqrt ((n : ℝ) + 1)
-    Integrable (fun v : EuclideanSpace ℝ (Fin n) => ‖v‖ ^ p) (ν : Measure (EuclideanSpace ℝ (Fin n))) ∧
+    Integrable (fun v : EuclideanSpace ℝ (Fin n) => ‖v‖ ^ p)
+        (ν : Measure (EuclideanSpace ℝ (Fin n))) ∧
       (∫ v, ‖v‖ ^ p ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) ≤
         (p.factorial : ℝ) / (Real.log 3 / (4 * R)) ^ p *
           ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) := by
   have hLC : KLS.BorelLogConcave ν := (KLS.LogConcave.borel_iff ν).1 hlc
-  have hint : Integrable (fun v : EuclideanSpace ℝ (Fin n) => ‖v‖ ^ 2) (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
-    simpa only [id_eq] using (memLp_two_iff_integrable_sq_norm hiso.memLp_two.1).1 hiso.memLp_two
+  have hint :
+    Integrable (fun v : EuclideanSpace ℝ (Fin n) => ‖v‖ ^ 2)
+      (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+    simpa only [id_eq] using
+      (memLp_two_iff_integrable_sq_norm hiso.memLp_two.aestronglyMeasurable).1 hiso.memLp_two
   exact hLC.integral_norm_pow_le_of_second_bound hint hiso.integral_norm_sq.le p
 
 end KLS.LogConcave
@@ -95,22 +107,28 @@ universe `u` has literature constant at most `K`. -/
 def IsotropicBound (K : NNReal) : Prop :=
   ∀ (V : Type u) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-    (ν : ProbabilityMeasure V), LogConcave ν → Isotropic ν → Poincare.LocalSlope.Intrinsic.constant ν ≤ (K : ENNReal)
+    (ν : ProbabilityMeasure V),
+    LogConcave ν → Isotropic ν → Poincare.LocalSlope.Intrinsic.constant ν ≤ (K : ENNReal)
 
-/-- Item (2): every log-concave law on every finite-dimensional Euclidean space of the universe `u`
+/--
+Item (2): every log-concave law on every finite-dimensional Euclidean space of the universe `u`
 has literature constant at most `K` times the operator norm of its covariance. -/
 def CovarianceBound (K : NNReal) : Prop :=
   ∀ (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
-    (μ : ProbabilityMeasure E), LogConcave μ →
-      Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (μ : Measure E)‖
+    (μ : ProbabilityMeasure E),
+    LogConcave μ →
+      Poincare.LocalSlope.Intrinsic.constant μ ≤
+        (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (μ : Measure E)‖
 
-/-- Item (3): every log-concave law on every finite-dimensional Euclidean space of the universe `u`
+/--
+Item (3): every log-concave law on every finite-dimensional Euclidean space of the universe `u`
 has affine covariance Poincaré constant at most `K`. -/
 def AffineBound (K : NNReal) : Prop :=
   ∀ (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
-    (μ : ProbabilityMeasure E), LogConcave μ → Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal)
+    (μ : ProbabilityMeasure E),
+    LogConcave μ → Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal)
 
 end KLS
 
@@ -120,94 +138,141 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
 namespace KLS.LogConcave
 
 omit [CompleteSpace E] in
-/-- The centered and whitened intrinsic law of a log-concave law: there is an isotropic log-concave
-law on the direction space with the same affine covariance Poincaré constant, equal to its literature
+/--
+The centered and whitened intrinsic law of a log-concave law: there is an isotropic log-concave
+law on the direction space with the same affine covariance Poincaré constant, equal to its
+literature
 constant. -/
-theorem exists_isotropic_localSlope_constant_eq {μ : ProbabilityMeasure E}
-    (hμ : LogConcave μ) :
+theorem exists_isotropic_localSlope_constant_eq {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
     ∃ ν' : ProbabilityMeasure (affineSupport μ).direction,
-      LogConcave ν' ∧ Isotropic ν' ∧ Poincare.CovarianceGradient.Intrinsic.constant μ = Poincare.LocalSlope.Intrinsic.constant ν' := by
+      LogConcave ν' ∧
+        Isotropic ν' ∧
+          Poincare.CovarianceGradient.Intrinsic.constant μ =
+            Poincare.LocalSlope.Intrinsic.constant ν' := by
   set ν := Probability.intrinsicMeasure μ with hνdef
   have hν : LogConcave ν := hμ.intrinsicMeasure
   have hν2 : MemLp id 2 (ν : Measure (affineSupport μ).direction) := hμ.intrinsic_memLp_id_two
-  have hpos : ∀ v : (affineSupport μ).direction, v ≠ 0 →
-      0 < inner ℝ (Covariance.operator (ν : Measure (affineSupport μ).direction) v) v :=
+  have hpos :
+    ∀ v : (affineSupport μ).direction,
+      v ≠ 0 → 0 < inner ℝ (Covariance.operator (ν : Measure (affineSupport μ).direction) v) v :=
     fun v hv ↦ Covariance.intrinsic_operator_inner_self_pos μ hμ.memLp_id_two hv
-  obtain ⟨W, hWadj, hW⟩ := Covariance.exists_whitening (ν : Measure (affineSupport μ).direction) hpos
-  set c : (affineSupport μ).direction := -∫ x, x ∂(ν : Measure (affineSupport μ).direction) with hcdef
+  obtain ⟨W, hWadj, hW⟩ :=
+    Covariance.exists_whitening (ν : Measure (affineSupport μ).direction) hpos
+  set c : (affineSupport μ).direction := -∫ x, x ∂(ν : Measure (affineSupport μ).direction) with
+    hcdef
   set νc := Probability.translateLaw ν c with hνc
   set νt := Probability.mapContinuousLinearEquiv νc W with hνt
   have hνc_lc : LogConcave νc := hν.translateLaw c
   have hνt_lc : LogConcave νt := hνc_lc.mapContinuousLinearEquiv W
-  have hνc2 : MemLp id 2 (νc : Measure (affineSupport μ).direction) := Probability.memLp_id_two_translateLaw ν c hν2
-  have hνt2 : MemLp id 2 (νt : Measure (affineSupport μ).direction) := Probability.memLp_id_two_mapContinuousLinearEquiv νc W hνc2
+  have hνc2 : MemLp id 2 (νc : Measure (affineSupport μ).direction) :=
+    Probability.memLp_id_two_translateLaw ν c hν2
+  have hνt2 : MemLp id 2 (νt : Measure (affineSupport μ).direction) :=
+    Probability.memLp_id_two_mapContinuousLinearEquiv νc W hνc2
   have hmean_c : ∫ x, x ∂(νc : Measure (affineSupport μ).direction) = 0 :=
     Probability.integral_id_translateLaw_neg_integral ν (hν2.integrable one_le_two)
   have hmean_t : ∫ y, y ∂(νt : Measure (affineSupport μ).direction) = 0 := by
-    rw [hνt, Probability.integral_id_mapContinuousLinearEquiv νc W (hνc2.integrable one_le_two), hmean_c, map_zero]
-  have hcov_c : Covariance.operator (νc : Measure (affineSupport μ).direction) = Covariance.operator (ν : Measure (affineSupport μ).direction) :=
+    rw [hνt, Probability.integral_id_mapContinuousLinearEquiv νc W (hνc2.integrable one_le_two),
+      hmean_c, map_zero]
+  have hcov_c :
+    Covariance.operator (νc : Measure (affineSupport μ).direction) =
+      Covariance.operator (ν : Measure (affineSupport μ).direction) :=
     Covariance.operator_translateLaw ν c
-  have hcov_t : Covariance.operator (νt : Measure (affineSupport μ).direction) = ContinuousLinearMap.id ℝ _ := by
+  have hcov_t :
+    Covariance.operator (νt : Measure (affineSupport μ).direction) =
+      ContinuousLinearMap.id ℝ _ := by
     rw [hνt, Covariance.operator_mapContinuousLinearEquiv, hcov_c, hWadj]
     refine ContinuousLinearMap.ext fun u ↦ ext_inner_right ℝ fun v ↦ ?_
     simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply]
     rw [← hWadj, ContinuousLinearMap.adjoint_inner_left, hWadj]
     exact hW u v
-  have hiso : Isotropic νt := ⟨hνt2, hmean_t, hcov_t⟩
+  have hiso : Isotropic νt :=
+    ⟨hνt2, hmean_t, hcov_t⟩
   -- full support of the whitened law
+
   have htop : affineSupport νt = ⊤ := by
     apply Probability.affineSupport_mapContinuousLinearEquiv_eq_top
     rw [hνc, affineSupport_translateLaw, affineSupport_intrinsicMeasure]
     exact AffineMap.map_top_of_surjective _ (AffineEquiv.constVAdd ℝ _ c).surjective
   have hi : (interior (νt : Measure (affineSupport μ).direction).support).Nonempty :=
     hνt_lc.interior_support_nonempty_of_affineSupport_eq_top htop
-  have hac : (νt : Measure (affineSupport μ).direction) ≪ (Measure.addHaar : Measure (affineSupport μ).direction) :=
+  have hac :
+    (νt : Measure (affineSupport μ).direction) ≪
+      (Measure.addHaar : Measure (affineSupport μ).direction) :=
     hνt_lc.absolutelyContinuous_haar Measure.addHaar hi
-  have hfr : (νt : Measure (affineSupport μ).direction) (frontier (νt : Measure (affineSupport μ).direction).support) = 0 :=
+  have hfr :
+    (νt : Measure (affineSupport μ).direction)
+        (frontier (νt : Measure (affineSupport μ).direction).support) =
+      0 :=
     hνt_lc.frontier_support_eq_zero hi
   refine ⟨νt, hνt_lc, hiso, ?_⟩
-  calc Poincare.CovarianceGradient.Intrinsic.constant μ
-      = Poincare.L2Energy.constant ν (Energy.CovarianceGradient.relaxation ν) := Poincare.CovarianceGradient.Intrinsic.constant_eq μ
+  calc
+    Poincare.CovarianceGradient.Intrinsic.constant μ =
+        Poincare.L2Energy.constant ν (Energy.CovarianceGradient.relaxation ν) :=
+      Poincare.CovarianceGradient.Intrinsic.constant_eq μ
     _ = Poincare.L2Energy.constant νc (Energy.CovarianceGradient.relaxation νc) :=
-        (Poincare.CovarianceGradient.constant_translateLaw ν c).symm
+      (Poincare.CovarianceGradient.constant_translateLaw ν c).symm
     _ = Poincare.L2Energy.constant νt (Energy.CovarianceGradient.relaxation νt) :=
-        (Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv νc W).symm
-    _ = Poincare.L2Energy.constant νt (FunctionalInequalities.Energy.LipschitzGradient.relaxation νt Measure.addHaar hac) := by
-        rw [FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitz νt Measure.addHaar hac hfr hcov_t]
+      (Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv νc W).symm
+    _ =
+        Poincare.L2Energy.constant νt
+          (FunctionalInequalities.Energy.LipschitzGradient.relaxation νt Measure.addHaar hac) := by
+      rw [FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitz νt
+          Measure.addHaar hac hfr hcov_t]
     _ = Poincare.SmoothTest.constant (νt : Measure (affineSupport μ).direction) :=
-        (FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz νt Measure.addHaar hac hfr).symm
+      (FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz νt Measure.addHaar hac
+          hfr).symm
     _ = Poincare.LocalSlope.Intrinsic.constant νt := hνt_lc.smoothTest_constant_eq_localSlope
 
 /-- The literature constant of a log-concave law is at most the operator norm of its covariance
 times its affine covariance Poincaré constant. -/
-theorem localSlope_le_mul_intrinsicCovariance {μ : ProbabilityMeasure E}
-    (hμ : LogConcave μ) {K : NNReal} (hK : Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal)) :
-    Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (μ : Measure E)‖ := by
+theorem localSlope_le_mul_intrinsicCovariance {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
+    {K : NNReal} (hK : Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal)) :
+    Poincare.LocalSlope.Intrinsic.constant μ ≤
+      (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (μ : Measure E)‖ := by
   have hν : LogConcave (Probability.intrinsicMeasure μ) := hμ.intrinsicMeasure
-  have hi : (interior (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction).support).Nonempty :=
+  have hi :
+    (interior
+        (Probability.intrinsicMeasure μ :
+            Measure (affineSupport μ).direction).support).Nonempty :=
     hμ.interior_intrinsic_support_nonempty
-  have hac : (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction) ≪
+  have hac :
+    (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction) ≪
       (Measure.addHaar : Measure (affineSupport μ).direction) :=
     hν.absolutelyContinuous_haar Measure.addHaar hi
-  have hfr : (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction)
-      (frontier (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction).support) = 0 :=
+  have hfr :
+    (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction)
+        (frontier
+          (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction).support) =
+      0 :=
     hν.frontier_support_eq_zero hi
-  have hlit : Poincare.LocalSlope.Intrinsic.constant μ =
+  have hlit :
+    Poincare.LocalSlope.Intrinsic.constant μ =
       Poincare.L2Energy.constant (Probability.intrinsicMeasure μ)
-        (FunctionalInequalities.Energy.LipschitzGradient.relaxation (Probability.intrinsicMeasure μ) Measure.addHaar hac) := by
+        (FunctionalInequalities.Energy.LipschitzGradient.relaxation
+          (Probability.intrinsicMeasure μ) Measure.addHaar hac) := by
     rw [← hμ.smoothTest_constant_eq_intrinsic_and_localSlope.2,
-      FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz _ Measure.addHaar hac hfr]
-  have hholds : Poincare.L2Energy.Holds (Probability.intrinsicMeasure μ)
+      FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz _ Measure.addHaar hac
+        hfr]
+  have hholds :
+    Poincare.L2Energy.Holds (Probability.intrinsicMeasure μ)
       (Energy.CovarianceGradient.relaxation (Probability.intrinsicMeasure μ)) K := by
-    have h : Poincare.CovarianceGradient.Intrinsic.Holds μ K := (Poincare.CovarianceGradient.Intrinsic.holds_iff_constant_le μ K).mpr hK
-    rw [Poincare.CovarianceGradient.Intrinsic.Holds, Energy.CovarianceGradient.Intrinsic.energy_eq_relaxation_intrinsicMeasure] at h
+    have h : Poincare.CovarianceGradient.Intrinsic.Holds μ K :=
+      (Poincare.CovarianceGradient.Intrinsic.holds_iff_constant_le μ K).mpr hK
+    rw [Poincare.CovarianceGradient.Intrinsic.Holds,
+      Energy.CovarianceGradient.Intrinsic.energy_eq_relaxation_intrinsicMeasure] at h
     exact h
-  have hcmp : ∀ f : (FunctionalInequalities.Energy.LipschitzGradient.relaxation (Probability.intrinsicMeasure μ)
-      Measure.addHaar hac).domain,
+  have hcmp :
+    ∀ f :
+      (FunctionalInequalities.Energy.LipschitzGradient.relaxation
+          (Probability.intrinsicMeasure μ) Measure.addHaar hac).domain,
       Energy.CovarianceGradient.relaxation (Probability.intrinsicMeasure μ) f.1 ≤
-        (‖Covariance.operator (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction)‖₊ : ENNReal) *
-          FunctionalInequalities.Energy.LipschitzGradient.relaxation (Probability.intrinsicMeasure μ) Measure.addHaar hac f.1 :=
-    fun f ↦ FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz
+        (‖Covariance.operator
+                (Probability.intrinsicMeasure μ : Measure (affineSupport μ).direction)‖₊ :
+            ENNReal) *
+          FunctionalInequalities.Energy.LipschitzGradient.relaxation
+            (Probability.intrinsicMeasure μ) Measure.addHaar hac f.1 :=
+    fun f ↦
+    FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz
       (Probability.intrinsicMeasure μ) Measure.addHaar hac hfr f.1
       ((Energy.Functional.mem_domain _ _).mp f.2)
   have hle := Poincare.L2Energy.constant_le_mul_of_energy_le_mul hholds hcmp
@@ -242,14 +307,16 @@ end KLS.LogConcave
 namespace KLS
 
 /-- (1) ⇒ (3). -/
-theorem affineBound_of_isotropicBound {K : NNReal} (h : IsotropicBound.{u} K) : AffineBound.{u} K := by
+theorem affineBound_of_isotropicBound {K : NNReal} (h : IsotropicBound.{u} K) :
+    AffineBound.{u} K := by
   intro E _ _ _ _ _ _ _ μ hμ
   obtain ⟨ν', hν', hiso, heq⟩ := hμ.exists_isotropic_localSlope_constant_eq
   rw [heq]
   exact h _ ν' hν' hiso
 
 /-- (3) ⇒ (2). -/
-theorem covarianceBound_of_affineBound {K : NNReal} (h : AffineBound.{u} K) : CovarianceBound.{u} K := by
+theorem covarianceBound_of_affineBound {K : NNReal} (h : AffineBound.{u} K) :
+    CovarianceBound.{u} K := by
   intro E _ _ _ _ _ _ _ μ hμ
   exact hμ.localSlope_le_mul_intrinsicCovariance (h E μ hμ)
 

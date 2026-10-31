@@ -1,10 +1,14 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
-import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.KLS.BKL.Cumulant.Energy.Basic
 /-! Audit clients for the cumulant permutation symmetry (LocalCumulant section CumulantSymmetry)
 and the Boolean-mask complement pairing (IteratedDerivative/Bilinear), in the sections SkewLaw,
 PlaneLaw, PermutationClients and PairClients. -/
+
+@[expose] public section
 
 -- ===== SkewLaw =====
 section SkewLaw
@@ -66,7 +70,8 @@ section PlaneLaw
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory Set
-open FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
+open FunctionalInequalities FunctionalInequalities.Analysis
+  FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace ContDiff
 namespace D74RawPlane
 abbrev E := EuclideanSpace ℝ (Fin 2)
@@ -87,28 +92,38 @@ theorem integral_μ {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] [Comp
     (g : E → F) :
     (∫ x, g x ∂(μ : Measure E)) =
       (1 / 4 : ℝ) • g (point 1 1) + (1 / 4 : ℝ) • g (point 1 (-1)) +
-      (1 / 4 : ℝ) • g (point (-1) 1) + (1 / 4 : ℝ) • g (point (-1) (-1)) := by
+          (1 / 4 : ℝ) • g (point (-1) 1) +
+        (1 / 4 : ℝ) • g (point (-1) (-1)) := by
   have hi (x : E) : Integrable g (ENNReal.ofReal (1 / 4) • Measure.dirac x) :=
     (integrable_dirac (by simp)).smul_measure (by norm_num)
-  change (∫ x, g x ∂(ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1)))) = _
+  change
+    (∫ x,
+        g
+          x ∂(ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
+              ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
+            ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
+          ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1)))) =
+      _
   rw [integral_add_measure ((hi _).add_measure (hi _) |>.add_measure (hi _)) (hi _),
-    integral_add_measure ((hi _).add_measure (hi _)) (hi _),
-    integral_add_measure (hi _) (hi _)]
-  simp only [integral_smul_measure, integral_dirac, ENNReal.toReal_ofReal (by norm_num : (0 : ℝ) ≤ 1 / 4)]
+    integral_add_measure ((hi _).add_measure (hi _)) (hi _), integral_add_measure (hi _) (hi _)]
+  simp only [integral_smul_measure, integral_dirac,
+    ENNReal.toReal_ofReal (by norm_num : (0 : ℝ) ≤ 1 / 4)]
 
 def K : Set E := {point 1 1, point 1 (-1), point (-1) 1, point (-1) (-1)}
 
 theorem support_subset : (μ : Measure E).support ⊆ K := by
-  apply Measure.support_subset_of_isClosed
-    (isClosed_singleton.union (isClosed_singleton.union (isClosed_singleton.union isClosed_singleton)))
+  apply
+    Measure.support_subset_of_isClosed
+      (isClosed_singleton.union
+        (isClosed_singleton.union (isClosed_singleton.union isClosed_singleton)))
   rw [mem_ae_iff]
-  change ((ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
-    ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1))) Kᶜ) = 0
+  change
+    ((ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 1) +
+              ENNReal.ofReal (1 / 4) • Measure.dirac (point 1 (-1)) +
+            ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) 1) +
+          ENNReal.ofReal (1 / 4) • Measure.dirac (point (-1) (-1)))
+        Kᶜ) =
+      0
   simp [K]
 
 theorem compact_μ : IsCompact (μ : Measure E).support := by
@@ -146,30 +161,33 @@ theorem generic_m0 (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).
 
 namespace Skew
 open D74rSkewLaw
-def law : ProbabilityMeasure ℝ := ⟨twoPt,isProbabilityMeasure_twoPt⟩
+def law : ProbabilityMeasure ℝ :=
+  ⟨twoPt, isProbabilityMeasure_twoPt⟩
 lemma compact_law : IsCompact (law : Measure ℝ).support := by
-  have hs : (law : Measure ℝ).support ⊆ ({(2:ℝ),-1/2}:Set ℝ) := by
+  have hs : (law : Measure ℝ).support ⊆ ({(2 : ℝ), -1 / 2} : Set ℝ) := by
     apply Measure.support_subset_of_isClosed (isClosed_singleton.union isClosed_singleton)
     rw [mem_ae_iff]
-    simp [law,twoPt]
-  exact (Set.toFinite ({(2:ℝ),-1/2}:Set ℝ)).isCompact.of_isClosed_subset
-    (law : Measure ℝ).isClosed_support hs
+    simp [law, twoPt]
+  exact
+    (Set.toFinite ({(2 : ℝ), -1 / 2} : Set ℝ)).isCompact.of_isClosed_subset
+      (law : Measure ℝ).isClosed_support hs
 
-theorem actual_nonzero_third : cumulant (law : Measure ℝ) 3 ![1,1,1] = 3/2 :=
+theorem actual_nonzero_third : cumulant (law : Measure ℝ) 3 ![1, 1, 1] = 3 / 2 :=
   cumulant_three_twoPt
 
-theorem signed_third : cumulant (law : Measure ℝ) 3 ![-2,3,1] = -9 := by
+theorem signed_third : cumulant (law : Measure ℝ) 3 ![-2, 3, 1] = -9 := by
   have : IsProbabilityMeasure twoPt := isProbabilityMeasure_twoPt
-  change cumulant twoPt 3 ![-2,3,1] = -9
-  rw [cumulant_three_eq_integral twoPt integrable_exp_mul_norm_twoPt centered_twoPt,integral_twoPt]
+  change cumulant twoPt 3 ![-2, 3, 1] = -9
+  rw [cumulant_three_eq_integral twoPt integrable_exp_mul_norm_twoPt centered_twoPt,
+    integral_twoPt]
   norm_num [Real.inner_apply]
 
-theorem actual_signed_swap : cumulant (law : Measure ℝ) 3 ![3,-2,1] = -9 := by
-  have hp := cumulant_comp_perm_of_compact law compact_law (Equiv.swap (0:Fin 3) 1)
-    ![(-2:ℝ),3,1]
-  have he : (![-2,3,1] : Fin 3 → ℝ) ∘ Equiv.swap 0 1 = ![3,-2,1] := by
+theorem actual_signed_swap : cumulant (law : Measure ℝ) 3 ![3, -2, 1] = -9 := by
+  have hp :=
+    cumulant_comp_perm_of_compact law compact_law (Equiv.swap (0 : Fin 3) 1) ![(-2 : ℝ), 3, 1]
+  have he : (![-2, 3, 1] : Fin 3 → ℝ) ∘ Equiv.swap 0 1 = ![3, -2, 1] := by
     funext i
-    fin_cases i <;> norm_num [Function.comp_def,Equiv.swap_apply_def]
+    fin_cases i <;> norm_num [Function.comp_def, Equiv.swap_apply_def]
   rw [he] at hp
   exact hp.trans signed_third
 
@@ -185,36 +203,45 @@ theorem all_orders {m : ℕ} (σ : Equiv.Perm (Fin m)) (h : Fin m → D74RawPlan
     cumulant (μ : Measure D74RawPlane.E) m (h ∘ σ) = cumulant (μ : Measure D74RawPlane.E) m h :=
   cumulant_comp_perm_of_compact μ compact_μ σ h
 
-theorem actual_signed_second : cumulant (μ : Measure D74RawPlane.E) 2 ![point 1 2,point (-2) 3] = 4 := by
+theorem actual_signed_second :
+    cumulant (μ : Measure D74RawPlane.E) 2 ![point 1 2, point (-2) 3] = 4 := by
   rw [cumulant_two_eq_centered_moment_of_integrable_exp (μ : Measure D74RawPlane.E) one_pos
-    (compact_support_integrable_exp _ compact_μ 1),integral_μ,integral_μ,integral_μ]
-  norm_num [PiLp.inner_apply,Fin.sum_univ_two,Real.inner_apply,point,smul_eq_mul]
+      (compact_support_integrable_exp _ compact_μ 1),
+    integral_μ, integral_μ, integral_μ]
+  norm_num [PiLp.inner_apply, Fin.sum_univ_two, Real.inner_apply, point, smul_eq_mul]
 
-theorem actual_second_swap : cumulant (μ : Measure D74RawPlane.E) 2 ![point (-2) 3,point 1 2] = 4 := by
-  have hp := cumulant_comp_perm_of_compact μ compact_μ (Equiv.swap (0:Fin 2) 1)
-    ![point 1 2,point (-2) 3]
-  have he : (![point 1 2,point (-2) 3] : Fin 2 → D74RawPlane.E) ∘ Equiv.swap 0 1 = ![point (-2) 3,point 1 2] := by
+theorem actual_second_swap :
+    cumulant (μ : Measure D74RawPlane.E) 2 ![point (-2) 3, point 1 2] = 4 := by
+  have hp :=
+    cumulant_comp_perm_of_compact μ compact_μ (Equiv.swap (0 : Fin 2) 1)
+      ![point 1 2, point (-2) 3]
+  have he :
+    (![point 1 2, point (-2) 3] : Fin 2 → D74RawPlane.E) ∘ Equiv.swap 0 1 =
+      ![point (-2) 3, point 1 2] := by
     funext i
-    fin_cases i <;> norm_num [Function.comp_def,Equiv.swap_apply_def]
+    fin_cases i <;> norm_num [Function.comp_def, Equiv.swap_apply_def]
   rw [he] at hp
   exact hp.trans actual_signed_second
 
 /-- Literal mixed coordinates, opposite signs and a repeated direction. -/
 theorem fourth_repeat_signed_swap :
     cumulant (μ : Measure D74RawPlane.E) 4
-      ((![point 1 2,point (-2) 3,point 1 2,point 3 (-1)] : Fin 4 → D74RawPlane.E) ∘ Equiv.swap 0 3) =
-    cumulant (μ : Measure D74RawPlane.E) 4 ![point 1 2,point (-2) 3,point 1 2,point 3 (-1)] :=
+        ((![point 1 2, point (-2) 3, point 1 2, point 3 (-1)] : Fin 4 → D74RawPlane.E) ∘
+          Equiv.swap 0 3) =
+      cumulant (μ : Measure D74RawPlane.E) 4
+        ![point 1 2, point (-2) 3, point 1 2, point 3 (-1)] :=
   cumulant_comp_perm_of_compact μ compact_μ _ _
 end Plane
 
 namespace Zero
 abbrev E0 := EuclideanSpace ℝ (Fin 0)
-def law : ProbabilityMeasure E0 := ⟨Measure.dirac 0,inferInstance⟩
+def law : ProbabilityMeasure E0 :=
+  ⟨Measure.dirac 0, inferInstance⟩
 lemma compact_law : IsCompact (law : Measure E0).support :=
   isCompact_univ.of_isClosed_subset (law : Measure E0).isClosed_support (subset_univ _)
 
-theorem positive_arity_all (m : ℕ) (σ : Equiv.Perm (Fin (m+1))) (h : Fin (m+1) → E0) :
-    cumulant (law : Measure E0) (m+1) (h ∘ σ) = cumulant (law : Measure E0) (m+1) h :=
+theorem positive_arity_all (m : ℕ) (σ : Equiv.Perm (Fin (m + 1))) (h : Fin (m + 1) → E0) :
+    cumulant (law : Measure E0) (m + 1) (h ∘ σ) = cumulant (law : Measure E0) (m + 1) h :=
   cumulant_comp_perm_of_compact law compact_law σ h
 
 /-- The compact zero-dimensional law is a real m0 consumer as well. -/
@@ -254,52 +281,53 @@ lemma middle_compl {m : ℕ} (q : Fin m → Bool) : middle m (compl q) ↔ middl
 
 def middleMasks (m : ℕ) : Finset (Fin m → Bool) := Finset.univ.filter (middle m)
 def representatives {m : ℕ} (i₀ : Fin m) : Finset (Fin m → Bool) :=
-  Finset.univ.filter fun q => q i₀=true ∧ middle m q
+  Finset.univ.filter fun q => q i₀ = true ∧ middle m q
 
-lemma generic_signed_middle {m : ℕ} (f : (Fin m → Bool) → ℝ)
-    (hf : ∀ q,f (compl q)=f q) (i₀ : Fin m) :
-    (∑ q ∈ middleMasks m,f q) = 2*∑ q ∈ representatives i₀,f q :=
+lemma generic_signed_middle {m : ℕ} (f : (Fin m → Bool) → ℝ) (hf : ∀ q, f (compl q) = f q)
+    (i₀ : Fin m) : (∑ q ∈ middleMasks m, f q) = 2 * ∑ q ∈ representatives i₀, f q :=
   sum_filter_eq_two_mul_sum_filter_of_compl_invariant (middle m) middle_compl f hf i₀
 
-lemma actual_middle_m1 : (middleMasks 1).card=0 := by decide
-lemma actual_middle_m2 : (middleMasks 2).card=0 := by decide
-lemma actual_middle_m3 : (middleMasks 3).card=0 := by decide
-lemma actual_middle_m4 : (middleMasks 4).card=6 := by decide
-lemma actual_representatives_m1 : (representatives (0:Fin 1)).card=0 := by decide
-lemma actual_representatives_m2 : (representatives (0:Fin 2)).card=0 := by decide
-lemma actual_representatives_m3 : (representatives (0:Fin 3)).card=0 := by decide
-lemma actual_representatives_m4 : (representatives (0:Fin 4)).card=3 := by decide
+lemma actual_middle_m1 : (middleMasks 1).card = 0 := by decide
+lemma actual_middle_m2 : (middleMasks 2).card = 0 := by decide
+lemma actual_middle_m3 : (middleMasks 3).card = 0 := by decide
+lemma actual_middle_m4 : (middleMasks 4).card = 6 := by decide
+lemma actual_representatives_m1 : (representatives (0 : Fin 1)).card = 0 := by decide
+lemma actual_representatives_m2 : (representatives (0 : Fin 2)).card = 0 := by decide
+lemma actual_representatives_m3 : (representatives (0 : Fin 3)).card = 0 := by decide
+lemma actual_representatives_m4 : (representatives (0 : Fin 4)).card = 3 := by decide
 
 /-- Counted sum of actual middle masks, not an assumed pairing conclusion. -/
 theorem constant_middle_pair (m : ℕ) (i₀ : Fin m) :
-    (∑ _q ∈ middleMasks m,(1:ℝ)) = 2*∑ _q ∈ representatives i₀,(1:ℝ) :=
+    (∑ _q ∈ middleMasks m, (1 : ℝ)) = 2 * ∑ _q ∈ representatives i₀, (1 : ℝ) :=
   generic_signed_middle (fun _ => 1) (fun _ => rfl) i₀
 
-theorem actual_four_constant : (∑ _q ∈ middleMasks 4,(1:ℝ)) = 6 := by
-  simp [actual_middle_m4]
+theorem actual_four_constant : (∑ _q ∈ middleMasks 4, (1 : ℝ)) = 6 := by simp [actual_middle_m4]
 
-theorem actual_four_representatives : (∑ _q ∈ representatives (0:Fin 4),(1:ℝ)) = 3 := by
+theorem actual_four_representatives : (∑ _q ∈ representatives (0 : Fin 4), (1 : ℝ)) = 3 := by
   simp [actual_representatives_m4]
 
 /-- Pair invariance permits signs: two contributions-2 cancel four contributions+1. -/
-def signedFour (q : Fin 4 → Bool) : ℝ := if q 0=q 1 then -2 else 1
-lemma signedFour_compl (q : Fin 4 → Bool) : signedFour (compl q)=signedFour q := by
+def signedFour (q : Fin 4 → Bool) : ℝ :=
+  if q 0 = q 1 then -2 else 1
+lemma signedFour_compl (q : Fin 4 → Bool) : signedFour (compl q) = signedFour q := by
   unfold signedFour compl
   cases q 0 <;> cases q 1 <;> rfl
 
-theorem actual_signed_pair : (∑ q ∈ middleMasks 4,signedFour q) =
-    2*∑ q ∈ representatives (0:Fin 4),signedFour q :=
+theorem actual_signed_pair :
+    (∑ q ∈ middleMasks 4, signedFour q) = 2 * ∑ q ∈ representatives (0 : Fin 4), signedFour q :=
   generic_signed_middle signedFour signedFour_compl 0
 
-lemma concrete_representatives_four : representatives (0:Fin 4) =
-    {![true,true,false,false],![true,false,true,false],![true,false,false,true]} := by decide
+lemma concrete_representatives_four :
+    representatives (0 : Fin 4) =
+      {![true, true, false, false], ![true, false, true, false], ![true, false, false, true]} := by
+  decide
 
-theorem signed_representatives_cancel : (∑ q ∈ representatives (0:Fin 4),signedFour q)=0 := by
+theorem signed_representatives_cancel : (∑ q ∈ representatives (0 : Fin 4), signedFour q) = 0 := by
   rw [concrete_representatives_four]
   norm_num [signedFour]
 
-theorem signed_all_cancel : (∑ q ∈ middleMasks 4,signedFour q)=0 := by
-  rw [actual_signed_pair,signed_representatives_cancel]
+theorem signed_all_cancel : (∑ q ∈ middleMasks 4, signedFour q) = 0 := by
+  rw [actual_signed_pair, signed_representatives_cancel]
   ring
 
 /-- Empty arity does not supply the fixed slot required by the public pair theorem. -/
@@ -307,10 +335,10 @@ theorem no_fixed_slot_Fin0 : ¬Nonempty (Fin 0) := by
   rintro ⟨i⟩
   exact Fin.elim0 i
 
-theorem empty_arity_full_sum_one : (∑ _q : Fin 0 → Bool,(1:ℝ))=1 := by simp
+theorem empty_arity_full_sum_one : (∑ _q : Fin 0 → Bool, (1 : ℝ)) = 1 := by simp
 
 theorem empty_arity_naive_doubling_false :
-    (∑ _q : Fin 0 → Bool,(1:ℝ)) ≠ 2*(∑ _q : Fin 0 → Bool,(1:ℝ)) := by
+    (∑ _q : Fin 0 → Bool, (1 : ℝ)) ≠ 2 * (∑ _q : Fin 0 → Bool, (1 : ℝ)) := by
   rw [empty_arity_full_sum_one]
   norm_num
 end D74GroupingPairs

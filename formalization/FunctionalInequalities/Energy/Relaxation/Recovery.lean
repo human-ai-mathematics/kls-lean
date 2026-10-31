@@ -1,6 +1,8 @@
-import FunctionalInequalities.Energy.Form.Core
-import FunctionalInequalities.Energy.Relaxation.Approximation
-import Mathlib.Analysis.SpecificLimits.Basic
+module
+
+public import FunctionalInequalities.Energy.Form.Core
+public import FunctionalInequalities.Energy.Relaxation.Approximation
+public import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
 # Recovery sequences for sequential relaxation
@@ -14,6 +16,8 @@ relaxed energy.
 These conclusions use only the pseudometric structure and, for the all-points result, density of
 the realization. They do not require a quadratic law, closability, or a Markov property.
 -/
+
+@[expose] public section
 
 noncomputable section
 

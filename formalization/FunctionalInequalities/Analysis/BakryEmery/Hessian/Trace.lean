@@ -1,28 +1,46 @@
-import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
 
 /-!
 # Trace evolution of the Hessian under the inverse-Hessian operator
 
-For a smooth `φ` on a finite-dimensional real inner-product space, `stdHessianMatrix φ x` is the Hessian matrix of `φ` in the
-standard orthonormal basis (index type `StdBasisIndex E`), `stdHessianMatrixDeriv φ x a` its derivative along the `a`-th
-basis vector, and `stdHessianMatrixGenerator φ V x` its entrywise image under the inverse-Hessian operator
+For a smooth `φ` on a finite-dimensional real inner-product space, `stdHessianMatrix φ x` is the
+Hessian matrix of `φ` in the
+standard orthonormal basis (index type `StdBasisIndex E`), `stdHessianMatrixDeriv φ x a` its
+derivative along the `a`-th
+basis vector, and `stdHessianMatrixGenerator φ V x` its entrywise image under the inverse-Hessian
+operator
 `L = hessianInverseOperator φ V`. For every constant real matrix `B` and every point `x`
 (`hessianInverseOperator_trace_stdHessianMatrix_sq`):
-`L tr(B H B H) = 2 tr(B H B (L H)) + 2 Σ_ab A^{ab} tr(B ∂_a H B ∂_b H)` with `A = (∇²φ)⁻¹` (`inverseHessianEntry`), the
-pointwise trace identity (2.8) of Letwin, arXiv:2607.24164v1, in the proof of Theorem 2.5. There is no positive
-semidefiniteness, commutation or Monge–Ampère premise. Not provided: the substitution of the twice-differentiated
+`L tr(B H B H) = 2 tr(B H B (L H)) + 2 Σ_ab A^{ab} tr(B ∂_a H B ∂_b H)` with `A = (∇²φ)⁻¹`
+(`inverseHessianEntry`), the
+pointwise trace identity (2.8) of Letwin, arXiv:2607.24164v1, in the proof of Theorem 2.5. There is
+no positive
+semidefiniteness, commutation or Monge–Ampère premise. Not provided: the substitution of the
+twice-differentiated
 Monge–Ampère equation, (2.10), the tensor comparison and the trace bound of Theorem 2.5.
 
-Monge–Ampère substitution (section `MongeAmpereTrace`). For a GIVEN smooth `φ` with positive definite Hessian at every
-point satisfying the zero-order Monge–Ampère relation `log det ∇²φ = −φ + V(∇φ)`, with `V` smooth only on an open `U ⊇
-closure K` and `range ∇φ ⊆ K`: Letwin (2.9), `L H = −H + H ∇²V(∇φ) H + G` with the inverse-Hessian third-derivative Gram
-matrix `G = stdThirdGram φ x` (`stdHessianMatrixGenerator_apply_on_range`, `stdHessianMatrixGenerator_eq_on_range`), and
-(2.10) for every constant real `B` (`traceGenerator_210_on_range`). If moreover `K` is open, `V` convex on `K` and `B`
-positive semidefinite, the three remainders `Σ A^{ab} tr(B∂_aH B∂_bH)`, `tr(BHB·H∇²V(∇φ)H)` and `tr(BHB·G)` are
-nonnegative, hence `L tr(BHBH) + 2 tr(BHBH) ≥ 0` pointwise (`traceGeneratorCondition_on_range`). This is the pointwise
-condition before Lemma A.5; its integration (A.4/A.5 for this trace function), the moment map of an arbitrary source law
+Monge–Ampère substitution (section `MongeAmpereTrace`). For a GIVEN smooth `φ` with positive
+definite Hessian at every
+point satisfying the zero-order Monge–Ampère relation `log det ∇²φ = −φ + V(∇φ)`, with `V` smooth
+only on an open `U ⊇
+closure K` and `range ∇φ ⊆ K`: Letwin (2.9), `L H = −H + H ∇²V(∇φ) H + G` with the inverse-Hessian
+third-derivative Gram
+matrix `G = stdThirdGram φ x` (`stdHessianMatrixGenerator_apply_on_range`,
+`stdHessianMatrixGenerator_eq_on_range`), and
+(2.10) for every constant real `B` (`traceGenerator_210_on_range`). If moreover `K` is open, `V`
+convex on `K` and `B`
+positive semidefinite, the three remainders `Σ A^{ab} tr(B∂_aH B∂_bH)`, `tr(BHB·H∇²V(∇φ)H)` and
+`tr(BHB·G)` are
+nonnegative, hence `L tr(BHBH) + 2 tr(BHBH) ≥ 0` pointwise (`traceGeneratorCondition_on_range`).
+This is the pointwise
+condition before Lemma A.5; its integration (A.4/A.5 for this trace function), the moment map of an
+arbitrary source law
 and the trace bound of Theorem 2.5 are not provided.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -48,9 +66,9 @@ def stdHessianMatrixDeriv (φ : E → ℝ) (x : E) (a : StdBasisIndex E) :
     (fun y => hessianMatrixIn φ (stdOrthonormalBasis ℝ E) y i j) x
     (stdOrthonormalBasis ℝ E a)
 
-def stdHessianMatrixGenerator (φ V : E → ℝ) (x : E) : Matrix (StdBasisIndex E) (StdBasisIndex E) ℝ :=
-  fun i j => hessianInverseOperator φ V
-    (fun y => hessianMatrixIn φ (stdOrthonormalBasis ℝ E) y i j) x
+def stdHessianMatrixGenerator (φ V : E → ℝ) (x : E) :
+    Matrix (StdBasisIndex E) (StdBasisIndex E) ℝ := fun i j =>
+  hessianInverseOperator φ V (fun y => hessianMatrixIn φ (stdOrthonormalBasis ℝ E) y i j) x
 
 private lemma contDiff_two_stdHessianMatrix_apply {φ : E → ℝ}
     (hφ : ContDiff ℝ ∞ φ) (i j : StdBasisIndex E) :
@@ -192,71 +210,76 @@ private lemma hessianInverseOperator_trace_mul
     _ = _ := by
       rw [hsecond, hgrad]
 
-/-- The trace-square identity for the actual Hessian field and an arbitrary fixed real matrix. -/
-theorem hessianInverseOperator_trace_stdHessianMatrix_sq
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
+/--
+The trace-square identity for the actual Hessian field and an arbitrary fixed real matrix. -/
+theorem hessianInverseOperator_trace_stdHessianMatrix_sq {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
     (B : Matrix (StdBasisIndex E) (StdBasisIndex E) ℝ) (x : E) :
     hessianInverseOperator φ V
         (fun y => (B * stdHessianMatrix φ y * B * stdHessianMatrix φ y).trace) x =
       2 * (B * stdHessianMatrix φ x * B * stdHessianMatrixGenerator φ V x).trace +
-        2 * ∑ a, ∑ b,
-          inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a b *
-            (B * stdHessianMatrixDeriv φ x a * B * stdHessianMatrixDeriv φ x b).trace := by
+        2 *
+          ∑ a,
+            ∑ b,
+              inverseHessianEntry φ (stdOrthonormalBasis ℝ E) x a b *
+                (B * stdHessianMatrixDeriv φ x a * B * stdHessianMatrixDeriv φ x b).trace := by
   classical
-  let hφ2 : ContDiff ℝ 2 φ :=
-    hφ.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hF : ∀ i j : StdBasisIndex E,
-      ContDiff ℝ 2 (fun y => (B * stdHessianMatrix φ y) i j) := by
+  let hφ2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hF : ∀ i j : StdBasisIndex E, ContDiff ℝ 2 (fun y => (B * stdHessianMatrix φ y) i j) := by
     intro i j
     change ContDiff ℝ 2 (fun y => ∑ l, B i l * stdHessianMatrix φ y l j)
-    exact ContDiff.sum fun l _ => contDiff_const.mul
-      (contDiff_two_stdHessianMatrix_apply hφ l j)
+    exact
+      ContDiff.sum fun l _ => contDiff_const.mul (contDiff_two_stdHessianMatrix_apply hφ l j)
   have hLF :
-      (fun i j => hessianInverseOperator φ V
-        (fun y => (B * stdHessianMatrix φ y) i j) x) =
-        B * stdHessianMatrixGenerator φ V x := by
+    (fun i j => hessianInverseOperator φ V (fun y => (B * stdHessianMatrix φ y) i j) x) =
+      B * stdHessianMatrixGenerator φ V x := by
     ext i j
-    change hessianInverseOperator φ V
-        (fun y => ∑ l, B i l * stdHessianMatrix φ y l j) x =
-      ∑ l, B i l * hessianInverseOperator φ V
-        (fun y => stdHessianMatrix φ y l j) x
-    rw [hessianInverseOperator_sum Finset.univ φ V (f := fun l y => B i l * stdHessianMatrix φ y l j)
-      (fun l _ => contDiff_const.mul
-        (contDiff_two_stdHessianMatrix_apply hφ l j)) x]
+    change
+      hessianInverseOperator φ V (fun y => ∑ l, B i l * stdHessianMatrix φ y l j) x =
+        ∑ l, B i l * hessianInverseOperator φ V (fun y => stdHessianMatrix φ y l j) x
+    rw [hessianInverseOperator_sum Finset.univ φ V (f := fun l y =>
+        B i l * stdHessianMatrix φ y l j)
+        (fun l _ => contDiff_const.mul (contDiff_two_stdHessianMatrix_apply hφ l j)) x]
     apply Finset.sum_congr rfl
     intro l _
-    exact hessianInverseOperator_const_mul hφ2 V
-      (contDiff_two_stdHessianMatrix_apply hφ l j) (B i l) x
-  have hDF : ∀ a : StdBasisIndex E,
-      (fun i j => fderiv ℝ (fun y => (B * stdHessianMatrix φ y) i j) x
-        (stdOrthonormalBasis ℝ E a)) = B * stdHessianMatrixDeriv φ x a := by
+    exact
+      hessianInverseOperator_const_mul hφ2 V (contDiff_two_stdHessianMatrix_apply hφ l j)
+        (B i l) x
+  have hDF :
+    ∀ a : StdBasisIndex E,
+      (fun i j =>
+          fderiv ℝ (fun y => (B * stdHessianMatrix φ y) i j) x (stdOrthonormalBasis ℝ E a)) =
+        B * stdHessianMatrixDeriv φ x a := by
     intro a
     ext i j
-    change fderiv ℝ (fun y => ∑ l, B i l * stdHessianMatrix φ y l j) x
-        (stdOrthonormalBasis ℝ E a) =
-      ∑ l, B i l * fderiv ℝ (fun y => stdHessianMatrix φ y l j) x
+    change
+      fderiv ℝ (fun y => ∑ l, B i l * stdHessianMatrix φ y l j) x (stdOrthonormalBasis ℝ E a) =
+        ∑ l, B i l * fderiv ℝ (fun y => stdHessianMatrix φ y l j) x (stdOrthonormalBasis ℝ E a)
+    have hs :=
+      fderiv_sum_apply (E := E) (s := (Finset.univ : Finset (StdBasisIndex E))) (g := fun l y =>
+        B i l * stdHessianMatrix φ y l j) (x := x)
+        (fun l _ =>
+          ((contDiff_const.mul (contDiff_two_stdHessianMatrix_apply hφ l j)).differentiable
+            (by norm_num) x))
         (stdOrthonormalBasis ℝ E a)
-    have hs := fderiv_sum_apply (E := E)
-      (s := (Finset.univ : Finset (StdBasisIndex E)))
-      (g := fun l y => B i l * stdHessianMatrix φ y l j) (x := x)
-      (fun l _ => ((contDiff_const.mul
-        (contDiff_two_stdHessianMatrix_apply hφ l j)).differentiable (by norm_num) x))
-      (stdOrthonormalBasis ℝ E a)
-    rw [show fderiv ℝ (fun y => ∑ l, B i l * stdHessianMatrix φ y l j) x
-        (stdOrthonormalBasis ℝ E a) =
-        ∑ l, fderiv ℝ (fun y => B i l * stdHessianMatrix φ y l j) x
-          (stdOrthonormalBasis ℝ E a) by simpa using hs]
+    rw [show
+        fderiv ℝ (fun y => ∑ l, B i l * stdHessianMatrix φ y l j) x
+            (stdOrthonormalBasis ℝ E a) =
+          ∑ l,
+            fderiv ℝ (fun y => B i l * stdHessianMatrix φ y l j) x (stdOrthonormalBasis ℝ E a)
+        by simpa using hs]
     apply Finset.sum_congr rfl
     intro l _
-    exact fderiv_const_mul_apply
-      ((contDiff_two_stdHessianMatrix_apply hφ l j).differentiable (by norm_num) x)
-      (B i l) (stdOrthonormalBasis ℝ E a)
-  have hmain := hessianInverseOperator_trace_mul hφ2 V
-    (A := fun y => B * stdHessianMatrix φ y)
-    (C := fun y => B * stdHessianMatrix φ y) hF hF x
+    exact
+      fderiv_const_mul_apply
+        ((contDiff_two_stdHessianMatrix_apply hφ l j).differentiable (by norm_num) x) (B i l)
+        (stdOrthonormalBasis ℝ E a)
+  have hmain :=
+    hessianInverseOperator_trace_mul hφ2 V (A := fun y => B * stdHessianMatrix φ y) (C :=
+      fun y => B * stdHessianMatrix φ y) hF hF x
   rw [hLF] at hmain
   simp_rw [hDF] at hmain
-  rw [Matrix.trace_mul_comm (B * stdHessianMatrixGenerator φ V x) (B * stdHessianMatrix φ x)] at hmain
+  rw [Matrix.trace_mul_comm (B * stdHessianMatrixGenerator φ V x)
+      (B * stdHessianMatrix φ x)] at hmain
   simpa [Matrix.mul_assoc, two_mul] using hmain
 
 section MongeAmpereTrace

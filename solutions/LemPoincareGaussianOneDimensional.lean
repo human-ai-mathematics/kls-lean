@@ -1,4 +1,6 @@
-import FunctionalInequalities.Poincare.Gaussian.Real
+module
+
+public import FunctionalInequalities.Poincare.Gaussian.Real
 
 /-!
 # Lean certificate for `lem:poincare-gaussian-one-dimensional`
@@ -19,6 +21,8 @@ obligations. The applications below illustrate variance normalization and the Di
 The certificate directly combines the reusable theorems without duplicating their proofs.
 -/
 
+@[expose] public section
+
 set_option pp.universes true
 set_option pp.funBinderTypes true
 set_option format.width 100
@@ -34,7 +38,9 @@ optimal constant for every real mean and every nonnegative variance, including t
 theorem certificate (m : ℝ) (v : NNReal) :
     FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal m v) (v : ℝ) ∧
       FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal m v) = (v : ENNReal) := by
-  exact ⟨FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m v, FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m v⟩
+  exact
+    ⟨FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m v,
+      FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m v⟩
 
 #check @certificate
 
@@ -56,7 +62,8 @@ theorem certificate (m : ℝ) (v : NNReal) :
 #check @FunctionalInequalities.Poincare.SmoothTest.interval_sq_sub_le_integral_sq_deriv
 #check @FunctionalInequalities.Poincare.SmoothTest.Admissible.variance_le_integral_sq_sub
 #check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integrable_gaussianPDFReal_mul_sq_sub
-#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integrable_gaussianPDFReal_mul_sq_deriv
+#check
+  @FunctionalInequalities.Poincare.SmoothTest.Admissible.integrable_gaussianPDFReal_mul_sq_deriv
 #check @FunctionalInequalities.Poincare.SmoothTest.lintegral_gaussian_right_triangle
 #check @FunctionalInequalities.Poincare.SmoothTest.lintegral_gaussian_left_triangle
 #check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integral_Ioi_sq_sub_gaussian_le
@@ -68,18 +75,30 @@ theorem certificate (m : ℝ) (v : NNReal) :
 /-! ## Typed applications of the proved interfaces -/
 
 -- Standard Gaussian: variance one means Poincaré constant one.
-#check (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal 0 1 : FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal 0 1) 1)
-#check (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 0 1 : FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal 0 1) = 1)
+#check
+  (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal 0 1 :
+    FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal 0 1) 1)
+#check
+  (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 0 1 :
+    FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal 0 1) = 1)
 
 -- Mean three, variance four: the constant is four, not the standard deviation two.
-#check (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal 3 4 : FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal 3 4) 4)
-#check (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 3 4 : FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal 3 4) = 4)
+#check
+  (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal 3 4 :
+    FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal 3 4) 4)
+#check
+  (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 3 4 :
+    FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal 3 4) = 4)
 
 -- Zero variance is allowed for every mean in the same two main interfaces.
-#check (fun (m : ℝ) ↦
-  (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m 0 : FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal m 0) 0))
-#check (fun (m : ℝ) ↦
-  (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m 0 : FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal m 0) = 0))
+#check
+  (fun (m : ℝ) ↦
+    (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m 0 :
+      FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal m 0) 0))
+#check
+  (fun (m : ℝ) ↦
+    (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m 0 :
+      FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal m 0) = 0))
 
 -- The existing Mathlib identity explains the law used in those boundary applications.
 #check (fun (m : ℝ) ↦ (gaussianReal_zero_var m : gaussianReal m 0 = Measure.dirac m))

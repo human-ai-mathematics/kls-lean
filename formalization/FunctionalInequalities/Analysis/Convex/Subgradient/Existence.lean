@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
-import Mathlib.Topology.MetricSpace.Thickening
+module
+
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Basic
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
+public import Mathlib.Topology.MetricSpace.Thickening
 
 /-!
 # Existence and compact-local bounds of supporting slopes
@@ -9,6 +11,8 @@ Supporting convex infrastructure for Letwin arXiv:2607.24164v1
 Theorem 1.2 and Lemma 2.2. Mathematical scopes and source attributions
 are retained in the individual declarations.
 -/
+
+@[expose] public section
 
 noncomputable section
 open Set
@@ -66,6 +70,8 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
     ∃ g : E, (∀ y, u x + ⟪g, y - x⟫ ≤ u y) ∧
       ∀ ε > 0, ∃ t > 0, (u (x + t • v) - u x) / t ≤ ⟪g, v⟫ + ε := by
   -- Positive difference quotients and their finite infimum.
+
+  -- Construct the one-sided directional slope and its lower envelope.
   let slope : E → ℝ → ℝ := fun w t => (u (x + t • w) - u x) / t
   let p : E → ℝ := fun w =>
     sInf (Set.range (fun t : {t : ℝ // 0 < t} => slope w t))
@@ -156,6 +162,8 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
     apply le_antisymm
     · simpa [slope] using hp_le 0 ⟨1, by norm_num⟩
     · simpa [slope] using hp_lower 0
+
+  -- Prove positive homogeneity and subadditivity of the slope envelope.
   have hslope_scale :
       ∀ {w : E} {c t : ℝ}, 0 < c → 0 < t →
         slope (c • w) t = c * slope w (c * t) := by
@@ -279,6 +287,8 @@ theorem exists_subgradient_slope_le_inner_add {E : Type*} [NormedAddCommGroup E]
     dsimp [ε] at hε hbound ⊢
     linarith
   -- The unit difference quotient bounds the envelope by the actual increment.
+
+  -- Apply the supporting-functional argument to obtain a subgradient.
   have hp_increment : ∀ w, p w ≤ u (x + w) - u x := by
     intro w
     simpa [slope] using hp_le w ⟨1, by norm_num⟩
@@ -379,30 +389,21 @@ open Set Metric
 
 /-- Uniform boundedness of all domain-relative supporting slopes on a compact subset
 of an open convex domain. -/
-theorem exists_uniform_subgradient_bound_on_compact
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E]
-    {Ω K : Set E} {v : E → ℝ}
-    (hΩ : IsOpen Ω) (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω)
-    (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
-    ∃ R : ℝ, 0 ≤ R ∧
-      (∀ x ∈ K, ∃ p : E, ∀ y ∈ Ω, v x + ⟪p, y-x⟫ ≤ v y) ∧
-      (∀ x ∈ K, ∀ p : E,
-        (∀ y ∈ Ω, v x + ⟪p, y-x⟫ ≤ v y) → ‖p‖ ≤ R) := by
+theorem exists_uniform_subgradient_bound_on_compact {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {Ω K : Set E} {v : E → ℝ} (hΩ : IsOpen Ω)
+    (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
+    ∃ R : ℝ,
+      0 ≤ R ∧
+        (∀ x ∈ K, ∃ p : E, ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y) ∧
+          (∀ x ∈ K, ∀ p : E, (∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y) → ‖p‖ ≤ R) := by
   classical
-
-  have hsupport :
-      ∀ x ∈ Ω, ∃ p : E, ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y := by
+  have hsupport : ∀ x ∈ Ω, ∃ p : E, ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y := by
     intro x hx
-    let f : E → EReal :=
-      fun z => if z + x ∈ Ω then (v (z + x) : EReal) else ⊤
-
+    let f : E → EReal := fun z => if z + x ∈ Ω then (v (z + x) : EReal) else ⊤
     have hfbot : ∀ z, f z ≠ ⊥ := by
       intro z
       by_cases hz : z + x ∈ Ω <;> simp [f, hz]
-
-    have hfconv :
-        Convex ℝ {p : E × ℝ | f p.1 ≤ (p.2 : EReal)} := by
+    have hfconv : Convex ℝ {p : E × ℝ | f p.1 ≤ (p.2 : EReal)} := by
       intro p hp q hq a b ha hb hab
       change f p.1 ≤ (p.2 : EReal) at hp
       change f q.1 ≤ (q.2 : EReal) at hq
@@ -412,84 +413,66 @@ theorem exists_uniform_subgradient_bound_on_compact
       have hqΩ : q.1 + x ∈ Ω := by
         by_contra hqΩ
         simp [f, hqΩ] at hq
-      have harg :
-          a • p.1 + b • q.1 + x = a • (p.1 + x) + b • (q.1 + x) := by
+      have harg : a • p.1 + b • q.1 + x = a • (p.1 + x) + b • (q.1 + x) := by
         calc
-          _ = a • p.1 + b • q.1 + (a+b) • x := by rw [hab, one_smul]
+          _ = a • p.1 + b • q.1 + (a + b) • x := by rw [hab, one_smul]
           _ = _ := by rw [smul_add, smul_add, add_smul]; abel
       have hdom : a • p.1 + b • q.1 + x ∈ Ω := by
         rw [harg]
         exact hv.1 hpΩ hqΩ ha hb hab
-      have hval :
-          v (a • (p.1 + x) + b • (q.1 + x)) ≤
-            a • v (p.1 + x) + b • v (q.1 + x) :=
+      have hval : v (a • (p.1 + x) + b • (q.1 + x)) ≤ a • v (p.1 + x) + b • v (q.1 + x) :=
         hv.2 hpΩ hqΩ ha hb hab
-      change
-        f (a • p.1 + b • q.1) ≤
-          ((a • p.2 + b • q.2 : ℝ) : EReal)
+      change f (a • p.1 + b • q.1) ≤ ((a • p.2 + b • q.2 : ℝ) : EReal)
       rw [show f (a • p.1 + b • q.1) = (v (a • p.1 + b • q.1 + x) : EReal) by
-        simp only [f, if_pos hdom]]
-      have hpv : v (p.1 + x) ≤ p.2 := EReal.coe_le_coe_iff.mp (by simpa only [f, if_pos hpΩ] using hp)
-      have hqv : v (q.1 + x) ≤ q.2 := EReal.coe_le_coe_iff.mp (by simpa only [f, if_pos hqΩ] using hq)
+          simp only [f, ite_eq_left hdom]]
+      have hpv : v (p.1 + x) ≤ p.2 :=
+        EReal.coe_le_coe_iff.mp (by simpa only [f, ite_eq_left hpΩ] using hp)
+      have hqv : v (q.1 + x) ≤ q.2 :=
+        EReal.coe_le_coe_iff.mp (by simpa only [f, ite_eq_left hqΩ] using hq)
       apply EReal.coe_le_coe_iff.mpr
       rw [harg]
-      have hbnd : a * v (p.1+x) + b * v (q.1+x) ≤ a*p.2+b*q.2 :=
+      have hbnd : a * v (p.1 + x) + b * v (q.1 + x) ≤ a * p.2 + b * q.2 :=
         add_le_add (mul_le_mul_of_nonneg_left hpv ha) (mul_le_mul_of_nonneg_left hqv hb)
       exact hval.trans (by simpa only [smul_eq_mul] using hbnd)
-
     have hf : ConvexPotential f := ⟨hfbot, hfconv⟩
-
-    have hzero :
-        (0 : E) ∈ interior {z | f z ≠ ⊤} := by
+    have hzero : (0 : E) ∈ interior {z | f z ≠ ⊤} := by
       apply mem_interior_iff_mem_nhds.mpr
-      have ht : ContinuousAt (fun z : E => z + x) 0 :=
-        continuousAt_id.add continuousAt_const
+      have ht : ContinuousAt (fun z : E => z + x) 0 := continuousAt_id.add continuousAt_const
       have ht' : Filter.Tendsto (fun z : E => z + x) (nhds 0) (nhds x) := by
-        change Filter.Tendsto (fun z : E => z+x) (nhds 0) (nhds (0+x)) at ht
+        change Filter.Tendsto (fun z : E => z + x) (nhds 0) (nhds (0 + x)) at ht
         simpa only [zero_add] using ht
       filter_upwards [ht'.eventually (hΩ.mem_nhds hx)] with z hz
       change z + x ∈ Ω at hz
       dsimp only [f]
-      rw [if_pos hz]
+      rw [ite_eq_left hz]
       exact EReal.coe_ne_top _
-
-    obtain ⟨a, ha⟩ :=
-      exists_supporting_affine_at_zero f hf hzero
-
+    obtain ⟨a, ha⟩ := exists_supporting_affine_at_zero f hf hzero
     refine ⟨a, ?_⟩
     intro y hy
-    have hh :
-        ((⟪a, y - x⟫ + v x : ℝ) : EReal) ≤ (v y : EReal) := by
+    have hh : ((⟪a, y - x⟫ + v x : ℝ) : EReal) ≤ (v y : EReal) := by
       simpa [f, hx, hy] using ha (y - x)
     simpa only [add_comm] using EReal.coe_le_coe_iff.mp hh
-
   have hlocal :
-      ∀ x ∈ Ω, ∃ r : ℝ, 0 < r ∧
-        ∀ z, dist z x < r / 2 →
-          ∀ p : E,
-            (∀ y ∈ Ω, v z + ⟪p, y - z⟫ ≤ v y) →
-              ‖p‖ ≤ 8 * (|v x| + 1) / r := by
+    ∀ x ∈ Ω,
+      ∃ r : ℝ,
+        0 < r ∧
+          ∀ z,
+            dist z x < r / 2 →
+              ∀ p : E, (∀ y ∈ Ω, v z + ⟪p, y - z⟫ ≤ v y) → ‖p‖ ≤ 8 * (|v x| + 1) / r := by
     intro x hx
-    have hcx : ContinuousAt v x :=
-      (hvc x hx).continuousAt (hΩ.mem_nhds hx)
-    obtain ⟨ε, hεpos, hε⟩ :=
-      Metric.mem_nhds_iff.mp (hΩ.mem_nhds hx)
-    obtain ⟨δ, hδpos, hδ⟩ :=
-      Metric.continuousAt_iff.mp hcx 1 zero_lt_one
+    have hcx : ContinuousAt v x := (hvc x hx).continuousAt (hΩ.mem_nhds hx)
+    obtain ⟨ε, hεpos, hε⟩ := Metric.mem_nhds_iff.mp (hΩ.mem_nhds hx)
+    obtain ⟨δ, hδpos, hδ⟩ := Metric.continuousAt_iff.mp hcx 1 zero_lt_one
     let r : ℝ := min ε δ
     have hr : 0 < r := lt_min hεpos hδpos
-
     have hclose : ∀ w, dist w x < r → |v w - v x| < 1 := by
       intro w hw
-      have hwδ : dist w x < δ :=
-        lt_of_lt_of_le hw (min_le_right ε δ)
+      have hwδ : dist w x < δ := lt_of_lt_of_le hw (min_le_right ε δ)
       have h := hδ hwδ
       simpa [Real.dist_eq] using h
-
     refine ⟨r, hr, ?_⟩
     intro z hz p hp
-    have hbound_value :
-        ∀ w, dist w x < r → |v w| ≤ |v x| + 1 := by
+    have hbound_value : ∀ w, dist w x < r → |v w| ≤ |v x| + 1 := by
       intro w hw
       have hdiff : |v w - v x| < 1 := hclose w hw
       calc
@@ -499,39 +482,33 @@ theorem exists_uniform_subgradient_bound_on_compact
         _ ≤ |v w - v x| + |v x| := abs_add_le _ _
         _ ≤ 1 + |v x| := by linarith only [hdiff]
         _ = |v x| + 1 := by ring
-
-    have hball : closedBall z (r/4) ⊆ Ω := by
+    have hball : closedBall z (r / 4) ⊆ Ω := by
       intro y hy
       have hyx : dist y x < r := by
         have ht := dist_triangle y z x
-        have hyd : dist y z ≤ r/4 := mem_closedBall.mp hy
+        have hyd : dist y z ≤ r / 4 := mem_closedBall.mp hy
         linarith
       exact hε (mem_ball.mpr (lt_of_lt_of_le hyx (min_le_left ε δ)))
-    have hvalues : ∀ y ∈ closedBall z (r/4), |v y| ≤ |v x|+1 := by
+    have hvalues : ∀ y ∈ closedBall z (r / 4), |v y| ≤ |v x| + 1 := by
       intro y hy
       apply hbound_value
       have ht := dist_triangle y z x
-      have hyd : dist y z ≤ r/4 := mem_closedBall.mp hy
+      have hyd : dist y z ≤ r / 4 := mem_closedBall.mp hy
       linarith
-    have hnorm := norm_subgradient_le_of_closedBall
-      (show 0<r/4 by positivity) hball hvalues hp
+    have hnorm :=
+      norm_subgradient_le_of_closedBall (show 0 < r / 4 by positivity) hball hvalues hp
     convert hnorm using 1
     ring
-
-  let ρ : Ω → ℝ :=
-    fun z => Classical.choose (hlocal z z.property)
-
+  let ρ : Ω → ℝ := fun z => Classical.choose (hlocal z z.property)
   have hρ :
-      ∀ z : Ω, 0 < ρ z ∧
-        ∀ w, dist w (z : E) < ρ z / 2 →
-          ∀ p : E,
-            (∀ y ∈ Ω, v w + ⟪p, y - w⟫ ≤ v y) →
-              ‖p‖ ≤ 8 * (|v (z : E)| + 1) / ρ z := by
+    ∀ z : Ω,
+      0 < ρ z ∧
+        ∀ w,
+          dist w (z : E) < ρ z / 2 →
+            ∀ p : E, (∀ y ∈ Ω, v w + ⟪p, y - w⟫ ≤ v y) → ‖p‖ ≤ 8 * (|v (z : E)| + 1) / ρ z := by
     intro z
     exact Classical.choose_spec (hlocal z z.property)
-
-  have hcover :
-      K ⊆ ⋃ z : Ω, ball (z : E) (ρ z / 2) := by
+  have hcover : K ⊆ ⋃ z : Ω, ball (z : E) (ρ z / 2) := by
     intro x hx
     let z : Ω := ⟨x, hKΩ hx⟩
     have hz : dist x (z : E) < ρ z / 2 := by
@@ -539,27 +516,18 @@ theorem exists_uniform_subgradient_bound_on_compact
       linarith [hρ z |>.1]
     refine mem_iUnion.mpr ⟨z, ?_⟩
     exact mem_ball.mpr hz
-
   obtain ⟨s, hs⟩ :=
-    hK.elim_finite_subcover
-      (fun z : Ω => ball (z : E) (ρ z / 2))
-      (fun _ => isOpen_ball)
-      hcover
-
-  let B : Ω → ℝ :=
-    fun z => 8 * (|v (z : E)| + 1) / ρ z
+    hK.elim_finite_subcover (fun z : Ω => ball (z : E) (ρ z / 2)) (fun _ => isOpen_ball) hcover
+  let B : Ω → ℝ := fun z => 8 * (|v (z : E)| + 1) / ρ z
   let R : ℝ := ∑ z ∈ s, B z
-
   have hB : ∀ z : Ω, 0 ≤ B z := by
     intro z
     dsimp [B]
     have hzρ : 0 < ρ z := hρ z |>.1
     positivity
-
   have hR : 0 ≤ R := by
     dsimp [R]
     exact Finset.sum_nonneg (fun z hz => hB z)
-
   refine ⟨R, hR, ?_, ?_⟩
   · intro x hx
     exact hsupport x (hKΩ hx)
@@ -567,13 +535,11 @@ theorem exists_uniform_subgradient_bound_on_compact
     have hxs := hs hx
     rcases mem_iUnion.mp hxs with ⟨z, hxs⟩
     rcases mem_iUnion.mp hxs with ⟨hzs, hball⟩
-    have hdist : dist x (z : E) < ρ z / 2 :=
-      mem_ball.mp hball
+    have hdist : dist x (z : E) < ρ z / 2 := mem_ball.mp hball
     have hpz : ‖p‖ ≤ B z := by
       dsimp [B]
       exact (hρ z).2 x hdist p hp
-    have hsum : B z ≤ ∑ w ∈ s, B w := by
-      exact Finset.single_le_sum (fun w hw => hB w) hzs
+    have hsum : B z ≤ ∑ w ∈ s, B w := by exact Finset.single_le_sum (fun w hw => hB w) hzs
     calc
       ‖p‖ ≤ B z := hpz
       _ ≤ ∑ w ∈ s, B w := hsum

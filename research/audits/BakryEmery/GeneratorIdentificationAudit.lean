@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
 
 /-!
 # Scope audit for the generator identification on smooth tests
@@ -23,6 +25,8 @@ Dirichlet form of the differential expression is `∫ ‖∇f‖² dν`, matchin
 The axiom reports at the end cover every public declaration of the three imported modules and every
 theorem of this client; each must list only `propext`, `Classical.choice` and `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

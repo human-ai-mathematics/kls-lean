@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 
 /-! Independent full-signature client for Haar-a.e. Borell density continuity. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

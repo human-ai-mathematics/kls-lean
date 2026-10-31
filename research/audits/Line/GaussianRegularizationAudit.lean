@@ -1,7 +1,11 @@
-import FunctionalInequalities.Probability.Line.GaussianProfile
-import FunctionalInequalities.Analysis.BakryEmery.Gamma
+module
+
+public import FunctionalInequalities.Probability.Line.GaussianProfile
+public import FunctionalInequalities.Analysis.BakryEmery.Gamma
 
 /-! Actual scalar regularization and a smooth-input chain-rule client, not a heat theorem. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open Set Filter Topology

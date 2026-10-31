@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
 
 /-!
 # Lean certificate: `thm:one-dimensional-logconcave-poincare`
@@ -12,6 +14,8 @@ well. Zero variance (a Dirac law, whose affine support is a point) is included: 
 proof in `KLS/LogConcave/Line/Poincare.lean`. Nothing here asserts a smaller universal constant, a
 bound in higher dimension, a Cheeger inequality, or any statement about the raw energy on tests.
 -/
+
+@[expose] public section
 
 noncomputable section
 

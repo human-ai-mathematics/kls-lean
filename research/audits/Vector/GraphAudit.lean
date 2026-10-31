@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Basic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the vector-valued graph infrastructure
@@ -13,6 +15,8 @@ needs no shear argument here.
 **The area formula itself is not proved here.**  It also needs the two-sided estimates and the
 limit; see `GraphSandwichAudit.lean` and `GraphAreaAudit.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

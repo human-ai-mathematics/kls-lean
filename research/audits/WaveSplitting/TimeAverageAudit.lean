@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.WaveSplitting.TimeAverage
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.TimeAverage
 
 /-! Independent clients of the finite time average of the actual splitting cells and its exact
 `J_cl q - h` identity. The identity involves the actual residual on every cell and the actual
 compatibility defect; no residual bound, wave existence or `p = grad u` is assumed. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

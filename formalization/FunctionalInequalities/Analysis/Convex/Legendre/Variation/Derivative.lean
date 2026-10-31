@@ -1,24 +1,35 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
-import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Perturbation
-import Mathlib.Analysis.Calculus.Gradient.Basic
-import Mathlib.Analysis.Calculus.FDeriv.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Attainment
+public import FunctionalInequalities.Analysis.Convex.Legendre.Variation.Perturbation
+public import Mathlib.Analysis.Calculus.Gradient.Basic
+public import Mathlib.Analysis.Calculus.FDeriv.Basic
 
 /-!
 # The first variation of the Legendre transform
 
-Let `φ` be proper and lower semicontinuous on a finite-dimensional real inner-product space (dimension zero included), let
+Let `φ` be proper and lower semicontinuous on a finite-dimensional real inner-product space
+(dimension zero included), let
 `y` be interior to the finite domain of `φ*` and let `q ↦ (φ* q).toReal` be differentiable at `y`.
 
-* Near-maximizers concentrate at the dual gradient: for every `ε > 0` there is `δ > 0` such that every `z` with
-  `φ* y − δ ≤ ⟪z, y⟫ − φ z` satisfies `‖z − ∇(φ*)(y)‖ < ε` (`exists_delta_nearMaximizer_norm_sub_gradient_lt`).
-* For every bounded continuous real `b`, `t ↦ (φ + t b)*(y)` is differentiable at `0` with derivative `−b(∇(φ*)(y))`
+* Near-maximizers concentrate at the dual gradient: for every `ε > 0` there is `δ > 0` such that
+  every `z` with
+  `φ* y − δ ≤ ⟪z, y⟫ − φ z` satisfies `‖z − ∇(φ*)(y)‖ < ε`
+  (`exists_delta_nearMaximizer_norm_sub_gradient_lt`).
+* For every bounded continuous real `b`, `t ↦ (φ + t b)*(y)` is differentiable at `0` with
+  derivative `−b(∇(φ*)(y))`
   (`hasDerivAt_legendre_add_smul_of_dualDifferentiable`); `φ` may take `⊤`.
 
-No maximizing family, derivative formula, primal differentiability, global finiteness or nonnegativity is assumed. This is
-the pointwise first variation behind Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (Berman–Berndtsson,
-arXiv:1207.6128v1, Lemma 2.7 second point / Appendix 6); the integral first variation (Euler–Lagrange) for a source law, the
+No maximizing family, derivative formula, primal differentiability, global finiteness or
+nonnegativity is assumed. This is
+the pointwise first variation behind Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42)
+(Berman–Berndtsson,
+arXiv:1207.6128v1, Lemma 2.7 second point / Appendix 6); the integral first variation
+(Euler–Lagrange) for a source law, the
 gradient push-forward, source regularity and CEK Theorem 2 are not provided.
 -/
+
+@[expose] public section
 
 noncomputable section
 

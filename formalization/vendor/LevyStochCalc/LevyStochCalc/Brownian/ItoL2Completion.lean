@@ -3,14 +3,18 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoL2CompletionLp
-import LevyStochCalc.Brownian.ItoL2CompletionExistence
-import LevyStochCalc.Brownian.ItoL2CompletionIncrement
-import LevyStochCalc.Brownian.ItoL2CompletionConvergence
-import LevyStochCalc.Brownian.ItoL2CompletionCompensator
-import LevyStochCalc.Brownian.ItoL2CompletionMaster
-import LevyStochCalc.Brownian.ItoL2CompletionQuadVar
-import LevyStochCalc.Brownian.ItoL2CompletionApi
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoL2CompletionLp
+public import LevyStochCalc.Brownian.ItoL2CompletionExistence
+public import LevyStochCalc.Brownian.ItoL2CompletionIncrement
+public import LevyStochCalc.Brownian.ItoL2CompletionConvergence
+public import LevyStochCalc.Brownian.ItoL2CompletionCompensator
+public import LevyStochCalc.Brownian.ItoL2CompletionMaster
+public import LevyStochCalc.Brownian.ItoL2CompletionQuadVar
+public import LevyStochCalc.Brownian.ItoL2CompletionApi
 
 /-!
 # Brownian Itô integral via L²-completion

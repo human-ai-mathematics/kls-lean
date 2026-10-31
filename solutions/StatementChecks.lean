@@ -1,11 +1,13 @@
-import FunctionalInequalities.KLS.Statement
-import FunctionalInequalities.KLS.LogConcave.Borel
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.KLS.ConditionalFiber.Basic
-import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
-import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
-import FunctionalInequalities.KLS.LogConcave.Covariance
+module
+
+public import FunctionalInequalities.KLS.Statement
+public import FunctionalInequalities.KLS.LogConcave.Borel
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.KLS.Isoperimetry
+public import FunctionalInequalities.KLS.ConditionalFiber.Basic
+public import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
+public import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
+public import FunctionalInequalities.KLS.LogConcave.Covariance
 
 /-!
 # Literal KLS statement checks
@@ -17,10 +19,13 @@ alone is not a semantic-stability guarantee. Mathematical scope changes remain r
 The existing Dirac representative checks are in `examples/PoincareFoundation.lean`.
 Gaussian variance-normalized bounds and their transfer to the intrinsic smooth relaxation are
 already checked in `solutions/LemLegacyRelaxedPoincareComparison.lean`. A Gaussian bound for
-`Poincare.LocalSlope.Intrinsic.constant` can now use the proved smooth/locally-Lipschitz comparison after
+`Poincare.LocalSlope.Intrinsic.constant` can now use the proved smooth/locally-Lipschitz comparison
+after
 discharging intrinsic absolute continuity for the concrete Gaussian law. That specialization
 is not included among these definition checks.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -37,17 +42,22 @@ example {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSp
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
     (μ : ProbabilityMeasure E) (f : E → ℝ) :
     FunctionalInequalities.Energy.LocalSlope.Admissible μ f ↔
-      LocallyLipschitz f ∧ MemLp f 2 (μ : Measure E) ∧ FunctionalInequalities.Energy.LocalSlope.energy μ f ≠ ⊤ :=
+      LocallyLipschitz f ∧
+        MemLp f 2 (μ : Measure E) ∧ FunctionalInequalities.Energy.LocalSlope.energy μ f ≠ ⊤ :=
   ⟨fun h ↦ ⟨h.1, h.2, h.3⟩, fun h ↦ ⟨h.1, h.2.1, h.2.2⟩⟩
 
 example (c : ℝ) :
-    FunctionalInequalities.Energy.LocalSlope.apply (fun _ : EuclideanSpace ℝ (Fin 0) ↦ c) 0 = 0 := by simp
+    FunctionalInequalities.Energy.LocalSlope.apply (fun _ : EuclideanSpace ℝ (Fin 0) ↦ c) 0 =
+      0 := by
+  simp
 
 example (f : EuclideanSpace ℝ (Fin 0) → ℝ) (x : EuclideanSpace ℝ (Fin 0)) :
-    FunctionalInequalities.Energy.LocalSlope.apply f x = 0 := FunctionalInequalities.Energy.LocalSlope.apply_eq_zero_of_subsingleton f x
+    FunctionalInequalities.Energy.LocalSlope.apply f x = 0 :=
+  FunctionalInequalities.Energy.LocalSlope.apply_eq_zero_of_subsingleton f x
 
 example (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
-    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ = 0 := FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton μ
+    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ = 0 :=
+  FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton μ
 
 namespace Solutions.StatementChecks
 
@@ -56,18 +66,19 @@ section InnerProduct
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/-- Normalization: every constant has zero literature energy in every allowed coordinate space. -/
-theorem constant_energy
-    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
-    FunctionalInequalities.Energy.LocalSlope.energy μ (fun _ ↦ c) = 0 := by simp [FunctionalInequalities.Energy.LocalSlope.energy]
+/--
+Normalization: every constant has zero literature energy in every allowed coordinate space. -/
+theorem constant_energy [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+    [SecondCountableTopology E] [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
+    FunctionalInequalities.Energy.LocalSlope.energy μ (fun _ ↦ c) = 0 := by
+  simp [FunctionalInequalities.Energy.LocalSlope.energy]
 
 /-- Test domain: finite-energy tests include constants, even when their energy is zero. -/
-theorem constant_admissible
-    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
+theorem constant_admissible [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+    [SecondCountableTopology E] [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
     FunctionalInequalities.Energy.LocalSlope.Admissible μ (fun _ ↦ c) :=
-  ⟨LocallyLipschitz.const c, memLp_const c, by simp [FunctionalInequalities.Energy.LocalSlope.energy]⟩
+  ⟨LocallyLipschitz.const c, memLp_const c, by
+    simp [FunctionalInequalities.Energy.LocalSlope.energy]⟩
 
 end InnerProduct
 
@@ -78,11 +89,14 @@ theorem zero_dimension_covariance (μ : ProbabilityMeasure (EuclideanSpace ℝ (
     Subsingleton.elim _ _
   simp [h]
 
-/-- Quantifier boundary: the literal KLS inequality holds in dimension zero for every finite C. -/
+/--
+Quantifier boundary: the literal KLS inequality holds in dimension zero for every finite C. -/
 theorem zero_dimension_bound (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) (C : NNReal) :
-    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤ (C : ENNReal) *
-      ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin 0)))‖ := by
-  rw [FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton, zero_dimension_covariance]
+    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤
+      (C : ENNReal) *
+        ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin 0)))‖ := by
+  rw [FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton,
+    zero_dimension_covariance]
   simp
 
 /-- Nonzero normalization: the ambient real identity has pointwise local slope one. -/
@@ -103,17 +117,21 @@ theorem localSlope_id (x : ℝ) : FunctionalInequalities.Energy.LocalSlope.apply
 /-- Carrier convention: ambient slope energy at a Dirac atom need not vanish for its L² class.
 The literature constant instead takes the intrinsic law, removing ambient normal directions. -/
 theorem ambient_dirac_identity_energy :
-    FunctionalInequalities.Energy.LocalSlope.energy (Probability.ofMeasure (Measure.dirac (0 : ℝ))) id = 1 := by
+    FunctionalInequalities.Energy.LocalSlope.energy
+        (Probability.ofMeasure (Measure.dirac (0 : ℝ))) id =
+      1 := by
   simp [FunctionalInequalities.Energy.LocalSlope.energy, localSlope_id]
 
 end Solutions.StatementChecks
 
 namespace Solutions.StatementChecks
 
-/-- Infrastructure: inner regularity under the exact normed-space assumptions of the Borell draft. -/
+/--
+Infrastructure: inner regularity under the exact normed-space assumptions of the Borell draft. -/
 theorem borell_innerRegular {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E] (μ : ProbabilityMeasure E) :
-    Measure.InnerRegular (μ : Measure E) := inferInstance
+    Measure.InnerRegular (μ : Measure E) :=
+  inferInstance
 
 /-- Infrastructure: positive ENNReal powers commute with arbitrary indexed suprema. -/
 theorem borell_rpow_iSup {I : Type*} (f : I → ENNReal) (t : ℝ) (ht : 0 < t) :
@@ -251,169 +269,252 @@ theorem zero_dimension_affine_constant (μ : ProbabilityMeasure (EuclideanSpace 
 /-- A Dirac law in a positive-dimensional ambient space has zero-dimensional affine support and
 therefore affine constant zero; the ambient dimension is irrelevant. -/
 theorem ambient_dirac_affine_constant :
-    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant (Probability.ofMeasure (Measure.dirac (0 : ℝ))) = 0 := by
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant
+        (Probability.ofMeasure (Measure.dirac (0 : ℝ))) =
+      0 := by
   let μ := Probability.ofMeasure (Measure.dirac (0 : ℝ))
   have hA : Probability.affineSupport μ ≤ affineSpan ℝ ({0} : Set ℝ) := by
-    apply Probability.affineSupport_le_of_ae_mem μ _ (AffineSubspace.closed_of_finiteDimensional _)
+    apply
+      Probability.affineSupport_le_of_ae_mem μ _ (AffineSubspace.closed_of_finiteDimensional _)
     change ∀ᵐ x ∂(Measure.dirac (0 : ℝ)), x ∈ affineSpan ℝ ({0} : Set ℝ)
     simp
   have hdir : (Probability.affineSupport μ).direction = ⊥ := by
     apply bot_unique
-    simpa only [direction_affineSpan, vectorSpan_singleton] using
-      AffineSubspace.direction_le hA
-  exact FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot μ hdir
+    simpa only [direction_affineSpan, vectorSpan_singleton] using AffineSubspace.direction_le hA
+  exact
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot
+      μ hdir
 
 /-- All excluded fibers contribute zero before extended division. -/
 theorem conditional_bad_fiber (n : ℕ)
-    (κ : Kernel (KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
-      EuclideanSpace ℝ (Fin (n + 1))) ℝ)
-    (b : KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
-      EuclideanSpace ℝ (Fin (n + 1))) (f : EuclideanSpace ℝ (Fin (n + 1)) → ℝ)
-    (h : ¬ FunctionalInequalities.KLS.ConditionalFiber.Nondegenerate κ b) : KLS.ConditionalFiber.energyAt κ b f = 0 := by
-  simp [KLS.ConditionalFiber.energyAt, h]
+    (κ :
+      Kernel
+        (KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
+          EuclideanSpace ℝ (Fin (n + 1)))
+        ℝ)
+    (b :
+      KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
+        EuclideanSpace ℝ (Fin (n + 1)))
+    (f : EuclideanSpace ℝ (Fin (n + 1)) → ℝ)
+    (h : ¬FunctionalInequalities.KLS.ConditionalFiber.Nondegenerate κ b) :
+    KLS.ConditionalFiber.energyAt κ b f = 0 := by simp [KLS.ConditionalFiber.energyAt, h]
 
 end Solutions.StatementChecks
 
-/-- info: 'Solutions.StatementChecks.constant_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.constant_energy' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.constant_energy
+  #print axioms Solutions.StatementChecks.constant_energy
 
-/-- info: 'Solutions.StatementChecks.constant_admissible' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.constant_admissible' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.constant_admissible
+  #print axioms Solutions.StatementChecks.constant_admissible
 
-/-- info: 'Solutions.StatementChecks.zero_dimension_covariance' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.zero_dimension_covariance' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.zero_dimension_covariance
+  #print axioms Solutions.StatementChecks.zero_dimension_covariance
 
-/-- info: 'Solutions.StatementChecks.zero_dimension_bound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.zero_dimension_bound' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.zero_dimension_bound
+  #print axioms Solutions.StatementChecks.zero_dimension_bound
 
-/-- info: 'Solutions.StatementChecks.localSlope_id' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.localSlope_id' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.localSlope_id
+  #print axioms Solutions.StatementChecks.localSlope_id
 
-/-- info: 'Solutions.StatementChecks.ambient_dirac_identity_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.ambient_dirac_identity_energy' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.ambient_dirac_identity_energy
+  #print axioms Solutions.StatementChecks.ambient_dirac_identity_energy
 
-/-- info: 'Solutions.StatementChecks.borell_innerRegular' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.borell_innerRegular' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.borell_innerRegular
+  #print axioms Solutions.StatementChecks.borell_innerRegular
 
-/-- info: 'Solutions.StatementChecks.borell_rpow_iSup' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.borell_rpow_iSup' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.borell_rpow_iSup
+  #print axioms Solutions.StatementChecks.borell_rpow_iSup
 
-/-- info: 'Solutions.StatementChecks.borell_mul_iSup' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.borell_mul_iSup' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.borell_mul_iSup
+  #print axioms Solutions.StatementChecks.borell_mul_iSup
 
-/-- info: 'Solutions.StatementChecks.isotropic_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.isotropic_fields' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.isotropic_fields
+  #print axioms Solutions.StatementChecks.isotropic_fields
 
-/-- info: 'Solutions.StatementChecks.zero_dimension_isotropic' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.zero_dimension_isotropic' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.zero_dimension_isotropic
+  #print axioms Solutions.StatementChecks.zero_dimension_isotropic
 
-/-- info: 'Solutions.StatementChecks.borel_logconcavity_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.borel_logconcavity_fields' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.borel_logconcavity_fields
+  #print axioms Solutions.StatementChecks.borel_logconcavity_fields
 
-/-- info: 'Solutions.StatementChecks.zero_dimension_innerMeasure' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.zero_dimension_innerMeasure' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.zero_dimension_innerMeasure
+  #print axioms Solutions.StatementChecks.zero_dimension_innerMeasure
 
-/-- info: 'Solutions.StatementChecks.isoperimetric_inverse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.isoperimetric_inverse' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.isoperimetric_inverse
+  #print axioms Solutions.StatementChecks.isoperimetric_inverse
 
-/-- info: 'Solutions.StatementChecks.zero_dimension_isoperimetry' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.zero_dimension_isoperimetry' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.zero_dimension_isoperimetry
+  #print axioms Solutions.StatementChecks.zero_dimension_isoperimetry
 
-/-- info: 'Solutions.StatementChecks.ambient_dirac_isoperimetry' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.ambient_dirac_isoperimetry' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.ambient_dirac_isoperimetry
+  #print axioms Solutions.StatementChecks.ambient_dirac_isoperimetry
 
-/-- info: 'Solutions.StatementChecks.isoperimetric_boundary_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.isoperimetric_boundary_fields' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.isoperimetric_boundary_fields
+  #print axioms Solutions.StatementChecks.isoperimetric_boundary_fields
 
-/-- info: 'Solutions.StatementChecks.conditional_zero_dimension_excluded' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.conditional_zero_dimension_excluded' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.conditional_zero_dimension_excluded
+  #print axioms Solutions.StatementChecks.conditional_zero_dimension_excluded
 
-/-- info: 'Solutions.StatementChecks.conditional_domain_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.conditional_domain_fields' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.conditional_domain_fields
+  #print axioms Solutions.StatementChecks.conditional_domain_fields
 
-/-- info: 'Solutions.StatementChecks.conditional_bad_fiber' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.conditional_bad_fiber' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.conditional_bad_fiber
+  #print axioms Solutions.StatementChecks.conditional_bad_fiber
 
-/-- info: 'Solutions.StatementChecks.affine_constant_unfold' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.affine_constant_unfold' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.affine_constant_unfold
+  #print axioms Solutions.StatementChecks.affine_constant_unfold
 
-/-- info: 'Solutions.StatementChecks.affine_test_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.affine_test_fields' depends on axioms: [propext, Classical.choice,
+Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.affine_test_fields
+  #print axioms Solutions.StatementChecks.affine_test_fields
 
-/-- info: 'Solutions.StatementChecks.affine_energy_integral' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.affine_energy_integral' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.affine_energy_integral
+  #print axioms Solutions.StatementChecks.affine_energy_integral
 
-/-- info: 'Solutions.StatementChecks.zero_dimension_affine_constant' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.zero_dimension_affine_constant' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.zero_dimension_affine_constant
+  #print axioms Solutions.StatementChecks.zero_dimension_affine_constant
 
-/-- info: 'Solutions.StatementChecks.ambient_dirac_affine_constant' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'Solutions.StatementChecks.ambient_dirac_affine_constant' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.StatementChecks.ambient_dirac_affine_constant
+  #print axioms Solutions.StatementChecks.ambient_dirac_affine_constant
 
-/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two
+  #print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two
 
-/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt' depends on axioms:
+[propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt
+  #print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt
 
-/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq' depends on axioms:
+[propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq
+  #print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq
 
-/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq' depends on
+axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq
+  #print axioms FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq
 
-/-- info: 'FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info:
+'FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot
+  #print axioms
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw
+  #print axioms FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id
+  #print axioms FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt
+  #print axioms FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy' depends on axioms:
+[propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy
+  #print axioms FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae
+  #print axioms FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.form_toLp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/--
+info: 'FunctionalInequalities.KLS.ConditionalFiber.form_toLp' depends on axioms: [propext,
+Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.form_toLp
+  #print axioms FunctionalInequalities.KLS.ConditionalFiber.form_toLp

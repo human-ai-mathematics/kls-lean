@@ -1,5 +1,7 @@
-import FunctionalInequalities.Probability.MomentMeasure.Maximality.GradientVariation
-import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Maximality.GradientVariation
+public import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite
 
 /-!
 # Maximality of essentially continuous moment potentials (CEK Theorem 8)
@@ -26,6 +28,8 @@ gradient mass of `e^{-ψₖ}` tends to zero by the line-by-line variation estima
 continuous potentials (`GradientVariation.lean`). Essential continuity enters only there; without
 it the conclusion fails (CEK Proposition 10).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -786,7 +790,7 @@ theorem lintegral_le_exp_of_convexOn {Φ : E → ℝ} (hΦ : ConvexOn ℝ univ �
   have hint'' : Integrable (fun x => Real.exp ((-Φ') x)) := hint'
   have : IsProbabilityMeasure ((volume : Measure E).tilted (-Φ')) :=
     isProbabilityMeasure_tilted hint''
-  have : IsProbabilityMeasure μ' := Measure.isProbabilityMeasure_map hgm'
+  have : IsProbabilityMeasure μ' := (Measure.isProbabilityMeasure_map_iff hgm').2 inferInstance
   have hHμ : Integrable H μ' := by
     rw [hμ', integrable_map_measure hHm.aestronglyMeasurable hgm',
       integrable_tilted_iff hint'']
@@ -895,6 +899,8 @@ private theorem lintegral_indicator_closedBall_le (hψ : ConvexPotential ψ)
   have hy₀b : legendre f y₀ ≠ ⊥ := legendre_ne_bot f hfprop y₀
   set B₀ := (legendre f y₀).toReal with hB₀
   have hy₀norm : ‖y₀‖ ≤ R := by simpa using hy₀
+
+  -- Truncate the dual potential and bound its finite representative.
   set FR := legendre (ballTruncate (legendre f) R) with hFR
   have hFRlow : ∀ p, ((inner ℝ y₀ p - B₀ : ℝ) : EReal) ≤ FR p := by
     intro p
@@ -941,6 +947,8 @@ private theorem lintegral_indicator_closedBall_le (hψ : ConvexPotential ψ)
     rw [hD, density_eq_ofReal' hyt hyb]
     exact ENNReal.ofReal_le_ofReal (Real.exp_le_exp.mpr (by rw [real_inner_comm]; linarith))
   -- the perturbation `H = F_R − ψ*`
+
+  -- Form the integrable perturbation and reduce to its exponential integral bound.
   set φ := legendre ψ with hφ
   set H : E → ℝ := fun p => FRr p - (φ p).toReal with hH
   have hφm : Measurable fun p => (φ p).toReal :=
@@ -967,6 +975,8 @@ private theorem lintegral_indicator_closedBall_le (hψ : ConvexPotential ψ)
   have hΨm : Measurable Ψ := measurable_ereal_toReal.comp hlsc.measurable
   have hGm : MeasurableSet G :=
     isOpen_interior.measurableSet.inter (measurableSet_of_differentiableAt ℝ Ψ)
+
+  -- Approximate the original potential by finite Lipschitz dual truncations.
   set Ψk : ℕ → E → ℝ := fun k x => (legendre (ballTruncate φ (c + k)) x).toReal with hΨk
   have hk : ∀ k : ℕ, c ≤ c + k := fun k => by linarith [(Nat.cast_nonneg k : (0 : ℝ) ≤ k)]
   have hfink := fun k : ℕ => legendre_ballTruncate_ne_top_ne_bot hlow hc.le (hk k) hx₁
@@ -1053,6 +1063,8 @@ private theorem lintegral_indicator_closedBall_le (hψ : ConvexPotential ψ)
       ring
     · rw [hg, indicator_of_notMem hy]; exact zero_le
   -- the agreement sets
+
+  -- Use agreement sets to separate the common part from the truncation tails.
   set B := stdOrthonormalBasis ℝ E with hB
   set A : ℕ → Set E := fun k => G ∩ {x | ‖gradient Ψ x‖ ≤ c + k} with hA
   have hAm : ∀ k, MeasurableSet (A k) := fun k =>
@@ -1187,6 +1199,8 @@ private theorem lintegral_indicator_closedBall_le (hψ : ConvexPotential ψ)
         _ = C₁ * Real.exp (-Ψk k x) + C₂ * ∑ i, |inner ℝ (gradient (Ψk k) x) (B i)| *
             Real.exp (-Ψk k x) := by rw [← Finset.sum_mul]; ring
   -- limits of the error terms
+
+  -- Pass each term to the limit and recover the desired exponential bound.
   have hP1lim : Tendsto P1 atTop (𝓝 (∫ p, H p ∂μ)) := by
     rw [← hg₀μ]
     refine tendsto_integral_of_dominated_convergence (fun x => ‖g₀ x‖)

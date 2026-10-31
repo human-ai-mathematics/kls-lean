@@ -32,6 +32,7 @@ From the repository root:
 python3 research/cache_mathlib.py
 python3 research/check_ledger.py
 python3 research/check_blueprint.py
+python3 research/check_documentation.py
 python3 research/verify.py
 ```
 
@@ -40,6 +41,35 @@ library, solution, example and vendored modules with `lake --wfail build` (inclu
 closures), and strictly compiles every live `research/audits/**/*.lean` client. It checks the
 statement baseline and registered declarations, audits transitive axioms, and replays the
 current local modules with Lean's kernel.
+
+The full local `documentation` gate checks complete source-document headings (with six
+explicitly reviewed compact-synopsis exceptions), the generated module directory, local
+Markdown paths and heading/line anchors, and all registered Lean declaration links. A line
+inside the correct file still fails if it no longer starts the bound declaration or structure
+field. It also checks the generated current Letwin summary against the canonical literature
+items and actual source declarations, the current maintenance handoff, and the reviewed
+route-specific qualifications in prose and canonical notes. Inputs live in
+[documentation-checks.json](progress/documentation-checks.json). It checks recorded scope
+consistency; it does not establish a paper theorem or replace source-fidelity review.
+
+Refresh the module directory with `python3 research/module_inventory.py`. The optional
+`python3 research/check_documentation.py --write` refreshes only the marked current-scope
+blocks and bound declaration anchors; it leaves reviewed free prose to explicit editing.
+The default check is read-only. Regression tests include mutations for split headings,
+in-range wrong anchors, stale generated views and lost route qualifications. This gate is
+local only; remote Lean-only certification retains its documented Lean scope.
+
+Owned-source maintenance checks also require a nonempty first module summary, reject obsolete
+dated candidate labels and production `#print axioms` output, and bind every migrated report to
+its audit file.
+Linter exceptions must be declaration-local and match a reviewed reason for retaining the exact
+public interface. Owned Lean whitespace, set-builder semicolons, text encoding and source-file
+references in production comments are checked, including brace-group and repository-root paths.
+References resolve through explicit owning paths or a unique suffix; ambiguous suffixes fail.
+The [quality follow-up](progress/2026-10-31-quality-gate-map.json) records the full-gate empty-summary
+and reference-ambiguity regression inputs.
+Existing mathematical identifiers and source notation retain the reviewed Unicode typography
+recorded in the [maintenance closure review](progress/2026-10-30-maintenance-closure-map.json).
 
 The generated axiom audit checks every project-local declaration, including private and
 generated declarations and the target theorem `FunctionalInequalities.KLS.kls`; no local
@@ -90,13 +120,15 @@ verifier nor changes certificate status. Third-party compiled dependencies remai
 ## Receipts and trust scope
 
 The [Comparator setup](audits/KLS/Comparator/README.md) is a separate, opt-in check for the
-KLS endpoint and the separate [OpenAI bridge package](../integrations/openai/README.md),
-using tools pinned for Lean 4.33.0. Run
+KLS endpoint, the separate [OpenAI bridge package](../integrations/openai/README.md) and the
+Palomar project, using the `lake comparator` bundled with the pinned Lean 4.35.0 toolchain
+(receipts made before that migration used the external Comparator v4.33.0 pin). Run
 `python3 research/comparator.py --target kls --mode compile` for a strict original-declaration
 client, or select the documented development/Linux sandbox mode for actual export, statement
 comparison, axiom validation and kernel replay. It is not silently added to remote CI or to
 the full verifier. Receipts under `build/comparator/` bind inputs and the current local source;
-development-mode success explicitly lacks sandboxing and no additional kernel is enabled.
+development-mode success explicitly lacks sandboxing, and only the Palomar configuration
+registers an additional kernel (NanoDa).
 The challenge placeholder stays in a `.lean.in` template outside the proof-client inventory.
 
 Mechanical verification checks the recorded Lean statements and their proof dependencies.

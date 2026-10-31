@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.PiCoordinates
-import FunctionalInequalities.Analysis.Sard.QuadraticCover
-import Mathlib.Topology.Bases
+module
+
+public import FunctionalInequalities.Analysis.PiCoordinates
+public import FunctionalInequalities.Analysis.Sard.QuadraticCover
+public import Mathlib.Topology.Bases
 
 /-! # Sard's theorem in the plane
 
@@ -14,6 +16,8 @@ points collapses onto the one-dimensional covering lemma.
 This is dimension two only. It does not prove `Analysis.sard`, which is stated in arbitrary
 finite dimension and needs the higher-order flatness stratification.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -32,8 +36,7 @@ private lemma apply_decomp_fin_two (α : (Fin 2 → ℝ) →L[ℝ] ℝ) (i : Fin
   have h := congrArg α (decomp_fin_two i v)
   simpa [smul_eq_mul] using h
 
-private lemma norm_le_abs_add_abs (i : Fin 2) (v : Fin 2 → ℝ) :
-    ‖v‖ ≤ |v i| + |v (1 - i)| := by
+private lemma norm_le_abs_add_abs (i : Fin 2) (v : Fin 2 → ℝ) : ‖v‖ ≤ |v i| + |v (1 - i)| := by
   rw [pi_norm_le_iff_of_nonneg (by positivity)]
   intro k
   fin_cases i <;> fin_cases k <;> simp only [Real.norm_eq_abs] <;> simp
@@ -245,13 +248,13 @@ Lebesgue null. The critical set is not assumed measurable. This is the two-dimen
 only; the general statement in arbitrary finite dimension is not proved here. -/
 theorem sard_plane {u : (Fin 2 → ℝ) → ℝ} (hu : ContDiff ℝ 2 u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 := by
-  have hsplit : {x : Fin 2 → ℝ | fderiv ℝ u x = 0} =
+  have hsplit :
+    {x : Fin 2 → ℝ | fderiv ℝ u x = 0} =
       {x | fderiv ℝ u x = 0 ∧ iteratedFDeriv ℝ 2 u x = 0} ∪
         {x | fderiv ℝ u x = 0 ∧ iteratedFDeriv ℝ 2 u x ≠ 0} := by
     ext x
     by_cases h : iteratedFDeriv ℝ 2 u x = 0 <;> simp [h]
   rw [hsplit, image_union]
-  exact measure_union_null (volume_image_flat_univ_eq_zero hu)
-    (volume_image_nonflat_eq_zero hu)
+  exact measure_union_null (volume_image_flat_univ_eq_zero hu) (volume_image_nonflat_eq_zero hu)
 
 end FunctionalInequalities.Analysis

@@ -1,14 +1,18 @@
-import FunctionalInequalities.Energy.CovarianceGradient.IntrinsicTranslation
-import FunctionalInequalities.Poincare.CovarianceGradient.Transport
-import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
+module
+
+public import FunctionalInequalities.Energy.CovarianceGradient.IntrinsicTranslation
+public import FunctionalInequalities.Poincare.CovarianceGradient.Transport
+public import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
 
 /-!
 # Ambient translation invariance of the affine covariance Poincaré constant
 
 Source: Blueprint `lem:affine-poincare-translation-invariance`, the identity
-`C_P^aff((τ_b)_# μ) = C_P^aff(μ)` for `τ_b(x) = x + b`. Read `Probability.affineSupport_translateLaw`,
+`C_P^aff((τ_b)_# μ) = C_P^aff(μ)` for `τ_b(x) = x + b`. Read
+`Probability.affineSupport_translateLaw`,
 `Probability.direction_affineSupport_translateLaw`, `Probability.intrinsicMeasure_translateLaw`,
-`Energy.CovarianceGradient.Intrinsic.exists_translateLaw_isometry` and `Poincare.CovarianceGradient.Intrinsic.constant_translateLaw`.
+`Energy.CovarianceGradient.Intrinsic.exists_translateLaw_isometry` and
+`Poincare.CovarianceGradient.Intrinsic.constant_translateLaw`.
 
 For a probability law `μ` on a finite-dimensional Euclidean space `E` and `b ∈ E`, the translated
 law `Probability.translateLaw μ b` is the image of `μ` under `x ↦ b + x`. Its affine support
@@ -28,6 +32,8 @@ definition), any Poincaré inequality, finiteness of the constant, the isotropic
 invariance under any non-translation affine map of `E`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter Topology
@@ -45,11 +51,12 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   (μ : ProbabilityMeasure E) (b : E)
 
 omit [CompleteSpace E] in
-/-- The affine covariance Poincaré constant is invariant under ambient translations of the law. -/
-theorem constant_translateLaw :
-    constant (Probability.translateLaw μ b) = constant μ := by
+/--
+The affine covariance Poincaré constant is invariant under ambient translations of the law. -/
+theorem constant_translateLaw : constant (Probability.translateLaw μ b) = constant μ := by
   unfold constant
-  rw [energy_eq_relaxation_intrinsicMeasure (Probability.translateLaw μ b), energy_eq_relaxation_intrinsicMeasure μ, Probability.intrinsicMeasure_translateLaw,
+  rw [energy_eq_relaxation_intrinsicMeasure (Probability.translateLaw μ b),
+    energy_eq_relaxation_intrinsicMeasure μ, Probability.intrinsicMeasure_translateLaw,
     Poincare.CovarianceGradient.constant_translateLaw,
     Poincare.CovarianceGradient.constant_mapLinearIsometryEquiv]
 

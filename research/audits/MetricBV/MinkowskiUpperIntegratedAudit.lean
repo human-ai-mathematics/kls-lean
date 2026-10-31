@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
 
 /-! Independent full-signature clients for the integrated upper content of thickenings. Checks: the
 integrated bound `∫⁻ s in (0, r), ν⁺⁺(B^s) ≤ ν(B^r) - ν(B)` for every law, set and radius, its
@@ -9,6 +11,8 @@ uniform law on `[0, 1]` with `B = {0}`, where for `0 < r ≤ 1` the integral equ
 `ENNReal.ofReal r = ν(B^r) - ν(B)`, so the bound is attained. Not claimed: measurability or
 integrability of the integrand or of the derivative, absolute continuity of the radius mass,
 equality in general, the lower-to-upper recovery or relaxed-upper identity. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -44,11 +48,14 @@ theorem derivativeIntegral (ν : ProbabilityMeasure V) (B : Set V) (r : ℝ) :
     (∫⁻ s in Ioo 0 r, ENNReal.ofReal (deriv (thickeningMass (ν : Measure V) B) s) ≤
         (ν : Measure V) (thickening r B) - (ν : Measure V) B) ∧
       (monotone_thickeningMass (ν : Measure V) B).stieltjesFunction.measure (Ioo 0 r) ≤
-        (ν : Measure V) (thickening r B) - (ν : Measure V) B ∧
-      ((ν : Measure V) B).toReal ≤ Function.rightLim (thickeningMass (ν : Measure V) B) 0 ∧
-      Function.leftLim (Function.rightLim (thickeningMass (ν : Measure V) B)) r ≤ thickeningMass (ν : Measure V) B r :=
-  ⟨setLIntegral_ofReal_deriv_thickeningMass_le (ν : Measure V) B r, stieltjesMeasure_thickeningMass_Ioo_le (ν : Measure V) B r,
-    toReal_measure_le_rightLim_thickeningMass_zero (ν : Measure V) B, leftLim_rightLim_thickeningMass_le (ν : Measure V) B r⟩
+          (ν : Measure V) (thickening r B) - (ν : Measure V) B ∧
+        ((ν : Measure V) B).toReal ≤ Function.rightLim (thickeningMass (ν : Measure V) B) 0 ∧
+          Function.leftLim (Function.rightLim (thickeningMass (ν : Measure V) B)) r ≤
+            thickeningMass (ν : Measure V) B r :=
+  ⟨setLIntegral_ofReal_deriv_thickeningMass_le (ν : Measure V) B r,
+    stieltjesMeasure_thickeningMass_Ioo_le (ν : Measure V) B r,
+    toReal_measure_le_rightLim_thickeningMass_zero (ν : Measure V) B,
+    leftLim_rightLim_thickeningMass_le (ν : Measure V) B r⟩
 
 theorem emptySet (ν : ProbabilityMeasure V) (r : ℝ) :
     ∫⁻ s in Ioo 0 r, upperMinkowskiContent (ν : Measure V) (thickening s (∅ : Set V)) = 0 :=

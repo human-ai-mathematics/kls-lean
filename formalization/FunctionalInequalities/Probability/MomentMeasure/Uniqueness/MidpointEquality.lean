@@ -1,8 +1,10 @@
-import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite
-import FunctionalInequalities.Probability.Line.Haar
-import FunctionalInequalities.Probability.Line.PrekopaEquality
-import Mathlib.MeasureTheory.Measure.CharacteristicFunction.Basic
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Probability.MomentMeasure.Maximality.Finite
+public import FunctionalInequalities.Probability.Line.Haar
+public import FunctionalInequalities.Probability.Line.PrekopaEquality
+public import Mathlib.MeasureTheory.Measure.CharacteristicFunction.Basic
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # Equality in the midpoint Prékopa–Leindler inequality for log-concave densities
@@ -26,6 +28,8 @@ Proof:
   (`Measure.ext_of_charFunDual`) `e^{-ψ₁} dx` is the translate of `e^{-ψ₀} dx` by `b₁ − b₀`, and
   continuity of the densities gives the pointwise identity.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -457,7 +461,7 @@ theorem exists_eq_translate_of_lintegral_midpointDensity_le_one {ψ₀ ψ₁ : E
   have hid₁ := integrable_id_tilted hψ₁ hn₁
   set d : E := (∫ x, x ∂ν₁) - ∫ x, x ∂ν₀ with hd
   have hPd : IsProbabilityMeasure (ν₀.map (· + d)) :=
-    Measure.isProbabilityMeasure_map (measurable_add_const d).aemeasurable
+    (Measure.isProbabilityMeasure_map_iff (measurable_add_const d).aemeasurable).2 inferInstance
   -- every one-dimensional projection of `ν₁` is that of the translate of `ν₀`
   have hproj : ∀ θ : E, ‖θ‖ = 1 →
       ν₁.map (fun x => ⟪θ, x⟫) = (ν₀.map (· + d)).map (fun x => ⟪θ, x⟫) := by

@@ -6,8 +6,13 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoIntegrandComplete
-import LevyStochCalc.Probability.Progressive
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use the v4.35.0
+-- `eLpNorm`/`MemLp` API and pass the measurability witness `eLpNorm_sq_eq_lintegral` now takes.
+module
+
+public import LevyStochCalc.Brownian.ItoIntegrandComplete
+public import LevyStochCalc.Probability.Progressive
 
 /-!
 # Completeness of the marked integrands
@@ -18,6 +23,8 @@ complete, so an energy-Cauchy sequence of admissible marked integrands has a lim
 `limsup` along an almost-everywhere convergent subsequence provides a genuinely progressively
 measurable representative of it.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter
 open scoped NNReal ENNReal Topology
@@ -47,8 +54,8 @@ theorem markedEnergy_eq_eLpNorm_sq {φ : Ω → ℝ → E → ℝ}
       = eLpNorm (fun p : Ω × ℝ × E => φ p.1 p.2.1 p.2.2) 2 (markedEnergyMeasure P ν T) ^ 2 := by
   have hme : Measurable fun p : Ω × ℝ × E => (‖φ p.1 p.2.1 p.2.2‖₊ : ℝ≥0∞) ^ 2 :=
     ((measurable_nnnorm.comp hm).coe_nnreal_ennreal).pow_const 2
-  rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral, markedEnergyMeasure, markedEnergy,
-    lintegral_prod _ hme.aemeasurable]
+  rw [LevyStochCalc.Brownian.Ito.eLpNorm_sq_eq_lintegral _ _ hm.aestronglyMeasurable,
+    markedEnergyMeasure, markedEnergy, lintegral_prod _ hme.aemeasurable]
   refine lintegral_congr fun ω => ?_
   exact (lintegral_prod (μ := volume.restrict (Set.Icc (0 : ℝ) T)) (ν := ν)
     (fun y : ℝ × E => (‖φ ω y.1 y.2‖₊ : ℝ≥0∞) ^ 2)
@@ -60,7 +67,7 @@ theorem memLp_of_markedEnergy_ne_top {φ : Ω → ℝ → E → ℝ}
     (hm : Measurable fun p : Ω × ℝ × E => φ p.1 p.2.1 p.2.2) {T : ℝ}
     (hfin : markedEnergy P ν T φ ≠ ⊤) :
     MemLp (fun p : Ω × ℝ × E => φ p.1 p.2.1 p.2.2) 2 (markedEnergyMeasure P ν T) := by
-  refine ⟨hm.stronglyMeasurable.aestronglyMeasurable, ?_⟩
+  rw [memLp_iff]
   refine lt_top_iff_ne_top.mpr fun hcon => hfin ?_
   rw [markedEnergy_eq_eLpNorm_sq hm T, hcon]
   simp
@@ -184,12 +191,8 @@ theorem exists_marked_progressive_energy_limit (ℱ : Filtration ℝ ‹Measurab
       ∧ markedEnergy P ν T ψ ≠ ⊤
       ∧ Tendsto (fun n => markedEnergy P ν T (fun ω s e => φ n ω s e - ψ ω s e)) atTop (𝓝 0) := by
   obtain ⟨g, hgMem, hgt⟩ := exists_markedEnergy_limit hm hfin hcau
-  have hMem : ∀ n, MemLp (fun p : Ω × ℝ × E => φ n p.1 p.2.1 p.2.2) 2
-      (markedEnergyMeasure P ν T) := fun n => memLp_of_markedEnergy_ne_top (hm n) (hfin n)
   obtain ⟨ns, -, hae⟩ := (tendstoInMeasure_of_tendsto_eLpNorm
-    (μ := markedEnergyMeasure P ν T) (p := 2) (by norm_num)
-    (fun n => (hMem n).aestronglyMeasurable) hgMem.aestronglyMeasurable
-    hgt).exists_seq_tendsto_ae
+    (μ := markedEnergyMeasure P ν T) (p := 2) (by norm_num) hgt).exists_seq_tendsto_ae
   have hKm : Measurable fun p : Ω × ℝ × E =>
       limsupMarkedIntegrand φ ns p.1 p.2.1 p.2.2 := Measurable.limsup fun i => hm (ns i)
   have hKp : Probability.MarkedProgressivelyMeasurable ℱ (limsupMarkedIntegrand φ ns) :=

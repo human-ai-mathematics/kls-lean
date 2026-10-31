@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Hessian
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Hessian
 
 /-!
 # Audit: upper Hessian bound of the Gaussian-smoothed potential (BKL Section 2)
@@ -9,6 +11,8 @@ Clients: the unit direction at `s = 3` gives the bound `6` and the posterior var
 for every probability law with a Borell density on `ℝ¹`; dimension zero gives the bound `0`.
 Neither polynomial growth of all derivatives nor the regular approximation theorem is asserted.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 open FunctionalInequalities.Analysis.BakryEmery
@@ -54,11 +58,15 @@ theorem zero_dimension {μ : Measure (EuclideanSpace ℝ (Fin 0))} [IsProbabilit
 
 end GaussianHessianAudit
 
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedDensity_line_factorization
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedDensity_line_factorization
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_line_cgf
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_score
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner
-#print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_le
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_score
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_le
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_posterior_le
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.memLp_two_score_posterior
 #print axioms FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.memLp_two_inner_posterior

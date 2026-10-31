@@ -1,10 +1,14 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Strict clients for radius-local restriction, positive-level coarea, the nonnegative
 content/slope bound, and perimeter below content at measurable finite-mass targets.
 No properness or sigma-finiteness is assumed by the generic clients. The real-volume
 client has infinite total mass. This is the direct coarea upper bound, not the full
 radius-liminf chain of ADMG Lemma 3.2 or a Minkowski recovery identity. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

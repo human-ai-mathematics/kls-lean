@@ -1,13 +1,16 @@
-import FunctionalInequalities.Analysis.Newtonian.Truncation.Basic
-import FunctionalInequalities.Analysis.Newtonian.Kernel.Harmonic
-import FunctionalInequalities.Analysis.IteratedDerivative.Affine
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
+module
+
+public import FunctionalInequalities.Analysis.Newtonian.Truncation.Basic
+public import FunctionalInequalities.Analysis.Newtonian.Kernel.Harmonic
+public import FunctionalInequalities.Analysis.IteratedDerivative.Affine
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
 
 /-!
 # The smooth annular reproducing kernel
 
 Supporting the harmonic part of the interior estimates of Gilbarg–Trudinger, *Elliptic Partial
-Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60, and the
+Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), Theorem 4.6, p. 60, and
+the
 derivative estimates for harmonic functions, Theorem 2.10 / (2.31). For `n ≥ 2` (including the
 logarithmic planar kernel) and `ε > 0`:
 
@@ -24,6 +27,8 @@ The sign is the one of `Γ`, normalized so that `Γ ⋆ Δu = u` (`compact_C2_ne
 the reproducing property itself is proved in `Harmonic/CompactReproduction`. No mean-value property
 is used.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric MeasureTheory Filter InnerProductSpace
 open scoped ContDiff Topology

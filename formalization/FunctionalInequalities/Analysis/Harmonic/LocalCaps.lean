@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
-import FunctionalInequalities.Analysis.Harmonic.LocalReproduction
-import FunctionalInequalities.Analysis.Convolution.DerivativeCaps
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.OperatorNorm
+public import FunctionalInequalities.Analysis.Harmonic.LocalReproduction
+public import FunctionalInequalities.Analysis.Convolution.DerivativeCaps
 
 /-!
 # Interior derivative bounds for harmonic functions on the unit ball
@@ -12,14 +14,18 @@ Theorem 2.10 / (2.31), through order three, as used for the harmonic part of The
 * `harmonicLocalization_bound`: the cutoff localization does not increase a value bound `|h| ≤ M`
   on `B₂`;
 * `local_harmonic_derivative_caps`: for `n ≥ 2` there are positive constants `C1, C2, C3`, depending
-  only on `n` and chosen before `h`, such that every `h ∈ C²(B₂)` with `Δh = 0` and `|h| ≤ M` on `B₂`
-  is `C^∞` on `B₁` and satisfies `‖Dh‖ ≤ C1 M`, `‖D²h‖ ≤ C2 M`, `‖D³h‖ ≤ C3 M` on `B₁` (nested Fréchet
+  only on `n` and chosen before `h`, such that every `h ∈ C²(B₂)` with `Δh = 0` and `|h| ≤ M` on
+  `B₂`
+  is `C^∞` on `B₁` and satisfies `‖Dh‖ ≤ C1 M`, `‖D²h‖ ≤ C2 M`, `‖D³h‖ ≤ C3 M` on `B₁` (nested
+  Fréchet
   derivatives, operator norm).
 
 The bounds come from the reproducing formula `h = annularKernel n (1/8) ⋆ harmonicLocalization n h`
 on `B₁` and `convolution_derivative_caps`. The constants are not GT's explicit `(n|α|/d)^|α|`; only
 their existence and dependence on `n` alone are proved.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric MeasureTheory Filter
 open scoped ContDiff Topology Convolution

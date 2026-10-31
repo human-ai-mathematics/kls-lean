@@ -6,7 +6,14 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Poisson.CompensatedDensityRectSimple
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+-- Modified 2026-10-31 by the KLS formalization project: pass the measurability argument now
+-- required by `eLpNorm_nnreal_pow_eq_lintegral` in Mathlib v4.35.0 (proof-only change).
+module
+
+public import LevyStochCalc.Poisson.CompensatedDensityRectSimple
 
 /-!
 # Mark discretisation of the shifted dyadic eval
@@ -17,6 +24,8 @@ density argument on each time piece over the trimmed product measure. Summing th
 errors gives an `L²(P ⊗ ds ⊗ ν)` approximating sequence of adapted, mark-simple,
 piecewise-constant-in-time integrands.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -128,6 +137,7 @@ lemma exists_markSimple_adapted_within
             = ∫⁻ q, (‖f q - g q‖₊ : ℝ≥0∞) ^ 2 ∂μ := by
           have hL := MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
             (μ := μ) (p := (2 : ℝ≥0)) (f := f - g) (by norm_num)
+            (h_meas.sub hg_meas).aestronglyMeasurable
           rw [show ((2 : ℝ≥0) : ℝ≥0∞) = (2 : ℝ≥0∞) from by simp,
             show ((2 : ℝ≥0) : ℝ) = (2 : ℝ) from by norm_num] at hL
           rw [hL]; refine lintegral_congr (fun q => ?_)
@@ -306,8 +316,8 @@ lemma exists_markEval_close_dyadic
       refine Finset.sum_congr rfl (fun i _ => ?_)
       rw [Set.indicator_apply]
       by_cases hsi : s ∈ Set.Ioc (p i.castSucc) (p i.succ)
-      · rw [if_pos (Set.mem_Ioc.mp hsi), if_pos hsi, one_mul]
-      · rw [if_neg (fun hc => hsi (Set.mem_Ioc.mpr hc)), if_neg hsi, zero_mul]
+      · rw [ite_eq_left (Set.mem_Ioc.mp hsi), ite_eq_left hsi, one_mul]
+      · rw [ite_eq_right (fun hc => hsi (Set.mem_Ioc.mpr hc)), ite_eq_right hsi, zero_mul]
     rw [hDES, ← Finset.sum_sub_distrib]
     rw [show (∑ i : Fin (2 ^ n), ((Set.Ioc (p i.castSucc) (p i.succ)).indicator
             (fun _ => (1 : ℝ)) s * d i ω e

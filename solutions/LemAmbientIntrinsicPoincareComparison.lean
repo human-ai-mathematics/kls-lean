@@ -1,4 +1,7 @@
-import FunctionalInequalities.Poincare.SmoothGradient.Comparison
+module
+
+public import FunctionalInequalities.Poincare.SmoothGradient.Comparison
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: ambient and intrinsic-affine comparison
@@ -9,6 +12,8 @@ Typed applications include zero dimension, singular laws and infinite optimal co
 
 Sources, assumptions and reading order: `Poincare/Euclidean/README.md` in the library.
 -/
+
+@[expose] public section
 
 open MeasureTheory FunctionalInequalities
 

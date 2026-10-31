@@ -6,7 +6,11 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import Mathlib.Probability.Martingale.Basic
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Martingale.Basic
 
 /-!
 # Orthogonality of martingale differences
@@ -22,6 +26,8 @@ moments.
 * `LevyStochCalc.Probability.integral_sq_sum_of_condExp_eq_zero` — the second moment of a sum of
   martingale differences is the sum of the second moments.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Probability
 

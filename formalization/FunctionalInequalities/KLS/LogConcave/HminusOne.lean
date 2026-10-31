@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
-import FunctionalInequalities.Analysis.BakryEmery.Curvature
-import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.KLS.LogConcave.BrascampLieb
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Range
+public import FunctionalInequalities.Analysis.BakryEmery.Curvature
+public import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+public import FunctionalInequalities.KLS.LogConcave.BrascampLieb
 
 /-!
 # Dual gradient estimates and the H⁻¹ variance bound
@@ -13,8 +15,11 @@ Supports Letwin arXiv:2607.24164v1, Proposition 2.8, through three interfaces:
 - `variance_le_sum_of_partial_dual_bounds`, retaining the C² convex potential,
   C¹/L² function and L² partial-derivative hypotheses stated below.
 
-The variance assembly uses the heat-generator range density from `HeatSemigroup/Generator/Range.lean`.
+The variance assembly uses the heat-generator range density from
+`HeatSemigroup/Generator/Range.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -453,17 +458,19 @@ smoothing of the target): if `ν = e^{-W} dm` with `W` convex and `C²`, `f ∈ 
 integrable partial derivatives, and each partial derivative satisfies the dual bound
 `(∫ ∂ᵢf · h dν)² ≤ Kᵢ ∫ ‖∇h‖² dν` for all compactly supported smooth `h`, then
 `Var_ν f ≤ Σᵢ Kᵢ`. -/
-theorem variance_le_sum_of_partial_dual_bounds {n : ℕ}
-    (m : Measure (EuclideanSpace ℝ (Fin n))) [m.IsAddHaarMeasure]
-    {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hν : FunctionalInequalities.KLS.LogConcave ν)
-    {W : EuclideanSpace ℝ (Fin n) → ℝ} (hνW : (ν : Measure _) = m.tilted (-W))
-    (hW : ContDiff ℝ 2 W) (hWc : ConvexOn ℝ Set.univ W)
+theorem variance_le_sum_of_partial_dual_bounds {n : ℕ} (m : Measure (EuclideanSpace ℝ (Fin n)))
+    [m.IsAddHaarMeasure] {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
+    (hν : FunctionalInequalities.KLS.LogConcave ν) {W : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hνW : (ν : Measure _) = m.tilted (-W)) (hW : ContDiff ℝ 2 W) (hWc : ConvexOn ℝ Set.univ W)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : ContDiff ℝ 1 f) (hf2 : MemLp f 2 (ν : Measure _))
     (hdf2 : ∀ i, MemLp (fun x => fderiv ℝ f x (EuclideanSpace.single i 1)) 2 (ν : Measure _))
     (K : Fin n → ℝ)
-    (hK : ∀ i (h : EuclideanSpace ℝ (Fin n) → ℝ), ContDiff ℝ ∞ h → HasCompactSupport h →
-      (∫ x, fderiv ℝ f x (EuclideanSpace.single i 1) * h x ∂(ν : Measure _)) ^ 2 ≤
-        K i * ∫ x, ‖fderiv ℝ h x‖ ^ 2 ∂(ν : Measure _)) :
+    (hK :
+      ∀ i (h : EuclideanSpace ℝ (Fin n) → ℝ),
+        ContDiff ℝ ∞ h →
+          HasCompactSupport h →
+            (∫ x, fderiv ℝ f x (EuclideanSpace.single i 1) * h x ∂(ν : Measure _)) ^ 2 ≤
+              K i * ∫ x, ‖fderiv ℝ h x‖ ^ 2 ∂(ν : Measure _)) :
     variance f (ν : Measure _) ≤ ∑ i, K i := by
   have _ := hdf2
   have hU1 : ContDiff ℝ 1 W := hW.of_le (by norm_num)
@@ -471,88 +478,76 @@ theorem variance_le_sum_of_partial_dual_bounds {n : ℕ}
   let C : ℝ := ∑ i, K i
   have hKnonneg : ∀ i, 0 ≤ K i := by
     intro i
-    exact nonneg_of_forall_sq_integral_le_mul_integral_norm_fderiv_sq
-      (Fin.pos i) m hνW hW.continuous (hK i)
-  have hQ : ∀ w ∈ compactSmoothDiffusionImage (ν := ν) hU1,
+    exact
+      nonneg_of_forall_sq_integral_le_mul_integral_norm_fderiv_sq (Fin.pos i) m hνW
+        hW.continuous (hK i)
+  have hQ :
+    ∀ w ∈ compactSmoothDiffusionImage (ν := ν) hU1,
       2 * ⟪FunctionalInequalities.L2.center ν F, w⟫ - ‖w‖ ^ 2 ≤ C := by
     rintro w ⟨g, hg, hgc, rfl⟩
     let hL : MemLp (fun x => -weightedLaplacian W g x) 2 (ν : Measure _) :=
       memLp_neg_weightedLaplacian (ν := ν) hU1 hg hgc
-    let G : Lp ℝ 2 (ν : Measure _) :=
-      hL.toLp (fun x => -weightedLaplacian W g x)
+    let G : Lp ℝ 2 (ν : Measure _) := hL.toLp (fun x => -weightedLaplacian W g x)
     change 2 * ⟪FunctionalInequalities.L2.center ν F, G⟫ - ‖G‖ ^ 2 ≤ C
     have hmean : FunctionalInequalities.L2.mean ν G = 0 :=
       compact_diffusion_toLp_mean_zero m hνW hU1 hg hgc
-    have hinner : ⟪F, G⟫ =
-        ∫ x, f x * (-weightedLaplacian W g x) ∂(ν : Measure _) :=
+    have hinner : ⟪F, G⟫ = ∫ x, f x * (-weightedLaplacian W g x) ∂(ν : Measure _) :=
       real_inner_toLp hf2 hL
-    have hnorm : ‖G‖ ^ 2 =
-        ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) := by
+    have hnorm : ‖G‖ ^ 2 = ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) := by
       simpa only [G, Real.norm_eq_abs, abs_neg, sq_abs] using
         (FunctionalInequalities.L2.norm_toLp_sq hL)
-    obtain ⟨_, _, hpair⟩ :=
-      compact_pairing_identity m hνW hU1 hf hg hgc
+    obtain ⟨_, _, hpair⟩ := compact_pairing_identity m hνW hU1 hf hg hgc
     have hcoord_f (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
-        (gradient f x).ofLp i =
-          fderiv ℝ f x (EuclideanSpace.single i 1) := by
+      (gradient f x).ofLp i = fderiv ℝ f x (EuclideanSpace.single i 1) := by
       calc
-        (gradient f x).ofLp i =
-            inner ℝ (gradient f x) (EuclideanSpace.single i 1) := by
-          simpa using
-            (EuclideanSpace.inner_single_right i (1 : ℝ) (gradient f x)).symm
+        (gradient f x).ofLp i = inner ℝ (gradient f x) (EuclideanSpace.single i 1) := by
+          simpa using (EuclideanSpace.inner_single_right i (1 : ℝ) (gradient f x)).symm
         _ = fderiv ℝ f x (EuclideanSpace.single i 1) := by
           simpa only [gradient] using
-            (InnerProductSpace.toDual_symm_apply
-              (𝕜 := ℝ) (E := EuclideanSpace ℝ (Fin n))
-              (x := EuclideanSpace.single i 1) (y := fderiv ℝ f x))
+            (InnerProductSpace.toDual_symm_apply (𝕜 := ℝ) (E := EuclideanSpace ℝ (Fin n)) (x :=
+              EuclideanSpace.single i 1) (y := fderiv ℝ f x))
     have hcoord_g (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
-        (gradient g x).ofLp i =
-          fderiv ℝ g x (EuclideanSpace.single i 1) := by
+      (gradient g x).ofLp i = fderiv ℝ g x (EuclideanSpace.single i 1) := by
       calc
-        (gradient g x).ofLp i =
-            inner ℝ (gradient g x) (EuclideanSpace.single i 1) := by
-          simpa using
-            (EuclideanSpace.inner_single_right i (1 : ℝ) (gradient g x)).symm
+        (gradient g x).ofLp i = inner ℝ (gradient g x) (EuclideanSpace.single i 1) := by
+          simpa using (EuclideanSpace.inner_single_right i (1 : ℝ) (gradient g x)).symm
         _ = fderiv ℝ g x (EuclideanSpace.single i 1) := by
           simpa only [gradient] using
-            (InnerProductSpace.toDual_symm_apply
-              (𝕜 := ℝ) (E := EuclideanSpace ℝ (Fin n))
-              (x := EuclideanSpace.single i 1) (y := fderiv ℝ g x))
+            (InnerProductSpace.toDual_symm_apply (𝕜 := ℝ) (E := EuclideanSpace ℝ (Fin n)) (x :=
+              EuclideanSpace.single i 1) (y := fderiv ℝ g x))
     let A : Fin n → ℝ := fun i =>
-      ∫ x, fderiv ℝ f x (EuclideanSpace.single i 1) *
-        fderiv ℝ g x (EuclideanSpace.single i 1) ∂(ν : Measure _)
+      ∫ x,
+        fderiv ℝ f x (EuclideanSpace.single i 1) *
+          fderiv ℝ g x (EuclideanSpace.single i 1) ∂(ν : Measure _)
     let D : Fin n → ℝ := fun i =>
-      ∫ x, ‖fderiv ℝ (fun y =>
-        fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^ 2 ∂(ν : Measure _)
+      ∫ x, ‖fderiv ℝ (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^ 2 ∂(ν : Measure _)
     have hprod_int (i : Fin n) :
-        Integrable (fun x =>
-          fderiv ℝ f x (EuclideanSpace.single i 1) *
-            fderiv ℝ g x (EuclideanSpace.single i 1)) (ν : Measure _) := by
+      Integrable
+        (fun x =>
+          fderiv ℝ f x (EuclideanSpace.single i 1) * fderiv ℝ g x (EuclideanSpace.single i 1))
+        (ν : Measure _) := by
       have hp :
-          Continuous (fun x : EuclideanSpace ℝ (Fin n) =>
-            (x, EuclideanSpace.single i (1 : ℝ))) :=
+        Continuous (fun x : EuclideanSpace ℝ (Fin n) => (x, EuclideanSpace.single i (1 : ℝ))) :=
         Continuous.prodMk continuous_id continuous_const
-      have hfc : Continuous (fun x : EuclideanSpace ℝ (Fin n) =>
-          fderiv ℝ f x (EuclideanSpace.single i 1)) := by
+      have hfc :
+        Continuous
+          (fun x : EuclideanSpace ℝ (Fin n) => fderiv ℝ f x (EuclideanSpace.single i 1)) := by
+        simpa only [Function.comp_def] using (hf.continuous_fderiv_apply (by simp)).comp hp
+      have hgccont :
+        Continuous
+          (fun x : EuclideanSpace ℝ (Fin n) => fderiv ℝ g x (EuclideanSpace.single i 1)) := by
+        simpa only [Function.comp_def] using (hg.continuous_fderiv_apply (by simp)).comp hp
+      have hgc' : HasCompactSupport (fun x => fderiv ℝ g x (EuclideanSpace.single i 1)) := by
         simpa only [Function.comp_def] using
-          (hf.continuous_fderiv_apply (by simp)).comp hp
-      have hgccont : Continuous (fun x : EuclideanSpace ℝ (Fin n) =>
-          fderiv ℝ g x (EuclideanSpace.single i 1)) := by
-        simpa only [Function.comp_def] using
-          (hg.continuous_fderiv_apply (by simp)).comp hp
-      have hgc' : HasCompactSupport (fun x =>
-          fderiv ℝ g x (EuclideanSpace.single i 1)) := by
-        simpa only [Function.comp_def] using
-          (hgc.fderiv ℝ).comp_left
-            (g := fun q => q (EuclideanSpace.single i 1)) (by simp)
+          (hgc.fderiv ℝ).comp_left (g := fun q => q (EuclideanSpace.single i 1)) (by simp)
       exact (hfc.mul hgccont).integrable_of_hasCompactSupport hgc'.mul_left
-    have hgrad_sum :
-        (∫ x, ⟪gradient f x, gradient g x⟫ ∂(ν : Measure _)) =
-          ∑ i, A i := by
+    have hgrad_sum : (∫ x, ⟪gradient f x, gradient g x⟫ ∂(ν : Measure _)) = ∑ i, A i := by
       calc
         (∫ x, ⟪gradient f x, gradient g x⟫ ∂(ν : Measure _)) =
-            ∫ x, ∑ i, fderiv ℝ f x (EuclideanSpace.single i 1) *
-              fderiv ℝ g x (EuclideanSpace.single i 1) ∂(ν : Measure _) := by
+            ∫ x,
+              ∑ i,
+                fderiv ℝ f x (EuclideanSpace.single i 1) *
+                  fderiv ℝ g x (EuclideanSpace.single i 1) ∂(ν : Measure _) := by
           apply integral_congr_ae
           filter_upwards [] with x
           rw [PiLp.inner_apply]
@@ -566,65 +561,58 @@ theorem variance_le_sum_of_partial_dual_bounds {n : ℕ}
           exact hprod_int i
     have hterm : ∀ i, 2 * A i ≤ K i + D i := by
       intro i
-      have hsq := hK i
-        (fun x => fderiv ℝ g x (EuclideanSpace.single i 1))
-        (by
-          have hp :
+      have hsq :=
+        hK i (fun x => fderiv ℝ g x (EuclideanSpace.single i 1))
+          (by
+            have hp :
               ContDiff ℝ ∞
-                (fun x : EuclideanSpace ℝ (Fin n) =>
-                  (x, EuclideanSpace.single i (1 : ℝ))) :=
-            contDiff_id.prodMk contDiff_const
-          simpa only [Function.comp_def] using
-            (hg.contDiff_fderiv_apply (m := ∞) (by simp)).comp hp)
-        (by
-          simpa only [Function.comp_def] using
-            (hgc.fderiv ℝ).comp_left
-              (g := fun q => q (EuclideanSpace.single i 1)) (by simp))
+                (fun x : EuclideanSpace ℝ (Fin n) => (x, EuclideanSpace.single i (1 : ℝ))) :=
+              contDiff_id.prodMk contDiff_const
+            simpa only [Function.comp_def] using
+              (hg.contDiff_fderiv_apply (m := ∞) (by simp)).comp hp)
+          (by
+            simpa only [Function.comp_def] using
+              (hgc.fderiv ℝ).comp_left (g := fun q => q (EuclideanSpace.single i 1)) (by simp))
       change
-        2 * (∫ x, fderiv ℝ f x (EuclideanSpace.single i 1) *
-          fderiv ℝ g x (EuclideanSpace.single i 1) ∂(ν : Measure _)) ≤
-          K i + ∫ x, ‖fderiv ℝ
-            (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^ 2
-            ∂(ν : Measure _)
-      have hD : 0 ≤ ∫ x, ‖fderiv ℝ
-          (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^ 2
-          ∂(ν : Measure _) :=
+        2 *
+            (∫ x,
+              fderiv ℝ f x (EuclideanSpace.single i 1) *
+                fderiv ℝ g x (EuclideanSpace.single i 1) ∂(ν : Measure _)) ≤
+          K i +
+            ∫ x,
+              ‖fderiv ℝ (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^
+                2 ∂(ν : Measure _)
+      have hD :
+        0 ≤
+          ∫ x,
+            ‖fderiv ℝ (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^
+              2 ∂(ν : Measure _) :=
         integral_nonneg (fun x => sq_nonneg _)
-      nlinarith [hsq, hKnonneg i, hD, sq_nonneg
-        (K i - ∫ x, ‖fderiv ℝ
-          (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^ 2
-          ∂(ν : Measure _))]
-    have hsum :
-        2 * ∑ i, A i ≤ ∑ i, K i + ∑ i, D i := by
-      have h :=
-        Finset.sum_le_sum (s := (Finset.univ : Finset (Fin n)))
-          (fun i hi => hterm i)
+      nlinarith [hsq, hKnonneg i, hD,
+        sq_nonneg
+          (K i -
+            ∫ x,
+              ‖fderiv ℝ (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^
+                2 ∂(ν : Measure _))]
+    have hsum : 2 * ∑ i, A i ≤ ∑ i, K i + ∑ i, D i := by
+      have h := Finset.sum_le_sum (s := (Finset.univ : Finset (Fin n))) (fun i hi => hterm i)
       simpa [Finset.mul_sum, Finset.sum_add_distrib] using h
-    have hLT9c := sum_integral_norm_fderiv_partial_sq_le_integral_weightedLaplacian_sq
-      m hW hWc hg hgc
+    have hLT9c :=
+      sum_integral_norm_fderiv_partial_sq_le_integral_weightedLaplacian_sq m hW hWc hg hgc
     rw [← hνW] at hLT9c
-    have hLT9c' :
-        ∑ i, D i ≤
-          ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) := by
+    have hLT9c' : ∑ i, D i ≤ ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) := by
       simpa [D] using hLT9c
-    have hmain :
-        2 * ∑ i, A i -
-            ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) ≤ C := by
-      change
-        2 * ∑ i, A i -
-            ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) ≤ ∑ i, K i
+    have hmain : 2 * ∑ i, A i - ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) ≤ C := by
+      change 2 * ∑ i, A i - ∫ x, weightedLaplacian W g x ^ 2 ∂(ν : Measure _) ≤ ∑ i, K i
       linarith
-    rw [inner_center_left_of_mean_zero ν F G hmean, hinner, hnorm, hpair,
-      hgrad_sum]
+    rw [inner_center_left_of_mean_zero ν F G hmean, hinner, hnorm, hpair, hgrad_sum]
     exact hmain
-  have hclosure : FunctionalInequalities.L2.center ν F ∈
-      closure (compactSmoothDiffusionImage (ν := ν) hU1) :=
+  have hclosure :
+    FunctionalInequalities.L2.center ν F ∈ closure (compactSmoothDiffusionImage (ν := ν) hU1) :=
     center_mem_closure_compactSmoothDiffusionImage m hν hνW hU1 F
   have hnorm : ‖FunctionalInequalities.L2.center ν F‖ ^ 2 ≤ C :=
-    norm_sq_le_of_mem_closure_quadratic_bound
-      (FunctionalInequalities.L2.center ν F) hclosure hQ
-  have hvariance : (FunctionalInequalities.L2.variance ν F : ℝ) =
-      variance f (ν : Measure _) :=
+    norm_sq_le_of_mem_closure_quadratic_bound (FunctionalInequalities.L2.center ν F) hclosure hQ
+  have hvariance : (FunctionalInequalities.L2.variance ν F : ℝ) = variance f (ν : Measure _) :=
     (FunctionalInequalities.L2.coe_variance_eq_pointwise ν F).trans
       (variance_congr hf2.coeFn_toLp)
   rw [← hvariance, FunctionalInequalities.L2.coe_variance]

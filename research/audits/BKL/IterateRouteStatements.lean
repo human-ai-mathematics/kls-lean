@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Tilt
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 
 /-!
 # Route statements: the BKL iterates in `D(A)` and Theorem 3.1
@@ -20,6 +22,8 @@ source's `h_{k+1}` (see `KLS/BKL/PoissonIterate/Basic.lean` for the conventions)
 * `J1`–`J2`: Lemma 3.8 and Lemma 3.9 in the route form (target 3).
 * `M`: Theorem 3.1, the exact source statement for regular laws (target 4).
 -/
+
+@[expose] public section
 
 noncomputable section
 

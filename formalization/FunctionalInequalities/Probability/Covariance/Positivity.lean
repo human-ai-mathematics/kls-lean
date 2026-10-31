@@ -1,13 +1,19 @@
-import FunctionalInequalities.Probability.Covariance.Intrinsic
-import FunctionalInequalities.Analysis.Operator.Positive
+module
+
+public import FunctionalInequalities.Probability.Covariance.Intrinsic
+public import FunctionalInequalities.Analysis.Operator.Positive
 
 /-!
 # Positivity of the ambient covariance
 
-For a probability law with finite second moment on a finite-dimensional inner product space: full affine
-support gives a strictly positive covariance operator, an injective covariance operator gives full affine
+For a probability law with finite second moment on a finite-dimensional inner product space: full
+affine
+support gives a strictly positive covariance operator, an injective covariance operator gives full
+affine
 support, and the covariance operator is self-adjoint.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace
@@ -47,7 +53,8 @@ theorem Covariance.inner_operator_self_pos_of_affineSupport_eq_top (μ : Probabi
 
 /-- An injective covariance operator forces full affine support. -/
 theorem Probability.affineSupport_eq_top_of_covariance_injective (μ : ProbabilityMeasure E)
-    (h2 : MemLp id 2 (μ : Measure E)) (hinj : Function.Injective (Covariance.operator (μ : Measure E))) :
+    (h2 : MemLp id 2 (μ : Measure E))
+    (hinj : Function.Injective (Covariance.operator (μ : Measure E))) :
     Probability.affineSupport μ = ⊤ := by
   have hperp : (Probability.affineSupport μ).directionᗮ = ⊥ := by
     apply bot_unique
@@ -55,13 +62,15 @@ theorem Probability.affineSupport_eq_top_of_covariance_injective (μ : Probabili
     have h := Covariance.operator_apply_eq_zero_of_mem_orthogonal μ h2 hw
     have hz : w = 0 := hinj (h.trans (map_zero _).symm)
     simpa only [Submodule.mem_bot] using hz
-  have hdir : (Probability.affineSupport μ).direction = ⊤ := Submodule.orthogonal_eq_bot_iff.mp hperp
+  have hdir : (Probability.affineSupport μ).direction = ⊤ :=
+    Submodule.orthogonal_eq_bot_iff.mp hperp
   have hne : (Probability.affineSupport μ : Set E).Nonempty :=
     ⟨Probability.origin μ, (Probability.origin μ).property⟩
   exact (AffineSubspace.direction_eq_top_iff_of_nonempty hne).mp hdir
 
 /-- The covariance operator is self-adjoint. -/
-theorem Covariance.operator_isSelfAdjoint (μ : Measure E) : IsSelfAdjoint (Covariance.operator μ) := by
+theorem Covariance.operator_isSelfAdjoint (μ : Measure E) :
+    IsSelfAdjoint (Covariance.operator μ) := by
   apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
   intro x y
   change ⟪Covariance.operator μ x, y⟫ = ⟪x, Covariance.operator μ y⟫

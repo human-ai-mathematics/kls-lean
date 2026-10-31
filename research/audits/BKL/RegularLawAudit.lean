@@ -1,22 +1,28 @@
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
-import solutions.ThmBakryEmeryPoincare
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Temperate
+public import solutions.ThmBakryEmeryPoincare
 
 /-!
 # Audit: regular laws and the energy recursion (BKL (12), Lemma 3.4, Corollary 3.5)
 
 * **Regular-law adapter.** The scaled Gaussian potential `V = (ρ/2)‖x‖²` satisfies the source's
   regularity (12) with `a = b = ρ` (temperate growth and the Hessian identity are proved here). The
-  adapter then derives that `volume.tilted (-V)` is a probability law with all exponential moments, and
+  adapter then derives that `volume.tilted (-V)` is a probability law with all exponential moments,
+  and
   the tensor-valued Lemma 3.6, the curvature form of (16) and the operator-domain Lemma 2.1 with
   `C = 1/ρ`, also in its componentwise tensor form, hold for it with no remaining analytic premise.
 * **Energy recursion.** Lemma 3.4 is instantiated for the Gaussian law on the pair `g = ⟪c, ·⟫`,
-  `h = 0` (which satisfies (30) and (33), since `∇₀g = 0`); Corollary 3.5 is instantiated on an explicit
+  `h = 0` (which satisfies (30) and (33), since `∇₀g = 0`); Corollary 3.5 is instantiated on an
+  explicit
   real sequence and on an explicit chain of iterates through the Poisson-chain endpoint; (36) and
   Lemma 3.2 are instantiated on explicit chains and pairs. The source's
   iterates need Lemma 2.1 on `𝒜` and the first eigenfunction, not proved.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -33,10 +39,12 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 open Solutions.ThmBakryEmeryPoincare
 
 omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
+    [FiniteDimensional ℝ V] in
 theorem regularPotential_gaussian {ρ : ℝ} (hρ : 0 < ρ) :
-    RegularPotential (potential (V := V) ρ) ρ ρ where
-  temperate := (Function.HasTemperateGrowth.const (ρ / 2)).mul (Function.hasTemperateGrowth_norm_sq V)
+    RegularPotential (potential (V := V) ρ) ρ ρ
+    where
+  temperate :=
+    (Function.HasTemperateGrowth.const (ρ / 2)).mul (Function.hasTemperateGrowth_norm_sq V)
   pos := hρ
   lower x v := (bilinearIteratedFDerivTwo_potential ρ x v).ge
   upper x v := (bilinearIteratedFDerivTwo_potential ρ x v).le
@@ -59,19 +67,30 @@ example {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
 
 /-- The operator-domain Lemma 2.1 for the regular Gaussian law, with `C = 1/ρ`. -/
 example {ρ : ℝ} (hρ : 0 < ρ)
-    (g : Lp ℝ 2 (((regularPotential_gaussian (V := V) hρ).law : ProbabilityMeasure V) : Measure V))
+    (g :
+      Lp ℝ 2 (((regularPotential_gaussian (V := V) hρ).law : ProbabilityMeasure V) : Measure V))
     (hg : L2.mean (regularPotential_gaussian (V := V) hρ).law g = 0) :
-    ∃! u : (Analysis.Semigroup.adjointComp
-        ((regularPotential_gaussian (V := V) hρ).logConcave_law.closedWeightedOperator
-          (volume : Measure V) (ContinuousLinearMap.id ℝ V)
-          (regularPotential_gaussian (V := V) hρ).interior_support_law)).domain,
-      L2.mean (regularPotential_gaussian (V := V) hρ).law
-          (u : Lp ℝ 2 (((regularPotential_gaussian (V := V) hρ).law : ProbabilityMeasure V) : Measure V)) = 0 ∧
-        Analysis.Semigroup.adjointComp
+    ∃! u :
+      (Analysis.Semigroup.adjointComp
           ((regularPotential_gaussian (V := V) hρ).logConcave_law.closedWeightedOperator
             (volume : Measure V) (ContinuousLinearMap.id ℝ V)
-            (regularPotential_gaussian (V := V) hρ).interior_support_law) u = g ∧
-          ‖(u : Lp ℝ 2 (((regularPotential_gaussian (V := V) hρ).law : ProbabilityMeasure V) : Measure V))‖ ≤
+            (regularPotential_gaussian (V := V) hρ).interior_support_law)).domain,
+      L2.mean (regularPotential_gaussian (V := V) hρ).law
+            (u :
+              Lp ℝ 2
+                (((regularPotential_gaussian (V := V) hρ).law : ProbabilityMeasure V) :
+                  Measure V)) =
+          0 ∧
+        Analysis.Semigroup.adjointComp
+              ((regularPotential_gaussian (V := V) hρ).logConcave_law.closedWeightedOperator
+                (volume : Measure V) (ContinuousLinearMap.id ℝ V)
+                (regularPotential_gaussian (V := V) hρ).interior_support_law)
+              u =
+            g ∧
+          ‖(u :
+                Lp ℝ 2
+                  (((regularPotential_gaussian (V := V) hρ).law : ProbabilityMeasure V) :
+                    Measure V))‖ ≤
             ρ⁻¹ * ‖g‖ :=
   (regularPotential_gaussian hρ).existsUnique_centered_adjointComp_eq g hg
 
@@ -221,26 +240,35 @@ theorem eigen_linear_gaussian {ρ : ℝ} (hρ : 0 < ρ) (c : V) :
 
 /-- Lemma 3.4 for the Gaussian law and the pair `g = ⟪c, ·⟫`, `h = 0`. -/
 theorem lemma_3_4_trivial_pair {ρ : ℝ} (hρ : 0 < ρ) (c : V) (α : ℝ) :
-    ∫ x, ‖weightedLaplacianVec (potential ρ)
-          (fun _ : V => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => ℝ))) x‖ ^ 2
-          ∂((volume : Measure V).tilted (-potential ρ)) +
-        ∫ x, ‖gradCoord (gradCoord fun y : V => ⟪c, y⟫) x -
-            α • gradCoord (fun _ : V => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => ℝ))) x‖ ^ 2
-          ∂((volume : Measure V).tilted (-potential ρ)) +
-        ρ * ∫ x, ‖gradCoord (fun y : V => ⟪c, y⟫) x‖ ^ 2 ∂((volume : Measure V).tilted (-potential ρ)) ≤
-      ∫ x, ‖weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫) x‖ ^ 2
-        ∂((volume : Measure V).tilted (-potential ρ)) := by
+    ∫ x,
+            ‖weightedLaplacianVec (potential ρ)
+                  (fun _ : V => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => ℝ))) x‖ ^
+              2 ∂((volume : Measure V).tilted (-potential ρ)) +
+          ∫ x,
+            ‖gradCoord (gradCoord fun y : V => ⟪c, y⟫) x -
+                  α •
+                    gradCoord
+                      (fun _ : V => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => ℝ))) x‖ ^
+              2 ∂((volume : Measure V).tilted (-potential ρ)) +
+        ρ *
+          ∫ x,
+            ‖gradCoord (fun y : V => ⟪c, y⟫) x‖ ^
+              2 ∂((volume : Measure V).tilted (-potential ρ)) ≤
+      ∫ x,
+        ‖weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫) x‖ ^
+          2 ∂((volume : Measure V).tilted (-potential ρ)) := by
   have hP := (regularPotential_gaussian (V := V) hρ).isProbabilityMeasure
   have hd : ∀ x : V, fderiv ℝ (fun y : V => ⟪c, y⟫) x = innerSL ℝ c := fun x =>
     (innerSL ℝ c).fderiv
-  have hfun : gradCoord (fun y : V => ⟪c, y⟫) =
-      fun _ => gradCoord (fun y : V => ⟪c, y⟫) 0 := by
+  have hfun : gradCoord (fun y : V => ⟪c, y⟫) = fun _ => gradCoord (fun y : V => ⟪c, y⟫) 0 := by
     funext x
     simp only [gradCoord, hd]
-  refine integral_norm_sq_weightedLaplacianVec_ge (volume : Measure V)
-    (regularPotential_gaussian hρ).temperate (regularPotential_gaussian hρ).integrable_exp_mul_norm
-    (regularPotential_gaussian hρ).lower (Function.hasTemperateGrowth_inner_right c)
-    (Function.HasTemperateGrowth.const _) (fun x => ?_) ?_
+  refine
+    integral_norm_sq_weightedLaplacianVec_ge (volume : Measure V)
+      (regularPotential_gaussian hρ).temperate
+      (regularPotential_gaussian hρ).integrable_exp_mul_norm
+      (regularPotential_gaussian hρ).lower (Function.hasTemperateGrowth_inner_right c)
+      (Function.HasTemperateGrowth.const _) (fun x => ?_) ?_
   · rw [hfun]
     simp [weightedLaplacianVec, integral_const]
   · rw [hfun]
@@ -251,36 +279,51 @@ theorem lemma_3_4_trivial_pair {ρ : ℝ} (hρ : 0 < ρ) (c : V) (α : ℝ) :
 end GaussianExamples
 
 /-- Corollary 3.5 on an explicit real sequence satisfying (45). -/
-example : Summable (fun i : ℕ => (1 / 2 : ℝ) ^ i) ∧
-    Filter.Tendsto (fun i : ℕ => (1 / 2 : ℝ) ^ i) Filter.atTop (nhds 0) := by
-  obtain ⟨h1, -, h3⟩ := summable_and_tendsto_zero_of_energy (L := fun i => 2 * (1 / 2 : ℝ) ^ i)
-    (χ := fun _ => 0) (v := fun i => (1 / 2 : ℝ) ^ i) (a := 1) one_pos
-    (fun i => by positivity) (fun _ => le_rfl) (fun i => by positivity)
-    (fun i => by simp only [pow_succ]; ring_nf; linarith [pow_pos (by norm_num : (0 : ℝ) < 1 / 2) i])
+example :
+    Summable (fun i : ℕ => (1 / 2 : ℝ) ^ i) ∧
+      Filter.Tendsto (fun i : ℕ => (1 / 2 : ℝ) ^ i) Filter.atTop (nhds 0) := by
+  obtain ⟨h1, -, h3⟩ :=
+    summable_and_tendsto_zero_of_energy (L := fun i => 2 * (1 / 2 : ℝ) ^ i) (χ := fun _ => 0)
+      (v := fun i => (1 / 2 : ℝ) ^ i) (a := 1) one_pos (fun i => by positivity)
+      (fun _ => le_rfl) (fun i => by positivity)
+      (fun i => by
+        simp only [pow_succ]; ring_nf;
+        linarith [pow_pos (by norm_num : (0 : ℝ) < 1 / 2) i])
   exact ⟨h1, h3⟩
 
 omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- Corollary 3.5 for an explicit chain of iterates on `ℝ`: `h_k(y) = d_k y` with `d_0 = c`, `d_k = 0`
-for `k ≥ 1`, every level `ℝ`, linked by the basis isometry `PiLp 2 (Fin 1 → ℝ) ≃ ℝ`; the relations (30)
+    [FiniteDimensional ℝ V] in
+/--
+Corollary 3.5 for an explicit chain of iterates on `ℝ`: `h_k(y) = d_k y` with `d_0 = c`, `d_k = 0`
+for `k ≥ 1`, every level `ℝ`, linked by the basis isometry `PiLp 2 (Fin 1 → ℝ) ≃ ℝ`; the relations
+(30)
 and (33) hold for every scale sequence `α`, and the energies are summable and tend to `0`. -/
 theorem chain_client {ρ : ℝ} (hρ : 0 < ρ) (c : ℝ) (α : ℕ → ℝ) :
-    Summable (fun k => ∫ x, ‖gradCoord (fun y : ℝ => (if k = 0 then c else 0) * y) x‖ ^ 2
-        ∂((volume : Measure ℝ).tilted (-potential ρ))) ∧
-      Tendsto (fun k => ∫ x, ‖gradCoord (fun y : ℝ => (if k = 0 then c else 0) * y) x‖ ^ 2
-        ∂((volume : Measure ℝ).tilted (-potential ρ))) atTop (𝓝 0) := by
+    Summable
+        (fun k =>
+          ∫ x,
+            ‖gradCoord (fun y : ℝ => (if k = 0 then c else 0) * y) x‖ ^
+              2 ∂((volume : Measure ℝ).tilted (-potential ρ))) ∧
+      Tendsto
+        (fun k =>
+          ∫ x,
+            ‖gradCoord (fun y : ℝ => (if k = 0 then c else 0) * y) x‖ ^
+              2 ∂((volume : Measure ℝ).tilted (-potential ρ)))
+        atTop (𝓝 0) := by
   have hP := (regularPotential_gaussian (V := ℝ) hρ).isProbabilityMeasure
-  have hfun : ∀ d : ℝ, gradCoord (fun y : ℝ => d * y) = fun _ => gradCoord (fun y : ℝ => d * y) 0 := by
+  have hfun :
+    ∀ d : ℝ, gradCoord (fun y : ℝ => d * y) = fun _ => gradCoord (fun y : ℝ => d * y) 0 := by
     intro d
     funext x
     simp [gradCoord]
-  refine summable_and_tendsto_zero_of_poisson_chain (volume : Measure ℝ)
-    (regularPotential_gaussian hρ).temperate (regularPotential_gaussian hρ).integrable_exp_mul_norm
-    hρ (regularPotential_gaussian hρ).lower (fun _ => ℝ)
-    (fun _ => (stdOrthonormalBasis ℝ ℝ).repr.symm)
-    (fun k y => (if k = 0 then c else 0) * y)
-    (fun k => (Function.HasTemperateGrowth.const _).mul Function.HasTemperateGrowth.id') α
-    (fun k x => ?_) (fun k => ?_)
+  refine
+    summable_and_tendsto_zero_of_poisson_chain (volume : Measure ℝ)
+      (regularPotential_gaussian hρ).temperate
+      (regularPotential_gaussian hρ).integrable_exp_mul_norm hρ
+      (regularPotential_gaussian hρ).lower (fun _ => ℝ)
+      (fun _ => (stdOrthonormalBasis ℝ ℝ).repr.symm) (fun k y => (if k = 0 then c else 0) * y)
+      (fun k => (Function.HasTemperateGrowth.const _).mul Function.HasTemperateGrowth.id') α
+      (fun k x => ?_) (fun k => ?_)
   · rw [hfun]
     simp [weightedLaplacianVec, integral_const]
   · rw [hfun (if k = 0 then c else 0)]
@@ -289,96 +332,142 @@ theorem chain_client {ρ : ℝ} (hρ : 0 < ρ) (c : ℝ) (α : ℕ → ℝ) :
     rfl
 
 omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
+    [FiniteDimensional ℝ V] in
 /-- The (36) form on the explicit chain of `chain_client`: `v_0 = v_N + Σ_{k<N} ‖∫ ∇h_k‖²` (no
 identification of `v_0` with `λ₁`). -/
 theorem energy_identity_chain {ρ : ℝ} (hρ : 0 < ρ) (c : ℝ) (N : ℕ) :
-    ∫ x, ‖gradCoord (fun y : ℝ => (if (0 : ℕ) = 0 then c else 0) * y) x‖ ^ 2
-        ∂((volume : Measure ℝ).tilted (-potential ρ)) =
-      ∫ x, ‖gradCoord (fun y : ℝ => (if N = 0 then c else 0) * y) x‖ ^ 2
-          ∂((volume : Measure ℝ).tilted (-potential ρ)) +
-        ∑ k ∈ Finset.range N, ‖∫ x, gradCoord (fun y : ℝ => (if k = 0 then c else 0) * y) x
-          ∂((volume : Measure ℝ).tilted (-potential ρ))‖ ^ 2 := by
+    ∫ x,
+        ‖gradCoord (fun y : ℝ => (if (0 : ℕ) = 0 then c else 0) * y) x‖ ^
+          2 ∂((volume : Measure ℝ).tilted (-potential ρ)) =
+      ∫ x,
+          ‖gradCoord (fun y : ℝ => (if N = 0 then c else 0) * y) x‖ ^
+            2 ∂((volume : Measure ℝ).tilted (-potential ρ)) +
+        ∑ k ∈ Finset.range N,
+          ‖∫ x,
+                gradCoord (fun y : ℝ => (if k = 0 then c else 0) * y)
+                  x ∂((volume : Measure ℝ).tilted (-potential ρ))‖ ^
+            2 := by
   have hP := (regularPotential_gaussian (V := ℝ) hρ).isProbabilityMeasure
-  have hfun : ∀ d : ℝ, gradCoord (fun y : ℝ => d * y) = fun _ => gradCoord (fun y : ℝ => d * y) 0 := by
+  have hfun :
+    ∀ d : ℝ, gradCoord (fun y : ℝ => d * y) = fun _ => gradCoord (fun y : ℝ => d * y) 0 := by
     intro d
     funext x
     simp [gradCoord]
-  refine integral_norm_sq_gradCoord_eq_add_sum (volume : Measure ℝ)
-    (regularPotential_gaussian hρ).integrable_exp_mul_norm (fun _ => ℝ)
-    (fun k y => (if k = 0 then c else 0) * y)
-    (fun k => (Function.HasTemperateGrowth.const _).mul Function.HasTemperateGrowth.id')
-    (fun k => ?_) N
+  refine
+    integral_norm_sq_gradCoord_eq_add_sum (volume : Measure ℝ)
+      (regularPotential_gaussian hρ).integrable_exp_mul_norm (fun _ => ℝ)
+      (fun k y => (if k = 0 then c else 0) * y)
+      (fun k => (Function.HasTemperateGrowth.const _).mul Function.HasTemperateGrowth.id')
+      (fun k => ?_) N
   rw [hfun (if k = 0 then c else 0)]
   simp only [integral_const, probReal_univ, one_smul, sub_self, norm_zero]
   simp [gradCoord]
   rfl
 
 omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- The generalized Lemma 3.2 on the Gaussian law of `ℝ` for the pair `g = c·`, `h = 0`, `α = 1`,
+    [FiniteDimensional ℝ V] in
+/--
+The generalized Lemma 3.2 on the Gaussian law of `ℝ` for the pair `g = c·`, `h = 0`, `α = 1`,
 `λ = 1` (`λ` is not identified with the spectral gap). -/
 theorem lemma_3_2_trivial_pair {ρ : ℝ} (hρ : 0 < ρ) (c : ℝ) :
-    ∃ T : ℝ → PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) =>
-        PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)),
+    ∃ T :
+      ℝ →
+        PiLp 2
+          (fun _ : Fin (Module.finrank ℝ ℝ) => PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)),
       (∀ x i j, T x i j = T x j i) ∧
-        Integrable (fun x => ‖(gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x -
-            ∫ y, gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) y
-              ∂((volume : Measure ℝ).tilted (-potential ρ))) - T x‖ ^ 2)
-          ((volume : Measure ℝ).tilted (-potential ρ)) ∧
-        ∫ x, ‖(gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x -
-            ∫ y, gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) y
-              ∂((volume : Measure ℝ).tilted (-potential ρ))) - T x‖ ^ 2
-            ∂((volume : Measure ℝ).tilted (-potential ρ)) ≤
-          (∫ x, ‖gradCoord (gradCoord fun y : ℝ => c * y) x -
-              (1 : ℝ) • gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x‖ ^ 2
-            ∂((volume : Measure ℝ).tilted (-potential ρ))) / 1 := by
+        Integrable
+            (fun x =>
+              ‖(gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                        x -
+                      ∫ y,
+                        gradCoord
+                          (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                          y ∂((volume : Measure ℝ).tilted (-potential ρ))) -
+                    T x‖ ^
+                2)
+            ((volume : Measure ℝ).tilted (-potential ρ)) ∧
+          ∫ x,
+              ‖(gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                        x -
+                      ∫ y,
+                        gradCoord
+                          (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                          y ∂((volume : Measure ℝ).tilted (-potential ρ))) -
+                    T x‖ ^
+                2 ∂((volume : Measure ℝ).tilted (-potential ρ)) ≤
+            (∫ x,
+                ‖gradCoord (gradCoord fun y : ℝ => c * y) x -
+                      (1 : ℝ) •
+                        gradCoord
+                          (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                          x‖ ^
+                  2 ∂((volume : Measure ℝ).tilted (-potential ρ))) /
+              1 := by
   have hP := (regularPotential_gaussian (V := ℝ) hρ).isProbabilityMeasure
   have hfun : gradCoord (fun y : ℝ => c * y) = fun _ => gradCoord (fun y : ℝ => c * y) 0 := by
     funext x
     simp [gradCoord]
-  refine exists_symm_integral_norm_sq_sub_le (g := fun y : ℝ => c * y) (volume : Measure ℝ)
-    (regularPotential_gaussian hρ).temperate (regularPotential_gaussian hρ).integrable_exp_mul_norm
-    ((Function.HasTemperateGrowth.const c).mul Function.HasTemperateGrowth.id')
-    (Function.HasTemperateGrowth.const _) (fun x => ?_) one_pos (fun _ => by norm_num)
+  refine
+    exists_symm_integral_norm_sq_sub_le (g := fun y : ℝ => c * y) (volume : Measure ℝ)
+      (regularPotential_gaussian hρ).temperate
+      (regularPotential_gaussian hρ).integrable_exp_mul_norm
+      ((Function.HasTemperateGrowth.const c).mul Function.HasTemperateGrowth.id')
+      (Function.HasTemperateGrowth.const _) (fun x => ?_) one_pos (fun _ => by norm_num)
   rw [hfun]
   simp [weightedLaplacianVec, integral_const]
 
 omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- `S₂` on a tensor that is not symmetric in its first two indices: `A` is no farther from `S₂ A`
+    [FiniteDimensional ℝ V] in
+/--
+`S₂` on a tensor that is not symmetric in its first two indices: `A` is no farther from `S₂ A`
 than from the symmetric tensor `0`. -/
 theorem symmetrizeFirstTwo_nonvacuous :
-    ‖(WithLp.toLp 2 fun i : Fin 2 => WithLp.toLp 2 fun j : Fin 2 => if i = 0 ∧ j = 1 then (1 : ℝ) else 0) -
-        symmetrizeFirstTwo (WithLp.toLp 2 fun i : Fin 2 => WithLp.toLp 2 fun j : Fin 2 =>
-          if i = 0 ∧ j = 1 then (1 : ℝ) else 0)‖ ≤
-      ‖(WithLp.toLp 2 fun i : Fin 2 => WithLp.toLp 2 fun j : Fin 2 =>
-          if i = 0 ∧ j = 1 then (1 : ℝ) else 0) - 0‖ :=
+    ‖(WithLp.toLp 2 fun i : Fin 2 =>
+            WithLp.toLp 2 fun j : Fin 2 => if i = 0 ∧ j = 1 then (1 : ℝ) else 0) -
+          symmetrizeFirstTwo
+            (WithLp.toLp 2 fun i : Fin 2 =>
+              WithLp.toLp 2 fun j : Fin 2 => if i = 0 ∧ j = 1 then (1 : ℝ) else 0)‖ ≤
+      ‖(WithLp.toLp 2 fun i : Fin 2 =>
+            WithLp.toLp 2 fun j : Fin 2 => if i = 0 ∧ j = 1 then (1 : ℝ) else 0) -
+          0‖ :=
   norm_sub_symmetrizeFirstTwo_le _ _ (fun _ _ => rfl)
 
 omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
-/-- Lemma 3.3 for `q = 2` (generalized form) on the Gaussian law of `ℝ` for the pair `g = c·`, `h = 0`,
+    [FiniteDimensional ℝ V] in
+/--
+Lemma 3.3 for `q = 2` (generalized form) on the Gaussian law of `ℝ` for the pair `g = c·`, `h = 0`,
 `α = 1`, `λ = 1`. -/
 theorem lemma_3_3_q2_trivial_pair {ρ : ℝ} (hρ : 0 < ρ) (c : ℝ) :
-    ∫ x, ‖(gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x -
-          ∫ y, gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) y
-            ∂((volume : Measure ℝ).tilted (-potential ρ))) -
-        symmetrizeFirstTwo (gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x -
-          ∫ y, gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) y
-            ∂((volume : Measure ℝ).tilted (-potential ρ)))‖ ^ 2
-        ∂((volume : Measure ℝ).tilted (-potential ρ)) ≤
-      (∫ x, ‖gradCoord (gradCoord fun y : ℝ => c * y) x -
-          (1 : ℝ) • gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x‖ ^ 2
-        ∂((volume : Measure ℝ).tilted (-potential ρ))) / 1 := by
+    ∫ x,
+        ‖(gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ))) x -
+                ∫ y,
+                  gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                    y ∂((volume : Measure ℝ).tilted (-potential ρ))) -
+              symmetrizeFirstTwo
+                (gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                    x -
+                  ∫ y,
+                    gradCoord
+                      (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                      y ∂((volume : Measure ℝ).tilted (-potential ρ)))‖ ^
+          2 ∂((volume : Measure ℝ).tilted (-potential ρ)) ≤
+      (∫ x,
+          ‖gradCoord (gradCoord fun y : ℝ => c * y) x -
+                (1 : ℝ) •
+                  gradCoord (fun _ : ℝ => (0 : PiLp 2 (fun _ : Fin (Module.finrank ℝ ℝ) => ℝ)))
+                    x‖ ^
+            2 ∂((volume : Measure ℝ).tilted (-potential ρ))) /
+        1 := by
   have hP := (regularPotential_gaussian (V := ℝ) hρ).isProbabilityMeasure
   have hfun : gradCoord (fun y : ℝ => c * y) = fun _ => gradCoord (fun y : ℝ => c * y) 0 := by
     funext x
     simp [gradCoord]
-  refine integral_norm_sq_sub_symmetrizeFirstTwo_le (g := fun y : ℝ => c * y) (volume : Measure ℝ)
-    (regularPotential_gaussian hρ).temperate (regularPotential_gaussian hρ).integrable_exp_mul_norm
-    ((Function.HasTemperateGrowth.const c).mul Function.HasTemperateGrowth.id')
-    (Function.HasTemperateGrowth.const _) (fun x => ?_) one_pos (fun _ => by norm_num)
+  refine
+    integral_norm_sq_sub_symmetrizeFirstTwo_le (g := fun y : ℝ => c * y) (volume : Measure ℝ)
+      (regularPotential_gaussian hρ).temperate
+      (regularPotential_gaussian hρ).integrable_exp_mul_norm
+      ((Function.HasTemperateGrowth.const c).mul Function.HasTemperateGrowth.id')
+      (Function.HasTemperateGrowth.const _) (fun x => ?_) one_pos (fun _ => by norm_num)
   rw [hfun]
   simp [weightedLaplacianVec, integral_const]
 
@@ -392,7 +481,8 @@ end BKLRegularLawAudit
 #print axioms BKLRegularLawAudit.lemma_3_2_trivial_pair
 #print axioms BKLRegularLawAudit.generator_linear_gaussian
 #print axioms BKLRegularLawAudit.poincare_temperate_gaussian
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_apply_eq_smul_taylorTensor_one
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_apply_eq_smul_taylorTensor_one
 #print axioms FunctionalInequalities.Analysis.BakryEmery.norm_sq_integral_gradCoord_eq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.norm_sq_integral_gradient_le_of_eigen
 #print axioms BKLRegularLawAudit.eigen_linear_gaussian
@@ -400,26 +490,33 @@ end BKLRegularLawAudit
 #print axioms BKLRegularLawAudit.lemma_3_3_q2_trivial_pair
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_sub_symmetrizeFirstTwo_le
 #print axioms FunctionalInequalities.KLS.LogConcave.integral_norm_sq_sub_symmetrizeFirstTwo_le_mul
-#print axioms FunctionalInequalities.KLS.LogConcave.integral_norm_sq_sub_integral_le_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.KLS.LogConcave.integral_norm_sq_gradCoord_le_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.integral_norm_sq_sub_integral_le_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.integral_norm_sq_gradCoord_le_of_hasTemperateGrowth
 #print axioms FunctionalInequalities.KLS.LogConcave.one_le_mul_sq_of_poisson
 #print axioms FunctionalInequalities.KLS.LogConcave.exists_symm_integral_norm_sq_sub_le_mul
-#print axioms FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_closedWeightedOperator_domain_of_hasTemperateGrowth
-#print axioms FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_adjointComp_domain_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_closedWeightedOperator_domain_of_hasTemperateGrowth
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_adjointComp_domain_of_hasTemperateGrowth
 #print axioms FunctionalInequalities.KLS.LogConcave.centered_inverse_eq_toLp_of_hasTemperateGrowth
 #print axioms FunctionalInequalities.Analysis.BakryEmery.exists_symm_integral_norm_sq_sub_le
-#print axioms FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_sub_eq_of_normalized
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_sub_eq_of_normalized
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_eq_add_sum
 #print axioms FunctionalInequalities.Analysis.BakryEmery.gradCoord_gradCoord_symm
 #print axioms FunctionalInequalities.KLS.LogConcave.existsUnique_centered_adjointComp_eq_components
-#print axioms FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq_components
+#print axioms
+  FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq_components
 #print axioms FunctionalInequalities.L2.sum_norm_sq_compLp_innerSL
 #print axioms FunctionalInequalities.L2.mean_compLp_innerSL
 #print axioms FunctionalInequalities.KLS.RegularPotential.integrable_exp_mul_norm
 #print axioms FunctionalInequalities.KLS.RegularPotential.isProbabilityMeasure
 #print axioms FunctionalInequalities.KLS.RegularPotential.taylorTensor_neg_weightedLaplacianVec
 #print axioms FunctionalInequalities.KLS.RegularPotential.integral_inner_weightedLaplacianVec_eq_neg
-#print axioms FunctionalInequalities.KLS.RegularPotential.integral_hessian_add_le_norm_sq_weightedLaplacianVec
+#print axioms
+  FunctionalInequalities.KLS.RegularPotential.integral_hessian_add_le_norm_sq_weightedLaplacianVec
 #print axioms FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_ge
 #print axioms FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_gradCoord_eq

@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Trace
 
 /-!
 # Audit: Hessian trace evolution for a nonconstant real potential
@@ -9,6 +11,8 @@ real potential `φ(x) = x⁴/12 + x²/2` (smooth, Hessian `1 + x²`, positive an
 `hessianInverseOperator_trace_stdHessianMatrix_sq` is invoked at every point. Every premise is
 derived. Not (2.10), the trace bound or a moment-map client.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -171,7 +175,8 @@ theorem nonconstant_real_generator_client :
 
 end LetwinHessianTraceAudit
 
-#print axioms FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_trace_stdHessianMatrix_sq
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_trace_stdHessianMatrix_sq
 #print axioms LetwinHessianTraceAudit.realGenerator_potential_smooth
 #print axioms LetwinHessianTraceAudit.realGenerator_hessian_formula
 #print axioms LetwinHessianTraceAudit.realGenerator_hessian_entry

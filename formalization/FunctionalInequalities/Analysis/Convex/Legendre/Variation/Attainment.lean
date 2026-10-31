@@ -1,28 +1,40 @@
-import FunctionalInequalities.Analysis.Extremum
-import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import Mathlib.Analysis.Calculus.LocalExtr.Basic
-import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.Calculus.Gradient.Basic
+module
+
+public import FunctionalInequalities.Analysis.Extremum
+public import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import Mathlib.Analysis.Calculus.LocalExtr.Basic
+public import Mathlib.Analysis.InnerProductSpace.Calculus
+public import Mathlib.Analysis.Calculus.Gradient.Basic
 
 /-!
 # Attainment of the Legendre supremum and the gradient of the conjugate
 
-For a proper (`ProperPotential`) extended-real `φ` on a finite-dimensional real inner-product space (dimension zero
-included) and a point `y` in the interior of the finite domain `{q | φ* q ≠ ⊤}` of its Legendre transform `φ*`:
+For a proper (`ProperPotential`) extended-real `φ` on a finite-dimensional real inner-product space
+(dimension zero
+included) and a point `y` in the interior of the finite domain `{q | φ* q ≠ ⊤}` of its Legendre
+transform `φ*`:
 
-* every maximizing affine term is the dual gradient: if `⟪z, y⟫ − φ z = φ* y` and `q ↦ (φ* q).toReal` is differentiable
+* every maximizing affine term is the dual gradient: if `⟪z, y⟫ − φ z = φ* y` and `q ↦ (φ*
+  q).toReal` is differentiable
   at `y`, then `z = ∇(φ*)(y)` (`conjugate_maximizer_eq_gradient`);
-* the tilted primal grows linearly, `a‖z‖ − b ≤ φ z − ⟪z, y⟫` with `a > 0` (`exists_coercive_tilt_of_mem_interior_legendre_domain`),
-  so `z ↦ ⟪z, y⟫ − φ z` has the data of `exists_finite_maximum_of_upperSemicontinuous_linear_decay` when `φ` is lower
+* the tilted primal grows linearly, `a‖z‖ − b ≤ φ z − ⟪z, y⟫` with `a > 0`
+  (`exists_coercive_tilt_of_mem_interior_legendre_domain`),
+  so `z ↦ ⟪z, y⟫ − φ z` has the data of `exists_finite_maximum_of_upperSemicontinuous_linear_decay`
+  when `φ` is lower
   semicontinuous (`tiltedObjective_data`);
-* hence the supremum is attained, and the maximizer is the dual gradient when the conjugate is differentiable
+* hence the supremum is attained, and the maximizer is the dual gradient when the conjugate is
+  differentiable
   (`exists_legendre_maximizer_with_gradient_identity`).
 
-No convexity, differentiability, nonnegativity or global finiteness of `φ` is assumed. Pointwise prerequisites of
-Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (Berman–Berndtsson, arXiv:1207.6128v1, Lemma 2.7 / Appendix 6); not the
+No convexity, differentiability, nonnegativity or global finiteness of `φ` is assumed. Pointwise
+prerequisites of
+Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (Berman–Berndtsson, arXiv:1207.6128v1, Lemma 2.7
+/ Appendix 6); not the
 integral first variation, the source moment map or its push-forward.
 -/
+
+@[expose] public section
 
 noncomputable section
 

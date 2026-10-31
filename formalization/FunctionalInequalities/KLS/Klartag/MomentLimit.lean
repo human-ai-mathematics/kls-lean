@@ -1,13 +1,15 @@
-import FunctionalInequalities.KLS.Klartag.LinearBounds
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Analysis.Convex.PointwiseCompactness
-import FunctionalInequalities.Analysis.Convex.SecondOrder.Difference
-import FunctionalInequalities.Analysis.Convex.Subgradient.Stability
-import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
-import FunctionalInequalities.Probability.MomentMeasure.Gradient
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Measure.Tilted
-import Mathlib.Analysis.Calculus.Rademacher
+module
+
+public import FunctionalInequalities.KLS.Klartag.LinearBounds
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Analysis.Convex.PointwiseCompactness
+public import FunctionalInequalities.Analysis.Convex.SecondOrder.Difference
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Stability
+public import FunctionalInequalities.Analysis.Convex.Subgradient.Existence
+public import FunctionalInequalities.Probability.MomentMeasure.Gradient
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import Mathlib.Analysis.Calculus.Rademacher
 
 /-!
 # Limits of centered convex potentials and their moment measures
@@ -33,13 +35,16 @@ For normalized potentials on `ℝⁿ`, the potential of an isotropic law whose g
 (`MomentMeasure.inv_le_integral_abs_inner_gradient_of_isotropic`); translation and centering of
 such potentials are in `Probability/MomentMeasure/Gradient.lean`.
 
-Scope / not proved: the uniqueness step of (ii) ⇒ (i) (uniqueness of moment-measure potentials,
-Cordero-Erausquin–Klartag) is not formalized, so the limit potential is produced, not identified
-with a given potential, and convergence of the whole sequence is not asserted. The paper's
+Scope of this limit producer: it constructs a limit potential without identifying it with a
+given potential, and it does not assert convergence of the whole sequence. Moment-potential
+uniqueness has its separate current owner in `KLS/CEK/Uniqueness.lean`; applying that theorem
+requires matching its source and translation hypotheses. The paper's
 `Ω`-supported moment measures and continuous test functions on `Ω` are replaced by weak
 convergence of probability measures and bounded continuous test functions; the potentials are
 assumed `C¹`.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Topology Set
@@ -209,7 +214,7 @@ theorem exists_limit_potential (m : Measure E) [m.IsAddHaarMeasure]
       (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : E)) atTop (𝓝 0))
   have : IsProbabilityMeasure (m.tilted (-F)) := isProbabilityMeasure_tilted (f := -F) hIF
   have : IsProbabilityMeasure ((m.tilted (-F)).map (gradient F)) :=
-    Measure.isProbabilityMeasure_map hGF.continuous.aemeasurable
+    (Measure.isProbabilityMeasure_map_iff hGF.continuous.aemeasurable).2 inferInstance
   let η : ProbabilityMeasure E := ⟨(m.tilted (-F)).map (gradient F), inferInstance⟩
   have hη : Tendsto (fun j => μ (s j)) atTop (𝓝 η) := by
     refine ProbabilityMeasure.tendsto_iff_forall_integral_tendsto.2 fun b => ?_
@@ -234,79 +239,72 @@ theorem exists_limit_potential (m : Measure E) [m.IsAddHaarMeasure]
 
 section Euclidean
 
-/-- **Klartag's nondegeneracy (13)** with `ε = 1/R` for the potential `u` of an isotropic law whose
+/--
+**Klartag's nondegeneracy (13)** with `ε = 1/R` for the potential `u` of an isotropic law whose
 gradient is bounded by `R` (`‖∇u‖ ≤ R`). -/
-theorem inv_le_integral_abs_inner_gradient_of_isotropic {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hu : ContDiff ℝ 1 u)
+theorem inv_le_integral_abs_inner_gradient_of_isotropic {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)
     (hnorm : (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1)
-    (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hiso : FunctionalInequalities.KLS.Isotropic ν)
-    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
-      (ν : Measure (EuclideanSpace ℝ (Fin n))))
-    {R : ℝ} (hR : 0 < R) (hsupp : ∀ x, ‖gradient u x‖ ≤ R)
-    {θ : EuclideanSpace ℝ (Fin n)} (hθ : ‖θ‖ = 1) :
-    1 / R ≤ ∫ x, |⟪gradient u x, θ⟫| * Real.exp (-u x)
-      ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hiso : FunctionalInequalities.KLS.Isotropic ν)
+    (hmap :
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (ν : Measure (EuclideanSpace ℝ (Fin n))))
+    {R : ℝ} (hR : 0 < R) (hsupp : ∀ x, ‖gradient u x‖ ≤ R) {θ : EuclideanSpace ℝ (Fin n)}
+    (hθ : ‖θ‖ = 1) :
+    1 / R ≤
+      ∫ x,
+        |⟪gradient u x, θ⟫| * Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
   have hg : Continuous (gradient u) := Analysis.BakryEmery.continuous_gradient hu
   have hball : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), ‖y‖ ≤ R := by
     have hc : IsClosed {y : EuclideanSpace ℝ (Fin n) | ‖y‖ ≤ R} :=
       isClosed_le continuous_norm continuous_const
-    have hm : MeasurableSet {y : EuclideanSpace ℝ (Fin n) | ¬ ‖y‖ ≤ R} :=
-      hc.measurableSet.compl
+    have hm : MeasurableSet {y : EuclideanSpace ℝ (Fin n) | ¬‖y‖ ≤ R} := hc.measurableSet.compl
     rw [ae_iff, ← hmap, Measure.map_apply hg.measurable hm]
-    have hempty :
-        (gradient u) ⁻¹' {y | ¬ ‖y‖ ≤ R} = ∅ := by
+    have hempty : (gradient u) ⁻¹' {y | ¬‖y‖ ≤ R} = ∅ := by
       ext x
       simp only [mem_preimage, mem_ofPred_eq, mem_empty_iff_false, iff_false]
       exact not_not_intro (hsupp x)
     rw [hempty, measure_empty]
-  have habs :
-      ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), |⟪θ, y⟫| ≤ R := by
+  have habs : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), |⟪θ, y⟫| ≤ R := by
     filter_upwards [hball] with y hy
     calc
       |⟪θ, y⟫| ≤ ‖θ‖ * ‖y‖ := abs_real_inner_le_norm _ _
       _ = ‖y‖ := by rw [hθ, one_mul]
       _ ≤ R := hy
-  have hi : Integrable (fun y => |⟪θ, y⟫|)
-      (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
-    apply (integrable_const R).mono'
-      (continuous_const.inner continuous_id).abs.aestronglyMeasurable
+  have hi : Integrable (fun y => |⟪θ, y⟫|) (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+    apply
+      (integrable_const R).mono' (continuous_const.inner continuous_id).abs.aestronglyMeasurable
     filter_upwards [habs] with y hy
     simpa only [Real.norm_eq_abs, abs_abs] using hy
-  have hpoint :
-      ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))),
-        ⟪θ, y⟫ ^ 2 ≤ R * |⟪θ, y⟫| := by
+  have hpoint : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), ⟪θ, y⟫ ^ 2 ≤ R * |⟪θ, y⟫| := by
     filter_upwards [habs] with y hy
     calc
-      ⟪θ, y⟫ ^ 2 = |⟪θ, y⟫| * |⟪θ, y⟫| := by
-        rw [← pow_two, sq_abs]
-      _ ≤ R * |⟪θ, y⟫| :=
-        mul_le_mul_of_nonneg_right hy (abs_nonneg _)
-  have hsq : Integrable (fun y => ⟪θ, y⟫ ^ 2)
-      (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
-    apply (hi.const_mul R).mono'
-      ((continuous_const.inner continuous_id).pow 2).aestronglyMeasurable
+      ⟪θ, y⟫ ^ 2 = |⟪θ, y⟫| * |⟪θ, y⟫| := by rw [← pow_two, sq_abs]
+      _ ≤ R * |⟪θ, y⟫| := mul_le_mul_of_nonneg_right hy (abs_nonneg _)
+  have hsq : Integrable (fun y => ⟪θ, y⟫ ^ 2) (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+    apply
+      (hi.const_mul R).mono' ((continuous_const.inner continuous_id).pow 2).aestronglyMeasurable
     filter_upwards [hpoint] with y hy
     rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg (⟪θ, y⟫ : ℝ))]
     exact hy
-  have hsecond :
-      (∫ y, ⟪θ, y⟫ ^ 2 ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) = 1 := by
-    simpa [pow_two, real_inner_self_eq_norm_sq, hθ] using
-      hiso.integral_inner_mul_inner θ θ
-  have hineq :
-      1 ≤ R * ∫ y, |⟪θ, y⟫| ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hsecond : (∫ y, ⟪θ, y⟫ ^ 2 ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) = 1 := by
+    simpa [pow_two, real_inner_self_eq_norm_sq, hθ] using hiso.integral_inner_mul_inner θ θ
+  have hineq : 1 ≤ R * ∫ y, |⟪θ, y⟫| ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) := by
     calc
-      1 = ∫ y, ⟪θ, y⟫ ^ 2 ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) :=
-        hsecond.symm
+      1 = ∫ y, ⟪θ, y⟫ ^ 2 ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) := hsecond.symm
       _ ≤ ∫ y, R * |⟪θ, y⟫| ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) :=
         integral_mono_ae hsq (hi.const_mul R) hpoint
       _ = R * ∫ y, |⟪θ, y⟫| ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) := by
         rw [integral_const_mul]
   have hchange :
-      (∫ y, |⟪θ, y⟫| ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) =
-        ∫ x, |⟪gradient u x, θ⟫| * Real.exp (-u x)
-          ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    rw [← hmap, integral_map hg.measurable.aemeasurable
-      (continuous_const.inner continuous_id).abs.aestronglyMeasurable, integral_tilted]
+    (∫ y, |⟪θ, y⟫| ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) =
+      ∫ x,
+        |⟪gradient u x, θ⟫| * Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    rw [← hmap,
+      integral_map hg.measurable.aemeasurable
+        (continuous_const.inner continuous_id).abs.aestronglyMeasurable,
+      integral_tilted]
     simp only [Pi.neg_apply, hnorm, div_one, smul_eq_mul, mul_comm, real_inner_comm θ]
   rw [hchange] at hineq
   apply (div_le_iff₀ hR).2

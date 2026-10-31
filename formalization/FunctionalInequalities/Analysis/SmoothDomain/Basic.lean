@@ -1,10 +1,14 @@
-import FunctionalInequalities.Analysis.Hausdorff.Volume
-import FunctionalInequalities.Analysis.Hausdorff.LevelSet
-import Mathlib.Analysis.Calculus.Deriv.MeanValue
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Volume
+public import FunctionalInequalities.Analysis.Hausdorff.LevelSet
+public import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
 /-! # Smooth domains and their boundary measure
 
 Foundations independent of perimeter recovery, coarea and Sard. -/
+
+@[expose] public section
 
 noncomputable section
 

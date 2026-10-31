@@ -1,7 +1,12 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Coordinates
+public import Lean
+meta import Lean
 
 /-! Total coordinate Hessians without the inverse-Hessian diffusion layer. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities
 namespace SourceLayout

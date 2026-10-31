@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.BKL.Reduction
-import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
+module
+
+public import FunctionalInequalities.KLS.BKL.Reduction
+public import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
 
 /-!
 # Audit: the isotropic log-concave reduction and the conditional Theorem 1.1 (BKL)
@@ -101,8 +103,10 @@ end IsotropicReductionAudit
 #print axioms FunctionalInequalities.KLS.LogConcave.affineSupport_eq_top_of_isotropic
 #print axioms FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_isotropic
 #print axioms FunctionalInequalities.KLS.LogConcave.localSlope_le_of_regular_isotropic_bound
-#print axioms FunctionalInequalities.KLS.LogConcave.localSlope_le_of_euclidean_regular_isotropic_bound
-#print axioms FunctionalInequalities.KLS.LogConcave.isotropicBound_of_euclidean_regular_isotropic_bound
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.localSlope_le_of_euclidean_regular_isotropic_bound
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.isotropicBound_of_euclidean_regular_isotropic_bound
 #print axioms FunctionalInequalities.KLS.localSlope_le_of_cumulantBound_all
 #print axioms FunctionalInequalities.KLS.conjecture_of_cumulantBound
 #print axioms IsotropicReductionAudit.real_isotropic_lc_four

@@ -202,11 +202,46 @@ def _skip_trivia(source: str, i: int) -> int:
     return i
 
 
+def _skip_directive_trivia(source: str, i: int) -> int:
+    """Lean v4.35 import-header `whitespace` inside one directive (ParseImportsFast.lean:97-119).
+
+    Newlines, `--` comments and nested `/- -/` comments are skipped; a tab fails (line 103) and
+    a doc comment ends the trivia because it is a token there (line 116). Kept in step with
+    `research/lean_header.py`; this runner deliberately stays standalone.
+    """
+    n = len(source)
+    while i < n:
+        if source[i] == "\t":
+            raise DownstreamFailure("tabs are not allowed in an import directive")
+        if source[i].isspace():
+            i += 1
+        elif source.startswith("--", i):
+            j = source.find("\n", i)
+            i = n if j < 0 else j
+        elif source.startswith("/-", i) and not source.startswith(("/--", "/-!"), i):
+            depth, i = 1, i + 2
+            while i < n and depth:
+                if source.startswith("/-", i):
+                    depth, i = depth + 1, i + 2
+                elif source.startswith("-/", i):
+                    depth, i = depth - 1, i + 2
+                else:
+                    i += 1
+            if depth:
+                raise DownstreamFailure("unterminated block comment in an import directive")
+        else:
+            break
+    return i
+
+
 def parse_imports(source: str) -> list[str]:
     """Imported module names from a Lean module header, without lexing declaration bodies.
 
-    Supports `module`/`prelude`, `public`/`meta` modifiers, `import all`, and several
-    modules on one import line.  Anything else after `import` fails closed.
+    Supports `module`/`prelude`, `public`/`meta` modifiers and `import all`. As in Lean's
+    `keywordCore` (ParseImportsFast.lean:121-134), trivia including newlines and nested
+    comments may separate the keywords from the mandatory first module name. Further modules
+    on the same line as the first are accepted for older sources only. Anything else after
+    `import` fails closed.
     """
     imports: list[str] = []
     i = 0
@@ -220,29 +255,30 @@ def parse_imports(source: str) -> list[str]:
             i = word.end()
             continue
         while token in {"public", "meta", "private"}:
-            i = _skip_trivia(source, word.end())
+            i = _skip_directive_trivia(source, word.end())
             word = MODULE_IDENT.match(source, i)
             token = word.group() if word else ""
         if token != "import":
             break
-        j = word.end()
-        modules: list[str] = []
-        while True:
+        k = _skip_directive_trivia(source, word.end())
+        keyword = MODULE_IDENT.match(source, k)
+        if keyword and keyword.group() == "all":
+            k = _skip_directive_trivia(source, keyword.end())
+        name = MODULE_IDENT.match(source, k)
+        if not name:
+            raise DownstreamFailure("import directive without a module name")
+        if name.group() in HEADER_KEYWORDS:
+            raise DownstreamFailure(f"unsupported import syntax: {source[k:k + 40]!r}")
+        modules, j = [name.group()], name.end()
+        while True:  # legacy: further modules on the first module's line only
             k = _skip_trivia(source, j)
             if k >= len(source) or "\n" in source[j:k]:
                 break
-            if not modules:
-                keyword = MODULE_IDENT.match(source, k)
-                if keyword and keyword.group() == "all":
-                    j = keyword.end()
-                    continue
             name = MODULE_IDENT.match(source, k)
             if not name or name.group() in HEADER_KEYWORDS:
                 raise DownstreamFailure(f"unsupported import syntax: {source[k:k + 40]!r}")
             modules.append(name.group())
             j = name.end()
-        if not modules:
-            raise DownstreamFailure("import directive without a module name")
         imports.extend(modules)
         i = j
     return imports

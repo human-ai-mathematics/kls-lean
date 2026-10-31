@@ -1,7 +1,12 @@
-import FunctionalInequalities.Analysis.Graph.Area
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Graph.Area
+public import Lean
+meta import Lean
 
 /-! The former graph gradient-continuity contract uses the common calculus theorem. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

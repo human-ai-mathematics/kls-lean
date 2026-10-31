@@ -3,9 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoProcess
-import LevyStochCalc.Brownian.MultidimFiltered
-import Mathlib.Algebra.Order.Chebyshev
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.ItoProcess
+public import LevyStochCalc.Brownian.MultidimFiltered
+public import Mathlib.Algebra.Order.Chebyshev
 
 /-!
 # Vector Itô processes and the moments of their increments
@@ -31,6 +36,8 @@ for sums; the supremum norm on `Fin n → ℝ` is then controlled coordinatewise
 * `LevyStochCalc.Brownian.Ito.integrable_norm_vectorItoProcess_sub_pow_three` — the cube of the
   norm of the increment is integrable.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -87,7 +94,7 @@ theorem integrable_abs_sum_and_le {f : ι → Ω → ℝ} (hfm : ∀ i, Measurab
     MeasureTheory.integrable_finsetSum _ fun i _ => hfi i
   have hpt : ∀ ω, |∑ i, f i ω| ≤ ∑ i, |f i ω| := fun ω => Finset.abs_sum_le_sum_abs _ _
   have hmeas : Measurable fun ω => |∑ i, f i ω| :=
-    (Finset.measurable_sum _ fun i _ => hfm i).abs
+    (continuous_abs.measurable.comp (Finset.measurable_sum _ fun i _ => hfm i))
   have hint : Integrable (fun ω => |∑ i, f i ω|) P := by
     refine hdom.mono' hmeas.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, abs_abs]
@@ -137,7 +144,7 @@ theorem integrable_abs_sum_pow_three {f : ι → Ω → ℝ} (hfm : ∀ i, Measu
       (f := fun i => |f i ω|) (fun j _ => abs_nonneg (f j ω)) 2
     simpa using h1.trans h2
   have hmeas : Measurable fun ω => |∑ i, f i ω| ^ 3 :=
-    (Finset.measurable_sum _ fun i _ => hfm i).abs.pow_const 3
+    (continuous_abs.measurable.comp (Finset.measurable_sum _ fun i _ => hfm i)).pow_const 3
   refine hdom.mono' hmeas.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
   rw [Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (abs_nonneg _) 3)]
   exact hpt ω
@@ -174,7 +181,7 @@ theorem integrable_abs_add_and_le {A B : Ω → ℝ} (hAm : Measurable A) (hBm :
     Integrable (fun ω => |A ω + B ω|) P ∧ ∫ ω, |A ω + B ω| ∂P ≤ a + b := by
   have hdom : Integrable (fun ω => |A ω| + |B ω|) P := hA.add hB
   have hpt : ∀ ω, |A ω + B ω| ≤ |A ω| + |B ω| := fun ω => abs_add_le _ _
-  have hmeas : Measurable fun ω => |A ω + B ω| := (hAm.add hBm).abs
+  have hmeas : Measurable fun ω => |A ω + B ω| := (continuous_abs.measurable.comp (hAm.add hBm))
   have hint : Integrable (fun ω => |A ω + B ω|) P := by
     refine hdom.mono' hmeas.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, abs_abs]
@@ -193,7 +200,8 @@ theorem integrable_abs_add_pow_three {A B : Ω → ℝ} (hAm : Measurable A) (hB
   have hpt : ∀ ω, |A ω + B ω| ^ 3 ≤ 4 * (|A ω| ^ 3 + |B ω| ^ 3) := fun ω =>
     (pow_le_pow_left₀ (abs_nonneg _) (abs_add_le (A ω) (B ω)) 3).trans
       (add_pow_three_le_four (abs_nonneg _) (abs_nonneg _))
-  have hmeas : Measurable fun ω => |A ω + B ω| ^ 3 := (hAm.add hBm).abs.pow_const 3
+  have hmeas : Measurable fun ω => |A ω + B ω| ^ 3 :=
+    (continuous_abs.measurable.comp (hAm.add hBm)).pow_const 3
   refine hdom.mono' hmeas.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
   rw [Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (abs_nonneg _) 3)]
   exact hpt ω
@@ -258,7 +266,7 @@ theorem measurable_vectorItoProcess {X₀ : Ω → Fin n → ℝ}
     (hX₀ : ∀ m, Measurable fun ω => X₀ ω m) {bdrift : Fin n → Ω → ℝ → ℝ}
     (hbm : ∀ m, Measurable (Function.uncurry (bdrift m))) (t : ℝ) :
     Measurable (vectorItoProcess W ℱ hcoord H hHm hHp hHs X₀ bdrift t) := by
-  refine measurable_pi_lambda _ fun m => ?_
+  refine Measurable.of_eval fun m => ?_
   exact ((hX₀ m).add (measurable_setIntegral (hbm m) _)).add
     (measurable_vectorItoMartingale W ℱ hcoord H hHm hHp hHs m t)
 
@@ -380,7 +388,7 @@ include hbm hB in
 theorem measurable_vectorItoProcess_sub {u v : ℝ} (hu : 0 ≤ u) (huv : u ≤ v) :
     Measurable fun ω => vectorItoProcess W ℱ hcoord H hHm hHp hHs X₀ bdrift v ω
       - vectorItoProcess W ℱ hcoord H hHm hHp hHs X₀ bdrift u ω := by
-  refine measurable_pi_lambda _ fun m => ?_
+  refine Measurable.of_eval fun m => ?_
   have hrw : (fun ω => (vectorItoProcess W ℱ hcoord H hHm hHp hHs X₀ bdrift v ω
         - vectorItoProcess W ℱ hcoord H hHm hHp hHs X₀ bdrift u ω) m)
       = fun ω => (∫ s in Set.Ioc u v, bdrift m ω s ∂volume)

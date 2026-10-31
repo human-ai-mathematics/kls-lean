@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
+module
+
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
 
 /-!
 # Lean certificate: `thm:bkl-taylor-criterion`
@@ -24,6 +26,8 @@ the class `𝒜` and with an approximate first eigenfunction instead of an exact
 standard Gaussian on `ℝ¹` is regular, centered with covariance one, and satisfies (29) with `R = 8`
 (`KLS.gaussian_taylor_hypotheses`), so the hypotheses are jointly satisfiable in positive dimension.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -64,8 +68,10 @@ theorem regularPotential_zero :
 /-- **Nonvacuity in dimension zero.** The zero potential on `ℝ⁰` is regular, its law is centered
 with covariance at most the identity, and (29) holds with `R = 1`: all hypotheses of the
 certificate are discharged, and it gives `C_P ≤ K`. -/
-theorem dimZero : ∃ K : ℝ,
-    Poincare.LocalSlope.Intrinsic.constant regularPotential_zero.law ≤ ENNReal.ofReal (K * 1 ^ 2) := by
+theorem dimZero :
+    ∃ K : ℝ,
+      Poincare.LocalSlope.Intrinsic.constant regularPotential_zero.law ≤
+        ENNReal.ofReal (K * 1 ^ 2) := by
   obtain ⟨K, -, hK⟩ := certificate
   refine ⟨K, hK 0 _ 1 1 regularPotential_zero ?_ ?_ 1 le_rfl ?_⟩
   · have h : (fun x : EuclideanSpace ℝ (Fin 0) => x) = fun _ => 0 :=
@@ -78,29 +84,34 @@ theorem dimZero : ∃ K : ℝ,
     have hempty : IsEmpty (Fin d → Fin 0) := by
       have : Nonempty (Fin d) := ⟨⟨0, hd⟩⟩
       infer_instance
-    have h0 : coordTensor (EuclideanSpace.basisFun (Fin 0) ℝ)
-        (taylorTensor (regularPotential_zero.law : Measure (EuclideanSpace ℝ (Fin 0))) f d) = 0 :=
+    have h0 :
+      coordTensor (EuclideanSpace.basisFun (Fin 0) ℝ)
+          (taylorTensor (regularPotential_zero.law : Measure (EuclideanSpace ℝ (Fin 0))) f d) =
+        0 :=
       Subsingleton.elim _ _
     rw [h0, norm_zero]
     positivity
 
 /--
-info: 'Solutions.ThmBklTaylorCriterion.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBklTaylorCriterion.certificate' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBklTaylorCriterion.certificate
+  #print axioms Solutions.ThmBklTaylorCriterion.certificate
 
 /--
-info: 'Solutions.ThmBklTaylorCriterion.regularPotential_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBklTaylorCriterion.regularPotential_zero' depends on axioms: [propext,
+Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBklTaylorCriterion.regularPotential_zero
+  #print axioms Solutions.ThmBklTaylorCriterion.regularPotential_zero
 
 /--
-info: 'Solutions.ThmBklTaylorCriterion.dimZero' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBklTaylorCriterion.dimZero' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBklTaylorCriterion.dimZero
+  #print axioms Solutions.ThmBklTaylorCriterion.dimZero
 
 /-- **Nonvacuity in dimension one.** The standard Gaussian `volume.tilted (-‖x‖²/2)` on `ℝ¹`
 satisfies every hypothesis of the certificate with `a = b = 1` and `R = 8`, which gives
@@ -113,9 +124,10 @@ theorem gaussian : ∃ K : ℝ, Poincare.LocalSlope.Intrinsic.constant
   exact ⟨K, hK 1 _ 1 1 KLS.regularPotential_half_norm_sq hcen hcov 8 (by norm_num) h29⟩
 
 /--
-info: 'Solutions.ThmBklTaylorCriterion.gaussian' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmBklTaylorCriterion.gaussian' depends on axioms: [propext, Classical.choice,
+Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmBklTaylorCriterion.gaussian
+  #print axioms Solutions.ThmBklTaylorCriterion.gaussian
 
 end Solutions.ThmBklTaylorCriterion

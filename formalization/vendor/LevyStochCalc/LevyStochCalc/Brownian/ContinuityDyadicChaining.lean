@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Construction
-import Mathlib.Probability.Process.Kolmogorov
-import Mathlib.Probability.Distributions.Gaussian.Fernique
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Construction
+public import Mathlib.Probability.Process.Kolmogorov
+public import Mathlib.Probability.Distributions.Gaussian.Fernique
 
 /-!
 # Dyadic chaining for the Kolmogorov-Chentsov theorem
@@ -21,6 +25,8 @@ increments of `f` into `α`-Hölder continuity of `f` on the dyadics of `[0, 1)`
 No probability enters here; the random increment bounds are supplied in
 `LevyStochCalc.Brownian.ContinuityKolmogorovBounds`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal Topology

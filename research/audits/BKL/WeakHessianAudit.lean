@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Hessian
 
 /-!
 # Audit: the weak Hessian on `D(A)` and the curvature form of BKL (16)
@@ -17,6 +19,8 @@ library theorems of `KLS/LogConcave/HeatSemigroup/Generator/Hessian.lean`:
 These are supporting results of the operator route; they do not state or prove Theorem 3.1, and
 they do not establish Lemma 2.1 on the class `𝒜`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

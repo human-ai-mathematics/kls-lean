@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
-import Mathlib.Analysis.Calculus.ParametricIntegral
-import Mathlib.MeasureTheory.Group.Integral
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
+public import Mathlib.Analysis.Calculus.ParametricIntegral
+public import Mathlib.MeasureTheory.Group.Integral
 
 /-!
 # Integration by parts against smooth compactly supported tests
@@ -29,6 +31,8 @@ No measure other than Haar measure enters, and nothing is asserted about closabi
 or Poincaré inequalities.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Filter Topology InnerProductSpace
@@ -49,7 +53,8 @@ omit [CompleteSpace V] in
 /-- The derivative of a compactly supported `C¹` function is globally bounded. -/
 theorem exists_bound_fderiv_of_hasCompactSupport {u : V → ℝ} (hu : ContDiff ℝ 1 u)
     (hsupp : HasCompactSupport u) : ∃ M : ℝ, 0 ≤ M ∧ ∀ x, ‖fderiv ℝ u x‖ ≤ M := by
-  obtain ⟨C, hC⟩ := hsupp.exists_bound_of_continuousOn (hu.continuous_fderiv one_ne_zero).continuousOn
+  obtain ⟨C, hC⟩ :=
+    hsupp.exists_bound_of_continuousOn (hu.continuous_fderiv one_ne_zero).continuousOn
   refine ⟨max C 0, le_max_right _ _, fun x ↦ ?_⟩
   by_cases hx : x ∈ tsupport u
   · exact (hC x hx).trans (le_max_left _ _)
@@ -161,47 +166,64 @@ theorem integral_mul_inner_gradient {g : V → ℝ} {K : NNReal} (hg : Lipschitz
     {φ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφs : HasCompactSupport φ) (w : V) :
     ∫ x, φ x * inner ℝ (gradient g x) w ∂m = -∫ x, g x * fderiv ℝ φ x w ∂m := by
   -- the identity for the mollified functions
-  have hid : ∀ j, ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m =
-      -∫ x, mollify m (radius j) g x * fderiv ℝ φ x w ∂m := by
+
+  have hid :
+    ∀ j,
+      ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m =
+        -∫ x, mollify m (radius j) g x * fderiv ℝ φ x w ∂m := by
     intro j
     simp_rw [inner_gradient_left]
     exact integral_mul_fderiv_apply m hφ hφs (contDiff_mollify m (radius_pos j) hg.continuous) w
   have hφ' : HasCompactSupport fun x ↦ fderiv ℝ φ x w :=
     (hφs.fderiv ℝ).comp_left (g := fun L : V →L[ℝ] ℝ ↦ L w) (by simp)
   have hφ'c : Continuous fun x ↦ fderiv ℝ φ x w :=
-    (hφ.continuous_fderiv (by simp)).clm_apply continuous_const
+    (hφ.continuous_fderiv (by simp)).clm_apply
+      continuous_const
   -- left-hand sides converge by dominated convergence
-  have hL : Tendsto (fun j ↦ ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m) atTop
+
+  have hL :
+    Tendsto (fun j ↦ ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m) atTop
       (𝓝 (∫ x, φ x * inner ℝ (gradient g x) w ∂m)) := by
     refine tendsto_integral_of_dominated_convergence (fun x ↦ ‖φ x‖ * (K * ‖w‖)) ?_ ?_ ?_ ?_
     · intro j
-      exact (hφ.continuous.mul ((continuous_gradient_of_contDiff
-        (contDiff_mollify m (radius_pos j) hg.continuous) (by simp)).inner
-          continuous_const)).aestronglyMeasurable
-    · exact (hφ.continuous.norm.mul continuous_const).integrable_of_hasCompactSupport
-        hφs.norm.mul_right
+      exact
+        (hφ.continuous.mul
+            ((continuous_gradient_of_contDiff (contDiff_mollify m (radius_pos j) hg.continuous)
+                  (by simp)).inner
+              continuous_const)).aestronglyMeasurable
+    · exact
+        (hφ.continuous.norm.mul continuous_const).integrable_of_hasCompactSupport
+          hφs.norm.mul_right
     · intro j
       refine Eventually.of_forall fun x ↦ ?_
       rw [norm_mul]
       gcongr
-      calc ‖inner ℝ (gradient (mollify m (radius j) g) x) w‖ ≤
-            ‖gradient (mollify m (radius j) g) x‖ * ‖w‖ := norm_inner_le_norm _ _
+      calc
+        ‖inner ℝ (gradient (mollify m (radius j) g) x) w‖ ≤
+            ‖gradient (mollify m (radius j) g) x‖ * ‖w‖ :=
+          norm_inner_le_norm _ _
         _ ≤ K * ‖w‖ := by
           gcongr
           exact norm_gradient_le_of_lipschitz (lipschitzWith_mollify m (radius_pos j) hg) x
     · filter_upwards [ae_differentiableAt_of_locallyLipschitz hg.locallyLipschitz m] with x hx
-      exact tendsto_const_nhds.mul
-        ((tendsto_gradient_mollify m hg.continuous hx radius_pos tendsto_radius).inner
-          tendsto_const_nhds)
+      exact
+        tendsto_const_nhds.mul
+          ((tendsto_gradient_mollify m hg.continuous hx radius_pos tendsto_radius).inner
+            tendsto_const_nhds)
   -- right-hand sides converge by dominated convergence and uniform closeness
-  have hR : Tendsto (fun j ↦ ∫ x, mollify m (radius j) g x * fderiv ℝ φ x w ∂m) atTop
+
+  have hR :
+    Tendsto (fun j ↦ ∫ x, mollify m (radius j) g x * fderiv ℝ φ x w ∂m) atTop
       (𝓝 (∫ x, g x * fderiv ℝ φ x w ∂m)) := by
-    refine tendsto_integral_of_dominated_convergence
-      (fun x ↦ (‖g x‖ + K * 2) * ‖fderiv ℝ φ x w‖) ?_ ?_ ?_ ?_
+    refine
+      tendsto_integral_of_dominated_convergence (fun x ↦ (‖g x‖ + K * 2) * ‖fderiv ℝ φ x w‖) ?_
+        ?_ ?_ ?_
     · intro j
       exact ((continuous_mollify m (radius_pos j) hg.continuous).mul hφ'c).aestronglyMeasurable
-    · exact ((hg.continuous.norm.add continuous_const).mul hφ'c.norm)
-        |>.integrable_of_hasCompactSupport hφ'.norm.mul_left
+    · exact
+        ((hg.continuous.norm.add continuous_const).mul
+            hφ'c.norm) |>.integrable_of_hasCompactSupport
+          hφ'.norm.mul_left
     · intro j
       refine Eventually.of_forall fun x ↦ ?_
       rw [norm_mul]
@@ -210,9 +232,10 @@ theorem integral_mul_inner_gradient {g : V → ℝ} {K : NNReal} (hg : Lipschitz
         unfold radius
         rw [div_le_one (by positivity)]
         linarith [(Nat.cast_nonneg j : (0 : ℝ) ≤ j)]
-      calc ‖mollify m (radius j) g x‖ ≤ ‖g x‖ + ‖mollify m (radius j) g x - g x‖ := by
-            have := norm_add_le (g x) (mollify m (radius j) g x - g x)
-            rwa [add_sub_cancel] at this
+      calc
+        ‖mollify m (radius j) g x‖ ≤ ‖g x‖ + ‖mollify m (radius j) g x - g x‖ := by
+          have := norm_add_le (g x) (mollify m (radius j) g x - g x)
+          rwa [add_sub_cancel] at this
         _ ≤ ‖g x‖ + K * (2 * radius j) := by
           gcongr
           exact norm_mollify_sub_le m (radius_pos j) hg x
@@ -222,11 +245,14 @@ theorem integral_mul_inner_gradient {g : V → ℝ} {K : NNReal} (hg : Lipschitz
     · refine Eventually.of_forall fun x ↦ ?_
       refine Tendsto.mul ?_ tendsto_const_nhds
       rw [tendsto_iff_norm_sub_tendsto_zero]
-      refine squeeze_zero (fun j ↦ norm_nonneg _) (fun j ↦ norm_mollify_sub_le m (radius_pos j) hg x) ?_
+      refine
+        squeeze_zero (fun j ↦ norm_nonneg _) (fun j ↦ norm_mollify_sub_le m (radius_pos j) hg x)
+          ?_
       have : Tendsto (fun j ↦ (K : ℝ) * (2 * radius j)) atTop (𝓝 ((K : ℝ) * (2 * 0))) :=
         tendsto_const_nhds.mul (tendsto_const_nhds.mul tendsto_radius)
       simpa using this
-  have hL' : Tendsto (fun j ↦ ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m) atTop
+  have hL' :
+    Tendsto (fun j ↦ ∫ x, φ x * inner ℝ (gradient (mollify m (radius j) g) x) w ∂m) atTop
       (𝓝 (-∫ x, g x * fderiv ℝ φ x w ∂m)) :=
     hR.neg.congr fun j ↦ (hid j).symm
   exact tendsto_nhds_unique hL hL'

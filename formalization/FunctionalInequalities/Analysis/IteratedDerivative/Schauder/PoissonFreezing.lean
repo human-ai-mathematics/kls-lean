@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientCoordinates
-import FunctionalInequalities.Analysis.Newtonian.Schauder.CompactPoisson
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Schauder.CoefficientCoordinates
+public import FunctionalInequalities.Analysis.Newtonian.Schauder.CompactPoisson
 
 /-!
 # Coefficient freezing fed by the compact Poisson estimates
@@ -11,6 +13,8 @@ Theorem 6.2, (6.17)–(6.19), consumes exactly those produced caps. This is a br
 results; it is neither the interior Theorem 4.6 nor the constant-coefficient transformation of
 Lemma 6.1.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric
 open scoped NNReal

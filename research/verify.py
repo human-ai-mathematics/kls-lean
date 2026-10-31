@@ -18,6 +18,7 @@ import threading
 import time
 
 import atlas
+import lean_header
 import statement_snapshot
 import vendor_lock
 
@@ -103,8 +104,28 @@ def build_replay_inputs(root: Path, snapshot: dict, destination: Path, run) -> d
     return prepare_replay(root, snapshot, destination)
 
 
+# Shared artifact policy (research/lean_header.py): a `module` source needs `.olean`,
+# `.olean.server`, `.olean.private`, `.ir.sig` and `.ir`; a non-module source only `.olean`. A
+# non-module root (the generated audits) takes every constant, private ones included, from
+# `.olean.private`, so all five are required here instead of copied opportunistically.
+MODULE_ARTIFACTS = lean_header.MODULE_ARTIFACTS
+NONMODULE_ARTIFACTS = lean_header.NONMODULE_ARTIFACTS
+
+
+def replay_artifacts(root: Path, name: str) -> tuple[str, ...]:
+    """The compiled artifacts a current source must have, from its own header."""
+    try:
+        return lean_header.required_artifacts((root / name).read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, lean_header.HeaderError) as exc:
+        raise RuntimeError(f"Cannot classify current source {name}: {exc}") from exc
+
+
 def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
-    """Copy only current source modules, leaving obsolete development artifacts untouched."""
+    """Copy only current source modules, leaving obsolete development artifacts untouched.
+
+    Every artifact Lean writes for a current source is required and copied; a missing private
+    or server companion fails here instead of shrinking the audited declaration set.
+    """
     if destination.exists() and any(destination.iterdir()):
         raise RuntimeError("The checked module view must be empty before copying current modules")
     compiled = root / "formalization/.lake/build/lib/lean"
@@ -112,12 +133,15 @@ def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
     hashes = {}
     for module, name in sources.items():
         relative = Path(*module.split("."))
-        for suffix in [".olean", ".olean.server", ".olean.private"]:
+        if not (compiled / relative.with_suffix(".olean")).is_file():
+            raise RuntimeError(f"Current source {name} has no built module: "
+                               f"{compiled / relative.with_suffix('.olean')}")
+        for suffix in replay_artifacts(root, name):
             source = compiled / relative.with_suffix(suffix)
             if not source.is_file():
                 if suffix == ".olean":
                     raise RuntimeError(f"Current source {name} has no built module: {source}")
-                continue
+                raise RuntimeError(f"Current module source {name} lacks its {suffix} artifact: {source}")
             target = destination / source.relative_to(compiled)
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
@@ -254,7 +278,8 @@ def verification_snapshot(root: Path, *, lean_only: bool = False) -> dict:
         # Bind Lean evidence to proof inputs and their tooling, not prose or ledger status.
         inputs = {"formalization/lean-toolchain", "formalization/lakefile.toml",
                   "formalization/lake-manifest.json", "research/verify.py", "research/atlas.py",
-                  "research/cache_mathlib.py", "research/downstream.py"}
+                  "research/cache_mathlib.py", "research/downstream.py",
+                  "research/lean_header.py"}
         files = {name: digest for name, digest in snapshot["files"].items()
                  if name in inputs or name.endswith(".lean") or name.startswith(CLASSICAL_KLS_DIR + "/")}
         snapshot = {**snapshot, "files": files, "sha256": atlas.digest(files)}
@@ -457,6 +482,8 @@ def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: b
         internal_gate("source-discovery", [f"Lean source missing from snapshot: {p}" for p in hidden],
                       "Checked production and audit directories against the source snapshot")
         if not lean_only:
+            run("documentation", [sys.executable, str(root / "research/check_documentation.py"),
+                                  "--root", str(root)])
             derived, errors = atlas.build_atlas(root, snapshot=before)
             internal_gate("atlas-ledger-blueprint", errors, "Structural and task metadata checks")
             (output_dir / "atlas.json").write_text(json.dumps(derived, ensure_ascii=False, indent=2) + "\n")

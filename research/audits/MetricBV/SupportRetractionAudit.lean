@@ -1,6 +1,9 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.Analysis.MetricBV.Transport
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.Analysis.MetricBV.Transport
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
 /-! Independent full-signature clients for the perimeter equality under a nonexpansive retraction
 onto a full-mass measurable subset: the nonexpansive-composition slope bound (with a collapsing
@@ -10,6 +13,8 @@ map), the reverse inequality and the equality, and the genuine proper retract
 the perimeter transfer between the space and the trace. This is a structural retraction theorem;
 it is not `closedSupportLaw` equality for arbitrary supports, nor the closed convex projection,
 nor an identification of `intrinsicHalfConstant`. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

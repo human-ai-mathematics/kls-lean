@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Vector.Jacobian
-import FunctionalInequalities.Analysis.Graph.Implicit
-import FunctionalInequalities.Analysis.SmoothDomain.Basic
+module
+
+public import FunctionalInequalities.Analysis.Vector.Jacobian
+public import FunctionalInequalities.Analysis.Graph.Implicit
+public import FunctionalInequalities.Analysis.SmoothDomain.Basic
 
 /-! # The linear area formula in the normalized convention, and affine fibres
 
@@ -19,6 +21,8 @@ an isometry, and the top-dimensional normalized Hausdorff measure of a space is 
 **No coarea formula is proved here**, and no `C¹` area formula either: everything below is about
 linear maps and affine subspaces.
 -/
+
+@[expose] public section
 
 noncomputable section
 

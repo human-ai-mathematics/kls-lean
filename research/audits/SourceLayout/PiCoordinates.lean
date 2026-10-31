@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.PiCoordinates
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.PiCoordinates
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open FunctionalInequalities.Analysis
 

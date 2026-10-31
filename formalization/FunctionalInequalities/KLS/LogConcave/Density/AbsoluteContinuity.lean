@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.Transport
-import FunctionalInequalities.Probability.Domination.Averages
-import Mathlib.Analysis.LocallyConvex.Separation
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Transport
+public import FunctionalInequalities.Probability.Domination.Averages
+public import Mathlib.Analysis.LocallyConvex.Separation
 
 /-!
 # Small-ball bounds for log-concave laws
@@ -11,6 +13,8 @@ log-concavity. It includes singular ambient laws and zero-dimensional affine sup
 It proves the absolute-continuity and null-boundary portions of the representation
 theorem; it does not construct the log-concave density representative or prove moments.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -24,9 +28,8 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimension
 omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] in
 /-- A convex set meeting every radius-R ball with center in a larger ball contains the
 inner ball. Separation turns the covering condition into a quantitative interior witness. -/
-private theorem ball_subset_of_nearby_points {S : Set E} (hS : Convex ℝ S)
-    (a : E) (R : ℝ) (hR : 0 < R)
-    (hnear : ∀ y ∈ closedBall a (8 * R), ∃ z ∈ S, dist z y < R) : ball a R ⊆ S := by
+private theorem ball_subset_of_nearby_points {S : Set E} (hS : Convex ℝ S) (a : E) (R : ℝ)
+    (hR : 0 < R) (hnear : ∀ y ∈ closedBall a (8 * R), ∃ z ∈ S, dist z y < R) : ball a R ⊆ S := by
   have hclosure : closedBall a R ⊆ closure S := by
     intro x hx
     by_contra hnot
@@ -40,9 +43,9 @@ private theorem ball_subset_of_nearby_points {S : Set E} (hS : Convex ℝ S)
       linarith
     have hfn : 0 < ‖f‖ := norm_pos_iff.mpr hf0
     have hfnn : 0 < ‖f‖₊ := by exact_mod_cast hfn
-    obtain ⟨v, hvn, hvf⟩ :=
-      f.exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm (half_lt_self hfnn)
-    have hvn' : ‖v‖ = 1 := by simpa only [← coe_nnnorm, NNReal.coe_one] using congrArg ((↑) : NNReal → ℝ) hvn
+    obtain ⟨v, hvn, hvf⟩ := f.exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm (half_lt_self hfnn)
+    have hvn' : ‖v‖ = 1 := by
+      simpa only [← coe_nnnorm, NNReal.coe_one] using congrArg ((↑) : NNReal → ℝ) hvn
     have hvf' : ‖f‖ / 2 < |f v| := by exact_mod_cast hvf
     obtain ⟨v, hvn, hvf⟩ : ∃ v : E, ‖v‖ = 1 ∧ ‖f‖ / 2 < f v := by
       rcases lt_abs.mp hvf' with h | h
@@ -58,7 +61,10 @@ private theorem ball_subset_of_nearby_points {S : Set E} (hS : Convex ℝ S)
     have hxd : |f x - f a| ≤ ‖f‖ * R := by
       have h := f.le_opNorm (x - a)
       rw [map_sub, Real.norm_eq_abs] at h
-      exact h.trans (mul_le_mul_of_nonneg_left (by simpa only [mem_closedBall, dist_eq_norm] using hx) hfn.le)
+      exact
+        h.trans
+          (mul_le_mul_of_nonneg_left (by simpa only [mem_closedBall, dist_eq_norm] using hx)
+            hfn.le)
     have hfy : f y = f a + (8 * R) * f v := by simp [y]
     have hzf := hfu z (subset_closure hz)
     have hbound := mul_lt_mul_of_pos_left hzy hfn
@@ -67,8 +73,10 @@ private theorem ball_subset_of_nearby_points {S : Set E} (hS : Convex ℝ S)
     nlinarith
   have hspan : affineSpan ℝ S = ⊤ := by
     have hsub : ball a R ⊆ affineSpan ℝ S :=
-      ball_subset_closedBall.trans (hclosure.trans
-        (closure_minimal (subset_affineSpan ℝ S) (affineSpan ℝ S).closed_of_finiteDimensional))
+      ball_subset_closedBall.trans
+        (hclosure.trans
+          (closure_minimal (subset_affineSpan ℝ S)
+            (affineSpan ℝ S).closed_of_finiteDimensional))
     apply top_unique
     rw [← isOpen_ball.affineSpan_eq_top (u := ball a R) (nonempty_ball.mpr hR)]
     exact affineSpan_le.mpr hsub
@@ -79,14 +87,20 @@ private theorem ball_subset_of_nearby_points {S : Set E} (hS : Convex ℝ S)
   exact hb.trans interior_subset
 
 /-- Uniformly positive support masses force a high ball-average point near every center. -/
-private theorem exists_uniform_ball_average_points (μ : ProbabilityMeasure E)
-    (m : Measure E) [m.IsAddHaarMeasure] {K : Set E} (hK : IsCompact K)
-    (hKs : K ⊆ (μ : Measure E).support) {δ : ℝ} (hδ : 0 < δ) :
-    ∃ c : ENNReal, 0 < c ∧ c ≠ ⊤ ∧ ∀ r : ℝ, 0 < r → r ≤ δ →
-      ∀ y ∈ K, ∃ z ∈ ball y (2 * δ),
-        c * m (closedBall (0 : E) r) ≤ (μ : Measure E) (closedBall z r) := by
-  obtain ⟨γ, hγ, hγK⟩ := Probability.exists_pos_le_measure_ball_on_isCompact
-    (μ : Measure E) hK hKs δ hδ
+private theorem exists_uniform_ball_average_points (μ : ProbabilityMeasure E) (m : Measure E)
+    [m.IsAddHaarMeasure] {K : Set E} (hK : IsCompact K) (hKs : K ⊆ (μ : Measure E).support)
+    {δ : ℝ} (hδ : 0 < δ) :
+    ∃ c : ENNReal,
+      0 < c ∧
+        c ≠ ⊤ ∧
+          ∀ r : ℝ,
+            0 < r →
+              r ≤ δ →
+                ∀ y ∈ K,
+                  ∃ z ∈ ball y (2 * δ),
+                    c * m (closedBall (0 : E) r) ≤ (μ : Measure E) (closedBall z r) := by
+  obtain ⟨γ, hγ, hγK⟩ :=
+    Probability.exists_pos_le_measure_ball_on_isCompact (μ : Measure E) hK hKs δ hδ
   let D := m (ball (0 : E) (2 * δ))
   have hDt : D ≠ ⊤ := measure_ball_ne_top
   obtain ⟨c, hc, hcγ⟩ := exists_between (ENNReal.div_pos hγ.ne' hDt)
@@ -98,15 +112,19 @@ private theorem exists_uniform_ball_average_points (μ : ProbabilityMeasure E)
   push Not at hn
   have hb0 : m (closedBall (0 : E) r) ≠ 0 := (measure_closedBall_pos m _ hr).ne'
   have hbt : m (closedBall (0 : E) r) ≠ ⊤ := measure_closedBall_lt_top.ne
-  have hlower := (mul_le_mul (le_refl (m (closedBall (0 : E) r))) (hγK y hy) (by positivity) (by positivity)).trans
-    (Probability.measure_ball_mul_closedBall_le_lintegral (μ : Measure E) m y hrδ)
-  have hupper : (∫⁻ z in ball y (2 * δ), (μ : Measure E) (closedBall z r) ∂m) ≤
+  have hlower :=
+    (mul_le_mul (le_refl (m (closedBall (0 : E) r))) (hγK y hy) (by positivity)
+          (by positivity)).trans
+      (Probability.measure_ball_mul_closedBall_le_lintegral (μ : Measure E) m y hrδ)
+  have hupper :
+    (∫⁻ z in ball y (2 * δ), (μ : Measure E) (closedBall z r) ∂m) ≤
       (c * m (closedBall (0 : E) r)) * D := by
     calc
       _ ≤ ∫⁻ _ in ball y (2 * δ), c * m (closedBall (0 : E) r) ∂m :=
         setLIntegral_mono' measurableSet_ball (fun z hz => (hn z hz).le)
-      _ = _ := by simp only [lintegral_const, Measure.restrict_apply_univ,
-        Measure.addHaar_ball_center m, D]
+      _ = _ := by
+        simp only [lintegral_const, Measure.restrict_apply_univ, Measure.addHaar_ball_center m,
+          D]
   have hstrict := ENNReal.mul_lt_mul_left hb0 hbt hcD
   have hbad := hlower.trans hupper
   exact (not_lt_of_ge hbad) (by simpa only [mul_assoc, mul_left_comm, mul_comm] using hstrict)

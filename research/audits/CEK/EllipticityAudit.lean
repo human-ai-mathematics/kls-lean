@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
-import FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic
+module
+
+public import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
+public import FunctionalInequalities.Analysis.BakryEmery.GradientForcing.Elliptic
 
 /-!
 # Audit: uniformly elliptic difference-quotient equations of the regular moment potential
@@ -12,7 +14,8 @@ Real clients for the strong regular class of Letwin, arXiv:2607.24164v1, Lemma 2
   `exists_regular_moment_potential_elliptic_quotient_equations` from the original inputs only. It
   extracts one potential `u` with its normalization, gradient transport, `C²`, pointwise positive
   definite Hessian, log-determinant equation and Hessian upper bound, and on the ball of radius
-  `1/2`, for every unit direction and nonzero step `|q| ≤ 1/2`, the finite-difference equations with the
+  `1/2`, for every unit direction and nonzero step `|q| ≤ 1/2`, the finite-difference equations with
+  the
   same averaged-inverse coefficients, their entry cap and positive quadratic lower and upper bounds,
   all independent of the direction and the step.
 * `unit_ball_unit_direction_linearized_equations` calls
@@ -24,6 +27,8 @@ Real clients for the strong regular class of Letwin, arXiv:2607.24164v1, Lemma 2
 
 Neither client claims a Schauder estimate, a regularity gain or a merely convex Lemma 2.2 statement.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -127,10 +132,14 @@ end CEKEllipticityAudit
 
 #print axioms CEKEllipticityAudit.unit_ball_unit_direction_elliptic_equations
 #print axioms CEKEllipticityAudit.unit_ball_unit_direction_linearized_equations
-#print axioms FunctionalInequalities.Analysis.exists_regular_moment_potential_elliptic_quotient_equations
-#print axioms FunctionalInequalities.Analysis.BakryEmery.exists_uniform_elliptic_differenceQuotient_equations
-#print axioms FunctionalInequalities.Analysis.BakryEmery.exists_uniform_linearized_differenceQuotient_equations
-#print axioms FunctionalInequalities.Analysis.BakryEmery.exists_uniform_segmentForcingCoefficient_bounds
+#print axioms
+  FunctionalInequalities.Analysis.exists_regular_moment_potential_elliptic_quotient_equations
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.exists_uniform_elliptic_differenceQuotient_equations
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.exists_uniform_linearized_differenceQuotient_equations
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.exists_uniform_segmentForcingCoefficient_bounds
 #print axioms FunctionalInequalities.Analysis.BakryEmery.linearized_differenceQuotient_equation
 #print axioms FunctionalInequalities.Analysis.exists_uniform_averagedInverse_ellipticity
 #print axioms FunctionalInequalities.Analysis.exists_uniform_quadratic_bounds

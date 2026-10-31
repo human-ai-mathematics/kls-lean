@@ -1,8 +1,10 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.Topology.ContinuousMap.Bounded.Basic
-import FunctionalInequalities.Analysis.Cutoff.SmoothBall
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.Topology.ContinuousMap.Bounded.Basic
+public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # Poincaré bounds under weak limits
@@ -12,9 +14,12 @@ convergent family of laws passes to the limit. For a fixed compactly supported s
 integrals of `f`, `f²` and `‖∇f‖²` are integrals of bounded continuous functions, so the inequality
 `Var f ≤ C ∫‖∇f‖²` survives weak convergence with converging constants
 (`variance_le_mul_energy_of_tendsto`). The extension from compactly supported tests to all
-admissible tests and the transfer to the literature constant of a log-concave limit are added as they
+admissible tests and the transfer to the literature constant of a log-concave limit are added as
+they
 are proved.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -47,8 +52,6 @@ theorem variance_le_mul_energy_of_tendsto {μs : ℕ → ProbabilityMeasure E} {
 
       have hfs : Continuous (fun x => f x ^ 2) := by
         convert hf.continuous.pow 2 using 1
-        ext x
-        rfl
 
       obtain ⟨Bf2, hBf2⟩ := hfc.exists_bound_of_continuous hfs
       let gf2 : BoundedContinuousFunction E ℝ :=
@@ -68,8 +71,6 @@ theorem variance_le_mul_energy_of_tendsto {μs : ℕ → ProbabilityMeasure E} {
 
       have hgrads : Continuous (fun x => ‖fderiv ℝ f x‖ ^ 2) := by
         convert hfd.norm.pow 2 using 1
-        ext x
-        rfl
 
       obtain ⟨Bg, hBg⟩ := hgradc.exists_bound_of_continuous hgrads
       let gg : BoundedContinuousFunction E ℝ :=
@@ -200,128 +201,106 @@ omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 `∫ χ_{n+1} f → ∫ f` and `∫ (χ_{n+1} f)² → ∫ f²` (no `L²`-norm convergence is exported). -/
 theorem tendsto_integral_scaled_mul {μ : Measure E} [IsFiniteMeasure μ] {f : E → ℝ}
     (hf : MemLp f 2 μ) :
-    Tendsto (fun n : ℕ => ∫ x, Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x ∂μ)
+    Tendsto
+        (fun n : ℕ =>
+          ∫ x, Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x ∂μ)
         atTop (𝓝 (∫ x, f x ∂μ)) ∧
-      Tendsto (fun n : ℕ =>
+      Tendsto
+        (fun n : ℕ =>
           ∫ x, (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) ^ 2 ∂μ)
         atTop (𝓝 (∫ x, f x ^ 2 ∂μ)) := by
-    have hmeas₁ : ∀ n : ℕ, AEStronglyMeasurable
-        (fun x =>
-          Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) μ := by
-      intro n
-      have hχ :
-          AEStronglyMeasurable
-            (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1)) μ :=
-        (Energy.Euclidean.LipschitzApproximation.contDiff_scaled
+  have hmeas₁ :
+    ∀ n : ℕ,
+      AEStronglyMeasurable
+        (fun x => Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) μ := by
+    intro n
+    have hχ :
+      AEStronglyMeasurable (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1)) μ :=
+      (Energy.Euclidean.LipschitzApproximation.contDiff_scaled
           ((n : ℝ) + 1)).continuous.aestronglyMeasurable
-      exact hχ.mul hf.1
-
-    have hbound₁ : ∀ n : ℕ, ∀ᵐ x ∂μ,
-        ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖
-          ≤ ‖f x‖ := by
-      intro n
-      filter_upwards [] with x
-      have hχ₀ :
-          0 ≤ Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x :=
-        Energy.Euclidean.LipschitzApproximation.scaled_nonneg
-          ((n : ℝ) + 1) x
-      have hχ₁ :
-          Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x ≤ 1 :=
-        Energy.Euclidean.LipschitzApproximation.scaled_le_one
-          ((n : ℝ) + 1) x
+    exact hχ.mul hf.aestronglyMeasurable
+  have hbound₁ :
+    ∀ n : ℕ,
+      ∀ᵐ x ∂μ, ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ ≤ ‖f x‖ := by
+    intro n
+    filter_upwards [] with x
+    have hχ₀ : 0 ≤ Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x :=
+      Energy.Euclidean.LipschitzApproximation.scaled_nonneg ((n : ℝ) + 1) x
+    have hχ₁ : Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x ≤ 1 :=
+      Energy.Euclidean.LipschitzApproximation.scaled_le_one ((n : ℝ) + 1) x
+    rw [norm_mul, Real.norm_eq_abs, abs_of_nonneg hχ₀]
+    exact mul_le_of_le_one_left (norm_nonneg _) hχ₁
+  have hlim₁ :
+    ∀ᵐ x ∂μ,
+      Tendsto
+        (fun n : ℕ => Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x)
+        atTop (𝓝 (f x)) := by
+    filter_upwards [] with x
+    refine tendsto_atTop_of_eventually_const (i₀ := Nat.ceil ‖x‖) ?_
+    intro n hn
+    have hR : 0 < (n : ℝ) + 1 := by positivity
+    rw [scaled_eq_one_of_ceil_le x n hR hn]
+    simp
+  have hfirst :=
+    MeasureTheory.tendsto_integral_of_dominated_convergence (bound := fun x => ‖f x‖)
+      (F_measurable := hmeas₁) (bound_integrable := (hf.integrable one_le_two).norm) (h_bound :=
+      hbound₁) (h_lim := hlim₁)
+  have hmeas₂ :
+    ∀ n : ℕ,
+      AEStronglyMeasurable
+        (fun x => (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) ^ 2)
+        μ := by
+    intro n
+    have hχ :
+      AEStronglyMeasurable (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1)) μ :=
+      (Energy.Euclidean.LipschitzApproximation.contDiff_scaled
+          ((n : ℝ) + 1)).continuous.aestronglyMeasurable
+    exact (hχ.mul hf.aestronglyMeasurable).pow 2
+  have hbound₂ :
+    ∀ n : ℕ,
+      ∀ᵐ x ∂μ,
+        ‖(Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) ^ 2‖ ≤
+          f x ^ 2 := by
+    intro n
+    filter_upwards [] with x
+    have hχ₀ : 0 ≤ Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x :=
+      Energy.Euclidean.LipschitzApproximation.scaled_nonneg ((n : ℝ) + 1) x
+    have hχ₁ : Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x ≤ 1 :=
+      Energy.Euclidean.LipschitzApproximation.scaled_le_one ((n : ℝ) + 1) x
+    have hnorm :
+      ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ ≤ ‖f x‖ := by
       rw [norm_mul, Real.norm_eq_abs, abs_of_nonneg hχ₀]
       exact mul_le_of_le_one_left (norm_nonneg _) hχ₁
-
-    have hlim₁ : ∀ᵐ x ∂μ, Tendsto
-        (fun n : ℕ =>
-          Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x)
-        atTop (𝓝 (f x)) := by
-      filter_upwards [] with x
-      refine tendsto_atTop_of_eventually_const (i₀ := Nat.ceil ‖x‖) ?_
-      intro n hn
-      have hR : 0 < (n : ℝ) + 1 := by positivity
-      rw [scaled_eq_one_of_ceil_le x n hR hn]
-      simp
-
-    have hfirst :=
-      MeasureTheory.tendsto_integral_of_dominated_convergence
-        (bound := fun x => ‖f x‖)
-        (F_measurable := hmeas₁)
-        (bound_integrable := (hf.integrable one_le_two).norm)
-        (h_bound := hbound₁)
-        (h_lim := hlim₁)
-
-    have hmeas₂ : ∀ n : ℕ, AEStronglyMeasurable
-        (fun x =>
-          (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) ^ 2) μ := by
-      intro n
-      have hχ :
-          AEStronglyMeasurable
-            (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1)) μ :=
-        (Energy.Euclidean.LipschitzApproximation.contDiff_scaled
-          ((n : ℝ) + 1)).continuous.aestronglyMeasurable
-      exact (hχ.mul hf.1).pow 2
-
-    have hbound₂ : ∀ n : ℕ, ∀ᵐ x ∂μ,
-        ‖(Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) ^ 2‖
-          ≤ f x ^ 2 := by
-      intro n
-      filter_upwards [] with x
-      have hχ₀ :
-          0 ≤ Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x :=
-        Energy.Euclidean.LipschitzApproximation.scaled_nonneg
-          ((n : ℝ) + 1) x
-      have hχ₁ :
-          Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x ≤ 1 :=
-        Energy.Euclidean.LipschitzApproximation.scaled_le_one
-          ((n : ℝ) + 1) x
-      have hnorm :
-          ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖
-            ≤ ‖f x‖ := by
-        rw [norm_mul, Real.norm_eq_abs, abs_of_nonneg hχ₀]
-        exact mul_le_of_le_one_left (norm_nonneg _) hχ₁
-      rw [norm_pow]
-      calc
-        ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ ^ 2
-            ≤ ‖f x‖ ^ 2 := by
-              calc
-                ‖Energy.Euclidean.LipschitzApproximation.scaled
-                      ((n : ℝ) + 1) x * f x‖ ^ 2
-                    =
-                  ‖Energy.Euclidean.LipschitzApproximation.scaled
-                      ((n : ℝ) + 1) x * f x‖ *
-                    ‖Energy.Euclidean.LipschitzApproximation.scaled
-                      ((n : ℝ) + 1) x * f x‖ := by ring
-                _ ≤ ‖f x‖ *
-                    ‖Energy.Euclidean.LipschitzApproximation.scaled
-                      ((n : ℝ) + 1) x * f x‖ :=
-                  mul_le_mul_of_nonneg_right hnorm (norm_nonneg _)
-                _ ≤ ‖f x‖ * ‖f x‖ :=
-                  mul_le_mul_of_nonneg_left hnorm (norm_nonneg _)
-                _ = ‖f x‖ ^ 2 := by ring
-        _ = f x ^ 2 := by
-          rw [Real.norm_eq_abs, sq_abs]
-
-    have hlim₂ : ∀ᵐ x ∂μ, Tendsto
+    rw [norm_pow]
+    calc
+      ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ ^ 2 ≤ ‖f x‖ ^ 2 := by
+        calc
+          ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ ^ 2 =
+              ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ *
+                ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ := by
+            ring
+          _ ≤ ‖f x‖ * ‖Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x‖ :=
+            mul_le_mul_of_nonneg_right hnorm (norm_nonneg _)
+          _ ≤ ‖f x‖ * ‖f x‖ := mul_le_mul_of_nonneg_left hnorm (norm_nonneg _)
+          _ = ‖f x‖ ^ 2 := by ring
+      _ = f x ^ 2 := by rw [Real.norm_eq_abs, sq_abs]
+  have hlim₂ :
+    ∀ᵐ x ∂μ,
+      Tendsto
         (fun n : ℕ =>
           (Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x) ^ 2)
         atTop (𝓝 (f x ^ 2)) := by
-      filter_upwards [] with x
-      refine tendsto_atTop_of_eventually_const (i₀ := Nat.ceil ‖x‖) ?_
-      intro n hn
-      have hR : 0 < (n : ℝ) + 1 := by positivity
-      rw [scaled_eq_one_of_ceil_le x n hR hn]
-      simp
-
-    have hsecond :=
-      MeasureTheory.tendsto_integral_of_dominated_convergence
-        (bound := fun x => f x ^ 2)
-        (F_measurable := hmeas₂)
-        (bound_integrable := (memLp_two_iff_integrable_sq hf.1).1 hf)
-        (h_bound := hbound₂)
-        (h_lim := hlim₂)
-
-    exact ⟨hfirst, hsecond⟩
+    filter_upwards [] with x
+    refine tendsto_atTop_of_eventually_const (i₀ := Nat.ceil ‖x‖) ?_
+    intro n hn
+    have hR : 0 < (n : ℝ) + 1 := by positivity
+    rw [scaled_eq_one_of_ceil_le x n hR hn]
+    simp
+  have hsecond :=
+    MeasureTheory.tendsto_integral_of_dominated_convergence (bound := fun x => f x ^ 2)
+      (F_measurable := hmeas₂) (bound_integrable := (memLp_two_iff_integrable_sq hf.aestronglyMeasurable).1 hf)
+      (h_bound := hbound₂) (h_lim := hlim₂)
+  exact ⟨hfirst, hsecond⟩
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Inside the ball the cutoff does not change the gradient. -/
@@ -428,7 +407,7 @@ theorem tendsto_energy_scaled_mul {μ : Measure E} [IsFiniteMeasure μ] {f : E �
     obtain ⟨M, hM0, hM⟩ :=
       Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump (E := E)
     have hsq : Integrable (fun x : E => f x ^ 2) μ :=
-      (memLp_two_iff_integrable_sq hf.memLp_two.1).1 hf.memLp_two
+      (memLp_two_iff_integrable_sq hf.memLp_two.aestronglyMeasurable).1 hf.memLp_two
     have hbound :
         Integrable
           (fun x : E => 2 * ‖gradient f x‖ ^ 2 + 2 * M ^ 2 * f x ^ 2) μ :=

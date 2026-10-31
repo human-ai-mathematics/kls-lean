@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
-import FunctionalInequalities.KLS.Geometry.Cheeger.Median
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Median
 
 /-!
 # Scope audit for Cheeger's inequality `C_P^smooth(ν) ≤ 4 / h_M(ν)²`
@@ -25,6 +27,8 @@ a `1`-Lipschitz admissible test, for which `route_P6` gives the scale-free bound
 The axiom reports at the end cover every public declaration of the median and inequality modules
 and every theorem of this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -189,16 +193,19 @@ reported. -/
 #print axioms FunctionalInequalities.KLS.Isoperimetry.contDiff_sq_posPart
 #print axioms FunctionalInequalities.KLS.Isoperimetry.enorm_gradient_eq_enorm_fderiv
 #print axioms FunctionalInequalities.KLS.Isoperimetry.measurable_enorm_gradient
-#print axioms FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_sq_mul_lintegral_posPart_sq_le
+#print axioms
+  FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_sq_mul_lintegral_posPart_sq_le
 #print axioms FunctionalInequalities.KLS.Isoperimetry.evariance_le_lintegral_ofReal_sub_sq
 #print axioms FunctionalInequalities.KLS.Isoperimetry.enorm_gradient_neg
 #print axioms FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_sq_mul_evariance_le
 #print axioms FunctionalInequalities.KLS.Isoperimetry.add_sq_le_four_mul_add_sq
 #print axioms FunctionalInequalities.KLS.Isoperimetry.exists_lipschitz_bound_of_hasCompactSupport
-#print axioms FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_sq_mul_evariance_le_of_admissible
+#print axioms
+  FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_sq_mul_evariance_le_of_admissible
 #print axioms FunctionalInequalities.KLS.Isoperimetry.ofReal_energy_eq_lintegral
 #print axioms FunctionalInequalities.KLS.Isoperimetry.smoothTest_constant_le
-#print axioms FunctionalInequalities.KLS.Isoperimetry.smoothTest_constant_eq_zero_of_minkowskiConstant_eq_top
+#print axioms
+  FunctionalInequalities.KLS.Isoperimetry.smoothTest_constant_eq_zero_of_minkowskiConstant_eq_top
 
 #print axioms CheegerInequalityAudit.route_P1
 #print axioms CheegerInequalityAudit.route_P2
@@ -214,11 +221,14 @@ reported. -/
 /-! #### The target `P0` of `InequalityRouteStatements.lean`, verbatim, through the identification
 `h_μ = h_M(ν)` of `KLS/Geometry/Cheeger/Equality.lean` -/
 
-theorem CheegerInequalityAudit.route_P0 : ∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
-    {μ : ProbabilityMeasure E}, LogConcave μ →
-    Poincare.LocalSlope.Intrinsic.constant μ ≤ 4 * Isoperimetry.inverseScale μ ^ 2 :=
-  fun hμ => FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq hμ
+theorem CheegerInequalityAudit.route_P0 :
+    ∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+      [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+      {μ : ProbabilityMeasure E},
+      LogConcave μ →
+        Poincare.LocalSlope.Intrinsic.constant μ ≤ 4 * Isoperimetry.inverseScale μ ^ 2 :=
+  fun hμ =>
+  FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq hμ
 
 #print axioms FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq
 #print axioms CheegerInequalityAudit.route_P0

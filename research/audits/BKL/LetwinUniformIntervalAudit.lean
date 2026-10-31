@@ -1,6 +1,12 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
-import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformIntervalClient
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
+public import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformIntervalClient
+public meta import Lean
+import all FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
+import all FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
+import all FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformIntervalClient
 
 /-!
 # Audit: Letwin Lemmas A.4 and A.5 for the uniform-interval source law
@@ -19,12 +25,15 @@ at elaboration:
   integral-zero statement for `f` is used (none is defined: the checked names below are absent).
 -/
 
+@[expose] public section
+
 open Lean Elab Command
 
 namespace LetwinUniformIntervalAudit
 
-/-- The constants of module `m` whose transitive axioms are not among `propext`, `Classical.choice`, `Quot.sound`. -/
-def nonstandard (m : Name) : CommandElabM (Array Name) := do
+/-- The constants of module `m` whose transitive axioms are not among `propext`, `Classical.choice`,
+`Quot.sound`. -/
+meta def nonstandard (m : Name) : CommandElabM (Array Name) := do
   let env ← getEnv
   let some idx := env.getModuleIdx? m | throwError "module {m} not imported"
   let mut bad := #[]
@@ -33,9 +42,10 @@ def nonstandard (m : Name) : CommandElabM (Array Name) := do
     unless ax.all (fun a => a == ``propext || a == ``Classical.choice || a == ``Quot.sound) do bad := bad.push c
   return bad
 
-/-- The constants occurring in the value of `c` or of its own auxiliary constants (names extending `c`, such as
+/-- The constants occurring in the value of `c` or of its own auxiliary constants (names extending
+`c`, such as
 abstracted `_proof_n` terms), followed transitively. -/
-partial def usedInValue (c : Name) : CommandElabM (Array Name) := do
+meta partial def usedInValue (c : Name) : CommandElabM (Array Name) := do
   let env ← getEnv
   let rec go (todo : List Name) (seen : NameSet) (acc : Array Name) : CommandElabM (Array Name) := do
     match todo with

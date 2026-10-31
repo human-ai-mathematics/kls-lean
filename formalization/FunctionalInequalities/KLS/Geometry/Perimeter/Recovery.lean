@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.Relative
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.Relative
 
 /-! # Smooth recovery sequences for the relative perimeter
 
 The outward dilation of `Geometry/RelativePerimeter` is combined with a vanishing mollification
 radius.  No coarea, Sard or Cheeger dependency. -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -144,23 +148,25 @@ namespace RelativePerimeter
 
 /-- Blueprint `lem:relative-perimeter-smoothing`.  Let `ν` be a probability law on a
 finite-dimensional real inner-product space with a Borell density `ρ` relative to Lebesgue
-measure `volume`, and put `Ω = interior ν.support`.  For every smooth domain `U` with finite relative
+measure `volume`, and put `Ω = interior ν.support`.  For every smooth domain `U` with finite
+relative
 perimeter there are globally `C^∞`, globally Lipschitz functions `0 ≤ u_j ≤ 1` such that
 `u_j → 𝟙_U` in `L¹(ν)` and `limsup_j ∫ ‖∇u_j‖ dν ≤ P_ρ(U)`.  The domain and the carrier may be
 unbounded; a piece of `∂U` on `∂(supp ν)` costs nothing. -/
-theorem exists_smooth_recovery_sequence {ν : ProbabilityMeasure V}
-    {ρ : V → ℝ} (hρ : IsBorellDensity (ν : Measure V) volume ρ)
-    (U : SmoothDomain V)
+theorem exists_smooth_recovery_sequence {ν : ProbabilityMeasure V} {ρ : V → ℝ}
+    (hρ : IsBorellDensity (ν : Measure V) volume ρ) (U : SmoothDomain V)
     (_hU : relativePerimeter ρ (interior (ν : Measure V).support) U ≠ ⊤) :
     ∃ u : ℕ → V → ℝ,
-      (∀ j, ContDiff ℝ ∞ (u j) ∧ (∃ K : ℝ≥0, LipschitzWith K (u j)) ∧
-        ∀ x, u j x ∈ Set.Icc (0 : ℝ) 1) ∧
-      Tendsto (fun j ↦ ∫⁻ x, ‖u j x - U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V))
-        atTop (𝓝 0) ∧
-      limsup (fun j ↦ ∫⁻ x, ‖gradient (u j) x‖ₑ ∂(ν : Measure V)) atTop ≤
-        relativePerimeter ρ (interior (ν : Measure V).support) U := by
+      (∀ j,
+          ContDiff ℝ ∞ (u j) ∧
+            (∃ K : ℝ≥0, LipschitzWith K (u j)) ∧ ∀ x, u j x ∈ Set.Icc (0 : ℝ) 1) ∧
+        Tendsto (fun j ↦ ∫⁻ x, ‖u j x - U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V)) atTop
+            (𝓝 0) ∧
+          limsup (fun j ↦ ∫⁻ x, ‖gradient (u j) x‖ₑ ∂(ν : Measure V)) atTop ≤
+            relativePerimeter ρ (interior (ν : Measure V).support) U := by
   classical
   -- an interior ball on which the density is bounded below, and the global upper bound
+
   obtain ⟨a, r₀, b₀, hr₀, hb₀, hball₀⟩ := hρ.exists_ball_le
   obtain ⟨M, hM⟩ := hρ.exists_le
   set r : ℝ := r₀ / 2 with hrdef
@@ -177,18 +183,21 @@ theorem exists_smooth_recovery_sequence {ν : ProbabilityMeasure V}
     exact interior_maximal (fun z hz ↦ lt_of_lt_of_le hb₀ (hball₀ z hz)) Metric.isOpen_ball
   have hMpos : 0 < M :=
     lt_of_lt_of_le hb₀ ((hball a (Metric.mem_closedBall_self hr.le)).trans (hM a))
-  have hbase : 0 < M / b₀ := div_pos hMpos hb₀
+  have hbase : 0 < M / b₀ :=
+    div_pos hMpos
+      hb₀
   -- the frontiers are null for `ν`
+
   have hUfr : (ν : Measure V) (frontier U.carrier) = 0 :=
-    hρ.absolutelyContinuous (U.addHaar_frontier volume)
+    hρ.absolutelyContinuous
+      (U.addHaar_frontier volume)
   -- the dilation ratios
+
   set s : ℕ → ℝ := fun j ↦ 1 - 1 / ((j : ℝ) + 2) with hsdef
   have hs₀ : ∀ j, 0 < s j := by
     intro j
-    have hj : (1 : ℝ) < (j : ℝ) + 2 := by
-      have := Nat.cast_nonneg (α := ℝ) j; linarith
-    have hlt : 1 / ((j : ℝ) + 2) < 1 := by
-      rw [div_lt_one (by linarith)]; exact hj
+    have hj : (1 : ℝ) < (j : ℝ) + 2 := by have := Nat.cast_nonneg (α := ℝ) j; linarith
+    have hlt : 1 / ((j : ℝ) + 2) < 1 := by rw [div_lt_one (by linarith)]; exact hj
     simp only [hsdef]
     linarith
   have hs₁ : ∀ j, s j < 1 := by
@@ -200,22 +209,30 @@ theorem exists_smooth_recovery_sequence {ν : ProbabilityMeasure V}
     have h : Tendsto (fun j : ℕ ↦ 1 / ((j : ℝ) + 2)) atTop (𝓝 0) :=
       tendsto_const_nhds.div_atTop
         (tendsto_atTop_add_const_right _ 2 tendsto_natCast_atTop_atTop)
-    simpa [hsdef] using tendsto_const_nhds.sub h
+    simpa [hsdef] using
+      tendsto_const_nhds.sub
+        h
   -- the dilated domains and the choice of bump radii
-  have hWfr : ∀ j, (ν : Measure V)
-      (frontier (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier) = 0 := fun j ↦
+
+  have hWfr :
+    ∀ j, (ν : Measure V) (frontier (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier) = 0 :=
+    fun j ↦
     hρ.absolutelyContinuous ((U.homothety a (inv_ne_zero (hs₀ j).ne')).addHaar_frontier volume)
-  have hchoice : ∀ j : ℕ, ∃ φ : ContDiffBump (0 : V),
-      φ.rOut < r * (1 - s j) / s j ∧
-      ∫⁻ x, ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator φ volume x -
-          (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator 1 x‖ₑ
-        ∂(ν : Measure V) < ((j : ℝ≥0∞) + 1)⁻¹ := by
+  have hchoice :
+    ∀ j : ℕ,
+      ∃ φ : ContDiffBump (0 : V),
+        φ.rOut < r * (1 - s j) / s j ∧
+          ∫⁻ x,
+              ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator φ volume x -
+                  (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator 1
+                    x‖ₑ ∂(ν : Measure V) <
+            ((j : ℝ≥0∞) + 1)⁻¹ := by
     intro j
-    have hpos : 0 < r * (1 - s j) / s j :=
-      div_pos (mul_pos hr (sub_pos.mpr (hs₁ j))) (hs₀ j)
-    exact SmoothDomain.exists_bump_lintegral_enorm_mollifiedIndicator_sub_lt
-      (U.homothety a (inv_ne_zero (hs₀ j).ne')) ν (hWfr j) hpos
-      (ENNReal.inv_pos.mpr (by simp))
+    have hpos : 0 < r * (1 - s j) / s j := div_pos (mul_pos hr (sub_pos.mpr (hs₁ j))) (hs₀ j)
+    exact
+      SmoothDomain.exists_bump_lintegral_enorm_mollifiedIndicator_sub_lt
+        (U.homothety a (inv_ne_zero (hs₀ j).ne')) ν (hWfr j) hpos
+        (ENNReal.inv_pos.mpr (by simp))
   choose φ hφR hφerr using hchoice
   have hεj : ∀ j, s j * (φ j).rOut / (1 - s j) < r := by
     intro j
@@ -225,71 +242,97 @@ theorem exists_smooth_recovery_sequence {ν : ProbabilityMeasure V}
     rw [lt_div_iff₀ h2] at h3
     rw [div_lt_iff₀ h1, mul_comm (s j) ((φ j).rOut)]
     exact h3
-  refine ⟨fun j ↦ (U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume,
-    fun j ↦ (U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator_contDiff_lipschitz_mem_Icc
-      (φ j) volume, ?_, ?_⟩
+  refine
+    ⟨fun j ↦ (U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume, fun j ↦
+      (U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator_contDiff_lipschitz_mem_Icc
+        (φ j) volume,
+      ?_, ?_⟩
   · -- `L¹(ν)` convergence: dilation error plus mollification error
+
     set g : ℝ → ℝ≥0∞ := fun c ↦
-      ∫⁻ x, ‖U.carrier.indicator (1 : V → ℝ) (AffineMap.homothety a c x) -
-        U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V) with hgdef
+      ∫⁻ x,
+        ‖U.carrier.indicator (1 : V → ℝ) (AffineMap.homothety a c x) -
+            U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V) with
+      hgdef
     have hg : Tendsto g (𝓝 1) (𝓝 0) := tendsto_indicator_homothety ν U.isOpen hUfr a
     have hgs : Tendsto (fun j ↦ g (s j)) atTop (𝓝 0) := hg.comp hstend
-    have hWind : ∀ (j : ℕ) (x : V),
-        (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x
-          = U.carrier.indicator 1 (AffineMap.homothety a (s j) x) := by
+    have hWind :
+      ∀ (j : ℕ) (x : V),
+        (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x =
+          U.carrier.indicator 1 (AffineMap.homothety a (s j) x) := by
       intro j x
       rw [U.indicator_homothety a (inv_ne_zero (hs₀ j).ne') x, inv_inv]
-    have hle : ∀ j : ℕ,
-        ∫⁻ x, ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-            U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V)
-          ≤ ((j : ℝ≥0∞) + 1)⁻¹ + g (s j) := by
+    have hle :
+      ∀ j : ℕ,
+        ∫⁻ x,
+            ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
+                U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
+          ((j : ℝ≥0∞) + 1)⁻¹ + g (s j) := by
       intro j
-      have hmeas : Measurable fun x ↦
+      have hmeas :
+        Measurable fun x ↦
           ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-            (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x‖ₑ :=
-        ((((U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator_contDiff_lipschitz_mem_Icc
-          (φ j) volume).1.continuous.measurable).sub
+              (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x‖ₑ :=
+        ((((U.homothety a
+                        (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator_contDiff_lipschitz_mem_Icc
+                    (φ j) volume).1.continuous.measurable).sub
             (measurable_one.indicator
               (U.homothety a (inv_ne_zero (hs₀ j).ne')).isOpen.measurableSet)).enorm
-      calc ∫⁻ x, ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-              U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V)
-          ≤ ∫⁻ x, (‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-                (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x‖ₑ +
-              ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x -
-                U.carrier.indicator 1 x‖ₑ) ∂(ν : Measure V) := by
-            refine lintegral_mono fun x ↦ ?_
-            rw [show (U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-                U.carrier.indicator (1 : V → ℝ) x
-              = ((U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-                  (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x) +
-                ((U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x -
-                  U.carrier.indicator 1 x) by ring]
-            exact enorm_add_le _ _
-        _ = (∫⁻ x, ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
-                (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x‖ₑ
-              ∂(ν : Measure V)) +
-            ∫⁻ x, ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x -
-                U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V) := lintegral_add_left hmeas _
+      calc
+        ∫⁻ x,
+              ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
+                  U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
+            ∫⁻ x,
+              (‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
+                    (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ)
+                      x‖ₑ +
+                ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x -
+                    U.carrier.indicator 1 x‖ₑ) ∂(ν : Measure V) := by
+          refine lintegral_mono fun x ↦ ?_
+          rw [show
+              (U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
+                  U.carrier.indicator (1 : V → ℝ) x =
+                ((U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
+                    (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x) +
+                  ((U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x -
+                    U.carrier.indicator 1 x)
+              by ring]
+          exact enorm_add_le _ _
+        _ =
+            (∫⁻ x,
+                ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume x -
+                    (U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ)
+                      x‖ₑ ∂(ν : Measure V)) +
+              ∫⁻ x,
+                ‖(U.homothety a (inv_ne_zero (hs₀ j).ne')).carrier.indicator (1 : V → ℝ) x -
+                    U.carrier.indicator 1 x‖ₑ ∂(ν : Measure V) :=
+          lintegral_add_left hmeas _
         _ ≤ ((j : ℝ≥0∞) + 1)⁻¹ + g (s j) := by
-            refine add_le_add (hφerr j).le (le_of_eq ?_)
-            rw [hgdef]
-            exact lintegral_congr fun x ↦ by rw [hWind j x]
+          refine add_le_add (hφerr j).le (le_of_eq ?_)
+          rw [hgdef]
+          exact lintegral_congr fun x ↦ by rw [hWind j x]
     have hinv : Tendsto (fun j : ℕ ↦ ((j : ℝ≥0∞) + 1)⁻¹) atTop (𝓝 0) := by
       have h := ENNReal.tendsto_inv_nat_nhds_zero.comp (tendsto_add_atTop_nat 1)
       simpa [Function.comp_def] using h
     have hsum : Tendsto (fun j : ℕ ↦ ((j : ℝ≥0∞) + 1)⁻¹ + g (s j)) atTop (𝓝 0) := by
       simpa using hinv.add hgs
-    exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hsum
-      (fun _ ↦ by simp) hle
+    exact
+      tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hsum (fun _ ↦ by simp) hle
   · -- the gradient budget: the dilation coefficient tends to one
+
     set P : ℝ≥0∞ := relativePerimeter ρ (interior (ν : Measure V).support) U with hP
     set c : ℕ → ℝ := fun j ↦
       s j ^ (1 - (Module.finrank ℝ V : ℝ)) * (M / b₀) ^ ((1 - s j) / s j) with hcdef
-    have hle : ∀ j : ℕ,
-        ∫⁻ x, ‖gradient ((U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator
-          (φ j) volume) x‖ₑ ∂(ν : Measure V) ≤ ENNReal.ofReal (c j) * P := fun j ↦
-      lintegral_enorm_gradient_mollified_homothety_le hρ U hr haΩ hb₀ hball hM
-        (hs₀ j) (hs₁ j) (φ j) (hεj j)
+    have hle :
+      ∀ j : ℕ,
+        ∫⁻ x,
+            ‖gradient
+                ((U.homothety a (inv_ne_zero (hs₀ j).ne')).mollifiedIndicator (φ j) volume)
+                x‖ₑ ∂(ν : Measure V) ≤
+          ENNReal.ofReal (c j) * P :=
+      fun j ↦
+      lintegral_enorm_gradient_mollified_homothety_le hρ U hr haΩ hb₀ hball hM (hs₀ j) (hs₁ j)
+        (φ j) (hεj j)
     have hctend : Tendsto c atTop (𝓝 1) := by
       have h1 : Tendsto (fun j : ℕ ↦ s j ^ (1 - (Module.finrank ℝ V : ℝ))) atTop (𝓝 1) := by
         have hcont : ContinuousAt (fun x : ℝ ↦ x ^ (1 - (Module.finrank ℝ V : ℝ))) 1 :=
@@ -306,10 +349,11 @@ theorem exists_smooth_recovery_sequence {ν : ProbabilityMeasure V}
     have hlim : Tendsto (fun j : ℕ ↦ ENNReal.ofReal (c j) * P) atTop (𝓝 P) := by
       have h1 : Tendsto (fun j : ℕ ↦ ENNReal.ofReal (c j)) atTop (𝓝 1) := by
         simpa [Function.comp_def] using (ENNReal.continuous_ofReal.tendsto 1).comp hctend
-      simpa using ENNReal.Tendsto.mul h1 (Or.inl one_ne_zero) tendsto_const_nhds
-        (Or.inr ENNReal.one_ne_top)
-    exact le_trans (limsup_le_limsup (Filter.Eventually.of_forall hle))
-      (le_of_eq hlim.limsup_eq)
+      simpa using
+        ENNReal.Tendsto.mul h1 (Or.inl one_ne_zero) tendsto_const_nhds
+          (Or.inr ENNReal.one_ne_top)
+    exact
+      le_trans (limsup_le_limsup (Filter.Eventually.of_forall hle)) (le_of_eq hlim.limsup_eq)
 
 end RelativePerimeter
 end FunctionalInequalities.KLS

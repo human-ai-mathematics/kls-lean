@@ -3,8 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardContraction
-import LevyStochCalc.Probability.DoobContinuous
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Ito.PicardContraction
+public import LevyStochCalc.Probability.DoobContinuous
 
 /-!
 # The `S²` bound for the Picard step
@@ -16,6 +21,8 @@ by its own total variation over the window, and each stochastic component is a m
 Doob's `L²` inequality over the dyadic points applies. Only the dyadic form of Doob is available
 here, because the stochastic integrals are càdlàg only up to modification.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory LevyStochCalc.Probability
 open scoped NNReal ENNReal
@@ -73,7 +80,7 @@ theorem iSup_dyadicRunMax_drift_le
     Filter.Eventually.of_forall fun _ => norm_nonneg _
   have hmono : ∫ s in Set.Icc (0 : ℝ) t, ‖coeffs.μ s (X s ω) i‖
       ≤ ∫ s in Set.Icc (0 : ℝ) T', ‖coeffs.μ s (X s ω) i‖ :=
-    MeasureTheory.setIntegral_mono_set hint.norm hnn' hsub.eventuallyLE
+    MeasureTheory.setIntegral_mono_set hint.norm hnn' hsub.eventuallySubset
   have hnorm : ‖∫ s in Set.Icc (0 : ℝ) t, coeffs.μ s (X s ω) i‖
       ≤ ∫ s in Set.Icc (0 : ℝ) T', ‖coeffs.μ s (X s ω) i‖ :=
     le_trans (MeasureTheory.norm_integral_le_integral_norm _) hmono

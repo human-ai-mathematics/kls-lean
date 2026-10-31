@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Graph.Basic
-import Mathlib.LinearAlgebra.Matrix.SchurComplement
+module
+
+public import FunctionalInequalities.Analysis.Vector.Graph.Basic
+public import Mathlib.LinearAlgebra.Matrix.SchurComplement
 
 /-! # The fibre Jacobian of a codimension-`m` level family
 
@@ -31,6 +33,8 @@ parameter space, which is exactly the passage from a coarea Jacobian to an area 
 
 **No coarea formula is proved here.**
 -/
+
+@[expose] public section
 
 noncomputable section
 

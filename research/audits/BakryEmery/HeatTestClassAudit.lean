@@ -1,8 +1,12 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClass
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.BakryEmery.TestClass
 
 /-! Semantic clients for the partial heat-test extension. The full target, with arbitrary
 `F = P_r g`, is not proved by this audit. In particular the smooth-data client below does not
 assume or construct a classical representative of heat data. -/
+
+@[expose] public section
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Topology InnerProductSpace
@@ -93,10 +97,14 @@ end BakryEmeryHeatTestClassAudit
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.exists_bounds_operator_toLp
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integrable_operator_toLp_weakGamma
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_adjointComp_mul_toLp_eq
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_gammaTwo_nonneg_of_mem_domain
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_nonneg_of_mem_domain
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_nonneg_of_mem_domain_of_tendsto
-#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_operator_test_nonneg
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_gammaTwo_nonneg_of_mem_domain
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_nonneg_of_mem_domain
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_nonneg_of_mem_domain_of_tendsto
+#print axioms
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_weakGamma_operator_test_nonneg
 #print axioms BakryEmeryHeatTestClassAudit.bounded_orbit
 #print axioms BakryEmeryHeatTestClassAudit.pairings_integrable
 #print axioms BakryEmeryHeatTestClassAudit.domain_test_sign

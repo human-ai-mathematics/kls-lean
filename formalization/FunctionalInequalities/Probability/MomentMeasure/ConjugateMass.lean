@@ -1,28 +1,40 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
-import FunctionalInequalities.Probability.MomentMeasure.Basic
-import Mathlib.MeasureTheory.Constructions.HaarToSphere
-import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
-import Mathlib.MeasureTheory.Integral.Lebesgue.DominatedConvergence
-import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLogExp
-import Mathlib.Topology.Instances.EReal.Lemmas
-import Mathlib.Topology.Order.LiminfLimsup
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.AffineMaximum
+public import FunctionalInequalities.Probability.MomentMeasure.Basic
+public import Mathlib.MeasureTheory.Constructions.HaarToSphere
+public import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
+public import Mathlib.MeasureTheory.Integral.Lebesgue.DominatedConvergence
+public import Mathlib.Analysis.SpecialFunctions.Log.ENNRealLogExp
+public import Mathlib.Topology.Instances.EReal.Lemmas
+public import Mathlib.Topology.Order.LiminfLimsup
 
 /-!
 # Upper semicontinuity of conjugate mass (CEK Lemma 17, (56b))
 
-`limsup_mass_legendre_le`: let `K` be open and convex with `0 ∈ K`, let potentials `φ j` converge to `ψ` at every point of
-`K`, where `ψ` is finite, and let `ψ` be radially closed and `⊤` off `closure K`. Then for every additive Haar measure `dx`
+`limsup_mass_legendre_le`: let `K` be open and convex with `0 ∈ K`, let potentials `φ j` converge to
+`ψ` at every point of
+`K`, where `ψ` is finite, and let `ψ` be radially closed and `⊤` off `closure K`. Then for every
+additive Haar measure `dx`
 on a finite-dimensional space, dimension zero included, `∫ exp(-ψ*) dx` is finite and is at least
-`limsup_j ∫ exp(-(φ j)*) dx` (Cordero-Erausquin–Klartag, *Moment measures*, arXiv:1304.0630v1, Lemma 17, (56b)).
-No convergence of the conjugates, finiteness of initial dual masses or integrability is assumed: the pointwise step is
-`limsup_density_legendre_le`, and the common integrable dominator `exists_integrable_exponential_domination` is built from
-finitely many vertices (`Analysis/Convex/Legendre/AffineMaximum.lean`) and `integrable_exp_sub_norm`, the Haar integrability of
+`limsup_j ∫ exp(-(φ j)*) dx` (Cordero-Erausquin–Klartag, *Moment measures*, arXiv:1304.0630v1, Lemma
+17, (56b)).
+No convergence of the conjugates, finiteness of initial dual masses or integrability is assumed: the
+pointwise step is
+`limsup_density_legendre_le`, and the common integrable dominator
+`exists_integrable_exponential_domination` is built from
+finitely many vertices (`Analysis/Convex/Legendre/AffineMaximum.lean`) and
+`integrable_exp_sub_norm`, the Haar integrability of
 `exp(M - c‖y‖)` for `c > 0`.
 
-Real normalization (`real_legendre_normalization`): if the conjugate `φ*` has a real representative `ψ` and conjugate mass
-`1`, then `exp(−ψ)` is Bochner integrable with integral `1` and `weightedMeasure dx ψ` is a probability measure; finiteness of
+Real normalization (`real_legendre_normalization`): if the conjugate `φ*` has a real representative
+`ψ` and conjugate mass
+`1`, then `exp(−ψ)` is Bochner integrable with integral `1` and `weightedMeasure dx ψ` is a
+probability measure; finiteness of
 the lower integral is established before the real conversion.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Set
@@ -50,9 +62,9 @@ theorem integrable_exp_sub_norm [FiniteDimensional ℝ E] [MeasurableSpace E] [B
     have hi : Integrable (fun y : E => Real.exp (-c * ‖y‖)) dx := by
       apply (integrable_fun_norm_addHaar dx (f := fun t : ℝ => Real.exp (-c * t))).mpr
       simpa only [smul_eq_mul, Real.rpow_natCast, Real.rpow_one] using
-        (integrableOn_rpow_mul_exp_neg_mul_rpow
-          (s := ((Module.finrank ℝ E - 1 : ℕ) : ℝ)) (p := 1)
-          (by have hsn := Nat.cast_nonneg (α := ℝ) (Module.finrank ℝ E - 1); linarith) (by norm_num) hc)
+        (integrableOn_rpow_mul_exp_neg_mul_rpow (s := ((Module.finrank ℝ E - 1 : ℕ) : ℝ)) (p :=
+          1) (by have hsn := Nat.cast_nonneg (α := ℝ) (Module.finrank ℝ E - 1); linarith)
+          (by norm_num) hc)
     convert hi.const_mul (Real.exp M) using 1
     funext y
     rw [← Real.exp_add]
@@ -190,7 +202,7 @@ end MomentMeasure
 
 end FunctionalInequalities.Probability
 
-/-! ### CEK Proposition 12 support (2026-10-10 candidate) -/
+/-! ### CEK Proposition 12: logarithmic comparison from integral limits -/
 
 namespace FunctionalInequalities.Probability.MomentMeasure
 
@@ -239,8 +251,6 @@ theorem log_sub_ge_of_integral_limits
     (S : EReal) ≤ ((S + M - r : ℝ) : EReal) := EReal.coe_le_coe_iff.mpr (by linarith)
     _ = ((S + M : ℝ) : EReal) - (r : EReal) := EReal.coe_sub _ _
     _ ≤ _ := EReal.sub_le_sub hl le_rfl
-
-#print axioms log_sub_ge_of_integral_limits
 
 end
 

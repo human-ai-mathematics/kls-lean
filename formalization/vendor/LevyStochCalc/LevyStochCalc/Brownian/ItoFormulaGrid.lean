@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.ItoProcess
-import LevyStochCalc.Brownian.RiemannSum
-import LevyStochCalc.Brownian.ItoIncrementMoment
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.ItoProcess
+public import LevyStochCalc.Brownian.RiemannSum
+public import LevyStochCalc.Brownian.ItoIncrementMoment
 
 /-!
 # The uniform grid and the third-moment remainder
@@ -31,6 +35,8 @@ Itô's formula.
 * `LevyStochCalc.Brownian.Ito.lintegral_sq_sub_le_of_bound` — a uniform pathwise bound on
   `(0, T]` gives the `L²` distance over the window.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

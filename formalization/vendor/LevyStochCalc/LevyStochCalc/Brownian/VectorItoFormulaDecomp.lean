@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.VectorItoTaylor
-import LevyStochCalc.Brownian.CoordDerivative
-import LevyStochCalc.Brownian.VectorItoProcessVersion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.VectorItoTaylor
+public import LevyStochCalc.Brownian.CoordDerivative
+public import LevyStochCalc.Brownian.VectorItoProcessVersion
 
 /-!
 # The grid decomposition behind Itô's formula in the vector case
@@ -22,6 +26,8 @@ and the Brownian index, and the second-order term over a pair of state indices.
 * `LevyStochCalc.Brownian.Ito.IsVectorItoVersion.vectorItoFormula_decomp_ae` — the defect of
   Itô's formula as the remainder plus the three families of Riemann-sum errors.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 

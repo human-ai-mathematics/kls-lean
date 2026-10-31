@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import Mathlib.Analysis.Distribution.TemperateGrowth
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import Mathlib.Analysis.Distribution.TemperateGrowth
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-! # Temperate functions in L1 and L2 under exponential moments
 
@@ -9,6 +11,8 @@ space. For L1, either space is second countable; real targets need no such sourc
 hypothesis. The L2 result retains its second-countable source. No Hilbert,
 finite-dimensional or probability normalization hypothesis is needed.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter

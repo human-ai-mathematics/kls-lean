@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Finite
-import FunctionalInequalities.Analysis.MetricBV.Approximation
-import Mathlib.Probability.Distributions.Gaussian.Real
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Finite
+public import FunctionalInequalities.Analysis.MetricBV.Approximation
+public import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for the recovery sequence of the metric BV perimeter:
 for every Borel measure and every set of finite perimeter, an actual approximating sequence whose
@@ -10,6 +12,8 @@ bounds. Boundary cases: an empty carrier, zero perimeter (the empty set for Lebe
 `ℝ`, the whole line for the standard Gaussian law), and infinite perimeter (the whole line for
 Lebesgue measure), where the hypothesis fails and no recovery sequence is claimed. This is not a
 Minkowski recovery or lower semicontinuity statement. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

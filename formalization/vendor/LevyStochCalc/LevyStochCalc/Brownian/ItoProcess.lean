@@ -3,9 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.DriftIncrement
-import LevyStochCalc.Brownian.ItoIncrementMoment
-import LevyStochCalc.Probability.AbsMoment
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system (module
+-- header, public imports, exposed public section) for Lean/Mathlib v4.35.0; proofs use
+-- `continuous_abs.measurable.comp` for the no longer reachable `Measurable.abs`.
+module
+
+public import LevyStochCalc.Brownian.DriftIncrement
+public import LevyStochCalc.Brownian.ItoIncrementMoment
+public import LevyStochCalc.Probability.AbsMoment
 
 /-!
 # Itô processes and the moments of their increments
@@ -26,6 +31,8 @@ the Itô integral.
 * `LevyStochCalc.Brownian.Ito.integrable_abs_itoIncrement_pow_three` — the cube of the absolute
   increment is integrable.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -56,7 +63,7 @@ theorem integrable_abs_drift_pow
     measurable_setIntegral_Ioc hbm _ _
   have hvu : (0 : ℝ) ≤ v - u := sub_nonneg.mpr huv
   refine (MeasureTheory.integrable_const ((B * (v - u)) ^ n)).mono
-    ((hDmeas.abs.pow_const n).aestronglyMeasurable)
+    (((continuous_abs.measurable.comp hDmeas).pow_const n).aestronglyMeasurable)
     (Filter.Eventually.of_forall fun ω => ?_)
   rw [Real.norm_eq_abs, Real.norm_eq_abs,
     abs_of_nonneg (pow_nonneg (abs_nonneg _) n),
@@ -176,7 +183,7 @@ theorem integrable_abs_itoIncrement_pow_three
   have hMint := (integral_abs_sub_pow_three_le W ℱ hℱ H hm hp hq hC0 hCH hu huv).1
   have hMmeas := measurable_sub_stochasticIntegralBrownian W ℱ hℱ H hm hp hq u v
   refine ((hDint.add hMint).const_mul 4).mono
-    (((hDmeas.add hMmeas).abs.pow_const 3).aestronglyMeasurable)
+    (((continuous_abs.measurable.comp (hDmeas.add hMmeas)).pow_const 3).aestronglyMeasurable)
     (Filter.Eventually.of_forall fun ω => ?_)
   rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (abs_nonneg _) 3)]
   refine le_trans ?_ (le_abs_self _)
@@ -276,7 +283,8 @@ theorem integral_abs_sub_stochasticIntegral_le {u v : ℝ} (hu : 0 ≤ u) (huv :
       |stochasticIntegralBrownian W ℱ hℱ H hm hp hq v ω
         - stochasticIntegralBrownian W ℱ hℱ H hm hp hq u ω|) P := by
     refine ((hMsq.add (MeasureTheory.integrable_const 1)).div_const 2).mono
-      hMmeas.abs.aestronglyMeasurable (Filter.Eventually.of_forall fun ω => ?_)
+      (continuous_abs.measurable.comp hMmeas).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_abs]
     exact (hyoung _).trans (le_abs_self _)
   refine ⟨hMabs, ?_⟩
@@ -321,7 +329,8 @@ theorem integral_abs_itoProcess_sub_le
       |(∫ s in Set.Ioc u v, bdrift ω s ∂volume)
         + (stochasticIntegralBrownian W ℱ hℱ H hm hp hq v ω
           - stochasticIntegralBrownian W ℱ hℱ H hm hp hq u ω)|) P := by
-    refine (hDabs.add hMabs).mono ((hDmeas.add hMmeas).abs.aestronglyMeasurable)
+    refine (hDabs.add hMabs).mono
+      ((continuous_abs.measurable.comp (hDmeas.add hMmeas)).aestronglyMeasurable)
       (Filter.Eventually.of_forall fun ω => ?_)
     rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_abs]
     exact (hpt ω).trans (le_abs_self _)

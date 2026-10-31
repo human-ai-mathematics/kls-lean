@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
-import FunctionalInequalities.KLS.LogConcave.Line.Poincare
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
+public import FunctionalInequalities.KLS.LogConcave.Line.Poincare
 
 /-! Independent full-signature clients for the closed-support BV Cheeger constants and the
 log-concave intrinsic frontend. Checks: the trace and image correspondences (measurability, mass,
@@ -10,6 +12,8 @@ admissible family: all constants `⊤`), and the frontend
 `intrinsicHalfConstant μ = Isoperimetry.constant μ` for finite-dimensional log-concave laws,
 instantiated for an actual log-concave law (a Dirac law on `ℝ`). Nonconvex supports, the
 literature test-class equivalence and general metric-measure comparisons are not claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

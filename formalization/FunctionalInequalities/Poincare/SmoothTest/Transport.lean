@@ -1,6 +1,8 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.Calculus.ContDiff.Operations
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
 
 /-!
 # Transport interfaces for `lem:poincare-finite-tensorization`
@@ -17,6 +19,8 @@ The Mathlib sources at the pinned v4.33.0 commit are
 [integral transport](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Integral/Bochner/Basic.lean),
 and [variance](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Probability/Moments/Variance.lean).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -142,7 +146,7 @@ private theorem isometry_adjoint_isometryEquiv :
 private theorem admissible_comp_isometryEquiv {f : F → ℝ}
     (hf : Admissible (μ.map e) f) : Admissible μ (f ∘ e) :=
   have : IsProbabilityMeasure (μ.map ⇑e) :=
-    Measure.isProbabilityMeasure_map e.continuous.measurable.aemeasurable
+    (Measure.isProbabilityMeasure_map_iff e.continuous.measurable.aemeasurable).2 inferInstance
   Admissible.comp_projection (e : E →L[ℝ] F) (isometry_adjoint_isometryEquiv e)
     (measurePreserving_isometryEquiv e μ) hf
 
@@ -155,7 +159,7 @@ theorem admissible_map_linearIsometryEquiv_iff {f : F → ℝ} :
   · exact admissible_comp_isometryEquiv e μ
   · intro h
     have hprob : IsProbabilityMeasure (μ.map ⇑e) :=
-      Measure.isProbabilityMeasure_map e.continuous.measurable.aemeasurable
+      (Measure.isProbabilityMeasure_map_iff e.continuous.measurable.aemeasurable).2 inferInstance
     have hmm : (μ.map ⇑e).map ⇑e.symm = μ := by
       rw [Measure.map_map e.symm.continuous.measurable e.continuous.measurable]
       have hco : ⇑e.symm ∘ ⇑e = id := funext fun x ↦ e.symm_apply_apply x
@@ -180,7 +184,7 @@ theorem variance_map_linearIsometryEquiv {f : F → ℝ} (hf : MemLp f 2 (μ.map
 theorem energy_map_linearIsometryEquiv {f : F → ℝ} (hf : Admissible (μ.map e) f) :
     energy (μ.map e) f = energy μ (f ∘ e) :=
   have : IsProbabilityMeasure (μ.map ⇑e) :=
-    Measure.isProbabilityMeasure_map e.continuous.measurable.aemeasurable
+    (Measure.isProbabilityMeasure_map_iff e.continuous.measurable.aemeasurable).2 inferInstance
   (energy_comp_projection (e : E →L[ℝ] F) (isometry_adjoint_isometryEquiv e)
     (measurePreserving_isometryEquiv e μ) hf).symm
 
@@ -189,7 +193,7 @@ above, applied to the repository's fixed-constant `Holds` definition. -/
 theorem holds_map_linearIsometryEquiv_iff {C : ℝ} :
     Holds (μ.map e) C ↔ Holds μ C := by
   have hprob : IsProbabilityMeasure (μ.map ⇑e) :=
-    Measure.isProbabilityMeasure_map e.continuous.measurable.aemeasurable
+    (Measure.isProbabilityMeasure_map_iff e.continuous.measurable.aemeasurable).2 inferInstance
   constructor
   · intro h
     refine ⟨inferInstance, h.constant_nonneg, fun g hg ↦ ?_⟩
@@ -237,7 +241,7 @@ theorem Holds.map_smul {μ : Measure E} {C : ℝ} (h : Holds μ C) (r : ℝ) :
   let q : E → E := fun x => r • x
   have hq : Measurable q := by fun_prop
   let hmap : MeasurePreserving q μ (μ.map q) := ⟨hq, rfl⟩
-  refine ⟨Measure.isProbabilityMeasure_map hq.aemeasurable,
+  refine ⟨(Measure.isProbabilityMeasure_map_iff hq.aemeasurable).2 inferInstance,
     mul_nonneg (sq_nonneg r) h.constant_nonneg, ?_⟩
   intro f hf
   have hdiff : Differentiable ℝ f := hf.smooth'.differentiable (by simp)

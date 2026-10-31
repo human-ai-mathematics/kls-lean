@@ -3,8 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.MarkStep
-import LevyStochCalc.Brownian.ItoL2Completion
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Poisson.MarkStep
+public import LevyStochCalc.Brownian.ItoL2Completion
 
 /-!
 # Approximation of a square-integrable integrand by mark-step integrands
@@ -16,6 +21,8 @@ an adapted mark-step integrand on a dyadic grid of level at least `L₀` within 
 restricted to a mark set of finite measure (`truncate`), which reduces to the bounded,
 finitely supported case treated by `exists_markEval_L2_tendsto`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -220,21 +227,21 @@ theorem exists_markStep_close {T : ℝ} (hT : 0 < T)
       ξ := fun i k => if h : i < 2 ^ ℓ then ξ ⟨i, h⟩ k else 0
       ξ_bounded := fun i k => by
         by_cases h : i < 2 ^ ℓ
-        · rw [dif_pos h]
+        · rw [dite_eq_left h]
           exact hξb ⟨i, h⟩ k
-        · rw [dif_neg h]
+        · rw [dite_eq_right h]
           exact ⟨0, fun ω => by simp⟩
       ξ_measurable := fun i k => by
         by_cases h : i < 2 ^ ℓ
-        · rw [dif_pos h]
+        · rw [dite_eq_left h]
           exact hξm ⟨i, h⟩ k
-        · rw [dif_neg h]
+        · rw [dite_eq_right h]
           exact measurable_const }
   have hG : G.Adapted ℱ := by
     intro i hi k
     change @StronglyMeasurable Ω ℝ _ (ℱ ((TimeGrid.dyadic T hT ℓ).p i))
       (if h : i < 2 ^ ℓ then ξ ⟨i, h⟩ k else 0)
-    rw [dif_pos (show i < 2 ^ ℓ from hi)]
+    rw [dite_eq_left (show i < 2 ^ ℓ from hi)]
     exact hξa ⟨i, hi⟩ k
   have heval : ∀ s e ω, G.eval s e ω = ∑ i : Fin (2 ^ ℓ),
       (Set.Ioc (dyadicPartition T ℓ i.castSucc) (dyadicPartition T ℓ i.succ)).indicator
@@ -251,7 +258,7 @@ theorem exists_markStep_close {T : ℝ} (hT : 0 < T)
     rw [show (∑ k, (if h : (i : ℕ) < 2 ^ ℓ then ξ ⟨i, h⟩ k else 0) ω
           * (B k).indicator (fun _ => (1 : ℝ)) e)
         = ∑ k, ξ ⟨i, i.isLt⟩ k ω * (B k).indicator (fun _ => (1 : ℝ)) e from
-      Finset.sum_congr rfl fun k _ => by rw [dif_pos (show (i : ℕ) < 2 ^ ℓ from i.isLt)]]
+      Finset.sum_congr rfl fun k _ => by rw [dite_eq_left (show (i : ℕ) < 2 ^ ℓ from i.isLt)]]
     exact hF ⟨i, i.isLt⟩ ω (fun B' => B'.indicator (fun _ => (1 : ℝ)) e)
   have hmk : Measurable (fun p : Ω × ℝ × E => ∑ i : Fin (2 ^ ℓ),
       (Set.Ioc (dyadicPartition T ℓ i.castSucc) (dyadicPartition T ℓ i.succ)).indicator

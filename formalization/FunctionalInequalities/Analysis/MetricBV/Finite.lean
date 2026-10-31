@@ -1,8 +1,12 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
 
 /-!
 # Metric BV on finite and singleton metric spaces
 -/
+
+@[expose] public section
 
 noncomputable section
 

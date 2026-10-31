@@ -3,12 +3,16 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Analysis.SpecialFunctions.SmoothTransition
-import Mathlib.Analysis.Calculus.FDeriv.Const
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.Topology.UniformSpace.HeineCantor
-import Mathlib.Analysis.Normed.Group.Constructions
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Analysis.SpecialFunctions.SmoothTransition
+public import Mathlib.Analysis.Calculus.FDeriv.Const
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Topology.UniformSpace.HeineCantor
+public import Mathlib.Analysis.Normed.Group.Constructions
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 
 /-!
 # A smooth compactly supported cutoff on a finite-dimensional cube
@@ -27,6 +31,8 @@ together with all its derivatives.
 * `LevyStochCalc.exists_delta_of_hasCompactSupport` — a continuous function with compact support
   on a proper normed space is uniformly continuous, in `ε`–`δ` form.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc
 
@@ -63,7 +69,7 @@ noncomputable def boxCut (k : ℝ) (z : Fin n → ℝ) : ℝ := ∏ i, smoothCut
 
 theorem contDiff_boxCut (k : ℝ) {N : ℕ∞} : ContDiff ℝ N (boxCut (n := n) k) := by
   unfold boxCut
-  exact contDiff_prod fun i _ => (contDiff_smoothCut k).comp (contDiff_apply ℝ ℝ i)
+  exact contDiff_prod fun i _ => (contDiff_smoothCut k).comp (contDiff_apply (𝕜 := ℝ) (F' := fun _ => ℝ) i)
 
 theorem boxCut_eq_one {k : ℝ} (hk : 0 < k) {z : Fin n → ℝ} (hz : ‖z‖ ≤ 3 * k / 2) :
     boxCut k z = 1 := by

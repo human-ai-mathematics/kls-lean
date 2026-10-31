@@ -1,6 +1,8 @@
-import FunctionalInequalities.Analysis.Hausdorff.Slicing
-import FunctionalInequalities.Analysis.Hausdorff.Content
-import FunctionalInequalities.Analysis.Hausdorff.Volume
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Slicing
+public import FunctionalInequalities.Analysis.Hausdorff.Content
+public import FunctionalInequalities.Analysis.Hausdorff.Volume
 
 /-!
 # Eilenberg slicing bound and compact-slice measurability in the normalized surface measure
@@ -36,10 +38,15 @@ level.  It is not a consequence of the majorant bound — that bound says nothin
 function's measurability — and it is proved in `Analysis/Hausdorff/Content.lean` through the
 scalewise open-cover costs, whose scale limit is `μH[d]` and each of which is upper semicontinuous
 in the level.  Only the positive normalizing scalar is added here, so no dimension split is
-needed. The later declarations in this module prove the Borel-set bridge Borel-slice measurability and
-measurable-weight version weighted-slice measurability, with almost-everywhere measurability under a Lipschitz bound on
-the set. `LevelSetMeasurable` exposes weighted-slice measurability at `S = Set.univ` under the original Analysis name.
+needed. The later declarations in this module prove the Borel-set bridge Borel-slice measurability
+and
+measurable-weight version weighted-slice measurability, with almost-everywhere measurability under a
+Lipschitz bound on
+the set. `LevelSetMeasurable` exposes weighted-slice measurability at `S = Set.univ` under the
+original Analysis name.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -127,8 +134,8 @@ theorem exists_measurable_majorant {u : V → ℝ} {K : ℝ≥0} {S : Set V}
           * volume S := by
       rw [hd, Analysis.hausdorffMeasure_finrank_eq_smul_volume V, Measure.smul_apply, smul_eq_mul]
     calc ENNReal.ofReal (unitBallVolume m / 2 ^ m) * ∫⁻ t, F t ∂(volume : Measure ℝ)
-        ≤ ENNReal.ofReal (unitBallVolume m / 2 ^ m) * (2 * (K : ℝ≥0∞) * μH[(m : ℝ) + 1] S) :=
-          by gcongr
+        ≤ ENNReal.ofReal (unitBallVolume m / 2 ^ m) * (2 * (K : ℝ≥0∞) * μH[(m : ℝ) + 1] S) := by
+          gcongr
       _ = ENNReal.ofReal (unitBallVolume m / 2 ^ m) * 2
             * ENNReal.ofReal (2 ^ Module.finrank ℝ V / unitBallVolume (Module.finrank ℝ V))
             * (K : ℝ≥0∞) * volume S := by rw [hvol]; ring

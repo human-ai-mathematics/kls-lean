@@ -1,11 +1,15 @@
-import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+meta import Lean
 
 /-!
 # Scope audit for `S5` of `GenerationRouteStatements.lean`
 
 The obligation `S5` of `research/audits/Semigroup/GenerationRouteStatements.lean` is restated here
 **verbatim** — the proposition is copied character for character from that route file — and
-discharged from the hole-free module `Analysis/Semigroup/Exponential/Contraction.lean`. A renamed binder, a
+discharged from the hole-free module `Analysis/Semigroup/Exponential/Contraction.lean`. A renamed
+binder, a
 reordered hypothesis or a weakened conclusion would fail to elaborate here.
 
 The contraction is discharged from a **strictly stronger** module lemma: the route assumed `L`
@@ -26,6 +30,8 @@ bound is an equality, and `L = 0`, where every exponential is the identity.
 The axiom reports at the end cover every public declaration of the new module and every theorem of
 this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,6 +1,10 @@
-import examples.EllipticDrift
+module
+
+public import examples.EllipticDrift
 
 /-! Standard-axiom checks for the concrete skew-coefficient model and entry-bound counterexample. -/
+
+@[expose] public section
 
 #print axioms CNSCoefficientScopeAudit.quadratic_identity
 #print axioms CNSCoefficientScopeAudit.symmetric_part_identity

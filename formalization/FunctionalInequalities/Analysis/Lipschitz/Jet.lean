@@ -1,11 +1,15 @@
-import Mathlib.Analysis.Calculus.Rademacher
-import Mathlib.Analysis.Calculus.FDeriv.Measurable
-import Mathlib.MeasureTheory.Measure.Regular
-import Mathlib.Topology.Instances.ENNReal.Lemmas
+module
+
+public import Mathlib.Analysis.Calculus.Rademacher
+public import Mathlib.Analysis.Calculus.FDeriv.Measurable
+public import Mathlib.MeasureTheory.Measure.Regular
+public import Mathlib.Topology.Instances.ENNReal.Lemmas
 
 /-! # Compact jets of a Lipschitz function
 Uniformize the ambient remainder on compact sets covering almost every point.
 The ambient estimate also gives continuity of the derivative on each piece. -/
+
+@[expose] public section
 
 noncomputable section
 open Set Metric MeasureTheory Filter Topology TopologicalSpace
@@ -110,23 +114,23 @@ omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- Uniformize countably many increasing measurable covers on a large compact subset.
 The summable exceptional budgets are chosen before compact inner regularity is applied. -/
 theorem exists_compact_uniform_cover (μ : Measure V) [Measure.InnerRegularCompactLTTop μ]
-    {A : Set V} (hA : MeasurableSet A) (hfin : μ A ≠ ∞)
-    (B : ℕ → ℕ → Set V) (hB : ∀ n m, MeasurableSet (B n m))
-    (hmono : ∀ n, Monotone (B n)) (hcover : ∀ n, A ⊆ ⋃ m, B n m)
-    {ε : ℝ≥0∞} (hε : ε ≠ 0) :
+    {A : Set V} (hA : MeasurableSet A) (hfin : μ A ≠ ∞) (B : ℕ → ℕ → Set V)
+    (hB : ∀ n m, MeasurableSet (B n m)) (hmono : ∀ n, Monotone (B n))
+    (hcover : ∀ n, A ⊆ ⋃ m, B n m) {ε : ℝ≥0∞} (hε : ε ≠ 0) :
     ∃ C, C ⊆ A ∧ IsCompact C ∧ μ (A \ C) < ε ∧ ∀ n, ∃ m, C ⊆ B n m := by
   classical
   obtain ⟨d, hd, hsum⟩ := ENNReal.exists_pos_sum_of_countable' (ENNReal.half_pos hε).ne' ℕ
   have hchoice : ∀ n, ∃ m, μ (A \ B n m) < d n := by
     intro n
-    obtain ⟨m, hm⟩ := exists_measure_iInter_lt
-      (fun m => (hA.diff (hB n m)).nullMeasurableSet) (hd n)
-      ⟨0, ne_top_of_le_ne_top hfin (measure_mono sdiff_subset)⟩ (by
-        ext x
-        simp only [mem_iInter, Set.mem_sdiff, mem_empty_iff_false, iff_false]
-        intro hx
-        obtain ⟨m, hxm⟩ := mem_iUnion.1 (hcover n (hx 0).1)
-        exact (hx m).2 hxm)
+    obtain ⟨m, hm⟩ :=
+      exists_measure_iInter_lt (fun m => (hA.diff (hB n m)).nullMeasurableSet) (hd n)
+        ⟨0, ne_top_of_le_ne_top hfin (measure_mono sdiff_subset)⟩
+        (by
+          ext x
+          simp only [mem_iInter, Set.mem_sdiff, mem_empty_iff_false, iff_false]
+          intro hx
+          obtain ⟨m, hxm⟩ := mem_iUnion.1 (hcover n (hx 0).1)
+          exact (hx m).2 hxm)
     refine ⟨m, (measure_mono ?_).trans_lt hm⟩
     intro x hx
     simp only [mem_iInter]
@@ -137,17 +141,19 @@ theorem exists_compact_uniform_cover (μ : Measure V) [Measure.InnerRegularCompa
   have hTA : T ⊆ A := inter_subset_left
   have hloss : μ (A \ T) < ε / 2 := by
     calc
-      _ ≤ μ (⋃ n, A \ B n (m n)) := measure_mono (by
-        intro x hx
-        have : ¬ ∀ n, x ∈ B n (m n) := by
-          intro hall; exact hx.2 ⟨hx.1, mem_iInter.2 hall⟩
-        obtain ⟨n, hn⟩ := not_forall.1 this
-        exact mem_iUnion.2 ⟨n, hx.1, hn⟩)
+      _ ≤ μ (⋃ n, A \ B n (m n)) :=
+        measure_mono
+          (by
+            intro x hx
+            have : ¬∀ n, x ∈ B n (m n) := by intro hall; exact hx.2 ⟨hx.1, mem_iInter.2 hall⟩
+            obtain ⟨n, hn⟩ := not_forall.1 this
+            exact mem_iUnion.2 ⟨n, hx.1, hn⟩)
       _ ≤ ∑' n, μ (A \ B n (m n)) := measure_iUnion_le _
       _ ≤ ∑' n, d n := ENNReal.tsum_le_tsum (fun n => (hm n).le)
       _ < ε / 2 := hsum
-  obtain ⟨C, hCT, hC, hCloss⟩ := hT.exists_isCompact_sdiff_lt
-    (ne_top_of_le_ne_top hfin (measure_mono hTA)) (ENNReal.half_pos hε).ne'
+  obtain ⟨C, hCT, hC, hCloss⟩ :=
+    hT.exists_isCompact_sdiff_lt (ne_top_of_le_ne_top hfin (measure_mono hTA))
+      (ENNReal.half_pos hε).ne'
   refine ⟨C, hCT.trans hTA, hC, ?_, fun n => ⟨m n, fun x hx => mem_iInter.1 (hCT hx).2 n⟩⟩
   calc
     _ ≤ μ ((A \ T) ∪ (T \ C)) := measure_mono (by intro x hx; by_cases h : x ∈ T <;> simp_all)

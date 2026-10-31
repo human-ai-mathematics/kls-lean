@@ -1,23 +1,30 @@
-import FunctionalInequalities.Probability.Line.Cdf
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Probability.Moments.Variance
+module
+
+public import FunctionalInequalities.Probability.Line.Cdf
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Affine quantile-density profiles on the unit interval
 
 Source: Blueprint `thm:one-dimensional-logconcave-poincare` (sharp form with constant `4`),
-supporting calculus; the argument follows Section 4 of the collaborator's constant-4 source audit (a locally kept record). Read `affineWeight`,
+supporting calculus; the argument follows Section 4 of the collaborator's constant-4 source audit (a
+locally kept record). Read `affineWeight`,
 `affineQuantile`, `hasDerivAt_affineQuantile` and `one_div_le_variance_affineQuantile`.
 
 For `a, b > 0` the affine weight `w(u) = a² (1 - u) + b² u` is positive on `[0, 1]` and the quantile
-function of the law with quantile density `w`, anchored at `p`, is `q(u) = ∫_p^u 1 / w`. Its variance
+function of the law with quantile density `w`, anchored at `p`, is `q(u) = ∫_p^u 1 / w`. Its
+variance
 under the uniform law on `[0, 1]` is at least `1 / (a + b)⁴`: for `a = b` it is `1 / (12 a⁴)`, and
-for `a ≠ b` it equals `(1 - a² b² (log b² - log a²)² / (b² - a²)²) / (b² - a²)²`, bounded below by the
+for `a ≠ b` it equals `(1 - a² b² (log b² - log a²)² / (b² - a²)²) / (b² - a²)²`, bounded below by
+the
 elementary inequality `a b (log b - log a)² ≤ (b - a)²`, which is `t ≤ sinh t`.
 
 Nothing here concerns a probability law other than the uniform law on `[0, 1]`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -68,14 +75,16 @@ theorem intervalIntegrable_inv_affineWeight (ha : 0 < a) (hb : 0 < b) {p u : ℝ
     IntervalIntegrable (fun t ↦ (affineWeight a b t)⁻¹) volume p u :=
   ((continuousOn_inv_affineWeight ha hb).mono (uIcc_subset_Icc hp hu)).intervalIntegrable
 
-/-- The quantile function is differentiable in the open unit interval with derivative `1 / w`. -/
+/--
+The quantile function is differentiable in the open unit interval with derivative `1 / w`. -/
 theorem hasDerivAt_affineQuantile (ha : 0 < a) (hb : 0 < b) {p u : ℝ} (hp : p ∈ Icc (0 : ℝ) 1)
-    (hu : u ∈ Ioo (0 : ℝ) 1) :
-    HasDerivAt (affineQuantile a b p) (affineWeight a b u)⁻¹ u := by
+    (hu : u ∈ Ioo (0 : ℝ) 1) : HasDerivAt (affineQuantile a b p) (affineWeight a b u)⁻¹ u := by
   have hcont := (continuousOn_inv_affineWeight ha hb).mono Ioo_subset_Icc_self
-  exact integral_hasDerivAt_right (intervalIntegrable_inv_affineWeight ha hb hp (Ioo_subset_Icc_self hu))
-    (hcont.stronglyMeasurableAtFilter isOpen_Ioo u hu)
-    (hcont.continuousAt (isOpen_Ioo.mem_nhds hu))
+  exact
+    integral_hasDerivAt_right
+      (intervalIntegrable_inv_affineWeight ha hb hp (Ioo_subset_Icc_self hu))
+      (hcont.stronglyMeasurableAtFilter isOpen_Ioo u hu)
+      (hcont.continuousAt (isOpen_Ioo.mem_nhds hu))
 
 /-- Closed form of the quantile function for `a ≠ b`. -/
 theorem affineQuantile_eq (ha : 0 < a) (hb : 0 < b) (hab : a ^ 2 ≠ b ^ 2) {p u : ℝ}
@@ -168,10 +177,13 @@ theorem integral_log_sq_affineWeight (ha : 0 < a) (hb : 0 < b) (hab : a ^ 2 ≠ 
 /-- The variance of the uniform law on the unit interval is `1/12`. -/
 theorem variance_id_unitUniform : variance (fun u : ℝ ↦ u) unitUniform = 1 / 12 := by
   have hmem : MemLp (fun u : ℝ ↦ u) 2 unitUniform :=
-    MemLp.of_bound (continuous_id.aestronglyMeasurable) 1 (by
-      rw [ae_restrict_iff' measurableSet_Icc]
-      exact ae_of_all _ fun u hu ↦ by
-        rw [Real.norm_eq_abs, abs_le]; constructor <;> linarith [hu.1, hu.2])
+    MemLp.of_bound (continuous_id.aestronglyMeasurable) 1
+      (by
+        rw [ae_restrict_iff' measurableSet_Icc]
+        exact
+          ae_of_all _ fun u hu ↦ by
+            rw [Real.norm_eq_abs, abs_le];
+            constructor <;> linarith [hu.1, hu.2])
   rw [variance_eq_sub hmem]
   simp only [Pi.pow_apply, unitUniform]
   rw [integral_Icc_eq_integral_Ioc, ← integral_of_le zero_le_one, integral_pow,
@@ -244,17 +256,18 @@ theorem mul_mul_log_sub_sq_le (ha : 0 < a) (hb : 0 < b) :
   have hlog : Real.log b - Real.log a = 2 * s := by rw [hs]; ring
   rw [hlog, hb']
   have hpos : 0 < a ^ 2 * Real.exp (2 * s) := by positivity
-  have h2s : Real.exp (2 * s) = Real.exp s ^ 2 := by rw [show 2 * s = s + s by ring, Real.exp_add, sq]
-  calc a * (a * Real.exp (2 * s)) * (2 * s) ^ 2 = 4 * (a ^ 2 * Real.exp (2 * s)) * s ^ 2 := by ring
+  have h2s : Real.exp (2 * s) = Real.exp s ^ 2 := by
+    rw [show 2 * s = s + s by ring, Real.exp_add, sq]
+  calc
+    a * (a * Real.exp (2 * s)) * (2 * s) ^ 2 = 4 * (a ^ 2 * Real.exp (2 * s)) * s ^ 2 := by ring
     _ ≤ 4 * (a ^ 2 * Real.exp (2 * s)) * Real.sinh s ^ 2 := by gcongr
     _ = (a * Real.exp (2 * s) - a) ^ 2 := by
-        rw [show a * Real.exp (2 * s) - a = a * (Real.exp (2 * s) - 1) by ring, hexp, h2s]
-        ring
+      rw [show a * Real.exp (2 * s) - a = a * (Real.exp (2 * s) - 1) by ring, hexp, h2s]
+      ring
 
 /-- The variance of the affine quantile function is at least `1 / (a + b)⁴`. -/
 theorem one_div_le_variance_affineQuantile (ha : 0 < a) (hb : 0 < b) {p : ℝ}
-    (hp : p ∈ Icc (0 : ℝ) 1) :
-    1 / (a + b) ^ 4 ≤ variance (affineQuantile a b p) unitUniform := by
+    (hp : p ∈ Icc (0 : ℝ) 1) : 1 / (a + b) ^ 4 ≤ variance (affineQuantile a b p) unitUniform := by
   by_cases hab : a = b
   · subst hab
     have hae : affineQuantile a a p =ᵐ[unitUniform] fun u ↦ (u - p) * (a ^ 2)⁻¹ :=
@@ -263,7 +276,8 @@ theorem one_div_le_variance_affineQuantile (ha : 0 < a) (hb : 0 < b) {p : ℝ}
       variance_sub_const (X := fun u : ℝ ↦ u) continuous_id'.aestronglyMeasurable,
       variance_id_unitUniform]
     have h : (0 : ℝ) < (a ^ 2) ^ 2 := by positivity
-    calc 1 / (a + a) ^ 4 = 1 / (16 * (a ^ 2) ^ 2) := by ring
+    calc
+      1 / (a + a) ^ 4 = 1 / (16 * (a ^ 2) ^ 2) := by ring
       _ ≤ 1 / (12 * (a ^ 2) ^ 2) := one_div_le_one_div_of_le (by positivity) (by nlinarith)
       _ = 1 / 12 * ((a ^ 2)⁻¹) ^ 2 := by rw [inv_pow, ← one_div, one_div_mul_one_div]
   · have hab2 : a ^ 2 ≠ b ^ 2 := fun h ↦ hab ((pow_left_inj₀ ha.le hb.le two_ne_zero).mp h)
@@ -278,30 +292,39 @@ theorem one_div_le_variance_affineQuantile (ha : 0 < a) (hb : 0 < b) {p : ℝ}
     have hS : 0 < a + b := by positivity
     rw [hlog, div_le_div_iff₀ (by positivity) hβ2, one_mul]
     -- `(b² − a²)² ≤ (a+b)⁴ · (1 − a²b²·4(log b − log a)²/(b²−a²)²)`
-    have hmain : a ^ 2 * b ^ 2 * (2 * (Real.log b - Real.log a)) ^ 2 / (b ^ 2 - a ^ 2) ^ 2 ≤
+
+    have hmain :
+      a ^ 2 * b ^ 2 * (2 * (Real.log b - Real.log a)) ^ 2 / (b ^ 2 - a ^ 2) ^ 2 ≤
         4 * a * b / (a + b) ^ 2 := by
       rw [div_le_div_iff₀ hβ2 (by positivity), hβeq]
-      have : a ^ 2 * b ^ 2 * (2 * (Real.log b - Real.log a)) ^ 2 * (a + b) ^ 2 =
-          4 * (a * b * (Real.log b - Real.log a) ^ 2) * (a * b * (a + b) ^ 2) := by ring
+      have :
+        a ^ 2 * b ^ 2 * (2 * (Real.log b - Real.log a)) ^ 2 * (a + b) ^ 2 =
+          4 * (a * b * (Real.log b - Real.log a) ^ 2) * (a * b * (a + b) ^ 2) := by
+        ring
       rw [this]
-      have h2 : 4 * (a * b * (Real.log b - Real.log a) ^ 2) * (a * b * (a + b) ^ 2) ≤
+      have h2 :
+        4 * (a * b * (Real.log b - Real.log a) ^ 2) * (a * b * (a + b) ^ 2) ≤
           4 * (b - a) ^ 2 * (a * b * (a + b) ^ 2) := by
         have := mul_le_mul_of_nonneg_right hkey (by positivity : (0 : ℝ) ≤ a * b * (a + b) ^ 2)
         nlinarith [this]
-      calc _ ≤ 4 * (b - a) ^ 2 * (a * b * (a + b) ^ 2) := h2
+      calc
+        _ ≤ 4 * (b - a) ^ 2 * (a * b * (a + b) ^ 2) := h2
         _ = 4 * a * b * ((b - a) * (b + a)) ^ 2 := by ring
     have hfinal : (b ^ 2 - a ^ 2) ^ 2 ≤ (a + b) ^ 4 * (1 - 4 * a * b / (a + b) ^ 2) := by
-      have : (a + b) ^ 4 * (1 - 4 * a * b / (a + b) ^ 2) = (a + b) ^ 2 * ((a + b) ^ 2 - 4 * a * b) := by
+      have :
+        (a + b) ^ 4 * (1 - 4 * a * b / (a + b) ^ 2) = (a + b) ^ 2 * ((a + b) ^ 2 - 4 * a * b) := by
         field_simp
       rw [this, hβeq]
       have : (a + b) ^ 2 - 4 * a * b = (b - a) ^ 2 := by ring
       rw [this]
       nlinarith [sq_nonneg (a + b), sq_nonneg (b - a)]
-    calc (b ^ 2 - a ^ 2) ^ 2 ≤ (a + b) ^ 4 * (1 - 4 * a * b / (a + b) ^ 2) := hfinal
+    calc
+      (b ^ 2 - a ^ 2) ^ 2 ≤ (a + b) ^ 4 * (1 - 4 * a * b / (a + b) ^ 2) := hfinal
       _ = (1 - 4 * a * b / (a + b) ^ 2) * (a + b) ^ 4 := mul_comm _ _
-      _ ≤ (1 - a ^ 2 * b ^ 2 * (2 * (Real.log b - Real.log a)) ^ 2 / (b ^ 2 - a ^ 2) ^ 2) *
-          (a + b) ^ 4 := by
-          gcongr
+      _ ≤
+          (1 - a ^ 2 * b ^ 2 * (2 * (Real.log b - Real.log a)) ^ 2 / (b ^ 2 - a ^ 2) ^ 2) *
+            (a + b) ^ 4 := by
+        gcongr
 
 end Inequality
 

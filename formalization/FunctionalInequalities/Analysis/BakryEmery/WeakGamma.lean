@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Semigroup.VonNeumann
-import Mathlib.MeasureTheory.Function.L2Space
-import FunctionalInequalities.L2.BoundedMultiplier
-import Mathlib.Analysis.Calculus.Deriv.Slope
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+public import Mathlib.MeasureTheory.Function.L2Space
+public import FunctionalInequalities.L2.BoundedMultiplier
+public import Mathlib.Analysis.Calculus.Deriv.Slope
 
 /-!
 # The weak carré du champ of square-integrable vector fields
@@ -32,7 +34,8 @@ What is proved:
   the tested weak `Γ` integrals; `tendsto_integral_mul_of_tendsto_multiplier` lets a uniformly
   bounded multiplier converge in `L²` at the same time, and
   `hasDerivWithinAt_integral_mul_apply_self` is the resulting product rule for
-  `s ↦ ∫ q s Γ(u s, u s) dμ`, with uniformly bounded difference quotients of `q`. These are the engine for transporting a `Γ`-inequality proved
+  `s ↦ ∫ q s Γ(u s, u s) dμ`, with uniformly bounded difference quotients of `q`. These are the
+  engine for transporting a `Γ`-inequality proved
   on a smaller class to its `L²` closure;
 * `integral_eq_integral_mul_adjointComp`: for `f ∈ D(T†T)` and `x ∈ D(T)`,
   `∫ Γ(T f, T x) dμ = ∫ (T†T f) x dμ`. This is the weak integration-by-parts interface in the
@@ -43,6 +46,8 @@ What is proved:
 No product or chain rule, no `Γ₂`, and no semigroup statement is made here. `Γ(u, v)` is only
 `L¹`; applying an `L²` semigroup to it is not meaningful and is not attempted.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -131,9 +136,9 @@ theorem integral_norm_mul_norm_le {H' : Type*} [NormedAddCommGroup H'] (u : Lp H
   have hu : MemLp (fun x => ‖u x‖) 2 μ := (Lp.memLp u).norm
   have hv : MemLp (fun x => ‖v x‖) 2 μ := (Lp.memLp v).norm
   have hnu : ‖hu.toLp _‖ = ‖u‖ := by
-    rw [Lp.norm_toLp, eLpNorm_norm, ← Lp.norm_def]
+    rw [Lp.norm_toLp, eLpNorm_norm _ (Lp.aestronglyMeasurable u), ← Lp.norm_def]
   have hnv : ‖hv.toLp _‖ = ‖v‖ := by
-    rw [Lp.norm_toLp, eLpNorm_norm, ← Lp.norm_def]
+    rw [Lp.norm_toLp, eLpNorm_norm _ (Lp.aestronglyMeasurable v), ← Lp.norm_def]
   have hint : ∫ x, ‖u x‖ * ‖v x‖ ∂μ = ⟪hu.toLp _, hv.toLp _⟫ := by
     rw [L2.inner_def]
     refine integral_congr_ae ?_
@@ -148,11 +153,11 @@ end GammaIntegrability
 controlled by the `L²` distances of the fields. -/
 theorem integral_abs_sub_le (u u' v v' : Lp H 2 μ) :
     ∫ x, |apply u v x - apply u' v' x| ∂μ ≤ ‖u - u'‖ * ‖v‖ + ‖u'‖ * ‖v - v'‖ := by
-  have hpt : (fun x => |apply u v x - apply u' v' x|)
-      ≤ᵐ[μ] fun x => ‖(u - u') x‖ * ‖v x‖ + ‖u' x‖ * ‖(v - v') x‖ := by
+  have hpt :
+    (fun x => |apply u v x - apply u' v' x|) ≤ᵐ[μ] fun x =>
+      ‖(u - u') x‖ * ‖v x‖ + ‖u' x‖ * ‖(v - v') x‖ := by
     filter_upwards [Lp.coeFn_sub u u', Lp.coeFn_sub v v'] with x hx hy
-    have hsplit : apply u v x - apply u' v' x =
-        ⟪u x - u' x, v x⟫ + ⟪u' x, v x - v' x⟫ := by
+    have hsplit : apply u v x - apply u' v' x = ⟪u x - u' x, v x⟫ + ⟪u' x, v x - v' x⟫ := by
       simp only [apply_def, inner_sub_left, inner_sub_right]
       ring
     have h1 : |⟪u x - u' x, v x⟫| ≤ ‖(u - u') x‖ * ‖v x‖ := by
@@ -165,13 +170,13 @@ theorem integral_abs_sub_le (u u' v v' : Lp H 2 μ) :
     exact (abs_add_le _ _).trans (add_le_add h1 h2)
   have hsum : Integrable (fun x => ‖(u - u') x‖ * ‖v x‖ + ‖u' x‖ * ‖(v - v') x‖) μ :=
     (integrable_norm_mul_norm (u - u') v).add (integrable_norm_mul_norm u' (v - v'))
-  calc ∫ x, |apply u v x - apply u' v' x| ∂μ
-      ≤ ∫ x, (‖(u - u') x‖ * ‖v x‖ + ‖u' x‖ * ‖(v - v') x‖) ∂μ :=
-        integral_mono_ae ((integrable u v).sub (integrable u' v')).abs hsum hpt
+  calc
+    ∫ x, |apply u v x - apply u' v' x| ∂μ ≤
+        ∫ x, (‖(u - u') x‖ * ‖v x‖ + ‖u' x‖ * ‖(v - v') x‖) ∂μ :=
+      integral_mono_ae ((integrable u v).sub (integrable u' v')).abs hsum hpt
     _ = (∫ x, ‖(u - u') x‖ * ‖v x‖ ∂μ) + ∫ x, ‖u' x‖ * ‖(v - v') x‖ ∂μ :=
-        integral_add (integrable_norm_mul_norm _ _) (integrable_norm_mul_norm _ _)
-    _ ≤ ‖u - u'‖ * ‖v‖ + ‖u'‖ * ‖v - v'‖ := by
-        gcongr <;> exact integral_norm_mul_norm_le _ _
+      integral_add (integrable_norm_mul_norm _ _) (integrable_norm_mul_norm _ _)
+    _ ≤ ‖u - u'‖ * ‖v‖ + ‖u'‖ * ‖v - v'‖ := by gcongr <;> exact integral_norm_mul_norm_le _ _
 
 /-- The tested form of `integral_abs_sub_le`, for a nonnegative a.e. bound `C` on `φ`. -/
 theorem abs_integral_mul_sub_le {φ : α → ℝ} (hφ : AEStronglyMeasurable φ μ) {C : ℝ}
@@ -372,12 +377,15 @@ theorem abs_integral_mul_sub_le_of_bdd_right {β : Lp H 2 μ} {M : ℝ} (hM0 : 0
     (hM : ∀ᵐ x ∂μ, ‖β x‖ ≤ M) (a a' : Lp ℝ 2 μ) (u u' : Lp H 2 μ) :
     |(∫ x, a x * apply u β x ∂μ) - ∫ x, a' x * apply u' β x ∂μ| ≤
       M * (‖a - a'‖ * ‖u‖ + ‖a'‖ * ‖u - u'‖) := by
-  rw [← integral_sub (integrable_mul_of_bdd_right hM a u)
-    (integrable_mul_of_bdd_right hM a' u')]
-  have hb : ∀ᵐ x ∂μ, |a x * apply u β x - a' x * apply u' β x|
-      ≤ M * (‖(a - a') x‖ * ‖u x‖ + ‖a' x‖ * ‖(u - u') x‖) := by
+  rw [←
+    integral_sub (integrable_mul_of_bdd_right hM a u) (integrable_mul_of_bdd_right hM a' u')]
+  have hb :
+    ∀ᵐ x ∂μ,
+      |a x * apply u β x - a' x * apply u' β x| ≤
+        M * (‖(a - a') x‖ * ‖u x‖ + ‖a' x‖ * ‖(u - u') x‖) := by
     filter_upwards [hM, Lp.coeFn_sub a a', Lp.coeFn_sub u u'] with x hx ha hu
-    have hsplit : a x * apply u β x - a' x * apply u' β x =
+    have hsplit :
+      a x * apply u β x - a' x * apply u' β x =
         (a x - a' x) * apply u β x + a' x * apply (u - u') β x := by
       have : apply (u - u') β x = apply u β x - apply u' β x := by
         simp only [apply_def, hu, Pi.sub_apply, inner_sub_left]
@@ -385,39 +393,44 @@ theorem abs_integral_mul_sub_le_of_bdd_right {β : Lp H 2 μ} {M : ℝ} (hM0 : 0
       ring
     have h1 : |(a x - a' x) * apply u β x| ≤ ‖(a - a') x‖ * ‖u x‖ * M := by
       rw [abs_mul, ha, Pi.sub_apply, Real.norm_eq_abs]
-      calc |a x - a' x| * |apply u β x| ≤ |a x - a' x| * (‖u x‖ * ‖β x‖) := by
-            gcongr
-            exact abs_le_mul u β x
+      calc
+        |a x - a' x| * |apply u β x| ≤ |a x - a' x| * (‖u x‖ * ‖β x‖) := by
+          gcongr
+          exact abs_le_mul u β x
         _ ≤ |a x - a' x| * ‖u x‖ * M := by
-            rw [mul_assoc]
-            gcongr
+          rw [mul_assoc]
+          gcongr
     have h2 : |a' x * apply (u - u') β x| ≤ ‖a' x‖ * ‖(u - u') x‖ * M := by
       rw [abs_mul, Real.norm_eq_abs]
-      calc |a' x| * |apply (u - u') β x| ≤ |a' x| * (‖(u - u') x‖ * ‖β x‖) := by
-            gcongr
-            exact abs_le_mul (u - u') β x
+      calc
+        |a' x| * |apply (u - u') β x| ≤ |a' x| * (‖(u - u') x‖ * ‖β x‖) := by
+          gcongr
+          exact abs_le_mul (u - u') β x
         _ ≤ |a' x| * ‖(u - u') x‖ * M := by
-            rw [mul_assoc]
-            gcongr
+          rw [mul_assoc]
+          gcongr
     rw [hsplit]
     refine (abs_add_le _ _).trans ?_
     have := add_le_add h1 h2
     nlinarith [this, norm_nonneg ((a - a') x), norm_nonneg (u x), norm_nonneg (a' x),
       norm_nonneg ((u - u') x)]
-  have hsum : Integrable (fun x =>
-      M * (‖(a - a') x‖ * ‖u x‖ + ‖a' x‖ * ‖(u - u') x‖)) μ :=
+  have hsum : Integrable (fun x => M * (‖(a - a') x‖ * ‖u x‖ + ‖a' x‖ * ‖(u - u') x‖)) μ :=
     (((integrable_norm_mul_norm (a - a') u).add
-      (integrable_norm_mul_norm a' (u - u')))).const_mul M
-  calc |∫ x, (a x * apply u β x - a' x * apply u' β x) ∂μ|
-      ≤ ∫ x, |a x * apply u β x - a' x * apply u' β x| ∂μ := abs_integral_le_integral_abs
+          (integrable_norm_mul_norm a' (u - u')))).const_mul
+      M
+  calc
+    |∫ x, (a x * apply u β x - a' x * apply u' β x) ∂μ| ≤
+        ∫ x, |a x * apply u β x - a' x * apply u' β x| ∂μ :=
+      abs_integral_le_integral_abs
     _ ≤ ∫ x, M * (‖(a - a') x‖ * ‖u x‖ + ‖a' x‖ * ‖(u - u') x‖) ∂μ :=
-        integral_mono_ae ((integrable_mul_of_bdd_right hM a u).sub
-          (integrable_mul_of_bdd_right hM a' u')).abs hsum hb
+      integral_mono_ae
+        ((integrable_mul_of_bdd_right hM a u).sub (integrable_mul_of_bdd_right hM a' u')).abs
+        hsum hb
     _ = M * ∫ x, (‖(a - a') x‖ * ‖u x‖ + ‖a' x‖ * ‖(u - u') x‖) ∂μ := integral_const_mul _ _
     _ = M * ((∫ x, ‖(a - a') x‖ * ‖u x‖ ∂μ) + ∫ x, ‖a' x‖ * ‖(u - u') x‖ ∂μ) := by
-        rw [integral_add (integrable_norm_mul_norm _ _) (integrable_norm_mul_norm _ _)]
+      rw [integral_add (integrable_norm_mul_norm _ _) (integrable_norm_mul_norm _ _)]
     _ ≤ M * (‖a - a'‖ * ‖u‖ + ‖a'‖ * ‖u - u'‖) := by
-        gcongr <;> exact integral_norm_mul_norm_le _ _
+      gcongr <;> exact integral_norm_mul_norm_le _ _
 
 /-- **Transport of `∫ a · Γ(u, β)` along `L²` convergence**, for a fixed a.e. bounded field `β`.
 Only the multiplier and the first field move, and both move in `L²`. -/

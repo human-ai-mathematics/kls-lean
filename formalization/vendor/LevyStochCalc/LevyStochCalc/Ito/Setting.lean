@@ -3,9 +3,13 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Brownian.Multidim
-import LevyStochCalc.Brownian.MultidimIto
-import LevyStochCalc.Poisson.L2Isometry
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Brownian.Multidim
+public import LevyStochCalc.Brownian.MultidimIto
+public import LevyStochCalc.Poisson.L2Isometry
 
 /-!
 # Jump-diffusion process structure
@@ -46,6 +50,8 @@ bundles to be progressive for that one `ℱ`; coupled `(σ, γ)` are therefore i
 scope. Such a filtration exists — `LevyStochCalc/Driver/Existence.lean`,
 `exists_isBrownianFiltration_and_isPoissonFiltration`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

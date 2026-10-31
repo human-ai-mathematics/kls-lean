@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Poincare.SmoothTest.WeakLimit
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.Poincare.SmoothTest.WeakLimit
 
 /-!
 # Weak limits of Poincaré bounds for log-concave laws
@@ -9,6 +11,8 @@ weakly convergent sequence of laws with converging constants passes to a log-con
 the literature (local-slope) constant. This is the transfer step of the regular approximation; the
 approximating laws themselves (Gaussian smoothing and quadratic tilt) are constructed elsewhere.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 

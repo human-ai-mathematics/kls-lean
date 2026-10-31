@@ -6,7 +6,11 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Ito.Picard
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.Picard
 
 /-!
 # Square integrability of the Picard integrands along a state process
@@ -19,6 +23,8 @@ the process space frozen at `T` has that energy. Composing a jointly measurable 
 with a measurable, respectively progressively measurable, state process supplies the matching
 measurability of the integrands.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -368,7 +374,7 @@ theorem progressivelyMeasurable_comp_state {n : ℕ}
   intro t
   let : MeasurableSpace Ω := ℱ t
   have hXm : Measurable fun q : Set.Iic t × Ω => (X (q.1 : ℝ) q.2 : Fin n → ℝ) :=
-    measurable_pi_lambda _ fun i => ((hX i).isStronglyProgressive t).measurable
+    Measurable.of_eval fun i => ((hX i).isStronglyProgressive t).measurable
   have hq : Measurable fun q : Set.Iic t × Ω => ((q.1 : ℝ), X (q.1 : ℝ) q.2) :=
     (measurable_subtype_coe.comp measurable_fst).prodMk hXm
   exact (hf.comp hq).stronglyMeasurable
@@ -384,7 +390,7 @@ theorem markedProgressivelyMeasurable_comp_state {n : ℕ}
   intro t
   let : MeasurableSpace Ω := ℱ t
   have hXm : Measurable fun q : Set.Iic t × Ω => (X (q.1 : ℝ) q.2 : Fin n → ℝ) :=
-    measurable_pi_lambda _ fun i => ((hX i).isStronglyProgressive t).measurable
+    Measurable.of_eval fun i => ((hX i).isStronglyProgressive t).measurable
   have hbase : Measurable fun q : (Set.Iic t × Ω) × E =>
       g (q.1.1 : ℝ) (X (q.1.1 : ℝ) q.1.2) q.2 :=
     hg.comp (((measurable_subtype_coe.comp measurable_fst).comp measurable_fst).prodMk

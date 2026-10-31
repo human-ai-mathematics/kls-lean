@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.AdjointComp
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.AdjointComp
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 
 /-!
 # Route statements: von Neumann's theorem and the resolvent limits
@@ -8,7 +10,8 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 It preserves the von Neumann and resolvent-limit contracts `V1`–`V5`, `R1`–`R3`.
 Current sources are `Analysis/Semigroup/VonNeumann.lean` and
 `Analysis/Semigroup/Resolvent/Limit.lean`; independent clients are
-`research/audits/Semigroup/VonNeumannAudit.lean` and `research/audits/Semigroup/ResolventLimitAudit.lean`.
+`research/audits/Semigroup/VonNeumannAudit.lean` and
+`research/audits/Semigroup/ResolventLimitAudit.lean`.
 
 ## Why this route exists
 
@@ -35,10 +38,13 @@ The checked propositions do not prove `thm:logconcave-cheeger-poincare-compariso
 
 `⟪x, y⟫` is the real inner product.  `T†` is `LinearPMap.adjoint T` (`open scoped LinearPMap`).
 `adjointComp T` is `T†T` with domain `{x ∈ D(T) | T x ∈ D(T†)}`; its domain is definitionally
-`adjointCompDomain T ⊓ T.domain`, so for `x : (adjointComp T).domain` the term `⟨x, x.2.2⟩ : T.domain`
+`adjointCompDomain T ⊓ T.domain`, so for `x : (adjointComp T).domain` the term `⟨x, x.2.2⟩ :
+T.domain`
 is available without any lemma.  `resolventCLM T hT hs` is `J_s = (1 + s T†T)⁻¹` as a
 `ContinuousLinearMap`, characterised by the weak equation `WeakResolvent T s f (resolventDomain …)`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -139,7 +145,8 @@ the same equation tested against `v = u`. -/
 /-! ### `R2` — strong convergence `J_s → 1` as `s ↓ 0`
 
 For every `f : H₀` and `ε > 0` there is `δ > 0` with `‖J_s f - f‖ < ε` for `0 < s < δ`.  Approximate
-`f` by `g ∈ D(T)` (density), use `R1` on `g` and the contraction bound `‖J_s‖ ≤ 1` on `f - g`.  Stated
+`f` by `g ∈ D(T)` (density), use `R1` on `g` and the contraction bound `‖J_s‖ ≤ 1` on `f - g`.
+Stated
 in `ε`–`δ` form because `resolventCLM` carries the proof `0 < s` as an argument. -/
 
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]

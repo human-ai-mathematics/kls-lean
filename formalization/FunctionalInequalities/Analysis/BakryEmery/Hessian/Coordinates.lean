@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
+module
+
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Operator
 
 /-! # Coordinate matrices of total Hessians
 
@@ -7,35 +9,38 @@ local smoothness and affine changes. Row orientation and nonsmooth total
 conventions are retained, including dimension zero.
 -/
 
+@[expose] public section
+
 noncomputable section
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace ContDiff
 namespace FunctionalInequalities.Probability.Stein
 /-- The Hessian matrix `(∇²φ)_{ij}(y) = D²φ(y)(e_i, e_j)` of `φ` in the standard basis. -/
-noncomputable def hessianMatrix {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (y : EuclideanSpace ℝ (Fin n)) : Probability.Stein.KernelMatrix n :=
-  fun i j => bilinearIteratedFDerivTwo ℝ φ y (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)
+noncomputable def hessianMatrix {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ)
+    (y : EuclideanSpace ℝ (Fin n)) : Probability.Stein.KernelMatrix n := fun i j =>
+  bilinearIteratedFDerivTwo ℝ φ y (EuclideanSpace.basisFun (Fin n) ℝ i)
+    (EuclideanSpace.basisFun (Fin n) ℝ j)
 
-/-- Matrix of a gradient derivative: row `r` is the input direction and column `s` the dual coordinate. -/
+/--
+Matrix of a gradient derivative: row `r` is the input direction and column `s` the dual coordinate.
+-/
 def gradientDerivativeMatrix {n : ℕ}
-    (L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
-    Matrix (Fin n) (Fin n) ℝ :=
+    (L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) : Matrix (Fin n) (Fin n) ℝ :=
   fun r s =>
-    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n)))
-      (L (EuclideanSpace.basisFun (Fin n) ℝ r))
-      (EuclideanSpace.basisFun (Fin n) ℝ s)
+  (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n)))
+    (L (EuclideanSpace.basisFun (Fin n) ℝ r)) (EuclideanSpace.basisFun (Fin n) ℝ s)
 
-/-- The total coordinate Hessian is the matrix of the total gradient derivative, even at nonsmooth points. -/
-theorem hessianMatrix_eq_gradientDerivativeMatrix {n : ℕ}
-    (u : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
+/--
+The total coordinate Hessian is the matrix of the total gradient derivative, even at nonsmooth
+points. -/
+theorem hessianMatrix_eq_gradientDerivativeMatrix {n : ℕ} (u : EuclideanSpace ℝ (Fin n) → ℝ)
+    (x : EuclideanSpace ℝ (Fin n)) :
     hessianMatrix u x = gradientDerivativeMatrix (fderiv ℝ (gradient u) x) := by
-  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
-      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
+  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ] StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
     (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
   have he : fderiv ℝ u = T ∘ gradient u :=
     funext fun y => (T.apply_symm_apply (fderiv ℝ u y)).symm
-  have hd :
-      fderiv ℝ (fderiv ℝ u) x =
-        T.toContinuousLinearMap.comp (fderiv ℝ (gradient u) x) :=
+  have hd : fderiv ℝ (fderiv ℝ u) x = T.toContinuousLinearMap.comp (fderiv ℝ (gradient u) x) :=
     (congrArg (fun f => fderiv ℝ f x) he).trans T.comp_fderiv
   ext r s
   change
@@ -84,21 +89,27 @@ theorem chain_coordinate {n : ℕ} {φ f : EuclideanSpace ℝ (Fin n) → ℝ} (
       ∑ j, hessianMatrix φ y i j * gradient f (gradient φ y) j := by
   have hg : ContDiff ℝ 1 (gradient φ) := contDiff_gradient hφ (by norm_num)
   rw [fderiv_comp y (hf.differentiable one_ne_zero _) (hg.differentiable one_ne_zero _)]
-  change fderiv ℝ f (gradient φ y) (fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i)) = _
+  change
+    fderiv ℝ f (gradient φ y) (fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i)) =
+      _
   rw [← inner_gradient_left, PiLp.inner_apply]
   apply Finset.sum_congr rfl
   intro j _
-  have hcoord : fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i) j = hessianMatrix φ y i j := by
+  have hcoord :
+    fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i) j = hessianMatrix φ y i j := by
     rw [hessianMatrix, hessian_eq_inner_fderiv_gradient hφ]
-    exact (EuclideanSpace.inner_basisFun_real (Fin n) (fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i)) j).symm
+    exact
+      (EuclideanSpace.inner_basisFun_real (Fin n)
+          (fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i)) j).symm
   rw [hcoord]
   simp only [Real.inner_apply, mul_comm]
 
 /-- Continuity of the Hessian entries. -/
-theorem hessian_entry_continuous {n : ℕ} {φ : EuclideanSpace ℝ (Fin n) → ℝ} (hφ : ContDiff ℝ 2 φ) (i j : Fin n) :
-    Continuous (fun y => hessianMatrix φ y i j) := by
+theorem hessian_entry_continuous {n : ℕ} {φ : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hφ : ContDiff ℝ 2 φ) (i j : Fin n) : Continuous (fun y => hessianMatrix φ y i j) := by
   have h1 : ContDiff ℝ 1 (fderiv ℝ φ) := hφ.fderiv_right (by norm_num)
-  exact ((h1.continuous_fderiv (by norm_num)).clm_apply continuous_const).clm_apply continuous_const
+  exact
+    ((h1.continuous_fderiv (by norm_num)).clm_apply continuous_const).clm_apply continuous_const
 
 
 section AffineHessian
@@ -106,28 +117,29 @@ open Matrix
 open scoped ContDiff
 
 /-- The canonical Hessian under a local C2 affine change is its actual matrix congruence. -/
-theorem hessianMatrix_comp_affine_at {n : ℕ}
-    {u : EuclideanSpace ℝ (Fin n) → ℝ}
+theorem hessianMatrix_comp_affine_at {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
     (L : EuclideanSpace ℝ (Fin n) ≃L[ℝ] EuclideanSpace ℝ (Fin n))
-    (c x : EuclideanSpace ℝ (Fin n)) (hu : ContDiffAt ℝ 2 u (L x+c)) :
+    (c x : EuclideanSpace ℝ (Fin n)) (hu : ContDiffAt ℝ 2 u (L x + c)) :
     let e := (EuclideanSpace.basisFun (Fin n) ℝ).toBasis
     let A := LinearMap.toMatrix e e L.toLinearMap
-    hessianMatrix (fun y => u (L y+c)) x=Aᵀ*hessianMatrix u (L x+c)*A := by
+    hessianMatrix (fun y => u (L y + c)) x = Aᵀ * hessianMatrix u (L x + c) * A := by
   dsimp only
   let e := (EuclideanSpace.basisFun (Fin n) ℝ).toBasis
   let B : LinearMap.BilinForm ℝ (EuclideanSpace ℝ (Fin n)) :=
-    bilinearIteratedFDerivTwo ℝ u (L x+c)
-  have hm : hessianMatrix (fun y => u (L y+c)) x =
+    bilinearIteratedFDerivTwo ℝ u (L x + c)
+  have hm :
+    hessianMatrix (fun y => u (L y + c)) x =
       LinearMap.BilinForm.toMatrix e (LinearMap.BilinForm.comp B L.toLinearMap L.toLinearMap) := by
     ext i j
     rw [LinearMap.BilinForm.toMatrix_apply]
-    change bilinearIteratedFDerivTwo ℝ (fun y => u (L y+c)) x
-      (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j) =
-        bilinearIteratedFDerivTwo ℝ u (L x+c)
-          (L (EuclideanSpace.basisFun (Fin n) ℝ i)) (L (EuclideanSpace.basisFun (Fin n) ℝ j))
+    change
+      bilinearIteratedFDerivTwo ℝ (fun y => u (L y + c)) x (EuclideanSpace.basisFun (Fin n) ℝ i)
+          (EuclideanSpace.basisFun (Fin n) ℝ j) =
+        bilinearIteratedFDerivTwo ℝ u (L x + c) (L (EuclideanSpace.basisFun (Fin n) ℝ i))
+          (L (EuclideanSpace.basisFun (Fin n) ℝ j))
     exact bilinearIteratedFDerivTwo_comp_affine_at L c x _ _ hu
-  rw [hm,LinearMap.BilinForm.toMatrix_comp e e]
-  have hB : LinearMap.BilinForm.toMatrix e B = hessianMatrix u (L x+c) := by
+  rw [hm, LinearMap.BilinForm.toMatrix_comp e e]
+  have hB : LinearMap.BilinForm.toMatrix e B = hessianMatrix u (L x + c) := by
     ext i j
     rw [LinearMap.BilinForm.toMatrix_apply]
     rfl
@@ -189,7 +201,9 @@ section PositiveDefinite
 variable {n : ℕ}
 local notation "E" => EuclideanSpace ℝ (Fin n)
 
-/-- A positive definite coordinate Hessian matrix makes the Hessian bilinear form positive on nonzero vectors. -/
+/--
+A positive definite coordinate Hessian matrix makes the Hessian bilinear form positive on nonzero
+vectors. -/
 theorem bilinearIteratedFDerivTwo_pos_of_hessianMatrix_posDef {u : E → ℝ} {x : E}
     (hp : (hessianMatrix u x).PosDef) (v : E) (hv : v ≠ 0) :
     0 < bilinearIteratedFDerivTwo ℝ u x v v := by

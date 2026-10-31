@@ -1,11 +1,14 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
-import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator.Basic
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
+public import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 
 /-!
 # When is `C_c^∞(V)` an operator core of the generator?
 
-`HeatSemigroup/BakryEmery/GammaTwo.lean` proves the weak `Γ₂` inequality along the heat flow under exactly
+`HeatSemigroup/BakryEmery/GammaTwo.lean` proves the weak `Γ₂` inequality along the heat flow under
+exactly
 one hypothesis, `hcore`: every `F ∈ D(A)`, `A = T̄†T̄`, is a limit of smooth compactly supported
 classes **in the graph norm of `A`**, equivalently `ℒ = Δ - ⟪∇U, ∇·⟫` is essentially self-adjoint
 on `C_c^∞(V)` in `L²(ν)`. This module proves the half of that statement which is a global
@@ -27,7 +30,7 @@ Write `T̄` for the closed unit-weight gradient of `ν = m.tilted (-U)` and `A =
 
 The potential is only assumed `C¹` and **no convexity, no semigroup and no `Γ₂` input is used**.
 
-## The two halves, and which one is still missing
+## The two ingredients and their separate owners
 
 The classical proof that a weighted Laplacian on a complete space is essentially self-adjoint on
 `C_c^∞` has two independent ingredients:
@@ -68,6 +71,8 @@ hypotheses are visible in their types and are not packaged into a structure, an 
 definition. The KLS target itself is proved in `KLS/Target.lean` (`KLS.kls`, through the BKL
 route); this module contributes only the operator-core criterion described above.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -297,6 +302,8 @@ private theorem norm_toLp_mul_cutoff_le
   have hr4 : (0:ℝ) < 4 * r := by linarith
   have hMr : 0 ≤ M / r := div_nonneg hM0 hr.le
   -- the three cutoffs
+
+  -- Prepare the three cutoff scales and their support identities.
   have hχs : ContDiff ℝ ∞ (cutoff (V := V) r) := contDiff_cutoff r
   have hχc : HasCompactSupport (cutoff (V := V) r) := hasCompactSupport_cutoff hr
   have hξs : ContDiff ℝ ∞ (cutoff (V := V) (2 * r)) := contDiff_cutoff _
@@ -341,6 +348,8 @@ private theorem norm_toLp_mul_cutoff_le
     rw [mem_closedBall, dist_zero_right] at this
     exact cutoff_eq_one hr4 (le_trans this (by linarith))
   -- the three domain elements
+
+  -- Place the localized functions in the closed operator domain.
   have hwmem : (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hζs hζc u).toLp _ ∈
     (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain :=
     hloc _ hζs hζc
@@ -378,6 +387,8 @@ private theorem norm_toLp_mul_cutoff_le
     (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)) : (Lp ℝ 2
       (ν : Measure V)))
   -- `T̄ z = χ p + 2 χ q`
+
+  -- Expand the operator pairings and cancel the nested cutoff terms.
   have hA : (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (⟨_, hzmem⟩ :
     (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
       = L2.bddSmulL (H := V) hχm hχb p + (2 : ℝ) • L2.bddSmulL (H := V) hχm hχb q := by
@@ -570,6 +581,8 @@ private theorem norm_toLp_mul_cutoff_le
       (hcvf.inner tendsto_const_nhds).neg
     exact tendsto_nhds_unique (hlim1.congr hkey) hlim2
   -- the resulting quadratic estimate
+
+  -- Convert the resulting energy comparison into the norm bound.
   have hqnorm : ‖q‖ ≤ M / r * ‖u‖ := by
     have h1 : ‖q‖ ≤ |M / r| * ‖(((⟨_, hwmem⟩ :
       (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)) : (Lp ℝ 2
@@ -732,51 +745,76 @@ simultaneous approximation of `F` and `A F`. Nothing beyond the stated hypothesi
 potential is only `C¹` and no convexity, no semigroup and no `Γ₂` input is used. -/
 theorem exists_seq_smooth_tendsto_adjointComp_of_localRegularity
     (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ 1 U)
-    (hreg : ∀ u : (Lp ℝ 2 (ν : Measure V)),
-      (∀ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f),
-        ⟪((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
-          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ : (Lp ℝ 2 (ν : Measure V))), u⟫ +
-          ⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f : (Lp ℝ 2
-            (ν : Measure V))), u⟫ = 0) →
-      ∀ (χ : V → ℝ) (hχ : ContDiff ℝ ∞ χ) (hχc : HasCompactSupport χ),
-        (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _ ∈
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
+    (hreg :
+      ∀ u : (Lp ℝ 2 (ν : Measure V)),
+        (∀ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f),
+            ⟪((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
+                      ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ :
+                    (Lp ℝ 2 (ν : Measure V))),
+                  u⟫ +
+                ⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f :
+                    (Lp ℝ 2 (ν : Measure V))),
+                  u⟫ =
+              0) →
+          ∀ (χ : V → ℝ) (hχ : ContDiff ℝ ∞ χ) (hχc : HasCompactSupport χ),
+            (memLp_mul_of_contDiff_hasCompactSupport (ν := ν) hχ hχc u).toLp _ ∈
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi).domain)
     (F : ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) :
-    ∃ (fn : ℕ → V → ℝ) (hfn : ∀ n, ContDiff ℝ ∞ (fn n))
-      (hfnc : ∀ n, HasCompactSupport (fn n)),
-      Tendsto (fun n => ‖(memLp_of_contDiff_hasCompactSupport ν (hfn n) (hfnc n)).toLp (fn n)
-        - (F : (Lp ℝ 2 (ν : Measure V)))‖) atTop (𝓝 0) ∧
-      Tendsto (fun n => ‖((adjointComp
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
-          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n)
-          (hfnc n)⟩ : (Lp ℝ 2 (ν : Measure V))) - ((adjointComp
-            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F : (Lp ℝ 2
-              (ν : Measure V)))‖) atTop (𝓝 0) := by
+    ∃ (fn : ℕ → V → ℝ) (hfn : ∀ n, ContDiff ℝ ∞ (fn n)) (hfnc : ∀ n, HasCompactSupport (fn n)),
+      Tendsto
+          (fun n =>
+            ‖(memLp_of_contDiff_hasCompactSupport ν (hfn n) (hfnc n)).toLp (fn n) -
+                (F : (Lp ℝ 2 (ν : Measure V)))‖)
+          atTop (𝓝 0) ∧
+        Tendsto
+          (fun n =>
+            ‖((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
+                    ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩ :
+                  (Lp ℝ 2 (ν : Measure V))) -
+                ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F :
+                  (Lp ℝ 2 (ν : Measure V)))‖)
+          atTop (𝓝 0) := by
   classical
-  have hd : Dense (((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain : Set
-    (Lp ℝ 2 (ν : Measure V))) :=
+  have hd :
+    Dense
+      (((hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain :
+        Set (Lp ℝ 2 (ν : Measure V))) :=
     hν.dense_domain_closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-  set Ψ : ((adjointComp
-    (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain →ₗ[ℝ] (Lp ℝ 2
-      (ν : Measure V)) := ((adjointComp
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).toFun + ((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain.subtype with hΨ
-  have hΨapply : ∀ v : ((adjointComp
-    (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain, Ψ v = ((adjointComp
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) v : (Lp ℝ 2
-        (ν : Measure V))) + (v : (Lp ℝ 2 (ν : Measure V))) := fun v => rfl
+  set Ψ :
+    ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain →ₗ[ℝ]
+      (Lp ℝ 2 (ν : Measure V)) :=
+    ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).toFun +
+      ((adjointComp
+          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain.subtype with
+    hΨ
+  have hΨapply :
+    ∀ v : ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain,
+      Ψ v =
+        ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) v :
+            (Lp ℝ 2 (ν : Measure V))) +
+          (v : (Lp ℝ 2 (ν : Measure V))) :=
+    fun v => rfl
   set K : Submodule ℝ (Lp ℝ 2 (ν : Measure V)) :=
-    Submodule.map Ψ (Submodule.comap ((adjointComp
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain.subtype (smoothCore ν)) with hK
+    Submodule.map Ψ
+      (Submodule.comap
+        ((adjointComp
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain.subtype
+        (smoothCore ν)) with
+    hK
   -- the orthogonal complement of the range is trivial
+
   have hKorth : Kᗮ = ⊥ := by
     rw [Submodule.eq_bot_iff]
     intro u hu
-    have horth : ∀ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f),
+    have horth :
+      ∀ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f),
         ⟪((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
-          ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ : (Lp ℝ 2 (ν : Measure V))), u⟫ +
-          ⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f : (Lp ℝ 2
-            (ν : Measure V))), u⟫ = 0 := by
+                  ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ :
+                (Lp ℝ 2 (ν : Measure V))),
+              u⟫ +
+            ⟪((memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f : (Lp ℝ 2 (ν : Measure V))),
+              u⟫ =
+          0 := by
       intro f hf hfc
       have hmemK : Ψ ⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU hf hfc⟩ ∈ K :=
         Submodule.mem_map_of_mem ⟨f, hf, hfc, rfl⟩
@@ -788,80 +826,110 @@ theorem exists_seq_smooth_tendsto_adjointComp_of_localRegularity
     Submodule.dense_iff_topologicalClosure_eq_top.mpr
       (Submodule.topologicalClosure_eq_top_iff.mpr hKorth)
   obtain ⟨x, hxK, hxlim⟩ := mem_closure_iff_seq_limit.mp (hdense (Ψ F))
-  have hchoice : ∀ n, ∃ z : ((adjointComp
-    (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain, (z : (Lp ℝ 2
-      (ν : Measure V))) ∈ smoothCore ν ∧ Ψ z = x n := by
+  have hchoice :
+    ∀ n,
+      ∃ z :
+        ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain,
+        (z : (Lp ℝ 2 (ν : Measure V))) ∈ smoothCore ν ∧ Ψ z = x n := by
     intro n
     obtain ⟨z, hzmem, hzeq⟩ := hxK n
     exact ⟨z, hzmem, hzeq⟩
   choose z hzs hzeq using hchoice
-  have hzsm : ∀ n, ∃ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f),
-      (z n : (Lp ℝ 2 (ν : Measure V))) =
-        (memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f := hzs
-  choose fn hfn hfnc hfneq using hzsm
+  have hzsm :
+    ∀ n,
+      ∃ (f : V → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f),
+        (z n : (Lp ℝ 2 (ν : Measure V))) =
+          (memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f :=
+    hzs
+  choose fn hfn hfnc hfneq using
+    hzsm
   -- the graph-norm comparison
-  have hcmp : ∀ n, ‖(z n : (Lp ℝ 2 (ν : Measure V))) - (F : (Lp ℝ 2
-    (ν : Measure V)))‖ ≤ ‖x n - Ψ F‖ ∧
-      ‖((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) :
-        (Lp ℝ 2 (ν : Measure V))) - ((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F : (Lp ℝ 2
-            (ν : Measure V)))‖ ≤ ‖x n - Ψ F‖ := by
+
+  have hcmp :
+    ∀ n,
+      ‖(z n : (Lp ℝ 2 (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V)))‖ ≤ ‖x n - Ψ F‖ ∧
+        ‖((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) :
+                (Lp ℝ 2 (ν : Measure V))) -
+              ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F :
+                (Lp ℝ 2 (ν : Measure V)))‖ ≤
+          ‖x n - Ψ F‖ := by
     intro n
     have hv : Ψ (z n - F) = x n - Ψ F := by rw [map_sub, hzeq n]
-    have hcoe : ((z n - F : ((adjointComp
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) : (Lp ℝ 2
-        (ν : Measure V))) = (z n : (Lp ℝ 2 (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V))) := rfl
-    have hAsub : ((adjointComp
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n - F) : (Lp ℝ 2
-        (ν : Measure V))) = ((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) : (Lp ℝ 2
-            (ν : Measure V))) - ((adjointComp
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F : (Lp ℝ 2
-                (ν : Measure V))) :=
+    have hcoe :
+      ((z n - F :
+            ((adjointComp
+                (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) :
+          (Lp ℝ 2 (ν : Measure V))) =
+        (z n : (Lp ℝ 2 (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V))) :=
+      rfl
+    have hAsub :
+      ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n - F) :
+          (Lp ℝ 2 (ν : Measure V))) =
+        ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) :
+            (Lp ℝ 2 (ν : Measure V))) -
+          ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F :
+            (Lp ℝ 2 (ν : Measure V))) :=
       LinearPMap.map_sub _ _ _
-    have hnn : 0 ≤ ⟪((adjointComp
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n - F) : (Lp ℝ 2
-        (ν : Measure V))), ((z n - F : ((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) : (Lp ℝ 2
-            (ν : Measure V)))⟫ := by
+    have hnn :
+      0 ≤
+        ⟪((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
+              (z n - F) :
+            (Lp ℝ 2 (ν : Measure V))),
+          ((z n - F :
+              ((adjointComp
+                  (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) :
+            (Lp ℝ 2 (ν : Measure V)))⟫ := by
       rw [inner_adjointComp_self hd (z n - F)]
       positivity
-    have hexp : ‖Ψ (z n - F)‖ ^ 2 = ‖((adjointComp
-      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n - F) : (Lp ℝ 2
-        (ν : Measure V)))‖ ^ 2 +
-        2 * ⟪((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n - F) : (Lp ℝ 2
-            (ν : Measure V))), ((z n - F : ((adjointComp
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) : (Lp ℝ 2
-                (ν : Measure V)))⟫ +
-        ‖((z n - F : ((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) : (Lp ℝ 2
-            (ν : Measure V)))‖ ^ 2 := by
+    have hexp :
+      ‖Ψ (z n - F)‖ ^ 2 =
+        ‖((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
+                    (z n - F) :
+                  (Lp ℝ 2 (ν : Measure V)))‖ ^
+              2 +
+            2 *
+              ⟪((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))
+                    (z n - F) :
+                  (Lp ℝ 2 (ν : Measure V))),
+                ((z n - F :
+                    ((adjointComp
+                        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V)
+                          hi))).domain) :
+                  (Lp ℝ 2 (ν : Measure V)))⟫ +
+          ‖((z n - F :
+                  ((adjointComp
+                      (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) :
+                (Lp ℝ 2 (ν : Measure V)))‖ ^
+            2 := by
       rw [hΨapply]
       exact norm_add_sq_real _ _
     rw [hAsub, hcoe] at hnn
     rw [hv, hcoe, hAsub] at hexp
     constructor
-    · nlinarith [hexp, hnn, norm_nonneg (x n - Ψ F), norm_nonneg ((z n : (Lp ℝ 2
-      (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V)))),
-        norm_nonneg (((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) : (Lp ℝ 2
-            (ν : Measure V))) - ((adjointComp
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F : (Lp ℝ 2
-                (ν : Measure V))))]
-    · nlinarith [hexp, hnn, norm_nonneg (x n - Ψ F), norm_nonneg ((z n : (Lp ℝ 2
-      (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V)))),
-        norm_nonneg (((adjointComp
-          (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) : (Lp ℝ 2
-            (ν : Measure V))) - ((adjointComp
-              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F : (Lp ℝ 2
-                (ν : Measure V))))]
+    · nlinarith [hexp, hnn, norm_nonneg (x n - Ψ F),
+        norm_nonneg ((z n : (Lp ℝ 2 (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V)))),
+        norm_nonneg
+          (((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) :
+              (Lp ℝ 2 (ν : Measure V))) -
+            ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F :
+              (Lp ℝ 2 (ν : Measure V))))]
+    · nlinarith [hexp, hnn, norm_nonneg (x n - Ψ F),
+        norm_nonneg ((z n : (Lp ℝ 2 (ν : Measure V))) - (F : (Lp ℝ 2 (ν : Measure V)))),
+        norm_nonneg
+          (((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) (z n) :
+              (Lp ℝ 2 (ν : Measure V))) -
+            ((adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)) F :
+              (Lp ℝ 2 (ν : Measure V))))]
   have hlim0 : Tendsto (fun n => ‖x n - Ψ F‖) atTop (𝓝 0) := by
     have := (hxlim.sub (tendsto_const_nhds (x := Ψ F))).norm
     simpa using this
-  have hzeq' : ∀ n, (⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n)
-      (hfnc n)⟩ : ((adjointComp
-        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) = z n := fun n => Subtype.ext (hfneq n).symm
+  have hzeq' :
+    ∀ n,
+      (⟨_, hν.toLp_mem_adjointComp_domain m hi hνU hU (hfn n) (hfnc n)⟩ :
+          ((adjointComp
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi))).domain) =
+        z n :=
+    fun n => Subtype.ext (hfneq n).symm
   refine ⟨fn, hfn, hfnc, ?_, ?_⟩
   · refine squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hlim0
     rw [← hfneq n]

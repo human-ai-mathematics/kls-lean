@@ -1,6 +1,10 @@
-import FunctionalInequalities.L2.Pairing
-import FunctionalInequalities.Analysis.Cutoff.Profile
-import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+module
+
+public import FunctionalInequalities.L2.Pairing
+public import FunctionalInequalities.Analysis.Cutoff.Profile
+public import FunctionalInequalities.Analysis.BakryEmery.Hessian.Weak
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set

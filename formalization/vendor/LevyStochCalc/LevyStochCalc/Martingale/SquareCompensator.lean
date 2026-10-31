@@ -3,8 +3,12 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import Mathlib.Probability.Martingale.Basic
-import Mathlib.MeasureTheory.Function.ConditionalExpectation.Real
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import Mathlib.Probability.Martingale.Basic
+public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Real
 
 /-!
 # The compensated square of a square-integrable martingale
@@ -15,6 +19,8 @@ For a square-integrable martingale `M` and an adapted integrable process `A`, th
 `∫_B M_s M_t` equals `∫_B M_s²` by the martingale property, so the identity says exactly that
 `∫_B (M_t² − A_t) = ∫_B (M_s² − A_s)`.
 -/
+
+@[expose] public section
 
 open MeasureTheory Filter
 

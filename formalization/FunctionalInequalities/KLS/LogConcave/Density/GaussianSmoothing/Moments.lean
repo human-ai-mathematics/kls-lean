@@ -1,12 +1,16 @@
-import FunctionalInequalities.Probability.Gaussian.Moments
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
-import FunctionalInequalities.Probability.Product
-import FunctionalInequalities.Probability.Covariance.Basic
-import Mathlib.MeasureTheory.Group.IntegralConvolution
-import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.Analysis.WeakDerivative.Testing
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Moments
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
+public import FunctionalInequalities.Probability.Product
+public import FunctionalInequalities.Probability.Covariance.Basic
+public import Mathlib.MeasureTheory.Group.IntegralConvolution
+public import FunctionalInequalities.Analysis.WeakDerivative.Basic
+public import FunctionalInequalities.Analysis.WeakDerivative.Testing
+public import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+
+@[expose] public section
 
 section
 
@@ -35,40 +39,49 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 omit [CompleteSpace E] in
 /-- The smoothed law `μ * γ_s` has a finite second moment when `μ` does. -/
-theorem smoothedLaw_memLp_two (μ : Measure E) [IsProbabilityMeasure μ]
-    (hμ2 : MemLp id 2 μ) {s : ℝ} (hs : 0 < s) : MemLp id 2 (smoothedLaw μ s) := by
-  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) := Probability.Gaussian.law_probability hs
+theorem smoothedLaw_memLp_two (μ : Measure E) [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ)
+    {s : ℝ} (hs : 0 < s) : MemLp id 2 (smoothedLaw μ s) := by
+  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) :=
+    Probability.Gaussian.law_probability hs
   unfold smoothedLaw Measure.conv
-  apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable
-    (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)).2
-  exact (hμ2.comp_fst (Probability.Gaussian.law s)).add ((Probability.Gaussian.memLp_two hs).comp_snd μ)
+  apply
+    (memLp_map_measure_iff continuous_id.aestronglyMeasurable
+        (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)).2
+  exact
+    (hμ2.comp_fst (Probability.Gaussian.law s)).add
+      ((Probability.Gaussian.memLp_two hs).comp_snd μ)
 
 
 /-- Gaussian smoothing preserves the mean. -/
-theorem smoothedLaw_mean (μ : Measure E) [IsProbabilityMeasure μ]
-    (hμ2 : MemLp id 2 μ) {s : ℝ} (hs : 0 < s) :
-    (∫ y : E, y ∂(smoothedLaw μ s)) = ∫ y : E, y ∂μ := by
-  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) := Probability.Gaussian.law_probability hs
+theorem smoothedLaw_mean (μ : Measure E) [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ) {s : ℝ}
+    (hs : 0 < s) : (∫ y : E, y ∂(smoothedLaw μ s)) = ∫ y : E, y ∂μ := by
+  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) :=
+    Probability.Gaussian.law_probability hs
   have hfirst : Integrable (fun p : E × E => p.1) (μ.prod (Probability.Gaussian.law s)) :=
     (hμ2.comp_fst (Probability.Gaussian.law s)).integrable one_le_two
   have hsecond : Integrable (fun p : E × E => p.2) (μ.prod (Probability.Gaussian.law s)) :=
     ((Probability.Gaussian.memLp_two hs).comp_snd μ).integrable one_le_two
   unfold smoothedLaw Measure.conv
-  change (∫ y, id y ∂(Measure.map (fun p : E × E => p.1 + p.2) (μ.prod (Probability.Gaussian.law s)))) = _
+  change
+    (∫ y,
+        id
+          y ∂(Measure.map (fun p : E × E => p.1 + p.2) (μ.prod (Probability.Gaussian.law s)))) =
+      _
   rw [integral_map (by fun_prop) continuous_id.aestronglyMeasurable]
   change (∫ p : E × E, p.1 + p.2 ∂(μ.prod (Probability.Gaussian.law s))) = _
-  rw [integral_add hfirst hsecond, integral_fun_fst (fun y : E => y), integral_fun_snd (fun y : E => y),
-    Probability.Gaussian.mean_zero hs]
+  rw [integral_add hfirst hsecond, integral_fun_fst (fun y : E => y),
+    integral_fun_snd (fun y : E => y), Probability.Gaussian.mean_zero hs]
   simp
 
 -- Retain the existing CompleteSpace binder in this public interface.
 set_option linter.unusedSectionVars false in
 /-- Variances add under smoothing: `Var_{μ*γ_s}⟪v,·⟫ = Var_μ⟪v,·⟫ + ‖v‖²/(2s)`. -/
-theorem smoothedLaw_variance (μ : Measure E) [IsProbabilityMeasure μ]
-    (hμ2 : MemLp id 2 μ) {s : ℝ} (hs : 0 < s) (v : E) :
+theorem smoothedLaw_variance (μ : Measure E) [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ)
+    {s : ℝ} (hs : 0 < s) (v : E) :
     variance (fun y : E => ⟪v, y⟫) (smoothedLaw μ s) =
       variance (fun y : E => ⟪v, y⟫) μ + ‖v‖ ^ 2 / (2 * s) := by
-  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) := Probability.Gaussian.law_probability hs
+  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) :=
+    Probability.Gaussian.law_probability hs
   have hX : MemLp (fun y : E => ⟪v, y⟫) 2 μ := by
     simpa only [id_eq, innerSL_apply_apply] using hμ2.continuousLinearMap_comp (innerSL ℝ v)
   have hY : MemLp (fun y : E => ⟪v, y⟫) 2 (Probability.Gaussian.law s) := by
@@ -78,7 +91,7 @@ theorem smoothedLaw_variance (μ : Measure E) [IsProbabilityMeasure μ]
   rw [Probability.Gaussian.variance_inner hs] at h
   unfold smoothedLaw Measure.conv
   rw [variance_map (by fun_prop : AEMeasurable (fun y : E => ⟪v, y⟫) _)
-    (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)]
+      (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)]
   simpa only [Function.comp_def, inner_add_right] using h
 
 
@@ -101,11 +114,12 @@ theorem smoothedLaw_covarianceBilin (μ : Measure E) [IsProbabilityMeasure μ]
   field_simp [hs.ne'] at hv hw hsum ⊢
   nlinarith
 
-/-- **Covariance of the smoothed law**: `Cov(μ * γ_s) = Cov μ + (1/(2s)) · Id` (BKL Section 2, p. 5). -/
+/--
+**Covariance of the smoothed law**: `Cov(μ * γ_s) = Cov μ + (1/(2s)) · Id` (BKL Section 2, p. 5). -/
 theorem smoothedLaw_covariance_operator (μ : Measure E) [IsProbabilityMeasure μ]
     (hμ2 : MemLp id 2 μ) {s : ℝ} (hs : 0 < s) :
-    Covariance.operator (smoothedLaw μ s) = Covariance.operator μ +
-      (1 / (2 * s)) • (1 : E →L[ℝ] E) := by
+    Covariance.operator (smoothedLaw μ s) =
+      Covariance.operator μ + (1 / (2 * s)) • (1 : E →L[ℝ] E) := by
   ext v
   apply ext_inner_right ℝ
   intro w
@@ -114,7 +128,8 @@ theorem smoothedLaw_covariance_operator (μ : Measure E) [IsProbabilityMeasure �
     Covariance.operator_inner]
   have hone : (1 : E →L[ℝ] E) v = v := rfl
   rw [hone]
-  simpa only [one_div, one_mul, div_eq_mul_inv, mul_comm] using smoothedLaw_covarianceBilin μ hμ2 hs v w
+  simpa only [one_div, one_mul, div_eq_mul_inv, mul_comm] using
+    smoothedLaw_covarianceBilin μ hμ2 hs v w
 
 
 /-- Raw directional second moments increase by `‖v‖²/(2s)`. -/
@@ -194,11 +209,14 @@ theorem smoothedLaw_norm_sq_tendsto (μ : Measure E) [IsProbabilityMeasure μ]
 /-- The covariance operators of the smoothed laws converge in operator norm as `s → ∞`. -/
 theorem smoothedLaw_covariance_operator_tendsto (μ : Measure E) [IsProbabilityMeasure μ]
     (hμ2 : MemLp id 2 μ) :
-    Tendsto (fun s : ℝ => Covariance.operator (smoothedLaw μ s)) atTop (𝓝 (Covariance.operator μ)) := by
-  have ht : Tendsto (fun s : ℝ => Covariance.operator μ + (1 / (2 * s)) • (1 : E →L[ℝ] E))
-      atTop (𝓝 (Covariance.operator μ)) := by
-    simpa only [zero_smul, add_zero] using (tendsto_const_nhds (x := Covariance.operator μ)).add
-      (epsilon_tendsto_zero.smul (tendsto_const_nhds (x := (1 : E →L[ℝ] E))))
+    Tendsto (fun s : ℝ => Covariance.operator (smoothedLaw μ s)) atTop
+      (𝓝 (Covariance.operator μ)) := by
+  have ht :
+    Tendsto (fun s : ℝ => Covariance.operator μ + (1 / (2 * s)) • (1 : E →L[ℝ] E)) atTop
+      (𝓝 (Covariance.operator μ)) := by
+    simpa only [zero_smul, add_zero] using
+      (tendsto_const_nhds (x := Covariance.operator μ)).add
+        (epsilon_tendsto_zero.smul (tendsto_const_nhds (x := (1 : E →L[ℝ] E))))
   apply ht.congr'
   filter_upwards [Ioi_mem_atTop (0 : ℝ)] with s hs
   exact (smoothedLaw_covariance_operator μ hμ2 hs).symm
@@ -210,7 +228,9 @@ end
 
 /-! ### Fourth moments of Gaussian, smoothed and linear-image laws; translated Gaussian identity
 
-`Probability.Gaussian.law s` has a fourth moment; fourth moments pass to smoothed laws and linear images; the Gaussian directional identity for bounded Lipschitz `C¹` tests holds after a translation. -/
+`Probability.Gaussian.law s` has a fourth moment; fourth moments pass to smoothed laws and linear
+images; the Gaussian directional identity for bounded Lipschitz `C¹` tests holds after a
+translation. -/
 
 noncomputable section
 open MeasureTheory Set
@@ -221,15 +241,18 @@ namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-theorem smoothedLaw_memLp_four (μ : Measure E) [IsProbabilityMeasure μ]
-    (hμ4 : MemLp id 4 μ) {s : ℝ} (hs : 0 < s) : MemLp id 4 (smoothedLaw μ s) := by
-  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) := Probability.Gaussian.law_probability hs
+theorem smoothedLaw_memLp_four (μ : Measure E) [IsProbabilityMeasure μ] (hμ4 : MemLp id 4 μ)
+    {s : ℝ} (hs : 0 < s) : MemLp id 4 (smoothedLaw μ s) := by
+  let _ : IsProbabilityMeasure (Probability.Gaussian.law (V := E) s) :=
+    Probability.Gaussian.law_probability hs
   unfold smoothedLaw Measure.conv
-  apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable
-    (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)).2
-  exact (hμ4.comp_fst (Probability.Gaussian.law s)).add ((Probability.Gaussian.memLp_four hs).comp_snd μ)
+  apply
+    (memLp_map_measure_iff continuous_id.aestronglyMeasurable
+        (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)).2
+  exact
+    (hμ4.comp_fst (Probability.Gaussian.law s)).add
+      ((Probability.Gaussian.memLp_four hs).comp_snd μ)
 
 end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 end
-

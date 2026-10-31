@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.BrascampLieb
-import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.BrascampLieb
+public import FunctionalInequalities.KLS.BKL.GaussianTaylor
+public import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 
 /-!
 # Audit: the scalar Brascamp–Lieb inequality is sharp for the standard Gaussian law on `ℝ`
@@ -12,6 +14,8 @@ identity, the energy is integrable with integral `1`, the law is isotropic (from
 moments), the variance is `1`, and `scalar_brascamp_lieb_finite_energy` is invoked, so equality
 holds. No premise. Not a source-law moment-map client.
 -/
+
+@[expose] public section
 
 noncomputable section
 

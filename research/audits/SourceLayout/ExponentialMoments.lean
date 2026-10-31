@@ -1,7 +1,11 @@
-import FunctionalInequalities.Probability.ExponentialMoments.Norm
-import FunctionalInequalities.Probability.ExponentialMoments.Temperate
+module
+
+public import FunctionalInequalities.Probability.ExponentialMoments.Norm
+public import FunctionalInequalities.Probability.ExponentialMoments.Temperate
 
 /-! Generic finite-measure moments and normed-source temperate L2 clients. -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities MeasureTheory
 open scoped RealInnerProductSpace

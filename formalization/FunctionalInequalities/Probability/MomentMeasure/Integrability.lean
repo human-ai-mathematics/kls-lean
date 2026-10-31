@@ -1,18 +1,24 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import FunctionalInequalities.Probability.MomentMeasure.Basic
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Real
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Function.L1Space.Integrable
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import FunctionalInequalities.Probability.MomentMeasure.Basic
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Order
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Real
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Function.L1Space.Integrable
 
 /-!
 # Integrable potentials and their truncation
 
-Finite-domain witnesses of `PotentialIntegrable`, integrability of the lower truncation for every real cutoff and of
-its actual biconjugate, and the integral comparison used in the convexification step of CEK Proposition 12.
+Finite-domain witnesses of `PotentialIntegrable`, integrability of the lower truncation for every
+real cutoff and of
+its actual biconjugate, and the integral comparison used in the convexification step of CEK
+Proposition 12.
 
 Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
+
+@[expose] public section
 
 noncomputable section
 

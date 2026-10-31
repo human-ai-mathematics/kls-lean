@@ -1,9 +1,13 @@
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.Analysis.InnerProductSpace.Orthogonal
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.Analysis.Calculus.ContDiff.Basic
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.Analysis.InnerProductSpace.Orthogonal
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.Analysis.Calculus.ContDiff.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
 
 /-!
 # Affine decomposition bounds in `L²`
@@ -20,6 +24,8 @@ finite-dimensional subspaces `K` (constants) and `L` (linear functions).
 affine-orthogonal part of a function on `ℝⁿ` for a centered probability measure `μ` with identity
 covariance; its properties are stated with those moment hypotheses only.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 open scoped RealInnerProductSpace
@@ -117,9 +123,9 @@ theorem eLpNorm_le_eLpNorm_of_integral_sq_le {α : Type*} [MeasurableSpace α] {
     (h : ∫ x, u x ^ 2 ∂μ ≤ ∫ x, v x ^ 2 ∂μ) :
     eLpNorm u 2 μ ≤ eLpNorm v 2 μ := by
     have hu_int : Integrable (fun x => u x ^ 2) μ :=
-      (memLp_two_iff_integrable_sq hu.1).1 hu
+      (memLp_two_iff_integrable_sq hu.aestronglyMeasurable).1 hu
     have hv_int : Integrable (fun x => v x ^ 2) μ :=
-      (memLp_two_iff_integrable_sq hv.1).1 hv
+      (memLp_two_iff_integrable_sq hv.aestronglyMeasurable).1 hv
     have hu_nonneg : 0 ≤ᵐ[μ] (fun x => u x ^ 2) :=
       Filter.Eventually.of_forall (fun x => sq_nonneg (u x))
     have hv_nonneg : 0 ≤ᵐ[μ] (fun x => v x ^ 2) :=
@@ -156,13 +162,15 @@ theorem eLpNorm_le_eLpNorm_of_integral_sq_le {α : Type*} [MeasurableSpace α] {
     have hu_norm :
         eLpNorm u 2 μ =
           (ENNReal.ofReal (∫ x, u x ^ 2 ∂μ)) ^ (1 / (2 : ℝ)) := by
-      rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
+      rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top
+        hu.aestronglyMeasurable]
       simp only [ENNReal.toReal_ofNat]
       rw [hu_lint]
     have hv_norm :
         eLpNorm v 2 μ =
           (ENNReal.ofReal (∫ x, v x ^ 2 ∂μ)) ^ (1 / (2 : ℝ)) := by
-      rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
+      rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top
+        hv.aestronglyMeasurable]
       simp only [ENNReal.toReal_ofNat]
       rw [hv_lint]
     rw [hu_norm, hv_norm]
@@ -276,6 +284,7 @@ theorem integral_inner_mul_affineOrthPart (μ : Measure (EuclideanSpace ℝ (Fin
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)
     {g : EuclideanSpace ℝ (Fin n) → ℝ} (hg : MemLp g 2 μ) (u : EuclideanSpace ℝ (Fin n)) :
     ∫ x, ⟪u, x⟫ * affineOrthPart μ g x ∂μ = 0 := by
+    -- Check integrability of the products in the affine projection.
     have hu : MemLp (fun x : EuclideanSpace ℝ (Fin n) => ⟪u, x⟫) 2 μ := by
       simpa [Function.comp_def] using (innerSL ℝ u).comp_memLp' hμ2
     have hlin : ∀ v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪v, x⟫ ∂μ = 0 := by
@@ -317,6 +326,8 @@ theorem integral_inner_mul_affineOrthPart (μ : Measure (EuclideanSpace ℝ (Fin
                   ⟪EuclideanSpace.basisFun (Fin n) ℝ j, x⟫) μ := by
       simpa only [Finset.mul_sum] using
         (integrable_finsetSum _ (fun j hj => h₃ j))
+
+    -- Evaluate the projection sum using the covariance identity.
     have hsum_eval :
         ∫ x, ⟪u, x⟫ *
             ∑ j,

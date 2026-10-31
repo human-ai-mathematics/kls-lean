@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
-import FunctionalInequalities.Energy.WeightedGradient.Basic
-import FunctionalInequalities.Energy.Euclidean.WeakDerivative
-import FunctionalInequalities.L2.MeanVariance
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.Normed.Lp.SmoothApprox
+module
+
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+public import FunctionalInequalities.Energy.WeightedGradient.Basic
+public import FunctionalInequalities.Energy.Euclidean.WeakDerivative
+public import FunctionalInequalities.L2.MeanVariance
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.Normed.Lp.SmoothApprox
 
 /-!
 # Dense domain and smooth core of the weighted gradient operator
@@ -25,6 +27,8 @@ by monotonicity the same holds for every intermediate core, in particular for th
 
 Closability itself is proved in `Closable.lean`; nothing here asserts it.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -132,7 +136,8 @@ omit [FiniteDimensional ℝ V] in
 theorem smoothCore_le_constantSmoothCore : smoothCore ν ≤ constantSmoothCore ν :=
   le_sup_left
 
-omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V]
+    [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The `L²` constant one is the class of the constant test one. -/
 theorem L2_const_eq_toLp (c : ℝ) :
     L2.const ν c = (memLp_const c : MemLp (fun _ : V ↦ c) 2 (ν : Measure V)).toLp _ := by
@@ -168,29 +173,40 @@ theorem exists_smoothCore_tendsto (hac : (ν : Measure V) ≪ m)
     (hfr : (ν : Measure V) (frontier (ν : Measure V).support) = 0)
     (f : (operator ν B hac).domain) :
     ∃ s : ℕ → smoothCore ν,
-      Tendsto (fun n ↦ ((s n : Lp ℝ 2 (ν : Measure V)),
-        operator ν B hac ⟨s n, smoothCore_le_domain_operator ν B hac (s n).2⟩))
+      Tendsto
+        (fun n ↦
+          ((s n : Lp ℝ 2 (ν : Measure V)),
+            operator ν B hac ⟨s n, smoothCore_le_domain_operator ν B hac (s n).2⟩))
         atTop (𝓝 ((f : Lp ℝ 2 (ν : Measure V)), operator ν B hac f)) := by
   obtain ⟨g, h, hfg⟩ := (mem_domain_operator_iff ν B hac _).mp f.2
   obtain ⟨K, hK⟩ := h.1
-  obtain ⟨gSeq, hprop, hconv, hconvB⟩ := LipschitzApproximation.exists_smooth_weighted_L2
-    ν m hac B g hK.locallyLipschitz h.memLp h.memLp_apply
-  have hmem : ∀ n, (memLp_of_contDiff_hasCompactSupport ν (hprop n).1 (hprop n).2.1).toLp (gSeq n) ∈
-      smoothCore ν := fun n ↦ ⟨gSeq n, (hprop n).1, (hprop n).2.1, rfl⟩
+  obtain ⟨gSeq, hprop, hconv, hconvB⟩ :=
+    LipschitzApproximation.exists_smooth_weighted_L2 ν m hac B g hK.locallyLipschitz h.memLp
+      h.memLp_apply
+  have hmem :
+    ∀ n,
+      (memLp_of_contDiff_hasCompactSupport ν (hprop n).1 (hprop n).2.1).toLp (gSeq n) ∈
+        smoothCore ν :=
+    fun n ↦ ⟨gSeq n, (hprop n).1, (hprop n).2.1, rfl⟩
   refine ⟨fun n ↦ ⟨_, hmem n⟩, ?_⟩
   have htest : ∀ n, IsTest ν B (gSeq n) := fun n ↦
     IsTest.of_contDiff_hasCompactSupport ν B (hprop n).1 (hprop n).2.1
-  have hT : ∀ n, operator ν B hac
-      ⟨(memLp_of_contDiff_hasCompactSupport ν (hprop n).1 (hprop n).2.1).toLp (gSeq n),
-        smoothCore_le_domain_operator ν B hac (hmem n)⟩ =
-      (htest n).memLp_apply.toLp (apply B (gSeq n)) := fun n ↦
-    operator_apply ν B hac hfr (htest n) _ rfl
+  have hT :
+    ∀ n,
+      operator ν B hac
+          ⟨(memLp_of_contDiff_hasCompactSupport ν (hprop n).1 (hprop n).2.1).toLp (gSeq n),
+            smoothCore_le_domain_operator ν B hac (hmem n)⟩ =
+        (htest n).memLp_apply.toLp (apply B (gSeq n)) :=
+    fun n ↦ operator_apply ν B hac hfr (htest n) _ rfl
   have hTf : operator ν B hac f = h.memLp_apply.toLp (apply B g) :=
     operator_apply ν B hac hfr h f.2 hfg
   refine Tendsto.prodMk_nhds ?_ ?_
   · rw [hfg, tendsto_iff_norm_sub_tendsto_zero]
-    have h1 : ∀ n, ‖(memLp_of_contDiff_hasCompactSupport ν (hprop n).1 (hprop n).2.1).toLp (gSeq n) -
-        h.memLp.toLp g‖ = (eLpNorm (fun x ↦ gSeq n x - g x) 2 (ν : Measure V)).toReal := by
+    have h1 :
+      ∀ n,
+        ‖(memLp_of_contDiff_hasCompactSupport ν (hprop n).1 (hprop n).2.1).toLp (gSeq n) -
+              h.memLp.toLp g‖ =
+          (eLpNorm (fun x ↦ gSeq n x - g x) 2 (ν : Measure V)).toReal := by
       intro n
       rw [← MemLp.toLp_sub, Lp.norm_toLp]
       rfl
@@ -199,9 +215,11 @@ theorem exists_smoothCore_tendsto (hac : (ν : Measure V) ≪ m)
     simpa [Function.comp_def] using this
   · simp only [hT, hTf]
     rw [tendsto_iff_norm_sub_tendsto_zero]
-    have h1 : ∀ n, ‖(htest n).memLp_apply.toLp (apply B (gSeq n)) -
-        h.memLp_apply.toLp (apply B g)‖ =
-        (eLpNorm (fun x ↦ B (gradient (gSeq n) x) - B (gradient g x)) 2 (ν : Measure V)).toReal := by
+    have h1 :
+      ∀ n,
+        ‖(htest n).memLp_apply.toLp (apply B (gSeq n)) - h.memLp_apply.toLp (apply B g)‖ =
+          (eLpNorm (fun x ↦ B (gradient (gSeq n) x) - B (gradient g x)) 2
+              (ν : Measure V)).toReal := by
       intro n
       rw [← MemLp.toLp_sub, Lp.norm_toLp]
       rfl

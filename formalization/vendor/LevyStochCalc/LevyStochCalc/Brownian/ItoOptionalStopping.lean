@@ -6,9 +6,14 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Brownian.ItoFinsetSum
-import LevyStochCalc.Brownian.ItoPullOut
-import LevyStochCalc.Probability.StoppedProgressive
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0, with
+-- source adaptations (deprecated names, proof-context visibility) listed in vendor/port.patch.
+module
+
+public import LevyStochCalc.Brownian.ItoFinsetSum
+public import LevyStochCalc.Brownian.ItoPullOut
+public import LevyStochCalc.Probability.StoppedProgressive
 
 /-!
 # Optional stopping for the Itô integral, for a stopping time of finite range
@@ -26,6 +31,8 @@ so it passes inside the integral; the resulting sum telescopes into the integral
   integrand.
 * `LevyStochCalc.Brownian.Ito.stochasticIntegralBrownian_stopped` — the identity.
 -/
+
+@[expose] public section
 
 namespace LevyStochCalc.Brownian.Ito
 
@@ -168,7 +175,7 @@ theorem stopped_eq_sub_sum (H : Ω → ℝ → ℝ) {t : ℝ} (J : Finset ℝ)
       rw [hsum, hind0, cutTerm, hhit]
       by_cases hsc : s ≤ c₀
       · have h1 : Probability.stopped τ H ω s = H ω s := by
-          rw [Probability.stopped, if_pos]
+          rw [Probability.stopped, ite_eq_left]
           rw [hc₀]
           exact_mod_cast hsc
         have h2 : indIoc Ω c₀ t ω s = 0 := by
@@ -179,7 +186,7 @@ theorem stopped_eq_sub_sum (H : Ω → ℝ → ℝ) {t : ℝ} (J : Finset ℝ)
         ring
       · push Not at hsc
         have h1 : Probability.stopped τ H ω s = 0 := by
-          rw [Probability.stopped, if_neg]
+          rw [Probability.stopped, ite_eq_right]
           rw [hc₀]
           exact fun hcon => absurd (by exact_mod_cast hcon : s ≤ c₀) (not_le.mpr hsc)
         have h2 : indIoc Ω c₀ t ω s = 1 := by
@@ -192,7 +199,7 @@ theorem stopped_eq_sub_sum (H : Ω → ℝ → ℝ) {t : ℝ} (J : Finset ℝ)
         rw [hcon] at hge
         exact absurd (by exact_mod_cast hge : t ≤ c) (not_le.mpr (hJt c hc))
       have h1 : Probability.stopped τ H ω s = H ω s := by
-        rw [Probability.stopped, if_pos]
+        rw [Probability.stopped, ite_eq_left]
         exact le_trans (by exact_mod_cast hs.2) hge
       rw [hsum, hind0, h1]
       ring

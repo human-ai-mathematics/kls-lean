@@ -1,5 +1,7 @@
-import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the slope sandwich
 
@@ -37,6 +39,8 @@ there with no hypothesis at all.
 The axiom reports at the end cover every public declaration of the comparison module and every
 theorem of this client; each of them must list only `propext`, `Classical.choice` and `Quot.sound`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

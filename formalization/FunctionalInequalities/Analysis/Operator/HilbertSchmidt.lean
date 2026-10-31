@@ -1,15 +1,21 @@
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Trace
+module
+
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!
 # Standard trace and Hilbert–Schmidt norm
 
-`stdTrace` and `hsNormSq` in the standard basis of a finite-dimensional inner-product space, with operator norm ≤
-Hilbert–Schmidt ≤ trace for positive operators and the Cauchy–Schwarz and composition bounds (Lyapunov estimates of the
+`stdTrace` and `hsNormSq` in the standard basis of a finite-dimensional inner-product space, with
+operator norm ≤
+Hilbert–Schmidt ≤ trace for positive operators and the Cauchy–Schwarz and composition bounds
+(Lyapunov estimates of the
 cutoff localization).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -61,7 +67,8 @@ def stdTrace (M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n
 def hsNormSq (M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) : ℝ :=
   ∑ i, ∑ j, ⟪EuclideanSpace.basisFun (Fin n) ℝ i, M (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ ^ 2
 
-theorem hsNormSq_nonneg (M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) : 0 ≤ hsNormSq M := by
+theorem hsNormSq_nonneg (M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
+    0 ≤ hsNormSq M := by
   unfold hsNormSq
   exact Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => sq_nonneg _
 
@@ -138,13 +145,14 @@ theorem hsNormSq_comp_le (M N : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSp
       mul_pow _ _ 2
 
 /-- The trace of a positive operator is nonnegative. -/
-theorem stdTrace_nonneg {M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)} (hM : M.IsPositive) :
-    0 ≤ stdTrace M := by
+theorem stdTrace_nonneg {M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)}
+    (hM : M.IsPositive) : 0 ≤ stdTrace M := by
   unfold stdTrace
-  exact Finset.sum_nonneg fun i _ =>
-    hM.inner_nonneg_right (EuclideanSpace.basisFun (Fin n) ℝ i)
+  exact Finset.sum_nonneg fun i _ => hM.inner_nonneg_right (EuclideanSpace.basisFun (Fin n) ℝ i)
 
-/-- For a positive operator, `‖M‖²_HS ≤ (tr M)²` (Cauchy–Schwarz for the semi-inner product `⟪M·,·⟫`). -/
+/--
+For a positive operator, `‖M‖²_HS ≤ (tr M)²` (Cauchy–Schwarz for the semi-inner product `⟪M·,·⟫`).
+-/
 theorem hsNormSq_le_stdTrace_sq {M : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)}
     (hM : M.IsPositive) : hsNormSq M ≤ stdTrace M ^ 2 := by
   unfold hsNormSq stdTrace
@@ -153,24 +161,26 @@ theorem hsNormSq_le_stdTrace_sq {M : EuclideanSpace ℝ (Fin n) →L[ℝ] Euclid
   intro i _
   apply Finset.sum_le_sum
   intro j _
-  exact positive_inner_sq_le hM
-    (EuclideanSpace.basisFun (Fin n) ℝ i)
-    (EuclideanSpace.basisFun (Fin n) ℝ j)
+  exact
+    positive_inner_sq_le hM (EuclideanSpace.basisFun (Fin n) ℝ i)
+      (EuclideanSpace.basisFun (Fin n) ℝ j)
 
 /-- Cauchy–Schwarz for the Hilbert–Schmidt pairing `Σ_j ⟪M e_j, N e_j⟫`. -/
-theorem sum_inner_apply_le_sqrt_hsNormSq_mul (M N : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
+theorem sum_inner_apply_le_sqrt_hsNormSq_mul
+    (M N : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
     ∑ j, ⟪M (EuclideanSpace.basisFun (Fin n) ℝ j), N (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ ≤
       Real.sqrt (hsNormSq M) * Real.sqrt (hsNormSq N) := by
   calc
-    (∑ j, ⟪M (EuclideanSpace.basisFun (Fin n) ℝ j),
-        N (EuclideanSpace.basisFun (Fin n) ℝ j)⟫) ≤
-        ∑ j, ‖M (EuclideanSpace.basisFun (Fin n) ℝ j)‖ *
-          ‖N (EuclideanSpace.basisFun (Fin n) ℝ j)‖ := by
+    (∑ j, ⟪M (EuclideanSpace.basisFun (Fin n) ℝ j), N (EuclideanSpace.basisFun (Fin n) ℝ j)⟫) ≤
+        ∑ j,
+          ‖M (EuclideanSpace.basisFun (Fin n) ℝ j)‖ *
+            ‖N (EuclideanSpace.basisFun (Fin n) ℝ j)‖ := by
       apply Finset.sum_le_sum
       intro j _
       exact real_inner_le_norm _ _
-    _ ≤ Real.sqrt (∑ j, ‖M (EuclideanSpace.basisFun (Fin n) ℝ j)‖ ^ 2) *
-        Real.sqrt (∑ j, ‖N (EuclideanSpace.basisFun (Fin n) ℝ j)‖ ^ 2) :=
+    _ ≤
+        Real.sqrt (∑ j, ‖M (EuclideanSpace.basisFun (Fin n) ℝ j)‖ ^ 2) *
+          Real.sqrt (∑ j, ‖N (EuclideanSpace.basisFun (Fin n) ℝ j)‖ ^ 2) :=
       Real.sum_mul_le_sqrt_mul_sqrt Finset.univ
         (fun j => ‖M (EuclideanSpace.basisFun (Fin n) ℝ j)‖)
         (fun j => ‖N (EuclideanSpace.basisFun (Fin n) ℝ j)‖)
@@ -181,18 +191,18 @@ end FunctionalInequalities.Analysis
 
 /-! ### Hilbert–Schmidt sum of a symmetric operator
 
-For a symmetric continuous linear operator `A` and any finite orthonormal basis, `Σᵢⱼ ⟪A bᵢ, bⱼ⟫² = tr (A ∘ A)`. -/
+For a symmetric continuous linear operator `A` and any finite orthonormal basis, `Σᵢⱼ ⟪A bᵢ, bⱼ⟫² =
+tr (A ∘ A)`. -/
 
 noncomputable section
 open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-theorem sum_inner_apply_sq_eq_trace_comp_of_isSymmetric
-    {ι E : Type*} [Fintype ι] [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    (A : E →L[ℝ] E) (hA : (A : E →ₗ[ℝ] E).IsSymmetric)
-    (b : OrthonormalBasis ι ℝ E) :
-    (∑ i, ∑ j, ⟪A (b i),b j⟫ ^ 2) = LinearMap.trace ℝ E (A.toLinearMap * A.toLinearMap) := by
+theorem sum_inner_apply_sq_eq_trace_comp_of_isSymmetric {ι E : Type*} [Fintype ι]
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] (A : E →L[ℝ] E)
+    (hA : (A : E →ₗ[ℝ] E).IsSymmetric) (b : OrthonormalBasis ι ℝ E) :
+    (∑ i, ∑ j, ⟪A (b i), b j⟫ ^ 2) = LinearMap.trace ℝ E (A.toLinearMap * A.toLinearMap) := by
   simp_rw [b.sum_sq_inner_left]
   rw [LinearMap.trace_eq_sum_inner _ b]
   apply Finset.sum_congr rfl

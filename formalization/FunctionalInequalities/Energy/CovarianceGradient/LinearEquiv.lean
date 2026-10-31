@@ -1,7 +1,9 @@
-import FunctionalInequalities.L2.Transport
-import FunctionalInequalities.Energy.CovarianceGradient.Isometry
-import FunctionalInequalities.Energy.CovarianceGradient.Translation
-import Mathlib.Analysis.InnerProductSpace.Adjoint
+module
+
+public import FunctionalInequalities.L2.Transport
+public import FunctionalInequalities.Energy.CovarianceGradient.Isometry
+public import FunctionalInequalities.Energy.CovarianceGradient.Translation
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Linear change of variables for the covariance relaxation
@@ -9,13 +11,18 @@ import Mathlib.Analysis.InnerProductSpace.Adjoint
 Source: Blueprint `thm:affine-isotropic-reduction`, the sentence "whiten the centered intrinsic law
 by `Cov^{-1/2}`; pullback of the isotropic inequality gives the covariance-form inequality". Read
 `gradient_comp_continuousLinearEquiv`, `Covariance.operator_map_continuousLinearEquiv`,
-`KLS.LogConcave.mapContinuousLinearEquiv`, `L2.ContinuousLinearEquiv.pullbackEquiv`, `L2.ContinuousLinearEquiv.variance_pullbackEquiv`, `Energy.CovarianceGradient.relaxation_mapContinuousLinearEquiv`,
-`Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv` and `Probability.affineSupport_mapContinuousLinearEquiv`.
+`KLS.LogConcave.mapContinuousLinearEquiv`, `L2.ContinuousLinearEquiv.pullbackEquiv`,
+`L2.ContinuousLinearEquiv.variance_pullbackEquiv`,
+`Energy.CovarianceGradient.relaxation_mapContinuousLinearEquiv`,
+`Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv` and
+`Probability.affineSupport_mapContinuousLinearEquiv`.
 
 For a probability law `ν` on a finite-dimensional Euclidean space `V₁` and a continuous linear
-equivalence `T : V₁ ≃L[ℝ] V₂`, the image law `KLS.LogConcave.mapContinuousLinearEquiv ν T` lives on `V₂`. Its covariance
+equivalence `T : V₁ ≃L[ℝ] V₂`, the image law `KLS.LogConcave.mapContinuousLinearEquiv ν T` lives on
+`V₂`. Its covariance
 operator is `T ∘ Σ ∘ T†` with `T†` the adjoint; the gradient of `g ∘ T` is `T† ∇g ∘ T`; composition
-with `T` is a linear isometric equivalence `L²(KLS.LogConcave.mapContinuousLinearEquiv ν T) ≃ L²(ν)` (because `T` is measure
+with `T` is a linear isometric equivalence `L²(KLS.LogConcave.mapContinuousLinearEquiv ν T) ≃ L²(ν)`
+(because `T` is measure
 preserving between the two laws) which preserves variance; globally Lipschitz covariance tests
 correspond by composition with equal covariance energies, since
 `⟪T Σ T† w, w⟫ = ⟪Σ T† w, T† w⟫`; hence the covariance relaxations correspond under the isometry and
@@ -27,6 +34,8 @@ module is retained as the certified special case used for translation invariance
 for every Borel probability law; no log-concavity, density or closability is used, and no Poincaré
 inequality is asserted. The zero-dimensional spaces are included.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -66,9 +75,10 @@ end Gradient
 
 section Tests
 
-variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
-
-  {ν₁ : ProbabilityMeasure V₁} {ν₂ : ProbabilityMeasure V₂} {T : V₁ ≃L[ℝ] V₂}
+variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁]
+  [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂]
+  [FiniteDimensional ℝ V₂] {ν₁ : ProbabilityMeasure V₁} {ν₂ : ProbabilityMeasure V₂}
+  {T : V₁ ≃L[ℝ] V₂}
 
 namespace CovarianceGradient.Test
 
@@ -83,11 +93,12 @@ def compContinuousLinearEquiv
   toFun := fun x ↦ g (T x)
   lipschitz := by
     obtain ⟨K, hK⟩ := g.lipschitz
-    exact ⟨K * ‖(T : V₁ →L[ℝ] V₂)‖₊, hK.comp (T : V₁ →L[ℝ] V₂).lipschitz⟩
+    exact ⟨K * ‖(T : V₁ →L[ℝ] V₂)‖₊, hK.comp (T : V₁ →L[ℝ] V₂).lipschitzWith⟩
   memLp_two := by
     have := g.memLp_two
     rw [← hmp.map_eq] at this
-    exact (memLp_map_measure_iff (hmp.map_eq ▸ g.memLp_two.1) hmp.aemeasurable).mp this
+    exact (memLp_map_measure_iff (hmp.map_eq ▸ g.memLp_two.aestronglyMeasurable)
+      hmp.aemeasurable).mp this
   integrable := by
     have hdens : density ν₁ (fun x ↦ g (T x)) =
         density ν₂ g.toFun ∘ T := by
@@ -101,7 +112,8 @@ def compContinuousLinearEquiv
 
 section EquivalentTests
 
-omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
+omit [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [SecondCountableTopology V₂]
+  [FiniteDimensional ℝ V₂]
 /-- The composed test has the same covariance energy. -/
 theorem energy_compContinuousLinearEquiv
     (hmp : MeasurePreserving T (ν₁ : Measure V₁) (ν₂ : Measure V₂))
@@ -141,9 +153,9 @@ end Tests
 
 section Relaxation
 
-variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁] [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂] [FiniteDimensional ℝ V₂]
-
-  (ν : ProbabilityMeasure V₁) (T : V₁ ≃L[ℝ] V₂)
+variable [MeasurableSpace V₁] [BorelSpace V₁] [SecondCountableTopology V₁]
+  [FiniteDimensional ℝ V₁] [MeasurableSpace V₂] [BorelSpace V₂] [SecondCountableTopology V₂]
+  [FiniteDimensional ℝ V₂] (ν : ProbabilityMeasure V₁) (T : V₁ ≃L[ℝ] V₂)
 
 namespace CovarianceGradient
 
@@ -151,33 +163,52 @@ omit [FiniteDimensional ℝ V₁] [FiniteDimensional ℝ V₂] in
 omit [SecondCountableTopology V₁] in
 /-- The covariance relaxation of the image law is the covariance relaxation of `ν` pulled back
 along `T`. -/
-theorem relaxation_mapContinuousLinearEquiv (f : Lp ℝ 2 (Probability.mapContinuousLinearEquiv ν T : Measure V₂)) :
-    relaxation (Probability.mapContinuousLinearEquiv ν T) f = relaxation ν (L2.ContinuousLinearEquiv.pullbackEquiv ν T f) := by
-  have hcov : ∀ w, inner ℝ (Covariance.operator (Probability.mapContinuousLinearEquiv ν T : Measure V₂) w) w =
-      inner ℝ (Covariance.operator (ν : Measure V₁) ((T : V₁ →L[ℝ] V₂).adjoint w))
-        ((T : V₁ →L[ℝ] V₂).adjoint w) :=
+theorem relaxation_mapContinuousLinearEquiv
+    (f : Lp ℝ 2 (Probability.mapContinuousLinearEquiv ν T : Measure V₂)) :
+    relaxation (Probability.mapContinuousLinearEquiv ν T) f =
+      relaxation ν (L2.ContinuousLinearEquiv.pullbackEquiv ν T f) := by
+  have hcov :
+    ∀ w,
+      inner ℝ (Covariance.operator (Probability.mapContinuousLinearEquiv ν T : Measure V₂) w)
+          w =
+        inner ℝ (Covariance.operator (ν : Measure V₁) ((T : V₁ →L[ℝ] V₂).adjoint w))
+          ((T : V₁ →L[ℝ] V₂).adjoint w) :=
     Covariance.inner_operator_mapContinuousLinearEquiv ν T
-  have hcov' : ∀ w, inner ℝ (Covariance.operator (ν : Measure V₁) w) w =
-      inner ℝ (Covariance.operator (Probability.mapContinuousLinearEquiv ν T : Measure V₂)
-        ((T.symm : V₂ →L[ℝ] V₁).adjoint w)) ((T.symm : V₂ →L[ℝ] V₁).adjoint w) :=
+  have hcov' :
+    ∀ w,
+      inner ℝ (Covariance.operator (ν : Measure V₁) w) w =
+        inner ℝ
+          (Covariance.operator (Probability.mapContinuousLinearEquiv ν T : Measure V₂)
+            ((T.symm : V₂ →L[ℝ] V₁).adjoint w))
+          ((T.symm : V₂ →L[ℝ] V₁).adjoint w) :=
     Covariance.inner_operator_mapContinuousLinearEquiv_symm ν T
   apply le_antisymm
-  · have h := (preEnergy ν).sequentialRelaxation_comp_le
-      (preEnergy (Probability.mapContinuousLinearEquiv ν T)) (L2.ContinuousLinearEquiv.pullbackInv ν T)
-      (L2.ContinuousLinearEquiv.pullbackInv ν T).continuous ?_ (L2.ContinuousLinearEquiv.pullbackEquiv ν T f)
-    · rw [L2.ContinuousLinearEquiv.pullbackEquiv_apply, L2.ContinuousLinearEquiv.pullbackInv_pullback] at h
+  · have h :=
+      (preEnergy ν).sequentialRelaxation_comp_le
+        (preEnergy (Probability.mapContinuousLinearEquiv ν T))
+        (L2.ContinuousLinearEquiv.pullbackInv ν T)
+        (L2.ContinuousLinearEquiv.pullbackInv ν T).continuous ?_
+        (L2.ContinuousLinearEquiv.pullbackEquiv ν T f)
+    · rw [L2.ContinuousLinearEquiv.pullbackEquiv_apply,
+        L2.ContinuousLinearEquiv.pullbackInv_pullback] at h
       exact h
     · intro g
-      refine ⟨g.compContinuousLinearEquiv (Probability.measurePreserving_mapContinuousLinearEquiv_symm ν T) hcov', ?_,
-        le_of_eq ?_⟩
+      refine
+        ⟨g.compContinuousLinearEquiv
+            (Probability.measurePreserving_mapContinuousLinearEquiv_symm ν T) hcov',
+          ?_, le_of_eq ?_⟩
       · exact g.toL2_compContinuousLinearEquiv _ _
       · exact g.energy_compContinuousLinearEquiv _ _
-  · have h := (preEnergy (Probability.mapContinuousLinearEquiv ν T)).sequentialRelaxation_comp_le
-      (preEnergy ν) (L2.ContinuousLinearEquiv.pullback ν T) (L2.ContinuousLinearEquiv.pullback ν T).continuous ?_ f
+  · have h :=
+      (preEnergy (Probability.mapContinuousLinearEquiv ν T)).sequentialRelaxation_comp_le
+        (preEnergy ν) (L2.ContinuousLinearEquiv.pullback ν T)
+        (L2.ContinuousLinearEquiv.pullback ν T).continuous ?_ f
     · exact h
     · intro g
-      refine ⟨g.compContinuousLinearEquiv (Probability.measurePreserving_mapContinuousLinearEquiv ν T) hcov, ?_,
-        le_of_eq ?_⟩
+      refine
+        ⟨g.compContinuousLinearEquiv
+            (Probability.measurePreserving_mapContinuousLinearEquiv ν T) hcov,
+          ?_, le_of_eq ?_⟩
       · exact g.toL2_compContinuousLinearEquiv _ _
       · exact g.energy_compContinuousLinearEquiv _ _
 

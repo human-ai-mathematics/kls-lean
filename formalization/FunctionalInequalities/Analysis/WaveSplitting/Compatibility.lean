@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.WaveSplitting.WeightedEnergy
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.WeightedEnergy
 
 /-!
 # Gradient compatibility defect of the actual splitting scheme
@@ -9,6 +11,8 @@ residual, `e_(p_j) - D_(a_j) e_u`. Hence it costs one derivative of the residual
 the forced weighted energy this controls the weighted coordinate form energy of `u` by the
 initial weighted norm plus a mesh-dependent remainder.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff
@@ -27,7 +31,8 @@ def formState (a : ι → E) (Y : State E ι) : State E ι :=
   ⟨Y.u, 0, fun j x => fderiv ℝ Y.u x (a j)⟩
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-@[simp] theorem subState_zeroState (Y : State E ι) : subState Y zeroState = Y := by
+@[simp]
+theorem subState_zeroState (Y : State E ι) : subState Y zeroState = Y := by
   apply State.ext <;> funext <;> simp [subState, zeroState]
 
 theorem State.Smooth.compatibilityDefect {Y : State E ι} (hY : Y.Smooth) (a : ι → E) :
@@ -174,8 +179,8 @@ variable [FiniteDimensional ℝ E]
 theorem sqrt_derivativeEnergy_defect_step_le {d : ℕ} (a : Fin d → E) {b : Fin d → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E (Fin d)} (hY : Y.Smooth) {R : ℝ}
     (hR : Y.Supported R) (k : ℕ) {θ M : ℝ} (hθ : 0 ≤ θ)
-    (hM : ∀ s ∈ Icc 0 θ,
-      derivativeEnergy m a (k + 1) (residual a b (List.finRange d) Y s) ≤ M) :
+    (hM :
+      ∀ s ∈ Icc 0 θ, derivativeEnergy m a (k + 1) (residual a b (List.finRange d) Y s) ≤ M) :
     √(derivativeEnergy m a k (compatibilityDefect a (step a b (List.finRange d) θ Y))) ≤
       √(derivativeEnergy m a k (compatibilityDefect a Y)) +
         θ * √(defectConstant (ι := Fin d) k * M) := by
@@ -183,46 +188,62 @@ theorem sqrt_derivativeEnergy_defect_step_le {d : ℕ} (a : Fin d → E) {b : Fi
   have htr := travel_nonneg a js
   have hZ : JointSmooth (fun s => step a b js s Y) := (hY.joint_const.sweep a js).reaction hb
   have hdY := hY.compatibilityDefect a
-  have hg : JointSmooth (fun s => subState (compatibilityDefect a (step a b js s Y))
-      (compatibilityDefect a Y)) := (hZ.compatibilityDefect a).subState hdY.joint_const
-  have hsuppθ : ∀ s ∈ Icc 0 θ, (step a b js s Y).Supported (R + θ * travel a js) :=
-    fun s hs => ((hR.sweep a s js).reaction b s).mono (by
-      rw [abs_of_nonneg hs.1]; nlinarith [mul_le_mul_of_nonneg_right hs.2 htr])
+  have hg :
+    JointSmooth
+      (fun s => subState (compatibilityDefect a (step a b js s Y)) (compatibilityDefect a Y)) :=
+    (hZ.compatibilityDefect a).subState hdY.joint_const
+  have hsuppθ : ∀ s ∈ Icc 0 θ, (step a b js s Y).Supported (R + θ * travel a js) := fun s hs =>
+    ((hR.sweep a s js).reaction b s).mono
+      (by rw [abs_of_nonneg hs.1]; nlinarith [mul_le_mul_of_nonneg_right hs.2 htr])
   have hRθ : R ≤ R + θ * travel a js := by nlinarith
-  have hderiv (s : ℝ) : timeDerivative (fun s => subState (compatibilityDefect a
-      (step a b js s Y)) (compatibilityDefect a Y)) s =
-        compatibilityDefect a (residual a b js Y s) := by
-    have h := (hZ.hasTimeDerivative_compatibilityDefect a s).subState
-      (hasTimeDerivative_const (compatibilityDefect a Y) s)
-    rw [h.timeDerivative_eq, subState_zeroState, compatibilityDefect_timeDerivative_step a hb hY]
-  have htime := derivativeEnergy_le_of_timeDerivative m a k hg (by simp) (R := R + θ * travel a js)
-    (M := defectConstant (ι := Fin d) k * M) hθ
-    (fun s hs => ((hsuppθ s hs).compatibilityDefect a).subState ((hR.compatibilityDefect a).mono hRθ))
-    (fun s hs => by
-      rw [hderiv s]
-      have hes := (jointSmooth_residual a hb js hY).slice s
-      have hec : (residual a b js Y s).CompactSupport := (hR.residual a b js s).hasCompactSupport
-      exact (derivativeEnergy_compatibilityDefect_le m a k hes hec).trans
-        (mul_le_mul_of_nonneg_left (hM s hs) (defectConstant_nonneg k)))
-  have hid : compatibilityDefect a (step a b js θ Y) = addState (compatibilityDefect a Y)
-      (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y)) := by
+  have hderiv (s : ℝ) :
+    timeDerivative
+        (fun s => subState (compatibilityDefect a (step a b js s Y)) (compatibilityDefect a Y))
+        s =
+      compatibilityDefect a (residual a b js Y s) := by
+    have h :=
+      (hZ.hasTimeDerivative_compatibilityDefect a s).subState
+        (hasTimeDerivative_const (compatibilityDefect a Y) s)
+    rw [h.timeDerivative_eq, subState_zeroState,
+      compatibilityDefect_timeDerivative_step a hb hY]
+  have htime :=
+    derivativeEnergy_le_of_timeDerivative m a k hg (by simp) (R := R + θ * travel a js) (M :=
+      defectConstant (ι := Fin d) k * M) hθ
+      (fun s hs =>
+        ((hsuppθ s hs).compatibilityDefect a).subState ((hR.compatibilityDefect a).mono hRθ))
+      (fun s hs => by
+        rw [hderiv s]
+        have hes := (jointSmooth_residual a hb js hY).slice s
+        have hec : (residual a b js Y s).CompactSupport :=
+          (hR.residual a b js s).hasCompactSupport
+        exact
+          (derivativeEnergy_compatibilityDefect_le m a k hes hec).trans
+            (mul_le_mul_of_nonneg_left (hM s hs) (defectConstant_nonneg k)))
+  have hid :
+    compatibilityDefect a (step a b js θ Y) =
+      addState (compatibilityDefect a Y)
+        (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y)) := by
     apply State.ext
     · funext x; simp [compatibilityDefect, addState, subState]
     · funext x; simp [compatibilityDefect, addState, subState]
     · funext j x; simp only [compatibilityDefect, addState, subState]; ring
   have hstep : (step a b js θ Y).Smooth := (hY.sweep a θ js).reaction hb θ
-  have hmin := derivativeEnergy_addState_le_sq m a k hdY
-    ((hstep.compatibilityDefect a).subState hdY) ((hR.compatibilityDefect a).mono hRθ)
-    (((hsuppθ θ ⟨hθ, le_rfl⟩).compatibilityDefect a).subState
-      ((hR.compatibilityDefect a).mono hRθ))
+  have hmin :=
+    derivativeEnergy_addState_le_sq m a k hdY ((hstep.compatibilityDefect a).subState hdY)
+      ((hR.compatibilityDefect a).mono hRθ)
+      (((hsuppθ θ ⟨hθ, le_rfl⟩).compatibilityDefect a).subState
+        ((hR.compatibilityDefect a).mono hRθ))
   rw [← hid] at hmin
   have hE₀ := derivativeEnergy_nonneg m a k (compatibilityDefect a Y)
-  have hE₁ := derivativeEnergy_nonneg m a k
-    (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y))
-  have hs₁ : √(derivativeEnergy m a k
-      (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y))) ≤
-        θ * √(defectConstant (ι := Fin d) k * M) := by
-    calc _ ≤ √(θ ^ 2 * (defectConstant (ι := Fin d) k * M)) := Real.sqrt_le_sqrt htime
+  have hE₁ :=
+    derivativeEnergy_nonneg m a k
+      (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y))
+  have hs₁ :
+    √(derivativeEnergy m a k
+          (subState (compatibilityDefect a (step a b js θ Y)) (compatibilityDefect a Y))) ≤
+      θ * √(defectConstant (ι := Fin d) k * M) := by
+    calc
+      _ ≤ √(θ ^ 2 * (defectConstant (ι := Fin d) k * M)) := Real.sqrt_le_sqrt htime
       _ = θ * √(defectConstant (ι := Fin d) k * M) := by
         rw [Real.sqrt_mul (sq_nonneg θ), Real.sqrt_sq hθ]
   have hsq := Real.sqrt_le_sqrt hmin
@@ -311,17 +332,27 @@ theorem exists_formEnergy_cell_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
     {b : Fin d → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) {w : E → ℝ} (hw : ContDiff ℝ 1 w)
     (hw0 : ∀ x, 0 ≤ w x) (hwb : ∀ j x, fderiv ℝ w x (a j) = -(b j x * w x))
     {Y : State E (Fin d)} (hY : Y.Smooth) {R : ℝ} (hR : Y.Supported R) (L : ℝ) :
-    ∃ C : ℝ, 0 ≤ C ∧ ∀ (N : ℕ) (δ : ℝ), 0 ≤ δ → δ ≤ 1 → (N : ℝ) * δ ≤ L →
-      ∀ k : ℕ, k < N → ∀ θ : ℝ, 0 ≤ θ → θ ≤ δ →
-        √(weightedEnergy m w (formState a (cell a b (List.finRange d) δ Y k θ))) ≤
-          √(weightedEnergy m w Y) +
-            C * (√(derivativeEnergy m a 0 (compatibilityDefect a Y)) + δ) := by
+    ∃ C : ℝ,
+      0 ≤ C ∧
+        ∀ (N : ℕ) (δ : ℝ),
+          0 ≤ δ →
+            δ ≤ 1 →
+              (N : ℝ) * δ ≤ L →
+                ∀ k : ℕ,
+                  k < N →
+                    ∀ θ : ℝ,
+                      0 ≤ θ →
+                        θ ≤ δ →
+                          √(weightedEnergy m w
+                                (formState a (cell a b (List.finRange d) δ Y k θ))) ≤
+                            √(weightedEnergy m w Y) +
+                              C * (√(derivativeEnergy m a 0 (compatibilityDefect a Y)) + δ) := by
   set js := List.finRange d
   obtain ⟨CW, hCW, hW⟩ := exists_weightedEnergy_cell_bound m a hb hw hw0 hwb hY hR L
   obtain ⟨CD, hCD, hDf⟩ := exists_defect_cell_bound m a hb hY hR 0 L
   set T := R + max L 0 * travel a js
-  obtain ⟨M, hM⟩ := (isCompact_closedBall (0 : E) T).exists_bound_of_continuousOn
-    hw.continuous.continuousOn
+  obtain ⟨M, hM⟩ :=
+    (isCompact_closedBall (0 : E) T).exists_bound_of_continuousOn hw.continuous.continuousOn
   have hMw : ∀ x, ‖x‖ ≤ T → w x ≤ max M 0 := fun x hx => by
     have := hM x (by simpa [Metric.mem_closedBall, dist_zero_right] using hx)
     rw [Real.norm_eq_abs, abs_of_nonneg (hw0 x)] at this
@@ -353,26 +384,32 @@ theorem exists_formEnergy_cell_bound [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
   have h₁ := weightedEnergy_subState_le m hw.continuous hw0 hX₀ hdX hX₀R hdXR
   rw [← hid] at h₁
   have hint {Z : State E (Fin d)} (hZ : Z.Smooth) (hZR : Z.Supported T) :
-      Integrable (fun x => w x * (Z.u x ^ 2 + Z.v x ^ 2 + ∑ j, Z.p j x ^ 2)) m := by
-    refine (hw.continuous.mul (((hZ.1.continuous.pow 2).add (hZ.2.1.continuous.pow 2)).add
-      (continuous_finsetSum _ fun j _ => (hZ.2.2 j).continuous.pow 2))).integrable_of_hasCompactSupport
-      (HasCompactSupport.intro (isCompact_closedBall 0 T) fun x hx => ?_)
-    obtain ⟨hu, hv, hp⟩ := hZR x (by simpa [Metric.mem_closedBall, dist_zero_right, not_le] using hx)
+    Integrable (fun x => w x * (Z.u x ^ 2 + Z.v x ^ 2 + ∑ j, Z.p j x ^ 2)) m := by
+    refine
+      (hw.continuous.mul
+            (((hZ.1.continuous.pow 2).add (hZ.2.1.continuous.pow 2)).add
+              (continuous_finsetSum _ fun j _ =>
+                (hZ.2.2 j).continuous.pow 2))).integrable_of_hasCompactSupport
+        (HasCompactSupport.intro (isCompact_closedBall 0 T) fun x hx => ?_)
+    obtain ⟨hu, hv, hp⟩ :=
+      hZR x (by simpa [Metric.mem_closedBall, dist_zero_right, not_le] using hx)
     simp [hu, hv, hp]
   have h₂ : weightedEnergy m w X₀ ≤ weightedEnergy m w X :=
     integral_mono (hint hX₀ hX₀R) (hint hX hXR) fun x =>
-      mul_le_mul_of_nonneg_left (by simp only [X₀, Pi.zero_apply]; nlinarith [sq_nonneg (X.v x)])
-        (hw0 x)
+      mul_le_mul_of_nonneg_left
+        (by simp only [X₀, Pi.zero_apply]; nlinarith [sq_nonneg (X.v x)]) (hw0 x)
   have h₃ := weightedEnergy_le_mul_energy m hw.continuous hdX hdXR hMw
   rw [← derivativeEnergy_zero m a] at h₃
   have h₄ := hDf N δ hδ hδ1 hL k hk θ hθ hθδ
   have h₅ := hW N δ hδ hδ1 hL k hk θ hθ hθδ
-  have hs₁ : √(weightedEnergy m w (formState a X)) ≤
+  have hs₁ :
+    √(weightedEnergy m w (formState a X)) ≤
       √(weightedEnergy m w X₀) + √(weightedEnergy m w (compatibilityDefect a X)) := by
     have := Real.sqrt_le_sqrt h₁
     rwa [Real.sqrt_sq (by positivity)] at this
   have hs₂ : √(weightedEnergy m w X₀) ≤ √(weightedEnergy m w X) := Real.sqrt_le_sqrt h₂
-  have hs₃ : √(weightedEnergy m w (compatibilityDefect a X)) ≤
+  have hs₃ :
+    √(weightedEnergy m w (compatibilityDefect a X)) ≤
       √(max M 0) * √(derivativeEnergy m a 0 (compatibilityDefect a X)) := by
     rw [← Real.sqrt_mul hM0]
     exact Real.sqrt_le_sqrt h₃

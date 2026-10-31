@@ -1,6 +1,8 @@
-import FunctionalInequalities.Probability.Line.BrunnMinkowski
-import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
-import Mathlib.MeasureTheory.Constructions.Pi
+module
+
+public import FunctionalInequalities.Probability.Line.BrunnMinkowski
+public import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
+public import Mathlib.MeasureTheory.Constructions.Pi
 
 /-!
 # Finite-dimensional Prékopa–Leindler and Brunn–Minkowski
@@ -12,6 +14,8 @@ measure, and `lintegral_slice_prekopaLeindler` its consequence for integrals ove
 slices `W + a` of a linear subspace `W` (the slice step of the equality case of Prékopa–Leindler
 used for uniqueness of moment measures, Cordero-Erausquin–Klartag arXiv:1304.0630v1, Theorem 2).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -46,62 +50,76 @@ private theorem iSup_min_natCast (a : ℝ≥0∞) : ⨆ n : ℕ, min a (n : ℝ�
   · obtain ⟨n, hn⟩ := ENNReal.exists_nat_gt ha
     exact le_iSup_of_le n (le_min le_rfl hn.le)
 
-private theorem isPL_real {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
-    IsPL ℝ (volume : Measure ℝ) t := by
-  have ht1' : (0:ℝ) < 1 - t := by linarith
+private theorem isPL_real {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) : IsPL ℝ (volume : Measure ℝ) t := by
+  have ht1' : (0 : ℝ) < 1 - t := by linarith
   intro f g h hf hg hh hfgh
   have hmin : ∀ (u : ℝ → ℝ≥0∞) (N : ℕ) (x : ℝ), min (u x) (N : ℝ≥0∞) ≠ ⊤ := by
     intro u N x
     exact ne_top_of_le_ne_top (ENNReal.natCast_ne_top N) (min_le_right _ _)
-  have hstep : ∀ N : ℕ,
-      (∫⁻ x, min (f x) (N : ℝ≥0∞)) ^ t * (∫⁻ y, min (g y) (N : ℝ≥0∞)) ^ (1 - t) ≤
-        ∫⁻ z, h z := by
+  have hstep :
+    ∀ N : ℕ,
+      (∫⁻ x, min (f x) (N : ℝ≥0∞)) ^ t * (∫⁻ y, min (g y) (N : ℝ≥0∞)) ^ (1 - t) ≤ ∫⁻ z, h z := by
     intro N
-    have hkey : ∀ x y : ℝ,
-        (min (f x) (N : ℝ≥0∞)) ^ t * (min (g y) (N : ℝ≥0∞)) ^ (1 - t)
-          ≤ min (h (t * x + (1 - t) * y)) (N : ℝ≥0∞) := by
+    have hkey :
+      ∀ x y : ℝ,
+        (min (f x) (N : ℝ≥0∞)) ^ t * (min (g y) (N : ℝ≥0∞)) ^ (1 - t) ≤
+          min (h (t * x + (1 - t) * y)) (N : ℝ≥0∞) := by
       intro x y
       refine le_min ?_ ?_
-      · refine le_trans (mul_le_mul' (ENNReal.rpow_le_rpow (min_le_left _ _) ht0.le)
-          (ENNReal.rpow_le_rpow (min_le_left _ _) ht1'.le)) ?_
+      · refine
+          le_trans
+            (mul_le_mul' (ENNReal.rpow_le_rpow (min_le_left _ _) ht0.le)
+              (ENNReal.rpow_le_rpow (min_le_left _ _) ht1'.le))
+            ?_
         simpa using hfgh x y
-      · refine le_trans (mul_le_mul' (ENNReal.rpow_le_rpow (min_le_right _ _) ht0.le)
-          (ENNReal.rpow_le_rpow (min_le_right _ _) ht1'.le)) ?_
+      · refine
+          le_trans
+            (mul_le_mul' (ENNReal.rpow_le_rpow (min_le_right _ _) ht0.le)
+              (ENNReal.rpow_le_rpow (min_le_right _ _) ht1'.le))
+            ?_
         rw [← ENNReal.rpow_add_of_nonneg _ _ ht0.le ht1'.le]
         simp
-    have hreal : ∀ x y : ℝ,
-        ((min (f x) (N : ℝ≥0∞)).toReal) ^ t * ((min (g y) (N : ℝ≥0∞)).toReal) ^ (1 - t)
-          ≤ (min (h (t * x + (1 - t) * y)) (N : ℝ≥0∞)).toReal := by
+    have hreal :
+      ∀ x y : ℝ,
+        ((min (f x) (N : ℝ≥0∞)).toReal) ^ t * ((min (g y) (N : ℝ≥0∞)).toReal) ^ (1 - t) ≤
+          (min (h (t * x + (1 - t) * y)) (N : ℝ≥0∞)).toReal := by
       intro x y
       rw [ENNReal.toReal_rpow, ENNReal.toReal_rpow, ← ENNReal.toReal_mul]
       refine ENNReal.toReal_mono (hmin h N _) (hkey x y)
-    have hmeas : ∀ u : ℝ → ℝ≥0∞, Measurable u →
-        Measurable fun x => (min (u x) (N : ℝ≥0∞)).toReal :=
+    have hmeas :
+      ∀ u : ℝ → ℝ≥0∞, Measurable u → Measurable fun x => (min (u x) (N : ℝ≥0∞)).toReal :=
       fun u hu => (hu.min measurable_const).ennreal_toReal
-    have hPL := Probability.Line.prekopaLeindler
-      (hmeas f hf) (hmeas g hg) (hmeas h hh)
-      (fun x => ENNReal.toReal_nonneg) (fun y => ENNReal.toReal_nonneg) ht0 ht1 hreal
-    have hof : ∀ (u : ℝ → ℝ≥0∞) (x : ℝ),
+    have hPL :=
+      Probability.Line.prekopaLeindler (hmeas f hf) (hmeas g hg) (hmeas h hh)
+        (fun x => ENNReal.toReal_nonneg) (fun y => ENNReal.toReal_nonneg) ht0 ht1 hreal
+    have hof :
+      ∀ (u : ℝ → ℝ≥0∞) (x : ℝ),
         ENNReal.ofReal ((min (u x) (N : ℝ≥0∞)).toReal) = min (u x) (N : ℝ≥0∞) :=
       fun u x => ENNReal.ofReal_toReal (hmin u N x)
     simp only [hof] at hPL
     exact hPL.trans (lintegral_mono fun z => min_le_left _ _)
   have hmono : ∀ u : ℝ → ℝ≥0∞, Monotone fun N : ℕ => ∫⁻ x, min (u x) (N : ℝ≥0∞) :=
     fun u a b hab => lintegral_mono fun x => min_le_min le_rfl (by exact_mod_cast hab)
-  have hsup : ∀ u : ℝ → ℝ≥0∞, Measurable u →
-      (⨆ N : ℕ, ∫⁻ x, min (u x) (N : ℝ≥0∞)) = ∫⁻ x, u x := by
+  have hsup :
+    ∀ u : ℝ → ℝ≥0∞, Measurable u → (⨆ N : ℕ, ∫⁻ x, min (u x) (N : ℝ≥0∞)) = ∫⁻ x, u x := by
     intro u hu
-    rw [← lintegral_iSup (fun N => hu.min measurable_const)
-      (fun a b hab x => min_le_min le_rfl (by exact_mod_cast hab))]
+    rw [←
+      lintegral_iSup (fun N => hu.min measurable_const)
+        (fun a b hab x => min_le_min le_rfl (by exact_mod_cast hab))]
     exact lintegral_congr fun x => iSup_min_natCast (u x)
   rw [← hsup f hf, ← hsup g hg]
-  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
-  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _, ENNReal.iSup_mul]
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ←
+    ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _,
+    ENNReal.iSup_mul]
   refine iSup_le fun N => ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun M => ?_
-  exact le_trans (mul_le_mul' (ENNReal.rpow_le_rpow (hmono f (le_max_left N M)) ht0.le)
-    (ENNReal.rpow_le_rpow (hmono g (le_max_right N M)) ht1'.le)) (hstep (max N M))
+  exact
+    le_trans
+      (mul_le_mul' (ENNReal.rpow_le_rpow (hmono f (le_max_left N M)) ht0.le)
+        (ENNReal.rpow_le_rpow (hmono g (le_max_right N M)) ht1'.le))
+      (hstep (max N M))
 
 section MeasurableSpace
 
@@ -185,17 +203,18 @@ private theorem isPL_volume {E : Type*} [NormedAddCommGroup E] [InnerProductSpac
 measure.  The one-dimensional case is `FunctionalInequalities.Probability.Line.prekopaLeindler`;
 the general case follows by induction on the dimension and Fubini along a line. -/
 theorem prekopaLeindler {f g h : V → ℝ} (hf : Measurable f) (hg : Measurable g)
-    (hh : Measurable h) (hf0 : ∀ x, 0 ≤ f x) (hg0 : ∀ x, 0 ≤ g x)
-    {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
-    (hfgh : ∀ x y, f x ^ t * g y ^ (1 - t) ≤ h (t • x + (1 - t) • y)) :
+    (hh : Measurable h) (hf0 : ∀ x, 0 ≤ f x) (hg0 : ∀ x, 0 ≤ g x) {t : ℝ} (ht0 : 0 < t)
+    (ht1 : t < 1) (hfgh : ∀ x y, f x ^ t * g y ^ (1 - t) ≤ h (t • x + (1 - t) • y)) :
     (∫⁻ x, ENNReal.ofReal (f x)) ^ t * (∫⁻ y, ENNReal.ofReal (g y)) ^ (1 - t) ≤
       ∫⁻ z, ENNReal.ofReal (h z) := by
-  have ht1' : (0:ℝ) < 1 - t := by linarith
-  refine isPL_volume ht0 ht1 (fun x => ENNReal.ofReal (f x)) (fun y => ENNReal.ofReal (g y))
-    (fun z => ENNReal.ofReal (h z)) hf.ennreal_ofReal hg.ennreal_ofReal hh.ennreal_ofReal ?_
+  have ht1' : (0 : ℝ) < 1 - t := by linarith
+  refine
+    isPL_volume ht0 ht1 (fun x => ENNReal.ofReal (f x)) (fun y => ENNReal.ofReal (g y))
+      (fun z => ENNReal.ofReal (h z)) hf.ennreal_ofReal hg.ennreal_ofReal hh.ennreal_ofReal ?_
   intro x y
   rw [ENNReal.ofReal_rpow_of_nonneg (hf0 x) ht0.le,
-    ENNReal.ofReal_rpow_of_nonneg (hg0 y) ht1'.le, ← ENNReal.ofReal_mul (Real.rpow_nonneg (hf0 x) t)]
+    ENNReal.ofReal_rpow_of_nonneg (hg0 y) ht1'.le, ←
+    ENNReal.ofReal_mul (Real.rpow_nonneg (hf0 x) t)]
   exact ENNReal.ofReal_le_ofReal (hfgh x y)
 
 /-- **Prékopa–Leindler inequality** for `ℝ≥0∞`-valued functions and an arbitrary additive Haar
@@ -278,7 +297,8 @@ theorem lintegral_mul_translate_logConcave
           mul_le_mul' (hpLC x y t ht0 ht1) (hqLC (a - x) (b - y) t ht0 ht1)
     _ = _ := by rw [harg]
 
-/-- **Multiplicative Brunn–Minkowski inequality**: a convex combination of two nonempty measurable
+/--
+**Multiplicative Brunn–Minkowski inequality**: a convex combination of two nonempty measurable
 sets carries at least the geometric mean of their volumes.  The combination set need not be
 measurable; the outer-measure bound is what is used. -/
 theorem volume_rpow_mul_le_volume_combination {S T : Set V} (hS : MeasurableSet S)
@@ -286,61 +306,75 @@ theorem volume_rpow_mul_le_volume_combination {S T : Set V} (hS : MeasurableSet 
     (ht1 : t < 1) :
     volume S ^ t * volume T ^ (1 - t) ≤
       volume {z : V | ∃ x ∈ S, ∃ y ∈ T, z = t • x + (1 - t) • y} := by
-  have ht1' : (0:ℝ) < 1 - t := by linarith
+  have ht1' : (0 : ℝ) < 1 - t := by linarith
   set C := {z : V | ∃ x ∈ S, ∃ y ∈ T, z = t • x + (1 - t) • y} with hC
-  have hind : ∀ A : Set V, MeasurableSet A →
-      ∫⁻ x, ENNReal.ofReal (A.indicator (fun _ => (1:ℝ)) x) = volume A := by
+  have hind :
+    ∀ A : Set V,
+      MeasurableSet A → ∫⁻ x, ENNReal.ofReal (A.indicator (fun _ => (1 : ℝ)) x) = volume A := by
     intro A hA
     rw [← lintegral_indicator_one hA]
     refine lintegral_congr fun x => ?_
     by_cases hx : x ∈ A <;> simp [hx]
-  have key : ∀ K : Set V, K ⊆ S → IsCompact K →
-      ∀ L : Set V, L ⊆ T → IsCompact L →
-      volume K ^ t * volume L ^ (1 - t) ≤ volume C := by
+  have key :
+    ∀ K : Set V,
+      K ⊆ S →
+        IsCompact K →
+          ∀ L : Set V, L ⊆ T → IsCompact L → volume K ^ t * volume L ^ (1 - t) ≤ volume C := by
     intro K hKS hK L hLT hL
     set D := t • K + (1 - t) • L with hD
     have hDc : IsCompact D := (hK.smul t).add (hL.smul (1 - t))
     have hDS : D ⊆ C := by
       rintro _ ⟨-, ⟨x, hx, rfl⟩, -, ⟨y, hy, rfl⟩, rfl⟩
       exact ⟨x, hKS hx, y, hLT hy, rfl⟩
-    have hhyp : ∀ x y : V, (K.indicator (fun _ => (1:ℝ)) x) ^ t *
-        (L.indicator (fun _ => (1:ℝ)) y) ^ (1 - t) ≤
-        D.indicator (fun _ => (1:ℝ)) (t • x + (1 - t) • y) := by
+    have hhyp :
+      ∀ x y : V,
+        (K.indicator (fun _ => (1 : ℝ)) x) ^ t * (L.indicator (fun _ => (1 : ℝ)) y) ^ (1 - t) ≤
+          D.indicator (fun _ => (1 : ℝ)) (t • x + (1 - t) • y) := by
       intro x y
       by_cases hx : x ∈ K
       · by_cases hy : y ∈ L
         · rw [Set.indicator_of_mem hx, Set.indicator_of_mem hy,
-            Set.indicator_of_mem (show t • x + (1 - t) • y ∈ D from
-              ⟨t • x, ⟨x, hx, rfl⟩, (1 - t) • y, ⟨y, hy, rfl⟩, rfl⟩)]
+            Set.indicator_of_mem
+              (show t • x + (1 - t) • y ∈ D from
+                ⟨t • x, ⟨x, hx, rfl⟩, (1 - t) • y, ⟨y, hy, rfl⟩, rfl⟩)]
           simp
         · rw [Set.indicator_of_notMem hy, Real.zero_rpow ht1'.ne', mul_zero]
           exact Set.indicator_nonneg (fun _ _ => zero_le_one) _
       · rw [Set.indicator_of_notMem hx, Real.zero_rpow ht0.ne', zero_mul]
         exact Set.indicator_nonneg (fun _ _ => zero_le_one) _
-    have hPL := prekopaLeindler (measurable_const.indicator hK.measurableSet)
-      (measurable_const.indicator hL.measurableSet)
-      (measurable_const.indicator hDc.measurableSet)
-      (fun x => Set.indicator_nonneg (fun _ _ => zero_le_one) x)
-      (fun x => Set.indicator_nonneg (fun _ _ => zero_le_one) x) ht0 ht1 hhyp
+    have hPL :=
+      prekopaLeindler (measurable_const.indicator hK.measurableSet)
+        (measurable_const.indicator hL.measurableSet)
+        (measurable_const.indicator hDc.measurableSet)
+        (fun x => Set.indicator_nonneg (fun _ _ => zero_le_one) x)
+        (fun x => Set.indicator_nonneg (fun _ _ => zero_le_one) x) ht0 ht1 hhyp
     rw [hind K hK.measurableSet, hind L hL.measurableSet, hind D hDc.measurableSet] at hPL
     exact hPL.trans (measure_mono hDS)
-  have hsup : ∀ U : Set V, MeasurableSet U → U.Nonempty →
-      volume U = ⨆ K : {K : Set V // K ⊆ U ∧ IsCompact K ∧ K.Nonempty}, volume (K : Set V) := by
+  have hsup :
+    ∀ U : Set V,
+      MeasurableSet U →
+        U.Nonempty →
+          volume U =
+            ⨆ K : { K : Set V // K ⊆ U ∧ IsCompact K ∧ K.Nonempty }, volume (K : Set V) := by
     intro U hU hUne
     refine le_antisymm ?_ (iSup_le fun K ↦ measure_mono K.2.1)
     rw [hU.measure_eq_iSup_isCompact volume]
     refine iSup_le fun K ↦ iSup_le fun hKU ↦ iSup_le fun hK ↦ ?_
     obtain ⟨x₀, hx₀⟩ := hUne
-    exact le_iSup_of_le ⟨K ∪ {x₀}, Set.union_subset hKU (by simpa using hx₀),
-      hK.union isCompact_singleton, ⟨x₀, by simp⟩⟩ (measure_mono Set.subset_union_left)
+    exact
+      le_iSup_of_le
+        ⟨K ∪ { x₀ }, Set.union_subset hKU (by simpa using hx₀), hK.union isCompact_singleton,
+          ⟨x₀, by simp⟩⟩
+        (measure_mono Set.subset_union_left)
   obtain ⟨s₀, hs₀⟩ := hSne
   obtain ⟨t₀, ht₀⟩ := hTne
-  have hnS : Nonempty {K : Set V // K ⊆ S ∧ IsCompact K ∧ K.Nonempty} :=
-    ⟨⟨{s₀}, by simpa using hs₀, isCompact_singleton, ⟨s₀, rfl⟩⟩⟩
-  have hnT : Nonempty {L : Set V // L ⊆ T ∧ IsCompact L ∧ L.Nonempty} :=
-    ⟨⟨{t₀}, by simpa using ht₀, isCompact_singleton, ⟨t₀, rfl⟩⟩⟩
+  have hnS : Nonempty { K : Set V // K ⊆ S ∧ IsCompact K ∧ K.Nonempty } :=
+    ⟨⟨{ s₀ }, by simpa using hs₀, isCompact_singleton, ⟨s₀, rfl⟩⟩⟩
+  have hnT : Nonempty { L : Set V // L ⊆ T ∧ IsCompact L ∧ L.Nonempty } :=
+    ⟨⟨{ t₀ }, by simpa using ht₀, isCompact_singleton, ⟨t₀, rfl⟩⟩⟩
   rw [hsup S hS ⟨s₀, hs₀⟩, hsup T hT ⟨t₀, ht₀⟩]
-  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ← ENNReal.orderIsoRpow_apply (1 - t) ht1']
+  simp_rw (config := { congrConsts := false }) [← ENNReal.orderIsoRpow_apply t ht0, ←
+    ENNReal.orderIsoRpow_apply (1 - t) ht1']
   rw [(ENNReal.orderIsoRpow _ ht0).map_iSup _, (ENNReal.orderIsoRpow _ ht1').map_iSup _,
     ENNReal.iSup_mul]
   refine iSup_le fun K ↦ ?_
@@ -355,18 +389,18 @@ theorem volume_rpow_add_le_volume_add_rpow [Nontrivial V] {S T : Set V} (hS : Is
       volume (S + T) ^ (1 / (Module.finrank ℝ V : ℝ)) := by
   have hmono : ∀ {A B : Set V}, A.Nonempty → volume B ≤ volume (A + B) := by
     rintro A B ⟨a, ha⟩
-    have hsub : (a + ·) '' B ⊆ A + B := by
-      rintro _ ⟨b, hb, rfl⟩; exact ⟨a, ha, b, hb, rfl⟩
-    calc volume B = volume ((a + ·) '' B) := by
-          rw [Set.image_add_left, measure_preimage_add]
+    have hsub : (a + ·) '' B ⊆ A + B := by rintro _ ⟨b, hb, rfl⟩; exact ⟨a, ha, b, hb, rfl⟩
+    calc
+      volume B = volume ((a + ·) '' B) := by rw [Set.image_add_left, measure_preimage_add]
       _ ≤ volume (A + B) := measure_mono hsub
-  have hmono' : volume S ≤ volume (S + T) := by
-    rw [add_comm]; exact hmono hTne
+  have hmono' : volume S ≤ volume (S + T) := by rw [add_comm]; exact hmono hTne
   set n := Module.finrank ℝ V with hn
   have hn0 : 0 < n := Module.finrank_pos
-  have hnR : (0:ℝ) < n := by exact_mod_cast hn0
-  have hexp : (0:ℝ) ≤ 1 / n := by positivity
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn0
+  have hexp : (0 : ℝ) ≤ 1 / n := by
+    positivity
   -- degenerate cases
+
   by_cases hA : volume S = 0
   · rw [hA, ENNReal.zero_rpow_of_pos (by positivity), zero_add]
     exact ENNReal.rpow_le_rpow (hmono hSne) hexp
@@ -375,8 +409,8 @@ theorem volume_rpow_add_le_volume_add_rpow [Nontrivial V] {S T : Set V} (hS : Is
     exact ENNReal.rpow_le_rpow hmono' hexp
   have hAtop : volume S ≠ ⊤ := hS.measure_lt_top.ne
   have hBtop : volume T ≠ ⊤ := hT.measure_lt_top.ne
-  set α : ℝ := (volume S).toReal ^ ((1:ℝ) / n) with hα
-  set β : ℝ := (volume T).toReal ^ ((1:ℝ) / n) with hβ
+  set α : ℝ := (volume S).toReal ^ ((1 : ℝ) / n) with hα
+  set β : ℝ := (volume T).toReal ^ ((1 : ℝ) / n) with hβ
   have hApos : 0 < (volume S).toReal := ENNReal.toReal_pos hA hAtop
   have hBpos : 0 < (volume T).toReal := ENNReal.toReal_pos hB hBtop
   have hαpos : 0 < α := Real.rpow_pos_of_pos hApos _
@@ -387,9 +421,9 @@ theorem volume_rpow_add_le_volume_add_rpow [Nontrivial V] {S T : Set V} (hS : Is
   have hβn : β ^ n = (volume T).toReal := by
     rw [hβ, ← Real.rpow_natCast (_ ^ _) n, ← Real.rpow_mul hBpos.le]
     rw [one_div, inv_mul_cancel₀ hnR.ne', Real.rpow_one]
-  have hαE : ENNReal.ofReal α = volume S ^ ((1:ℝ) / n) := by
+  have hαE : ENNReal.ofReal α = volume S ^ ((1 : ℝ) / n) := by
     rw [hα, ← ENNReal.ofReal_rpow_of_nonneg hApos.le hexp, ENNReal.ofReal_toReal hAtop]
-  have hβE : ENNReal.ofReal β = volume T ^ ((1:ℝ) / n) := by
+  have hβE : ENNReal.ofReal β = volume T ^ ((1 : ℝ) / n) := by
     rw [hβ, ← ENNReal.ofReal_rpow_of_nonneg hBpos.le hexp, ENNReal.ofReal_toReal hBtop]
   set c : ℝ := α + β with hc
   have hcpos : 0 < c := by positivity
@@ -400,9 +434,11 @@ theorem volume_rpow_add_le_volume_add_rpow [Nontrivial V] {S T : Set V} (hS : Is
   have e1 : t * α⁻¹ = c⁻¹ := by rw [ht]; field_simp
   have e2 : (1 - t) * β⁻¹ = c⁻¹ := by rw [h1t]; field_simp
   have hS'c : IsCompact (α⁻¹ • S) := by
-    rw [← Set.image_smul]; exact hS.image (continuous_const_smul _)
+    rw [← Set.image_smul];
+    exact hS.image (continuous_const_smul _)
   have hT'c : IsCompact (β⁻¹ • T) := by
-    rw [← Set.image_smul]; exact hT.image (continuous_const_smul _)
+    rw [← Set.image_smul];
+    exact hT.image (continuous_const_smul _)
   have hvolS' : volume (α⁻¹ • S) = 1 := by
     rw [Measure.addHaar_smul_of_nonneg _ (by positivity), inv_pow, hαn,
       ENNReal.ofReal_inv_of_pos hApos, ENNReal.ofReal_toReal hAtop,
@@ -411,39 +447,40 @@ theorem volume_rpow_add_le_volume_add_rpow [Nontrivial V] {S T : Set V} (hS : Is
     rw [Measure.addHaar_smul_of_nonneg _ (by positivity), inv_pow, hβn,
       ENNReal.ofReal_inv_of_pos hBpos, ENNReal.ofReal_toReal hBtop,
       ENNReal.inv_mul_cancel hB hBtop]
-  have hset : {z : V | ∃ x ∈ α⁻¹ • S, ∃ y ∈ β⁻¹ • T, z = t • x + (1 - t) • y}
-      = c⁻¹ • (S + T) := by
+  have hset : {z : V | ∃ x ∈ α⁻¹ • S, ∃ y ∈ β⁻¹ • T, z = t • x + (1 - t) • y} = c⁻¹ • (S + T) := by
     ext z
     constructor
     · rintro ⟨-, ⟨x, hx, rfl⟩, -, ⟨y, hy, rfl⟩, rfl⟩
-      exact ⟨x + y, ⟨x, hx, y, hy, rfl⟩, by
-        rw [smul_smul, smul_smul, e1, e2, ← smul_add]⟩
+      exact ⟨x + y, ⟨x, hx, y, hy, rfl⟩, by rw [smul_smul, smul_smul, e1, e2, ← smul_add]⟩
     · rintro ⟨-, ⟨x, hx, y, hy, rfl⟩, rfl⟩
-      exact ⟨α⁻¹ • x, ⟨x, hx, rfl⟩, β⁻¹ • y, ⟨y, hy, rfl⟩, by
-        rw [smul_smul, smul_smul, e1, e2, ← smul_add]⟩
-  have hBM := volume_rpow_mul_le_volume_combination hS'c.measurableSet (hSne.image _) hT'c.measurableSet (hTne.image _) ht0 ht1
+      exact
+        ⟨α⁻¹ • x, ⟨x, hx, rfl⟩, β⁻¹ • y, ⟨y, hy, rfl⟩, by
+          rw [smul_smul, smul_smul, e1, e2, ← smul_add]⟩
+  have hBM :=
+    volume_rpow_mul_le_volume_combination hS'c.measurableSet (hSne.image _) hT'c.measurableSet
+      (hTne.image _) ht0 ht1
   rw [hvolS', hvolT', ENNReal.one_rpow, ENNReal.one_rpow, one_mul, hset,
-    Measure.addHaar_smul_of_nonneg _ (by positivity : (0:ℝ) ≤ c⁻¹), inv_pow,
+    Measure.addHaar_smul_of_nonneg _ (by positivity : (0 : ℝ) ≤ c⁻¹), inv_pow,
     ENNReal.ofReal_inv_of_pos (by positivity)] at hBM
   have hK0 : ENNReal.ofReal (c ^ n) ≠ 0 := by
     simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
     positivity
   have hKtop : ENNReal.ofReal (c ^ n) ≠ ⊤ := ENNReal.ofReal_ne_top
   have hmain : ENNReal.ofReal (c ^ n) ≤ volume (S + T) := by
-    calc ENNReal.ofReal (c ^ n) = ENNReal.ofReal (c ^ n) * 1 := (mul_one _).symm
-      _ ≤ ENNReal.ofReal (c ^ n) * ((ENNReal.ofReal (c ^ n))⁻¹ * volume (S + T)) :=
-          by gcongr
-      _ = volume (S + T) := by
-          rw [← mul_assoc, ENNReal.mul_inv_cancel hK0 hKtop, one_mul]
-  calc volume S ^ ((1:ℝ) / n) + volume T ^ ((1:ℝ) / n)
-      = ENNReal.ofReal α + ENNReal.ofReal β := by rw [hαE, hβE]
+    calc
+      ENNReal.ofReal (c ^ n) = ENNReal.ofReal (c ^ n) * 1 := (mul_one _).symm
+      _ ≤ ENNReal.ofReal (c ^ n) * ((ENNReal.ofReal (c ^ n))⁻¹ * volume (S + T)) := by gcongr
+      _ = volume (S + T) := by rw [← mul_assoc, ENNReal.mul_inv_cancel hK0 hKtop, one_mul]
+  calc
+    volume S ^ ((1 : ℝ) / n) + volume T ^ ((1 : ℝ) / n) = ENNReal.ofReal α + ENNReal.ofReal β := by
+      rw [hαE, hβE]
     _ = ENNReal.ofReal c := (ENNReal.ofReal_add hαpos.le hβpos.le).symm
-    _ = ENNReal.ofReal (c ^ n) ^ ((1:ℝ) / n) := by
-        rw [ENNReal.ofReal_rpow_of_nonneg (by positivity) hexp]
-        congr 1
-        rw [← Real.rpow_natCast c n, ← Real.rpow_mul hcpos.le, mul_one_div, div_self hnR.ne',
-          Real.rpow_one]
-    _ ≤ volume (S + T) ^ ((1:ℝ) / n) := ENNReal.rpow_le_rpow hmain hexp
+    _ = ENNReal.ofReal (c ^ n) ^ ((1 : ℝ) / n) := by
+      rw [ENNReal.ofReal_rpow_of_nonneg (by positivity) hexp]
+      congr 1
+      rw [← Real.rpow_natCast c n, ← Real.rpow_mul hcpos.le, mul_one_div, div_self hnR.ne',
+        Real.rpow_one]
+    _ ≤ volume (S + T) ^ ((1 : ℝ) / n) := ENNReal.rpow_le_rpow hmain hexp
 
 end Isodiametric
 

@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Convex.Legendre.Basic
-import Mathlib.Analysis.LocallyConvex.Separation
-import Mathlib.Analysis.InnerProductSpace.Dual
-import Mathlib.Topology.Semicontinuity.Basic
+module
+
+public import FunctionalInequalities.Analysis.Convex.Legendre.Basic
+public import Mathlib.Analysis.LocallyConvex.Separation
+public import Mathlib.Analysis.InnerProductSpace.Dual
+public import Mathlib.Topology.Semicontinuity.Basic
 
 /-!
 # The Fenchel–Moreau theorem for extended-real potentials
@@ -18,6 +20,8 @@ a vertical one (`β = 0`) is added with arbitrary weight to a fixed affine minor
 separating a point below the graph over the effective domain. Affine minorants bound the
 biconjugate from below (`le_legendre_legendre_of_affine_le`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -78,8 +82,8 @@ variable [CompleteSpace E]
 the Riesz representative `w` of the horizontal part and the vertical coefficient `β`. -/
 private theorem exists_separation {ψ : E → EReal} (hψ : ConvexPotential ψ)
     (hlsc : LowerSemicontinuous ψ) {x : E} {a : ℝ} (ha : (a : EReal) < ψ x) :
-    ∃ (w : E) (β u : ℝ), (∀ y (r : ℝ), ψ y ≤ r → inner ℝ w y + r * β < u) ∧
-      u < inner ℝ w x + a * β := by
+    ∃ (w : E) (β u : ℝ),
+      (∀ y (r : ℝ), ψ y ≤ r → inner ℝ w y + r * β < u) ∧ u < inner ℝ w x + a * β := by
   set S : Set (E × ℝ) := {q | ψ q.1 ≤ (q.2 : EReal)} with hSdef
   have hSclosed : IsClosed S :=
     hlsc.isClosed_epigraph.preimage
@@ -89,8 +93,7 @@ private theorem exists_separation {ψ : E → EReal} (hψ : ConvexPotential ψ)
   set w : E := (InnerProductSpace.toDual ℝ E).symm (f.comp (ContinuousLinearMap.inl ℝ E ℝ))
   have hf : ∀ (y : E) (r : ℝ), f (y, r) = inner ℝ w y + r * f ((0 : E), (1 : ℝ)) := by
     intro y r
-    have hyr : ((y, r) : E × ℝ) = (y, 0) + r • ((0 : E), (1 : ℝ)) := by
-      ext <;> simp
+    have hyr : ((y, r) : E × ℝ) = (y, 0) + r • ((0 : E), (1 : ℝ)) := by ext <;> simp
     rw [hyr, map_add, map_smul, smul_eq_mul, InnerProductSpace.toDual_symm_apply]
     rfl
   refine ⟨w, f ((0 : E), (1 : ℝ)), u, fun y r hyr => ?_, by rw [← hf]; exact hfx⟩

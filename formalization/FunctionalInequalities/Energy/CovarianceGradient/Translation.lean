@@ -1,14 +1,18 @@
-import FunctionalInequalities.L2.Transport
-import FunctionalInequalities.Energy.CovarianceGradient.Basic
+module
+
+public import FunctionalInequalities.L2.Transport
+public import FunctionalInequalities.Energy.CovarianceGradient.Basic
 
 /-!
 # Translation invariance of the covariance relaxation
 
 Source: Blueprint `thm:affine-covariance-relaxation-closed`, the sentence "changing the affine
 origin translates `ν`; pullback by this translation is an `L²` isometry preserving variance and
-covariance energy". Read `translateLaw`, `L2.Translation.pullbackEquiv`, `L2.Translation.variance_pullbackEquiv`,
+covariance energy". Read `translateLaw`, `L2.Translation.pullbackEquiv`,
+`L2.Translation.variance_pullbackEquiv`,
 `Covariance.operator_translateLaw`, `Energy.CovarianceGradient.Test.translate`,
-`Energy.CovarianceGradient.relaxation_translateLaw` and `Poincare.CovarianceGradient.constant_translateLaw`.
+`Energy.CovarianceGradient.relaxation_translateLaw` and
+`Poincare.CovarianceGradient.constant_translateLaw`.
 
 For a probability law `ν` on a finite-dimensional Euclidean space and a vector `c`, the translated
 law is the image of `ν` under `x ↦ c + x`. Composition with the translation is a linear isometric
@@ -20,6 +24,8 @@ and the optimal `L²` Poincaré constants of the two relaxations coincide.
 These statements hold for every Borel probability law; no log-concavity, density or closability
 is used, and no Poincaré inequality is asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -70,7 +76,7 @@ def translate
   memLp_two := by
     have := g.memLp_two
     rw [← hmp.map_eq] at this
-    exact (memLp_map_measure_iff (hmp.map_eq ▸ g.memLp_two.1) hmp.aemeasurable).mp this
+    exact (memLp_map_measure_iff (hmp.map_eq ▸ g.memLp_two.aestronglyMeasurable) hmp.aemeasurable).mp this
   integrable := by
     have hdens : density ν₁ (fun x ↦ g (c + x)) =
         density ν₂ g.toFun ∘ fun x ↦ c + x := by
@@ -129,22 +135,30 @@ omit [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The covariance relaxation of the translated law is the covariance relaxation of `ν` pulled
 back along the translation isometry. -/
 theorem relaxation_translateLaw (f : Lp ℝ 2 (Probability.translateLaw ν c : Measure V)) :
-    relaxation (Probability.translateLaw ν c) f = relaxation ν (L2.Translation.pullbackEquiv ν c f) := by
-  have hcov : Covariance.operator (Probability.translateLaw ν c : Measure V) =
-      Covariance.operator (ν : Measure V) := Covariance.operator_translateLaw ν c
+    relaxation (Probability.translateLaw ν c) f =
+      relaxation ν (L2.Translation.pullbackEquiv ν c f) := by
+  have hcov :
+    Covariance.operator (Probability.translateLaw ν c : Measure V) =
+      Covariance.operator (ν : Measure V) :=
+    Covariance.operator_translateLaw ν c
   apply le_antisymm
   · -- pull tests of `ν` back to the translated law along the inverse translation
-    have h := (preEnergy ν).sequentialRelaxation_comp_le
-      (preEnergy (Probability.translateLaw ν c)) (L2.Translation.pullbackInv ν c)
-      (L2.Translation.pullbackInv ν c).continuous ?_ (L2.Translation.pullbackEquiv ν c f)
+
+    have h :=
+      (preEnergy ν).sequentialRelaxation_comp_le (preEnergy (Probability.translateLaw ν c))
+        (L2.Translation.pullbackInv ν c) (L2.Translation.pullbackInv ν c).continuous ?_
+        (L2.Translation.pullbackEquiv ν c f)
     · rw [L2.Translation.pullbackEquiv_apply, L2.Translation.pullbackInv_pullback] at h
       exact h
     · intro g
-      refine ⟨g.translate (Probability.measurePreserving_translate_symm ν c) hcov.symm, ?_, le_of_eq ?_⟩
+      refine
+        ⟨g.translate (Probability.measurePreserving_translate_symm ν c) hcov.symm, ?_,
+          le_of_eq ?_⟩
       · exact g.toL2_translate _ _
       · exact g.energy_translate _ _
-  · have h := (preEnergy (Probability.translateLaw ν c)).sequentialRelaxation_comp_le
-      (preEnergy ν) (L2.Translation.pullback ν c) (L2.Translation.pullback ν c).continuous ?_ f
+  · have h :=
+      (preEnergy (Probability.translateLaw ν c)).sequentialRelaxation_comp_le (preEnergy ν)
+        (L2.Translation.pullback ν c) (L2.Translation.pullback ν c).continuous ?_ f
     · exact h
     · intro g
       refine ⟨g.translate (Probability.measurePreserving_translate ν c) hcov, ?_, le_of_eq ?_⟩

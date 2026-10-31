@@ -1,4 +1,6 @@
-import Mathlib.Analysis.Calculus.FDeriv.Mul
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
 
 /-!
 # Derivative of the inverse of an operator-valued function
@@ -8,6 +10,8 @@ differentiable at `x` with derivative `v ↦ −H(x)⁻¹ (DH(x)[v]) H(x)⁻¹` 
 Used for the derivative of the inverse Hessian (Letwin (2.5)).
 -/
 
+@[expose] public section
+
 noncomputable section
 open scoped ContDiff
 
@@ -16,16 +20,17 @@ namespace FunctionalInequalities.Analysis
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {R : Type*} [NormedRing R] [HasSummableGeomSeries R] [NormedAlgebra ℝ R]
 
-/-- Derivative of `y ↦ Ring.inverse (H y)` at a point where `H y` is a unit (composition with Mathlib's
+/--
+Derivative of `y ↦ Ring.inverse (H y)` at a point where `H y` is a unit (composition with Mathlib's
 `hasFDerivAt_ringInverse`). -/
 theorem hasFDerivAt_ringInverse_comp {H : E → R} {H' : E →L[ℝ] R} {x : E}
     (hH : HasFDerivAt H H' x) (hunit : IsUnit (H x)) :
     HasFDerivAt (fun y => Ring.inverse (H y))
-      (-ContinuousLinearMap.mulLeftRight ℝ R (Ring.inverse (H x)) (Ring.inverse (H x)) ∘L H') x := by
+      (-ContinuousLinearMap.mulLeftRight ℝ R (Ring.inverse (H x)) (Ring.inverse (H x)) ∘L H')
+      x := by
   obtain ⟨a, ha⟩ := hunit
   have hd := hasFDerivAt_ringInverse (𝕜 := ℝ) a
-  have hInv : (↑a⁻¹ : R) = Ring.inverse (H x) := by
-    rw [← ha, Ring.inverse_unit]
+  have hInv : (↑a⁻¹ : R) = Ring.inverse (H x) := by rw [← ha, Ring.inverse_unit]
   rw [ha, hInv] at hd
   exact hd.comp x hH
 

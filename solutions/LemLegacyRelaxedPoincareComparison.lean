@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.SmoothTest.Comparison
-import FunctionalInequalities.Poincare.Gaussian.Real
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Comparison
+public import FunctionalInequalities.Poincare.Gaussian.Real
 
 /-!
 # Lean certificate: legacy tests and relaxed Poincaré constants
@@ -11,29 +13,37 @@ Typed applications include zero dimension, singular laws and infinite optimal co
 Sources, assumptions and reading order: `Poincare/Euclidean/README.md` in the library.
 -/
 
+@[expose] public section
+
 open MeasureTheory FunctionalInequalities
 
 namespace Solutions.LemLegacyRelaxedPoincareComparison
 
 /-- Arbitrary pre-energy comparison and its complete legacy-to-intrinsic specialization. -/
-theorem certificate {α E : Type*} [MeasurableSpace α]
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
-    (ν : ProbabilityMeasure α) (P : Energy.PreEnergy (Lp ℝ 2 (ν : Measure α)))
-    (μ : ProbabilityMeasure E) :
-    (∀ C : NNReal, (Poincare.TestFamily.ofPreEnergy ν P).Holds C ↔
-      Poincare.L2Energy.Holds ν P.sequentialRelaxation C) ∧
-    (Poincare.TestFamily.ofPreEnergy ν P).constant =
-      Poincare.L2Energy.constant ν P.sequentialRelaxation ∧
-    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
-      (Poincare.TestFamily.ofPreEnergy μ (FunctionalInequalities.Energy.SmoothGradient.preEnergy μ)).Holds C) ∧
-    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
-      FunctionalInequalities.Poincare.SmoothGradient.Ambient.Holds μ C) ∧
-    FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure E) = FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant μ ∧
-    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
-      FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds μ C) ∧
-    FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure E) =
-      FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant μ :=
+theorem certificate {α E : Type*} [MeasurableSpace α] [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+    [SecondCountableTopology E] [FiniteDimensional ℝ E] (ν : ProbabilityMeasure α)
+    (P : Energy.PreEnergy (Lp ℝ 2 (ν : Measure α))) (μ : ProbabilityMeasure E) :
+    (∀ C : NNReal,
+        (Poincare.TestFamily.ofPreEnergy ν P).Holds C ↔
+          Poincare.L2Energy.Holds ν P.sequentialRelaxation C) ∧
+      (Poincare.TestFamily.ofPreEnergy ν P).constant =
+          Poincare.L2Energy.constant ν P.sequentialRelaxation ∧
+        (∀ C : NNReal,
+            FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
+              (Poincare.TestFamily.ofPreEnergy μ
+                    (FunctionalInequalities.Energy.SmoothGradient.preEnergy μ)).Holds
+                C) ∧
+          (∀ C : NNReal,
+              FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
+                FunctionalInequalities.Poincare.SmoothGradient.Ambient.Holds μ C) ∧
+            FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure E) =
+                FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant μ ∧
+              (∀ C : NNReal,
+                  FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
+                    FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds μ C) ∧
+                FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure E) =
+                  FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant μ :=
   ⟨Poincare.TestFamily.holds_ofPreEnergy_iff ν P,
     Poincare.TestFamily.constant_ofPreEnergy_eq ν P,
     FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy μ,
@@ -91,8 +101,10 @@ private def emptyPreEnergy (μ : ProbabilityMeasure ℝ) :
       (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m 0))
 
 -- Infinite values remain extended values throughout the comparison.
-#check (fun (μ : ProbabilityMeasure ℝ) (h : FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure ℝ) = ⊤) ↦
-  (FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic μ).symm.trans h)
+#check
+  (fun (μ : ProbabilityMeasure ℝ)
+      (h : FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure ℝ) = ⊤) ↦
+    (FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic μ).symm.trans h)
 
 /--
 info: 'Solutions.LemLegacyRelaxedPoincareComparison.certificate'

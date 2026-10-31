@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Hausdorff.Content
-import Lean
+module
+
+public import FunctionalInequalities.Analysis.Hausdorff.Content
+public import Lean
+meta import Lean
+
+@[expose] public section
 
 open MeasureTheory FunctionalInequalities.Analysis
 open scoped ENNReal

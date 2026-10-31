@@ -1,5 +1,7 @@
-import Mathlib.Analysis.Distribution.TemperateGrowth
-import Mathlib.Analysis.Calculus.MeanValue
+module
+
+public import Mathlib.Analysis.Distribution.TemperateGrowth
+public import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Temperate growth from bounded high derivatives
@@ -10,6 +12,8 @@ polynomial bound on `D^{m+1} f` gives one on `D^m f` by the mean value inequalit
 function with uniformly bounded derivatives of all orders `≥ 3` has `Function.HasTemperateGrowth`.
 -/
 
+@[expose] public section
+
 open Set
 open scoped ContDiff
 
@@ -18,21 +22,22 @@ namespace FunctionalInequalities.Analysis
 variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [NormedAddCommGroup F] [NormedSpace ℝ F]
 
-/-- Mean value: a polynomial bound `‖Df(x)‖ ≤ C(1+‖x‖)^k` gives `‖f(x)‖ ≤ (C + ‖f 0‖)(1+‖x‖)^{k+1}`. -/
-theorem polynomial_growth_of_fderiv {f : E → F} (hf : Differentiable ℝ f)
-    {k : ℕ} {C : ℝ} (hC : 0 ≤ C)
-    (hD : ∀ x, ‖fderiv ℝ f x‖ ≤ C * (1 + ‖x‖) ^ k) :
+/--
+Mean value: a polynomial bound `‖Df(x)‖ ≤ C(1+‖x‖)^k` gives `‖f(x)‖ ≤ (C + ‖f 0‖)(1+‖x‖)^{k+1}`. -/
+theorem polynomial_growth_of_fderiv {f : E → F} (hf : Differentiable ℝ f) {k : ℕ} {C : ℝ}
+    (hC : 0 ≤ C) (hD : ∀ x, ‖fderiv ℝ f x‖ ≤ C * (1 + ‖x‖) ^ k) :
     ∀ x, ‖f x‖ ≤ (C + ‖f 0‖) * (1 + ‖x‖) ^ (k + 1) := by
   intro x
-  have hbound : ∀ y ∈ Metric.closedBall (0 : E) ‖x‖,
-      ‖fderiv ℝ f y‖ ≤ C * (1 + ‖x‖) ^ k := by
+  have hbound : ∀ y ∈ Metric.closedBall (0 : E) ‖x‖, ‖fderiv ℝ f y‖ ≤ C * (1 + ‖x‖) ^ k := by
     intro y hy
     have hy' : ‖y‖ ≤ ‖x‖ := by simpa only [Metric.mem_closedBall, dist_zero_right] using hy
-    exact (hD y).trans (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by positivity) (by linarith) k) hC)
-  have hdiff := Convex.norm_image_sub_le_of_norm_fderiv_le
-    (fun y _ => hf y) hbound (convex_closedBall (0 : E) ‖x‖)
-    (by simp : (0 : E) ∈ Metric.closedBall (0 : E) ‖x‖)
-    (by simp : x ∈ Metric.closedBall (0 : E) ‖x‖)
+    exact
+      (hD y).trans
+        (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by positivity) (by linarith) k) hC)
+  have hdiff :=
+    Convex.norm_image_sub_le_of_norm_fderiv_le (fun y _ => hf y) hbound
+      (convex_closedBall (0 : E) ‖x‖) (by simp : (0 : E) ∈ Metric.closedBall (0 : E) ‖x‖)
+      (by simp : x ∈ Metric.closedBall (0 : E) ‖x‖)
   simp only [sub_zero] at hdiff
   have hr : 1 ≤ 1 + ‖x‖ := by linarith [norm_nonneg x]
   have hpow : 1 ≤ (1 + ‖x‖) ^ (k + 1) := one_le_pow₀ hr

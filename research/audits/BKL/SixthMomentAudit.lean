@@ -1,24 +1,31 @@
-import FunctionalInequalities.KLS.BKL.Posterior.Covariance
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import Mathlib.Probability.ConditionalProbability
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
-import FunctionalInequalities.KLS.BKL.Posterior.Moments
+module
+
+public import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import Mathlib.Probability.ConditionalProbability
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+public import FunctionalInequalities.KLS.BKL.Posterior.Moments
 /-! Audit clients for the canonical sixth moment of the compact posterior
 (`KLS/BKL/PosteriorDomain.lean` section SixthMoment), in the sections UniformWitness, LawClients,
 ZeroClients and ConsumerApplications. -/
+
+@[expose] public section
 
 -- ===== UniformWitness =====
 /-!
 # Audit: a law satisfying every premise of the conditional BKL Lemma 4.2
 
 The uniform law on `[-√3, √3]` is a centered isotropic probability law on `ℝ` with all exponential
-moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so the
+moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so
+the
 conditional BKL Lemma 4.2 (`sum_sq_cumulant_three_le_of_letwin` in
-`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client also
+`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client
+also
 connects the cumulant and Taylor formulations (`taylorTensor_two_inner_eq_of_centered`,
-`cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed witness
+`cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed
+witness
 is included: the two-point law `(1/5) δ₂ + (4/5) δ_{-1/2}` is centered and isotropic with
 `Var(m X²) = 9 m² / 4 ≤ 8 m²` and `κ₃(1, 1, 1) = 3/2 ≠ 0`. The uniform law is log-concave, the
 two-point law is not; the conditional statement does not assume log-concavity. The client does not
@@ -231,11 +238,14 @@ theorem sum_sq_cumulant_three_le_unifSym (u : ℝ) :
         integrable_exp_mul_norm_unifSym centered_unifSym isotropic_unifSym
         letwinQuadraticBound_unifSym u
 
-/-- The cumulant and Taylor formulations agree for the witness: `T_2⟪u, ·⟫(v, w) = ½ κ_3(u, v, w)`. -/
+/--
+The cumulant and Taylor formulations agree for the witness: `T_2⟪u, ·⟫(v, w) = ½ κ_3(u, v, w)`. -/
 theorem taylorTensor_two_eq_half_cumulant_unifSym (u v w : ℝ) :
-    taylorTensor unifSym (fun x => ⟪u, x⟫) 2 ![v, w] = (1 / 2 : ℝ) * cumulant unifSym 3 ![u, v, w] := by
+    taylorTensor unifSym (fun x => ⟪u, x⟫) 2 ![v, w] =
+      (1 / 2 : ℝ) * cumulant unifSym 3 ![u, v, w] := by
   have := isProbabilityMeasure_unifSym
-  rw [taylorTensor_two_inner_eq_of_centered unifSym integrable_exp_mul_norm_unifSym centered_unifSym,
+  rw [taylorTensor_two_inner_eq_of_centered unifSym integrable_exp_mul_norm_unifSym
+      centered_unifSym,
     cumulant_three_eq_integral unifSym integrable_exp_mul_norm_unifSym centered_unifSym]
 
 end BKLThirdCumulantWitness
@@ -306,7 +316,8 @@ theorem letwinQuadraticBound_twoPt : LetwinQuadraticBound twoPt := by
         intro i
         apply Fin.ext
         omega }
-  have hsum : ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ ℝ i), (stdOrthonormalBasis ℝ ℝ j)⟫ ^ 2 = c ^ 2 := by
+  have hsum :
+    ∑ i, ∑ j, ⟪M (stdOrthonormalBasis ℝ ℝ i), (stdOrthonormalBasis ℝ ℝ j)⟫ ^ 2 = c ^ 2 := by
     simp only [Fintype.sum_unique]
     let b : ℝ := stdOrthonormalBasis ℝ ℝ default
     have hb : b ^ 2 = 1 := by
@@ -316,8 +327,8 @@ theorem letwinQuadraticBound_twoPt : LetwinQuadraticBound twoPt := by
       rw [Real.norm_eq_abs] at hn
       nlinarith [sq_abs b]
     rw [show ⟪M b, b⟫ = c * b ^ 2 by
-      dsimp [b]
-      exact hquad _]
+        dsimp [b]
+        exact hquad _]
     rw [hb]
     ring
   rw [hvar, hsum]
@@ -350,7 +361,8 @@ end BKLSkewWitness
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
-open FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Probability.Posterior
+open FunctionalInequalities FunctionalInequalities.Analysis
+  FunctionalInequalities.Probability.Posterior
 open scoped RealInnerProductSpace ENNReal
 namespace SM1LawClients
 open BKLThirdCumulantWitness
@@ -368,27 +380,29 @@ lemma scalar_compact : IsCompact (scalarLaw : Measure ℝ).support := by
   exact isCompact_Icc.of_isClosed_subset (scalarLaw : Measure ℝ).isClosed_support
     (Measure.support_subset_of_isClosed isClosed_Icc scalar_ae)
 lemma scalar_density : KLS.IsBorellDensity (scalarLaw : Measure ℝ) volume rho := by
-  refine ⟨measurable_const.indicator measurableSet_Icc, ?_,
-    isClosed_Icc.upperSemicontinuous_indicator d_pos.le, ?_, ?_⟩
+  refine
+    ⟨measurable_const.indicator measurableSet_Icc, ?_,
+      isClosed_Icc.upperSemicontinuous_indicator d_pos.le, ?_, ?_⟩
   · intro x
     exact indicator_nonneg (by intro x hx; exact d_pos.le) x
   · intro x y t ht0 ht1
     by_cases hx : x ∈ S
     · by_cases hy : y ∈ S
-      · have hm : t • x + (1-t) • y ∈ S :=
+      · have hm : t • x + (1 - t) • y ∈ S :=
           (convex_Icc _ _) hx hy ht0.le (by linarith) (by ring)
         simp only [rho, indicator_of_mem hx, indicator_of_mem hy, indicator_of_mem hm]
         rw [← Real.rpow_add d_pos]
         simp
-      · simp only [rho, indicator_of_notMem hy,
-          Real.zero_rpow (by linarith : (1-t) ≠ 0), mul_zero]
+      · simp only [rho, indicator_of_notMem hy, Real.zero_rpow (by linarith : (1 - t) ≠ 0),
+          mul_zero]
         exact indicator_nonneg (by intro z hz; exact d_pos.le) _
     · simp only [rho, indicator_of_notMem hx, Real.zero_rpow ht0.ne', zero_mul]
       exact indicator_nonneg (by intro z hz; exact d_pos.le) _
   · have he : (fun x => ENNReal.ofReal (rho x)) = S.indicator (fun _ => ENNReal.ofReal d) := by
       funext x
       by_cases hx : x ∈ S <;> simp [rho, hx]
-    rw [he, withDensity_indicator (show MeasurableSet S from measurableSet_Icc), withDensity_const]
+    rw [he, withDensity_indicator (show MeasurableSet S from measurableSet_Icc),
+      withDensity_const]
     change ENNReal.ofReal d • volume.restrict S = unifSym
     rw [unifSym, ProbabilityTheory.cond]
     have hvol : volume S = ENNReal.ofReal (2 * Real.sqrt 3) := by
@@ -396,7 +410,7 @@ lemma scalar_density : KLS.IsBorellDensity (scalarLaw : Measure ℝ) volume rho 
       congr 1
       ring
     change ENNReal.ofReal d • volume.restrict S = (volume S)⁻¹ • volume.restrict S
-    rw [hvol, ← ENNReal.ofReal_inv_of_pos (by positivity : 0 < 2 * Real.sqrt (3:ℝ))]
+    rw [hvol, ← ENNReal.ofReal_inv_of_pos (by positivity : 0 < 2 * Real.sqrt (3 : ℝ))]
     rfl
 lemma scalar_lc : KLS.LogConcave scalarLaw := scalar_density.compactLogConcave
 lemma scalar_iso : KLS.Isotropic scalarLaw := by
@@ -411,7 +425,11 @@ lemma scalar_iso : KLS.Isotropic scalarLaw := by
 abbrev E1 := EuclideanSpace ℝ (Fin 1)
 def embed : ℝ ≃ₗᵢ[ℝ] E1 :=
   ((stdOrthonormalBasis ℝ ℝ).reindex (finCongr (Module.finrank_self ℝ))).repr
-def law : ProbabilityMeasure E1 := scalarLaw.map embed.continuous.measurable.aemeasurable
+def law : ProbabilityMeasure E1 :=
+  -- The measurability witness that `ProbabilityMeasure.map` took before Mathlib v4.35 (which takes
+  -- the function itself) stays referenced, as in `Probability.intrinsicMeasure`.
+  have _hmeas := embed.continuous.measurable
+  scalarLaw.map embed
 lemma law_iso : KLS.Isotropic law := scalar_iso.map_linearIsometryEquiv embed
 lemma law_lc : KLS.LogConcave law := by
   exact KLS.LogConcave.map_affineIsometry scalarLaw scalar_lc law
@@ -422,33 +440,42 @@ lemma law_compact : IsCompact (law : Measure E1).support := by
     rw [mem_ae_iff]
     change ((scalarLaw : Measure ℝ).map embed) (embed '' S)ᶜ = 0
     rw [Measure.map_apply embed.continuous.measurable hk.isClosed.measurableSet.compl]
-    apply measure_mono_null ?_ ((mem_ae_iff).1 (show S ∈ ae (scalarLaw : Measure ℝ) from scalar_ae))
+    apply
+      measure_mono_null ?_ ((mem_ae_iff).1 (show S ∈ ae (scalarLaw : Measure ℝ) from scalar_ae))
     intro x hx hxs
-    exact hx ⟨x,hxs,rfl⟩
-  exact hk.of_isClosed_subset (law : Measure E1).isClosed_support
-    (Measure.support_subset_of_isClosed hk.isClosed ha)
+    exact hx ⟨x, hxs, rfl⟩
+  exact
+    hk.of_isClosed_subset (law : Measure E1).isClosed_support
+      (Measure.support_subset_of_isClosed hk.isClosed ha)
 
 def Q (q : ℝ) : E1 →L[ℝ] E1 := q • ContinuousLinearMap.id ℝ E1
 lemma Q_selfAdjoint (q : ℝ) : IsSelfAdjoint (Q q) := by
   apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
   intro u v
   simp [Q, real_inner_smul_left, inner_smul_right]
-lemma Q_psd (q : ℝ) (hq : 0 ≤ q) : ∀ x : E1, 0 ≤ ⟪Q q x,x⟫ := by
+lemma Q_psd (q : ℝ) (hq : 0 ≤ q) : ∀ x : E1, 0 ≤ ⟪Q q x, x⟫ := by
   intro x
   simp only [Q, smul_apply, ContinuousLinearMap.id_apply, real_inner_smul_left]
   exact mul_nonneg hq (real_inner_self_nonneg)
 
 lemma actual_signed (c : E1) (q : ℝ) (hq : 0 ≤ q) :
-    Integrable (fun x : E1 =>
-      ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-        (x - posteriorMean law c (Q q))‖ ^ 6) (compactPosterior law law_compact c (Q q) : Measure E1) ∧
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-      (x - posteriorMean law c (Q q))‖ ^ 6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
-      (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1:ℝ) + 1)))) ^ 6 *
-        ((3:ℝ) ^ (3/4:ℝ) / (1 - (3:ℝ) ^ (-(1/4:ℝ)))) := by
+    Integrable
+        (fun x : E1 =>
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6)
+        (compactPosterior law law_compact c (Q q) : Measure E1) ∧
+      (∫ x,
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
+        (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1 : ℝ) + 1)))) ^ 6 *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) := by
   simpa only [Nat.cast_one] using
-    KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le
-      law law_compact law_iso law_lc c (Q q) (Q_selfAdjoint q) (Q_psd q hq)
+    KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le law law_compact law_iso
+      law_lc c (Q q) (Q_selfAdjoint q) (Q_psd q hq)
 
 end SM1LawClients
 
@@ -456,7 +483,8 @@ end SM1LawClients
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
-open FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Probability.Posterior
+open FunctionalInequalities FunctionalInequalities.Analysis
+  FunctionalInequalities.Probability.Posterior
 open scoped RealInnerProductSpace
 namespace SM1ZeroClients
 abbrev E0 := EuclideanSpace ℝ (Fin 0)
@@ -473,7 +501,9 @@ lemma law_iso : KLS.Isotropic law := by
     exact Subsingleton.elim _ _
 lemma law_lc : KLS.LogConcave law := by
   intro K₀ K₁ hK₀ hK₁ t ht0 ht1
-  change (Measure.dirac (0 : E0)) K₀ ^ t * (Measure.dirac (0 : E0)) K₁ ^ (1 - t) ≤ (Measure.dirac (0 : E0)) _
+  change
+    (Measure.dirac (0 : E0)) K₀ ^ t * (Measure.dirac (0 : E0)) K₁ ^ (1 - t) ≤
+      (Measure.dirac (0 : E0)) _
   by_cases h0 : (0 : E0) ∈ K₀
   · by_cases h1 : (0 : E0) ∈ K₁
     · have hmem : (0 : E0) ∈ {z | ∃ x ∈ K₀, ∃ y ∈ K₁, z = t • x + (1 - t) • y} :=
@@ -491,82 +521,129 @@ lemma Q_selfAdjoint (Q : E0 →L[ℝ] E0) : IsSelfAdjoint Q := by
   intro u v
   have hu : u = 0 := Subsingleton.elim _ _
   have hv : v = 0 := Subsingleton.elim _ _
-  simp [hu,hv]
-lemma Q_psd (Q : E0 →L[ℝ] E0) : ∀ x : E0, 0 ≤ ⟪Q x,x⟫ := by
+  simp [hu, hv]
+lemma Q_psd (Q : E0 →L[ℝ] E0) : ∀ x : E0, 0 ≤ ⟪Q x, x⟫ := by
   intro x
   have hx : x = 0 := Subsingleton.elim _ _
   simp [hx]
 lemma actual_all_parameters (c : E0) (Q : E0 →L[ℝ] E0) :
-    Integrable (fun x : E0 =>
-      ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
-        (x - posteriorMean law c Q)‖ ^ 6) (compactPosterior law law_compact c Q : Measure E0) ∧
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
-      (x - posteriorMean law c Q)‖ ^ 6 ∂(compactPosterior law law_compact c Q : Measure E0)) ≤
-      (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((0:ℝ) + 1)))) ^ 6 *
-        ((3:ℝ) ^ (3/4:ℝ) / (1 - (3:ℝ) ^ (-(1/4:ℝ)))) := by
+    Integrable
+        (fun x : E0 =>
+          ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
+                (x - posteriorMean law c Q)‖ ^
+            6)
+        (compactPosterior law law_compact c Q : Measure E0) ∧
+      (∫ x,
+          ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
+                (x - posteriorMean law c Q)‖ ^
+            6 ∂(compactPosterior law law_compact c Q : Measure E0)) ≤
+        (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((0 : ℝ) + 1)))) ^ 6 *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) := by
   simpa only [Nat.cast_zero] using
-    KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le
-      law law_compact law_iso law_lc c Q (Q_selfAdjoint Q) (Q_psd Q)
+    KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le law law_compact law_iso
+      law_lc c Q (Q_selfAdjoint Q) (Q_psd Q)
 lemma actual_integral_zero (c : E0) (Q : E0 →L[ℝ] E0) :
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
-      (x - posteriorMean law c Q)‖ ^ 6 ∂(compactPosterior law law_compact c Q : Measure E0)) = 0 := by
-  have hzero : ∀ x : E0, inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
-      (x - posteriorMean law c Q) = 0 := fun _ => Subsingleton.elim _ _
+    (∫ x,
+        ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
+              (x - posteriorMean law c Q)‖ ^
+          6 ∂(compactPosterior law law_compact c Q : Measure E0)) =
+      0 := by
+  have hzero :
+    ∀ x : E0,
+      inverseSqrt (Covariance.operator (compactPosterior law law_compact c Q : Measure E0))
+          (x - posteriorMean law c Q) =
+        0 :=
+    fun _ => Subsingleton.elim _ _
   simp [hzero]
 end SM1ZeroClients
 
 -- ===== ConsumerApplications =====
 set_option autoImplicit false
 noncomputable section
-open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis FunctionalInequalities.Probability.Posterior
+open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis
+  FunctionalInequalities.Probability.Posterior
 open SM1LawClients
 namespace SM1Applications
 theorem negative_linear_parameter :
-  let c : E1 := embed (-2);
-  let q : ℝ := 3;
-    Integrable (fun x : E1 =>
-      ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-        (x - posteriorMean law c (Q q))‖ ^ 6) (compactPosterior law law_compact c (Q q) : Measure E1) ∧
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-      (x - posteriorMean law c (Q q))‖ ^ 6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
-      (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1:ℝ) + 1)))) ^ 6 *
-        ((3:ℝ) ^ (3/4:ℝ) / (1 - (3:ℝ) ^ (-(1/4:ℝ)))) :=
+    let c : E1 := embed (-2);
+    let q : ℝ := 3;
+    Integrable
+        (fun x : E1 =>
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6)
+        (compactPosterior law law_compact c (Q q) : Measure E1) ∧
+      (∫ x,
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
+        (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1 : ℝ) + 1)))) ^ 6 *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) :=
   actual_signed (embed (-2)) 3 (by norm_num)
 
 theorem positive_linear_zero_Q :
-  let c : E1 := embed 2;
-  let q : ℝ := 0;
-    Integrable (fun x : E1 =>
-      ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-        (x - posteriorMean law c (Q q))‖ ^ 6) (compactPosterior law law_compact c (Q q) : Measure E1) ∧
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-      (x - posteriorMean law c (Q q))‖ ^ 6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
-      (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1:ℝ) + 1)))) ^ 6 *
-        ((3:ℝ) ^ (3/4:ℝ) / (1 - (3:ℝ) ^ (-(1/4:ℝ)))) :=
+    let c : E1 := embed 2;
+    let q : ℝ := 0;
+    Integrable
+        (fun x : E1 =>
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6)
+        (compactPosterior law law_compact c (Q q) : Measure E1) ∧
+      (∫ x,
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
+        (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1 : ℝ) + 1)))) ^ 6 *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) :=
   actual_signed (embed 2) 0 (by norm_num)
 
 theorem initial_parameters :
-  let c : E1 := 0;
-  let q : ℝ := 0;
-    Integrable (fun x : E1 =>
-      ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-        (x - posteriorMean law c (Q q))‖ ^ 6) (compactPosterior law law_compact c (Q q) : Measure E1) ∧
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
-      (x - posteriorMean law c (Q q))‖ ^ 6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
-      (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1:ℝ) + 1)))) ^ 6 *
-        ((3:ℝ) ^ (3/4:ℝ) / (1 - (3:ℝ) ^ (-(1/4:ℝ)))) :=
+    let c : E1 := 0;
+    let q : ℝ := 0;
+    Integrable
+        (fun x : E1 =>
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6)
+        (compactPosterior law law_compact c (Q q) : Measure E1) ∧
+      (∫ x,
+          ‖inverseSqrt
+                (Covariance.operator (compactPosterior law law_compact c (Q q) : Measure E1))
+                (x - posteriorMean law c (Q q))‖ ^
+            6 ∂(compactPosterior law law_compact c (Q q) : Measure E1)) ≤
+        (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((1 : ℝ) + 1)))) ^ 6 *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) :=
   actual_signed (0) 0 (by norm_num)
 
 theorem empty_parameters :
-  let c : SM1ZeroClients.E0 := 0;
-  let Q : SM1ZeroClients.E0 →L[ℝ] SM1ZeroClients.E0 := 0;
-    Integrable (fun x : SM1ZeroClients.E0 =>
-      ‖inverseSqrt (Covariance.operator (compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q : Measure SM1ZeroClients.E0))
-        (x - posteriorMean SM1ZeroClients.law c Q)‖ ^ 6) (compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q : Measure SM1ZeroClients.E0) ∧
-    (∫ x, ‖inverseSqrt (Covariance.operator (compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q : Measure SM1ZeroClients.E0))
-      (x - posteriorMean SM1ZeroClients.law c Q)‖ ^ 6 ∂(compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q : Measure SM1ZeroClients.E0)) ≤
-      (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((0:ℝ) + 1)))) ^ 6 *
-        ((3:ℝ) ^ (3/4:ℝ) / (1 - (3:ℝ) ^ (-(1/4:ℝ)))) :=
+    let c : SM1ZeroClients.E0 := 0;
+    let Q : SM1ZeroClients.E0 →L[ℝ] SM1ZeroClients.E0 := 0;
+    Integrable
+        (fun x : SM1ZeroClients.E0 =>
+          ‖inverseSqrt
+                (Covariance.operator
+                  (compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q :
+                    Measure SM1ZeroClients.E0))
+                (x - posteriorMean SM1ZeroClients.law c Q)‖ ^
+            6)
+        (compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q :
+          Measure SM1ZeroClients.E0) ∧
+      (∫ x,
+          ‖inverseSqrt
+                (Covariance.operator
+                  (compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q :
+                    Measure SM1ZeroClients.E0))
+                (x - posteriorMean SM1ZeroClients.law c Q)‖ ^
+            6 ∂(compactPosterior SM1ZeroClients.law SM1ZeroClients.law_compact c Q :
+            Measure SM1ZeroClients.E0)) ≤
+        (Nat.factorial 6 : ℝ) / (Real.log 3 / (4 * (2 * Real.sqrt ((0 : ℝ) + 1)))) ^ 6 *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) :=
   SM1ZeroClients.actual_all_parameters 0 0
 end SM1Applications
 
@@ -610,4 +687,5 @@ end SM1Applications
 #print axioms SM1Applications.positive_linear_zero_Q
 #print axioms SM1Applications.initial_parameters
 #print axioms SM1Applications.empty_parameters
-#print axioms FunctionalInequalities.KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le
+#print axioms
+  FunctionalInequalities.KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le

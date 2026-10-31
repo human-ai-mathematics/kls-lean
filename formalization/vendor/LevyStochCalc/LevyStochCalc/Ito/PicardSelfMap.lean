@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardStochasticLipschitz
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardStochasticLipschitz
 
 /-!
 # The Picard map as a self-map of the process space, and its difference bounds
@@ -13,6 +17,8 @@ The output of a Picard step as an element of `SBoundedProcess`, the induced self
 sub-additivity bounds `(a + b + c)² ≤ 3 (a² + b² + c²)` in real, vector and `ω`-integrated form,
 which split the difference of two Picard steps into its drift, diffusion and jump contributions.
 -/
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
 

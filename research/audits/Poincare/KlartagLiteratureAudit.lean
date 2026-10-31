@@ -1,12 +1,15 @@
-import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Poincare
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the literature-Poincaré clause of `thm:klartag-density-frontend-identification`
 
 Every obligation `Q1`, `Q2` and the target `Q0` of
 `research/audits/Poincare/KlartagLiteratureRouteStatements.lean` is restated here **verbatim** — the
 propositions preserve the route contracts — and discharged through
-`Poincare/LocalSlope/Gradient.lean` and `KLS/LogConcave/Poincare.lean`. A renamed binder, a reordered
+`Poincare/LocalSlope/Gradient.lean` and `KLS/LogConcave/Poincare.lean`. A renamed binder, a
+reordered
 hypothesis or a weakened conclusion would fail to elaborate here.
 
 The affine-origin independence `Q3` of `KlartagLiteratureRouteStatements.lean` has no
@@ -19,15 +22,19 @@ depends on neither the origin nor the reference.
 The Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` of
 `thm:logconcave-cheeger-poincare-comparison` is outside this client's scope; its current source is
 `KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`, with client
-`research/audits/Density/GaussianBuserPassageAudit.lean`. This client also makes no dimension-free KLS claim.
+`research/audits/Density/GaussianBuserPassageAudit.lean`. This client also makes no dimension-free
+KLS claim.
 
 Two boundary cases are recorded after the route items: a zero-dimensional direction space, where
 both sides collapse to `0`, and the transport of a valid constant through `route_Q1` for a law
 that is already absolutely continuous.
 
-The axiom reports at the end cover the gradient/optimal-constant source declarations and every theorem of
+The axiom reports at the end cover the gradient/optimal-constant source declarations and every
+theorem of
 this client.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -141,7 +148,8 @@ end KlartagLiteraturePoincareAudit
 
 #print axioms FunctionalInequalities.Poincare.LocalSlope.holds_iff_memLp_gradient
 #print axioms FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient
-#print axioms FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave
+#print axioms
+  FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave
 
 #print axioms KlartagLiteraturePoincareAudit.route_Q1
 #print axioms KlartagLiteraturePoincareAudit.route_Q2

@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
 
 /-! Independent full-signature client for the finite-dimensional Borell-density converse. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

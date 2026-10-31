@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Coarea.Isoperimetry
-import FunctionalInequalities.Analysis.Coarea.Lipschitz
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.Analysis.Sard.Sharp
+module
+
+public import FunctionalInequalities.Analysis.Coarea.Isoperimetry
+public import FunctionalInequalities.Analysis.Coarea.Lipschitz
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.Analysis.Sard.Sharp
 
 /-!
 # Scope audit for the `C¹` weighted coarea formula
@@ -23,6 +25,8 @@ Also imported, so that all reports below come from a single consistent environme
   `KLS.Isoperimetry.minkowskiConstant_eq_smoothConstant` that follows from them (in
   `KLS/Geometry/Cheeger/Equality.lean`).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -58,7 +62,8 @@ end IsoperimetryCoareaAudit
 
 /-! ### Axiom audit -/
 
-#print axioms FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
+#print axioms
+  FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
 #print axioms IsoperimetryCoareaAudit.client_isoperimetry_coarea
 #print axioms FunctionalInequalities.Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
 #print axioms IsoperimetryCoareaAudit.client_lipschitz_coarea_statement

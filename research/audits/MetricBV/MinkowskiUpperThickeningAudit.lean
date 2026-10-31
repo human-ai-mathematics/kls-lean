@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
-import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
+public import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Independent full-signature clients for the upper Minkowski content of thickenings at
 differentiability radii.  Checks: the almost-everywhere monotone differentiation
 theorem combined with the pointwise derivative bound, the pointwise bound with a nonnegative
@@ -11,6 +13,8 @@ jumps at `0` (so it is not continuous there, although it is differentiable with 
 every positive radius, where the upper content of the thickening is `0`).  No integrated
 upper-content bound, no recovery/relaxation identity between the lower and upper contents and no
 absolute continuity of the radius mass is claimed. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -25,8 +29,10 @@ variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V]
 
 /-- The a.e. theorem together with the pointwise derivative bound, for every law and set. -/
 theorem aeDerivativeBound (ν : ProbabilityMeasure V) (B : Set V) :
-    ∀ᵐ s ∂(volume : Measure ℝ), DifferentiableAt ℝ (thickeningMass (ν : Measure V) B) s ∧
-      upperMinkowskiContent (ν : Measure V) (thickening s B) ≤ ENNReal.ofReal (deriv (thickeningMass (ν : Measure V) B) s) := by
+    ∀ᵐ s ∂(volume : Measure ℝ),
+      DifferentiableAt ℝ (thickeningMass (ν : Measure V) B) s ∧
+        upperMinkowskiContent (ν : Measure V) (thickening s B) ≤
+          ENNReal.ofReal (deriv (thickeningMass (ν : Measure V) B) s) := by
   filter_upwards [ae_differentiableAt_thickeningMass (ν : Measure V) B] with s hs
   exact ⟨hs, upperMinkowskiContent_thickening_le_deriv_of_differentiableAt (ν : Measure V) B hs⟩
 
@@ -50,23 +56,33 @@ theorem lowerLeUpper (ν : ProbabilityMeasure V) (B : Set V) :
   minkowskiContent_le_upperMinkowskiContent (ν : Measure V) B
 
 theorem emptySet (ν : ProbabilityMeasure V) :
-    upperMinkowskiContent (ν : Measure V) (∅ : Set V) = 0 ∧ minkowskiContent (ν : Measure V) (∅ : Set V) = 0 ∧
-      ∀ s : ℝ, thickeningMass (ν : Measure V) (∅ : Set V) s = 0 :=
-  ⟨upperMinkowskiContent_empty (ν : Measure V), minkowskiContent_empty (ν : Measure V), thickeningMass_empty (ν : Measure V)⟩
+    upperMinkowskiContent (ν : Measure V) (∅ : Set V) = 0 ∧
+      minkowskiContent (ν : Measure V) (∅ : Set V) = 0 ∧
+        ∀ s : ℝ, thickeningMass (ν : Measure V) (∅ : Set V) s = 0 :=
+  ⟨upperMinkowskiContent_empty (ν : Measure V), minkowskiContent_empty (ν : Measure V),
+    thickeningMass_empty (ν : Measure V)⟩
 
 /-- Radius-mass bookkeeping: monotone, in `[0, 1]`, zero for nonpositive radii, lossless
 conversion, and the increment-quotient conversion with a positive denominator. -/
 theorem massBookkeeping (ν : ProbabilityMeasure V) (B : Set V) :
     Monotone (thickeningMass (ν : Measure V) B) ∧
-      (∀ s : ℝ, 0 ≤ thickeningMass (ν : Measure V) B s ∧ thickeningMass (ν : Measure V) B s ≤ 1) ∧
-      (∀ s : ℝ, s ≤ 0 → thickeningMass (ν : Measure V) B s = 0) ∧
-      (∀ s : ℝ, ENNReal.ofReal (thickeningMass (ν : Measure V) B s) = (ν : Measure V) (thickening s B)) ∧
-      ∀ s t : ℝ, 0 < t →
-        ((ν : Measure V) (thickening (s + t) B) - (ν : Measure V) (thickening s B)) /
-            ENNReal.ofReal t =
-          ENNReal.ofReal ((thickeningMass (ν : Measure V) B (s + t) - thickeningMass (ν : Measure V) B s) / t) :=
-  ⟨monotone_thickeningMass (ν : Measure V) B, fun s => ⟨thickeningMass_nonneg (ν : Measure V) B s, thickeningMass_le_one ν B s⟩,
-    fun _ hs => thickeningMass_of_nonpos (ν : Measure V) B hs, ofReal_thickeningMass (ν : Measure V) B,
+      (∀ s : ℝ,
+          0 ≤ thickeningMass (ν : Measure V) B s ∧ thickeningMass (ν : Measure V) B s ≤ 1) ∧
+        (∀ s : ℝ, s ≤ 0 → thickeningMass (ν : Measure V) B s = 0) ∧
+          (∀ s : ℝ,
+              ENNReal.ofReal (thickeningMass (ν : Measure V) B s) =
+                (ν : Measure V) (thickening s B)) ∧
+            ∀ s t : ℝ,
+              0 < t →
+                ((ν : Measure V) (thickening (s + t) B) - (ν : Measure V) (thickening s B)) /
+                    ENNReal.ofReal t =
+                  ENNReal.ofReal
+                    ((thickeningMass (ν : Measure V) B (s + t) -
+                        thickeningMass (ν : Measure V) B s) /
+                      t) :=
+  ⟨monotone_thickeningMass (ν : Measure V) B, fun s =>
+    ⟨thickeningMass_nonneg (ν : Measure V) B s, thickeningMass_le_one ν B s⟩, fun _ hs =>
+    thickeningMass_of_nonpos (ν : Measure V) B hs, ofReal_thickeningMass (ν : Measure V) B,
     fun _ _ ht => measure_thickening_sub_div_eq_ofReal (ν : Measure V) B ht⟩
 
 /-- Zero increments give zero upper content (and zero lower content). -/
@@ -74,7 +90,10 @@ theorem zeroIncrements (ν : ProbabilityMeasure V) {B : Set V}
     (h : ∀ r : ℝ, 0 < r → (ν : Measure V) (thickening r B) ≤ (ν : Measure V) B) :
     upperMinkowskiContent (ν : Measure V) B = 0 ∧ minkowskiContent (ν : Measure V) B = 0 := by
   have hu := upperMinkowskiContent_eq_zero_of_forall_measure_thickening_le (ν : Measure V) h
-  exact ⟨hu, le_antisymm ((minkowskiContent_le_upperMinkowskiContent (ν : Measure V) B).trans_eq hu) bot_le⟩
+  exact
+    ⟨hu,
+      le_antisymm ((minkowskiContent_le_upperMinkowskiContent (ν : Measure V) B).trans_eq hu)
+        bot_le⟩
 
 /-! ### The uniform law on `[0, 1]` with `B = {0}` -/
 
@@ -129,7 +148,8 @@ theorem uniform_hasDerivAt {s : ℝ} (hs0 : 0 < s) (hs1 : s < 1) :
 theorem uniformBound {s : ℝ} (hs0 : 0 < s) (hs1 : s < 1) :
     upperMinkowskiContent (uniformInterval : Measure ℝ) (thickening s {0}) ≤ 1 := by
   simpa using
-    upperMinkowskiContent_thickening_le_of_hasDerivAt (uniformInterval : Measure ℝ) {0} (uniform_hasDerivAt hs0 hs1)
+    upperMinkowskiContent_thickening_le_of_hasDerivAt (uniformInterval : Measure ℝ) {0}
+      (uniform_hasDerivAt hs0 hs1)
 
 /-- The bound is attained: the upper content of the thickening is exactly `1`, and equals
 `ENNReal.ofReal` of the derivative. -/
@@ -137,18 +157,25 @@ theorem uniformAttained {s : ℝ} (hs0 : 0 < s) (hs1 : s < 1) :
     upperMinkowskiContent (uniformInterval : Measure ℝ) (thickening s {0}) = 1 ∧
       upperMinkowskiContent (uniformInterval : Measure ℝ) (thickening s {0}) =
         ENNReal.ofReal (deriv (thickeningMass (uniformInterval : Measure ℝ) {0}) s) := by
-  have hderiv : deriv (thickeningMass (uniformInterval : Measure ℝ) {0}) s = 1 := (uniform_hasDerivAt hs0 hs1).deriv
-  have hquot : ∀ t : ℝ, 0 < t → t < 1 - s →
-      ((uniformInterval : Measure ℝ) (thickening t (thickening s {0})) -
-          (uniformInterval : Measure ℝ) (thickening s {0})) / ENNReal.ofReal t = 1 := by
+  have hderiv : deriv (thickeningMass (uniformInterval : Measure ℝ) {0}) s = 1 :=
+    (uniform_hasDerivAt hs0 hs1).deriv
+  have hquot :
+    ∀ t : ℝ,
+      0 < t →
+        t < 1 - s →
+          ((uniformInterval : Measure ℝ) (thickening t (thickening s {0})) -
+                (uniformInterval : Measure ℝ) (thickening s {0})) /
+              ENNReal.ofReal t =
+            1 := by
     intro t ht0 ht1
     rw [thickening_singleton, thickening_ball_real hs0 ht0, uniform_ball hs0 hs1.le,
       uniform_ball (by linarith) (by linarith), ← ENNReal.ofReal_sub _ hs0.le,
       show s + t - s = t by ring, ENNReal.div_self (by simpa using ht0) ENNReal.ofReal_ne_top]
   have hconst : upperMinkowskiContent (uniformInterval : Measure ℝ) (thickening s {0}) = 1 := by
     unfold upperMinkowskiContent
-    rw [limsup_congr (Eventually.mono (Ioo_mem_nhdsGT (by linarith : (0 : ℝ) < 1 - s))
-      fun t ht => hquot t ht.1 ht.2)]
+    rw [limsup_congr
+        (Eventually.mono (Ioo_mem_nhdsGT (by linarith : (0 : ℝ) < 1 - s)) fun t ht =>
+          hquot t ht.1 ht.2)]
     exact limsup_const 1
   exact ⟨hconst, by rw [hconst, hderiv, ENNReal.ofReal_one]⟩
 
@@ -157,10 +184,13 @@ theorem uniformAttained {s : ℝ} (hs0 : 0 < s) (hs1 : s < 1) :
 /-- The Dirac law at `0`. -/
 def diracLaw : ProbabilityMeasure ℝ := ⟨Measure.dirac 0, inferInstance⟩
 
-theorem dirac_thickeningMass_pos {s : ℝ} (hs : 0 < s) : thickeningMass (diracLaw : Measure ℝ) {0} s = 1 := by
-  simp [thickeningMass, diracLaw, thickening_singleton, Measure.dirac_apply_of_mem (mem_ball_self hs)]
+theorem dirac_thickeningMass_pos {s : ℝ} (hs : 0 < s) :
+    thickeningMass (diracLaw : Measure ℝ) {0} s = 1 := by
+  simp [thickeningMass, diracLaw, thickening_singleton,
+    Measure.dirac_apply_of_mem (mem_ball_self hs)]
 
-theorem dirac_thickeningMass_nonpos {s : ℝ} (hs : s ≤ 0) : thickeningMass (diracLaw : Measure ℝ) {0} s = 0 :=
+theorem dirac_thickeningMass_nonpos {s : ℝ} (hs : s ≤ 0) :
+    thickeningMass (diracLaw : Measure ℝ) {0} s = 0 :=
   thickeningMass_of_nonpos (diracLaw : Measure ℝ) {0} hs
 
 /-- The radius mass jumps at `0`: it is not continuous there, so a.e. differentiability does not

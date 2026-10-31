@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.Isotropic
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Isotropic
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
 # Lean certificate: `thm:affine-isotropic-reduction`
@@ -13,6 +15,8 @@ finite-dimensional Euclidean space of the universe. Moreover the affine formulat
 zero-dimensional law is included in all three statements. Nothing here asserts that any of the
 three statements holds for some `K`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -37,13 +41,17 @@ covariance-normalized literature bound in every dimension. -/
 example (K : NNReal) (h : KLS.AffineBound.{0} K) (n : ℕ)
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hμ : KLS.LogConcave μ) :
     FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤
-      (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))‖ :=
+      (K : ENNReal) *
+        ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))‖ :=
   ((certificate K).2.1.mpr h) (EuclideanSpace ℝ (Fin n)) μ hμ
 
 /-- Dimension zero: both constants vanish, so every `K` bounds them. -/
 example (K : NNReal) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
-    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal) ∧ FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) := by
-  rw [FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_subsingleton μ, FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton μ]
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal) ∧
+      FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) := by
+  rw [FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_subsingleton
+      μ,
+    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton μ]
   exact ⟨zero_le, zero_le⟩
 
 end Solutions.ThmAffineIsotropicReduction

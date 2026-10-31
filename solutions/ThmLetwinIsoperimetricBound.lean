@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Letwin.IsoperimetricBound
+module
+
+public import FunctionalInequalities.KLS.Letwin.IsoperimetricBound
 
 /-!
 # Lean paper-target certificate: `thm:letwin-log-quarter`
@@ -16,23 +18,30 @@ for full-dimensional laws; this certificate does not claim all-statement or orig
 The separate compact Letwin certificate remains the input to the BKL proof.
 -/
 
+@[expose] public section
+
 open MeasureTheory
 
 namespace Solutions.ThmLetwinIsoperimetricBound
 
 /-- Letwin Theorem 1.1, with one constant before every dimension and law. -/
 theorem certificate :
-    ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, 2 ≤ n →
-      (⨆ (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-          (_ : FunctionalInequalities.KLS.LogConcave μ) (_ : FunctionalInequalities.KLS.Isotropic μ),
-        FunctionalInequalities.KLS.Isoperimetry.inverseScale μ) ≤
-          ENNReal.ofReal (C * (Real.log (n : ℝ)) ^ (1 / 4 : ℝ)) :=
+    ∃ C : ℝ,
+      0 < C ∧
+        ∀ n : ℕ,
+          2 ≤ n →
+            (⨆ (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (_ :
+                FunctionalInequalities.KLS.LogConcave μ) (_ :
+                FunctionalInequalities.KLS.Isotropic μ),
+                FunctionalInequalities.KLS.Isoperimetry.inverseScale μ) ≤
+              ENNReal.ofReal (C * (Real.log (n : ℝ)) ^ (1 / 4 : ℝ)) :=
   FunctionalInequalities.KLS.LogConcave.exists_logQuarter_isoperimetricBound
 
 /--
-info: 'Solutions.ThmLetwinIsoperimetricBound.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'Solutions.ThmLetwinIsoperimetricBound.certificate' depends on axioms: [propext,
+Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms Solutions.ThmLetwinIsoperimetricBound.certificate
+  #print axioms Solutions.ThmLetwinIsoperimetricBound.certificate
 
 end Solutions.ThmLetwinIsoperimetricBound

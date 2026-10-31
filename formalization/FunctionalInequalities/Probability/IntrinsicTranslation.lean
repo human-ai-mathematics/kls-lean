@@ -1,7 +1,11 @@
-import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.Probability.Support.Affine
+module
+
+public import FunctionalInequalities.Probability.Transport
+public import FunctionalInequalities.Probability.Support.Affine
 
 /-! # Translation of the affine support, intrinsic law, and barycenter -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Filter Topology
@@ -32,11 +36,16 @@ theorem affineSupport_translateLaw :
       (affineSupport μ).map (AffineEquiv.constVAdd ℝ E b).toAffineMap := by
   apply le_antisymm
   · apply affineSupport_le_of_ae_mem
-    · exact ((affineSupport μ).map (AffineEquiv.constVAdd ℝ E b).toAffineMap).closed_of_finiteDimensional
-    · rw [coe_translateLaw]
-      refine (ae_map_iff (measurable_const_add b).aemeasurable
+    · exact
         ((affineSupport μ).map
-          (AffineEquiv.constVAdd ℝ E b).toAffineMap).closed_of_finiteDimensional.measurableSet).2 ?_
+            (AffineEquiv.constVAdd ℝ E b).toAffineMap).closed_of_finiteDimensional
+    · rw [coe_translateLaw]
+      refine
+        (ae_map_iff (measurable_const_add b).aemeasurable
+              ((affineSupport μ).map
+                  (AffineEquiv.constVAdd ℝ E
+                      b).toAffineMap).closed_of_finiteDimensional.measurableSet).2
+          ?_
       filter_upwards [ae_mem_affineSupport μ] with x hx
       exact ⟨x, hx, rfl⟩
   · rw [AffineSubspace.map_le_iff_le_comap]
@@ -98,12 +107,16 @@ theorem intrinsicMap_translateLaw {x : E} (hx : x ∈ affineSupport μ) :
 isometric image of the intrinsic law of `μ`. -/
 theorem intrinsicMeasure_translateLaw :
     intrinsicMeasure (translateLaw μ b) =
-      translateLaw (mapLinearIsometryEquiv (intrinsicMeasure μ) (translateDirectionEquiv μ b)) (translateShift μ b) := by
+      translateLaw (mapLinearIsometryEquiv (intrinsicMeasure μ) (translateDirectionEquiv μ b))
+        (translateShift μ b) := by
   apply ProbabilityMeasure.toMeasure_injective
-  simp only [intrinsicMeasure, ProbabilityMeasure.toMeasure_map, coe_translateLaw, coe_mapLinearIsometryEquiv]
+  simp only [intrinsicMeasure, ProbabilityMeasure.toMeasure_map, coe_translateLaw,
+    coe_mapLinearIsometryEquiv]
   rw [Measure.map_map (measurable_intrinsicMap _) (measurable_const_add b),
-    Measure.map_map (measurable_const_add _) (translateDirectionEquiv μ b).continuous.measurable,
-    Measure.map_map ((measurable_const_add _).comp (translateDirectionEquiv μ b).continuous.measurable)
+    Measure.map_map (measurable_const_add _)
+      (translateDirectionEquiv μ b).continuous.measurable,
+    Measure.map_map
+      ((measurable_const_add _).comp (translateDirectionEquiv μ b).continuous.measurable)
       (measurable_intrinsicMap μ)]
   refine Measure.map_congr ?_
   filter_upwards [ae_mem_affineSupport μ] with x hx

@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.Gaussian.Hardy
-import FunctionalInequalities.Poincare.SmoothTest.Linear
+module
+
+public import FunctionalInequalities.Poincare.Gaussian.Hardy
+public import FunctionalInequalities.Poincare.SmoothTest.Linear
 
 /-!
 # Sharp one-dimensional Gaussian Poincaré constant
@@ -21,6 +23,8 @@ identification, nor does it formalize the source's Bakry--Émery/LSI proof route
 * `constant_gaussianReal`: its extended optimal constant is exactly `(v : ENNReal)`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
@@ -40,25 +44,25 @@ theorem holds_gaussianReal_zero (m : ℝ) : Holds (gaussianReal m 0) 0 := by
 The existing smooth L² finite-energy domain, arbitrary mean, and zero-variance branch are
 explicit local choices/extensions. Combine the positive-variance anchored estimate with
 variance minimization and `holds_gaussianReal_zero`; the constant is the variance `v`. -/
-theorem holds_gaussianReal (m : ℝ) (v : NNReal) :
-    Holds (gaussianReal m v) (v : ℝ) := by
+theorem holds_gaussianReal (m : ℝ) (v : NNReal) : Holds (gaussianReal m v) (v : ℝ) := by
   by_cases hv : v = 0
   · simpa [hv] using holds_gaussianReal_zero m
   refine ⟨inferInstance, v.coe_nonneg, ?_⟩
   intro f hf
-  calc variance f (gaussianReal m v)
-      ≤ ∫ x, (f x - f m) ^ 2 ∂gaussianReal m v := hf.variance_le_integral_sq_sub (f m)
+  calc
+    variance f (gaussianReal m v) ≤ ∫ x, (f x - f m) ^ 2 ∂gaussianReal m v :=
+      hf.variance_le_integral_sq_sub (f m)
     _ ≤ (v : ℝ) * energy (gaussianReal m v) f := hf.integral_sq_sub_gaussian_le hv
 
 /-- Source: the linear-test lower-bound argument in the
 [Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L24-L28).
 Use `variance_linear_le` at `1 : ℝ`, Mathlib's `memLp_id_gaussianReal`, and
 `variance_id_gaussianReal`. The test is the identity, whose energy is one, including for `v = 0`.
-Arbitrary means and zero variance are local extensions; no covariance eigenvalue theorem is needed. -/
+Arbitrary means and zero variance are local extensions; no covariance eigenvalue theorem is needed.
+-/
 theorem Holds.gaussianReal_variance_le {m : ℝ} {v : NNReal} {C : ℝ}
     (h : Holds (gaussianReal m v) C) : (v : ℝ) ≤ C := by
-  have hmem : MemLp (id : ℝ → ℝ) 2 (gaussianReal m v) :=
-    memLp_id_gaussianReal' 2 (by norm_num)
+  have hmem : MemLp (id : ℝ → ℝ) 2 (gaussianReal m v) := memLp_id_gaussianReal' 2 (by norm_num)
   have hlin := variance_linear_le h hmem (1 : ℝ)
   have hid : linear (1 : ℝ) = id := by
     funext x

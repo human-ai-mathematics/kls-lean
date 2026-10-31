@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvector
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvector
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
 
 /-!
 # Approximate first eigenfunctions of the heat-model generator
@@ -21,6 +23,8 @@ Centered means orthogonal to `ker T̄`, the constants (`orthogonal_ker_iff_mean_
 This is not an eigenfunction: no compactness of the resolvent is proved and no exact eigenvalue
 is claimed to be attained.
 -/
+
+@[expose] public section
 
 noncomputable section
 

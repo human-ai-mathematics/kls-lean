@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Graph.Implicit
+module
+
+public import FunctionalInequalities.Analysis.Graph.Implicit
 
 /-!
 # Integration against the surface measure of a `C¹` graph
@@ -29,6 +31,8 @@ carried out in `Analysis/SmoothDomain/LocalGaussGreen.lean`.
 
 Every statement here is proved and uses only the standard axioms; the module contains no hole.
 -/
+
+@[expose] public section
 
 noncomputable section
 

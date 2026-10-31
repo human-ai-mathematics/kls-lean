@@ -1,8 +1,10 @@
-import FunctionalInequalities.Energy.Form.Dirichlet
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
-import FunctionalInequalities.Energy.Relaxation.Contraction
-import FunctionalInequalities.Energy.SmoothGradient.Closed
-import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
+module
+
+public import FunctionalInequalities.Energy.Form.Dirichlet
+public import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
+public import FunctionalInequalities.Energy.Relaxation.Contraction
+public import FunctionalInequalities.Energy.SmoothGradient.Closed
+public import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
 
 /-!
 # Dirichlet property of the smooth-gradient relaxation
@@ -31,6 +33,8 @@ What this module does not claim: agreement of the relaxation with the raw energy
 identification with a Cheeger energy or with `2 Ch_μ`, any Poincaré inequality, or a Markov
 property for the covariance-weighted relaxations. The zero-dimensional space is included.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -94,29 +98,35 @@ theorem norm_gradient_comp_le {ψ : ℝ → ℝ} (hψ : ContDiff ℝ ∞ ψ)
     _ = ‖fderiv ℝ f.toFun x‖ := one_mul _
 
 /-- A smooth test composed with the mollified normal contraction is a smooth test. -/
-def compSmoothed (f : Test μ) (φ : NormalContraction) (j : ℕ) : Test μ where
+def compSmoothed (f : Test μ) (φ : NormalContraction) (j : ℕ) : Test μ
+    where
   toFun := fun x ↦ φ.smoothed j (f x)
   contDiff := (φ.contDiff_smoothed j).comp f.contDiff
   memLp_two := by
-    refine MemLp.of_le ((memLp_const ‖φ.smoothed j 0‖).add f.memLp_two.norm)
-      ((φ.contDiff_smoothed j).continuous.comp f.contDiff.continuous).aestronglyMeasurable
-      (ae_of_all _ fun x ↦ ?_)
+    refine
+      MemLp.of_le ((memLp_const ‖φ.smoothed j 0‖).add f.memLp_two.norm)
+        ((φ.contDiff_smoothed j).continuous.comp f.contDiff.continuous).aestronglyMeasurable
+        (ae_of_all _ fun x ↦ ?_)
     change ‖φ.smoothed j (f x)‖ ≤ ‖‖φ.smoothed j 0‖ + ‖f x‖‖
     rw [Real.norm_eq_abs (‖φ.smoothed j 0‖ + ‖f x‖),
       abs_of_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _))]
     have hlip := (φ.lipschitzWith_smoothed j).dist_le_mul (f x) 0
     rw [dist_eq_norm, dist_eq_norm, NNReal.coe_one, one_mul, sub_zero] at hlip
-    calc ‖φ.smoothed j (f x)‖ = ‖(φ.smoothed j (f x) - φ.smoothed j 0) + φ.smoothed j 0‖ := by
-          rw [sub_add_cancel]
+    calc
+      ‖φ.smoothed j (f x)‖ = ‖(φ.smoothed j (f x) - φ.smoothed j 0) + φ.smoothed j 0‖ := by
+        rw [sub_add_cancel]
       _ ≤ ‖φ.smoothed j (f x) - φ.smoothed j 0‖ + ‖φ.smoothed j 0‖ := norm_add_le _ _
       _ ≤ ‖f x‖ + ‖φ.smoothed j 0‖ := by gcongr
       _ = ‖φ.smoothed j 0‖ + ‖f x‖ := add_comm _ _
   gradient_sq_integrable := by
-    refine f.gradient_sq_integrable.mono
-      ((aestronglyMeasurable_gradient _ (μ : Measure E)).norm.pow 2) (ae_of_all _ fun x ↦ ?_)
-    rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _), abs_of_nonneg (sq_nonneg _)]
-    exact pow_le_pow_left₀ (norm_nonneg _)
-      (norm_gradient_comp_le (φ.contDiff_smoothed j) (φ.norm_fderiv_smoothed_le j) f x) 2
+    refine
+      f.gradient_sq_integrable.mono
+        ((aestronglyMeasurable_gradient _ (μ : Measure E)).norm.pow 2) (ae_of_all _ fun x ↦ ?_)
+    rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _),
+      abs_of_nonneg (sq_nonneg _)]
+    exact
+      pow_le_pow_left₀ (norm_nonneg _)
+        (norm_gradient_comp_le (φ.contDiff_smoothed j) (φ.norm_fderiv_smoothed_le j) f x) 2
 
 /-- Composition with the mollified contraction does not increase the smooth-gradient energy. -/
 theorem energy_compSmoothed_le (f : Test μ) (φ : NormalContraction) (j : ℕ) :
@@ -152,17 +162,21 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
   (μ : ProbabilityMeasure E)
 
-/-- Every normal contraction satisfies the relaxed contraction bound on the realized smooth tests:
+/--
+Every normal contraction satisfies the relaxed contraction bound on the realized smooth tests:
 the relaxed energy of `φ ∘ f` is at most the raw energy of `f`. -/
 theorem relaxedContractionBound (φ : NormalContraction) :
     (preEnergy μ).RelaxedContractionBound (φ.compL2 (μ : Measure E)) := by
   intro f
-  have hconv : Tendsto (fun j ↦ (preEnergy μ).toAmbient (f.compSmoothed φ j)) atTop
+  have hconv :
+    Tendsto (fun j ↦ (preEnergy μ).toAmbient (f.compSmoothed φ j)) atTop
       (𝓝 (φ.compL2 (μ : Measure E) ((preEnergy μ).toAmbient f))) := by
     rw [tendsto_iff_norm_sub_tendsto_zero]
     refine squeeze_zero (fun j ↦ norm_nonneg _) (fun j ↦ f.norm_toL2_compSmoothed_sub_le φ j) ?_
     simpa using tendsto_radius.const_mul (2 : ℝ)
-  let s : (preEnergy μ).ApproximatingSequence (φ.compL2 (μ : Measure E) ((preEnergy μ).toAmbient f)) :=
+  let s :
+    (preEnergy μ).ApproximatingSequence
+      (φ.compL2 (μ : Measure E) ((preEnergy μ).toAmbient f)) :=
     ⟨fun j ↦ f.compSmoothed φ j, hconv⟩
   refine ((preEnergy μ).sequentialRelaxation_le_sequenceEnergy s).trans ?_
   refine (liminf_le_liminf (Eventually.of_forall fun j ↦ ?_)).trans_eq (liminf_const _)
@@ -188,17 +202,33 @@ omit [CompleteSpace E]
 /-- Passing to intrinsic coordinates commutes with normal contractions. -/
 theorem toIntrinsicL2_compL2 (φ : NormalContraction) (f : Lp ℝ 2 (μ : Measure E)) :
     toIntrinsicL2 μ (φ.compL2 (μ : Measure E) f) =
-      φ.compL2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) (toIntrinsicL2 μ f) := by
+      φ.compL2
+        (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
+        (toIntrinsicL2 μ f) := by
   apply Lp.ext
-  have h1 : ⇑(toIntrinsicL2 μ (φ.compL2 (μ : Measure E) f)) =ᵐ[(Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)]
+  have h1 :
+    ⇑(toIntrinsicL2 μ
+          (φ.compL2 (μ : Measure E)
+            f)) =ᵐ[(Probability.intrinsicMeasure μ :
+        Measure (Probability.affineSupport μ).direction)]
       ⇑(φ.compL2 (μ : Measure E) f) ∘ Probability.reconstruct μ :=
     Lp.coeFn_compMeasurePreserving _ (Probability.measurePreserving_reconstruct μ)
-  have h2 : ⇑(φ.compL2 (μ : Measure E) f) ∘ Probability.reconstruct μ
-      =ᵐ[(Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)] (fun x ↦ φ (f x)) ∘ Probability.reconstruct μ :=
+  have h2 :
+    ⇑(φ.compL2 (μ : Measure E) f) ∘
+        Probability.reconstruct
+          μ =ᵐ[(Probability.intrinsicMeasure μ :
+        Measure (Probability.affineSupport μ).direction)]
+      (fun x ↦ φ (f x)) ∘ Probability.reconstruct μ :=
     (Probability.measurePreserving_reconstruct μ).quasiMeasurePreserving.ae_eq_comp
       (φ.coeFn_compL2 (μ : Measure E) f)
-  have h3 := φ.coeFn_compL2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) (toIntrinsicL2 μ f)
-  have h4 : ⇑(toIntrinsicL2 μ f) =ᵐ[(Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)]
+  have h3 :=
+    φ.coeFn_compL2
+      (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
+      (toIntrinsicL2 μ f)
+  have h4 :
+    ⇑(toIntrinsicL2 μ
+          f) =ᵐ[(Probability.intrinsicMeasure μ :
+        Measure (Probability.affineSupport μ).direction)]
       ⇑f ∘ Probability.reconstruct μ :=
     Lp.coeFn_compMeasurePreserving _ (Probability.measurePreserving_reconstruct μ)
   filter_upwards [h1, h2, h3, h4] with v e1 e2 e3 e4

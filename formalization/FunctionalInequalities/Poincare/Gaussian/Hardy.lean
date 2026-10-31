@@ -1,7 +1,9 @@
-import FunctionalInequalities.Poincare.SmoothTest.Basic
-import FunctionalInequalities.Poincare.Gaussian.Density
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.ContDiff
-import Mathlib.MeasureTheory.Integral.Prod
+module
+
+public import FunctionalInequalities.Poincare.SmoothTest.Basic
+public import FunctionalInequalities.Poincare.Gaussian.Density
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.ContDiff
+public import Mathlib.MeasureTheory.Integral.Prod
 
 /-!
 # Analytic upper bound for the one-dimensional Gaussian Poincaré inequality
@@ -16,6 +18,8 @@ For positive variance `v`, the two Gaussian first-moment tails contribute exactl
 factor `v`. The proof requires no global Lebesgue L² hypothesis on the derivative and no decay
 assumption on the test function. All declarations are fully proved and proof-placeholder-free.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -120,10 +124,9 @@ theorem Admissible.integrable_gaussianPDFReal_mul_sq_deriv {m : ℝ} {v : NNReal
 /-- Source: local nonnegative Tonelli helper, using Mathlib's `lintegral_lintegral_swap` and
 `integral_Ioi_centered_gaussianPDFReal`. It integrates the region `m < t < x`. No finite-integral
 hypothesis is imposed on `g`; both sides are extended nonnegative integrals. -/
-theorem lintegral_gaussian_right_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
-    (g : ℝ → ENNReal) (hg : Measurable g) :
-    (∫⁻ x in Set.Ioi m,
-      ENNReal.ofReal (x - m) * gaussianPDF m v x * ∫⁻ t in Set.Ioo m x, g t) =
+theorem lintegral_gaussian_right_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0) (g : ℝ → ENNReal)
+    (hg : Measurable g) :
+    (∫⁻ x in Set.Ioi m, ENNReal.ofReal (x - m) * gaussianPDF m v x * ∫⁻ t in Set.Ioo m x, g t) =
       (v : ENNReal) * ∫⁻ t in Set.Ioi m, gaussianPDF m v t * g t := by
   set F : ℝ → ENNReal := fun x ↦ ENNReal.ofReal (x - m) * gaussianPDF m v x with hF
   have hF_meas : Measurable F :=
@@ -135,7 +138,8 @@ theorem lintegral_gaussian_right_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
   set K : ℝ × ℝ → ENNReal := fun p ↦ F p.1 * s.indicator (fun q ↦ g q.2) p with hK
   have hK_meas : Measurable K :=
     (hF_meas.comp measurable_fst).mul ((hg.comp measurable_snd).indicator hs_meas)
-  have step1 : (∫⁻ x in Set.Ioi m, F x * ∫⁻ t in Set.Ioo m x, g t) =
+  have step1 :
+    (∫⁻ x in Set.Ioi m, F x * ∫⁻ t in Set.Ioo m x, g t) =
       ∫⁻ x in Set.Ioi m, ∫⁻ t in Set.Ioi m, K (x, t) := by
     refine lintegral_congr fun x ↦ ?_
     have h1 : ∀ t : ℝ, K (x, t) = F x * (Set.Iio x).indicator g t := by
@@ -146,28 +150,30 @@ theorem lintegral_gaussian_right_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
     congr 1
     rw [lintegral_indicator measurableSet_Iio, Measure.restrict_restrict measurableSet_Iio,
       Set.inter_comm, Set.Ioi_inter_Iio]
-  have step2 : (∫⁻ x in Set.Ioi m, ∫⁻ t in Set.Ioi m, K (x, t)) =
+  have step2 :
+    (∫⁻ x in Set.Ioi m, ∫⁻ t in Set.Ioi m, K (x, t)) =
       ∫⁻ t in Set.Ioi m, ∫⁻ x in Set.Ioi m, K (x, t) :=
     lintegral_lintegral_swap hK_meas.aemeasurable
-  have hEval : ∀ t ∈ Set.Ioi m,
-      (∫⁻ x in Set.Ioi t, F x) = (v : ENNReal) * gaussianPDF m v t := by
+  have hEval : ∀ t ∈ Set.Ioi m, (∫⁻ x in Set.Ioi t, F x) = (v : ENNReal) * gaussianPDF m v t := by
     intro t ht
     have hmt : m < t := ht
-    have h1 : Set.EqOn F (fun x ↦ ENNReal.ofReal ((x - m) * gaussianPDFReal m v x))
-        (Set.Ioi t) := by
+    have h1 :
+      Set.EqOn F (fun x ↦ ENNReal.ofReal ((x - m) * gaussianPDFReal m v x)) (Set.Ioi t) := by
       intro x hx
       have hxt : t < x := hx
       simp only [hF, gaussianPDF]
       rw [← ENNReal.ofReal_mul (by linarith : (0 : ℝ) ≤ x - m)]
-    rw [setLIntegral_congr_fun measurableSet_Ioi h1,
-      ← ofReal_integral_eq_lintegral_ofReal
+    rw [setLIntegral_congr_fun measurableSet_Ioi h1, ←
+      ofReal_integral_eq_lintegral_ofReal
         (integrable_centered_gaussianPDFReal m hv).integrableOn
-        ((ae_restrict_iff' measurableSet_Ioi).2 (Filter.Eventually.of_forall fun x hx ↦
-          mul_nonneg (by linarith [Set.mem_Ioi.mp hx] : (0 : ℝ) ≤ x - m)
-            (gaussianPDFReal_nonneg m v x))),
-      integral_Ioi_centered_gaussianPDFReal m hv t,
-      ENNReal.ofReal_mul v.coe_nonneg, ENNReal.ofReal_coe_nnreal, gaussianPDF]
-  have step3 : (∫⁻ t in Set.Ioi m, ∫⁻ x in Set.Ioi m, K (x, t)) =
+        ((ae_restrict_iff' measurableSet_Ioi).2
+          (Filter.Eventually.of_forall fun x hx ↦
+            mul_nonneg (by linarith [Set.mem_Ioi.mp hx] : (0 : ℝ) ≤ x - m)
+              (gaussianPDFReal_nonneg m v x))),
+      integral_Ioi_centered_gaussianPDFReal m hv t, ENNReal.ofReal_mul v.coe_nonneg,
+      ENNReal.ofReal_coe_nnreal, gaussianPDF]
+  have step3 :
+    (∫⁻ t in Set.Ioi m, ∫⁻ x in Set.Ioi m, K (x, t)) =
       ∫⁻ t in Set.Ioi m, (v : ENNReal) * gaussianPDF m v t * g t := by
     refine setLIntegral_congr_fun measurableSet_Ioi fun t ht ↦ ?_
     have hmt : m < t := ht
@@ -176,23 +182,24 @@ theorem lintegral_gaussian_right_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
       by_cases hxt : t < x <;> simp [hK, hs, Set.indicator_apply, hxt]
     simp_rw [h1]
     rw [lintegral_indicator measurableSet_Ioi, Measure.restrict_restrict measurableSet_Ioi,
-      Set.inter_eq_left.mpr (Set.Ioi_subset_Ioi hmt.le),
-      lintegral_mul_const _ hF_meas, hEval t ht]
-  calc (∫⁻ x in Set.Ioi m, F x * ∫⁻ t in Set.Ioo m x, g t)
-      = ∫⁻ x in Set.Ioi m, ∫⁻ t in Set.Ioi m, K (x, t) := step1
+      Set.inter_eq_left.mpr (Set.Ioi_subset_Ioi hmt.le), lintegral_mul_const _ hF_meas,
+      hEval t ht]
+  calc
+    (∫⁻ x in Set.Ioi m, F x * ∫⁻ t in Set.Ioo m x, g t) =
+        ∫⁻ x in Set.Ioi m, ∫⁻ t in Set.Ioi m, K (x, t) :=
+      step1
     _ = ∫⁻ t in Set.Ioi m, ∫⁻ x in Set.Ioi m, K (x, t) := step2
     _ = ∫⁻ t in Set.Ioi m, (v : ENNReal) * gaussianPDF m v t * g t := step3
     _ = (v : ENNReal) * ∫⁻ t in Set.Ioi m, gaussianPDF m v t * g t := by
-        simp_rw [mul_assoc]
-        exact lintegral_const_mul' _ _ ENNReal.coe_ne_top
+      simp_rw [mul_assoc]
+      exact lintegral_const_mul' _ _ ENNReal.coe_ne_top
 
 /-- Source: local nonnegative Tonelli helper, using Mathlib's `lintegral_lintegral_swap` and
 `integral_Iio_centered_gaussianPDFReal`. It integrates the region `x < t < m`. The reversed
 orientation changes the nonnegative length factor to `m - x`; no integrability of `g` is assumed. -/
-theorem lintegral_gaussian_left_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
-    (g : ℝ → ENNReal) (hg : Measurable g) :
-    (∫⁻ x in Set.Iio m,
-      ENNReal.ofReal (m - x) * gaussianPDF m v x * ∫⁻ t in Set.Ioo x m, g t) =
+theorem lintegral_gaussian_left_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0) (g : ℝ → ENNReal)
+    (hg : Measurable g) :
+    (∫⁻ x in Set.Iio m, ENNReal.ofReal (m - x) * gaussianPDF m v x * ∫⁻ t in Set.Ioo x m, g t) =
       (v : ENNReal) * ∫⁻ t in Set.Iio m, gaussianPDF m v t * g t := by
   set F : ℝ → ENNReal := fun x ↦ ENNReal.ofReal (m - x) * gaussianPDF m v x with hF
   have hF_meas : Measurable F :=
@@ -204,7 +211,8 @@ theorem lintegral_gaussian_left_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
   set K : ℝ × ℝ → ENNReal := fun p ↦ F p.1 * s.indicator (fun q ↦ g q.2) p with hK
   have hK_meas : Measurable K :=
     (hF_meas.comp measurable_fst).mul ((hg.comp measurable_snd).indicator hs_meas)
-  have step1 : (∫⁻ x in Set.Iio m, F x * ∫⁻ t in Set.Ioo x m, g t) =
+  have step1 :
+    (∫⁻ x in Set.Iio m, F x * ∫⁻ t in Set.Ioo x m, g t) =
       ∫⁻ x in Set.Iio m, ∫⁻ t in Set.Iio m, K (x, t) := by
     refine lintegral_congr fun x ↦ ?_
     have h1 : ∀ t : ℝ, K (x, t) = F x * (Set.Ioi x).indicator g t := by
@@ -215,32 +223,35 @@ theorem lintegral_gaussian_left_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
     congr 1
     rw [lintegral_indicator measurableSet_Ioi, Measure.restrict_restrict measurableSet_Ioi,
       Set.Ioi_inter_Iio]
-  have step2 : (∫⁻ x in Set.Iio m, ∫⁻ t in Set.Iio m, K (x, t)) =
+  have step2 :
+    (∫⁻ x in Set.Iio m, ∫⁻ t in Set.Iio m, K (x, t)) =
       ∫⁻ t in Set.Iio m, ∫⁻ x in Set.Iio m, K (x, t) :=
     lintegral_lintegral_swap hK_meas.aemeasurable
-  have hEval : ∀ t ∈ Set.Iio m,
-      (∫⁻ x in Set.Iio t, F x) = (v : ENNReal) * gaussianPDF m v t := by
+  have hEval : ∀ t ∈ Set.Iio m, (∫⁻ x in Set.Iio t, F x) = (v : ENNReal) * gaussianPDF m v t := by
     intro t ht
     have hmt : t < m := ht
-    have h1 : Set.EqOn F (fun x ↦ ENNReal.ofReal ((m - x) * gaussianPDFReal m v x))
-        (Set.Iio t) := by
+    have h1 :
+      Set.EqOn F (fun x ↦ ENNReal.ofReal ((m - x) * gaussianPDFReal m v x)) (Set.Iio t) := by
       intro x hx
       have hxt : x < t := hx
       simp only [hF, gaussianPDF]
       rw [← ENNReal.ofReal_mul (by linarith : (0 : ℝ) ≤ m - x)]
     have hint : Integrable (fun x ↦ (m - x) * gaussianPDFReal m v x) volume := by
-      refine (integrable_centered_gaussianPDFReal m hv).neg.congr
-        (Filter.Eventually.of_forall fun x ↦ ?_)
+      refine
+        (integrable_centered_gaussianPDFReal m hv).neg.congr
+          (Filter.Eventually.of_forall fun x ↦ ?_)
       simp only [Pi.neg_apply]
       ring
-    rw [setLIntegral_congr_fun measurableSet_Iio h1,
-      ← ofReal_integral_eq_lintegral_ofReal hint.integrableOn
-        ((ae_restrict_iff' measurableSet_Iio).2 (Filter.Eventually.of_forall fun x hx ↦
-          mul_nonneg (by linarith [Set.mem_Iio.mp hx] : (0 : ℝ) ≤ m - x)
-            (gaussianPDFReal_nonneg m v x))),
-      integral_Iio_centered_gaussianPDFReal m hv t,
-      ENNReal.ofReal_mul v.coe_nonneg, ENNReal.ofReal_coe_nnreal, gaussianPDF]
-  have step3 : (∫⁻ t in Set.Iio m, ∫⁻ x in Set.Iio m, K (x, t)) =
+    rw [setLIntegral_congr_fun measurableSet_Iio h1, ←
+      ofReal_integral_eq_lintegral_ofReal hint.integrableOn
+        ((ae_restrict_iff' measurableSet_Iio).2
+          (Filter.Eventually.of_forall fun x hx ↦
+            mul_nonneg (by linarith [Set.mem_Iio.mp hx] : (0 : ℝ) ≤ m - x)
+              (gaussianPDFReal_nonneg m v x))),
+      integral_Iio_centered_gaussianPDFReal m hv t, ENNReal.ofReal_mul v.coe_nonneg,
+      ENNReal.ofReal_coe_nnreal, gaussianPDF]
+  have step3 :
+    (∫⁻ t in Set.Iio m, ∫⁻ x in Set.Iio m, K (x, t)) =
       ∫⁻ t in Set.Iio m, (v : ENNReal) * gaussianPDF m v t * g t := by
     refine setLIntegral_congr_fun measurableSet_Iio fun t ht ↦ ?_
     have hmt : t < m := ht
@@ -249,15 +260,17 @@ theorem lintegral_gaussian_left_triangle (m : ℝ) {v : NNReal} (hv : v ≠ 0)
       by_cases hxt : x < t <;> simp [hK, hs, Set.indicator_apply, hxt]
     simp_rw [h1]
     rw [lintegral_indicator measurableSet_Iio, Measure.restrict_restrict measurableSet_Iio,
-      Set.inter_eq_left.mpr (Set.Iio_subset_Iio hmt.le),
-      lintegral_mul_const _ hF_meas, hEval t ht]
-  calc (∫⁻ x in Set.Iio m, F x * ∫⁻ t in Set.Ioo x m, g t)
-      = ∫⁻ x in Set.Iio m, ∫⁻ t in Set.Iio m, K (x, t) := step1
+      Set.inter_eq_left.mpr (Set.Iio_subset_Iio hmt.le), lintegral_mul_const _ hF_meas,
+      hEval t ht]
+  calc
+    (∫⁻ x in Set.Iio m, F x * ∫⁻ t in Set.Ioo x m, g t) =
+        ∫⁻ x in Set.Iio m, ∫⁻ t in Set.Iio m, K (x, t) :=
+      step1
     _ = ∫⁻ t in Set.Iio m, ∫⁻ x in Set.Iio m, K (x, t) := step2
     _ = ∫⁻ t in Set.Iio m, (v : ENNReal) * gaussianPDF m v t * g t := step3
     _ = (v : ENNReal) * ∫⁻ t in Set.Iio m, gaussianPDF m v t * g t := by
-        simp_rw [mul_assoc]
-        exact lintegral_const_mul' _ _ ENNReal.coe_ne_top
+      simp_rw [mul_assoc]
+      exact lintegral_const_mul' _ _ ENNReal.coe_ne_top
 
 /-- Source: local right-half-line estimate in the direct proof of the manuscript's Gaussian
 Poincaré upper bound. Combine `interval_sq_sub_le_integral_sq_deriv`,

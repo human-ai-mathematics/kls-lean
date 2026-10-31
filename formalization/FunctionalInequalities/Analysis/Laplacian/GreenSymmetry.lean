@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Laplacian.TestIdentity
-import Mathlib.Tactic.NormNum
+module
+
+public import FunctionalInequalities.Analysis.Laplacian.TestIdentity
+public import Mathlib.Tactic.NormNum
 
 /-!
 # Symmetry of the Laplacian against one compactly supported function
@@ -8,14 +10,18 @@ import Mathlib.Tactic.NormNum
 an arbitrary `g ∈ C²(ℝⁿ)`, `∫ g Δu = ∫ u Δg`, with Mathlib's actual Laplacian. This is the
 whole-space, compact-support case of Green's second identity (Gilbarg–Trudinger, *Elliptic Partial
 Differential Equations of Second Order*, Classics 2001 (ISBN 3-540-41160-7), §2.4): both sides equal
-`-∑ᵢ ∫ ∂ᵢg ∂ᵢu`, the left one by coordinatewise integration by parts and the right one by Green's first
-identity (`integral_test_mul_laplacian`) with `u` as the compact test. Only `u` needs compact support
+`-∑ᵢ ∫ ∂ᵢg ∂ᵢu`, the left one by coordinatewise integration by parts and the right one by Green's
+first
+identity (`integral_test_mul_laplacian`) with `u` as the compact test. Only `u` needs compact
+support
 and no boundary term appears.
 
 It is the integration-by-parts step that turns the Newtonian representation (4.15) into the
 annular reproducing formula of `Harmonic/CompactReproduction`, used for the harmonic part of GT
 Theorem 4.6, p. 60.
 -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory
 open scoped ContDiff

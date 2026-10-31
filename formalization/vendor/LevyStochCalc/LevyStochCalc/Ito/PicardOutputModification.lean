@@ -6,7 +6,11 @@ Authors: Christian Garry
 -- Modified 2026-10-27 by the KLS formalization project: update deprecated aliases and
 -- proof-local bindings for warning-free Lean v4.33.0 builds; see vendor/port.patch.
 
-import LevyStochCalc.Ito.PicardOutputMoments
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardOutputMoments
 
 /-!
 # Càdlàg modifications of the Picard step
@@ -18,6 +22,8 @@ indistinguishable from the step at every fixed time and càdlàg along almost ev
 Bielecki norm is unchanged, and the result is a genuine self-map of the space of bounded
 adapted càdlàg processes.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal
@@ -373,7 +379,7 @@ theorem exists_sBoundedProcess_picardStep [ℱ.IsRightContinuous]
     exact funext fun i => hω i
   refine ⟨{
     X := fun t ω i => Z i t ω
-    measurable_path := measurable_pi_lambda _ fun i =>
+    measurable_path := Measurable.of_eval fun i =>
       LevyStochCalc.Probability.measurable_uncurry_of_rightContinuous (hZmeas i)
         (hZright i)
     adapted := fun i =>

@@ -3,7 +3,11 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Ito.PicardOutputModification
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Ito.PicardOutputModification
 
 /-!
 # Bielecki weighting and the per-component difference bounds
@@ -15,6 +19,8 @@ Combined with the Lipschitz bounds on the coefficients this bounds the drift, di
 jump components of the difference of two Picard steps by the energy of the difference of the
 two frozen paths.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 open scoped NNReal ENNReal

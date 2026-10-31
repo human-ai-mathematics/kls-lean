@@ -1,14 +1,18 @@
-import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Closure
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Closure
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # The heat semigroup of a log-concave law
 
-This module specialises the abstract semigroup construction of `Analysis/Semigroup/` to the repository's energy operator. For a full-dimensional compact-set
+This module specialises the abstract semigroup construction of `Analysis/Semigroup/` to the
+repository's energy operator. For a full-dimensional compact-set
 log-concave probability `ν` on a finite-dimensional Euclidean space `V`, a Haar measure `m` and a
 weight `B : V →L[ℝ] V`, the closable weighted gradient
-`T = hν.weightedOperator m B hi : L²(ν) →ₗ.[ℝ] L²(ν; V)` (`KLS/LogConcave/WeightedGradient/Basic.lean`,
+`T = hν.weightedOperator m B hi : L²(ν) →ₗ.[ℝ] L²(ν; V)`
+(`KLS/LogConcave/WeightedGradient/Basic.lean`,
 `g ↦ B ∘ ∇g` on Lipschitz tests) has a closure `T̄`, closed and densely defined. Feeding `T̄` to
 `FunctionalInequalities.Analysis.Semigroup.Generated.operator` gives
 
@@ -30,6 +34,8 @@ Nothing here uses log-concavity beyond the three
 hypothesis lemmas that make the weighted gradient closable and densely defined.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory FunctionalInequalities.Analysis.Semigroup
@@ -49,11 +55,14 @@ variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (B : V
 
 namespace HeatSemigroup
 
-/-- **The heat semigroup of `ν`**: `P_t = exp (-t T̄†T̄)` on `L²(ν)`, for `t ≥ 0`, obtained from the
-abstract construction `FunctionalInequalities.Analysis.Semigroup.Generated.operator` applied to the closed weighted gradient. -/
-def operator (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty)
-    {t : ℝ} (ht : 0 ≤ t) : Lp ℝ 2 (ν : Measure V) →L[ℝ] Lp ℝ 2 (ν : Measure V) :=
-  FunctionalInequalities.Analysis.Semigroup.Generated.operator (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+/--
+**The heat semigroup of `ν`**: `P_t = exp (-t T̄†T̄)` on `L²(ν)`, for `t ≥ 0`, obtained from the
+abstract construction `FunctionalInequalities.Analysis.Semigroup.Generated.operator` applied to the
+closed weighted gradient. -/
+def operator (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ}
+    (ht : 0 ≤ t) : Lp ℝ 2 (ν : Measure V) →L[ℝ] Lp ℝ 2 (ν : Measure V) :=
+  FunctionalInequalities.Analysis.Semigroup.Generated.operator
+    (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) ht
 
 end HeatSemigroup
@@ -62,44 +71,56 @@ variable (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempt
 
 namespace HeatSemigroup
 
-/-- `P_t f` is the abstract `FunctionalInequalities.Analysis.Semigroup.Generated.apply` of the closed weighted gradient. -/
+/--
+`P_t f` is the abstract `FunctionalInequalities.Analysis.Semigroup.Generated.apply` of the closed
+weighted gradient. -/
 theorem apply {t : ℝ} (ht : 0 ≤ t) (f : Lp ℝ 2 (ν : Measure V)) :
     HeatSemigroup.operator m B hν hi ht f =
-      FunctionalInequalities.Analysis.Semigroup.Generated.apply (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
-        (hν.dense_domain_closedWeightedOperator m B hi) t f := rfl
+      FunctionalInequalities.Analysis.Semigroup.Generated.apply
+        (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+        (hν.dense_domain_closedWeightedOperator m B hi) t f :=
+  rfl
 
 /-- `P_t` is a contraction of `L²(ν)`. -/
 theorem norm_apply_le {t : ℝ} (ht : 0 ≤ t) (f : Lp ℝ 2 (ν : Measure V)) :
     ‖HeatSemigroup.operator m B hν hi ht f‖ ≤ ‖f‖ :=
-  FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+  FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le
+    (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) ht f
 
 /-- `P_t` is symmetric on `L²(ν)`. -/
 theorem symmetric {t : ℝ} (ht : 0 ≤ t) (f g : Lp ℝ 2 (ν : Measure V)) :
     ⟪HeatSemigroup.operator m B hν hi ht f, g⟫ = ⟪f, HeatSemigroup.operator m B hν hi ht g⟫ :=
-  FunctionalInequalities.Analysis.Semigroup.Generated.symmetric (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+  FunctionalInequalities.Analysis.Semigroup.Generated.symmetric
+    (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) ht f g
 
 /-- `P_0 = 1`. -/
-theorem zero (f : Lp ℝ 2 (ν : Measure V)) :
-    HeatSemigroup.operator m B hν hi le_rfl f = f :=
-  FunctionalInequalities.Analysis.Semigroup.Generated.zero_time (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+theorem zero (f : Lp ℝ 2 (ν : Measure V)) : HeatSemigroup.operator m B hν hi le_rfl f = f :=
+  FunctionalInequalities.Analysis.Semigroup.Generated.zero_time
+    (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) f
 
 /-- The semigroup law `P_{t+u} = P_t P_u`. -/
 theorem add {t u : ℝ} (ht : 0 ≤ t) (hu : 0 ≤ u) (f : Lp ℝ 2 (ν : Measure V)) :
     HeatSemigroup.operator m B hν hi (add_nonneg ht hu) f =
       HeatSemigroup.operator m B hν hi ht (HeatSemigroup.operator m B hν hi hu f) :=
-  FunctionalInequalities.Analysis.Semigroup.Generated.add_time (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+  FunctionalInequalities.Analysis.Semigroup.Generated.add_time
+    (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) ht hu f
 
 /-- Strong continuity: `t ↦ P_t f` is continuous on `[0, ∞)`, expressed through the underlying
-`FunctionalInequalities.Analysis.Semigroup.Generated.apply` (which is defined for every real `t`). -/
+`FunctionalInequalities.Analysis.Semigroup.Generated.apply` (which is defined for every real `t`).
+-/
 theorem continuousOn (f : Lp ℝ 2 (ν : Measure V)) :
-    ContinuousOn (fun t : ℝ => FunctionalInequalities.Analysis.Semigroup.Generated.apply (hν.closedWeightedOperator m B hi)
-      (hν.closedWeightedOperator_isClosed m B hi) (hν.dense_domain_closedWeightedOperator m B hi)
-      t f) (Set.Ici 0) :=
-  FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+    ContinuousOn
+      (fun t : ℝ =>
+        FunctionalInequalities.Analysis.Semigroup.Generated.apply
+          (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
+          (hν.dense_domain_closedWeightedOperator m B hi) t f)
+      (Set.Ici 0) :=
+  FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn
+    (hν.closedWeightedOperator m B hi) (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) f
 
 /-- The generator is `-T̄†T̄`: on `D(T̄†T̄)`, `(P_t f - f)/t → -T̄†T̄ f` as `t ↓ 0`. -/

@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Letwin.SteinKernel
+module
+
+public import FunctionalInequalities.KLS.Letwin.SteinKernel
 
 /-!
 # Clients of the higher-order Schauder bootstrap
@@ -7,6 +9,8 @@ The Euclidean-plane quadratic solves Δw + w = 4 + w with identity leading coeff
 zero drift and all local hypotheses proved. A second client projects the smooth regular-class
 moment map, its transport and its smooth inverse from the original Letwin assumptions.
 -/
+
+@[expose] public section
 noncomputable section
 open Set Metric MeasureTheory
 open scoped NNReal ContDiff ENNReal

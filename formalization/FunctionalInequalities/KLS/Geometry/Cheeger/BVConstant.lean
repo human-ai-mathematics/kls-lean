@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.MetricBV.Basic
-import FunctionalInequalities.Analysis.MetricBV.Complement
-import FunctionalInequalities.Analysis.MetricBV.Transport
-import FunctionalInequalities.Probability.Support.Affine
+module
+
+public import FunctionalInequalities.Analysis.MetricBV.Basic
+public import FunctionalInequalities.Analysis.MetricBV.Complement
+public import FunctionalInequalities.Analysis.MetricBV.Transport
+public import FunctionalInequalities.Probability.Support.Affine
 
 /-!
 # Metric BV Cheeger constants on the closed intrinsic support
@@ -13,6 +15,8 @@ perimeter for finite measures; in particular on the closed intrinsic support
 (`intrinsicHalfConstant_eq_symmetricConstant`). They are distinct from the existing lower
 Minkowski-content infimum until a relaxation and recovery comparison is proved.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -86,12 +90,11 @@ theorem halfConstant_eq_top_of_subsingleton [Subsingleton X]
       exact iInf_neg (by norm_num : ¬ (1 : ENNReal) ≤ 1 / 2)
   · exact iInf_neg hB
 
-set_option linter.style.haveILetI false in
 /-- Zero-dimensional affine support yields the empty BV Cheeger test family. -/
 theorem intrinsicHalfConstant_eq_top_of_finrank_zero (μ : ProbabilityMeasure E)
     (h : Module.finrank ℝ (Probability.affineSupport μ).direction = 0) :
     intrinsicHalfConstant μ = ⊤ := by
-  haveI : Subsingleton (Probability.affineSupport μ).direction :=
+  have : Subsingleton (Probability.affineSupport μ).direction :=
     Module.finrank_zero_iff.mp h
   exact halfConstant_eq_top_of_subsingleton _
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Garry
 -/
-import LevyStochCalc.Poisson.PastFutureIndependence
-import LevyStochCalc.Probability.ComapTuple
-import LevyStochCalc.Probability.IndepJoin
-import LevyStochCalc.Probability.IndepLimit
+-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
+-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
+module
+
+public import LevyStochCalc.Poisson.PastFutureIndependence
+public import LevyStochCalc.Probability.ComapTuple
+public import LevyStochCalc.Probability.IndepJoin
+public import LevyStochCalc.Probability.IndepLimit
 
 /-!
 # Poisson random measures with respect to a filtration
@@ -20,6 +24,8 @@ instance, a smaller filtration to which `N` is adapted is one, and so is the rig
 version `ℱ₊`: for a finite family of future regions `D`, the counts `N(D ∩ ((r, ∞) × E))` are
 jointly independent of `ℱ r ⊇ ℱ₊ s` and increase to `N(D)` as `r ↓ s`.
 -/
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal
@@ -92,8 +98,8 @@ theorem IsPoissonFiltration.rightCont {N : PoissonRandomMeasure P ν}
         Probability.comap_pi_eq_iSup fun i ω => N.N ω (g i)
       rw [← hYcomap]
       refine Probability.indep_comap_of_tendsto_ae (ℱ.rightCont.le s)
-        (fun k => measurable_pi_lambda _ fun i => N.measurable_eval (hcut k i))
-        (measurable_pi_lambda _ fun i => N.measurable_eval (hg i).2) (fun k => ?_) ?_
+        (fun k => Measurable.of_eval fun i => N.measurable_eval (hcut k i))
+        (Measurable.of_eval fun i => N.measurable_eval (hg i).2) (fun k => ?_) ?_
       · have hkcomap : MeasurableSpace.comap
               (fun ω (i : Fin n) => N.N ω (g i ∩ Set.Ioi (r k) ×ˢ Set.univ)) inferInstance
             = ⨆ i, MeasurableSpace.comap

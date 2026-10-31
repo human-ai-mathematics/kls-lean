@@ -1,6 +1,8 @@
-import Mathlib.MeasureTheory.Integral.IntegralEqImproper
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import Mathlib.Analysis.Convex.Deriv
+module
+
+public import Mathlib.MeasureTheory.Integral.IntegralEqImproper
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.Analysis.Convex.Deriv
 
 /-!
 # Integrals of exponential functions on the line
@@ -19,6 +21,8 @@ total variation of `e^{-g}` for a convex `g` tending to `+∞` at `±∞` is
 `∫ |g'| e^{-g} = 2 e^{-inf g}` (`lintegral_abs_deriv_mul_exp_neg_eq`); this is the one-dimensional
 identity in Klartag, *Logarithmically-concave moment measures I*, arXiv:1309.2767v1, (15).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -149,16 +153,16 @@ theorem lintegral_abs_deriv_mul_exp_neg_eq {g : ℝ → ℝ} (hg : ConvexOn ℝ 
     (hg1 : ContDiff ℝ 1 g) (htop : Tendsto g atTop atTop) (hbot : Tendsto g atBot atTop) :
     ∫⁻ t, ENNReal.ofReal (|deriv g t| * Real.exp (-g t)) =
       ENNReal.ofReal (2 * Real.exp (-⨅ t, g t)) := by
-  obtain ⟨a, ha⟩ := hg1.continuous.exists_forall_le
-    (show Tendsto g (cocompact ℝ) atTop by
-      rw [cocompact_eq_atBot_atTop]
-      exact hbot.sup htop)
+  obtain ⟨a, ha⟩ :=
+    hg1.continuous.exists_forall_le
+      (show Tendsto g (cocompact ℝ) atTop by
+        rw [cocompact_eq_atBot_atTop]
+        exact hbot.sup htop)
   have hbdd : BddBelow (range g) := by
     refine ⟨g a, ?_⟩
     rintro _ ⟨t, rfl⟩
     exact ha t
-  have hinf : (⨅ t, g t) = g a :=
-    le_antisymm (ciInf_le hbdd a) (le_ciInf ha)
+  have hinf : (⨅ t, g t) = g a := le_antisymm (ciInf_le hbdd a) (le_ciInf ha)
   have hlocal : IsLocalMin g a := Filter.Eventually.of_forall ha
   have hzero : deriv g a = 0 := hlocal.deriv_eq_zero
   have hd : Differentiable ℝ g := hg1.differentiable (by norm_num)
@@ -167,43 +171,32 @@ theorem lintegral_abs_deriv_mul_exp_neg_eq {g : ℝ → ℝ} (hg : ConvexOn ℝ 
     hzero ▸ hmono (mem_univ a) (mem_univ t) (le_of_lt ht)
   have hnonpos (t : ℝ) (ht : t ∈ Iio a) : deriv g t ≤ 0 :=
     hzero ▸ hmono (mem_univ t) (mem_univ a) (le_of_lt ht)
-  have hdneg (t : ℝ) :
-      deriv (fun s : ℝ => g (-s)) t = -deriv g (-t) := by
+  have hdneg (t : ℝ) : deriv (fun s : ℝ => g (-s)) t = -deriv g (-t) := by
     simpa only [Function.comp_def, mul_neg_one] using
       ((hd (-t)).hasDerivAt.comp t (hasDerivAt_id t).neg).deriv
-  have hneg_nonneg (t : ℝ) (ht : t ∈ Ioi (-a)) :
-      0 ≤ deriv (fun s : ℝ => g (-s)) t := by
+  have hneg_nonneg (t : ℝ) (ht : t ∈ Ioi (-a)) : 0 ≤ deriv (fun s : ℝ => g (-s)) t := by
     rw [hdneg]
     exact neg_nonneg.mpr (hnonpos (-t) (by simp only [mem_Iio, mem_Ioi] at ht ⊢; linarith))
-  let F : ℝ → ENNReal :=
-    fun t => ENNReal.ofReal (|deriv g t| * Real.exp (-g t))
-  have hderivcont : Continuous (deriv g) :=
-    hg1.continuous_deriv (by norm_num)
+  let F : ℝ → ENNReal := fun t => ENNReal.ofReal (|deriv g t| * Real.exp (-g t))
+  have hderivcont : Continuous (deriv g) := hg1.continuous_deriv (by norm_num)
   have hF : Measurable F :=
     (ENNReal.continuous_ofReal.comp
-      (hderivcont.abs.mul (Real.continuous_exp.comp hg1.continuous.neg))).measurable
-  have hright :
-      (∫⁻ t in Ioi a, F t) = ENNReal.ofReal (Real.exp (-g a)) := by
+        (hderivcont.abs.mul (Real.continuous_exp.comp hg1.continuous.neg))).measurable
+  have hright : (∫⁻ t in Ioi a, F t) = ENNReal.ofReal (Real.exp (-g a)) := by
     calc
-      (∫⁻ t in Ioi a, F t) =
-          ∫⁻ t in Ioi a, ENNReal.ofReal (deriv g t * Real.exp (-g t)) := by
+      (∫⁻ t in Ioi a, F t) = ∫⁻ t in Ioi a, ENNReal.ofReal (deriv g t * Real.exp (-g t)) := by
         apply setLIntegral_congr_fun measurableSet_Ioi
         intro t ht
         dsimp only [F]
         rw [abs_of_nonneg (hnonneg t ht)]
       _ = _ := lintegral_Ioi_deriv_mul_exp_neg_eq hg1 hnonneg htop
   have hneg_integral :=
-    lintegral_Ioi_deriv_mul_exp_neg_eq
-      (g := fun t : ℝ => g (-t)) (a := -a)
-      (hg1.comp contDiff_neg) hneg_nonneg
-      (hbot.comp tendsto_neg_atTop_atBot)
-  have hreflect :
-      (∫⁻ t in Ioi (-a), F (-t)) = ∫⁻ t in Iio a, F t := by
-    rw [← lintegral_indicator measurableSet_Ioi,
-      ← lintegral_indicator measurableSet_Iio]
+    lintegral_Ioi_deriv_mul_exp_neg_eq (g := fun t : ℝ => g (-t)) (a := -a)
+      (hg1.comp contDiff_neg) hneg_nonneg (hbot.comp tendsto_neg_atTop_atBot)
+  have hreflect : (∫⁻ t in Ioi (-a), F (-t)) = ∫⁻ t in Iio a, F t := by
+    rw [← lintegral_indicator measurableSet_Ioi, ← lintegral_indicator measurableSet_Iio]
     calc
-      (∫⁻ t, (Ioi (-a)).indicator (fun t => F (-t)) t) =
-          ∫⁻ t, ((Iio a).indicator F) (-t) := by
+      (∫⁻ t, (Ioi (-a)).indicator (fun t => F (-t)) t) = ∫⁻ t, ((Iio a).indicator F) (-t) := by
         apply lintegral_congr
         intro t
         have hi : t ∈ Ioi (-a) ↔ -t ∈ Iio a := by
@@ -211,21 +204,16 @@ theorem lintegral_abs_deriv_mul_exp_neg_eq {g : ℝ → ℝ} (hg : ConvexOn ℝ 
           constructor <;> intro ht <;> linarith
         by_cases ht : t ∈ Ioi (-a)
         · rw [indicator_of_mem ht, indicator_of_mem (hi.mp ht)]
-        · rw [indicator_of_notMem ht,
-            indicator_of_notMem (fun h => ht (hi.mpr h))]
-      _ = ∫⁻ t, (Iio a).indicator F t
-            ∂(Measure.map (fun t : ℝ => -t) volume) := by
+        · rw [indicator_of_notMem ht, indicator_of_notMem (fun h => ht (hi.mpr h))]
+      _ = ∫⁻ t, (Iio a).indicator F t ∂(Measure.map (fun t : ℝ => -t) volume) := by
         exact (lintegral_map (hF.indicator measurableSet_Iio) measurable_neg).symm
-      _ = _ := by
-        rw [(Measure.measurePreserving_neg (volume : Measure ℝ)).map_eq]
-  have hleft :
-      (∫⁻ t in Iio a, F t) = ENNReal.ofReal (Real.exp (-g a)) := by
+      _ = _ := by rw [(Measure.measurePreserving_neg (volume : Measure ℝ)).map_eq]
+  have hleft : (∫⁻ t in Iio a, F t) = ENNReal.ofReal (Real.exp (-g a)) := by
     calc
-      (∫⁻ t in Iio a, F t) = ∫⁻ t in Ioi (-a), F (-t) :=
-        hreflect.symm
-      _ = ∫⁻ t in Ioi (-a),
-          ENNReal.ofReal
-            (deriv (fun s : ℝ => g (-s)) t * Real.exp (-g (-t))) := by
+      (∫⁻ t in Iio a, F t) = ∫⁻ t in Ioi (-a), F (-t) := hreflect.symm
+      _ =
+          ∫⁻ t in Ioi (-a),
+            ENNReal.ofReal (deriv (fun s : ℝ => g (-s)) t * Real.exp (-g (-t))) := by
         apply setLIntegral_congr_fun measurableSet_Ioi
         intro t ht
         have ht' : -t ∈ Iio a := by
@@ -234,12 +222,9 @@ theorem lintegral_abs_deriv_mul_exp_neg_eq {g : ℝ → ℝ} (hg : ConvexOn ℝ 
           linarith
         dsimp only [F]
         rw [hdneg, abs_of_nonpos (hnonpos (-t) ht')]
-      _ = _ := by
-        simpa only [neg_neg] using hneg_integral
-  have hic :
-      (∫⁻ t in Iic a, F t) = ∫⁻ t in Iio a, F t := by
-    rw [← lintegral_indicator measurableSet_Iic,
-      ← lintegral_indicator measurableSet_Iio]
+      _ = _ := by simpa only [neg_neg] using hneg_integral
+  have hic : (∫⁻ t in Iic a, F t) = ∫⁻ t in Iio a, F t := by
+    rw [← lintegral_indicator measurableSet_Iic, ← lintegral_indicator measurableSet_Iio]
     apply lintegral_congr
     intro t
     by_cases hta : t < a
@@ -248,25 +233,19 @@ theorem lintegral_abs_deriv_mul_exp_neg_eq {g : ℝ → ℝ} (hg : ConvexOn ℝ 
     · by_cases heq : t = a
       · subst t
         simp [F, hzero]
-      · have hgt : a < t :=
-          lt_of_le_of_ne (not_lt.mp hta) (Ne.symm heq)
+      · have hgt : a < t := lt_of_le_of_ne (not_lt.mp hta) (Ne.symm heq)
         rw [indicator_of_notMem (show t ∉ Iic a from not_le.mpr hgt),
           indicator_of_notMem (show t ∉ Iio a from hta)]
-  have hsplit :
-      (∫⁻ t in Iic a, F t) + (∫⁻ t in Ioi a, F t) = ∫⁻ t, F t := by
-    simpa only [compl_Iic] using
-      (lintegral_add_compl F measurableSet_Iic)
+  have hsplit : (∫⁻ t in Iic a, F t) + (∫⁻ t in Ioi a, F t) = ∫⁻ t, F t := by
+    simpa only [compl_Iic] using (lintegral_add_compl F measurableSet_Iic)
   change (∫⁻ t, F t) = _
   calc
-    (∫⁻ t, F t) =
-        (∫⁻ t in Iic a, F t) + (∫⁻ t in Ioi a, F t) := hsplit.symm
-    _ = ENNReal.ofReal (Real.exp (-g a)) +
-        ENNReal.ofReal (Real.exp (-g a)) := by
+    (∫⁻ t, F t) = (∫⁻ t in Iic a, F t) + (∫⁻ t in Ioi a, F t) := hsplit.symm
+    _ = ENNReal.ofReal (Real.exp (-g a)) + ENNReal.ofReal (Real.exp (-g a)) := by
       rw [hic, hleft, hright]
     _ = ENNReal.ofReal (2 * Real.exp (-g a)) := by
       rw [two_mul, ENNReal.ofReal_add (by positivity) (by positivity)]
-    _ = ENNReal.ofReal (2 * Real.exp (-⨅ t, g t)) := by
-      rw [hinf]
+    _ = ENNReal.ofReal (2 * Real.exp (-⨅ t, g t)) := by rw [hinf]
 
 end TotalVariation
 

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
-import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+public import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
 
 /-!
 # Upper Minkowski recovery of the metric BV perimeter
@@ -34,6 +36,8 @@ finite approximating-set mass; radius-local transfer first proves finite neighbo
 from finite target mass and finite lower content. No pointwise content/perimeter equality or
 infinite-mass target endpoint is asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -100,20 +104,25 @@ theorem liminf_upperMinkowskiContent_eq_top_of_perimeter_eq_top (ν : Measure V)
 
 /-- From Stage A: a measurable set of finite lower content has a positive thickening with
 indicator error at most `δ` and upper content at most its lower content plus `δ`. -/
-theorem exists_thickening_approx (ν : Measure V) [IsFiniteMeasure ν] {A : Set V} (hA : MeasurableSet A)
-    (hfin : Isoperimetry.minkowskiContent ν A ≠ ⊤) {δ : ℝ} (hδ : 0 < δ) :
-    ∃ s : ℝ, 0 < s ∧
-      ∫⁻ x, ‖(thickening s A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
-        ENNReal.ofReal δ ∧
-      Isoperimetry.upperMinkowskiContent ν (thickening s A) ≤
-        Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ := by
+theorem exists_thickening_approx (ν : Measure V) [IsFiniteMeasure ν] {A : Set V}
+    (hA : MeasurableSet A) (hfin : Isoperimetry.minkowskiContent ν A ≠ ⊤) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ s : ℝ,
+      0 < s ∧
+        ∫⁻ x, ‖(thickening s A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
+            ENNReal.ofReal δ ∧
+          Isoperimetry.upperMinkowskiContent ν (thickening s A) ≤
+            Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ := by
   obtain ⟨s, hs, -, -, hL1, hl⟩ := Isoperimetry.exists_upperRecovery ν A hA hfin
   have hδ' : (0 : ℝ≥0∞) < ENNReal.ofReal δ := ENNReal.ofReal_pos.2 hδ
-  have h1 : ∀ᶠ n in atTop, ∫⁻ x, ‖(thickening (s n) A).indicator (1 : V → ℝ) x -
-      A.indicator 1 x‖ₑ ∂(ν : Measure V) ≤ ENNReal.ofReal δ :=
+  have h1 :
+    ∀ᶠ n in atTop,
+      ∫⁻ x, ‖(thickening (s n) A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
+        ENNReal.ofReal δ :=
     ENNReal.tendsto_nhds_zero.1 hL1 _ hδ'
-  have h2 : ∀ᶠ n in atTop, Isoperimetry.upperMinkowskiContent ν (thickening (s n) A) <
-      Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ :=
+  have h2 :
+    ∀ᶠ n in atTop,
+      Isoperimetry.upperMinkowskiContent ν (thickening (s n) A) <
+        Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ :=
     eventually_lt_of_limsup_lt (hl.trans_lt (ENNReal.lt_add_right hfin hδ'.ne'))
   obtain ⟨n, hn1, hn2⟩ := (h1.and h2).exists
   exact ⟨s n, hs n, hn1, hn2.le⟩
@@ -240,28 +249,42 @@ end UpperRecovery
 
 /-- For a measurable finite-mass target, global indicator L1 convergence bounds perimeter
 by the liminf of genuine upper contents under any Borel measure. -/
-theorem perimeter_le_liminf_upperMinkowskiContent_of_measure_lt_top (ν : Measure V) {B : Set V} (hB : MeasurableSet B) (hνB : ν B < ⊤)
-    {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
-    (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
-      atTop (𝓝 0)) : perimeter ν B ≤ liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A n)) atTop :=
+theorem perimeter_le_liminf_upperMinkowskiContent_of_measure_lt_top (ν : Measure V) {B : Set V}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
+    (hconv :
+      Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop
+        (𝓝 0)) :
+    perimeter ν B ≤ liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A n)) atTop :=
   (perimeter_le_liminf_minkowskiContent_of_measure_lt_top ν hB hνB hA hconv).trans
-    (liminf_le_liminf (Eventually.of_forall fun n =>
-      (show Isoperimetry.minkowskiContent ν (A n) ≤ Isoperimetry.upperMinkowskiContent ν (A n) from liminf_le_limsup)))
+    (liminf_le_liminf
+      (Eventually.of_forall fun n =>
+        (show Isoperimetry.minkowskiContent ν (A n) ≤ Isoperimetry.upperMinkowskiContent ν (A n)
+          from liminf_le_limsup)))
 
 /-- A finite-mass set of finite lower content admits a finite-mass positive thickening
 with prescribed indicator L1 and upper-content slack. -/
-theorem exists_thickening_approx_of_measure_lt_top (ν : Measure V) {A : Set V} (hA : MeasurableSet A) (hνA : ν A < ⊤)
-    (hfin : Isoperimetry.minkowskiContent ν A < ⊤) {δ : ℝ} (hδ : 0 < δ) :
-    ∃ s : ℝ, 0 < s ∧ ν (Metric.thickening s A) < ⊤ ∧
-      ∫⁻ x, ‖(Metric.thickening s A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂ν ≤
-        ENNReal.ofReal δ ∧ Isoperimetry.upperMinkowskiContent ν (Metric.thickening s A) ≤
-          Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ := by
-  obtain ⟨s, hs, -, -, hmass, hL1, hl⟩ := Isoperimetry.exists_upperRecovery_of_measure_lt_top ν hA hνA hfin
+theorem exists_thickening_approx_of_measure_lt_top (ν : Measure V) {A : Set V}
+    (hA : MeasurableSet A) (hνA : ν A < ⊤) (hfin : Isoperimetry.minkowskiContent ν A < ⊤)
+    {δ : ℝ} (hδ : 0 < δ) :
+    ∃ s : ℝ,
+      0 < s ∧
+        ν (Metric.thickening s A) < ⊤ ∧
+          ∫⁻ x, ‖(Metric.thickening s A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂ν ≤
+              ENNReal.ofReal δ ∧
+            Isoperimetry.upperMinkowskiContent ν (Metric.thickening s A) ≤
+              Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ := by
+  obtain ⟨s, hs, -, -, hmass, hL1, hl⟩ :=
+    Isoperimetry.exists_upperRecovery_of_measure_lt_top ν hA hνA hfin
   have hδ' : (0 : ℝ≥0∞) < ENNReal.ofReal δ := ENNReal.ofReal_pos.2 hδ
-  have h1 : ∀ᶠ n in atTop, ∫⁻ x, ‖(Metric.thickening (s n) A).indicator (1 : V → ℝ) x -
-      A.indicator 1 x‖ₑ ∂ν ≤ ENNReal.ofReal δ := ENNReal.tendsto_nhds_zero.1 hL1 _ hδ'
-  have h2 : ∀ᶠ n in atTop, Isoperimetry.upperMinkowskiContent ν (Metric.thickening (s n) A) <
-      Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ :=
+  have h1 :
+    ∀ᶠ n in atTop,
+      ∫⁻ x, ‖(Metric.thickening (s n) A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂ν ≤
+        ENNReal.ofReal δ :=
+    ENNReal.tendsto_nhds_zero.1 hL1 _ hδ'
+  have h2 :
+    ∀ᶠ n in atTop,
+      Isoperimetry.upperMinkowskiContent ν (Metric.thickening (s n) A) <
+        Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ :=
     eventually_lt_of_limsup_lt (hl.trans_lt (ENNReal.lt_add_right hfin.ne hδ'.ne'))
   obtain ⟨n, hn1, hn2⟩ := (h1.and h2).exists
   exact ⟨s n, hs n, hmass n, hn1, hn2.le⟩
@@ -271,39 +294,63 @@ bounded Borel sets. The selected sets are open and bounded, have finite mass and
 upper content term by term, and converge in global indicator L1 with upper contents
 converging to the finite target perimeter. No properness or finite total mass is needed. -/
 theorem exists_upperMinkowskiRecovery_of_finite_on_bounded (ν : Measure V)
-    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
-    {B : Set V} (hB : MeasurableSet B) (hνB : ν B < ⊤) (hP : perimeter ν B < ⊤) :
-    ∃ U : ℕ → Set V, (∀ n, IsOpen (U n)) ∧ (∀ n, MeasurableSet (U n)) ∧ (∀ n, Bornology.IsBounded (U n)) ∧
-      (∀ n, ν (U n) < ⊤) ∧ (∀ n, Isoperimetry.upperMinkowskiContent ν (U n) < ⊤) ∧
-      Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
-        atTop (𝓝 0) ∧ Tendsto (fun n => Isoperimetry.upperMinkowskiContent ν (U n)) atTop (𝓝 (perimeter ν B)) := by
+    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤) {B : Set V}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) (hP : perimeter ν B < ⊤) :
+    ∃ U : ℕ → Set V,
+      (∀ n, IsOpen (U n)) ∧
+        (∀ n, MeasurableSet (U n)) ∧
+          (∀ n, Bornology.IsBounded (U n)) ∧
+            (∀ n, ν (U n) < ⊤) ∧
+              (∀ n, Isoperimetry.upperMinkowskiContent ν (U n) < ⊤) ∧
+                Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
+                    atTop (𝓝 0) ∧
+                  Tendsto (fun n => Isoperimetry.upperMinkowskiContent ν (U n)) atTop
+                    (𝓝 (perimeter ν B)) := by
   obtain ⟨A, hA, hbndA, hmassA, hfinA, hconvA, hcostA⟩ :=
     exists_minkowskiRecovery_of_finite_on_bounded ν hν hB hνB hP
-  have hs : ∀ n : ℕ, ∃ s : ℝ, 0 < s ∧ ν (Metric.thickening s (A n)) < ⊤ ∧
-      ∫⁻ x, ‖(Metric.thickening s (A n)).indicator (1 : V → ℝ) x - (A n).indicator 1 x‖ₑ ∂ν ≤
-        ENNReal.ofReal (1 / ((n : ℝ) + 1)) ∧
-      Isoperimetry.upperMinkowskiContent ν (Metric.thickening s (A n)) ≤
-        Isoperimetry.minkowskiContent ν (A n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)) := fun n =>
+  have hs :
+    ∀ n : ℕ,
+      ∃ s : ℝ,
+        0 < s ∧
+          ν (Metric.thickening s (A n)) < ⊤ ∧
+            ∫⁻ x,
+                  ‖(Metric.thickening s (A n)).indicator (1 : V → ℝ) x -
+                      (A n).indicator 1 x‖ₑ ∂ν ≤
+                ENNReal.ofReal (1 / ((n : ℝ) + 1)) ∧
+              Isoperimetry.upperMinkowskiContent ν (Metric.thickening s (A n)) ≤
+                Isoperimetry.minkowskiContent ν (A n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)) :=
+    fun n =>
     exists_thickening_approx_of_measure_lt_top ν (hA n) (hmassA n) (hfinA n) (by positivity)
   choose s hspos hmass he hc using hs
   let U : ℕ → Set V := fun n => Metric.thickening (s n) (A n)
   have hU : ∀ n, MeasurableSet (U n) := fun _ => Metric.isOpen_thickening.measurableSet
   have hη : Tendsto (fun n : ℕ => ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop (𝓝 0) := by
     simpa using ENNReal.tendsto_ofReal tendsto_one_div_add_atTop_nhds_zero_nat
-  have herr : ∀ n, ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
-      ENNReal.ofReal (1 / ((n : ℝ) + 1)) +
-        ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν := fun n =>
+  have herr :
+    ∀ n,
+      ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+        ENNReal.ofReal (1 / ((n : ℝ) + 1)) +
+          ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν :=
+    fun n =>
     (lintegral_enorm_indicator_sub_le_add ν (hU n) (hA n) B).trans (add_le_add (he n) le_rfl)
-  have hconv : Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
-      atTop (𝓝 0) :=
-    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
-      (by simpa using hη.add hconvA) (fun _ => zero_le) herr
+  have hconv :
+    Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop
+      (𝓝 0) :=
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds (by simpa using hη.add hconvA)
+      (fun _ => zero_le) herr
   have hcontentFin : ∀ n, Isoperimetry.upperMinkowskiContent ν (U n) < ⊤ := fun n =>
     (hc n).trans_lt (ENNReal.add_lt_top.2 ⟨hfinA n, ENNReal.ofReal_lt_top⟩)
-  refine ⟨U, fun _ => Metric.isOpen_thickening, hU, fun n => (hbndA n).thickening, hmass, hcontentFin, hconv, ?_⟩
-  refine tendsto_of_le_liminf_of_limsup_le (perimeter_le_liminf_upperMinkowskiContent_of_measure_lt_top ν hB hνB hU hconv) ?_
-  have hup : Tendsto (fun n => Isoperimetry.minkowskiContent ν (A n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
-      atTop (𝓝 (perimeter ν B)) := by simpa using hcostA.add hη
+  refine
+    ⟨U, fun _ => Metric.isOpen_thickening, hU, fun n => (hbndA n).thickening, hmass,
+      hcontentFin, hconv, ?_⟩
+  refine
+    tendsto_of_le_liminf_of_limsup_le
+      (perimeter_le_liminf_upperMinkowskiContent_of_measure_lt_top ν hB hνB hU hconv) ?_
+  have hup :
+    Tendsto
+      (fun n => Isoperimetry.minkowskiContent ν (A n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+      atTop (𝓝 (perimeter ν B)) := by
+    simpa using hcostA.add hη
   exact (limsup_le_limsup (Eventually.of_forall hc)).trans_eq hup.limsup_eq
 
 end FunctionalInequalities.KLS.MetricBV

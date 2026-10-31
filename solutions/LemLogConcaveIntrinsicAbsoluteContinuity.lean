@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 
 /-!
 # Lean certificate: `lem:logconcave-intrinsic-absolute-continuity`
@@ -7,6 +9,8 @@ The compact-set definition implies intrinsic absolute continuity for arbitrary f
 log-concave probability laws. This certifies the precise input needed by the selected/literature
 comparison; the full Borell density-representative and moment theorem remains separate.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -101,7 +105,8 @@ info: 'FunctionalInequalities.KLS.LogConcave.absolutelyContinuous_of_interior_su
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.absolutelyContinuous_of_interior_support_nonempty
+  #print axioms
+    FunctionalInequalities.KLS.LogConcave.absolutelyContinuous_of_interior_support_nonempty
 
 /--
 info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_absolutelyContinuous'

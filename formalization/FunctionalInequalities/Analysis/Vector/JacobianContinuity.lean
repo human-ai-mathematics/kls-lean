@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Jacobian
-import Mathlib.Analysis.Calculus.FDeriv.Measurable
+module
+
+public import FunctionalInequalities.Analysis.Vector.Jacobian
+public import Mathlib.Analysis.Calculus.FDeriv.Measurable
 
 /-! # Continuity and measurability of the volume factors
 
@@ -18,6 +20,8 @@ formula will need on the other side.
 
 **No area formula and no coarea formula are proved here.**
 -/
+
+@[expose] public section
 
 noncomputable section
 

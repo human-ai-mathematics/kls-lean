@@ -1,5 +1,9 @@
-import FunctionalInequalities.Analysis.Convex.Quadratic
-import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+module
+
+public import FunctionalInequalities.Analysis.Convex.Quadratic
+public import FunctionalInequalities.Analysis.Convex.Viscosity.Equation
+
+@[expose] public section
 
 noncomputable section
 open Set Metric Filter Topology MeasureTheory Classical
@@ -66,8 +70,8 @@ private theorem clientQ_support
   linarith
 
 private theorem client_subgradientImage_eq
-    {n : ℕ} {G : Set (EuclideanSpace ℝ (Fin n))}
-    : subgradientImage (clientQ n) G = G := by
+    {n : ℕ} {G : Set (EuclideanSpace ℝ (Fin n))} :
+    subgradientImage (clientQ n) G = G := by
   ext p
   constructor
   · intro hp

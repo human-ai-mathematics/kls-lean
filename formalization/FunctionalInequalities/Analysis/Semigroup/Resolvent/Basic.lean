@@ -1,11 +1,14 @@
-import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
-import Mathlib.Analysis.InnerProductSpace.ProdL2
+module
+
+public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-!
 # The resolvent: unique solvability of the weak equation
 
 Resolvent solvability, proved here as
-`existsUnique_weakResolvent`. See `Resolvent/Form.lean` for the form construction, the shifted weak form and the resolvent operator.
+`existsUnique_weakResolvent`. See `Resolvent/Form.lean` for the form construction, the shifted weak
+form and the resolvent operator.
 
 The proof uses **orthogonal projection, not Lax–Milgram**. Rescaling the second coordinate by
 `√s` turns the shifted form into the ambient inner product of `WithLp 2 (H₀ × H₁)`: for
@@ -21,6 +24,8 @@ through the adjoint, which this module does not do.
 
 The Yosida approximation and the semigroup limit are not proved here.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -88,9 +93,12 @@ theorem isClosed_graphL2 (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) :
 
 end ResolventGraph
 
-/-- resolvent solvability's ambient space: the transported graph of a closed operator is a Hilbert space.
+/--
+resolvent solvability's ambient space: the transported graph of a closed operator is a Hilbert
+space.
 
-This is the space on which the shifted form of the shifted weak form is coercive, so it is exactly the input
+This is the space on which the shifted form of the shifted weak form is coercive, so it is exactly
+the input
 Lax–Milgram needs. The existence half of resolvent solvability is still open. -/
 theorem completeSpace_graphL2 (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) :
     CompleteSpace (graphL2 T) :=
@@ -181,8 +189,10 @@ theorem existsUnique_weakResolvent (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed
 
 /-! ## The resolvent as a bounded operator
 
-resolvent solvability gives unique solvability, so the solution map is a well-defined function; linearity follows
-from uniqueness, the norm bound from the resolvent operator, and self-adjointness from symmetry of the form. This is
+resolvent solvability gives unique solvability, so the solution map is a well-defined function;
+linearity follows
+from uniqueness, the norm bound from the resolvent operator, and self-adjointness from symmetry of
+the form. This is
 the operator `J_s = (1 + s T*T)⁻¹` from which the Yosida approximation is built.
 -/
 

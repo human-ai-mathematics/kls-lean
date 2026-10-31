@@ -1,21 +1,30 @@
-import FunctionalInequalities.Analysis.Newtonian.Schauder.Interior
+module
+
+public import FunctionalInequalities.Analysis.Newtonian.Schauder.Interior
 
 /-!
 # Audit: GT Theorem 4.6 (Hessian form) on a planar Poisson solution
 
-Real client of `poisson_interior_hessian_holder` (`FunctionalInequalities/Analysis/Newtonian/Schauder/Interior.lean`;
-Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001, Theorem 4.6, p. 60) with
+Real client of `poisson_interior_hessian_holder`
+(`FunctionalInequalities/Analysis/Newtonian/Schauder/Interior.lean`;
+Gilbarg–Trudinger, *Elliptic Partial Differential Equations of Second Order*, Classics 2001, Theorem
+4.6, p. 60) with
 `n = 2`, `α = 1/2`, `c = 0`, `R = 1`, on the nonharmonic quadratic `u(x) = x₀² + x₁²`:
 
-* `sumSquares_smooth`, `sumSquares_hessian`, `sumSquares_hessian_nonzero`: `u` is smooth with constant Hessian
+* `sumSquares_smooth`, `sumSquares_hessian`, `sumSquares_hessian_nonzero`: `u` is smooth with
+  constant Hessian
   `diag(2, 2)`, so `D²u(e₀, e₀) = 2`;
 * `sumSquares_laplacian`, `sumSquares_bound`: `Δu = 4` everywhere and `|u| ≤ 8` on `B₂(0)`;
-* `sumSquares_interior_client`: the theorem with `U = 8`, the constant source `f = 4` (`M = 4`) and Hölder cap
+* `sumSquares_interior_client`: the theorem with `U = 8`, the constant source `f = 4` (`M = 4`) and
+  Hölder cap
   `H = 0`, giving `‖D²u‖ ≤ 12 C` and `‖D²u(x) - D²u(y)‖ ≤ 12 C ‖x - y‖^{1/2}` on `B₁(0)`.
 
-Every hypothesis of the theorem is proved, not assumed; the constant `C` is the theorem's constant, chosen before
+Every hypothesis of the theorem is proved, not assumed; the constant `C` is the theorem's constant,
+chosen before
 `c`, `R` and the data.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -47,9 +56,13 @@ theorem sumSquares_smooth : ContDiff ℝ ∞ sumSquares :=
 
 theorem sumSquares_fderiv : fderiv ℝ sumSquares = fun x => sumSquaresHessian x := by
   funext x
-  have hh := (((coordinate 0).hasFDerivAt (x := x)).mul ((coordinate 0).hasFDerivAt)).add
-    (((coordinate 1).hasFDerivAt).mul ((coordinate 1).hasFDerivAt))
-  change fderiv ℝ (fun i : E => coordinate 0 i * coordinate 0 i + coordinate 1 i * coordinate 1 i) x = _
+  have hh :=
+    (((coordinate 0).hasFDerivAt (x := x)).mul ((coordinate 0).hasFDerivAt)).add
+      (((coordinate 1).hasFDerivAt).mul ((coordinate 1).hasFDerivAt))
+  change
+    fderiv ℝ (fun i : E => coordinate 0 i * coordinate 0 i + coordinate 1 i * coordinate 1 i)
+        x =
+      _
   simpa only [Pi.mul_def, Pi.add_def, sumSquaresHessian, map_add, add_apply,
     ContinuousLinearMap.smulRight_apply] using hh.fderiv
 
@@ -58,7 +71,8 @@ theorem sumSquares_hessian (x : E) : fderiv ℝ (fderiv ℝ sumSquares) x = sumS
   exact sumSquaresHessian.fderiv
 
 theorem sumSquares_hessian_nonzero :
-    fderiv ℝ (fderiv ℝ sumSquares) 0 (EuclideanSpace.single 0 1) (EuclideanSpace.single 0 1) = 2 := by
+    fderiv ℝ (fderiv ℝ sumSquares) 0 (EuclideanSpace.single 0 1) (EuclideanSpace.single 0 1) =
+      2 := by
   rw [sumSquares_hessian]
   norm_num [sumSquaresHessian, coordinate]
 
@@ -85,23 +99,31 @@ theorem half_pos' : (0 : ℝ≥0) < 1 / 2 := by rw [← NNReal.coe_lt_coe]; norm
 
 theorem half_lt_one : (1 / 2 : ℝ≥0) < 1 := by rw [← NNReal.coe_lt_coe]; norm_num
 
-/-- GT 2001 Theorem 4.6 (Hessian form) for `u = x₀² + x₁²`, `Δu = 4`, on `B₁(0) ⊂ B₂(0)` with `α = 1/2`. -/
-theorem sumSquares_interior_client : ∃ C : ℝ, 0 < C ∧
-    (∀ x ∈ ball (0 : E) 1, ‖fderiv ℝ (fderiv ℝ sumSquares) x‖ ≤ C * 12) ∧
-    ∀ x ∈ ball (0 : E) 1, ∀ y ∈ ball (0 : E) 1,
-      ‖fderiv ℝ (fderiv ℝ sumSquares) x - fderiv ℝ (fderiv ℝ sumSquares) y‖ ≤
-        C * 12 * ‖x - y‖ ^ (((1 / 2 : ℝ≥0)) : ℝ) := by
-  obtain ⟨C, hC, hest⟩ := poisson_interior_hessian_holder (by norm_num : 2 ≤ 2) half_pos' half_lt_one
+/--
+GT 2001 Theorem 4.6 (Hessian form) for `u = x₀² + x₁²`, `Δu = 4`, on `B₁(0) ⊂ B₂(0)` with `α = 1/2`.
+-/
+theorem sumSquares_interior_client :
+    ∃ C : ℝ,
+      0 < C ∧
+        (∀ x ∈ ball (0 : E) 1, ‖fderiv ℝ (fderiv ℝ sumSquares) x‖ ≤ C * 12) ∧
+          ∀ x ∈ ball (0 : E) 1,
+            ∀ y ∈ ball (0 : E) 1,
+              ‖fderiv ℝ (fderiv ℝ sumSquares) x - fderiv ℝ (fderiv ℝ sumSquares) y‖ ≤
+                C * 12 * ‖x - y‖ ^ (((1 / 2 : ℝ≥0)) : ℝ) := by
+  obtain ⟨C, hC, hest⟩ :=
+    poisson_interior_hessian_holder (by norm_num : 2 ≤ 2) half_pos' half_lt_one
   refine ⟨C, hC, ?_⟩
   have hc2 : ContDiffOn ℝ 2 sumSquares (ball (0 : E) (2 * 1)) :=
-    (sumSquares_smooth.of_le (by
-      change (↑(2 : ℕ∞) : WithTop ℕ∞) ≤ ↑(⊤ : ℕ∞)
-      exact WithTop.coe_le_coe.mpr le_top)).contDiffOn
+    (sumSquares_smooth.of_le
+        (by
+          change (↑(2 : ℕ∞) : WithTop ℕ∞) ≤ ↑(⊤ : ℕ∞)
+          exact WithTop.coe_le_coe.mpr le_top)).contDiffOn
   have hf : ∀ y ∈ ball (0 : E) (2 * 1), |(fun _ : E => (4 : ℝ)) y| ≤ 4 := fun y _ => by norm_num
   have hH : HolderOnWith 0 (1 / 2) (fun _ : E => (4 : ℝ)) (ball (0 : E) (2 * 1)) :=
     (HolderWith.const (C := 0) (r := 1 / 2) (y := (4 : ℝ))).holderOnWith _
-  have h := hest 0 1 one_pos sumSquares (fun _ => 4) 8 4 0 hc2 (fun x _ => sumSquares_laplacian x)
-    sumSquares_bound hf hH
+  have h :=
+    hest 0 1 one_pos sumSquares (fun _ => 4) 8 4 0 hc2 (fun x _ => sumSquares_laplacian x)
+      sumSquares_bound hf hH
   refine ⟨fun x hx => ?_, fun x hx y hy => ?_⟩
   · have := h.1 x hx
     simp only [Real.one_rpow, NNReal.coe_zero, mul_zero, add_zero, mul_one] at this

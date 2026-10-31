@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.SmoothDomain.Basic
-import FunctionalInequalities.Analysis.Graph.Implicit
+module
+
+public import FunctionalInequalities.Analysis.SmoothDomain.Basic
+public import FunctionalInequalities.Analysis.Graph.Implicit
 
 /-!
 # The outward normal and the local boundary chart of a smooth domain
@@ -37,6 +39,8 @@ that assumes `x₀ ∈ frontier U.carrier` is vacuous there.  Nothing in this mo
 `Nontrivial V`; where nondegeneracy is needed it is *derived* from the frontier point, through
 `‖outwardNormal x₀‖ = 1`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -204,7 +208,7 @@ theorem outwardNormal_eq (U : SmoothDomain V) {x : V} (hx : x ∈ frontier U.car
     rw [hgrad, norm_smul, Real.norm_eq_abs, abs_of_pos hlam, smul_smul]
     congr 1
     field_simp
-  rw [outwardNormal, dif_pos hx]
+  rw [outwardNormal, dite_eq_left hx]
   obtain ⟨h1, h2, h3, h4, h5⟩ := (U.exists_defining x hx).choose_spec.choose_spec
   exact key _ _ h1 h2 h3 h4 h5
 
@@ -215,7 +219,7 @@ theorem norm_outwardNormal (U : SmoothDomain V) {x : V} (hx : x ∈ frontier U.c
   obtain ⟨-, hxW, -, hφ', -⟩ := (U.exists_defining x hx).choose_spec.choose_spec
   have hne : gradient (U.exists_defining x hx).choose_spec.choose x ≠ 0 := fun h =>
     hφ' x hxW (by rw [← toDual_gradient (𝕜 := ℝ), h, map_zero])
-  rw [outwardNormal, dif_pos hx, norm_smul, norm_inv, norm_norm,
+  rw [outwardNormal, dite_eq_left hx, norm_smul, norm_inv, norm_norm,
     inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)]
 
 /-- The outward unit normal is continuous on the frontier. Its zero extension need not be
@@ -257,7 +261,7 @@ theorem measurable_outwardNormal (U : SmoothDomain V) :
     funext x
     by_cases hx : x ∈ frontier U.carrier
     · rw [Set.piecewise_eq_of_mem _ _ _ hx]
-    · rw [Set.piecewise_eq_of_notMem _ _ _ hx, outwardNormal, dif_neg hx]
+    · rw [Set.piecewise_eq_of_notMem _ _ _ hx, outwardNormal, dite_eq_right hx]
   rw [hpw]
   exact U.continuousOn_outwardNormal.measurable_piecewise continuousOn_const
     isClosed_frontier.measurableSet

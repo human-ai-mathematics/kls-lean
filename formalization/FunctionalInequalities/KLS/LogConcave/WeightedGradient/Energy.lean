@@ -1,6 +1,8 @@
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Closure
-import FunctionalInequalities.Energy.Cheeger.Identification
-import FunctionalInequalities.Energy.SmoothGradient.Core
+module
+
+public import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Closure
+public import FunctionalInequalities.Energy.Cheeger.Identification
+public import FunctionalInequalities.Energy.SmoothGradient.Core
 
 /-!
 # The unit-weight log-concave gradient generates the canonical energy
@@ -10,6 +12,8 @@ unit-weight gradient is the smooth-gradient relaxation, hence twice the selected
 This is the normalization bridge used by the heat-semigroup route: it does not identify a
 differential expression for the generator and proves no Bakry--Émery estimate.
 -/
+
+@[expose] public section
 
 noncomputable section
 

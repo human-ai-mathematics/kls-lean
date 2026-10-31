@@ -1,7 +1,9 @@
-import FunctionalInequalities.Probability.Gaussian.Moments
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
-import Mathlib.Analysis.Complex.ExponentialBounds
-import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
+module
+
+public import FunctionalInequalities.Probability.Gaussian.Moments
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
+public import Mathlib.Analysis.Complex.ExponentialBounds
+public import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 
 /-!
 # Nonvacuity of BKL Theorem 3.1: the standard Gaussian on `ℝ¹`
@@ -54,8 +56,11 @@ is dimension-dependent, and no dimension-free instance of (29) is claimed. The w
 nonvacuity check of the hypotheses of Theorem 3.1; it gives no new information on the Gaussian
 (whose Poincaré constant is `1` by Bakry–Émery) and is not a step towards the KLS bound.
 
-The concrete witness instantiates `RegularPotential` and uses `KLS/LogConcave/Regular/Basic.lean` and `KLS/BKL/PoissonIterate/Criterion.lean`.
+The concrete witness instantiates `RegularPotential` and uses `KLS/LogConcave/Regular/Basic.lean`
+and `KLS/BKL/PoissonIterate/Criterion.lean`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -235,7 +240,7 @@ theorem norm_iteratedFDeriv_exp_neg_half_norm_sq_le (j : ℕ) :
       ContinuousMultilinearMap.norm_compContinuousLinearMap_le _ _
     _ ≤ ‖iteratedFDeriv ℝ j (fun t : ℝ => Real.exp (-(t ^ 2 / 2))) 0‖ * 1 := by
       gcongr
-      exact Finset.prod_le_one (fun _ _ => norm_nonneg _) (fun _ _ => hL)
+      exact Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) (fun _ _ => hL)
     _ ≤ j ! := by
       rw [mul_one, norm_iteratedFDeriv_eq_norm_iteratedDeriv, Real.norm_eq_abs]
       exact abs_iteratedDeriv_gaussian_zero_le j
@@ -248,8 +253,8 @@ theorem integral_exp_two_mul_norm_tilted_half_norm_sq_le : ∫ x, Real.exp (2 * 
   have hV := regularPotential_half_norm_sq (E := ℝ¹)
   have hint₁ := integrable_exp_inner_tilted_half_norm_sq ((2 : ℝ) • e)
   have hint₂ := integrable_exp_inner_tilted_half_norm_sq (-((2 : ℝ) • e))
-  have hpt (x : ℝ¹) : Real.exp (2 * ‖x‖) ≤
-      Real.exp ⟪(2 : ℝ) • e, x⟫ + Real.exp ⟪-((2 : ℝ) • e), x⟫ := by
+  have hpt (x : ℝ¹) :
+    Real.exp (2 * ‖x‖) ≤ Real.exp ⟪(2 : ℝ) • e, x⟫ + Real.exp ⟪-((2 : ℝ) • e), x⟫ := by
     rw [norm_eq_abs_inner_basisFun x, inner_neg_left, real_inner_smul_left]
     rcases abs_cases ⟪e, x⟫ with ⟨h, _⟩ | ⟨h, _⟩ <;> rw [h]
     · linarith [Real.exp_pos (-(2 * ⟪e, x⟫))]
@@ -329,7 +334,7 @@ private theorem integral_exp_mul_norm_le_cauchy_schwarz {f : ℝ¹ → ℝ} (hf 
         ‖hw.toLp (fun x => Real.exp (1 * ‖x‖))‖ *
           ‖hf.norm.toLp (fun x => ‖f x‖)‖ := real_inner_le_norm _ _
     _ = (eLpNorm (fun x : ℝ¹ => Real.exp (1 * ‖x‖)) 2 γ₁).toReal * (eLpNorm f 2 γ₁).toReal := by
-      rw [Lp.norm_toLp, Lp.norm_toLp, eLpNorm_norm]
+      rw [Lp.norm_toLp, Lp.norm_toLp, eLpNorm_norm f hf.aestronglyMeasurable]
     _ ≤ 4 * (eLpNorm f 2 γ₁).toReal := by
       gcongr
       exact eLpNorm_exp_norm_le
@@ -357,7 +362,7 @@ theorem norm_iteratedFDeriv_integral_exp_inner_smul_tilted_half_norm_sq_le {f : 
     calc
       ‖∏ j, ⟪x, h j⟫‖ = ∏ j, ‖⟪x, h j⟫‖ := norm_prod _ _
       _ ≤ ∏ j, (‖x‖ * ‖h j‖) :=
-        Finset.prod_le_prod (fun _ _ => norm_nonneg _) (fun j _ => norm_inner_le_norm x (h j))
+        Finset.prod_le_prod₀ (fun _ _ => norm_nonneg _) (fun j _ => norm_inner_le_norm x (h j))
       _ = ‖x‖ ^ k * ∏ j, ‖h j‖ := by
         rw [Finset.prod_mul_distrib, Finset.prod_const, Finset.card_univ, Fintype.card_fin]
       _ ≤ k ! * Real.exp (1 * ‖x‖) * ∏ j, ‖h j‖ := by gcongr

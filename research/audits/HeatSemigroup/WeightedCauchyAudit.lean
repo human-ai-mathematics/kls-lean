@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate.GaussianProfile
 
 /-! Independent full-signature clients for weighted heat Cauchy-Schwarz and dissipation. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 set_option maxHeartbeats 800000
@@ -69,36 +73,40 @@ theorem gaussian (hνU : (ν : Measure V) = m.tilted (-U))
         WeakGamma.apply (T ⟨_, H.2.2⟩) (T ⟨_, H.2.2⟩) x ≤ P s a x * P s z x :=
   ae_gradient_sq_le_operator_profile_mul m hν hi hνU hU hconv hε hε' f hf hs hst
 
-theorem differential {β : V → ℝ} {C : ℝ}
-    (hβ : AEStronglyMeasurable β (ν : Measure V))
-    (hC : ∀ᵐ x ∂(ν : Measure V), |β x| ≤ C)
-    (hβ0 : ∀ᵐ x ∂(ν : Measure V), 0 ≤ β x)
-    (hνU : (ν : Measure V) = m.tilted (-U))
-    (hU : ContDiff ℝ ∞ U) (hconv : ConvexOn ℝ Set.univ U)
-    {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
-    (f : Lp ℝ 2 (ν : Measure V))
-    (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) (1 - 2 * ε))
+theorem differential {β : V → ℝ} {C : ℝ} (hβ : AEStronglyMeasurable β (ν : Measure V))
+    (hC : ∀ᵐ x ∂(ν : Measure V), |β x| ≤ C) (hβ0 : ∀ᵐ x ∂(ν : Measure V), 0 ≤ β x)
+    (hνU : (ν : Measure V) = m.tilted (-U)) (hU : ContDiff ℝ ∞ U)
+    (hconv : ConvexOn ℝ Set.univ U) {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1 / 2)
+    (f : Lp ℝ 2 (ν : Measure V)) (hf : ∀ᵐ x ∂(ν : Measure V), f x ∈ Icc (0 : ℝ) (1 - 2 * ε))
     {s t : ℝ} (hs : 0 < s) (hst : s < t) :
     let T := hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi
-    let P := Generated.apply T (hν.closedWeightedOperator_isClosed m _ hi)
-      (hν.dense_domain_closedWeightedOperator m _ hi)
+    let P :=
+      Generated.apply T (hν.closedWeightedOperator_isClosed m _ hi)
+        (hν.dense_domain_closedWeightedOperator m _ hi)
     let F : (adjointComp T).domain :=
-      ⟨P (t - s) f, Generated.mem_adjointComp_domain_apply_of_pos T
-        (hν.closedWeightedOperator_isClosed m _ hi) (hν.dense_domain_closedWeightedOperator m _ hi)
-        f (sub_pos.mpr hst)⟩
+      ⟨P (t - s) f,
+        Generated.mem_adjointComp_domain_apply_of_pos T
+          (hν.closedWeightedOperator_isClosed m _ hi)
+          (hν.dense_domain_closedWeightedOperator m _ hi) f (sub_pos.mpr hst)⟩
     let H : (adjointComp T).domain :=
-      ⟨P t f, Generated.mem_adjointComp_domain_apply_of_pos T
-        (hν.closedWeightedOperator_isClosed m _ hi) (hν.dense_domain_closedWeightedOperator m _ hi)
-        f (hs.trans hst)⟩
-    ∃ G : ℝ → Lp ℝ 2 (ν : Measure V), ∃ z : Lp ℝ 2 (ν : Measure V),
-      (∀ r : ℝ, r < t → ∀ᵐ x ∂(ν : Measure V), G r x = profile (P (t - r) f x + ε)) ∧
-      (∀ᵐ x ∂(ν : Measure V), z x = (profile (P (t - s) f x + ε))⁻¹ *
-        WeakGamma.apply (T ⟨_, F.2.2⟩) (T ⟨_, F.2.2⟩) x) ∧
-      HasDerivAt (fun r ↦ ∫ x, β x * (P r (G r) x) ^ 2 ∂(ν : Measure V))
-        (-2 * ∫ x, β x * P s (G s) x * P s z x ∂(ν : Measure V)) s ∧
-      (-2 * ∫ x, β x * P s (G s) x * P s z x ∂(ν : Measure V)) ≤
-        -2 * ∫ x, β x * WeakGamma.apply (T ⟨_, H.2.2⟩) (T ⟨_, H.2.2⟩) x ∂(ν : Measure V) :=
-  exists_hasDerivAt_integral_operator_profile_sq_le m hν hi hβ hC hβ0 hνU hU hconv hε hε' f hf hs hst
+      ⟨P t f,
+        Generated.mem_adjointComp_domain_apply_of_pos T
+          (hν.closedWeightedOperator_isClosed m _ hi)
+          (hν.dense_domain_closedWeightedOperator m _ hi) f (hs.trans hst)⟩
+    ∃ G : ℝ → Lp ℝ 2 (ν : Measure V),
+      ∃ z : Lp ℝ 2 (ν : Measure V),
+        (∀ r : ℝ, r < t → ∀ᵐ x ∂(ν : Measure V), G r x = profile (P (t - r) f x + ε)) ∧
+          (∀ᵐ x ∂(ν : Measure V),
+              z x =
+                (profile (P (t - s) f x + ε))⁻¹ *
+                  WeakGamma.apply (T ⟨_, F.2.2⟩) (T ⟨_, F.2.2⟩) x) ∧
+            HasDerivAt (fun r ↦ ∫ x, β x * (P r (G r) x) ^ 2 ∂(ν : Measure V))
+                (-2 * ∫ x, β x * P s (G s) x * P s z x ∂(ν : Measure V)) s ∧
+              (-2 * ∫ x, β x * P s (G s) x * P s z x ∂(ν : Measure V)) ≤
+                -2 *
+                  ∫ x, β x * WeakGamma.apply (T ⟨_, H.2.2⟩) (T ⟨_, H.2.2⟩) x ∂(ν : Measure V) :=
+  exists_hasDerivAt_integral_operator_profile_sq_le m hν hi hβ hC hβ0 hνU hU hconv hε hε' f hf
+    hs hst
 
 end HeatWeightedCauchyAudit
 

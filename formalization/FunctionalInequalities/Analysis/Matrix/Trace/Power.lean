@@ -1,13 +1,17 @@
-import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Algebra.Order.Chebyshev
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Tactic.NoncommRing
+module
+
+public import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+public import Mathlib.Analysis.Matrix.PosDef
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Algebra.Order.Chebyshev
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Tactic.NoncommRing
 
 /-!
 # Trace inequalities for real spectral powers
 -/
+
+@[expose] public section
 
 open Matrix
 

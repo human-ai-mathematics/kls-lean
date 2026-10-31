@@ -1,10 +1,14 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Strict clients for the actual lower-content relaxation at measurable finite-mass
 targets under measures finite on bounded Borel sets. All convergence is global indicator
 L1. The recovery client exposes bounded sets, finite masses, finite contents and the actual
 limits. A convergent sequence may have an infinite-mass finite prefix. Neither the upper
 endpoint nor the intervening radius-liminf coarea chain is asserted. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -101,13 +105,20 @@ theorem infinitePrefix :
     by_cases hn : n = 0
     · simp [intervalWithInfinitePrefix, hn]
     · simp [intervalWithInfinitePrefix, hn]
-  have hconv : Tendsto (fun n => ∫⁻ x, ‖(intervalWithInfinitePrefix n).indicator (1 : ℝ → ℝ) x -
-      (Set.Icc (0 : ℝ) 1).indicator 1 x‖ₑ ∂volume) atTop (𝓝 0) := by
+  have hconv :
+    Tendsto
+      (fun n =>
+        ∫⁻ x,
+          ‖(intervalWithInfinitePrefix n).indicator (1 : ℝ → ℝ) x -
+              (Set.Icc (0 : ℝ) 1).indicator 1 x‖ₑ ∂volume)
+      atTop (𝓝 0) := by
     apply tendsto_const_nhds.congr'
     filter_upwards [eventually_gt_atTop (0 : ℕ)] with n hn
     simp [intervalWithInfinitePrefix, hn.ne']
-  exact ⟨by simp [intervalWithInfinitePrefix],
-    perimeter_le_liminf_minkowskiContent_of_measure_lt_top volume measurableSet_Icc (by simp) hA hconv⟩
+  exact
+    ⟨by simp [intervalWithInfinitePrefix],
+      perimeter_le_liminf_minkowskiContent_of_measure_lt_top volume measurableSet_Icc (by simp)
+        hA hconv⟩
 
 theorem zeroMeasure {B : Set X} (hB : MeasurableSet B) :
     relaxedMinkowskiContent (0 : Measure X) B = 0 := nullTarget 0 (by simp) hB (by simp)

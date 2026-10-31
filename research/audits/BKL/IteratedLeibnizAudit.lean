@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
-import FunctionalInequalities.Probability.Line.AffineProfile
-import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
+public import FunctionalInequalities.Probability.Line.AffineProfile
+public import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
 
 /-!
 # Audit: raw Leibniz allocations and permutation symmetry of iterated derivatives
@@ -12,6 +14,8 @@ factorial); the unit-uniform law on `[0, 1]` is a genuine compact noncentred law
 `1/12` whose actual scalar cumulants inherit real `C^∞` permutation symmetry. No (74) drift,
 parameter jet or stochastic statement is involved.
 -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory

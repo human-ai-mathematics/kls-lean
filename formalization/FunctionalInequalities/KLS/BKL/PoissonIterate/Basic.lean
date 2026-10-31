@@ -1,7 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
-import FunctionalInequalities.Analysis.Tensor.Coefficients
-import FunctionalInequalities.Analysis.Tensor.Symmetrization
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SpectralGap.Inverse
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
+public import FunctionalInequalities.Analysis.Tensor.Coefficients
+public import FunctionalInequalities.Analysis.Tensor.Symmetrization
 
 /-!
 # The Poisson iterates of BKL Section 3 in `L²`
@@ -19,12 +21,15 @@ properties (beyond `normSq_nonneg`) are proved in the sibling modules.
   `Fin k → Fin n` with `n = finrank ℝ V` and the fixed orthonormal basis `stdOrthonormalBasis ℝ V`.
   Its squared norm `normSq` is the squared Hilbert–Schmidt `L²` norm `Σ_I ‖u_I‖²`.
 * Differentiation adds a new **first** index: `(gradField u) (Fin.cons j I) = ∂_j (u I)`.
-* The operators are total: `weakGrad`, `gen` and `centeredInv` are `T`, `T†T` and the centered inverse of
+* The operators are total: `weakGrad`, `gen` and `centeredInv` are `T`, `T†T` and the centered
+  inverse of
   `T†T` on their domains and `0` elsewhere, so definitions need no domain proofs. Statements about
   them carry the domain facts as theorems.
 * Indices are shifted by one against the source: `iter T f k` is the source's `h_{k+1}`, a field
   with `k` indices, and `scale T (iter T f k)` is `α_{k+2}`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

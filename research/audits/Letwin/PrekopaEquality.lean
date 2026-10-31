@@ -1,6 +1,10 @@
-import FunctionalInequalities.Probability.Line.PrekopaEquality
+module
+
+public import FunctionalInequalities.Probability.Line.PrekopaEquality
 
 /-! Client of the equality case of the midpoint Prekopa--Leindler inequality on the line. -/
+
+@[expose] public section
 noncomputable section
 namespace LetwinPrekopaEqualityAudit
 open MeasureTheory FunctionalInequalities.Probability.Line

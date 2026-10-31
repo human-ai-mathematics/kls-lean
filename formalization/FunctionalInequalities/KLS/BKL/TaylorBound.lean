@@ -1,13 +1,15 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Density
-import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
-import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
-import FunctionalInequalities.KLS.BKL.Suspension.Moments
-import FunctionalInequalities.KLS.LogConcave.Regular.Basic
-import Mathlib.Analysis.Normed.Lp.SmoothApprox
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
-import FunctionalInequalities.L2.AffineDecomposition
-import FunctionalInequalities.KLS.BKL.Suspension.Law
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Density
+public import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
+public import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
+public import FunctionalInequalities.KLS.BKL.Suspension.Moments
+public import FunctionalInequalities.KLS.LogConcave.Regular.Basic
+public import Mathlib.Analysis.Normed.Lp.SmoothApprox
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
+public import FunctionalInequalities.L2.AffineDecomposition
+public import FunctionalInequalities.KLS.BKL.Suspension.Law
 
 /-!
 # BKL Proposition 7.1: the Taylor-coefficient bound from cumulant bounds
@@ -16,13 +18,16 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Proposition 7.1, pp. 28–30. Und
 `CumulantBound d b` (`R^ν_{d+1} ≤ b Id` for every isotropic log-concave `ν` in every dimension),
 every isotropic regular law `μ` satisfies (113), `|T_d f|² ≤ b/(d!)²`, for `f ∈ C² ∩ L²(μ)` with
 bounded Hessian normalized by (108) — proved through the suspension `(S, X₁, …, X_N)` with `N`
-chosen by (110) for each `β`, then `β → ∞`. Then (113) extends by density to every `f ∈ L²(μ)` orthogonal to the affine
+chosen by (110) for each `β`, then `β → ∞`. Then (113) extends by density to every `f ∈ L²(μ)`
+orthogonal to the affine
 functions (`norm_coordTensor_taylorTensor_sq_le_of_orthogonal`). Finally the assembly (107),
 `norm_coordTensor_taylorTensor_sq_le_two_mul`, is Proposition 7.1 in the source form (conditional on
 its hypothesis `CumulantBound`). Nothing here is Theorem 4.1 or Theorem 1.1.
 
 The proof uses the law, density, cumulant, moment and derivative interfaces of `Suspension/`.
 -/
+
+@[expose] public section
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Analysis.Tensor
@@ -44,15 +49,16 @@ private theorem source_energy_bound_of_sigma_bounds {T b : ℝ} {d : ℕ} (hb : 
   by_contra hnot
   have hgap : 0 < T - α := sub_pos.mpr (lt_of_not_ge hnot)
   let β : ℝ := Real.sqrt (4 * α / (T - α))
-  have hratio : 0 < 4 * α / (T - α) := by change 0 < 4 * (b / (d.factorial : ℝ) ^ 2) / (T - α); positivity
+  have hratio : 0 < 4 * α / (T - α) := by
+    change 0 < 4 * (b / (d.factorial : ℝ) ^ 2) / (T - α);
+    positivity
   have hβ : 0 < β := Real.sqrt_pos.mpr hratio
   have hβsq : β ^ 2 = 4 * α / (T - α) := Real.sq_sqrt hratio.le
   have hproduct : β ^ 2 * (T - α) = 4 * α := (eq_div_iff hgap.ne').mp hβsq
   have hextra : 2 * α / β ^ 2 < T - α := by
     apply (div_lt_iff₀ (pow_pos hβ 2)).2
     nlinarith [hproduct]
-  have hbβ : T ≤ sigma β ^ 2 * α := by
-    simpa only [α, mul_div_assoc] using hβbound β hβ
+  have hbβ : T ≤ sigma β ^ 2 * α := by simpa only [α, mul_div_assoc] using hβbound β hβ
   rw [sigma_sq hβ] at hbβ
   have heq : (1 + 2 / β ^ 2) * α = α + 2 * α / β ^ 2 := by ring
   rw [heq] at hbβ
@@ -64,46 +70,56 @@ private theorem taylor_energy_le_sigma_sq_mul_cumulant_bound {d : ℕ} (hd : 1 �
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} {M : ℝ} (hf : ContDiff ℝ 2 f)
     (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (hf2 : MemLp f 2 (hV.law : Measure _))
-    (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0)
-    (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
+    (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0) (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) {β : ℝ} (hβ : 0 < β) :
-    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
+    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^
+        2 ≤
       sigma β ^ 2 * b / (d.factorial : ℝ) ^ 2 := by
   classical
   have hM : 0 ≤ M := (norm_nonneg (fderiv ℝ (fderiv ℝ f) 0)).trans (hfM 0)
   obtain ⟨N, hN, h110⟩ := exists_copies hV.pos hβ.le hM
   let ν : ProbabilityMeasure (JointSpace N n) :=
     ⟨jointLaw (hV.law : Measure _) f β (sigma β) N,
-      isProbabilityMeasure_jointLaw_of_pos (hV.law : Measure _) hf.continuous.measurable hβ (sigma β) N⟩
-  have hisoν : KLS.Isotropic ν := isotropic_jointLaw hN (hV.law : Measure _)
-    hiso.memLp_two hiso.mean_zero hiso.integral_inner_mul_inner
-    hf.continuous.measurable hf2 hf0 hf1 hfx hβ
+      isProbabilityMeasure_jointLaw_of_pos (hV.law : Measure _) hf.continuous.measurable hβ
+        (sigma β) N⟩
+  have hisoν : KLS.Isotropic ν :=
+    isotropic_jointLaw hN (hV.law : Measure _) hiso.memLp_two hiso.mean_zero
+      hiso.integral_inner_mul_inner hf.continuous.measurable hf2 hf0 hf1 hfx hβ
   have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hlcν : KLS.LogConcave ν := logConcave_jointLaw V f hβ hV2 hf
-    hV.lower hfM h110 hV.integrable_exp_neg ν.prop
+  have hlcν : KLS.LogConcave ν :=
+    logConcave_jointLaw V f hβ hV2 hf hV.lower hfM h110 hV.integrable_exp_neg ν.prop
   have hhigh := cumulantBound_jointSpace hcb hisoν hlcν (EuclideanSpace.single none 1)
-  have hhigh' : (∑ K : Fin d → Option (Fin N × Fin n),
-      cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
-        (Fin.cons (EuclideanSpace.single none 1) fun k => EuclideanSpace.single (K k) 1) ^ 2) ≤ b := by
-    simpa only [ν, ProbabilityMeasure.coe_mk, EuclideanSpace.basisFun_apply, PiLp.norm_single, norm_one,
-      one_pow, mul_one] using hhigh
+  have hhigh' :
+    (∑ K : Fin d → Option (Fin N × Fin n),
+        cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
+            (Fin.cons (EuclideanSpace.single none 1) fun k => EuclideanSpace.single (K k) 1) ^
+          2) ≤
+      b := by
+    simpa only [ν, ProbabilityMeasure.coe_mk, EuclideanSpace.basisFun_apply, PiLp.norm_single,
+      norm_one, one_pow, mul_one] using hhigh
   have hσ : 0 < sigma β := Real.sqrt_pos.mpr (by positivity)
-  have hlow := sum_sq_cumulant_ge_of_entries hN
-    (jointLaw (hV.law : Measure _) f β (sigma β) N) (hV.law : Measure _) f hσ hd
-    (fun I J => cumulant_jointLaw_none_entries hN V hV hβ hf hfM h110 hd I J)
+  have hlow :=
+    sum_sq_cumulant_ge_of_entries hN (jointLaw (hV.law : Measure _) f β (sigma β) N)
+      (hV.law : Measure _) f hσ hd
+      (fun I J => cumulant_jointLaw_none_entries hN V hV hβ hf hfM h110 hd I J)
   have hbound := hlow.trans hhigh'
   have hfac : 0 < (d.factorial : ℝ) ^ 2 := by positivity
   have hσsq : 0 < sigma β ^ 2 := pow_pos hσ 2
-  have hbound' : (d.factorial : ℝ) ^ 2 *
-      ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
-        (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤ b * sigma β ^ 2 := by
+  have hbound' :
+    (d.factorial : ℝ) ^ 2 *
+        ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
+              (taylorTensor (hV.law : Measure _) f d)‖ ^
+          2 ≤
+      b * sigma β ^ 2 := by
     apply (div_le_iff₀ hσsq).mp
     simpa only [div_mul_eq_mul_div] using hbound
   apply (le_div_iff₀ hfac).mpr
   nlinarith only [hbound']
 
-/-- **BKL (113) for `f ∈ C²` with bounded Hessian satisfying (108)**: under `CumulantBound d b`, for an
-isotropic regular law, `|T_d f|² ≤ b/(d!)²`. For each `β > 0` a copy number `N` is chosen by (110); the
+/--
+**BKL (113) for `f ∈ C²` with bounded Hessian satisfying (108)**: under `CumulantBound d b`, for an
+isotropic regular law, `|T_d f|² ≤ b/(d!)²`. For each `β > 0` a copy number `N` is chosen by (110);
+the
 joint law is isotropic and log-concave, (112) and the Hilbert–Schmidt step give
 `(d!)²/σ_β² |T_d f|² ≤ b`, and `β → ∞`. -/
 theorem norm_coordTensor_taylorTensor_sq_le_of_cumulantBound {d : ℕ} (hd : 2 ≤ d) {b : ℝ}
@@ -111,14 +127,16 @@ theorem norm_coordTensor_taylorTensor_sq_le_of_cumulantBound {d : ℕ} (hd : 2 �
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} {M : ℝ} (hf : ContDiff ℝ 2 f)
     (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (hf2 : MemLp f 2 (hV.law : Measure _))
-    (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0)
-    (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
+    (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0) (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) :
-    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
+    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^
+        2 ≤
       b / (d.factorial : ℝ) ^ 2 := by
   apply source_energy_bound_of_sigma_bounds hb hd
   intro β hβ
-  exact taylor_energy_le_sigma_sq_mul_cumulant_bound (by omega) hcb V hV hiso hf hfM hf2 hf0 hf1 hfx hβ
+  exact
+    taylor_energy_le_sigma_sq_mul_cumulant_bound (by omega) hcb V hV hiso hf hfM hf2 hf0 hf1 hfx
+      hβ
 
 /-! ### The density step (BKL p. 30) -/
 
@@ -306,7 +324,7 @@ private theorem norm_error_le (μ : Measure A)
     simpa only [ENNReal.toReal_ofReal hε] using
       (ENNReal.toReal_le_toReal hfg.eLpNorm_ne_top ENNReal.ofReal_ne_top).2 happrox
   refine ⟨herr, ?_⟩
-  have htri := eLpNorm_sub_le hf.aestronglyMeasurable hfg.aestronglyMeasurable one_le_two
+  have htri := eLpNorm_sub_le (f := f) (g := f - g) (μ := μ) one_le_two
   have heq : f - (f - g) = g := by funext x; simp
   rw [heq] at htri
   have ht := (ENNReal.toReal_le_toReal hg.eLpNorm_ne_top
@@ -382,38 +400,45 @@ private theorem smooth_homogeneous_bound {n d : ℕ}
     rw [hnormscale, div_pow] at hqbound
     exact (div_le_iff₀ (sq_pos_of_pos hs)).1 hqbound
 
-/-- Exact source affine-orthogonal density extension endpoint: the normalized smooth estimate extends to the full affine-
+/--
+Exact source affine-orthogonal density extension endpoint: the normalized smooth estimate extends to
+the full affine-
 orthogonal L2 subspace by actual smooth bounded-Hessian density and actual Taylor continuity. -/
 theorem norm_coordTensor_taylorTensor_sq_le_of_smooth {d : ℕ} {b : ℝ} (hb : 0 ≤ b) {n : ℕ}
     (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ} (hV : KLS.RegularPotential V a b')
     (hiso : KLS.Isotropic hV.law)
-    (h113 : ∀ g : EuclideanSpace ℝ (Fin n) → ℝ, ContDiff ℝ 2 g →
-      (∃ M : ℝ, ∀ x, ‖fderiv ℝ (fderiv ℝ g) x‖ ≤ M) → MemLp g 2 (hV.law : Measure _) →
-      ∫ x, g x ∂(hV.law : Measure _) = 0 →
-      ∫ x, g x ^ 2 ∂(hV.law : Measure _) = 1 →
-      (∀ u, ∫ x, ⟪u, x⟫ * g x ∂(hV.law : Measure _) = 0) →
-      ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) g d)‖ ^ 2 ≤
-        b / (d.factorial : ℝ) ^ 2)
+    (h113 :
+      ∀ g : EuclideanSpace ℝ (Fin n) → ℝ,
+        ContDiff ℝ 2 g →
+          (∃ M : ℝ, ∀ x, ‖fderiv ℝ (fderiv ℝ g) x‖ ≤ M) →
+            MemLp g 2 (hV.law : Measure _) →
+              ∫ x, g x ∂(hV.law : Measure _) = 0 →
+                ∫ x, g x ^ 2 ∂(hV.law : Measure _) = 1 →
+                  (∀ u, ∫ x, ⟪u, x⟫ * g x ∂(hV.law : Measure _) = 0) →
+                    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
+                            (taylorTensor (hV.law : Measure _) g d)‖ ^
+                        2 ≤
+                      b / (d.factorial : ℝ) ^ 2)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : MemLp f 2 (hV.law : Measure _))
     (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0)
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) :
-    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
+    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^
+        2 ≤
       b / (d.factorial : ℝ) ^ 2 * (eLpNorm f 2 (hV.law : Measure _)).toReal ^ 2 := by
   let μ : Measure (EuclideanSpace ℝ (Fin n)) := hV.law
   let B : ℝ := b / (d.factorial : ℝ) ^ 2
-  let A : (EuclideanSpace ℝ (Fin n) → ℝ) → Coord n d :=
-    fun g => coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor μ g d)
+  let A : (EuclideanSpace ℝ (Fin n) → ℝ) → Coord n d := fun g =>
+    coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor μ g d)
   have hB : 0 ≤ B := div_nonneg hb (sq_nonneg _)
   have hroot : 0 ≤ Real.sqrt B := Real.sqrt_nonneg _
   have hrootsq : Real.sqrt B ^ 2 = B := Real.sq_sqrt hB
-  have hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ :=
-    hV.integrable_exp_mul_norm
-  obtain ⟨C, hC⟩ := exists_norm_coordTensor_taylorTensor_le μ hexp
-    (EuclideanSpace.basisFun (Fin n) ℝ) d
+  have hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ := hV.integrable_exp_mul_norm
+  obtain ⟨C, hC⟩ :=
+    exists_norm_coordTensor_taylorTensor_le μ hexp (EuclideanSpace.basisFun (Fin n) ℝ) d
   let C0 : ℝ := max C 0
   have hC0 : 0 ≤ C0 := le_max_right C 0
   have hcont (g : EuclideanSpace ℝ (Fin n) → ℝ) (hg : MemLp g 2 μ) :
-      ‖A g‖ ≤ C0 * (eLpNorm g 2 μ).toReal :=
+    ‖A g‖ ≤ C0 * (eLpNorm g 2 μ).toReal :=
     (hC g hg).trans (mul_le_mul_of_nonneg_right (le_max_left C 0) ENNReal.toReal_nonneg)
   have hnorm : ‖A f‖ ≤ Real.sqrt B * (eLpNorm f 2 μ).toReal := by
     apply le_of_forall_pos_le_add
@@ -426,16 +451,16 @@ theorem norm_coordTensor_taylorTensor_sq_le_of_smooth {d : ℕ} {b : ℝ} (hb : 
     have hεeq : ε * (K + 1) = η := (div_mul_cancel₀ _ hden.ne')
     have hKε : K * ε ≤ η := by nlinarith [hε.le]
     obtain ⟨g, hgSmooth, hgM, hg2, hg0, hgorth, happrox⟩ :=
-      exists_smooth_bounded_hessian_approx μ
-        hiso.memLp_two hiso.mean_zero hiso.integral_inner_mul_inner hf hf0 hfx hε
+      exists_smooth_bounded_hessian_approx μ hiso.memLp_two hiso.mean_zero
+        hiso.integral_inner_mul_inner hf hf0 hfx hε
     obtain ⟨herr, hgnorm⟩ := norm_error_le μ hf hg2 hε.le happrox
     have hgBound : ‖A g‖ ^ 2 ≤ B * (eLpNorm g 2 μ).toReal ^ 2 :=
       smooth_homogeneous_bound μ hexp B h113 hgSmooth hgM hg2 hg0 hgorth
     have hgBoundNorm : ‖A g‖ ≤ Real.sqrt B * (eLpNorm g 2 μ).toReal := by
       have hrnonneg : 0 ≤ Real.sqrt B * (eLpNorm g 2 μ).toReal :=
         mul_nonneg hroot ENNReal.toReal_nonneg
-      have hsq : (Real.sqrt B * (eLpNorm g 2 μ).toReal) ^ 2 =
-          B * (eLpNorm g 2 μ).toReal ^ 2 := by rw [mul_pow, hrootsq]
+      have hsq : (Real.sqrt B * (eLpNorm g 2 μ).toReal) ^ 2 = B * (eLpNorm g 2 μ).toReal ^ 2 := by
+        rw [mul_pow, hrootsq]
       nlinarith [sq_nonneg (‖A g‖ - Real.sqrt B * (eLpNorm g 2 μ).toReal), norm_nonneg (A g)]
     have hfg2 : MemLp (f - g) 2 μ := hf.sub hg2
     have heq : (fun x => (f - g) x + g x) = f := by funext x; simp
@@ -453,24 +478,27 @@ theorem norm_coordTensor_taylorTensor_sq_le_of_smooth {d : ℕ} {b : ℝ} (hb : 
       _ = Real.sqrt B * (eLpNorm f 2 μ).toReal + K * ε := by dsimp [K]; ring
       _ ≤ Real.sqrt B * (eLpNorm f 2 μ).toReal + η := add_le_add le_rfl hKε
   change ‖A f‖ ^ 2 ≤ B * (eLpNorm f 2 μ).toReal ^ 2
-  have hsq : (Real.sqrt B * (eLpNorm f 2 μ).toReal) ^ 2 =
-      B * (eLpNorm f 2 μ).toReal ^ 2 := by rw [mul_pow, hrootsq]
+  have hsq : (Real.sqrt B * (eLpNorm f 2 μ).toReal) ^ 2 = B * (eLpNorm f 2 μ).toReal ^ 2 := by
+    rw [mul_pow, hrootsq]
   nlinarith [norm_nonneg (A f), mul_nonneg hroot (ENNReal.toReal_nonneg (a := eLpNorm f 2 μ))]
 
 
-/-- **BKL (113) for every `f ∈ L²(μ)` orthogonal to the affine functions**, under `CumulantBound d b`:
+/--
+**BKL (113) for every `f ∈ L²(μ)` orthogonal to the affine functions**, under `CumulantBound d b`:
 the smooth case `norm_coordTensor_taylorTensor_sq_le_of_cumulantBound` extended by density. -/
-theorem norm_coordTensor_taylorTensor_sq_le_of_orthogonal {d : ℕ} (hd : 2 ≤ d) {b : ℝ} (hb : 0 < b)
-    (hcb : CumulantBound d b) {n : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
+theorem norm_coordTensor_taylorTensor_sq_le_of_orthogonal {d : ℕ} (hd : 2 ≤ d) {b : ℝ}
+    (hb : 0 < b) (hcb : CumulantBound d b) {n : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : MemLp f 2 (hV.law : Measure _))
     (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0)
     (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) :
-    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
+    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^
+        2 ≤
       b / (d.factorial : ℝ) ^ 2 * (eLpNorm f 2 (hV.law : Measure _)).toReal ^ 2 :=
   norm_coordTensor_taylorTensor_sq_le_of_smooth hb.le V hV hiso
     (fun _g hg ⟨_M, hM⟩ hg2 hg0 hg1 hgx =>
-      norm_coordTensor_taylorTensor_sq_le_of_cumulantBound hd hb hcb V hV hiso hg hM hg2 hg0 hg1 hgx)
+      norm_coordTensor_taylorTensor_sq_le_of_cumulantBound hd hb hcb V hV hiso hg hM hg2 hg0 hg1
+        hgx)
     hf hf0 hfx
 
 /-! ### The assembly (107) -/
@@ -504,7 +532,8 @@ theorem norm_coordTensor_taylorTensor_sq_le_two_mul {d : ℕ} (hd : 2 ≤ d) {b 
     (hcb : CumulantBound d b) {n : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
     (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : MemLp f 2 (hV.law : Measure _)) :
-    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^ 2 ≤
+    ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ) (taylorTensor (hV.law : Measure _) f d)‖ ^
+        2 ≤
       2 * b / (d.factorial : ℝ) ^ 2 * (eLpNorm f 2 (hV.law : Measure _)).toReal ^ 2 := by
   classical
   let μ : Measure (EuclideanSpace ℝ (Fin n)) := hV.law
@@ -514,15 +543,16 @@ theorem norm_coordTensor_taylorTensor_sq_le_two_mul {d : ℕ} (hd : 2 ≤ d) {b 
   let v : EuclideanSpace ℝ (Fin n) := WithLp.toLp 2 co
   let l : EuclideanSpace ℝ (Fin n) → ℝ := fun x => ⟪v, x⟫
   let q : EuclideanSpace ℝ (Fin n) → ℝ := affineOrthPart μ f
-  let A : (EuclideanSpace ℝ (Fin n) → ℝ) → Coord n d :=
-    fun g => coordTensor e (taylorTensor μ g d)
+  let A : (EuclideanSpace ℝ (Fin n) → ℝ) → Coord n d := fun g =>
+    coordTensor e (taylorTensor μ g d)
   let B : ℝ := b / (d.factorial : ℝ) ^ 2
   have hB : 0 ≤ B := div_nonneg hb.le (sq_nonneg _)
   have hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ := hV.integrable_exp_mul_norm
   have hq2 : MemLp q 2 μ := memLp_affineOrthPart μ hiso.memLp_two hf
   have hq0 : ∫ x, q x ∂μ = 0 := integral_affineOrthPart μ hiso.memLp_two hiso.mean_zero hf
   have hqorth : ∀ u, ∫ x, ⟪u, x⟫ * q x ∂μ = 0 :=
-    integral_inner_mul_affineOrthPart μ hiso.memLp_two hiso.mean_zero hiso.integral_inner_mul_inner hf
+    integral_inner_mul_affineOrthPart μ hiso.memLp_two hiso.mean_zero
+      hiso.integral_inner_mul_inner hf
   have hqbound : ‖A q‖ ^ 2 ≤ B * (eLpNorm q 2 μ).toReal ^ 2 :=
     norm_coordTensor_taylorTensor_sq_le_of_orthogonal hd hb hcb V hV hiso hq2 hq0 hqorth
   have hl2 : MemLp l 2 μ := by
@@ -532,8 +562,7 @@ theorem norm_coordTensor_taylorTensor_sq_le_two_mul {d : ℕ} (hd : 2 ≤ d) {b 
     norm_coordTensor_taylorTensor_inner_sq_le_of_basis μ hexp e
       (hcb n hV.law hiso hV.logConcave_law) v
   have hvnorm : ‖v‖ ^ 2 = ∑ j, co j ^ 2 := EuclideanSpace.real_norm_sq_eq v
-  have hrepr (x : EuclideanSpace ℝ (Fin n)) :
-      ⟪v, x⟫ = ∑ j, co j * ⟪e j, x⟫ := by
+  have hrepr (x : EuclideanSpace ℝ (Fin n)) : ⟪v, x⟫ = ∑ j, co j * ⟪e j, x⟫ := by
     simpa only [e, EuclideanSpace.basisFun_inner, EuclideanSpace.inner_basisFun_real, v] using
       (e.sum_inner_mul_inner v x).symm
   have hdecomp : (fun x => (c + l x) + q x) = f := by
@@ -558,8 +587,9 @@ theorem norm_coordTensor_taylorTensor_sq_le_two_mul {d : ℕ} (hd : 2 ≤ d) {b 
     change A f = A (fun x => c + l x) + A q at ht
     rw [hAl] at ht
     exact ht
-  have hpyth := integral_sq_eq_affine_decomposition μ hiso.memLp_two hiso.mean_zero
-    hiso.integral_inner_mul_inner hf
+  have hpyth :=
+    integral_sq_eq_affine_decomposition μ hiso.memLp_two hiso.mean_zero
+      hiso.integral_inner_mul_inner hf
   have henergy : ‖v‖ ^ 2 + ∫ x, q x ^ 2 ∂μ ≤ ∫ x, f x ^ 2 ∂μ := by
     change ‖v‖ ^ 2 + ∫ x, affineOrthPart μ f x ^ 2 ∂μ ≤ ∫ x, f x ^ 2 ∂μ
     rw [hvnorm]

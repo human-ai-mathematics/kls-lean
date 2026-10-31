@@ -1,6 +1,8 @@
-import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Function.L2Space
+module
+
+public import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
 # Quantiles and the Paley–Zygmund inequality
@@ -15,6 +17,8 @@ paper's quantile is `-∞` in the degenerate case `f = 0` with `1 - ε < 0`, whe
 inequality fails; the real convention gives `0`, and the Lean statement keeps the paper's
 hypotheses unchanged.
 -/
+
+@[expose] public section
 
 open MeasureTheory
 
@@ -364,7 +368,7 @@ theorem lowerQuantile_nonneg (μ : Measure Ω) [IsFiniteMeasure μ] {g : Ω → 
 /-- `‖f‖₁ = ∫ |f|` for a measurable real function. -/
 theorem toReal_eLpNorm_one_eq_integral_abs (μ : Measure Ω) {f : Ω → ℝ} (hf : Measurable f) :
     (eLpNorm f 1 μ).toReal = ∫ x, |f x| ∂μ := by
-  rw [eLpNorm_one_eq_lintegral_enorm]
+  rw [eLpNorm_one_eq_lintegral_enorm hf.aestronglyMeasurable]
   symm
   simpa [Real.norm_eq_abs] using
     (integral_norm_eq_lintegral_enorm (μ := μ) hf.aestronglyMeasurable)
@@ -377,10 +381,9 @@ theorem integral_sq_le_of_eLpNorm_two_le (μ : Measure Ω) [IsProbabilityMeasure
     (hL2 : eLpNorm f 2 μ ≤ ENNReal.ofReal D * eLpNorm f 1 μ) :
     MemLp f 2 μ ∧ ∫ x, f x ^ 2 ∂μ ≤ D ^ 2 * (eLpNorm f 1 μ).toReal ^ 2 := by
   have hf2 : MemLp f 2 μ := by
-    refine ⟨hf.aestronglyMeasurable, ?_⟩
-    exact
-      lt_of_le_of_lt hL2
-        (ENNReal.mul_lt_top ENNReal.ofReal_lt_top hL1)
+    change eLpNorm f 2 μ < ⊤
+    simpa only [eLpNorm, hf.aestronglyMeasurable] using
+      lt_of_le_of_lt hL2 (ENNReal.mul_lt_top ENNReal.ofReal_lt_top hL1)
 
   have heq :
       eLpNorm f 2 μ =
@@ -561,7 +564,7 @@ theorem mul_eLpNorm_one_le_lowerQuantile (μ : Measure Ω) [IsProbabilityMeasure
       eLpNorm f 1 μ ≤ eLpNorm f 2 μ :=
     eLpNorm_le_eLpNorm_of_exponent_le
       (μ := μ) (f := f) (p := (1 : ENNReal)) (q := (2 : ENNReal))
-      (by norm_num) hf.aestronglyMeasurable
+      (by norm_num)
 
   have htop :
       ENNReal.ofReal D * eLpNorm f 1 μ ≠ ⊤ :=

@@ -1,18 +1,26 @@
-import FunctionalInequalities.KLS.LogConcave.WeakBrascampLieb
-import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
-import FunctionalInequalities.Probability.Moments
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.WeakBrascampLieb
+public import FunctionalInequalities.Analysis.Matrix.WeakDerivative
+public import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
+public import FunctionalInequalities.Probability.Moments
+public import Mathlib.Analysis.Matrix.Order
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
 /-!
 # Hessian trace estimates for log-concave potentials
 
-Letwin arXiv:2607.24164v1 Theorem 2.5 in weak form: for a normalized log-concave law with a C1 globally Lipschitz potential
-with Lipschitz gradient, the weak Brascamp–Lieb inequality applied to the entries of `√B ∇²U √B`, the matrix variance
-identity and the half energy bound give `∫ tr(B ∇²U B ∇²U) ≤ 2 tr(B B)` for PSD `B`. Regularity is explicit in each
-statement. The entry Brascamp–Lieb client and the finite component-integrability step are private one-use supports.
+Letwin arXiv:2607.24164v1 Theorem 2.5 in weak form: for a normalized log-concave law with a C1
+globally Lipschitz potential
+with Lipschitz gradient, the weak Brascamp–Lieb inequality applied to the entries of `√B ∇²U √B`,
+the matrix variance
+identity and the half energy bound give `∫ tr(B ∇²U B ∇²U) ≤ 2 tr(B B)` for PSD `B`. Regularity is
+explicit in each
+statement. The entry Brascamp–Lieb client and the finite component-integrability step are private
+one-use supports.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -106,42 +114,64 @@ open scoped ContDiff MatrixOrder
 namespace FunctionalInequalities.KLS.LogConcave
 
 set_option maxHeartbeats 4000000 in
-/-- Weak Hessian trace bound (Letwin arXiv:2607.24164v1 Theorem 2.5, weak C1,1 form): for a normalized convex C1 globally
-Lipschitz potential with Lipschitz gradient and a.e. positive definite Hessian, weak Hessian tensor `T`, mean Hessian identity,
-and the half energy bound, `tr(B ∇²U B ∇²U)` is integrable and `∫ tr(B ∇²U B ∇²U) ≤ 2 tr(B B)` for every PSD `B`. -/
+/--
+Weak Hessian trace bound (Letwin arXiv:2607.24164v1 Theorem 2.5, weak C1,1 form): for a normalized
+convex C1 globally
+Lipschitz potential with Lipschitz gradient and a.e. positive definite Hessian, weak Hessian tensor
+`T`, mean Hessian identity,
+and the half energy bound, `tr(B ∇²U B ∇²U)` is integrable and `∫ tr(B ∇²U B ∇²U) ≤ 2 tr(B B)` for
+every PSD `B`. -/
 theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
-    {nu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
-    {U : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hnuU : (nu : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U))
-    (hconv : ConvexOn ℝ Set.univ U) (hU : ContDiff ℝ 1 U)
-    {G : NNReal} (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
+    {nu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} {U : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hnuU :
+      (nu : Measure (EuclideanSpace ℝ (Fin n))) =
+        (volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-U))
+    (hconv : ConvexOn ℝ Set.univ U) (hU : ContDiff ℝ 1 U) {G : NNReal}
+    (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
     (hnorm : (∫ x, Real.exp (-U x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1)
     (hPD : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))), (hessianMatrix U x).PosDef)
     (T : EuclideanSpace ℝ (Fin n) → Fin n → Matrix (Fin n) (Fin n) ℝ)
-    (hT : ∀ k i j : Fin n,
-      HasWeakDerivAlong (fun x => hessianMatrix U x i j) (fun x => T x k i j)
-        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
-      ∀ K : Set (EuclideanSpace ℝ (Fin n)), IsCompact K →
-        MemLp (fun x => T x k i j) 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict K))
-    (hR : ∀ i j : Fin n, ∀ K : Set (EuclideanSpace ℝ (Fin n)), IsCompact K →
-      MemLp (fun x => (hessianMatrix U x)⁻¹ i j) (⊤ : ENNReal)
-        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict K))
-    (hmean : ∀ i j : Fin n,
-      Integrable (fun x => hessianMatrix U x i j) (nu : Measure (EuclideanSpace ℝ (Fin n))) ∧
-      (∫ x, hessianMatrix U x i j ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) =
-        (1 : Matrix (Fin n) (Fin n) ℝ) i j)
+    (hT :
+      ∀ k i j : Fin n,
+        HasWeakDerivAlong (fun x => hessianMatrix U x i j) (fun x => T x k i j)
+            (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+          ∀ K : Set (EuclideanSpace ℝ (Fin n)),
+            IsCompact K →
+              MemLp (fun x => T x k i j) 2
+                ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict K))
+    (hR :
+      ∀ i j : Fin n,
+        ∀ K : Set (EuclideanSpace ℝ (Fin n)),
+          IsCompact K →
+            MemLp (fun x => (hessianMatrix U x)⁻¹ i j) (⊤ : ENNReal)
+              ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict K))
+    (hmean :
+      ∀ i j : Fin n,
+        Integrable (fun x => hessianMatrix U x i j) (nu : Measure (EuclideanSpace ℝ (Fin n))) ∧
+          (∫ x, hessianMatrix U x i j ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) =
+            (1 : Matrix (Fin n) (Fin n) ℝ) i j)
     (B : Matrix (Fin n) (Fin n) ℝ) (hB : B.PosSemidef)
-    (hD : Integrable (fun x => ∑ k : Fin n, ∑ l : Fin n, (hessianMatrix U x)⁻¹ k l *
-      (B * T x k * B * T x l).trace) (nu : Measure (EuclideanSpace ℝ (Fin n))))
-    (hhalf : (∫ x, (∑ k : Fin n, ∑ l : Fin n, (hessianMatrix U x)⁻¹ k l *
-      (B * T x k * B * T x l).trace) ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) ≤
-      (1 / 2 : ℝ) * ∫ x, (B * hessianMatrix U x * B * hessianMatrix U x).trace
-        ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) :
+    (hD :
+      Integrable
+        (fun x =>
+          ∑ k : Fin n, ∑ l : Fin n, (hessianMatrix U x)⁻¹ k l * (B * T x k * B * T x l).trace)
+        (nu : Measure (EuclideanSpace ℝ (Fin n))))
+    (hhalf :
+      (∫ x,
+          (∑ k : Fin n,
+            ∑ l : Fin n,
+              (hessianMatrix U x)⁻¹ k l *
+                (B * T x k * B * T x l).trace) ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) ≤
+        (1 / 2 : ℝ) *
+          ∫ x,
+            (B * hessianMatrix U x * B *
+                hessianMatrix U x).trace ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) :
     Integrable (fun x => (B * hessianMatrix U x * B * hessianMatrix U x).trace)
-      (nu : Measure (EuclideanSpace ℝ (Fin n))) ∧
-    (∫ x, (B * hessianMatrix U x * B * hessianMatrix U x).trace
-      ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) ≤ 2 * (B * B).trace := by
+        (nu : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      (∫ x,
+          (B * hessianMatrix U x * B *
+              hessianMatrix U x).trace ∂(nu : Measure (EuclideanSpace ℝ (Fin n)))) ≤
+        2 * (B * B).trace := by
   classical
   let mu : Measure (EuclideanSpace ℝ (Fin n)) := (nu : Measure (EuclideanSpace ℝ (Fin n)))
   let H := fun x => hessianMatrix U x
@@ -168,12 +198,10 @@ theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
   let P := Fin n × Fin n
   let A := fun x => S * H x * S
   let F : P → EuclideanSpace ℝ (Fin n) → ℝ := fun p x => A x p.1 p.2
-  let a : P → EuclideanSpace ℝ (Fin n) → Fin n → ℝ :=
-    fun p x k => (S * T x k * S) p.1 p.2
-  let e : P → EuclideanSpace ℝ (Fin n) → ℝ :=
-    fun p x => a p x ⬝ᵥ (R x *ᵥ a p x)
+  let a : P → EuclideanSpace ℝ (Fin n) → Fin n → ℝ := fun p x k => (S * T x k * S) p.1 p.2
+  let e : P → EuclideanSpace ℝ (Fin n) → ℝ := fun p x => a p x ⬝ᵥ (R x *ᵥ a p x)
   have hExp (Z : Matrix (Fin n) (Fin n) ℝ) (i j : Fin n) :
-      (S * Z * S) i j = ∑ q : P, (S i q.1 * S q.2 j) * Z q.1 q.2 := by
+    (S * Z * S) i j = ∑ q : P, (S i q.1 * S q.2 j) * Z q.1 q.2 := by
     dsimp only [P]
     simp only [Matrix.mul_apply, Finset.sum_mul, Fintype.sum_prod_type]
     rw [Finset.sum_comm]
@@ -182,39 +210,38 @@ theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
     apply Finset.sum_congr rfl
     intro c _
     ring
-  have hData (p : P) (k : Fin n) := bounded_weak_matrix_product_entry S (G : ℝ)
-    (fun i j => (hT k i j).1)
-    (fun x i j => norm_hessianMatrix_entry_le_of_lipschitz_gradient hG x i j)
-    (fun i j => (hT k i j).2) p.1 p.2
+  have hData (p : P) (k : Fin n) :=
+    bounded_weak_matrix_product_entry S (G : ℝ) (fun i j => (hT k i j).1)
+      (fun x i j => norm_hessianMatrix_entry_le_of_lipschitz_gradient hG x i j)
+      (fun i j => (hT k i j).2) p.1 p.2
   have hF2 (p : P) : MemLp (F p) 2 mu :=
     MemLp.of_bound ((hData p p.1).2.1.1.aestronglyMeasurable.mono_ac hac)
       (∑ q : P, ‖S p.1 q.1 * S q.2 p.2‖ * max (G : ℝ) 0)
       (Filter.Eventually.of_forall (hData p p.1).1)
-  have hRm (i j : Fin n) : AEMeasurable (fun x => R x i j)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    have hloc : LocallyIntegrable (fun x => R x i j)
-        (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hRm (i j : Fin n) :
+    AEMeasurable (fun x => R x i j) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    have hloc :
+      LocallyIntegrable (fun x => R x i j) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
       apply locallyIntegrable_iff.mpr
       intro K hK
       let : IsFiniteMeasure ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict K) :=
         isFiniteMeasure_restrict.mpr hK.measure_lt_top.ne
       exact (hR i j K hK).integrable (by simp)
     exact hloc.aestronglyMeasurable.aemeasurable
-  have hTm (k i j : Fin n) : AEMeasurable (fun x => T x k i j)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+  have hTm (k i j : Fin n) :
+    AEMeasurable (fun x => T x k i j) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     (hT k i j).1.2.1.aestronglyMeasurable.aemeasurable
-  have ham (p : P) (k : Fin n) : AEMeasurable (fun x => a p x k)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-    have heq : (fun x => a p x k) =
-        (fun x => ∑ q : P, (S p.1 q.1 * S q.2 p.2) * T x k q.1 q.2) := by
+  have ham (p : P) (k : Fin n) :
+    AEMeasurable (fun x => a p x k) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    have heq :
+      (fun x => a p x k) = (fun x => ∑ q : P, (S p.1 q.1 * S q.2 p.2) * T x k q.1 q.2) := by
       funext x
       exact hExp (T x k) p.1 p.2
     rw [heq]
     apply Finset.aemeasurable_fun_sum
     intro q _
     exact aemeasurable_const.mul (hTm k q.1 q.2)
-  have hem (p : P) : AEMeasurable (e p)
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hem (p : P) : AEMeasurable (e p) (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
     dsimp only [e]
     simp only [dotProduct, Matrix.mulVec]
     apply Finset.aemeasurable_fun_sum
@@ -225,8 +252,7 @@ theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
     exact (hRm k l).mul (ham p l)
   have henonneg : ∀ᵐ x ∂mu, ∀ p : P, 0 ≤ e p x := by
     filter_upwards [hac.ae_le hPD] with x hx p
-    simpa only [e, R, H, star_trivial] using
-      hx.inv.posSemidef.dotProduct_mulVec_nonneg (a p x)
+    simpa only [e, R, H, star_trivial] using hx.inv.posSemidef.dotProduct_mulVec_nonneg (a p x)
   have hTsym := ae_weak_third_derivative_symm hU hG (fun k i j => (hT k i j).1)
   have hesum : (fun x => ∑ p : P, e p x) =ᵐ[mu] D := by
     filter_upwards [hac.ae_le hTsym] with x hx
@@ -236,11 +262,12 @@ theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
       exact (hx k j i).2
     simpa only [e, a, D, hSS] using
       sum_matrix_product_entry_quadratic_eq_trace S hSsym (R x) (T x) ht
-  obtain ⟨heI, heInt⟩ := FunctionalInequalities.Probability.integrable_components_and_sum_integral
-    mu e D (fun p => (hem p).aestronglyMeasurable.mono_ac hac) henonneg hDI hesum
+  obtain ⟨heI, heInt⟩ :=
+    FunctionalInequalities.Probability.integrable_components_and_sum_integral mu e D
+      (fun p => (hem p).aestronglyMeasurable.mono_ac hac) henonneg hDI hesum
   have hBL (p : P) : ProbabilityTheory.variance (F p) mu ≤ ∫ x, e p x ∂mu :=
-    variance_matrix_product_hessian_entry_le hnuU hconv hU hG hL hnorm hPD
-      T hT S p.1 p.2 (heI p)
+    variance_matrix_product_hessian_entry_le hnuU hconv hU hG hL hnorm hPD T hT S p.1 p.2
+      (heI p)
   have hVarBound : (∑ p : P, ProbabilityTheory.variance (F p) mu) ≤ ∫ x, D x ∂mu := by
     calc
       _ ≤ ∑ p : P, ∫ x, e p x ∂mu := Finset.sum_le_sum fun p _ => hBL p
@@ -256,8 +283,7 @@ theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
         apply Finset.sum_congr rfl
         intro q _
         rw [(hmean q.1 q.2).2]
-      _ = (S * (1 : Matrix (Fin n) (Fin n) ℝ) * S) p.1 p.2 :=
-        (hExp 1 p.1 p.2).symm
+      _ = (S * (1 : Matrix (Fin n) (Fin n) ℝ) * S) p.1 p.2 := (hExp 1 p.1 p.2).symm
       _ = _ := by rw [Matrix.mul_one, hSS]
   have hASym : ∀ᵐ x ∂mu, (A x).IsSymm := by
     filter_upwards [hac.ae_le hPD] with x hx
@@ -277,8 +303,9 @@ theorem integral_trace_quadratic_le_two_mul_trace_sq {n : ℕ}
   have hf : Integrable f mu :=
     (integrable_finsetSum _ (fun p _ => (hF2 p).integrable_sq)).congr hsumf
   have hBsym : B.IsSymm := Matrix.isHermitian_iff_isSymm.mp hB.isHermitian
-  have hVarEq := FunctionalInequalities.Probability.sum_variance_entries_eq_integral_trace_sub_trace_mean
-    mu A B hBsym hASym (fun i j => hF2 (i,j)) (fun i j => hMeanA (i,j))
+  have hVarEq :=
+    FunctionalInequalities.Probability.sum_variance_entries_eq_integral_trace_sub_trace_mean mu
+      A B hBsym hASym (fun i j => hF2 (i, j)) (fun i j => hMeanA (i, j))
   rw [integral_congr_ae (Filter.Eventually.of_forall hAtrace)] at hVarEq
   have hfinal : (∫ x, f x ∂mu) - (B * B).trace ≤ (1 / 2 : ℝ) * ∫ x, f x ∂mu := by
     calc

@@ -1,13 +1,15 @@
-import FunctionalInequalities.KLS.BKL.Suspension.Basic
-import FunctionalInequalities.Probability.Line.Laplace
-import Mathlib.MeasureTheory.Constructions.Pi
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.Probability.LogConcave
-import FunctionalInequalities.KLS.LogConcave.Density.Tilted
-import Mathlib.MeasureTheory.Measure.Tilted
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
-import FunctionalInequalities.KLS.LogConcave.Transport
+module
+
+public import FunctionalInequalities.KLS.BKL.Suspension.Basic
+public import FunctionalInequalities.Probability.Line.Laplace
+public import Mathlib.MeasureTheory.Constructions.Pi
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import FunctionalInequalities.KLS.Isotropic
+public import FunctionalInequalities.Probability.LogConcave
+public import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+public import Mathlib.MeasureTheory.Measure.Tilted
+public import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
+public import FunctionalInequalities.KLS.LogConcave.Transport
 
 /-!
 # The joint law of the suspension (BKL Proposition 7.1)
@@ -23,6 +25,8 @@ pairs `(i, j)`. `CumulantBound d b` names the hypothesis `R^ν_{d+1} ≤ b Id` o
 module makes the definitions, proves that the joint law is a probability measure, and that it is
 log-concave under (110) once it is identified with the tilted Lebesgue law of `W_N` (109).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -229,10 +233,14 @@ probability measure `ν` in every dimension, i.e. `Σ_J κ^ν_{d+1}(u, e_{J 1}, 
 in the standard basis of `ℝ^m`. This names the hypothesis; it asserts nothing. -/
 def CumulantBound (d : ℕ) (b : ℝ) : Prop :=
   ∀ (m : ℕ) (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin m))),
-    KLS.Isotropic ν → _root_.FunctionalInequalities.KLS.LogConcave ν →
-      ∀ u : EuclideanSpace ℝ (Fin m),
-      ∑ J : Fin d → Fin m, Analysis.BakryEmery.cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
-        (Fin.cons u fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k)) ^ 2 ≤ b * ‖u‖ ^ 2
+    KLS.Isotropic ν →
+      _root_.FunctionalInequalities.KLS.LogConcave ν →
+        ∀ u : EuclideanSpace ℝ (Fin m),
+          ∑ J : Fin d → Fin m,
+              Analysis.BakryEmery.cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+                  (Fin.cons u fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k)) ^
+                2 ≤
+            b * ‖u‖ ^ 2
 
 /-! ### The coordinate adapter `ℝ^{Option (Fin N × Fin n)} ≃ ℝ^{Nn+1}`
 
@@ -259,16 +267,16 @@ theorem coordinateEquiv_basisFun (N n : ℕ) (i : Option (Fin N × Fin n)) :
 /-- Isotropy is preserved by the coordinate adapter. -/
 theorem isotropic_map_coordinateEquiv {N n : ℕ} {ν : ProbabilityMeasure (JointSpace N n)}
     (hν : KLS.Isotropic ν) :
-    KLS.Isotropic (ν.map (coordinateEquiv N n).continuous.measurable.aemeasurable) :=
+    KLS.Isotropic (ν.map (coordinateEquiv N n)) :=
   hν.map_linearIsometryEquiv (coordinateEquiv N n)
 
 /-- Log-concavity is preserved by the coordinate adapter. -/
 theorem logConcave_map_coordinateEquiv {N n : ℕ} {ν : ProbabilityMeasure (JointSpace N n)}
     (hν : KLS.LogConcave ν) :
-    KLS.LogConcave (ν.map (coordinateEquiv N n).continuous.measurable.aemeasurable) := by
+    KLS.LogConcave (ν.map (coordinateEquiv N n)) := by
   let φ := coordinateEquiv N n
   apply KLS.LogConcave.of_affineIsometry_map hν
-    (ν.map φ.continuous.measurable.aemeasurable) φ.symm.toLinearIsometry.toAffineIsometry
+    (ν.map φ) φ.symm.toLinearIsometry.toAffineIsometry
   change Measure.map φ.symm (Measure.map φ (ν : Measure (JointSpace N n))) = _
   rw [Measure.map_map φ.symm.continuous.measurable φ.continuous.measurable]
   simp only [Function.comp_def, φ.symm_apply_apply, Measure.map_id']
@@ -287,13 +295,13 @@ theorem cumulantBound_jointSpace {N n d : ℕ} {b : ℝ} (hb : CumulantBound d b
   classical
   let φ := coordinateEquiv N n
   let e := Fintype.equivFinOfCardEq (card_option_prod N n)
-  have h := hb (N * n + 1) (ν.map φ.continuous.measurable.aemeasurable)
+  have h := hb (N * n + 1) (ν.map φ)
     (isotropic_map_coordinateEquiv hiso) (logConcave_map_coordinateEquiv hlc) (φ u)
   rw [LinearIsometryEquiv.norm_map] at h
   refine le_trans (le_of_eq ?_) h
   rw [← (Equiv.piCongrRight fun _ : Fin d => e).sum_comp]
   refine Finset.sum_congr rfl fun J _ => ?_
-  have hmap : ((ν.map φ.continuous.measurable.aemeasurable : ProbabilityMeasure _) :
+  have hmap : ((ν.map φ : ProbabilityMeasure _) :
       Measure (EuclideanSpace ℝ (Fin (N * n + 1)))) = (ν : Measure (JointSpace N n)).map φ := by
     simp [ProbabilityMeasure.toMeasure_map]
   rw [hmap]

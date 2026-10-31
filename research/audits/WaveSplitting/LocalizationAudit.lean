@@ -1,7 +1,11 @@
-import FunctionalInequalities.Analysis.WaveSplitting.Localization
+module
+
+public import FunctionalInequalities.Analysis.WaveSplitting.Localization
 
 /-! Independent clients of localization and fixed-horizon stability for original smooth
 coefficients. No global coefficient bounds, convexity or sign assumptions are added. -/
+
+@[expose] public section
 noncomputable section
 set_option autoImplicit false
 open MeasureTheory FunctionalInequalities.Analysis.WaveSplitting

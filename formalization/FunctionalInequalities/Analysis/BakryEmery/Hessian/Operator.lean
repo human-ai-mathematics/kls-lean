@@ -1,8 +1,10 @@
-import Mathlib.LinearAlgebra.Matrix.BilinearForm
-import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.Operator.Coordinates
-import Mathlib.LinearAlgebra.FiniteDimensional.Basic
-import Mathlib.Analysis.InnerProductSpace.Adjoint
+module
+
+public import Mathlib.LinearAlgebra.Matrix.BilinearForm
+public import FunctionalInequalities.Analysis.BakryEmery.Calculus
+public import FunctionalInequalities.Analysis.Operator.Coordinates
+public import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-! # Hessian operators and their inverses
 
@@ -15,6 +17,8 @@ any moment potential. Coordinate matrices and the diffusion generator are
 defined in separate modules.
 -/
 
+@[expose] public section
+
 noncomputable section
 open scoped ContDiff RealInnerProductSpace
 open FunctionalInequalities.Analysis
@@ -24,8 +28,10 @@ namespace FunctionalInequalities.Analysis.BakryEmery
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 
 /-- The Hessian operator `∇²φ(x) = D(∇φ)(x) : E →L[ℝ] E`. The Euclidean coordinate object
-`Probability.Stein.hessianMatrix` is its standard-basis entry matrix (`Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator`). -/
-def hessianOperator (φ : E → ℝ) (x : E) : E →L[ℝ] E := fderiv ℝ (gradient φ) x
+`Probability.Stein.hessianMatrix` is its standard-basis entry matrix
+(`Probability.Stein.hessianMatrix_eq_operatorEntry_hessianOperator`). -/
+def hessianOperator (φ : E → ℝ) (x : E) : E →L[ℝ] E :=
+  fderiv ℝ (gradient φ) x
 
 /-- The Hessian/gradient derivative identity needs C2 only at the point.
 It applies to a reference given C2 on an open domain without a global extension. -/
@@ -43,16 +49,19 @@ theorem bilinearIteratedFDerivTwo_eq_inner_hessianOperator_at {φ : E → ℝ} {
     fderiv_inner_apply ℝ (hg.differentiableAt one_ne_zero) (differentiableAt_const v)]
   simp [hessianOperator]
 
-/-- `D²φ(x)(u, v) = ⟪∇²φ(x) u, v⟫` (the same identity as `Probability.Stein.hessian_eq_inner_fderiv_gradient`,
+/--
+`D²φ(x)(u, v) = ⟪∇²φ(x) u, v⟫` (the same identity as
+`Probability.Stein.hessian_eq_inner_fderiv_gradient`,
 restated for the operator; the Hessian–Stein chain source is credited). -/
-theorem bilinearIteratedFDerivTwo_eq_inner_hessianOperator {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x u v : E) :
-    bilinearIteratedFDerivTwo ℝ φ x u v = ⟪hessianOperator φ x u, v⟫ := by
+theorem bilinearIteratedFDerivTwo_eq_inner_hessianOperator {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ)
+    (x u v : E) : bilinearIteratedFDerivTwo ℝ φ x u v = ⟪hessianOperator φ x u, v⟫ := by
   exact bilinearIteratedFDerivTwo_eq_inner_hessianOperator_at hφ.contDiffAt u v
 
-theorem operatorEntry_hessianOperator {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E) (i j : Fin m) :
+theorem operatorEntry_hessianOperator {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ 2 φ) (x : E) (i j : Fin m) :
     operatorEntry b (hessianOperator φ x) i j = bilinearIteratedFDerivTwo ℝ φ x (b i) (b j) := by
-  rw [bilinearIteratedFDerivTwo_symm hφ x (b i) (b j), bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ]
+  rw [bilinearIteratedFDerivTwo_symm hφ x (b i) (b j),
+    bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ]
   exact real_inner_comm _ _
 
 /-- A positive definite Hessian is a unit (including rank zero). -/
@@ -79,18 +88,21 @@ theorem hessianOperator_isSelfAdjoint {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ)
   intro u v
   change ⟪hessianOperator φ x u, v⟫ = ⟪u, hessianOperator φ x v⟫
   calc
-    ⟪hessianOperator φ x u, v⟫ = bilinearIteratedFDerivTwo ℝ φ x u v := (bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ x u v).symm
+    ⟪hessianOperator φ x u, v⟫ = bilinearIteratedFDerivTwo ℝ φ x u v :=
+      (bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ x u v).symm
     _ = bilinearIteratedFDerivTwo ℝ φ x v u := bilinearIteratedFDerivTwo_symm hφ x u v
-    _ = ⟪hessianOperator φ x v, u⟫ := bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ x v u
+    _ = ⟪hessianOperator φ x v, u⟫ :=
+      bilinearIteratedFDerivTwo_eq_inner_hessianOperator hφ x v u
     _ = ⟪u, hessianOperator φ x v⟫ := real_inner_comm _ _
 
 /-- The inverse of a positive definite Hessian is positive definite. -/
 theorem inner_ringInverse_hessianOperator_pos {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E)
-    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
-    (v : E) (hv : v ≠ 0) : 0 < ⟪Ring.inverse (hessianOperator φ x) v, v⟫ := by
+    (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (v : E) (hv : v ≠ 0) :
+    0 < ⟪Ring.inverse (hessianOperator φ x) v, v⟫ := by
   have hunit := hessianOperator_isUnit_of_posDef hφ x hPD
   have hright : hessianOperator φ x (Ring.inverse (hessianOperator φ x) v) = v := by
-    have h := congrArg (fun L : E →L[ℝ] E => L v) (Ring.mul_inverse_cancel (hessianOperator φ x) hunit)
+    have h :=
+      congrArg (fun L : E →L[ℝ] E => L v) (Ring.mul_inverse_cancel (hessianOperator φ x) hunit)
     simpa only [mul_apply_eq_comp, one_apply_eq_self] using h
   have hne : Ring.inverse (hessianOperator φ x) v ≠ 0 := by
     intro hz
@@ -123,14 +135,18 @@ theorem inverseHessianEntry_symm {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
 theorem sum_inverseHessianEntry_mul_hessian {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
     {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (i j : Fin m) :
-    (∑ a, inverseHessianEntry φ b x i a *
-      bilinearIteratedFDerivTwo ℝ φ x (b a) (b j)) = if i = j then 1 else 0 := by
+    (∑ a, inverseHessianEntry φ b x i a * bilinearIteratedFDerivTwo ℝ φ x (b a) (b j)) =
+      if i = j then 1 else 0 := by
   obtain ⟨U, hU⟩ := hessianOperator_isUnit_of_posDef hφ x hPD
   have hInv : Ring.inverse (hessianOperator φ x) * hessianOperator φ x = 1 := by
     rw [← hU, Ring.inverse_unit]
     simp
   simp_rw [← operatorEntry_hessianOperator b hφ x]
-  change (∑ a, operatorEntry b (Ring.inverse (hessianOperator φ x)) i a * operatorEntry b (hessianOperator φ x) a j) = _
+  change
+    (∑ a,
+        operatorEntry b (Ring.inverse (hessianOperator φ x)) i a *
+          operatorEntry b (hessianOperator φ x) a j) =
+      _
   rw [← operatorEntry_mul, hInv]
   simp [operatorEntry, b.inner_eq_ite]
 
@@ -157,40 +173,51 @@ theorem sum_inverseHessianEntry_mul_hessian_hessian {φ : E → ℝ} (hφ : Cont
       rw [sum_inverseHessianEntry_mul_hessian b hφ x hPD a i]
     _ = bilinearIteratedFDerivTwo ℝ φ x (b i) (b i) := by simp
 
-/-- **Letwin (2.5), operator form**: `D((∇²φ)⁻¹)(x)[v] = −(∇²φ)⁻¹ (D(∇²φ)(x)[v]) (∇²φ)⁻¹` for a smooth `φ`
+/--
+**Letwin (2.5), operator form**: `D((∇²φ)⁻¹)(x)[v] = −(∇²φ)⁻¹ (D(∇²φ)(x)[v]) (∇²φ)⁻¹` for a smooth
+`φ`
 with positive definite Hessian at `x`. -/
 theorem fderiv_ringInverse_hessianOperator_apply {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (v : E) :
     fderiv ℝ (fun y => Ring.inverse (hessianOperator φ y)) x v =
-      -(Ring.inverse (hessianOperator φ x) * fderiv ℝ (hessianOperator φ) x v * Ring.inverse (hessianOperator φ x)) := by
+      -(Ring.inverse (hessianOperator φ x) * fderiv ℝ (hessianOperator φ) x v *
+          Ring.inverse (hessianOperator φ x)) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hg : ContDiff ℝ ∞ (gradient φ) := contDiff_gradient hφ (by simp)
   have hH : ContDiff ℝ ∞ (hessianOperator φ) := hg.fderiv_right (by simp)
-  exact fderiv_ringInverse_comp_apply (hH.differentiable (by simp) x) (hessianOperator_isUnit_of_posDef h2 x hPD) v
+  exact
+    fderiv_ringInverse_comp_apply (hH.differentiable (by simp) x)
+      (hessianOperator_isUnit_of_posDef h2 x hPD) v
 
 /-- Exact directional (2.5): the middle factor is the ACTUAL derivative of the Hessian
 operatorEntry, hence source `partial_abk phi`. No such identity is supplied as a premise. -/
-theorem fderiv_inverseHessianEntry_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x : E)
+theorem fderiv_inverseHessianEntry_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) {φ : E → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (x : E)
     (hPD : ∀ v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v) (i j k : Fin m) :
     fderiv ℝ (fun y => inverseHessianEntry φ b y i j) x (b k) =
-      -(∑ a, ∑ c, inverseHessianEntry φ b x i a *
-        fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b k) *
-        inverseHessianEntry φ b x c j) := by
+      -(∑ a,
+          ∑ c,
+            inverseHessianEntry φ b x i a *
+                fderiv ℝ (fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c)) x (b k) *
+              inverseHessianEntry φ b x c j) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hg : ContDiff ℝ ∞ (gradient φ) := contDiff_gradient hφ (by simp)
   have hH : ContDiff ℝ ∞ (hessianOperator φ) := hg.fderiv_right (by simp)
   have hd : DifferentiableAt ℝ (hessianOperator φ) x := hH.differentiable (by simp) x
-  have h := operatorEntry_ringInverse_fderiv_apply b hd (hessianOperator_isUnit_of_posDef h2 x hPD) i j (b k)
-  change fderiv ℝ (fun y => operatorEntry b (Ring.inverse (hessianOperator φ y)) i j) x (b k) = _
+  have h :=
+    operatorEntry_ringInverse_fderiv_apply b hd (hessianOperator_isUnit_of_posDef h2 x hPD) i j
+      (b k)
+  change
+    fderiv ℝ (fun y => operatorEntry b (Ring.inverse (hessianOperator φ y)) i j) x (b k) = _
   rw [h]
   congr 1
   apply Finset.sum_congr rfl
   intro a _ha
   apply Finset.sum_congr rfl
   intro c _hc
-  have heq : (fun y => operatorEntry b (hessianOperator φ y) a c) =
-      fun y => bilinearIteratedFDerivTwo ℝ φ y (b a) (b c) := by
+  have heq :
+    (fun y => operatorEntry b (hessianOperator φ y) a c) = fun y =>
+      bilinearIteratedFDerivTwo ℝ φ y (b a) (b c) := by
     ext y
     exact operatorEntry_hessianOperator b h2 y a c
   rw [← operatorEntry_fderiv_apply b hd a c (b k), heq]
@@ -269,21 +296,25 @@ theorem contDiffAt_inverseHessianEntry {m : ℕ} (b : OrthonormalBasis (Fin m) �
   have hInv := hInvAt.comp x hH.contDiffAt
   exact contDiffAt_const.inner ℝ (hInv.clm_apply contDiffAt_const)
 
-/-- Derivative of the drift coordinate `∂_a V ∘ ∇φ`: `∂_j (∂_aV(∇φ)) = Σ_c ∂_{ac}V(∇φ) ∂_{cj}φ`, for `V` smooth on an
+/--
+Derivative of the drift coordinate `∂_a V ∘ ∇φ`: `∂_j (∂_aV(∇φ)) = Σ_c ∂_{ac}V(∇φ) ∂_{cj}φ`, for `V`
+smooth on an
 open set containing `∇φ(x)`. -/
 theorem fderiv_fderiv_comp_gradient_apply {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E)
-    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U)
-    (hV : ContDiffOn ℝ ∞ V U) {x : E} (hx : gradient φ x ∈ U) (a j : Fin m) :
+    {φ V : E → ℝ} (hφ : ContDiff ℝ ∞ φ) {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
+    {x : E} (hx : gradient φ x ∈ U) (a j : Fin m) :
     fderiv ℝ (fun y => fderiv ℝ V (gradient φ y) (b a)) x (b j) =
-      ∑ c, bilinearIteratedFDerivTwo ℝ V (gradient φ x) (b a) (b c) *
-        bilinearIteratedFDerivTwo ℝ φ x (b c) (b j) := by
+      ∑ c,
+        bilinearIteratedFDerivTwo ℝ V (gradient φ x) (b a) (b c) *
+          bilinearIteratedFDerivTwo ℝ φ x (b c) (b j) := by
   have h2 : ContDiff ℝ 2 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hVx : ContDiffAt ℝ ∞ V (gradient φ x) := hV.contDiffAt (hU.mem_nhds hx)
   have hV2 : ContDiffAt ℝ 2 V (gradient φ x) := hVx.of_le (WithTop.coe_le_coe.mpr le_top)
   have ha : ContDiffAt ℝ ∞ (fun z => fderiv ℝ V z (b a)) (gradient φ x) :=
     (hVx.fderiv_right (by simp)).clm_apply contDiffAt_const
   have hg : ContDiff ℝ ∞ (gradient φ) := contDiff_gradient hφ (by simp)
-  have hc : fderiv ℝ (fun y => fderiv ℝ V (gradient φ y) (b a)) x =
+  have hc :
+    fderiv ℝ (fun y => fderiv ℝ V (gradient φ y) (b a)) x =
       fderiv ℝ (fun z => fderiv ℝ V z (b a)) (gradient φ x) ∘L fderiv ℝ (gradient φ) x :=
     fderiv_comp x (ha.differentiableAt (by simp)) ((hg.differentiable (by simp)) x)
   rw [hc, ContinuousLinearMap.comp_apply]
@@ -293,7 +324,8 @@ theorem fderiv_fderiv_comp_gradient_apply {m : ℕ} (b : OrthonormalBasis (Fin m
   apply Finset.sum_congr rfl
   intro c _hc
   change operatorEntry b (hessianOperator φ x) c j * _ = _
-  rw [operatorEntry_hessianOperator b h2, ← bilinearIteratedFDerivTwo_eq_fderiv_apply_at hV2, bilinearIteratedFDerivTwo_symm_at hV2 (b c) (b a)]
+  rw [operatorEntry_hessianOperator b h2, ← bilinearIteratedFDerivTwo_eq_fderiv_apply_at hV2,
+    bilinearIteratedFDerivTwo_symm_at hV2 (b c) (b a)]
   ring
 
 end LocalRegularity

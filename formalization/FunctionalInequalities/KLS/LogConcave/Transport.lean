@@ -1,9 +1,12 @@
-import FunctionalInequalities.Probability.Support.Affine
-import FunctionalInequalities.Probability.Transport
-import FunctionalInequalities.Probability.LogConcave
-import Mathlib.Analysis.Convex.Measure
-import Mathlib.Topology.Maps.Proper.Basic
-import Mathlib.Probability.ConditionalProbability
+module
+
+public import FunctionalInequalities.Probability.Support.Affine
+public import FunctionalInequalities.Probability.Transport
+public import FunctionalInequalities.Probability.LogConcave
+public import Mathlib.Analysis.Convex.Measure
+public import Mathlib.Analysis.Normed.Affine.AddTorsorBases
+public import Mathlib.Topology.Maps.Proper.Basic
+public import Mathlib.Probability.ConditionalProbability
 
 /-!
 # Geometry of the compact-set log-concavity convention
@@ -16,6 +19,8 @@ included in the definition and no representation theorem is assumed here.
 Conditioning on a closed convex set of positive mass preserves log-concavity (`cond`), used to
 truncate laws to balls (BKL arXiv:2610.05474v1, p. 19).
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -38,11 +43,12 @@ theorem of_affineIsometry_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
   have hm (S : Set F) (hS : IsCompact S) : (μ : Measure E) (f '' S) = (ν : Measure F) S := by
     rw [← hmap, Measure.map_apply f.continuous.measurable (hS.image f.continuous).measurableSet,
       Set.preimage_image_eq _ f.injective]
-  have hcomb : f '' {z | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
+  have hcomb :
+    f '' {z | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
       {z | ∃ x ∈ f '' K, ∃ y ∈ f '' L, z = t • x + (1 - t) • y} := by
     have hf (x y : F) : f (t • x + (1 - t) • y) = t • f x + (1 - t) • f y := by
-      simpa only [AffineMap.lineMap_apply_module, sub_sub_cancel, AffineIsometry.coe_toAffineMap]
-        using f.toAffineMap.apply_lineMap x y (1 - t)
+      simpa only [AffineMap.lineMap_apply_module, sub_sub_cancel,
+        AffineIsometry.coe_toAffineMap] using f.toAffineMap.apply_lineMap x y (1 - t)
     ext z
     constructor
     · rintro ⟨_, ⟨x, hx, y, hy, rfl⟩, rfl⟩
@@ -50,13 +56,14 @@ theorem of_affineIsometry_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
     · rintro ⟨_, ⟨x, hx, rfl⟩, _, ⟨y, hy, rfl⟩, rfl⟩
       exact ⟨t • x + (1 - t) • y, ⟨x, hx, y, hy, rfl⟩, hf x y⟩
   have hc : IsCompact {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} := by
-    have he : {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
+    have he :
+      {z : F | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
         (fun p : F × F => t • p.1 + (1 - t) • p.2) '' (K ×ˢ L) := by
       ext z
       simp only [mem_ofPred_eq, mem_image, mem_prod]
       constructor
-      · rintro ⟨x, hx, y, hy, rfl⟩; exact ⟨(x,y), ⟨hx,hy⟩, rfl⟩
-      · rintro ⟨⟨x,y⟩, ⟨hx,hy⟩, rfl⟩; exact ⟨x,hx,y,hy,rfl⟩
+      · rintro ⟨x, hx, y, hy, rfl⟩; exact ⟨(x, y), ⟨hx, hy⟩, rfl⟩
+      · rintro ⟨⟨x, y⟩, ⟨hx, hy⟩, rfl⟩; exact ⟨x, hx, y, hy, rfl⟩
     rw [he]
     exact (hK.prod hL).image (by fun_prop)
   have h := hμ (f '' K) (f '' L) (hK.image f.continuous) (hL.image f.continuous) t ht ht1
@@ -94,22 +101,24 @@ theorem of_continuousLinearEquiv_map {μ : ProbabilityMeasure E} (hμ : LogConca
   have h := hμ (T '' K) (T '' L) (hK.image T.continuous) (hL.image T.continuous) t ht ht1
   rwa [hm K hK, hm L hL, ← hcomb, hm _ hc] at h
 
-/-- Pushforward along an affine isometric embedding of a complete space preserves compact-set log-concavity
-(the converse direction of `of_affineIsometry_map`; lower-dimensional images allowed, no density assumed). -/
-theorem map_affineIsometry [CompleteSpace F]
-    (ν : ProbabilityMeasure F) (hν : LogConcave ν)
+/--
+Pushforward along an affine isometric embedding of a complete space preserves compact-set
+log-concavity
+(the converse direction of `of_affineIsometry_map`; lower-dimensional images allowed, no density
+assumed). -/
+theorem map_affineIsometry [CompleteSpace F] (ν : ProbabilityMeasure F) (hν : LogConcave ν)
     (μ : ProbabilityMeasure E) (f : F →ᵃⁱ[ℝ] E)
-    (hmap : (μ : Measure E) = (ν : Measure F).map f) :
-    LogConcave μ := by
+    (hmap : (μ : Measure E) = (ν : Measure F).map f) : LogConcave μ := by
   intro K L hK hL t ht0 ht1
   have hK' := f.isometry.isClosedEmbedding.isProperMap.isCompact_preimage hK
   have hL' := f.isometry.isClosedEmbedding.isProperMap.isCompact_preimage hL
   have h := hν (f ⁻¹' K) (f ⁻¹' L) hK' hL' t ht0 ht1
   have hf (x y : F) : f (t • x + (1 - t) • y) = t • f x + (1 - t) • f y := by
-    simpa only [AffineMap.lineMap_apply_module, sub_sub_cancel, AffineIsometry.coe_toAffineMap]
-      using f.toAffineMap.apply_lineMap x y (1 - t)
+    simpa only [AffineMap.lineMap_apply_module, sub_sub_cancel,
+      AffineIsometry.coe_toAffineMap] using f.toAffineMap.apply_lineMap x y (1 - t)
   have hc : IsCompact {z : E | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} := by
-    have he : {z : E | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
+    have he :
+      {z : E | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
         (fun p : E × E => t • p.1 + (1 - t) • p.2) '' (K ×ˢ L) := by
       ext z
       simp only [mem_ofPred_eq, mem_image, mem_prod]
@@ -219,9 +228,10 @@ variable {V₁ V₂ : Type*} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V�
   [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] [MeasurableSpace V₂] [BorelSpace V₂]
 
 /-- The image of a log-concave law under a continuous linear equivalence is log-concave. -/
-theorem mapContinuousLinearEquiv {ν : ProbabilityMeasure V₁} (hν : LogConcave ν) (T : V₁ ≃L[ℝ] V₂) :
-    LogConcave (Probability.mapContinuousLinearEquiv ν T) :=
-  hν.of_continuousLinearEquiv_map _ T.symm (Probability.measurePreserving_mapContinuousLinearEquiv_symm ν T).map_eq
+theorem mapContinuousLinearEquiv {ν : ProbabilityMeasure V₁} (hν : LogConcave ν)
+    (T : V₁ ≃L[ℝ] V₂) : LogConcave (Probability.mapContinuousLinearEquiv ν T) :=
+  hν.of_continuousLinearEquiv_map _ T.symm
+    (Probability.measurePreserving_mapContinuousLinearEquiv_symm ν T).map_eq
 
 end LinearEquivalence
 

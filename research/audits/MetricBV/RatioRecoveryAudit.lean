@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+module
+
+public import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for mass and symmetric-ratio recovery: mass continuity
 under set-indicator `L¹` convergence, the eventual mass window `(0, 1)` of the Minkowski recovery
@@ -8,6 +10,8 @@ sets and convergence of their symmetric quotients `content / min (mass, 1 - mass
 applied), the half-mass case without a branch, a concrete two-atom law `(δ₀ + δ₁)/2` on `ℝ` with
 `B = Iic (1/2)` satisfying all hypotheses, and the zero-dimensional space, where no mass window
 exists. No half-mass constraint on the recovery sets and no Cheeger equality is asserted. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section
@@ -53,9 +57,13 @@ theorem massWindow (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet 
 theorem contentRatio (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet B)
     (hB : perimeter (ν : Measure V) B < ⊤) (h0 : 0 < (ν : Measure V) B)
     (h1 : (ν : Measure V) B < 1) :
-    Tendsto (fun n => Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) /
-        min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
-          (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))) atTop
+    Tendsto
+      (fun n =>
+        Isoperimetry.minkowskiContent (ν : Measure V)
+            (minkowskiRecoverySet (ν : Measure V) hB n) /
+          min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
+            (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n)))
+      atTop
       (𝓝 (perimeter (ν : Measure V) B / min ((ν : Measure V) B) (1 - (ν : Measure V) B))) := by
   exact tendsto_minkowskiContent_div_min_minkowskiRecoverySet ν hBm hB h0 h1
 
@@ -71,13 +79,17 @@ theorem perimeterRatio (ν : ProbabilityMeasure V) {B : Set V} (hBm : Measurable
 /-- Half mass, without a branch: the limit is `perimeter B / 2⁻¹`. -/
 theorem halfMass (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet B)
     (hB : perimeter (ν : Measure V) B < ⊤) (hhalf : (ν : Measure V) B = 2⁻¹) :
-    Tendsto (fun n => Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) /
-        min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
-          (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))) atTop
-      (𝓝 (perimeter (ν : Measure V) B / 2⁻¹)) := by
-  have h := tendsto_minkowskiContent_div_min_minkowskiRecoverySet ν hBm hB
-    (by rw [hhalf]; exact ENNReal.inv_pos.2 ENNReal.ofNat_ne_top)
-    (by rw [hhalf]; exact ENNReal.inv_lt_one.2 ENNReal.one_lt_two)
+    Tendsto
+      (fun n =>
+        Isoperimetry.minkowskiContent (ν : Measure V)
+            (minkowskiRecoverySet (ν : Measure V) hB n) /
+          min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
+            (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n)))
+      atTop (𝓝 (perimeter (ν : Measure V) B / 2⁻¹)) := by
+  have h :=
+    tendsto_minkowskiContent_div_min_minkowskiRecoverySet ν hBm hB
+      (by rw [hhalf]; exact ENNReal.inv_pos.2 ENNReal.ofNat_ne_top)
+      (by rw [hhalf]; exact ENNReal.inv_lt_one.2 ENNReal.one_lt_two)
   rwa [hhalf, ENNReal.one_sub_inv_two, min_self] at h
 
 /-- Mass `0`: the masses still converge (to `0`), but the ratio theorem is not applicable. -/
@@ -114,11 +126,15 @@ and zero Minkowski content (small thickenings miss the atom at `1`), hence zero 
 the symmetric content quotients of its recovery sets converge to `0`. -/
 theorem twoAtomHalfLine :
     ∃ hB : perimeter (twoAtom : Measure ℝ) (Set.Iic (1 / 2)) < ⊤,
-      MeasurableSet (Set.Iic (1 / 2 : ℝ)) ∧ (twoAtom : Measure ℝ) (Set.Iic (1 / 2)) = 2⁻¹ ∧
-      Tendsto (fun n => Isoperimetry.minkowskiContent (twoAtom : Measure ℝ)
-          (minkowskiRecoverySet (twoAtom : Measure ℝ) hB n) /
-        min ((twoAtom : Measure ℝ) (minkowskiRecoverySet (twoAtom : Measure ℝ) hB n))
-          (1 - (twoAtom : Measure ℝ) (minkowskiRecoverySet (twoAtom : Measure ℝ) hB n))) atTop (𝓝 0) := by
+      MeasurableSet (Set.Iic (1 / 2 : ℝ)) ∧
+        (twoAtom : Measure ℝ) (Set.Iic (1 / 2)) = 2⁻¹ ∧
+          Tendsto
+            (fun n =>
+              Isoperimetry.minkowskiContent (twoAtom : Measure ℝ)
+                  (minkowskiRecoverySet (twoAtom : Measure ℝ) hB n) /
+                min ((twoAtom : Measure ℝ) (minkowskiRecoverySet (twoAtom : Measure ℝ) hB n))
+                  (1 - (twoAtom : Measure ℝ) (minkowskiRecoverySet (twoAtom : Measure ℝ) hB n)))
+            atTop (𝓝 0) := by
   set B : Set ℝ := Set.Iic (1 / 2) with hBdef
   have hBm : MeasurableSet B := measurableSet_Iic
   have hmass : (twoAtom : Measure ℝ) B = 2⁻¹ :=
@@ -134,17 +150,18 @@ theorem twoAtomHalfLine :
       show x < 1 / 2 + r
       linarith
     have hthick : (twoAtom : Measure ℝ) (Metric.thickening r B) ≤ 2⁻¹ :=
-      (measure_mono hsub).trans (twoAtom_apply measurableSet_Iio
-        (by simp only [Set.mem_Iio]; linarith [hr.1])
-        (by simp only [Set.mem_Iio, not_lt]; linarith [hr.2])).le
+      (measure_mono hsub).trans
+        (twoAtom_apply measurableSet_Iio (by simp only [Set.mem_Iio]; linarith [hr.1])
+            (by simp only [Set.mem_Iio, not_lt]; linarith [hr.2])).le
     rw [hmass, tsub_eq_zero_of_le hthick, ENNReal.zero_div]
   have hp : perimeter (twoAtom : Measure ℝ) B = 0 :=
     le_antisymm ((perimeter_le_minkowskiContent (twoAtom : Measure ℝ) hBm).trans_eq hc) bot_le
   have hB : perimeter (twoAtom : Measure ℝ) B < ⊤ := hp ▸ ENNReal.zero_lt_top
   refine ⟨hB, hBm, hmass, ?_⟩
-  have h := tendsto_minkowskiContent_div_min_minkowskiRecoverySet twoAtom hBm hB
-    (by rw [hmass]; exact ENNReal.inv_pos.2 ENNReal.ofNat_ne_top)
-    (by rw [hmass]; exact ENNReal.inv_lt_one.2 ENNReal.one_lt_two)
+  have h :=
+    tendsto_minkowskiContent_div_min_minkowskiRecoverySet twoAtom hBm hB
+      (by rw [hmass]; exact ENNReal.inv_pos.2 ENNReal.ofNat_ne_top)
+      (by rw [hmass]; exact ENNReal.inv_lt_one.2 ENNReal.one_lt_two)
   rwa [hp, ENNReal.zero_div] at h
 
 #print axioms massBound

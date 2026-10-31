@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.MeasurableCover
-import FunctionalInequalities.Analysis.Vector.Coarea.Local
+module
+
+public import FunctionalInequalities.Analysis.MeasurableCover
+public import FunctionalInequalities.Analysis.Vector.Coarea.Local
 
 /-! # Weighted slice measurability in codimension `m`, and the regular coarea formula
 
@@ -19,6 +21,8 @@ null critical fibres are supplied. Their rank-deficient and zero-derivative prod
 separate in `Vector/RankDeficient/Coarea.lean` and `Vector/Slice/Critical.lean`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory Module Set
@@ -36,12 +40,14 @@ variable {H K V W : Type*}
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
   [MeasurableSpace W] [BorelSpace W]
 
-/-- **The codimension-`m` regular coarea formula.**  On an open set where the differential of `u` is
+/--
+**The codimension-`m` regular coarea formula.**  On an open set where the differential of `u` is
 everywhere surjective, for every Borel `S ⊆ O` and every measurable `ℝ≥0∞` weight, the level
 function is measurable and the coarea equality holds, with the normalized Hausdorff measure of the
 codimension as the fibre measure.
 
-This is the analogue of the scalar regular-domain coarea, `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`; the level
+This is the analogue of the scalar regular-domain coarea,
+`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`; the level
 function is even **measurable**, not merely almost everywhere measurable.
 
 No finiteness, boundedness, integrability, regular-value or `SFinite` hypothesis is used, and no
@@ -49,13 +55,18 @@ regularity of `u` outside `O`.  **Nothing is claimed about the critical set**: s
 differential is assumed at every point of `O`. -/
 theorem coarea_of_contDiffOn_of_coareaJacobian_ne_zero {O S : Set V} {u : V → W} {g : V → ℝ≥0∞}
     (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O)
-    (hreg : ∀ x ∈ O, coareaJacobian (fderiv ℝ u x) ≠ 0)
-    (hS : MeasurableSet S) (hSO : S ⊆ O) (hg : Measurable g) :
-    Measurable (fun t : W => ∫⁻ y in S ∩ {x : V | u x = t}, g y
-        ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))) ∧
-    (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
-      = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y
-          ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W)) ∂(volume : Measure W)) := by
+    (hreg : ∀ x ∈ O, coareaJacobian (fderiv ℝ u x) ≠ 0) (hS : MeasurableSet S) (hSO : S ⊆ O)
+    (hg : Measurable g) :
+    Measurable
+        (fun t : W =>
+          ∫⁻ y in S ∩ {x : V | u x = t},
+            g y ∂(KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W))) ∧
+      (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) =
+        ∫⁻ t,
+          ∫⁻ y in S ∩ {x : V | u x = t},
+            g
+              y ∂(KLS.hausdorffNormalized V
+              (finrank ℝ V - finrank ℝ W)) ∂(volume : Measure W)) := by
   classical
   set ν : Measure V := KLS.hausdorffNormalized V (finrank ℝ V - finrank ℝ W) with hν
   rcases S.eq_empty_or_nonempty with hSe | ⟨z₀, hz₀⟩
@@ -70,35 +81,37 @@ theorem coarea_of_contDiffOn_of_coareaJacobian_ne_zero {O S : Set V} {u : V → 
     have hw : Measurable (O.piecewise u (fun _ => (0 : W))) :=
       hu.continuousOn.measurable_piecewise continuous_const.continuousOn hO.measurableSet
     intro n t
-    have heq : Q n ∩ {x : V | u x = t}
-        = Q n ∩ {x : V | O.piecewise u (fun _ => (0 : W)) x = t} := by
+    have heq :
+      Q n ∩ {x : V | u x = t} = Q n ∩ {x : V | O.piecewise u (fun _ => (0 : W)) x = t} := by
       ext x
       constructor <;> rintro ⟨hx, ht⟩ <;> exact ⟨hx, by simpa [hQO n hx] using ht⟩
     rw [heq]
     exact (hQm n).inter (hw (measurableSet_singleton t))
   have hmeas : ∀ n, Measurable (fun t : W => ∫⁻ y in Q n ∩ {x : V | u x = t}, g y ∂ν) :=
     fun n => (hformula (σ n) (Q n) (hQm n) (hQn n) g hg).1
-  have hsum : ∀ t : W, (∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν)
-      = ∑' n, ∫⁻ y in Q n ∩ {x : V | u x = t}, g y ∂ν := by
+  have hsum :
+    ∀ t : W,
+      (∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν) = ∑' n, ∫⁻ y in Q n ∩ {x : V | u x = t}, g y ∂ν := by
     intro t
     rw [← hQu, Set.iUnion_inter]
-    exact lintegral_iUnion (fun n => hslicem n t)
-      (fun i j hij => (hQd hij).mono Set.inter_subset_left Set.inter_subset_left) g
+    exact
+      lintegral_iUnion (fun n => hslicem n t)
+        (fun i j hij => (hQd hij).mono Set.inter_subset_left Set.inter_subset_left) g
   refine ⟨?_, ?_⟩
   · simp_rw [hsum]
     exact Measurable.tsum hmeas
   · calc
-      (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V))
-          = ∑' n, ∫⁻ x in Q n, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x
-              ∂(volume : Measure V) := by
+      (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)) =
+          ∑' n,
+            ∫⁻ x in Q n,
+              ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V) := by
         rw [← hQu]
         exact lintegral_iUnion hQm hQd _
       _ = ∑' n, ∫⁻ t, ∫⁻ y in Q n ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) :=
         tsum_congr fun n => (hformula (σ n) (Q n) (hQm n) (hQn n) g hg).2
       _ = ∫⁻ t, ∑' n, ∫⁻ y in Q n ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) :=
         (lintegral_tsum fun n => (hmeas n).aemeasurable).symm
-      _ = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := by
-        simp_rw [hsum]
+      _ = ∫⁻ t, ∫⁻ y in S ∩ {x : V | u x = t}, g y ∂ν ∂(volume : Measure W) := by simp_rw [hsum]
 
 /-- Regular coarea extends over AE-null critical fibres. The nullity is an
 explicit input, independently of the theorem used to establish it. -/

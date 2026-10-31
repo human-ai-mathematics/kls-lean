@@ -45,8 +45,11 @@ REQUIRED_NODE_FIELDS = {
 }
 NODE_STATUSES = {"drafted", "frozen", "proved"}
 FORBIDDEN_LEAN_TOKENS = re.compile(r"\b(?:sorry|admit|native_decide|axiom|unsafe)\b")
+# Module grammar `[public] [meta] import [all] M`: every directive is a proof-closure edge
+# (`meta` only selects IR; `all` only widens visibility), so the guard follows all of them.
 LEAN_IMPORTS = re.compile(
-    r"^[ \t]*(?:public[ \t]+)?import[ \t]+([\w.]+(?:[ \t]+[\w.]+)*)", re.MULTILINE
+    r"^[ \t]*(?:(?:public|meta)[ \t]+)*import[ \t]+(?:all[ \t]+)?([\w.]+(?:[ \t]+[\w.]+)*)",
+    re.MULTILINE,
 )
 
 

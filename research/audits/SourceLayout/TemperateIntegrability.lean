@@ -1,11 +1,16 @@
-import Lean
-import FunctionalInequalities.Probability.ExponentialMoments.Temperate
-import Mathlib.Analysis.Normed.Module.FiniteDimension
+module
+
+public import Lean
+public import FunctionalInequalities.Probability.ExponentialMoments.Temperate
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+meta import Lean
 
 /-! Legacy scalar/vector integrability contracts and the lower normed-space producer.
 The scalar contract has no second-countability or finite-dimensional source premise.
 Neither target completeness nor a probability/finite-measure instance is introduced.
 -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities MeasureTheory
 namespace SourceLayout

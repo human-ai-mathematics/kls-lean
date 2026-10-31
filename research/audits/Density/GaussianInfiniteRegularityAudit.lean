@@ -1,6 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 
 /-! Independent full-signature client for smoothness of the actual Gaussian convolution. -/
+
+@[expose] public section
 
 set_option autoImplicit false
 noncomputable section

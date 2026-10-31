@@ -1,9 +1,11 @@
-import FunctionalInequalities.Energy.Form.Dirichlet
-import FunctionalInequalities.Energy.WeightedGradient.Core
-import FunctionalInequalities.KLS.ConditionalFiber.Basic
-import FunctionalInequalities.Probability.Variance.TwoPoint
-import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
-import Mathlib.MeasureTheory.Function.LpSpace.Complete
+module
+
+public import FunctionalInequalities.Energy.Form.Dirichlet
+public import FunctionalInequalities.Energy.WeightedGradient.Core
+public import FunctionalInequalities.KLS.ConditionalFiber.Basic
+public import FunctionalInequalities.Probability.Variance.TwoPoint
+public import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
+public import Mathlib.MeasureTheory.Function.LpSpace.Complete
 
 /-!
 # The conditional-fiber form is a Dirichlet energy
@@ -29,6 +31,8 @@ Borel probability law on a finite-dimensional inner-product space and every prob
 unit sphere. Nothing here compares the form with a gradient energy, bounds it by a fiber Poincaré
 constant, or asserts a frame bound or a Poincaré inequality.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -92,7 +96,7 @@ omit [BorelSpace E] [SecondCountableTopology E] [IsMarkovKernel κ] in
 theorem energyAt_of_not_nondegenerate (hb : ¬ Nondegenerate κ b) (f : E → ℝ) :
     energyAt κ b f = 0 := by
   unfold energyAt
-  rw [if_neg hb]
+  rw [ite_eq_right hb]
 
 omit [SecondCountableTopology E] in
 /-- Jump representation of the fiber energy: on a nondegenerate fiber the normalized variance is
@@ -102,7 +106,7 @@ theorem energyAt_eq_jump_div {f : E → ℝ} (hf : Measurable f) (hb : Nondegene
   rw [← two_mul_evariance_eq_jump κ b hf,
     ENNReal.mul_div_mul_left _ _ two_ne_zero ENNReal.ofNat_ne_top]
   unfold energyAt
-  rw [if_pos hb]
+  rw [ite_eq_left hb]
 
 omit [BorelSpace E] [SecondCountableTopology E] in
 /-- A globally `L`-Lipschitz test has squared jump integral at most `L²` times the two-point
@@ -207,8 +211,8 @@ theorem energyAt_add_sub {f g : E → ℝ} (hf : Measurable f) (hg : Measurable 
 theorem energyAt_comp_le (φ : Energy.NormalContraction) {f : E → ℝ} (hf : Measurable f) :
     energyAt κ b (fun x ↦ φ (f x)) ≤ energyAt κ b f := by
   by_cases hb : Nondegenerate κ b
-  · rw [energyAt_eq_jump_div κ b (f := fun x ↦ φ (f x)) (φ.lipschitz.continuous.measurable.comp hf) hb,
-      energyAt_eq_jump_div κ b hf hb]
+  · rw [energyAt_eq_jump_div κ b (f := fun x ↦ φ (f x))
+        (φ.lipschitz.continuous.measurable.comp hf) hb, energyAt_eq_jump_div κ b hf hb]
     refine ENNReal.div_le_div_right (lintegral_mono fun p ↦ ?_) _
     refine pow_le_pow_left' ?_ 2
     rw [← edist_eq_enorm_sub, ← edist_eq_enorm_sub]
@@ -411,8 +415,7 @@ theorem lowerSemicontinuous_form :
   obtain ⟨fs, hfs, hbound⟩ := exists_seq_forall_of_frequently hfreq
   have hnorm := (Lp.tendsto_Lp_iff_tendsto_eLpNorm' fs f).1 hfs
   have hinm : TendstoInMeasure (μ : Measure E) (fun n ↦ ⇑(fs n)) atTop ⇑f :=
-    tendstoInMeasure_of_tendsto_eLpNorm two_ne_zero (fun n ↦ Lp.aestronglyMeasurable _)
-      (Lp.aestronglyMeasurable f) hnorm
+    tendstoInMeasure_of_tendsto_eLpNorm two_ne_zero hnorm
   obtain ⟨ns, -, hae⟩ := hinm.exists_seq_tendsto_ae
   calc form μ ρ f = energy μ ρ ⇑f := rfl
     _ ≤ liminf (fun k ↦ energy μ ρ ⇑(fs (ns k))) atTop :=

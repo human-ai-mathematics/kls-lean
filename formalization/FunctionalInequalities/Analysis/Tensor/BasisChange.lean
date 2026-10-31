@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Tensor.Coefficients
+module
+
+public import FunctionalInequalities.Analysis.Tensor.Coefficients
 
 /-!
 # Basis independence of the Hilbert–Schmidt norm of coefficient arrays
@@ -29,6 +31,8 @@ This is a statement about real-valued multilinear forms only; it does not identi
 an intrinsic Hilbert–Schmidt norm defined without bases, and it says nothing about the operator
 norm beyond `norm_le_norm_coordTensor`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

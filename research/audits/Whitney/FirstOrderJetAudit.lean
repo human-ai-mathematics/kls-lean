@@ -1,7 +1,9 @@
-import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.Calculus.ContDiff.Operations
-import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+module
+
+public import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.Calculus.ContDiff.Operations
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 /-!
 # Strict audit client for the first-order jet condition (necessity half of Whitney extension)
@@ -20,6 +22,8 @@ hypothesis is the right one and cannot be weakened to something the conclusion w
 `trivial_jet` instantiates it at the jet of the realizing function itself, and `concrete`
 at a square on a closed ball, so the statement is not vacuous.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -74,8 +78,7 @@ end Consumers
 theorem concrete (r : ℝ) :
     ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
       ∀ x ∈ Metric.closedBall (0 : ℝ) r, ∀ y ∈ Metric.closedBall (0 : ℝ) r, ‖y - x‖ < δ →
-        ‖y ^ 2 - x ^ 2 - fderiv ℝ (fun z : ℝ => z ^ 2) x (y - x)‖ ≤ ε * ‖y - x‖ :=
-  by
+        ‖y ^ 2 - x ^ 2 - fderiv ℝ (fun z : ℝ => z ^ 2) x (y - x)‖ ≤ ε * ‖y - x‖ := by
   have hv : ContDiff ℝ 1 (fun z : ℝ => z ^ 2) := contDiff_id.pow 2
   exact uniform_jet_remainder_of_contDiff (isCompact_closedBall 0 r) hv
     (fun _ _ => rfl) (fun _ _ => rfl)

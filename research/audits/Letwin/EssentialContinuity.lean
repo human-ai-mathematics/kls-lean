@@ -1,5 +1,10 @@
-import FunctionalInequalities.Analysis.Convex.EssentialContinuity
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Convex.EssentialContinuity
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Metric

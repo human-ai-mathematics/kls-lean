@@ -1,7 +1,9 @@
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.Convex.Continuous
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+module
+
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Convex.Continuous
+public import Mathlib.Analysis.SpecialFunctions.ExpDeriv
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
 # Variation of `e^{-G}` for a convex function `G` on an interval
@@ -18,6 +20,8 @@ These are the one-dimensional estimates behind Cordero-Erausquin–Klartag, *Mom
 (arXiv:1304.0630v1), Lemma 4 (`∫ |∂ᵢρ| ≤ 2 ∫ sup_t ρ(y, t) dy` for a log-concave `ρ`) and the
 vanishing boundary term of Lemma 9 for a continuous log-concave function on a line.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -48,8 +52,7 @@ theorem integral_rightDeriv_mul_exp_neg (hJ : IsOpen J) (hG : ConvexOn ℝ J G) 
       rw [hJ.interior_eq]; exact hsub (Ioo_subset_Icc_self hs)
     have hd := (hG.hasDerivWithinAt_rightDeriv_of_mem_interior hsJ).neg.exp.neg
     convert hd using 1
-    · funext x; simp only [Pi.neg_apply]
-    · simp only [Pi.neg_apply]; ring) hint
+    simp only [Pi.neg_apply]; ring) hint
   rw [h]
   ring
 

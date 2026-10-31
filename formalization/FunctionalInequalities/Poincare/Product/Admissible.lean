@@ -1,5 +1,7 @@
-import FunctionalInequalities.Poincare.Product.Geometry
-import FunctionalInequalities.Probability.Variance.Product
+module
+
+public import FunctionalInequalities.Poincare.Product.Geometry
+public import FunctionalInequalities.Probability.Variance.Product
 
 /-!
 # Almost-everywhere admissibility of Hilbert-product sections
@@ -18,6 +20,8 @@ The Mathlib sources at the pinned v4.33.0 commit are
 [L² transport](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Function/LpSeminorm/Basic.lean),
 and [integrability under equivalences](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Function/L1Space/Integrable.lean).
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
-import FunctionalInequalities.Analysis.Tensor.Coordinate
+module
+
+public import FunctionalInequalities.KLS.BKL.Cumulant.Envelope
+public import FunctionalInequalities.Analysis.Tensor.Coordinate
 
 /-!
 # Audit: BKL Section 6 envelope arithmetic with source-range consumers
@@ -15,6 +17,8 @@ process, energy estimate or Theorem 4.1 is asserted.
 * `absorption_at_four`: a source-range instance in which the square-root term is positive.
 * `contract_identity`: a nonzero instance of the contraction (101)–(102).
 -/
+
+@[expose] public section
 
 namespace BKLCumulantEnvelopeAudit
 

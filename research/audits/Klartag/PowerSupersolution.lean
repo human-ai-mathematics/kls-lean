@@ -1,9 +1,13 @@
-import FunctionalInequalities.KLS.Klartag.PowerSupersolution
+module
+
+public import FunctionalInequalities.KLS.Klartag.PowerSupersolution
 
 /-! Klartag arXiv:1309.2767v1, Lemma 5.2, dual form of Section 5: the statement is restated
 with its exact hypotheses (open `K`, `φ` smooth on `K` with positive definite Hessian, `ρ`
 convex and `C²` on `K`, the dual transport equation (66) on `K`) and conclusion
 `L(f^ε) + ε f^ε ≥ 0` for `f = ⟪(∇²φ)⁻¹θ, θ⟫` and the operator (67). -/
+
+@[expose] public section
 set_option autoImplicit false
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff RealInnerProductSpace Topology
@@ -32,7 +36,8 @@ end KlartagAudit
 #print axioms FunctionalInequalities.Analysis.BakryEmery.exists_contDiff_eventuallyEq_germ
 #print axioms FunctionalInequalities.Analysis.BakryEmery.nondivergenceOperator_congr
 #print axioms FunctionalInequalities.Analysis.BakryEmery.hessianOperator_congr_of_eventuallyEq
-#print axioms FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_congr_of_eventuallyEq
+#print axioms
+  FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_congr_of_eventuallyEq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.inverseHessianEntry_congr_of_eventuallyEq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.logDetHessian_congr_of_eventuallyEq
 #print axioms FunctionalInequalities.Analysis.BakryEmery.fderiv_dualTransport_rhs

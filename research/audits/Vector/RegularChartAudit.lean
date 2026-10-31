@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.Vector.Coarea.RegularChart
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import FunctionalInequalities.Analysis.Vector.Coarea.RegularChart
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Scope audit for the codimension-`m` level chart
@@ -25,6 +27,8 @@ family in exactly the form `u (ι y + ψ (y, t) • e) = t` that the proved scal
 `Analysis.setLIntegral_coarea_graph_family` consumes, from exactly the scalar hypotheses
 `gradient u x₀ = c • e` with `c ≠ 0`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -142,28 +146,34 @@ theorem isVectorGraphSplitting_of_isGraphSplitting {ι : H →ₗᵢ[ℝ] V} {e 
 
 /-- **`m = 1` produces the proved scalar shape.**  From exactly the scalar hypotheses of
 `Analysis.exists_coarea_neighborhood` — a graph splitting and `gradient u x₀ = c • e` with `c ≠ 0` —
-the codimension-`m` chart yields a family `u (ι y + ψ (y, t) • e) = t` on an open joint domain, which
+the codimension-`m` chart yields a family `u (ι y + ψ (y, t) • e) = t` on an open joint domain,
+which
 is the hypothesis `hlevel` of the proved `Analysis.setLIntegral_coarea_graph_family`. -/
 theorem codimension_one_levelGraphFamily {ι : H →ₗᵢ[ℝ] V} {e : V} (hsp : IsGraphSplitting ι e)
     {u : V → ℝ} {O : Set V} (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) {x₀ : V} (hx₀ : x₀ ∈ O)
     {c : ℝ} (hc : c ≠ 0) (hgrad : gradient u x₀ = c • e) :
     ∃ (Ω : Set (H × ℝ)) (ψ : H × ℝ → ℝ) (N : Set V),
-      IsOpen Ω ∧ ContDiff ℝ 1 ψ ∧ IsOpen N ∧ x₀ ∈ N ∧ N ⊆ O ∧
-      (∀ p ∈ Ω, u (ι p.1 + ψ p • e) = p.2) ∧
-      (fun p : H × ℝ => ι p.1 + ψ p • e) '' Ω = N ∧
-      Set.InjOn (fun p : H × ℝ => ι p.1 + ψ p • e) Ω := by
+      IsOpen Ω ∧
+        ContDiff ℝ 1 ψ ∧
+          IsOpen N ∧
+            x₀ ∈ N ∧
+              N ⊆ O ∧
+                (∀ p ∈ Ω, u (ι p.1 + ψ p • e) = p.2) ∧
+                  (fun p : H × ℝ => ι p.1 + ψ p • e) '' Ω = N ∧
+                    Set.InjOn (fun p : H × ℝ => ι p.1 + ψ p • e) Ω := by
   have hd : ∀ v : V, fderiv ℝ u x₀ v = ⟪gradient u x₀, v⟫ := by
     intro v
     rw [← toDual_gradient (𝕜 := ℝ) (f := u) (x := x₀)]
     rfl
   have hker : fderiv ℝ u x₀ ∘L ι.toContinuousLinearMap = 0 := by
     refine ContinuousLinearMap.ext fun y => ?_
-    simp only [ContinuousLinearMap.comp_apply, LinearIsometry.coe_toContinuousLinearMap, zero_apply]
+    simp only [ContinuousLinearMap.comp_apply, LinearIsometry.coe_toContinuousLinearMap,
+      zero_apply]
     rw [hd, hgrad, real_inner_smul_left, hsp.perp' y, mul_zero]
-  have hQ : Function.Bijective
-      (fderiv ℝ u x₀ ∘L (lineIsometry hsp.norm_e).toContinuousLinearMap) := by
-    have hval : ∀ s : ℝ,
-        (fderiv ℝ u x₀ ∘L (lineIsometry hsp.norm_e).toContinuousLinearMap) s = c * s := by
+  have hQ :
+    Function.Bijective (fderiv ℝ u x₀ ∘L (lineIsometry hsp.norm_e).toContinuousLinearMap) := by
+    have hval :
+      ∀ s : ℝ, (fderiv ℝ u x₀ ∘L (lineIsometry hsp.norm_e).toContinuousLinearMap) s = c * s := by
       intro s
       simp only [ContinuousLinearMap.comp_apply, LinearIsometry.coe_toContinuousLinearMap,
         lineIsometry_apply]

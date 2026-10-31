@@ -1,4 +1,6 @@
-import FunctionalInequalities.Analysis.Tensor.BasisChange
+module
+
+public import FunctionalInequalities.Analysis.Tensor.BasisChange
 
 /-!
 # Audit: basis independence of the Hilbert–Schmidt norm of coefficient arrays
@@ -13,6 +15,8 @@ Section 2), discharged by `Analysis/Tensor/BasisChange.lean`:
 
 This is a supporting lemma; it does not state or prove any theorem of the paper.
 -/
+
+@[expose] public section
 
 noncomputable section
 

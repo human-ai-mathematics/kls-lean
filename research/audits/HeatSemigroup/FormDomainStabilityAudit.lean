@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
+module
+
+public import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 
 /-! Independent statement audit for invariance of the form domain `D(T)` under the generated
 semigroup and for energy contraction.
@@ -9,6 +11,8 @@ contraction on the generator domain) or `f ∈ D(T)` (all other statements): no 
 test class, no compact support and no positive-time smoothing is assumed, and `t = 0` and the
 zero vector are exercised explicitly. The gradient is the closed operator `T` (concretely the
 closed weighted gradient with an arbitrary weight `B`), not a classical representative. -/
+
+@[expose] public section
 noncomputable section
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.Semigroup
 open scoped RealInnerProductSpace LinearPMap
@@ -162,13 +166,16 @@ end SemigroupFormDomainStabilityAudit
 #print axioms FunctionalInequalities.Analysis.Semigroup.norm_map_resolventDomain_sub_sq_le_sub
 #print axioms FunctionalInequalities.Analysis.Semigroup.norm_map_resolventDomain_le
 #print axioms FunctionalInequalities.Analysis.Semigroup.norm_map_resolventDomain_sub_map_sq_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_map_resolventDomain_sub_map_lt
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_map_resolventDomain_sub_map_lt
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.norm_map_apply_sq_le_mul
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.norm_map_apply_sq_le_mul_norm
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.norm_map_apply_le_of_generator
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.inner_adjointComp_apply_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.exists_seq_mem_adjointComp_domain_tendsto_graph
-#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_domain_norm_map_apply_le
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.exists_seq_mem_adjointComp_domain_tendsto_graph
+#print axioms
+  FunctionalInequalities.Analysis.Semigroup.Generated.exists_mem_domain_norm_map_apply_le
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.preserves_form_domain
 #print axioms FunctionalInequalities.Analysis.Semigroup.Generated.norm_map_apply_le
 #print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.preserves_form_domain

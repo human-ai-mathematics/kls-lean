@@ -1,9 +1,16 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
+module
 
-/-! Audit client for the weak inverse-Hessian generator identities (Letwin arXiv:2607.24164v1 (2.2), weak `C^{1,1}`
-counterpart) and the inverse-Hessian integrability interface of `Analysis/Matrix/Piola.lean`: the exact original
-statements, the generator symmetry they give for compactly supported `C²` tests, and an actual compactly supported
+public import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
+
+/-! Audit client for the weak inverse-Hessian generator identities (Letwin arXiv:2607.24164v1 (2.2),
+weak `C^{1,1}`
+counterpart) and the inverse-Hessian integrability interface of `Analysis/Matrix/Piola.lean`: the
+exact original
+statements, the generator symmetry they give for compactly supported `C²` tests, and an actual
+compactly supported
 Lipschitz test derivative against inverse-Hessian entries. Canonical imports only. -/
+
+@[expose] public section
 
 noncomputable section
 open MeasureTheory Set Filter
@@ -72,23 +79,28 @@ theorem exact_integrability_interface {n : ℕ}
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
   exact integrable_inv_hessianMatrix_mul_of_bounded_compact hG hF hdet hf hfc hC i j
 
-/-- The derivative of a compactly supported Lipschitz test is integrable against every inverse-Hessian entry, with
+/--
+The derivative of a compactly supported Lipschitz test is integrable against every inverse-Hessian
+entry, with
 no global bound on the gradient of `u` beyond its Lipschitz constant. -/
 theorem lipschitz_compact_test_derivative_integrable {n : ℕ}
-    {u F ψ : EuclideanSpace ℝ (Fin n) → ℝ}
-    {G : NNReal} (hG : LipschitzWith G (gradient u)) (hF : Continuous F)
-    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
-      (hessianMatrix u x).det = Real.exp (F x))
+    {u F ψ : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal} (hG : LipschitzWith G (gradient u))
+    (hF : Continuous F)
+    (hdet :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).det = Real.exp (F x))
     {Lψ : NNReal} (hψ : LipschitzWith Lψ ψ) (hψc : HasCompactSupport ψ) (i j : Fin n)
     (v : EuclideanSpace ℝ (Fin n)) :
     Integrable (fun x => (hessianMatrix u x)⁻¹ i j * fderiv ℝ ψ x v)
       (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-  refine integrable_inv_hessianMatrix_mul_of_bounded_compact hG hF hdet
-    ((ContinuousLinearMap.apply ℝ ℝ v).measurable.comp (measurable_fderiv ℝ ψ))
-    (hψc.fderiv_apply ℝ v) (C := (Lψ : ℝ) * ‖v‖) ?_ i j
+  refine
+    integrable_inv_hessianMatrix_mul_of_bounded_compact hG hF hdet
+      ((ContinuousLinearMap.apply ℝ ℝ v).measurable.comp (measurable_fderiv ℝ ψ))
+      (hψc.fderiv_apply ℝ v) (C := (Lψ : ℝ) * ‖v‖) ?_ i j
   intro x
-  exact ((fderiv ℝ ψ x).le_opNorm v).trans
-    (mul_le_mul_of_nonneg_right (norm_fderiv_le_of_lipschitz ℝ hψ) (norm_nonneg v))
+  exact
+    ((fderiv ℝ ψ x).le_opNorm v).trans
+      (mul_le_mul_of_nonneg_right (norm_fderiv_le_of_lipschitz ℝ hψ) (norm_nonneg v))
 
 #print axioms FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy
 #print axioms FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy'

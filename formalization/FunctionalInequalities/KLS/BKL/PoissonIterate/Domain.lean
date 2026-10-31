@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
+module
+
+public import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
 
 /-!
 # The BKL iterates lie in `D(A)`: domain, (30), (33), (46), (35)–(36) and (32)
@@ -46,6 +48,8 @@ of smooth functions of polynomial growth; Lemmas 3.2–3.4, Corollary 3.5 and Th
 proved here.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 open MeasureTheory
@@ -63,12 +67,12 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Measurabl
 /-- The total gradient agrees with `T` on its domain. -/
 theorem weakGrad_of_mem {u : Lp ℝ 2 (ν : Measure V)} (hu : u ∈ T.domain) :
     weakGrad T u = T ⟨u, hu⟩ :=
-  dif_pos hu
+  dite_eq_left hu
 
 /-- The total generator agrees with `T†T` on its domain. -/
 theorem gen_of_mem {u : Lp ℝ 2 (ν : Measure V)} (hu : u ∈ (adjointComp T).domain) :
     gen T u = adjointComp T ⟨u, hu⟩ :=
-  dif_pos hu
+  dite_eq_left hu
 
 /-- The total gradient of `0` is `0`. -/
 @[simp]
@@ -121,7 +125,7 @@ theorem centeredInv_spec_of_exists {g : Lp ℝ 2 (ν : Measure V)}
     ∃ hu : centeredInv T g ∈ (adjointComp T).domain, adjointComp T ⟨_, hu⟩ = g := by
   have hc : centeredInv T g = (h.choose : Lp ℝ 2 (ν : Measure V)) := by
     unfold centeredInv
-    rw [dif_pos h]
+    rw [dite_eq_left h]
   rw [hc]
   exact ⟨h.choose.2, h.choose_spec.2⟩
 
@@ -364,7 +368,7 @@ theorem energy_step {k : ℕ} (h : Field ν k) :
   by_cases h0 : energy T̄ (invField T̄ (grad0 T̄ h)) = 0
   · rw [h0, mul_zero, normSq_grad0_eq_zero_of_energy_eq_zero m hν hi hνU hU hC h h0]
   · have hs : scale T̄ h = Real.sqrt (normSq (grad0 T̄ h) /
-        energy T̄ (invField T̄ (grad0 T̄ h))) := if_neg h0
+        energy T̄ (invField T̄ (grad0 T̄ h))) := ite_eq_right h0
     rw [hs, Real.sq_sqrt (div_nonneg (normSq_nonneg _) (energy_nonneg _ _)),
       div_mul_cancel₀ _ h0]
 
@@ -387,11 +391,11 @@ theorem inv_le_scale_sq_step (hCpos : 0 < C) {k : ℕ} (h : Field ν k) (hs : 0 
   set E := energy T̄ (invField T̄ (grad0 T̄ h)) with hE
   have h0 : E ≠ 0 := by
     intro h0
-    have : scale T̄ h = 0 := if_pos h0
+    have : scale T̄ h = 0 := ite_eq_left h0
     exact hs.ne' this
   have hEpos : 0 < E := lt_of_le_of_ne (normSq_nonneg _) (Ne.symm h0)
   have hsq : scale T̄ h ^ 2 = normSq (grad0 T̄ h) / E := by
-    have : scale T̄ h = Real.sqrt (normSq (grad0 T̄ h) / E) := if_neg h0
+    have : scale T̄ h = Real.sqrt (normSq (grad0 T̄ h) / E) := ite_eq_right h0
     rw [this, Real.sq_sqrt (div_nonneg (normSq_nonneg _) hEpos.le)]
   have hbound : E ≤ (C : ℝ) * normSq (grad0 T̄ h) := by
     rw [hE, energy_eq_sum, normSq, Finset.mul_sum]

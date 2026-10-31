@@ -1,12 +1,15 @@
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
-import FunctionalInequalities.Poincare.LocalSlope.Gradient
-import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
+module
+
+public import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
+public import FunctionalInequalities.Poincare.LocalSlope.Gradient
+public import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 
 /-!
 # Poincare constants for general log-concave laws
 
 Read `KLS/LogConcave/Density/AbsoluteContinuity.lean` for intrinsic absolute continuity, then
-`Poincare/LocalSlope/SmoothTestComparison.lean` for the test-class comparison. This module removes the explicit absolute-continuity premise
+`Poincare/LocalSlope/SmoothTestComparison.lean` for the test-class comparison. This module removes
+the explicit absolute-continuity premise
 from the comparison when the probability law is compact-set log-concave. It also supplies the
 gradient-form optimum `Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave`
 and, for an absolutely continuous law, the ambient unit-energy form
@@ -15,6 +18,8 @@ Ambient singularity,
 zero-dimensional affine support, and infinite optimal constants are included. No dimension-free
 bound, Cheeger energy identification, or raw/core agreement is asserted.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -27,11 +32,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
 
 /-- The ambient smooth-test, intrinsic smooth-test, and intrinsic literature optima agree
 for every log-concave probability law. Absolute continuity is derived, not assumed. -/
-theorem smoothTest_constant_eq_intrinsic_and_localSlope
-    {μ : ProbabilityMeasure E} (hμ : KLS.LogConcave μ) :
+theorem smoothTest_constant_eq_intrinsic_and_localSlope {μ : ProbabilityMeasure E}
+    (hμ : KLS.LogConcave μ) :
     Poincare.SmoothTest.constant (μ : Measure E) =
-        Poincare.SmoothTest.constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ∧
-      Poincare.SmoothTest.constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) =
+        Poincare.SmoothTest.constant
+          (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ∧
+      Poincare.SmoothTest.constant
+          (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) =
         Poincare.LocalSlope.Intrinsic.constant μ :=
   Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope μ Measure.addHaar
     (hμ.intrinsic_absolutelyContinuous Measure.addHaar)

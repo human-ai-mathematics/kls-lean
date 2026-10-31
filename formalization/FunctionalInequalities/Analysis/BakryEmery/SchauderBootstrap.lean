@@ -1,5 +1,7 @@
-import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Induction
-import FunctionalInequalities.Analysis.BakryEmery.LinearizedEquation
+module
+
+public import FunctionalInequalities.Analysis.IteratedDerivative.Bootstrap.Induction
+public import FunctionalInequalities.Analysis.BakryEmery.LinearizedEquation
 
 /-!
 # Smoothness of a strictly elliptic moment Monge–Ampère potential
@@ -8,6 +10,8 @@ Letwin arXiv:2607.24164v1 Lemma 2.2, strong-class smoothness support, following
 Gilbarg–Trudinger, Classics 2001, Lemma 17.16 and Theorem 6.2. The potential is given and
 locally C^{3,α}; the proof retains it while inducting through every finite order.
 -/
+
+@[expose] public section
 local macro "nat_cast_le" : tactic => `(tactic| first | (norm_cast; done) | (norm_cast; omega))
 
 noncomputable section
@@ -18,9 +22,10 @@ open scoped NNReal ContDiff BigOperators Matrix.Norms.Elementwise
 variable {n : ℕ}
 local notation "E" => EuclideanSpace ℝ (Fin n)
 
-/-- The inverse Hessian is locally uniformly elliptic once the Hessian is C¹ and positive definite. -/
-theorem locallyUniformElliptic_inverse_hessian {u : E → ℝ}
-    (hu : LocHolderDeriv 3 u) (hp : ∀ x, (hessianMatrix u x).PosDef) :
+/--
+The inverse Hessian is locally uniformly elliptic once the Hessian is C¹ and positive definite. -/
+theorem locallyUniformElliptic_inverse_hessian {u : E → ℝ} (hu : LocHolderDeriv 3 u)
+    (hp : ∀ x, (hessianMatrix u x).PosDef) :
     LocallyUniformElliptic (fun i j x => (hessianMatrix u x)⁻¹ i j) := by
   have hreg : ∀ i j, LocHolderDeriv 1 (fun x => (hessianMatrix u x)⁻¹ i j) :=
     LocHolderDeriv.matrix_inv_entry (fun i j => hu.hessianEntry i j)
@@ -28,10 +33,11 @@ theorem locallyUniformElliptic_inverse_hessian {u : E → ℝ}
   have hc : Continuous (fun x => (hessianMatrix u x)⁻¹) :=
     continuous_pi fun i => continuous_pi fun j => (hreg i j).contDiff.continuous
   intro s hs
-  let : CompactSpace (closedBall (0 : E) s) := isCompact_iff_compactSpace.mp (isCompact_closedBall (0 : E) s)
-  obtain ⟨a, b, ha, _hb, h⟩ := exists_uniform_quadratic_bounds
-    (fun x : closedBall (0 : E) s => (hessianMatrix u x.val)⁻¹)
-    (hc.comp continuous_subtype_val) (fun x => (hp x.val).inv)
+  let : CompactSpace (closedBall (0 : E) s) :=
+    isCompact_iff_compactSpace.mp (isCompact_closedBall (0 : E) s)
+  obtain ⟨a, b, ha, _hb, h⟩ :=
+    exists_uniform_quadratic_bounds (fun x : closedBall (0 : E) s => (hessianMatrix u x.val)⁻¹)
+      (hc.comp continuous_subtype_val) (fun x => (hp x.val).inv)
   refine ⟨a, max a b, ha, le_max_left _ _, fun x hx ξ => ?_⟩
   refine ⟨(h ⟨x, hx⟩ ξ).1, (h ⟨x, hx⟩ ξ).2.trans ?_⟩
   exact mul_le_mul_of_nonneg_right (le_max_right _ _) (sq_nonneg ‖ξ‖)

@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
-import FunctionalInequalities.Energy.LocalSlope.Basic
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
+public import FunctionalInequalities.Energy.LocalSlope.Basic
 
 /-!
 # Minkowski coarea inequality with the local slope
@@ -37,6 +39,8 @@ statements, the latter now an instance of the majorant lemma.  The `C¹` theorem
 generic measurable-majorant theorem.  This is not a
 pointwise comparison of Minkowski content with a perimeter.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -89,15 +93,16 @@ theorem limsup_ofReal_openBallSup_le_localSlope (u : V → ℝ) (x : V) {r : ℕ
 variable [MeasurableSpace V] [BorelSpace V]
 
 /-- Layer cake with the open-ball majorant at the radii `1 / (n + 1)`, on every metric space. -/
-theorem lintegral_minkowskiContent_superlevel_le_limsup_openBallSup (ν : Measure V) [IsFiniteMeasure ν]
-    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
+theorem lintegral_minkowskiContent_superlevel_le_limsup_openBallSup (ν : Measure V)
+    [IsFiniteMeasure ν] {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
-      ∫⁻ x, limsup (fun n : ℕ => ENNReal.ofReal
-        ((openBallSup u (1 / ((n : ℝ) + 1)) x - u x) / (1 / ((n : ℝ) + 1)))) atTop
-        ∂(ν : Measure V) :=
-  lintegral_minkowskiContent_superlevel_le_limsup_of_majorant ν hK
-    (r := fun n : ℕ => 1 / ((n : ℝ) + 1)) (fun n => by positivity)
-    tendsto_one_div_add_atTop_nhds_zero_nat
+      ∫⁻ x,
+        limsup
+          (fun n : ℕ =>
+            ENNReal.ofReal ((openBallSup u (1 / ((n : ℝ) + 1)) x - u x) / (1 / ((n : ℝ) + 1))))
+          atTop ∂(ν : Measure V) :=
+  lintegral_minkowskiContent_superlevel_le_limsup_of_majorant ν hK (r := fun n : ℕ =>
+    1 / ((n : ℝ) + 1)) (fun n => by positivity) tendsto_one_div_add_atTop_nhds_zero_nat
     (fun n => measurable_openBallSup hK (by positivity))
     (fun n t => thickening_superlevel_subset_openBallSup hK _ t)
     (fun n x => openBallSup_le_add hK (by positivity) x)
@@ -116,8 +121,8 @@ theorem lintegral_minkowskiContent_superlevel_le_localSlope (ν : Measure V) [Is
 /-- The actual right-radius liminf of integrated open-ball growth bounds the superlevel
 content integral. A sequence attaining that liminf is used only to prove the radius-filter
 statement; no sequence-specific replacement is made in the conclusion. -/
-theorem lintegral_minkowskiContent_superlevel_le_liminf_openBallSup (ν : Measure V) [IsFiniteMeasure ν]
-    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
+theorem lintegral_minkowskiContent_superlevel_le_liminf_openBallSup (ν : Measure V)
+    [IsFiniteMeasure ν] {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν) (𝓝[>] 0) := by
   let H : ℝ → ℝ≥0∞ := fun r => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν
@@ -126,9 +131,10 @@ theorem lintegral_minkowskiContent_superlevel_le_liminf_openBallSup (ν : Measur
   have hrpos : ∀ n : ℕ, 0 < r (n + N) := fun n => hN (n + N) (Nat.le_add_left N n)
   have hr0 : Tendsto (fun n => r (n + N)) atTop (𝓝 (0 : ℝ)) :=
     (hr.comp (tendsto_add_atTop_nat N)).mono_right nhdsWithin_le_nhds
-  have hl := lintegral_minkowskiContent_superlevel_le_liminf_of_majorant ν hK hrpos hr0
-    (fun n => measurable_openBallSup hK (hrpos n))
-    (fun n t => thickening_superlevel_subset_openBallSup hK (r (n + N)) t)
+  have hl :=
+    lintegral_minkowskiContent_superlevel_le_liminf_of_majorant ν hK hrpos hr0
+      (fun n => measurable_openBallSup hK (hrpos n))
+      (fun n t => thickening_superlevel_subset_openBallSup hK (r (n + N)) t)
   have hqt : Tendsto (fun n => H (r (n + N))) atTop (𝓝 (liminf H (𝓝[>] 0))) :=
     hq.comp (tendsto_add_atTop_nat N)
   exact hl.trans_eq hqt.liminf_eq
@@ -144,11 +150,15 @@ theorem liminf_lintegral_openBallSup_le_localSlope (ν : Measure V) [IsFiniteMea
   have hr0 : Tendsto r atTop (𝓝 0) := tendsto_one_div_add_atTop_nhds_zero_nat
   have hrW : Tendsto r atTop (𝓝[>] (0 : ℝ)) :=
     tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hr0 (Eventually.of_forall hrpos)
-  have hc := hrW.liminf_le_liminf_comp (u := fun r : ℝ =>
-    ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν)
+  have hc :=
+    hrW.liminf_le_liminf_comp (u := fun r : ℝ =>
+      ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν)
   have hmeas : ∀ n, Measurable fun x => ENNReal.ofReal ((openBallSup u (r n) x - u x) / r n) :=
-    fun n => (((measurable_openBallSup hK (hrpos n)).sub hK.continuous.measurable).div_const _).ennreal_ofReal
-  have hbound : ∀ n x, ENNReal.ofReal ((openBallSup u (r n) x - u x) / r n) ≤ ENNReal.ofReal (K : ℝ) := by
+    fun n =>
+    (((measurable_openBallSup hK (hrpos n)).sub hK.continuous.measurable).div_const
+        _).ennreal_ofReal
+  have hbound :
+    ∀ n x, ENNReal.ofReal ((openBallSup u (r n) x - u x) / r n) ≤ ENNReal.ofReal (K : ℝ) := by
     intro n x
     apply ENNReal.ofReal_le_ofReal
     rw [div_le_iff₀ (hrpos n)]
@@ -157,8 +167,9 @@ theorem liminf_lintegral_openBallSup_le_localSlope (ν : Measure V) [IsFiniteMea
     rw [lintegral_const]
     exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (measure_ne_top _ _)
   refine hc.trans (le_trans liminf_le_limsup ?_)
-  exact (limsup_lintegral_le _ hmeas (fun n => Eventually.of_forall (hbound n)) hgfin).trans
-    (lintegral_mono fun x => limsup_ofReal_openBallSup_le_localSlope u x hrpos hr0)
+  exact
+    (limsup_lintegral_le _ hmeas (fun n => Eventually.of_forall (hbound n)) hgfin).trans
+      (lintegral_mono fun x => limsup_ofReal_openBallSup_le_localSlope u x hrpos hr0)
 omit [BorelSpace V] in
 private theorem lintegral_openBallSup_growth_restrict_eq (ν : Measure V) {u : V → ℝ} {K : ℝ≥0}
     (hK : LipschitzWith K u) (hu : ∀ x, 0 ≤ u x) {δ r : ℝ} (hδ : 0 < δ)
@@ -191,61 +202,74 @@ right-radius liminf of integrated open-ball growth, which is at most the local-s
 integral. The function is nonnegative and Lipschitz, and some positive-support
 neighborhood has finite mass. The original measure may have infinite total mass;
 no properness, sigma-finiteness or integrability of the function is assumed. -/
-theorem setLIntegral_minkowskiContent_superlevel_coarea_of_finite_neighborhood (ν : Measure V) {u : V → ℝ} {K : ℝ≥0}
-    (hK : LipschitzWith K u) (hu : ∀ x, 0 ≤ u x) {δ : ℝ} (hδ : 0 < δ)
+theorem setLIntegral_minkowskiContent_superlevel_coarea_of_finite_neighborhood (ν : Measure V)
+    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) (hu : ∀ x, 0 ≤ u x) {δ : ℝ} (hδ : 0 < δ)
     (hfin : ν (thickening δ {x | 0 < u x}) < ⊤) :
     (∫⁻ t in Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
-      liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν) (𝓝[>] 0)) ∧
-    (liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν) (𝓝[>] 0) ≤
-      ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂ν) := by
+        liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν)
+          (𝓝[>] 0)) ∧
+      (liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν) (𝓝[>] 0) ≤
+        ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂ν) := by
   let U := thickening δ {x | 0 < u x}
   have hU : MeasurableSet U := Metric.isOpen_thickening.measurableSet
   have : IsFiniteMeasure (ν.restrict U) := ⟨by simpa [Measure.restrict_apply_univ] using hfin⟩
-  have he : ∀ t ∈ Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} =
-      minkowskiContent (ν.restrict U) {x | t ≤ u x} := by
+  have he :
+    ∀ t ∈ Ioi (0 : ℝ),
+      minkowskiContent ν {x | t ≤ u x} = minkowskiContent (ν.restrict U) {x | t ≤ u x} := by
     intro t ht
     have hsub : {x | t ≤ u x} ⊆ {x | 0 < u x} := by
       intro x hx
       exact (show 0 < t from ht).trans_le hx
-    exact (minkowskiContent_restrict_of_thickening_subset ν hU hδ
-      (thickening_subset_of_subset δ hsub)).symm
-  have hi : liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r)
-      ∂(ν.restrict U)) (𝓝[>] 0) =
+    exact
+      (minkowskiContent_restrict_of_thickening_subset ν hU hδ
+          (thickening_subset_of_subset δ hsub)).symm
+  have hi :
+    liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂(ν.restrict U))
+        (𝓝[>] 0) =
       liminf (fun r : ℝ => ∫⁻ x, ENNReal.ofReal ((openBallSup u r x - u x) / r) ∂ν) (𝓝[>] 0) := by
     apply liminf_congr
     filter_upwards [Ioo_mem_nhdsGT hδ] with r hr
     exact lintegral_openBallSup_growth_restrict_eq ν hK hu hδ hr.1 hr.2.le
   constructor
-  · calc ∫⁻ t in Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ)
-        = ∫⁻ t in Ioi (0 : ℝ), minkowskiContent (ν.restrict U) {x | t ≤ u x}
-            ∂(volume : Measure ℝ) := setLIntegral_congr_fun measurableSet_Ioi he
+  · calc
+      ∫⁻ t in Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) =
+          ∫⁻ t in Ioi (0 : ℝ),
+            minkowskiContent (ν.restrict U) {x | t ≤ u x} ∂(volume : Measure ℝ) :=
+        setLIntegral_congr_fun measurableSet_Ioi he
       _ ≤ ∫⁻ t, minkowskiContent (ν.restrict U) {x | t ≤ u x} ∂(volume : Measure ℝ) :=
         setLIntegral_le_lintegral _ _
-      _ ≤ _ := (lintegral_minkowskiContent_superlevel_le_liminf_openBallSup (ν.restrict U) hK).trans_eq hi
+      _ ≤ _ :=
+        (lintegral_minkowskiContent_superlevel_le_liminf_openBallSup (ν.restrict U) hK).trans_eq
+          hi
   · rw [← hi]
-    exact (liminf_lintegral_openBallSup_le_localSlope (ν.restrict U) hK).trans (setLIntegral_le_lintegral _ _)
+    exact
+      (liminf_lintegral_openBallSup_le_localSlope (ν.restrict U) hK).trans
+        (setLIntegral_le_lintegral _ _)
 
 /-- Positive-superlevel coarea when a positive-support neighborhood has finite measure.
 The original measure need not be finite or sigma-finite, and the carrier need not be proper. -/
-theorem setLIntegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborhood (ν : Measure V) {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u)
-    {δ : ℝ} (hδ : 0 < δ) (hfin : ν (Metric.thickening δ {x | 0 < u x}) < ⊤) :
+theorem setLIntegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborhood
+    (ν : Measure V) {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) {δ : ℝ} (hδ : 0 < δ)
+    (hfin : ν (Metric.thickening δ {x | 0 < u x}) < ⊤) :
     ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂ν := by
   let U := Metric.thickening δ {x | 0 < u x}
   have hU : MeasurableSet U := Metric.isOpen_thickening.measurableSet
   have : IsFiniteMeasure (ν.restrict U) := ⟨by simpa [Measure.restrict_apply_univ] using hfin⟩
-  have he : ∀ t ∈ Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} =
-      minkowskiContent (ν.restrict U) {x | t ≤ u x} := by
+  have he :
+    ∀ t ∈ Set.Ioi (0 : ℝ),
+      minkowskiContent ν {x | t ≤ u x} = minkowskiContent (ν.restrict U) {x | t ≤ u x} := by
     intro t ht
     have htS : {x | t ≤ u x} ⊆ {x | 0 < u x} := by
       intro x hx
       exact (show 0 < t from ht).trans_le hx
-    have htU : Metric.thickening δ {x | t ≤ u x} ⊆ U :=
-      Metric.thickening_subset_of_subset δ htS
+    have htU : Metric.thickening δ {x | t ≤ u x} ⊆ U := Metric.thickening_subset_of_subset δ htS
     exact (minkowskiContent_restrict_of_thickening_subset ν hU hδ htU).symm
-  calc ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ)
-      = ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent (ν.restrict U) {x | t ≤ u x}
-          ∂(volume : Measure ℝ) := setLIntegral_congr_fun measurableSet_Ioi he
+  calc
+    ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) =
+        ∫⁻ t in Set.Ioi (0 : ℝ),
+          minkowskiContent (ν.restrict U) {x | t ≤ u x} ∂(volume : Measure ℝ) :=
+      setLIntegral_congr_fun measurableSet_Ioi he
     _ ≤ ∫⁻ t, minkowskiContent (ν.restrict U) {x | t ≤ u x} ∂(volume : Measure ℝ) :=
       setLIntegral_le_lintegral _ _
     _ ≤ ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂(ν.restrict U) :=
@@ -254,14 +278,14 @@ theorem setLIntegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighbo
 /-- The local-slope upper bound in ADMG Lemma 3.2 for nonnegative Lipschitz functions
 with finite mass of a positive-support neighborhood, as a consequence of the full
 right-radius-liminf chain. Nonpositive superlevels have zero content. -/
-theorem lintegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborhood (ν : Measure V) {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u)
-    (hu : ∀ x, 0 ≤ u x) {δ : ℝ} (hδ : 0 < δ)
-    (hfin : ν (Metric.thickening δ {x | 0 < u x}) < ⊤) :
+theorem lintegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborhood
+    (ν : Measure V) {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) (hu : ∀ x, 0 ≤ u x) {δ : ℝ}
+    (hδ : 0 < δ) (hfin : ν (Metric.thickening δ {x | 0 < u x}) < ⊤) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂ν := by
-  have he : ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) =
-      ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x}
-        ∂(volume : Measure ℝ) := by
+  have he :
+    ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) =
+      ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) := by
     rw [← lintegral_indicator measurableSet_Ioi]
     apply lintegral_congr
     intro t
@@ -272,18 +296,19 @@ theorem lintegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborho
         Set.eq_univ_of_forall fun x => (not_lt.mp ht).trans (hu x)
       rw [hs, minkowskiContent_univ]
   rw [he]
-  have hc := setLIntegral_minkowskiContent_superlevel_coarea_of_finite_neighborhood ν hK hu hδ hfin
+  have hc :=
+    setLIntegral_minkowskiContent_superlevel_coarea_of_finite_neighborhood ν hK hu hδ hfin
   exact hc.1.trans hc.2
 
 /-- Finiteness on bounded Borel sets supplies the finite-neighborhood premise for a
 Lipschitz function with bounded positive support on an arbitrary metric space. -/
-theorem setLIntegral_minkowskiContent_superlevel_le_localSlope_of_bounded_positive (ν : Measure V)
-    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
-    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u)
-    (hu : Bornology.IsBounded {x | 0 < u x}) :
+theorem setLIntegral_minkowskiContent_superlevel_le_localSlope_of_bounded_positive
+    (ν : Measure V) (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
+    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) (hu : Bornology.IsBounded {x | 0 < u x}) :
     ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂ν :=
-  setLIntegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborhood ν hK zero_lt_one (hν _ hu.thickening Metric.isOpen_thickening.measurableSet)
+  setLIntegral_minkowskiContent_superlevel_le_localSlope_of_finite_neighborhood ν hK zero_lt_one
+    (hν _ hu.thickening Metric.isOpen_thickening.measurableSet)
 
 
 end Generic
@@ -333,19 +358,23 @@ theorem limsup_ofReal_ballSup_le_localSlope (u : V → ℝ) (x : V) {r : ℕ →
 
 variable [MeasurableSpace V] [BorelSpace V]
 
-/-- Layer cake with the closed-ball majorant at the radii `1 / (n + 1)` (normed scope, as before):
+/--
+Layer cake with the closed-ball majorant at the radii `1 / (n + 1)` (normed scope, as before):
 an instance of the majorant lemma, the closed-ball supremum being measurable through its
 translation-based Lipschitz property. -/
-theorem lintegral_minkowskiContent_superlevel_le_limsup (ν : Measure V) [IsFiniteMeasure ν] {u : V → ℝ}
-    {K : ℝ≥0} (hK : LipschitzWith K u) :
+theorem lintegral_minkowskiContent_superlevel_le_limsup (ν : Measure V) [IsFiniteMeasure ν]
+    {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
-      ∫⁻ x, limsup (fun n : ℕ => ENNReal.ofReal
-        ((ballSup u (1 / ((n : ℝ) + 1)) x - u x) / (1 / ((n : ℝ) + 1)))) atTop
-        ∂(ν : Measure V) :=
-  lintegral_minkowskiContent_superlevel_le_limsup_of_majorant ν hK
-    (r := fun n : ℕ => 1 / ((n : ℝ) + 1)) (fun n => by positivity)
-    tendsto_one_div_add_atTop_nhds_zero_nat
-    (fun n => (lipschitzWith_ballSup hK (by positivity : (0 : ℝ) ≤ 1 / ((n : ℝ) + 1))).continuous.measurable)
+      ∫⁻ x,
+        limsup
+          (fun n : ℕ =>
+            ENNReal.ofReal ((ballSup u (1 / ((n : ℝ) + 1)) x - u x) / (1 / ((n : ℝ) + 1))))
+          atTop ∂(ν : Measure V) :=
+  lintegral_minkowskiContent_superlevel_le_limsup_of_majorant ν hK (r := fun n : ℕ =>
+    1 / ((n : ℝ) + 1)) (fun n => by positivity) tendsto_one_div_add_atTop_nhds_zero_nat
+    (fun n =>
+      (lipschitzWith_ballSup hK
+          (by positivity : (0 : ℝ) ≤ 1 / ((n : ℝ) + 1))).continuous.measurable)
     (fun n t => thickening_superlevel_subset hK _ t)
     (fun n x => ballSup_le_add hK (by positivity) x)
 

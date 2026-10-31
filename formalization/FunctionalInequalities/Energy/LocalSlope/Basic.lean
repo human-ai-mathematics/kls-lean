@@ -1,9 +1,13 @@
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Probability.Moments.Variance
-import Mathlib.Topology.MetricSpace.Lipschitz
+module
+
+public import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Probability.Moments.Variance
+public import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-! # Squared local metric slope and its finite-energy test class -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -147,7 +151,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [FiniteDimensional ℝ E]
 
 /-- The squared local-slope integral for the displayed coordinate law `ν`, with no factor `1/2`.
-It takes values in `ENNReal` and may be infinite. No change to intrinsic coordinates is made here. -/
+It takes values in `ENNReal` and may be infinite. No change to intrinsic coordinates is made here.
+-/
 def energy (ν : ProbabilityMeasure E) (f : E → ℝ) : ENNReal :=
   ∫⁻ x, apply f x ^ 2 ∂(ν : Measure E)
 

@@ -1,10 +1,12 @@
-import FunctionalInequalities.Probability.Moments
-import FunctionalInequalities.Probability.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Normed.Lp.MeasurableSpace
-import Mathlib.Probability.Kernel.Disintegration.StandardBorel
-import Mathlib.Probability.Kernel.Disintegration.Unique
-import Mathlib.Probability.Moments.Variance
+module
+
+public import FunctionalInequalities.Probability.Moments
+public import FunctionalInequalities.Probability.Basic
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+public import Mathlib.Probability.Kernel.Disintegration.StandardBorel
+public import Mathlib.Probability.Kernel.Disintegration.Unique
+public import Mathlib.Probability.Moments.Variance
 
 /-!
 # Conditional-fiber energy: basic construction and proved well-definedness contracts
@@ -21,6 +23,8 @@ fully proved.
 No closedness, Markov property, frame bound, Poincare inequality or KLS result is asserted.
 An admissible frame has positive dimension; there is no zero-dimensional sphere probability.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -68,7 +72,7 @@ def jointLaw (μ : ProbabilityMeasure E) (ρ : ProbabilityMeasure (Direction E))
 
 instance instIsProbabilityMeasureJointLaw (μ : ProbabilityMeasure E)
     (ρ : ProbabilityMeasure (Direction E)) : IsProbabilityMeasure (jointLaw μ ρ) :=
-  Measure.isProbabilityMeasure_map measurable_coordinates.aemeasurable
+  (Measure.isProbabilityMeasure_map_iff measurable_coordinates.aemeasurable).2 inferInstance
 
 /-- Joint base law of `(θ, z)`, supported on `z ⟂ θ` almost everywhere. -/
 def baseLaw (μ : ProbabilityMeasure E) (ρ : ProbabilityMeasure (Direction E)) :
@@ -200,38 +204,42 @@ theorem ae_memLp_id (μ : ProbabilityMeasure E) (ρ : ProbabilityMeasure (Direct
   exact (Probability.memLp_id_two_iff_lintegral_enorm_rpow_lt_top _).2 hb
 
 /-- For a Borel test, the guarded normalized variance is jointly measurable. -/
-theorem measurable_energyAt (κ : Kernel (Direction E × E) ℝ) [IsMarkovKernel κ]
-    (f : E → ℝ) (hf : Measurable f) : Measurable (fun b ↦ energyAt κ b f) := by
+theorem measurable_energyAt (κ : Kernel (Direction E × E) ℝ) [IsMarkovKernel κ] (f : E → ℝ)
+    (hf : Measurable f) : Measurable (fun b ↦ energyAt κ b f) := by
   have hrec : Measurable (fun q : (Direction E × E) × ℝ ↦ f (reconstruct q.1 q.2)) :=
     hf.comp measurable_reconstruct
   have hmean : Measurable fun b ↦ ∫ t, f (reconstruct b t) ∂κ b :=
     hrec.stronglyMeasurable.integral_kernel_prod_right'.measurable
   have hvar : Measurable fun b ↦ evariance (fun t ↦ f (reconstruct b t)) (κ b) := by
     simp only [evariance]
-    exact Measurable.lintegral_kernel_prod_right'
-      (f := fun q : (Direction E × E) × ℝ ↦
+    exact
+      Measurable.lintegral_kernel_prod_right' (f := fun q : (Direction E × E) × ℝ ↦
         ‖f (reconstruct q.1 q.2) - ∫ t, f (reconstruct q.1 t) ∂κ q.1‖ₑ ^ 2)
-      ((hrec.sub (hmean.comp measurable_fst)).enorm.pow_const _)
+        ((hrec.sub (hmean.comp measurable_fst)).enorm.pow_const _)
   have hsnd : StronglyMeasurable (fun q : (Direction E × E) × ℝ ↦ q.2) :=
     measurable_snd.stronglyMeasurable
-  have hmean_id : Measurable fun b ↦ ∫ t, t ∂κ b :=
-    hsnd.integral_kernel_prod_right'.measurable
+  have hmean_id : Measurable fun b ↦ ∫ t, t ∂κ b := hsnd.integral_kernel_prod_right'.measurable
   have hvar_id : Measurable fun b ↦ evariance id (κ b) := by
     simp only [evariance, id_eq]
-    exact Measurable.lintegral_kernel_prod_right'
-      (f := fun q : (Direction E × E) × ℝ ↦ ‖q.2 - ∫ t, t ∂κ q.1‖ₑ ^ 2)
-      ((measurable_snd.sub (hmean_id.comp measurable_fst)).enorm.pow_const _)
+    exact
+      Measurable.lintegral_kernel_prod_right' (f := fun q : (Direction E × E) × ℝ ↦
+        ‖q.2 - ∫ t, t ∂κ q.1‖ₑ ^ 2)
+        ((measurable_snd.sub (hmean_id.comp measurable_fst)).enorm.pow_const _)
   have hsecond : Measurable fun b ↦ ∫⁻ t, ‖t‖ₑ ^ (2 : ℝ) ∂κ b :=
-    Measurable.lintegral_kernel_prod_right'
-      (f := fun q : (Direction E × E) × ℝ ↦ ‖q.2‖ₑ ^ (2 : ℝ)) (by fun_prop)
+    Measurable.lintegral_kernel_prod_right' (f := fun q : (Direction E × E) × ℝ ↦
+      ‖q.2‖ₑ ^ (2 : ℝ)) (by fun_prop)
   have hgood : MeasurableSet {b | Nondegenerate κ b} := by
-    have e : {b | Nondegenerate κ b} = {b : Direction E × E | inner ℝ b.2 b.1.1 = 0} ∩
-        ({b | ∫⁻ t, ‖t‖ₑ ^ (2 : ℝ) ∂κ b < ⊤} ∩ {b | evariance id (κ b) ≠ 0}) := by
+    have e :
+      {b | Nondegenerate κ b} =
+        {b : Direction E × E | inner ℝ b.2 b.1.1 = 0} ∩
+          ({b | ∫⁻ t, ‖t‖ₑ ^ (2 : ℝ) ∂κ b < ⊤} ∩ {b | evariance id (κ b) ≠ 0}) := by
       ext b
-      simp only [Nondegenerate, Set.mem_ofPred_eq, Set.mem_inter_iff, Probability.memLp_id_two_iff_lintegral_enorm_rpow_lt_top]
+      simp only [Nondegenerate, Set.mem_ofPred_eq, Set.mem_inter_iff,
+        Probability.memLp_id_two_iff_lintegral_enorm_rpow_lt_top]
     rw [e]
-    refine (measurableSet_eq_fun (by fun_prop) measurable_const).inter
-      ((measurableSet_lt hsecond measurable_const).inter ?_)
+    refine
+      (measurableSet_eq_fun (by fun_prop) measurable_const).inter
+        ((measurableSet_lt hsecond measurable_const).inter ?_)
     exact (hvar_id (measurableSet_singleton 0)).compl
   unfold energyAt
   exact Measurable.ite hgood (hvar.div hvar_id) measurable_const

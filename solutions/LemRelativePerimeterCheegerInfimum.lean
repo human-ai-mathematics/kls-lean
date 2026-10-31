@@ -1,5 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.Probability.LogConcave
+module
+
+public import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+public import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `lem:relative-perimeter-cheeger-infimum`
@@ -23,6 +25,8 @@ finite content, their mollification, smooth Sard and the weighted `C¹` coarea f
 density. The statement compares infima, not the two perimeters of each test set; no Poincaré
 inequality, no BV-perimeter identification and no Cheeger–Buser comparison follows from it.
 -/
+
+@[expose] public section
 
 noncomputable section
 
