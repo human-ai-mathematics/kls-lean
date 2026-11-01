@@ -21,7 +21,7 @@ representative is asserted.
 
 /-! ## Contraction and power decay of essential widths -/
 
-noncomputable section EssentialWidths
+section EssentialWidths
 
 open MeasureTheory Set Metric Filter Finset
 

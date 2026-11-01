@@ -24,7 +24,7 @@ log β`.
 
 @[expose] public section
 
-noncomputable section
+section
 open Filter
 open scoped Topology ContDiff RealInnerProductSpace
 

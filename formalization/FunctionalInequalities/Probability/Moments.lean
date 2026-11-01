@@ -484,7 +484,7 @@ end MatrixVarianceTrace
 
 If `f` is in `L⁴`, then `⟪A f, f⟫` is in `L²` for every continuous linear `A`. -/
 
-noncomputable section
+section
 open MeasureTheory
 open scoped RealInnerProductSpace
 

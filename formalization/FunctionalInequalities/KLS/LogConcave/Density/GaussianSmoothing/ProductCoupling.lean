@@ -33,7 +33,7 @@ No target Stein kernel or inverse transport is constructed.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein
@@ -136,7 +136,7 @@ end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 end
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein
@@ -228,7 +228,7 @@ end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 end
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein

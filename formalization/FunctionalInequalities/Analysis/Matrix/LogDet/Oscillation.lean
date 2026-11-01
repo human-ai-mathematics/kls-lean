@@ -26,7 +26,7 @@ law are explicit premises; no PDE module is imported. It is not the classical `C
 
 /-! ## Pairwise comparison, averaged deficits and oscillation decay -/
 
-noncomputable section FrameOscillation
+section FrameOscillation
 
 open MeasureTheory Matrix Set Metric Filter Finset
 

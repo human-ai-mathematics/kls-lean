@@ -44,7 +44,7 @@ translations of `μ` in the ambient space (a separate node), an isotropic reduct
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal

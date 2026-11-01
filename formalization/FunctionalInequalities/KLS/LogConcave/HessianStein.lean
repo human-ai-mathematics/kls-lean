@@ -381,7 +381,7 @@ For `C¹` globally Lipschitz `u` with Lipschitz gradient and `∫ e^{-u} = 1`, t
 Stein identity in a direction `v`, and its form for tests `h (S x + z)` with a continuous linear
 `S`. -/
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis
 open FunctionalInequalities.Probability.Stein
@@ -448,7 +448,7 @@ end FunctionalInequalities.KLS.LogConcave
 
 end
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein
@@ -508,7 +508,7 @@ end
 
 /-! ### Weak Hessian–Stein kernel at `C^{1,1}` regularity -/
 
-noncomputable section
+section
 open MeasureTheory Filter
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein

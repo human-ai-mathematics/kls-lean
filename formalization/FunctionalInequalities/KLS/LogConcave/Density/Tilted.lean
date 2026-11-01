@@ -18,7 +18,7 @@ Lebesgue measure `volume`).
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set
 
@@ -248,7 +248,7 @@ convex `K` that need not be closed (Letwin's bounded open convex bodies), contin
 and convexity on `K`
 suffice (`logConcave_of_eq_restricted_exp_on_closure`). -/
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped Topology
 

@@ -28,7 +28,7 @@ Two matrix facts used on the weak moment-map route to Letwin's quadratic-form bo
 
 @[expose] public section
 
-noncomputable section
+section
 
 open Matrix
 
@@ -489,7 +489,7 @@ end FunctionalInequalities.Analysis
 
 /-! ## Directional deficits in a fixed rank-one frame -/
 
-noncomputable section FrameDeficit
+section FrameDeficit
 
 open Matrix Finset
 

@@ -15,7 +15,7 @@ are retained in the individual declarations.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped RealInnerProductSpace
 

@@ -28,7 +28,7 @@ frontier crossing proves properness, without a coercivity or image input.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open Set Metric Filter Topology
 open scoped Topology RealInnerProductSpace

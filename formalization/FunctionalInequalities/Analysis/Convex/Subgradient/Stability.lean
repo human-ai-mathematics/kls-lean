@@ -18,18 +18,22 @@ all the functions are differentiable (Rockafellar, *Convex Analysis*, Theorem 24
 
 @[expose] public section
 
-noncomputable section
-open Set
+open Set Metric Filter
 open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
-open Set Metric Filter
+
+section SupportingImages
+
 open scoped Topology
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E]
+
 /-- Locally uniform convergence to a continuous function generates an eventual uniform
 bound for ALL actual supporting slopes on a compact interior set. The approximating
 functions need not be convex, continuous, or differentiable. -/
-theorem exists_eventual_support_slope_bound_of_locally_uniform {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : ℕ → E → ℝ}
+theorem exists_eventual_support_slope_bound_of_locally_uniform {f : ℕ → E → ℝ}
     {v : E → ℝ} {Ω K : Set E} (hΩ : IsOpen Ω) (hvc : ContinuousOn v Ω)
     (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
     ∃ R : ℝ,
@@ -66,8 +70,7 @@ theorem exists_eventual_support_slope_bound_of_locally_uniform {E : Type*}
 locally uniform convergence to a continuous function. Compactness produces the SAME
 limit basepoint and slope, and every domain support inequality passes to that limit.
 No convexity or regularity of the approximating functions is required. -/
-theorem eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : ℕ → E → ℝ}
+theorem eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn {f : ℕ → E → ℝ}
     {v : E → ℝ} {Ω K U : Set E} (hΩ : IsOpen Ω) (hvc : ContinuousOn v Ω)
     (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω)
     (hU : IsOpen U) (hI : subgradientImageOn v Ω K ⊆ U) :
@@ -118,16 +121,12 @@ theorem eventually_subgradientImageOn_subset_of_tendstoLocallyUniformlyOn {E : T
   obtain ⟨n, hn⟩ := hev.exists
   exact hpU (k n) hn
 
-end FunctionalInequalities.Analysis
-namespace FunctionalInequalities.Analysis
-open Set Metric Filter
-open scoped Topology
 /-- A genuinely unique supporting contact of a continuous limit persists inside
 any open neighborhood under locally uniform convergence of convex continuous
 potentials. The sphere gap and interior minimum are produced from the source
 conditions; no contact of the approximants is assumed. All finite dimensions. -/
-theorem eventually_mem_subgradientImageOn_of_unique_contact {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : ℕ → E → ℝ} {v : E → ℝ} {Ω G : Set E}
+theorem eventually_mem_subgradientImageOn_of_unique_contact
+    {f : ℕ → E → ℝ} {v : E → ℝ} {Ω G : Set E}
     {x p : E} (hΩ : IsOpen Ω) (hf : ∀ n, ConvexOn ℝ Ω (f n)) (hfc : ∀ n, ContinuousOn (f n) Ω)
     (hvc : ContinuousOn v Ω) (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hG : IsOpen G)
     (hGΩ : G ⊆ Ω) (hx : x ∈ G) (hp : ∀ y ∈ Ω, v x + ⟪p, y - x⟫ ≤ v y)
@@ -207,7 +206,11 @@ theorem eventually_mem_subgradientImageOn_of_unique_contact {E : Type*} [NormedA
     ⟨z, hBG hz,
       subgradient_le_on_of_isOpen (hf n) isOpen_ball (ball_subset_closedBall.trans hBO) hzB hpB⟩
 
+end SupportingImages
+
 section GradientConvergence
+
+open scoped Topology
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 

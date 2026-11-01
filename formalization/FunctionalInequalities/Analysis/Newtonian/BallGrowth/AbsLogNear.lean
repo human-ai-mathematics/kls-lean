@@ -19,17 +19,19 @@ of Second Order*, Classics 2001 (ISBN 3-540-41160-7), (2.12).
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Metric Filter
 open scoped ENNReal Topology
 
 namespace FunctionalInequalities.Analysis
 
+variable {E : Type*} [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+
 /-- Absolute logarithmic near integral. This is valid for every positive
 radius, since log(R/r) bounds the variation from log R on r<R. -/
-theorem lintegral_abs_log_norm_sub_le_of_ball_growth {E : Type*} [NormedAddCommGroup E]
-    [MeasurableSpace E] [BorelSpace E] (μ : Measure E) (x : E) {K R d : ℝ} (hK : 0 ≤ K)
+theorem lintegral_abs_log_norm_sub_le_of_ball_growth (μ : Measure E) (x : E) {K R d : ℝ}
+    (hK : 0 ≤ K)
     (hR : 0 < R) (hd : 0 < d)
     (hgrowth : ∀ r : ℝ, 0 < r → μ (ball x r) ≤ ENNReal.ofReal (K * r ^ d)) :
     (∫⁻ y in ball x R, ENNReal.ofReal |Real.log ‖y - x‖| ∂μ) ≤
@@ -74,8 +76,8 @@ theorem lintegral_abs_log_norm_sub_le_of_ball_growth {E : Type*} [NormedAddCommG
 
 /-- The logarithmic kernel is locally L1 under positive-dimensional ball
 growth, with an explicit bound valid at every positive radius. -/
-theorem integrableOn_log_norm_sub_ball_of_ball_growth {E : Type*} [NormedAddCommGroup E]
-    [MeasurableSpace E] [BorelSpace E] (μ : Measure E) (x : E) {K R d : ℝ} (hK : 0 ≤ K)
+theorem integrableOn_log_norm_sub_ball_of_ball_growth (μ : Measure E) (x : E) {K R d : ℝ}
+    (hK : 0 ≤ K)
     (hR : 0 < R) (hd : 0 < d)
     (hgrowth : ∀ r : ℝ, 0 < r → μ (ball x r) ≤ ENNReal.ofReal (K * r ^ d)) :
     IntegrableOn (fun y => Real.log ‖y - x‖) (ball x R) μ ∧

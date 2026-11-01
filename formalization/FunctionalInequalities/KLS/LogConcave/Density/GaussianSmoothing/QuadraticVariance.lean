@@ -32,7 +32,7 @@ public import FunctionalInequalities.Probability.Transport
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set ProbabilityTheory Filter
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein
@@ -146,7 +146,7 @@ end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 end
 
-noncomputable section
+section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace
 
@@ -168,7 +168,7 @@ end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 end
 
-noncomputable section
+section
 open Filter
 open scoped Topology
 

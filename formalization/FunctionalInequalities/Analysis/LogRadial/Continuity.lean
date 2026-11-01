@@ -25,7 +25,7 @@ differentiable there.
 
 @[expose] public section
 
-noncomputable section
+section
 open Filter
 open scoped Topology
 

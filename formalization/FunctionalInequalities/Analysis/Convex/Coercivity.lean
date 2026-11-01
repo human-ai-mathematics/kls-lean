@@ -10,18 +10,15 @@ public import Mathlib.Analysis.Normed.Module.Convex
 # Minimum and compact sublevels of a convex potential with integrable `e^{-φ}`
 
 Letwin arXiv:2607.24164v1, Lemma A.4 (p. 17), first sentence of the proof: a finite convex `φ` on a
-finite-dimensional
-real inner product space with `e^{-φ}` integrable for an additive Haar measure attains its minimum,
-and every sublevel
-set is compact (`exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg`). No
-minimum, coercivity or
-bounded-sublevel premise; the source normalisation `∫ e^{-φ} = 1` only supplies the integrability.
-Dimension zero is
-included. Route: every sublevel has finite Haar volume; a convex set of finite volume containing a
-ball is bounded
-(otherwise it contains arbitrarily many disjoint translates of a smaller ball); closed and bounded
-sublevels are
-compact, and the minimum over the nonempty sublevel `{φ ≤ φ 0}` is global.
+finite-dimensional real inner product space with `e^{-φ}` integrable for an additive Haar measure
+attains its minimum, and every sublevel set is compact
+(`exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg`). No minimum, coercivity
+or bounded-sublevel premise; the source normalisation `∫ e^{-φ} = 1` only supplies the integrability.
+Dimension zero is included.
+
+Route: every sublevel has finite Haar volume; a convex set of finite volume containing a ball is
+bounded (otherwise it contains arbitrarily many disjoint translates of a smaller ball); closed and
+bounded sublevels are compact, and the minimum over the nonempty sublevel `{φ ≤ φ 0}` is global.
 
 `isBounded_of_convex_of_measure_lt_top` isolates the shared normed-space boundedness step; the
 moment-potential ball-truncation construction uses this same producer.
@@ -33,15 +30,19 @@ open MeasureTheory
 
 namespace FunctionalInequalities.Analysis
 
+section ConvexSets
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
+
 /-- A convex set of finite additive Haar measure containing a ball around the origin is bounded.
 
 The disjoint-ball argument uses only the real normed-space structure, translation invariance and
 positive measure of open balls. No finite-dimensionality, completeness, inner product, closedness
 or measurability of the convex set is required. This is the common boundedness step in Letwin
 arXiv:2607.24164v1, Lemma A.4, and the linear-growth support for CEK arXiv:1304.0630v1, (7). -/
-theorem isBounded_of_convex_of_measure_lt_top {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] [MeasurableSpace E] [BorelSpace E]
-    (m : Measure E) [m.IsAddHaarMeasure] (s : Set E) (hcs : Convex ℝ s)
+theorem isBounded_of_convex_of_measure_lt_top (m : Measure E) [m.IsAddHaarMeasure]
+    (s : Set E) (hcs : Convex ℝ s)
     (hms : m s < (⊤ : ENNReal))
     (hrball : ∃ r : ℝ, 0 < r ∧ Metric.ball (0 : E) r ⊆ s) : Bornology.IsBounded s := by
   obtain ⟨r, hr, hball⟩ := hrball
@@ -156,13 +157,18 @@ theorem isBounded_of_convex_of_measure_lt_top {E : Type*} [NormedAddCommGroup E]
   have hstrict : (m s).toReal < (N : ℝ) * b.toReal := (div_lt_iff₀ hbpos).mp hNratio
   exact (not_lt_of_ge hreal) hstrict
 
+end ConvexSets
+
+section IntegrablePotential
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
 /--
 **Coercivity from integrability** (Letwin Lemma A.4, p. 17): a convex `φ` with `e^{-φ}` integrable
-for an additive
-Haar measure has a global minimiser, and all its sublevel sets are compact. -/
-theorem exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure] {φ : E → ℝ}
+for an additive Haar measure has a global minimiser, and all its sublevel sets are compact. -/
+theorem exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg
+    (m : Measure E) [m.IsAddHaarMeasure] {φ : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ φ) (hint : Integrable (fun x => Real.exp (-φ x)) m) :
     (∃ y₀ : E, ∀ y, φ y₀ ≤ φ y) ∧ ∀ c : ℝ, IsCompact {y | φ y ≤ c} := by
   classical
@@ -248,13 +254,9 @@ theorem exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg {
   · exact hmin (show y ∈ {y : E | φ y ≤ φ 0} from hy)
   · exact le_trans (show φ y₀ ≤ φ 0 from hy₀) (le_of_lt (lt_of_not_ge hy))
 
-end FunctionalInequalities.Analysis
+end IntegrablePotential
 
 /-! ## Linear growth from a strict minimum and attained minima -/
-
-noncomputable section StrictMinimumGrowth
-
-namespace FunctionalInequalities.Analysis
 
 section LinearGrowth
 
@@ -265,9 +267,8 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
 
 /--
 **Linear growth from a strict minimum.** A continuous convex `f` on a proper normed space with a
-strict global minimum
-at `a` satisfies `c ‖x‖ + b ≤ f x` for some `c > 0` and `b` (convexity along the rays through the
-unit sphere around `a`). -/
+strict global minimum at `a` satisfies `c ‖x‖ + b ≤ f x` for some `c > 0` and `b` (convexity along
+the rays through the unit sphere around `a`). -/
 theorem exists_linear_lower_bound_of_strict_min {f : E → ℝ} (hf : ConvexOn ℝ univ f)
     (hc : Continuous f) (a : E) (hm : ∀ x, x ≠ a → f a < f x) :
     ∃ c : ℝ, 0 < c ∧ ∃ b : ℝ, ∀ x, c * ‖x‖ + b ≤ f x := by
@@ -331,5 +332,3 @@ theorem exists_min_of_linear_lower_bound {f : E → ℝ} (hf : Continuous f) {c 
 end LinearGrowth
 
 end FunctionalInequalities.Analysis
-
-end StrictMinimumGrowth

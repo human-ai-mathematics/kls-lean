@@ -12,16 +12,18 @@ locally uniform approximating sequence.
 
 @[expose] public section
 
-noncomputable section
 open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
+
 namespace FunctionalInequalities.Analysis
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 /-- Actual ordinary locally restricted gradient transport gives exact compact
 MA mass. The existing Alexandrov pushforward identity GENERATES bad-fiber/null
 control; there is no supplied exceptional set, injectivity or dual MA premise. -/
-theorem volume_subgradientImage_eq_of_local_map {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem volume_subgradientImage_eq_of_local_map
     {ψ : E → ℝ} {L : NNReal} (hL : LipschitzWith L ψ) (hcv : ConvexOn ℝ univ ψ)
     (hC1 : ContDiff ℝ 1 ψ) {P : E → E} (hg : ∀ p, gradient ψ p = P p) {T : Set E}
     (hmap : (volume.restrict (P ⁻¹' T)).map P = volume.restrict T) {S : Set E}
@@ -47,17 +49,9 @@ theorem volume_subgradientImage_eq_of_local_map {E : Type*} [NormedAddCommGroup 
     inter_eq_self_of_subset_left hi, inter_eq_self_of_subset_left hST] using hm
 
 
-end FunctionalInequalities.Analysis
-
-namespace FunctionalInequalities.Analysis
-open Set Metric Filter MeasureTheory
-open scoped RealInnerProductSpace Topology
-
 /-- Ordinary actual local gradient transport gives the true OPEN MA equation,
 not a compact-closure substitution. Highest source below GENERATES all inputs. -/
 theorem volume_subgradientImage_eq_of_local_map_on_open
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {ψ : E → ℝ} {L : NNReal} (hL : LipschitzWith L ψ)
     (hcv : ConvexOn ℝ univ ψ) (hC1 : ContDiff ℝ 1 ψ)
     {P : E → E} (hg : ∀ p, gradient ψ p = P p) {T : Set E}
@@ -68,17 +62,10 @@ theorem volume_subgradientImage_eq_of_local_map_on_open
     (fun _ hS hST => volume_subgradientImage_eq_of_local_map hL hcv hC1 hg hmap hS hST)
 
 
-end FunctionalInequalities.Analysis
-
-namespace FunctionalInequalities.Analysis
-open Set Metric Filter MeasureTheory
-open scoped RealInnerProductSpace Topology
-
 /-- Actual optimizer data and the SAME domain measure formula/identification
 give exact image/capacity and restricted-volume transport. No source transport,
 image agreement, C1, compactness, open domain, N or injectivity is required. -/
-theorem optimizer_transport_of_domain_measure {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem optimizer_transport_of_domain_measure
     {u : E → ℝ} {Ω K : Set E} {μ : Measure E} (hu : ConvexOn ℝ Ω u) (hKΩ : K ⊆ Ω) (P : E → E)
     (hPC : Continuous P)
     (hopt :

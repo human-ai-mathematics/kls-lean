@@ -269,7 +269,7 @@ theorem exists_subseq_lintegral_le_liminf_of_convex_epigraph {E : Type*} [Normed
 
 end FunctionalInequalities.Probability
 
-noncomputable section
+section
 open Filter
 open scoped Topology
 

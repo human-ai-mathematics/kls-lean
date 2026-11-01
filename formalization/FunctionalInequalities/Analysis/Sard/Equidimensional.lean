@@ -39,7 +39,7 @@ It is recorded in `research/audits/Sard/EquidimensionalAudit.lean`, in both dire
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Module Set
 open scoped ENNReal NNReal RealInnerProductSpace

@@ -24,7 +24,7 @@ Consumers: the Riesz potentials of `RieszPotential/` and the Morrey bounds of `M
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter Metric
 open scoped ENNReal Topology
@@ -133,7 +133,7 @@ end FunctionalInequalities.Analysis
 
 /-! ## Lebesgue measure of Euclidean balls -/
 
-noncomputable section EuclideanBalls
+section EuclideanBalls
 
 open MeasureTheory Set Metric
 

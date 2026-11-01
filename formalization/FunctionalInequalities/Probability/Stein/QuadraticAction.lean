@@ -31,7 +31,7 @@ All finite dimensions; nothing here asserts a Stein kernel.
 
 @[expose] public section
 
-noncomputable section
+section
 open scoped RealInnerProductSpace MatrixOrder
 open FunctionalInequalities.Probability.Stein
 
@@ -72,7 +72,7 @@ end FunctionalInequalities.Analysis
 
 end
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Probability.Stein
 open scoped RealInnerProductSpace MatrixOrder
@@ -175,7 +175,7 @@ end FunctionalInequalities.KLS.LogConcave
 
 end
 
-noncomputable section
+section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace
 

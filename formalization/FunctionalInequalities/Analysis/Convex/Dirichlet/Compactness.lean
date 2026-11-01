@@ -17,7 +17,7 @@ arXiv:1207.6128v1 Theorem 2.24(ii), not a reference-existence or W2p theorem.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Metric Filter
 open scoped ENNReal RealInnerProductSpace Topology

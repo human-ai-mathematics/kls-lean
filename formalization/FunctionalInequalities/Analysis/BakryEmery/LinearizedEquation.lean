@@ -14,7 +14,7 @@ Only C³ regularity of the given potential and C¹ regularity of the target pote
 
 @[expose] public section
 
-noncomputable section
+section
 namespace FunctionalInequalities.Analysis
 
 open scoped FunctionalInequalities.Analysis.DerivativeNorms

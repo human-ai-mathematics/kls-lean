@@ -22,7 +22,7 @@ one-use supports.
 
 @[expose] public section
 
-noncomputable section
+section
 
 section ComponentIntegrability
 

@@ -13,16 +13,20 @@ rigidity and moment-source regularity have separate consumers.
 
 @[expose] public section
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.Analysis
 open Set Metric Filter MeasureTheory
 open scoped RealInnerProductSpace Topology
 
+section DomainUnitContact
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
+
 /-- The generated proper patch transfers the SAME contact and actual UNIT
 bounds to the existing Caffarelli compact-sublevel theorem. -/
-theorem eq_of_domain_unit_contact {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E] {u : E → ℝ}
+theorem eq_of_domain_unit_contact {u : E → ℝ}
     {Ω : Set E} (hΩ : IsOpen Ω) (hcΩ : Convex ℝ Ω) (hb : Bornology.IsBounded Ω)
     (hu : ConvexOn ℝ (closure Ω) u) (hC : ContinuousOn u (closure Ω))
     (hz : ∀ z ∈ frontier Ω, u z = 0) (hneg : ∀ x ∈ Ω, u x < 0)
@@ -72,15 +76,14 @@ theorem eq_of_domain_unit_contact {E : Type*} [NormedAddCommGroup E] [InnerProdu
     exact hxy
 
 
-end FunctionalInequalities.Analysis
+end DomainUnitContact
 
-namespace FunctionalInequalities.Analysis
-open Set Metric Filter MeasureTheory
-open scoped RealInnerProductSpace Topology
+section DualSections
 
-private lemma support_eq_of_contained_dual_section {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u ψ : E → ℝ} {K D : Set E} (P : E → E)
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E]
+
+private lemma support_eq_of_contained_dual_section {u ψ : E → ℝ} {K D : Set E} (P : E → E)
     (hP :
       ∀ p,
         P p ∈ K ∧
@@ -154,9 +157,8 @@ private lemma support_eq_of_contained_dual_section {E : Type*} [NormedAddCommGro
 
 /-- Actual C0 compact conjugate and OPEN dual MA generate uniqueness of
 primal support slopes, using a generated full section and existing contact/Haar. -/
-theorem eq_of_primal_supports_of_open_dual_mass {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u ψ : E → ℝ} {K D : Set E} (hD : IsOpen D) (hu : ConvexOn ℝ D u) (hC : ContinuousOn u D)
+theorem eq_of_primal_supports_of_open_dual_mass {u ψ : E → ℝ} {K D : Set E} (hD : IsOpen D)
+    (hu : ConvexOn ℝ D u) (hC : ContinuousOn u D)
     (hK : IsCompact K) (hKD : K ⊆ D) (P : E → E) (hPC : Continuous P)
     (hP :
       ∀ p,
@@ -175,9 +177,8 @@ theorem eq_of_primal_supports_of_open_dual_mass {E : Type*} [NormedAddCommGroup 
 
 /-- One actual section and one actual contact implementation produce both
 the full contained section and uniqueness of ALL support slopes at SAME point. -/
-theorem exists_contained_section_unique_supports {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {u ψ : E → ℝ} {K D : Set E} (hD : IsOpen D) (hu : ConvexOn ℝ D u) (hC : ContinuousOn u D)
+theorem exists_contained_section_unique_supports {u ψ : E → ℝ} {K D : Set E} (hD : IsOpen D)
+    (hu : ConvexOn ℝ D u) (hC : ContinuousOn u D)
     (hK : IsCompact K) (hKD : K ⊆ D) (P : E → E) (hPC : Continuous P)
     (hP :
       ∀ p,
@@ -203,5 +204,7 @@ theorem exists_contained_section_unique_supports {E : Type*} [NormedAddCommGroup
   exact
     ⟨p₀, R, hP₀, hvalue, hR, hcomp, hsection, fun p q hp hq =>
       support_eq_of_contained_dual_section P hP hKD hcvψ hv hMA hx hR hcomp hsection hp hq⟩
+
+end DualSections
 
 end FunctionalInequalities.Analysis

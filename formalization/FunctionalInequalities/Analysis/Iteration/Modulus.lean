@@ -180,7 +180,7 @@ end FunctionalInequalities.Analysis
 
 /-! ## Scalar width absorption and the quarter-scale power modulus -/
 
-noncomputable section WidthContraction
+section WidthContraction
 
 open Finset Set
 

@@ -25,7 +25,7 @@ retains its own support, integrability and dimensional hypotheses.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory
 open scoped ContDiff
 

@@ -34,7 +34,7 @@ Scope: ambient `ℝ²` only; no drift or zeroth-order term, comparison, modulus 
 
 @[expose] public section
 
-noncomputable section
+section
 open Filter
 open scoped ContDiff Topology
 
@@ -249,7 +249,7 @@ Scope: ambient dimension `m + 2 ≥ 2` only; no drift or zeroth-order term, comp
 existence.
 -/
 
-noncomputable section
+section
 open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
@@ -508,7 +508,7 @@ Scope: only the radial/log part with bounded drift; no polynomial part, zeroth-o
 comparison.
 -/
 
-noncomputable section
+section
 open Filter
 open scoped Topology ContDiff RealInnerProductSpace
 
@@ -667,7 +667,7 @@ Proof:
 * The budget gives `r C φ(x) ≤ ℓ / 16`, so `a φ(x) ≥ -C φ(x) ≥ -ℓ / (16 r)`.
 -/
 
-noncomputable section
+section
 open Filter
 open scoped Topology ContDiff RealInnerProductSpace
 

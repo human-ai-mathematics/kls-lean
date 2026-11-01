@@ -15,7 +15,7 @@ The solution is given; no existence or higher-dimensional regularity is asserted
 
 @[expose] public section
 
-noncomputable section
+section
 open Set Metric
 open scoped ContDiff Topology
 namespace FunctionalInequalities.Analysis
@@ -50,7 +50,7 @@ theorem contDiff_infty_of_positive_second_derivative_log_eq {u V : ℝ → ℝ} 
 end FunctionalInequalities.Analysis
 
 
-noncomputable section
+section
 open scoped ContDiff RealInnerProductSpace
 open FunctionalInequalities.Probability.Stein
 namespace FunctionalInequalities.Analysis

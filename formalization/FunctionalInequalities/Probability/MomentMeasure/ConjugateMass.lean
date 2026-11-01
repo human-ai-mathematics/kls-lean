@@ -36,7 +36,7 @@ the lower integral is established before the real conversion.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Filter Set
 open scoped ENNReal Topology
 

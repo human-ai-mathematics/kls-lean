@@ -10,7 +10,7 @@ public import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory
 open scoped ContDiff
 
@@ -142,7 +142,7 @@ end FunctionalInequalities.Analysis
 
 end WeakDerivativeGluing
 section CompactWeakDerivativeTesting
-noncomputable section
+section
 open MeasureTheory Filter Set Metric InnerProductSpace
 open scoped Convolution ContDiff ENNReal RealInnerProductSpace Topology
 namespace FunctionalInequalities.Analysis

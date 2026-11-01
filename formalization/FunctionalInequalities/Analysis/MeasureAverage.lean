@@ -23,18 +23,22 @@ the real Bochner integral uses the inner-product-space instance path of the revi
 
 /-! ## Averages of a.e. bounds and normalized L¹ estimates -/
 
-noncomputable section RealAverages
+namespace FunctionalInequalities.Analysis
+
+section RealAverages
 
 open MeasureTheory Filter
 
-namespace FunctionalInequalities.Analysis
+section PairwiseBounds
+
+variable {X Y : Type*} [MeasurableSpace X] [MeasurableSpace Y]
 
 /--
 Averaging an a.e. pairwise bound `lc · g y ≤ uc · f x + E` over a finite nonzero measure in `x`
 gives
 `lc · g y ≤ uc · (∫ f dμ)/μ(univ) + E` for a.e. `y`. -/
-theorem average_of_ae_pairwise_bound {X Y : Type*} [MeasurableSpace X] [MeasurableSpace Y]
-    (μ : Measure X) (ν : Measure Y) [IsFiniteMeasure μ] [NeZero μ] (f : X → ℝ) (g : Y → ℝ)
+theorem average_of_ae_pairwise_bound (μ : Measure X) (ν : Measure Y)
+    [IsFiniteMeasure μ] [NeZero μ] (f : X → ℝ) (g : Y → ℝ)
     {lc uc E : ℝ} (hf : Integrable f μ) (hpair : ∀ᵐ y ∂ν, ∀ᵐ x ∂μ, lc * g y ≤ uc * f x + E) :
     ∀ᵐ y ∂ν, lc * g y ≤ uc * ((∫ x, f x ∂μ) / μ.real Set.univ) + E := by
   have hm : 0 < μ.real Set.univ :=
@@ -57,8 +61,8 @@ theorem average_of_ae_pairwise_bound {X Y : Type*} [MeasurableSpace X] [Measurab
 /--
 Under the averaged pairwise bound (with `lc > 0` and `g ≥ 0` a.e.), `essSup g ≤ (uc/lc) · (∫ f
 dμ)/μ(univ) + E/lc`. -/
-theorem essSup_le_average_of_ae_pairwise_bound {X Y : Type*} [MeasurableSpace X]
-    [MeasurableSpace Y] (μ : Measure X) (ν : Measure Y) [IsFiniteMeasure μ] [NeZero μ]
+theorem essSup_le_average_of_ae_pairwise_bound (μ : Measure X) (ν : Measure Y)
+    [IsFiniteMeasure μ] [NeZero μ]
     [NeZero ν] (f : X → ℝ) (g : Y → ℝ) {lc uc E : ℝ} (hlc : 0 < lc) (hf : Integrable f μ)
     (hg0 : ∀ᵐ y ∂ν, 0 ≤ g y) (hpair : ∀ᵐ y ∂ν, ∀ᵐ x ∂μ, lc * g y ≤ uc * f x + E) :
     essSup g ν ≤ (uc / lc) * ((∫ x, f x ∂μ) / μ.real Set.univ) + E / lc := by
@@ -70,8 +74,14 @@ theorem essSup_le_average_of_ae_pairwise_bound {X Y : Type*} [MeasurableSpace X]
     convert hle using 1; ring
   exact essSup_le_of_ae_le _ hg (isCoboundedUnder_le_of_eventually_le _ hg0)
 
+end PairwiseBounds
+
+section L1Estimates
+
+variable {X : Type*} [MeasurableSpace X]
+
 /-- For an integrable a.e. nonnegative `w`, `‖w‖_{L¹} = ofReal (∫ w)`. -/
-theorem eLpNorm_one_eq_ofReal_integral {X : Type*} [MeasurableSpace X] (μ : Measure X)
+theorem eLpNorm_one_eq_ofReal_integral (μ : Measure X)
     (w : X → ℝ) (hw : Integrable w μ) (hw0 : ∀ᵐ x ∂μ, 0 ≤ w x) :
     eLpNorm w 1 μ = ENNReal.ofReal (∫ x, w x ∂μ) := by
   rw [eLpNorm_one_eq_lintegral_enorm hw.aestronglyMeasurable,
@@ -84,7 +94,7 @@ theorem eLpNorm_one_eq_ofReal_integral {X : Type*} [MeasurableSpace X] (μ : Mea
 /--
 A radius-normalized `L¹` estimate `R^{−N} ‖w‖₁ ≤ C · T` of an integrable a.e. nonnegative `w` gives
 `∫ w ≤ C T R^N`. -/
-theorem integral_le_of_normalized_eLpNorm_one {X : Type*} [MeasurableSpace X] (μ : Measure X)
+theorem integral_le_of_normalized_eLpNorm_one (μ : Measure X)
     (w : X → ℝ) (hw : Integrable w μ) (hw0 : ∀ᵐ x ∂μ, 0 ≤ w x) {R N C T : ℝ} (hR : 0 < R)
     (hC : 0 ≤ C) (hT : 0 ≤ T)
     (h : (ENNReal.ofReal R) ^ (-N) * eLpNorm w 1 μ ≤ ENNReal.ofReal C * ENNReal.ofReal T) :
@@ -101,7 +111,7 @@ theorem integral_le_of_normalized_eLpNorm_one {X : Type*} [MeasurableSpace X] (�
 /--
 If moreover `μ(univ) = m R^N` (`m > 0`), the radius cancels in the average: `(∫ w)/μ(univ) ≤ C T/m`.
 -/
-theorem average_le_of_normalized_eLpNorm_one {X : Type*} [MeasurableSpace X] (μ : Measure X)
+theorem average_le_of_normalized_eLpNorm_one (μ : Measure X)
     (w : X → ℝ) (hw : Integrable w μ) (hw0 : ∀ᵐ x ∂μ, 0 ≤ w x) {R N C T m : ℝ} (hR : 0 < R)
     (hC : 0 ≤ C) (hT : 0 ≤ T) (hm : 0 < m) (hmass : μ.real Set.univ = m * R ^ N)
     (h : (ENNReal.ofReal R) ^ (-N) * eLpNorm w 1 μ ≤ ENNReal.ofReal C * ENNReal.ofReal T) :
@@ -113,15 +123,11 @@ theorem average_le_of_normalized_eLpNorm_one {X : Type*} [MeasurableSpace X] (μ
     _ ≤ C * T * R ^ N := hi
     _ = _ := by field_simp
 
-end FunctionalInequalities.Analysis
+end L1Estimates
 
 end RealAverages
 
 /-! ## Hölder moduli of averages -/
-
-noncomputable section HolderMeans
-
-namespace FunctionalInequalities.Analysis
 
 section HolderAverages
 
@@ -172,5 +178,3 @@ theorem holderWith_unit_interval_mean {X : Type*} [PseudoMetricSpace X] (q : ℝ
 end HolderAverages
 
 end FunctionalInequalities.Analysis
-
-end HolderMeans

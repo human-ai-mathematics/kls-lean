@@ -198,7 +198,7 @@ end
 `action` is multiplicative, additive, homogeneous and unital; its basis columns and the trace
 formula `Σᵢ ‖A eᵢ‖² = tr (Aᵀ A)`. -/
 
-noncomputable section
+section
 open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Probability.Stein
@@ -246,7 +246,7 @@ end
 
 /-! ### Hilbert–Schmidt norm and trace -/
 
-noncomputable section
+section
 open scoped Matrix.Norms.Frobenius
 
 namespace FunctionalInequalities.Probability.Stein

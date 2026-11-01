@@ -16,7 +16,7 @@ matrix entry.
 
 /-! ## Entries from frame quadratic forms -/
 
-noncomputable section MatrixEntryHolder
+section MatrixEntryHolder
 
 open MeasureTheory Set Matrix
 open scoped NNReal ENNReal

@@ -14,7 +14,7 @@ rigidity and moment-source regularity have separate consumers.
 
 @[expose] public section
 
-noncomputable section
+section
 
 section MomentStrictConvexity
 

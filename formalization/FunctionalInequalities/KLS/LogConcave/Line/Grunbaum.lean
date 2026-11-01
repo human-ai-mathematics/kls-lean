@@ -22,7 +22,7 @@ tail `G(t) = μ(t, ∞)` is log-concave, so it lies below its tangent exponentia
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter Topology
 open scoped ENNReal
@@ -211,7 +211,7 @@ theorem exists_le_mul_exp {g : ℝ → ℝ} (hg0 : ∀ t, 0 ≤ g t) (hanti : An
         congr 1
         ring_nf
 
-noncomputable section
+section
 
 variable {μ : ProbabilityMeasure ℝ}
 

@@ -16,7 +16,7 @@ its own hypotheses and scope; this layout does not assert further regularity.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open Set Metric Filter MeasureTheory
 open scoped RealInnerProductSpace Topology

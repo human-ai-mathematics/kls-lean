@@ -19,7 +19,7 @@ source hypotheses, dimensional scope and mathematical conclusions.
 
 @[expose] public section
 
-noncomputable section
+section
 open Set Metric Filter
 open scoped RealInnerProductSpace Topology
 open FunctionalInequalities.Probability.Stein

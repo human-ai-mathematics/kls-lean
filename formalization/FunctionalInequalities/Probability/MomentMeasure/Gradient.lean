@@ -31,13 +31,16 @@ translate is centered
 
 @[expose] public section
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.Probability.MomentMeasure
 
 open FunctionalInequalities.Analysis
 
 section SupportRange
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [ProperSpace E] [MeasurableSpace E] [BorelSpace E]
 
 open Set MeasureTheory
 open scoped Topology ENNReal
@@ -48,9 +51,8 @@ pushes an
 open-positive `ν` forward to a measure with support `K`, then `range ∇u = interior K`: the range is
 open and convex with
 closure `K`. -/
-theorem range_gradient_eq_interior_of_map_support {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [ProperSpace E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} (hu : StrictConvexOn ℝ univ u) (hd : Differentiable ℝ u)
+theorem range_gradient_eq_interior_of_map_support {u : E → ℝ} (hu : StrictConvexOn ℝ univ u)
+    (hd : Differentiable ℝ u)
     (hg : Continuous (gradient u)) (ν : Measure E) [ν.IsOpenPosMeasure] {K : Set E}
     (hs : (ν.map (gradient u)).support = K) : range (gradient u) = interior K := by
   have ho := isOpen_range_gradient hu hd
@@ -66,9 +68,8 @@ theorem range_gradient_eq_interior_of_map_support {E : Type*} [NormedAddCommGrou
 If `∇u` pushes the tilt of an open-positive `μ` by `−u` (with `e^{−u}` integrable) forward to `1_K
 e^{−W} μ`, where `K`
 is closed and convex with nonempty interior and `W` is continuous, then `range ∇u = interior K`. -/
-theorem range_gradient_eq_interior_of_tilted_map {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [ProperSpace E] [MeasurableSpace E] [BorelSpace E]
-    {u : E → ℝ} (hu : StrictConvexOn ℝ univ u) (hd : Differentiable ℝ u)
+theorem range_gradient_eq_interior_of_tilted_map {u : E → ℝ} (hu : StrictConvexOn ℝ univ u)
+    (hd : Differentiable ℝ u)
     (hg : Continuous (gradient u)) (μ : Measure E) [μ.IsOpenPosMeasure]
     (he : Integrable (fun x => Real.exp (-u x)) μ) {K : Set E} (hc : Convex ℝ K)
     (hK : IsClosed K) (hi : (interior K).Nonempty) {W : E → ℝ} (hW : Continuous W)

@@ -12,16 +12,13 @@ are retained in the individual declarations.
 
 @[expose] public section
 
-noncomputable section
-open Set
-open scoped RealInnerProductSpace
-
-section DomainAffineTransport
-
+section
 open Set
 open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
+
+section DomainAffineTransport
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
@@ -136,10 +133,9 @@ theorem subgradientImageOn_comp_affineEquiv_symm
     simpa only [Function.comp_apply, e.symm_apply_apply, hi] using
       hpx y hy
 
-end FunctionalInequalities.Analysis
-
 end DomainAffineTransport
-namespace FunctionalInequalities.Analysis
+
+section CompactImages
 open Set Metric
 open scoped Topology
 
@@ -171,5 +167,7 @@ theorem isCompact_subgradientImageOn_of_isCompact {E : Type*} [NormedAddCommGrou
       simpa only [mem_closedBall, dist_zero_right] using hbound x hx p hp
   rw [← heq]
   exact hAk.image continuous_snd
+
+end CompactImages
 
 end FunctionalInequalities.Analysis

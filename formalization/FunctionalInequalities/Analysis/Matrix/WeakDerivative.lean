@@ -26,7 +26,7 @@ packages bounded trace data of `tr(B A B A)` for globally bounded rough fields.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set Filter Matrix
 open scoped ContDiff Topology BigOperators
 

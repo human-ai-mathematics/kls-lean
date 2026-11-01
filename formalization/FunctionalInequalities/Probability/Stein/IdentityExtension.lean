@@ -16,7 +16,7 @@ open FunctionalInequalities.Analysis.BakryEmery
   FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 open scoped RealInnerProductSpace Topology ContDiff Matrix.Norms.Frobenius
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.Probability.Stein
 

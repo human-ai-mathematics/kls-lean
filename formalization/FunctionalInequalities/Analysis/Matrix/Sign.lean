@@ -20,7 +20,7 @@ of the proof of Letwin, arXiv:2607.24164v1, Theorem 1.2 (p. 14, preceding (2.21)
 
 @[expose] public section
 
-noncomputable section
+section
 open scoped MatrixOrder
 
 namespace FunctionalInequalities.Analysis
@@ -352,7 +352,7 @@ For symmetric invertible `M`, with `B = √(M²)`, `S = √B` and `Q = sign M`: 
 `S` is invertible and gives a self-adjoint Euclidean equivalence. Also: every symmetric matrix is a
 limit of symmetric invertible matrices. -/
 
-noncomputable section
+section
 open scoped MatrixOrder
 
 namespace FunctionalInequalities.Analysis
@@ -428,7 +428,7 @@ end FunctionalInequalities.Analysis
 
 end
 
-noncomputable section
+section
 open Matrix Filter Set
 open scoped Topology
 

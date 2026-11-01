@@ -958,7 +958,7 @@ end FunctionalInequalities.Analysis.BakryEmery
 The gradient of `f (S x + z)` is `S† ∇f (S x + z)` for a continuous linear `S` between real inner
 product spaces. -/
 
-noncomputable section
+section
 open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis.BakryEmery

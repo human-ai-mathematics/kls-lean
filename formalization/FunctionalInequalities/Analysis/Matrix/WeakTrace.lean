@@ -19,7 +19,7 @@ potential or source premise; all finite dimensions. Actual Hessian-evolution spe
 
 @[expose] public section
 
-noncomputable section
+section
 
 section FixedTestFiniteContraction
 
