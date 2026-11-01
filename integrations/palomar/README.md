@@ -11,6 +11,11 @@ This contained Lake project is the Palomar submission surface for one registry e
 | [`STATEMENT-CORRESPONDENCE.md`](STATEMENT-CORRESPONDENCE.md) | Row-by-row correspondence with the pinned OpenAI model and the Formal Conjectures statement. |
 | [`lakefile.toml`](lakefile.toml), [`lake-manifest.json`](lake-manifest.json), [`lean-toolchain`](lean-toolchain) | Lean `v4.35.0`, Mathlib `v4.35.0` (`56a005855ea17e0b0958f73ec801ae140b0a1679`) with its exact pinned closure, and the repository's `formalization` and `integrations/openai` packages as path dependencies. |
 
+Registered as [PALOMAR-2026-11-01-000014 v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1)
+at source commit `33fff6ea218ae07e42115bd1eacfcf7d39c534cb`. The public record includes
+the mechanical evidence, automated review and preserved source. This registration applies to
+that fixed commit.
+
 ## What is claimed
 
 One positive real constant `C`, chosen before the dimension, such that for every `n ≥ 1`, every

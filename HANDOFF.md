@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-31. This publication candidate contains accepted mathematical sources and current
+Updated 2026-11-02. This publication candidate contains accepted mathematical sources and current
 maintenance. The paper register and the current declarations own mathematical scope; a local
 working-tree receipt does not certify a future commit or release.
 
@@ -27,13 +27,22 @@ historical research records, not current formalization targets.
 <!-- BEGIN CURRENT MAINTENANCE -->
 ## Current maintenance
 
-This checkout is the publication candidate for the closed `KLSOpenAI.kls` Palomar entry,
-using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.
-The publication retains mathematical targets and certificate states; evidence must match its final commit.
+`KLSOpenAI.kls` at public commit `33fff6ea218ae07e42115bd1eacfcf7d39c534cb` is registered as
+[PALOMAR-2026-11-01-000014 v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1).
+The public record, exact source/target/configuration, archived mechanical report, automated review
+and preserved source tag have been checked. The automated review is not human peer review.
+The monitoring automation was deleted at the user's request and remains stopped.
+
+The separate Lean v4.33.1 [Formal Conjectures PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
+links that immutable version with `formal_proof using lean4`; its main theorem is a statement
+placeholder. Strict module build, exact ordinary-statement correspondence and standard axiom checks
+pass locally. The PR is ready for review and its Google CLA check passes; upstream workflows
+still require maintainer approval. The user confirmed personal copyright ownership. No CLA was
+signed by an agent.
 See the [current source review](research/progress/2026-10-31-palomar-publication-review.json).
-The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Run full local and independent-consumer checks, then exact-commit Linux sandbox Comparator, remote Lean certification and official Palomar preflight before registration.
-Publication and final-commit verification are approved for this candidate; registration and the FC proof link must use the actual verified public revision and real registry ID.
+The original KLS and preparation worktrees, unrelated validation-tool edits and mathematical interfaces remain preserved.
+Readability maintenance reorganizes local scopes without changing proof text. Complete full local verification of the selected maintenance tree before publishing it.
+These maintenance commits are local only; no push or remote certification is authorized. The registered Palomar record continues to identify only its fixed public commit above.
 <!-- END CURRENT MAINTENANCE -->
 
 ## Current publication candidate
@@ -52,10 +61,11 @@ measurability premises; upstream Cadlag/indistinguishability owner and type adap
 itemized. These exceptions add no KLS endpoint hypotheses or paper/certificate coverage.
 
 The [Formal Conjectures inputs](integrations/palomar/formal-conjectures/README.md) target the
-separate Lean v4.33.1 pin. Their main theorem is a deliberate statement placeholder. Add the
-`formal_proof` annotation only after obtaining the real Palomar registration identifier.
+separate Lean v4.33.1 pin. Their main theorem is a deliberate statement placeholder. The
+`formal_proof` annotation records the verified Palomar v1 entry above; it does not supply a local
+proof of the FC statement placeholder.
 
-## Final-commit verification
+## Verification of future publication snapshots
 
 Freeze the full source before verification. Run `python3 research/verify.py` for strict builds,
 all 447 live independent audit clients, local/vendor/private/generated declaration axiom

@@ -178,13 +178,22 @@
     "document": "HANDOFF.md",
     "review_map": "research/progress/2026-10-31-palomar-publication-review.json",
     "scope_lines": [
-      "This checkout is the publication candidate for the closed `KLSOpenAI.kls` Palomar entry,",
-      "using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.",
-      "The publication retains mathematical targets and certificate states; evidence must match its final commit."
+      "`KLSOpenAI.kls` at public commit `33fff6ea218ae07e42115bd1eacfcf7d39c534cb` is registered as",
+      "[PALOMAR-2026-11-01-000014 v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1).",
+      "The public record, exact source/target/configuration, archived mechanical report, automated review",
+      "and preserved source tag have been checked. The automated review is not human peer review.",
+      "The monitoring automation was deleted at the user's request and remains stopped.",
+      "",
+      "The separate Lean v4.33.1 [Formal Conjectures PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)",
+      "links that immutable version with `formal_proof using lean4`; its main theorem is a statement",
+      "placeholder. Strict module build, exact ordinary-statement correspondence and standard axiom checks",
+      "pass locally. The PR is ready for review and its Google CLA check passes; upstream workflows",
+      "still require maintainer approval. The user confirmed personal copyright ownership. No CLA was",
+      "signed by an agent."
     ],
-    "preservation": "The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.",
-    "next_step": "Run full local and independent-consumer checks, then exact-commit Linux sandbox Comparator, remote Lean certification and official Palomar preflight before registration.",
-    "activity_scope": "Publication and final-commit verification are approved for this candidate; registration and the FC proof link must use the actual verified public revision and real registry ID."
+    "preservation": "The original KLS and preparation worktrees, unrelated validation-tool edits and mathematical interfaces remain preserved.",
+    "next_step": "Readability maintenance reorganizes local scopes without changing proof text. Complete full local verification of the selected maintenance tree before publishing it.",
+    "activity_scope": "These maintenance commits are local only; no push or remote certification is authorized. The registered Palomar record continues to identify only its fixed public commit above."
   },
   "route_scope_notes": [
     {

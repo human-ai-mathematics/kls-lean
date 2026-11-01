@@ -24,5 +24,10 @@ Scope: step 4 is a same-pin source-copy equivalence check under the Formal Conje
 (Lean v4.33.1). It shows that the Formal Conjectures proposition and the copied Palomar ordinary
 definitions agree as statements; it does not prove KLS. The cross-version link to the Lean v4.35.0
 Palomar entry is that `Challenge.lean` contains the same definition block byte for byte, which
-Palomar's Comparator then checks against `Solution.lean`. The Formal Conjectures `formal_proof`
-annotation needs a real registered Palomar entry and is not part of this patch.
+Palomar's Comparator then checks against `Solution.lean`. The `formal_proof using lean4` annotation links the immutable registered
+[Palomar entry PALOMAR-2026-11-01-000014 v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1),
+which checks `KLSOpenAI.kls` at source commit
+`33fff6ea218ae07e42115bd1eacfcf7d39c534cb`. The main FC theorem remains a statement
+placeholder; the external proof is recorded by the attribute. The existing
+[FC PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712) is ready for review. Its individual Google CLA check passes; upstream workflows await
+maintainer approval.

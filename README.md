@@ -7,8 +7,9 @@ literature, with the dimension-free Kannan–Lovász–Simonovits (KLS) bound as
 [Getting started](examples/FIRST-USE.md) · [Examples](examples/README.md) · [API](formalization/API.md) · [Proof path](research/progress/PROOF-PATH.md) · [Verification](research/verification.md)
 
 **Toolchain:** Lean and Mathlib **v4.35.0**; library, vendor, solution, example and audit sources use Lean `module` headers.
-**Palomar:** the contained [submission project](integrations/palomar/README.md) states the
-pinned OpenAI form of the dimension-free bound for Palomar's Comparator.
+**Palomar:** [PALOMAR-2026-11-01-000014 v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1)
+registers the pinned OpenAI form of the dimension-free bound at commit `33fff6ea`.
+See the [submission project](integrations/palomar/README.md) for its exact scope.
 
 ## Use the library
 
