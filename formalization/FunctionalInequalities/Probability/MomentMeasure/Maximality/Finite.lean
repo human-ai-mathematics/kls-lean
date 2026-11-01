@@ -53,7 +53,7 @@ hypothesis from the maximality inequality `lintegral_le_exp_integral_of_map_grad
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped ENNReal Topology RealInnerProductSpace
@@ -473,7 +473,7 @@ end FunctionalInequalities.Probability.MomentMeasure
 
 end
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped ENNReal Topology RealInnerProductSpace

@@ -22,7 +22,7 @@ smoothness of that tensor or prove the main bound.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open Matrix
 open FunctionalInequalities.Probability.Stein

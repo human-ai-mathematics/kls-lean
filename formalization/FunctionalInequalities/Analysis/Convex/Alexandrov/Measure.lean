@@ -13,12 +13,15 @@ Theorem 2.24(ii).
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 section DomainSlopeNull
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E]
 
 open Metric
 
@@ -26,9 +29,8 @@ open Metric
 convex function form a null set. Actual buffered pair patches and the global
 Lipschitz-convex theorem produce the conclusion; no extension, slope bound,
 cover or overlap nullity is an input. All dimensions, including zero. -/
-theorem volume_domain_subgradient_two_points_eq_zero {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {v : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω) :
+theorem volume_domain_subgradient_two_points_eq_zero {v : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω)
+    (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω) :
     (volume : Measure E)
         {p : E |
           ∃ x ∈ Ω,
@@ -134,9 +136,8 @@ theorem volume_domain_subgradient_two_points_eq_zero {E : Type*} [NormedAddCommG
 
 /-- Disjoint domain subsets have supporting-slope images whose intersection
 is null. The images need not be measurable and no positive dimension is required. -/
-theorem volume_inter_subgradientImageOn_eq_zero_of_disjoint {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {v : E → ℝ} {Ω G H : Set E} (hΩ : IsOpen Ω) (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω)
+theorem volume_inter_subgradientImageOn_eq_zero_of_disjoint {v : E → ℝ} {Ω G H : Set E}
+    (hΩ : IsOpen Ω) (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω)
     (hG : G ⊆ Ω) (hH : H ⊆ Ω) (hGH : Disjoint G H) :
     (volume : Measure E) (subgradientImageOn v Ω G ∩ subgradientImageOn v Ω H) = 0 := by
   apply measure_mono_null ?_ (volume_domain_subgradient_two_points_eq_zero hΩ hv hvc)

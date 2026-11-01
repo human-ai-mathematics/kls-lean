@@ -16,7 +16,7 @@ Directional Fréchet-derivative bounds require only a real normed space.
 
 @[expose] public section
 
-noncomputable section
+section
 open Set Metric
 open scoped RealInnerProductSpace
 
@@ -46,7 +46,7 @@ theorem exists_lipschitzWith_neg_add_comp_gradient {n : ℕ}
 
 end FunctionalInequalities.Analysis
 
-noncomputable section
+section
 
 open Filter Topology
 open scoped ContDiff ENNReal

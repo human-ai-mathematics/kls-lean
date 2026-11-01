@@ -341,7 +341,7 @@ end FunctionalInequalities.Probability.Stein
 
 end GradientDerivativeIdentification
 
-noncomputable section HessianEntryBounds
+section HessianEntryBounds
 
 open MeasureTheory
 open FunctionalInequalities.Probability.Stein
@@ -387,7 +387,7 @@ end FunctionalInequalities.Probability.Stein
 end HessianEntryBounds
 
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped Topology ContDiff
 namespace FunctionalInequalities.Probability.Stein

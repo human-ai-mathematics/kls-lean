@@ -20,7 +20,7 @@ limit and no unconditional bound is asserted.
 open MeasureTheory Filter
 open scoped Topology
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.KLS.RegularPotential
 

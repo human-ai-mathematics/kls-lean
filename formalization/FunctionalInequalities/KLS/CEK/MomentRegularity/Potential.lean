@@ -36,7 +36,7 @@ ellipticity
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped RealInnerProductSpace ContDiff Topology

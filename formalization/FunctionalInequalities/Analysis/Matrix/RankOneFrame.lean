@@ -706,7 +706,7 @@ end FunctionalInequalities.Analysis
 
 /-! ## Quadratic forms of frame directions: bounds, coordinates and normalized pairs -/
 
-noncomputable section FrameQuadratics
+section FrameQuadratics
 
 open Matrix Finset
 

@@ -19,7 +19,7 @@ derivatives.
 
 /-! ## Lipschitz maps with a continuous a.e. derivative -/
 
-noncomputable section ContinuousAEDerivative
+section ContinuousAEDerivative
 
 open MeasureTheory Set Filter
 open scoped NNReal Convolution Topology

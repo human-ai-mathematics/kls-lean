@@ -41,7 +41,7 @@ derivatives of
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Matrix
 open scoped ContDiff

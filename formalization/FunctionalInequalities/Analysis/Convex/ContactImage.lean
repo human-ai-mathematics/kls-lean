@@ -23,7 +23,7 @@ Dirichlet existence or W²,p theorem.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Metric
 open scoped ENNReal NNReal RealInnerProductSpace

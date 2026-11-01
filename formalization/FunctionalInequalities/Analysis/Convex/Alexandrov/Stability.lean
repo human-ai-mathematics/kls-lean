@@ -13,19 +13,23 @@ Theorem 2.24(ii).
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
-open Set Metric Filter
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E]
+
+open Metric Filter
 open scoped Topology
+
 /-- Compact supporting images satisfy the upper volume inequality under actual
 locally uniform convergence. Haar outer regularity is applied to the compact
 limit image. The approximating functions need not be convex or continuous. -/
-theorem limsup_volume_subgradientImageOn_le_of_locally_uniform {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] {f : ℕ → E → ℝ} {v : E → ℝ} {Ω K : Set E} (hΩ : IsOpen Ω)
+theorem limsup_volume_subgradientImageOn_le_of_locally_uniform {f : ℕ → E → ℝ} {v : E → ℝ}
+    {Ω K : Set E} (hΩ : IsOpen Ω)
     (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω)
     (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
     limsup (fun n => (volume : Measure E) (subgradientImageOn (f n) Ω K)) atTop ≤
@@ -42,9 +46,8 @@ theorem limsup_volume_subgradientImageOn_le_of_locally_uniform {E : Type*}
 /-- Almost every actual supporting slope of the limit persists eventually in
 the image of an open test set. The exceptional set and uniqueness are derived
 from the actual C0 convex source, rather than assumed as an N property. -/
-theorem ae_eventually_mem_subgradientImageOn_of_locally_uniform {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] {f : ℕ → E → ℝ} {v : E → ℝ} {Ω G : Set E} (hΩ : IsOpen Ω)
+theorem ae_eventually_mem_subgradientImageOn_of_locally_uniform {f : ℕ → E → ℝ} {v : E → ℝ}
+    {Ω G : Set E} (hΩ : IsOpen Ω)
     (hf : ∀ n, ConvexOn ℝ Ω (f n)) (hfc : ∀ n, ContinuousOn (f n) Ω) (hv : ConvexOn ℝ Ω v)
     (hvc : ContinuousOn v Ω) (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hG : IsOpen G)
     (hGΩ : G ⊆ Ω) :
@@ -75,9 +78,8 @@ theorem ae_eventually_mem_subgradientImageOn_of_locally_uniform {E : Type*}
 under locally uniform convergence of C0 convex potentials. Actual two-point
 nullity supplies almost-everywhere unique contacts; Borel images and Fatou
 close the inequality, including infinite volumes and zero dimension. -/
-theorem volume_subgradientImageOn_le_liminf_of_locally_uniform {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] {f : ℕ → E → ℝ} {v : E → ℝ} {Ω G : Set E} (hΩ : IsOpen Ω)
+theorem volume_subgradientImageOn_le_liminf_of_locally_uniform {f : ℕ → E → ℝ} {v : E → ℝ}
+    {Ω G : Set E} (hΩ : IsOpen Ω)
     (hf : ∀ n, ConvexOn ℝ Ω (f n)) (hfc : ∀ n, ContinuousOn (f n) Ω) (hv : ConvexOn ℝ Ω v)
     (hvc : ContinuousOn v Ω) (hlim : TendstoLocallyUniformlyOn f v atTop Ω) (hG : IsOpen G)
     (hGΩ : G ⊆ Ω) :
@@ -113,19 +115,13 @@ theorem volume_subgradientImageOn_le_liminf_of_locally_uniform {E : Type*}
       funext n
       exact lintegral_indicator_one (hA n)
 
-end FunctionalInequalities.Analysis
-
-namespace FunctionalInequalities.Analysis
-open Set Metric Filter
-open scoped Topology
 /-- Locally uniform C0 convex sources produce their actual SAME Monge--Ampere
 measures, retaining every Borel supporting-image formula and interior compact
 finiteness. Source-derived local Portmanteau inequalities yield convergence
 on all continuity sets with compact closure INSIDE the domain. No measure or
 stability property is an input; no ambient narrow convergence is asserted. -/
-theorem exists_domain_mongeAmpere_measures_local_limits {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {f : ℕ → E → ℝ} {v : E → ℝ} {Ω : Set E} (hΩ : IsOpen Ω) (hf : ∀ n, ConvexOn ℝ Ω (f n))
+theorem exists_domain_mongeAmpere_measures_local_limits {f : ℕ → E → ℝ} {v : E → ℝ} {Ω : Set E}
+    (hΩ : IsOpen Ω) (hf : ∀ n, ConvexOn ℝ Ω (f n))
     (hfc : ∀ n, ContinuousOn (f n) Ω) (hv : ConvexOn ℝ Ω v) (hvc : ContinuousOn v Ω)
     (hlim : TendstoLocallyUniformlyOn f v atTop Ω) :
     ∃ (μs : ℕ → Measure E) (μ : Measure E),
@@ -176,9 +172,8 @@ under locally uniform convergence of continuous convex potentials. The coefficie
 may be zero; neither the domain nor its open subsets need have finite volume.
 The reverse inequality uses compact inner approximation and an actual open
 thickening, so no equation on compact sets is assumed. -/
-theorem domain_constant_density_of_locally_uniform {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {f : ℕ → E → ℝ} {v : E → ℝ} {Ω : Set E} (c : ℝ≥0) (hΩ : IsOpen Ω)
+theorem domain_constant_density_of_locally_uniform {f : ℕ → E → ℝ} {v : E → ℝ} {Ω : Set E} (c : ℝ≥0)
+    (hΩ : IsOpen Ω)
     (hf : ∀ n, ConvexOn ℝ Ω (f n)) (hfc : ∀ n, ContinuousOn (f n) Ω) (hv : ConvexOn ℝ Ω v)
     (hvc : ContinuousOn v Ω) (hlim : TendstoLocallyUniformlyOn f v atTop Ω)
     (hMA :
@@ -235,9 +230,8 @@ theorem domain_constant_density_of_locally_uniform {E : Type*} [NormedAddCommGro
 
 /-- Actual open lower-MA source data give lower bounds on EVERY Borel subset,
 using real local finite restrictions rather than an outer-regularity input. -/
-theorem volume_le_subgradientImageOn_of_open_lower {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-    {Ω : Set E} {u : E → ℝ} (hΩ : IsOpen Ω) (hu : ConvexOn ℝ Ω u) (huc : ContinuousOn u Ω)
+theorem volume_le_subgradientImageOn_of_open_lower {Ω : Set E} {u : E → ℝ} (hΩ : IsOpen Ω)
+    (hu : ConvexOn ℝ Ω u) (huc : ContinuousOn u Ω)
     (hMA : ∀ G : Set E, IsOpen G → G ⊆ Ω → volume G ≤ volume (subgradientImageOn u Ω G)) :
     ∀ G : Set E, MeasurableSet G → G ⊆ Ω → volume G ≤ volume (subgradientImageOn u Ω G) := by
   obtain ⟨μ, hμ, hfin⟩ := exists_domain_mongeAmpere_measure hΩ hu huc
@@ -275,11 +269,5 @@ theorem volume_le_subgradientImageOn_of_open_lower {E : Type*} [NormedAddCommGro
     exact (hcompact K hK (hKG.trans hGΩ)).trans (measure_mono hKG)
   rwa [hμ G hG, inter_eq_left.mpr hGΩ] at hbound
 
-
-end FunctionalInequalities.Analysis
-
-namespace FunctionalInequalities.Analysis
-open Set Metric Filter MeasureTheory
-open scoped RealInnerProductSpace Topology
 
 end FunctionalInequalities.Analysis

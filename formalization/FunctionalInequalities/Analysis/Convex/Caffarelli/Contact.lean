@@ -21,7 +21,7 @@ rigidity and moment-source regularity have separate consumers.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open Set Metric
 open scoped RealInnerProductSpace

@@ -26,7 +26,7 @@ No variance, `H⁻¹`, moment-map or kernel hypothesis is used.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped ENNReal ContDiff
 

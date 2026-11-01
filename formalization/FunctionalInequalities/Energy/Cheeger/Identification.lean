@@ -34,7 +34,7 @@ inequality, a finiteness statement or a Cheeger–Buser comparison.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal ContDiff

@@ -232,7 +232,7 @@ end
 images; the Gaussian directional identity for bounded Lipschitz `C¹` tests holds after a
 translation. -/
 
-noncomputable section
+section
 open MeasureTheory Set
 open scoped ENNReal ContDiff
 

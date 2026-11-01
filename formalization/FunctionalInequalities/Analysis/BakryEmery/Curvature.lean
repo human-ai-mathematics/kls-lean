@@ -30,7 +30,7 @@ arXiv:2607.24164v1, Lemma A.6, not that lemma.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory InnerProductSpace
 open scoped ContDiff RealInnerProductSpace

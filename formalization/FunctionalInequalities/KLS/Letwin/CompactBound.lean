@@ -25,7 +25,7 @@ bound.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff RealInnerProductSpace

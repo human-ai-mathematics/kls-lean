@@ -10,7 +10,7 @@ public import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory
 open scoped ContDiff
 

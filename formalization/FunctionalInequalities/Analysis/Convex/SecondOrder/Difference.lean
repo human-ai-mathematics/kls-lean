@@ -31,7 +31,7 @@ arXiv:2607.24164v1). A function with a subgradient at every point and such a bou
 
 @[expose] public section
 
-noncomputable section
+section
 
 open scoped RealInnerProductSpace
 

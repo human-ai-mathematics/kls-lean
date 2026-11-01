@@ -40,7 +40,7 @@ interior-regularity argument of `KLS/LogConcave/HeatSemigroup/Generator/Interior
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Filter Topology Metric InnerProductSpace
 open scoped Convolution ContDiff ENNReal RealInnerProductSpace

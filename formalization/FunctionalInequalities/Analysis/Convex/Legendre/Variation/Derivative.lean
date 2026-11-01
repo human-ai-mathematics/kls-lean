@@ -31,7 +31,7 @@ gradient push-forward, source regularity and CEK Theorem 2 are not provided.
 
 @[expose] public section
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.Analysis
 

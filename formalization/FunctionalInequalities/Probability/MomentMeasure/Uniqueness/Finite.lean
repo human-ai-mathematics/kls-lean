@@ -44,7 +44,7 @@ of Prékopa–Leindler (`exists_eq_translate_of_lintegral_midpointDensity_le_one
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped ENNReal Topology RealInnerProductSpace
@@ -219,7 +219,7 @@ end FunctionalInequalities.Probability.MomentMeasure
 
 end
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped ENNReal Topology RealInnerProductSpace

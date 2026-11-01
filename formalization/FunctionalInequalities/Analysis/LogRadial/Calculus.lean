@@ -34,7 +34,7 @@ rules.
 
 @[expose] public section
 
-noncomputable section
+section
 open Filter
 open scoped ContDiff Topology
 

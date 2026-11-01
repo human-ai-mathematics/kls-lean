@@ -18,7 +18,7 @@ or mathematical completion is inferred.
 
 @[expose] public section
 
-noncomputable section
+section
 
 section MongeAmpereFirstRhsDerivative
 open MeasureTheory Set Filter

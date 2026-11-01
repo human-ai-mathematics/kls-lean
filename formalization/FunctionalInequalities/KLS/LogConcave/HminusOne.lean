@@ -21,7 +21,7 @@ The variance assembly uses the heat-generator range density from
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory
 open scoped ContDiff

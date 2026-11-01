@@ -94,7 +94,7 @@ constant `1` while `Metric.thickening r ∅ = ∅`, so the bound fails for the e
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal ContDiff symmDiff

@@ -21,7 +21,7 @@ invariance of domain nor an invertible Hessian.
 
 @[expose] public section
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.Analysis
 
@@ -148,6 +148,8 @@ theorem gradient_eq_of_tilt_min {E : Type*} [NormedAddCommGroup E] [InnerProduct
   rw [toDual_gradient]
   exact sub_eq_zero.mp hz
 
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
 /--
 **Open gradient map.** The gradient of a differentiable strictly convex function on a
 finite-dimensional space is an
@@ -155,8 +157,7 @@ open map. Near `p = ∇u(a)` every tilt minimizer lies in one fixed ball, and th
 compact part of that
 ball outside an open `U ∋ a` misses `p`. Neither invariance of domain nor an invertible Hessian is
 used. -/
-theorem isOpenMap_gradient_of_strictConvexOn {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hu : StrictConvexOn ℝ univ u)
+theorem isOpenMap_gradient_of_strictConvexOn {u : E → ℝ} (hu : StrictConvexOn ℝ univ u)
     (hd : Differentiable ℝ u) : IsOpenMap (gradient u) := by
   have hg : Continuous (gradient u) :=
     (InnerProductSpace.toDual ℝ E).symm.continuous.comp
@@ -207,8 +208,7 @@ theorem isOpenMap_gradient_of_strictConvexOn {E : Type*} [NormedAddCommGroup E]
 The gradient of a differentiable strictly convex function on a finite-dimensional space is a
 homeomorphism onto its
 range (continuous, injective and open). -/
-theorem exists_gradient_homeomorph_range {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hu : StrictConvexOn ℝ univ u)
+theorem exists_gradient_homeomorph_range {u : E → ℝ} (hu : StrictConvexOn ℝ univ u)
     (hd : Differentiable ℝ u) : ∃ e : E ≃ₜ range (gradient u), ∀ x, (e x : E) = gradient u x := by
   have hg : Continuous (gradient u) :=
     (InnerProductSpace.toDual ℝ E).symm.continuous.comp

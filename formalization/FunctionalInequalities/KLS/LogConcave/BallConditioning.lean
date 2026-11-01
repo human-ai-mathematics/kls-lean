@@ -23,7 +23,7 @@ class used by the approximation step of Letwin's Lemma A.1.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ContDiff

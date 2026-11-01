@@ -358,7 +358,7 @@ end FunctionalInequalities.L2
 For finitely many real `L²` random variables, the variance of `Σᵢ cₖᵢ fᵢ` converges when the
 coefficients converge (stated in namespace `Probability`). -/
 
-noncomputable section
+section
 open MeasureTheory Filter
 open scoped Topology
 

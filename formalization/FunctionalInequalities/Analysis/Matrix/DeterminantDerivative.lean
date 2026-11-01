@@ -176,7 +176,7 @@ end DeterminantPolynomialIdentification
 
 /-! ## Smoothness of the log-determinant -/
 
-noncomputable section LogDetSmoothness
+section LogDetSmoothness
 
 namespace FunctionalInequalities.Analysis
 

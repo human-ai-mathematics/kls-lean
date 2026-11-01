@@ -39,7 +39,7 @@ variable {n : ℕ} (hn : 0 < n)
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : FunctionalInequalities.KLS.Isotropic μ)
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped RealInnerProductSpace ContDiff Topology

@@ -27,7 +27,7 @@ almost everywhere
 
 @[expose] public section
 
-noncomputable section
+section
 
 open Set Filter
 open scoped RealInnerProductSpace Topology

@@ -146,7 +146,7 @@ end FunctionalInequalities.Probability.Stein
 
 If `∇u` is Lipschitz, then `y ↦ (∇²u y) v` is in `L²` of every finite measure. -/
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 
@@ -180,7 +180,7 @@ carries `ν`-a.e. positive
 definiteness and the `L²(ν)` Hilbert–Schmidt bound of `∇²u` to `∇²u ∘ Ψ` under `μ`; `C¹` suffices.
 -/
 
-noncomputable section
+section
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff Matrix.Norms.Frobenius

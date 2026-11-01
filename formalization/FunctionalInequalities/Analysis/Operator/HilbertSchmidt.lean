@@ -194,7 +194,7 @@ end FunctionalInequalities.Analysis
 For a symmetric continuous linear operator `A` and any finite orthonormal basis, `Σᵢⱼ ⟪A bᵢ, bⱼ⟫² =
 tr (A ∘ A)`. -/
 
-noncomputable section
+section
 open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis

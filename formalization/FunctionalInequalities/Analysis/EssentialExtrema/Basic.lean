@@ -65,7 +65,7 @@ end FunctionalInequalities.Analysis
 
 /-! ## Real essential extrema and a common good set -/
 
-noncomputable section RealEssentialBounds
+section RealEssentialBounds
 
 open MeasureTheory Filter Set TopologicalSpace
 

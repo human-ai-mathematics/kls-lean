@@ -13,7 +13,7 @@ equation, inverse Hessian or integration-by-parts premise is required.
 -/
 
 @[expose] public section
-noncomputable section
+section
 
 section MongeAmpereExponentDerivative
 

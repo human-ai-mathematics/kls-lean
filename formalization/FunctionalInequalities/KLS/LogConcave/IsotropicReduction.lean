@@ -25,7 +25,7 @@ passes to the weak limit. The universal bound for regular laws is a hypothesis (
 
 open MeasureTheory Filter Topology
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.KLS.LogConcave
 

@@ -18,7 +18,7 @@ an a.e. nonzero density preserves the support, so `1_K e^{−W} μ` has support 
 
 @[expose] public section
 
-noncomputable section
+section
 
 namespace FunctionalInequalities.Probability
 

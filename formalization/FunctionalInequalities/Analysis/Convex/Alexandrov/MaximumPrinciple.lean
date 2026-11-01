@@ -34,7 +34,7 @@ Each statement retains its actual hypotheses and dimensional scope.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal

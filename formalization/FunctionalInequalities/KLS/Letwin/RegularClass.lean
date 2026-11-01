@@ -66,7 +66,7 @@ variable {n : ℕ} (hn : 0 < n)
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
     (hiso : FunctionalInequalities.KLS.Isotropic μ)
 
-noncomputable section
+section
 open MeasureTheory Set Filter ProbabilityTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein
@@ -193,7 +193,7 @@ end FunctionalInequalities.KLS.LogConcave
 
 end
 
-noncomputable section
+section
 open MeasureTheory ProbabilityTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Probability.Stein
@@ -246,7 +246,7 @@ end FunctionalInequalities.KLS.LogConcave
 
 end
 
-noncomputable section
+section
 open MeasureTheory Set
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped ContDiff RealInnerProductSpace

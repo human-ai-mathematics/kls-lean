@@ -19,7 +19,7 @@ along the exhaustion by balls
 
 /-! ## Representatives -/
 
-noncomputable section HolderRepresentatives
+section HolderRepresentatives
 
 open MeasureTheory Set Metric Filter
 open scoped NNReal ENNReal

@@ -24,7 +24,7 @@ and `r = √S`. Since `|p - β|, |q| ≤ r`, we get `‖R'‖ ≤ 2` and `‖L'�
 
 @[expose] public section
 
-noncomputable section
+section
 open Filter
 open scoped Topology RealInnerProductSpace
 

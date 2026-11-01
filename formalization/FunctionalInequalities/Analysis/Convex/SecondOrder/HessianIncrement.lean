@@ -37,7 +37,7 @@ proved here.
 
 @[expose] public section
 
-noncomputable section
+section
 open MeasureTheory Set Filter
 open scoped Topology RealInnerProductSpace
 open FunctionalInequalities.Probability.Stein
@@ -393,7 +393,7 @@ theorem integral_mul_hessian_increment_le {n : ℕ} {u V η : EuclideanSpace ℝ
 
 end FunctionalInequalities.Analysis
 
-noncomputable section
+section
 open MeasureTheory Set Filter
 open scoped Topology ContDiff RealInnerProductSpace
 open FunctionalInequalities.Probability.Stein

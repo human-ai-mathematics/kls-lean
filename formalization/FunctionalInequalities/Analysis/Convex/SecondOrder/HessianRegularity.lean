@@ -36,7 +36,7 @@ The integrated Hessian-increment energy behind the weak third derivative is in
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Set Filter
 open scoped Topology RealInnerProductSpace

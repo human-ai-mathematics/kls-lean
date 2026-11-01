@@ -32,11 +32,11 @@ type (the empty one included).
 
 @[expose] public section
 
-noncomputable section
+namespace FunctionalInequalities.Analysis
+
+section TraceExtensions
 
 open Matrix MeasureTheory
-
-namespace FunctionalInequalities.Analysis
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
@@ -152,16 +152,6 @@ theorem symmetric_trace_integral_extension
         2 * (B * B).trace :=
   symmetric_trace_integral_extension_mul ν H hH_meas hH_psd hPSD hB
 
-end FunctionalInequalities.Analysis
-
-section AEPosSemidefTraceIntegral
-
-open Matrix MeasureTheory
-
-namespace FunctionalInequalities.Analysis
-
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-
 /--
 The symmetric trace-integral extension of `symmetric_trace_integral_extension` from
 almost-everywhere positive
@@ -181,19 +171,16 @@ theorem symmetric_trace_integral_extension_of_ae_posSemidef {Ω : Type*} [Measur
       (∫ x, (B * H x * B * H x).trace ∂ν) ≤ 2 * (B * B).trace :=
   symmetric_trace_integral_extension_mul_of_ae_posSemidef ν H hH_meas hH_psd hPSD hB
 
-end FunctionalInequalities.Analysis
-
-end AEPosSemidefTraceIntegral
+end TraceExtensions
 
 /-! ### Trace against a mean-identity matrix field
 
 If every entry of a random matrix `H` is integrable with mean `Id`, then `tr (B H)` is integrable
 with integral `tr B`. -/
 
-noncomputable section
-open MeasureTheory Matrix
+section MeanIdentity
 
-namespace FunctionalInequalities.Analysis
+open MeasureTheory Matrix
 
 set_option maxHeartbeats 400000 in
 theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω] [Fintype ι]
@@ -227,16 +214,13 @@ theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω] [Fin
   simp_rw [he]
   rfl
 
-end FunctionalInequalities.Analysis
-
-end
+end MeanIdentity
 
 /-! ### Finite contraction of matrix flux identities -/
 
-noncomputable section
-open Matrix MeasureTheory
+section FluxContraction
 
-namespace FunctionalInequalities.Analysis
+open Matrix MeasureTheory
 
 /-- Finite contraction of matrix-valued weak flux identities with PSD forcing.
 The entries may already include a fixed nonnegative compact test function and weight. -/
@@ -285,6 +269,6 @@ theorem integral_quadratic_flux_le_of_posSemidef
     _ = ∫ x, -dotProduct v ((E x).mulVec v) ∂ν := by rw [integral_neg, heq]
     _ ≤ _ := integral_mono_ae (hint E hE).neg (hint H hH) hpoint
 
-end FunctionalInequalities.Analysis
+end FluxContraction
 
-end
+end FunctionalInequalities.Analysis

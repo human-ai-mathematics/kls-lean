@@ -19,15 +19,16 @@ asserted.
 -/
 
 @[expose] public section
-noncomputable section
+section
 open Set Metric
 open scoped RealInnerProductSpace Topology
 namespace FunctionalInequalities.Analysis.BakryEmery
 
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
 /-- Actual local C2 and positive Hessian of the comparison reference produce uniform
 strong monotonicity and a Lipschitz gradient on a compact convex set. -/
-theorem exists_uniform_gradient_bounds_of_posDef_hessianOn {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {v : E → ℝ} {U : Set E} (hU : IsOpen U)
+theorem exists_uniform_gradient_bounds_of_posDef_hessianOn {v : E → ℝ} {U : Set E} (hU : IsOpen U)
     (hv : ContDiffOn ℝ 2 v U) {K : Set E} (hKU : K ⊆ U) (hK : IsCompact K) (hKc : Convex ℝ K)
     (hPD : ∀ x ∈ K, ∀ z : E, z ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ v x z z) :
     ∃ κ L : ℝ,
@@ -117,9 +118,8 @@ theorem exists_uniform_gradient_bounds_of_posDef_hessianOn {E : Type*} [NormedAd
 
 /-- Actual C2 and positive Hessian of the comparison reference produce uniform
 strong monotonicity and a Lipschitz gradient on a compact convex set. -/
-theorem exists_uniform_gradient_bounds_of_posDef_hessian {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    {v : E → ℝ} (hv : ContDiff ℝ 2 v) {K : Set E}
+theorem exists_uniform_gradient_bounds_of_posDef_hessian {v : E → ℝ} (hv : ContDiff ℝ 2 v)
+    {K : Set E}
     (hK : IsCompact K) (hKc : Convex ℝ K)
     (hPD : ∀ x ∈ K, ∀ z : E, z ≠ 0 →
       0 < bilinearIteratedFDerivTwo ℝ v x z z) :

@@ -38,7 +38,7 @@ pointwise defect bound and one scalar monotonicity step.
 set_option autoImplicit false
 set_option relaxedAutoImplicit false
 
-noncomputable section
+section
 open MeasureTheory
 open scoped ContDiff RealInnerProductSpace
 

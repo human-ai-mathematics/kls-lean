@@ -20,16 +20,19 @@ The bound itself is a hypothesis; nothing here proves a constant.
 
 @[expose] public section
 
-noncomputable section
+namespace FunctionalInequalities.Probability
+
+section MatrixForms
+
 open MeasureTheory Filter Matrix
 open scoped Topology RealInnerProductSpace
 
-namespace FunctionalInequalities.Probability
+variable {n : ℕ} (mu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+  (h4 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 4 (mu : Measure _))
 
+include h4 in
 set_option maxHeartbeats 500000 in
-theorem tendsto_variance_quadratic_matrix_forms {n : ℕ}
-    (mu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (h4 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 4 (mu : Measure _))
+theorem tendsto_variance_quadratic_matrix_forms
     {seq : ℕ → Matrix (Fin n) (Fin n) ℝ} {A : Matrix (Fin n) (Fin n) ℝ}
     (hseq : Tendsto seq atTop (𝓝 A)) :
     Tendsto (fun k => ProbabilityTheory.variance
@@ -58,21 +61,9 @@ theorem tendsto_variance_quadratic_matrix_forms {n : ℕ}
     (fun k p => seq k p.1 p.2) (fun p => A p.1 p.2) hc
   simpa only [Fintype.sum_prod_type, mul_assoc] using h
 
-end FunctionalInequalities.Probability
-
-end
-
-noncomputable section
-open MeasureTheory Filter Matrix
-open scoped Topology
-
-namespace FunctionalInequalities.Probability
-
+include h4 in
 set_option maxHeartbeats 500000 in
-theorem symmetric_matrix_variance_bound_of_isUnit {n : ℕ}
-    (mu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (h4 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 4 (mu : Measure _))
-    (C : ℝ)
+theorem symmetric_matrix_variance_bound_of_isUnit (C : ℝ)
     (hBound : ∀ B : Matrix (Fin n) (Fin n) ℝ, B.IsSymm → IsUnit B →
       ProbabilityTheory.variance (fun x : EuclideanSpace ℝ (Fin n) =>
         ∑ i, ∑ j, B i j * x i * x j) (mu : Measure _) ≤ C * (B * B).trace) :
@@ -89,20 +80,18 @@ theorem symmetric_matrix_variance_bound_of_isUnit {n : ℕ}
   exact le_of_tendsto_of_tendsto hvar hright
     (Filter.Eventually.of_forall fun k => hBound (seq k) (hunit k).1 (hunit k).2)
 
-end FunctionalInequalities.Probability
+end MatrixForms
 
-end
+section Convolution
 
-noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace
 
-namespace FunctionalInequalities.Probability
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
 
 set_option maxHeartbeats 500000 in
-theorem quadratic_variance_le_centered_noise_convolution {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
-    [SecondCountableTopology E] (mu nu : ProbabilityMeasure E)
+theorem quadratic_variance_le_centered_noise_convolution (mu nu : ProbabilityMeasure E)
     (hmu4 : MemLp (id : E → E) 4 (mu : Measure E))
     (hnu4 : MemLp (id : E → E) 4 (nu : Measure E)) (hmean : (∫ z, z ∂(nu : Measure E)) = 0)
     (A : E →L[ℝ] E) :
@@ -164,6 +153,6 @@ theorem quadratic_variance_le_centered_noise_convolution {E : Type*} [NormedAddC
     rfl
   exact hmap.symm ▸ hprod
 
-end FunctionalInequalities.Probability
+end Convolution
 
-end
+end FunctionalInequalities.Probability

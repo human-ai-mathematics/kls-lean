@@ -25,7 +25,7 @@ Nothing here is a Poincaré inequality; the bound feeds the sharp Hardy module.
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory ProbabilityTheory Set Filter Topology
 open FunctionalInequalities.Probability.Line (cdf affineWeight affineQuantile unitUniform)

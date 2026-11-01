@@ -181,7 +181,7 @@ end MatrixProductEntryTrace
 Finite identities over any finite index type: `tr ((A + t 1)ᵀ (A + t 1))`, invariance under a
 symmetric involution, and `tr` of `S H S` and of its square. -/
 
-noncomputable section
+section
 
 
 namespace FunctionalInequalities.Analysis

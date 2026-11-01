@@ -49,7 +49,7 @@ Closest literature: S. Eriksson-Bique, *Density of Lipschitz functions in energy
 
 @[expose] public section
 
-noncomputable section
+section
 
 open MeasureTheory Filter Topology Set
 open FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
