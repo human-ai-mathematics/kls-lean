@@ -29,11 +29,11 @@ historical research records, not current formalization targets.
 
 This checkout adds `KLSOpenAI.kls_locallyLipschitz` alongside the registered `KLSOpenAI.kls` endpoint,
 using Lean/Mathlib v4.35.0, with the extended Formal Conjectures statement published on Lean v4.33.1.
-The proof source is frozen at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged.
+The 2026-11-02 style revision edits the bridge source after the preflighted commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged.
 See the [pre-extension base-selection review](research/progress/2026-10-31-palomar-publication-review.json).
 The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Next step: complete new-version intake after the Palomar host permits access, review the returned report, then add a proof link only after actual registration.
-The official full preflight passed for both endpoints at the frozen proof commit; new-version intake is blocked by the submission host and no new Palomar version exists.
+Next step: run the official full preflight on the public commit containing the style revision, then complete new-version intake once the Palomar host permits access; add a proof link only after actual registration.
+The historical official full preflight covers `ed8da44` only; the edited source awaits a fresh preflight, new-version intake remains blocked by the submission host and no new Palomar version exists.
 <!-- END CURRENT MAINTENANCE -->
 
 ## Current publication candidate
@@ -59,6 +59,12 @@ Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`; 
 is not registered. Its new-version intake is blocked by the submission host's Cloudflare
 client-signature denial; no new submission was created.
 
+A later 2026-11-02 style revision keeps every public statement. `LocallyLipschitzBound` now passes
+the named theorem `KLSOpenAI.completeSpace_space` to `gradient` instead of a generated auxiliary
+proof, and both bridges share `KLSOpenAI.smoothTest_holds_of_localSlope_le_covariance`. The
+[frontend style review](research/progress/2026-11-02-frontend-style-review.md) records the
+placement, additions and interface comparison.
+
 The [Formal Conjectures inputs](integrations/palomar/formal-conjectures/README.md) target the
 separate Lean v4.33.1 pin and state the locally Lipschitz form. Their main theorem is a deliberate
 statement placeholder. Add the `formal_proof` annotation only after a registered Palomar version
@@ -68,13 +74,15 @@ includes `KLSOpenAI.kls_locallyLipschitz`.
 
 The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
 passed on 2026-11-02 for both endpoints at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`, with
-Lean, NanoDa and con-ron acceptance and no reported errors or warnings. Local strict builds,
-bridge boundary/all-declaration axiom audits, the actual development Comparator, and the
-Formal Conjectures strict build and statement correspondence also passed. The generalized
-statement is published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
-at `98067de1693653eec73b644e64a17b35477ede78`; upstream human review remains required.
-These receipts cover the frozen proof source. Later documentation changes are checked
-separately and do not inherit an exact-commit preflight claim.
+Lean, NanoDa and con-ron acceptance and no reported errors or warnings. That run is historical
+evidence for `ed8da44` only. The style revision changes the bridge sources and the Palomar
+Challenge, so the edited source needs a fresh official preflight on its public commit. Local
+strict builds, the bridge boundary and all-declaration axiom audits, the actual development
+Comparator for both endpoints, and the Formal Conjectures statement correspondence were rerun on
+the edited source; their receipts bind those local snapshots only. The generalized statement is
+published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712) at
+`98067de1693653eec73b644e64a17b35477ede78`; its file is unchanged by the style revision, and
+upstream human review remains required.
 
 To reproduce extension checks, run the strict OpenAI package build with its
 import-boundary and all-declaration axiom audits, the Palomar `lake build Challenge Solution`,

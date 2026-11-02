@@ -94,7 +94,9 @@ review:
     https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6288377384.
     These personal reports predate and do not cover the locally Lipschitz
     definitions and bridge added on 2026-11-02, which have received only
-    agent-assisted Claude, GPT and Codex review.
+    agent-assisted Claude, GPT and Codex review. The same holds for the later
+    2026-11-02 style revision: the shared smooth-bound conversion, the
+    reorganized of_conjecture proof and the completeSpace_space theorem.
     This is not a full public-API or independent peer-review signoff, and no
     OpenAI endorsement is asserted. The current itemized scope is recorded in
     ../../research/progress/public-interface-review.md. Compilation and

@@ -29,8 +29,9 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace KLSOpenAI
 
-private theorem density_rpow {n : ℕ} {ρ : Space n → ℝ}
-    (hρ : IsLogConcaveDensity ρ) (x y : Space n) {t : ℝ}
+variable {n : ℕ} {ρ : Space n → ℝ}
+
+private theorem density_rpow (hρ : IsLogConcaveDensity ρ) (x y : Space n) {t : ℝ}
     (ht0 : 0 < t) (ht1 : t < 1) :
     ρ x ^ t * ρ y ^ (1 - t) ≤ ρ (t • x + (1 - t) • y) := by
   have ht : 0 < 1 - t := by linarith
@@ -52,7 +53,7 @@ private theorem density_rpow {n : ℕ} {ρ : Space n → ℝ}
 
 /-- An OpenAI log-concave probability density gives a compact-set log-concave law.
 Prékopa–Leindler applies directly; upper semicontinuity of the density is unnecessary. -/
-theorem logConcave {n : ℕ} {ρ : Space n → ℝ} (hρ : IsLogConcaveDensity ρ) :
+theorem logConcave (hρ : IsLogConcaveDensity ρ) :
     FunctionalInequalities.KLS.LogConcave
       (⟨densityMeasure ρ, hρ.probability⟩ : ProbabilityMeasure (Space n)) := by
   intro K L hK hL t ht0 ht1
@@ -84,8 +85,7 @@ theorem logConcave {n : ℕ} {ρ : Space n → ℝ} (hρ : IsLogConcaveDensity �
     exact Set.indicator_nonneg (fun z _ => hρ.nonnegative z) _
 
 /-- Coordinate isotropy in the OpenAI model implies the library's vector/covariance isotropy. -/
-theorem isotropic {n : ℕ} {ρ : Space n → ℝ} (hρ : IsLogConcaveDensity ρ)
-    (hi : IsIsotropic (densityMeasure ρ)) :
+theorem isotropic (hρ : IsLogConcaveDensity ρ) (hi : IsIsotropic (densityMeasure ρ)) :
     FunctionalInequalities.KLS.Isotropic
       (⟨densityMeasure ρ, hρ.probability⟩ : ProbabilityMeasure (Space n)) := by
   let μ : ProbabilityMeasure (Space n) := ⟨densityMeasure ρ, hρ.probability⟩
@@ -130,38 +130,48 @@ theorem isotropic {n : ℕ} {ρ : Space n → ℝ} (hρ : IsLogConcaveDensity ρ
       rw [hi.second_moment]
     _ = u i * v i := by simp
 
+/-- At an OpenAI isotropic log-concave density, a covariance-normalized local-slope bound
+`C_P^lit(μ) ≤ C ‖Cov μ‖` gives the smooth compactly supported Poincaré bound with the same
+constant: the covariance is the identity, whose operator norm is at most one. Every dimension,
+including zero, is allowed. -/
+theorem smoothTest_holds_of_localSlope_le_covariance (hρ : IsLogConcaveDensity ρ)
+    (hi : IsIsotropic (densityMeasure ρ)) {C : NNReal}
+    (hC : FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant
+        (⟨densityMeasure ρ, hρ.probability⟩ : ProbabilityMeasure (Space n)) ≤
+      (C : ENNReal) * ENNReal.ofReal
+        ‖FunctionalInequalities.Covariance.operator (densityMeasure ρ)‖) :
+    FunctionalInequalities.Poincare.SmoothTest.Holds (densityMeasure ρ) (C : ℝ) := by
+  let μ : ProbabilityMeasure (Space n) := ⟨densityMeasure ρ, hρ.probability⟩
+  have hcov : FunctionalInequalities.Covariance.operator (densityMeasure ρ) =
+      ContinuousLinearMap.id ℝ (Space n) := (isotropic hρ hi).covariance_identity
+  have hlit : FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤ (C : ENNReal) := by
+    refine hC.trans (mul_le_of_le_one_right zero_le ?_)
+    rw [hcov]
+    exact ENNReal.ofReal_le_one.mpr ContinuousLinearMap.norm_id_le
+  apply (FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient μ C).mpr
+  apply (FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_constant_le μ C).mpr
+  rw [← FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient μ,
+    (logConcave hρ).smoothTest_constant_eq_localSlope]
+  exact hlit
+
 /-- The covariance-normalized KLS conjecture implies exactly the pinned OpenAI statement.
 One positive real constant is chosen before every dimension, density and test function. -/
 theorem of_conjecture (hKLS : FunctionalInequalities.KLS.Conjecture) : KLSStatement := by
   obtain ⟨C, hC⟩ := hKLS
   refine ⟨(C : ℝ) + 1, by positivity, ?_⟩
-  intro n _ ρ hρ hi
+  intro n _ ρ hρ hi f hf
   let μ : ProbabilityMeasure (Space n) := ⟨densityMeasure ρ, hρ.probability⟩
-  have hLC := logConcave hρ
-  have hiso := isotropic hρ hi
-  have hb : FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant μ ≤ (C : ENNReal) := by
-    rw [← FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient μ,
-      hLC.smoothTest_constant_eq_localSlope]
-    have hbound := hC n μ hLC hiso.memLp_two
-    rw [hiso.covariance_identity] at hbound
-    apply hbound.trans
-    calc
-      (C : ENNReal) * ENNReal.ofReal ‖ContinuousLinearMap.id ℝ (Space n)‖ ≤
-          (C : ENNReal) * ENNReal.ofReal 1 := by
-          simpa only [mul_comm] using mul_le_mul_left
-            (ENNReal.ofReal_le_ofReal (ContinuousLinearMap.norm_id_le (𝕜 := ℝ) (E := Space n)))
-            (C : ENNReal)
-      _ = (C : ENNReal) := by simp
-  have hsmooth := (FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient μ C).mpr
-    ((FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_constant_le μ C).mpr hb)
-  intro f hf
+  have hsmooth := smoothTest_holds_of_localSlope_le_covariance hρ hi
+    (hC n μ (logConcave hρ) (isotropic hρ hi).memLp_two)
+  have : IsProbabilityMeasure (densityMeasure ρ) := hρ.probability
   have hadm := FunctionalInequalities.Poincare.SmoothTest.Admissible.of_contDiff_hasCompactSupport
-    (μ := (μ : Measure (Space n))) hf.1 hf.2
-  have hv := hsmooth.variance_le hadm
-  rw [ProbabilityTheory.variance_eq_integral hadm.memLp_two.aemeasurable] at hv
+    (μ := densityMeasure ρ) hf.1 hf.2
+  have hvariance := hsmooth.variance_le hadm
+  rw [ProbabilityTheory.variance_eq_integral hadm.memLp_two.aemeasurable] at hvariance
   change variance (densityMeasure ρ) f ≤ ((C : ℝ) + 1) * dirichletEnergy (densityMeasure ρ) f
-  change variance (densityMeasure ρ) f ≤ (C : ℝ) * dirichletEnergy (densityMeasure ρ) f at hv
-  exact hv.trans (mul_le_mul_of_nonneg_right (by linarith)
+  change variance (densityMeasure ρ) f ≤ (C : ℝ) * dirichletEnergy (densityMeasure ρ) f
+    at hvariance
+  exact hvariance.trans (mul_le_mul_of_nonneg_right (by linarith)
     (integral_nonneg fun x => sq_nonneg ‖gradient f x‖))
 
 end KLSOpenAI

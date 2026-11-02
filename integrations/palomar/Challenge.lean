@@ -15,7 +15,8 @@ integral.
 The unchanged ordinary definitions in `OAI` come from OpenAI/math at
 adc7f1241b42e322a6451854ab7e4b4c146bf78a (Apache-2.0); its original smooth
 compactly supported endpoint is retained and compared too. The two `KLSOpenAI`
-definitions are this project's extension of that model, not OpenAI material.
+definitions and the carrier-completeness theorem they name are this project's extension
+of that model, not OpenAI material.
 
 This trusted file imports only Mathlib. Its two deliberate theorem placeholders
 are compared against the closed proofs in Solution.lean. All ordinary definitions
@@ -94,10 +95,21 @@ noncomputable section
 open MeasureTheory
 open OAI.LeanBlast.KLS
 
+/-- The Euclidean carrier of the OpenAI model is complete.
+
+`gradient` takes this instance as an argument. Left to instance synthesis, its proof is a
+compound term that Lean abstracts into a generated auxiliary theorem whose name depends on
+the surrounding module, so the same source can elaborate to different terms in the Palomar
+challenge and in its solution. `LocallyLipschitzBound` names this theorem instead. It is not
+an instance. -/
+theorem completeSpace_space (n : ℕ) : CompleteSpace (Space n) := by
+  infer_instance
+
 /-- The direct Poincare bound on the paper's locally Lipschitz L2 test class.
 The variance is the ordinary centered-square integral. Its nonnegative extended
 value is compared with the squared-gradient energy, which may be infinite. -/
 def LocallyLipschitzBound {n : ℕ} (μ : Measure (Space n)) (C : ℝ) : Prop :=
+  letI := completeSpace_space n
   ∀ f : Space n → ℝ, LocallyLipschitz f → MemLp f 2 μ →
     ENNReal.ofReal (OAI.LeanBlast.KLS.variance μ f) ≤
       ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂μ

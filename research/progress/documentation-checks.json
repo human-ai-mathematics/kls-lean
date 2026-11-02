@@ -121,9 +121,27 @@
     },
     {
       "document": "research/progress/public-interface-review.md",
+      "label": "shared smooth-bound conversion",
+      "source": "integrations/openai/KLSOpenAI/Bridge.lean",
+      "declaration": "KLSOpenAI.smoothTest_holds_of_localSlope_le_covariance"
+    },
+    {
+      "document": "research/progress/public-interface-review.md",
       "label": "target",
       "source": "integrations/openai/KLSOpenAI/Target.lean",
       "declaration": "KLSOpenAI.kls"
+    },
+    {
+      "document": "research/progress/2026-11-02-frontend-style-review.md",
+      "label": "`KLSOpenAI.completeSpace_space`",
+      "source": "integrations/openai/KLSOpenAI/LocallyLipschitz.lean",
+      "declaration": "KLSOpenAI.completeSpace_space"
+    },
+    {
+      "document": "research/progress/2026-11-02-frontend-style-review.md",
+      "label": "`KLSOpenAI.smoothTest_holds_of_localSlope_le_covariance`",
+      "source": "integrations/openai/KLSOpenAI/Bridge.lean",
+      "declaration": "KLSOpenAI.smoothTest_holds_of_localSlope_le_covariance"
     },
     {
       "document": "research/progress/public-interface-review.md",
@@ -181,11 +199,11 @@
     "scope_lines": [
       "This checkout adds `KLSOpenAI.kls_locallyLipschitz` alongside the registered `KLSOpenAI.kls` endpoint,",
       "using Lean/Mathlib v4.35.0, with the extended Formal Conjectures statement published on Lean v4.33.1.",
-      "The proof source is frozen at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged."
+      "The 2026-11-02 style revision edits the bridge source after the preflighted commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged."
     ],
     "preservation": "The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.",
-    "next_step": "Next step: complete new-version intake after the Palomar host permits access, review the returned report, then add a proof link only after actual registration.",
-    "activity_scope": "The official full preflight passed for both endpoints at the frozen proof commit; new-version intake is blocked by the submission host and no new Palomar version exists."
+    "next_step": "Next step: run the official full preflight on the public commit containing the style revision, then complete new-version intake once the Palomar host permits access; add a proof link only after actual registration.",
+    "activity_scope": "The historical official full preflight covers `ed8da44` only; the edited source awaits a fresh preflight, new-version intake remains blocked by the submission host and no new Palomar version exists."
   },
   "route_scope_notes": [
     {

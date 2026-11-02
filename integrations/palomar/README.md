@@ -4,7 +4,7 @@ This contained Lake project is the Palomar submission surface for one registry e
 
 | File | Role |
 |---|---|
-| [`Challenge.lean`](Challenge.lean) | Trusted statement. Imports only Mathlib. Inlines the pinned OpenAI ordinary definitions (`OAI.LeanBlast.KLS.*`) and the locally Lipschitz definitions `KLSOpenAI.LocallyLipschitzBound` and `KLSOpenAI.LocallyLipschitzStatement`, then states `KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement` and `KLSOpenAI.kls_locallyLipschitz : KLSOpenAI.LocallyLipschitzStatement`, each with a deliberate `sorry`. |
+| [`Challenge.lean`](Challenge.lean) | Trusted statement. Imports only Mathlib. Inlines the pinned OpenAI ordinary definitions (`OAI.LeanBlast.KLS.*`) the locally Lipschitz definitions `KLSOpenAI.LocallyLipschitzBound` and `KLSOpenAI.LocallyLipschitzStatement`, and the carrier-completeness theorem `KLSOpenAI.completeSpace_space` that the bound names, then states `KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement` and `KLSOpenAI.kls_locallyLipschitz : KLSOpenAI.LocallyLipschitzStatement`, each with a deliberate `sorry`. |
 | [`Solution.lean`](Solution.lean) | Imports the OpenAI model and `KLSOpenAI.Target`; declares nothing. |
 | [`comparator.json`](comparator.json) | Compares both `KLSOpenAI.kls` and `KLSOpenAI.kls_locallyLipschitz`; no `definition_names` holes, so every ordinary definition in the statements is compared by body. Axioms: `propext`, `Quot.sound`, `Classical.choice`. |
 | [`formalization.yaml`](formalization.yaml) | Palomar v0.4 metadata for this entry. |
@@ -34,8 +34,9 @@ form, a numerical value of `C`, or the paper's uncut Eldan construction. The lib
 Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`. Both endpoints
 passed the [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
 at commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2` on 2026-11-02, with Lean, NanoDa and con-ron
-acceptance and no reported errors or warnings. This is preflight evidence for that exact source,
-not a registration of the locally Lipschitz endpoint. New-version intake was blocked by the
+acceptance and no reported errors or warnings. That historical run covers only that source and
+does not register the locally Lipschitz endpoint. A later style revision changed the Challenge
+and the bridge sources without changing either statement; that source needs a fresh preflight. New-version intake was blocked by the
 submission host's Cloudflare client-signature denial; no new submission or version was created.
 
 ## Review boundaries
@@ -43,8 +44,10 @@ submission host's Cloudflare client-signature denial; no new submission or versi
 - **Statement (human-auditable):** `Challenge.lean` only. Its `OAI` definitions are the OpenAI
   model at `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, unchanged except for the module header,
   `public import Mathlib` and `@[expose] public section`; see `../openai/UPSTREAM.json`. The two
-  `KLSOpenAI` definitions are new project code that add the locally Lipschitz statement on top
-  of that model; they are not OpenAI material.
+  `KLSOpenAI` definitions and the carrier-completeness theorem `KLSOpenAI.completeSpace_space`
+  are new project code that add the locally Lipschitz statement on top of that model; they are
+  not OpenAI material. The theorem gives `gradient`'s completeness argument a named term, so the
+  bound's body is identical in Challenge and Solution; it is not an instance.
 - **Proof (for machine checking):** everything imported by `Solution.lean`: the bridge in
   `../openai/KLSOpenAI`, the library in `../../formalization`, and the vendored
   stochastic-calculus libraries with their recorded local adaptations.

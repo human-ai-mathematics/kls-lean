@@ -25,20 +25,24 @@ open OAI.LeanBlast.KLS FunctionalInequalities
 
 namespace KLSOpenAI
 
-set_option linter.auxLemma false in
+/-- The Euclidean carrier of the OpenAI model is complete.
+
+`gradient` takes this instance as an argument. Left to instance synthesis, its proof is a
+compound term that Lean abstracts into a generated auxiliary theorem whose name depends on
+the surrounding module, so the same source can elaborate to different terms in the Palomar
+challenge and in its solution. `LocallyLipschitzBound` names this theorem instead. It is not
+an instance. -/
+theorem completeSpace_space (n : ℕ) : CompleteSpace (Space n) := by
+  infer_instance
+
 /-- The direct Poincare bound on the paper's locally Lipschitz L2 test class.
 The variance is the ordinary centered-square integral. Its nonnegative extended
-value is compared with the squared-gradient energy, which may be infinite.
-
-The `CompleteSpace` argument of `gradient` is the proof that the pinned model
-abstracted for `dirichletEnergy`. In the Palomar challenge this definition follows
-the model in one file, so Lean reuses that proof there; naming it here makes
-both bodies the same term, as Comparator requires. -/
+value is compared with the squared-gradient energy, which may be infinite. -/
 def LocallyLipschitzBound {n : ℕ} (μ : Measure (Space n)) (C : ℝ) : Prop :=
+  letI := completeSpace_space n
   ∀ f : Space n → ℝ, LocallyLipschitz f → MemLp f 2 μ →
     ENNReal.ofReal (OAI.LeanBlast.KLS.variance μ f) ≤
-      ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal
-        ‖@gradient ℝ (Space n) _ _ _ OAI.LeanBlast.KLS.dirichletEnergy._proof_1 f x‖) ^ 2 ∂μ
+      ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂μ
 
 /-- BKL Theorem 1.1 in ordinary density coordinates: one positive constant before
 all positive dimensions, isotropic log-concave densities and locally Lipschitz L2 tests. -/
@@ -47,6 +51,9 @@ def LocallyLipschitzStatement : Prop :=
     ∀ ρ : Space n → ℝ, IsLogConcaveDensity ρ → IsIsotropic (densityMeasure ρ) →
       LocallyLipschitzBound (densityMeasure ρ) C
 
+/-- For an absolutely continuous law, a smooth-test Poincaré bound with a positive constant
+bounds the extended variance of every locally Lipschitz function by its squared-gradient
+`lintegral`; infinite energy makes the bound trivial. -/
 private theorem locallyLipschitz_of_smooth {n : ℕ} (μ : ProbabilityMeasure (Space n))
     (hac : (μ : Measure (Space n)) ≪ volume) (C : NNReal) (hC : 0 < C)
     (h : Poincare.SmoothTest.Holds (μ : Measure (Space n)) (C : ℝ))
@@ -75,34 +82,18 @@ theorem locallyLipschitz_of_conjecture (hKLS : KLS.Conjecture) :
   refine ⟨(D : ℝ), by exact_mod_cast hD, ?_⟩
   intro n _ ρ hρ hi f hf hL2
   let μ : ProbabilityMeasure (Space n) := ⟨densityMeasure ρ, hρ.probability⟩
-  have hLC := logConcave hρ
-  have hiso := isotropic hρ hi
-  have hb : Poincare.SmoothGradient.Ambient.constant μ ≤ (C : ENNReal) := by
-    rw [← Poincare.SmoothTest.constant_eq_ambient μ, hLC.smoothTest_constant_eq_localSlope]
-    have hbound := hC n μ hLC hiso.memLp_two
-    rw [hiso.covariance_identity] at hbound
-    apply hbound.trans
-    calc
-      (C : ENNReal) * ENNReal.ofReal ‖ContinuousLinearMap.id ℝ (Space n)‖ ≤
-          (C : ENNReal) * ENNReal.ofReal 1 := by
-          simpa only [mul_comm] using mul_le_mul_left
-            (ENNReal.ofReal_le_ofReal (ContinuousLinearMap.norm_id_le (𝕜 := ℝ) (E := Space n)))
-            (C : ENNReal)
-      _ = (C : ENNReal) := by simp
-  have hsmooth := (Poincare.SmoothTest.holds_iff_ambient μ C).mpr
-    ((Poincare.SmoothGradient.Ambient.holds_iff_constant_le μ C).mpr hb)
-  have hsmoothD : Poincare.SmoothTest.Holds (μ : Measure (Space n)) (D : ℝ) :=
-    hsmooth.mono (by simp [D])
-  have hac : (μ : Measure (Space n)) ≪ volume := withDensity_absolutelyContinuous volume _
-  have h : evariance f (densityMeasure ρ) ≤
+  have hsmooth : Poincare.SmoothTest.Holds (densityMeasure ρ) (D : ℝ) :=
+    (smoothTest_holds_of_localSlope_le_covariance hρ hi
+      (hC n μ (logConcave hρ) (isotropic hρ hi).memLp_two)).mono (by simp [D])
+  have hlocal : evariance f (densityMeasure ρ) ≤
       (D : ENNReal) * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂densityMeasure ρ :=
-    locallyLipschitz_of_smooth μ hac D hD hsmoothD f hf
+    locallyLipschitz_of_smooth μ (withDensity_absolutelyContinuous volume _) D hD hsmooth f hf
   have : IsProbabilityMeasure (densityMeasure ρ) := hρ.probability
-  have hvar : OAI.LeanBlast.KLS.variance (densityMeasure ρ) f =
+  have hvariance : OAI.LeanBlast.KLS.variance (densityMeasure ρ) f =
       ProbabilityTheory.variance f (densityMeasure ρ) := by
     rw [ProbabilityTheory.variance_eq_integral hL2.aemeasurable]
     rfl
-  rw [hvar, ProbabilityTheory.ofReal_variance hL2, ENNReal.ofReal_coe_nnreal]
-  exact h
+  rw [hvariance, ProbabilityTheory.ofReal_variance hL2, ENNReal.ofReal_coe_nnreal]
+  exact hlocal
 
 end KLSOpenAI

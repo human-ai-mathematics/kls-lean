@@ -8,7 +8,7 @@ packages.
 | File | Content |
 |---|---|
 | [`FC_CONTRIBUTION.patch`](FC_CONTRIBUTION.patch) | One new file, `FormalConjectures/Arxiv/2610.05474/KLS.lean`: the ordinary OpenAI density and isotropy definitions in namespace `KannanLovaszSimonovits`, the locally Lipschitz `L²` test class with extended gradient energy, the main statement `kannan_lovasz_simonovits` (a deliberate `sorry` statement placeholder) and five short sanity tests: the zero test, an absolute coordinate (nonsmooth, not compactly supported), infinite energy, and the variance of zero and of a coordinate. |
-| [`StatementCorrespondence.lean.in`](StatementCorrespondence.lean.in) | Correspondence client: the exact `OAI` definition block and the two `KLSOpenAI` locally Lipschitz definitions of `Challenge.lean`, a check that the type of `kannan_lovasz_simonovits` is definitionally the proposition `Statement`, and `palomar_iff_fc : KLSOpenAI.LocallyLipschitzStatement ↔ Statement`. The `.lean.in` extension keeps it out of this repository's Lean sources. |
+| [`StatementCorrespondence.lean.in`](StatementCorrespondence.lean.in) | Correspondence client: the exact `OAI` definition block and the `KLSOpenAI` block of `Challenge.lean` (carrier-completeness theorem and the two locally Lipschitz definitions), a check that the type of `kannan_lovasz_simonovits` is definitionally the proposition `Statement`, and `palomar_iff_fc : KLSOpenAI.LocallyLipschitzStatement ↔ Statement`. The `.lean.in` extension keeps it out of this repository's Lean sources. |
 
 ## Reproduce
 
@@ -21,8 +21,8 @@ packages.
 4. Copy `StatementCorrespondence.lean.in` to a scratch `.lean` file and run
    `lake env lean -DwarningAsError=true <scratch>.lean` from that checkout.
 5. Check that both copied blocks are byte-identical to `Challenge.lean`: the text from
-   `namespace OAI` through `end OAI`, and the text from `namespace KLSOpenAI` up to the first
-   theorem docstring, must each occur exactly once in the scratch file.
+   `namespace OAI` through `end OAI`, and the text from `namespace KLSOpenAI` up to the docstring
+   of `KLSOpenAI.kls`, must each occur exactly once in the scratch file.
 
 Scope: step 4 is a same-pin source-copy equivalence check under the Formal Conjectures toolchain
 (Lean v4.33.1). It shows that the Formal Conjectures proposition and the copied Palomar
@@ -35,6 +35,7 @@ version that includes `KLSOpenAI.kls_locallyLipschitz`.
 The contribution is published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
 at `98067de1693653eec73b644e64a17b35477ede78`; its title and description use the extended test class.
 The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
-passed for the proof source at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`.
+passed for the proof source at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; that historical run does
+not cover the later style revision, which needs a fresh preflight.
 New-version intake is blocked by the submission host's client-signature denial; the proof
 annotation remains absent until a real registered version covers this endpoint.

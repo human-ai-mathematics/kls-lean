@@ -18,8 +18,10 @@ with Lean 4.35.0. Checking out a Git revision fixes both the bridge and its KLS 
 - [KLSOpenAI/Bridge.lean](KLSOpenAI/Bridge.lean) proves `KLSOpenAI.of_conjecture`
   without importing the KLS proof. Measurable log-concave densities are converted
   directly using Prékopa–Leindler; upper semicontinuity is not assumed. Coordinate
-  moments give vector isotropy, and smooth compactly supported tests have the
-  required integrability. A nonnegative universal constant `C` becomes `C + 1`.
+  moments give vector isotropy, and `smoothTest_holds_of_localSlope_le_covariance`, shared
+  with the locally Lipschitz bridge, turns a covariance-normalized constant into a smooth
+  compactly supported Poincaré constant in every dimension. Those tests have the required
+  integrability. A nonnegative universal constant `C` becomes `C + 1`.
 - [KLSOpenAI/LocallyLipschitz.lean](KLSOpenAI/LocallyLipschitz.lean) is new project code,
   not part of the OpenAI model. It defines `LocallyLipschitzStatement`, a density-coordinate
   formulation of arXiv:2610.05474v1, Theorem 1.1, on the unchanged OpenAI density and isotropy
@@ -27,7 +29,9 @@ with Lean 4.35.0. Checking out a Git revision fixes both the bridge and its KLS 
   and density, and every locally Lipschitz `f` in `L²` satisfies
   `ENNReal.ofReal (variance μ f) ≤ ENNReal.ofReal C * ∫⁻ ‖∇f‖²`. The energy is an extended
   nonnegative integral and may be infinite; no finite-energy or extra density premise is
-  imposed. `locallyLipschitz_of_conjecture` derives it without importing the KLS proof:
+  imposed. The theorem `completeSpace_space` (not an instance) gives the completeness argument
+  of `gradient` a stable named term, so the definition elaborates identically in the Palomar
+  challenge. `locallyLipschitz_of_conjecture` derives the statement without importing the KLS proof:
   for absolutely continuous laws the library equates smooth-test and local-slope Poincaré
   bounds, and identifies the local-slope energy of a locally Lipschitz function with
   its squared-gradient `lintegral`.
@@ -47,8 +51,9 @@ compare the original `KLSOpenAI.kls` and conditional `KLSOpenAI.of_conjecture` a
 challenge importing the upstream model and the KLS proposition, with no proof import.
 The locally Lipschitz endpoint is compared by the
 [Palomar configuration](../palomar/comparator.json), together with `KLSOpenAI.kls`.
-Both passed the [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
-at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2` (Lean, NanoDa and con-ron).
+Both passed a historical [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2` (Lean, NanoDa and con-ron); the later style
+revision of these bridges awaits a fresh preflight.
 The locally Lipschitz endpoint is not registered; see the [current Palomar status](../palomar/README.md).
 
 From the repository root, first prepare and build the substantive KLS library:
@@ -108,6 +113,9 @@ The [current review checklist](../../research/progress/public-interface-review.m
 the maintainer's 2026-10-26 report of personally reviewing the OpenAI statement and
 bridge conversion proof. Upstream stochastic-analysis interfaces remain outside
 that reported personal review, as do the locally Lipschitz definitions and bridge added on
-2026-11-02, which have had agent-assisted Claude, GPT and Codex review only.
+2026-11-02, which have had agent-assisted Claude, GPT and Codex review only. The later
+2026-11-02 style revision, comprising the shared smooth-bound conversion, the reorganized
+`of_conjecture` proof and `completeSpace_space`, likewise has agent-assisted review only and is
+not covered by the 2026-10-26 personal review.
 The bridge imports the substantive proof; its OpenAI model (header-adapted only) retains its
 original authorship and license.

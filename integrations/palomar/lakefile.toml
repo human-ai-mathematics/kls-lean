@@ -19,7 +19,7 @@ path = "../../formalization"
 name = "kls-openai-bridge"
 path = "../openai"
 
-# The Challenge carries the one deliberate `sorry`, so it is not built with warnings as errors.
+# The Challenge carries the two deliberate `sorry`s, so it is not built with warnings as errors.
 [[lean_lib]]
 name = "Challenge"
 roots = ["Challenge"]
