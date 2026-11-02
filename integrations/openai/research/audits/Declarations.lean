@@ -3,12 +3,14 @@ module
 public import Check
 public import KLSOpenAI
 public import KLSOpenAI.Bridge
+public import KLSOpenAI.LocallyLipschitz
 public import KLSOpenAI.Target
 public import Lean
 public import OAI.Analysis.KLS.Model
 meta import Lean
 import all OAI.Analysis.KLS.Model
 import all KLSOpenAI.Bridge
+import all KLSOpenAI.LocallyLipschitz
 import all KLSOpenAI.Target
 import all KLSOpenAI
 import all Check
@@ -16,7 +18,7 @@ import all Check
 
 run_cmd do
   let env ← Lean.getEnv
-  let modules : Array String := #["OAI.Analysis.KLS.Model", "KLSOpenAI.Bridge", "KLSOpenAI.Target", "KLSOpenAI", "Check"]
+  let modules : Array String := #["OAI.Analysis.KLS.Model", "KLSOpenAI.Bridge", "KLSOpenAI.LocallyLipschitz", "KLSOpenAI.Target", "KLSOpenAI", "Check"]
   let allowed : Array Lean.Name := #[`propext, `Classical.choice, `Quot.sound]
   let mut count : Nat := 0
   for (name, _) in env.constants.toList do
@@ -39,3 +41,5 @@ run_cmd do
 #print KLSOpenAI.of_conjecture
 #print axioms KLSOpenAI.of_conjecture
 #print axioms KLSOpenAI.kls
+#print axioms KLSOpenAI.locallyLipschitz_of_conjecture
+#print axioms KLSOpenAI.kls_locallyLipschitz

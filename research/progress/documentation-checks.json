@@ -177,14 +177,15 @@
   "handoff": {
     "document": "HANDOFF.md",
     "review_map": "research/progress/2026-10-31-palomar-publication-review.json",
+    "review_label": "pre-extension base-selection review",
     "scope_lines": [
-      "This checkout is the publication candidate for the closed `KLSOpenAI.kls` Palomar entry,",
+      "This checkout prepares a new Palomar version adding `KLSOpenAI.kls_locallyLipschitz` to the closed `KLSOpenAI.kls` entry,",
       "using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.",
       "The publication retains mathematical targets and certificate states; evidence must match its final commit."
     ],
     "preservation": "The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.",
-    "next_step": "Run full local and independent-consumer checks, then exact-commit Linux sandbox Comparator, remote Lean certification and official Palomar preflight before registration.",
-    "activity_scope": "Publication and final-commit verification are approved for this candidate; registration and the FC proof link must use the actual verified public revision and real registry ID."
+    "next_step": "Gates for this extension: strict OpenAI package build and audits, Formal Conjectures `--wfail` build and correspondence check, Palomar build and actual Comparator for both endpoints, then the official Palomar full preflight on the exact public commit.",
+    "activity_scope": "Codex accepts the final bytes and owns publication, PR updates and registration; the FC proof link must name a real registered version that includes `KLSOpenAI.kls_locallyLipschitz`."
   },
   "route_scope_notes": [
     {

@@ -4,30 +4,43 @@ This contained Lake project is the Palomar submission surface for one registry e
 
 | File | Role |
 |---|---|
-| [`Challenge.lean`](Challenge.lean) | Trusted statement. Imports only Mathlib. Inlines the pinned OpenAI ordinary definitions (`OAI.LeanBlast.KLS.*`) and states `KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement` with the single deliberate `sorry`. |
+| [`Challenge.lean`](Challenge.lean) | Trusted statement. Imports only Mathlib. Inlines the pinned OpenAI ordinary definitions (`OAI.LeanBlast.KLS.*`) and the locally Lipschitz definitions `KLSOpenAI.LocallyLipschitzBound` and `KLSOpenAI.LocallyLipschitzStatement`, then states `KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement` and `KLSOpenAI.kls_locallyLipschitz : KLSOpenAI.LocallyLipschitzStatement`, each with a deliberate `sorry`. |
 | [`Solution.lean`](Solution.lean) | Imports the OpenAI model and `KLSOpenAI.Target`; declares nothing. |
-| [`comparator.json`](comparator.json) | Compares `KLSOpenAI.kls`; no `definition_names` holes, so every ordinary definition in the statement is compared by body. Axioms: `propext`, `Quot.sound`, `Classical.choice`. |
+| [`comparator.json`](comparator.json) | Compares both `KLSOpenAI.kls` and `KLSOpenAI.kls_locallyLipschitz`; no `definition_names` holes, so every ordinary definition in the statements is compared by body. Axioms: `propext`, `Quot.sound`, `Classical.choice`. |
 | [`formalization.yaml`](formalization.yaml) | Palomar v0.4 metadata for this entry. |
 | [`STATEMENT-CORRESPONDENCE.md`](STATEMENT-CORRESPONDENCE.md) | Row-by-row correspondence with the pinned OpenAI model and the Formal Conjectures statement. |
 | [`lakefile.toml`](lakefile.toml), [`lake-manifest.json`](lake-manifest.json), [`lean-toolchain`](lean-toolchain) | Lean `v4.35.0`, Mathlib `v4.35.0` (`56a005855ea17e0b0958f73ec801ae140b0a1679`) with its exact pinned closure, and the repository's `formalization` and `integrations/openai` packages as path dependencies. |
 
 ## What is claimed
 
-One positive real constant `C`, chosen before the dimension, such that for every `n ≥ 1`, every
-measurable probability density on `ℝⁿ` that is log-concave on its positive support and whose law
-is isotropic (integrable coordinates and products, zero mean, Kronecker second moments), and every
-`C^∞` compactly supported real test `f`, `Var(f) ≤ C · ∫ ‖∇f‖²`.
+Both statements choose one positive real constant `C` before the dimension `n ≥ 1` and the
+measurable probability density on `ℝⁿ`, which is log-concave on its positive support and whose
+law is isotropic (integrable coordinates and products, zero mean, Kronecker second moments).
 
-Not claimed: the locally Lipschitz `L²` test class of Bizeul–Klartag–Lehec Theorem 1.1, the
-original convex-body isoperimetric formulation, a numerical value of `C`, or the paper's uncut
-Eldan construction. The library theorem `FunctionalInequalities.KLS.kls` is a stronger
-covariance-normalized statement; `KLSOpenAI.of_conjecture` converts it to this form.
+- `KLSOpenAI.kls`, the pinned OpenAI form: `Var(f) ≤ C · ∫ ‖∇f‖²` for every `C^∞` compactly
+  supported real test `f`.
+- `KLSOpenAI.kls_locallyLipschitz` (proposed for a new version, not registered), a
+  density-coordinate formulation of Bizeul–Klartag–Lehec arXiv:2610.05474v1 Theorem 1.1: for
+  every locally Lipschitz `f` in `L²`,
+  `ENNReal.ofReal Var(f) ≤ ENNReal.ofReal C · ∫⁻ ‖∇f‖²`. The variance is the ordinary centered
+  square integral; the energy is an extended nonnegative integral and may be infinite, so no
+  finite-energy premise is imposed.
+
+Not claimed: the original convex-body isoperimetric formulation, dimension zero in this density
+form, a numerical value of `C`, or the paper's uncut Eldan construction. The library theorem
+`FunctionalInequalities.KLS.kls` is a stronger covariance-normalized statement;
+`KLSOpenAI.of_conjecture` and `KLSOpenAI.locallyLipschitz_of_conjecture` convert it to these forms.
+
+Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`. The locally
+Lipschitz endpoint is local work prepared for a new version; it is not registered.
 
 ## Review boundaries
 
-- **Statement (human-auditable):** `Challenge.lean` only. Its definitions are the OpenAI model
-  at `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, unchanged except for the module header,
-  `public import Mathlib` and `@[expose] public section`; see `../openai/UPSTREAM.json`.
+- **Statement (human-auditable):** `Challenge.lean` only. Its `OAI` definitions are the OpenAI
+  model at `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, unchanged except for the module header,
+  `public import Mathlib` and `@[expose] public section`; see `../openai/UPSTREAM.json`. The two
+  `KLSOpenAI` definitions are new project code that add the locally Lipschitz statement on top
+  of that model; they are not OpenAI material.
 - **Proof (for machine checking):** everything imported by `Solution.lean`: the bridge in
   `../openai/KLSOpenAI`, the library in `../../formalization`, and the vendored
   stochastic-calculus libraries with their recorded local adaptations.
@@ -37,11 +50,14 @@ covariance-normalized statement; `KLSOpenAI.of_conjecture` converts it to this f
 
 ## Checking
 
-Prepare the pinned caches with `python3 research/cache_mathlib.py --project all`. From the
-repository root, run `python3 research/comparator.py --target palomar --mode compile` for
-strict statement/solution compilation and `--mode development` for the actual bundled judge
-with NanoDa on macOS. Development mode is unsandboxed. Linux `--mode sandbox`, official
-preflight and registry acceptance are separate evidence. The complete library acceptance
+Prepare the pinned caches with `python3 research/cache_mathlib.py --project all`. In this
+directory, `lake build Challenge Solution` builds both modules; the Challenge reports its two
+deliberate `sorry` placeholders. From the repository root,
+`python3 research/comparator.py --target palomar --mode compile` strictly builds the Solution
+and its axiom client and reports `COMPILED_CLIENT_ONLY`; it does not judge the
+Challenge/Solution comparison. `--mode development` runs the actual bundled judge with NanoDa
+on macOS, without the sandbox. Linux `--mode sandbox`, official preflight and registry
+acceptance are separate evidence. The complete library acceptance
 command is `python3 research/verify.py`; all receipts bind their own exact source inputs.
 
 

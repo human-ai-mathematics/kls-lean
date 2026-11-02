@@ -420,7 +420,7 @@ def maintenance_scope(config: dict) -> str:
         "## Current maintenance",
         "",
         *config["scope_lines"],
-        f"See the [current source review]({config['review_map']}).",
+        f"See the [{config.get('review_label', 'current source review')}]({config['review_map']}).",
         config["preservation"],
         config["next_step"],
         config.get("activity_scope", "No commit, push or remote certification is part of this maintenance."),

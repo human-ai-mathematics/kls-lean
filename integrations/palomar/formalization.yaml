@@ -1,10 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/99c678e569c7c4c0772db297c5ddd5e4c9b6322e/schema/formalization.schema.json
 # Palomar entry metadata for the contained project integrations/palomar (comparator.json here).
-# Source-level candidate prepared 2026-10-31; no Palomar preflight or submission has run.
+# Version 1 (PALOMAR-2026-11-01-000014) registered only KLSOpenAI.kls. This source adds the
+# locally Lipschitz endpoint for a proposed new version; it has not been preflighted or submitted.
 version: v0.4
 
 project:
-  name: Dimension-free KLS Poincare bound for isotropic log-concave densities (smooth compactly supported tests)
+  name: Dimension-free KLS Poincare bound for isotropic log-concave densities
   description: >-
     A Lean 4 / Mathlib library for Poincare inequalities, log-concave probability
     measures and stochastic localization. Its dimension-free KLS theorem bounds
@@ -14,12 +15,16 @@ project:
     proof follows Bizeul-Klartag-Lehec through finite-horizon cutoff localization,
     the compact Letwin constant-8 quadratic variance bound and approximation.
     Supporting results include Cheeger-Buser comparisons, covariance and energy
-    interfaces and moment-map calculus. This entry checks the pinned OpenAI
-    density formulation: for every n >= 1 and isotropic measurable log-concave
-    probability density, Var(f) <= C * E|grad f|^2 for every smooth compactly
-    supported real test, with one positive C before all dimensions and laws.
-    No numerical final KLS constant, formal equivalence with the paper's locally
-    Lipschitz L^2 test class, or uncut Eldan construction is claimed.
+    interfaces and moment-map calculus. This proposed new version checks two
+    density statements with one positive C before all dimensions n >= 1 and all
+    isotropic measurable log-concave probability densities: the pinned OpenAI
+    form, Var(f) <= C * E|grad f|^2 for smooth compactly supported tests
+    (registered in version 1), and a density-coordinate formulation of
+    Bizeul-Klartag-Lehec Theorem 1.1 for every locally Lipschitz f in L^2, with
+    the squared-gradient energy as an extended nonnegative integral that may be
+    infinite (proposed, not yet registered). The locally Lipschitz definitions
+    and bridge are new project code, not part of the OpenAI model. No numerical
+    final KLS constant or uncut Eldan construction is claimed.
   authors: [Lazyfill]
   responsible_maintainers: [lyw-ops]
   license: Apache-2.0
@@ -38,10 +43,12 @@ sources:
     author_endorsement: other
     note: >-
       Theorem 1.1 bounds the Poincare constant of isotropic log-concave laws by a
-      universal constant for locally Lipschitz L^2 test functions. This entry
-      states the bound for smooth compactly supported tests only, in the OpenAI
-      density formulation, and claims no formal equivalence with the locally
-      Lipschitz test class. The proof uses a locally constructed finite-horizon
+      universal constant for locally Lipschitz L^2 test functions.
+      KLSOpenAI.kls_locallyLipschitz (proposed for a new version, not covered by
+      registered version 1) is a density-coordinate formulation with this test
+      class for isotropic log-concave probability densities on R^n, n >= 1;
+      KLSOpenAI.kls keeps the smooth compactly supported OpenAI form. The proof
+      uses a locally constructed finite-horizon
       cutoff localization and a compact-to-general passage; it does not construct
       the paper's uncut Eldan process or its literal identities (68)-(73).
       Source-author involvement is not established in the current provenance
@@ -79,7 +86,9 @@ related_formalizations:
       are this pinned OpenAI Lean model, Apache-2.0, unchanged apart from the Lean
       module header, public import and exposed public section. Challenge.lean
       inlines the same definitions; integrations/openai/UPSTREAM.json records the
-      upstream hash and the exact module adaptation. No OpenAI endorsement is asserted.
+      upstream hash and the exact module adaptation. The locally Lipschitz
+      definitions and bridge are new project code, not part of the OpenAI model.
+      No OpenAI endorsement is asserted.
   - id: https://github.com/HongruZhao/KLS500
     relationship: independent
     note: >-
@@ -98,20 +107,27 @@ related_formalizations:
 
 status:
   scope: >-
-    Exactly KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement. One positive real
-    constant is chosen before every dimension n >= 1, every measurable,
-    nonnegative probability density that is log-concave on its positive support
-    and whose law is isotropic (integrable coordinates and products, zero mean,
-    Kronecker second moments), and every smooth compactly supported real test.
+    Exactly KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement (registered in version
+    1, PALOMAR-2026-11-01-000014) and KLSOpenAI.kls_locallyLipschitz :
+    KLSOpenAI.LocallyLipschitzStatement (proposed for a new version; version 1
+    does not cover it). Each has
+    one positive real constant chosen before every dimension n >= 1 and every
+    measurable, nonnegative probability density that is log-concave on its
+    positive support and whose law is isotropic (integrable coordinates and
+    products, zero mean, Kronecker second moments). KLSOpenAI.kls bounds the
+    variance of every smooth compactly supported real test. The second statement
+    bounds ENNReal.ofReal of the ordinary centered variance of every locally
+    Lipschitz f in L^2 by ENNReal.ofReal C times the lintegral of the squared
+    gradient norm, which may be infinite; no finite-energy premise is imposed.
     No upper semicontinuity or extra moment assumption is imposed. Not claimed:
-    the locally Lipschitz L^2 test class of the source theorem, the original
-    convex-body isoperimetric formulation, an explicit numerical constant, or the
-    paper's uncut Eldan construction. The library's stronger covariance-normalized
-    theorem FunctionalInequalities.KLS.kls (finite second moment, dimension zero
-    and singular supports included) implies this statement through
-    KLSOpenAI.of_conjecture. The sorry counts and axiom lists below are the
-    source-level properties of the proof development (the Challenge's deliberate
-    placeholder excluded) and the targets for checking this module-system port.
+    the original convex-body isoperimetric formulation, an explicit numerical
+    constant, or the paper's uncut Eldan construction. The library's stronger
+    covariance-normalized theorem FunctionalInequalities.KLS.kls (finite second
+    moment, dimension zero and singular supports included) implies both
+    statements through KLSOpenAI.of_conjecture and
+    KLSOpenAI.locallyLipschitz_of_conjecture. The sorry counts and axiom lists
+    below are the source-level properties of the proof development (the
+    Challenge's two deliberate placeholders excluded).
     Actual audit/Comparator results are bound to their checked snapshot and trust
     scope by the corresponding run receipts; this metadata alone is not an audit result.
   sorry_count: 0
@@ -119,6 +135,12 @@ status:
   axioms: [propext, Classical.choice, Quot.sound]
   main_results:
     - declaration: KLSOpenAI.kls
+      file: integrations/openai/KLSOpenAI/Target.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      comparator_config: integrations/palomar/comparator.json
+      literature_dependencies: []
+    - declaration: KLSOpenAI.kls_locallyLipschitz
       file: integrations/openai/KLSOpenAI/Target.lean
       sorry_count: 0
       axioms: [propext, Classical.choice, Quot.sound]
@@ -147,10 +169,12 @@ automation:
 
 fidelity:
   divergences: >-
-    Relative to Bizeul-Klartag-Lehec Theorem 1.1: smooth compactly supported tests
-    instead of locally Lipschitz L^2 tests; density formulation with explicit
-    coordinate-moment isotropy; positive dimensions only. Relative to the pinned
-    OpenAI statement: none (identical definitions and statement).
+    Relative to Bizeul-Klartag-Lehec Theorem 1.1: density formulation with
+    explicit coordinate-moment isotropy, positive dimensions only, and the
+    gradient energy written as an extended nonnegative integral; KLSOpenAI.kls
+    additionally restricts to smooth compactly supported tests. Relative to the
+    pinned OpenAI statement: KLSOpenAI.kls is identical; the locally Lipschitz
+    statement reuses its unchanged definitions and enlarges only the test class.
 
 review:
   status: self-assessed
@@ -161,22 +185,37 @@ review:
     library. External stochastic-analysis interfaces have not received that
     personal review. The itemized scope is in research/progress/public-interface-review.md.
     Agent-assisted Claude and GPT review passes were used during development.
+    The maintainer's reported personal review predates the locally Lipschitz
+    definitions and bridge added on 2026-11-02; those have received only
+    agent-assisted Claude, GPT and Codex review, which is not personal expert review.
     This is not independent peer review or source-author approval.
 
 alignment:
   namespace: KLSOpenAI
   statements:
+    - source: Bizeul-Klartag-Lehec arXiv:2610.05474v1 Theorem 1.1, locally Lipschitz L^2 test functions
+      lean: KLSOpenAI.kls_locallyLipschitz
+      module: KLSOpenAI.Target
+      status: adapted
+      note: >-
+        Proposed, unregistered endpoint. Density-coordinate formulation with the
+        source test class, for isotropic log-concave probability densities on
+        R^n with n >= 1; the energy is an extended nonnegative integral, so
+        infinite energy is included rather than excluded by a premise. The
+        definitions are new project code over the unchanged OpenAI model.
     - source: Bizeul-Klartag-Lehec arXiv:2610.05474v1 Theorem 1.1, smooth compactly supported test functions
       lean: KLSOpenAI.kls
       module: KLSOpenAI.Target
       status: adapted
       note: >-
-        Weaker test class than the source theorem (C^infinity with compact support);
-        same universal positive constant before all dimensions, densities and tests.
+        The pinned OpenAI form: a weaker test class than the source theorem
+        (C^infinity with compact support); same universal positive constant
+        before all dimensions, densities and tests.
 
 acknowledgements: >-
   The project initially followed the roadmap organized by Nicolas (nbrosse). The
-  statement is OpenAI's pinned Lean model. The stochastic-calculus foundation is
+  density model and smooth statement are OpenAI's pinned Lean model; the locally
+  Lipschitz extension is new project code. The stochastic-calculus foundation is
   the work of LevyStochCalc and its dependencies. Mathlib, Lean and other imported
   libraries retain their original authorship and licenses; the cited mathematical
   authors are credited separately from this Lean implementation.

@@ -1,7 +1,8 @@
 # KLS bridge to the OpenAI statement
 
 This separate Lean project derives the exact OpenAI
-`OAI.LeanBlast.KLS.KLSStatement` from the existing covariance-normalized
+`OAI.LeanBlast.KLS.KLSStatement`, and its extension to the locally Lipschitz `L²` test
+class of Bizeul–Klartag–Lehec Theorem 1.1, from the existing covariance-normalized
 `FunctionalInequalities.KLS.Conjecture`. It is an independent Lake project within
 the same repository, using `../../formalization` as a relative path dependency
 with Lean 4.35.0. Checking out a Git revision fixes both the bridge and its KLS source.
@@ -19,18 +20,33 @@ with Lean 4.35.0. Checking out a Git revision fixes both the bridge and its KLS 
   directly using Prékopa–Leindler; upper semicontinuity is not assumed. Coordinate
   moments give vector isotropy, and smooth compactly supported tests have the
   required integrability. A nonnegative universal constant `C` becomes `C + 1`.
-- [KLSOpenAI/Target.lean](KLSOpenAI/Target.lean) proves `KLSOpenAI.kls` by applying
-  that bridge to the KLS library's existing theorem.
-- [Check.lean](Check.lean) consumes the conclusion as the ordinary variance and
-  gradient integrals with one positive constant for every dimension `n ≥ 1`.
+- [KLSOpenAI/LocallyLipschitz.lean](KLSOpenAI/LocallyLipschitz.lean) is new project code,
+  not part of the OpenAI model. It defines `LocallyLipschitzStatement`, a density-coordinate
+  formulation of arXiv:2610.05474v1, Theorem 1.1, on the unchanged OpenAI density and isotropy
+  definitions: one positive constant before every dimension `n ≥ 1`
+  and density, and every locally Lipschitz `f` in `L²` satisfies
+  `ENNReal.ofReal (variance μ f) ≤ ENNReal.ofReal C * ∫⁻ ‖∇f‖²`. The energy is an extended
+  nonnegative integral and may be infinite; no finite-energy or extra density premise is
+  imposed. `locallyLipschitz_of_conjecture` derives it without importing the KLS proof:
+  for absolutely continuous laws the library equates smooth-test and local-slope Poincaré
+  bounds, and identifies the local-slope energy of a locally Lipschitz function with
+  its squared-gradient `lintegral`.
+- [KLSOpenAI/Target.lean](KLSOpenAI/Target.lean) proves `KLSOpenAI.kls` and
+  `KLSOpenAI.kls_locallyLipschitz` by applying these bridges to the KLS library's
+  existing theorem.
+- [Check.lean](Check.lean) consumes the original endpoint as ordinary variance and
+  gradient integrals, and the locally Lipschitz endpoint as an extended-real inequality
+  with the `lintegral` energy, each with one positive constant for every dimension `n ≥ 1`.
 
-The closed endpoint uses the KLS library's Bizeul–Klartag–Lehec proof. This bridge
+The closed endpoints use the KLS library's Bizeul–Klartag–Lehec proof. This bridge
 adds no numerical constant and does not change the KLS library, its proof scope,
 or its certificate statuses. It is separate from the ongoing Mathlib contribution
 preparation. [formalization.yaml](formalization.yaml) separately credits the substantive
 proof and the upstream statement. [Comparator inputs](research/comparator/config.json)
 compare the original `KLSOpenAI.kls` and conditional `KLSOpenAI.of_conjecture` against a
 challenge importing the upstream model and the KLS proposition, with no proof import.
+The locally Lipschitz endpoint is compared by the
+[Palomar configuration](../palomar/comparator.json), together with `KLSOpenAI.kls`.
 
 From the repository root, first prepare and build the substantive KLS library:
 
@@ -58,8 +74,9 @@ ensure its cache is populated. Use `--project openai` for just the bridge, or
 The committed manifest retains the root library's exact third-party pins. Local
 development may reuse their compiled caches; its receipts record that trust scope.
 The package is checked separately from the root library's default build and full
-verifier. The two audit clients check the conditional bridge's import boundary and
-all declarations in the model, bridge, target and ordinary-integral client. Raw
+verifier. The two audit clients check that neither conditional bridge imports a closed
+KLS endpoint, and audit all declarations, including private and generated ones, in the
+model, both bridges, target and ordinary-integral client. Raw
 attempts and receipts stay in ignored `build/` directories. The upstream model is
 independently checkable against the source pin and SHA-256 in `UPSTREAM.json`: reversing the
 recorded module-header transformation reproduces the original upstream bytes, and the
@@ -87,6 +104,7 @@ the maintainer's review of key statements and the separate Claude/GPT review pas
 The [current review checklist](../../research/progress/public-interface-review.md) records
 the maintainer's 2026-10-26 report of personally reviewing the OpenAI statement and
 bridge conversion proof. Upstream stochastic-analysis interfaces remain outside
-that reported personal review.
+that reported personal review, as do the locally Lipschitz definitions and bridge added on
+2026-11-02, which have had agent-assisted Claude, GPT and Codex review only.
 The bridge imports the substantive proof; its OpenAI model (header-adapted only) retains its
 original authorship and license.

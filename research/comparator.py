@@ -37,7 +37,7 @@ AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 TARGETS = {
     "kls": ["FunctionalInequalities.KLS.kls"],
     "openai": ["KLSOpenAI.kls", "KLSOpenAI.of_conjecture"],
-    "palomar": ["KLSOpenAI.kls"],
+    "palomar": ["KLSOpenAI.kls", "KLSOpenAI.kls_locallyLipschitz"],
 }
 # Palomar forces NanoDa; its committed configuration must say so and name no other kernel.
 NANODA_TARGETS = {"palomar"}

@@ -39,8 +39,15 @@ status:
   scope: >-
     The exact OpenAI statement, with one positive real constant before all
     dimensions n >= 1, all admitted measurable log-concave isotropic densities
-    and all smooth compactly supported test functions. No upper semicontinuity
-    or additional moment assumption is imposed. No numerical final bound.
+    and all smooth compactly supported test functions. Its extension
+    KLSOpenAI.kls_locallyLipschitz keeps the same density and isotropy
+    definitions and admits every locally Lipschitz L^2 test, with the
+    squared-gradient energy as an extended nonnegative integral that may be
+    infinite (a density-coordinate formulation of Bizeul-Klartag-Lehec
+    arXiv:2610.05474v1, Theorem 1.1). Its definitions and bridge are new project
+    code, not part of the OpenAI model. No upper
+    semicontinuity or additional moment assumption is imposed. No numerical
+    final bound.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: [propext, Classical.choice, Quot.sound]
@@ -56,6 +63,16 @@ status:
       sorry_count: 0
       axioms: [propext, Classical.choice, Quot.sound]
       comparator_config: research/comparator/config.json
+      literature_dependencies: []
+    - declaration: KLSOpenAI.kls_locallyLipschitz
+      file: KLSOpenAI/Target.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies: []
+    - declaration: KLSOpenAI.locallyLipschitz_of_conjecture
+      file: KLSOpenAI/LocallyLipschitz.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
       literature_dependencies: []
 automation:
   methods:
@@ -75,6 +92,9 @@ review:
     or every dependency proof term. Nicolas reports checking the bridge,
     including the upstream model hash, and the metadata in Issue 10 comment
     https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6288377384.
+    These personal reports predate and do not cover the locally Lipschitz
+    definitions and bridge added on 2026-11-02, which have received only
+    agent-assisted Claude, GPT and Codex review.
     This is not a full public-API or independent peer-review signoff, and no
     OpenAI endorsement is asserted. The current itemized scope is recorded in
     ../../research/progress/public-interface-review.md. Compilation and
@@ -85,8 +105,10 @@ fidelity:
     The upstream statement is unchanged. The proof converts densities to
     compact-set log-concave laws, derives covariance isotropy from coordinate
     moments, and enlarges the substantive theorem's nonnegative C to C+1.
-    The bridge theorem of_conjecture does not import the closed KLS proof;
-    Target.lean supplies it separately.
+    The locally Lipschitz statement is a separate extension that reuses the
+    upstream definitions and enlarges only the test class. Neither bridge
+    theorem (of_conjecture, locallyLipschitz_of_conjecture) imports the closed
+    KLS proof; Target.lean supplies it separately.
 acknowledgements: >-
   The substantive KLS project initially followed the roadmap organized by
   Nicolas (nbrosse); its early foundational work and proof development started

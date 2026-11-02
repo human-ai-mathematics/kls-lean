@@ -8,7 +8,8 @@ literature, with the dimension-free Kannan–Lovász–Simonovits (KLS) bound as
 
 **Toolchain:** Lean and Mathlib **v4.35.0**; library, vendor, solution, example and audit sources use Lean `module` headers.
 **Palomar:** the contained [submission project](integrations/palomar/README.md) states the
-pinned OpenAI form of the dimension-free bound for Palomar's Comparator.
+pinned OpenAI form of the dimension-free bound and its locally Lipschitz `L²` extension for
+Palomar's Comparator; registered version 1 covers the OpenAI form only.
 
 ## Use the library
 
@@ -46,7 +47,9 @@ and certificates.
 
 Also formalized:
 
-- **The exact OpenAI statement**, through the separate [bridge package](integrations/openai/README.md).
+- **The exact OpenAI statement**, through the separate [bridge package](integrations/openai/README.md),
+  and its extension to every locally Lipschitz `L²` test (a density-coordinate formulation of
+  BKL Theorem 1.1, with possibly infinite gradient energy).
 - **[Letwin Theorem 1.2](formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean)**
   with exact constant **8**, for every positive-dimensional isotropic log-concave law
   and every self-adjoint quadratic form, without compact support;
@@ -88,7 +91,8 @@ are historical research records with their own open hypotheses and local proof s
 
 ## Related formalizations
 
-The table compares public theorem endpoints at versions checked on **2026-10-20**.
+This historical table compares public theorem endpoints at versions checked on **2026-10-20**;
+the other repositories have not been rechecked for this candidate.
 On narrow screens, scroll the table horizontally.
 
 | | kls-lean | [KLS500](https://github.com/HongruZhao/KLS500/tree/c1a50992a81456849996deef2971d4a0b3190bdd) | [KLS15](https://github.com/HongruZhao/KLS15/tree/fe59199e9c039a79a436daa939f79662df2596da) |
@@ -97,10 +101,10 @@ On narrow screens, scroll the table horizontally.
 | Main endpoint scope | Covariance-normalized; all `n ≥ 0`, including singular affine supports | Isotropic log-concave laws, `n ≥ 1` | Isotropic log-concave laws, `n ≥ 1` |
 | Exact OpenAI statement | [Proved](integrations/openai/README.md) | Proved | Proved |
 | Main proof source | BKL, finite-horizon cutoff route | BKL and Song–Zhang | Balasubramanian–Kasiviswanathan v2 |
-| Comparator | Linux sandbox pass reported | Not run | Not run |
+| Comparator (historical) | Linux sandbox pass reported at `2639e79`, not this candidate | Not run | Not run |
 
-Comparator entries follow the pinned verification notes and reports. The reported
-kls-lean pass covers `2639e79`; the final release still needs a rerun.
+Comparator entries follow the pinned verification notes and reports of that date. The reported
+kls-lean pass covers only `2639e79`; this candidate needs its own exact-commit run.
 [Pinned comparison details](research/progress/formalization-comparison.md) record sources,
 shared dependencies and verification scope. KLS15 continues KLS500.
 

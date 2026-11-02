@@ -13,6 +13,20 @@ namespace KLSOpenAI.Check
 
 example : FunctionalInequalities.KLS.Conjecture → KLSStatement := of_conjecture
 
+example : FunctionalInequalities.KLS.Conjecture → LocallyLipschitzStatement :=
+  locallyLipschitz_of_conjecture
+
+/-- A client can use the full locally Lipschitz L2 class: an extended-real inequality whose
+gradient energy is a `lintegral`, possibly infinite. -/
+theorem locallyLipschitz_integral_bound :
+    ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, 1 ≤ n →
+      ∀ ρ : Space n → ℝ, IsLogConcaveDensity ρ → IsIsotropic (densityMeasure ρ) →
+        ∀ f : Space n → ℝ, LocallyLipschitz f → MemLp f 2 (densityMeasure ρ) →
+          ENNReal.ofReal (∫ x, (f x - ∫ y, f y ∂densityMeasure ρ) ^ 2 ∂densityMeasure ρ) ≤
+            ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂densityMeasure ρ := by
+  obtain ⟨C, hC, h⟩ := KLSOpenAI.kls_locallyLipschitz
+  exact ⟨C, hC, fun n hn ρ hρ hi f hf hL2 => h n hn ρ hρ hi f hf hL2⟩
+
 /-- A downstream consumer can use the result in ordinary integrals, retaining one
 constant chosen before the dimension, density and compactly supported smooth test. -/
 theorem integral_bound :
@@ -37,5 +51,8 @@ theorem zero_dimensional_conversion {ρ : Space 0 → ℝ} (hρ : IsLogConcaveDe
 #print axioms zero_dimensional_conversion
 #print axioms KLSOpenAI.of_conjecture
 #print axioms KLSOpenAI.kls
+#print axioms locallyLipschitz_integral_bound
+#print axioms KLSOpenAI.locallyLipschitz_of_conjecture
+#print axioms KLSOpenAI.kls_locallyLipschitz
 
 end KLSOpenAI.Check

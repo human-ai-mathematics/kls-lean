@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-31. This publication candidate contains accepted mathematical sources and current
+Updated 2026-11-02. This publication candidate contains accepted mathematical sources and current
 maintenance. The paper register and the current declarations own mathematical scope; a local
 working-tree receipt does not certify a future commit or release.
 
@@ -27,23 +27,23 @@ historical research records, not current formalization targets.
 <!-- BEGIN CURRENT MAINTENANCE -->
 ## Current maintenance
 
-This checkout is the publication candidate for the closed `KLSOpenAI.kls` Palomar entry,
+This checkout prepares a new Palomar version adding `KLSOpenAI.kls_locallyLipschitz` to the closed `KLSOpenAI.kls` entry,
 using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.
 The publication retains mathematical targets and certificate states; evidence must match its final commit.
-See the [current source review](research/progress/2026-10-31-palomar-publication-review.json).
+See the [pre-extension base-selection review](research/progress/2026-10-31-palomar-publication-review.json).
 The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Run full local and independent-consumer checks, then exact-commit Linux sandbox Comparator, remote Lean certification and official Palomar preflight before registration.
-Publication and final-commit verification are approved for this candidate; registration and the FC proof link must use the actual verified public revision and real registry ID.
+Gates for this extension: strict OpenAI package build and audits, Formal Conjectures `--wfail` build and correspondence check, Palomar build and actual Comparator for both endpoints, then the official Palomar full preflight on the exact public commit.
+Codex accepts the final bytes and owns publication, PR updates and registration; the FC proof link must name a real registered version that includes `KLSOpenAI.kls_locallyLipschitz`.
 <!-- END CURRENT MAINTENANCE -->
 
 ## Current publication candidate
 
-The selected publication contains the accepted Lean/Mathlib v4.35.0 proof development and
-`integrations/palomar` for the closed `KLSOpenAI.kls` endpoint. The original v4.33 checkout and
-the accepted v4.35 preparation worktree remain separate and unchanged. All 33 paused Mathlib
-proposal files are excluded. The [publication review](research/progress/2026-10-31-palomar-publication-review.json)
-records that selection; the [migration review](research/progress/2026-10-31-palomar-module-migration-map.json)
-records the explicit interface adaptations. No Lean proof or statement changes in this publication step.
+The publication contains the accepted Lean/Mathlib v4.35.0 proof development and
+`integrations/palomar`. The original v4.33 checkout and the accepted v4.35 preparation worktree
+remain separate and unchanged. All 33 paused Mathlib proposal files are excluded. The
+[publication review](research/progress/2026-10-31-palomar-publication-review.json) records that
+selection; the [migration review](research/progress/2026-10-31-palomar-module-migration-map.json)
+records the explicit interface adaptations.
 
 Fourteen formerly private declarations are exposed with identical data; eight remain scoped.
 The explicit `eLpNormEssSup` and same-function probability-map representations preserve their
@@ -51,21 +51,28 @@ reviewed mathematical meanings. Five vendor norm formulas gain existing a.e. str
 measurability premises; upstream Cadlag/indistinguishability owner and type adaptations are
 itemized. These exceptions add no KLS endpoint hypotheses or paper/certificate coverage.
 
+The 2026-11-02 extension adds new project code in `integrations/openai/KLSOpenAI/LocallyLipschitz.lean`
+and a second Palomar endpoint, `KLSOpenAI.kls_locallyLipschitz`: a density-coordinate formulation of
+BKL Theorem 1.1 for locally Lipschitz `L²` tests with possibly infinite gradient energy, over the
+unchanged OpenAI model. The library in `formalization/` and its certificates are unchanged.
+Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`; the new endpoint
+is proposed for a new version.
+
 The [Formal Conjectures inputs](integrations/palomar/formal-conjectures/README.md) target the
-separate Lean v4.33.1 pin. Their main theorem is a deliberate statement placeholder. Add the
-`formal_proof` annotation only after obtaining the real Palomar registration identifier.
+separate Lean v4.33.1 pin and state the locally Lipschitz form. Their main theorem is a deliberate
+statement placeholder. Add the `formal_proof` annotation only after a registered Palomar version
+includes `KLSOpenAI.kls_locallyLipschitz`.
 
-## Final-commit verification
+## Verification
 
-Freeze the full source before verification. Run `python3 research/verify.py` for strict builds,
-all 447 live independent audit clients, local/vendor/private/generated declaration axiom
-audits, statement and metadata checks, and local-module kernel replay. The OpenAI bridge
-and Palomar retain their separate strict checks. Run an independent Git consumer with
-`python3 research/downstream.py --rev <full-commit>`.
-
-The final public commit also needs the KLS, OpenAI and Palomar Linux sandbox Comparator
-checks (Palomar requires NanoDa), remote Lean certification and the separate official Palomar
-preflight. Native macOS development judging does not provide Linux sandbox evidence.
+For this extension, freeze the source and run the strict OpenAI package build with its
+import-boundary and all-declaration axiom audits, the Palomar `lake build Challenge Solution`,
+`python3 research/comparator.py --target palomar --mode development` (NanoDa, unsandboxed),
+the Formal Conjectures `--wfail` build with the correspondence client, and the documentation and
+comparator Python checks. The public commit then needs the official Palomar full preflight
+before submission. Native macOS development judging does not provide Linux sandbox evidence.
+A change to `formalization/` instead needs `python3 research/verify.py` for strict builds, all
+live audit clients, declaration axiom audits, metadata checks and local-module kernel replay.
 [BKL independent targets](research/audits/BKL/IndependentTargets/README.md) retain their
 separate source-PDF, definition-closure, mutation and replay checks.
 

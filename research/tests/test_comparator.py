@@ -29,7 +29,7 @@ class ComparatorConfigurationTests(unittest.TestCase):
             config["theorem_names"] = ["KLSOpenAI.kls", "KLSOpenAI.of_conjecture"]
         if target == "palomar":
             config = {"challenge_module": "Challenge", "solution_module": "Solution",
-                      "theorem_names": ["KLSOpenAI.kls"], "definition_names": [],
+                      "theorem_names": ["KLSOpenAI.kls", "KLSOpenAI.kls_locallyLipschitz"], "definition_names": [],
                       "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
                       "enable_nanoda": True}
         return config
@@ -46,7 +46,7 @@ class ComparatorConfigurationTests(unittest.TestCase):
         comparator.validate_config(json.loads(
             (ROOT / "integrations/palomar/comparator.json").read_text()), "palomar")
 
-    def test_palomar_requires_nanoda_exact_keys_and_one_target(self):
+    def test_palomar_requires_nanoda_exact_keys_and_both_targets(self):
         for key, value in [("enable_nanoda", False), ("enable_nanoda", "true"),
                            ("external_kernels", {"nanoda": ["nanoda_bin"]}), ("extra", 1),
                            ("theorem_names", ["KLSOpenAI.kls", "KLSOpenAI.of_conjecture"]),
@@ -63,7 +63,8 @@ class ComparatorConfigurationTests(unittest.TestCase):
             comparator.validate_config(config, "palomar")
 
     def test_empty_or_partial_target_list_is_rejected(self):
-        for target, names in [("kls", []), ("openai", ["KLSOpenAI.kls"])]:
+        for target, names in [("kls", []), ("openai", ["KLSOpenAI.kls"]),
+                              ("palomar", ["KLSOpenAI.kls"])]:
             config = self.config(target)
             config["theorem_names"] = names
             with self.assertRaisesRegex(RuntimeError, "exactly these declarations"):
@@ -135,7 +136,8 @@ class ComparatorConfigurationTests(unittest.TestCase):
 
     def test_generated_solution_axiom_client_is_non_module(self):
         client = comparator.solution_axiom_client("palomar")
-        self.assertEqual(client, "import Solution\n\n#print axioms KLSOpenAI.kls\n")
+        self.assertEqual(client, "import Solution\n\n#print axioms KLSOpenAI.kls\n"
+                         "#print axioms KLSOpenAI.kls_locallyLipschitz\n")
         self.assertFalse(comparator.lean_header.parse_header(client).is_module)
 
     def test_sandbox_reach_rejects_covered_dependency_paths(self):
