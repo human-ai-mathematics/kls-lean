@@ -50,4 +50,7 @@ that implies both through `KLSOpenAI.of_conjecture` and `KLSOpenAI.locallyLipsch
 Registered Palomar version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`. It does
 not certify the locally Lipschitz statement, so the Formal Conjectures statement carries no
 `formal_proof` annotation until a version that includes `KLSOpenAI.kls_locallyLipschitz` is
-registered.
+registered. The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+passed for both endpoints at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; it does not replace registration.
+The locally Lipschitz statement and its five tests are published in [Formal Conjectures PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712),
+currently at `98067de1693653eec73b644e64a17b35477ede78`.

@@ -1,7 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/99c678e569c7c4c0772db297c5ddd5e4c9b6322e/schema/formalization.schema.json
 # Palomar entry metadata for the contained project integrations/palomar (comparator.json here).
 # Version 1 (PALOMAR-2026-11-01-000014) registered only KLSOpenAI.kls. This source adds the
-# locally Lipschitz endpoint for a proposed new version; it has not been preflighted or submitted.
+# locally Lipschitz endpoint. Official full preflight passed at ed8da44bf8637d31bfd352d22a8a59a3a4445bf2;
+# new-version intake is blocked and the new endpoint is not registered.
 version: v0.4
 
 project:
@@ -130,6 +131,11 @@ status:
     Challenge's two deliberate placeholders excluded).
     Actual audit/Comparator results are bound to their checked snapshot and trust
     scope by the corresponding run receipts; this metadata alone is not an audit result.
+    Official full preflight at ed8da44bf8637d31bfd352d22a8a59a3a4445bf2 passed for both
+    endpoints with Lean, NanoDa and con-ron on 2026-11-02 (GitHub Actions run 41430632501).
+    This evidence is for that source commit, not later documentation changes or a new
+    Palomar registration. New-version intake is blocked by the submission host's
+    client-signature denial; no new submission was created.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: [propext, Classical.choice, Quot.sound]

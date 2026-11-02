@@ -27,13 +27,13 @@ historical research records, not current formalization targets.
 <!-- BEGIN CURRENT MAINTENANCE -->
 ## Current maintenance
 
-This checkout prepares a new Palomar version adding `KLSOpenAI.kls_locallyLipschitz` to the closed `KLSOpenAI.kls` entry,
-using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.
-The publication retains mathematical targets and certificate states; evidence must match its final commit.
+This checkout adds `KLSOpenAI.kls_locallyLipschitz` alongside the registered `KLSOpenAI.kls` endpoint,
+using Lean/Mathlib v4.35.0, with the extended Formal Conjectures statement published on Lean v4.33.1.
+The proof source is frozen at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged.
 See the [pre-extension base-selection review](research/progress/2026-10-31-palomar-publication-review.json).
 The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Gates for this extension: strict OpenAI package build and audits, Formal Conjectures `--wfail` build and correspondence check, Palomar build and actual Comparator for both endpoints, then the official Palomar full preflight on the exact public commit.
-Codex accepts the final bytes and owns publication, PR updates and registration; the FC proof link must name a real registered version that includes `KLSOpenAI.kls_locallyLipschitz`.
+Next step: complete new-version intake after the Palomar host permits access, review the returned report, then add a proof link only after actual registration.
+The official full preflight passed for both endpoints at the frozen proof commit; new-version intake is blocked by the submission host and no new Palomar version exists.
 <!-- END CURRENT MAINTENANCE -->
 
 ## Current publication candidate
@@ -56,7 +56,8 @@ and a second Palomar endpoint, `KLSOpenAI.kls_locallyLipschitz`: a density-coord
 BKL Theorem 1.1 for locally Lipschitz `L²` tests with possibly infinite gradient energy, over the
 unchanged OpenAI model. The library in `formalization/` and its certificates are unchanged.
 Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`; the new endpoint
-is proposed for a new version.
+is not registered. Its new-version intake is blocked by the submission host's Cloudflare
+client-signature denial; no new submission was created.
 
 The [Formal Conjectures inputs](integrations/palomar/formal-conjectures/README.md) target the
 separate Lean v4.33.1 pin and state the locally Lipschitz form. Their main theorem is a deliberate
@@ -65,7 +66,17 @@ includes `KLSOpenAI.kls_locallyLipschitz`.
 
 ## Verification
 
-For this extension, freeze the source and run the strict OpenAI package build with its
+The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+passed on 2026-11-02 for both endpoints at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`, with
+Lean, NanoDa and con-ron acceptance and no reported errors or warnings. Local strict builds,
+bridge boundary/all-declaration axiom audits, the actual development Comparator, and the
+Formal Conjectures strict build and statement correspondence also passed. The generalized
+statement is published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
+at `98067de1693653eec73b644e64a17b35477ede78`; upstream human review remains required.
+These receipts cover the frozen proof source. Later documentation changes are checked
+separately and do not inherit an exact-commit preflight claim.
+
+To reproduce extension checks, run the strict OpenAI package build with its
 import-boundary and all-declaration axiom audits, the Palomar `lake build Challenge Solution`,
 `python3 research/comparator.py --target palomar --mode development` (NanoDa, unsandboxed),
 the Formal Conjectures `--wfail` build with the correspondence client, and the documentation and
@@ -78,8 +89,8 @@ separate source-PDF, definition-closure, mutation and replay checks.
 
 Raw pass/fail receipts remain under ignored `build/` and in their workflow artifacts. A
 receipt certifies its recorded input hashes, revision and trust scope; earlier preparation,
-v4.33 or Linux receipts do not certify this publication commit. No future pass or registration
-is asserted by this tracked handoff. Imported compiled dependencies retain their documented
+v4.33 or Linux receipts do not certify this publication commit. No registration of the new
+endpoint is asserted by this handoff. Imported compiled dependencies retain their documented
 trust boundary. See the [verification guide](research/verification.md) and
 [release procedure](research/release.md).
 

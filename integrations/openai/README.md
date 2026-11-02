@@ -47,6 +47,9 @@ compare the original `KLSOpenAI.kls` and conditional `KLSOpenAI.of_conjecture` a
 challenge importing the upstream model and the KLS proposition, with no proof import.
 The locally Lipschitz endpoint is compared by the
 [Palomar configuration](../palomar/comparator.json), together with `KLSOpenAI.kls`.
+Both passed the [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2` (Lean, NanoDa and con-ron).
+The locally Lipschitz endpoint is not registered; see the [current Palomar status](../palomar/README.md).
 
 From the repository root, first prepare and build the substantive KLS library:
 

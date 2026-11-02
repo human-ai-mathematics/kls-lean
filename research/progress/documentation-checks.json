@@ -179,13 +179,13 @@
     "review_map": "research/progress/2026-10-31-palomar-publication-review.json",
     "review_label": "pre-extension base-selection review",
     "scope_lines": [
-      "This checkout prepares a new Palomar version adding `KLSOpenAI.kls_locallyLipschitz` to the closed `KLSOpenAI.kls` entry,",
-      "using Lean/Mathlib v4.35.0, with a separate Formal Conjectures statement patch for Lean v4.33.1.",
-      "The publication retains mathematical targets and certificate states; evidence must match its final commit."
+      "This checkout adds `KLSOpenAI.kls_locallyLipschitz` alongside the registered `KLSOpenAI.kls` endpoint,",
+      "using Lean/Mathlib v4.35.0, with the extended Formal Conjectures statement published on Lean v4.33.1.",
+      "The proof source is frozen at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged."
     ],
     "preservation": "The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.",
-    "next_step": "Gates for this extension: strict OpenAI package build and audits, Formal Conjectures `--wfail` build and correspondence check, Palomar build and actual Comparator for both endpoints, then the official Palomar full preflight on the exact public commit.",
-    "activity_scope": "Codex accepts the final bytes and owns publication, PR updates and registration; the FC proof link must name a real registered version that includes `KLSOpenAI.kls_locallyLipschitz`."
+    "next_step": "Next step: complete new-version intake after the Palomar host permits access, review the returned report, then add a proof link only after actual registration.",
+    "activity_scope": "The official full preflight passed for both endpoints at the frozen proof commit; new-version intake is blocked by the submission host and no new Palomar version exists."
   },
   "route_scope_notes": [
     {

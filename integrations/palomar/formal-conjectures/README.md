@@ -32,3 +32,9 @@ same definition blocks byte for byte (step 5), which Palomar's Comparator then c
 `Solution.lean`. Registered Palomar version 1 covers only the smooth compactly supported
 `KLSOpenAI.kls`, so the Formal Conjectures `formal_proof` annotation waits for a registered
 version that includes `KLSOpenAI.kls_locallyLipschitz`.
+The contribution is published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
+at `98067de1693653eec73b644e64a17b35477ede78`; its title and description use the extended test class.
+The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+passed for the proof source at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`.
+New-version intake is blocked by the submission host's client-signature denial; the proof
+annotation remains absent until a real registered version covers this endpoint.

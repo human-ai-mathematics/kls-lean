@@ -31,8 +31,12 @@ form, a numerical value of `C`, or the paper's uncut Eldan construction. The lib
 `FunctionalInequalities.KLS.kls` is a stronger covariance-normalized statement;
 `KLSOpenAI.of_conjecture` and `KLSOpenAI.locallyLipschitz_of_conjecture` convert it to these forms.
 
-Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`. The locally
-Lipschitz endpoint is local work prepared for a new version; it is not registered.
+Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`. Both endpoints
+passed the [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+at commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2` on 2026-11-02, with Lean, NanoDa and con-ron
+acceptance and no reported errors or warnings. This is preflight evidence for that exact source,
+not a registration of the locally Lipschitz endpoint. New-version intake was blocked by the
+submission host's Cloudflare client-signature denial; no new submission or version was created.
 
 ## Review boundaries
 
