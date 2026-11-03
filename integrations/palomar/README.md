@@ -1,6 +1,6 @@
 # Palomar entry: dimension-free KLS bound
 
-This contained Lake project is the Palomar submission surface for one registry entry:
+This Lake project contains the Palomar submission materials.
 
 | File | Role |
 |---|---|
@@ -13,13 +13,14 @@ This contained Lake project is the Palomar submission surface for one registry e
 
 ## What is claimed
 
-Both statements choose one positive real constant `C` before the dimension `n ≥ 1` and the
-measurable probability density on `ℝⁿ`, which is log-concave on its positive support and whose
-law is isotropic (integrable coordinates and products, zero mean, Kronecker second moments).
+Each statement asserts the existence of a positive real constant `C` that works in every
+dimension `n ≥ 1` and for every measurable probability density on `ℝⁿ` that is log-concave
+on its positive support and whose law is isotropic (integrable coordinates and products,
+zero mean, Kronecker second moments).
 
 - `KLSOpenAI.kls`, the pinned OpenAI form: `Var(f) ≤ C · ∫ ‖∇f‖²` for every `C^∞` compactly
   supported real test `f`.
-- `KLSOpenAI.kls_locallyLipschitz` (proposed for a new version, not registered), a
+- `KLSOpenAI.kls_locallyLipschitz` (proposed for Palomar registration), a
   density-coordinate formulation of Bizeul–Klartag–Lehec arXiv:2610.05474v1 Theorem 1.1: for
   every locally Lipschitz `f` in `L²`,
   `ENNReal.ofReal Var(f) ≤ ENNReal.ofReal C · ∫⁻ ‖∇f‖²`. The variance is the ordinary centered
@@ -31,13 +32,15 @@ form, a numerical value of `C`, or the paper's uncut Eldan construction. The lib
 `FunctionalInequalities.KLS.kls` is a stronger covariance-normalized statement;
 `KLSOpenAI.of_conjecture` and `KLSOpenAI.locallyLipschitz_of_conjecture` convert it to these forms.
 
-Registered version 1 (`PALOMAR-2026-11-01-000014`) covers only `KLSOpenAI.kls`. Both endpoints
-passed the [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
-at commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2` on 2026-11-02, with Lean, NanoDa and con-ron
-acceptance and no reported errors or warnings. That historical run covers only that source and
-does not register the locally Lipschitz endpoint. A later style revision changed the Challenge
-and the bridge sources without changing either statement; that source needs a fresh preflight. New-version intake was blocked by the
-submission host's Cloudflare client-signature denial; no new submission or version was created.
+Registered version 1 (`PALOMAR-2026-11-01-000014`) covers the smooth endpoint
+`KLSOpenAI.kls`. Both endpoints passed the [earlier official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
+at `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`. Both also passed the
+[official full preflight of the revised source](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41619026459)
+at `fddfcd89dc16994c014065de4f25094fdd56cadc` on 2026-11-03 with Lean, NanoDa and
+con-ron and no reported errors or warnings. Each report applies to its exact source
+commit.
+The last automated submission attempt was blocked by Cloudflare (HTTP 403, Error 1010)
+before a submission was created. The locally Lipschitz endpoint awaits registration.
 
 ## Review boundaries
 

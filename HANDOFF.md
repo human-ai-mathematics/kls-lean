@@ -31,15 +31,15 @@ using Lean/Mathlib v4.35.0, with the extended Formal Conjectures statement publi
 The 2026-11-02 style revision edits the bridge source after the preflighted commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged.
 See the [pre-extension base-selection review](research/progress/2026-10-31-palomar-publication-review.json).
 The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Next step: run the official full preflight on the public commit containing the style revision, then complete new-version intake once the Palomar host permits access; add a proof link only after actual registration.
-The historical official full preflight covers `ed8da44` only; the edited source awaits a fresh preflight, new-version intake remains blocked by the submission host and no new Palomar version exists.
+Next step: prepare the locally Lipschitz endpoint for Palomar registration. Add the proof link to Formal Conjectures after the matching endpoint is registered.
+The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41619026459) passed for both endpoints at `fddfcd89dc16994c014065de4f25094fdd56cadc`. The last automated submission attempt was blocked by Cloudflare before a submission was created.
 <!-- END CURRENT MAINTENANCE -->
 
 ## Publication and verification
 
 - [Palomar v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1)
   registers `KLSOpenAI.kls`. The [Palomar submission guide](integrations/palomar/README.md)
-  describes the locally Lipschitz endpoint and the historical [official preflight at `ed8da44`](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501).
+  describes the locally Lipschitz endpoint and its preflight evidence.
 - [Formal Conjectures PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
   is open for upstream review. Its [submission inputs](integrations/palomar/formal-conjectures/README.md)
   pin Lean v4.33.1 and use a deliberate statement placeholder.

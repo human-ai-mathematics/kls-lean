@@ -202,8 +202,8 @@
       "The 2026-11-02 style revision edits the bridge source after the preflighted commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged."
     ],
     "preservation": "The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.",
-    "next_step": "Next step: run the official full preflight on the public commit containing the style revision, then complete new-version intake once the Palomar host permits access; add a proof link only after actual registration.",
-    "activity_scope": "The historical official full preflight covers `ed8da44` only; the edited source awaits a fresh preflight, new-version intake remains blocked by the submission host and no new Palomar version exists."
+    "next_step": "Next step: prepare the locally Lipschitz endpoint for Palomar registration. Add the proof link to Formal Conjectures after the matching endpoint is registered.",
+    "activity_scope": "The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41619026459) passed for both endpoints at `fddfcd89dc16994c014065de4f25094fdd56cadc`. The last automated submission attempt was blocked by Cloudflare before a submission was created."
   },
   "route_scope_notes": [
     {

@@ -7,11 +7,10 @@ literature, with the dimension-free Kannan–Lovász–Simonovits (KLS) bound as
 [Getting started](examples/FIRST-USE.md) · [Examples](examples/README.md) · [API](formalization/API.md) · [Proof path](research/progress/PROOF-PATH.md) · [Verification](research/verification.md)
 
 **Toolchain:** Lean and Mathlib **v4.35.0**; library, vendor, solution, example and audit sources use Lean `module` headers.
-**Palomar:** the contained [submission project](integrations/palomar/README.md) states the
-pinned OpenAI form of the dimension-free bound and its locally Lipschitz `L²` extension for
-Palomar's Comparator. A historical [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41430632501)
-passed for both at `ed8da44`; the current edited source awaits a fresh preflight. Registered
-version 1 covers the OpenAI form only.
+**Palomar:** the contained [submission project](integrations/palomar/README.md) compares the
+pinned OpenAI form of the dimension-free bound and its locally Lipschitz `L²` extension.
+Registered version 1 covers the OpenAI form. The submission guide records preflight and
+registration status for the locally Lipschitz extension.
 
 ## Use the library
 

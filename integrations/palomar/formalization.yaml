@@ -1,9 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/99c678e569c7c4c0772db297c5ddd5e4c9b6322e/schema/formalization.schema.json
 # Palomar entry metadata for the contained project integrations/palomar (comparator.json here).
-# Version 1 (PALOMAR-2026-11-01-000014) registered only KLSOpenAI.kls. This source adds the
-# locally Lipschitz endpoint. Official full preflight passed at ed8da44bf8637d31bfd352d22a8a59a3a4445bf2
-# (historical); the later style revision needs a fresh preflight. New-version intake is blocked
-# and the new endpoint is not registered.
+# PALOMAR-2026-11-01-000014 v1 registers KLSOpenAI.kls. This configuration also checks
+# KLSOpenAI.kls_locallyLipschitz. See README.md for preflight and registration status.
 version: v0.4
 
 project:
@@ -17,14 +15,15 @@ project:
     proof follows Bizeul-Klartag-Lehec through finite-horizon cutoff localization,
     the compact Letwin constant-8 quadratic variance bound and approximation.
     Supporting results include Cheeger-Buser comparisons, covariance and energy
-    interfaces and moment-map calculus. This proposed new version checks two
-    density statements with one positive C before all dimensions n >= 1 and all
-    isotropic measurable log-concave probability densities: the pinned OpenAI
-    form, Var(f) <= C * E|grad f|^2 for smooth compactly supported tests
-    (registered in version 1), and a density-coordinate formulation of
-    Bizeul-Klartag-Lehec Theorem 1.1 for every locally Lipschitz f in L^2, with
-    the squared-gradient energy as an extended nonnegative integral that may be
-    infinite (proposed, not yet registered). The locally Lipschitz definitions
+    interfaces and moment-map calculus. This Palomar configuration compares two
+    density statements. Each asserts the existence of a positive constant C
+    that works in every dimension n >= 1 and for every measurable isotropic
+    log-concave probability density. The pinned OpenAI statement gives
+    Var(f) <= C * E|grad f|^2 for smooth compactly supported tests and is the
+    statement registered in PALOMAR-2026-11-01-000014 v1. The density-coordinate
+    formulation of Bizeul-Klartag-Lehec Theorem 1.1 applies to every locally
+    Lipschitz f in L^2 and uses an extended nonnegative squared-gradient
+    integral that may be infinite. The locally Lipschitz definitions
     and bridge are new project code, not part of the OpenAI model. No numerical
     final KLS constant or uncut Eldan construction is claimed.
   authors: [Lazyfill]
@@ -46,8 +45,7 @@ sources:
     note: >-
       Theorem 1.1 bounds the Poincare constant of isotropic log-concave laws by a
       universal constant for locally Lipschitz L^2 test functions.
-      KLSOpenAI.kls_locallyLipschitz (proposed for a new version, not covered by
-      registered version 1) is a density-coordinate formulation with this test
+      KLSOpenAI.kls_locallyLipschitz is a density-coordinate formulation with this test
       class for isotropic log-concave probability densities on R^n, n >= 1;
       KLSOpenAI.kls keeps the smooth compactly supported OpenAI form. The proof
       uses a locally constructed finite-horizon
@@ -111,9 +109,8 @@ status:
   scope: >-
     Exactly KLSOpenAI.kls : OAI.LeanBlast.KLS.KLSStatement (registered in version
     1, PALOMAR-2026-11-01-000014) and KLSOpenAI.kls_locallyLipschitz :
-    KLSOpenAI.LocallyLipschitzStatement (proposed for a new version; version 1
-    does not cover it). Each has
-    one positive real constant chosen before every dimension n >= 1 and every
+    KLSOpenAI.LocallyLipschitzStatement (proposed for Palomar registration).
+    Each has one positive real constant chosen before every dimension n >= 1 and every
     measurable, nonnegative probability density that is log-concave on its
     positive support and whose law is isotropic (integrable coordinates and
     products, zero mean, Kronecker second moments). KLSOpenAI.kls bounds the
@@ -132,12 +129,8 @@ status:
     Challenge's two deliberate placeholders excluded).
     Actual audit/Comparator results are bound to their checked snapshot and trust
     scope by the corresponding run receipts; this metadata alone is not an audit result.
-    Official full preflight at ed8da44bf8637d31bfd352d22a8a59a3a4445bf2 passed for both
-    endpoints with Lean, NanoDa and con-ron on 2026-11-02 (GitHub Actions run 41430632501).
-    This historical evidence is for that source commit, not the later style revision of
-    the bridge and Challenge sources, documentation changes or a new Palomar
-    registration. New-version intake is blocked by the submission host's
-    client-signature denial; no new submission was created.
+    The Palomar README records the official preflights and the outcome of the
+    last submission attempt.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: [propext, Classical.choice, Quot.sound]
@@ -182,7 +175,8 @@ fidelity:
     gradient energy written as an extended nonnegative integral; KLSOpenAI.kls
     additionally restricts to smooth compactly supported tests. Relative to the
     pinned OpenAI statement: KLSOpenAI.kls is identical; the locally Lipschitz
-    statement reuses its unchanged definitions and enlarges only the test class.
+    statement reuses its unchanged density and variance definitions, enlarges
+    the test class, and expresses the gradient energy as an extended integral.
 
 review:
   status: self-assessed
