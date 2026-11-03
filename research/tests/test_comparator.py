@@ -18,8 +18,9 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "research"))
 import comparator
+from run_python_tests import comparator_bundled_enabled
 
-BUNDLED = os.environ.get("KLS_COMPARATOR_BUNDLED")
+BUNDLED = comparator_bundled_enabled()
 
 
 class ComparatorConfigurationTests(unittest.TestCase):

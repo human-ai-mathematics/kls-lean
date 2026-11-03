@@ -29,18 +29,46 @@ receipts request verification; they do not establish proof or certificate status
 From the repository root:
 
 ```bash
+python3 -m venv build/validation-venv
+source build/validation-venv/bin/activate
+python3 -m pip install -r research/requirements-validation.txt
 python3 research/cache_mathlib.py
 python3 research/check_ledger.py
 python3 research/check_blueprint.py
+python3 research/check_metadata.py
 python3 research/check_documentation.py
 python3 research/verify.py
 ```
 
-The full verifier runs structural/task checks and Python regressions, builds all current
-library, solution, example and vendored modules with `lake --wfail build` (including modules outside default import
-closures), and strictly compiles every live `research/audits/**/*.lean` client. It checks the
+The full verifier checks metadata before structural/task checks and Python regressions, then
+builds all current library, solution, example and vendored modules with `lake --wfail build`
+(including modules outside default import closures), and strictly compiles every live
+`research/audits/**/*.lean` client. It checks the
 statement baseline and registered declarations, audits transitive axioms, and replays the
 current local modules with Lean's kernel.
+
+The local `metadata` gate validates all three `formalization.yaml` documents against the
+[pinned offline v0.4 schema](metadata/README.md), rejects duplicate keys and requires quoted
+MSC codes to preserve strings across Python and browser YAML parsers. It checks metadata
+structure and encoding, not mathematical fidelity or Palomar acceptance. The validation
+dependencies are needed only for local metadata/Python checks, not Lean-only certification.
+
+The Python gate writes `python-tests.json` and embeds its counts, profile and skip reasons in
+the full receipt's `python_tests` field, including on test failure. Default runs retain the
+optional Comparator probes as skips. Set exactly `KLS_COMPARATOR_BUNDLED=1` to enable the
+three real-tool development probes; other values, including `0`, leave them disabled. For
+an explicitly required zero-skip local run, use:
+
+```bash
+KLS_COMPARATOR_BUNDLED=1 python3 research/verify.py --require-no-test-skips
+```
+
+The zero-skip option rejects skipped tests and cannot be combined with `--lean-only`, which
+does not run Python tests. An empty test discovery fails in either local test profile.
+To run Python regressions with the same structured coverage without a full Lean build, use
+`python3 research/run_python_tests.py --output build/python-tests.json`; add
+`--require-no-skips` when required. These probes retain their development-mode scope and
+do not replace the separate Linux sandbox Comparator checks.
 
 The full local `documentation` gate checks complete source-document headings (with six
 explicitly reviewed compact-synopsis exceptions), the generated module directory, local
@@ -100,8 +128,8 @@ their pinned precompiled closure, and checks all required Mathlib `.olean` files
 preflight fails on an incomplete cache instead of silently rebuilding Mathlib from source.
 Use `python3 research/cache_mathlib.py --check` to inspect existing caches without fetching.
 The default covers `formalization/`, matching the main-library CI scope. Before building
-the separate OpenAI package, use `--project openai` for its cache or `--project all`
-for both packages. Each selected package's own Mathlib checkout and compiled closure are
+a separate package, use `--project openai` or `--project palomar` for its cache, or `--project all`
+for all three packages. Each selected package's own Mathlib checkout and compiled closure are
 checked; a complete main-library cache does not substitute for a separate bridge cache.
 These selections also support `--check`.
 This checks file presence, not third-party proof validity. Cache inputs remain pinned;
@@ -129,7 +157,9 @@ comparison, axiom validation and kernel replay. It is not silently added to remo
 the full verifier. Receipts under `build/comparator/` bind inputs and the current local source;
 development-mode success explicitly lacks sandboxing, and only the Palomar configuration
 registers an additional kernel (NanoDa).
-The challenge placeholder stays in a `.lean.in` template outside the proof-client inventory.
+The KLS and OpenAI challenge placeholders stay in `.lean.in` templates outside the proof-client
+inventory. Palomar instead tracks `integrations/palomar/Challenge.lean`, whose deliberate
+statement placeholder is separate from `Solution.lean` and the audited proof development.
 
 Mechanical verification checks the recorded Lean statements and their proof dependencies.
 Source-fidelity review separately compares those statements with a pinned paper's hypotheses,

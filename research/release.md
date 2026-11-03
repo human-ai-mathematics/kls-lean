@@ -56,6 +56,7 @@ so that a fresh clone needs no local archive. Keep the root README short and fol
 From the root, populate and check the pinned third-party cache, then freeze the files:
 
 ```bash
+source build/validation-venv/bin/activate  # see verification.md for its one-time setup
 python3 research/cache_mathlib.py --project all
 python3 research/verify.py
 ```

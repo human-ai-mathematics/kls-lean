@@ -353,7 +353,9 @@ class KernelReplayFlagTests(unittest.TestCase):
         self.assertIn("covered by the full local receipt", report["trust_scope"])
         gates = {gate["name"]: gate for gate in report["gates"]}
         self.assertNotIn("leanchecker", gates)
+        self.assertNotIn("metadata", gates)
         self.assertNotIn("documentation", gates)
+        self.assertNotIn("python_tests", report)
         for name in ["lake-build", "lake-build-replay-scope", "research-audit-000",
                      "local-declaration-audit", "vendor-axiom-audit", "classical-kls"]:
             self.assertIn(name, gates)
@@ -390,6 +392,78 @@ class KernelReplayFlagTests(unittest.TestCase):
             self.assertFalse((Path(directory) / "build").exists())
             with self.assertRaisesRegex(ValueError, "--no-kernel-replay requires --lean-only"):
                 run_verification(Path(directory), no_kernel_replay=True)
+
+
+class LocalPreflightTests(unittest.TestCase):
+    """Exercise early local gates and their receipts; never invoke the Lean build."""
+
+    def run_fixture(self, *, metadata_ok=True, python_ok=True, coverage=True,
+                    require_no_test_skips=False, skipped=0):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            snapshot = {"sha256": "fixture", "files": {}}
+
+            def run_command(command, *, cwd, logfile, **kwargs):
+                code = 0
+                if logfile.stem == "metadata":
+                    code = 0 if metadata_ok else 1
+                elif logfile.stem == "python-tests":
+                    self.assertEqual("--require-no-skips" in command, require_no_test_skips)
+                    if coverage:
+                        output = Path(command[command.index("--output") + 1])
+                        output.write_text(json.dumps({"status": "passed" if python_ok else "failed",
+                                                      "tests_run": 2, "skipped": skipped,
+                                                      "skip_reasons": []}))
+                    code = 0 if python_ok else 1
+                elif logfile.stem == "lake-build":
+                    code = 1  # Deliberately stop the fixture before proof verification.
+                logfile.write_text("local preflight fixture\n")
+                return subprocess.CompletedProcess(command, code)
+
+            with (patch("verify.verification_snapshot", return_value=snapshot),
+                  patch("verify.atlas.build_atlas", return_value=({}, [])),
+                  patch("verify.vendor_lock.check_lock", return_value=({}, [])),
+                  patch("verify.run_logged_command", side_effect=run_command),
+                  redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO())):
+                status = run_verification(root, require_no_test_skips=require_no_test_skips)
+            report = json.loads((root / "build/verification/latest.json").read_text())
+            self.assertEqual(status, 1)
+            return report
+
+    def test_invalid_metadata_stops_before_tests_and_lean(self):
+        report = self.run_fixture(metadata_ok=False)
+        self.assertEqual([gate["name"] for gate in report["gates"]], ["source-discovery", "metadata"])
+        self.assertNotIn("python_tests", report)
+
+    def test_python_coverage_is_embedded_before_build(self):
+        report = self.run_fixture(require_no_test_skips=True)
+        names = [gate["name"] for gate in report["gates"]]
+        self.assertLess(names.index("metadata"), names.index("python-tests"))
+        self.assertLess(names.index("python-tests"), names.index("lake-build"))
+        self.assertEqual(report["python_tests"]["tests_run"], 2)
+        self.assertEqual(report["python_tests"]["skipped"], 0)
+
+    def test_failed_tests_retain_coverage_and_stop_before_lean(self):
+        report = self.run_fixture(python_ok=False)
+        self.assertEqual(report["python_tests"]["status"], "failed")
+        self.assertNotIn("lake-build", [gate["name"] for gate in report["gates"]])
+
+    def test_missing_report_and_strict_skips_cannot_pass(self):
+        for arguments in [{"coverage": False}, {"require_no_test_skips": True, "skipped": 1}]:
+            with self.subTest(arguments=arguments):
+                report = self.run_fixture(**arguments)
+                self.assertNotIn("lake-build", [gate["name"] for gate in report["gates"]])
+
+    def test_zero_skip_option_cannot_be_used_with_lean_only(self):
+        result = subprocess.run([sys.executable, str(ROOT / "research/verify.py"),
+                                 "--lean-only", "--require-no-test-skips"],
+                                text=True, capture_output=True, timeout=30)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("cannot be used with --lean-only", result.stderr)
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(ValueError, "cannot be used with --lean-only"):
+                run_verification(Path(directory), lean_only=True, require_no_test_skips=True)
+            self.assertFalse((Path(directory) / "build").exists())
 
 
 class LeanOnlyBoundaryTests(unittest.TestCase):

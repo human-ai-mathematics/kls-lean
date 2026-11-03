@@ -381,8 +381,8 @@ class VerifierIntegrationTests(unittest.TestCase):
 
             def run_command(command, *, logfile, **kwargs):
                 seen.append(logfile.stem)
-                logfile.write_text("intentional documentation mutation\n")
-                return subprocess.CompletedProcess(command, 1)
+                logfile.write_text(f"fixture gate: {logfile.stem}\n")
+                return subprocess.CompletedProcess(command, int(logfile.stem == "documentation"))
 
             snapshot = {"sha256": "fixture", "files": {}}
             with (patch("verify.verification_snapshot", return_value=snapshot),
@@ -390,7 +390,7 @@ class VerifierIntegrationTests(unittest.TestCase):
                   redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO())):
                 result = verify.run_verification(root)
             self.assertEqual(result, 1)
-            self.assertEqual(seen, ["documentation"])
+            self.assertEqual(seen, ["metadata", "documentation"])
             report = json.loads((root / "build/verification/latest.json").read_text())
             self.assertEqual(report["status"], "failed")
             self.assertIn("documentation failed", report["errors"][0])

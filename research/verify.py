@@ -399,9 +399,12 @@ def run_logged_command(command: list[str], *, cwd: Path, logfile: Path, env: dic
     return subprocess.CompletedProcess(command, returncode)
 
 
-def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: bool = False) -> int:
+def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: bool = False,
+                     require_no_test_skips: bool = False) -> int:
     if no_kernel_replay and not lean_only:
         raise ValueError("--no-kernel-replay requires --lean-only")
+    if require_no_test_skips and lean_only:
+        raise ValueError("--require-no-test-skips cannot be used with --lean-only")
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     artifact = Path("build/verification") / started
     output_dir = root / artifact
@@ -482,6 +485,8 @@ def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: b
         internal_gate("source-discovery", [f"Lean source missing from snapshot: {p}" for p in hidden],
                       "Checked production and audit directories against the source snapshot")
         if not lean_only:
+            run("metadata", [sys.executable, str(root / "research/check_metadata.py"),
+                             "--root", str(root)])
             run("documentation", [sys.executable, str(root / "research/check_documentation.py"),
                                   "--root", str(root)])
             derived, errors = atlas.build_atlas(root, snapshot=before)
@@ -491,7 +496,22 @@ def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: b
             report["vendor_lock"], errors = vendor_lock.check_lock(root, set(VENDOR_ROOTS))
             internal_gate("vendor-provenance-lock", errors,
                           "Checked vendored files, port.patch and upstream hashes against vendor-lock.json")
-            run("python-tests", [sys.executable, "-m", "unittest", "discover", "-s", "research/tests", "-p", "test_*.py"])
+            tests_output = output_dir / "python-tests.json"
+            command = [sys.executable, str(root / "research/run_python_tests.py"),
+                       "--root", str(root), "--output", str(tests_output)]
+            if require_no_test_skips:
+                command.append("--require-no-skips")
+            try:
+                run("python-tests", command)
+            finally:
+                if tests_output.is_file():
+                    report["python_tests"] = json.loads(tests_output.read_text(encoding="utf-8"))
+            if not tests_output.is_file():
+                raise RuntimeError("Python tests produced no structured coverage report")
+            if report["python_tests"]["status"] != "passed":
+                raise RuntimeError("Python test coverage report did not pass")
+            if require_no_test_skips and report["python_tests"]["skipped"]:
+                raise RuntimeError("Python test coverage report contains skipped tests")
         run("lake-build", ["lake", "--wfail", "build"], cwd=root / "formalization")
         view = output_dir / "local-olean"
         replay = build_replay_inputs(root, before, view, run)
@@ -604,8 +624,13 @@ if __name__ == "__main__":
                         help="build, strictly audit and replay Lean; leave documentation/metadata checks local")
     parser.add_argument("--no-kernel-replay", action="store_true",
                         help="skip local-module kernel replay for remote CI; requires --lean-only")
+    parser.add_argument("--require-no-test-skips", action="store_true",
+                        help="require a full local run with no skipped Python tests")
     args = parser.parse_args()
     if args.no_kernel_replay and not args.lean_only:
         parser.error("--no-kernel-replay requires --lean-only")
+    if args.require_no_test_skips and args.lean_only:
+        parser.error("--require-no-test-skips cannot be used with --lean-only")
     raise SystemExit(run_verification(args.root.resolve(), lean_only=args.lean_only,
-                                     no_kernel_replay=args.no_kernel_replay))
+                                     no_kernel_replay=args.no_kernel_replay,
+                                     require_no_test_skips=args.require_no_test_skips))

@@ -23,8 +23,12 @@ Keep third-party licenses, attribution and modification notices with reused code
 Use the pinned Lean toolchain and dependency manifest. From the repository root:
 
 ```bash
+python3 -m venv build/validation-venv
+source build/validation-venv/bin/activate
+python3 -m pip install -r research/requirements-validation.txt
 python3 research/cache_mathlib.py
 python3 research/check_ledger.py
+python3 research/check_metadata.py
 python3 research/check_documentation.py
 python3 research/verify.py
 ```

@@ -1,0 +1,3 @@
+# Local metadata validation; Lean-only certification does not import these packages.
+PyYAML==6.0.3
+jsonschema==4.25.1

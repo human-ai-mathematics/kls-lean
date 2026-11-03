@@ -177,7 +177,9 @@ requires the tag to point at the checked-out HEAD and tracked files to match HEA
 files are ignored), then runs `python3 research/verify.py`. This catches local failures before a
 remote run is spent; failures that only the clean runner can expose still need remote CI.
 Enable it once per checkout with `git config core.hooksPath .githooks`, after preserving any
-existing hook configuration. `git push --no-verify` bypasses it; a bypassed or local receipt is
+existing hook configuration, and push from the activated
+[validation environment](verification.md#verification-commands) so the metadata gate can run.
+`git push --no-verify` bypasses it; a bypassed or local receipt is
 not remote evidence.
 
 Run Lean certification either manually with `gh workflow run lean.yml --ref <branch-or-tag>`

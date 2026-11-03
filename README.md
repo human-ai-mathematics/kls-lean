@@ -124,7 +124,9 @@ python3 research/cache_mathlib.py
 The public repository supports anonymous HTTPS cloning. To use the library in another
 Lean project, follow the [separate-project walkthrough](examples/FIRST-USE.md).
 
-For **full local verification**, run `python3 research/verify.py`. This builds sources,
+For **full local verification**, install the
+[validation dependencies](research/verification.md#verification-commands) and run
+`python3 research/verify.py`. This builds sources,
 checks statements and metadata, audits local declarations and replays local modules.
 Pinned third-party compiled imports remain trusted. The OpenAI bridge has
 [separate build and audit instructions](integrations/openai/README.md); prepare both
