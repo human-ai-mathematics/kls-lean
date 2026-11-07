@@ -29,10 +29,13 @@ Scope: step 4 is a same-pin source-copy equivalence check under the Formal Conje
 definitions agree as statements, without citing the placeholder theorem; it does not prove KLS.
 The cross-version link to the Lean v4.35.0 Palomar entry is that `Challenge.lean` contains the
 same definition blocks byte for byte (step 5), which Palomar's Comparator then checks against
-`Solution.lean`. Registered Palomar version 1 covers only the smooth compactly supported
-`KLSOpenAI.kls`, so the Formal Conjectures `formal_proof` annotation waits for a registry
-record that includes `KLSOpenAI.kls_locallyLipschitz`.
+`Solution.lean`.
+[Registered Palomar version 2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2)
+includes `KLSOpenAI.kls_locallyLipschitz` at source commit
+`e60bc39b18ef691263c66e2dba8d64726f18060d`, so it supplies the matching proof record for the
+Formal Conjectures `formal_proof` annotation. Version 1 covers only the smooth compactly
+supported `KLSOpenAI.kls` and is not the proof link for the extended statement.
 The contribution is published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
-at `98067de1693653eec73b644e64a17b35477ede78`; its title and description use the extended test class.
-The [Palomar submission guide](../README.md) records the preflight results and the
-last submission attempt for the locally Lipschitz endpoint.
+at `b70285b46b87725f10ddf484548d0bb0d77b8517`; its title and description use the extended test class.
+Next step: add the version-2 proof link to that PR. The
+[Palomar submission guide](../README.md) records the registration and verification evidence.

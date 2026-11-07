@@ -51,8 +51,10 @@ compare the original `KLSOpenAI.kls` and conditional `KLSOpenAI.of_conjecture` a
 challenge importing the upstream model and the KLS proposition, with no proof import.
 The locally Lipschitz endpoint is compared by the
 [Palomar configuration](../palomar/comparator.json), together with `KLSOpenAI.kls`.
-See the [Palomar submission guide](../palomar/README.md) for the preflight results
-and registration status of the locally Lipschitz endpoint.
+Both endpoints are registered in
+[Palomar version 2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2)
+at `e60bc39b18ef691263c66e2dba8d64726f18060d`. See the
+[Palomar submission guide](../palomar/README.md) for their scope and verification evidence.
 
 From the repository root, first prepare and build the substantive KLS library:
 

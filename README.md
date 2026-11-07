@@ -9,8 +9,9 @@ literature, with the dimension-free Kannan–Lovász–Simonovits (KLS) bound as
 **Toolchain:** Lean and Mathlib **v4.35.0**; library, vendor, solution, example and audit sources use Lean `module` headers.
 **Palomar:** the contained [submission project](integrations/palomar/README.md) compares the
 pinned OpenAI form of the dimension-free bound and its locally Lipschitz `L²` extension.
-Registered version 1 covers the OpenAI form. The submission guide records preflight and
-registration status for the locally Lipschitz extension.
+[Registered version 2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2)
+covers both statements at source commit `e60bc39b18ef691263c66e2dba8d64726f18060d`.
+The submission guide records their scope and verification evidence.
 
 ## Use the library
 

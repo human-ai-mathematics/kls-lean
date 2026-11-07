@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-11-03. The paper register and the current Lean declarations define the mathematical
+Updated 2026-11-07. The paper register and the current Lean declarations define the mathematical
 scope. Verification receipts apply to their recorded source snapshots.
 
 ## Accepted scope and retained boundaries
@@ -26,20 +26,22 @@ historical research records, not current formalization targets.
 <!-- BEGIN CURRENT MAINTENANCE -->
 ## Current maintenance
 
-This checkout adds `KLSOpenAI.kls_locallyLipschitz` alongside the registered `KLSOpenAI.kls` endpoint,
-using Lean/Mathlib v4.35.0, with the extended Formal Conjectures statement published on Lean v4.33.1.
-The 2026-11-02 style revision edits the bridge source after the preflighted commit `ed8da44bf8637d31bfd352d22a8a59a3a4445bf2`; certificate states remain unchanged.
+Palomar version 2 registers `KLSOpenAI.kls` and `KLSOpenAI.kls_locallyLipschitz` at
+source commit `e60bc39b18ef691263c66e2dba8d64726f18060d`.
+The proof packages use Lean/Mathlib v4.35.0; the Formal Conjectures statement uses Lean v4.33.1.
+Publication updates do not change the mathematical declarations or internal certificate states.
 See the [pre-extension base-selection review](research/progress/2026-10-31-palomar-publication-review.json).
 The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Next step: prepare the locally Lipschitz endpoint for Palomar registration. Add the proof link to Formal Conjectures after the matching endpoint is registered.
-The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41619026459) passed for both endpoints at `fddfcd89dc16994c014065de4f25094fdd56cadc`. The last automated submission attempt was blocked by Cloudflare before a submission was created.
+Next step: add the registered version-2 proof link to Formal Conjectures PR #7712 and address upstream review.
+The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41625639426) and [Palomar mechanical verification](https://github.com/PalomarRegistry/PalomarSubmission/actions/runs/41631278646) passed for both endpoints at `e60bc39b18ef691263c66e2dba8d64726f18060d`. [Palomar version 2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2) was registered on 2026-11-07 after the automated editorial review identified no blocking problems or warnings.
 <!-- END CURRENT MAINTENANCE -->
 
 ## Publication and verification
 
-- [Palomar v1](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=1)
-  registers `KLSOpenAI.kls`. The [Palomar submission guide](integrations/palomar/README.md)
-  describes the locally Lipschitz endpoint and its preflight evidence.
+- [Palomar v2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2)
+  registers `KLSOpenAI.kls` and `KLSOpenAI.kls_locallyLipschitz` at
+  `e60bc39b18ef691263c66e2dba8d64726f18060d`. The
+  [Palomar submission guide](integrations/palomar/README.md) records their scope and evidence.
 - [Formal Conjectures PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
   is open for upstream review. Its [submission inputs](integrations/palomar/formal-conjectures/README.md)
   pin Lean v4.33.1 and use a deliberate statement placeholder.
