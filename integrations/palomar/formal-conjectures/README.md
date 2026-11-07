@@ -36,6 +36,8 @@ includes `KLSOpenAI.kls_locallyLipschitz` at source commit
 Formal Conjectures `formal_proof` annotation. Version 1 covers only the smooth compactly
 supported `KLSOpenAI.kls` and is not the proof link for the extended statement.
 The contribution is published in [PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
-at `b70285b46b87725f10ddf484548d0bb0d77b8517`; its title and description use the extended test class.
-Next step: add the version-2 proof link to that PR. The
+at `a8117f89a12bda93fa89abb8aba00a5817ffe9e6`; its title and description use the extended test class.
+The main theorem carries `formal_proof using lean4` pointing to version 2. The strict
+changed-module build and the statement-correspondence check passed at that commit on Lean
+v4.33.1. Upstream review and merge remain pending. The
 [Palomar submission guide](../README.md) records the registration and verification evidence.
