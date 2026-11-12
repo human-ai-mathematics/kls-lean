@@ -47,8 +47,6 @@ The heat-test frontend that consumes the two-field core is in
 
 noncomputable section
 
-set_option autoImplicit false
-
 open MeasureTheory Filter Topology
 open FunctionalInequalities.Analysis.Semigroup FunctionalInequalities.Analysis.BakryEmery
   FunctionalInequalities.Analysis.WaveSplitting

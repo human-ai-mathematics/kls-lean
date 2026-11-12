@@ -151,7 +151,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -615,11 +615,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SpectralGap/Decay.lean",
-            "sha256": "4f01f9d39327c64735b51b17a79fbd009cd622f8937deab1ed8db59f5de849a2"
+            "sha256": "3901bf4d1e32262f857634acb6df5bba48ad7a2998fa09fe497fb5a2263dcc76"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClass.lean",
-            "sha256": "05de04ce434533a0c86c686ac079348dc162648a6951033fc0574381e0d27f71"
+            "sha256": "c7a23d2a592da44489c2166b3a9f09f9e70d67436350aa0b6bfcfb43cf8c774d"
           },
           {
             "path": "research/audits/BakryEmery/HeatTestClassAudit.lean",
@@ -631,11 +631,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WaveSplitting/Potential.lean",
-            "sha256": "8ed21b1ed60771c96cb0d728c0149b86f022e4474bd1d5160ec3a2ccbc859f94"
+            "sha256": "8f9ecdada43624a5b5b868632ffa786b0f46f856ec494f50713821c574e64785"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/FormRange.lean",
-            "sha256": "67981cfa8cb9c9f40cdfb79af17657c3091fb4255d1d27b298b39c004c688ff7"
+            "sha256": "a6f40304898a678019c3b96e7d49ac4bff91a08c8d199ad906375b3b28352a46"
           },
           {
             "path": "research/audits/HeatSemigroup/FormRangeAudit.lean",
@@ -643,7 +643,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/BakryEmery/TestClassExtension.lean",
-            "sha256": "4f46e99e3be1da178b5eb14563833f177503a127f312dcda234b2e5f887f7ab5"
+            "sha256": "93ed16eaa9f7634cf5cbddd3f7af3b6467c7cae242ca20dd62334d4008fafb0d"
           },
           {
             "path": "research/audits/BakryEmery/HeatTestExtensionAudit.lean",
@@ -655,7 +655,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Basic.lean",
-            "sha256": "9386fecacf46d19413990efd4a468802ce0c0b8bb4b6b3ed306bc41d80f6fdd9"
+            "sha256": "6a35a7f508b744c1e0b0233363bf637d50fb25cabdf3b70ce48d758714d9c91b"
           },
           {
             "path": "research/audits/BakryEmery/GradientEstimateAudit.lean",
@@ -667,7 +667,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/ReversePoincare.lean",
-            "sha256": "9685d7ba4b8fdb6cdb787e8eff445238523528761bc934394b7b07a57debe62b"
+            "sha256": "f3ac3b820c85d1f978789c8140b64766db9bfbf87d2adfad03d00e24abb1ba7c"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -675,7 +675,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/SelfImprovement.lean",
-            "sha256": "6d75514228780e6291b68dc2ac4300aafd45e2ffc532bc062c3e6d02a6b8c3af"
+            "sha256": "8c4e432f707b6de2ac3e16fe6426ccd57d21937cb48151dead967357e3d8dd88"
           },
           {
             "path": "research/audits/BakryEmery/ReverseSelfImprovementAudit.lean",
@@ -683,7 +683,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/TestFunctionOrder.lean",
-            "sha256": "69cea15260285d1cef9f39256d42d36f4f6a8317049bc7dcdad2082dec556085"
+            "sha256": "5b3da65fb16a3c1465d8c94312b4947b405bc5b7a93a7d6ea801a690dc96e5e3"
           },
           {
             "path": "research/audits/HeatSemigroup/AlmostEverywhereAudit.lean",
@@ -691,11 +691,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Duality.lean",
-            "sha256": "73416608f6c055d508f9f84267b6c114b7d62cf98b32c84c44d6cf7959debebd"
+            "sha256": "8d1e1bd4b8175ac95473027bff199ba70454aa52f6f23c0765aea9330710396c"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Approximation.lean",
-            "sha256": "81a8f3cd1ad81df6b93d8a14de1307e47e6569bb75fb7f40e52c4ff63aac7d8a"
+            "sha256": "7ae2d9a0fe7ac055df66fe3a59492e56d7d6fb1b52a9beeb015f2c2652546c8a"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
@@ -703,7 +703,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Perimeter.lean",
-            "sha256": "711820066cff9304a68efa6ff39f371f30856686c4f47317a81a9701adf713a6"
+            "sha256": "1613cff83e775bbb1944916761b45d9e58f85e16dc024c2889e9553d19d9448f"
           },
           {
             "path": "research/audits/HeatSemigroup/SmallTimeAudit.lean",
@@ -727,7 +727,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/GaussianProfile.lean",
-            "sha256": "3bbec4e0b009e59ce2505e7f5866a80b4f0948764f8840401bf111fd96fd4ed5"
+            "sha256": "7980d72d18c4011559ad39442c5ef9ed1a2d33115f7edb477401e59588a5537f"
           },
           {
             "path": "research/audits/HeatSemigroup/ChainRuleAudit.lean",
@@ -743,7 +743,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate/Interpolation.lean",
-            "sha256": "e4fa4746ccd6a47ec2f211c2cf2777851fbad3e0cf7b9e5217055495006cbd64"
+            "sha256": "1f46c2860508a1eba7565befabe862c1d8354ac2dadaef4f6433f8d42186e801"
           },
           {
             "path": "research/audits/HeatSemigroup/CompositionDerivativeAudit.lean",
@@ -779,7 +779,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient/Poincare.lean",
-            "sha256": "b651a018ed263e4e1e9abf0490066f731c06d0f425a53450f79eeaaea3008264"
+            "sha256": "c352f7fb6346f6acd03c0f76bbe5540131fb1ba1d18301d3a1511333ee645baa"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/SmallTime/Correlation.lean",
@@ -791,7 +791,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
-            "sha256": "539c460b5871e2d225856b2716418e846289c775908cbbc70fa456d25c4e2cc1"
+            "sha256": "b0634851946ffb9165f949ef289c3f6b2c3cb9c5fee0edaa276b467002650a90"
           },
           {
             "path": "research/audits/HeatSemigroup/SpectralDecayAudit.lean",
@@ -803,11 +803,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
-            "sha256": "4e054b7ba727a37562506d0d81c7b1a52f4d0e641b26c1058623c53196796e69"
+            "sha256": "82164c5a08b111c2c977eb9c930bacb1e4689c92c9934d708d7b31200dc4ca1d"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean",
-            "sha256": "b235976245a395cb5cb64b9ef610cbb78e51214c0fbdca154daa071ca195204c"
+            "sha256": "a500e2b8be680a4ee29d4dca2c4561b0a1ef1facddaa99ba015d4a0438fbb354"
           },
           {
             "path": "research/audits/Density/GaussianBuserPassageAudit.lean",
@@ -2203,7 +2203,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
-            "sha256": "9ae1df1f0b78f40e73cf05edae9ba1279e33864c4f70c0fcdd7576519ca01ac6"
+            "sha256": "d4d7693f0905b2042665c81886d5d113339d5a7860bda1e569a8c1cdaf895ba3"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/SliceKernel.lean",
@@ -2647,7 +2647,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/SmoothDomain/GaussGreen.lean",
-            "sha256": "91ce32d2954845aec0997a4a1d6fe9981a52a3dabc3efd515ea9280b37bbe8c4"
+            "sha256": "0582c391c723665e3ec0740cd8a28e8bfe68a537a24ada982988d14f9fd28e68"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/SmoothDomain/Basic.lean",
@@ -2683,11 +2683,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
-            "sha256": "ea5967cfc9e6b72927c57f894451ce91dd1489f306bb2f7439dd5ea303038b6f"
+            "sha256": "5e4ffdd08ab485ab432ff888e158fb2fdc5f507852d2579a3f870d5045f5553d"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiConstant.lean",
-            "sha256": "eabf92294fa18dca5f13d8f762b2df016eb14225cfe90a82e17d8bb5754c0290"
+            "sha256": "c48d2b6d0d26fff90a7f4beba0dcde903a4250e54dae1b1b808e0bf6a46363e9"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
@@ -2695,7 +2695,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
-            "sha256": "f6f37a0dcfc56715fb10ed1731dd02b3622a7b1c5f7419828c852a67596bf8ba"
+            "sha256": "04afc799fa669c35a7d4ed790b97209e37e3205a018c7e03dde0034f0ce3692c"
           },
           {
             "path": "research/audits/Coarea/WeightedRouteStatements.lean",
@@ -2791,7 +2791,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Coarea/Isoperimetry.lean",
-            "sha256": "c43e4ad54afdf03274aa5c2793d36317ffb94e77f97252411374f802112e672b"
+            "sha256": "e92f582670ebe083e18007fa8521f246c71b870e17023484c7c53dff9bf1c81f"
           },
           {
             "path": "research/audits/Coarea/IsoperimetryAudit.lean",
@@ -3143,7 +3143,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
-            "sha256": "b5ec04c00813cebcdb22d33e429ecaad6cf4eb63bac8a251e059aba38221e916"
+            "sha256": "afbeb685c47c3f8602ffac648072bd072dc63764056d7b50dd1a4556d452ede5"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
@@ -3219,7 +3219,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
-            "sha256": "b5ec04c00813cebcdb22d33e429ecaad6cf4eb63bac8a251e059aba38221e916"
+            "sha256": "afbeb685c47c3f8602ffac648072bd072dc63764056d7b50dd1a4556d452ede5"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
@@ -3231,7 +3231,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Coarea/Isoperimetry.lean",
-            "sha256": "c43e4ad54afdf03274aa5c2793d36317ffb94e77f97252411374f802112e672b"
+            "sha256": "e92f582670ebe083e18007fa8521f246c71b870e17023484c7c53dff9bf1c81f"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/SmoothDomain/RegularSuperlevel.lean",
@@ -3239,7 +3239,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
-            "sha256": "f6f37a0dcfc56715fb10ed1731dd02b3622a7b1c5f7419828c852a67596bf8ba"
+            "sha256": "04afc799fa669c35a7d4ed790b97209e37e3205a018c7e03dde0034f0ce3692c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
@@ -3379,7 +3379,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
@@ -3431,7 +3431,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -3491,7 +3491,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -3543,7 +3543,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
@@ -3567,7 +3567,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/Difference.lean",
-            "sha256": "c321c6aabd3e3a0505b092fc26a78b71d939e7e8c2e87115109089d4cefd8881"
+            "sha256": "b80ff2fffcc9c0899a176011005c1ea21e48d50bc4dc165c0ef49b82c7005558"
           }
         ],
         "gaps": []
@@ -3587,7 +3587,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -3611,11 +3611,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean",
-            "sha256": "4cccc4aa65b50bf3e1e06766a8d58a4b29a751cd17748fb33ee83044cdc1c950"
+            "sha256": "3887c087b7da9ae800b143b3be9d712a78025f8533cea8c42cf78134668002f3"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/Difference.lean",
-            "sha256": "c321c6aabd3e3a0505b092fc26a78b71d939e7e8c2e87115109089d4cefd8881"
+            "sha256": "b80ff2fffcc9c0899a176011005c1ea21e48d50bc4dc165c0ef49b82c7005558"
           }
         ],
         "gaps": []
@@ -3635,11 +3635,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean",
-            "sha256": "4cccc4aa65b50bf3e1e06766a8d58a4b29a751cd17748fb33ee83044cdc1c950"
+            "sha256": "3887c087b7da9ae800b143b3be9d712a78025f8533cea8c42cf78134668002f3"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -3647,7 +3647,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/Difference.lean",
-            "sha256": "c321c6aabd3e3a0505b092fc26a78b71d939e7e8c2e87115109089d4cefd8881"
+            "sha256": "b80ff2fffcc9c0899a176011005c1ea21e48d50bc4dc165c0ef49b82c7005558"
           }
         ],
         "gaps": []
@@ -3699,7 +3699,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
@@ -3723,7 +3723,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean",
-            "sha256": "4cccc4aa65b50bf3e1e06766a8d58a4b29a751cd17748fb33ee83044cdc1c950"
+            "sha256": "3887c087b7da9ae800b143b3be9d712a78025f8533cea8c42cf78134668002f3"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean",
@@ -3743,7 +3743,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
@@ -3751,7 +3751,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/Difference.lean",
-            "sha256": "c321c6aabd3e3a0505b092fc26a78b71d939e7e8c2e87115109089d4cefd8881"
+            "sha256": "b80ff2fffcc9c0899a176011005c1ea21e48d50bc4dc165c0ef49b82c7005558"
           }
         ],
         "gaps": []
@@ -3775,11 +3775,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/HessianIncrement.lean",
-            "sha256": "4cccc4aa65b50bf3e1e06766a8d58a4b29a751cd17748fb33ee83044cdc1c950"
+            "sha256": "3887c087b7da9ae800b143b3be9d712a78025f8533cea8c42cf78134668002f3"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -3803,11 +3803,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -3819,7 +3819,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondOrder/Difference.lean",
-            "sha256": "c321c6aabd3e3a0505b092fc26a78b71d939e7e8c2e87115109089d4cefd8881"
+            "sha256": "b80ff2fffcc9c0899a176011005c1ea21e48d50bc4dc165c0ef49b82c7005558"
           }
         ],
         "gaps": []
@@ -3887,7 +3887,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -3927,7 +3927,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -3951,11 +3951,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -3987,7 +3987,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4011,11 +4011,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4043,7 +4043,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4067,11 +4067,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4099,7 +4099,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4123,11 +4123,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4155,11 +4155,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4183,11 +4183,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4215,11 +4215,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4243,11 +4243,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4279,7 +4279,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           }
         ],
         "gaps": []
@@ -4319,7 +4319,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4343,11 +4343,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4375,7 +4375,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -4407,7 +4407,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -4419,7 +4419,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -4431,7 +4431,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4455,11 +4455,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4475,7 +4475,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           }
         ],
         "gaps": []
@@ -4495,7 +4495,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4519,11 +4519,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4551,7 +4551,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4575,11 +4575,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4607,11 +4607,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4635,11 +4635,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4671,7 +4671,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Coordinates.lean",
@@ -4703,7 +4703,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -4715,11 +4715,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4743,11 +4743,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4795,7 +4795,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -4807,7 +4807,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -4819,11 +4819,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4847,11 +4847,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4891,7 +4891,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4915,11 +4915,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -4947,7 +4947,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -4971,11 +4971,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -5007,7 +5007,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -5035,7 +5035,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
-            "sha256": "8557023e8d9930ddaaf07cd00d70d5b50ad171c54d1e8895aa0b5752227aef75"
+            "sha256": "ab0a0b25e1db515ff2c1eac0bde5958233add64f233d15394fc924e30a2a23c7"
           }
         ],
         "gaps": []
@@ -5063,7 +5063,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5075,7 +5075,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
-            "sha256": "8557023e8d9930ddaaf07cd00d70d5b50ad171c54d1e8895aa0b5752227aef75"
+            "sha256": "ab0a0b25e1db515ff2c1eac0bde5958233add64f233d15394fc924e30a2a23c7"
           },
           {
             "path": "research/audits/BKL/WeakHessianInverseAudit.lean",
@@ -5099,7 +5099,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -5123,11 +5123,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -5159,7 +5159,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -5183,11 +5183,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -5215,7 +5215,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
@@ -5239,7 +5239,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
@@ -5247,7 +5247,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
-            "sha256": "9aefc14130770f7baaedc6668b1b56bd8d7e4c63653fd97cf827f1d13acc9c59"
+            "sha256": "561df5deb69df862ceda4ffb847dc893c4086969dfca5b8de8459cc7d5da3da8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
@@ -5255,11 +5255,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
-            "sha256": "911f21a2525b8b5441fc09263eb431d097a48e49ac89b5df84581939f9f7d176"
+            "sha256": "bb59f4ff84a728208c8573c2ca737c148a1e05e3ecd1c5bb85f057c497720752"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           }
         ],
         "gaps": []
@@ -5279,7 +5279,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
@@ -5287,7 +5287,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
-            "sha256": "9aefc14130770f7baaedc6668b1b56bd8d7e4c63653fd97cf827f1d13acc9c59"
+            "sha256": "561df5deb69df862ceda4ffb847dc893c4086969dfca5b8de8459cc7d5da3da8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
@@ -5295,11 +5295,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
-            "sha256": "911f21a2525b8b5441fc09263eb431d097a48e49ac89b5df84581939f9f7d176"
+            "sha256": "bb59f4ff84a728208c8573c2ca737c148a1e05e3ecd1c5bb85f057c497720752"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           }
         ],
         "gaps": []
@@ -5319,7 +5319,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
@@ -5327,7 +5327,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
-            "sha256": "9aefc14130770f7baaedc6668b1b56bd8d7e4c63653fd97cf827f1d13acc9c59"
+            "sha256": "561df5deb69df862ceda4ffb847dc893c4086969dfca5b8de8459cc7d5da3da8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
@@ -5335,11 +5335,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
-            "sha256": "911f21a2525b8b5441fc09263eb431d097a48e49ac89b5df84581939f9f7d176"
+            "sha256": "bb59f4ff84a728208c8573c2ca737c148a1e05e3ecd1c5bb85f057c497720752"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           }
         ],
         "gaps": []
@@ -5359,7 +5359,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
@@ -5367,7 +5367,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
-            "sha256": "9aefc14130770f7baaedc6668b1b56bd8d7e4c63653fd97cf827f1d13acc9c59"
+            "sha256": "561df5deb69df862ceda4ffb847dc893c4086969dfca5b8de8459cc7d5da3da8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
@@ -5375,11 +5375,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
-            "sha256": "911f21a2525b8b5441fc09263eb431d097a48e49ac89b5df84581939f9f7d176"
+            "sha256": "bb59f4ff84a728208c8573c2ca737c148a1e05e3ecd1c5bb85f057c497720752"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           }
         ],
         "gaps": []
@@ -5399,7 +5399,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
@@ -5407,7 +5407,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
-            "sha256": "9aefc14130770f7baaedc6668b1b56bd8d7e4c63653fd97cf827f1d13acc9c59"
+            "sha256": "561df5deb69df862ceda4ffb847dc893c4086969dfca5b8de8459cc7d5da3da8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
@@ -5415,11 +5415,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
-            "sha256": "911f21a2525b8b5441fc09263eb431d097a48e49ac89b5df84581939f9f7d176"
+            "sha256": "bb59f4ff84a728208c8573c2ca737c148a1e05e3ecd1c5bb85f057c497720752"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           }
         ],
         "gaps": []
@@ -5439,7 +5439,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Composition.lean",
-            "sha256": "830ebd67361fbf9e34dad1350a2a96b96e73044e07b3194e6547775f703fa06e"
+            "sha256": "788234c2c43904b1fea6b98b88848c13eec3dad06503bb9e2c057797380a28b4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Directional.lean",
@@ -5447,7 +5447,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Flux.lean",
-            "sha256": "9aefc14130770f7baaedc6668b1b56bd8d7e4c63653fd97cf827f1d13acc9c59"
+            "sha256": "561df5deb69df862ceda4ffb847dc893c4086969dfca5b8de8459cc7d5da3da8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Testing.lean",
@@ -5455,11 +5455,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessian/Weighted.lean",
-            "sha256": "911f21a2525b8b5441fc09263eb431d097a48e49ac89b5df84581939f9f7d176"
+            "sha256": "bb59f4ff84a728208c8573c2ca737c148a1e05e3ecd1c5bb85f057c497720752"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           }
         ],
         "gaps": []
@@ -5487,7 +5487,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5527,7 +5527,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5615,7 +5615,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5647,7 +5647,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -5671,11 +5671,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -5703,7 +5703,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "2419eaea18cd80574b7706f622c98fb13f99c4ce1d2547daf118c6f532f04f5d"
+            "sha256": "c6725b55f6949144ca1b1c51f3311f2230bdd1436b1e7f85db566fafc5f72577"
           }
         ],
         "gaps": []
@@ -5747,7 +5747,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean",
-            "sha256": "6c9885fb32713379160bc0ad8e1732843a4807d745ec3a54e9c16fdf7d62c795"
+            "sha256": "842f1842dc9b410240f626a4e1ad84d02996660f2fec7fb1d1057df17424e0b0"
           }
         ],
         "gaps": []
@@ -5815,7 +5815,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5847,7 +5847,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakLaplacian.lean",
-            "sha256": "cbc7958861580de3d100c6c467348b3e8a507b14237e6c76d03746943ae32df4"
+            "sha256": "b5f0d245e8e372dc88d31212cabb6fefd8f41753eb7e41fac1644e28cbefb46c"
           }
         ],
         "gaps": []
@@ -5867,7 +5867,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Lipschitz.lean",
-            "sha256": "61982de1fe0cc833bad7201a146914f08bdc46bc8a4e2076a5a1495bf54608eb"
+            "sha256": "4e3c3d2900f5fa6bbaa400817c838eada55302761cebaa35acb8f953bfe47113"
           }
         ],
         "gaps": []
@@ -5887,7 +5887,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeakBrascampLieb.lean",
-            "sha256": "2ba7482c5a5a1c055be2d4594800188483b2276b00911f0135954f9ce2a0e268"
+            "sha256": "16c3520208ac70c5fe21715e0112703ec472ab8d0b7767867e26f5789b6a83d6"
           }
         ],
         "gaps": []
@@ -5907,7 +5907,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
-            "sha256": "3a66de716dea30966c6472c2ebb304ca4ea80cd2891d07acf51810b905abeef3"
+            "sha256": "23687c518adc4d9a55a927759b54d8ebc66e3ea66b69026f574bed4c63c76816"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
@@ -5915,7 +5915,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
-            "sha256": "8b52730d7bb37c02ca154e74887e9357ebe2429387de7f8d979da43ae2f2c744"
+            "sha256": "d27709508b3b59eeaeff2a25093785ac0d0e16ae83dd0b9cfd54ff3783835b0a"
           }
         ],
         "gaps": []
@@ -5935,7 +5935,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -5955,7 +5955,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean",
-            "sha256": "a17010fe328e578cce7cae4443ef2faa8e438f9c3beeaa6613900d4a0528957e"
+            "sha256": "4d9008102139699a35a6844d99b539d6b305789f981b29c90d64addb880b5ced"
           }
         ],
         "gaps": []
@@ -5975,7 +5975,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
-            "sha256": "ebdfc876577e9014346edd26dd3f8847b6481047735ac149e97637efcc17f257"
+            "sha256": "cd807ef39bd9d6851389f2fcf70c2ae651740bbd99812dbc8324f44a54cca492"
           }
         ],
         "gaps": []
@@ -5995,7 +5995,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
-            "sha256": "1c86a3cce539628029ba35c61be75534d3971e2498442bac4c987869d2e22e46"
+            "sha256": "c35231bfa7b36bc6e615942459908fa392011be2fe52cc9d8ea4e3cdeeedab91"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
@@ -6019,11 +6019,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Products.lean",
-            "sha256": "06076368fd28678d571508be8a2d06dd168e79f7c719cb5a4125dc26c32dc090"
+            "sha256": "0eb3fc6d6055981aa440cd27b11775561d06db42ce003e9cb9f8c02b680a2629"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Testing.lean",
-            "sha256": "c8c0dd92f1ba4d353c129504d8aeceede7a0bc8534af795901d479fd3630de6c"
+            "sha256": "20980f35d14585c5418a6e4600a5ef4f9e23e760507162300571d8b97f34477b"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Pairing.lean",
@@ -6051,7 +6051,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
-            "sha256": "8557023e8d9930ddaaf07cd00d70d5b50ad171c54d1e8895aa0b5752227aef75"
+            "sha256": "ab0a0b25e1db515ff2c1eac0bde5958233add64f233d15394fc924e30a2a23c7"
           }
         ],
         "gaps": []
@@ -6083,7 +6083,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
@@ -6107,7 +6107,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
-            "sha256": "624db2d2a4e9a1c83f0f794558ddc1218e8681474013997af4fc637b0f3c5751"
+            "sha256": "ddba72b5ec420dee72c5c3383b7b602ab3253a11118c3e1b7f4326e55914ea62"
           }
         ],
         "gaps": []
@@ -6139,7 +6139,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean",
-            "sha256": "07309bd62746e8a843e5a9cddbe91ed67aed68f4d51980707e8300ef310ac370"
+            "sha256": "fd434b1e4b1c04788df903e4c39ffe9f422ce8cce8b069071d2ab97b1cb03c94"
           }
         ],
         "gaps": []
@@ -6159,15 +6159,15 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
-            "sha256": "8332798a8900a40f8ecb95a4c437bcc288ac8c7d70ae70bd1608d96b4ae93a27"
+            "sha256": "c0542de4df72209b0c1174e07dc0f7053dae3b4198350d0168770391dcef939c"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean",
-            "sha256": "690bc8a9f4b08eb4dda45320d9dceaaf22f963790cc730a69d29fe4fdb63ea73"
+            "sha256": "95696f83f054ef04bed77015c1573746bf8b885e616702a5529d735e8db84e16"
           }
         ],
         "gaps": []
@@ -6195,7 +6195,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "5c1388d619c1010391fe7d13fe30ea929404fafab739748d37098fad682926ee"
+            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -6227,7 +6227,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
-            "sha256": "3a66de716dea30966c6472c2ebb304ca4ea80cd2891d07acf51810b905abeef3"
+            "sha256": "23687c518adc4d9a55a927759b54d8ebc66e3ea66b69026f574bed4c63c76816"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
@@ -6235,7 +6235,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
-            "sha256": "8b52730d7bb37c02ca154e74887e9357ebe2429387de7f8d979da43ae2f2c744"
+            "sha256": "d27709508b3b59eeaeff2a25093785ac0d0e16ae83dd0b9cfd54ff3783835b0a"
           }
         ],
         "gaps": []
@@ -6255,7 +6255,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
-            "sha256": "b28239636a3c664f51595328e94109177e54eeb2b26102280b9b8998d9701fba"
+            "sha256": "21b206cd7791ae513f0f4f851d894f1a8a48d1461190d19ddf355db10676b883"
           }
         ],
         "gaps": []
@@ -6275,7 +6275,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
-            "sha256": "b28239636a3c664f51595328e94109177e54eeb2b26102280b9b8998d9701fba"
+            "sha256": "21b206cd7791ae513f0f4f851d894f1a8a48d1461190d19ddf355db10676b883"
           }
         ],
         "gaps": []
@@ -6295,7 +6295,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
-            "sha256": "ebdfc876577e9014346edd26dd3f8847b6481047735ac149e97637efcc17f257"
+            "sha256": "cd807ef39bd9d6851389f2fcf70c2ae651740bbd99812dbc8324f44a54cca492"
           }
         ],
         "gaps": []
@@ -6367,7 +6367,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean",
-            "sha256": "07309bd62746e8a843e5a9cddbe91ed67aed68f4d51980707e8300ef310ac370"
+            "sha256": "fd434b1e4b1c04788df903e4c39ffe9f422ce8cce8b069071d2ab97b1cb03c94"
           }
         ],
         "gaps": []
@@ -6399,7 +6399,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Hessian/Weak.lean",
-            "sha256": "ad2f160921e5a5edacee2988f7f36ef6df58ece90af0d3e6f24f0aa8f2af3b27"
+            "sha256": "531ab0c27149b4b6a05e220c7df4d29106ff9d830d869a722504781eeebf059e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
@@ -6423,7 +6423,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
-            "sha256": "598f29fabf323286e768a3edcef4c263ecf8e2235d2b5581746b5cb8d93c45ee"
+            "sha256": "ab3d080b006dd2ec4f21ed6525b7117fe744c6b1166c0b10c3d0d0e77d26bee8"
           }
         ],
         "gaps": []
@@ -6443,7 +6443,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
-            "sha256": "598f29fabf323286e768a3edcef4c263ecf8e2235d2b5581746b5cb8d93c45ee"
+            "sha256": "ab3d080b006dd2ec4f21ed6525b7117fe744c6b1166c0b10c3d0d0e77d26bee8"
           }
         ],
         "gaps": []
@@ -6463,7 +6463,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
-            "sha256": "598f29fabf323286e768a3edcef4c263ecf8e2235d2b5581746b5cb8d93c45ee"
+            "sha256": "ab3d080b006dd2ec4f21ed6525b7117fe744c6b1166c0b10c3d0d0e77d26bee8"
           }
         ],
         "gaps": []
@@ -6483,7 +6483,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -6523,7 +6523,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean",
-            "sha256": "0203644bfc3ce0eec5d264d78ec905b0451d587f2716232580353311d248e32e"
+            "sha256": "f4720c282619df104483b8ef450d987651bbd6dcbe2c00f791b75c7a51ff8306"
           }
         ],
         "gaps": []
@@ -6543,7 +6543,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean",
-            "sha256": "0203644bfc3ce0eec5d264d78ec905b0451d587f2716232580353311d248e32e"
+            "sha256": "f4720c282619df104483b8ef450d987651bbd6dcbe2c00f791b75c7a51ff8306"
           }
         ],
         "gaps": []
@@ -6563,7 +6563,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/Variance/Quadratic.lean",
-            "sha256": "0203644bfc3ce0eec5d264d78ec905b0451d587f2716232580353311d248e32e"
+            "sha256": "f4720c282619df104483b8ef450d987651bbd6dcbe2c00f791b75c7a51ff8306"
           }
         ],
         "gaps": []
@@ -6583,15 +6583,15 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
-            "sha256": "8332798a8900a40f8ecb95a4c437bcc288ac8c7d70ae70bd1608d96b4ae93a27"
+            "sha256": "c0542de4df72209b0c1174e07dc0f7053dae3b4198350d0168770391dcef939c"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean",
-            "sha256": "690bc8a9f4b08eb4dda45320d9dceaaf22f963790cc730a69d29fe4fdb63ea73"
+            "sha256": "95696f83f054ef04bed77015c1573746bf8b885e616702a5529d735e8db84e16"
           }
         ],
         "gaps": []
@@ -6611,15 +6611,15 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
-            "sha256": "8332798a8900a40f8ecb95a4c437bcc288ac8c7d70ae70bd1608d96b4ae93a27"
+            "sha256": "c0542de4df72209b0c1174e07dc0f7053dae3b4198350d0168770391dcef939c"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Gaussian/Moments.lean",
-            "sha256": "690bc8a9f4b08eb4dda45320d9dceaaf22f963790cc730a69d29fe4fdb63ea73"
+            "sha256": "95696f83f054ef04bed77015c1573746bf8b885e616702a5529d735e8db84e16"
           }
         ],
         "gaps": []
@@ -6679,7 +6679,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
-            "sha256": "624db2d2a4e9a1c83f0f794558ddc1218e8681474013997af4fc637b0f3c5751"
+            "sha256": "ddba72b5ec420dee72c5c3383b7b602ab3253a11118c3e1b7f4326e55914ea62"
           }
         ],
         "gaps": []
@@ -6699,7 +6699,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
-            "sha256": "ab90cc26d75ea46e6c77da00640024663250592af1bd924dd5ce22072f353cae"
+            "sha256": "4df0bdd968a9e5948cf8d698d833fb7477be1cbe919faf325a59b37555be28a2"
           }
         ],
         "gaps": []
@@ -6719,7 +6719,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
-            "sha256": "ab90cc26d75ea46e6c77da00640024663250592af1bd924dd5ce22072f353cae"
+            "sha256": "4df0bdd968a9e5948cf8d698d833fb7477be1cbe919faf325a59b37555be28a2"
           }
         ],
         "gaps": []
@@ -6739,11 +6739,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
-            "sha256": "0098d504e06470ae3954c07b2aeadcddaf06c8fee0fb287b0a0876e9453c275c"
+            "sha256": "830aeb97338ec5a0f57ad683f49d914b5589de92f119ca8e7f9809f8cc737056"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -6763,11 +6763,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
-            "sha256": "0098d504e06470ae3954c07b2aeadcddaf06c8fee0fb287b0a0876e9453c275c"
+            "sha256": "830aeb97338ec5a0f57ad683f49d914b5589de92f119ca8e7f9809f8cc737056"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -6787,11 +6787,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
-            "sha256": "0098d504e06470ae3954c07b2aeadcddaf06c8fee0fb287b0a0876e9453c275c"
+            "sha256": "830aeb97338ec5a0f57ad683f49d914b5589de92f119ca8e7f9809f8cc737056"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -6811,7 +6811,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/Tilted.lean",
-            "sha256": "bba3d3c5b8ffbcf8faf62ab7a3eda2c74ba016843c391388991871b702912ae9"
+            "sha256": "f2ac60ab434ab4cd3e0ef03ac12c666e6f094e5ffca148415495487640eb9374"
           }
         ],
         "gaps": []
@@ -6831,11 +6831,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
-            "sha256": "9a6e9c536d14ec6a5cfff01931d616750f27501030f4342eaa7e0a3207f85005"
+            "sha256": "a2308e2f1879960f8cbaf641d987e500b73b46da72074266990f89f263c17c33"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []
@@ -6855,11 +6855,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
-            "sha256": "9a6e9c536d14ec6a5cfff01931d616750f27501030f4342eaa7e0a3207f85005"
+            "sha256": "a2308e2f1879960f8cbaf641d987e500b73b46da72074266990f89f263c17c33"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "4be1bb787cbcd709aedc0a3f286edadcc34528670bfe6bd5cfa421d90bb45ccb"
+            "sha256": "4acdc33b6a721265156a93e4fda792ee2fd8b60eeac6038f78f835358eb705c5"
           }
         ],
         "gaps": []

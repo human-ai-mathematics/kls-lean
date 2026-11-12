@@ -15,7 +15,6 @@ with a vanishing Gaussian variance term.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace

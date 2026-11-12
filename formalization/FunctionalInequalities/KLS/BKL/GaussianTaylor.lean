@@ -156,10 +156,10 @@ theorem integral_id_tilted_half_norm_sq :
     show (2 : ℝ) * (1 / 2) = 1 by norm_num, div_one] using h
 
 -- Retain the existing CompleteSpace binder in this public interface.
-set_option linter.unusedSectionVars false in
 /-- **The standard Gaussian has identity covariance**: `∫ ⟪v, x⟫² dγ = ‖v‖²`. -/
 theorem integral_inner_sq_tilted_half_norm_sq (v : E) :
     ∫ x, ⟪v, x⟫ ^ 2 ∂((volume : Measure E).tilted (-fun x : E => ‖x‖ ^ 2 / 2)) = ‖v‖ ^ 2 := by
+  let _ := (inferInstance : CompleteSpace E)
   have hs : (0 : ℝ) < 1 / 2 := by norm_num
   have h := Probability.Gaussian.integral_inner_sq (E := E) hs v
   rw [gaussianLaw_half_eq_tilted] at h

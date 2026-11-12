@@ -183,7 +183,6 @@ private theorem memLp_coordinate_fderiv_of_lipschitz {n : ℕ}
   exact MemLp.of_bound hMeas.aestronglyMeasurable (C : ℝ)
     (Filter.Eventually.of_forall hBound)
 
-set_option maxHeartbeats 800000 in
 /-- Actual weak derivative of a smooth coordinate derivative composed with a
 C1 potential's Lipschitz gradient. Supporting component for weak Letwin (2.6). -/
 theorem exists_lipschitzWith_weak_fderiv_comp_gradient {n : ℕ}

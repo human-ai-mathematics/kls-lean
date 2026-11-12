@@ -553,7 +553,6 @@ private lemma touching_cancel_volume {n : ℕ}
     (ENNReal.mul_le_mul_iff_right (ne_of_gt hpos) (ne_of_lt hfin)).mp
       (by simpa only [mul_comm] using h)
 
-set_option maxHeartbeats 800000 in
 /--
 **Upper touching test for an Alexandrov solution** (viscosity inequality): if the subgradient
 images of the convex `u` on open subsets of `Ω` carry the density `f`
@@ -647,7 +646,6 @@ theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace �
   have hcoef : a ≤ M.det := touching_cancel_volume hGpos hGfin hM.det_pos.le hmul
   exact (not_le_of_gt hMdet) hcoef
 
-set_option maxHeartbeats 800000 in
 /-- **Lower touching test for an Alexandrov solution**: with the
 same Alexandrov hypothesis, if `ψ ∈ C²` touches `u` from below at `x₀` (`ψ ≤ u` near `x₀`,
 `u x₀ = ψ x₀`) and `∇²ψ(x₀)` is positive semidefinite, then `det ∇²ψ(x₀) ≤ f x₀`. -/

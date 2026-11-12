@@ -245,7 +245,6 @@ private lemma exists_quadratic_comparison_at_maximum {n : ℕ}
     (det_midpoint_ge (hpos (x + h)) (hpos (x - h))
       (hlog (x + h)) (hlog (x - h))) hdet
 
-set_option maxHeartbeats 800000 in
 /--
 **A penalised maximum with the log-density comparison**: let the convex, Lipschitz, coercive `u`
 be an Alexandrov

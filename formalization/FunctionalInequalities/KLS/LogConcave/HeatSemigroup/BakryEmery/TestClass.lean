@@ -24,7 +24,6 @@ step rather than the compact-data Bochner statement alone.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 
 open MeasureTheory Filter Topology InnerProductSpace
@@ -154,7 +153,6 @@ section SmoothBounds
 variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
-set_option maxHeartbeats 800000 in
 /-- Smooth compactly supported data and their generator images give uniformly bounded heat
 orbit tests, including time zero. The constants do not depend on time. -/
 theorem exists_bounds_operator_toLp (hνU : (ν : Measure V) = m.tilted (-U))
@@ -251,7 +249,6 @@ private theorem integrable_mul_compact (ψ : Lp ℝ 2 (ν : Measure V)) {q : V �
   filter_upwards [hqL.coeFn_toLp] with x hx
   simp only [hx, Real.inner_apply]
 
-set_option maxHeartbeats 800000 in
 /-- Pointwise Bochner, integrated against a nonnegative generator-domain class. The data
 remain smooth and compactly supported; no smoothness or compact support of the test is assumed. -/
 theorem integral_gammaTwo_nonneg_of_mem_domain

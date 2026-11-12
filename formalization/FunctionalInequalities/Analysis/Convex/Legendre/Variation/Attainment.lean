@@ -42,8 +42,6 @@ namespace FunctionalInequalities.Analysis
 
 section MaximizerGradient
 
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 open Set
 
 /-- Identification part of the dual-differentiability argument in

@@ -490,7 +490,6 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Probability
 
-set_option maxHeartbeats 300000 in
 theorem memLp_quadratic_of_memLp_four {alpha E : Type*} [MeasurableSpace alpha]
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] {mu : Measure alpha}
     {f : alpha → E} (hf : MemLp f 4 mu) (A : E →L[ℝ] E) :

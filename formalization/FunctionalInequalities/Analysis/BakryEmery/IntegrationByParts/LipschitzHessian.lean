@@ -28,7 +28,6 @@ namespace FunctionalInequalities.Analysis.BakryEmery
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-set_option maxHeartbeats 800000 in
 /-- **Mean Hessian identity for a `C¹` potential with Lipschitz gradient** (Letwin
 arXiv:2607.24164v1, Lemma 2.3, analytic part, at `C^{1,1}`):
 `∫ ⟪D(∇φ)(x) u, v⟫ dν = ∫ ∂_uφ ∂_vφ dν` for convex `φ ∈ C¹` with `G`-Lipschitz gradient,
@@ -239,7 +238,6 @@ open scoped ContDiff Topology
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 800000 in
 /--
 Weighted integration by parts for a bounded globally Lipschitz test `η` against the normalized
 exponential tilt of a

@@ -78,7 +78,6 @@ private lemma resolvent_subgradient_inverse {f : E → ℝ} {P : E → E}
   exact sub_eq_zero.mp (norm_eq_zero.mp hn)
 
 -- A local lower bound, together with firm monotonicity, controls every preimage.
-set_option maxHeartbeats 800000 in
 private lemma resolvent_preimage_near {P : E → E} {z : E}
     (hm : ∀ a b, ‖P a - P b‖ ^ 2 ≤ ⟪P a - P b, a - b⟫)
     {c δ : ℝ} (hc : 0 < c) (hδ : 0 < δ)
@@ -152,7 +151,6 @@ private lemma resolvent_absorb_remainder (T : E ≃L[ℝ] E) {K c : ℝ}
   rw [he] at hm
   nlinarith only [hb, hm]
 
-set_option maxHeartbeats 800000 in
 /--
 **Inverting the resolvent at a point of invertible differentiability** (Alexandrov's theorem):
 let `P` be the resolvent of `f` (`z − P z` is a subgradient of `f` at
@@ -602,7 +600,6 @@ Taylor expansion at almost every point. -/
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 800000 in
 /-- **Alexandrov expansion with retained subgradient expansion**.
 
 This is the shared producer for the value expansion and the first-order expansion of all

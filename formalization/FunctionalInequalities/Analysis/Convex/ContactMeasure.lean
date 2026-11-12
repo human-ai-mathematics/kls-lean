@@ -508,7 +508,6 @@ theorem volume_image_residual_le_of_quadratic_contacts {n : ℕ} (hn : 0 < n)
     volume_image_residual_le_of_posDef_reference hn hconv hu hqconv hq hΩ hqPD hf hfpos hMA hqMA
       hε hδ hδ1 hfupper hΓ hΓΩ hs
 
-set_option maxHeartbeats 1200000 in
 private theorem full_contact_assembly
     {n : ℕ} {u v : EuclideanSpace ℝ (Fin n) → ℝ}
     {Ω : Set (EuclideanSpace ℝ (Fin n))}

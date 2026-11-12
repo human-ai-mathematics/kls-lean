@@ -76,7 +76,6 @@ open scoped ContDiff RealInnerProductSpace Topology MatrixOrder
 namespace FunctionalInequalities.KLS.LogConcave
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-set_option maxHeartbeats 1500000 in
 theorem regularClass_matrix_variance_le_eight :
     ∀ M : Matrix (Fin n) (Fin n) ℝ,
       M.IsSymm →

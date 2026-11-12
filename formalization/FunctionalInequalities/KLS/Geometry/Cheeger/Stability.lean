@@ -13,7 +13,6 @@ relative perimeter of individual domains.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal ContDiff symmDiff BoundedContinuousFunction

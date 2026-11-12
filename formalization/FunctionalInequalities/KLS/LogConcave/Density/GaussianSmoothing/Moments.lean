@@ -74,7 +74,6 @@ theorem smoothedLaw_mean (μ : Measure E) [IsProbabilityMeasure μ] (hμ2 : MemL
   simp
 
 -- Retain the existing CompleteSpace binder in this public interface.
-set_option linter.unusedSectionVars false in
 /-- Variances add under smoothing: `Var_{μ*γ_s}⟪v,·⟫ = Var_μ⟪v,·⟫ + ‖v‖²/(2s)`. -/
 theorem smoothedLaw_variance (μ : Measure E) [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ)
     {s : ℝ} (hs : 0 < s) (v : E) :

@@ -137,7 +137,6 @@ private theorem cutoff_weighted_path_bounds {E : ℕ → Param n → ℝ}
     exact mul_le_mul (hw s hs) (hw' s hs) (abs_nonneg _) ((abs_nonneg _).trans (hw s hs))
   exact ⟨hGbd, hfbd, hffbd⟩
 
-set_option maxHeartbeats 1000000 in
 theorem energy_integral_le_of_generator_ge (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
     {ρ : ℝ} (hρ : 0 ≤ ρ)
     (hsupp : (μ : Measure (EuclideanSpace ℝ (Fin n))).support ⊆ Metric.closedBall 0 ρ)

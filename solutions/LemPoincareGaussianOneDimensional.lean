@@ -23,10 +23,6 @@ The certificate directly combines the reusable theorems without duplicating thei
 
 @[expose] public section
 
-set_option pp.universes true
-set_option pp.funBinderTypes true
-set_option format.width 100
-
 open MeasureTheory ProbabilityTheory FunctionalInequalities
 
 namespace Solutions.LemPoincareGaussianOneDimensional

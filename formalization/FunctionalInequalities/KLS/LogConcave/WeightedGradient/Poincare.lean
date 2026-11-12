@@ -14,7 +14,6 @@ the finite bounds on the intrinsic literature optimum. No heat estimate is assum
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 
 open MeasureTheory

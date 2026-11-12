@@ -231,7 +231,6 @@ theorem exists_hasDerivAt_shifted_operator {ε : ℝ} (hε : 0 < ε) (hε' : ε 
       L2.hasDerivAt_compLp (hΦ.differentiable (by simp)) hL hΦ0
         (Generated.hasDerivAt_apply_of_pos T hT hd f ht) (hw.toLp _) hw.coeFn_toLp
 
-set_option maxHeartbeats 800000 in
 /-- Interior derivative of the actual shifted Gaussian heat interpolation.
 Only a C1 potential is required; this is a tested identity, not the squared BGL bound. -/
 theorem hasDerivAt_integral_operator_shifted (hνU : (ν : Measure V) = m.tilted (-U))
@@ -287,7 +286,6 @@ theorem hasDerivAt_integral_operator_shifted (hνU : (ν : Measure V) = m.tilted
     ring
   exact (h.congr_of_eventuallyEq hfun).congr_deriv hval
 
-set_option maxHeartbeats 800000 in
 /-- Strong L2 derivative of the shifted Gaussian interpolation. The reciprocal-profile
 Gamma field is an actual L2 class, constructed from the generator composition formula. -/
 theorem exists_hasDerivAt_operator_shifted (hνU : (ν : Measure V) = m.tilted (-U))
@@ -353,7 +351,6 @@ theorem exists_hasDerivAt_operator_shifted (hνU : (ν : Measure V) = m.tilted (
   rw [hval, ← neg_one_smul ℝ z, Generated.map_smul T hT hd hs.le, neg_one_smul] at h
   exact h
 
-set_option maxHeartbeats 800000 in
 /-- Adding the heat-invariant constant I(eps) gives the positive, unshifted
 profile interpolation with the same strong L2 derivative. -/
 theorem exists_hasDerivAt_operator_profile (hνU : (ν : Measure V) = m.tilted (-U))
@@ -401,7 +398,6 @@ theorem exists_hasDerivAt_operator_profile (hνU : (ν : Measure V) = m.tilted (
     exact
       (Generated.map_add T hT hd hr.le _ _).trans (congrArg (fun v ↦ P r (G r) + v) (hc r hr))
 
-set_option maxHeartbeats 800000 in
 /-- The exact derivative of the tested squared, positive Gaussian interpolation.
 The quantitative BGL lower bound on its dissipation is a separate step. -/
 theorem exists_hasDerivAt_integral_operator_profile_sq {β : V → ℝ} {C : ℝ}
@@ -447,7 +443,6 @@ theorem exists_hasDerivAt_integral_operator_profile_sq {β : V → ℝ} {C : ℝ
   rw [he]
   ring
 
-set_option maxHeartbeats 800000 in
 /-- The Gaussian interpolation dissipation dominates the squared closed gradient at
 its fixed terminal time. Both weights are actual L2 classes with identified representatives. -/
 theorem ae_gradient_sq_le_operator_profile_mul (hνU : (ν : Measure V) = m.tilted (-U))
@@ -523,7 +518,6 @@ theorem ae_gradient_sq_le_operator_profile_mul (hνU : (ν : Measure V) = m.tilt
   rw [heT] at h
   simpa only [WeakGamma.self_eq_norm_sq] using h
 
-set_option maxHeartbeats 800000 in
 /-- Interior quantitative differential inequality for the bounded, nonnegative-test
 Gaussian square interpolation. Time integration and endpoint limits remain separate. -/
 theorem exists_hasDerivAt_integral_operator_profile_sq_le {β : V → ℝ} {C : ℝ}
@@ -577,7 +571,6 @@ theorem exists_hasDerivAt_integral_operator_profile_sq_le {β : V → ℝ} {C : 
     simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hx hb)
   exact mul_le_mul_of_nonpos_left hle (by norm_num)
 
-set_option maxHeartbeats 1200000 in
 /-- Integrated Gaussian profile inequality with an explicit epsilon range margin.
 Both time endpoints are included; the initial profile is constructed as an L2 class. -/
 theorem exists_integral_gradient_sq_le_profile_sub {β : V → ℝ} {C : ℝ}
@@ -679,7 +672,6 @@ theorem exists_integral_gradient_sq_le_profile_sub {β : V → ℝ} {C : ℝ}
     rw [hzero] at hi
     linarith
 
-set_option maxHeartbeats 1200000 in
 /-- The regularized integrated Gaussian inequality holds almost everywhere, with
 both profile endpoints and the nonnegative terminal heat-profile square retained. -/
 theorem exists_ae_gradient_sq_le_profile_sub (hνU : (ν : Measure V) = m.tilted (-U))
@@ -792,7 +784,6 @@ private theorem tendsto_profileAffine (f : Lp ℝ 2 (ν : Measure V)) :
 
 end ProfileComposition
 
-set_option maxHeartbeats 1600000 in
 /-- Gaussian BGL inequality tested against bounded nonnegative functions, for all
 unit-interval L2 data. The epsilon range margin has been removed by L2 convergence. -/
 theorem exists_integral_gradient_sq_le_profile {β : V → ℝ} {C : ℝ}
@@ -899,7 +890,6 @@ theorem exists_integral_gradient_sq_le_profile {β : V → ℝ} {C : ℝ}
       rw [hx]
     rwa [he] at hle
 
-set_option maxHeartbeats 1600000 in
 /-- The Gaussian BGL inequality for unit-interval data in the smooth convex model.
 The initial Gaussian profile is an actual L2 class; no epsilon margin remains. -/
 theorem exists_ae_gradient_sq_le_profile (hνU : (ν : Measure V) = m.tilted (-U))
@@ -1035,7 +1025,6 @@ theorem ae_norm_gradient_le_of_unitInterval (hνU : (ν : Measure V) = m.tilted 
     nlinarith [hm]
   nlinarith
 
-set_option maxHeartbeats 1000000 in
 /-- Gaussian BGL improves bounded-data gradient regularization to M/sqrt(pi*t).
 The zero bound is included, and no form-domain assumption on the initial datum is needed. -/
 theorem ae_norm_gradient_le_of_bounded_pi (hνU : (ν : Measure V) = m.tilted (-U))

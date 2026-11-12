@@ -616,7 +616,6 @@ section FiniteDimensional
 
 variable [FiniteDimensional ℝ E]
 
-set_option maxHeartbeats 800000 in
 private lemma sd_penalized_estimate {u V : E → ℝ}
     (hconv : ConvexOn ℝ univ u) (hu : Differentiable ℝ u)
     (hV : Differentiable ℝ V) {κ : ℝ} (hκ : 0 < κ) {Ω : Set E}

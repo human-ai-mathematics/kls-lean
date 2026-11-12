@@ -293,7 +293,6 @@ theorem integral_divergence_eq_integral_inner_outwardNormal (U : SmoothDomain V)
         rw [hFeq]
         exact (sum_inner s (fun i => G i x) (U.outwardNormal x)).symm
 
-set_option maxHeartbeats 1000000 in
 /-- The distributional gradient of the indicator of a smooth domain is the oriented surface
 measure: `∫_U ∇η = ∫_{∂U} η ν dℋ^{n-1}` for every compactly supported `C¹` test function `η`.
 Equivalently `D𝟙_U = -ν ℋ^{n-1}⌊∂U`.

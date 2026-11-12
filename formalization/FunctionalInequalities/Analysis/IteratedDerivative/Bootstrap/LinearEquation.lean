@@ -237,7 +237,6 @@ end DifferenceQuotients
 
 section BallStep
 
-set_option maxHeartbeats 1600000 in
 /-- **One Schauder step for a linear equation with `C^{1,α}` data on a ball** (Gilbarg–Trudinger,
 Classics 2001, Lemma 17.16 method with Theorem 6.2). Let `n ≥ 2`, `0 < α < 1`, `0 < λ ≤ Λ`,
 `S > 0` and caps `Ka, Kb, Kg, Nw ≥ 0`. There are `R > 0` and `Kc ≥ 0`, chosen before the centre

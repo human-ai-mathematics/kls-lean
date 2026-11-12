@@ -28,8 +28,6 @@ the class-level statements are in `KLS/LogConcave/HeatSemigroup/Generator/FormRa
 
 noncomputable section
 
-set_option autoImplicit false
-
 open MeasureTheory
 open scoped ContDiff RealInnerProductSpace
 

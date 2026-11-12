@@ -99,7 +99,6 @@ private theorem diffusionGenerator_const_local {d : ℕ}
 
 end NormedSpace
 
-set_option maxHeartbeats 1000000 in
 theorem sum_hsNormSq_conjugatedNoiseOperator_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
     (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) (p : Param n)
     (hSym : IsSelfAdjoint p.2) (hQ : ∀ x, 0 ≤ ⟪p.2 x, x⟫) :
@@ -150,7 +149,6 @@ theorem sum_hsNormSq_conjugatedNoiseOperator_le (hiso : KLS.Isotropic μ) (hLC :
       simp
       ring
 
-set_option maxHeartbeats 1000000 in
 theorem generator_stdTrace_ringInverse_cov_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
     (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) (p : Param n)
     (hSym : IsSelfAdjoint p.2) (hQ : ∀ x, 0 ≤ ⟪p.2 x, x⟫) :
@@ -226,7 +224,6 @@ theorem generator_stdTrace_ringInverse_cov_le (hiso : KLS.Isotropic μ) (hLC : K
       exact sum_hsNormSq_conjugatedNoiseOperator_le μ hc hiso hLC h8 p hSym hQ
     _ = (1 + 8 * n) * G := by ring
 
-set_option maxHeartbeats 1000000 in
 theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ)
     (hLC : KLS.LogConcave μ) (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) (p : Param n)
     (hSym : IsSelfAdjoint p.2) (hQ : ∀ x, 0 ≤ ⟪p.2 x, x⟫) :
@@ -376,7 +373,6 @@ theorem sum_sq_fderiv_stdTrace_ringInverse_cov_noise_le (hiso : KLS.Isotropic μ
       ring_nf
       rfl
 
-set_option maxHeartbeats 1000000 in
 theorem exists_generator_lyapunov_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
     (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) {r : ℝ} (hr : 0 ≤ r)
     (hsupp : (μ : Measure (EuclideanSpace ℝ (Fin n))).support ⊆ Metric.closedBall 0 r) :

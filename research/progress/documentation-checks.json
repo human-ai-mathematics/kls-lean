@@ -396,62 +396,7 @@
     }
   ],
   "maintenance": {
-    "linter_exceptions": [
-      {
-        "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean",
-        "option": "linter.unusedVariables",
-        "declaration": "FunctionalInequalities.Analysis.BakryEmery.contDiffOn_logLaplace_ball",
-        "reason": "Retain the named positive-radius premise hr and the exact established log-Laplace contract."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/Analysis/Coarea/Isoperimetry.lean",
-        "option": "linter.unusedVariables",
-        "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet",
-        "reason": "Retain the named Lipschitz bound hK and the ambient structure of the original coarea interface."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/BKL/GaussianTaylor.lean",
-        "option": "linter.unusedSectionVars",
-        "declaration": "FunctionalInequalities.KLS.integral_inner_sq_tilted_half_norm_sq",
-        "reason": "Retain the existing CompleteSpace binder and exact public telescope; this particular scalar proof does not consume that instance."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
-        "option": "linter.unusedVariables",
-        "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_distanceCutoff_le",
-        "reason": "Retain the reference Haar measure, named absolute-continuity premise hac and ambient structure from the established public contract."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
-        "option": "linter.unusedVariables",
-        "declaration": "FunctionalInequalities.KLS.Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le",
-        "reason": "Retain the named hu01 range premise of the published [0,1]-valued test class, even though this proof route does not use the full range bound."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiConstant.lean",
-        "option": "linter.unusedVariables",
-        "declaration": "FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_mul_lintegral_min_superlevel_le",
-        "reason": "Retain the named hu01 range premise of the published [0,1]-valued test class, even though this proof route does not use the full range bound."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
-        "option": "linter.unusedSectionVars",
-        "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_minkowskiContent_superlevel_le",
-        "reason": "Retain the explicit finite-dimensional and ambient SecondCountableTopology scope of the Minkowski coarea interface."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
-        "option": "linter.unusedVariables",
-        "declaration": "FunctionalInequalities.KLS.LogConcave.ae_conditionalFiber_logConcave",
-        "reason": "Retain the named Admissible premise hρ and the established fiber interface; the current proof derives log-concavity from the absolute-continuity route."
-      },
-      {
-        "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
-        "option": "linter.unusedSectionVars",
-        "declaration": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_variance",
-        "reason": "Retain the existing CompleteSpace binder and exact public telescope; this particular scalar proof does not consume that instance."
-      }
-    ],
+    "linter_exceptions": [],
     "audit_reports": [
       {
         "declaration": "FunctionalInequalities.Probability.Diffusion.vectorGenerator",

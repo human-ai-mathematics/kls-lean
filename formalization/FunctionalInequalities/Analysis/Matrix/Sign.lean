@@ -357,7 +357,6 @@ open scoped MatrixOrder
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 700000 in
 theorem symmetric_matrix_spectral_geometry {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ)
     (hM : M.IsSymm) (hunit : IsUnit M) :
     let B : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt (M * M)
@@ -434,7 +433,6 @@ open scoped Topology
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 300000 in
 theorem exists_symmetric_isUnit_matrix_sequence {ι : Type*} [Fintype ι] [DecidableEq ι]
     (A : Matrix ι ι ℝ) (hA : A.IsSymm) :
     ∃ seq : ℕ → Matrix ι ι ℝ,

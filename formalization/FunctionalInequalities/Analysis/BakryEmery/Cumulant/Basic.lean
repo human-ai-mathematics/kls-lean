@@ -785,8 +785,6 @@ theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E)
       simp [div_eq_mul_inv, inv_pow]
       ring
 
--- Retain the positive-radius parameter of the established public contract.
-set_option linter.unusedVariables false in
 open scoped ContDiff in
 /-- **Local smoothness of `Λ_μ`** (BKL p. 29, "finite and smooth in a neighborhood of the origin"):
 one positive norm-exponential moment `∫ e^{r‖x‖} dμ < ∞` makes `Λ_μ` `C^∞` on the open ball of
@@ -794,6 +792,7 @@ radius `r`. The local integral identities are in `Tilt/Local.lean`. -/
 theorem contDiffOn_logLaplace_ball (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ] {r : ℝ}
     (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) :
     ContDiffOn ℝ ∞ (logLaplace μ) (Metric.ball 0 r) := by
+  let _ := hr
   have hgi : ∀ t < r,
       Integrable (fun x : E => Real.exp (t * ‖x‖) * ‖(1 : ℝ)‖) μ := by
     intro t ht

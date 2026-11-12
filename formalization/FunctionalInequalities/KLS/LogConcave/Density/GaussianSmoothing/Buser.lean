@@ -17,7 +17,6 @@ finite-dimensional affine support, including dimension zero.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Topology
 open scoped ENNReal NNReal ContDiff

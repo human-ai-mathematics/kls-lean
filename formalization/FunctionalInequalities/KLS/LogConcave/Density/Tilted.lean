@@ -257,7 +257,6 @@ namespace FunctionalInequalities.KLS.LogConcave
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-set_option maxHeartbeats 500000 in
 /--
 For closed convex `K` and `W` continuous and convex on `K`, `1_K e^{-W}` is a log-concave Borell
 density of `μ = (1_K e^{-W}) dx`. Only the values of `W` on `K` enter. -/

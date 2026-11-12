@@ -32,7 +32,6 @@ consequence `|T̄P_t f| ≤ M/√(2t)` via smooth-test order separation.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 
 open MeasureTheory Filter Topology Set

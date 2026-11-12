@@ -320,7 +320,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-set_option maxHeartbeats 600000 in
 /--
 Weak source Stein identity at a C1 potential with Lipschitz gradient and mass-one exponential
 weight: for every C1 bounded
@@ -389,7 +388,6 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-set_option maxHeartbeats 600000 in
 theorem source_directional_stein_identity_of_bounded_lipschitz_test {n : ℕ}
     {u f : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lf : NNReal} (hu : ContDiff ℝ 1 u)
     (hL : LipschitzWith L u) (hG : LipschitzWith G (gradient u))
@@ -456,7 +454,6 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-set_option maxHeartbeats 600000 in
 theorem source_affine_stein_identity_of_bounded_lipschitz_test {n : ℕ}
     {u h : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lh : NNReal} (hu : ContDiff ℝ 1 u)
     (hL : LipschitzWith L u) (hG : LipschitzWith G (gradient u))

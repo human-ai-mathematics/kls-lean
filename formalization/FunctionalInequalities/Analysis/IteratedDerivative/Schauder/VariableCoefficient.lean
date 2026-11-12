@@ -864,7 +864,6 @@ private theorem seminorm_recursion {n : ℕ} {α : ℝ≥0} (hα0 : 0 < α) (hα
     _ ≤ _ := halg
     _ = _ := by ring
 
-set_option maxHeartbeats 1600000 in
 /-- **GT 2001 Theorem 6.2, interior a priori form on balls.** For `n ≥ 2`, `0 < α < 1`,
 `0 < λ ≤ Λ` and `K, Kb ≥ 0` there is `C > 0` such that for every centre `c`, radius `0 < R ≤ 1`,
 symmetric `(λ, Λ)`-elliptic principal coefficients `a` with `α`-Hölder cap `K`, first-order

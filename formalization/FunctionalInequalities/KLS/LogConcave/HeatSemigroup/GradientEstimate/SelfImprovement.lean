@@ -30,7 +30,6 @@ form domain. Mass preservation then gives `integral_norm_gradient_le`.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 
 open MeasureTheory Filter Topology Set

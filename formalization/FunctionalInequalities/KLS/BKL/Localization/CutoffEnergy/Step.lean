@@ -116,7 +116,6 @@ private theorem sqrt_two_mul_aux (x y : ℝ) :
     _ = 2 * (Real.sqrt x * Real.sqrt y) := by
       rw [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
 
-set_option maxHeartbeats 1000000 in
 private theorem inductionMain_zero_le {K : ℝ} (hK : 153 ≤ K)
     {m : ℕ} (hm : 3 ≤ m) :
     inductionMain K m 0 ≤ envelope K m := by
@@ -160,7 +159,6 @@ private theorem exists_positive_small_aux {f : ℝ → ℝ}
   rw [Real.dist_eq, sub_zero, abs_of_pos (by positivity : 0 < η / 2)]
   linarith
 
-set_option maxHeartbeats 1000000 in
 private theorem weightedEnergyIntegral_mono_aux
     {n : ℕ} {μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
     {hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support}
@@ -214,7 +212,6 @@ private theorem weightedEnergyIntegral_mono_aux
   · filter_upwards [] with s hs
     exact ⟨hs.1, hs.2.trans hST⟩
 
-set_option maxHeartbeats 1000000 in
 /--
 **The inductive step of BKL Section 6, (95)–(106), in cutoff form**: under the compact Letwin bound,
 Lemma 5.1

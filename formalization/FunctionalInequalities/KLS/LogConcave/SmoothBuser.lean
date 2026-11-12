@@ -15,7 +15,6 @@ smooth convex potential. No passage to an arbitrary nonsmooth log-concave law is
 
 @[expose] public section
 
-set_option autoImplicit false
 section
 
 open MeasureTheory Set

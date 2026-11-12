@@ -16,8 +16,6 @@ measure, the nonconstant bounded smooth `f = tanh²(√3 y / 2)` satisfies `L f 
 -/
 
 @[expose] public section
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 
 open MeasureTheory
 open scoped ContDiff

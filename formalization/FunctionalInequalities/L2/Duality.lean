@@ -5,7 +5,6 @@ public import Mathlib.MeasureTheory.Function.L2Space
 /-! # Bounded tests for the integral absolute value of an L2 function -/
 
 @[expose] public section
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter
 open scoped RealInnerProductSpace

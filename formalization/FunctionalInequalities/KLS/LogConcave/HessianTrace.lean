@@ -62,7 +62,6 @@ open scoped ContDiff
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-set_option maxHeartbeats 1000000 in
 private theorem variance_matrix_product_hessian_entry_le {n : ℕ}
     {nu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
     {U : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -113,7 +112,6 @@ open scoped ContDiff MatrixOrder
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-set_option maxHeartbeats 4000000 in
 /--
 Weak Hessian trace bound (Letwin arXiv:2607.24164v1 Theorem 2.5, weak C1,1 form): for a normalized
 convex C1 globally

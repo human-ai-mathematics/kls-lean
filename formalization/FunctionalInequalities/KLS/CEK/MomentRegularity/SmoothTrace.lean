@@ -34,7 +34,6 @@ variable (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace
   (hiso : KLS.Isotropic μ)
 include hn hκ hK hKc hKint hW hstrong hμ hiso
 
-set_option maxHeartbeats 1000000 in
 /-- **Smooth regular moment potential with the sharp trace bound, at one witness.** Every field of
 `exists_regular_moment_potential_smooth` in the same order, then the mean-identity field and the
 weak Theorem 2.5 bound

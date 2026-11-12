@@ -14,7 +14,6 @@ fixed-constant bound for the convolution law.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped ContDiff

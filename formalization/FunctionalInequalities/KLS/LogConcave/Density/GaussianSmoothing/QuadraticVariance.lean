@@ -42,7 +42,6 @@ namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 open FunctionalInequalities.Probability.Gaussian
 
-set_option maxHeartbeats 1000000 in
 theorem gaussian_smoothed_quadratic_variance_le_latent_energy {n : ℕ}
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (hLC : FunctionalInequalities.KLS.LogConcave μ) (hfull : Probability.affineSupport μ = ⊤)

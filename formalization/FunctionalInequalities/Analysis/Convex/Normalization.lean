@@ -522,7 +522,6 @@ dimensional radii. -/
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 4000000 in
 /-- **Affine normalisation of convex bodies** (John-type, via a maximal-volume simplex; Caffarelli's
 argument): there is a constant `C` depending only on the space such that every
 compact convex set with nonempty interior is affinely equivalent to a set squeezed between the unit

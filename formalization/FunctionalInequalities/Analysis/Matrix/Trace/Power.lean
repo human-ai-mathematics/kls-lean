@@ -197,7 +197,6 @@ theorem cfc_eq_mul_diagonal_mul {A : Matrix n n ℝ} (hA : A.IsHermitian) (f : �
         (hA.eigenvectorUnitary : Matrix n n ℝ)ᵀ
   rw [hdiag, hstar]
 
-set_option maxHeartbeats 800000 in
 /-- Lee–Vempala (2024), Lemma 42 (Eldan): for a positive definite real matrix `A`, a symmetric
 matrix `Δ` and `α, β ≥ 0`, `Tr(A^α Δ A^β Δ) ≤ Tr(A^{α+β} Δ²)`. -/
 theorem trace_rpow_mul_rpow_mul_le {A Δ : Matrix n n ℝ} (hA : A.PosDef) (hΔ : Δ.IsSymm)

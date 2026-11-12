@@ -325,7 +325,6 @@ open scoped ContDiff Topology
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1000000 in
 /--
 Weak trace contraction of a tested Hessian-type flux identity (Letwin arXiv:2607.24164v1, weak
 counterpart of

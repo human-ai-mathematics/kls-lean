@@ -528,7 +528,6 @@ theorem limsup_ofReal_ballSup_le {u : V → ℝ} {x : V} (hx : DifferentiableAt 
 -- Finite dimensionality is retained explicitly in this Minkowski coarea interface.
 omit [FiniteDimensional ℝ V] in
 -- The ambient SecondCountableTopology parameter is part of this theorem's public scope.
-set_option linter.unusedSectionVars false in
 /-- Minkowski coarea inequality (Ambrosio–Di Marino–Gigli 2017, Lemma 3.2) for a `C¹` Lipschitz
 function, with closed superlevel sets and the Euclidean gradient: `∫ ν⁺({u ≥ t}) dt ≤ ∫ ‖∇u‖ dν`.
 No density is assumed. -/
@@ -538,6 +537,7 @@ theorem lintegral_minkowskiContent_superlevel_le
     (hu : ContDiff ℝ 1 u) {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by
+  let _ := (inferInstance : SecondCountableTopology V)
   classical
   set r : ℕ → ℝ := fun n => 1 / ((n : ℝ) + 1) with hrdef
   have hrpos : ∀ n, 0 < r n := fun n => by

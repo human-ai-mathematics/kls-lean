@@ -221,7 +221,6 @@ end Calculus
 variable {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
   (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
 
-set_option maxHeartbeats 2000000 in
 /--
 **BKL Lemma 4.3, (73), in generator form**: for `m ≥ 3`, every slot `i₀` and directions `h`, the
 generator of

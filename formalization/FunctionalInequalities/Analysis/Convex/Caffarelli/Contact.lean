@@ -637,7 +637,6 @@ section MeasurableSpace
 
 variable [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
 
-set_option maxHeartbeats 4000000 in
 /-- **Caffarelli's contact-set lemma, localised form**: let `C` be the
 compact contact set of a supporting affine function of the convex `u`, `z ∈ C` strictly exposed in
 the unit

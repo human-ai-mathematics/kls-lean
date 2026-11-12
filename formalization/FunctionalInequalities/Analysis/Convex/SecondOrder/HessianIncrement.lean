@@ -415,7 +415,6 @@ private lemma entry_sq_le_sum_sq_add_sum_sq {n : ℕ}
       (Finset.sum_nonneg
         (fun k _ => Finset.sum_nonneg (fun l _ => sq_nonneg (Q k l)))))
 
-set_option maxHeartbeats 800000 in
 /-- The global L2 difference-quotient bound for a compact cutoff times a Hessian entry, with `V`
 convex only on a set `Ω` containing every gradient value `∇u x` (see
 `exists_hessian_cutoff_sq_difference_bound`). -/

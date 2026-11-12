@@ -186,7 +186,6 @@ theorem sum_inner_noiseTensor_self (p : Param n) (r : ℕ)
   rw [Finset.sum_comm]
   rfl
 
-set_option maxHeartbeats 1000000 in
 theorem stdMatrix_conjugatedNoiseOperator (hiso : KLS.Isotropic μ)
     (p : Param n) (k : Fin n) :
     stdMatrix (conjugatedNoiseOperator μ hc p k) =
@@ -251,7 +250,6 @@ theorem isSelfAdjoint_conjugatedNoiseOperator (hiso : KLS.Isotropic μ)
     _ = ⟪P x, D (P y)⟫ := hsD _ _
     _ = ⟪x, P (D (P y))⟫ := hsP _ _
 
-set_option maxHeartbeats 1000000 in
 theorem generator_cumulantEnergy_eq (hiso : KLS.Isotropic μ) {r : ℕ} (hr : 2 ≤ r)
     (u : EuclideanSpace ℝ (Fin n)) (p : Param n) :
     generator μ hc

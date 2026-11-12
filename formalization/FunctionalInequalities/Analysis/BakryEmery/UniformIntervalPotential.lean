@@ -32,8 +32,6 @@ The nonconstant test function for the Lemma A.5 client, `f = tanh²(√3 y / 2)`
 -/
 
 @[expose] public section
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 
 open MeasureTheory
 open scoped ContDiff

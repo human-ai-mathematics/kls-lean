@@ -20,7 +20,6 @@ statement; convergence of laws and geometric/Poincare stability are separate.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set Filter Topology Bornology
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing

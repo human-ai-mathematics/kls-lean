@@ -14,7 +14,6 @@ one-dimensional standard Gaussians. The empty product covers dimension zero.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory
 

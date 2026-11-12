@@ -52,7 +52,6 @@ private theorem proximal_subgradient_monotonicity
   have hc := real_inner_comm (x - x') (z - w)
   linarith
 
-set_option maxHeartbeats 800000 in
 private theorem exists_proximal_minimizer
     [FiniteDimensional ℝ E] {f : E → ℝ}
     (hconv : ConvexOn ℝ univ f) (z : E) :
@@ -90,7 +89,6 @@ private theorem exists_proximal_minimizer
       mul_zero, add_zero] at hxz
     nlinarith
 
-set_option maxHeartbeats 800000 in
 private theorem subgradient_of_proximal_minimizer
     {f : E → ℝ} (hconv : ConvexOn ℝ univ f) {x z : E}
     (hx : ∀ y,

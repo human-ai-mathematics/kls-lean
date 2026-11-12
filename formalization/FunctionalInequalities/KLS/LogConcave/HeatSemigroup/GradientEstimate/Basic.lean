@@ -36,7 +36,6 @@ Outside this module's statements: the `L¹`-type estimate `|T̄P_t f| ≤ P_t |T
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 
 open MeasureTheory Filter Topology Set

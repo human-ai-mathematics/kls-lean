@@ -136,7 +136,6 @@ theorem sum_matrix_product_entry_mul_eq_trace {n : ℕ} (S A D : Matrix (Fin n) 
       rw [hentry]
     _ = _ := by simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm (S * A * S * S * D) S
 
-set_option maxHeartbeats 1000000 in
 /--
 Entrywise inverse-quadratic energies of `S Tₖ S` sum to the trace energy `∑ₖₗ Rₖₗ tr((S S) Tₖ (S S)
 Tₗ)` for symmetric

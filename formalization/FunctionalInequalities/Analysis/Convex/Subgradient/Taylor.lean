@@ -103,7 +103,6 @@ private lemma inner_slope_error
   rw [inner_sub_left, inner_sub_left, map_smul, real_inner_smul_left] at hb
   simpa only [pow_two, mul_assoc] using hb
 
-set_option maxHeartbeats 800000 in
 /-- **First-order expansion of the subdifferential gives a second-order Taylor expansion**
 (Alexandrov's theorem): if every subgradient `q` of the convex `f` at points `y` near `x`
 satisfies `‖q − p − B (y − x)‖ ≤ ε ‖y − x‖`, then

@@ -211,9 +211,7 @@ theorem tendsto_distanceCutoff_indicator (ν : ProbabilityMeasure V) {B : Set V}
 /-! ### The gradient integral of the cutoff -/
 
 -- The reference Haar measure, absolute-continuity premise and ambient structure are retained.
--- The unused explicit `hac` keeps its local unused-variable exception.
 omit [SecondCountableTopology V] [FiniteDimensional ℝ V] in
-set_option linter.unusedVariables false in
 /-- The gradient of the cutoff vanishes at every point of its two constant-value sets and is
 bounded by `1/r` on the open annulus `B^r ∖ closure B`, so
 `∫ ‖∇w_r‖ dν ≤ (ν(B^r) - ν(closure B)) / r`.  This sharpens the Blueprint's
@@ -225,6 +223,7 @@ theorem lintegral_enorm_gradient_distanceCutoff_le
     ∫⁻ x, ‖gradient (distanceCutoff B r) x‖ₑ ∂(ν : Measure V) ≤
       ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) (closure B)) /
         ENNReal.ofReal r := by
+  let _ := hac
   rcases Set.eq_empty_or_nonempty B with rfl | hB
   · -- `Metric.infDist x ∅ = 0`, so the cutoff is the constant `1` and its gradient vanishes.
     have hconst : distanceCutoff (∅ : Set V) r = fun _ : V ↦ (1 : ℝ) := by

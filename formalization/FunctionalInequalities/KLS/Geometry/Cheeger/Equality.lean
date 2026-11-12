@@ -247,10 +247,6 @@ private theorem smoothConstant_mul_lintegral_min_superlevel_le_aux {ν : Probabi
     _ = ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
         (lintegral_enorm_gradient_eq_lintegral_levelSet_density hρ hK).symm
 
--- `hu01` is part of the published interface and fixes the mathematical scope of the statement;
--- the Sard route below needs no bound on the range of `u`, so the linter is silenced instead of
--- the hypothesis being renamed.
-set_option linter.unusedVariables false in
 /-- Weighted coarea and Sard: for a smooth Lipschitz `[0,1]`-valued `u`,
 `h_S ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν`. -/
 theorem smoothConstant_mul_lintegral_min_superlevel_le {ν : ProbabilityMeasure V} {ρ : V → ℝ}
@@ -259,8 +255,9 @@ theorem smoothConstant_mul_lintegral_min_superlevel_le {ν : ProbabilityMeasure 
     smoothConstant ρ (interior (ν : Measure V).support) ν *
         ∫⁻ t in Set.Ioo (0 : ℝ) 1,
           min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
-      ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
-  smoothConstant_mul_lintegral_min_superlevel_le_aux hρ _ hu hK
+      ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by
+  let _ := hu01
+  exact smoothConstant_mul_lintegral_min_superlevel_le_aux hρ _ hu hK
 
 /-! ### The distance cutoff and the balance -/
 

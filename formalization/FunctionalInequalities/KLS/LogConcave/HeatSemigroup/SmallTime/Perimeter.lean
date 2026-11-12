@@ -12,7 +12,6 @@ Both include t=0. No general metric-BV identification or nonsmooth-potential pas
 -/
 
 @[expose] public section
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Topology Set InnerProductSpace
 open scoped ContDiff ENNReal

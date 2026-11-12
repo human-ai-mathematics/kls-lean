@@ -232,7 +232,6 @@ theorem variance_inner {s : ℝ} (hs : 0 < s) (v : E) :
 
 end Moments
 
-set_option maxHeartbeats 800000 in
 /--
 Gaussian integration by parts for C1 bounded globally Lipschitz tests: under `law s` (`s > 0`, all
 dimensions),

@@ -98,7 +98,6 @@ section Diffusion
 variable {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
   [IsProbabilityMeasure P] {N d : ℕ}
 
-set_option maxHeartbeats 1600000 in
 /-- **Dynkin's identity**: for continuous compactly supported coefficients and `C²` `F`, `F(Y_T)` is
 integrable and `E F(Y_T) − F(x₀) = E ∫₀ᵀ 𝓛F(Y_s) ds`. -/
 theorem IsDiffusion.dynkin {W : MultidimBrownianMotion P d}
@@ -331,7 +330,6 @@ private theorem weighted_noise_zero
       Finset.sum_congr rfl fun p _ => (hc p).symm
     _ = 0 := hs.symm.trans h0
 
-set_option maxHeartbeats 1200000 in
 theorem IsDiffusion.ae_linear_eq_integral {W : MultidimBrownianMotion P d}
     {ℱ : Filtration ℝ ‹MeasurableSpace Ω›} {hW : ∀ k, IsBrownianFiltration (W.W k) ℱ}
     {b : (Fin N → ℝ) → Fin N → ℝ} {σ : (Fin N → ℝ) → Fin d → Fin N → ℝ} {x₀ : Fin N → ℝ}

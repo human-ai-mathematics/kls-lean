@@ -211,8 +211,6 @@ open FunctionalInequalities.Analysis
 section
 -- A logarithmic lower bound from limits of integrals.
 
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 open Filter
 open scoped ENNReal Topology
 /-- CEK Proposition12 limit assembly: the actual extended logarithm and real

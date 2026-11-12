@@ -15,7 +15,6 @@ arXiv:2610.05474v1, Section 2, independently of convolution or Poincaré bounds.
 -/
 
 @[expose] public section
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped RealInnerProductSpace

@@ -118,7 +118,6 @@ private theorem inverse_cov_smooth_two (hiso : KLS.Isotropic μ) :
     Isotropic.contDiff_ringInverse_covariance_joint μ hc hiso
   exact h.of_le (WithTop.coe_le_coe.mpr le_top)
 
-set_option maxHeartbeats 1000000 in
 private theorem cov_derivative_symmetric (p v : Param n) (x y : Vec n) :
     ⟪fderiv ℝ (cov μ hc) p v x, y⟫ =
       ⟪x, fderiv ℝ (cov μ hc) p v y⟫ := by
@@ -145,7 +144,6 @@ private theorem cov_derivative_symmetric (p v : Param n) (x y : Vec n) :
       fderiv_clm_comp_apply_vec (entryMap x y) hA v
     _ = ⟪x, fderiv ℝ (cov μ hc) p v y⟫ := rfl
 
-set_option maxHeartbeats 1000000 in
 private theorem cov_vector_generator (hiso : KLS.Isotropic μ) (p : Param n) :
     vectorGenerator (drift μ hc) (noise μ hc) (cov μ hc) p =
       -(cov μ hc p) := by
@@ -254,7 +252,6 @@ theorem opNorm_sq_ringInverse_cov_le_lyapunov (hiso : KLS.Isotropic μ) (p : Par
   unfold lyapunov
   nlinarith [sq_nonneg ‖p.1‖, hsNormSq_nonneg p.2]
 
-set_option maxHeartbeats 1000000 in
 /-- `𝓛 ‖c‖² = 2⟪c, A⁻¹ a⟫ + tr A⁻¹`. -/
 theorem generator_norm_sq_fst (hiso : KLS.Isotropic μ) (p : Param n) :
     generator μ hc (fun q : Param n => ‖q.1‖ ^ 2) p =
@@ -281,7 +278,6 @@ theorem generator_norm_sq_fst (hiso : KLS.Isotropic μ) (p : Param n) :
   rw [← Finset.mul_sum, htr]
   ring
 
-set_option maxHeartbeats 1000000 in
 /-- `𝓛 ‖Q‖²_HS = 2 Σ_j ⟪Q e_j, A⁻¹ e_j⟫` (no noise acts on `Q`). -/
 theorem generator_hsNormSq_snd (hiso : KLS.Isotropic μ) (p : Param n) :
     generator μ hc (fun q : Param n => hsNormSq q.2) p =
@@ -323,7 +319,6 @@ theorem generator_hsNormSq_snd (hiso : KLS.Isotropic μ) (p : Param n) :
   rw [hd]
   ring
 
-set_option maxHeartbeats 1000000 in
 /-- The noise derivative of `tr A⁻¹`: `D(tr A⁻¹)[σ e_k] = −Σ_i ⟪σ e_i, H̃_k σ e_i⟫` with
 `H̃_k = σ (D_cA[σ e_k]) σ`. -/
 theorem fderiv_stdTrace_ringInverse_cov_noise (hiso : KLS.Isotropic μ) (p : Param n)
@@ -361,7 +356,6 @@ theorem fderiv_stdTrace_ringInverse_cov_noise (hiso : KLS.Isotropic μ) (p : Par
       (fderiv ℝ (cov μ hc) p (noise μ hc p k)) (inverseSqrt_cov_props μ hc hiso p).1 hSS
       (EuclideanSpace.basisFun (Fin n) ℝ i)
 
-set_option maxHeartbeats 1000000 in
 /-- `𝓛 tr A⁻¹ = tr A⁻¹ + Σ_k Σ_i ‖H̃_k σ e_i‖²` (BKL (69) and the inverse calculus). -/
 theorem generator_stdTrace_ringInverse_cov (hiso : KLS.Isotropic μ) (p : Param n) :
     generator μ hc (fun q : Param n => stdTrace (Ring.inverse (cov μ hc q))) p =

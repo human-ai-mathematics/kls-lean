@@ -151,7 +151,6 @@ namespace FunctionalInequalities.Analysis
 Letwin2607.24164v1 (2.6). These are scalar weak-calculus supports; they do not
 establish the moment-law evolution, energy comparison, Theorem2.5 or compact8. -/
 
-set_option maxHeartbeats 800000 in
 /-- A compact rough test with two compact L2 weak derivatives admits smooth tests
 with common compact support and simultaneous L2 convergence of those derivatives.
 Supporting density component for Letwin2607.24164v1 (2.6). -/
@@ -392,7 +391,6 @@ private theorem norm_normed_convolution_le_three_mul {n : ℕ}
     _ ≤ 2 * C + C := add_le_add (by simpa only [dist_eq_norm] using hd) (hbound x)
     _ = 3 * C := by ring
 
-set_option maxHeartbeats 1200000 in
 /--
 Support- and radius-controlled form of the bounded all-coordinate approximation: when the supports
 of `η`

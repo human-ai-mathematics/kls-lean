@@ -24,7 +24,6 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
-set_option maxHeartbeats 800000 in
 /-- The interior derivative of the tested nonlinear heat interpolation for arbitrary
 L2 data and a bounded generator-domain test. A C1 potential suffices. -/
 theorem hasDerivAt_integral_operator_comp (hνU : (ν : Measure V) = m.tilted (-U))

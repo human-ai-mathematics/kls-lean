@@ -139,7 +139,6 @@ private theorem sum_weak_hessian_divergence_minus_drift_eq {n : ℕ}
   ring
 
 
-set_option maxHeartbeats 1200000 in
 private theorem ae_hessian_flux_forcing_minus_drift {n : ℕ}
     {u W : EuclideanSpace ℝ (Fin n) → ℝ} {G LF : NNReal}
     (hu : ContDiff ℝ 1 u)
@@ -337,7 +336,6 @@ private theorem integral_exp_neg_flux_of_unweighted {n : ℕ}
     linarith only [hab]
 
 
-set_option maxHeartbeats 1200000 in
 /--
 Weighted weak Hessian evolution (weak Letwin (2.6)): the flux `J` is compact-local L2, the curvature
 and Gram forcing `E = -H + H ∇²W(∇u) H + tr(H⁻¹Tᵢ H⁻¹Tⱼ)` and `e^{-u} E` are locally integrable, and

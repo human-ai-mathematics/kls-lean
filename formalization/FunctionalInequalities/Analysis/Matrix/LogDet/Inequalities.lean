@@ -341,7 +341,6 @@ private lemma frobenius_sub_trace {n : ℕ}
   rw [Matrix.trace_mul_comm B A]
   ring
 
-set_option maxHeartbeats 800000 in
 /-- **Quantitative concavity of `log det`**: for positive definite `A, B ≤ K·Id`,
 `log det B + ‖B − A‖²_F / (2K²) ≤ log det A + tr(A⁻¹ (B − A))`. -/
 theorem log_det_add_frobenius_sq_le {n : ℕ} {A B : Matrix (Fin n) (Fin n) ℝ} {K : ℝ}

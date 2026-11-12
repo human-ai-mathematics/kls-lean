@@ -31,7 +31,6 @@ variable {n : ℕ} (mu : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
   (h4 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 4 (mu : Measure _))
 
 include h4 in
-set_option maxHeartbeats 500000 in
 theorem tendsto_variance_quadratic_matrix_forms
     {seq : ℕ → Matrix (Fin n) (Fin n) ℝ} {A : Matrix (Fin n) (Fin n) ℝ}
     (hseq : Tendsto seq atTop (𝓝 A)) :
@@ -62,7 +61,6 @@ theorem tendsto_variance_quadratic_matrix_forms
   simpa only [Fintype.sum_prod_type, mul_assoc] using h
 
 include h4 in
-set_option maxHeartbeats 500000 in
 theorem symmetric_matrix_variance_bound_of_isUnit (C : ℝ)
     (hBound : ∀ B : Matrix (Fin n) (Fin n) ℝ, B.IsSymm → IsUnit B →
       ProbabilityTheory.variance (fun x : EuclideanSpace ℝ (Fin n) =>
@@ -90,7 +88,6 @@ open scoped RealInnerProductSpace
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
 
-set_option maxHeartbeats 500000 in
 theorem quadratic_variance_le_centered_noise_convolution (mu nu : ProbabilityMeasure E)
     (hmu4 : MemLp (id : E → E) 4 (mu : Measure E))
     (hnu4 : MemLp (id : E → E) 4 (nu : Measure E)) (hmean : (∫ z, z ∂(nu : Measure E)) = 0)

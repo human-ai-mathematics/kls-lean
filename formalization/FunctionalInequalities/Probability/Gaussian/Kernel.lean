@@ -14,7 +14,6 @@ This is shared support for BKL arXiv:2610.05474v1, Section 2 and Theorem 3.1.
 -/
 
 @[expose] public section
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
 open scoped ENNReal

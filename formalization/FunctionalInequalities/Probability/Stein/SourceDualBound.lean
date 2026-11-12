@@ -23,7 +23,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Probability.Stein
 
-set_option maxHeartbeats 400000 in
 /--
 Squared dual bound from a source identity: for a latent L2 field paired with compactly supported
 smooth tests through a

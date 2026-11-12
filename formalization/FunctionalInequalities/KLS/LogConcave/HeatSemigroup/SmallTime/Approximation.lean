@@ -12,7 +12,6 @@ The potential is smooth and convex and the weight is the identity.
 -/
 
 @[expose] public section
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Topology Set
 open FunctionalInequalities.Analysis.Semigroup

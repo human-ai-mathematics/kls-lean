@@ -43,7 +43,6 @@ namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
 open FunctionalInequalities.Probability.Gaussian
 
-set_option maxHeartbeats 800000 in
 theorem gaussian_product_source_stein_pairings_integrable {n : ℕ}
     {u h : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lh : NNReal} (hu : ContDiff ℝ 1 u)
     (hL : LipschitzWith L u) (hG : LipschitzWith G (gradient u))
@@ -144,7 +143,6 @@ open scoped ContDiff RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
-set_option maxHeartbeats 800000 in
 theorem gaussian_product_source_stein_identity {n : ℕ} {u h : EuclideanSpace ℝ (Fin n) → ℝ}
     {L G Lh : NNReal} (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
     (hG : LipschitzWith G (gradient u)) (hnorm : (∫ y, Real.exp (-u y) ∂volume) = 1)
@@ -236,7 +234,6 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
-set_option maxHeartbeats 800000 in
 theorem gaussian_product_compact_dual_bound {n : ℕ}
     (μ ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) {u : EuclideanSpace ℝ (Fin n) → ℝ}
     {L G : NNReal} (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)

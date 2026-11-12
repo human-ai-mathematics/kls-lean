@@ -277,7 +277,6 @@ private lemma trace_spectral_quadratic {n : ℕ}
     _ = _ := by
       simp only [D, Matrix.trace, Matrix.diag, Matrix.diagonal_mul, he]
 
-set_option maxHeartbeats 800000 in
 private lemma second_weight_integrable {n : ℕ}
     {u χ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : Continuous u) (hχ : ContDiff ℝ 2 χ) (hχc : HasCompactSupport χ)
@@ -293,7 +292,6 @@ private lemma second_weight_integrable {n : ℕ}
     exact (hχc.iteratedFDeriv 2).comp_left (g := L) (map_zero L)
   exact (hu.mul hc).integrable_of_hasCompactSupport hs.mul_left
 
-set_option maxHeartbeats 800000 in
 private lemma trace_integral_bound {n : ℕ}
     {u F χ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ u) (hF : Continuous F)

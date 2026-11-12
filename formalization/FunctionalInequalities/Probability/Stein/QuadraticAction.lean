@@ -37,7 +37,6 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 800000 in
 theorem sum_norm_action_spectral_sign_noise {n : ℕ} (M H : Matrix (Fin n) (Fin n) ℝ)
     (hM : M.IsSymm) (hH : H.IsSymm) (hunit : IsUnit M) (t : ℝ) :
     let B : Matrix (Fin n) (Fin n) ℝ := CFC.sqrt (M * M)
@@ -79,7 +78,6 @@ open scoped RealInnerProductSpace MatrixOrder
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-set_option maxHeartbeats 1000000 in
 theorem sum_integral_spectral_noise_energy_le {n : ℕ} {Ω Δ : Type*} [MeasurableSpace Ω]
     [MeasurableSpace Δ] (ρ : Measure Ω) [IsProbabilityMeasure ρ] (γ : Measure Δ)
     [IsProbabilityMeasure γ] (H : Ω → Matrix (Fin n) (Fin n) ℝ)

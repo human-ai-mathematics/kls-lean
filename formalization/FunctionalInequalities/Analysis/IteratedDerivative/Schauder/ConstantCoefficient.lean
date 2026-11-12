@@ -199,7 +199,6 @@ private theorem eq_bilinearComp_symm {E : Type*} [NormedAddCommGroup E] [NormedS
   rw [h]
   simp [ContinuousLinearMap.bilinearComp_apply]
 
-set_option maxHeartbeats 800000 in
 /-- **GT 2001 Lemma 6.1 (p. 88), interior form.** Interior Hessian and Hessian-Hölder estimates on
 `B_R(c)` for `C²` solutions of the constant-coefficient equation `Σ_{ij} A_{ij} D_{ij} u = f` on
 `B_{2R}(c)`, with one constant `C(n, α, λ, Λ)` for `n ≥ 2`, `0 < α < 1` and symmetric `A` with

@@ -64,7 +64,38 @@ private theorem source_energy_bound_of_sigma_bounds {T b : ℝ} {d : ℕ} (hb : 
   rw [heq] at hbβ
   linarith
 
-set_option maxHeartbeats 800000 in
+private theorem joint_cumulant_sum_sq_le {n N d : ℕ} {b : ℝ} (hcb : CumulantBound d b)
+    (hN : 0 < N) (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
+    (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
+    {f : EuclideanSpace ℝ (Fin n) → ℝ} {M β : ℝ} (hβ : 0 < β) (hf : ContDiff ℝ 2 f)
+    (hfM : ∀ x, ‖fderiv ℝ (fderiv ℝ f) x‖ ≤ M) (h110 : β / Real.sqrt N * M ≤ a)
+    (hf2 : MemLp f 2 (hV.law : Measure _))
+    (hf0 : ∫ x, f x ∂(hV.law : Measure _) = 0) (hf1 : ∫ x, f x ^ 2 ∂(hV.law : Measure _) = 1)
+    (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂(hV.law : Measure _) = 0) :
+    (∑ K : Fin d → Option (Fin N × Fin n),
+      cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
+        (Fin.cons (EuclideanSpace.single none 1) fun k => EuclideanSpace.single (K k) 1) ^ 2) ≤ b := by
+  classical
+  let ν : ProbabilityMeasure (JointSpace N n) :=
+    ⟨jointLaw (hV.law : Measure _) f β (sigma β) N,
+      isProbabilityMeasure_jointLaw_of_pos (hV.law : Measure _) hf.continuous.measurable hβ
+        (sigma β) N⟩
+  have hisoν : KLS.Isotropic ν :=
+    isotropic_jointLaw hN (hV.law : Measure _) hiso.memLp_two hiso.mean_zero
+      hiso.integral_inner_mul_inner hf.continuous.measurable hf2 hf0 hf1 hfx hβ
+  have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  have hlcν : KLS.LogConcave ν :=
+    logConcave_jointLaw V f hβ hV2 hf hV.lower hfM h110 hV.integrable_exp_neg ν.prop
+  simpa only [ν, ProbabilityMeasure.coe_mk, EuclideanSpace.basisFun_apply, PiLp.norm_single,
+    norm_one, one_pow, mul_one] using
+    cumulantBound_jointSpace hcb hisoν hlcν (EuclideanSpace.single none 1)
+
+private theorem le_mul_div_of_div_mul_le {a s t b : ℝ} (ha : 0 < a) (hs : 0 < s)
+    (h : a / s * t ≤ b) : t ≤ s * b / a := by
+  rw [div_mul_eq_mul_div, div_le_iff₀ hs] at h
+  apply (le_div_iff₀ ha).mpr
+  simpa only [mul_comm] using h
+
 private theorem taylor_energy_le_sigma_sq_mul_cumulant_bound {d : ℕ} (hd : 1 ≤ d) {b : ℝ}
     (hcb : CumulantBound d b) {n : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
@@ -78,43 +109,13 @@ private theorem taylor_energy_le_sigma_sq_mul_cumulant_bound {d : ℕ} (hd : 1 �
   classical
   have hM : 0 ≤ M := (norm_nonneg (fderiv ℝ (fderiv ℝ f) 0)).trans (hfM 0)
   obtain ⟨N, hN, h110⟩ := exists_copies hV.pos hβ.le hM
-  let ν : ProbabilityMeasure (JointSpace N n) :=
-    ⟨jointLaw (hV.law : Measure _) f β (sigma β) N,
-      isProbabilityMeasure_jointLaw_of_pos (hV.law : Measure _) hf.continuous.measurable hβ
-        (sigma β) N⟩
-  have hisoν : KLS.Isotropic ν :=
-    isotropic_jointLaw hN (hV.law : Measure _) hiso.memLp_two hiso.mean_zero
-      hiso.integral_inner_mul_inner hf.continuous.measurable hf2 hf0 hf1 hfx hβ
-  have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
-  have hlcν : KLS.LogConcave ν :=
-    logConcave_jointLaw V f hβ hV2 hf hV.lower hfM h110 hV.integrable_exp_neg ν.prop
-  have hhigh := cumulantBound_jointSpace hcb hisoν hlcν (EuclideanSpace.single none 1)
-  have hhigh' :
-    (∑ K : Fin d → Option (Fin N × Fin n),
-        cumulant (jointLaw (hV.law : Measure _) f β (sigma β) N) (d + 1)
-            (Fin.cons (EuclideanSpace.single none 1) fun k => EuclideanSpace.single (K k) 1) ^
-          2) ≤
-      b := by
-    simpa only [ν, ProbabilityMeasure.coe_mk, EuclideanSpace.basisFun_apply, PiLp.norm_single,
-      norm_one, one_pow, mul_one] using hhigh
   have hσ : 0 < sigma β := Real.sqrt_pos.mpr (by positivity)
-  have hlow :=
-    sum_sq_cumulant_ge_of_entries hN (jointLaw (hV.law : Measure _) f β (sigma β) N)
-      (hV.law : Measure _) f hσ hd
-      (fun I J => cumulant_jointLaw_none_entries hN V hV hβ hf hfM h110 hd I J)
-  have hbound := hlow.trans hhigh'
+  have hentries := cumulant_jointLaw_none_entries hN V hV hβ hf hfM h110 hd
+  have hlow := sum_sq_cumulant_ge_of_entries hN (jointLaw (hV.law : Measure _) f β (sigma β) N)
+    (hV.law : Measure _) f hσ hd hentries
+  have hhigh := joint_cumulant_sum_sq_le hcb hN V hV hiso hβ hf hfM h110 hf2 hf0 hf1 hfx
   have hfac : 0 < (d.factorial : ℝ) ^ 2 := by positivity
-  have hσsq : 0 < sigma β ^ 2 := pow_pos hσ 2
-  have hbound' :
-    (d.factorial : ℝ) ^ 2 *
-        ‖coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
-              (taylorTensor (hV.law : Measure _) f d)‖ ^
-          2 ≤
-      b * sigma β ^ 2 := by
-    apply (div_le_iff₀ hσsq).mp
-    simpa only [div_mul_eq_mul_div] using hbound
-  apply (le_div_iff₀ hfac).mpr
-  nlinarith only [hbound']
+  exact le_mul_div_of_div_mul_le hfac (pow_pos hσ 2) (hlow.trans hhigh)
 
 /--
 **BKL (113) for `f ∈ C²` with bounded Hessian satisfying (108)**: under `CumulantBound d b`, for an
@@ -177,8 +178,6 @@ end NormedSpace
 
 /-! Smooth affine-orthogonal approximants for BKL p. 30. The approximation is derived
 from Mathlib smooth compact-support density, not assumed as a field. -/
-
-set_option autoImplicit false
 
 open MeasureTheory FunctionalInequalities.L2
 open scoped ContDiff RealInnerProductSpace

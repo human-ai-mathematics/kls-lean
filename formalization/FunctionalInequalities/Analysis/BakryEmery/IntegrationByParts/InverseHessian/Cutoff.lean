@@ -35,8 +35,6 @@ pointwise defect bound and one scalar monotonicity step.
 -/
 
 @[expose] public section
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 
 section
 open MeasureTheory

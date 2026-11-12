@@ -145,10 +145,6 @@ theorem measurable_min_measure_superlevel (ν : ProbabilityMeasure V) (u : V →
 
 /-! ### The integrated coarea bound -/
 
--- `hu01` is part of the original statement and fixes its mathematical scope; the proof needs only
--- the restriction of the level integral to `Ioo 0 1`, so the hypothesis stays in the signature and
--- the linter is silenced instead of the statement being narrowed.
-set_option linter.unusedVariables false in
 /-- Consequence for `h_M`: `h_M ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν` for a `C¹` Lipschitz
 `[0,1]`-valued `u` (open and closed superlevel sets have the same mass for almost every `t`). -/
 theorem minkowskiConstant_mul_lintegral_min_superlevel_le (ν : ProbabilityMeasure V) {u : V → ℝ}
@@ -158,6 +154,7 @@ theorem minkowskiConstant_mul_lintegral_min_superlevel_le (ν : ProbabilityMeasu
         ∫⁻ t in Set.Ioo (0 : ℝ) 1,
           min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
       ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by
+  let _ := hu01
   have humeas : Measurable u := hu.continuous.measurable
   have hpt : ∀ᵐ t ∂(volume : Measure ℝ),
       minkowskiConstant ν *

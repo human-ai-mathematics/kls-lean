@@ -314,7 +314,6 @@ private lemma slot_derivative_sum
     _ = -inner T (actSum M T) := by
       simp only [inner, Finset.sum_neg_distrib]
 
-set_option maxHeartbeats 800000 in
 /--
 **BKL (88), first order, along the line**: `d/dε F(1 + εH, T + εX)|₀ = 2⟨T, X⟩ − ⟨T, Σ_H T⟩`. -/
 theorem hasDerivAt_energyForm_line (T : (Fin r → Fin n) → ℝ)
@@ -389,7 +388,6 @@ theorem hasDerivAt_energyForm_line (T : (Fin r → Fin n) → ℝ)
   convert h using 1
   rfl
 
-set_option maxHeartbeats 800000 in
 /-- **BKL (88), first order**: `DF(Id, T)[(H, X)] = 2⟨T, X⟩ − ⟨T, Σ_H T⟩`. -/
 theorem fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
     (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (X : (Fin r → Fin n) → ℝ) :
@@ -608,7 +606,6 @@ theorem hasDerivAt_deriv_inner_ringInverse_one_add
     inverse_entry_second H (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
       (EuclideanSpace.basisFun (Fin n) ℝ k)
 
-set_option maxHeartbeats 800000 in
 /-- The second directional derivative is the second derivative along the line. -/
 theorem fderiv_fderiv_apply_eq_deriv_deriv_line {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
     {Φ : W → ℝ} {y : W} (hΦ : ContDiffAt ℝ 2 Φ y) (v : W) :
@@ -876,7 +873,6 @@ private lemma inner_H_H (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace
 
 /-! ### The second derivative along the line -/
 
-set_option maxHeartbeats 1600000 in
 /-- **BKL (88), second order, along the line**: for symmetric `H`,
 `d²/dε² F(1 + εH, T + εX)|₀ = 2 (|X|² − 2⟨X, Σ_H T⟩ + ½|Σ_H T|² + ½ Σ_s |H^{(s)} T|²)`. -/
 theorem deriv_deriv_energyForm_line (T : (Fin r → Fin n) → ℝ)

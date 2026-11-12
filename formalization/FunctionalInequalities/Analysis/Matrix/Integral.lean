@@ -182,7 +182,6 @@ section MeanIdentity
 
 open MeasureTheory Matrix
 
-set_option maxHeartbeats 400000 in
 theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω] [Fintype ι]
     [DecidableEq ι] (ρ : Measure Ω) (H : Ω → Matrix ι ι ℝ)
     (hInt : ∀ i j, Integrable (fun y => H y i j) ρ)

@@ -44,7 +44,6 @@ private theorem hessian_pairing_eq_coordinate_quadratic {n : ℕ}
   change (fun i => v i) ⬝ᵥ star (hessianMatrix U x *ᵥ (fun i => v i)) = _
   simp only [star_trivial]
 
-set_option maxHeartbeats 2000000 in
 /--
 Weak compact variational estimate: the C1,1 sibling of `compact_variational_estimate` for a globally
 bounded
@@ -139,7 +138,6 @@ theorem compact_weak_variational_estimate {n : ℕ}
   dsimp only [dv, dotProduct] at hyoung hcoer ⊢
   linarith only [hyoung, hcoer]
 
-set_option maxHeartbeats 2000000 in
 /--
 Weak finite-energy scalar Brascamp–Lieb inequality (Letwin arXiv:2607.24164v1 Lemma A.6 at C^{1,1}):
 for a

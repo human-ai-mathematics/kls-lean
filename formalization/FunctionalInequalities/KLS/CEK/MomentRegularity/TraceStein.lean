@@ -529,7 +529,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 800000 in
 private theorem trace_conservativity {u : EuclideanSpace ℝ (Fin n) → ℝ} {L LF : NNReal}
     {T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ}
     (hκ : 0 < κ) (hW : ContDiff ℝ ∞ W)
@@ -654,7 +653,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1000000 in
 /--
 Weak half-trace tensor energy at one regular moment witness (Letwin arXiv:2607.24164v1 (2.14), weak
 form): with the
@@ -770,7 +768,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1000000 in
 private theorem positive_trace_bound {u : EuclideanSpace ℝ (Fin n) → ℝ} {L LF : NNReal}
     {T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ}
     (hbase : MomentTraceData W κ μ u L LF T)
@@ -802,7 +799,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1000000 in
 private theorem symmetric_trace_bound {u : EuclideanSpace ℝ (Fin n) → ℝ} {L LF : NNReal}
     {T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ}
     (hbase : MomentTraceData W κ μ u L LF T)
@@ -833,7 +829,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1000000 in
 private theorem weighted_weak_pairing {u : EuclideanSpace ℝ (Fin n) → ℝ} {L LF : NNReal}
     {T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ}
     (hbase : MomentTraceData W κ μ u L LF T) :
@@ -858,7 +853,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-set_option maxHeartbeats 1000000 in
 /-- Weak source Stein coupling at one regular moment witness: at the same `u`, `L`, `LF`, `T` the
 whole payload (cutoff testing,
 trace contraction, conservativity, half energy, all-symmetric Theorem 2.5 trace bound and
@@ -1143,7 +1137,6 @@ open scoped ContDiff
 namespace FunctionalInequalities.Analysis
 
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
-set_option maxHeartbeats 1000000 in
 /--
 The properties of one actual regular moment witness used by the Letwin regular-class assembly, as a
 flat conjunction at

@@ -17,7 +17,6 @@ functions. The proof approximates compact indicators and uses inner regularity.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Filter Metric Function Set TopologicalSpace
 open scoped Topology ContDiff Manifold

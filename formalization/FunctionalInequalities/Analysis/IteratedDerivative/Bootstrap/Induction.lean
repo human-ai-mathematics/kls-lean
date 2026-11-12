@@ -273,7 +273,6 @@ private lemma local_linear_schauder_data (hn : 2 ≤ n)
     hg.1 hsym hellc haN hahol hbN hbdN hbhol hgN hghol hwN hw2N hw2hol
     (fun x hx => heq x)
 
-set_option maxHeartbeats 1600000 in
 /-- Interior Schauder regularity through every finite derivative order, at the given solution. -/
 theorem locHolderDeriv_succ_succ_succ_of_linear_equation (hn : 2 ≤ n) (m : ℕ)
     {w g : E → ℝ} {a : Fin n → Fin n → E → ℝ} {b : Fin n → E → ℝ}

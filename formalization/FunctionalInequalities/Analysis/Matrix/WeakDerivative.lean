@@ -302,7 +302,6 @@ private theorem matrix_product_entry_eq_sum {n : ℕ} (S A : Matrix (Fin n) (Fin
   intro b _
   ring
 
-set_option maxHeartbeats 1000000 in
 /--
 For a constant real matrix `S` and a matrix field `H` with globally bounded entries and
 compact-local L2 weak entry

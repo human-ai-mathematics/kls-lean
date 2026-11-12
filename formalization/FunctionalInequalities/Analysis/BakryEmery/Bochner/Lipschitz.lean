@@ -278,7 +278,6 @@ theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (
     exact (mixed_integral_identity hU ((hV k).of_le (by decide)) hf hfc).symm
   exact tendsto_nhds_unique hlimit hH
 
-set_option maxHeartbeats 2000000 in
 /--
 Ordinary diffusion coercivity at `C^{1,1}`: for a C1 globally Lipschitz potential `U` with Lipschitz
 gradient and

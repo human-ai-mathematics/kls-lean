@@ -37,8 +37,6 @@ namespace FunctionalInequalities.Analysis
 
 section NearMaximizer
 
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 open Set
 
 /-- Actual affine terms that approach the finite conjugate value concentrate
@@ -246,8 +244,6 @@ end NearMaximizer
 
 section Variation
 
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 open Set
 
 /-- Direct first variation of the Legendre transform under a bounded continuous

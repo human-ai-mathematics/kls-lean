@@ -91,10 +91,8 @@ private theorem isBorellDensity_sliceKernel {m : Measure E} [Measure.IsAddHaarMe
       ENNReal.ofReal_toReal hb.2.ne, ConditionalFiber.sliceDensity, ENNReal.div_eq_inv_mul]
 
 -- The corollary block retains admissibility and ambient structure in its shared interface.
--- The unused explicit `hρ` keeps its local unused-variable exception.
 omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
   [SecondCountableTopology E] [FiniteDimensional ℝ E] μ ρ in
-set_option linter.unusedVariables false in
 /-- Blueprint: "Fubini disintegration of the log-concave density gives conditional densities
 proportional to `t ↦ ρ_μ(z + tθ)` wherever the normalizing slice integral is finite and positive.
 These densities are log-concave. The remaining fibers are null." The chosen disintegration kernel
@@ -107,6 +105,7 @@ theorem ae_conditionalFiber_logConcave
     (m : Measure E) [Measure.IsAddHaarMeasure m] (hac : (μ : Measure E) ≪ m) :
     ∀ᵐ b ∂baseLaw μ ρ,
       LogConcave (⟨kernel μ ρ b, inferInstance⟩ : ProbabilityMeasure ℝ) := by
+  let _ := hρ
   obtain ⟨p, hp⟩ := hμ.exists_isBorellDensity_of_interior_support_nonempty m
     (hμ.interior_support_nonempty_of_affineSupport_eq_top
       (ConditionalFiber.affineSupport_eq_top_of_absolutelyContinuous μ m hac)) hac

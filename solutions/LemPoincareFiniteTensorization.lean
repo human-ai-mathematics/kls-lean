@@ -29,9 +29,6 @@ conclusions directly from this reusable API.
 
 @[expose] public section
 
-set_option pp.universes true
-set_option format.width 100
-
 #check @FunctionalInequalities.Poincare.SmoothTest.contDiff_comp_projection
 #check @FunctionalInequalities.Poincare.SmoothTest.gradient_comp_projection
 #check @FunctionalInequalities.Poincare.SmoothTest.norm_gradient_comp_projection
@@ -85,8 +82,6 @@ eight former Euclidean statements. Each expression binds every assumption explic
 printed type exposes the complete statement. Their sources are the reusable declarations named
 in each expression; the applications create no additional public declarations or certificates.
 -/
-
-set_option pp.funBinderTypes true
 
 open MeasureTheory
 open FunctionalInequalities
@@ -291,7 +286,6 @@ theorem certificate :
 
 end Solutions.LemPoincareFiniteTensorization
 
-set_option pp.universes false in
 /--
 info: 'Solutions.LemPoincareFiniteTensorization.certificate' depends on axioms: [propext,
 Classical.choice, Quot.sound]

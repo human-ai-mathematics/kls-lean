@@ -97,7 +97,6 @@ private theorem hasWeakDerivAlong_neg_add_sum {n m : ℕ}
   simpa only [Fintype.sum_option, F, D, c, one_mul, neg_one_mul] using h
 
 
-set_option maxHeartbeats 800000 in
 /--
 Weak derivative of the right-hand side `-∂ᵢu + Σₐ Hᵢₐ ∂ₐW(∇u)` of the first weak Monge–Ampère
 identity
@@ -183,7 +182,6 @@ open FunctionalInequalities.Probability.Stein
 open scoped ContDiff RealInnerProductSpace Topology
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 800000 in
 /--
 Compact-local L2 Hessian flux `Jᵢⱼₐ = Σ_b (H⁻¹)_{ba} T_{bij}` and local integrability of the trace
 forcing `Cᵢⱼ` from compact-local L2 tensor and inverse-derivative data and compact-local inverse
@@ -286,7 +284,6 @@ section ArrayPairBalance
 open MeasureTheory
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1200000 in
 /-- Finite integral balance of paired integrable arrays; one-use support of the flux identity. -/
 private theorem integral_array_pair_balance {n : ℕ}
     (A B C D : Fin n → Fin n → EuclideanSpace ℝ (Fin n) → ℝ)
@@ -607,7 +604,6 @@ private theorem integrable_compact_continuous_mul_of_local_memLp_two {n : ℕ}
       hχ hχc
 
 
-set_option maxHeartbeats 1200000 in
 /-- Unweighted weak Hessian flux identity: for every compactly supported C1 `ψ`,
 `∫ Σₐ Jᵢⱼₐ ∂ₐψ = -∫ Cᵢⱼ ψ`, with `J` compact-local L2 and `C` locally integrable, from a C1
 potential

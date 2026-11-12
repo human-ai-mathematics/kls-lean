@@ -128,8 +128,6 @@ end BoundedPerturbation
 
 section FiniteCurve
 
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
 open Set
 
 /-- A bounded real perturbation produces a finite real Legendre curve and its

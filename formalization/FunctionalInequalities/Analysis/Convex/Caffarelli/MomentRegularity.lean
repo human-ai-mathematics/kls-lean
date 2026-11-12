@@ -151,7 +151,6 @@ section InnerProduct
 variable {E : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-set_option maxHeartbeats 800000 in
 /-- **The moment potential is `C¹`**: a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient
 pushes
 `e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous)

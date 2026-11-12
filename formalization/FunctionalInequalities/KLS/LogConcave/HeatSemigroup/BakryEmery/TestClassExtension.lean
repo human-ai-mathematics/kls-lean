@@ -30,7 +30,6 @@ or KLS statement is made.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 
 open MeasureTheory Filter Topology

@@ -24,7 +24,6 @@ open FunctionalInequalities.Analysis.BakryEmery
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 1000000 in
 /--
 Rough integration by parts for the ordinary weighted Laplacian at a C1 potential with mass-one
 exponential

@@ -504,8 +504,6 @@ end FiniteIndex
 /-! Local symmetry and the mixed-derivative bridge in BKL (112).
 The function is smooth on an open neighborhood, not on the whole ambient space. -/
 
-set_option autoImplicit false
-
 open Filter Set
 open scoped ContDiff Topology
 

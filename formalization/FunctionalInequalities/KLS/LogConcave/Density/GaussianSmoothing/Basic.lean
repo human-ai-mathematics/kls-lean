@@ -25,7 +25,6 @@ individual-domain perimeter convergence.
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set
 open scoped ENNReal
@@ -718,8 +717,6 @@ section AllOrderRegularity
 
 open Filter Topology
 open scoped ContDiff
-
-set_option backward.isDefEq.respectTransparency false
 
 private theorem pow_mul_exp_neg_sq_bounded (b : ℝ) (hb : 0 < b) (n : ℕ) :
     ∃ C : ℝ, ∀ r : ℝ, 0 ≤ r → r ^ n * Real.exp (-b * r ^ 2) ≤ C := by

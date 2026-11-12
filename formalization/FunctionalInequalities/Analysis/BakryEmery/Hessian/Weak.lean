@@ -473,7 +473,6 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Probability.Stein
 
-set_option maxHeartbeats 400000 in
 /--
 C1 counterpart of `chain_coordinate`: for C1 `u`, `f` and a point where `∇u` is differentiable, the
 coordinate derivative of

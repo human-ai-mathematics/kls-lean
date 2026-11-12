@@ -17,7 +17,6 @@ energy derivative extend the result from generator-domain data to arbitrary L2 d
 
 @[expose] public section
 
-set_option autoImplicit false
 noncomputable section
 open MeasureTheory Set InnerProductSpace
 open FunctionalInequalities.Analysis.Semigroup

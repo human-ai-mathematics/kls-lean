@@ -32,7 +32,6 @@ open scoped Convolution ContDiff ENNReal RealInnerProductSpace Topology
 namespace FunctionalInequalities.Analysis
 
 
-set_option maxHeartbeats 800000 in
 /-- Scalar weak product rule: global L2 factors and directional derivatives
 produce a locally integrable product and its actual weak derivative. -/
 theorem HasWeakDerivAlong.mul_of_memLp_two {E : Type*} [NormedAddCommGroup E]

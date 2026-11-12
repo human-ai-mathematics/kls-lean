@@ -36,7 +36,6 @@ namespace FunctionalInequalities.Analysis
 Letwin2607.24164v1 (2.6). These are scalar weak-calculus supports; they do not
 establish the moment-law evolution, energy comparison, Theorem2.5 or compact8. -/
 
-set_option maxHeartbeats 800000 in
 /-- Compact rough H1 tests preserve the curl identity of two weak derivatives
 of the same scalar function. Supporting interface for Letwin2607.24164v1 (2.6). -/
 theorem integral_weakDeriv_mul_eq_swap {n : ℕ}
@@ -646,7 +645,6 @@ open FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
 namespace FunctionalInequalities.Analysis
 
-set_option maxHeartbeats 800000 in
 /-- The integral of a globally integrable weak directional derivative is zero.
 This is the cutoff lemma used for Letwin arXiv:2607.24164v1 (2.1)/Lemma2.7. -/
 theorem integral_eq_zero_of_integrable_weak_derivative {n : ℕ}
