@@ -32,7 +32,7 @@ The proof packages use Lean/Mathlib v4.35.0; the Formal Conjectures statement us
 Publication updates do not change the mathematical declarations or internal certificate states.
 See the [pre-extension base-selection review](research/progress/2026-10-31-palomar-publication-review.json).
 The original KLS checkout and accepted preparation worktree remain preserved. The 33 paused Mathlib proposal files are excluded from this publication.
-Next step: respond to upstream review of Formal Conjectures PR #7712. Its main statement now links to the registered Palomar version-2 proof.
+Next step: await maintainer CI approval and review of Formal Conjectures PR #7712, now placed in the Randomstrasse 101 collection as Problem 30. The CLA check has passed, and the main statement links to the registered Palomar version-2 proof.
 The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/actions/runs/41625639426) and [Palomar mechanical verification](https://github.com/PalomarRegistry/PalomarSubmission/actions/runs/41631278646) passed for both endpoints at `e60bc39b18ef691263c66e2dba8d64726f18060d`. [Palomar version 2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2) was registered on 2026-11-07 after the automated editorial review identified no blocking problems or warnings.
 <!-- END CURRENT MAINTENANCE -->
 
@@ -43,8 +43,11 @@ The [official full preflight](https://github.com/human-ai-mathematics/kls-lean/a
   `e60bc39b18ef691263c66e2dba8d64726f18060d`. The
   [Palomar submission guide](integrations/palomar/README.md) records their scope and evidence.
 - [Formal Conjectures PR #7712](https://github.com/google-deepmind/formal-conjectures/pull/7712)
-  is open for upstream review. Its [submission inputs](integrations/palomar/formal-conjectures/README.md)
-  pin Lean v4.33.1 and use a deliberate statement placeholder.
+  is open at `9bb8202ff1cd8c97d1c28619e56a8b643ae96de5`. A maintainer reopened it for the
+  Randomstrasse 101 collection, and the statement now lives in `FormalConjectures/Randomstrasse`;
+  maintainer approval of the upstream CI runs and review are pending. Its
+  [submission inputs](integrations/palomar/formal-conjectures/README.md) pin Lean v4.33.1 and use a
+  deliberate statement placeholder.
 - The [verification guide](research/verification.md) covers strict builds, declaration audits,
   kernel replay and metadata checks. The [OpenAI](integrations/openai/README.md) and
   [Palomar](integrations/palomar/README.md#checking) guides give the separate bridge and Comparator

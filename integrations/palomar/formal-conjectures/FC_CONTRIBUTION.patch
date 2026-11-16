@@ -1,8 +1,8 @@
-diff --git a/FormalConjectures/Arxiv/2610.05474/KLS.lean b/FormalConjectures/Arxiv/2610.05474/KLS.lean
+diff --git a/FormalConjectures/Randomstrasse/KLS.lean b/FormalConjectures/Randomstrasse/KLS.lean
 new file mode 100644
 --- /dev/null
-+++ b/FormalConjectures/Arxiv/2610.05474/KLS.lean
-@@ -0,0 +1,137 @@
++++ b/FormalConjectures/Randomstrasse/KLS.lean
+@@ -0,0 +1,139 @@
 +/-
 +Copyright 2026 The Formal Conjectures Authors.
 +
@@ -25,11 +25,13 @@ new file mode 100644
 +/-!
 +# The Kannan--Lovász--Simonovits inequality
 +
-+The dimension-free Poincaré bound for isotropic log-concave probability densities,
-+on the locally Lipschitz $L^2$ test class of Bizeul–Klartag–Lehec, Theorem 1.1.
++This file states the Poincaré formulation of Problem 30 for isotropic log-concave
++probability densities, using the locally Lipschitz $L^2$ test class of
++Bizeul–Klartag–Lehec, Theorem 1.1.
 +The squared-gradient energy is an extended nonnegative integral and may be infinite.
 +
 +*References:*
++- [Randomstrasse 101, Problem 30](https://randomstrasse101.math.ethz.ch/posts/KLSConjecture/).
 +- [BKL26] Pierre Bizeul, Boaz Klartag and Joseph Lehec,
 +  *Presenting a proof of the Kannan-Lovász-Simonovits conjecture*,
 +  [arXiv:2610.05474v1](https://arxiv.org/abs/2610.05474v1), Theorem 1.1.
@@ -140,3 +142,15 @@ new file mode 100644
 +  simpa [variance, expectation, h.mean_zero, pow_two] using h.second_moment i i
 +
 +end KannanLovaszSimonovits
+diff --git a/FormalConjectures/Randomstrasse/README.md b/FormalConjectures/Randomstrasse/README.md
+new file mode 100644
+--- /dev/null
++++ b/FormalConjectures/Randomstrasse/README.md
+@@ -0,0 +1,7 @@
++# Randomstrasse 101
++
++This directory contains formal statements of problems from [Randomstrasse 101](https://randomstrasse101.math.ethz.ch/).
++
++| Problem | Lean file | Status |
++| --- | --- | --- |
++| [30. The KLS Conjecture](https://randomstrasse101.math.ethz.ch/posts/KLSConjecture/) | [KLS.lean](KLS.lean) | Solved |

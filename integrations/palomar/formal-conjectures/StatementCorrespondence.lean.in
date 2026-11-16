@@ -1,4 +1,4 @@
-import FormalConjectures.Arxiv.«2610.05474».KLS
+import FormalConjectures.Randomstrasse.KLS
 import Lean
 
 /-! Correspondence audit at FC Lean4.33.1 using the exact ordinary Palomar definition blocks.
