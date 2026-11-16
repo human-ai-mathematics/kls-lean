@@ -1,8 +1,7 @@
 # kls-lean
 
-A Lean 4 library for **Poincaré inequalities, log-concave measures and stochastic
-localization**. It develops reusable analysis and probability tools around published
-literature, with the dimension-free Kannan–Lovász–Simonovits (KLS) bound as a main application.
+Lean 4 formalization of the dimension-free Kannan–Lovász–Simonovits (KLS) bound,
+following the proof of Bizeul, Klartag, and Lehec.
 
 [Getting started](examples/FIRST-USE.md) · [Examples](examples/README.md) · [API](formalization/API.md) · [Proof path](research/progress/PROOF-PATH.md) · [Verification](research/verification.md)
 
@@ -90,25 +89,6 @@ Also formalized:
 The [literature register](research/progress/LITERATURE.md) records exact hypotheses,
 supporting results and paper coverage. The four [exploratory routes](research/progress/README.md#proof-progress-tree)
 are historical research records with their own open hypotheses and local proof statuses.
-
-## Related formalizations
-
-This historical table compares public theorem endpoints at versions checked on **2026-10-20**;
-the other repositories have not been rechecked for this candidate.
-On narrow screens, scroll the table horizontally.
-
-| | kls-lean | [KLS500](https://github.com/HongruZhao/KLS500/tree/c1a50992a81456849996deef2971d4a0b3190bdd) | [KLS15](https://github.com/HongruZhao/KLS15/tree/fe59199e9c039a79a436daa939f79662df2596da) |
-| --- | --- | --- | --- |
-| Poincaré bound | Finite universal constant; no numerical value | ≤ 500; also a Cheeger bound | ≤ 15 |
-| Main endpoint scope | Covariance-normalized; all `n ≥ 0`, including singular affine supports | Isotropic log-concave laws, `n ≥ 1` | Isotropic log-concave laws, `n ≥ 1` |
-| Exact OpenAI statement | [Proved](integrations/openai/README.md) | Proved | Proved |
-| Main proof source | BKL, finite-horizon cutoff route | BKL and Song–Zhang | Balasubramanian–Kasiviswanathan v2 |
-| Comparator (historical) | Linux sandbox pass reported at `2639e79`, not this candidate | Not run | Not run |
-
-Comparator entries follow the pinned verification notes and reports of that date. The reported
-kls-lean pass covers only `2639e79`; this candidate needs its own exact-commit run.
-[Pinned comparison details](research/progress/formalization-comparison.md) record sources,
-shared dependencies and verification scope. KLS15 continues KLS500.
 
 ## Build and verify
 

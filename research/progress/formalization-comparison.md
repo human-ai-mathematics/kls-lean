@@ -2,8 +2,8 @@
 
 Checked 2026-10-20 against the default-branch source revisions below. This is a source and
 documentation comparison of public endpoints. No third-party repository was rebuilt or
-independently certified in this review. The root [README](../../README.md#related-formalizations)
-keeps the compact table; the [literature register](LITERATURE.md) owns our paper coverage.
+independently certified in this review. The [literature register](LITERATURE.md) records
+our paper coverage.
 
 ## Inspected revisions and endpoints
 
