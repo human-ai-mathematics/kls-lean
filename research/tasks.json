@@ -607,7 +607,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator/InteriorRegularity.lean",
-            "sha256": "4680c065120b084c14e9e0978750b8ebba356f094aaed4d876673a5fc76c608d"
+            "sha256": "41c89d7ea9333430761f0194910ba535c9b160d6580c6281a2fa84a045f3836a"
           },
           {
             "path": "research/audits/BakryEmery/InteriorRegularityAudit.lean",
@@ -3431,7 +3431,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -3887,7 +3887,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -4407,7 +4407,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -4795,7 +4795,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5063,7 +5063,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5487,7 +5487,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5527,7 +5527,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5615,7 +5615,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -5815,7 +5815,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
@@ -6195,7 +6195,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
-            "sha256": "79f918281fa71cef23e4ecc6d4397558b44703652130d86a8ebbaa9718f9484b"
+            "sha256": "f07ab6b7d160f04d5ff18afc23f789fb5732769f31f0c4a468cf884fd90dbf41"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",

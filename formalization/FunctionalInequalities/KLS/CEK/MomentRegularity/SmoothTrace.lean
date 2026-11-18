@@ -85,10 +85,11 @@ theorem exists_regular_moment_potential_smooth_trace :
           ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
         (∫ x, (B * hessianMatrix u x * B * hessianMatrix u x).trace
           ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) ≤ 2 * (B * B).trace) := by
-    obtain ⟨u, L, LF, T, hCanonical⟩ :=
+    obtain ⟨u, L, LF, T, ⟨hStages, _hPairing⟩, _hStein⟩ :=
       exists_regular_moment_weak_stein_coupling hn hκ hK hKc hKint hW hstrong μ hμ hiso
-    have hT25 := hCanonical.1.1.2
-    obtain ⟨hbase, _hcutoffs⟩ := hCanonical.1.1.1.1.1.1
+    -- Extract the trace bound and the weak regularity data from the same witness.
+    obtain ⟨⟨⟨⟨⟨hbase, _hCutoffs⟩, _hContraction⟩, _hConservativity⟩, _hEnergy⟩, hT25⟩ :=
+      hStages
     obtain
       ⟨hconv, hl, hnorm, hmap, hC1, hG, hF, _hw, hd, hT, _he, hfirst, hInv, hmean, _hq,
         _hflux, _hweighted, _hbounded⟩ :=

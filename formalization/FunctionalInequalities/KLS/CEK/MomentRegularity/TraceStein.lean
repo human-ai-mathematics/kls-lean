@@ -852,6 +852,36 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+/-- The cutoff proof stages and the final trace bound for a fixed moment potential. -/
+private structure MomentTraceWitness {n : ℕ} (W : EuclideanSpace ℝ (Fin n) → ℝ) (κ : ℝ)
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (u : EuclideanSpace ℝ (Fin n) → ℝ)
+    (L LF : NNReal) (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ) : Prop where
+  data : MomentTraceData W κ μ u L LF T
+  cutoffTesting : CutoffTraceTesting W u T
+  contraction : TraceContraction W u T
+  conservativity : TraceConservativity W u T
+  energy : TraceEnergyBound u T
+  traceBound : SymmetricTraceBound u
+
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+private theorem exists_moment_trace_witness :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
+        (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
+      MomentTraceWitness W κ μ u L LF T := by
+  obtain ⟨u, L, LF, T, hdata, hcutoffs⟩ :=
+    exists_trace_cutoff_witness hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  have hTrace := trace_contraction (μ := μ) hdata
+  have hConserve := trace_conservativity (μ := μ) hκ hW hstrong hdata hcutoffs hTrace
+  have hEnergy := trace_energy_bound (μ := μ) hκ hW hstrong hdata hcutoffs hConserve
+  exact ⟨u, L, LF, T, {
+    data := hdata
+    cutoffTesting := hcutoffs
+    contraction := hTrace
+    conservativity := hConserve
+    energy := hEnergy
+    traceBound := symmetric_trace_bound (μ := μ) hdata (positive_trace_bound (μ := μ) hdata hEnergy)
+  }⟩
+
 include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- Weak source Stein coupling at one regular moment witness: at the same `u`, `L`, `LF`, `T` the
 whole payload (cutoff testing,
@@ -1109,15 +1139,12 @@ theorem exists_regular_moment_weak_stein_coupling :
           ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) =
           ∫ y, (∑ j, hessianMatrix u y i j * gradient f (gradient u y) j)
             ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) := by
-  obtain ⟨u, L, LF, T, hbase, hcutoffs⟩ := exists_trace_cutoff_witness
-    hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  have hTrace := trace_contraction (μ := μ) hbase
-  have hConserve := trace_conservativity (μ := μ) hκ hW hstrong hbase hcutoffs hTrace
-  have hEnergy := trace_energy_bound (μ := μ) hκ hW hstrong hbase hcutoffs hConserve
-  have hPSD := positive_trace_bound (μ := μ) hbase hEnergy
-  have hSymm := symmetric_trace_bound (μ := μ) hbase hPSD
+  obtain ⟨u, L, LF, T, hWitness⟩ :=
+    exists_moment_trace_witness hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  have hbase := hWitness.data
   have hPair := weighted_weak_pairing (μ := μ) hbase
-  refine ⟨u, L, LF, T, ⟨⟨⟨⟨⟨⟨hbase, hcutoffs⟩, hTrace⟩, hConserve⟩, hEnergy⟩, hSymm⟩, hPair⟩, ?_⟩
+  refine ⟨u, L, LF, T, ⟨⟨⟨⟨⟨⟨hbase, hWitness.cutoffTesting⟩, hWitness.contraction⟩,
+    hWitness.conservativity⟩, hWitness.energy⟩, hWitness.traceBound⟩, hPair⟩, ?_⟩
   rcases hbase with ⟨_hc, hl, _hnrm, _hm, hC1, hG, _hF, _hw, _hdata, _hT, _he,
     _hfirst, _hInv, _hmean, _hq, _hflux, _hweighted, _hbounded⟩
   intro f Lf C hf hfLip hbound i
@@ -1181,13 +1208,10 @@ theorem exists_regular_moment_hessian_trace_bound :
                                       Measure (EuclideanSpace ℝ (Fin n))).tilted
                                   (-u))) ≤
                               2 * (B * B).trace) := by
-  obtain ⟨u, L, LF, T, hbase, hcutoffs⟩ :=
-    exists_trace_cutoff_witness hn hκ hK hKc hKint hW hstrong μ hμ hiso
-  have hTrace := trace_contraction (μ := μ) hbase
-  have hConserve := trace_conservativity (μ := μ) hκ hW hstrong hbase hcutoffs hTrace
-  have hEnergy := trace_energy_bound (μ := μ) hκ hW hstrong hbase hcutoffs hConserve
-  have hT25 :=
-    symmetric_trace_bound (μ := μ) hbase (positive_trace_bound (μ := μ) hbase hEnergy)
+  obtain ⟨u, L, LF, T, hWitness⟩ :=
+    exists_moment_trace_witness hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  have hT25 := hWitness.traceBound
+  have hbase := hWitness.data
   rcases hbase with
     ⟨hc, hl, hnrm, hm, hC1, hG, _hF, _hw, hdata, _hT, _he, _hfirst, _hInv, hmean, _hq, _hflux,
       _hweighted, _hbounded⟩
