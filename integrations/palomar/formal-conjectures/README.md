@@ -9,26 +9,33 @@ packages.
 |---|---|
 | [`FC_CONTRIBUTION.patch`](FC_CONTRIBUTION.patch) | Two new files. `FormalConjectures/Randomstrasse/KLS.lean`: the ordinary OpenAI density and isotropy definitions in namespace `KannanLovaszSimonovits`, the locally Lipschitz `L²` test class with extended gradient energy, the main statement `kannan_lovasz_simonovits` (a deliberate `sorry` statement placeholder) and five short sanity tests: the zero test, an absolute coordinate (nonsmooth, not compactly supported), infinite energy, and the variance of zero and of a coordinate. `FormalConjectures/Randomstrasse/README.md`: the collection index, linking [Randomstrasse 101](https://randomstrasse101.math.ethz.ch/) and listing Problem 30 as solved. |
 | [`StatementCorrespondence.lean.in`](StatementCorrespondence.lean.in) | Correspondence client: the exact `OAI` definition block and the `KLSOpenAI` block of `Challenge.lean` (carrier-completeness theorem and the two locally Lipschitz definitions), a check that the type of `kannan_lovasz_simonovits` is definitionally the proposition `Statement`, and `palomar_iff_fc : KLSOpenAI.LocallyLipschitzStatement ↔ Statement`. The `.lean.in` extension keeps it out of this repository's Lean sources. |
+| [`check_statement_correspondence.py`](check_statement_correspondence.py) | Local reproduction command for an external checkout. Requires only the Python standard library. |
 
 ## Reproduce
 
 1. Check out `google-deepmind/formal-conjectures` at
    `b6939a3a0d89e5f999fa8c6483a6ef646c1e2923` (toolchain `leanprover/lean4:v4.33.1`) and fetch its
    Mathlib cache.
-2. Apply the patch: `git apply FC_CONTRIBUTION.patch`.
-3. Strictly build the new file:
-   `lake --wfail build FormalConjectures.Randomstrasse.KLS`.
-4. Copy `StatementCorrespondence.lean.in` to a scratch `.lean` file and run
-   `lake env lean -DwarningAsError=true <scratch>.lean` from that checkout.
-5. Check that both copied blocks are byte-identical to `Challenge.lean`: the text from
-   `namespace OAI` through `end OAI`, and the text from `namespace KLSOpenAI` up to the docstring
-   of `KLSOpenAI.kls`, must each occur exactly once in the scratch file.
+2. From that checkout, apply [`FC_CONTRIBUTION.patch`](FC_CONTRIBUTION.patch) with `git apply`.
+3. Strictly build the module with `lake --wfail build FormalConjectures.Randomstrasse.KLS`.
+4. From this repository, run
+   `python3 integrations/palomar/formal-conjectures/check_statement_correspondence.py <checkout>`.
+   Both definition blocks from `Challenge.lean` must occur byte for byte exactly once in
+   `StatementCorrespondence.lean.in`. The command then elaborates those client bytes from a
+   temporary file with `lake env lean -DwarningAsError=true`. It checks that
+   `palomar_iff_fc` depends only on `propext`, `Classical.choice` and `Quot.sound`.
 
-Scope: step 4 is a same-pin source-copy equivalence check under the Formal Conjectures toolchain
-(Lean v4.33.1). It shows that the Formal Conjectures proposition and the copied Palomar
-definitions agree as statements, without citing the placeholder theorem; it does not prove KLS.
+A checkout of the published head `9bb8202ff1cd8c97d1c28619e56a8b643ae96de5`, built as in step 3,
+is accepted in place of steps 1 and 2. The command checks the toolchain file, `HEAD`,
+and the two contribution files against the patch with strict whitespace matching. It
+uses `lake --wfail build --no-build` to check build freshness and reports the step 3
+command if this check fails. It reads the checkout and its Git index, and writes the
+client to a temporary directory. Lake manages its ignored `.lake` directory.
+
+Step 4 proves equivalence between the Formal Conjectures proposition and the copied
+Palomar definitions under Lean v4.33.1. The equivalence proof uses the proposition's type.
 The cross-version link to the Lean v4.35.0 Palomar entry is that `Challenge.lean` contains the
-same definition blocks byte for byte (step 5), which Palomar's Comparator then checks against
+same definition blocks byte for byte, which Palomar's Comparator then checks against
 `Solution.lean`.
 [Registered Palomar version 2](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-01-000014&version=2)
 includes `KLSOpenAI.kls_locallyLipschitz` at source commit
