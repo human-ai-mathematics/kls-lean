@@ -54,7 +54,6 @@ STATEMENT_CHECKS = {"Solutions.StatementChecks." + name for name in (
 VENDOR_ROOTS = {
     "LevyStochCalc": "formalization/vendor/LevyStochCalc",
     "BrownianMotion": "formalization/vendor/BrownianMotion",
-    "MathFin": "formalization/vendor/MathFin",
     "KolmogorovExtension4": "formalization/vendor/KolmogorovExtension4",
 }
 # The synchronized BrownianMotion sources have no accepted upstream holes. Keep the exact
@@ -413,14 +412,13 @@ def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: b
     report = {"version": 1, "started_utc": started, "artifact": str(artifact / "report.json"),
               "snapshot": before, "scope": "lean-only" if lean_only else "full",
               "status": "failed", "gates": [], "errors": [],
-              "trust_scope": "Local source build and local-module kernel replay, including the vendored libraries; pinned third-party compiled imports (Mathlib and its dependencies) are trusted. No fresh replay, external checker or isolated rebuild."}
+              "trust_scope": "Local source build and local-module kernel replay, including the vendored libraries. Pinned compiled imports from Mathlib, Tau Ceti and their dependencies are trusted."}
     if no_kernel_replay:
         report.update(kernel_replay="skipped", replayed_modules=[])
         report["trust_scope"] = (
             "Lean source build and strict axiom audits, including the vendored libraries; "
             "local-module kernel replay was not run remotely and is covered by the full local receipt. "
-            "Pinned third-party compiled imports (Mathlib and its dependencies) are trusted. "
-            "No fresh replay, external checker or isolated rebuild.")
+            "Pinned compiled imports from Mathlib, Tau Ceti and their dependencies are trusted.")
     progress_lock = threading.Lock()
     active = {}
 

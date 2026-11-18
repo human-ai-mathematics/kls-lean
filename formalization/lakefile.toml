@@ -1,7 +1,7 @@
 name = "functional-inequalities"
 version = "0.1.0"
 defaultTargets = ["FunctionalInequalities", "Solutions", "Examples",
-  "LevyStochCalc", "BrownianMotion", "MathFin", "KolmogorovExtension4"]
+  "LevyStochCalc", "BrownianMotion", "KolmogorovExtension4"]
 
 [[require]]
 name = "mathlib"
@@ -12,6 +12,12 @@ rev = "v4.35.0"
 name = "checkdecls"
 git = "https://github.com/PatrickMassot/checkdecls.git"
 rev = "3d425859e73fcfbef85b9638c2a91708ef4a22d4"
+
+# The Lean Pool backport uses the same Lean and Mathlib v4.35.0 pins.
+[[require]]
+name = "TauCeti"
+git = "https://github.com/lyw-ops/TauCeti.git"
+rev = "4705013d2da8bac010289af92000f4a5b8ffca00"
 
 [[lean_lib]]
 name = "FunctionalInequalities"
@@ -89,12 +95,6 @@ leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
 name = "BrownianMotion"
 srcDir = "vendor/BrownianMotion"
 globs = ["BrownianMotion.+"]
-leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
-
-[[lean_lib]]
-name = "MathFin"
-srcDir = "vendor/MathFin"
-globs = ["MathFin.+"]
 leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
 
 [[lean_lib]]

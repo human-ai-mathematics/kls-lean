@@ -123,7 +123,8 @@ Both library builds and audit clients use warnings-as-errors. Proposition type c
 compiling them neither proves the proposition nor registers a certificate. Audit elaboration
 and local-module kernel replay are separately reported scopes.
 
-Before a cold build, `cache_mathlib.py` recognizes both `Mathlib` and `Mathlib.*`, requests
+Before a cold build, `cache_mathlib.py` recognizes both `Mathlib` and `Mathlib.*`, including
+imports reached through the selected package's pinned Tau Ceti sources. It requests
 their pinned precompiled closure, and checks all required Mathlib `.olean` files. The CI
 preflight fails on an incomplete cache instead of silently rebuilding Mathlib from source.
 Use `python3 research/cache_mathlib.py --check` to inspect existing caches without fetching.
@@ -194,7 +195,9 @@ It records `"kernel_replay": "skipped"` and `"replayed_modules": []`: local-modu
 was not run remotely and its evidence is covered by the full local receipt. Without
 `--no-kernel-replay`, both full and Lean-only runs retain replay; the flag requires `--lean-only`.
 
-Pinned third-party compiled imports, including Mathlib and its dependencies, remain trusted.
+Pinned compiled imports from Mathlib, Tau Ceti and their dependencies remain trusted.
+Local source builds include the imported Tau Ceti modules. The transitive axiom audits
+cover their use by audited declarations, and the replay scope covers project and vendor modules.
 Local-module replay is not an independent second kernel, a fresh dependency replay or an
 isolated source reconstruction. Kernel replay alone accepts `sorryAx`; the separate axiom
 gates reject it in their stated proof scopes. No-sorry claims require the actual declaration

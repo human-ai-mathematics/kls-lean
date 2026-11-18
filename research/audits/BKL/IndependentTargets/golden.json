@@ -1,7 +1,7 @@
 {
   "version": 1,
   "toolchain": "leanprover/lean4:v4.35.0",
-  "lake_manifest_sha256": "12e090d4ab3861278e12b7dc0b2737a505035ffdc9d282eda9fd46626fa19888",
+  "lake_manifest_sha256": "c61532e8a9bed38f35c7f255cf1f1f5330b324e01bf895056766dc92d60275c4",
   "printing": {
     "pp.all": true,
     "pp.proofs": true,

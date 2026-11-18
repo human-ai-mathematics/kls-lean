@@ -274,7 +274,7 @@
           "upstream_git_blob": "b50c93d7afd9766b091c5b65c95498eaac98d81a",
           "upstream_path": "BrownianMotion/Gaussian/Moment.lean",
           "upstream_sha256": "1ec420407465231b2bdee35a8923b5786c22336ca4c7efcf07cef05eab9fbb3c",
-          "vendored_sha256": "327fb8f98f116dc70f7fceada84061ad54c0662eb228764e926d9ff7e11cdd0d"
+          "vendored_sha256": "febe77539d774fb68e05a6ebab39eda3c5230f83b1082d887d070867dec2ebb8"
         },
         "BrownianMotion/BrownianMotion/Gaussian/ProjectiveLimit.lean": {
           "module": "BrownianMotion.Gaussian.ProjectiveLimit",
@@ -1899,7 +1899,7 @@
           "upstream_git_blob": "083526b8e384752dd52ee5d05b123d5022102f4a",
           "upstream_path": "LevyStochCalc/Probability/DoobContinuous.lean",
           "upstream_sha256": "d24550abb47de9c382f5eb0ba6ed86a992497f4fda8c3d017ec44d27a3684b78",
-          "vendored_sha256": "90e9c0fbff583f11b1e89f2fc7b1bfd0ee436b7b324edacfd02679bdbcae6a58"
+          "vendored_sha256": "794e1db15f240af01776a2e4f1057bb7be24f232d234270a37f5510a93a76f07"
         },
         "LevyStochCalc/LevyStochCalc/Probability/ExitTime.lean": {
           "module": "LevyStochCalc.Probability.ExitTime",
@@ -1991,33 +1991,6 @@
         "kolmogorov_extension4": "f33cbc388e5d444606dffa7eec507a26b62c15bb",
         "mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997"
       },
-      "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
-      "upstream_toolchain": "leanprover/lean4:v4.32.0"
-    },
-    "MathFin": {
-      "commit": "784a8311f75a1519a23717856df9982bd6a9a370",
-      "files": {
-        "MathFin/LICENSE": {
-          "module": null,
-          "patched": false,
-          "upstream_git_blob": "8a4068d55f5e47b9a69ab5df964d83ff37b1640e",
-          "upstream_path": "LICENSE",
-          "upstream_sha256": "1b0a8b5c5ffab53b86ee05ce1d3c09ae61bdc50549ceb28766c1d71abee14af8",
-          "vendored_sha256": "1b0a8b5c5ffab53b86ee05ce1d3c09ae61bdc50549ceb28766c1d71abee14af8"
-        },
-        "MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean": {
-          "module": "MathFin.Foundations.DoobLpMaximalInequality",
-          "patched": true,
-          "upstream_git_blob": "7425147364f5e493697eff4a486913393a18517e",
-          "upstream_path": "MathFin/Foundations/DoobLpMaximalInequality.lean",
-          "upstream_sha256": "1320011ebdc88b7a25c4eb417e16d89b495c84d4c01b246d3b74c6998b60e226",
-          "vendored_sha256": "57d7de7946034d3133f28cddb26add19d09db7232666c7b0e465f0ed09c97ede"
-        }
-      },
-      "license": "Apache-2.0",
-      "modules": 1,
-      "repository": "https://github.com/raphaelrrcoelho/formal-mathfin",
-      "upstream_dependencies": {},
       "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
       "upstream_toolchain": "leanprover/lean4:v4.32.0"
     }
@@ -2241,11 +2214,10 @@
       "LevyStochCalc/LevyStochCalc/Probability/ProgressiveCadlag.lean",
       "LevyStochCalc/LevyStochCalc/Probability/StoppedProgressive.lean",
       "LevyStochCalc/LevyStochCalc/Probability/Transport.lean",
-      "LevyStochCalc/LevyStochCalc/Probability/TrivialSigma.lean",
-      "MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean"
+      "LevyStochCalc/LevyStochCalc/Probability/TrivialSigma.lean"
     ],
     "path": "port.patch",
-    "sha256": "e572eb3664d6eda5dddc0ececba75bf8ca46453f2985371836a0995ef4a41f47"
+    "sha256": "288ab21e97bce00a3df559f58facd12c8a6fb13edb5d8b77e1cb61c2c98c7526"
   },
   "port": {
     "lean": "v4.35.0",

@@ -37,13 +37,39 @@ def project_sources(root: Path, project: str = "formalization") -> list[Path]:
     return sorted(path for path in paths if path.is_file())
 
 
-def mathlib_roots(root: Path, project: str = "formalization") -> dict[str, list[str]]:
-    """Keep the aggregate `Mathlib` import as well as dotted module imports."""
+def mathlib_roots(root: Path, project: str = "formalization", *,
+                  resolve_tau: bool = False) -> dict[str, list[str]]:
+    """Collect Mathlib imports of the project and its reachable Tau Ceti modules."""
     result: dict[str, list[str]] = {}
-    for path in project_sources(root, project):
+    pending: list[tuple[str, Path]] = []
+
+    def collect(path: Path) -> None:
         for module in parse_imports(path.read_text(encoding="utf-8")):
             if module == "Mathlib" or module.startswith("Mathlib."):
                 result.setdefault(module, []).append(str(path.relative_to(root)))
+            elif module == "TauCeti" or module.startswith("TauCeti."):
+                pending.append((module, path))
+
+    for path in project_sources(root, project):
+        collect(path)
+    package = root / PROJECTS[project]
+    tau = package / ".lake/packages/TauCeti"
+    if pending and resolve_tau:
+        subprocess.run(["lake", "env", "true"], cwd=package, check=True)
+    seen: set[str] = set()
+    while pending:
+        module, importer = pending.pop()
+        if module in seen:
+            continue
+        seen.add(module)
+        source = tau.joinpath(*module.split(".")).with_suffix(".lean")
+        if not source.is_file():
+            recovery = (f"Run `lake env true` from {package} to resolve its pinned dependencies."
+                        if not tau.is_dir() else f"Check the pinned Tau Ceti checkout at {tau}.")
+            raise ValueError(f"[{project}] Pinned Tau Ceti source is missing: {module} "
+                             f"(imported by {importer.relative_to(root)}; expected {source}). "
+                             + recovery)
+        collect(source)
     if not result:
         raise ValueError("No Mathlib imports found; refusing an unspecified cache request")
     return result
@@ -96,7 +122,7 @@ def prepare_cache(root: Path, *, project: str = "formalization", check_only: boo
     package = root / PROJECTS[project]
     if not package.is_dir():
         raise ValueError(f"Cache project directory is missing: {package}")
-    roots = mathlib_roots(root, project)
+    roots = mathlib_roots(root, project, resolve_tau=not check_only)
     # The aggregate module already imports all dotted Mathlib modules.
     targets = ["Mathlib"] if "Mathlib" in roots else sorted(roots)
     print(f"[{project}] Mathlib cache: {len(roots)} direct imports; "

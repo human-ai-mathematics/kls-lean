@@ -6,17 +6,16 @@ public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 public import Mathlib.MeasureTheory.Integral.IntegralEqImproper
 public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 public import Mathlib.Probability.Moments.MGFAnalytic
+import TauCeti.Probability.Distributions.Laplace
 
 /-!
 # The Laplace law
 
 The Laplace law with rate `β > 0` has density `(β/2) e^{-β|s|}` on `ℝ`. It is the noise `η_β` of
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), proof of Proposition 7.1. The function `s ↦ e^{ws}`
-is integrable for `η_β` exactly when `|w| < β`; for `|w| ≥ β` it is not integrable (Lean's real
-Bochner integral is then `0`, not `∞`). The law has local, not global, exponential moments: its
-moment generating function is `β²/(β² - w²)` on `|w| < β`, its mean is `0` and its second moment
-`2/β²` (`laplaceMeasure_moments`).
-It is a probability measure (`isProbabilityMeasure_laplaceMeasure`).
+is integrable for `η_β` exactly when `|w| < β`. On this interval the moment generating function
+is `β²/(β² - w²)`. The law has mean `0`, second moment `2/β²` and total mass `1`.
+The proofs identify `η_β` with Tau Ceti's Laplace law of location `0` and scale `β⁻¹`.
 -/
 
 @[expose] public section
@@ -34,230 +33,74 @@ def laplaceDensity (β s : ℝ) : ℝ := β / 2 * Real.exp (-(β * |s|))
 def laplaceMeasure (β : ℝ) : Measure ℝ :=
   volume.withDensity fun s => ENNReal.ofReal (laplaceDensity β s)
 
+private theorem laplaceDensity_eq_laplacePDFReal {β : ℝ} (hβ : 0 < β) :
+    laplaceDensity β = TauCeti.Probability.laplacePDFReal 0 β⁻¹ := by
+  funext x
+  rw [TauCeti.Probability.laplacePDFReal_of_pos (inv_pos.mpr hβ), laplaceDensity,
+    sub_zero, div_inv_eq_mul]
+  simp [mul_comm, div_eq_mul_inv]
+
+private theorem laplaceMeasure_eq_scale {β : ℝ} (hβ : 0 < β) :
+    laplaceMeasure β = TauCeti.Probability.laplaceMeasure 0 β⁻¹ := by
+  rw [laplaceMeasure, TauCeti.Probability.laplaceMeasure_eq_withDensity, laplaceDensity_eq_laplacePDFReal hβ]
+  congr 1
+  exact funext fun x => (TauCeti.Probability.laplacePDF_eq_ofReal 0 β⁻¹ x).symm
 
 /-- The Laplace density has total integral `1`. -/
 theorem integral_laplaceDensity {β : ℝ} (hβ : 0 < β) :
     ∫ x : ℝ, laplaceDensity β x = 1 := by
-  have habs :
-      ∫ x : ℝ, Real.exp (-β * |x|) =
-        2 * ∫ x in Set.Ioi (0 : ℝ), Real.exp (-β * x) := by
-    simpa using
-      (integral_comp_abs (f := fun x : ℝ => Real.exp (-β * x)))
-  have hi :
-      ∫ x in Set.Ioi (0 : ℝ), Real.exp (-β * x) = β⁻¹ := by
-    simpa using integral_exp_mul_Ioi (a := -β) (by linarith) 0
-  have habs' :
-      ∫ x : ℝ, Real.exp (-(β * |x|)) =
-        2 * ∫ x in Set.Ioi (0 : ℝ), Real.exp (-β * x) := by
-    simpa only [neg_mul] using habs
-  simp only [laplaceDensity, integral_const_mul]
-  rw [habs', hi]
-  field_simp
+  rw [laplaceDensity_eq_laplacePDFReal hβ]
+  exact TauCeti.Probability.integral_laplacePDFReal (inv_pos.mpr hβ) 0
 
 /-- The Laplace density is integrable. -/
 theorem integrable_laplaceDensity {β : ℝ} (hβ : 0 < β) :
     Integrable (laplaceDensity β) := by
-  have hneg :
-      IntegrableOn (fun x : ℝ => Real.exp (-(β * |x|))) (Set.Iic 0) := by
-    have h := integrableOn_exp_mul_Iic (a := β) hβ 0
-    refine h.congr ?_
-    filter_upwards [ae_restrict_mem measurableSet_Iic] with x hx
-    rw [abs_of_nonpos hx]
-    ring_nf
-  have hpos :
-      IntegrableOn (fun x : ℝ => Real.exp (-(β * |x|))) (Set.Ioi 0) := by
-    have h := integrableOn_exp_mul_Ioi (a := -β) (by linarith) 0
-    refine h.congr ?_
-    filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
-    simp [abs_of_pos (show 0 < x from hx), neg_mul]
-  have h :
-      IntegrableOn (fun x : ℝ => Real.exp (-(β * |x|)))
-        (Set.Iic 0 ∪ Set.Ioi 0) :=
-    hneg.union hpos
-  have h' :
-      Integrable (fun x : ℝ => Real.exp (-(β * |x|))) := by
-    simpa [Set.Iic_union_Ioi] using h
-  have hc := h'.const_mul (β / 2)
-  change Integrable (fun x : ℝ => β / 2 * Real.exp (-(β * |x|)))
-  exact hc
+  rw [laplaceDensity_eq_laplacePDFReal hβ]
+  exact TauCeti.Probability.integrable_laplacePDFReal 0
 
 /-- For `β > 0`, `laplaceMeasure β` has total mass `1`. -/
 theorem isProbabilityMeasure_laplaceMeasure {β : ℝ} (hβ : 0 < β) :
     IsProbabilityMeasure (laplaceMeasure β) := by
-    refine ⟨?_⟩
-    simp [laplaceMeasure, withDensity_apply, MeasurableSet.univ,
-      Measure.restrict_univ]
-    rw [← ofReal_integral_eq_lintegral_ofReal]
-    · rw [integral_laplaceDensity hβ]
-      norm_num
-    · exact integrable_laplaceDensity hβ
-    · exact Filter.Eventually.of_forall (fun x => by
-        simp [laplaceDensity]
-        positivity)
+  rw [laplaceMeasure_eq_scale hβ]
+  exact TauCeti.Probability.isProbabilityMeasure_laplaceMeasure (inv_pos.mpr hβ) 0
 
 /-! ### Local moment generating function and moments
 
-The density and law moment generating functions, the moment identification through
-`ProbabilityTheory.iteratedDeriv_mgf_zero` and the rational calculus are used only for `|w| < β`. -/
+The moment generating function on `|w| < β` gives moment integrability and the derivative
+formula at `0`. The first two moments follow from the corresponding Laplace formulas. -/
 
 section Moments
 
 open ProbabilityTheory Filter Set
 open scoped Topology
 
+private theorem laplaceMeasure_mgf_scale {β w : ℝ} (hβ : 0 < β) (hw : |w| < β) :
+    Integrable (fun s : ℝ => Real.exp (w * s)) (TauCeti.Probability.laplaceMeasure 0 β⁻¹) ∧
+      mgf id (TauCeti.Probability.laplaceMeasure 0 β⁻¹) w = β ^ 2 / (β ^ 2 - w ^ 2) := by
+  have hb : 0 < β⁻¹ := inv_pos.mpr hβ
+  have ht : w ∈ Ioo (-(β⁻¹)⁻¹) (β⁻¹)⁻¹ := by simpa only [inv_inv, mem_Ioo] using abs_lt.mp hw
+  refine ⟨(TauCeti.Probability.integrable_exp_mul_laplaceMeasure_iff hb 0 w).2 ht, ?_⟩
+  rw [TauCeti.Probability.mgf_id_laplaceMeasure hb 0 ht, zero_mul, Real.exp_zero, inv_pow]
+  field_simp [hβ.ne']
+
 /-- **Local moment generating function of the Laplace law**: for `β > 0` and `|w| < β`, the
 function `s ↦ e^{ws} (β/2) e^{-β|s|}` is integrable with integral `β² / (β² - w²)`. -/
 theorem integral_exp_mul_laplaceDensity {β w : ℝ} (hβ : 0 < β) (hw : |w| < β) :
     MeasureTheory.Integrable (fun s => Real.exp (w * s) * laplaceDensity β s) ∧
       ∫ s, Real.exp (w * s) * laplaceDensity β s = β ^ 2 / (β ^ 2 - w ^ 2) := by
-    have hw₁ : -β < w := (abs_lt.mp hw).1
-    have hw₂ : w < β := (abs_lt.mp hw).2
-    have hnegRate : w - β < 0 := by linarith
-    have hposRate : 0 < w + β := by linarith
-    have hβw : 0 < β - w := by linarith
-    have hwβ : 0 < β + w := by linarith
-    have hden : 0 < β ^ 2 - w ^ 2 := by
-      nlinarith [mul_pos hβw hwβ]
-
-    let f : ℝ → ℝ :=
-      fun s => Real.exp (w * s) * laplaceDensity β s
-
-    have hpos_eq :
-        ∀ s ∈ Set.Ioi (0 : ℝ),
-          f s = (β / 2) * Real.exp ((w - β) * s) := by
-      intro s hs
-      dsimp [f, laplaceDensity]
-      rw [abs_of_pos hs]
-      calc
-        Real.exp (w * s) * (β / 2 * Real.exp (-(β * s))) =
-            β / 2 * (Real.exp (w * s) * Real.exp (-(β * s))) := by
-              ring
-        _ = β / 2 * Real.exp (w * s + -(β * s)) := by
-              rw [← Real.exp_add]
-        _ = β / 2 * Real.exp ((w - β) * s) := by
-              congr 2
-              ring
-
-    have hneg_eq :
-        ∀ s ∈ Set.Iic (0 : ℝ),
-          f s = (β / 2) * Real.exp ((w + β) * s) := by
-      intro s hs
-      dsimp [f, laplaceDensity]
-      rw [abs_of_nonpos hs]
-      calc
-        Real.exp (w * s) * (β / 2 * Real.exp (-(β * -s))) =
-            β / 2 * (Real.exp (w * s) * Real.exp (-(β * -s))) := by
-              ring
-        _ = β / 2 * Real.exp (w * s + -(β * -s)) := by
-              rw [← Real.exp_add]
-        _ = β / 2 * Real.exp ((w + β) * s) := by
-              congr 2
-              ring
-
-    have hpos_exp :
-        MeasureTheory.IntegrableOn
-          (fun s : ℝ => Real.exp ((w - β) * s)) (Set.Ioi 0) :=
-      integrableOn_exp_mul_Ioi (a := w - β) hnegRate 0
-
-    have hneg_exp :
-        MeasureTheory.IntegrableOn
-          (fun s : ℝ => Real.exp ((w + β) * s)) (Set.Iic 0) :=
-      integrableOn_exp_mul_Iic (a := w + β) hposRate 0
-
-    have hpos : MeasureTheory.IntegrableOn f (Set.Ioi 0) := by
-      have h := hpos_exp.const_mul (β / 2)
-      apply h.congr
-      filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Ioi] with s hs
-      exact (hpos_eq s hs).symm
-
-    have hneg : MeasureTheory.IntegrableOn f (Set.Iic 0) := by
-      have h := hneg_exp.const_mul (β / 2)
-      apply h.congr
-      filter_upwards [MeasureTheory.ae_restrict_mem measurableSet_Iic] with s hs
-      exact (hneg_eq s hs).symm
-
-    have hglob : MeasureTheory.Integrable f := by
-      have h := hneg.union hpos
-      simpa [Set.Iic_union_Ioi] using h
-
-    have hpos_val :
-        ∫ s in Set.Ioi (0 : ℝ), f s =
-          (β / 2) * (1 / (β - w)) := by
-      calc
-        ∫ s in Set.Ioi (0 : ℝ), f s =
-            ∫ s in Set.Ioi (0 : ℝ),
-              (β / 2) * Real.exp ((w - β) * s) := by
-          apply MeasureTheory.integral_congr_ae
-          filter_upwards
-            [MeasureTheory.ae_restrict_mem measurableSet_Ioi] with s hs
-          exact hpos_eq s hs
-        _ = (β / 2) *
-            ∫ s in Set.Ioi (0 : ℝ), Real.exp ((w - β) * s) := by
-          simpa [smul_eq_mul] using
-            (MeasureTheory.integral_smul
-              (μ := MeasureTheory.volume.restrict (Set.Ioi (0 : ℝ)))
-              (β / 2) (fun s : ℝ => Real.exp ((w - β) * s)))
-        _ = (β / 2) * (1 / (β - w)) := by
-          rw [integral_exp_mul_Ioi (a := w - β) hnegRate (0 : ℝ)]
-          simp only [mul_zero, Real.exp_zero]
-          field_simp [ne_of_lt hnegRate]
-          ring
-
-    have hneg_val :
-        ∫ s in Set.Iic (0 : ℝ), f s =
-          (β / 2) * (1 / (β + w)) := by
-      calc
-        ∫ s in Set.Iic (0 : ℝ), f s =
-            ∫ s in Set.Iic (0 : ℝ),
-              (β / 2) * Real.exp ((w + β) * s) := by
-          apply MeasureTheory.integral_congr_ae
-          filter_upwards
-            [MeasureTheory.ae_restrict_mem measurableSet_Iic] with s hs
-          exact hneg_eq s hs
-        _ = (β / 2) *
-            ∫ s in Set.Iic (0 : ℝ), Real.exp ((w + β) * s) := by
-          simpa [smul_eq_mul] using
-            (MeasureTheory.integral_smul
-              (μ := MeasureTheory.volume.restrict (Set.Iic (0 : ℝ)))
-              (β / 2) (fun s : ℝ => Real.exp ((w + β) * s)))
-        _ = (β / 2) * (1 / (β + w)) := by
-          rw [integral_exp_mul_Iic (a := w + β) hposRate (0 : ℝ)]
-          simp only [mul_zero, Real.exp_zero]
-          field_simp [ne_of_gt hposRate]
-          ring
-
-    refine ⟨?_, ?_⟩
-    · simpa [f] using hglob
-    · change ∫ s, f s = β ^ 2 / (β ^ 2 - w ^ 2)
-      have hsplit :=
-        MeasureTheory.integral_add_compl
-          (μ := MeasureTheory.volume) (s := Set.Iic (0 : ℝ))
-          measurableSet_Iic hglob
-      rw [← hsplit, Set.compl_Iic, hneg_val, hpos_val]
-      field_simp [ne_of_gt hβw, ne_of_gt hwβ, ne_of_gt hden]
-      ring
+  obtain ⟨hi, hm⟩ := laplaceMeasure_mgf_scale hβ hw
+  rw [TauCeti.Probability.integrable_laplaceMeasure_iff, ← laplaceDensity_eq_laplacePDFReal hβ] at hi
+  change (∫ s : ℝ, Real.exp (w * s) ∂TauCeti.Probability.laplaceMeasure 0 β⁻¹) = _ at hm
+  rw [TauCeti.Probability.integral_laplaceMeasure_eq, ← laplaceDensity_eq_laplacePDFReal hβ] at hm
+  exact ⟨by simpa only [smul_eq_mul, mul_comm] using hi,
+    by simpa only [smul_eq_mul, mul_comm] using hm⟩
 
 /-- The law-level moment generating function on `|w| < β`. -/
 theorem laplaceMeasure_mgf {β w : ℝ} (hβ : 0 < β) (hw : |w| < β) :
     Integrable (fun s : ℝ => Real.exp (w * s)) (laplaceMeasure β) ∧
       mgf id (laplaceMeasure β) w = β ^ 2 / (β ^ 2 - w ^ 2) := by
-  have hm : Measurable (fun s : ℝ => ENNReal.ofReal (laplaceDensity β s)) := by
-    unfold laplaceDensity
-    fun_prop
-  have hfin : ∀ᵐ s : ℝ ∂volume, ENNReal.ofReal (laplaceDensity β s) < ⊤ :=
-    Filter.Eventually.of_forall fun _ => ENNReal.ofReal_lt_top
-  have hnn (s : ℝ) : 0 ≤ laplaceDensity β s := by
-    unfold laplaceDensity
-    positivity
-  have h := integral_exp_mul_laplaceDensity hβ hw
-  constructor
-  · unfold laplaceMeasure
-    rw [integrable_withDensity_iff hm hfin]
-    simpa only [ENNReal.toReal_ofReal (hnn _)] using h.1
-  · change (∫ s : ℝ, Real.exp (w * id s) ∂volume.withDensity
-      (fun s => ENNReal.ofReal (laplaceDensity β s))) = _
-    rw [integral_withDensity_eq_integral_toReal_smul hm hfin]
-    simpa only [id_eq, ENNReal.toReal_ofReal (hnn _), smul_eq_mul, mul_comm] using h.2
+  rw [laplaceMeasure_eq_scale hβ]
+  exact laplaceMeasure_mgf_scale hβ hw
 
 /-- `0` is an interior point of the exponential-integrability set of the Laplace law. -/
 theorem zero_mem_interior_integrableExpSet_laplaceMeasure {β : ℝ} (hβ : 0 < β) :
@@ -301,70 +144,21 @@ theorem integrable_exp_abs_laplaceMeasure {β : ℝ} (hβ : 0 < β) :
   have hn := (laplaceMeasure_mgf (w := -(β / 2)) hβ (by simpa only [abs_neg] using hsmall)).1
   exact ProbabilityTheory.integrable_exp_mul_abs (X := id) hp hn
 
-private noncomputable def rationalMgf (β w : ℝ) : ℝ := β ^ 2 / (β ^ 2 - w ^ 2)
-private noncomputable def rationalMgfDeriv (β w : ℝ) : ℝ :=
-  2 * β ^ 2 * w / (β ^ 2 - w ^ 2) ^ 2
-
-/-- `G'(w) = 2β²w/(β² - w²)²` on `|w| < β`. -/
-private theorem hasDerivAt_rationalMgf {β w : ℝ} (_hβ : 0 < β) (hw : |w| < β) :
-    HasDerivAt (rationalMgf β) (rationalMgfDeriv β w) w := by
-  have hbounds := abs_lt.mp hw
-  have hprod : 0 < (β - w) * (β + w) := mul_pos (by linarith) (by linarith)
-  have hden : 0 < β ^ 2 - w ^ 2 := by nlinarith
-  have h := (hasDerivAt_const w (β ^ 2)).div
-    ((hasDerivAt_const w (β ^ 2)).sub (hasDerivAt_pow 2 w)) hden.ne'
-  have h' : HasDerivAt (rationalMgf β)
-      ((0 * (β ^ 2 - w ^ 2) - β ^ 2 * (0 - 2 * w)) / (β ^ 2 - w ^ 2) ^ 2) w := by
-    convert! h using 1
-    simp [Pi.sub_apply]
-  convert h' using 1
-  dsimp [rationalMgfDeriv]
-  ring
-
-/-- `G'(0) = 0` for `G(w) = β²/(β² - w²)`. -/
-private theorem rationalMgf_deriv_zero {β : ℝ} (hβ : 0 < β) :
-    deriv (rationalMgf β) 0 = 0 := by
-  simpa [rationalMgfDeriv] using
-    (hasDerivAt_rationalMgf hβ (by simpa using hβ : |(0 : ℝ)| < β)).deriv
-
-private theorem hasDerivAt_rationalMgfDeriv_zero {β : ℝ} (hβ : 0 < β) :
-    HasDerivAt (rationalMgfDeriv β) (2 / β ^ 2) 0 := by
-  have hnum : HasDerivAt (fun w : ℝ => 2 * β ^ 2 * w) (2 * β ^ 2) 0 := by
-    simpa using (hasDerivAt_id (0 : ℝ)).const_mul (2 * β ^ 2)
-  have hbase : HasDerivAt (fun w : ℝ => β ^ 2 - w ^ 2) 0 0 := by
-    convert! (hasDerivAt_const (0 : ℝ) (β ^ 2)).sub (hasDerivAt_pow 2 0) using 1
-    simp
-  have hden : HasDerivAt (fun w : ℝ => (β ^ 2 - w ^ 2) ^ 2) 0 0 := by
-    convert! hbase.pow 2 using 1
-    simp
-  have h := hnum.div hden (by simp [hβ.ne'])
-  convert! h using 1
-  field_simp [hβ.ne']
-  ring
-
-/-- `G''(0) = 2/β²` for `G(w) = β²/(β² - w²)`. -/
-private theorem rationalMgf_second_zero {β : ℝ} (hβ : 0 < β) :
-    iteratedDeriv 2 (rationalMgf β) 0 = 2 / β ^ 2 := by
-  have heq : deriv (rationalMgf β) =ᶠ[𝓝 (0 : ℝ)] rationalMgfDeriv β := by
-    filter_upwards [Ioo_mem_nhds (by linarith : -β < 0) hβ] with w hw
-    exact (hasDerivAt_rationalMgf hβ (abs_lt.mpr hw)).deriv
-  rw [show (2 : ℕ) = 1 + 1 by norm_num, iteratedDeriv_succ, iteratedDeriv_one]
-  exact heq.deriv_eq.trans (hasDerivAt_rationalMgfDeriv_zero hβ).deriv
-
 /-- The Laplace law is centered. -/
 theorem integral_id_laplaceMeasure {β : ℝ} (hβ : 0 < β) :
     (∫ s : ℝ, s ∂laplaceMeasure β) = 0 := by
-  have h := laplaceMeasure_moment_eq_iteratedDeriv hβ 1
-  change (∫ s : ℝ, s ^ 1 ∂laplaceMeasure β) = iteratedDeriv 1 (rationalMgf β) 0 at h
-  simpa only [pow_one, iteratedDeriv_one, rationalMgf_deriv_zero hβ] using h
+  rw [laplaceMeasure_eq_scale hβ]
+  exact TauCeti.Probability.integral_id_laplaceMeasure (inv_pos.mpr hβ) 0
 
-/-- The second moment of the Laplace law is `2/β²` (the source's `σ_β² = 1 + 2/β²` adds the
-unit variance of `f`). -/
+/-- The second moment of the Laplace law is `2/β²`. -/
 theorem integral_sq_laplaceMeasure {β : ℝ} (hβ : 0 < β) :
-    (∫ s : ℝ, s ^ 2 ∂laplaceMeasure β) = 2 / β ^ 2 :=
-  (laplaceMeasure_moment_eq_iteratedDeriv hβ 2).trans (rationalMgf_second_zero hβ)
+    (∫ s : ℝ, s ^ 2 ∂laplaceMeasure β) = 2 / β ^ 2 := by
+  rw [laplaceMeasure_eq_scale hβ]
+  have hm := TauCeti.Probability.integral_pow_abs_sub_laplaceMeasure (inv_pos.mpr hβ) 0 2
+  norm_num at hm
+  simpa only [div_eq_mul_inv, inv_pow] using hm
 
-/-- **Mean and variance of the Laplace law**, from the local moment generating function only. -/
+/-- **Mean and variance of the Laplace law.** -/
 theorem laplaceMeasure_moments {β : ℝ} (hβ : 0 < β) :
     Integrable (fun s : ℝ => s) (laplaceMeasure β) ∧
       Integrable (fun s : ℝ => s ^ 2) (laplaceMeasure β) ∧

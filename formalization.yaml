@@ -69,10 +69,15 @@ related_formalizations:
   - id: https://github.com/cgarryZA/LevyStochCalc/tree/984dbf0b790031eac05d56fe5a84b65e15e1e932
     relationship: adapts
     note: >-
-      External stochastic-calculus infrastructure, with the BrownianMotion,
-      KolmogorovExtension4 and MathFin dependencies pinned and credited in
+      External stochastic-calculus infrastructure, with the BrownianMotion
+      and KolmogorovExtension4 dependencies pinned and credited in
       formalization/vendor/README.md and vendor-lock.json. Apache-2.0 notices
       are retained. Local toolchain adaptations are recorded in port.patch.
+  - id: https://github.com/lyw-ops/TauCeti/tree/4705013d2da8bac010289af92000f4a5b8ffca00
+    relationship: builds-on
+    note: >-
+      The current Lean 4.35 proof package imports Tau Ceti for Doob's discrete
+      maximal inequality, Laplace laws, Gaussian even moments and Fenchel–Moreau.
 
 classification:
   arxiv: [math.PR, math.FA]

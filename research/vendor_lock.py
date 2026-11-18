@@ -33,6 +33,7 @@ PINS: dict[str, dict[str, Any]] = {
         "license": "Apache-2.0",
         "upstream_dependencies": {
             "BrownianMotion": "4d52fa776130a29d4ad7d6eda2035a919c0b4696",
+            # Original upstream dependency; no longer vendored (formalization/vendor/README.md).
             "MathFin": "784a8311f75a1519a23717856df9982bd6a9a370",
             "kolmogorov_extension4": "f33cbc388e5d444606dffa7eec507a26b62c15bb",
             "mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
@@ -52,13 +53,6 @@ PINS: dict[str, dict[str, Any]] = {
     "KolmogorovExtension4": {
         "repository": "https://github.com/RemyDegenne/kolmogorov_extension4",
         "commit": "f33cbc388e5d444606dffa7eec507a26b62c15bb",
-        "upstream_toolchain": "leanprover/lean4:v4.32.0",
-        "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
-        "license": "Apache-2.0",
-    },
-    "MathFin": {
-        "repository": "https://github.com/raphaelrrcoelho/formal-mathfin",
-        "commit": "784a8311f75a1519a23717856df9982bd6a9a370",
         "upstream_toolchain": "leanprover/lean4:v4.32.0",
         "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
         "license": "Apache-2.0",
@@ -688,19 +682,22 @@ def check_upstream(root: Path, clones: dict[str, Path]) -> list[str]:
                 for package in packages or []
                 if isinstance(package, dict) and isinstance(package.get("name"), str)
             }
+            # MathFin is an original dependency that is no longer vendored: its expected
+            # revision comes only from the declared upstream dependencies.
             required = {
                 "BrownianMotion": "BrownianMotion",
-                "MathFin": "MathFin",
+                "MathFin": None,
                 "kolmogorov_extension4": "KolmogorovExtension4",
                 "mathlib": "LevyStochCalc",
             }
             for package_name, pin_root in required.items():
                 package = package_map.get(package_name)
-                expected = (
-                    PINS.get(pin_root, {}).get("commit")
-                    if package_name != "mathlib"
-                    else levy.get("upstream_mathlib")
-                )
+                if package_name == "mathlib":
+                    expected = levy.get("upstream_mathlib")
+                elif pin_root is None:
+                    expected = None
+                else:
+                    expected = PINS.get(pin_root, {}).get("commit")
                 expected = levy.get("upstream_dependencies", {}).get(package_name, expected)
                 if package is None:
                     errors.append(f"LevyStochCalc manifest lacks package: {package_name}")

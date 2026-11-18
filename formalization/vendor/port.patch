@@ -616,16 +616,155 @@
      HasLaw (brownian t) (gaussianReal 0 t) gaussianLimit :=
 --- a/BrownianMotion/BrownianMotion/Gaussian/Moment.lean
 +++ b/BrownianMotion/BrownianMotion/Gaussian/Moment.lean
-@@ -1,6 +1,9 @@
+@@ -1,6 +1,12 @@
 +-- Modified 2026-10-31 by the KLS formalization project: explicit import of the square-root
 +-- calculus needed under Mathlib v4.35.0's module imports; see vendor/port.patch.
++-- Modified 2026-11-18 by the KLS formalization project to obtain even Gaussian
++-- moments from Tau Ceti. See vendor/port.patch.
  module
  
  public import Mathlib.Probability.Distributions.Gaussian.Real
 +public import Mathlib.Analysis.SpecialFunctions.Sqrt
++import TauCeti.Probability.Distributions.Gaussian.Moments
  
  @[expose] public section
  
+@@ -12,131 +18,10 @@
+ lemma centralMoment_two_mul_gaussianReal (μ : ℝ) (σ : ℝ≥0) (n : ℕ) :
+     centralMoment id (2 * n) (gaussianReal μ (σ^2))
+     = σ ^ (2 * n) * Nat.doubleFactorial (2 * n - 1) := by
+-  -- 1. Prove the case n = 0 and proceed with n ≠ 0
+-  by_cases hn : n = 0
+-  · simp [hn, centralMoment]
+-  -- 2. Prove the case σ = 0 and proceed with σ ≠ 0
+-  by_cases hσ : σ = 0
+-  · simp [hσ, hn, centralMoment]
+-  let φ x := σ * Real.sqrt (2 * x) -- used for u sub later
+-  have hφ_Ioi : Set.Ioi 0 = φ '' Set.Ioi 0 := by
+-    subst φ
+-    apply subset_antisymm
+-    · intros x hx
+-      rw [Set.mem_Ioi] at hx
+-      simp only [Nat.ofNat_nonneg, Real.sqrt_mul, Set.mem_image, Set.mem_Ioi]
+-      exists x^2 / (2 * σ ^ 2)
+-      simp only [Nat.ofNat_nonneg, Real.sqrt_mul, Nat.ofNat_pos,
+-        mul_nonneg_iff_of_pos_left, NNReal.zero_le_coe, pow_nonneg, Real.sqrt_div', Real.sqrt_sq]
+-      exact ⟨by positivity, by field_simp; rw [Real.sqrt_sq hx.le]⟩
+-    · simp only [Nat.ofNat_nonneg, Real.sqrt_mul, Set.image_subset_iff]
+-      intros x hx
+-      simp only [Set.mem_Ioi, Set.mem_preimage] at hx ⊢
+-      positivity
+-  have h_diff {x} (hx : 0 < x) : DifferentiableAt ℝ φ x := by
+-    subst φ
+-    fun_prop (disch := (apply ne_of_gt; positivity))
+-  have h_inj : Set.InjOn φ (Set.Ioi 0) := by
+-    simp only [Set.InjOn, Set.mem_Ioi, Nat.ofNat_nonneg, Real.sqrt_mul, mul_eq_mul_left_iff,
+-      Real.sqrt_eq_zero, OfNat.ofNat_ne_zero, or_false, NNReal.coe_eq_zero, hσ, φ]
+-    intros x1 hx1 x2 hx2 hx1x2
+-    rwa [Real.sqrt_inj (by positivity) (by positivity)] at hx1x2
+-  have h_deriv {x} (hx : 0 < x) : deriv φ x = σ / (√2 * √x) := by
+-    subst φ
+-    simp only [Nat.ofNat_nonneg, Real.sqrt_mul, deriv_const_mul_field',
+-      deriv_sqrt (f := fun x ↦ x) (x := x) (by fun_prop) hx.ne', deriv_id'', one_div, mul_inv_rev]
+-    congr
+-    rw [mul_comm, mul_assoc]
+-    simp only [mul_inv_rev, mul_eq_mul_left_iff, inv_eq_zero, (Real.sqrt_pos_of_pos hx).ne',
+-      or_false]
+-    field_simp
+-    rw [Real.sq_sqrt (by simp)]
+-  have hφ_pow {x} (hx : 0 < x) : φ x ^ (2 * n) = σ ^ (2 * n) * (2 * x) ^ n := by
+-    simp only [φ, Nat.ofNat_nonneg, Real.sqrt_mul]
+-    ring_nf
+-    simp_rw [mul_comm _ 2, pow_mul, Real.sq_sqrt zero_le_two, Real.sq_sqrt hx.le]
+-    ring
+-  calc centralMoment id (2 * n) (gaussianReal μ (σ^2))
+-  -- 3. E_{X ∼ N(μ, σ²)}[(X - E[X])^(2n)] = ∫ x^(2n) dP(x) with P = N(0, σ^2)
+-  _ = ∫ x, x ^ (2 * n) ∂gaussianReal 0 (σ^2) := by
+-    simp only [centralMoment, id_eq, integral_id_gaussianReal, Pi.pow_apply, Pi.sub_apply]
+-    rw [show μ = 0 + μ by ring_nf, ← gaussianReal_map_add_const,
+-      (measurableEmbedding_addRight μ).integral_map]
+-    simp
+-  -- 4. ... = ∫ x^(2n) / √(2πσ²) e^(- x² / 2σ^2) dx
+-  _ = ∫ x, x^(2 * n) / (Real.sqrt (2 * Real.pi * σ ^ 2)) * Real.exp (-x ^ 2 / (2 * σ ^ 2)) := by
+-    simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, pow_eq_zero_iff, hσ,
+-      integral_gaussianReal_eq_integral_smul, gaussianPDFReal_def, NNReal.coe_pow,
+-      NNReal.zero_le_coe, pow_nonneg, Real.sqrt_mul', Nat.ofNat_nonneg, Real.sqrt_mul,
+-      Real.sqrt_sq, mul_inv_rev, sub_zero, smul_eq_mul]
+-    ring_nf
+-  -- 5. ... = 2 ∫_(0, ∞) x^(2n) / √(2πσ²) e^(- x² / 2σ^2) dx
+-  _ = 2 * ∫ x in Set.Ioi 0, x ^ (2 * n) / (Real.sqrt (2 * Real.pi * σ ^ 2))
+-                            * Real.exp (-x ^ 2 / (2 * σ ^ 2)) := by
+-    conv_lhs =>
+-      rhs
+-      ext x
+-      rw [show x ^ (2 * n) / √(2 * Real.pi * ↑σ ^ 2) * Real.exp (-x ^ 2
+-              / (2 * ↑σ ^ 2)) = (fun u => u ^ (2 * n) / √(2 * Real.pi * ↑σ ^ 2)
+-              * Real.exp (-u ^ 2 / (2 * ↑σ ^ 2))) |x| by
+-            simp only [NNReal.zero_le_coe, pow_nonneg, Real.sqrt_mul', Nat.ofNat_nonneg,
+-              Real.sqrt_mul, Real.sqrt_sq, sq_abs, mul_eq_mul_right_iff, Real.exp_ne_zero,
+-              or_false]
+-            rw [pow_mul, ← sq_abs]
+-            ring_nf]
+-    rw [integral_comp_abs
+-      (f := (fun u => u ^ (2 * n) / √(2 * Real.pi * σ ^ 2) * Real.exp (-u ^ 2 / (2 * σ ^ 2))))]
+--- 6. ... = 2 ∫_(0, ∞) φ(x)^(2n) / √(2πσ²) e^(- φ(x)² / 2σ^2) |φ'(x)| dx
+--- where φ(x) = σ √(2x) and φ'(x) = σ / (√2 * √x), i.e.,
+--- u sub with y = x^2 / (2σ²) or x = σ √(2y).
+-  _ = 2 * ∫ x in Set.Ioi 0, φ x ^ (2 * n) / (Real.sqrt (2 * Real.pi * σ ^ 2))
+-        * Real.exp (-φ x ^ 2 / (2 * σ ^ 2)) * |deriv φ x| := by
+-    conv_lhs => rw [hφ_Ioi]
+-    rw [integral_image_eq_integral_abs_deriv_smul (f' := deriv φ) measurableSet_Ioi]
+-    · congr with x
+-      simp only [NNReal.zero_le_coe, pow_nonneg, Real.sqrt_mul', Nat.ofNat_nonneg, Real.sqrt_mul,
+-        Real.sqrt_sq, smul_eq_mul]
+-      group
+-    · exact fun x hx ↦ (h_diff (by simpa using hx)).hasDerivAt.hasDerivWithinAt
+-    · exact h_inj
+-  _ = 2 * ∫ x in Set.Ioi 0, φ x ^ (2 * n) / (Real.sqrt (2 * Real.pi * σ ^ 2))
+-        * Real.exp (-x) * |deriv φ x| := by
+-    congr 1
+-    refine setIntegral_congr_fun measurableSet_Ioi fun x hx ↦ ?_
+-    simp only [Set.mem_Ioi] at hx
+-    congr
+-    simp only [Nat.ofNat_nonneg, Real.sqrt_mul, φ]
+-    ring_nf
+-    field_simp
+-    rw [Real.sq_sqrt (by positivity), Real.sq_sqrt (by positivity)]
+-  -- 7. ... = σ^(2n) 2^n / √π Γ(n + 1/2)
+-  _ = σ ^ (2 * n) * 2 ^ n / √Real.pi * Real.Gamma (n + 1/2) := by
+-    rw [Real.Gamma_eq_integral (by positivity)]
+-    simp only [← integral_const_mul]
+-    refine setIntegral_congr_fun measurableSet_Ioi fun x hx ↦ ?_
+-    simp only [Set.mem_Ioi] at hx
+-    rw [h_deriv hx, hφ_pow hx]
+-    simp only [NNReal.zero_le_coe, pow_nonneg, Real.sqrt_mul', Nat.ofNat_nonneg, Real.sqrt_mul,
+-      Real.sqrt_sq, one_div]
+-    rw [abs_of_nonneg (by positivity)]
+-    field_simp
+-    ring_nf
+-    have : x ^ n = x ^ (-(1 : ℝ) / 2 + n) * √x := by
+-      rw [Real.sqrt_eq_rpow, ← Real.rpow_add_of_nonneg (by positivity) _ (by positivity)]
+-      · ring_nf
+-        rw [Real.rpow_natCast]
+-      · rw [add_comm, neg_div, ← sub_eq_add_neg]
+-        simp only [one_div, sub_nonneg]
+-        calc (2 : ℝ)⁻¹
+-        _ ≤ 1 := by norm_num
+-        _ ≤ n := by norm_cast; omega
+-    rw [this, Real.sq_sqrt zero_le_two]
+-    ring
+-  -- 8. ... = σ^(2n) (2n - 1)!!
+-  _ = σ ^ (2 * n) * Nat.doubleFactorial (2 * n - 1) := by
+-    rw [Real.Gamma_nat_add_half, ← sub_eq_zero]
+-    field_simp
+-    ring
++  calc
++    _ = (((σ ^ 2 : ℝ≥0) : ℝ) ^ n) * Nat.doubleFactorial (2 * n - 1) :=
++      TauCeti.Probability.centralMoment_id_two_mul_gaussianReal μ (σ ^ 2) n
++    _ = _ := by rw [NNReal.coe_pow, ← pow_mul]
+ 
+ lemma centralMoment_fun_two_mul_gaussianReal (μ : ℝ) (σ : ℝ≥0) (n : ℕ) :
+     centralMoment (fun x ↦ x) (2 * n) (gaussianReal μ (σ^2))
 --- a/BrownianMotion/BrownianMotion/StochasticIntegral/Cadlag.lean
 +++ b/BrownianMotion/BrownianMotion/StochasticIntegral/Cadlag.lean
 @@ -3,6 +3,10 @@
@@ -9711,7 +9850,7 @@
  
 --- a/LevyStochCalc/LevyStochCalc/Probability/DoobContinuous.lean
 +++ b/LevyStochCalc/LevyStochCalc/Probability/DoobContinuous.lean
-@@ -3,9 +3,13 @@
+@@ -3,26 +3,34 @@
  Released under Apache 2.0 license as described in the file LICENSE.
  Authors: Christian Garry
  -/
@@ -9720,15 +9859,34 @@
 -import MathFin.Foundations.DoobLpMaximalInequality
 +-- Modified 2026-10-31 by the KLS formalization project: ported to the Lean module system
 +-- (module header, public imports, exposed public section) for Lean/Mathlib v4.35.0.
++-- Modified 2026-11-18 by the KLS formalization project to use the discrete maximal
++-- inequality from Tau Ceti on the dyadic time grid. See vendor/port.patch.
 +module
 +
 +public import Mathlib.Probability.Martingale.Basic
 +public import LevyStochCalc.Probability.ProgressiveCadlag
-+public import MathFin.Foundations.DoobLpMaximalInequality
++import TauCeti.Probability.Martingale.MaximalInequality.Lp
  
  /-!
  # Doob's `L²` maximal inequality in continuous time
-@@ -23,6 +27,8 @@
+ 
+-For a right-continuous martingale on `[0, T]`, the supremum of the paths over the window is
+-square integrable, with `𝔼[sup_{t ≤ T} |M_t|²] ≤ 4 𝔼[|M_T|²]`.
+-
+-The discrete inequality is `MeasureTheory.Martingale.eLpNorm_norm_runMax_le`; the passage to
+-continuous time samples the martingale along the dyadic partition of `[0, T]`, whose points are
+-increasing in the level, and uses right-continuity to identify the supremum over the window with
+-the supremum of the sampled maxima.
++For a right-continuous martingale on `[0, T]`, the extended second moment of the path supremum
++is at most four times the extended second moment of the terminal value.
++
++The proof samples the martingale on dyadic partitions of `[0, T]` and applies Tau Ceti's
++`MeasureTheory.Martingale.eLpNorm_partialSups_norm_le`. The partitions refine with each level,
++and right-continuity identifies the supremum over the window with the supremum of the sampled
++maxima.
+ 
+ ## Main statements
+ 
  * `Filtration.compMono`, `martingale_compMono` — sampling along a monotone time map.
  * `dyadicTime` — the dyadic partition points of `[0, T]`.
  -/
@@ -9737,7 +9895,7 @@
  
  open MeasureTheory ProbabilityTheory
  open scoped NNReal ENNReal
-@@ -253,10 +259,11 @@
+@@ -253,10 +261,11 @@
    rw [pow_two]
    exact mul_le_mul' (ha (le_max_left n m)) (ha (le_max_right n m))
  
@@ -9752,16 +9910,34 @@
    simp only [ENNReal.toReal_ofNat]
    congr 1
    refine lintegral_congr fun ω => ?_
-@@ -279,7 +286,12 @@
-   rw [hp, hc, dyadicTime_top n] at hdoob
-   have hlhs : eLpNorm (fun ω => (Finset.range (2 ^ n + 1)).sup' Finset.nonempty_range_add_one
-       fun k => ‖M (dyadicTime T n k) ω‖) 2 μ = eLpNorm (dyadicRunMax M T n) 2 μ := rfl
+@@ -270,16 +279,21 @@
+     ∫⁻ ω, (‖dyadicRunMax M T n ω‖₊ : ℝ≥0∞) ^ 2 ∂μ
+       ≤ 4 * ∫⁻ ω, (‖M T ω‖₊ : ℝ≥0∞) ^ 2 ∂μ := by
+   have hsamp := martingale_compMono hM (dyadicTime T n) (dyadicTime_monotone hT n)
+-  have hdoob := MeasureTheory.Martingale.eLpNorm_norm_runMax_le hsamp
+-    (by norm_num : (1 : ℝ) < 2) (2 ^ n)
+-  have hp : ENNReal.ofReal (2 : ℝ) = (2 : ℝ≥0∞) := by
+-    simp
+-  have hc : ENNReal.ofReal ((2 : ℝ) / (2 - 1)) = (2 : ℝ≥0∞) := by
+-    norm_num
+-  rw [hp, hc, dyadicTime_top n] at hdoob
+-  have hlhs : eLpNorm (fun ω => (Finset.range (2 ^ n + 1)).sup' Finset.nonempty_range_add_one
+-      fun k => ‖M (dyadicTime T n k) ω‖) 2 μ = eLpNorm (dyadicRunMax M T n) 2 μ := rfl
 -  rw [hlhs, eLpNorm_two_eq, eLpNorm_two_eq] at hdoob
++  have hdoob := hsamp.eLpNorm_partialSups_norm_le (2 ^ n)
++    (p := 2) (by norm_num) (by simp)
++  have hmax : partialSups (fun k ω => ‖M (dyadicTime T n k) ω‖) (2 ^ n) =
++      dyadicRunMax M T n := by
++    funext ω
++    simp only [partialSups_eq_sup'_range, Finset.sup'_apply, dyadicRunMax]
++  have hdenom : (2 : ℝ≥0∞) - 1 = 1 := by
++    rw [← one_add_one_eq_two, ENNReal.add_sub_cancel_right ENNReal.one_ne_top]
++  rw [hmax, hdenom, div_one, dyadicTime_top n] at hdoob
 +  have hmeas_max : AEStronglyMeasurable (dyadicRunMax M T n) μ := by
 +    unfold dyadicRunMax
 +    exact (Finset.measurable_range_sup'' fun k _ =>
 +      ((hM.stronglyMeasurable _).mono (ℱ.le _)).measurable.norm).aestronglyMeasurable
-+  rw [hlhs, eLpNorm_two_eq _ hmeas_max, eLpNorm_two_eq _ (hM.integrable T).aestronglyMeasurable]
++  rw [eLpNorm_two_eq _ hmeas_max, eLpNorm_two_eq _ (hM.integrable T).aestronglyMeasurable]
 +    at hdoob
    have hsq := ENNReal.rpow_le_rpow hdoob (by norm_num : (0 : ℝ) ≤ 2)
    rw [← ENNReal.rpow_mul, ENNReal.mul_rpow_of_nonneg _ _ (by norm_num : (0 : ℝ) ≤ 2),
@@ -10333,82 +10509,3 @@
        simp [Set.mem_preimage, hω, hy]
      rw [measure_congr hae, measure_empty]
  
---- a/MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean
-+++ b/MathFin/MathFin/Foundations/DoobLpMaximalInequality.lean
-@@ -3,6 +3,8 @@
- Released under Apache 2.0 license as described in the file LICENSE.
- Authors: Raphael Coelho
- -/
-+-- Modified 2026-10-31 by the KLS formalization project: Lean/Mathlib v4.35.0 replacements
-+-- of deprecated names (identifier-only); see vendor/port.patch.
- module
- 
- public import Mathlib.Probability.Martingale.OptionalStopping
-@@ -11,6 +13,7 @@
- public import Mathlib.MeasureTheory.Integral.MeanInequalities
- public import Mathlib.MeasureTheory.Function.LpSeminorm.Basic
- public import Mathlib.Analysis.MeanInequalities
-+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
- 
- /-!
- # Doob's Lᵖ maximal inequality
-@@ -589,11 +592,11 @@
-         if t ≤ K then μ {ω | t ≤ runMax f n ω} else 0 := by
-     intro t ht
-     by_cases hle : t ≤ K
--    · simp only [hle, if_true]
-+    · simp only [hle, ite_true]
-       congr 1
-       ext ω
-       simp [hle]
--    · simp only [hle, if_false]
-+    · simp only [hle, ite_false]
-       rw [show {ω | t ≤ min (runMax f n ω) K} = ∅ by
-         ext ω
-         simp [hle]]
-@@ -638,7 +641,7 @@
-       intro t ht
-       change μ {ω | t ≤ min (runMax f n ω) K} * _ =
-             μ {ω | t ≤ runMax f n ω} * _
--      rw [h_ZK_set t ht.1, if_pos ht.2]
-+      rw [h_ZK_set t ht.1, ite_eq_left ht.2]
-     rw [h_left, h_zero_right, add_zero]
-   rw [h_split]
-   -- Now apply layer_integrand_bound pointwise.
-@@ -822,14 +825,14 @@
- /-- Conversion lemma: for a non-negative `f : Ω → ℝ` and `1 < p`,
-     `eLpNorm f (ofReal p) μ = (∫⁻ ω, ofReal(f ω ^ p) ∂μ)^(1/p)`. -/
- private lemma eLpNorm_eq_lintegral_ofReal_pow
--    {f : Ω → ℝ} (hf_nn : ∀ ω, 0 ≤ f ω) {p : ℝ} (hp : 1 < p) :
-+    {f : Ω → ℝ} (hf_meas : AEStronglyMeasurable f μ) (hf_nn : ∀ ω, 0 ≤ f ω) {p : ℝ} (hp : 1 < p) :
-     eLpNorm f (ENNReal.ofReal p) μ
-       = (∫⁻ ω, ENNReal.ofReal (f ω ^ p) ∂μ) ^ (1 / p) := by
-   have hp_pos : 0 < p := lt_trans zero_lt_one hp
-   have hp_ne_zero : (ENNReal.ofReal p) ≠ 0 := by
-     simp [hp_pos]
-   have hp_ne_top : (ENNReal.ofReal p) ≠ ⊤ := ENNReal.ofReal_ne_top
--  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne_zero hp_ne_top]
-+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne_zero hp_ne_top hf_meas]
-   rw [ENNReal.toReal_ofReal hp_pos.le]
-   congr 1
-   apply lintegral_congr_ae
-@@ -946,8 +949,9 @@
-           eLpNorm (f n) (ENNReal.ofReal p) μ := by
-   -- `Finset.sup'` is definitionally `runMax f n`.
-   change eLpNorm (runMax f n) (ENNReal.ofReal p) μ ≤ _
--  rw [eLpNorm_eq_lintegral_ofReal_pow (runMax_nonneg hnonneg n) hp,
--      eLpNorm_eq_lintegral_ofReal_pow (hnonneg n) hp]
-+  rw [eLpNorm_eq_lintegral_ofReal_pow (runMax_measurable hsub n).aestronglyMeasurable
-+        (runMax_nonneg hnonneg n) hp,
-+      eLpNorm_eq_lintegral_ofReal_pow (hsub.integrable n).aestronglyMeasurable (hnonneg n) hp]
-   set A : ℝ≥0∞ := ∫⁻ ω, ENNReal.ofReal ((runMax f n ω) ^ p) ∂μ
-   set B : ℝ≥0∞ := ∫⁻ ω, ENNReal.ofReal ((f n ω) ^ p) ∂μ
-   set C : ℝ≥0∞ := ENNReal.ofReal (p / (p - 1)) with hC_def
-@@ -1015,6 +1019,6 @@
-       ≤ ENNReal.ofReal (p / (p - 1)) * eLpNorm (f n) (ENNReal.ofReal p) μ := by
-   have hsub := martingale_norm_submartingale hf
-   have hbound := maximal_ineq_Lp hsub (fun _ _ ↦ norm_nonneg _) hp n
--  rwa [eLpNorm_norm] at hbound
-+  rwa [eLpNorm_norm _ (hf.integrable n).aestronglyMeasurable] at hbound
- 
- end MeasureTheory

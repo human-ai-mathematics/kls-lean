@@ -13,9 +13,11 @@ proved by adding them.
 | `LevyStochCalc` | [cgarryZA/LevyStochCalc](https://github.com/cgarryZA/LevyStochCalc) | `984dbf0b790031eac05d56fe5a84b65e15e1e932` (2026-09-30) | v4.32.0, Mathlib `81a5d25` | Apache-2.0 | 196 |
 | `BrownianMotion` | [RemyDegenne/brownian-motion](https://github.com/RemyDegenne/brownian-motion) | `a7ad7af662044313bc80a7c0756360fb3745f931` | v4.33.0-rc1, Mathlib `0434c03` | Apache-2.0 | 42 |
 | `KolmogorovExtension4` | [RemyDegenne/kolmogorov_extension4](https://github.com/RemyDegenne/kolmogorov_extension4) | `f33cbc388e5d444606dffa7eec507a26b62c15bb` | v4.32.0 | Apache-2.0 | 3 |
-| `MathFin` | [raphaelrrcoelho/formal-mathfin](https://github.com/raphaelrrcoelho/formal-mathfin) | `784a8311f75a1519a23717856df9982bd6a9a370` | v4.32.0 | Apache-2.0 | 1 |
 
-KolmogorovExtension4 and MathFin retain LevyStochCalc's original dependency revisions.
+KolmogorovExtension4 retains LevyStochCalc's original dependency revision. LevyStochCalc's
+original upstream dependency on `MathFin` ([raphaelrrcoelho/formal-mathfin](https://github.com/raphaelrrcoelho/formal-mathfin)
+at `784a8311f75a1519a23717856df9982bd6a9a370`, Apache-2.0) remains recorded in the lock; its
+vendored copy was removed on 2026-11-18 (see [Former vendored library](#former-vendored-library-mathfin)).
 BrownianMotion is an explicit override of its original `4d52fa7` dependency, synchronized
 to the corrected regularization interfaces. BrownianMotion itself pins KolmogorovExtension4
 to `7d76e18`; this package retains the tested `f33cbc3` revision. All libraries use this
@@ -41,8 +43,8 @@ No KLS500 source is included; its own port targets a different toolchain.
 ## Local changes
 
 The sources are ported to this package's Lean v4.35.0 and Mathlib `56a0058` (tag v4.35.0) and to
-the Lean module system. 219 files differ from their respective pinned upstream sources
-(LevyStochCalc 196, BrownianMotion 20, KolmogorovExtension4 2, MathFin 1):
+the Lean module system. 218 files differ from their respective pinned upstream sources
+(LevyStochCalc 196, BrownianMotion 20, KolmogorovExtension4 2):
 [`port.patch`](port.patch) is the exact unified diff and applies with `patch -p1` from this
 directory. Modification notices identify every changed source. The BrownianMotion update
 changes its upstream API; existing project and LevyStochCalc public contracts are retained,
@@ -60,11 +62,13 @@ No option, axiom or `sorry` is added by the local adaptations.
 | `LevyStochCalc/Brownian/{ItoAlgebraAssociativity, ItoPullOut, CrossVariation}.lean` | stale `Decidable` instance in `if` after `simp only`; goal restated with `show` |
 | `LevyStochCalc/Martingale/CadlagModification.lean` | migrate to the upstream `rightContModifReal` / `cadlagModifReal` names, retaining the existing hypotheses |
 | 43 further files, listed by `patch.files` in `vendor-lock.json` | apply Lean v4.33.0's recommended replacements for deprecated set aliases and proof-local `haveI`/`letI` bindings; each file has a dated modification notice |
-| all 196 LevyStochCalc sources | Lean module system: `module` header, every `import` made `public import`, `@[expose] public section` (BrownianMotion, KolmogorovExtension4 and MathFin are already modules upstream); dated 2026-10-31 notice |
+| all 196 LevyStochCalc sources | Lean module system: `module` header, every `import` made `public import`, `@[expose] public section` (BrownianMotion and KolmogorovExtension4 are already modules upstream); dated 2026-10-31 notice |
 | LevyStochCalc and the other libraries, files listed in `port.patch` | Lean/Mathlib v4.35.0 drop-in replacements of deprecated names (for example `if_pos` → `ite_eq_left`, `.lipschitz` → `.lipschitzWith`); dated 2026-10-31 notice |
 | `LevyStochCalc/Brownian/SimplePredictableRefineCommon.lean` | `mergedIdxMap_left/_right`: the private existence lemma is passed through a fully stated `show … by exact …`, so the exposed definition body does not reference a private proof; the lemmas stay private |
 | `LevyStochCalc/Brownian/ItoL2CompletionMaster.lean` | `masterApprox`: the private `master_tol_pos n` is passed through `show (0 : ℝ≥0∞) < ((n : ℝ≥0∞) + 1)⁻¹ by exact …` (the same proposition; the chosen data are unchanged) |
 | LevyStochCalc and BrownianMotion files listed in `port.patch` | Mathlib v4.35.0 `eLpNorm`/`MemLp` API: `MemLp f p μ` is `eLpNorm f p μ < ∞`, triangle inequalities no longer take measurability arguments, norm formulas take an `AEStronglyMeasurable` argument; proofs pass existing witnesses (proof-only) |
+| `BrownianMotion/Gaussian/Moment.lean` | 2026-11-18: the proof of `ProbabilityTheory.centralMoment_two_mul_gaussianReal` is derived from Tau Ceti's `TauCeti.Probability.centralMoment_id_two_mul_gaussianReal` through a private import of `TauCeti.Probability.Distributions.Gaussian.Moments`; the statement and the module's other declarations are unchanged (proof-only) |
+| `LevyStochCalc/Probability/DoobContinuous.lean` | 2026-11-18: the import of MathFin's `DoobLpMaximalInequality` is replaced by a private import of `TauCeti.Probability.Martingale.MaximalInequality.Lp`; `lintegral_sq_dyadicRunMax_le` applies Tau Ceti's `MeasureTheory.Martingale.eLpNorm_partialSups_norm_le` on the dyadic grid instead of MathFin's `eLpNorm_norm_runMax_le`, and the module docstring is reworded accordingly; statements are unchanged (proof-only) |
 | `LevyStochCalc/Probability/DoobContinuous.lean` | `LevyStochCalc.Probability.eLpNorm_two_eq` gains `(hf : AEStronglyMeasurable f μ)` after `f`: its unconditional statement is false for the v4.35.0 `eLpNorm`, which is `∞` off the a.e.-strongly-measurable branch |
 | `LevyStochCalc/Poisson/CompensatedDensityLimit.lean`, `LevyStochCalc/Brownian/ItoL2CompletionConvergence.lean`, `LevyStochCalc/Brownian/ItoIntegrandComplete.lean` | for the same reason, exactly four further norm-formula helpers gain one `AEStronglyMeasurable` premise after the function: `Poisson.Compensated.eLpNorm_two_rpow_eq_lintegral_sq`, `Brownian.Ito.eLpNorm_two_rpow_eq_lintegral_sq`, `Brownian.Ito.eLpNorm_sq_eq_lintegral_nnnorm_sq`, `Brownian.Ito.eLpNorm_sq_eq_lintegral`; every caller passes an existing witness. No other public premise changes |
 | `LevyStochCalc/Brownian/ItoDensityUnbounded.lean`, `LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean` | private helpers only: two now-unused measurability binders renamed `_hf`/`_hg`/`_hfn` (types and order kept); private `eLpNorm_mul_le_of_bound` gains `(hcg : AEStronglyMeasurable (fun ω => c ω * g ω) P)` |
@@ -97,16 +101,32 @@ claimed. The [boundary client](../../research/audits/StochasticCalculus/Regulari
 checks the corrected contracts, the retained LevyStochCalc client, absence of the obsolete
 interfaces and exclusion of the unrelated UniformIntegrable module.
 
+## Former vendored library: MathFin
+
+Until 2026-11-18 this directory also vendored `MathFin/Foundations/DoobLpMaximalInequality.lean`
+and the `LICENSE` of [raphaelrrcoelho/formal-mathfin](https://github.com/raphaelrrcoelho/formal-mathfin)
+(Raphael Coelho, Apache-2.0) at `784a8311f75a1519a23717856df9982bd6a9a370`, upstream toolchain
+v4.32.0 and Mathlib `81a5d25`, as LevyStochCalc's original dependency for the discrete Doob
+maximal inequality. Its sole consumer, `LevyStochCalc/Probability/DoobContinuous.lean`, now uses
+the discrete maximal inequality of the Tau Ceti Lake dependency (pinned at
+`4705013d2da8bac010289af92000f4a5b8ffca00` in `../lakefile.toml`), so the copy, its `lean_lib`,
+its lock entry and its `port.patch` section were removed. The removed port (dated 2026-10-31
+modification notice, Lean/Mathlib v4.35.0 identifier replacements, an explicit
+`Mathlib.Analysis.SpecialFunctions.Integrals.Basic` import and a measurability argument for the
+private `eLpNorm_eq_lintegral_ofReal_pow`) remains in the Git history of this directory up to
+commit `56802c7`. LevyStochCalc's lock entry still records the original `MathFin` manifest pin,
+and `--fetch` checks it against LevyStochCalc's upstream `lake-manifest.json`.
+
 ## Verification and updates
 
-The four directories are `lean_lib`s of this package (`../lakefile.toml`), not a separate Lake
+The three directories are `lean_lib`s of this package (`../lakefile.toml`), not a separate Lake
 package: they share its toolchain, Mathlib pin and build directory. `research/verify.py` treats
 their files as local sources: they are part of the source snapshot, built by the default
 `lake build`, replayed by `leanchecker` and covered by the vendor axiom gate.
 
 ## Provenance lock
 
-[`vendor-lock.json`](vendor-lock.json) records, for every file under the four directories, its
+[`vendor-lock.json`](vendor-lock.json) records, for every file under the three directories, its
 upstream path at the pinned commit, the upstream SHA-256 and Git blob id, the vendored SHA-256,
 the module name and whether `port.patch` changes it, together with the SHA-256 of `port.patch`
 and the pins. Schema 2 separately binds the recorded upstream dependency revisions, making

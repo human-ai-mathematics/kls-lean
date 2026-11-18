@@ -3,7 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from cache_mathlib import check_cache, mathlib_roots, prepare_cache, required_modules
@@ -82,6 +82,75 @@ class MathlibCacheTests(unittest.TestCase):
         roots = mathlib_roots(self.root)
         self.assertIn("formalization/vendor/Example/Lib.lean", roots["Mathlib.A"])
         self.assertIn("research/audits/nested/Client.lean", roots["Mathlib.B"])
+
+    def test_reachable_tau_imports_are_requested_and_checked(self):
+        self.write("formalization/FunctionalInequalities.lean", "import Mathlib.A\nimport TauCeti.A\n")
+        tau = "formalization/.lake/packages/TauCeti/TauCeti"
+        self.write(f"{tau}/A.lean", "module\n\nmeta import TauCeti.B\n")
+        self.write(f"{tau}/B.lean", "module\n\npublic import Mathlib.C\n")
+        self.write(f"{tau}/Decoy.lean", "import Mathlib.Decoy\n")
+        self.write("formalization/.lake/packages/mathlib/Mathlib/C.lean", "import Lean\n")
+        self.compile_modules("Mathlib.A", "Mathlib.B")
+        self.assertEqual(mathlib_roots(self.root)["Mathlib.C"], [f"{tau}/B.lean"])
+        with patch("cache_mathlib.subprocess.run") as run:
+            with self.assertRaisesRegex(ValueError, r"Mathlib\.C \(\.olean\)"):
+                prepare_cache(self.root, check_only=True)
+        run.assert_not_called()
+
+        self.compile_modules("Mathlib.C")
+        with patch("cache_mathlib.subprocess.run") as run:
+            self.assertEqual(prepare_cache(self.root), 0)
+        project = self.root / "formalization"
+        self.assertEqual(run.call_args_list, [
+            call(["lake", "env", "true"], cwd=project, check=True),
+            call(["lake", "exe", "cache", "get", "Mathlib.A", "Mathlib.C"], cwd=project, check=True),
+        ])
+
+    def test_preparation_resolves_missing_tau_checkout_check_only_stays_offline(self):
+        self.write("formalization/FunctionalInequalities.lean", "import TauCeti.A\n")
+        project = self.root / "formalization"
+        with patch("cache_mathlib.subprocess.run") as run:
+            with self.assertRaisesRegex(ValueError, r"Tau Ceti source is missing: TauCeti.A.*lake env true"):
+                prepare_cache(self.root, check_only=True)
+        run.assert_not_called()
+
+        def resolve(command, **_kwargs):
+            if command == ["lake", "env", "true"]:
+                self.write("formalization/.lake/packages/TauCeti/TauCeti/A.lean", "import Mathlib.B\n")
+
+        self.compile_modules("Mathlib.B")
+        with patch("cache_mathlib.subprocess.run", side_effect=resolve) as run:
+            self.assertEqual(prepare_cache(self.root), 0)
+        self.assertEqual(run.call_args_list, [
+            call(["lake", "env", "true"], cwd=project, check=True),
+            call(["lake", "exe", "cache", "get", "Mathlib.B"], cwd=project, check=True),
+        ])
+
+    def test_preparation_updates_existing_tau_checkout_before_reading_sources(self):
+        self.write("formalization/FunctionalInequalities.lean", "import TauCeti.Current\n")
+        tau = "formalization/.lake/packages/TauCeti/TauCeti"
+        self.write(f"{tau}/Old.lean", "import Mathlib.A\n")
+
+        def resolve(command, **_kwargs):
+            if command == ["lake", "env", "true"]:
+                self.write(f"{tau}/Current.lean", "import Mathlib.B\n")
+
+        with patch("cache_mathlib.subprocess.run", side_effect=resolve) as run:
+            self.assertEqual(mathlib_roots(self.root, resolve_tau=True), {
+                "Mathlib.B": [f"{tau}/Current.lean"],
+            })
+        run.assert_called_once_with(["lake", "env", "true"], cwd=self.root / "formalization", check=True)
+
+    def test_tau_sources_use_selected_package(self):
+        self.add_bridge()
+        self.write("formalization/FunctionalInequalities.lean", "import TauCeti.A\n")
+        self.write("formalization/.lake/packages/TauCeti/TauCeti/A.lean", "import Mathlib.A\n")
+        tau = "integrations/openai/.lake/packages/TauCeti/TauCeti"
+        self.write(f"{tau}/A.lean", "import TauCeti.B\n")
+        with self.assertRaisesRegex(ValueError, r"\[openai\].*TauCeti.B.*imported by .*TauCeti/A.lean"):
+            mathlib_roots(self.root, "openai")
+        self.write(f"{tau}/B.lean", "import Mathlib.C\n")
+        self.assertEqual(set(mathlib_roots(self.root, "openai")), {"Mathlib", "Mathlib.C"})
 
     def test_no_import_and_missing_pinned_source_fail_closed(self):
         self.write("formalization/FunctionalInequalities.lean", "import Lean\n")

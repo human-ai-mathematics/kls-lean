@@ -75,7 +75,9 @@ class TestVendorLock(unittest.TestCase):
             b"port.patch -whitespace\n",
         )
 
-        roots = ["LevyStochCalc", "BrownianMotion", "KolmogorovExtension4", "MathFin"]
+        # MathFin is an original LevyStochCalc dependency that is not vendored.
+        roots = ["LevyStochCalc", "BrownianMotion", "KolmogorovExtension4"]
+        upstream_roots = [*roots, "MathFin"]
         module_paths = {
             "LevyStochCalc": "LevyStochCalc/Basic.lean",
             "BrownianMotion": "BrownianMotion/Basic.lean",
@@ -93,7 +95,7 @@ class TestVendorLock(unittest.TestCase):
 
         clones: dict[str, Path] = {}
         commits: dict[str, str] = {}
-        for name in roots:
+        for name in upstream_roots:
             clone = self.root / "upstream" / name
             clone.mkdir(parents=True)
             subprocess.run(["git", "-C", str(clone), "init", "-q"], check=True)
@@ -133,6 +135,8 @@ class TestVendorLock(unittest.TestCase):
             }
             for name in roots
         }
+        fake_pins["LevyStochCalc"]["upstream_dependencies"] = {"MathFin": commits["MathFin"]}
+        self.mathfin_commit = commits["MathFin"]
 
         for name in roots:
             vendor_root = vendor / name
@@ -198,7 +202,6 @@ class TestVendorLock(unittest.TestCase):
                 "KolmogorovExtension4/KolmogorovExtension4/Basic.lean",
                 "KolmogorovExtension4.Basic",
             ),
-            "MathFin": ("MathFin/MathFin/Foundations/Basic.lean", "MathFin.Foundations.Basic"),
         }
         for library, (path, module) in expected.items():
             with self.subTest(library=library):
@@ -221,9 +224,7 @@ class TestVendorLock(unittest.TestCase):
 
     def test_declared_dependency_is_distinct_from_tested_vendor_override(self) -> None:
         original = vendor_lock.PINS["BrownianMotion"]["commit"]
-        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"] = {
-            "BrownianMotion": original,
-        }
+        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"]["BrownianMotion"] = original
         path = self.clones["BrownianMotion"] / "BrownianMotion/Basic.lean"
         path.write_bytes(path.read_bytes() + b"-- newer upstream revision\n")
         current = self._commit_repo(self.clones["BrownianMotion"])
@@ -233,14 +234,14 @@ class TestVendorLock(unittest.TestCase):
         lock = self._generate_and_write()
         self.assertNotEqual(original, current)
         self.assertEqual(lock["libraries"]["LevyStochCalc"]["upstream_dependencies"],
-                         {"BrownianMotion": original})
+                         {"BrownianMotion": original, "MathFin": self.mathfin_commit})
         self.assertEqual(self._check(), [])
         self.assertEqual(vendor_lock.check_upstream(self.root, self.clones), [])
 
     def test_tampered_declared_dependency_is_rejected_offline(self) -> None:
-        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"] = {
-            "BrownianMotion": vendor_lock.PINS["BrownianMotion"]["commit"],
-        }
+        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"]["BrownianMotion"] = (
+            vendor_lock.PINS["BrownianMotion"]["commit"]
+        )
         lock = self._generate_and_write()
         lock["libraries"]["LevyStochCalc"]["upstream_dependencies"]["BrownianMotion"] = "f" * 40
         path = self.root / vendor_lock.VENDOR_DIR / vendor_lock.LOCK_NAME
@@ -248,9 +249,7 @@ class TestVendorLock(unittest.TestCase):
         self._assert_error("upstream_dependencies does not match PINS")
 
     def test_incorrect_declared_upstream_dependency_is_rejected_online(self) -> None:
-        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"] = {
-            "BrownianMotion": "f" * 40,
-        }
+        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"]["BrownianMotion"] = "f" * 40
         self._generate_and_write()
         errors = vendor_lock.check_upstream(self.root, self.clones)
         self.assertTrue(any("declared manifest pin mismatch: BrownianMotion" in e for e in errors),
@@ -259,19 +258,19 @@ class TestVendorLock(unittest.TestCase):
     def test_extra_file(self) -> None:
         self._generate_and_write()
         self._write(
-            self.root / vendor_lock.VENDOR_DIR / "MathFin/extra.txt",
+            self.root / vendor_lock.VENDOR_DIR / "KolmogorovExtension4/extra.txt",
             b"extra\n",
         )
         self._assert_error("extra vendored file")
 
     def test_missing_file(self) -> None:
         self._generate_and_write()
-        (self.root / vendor_lock.VENDOR_DIR / "MathFin/LICENSE").unlink()
+        (self.root / vendor_lock.VENDOR_DIR / "KolmogorovExtension4/LICENSE").unlink()
         self._assert_error("missing vendored file")
 
     def test_symlink(self) -> None:
         self._generate_and_write()
-        target = self.root / vendor_lock.VENDOR_DIR / "MathFin/LICENSE"
+        target = self.root / vendor_lock.VENDOR_DIR / "KolmogorovExtension4/LICENSE"
         target.unlink()
         try:
             target.symlink_to("does-not-exist")
@@ -342,7 +341,7 @@ class TestVendorLock(unittest.TestCase):
 
     def test_wrong_commit_pin(self) -> None:
         lock = self._generate_and_write()
-        lock["libraries"]["MathFin"]["commit"] = "0" * 40
+        lock["libraries"]["KolmogorovExtension4"]["commit"] = "0" * 40
         (self.root / vendor_lock.VENDOR_DIR / vendor_lock.LOCK_NAME).write_text(
             json.dumps(lock, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
@@ -353,6 +352,20 @@ class TestVendorLock(unittest.TestCase):
         self._generate_and_write()
         self._write(self.root / vendor_lock.VENDOR_DIR / "extra.txt", b"extra\n")
         self._assert_error("vendor top-level inventory")
+
+    def test_removed_vendored_root_is_rejected(self) -> None:
+        self._generate_and_write()
+        self._write(
+            self.root / vendor_lock.VENDOR_DIR / "MathFin/MathFin/Foundations/Basic.lean",
+            b"module MathFin.Foundations.Basic\n",
+        )
+        self._assert_error("vendor top-level inventory")
+
+    def test_unvendored_dependency_must_be_declared(self) -> None:
+        del vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"]["MathFin"]
+        self._generate_and_write()
+        errors = vendor_lock.check_upstream(self.root, self.clones)
+        self.assertTrue(any("manifest pin mismatch: MathFin" in e for e in errors), errors)
 
     def test_upstream_blob_differs_from_lock(self) -> None:
         lock = self._generate_and_write()
@@ -367,7 +380,7 @@ class TestVendorLock(unittest.TestCase):
         self.assertTrue(any("upstream blob mismatch" in error for error in errors), errors)
 
     def test_generate_refuses_different_unpatched_file(self) -> None:
-        path = self.root / vendor_lock.VENDOR_DIR / "MathFin/LICENSE"
+        path = self.root / vendor_lock.VENDOR_DIR / "KolmogorovExtension4/LICENSE"
         path.write_bytes(b"different\n")
         with self.assertRaisesRegex(ValueError, "unpatched file differs"):
             vendor_lock.generate_lock(self.root, self.clones)
@@ -433,6 +446,13 @@ class TestVendorLock(unittest.TestCase):
         parsed = vendor_lock.parse_patch(text)["A"]
         self.assertEqual(vendor_lock.apply_forward(b"old", parsed), b"new\n")
         self.assertEqual(vendor_lock.apply_reverse(b"new\n", parsed), b"old")
+
+    def test_real_pins_keep_mathfin_as_unvendored_dependency(self) -> None:
+        self.assertNotIn("MathFin", self.real_pins)
+        self.assertEqual(
+            self.real_pins["LevyStochCalc"]["upstream_dependencies"]["MathFin"],
+            "784a8311f75a1519a23717856df9982bd6a9a370",
+        )
 
     def test_real_repository_lock(self) -> None:
         real_root = Path(__file__).resolve().parents[2]
