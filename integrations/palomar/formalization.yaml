@@ -105,11 +105,12 @@ related_formalizations:
       and KolmogorovExtension4), ported to this toolchain and the Lean
       module system; pins, licenses and every local change are recorded in
       formalization/vendor/README.md, vendor-lock.json and port.patch.
-  - id: https://github.com/lyw-ops/TauCeti/tree/4705013d2da8bac010289af92000f4a5b8ffca00
+  - id: https://github.com/lyw-ops/TauCeti/tree/84e562f6feeb2de8f5318992e63fb8054f7d6c46
     relationship: builds-on
     note: >-
       The current checkout's proof package imports Tau Ceti for Doob's discrete
-      maximal inequality, Laplace laws, Gaussian even moments and Fenchel–Moreau.
+      maximal inequality, Laplace laws, Gaussian even moments, Fenchel–Moreau
+      and von Neumann's theorem for the maximal-domain adjoint composition.
       The registered v2 proof remains identified by its publication commit.
 
 status:

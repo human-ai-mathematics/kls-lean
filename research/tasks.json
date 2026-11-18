@@ -371,7 +371,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean",
-            "sha256": "80e0eef2115480eadab388a35a18562ab0c72946c560bff1a9ebfc7142b3a8ac"
+            "sha256": "082460bff7da91d9be03561fe916805952818a21b99148b756aa4ba26cdf3740"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Resolvent/Limit.lean",

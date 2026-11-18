@@ -1,7 +1,7 @@
 {
   "version": 1,
   "toolchain": "leanprover/lean4:v4.35.0",
-  "lake_manifest_sha256": "c61532e8a9bed38f35c7f255cf1f1f5330b324e01bf895056766dc92d60275c4",
+  "lake_manifest_sha256": "e67f86a213dcf705b1536c5aa3db1ca27ef74d6b82b2de3fd9989461d75fdb10",
   "printing": {
     "pp.all": true,
     "pp.proofs": true,
@@ -1302,7 +1302,7 @@
     "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant"
   ],
   "decision": {
-    "path": "research/a-series/statement-snapshot/2026-11-18-tauceti-dependency.md",
-    "sha256": "af2b4cbce12374ff96453ad90af80a48f36aa721dfce6fb8e7008f2e348bbeee"
+    "path": "research/a-series/statement-snapshot/2026-11-18-tauceti-adjoint-composition.md",
+    "sha256": "08733db4c90b029b7bd4e51fc0fe69ebb89dbb9888282a726ea67b4231101242"
   }
 }

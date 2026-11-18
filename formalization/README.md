@@ -77,7 +77,7 @@ under `blueprint/` are ignored outputs. Blueprint rendering runs locally when ne
 
 Install Elan. `lean-toolchain` selects Lean v4.35.0; `lake-manifest.json` fixes Mathlib
 `56a005855ea17e0b0958f73ec801ae140b0a1679` and the other package revisions, including the
-[Lean 4.35 Tau Ceti backport](https://github.com/lyw-ops/TauCeti/tree/4705013d2da8bac010289af92000f4a5b8ffca00).
+[Lean 4.35 Tau Ceti backport](https://github.com/lyw-ops/TauCeti/tree/84e562f6feeb2de8f5318992e63fb8054f7d6c46).
 From this directory:
 
 ```bash

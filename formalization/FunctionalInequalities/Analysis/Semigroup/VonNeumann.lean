@@ -2,6 +2,7 @@ module
 
 public import FunctionalInequalities.Analysis.Semigroup.AdjointComp
 public import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.AdjointComp
 
 /-!
 # von Neumann's theorem for `T†T`
@@ -49,15 +50,11 @@ unnecessary are
   and only the identification of the value `T† (T (J_s f)) = s⁻¹ (f - J_s f)`
   (`adjointComp_resolventDomain`) uses `adjoint_apply_eq`, hence density.
 
-## Order of the arguments
+## Density and self-adjointness
 
-Deriving density of D(T†T) from self-adjointness of T†T via
-`IsSelfAdjoint.dense_domain` would be circular here: `LinearPMap.IsFormalAdjoint.le_adjoint`, which
-turns symmetry of `T†T` into
-`T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So density of D(T†T) is proved first, by the
-direct
-argument (if `g ⊥ D(T†T)` then `g = u + T†T u` with `u = J_1 g`, and
-`0 = ⟪u, g⟫ = ‖u‖² + ‖T u‖²`), and self-adjointness of T†T is then derived from it.
+The maximal-domain composition agrees with Tau Ceti's `LinearPMap.adjointComp`. Its graph
+projection proof supplies density and self-adjointness for closed densely defined operators.
+The positive-parameter resolvent identities use the weak equation for `J_s`.
 
 ## Deliberately out of scope
 
@@ -301,9 +298,7 @@ theorem resolvent_add_smul_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsCl
 
 /-- `1 + T†T` is surjective: every `z : H₀` is `x + T†T x` for some `x ∈ D(T†T)`.
 
-This is the resolvent domain identity at `s = 1`, and it is the only consequence of the resolvent
-domain identity used in the proofs of self-adjointness of T†T and
-density of D(T†T). -/
+This is the resolvent domain identity at `s = 1`. -/
 theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (z : H₀) :
     ∃ x : (adjointComp T).domain, (x : H₀) + adjointComp T x = z := by
@@ -314,83 +309,31 @@ theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   rw [inv_one, one_smul]
   abel
 
-/-- density of D(T†T): `D(T†T)` is dense.
+omit [CompleteSpace H₁] in
+/-- The two maximal-domain constructions agree as partially defined operators. -/
+private theorem adjointComp_eq_linearPMap (T : H₀ →ₗ.[ℝ] H₁) :
+    adjointComp T = T.adjointComp := by
+  have hdomain : (adjointComp T).domain = T.adjointComp.domain := by
+    ext x
+    rw [adjointComp_domain_eq, mem_adjointCompDomain, LinearPMap.mem_adjointComp_domain]
+  refine LinearPMap.eq_of_le_of_domain_eq ⟨hdomain.le, ?_⟩ hdomain
+  rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
+  change x = y at hxy
+  subst y
+  rw [adjointComp_apply, LinearPMap.adjointComp_apply]
 
-Proved directly, not from self-adjointness of T†T (see the module docstring for why the other order
-is not
-available).  If `g` is orthogonal to `D(T†T)`, write `g = x + T†T x` with `x ∈ D(T†T)` by
-surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by the form identity, so `x = 0` and `g
-= 0`.
-A submodule of a complete inner product space with trivial orthogonal complement is dense. -/
+/-- The maximal domain of `T†T` is dense for closed densely defined `T`. -/
 theorem dense_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) :
     Dense (((adjointComp T).domain : Submodule ℝ H₀) : Set H₀) := by
-  rw [Submodule.dense_iff_topologicalClosure_eq_top, Submodule.topologicalClosure_eq_top_iff,
-    Submodule.eq_bot_iff]
-  intro g hg
-  obtain ⟨x, hx⟩ := exists_add_adjointComp T hT hd g
-  have hzero : ⟪(x : H₀), g⟫ = 0 := hg (x : H₀) x.2
-  rw [← hx, inner_add_right, ← real_inner_comm ((x : H₀)) (adjointComp T x),
-    inner_adjointComp hd x x.2.2, real_inner_self_eq_norm_sq,
-    real_inner_self_eq_norm_sq] at hzero
-  have hxz : (x : H₀) = 0 := by
-    have : ‖(x : H₀)‖ = 0 := by
-      nlinarith [norm_nonneg (x : H₀), sq_nonneg ‖T ⟨(x : H₀), x.2.2⟩‖]
-    simpa using this
-  have hx0 : x = 0 := Subtype.ext hxz
-  rw [← hx, hx0]
-  simp
+  rw [adjointComp_eq_linearPMap]
+  exact LinearPMap.dense_adjointComp_domain T hT hd
 
-/-- self-adjointness of T†T (von Neumann): `T†T` is self-adjoint.
-
-Symmetry (`adjointComp_isFormalAdjoint`) together with density of `D(T†T)` (density of D(T†T)) gives
-`T†T ≤ (T†T)†`.  For the reverse inclusion take `y ∈ D((T†T)†)`, solve `u + T†T u = y + (T†T)† y`
-with `u ∈ D(T†T)` by surjectivity of `1 + T†T`, and test against an arbitrary `z = x + T†T x`:
-both `⟪z, y⟫` and `⟪z, u⟫` collapse to `⟪x, y + (T†T)† y⟫`, so `y - u` is orthogonal to all of
-`H₀` and therefore `y = u ∈ D(T†T)`, with `(T†T)† y = T†T u`.  The two inclusions have equal
-domains, so `LinearPMap.eq_of_le_of_domain_eq` finishes. -/
+/-- Von Neumann's theorem for the maximal composition `T†T`. -/
 theorem isSelfAdjoint_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) : IsSelfAdjoint (adjointComp T) := by
-  have hdA := dense_adjointComp_domain T hT hd
-  have hsym := adjointComp_isFormalAdjoint hd
-  have hle : adjointComp T ≤ (adjointComp T)† := hsym.le_adjoint hdA
-  have hfa := LinearPMap.adjoint_isFormalAdjoint hdA (T := adjointComp T)
-  have key : ∀ y : ((adjointComp T)†).domain, ∃ hm : (y : H₀) ∈ (adjointComp T).domain,
-      adjointComp T ⟨(y : H₀), hm⟩ = (adjointComp T)† y := by
-    intro y
-    obtain ⟨u, hueq⟩ := exists_add_adjointComp T hT hd ((y : H₀) + (adjointComp T)† y)
-    have hperp : ∀ z : H₀, ⟪z, (y : H₀) - (u : H₀)⟫ = 0 := by
-      intro z
-      obtain ⟨x, hxeq⟩ := exists_add_adjointComp T hT hd z
-      have e1 : ⟪adjointComp T x, (y : H₀)⟫ = ⟪(x : H₀), (adjointComp T)† y⟫ := by
-        rw [← real_inner_comm (adjointComp T x) ((y : H₀)), ← hfa y x]
-        exact real_inner_comm _ _
-      have e2 : ⟪adjointComp T x, (u : H₀)⟫ = ⟪(x : H₀), adjointComp T u⟫ := hsym x u
-      have ea : ⟪(x : H₀) + adjointComp T x, (y : H₀)⟫
-          = ⟪(x : H₀), (y : H₀) + (adjointComp T)† y⟫ := by
-        rw [inner_add_left, inner_add_right, e1]
-      have eb : ⟪(x : H₀) + adjointComp T x, (u : H₀)⟫
-          = ⟪(x : H₀), (y : H₀) + (adjointComp T)† y⟫ := by
-        rw [inner_add_left, e2, ← inner_add_right, hueq]
-      rw [← hxeq, inner_sub_right, ea, eb, sub_self]
-    have hyu : (y : H₀) = (u : H₀) :=
-      sub_eq_zero.mp (inner_self_eq_zero.mp (hperp ((y : H₀) - (u : H₀))))
-    refine ⟨hyu ▸ u.2, ?_⟩
-    have hAu : adjointComp T ⟨(y : H₀), hyu ▸ u.2⟩ = adjointComp T u := by
-      congr 1
-      exact Subtype.ext hyu
-    rw [hAu]
-    have : (u : H₀) + adjointComp T u = (y : H₀) + (adjointComp T)† y := hueq
-    rw [hyu] at this
-    exact add_left_cancel this
-  have hge : (adjointComp T)† ≤ adjointComp T := by
-    refine ⟨fun y hy => (key ⟨y, hy⟩).choose, ?_⟩
-    intro a b hab
-    obtain ⟨hm, hval⟩ := key a
-    have : b = ⟨(a : H₀), hm⟩ := Subtype.ext hab.symm
-    rw [this, hval]
-  rw [LinearPMap.isSelfAdjoint_def]
-  exact LinearPMap.eq_of_le_of_domain_eq hge (le_antisymm hge.1 hle.1)
+  rw [adjointComp_eq_linearPMap]
+  exact LinearPMap.isSelfAdjoint_adjointComp T hT hd
 
 /-- the resolvent defect identity: the Yosida approximation on `D(T†T)`.
 

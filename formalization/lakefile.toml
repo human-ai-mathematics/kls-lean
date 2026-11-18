@@ -17,7 +17,7 @@ rev = "3d425859e73fcfbef85b9638c2a91708ef4a22d4"
 [[require]]
 name = "TauCeti"
 git = "https://github.com/lyw-ops/TauCeti.git"
-rev = "4705013d2da8bac010289af92000f4a5b8ffca00"
+rev = "84e562f6feeb2de8f5318992e63fb8054f7d6c46"
 
 [[lean_lib]]
 name = "FunctionalInequalities"
